@@ -25,9 +25,10 @@ HCPharoWebSite >> initializePresenter [
 HCPharoWebSite >> initializeWidgets [
 	link := self newLabel.
 	
+	self flag: #todo. "Currently there is no url text color in the theme. I opened a Pharo issue to add that and when it will be integrated to Pharo we should use it here. And later we should directly have a URLPresenter."
 	link 
 		label: 'Pharo.org Documentation Page';
-		color: Color blue
+		color: self theme selectionTextColor
 ]
 
 { #category : #accessing }
