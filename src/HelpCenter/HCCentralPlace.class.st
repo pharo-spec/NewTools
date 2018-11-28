@@ -21,6 +21,25 @@ HCCentralPlace class >> defaultSpec [
 	
 ]
 
+{ #category : #'world menu' }
+HCCentralPlace class >> menuCommandOn: aBuilder [
+	<worldMenu>
+	(aBuilder item: #'Help Center')
+		parent: #'New Tools';
+		order: 20;
+		action: [ self open ];
+		iconName: #smallHelpIcon;
+		help: 'Explore a list of help topics to learn to use Pharo tools.';
+		withSeparatorAfter 
+]
+
+{ #category : #specs }
+HCCentralPlace class >> open [
+	<script>
+	
+	self new openWithSpec
+]
+
 { #category : #accessing }
 HCCentralPlace >> hcPharoWebSiteComponent [
 	^ hcPharoWebSiteComponent
@@ -39,6 +58,11 @@ HCCentralPlace >> hcbrowserComponent [
 { #category : #accessing }
 HCCentralPlace >> hcbrowserComponent: anObject [
 	hcbrowserComponent := anObject
+]
+
+{ #category : #api }
+HCCentralPlace >> initialExtent [
+	^ 800@600
 ]
 
 { #category : #initialization }

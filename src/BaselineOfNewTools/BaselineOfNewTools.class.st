@@ -13,14 +13,9 @@ BaselineOfNewTools >> baseline: spec [
 			self spec: spec.
 
 			"Packages"
-			spec package: 'HelpCenter' with: [ spec requires: #('Spec') ] ]
-]
-
-{ #category : #accessing }
-BaselineOfNewTools >> projectClass [
-	^ [ self class environment at: #MetacelloCypressBaselineProject ]
-		on: NotFound
-		do: [ super projectClass ]
+			spec
+				package: 'NewTools' with: [ spec requires: #('Spec') ];
+				package: 'HelpCenter' with: [ spec requires: #('NewTools') ] ]
 ]
 
 { #category : #dependencies }
