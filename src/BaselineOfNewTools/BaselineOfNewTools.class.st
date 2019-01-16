@@ -7,18 +7,30 @@ Class {
 { #category : #baselines }
 BaselineOfNewTools >> baseline: spec [
 	<baseline>
-	spec
-		for: #common
-		do: [ "Dependencies"
-			self spec: spec.
+	
+	spec for: #common do: [ 
+		self spec: spec.
+		self lieutenant: spec.
 
-			"Packages"
-			spec
-				package: 'NewTools' with: [ spec requires: #('Spec') ];
-				package: 'HelpCenter' with: [ spec requires: #('NewTools') ] ]
+		spec
+			package: 'NewTools' with: [ spec requires: #('Spec') ];
+			package: 'HelpCenter' with: [ spec requires: #('NewTools') ];
+			package: 'NewTools-Inspector' with: [ spec requires: #('Spec' 'Lieutenant') ] ]
+]
+
+{ #category : #dependencies }
+BaselineOfNewTools >> lieutenant: spec [
+
+	self flag: #TODO. "Using *my* version for now, this needs to be reviewed, and making correct"
+	spec 
+		baseline: 'Lieutenant' 
+		with: [ spec repository: 'github://estebanlm/Lieutenant:master/src' ]
 ]
 
 { #category : #dependencies }
 BaselineOfNewTools >> spec: spec [
-	spec baseline: 'Spec' with: [ spec repository: 'github://pharo-spec/Spec:master/src' ]
+
+	spec 
+		baseline: 'Spec' 
+		with: [ spec repository: 'github://pharo-spec/Spec:master/src' ]
 ]
