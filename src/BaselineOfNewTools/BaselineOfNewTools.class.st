@@ -15,7 +15,8 @@ BaselineOfNewTools >> baseline: spec [
 		spec
 			package: 'NewTools' with: [ spec requires: #('Spec') ];
 			package: 'HelpCenter' with: [ spec requires: #('NewTools') ];
-			package: 'NewTools-Inspector' with: [ spec requires: #('Spec' 'Lieutenant') ] ]
+			package: 'NewTools-Inspector' with: [ spec requires: #('Spec' 'Lieutenant') ];
+			package: 'NewTools-Playground' with: [ spec requires: #('NewTools-Inspector') ] ]
 ]
 
 { #category : #dependencies }
