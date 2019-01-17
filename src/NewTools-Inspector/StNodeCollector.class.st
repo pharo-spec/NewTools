@@ -7,6 +7,14 @@ Class {
 	#category : #'NewTools-Inspector-Model'
 }
 
+{ #category : #'instance creation' }
+StNodeCollector class >> for: anObject [
+
+	^ self basicNew 
+		initializeObject: anObject;
+		yourself
+]
+
 { #category : #building }
 StNodeCollector >> collectNodes [
 
