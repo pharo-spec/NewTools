@@ -7,9 +7,7 @@ Collection >> inspectorItems [
 	^ TablePresenter new 
 		title: 'Items';
 		hideColumnHeaders;
-		addColumn: (StringTableColumn new 
-			evaluated: [ :each | GTObjectPrinter asTruncatedTextFrom: each ];
-			yourself);
+		addColumn: (StringTableColumn evaluated: [ :each | GTObjectPrinter asTruncatedTextFrom: each ]);
 		items: self asOrderedCollection;
 		yourself
 ]
