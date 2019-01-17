@@ -28,3 +28,9 @@ StInspectorModel >> inspectedObject [
 StInspectorModel >> inspectedObject: anObject [
 	inspectedObject := anObject
 ]
+
+{ #category : #accessing }
+StInspectorModel >> objectInspections [
+
+	^ self inspectedObject inspections
+]

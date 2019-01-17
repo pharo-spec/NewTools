@@ -4,20 +4,19 @@ Class {
 	#category : #'NewTools-Inspector-Model'
 }
 
-{ #category : #'instance creation' }
-StInspectorSelfNode class >> newObject: anObject [ 
+{ #category : #composition }
+StInspectorSelfNode >> childrenNodesFor: aVariablesBrowser [
+	"Self node does not have any subvariables, just return empty collection"
 
-	^ self new object: anObject
+	^ #()
 ]
 
 { #category : #accessing }
-StInspectorSelfNode >> name [ 
-
+StInspectorSelfNode >> key [
 	^ 'self'
 ]
 
 { #category : #accessing }
-StInspectorSelfNode >> value [
-
-	^ self object
+StInspectorSelfNode >> rawValue [
+	^ self hostObject
 ]

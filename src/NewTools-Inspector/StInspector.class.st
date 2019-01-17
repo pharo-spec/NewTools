@@ -33,6 +33,12 @@ StInspector class >> defaultTitle [
 	^ 'Inspector'
 ]
 
+{ #category : #accessing }
+StInspector class >> extensionsPragma [
+
+	^ #inspectorPresentationOrder:
+]
+
 { #category : #'instance creation' }
 StInspector class >> openOn: anObject [
 
@@ -59,9 +65,8 @@ StInspector >> allViews [
 
 { #category : #private }
 StInspector >> collectViews [
-	
-	self flag: #TODO.
-	^ #()
+
+	^ self model objectInspections
 ]
 
 { #category : #api }

@@ -29,13 +29,13 @@ StRawInspection >> initializeWidgets [
 	attributeTable
 		addColumn: (CompositeTableColumn new  
 			title: 'Variable';
+			width: 170;
 			addColumn: (ImageTableColumn new
 				width: 20;
 				evaluated: #icon;
 				yourself);
 			addColumn: (StringTableColumn new
-				evaluated: #name;
-				width: 150;
+				evaluated: #label;
 				yourself);
 			yourself);
 		addColumn: (StringTableColumn new

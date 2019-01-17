@@ -8,11 +8,23 @@ Class {
 }
 
 { #category : #'instance creation' }
-StInspectorSlotNode class >> newObject: anObject slot: aSlot [
-
-	^ self basicNew 
-		initializeObject: anObject slot: aSlot;
+StInspectorSlotNode class >> hostObject: anObject slot: aSlot [
+	^ (self hostObject: anObject)
+		slot: aSlot;
 		yourself
+]
+
+{ #category : #accessing }
+StInspectorSlotNode >> browsingActionsForNode [
+
+	^ {
+			GLMGenericAction new 
+				action: [ self systemNavigation browseAllAccessesTo: self label from: self hostObject class ]; 
+				title: 'List methods using this variable'.
+			GLMGenericAction new 
+				action: [ self systemNavigation browseAllStoresInto: self label from: self hostObject class ]; 
+				title: 'List methods storing into this variable'.		
+		}
 ]
 
 { #category : #accessing }
@@ -21,18 +33,31 @@ StInspectorSlotNode >> children [
 	^ self value inspectorNodes
 ]
 
-{ #category : #initialization }
-StInspectorSlotNode >> initializeObject: anObject slot: aSlot [
-
-	self initialize.
-	self object: anObject.
-	slot := aSlot
+{ #category : #accessing }
+StInspectorSlotNode >> errorMessage [
+	^ 'error obtaining attribute value'
 ]
 
 { #category : #accessing }
-StInspectorSlotNode >> name [
+StInspectorSlotNode >> inspectorActionsForNode [
+	"Return a collection of available inspector actions associated with a variable node"
 
+	^ self browsingActionsForNode
+]
+
+{ #category : #accessing }
+StInspectorSlotNode >> key [
 	^ self slot name
+]
+
+{ #category : #accessing }
+StInspectorSlotNode >> rawValue [
+	^ self hostObject readSlot: slot
+]
+
+{ #category : #actions }
+StInspectorSlotNode >> save: anObject [
+	self hostObject writeSlot: self slot value: anObject
 ]
 
 { #category : #accessing }
@@ -41,7 +66,16 @@ StInspectorSlotNode >> slot [
 ]
 
 { #category : #accessing }
-StInspectorSlotNode >> value [ 
+StInspectorSlotNode >> slot: aSlot [
 
-	^ self slot read: self object
+	self
+		assert: [ aSlot isNotNil ]
+		description: [ 'Slot can not be nil' ].
+
+	slot := aSlot.
+]
+
+{ #category : #accessing }
+StInspectorSlotNode >> variableTag [
+	^ 'attribute'
 ]
