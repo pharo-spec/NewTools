@@ -6,8 +6,10 @@ Collection >> inspectorItems [
 	
 	^ TablePresenter new 
 		title: 'Items';
-		hideColumnHeaders;
-		addColumn: (StringTableColumn evaluated: [ :each | GTObjectPrinter asTruncatedTextFrom: each ]);
+		addColumn: (IndexTableColumn title: 'Index');
+		addColumn: (StringTableColumn 
+			title: 'Value' 
+			evaluated: [ :each | GTObjectPrinter asTruncatedTextFrom: each ]);
 		items: self asOrderedCollection;
 		yourself
 ]

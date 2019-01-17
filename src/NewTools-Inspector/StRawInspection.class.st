@@ -42,7 +42,7 @@ StRawInspection >> initializeWidgets [
 			title: 'Value';
 			evaluated: #stringValue;
 			beEditable;
-			onAcceptEdition: [ :node :value | self inform: node name, '=', value asString "node value: value" ];
+			onAcceptEdition: [ :node :value | self inform: node label, '=', value asString "node value: value" ];
 			yourself).
 			
 	attributeTable 
