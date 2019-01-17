@@ -28,21 +28,8 @@ StInspectorSlotNode >> browsingActionsForNode [
 ]
 
 { #category : #accessing }
-StInspectorSlotNode >> children [ 
-	
-	^ self value inspectorNodes
-]
-
-{ #category : #accessing }
 StInspectorSlotNode >> errorMessage [
 	^ 'error obtaining attribute value'
-]
-
-{ #category : #accessing }
-StInspectorSlotNode >> inspectorActionsForNode [
-	"Return a collection of available inspector actions associated with a variable node"
-
-	^ self browsingActionsForNode
 ]
 
 { #category : #accessing }
@@ -57,7 +44,10 @@ StInspectorSlotNode >> rawValue [
 
 { #category : #actions }
 StInspectorSlotNode >> save: anObject [
-	self hostObject writeSlot: self slot value: anObject
+
+	self hostObject 
+		writeSlot: self slot 
+		value: anObject
 ]
 
 { #category : #accessing }

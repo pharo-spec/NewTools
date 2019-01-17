@@ -15,17 +15,9 @@ StInspectorNode class >> hostObject: anObject [
 ]
 
 { #category : #accessing }
-StInspectorNode >> children [
-
-	^ #()
-]
-
-{ #category : #composition }
-StInspectorNode >> childrenNodesFor: aVariablesBrowser [
-	"Return a collection of subvariable nodes to be displayed in a given raw variables browser.
-	Note: by default we dispatch to browser and let it perform collection"
-
-	^ aVariablesBrowser childrenVariableNodesForNode: self
+StInspectorNode >> children [ 
+	
+	^ self value allInspectorNodes
 ]
 
 { #category : #accessing }
@@ -68,13 +60,6 @@ StInspectorNode >> icon [
 StInspectorNode >> iconError: error [
 	
 	^ self iconNamed: #smallWarningIcon
-]
-
-{ #category : #actions }
-StInspectorNode >> inspectorActionsForNode [
-	"Return a collection of available inspector actions associated with a variable node"
-
-	^ #()
 ]
 
 { #category : #accessing }

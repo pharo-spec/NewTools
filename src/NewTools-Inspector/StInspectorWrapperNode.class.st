@@ -14,19 +14,9 @@ StInspectorWrapperNode class >> hostObject: anObject label: aString [
 		yourself
 ]
 
-{ #category : #composition }
-StInspectorWrapperNode >> childrenNodesFor: aVariablesBrowser [
-	^ self hostObject childrenNodesFor: aVariablesBrowser
-]
-
 { #category : #accessing }
 StInspectorWrapperNode >> errorMessage [
 	^ self hostObject errorMessage
-]
-
-{ #category : #accessing }
-StInspectorWrapperNode >> inspectorActionsForNode [
-	^ self hostObject inspectorActionsForNode
 ]
 
 { #category : #accessing }
