@@ -16,14 +16,9 @@ Class {
 StInspector class >> defaultSpec [
 	<spec: #default>
 	
-	^ SpecBoxLayout newVertical
+	^ SpecPanedLayout newVertical
 		add: #views;
-		addLast: #evaluator withConstraints: [ :constraints |
-			constraints 
-				expand: false;
-				fill: false; 
-				padding: 0;
-				minHeight: 100 ];
+		add: #evaluator;
 		yourself
 ]
 

@@ -32,7 +32,7 @@ StInspectorBrowseCommand >> initialize [
 		addGroup: StInspectorCommandGroup uniqueInstance;
 		name: 'Browse';
 		description: 'Browse instance class.';
-		iconName: #nautilus
+		iconName: #smallSystemBrowser
 ]
 
 { #category : #accessing }
