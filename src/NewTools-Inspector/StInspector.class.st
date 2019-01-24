@@ -73,17 +73,15 @@ StInspector >> initialExtent [
 { #category : #initialization }
 StInspector >> initializeWidgets [
 
-	views := self newTabManager.
+	views := self newNotebook.
 	evaluator := self newText beForCode.
 	
 	self title: (self class titleFor: self model inspectedObject).
-	views tabs: (self allViews collect: [ :each |
+	views pages: (self allViews collect: [ :each |
 		each owner: self.
-		self newTab 
-			label: each title;
-			presenter: each;
-			closeable: false;
-			yourself ]).
+		NotebookPage 
+			title: each title 
+			presenter: each ]).
 ]
 
 { #category : #initialization }
