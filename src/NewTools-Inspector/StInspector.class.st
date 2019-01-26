@@ -81,7 +81,7 @@ StInspector >> initializeWidgets [
 		each owner: self.
 		NotebookPage 
 			title: each title 
-			presenter: each ]).
+			provider: [ each ] ]).
 ]
 
 { #category : #initialization }
