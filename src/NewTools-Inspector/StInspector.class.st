@@ -17,6 +17,7 @@ StInspector class >> defaultSpec [
 	<spec: #default>
 	
 	^ SpecPanedLayout newVertical
+		position: 70 percent;
 		add: #views;
 		add: #evaluator;
 		yourself
