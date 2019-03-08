@@ -25,7 +25,7 @@ BaselineOfNewTools >> lieutenant: spec [
 	self flag: #TODO. "Using *my* version for now, this needs to be reviewed, and making correct"
 	spec 
 		baseline: 'Lieutenant' 
-		with: [ spec repository: 'github://estebanlm/Lieutenant:master/src' ]
+		with: [ spec repository: 'github://estebanlm/Lieutenant:try-superlight-version/src' ]
 ]
 
 { #category : #dependencies }
