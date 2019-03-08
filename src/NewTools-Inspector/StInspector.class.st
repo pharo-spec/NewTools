@@ -35,6 +35,11 @@ StInspector class >> extensionsPragma [
 	^ #inspectorPresentationOrder:
 ]
 
+{ #category : #'tools registry' }
+StInspector class >> inspect: anObject [
+	self openOn: anObject
+]
+
 { #category : #'instance creation' }
 StInspector class >> openOn: anObject [
 
@@ -73,22 +78,29 @@ StInspector >> initialExtent [
 
 { #category : #initialization }
 StInspector >> initializeWidgets [
-
 	views := self newNotebook.
-	evaluator := self newText beForCode.
-	
-	self title: (self class titleFor: self model inspectedObject).
-	views pages: (self allViews collect: [ :each |
-		each owner: self.
-		NotebookPage 
-			title: each title 
-			provider: [ each ] ]).
+	evaluator := self newText
+		beForCode;
+		aboutToStyle: true;
+		doItReceiver: self inspectedObject.
+	self title: (self class titleFor: self inspectedObject).
+	views
+		pages:
+			(self allViews
+				collect: [ :each | 
+					each owner: self.
+					NotebookPage title: each title provider: [ each ] ])
 ]
 
 { #category : #initialization }
 StInspector >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter toolBar: self newToolBar
+]
+
+{ #category : #'model access' }
+StInspector >> inspectedObject [ 	
+	^self model inspectedObject
 ]
 
 { #category : #'model access' }

@@ -43,3 +43,10 @@ Object >> rawInspection [
 	"This is the most basic presentation showing the state of the object"
 	^ StRawInspection on: self
 ]
+
+{ #category : #'*NewTools-Inspector' }
+Object >> stInspect [
+	"Temporary to experiment, should be replaced by inspect later"
+
+	^ StInspector inspect: self
+]
