@@ -78,7 +78,8 @@ FBFlag >> locations [
 
 { #category : #accessing }
 FBFlag >> locations: anObject [
-	locations := anObject
+	locations := anObject.
+	locations do: [ :location | location flag: self ]
 ]
 
 { #category : #accessing }

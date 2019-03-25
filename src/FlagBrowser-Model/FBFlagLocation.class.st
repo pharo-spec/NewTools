@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'classLocation',
 		'selector',
-		'interval'
+		'interval',
+		'flag'
 	],
 	#category : #'FlagBrowser-Model'
 }
@@ -24,7 +25,7 @@ FBFlagLocation >> = anObject [
 
 	self == anObject ifTrue: [ ^ true ].
 	self class = anObject class ifFalse: [ ^ false ].
-	^ selector = anObject selector and: [ classLocation = anObject classLocation ]
+	^ selector = anObject selector and: [ classLocation = anObject classLocation and: [ interval = anObject interval ] ]
 ]
 
 { #category : #accessing }
@@ -42,11 +43,21 @@ FBFlagLocation >> compiledMethod [
 	^ self classLocation >> self selector
 ]
 
+{ #category : #accessing }
+FBFlagLocation >> flag [
+	^ flag
+]
+
+{ #category : #accessing }
+FBFlagLocation >> flag: aFlag [
+	flag := aFlag
+]
+
 { #category : #comparing }
 FBFlagLocation >> hash [
 	"Answer an integer value that is related to the identity of the receiver."
 
-	^ selector hash bitXor: classLocation hash
+	^ selector hash bitXor: (classLocation hash bitXor: interval hash)
 ]
 
 { #category : #accessing }
@@ -57,6 +68,11 @@ FBFlagLocation >> interval [
 { #category : #accessing }
 FBFlagLocation >> interval: anObject [
 	interval := anObject
+]
+
+{ #category : #accessing }
+FBFlagLocation >> package [
+	^ self classLocation package
 ]
 
 { #category : #accessing }

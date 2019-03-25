@@ -3,9 +3,7 @@ Class {
 	#superclass : #FBPagePresenter,
 	#instVars : [
 		'modeDropbox',
-		'flagsList',
-		'locationsTable',
-		'code'
+		'flagsList'
 	],
 	#category : #'FlagBrowser-Spec'
 }
@@ -42,16 +40,6 @@ FBByFlagsPagePresenter class >> title [
 ]
 
 { #category : #accessing }
-FBByFlagsPagePresenter >> code [
-	^ code
-]
-
-{ #category : #accessing }
-FBByFlagsPagePresenter >> code: anObject [
-	code := anObject
-]
-
-{ #category : #accessing }
 FBByFlagsPagePresenter >> flagsList [
 	^ flagsList
 ]
@@ -63,12 +51,7 @@ FBByFlagsPagePresenter >> flagsList: anObject [
 
 { #category : #initialization }
 FBByFlagsPagePresenter >> initializePresenter [
-	locationsTable
-		whenSelectedItemChangedDo: [ :location | 
-			self code
-				text: location sourceCode;
-				behavior: location classLocation;
-				setSelection: location interval ].
+	super initializePresenter.
 
 	flagsList
 		whenSelectionChangedDo: [ :selection | 
@@ -81,17 +64,14 @@ FBByFlagsPagePresenter >> initializePresenter [
 			self flagsList
 				items: mode allFlags;
 				selectIndex: 1 ];
-		selectedItem: FBSymbolFlag.
-
-	code whenTextIsAcceptedDo: [ :text | code behavior compile: text ]
+		selectedItem: FBSymbolFlag
 ]
 
 { #category : #initialization }
 FBByFlagsPagePresenter >> initializeWidgets [
+	super initializeWidgets.
 	modeDropbox := self newDropList.
 	flagsList := self newList.
-	locationsTable := self newTable.
-	code := self newCode.
 
 	modeDropbox
 		items: FBFlag withAllSubclasses;
@@ -102,23 +82,8 @@ FBByFlagsPagePresenter >> initializeWidgets [
 		sortingBlock: [ :flag | flag parameter asString ] ascending.
 
 	locationsTable
-		activateOnDoubleClick;
-		whenActivatedDo: [ :selection | selection selectedItem openInBrowser ];
 		addColumn: (StringTableColumn title: 'Class' evaluated: #classLocation);
-		addColumn: (StringTableColumn title: 'Method' evaluated: #selector);
-		contextMenu: self tableMenu.
-
-	code aboutToStyle: true
-]
-
-{ #category : #accessing }
-FBByFlagsPagePresenter >> locationsTable [
-	^ locationsTable
-]
-
-{ #category : #accessing }
-FBByFlagsPagePresenter >> locationsTable: anObject [
-	locationsTable := anObject
+		addColumn: (StringTableColumn title: 'Method' evaluated: #selector)
 ]
 
 { #category : #accessing }
@@ -129,21 +94,4 @@ FBByFlagsPagePresenter >> modeDropbox [
 { #category : #accessing }
 FBByFlagsPagePresenter >> modeDropbox: anObject [
 	modeDropbox := anObject
-]
-
-{ #category : #initialization }
-FBByFlagsPagePresenter >> tableMenu [
-	| aMenu |
-	aMenu := MenuPresenter new.
-
-	aMenu
-		addGroup: [ :aGroup | 
-			aGroup
-				addItem: [ :anItem | 
-					anItem
-						name: 'Browse';
-						icon: (self iconNamed: #smallFind);
-						action: [ :param | self locationsTable selectedItem openInBrowser ] ] ].
-
-	^ aMenu
 ]

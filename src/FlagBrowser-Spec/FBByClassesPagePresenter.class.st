@@ -1,6 +1,6 @@
 Class {
 	#name : #FBByClassesPagePresenter,
-	#superclass : #FBPagePresenter,
+	#superclass : #FBByScopePagePresenter,
 	#category : #'FlagBrowser-Spec'
 }
 
@@ -17,4 +17,18 @@ FBByClassesPagePresenter class >> priority [
 { #category : #specs }
 FBByClassesPagePresenter class >> title [
 	^ 'By class'
+]
+
+{ #category : #initialization }
+FBByClassesPagePresenter >> initializeWidgets [
+	super initializeWidgets.
+
+	locationsTable
+		addColumn: (StringTableColumn title: 'Method' evaluated: #selector);
+		addColumn: (StringTableColumn title: 'Flag parameter' evaluated: [ :location | location flag parameter ])
+]
+
+{ #category : #initialization }
+FBByClassesPagePresenter >> scopeSelector [
+	^ #classLocation
 ]
