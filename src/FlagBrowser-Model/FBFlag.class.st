@@ -68,7 +68,7 @@ FBFlag class >> toLocations: aCollectionOfRBNodes [
 		collect: [ :node | 
 			| methodNode |
 			methodNode := node methodNode.
-			FBFlagLocation class: methodNode methodClass selector: methodNode selector ]
+			FBFlagLocation class: methodNode methodClass selector: methodNode selector interval: node sourceInterval ]
 ]
 
 { #category : #accessing }

@@ -3,16 +3,18 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'classLocation',
-		'selector'
+		'selector',
+		'interval'
 	],
 	#category : #'FlagBrowser-Model'
 }
 
 { #category : #'instance creation' }
-FBFlagLocation class >> class: aClass selector: aMethodSelector [
+FBFlagLocation class >> class: aClass selector: aMethodSelector interval: anInterval [
 	^ self new
 		classLocation: aClass;
 		selector: aMethodSelector;
+		interval: anInterval;
 		yourself
 ]
 
@@ -45,6 +47,16 @@ FBFlagLocation >> hash [
 	"Answer an integer value that is related to the identity of the receiver."
 
 	^ selector hash bitXor: classLocation hash
+]
+
+{ #category : #accessing }
+FBFlagLocation >> interval [
+	^ interval
+]
+
+{ #category : #accessing }
+FBFlagLocation >> interval: anObject [
+	interval := anObject
 ]
 
 { #category : #accessing }

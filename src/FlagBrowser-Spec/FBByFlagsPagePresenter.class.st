@@ -68,7 +68,8 @@ FBByFlagsPagePresenter >> initializePresenter [
 		whenSelectedItemChangedDo: [ :location | 
 			self code
 				text: location sourceCode;
-				behavior: location classLocation ].
+				behavior: location classLocation;
+				setSelection: location interval ].
 
 	flagsList
 		whenSelectionChangedDo: [ :selection | 
