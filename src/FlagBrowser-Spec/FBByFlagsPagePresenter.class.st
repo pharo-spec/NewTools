@@ -2,7 +2,6 @@ Class {
 	#name : #FBByFlagsPagePresenter,
 	#superclass : #FBPagePresenter,
 	#instVars : [
-		'selectedMode',
 		'modeDropbox',
 		'flagsList',
 		'locationsTable',
@@ -78,9 +77,12 @@ FBByFlagsPagePresenter >> initializePresenter [
 				selectIndex: 1 ].
 
 	modeDropbox
-		whenSelectedItemChangedDo: [ :mode | self selectedMode: mode ];
+		whenSelectedItemChangedDo: [ :mode | 
+			self flagsList
+				items: mode allFlags;
+				selectIndex: 1 ];
 		selectedItem: FBSymbolFlag.
-		
+
 	code whenTextIsAcceptedDo: [ :text | code behavior compile: text ]
 ]
 
@@ -127,21 +129,6 @@ FBByFlagsPagePresenter >> modeDropbox [
 { #category : #accessing }
 FBByFlagsPagePresenter >> modeDropbox: anObject [
 	modeDropbox := anObject
-]
-
-{ #category : #accessing }
-FBByFlagsPagePresenter >> selectedMode [
-	^ selectedMode
-]
-
-{ #category : #accessing }
-FBByFlagsPagePresenter >> selectedMode: anObject [
-	selectedMode := anObject.
-	self flagsList
-		ifNotNil: [ :list | 
-			list
-				items: selectedMode allFlags;
-				selectIndex: 1 ]
 ]
 
 { #category : #initialization }
