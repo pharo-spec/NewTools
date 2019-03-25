@@ -9,10 +9,11 @@ Class {
 
 { #category : #specs }
 FBByScopePagePresenter class >> defaultSpec [
-	^ SpecBoxLayout newHorizontal
-		add: #scopesList withConstraints: [ :constraints | constraints width: 250 ];
+	^ SpecPanedLayout newHorizontal
+		position: 250;
+		add: #scopesList;
 		add:
-			(SpecBoxLayout newVertical
+			(SpecPanedLayout newVertical
 				add: #locationsTable;
 				add: #code;
 				yourself);

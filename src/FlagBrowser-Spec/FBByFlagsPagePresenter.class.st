@@ -13,10 +13,11 @@ FBByFlagsPagePresenter class >> defaultSpec [
 	^ SpecBoxLayout newVertical
 		add: #modeDropbox withConstraints: [ :constraints | constraints height: 30 ];
 		add:
-			(SpecBoxLayout newHorizontal
-				add: #flagsList withConstraints: [ :constraints | constraints width: 250 ];
+			(SpecPanedLayout newHorizontal
+				position: 250;
+				add: #flagsList;
 				add:
-					(SpecBoxLayout newVertical
+					(SpecPanedLayout newVertical
 						add: #locationsTable;
 						add: #code;
 						yourself);
