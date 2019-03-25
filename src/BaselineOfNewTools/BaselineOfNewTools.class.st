@@ -7,16 +7,18 @@ Class {
 { #category : #baselines }
 BaselineOfNewTools >> baseline: spec [
 	<baseline>
-	
-	spec for: #common do: [ 
-		self spec: spec.
-		self lieutenant: spec.
+	spec
+		for: #common
+		do: [ self spec: spec.
+			self lieutenant: spec.
 
-		spec
-			package: 'NewTools' with: [ spec requires: #('Spec') ];
-			package: 'HelpCenter' with: [ spec requires: #('NewTools') ];
-			package: 'NewTools-Inspector' with: [ spec requires: #('Spec' 'Lieutenant') ];
-			package: 'NewTools-Playground' with: [ spec requires: #('NewTools-Inspector') ] ]
+			spec
+				package: 'NewTools' with: [ spec requires: #('Spec') ];
+				package: 'HelpCenter' with: [ spec requires: #('NewTools') ];
+				package: 'NewTools-Inspector' with: [ spec requires: #('Spec' 'Lieutenant') ];
+				package: 'NewTools-Playground' with: [ spec requires: #('NewTools-Inspector') ];
+				package: 'FlagBrowser-Model';
+				package: 'FlagBrowser-Spec' with: [ spec requires: #('FlagBrowser-Model') ] ]
 ]
 
 { #category : #dependencies }
