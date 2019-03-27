@@ -23,7 +23,7 @@ Class {
 		'classLocation',
 		'selector',
 		'interval',
-		'flag'
+		'owner'
 	],
 	#category : #'FlagBrowser-Model'
 }
@@ -61,16 +61,6 @@ FBLocation >> compiledMethod [
 	^ self classLocation >> self selector
 ]
 
-{ #category : #accessing }
-FBLocation >> flag [
-	^ flag
-]
-
-{ #category : #accessing }
-FBLocation >> flag: aFlag [
-	flag := aFlag
-]
-
 { #category : #comparing }
 FBLocation >> hash [
 	"Answer an integer value that is related to the identity of the receiver."
@@ -86,6 +76,16 @@ FBLocation >> interval [
 { #category : #accessing }
 FBLocation >> interval: anObject [
 	interval := anObject
+]
+
+{ #category : #accessing }
+FBLocation >> owner [
+	^ owner
+]
+
+{ #category : #accessing }
+FBLocation >> owner: aFlag [
+	owner := aFlag
 ]
 
 { #category : #accessing }

@@ -53,7 +53,7 @@ FBFlag class >> allFlags [
 FBFlag class >> allFlagsInSystem [
 	| flagNodes flags |
 	flags := OrderedCollection new.
-	flagNodes := #flag: senders flatCollect: [ :sender | sender compiledMethod ast allChildren select: [ :child | child isMessage and: [ child selector = #flag: ] ] ].
+	flagNodes := #owner: senders flatCollect: [ :sender | sender compiledMethod ast allChildren select: [ :child | child isMessage and: [ child selector = #owner: ] ] ].
 	(flagNodes groupedBy: [ :node | node arguments first value ])
 		keysAndValuesDo: [ :argument :rbNodes | 
 			self
@@ -147,7 +147,7 @@ FBFlag >> locations [
 { #category : #accessing }
 FBFlag >> locations: anObject [
 	locations := anObject.
-	locations do: [ :location | location flag: self ]
+	locations do: [ :location | location owner: self ]
 ]
 
 { #category : #accessing }
