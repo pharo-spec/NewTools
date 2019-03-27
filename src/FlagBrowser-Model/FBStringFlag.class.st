@@ -19,3 +19,8 @@ FBStringFlag class >> matchesArgument: aFlagArgument [
 FBStringFlag class >> priority [
 	^ 10
 ]
+
+{ #category : #update }
+FBStringFlag >> insensitiveParameter [
+	self parameter: self parameter asLowercase capitalized
+]

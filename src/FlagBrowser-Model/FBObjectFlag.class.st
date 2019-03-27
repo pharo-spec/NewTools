@@ -19,3 +19,8 @@ FBObjectFlag class >> matchesArgument: aFlagArgument [
 FBObjectFlag class >> priority [
 	^ 0
 ]
+
+{ #category : #update }
+FBObjectFlag >> insensitiveParameter [
+	"Do nothing for objects."
+]

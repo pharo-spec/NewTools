@@ -21,7 +21,8 @@ Class {
 	#superclass : #FBPagePresenter,
 	#instVars : [
 		'modeDropbox',
-		'flagsList'
+		'flagsList',
+		'caseCheckbox'
 	],
 	#category : #'FlagBrowser-Spec'
 }
@@ -40,6 +41,7 @@ FBByFlagsPagePresenter class >> defaultSpec [
 						add: #code;
 						yourself);
 				yourself);
+		add: #caseCheckbox withConstraints: [ :constraints | constraints height: 20 ];
 		yourself
 ]
 
@@ -83,7 +85,12 @@ FBByFlagsPagePresenter >> initializePresenter [
 			self flagsList
 				items: mode allFlags;
 				selectIndex: 1 ];
-		selectedItem: FBSymbolFlag
+		selectedItem: FBSymbolFlag.
+
+	caseCheckbox
+		whenChangedDo: [ :value | 
+			FBFlag caseSensitive: value.
+			modeDropbox selectedItem: modeDropbox selectedItem "Used to refresh the list" ]
 ]
 
 { #category : #initialization }
@@ -91,6 +98,7 @@ FBByFlagsPagePresenter >> initializeWidgets [
 	super initializeWidgets.
 	modeDropbox := self newDropList.
 	flagsList := self newList.
+	caseCheckbox := self newCheckBox.
 
 	modeDropbox
 		items: FBFlag withAllSubclasses;
@@ -102,7 +110,11 @@ FBByFlagsPagePresenter >> initializeWidgets [
 
 	locationsTable
 		addColumn: (StringTableColumn title: 'Class' evaluated: #classLocation);
-		addColumn: (StringTableColumn title: 'Method' evaluated: #selector)
+		addColumn: (StringTableColumn title: 'Method' evaluated: #selector).
+
+	caseCheckbox
+		label: 'Case sensitive';
+		state: FBFlag caseSensitive
 ]
 
 { #category : #accessing }

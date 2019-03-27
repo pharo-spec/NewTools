@@ -23,8 +23,26 @@ Class {
 		'parameter',
 		'locations'
 	],
+	#classVars : [
+		'CaseSensitive'
+	],
 	#category : #'FlagBrowser-Model'
 }
+
+{ #category : #accessing }
+FBFlag class >> addNew: aClass for: argument with: rbNodes in: flags [
+	self caseSensitive
+		ifFalse: [ | insensitiveArgument |
+			insensitiveArgument := argument asString asLowercase.
+			flags
+				detect: [ :flag | flag parameter asString asLowercase = insensitiveArgument and: [ flag parameter class = argument class ] ]
+				ifFound: [ :flag | 
+					^ flag
+						addLocations: (self toLocations: rbNodes);
+						insensitiveParameter ] ].
+
+	flags add: (aClass parameter: argument locations: (self toLocations: rbNodes))
+]
 
 { #category : #accessing }
 FBFlag class >> allFlags [
@@ -36,7 +54,13 @@ FBFlag class >> allFlagsInSystem [
 	| flagNodes flags |
 	flags := OrderedCollection new.
 	flagNodes := #flag: senders flatCollect: [ :sender | sender compiledMethod ast allChildren select: [ :child | child isMessage and: [ child selector = #flag: ] ] ].
-	(flagNodes groupedBy: [ :node | node arguments first value ]) keysAndValuesDo: [ :argument :rbNodes | flags add: ((self flagClassFor: argument) parameter: argument locations: (self toLocations: rbNodes)) ].
+	(flagNodes groupedBy: [ :node | node arguments first value ])
+		keysAndValuesDo: [ :argument :rbNodes | 
+			self
+				addNew: (self flagClassFor: argument)
+				for: argument
+				with: rbNodes
+				in: flags ].
 	^ flags
 ]
 
@@ -48,8 +72,24 @@ FBFlag class >> allInSystem [
 	flags := OrderedCollection new.
 	flagNodes := #flag: senders flatCollect: [ :sender | sender compiledMethod ast allChildren select: [ :child | child isMessage and: [ child selector = #flag: ] ] ].
 	(flagNodes groupedBy: [ :node | node arguments first value ])
-		keysAndValuesDo: [ :argument :rbNodes | (FBFlag flagClassFor: argument) = self ifTrue: [ flags add: (self parameter: argument locations: (self toLocations: rbNodes)) ] ].
+		keysAndValuesDo: [ :argument :rbNodes | 
+			(FBFlag flagClassFor: argument) = self
+				ifTrue: [ self
+						addNew: self
+						for: argument
+						with: rbNodes
+						in: flags ] ].
 	^ flags
+]
+
+{ #category : #accessing }
+FBFlag class >> caseSensitive [
+	^ CaseSensitive ifNil: [ CaseSensitive := true ]
+]
+
+{ #category : #accessing }
+FBFlag class >> caseSensitive: anObject [
+	CaseSensitive := anObject
 ]
 
 { #category : #accessing }
@@ -87,6 +127,16 @@ FBFlag class >> toLocations: aCollectionOfRBNodes [
 			| methodNode |
 			methodNode := node methodNode.
 			FBLocation class: methodNode methodClass selector: methodNode selector interval: node sourceInterval ]
+]
+
+{ #category : #adding }
+FBFlag >> addLocations: aCollection [
+	self locations addAll: aCollection
+]
+
+{ #category : #update }
+FBFlag >> insensitiveParameter [
+	self subclassResponsibility
 ]
 
 { #category : #accessing }
