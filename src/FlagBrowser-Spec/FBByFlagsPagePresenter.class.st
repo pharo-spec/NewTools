@@ -18,7 +18,7 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #FBByFlagsPagePresenter,
-	#superclass : #FBPagePresenter,
+	#superclass : #FBFlagPresentationPresenter,
 	#instVars : [
 		'modeDropbox',
 		'flagsList',

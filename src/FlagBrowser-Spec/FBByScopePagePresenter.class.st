@@ -13,7 +13,7 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #FBByScopePagePresenter,
-	#superclass : #FBPagePresenter,
+	#superclass : #FBFlagPresentationPresenter,
 	#instVars : [
 		'scopesList'
 	],
