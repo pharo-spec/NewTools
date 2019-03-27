@@ -1,3 +1,21 @@
+"
+Description
+--------------------
+
+I represent a Flag. A flag is a call to the method Object>>flag with a specific parameter. 
+
+I save the parameter of the flag (it can be a symbol, a string or an object) and its location (the method it is in).
+
+I am an abstract classes and my subclasses will be diferenciated by their parameter kind.
+ 
+Internal Representation and Key Implementation Points.
+--------------------
+
+    Instance Variables
+	locations:		<aCollection>	A collection of FBLocation
+	parameter:		<anObject>		Parameter of the flag. Can be a Symbol, a String or an object.
+
+"
 Class {
 	#name : #FBFlag,
 	#superclass : #Object,
@@ -68,7 +86,7 @@ FBFlag class >> toLocations: aCollectionOfRBNodes [
 		collect: [ :node | 
 			| methodNode |
 			methodNode := node methodNode.
-			FBFlagLocation class: methodNode methodClass selector: methodNode selector interval: node sourceInterval ]
+			FBLocation class: methodNode methodClass selector: methodNode selector interval: node sourceInterval ]
 ]
 
 { #category : #accessing }

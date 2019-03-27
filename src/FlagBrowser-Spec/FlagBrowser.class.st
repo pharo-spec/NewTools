@@ -1,3 +1,11 @@
+"
+Description
+--------------------
+
+I am a browser allowing one to browse the flags in the system. 
+
+I can organize them in different ways such as flags by flags parameters, flags by class or flags by packages.
+"
 Class {
 	#name : #FlagBrowser,
 	#superclass : #ComposablePresenter,

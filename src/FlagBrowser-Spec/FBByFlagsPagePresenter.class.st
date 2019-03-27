@@ -1,3 +1,21 @@
+"
+Description
+--------------------
+
+I am a page presenter to show the flags grouped by their parameters. 
+
+The user will need to select a flag parameter and see all the locations with this parameter.
+
+I will show different mode to browse the flags depending on the kin of their parameter. (Symbol, String, Object, Anyone)
+ 
+Internal Representation and Key Implementation Points.
+--------------------
+
+    Instance Variables
+	flagsList:		<aListPresenter>		A list displaying the differents parameters possible.
+	modeDropbox:		<aDropListPresenter>	A drop list to select the parameter kinds to show.
+
+"
 Class {
 	#name : #FBByFlagsPagePresenter,
 	#superclass : #FBPagePresenter,

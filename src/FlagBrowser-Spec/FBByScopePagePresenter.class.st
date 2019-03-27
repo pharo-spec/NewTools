@@ -1,3 +1,16 @@
+"
+Description
+--------------------
+
+I am a presenter showing the flags in a scope.
+ 
+Internal Representation and Key Implementation Points.
+--------------------
+
+    Instance Variables
+	scopesList:		<aListPresenter>	The list of scopes the user can select.
+
+"
 Class {
 	#name : #FBByScopePagePresenter,
 	#superclass : #FBPagePresenter,

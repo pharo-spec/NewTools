@@ -1,5 +1,23 @@
+"
+Description
+--------------------
+
+I represent a flag location. The location is the method in which it was defined. 
+
+I am used by FBFlag.
+ 
+Internal Representation and Key Implementation Points.
+--------------------
+
+    Instance Variables
+	classLocation:		<aClass>			Class of the compiled method containing the flag.
+	flag:					<aFlag>			Flag which is present at this location.
+	interval:				<anInterval>		Interval in the code where the flag is.
+	selector:				<aSelector>		Selector of the compiled method containing the flag.
+
+"
 Class {
-	#name : #FBFlagLocation,
+	#name : #FBLocation,
 	#superclass : #Object,
 	#instVars : [
 		'classLocation',
@@ -11,7 +29,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-FBFlagLocation class >> class: aClass selector: aMethodSelector interval: anInterval [
+FBLocation class >> class: aClass selector: aMethodSelector interval: anInterval [
 	^ self new
 		classLocation: aClass;
 		selector: aMethodSelector;
@@ -20,7 +38,7 @@ FBFlagLocation class >> class: aClass selector: aMethodSelector interval: anInte
 ]
 
 { #category : #comparing }
-FBFlagLocation >> = anObject [
+FBLocation >> = anObject [
 	"Answer whether the receiver and anObject represent the same object."
 
 	self == anObject ifTrue: [ ^ true ].
@@ -29,63 +47,63 @@ FBFlagLocation >> = anObject [
 ]
 
 { #category : #accessing }
-FBFlagLocation >> classLocation [
+FBLocation >> classLocation [
 	^ classLocation
 ]
 
 { #category : #accessing }
-FBFlagLocation >> classLocation: anObject [
+FBLocation >> classLocation: anObject [
 	classLocation := anObject
 ]
 
 { #category : #accessing }
-FBFlagLocation >> compiledMethod [
+FBLocation >> compiledMethod [
 	^ self classLocation >> self selector
 ]
 
 { #category : #accessing }
-FBFlagLocation >> flag [
+FBLocation >> flag [
 	^ flag
 ]
 
 { #category : #accessing }
-FBFlagLocation >> flag: aFlag [
+FBLocation >> flag: aFlag [
 	flag := aFlag
 ]
 
 { #category : #comparing }
-FBFlagLocation >> hash [
+FBLocation >> hash [
 	"Answer an integer value that is related to the identity of the receiver."
 
 	^ selector hash bitXor: (classLocation hash bitXor: interval hash)
 ]
 
 { #category : #accessing }
-FBFlagLocation >> interval [
+FBLocation >> interval [
 	^ interval
 ]
 
 { #category : #accessing }
-FBFlagLocation >> interval: anObject [
+FBLocation >> interval: anObject [
 	interval := anObject
 ]
 
 { #category : #accessing }
-FBFlagLocation >> package [
+FBLocation >> package [
 	^ self classLocation package
 ]
 
 { #category : #accessing }
-FBFlagLocation >> selector [
+FBLocation >> selector [
 	^ selector
 ]
 
 { #category : #accessing }
-FBFlagLocation >> selector: anObject [
+FBLocation >> selector: anObject [
 	selector := anObject
 ]
 
 { #category : #accessing }
-FBFlagLocation >> sourceCode [
+FBLocation >> sourceCode [
 	^ self compiledMethod sourceCode
 ]

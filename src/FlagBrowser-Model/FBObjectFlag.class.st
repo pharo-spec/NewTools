@@ -1,3 +1,9 @@
+"
+Description
+--------------------
+
+I represent a flag which parameter is an Object.
+"
 Class {
 	#name : #FBObjectFlag,
 	#superclass : #FBFlag,

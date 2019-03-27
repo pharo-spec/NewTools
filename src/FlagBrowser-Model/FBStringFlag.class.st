@@ -1,3 +1,9 @@
+"
+Description
+--------------------
+
+I represent a flag which parameter is a String.
+"
 Class {
 	#name : #FBStringFlag,
 	#superclass : #FBFlag,

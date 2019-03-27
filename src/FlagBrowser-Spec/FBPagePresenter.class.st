@@ -1,3 +1,19 @@
+"
+Description
+--------------------
+
+I represent a tab of the FlagBrowser. 
+
+We different subclasses will organize flags in different ways.
+
+Internal Representation and Key Implementation Points.
+--------------------
+
+    Instance Variables
+	code:					<aTextPresenter>		A text presenter to show the source code of the method containing the flag.
+	locationsTable:		<aTablePresenter>		A table presenter to show the different locations to highlight to the user depending on the page organization.
+
+"
 Class {
 	#name : #FBPagePresenter,
 	#superclass : #ComposablePresenter,

@@ -1,3 +1,9 @@
+"
+Description
+--------------------
+
+I represent a flag which parameter is a Symbol.
+"
 Class {
 	#name : #FBSymbolFlag,
 	#superclass : #FBFlag,

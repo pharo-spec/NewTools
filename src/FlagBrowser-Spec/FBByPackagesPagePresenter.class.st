@@ -1,3 +1,9 @@
+"
+Description
+--------------------
+
+I am a presenter showing the flags in packages.
+"
 Class {
 	#name : #FBByPackagesPagePresenter,
 	#superclass : #FBByScopePagePresenter,
