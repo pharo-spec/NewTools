@@ -40,8 +40,16 @@ FBFlagPresentationPresenter >> code: anObject [
 { #category : #initialization }
 FBFlagPresentationPresenter >> initializePresenter [
 	code whenTextIsAcceptedDo: [ :text | code behavior compile: text ].
-	
-	locationsTable whenSelectedItemChangedDo: [ :location | self selectLocation: location ]
+
+	self transmit
+		from: locationsTable
+		to: code
+		transform: #sourceCode
+		postTransmission:
+			[ :destination :origin :location | 
+			destination
+				behavior: location classLocation;
+				setSelection: location interval ]
 ]
 
 { #category : #initialization }
@@ -66,14 +74,6 @@ FBFlagPresentationPresenter >> locationsTable [
 { #category : #accessing }
 FBFlagPresentationPresenter >> locationsTable: anObject [
 	locationsTable := anObject
-]
-
-{ #category : #initialization }
-FBFlagPresentationPresenter >> selectLocation: location [
-	^ self code
-		text: location sourceCode;
-		behavior: location classLocation;
-		setSelection: location interval
 ]
 
 { #category : #initialization }

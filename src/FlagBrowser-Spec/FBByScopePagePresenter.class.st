@@ -44,11 +44,13 @@ FBByScopePagePresenter >> initializePresenter [
 	super initializePresenter.
 	locationsByScope := (FBFlag allFlags flatCollect: #locations) groupedBy: self scopeSelector.
 
+	self transmit
+		from: scopesList
+		to: locationsTable
+		transform: [ :scope | locationsByScope at: scope ]
+		postTransmission: [ :destination | destination selectIndex: 1 ].
+
 	scopesList
-		whenSelectionChangedDo: [ :selection | 
-			locationsTable
-				items: (locationsByScope at: selection selectedItem);
-				selectIndex: 1 ];
 		items: locationsByScope keys;
 		selectIndex: 1
 ]
@@ -61,4 +63,9 @@ FBByScopePagePresenter >> initializeWidgets [
 	scopesList
 		displayBlock: #name;
 		sortingBlock: #name ascending
+]
+
+{ #category : #initialization }
+FBByScopePagePresenter >> scopeSelector [
+	^ self subclassResponsibility
 ]

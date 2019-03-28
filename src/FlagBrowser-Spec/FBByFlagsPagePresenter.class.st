@@ -73,24 +73,21 @@ FBByFlagsPagePresenter >> flagsList: anObject [
 { #category : #initialization }
 FBByFlagsPagePresenter >> initializePresenter [
 	super initializePresenter.
+	
+	self transmit
+		from: flagsList
+		to: locationsTable
+		transform: #locations
+		postTransmission: [ :destination | destination selectIndex: 1 ].
 
-	flagsList
-		whenSelectionChangedDo: [ :selection | 
-			self locationsTable
-				items: selection selectedItem locations;
-				selectIndex: 1 ].
+	self transmit from: modeDropbox to: flagsList transform: #allFlags postTransmission: [ :destination | destination selectIndex: 1 ].
 
-	modeDropbox
-		whenSelectedItemChangedDo: [ :mode | 
-			self flagsList
-				items: mode allFlags;
-				selectIndex: 1 ];
-		selectedItem: FBSymbolFlag.
+	modeDropbox selectedItem: FBSymbolFlag.
 
 	caseCheckbox
 		whenChangedDo: [ :value | 
 			FBFlag caseSensitive: value.
-			modeDropbox selectedItem: modeDropbox selectedItem "Used to refresh the list" ]
+			modeDropbox selectedItem: modeDropbox selectedItem	"Used to refresh the list" ]
 ]
 
 { #category : #initialization }
