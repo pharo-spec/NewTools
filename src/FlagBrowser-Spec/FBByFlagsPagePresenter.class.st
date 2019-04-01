@@ -73,14 +73,10 @@ FBByFlagsPagePresenter >> flagsList: anObject [
 { #category : #initialization }
 FBByFlagsPagePresenter >> initializePresenter [
 	super initializePresenter.
-	
-	self transmit
-		from: flagsList
-		to: locationsTable
-		transform: #locations
-		postTransmission: [ :destination | destination selectIndex: 1 ].
 
-	self transmit from: modeDropbox to: flagsList transform: #allFlags postTransmission: [ :destination | destination selectIndex: 1 ].
+	flagsList transmitTo: locationsTable transform: #locations postTransmission: [ :destination | destination selectIndex: 1 ].
+
+	modeDropbox transmitTo: flagsList transform: #allFlags postTransmission: [ :destination | destination selectIndex: 1 ].
 
 	modeDropbox selectedItem: FBSymbolFlag.
 

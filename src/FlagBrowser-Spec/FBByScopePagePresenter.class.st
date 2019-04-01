@@ -44,11 +44,7 @@ FBByScopePagePresenter >> initializePresenter [
 	super initializePresenter.
 	locationsByScope := (FBFlag allFlags flatCollect: #locations) groupedBy: self scopeSelector.
 
-	self transmit
-		from: scopesList
-		to: locationsTable
-		transform: [ :scope | locationsByScope at: scope ]
-		postTransmission: [ :destination | destination selectIndex: 1 ].
+	scopesList transmitTo: locationsTable transform: [ :scope | locationsByScope at: scope ] postTransmission: [ :destination | destination selectIndex: 1 ].
 
 	scopesList
 		items: locationsByScope keys;

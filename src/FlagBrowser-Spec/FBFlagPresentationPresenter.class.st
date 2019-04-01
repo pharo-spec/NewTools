@@ -41,12 +41,10 @@ FBFlagPresentationPresenter >> code: anObject [
 FBFlagPresentationPresenter >> initializePresenter [
 	code whenTextIsAcceptedDo: [ :text | code behavior compile: text ].
 
-	self transmit
-		from: locationsTable
-		to: code
+	locationsTable
+		transmitTo: code
 		transform: #sourceCode
-		postTransmission:
-			[ :destination :origin :location | 
+		postTransmission: [ :destination :origin :location | 
 			destination
 				behavior: location classLocation;
 				setSelection: location interval ]
