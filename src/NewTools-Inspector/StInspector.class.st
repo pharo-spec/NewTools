@@ -35,7 +35,7 @@ StInspector class >> extensionsPragma [
 	^ #inspectorPresentationOrder:
 ]
 
-{ #category : #'instance creation' }
+{ #category : #opening }
 StInspector class >> openOn: anObject [
 
 	^ (self on: (StInspectorModel on: anObject)) openWithSpec
@@ -75,7 +75,7 @@ StInspector >> initialExtent [
 StInspector >> initializeWidgets [
 
 	views := self newNotebook.
-	evaluator := self newText beForCode.
+	evaluator := self newCode.
 	
 	self title: (self class titleFor: self model inspectedObject).
 	views pages: (self allViews collect: [ :each |
