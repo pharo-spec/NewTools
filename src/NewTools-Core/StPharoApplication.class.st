@@ -27,13 +27,13 @@ StPharoApplication >> start [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #convenience }
 StPharoApplication >> useGtk [
 
 	self useBackend: #Gtk with: StPharoGtkConfiguration new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #convenience }
 StPharoApplication >> useMorphic [
 
 	self useBackend: #Morphic

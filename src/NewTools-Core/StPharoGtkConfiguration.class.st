@@ -1,27 +1,24 @@
 Class {
 	#name : #StPharoGtkConfiguration,
 	#superclass : #SpecApplicationConfiguration,
-	#instVars : [
-		'platform'
-	],
 	#category : #'NewTools-Core'
 }
 
-{ #category : #initialization }
-StPharoGtkConfiguration >> initialize [
+{ #category : #configuring }
+StPharoGtkConfiguration >> configureOSX: anApplication [
 
-	super initialize.
-	platform := StPlatform newForPlatform
+	self installTheme: 'Sierra-dark'.
+	"self installTheme: 'Sierra-light'"	
+]
+
+{ #category : #configuring }
+StPharoGtkConfiguration >> configureWindows: anApplication [
+
+	self installTheme: 'Windows-10-master'
 ]
 
 { #category : #'private running' }
-StPharoGtkConfiguration >> installTheme [
+StPharoGtkConfiguration >> installTheme: aString [
 
-	GtkSettings default themeName: self platform defaultTheme
-]
-
-{ #category : #accessing }
-StPharoGtkConfiguration >> platform [ 
-
-	^ platform
+	GtkSettings default themeName: aString
 ]

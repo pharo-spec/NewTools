@@ -65,12 +65,6 @@ StInspector >> collectViews [
 	^ self model objectInspections
 ]
 
-{ #category : #api }
-StInspector >> initialExtent [ 
-
-	^ self class preferredExtent
-]
-
 { #category : #initialization }
 StInspector >> initializeWidgets [
 
@@ -88,7 +82,10 @@ StInspector >> initializeWidgets [
 { #category : #initialization }
 StInspector >> initializeWindow: aWindowPresenter [
 
-	aWindowPresenter toolBar: self newToolBar
+	super initializeWindow: aWindowPresenter.
+	aWindowPresenter 
+		title: self title;
+		toolBar: self newToolBar
 ]
 
 { #category : #'model access' }

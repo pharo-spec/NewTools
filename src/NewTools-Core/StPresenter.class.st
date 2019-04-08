@@ -40,3 +40,21 @@ StPresenter class >> owner: anOwningPresenter on: aDomainObject [
 		owner: anOwningPresenter
 		model: aDomainObject
 ]
+
+{ #category : #accessing }
+StPresenter class >> preferredExtent [
+
+	^ 600@400
+]
+
+{ #category : #initialization }
+StPresenter >> initializeWindow: aWindowPresenter [
+
+	aWindowPresenter initialExtent: self preferredExtent	
+]
+
+{ #category : #initialization }
+StPresenter >> preferredExtent [
+
+	^ self class preferredExtent
+]

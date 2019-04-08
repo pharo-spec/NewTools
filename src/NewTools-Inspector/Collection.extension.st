@@ -6,7 +6,7 @@ Collection >> inspectorItems [
 	
 	^ TablePresenter new 
 		title: 'Items';
-		addColumn: (IndexTableColumn title: 'Index');
+		addColumn: ((IndexTableColumn title: 'Index') width: 40);
 		addColumn: (StringTableColumn 
 			title: 'Value' 
 			evaluated: [ :each | GTObjectPrinter asTruncatedTextFrom: each ]);
