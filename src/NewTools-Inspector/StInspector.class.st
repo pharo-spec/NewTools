@@ -79,8 +79,7 @@ StInspector >> initialExtent [
 { #category : #initialization }
 StInspector >> initializeWidgets [
 	views := self newNotebook.
-	evaluator := self newText
-		beForCode;
+	evaluator := self newCode
 		aboutToStyle: true;
 		doItReceiver: self inspectedObject.
 	self title: (self class titleFor: self inspectedObject).
