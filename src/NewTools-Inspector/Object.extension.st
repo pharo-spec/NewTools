@@ -9,6 +9,12 @@ Object >> allInspectorNodes [
 ]
 
 { #category : #'*NewTools-Inspector' }
+Object >> breakpointInspection [
+	<inspectorPresentationOrder: 0>
+	^ StBreakpointInspection on: self
+]
+
+{ #category : #'*NewTools-Inspector' }
 Object >> inspections [
 	"This is a utility method that collects all presentations for the current object.
 	By default, it simply looks for the #gtInspectorPresentationOrder: pragma.
