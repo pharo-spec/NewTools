@@ -10,7 +10,8 @@ Object >> allInspectorNodes [
 
 { #category : #'*NewTools-Inspector-Extensions' }
 Object >> breakpointInspection [
-	<inspectorPresentationOrder: 0>
+	<inspectorPresentationOrder: 998>
+
 	^ StBreakpointInspection on: self
 ]
 
@@ -46,7 +47,8 @@ Object >> inspectorNodes [
 
 { #category : #'*NewTools-Inspector-Extensions' }
 Object >> metaInspection [
-	<inspectorPresentationOrder: 0>
+	<inspectorPresentationOrder: 999>
+
 	^ StMetaBrowser on: self
 ]
 
