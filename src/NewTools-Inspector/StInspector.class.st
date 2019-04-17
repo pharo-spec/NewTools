@@ -40,7 +40,7 @@ StInspector class >> inspect: anObject [
 	self openOn: anObject
 ]
 
-{ #category : #'instance creation' }
+{ #category : #opening }
 StInspector class >> openOn: anObject [
 
 	^ (self on: (StInspectorModel on: anObject)) openWithSpec
@@ -70,31 +70,29 @@ StInspector >> collectViews [
 	^ self model objectInspections
 ]
 
-{ #category : #api }
-StInspector >> initialExtent [ 
-
-	^ self class preferredExtent
-]
-
 { #category : #initialization }
 StInspector >> initializeWidgets [
+
 	views := self newNotebook.
-	evaluator := self newCode
-		aboutToStyle: true;
-		doItReceiver: self inspectedObject.
-	self title: (self class titleFor: self inspectedObject).
-	views
-		pages:
-			(self allViews
-				collect: [ :each | 
-					each owner: self.
-					NotebookPage title: each title provider: [ each ] ])
+	evaluator := self newCode.
+	
+	self title: (self class titleFor: self model inspectedObject).
+	views pages: (self allViews collect: [ :each |
+		each owner: self.
+		NotebookPage 
+			title: each title 
+			provider: [ each ] ]).
+		
+	self refresh
 ]
 
 { #category : #initialization }
 StInspector >> initializeWindow: aWindowPresenter [
 
-	aWindowPresenter toolBar: self newToolBar
+	super initializeWindow: aWindowPresenter.
+	aWindowPresenter 
+		title: self title;
+		toolBar: self newToolBar
 ]
 
 { #category : #'model access' }
@@ -128,7 +126,10 @@ StInspector >> newToolBar [
 StInspector >> refresh [
 	"model changed?  
 	 update inspector values."
-	self flag: #TODO.
+	self flag: #TODO. "not finished, clearly :P"
+	
+	evaluator 
+		doItReceiver: self model inspectedObject
 ]
 
 { #category : #'model access' }

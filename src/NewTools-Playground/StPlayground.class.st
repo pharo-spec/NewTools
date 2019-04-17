@@ -56,7 +56,7 @@ StPlayground >> initialize [
 { #category : #initialization }
 StPlayground >> initializeWidgets [
 	
-	text := self newText beForCode.
+	text := self newCode.
 	self focusOrder add: text
 ]
 
