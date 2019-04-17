@@ -4,7 +4,7 @@ A FBStringFlagTest is a test class for testing the behavior of FBStringFlag
 Class {
 	#name : #FBStringFlagTest,
 	#superclass : #FBFlagTest,
-	#category : #'FlagBrowser-Model-Tests'
+	#category : #'NewTools-FlagBrowser-Tests'
 }
 
 { #category : #accessing }

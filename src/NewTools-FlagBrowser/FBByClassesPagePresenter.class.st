@@ -7,7 +7,7 @@ I am a presenter showing the flags in classes.
 Class {
 	#name : #FBByClassesPagePresenter,
 	#superclass : #FBByScopePagePresenter,
-	#category : #'FlagBrowser-Spec'
+	#category : #'NewTools-FlagBrowser-Presenters'
 }
 
 { #category : #specs }

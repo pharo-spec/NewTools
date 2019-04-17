@@ -7,7 +7,7 @@ I represent a flag which parameter is an Object.
 Class {
 	#name : #FBObjectFlag,
 	#superclass : #FBFlag,
-	#category : #'FlagBrowser-Model'
+	#category : #'NewTools-FlagBrowser-Model'
 }
 
 { #category : #testing }
@@ -18,6 +18,11 @@ FBObjectFlag class >> matchesArgument: aFlagArgument [
 { #category : #accessing }
 FBObjectFlag class >> priority [
 	^ 0
+]
+
+{ #category : #'as yet unclassified' }
+FBObjectFlag class >> title [
+	^ 'Object flags'
 ]
 
 { #category : #update }

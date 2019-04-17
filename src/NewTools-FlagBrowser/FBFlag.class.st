@@ -26,7 +26,7 @@ Class {
 	#classVars : [
 		'CaseSensitive'
 	],
-	#category : #'FlagBrowser-Model'
+	#category : #'NewTools-FlagBrowser-Model'
 }
 
 { #category : #accessing }
@@ -118,6 +118,11 @@ FBFlag class >> parameter: anArgument locations: aCollectionOfNodes [
 { #category : #accessing }
 FBFlag class >> priority [
 	^ self subclassResponsibility
+]
+
+{ #category : #'as yet unclassified' }
+FBFlag class >> title [
+	^ 'All flags'
 ]
 
 { #category : #accessing }

@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'flag'
 	],
-	#category : #'FlagBrowser-Model-Tests'
+	#category : #'NewTools-FlagBrowser-Tests'
 }
 
 { #category : #testing }

@@ -12,7 +12,7 @@ Class {
 	#instVars : [
 		'tabs'
 	],
-	#category : #'FlagBrowser-Spec'
+	#category : #'NewTools-FlagBrowser-Presenters'
 }
 
 { #category : #specs }
