@@ -45,6 +45,12 @@ Object >> inspectorNodes [
 ]
 
 { #category : #'*NewTools-Inspector' }
+Object >> metaInspection [
+	<inspectorPresentationOrder: 0>
+	^ StMetaBrowser on: self
+]
+
+{ #category : #'*NewTools-Inspector' }
 Object >> rawInspection [
 	"This is the most basic presentation showing the state of the object"
 	^ StRawInspection on: self

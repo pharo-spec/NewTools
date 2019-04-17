@@ -90,6 +90,7 @@ StBreakpointInspection >> initializeWidgets [
 	breakpointsInSourceCode := self newCode.
 	breakpointsInSourceCode aboutToStyle: true.
 	breakpointsInSourceCode behavior: model class.
+	breakpointsInSourceCode disable.
 
 	"List of methods in which a breakpoint is installed"
 	methodsWithBreakpoints := self newTable.
