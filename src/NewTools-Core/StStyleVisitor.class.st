@@ -240,7 +240,7 @@ StStyleVisitor >> visitExpression: aString [
 StStyleVisitor >> visitGlobalNode: aRBGlobalNode [
 
 	self 
-		addStyle: #global 
+		addStyle: #globalVar
 		from: aRBGlobalNode start 
 		to: aRBGlobalNode stop
 ]
@@ -299,8 +299,11 @@ StStyleVisitor >> visitMessageNode: aRBMessageNode [
 
 { #category : #visiting }
 StStyleVisitor >> visitMethod: aString [
+	| ast |
 
-	self visitAST: (RBParser parseFaultyMethod: aString).
+	ast := RBParser parseFaultyMethod: aString.
+	ast isParseError ifTrue: [ ^ self visitExpression: aString ].
+	self visitAST: ast.
 	^ self tags
 ]
 

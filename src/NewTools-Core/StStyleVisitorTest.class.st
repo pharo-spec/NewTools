@@ -42,7 +42,14 @@ StStyleVisitorTest >> setUp [
 StStyleVisitorTest >> testVisitMethod [
 	| tags |
 
+	"smoke test"
+	visitor 
+		contextClass: Object;
+		visitMethod: self class syntaxInAPostcard.
+	"basic test"
 	tags := visitor 
 		contextClass: Object;
-		visitMethod: self class syntaxInAPostcard
+		visitMethod: 'self asString'.
+	
+	self assert: tags size equals: 2
 ]
