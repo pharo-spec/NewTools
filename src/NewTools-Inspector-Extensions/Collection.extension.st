@@ -1,6 +1,6 @@
 Extension { #name : #Collection }
 
-{ #category : #'*NewTools-Inspector' }
+{ #category : #'*NewTools-Inspector-Extensions' }
 Collection >> inspectorItems [
 	<inspectorPresentationOrder: 0> 
 	

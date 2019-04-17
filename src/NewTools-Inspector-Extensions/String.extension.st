@@ -1,6 +1,6 @@
 Extension { #name : #String }
 
-{ #category : #'*NewTools-Inspector' }
+{ #category : #'*NewTools-Inspector-Extensions' }
 String >> inspectorString [
 	<inspectorPresentationOrder: 10>
 	

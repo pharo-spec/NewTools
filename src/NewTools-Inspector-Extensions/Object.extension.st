@@ -1,6 +1,6 @@
 Extension { #name : #Object }
 
-{ #category : #'*NewTools-Inspector' }
+{ #category : #'*NewTools-Inspector-Extensions' }
 Object >> allInspectorNodes [
 	"Answer a list of attributes as nodes"
 	
@@ -8,13 +8,13 @@ Object >> allInspectorNodes [
 		self inspectorNodes
 ]
 
-{ #category : #'*NewTools-Inspector' }
+{ #category : #'*NewTools-Inspector-Extensions' }
 Object >> breakpointInspection [
 	<inspectorPresentationOrder: 0>
 	^ StBreakpointInspection on: self
 ]
 
-{ #category : #'*NewTools-Inspector' }
+{ #category : #'*NewTools-Inspector-Extensions' }
 Object >> inspections [
 	"This is a utility method that collects all presentations for the current object.
 	By default, it simply looks for the #gtInspectorPresentationOrder: pragma.
@@ -36,7 +36,7 @@ Object >> inspections [
 			self perform: eachPragma methodSelector  ]
 ]
 
-{ #category : #'*NewTools-Inspector' }
+{ #category : #'*NewTools-Inspector-Extensions' }
 Object >> inspectorNodes [
 	"Answer a list of attributes as nodes"
 	
@@ -44,19 +44,19 @@ Object >> inspectorNodes [
 	  
 ]
 
-{ #category : #'*NewTools-Inspector' }
+{ #category : #'*NewTools-Inspector-Extensions' }
 Object >> metaInspection [
 	<inspectorPresentationOrder: 0>
 	^ StMetaBrowser on: self
 ]
 
-{ #category : #'*NewTools-Inspector' }
+{ #category : #'*NewTools-Inspector-Extensions' }
 Object >> rawInspection [
 	"This is the most basic presentation showing the state of the object"
 	^ StRawInspection on: self
 ]
 
-{ #category : #'*NewTools-Inspector' }
+{ #category : #'*NewTools-Inspector-Extensions' }
 Object >> stInspect [
 	"Temporary to experiment, should be replaced by inspect later"
 

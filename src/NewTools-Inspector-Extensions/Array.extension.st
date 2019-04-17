@@ -1,6 +1,6 @@
 Extension { #name : #Array }
 
-{ #category : #'*NewTools-Inspector' }
+{ #category : #'*NewTools-Inspector-Extensions' }
 Array >> gtDisplayString [
 
 	^ super gtDisplayString contractTo: 200

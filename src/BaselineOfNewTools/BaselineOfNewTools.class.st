@@ -15,7 +15,8 @@ BaselineOfNewTools >> baseline: spec [
 			spec
 				package: 'NewTools' with: [ spec requires: #('Spec') ];
 				package: 'HelpCenter' with: [ spec requires: #('NewTools') ];
-				package: 'NewTools-Inspector' with: [ spec requires: #('Spec' 'Lieutenant') ];
+				package: 'NewTools-Inspector-Extensions' with: [ spec requires: #('Spec' 'Lieutenant') ];
+				package: 'NewTools-Inspector' with: [ spec requires: #('Spec' 'Lieutenant' 'NewTools-Inspector-Extensions') ];
 				package: 'NewTools-Playground' with: [ spec requires: #('NewTools-Inspector') ];
 				package: 'FlagBrowser-Model';
 				package: 'FlagBrowser-Model-Tests' with: [ spec requires: #('FlagBrowser-Model') ] ;
