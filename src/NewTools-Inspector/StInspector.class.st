@@ -77,6 +77,8 @@ StInspector >> initializeWidgets [
 		NotebookPage 
 			title: each title 
 			provider: [ each ] ]).
+		
+	self refresh
 ]
 
 { #category : #initialization }
@@ -114,7 +116,10 @@ StInspector >> newToolBar [
 StInspector >> refresh [
 	"model changed?  
 	 update inspector values."
-	self flag: #TODO.
+	self flag: #TODO. "not finished, clearly :P"
+	
+	evaluator 
+		doItReceiver: self model inspectedObject
 ]
 
 { #category : #'model access' }

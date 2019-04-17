@@ -17,6 +17,8 @@ GtkTextView >> expressionText: aString [
 GtkTextView >> methodText: aString class: aClass [ 
 	| codeBuffer |
 	
+	aString isEmptyOrNil ifTrue: [ ^ self text: aString ].
+
 	codeBuffer := GtkTextBuffer newTable: GtkTextTagTable newForCode.
 	codeBuffer text: aString.
 	(StStyleVisitor new 
