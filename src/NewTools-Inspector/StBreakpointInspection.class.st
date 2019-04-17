@@ -11,11 +11,10 @@ Class {
 
 { #category : #specs }
 StBreakpointInspection class >> defaultSpec [
-	^ SpecLayout composed
-		newRow: [ :r | 
-			r
-				newColumn: #methodsWithBreakpoints;
-				newColumn: #breakpointsInSourceCode ];
+
+	^ SpecPanedLayout newVertical
+		add: #methodsWithBreakpoints;
+		add: #breakpointsInSourceCode;
 		yourself
 ]
 

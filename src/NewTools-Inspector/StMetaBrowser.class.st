@@ -11,14 +11,13 @@ Class {
 
 { #category : #specs }
 StMetaBrowser class >> defaultSpec [
-	^ SpecLayout composed
-		newColumn: [ :mainColumn | 
-			mainColumn
-				newRow: [ :r | 
-					r
-						newColumn: #classes;
-						newColumn: #methods ];
-				newRow: [ :r2 | r2 newColumn: #source ] ];
+
+	^ SpecPanedLayout newVertical
+		add: (SpecPanedLayout newHorizontal 
+			add: #classes;
+			add: #methods;
+			yourself);
+		add: #source;
 		yourself
 ]
 
