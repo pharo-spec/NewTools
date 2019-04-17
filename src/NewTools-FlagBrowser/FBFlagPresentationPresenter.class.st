@@ -19,7 +19,7 @@ Class {
 		'code',
 		'locationsTable'
 	],
-	#category : #'FlagBrowser-Spec'
+	#category : #'NewTools-FlagBrowser-Presenters'
 }
 
 { #category : #testing }

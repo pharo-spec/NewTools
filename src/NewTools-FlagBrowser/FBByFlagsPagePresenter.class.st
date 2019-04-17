@@ -24,7 +24,7 @@ Class {
 		'flagsList',
 		'caseCheckbox'
 	],
-	#category : #'FlagBrowser-Spec'
+	#category : #'NewTools-FlagBrowser-Presenters'
 }
 
 { #category : #specs }

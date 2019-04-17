@@ -7,7 +7,7 @@ I am a mock used by FlagBrowser tests.
 Class {
 	#name : #FBMock,
 	#superclass : #Object,
-	#category : #'FlagBrowser-Model-Tests'
+	#category : #'NewTools-FlagBrowser-Tests'
 }
 
 { #category : #comparing }

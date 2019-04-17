@@ -9,7 +9,7 @@ We different subclasses will organize flags in different ways.
 Class {
 	#name : #FBPagePresenter,
 	#superclass : #ComposablePresenter,
-	#category : #'FlagBrowser-Spec'
+	#category : #'NewTools-FlagBrowser-Presenters'
 }
 
 { #category : #accessing }

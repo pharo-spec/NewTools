@@ -7,7 +7,7 @@ I represent a flag which parameter is a Symbol.
 Class {
 	#name : #FBSymbolFlag,
 	#superclass : #FBFlag,
-	#category : #'FlagBrowser-Model'
+	#category : #'NewTools-FlagBrowser-Model'
 }
 
 { #category : #testing }
@@ -18,6 +18,11 @@ FBSymbolFlag class >> matchesArgument: aFlagArgument [
 { #category : #accessing }
 FBSymbolFlag class >> priority [
 	^ 20
+]
+
+{ #category : #'as yet unclassified' }
+FBSymbolFlag class >> title [
+	^ 'Symbol flags'
 ]
 
 { #category : #update }

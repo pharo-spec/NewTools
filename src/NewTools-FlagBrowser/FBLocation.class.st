@@ -25,7 +25,7 @@ Class {
 		'interval',
 		'owner'
 	],
-	#category : #'FlagBrowser-Model'
+	#category : #'NewTools-FlagBrowser-Model'
 }
 
 { #category : #'instance creation' }
@@ -76,6 +76,11 @@ FBLocation >> interval [
 { #category : #accessing }
 FBLocation >> interval: anObject [
 	interval := anObject
+]
+
+{ #category : #'as yet unclassified' }
+FBLocation >> openInBrowser [
+	Smalltalk tools browser openOnMethod: self compiledMethod
 ]
 
 { #category : #accessing }
