@@ -35,7 +35,7 @@ StMetaBrowser >> initializeWidgets [
 	classes := self newTreeTable.
 	methods := self newList.
 	source := self newCode.
-	source aboutToStyle: true.
+
 	methods
 		whenSelectionChangedDo: [ :selection | 
 			| method |

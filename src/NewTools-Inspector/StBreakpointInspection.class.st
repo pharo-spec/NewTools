@@ -78,7 +78,8 @@ StBreakpointInspection >> initialize [
 { #category : #initialization }
 StBreakpointInspection >> initializeWidgets [
 	| allMethodsForModel breakpointData |
-	breakpointData := SortedCollection new sortBlock:[:a :b| (a at: #method) name < (b at: #method) name].
+	
+	breakpointData := SortedCollection sortBlock:[ :a :b | (a at: #method) name < (b at: #method) name].
 	allMethodsForModel := model class allMethods
 		select: [ :m | m hasBreakpoint or: [ m containsHalt ] ].
 	breakpointData addAll: (allMethodsForModel
@@ -88,37 +89,23 @@ StBreakpointInspection >> initializeWidgets [
 	
 	"Source code of methods in which breakpoint are installed"
 	breakpointsInSourceCode := self newCode.
-	breakpointsInSourceCode aboutToStyle: true.
 	breakpointsInSourceCode behavior: model class.
 	breakpointsInSourceCode disable.
 
 	"List of methods in which a breakpoint is installed"
 	methodsWithBreakpoints := self newTable.
+	methodsWithBreakpoints
+		addColumn: (StringTableColumn title: 'Type' evaluated: [ :item | item at: #type ]);
+		addColumn: (StringTableColumn title: 'Method' evaluated: [ :item | (item at: #method) name ]);
+		addColumn: (StringTableColumn title: 'When' evaluated: [ :item | item at: #onceOrAlways ]);
+		addColumn: (StringTableColumn title: 'Target(s)' evaluated: [ :item | item at: #target ]).
+		
+	methodsWithBreakpoints whenSelectionChangedDo: [ :selection | 
+		| selectedItem |
+		selectedItem := selection selectedItem.
+		breakpointsInSourceCode text: (selectedItem at: #method) sourceCode.
+		breakpointsInSourceCode setSelection: (selectedItem at: #interval) ].
 	
-	methodsWithBreakpoints
-		addColumn:
-			(StringTableColumn title: 'Type' evaluated: [ :item | item at: #type ]).
-	methodsWithBreakpoints
-		addColumn:
-			(StringTableColumn
-				title: 'Method'
-				evaluated: [ :item | (item at: #method) name ]).
-	methodsWithBreakpoints
-		addColumn:
-			(StringTableColumn
-				title: 'When'
-				evaluated: [ :item | item at: #onceOrAlways ]).
-	methodsWithBreakpoints
-		addColumn:
-			(StringTableColumn
-				title: 'Target(s)'
-				evaluated: [ :item | item at: #target ]).
-	methodsWithBreakpoints
-		whenSelectionChangedDo: [ :selection | 
-			| selectedItem |
-			selectedItem := selection selectedItem.
-			breakpointsInSourceCode text: (selectedItem at: #method) sourceCode.
-			breakpointsInSourceCode setSelection: (selectedItem at: #interval) ].
 	methodsWithBreakpoints items: breakpointData
 ]
 
