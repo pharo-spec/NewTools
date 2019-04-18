@@ -8,7 +8,7 @@ Class {
 StPharoGtkConfiguration >> configureOSX: anApplication [
 
 	self installTheme: 'Sierra-dark'.
-	"self installTheme: 'Sierra-light'"	
+	 "self installTheme: 'Sierra-light'"
 ]
 
 { #category : #configuring }
