@@ -17,7 +17,7 @@ Class {
 	#instVars : [
 		'description'
 	],
-	#category : #'FlagBrowser-Spec'
+	#category : #'NewTools-FlagBrowser-Presenters'
 }
 
 { #category : #specs }

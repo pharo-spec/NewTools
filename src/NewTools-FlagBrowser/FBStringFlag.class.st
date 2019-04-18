@@ -7,7 +7,7 @@ I represent a flag which parameter is a String.
 Class {
 	#name : #FBStringFlag,
 	#superclass : #FBFlag,
-	#category : #'FlagBrowser-Model'
+	#category : #'NewTools-FlagBrowser-Model'
 }
 
 { #category : #testing }
@@ -18,6 +18,11 @@ FBStringFlag class >> matchesArgument: aFlagArgument [
 { #category : #accessing }
 FBStringFlag class >> priority [
 	^ 10
+]
+
+{ #category : #'as yet unclassified' }
+FBStringFlag class >> title [
+	^ 'String flags'
 ]
 
 { #category : #update }
