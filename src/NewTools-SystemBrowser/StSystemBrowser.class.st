@@ -5,7 +5,9 @@ Class {
 		'packagesTree',
 		'classesList',
 		'inspectionPanel',
-		'codePanel'
+		'codePanel',
+		'navigationEnvironment',
+		'model'
 	],
 	#category : #'NewTools-SystemBrowser'
 }
@@ -47,22 +49,31 @@ StSystemBrowser class >> preferredExtent [
 { #category : #initialization }
 StSystemBrowser >> initializeWidgets [
 	
-	packagesTree := self newTreeTable.
-	classesList := self newList.
+	packagesTree := self newPackagesTree.
+	classesList := self newClassesList.
+	
 	inspectionPanel := self newNotebook 
 		addPage: self newInstaceSidePage;
 		addPage: self newClassSidePage;
 		addPage: self newVariablesPage;
 		yourself.
-	codePanel := self newLabel label: 'TODO'
+	codePanel := self newLabel label: 'TODO'.
+	
+	packagesTree transmitTo: classesList transform: #classes.
 ]
 
 { #category : #initialization }
 StSystemBrowser >> initializeWindow: aWindowPresenter [
 
-	aWindowPresenter 	
+	aWindowPresenter
 		title: self title;
 		initialExtent: self preferredExtent
+]
+
+{ #category : #'accessing model' }
+StSystemBrowser >> model [ 
+
+	^ model
 ]
 
 { #category : #initialization }
@@ -75,11 +86,35 @@ StSystemBrowser >> newClassSidePage [
 ]
 
 { #category : #initialization }
+StSystemBrowser >> newClassesList [
+
+	^ self newTable
+		hideColumnHeaders;
+		addColumn: (CompositeTableColumn 
+			with: (ImageTableColumn evaluated: #icon);
+			with: (StringTableColumn evaluated: #name));
+		yourself
+]
+
+{ #category : #initialization }
 StSystemBrowser >> newInstaceSidePage [
 	
 	^ self newNotebookPage
 		title: 'Instance';
 		presenterProvider: [ LabelPresenter new label: 'TODO' ];
+		yourself
+]
+
+{ #category : #initialization }
+StSystemBrowser >> newPackagesTree [
+	
+	^ self newTreeTable
+		hideColumnHeaders;
+		addColumn: (CompositeTableColumn 
+			with: (ImageTableColumn evaluated: #icon)
+			with: (StringTableColumn evaluated: #name));
+		roots: self model allPackages;
+		children: #children;
 		yourself
 ]
 
@@ -96,4 +131,10 @@ StSystemBrowser >> newVariablesPage [
 StSystemBrowser >> preferredExtent [
 
 	^ self class preferredExtent
+]
+
+{ #category : #'accessing model' }
+StSystemBrowser >> setModelBeforeInitialization: aNavigationEnvironment [
+
+	model := StSBEnvironmentModel newEnvironment: aNavigationEnvironment	
 ]
