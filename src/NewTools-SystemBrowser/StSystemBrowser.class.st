@@ -49,7 +49,11 @@ StSystemBrowser >> initializeWidgets [
 	
 	packagesTree := self newTreeTable.
 	classesList := self newList.
-	inspectionPanel := self newLabel label: 'TODO'.
+	inspectionPanel := self newNotebook 
+		addPage: self newInstaceSidePage;
+		addPage: self newClassSidePage;
+		addPage: self newVariablesPage;
+		yourself.
 	codePanel := self newLabel label: 'TODO'
 ]
 
@@ -59,6 +63,33 @@ StSystemBrowser >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 	
 		title: self title;
 		initialExtent: self preferredExtent
+]
+
+{ #category : #initialization }
+StSystemBrowser >> newClassSidePage [
+	
+	^ self newNotebookPage
+		title: 'Class';
+		presenterProvider: [ LabelPresenter new label: 'TODO' ];
+		yourself
+]
+
+{ #category : #initialization }
+StSystemBrowser >> newInstaceSidePage [
+	
+	^ self newNotebookPage
+		title: 'Instance';
+		presenterProvider: [ LabelPresenter new label: 'TODO' ];
+		yourself
+]
+
+{ #category : #initialization }
+StSystemBrowser >> newVariablesPage [
+	
+	^ self newNotebookPage
+		title: 'Variables';
+		presenterProvider: [ LabelPresenter new label: 'TODO' ];
+		yourself
 ]
 
 { #category : #accessing }
