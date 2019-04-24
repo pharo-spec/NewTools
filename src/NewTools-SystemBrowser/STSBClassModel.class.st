@@ -1,5 +1,5 @@
 Class {
-	#name : #STSBClassModel,
+	#name : #StSBClassModel,
 	#superclass : #StSBModel,
 	#instVars : [
 		'modelClass'
@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-STSBClassModel class >> newEnvironment: anEnvironment  class: aClass [
+StSBClassModel class >> newEnvironment: anEnvironment  class: aClass [
 
 	^ self new 
 		environment: anEnvironment;
@@ -17,23 +17,45 @@ STSBClassModel class >> newEnvironment: anEnvironment  class: aClass [
 ]
 
 { #category : #accessing }
-STSBClassModel >> icon [
+StSBClassModel >> classProtocols [
+	| metaclass |
 
-	^ nil
+	metaclass := self modelClass classSide.
+	^ metaclass organization allProtocols collect: [ :each |
+		StSBProtocolModel 
+			newEnvironment: self environment 
+			class: metaclass
+			protocol: each ]
 ]
 
 { #category : #accessing }
-STSBClassModel >> modelClass [
+StSBClassModel >> icon [
+
+	^ self modelClass systemIcon
+]
+
+{ #category : #accessing }
+StSBClassModel >> instanceProtocols [
+
+	^ self modelClass organization allProtocols collect: [ :each |
+		StSBProtocolModel 
+			newEnvironment: self environment 
+			class: self modelClass
+			protocol: each  ]
+]
+
+{ #category : #accessing }
+StSBClassModel >> modelClass [
 	^ modelClass
 ]
 
 { #category : #accessing }
-STSBClassModel >> modelClass: anObject [
+StSBClassModel >> modelClass: anObject [
 	modelClass := anObject
 ]
 
 { #category : #accessing }
-STSBClassModel >> name [
+StSBClassModel >> name [
 
 	^ self modelClass name
 ]

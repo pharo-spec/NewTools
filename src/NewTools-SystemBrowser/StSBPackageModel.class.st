@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-StSBPackageModel class >> newEnvironment: anEnvironment package: aPackage [ 
+StSBPackageModel class >> newEnvironment: anEnvironment package: aPackage [
 
 	^ self new 
 		environment: anEnvironment;
@@ -28,7 +28,7 @@ StSBPackageModel >> allClassesQueries [
 { #category : #accessing }
 StSBPackageModel >> children [
 
-	^ (self package classTags 
+	^ (self tagsQuery execute items 
 		collect: [ :each | StSBPackageTagModel newEnvironment: self environment packageTag: each ])
 		sorted: #name ascending 
 ]
@@ -40,7 +40,7 @@ StSBPackageModel >> classes [
 		inject: #()
 		into: [ :all :eachQuery | 
 			all, (eachQuery execute items 
-				collect: [ :each | STSBClassModel newEnvironment: self environment class: each ]) ]
+				collect: [ :each | StSBClassModel newEnvironment: self environment class: each ]) ]
 ]
 
 { #category : #accessing }
@@ -63,4 +63,10 @@ StSBPackageModel >> package [
 { #category : #accessing }
 StSBPackageModel >> package: anObject [
 	package := anObject
+]
+
+{ #category : #accessing }
+StSBPackageModel >> tagsQuery [
+		
+	^ ClyAllClassGroupsQuery sortedFrom: (ClyPackageScope of: self package in: self environment)
 ]

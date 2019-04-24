@@ -15,15 +15,3 @@ StSBBasePackageModel >> classes [
 
 	^ self subclassResponsibility
 ]
-
-{ #category : #accessing }
-StSBBasePackageModel >> icon [
-
-	^ nil
-]
-
-{ #category : #accessing }
-StSBBasePackageModel >> name [
-
-	^ self subclassResponsibility
-]

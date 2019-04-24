@@ -2,12 +2,13 @@ Class {
 	#name : #StSystemBrowser,
 	#superclass : #StPresenter,
 	#instVars : [
-		'packagesTree',
-		'classesList',
+		'model',
 		'inspectionPanel',
 		'codePanel',
-		'navigationEnvironment',
-		'model'
+		'packagesPanel',
+		'classesPanel',
+		'instanceSidePanel',
+		'classSidePanel'
 	],
 	#category : #'NewTools-SystemBrowser'
 }
@@ -18,8 +19,8 @@ StSystemBrowser class >> defaultSpec [
 	^ SpecPanedLayout newVertical
 		add: (SpecPanedLayout newHorizontal
 			add: (SpecPanedLayout newHorizontal
-				add: #packagesTree;
-				add: #classesList;
+				add: #packagesPanel;
+				add: #classesPanel;
 				yourself);
 			add: #inspectionPanel;
 			yourself);
@@ -43,23 +44,28 @@ StSystemBrowser class >> openOn: anEnvironment [
 { #category : #accessing }
 StSystemBrowser class >> preferredExtent [
 
-	^ 900@700
+	^ 900@650
 ]
 
 { #category : #initialization }
 StSystemBrowser >> initializeWidgets [
 	
-	packagesTree := self newPackagesTree.
-	classesList := self newClassesList.
+	packagesPanel := self instantiate: StSBPackagesPanel on: self model.
+	classesPanel := self instantiate: StSBClassesPanel on: self model.
 	
+	instanceSidePanel := self instantiate: StSBProtocolInspectionPanel on: self model.
+	classSidePanel := self instantiate: StSBProtocolInspectionPanel on: self model.
 	inspectionPanel := self newNotebook 
-		addPage: self newInstaceSidePage;
-		addPage: self newClassSidePage;
-		addPage: self newVariablesPage;
+		addPage: (self newPage: 'Instance' provider: instanceSidePanel);
+		addPage: (self newPage: 'Class' provider: classSidePanel); 
+		addPage: (self newPage: 'Variables' provider: (LabelPresenter new label: 'TODO'));
 		yourself.
+		
 	codePanel := self newLabel label: 'TODO'.
 	
-	packagesTree transmitTo: classesList transform: #classes.
+	packagesPanel transmitTo: classesPanel transform: #classes.
+	classesPanel transmitTo: instanceSidePanel transform: #instanceProtocols.
+	classesPanel transmitTo: classSidePanel transform: #classProtocols.	
 ]
 
 { #category : #initialization }
@@ -77,60 +83,12 @@ StSystemBrowser >> model [
 ]
 
 { #category : #initialization }
-StSystemBrowser >> newClassSidePage [
+StSystemBrowser >> newPage: aString provider: aBlock [
 	
 	^ self newNotebookPage
-		title: 'Class';
-		presenterProvider: [ LabelPresenter new label: 'TODO' ];
+		title: aString;
+		presenterProvider: aBlock;
 		yourself
-]
-
-{ #category : #initialization }
-StSystemBrowser >> newClassesList [
-
-	^ self newTable
-		hideColumnHeaders;
-		addColumn: (CompositeTableColumn 
-			with: (ImageTableColumn evaluated: #icon);
-			with: (StringTableColumn evaluated: #name));
-		yourself
-]
-
-{ #category : #initialization }
-StSystemBrowser >> newInstaceSidePage [
-	
-	^ self newNotebookPage
-		title: 'Instance';
-		presenterProvider: [ LabelPresenter new label: 'TODO' ];
-		yourself
-]
-
-{ #category : #initialization }
-StSystemBrowser >> newPackagesTree [
-	
-	^ self newTreeTable
-		hideColumnHeaders;
-		addColumn: (CompositeTableColumn 
-			with: (ImageTableColumn evaluated: #icon)
-			with: (StringTableColumn evaluated: #name));
-		roots: self model allPackages;
-		children: #children;
-		yourself
-]
-
-{ #category : #initialization }
-StSystemBrowser >> newVariablesPage [
-	
-	^ self newNotebookPage
-		title: 'Variables';
-		presenterProvider: [ LabelPresenter new label: 'TODO' ];
-		yourself
-]
-
-{ #category : #accessing }
-StSystemBrowser >> preferredExtent [
-
-	^ self class preferredExtent
 ]
 
 { #category : #'accessing model' }
