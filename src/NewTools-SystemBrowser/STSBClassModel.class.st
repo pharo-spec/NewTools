@@ -24,7 +24,6 @@ StSBClassModel >> classProtocols [
 	^ metaclass organization allProtocols collect: [ :each |
 		StSBProtocolModel 
 			newEnvironment: self environment 
-			class: metaclass
 			protocol: each ]
 ]
 
@@ -37,11 +36,16 @@ StSBClassModel >> icon [
 { #category : #accessing }
 StSBClassModel >> instanceProtocols [
 
-	^ self modelClass organization allProtocols collect: [ :each |
+	^ self instanceQuery execute items collect: [ :each |
 		StSBProtocolModel 
 			newEnvironment: self environment 
-			class: self modelClass
 			protocol: each  ]
+]
+
+{ #category : #accessing }
+StSBClassModel >> instanceQuery [
+
+	^ ClyAllMethodGroupsQuery from: ClyClassScope of: self modelClass in: self environment
 ]
 
 { #category : #accessing }

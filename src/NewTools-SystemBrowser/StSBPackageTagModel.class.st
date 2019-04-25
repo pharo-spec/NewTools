@@ -26,7 +26,9 @@ StSBPackageTagModel >> children [
 StSBPackageTagModel >> classes [
 
 	^ self packageTag classes collect: [ :each | 
-		StSBClassModel newEnvironment: self environment class: each ]
+		StSBClassModel 
+			newEnvironment: self environment
+			class: each ]
 ]
 
 { #category : #accessing }

@@ -25,14 +25,14 @@ StSBProtocolInspectionPanel >> initializePorts [
 		yourself).
 	self addOutputPort: (ListSelectionPresenterPort new
 		name: #'protocol-selection';
-		delegateTo: [ self methodList ];
+		delegateTo: [ self protocolList ];
 		yourself).
 	self addInputPort: (ItemsPresenterPort new
 		delegateTo: [ self protocolList ];
 		yourself).
 	self addInputPort: (ItemsPresenterPort new
 		name: 'method-items';
-		delegateTo: [ self protocolList ];
+		delegateTo: [ self methodList ];
 		yourself)	
 ]
 
@@ -47,8 +47,10 @@ StSBProtocolInspectionPanel >> initializeWidgets [
 		hideColumnHeaders;
 		addColumn: (StringTableColumn evaluated: #name);
 		yourself.
-		
-	protocolList transmitTo: methodList transform: #methods
+	
+	protocolList transmitTo: methodList transform: #methods.
+	"clean methods when changing protocols"
+	protocolList whenModelChangedDo: [ methodList items: #() ].
 ]
 
 { #category : #accessing }

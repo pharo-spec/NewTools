@@ -64,6 +64,15 @@ StInspector >> allViews [
 	^ { self model inspectedObject rawInspection }, self collectViews
 ]
 
+{ #category : #'private builder' }
+StInspector >> buildToolBar [
+
+	^ LtToolBarBuilder new 
+		owner: self;
+		matching: [ :each | each hasGroup: StInspectorCommandGroup uniqueInstance ];
+		build
+]
+
 { #category : #private }
 StInspector >> collectViews [
 
@@ -92,7 +101,7 @@ StInspector >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
 		title: self title;
-		toolBar: self newToolBar
+		toolBar: self buildToolBar
 ]
 
 { #category : #'model access' }
@@ -111,15 +120,6 @@ StInspector >> model: anInspectorModel [
 
 	model := anInspectorModel.
 	self refresh
-]
-
-{ #category : #'private factory' }
-StInspector >> newToolBar [
-
-	^ LtToolBarBuilder new 
-		owner: self;
-		matching: [ :each | each hasGroup: StInspectorCommandGroup uniqueInstance ];
-		build
 ]
 
 { #category : #private }

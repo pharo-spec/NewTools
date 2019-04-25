@@ -24,15 +24,15 @@ StSBVariableInspectionPanel >> initializePorts [
 		delegateTo: [ self methodList ];
 		yourself).
 	self addOutputPort: (ListSelectionPresenterPort new
-		name: #'protocol-selection';
-		delegateTo: [ self methodList ];
+		name: #'variable-selection';
+		delegateTo: [ self variableList ];
 		yourself).
 	self addInputPort: (ItemsPresenterPort new
-		delegateTo: [ self protocolList ];
+		delegateTo: [ self variableList ];
 		yourself).
 	self addInputPort: (ItemsPresenterPort new
 		name: 'method-items';
-		delegateTo: [ self protocolList ];
+		delegateTo: [ self methodList ];
 		yourself)	
 ]
 

@@ -41,6 +41,33 @@ StPlayground class >> defaultTitle [
 	^ 'Playground'
 ]
 
+{ #category : #'private builder' }
+StPlayground >> buildMenu [
+	| menuSpec |
+	
+	menuSpec := (PragmaMenuBuilder 
+		pragmaKeyword: WorldState discoveredMenuPragmaKeyword 
+		model: self)
+		menuSpec.
+	^ menuSpec asMenuBarPresenter
+	
+]
+
+{ #category : #'private builder' }
+StPlayground >> buildStatusBar [ 
+
+	^ StatusBarPresenter new
+]
+
+{ #category : #'private builder' }
+StPlayground >> buildToolBar [
+
+	^ LtToolBarBuilder new 
+		owner: self;
+		matching: [ :each | each hasGroup: StPlaygroundCommandGroup uniqueInstance ];
+		build
+]
+
 { #category : #api }
 StPlayground >> initialExtent [ 
 
@@ -64,38 +91,11 @@ StPlayground >> initializeWidgets [
 StPlayground >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter 
-		toolBar: self newToolBar;
-		statusBar: (statusBar := self newStatusBar).
+		toolBar: self buildToolBar;
+		statusBar: (statusBar := self buildStatusBar).
 	
 	self flag: #TODO. "This just has sense if this is the 'main' window"
 	"aWindowPresenter menu: self newMenu"
-]
-
-{ #category : #'private factory' }
-StPlayground >> newMenu [
-	| menuSpec |
-	
-	menuSpec := (PragmaMenuBuilder 
-		pragmaKeyword: WorldState discoveredMenuPragmaKeyword 
-		model: self)
-		menuSpec.
-	^ menuSpec asMenuBarPresenter
-	
-]
-
-{ #category : #'private factory' }
-StPlayground >> newStatusBar [ 
-
-	^ StatusBarPresenter new
-]
-
-{ #category : #'private factory' }
-StPlayground >> newToolBar [
-
-	^ LtToolBarBuilder new 
-		owner: self;
-		matching: [ :each | each hasGroup: StPlaygroundCommandGroup uniqueInstance ];
-		build
 ]
 
 { #category : #'accessing ui' }
