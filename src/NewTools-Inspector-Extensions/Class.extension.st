@@ -25,3 +25,14 @@ Class >> allReferencesInspection [
 	treeTable addColumn: (StringTableColumn title: 'References' evaluated: #name).
 	^ treeTable
 ]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
+Class >> classCommentInspection [
+	"This provides an editable comment of the current class"
+
+	<inspectorPresentationOrder: 20>
+	^ TextPresenter new
+		title: 'Comment';
+		text: self comment;
+		acceptBlock: [ :text | self comment: text stamp: Author changeStamp ]
+]
