@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'packageTree'
 	],
-	#category : #'NewTools-SystemBrowser'
+	#category : #'NewTools-SystemBrowser-View'
 }
 
 { #category : #specs }
@@ -16,14 +16,15 @@ StSBPackagesPanel class >> defaultSpec [
 ]
 
 { #category : #initialization }
-StSBPackagesPanel >> initializePorts [
+StSBPackagesPanel >> defineInputPorts [ 
 
-	self addOutputPort: (ListSelectionPresenterPort new
-		delegateTo: [ self packageTree ];
-		yourself).
-	self addInputPort: (ItemsPresenterPort new
-		delegateTo: [ self packageTree ];
-		yourself)
+	^ { ItemsPresenterPort newDelegate: [ self packageTree ] }
+]
+
+{ #category : #initialization }
+StSBPackagesPanel >> defineOutputPorts [ 
+
+	^ { ListSelectionPresenterPort newDelegate: [ self packageTree ] }
 ]
 
 { #category : #initialization }

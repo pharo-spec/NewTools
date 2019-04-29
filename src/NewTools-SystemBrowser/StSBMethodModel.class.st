@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'method'
 	],
-	#category : #'NewTools-SystemBrowser'
+	#category : #'NewTools-SystemBrowser-Model'
 }
 
 { #category : #'instance creation' }

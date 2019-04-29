@@ -1,7 +1,7 @@
 Class {
 	#name : #StSBBasePackageModel,
 	#superclass : #StSBModel,
-	#category : #'NewTools-SystemBrowser'
+	#category : #'NewTools-SystemBrowser-Model'
 }
 
 { #category : #accessing }

@@ -5,7 +5,7 @@ Class {
 		'methodList',
 		'variableList'
 	],
-	#category : #'NewTools-SystemBrowser'
+	#category : #'NewTools-SystemBrowser-View'
 }
 
 { #category : #specs }
@@ -18,22 +18,21 @@ StSBVariableInspectionPanel class >> defaultSpec [
 ]
 
 { #category : #initialization }
-StSBVariableInspectionPanel >> initializePorts [
+StSBVariableInspectionPanel >> defineInputPorts [
 
-	self addOutputPort: (ListSelectionPresenterPort new
-		delegateTo: [ self methodList ];
-		yourself).
-	self addOutputPort: (ListSelectionPresenterPort new
-		name: #'variable-selection';
-		delegateTo: [ self variableList ];
-		yourself).
-	self addInputPort: (ItemsPresenterPort new
-		delegateTo: [ self variableList ];
-		yourself).
-	self addInputPort: (ItemsPresenterPort new
-		name: 'method-items';
-		delegateTo: [ self methodList ];
-		yourself)	
+	^ { 
+	ItemsPresenterPort newDelegate: [ self variableList ].
+	ItemsPresenterPort newName: 'method-items' delegate: [ self methodList ] 
+	}	
+]
+
+{ #category : #initialization }
+StSBVariableInspectionPanel >> defineOutputPorts [
+
+	^ { 
+	ListSelectionPresenterPort newDelegate: [ self methodList ].
+	ListSelectionPresenterPort newName: #'variable-selection' delegate: [ self variableList ]
+	}
 ]
 
 { #category : #initialization }
@@ -48,7 +47,9 @@ StSBVariableInspectionPanel >> initializeWidgets [
 		addColumn: (StringTableColumn evaluated: #name);
 		yourself.
 		
-	variableList transmitTo: methodList transform: #methods
+	variableList transmitTo: methodList transform: #methods.
+	"clean methods when changing variables"
+	variableList whenModelChangedDo: [ methodList items: #() ].	
 ]
 
 { #category : #accessing }

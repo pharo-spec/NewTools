@@ -5,7 +5,7 @@ Class {
 		'protocolList',
 		'methodList'
 	],
-	#category : #'NewTools-SystemBrowser'
+	#category : #'NewTools-SystemBrowser-View'
 }
 
 { #category : #specs }
@@ -18,22 +18,21 @@ StSBProtocolInspectionPanel class >> defaultSpec [
 ]
 
 { #category : #initialization }
-StSBProtocolInspectionPanel >> initializePorts [
+StSBProtocolInspectionPanel >> defineInputPorts [
 
-	self addOutputPort: (ListSelectionPresenterPort new
-		delegateTo: [ self methodList ];
-		yourself).
-	self addOutputPort: (ListSelectionPresenterPort new
-		name: #'protocol-selection';
-		delegateTo: [ self protocolList ];
-		yourself).
-	self addInputPort: (ItemsPresenterPort new
-		delegateTo: [ self protocolList ];
-		yourself).
-	self addInputPort: (ItemsPresenterPort new
-		name: 'method-items';
-		delegateTo: [ self methodList ];
-		yourself)	
+	^ { 
+	ItemsPresenterPort newDelegate: [ self protocolList ].
+	ItemsPresenterPort newName: 'method-items' delegate: [ self methodList ]
+	}
+]
+
+{ #category : #initialization }
+StSBProtocolInspectionPanel >> defineOutputPorts [
+
+	^ { 
+	ListSelectionPresenterPort newDelegate: [ self methodList ].
+	ListSelectionPresenterPort newName: #'protocol-selection' delegate: [ self protocolList ]. 
+	}
 ]
 
 { #category : #initialization }

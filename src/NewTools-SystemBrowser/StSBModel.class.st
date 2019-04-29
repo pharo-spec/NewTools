@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'environment'
 	],
-	#category : #'NewTools-SystemBrowser'
+	#category : #'NewTools-SystemBrowser-Model'
 }
 
 { #category : #accessing }

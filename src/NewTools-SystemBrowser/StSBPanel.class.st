@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'model'
 	],
-	#category : #'NewTools-SystemBrowser'
+	#category : #'NewTools-SystemBrowser-View'
 }
 
 { #category : #'accessing model' }

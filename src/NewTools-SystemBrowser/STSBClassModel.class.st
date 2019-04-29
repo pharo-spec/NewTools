@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'modelClass'
 	],
-	#category : #'NewTools-SystemBrowser'
+	#category : #'NewTools-SystemBrowser-Model'
 }
 
 { #category : #'instance creation' }
@@ -18,13 +18,20 @@ StSBClassModel class >> newEnvironment: anEnvironment  class: aClass [
 
 { #category : #accessing }
 StSBClassModel >> classProtocols [
-	| metaclass |
 
-	metaclass := self modelClass classSide.
-	^ metaclass organization allProtocols collect: [ :each |
+	^ self classQuery execute items collect: [ :each |
 		StSBProtocolModel 
 			newEnvironment: self environment 
-			protocol: each ]
+			protocol: each  ]
+]
+
+{ #category : #'private queries' }
+StSBClassModel >> classQuery [
+
+	^ ClyAllMethodGroupsQuery 
+		from: ClyClassSideScope 
+		of: self modelClass 
+		in: self environment
 ]
 
 { #category : #accessing }
@@ -42,10 +49,13 @@ StSBClassModel >> instanceProtocols [
 			protocol: each  ]
 ]
 
-{ #category : #accessing }
+{ #category : #'private queries' }
 StSBClassModel >> instanceQuery [
 
-	^ ClyAllMethodGroupsQuery from: ClyClassScope of: self modelClass in: self environment
+	^ ClyAllMethodGroupsQuery 
+		from: ClyInstanceSideScope 
+		of: self modelClass 
+		in: self environment
 ]
 
 { #category : #accessing }

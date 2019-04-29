@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'classList'
 	],
-	#category : #'NewTools-SystemBrowser'
+	#category : #'NewTools-SystemBrowser-View'
 }
 
 { #category : #specs }
@@ -21,14 +21,15 @@ StSBClassesPanel >> classList [
 ]
 
 { #category : #initialization }
-StSBClassesPanel >> initializePorts [
+StSBClassesPanel >> defineInputPorts [
 
-	self addOutputPort: (ListSelectionPresenterPort new
-		delegateTo: [ self classList ];
-		yourself).
-	self addInputPort: (ItemsPresenterPort new
-		delegateTo: [ self classList ];
-		yourself)
+	^ { ItemsPresenterPort newDelegate: [ self classList ] }
+]
+
+{ #category : #initialization }
+StSBClassesPanel >> defineOutputPorts [
+
+	^ { ListSelectionPresenterPort newDelegate: [ self classList ] }
 ]
 
 { #category : #initialization }

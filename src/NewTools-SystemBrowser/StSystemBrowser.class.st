@@ -8,9 +8,13 @@ Class {
 		'packagesPanel',
 		'classesPanel',
 		'instanceSidePanel',
-		'classSidePanel'
+		'classSidePanel',
+		'codeText',
+		'commentText',
+		'sourcePage',
+		'variablesPanel'
 	],
-	#category : #'NewTools-SystemBrowser'
+	#category : #'NewTools-SystemBrowser-View'
 }
 
 { #category : #specs }
@@ -55,14 +59,15 @@ StSystemBrowser >> initializeWidgets [
 	
 	instanceSidePanel := self instantiate: StSBProtocolInspectionPanel on: self model.
 	classSidePanel := self instantiate: StSBProtocolInspectionPanel on: self model.
+	variablesPanel := self instantiate: StSBVariableInspectionPanel on: self model.
 	inspectionPanel := self newNotebook 
 		addPage: (self newPage: 'Instance' provider: instanceSidePanel);
 		addPage: (self newPage: 'Class' provider: classSidePanel); 
 		addPage: (self newPage: 'Variables' provider: (LabelPresenter new label: 'TODO'));
 		yourself.
 		
-	codePanel := self newLabel label: 'TODO'.
-	
+	codePanel := (self newLabel label: 'TODO').
+
 	packagesPanel transmitTo: classesPanel transform: #classes.
 	classesPanel transmitTo: instanceSidePanel transform: #instanceProtocols.
 	classesPanel transmitTo: classSidePanel transform: #classProtocols.	

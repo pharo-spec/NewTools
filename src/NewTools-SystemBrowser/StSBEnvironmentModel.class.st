@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'allPackagesQuery'
 	],
-	#category : #'NewTools-SystemBrowser'
+	#category : #'NewTools-SystemBrowser-Model'
 }
 
 { #category : #'instance creation' }
@@ -27,6 +27,12 @@ StSBEnvironmentModel >> allPackages [
 StSBEnvironmentModel >> allPackagesQuery [
 
 	^ allPackagesQuery ifNil: [ allPackagesQuery := self newAllPackagesQuery ]
+]
+
+{ #category : #accessing }
+StSBEnvironmentModel >> name [
+
+	^ nil
 ]
 
 { #category : #'private queries factory' }
