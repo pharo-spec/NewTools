@@ -38,7 +38,7 @@ StSBClassesPanel >> initializeWidgets [
 	classList := self newTable
 		hideColumnHeaders;
 		addColumn: (CompositeTableColumn 
-			with: (ImageTableColumn evaluated: #icon)
+			with: (ImageTableColumn evaluated: #icon) beNotExpandable
 			with: (StringTableColumn evaluated: #name));
 		yourself
 ]
