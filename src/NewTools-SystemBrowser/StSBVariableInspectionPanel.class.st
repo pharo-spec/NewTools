@@ -21,8 +21,8 @@ StSBVariableInspectionPanel class >> defaultSpec [
 StSBVariableInspectionPanel >> defineInputPorts [
 
 	^ { 
-	ItemsPresenterPort newDelegate: [ self variableList ].
-	ItemsPresenterPort newName: 'method-items' delegate: [ self methodList ] 
+	SpecListItemsPort newDelegate: [ self variableList ].
+	SpecListItemsPort newName: 'method-items' delegate: [ self methodList ] 
 	}	
 ]
 
@@ -30,8 +30,8 @@ StSBVariableInspectionPanel >> defineInputPorts [
 StSBVariableInspectionPanel >> defineOutputPorts [
 
 	^ { 
-	ListSelectionPresenterPort newDelegate: [ self methodList ].
-	ListSelectionPresenterPort newName: #'variable-selection' delegate: [ self variableList ]
+	SpecListSelectionPort newDelegate: [ self methodList ].
+	SpecListSelectionPort newName: #'variable-selection' delegate: [ self variableList ]
 	}
 ]
 

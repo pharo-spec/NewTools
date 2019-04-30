@@ -66,11 +66,15 @@ StSystemBrowser >> initializeWidgets [
 		addPage: (self newPage: 'Variables' provider: (LabelPresenter new label: 'TODO'));
 		yourself.
 		
-	codePanel := (self newLabel label: 'TODO').
+	codePanel := self newNotebook.
 
+	packagesPanel transmitDo: [ :selection | self selectPackage: selection ].
 	packagesPanel transmitTo: classesPanel transform: #classes.
+	
 	classesPanel transmitTo: instanceSidePanel transform: #instanceProtocols.
 	classesPanel transmitTo: classSidePanel transform: #classProtocols.	
+	
+	
 ]
 
 { #category : #initialization }
@@ -94,6 +98,14 @@ StSystemBrowser >> newPage: aString provider: aBlock [
 		title: aString;
 		presenterProvider: aBlock;
 		yourself
+]
+
+{ #category : #'browse-nautilus' }
+StSystemBrowser >> selectPackage: aPackage [
+
+	codePanel 
+		removeAll;
+		addPage: (self newPage: 'New class' provider: [ self newCode ])
 ]
 
 { #category : #'accessing model' }

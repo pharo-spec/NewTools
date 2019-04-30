@@ -23,13 +23,13 @@ StSBClassesPanel >> classList [
 { #category : #initialization }
 StSBClassesPanel >> defineInputPorts [
 
-	^ { ItemsPresenterPort newDelegate: [ self classList ] }
+	^ { SpecListItemsPort newDelegate: [ self classList ] }
 ]
 
 { #category : #initialization }
 StSBClassesPanel >> defineOutputPorts [
 
-	^ { ListSelectionPresenterPort newDelegate: [ self classList ] }
+	^ { SpecListSelectionPort newDelegate: [ self classList ] }
 ]
 
 { #category : #initialization }

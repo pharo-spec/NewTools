@@ -21,8 +21,8 @@ StSBProtocolInspectionPanel class >> defaultSpec [
 StSBProtocolInspectionPanel >> defineInputPorts [
 
 	^ { 
-	ItemsPresenterPort newDelegate: [ self protocolList ].
-	ItemsPresenterPort newName: 'method-items' delegate: [ self methodList ]
+	SpecListItemsPort newDelegate: [ self protocolList ].
+	SpecListItemsPort newName: 'method-items' delegate: [ self methodList ]
 	}
 ]
 
@@ -30,8 +30,8 @@ StSBProtocolInspectionPanel >> defineInputPorts [
 StSBProtocolInspectionPanel >> defineOutputPorts [
 
 	^ { 
-	ListSelectionPresenterPort newDelegate: [ self methodList ].
-	ListSelectionPresenterPort newName: #'protocol-selection' delegate: [ self protocolList ]. 
+	SpecListSelectionPort newDelegate: [ self methodList ].
+	SpecListSelectionPort newName: #'protocol-selection' delegate: [ self protocolList ]. 
 	}
 ]
 

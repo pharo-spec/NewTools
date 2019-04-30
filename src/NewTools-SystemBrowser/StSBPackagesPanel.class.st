@@ -18,13 +18,13 @@ StSBPackagesPanel class >> defaultSpec [
 { #category : #initialization }
 StSBPackagesPanel >> defineInputPorts [ 
 
-	^ { ItemsPresenterPort newDelegate: [ self packageTree ] }
+	^ { SpecListItemsPort newDelegate: [ self packageTree ] }
 ]
 
 { #category : #initialization }
 StSBPackagesPanel >> defineOutputPorts [ 
 
-	^ { ListSelectionPresenterPort newDelegate: [ self packageTree ] }
+	^ { SpecListSelectionPort newDelegate: [ self packageTree ] }
 ]
 
 { #category : #initialization }
@@ -33,7 +33,7 @@ StSBPackagesPanel >> initializeWidgets [
 	packageTree := self newTreeTable
 		hideColumnHeaders;
 		addColumn: (CompositeTableColumn 
-			with: (ImageTableColumn evaluated: #icon)
+			with: (ImageTableColumn evaluated: #icon) beNotExpandable
 			with: (StringTableColumn evaluated: #name));
 		roots: self model allPackages;
 		children: #children;
