@@ -16,10 +16,10 @@ StSBClassModel class >> newEnvironment: anEnvironment  class: aClass [
 		yourself
 ]
 
-{ #category : #'api-shout' }
+{ #category : #accessing }
 StSBClassModel >> behavior [
 
-	^ self modelClass classSide
+	^ nil
 ]
 
 { #category : #accessing }
@@ -40,13 +40,13 @@ StSBClassModel >> classQuery [
 		in: self environment
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 StSBClassModel >> comment [
 
 	^ self modelClass comment
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 StSBClassModel >> definition [
 
 	^ self modelClass definitionForNautilusWithSlots 

@@ -168,13 +168,13 @@ StSystemBrowser >> selectClass: aClassModel [
 		removeAll;
 		addPage: (self 
 			newPage: 'Comment' 
-			provider: (self newCommentFor: self selectedClass));
+			provider: [ self newCommentFor: self selectedClass ]);
 		addPage: (self 
 			newPage: selectedClass name
-			provider: (self newDefinitionFor: self selectedClass));
+			provider: [ self newDefinitionFor: self selectedClass ]);
 		addPage: (self 
 			newPage: 'New method' 
-			provider: (self newMethodTemplateForClass: self selectedClass));
+			provider: [ self newMethodTemplateForClass: self selectedClass ]);
 		selectPageIndex: 2
 ]
 
@@ -186,13 +186,13 @@ StSystemBrowser >> selectMethod: aMethodModel [
 		removeAll;
 		addPage: (self 
 			newPage: 'Comment' 
-			provider: (self newCommentFor: self selectedClass));
+			provider: [ self newCommentFor: self selectedClass ]);
 		addPage: (self 
 			newPage: self selectedClass name
-			provider: (self newDefinitionFor: self selectedClass));
+			provider: [ self newDefinitionFor: self selectedClass ]);
 		addPage: (self 
 			newPage: self selectedMethod name
-			provider: (self newDefinitionFor: self selectedMethod));
+			provider: [ self newDefinitionFor: self selectedMethod ]);
 		selectPageIndex: 3
 ]
 
@@ -204,10 +204,10 @@ StSystemBrowser >> selectPackage: aPackage [
 		removeAll;
 		addPage: (self 
 			newPage: 'Comment' 
-			provider: (self newCommentFor: self selectedPackage));
+			provider: [ self newCommentFor: self selectedPackage ]);
 		addPage: (self 
 			newPage: 'New class' 
-			provider: (self newClassTemplateForPackage: self selectedPackage))
+			provider: [ self newClassTemplateForPackage: self selectedPackage ])
 ]
 
 { #category : #accessing }
