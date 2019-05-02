@@ -11,7 +11,29 @@ StSBBasePackageModel >> children [
 ]
 
 { #category : #accessing }
+StSBBasePackageModel >> classTemplate [
+
+	self flag: #TODO. "Maybe extract this into its own creation tool, as Calypso 1?"
+	^ 'Object subclass: #NameOfSubclass
+	slots: {}
+	classVariables: {}
+	package: ''', self fullName, ''''
+]
+
+{ #category : #accessing }
 StSBBasePackageModel >> classes [
 
 	^ self subclassResponsibility
+]
+
+{ #category : #'as yet unclassified' }
+StSBBasePackageModel >> comment [
+
+	^ self package packageComment
+]
+
+{ #category : #accessing }
+StSBBasePackageModel >> fullName [
+
+	^ self name
 ]

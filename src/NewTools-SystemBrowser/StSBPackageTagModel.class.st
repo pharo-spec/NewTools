@@ -2,17 +2,17 @@ Class {
 	#name : #StSBPackageTagModel,
 	#superclass : #StSBBasePackageModel,
 	#instVars : [
-		'packageTag'
+		'classGroup'
 	],
 	#category : #'NewTools-SystemBrowser-Model'
 }
 
 { #category : #'instance creation' }
-StSBPackageTagModel class >> newEnvironment: anEnvironment packageTag: aPackageTag [ 
+StSBPackageTagModel class >> newEnvironment: anEnvironment classGroup: aPackageTag [ 
 
 	^ self new
 		environment: anEnvironment;
-		packageTag: aPackageTag;
+		classGroup: aPackageTag;
 		yourself
 ]
 
@@ -23,26 +23,53 @@ StSBPackageTagModel >> children [
 ]
 
 { #category : #accessing }
+StSBPackageTagModel >> classGroup [
+	
+	^ classGroup
+]
+
+{ #category : #accessing }
+StSBPackageTagModel >> classGroup: aClassGroup [
+
+	classGroup := aClassGroup
+]
+
+{ #category : #accessing }
 StSBPackageTagModel >> classes [
 
-	^ self packageTag classes collect: [ :each | 
+	^ self classGroup classes collect: [ :each | 
 		StSBClassModel 
 			newEnvironment: self environment
 			class: each ]
 ]
 
 { #category : #accessing }
+StSBPackageTagModel >> comment [
+
+	^ self package packageComment
+]
+
+{ #category : #accessing }
+StSBPackageTagModel >> fullName [
+
+	^ self package classTags
+		detect: [ :each | each name = self name ]
+		ifFound: [ :each | each categoryName ]
+		ifNone: [ self package name ]
+]
+
+{ #category : #accessing }
 StSBPackageTagModel >> name [
 
-	^ self packageTag name
+	^ self classGroup name
 ]
 
-{ #category : #accessing }
-StSBPackageTagModel >> packageTag [
-	^ packageTag
-]
+{ #category : #private }
+StSBPackageTagModel >> package [
 
-{ #category : #accessing }
-StSBPackageTagModel >> packageTag: anObject [
-	packageTag := anObject
+	self flag: #REVIEW. "This is like thois because calypso does not attach the tag query 
+	with a real RPackageTag but with some other query"
+	self classGroup classQuery scope packagesDo: [ :each | ^ each ].
+	^ nil
+	
 ]

@@ -16,6 +16,12 @@ StSBClassModel class >> newEnvironment: anEnvironment  class: aClass [
 		yourself
 ]
 
+{ #category : #'api-shout' }
+StSBClassModel >> behavior [
+
+	^ self modelClass classSide
+]
+
 { #category : #accessing }
 StSBClassModel >> classProtocols [
 
@@ -32,6 +38,19 @@ StSBClassModel >> classQuery [
 		from: ClyClassSideScope 
 		of: self modelClass 
 		in: self environment
+]
+
+{ #category : #'as yet unclassified' }
+StSBClassModel >> comment [
+
+	^ self modelClass comment
+]
+
+{ #category : #'as yet unclassified' }
+StSBClassModel >> definition [
+
+	^ self modelClass definitionForNautilusWithSlots 
+	
 ]
 
 { #category : #accessing }

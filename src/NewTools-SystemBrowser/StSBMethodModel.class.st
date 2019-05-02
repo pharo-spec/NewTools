@@ -16,6 +16,18 @@ StSBMethodModel class >> newEnvironment: anEnvironment method: aMethod [
 		yourself
 ]
 
+{ #category : #'api-shout' }
+StSBMethodModel >> behavior [
+
+	^ self method methodClass
+]
+
+{ #category : #'as yet unclassified' }
+StSBMethodModel >> definition [
+	
+	^ self method sourceCode
+]
+
 { #category : #accessing }
 StSBMethodModel >> method [
 	^ method

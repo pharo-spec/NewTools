@@ -12,7 +12,10 @@ Class {
 		'codeText',
 		'commentText',
 		'sourcePage',
-		'variablesPanel'
+		'variablesPanel',
+		'selectedPackage',
+		'selectedClass',
+		'selectedMethod'
 	],
 	#category : #'NewTools-SystemBrowser-View'
 }
@@ -51,6 +54,24 @@ StSystemBrowser class >> preferredExtent [
 	^ 900@650
 ]
 
+{ #category : #'private selecting' }
+StSystemBrowser >> basicSelectClass:  aClassModel [
+		
+	selectedClass := aClassModel
+]
+
+{ #category : #'private selecting' }
+StSystemBrowser >> basicSelectMethod:  aMethodModel [
+		
+	selectedMethod := aMethodModel
+]
+
+{ #category : #'private selecting' }
+StSystemBrowser >> basicSelectPackage: aPackageModel [
+		
+	selectedPackage := aPackageModel
+]
+
 { #category : #initialization }
 StSystemBrowser >> initializeWidgets [
 	
@@ -68,13 +89,17 @@ StSystemBrowser >> initializeWidgets [
 		
 	codePanel := self newNotebook.
 
-	packagesPanel transmitDo: [ :selection | self selectPackage: selection ].
 	packagesPanel transmitTo: classesPanel transform: #classes.
+	packagesPanel transmitDo: [ :selection | self selectPackage: selection ].
 	
 	classesPanel transmitTo: instanceSidePanel transform: #instanceProtocols.
-	classesPanel transmitTo: classSidePanel transform: #classProtocols.	
+	classesPanel transmitTo: classSidePanel transform: #classProtocols.		
+	"classesPanel transmitTo: variablesPanel transform: #variables."		
+	classesPanel transmitDo: [ :selection | self selectClass: selection ].
 	
-	
+	instanceSidePanel transmitDo: [ :selection | self selectMethod: selection ].
+	classSidePanel transmitDo: [ :selection | self selectMethod: selection ].
+	variablesPanel transmitDo: [ :selection | self selectMethod: selection ].
 ]
 
 { #category : #initialization }
@@ -91,7 +116,42 @@ StSystemBrowser >> model [
 	^ model
 ]
 
-{ #category : #initialization }
+{ #category : #'private factory' }
+StSystemBrowser >> newClassTemplateForPackage: aPackageModel [
+
+	^ self newCode
+		text: aPackageModel classTemplate;
+		yourself
+]
+
+{ #category : #'private factory' }
+StSystemBrowser >> newCommentFor: aModel [
+
+	^ self newCode
+		withoutSyntaxHighlight;
+		text: aModel comment;
+		yourself
+		
+]
+
+{ #category : #'private factory' }
+StSystemBrowser >> newDefinitionFor: aModel [
+
+	^ self newCode
+		text: aModel definition;
+		behavior: aModel behavior;
+		yourself
+]
+
+{ #category : #'private factory' }
+StSystemBrowser >> newMethodTemplateForClass: aClassModel [
+
+	^ self newCode
+		text: self class sourceCodeTemplate;
+		yourself
+]
+
+{ #category : #'private factory' }
 StSystemBrowser >> newPage: aString provider: aBlock [
 	
 	^ self newNotebookPage
@@ -100,12 +160,72 @@ StSystemBrowser >> newPage: aString provider: aBlock [
 		yourself
 ]
 
-{ #category : #'browse-nautilus' }
-StSystemBrowser >> selectPackage: aPackage [
+{ #category : #'private selecting' }
+StSystemBrowser >> selectClass: aClassModel [
 
+	self basicSelectClass: aClassModel.
 	codePanel 
 		removeAll;
-		addPage: (self newPage: 'New class' provider: [ self newCode ])
+		addPage: (self 
+			newPage: 'Comment' 
+			provider: (self newCommentFor: self selectedClass));
+		addPage: (self 
+			newPage: selectedClass name
+			provider: (self newDefinitionFor: self selectedClass));
+		addPage: (self 
+			newPage: 'New method' 
+			provider: (self newMethodTemplateForClass: self selectedClass));
+		selectPageIndex: 2
+]
+
+{ #category : #'private selecting' }
+StSystemBrowser >> selectMethod: aMethodModel [
+
+	self basicSelectMethod: aMethodModel.
+	codePanel 
+		removeAll;
+		addPage: (self 
+			newPage: 'Comment' 
+			provider: (self newCommentFor: self selectedClass));
+		addPage: (self 
+			newPage: self selectedClass name
+			provider: (self newDefinitionFor: self selectedClass));
+		addPage: (self 
+			newPage: self selectedMethod name
+			provider: (self newDefinitionFor: self selectedMethod));
+		selectPageIndex: 3
+]
+
+{ #category : #'private selecting' }
+StSystemBrowser >> selectPackage: aPackage [
+
+	self basicSelectPackage: aPackage.
+	codePanel 
+		removeAll;
+		addPage: (self 
+			newPage: 'Comment' 
+			provider: (self newCommentFor: self selectedPackage));
+		addPage: (self 
+			newPage: 'New class' 
+			provider: (self newClassTemplateForPackage: self selectedPackage))
+]
+
+{ #category : #accessing }
+StSystemBrowser >> selectedClass [
+
+	^ selectedClass
+]
+
+{ #category : #accessing }
+StSystemBrowser >> selectedMethod [
+		
+	^ selectedMethod
+]
+
+{ #category : #accessing }
+StSystemBrowser >> selectedPackage [
+
+	^ selectedPackage
 ]
 
 { #category : #'accessing model' }

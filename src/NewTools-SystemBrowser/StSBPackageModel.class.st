@@ -29,7 +29,7 @@ StSBPackageModel >> allClassesQueries [
 StSBPackageModel >> children [
 
 	^ (self tagsQuery execute items 
-		collect: [ :each | StSBPackageTagModel newEnvironment: self environment packageTag: each ])
+		collect: [ :each | StSBPackageTagModel newEnvironment: self environment classGroup: each ])
 		sorted: #name ascending 
 ]
 
