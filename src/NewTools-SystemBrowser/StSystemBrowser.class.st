@@ -164,6 +164,7 @@ StSystemBrowser >> newPage: aString provider: aBlock [
 StSystemBrowser >> selectClass: aClassModel [
 
 	self basicSelectClass: aClassModel.
+	self window title: 'Class: ', aClassModel name.
 	codePanel 
 		removeAll;
 		addPage: (self 
@@ -182,6 +183,7 @@ StSystemBrowser >> selectClass: aClassModel [
 StSystemBrowser >> selectMethod: aMethodModel [
 
 	self basicSelectMethod: aMethodModel.
+	self window title: aMethodModel name.
 	codePanel 
 		removeAll;
 		addPage: (self 
@@ -200,6 +202,7 @@ StSystemBrowser >> selectMethod: aMethodModel [
 StSystemBrowser >> selectPackage: aPackage [
 
 	self basicSelectPackage: aPackage.
+	self window title: 'Package: ', aPackage name.
 	codePanel 
 		removeAll;
 		addPage: (self 

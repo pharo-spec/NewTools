@@ -36,9 +36,8 @@ StInspectorBrowseCommand >> initialize [
 ]
 
 { #category : #accessing }
-StInspectorBrowseCommand >> model [ 
-
-	^ self owner model
+StInspectorBrowseCommand >> model [
+	^ self owner presenter
 ]
 
 { #category : #accessing }
