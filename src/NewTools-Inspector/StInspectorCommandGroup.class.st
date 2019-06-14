@@ -1,5 +1,5 @@
 Class {
 	#name : #StInspectorCommandGroup,
-	#superclass : #AnObsoleteLtCommandGroup,
+	#superclass : #LtCommandGroup,
 	#category : #'NewTools-Inspector-Command'
 }

@@ -14,7 +14,7 @@ In both cases, the ability of diving into objects to the right is an important f
 "
 Class {
 	#name : #StPlayground,
-	#superclass : #AnObsoleteStPresenter,
+	#superclass : #StPresenter,
 	#instVars : [
 		'text',
 		'statusBar'
