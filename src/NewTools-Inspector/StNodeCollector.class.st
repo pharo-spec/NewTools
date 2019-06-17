@@ -16,6 +16,23 @@ StNodeCollector class >> for: anObject [
 ]
 
 { #category : #building }
+StNodeCollector >> collectContextNodes [
+	| nodes |
+	nodes := OrderedCollection new.
+	nodes add: (StInspectorThisContextNode hostObject: self object).
+	nodes add: (StInspectorStackTopNode hostObject: self object).
+	self object tempNames
+		withIndexDo: [ :name :index | 
+			nodes
+				add:
+					(StInspectorContextNamedTempNode
+						hostObject: self object
+						tempName: name
+						tempIndex: index) ].
+	^ nodes
+]
+
+{ #category : #building }
 StNodeCollector >> collectNodes [
 
 	^ 

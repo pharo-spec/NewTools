@@ -17,6 +17,6 @@ StContextInspection >> initializeWidgets [
 	super initializeWidgets.
 			
 	attributeTable 
-		roots: self model allInspectorNodes;
+		roots: self model contextInspectorNodes;
 		children: [ :node | node children ]
 ]

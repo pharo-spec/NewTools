@@ -6,3 +6,9 @@ Context >> contextInspection [
 	<inspectorPresentationOrder: -1>
 	^ StContextInspection on: self
 ]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
+Context >> contextInspectorNodes [
+	
+	^  (StNodeCollector for: self) collectContextNodes
+]
