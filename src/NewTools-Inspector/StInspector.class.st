@@ -126,10 +126,11 @@ StInspector >> model: anInspectorModel [
 StInspector >> refresh [
 	"model changed?  
 	 update inspector values."
-	self flag: #TODO. "not finished, clearly :P"
-	
-	evaluator 
-		doItReceiver: self model inspectedObject
+
+	self flag: #TODO.	"not finished, clearly :P"
+	evaluator doItReceiver: self model inspectedObject.
+	views pagesChanged.
+	self update
 ]
 
 { #category : #'model access' }
