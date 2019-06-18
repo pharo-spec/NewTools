@@ -37,8 +37,18 @@ StRawInspection >> initializeWidgets [
 	attributeTable := self newTreeTable.
 	self addVariablesColumn.
 	self addValuesColumn.
+	self setAttributeTable
+]
+
+{ #category : #accessing }
+StRawInspection >> inspectorNodes [
+	^ self model allInspectorNodes
+]
+
+{ #category : #building }
+StRawInspection >> setAttributeTable [
 	attributeTable
-		roots: self model allInspectorNodes;
+		roots: self inspectorNodes;
 		children: [ :node | node children ]
 ]
 
