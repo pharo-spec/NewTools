@@ -55,6 +55,7 @@ Object >> metaInspection [
 { #category : #'*NewTools-Inspector-Extensions' }
 Object >> rawInspection [
 	"This is the most basic presentation showing the state of the object"
+
 	^ StRawInspection on: self
 ]
 

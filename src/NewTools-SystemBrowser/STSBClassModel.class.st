@@ -49,7 +49,7 @@ StSBClassModel >> comment [
 { #category : #accessing }
 StSBClassModel >> definition [
 
-	^ self modelClass definitionForNautilusWithSlots 
+	^ self modelClass definitionWithSlots
 	
 ]
 
