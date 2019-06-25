@@ -10,7 +10,7 @@ Class {
 { #category : #specs }
 StRawInspection class >> defaultSpec [
 
-	^ SpecBoxLayout newVertical 
+	^ SpBoxLayout newVertical 
 		add: #attributeTable;
 		yourself
 ]
@@ -54,7 +54,7 @@ StRawInspection >> setAttributeTable [
 
 { #category : #building }
 StRawInspection >> valuesColumn [
-	^ StringTableColumn new
+	^ SpStringTableColumn new
 		title: 'Value';
 		evaluated: #stringValue;
 		beEditable;
@@ -65,16 +65,16 @@ StRawInspection >> valuesColumn [
 
 { #category : #building }
 StRawInspection >> variablesColumn [
-	^ CompositeTableColumn new
+	^ SpCompositeTableColumn new
 		title: 'Variable';
 		width: 170;
 		addColumn:
-			(ImageTableColumn new
+			(SpImageTableColumn new
 				width: 20;
 				evaluated: #icon;
 				yourself);
 		addColumn:
-			(StringTableColumn new
+			(SpStringTableColumn new
 				evaluated: #label;
 				yourself);
 		yourself
