@@ -1,5 +1,5 @@
 Class {
 	#name : #StPresenter,
-	#superclass : #SpComposablePresenter,
+	#superclass : #SpPresenter,
 	#category : #NewTools
 }
