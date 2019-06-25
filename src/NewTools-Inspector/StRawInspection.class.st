@@ -10,7 +10,7 @@ Class {
 { #category : #specs }
 StRawInspection class >> defaultSpec [
 
-	^ SpecBoxLayout newVertical 
+	^ SpBoxLayout newVertical 
 		add: #attributeTable;
 		yourself
 ]

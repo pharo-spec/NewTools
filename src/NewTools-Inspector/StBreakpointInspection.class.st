@@ -12,7 +12,7 @@ Class {
 { #category : #specs }
 StBreakpointInspection class >> defaultSpec [
 
-	^ SpecPanedLayout newVertical
+	^ SpPanedLayout newVertical
 		add: #methodsWithBreakpoints;
 		add: #breakpointsInSourceCode;
 		yourself
@@ -94,10 +94,10 @@ StBreakpointInspection >> initializeWidgets [
 	"List of methods in which a breakpoint is installed"
 	methodsWithBreakpoints := self newTable.
 	methodsWithBreakpoints
-		addColumn: (StringTableColumn title: 'Type' evaluated: [ :item | item at: #type ]);
-		addColumn: (StringTableColumn title: 'Method' evaluated: [ :item | (item at: #method) name ]);
-		addColumn: (StringTableColumn title: 'When' evaluated: [ :item | item at: #onceOrAlways ]);
-		addColumn: (StringTableColumn title: 'Target(s)' evaluated: [ :item | item at: #target ]).
+		addColumn: (SpStringTableColumn title: 'Type' evaluated: [ :item | item at: #type ]);
+		addColumn: (SpStringTableColumn title: 'Method' evaluated: [ :item | (item at: #method) name ]);
+		addColumn: (SpStringTableColumn title: 'When' evaluated: [ :item | item at: #onceOrAlways ]);
+		addColumn: (SpStringTableColumn title: 'Target(s)' evaluated: [ :item | item at: #target ]).
 		
 	methodsWithBreakpoints whenSelectionChangedDo: [ :selection | 
 		| selectedItem |
