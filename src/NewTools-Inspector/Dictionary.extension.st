@@ -3,12 +3,12 @@ Extension { #name : #Dictionary }
 { #category : #'*NewTools-Inspector' }
 Dictionary >> inspectorItems [
 	
-	^ TablePresenter new 
+	^ SpTablePresenter new 
 		title: 'Items';
-		addColumn: (StringTableColumn 
+		addColumn: (SpStringTableColumn 
 			title: 'Key'
 			evaluated: [ :each | GTObjectPrinter asTruncatedTextFrom: each key ]);
-		addColumn: (StringTableColumn 
+		addColumn: (SpStringTableColumn 
 			title: 'Value' 
 			evaluated: [ :each | GTObjectPrinter asTruncatedTextFrom: each value ]);
 		items: self associations;
