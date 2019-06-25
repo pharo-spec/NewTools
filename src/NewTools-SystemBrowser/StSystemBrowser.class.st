@@ -23,9 +23,9 @@ Class {
 { #category : #specs }
 StSystemBrowser class >> defaultSpec [
 
-	^ SpecPanedLayout newVertical
-		add: (SpecPanedLayout newHorizontal
-			add: (SpecPanedLayout newHorizontal
+	^ SpPanedLayout newVertical
+		add: (SpPanedLayout newHorizontal
+			add: (SpPanedLayout newHorizontal
 				add: #packagesPanel;
 				add: #classesPanel;
 				yourself);

@@ -16,7 +16,7 @@ Class {
 StInspector class >> defaultSpec [
 	<spec: #default>
 	
-	^ SpecPanedLayout newVertical
+	^ SpPanedLayout newVertical
 		position: 70 percent;
 		add: #views;
 		add: #evaluator;
@@ -85,7 +85,6 @@ StInspector >> initializeWidgets [
 	views := self newNotebook.
 	evaluator := self newCode.
 	
-	self title: (self class titleFor: self model inspectedObject).
 	views pages: (self allViews collect: [ :each |
 		each owner: self.
 		NotebookPage 
@@ -128,6 +127,8 @@ StInspector >> refresh [
 	 update inspector values."
 
 	self flag: #TODO.	"not finished, clearly :P"
+	self withWindowDo: [ :window | 
+		window title: self title ].
 	evaluator doItReceiver: self model inspectedObject.
 	views pagesChanged.
 	self update
@@ -139,4 +140,9 @@ StInspector >> setModelBeforeInitialization: anInspectorModel [
 	model := anInspectorModel
 
 	
+]
+
+{ #category : #accessing }
+StInspector >> title [
+	^ self class titleFor: self model inspectedObject
 ]

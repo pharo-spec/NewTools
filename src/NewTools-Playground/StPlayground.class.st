@@ -31,8 +31,9 @@ StPlayground class >> defaultExtent [
 { #category : #specs }
 StPlayground class >> defaultSpec [
 
-	^ SpecLayout composed
-		newRow: #text
+	^ SpBoxLayout newVertical
+		add: #text;
+		yourself
 ]
 
 { #category : #accessing }

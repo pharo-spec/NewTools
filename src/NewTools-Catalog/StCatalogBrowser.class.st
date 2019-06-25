@@ -11,7 +11,7 @@ Class {
 { #category : #specs }
 StCatalogBrowser class >> defaultSpec [
 
-	^ SpecPanedLayout newHorizontal 
+	^ SpPanedLayout newHorizontal 
 		add: #list;
 		add: #description;
 		yourself

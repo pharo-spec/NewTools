@@ -17,7 +17,8 @@ Class {
 
 { #category : #specs }
 FlagBrowser class >> defaultSpec [
-	^ SpecBoxLayout newVertical
+
+	^ SpBoxLayout newVertical
 		add: #tabs;
 		yourself
 ]
