@@ -1,6 +1,6 @@
 Class {
 	#name : #StInspection,
-	#superclass : #ComposablePresenter,
+	#superclass : #SpPresenter,
 	#instVars : [
 		'model'
 	],

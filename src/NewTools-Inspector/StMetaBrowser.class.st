@@ -12,13 +12,13 @@ Class {
 
 { #category : #specs }
 StMetaBrowser class >> defaultSpec [
-	^ SpecPanedLayout newVertical
+	^ SpPanedLayout newVertical
 		add:
-			(SpecBoxLayout newHorizontal
+			(SpBoxLayout newHorizontal
 				spacing: 2;
 				add: #classes;
 				add:
-					(SpecBoxLayout newVertical
+					(SpBoxLayout newVertical
 						spacing: 2;
 						add: #methods;
 						add: #methodFilter
@@ -43,7 +43,7 @@ StMetaBrowser >> initializeClassTree [
 	classes
 		whenSelectionChangedDo: [ :classTreeSelection | self updateMethods: classTreeSelection ].
 	classes
-		addColumn: (StringTableColumn title: 'Class hierarchy' evaluated: #name).
+		addColumn: (SpStringTableColumn title: 'Class hierarchy' evaluated: #name).
 	classes roots: {classHierarchy first}.
 	classes
 		children:
