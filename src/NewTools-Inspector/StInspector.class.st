@@ -16,7 +16,7 @@ Class {
 StInspector class >> defaultSpec [
 	<spec: #default>
 	
-	^ SpecPanedLayout newVertical
+	^ SpPanedLayout newVertical
 		position: 70 percent;
 		add: #views;
 		add: #evaluator;
@@ -88,7 +88,7 @@ StInspector >> initializeWidgets [
 	self title: (self class titleFor: self model inspectedObject).
 	views pages: (self allViews collect: [ :each |
 		each owner: self.
-		NotebookPage 
+		SpNotebookPage 
 			title: each title 
 			provider: [ each ] ]).
 		
