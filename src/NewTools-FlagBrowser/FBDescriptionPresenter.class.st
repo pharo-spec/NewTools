@@ -22,7 +22,7 @@ Class {
 
 { #category : #specs }
 FBDescriptionPresenter class >> defaultSpec [
-	^ SpecBoxLayout newVertical
+	^ SpBoxLayout newVertical
 		add: #description;
 		yourself
 ]

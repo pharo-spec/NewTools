@@ -8,7 +8,7 @@ I can organize them in different ways such as flags by flags parameters, flags b
 "
 Class {
 	#name : #FlagBrowser,
-	#superclass : #ComposablePresenter,
+	#superclass : #StPresenter,
 	#instVars : [
 		'tabs'
 	],
@@ -17,7 +17,7 @@ Class {
 
 { #category : #specs }
 FlagBrowser class >> defaultSpec [
-	^ SpecBoxLayout newVertical
+	^ SpBoxLayout newVertical
 		add: #tabs;
 		yourself
 ]

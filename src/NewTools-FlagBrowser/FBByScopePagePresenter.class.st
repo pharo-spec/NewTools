@@ -22,11 +22,11 @@ Class {
 
 { #category : #specs }
 FBByScopePagePresenter class >> defaultSpec [
-	^ SpecPanedLayout newHorizontal
+	^ SpPanedLayout newHorizontal
 		position: 250;
 		add: #scopesList;
 		add:
-			(SpecPanedLayout newVertical
+			(SpPanedLayout newVertical
 				add: #locationsTable;
 				add: #code;
 				yourself);
