@@ -1,6 +1,6 @@
 Class {
 	#name : #StPharoApplication,
-	#superclass : #SpecApplication,
+	#superclass : #SpApplication,
 	#instVars : [
 		'properties'
 	],
