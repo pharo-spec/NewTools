@@ -1,6 +1,6 @@
 Class {
 	#name : #StInspectorBrowseCommand,
-	#superclass : #LtCommand,
+	#superclass : #CmCommand,
 	#category : #'NewTools-Inspector-Command'
 }
 
@@ -18,6 +18,14 @@ StInspectorBrowseCommand class >> toolBarActivation [
 		yourself
 ]
 
+{ #category : #converting }
+StInspectorBrowseCommand >> asSpecCommand [
+
+	^ super asSpecCommand 
+		iconName: #smallSystemBrowser;
+		yourself
+]
+
 { #category : #execution }
 StInspectorBrowseCommand >> execute [ 
 
@@ -29,10 +37,8 @@ StInspectorBrowseCommand >> initialize [
 	
 	super initialize.
 	self 
-		addGroup: StInspectorCommandGroup uniqueInstance;
-		name: 'Browse';
-		description: 'Browse instance class.';
-		iconName: #smallSystemBrowser
+		basicName: 'Browse';
+		basicDescription: 'Browse instance class.'
 ]
 
 { #category : #accessing }

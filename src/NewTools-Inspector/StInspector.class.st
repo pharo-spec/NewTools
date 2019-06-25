@@ -67,10 +67,10 @@ StInspector >> allViews [
 { #category : #'private builder' }
 StInspector >> buildToolBar [
 
-	^ LtToolBarBuilder new 
-		owner: self;
-		matching: [ :each | each hasGroup: StInspectorCommandGroup uniqueInstance ];
-		build
+	^ CmCommandGroup forSpec
+		register: (StInspectorBrowseCommand forSpecContext: self);
+		register: (StInspectorHelpCommand forSpecContext: self);
+		asToolBarPresenterWith: [ :presenter | presenter beIcons ]
 ]
 
 { #category : #private }

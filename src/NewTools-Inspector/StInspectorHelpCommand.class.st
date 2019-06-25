@@ -1,6 +1,6 @@
 Class {
 	#name : #StInspectorHelpCommand,
-	#superclass : #LtCommand,
+	#superclass : #CmCommand,
 	#category : #'NewTools-Inspector-Command'
 }
 
@@ -19,6 +19,14 @@ StInspectorHelpCommand class >> toolBarActivation [
 		yourself
 ]
 
+{ #category : #converting }
+StInspectorHelpCommand >> asSpecCommand [
+	
+	^ super asSpecCommand
+		iconName: #glamorousHelp;
+		yourself
+]
+
 { #category : #execution }
 StInspectorHelpCommand >> execute [ 
 
@@ -33,8 +41,6 @@ StInspectorHelpCommand >> initialize [
 	
 	super initialize.
 	self 
-		addGroup: StInspectorCommandGroup uniqueInstance;
-		name: 'Help';
-		description: 'Open help browser.';
-		iconName: #glamorousHelp
+		basicName: 'Help';
+		basicDescription: 'Open help browser.'
 ]
