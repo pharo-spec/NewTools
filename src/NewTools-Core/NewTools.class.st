@@ -1,7 +1,7 @@
 Class {
 	#name : #NewTools,
 	#superclass : #Object,
-	#category : #NewTools
+	#category : #'NewTools-Core'
 }
 
 { #category : #'world menu' }
