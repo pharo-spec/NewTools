@@ -87,7 +87,7 @@ StInspector >> initializeWidgets [
 	
 	views pages: (self allViews collect: [ :each |
 		each owner: self.
-		NotebookPage 
+		SpNotebookPage 
 			title: each title 
 			provider: [ each ] ]).
 		
