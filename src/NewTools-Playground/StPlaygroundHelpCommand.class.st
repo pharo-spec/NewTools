@@ -1,22 +1,16 @@
 Class {
 	#name : #StPlaygroundHelpCommand,
-	#superclass : #LtCommand,
+	#superclass : #CmCommand,
 	#category : #'NewTools-Playground-Command'
 }
 
-{ #category : #accessing }
-StPlaygroundHelpCommand class >> activations [
-
-	^ { self toolBarActivation }
-]
-
-{ #category : #accessing }
-StPlaygroundHelpCommand class >> toolBarActivation [
-
-	^ LtToolBarActivation new 
-		order: 10;
-		bePositionRight;
+{ #category : #converting }
+StPlaygroundHelpCommand >> asSpecCommand [ 
+	
+	^ super asSpecCommand 
+		iconName: #glamorousHelp;
 		yourself
+
 ]
 
 { #category : #execution }
@@ -33,8 +27,6 @@ StPlaygroundHelpCommand >> initialize [
 	
 	super initialize.
 	self 
-		addGroup: StPlaygroundCommandGroup uniqueInstance;
-		name: 'Help';
-		description: 'Open help browser.';
-		iconName: #glamorousHelp
+		basicName: 'Help';
+		basicDescription: 'Open help browser.'
 ]

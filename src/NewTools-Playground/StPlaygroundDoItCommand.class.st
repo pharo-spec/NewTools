@@ -1,20 +1,14 @@
 Class {
 	#name : #StPlaygroundDoItCommand,
-	#superclass : #LtCommand,
+	#superclass : #CmCommand,
 	#category : #'NewTools-Playground-Command'
 }
 
-{ #category : #accessing }
-StPlaygroundDoItCommand class >> activations [
-
-	^ { self toolBarActivation }
-]
-
-{ #category : #accessing }
-StPlaygroundDoItCommand class >> toolBarActivation [
-
-	^ LtToolBarActivation new 
-		order: 10;
+{ #category : #converting }
+StPlaygroundDoItCommand >> asSpecCommand [ 
+	
+	^ super asSpecCommand 
+		iconName: #glamorousGo;
 		yourself
 ]
 
@@ -29,8 +23,6 @@ StPlaygroundDoItCommand >> initialize [
 	
 	super initialize.
 	self 
-		addGroup: StPlaygroundCommandGroup uniqueInstance;
-		name: 'Do it';
-		description: 'Do it all and inspect.';
-		iconName: #glamorousGo
+		basicName: 'Do it';
+		basicDescription: 'Do it all and inspect.'
 ]

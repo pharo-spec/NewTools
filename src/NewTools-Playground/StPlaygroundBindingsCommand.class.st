@@ -1,20 +1,14 @@
 Class {
 	#name : #StPlaygroundBindingsCommand,
-	#superclass : #LtCommand,
+	#superclass : #CmCommand,
 	#category : #'NewTools-Playground-Command'
 }
 
-{ #category : #accessing }
-StPlaygroundBindingsCommand class >> activations [
-
-	^ { self toolBarActivation }
-]
-
-{ #category : #accessing }
-StPlaygroundBindingsCommand class >> toolBarActivation [
-
-	^ LtToolBarActivation new 
-		order: 20;
+{ #category : #converting }
+StPlaygroundBindingsCommand >> asSpecCommand [ 
+	
+	^ super asSpecCommand 
+		iconName: #glamorousTable;
 		yourself
 ]
 
@@ -29,8 +23,6 @@ StPlaygroundBindingsCommand >> initialize [
 	
 	super initialize.
 	self 
-		addGroup: StPlaygroundCommandGroup uniqueInstance;
-		name: 'Bindings';
-		description: 'Edit bindings list.';
-		iconName: #glamorousTable
+		basicName: 'Bindings';
+		basicDescription: 'Edit bindings list.'
 ]

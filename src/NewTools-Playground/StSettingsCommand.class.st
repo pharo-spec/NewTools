@@ -1,22 +1,16 @@
 Class {
 	#name : #StSettingsCommand,
-	#superclass : #LtCommand,
+	#superclass : #CmCommand,
 	#category : #'NewTools-Playground-Command'
 }
 
-{ #category : #accessing }
-StSettingsCommand class >> activations [
-
-	^ { self toolBarActivation }
-]
-
-{ #category : #accessing }
-StSettingsCommand class >> toolBarActivation [
-
-	^ LtToolBarActivation new 
-		order: 30;
-		bePositionRight;
+{ #category : #converting }
+StSettingsCommand >> asSpecCommand [ 
+	
+	^ super asSpecCommand 
+		iconName: #configuration;
 		yourself
+
 ]
 
 { #category : #execution }
@@ -33,8 +27,6 @@ StSettingsCommand >> initialize [
 	
 	super initialize.
 	self 
-		addGroup: StPlaygroundCommandGroup uniqueInstance;
-		name: 'Settings';
-		description: 'Open settings browser.';
-		iconName: #configuration
+		basicName: 'Settings';
+		basicDescription: 'Open settings browser.'
 ]

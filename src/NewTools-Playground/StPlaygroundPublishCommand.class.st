@@ -1,21 +1,16 @@
 Class {
 	#name : #StPlaygroundPublishCommand,
-	#superclass : #LtCommand,
+	#superclass : #CmCommand,
 	#category : #'NewTools-Playground-Command'
 }
 
-{ #category : #accessing }
-StPlaygroundPublishCommand class >> activations [
-
-	^ { self toolBarActivation }
-]
-
-{ #category : #accessing }
-StPlaygroundPublishCommand class >> toolBarActivation [
-
-	^ LtToolBarActivation new 
-		order: 100;
+{ #category : #converting }
+StPlaygroundPublishCommand >> asSpecCommand [ 
+	
+	^ super asSpecCommand 
+		iconName: #glamorousSaveToUrl;
 		yourself
+
 ]
 
 { #category : #execution }
@@ -29,8 +24,6 @@ StPlaygroundPublishCommand >> initialize [
 	
 	super initialize.
 	self 
-		addGroup: StPlaygroundCommandGroup uniqueInstance;
-		name: 'Publish';
-		description: 'Publish contents to the cloud.';
-		iconName: #glamorousSaveToUrl
+		basicName: 'Publish';
+		basicDescription: 'Publish contents to the cloud.'
 ]

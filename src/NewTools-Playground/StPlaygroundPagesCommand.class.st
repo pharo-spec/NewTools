@@ -1,21 +1,16 @@
 Class {
 	#name : #StPlaygroundPagesCommand,
-	#superclass : #LtCommand,
+	#superclass : #CmCommand,
 	#category : #'NewTools-Playground-Command'
 }
 
-{ #category : #accessing }
-StPlaygroundPagesCommand class >> activations [
-
-	^ { self toolBarActivation }
-]
-
-{ #category : #accessing }
-StPlaygroundPagesCommand class >> toolBarActivation [
-
-	^ LtToolBarActivation new 
-		order: 30;
+{ #category : #converting }
+StPlaygroundPagesCommand >> asSpecCommand [ 
+	
+	^ super asSpecCommand 
+		iconName: #glamorousMore;
 		yourself
+
 ]
 
 { #category : #execution }
@@ -29,8 +24,6 @@ StPlaygroundPagesCommand >> initialize [
 	
 	super initialize.
 	self 
-		addGroup: StPlaygroundCommandGroup uniqueInstance;
-		name: 'Pages';
-		description: 'Load a saved page.';
-		iconName: #glamorousMore
+		basicName: 'Pages';
+		basicDescription: 'Load a saved page.'
 ]

@@ -63,10 +63,19 @@ StPlayground >> buildStatusBar [
 { #category : #'private builder' }
 StPlayground >> buildToolBar [
 
-	^ LtToolBarBuilder new 
-		owner: self;
-		matching: [ :each | each hasGroup: StPlaygroundCommandGroup uniqueInstance ];
-		build
+	^ CmCommandGroup forSpec
+		register: (CmCommandGroup forSpec
+			register: (StPlaygroundDoItCommand forSpecContext: self);
+			register: (StPlaygroundPublishCommand forSpecContext: self);
+			register: (StPlaygroundBindingsCommand forSpecContext: self);
+			register: (StPlaygroundPagesCommand forSpecContext: self);
+			yourself);
+		register: (CmCommandGroup forSpec
+			register: (StPlaygroundDoItCommand forSpecContext: self);
+			yourself);
+		asToolBarPresenterWith: [ :presenter | 
+			self flag: #TODO. "This comes from a configuration"
+			presenter beIcons ]
 ]
 
 { #category : #api }
