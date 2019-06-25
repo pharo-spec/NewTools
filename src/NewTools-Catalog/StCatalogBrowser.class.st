@@ -1,6 +1,6 @@
 Class {
 	#name : #StCatalogBrowser,
-	#superclass : #ComposablePresenter,
+	#superclass : #StPresenter,
 	#instVars : [
 		'list',
 		'description'

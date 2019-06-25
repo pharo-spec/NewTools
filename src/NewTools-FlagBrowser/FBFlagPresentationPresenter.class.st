@@ -54,14 +54,12 @@ FBFlagPresentationPresenter >> initializePresenter [
 FBFlagPresentationPresenter >> initializeWidgets [
 	locationsTable := self newTable.
 	code := self newCode.
-
 	locationsTable
 		beResizable;
 		activateOnDoubleClick;
 		whenActivatedDo: [ :selection | selection selectedItem openInBrowser ];
 		contextMenu: self tableMenu.
-
-	code aboutToStyle: true
+	code syntaxHighlight: true
 ]
 
 { #category : #accessing }
