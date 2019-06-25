@@ -1,6 +1,6 @@
 Class {
 	#name : #StPharoGtkConfiguration,
-	#superclass : #SpecApplicationConfiguration,
+	#superclass : #SpApplicationConfiguration,
 	#category : #'NewTools-Gtk'
 }
 
