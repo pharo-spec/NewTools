@@ -11,7 +11,7 @@ Class {
 { #category : #specs }
 StSBProtocolInspectionPanel class >> defaultSpec [
 
-	^ SpecPanedLayout newHorizontal
+	^ SpPanedLayout newHorizontal
 		add: #protocolList;
 		add: #methodList;
 		yourself
@@ -21,8 +21,8 @@ StSBProtocolInspectionPanel class >> defaultSpec [
 StSBProtocolInspectionPanel >> defineInputPorts [
 
 	^ { 
-	SpecListItemsPort newDelegate: [ self protocolList ].
-	SpecListItemsPort newName: 'method-items' delegate: [ self methodList ]
+	SpListItemsPort newDelegate: [ self protocolList ].
+	SpListItemsPort newName: 'method-items' delegate: [ self methodList ]
 	}
 ]
 
@@ -30,8 +30,8 @@ StSBProtocolInspectionPanel >> defineInputPorts [
 StSBProtocolInspectionPanel >> defineOutputPorts [
 
 	^ { 
-	SpecListSelectionPort newDelegate: [ self methodList ].
-	SpecListSelectionPort newName: #'protocol-selection' delegate: [ self protocolList ]. 
+	SpListSelectionPort newDelegate: [ self methodList ].
+	SpListSelectionPort newName: #'protocol-selection' delegate: [ self protocolList ]. 
 	}
 ]
 
@@ -40,11 +40,11 @@ StSBProtocolInspectionPanel >> initializeWidgets [
 	
 	protocolList := self newTable 
 		hideColumnHeaders;
-		addColumn: (StringTableColumn evaluated: #name);
+		addColumn: (SpStringTableColumn evaluated: #name);
 		yourself.
 	methodList := self newTable
 		hideColumnHeaders;
-		addColumn: (StringTableColumn evaluated: #name);
+		addColumn: (SpStringTableColumn evaluated: #name);
 		yourself.
 	
 	protocolList transmitTo: methodList transform: #methods.

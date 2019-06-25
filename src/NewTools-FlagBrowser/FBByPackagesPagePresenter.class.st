@@ -30,9 +30,9 @@ FBByPackagesPagePresenter >> initializeWidgets [
 	super initializeWidgets.
 
 	locationsTable
-		addColumn: (StringTableColumn title: 'Class' evaluated: #classLocation);
-		addColumn: (StringTableColumn title: 'Method' evaluated: #selector);
-		addColumn: (StringTableColumn title: 'Flag parameter' evaluated: [ :location | location owner parameter ])
+		addColumn: (SpStringTableColumn title: 'Class' evaluated: #classLocation);
+		addColumn: (SpStringTableColumn title: 'Method' evaluated: #selector);
+		addColumn: (SpStringTableColumn title: 'Flag parameter' evaluated: [ :location | location owner parameter ])
 ]
 
 { #category : #initialization }

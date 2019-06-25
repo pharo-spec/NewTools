@@ -1,6 +1,6 @@
 Class {
 	#name : #StInspector,
-	#superclass : #StPresenter,
+	#superclass : #AnObsoleteStPresenter,
 	#instVars : [
 		'views',
 		'evaluator',

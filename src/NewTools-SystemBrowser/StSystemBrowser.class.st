@@ -84,7 +84,7 @@ StSystemBrowser >> initializeWidgets [
 	inspectionPanel := self newNotebook 
 		addPage: (self newPage: 'Instance' provider: instanceSidePanel);
 		addPage: (self newPage: 'Class' provider: classSidePanel); 
-		addPage: (self newPage: 'Variables' provider: (LabelPresenter new label: 'TODO'));
+		addPage: (self newPage: 'Variables' provider: (SpLabelPresenter new label: 'TODO'));
 		yourself.
 		
 	codePanel := self newNotebook.

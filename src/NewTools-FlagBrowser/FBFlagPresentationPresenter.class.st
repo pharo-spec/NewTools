@@ -75,16 +75,13 @@ FBFlagPresentationPresenter >> locationsTable: anObject [
 { #category : #initialization }
 FBFlagPresentationPresenter >> tableMenu [
 	| aMenu |
-	aMenu := MenuPresenter new.
-
-	aMenu
-		addGroup: [ :aGroup | 
-			aGroup
-				addItem: [ :anItem | 
-					anItem
-						name: 'Browse';
-						icon: (self iconNamed: #smallFind);
-						action: [ :param | self locationsTable selectedItem openInBrowser ] ] ].
+	
+	aMenu := SpMenuPresenter new.
+	aMenu addGroup: [ :aGroup | aGroup 
+		addItem: [ :anItem |	anItem
+			name: 'Browse';
+			icon: (self iconNamed: #smallFind);
+			action: [ :param | self locationsTable selectedItem openInBrowser ] ] ].
 
 	^ aMenu
 ]

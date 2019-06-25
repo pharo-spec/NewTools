@@ -102,8 +102,8 @@ FBByFlagsPagePresenter >> initializeWidgets [
 		sortingBlock: [ :flag | flag parameter asString ] ascending.
 
 	locationsTable
-		addColumn: (StringTableColumn title: 'Class' evaluated: #classLocation);
-		addColumn: (StringTableColumn title: 'Method' evaluated: #selector).
+		addColumn: (SpStringTableColumn title: 'Class' evaluated: #classLocation);
+		addColumn: (SpStringTableColumn title: 'Method' evaluated: #selector).
 
 	caseCheckbox
 		label: 'Case sensitive';

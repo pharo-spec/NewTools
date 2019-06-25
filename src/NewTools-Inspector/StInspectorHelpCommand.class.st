@@ -4,21 +4,6 @@ Class {
 	#category : #'NewTools-Inspector-Command'
 }
 
-{ #category : #accessing }
-StInspectorHelpCommand class >> activations [
-
-	^ { self toolBarActivation }
-]
-
-{ #category : #accessing }
-StInspectorHelpCommand class >> toolBarActivation [
-
-	^ LtToolBarActivation new 
-		order: 10;
-		bePositionRight;
-		yourself
-]
-
 { #category : #converting }
 StInspectorHelpCommand >> asSpecCommand [
 	

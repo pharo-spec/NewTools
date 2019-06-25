@@ -10,7 +10,7 @@ Class {
 { #category : #specs }
 StSBPackagesPanel class >> defaultSpec [
 
-	^ SpecBoxLayout newVertical 
+	^ SpBoxLayout newVertical 
 		add: #packageTree;
 		yourself
 ]
@@ -18,13 +18,13 @@ StSBPackagesPanel class >> defaultSpec [
 { #category : #initialization }
 StSBPackagesPanel >> defineInputPorts [ 
 
-	^ { SpecListItemsPort newDelegate: [ self packageTree ] }
+	^ { SpListItemsPort newDelegate: [ self packageTree ] }
 ]
 
 { #category : #initialization }
 StSBPackagesPanel >> defineOutputPorts [ 
 
-	^ { SpecListSelectionPort newDelegate: [ self packageTree ] }
+	^ { SpListSelectionPort newDelegate: [ self packageTree ] }
 ]
 
 { #category : #initialization }
@@ -32,9 +32,9 @@ StSBPackagesPanel >> initializeWidgets [
 	
 	packageTree := self newTreeTable
 		hideColumnHeaders;
-		addColumn: (CompositeTableColumn 
-			with: (ImageTableColumn evaluated: #icon) beNotExpandable
-			with: (StringTableColumn evaluated: #name));
+		addColumn: (SpCompositeTableColumn 
+			with: (SpImageTableColumn evaluated: #icon) beNotExpandable
+			with: (SpStringTableColumn evaluated: #name));
 		roots: self model allPackages;
 		children: #children;
 		yourself

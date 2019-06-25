@@ -4,7 +4,7 @@ Extension { #name : #String }
 String >> inspectorString [
 	<inspectorPresentationOrder: 10>
 	
-	^ TextPresenter new
+	^ SpTextPresenter new
 		title: 'String';
 		text: (self truncateWithElipsisTo: 100000);
 		yourself

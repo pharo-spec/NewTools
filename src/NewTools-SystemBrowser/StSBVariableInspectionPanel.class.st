@@ -11,7 +11,7 @@ Class {
 { #category : #specs }
 StSBVariableInspectionPanel class >> defaultSpec [
 
-	^ SpecPanedLayout newHorizontal
+	^ SpPanedLayout newHorizontal
 		add: #variableList;
 		add: #methodList;
 		yourself
@@ -21,8 +21,8 @@ StSBVariableInspectionPanel class >> defaultSpec [
 StSBVariableInspectionPanel >> defineInputPorts [
 
 	^ { 
-	SpecListItemsPort newDelegate: [ self variableList ].
-	SpecListItemsPort newName: 'method-items' delegate: [ self methodList ] 
+	SpListItemsPort newDelegate: [ self variableList ].
+	SpListItemsPort newName: 'method-items' delegate: [ self methodList ] 
 	}	
 ]
 
@@ -30,8 +30,8 @@ StSBVariableInspectionPanel >> defineInputPorts [
 StSBVariableInspectionPanel >> defineOutputPorts [
 
 	^ { 
-	SpecListSelectionPort newDelegate: [ self methodList ].
-	SpecListSelectionPort newName: #'variable-selection' delegate: [ self variableList ]
+	SpListSelectionPort newDelegate: [ self methodList ].
+	SpListSelectionPort newName: #'variable-selection' delegate: [ self variableList ]
 	}
 ]
 
@@ -40,11 +40,11 @@ StSBVariableInspectionPanel >> initializeWidgets [
 	
 	variableList := self newTable 
 		hideColumnHeaders;
-		addColumn: (StringTableColumn evaluated: #name);
+		addColumn: (SpStringTableColumn evaluated: #name);
 		yourself.
 	methodList := self newTable
 		hideColumnHeaders;
-		addColumn: (StringTableColumn evaluated: #name);
+		addColumn: (SpStringTableColumn evaluated: #name);
 		yourself.
 		
 	variableList transmitTo: methodList transform: #methods.

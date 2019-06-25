@@ -8,7 +8,7 @@ I can organize them in different ways such as flags by flags parameters, flags b
 "
 Class {
 	#name : #FlagBrowser,
-	#superclass : #StPresenter,
+	#superclass : #AnObsoleteStPresenter,
 	#instVars : [
 		'tabs'
 	],
@@ -45,7 +45,11 @@ FlagBrowser class >> open [
 FlagBrowser >> initializeWidgets [
 	tabs := self newNotebook.
 
-	FBPagePresenter allPages do: [ :aPage | tabs addPage: (NotebookPage title: aPage title icon: (self iconNamed: aPage icon) provider: [ self instantiate: aPage ]) ]
+	FBPagePresenter allPages do: [ :aPage | 
+		tabs addPage: (SpNotebookPage 
+			title: aPage title 
+			icon: (self iconNamed: aPage icon) 
+			provider: [ self instantiate: aPage ]) ]
 ]
 
 { #category : #initialization }

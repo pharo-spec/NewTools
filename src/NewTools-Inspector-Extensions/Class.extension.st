@@ -17,12 +17,12 @@ Class >> allReferencesInspection [
 		(allReferences	select: [ :rbMethodDef | 
 				rbMethodDef methodClass == aClass ])	asSortedCollection: sortBlock ].
 	
-	treeTable := TreeTablePresenter new.	
+	treeTable := SpTreeTablePresenter new.	
 	treeTable
 		title: 'All References';
 		roots: allClassesReferencing;
 		children: childrenBlock.
-	treeTable addColumn: (StringTableColumn title: 'References' evaluated: #name).
+	treeTable addColumn: (SpStringTableColumn title: 'References' evaluated: #name).
 	^ treeTable
 ]
 
@@ -31,7 +31,7 @@ Class >> classCommentInspection [
 	"This provides an editable comment of the current class"
 
 	<inspectorPresentationOrder: 20>
-	^ TextPresenter new
+	^ SpTextPresenter new
 		title: 'Comment';
 		text: self comment;
 		acceptBlock: [ :text | self comment: text stamp: Author changeStamp ]
@@ -42,7 +42,7 @@ Class >> classDefinitionInspection [
 	"This provides an editable comment of the current class"
 
 	<inspectorPresentationOrder: 15>
-	^ CodePresenter new
+	^ SpCodePresenter new
 		title: 'Definition';
 		text: self definition;
 		disable

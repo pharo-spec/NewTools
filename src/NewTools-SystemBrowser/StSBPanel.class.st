@@ -1,6 +1,6 @@
 Class {
 	#name : #StSBPanel,
-	#superclass : #ComposablePresenter,
+	#superclass : #StPresenter,
 	#instVars : [
 		'model'
 	],

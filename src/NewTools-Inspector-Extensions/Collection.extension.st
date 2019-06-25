@@ -4,10 +4,10 @@ Extension { #name : #Collection }
 Collection >> inspectorItems [
 	<inspectorPresentationOrder: 0> 
 	
-	^ TablePresenter new 
+	^ SpTablePresenter new 
 		title: 'Items';
-		addColumn: (IndexTableColumn title: 'Index');
-		addColumn: (StringTableColumn 
+		addColumn: (SpIndexTableColumn title: 'Index');
+		addColumn: (SpStringTableColumn 
 			title: 'Value' 
 			evaluated: [ :each | GTObjectPrinter asTruncatedTextFrom: each ]);
 		items: self asOrderedCollection;
