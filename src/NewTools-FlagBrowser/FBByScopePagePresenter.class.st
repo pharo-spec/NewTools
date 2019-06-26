@@ -65,3 +65,8 @@ FBByScopePagePresenter >> initializeWidgets [
 FBByScopePagePresenter >> scopeSelector [
 	^ self subclassResponsibility
 ]
+
+{ #category : #accessing }
+FBByScopePagePresenter >> scopesList [
+	^ scopesList
+]
