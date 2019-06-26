@@ -42,6 +42,15 @@ FBFlagPresentationPresenterTest >> setUp [
 ]
 
 { #category : #tests }
+FBFlagPresentationPresenterTest >> testWhenDoubleClickOnLocationsTableShouldCallOpenInBrowserMethod [
+	| mock |
+	mock := FBMockUseToTestDoubleClickAction new.
+	flagPage locationsTable items: {mock}.
+	flagPage locationsTable doubleClickAtIndex: 1.
+	self assert: mock isOpenInBrowserCall
+]
+
+{ #category : #tests }
 FBFlagPresentationPresenterTest >> testWhenSelectedItemChangedShouldCodeContainsSourceCode [
 	flagPage locationsTable selectIndex: 2.
 	self

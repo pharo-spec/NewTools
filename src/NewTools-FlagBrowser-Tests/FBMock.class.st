@@ -18,10 +18,25 @@ FBMock >> = anObject [
 
 { #category : #running }
 FBMock >> flagMethod [
-	self flag: #aRandomFlag
+	self flag: #aRandomFlagForTest
 ]
 
 { #category : #running }
 FBMock >> flagMethod2 [
-	self flag: #aRandomFlag2
+	self flag: #aRandomFlagForTest
+]
+
+{ #category : #'as yet unclassified' }
+FBMock >> flagStringMethod [
+	self flag: 'a flag for Test flagBrowser'
+]
+
+{ #category : #'as yet unclassified' }
+FBMock >> tagCapitalized [
+	self flag: #TEST
+]
+
+{ #category : #'as yet unclassified' }
+FBMock >> tagNotCapitalized [
+	self flag: #test
 ]

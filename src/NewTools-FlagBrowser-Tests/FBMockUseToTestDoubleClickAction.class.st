@@ -7,6 +7,11 @@ Class {
 	#category : #'NewTools-FlagBrowser-Tests-Presenters'
 }
 
+{ #category : #'as yet unclassified' }
+FBMockUseToTestDoubleClickAction >> initialize [
+	isOpenInBrowserCall := false
+]
+
 { #category : #accessing }
 FBMockUseToTestDoubleClickAction >> isOpenInBrowserCall [
 	^ isOpenInBrowserCall

@@ -12,6 +12,11 @@ FBClassMock >> compile: test [
 	isCompileCall := true
 ]
 
+{ #category : #initialization }
+FBClassMock >> initialize [
+	isCompileCall := true
+]
+
 { #category : #accessing }
 FBClassMock >> isCompileCall [
 	^ isCompileCall 
