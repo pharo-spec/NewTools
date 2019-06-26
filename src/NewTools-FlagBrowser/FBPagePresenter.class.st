@@ -8,7 +8,7 @@ We different subclasses will organize flags in different ways.
 "
 Class {
 	#name : #FBPagePresenter,
-	#superclass : #AnObsoleteStPresenter,
+	#superclass : #StPresenter,
 	#category : #'NewTools-FlagBrowser-Presenters'
 }
 
