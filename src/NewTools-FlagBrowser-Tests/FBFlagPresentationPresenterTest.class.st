@@ -42,11 +42,6 @@ FBFlagPresentationPresenterTest >> setUp [
 ]
 
 { #category : #tests }
-FBFlagPresentationPresenterTest >> testWhenDoubleClickOnItemOfLocationsTable [
-
-]
-
-{ #category : #tests }
 FBFlagPresentationPresenterTest >> testWhenSelectedItemChangedShouldCodeContainsSourceCode [
 	flagPage locationsTable selectIndex: 2.
 	self
