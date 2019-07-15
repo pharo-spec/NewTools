@@ -37,11 +37,6 @@ SpecDebugger class >> alwaysOpenFullDebugger [
 	^ AlwaysOpenFullDebugger ifNil: [AlwaysOpenFullDebugger := false]
 ]
 
-{ #category : #settings }
-SpecDebugger class >> alwaysOpenFullDebugger: aBoolean [
-	AlwaysOpenFullDebugger := aBoolean.
-]
-
 { #category : #'tools registry' }
 SpecDebugger class >> availableAutomatically [
 	"Should this debugger be taken into account when looking for a debugger to handle an exception."
