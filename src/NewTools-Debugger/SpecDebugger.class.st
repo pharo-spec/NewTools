@@ -424,9 +424,8 @@ SpecDebugger >> selectTopContext [
 ]
 
 { #category : #'accessing context' }
-SpecDebugger >> selectedContext [	
-
-	^ self stackTable selectedItem
+SpecDebugger >> selectedContext [
+	^ self stackTable selection selectedItem
 ]
 
 { #category : #'event - handling' }
@@ -507,7 +506,7 @@ SpecDebugger >> updateCodeFromContext [
 SpecDebugger >> updateCodeFromContext: aContext [
 	aContext
 		ifNil: [ self code
-				aboutToStyle: false;
+				withoutSyntaxHighlight;
 				text: '';
 				behavior: nil;
 				setSelection: (1 to: 0) ]
@@ -515,13 +514,12 @@ SpecDebugger >> updateCodeFromContext: aContext [
 			selectionInterval := self session
 				selectedCodeRangeForContext: aContext.
 			self code
-				aboutToStyle: true;
+				withSyntaxHighlight;
 				text: aContext sourceCode;
 				doItReceiver: aContext home receiver;
 				doItContext: aContext;
 				behavior: aContext home receiver class;
-				setSelection: selectionInterval";
-				highlightNextIntructionInterval: selectionInterval" ]
+				setSelection: selectionInterval ]
 ]
 
 { #category : #'updating actions' }
