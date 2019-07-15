@@ -53,16 +53,10 @@ SpecDebugger class >> availableAutomatically [
 SpecDebugger class >> closeAllDebuggers [
 	self flag: 'This code is Morphic related!'.
 	"SpecDebugger closeAllDebuggers"
-	(MorphicWindowAdapter allInstances select: [:w | 
-		(w model isKindOf: WindowModel) and: [ 
-			w model model isKindOf: self ]  ])
-			do: [:w | w delete ].
-			
-	SpecPreDebugWindow allInstances do: #delete.
-			
-		
-			
-	
+	(MorphicWindowAdapter allInstances
+		select:
+			[ :w | (w model isKindOf: WindowModel) and: [ w model model isKindOf: self ] ])
+		do: [ :w | w delete ]
 ]
 
 { #category : #specs }
@@ -150,9 +144,7 @@ SpecDebugger class >> openOn: aDebugSession withFullView: aBool [
 SpecDebugger class >> openOn: aDebugSession withFullView: aBool andNotification: aString [
 	| debugger |
 	debugger := self on: aDebugSession.
-	AlwaysOpenFullDebugger
-		ifTrue: [ debugger openWithFullView ]
-		ifFalse: [ debugger openWithNotification: aString ].
+	debugger openWithFullView.
 	^ debugger
 ]
 
@@ -492,11 +484,6 @@ SpecDebugger >> setSelectionForCurrentExecutionStep: anInterval [
 SpecDebugger >> stack [
 
 	^ stack
-]
-
-{ #category : #accessing }
-SpecDebugger >> stackPresenterClass [
-	^SpecDebuggerStack
 ]
 
 { #category : #initialization }
