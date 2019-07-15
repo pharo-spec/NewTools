@@ -15,6 +15,11 @@ StRawInspection class >> defaultSpec [
 		yourself
 ]
 
+{ #category : #specs }
+StRawInspection class >> title [
+	^ 'Raw'
+]
+
 { #category : #building }
 StRawInspection >> addValuesColumn [
 	attributeTable addColumn: self valuesColumn
@@ -23,13 +28,6 @@ StRawInspection >> addValuesColumn [
 { #category : #building }
 StRawInspection >> addVariablesColumn [
 	attributeTable addColumn: self variablesColumn
-]
-
-{ #category : #initialization }
-StRawInspection >> initialize [ 
-
-	super initialize.
-	self title: 'Raw'
 ]
 
 { #category : #initialization }

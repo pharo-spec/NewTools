@@ -25,6 +25,11 @@ StDebuggerInspector class >> openOn: anObject [
 		model: (StInspectorModel on: anObject)) openWithSpec
 ]
 
+{ #category : #specs }
+StDebuggerInspector class >> title [
+	 ^'Debugger Inspection'
+]
+
 { #category : #initialization }
 StDebuggerInspector >> initializeContextInspector [
 	contextInspector := StDebuggerRawInspection basicNew.

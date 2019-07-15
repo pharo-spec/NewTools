@@ -7,6 +7,11 @@ Class {
 	#category : #'NewTools-Debugger-View'
 }
 
+{ #category : #specs }
+StDebuggerRawInspection class >> title [
+	^'Raw (debugger)'
+]
+
 { #category : #building }
 StDebuggerRawInspection >> addValuesColumn [
 	

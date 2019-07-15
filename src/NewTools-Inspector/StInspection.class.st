@@ -7,6 +7,11 @@ Class {
 	#category : #'NewTools-Inspector-View'
 }
 
+{ #category : #specs }
+StInspection class >> title [
+	^self subclassResponsibility
+]
+
 { #category : #'model access' }
 StInspection >> model [
 	^ model
@@ -21,4 +26,9 @@ StInspection >> model: anObject [
 StInspection >> setModelBeforeInitialization: anObject [ 
 
 	model := anObject
+]
+
+{ #category : #TOREMOVE }
+StInspection >> title [
+	^self class title
 ]

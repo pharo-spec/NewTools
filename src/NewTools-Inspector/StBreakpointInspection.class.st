@@ -18,6 +18,11 @@ StBreakpointInspection class >> defaultSpec [
 		yourself
 ]
 
+{ #category : #specs }
+StBreakpointInspection class >> title [
+	^ 'Breakpoints'
+]
+
 { #category : #private }
 StBreakpointInspection >> breakpointDataFor: aMethod [
 	"Returns a collection of dictionaries containing breakpoint data for the given method."
@@ -65,13 +70,6 @@ StBreakpointInspection >> haltDataFor: aMethod [
 { #category : #private }
 StBreakpointInspection >> haltsSelectors [
 	^#( halt halt: haltIf: haltIfNil haltOnCount: haltOnce)
-]
-
-{ #category : #initialization }
-StBreakpointInspection >> initialize [ 
-
-	super initialize.
-	self title: 'Breakpoints'
 ]
 
 { #category : #initialization }
