@@ -19,23 +19,12 @@ Class {
 		'stackTable'
 	],
 	#classVars : [
-		'AlwaysOpenFullDebugger',
 		'ErrorRecursion',
 		'FilterCommonMessageSends',
-		'LogDebuggerStackToFile',
-		'StepSequence'
-	],
-	#classInstVars : [
-		'showScriptingPane',
-		'showAdvancedDebuggingToolbar'
+		'LogDebuggerStackToFile'
 	],
 	#category : #'NewTools-Debugger-View'
 }
-
-{ #category : #settings }
-SpecDebugger class >> alwaysOpenFullDebugger [
-	^ AlwaysOpenFullDebugger ifNil: [AlwaysOpenFullDebugger := false]
-]
 
 { #category : #'tools registry' }
 SpecDebugger class >> availableAutomatically [
