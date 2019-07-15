@@ -15,7 +15,7 @@ SpDynamicToolbar >> actions [
 SpDynamicToolbar >> buttonFor: anAction [
 	^ self newButton
 		action: anAction;
-		label: anAction defaultLabel;
+		label: anAction label;
 		yourself
 ]
 

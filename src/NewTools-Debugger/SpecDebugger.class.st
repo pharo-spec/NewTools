@@ -376,12 +376,11 @@ SpecDebugger >> openWithNotification: notificationString [
 	"NOTE: When this method returns, a new process has been scheduled to
 	run the windows, and thus this notifier, but the previous active porcess
 	has not been suspended. The sender will do this."
-	
-	SpecPreDebugWindow new 
-		setTitle: self label;
+
+	(SpecPreDebugPresenter on: self)
 		message: notificationString;
 		openWithSpec;
-		debugger: self
+		setTitle: self title
 ]
 
 { #category : #actions }
