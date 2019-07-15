@@ -10,7 +10,7 @@ Class {
 { #category : #running }
 SpDynamicToolBarTest >> setUp [
 	super setUp.
-	toolbar := SpDynamicToolbar basicNew
+	toolbar := SpDynamicToolbarPresenter basicNew
 	
 ]
 

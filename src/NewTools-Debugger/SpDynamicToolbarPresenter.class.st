@@ -1,5 +1,5 @@
 Class {
-	#name : #SpDynamicToolbar,
+	#name : #SpDynamicToolbarPresenter,
 	#superclass : #SpPresenter,
 	#traits : 'TSpDynamicPresenter',
 	#classTraits : 'TSpDynamicPresenter classTrait',
@@ -7,12 +7,12 @@ Class {
 }
 
 { #category : #'actions lookup' }
-SpDynamicToolbar >> actions [ 	
+SpDynamicToolbarPresenter >> actions [ 	
 	^self owner actions 
 ]
 
 { #category : #initialization }
-SpDynamicToolbar >> buttonFor: anAction [
+SpDynamicToolbarPresenter >> buttonFor: anAction [
 	^ self newButton
 		action: anAction;
 		label: anAction label;
@@ -20,12 +20,12 @@ SpDynamicToolbar >> buttonFor: anAction [
 ]
 
 { #category : #initialization }
-SpDynamicToolbar >> initializeWidgets [
+SpDynamicToolbarPresenter >> initializeWidgets [
 	
 ]
 
 { #category : #'actions lookup' }
-SpDynamicToolbar >> layout [
+SpDynamicToolbarPresenter >> layout [
 	| row |
 	row := SpBoxLayout newHorizontal.
 	self basicPresenters keysDo: [ :id | row add: id ].
@@ -33,18 +33,18 @@ SpDynamicToolbar >> layout [
 ]
 
 { #category : #initialization }
-SpDynamicToolbar >> refreshWidgets [
+SpDynamicToolbarPresenter >> refreshWidgets [
 	self actions do: [ :action | self presenterAt: action id put: (self buttonFor: action) ].
 	self presentersDo: [ :button | self focusOrder add: button ]
 ]
 
 { #category : #'actions lookup' }
-SpDynamicToolbar >> session [ 	
+SpDynamicToolbarPresenter >> session [ 	
 	^self owner session 
 ]
 
 { #category : #updating }
-SpDynamicToolbar >> update [
+SpDynamicToolbarPresenter >> update [
 	self refreshWidgets.
 	super update
 ]
