@@ -34,7 +34,7 @@ SpDynamicToolbar >> layout [
 
 { #category : #initialization }
 SpDynamicToolbar >> refreshWidgets [
-	self actions do: [ :action | self presenterAt: action specId put: (self buttonFor: action) ].
+	self actions do: [ :action | self presenterAt: action id put: (self buttonFor: action) ].
 	self presentersDo: [ :button | self focusOrder add: button ]
 ]
 
