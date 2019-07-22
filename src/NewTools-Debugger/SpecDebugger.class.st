@@ -171,9 +171,12 @@ SpecDebugger class >> taskbarIconName [
 
 { #category : #actions }
 SpecDebugger >> actions [
-	^ DebugSession
-		debuggingActionsForPragmas: {#debuggingAction}
-		for: self
+	| group |
+	group := (CmCommandGroup named: 'Stepping')
+		decorateWith: SpCommandGroup.
+	DebugCommand
+		allSubclassesDo: [ :cmdClass | group register: (self instantiateCommand: cmdClass) ].
+	^ group
 ]
 
 { #category : #actions }
@@ -310,6 +313,15 @@ SpecDebugger >> initializeWidgets [
 				notifying: notifyer ].
 	self code whenBuiltDo: [ :ann | ann widget font: self codeFont ].
 	"self code selection whenChangedSend: #selectionChanged to: self"
+]
+
+{ #category : #actions }
+SpecDebugger >> instantiateCommand: debugCommandClass [
+	^ (debugCommandClass
+		forSpecWithIconNamed: debugCommandClass defaultIconName
+		shortcutKey: debugCommandClass defaultShortcut)
+		context: self;
+		yourself
 ]
 
 { #category : #'accessing context' }

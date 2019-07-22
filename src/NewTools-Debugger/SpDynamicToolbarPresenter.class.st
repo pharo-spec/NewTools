@@ -3,12 +3,23 @@ Class {
 	#superclass : #SpPresenter,
 	#traits : 'TSpDynamicPresenter',
 	#classTraits : 'TSpDynamicPresenter classTrait',
+	#instVars : [
+		'debugCommands'
+	],
 	#category : #'NewTools-Debugger-View'
 }
 
+{ #category : #specs }
+SpDynamicToolbarPresenter class >> defaultSpec [
+	<spec: #default>
+	^ SpBoxLayout newHorizontal
+		add: #debugCommands;
+		yourself
+]
+
 { #category : #'actions lookup' }
 SpDynamicToolbarPresenter >> actions [ 	
-	^self owner actions 
+	^self owner actions
 ]
 
 { #category : #initialization }
@@ -21,21 +32,12 @@ SpDynamicToolbarPresenter >> buttonFor: anAction [
 
 { #category : #initialization }
 SpDynamicToolbarPresenter >> initializeWidgets [
-	
-]
-
-{ #category : #'actions lookup' }
-SpDynamicToolbarPresenter >> layout [
-	| row |
-	row := SpBoxLayout newHorizontal.
-	self basicPresenters keysDo: [ :id | row add: id ].
-	^ row
+	debugCommands := self actions asToolBarPresenter
 ]
 
 { #category : #initialization }
 SpDynamicToolbarPresenter >> refreshWidgets [
-	self actions do: [ :action | self presenterAt: action id put: (self buttonFor: action) ].
-	self presentersDo: [ :button | self focusOrder add: button ]
+	debugCommands := self actions asToolBarPresenter
 ]
 
 { #category : #'actions lookup' }
