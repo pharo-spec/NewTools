@@ -185,7 +185,7 @@ SpecDebugger >> code [
 
 { #category : #'actions code' }
 SpecDebugger >> codeContextMenuDebuggingActions [
-
+	self deprecated: 'Commands should be used from now on'.
 	^ self session class 
 		debuggingActionsForPragmas: #(contextMenuCodeDebuggingAction) 
 		for: self
