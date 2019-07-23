@@ -19,15 +19,7 @@ SpDynamicToolbarPresenter class >> defaultSpec [
 
 { #category : #'actions lookup' }
 SpDynamicToolbarPresenter >> actions [ 	
-	^self owner actions
-]
-
-{ #category : #initialization }
-SpDynamicToolbarPresenter >> buttonFor: anAction [
-	^ self newButton
-		action: anAction;
-		label: anAction label;
-		yourself
+	^self owner toolbarActions
 ]
 
 { #category : #initialization }

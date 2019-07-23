@@ -113,9 +113,9 @@ SpecDebugger class >> logDebuggerStackToFile: aBoolean [
 
 { #category : #'instance creation' }
 SpecDebugger class >> on: aDebugSession [
-
-	^ self new 	
-			session: aDebugSession
+	^ self basicNew
+		session: aDebugSession;
+		initialize
 ]
 
 { #category : #opening }
@@ -167,16 +167,6 @@ SpecDebugger class >> spanNewSessionFrom: anotherSession [
 SpecDebugger class >> taskbarIconName [
 
 	^#smallDebugIcon
-]
-
-{ #category : #actions }
-SpecDebugger >> actions [
-	| group |
-	group := (CmCommandGroup named: 'Stepping')
-		decorateWith: SpCommandGroup.
-	DebugCommand
-		allSubclassesDo: [ :cmdClass | group register: (self instantiateCommand: cmdClass) ].
-	^ group
 ]
 
 { #category : #actions }
@@ -257,22 +247,18 @@ SpecDebugger >> initialExtent [
 { #category : #initialization }
 SpecDebugger >> initialize [
 	terminateDebugSessionWhenClearing := true.
-	sessionHolder := nil asValueHolder.
-	labelHolder := nil asValueHolder.
+	"sessionHolder := nil asValueHolder."
+	"labelHolder := nil asValueHolder."
 	super initialize.
-	
-	self whenWindowChanged: [ :w | 
-		w whenClosedDo: [ self clear ] ].
-	
-	sessionHolder whenChangedDo: [:newSession :oldSession |
-		self removeActionsForSession: oldSession.
-		self registerActionsForSession: newSession.
-		self updateToolbar.
-		self updateStackFromSession: newSession ].
-	
-	labelHolder whenChangedDo: [ 
-		self updateTitle ].
-	
+	self whenWindowChanged: [ :w | w whenClosedDo: [ self clear ] ].
+	self sessionHolder
+		whenChangedDo: [ :newSession :oldSession | 
+			self removeActionsForSession: oldSession.
+			self registerActionsForSession: newSession.
+			self updateToolbar.
+			self updateStackFromSession: newSession ].
+	self labelHolder whenChangedDo: [ self updateTitle ].
+	self sessionHolder valueChanged
 ]
 
 { #category : #initialization }
@@ -289,14 +275,23 @@ SpecDebugger >> initializeInspectors [
 SpecDebugger >> initializeStack [
 	stackTable := self newTable.
 	stackTable
-		addColumn: (StringTableColumn title: 'Class' evaluated: [ :item | item receiver class]);
-		addColumn: (StringTableColumn title: 'Method' evaluated: [ :item | item method selector]);
-		addColumn: (StringTableColumn title: 'Context' evaluated: [ :item | item sender ]).
-	stackTable whenSelectionChangedDo: [ :selection |  
-		|context|
-		context := selection selectedItem.
-		self updateCodeFromContext: context.
-		self updateInspectorsFromContext: context.]
+		addColumn:
+			(StringTableColumn
+				title: 'Class'
+				evaluated: [ :item | item receiver class ]);
+		addColumn:
+			(StringTableColumn
+				title: 'Method'
+				evaluated: [ :item | item method selector ]);
+		addColumn:
+			(StringTableColumn title: 'Context' evaluated: [ :item | item sender ]).
+	stackTable
+		whenSelectionChangedDo: [ :selection | 
+			| context |
+			context := selection selectedItem.
+			self updateCodeFromContext: context.
+			self updateInspectorsFromContext: context.
+			self updateToolbar ]
 ]
 
 { #category : #initialization }
@@ -315,15 +310,6 @@ SpecDebugger >> initializeWidgets [
 	"self code selection whenChangedSend: #selectionChanged to: self"
 ]
 
-{ #category : #actions }
-SpecDebugger >> instantiateCommand: debugCommandClass [
-	^ (debugCommandClass
-		forSpecWithIconNamed: debugCommandClass defaultIconName
-		shortcutKey: debugCommandClass defaultShortcut)
-		context: self;
-		yourself
-]
-
 { #category : #'accessing context' }
 SpecDebugger >> interruptedContext [
 
@@ -338,14 +324,17 @@ SpecDebugger >> interruptedProcess [
 
 { #category : #accessing }
 SpecDebugger >> label [
-
-	^ labelHolder value
+	^ self labelHolder value
 ]
 
 { #category : #accessing }
 SpecDebugger >> label: aString [
+	self labelHolder value: aString
+]
 
-	labelHolder value: aString
+{ #category : #accessing }
+SpecDebugger >> labelHolder [
+	^ labelHolder ifNil: [ labelHolder := nil asValueHolder ]
 ]
 
 { #category : #api }
@@ -452,15 +441,18 @@ SpecDebugger >> selectionChanged [
 
 { #category : #accessing }
 SpecDebugger >> session [
-
-	^ sessionHolder value
+	^ self sessionHolder value
 ]
 
 { #category : #accessing }
 SpecDebugger >> session: aSession [
-
-	sessionHolder value: aSession.
+	self sessionHolder value: aSession.
 	self label: aSession asString
+]
+
+{ #category : #accessing }
+SpecDebugger >> sessionHolder [
+	^ sessionHolder ifNil: [ sessionHolder := nil asValueHolder ]
 ]
 
 { #category : #initialization }
@@ -496,6 +488,16 @@ SpecDebugger >> title [
 SpecDebugger >> toolbar [
 
 	^ toolbar
+]
+
+{ #category : #actions }
+SpecDebugger >> toolbarActions [
+	| group |
+	group := (CmCommandGroup named: 'Toolbar')
+		decorateWith: SpCommandGroup.
+	(DebugCommand toolbarCommandsForDebugger: self)
+		do: [ :cmd | group register: cmd ].
+	^ group
 ]
 
 { #category : #'updating widgets' }
@@ -552,13 +554,7 @@ SpecDebugger >> updateResume [
 
 { #category : #stack }
 SpecDebugger >> updateStackFromSession: aSession [
-
-	self flag: 'Remove nil test'.
-	stackTable
-		items:
-			(aSession
-				ifNil: [ OrderedCollection new ]
-				ifNotNil: [ :s | s shortStack ]).
+	stackTable items: aSession shortStack.
 	stackTable selectIndex: 1
 ]
 
