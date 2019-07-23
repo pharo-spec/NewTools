@@ -33,12 +33,9 @@ SpecDebugger class >> availableAutomatically [
 
 { #category : #utilities }
 SpecDebugger class >> closeAllDebuggers [
-	self flag: 'This code is Morphic related!'.
-	"SpecDebugger closeAllDebuggers"
-	(MorphicWindowAdapter allInstances
-		select:
-			[ :w | (w model isKindOf: WindowModel) and: [ w model model isKindOf: self ] ])
-		do: [ :w | w delete ]
+	<script>
+	SpecDebugger allInstancesDo: [ :dbg | dbg close ].
+	SpecPreDebugPresenter allInstancesDo: [ :dbg | dbg close ]
 ]
 
 { #category : #specs }
@@ -146,7 +143,7 @@ SpecDebugger class >> registerToolsOn: registry [
 
 { #category : #accessing }
 SpecDebugger class >> sessionClass [
-
+	self flag: 'Should be replaced by Sindarin - should even be removed in that case!'.
 	^ DebugSession
 ]
 
