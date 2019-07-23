@@ -17,7 +17,7 @@ AbandonPreDebugCommand class >> defaultDescription [
 
 { #category : #initialization }
 AbandonPreDebugCommand class >> defaultIconName [
-	^  #glamorousCancel
+	^  #delete
 ]
 
 { #category : #initialization }

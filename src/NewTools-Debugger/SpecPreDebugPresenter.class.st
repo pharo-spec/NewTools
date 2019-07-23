@@ -18,14 +18,6 @@ SpecPreDebugPresenter class >> defaultSpec [
 ]
 
 { #category : #actions }
-SpecPreDebugPresenter >> actions [
-	^ (DebugSession
-		debuggingActionsForPragmas: {#preDebuggingAction}
-		for: self debugger)
-		do: [ :preDebugAction | preDebugAction preDebugWindow: self ]
-]
-
-{ #category : #actions }
 SpecPreDebugPresenter >> close [
 	self withWindowDo: #close
 ]
@@ -40,9 +32,7 @@ SpecPreDebugPresenter >> initializeWidgets [
 	toolbar := self newDynamicToolbar.
 	toolbar update.
 	textPresenter := self newText.
-
 	textPresenter disable.
-
 	self focusOrder
 		add: toolbar;
 		add: textPresenter
@@ -82,4 +72,16 @@ SpecPreDebugPresenter >> setModelBeforeInitialization: aDebugger [
 { #category : #initialization }
 SpecPreDebugPresenter >> setTitle: aString [
 	self withWindowDo: [ :w | w title: aString ]
+]
+
+{ #category : #actions }
+SpecPreDebugPresenter >> toolbarActions [
+	| group |
+	group := (CmCommandGroup named: 'Toolbar')
+		decorateWith: SpCommandGroup.
+	(DebugCommand preDebugCommandsForDebugger: self debugger)
+		do: [ :cmd | 
+			cmd decoratedCommand context: self.
+			group register: cmd ].
+	^ group
 ]
