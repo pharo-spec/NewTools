@@ -276,7 +276,9 @@ SpecDebugger >> initializeStack [
 			context := selection selectedItem.
 			self updateCodeFromContext: context.
 			self updateInspectorsFromContext: context.
-			self updateToolbar ]
+			self updateToolbar ].
+	stackTable
+		contextMenu: [ self stackMenuActions beRoot asMenuPresenter ]
 ]
 
 { #category : #initialization }
@@ -417,6 +419,15 @@ SpecDebugger >> session: aSession [
 { #category : #accessing }
 SpecDebugger >> sessionHolder [
 	^ sessionHolder ifNil: [ sessionHolder := nil asValueHolder ]
+]
+
+{ #category : #actions }
+SpecDebugger >> stackMenuActions [
+	| group |
+	group := (CmCommandGroup named: 'Stack') decorateWith: SpCommandGroup.
+	(DebugCommand stackContextMenuCommandsForDebugger: self)
+		do: [ :cmd | group register: cmd ].
+	^ group
 ]
 
 { #category : #api }
