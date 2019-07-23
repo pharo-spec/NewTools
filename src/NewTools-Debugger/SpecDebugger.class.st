@@ -10,12 +10,10 @@ Class {
 	#instVars : [
 		'sessionHolder',
 		'labelHolder',
-		'stack',
 		'code',
 		'toolbar',
 		'contextInspector',
 		'receiverInspector',
-		'terminateDebugSessionWhenClearing',
 		'stackTable'
 	],
 	#classVars : [
@@ -172,16 +170,14 @@ SpecDebugger class >> taskbarIconName [
 { #category : #actions }
 SpecDebugger >> clear [
 	self removeActionsForSession: self session.
+
 	"No more code should follow after this, as the session might terminate this process."
-	terminateDebugSessionWhenClearing ifTrue: [
-		self session ifNotNil: [ :aSession | aSession terminate]
-	]
+	self session terminate
 ]
 
 { #category : #actions }
 SpecDebugger >> close [
-	
-	self window delete
+	self withWindowDo: #close
 ]
 
 { #category : #'accessing widgets' }
@@ -224,11 +220,6 @@ SpecDebugger >> currentContext [
 		ifFalse: [ self selectedContext ]
 ]
 
-{ #category : #stack }
-SpecDebugger >> defaultStackSize [
-	^ 20
-]
-
 { #category : #api }
 SpecDebugger >> initialExtent [ 
 	"This code was taken from the old debugger to get the same behavior. Fell free to refactor"
@@ -246,9 +237,6 @@ SpecDebugger >> initialExtent [
 
 { #category : #initialization }
 SpecDebugger >> initialize [
-	terminateDebugSessionWhenClearing := true.
-	"sessionHolder := nil asValueHolder."
-	"labelHolder := nil asValueHolder."
 	super initialize.
 	self whenWindowChanged: [ :w | w whenClosedDo: [ self clear ] ].
 	self sessionHolder
@@ -410,33 +398,12 @@ self flag: 'Kill it'.
 
 { #category : #'accessing context' }
 SpecDebugger >> selectTopContext [
-	stack setSelectedItem: stack list listItems first
+	stackTable selectIndex: 1
 ]
 
 { #category : #'accessing context' }
 SpecDebugger >> selectedContext [
 	^ self stackTable selection selectedItem
-]
-
-{ #category : #'event - handling' }
-SpecDebugger >> selectionChanged [
-	"| selection currentNode methodAst ast |
-	currentNode := self currentContext methodNode.
-	selection := self code getSelection.
-	methodAst := (currentNode methodClass
-		lookupSelector: self currentContext methodNode selector)
-		ifNil: [ currentNode ]
-		ifNotNil: [ :method | method ast ].
-	ast := methodAst bestNodeFor: selection.
-	ast ifNil: [ ^ self ].
-	ast isVariable
-		ifFalse: [ ^ self ].
-	(contextInspector itemLabeled: ast name)
-		ifNotNil:
-			[ :eyeInspectorItem | contextInspector list setSelectedItem: eyeInspectorItem ].
-	(receiverInspector itemLabeled: ast name)
-		ifNotNil:
-			[ :eyeInspectorItem | receiverInspector inspector list setSelectedItem: eyeInspectorItem ]"
 ]
 
 { #category : #accessing }
@@ -453,27 +420,6 @@ SpecDebugger >> session: aSession [
 { #category : #accessing }
 SpecDebugger >> sessionHolder [
 	^ sessionHolder ifNil: [ sessionHolder := nil asValueHolder ]
-]
-
-{ #category : #initialization }
-SpecDebugger >> setSelectionForCurrentExecutionStep: anInterval [
-	| highlightSegment |
-	highlightSegment := RubTextSegmentMorph
-		from: anInterval first
-		to: anInterval last + 1.
-	highlightSegment color: Color orange.
-	[self code widget widget addSegment: highlightSegment] on: Error do:[]
-]
-
-{ #category : #'accessing widgets' }
-SpecDebugger >> stack [
-
-	^ stack
-]
-
-{ #category : #initialization }
-SpecDebugger >> terminateDebugSessionWhenClearing: aBoolean [
-	terminateDebugSessionWhenClearing := aBoolean.
 ]
 
 { #category : #api }
