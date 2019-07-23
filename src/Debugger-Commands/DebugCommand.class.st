@@ -14,6 +14,11 @@ DebugCommand class >> defaultShortcut [
 	^ self subclassResponsibility
 ]
 
+{ #category : #testing }
+DebugCommand >> appliesToDebugger: aDebugger [
+	^ true
+]
+
 { #category : #accessing }
 DebugCommand >> currentContext [
 	^self debugger context
