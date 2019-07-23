@@ -6,6 +6,7 @@ Class {
 
 { #category : #default }
 WhereIsDebugCommand class >> defaultCommandName [
+	<ToolbarDebugCommand>
 	^ 'Where is?'
 ]
 

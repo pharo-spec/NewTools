@@ -6,8 +6,8 @@ Class {
 
 { #category : #accessing }
 ReturnValueDebugCommand class >> defaultCommandName [
-
-	^ 'Return entered value'
+	<ToolbarDebugCommand>
+	^ 'Return'
 ]
 
 { #category : #accessing }
@@ -17,7 +17,7 @@ ReturnValueDebugCommand class >> defaultDescription [
 
 { #category : #initialization }
 ReturnValueDebugCommand class >> defaultIconName [
-	^ #glamorousLeftSide
+	^ #refresh
 ]
 
 { #category : #accessing }

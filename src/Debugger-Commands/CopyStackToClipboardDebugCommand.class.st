@@ -6,7 +6,8 @@ Class {
 
 { #category : #initialization }
 CopyStackToClipboardDebugCommand class >> defaultCommandName [
-		^ 'Copy Stack to Clipboard'
+	<StackContextMenuDebugCommand>
+	^ 'Copy Stack to Clipboard'
 ]
 
 { #category : #initialization }

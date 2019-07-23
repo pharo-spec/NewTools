@@ -9,7 +9,8 @@ Class {
 
 { #category : #initialization }
 ProceedPreDebugCommand class >> defaultCommandName [
-	^ ProceedDebugCommand defaultCommandName 
+	<PreDebugCommand>
+	^ ProceedDebugCommand defaultCommandName
 ]
 
 { #category : #initialization }

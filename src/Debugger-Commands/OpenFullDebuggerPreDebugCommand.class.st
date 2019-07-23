@@ -6,6 +6,7 @@ Class {
 
 { #category : #default }
 OpenFullDebuggerPreDebugCommand class >> defaultCommandName [
+	<PreDebugCommand>
 	^ 'Debug'
 ]
 

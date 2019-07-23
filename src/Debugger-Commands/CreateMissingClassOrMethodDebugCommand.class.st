@@ -6,8 +6,8 @@ Class {
 
 { #category : #accessing }
 CreateMissingClassOrMethodDebugCommand class >> defaultCommandName [
-
-	^  'Create'
+	<ToolbarDebugCommand>
+	^ 'Create'
 ]
 
 { #category : #accessing }
@@ -17,7 +17,7 @@ CreateMissingClassOrMethodDebugCommand class >> defaultDescription [
 
 { #category : #initialization }
 CreateMissingClassOrMethodDebugCommand class >> defaultIconName [
-	^ #glamorousAdd
+	^ #changeAdd
 ]
 
 { #category : #initialization }

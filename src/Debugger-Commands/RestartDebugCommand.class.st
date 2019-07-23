@@ -6,6 +6,7 @@ Class {
 
 { #category : #default }
 RestartDebugCommand class >> defaultCommandName [
+	<ToolbarDebugCommand>
 	^ 'Restart'
 ]
 

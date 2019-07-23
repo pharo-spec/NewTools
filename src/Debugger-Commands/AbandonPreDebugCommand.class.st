@@ -6,6 +6,7 @@ Class {
 
 { #category : #default }
 AbandonPreDebugCommand class >> defaultCommandName [
+	<PreDebugCommand>
 	^ 'Abandon'
 ]
 

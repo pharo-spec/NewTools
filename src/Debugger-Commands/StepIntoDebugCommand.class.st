@@ -6,7 +6,8 @@ Class {
 
 { #category : #default }
 StepIntoDebugCommand class >> defaultCommandName [
-	^ 'Step Into'
+	<ToolbarDebugCommand>
+	^ 'Into'
 ]
 
 { #category : #default }

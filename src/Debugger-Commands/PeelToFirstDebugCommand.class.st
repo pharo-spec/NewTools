@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 PeelToFirstDebugCommand class >> defaultCommandName [
-
+	<StackContextMenuDebugCommand>
 	^ 'Peel to first like this'
 ]
 

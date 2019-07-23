@@ -6,6 +6,7 @@ Class {
 
 { #category : #default }
 ProceedDebugCommand class >> defaultCommandName [
+	<ToolbarDebugCommand>
 	^ 'Proceed'
 ]
 

@@ -6,8 +6,8 @@ Class {
 
 { #category : #accessing }
 CreateSubclassResponsabilityDebugCommand class >> defaultCommandName [
-
-	^  'Create'
+	<ToolbarDebugCommand>
+	^ 'Create'
 ]
 
 { #category : #accessing }
@@ -17,7 +17,7 @@ CreateSubclassResponsabilityDebugCommand class >> defaultDescription [
 
 { #category : #initialization }
 CreateSubclassResponsabilityDebugCommand class >> defaultIconName [
-	^ #add
+	^ #changeAdd
 ]
 
 { #category : #initialization }
