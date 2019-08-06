@@ -32,15 +32,15 @@ StMetaBrowser class >> defaultSpec [
 { #category : #initialization }
 StMetaBrowser >> initializeClassTree [
 	| classHierarchy |
+	
 	classHierarchy := self model class withAllSuperclasses reversed.
 	classes
 		whenSelectionChangedDo: [ :classTreeSelection | self updateMethods: classTreeSelection ].
 	classes
 		addColumn: (SpStringTableColumn title: 'Class hierarchy' evaluated: #name).
 	classes roots: {classHierarchy first}.
-	classes
-		children:
-			[ :aClass | classHierarchy select: [ :subclass | subclass superclass == aClass ] ].
+	classes children: [ :aClass | 
+		classHierarchy select: [ :subclass | subclass superclass == aClass ] ].
 	classes selectPath: (Array new: classHierarchy size withAll: 1)
 ]
 
@@ -48,10 +48,7 @@ StMetaBrowser >> initializeClassTree [
 StMetaBrowser >> initializeMethodFilter [
 
 	methodFilter autoAccept: true.
-	methodFilter acceptBlock: [:text|
-		
-		
-		  ]
+	methodFilter acceptBlock: [ :text|  ]
 ]
 
 { #category : #initialization }
@@ -64,17 +61,19 @@ StMetaBrowser >> initializeMethodList [
 				ifNil: [ source text: '' ]
 				ifNotNil: [ source behavior: method methodClass.
 					source text: method sourceCode ] ].
-	methods displayBlock: #selector
+	methods displayBlock: [ :each | each selector ]
 ]
 
 { #category : #initialization }
 StMetaBrowser >> initializePresenter [
+
 	self initializeMethodList.
 	self initializeClassTree
 ]
 
 { #category : #initialization }
 StMetaBrowser >> initializeWidgets [
+
 	classes := self newTreeTable.
 	methods := self newList.
 	methodFilter := self newTextInput.
@@ -84,6 +83,7 @@ StMetaBrowser >> initializeWidgets [
 { #category : #updating }
 StMetaBrowser >> updateMethods: classTreeSelection [
 	| class |
+
 	class := classTreeSelection selectedItem.
 	class
 		ifNil: [ methods items: SortedCollection new ]

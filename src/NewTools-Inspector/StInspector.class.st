@@ -37,7 +37,8 @@ StInspector class >> extensionsPragma [
 
 { #category : #'tools registry' }
 StInspector class >> inspect: anObject [
-	self openOn: anObject
+
+	^ self openOn: anObject
 ]
 
 { #category : #opening }
