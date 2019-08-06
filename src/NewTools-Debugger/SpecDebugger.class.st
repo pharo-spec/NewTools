@@ -191,11 +191,6 @@ SpecDebugger >> codeContextMenuDebuggingActions [
 		for: self
 ]
 
-{ #category : #private }
-SpecDebugger >> codeFont [ 
-	^ StandardFonts codeFont
-]
-
 { #category : #accessing }
 SpecDebugger >> color: aColor [
 	"Hack to make the spec debugger availlable in tests too"
@@ -293,7 +288,6 @@ SpecDebugger >> initializeWidgets [
 				recompileMethodTo: text string
 				inContext: self stackTable selectedItem
 				notifying: notifyer ].
-	self code whenBuiltDo: [ :ann | ann widget font: self codeFont ].
 	"self code selection whenChangedSend: #selectionChanged to: self"
 ]
 
