@@ -12,19 +12,17 @@ Class {
 
 { #category : #specs }
 StMetaBrowser class >> defaultSpec [
+	
 	^ SpPanedLayout newVertical
-		add:
-			(SpBoxLayout newHorizontal
+		add: (SpBoxLayout newHorizontal
+			spacing: 2;
+			add: #classes;
+			add: (SpBoxLayout newVertical
 				spacing: 2;
-				add: #classes;
-				add:
-					(SpBoxLayout newVertical
-						spacing: 2;
-						add: #methods;
-						add: #methodFilter
-							withConstraints: [ :constraint | constraint height: self inputTextHeight ];
-						yourself);
+				add: #methods;
+				addLast: #methodFilter expand: false fill: false padding: 0;
 				yourself);
+			yourself);
 		add: #source;
 		yourself
 ]
