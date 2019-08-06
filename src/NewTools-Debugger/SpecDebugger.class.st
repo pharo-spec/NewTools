@@ -41,12 +41,16 @@ SpecDebugger class >> closeAllDebuggers [
 { #category : #specs }
 SpecDebugger class >> defaultSpec [
 	<spec: #default>
+
 	^ SpPanedLayout newVertical
 		position: 70 percent;
-		add: (SpBoxLayout newVertical
+		add: (SpPanedLayout newVertical
+			position: 40 percent;
 			add: #stackTable;
-			add: #toolbar expand: false fill: false padding: 0;
-			add: #code;
+			add: (SpBoxLayout newVertical 
+				add: #toolbar expand: false fill: false padding: 0;
+				add: #code;
+				yourself);
 			yourself);
 		add: (SpPanedLayout newHorizontal
 			add: #receiverInspector;
