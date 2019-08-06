@@ -12,6 +12,7 @@ Class {
 { #category : #specs }
 SpDynamicToolbarPresenter class >> defaultSpec [
 	<spec: #default>
+
 	^ SpBoxLayout newHorizontal
 		add: #debugCommands;
 		yourself
