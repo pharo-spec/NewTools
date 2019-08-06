@@ -75,14 +75,11 @@ StInspector >> buildToolBar [
 
 { #category : #initialization }
 StInspector >> initializeWidgets [
-	| pages |
 
 	views := self newNotebook.
 	evaluator := self newCode.
 
-	pages := self allPages.
-	pages do: [ :each | each owner: self ].	
-	views pages: pages.
+	views pages: self allPages.
 		
 	self refresh
 ]
