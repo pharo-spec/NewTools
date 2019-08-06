@@ -73,12 +73,6 @@ StInspector >> buildToolBar [
 		asToolBarPresenterWith: [ :presenter | presenter beIcons ]
 ]
 
-{ #category : #private }
-StInspector >> collectViews [
-
-	^ self model objectInspections
-]
-
 { #category : #initialization }
 StInspector >> initializeWidgets [
 	| pages |
