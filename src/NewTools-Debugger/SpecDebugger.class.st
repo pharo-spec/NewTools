@@ -244,12 +244,16 @@ SpecDebugger >> initialize [
 
 { #category : #initialization }
 SpecDebugger >> initializeInspectors [
-	receiverInspector := StDebuggerInspector
-		newApplication: SpecNullApplication new
-		model: (StInspectorModel on: nil).
-	contextInspector := StDebuggerInspector
-		newApplication: SpecNullApplication new
-		model: (StInspectorModel on: [  ] asContext)
+
+	receiverInspector := (StDebuggerInspector
+		newApplication: self application
+		model: (StInspectorModel on: nil))
+		label: 'Receiver'.
+
+	contextInspector := (StDebuggerInspector
+		newApplication: self application
+		model: (StInspectorModel on: [ ] asContext))
+		label: 'Context'
 ]
 
 { #category : #stack }
