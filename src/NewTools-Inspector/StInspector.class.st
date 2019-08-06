@@ -32,7 +32,7 @@ StInspector class >> defaultTitle [
 { #category : #accessing }
 StInspector class >> extensionsPragma [
 
-	^ #inspectorPresentationOrder:
+	^ #inspectorPresentationOrder:title:
 ]
 
 { #category : #'tools registry' }
@@ -59,9 +59,9 @@ StInspector class >> titleFor: anObject [
 ]
 
 { #category : #private }
-StInspector >> allViews [
-	
-	^ { self model inspectedObject rawInspection }, self collectViews
+StInspector >> allPages [
+
+	^ self model objectInspectionPages
 ]
 
 { #category : #'private builder' }
@@ -81,15 +81,14 @@ StInspector >> collectViews [
 
 { #category : #initialization }
 StInspector >> initializeWidgets [
+	| pages |
 
 	views := self newNotebook.
 	evaluator := self newCode.
-	
-	views pages: (self allViews collect: [ :each |
-		each owner: self.
-		SpNotebookPage 
-			title: each title 
-			provider: [ each ] ]).
+
+	pages := self allPages.
+	pages do: [ :each | each owner: self ].	
+	views pages: pages.
 		
 	self refresh
 ]

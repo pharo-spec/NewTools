@@ -2,9 +2,9 @@ Extension { #name : #Class }
 
 { #category : #'*NewTools-Inspector-Extensions' }
 Class >> allReferencesInspection [
-
-	<inspectorPresentationOrder: 20>
+	<inspectorPresentationOrder: 20 title: 'All References'>
 	| allReferences allClassesReferencing sortBlock treeTable childrenBlock |
+	
 	allReferences := SystemNavigation default allReferencesTo: self binding.
 	sortBlock := [ :x :y | x name < y name ].
 	
@@ -19,31 +19,32 @@ Class >> allReferencesInspection [
 	
 	treeTable := SpTreeTablePresenter new.	
 	treeTable
-		title: 'All References';
 		roots: allClassesReferencing;
 		children: childrenBlock.
 	treeTable addColumn: (SpStringTableColumn title: 'References' evaluated: #name).
+	
 	^ treeTable
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
 Class >> classCommentInspection [
 	"This provides an editable comment of the current class"
-
-	<inspectorPresentationOrder: 20>
+	<inspectorPresentationOrder: 20 title: 'Comment'>
+	
 	^ SpTextPresenter new
-		title: 'Comment';
 		text: self comment;
-		acceptBlock: [ :text | self comment: text stamp: Author changeStamp ]
+		acceptBlock: [ :text | 
+			self 
+				comment: text 
+				stamp: Author changeStamp ]
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
 Class >> classDefinitionInspection [
 	"This provides an editable comment of the current class"
-
-	<inspectorPresentationOrder: 15>
+	<inspectorPresentationOrder: 15 title: 'Definition'>
+	
 	^ SpCodePresenter new
-		title: 'Definition';
 		text: self definition;
 		disable
 ]

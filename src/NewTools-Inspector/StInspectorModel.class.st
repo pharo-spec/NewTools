@@ -30,7 +30,7 @@ StInspectorModel >> inspectedObject: anObject [
 ]
 
 { #category : #accessing }
-StInspectorModel >> objectInspections [
+StInspectorModel >> objectInspectionPages [
 
-	^ self inspectedObject inspections
+	^ self inspectedObject inspectionPages
 ]

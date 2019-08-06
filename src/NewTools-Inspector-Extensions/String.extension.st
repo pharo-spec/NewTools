@@ -2,10 +2,9 @@ Extension { #name : #String }
 
 { #category : #'*NewTools-Inspector-Extensions' }
 String >> inspectorString [
-	<inspectorPresentationOrder: 10>
+	<inspectorPresentationOrder: 10 title: 'String'>
 	
 	^ SpTextPresenter new
-		title: 'String';
 		text: (self truncateWithElipsisTo: 100000);
 		yourself
 ]

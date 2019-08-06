@@ -10,13 +10,13 @@ Object >> allInspectorNodes [
 
 { #category : #'*NewTools-Inspector-Extensions' }
 Object >> breakpointInspection [
-	<inspectorPresentationOrder: 998>
+	<inspectorPresentationOrder: 998 title: 'Breakpoints'>
 
 	^ StBreakpointInspection on: self
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
-Object >> inspections [
+Object >> inspectionPages [
 	"This is a utility method that collects all presentations for the current object.
 	By default, it simply looks for the #gtInspectorPresentationOrder: pragma.
 	The inspector can decice whether or not a presentation should be dispayed.
@@ -24,17 +24,17 @@ Object >> inspections [
 	| pragmas |
 	
 	pragmas := Pragma
-		allNamed:  StInspector extensionsPragma
+		allNamed: StInspector extensionsPragma
 		from: self class
 		to: ProtoObject
 		sortedUsing: [ :x :y | (x argumentAt: 1) < (y argumentAt: 1) ].
 
-	"pragmas := pragmas select: [ :aPragma | aGTInspector shouldDisplayPresentationCreatedBy: aPragma method ]."
-	
 	^ (pragmas 
 		sorted: [ :a :b | (a argumentAt: 1) < (b argumentAt: 1) ])
 		collect: [ :eachPragma | 
-			self perform: eachPragma methodSelector  ]
+			SpNotebookPage 
+				title: (eachPragma argumentAt: 2)
+				provider: [ self perform: eachPragma methodSelector ] ]
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
@@ -47,7 +47,7 @@ Object >> inspectorNodes [
 
 { #category : #'*NewTools-Inspector-Extensions' }
 Object >> metaInspection [
-	<inspectorPresentationOrder: 999>
+	<inspectorPresentationOrder: 999 title: 'Meta'>
 
 	^ StMetaBrowser on: self
 ]
@@ -55,6 +55,7 @@ Object >> metaInspection [
 { #category : #'*NewTools-Inspector-Extensions' }
 Object >> rawInspection [
 	"This is the most basic presentation showing the state of the object"
+	<inspectorPresentationOrder: -1 title: 'Raw'>
 
 	^ StRawInspection on: self
 ]

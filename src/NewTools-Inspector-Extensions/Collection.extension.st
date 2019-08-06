@@ -2,10 +2,9 @@ Extension { #name : #Collection }
 
 { #category : #'*NewTools-Inspector-Extensions' }
 Collection >> inspectorItems [
-	<inspectorPresentationOrder: 0> 
+	<inspectorPresentationOrder: 0 title: 'Items'> 
 	
 	^ SpTablePresenter new 
-		title: 'Items';
 		addColumn: (SpIndexTableColumn title: 'Index');
 		addColumn: (SpStringTableColumn 
 			title: 'Value' 
