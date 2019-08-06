@@ -15,11 +15,6 @@ StRawInspection class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #specs }
-StRawInspection class >> title [
-	^ 'Raw'
-]
-
 { #category : #building }
 StRawInspection >> addValuesColumn [
 	attributeTable addColumn: self valuesColumn

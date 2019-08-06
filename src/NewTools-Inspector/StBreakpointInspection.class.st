@@ -18,11 +18,6 @@ StBreakpointInspection class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #specs }
-StBreakpointInspection class >> title [
-	^ 'Breakpoints'
-]
-
 { #category : #private }
 StBreakpointInspection >> breakpointDataFor: aMethod [
 	"Returns a collection of dictionaries containing breakpoint data for the given method."

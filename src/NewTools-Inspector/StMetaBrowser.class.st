@@ -29,11 +29,6 @@ StMetaBrowser class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #specs }
-StMetaBrowser class >> title [
-	^ 'Meta'
-]
-
 { #category : #initialization }
 StMetaBrowser >> initializeClassTree [
 	| classHierarchy |
