@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 CreateSubclassResponsabilityDebugCommand class >> defaultCommandName [
-	<ToolbarDebugCommand>
+	<toolbarDebugCommand: 10>
 	^ 'Create'
 ]
 

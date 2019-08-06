@@ -291,8 +291,8 @@ SpecDebugger >> initializeWidgets [
 		acceptBlock: [ :text :notifyer | 
 			self
 				recompileMethodTo: text string
-				inContext: self stackTable selectedItem
-				notifying: notifyer ].
+				inContext: self stackTable selection selectedItem
+				notifying: notifyer ]
 	"self code selection whenChangedSend: #selectionChanged to: self"
 ]
 
@@ -481,9 +481,9 @@ SpecDebugger >> updateCodeFromContext: aContext [
 { #category : #'updating actions' }
 SpecDebugger >> updateContextChanged [
 	| selection |
-	selection := self stackTable selectedItem.
-	self updateStep.
-"	self stack selectItem: selection"
+	selection := self stackTable selection selectedItem.
+	self updateStep
+	"	self stack selectItem: selection"
 ]
 
 { #category : #updating }

@@ -6,7 +6,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 RunToSelectionDebugCommand class >> defaultCommandName [
-	<ToolbarDebugCommand>
+	<toolbarDebugCommand: 5>
 	^ 'Run to'
 ]
 

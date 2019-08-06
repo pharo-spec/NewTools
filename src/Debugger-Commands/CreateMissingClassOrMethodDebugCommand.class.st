@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 CreateMissingClassOrMethodDebugCommand class >> defaultCommandName [
-	<ToolbarDebugCommand>
+	<toolbarDebugCommand: 0>
 	^ 'Create'
 ]
 

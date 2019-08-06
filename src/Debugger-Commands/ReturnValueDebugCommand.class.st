@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 ReturnValueDebugCommand class >> defaultCommandName [
-	<ToolbarDebugCommand>
+	<toolbarDebugCommand: 4>
 	^ 'Return'
 ]
 

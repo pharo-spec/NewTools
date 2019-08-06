@@ -14,17 +14,19 @@ DebugCommand class >> codeContextMenuCommandsForDebugger: debugger [
 { #category : #accessing }
 DebugCommand class >> debugCommandClassesForPragma: aSymbol [
 	| commandsClasses |
+	
 	commandsClasses := OrderedCollection new.
 	(self allSubclasses reject: [ :sc | sc hasAbstractMethods ])
 		do: [ :commandClass | 
-			commandsClasses
-				addAll:
-					((Pragma
-						allNamed: aSymbol
-						from: commandClass class
-						to: commandClass class)
-						collect: [ :pragma | pragma methodClass soleInstance ]) ].
-	^ commandsClasses
+			commandsClasses addAll: (Pragma
+				allNamed: aSymbol
+				from: commandClass class
+				to: commandClass class) ].
+	
+	^ ((aSymbol last = $:)
+		ifTrue: [ commandsClasses sorted: [ :a :b | (a argumentAt: 1) < (b argumentAt: 1) ] ]
+		ifFalse: [ commandsClasses ])
+		collect: [ :pragma | pragma methodClass soleInstance ]
 ]
 
 { #category : #initialization }
@@ -70,7 +72,7 @@ DebugCommand class >> stackContextMenuCommandsForDebugger: debugger [
 { #category : #'instance creation' }
 DebugCommand class >> toolbarCommandsForDebugger: debugger [
 	^ self
-		instantiateCommands: (self debugCommandClassesForPragma: #ToolbarDebugCommand)
+		instantiateCommands: (self debugCommandClassesForPragma: #toolbarDebugCommand:)
 		forDebugger: debugger
 ]
 
