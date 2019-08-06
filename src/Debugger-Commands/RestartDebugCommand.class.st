@@ -6,7 +6,8 @@ Class {
 
 { #category : #default }
 RestartDebugCommand class >> defaultCommandName [
-	<toolbarDebugCommand: 3>
+	<toolbarDebugCommand: 900>
+
 	^ 'Restart'
 ]
 

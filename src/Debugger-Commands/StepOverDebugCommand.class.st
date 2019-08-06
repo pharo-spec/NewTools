@@ -6,7 +6,8 @@ Class {
 
 { #category : #accessing }
 StepOverDebugCommand class >> defaultCommandName [
-	<toolbarDebugCommand: 7>
+	<toolbarDebugCommand: 40>
+
 	^ 'Over'
 ]
 

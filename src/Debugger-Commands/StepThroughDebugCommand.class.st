@@ -6,7 +6,8 @@ Class {
 
 { #category : #default }
 StepThroughDebugCommand class >> defaultCommandName [
-	<toolbarDebugCommand: 8>
+	<toolbarDebugCommand: 30>
+
 	^ 'Through'
 ]
 

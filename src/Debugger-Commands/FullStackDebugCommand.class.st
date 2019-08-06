@@ -6,7 +6,7 @@ Class {
 
 { #category : #default }
 FullStackDebugCommand class >> defaultCommandName [
-	<toolbarDebugCommand: 1>
+	<toolbarDebugCommand: 999>
 	^ 'Full stack'
 ]
 

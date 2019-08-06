@@ -6,7 +6,8 @@ Class {
 
 { #category : #default }
 StepIntoDebugCommand class >> defaultCommandName [
-	<toolbarDebugCommand: 1>
+	<toolbarDebugCommand: 20>
+	
 	^ 'Into'
 ]
 
