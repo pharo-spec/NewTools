@@ -16,13 +16,17 @@ StPharoGtkConfiguration >> configureOSX: anApplication [
 	self installTheme: 'Sierra-dark'.
 	 "self installTheme: 'Sierra-light'".
 	
-	anApplication cssProviderCode: (GtkCssProvider newFromString: '* { font: 12pt "Monaco" }')
+	anApplication 
+		propertyAt: self class cssProviderCodePropertyName  
+		put: (GtkCssProvider newFromString: '* { font: 12pt "Monaco" }')
 ]
 
 { #category : #configuring }
 StPharoGtkConfiguration >> configureUnix: anApplication [
 
-	anApplication cssProviderCode: (GtkCssProvider newFromString: '* { font: 12pt "Sans" }')
+	anApplication 
+		propertyAt: self class cssProviderCodePropertyName  
+		put: (GtkCssProvider newFromString: '* { font: 12pt "Sans" }')
 ]
 
 { #category : #configuring }
@@ -30,7 +34,9 @@ StPharoGtkConfiguration >> configureWindows: anApplication [
 
 	self installTheme: 'Windows-10-master'.
 	
-	anApplication cssProviderCode: (GtkCssProvider newFromString: '* { font: 10pt "Microsoft Sans Serif" }')
+	anApplication 
+		propertyAt: self class cssProviderCodePropertyName  
+		put: (GtkCssProvider newFromString: '* { font: 10pt "Microsoft Sans Serif" }')
 ]
 
 { #category : #'private running' }

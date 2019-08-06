@@ -1,6 +1,6 @@
 Extension { #name : #Morph }
 
-{ #category : #'*NewTools-Core' }
+{ #category : #'*NewTools-Morphic' }
 Morph >> inspectorIcon [
 
 	^ self class systemIcon
