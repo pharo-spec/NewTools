@@ -43,18 +43,15 @@ SpecDebugger class >> defaultSpec [
 	<spec: #default>
 	^ SpPanedLayout newVertical
 		position: 70 percent;
-		add:
-			(SpBoxLayout newVertical
-				add: #stackTable;
-				add: #toolbar
-					withConstraints: [ :constraint | constraint height: self toolbarHeight ];
-				add: #code;
-				yourself);
-		add:
-			(SpPanedLayout newHorizontal
-				add: #receiverInspector;
-				add: #contextInspector;
-				yourself);
+		add: (SpBoxLayout newVertical
+			add: #stackTable;
+			add: #toolbar expand: false fill: false padding: 0;
+			add: #code;
+			yourself);
+		add: (SpPanedLayout newHorizontal
+			add: #receiverInspector;
+			add: #contextInspector;
+			yourself);
 		yourself
 ]
 
