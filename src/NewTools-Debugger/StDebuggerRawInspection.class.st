@@ -19,6 +19,7 @@ StDebuggerRawInspection >> addValuesColumn [
 
 { #category : #accessing }
 StDebuggerRawInspection >> inspectorNodes [
+
 	^ self model debuggerInspectorNodes
 ]
 
@@ -29,15 +30,14 @@ StDebuggerRawInspection >> table [
 
 { #category : #building }
 StDebuggerRawInspection >> variablesColumn [
-	^ CompositeTableColumn new
-		addColumn:
-			(ImageTableColumn new
-				width: 20;
-				evaluated: #icon;
-				yourself);
-		addColumn:
-			(StringTableColumn new
-				evaluated: #label;
-				yourself);
+
+	^ SpCompositeTableColumn new
+		addColumn: (SpImageTableColumn new
+			width: 20;
+			evaluated: #icon;
+			yourself);
+		addColumn: (SpStringTableColumn new
+			evaluated: #label;
+			yourself);
 		yourself
 ]
