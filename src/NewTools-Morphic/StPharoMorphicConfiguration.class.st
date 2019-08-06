@@ -7,7 +7,7 @@ Class {
 { #category : #'as yet unclassified' }
 StPharoMorphicConfiguration class >> defaultStyleSheet [
 
-	^ SpStyleSheetSTONReader fromString: '
+	^ SpStyleSTONReader fromString: '
 .application [
 	Font { #name : "Source Sans Pro", #size : 10 },
 	Geometry { #height: 25 },
