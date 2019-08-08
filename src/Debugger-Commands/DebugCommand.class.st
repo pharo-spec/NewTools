@@ -7,6 +7,12 @@ Class {
 	#category : #'Debugger-Commands'
 }
 
+{ #category : #'as yet unclassified' }
+DebugCommand class >> AnonymousCommands [
+	AnonymousCommands ifNil: [ AnonymousCommands := OrderedCollection new ].
+	^ AnonymousCommands
+]
+
 { #category : #'instance creation' }
 DebugCommand class >> addAnonymousCommand: aCommand [
 	AnonymousCommands ifNil:[AnonymousCommands := OrderedCollection new].
@@ -24,7 +30,7 @@ DebugCommand class >> codeContextMenuCommandsForDebugger: debugger [
 DebugCommand class >> debugCommandClassesForPragma: aSymbol [
 	| allClasses commandsClasses |
 	allClasses := OrderedCollection withAll: self allSubclasses.
-	allClasses addAll: AnonymousCommands.
+	allClasses addAll: self AnonymousCommands.
 	commandsClasses := OrderedCollection new.
 	(allClasses reject: [ :sc | sc hasAbstractMethods ])
 		do: [ :commandClass | 
