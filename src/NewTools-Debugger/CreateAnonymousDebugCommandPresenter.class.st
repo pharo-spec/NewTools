@@ -56,6 +56,7 @@ CreateAnonymousDebugCommandPresenter >> findNonDuplicateNameOf: aString [
 CreateAnonymousDebugCommandPresenter >> initializeWidgets [
 	
 	nameField := self newTextInput.
+		nameField autoAccept: true.
 	scriptField := self newCode.
 		scriptField text: 'dbg stepOver'.
 	cancelButton := self newButton.
