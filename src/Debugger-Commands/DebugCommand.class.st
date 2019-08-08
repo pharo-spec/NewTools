@@ -15,8 +15,7 @@ DebugCommand class >> AnonymousCommands [
 
 { #category : #'instance creation' }
 DebugCommand class >> addAnonymousCommand: aCommand [
-	AnonymousCommands ifNil:[AnonymousCommands := OrderedCollection new].
-	AnonymousCommands add: aCommand
+	self AnonymousCommands add: aCommand
 ]
 
 { #category : #'instance creation' }
@@ -93,6 +92,11 @@ DebugCommand class >> preDebugCommandsForDebugger: debugger [
 	^ self
 		instantiateCommands: (self debugCommandClassesForPragma: #PreDebugCommand)
 		forDebugger: debugger
+]
+
+{ #category : #'instance creation' }
+DebugCommand class >> removeAllAnonymousCommands [
+	AnonymousCommands := nil
 ]
 
 { #category : #'instance creation' }
