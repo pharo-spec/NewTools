@@ -28,6 +28,9 @@ AddSindarinCommandDebugCommand class >> defaultShortcut [
 
 { #category : #hooks }
 AddSindarinCommandDebugCommand >> execute [
-	DebugCommand newAnonymousActionLabeled: 'Test' icon: 'abstract' executeScript: 'self debugger inspect'.
-	self debugger updateToolbar
+	
+	| creationDialog |
+	creationDialog := CreateAnonymousDebugCommandPresenter new openWithSpec.
+	"DebugCommand newAnonymousActionLabeled: 'Test' icon: 'abstract' executeScript: 'self debugger inspect'."
+	creationDialog window whenClosedDo: [ self debugger updateToolbar]
 ]
