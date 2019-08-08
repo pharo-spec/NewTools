@@ -6,7 +6,7 @@ Class {
 
 { #category : #default }
 AddSindarinCommandDebugCommand class >> defaultCommandName [
-	<toolbarDebugCommand: 9998>
+	<toolbarDebugCommand: 9997>
 	
 	^ 'New Cmd'
 ]
@@ -32,5 +32,5 @@ AddSindarinCommandDebugCommand >> execute [
 	| creationDialog |
 	creationDialog := CreateAnonymousDebugCommandPresenter new openWithSpec.
 	"DebugCommand newAnonymousActionLabeled: 'Test' icon: 'abstract' executeScript: 'self debugger inspect'."
-	creationDialog window whenClosedDo: [ self debugger updateToolbar]
+	creationDialog whenClosedDo: [ self debugger updateToolbar]
 ]
