@@ -1,8 +1,17 @@
 Class {
 	#name : #DebugCommand,
 	#superclass : #CmCommand,
+	#classVars : [
+		'AnonymousCommands'
+	],
 	#category : #'Debugger-Commands'
 }
+
+{ #category : #'instance creation' }
+DebugCommand class >> addAnonymousCommand: aCommand [
+	AnonymousCommands ifNil:[AnonymousCommands := OrderedCollection new].
+	AnonymousCommands add: aCommand
+]
 
 { #category : #'instance creation' }
 DebugCommand class >> codeContextMenuCommandsForDebugger: debugger [
@@ -13,10 +22,11 @@ DebugCommand class >> codeContextMenuCommandsForDebugger: debugger [
 
 { #category : #accessing }
 DebugCommand class >> debugCommandClassesForPragma: aSymbol [
-	| commandsClasses |
-	
+	| allClasses commandsClasses |
+	allClasses := OrderedCollection withAll: self allSubclasses.
+	allClasses addAll: AnonymousCommands.
 	commandsClasses := OrderedCollection new.
-	(self allSubclasses reject: [ :sc | sc hasAbstractMethods ])
+	(allClasses reject: [ :sc | sc hasAbstractMethods ])
 		do: [ :commandClass | 
 			commandsClasses addAll: (Pragma
 				allNamed: aSymbol
@@ -56,6 +66,23 @@ DebugCommand class >> instantiateCommands: commandClasses forDebugger: debugger 
 ]
 
 { #category : #'instance creation' }
+DebugCommand class >> newAnonymousActionLabeled: title icon: icon executeScript: sourceCode [
+
+	|command|
+	command := self newAnonymousSubclass.
+	command compile: 'execute ', sourceCode.
+	command class compile: 'defaultCommandName
+	<toolbarDebugCommand: 9999>
+	^', title printString.
+	command class compile: 'defaultIconName
+	^#', icon.
+	command class compile: 'defaultShortcut
+	^ nil'.
+	self addAnonymousCommand: command.
+	^command
+]
+
+{ #category : #'instance creation' }
 DebugCommand class >> preDebugCommandsForDebugger: debugger [
 	^ self
 		instantiateCommands: (self debugCommandClassesForPragma: #PreDebugCommand)
@@ -71,6 +98,7 @@ DebugCommand class >> stackContextMenuCommandsForDebugger: debugger [
 
 { #category : #'instance creation' }
 DebugCommand class >> toolbarCommandsForDebugger: debugger [
+
 	^ self
 		instantiateCommands: (self debugCommandClassesForPragma: #toolbarDebugCommand:)
 		forDebugger: debugger
