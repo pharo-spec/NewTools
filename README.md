@@ -2,5 +2,5 @@
 ```Smalltalk
 Metacello new
     baseline: 'NewTools';
-    repository: 'github://pharo-spec/NewTools';
+    repository: 'github://dupriezt/NewTools';
     load.
