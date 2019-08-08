@@ -14,7 +14,8 @@ Class {
 		'toolbar',
 		'contextInspector',
 		'receiverInspector',
-		'stackTable'
+		'stackTable',
+		'sindarinDebugger'
 	],
 	#classVars : [
 		'ErrorRecursion',
@@ -109,9 +110,16 @@ SpecDebugger class >> logDebuggerStackToFile: aBoolean [
 
 { #category : #'instance creation' }
 SpecDebugger class >> on: aDebugSession [
-	^ self basicNew
-		session: aDebugSession;
-		initialize
+	| sindarinDebugSession returnValue |
+	sindarinDebugSession := SindarinDebugSession forDebugSession: aDebugSession.
+	[sindarinDebugSession interruptedContext == aDebugSession interruptedContext ] whileFalse: [ sindarinDebugSession stepOver ].
+	returnValue := self basicNew
+		session: sindarinDebugSession;
+		sindarinDebugger: (SindarinDebugger attachTo: sindarinDebugSession);
+		initialize.
+	sindarinDebugSession activateEventTriggering.
+	^ returnValue
+	
 ]
 
 { #category : #opening }
@@ -418,6 +426,16 @@ SpecDebugger >> session: aSession [
 { #category : #accessing }
 SpecDebugger >> sessionHolder [
 	^ sessionHolder ifNil: [ sessionHolder := nil asValueHolder ]
+]
+
+{ #category : #accessing }
+SpecDebugger >> sindarinDebugger [
+	^ sindarinDebugger
+]
+
+{ #category : #accessing }
+SpecDebugger >> sindarinDebugger: aSindarinDebugger [
+	sindarinDebugger := aSindarinDebugger
 ]
 
 { #category : #actions }
