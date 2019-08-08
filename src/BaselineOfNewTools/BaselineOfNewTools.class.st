@@ -16,7 +16,7 @@ BaselineOfNewTools >> baseline: spec [
 			
 		spec
 			baseline: 'Sindarin'
-			with: [ spec repository: 'github://dupriezt/ScriptableDebugger:Sindarin' ].
+			with: [ spec repository: 'github://dupriezt/ScriptableDebugger' ].
 
 		spec
 			package: 'NewTools-Core' with: [ spec requires: #('Spec2') ];
