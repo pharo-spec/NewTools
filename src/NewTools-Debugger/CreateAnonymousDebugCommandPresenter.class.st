@@ -38,7 +38,7 @@ CreateAnonymousDebugCommandPresenter class >> defaultSpec [
 CreateAnonymousDebugCommandPresenter >> createCommand [
 	| name script |
 	name := self findNonDuplicateNameOf: nameField text.
-	script := '[:dbg | ', scriptField text, ' ] value: self debugger sindarinDebugger'.
+	script := '[:dbg | ', scriptField text, ' ] value: self debugger sindarinDebugger.'.
 	DebugCommand newAnonymousActionLabeled: name icon: 'abstract' executeScript: script.
 ]
 
@@ -56,7 +56,8 @@ CreateAnonymousDebugCommandPresenter >> findNonDuplicateNameOf: aString [
 CreateAnonymousDebugCommandPresenter >> initializeWidgets [
 	
 	nameField := self newTextInput.
-		nameField autoAccept: true.
+		nameField autoAccept: true;
+		text: 'MyCmd'.
 	scriptField := self newCode.
 		scriptField text: 'dbg stepOver'.
 	cancelButton := self newButton.
