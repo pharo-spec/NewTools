@@ -24,6 +24,12 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-FlagBrowser' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-FlagBrowser-Tests' with: [ spec requires: #('NewTools-FlagBrowser') ];
 			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #('NewTools-FlagBrowser-Tests') ] ]
+			package: 'Debugger-Commands' with: [ spec requires: #('NewTools-Sindarin-Tools')];
+			package: 'NewTools-Debugger-Extensions' with: [ spec requires: #('Debugger-Commands') ];
+			package: 'NewTools-Debugger' with: [ spec requires: #('NewTools-Debugger-Extensions') ];
+			package: 'NewTools-Debugger-Tests' with: [ spec requires: #('NewTools-Debugger') ]
+			
+			]
 ]
 
 { #category : #dependencies }
