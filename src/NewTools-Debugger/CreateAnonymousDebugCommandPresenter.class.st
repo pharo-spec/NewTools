@@ -38,7 +38,7 @@ CreateAnonymousDebugCommandPresenter class >> defaultSpec [
 CreateAnonymousDebugCommandPresenter >> createCommand [
 	| name script |
 	name := self findNonDuplicateNameOf: nameField text.
-	script := '[:dbg | ', scriptField text, ' ] value: self debugger sindarinDebugger.'.
+	script := 'self debugger sindarinDebugger deactivateAutoRefreshOfAttachedGraphicalDebugger. self debugger disconnectFromSessionUpdate. MyClass profile ifTrue: [TimeProfiler spyOn: [ [:dbg | ', scriptField text, ' ] value: self debugger sindarinDebugger]] ifFalse: [[:dbg | ', scriptField text, ' ] value: self debugger sindarinDebugger]. self debugger connectToSessionUpdate. self debugger sindarinDebugger activateAutoRefreshOfAttachedGraphicalDebugger'.
 	DebugCommand newAnonymousActionLabeled: name icon: 'abstract' executeScript: script.
 ]
 
