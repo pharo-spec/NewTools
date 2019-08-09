@@ -40,13 +40,10 @@ CreateAnonymousDebugCommandPresenter >> createCommand [
 	name := self findNonDuplicateNameOf: nameField text.
 	script := 
 		'
-		MyTimeProfiler spyOn: [
-			self debugger sindarinDebugger deactivateAutoRefreshOfAttachedGraphicalDebugger.
-			self debugger disconnectFromSessionUpdate.
-		 	[:dbg | ', scriptField text, ' ] value: self debugger sindarinDebugger.
-			self debugger connectToSessionUpdate.
-			self debugger sindarinDebugger activateAutoRefreshOfAttachedGraphicalDebugger.
-		]'.
+		self debugger sindarinDebugger deactivateAutoRefreshOfAttachedGraphicalDebugger.
+		 [:dbg | ', scriptField text, ' ] value: self debugger sindarinDebugger.
+		self debugger sindarinDebugger activateAutoRefreshOfAttachedGraphicalDebugger.
+		'.
 	DebugCommand newAnonymousActionLabeled: name icon: 'abstract' executeScript: script.
 ]
 
