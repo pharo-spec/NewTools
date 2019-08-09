@@ -90,8 +90,8 @@ StInspector >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
-		title: self title;
-		toolBar: self buildToolBar
+		title: self title";
+		toolBar: self buildToolBar"
 ]
 
 { #category : #'model access' }

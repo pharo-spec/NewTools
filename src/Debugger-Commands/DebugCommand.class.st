@@ -1,6 +1,9 @@
 Class {
 	#name : #DebugCommand,
 	#superclass : #CmCommand,
+	#instVars : [
+		'dbg'
+	],
 	#classVars : [
 		'AnonymousCommands'
 	],
@@ -75,7 +78,12 @@ DebugCommand class >> newAnonymousActionLabeled: title icon: icon executeScript:
 
 	|command|
 	command := self newAnonymousSubclass.
-	command compile: 'execute ', sourceCode.
+	command compile: 'execute 	
+		dbg deactivateAutoRefreshOfAttachedGraphicalDebugger.
+		self executeSindarinCommand.
+		dbg activateAutoRefreshOfAttachedGraphicalDebugger.'.
+	command compile: 'executeSindarinCommand ', sourceCode.
+	
 	command class compile: 'defaultCommandName
 	<toolbarDebugCommand: 9999>
 	^', title printString.
@@ -119,6 +127,12 @@ DebugCommand >> appliesToDebugger: aDebugger [
 	^ true
 ]
 
+{ #category : #initialization }
+DebugCommand >> context: aContext [
+	super context: aContext.
+	dbg := self debugger sindarinDebugger
+]
+
 { #category : #accessing }
 DebugCommand >> currentContext [
 	^self debugger context
@@ -132,9 +146,7 @@ DebugCommand >> debugger [
 { #category : #initialization }
 DebugCommand >> initialize [
 	super initialize.
-	"self
-		basicName: self debugCommandName;
-		basicDescription: self debugCommandDescription. "
+
 ]
 
 { #category : #accessing }
