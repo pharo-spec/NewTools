@@ -23,16 +23,14 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Playground' with: [ spec requires: #('NewTools-Inspector') ];
 			package: 'NewTools-FlagBrowser' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-FlagBrowser-Tests' with: [ spec requires: #('NewTools-FlagBrowser') ];
-			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #('NewTools-FlagBrowser-Tests') ] ]
+			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #('NewTools-FlagBrowser-Tests') ];
 			package: 'Debugger-Commands' with: [ spec requires: #('NewTools-Sindarin-Tools')];
 			package: 'NewTools-Debugger-Extensions' with: [ spec requires: #('Debugger-Commands') ];
 			package: 'NewTools-Debugger' with: [ spec requires: #('NewTools-Debugger-Extensions' 'Sindarin') ];
-			package: 'NewTools-Debugger-Tests' with: [ spec requires: #('NewTools-Debugger') ]
-			
-			]
+			package: 'NewTools-Debugger-Tests' with: [ spec requires: #('NewTools-Debugger') ]]
 ]
 
-{ #category : #dependencies }
+{ #category : #baselines }
 BaselineOfNewTools >> commander: spec [
 
 	spec baseline: 'Commander2' with: [ 
