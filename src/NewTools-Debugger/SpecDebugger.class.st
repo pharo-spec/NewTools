@@ -206,17 +206,6 @@ SpecDebugger >> color: aColor [
 	"Hack to make the spec debugger availlable in tests too"
 ]
 
-{ #category : #'as yet unclassified' }
-SpecDebugger >> connectToSessionUpdate [
-	"self sessionHolder addDependent: self.
-	self sessionHolder valueChanged."
-	"Must have called #disconnectFromSessionUpdate before"
-	"self sessionHolder announcer basicSubscribe: subscription.
-	self sessionHolder valueChanged."
-	self subscribeToSessionHolder.
-	self sessionHolder valueChanged.
-]
-
 { #category : #'accessing context' }
 SpecDebugger >> context [
  
@@ -231,15 +220,6 @@ SpecDebugger >> currentContext [
 	^ self selectedContext isNil 
 		ifTrue: [ self interruptedContext ]
 		ifFalse: [ self selectedContext ]
-]
-
-{ #category : #'as yet unclassified' }
-SpecDebugger >> disconnectFromSessionUpdate [
-"	self sessionHolder removeDependent: self."
-"	self sessionHolder announcer unsubscribe: self."
-	"subscription := self sessionHolder announcer subscriptions subscriptions asOrderedCollection first."
-	self sessionHolder announcer unsubscribe: self. 
-	"self sessionHolder announcer inspect."
 ]
 
 { #category : #api }
@@ -261,7 +241,12 @@ SpecDebugger >> initialExtent [
 SpecDebugger >> initialize [
 	super initialize.
 	self whenWindowChanged: [ :w | w whenClosedDo: [ self clear ] ].
-	self subscribeToSessionHolder.
+	self sessionHolder
+		whenChangedDo: [ :newSession :oldSession | 
+			self removeActionsForSession: oldSession.
+			self registerActionsForSession: newSession.
+			self updateToolbar.
+			self updateStackFromSession: newSession ].
 	self labelHolder whenChangedDo: [ self updateTitle ].
 	self sessionHolder valueChanged
 ]
@@ -393,6 +378,7 @@ SpecDebugger >> recompileMethodTo: aString inContext: aContext notifying: aNotif
 
 { #category : #session }
 SpecDebugger >> registerActionsForSession: aSession [
+
 	self flag: 'Kill it'.
 
 	aSession ifNotNil: [
