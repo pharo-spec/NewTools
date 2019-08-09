@@ -62,9 +62,10 @@ CreateAnonymousDebugCommandPresenter >> initializeWidgets [
 	
 	nameField := self newTextInput.
 		nameField autoAccept: true;
-		text: 'MyCmd'.
+			text: 'MyCmd'.
 	scriptField := self newCode.
-		scriptField text: 'dbg stepOver'.
+		scriptField autoAccept: true;
+			text: 'dbg stepOver'.
 	cancelButton := self newButton.
 	createButton := self newButton.
 	cancelCreateActionBar := self newActionBar
