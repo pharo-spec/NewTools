@@ -393,7 +393,6 @@ SpecDebugger >> recompileMethodTo: aString inContext: aContext notifying: aNotif
 
 { #category : #session }
 SpecDebugger >> registerActionsForSession: aSession [
-	[ ^self]value.
 	self flag: 'Kill it'.
 
 	aSession ifNotNil: [
