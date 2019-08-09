@@ -38,7 +38,7 @@ BaselineOfNewTools >> sindarin: spec [
 
 	spec 
 		baseline: 'Sindarin' 
-		with: [ spec repository: 'github://dupriezt/NewTools' ]
+		with: [ spec repository: 'github://dupriezt/ScriptableDebugger' ]
 ]
 
 { #category : #dependencies }
