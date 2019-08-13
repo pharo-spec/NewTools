@@ -12,7 +12,6 @@ BaselineOfNewTools >> baseline: spec [
 			
 		self
 			spec: spec;
-			commander: spec;
 			sindarin: spec.
 
 		spec
@@ -24,13 +23,6 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-FlagBrowser' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-FlagBrowser-Tests' with: [ spec requires: #('NewTools-FlagBrowser') ];
 			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #('NewTools-FlagBrowser-Tests') ] ]
-]
-
-{ #category : #dependencies }
-BaselineOfNewTools >> commander: spec [
-
-	spec baseline: 'Commander2' with: [ 
-		spec repository: 'github://pharo-spec/Commander2/src' ]
 ]
 
 { #category : #dependencies }
