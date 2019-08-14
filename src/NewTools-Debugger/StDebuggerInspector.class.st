@@ -37,7 +37,7 @@ StDebuggerInspector class >> title [
 { #category : #initialization }
 StDebuggerInspector >> initializeContextInspector [
 	contextInspector := StDebuggerRawInspection basicNew.
-	contextInspector application: SpecNullApplication new.
+	contextInspector application: SpNullApplication new.
 	contextInspector
 		setModelBeforeInitialization: self model inspectedObject.
 	contextInspector initialize.
@@ -54,7 +54,7 @@ StDebuggerInspector >> initializeContextInspector [
 { #category : #initialization }
 StDebuggerInspector >> initializeInspector [
 	inspector := StInspector basicNew.
-	inspector application: SpecNullApplication new.
+	inspector application: SpNullApplication new.
 	inspector
 		setModelBeforeInitialization: (StInspectorModel on: contextInspector table selectedItem hostObject).
 	inspector initialize
