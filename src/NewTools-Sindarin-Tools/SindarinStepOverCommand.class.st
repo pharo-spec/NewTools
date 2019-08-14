@@ -26,5 +26,6 @@ SindarinStepOverCommand class >> defaultName [
 
 { #category : #hooks }
 SindarinStepOverCommand >> execute [
-	self context stepOver
+	self context model stepOver.
+	self context refresh.
 ]

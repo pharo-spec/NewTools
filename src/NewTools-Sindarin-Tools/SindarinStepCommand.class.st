@@ -26,5 +26,6 @@ SindarinStepCommand class >> defaultName [
 
 { #category : #hooks }
 SindarinStepCommand >> execute [
-	self context step
+	self context model step.
+	self context refresh.
 ]
