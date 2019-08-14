@@ -19,6 +19,11 @@ SindarinStepOverCommand class >> defaultIconName [
 	^#glamorousOver
 ]
 
+{ #category : #default }
+SindarinStepOverCommand class >> defaultName [
+	^ 'Step Over'
+]
+
 { #category : #hooks }
 SindarinStepOverCommand >> execute [
 	self context stepOver

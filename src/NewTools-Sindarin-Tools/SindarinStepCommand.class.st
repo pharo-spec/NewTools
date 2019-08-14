@@ -19,6 +19,11 @@ SindarinStepCommand class >> defaultIconName [
 	^#glamorousInto
 ]
 
+{ #category : #default }
+SindarinStepCommand class >> defaultName [
+	^ 'Step'
+]
+
 { #category : #hooks }
 SindarinStepCommand >> execute [
 	self context step

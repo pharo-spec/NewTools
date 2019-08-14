@@ -19,6 +19,11 @@ SindarinRefreshCommand class >> defaultIconName [
 	^#refresh 
 ]
 
+{ #category : #default }
+SindarinRefreshCommand class >> defaultName [
+	^ 'Refresh'
+]
+
 { #category : #hooks }
 SindarinRefreshCommand >> execute [
 	self context refresh
