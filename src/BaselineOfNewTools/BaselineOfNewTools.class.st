@@ -12,23 +12,25 @@ BaselineOfNewTools >> baseline: spec [
 			
 		self
 			spec: spec;
-			commander: spec.
+			sindarin: spec.
 
 		spec
 			package: 'NewTools-Core' with: [ spec requires: #('Spec2') ];
 			package: 'HelpCenter' with: [ spec requires: #('NewTools-Core') ];
-			package: 'NewTools-Inspector-Extensions' with: [ spec requires: #('NewTools-Core' 'Commander2') ];
-			package: 'NewTools-Inspector' with: [ spec requires: #('Spec2' 'Commander2' 'NewTools-Inspector-Extensions') ];
+			package: 'NewTools-Inspector-Extensions' with: [ spec requires: #('NewTools-Core' 'Spec2') ];
+			package: 'NewTools-Inspector' with: [ spec requires: #('Spec2' 'NewTools-Inspector-Extensions') ];
 			package: 'NewTools-Playground' with: [ spec requires: #('NewTools-Inspector') ];
 			package: 'NewTools-FlagBrowser' with: [ spec requires: #('NewTools-Core') ];
-			package: 'NewTools-FlagBrowser-Tests' with: [ spec requires: #('NewTools-FlagBrowser') ] ]
+			package: 'NewTools-FlagBrowser-Tests' with: [ spec requires: #('NewTools-FlagBrowser') ];
+			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #('NewTools-FlagBrowser-Tests') ] ]
 ]
 
 { #category : #dependencies }
-BaselineOfNewTools >> commander: spec [
+BaselineOfNewTools >> sindarin: spec [
 
-	spec baseline: 'Commander2' with: [ 
-		spec repository: 'github://pharo-spec/Commander2/src' ]
+	spec 
+		baseline: 'Sindarin' 
+		with: [ spec repository: 'github://dupriezt/ScriptableDebugger' ]
 ]
 
 { #category : #dependencies }
