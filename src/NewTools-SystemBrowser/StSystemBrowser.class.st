@@ -13,6 +13,7 @@ Class {
 		'commentText',
 		'sourcePage',
 		'variablesPanel',
+		'statusBar',
 		'selectedPackage',
 		'selectedClass',
 		'selectedMethod'
@@ -73,21 +74,22 @@ StSystemBrowser >> basicSelectPackage: aPackageModel [
 ]
 
 { #category : #initialization }
-StSystemBrowser >> initializeWidgets [
-	
-	packagesPanel := self instantiate: StSBPackagesPanel on: self model.
-	classesPanel := self instantiate: StSBClassesPanel on: self model.
-	
-	instanceSidePanel := self instantiate: StSBProtocolInspectionPanel on: self model.
-	classSidePanel := self instantiate: StSBProtocolInspectionPanel on: self model.
-	variablesPanel := self instantiate: StSBVariableInspectionPanel on: self model.
-	inspectionPanel := self newNotebook 
-		addPage: (self newPage: 'Instance' provider: instanceSidePanel);
-		addPage: (self newPage: 'Class' provider: classSidePanel); 
-		addPage: (self newPage: 'Variables' provider: (SpLabelPresenter new label: 'TODO'));
-		yourself.
-		
-	codePanel := self newNotebook.
+StSystemBrowser >> buildStatusBar [
+
+	^ SpStatusBarPresenter new
+]
+
+{ #category : #initialization }
+StSystemBrowser >> buildToolBar [
+
+	^ CmCommandGroup forSpec
+		register: (StInspectorBrowseCommand forSpecContext: self);
+		register: (StInspectorHelpCommand forSpecContext: self);
+		asToolbarPresenterWith: [ :presenter | presenter beIcons ]
+]
+
+{ #category : #initialization }
+StSystemBrowser >> connectPresenters [
 
 	packagesPanel transmitTo: classesPanel transform: #classes.
 	packagesPanel transmitDo: [ :selection | self selectPackage: selection ].
@@ -103,11 +105,38 @@ StSystemBrowser >> initializeWidgets [
 ]
 
 { #category : #initialization }
+StSystemBrowser >> initializePresenters [
+	
+	packagesPanel := self instantiate: StSBPackagesPanel on: self model.
+	classesPanel := self instantiate: StSBClassesPanel on: self model.
+	
+	instanceSidePanel := self instantiate: StSBProtocolInspectionPanel on: self model.
+	classSidePanel := self instantiate: StSBProtocolInspectionPanel on: self model.
+	variablesPanel := self instantiate: StSBVariableInspectionPanel on: self model.
+	inspectionPanel := self newNotebook 
+		addPage: (self newPage: 'Instance' provider: instanceSidePanel);
+		addPage: (self newPage: 'Class' provider: classSidePanel); 
+		addPage: (self newPage: 'Variables' provider: (SpLabelPresenter new label: 'TODO'));
+		yourself.
+		
+	codePanel := self newNotebook
+]
+
+{ #category : #initialization }
+StSystemBrowser >> initializeWidgets [
+
+	self initializePresenters.	
+	self connectPresenters
+]
+
+{ #category : #initialization }
 StSystemBrowser >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
 		title: self title;
-		initialExtent: self preferredExtent
+		initialExtent: self preferredExtent;
+		toolBar: self buildToolBar;
+		statusBar: (statusBar := self buildStatusBar)
 ]
 
 { #category : #'accessing model' }

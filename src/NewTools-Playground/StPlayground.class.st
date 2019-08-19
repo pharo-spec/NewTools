@@ -42,6 +42,12 @@ StPlayground class >> defaultTitle [
 	^ 'Playground'
 ]
 
+{ #category : #'instance creation' }
+StPlayground class >> open [ 
+
+	^ self new openWithSpec
+]
+
 { #category : #'private builder' }
 StPlayground >> buildMenu [
 	| menuSpec |
@@ -62,19 +68,16 @@ StPlayground >> buildStatusBar [
 
 { #category : #'private builder' }
 StPlayground >> buildToolBar [
-
 	^ CmCommandGroup forSpec
-		register: (CmCommandGroup forSpec
-			register: (StPlaygroundDoItCommand forSpecContext: self);
-			register: (StPlaygroundPublishCommand forSpecContext: self);
-			register: (StPlaygroundBindingsCommand forSpecContext: self);
-			register: (StPlaygroundPagesCommand forSpecContext: self);
-			yourself);
-		register: (CmCommandGroup forSpec
-			register: (StPlaygroundDoItCommand forSpecContext: self);
-			yourself);
-		asToolBarPresenterWith: [ :presenter | 
-			self flag: #TODO. "This comes from a configuration"
+		register:
+			(CmCommandGroup forSpec
+				register: (StPlaygroundDoItCommand forSpecContext: self);
+				register: (StPlaygroundPublishCommand forSpecContext: self);
+				register: (StPlaygroundBindingsCommand forSpecContext: self);
+				register: (StPlaygroundPagesCommand forSpecContext: self);
+				yourself);
+		asToolbarPresenterWith: [ :presenter | 
+			self flag: #TODO.	"This comes from a configuration"
 			presenter beIcons ]
 ]
 
@@ -85,22 +88,16 @@ StPlayground >> initialExtent [
 ]
 
 { #category : #initialization }
-StPlayground >> initialize [
-	super initialize.
-	self title: self class defaultTitle
-]
-
-{ #category : #initialization }
 StPlayground >> initializeWidgets [
 	
-	text := self newCode.
-	self focusOrder add: text
+	text := self newCode
 ]
 
 { #category : #initialization }
 StPlayground >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter 
+		title: self class defaultTitle;
 		toolBar: self buildToolBar;
 		statusBar: (statusBar := self buildStatusBar).
 	

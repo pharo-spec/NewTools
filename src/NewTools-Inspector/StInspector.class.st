@@ -42,9 +42,15 @@ StInspector class >> inspect: anObject [
 ]
 
 { #category : #opening }
+StInspector class >> onObject: anObject [
+
+	^ self on: (StInspectorModel on: anObject)
+]
+
+{ #category : #opening }
 StInspector class >> openOn: anObject [
 
-	^ (self on: (StInspectorModel on: anObject)) openWithSpec
+	^ (self onObject: anObject) openWithSpec
 ]
 
 { #category : #accessing }
@@ -71,7 +77,7 @@ StInspector >> buildToolBar [
 	^ CmCommandGroup forSpec
 		register: (StInspectorBrowseCommand forSpecContext: self);
 		register: (StInspectorHelpCommand forSpecContext: self);
-		asToolBarPresenterWith: [ :presenter | presenter beIcons ]
+		asToolbarPresenterWith: [ :presenter | presenter beIcons ]
 ]
 
 { #category : #initialization }

@@ -13,8 +13,8 @@ StPharoGtkConfiguration class >> cssProviderCodePropertyName [
 { #category : #configuring }
 StPharoGtkConfiguration >> configureOSX: anApplication [
 
-	self installTheme: 'Sierra-dark'.
-	 "self installTheme: 'Sierra-light'".
+	"self installTheme: 'Sierra-dark'."
+	 self installTheme: 'Sierra-light'.
 	
 	anApplication 
 		propertyAt: self class cssProviderCodePropertyName  

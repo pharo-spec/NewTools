@@ -59,7 +59,7 @@ StMetaBrowser >> initializeMethodList [
 				ifNil: [ source text: '' ]
 				ifNotNil: [ source behavior: method methodClass.
 					source text: method sourceCode ] ].
-	methods displayBlock: [ :each | each selector ]
+	methods display: [ :each | each selector ]
 ]
 
 { #category : #initialization }
