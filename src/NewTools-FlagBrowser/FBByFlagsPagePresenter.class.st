@@ -92,19 +92,17 @@ FBByFlagsPagePresenter >> initializeWidgets [
 	modeDropbox := self newDropList.
 	flagsList := self newList.
 	caseCheckbox := self newCheckBox.
-
 	modeDropbox
 		items: FBFlag withAllSubclasses;
-		displayBlock: [ :class | class title ].
-
+		display: [ :class | class title ].
 	flagsList
-		displayBlock: [ :flag | flag parameter asString , ' (' , flag locations size asString , ' occurences)' ];
+		display: [ :flag | 
+			flag parameter asString , ' (' , flag locations size asString
+				, ' occurences)' ];
 		sortingBlock: [ :flag | flag parameter asString ] ascending.
-
 	locationsTable
 		addColumn: (SpStringTableColumn title: 'Class' evaluated: #classLocation);
 		addColumn: (SpStringTableColumn title: 'Method' evaluated: #selector).
-
 	caseCheckbox
 		label: 'Case sensitive';
 		state: FBFlag caseSensitive

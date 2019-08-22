@@ -55,9 +55,8 @@ FBByScopePagePresenter >> initializePresenter [
 FBByScopePagePresenter >> initializeWidgets [
 	super initializeWidgets.
 	scopesList := self newList.
-
 	scopesList
-		displayBlock: #name;
+		display: #name;
 		sortingBlock: #name ascending
 ]
 
