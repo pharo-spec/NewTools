@@ -68,14 +68,14 @@ Class {
 	#name : #FDFileDialogPresenter,
 	#superclass : #StPresenter,
 	#instVars : [
-		'okActionBlock',
 		'bookmarksTreeTable',
 		'bookmarks',
-		'fileNavigationSystem'
+		'fileNavigationSystem',
+		'okAction'
 	],
 	#classVars : [
 		'Bookmarks',
-		'OkActionBlock'
+		'OkAction'
 	],
 	#category : #'NewTools-FileDialog-UI'
 }
@@ -196,7 +196,7 @@ FDFileDialogPresenter class >> fullExample [
 	presenter defaultFolder: FileLocator home asFileReference.
 	"it's open the FileDialog on this file"
 	
-	presenter okActionBlock: [ :selectedFileReference | selectedFileReference inspect ].
+	presenter okAction: [ :selectedFileReference | selectedFileReference inspect ].
 	"you will define the action of the OK button "
 	
 	presenter
@@ -227,7 +227,7 @@ FDFileDialogPresenter class >> imageIcons [
 
 { #category : #'class initialization' }
 FDFileDialogPresenter class >> initialize [
-	OkActionBlock := self defaultOkActionBlock.
+	OkAction := self defaultOkActionBlock.
 	Bookmarks := self defaultBookmarks.
 ]
 
@@ -270,7 +270,7 @@ FDFileDialogPresenter >> columns: aCollectionOfColumns [
 FDFileDialogPresenter >> confirm [
 	self selectedEntry
 		ifNotNil: [ :entry | 
-			okActionBlock value: entry.
+			okAction value: entry.
 			self delete ]
 ]
 
@@ -332,7 +332,7 @@ FDFileDialogPresenter >> initialTitle [
 { #category : #initialization }
 FDFileDialogPresenter >> initialize [
 	super initialize.
-	okActionBlock := OkActionBlock.
+	okAction := OkAction.
 ]
 
 { #category : #'initialize-widgets' }
@@ -408,8 +408,8 @@ FDFileDialogPresenter >> isolate [
 ]
 
 { #category : #'api-customization' }
-FDFileDialogPresenter >> okActionBlock: aOneArgBlock [
-	okActionBlock := aOneArgBlock
+FDFileDialogPresenter >> okAction: aOneArgBlock [
+	okAction := aOneArgBlock
 ]
 
 { #category : #'api-customization' }

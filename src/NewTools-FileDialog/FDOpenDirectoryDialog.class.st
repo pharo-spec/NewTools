@@ -26,7 +26,7 @@ FDOpenDirectoryDialog class >> defaultSpec [
 FDOpenDirectoryDialog class >> example [
 	<example>
 	^ (self new
-		okActionBlock: [ :selectedFileReference | selectedFileReference inspect ])
+		okAction: [ :selectedFileReference | selectedFileReference inspect ])
 		openDialogWithSpec inspect
 ]
 
