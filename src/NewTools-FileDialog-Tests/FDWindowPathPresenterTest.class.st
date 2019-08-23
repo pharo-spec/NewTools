@@ -9,7 +9,8 @@ Class {
 
 { #category : #running }
 FDWindowPathPresenterTest >> setUp [
-	windowPathUI := FDWindowPathPresenter new.
+	super setUp.
+	windowPathUI := FDWindowPathPresenter new
 ]
 
 { #category : #running }

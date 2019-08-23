@@ -36,10 +36,9 @@ FDFileDialogTest >> setUp [
 
 { #category : #running }
 FDFileDialogTest >> tearDown [
-	super tearDown.
 	dialog class initialize.
-	window ifNotNil: #delete
-	
+	window ifNotNil: #delete.
+	super tearDown
 ]
 
 { #category : #tests }

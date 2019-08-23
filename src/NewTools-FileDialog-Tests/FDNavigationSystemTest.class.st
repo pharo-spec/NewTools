@@ -60,64 +60,43 @@ FDNavigationSystemTest >> testOpenFolder [
 FDNavigationSystemTest >> testWhenClickAnAfterHistoryButtonIfThereAreHistoryShouldComeBackTheGoodDirectory [
 	| itemsBefore |
 	itemsBefore := dialog fileReferenceTable items.
-	dialog fileReferenceTable
-		selectIndex: ((dialog fileReferenceTable items collect: #basename) indexOf: 'dir').
-	dialog fileReferenceTable
-		doActivateAtIndex: ((dialog fileReferenceTable items collect: #basename) indexOf: 'dir').
-	self
-		assertCollection: (dialog fileReferenceTable items collect: #basename)
-		hasSameElements: {'klm.jpg' . 'klm.png'}.
+	dialog fileReferenceTable selectIndex: ((dialog fileReferenceTable items collect: #basename) indexOf: 'dir').
+	dialog fileReferenceTable doActivateAtIndex: ((dialog fileReferenceTable items collect: #basename) indexOf: 'dir').
+	self assertCollection: (dialog fileReferenceTable items collect: #basename) hasSameElements: {'klm.jpg' . 'klm.png'}.
 	dialog previousButton click.
-	self
-		assertCollection: dialog fileReferenceTable items
-		hasSameElements: itemsBefore.
+	self assertCollection: dialog fileReferenceTable items hasSameElements: itemsBefore.
 	dialog nextButton click.
-	self
-		assertCollection: (dialog fileReferenceTable items collect: #basename)
-		hasSameElements: {'klm.jpg' . 'klm.png'}
+	self assertCollection: (dialog fileReferenceTable items collect: #basename) hasSameElements: {'klm.jpg' . 'klm.png'}
 ]
 
 { #category : #tests }
 FDNavigationSystemTest >> testWhenClickAnBeforeHistoryButtonIfThereAreHistoryShouldComeBackToTheLastDirectoryVisited [
 	| itemsBefore |
 	itemsBefore := dialog fileReferenceTable items.
-	dialog fileReferenceTable
-		selectIndex: ((dialog fileReferenceTable items collect: #basename) indexOf: 'dir').
-	dialog fileReferenceTable
-		doActivateAtIndex: ((dialog fileReferenceTable items collect: #basename) indexOf: 'dir').
-	self
-		assertCollection: (dialog fileReferenceTable items collect: #basename)
-		hasSameElements: {'klm.jpg' . 'klm.png'}.
+	dialog fileReferenceTable selectIndex: ((dialog fileReferenceTable items collect: #basename) indexOf: 'dir').
+	dialog fileReferenceTable doActivateAtIndex: ((dialog fileReferenceTable items collect: #basename) indexOf: 'dir').
+	self assertCollection: (dialog fileReferenceTable items collect: #basename) hasSameElements: {'klm.jpg' . 'klm.png'}.
 	dialog previousButton click.
-	self
-		assertCollection: dialog fileReferenceTable items
-		hasSameElements: itemsBefore
+	self assertCollection: dialog fileReferenceTable items hasSameElements: itemsBefore
 ]
 
 { #category : #tests }
 FDNavigationSystemTest >> testWhenCurrentDirectoryChangeshouldNewFileDialogOpenOnTheNewDirectory [
 	| dirIndex newFileDialog |
-	dirIndex := (dialog fileReferenceTable items collect: #basename)
-		indexOf: 'dir'.
+	dirIndex := (dialog fileReferenceTable items collect: #basename) indexOf: 'dir'.
 	dialog fileReferenceTable selectIndex: dirIndex.
 	dialog fileReferenceTable doubleClickAtIndex: dirIndex.
 	newFileDialog := FDFileNavigationSystemPresenter new.
-	self
-		assert: newFileDialog currentDirectory
-		equals: (root / 'dir') asFileReference
+	self assert: newFileDialog currentDirectory equals: (root / 'dir') asFileReference
 ]
 
 { #category : #tests }
 FDNavigationSystemTest >> testWhenCustomizeFilterShouldFilterDropListPresenterIncludeIt [
 	| aCollectionOfFilter |
-	aCollectionOfFilter := {FDDefaultFilter new.
-	FDDotJPGFilter new}.
+	aCollectionOfFilter := {FDDefaultFilter new . FDDotJPGFilter new}.
 	dialog filtersCustomization: aCollectionOfFilter.
-	self
-		assert: dialog filtersDropList selectedItem name
-		equals: FDDefaultFilter new name.
-	self
-		assert: (dialog filtersDropList listItems includesAll: aCollectionOfFilter)
+	self assert: dialog filtersDropList selectedItem name equals: FDDefaultFilter new name.
+	self assert: (dialog filtersDropList listItems includesAll: aCollectionOfFilter)
 ]
 
 { #category : #tests }
@@ -125,11 +104,8 @@ FDNavigationSystemTest >> testWhenCustomizeFilterWithoutDefaultFilterShouldFilte
 	| aCollectionOfFilter |
 	aCollectionOfFilter := {FDDotJPGFilter new}.
 	dialog filtersCustomization: aCollectionOfFilter.
-	self
-		assert: dialog filtersDropList selectedItem name
-		equals: FDDefaultFilter new name.
-	self
-		assert: (dialog filtersDropList listItems includesAll: aCollectionOfFilter)
+	self assert: dialog filtersDropList selectedItem name equals: FDDefaultFilter new name.
+	self assert: (dialog filtersDropList listItems includesAll: aCollectionOfFilter)
 ]
 
 { #category : #tests }
@@ -151,28 +127,19 @@ FDNavigationSystemTest >> testWhenFilesListSelectionChangedAndIsAPNGShouldprevie
 
 { #category : #tests }
 FDNavigationSystemTest >> testWhenOpenADirectoryShouldDisplayHisChildrenFilterByCurrentFilter [
-	dialog filtersDropList
-		selectedIndex:
-			((dialog filtersDropList listItems collect: #name)
-				indexOf: FDDotPNGFilter new name).
+	dialog filtersDropList selectedIndex: ((dialog filtersDropList listItems collect: #name) indexOf: FDDotPNGFilter new name).
 	self fileListAllMustBeFilterByPNGFIlter.
-	dialog fileReferenceTable
-		selectIndex: ((dialog fileReferenceTable items collect: #basename) indexOf: 'dir').
-	dialog fileReferenceTable
-		selectIndex: dialog fileReferenceTable selection selectedIndex.
-	dialog fileReferenceTable
-		selectIndex: dialog fileReferenceTable selection selectedIndex.
+	dialog fileReferenceTable selectIndex: ((dialog fileReferenceTable items collect: #basename) indexOf: 'dir').
+	dialog fileReferenceTable selectIndex: dialog fileReferenceTable selection selectedIndex.
+	dialog fileReferenceTable selectIndex: dialog fileReferenceTable selection selectedIndex.
 	self fileListAllMustBeFilterByPNGFIlter
 ]
 
 { #category : #tests }
 FDNavigationSystemTest >> testWhenPathTextInputPresenterAcceptShouldChangeFileListWithTheGoodContent [
-	dialog currentPathTextInputPresenter entityText
-		text: dialog currentPathTextInputPresenter entityText text , '/dir/'.
+	dialog currentPathTextInputPresenter entityText text: dialog currentPathTextInputPresenter entityText text , '/dir/'.
 	dialog currentPathTextInputPresenter entityText accept.
-	self
-		assertCollection: (dialog fileReferenceTable items collect: #basename)
-		hasSameElements: {'klm.png' . 'klm.jpg'}
+	self assertCollection: (dialog fileReferenceTable items collect: #basename) hasSameElements: {'klm.png' . 'klm.jpg'}
 ]
 
 { #category : #tests }
@@ -180,6 +147,5 @@ FDNavigationSystemTest >> testWhenToggleShowHiddenFileShouldHiddenFileAppear [
 	dialog toggleHiddenFiles.
 	self
 		assertCollection: (dialog fileReferenceTable items collect: #basename) asSet
-		hasSameElements:
-			#('.hidden-dir' 'dir' 'dir.ext' '.hidden' 'banana.jpg' 'patate.png' 'sth.aaa' 'sth.ext')
+		hasSameElements: #('.hidden-dir' 'dir' 'dir.ext' '.hidden' 'banana.jpg' 'patate.png' 'sth.aaa' 'sth.ext')
 ]
