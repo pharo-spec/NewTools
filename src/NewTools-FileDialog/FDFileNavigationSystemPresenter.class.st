@@ -71,9 +71,8 @@ Class {
 	],
 	#classVars : [
 		'Columns',
-		'Directory',
 		'FilterSet',
-		'LastDirectoryVisit',
+		'LastVisitedDirectory',
 		'Previewer'
 	],
 	#category : #'NewTools-FileDialog-UI'
@@ -159,8 +158,14 @@ FDFileNavigationSystemPresenter class >> example [
 FDFileNavigationSystemPresenter class >> initialize [
 	FilterSet := self defaultFilterSet.
 	Previewer := self defaultPreviewer.
-	Columns := self defaultColumns collect: #column.
-	LastDirectoryVisit := Directory := self defaultDirectory
+	Columns := self defaultColumns collect: #column
+]
+
+{ #category : #defaults }
+FDFileNavigationSystemPresenter class >> lastVisitedDirectory [
+	^ (LastVisitedDirectory isNil or: [ LastVisitedDirectory exists not ])
+		ifTrue: [ LastVisitedDirectory := self defaultDirectory ]
+		ifFalse: [ LastVisitedDirectory ]
 ]
 
 { #category : #accessing }
@@ -224,6 +229,11 @@ FDFileNavigationSystemPresenter >> currentPathTextInputPresenter [
 	^ currentPathTextInputPresenter
 ]
 
+{ #category : #initialization }
+FDFileNavigationSystemPresenter >> defaultDirectory [
+	^ self class defaultDirectory
+]
+
 { #category : #'api-customization' }
 FDFileNavigationSystemPresenter >> defaultFolder: aFileReference [
 	self updateWidgetWithFileReference: aFileReference.
@@ -248,7 +258,7 @@ FDFileNavigationSystemPresenter >> filesListAction [
 		whenSelectionChangedDo: [ :aFileReference | 
 			notebookPreviewer
 				page: (previewer previewOn: aFileReference selectedItem) ].
-	fileReferenceTable whenModelChangedDo: [ LastDirectoryVisit := currentDirectory ]
+	fileReferenceTable whenModelChangedDo: [ LastVisitedDirectory := currentDirectory ]
 ]
 
 { #category : #'api-customization' }
@@ -327,11 +337,11 @@ FDFileNavigationSystemPresenter >> initializePresenter [
 
 { #category : #initialization }
 FDFileNavigationSystemPresenter >> initializeWidgets [
-	currentDirectory := Directory copy.
+	currentDirectory := self defaultDirectory.
 	columns := Columns.
 	hiddenFilter := FDHidenFilter new.
 	previewer := Previewer.
-	
+
 	notebookPreviewer := self instantiate: FDNoteBookPreviewerPresenter.
 	fileReferenceTable := self newTable.
 	currentPathTextInputPresenter := self instantiate: FDWindowPathPresenter.
@@ -349,7 +359,7 @@ FDFileNavigationSystemPresenter >> initializeWidgets [
 	self initializeCurrentPathTextInput.
 	self initializeFilesTable.
 	self initializeFiltersDropList.
-	self updateWidgetWithFileReference: LastDirectoryVisit.
+	self updateWidgetWithFileReference: (self lastVisitedDirectory).
 	self focusOrder
 		add: previousButton;
 		add: nextButton;
@@ -357,6 +367,11 @@ FDFileNavigationSystemPresenter >> initializeWidgets [
 		add: fileReferenceTable;
 		add: nameText;
 		add: filtersDropList
+]
+
+{ #category : #accessing }
+FDFileNavigationSystemPresenter >> lastVisitedDirectory [
+	^ self class lastVisitedDirectory
 ]
 
 { #category : #accessing }

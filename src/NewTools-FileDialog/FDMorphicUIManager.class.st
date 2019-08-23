@@ -15,6 +15,13 @@ FDMorphicUIManager class >> beDefault [
 	self new beDefault
 ]
 
+{ #category : #testing }
+FDMorphicUIManager class >> isActiveManager [
+	"This is just a temporary UI manager and it should not be enabled by the system by default."
+
+	^ false
+]
+
 { #category : #'ui requests' }
 FDMorphicUIManager >> chooseDirectory: label from: dir [
 	self flag: #ToDoWhenIntegration.
