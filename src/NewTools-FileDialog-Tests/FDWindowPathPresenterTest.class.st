@@ -1,15 +1,21 @@
 Class {
 	#name : #FDWindowPathPresenterTest,
-	#superclass : #TestCase,
+	#superclass : #FDTest,
 	#instVars : [
 		'windowPathUI'
 	],
-	#category : #'NewTools-FileDialog-UI'
+	#category : #'NewTools-FileDialog-Tests'
 }
 
 { #category : #running }
 FDWindowPathPresenterTest >> setUp [
 	windowPathUI := FDWindowPathPresenter new.
+]
+
+{ #category : #running }
+FDWindowPathPresenterTest >> tearDown [
+	windowPathUI withWindowDo: [ :window | window close ].
+	super tearDown
 ]
 
 { #category : #tests }

@@ -9,23 +9,6 @@ Class {
 }
 
 { #category : #'instance creation' }
-FDTest >> createRoot [
-	(root := (FileLocator imageDirectory / 'fd-test') asFileReference)
-		ensureCreateDirectory.
-	(root / 'dir') ensureCreateDirectory.
-	(root / 'dir' / 'klm.png') ensureCreateFile.
-	(root / 'dir' / 'klm.jpg') ensureCreateFile.
-	(root / 'dir.ext') ensureCreateDirectory.
-	(root / '.hidden-dir') ensureCreateDirectory.
-	(root / '.hidden') ensureCreateFile.
-	(root / 'sth.ext') ensureCreateFile.
-	(root / 'sth.aaa') ensureCreateFile.
-	(root / 'banana.jpg') ensureCreateFile.
-	(root / 'patate.png') ensureCreateFile.
-	^ root
-]
-
-{ #category : #'instance creation' }
 FDTest >> inspectRoot [
 	<script: 'self basicNew createRoot asFileReference inspect'>
 	
@@ -33,5 +16,8 @@ FDTest >> inspectRoot [
 
 { #category : #running }
 FDTest >> setUp [
-	self createRoot
+	super setUp.
+	(root := (FileLocator imageDirectory / 'fd-test') asFileReference) ensureCreateDirectory.
+	{(root / 'dir') . (root / 'dir' / 'klm.png') . (root / 'dir' / 'klm.jpg') . (root / 'dir.ext') . (root / '.hidden-dir') . (root / '.hidden').
+	(root / 'sth.ext') . (root / 'sth.aaa') . (root / 'banana.jpg') . (root / 'patate.png')} do: #ensureCreateFile
 ]

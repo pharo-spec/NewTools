@@ -43,7 +43,7 @@ FDFileFilterTest >> testJPGFilterShouldFilterOnlyJPGFile [
 { #category : #tests }
 FDFileFilterTest >> testPNGFilterShouldFilterOnlyPNGFile [
 	| filterBis |
-	filterBis := FDDotPNGSelect new.
+	filterBis := FDDotPNGFilter new.
 	self
 		assert:
 			((root children
