@@ -25,7 +25,7 @@ Class {
 { #category : #accessing }
 StPlayground class >> defaultExtent [
 
-	^ 600 @ 400
+	^ 500 @ 350
 ]
 
 { #category : #specs }
@@ -81,12 +81,6 @@ StPlayground >> buildToolBar [
 			presenter beIcons ]
 ]
 
-{ #category : #api }
-StPlayground >> initialExtent [ 
-
-	^ self class defaultExtent
-]
-
 { #category : #initialization }
 StPlayground >> initializeWidgets [
 	
@@ -98,6 +92,7 @@ StPlayground >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter 
 		title: self class defaultTitle;
+		initialExtent: self class defaultExtent;
 		toolBar: self buildToolBar;
 		statusBar: (statusBar := self buildStatusBar).
 	
