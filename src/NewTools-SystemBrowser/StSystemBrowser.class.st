@@ -52,7 +52,7 @@ StSystemBrowser class >> openOn: anEnvironment [
 { #category : #accessing }
 StSystemBrowser class >> preferredExtent [
 
-	^ 900@650
+	^ 880@650
 ]
 
 { #category : #'private selecting' }

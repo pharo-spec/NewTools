@@ -40,14 +40,13 @@ FBFlagPresentationPresenter >> code: anObject [
 { #category : #initialization }
 FBFlagPresentationPresenter >> initializePresenter [
 	code whenTextIsAcceptedDo: [ :text | code behavior compile: text ].
-
 	locationsTable
 		transmitTo: code
 		transform: #sourceCode
 		postTransmission: [ :destination :origin :location | 
 			destination
 				behavior: location classLocation;
-				setSelection: location interval ]
+				selection: location interval ]
 ]
 
 { #category : #initialization }
