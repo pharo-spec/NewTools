@@ -21,6 +21,12 @@ RestartDebugCommand class >> defaultIconName [
 	^ #glamorousRestart
 ]
 
+{ #category : #default }
+RestartDebugCommand class >> defaultName [
+
+	^ 'Restart'
+]
+
 { #category : #initialization }
 RestartDebugCommand class >> defaultShortcut [
 	^ PharoShortcuts current restartExecutionShortcut

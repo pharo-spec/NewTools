@@ -20,6 +20,12 @@ RunToSelectionDebugCommand class >> defaultIconName [
 	^ #glamorousRightSide
 ]
 
+{ #category : #'as yet unclassified' }
+RunToSelectionDebugCommand class >> defaultName [
+
+	^ 'Run to'
+]
+
 { #category : #initialization }
 RunToSelectionDebugCommand class >> defaultShortcut [
 	^ nil

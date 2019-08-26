@@ -21,6 +21,12 @@ StepOverDebugCommand class >> defaultIconName [
 	^ #glamorousOver
 ]
 
+{ #category : #accessing }
+StepOverDebugCommand class >> defaultName [
+
+	^ 'Over'
+]
+
 { #category : #initialization }
 StepOverDebugCommand class >> defaultShortcut [
 	^ PharoShortcuts current stepOverShortcut

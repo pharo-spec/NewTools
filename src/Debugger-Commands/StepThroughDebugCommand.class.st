@@ -21,6 +21,12 @@ StepThroughDebugCommand class >> defaultIconName [
 	^ #glamorousThrough 
 ]
 
+{ #category : #default }
+StepThroughDebugCommand class >> defaultName [
+
+	^ 'Through'
+]
+
 { #category : #initialization }
 StepThroughDebugCommand class >> defaultShortcut [
 	^ PharoShortcuts current stepThroughShortcut

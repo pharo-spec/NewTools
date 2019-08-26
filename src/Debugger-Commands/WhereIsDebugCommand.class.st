@@ -20,6 +20,12 @@ WhereIsDebugCommand class >> defaultIconName [
 	^ #glamorousSearch 
 ]
 
+{ #category : #default }
+WhereIsDebugCommand class >> defaultName [
+
+	^ 'Where is?'
+]
+
 { #category : #initialization }
 WhereIsDebugCommand class >> defaultShortcut [
 	^ nil

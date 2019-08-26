@@ -27,6 +27,12 @@ ReturnValueDebugCommand class >> defaultLabel [
 	^ 'Return entered value'
 ]
 
+{ #category : #accessing }
+ReturnValueDebugCommand class >> defaultName [
+	
+	^ 'Return'
+]
+
 { #category : #initialization }
 ReturnValueDebugCommand class >> defaultShortcut [
 	^ nil

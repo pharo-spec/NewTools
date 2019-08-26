@@ -20,6 +20,12 @@ FullStackDebugCommand class >> defaultIconName [
 	^ #glamorousMore
 ]
 
+{ #category : #default }
+FullStackDebugCommand class >> defaultName [
+
+	^ 'Full stack'
+]
+
 { #category : #initialization }
 FullStackDebugCommand class >> defaultShortcut [
 	^ nil

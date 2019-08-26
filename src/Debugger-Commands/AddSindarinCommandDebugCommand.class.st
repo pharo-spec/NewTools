@@ -21,6 +21,12 @@ AddSindarinCommandDebugCommand class >> defaultIconName [
 	^ #add
 ]
 
+{ #category : #default }
+AddSindarinCommandDebugCommand class >> defaultName [
+	
+	^ 'New Cmd'
+]
+
 { #category : #initialization }
 AddSindarinCommandDebugCommand class >> defaultShortcut [
 	^ nil

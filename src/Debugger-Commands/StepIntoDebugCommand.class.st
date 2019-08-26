@@ -21,6 +21,12 @@ StepIntoDebugCommand class >> defaultIconName [
 	^ #glamorousInto
 ]
 
+{ #category : #default }
+StepIntoDebugCommand class >> defaultName [
+	
+	^ 'Into'
+]
+
 { #category : #initialization }
 StepIntoDebugCommand class >> defaultShortcut [
 	^ PharoShortcuts current stepIntoShortcut

@@ -20,6 +20,12 @@ ProceedDebugCommand class >> defaultIconName [
 	^ #glamorousGo
 ]
 
+{ #category : #default }
+ProceedDebugCommand class >> defaultName [
+
+	^ 'Proceed'
+]
+
 { #category : #initialization }
 ProceedDebugCommand class >> defaultShortcut [
 	^ PharoShortcuts current resumeExecutionShortcut

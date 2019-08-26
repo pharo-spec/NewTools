@@ -22,6 +22,13 @@ RemoveAllSindarinCommandDebugCommand class >> defaultIconName [
 ]
 
 { #category : #default }
+RemoveAllSindarinCommandDebugCommand class >> defaultName [
+
+	
+	^ 'Rem Cmd'
+]
+
+{ #category : #default }
 RemoveAllSindarinCommandDebugCommand class >> defaultShortcut [
 	^ nil
 ]
