@@ -1,8 +1,7 @@
 # NewTools
 
 ## Installation
-*This baseline loads the SpecDebugger packages of this repo (unlike the baseline of the original NewTools repo)*
-
+*For the ESUG 2019 version, checkout branch esug2019 and load the baseline*
 ```Smalltalk
 Metacello new
     baseline: 'NewTools';
