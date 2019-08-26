@@ -21,6 +21,12 @@ Class {
 	#category : #'NewTools-SystemBrowser-View'
 }
 
+{ #category : #private }
+StSystemBrowser class >> defaultEnvironment [
+	
+	^ ClyNavigationEnvironment currentImage
+]
+
 { #category : #specs }
 StSystemBrowser class >> defaultSpec [
 
@@ -40,13 +46,31 @@ StSystemBrowser class >> defaultSpec [
 StSystemBrowser class >> open [
 	<script>
 
-	^ self openOn: ClyNavigationEnvironment currentImage
+	^ self openOn: self defaultEnvironment
 ]
 
 { #category : #opening }
 StSystemBrowser class >> openOn: anEnvironment [
 
-	^ (self on: anEnvironment) openWithSpec
+	^ (self on: (StSBEnvironmentModel newEnvironment: anEnvironment)) openWithSpec
+]
+
+{ #category : #opening }
+StSystemBrowser class >> openOnClass: aClass [
+	| browser |
+
+	browser := self on: (StSBEnvironmentModel newEnvironment: self defaultEnvironment).
+	browser gotoClass: aClass.
+	^ browser openWithSpec
+]
+
+{ #category : #opening }
+StSystemBrowser class >> openOnPackage: aPackage [
+	| browser |
+
+	browser := self on: (StSBEnvironmentModel newEnvironment: self defaultEnvironment).
+	browser gotoPackage: aPackage.
+	^ browser openWithSpec
 ]
 
 { #category : #accessing }
@@ -102,6 +126,19 @@ StSystemBrowser >> connectPresenters [
 	instanceSidePanel transmitDo: [ :selection | self selectMethod: selection ].
 	classSidePanel transmitDo: [ :selection | self selectMethod: selection ].
 	variablesPanel transmitDo: [ :selection | self selectMethod: selection ].
+]
+
+{ #category : #accessing }
+StSystemBrowser >> gotoClass: aClass [
+
+	self gotoPackage: aClass package.
+	classesPanel gotoClass: aClass
+]
+
+{ #category : #accessing }
+StSystemBrowser >> gotoPackage: aPackage [
+
+	packagesPanel gotoPackage: aPackage 
 ]
 
 { #category : #initialization }
@@ -231,7 +268,7 @@ StSystemBrowser >> selectMethod: aMethodModel [
 StSystemBrowser >> selectPackage: aPackage [
 
 	self basicSelectPackage: aPackage.
-	self window title: 'Package: ', aPackage name.
+	self withWindowDo: [ :w | w title: 'Package: ', aPackage name ].
 	codePanel 
 		removeAll;
 		addPage: (self 
@@ -261,7 +298,7 @@ StSystemBrowser >> selectedPackage [
 ]
 
 { #category : #'accessing model' }
-StSystemBrowser >> setModelBeforeInitialization: aNavigationEnvironment [
+StSystemBrowser >> setModelBeforeInitialization: anEnvironment [
 
-	model := StSBEnvironmentModel newEnvironment: aNavigationEnvironment	
+	model := anEnvironment
 ]

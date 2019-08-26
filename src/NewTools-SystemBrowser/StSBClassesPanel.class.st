@@ -32,6 +32,18 @@ StSBClassesPanel >> defineOutputPorts [
 	^ { SpListSelectionPort newDelegate: [ self classList ] }
 ]
 
+{ #category : #accessing }
+StSBClassesPanel >> gotoClass: aClass [
+	| items classModel |
+
+	items := self classList items. 
+	classModel := items
+		detect: [ :each | each modelClass = aClass ]
+		ifNone: [ ^ self ].
+		
+	self classList selectItem: classModel
+]
+
 { #category : #initialization }
 StSBClassesPanel >> initializeWidgets [
 	

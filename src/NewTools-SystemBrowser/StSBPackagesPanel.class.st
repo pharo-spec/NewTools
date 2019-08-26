@@ -27,6 +27,18 @@ StSBPackagesPanel >> defineOutputPorts [
 	^ { SpListSelectionPort newDelegate: [ self packageTree ] }
 ]
 
+{ #category : #accessing }
+StSBPackagesPanel >> gotoPackage: aPackage [
+	| roots packageModel |
+
+	roots := self packageTree roots. 
+	packageModel := roots
+		detect: [ :each | each package = aPackage ]
+		ifNone: [ ^ self ].
+		
+	self packageTree selectPath: { roots indexOf: packageModel }
+]
+
 { #category : #initialization }
 StSBPackagesPanel >> initializeWidgets [
 	
