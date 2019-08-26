@@ -142,6 +142,15 @@ StSystemBrowser >> gotoPackage: aPackage [
 ]
 
 { #category : #initialization }
+StSystemBrowser >> initialTitle [
+		
+	self selectedClass ifNotNil: [ :aClass | ^ self titleFor: aClass ].
+	self selectedPackage ifNotNil: [ :aPackage | ^ self titleFor: aPackage ].
+	
+	^ 'System Browser'	
+]
+
+{ #category : #initialization }
 StSystemBrowser >> initializePresenters [
 	
 	packagesPanel := self instantiate: StSBPackagesPanel on: self model.
@@ -170,7 +179,7 @@ StSystemBrowser >> initializeWidgets [
 StSystemBrowser >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
-		title: self title;
+		title: self initialTitle;
 		initialExtent: self preferredExtent;
 		toolBar: self buildToolBar;
 		statusBar: (statusBar := self buildStatusBar)
@@ -230,7 +239,7 @@ StSystemBrowser >> newPage: aString provider: aBlock [
 StSystemBrowser >> selectClass: aClassModel [
 
 	self basicSelectClass: aClassModel.
-	self window title: 'Class: ', aClassModel name.
+	self withWindowDo: [ :w | w title: (self titleFor: aClassModel) ].
 	codePanel 
 		removeAll;
 		addPage: (self 
@@ -249,7 +258,7 @@ StSystemBrowser >> selectClass: aClassModel [
 StSystemBrowser >> selectMethod: aMethodModel [
 
 	self basicSelectMethod: aMethodModel.
-	self window title: aMethodModel name.
+	self withWindowDo: [ :w | w title: (self titleFor: aMethodModel) ].
 	codePanel 
 		removeAll;
 		addPage: (self 
@@ -268,7 +277,7 @@ StSystemBrowser >> selectMethod: aMethodModel [
 StSystemBrowser >> selectPackage: aPackage [
 
 	self basicSelectPackage: aPackage.
-	self withWindowDo: [ :w | w title: 'Package: ', aPackage name ].
+	self withWindowDo: [ :w | w title: (self titleFor: aPackage) ].
 	codePanel 
 		removeAll;
 		addPage: (self 
@@ -301,4 +310,10 @@ StSystemBrowser >> selectedPackage [
 StSystemBrowser >> setModelBeforeInitialization: anEnvironment [
 
 	model := anEnvironment
+]
+
+{ #category : #initialization }
+StSystemBrowser >> titleFor: aModel [
+
+	^ aModel windowTitle
 ]

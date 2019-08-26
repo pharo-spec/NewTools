@@ -22,7 +22,7 @@ StSBMethodModel >> behavior [
 	^ self method methodClass
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 StSBMethodModel >> definition [
 	
 	^ self method sourceCode
@@ -42,4 +42,10 @@ StSBMethodModel >> method: anObject [
 StSBMethodModel >> name [
 
 	^ self method selector
+]
+
+{ #category : #accessing }
+StSBMethodModel >> windowTitle [
+
+	^ self name
 ]

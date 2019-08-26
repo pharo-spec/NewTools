@@ -37,3 +37,15 @@ StSBBasePackageModel >> fullName [
 
 	^ self name
 ]
+
+{ #category : #accessing }
+StSBBasePackageModel >> package [
+
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+StSBBasePackageModel >> windowTitle [
+	
+	^ 'Package: ', self name
+]

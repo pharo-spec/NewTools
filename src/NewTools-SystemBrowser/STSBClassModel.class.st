@@ -92,3 +92,9 @@ StSBClassModel >> name [
 
 	^ self modelClass name
 ]
+
+{ #category : #accessing }
+StSBClassModel >> windowTitle [ 
+
+	^ 'Class: ', self name
+]

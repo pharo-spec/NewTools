@@ -36,3 +36,9 @@ StSBModel >> name [
 
 	^ self subclassResponsibility
 ]
+
+{ #category : #accessing }
+StSBModel >> windowTitle [
+	
+	^ 'TODO'
+]
