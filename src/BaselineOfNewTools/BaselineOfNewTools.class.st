@@ -12,7 +12,7 @@ BaselineOfNewTools >> baseline: spec [
 			
 		self
 			spec: spec;
-			commander: spec;
+"			commander: spec;"
 			sindarin: spec.
 
 		spec
@@ -23,11 +23,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Playground' with: [ spec requires: #('NewTools-Inspector') ];
 			package: 'NewTools-FlagBrowser' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-FlagBrowser-Tests' with: [ spec requires: #('NewTools-FlagBrowser') ];
-			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #('NewTools-FlagBrowser-Tests') ];
-			package: 'Debugger-Commands' with: [ spec requires: #('NewTools-Sindarin-Tools')];
-			package: 'NewTools-Debugger-Extensions' with: [ spec requires: #('Debugger-Commands') ];
-			package: 'NewTools-Debugger' with: [ spec requires: #('NewTools-Debugger-Extensions' 'Sindarin') ];
-			package: 'NewTools-Debugger-Tests' with: [ spec requires: #('NewTools-Debugger') ]]
+			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #('NewTools-FlagBrowser-Tests') ]]
 ]
 
 { #category : #baselines }
@@ -47,8 +43,8 @@ BaselineOfNewTools >> sindarin: spec [
 
 { #category : #dependencies }
 BaselineOfNewTools >> spec: spec [
-
+	"Depends on a specific commit of Spec2 to avoi breaking changes done to styles"
 	spec 
 		baseline: 'Spec2' 
-		with: [ spec repository: 'github://pharo-spec/Spec/src' ]
+		with: [ spec repository: 'github://pharo-spec/Spec:d5825e1c86bb351f1dea1fba76cbfbfa76a1369f/src' ]
 ]
