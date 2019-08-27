@@ -12,7 +12,7 @@ BaselineOfNewTools >> baseline: spec [
 			
 		self
 			spec: spec;
-"			commander: spec;"
+			commander: spec;
 			sindarin: spec.
 
 		spec
@@ -29,8 +29,7 @@ BaselineOfNewTools >> baseline: spec [
 { #category : #baselines }
 BaselineOfNewTools >> commander: spec [
 
-	spec baseline: 'Commander2' with: [ 
-		spec repository: 'github://pharo-spec/Commander2/src' ]
+	spec baseline: 'Commander2' with: [ spec repository: 'github://pharo-spec/Commander2:v1.2.0/src']
 ]
 
 { #category : #dependencies }
