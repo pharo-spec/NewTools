@@ -45,5 +45,5 @@ BaselineOfNewTools >> spec: spec [
 	"Depends on a specific commit of Spec2 to avoi breaking changes done to styles"
 	spec 
 		baseline: 'Spec2' 
-		with: [ spec repository: 'github://pharo-spec/Spec:d5825e1c86bb351f1dea1fba76cbfbfa76a1369f/src' ]
+		with: [ spec repository: 'github://pharo-spec/Spec:7633c2d/src' ]
 ]
