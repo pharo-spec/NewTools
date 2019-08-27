@@ -106,6 +106,12 @@ StPharoApplication >> useGtk [
 ]
 
 { #category : #convenience }
+StPharoApplication >> useGtkDark [
+
+	self useBackend: #Gtk with: StPharoGtkDarkConfiguration new
+]
+
+{ #category : #convenience }
 StPharoApplication >> useMorphic [
 
 	self useBackend: #Morphic

@@ -13,8 +13,7 @@ StPharoGtkConfiguration class >> cssProviderCodePropertyName [
 { #category : #configuring }
 StPharoGtkConfiguration >> configureOSX: anApplication [
 
-	"self installTheme: 'Sierra-dark'."
-	 self installTheme: 'Sierra-light'.
+	 self installTheme: self macThemeName.
 	
 	anApplication 
 		propertyAt: self class cssProviderCodePropertyName  
@@ -32,7 +31,7 @@ StPharoGtkConfiguration >> configureUnix: anApplication [
 { #category : #configuring }
 StPharoGtkConfiguration >> configureWindows: anApplication [
 
-	self installTheme: 'Windows-10-master'.
+	self installTheme: self windowsThemeName.
 	
 	anApplication 
 		propertyAt: self class cssProviderCodePropertyName  
@@ -43,4 +42,16 @@ StPharoGtkConfiguration >> configureWindows: anApplication [
 StPharoGtkConfiguration >> installTheme: aString [
 
 	GtkSettings default themeName: aString
+]
+
+{ #category : #accessing }
+StPharoGtkConfiguration >> macThemeName [
+		
+	^ 'Sierra-light'
+]
+
+{ #category : #accessing }
+StPharoGtkConfiguration >> windowsThemeName [
+
+	^ 'Windows-10-master'
 ]
