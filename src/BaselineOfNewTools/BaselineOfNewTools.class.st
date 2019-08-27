@@ -29,7 +29,8 @@ BaselineOfNewTools >> baseline: spec [
 { #category : #baselines }
 BaselineOfNewTools >> commander: spec [
 
-	spec baseline: 'Commander2' with: [ spec repository: 'github://pharo-spec/Commander2:v1.2.0/src']
+"	spec baseline: 'Commander2' with: [ spec repository: 'github://pharo-spec/Commander2:v1.2.0/src']"
+	spec baseline: 'Commander2' with: [ spec repository: 'github://pharo-spec/Commander2:ad5041cccdd34a7b021ca505323ce6d9a5912480/src']
 ]
 
 { #category : #dependencies }
@@ -42,8 +43,8 @@ BaselineOfNewTools >> sindarin: spec [
 
 { #category : #dependencies }
 BaselineOfNewTools >> spec: spec [
-	"Depends on a specific commit of Spec2 to avoi breaking changes done to styles"
+	"Depends on a specific commit of Spec2 to avoid breaking changes done to styles"
 	spec 
 		baseline: 'Spec2' 
-		with: [ spec repository: 'github://pharo-spec/Spec:6bbdc7bb88c7116619a78240f1ac1e7111b5850c/src' ]
+		with: [ spec repository: 'github://pharo-spec/Spec:daf4020f5fc97c3fc3a5b069dcdf3195e5af18cb/src' ]
 ]
