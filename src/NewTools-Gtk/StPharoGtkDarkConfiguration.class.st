@@ -1,3 +1,7 @@
+"
+I am a configuration for Pharo IDE for Gtk backend. 
+I will install a ""dark"" version of the UI theme, according to the platform version.
+"
 Class {
 	#name : #StPharoGtkDarkConfiguration,
 	#superclass : #StPharoGtkConfiguration,

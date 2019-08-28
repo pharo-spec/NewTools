@@ -1,3 +1,8 @@
+"
+I am the configuration for Pharo IDE for Gtk backend. 
+I will install the appropriate theme for each platform (macOS or windows, in linux I will accept default for now).
+I will install additional styles needed for the platform (e.g. font style for code).
+"
 Class {
 	#name : #StPharoGtkConfiguration,
 	#superclass : #SpApplicationConfiguration,
