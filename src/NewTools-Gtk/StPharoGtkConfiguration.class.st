@@ -4,41 +4,34 @@ Class {
 	#category : #'NewTools-Gtk'
 }
 
-{ #category : #'as yet unclassified' }
-StPharoGtkConfiguration class >> cssProviderCodePropertyName [
+{ #category : #private }
+StPharoGtkConfiguration >> addProviderFromString: aString [
 
-	^ #cssProviderCode
+	(GtkCssProvider newFromString: aString) addForApplicationToDefaultScreen
 ]
 
 { #category : #configuring }
 StPharoGtkConfiguration >> configureOSX: anApplication [
 
-	 self installTheme: self macThemeName.
-	
-	anApplication 
-		propertyAt: self class cssProviderCodePropertyName  
-		put: (GtkCssProvider newFromString: '* { font: 12pt "Monaco" }')
+	self installTheme: self macThemeName.
+	self addProviderFromString: '.code { font: 12pt "Monaco" }'
 ]
 
 { #category : #configuring }
 StPharoGtkConfiguration >> configureUnix: anApplication [
 
-	anApplication 
-		propertyAt: self class cssProviderCodePropertyName  
-		put: (GtkCssProvider newFromString: '* { font: 12pt "Sans" }')
+	self addProviderFromString: '.code { font: 12pt "Sans" }'
+
 ]
 
 { #category : #configuring }
 StPharoGtkConfiguration >> configureWindows: anApplication [
 
 	self installTheme: self windowsThemeName.
-	
-	anApplication 
-		propertyAt: self class cssProviderCodePropertyName  
-		put: (GtkCssProvider newFromString: '* { font: 10pt "Microsoft Sans Serif" }')
+	self addProviderFromString: '.code { font: 10pt "Microsoft Sans Serif" }'
 ]
 
-{ #category : #'private running' }
+{ #category : #private }
 StPharoGtkConfiguration >> installTheme: aString [
 
 	GtkSettings default themeName: aString
