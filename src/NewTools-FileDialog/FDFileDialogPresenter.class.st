@@ -119,7 +119,7 @@ FDFileDialogPresenter class >> defaultBookmarks [
 
 { #category : #defaultClassVariable }
 FDFileDialogPresenter class >> defaultOkActionBlock [
-	^ [ :fileReference | self inform: 'you select the file' , fileReference basename ]
+	^ [ :fileReference | fileReference ]
 ]
 
 { #category : #specs }
@@ -196,7 +196,7 @@ FDFileDialogPresenter class >> fullExample [
 	presenter defaultFolder: FileLocator home asFileReference.
 	"it's open the FileDialog on this file"
 	
-	presenter okAction: [ :selectedFileReference | selectedFileReference inspect ].
+	presenter okAction: [ :selectedFileReference | selectedFileReference ].
 	"you will define the action of the OK button "
 	
 	presenter
@@ -211,9 +211,9 @@ FDFileDialogPresenter class >> fullExample [
 	
 	presenter columns:  { FDCreationDateReferenceColumn }. 
 	
-	presenter openDialogWithSpec.
 	presenter inspect.
-	^ presenter
+	presenter openModalWithSpec.
+	^ presenter confirm
 ]
 
 { #category : #icons }
@@ -268,10 +268,10 @@ FDFileDialogPresenter >> columns: aCollectionOfColumns [
 
 { #category : #utility }
 FDFileDialogPresenter >> confirm [
-	self selectedEntry
+ 	 ^self selectedEntry
 		ifNotNil: [ :entry | 
-			okAction value: entry.
-			self delete ]
+			okAction cull: entry.
+		 ]
 ]
 
 { #category : #utility }
@@ -433,4 +433,9 @@ FDFileDialogPresenter >> selectedBookMark [
 { #category : #accessing }
 FDFileDialogPresenter >> selectedEntry [
 	^ self subclassResponsibility
+]
+
+{ #category : #utility }
+FDFileDialogPresenter >> selectedFile [
+	^ fileNavigationSystem fileReferenceTable selectedItem
 ]

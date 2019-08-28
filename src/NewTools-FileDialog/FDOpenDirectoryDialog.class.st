@@ -11,17 +11,6 @@ Class {
 	#category : #'NewTools-FileDialog-UI'
 }
 
-{ #category : #specs }
-FDOpenDirectoryDialog class >> defaultSpec [
-	^ SpBoxLayout newVertical
-		add:
-			(SpBoxLayout newHorizontal
-				add: #bookmarksTreeTable
-					withConstraints: [ :contraint | contraint width: 200 ];
-				yourself);
-		yourself
-]
-
 { #category : #examples }
 FDOpenDirectoryDialog class >> example [
 	<example>
