@@ -47,5 +47,5 @@ StSBMethodModel >> name [
 { #category : #accessing }
 StSBMethodModel >> windowTitle [
 
-	^ self name
+	^ self method printString
 ]
