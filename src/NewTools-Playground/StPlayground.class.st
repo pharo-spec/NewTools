@@ -25,7 +25,7 @@ Class {
 { #category : #accessing }
 StPlayground class >> defaultExtent [
 
-	^ 500 @ 350
+	^ 550 @ 350
 ]
 
 { #category : #specs }
