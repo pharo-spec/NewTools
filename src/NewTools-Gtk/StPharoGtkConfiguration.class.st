@@ -25,8 +25,9 @@ StPharoGtkConfiguration >> configureOSX: anApplication [
 { #category : #configuring }
 StPharoGtkConfiguration >> configureUnix: anApplication [
 
-	self addProviderFromString: '.code { font: 12pt "Sans" }'
-
+	self unixThemeName 
+		ifNotNil: [ :aName | self installTheme: aName ].
+	self addProviderFromString: '.code { font: 11pt "Sans Regular" }'
 ]
 
 { #category : #configuring }
@@ -46,6 +47,12 @@ StPharoGtkConfiguration >> installTheme: aString [
 StPharoGtkConfiguration >> macThemeName [
 		
 	^ 'Sierra-light'
+]
+
+{ #category : #accessing }
+StPharoGtkConfiguration >> unixThemeName [
+
+	^ 'Adwaita'
 ]
 
 { #category : #accessing }

@@ -15,6 +15,12 @@ StPharoGtkDarkConfiguration >> macThemeName [
 ]
 
 { #category : #accessing }
+StPharoGtkDarkConfiguration >> unixThemeName [
+
+	^ 'Adwaita-dark'
+]
+
+{ #category : #accessing }
 StPharoGtkDarkConfiguration >> windowsThemeName [
 
 	^ 'Windows-10-Dark-master'
