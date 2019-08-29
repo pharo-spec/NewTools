@@ -22,6 +22,8 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Playground' with: [ spec requires: #('NewTools-Inspector') ];
 			package: 'NewTools-FlagBrowser' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-FlagBrowser-Tests' with: [ spec requires: #('NewTools-FlagBrowser') ];
+			package: 'NewTools-FileDialog' with: [ spec requires: #('NewTools-Core') ];
+			package: 'NewTools-FileDialog-Tests' with: [ spec requires: #('NewTools-FileDialog') ];
 			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #('NewTools-FlagBrowser-Tests') ] ]
 ]
 
