@@ -61,6 +61,14 @@ FDBookmark class >> windowsDrives [
 				icon: (self iconNamed: #smallWindow) ]
 ]
 
+{ #category : #'default bookmarks' }
+FDBookmark class >> workingDirectory [
+	^ FDBookmark
+		name: 'working directory'
+		location: FileLocator workingDirectory asFileReference
+		icon: (self iconNamed: #komitterNewSlice) 
+]
+
 { #category : #comparing }
 FDBookmark >> = aBookmark [
 	self species = aBookmark species
