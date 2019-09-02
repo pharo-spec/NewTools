@@ -4,7 +4,7 @@ I'm a column for display the size of the file
 Class {
 	#name : #FDSizeFileReferenceColumn,
 	#superclass : #FDAbstractStringTableColumn,
-	#category : #'NewTools-FileDialog-FileTreeStrategie'
+	#category : #'NewTools-FileDialog-Display'
 }
 
 { #category : #adding }

@@ -93,7 +93,7 @@ FDFileNavigationSystemPresenter class >> buildCommandsGroupWith: presenter forRo
 FDFileNavigationSystemPresenter class >> defaultColumns [
 	^ {
 	FDIconFileReferenceTableColumn  .
-	FDbasenameFileReferenceColumn .
+	FDBasenameFileReferenceColumn .
 	FDSizeFileReferenceColumn .
 	FDAccessRightFileReferenceColumn }
 ]
@@ -180,7 +180,7 @@ FDFileNavigationSystemPresenter >> columns: aCollectionOfColumns [
 	tmpColumn
 		addAll:
 			({FDIconFileReferenceTableColumn.
-			FDbasenameFileReferenceColumn} ).
+			FDBasenameFileReferenceColumn} ).
 	fileReferenceTable
 		columns: ((tmpColumn asOrderedCollection sort: #sortValue ascending) collect: #column)
 ]

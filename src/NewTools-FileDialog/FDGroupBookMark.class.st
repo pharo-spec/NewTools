@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'collection'
 	],
-	#category : #'NewTools-FileDialog-bookMark'
+	#category : #'NewTools-FileDialog-Bookmark'
 }
 
 { #category : #'instance creation' }

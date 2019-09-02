@@ -3,31 +3,31 @@ I'm use to give you the basename of a fileReference
 	example : 'my/path/something.exe' asFileReference basename >> something.exe 
 "
 Class {
-	#name : #FDbasenameFileReferenceColumn,
+	#name : #FDBasenameFileReferenceColumn,
 	#superclass : #FDAbstractStringTableColumn,
-	#category : #'NewTools-FileDialog-FileTreeStrategie'
+	#category : #'NewTools-FileDialog-Display'
 }
 
 { #category : #adding }
-FDbasenameFileReferenceColumn class >> addContraintTo: aTableColumn [
+FDBasenameFileReferenceColumn class >> addContraintTo: aTableColumn [
 	"do nothing"
 ]
 
 { #category : #templateMethod }
-FDbasenameFileReferenceColumn class >> columnTitle [
+FDBasenameFileReferenceColumn class >> columnTitle [
 	"I'm returning a String for the title"
 
 	^ 'basename'
 ]
 
 { #category : #templateMethod }
-FDbasenameFileReferenceColumn class >> evaluateOn: aFileReference [
+FDBasenameFileReferenceColumn class >> evaluateOn: aFileReference [
 	"I'm provide action for fileReference"
 
 	^ aFileReference basename
 ]
 
 { #category : #sorting }
-FDbasenameFileReferenceColumn class >> sortValue [
+FDBasenameFileReferenceColumn class >> sortValue [
 	^ 1
 ]

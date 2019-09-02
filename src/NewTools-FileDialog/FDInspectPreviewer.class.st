@@ -4,7 +4,7 @@ I'm a inspector previewer
 Class {
 	#name : #FDInspectPreviewer,
 	#superclass : #FDAbstractPreviewer,
-	#category : #'NewTools-FileDialog-previewerStrategie'
+	#category : #'NewTools-FileDialog-Previewers'
 }
 
 { #category : #testing }

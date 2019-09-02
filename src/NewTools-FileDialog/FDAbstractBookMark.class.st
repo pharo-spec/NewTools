@@ -17,7 +17,7 @@ Class {
 		'name',
 		'icon'
 	],
-	#category : #'NewTools-FileDialog-bookMark'
+	#category : #'NewTools-FileDialog-Bookmark'
 }
 
 { #category : #accessing }

@@ -20,7 +20,7 @@ my subclasses have to define:
 Class {
 	#name : #FDAbstractFileReferenceColumn,
 	#superclass : #Object,
-	#category : #'NewTools-FileDialog-FileTreeStrategie'
+	#category : #'NewTools-FileDialog-Display'
 }
 
 { #category : #adding }

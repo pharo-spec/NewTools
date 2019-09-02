@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'location'
 	],
-	#category : #'NewTools-FileDialog-bookMark'
+	#category : #'NewTools-FileDialog-Bookmark'
 }
 
 { #category : #'default bookmarks' }
