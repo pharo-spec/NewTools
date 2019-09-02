@@ -29,7 +29,7 @@ FDSaveFileDialog class >> exampleExtension [
 FDSaveFileDialog class >> extension: aExtensionMatcher [
 	"example 
 		you want to save png File 
-			FDSaveFileDialog extension: '*.jpg'
+			FDSaveFileDialog extension: 'jpg'
 	"
 
 	^ self new
@@ -76,7 +76,7 @@ FDSaveFileDialog >> selectedEntry [
 	(fileNavigationSystem nameText text includes: extensionMather)
 		ifFalse: [ entry := entry
 				, ((extensionMather copyReplaceAll: '*' with: '') ) ].
-	proceed := entry exists not.
+	proceed := false.
 	entry exists
 		ifTrue: [ proceed := UIManager default
 				proceed:
