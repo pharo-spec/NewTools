@@ -10,19 +10,56 @@ Class {
 	#category : #'NewTools-FileDialog-Bookmark'
 }
 
+{ #category : #defaultClassVariable }
+FDBookmark class >> defaultBookmarks [
+	| presets |
+	presets := OrderedCollection new.
+	presets add: self workingDirectory.
+	presets add: self home.
+	presets add: self root.
+	presets add: self documents.
+	"presets add: self downloads."
+	presets add: self desktop.
+	^ OrderedCollection with: (FDGroupBookMark name: 'System' collection: presets iconName: '')
+]
+
+{ #category : #'default bookmarks' }
+FDBookmark class >> desktop [
+	^ self
+		name: 'Desktop'
+		location: FileLocator desktop
+		icon: (self iconNamed: #morph)
+]
+
+{ #category : #'default bookmarks' }
+FDBookmark class >> documents [
+	^ self
+		name: 'Documents'
+		location: FileLocator documents
+		icon: (self iconNamed: #book)
+]
+
+{ #category : #'default bookmarks' }
+FDBookmark class >> downloads [
+	^ self
+		name: 'Downloads'
+		location: FileLocator download
+		icon: (self iconNamed: #down)
+]
+
 { #category : #'default bookmarks' }
 FDBookmark class >> home [
-	^ FDBookmark
-		name: 'home'
-		location: FileLocator home asFileReference
+	^ self
+		name: 'Home'
+		location: FileLocator home
 		icon: (self iconNamed: #home)
 ]
 
 { #category : #'default bookmarks' }
 FDBookmark class >> image [
-	^ FDBookmark
-		name: 'image directory'
-		location: FileLocator imageDirectory asFileReference
+	^ self
+		name: 'Image directory'
+		location: FileLocator imageDirectory
 		icon: (self iconNamed: #komitterNewSlice)
 ]
 
@@ -37,35 +74,17 @@ FDBookmark class >> name: aName location: aLocation icon: anIcon [
 
 { #category : #'default bookmarks' }
 FDBookmark class >> root [
-	^ FDBookmark
-		name: 'file system'
-		location: FileLocator root asFileReference
+	^ self
+		name: '/'
+		location: FileLocator root
 		icon: (self iconNamed: #smallWindow)
 ]
 
 { #category : #'default bookmarks' }
-FDBookmark class >> tmp [
-	^ FDBookmark
-		name: 'tmp'
-		location: FileLocator temp asFileReference
-		icon: (self iconNamed: #open)
-]
-
-{ #category : #'default bookmarks' }
-FDBookmark class >> windowsDrives [
-	^ FileLocator root asFileReference directories
-		collect: [ :each | 
-			FDBookmark
-				name: each basename
-				location: each
-				icon: (self iconNamed: #smallWindow) ]
-]
-
-{ #category : #'default bookmarks' }
 FDBookmark class >> workingDirectory [
-	^ FDBookmark
-		name: 'working directory'
-		location: FileLocator workingDirectory asFileReference
+	^ self
+		name: 'Working directory'
+		location: FileLocator workingDirectory
 		icon: (self iconNamed: #komitterNewSlice) 
 ]
 
