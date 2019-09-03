@@ -13,14 +13,8 @@ Class {
 { #category : #defaultClassVariable }
 FDBookmark class >> defaultBookmarks [
 	| presets |
-	presets := OrderedCollection new.
-	presets add: self workingDirectory.
-	presets add: self home.
-	presets add: self root.
-	presets add: self documents.
-	"presets add: self downloads."
-	presets add: self desktop.
-	^ OrderedCollection with: (FDGroupBookMark name: 'System' collection: presets iconName: '')
+	presets := OrderedCollection withAll: {self root . self home . self workingDirectory . self desktop . self documents . self downloads}.
+	^ OrderedCollection with: (FDGroupBookMark name: 'Favourites' collection: presets iconName: '')
 ]
 
 { #category : #'default bookmarks' }
@@ -43,7 +37,7 @@ FDBookmark class >> documents [
 FDBookmark class >> downloads [
 	^ self
 		name: 'Downloads'
-		location: FileLocator download
+		location: FileLocator downloads
 		icon: (self iconNamed: #down)
 ]
 

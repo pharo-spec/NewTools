@@ -325,14 +325,11 @@ FDFileDialogPresenter >> initializeBookmarksTreeTable [
 			((SpImageTableColumn evaluated: [ :each | each icon ])
 				width: 50;
 				yourself);
-		addColumn:
-			(SpStringTableColumn
-				evaluated: [ :fdGroupBookMark | fdGroupBookMark name ]).
+		addColumn: (SpStringTableColumn evaluated: [ :fdGroupBookMark | fdGroupBookMark name ]).
 	bookmarksTreeTable
 		roots: bookmarks;
 		children: #children;
-		contextMenu:
-				[ (self rootCommandsGroup / 'bookmarkCommand') beRoot asMenuPresenter ]
+		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'bookmarkCommand' ]
 ]
 
 { #category : #initialization }
