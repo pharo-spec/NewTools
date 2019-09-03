@@ -1,30 +1,30 @@
 "
-I'm a column for display the size of the file
+I'm a column for display the size of the file in human readable format.
 "
 Class {
 	#name : #FDSizeColumn,
-	#superclass : #FDAbstractStringTableColumn,
-	#category : #'NewTools-FileDialog-Display'
+	#superclass : #FDAbstractColumn,
+	#category : #'NewTools-FileDialog-Columns'
 }
 
 { #category : #adding }
 FDSizeColumn class >> addContraintTo: aTableColumn [
-	aTableColumn width: 80
-]
-
-{ #category : #templateMethod }
-FDSizeColumn class >> columnTitle [
-	^ 'Size'
+	aTableColumn width: 70
 ]
 
 { #category : #templateMethod }
 FDSizeColumn class >> evaluateOn: aFileReference [
-	"I'm provide action for fileReference"
-
-	^ aFileReference humanReadableSize
+	^ aFileReference isDirectory
+		ifTrue: [ '--' ]
+		ifFalse: [ aFileReference humanReadableSize ]
 ]
 
 { #category : #sorting }
-FDSizeColumn class >> sortValue [
-	^ 10
+FDSizeColumn class >> priority [
+	^ 90
+]
+
+{ #category : #templateMethod }
+FDSizeColumn class >> title [
+	^ 'Size'
 ]

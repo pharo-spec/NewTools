@@ -1,21 +1,15 @@
 "
-I'm use to give you an Icon 
-	
+I'm a column use to displayan icon depending on the file to display in the file dialog.
 "
 Class {
 	#name : #FDIconColumn,
-	#superclass : #FDImageTableColumn,
-	#category : #'NewTools-FileDialog-Display'
+	#superclass : #FDAbstractColumn,
+	#category : #'NewTools-FileDialog-Columns'
 }
 
 { #category : #adding }
 FDIconColumn class >> addContraintTo: aTableColumn [
 	aTableColumn width: 20
-]
-
-{ #category : #templateMethod }
-FDIconColumn class >> columnTitle [
-	^ ''
 ]
 
 { #category : #templateMethod }
@@ -26,6 +20,16 @@ FDIconColumn class >> evaluateOn: aFileReference [
 ]
 
 { #category : #sorting }
-FDIconColumn class >> sortValue [
+FDIconColumn class >> priority [
 	^ 0
+]
+
+{ #category : #class }
+FDIconColumn class >> tableColumnClass [
+	^ SpImageTableColumn
+]
+
+{ #category : #templateMethod }
+FDIconColumn class >> title [
+	^ ''
 ]

@@ -62,7 +62,6 @@ Class {
 		'readPointerHistoryParcour',
 		'currentDirectory',
 		'hiddenFilter',
-		'columns',
 		'previewer',
 		'nextButton',
 		'previousButton',
@@ -162,11 +161,6 @@ FDFileNavigationSystemPresenter class >> lastVisitedDirectory [
 		ifFalse: [ LastVisitedDirectory ]
 ]
 
-{ #category : #accessing }
-FDFileNavigationSystemPresenter >> columns [
-	^ columns
-]
-
 { #category : #'api-customization' }
 FDFileNavigationSystemPresenter >> columns: aCollectionOfColumns [
 	| tmpColumn |
@@ -176,7 +170,7 @@ FDFileNavigationSystemPresenter >> columns: aCollectionOfColumns [
 			({FDIconColumn.
 			FDNameColumn} ).
 	fileReferenceTable
-		columns: ((tmpColumn asOrderedCollection sort: #sortValue ascending) collect: #column)
+		columns: ((tmpColumn asOrderedCollection sort: #priority ascending) collect: #column)
 ]
 
 { #category : #utils }
@@ -296,7 +290,7 @@ FDFileNavigationSystemPresenter >> initializeFilesTable [
 	fileReferenceTable contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'interact with file' ].
 	fileReferenceTable
 		beResizable;
-		columns: columns;
+		columns: FDAbstractColumn columns;
 		sortingBlock: [ :a :b | 
 			(a isDirectory & b isDirectory not or: [ a isDirectory & b isDirectory & (a basename asLowercase < b basename asLowercase) ])
 				or: [ a isFile & b isFile & (a basename asLowercase < b basename asLowercase) ] ]
@@ -328,7 +322,6 @@ FDFileNavigationSystemPresenter >> initializePresenter [
 { #category : #initialization }
 FDFileNavigationSystemPresenter >> initializeWidgets [
 	currentDirectory := self defaultDirectory.
-	columns := self class defaultColumns.
 	hiddenFilter := FDHidenFilter new.
 	previewer := Previewer.
 

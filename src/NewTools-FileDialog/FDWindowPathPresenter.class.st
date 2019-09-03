@@ -73,7 +73,7 @@ FDWindowPathPresenter >> currentDirectory [
 
 { #category : #api }
 FDWindowPathPresenter >> currentDirectory: aFileReference [
-	currentDirectory := aFileReference.
+	currentDirectory := aFileReference asAbsolute.
 	self updatePathInputWith: aFileReference.
 	pathButtons items: #() asOrderedCollection.
 	currentDirectory fullPath withParents

@@ -1,20 +1,15 @@
 "
-I'm a column use to give you the access right of a FileReference
+I'm a column use to give you the access rights of a FileReference
 "
 Class {
 	#name : #FDRightsColumn,
-	#superclass : #FDAbstractStringTableColumn,
-	#category : #'NewTools-FileDialog-Display'
+	#superclass : #FDAbstractColumn,
+	#category : #'NewTools-FileDialog-Columns'
 }
 
 { #category : #adding }
 FDRightsColumn class >> addContraintTo: aTableColumn [
-	aTableColumn width: 120
-]
-
-{ #category : #templateMethod }
-FDRightsColumn class >> columnTitle [
-	^ 'Rights'
+	aTableColumn width: 110
 ]
 
 { #category : #templateMethod }
@@ -25,6 +20,11 @@ FDRightsColumn class >> evaluateOn: aFileReference [
 ]
 
 { #category : #sorting }
-FDRightsColumn class >> sortValue [
-	^ 50
+FDRightsColumn class >> priority [
+	^ 100
+]
+
+{ #category : #templateMethod }
+FDRightsColumn class >> title [
+	^ 'Rights'
 ]

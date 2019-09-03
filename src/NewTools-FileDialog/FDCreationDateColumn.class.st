@@ -1,28 +1,28 @@
 "
-I'm a column use to display the creation date of a file
+I'm a column use to display the creation date of a file in a File dialog.
 "
 Class {
 	#name : #FDCreationDateColumn,
-	#superclass : #FDAbstractStringTableColumn,
-	#category : #'NewTools-FileDialog-Display'
+	#superclass : #FDAbstractColumn,
+	#category : #'NewTools-FileDialog-Columns'
 }
 
 { #category : #adding }
 FDCreationDateColumn class >> addContraintTo: aTableColumn [
-	"do nothing"
+	aTableColumn width: 150
 ]
 
 { #category : #templateMethod }
-FDCreationDateColumn class >> columnTitle [
-	^ 'Creation date'
-]
-
-{ #category : #templateMethod }
-FDCreationDateColumn class >> evaluateOn: aFileReference [ 
-	^ aFileReference creationTime asString
+FDCreationDateColumn class >> evaluateOn: aFileReference [
+	^ aFileReference creationTime fileDialogFormat
 ]
 
 { #category : #sorting }
-FDCreationDateColumn class >> sortValue [
-	^ 100
+FDCreationDateColumn class >> priority [
+	^ 60
+]
+
+{ #category : #templateMethod }
+FDCreationDateColumn class >> title [
+	^ 'Date Created'
 ]
