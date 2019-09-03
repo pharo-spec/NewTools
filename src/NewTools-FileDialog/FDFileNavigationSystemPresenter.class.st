@@ -70,7 +70,6 @@ Class {
 		'fileReferenceTable'
 	],
 	#classVars : [
-		'Columns',
 		'FilterSet',
 		'LastVisitedDirectory',
 		'Previewer'
@@ -91,11 +90,7 @@ FDFileNavigationSystemPresenter class >> buildCommandsGroupWith: presenter forRo
 
 { #category : #defaults }
 FDFileNavigationSystemPresenter class >> defaultColumns [
-	^ {
-	FDIconFileReferenceTableColumn  .
-	FDBasenameFileReferenceColumn .
-	FDSizeFileReferenceColumn .
-	FDAccessRightFileReferenceColumn }
+	^ {FDIconColumn . FDNameColumn . FDSizeColumn . FDRightsColumn} collect: #column
 ]
 
 { #category : #defaults }
@@ -157,8 +152,7 @@ FDFileNavigationSystemPresenter class >> example [
 { #category : #'class initialization' }
 FDFileNavigationSystemPresenter class >> initialize [
 	FilterSet := self defaultFilterSet.
-	Previewer := self defaultPreviewer.
-	Columns := self defaultColumns collect: #column
+	Previewer := self defaultPreviewer
 ]
 
 { #category : #defaults }
@@ -179,8 +173,8 @@ FDFileNavigationSystemPresenter >> columns: aCollectionOfColumns [
 	tmpColumn := aCollectionOfColumns asSet.
 	tmpColumn
 		addAll:
-			({FDIconFileReferenceTableColumn.
-			FDBasenameFileReferenceColumn} ).
+			({FDIconColumn.
+			FDNameColumn} ).
 	fileReferenceTable
 		columns: ((tmpColumn asOrderedCollection sort: #sortValue ascending) collect: #column)
 ]
@@ -299,17 +293,13 @@ FDFileNavigationSystemPresenter >> initializeCurrentPathTextInput [
 
 { #category : #'initialize-widgets' }
 FDFileNavigationSystemPresenter >> initializeFilesTable [
+	fileReferenceTable contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'interact with file' ].
 	fileReferenceTable
-		contextMenu: [ (self rootCommandsGroup / 'interact with file') beRoot
-				asMenuPresenter ].
-	fileReferenceTable
+		beResizable;
 		columns: columns;
 		sortingBlock: [ :a :b | 
-			(a isDirectory & b isDirectory not
-				or: [ a isDirectory & b isDirectory
-						& (a basename asLowercase < b basename asLowercase) ])
-				or: [ a isFile & b isFile
-						& (a basename asLowercase < b basename asLowercase) ] ]
+			(a isDirectory & b isDirectory not or: [ a isDirectory & b isDirectory & (a basename asLowercase < b basename asLowercase) ])
+				or: [ a isFile & b isFile & (a basename asLowercase < b basename asLowercase) ] ]
 ]
 
 { #category : #'initialize-widgets' }
@@ -338,7 +328,7 @@ FDFileNavigationSystemPresenter >> initializePresenter [
 { #category : #initialization }
 FDFileNavigationSystemPresenter >> initializeWidgets [
 	currentDirectory := self defaultDirectory.
-	columns := Columns.
+	columns := self class defaultColumns.
 	hiddenFilter := FDHidenFilter new.
 	previewer := Previewer.
 

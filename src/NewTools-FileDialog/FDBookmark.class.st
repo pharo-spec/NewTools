@@ -14,7 +14,7 @@ Class {
 FDBookmark class >> defaultBookmarks [
 	| presets |
 	presets := OrderedCollection withAll: {self root . self home . self workingDirectory . self desktop . self documents . self downloads}.
-	^ OrderedCollection with: (FDGroupBookMark name: 'Favourites' collection: presets iconName: '')
+	^ OrderedCollection with: (FDGroupBookmark name: 'Favourites' collection: presets iconName: '')
 ]
 
 { #category : #'default bookmarks' }

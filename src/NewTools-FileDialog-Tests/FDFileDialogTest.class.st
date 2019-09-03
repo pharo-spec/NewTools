@@ -68,7 +68,7 @@ FDFileDialogTest >> testWhenAddACollectionOfBookmarkToCustomBookmarkShouldBeAdde
 			[ :eachItem | FDBookmark name: eachItem basename location: eachItem path icon: nil ].
 	dialog
 		bookmarks:
-			{(FDGroupBookMark
+			{(FDGroupBookmark
 				name: 'aTestBookmark'
 				collection: aCollectionOfBookmark
 				iconName: '')}.

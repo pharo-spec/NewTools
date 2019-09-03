@@ -2,7 +2,7 @@
 i'm use to dispay group of bookmark
 "
 Class {
-	#name : #FDGroupBookMark,
+	#name : #FDGroupBookmark,
 	#superclass : #FDAbstractBookMark,
 	#instVars : [
 		'collection'
@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-FDGroupBookMark class >> name: aName collection: aCollection iconName: icon [
+FDGroupBookmark class >> name: aName collection: aCollection iconName: icon [
 	^ self new
 		name: aName;
 		collection: aCollection;
@@ -20,26 +20,26 @@ FDGroupBookMark class >> name: aName collection: aCollection iconName: icon [
 ]
 
 { #category : #accessing }
-FDGroupBookMark >> children [ 
+FDGroupBookmark >> children [ 
 	^ collection
 ]
 
 { #category : #accessing }
-FDGroupBookMark >> collection [
+FDGroupBookmark >> collection [
 	^ collection
 ]
 
 { #category : #accessing }
-FDGroupBookMark >> collection: anObject [
+FDGroupBookmark >> collection: anObject [
 	collection := anObject
 ]
 
 { #category : #testing }
-FDGroupBookMark >> isComposite [
+FDGroupBookmark >> isComposite [
 	^ true
 ]
 
 { #category : #accessing }
-FDGroupBookMark >> removeAt: anInteger [ 
+FDGroupBookmark >> removeAt: anInteger [ 
 	self collection removeAt: anInteger.
 ]

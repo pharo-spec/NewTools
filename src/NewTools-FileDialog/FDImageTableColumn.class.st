@@ -14,6 +14,5 @@ FDImageTableColumn class >> isAbstract [
 
 { #category : #class }
 FDImageTableColumn class >> tableColumnClass [
-	"I'm returning a class son of SpTableColumn"
-	^ SpImageTableColumn 
+	^ SpImageTableColumn
 ]

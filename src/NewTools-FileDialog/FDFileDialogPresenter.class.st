@@ -184,7 +184,7 @@ FDFileDialogPresenter class >> fullExample [
 	
 	presenter
 		bookmarks:
-			{(FDGroupBookMark
+			{(FDGroupBookmark
 				name: 'exampleGroup'
 				collection:
 					{FDBookmark image.
@@ -192,7 +192,7 @@ FDFileDialogPresenter class >> fullExample [
 				iconName: 'group')} .
 	"you define the bookmarks have to be instance of FDAbstractBookMark"
 	
-	presenter columns:  { FDCreationDateReferenceColumn }. 
+	presenter columns:  { FDCreationDateColumn }. 
 	
 	presenter inspect.
 	presenter openModalWithSpec.
@@ -249,7 +249,7 @@ FDFileDialogPresenter >> columns: aCollectionOfColumns [
 	fileNavigationSystem columns: aCollectionOfColumns 
 ]
 
-{ #category : #utility }
+{ #category : #utilities }
 FDFileDialogPresenter >> confirm [
  	 ^self selectedEntry
 		ifNotNil: [ :entry | 
@@ -257,7 +257,7 @@ FDFileDialogPresenter >> confirm [
 		 ]
 ]
 
-{ #category : #utility }
+{ #category : #utilities }
 FDFileDialogPresenter >> creatAnFDBookMark: aDirectory [
 	^ FDBookmark
 		name: aDirectory basename
@@ -270,7 +270,7 @@ FDFileDialogPresenter >> currentDirectory [
 	^ fileNavigationSystem currentDirectory 
 ]
 
-{ #category : #utility }
+{ #category : #utilities }
 FDFileDialogPresenter >> defaultFolder [
 	^ FileLocator imageDirectory asFileReference
 ]
@@ -295,7 +295,7 @@ FDFileDialogPresenter >> filtersCustomization: aCollection [
 	fileNavigationSystem filtersCustomization: aCollection
 ]
 
-{ #category : #utility }
+{ #category : #utilities }
 FDFileDialogPresenter >> iconFor: anEntry [
 	| ext |
 	anEntry isDirectory
@@ -397,7 +397,7 @@ FDFileDialogPresenter >> previewer: aPreviewer [
 	fileNavigationSystem previewer: aPreviewer
 ]
 
-{ #category : #utility }
+{ #category : #utilities }
 FDFileDialogPresenter >> selectFile: aFile [
 	fileNavigationSystem fileReferenceTable selection selectedItem = aFile
 		ifFalse: [ fileNavigationSystem fileReferenceTable
@@ -415,7 +415,7 @@ FDFileDialogPresenter >> selectedEntry [
 	^ self subclassResponsibility
 ]
 
-{ #category : #utility }
+{ #category : #utilities }
 FDFileDialogPresenter >> selectedFile [
 	^ fileNavigationSystem fileReferenceTable selectedItem
 ]
