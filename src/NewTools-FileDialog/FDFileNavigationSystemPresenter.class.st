@@ -394,8 +394,6 @@ FDFileNavigationSystemPresenter >> openFolder: aFileReference [
 FDFileNavigationSystemPresenter >> openOn: anAbsolutePath [
 	currentDirectory := anAbsolutePath asFileReference.
 	self updateTableContent.
-	self currentPathTextInputPresenter
-		updatePathInputWith: currentDirectory.
 	self updateHistoryList
 ]
 

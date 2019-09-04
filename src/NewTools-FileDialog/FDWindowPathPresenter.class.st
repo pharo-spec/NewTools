@@ -122,8 +122,3 @@ FDWindowPathPresenter >> select: fileReference [
 	self flag: #todo. "just refresh"
 	presenterUI openOn: self currentDirectory
 ]
-
-{ #category : #api }
-FDWindowPathPresenter >> updatePathInputWith: aFileReference [
-	textInput text: aFileReference fullName
-]
