@@ -257,6 +257,16 @@ FDFileDialogPresenter >> confirm [
 		 ]
 ]
 
+{ #category : #initialization }
+FDFileDialogPresenter >> connectPresenters [
+	bookmarksTreeTable
+		whenSelectionChangedDo: [ :selection | 
+			selection selectedItem
+				ifNotNil: [ :selectedItem | 
+					selectedItem isComposite
+						ifFalse: [ fileNavigationSystem openFolder: selectedItem location ] ] ]
+]
+
 { #category : #utilities }
 FDFileDialogPresenter >> creatAnFDBookMark: aDirectory [
 	^ FDBookmark
@@ -353,17 +363,7 @@ FDFileDialogPresenter >> initializeFilesList [
 ]
 
 { #category : #initialization }
-FDFileDialogPresenter >> initializePresenter [
-	bookmarksTreeTable
-		whenSelectionChangedDo: [ :selection | 
-			selection selectedItem
-				ifNotNil: [ :selectedItem | 
-					selectedItem isComposite
-						ifFalse: [ fileNavigationSystem openFolder: selectedItem location ] ] ]
-]
-
-{ #category : #initialization }
-FDFileDialogPresenter >> initializeWidgets [
+FDFileDialogPresenter >> initializePresenters [
 	bookmarks := Bookmarks.
 	
 	bookmarksTreeTable := self newTreeTable.

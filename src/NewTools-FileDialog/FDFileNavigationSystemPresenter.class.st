@@ -173,6 +173,15 @@ FDFileNavigationSystemPresenter >> columns: aCollectionOfColumns [
 		columns: ((tmpColumn asOrderedCollection sort: #priority ascending) collect: #column)
 ]
 
+{ #category : #initialization }
+FDFileNavigationSystemPresenter >> connectPresenters [
+	self filesListAction.
+	self filtersDropListAction.
+	self currentPathTextInputAction.
+	self previousBeforeButtonAction.
+	self nextButtonAction
+]
+
 { #category : #utils }
 FDFileNavigationSystemPresenter >> createDirectory [
 	^ self createDirectory: 'new-folder'
@@ -316,16 +325,7 @@ FDFileNavigationSystemPresenter >> initializeFiltersDropList [
 ]
 
 { #category : #initialization }
-FDFileNavigationSystemPresenter >> initializePresenter [
-	self filesListAction.
-	self filtersDropListAction.
-	self currentPathTextInputAction.
-	self previousBeforeButtonAction.
-	self nextButtonAction
-]
-
-{ #category : #initialization }
-FDFileNavigationSystemPresenter >> initializeWidgets [
+FDFileNavigationSystemPresenter >> initializePresenters [
 	currentDirectory := self defaultDirectory.
 	hiddenFilter := FDHidenFilter new.
 	previewer := Previewer.

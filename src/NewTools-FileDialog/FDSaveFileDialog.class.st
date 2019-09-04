@@ -43,6 +43,16 @@ FDSaveFileDialog class >> initialize [
 	Matcher := '*'
 ]
 
+{ #category : #initialization }
+FDSaveFileDialog >> connectPresenters [
+	| ec |
+	super connectPresenters.
+	(ec := EntryCompletion new)
+		dataSourceBlock: [ :text | fileNavigationSystem currentDirectory children collect: #basename ];
+		filterBlock: [ :opt :text |opt beginsWith: text ].
+	fileNavigationSystem nameText entryCompletion: ec
+]
+
 { #category : #'api-customization' }
 FDSaveFileDialog >> extension: anExtensionMatcher [
 	extensionMather := anExtensionMatcher
@@ -57,16 +67,6 @@ FDSaveFileDialog >> initialTitle [
 FDSaveFileDialog >> initialize [
 	super initialize.
 	extensionMather := Matcher
-]
-
-{ #category : #initialization }
-FDSaveFileDialog >> initializePresenter [
-	| ec |
-	super initializePresenter.
-	(ec := EntryCompletion new)
-		dataSourceBlock: [ :text | fileNavigationSystem currentDirectory children collect: #basename ];
-		filterBlock: [ :opt :text |opt beginsWith: text ].
-	fileNavigationSystem nameText entryCompletion: ec
 ]
 
 { #category : #accessing }

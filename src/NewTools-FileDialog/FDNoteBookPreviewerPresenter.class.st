@@ -113,7 +113,7 @@ FDNoteBookPreviewerPresenter >> initializePage [
 ]
 
 { #category : #initialization }
-FDNoteBookPreviewerPresenter >> initializeWidgets [
+FDNoteBookPreviewerPresenter >> initializePresenters [
 	notebook := self newNotebook.
 	page := self newText.
 	notebook addPage: self initializePage

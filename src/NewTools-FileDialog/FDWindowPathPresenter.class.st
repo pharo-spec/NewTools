@@ -62,12 +62,12 @@ FDWindowPathPresenter class >> otherlayout [
 
 { #category : #accessing }
 FDWindowPathPresenter >> currentDirectory [
-	^ self owner currentDirectory
+	^ self owner ifNotNil: #currentDirectory
 ]
 
 { #category : #api }
 FDWindowPathPresenter >> currentDirectory: aFileReference [
-	self owner currentDirectory: aFileReference asAbsolute.
+	self owner ifNotNil: [ :fileNavigation | fileNavigation currentDirectory: aFileReference asAbsolute ].
 	textInput text: aFileReference fullName.
 	path file: aFileReference.
 	self needRebuild: false.
@@ -80,7 +80,7 @@ FDWindowPathPresenter >> entityText [
 ]
 
 { #category : #initialization }
-FDWindowPathPresenter >> initializeWidgets [
+FDWindowPathPresenter >> initializePresenters [
 	| isTextInput |
 	textInput := self newTextInput.
 	path := self instantiate: FDPathPresenter.

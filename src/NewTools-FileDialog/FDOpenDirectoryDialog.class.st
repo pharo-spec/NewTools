@@ -25,8 +25,8 @@ FDOpenDirectoryDialog >> initialTitle [
 ]
 
 { #category : #initialization }
-FDOpenDirectoryDialog >> initializeWidgets [
-	super initializeWidgets.
+FDOpenDirectoryDialog >> initializePresenters [
+	super initializePresenters.
 	fileNavigationSystem nameText disable
 ]
 
