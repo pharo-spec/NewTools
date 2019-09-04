@@ -69,7 +69,7 @@ FDWindowPathPresenter >> currentDirectory [
 { #category : #api }
 FDWindowPathPresenter >> currentDirectory: aFileReference [
 	currentDirectory := aFileReference asAbsolute.
-	self updatePathInputWith: aFileReference.
+	textInput text: aFileReference fullName.
 	path file: aFileReference.
 	self needRebuild: false.
 	self buildWithSpec
@@ -77,19 +77,24 @@ FDWindowPathPresenter >> currentDirectory: aFileReference [
 
 { #category : #accessing }
 FDWindowPathPresenter >> entityText [
-	^ textInput entityText
+	^ textInput
 ]
 
 { #category : #initialization }
 FDWindowPathPresenter >> initializeWidgets [
 	| isTextInput |
-	isTextInput := false.
-	textInput := self instantiate: SpSelectEntity.
+	textInput := self newTextInput.
 	path := self instantiate: FDPathPresenter.
-	path action: [ :fileReference | self select: fileReference ].
 	editButton := self newButton.
-	textInput entityText autoAccept: false.
-	textInput placeholder: 'give/me/a/path'.
+
+	isTextInput := false.
+
+	path action: [ :fileReference | self select: fileReference ].
+
+	textInput
+		autoAccept: false;
+		placeholder: 'path/to/file'.
+
 	editButton
 		icon: (self iconNamed: #edit);
 		action: [ self needRebuild: false.
@@ -115,12 +120,5 @@ FDWindowPathPresenter >> presenterUI: anObject [
 { #category : #initialization }
 FDWindowPathPresenter >> select: fileReference [
 	self currentDirectory: fileReference asFileReference.
-	textInput entityText text: currentDirectory fullName.
-	^ presenterUI openOn: currentDirectory
-]
-
-{ #category : #api }
-FDWindowPathPresenter >> updatePathInputWith: aFileReference [
-	textInput possibleEntities: (aFileReference children collect: #fullName).
-	textInput entityText text: aFileReference fullName
+	presenterUI openOn: currentDirectory
 ]
