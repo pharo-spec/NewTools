@@ -23,5 +23,5 @@ FDWindowPathPresenterTest >> tearDown [
 FDWindowPathPresenterTest >> testRoot [
 	windowPathUI currentDirectory: FileLocator root.
 	windowPathUI openWithSpec.
-	self assert: windowPathUI pathButtons items size equals: 1
+	self assert: windowPathUI path presenters size equals: 1
 ]
