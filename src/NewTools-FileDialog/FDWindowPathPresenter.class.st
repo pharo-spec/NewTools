@@ -23,7 +23,6 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'textInput',
-		'currentDirectory',
 		'presenterUI',
 		'editButton',
 		'path'
@@ -63,12 +62,12 @@ FDWindowPathPresenter class >> otherlayout [
 
 { #category : #accessing }
 FDWindowPathPresenter >> currentDirectory [
-	^ currentDirectory
+	^ self owner currentDirectory
 ]
 
 { #category : #api }
 FDWindowPathPresenter >> currentDirectory: aFileReference [
-	currentDirectory := aFileReference asAbsolute.
+	self owner currentDirectory: aFileReference asAbsolute.
 	textInput text: aFileReference fullName.
 	path file: aFileReference.
 	self needRebuild: false.
@@ -119,6 +118,12 @@ FDWindowPathPresenter >> presenterUI: anObject [
 
 { #category : #initialization }
 FDWindowPathPresenter >> select: fileReference [
-	self currentDirectory: fileReference asFileReference.
-	presenterUI openOn: currentDirectory
+	self currentDirectory: fileReference.
+	self flag: #todo. "just refresh"
+	presenterUI openOn: self currentDirectory
+]
+
+{ #category : #api }
+FDWindowPathPresenter >> updatePathInputWith: aFileReference [
+	textInput text: aFileReference fullName
 ]

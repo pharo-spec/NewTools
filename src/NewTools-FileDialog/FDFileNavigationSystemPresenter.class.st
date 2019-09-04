@@ -202,6 +202,11 @@ FDFileNavigationSystemPresenter >> currentDirectory [
 	^ currentDirectory
 ]
 
+{ #category : #accessing }
+FDFileNavigationSystemPresenter >> currentDirectory: anObject [
+	currentDirectory := anObject
+]
+
 { #category : #'initialize-actions' }
 FDFileNavigationSystemPresenter >> currentPathTextInputAction [
 	currentPathTextInputPresenter entityText 
