@@ -56,7 +56,6 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'currentPathTextInputPresenter',
-		'nameLabel',
 		'nameText',
 		'filtersDropList',
 		'readPointerHistoryParcour',
@@ -94,7 +93,7 @@ FDFileNavigationSystemPresenter class >> defaultColumns [
 
 { #category : #defaults }
 FDFileNavigationSystemPresenter class >> defaultDirectory [
-	^ FileLocator imageDirectory asFileReference
+	^ FileLocator imageDirectory
 ]
 
 { #category : #'class initialization' }
@@ -112,11 +111,9 @@ FDFileNavigationSystemPresenter class >> defaultSpec [
 	^ SpBoxLayout newVertical
 		add:
 			(SpBoxLayout newHorizontal
-				add: #previousButton
-					withConstraints: [ :contraint | contraint width: 30 ];
-				add: #nextButton
-					withConstraints: [ :contraint | contraint width: 30 ];
-				add: #currentPathTextInputPresenter ;
+				add: #previousButton withConstraints: [ :contraint | contraint width: 30 ];
+				add: #nextButton withConstraints: [ :contraint | contraint width: 30 ];
+				add: #currentPathTextInputPresenter;
 				yourself)
 			withConstraints: [ :contraint | contraint height: self toolbarHeight ];
 		add:
@@ -126,11 +123,8 @@ FDFileNavigationSystemPresenter class >> defaultSpec [
 				yourself);
 		add:
 			(SpBoxLayout newHorizontal
-				add: #nameLabel
-					withConstraints: [ :contraint | contraint width: 35 ];
 				add: #nameText;
-				add: #filtersDropList
-					withConstraints: [ :contraint | contraint width: 140 ];
+				add: #filtersDropList withConstraints: [ :contraint | contraint width: 140 ];
 				yourself)
 			withConstraints: [ :contraint | contraint height: self toolbarHeight ];
 		yourself
@@ -333,21 +327,21 @@ FDFileNavigationSystemPresenter >> initializePresenters [
 	notebookPreviewer := self instantiate: FDNoteBookPreviewerPresenter.
 	fileReferenceTable := self newTable.
 	currentPathTextInputPresenter := self instantiate: FDWindowPathPresenter.
-	currentPathTextInputPresenter presenterUI: self.
-	nameLabel := self newLabel.
 	nameText := self newTextInput.
 	filtersDropList := self newDropList.
 	previousButton := self newButton.
 	nextButton := self newButton.
+
+	currentPathTextInputPresenter presenterUI: self.
 	readPointerHistoryParcour := DoubleLink value: currentDirectory.
 	nextButton icon: (self iconNamed: #glamorousDiveRight).
 	previousButton icon: (self iconNamed: #back).
-	nameLabel label: 'Name:'.
 	nameText autoAccept: true.
 	self initializeCurrentPathTextInput.
 	self initializeFilesTable.
 	self initializeFiltersDropList.
-	self updateWidgetWithFileReference: (self lastVisitedDirectory).
+	self updateWidgetWithFileReference: self lastVisitedDirectory.
+
 	self focusOrder
 		add: previousButton;
 		add: nextButton;
@@ -360,11 +354,6 @@ FDFileNavigationSystemPresenter >> initializePresenters [
 { #category : #accessing }
 FDFileNavigationSystemPresenter >> lastVisitedDirectory [
 	^ self class lastVisitedDirectory
-]
-
-{ #category : #accessing }
-FDFileNavigationSystemPresenter >> nameLabel [
-	^ nameLabel
 ]
 
 { #category : #accessing }
