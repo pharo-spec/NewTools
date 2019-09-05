@@ -29,7 +29,7 @@ FDSaveFileDialog class >> exampleExtension [
 FDSaveFileDialog class >> extension: aExtensionMatcher [
 	"example 
 		you want to save png File 
-			FDSaveFileDialog extension: '*.jpg'
+			FDSaveFileDialog extension: 'jpg'
 	"
 
 	^ self new
@@ -41,6 +41,16 @@ FDSaveFileDialog class >> extension: aExtensionMatcher [
 { #category : #'class initialization' }
 FDSaveFileDialog class >> initialize [ 
 	Matcher := '*'
+]
+
+{ #category : #initialization }
+FDSaveFileDialog >> connectPresenters [
+	| ec |
+	super connectPresenters.
+	(ec := EntryCompletion new)
+		dataSourceBlock: [ :text | fileNavigationSystem currentDirectory children collect: #basename ];
+		filterBlock: [ :opt :text |opt beginsWith: text ].
+	fileNavigationSystem nameText entryCompletion: ec
 ]
 
 { #category : #'api-customization' }
@@ -59,16 +69,6 @@ FDSaveFileDialog >> initialize [
 	extensionMather := Matcher
 ]
 
-{ #category : #initialization }
-FDSaveFileDialog >> initializePresenter [
-	| ec |
-	super initializePresenter.
-	(ec := EntryCompletion new)
-		dataSourceBlock: [ :text | fileNavigationSystem currentDirectory children collect: #basename ];
-		filterBlock: [ :opt :text |opt beginsWith: text ].
-	fileNavigationSystem nameText entryCompletion: ec
-]
-
 { #category : #accessing }
 FDSaveFileDialog >> selectedEntry [
 	| entry proceed |
@@ -76,7 +76,7 @@ FDSaveFileDialog >> selectedEntry [
 	(fileNavigationSystem nameText text includes: extensionMather)
 		ifFalse: [ entry := entry
 				, ((extensionMather copyReplaceAll: '*' with: '') ) ].
-	proceed := entry exists not.
+	proceed := false.
 	entry exists
 		ifTrue: [ proceed := UIManager default
 				proceed:

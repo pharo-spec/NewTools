@@ -12,7 +12,7 @@ my subclasses have to define :
 Class {
 	#name : #FDAbstractPreviewer,
 	#superclass : #Object,
-	#category : #'NewTools-FileDialog-previewerStrategie'
+	#category : #'NewTools-FileDialog-Previewers'
 }
 
 { #category : #testing }

@@ -4,7 +4,7 @@ I'm a previewer use to display the content of a file
 Class {
 	#name : #FDContentPreviewer,
 	#superclass : #FDAbstractPreviewer,
-	#category : #'NewTools-FileDialog-previewerStrategie'
+	#category : #'NewTools-FileDialog-Previewers'
 }
 
 { #category : #testing }

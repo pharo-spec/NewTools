@@ -4,7 +4,7 @@ I'm selecting only directory
 Class {
 	#name : #FDDirectoryFilter,
 	#superclass : #FDAbstractSimpleFilter,
-	#category : #'NewTools-FileDialog-filterStrategie'
+	#category : #'NewTools-FileDialog-Filtering'
 }
 
 { #category : #accessing }

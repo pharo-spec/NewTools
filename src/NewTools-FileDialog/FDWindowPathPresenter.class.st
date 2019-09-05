@@ -23,11 +23,9 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'textInput',
-		'edditButton',
-		'currentDirectory',
-		'pathButtons',
 		'presenterUI',
-		'isTextInput'
+		'editButton',
+		'path'
 	],
 	#category : #'NewTools-FileDialog-UI'
 }
@@ -35,8 +33,11 @@ Class {
 { #category : #specs }
 FDWindowPathPresenter class >> defaultSpec [
 	^ SpBoxLayout newHorizontal
-		add: #pathButtons;
-		add: #edditButton withConstraints: [:contraint |contraint width: 30];
+		add: #path;
+		add: #editButton
+			expand: false
+			fill: false
+			padding: 0;
 		yourself
 ]
 
@@ -51,69 +52,58 @@ FDWindowPathPresenter class >> example [
 { #category : #specs }
 FDWindowPathPresenter class >> otherlayout [
 	^ SpBoxLayout newHorizontal
-		add: #textInput withConstraints: [:contraint | contraint spec: #fDLayoutFileDialog]; 
-		add: #edditButton withConstraints: [:contraint |contraint width: 30 ];
-		yourself
-]
-
-{ #category : #factory }
-FDWindowPathPresenter >> creatButtonWith: aFileReference [
-	^ SpButtonPresenter new
-		label: aFileReference basename;
-		action: [ currentDirectory := aFileReference.
-			textInput entityText text: currentDirectory fullName.
-			presenterUI openOn: currentDirectory ];
+		add: #textInput withConstraints: [ :contraint | contraint spec: #fDLayoutFileDialog ];
+		add: #editButton
+			expand: false
+			fill: false
+			padding: 0;
 		yourself
 ]
 
 { #category : #accessing }
 FDWindowPathPresenter >> currentDirectory [
-	^ currentDirectory
+	^ self owner ifNotNil: #currentDirectory
 ]
 
 { #category : #api }
 FDWindowPathPresenter >> currentDirectory: aFileReference [
-	currentDirectory := aFileReference.
-	self updatePathInputWith: aFileReference.
-	pathButtons items: #() asOrderedCollection.
-	currentDirectory fullPath withParents
-		do: [ :eachAbsolutePath | pathButtons add: (self creatButtonWith: eachAbsolutePath) ].
+	self owner ifNotNil: [ :fileNavigation | fileNavigation currentDirectory: aFileReference asAbsolute ].
+	textInput text: aFileReference fullName.
+	path file: aFileReference.
 	self needRebuild: false.
 	self buildWithSpec
 ]
 
 { #category : #accessing }
 FDWindowPathPresenter >> entityText [
-	^ textInput entityText
+	^ textInput
 ]
 
 { #category : #initialization }
-FDWindowPathPresenter >> initializeWidgets [
+FDWindowPathPresenter >> initializePresenters [
+	| isTextInput |
+	textInput := self newTextInput.
+	path := self instantiate: FDPathPresenter.
+	editButton := self newButton.
+
 	isTextInput := false.
-	textInput := self instantiate: SpSelectEntity.
-	pathButtons := self newButtonBar.
-	edditButton := self newButton.
-	textInput entityText autoAccept: false.
-	textInput placeholder: 'give/me/a/path'.
-	edditButton
+
+	path action: [ :fileReference | self select: fileReference ].
+
+	textInput
+		autoAccept: false;
+		placeholder: 'path/to/file'.
+
+	editButton
 		icon: (self iconNamed: #edit);
 		action: [ self needRebuild: false.
-			self
-				buildWithSpecLayout:
-					(isTextInput
-						ifTrue: [ self class defaultSpec ]
-						ifFalse: [ self class otherlayout ]).
+			self buildWithSpecLayout: (isTextInput ifTrue: [ self class defaultSpec ] ifFalse: [ self class otherlayout ]).
 			isTextInput := isTextInput not ]
 ]
 
 { #category : #accessing }
-FDWindowPathPresenter >> isTextInput [
-	^ isTextInput
-]
-
-{ #category : #accessing }
-FDWindowPathPresenter >> pathButtons [
-	^ pathButtons
+FDWindowPathPresenter >> path [
+	^ path
 ]
 
 { #category : #accessing }
@@ -126,8 +116,9 @@ FDWindowPathPresenter >> presenterUI: anObject [
 	presenterUI := anObject
 ]
 
-{ #category : #api }
-FDWindowPathPresenter >> updatePathInputWith: aFileReference [
-	textInput possibleEntities: (aFileReference children collect: #fullName).
-	textInput entityText text: aFileReference fullName
+{ #category : #initialization }
+FDWindowPathPresenter >> select: fileReference [
+	self currentDirectory: fileReference.
+	self flag: #todo. "just refresh"
+	presenterUI openOn: self currentDirectory
 ]

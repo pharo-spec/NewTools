@@ -4,7 +4,7 @@ I'm selecting only jpg file
 Class {
 	#name : #FDDotJPGFilter,
 	#superclass : #FDAbstractCompositeFilter,
-	#category : #'NewTools-FileDialog-filterStrategie'
+	#category : #'NewTools-FileDialog-Filtering'
 }
 
 { #category : #accessing }

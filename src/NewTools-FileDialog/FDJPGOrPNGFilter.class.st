@@ -4,7 +4,7 @@ I'm selecting only jpg file or PNG file
 Class {
 	#name : #FDJPGOrPNGFilter,
 	#superclass : #FDAbstractCompositeFilter,
-	#category : #'NewTools-FileDialog-filterStrategie'
+	#category : #'NewTools-FileDialog-Filtering'
 }
 
 { #category : #initialization }

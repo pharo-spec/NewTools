@@ -4,7 +4,7 @@ I'm selecting file not hiddenfile
 Class {
 	#name : #FDHidenFilter,
 	#superclass : #FDAbstractSimpleFilter,
-	#category : #'NewTools-FileDialog-filterStrategie'
+	#category : #'NewTools-FileDialog-Filtering'
 }
 
 { #category : #accessing }

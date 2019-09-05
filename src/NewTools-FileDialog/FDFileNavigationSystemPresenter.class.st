@@ -56,13 +56,11 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'currentPathTextInputPresenter',
-		'nameLabel',
 		'nameText',
 		'filtersDropList',
 		'readPointerHistoryParcour',
 		'currentDirectory',
 		'hiddenFilter',
-		'columns',
 		'previewer',
 		'nextButton',
 		'previousButton',
@@ -70,7 +68,6 @@ Class {
 		'fileReferenceTable'
 	],
 	#classVars : [
-		'Columns',
 		'FilterSet',
 		'LastVisitedDirectory',
 		'Previewer'
@@ -83,7 +80,7 @@ FDFileNavigationSystemPresenter class >> buildCommandsGroupWith: presenter forRo
 	rootCommandGroup
 		register:
 			((CmCommandGroup named: 'interact with file') asSpecGroup
-				register: (FDCreatDirectoryCommand forSpec context: presenter);
+				register: (FDCreateDirectoryCommand forSpec context: presenter);
 				register: (FDToggleHiddenFilesCommand forSpec context: presenter);
 				register: (FDInspectCommand forSpec context: presenter);
 				yourself)
@@ -91,16 +88,12 @@ FDFileNavigationSystemPresenter class >> buildCommandsGroupWith: presenter forRo
 
 { #category : #defaults }
 FDFileNavigationSystemPresenter class >> defaultColumns [
-	^ {
-	FDIconFileReferenceTableColumn  .
-	FDbasenameFileReferenceColumn .
-	FDSizeFileReferenceColumn .
-	FDAccessRightFileReferenceColumn }
+	^ {FDIconColumn . FDNameColumn . FDSizeColumn . FDRightsColumn} collect: #column
 ]
 
 { #category : #defaults }
 FDFileNavigationSystemPresenter class >> defaultDirectory [
-	^ FileLocator imageDirectory asFileReference
+	^ FileLocator imageDirectory
 ]
 
 { #category : #'class initialization' }
@@ -118,11 +111,9 @@ FDFileNavigationSystemPresenter class >> defaultSpec [
 	^ SpBoxLayout newVertical
 		add:
 			(SpBoxLayout newHorizontal
-				add: #previousButton
-					withConstraints: [ :contraint | contraint width: 30 ];
-				add: #nextButton
-					withConstraints: [ :contraint | contraint width: 30 ];
-				add: #currentPathTextInputPresenter ;
+				add: #previousButton withConstraints: [ :contraint | contraint width: 30 ];
+				add: #nextButton withConstraints: [ :contraint | contraint width: 30 ];
+				add: #currentPathTextInputPresenter;
 				yourself)
 			withConstraints: [ :contraint | contraint height: self toolbarHeight ];
 		add:
@@ -132,11 +123,8 @@ FDFileNavigationSystemPresenter class >> defaultSpec [
 				yourself);
 		add:
 			(SpBoxLayout newHorizontal
-				add: #nameLabel
-					withConstraints: [ :contraint | contraint width: 35 ];
 				add: #nameText;
-				add: #filtersDropList
-					withConstraints: [ :contraint | contraint width: 140 ];
+				add: #filtersDropList withConstraints: [ :contraint | contraint width: 140 ];
 				yourself)
 			withConstraints: [ :contraint | contraint height: self toolbarHeight ];
 		yourself
@@ -157,8 +145,7 @@ FDFileNavigationSystemPresenter class >> example [
 { #category : #'class initialization' }
 FDFileNavigationSystemPresenter class >> initialize [
 	FilterSet := self defaultFilterSet.
-	Previewer := self defaultPreviewer.
-	Columns := self defaultColumns collect: #column
+	Previewer := self defaultPreviewer
 ]
 
 { #category : #defaults }
@@ -168,21 +155,25 @@ FDFileNavigationSystemPresenter class >> lastVisitedDirectory [
 		ifFalse: [ LastVisitedDirectory ]
 ]
 
-{ #category : #accessing }
-FDFileNavigationSystemPresenter >> columns [
-	^ columns
-]
-
 { #category : #'api-customization' }
 FDFileNavigationSystemPresenter >> columns: aCollectionOfColumns [
 	| tmpColumn |
 	tmpColumn := aCollectionOfColumns asSet.
 	tmpColumn
 		addAll:
-			({FDIconFileReferenceTableColumn.
-			FDbasenameFileReferenceColumn} ).
+			({FDIconColumn.
+			FDNameColumn} ).
 	fileReferenceTable
-		columns: ((tmpColumn asOrderedCollection sort: #sortValue ascending) collect: #column)
+		columns: ((tmpColumn asOrderedCollection sort: #priority ascending) collect: #column)
+]
+
+{ #category : #initialization }
+FDFileNavigationSystemPresenter >> connectPresenters [
+	self filesListAction.
+	self filtersDropListAction.
+	self currentPathTextInputAction.
+	self previousBeforeButtonAction.
+	self nextButtonAction
 ]
 
 { #category : #utils }
@@ -212,6 +203,11 @@ FDFileNavigationSystemPresenter >> createDirectory: initialName [
 { #category : #accessing }
 FDFileNavigationSystemPresenter >> currentDirectory [ 
 	^ currentDirectory
+]
+
+{ #category : #accessing }
+FDFileNavigationSystemPresenter >> currentDirectory: anObject [
+	currentDirectory := anObject
 ]
 
 { #category : #'initialize-actions' }
@@ -299,17 +295,13 @@ FDFileNavigationSystemPresenter >> initializeCurrentPathTextInput [
 
 { #category : #'initialize-widgets' }
 FDFileNavigationSystemPresenter >> initializeFilesTable [
+	fileReferenceTable contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'interact with file' ].
 	fileReferenceTable
-		contextMenu: [ (self rootCommandsGroup / 'interact with file') beRoot
-				asMenuPresenter ].
-	fileReferenceTable
-		columns: columns;
+		beResizable;
+		columns: FDAbstractColumn columns;
 		sortingBlock: [ :a :b | 
-			(a isDirectory & b isDirectory not
-				or: [ a isDirectory & b isDirectory
-						& (a basename asLowercase < b basename asLowercase) ])
-				or: [ a isFile & b isFile
-						& (a basename asLowercase < b basename asLowercase) ] ]
+			(a isDirectory & b isDirectory not or: [ a isDirectory & b isDirectory & (a basename asLowercase < b basename asLowercase) ])
+				or: [ a isFile & b isFile & (a basename asLowercase < b basename asLowercase) ] ]
 ]
 
 { #category : #'initialize-widgets' }
@@ -327,39 +319,29 @@ FDFileNavigationSystemPresenter >> initializeFiltersDropList [
 ]
 
 { #category : #initialization }
-FDFileNavigationSystemPresenter >> initializePresenter [
-	self filesListAction.
-	self filtersDropListAction.
-	self currentPathTextInputAction.
-	self previousBeforeButtonAction.
-	self nextButtonAction
-]
-
-{ #category : #initialization }
-FDFileNavigationSystemPresenter >> initializeWidgets [
+FDFileNavigationSystemPresenter >> initializePresenters [
 	currentDirectory := self defaultDirectory.
-	columns := Columns.
 	hiddenFilter := FDHidenFilter new.
 	previewer := Previewer.
 
 	notebookPreviewer := self instantiate: FDNoteBookPreviewerPresenter.
 	fileReferenceTable := self newTable.
 	currentPathTextInputPresenter := self instantiate: FDWindowPathPresenter.
-	currentPathTextInputPresenter presenterUI: self.
-	nameLabel := self newLabel.
 	nameText := self newTextInput.
 	filtersDropList := self newDropList.
 	previousButton := self newButton.
 	nextButton := self newButton.
+
+	currentPathTextInputPresenter presenterUI: self.
 	readPointerHistoryParcour := DoubleLink value: currentDirectory.
 	nextButton icon: (self iconNamed: #glamorousDiveRight).
 	previousButton icon: (self iconNamed: #back).
-	nameLabel label: 'Name:'.
 	nameText autoAccept: true.
 	self initializeCurrentPathTextInput.
 	self initializeFilesTable.
 	self initializeFiltersDropList.
-	self updateWidgetWithFileReference: (self lastVisitedDirectory).
+	self updateWidgetWithFileReference: self lastVisitedDirectory.
+
 	self focusOrder
 		add: previousButton;
 		add: nextButton;
@@ -372,11 +354,6 @@ FDFileNavigationSystemPresenter >> initializeWidgets [
 { #category : #accessing }
 FDFileNavigationSystemPresenter >> lastVisitedDirectory [
 	^ self class lastVisitedDirectory
-]
-
-{ #category : #accessing }
-FDFileNavigationSystemPresenter >> nameLabel [
-	^ nameLabel
 ]
 
 { #category : #accessing }
@@ -417,8 +394,6 @@ FDFileNavigationSystemPresenter >> openFolder: aFileReference [
 FDFileNavigationSystemPresenter >> openOn: anAbsolutePath [
 	currentDirectory := anAbsolutePath asFileReference.
 	self updateTableContent.
-	self currentPathTextInputPresenter
-		updatePathInputWith: currentDirectory.
 	self updateHistoryList
 ]
 

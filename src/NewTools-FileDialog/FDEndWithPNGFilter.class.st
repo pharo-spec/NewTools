@@ -4,7 +4,7 @@ I'm selecting file finishing with .png
 Class {
 	#name : #FDEndWithPNGFilter,
 	#superclass : #FDAbstractSimpleFilter,
-	#category : #'NewTools-FileDialog-filterStrategie'
+	#category : #'NewTools-FileDialog-Filtering'
 }
 
 { #category : #accessing }
