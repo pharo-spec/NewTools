@@ -36,7 +36,9 @@ StDebuggerInspector class >> title [
 { #category : #initialization }
 StDebuggerInspector >> initializeContextInspector [
 
-	contextInspector := StDebuggerRawInspection on: self model inspectedObject.
+	contextInspector := self 
+		instantiate: StDebuggerRawInspection 
+		on: self model inspectedObject.
 	contextInspector table selectPath: #(1).
 	contextInspector table
 		whenSelectionChangedDo: [ inspector model
@@ -50,8 +52,9 @@ StDebuggerInspector >> initializeContextInspector [
 { #category : #initialization }
 StDebuggerInspector >> initializeInspector [
 
-	inspector := StInspector on: (StInspectorModel on: contextInspector table selectedItem hostObject).
-
+	inspector := self 
+		instantiate: StInspector 
+		on: (StInspectorModel on: contextInspector table selectedItem hostObject)
 ]
 
 { #category : #initialization }
@@ -64,6 +67,7 @@ StDebuggerInspector >> initializeWidgets [
 
 { #category : #accessing }
 StDebuggerInspector >> inspectedObject [
+
 	^ self model inspectedObject
 ]
 
@@ -76,6 +80,7 @@ StDebuggerInspector >> label: aString [
 { #category : #updating }
 StDebuggerInspector >> updateWith: inspectedObject [
 	| oldPath oldItem |
+
 	oldPath := contextInspector table selection selectedPath.
 	oldItem := contextInspector table selectedItem hostObject.
 	self model inspectedObject: inspectedObject.

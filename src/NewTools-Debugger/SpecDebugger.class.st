@@ -6,7 +6,7 @@ All the debugging logic is in DebugSession and the corresponding debugging actio
 "
 Class {
 	#name : #SpecDebugger,
-	#superclass : #SpPresenterWithModel,
+	#superclass : #StPresenter,
 	#instVars : [
 		'sessionHolder',
 		'labelHolder',
@@ -105,13 +105,6 @@ SpecDebugger class >> logDebuggerStackToFile [
 { #category : #settings }
 SpecDebugger class >> logDebuggerStackToFile: aBoolean [
 	 LogDebuggerStackToFile := aBoolean
-]
-
-{ #category : #'instance creation' }
-SpecDebugger class >> on: aDebugSession [
-	^ self basicNew
-		session: aDebugSession;
-		initialize
 ]
 
 { #category : #opening }
@@ -230,6 +223,7 @@ SpecDebugger >> initialExtent [
 
 { #category : #initialization }
 SpecDebugger >> initialize [
+
 	super initialize.
 	self whenWindowChanged: [ :w | w whenClosedDo: [ self clear ] ].
 	self sessionHolder
@@ -245,15 +239,15 @@ SpecDebugger >> initialize [
 { #category : #initialization }
 SpecDebugger >> initializeInspectors [
 
-	receiverInspector := (StDebuggerInspector
-		newApplication: self application
-		model: (StInspectorModel on: nil))
-		label: 'Receiver'.
+	receiverInspector := self 
+		instantiate: StDebuggerInspector 
+		on: (StInspectorModel on: nil). 
+	receiverInspector label: 'Receiver'.
 
-	contextInspector := (StDebuggerInspector
-		newApplication: self application
-		model: (StInspectorModel on: [ ] asContext))
-		label: 'Context'
+	contextInspector := self 
+		instantiate: StDebuggerInspector 
+		on: (StInspectorModel on: [ ] asContext).
+	contextInspector label: 'Context'
 ]
 
 { #category : #stack }
@@ -283,16 +277,16 @@ SpecDebugger >> initializeStack [
 
 { #category : #initialization }
 SpecDebugger >> initializeWidgets [
+
 	self initializeStack.
 	toolbar := self newDynamicToolbar.
 	code := self newCode.
 	self initializeInspectors.
-	self code
-		acceptBlock: [ :text :notifyer | 
-			self
-				recompileMethodTo: text string
-				inContext: self stackTable selection selectedItem
-				notifying: notifyer ]
+	self code acceptBlock: [ :text :notifyer | 
+		self
+			recompileMethodTo: text string
+			inContext: self stackTable selection selectedItem
+			notifying: notifyer ]
 	"self code selection whenChangedSend: #selectionChanged to: self"
 ]
 
@@ -420,6 +414,12 @@ SpecDebugger >> sessionHolder [
 	^ sessionHolder ifNil: [ sessionHolder := nil asValueHolder ]
 ]
 
+{ #category : #initialization }
+SpecDebugger >> setModelBeforeInitialization: aSession [
+
+	self session: aSession
+]
+
 { #category : #actions }
 SpecDebugger >> stackMenuActions [
 	| group |
@@ -446,10 +446,11 @@ SpecDebugger >> toolbar [
 { #category : #actions }
 SpecDebugger >> toolbarActions [
 	| group |
-	group := (CmCommandGroup named: 'Toolbar')
-		decorateWith: SpCommandGroup.
+	
+	group := (CmCommandGroup named: 'Toolbar') asSpecGroup.
 	(DebugCommand toolbarCommandsForDebugger: self)
 		do: [ :cmd | group register: cmd ].
+	
 	^ group
 ]
 

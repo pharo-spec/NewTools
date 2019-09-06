@@ -30,5 +30,5 @@ WhereIsDebugCommand >> execute [
 	self flag: 'Should the action have this responsibility on the debugger code pane?'.
 	self flag: 'Bound to the bytecode execution model.'.
 	self debugger code
-		setSelection: (self session pcRangeForContext: self currentContext)
+		selection: (self session pcRangeForContext: self currentContext)
 ]

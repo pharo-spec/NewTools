@@ -79,11 +79,12 @@ SpecPreDebugPresenter >> setTitle: aString [
 { #category : #actions }
 SpecPreDebugPresenter >> toolbarActions [
 	| group |
-	group := (CmCommandGroup named: 'Toolbar')
-		decorateWith: SpCommandGroup.
+	
+	group := (CmCommandGroup named: 'Toolbar') asSpecGroup.
 	(DebugCommand preDebugCommandsForDebugger: self debugger)
 		do: [ :cmd | 
 			cmd decoratedCommand context: self.
 			group register: cmd ].
+	
 	^ group
 ]
