@@ -5,13 +5,6 @@ Class {
 }
 
 { #category : #default }
-RestartDebugCommand class >> defaultCommandName [
-	<toolbarDebugCommand: 900>
-
-	^ 'Restart'
-]
-
-{ #category : #default }
 RestartDebugCommand class >> defaultDescription [
 	^ 'Go back the start of the current execution context, resetting all local variables and take debugger control.'
 ]
@@ -19,6 +12,13 @@ RestartDebugCommand class >> defaultDescription [
 { #category : #initialization }
 RestartDebugCommand class >> defaultIconName [
 	^ #glamorousRestart
+]
+
+{ #category : #default }
+RestartDebugCommand class >> defaultName [
+	<toolbarDebugCommand: 900>
+
+	^ 'Restart'
 ]
 
 { #category : #initialization }

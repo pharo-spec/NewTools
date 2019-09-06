@@ -5,11 +5,6 @@ Class {
 }
 
 { #category : #default }
-SindarinStepOverCommand class >> defaultCommandName [
-	^ 'Step Over'
-]
-
-{ #category : #default }
 SindarinStepOverCommand class >> defaultDescription [
 	^ 'Step over'
 ]

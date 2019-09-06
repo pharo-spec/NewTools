@@ -261,15 +261,15 @@ SpecDebugger >> initializeStack [
 	stackTable := self newTable.
 	stackTable
 		addColumn:
-			(StringTableColumn
+			(SpStringTableColumn
 				title: 'Class'
 				evaluated: [ :item | item receiver class ]);
 		addColumn:
-			(StringTableColumn
+			(SpStringTableColumn
 				title: 'Method'
 				evaluated: [ :item | item method selector ]);
 		addColumn:
-			(StringTableColumn title: 'Context' evaluated: [ :item | item sender ]).
+			(SpStringTableColumn title: 'Context' evaluated: [ :item | item sender ]).
 	stackTable
 		whenSelectionChangedDo: [ :selection | 
 			| context |
@@ -475,7 +475,7 @@ SpecDebugger >> updateCodeFromContext: aContext [
 				doItReceiver: aContext home receiver;
 				doItContext: aContext;
 				behavior: aContext home receiver class;
-				setSelection: selectionInterval ]
+				selection: selectionInterval ]
 ]
 
 { #category : #'updating actions' }

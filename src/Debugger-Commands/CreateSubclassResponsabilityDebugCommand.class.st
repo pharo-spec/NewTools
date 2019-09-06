@@ -5,12 +5,6 @@ Class {
 }
 
 { #category : #accessing }
-CreateSubclassResponsabilityDebugCommand class >> defaultCommandName [
-	<toolbarDebugCommand: 10>
-	^ 'Create'
-]
-
-{ #category : #accessing }
 CreateSubclassResponsabilityDebugCommand class >> defaultDescription [
 	^ 'Create a method in a class having the responsability to implement it.'
 ]
@@ -18,6 +12,12 @@ CreateSubclassResponsabilityDebugCommand class >> defaultDescription [
 { #category : #initialization }
 CreateSubclassResponsabilityDebugCommand class >> defaultIconName [
 	^ #changeAdd
+]
+
+{ #category : #accessing }
+CreateSubclassResponsabilityDebugCommand class >> defaultName [
+	<toolbarDebugCommand: 10>
+	^ 'Create'
 ]
 
 { #category : #initialization }

@@ -5,12 +5,6 @@ Class {
 }
 
 { #category : #accessing }
-PeelToFirstDebugCommand class >> defaultCommandName [
-	<StackContextMenuDebugCommand>
-	^ 'Peel to first like this'
-]
-
-{ #category : #accessing }
 PeelToFirstDebugCommand class >> defaultDescription [
 	^ 'Peels the stack back to the second occurance of the currently selected message.'
 ]
@@ -18,6 +12,12 @@ PeelToFirstDebugCommand class >> defaultDescription [
 { #category : #initialization }
 PeelToFirstDebugCommand class >> defaultIconName [
 	^ #down
+]
+
+{ #category : #accessing }
+PeelToFirstDebugCommand class >> defaultName [
+	<StackContextMenuDebugCommand>
+	^ 'Peel to first like this'
 ]
 
 { #category : #initialization }

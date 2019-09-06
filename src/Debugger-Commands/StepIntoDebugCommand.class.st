@@ -5,13 +5,6 @@ Class {
 }
 
 { #category : #default }
-StepIntoDebugCommand class >> defaultCommandName [
-	<toolbarDebugCommand: 20>
-	
-	^ 'Into'
-]
-
-{ #category : #default }
 StepIntoDebugCommand class >> defaultDescription [
 	^ 'Step in the highlighted message, i.e. follow the sent message, taking debugger control in the method invoked.'
 ]
@@ -19,6 +12,13 @@ StepIntoDebugCommand class >> defaultDescription [
 { #category : #initialization }
 StepIntoDebugCommand class >> defaultIconName [
 	^ #glamorousInto
+]
+
+{ #category : #default }
+StepIntoDebugCommand class >> defaultName [
+	<toolbarDebugCommand: 20>
+	
+	^ 'Into'
 ]
 
 { #category : #initialization }

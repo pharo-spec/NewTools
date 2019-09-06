@@ -5,12 +5,6 @@ Class {
 }
 
 { #category : #initialization }
-CopyStackToClipboardDebugCommand class >> defaultCommandName [
-	<StackContextMenuDebugCommand>
-	^ 'Copy Stack to Clipboard'
-]
-
-{ #category : #initialization }
 CopyStackToClipboardDebugCommand class >> defaultDescription [
 	^ 'Copy a short debugging stack to the clipboard.'
 ]
@@ -18,6 +12,12 @@ CopyStackToClipboardDebugCommand class >> defaultDescription [
 { #category : #initialization }
 CopyStackToClipboardDebugCommand class >> defaultIconName [
 	^ #smallCopy
+]
+
+{ #category : #initialization }
+CopyStackToClipboardDebugCommand class >> defaultName [
+	<StackContextMenuDebugCommand>
+	^ 'Copy Stack to Clipboard'
 ]
 
 { #category : #initialization }

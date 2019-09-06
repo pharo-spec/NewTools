@@ -5,12 +5,6 @@ Class {
 }
 
 { #category : #default }
-FullStackDebugCommand class >> defaultCommandName [
-	<toolbarDebugCommand: 999>
-	^ 'Full stack'
-]
-
-{ #category : #default }
 FullStackDebugCommand class >> defaultDescription [
 	^ 'Open a full debugger to navigate in the full bugged stack.'
 ]
@@ -18,6 +12,12 @@ FullStackDebugCommand class >> defaultDescription [
 { #category : #initialization }
 FullStackDebugCommand class >> defaultIconName [
 	^ #glamorousMore
+]
+
+{ #category : #default }
+FullStackDebugCommand class >> defaultName [
+	<toolbarDebugCommand: 999>
+	^ 'Full stack'
 ]
 
 { #category : #initialization }

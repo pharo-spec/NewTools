@@ -5,12 +5,6 @@ Class {
 }
 
 { #category : #default }
-OpenFullDebuggerPreDebugCommand class >> defaultCommandName [
-	<PreDebugCommand>
-	^ 'Debug'
-]
-
-{ #category : #default }
 OpenFullDebuggerPreDebugCommand class >> defaultDescription [
 	^ 'Open a full debugger to navigate in the full bugged stack.'
 ]
@@ -18,6 +12,12 @@ OpenFullDebuggerPreDebugCommand class >> defaultDescription [
 { #category : #initialization }
 OpenFullDebuggerPreDebugCommand class >> defaultIconName [
 	^  #glamorousBug
+]
+
+{ #category : #default }
+OpenFullDebuggerPreDebugCommand class >> defaultName [
+	<PreDebugCommand>
+	^ 'Debug'
 ]
 
 { #category : #initialization }

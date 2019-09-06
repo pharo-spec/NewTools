@@ -24,9 +24,8 @@ StDebuggerInspector class >> defaultSpec [
 
 { #category : #'instance creation' }
 StDebuggerInspector class >> openOn: anObject [
-	^ (self
-		newApplication: SpecNullApplication new
-		model: (StInspectorModel on: anObject)) openWithSpec
+
+	^ (self on: (StInspectorModel on: anObject)) openWithSpec
 ]
 
 { #category : #specs }
@@ -36,11 +35,8 @@ StDebuggerInspector class >> title [
 
 { #category : #initialization }
 StDebuggerInspector >> initializeContextInspector [
-	contextInspector := StDebuggerRawInspection basicNew.
-	contextInspector application: SpecNullApplication new.
-	contextInspector
-		setModelBeforeInitialization: self model inspectedObject.
-	contextInspector initialize.
+
+	contextInspector := StDebuggerRawInspection on: self model inspectedObject.
 	contextInspector table selectPath: #(1).
 	contextInspector table
 		whenSelectionChangedDo: [ inspector model
@@ -53,11 +49,9 @@ StDebuggerInspector >> initializeContextInspector [
 
 { #category : #initialization }
 StDebuggerInspector >> initializeInspector [
-	inspector := StInspector basicNew.
-	inspector application: SpecNullApplication new.
-	inspector
-		setModelBeforeInitialization: (StInspectorModel on: contextInspector table selectedItem hostObject).
-	inspector initialize
+
+	inspector := StInspector on: (StInspectorModel on: contextInspector table selectedItem hostObject).
+
 ]
 
 { #category : #initialization }

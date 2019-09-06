@@ -8,12 +8,6 @@ Class {
 }
 
 { #category : #initialization }
-ProceedPreDebugCommand class >> defaultCommandName [
-	<PreDebugCommand>
-	^ ProceedDebugCommand defaultCommandName
-]
-
-{ #category : #initialization }
 ProceedPreDebugCommand class >> defaultDescription [
 	^ ProceedDebugCommand defaultDescription 
 ]
@@ -21,6 +15,12 @@ ProceedPreDebugCommand class >> defaultDescription [
 { #category : #initialization }
 ProceedPreDebugCommand class >> defaultIconName [
 	^ ProceedDebugCommand defaultIconName
+]
+
+{ #category : #initialization }
+ProceedPreDebugCommand class >> defaultName [
+	<PreDebugCommand>
+	^ ProceedDebugCommand defaultName
 ]
 
 { #category : #initialization }

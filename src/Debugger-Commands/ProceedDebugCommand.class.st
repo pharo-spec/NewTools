@@ -5,12 +5,6 @@ Class {
 }
 
 { #category : #default }
-ProceedDebugCommand class >> defaultCommandName [
-	<toolbarDebugCommand: 10>
-	^ 'Proceed'
-]
-
-{ #category : #default }
 ProceedDebugCommand class >> defaultDescription [
 	^ 'Relinquish debugger control and proceed execution from the current point of debugger control.'
 ]
@@ -18,6 +12,12 @@ ProceedDebugCommand class >> defaultDescription [
 { #category : #initialization }
 ProceedDebugCommand class >> defaultIconName [
 	^ #glamorousGo
+]
+
+{ #category : #default }
+ProceedDebugCommand class >> defaultName [
+	<toolbarDebugCommand: 10>
+	^ 'Proceed'
 ]
 
 { #category : #initialization }

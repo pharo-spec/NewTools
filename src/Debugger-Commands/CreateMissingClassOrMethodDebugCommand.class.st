@@ -5,12 +5,6 @@ Class {
 }
 
 { #category : #accessing }
-CreateMissingClassOrMethodDebugCommand class >> defaultCommandName [
-	<toolbarDebugCommand: 0>
-	^ 'Create'
-]
-
-{ #category : #accessing }
 CreateMissingClassOrMethodDebugCommand class >> defaultDescription [
     ^ 'Create the missing class or method in the user prompted class, and restart the debugger at the location where it can be edited.'
 ]
@@ -18,6 +12,12 @@ CreateMissingClassOrMethodDebugCommand class >> defaultDescription [
 { #category : #initialization }
 CreateMissingClassOrMethodDebugCommand class >> defaultIconName [
 	^ #changeAdd
+]
+
+{ #category : #accessing }
+CreateMissingClassOrMethodDebugCommand class >> defaultName [
+	<toolbarDebugCommand: 0>
+	^ 'Create'
 ]
 
 { #category : #initialization }
@@ -28,7 +28,8 @@ CreateMissingClassOrMethodDebugCommand class >> defaultShortcut [
 { #category : #testing }
 CreateMissingClassOrMethodDebugCommand >> appliesToDebugger: aDebugger [
 
-	^ aDebugger session isInterruptedContextDoesNotUnderstand 
+	"^ aDebugger session isInterruptedContextDoesNotUnderstand"
+	^ false
 ]
 
 { #category : #private }

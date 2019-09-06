@@ -5,13 +5,6 @@ Class {
 }
 
 { #category : #accessing }
-ReturnValueDebugCommand class >> defaultCommandName [
-	<toolbarDebugCommand: 910>
-	
-	^ 'Return'
-]
-
-{ #category : #accessing }
 ReturnValueDebugCommand class >> defaultDescription [
 	^ 'Return of a given value to the previous context.'
 ]
@@ -25,6 +18,13 @@ ReturnValueDebugCommand class >> defaultIconName [
 ReturnValueDebugCommand class >> defaultLabel [
 
 	^ 'Return entered value'
+]
+
+{ #category : #accessing }
+ReturnValueDebugCommand class >> defaultName [
+	<toolbarDebugCommand: 910>
+	
+	^ 'Return'
 ]
 
 { #category : #initialization }

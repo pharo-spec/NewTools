@@ -5,12 +5,6 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-RunToSelectionDebugCommand class >> defaultCommandName [
-	<toolbarDebugCommand: 50>
-	^ 'Run to'
-]
-
-{ #category : #'as yet unclassified' }
 RunToSelectionDebugCommand class >> defaultDescription [
 	^ 'Execute methods up to the text cursor position and return debugger control.'
 ]
@@ -18,6 +12,12 @@ RunToSelectionDebugCommand class >> defaultDescription [
 { #category : #initialization }
 RunToSelectionDebugCommand class >> defaultIconName [
 	^ #glamorousRightSide
+]
+
+{ #category : #'as yet unclassified' }
+RunToSelectionDebugCommand class >> defaultName [
+	<toolbarDebugCommand: 50>
+	^ 'Run to'
 ]
 
 { #category : #initialization }

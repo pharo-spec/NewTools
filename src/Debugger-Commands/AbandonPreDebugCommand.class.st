@@ -5,12 +5,6 @@ Class {
 }
 
 { #category : #default }
-AbandonPreDebugCommand class >> defaultCommandName [
-	<PreDebugCommand>
-	^ 'Abandon'
-]
-
-{ #category : #default }
 AbandonPreDebugCommand class >> defaultDescription [
 	^ 'Close the debugger and ignore the exception'
 ]
@@ -18,6 +12,12 @@ AbandonPreDebugCommand class >> defaultDescription [
 { #category : #initialization }
 AbandonPreDebugCommand class >> defaultIconName [
 	^  #delete
+]
+
+{ #category : #default }
+AbandonPreDebugCommand class >> defaultName [
+	<PreDebugCommand>
+	^ 'Abandon'
 ]
 
 { #category : #initialization }
