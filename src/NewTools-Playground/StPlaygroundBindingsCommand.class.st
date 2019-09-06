@@ -19,10 +19,9 @@ StPlaygroundBindingsCommand >> execute [
 ]
 
 { #category : #initialization }
-StPlaygroundBindingsCommand >> initialize [ 
-	
+StPlaygroundBindingsCommand >> initialize [
 	super initialize.
-	self 
-		basicName: 'Bindings';
-		basicDescription: 'Edit bindings list.'
+	self
+		name: 'Bindings';
+		description: 'Edit bindings list.'
 ]

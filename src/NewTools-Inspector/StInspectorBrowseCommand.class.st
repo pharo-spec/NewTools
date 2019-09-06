@@ -19,12 +19,11 @@ StInspectorBrowseCommand >> execute [
 ]
 
 { #category : #initialization }
-StInspectorBrowseCommand >> initialize [ 
-	
+StInspectorBrowseCommand >> initialize [
 	super initialize.
-	self 
-		basicName: 'Browse';
-		basicDescription: 'Browse instance class.'
+	self
+		name: 'Browse';
+		description: 'Browse instance class.'
 ]
 
 { #category : #accessing }

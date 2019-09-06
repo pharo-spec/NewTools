@@ -22,10 +22,9 @@ StInspectorHelpCommand >> execute [
 ]
 
 { #category : #initialization }
-StInspectorHelpCommand >> initialize [ 
-	
+StInspectorHelpCommand >> initialize [
 	super initialize.
-	self 
-		basicName: 'Help';
-		basicDescription: 'Open help browser.'
+	self
+		name: 'Help';
+		description: 'Open help browser.'
 ]
