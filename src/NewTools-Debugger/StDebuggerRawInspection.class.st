@@ -17,6 +17,13 @@ StDebuggerRawInspection >> addValuesColumn [
 	
 ]
 
+{ #category : #initialization }
+StDebuggerRawInspection >> initializeWidgets [
+
+	super initializeWidgets.
+	attributeTable hideColumnHeaders
+]
+
 { #category : #accessing }
 StDebuggerRawInspection >> inspectorNodes [
 
