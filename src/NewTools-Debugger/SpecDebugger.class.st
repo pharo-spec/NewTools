@@ -290,6 +290,14 @@ SpecDebugger >> initializeWidgets [
 	"self code selection whenChangedSend: #selectionChanged to: self"
 ]
 
+{ #category : #initialization }
+SpecDebugger >> initializeWindow: aWindowPresenter [
+
+	aWindowPresenter 
+		title: self title;
+		initialExtent: self initialExtent
+]
+
 { #category : #'accessing context' }
 SpecDebugger >> interruptedContext [
 
