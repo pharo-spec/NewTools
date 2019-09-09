@@ -289,11 +289,6 @@ FDFileNavigationSystemPresenter >> hiddenFilter [
 ]
 
 { #category : #'initialize-widgets' }
-FDFileNavigationSystemPresenter >> initializeCurrentPathTextInput [
-	currentPathTextInputPresenter currentDirectory: currentDirectory
-]
-
-{ #category : #'initialize-widgets' }
 FDFileNavigationSystemPresenter >> initializeFilesTable [
 	fileReferenceTable contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'interact with file' ].
 	fileReferenceTable
@@ -320,7 +315,6 @@ FDFileNavigationSystemPresenter >> initializeFiltersDropList [
 
 { #category : #initialization }
 FDFileNavigationSystemPresenter >> initializePresenters [
-	currentDirectory := self defaultDirectory.
 	hiddenFilter := FDHidenFilter new.
 	previewer := Previewer.
 
@@ -337,7 +331,6 @@ FDFileNavigationSystemPresenter >> initializePresenters [
 	nextButton icon: (self iconNamed: #glamorousDiveRight).
 	previousButton icon: (self iconNamed: #back).
 	nameText autoAccept: true.
-	self initializeCurrentPathTextInput.
 	self initializeFilesTable.
 	self initializeFiltersDropList.
 	self updateWidgetWithFileReference: self lastVisitedDirectory.
