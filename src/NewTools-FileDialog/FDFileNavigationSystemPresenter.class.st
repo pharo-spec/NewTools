@@ -327,13 +327,13 @@ FDFileNavigationSystemPresenter >> initializePresenters [
 	nextButton := self newButton.
 
 	currentPathTextInputPresenter presenterUI: self.
-	readPointerHistoryParcour := DoubleLink value: currentDirectory.
 	nextButton icon: (self iconNamed: #glamorousDiveRight).
 	previousButton icon: (self iconNamed: #back).
 	nameText autoAccept: true.
 	self initializeFilesTable.
 	self initializeFiltersDropList.
 	self updateWidgetWithFileReference: self lastVisitedDirectory.
+	readPointerHistoryParcour := DoubleLink value: currentDirectory.
 
 	self focusOrder
 		add: previousButton;
@@ -406,11 +406,6 @@ FDFileNavigationSystemPresenter >> previousBeforeButtonAction [
 { #category : #accessing }
 FDFileNavigationSystemPresenter >> previousButton [
 	^ previousButton
-]
-
-{ #category : #accessing }
-FDFileNavigationSystemPresenter >> readPointerHistoryParcour [
-	^ readPointerHistoryParcour
 ]
 
 { #category : #utilities }
