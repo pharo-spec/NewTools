@@ -279,8 +279,7 @@ FDFileNavigationSystemPresenter >> filtersDropList [
 
 { #category : #'initialize-actions' }
 FDFileNavigationSystemPresenter >> filtersDropListAction [
-	filtersDropList
-		whenSelectionChangedDo: [ self updateWidgetWithFileReference: currentDirectory ]
+	filtersDropList whenSelectionChangedDo: [ self updateTableContent ]
 ]
 
 { #category : #accessing }
@@ -436,7 +435,7 @@ FDFileNavigationSystemPresenter >> updateTableContent [
 
 { #category : #utilities }
 FDFileNavigationSystemPresenter >> updateWidgetWithFileReference: aFileReference [
-	currentDirectory := aFileReference.
+	self currentDirectory: aFileReference.
 	self updateTableContent.
 	currentPathTextInputPresenter currentDirectory: currentDirectory
 ]
