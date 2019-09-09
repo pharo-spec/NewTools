@@ -261,14 +261,6 @@ FDFileDialogPresenter >> connectPresenters [
 						ifFalse: [ fileNavigationSystem openFolder: selectedItem location ] ] ]
 ]
 
-{ #category : #utilities }
-FDFileDialogPresenter >> creatAnFDBookMark: aDirectory [
-	^ FDBookmark
-		name: aDirectory basename
-		location: aDirectory path
-		icon: nil
-]
-
 { #category : #accessing }
 FDFileDialogPresenter >> currentDirectory [
 	^ fileNavigationSystem currentDirectory 
@@ -318,8 +310,9 @@ FDFileDialogPresenter >> initialTitle [
 
 { #category : #initialization }
 FDFileDialogPresenter >> initialize [
-	super initialize.
+	bookmarks := Bookmarks.
 	okAction := OkAction.
+	super initialize
 ]
 
 { #category : #'initialize-widgets' }
@@ -358,8 +351,6 @@ FDFileDialogPresenter >> initializeFilesList [
 
 { #category : #initialization }
 FDFileDialogPresenter >> initializePresenters [
-	bookmarks := Bookmarks.
-	
 	bookmarksTreeTable := self newTreeTable.
 	fileNavigationSystem := self instantiate: FDFileNavigationSystemPresenter.
 

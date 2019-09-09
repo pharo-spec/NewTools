@@ -287,6 +287,13 @@ FDFileNavigationSystemPresenter >> hiddenFilter [
 	^ hiddenFilter
 ]
 
+{ #category : #initialization }
+FDFileNavigationSystemPresenter >> initialize [
+	hiddenFilter := FDHidenFilter new.
+	previewer := Previewer.
+	super initialize
+]
+
 { #category : #'initialize-widgets' }
 FDFileNavigationSystemPresenter >> initializeFilesTable [
 	fileReferenceTable contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'interact with file' ].
@@ -324,9 +331,6 @@ FDFileNavigationSystemPresenter >> initializeHistoryIteratorWith: aFolder [
 
 { #category : #initialization }
 FDFileNavigationSystemPresenter >> initializePresenters [
-	hiddenFilter := FDHidenFilter new.
-	previewer := Previewer.
-
 	notebookPreviewer := self instantiate: FDNoteBookPreviewerPresenter.
 	fileReferenceTable := self newTable.
 	currentPathTextInputPresenter := self instantiate: FDWindowPathPresenter.
