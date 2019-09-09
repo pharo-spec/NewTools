@@ -53,7 +53,7 @@ SpecDebugger class >> defaultSpec [
 				yourself);
 			yourself);
 		add: (SpPanedLayout newHorizontal
-			add: #receiverInspector;
+			add: #receiverInspector withConstraints: [ :c | c spec: #basicSpec ];
 			add: #contextInspector;
 			yourself);
 		yourself
@@ -211,14 +211,14 @@ SpecDebugger >> initialExtent [
 	"This code was taken from the old debugger to get the same behavior. Fell free to refactor"
 
 	RealEstateAgent standardWindowExtent y < 400 "a tiny screen" 
-		ifTrue: [^ 700@500].
+		ifTrue: [ ^ 700@500 ].
 	
 	^ [ | w h |
 		w := Display width.
 		h := Display height.
 		(w - (w // 3)) @ (h - (h // 5)) ]
 		on: Error
-		do: [ 850@600 ]
+		do: [ 850@650 ]
 ]
 
 { #category : #initialization }
@@ -239,7 +239,7 @@ SpecDebugger >> initialize [
 { #category : #initialization }
 SpecDebugger >> initializeInspectors [
 
-	receiverInspector := self 
+	receiverInspector := self
 		instantiate: StDebuggerInspector 
 		on: (StInspectorModel on: nil). 
 	receiverInspector label: 'Receiver'.
@@ -327,6 +327,7 @@ SpecDebugger >> labelHolder [
 
 { #category : #api }
 SpecDebugger >> okToChange [
+
 	self code canDiscardEdits
 		ifTrue: [ ^ true ].
 	self code changed: #wantToChange.

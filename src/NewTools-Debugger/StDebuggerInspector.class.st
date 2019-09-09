@@ -10,6 +10,15 @@ Class {
 }
 
 { #category : #specs }
+StDebuggerInspector class >> basicSpec [
+
+	^ SpBoxLayout newVertical 
+		add: #contextLabel expand: false fill: false padding: 5;
+		add: #inspector;
+		yourself
+]
+
+{ #category : #specs }
 StDebuggerInspector class >> defaultSpec [
 	<spec: #default>
 	^ SpPanedLayout newHorizontal
