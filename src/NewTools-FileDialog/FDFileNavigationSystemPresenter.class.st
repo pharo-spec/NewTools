@@ -58,14 +58,14 @@ Class {
 		'currentPathTextInputPresenter',
 		'nameText',
 		'filtersDropList',
-		'readPointerHistoryParcour',
 		'currentDirectory',
 		'hiddenFilter',
 		'previewer',
 		'nextButton',
 		'previousButton',
 		'notebookPreviewer',
-		'fileReferenceTable'
+		'fileReferenceTable',
+		'history'
 	],
 	#classVars : [
 		'FilterSet',
@@ -233,7 +233,7 @@ FDFileNavigationSystemPresenter >> defaultDirectory [
 { #category : #'api-customization' }
 FDFileNavigationSystemPresenter >> defaultFolder: aFileReference [
 	self updateWidgetWithFileReference: aFileReference.
-	readPointerHistoryParcour value: aFileReference
+	self initializeHistoryIteratorWith: aFileReference
 ]
 
 { #category : #accessing }
@@ -313,6 +313,16 @@ FDFileNavigationSystemPresenter >> initializeFiltersDropList [
 ]
 
 { #category : #initialization }
+FDFileNavigationSystemPresenter >> initializeHistoryIteratorWith: aFolder [
+	history := ConfigurableHistoryIterator
+		undo: [ :folder | history hasPrevious
+			ifTrue: [ self updateWidgetWithFileReference: history current ]
+			ifFalse: [ self inform: 'Nothing to undo' ] ]
+		redo: [ :folder | self updateWidgetWithFileReference: folder ].
+	history register: aFolder
+]
+
+{ #category : #initialization }
 FDFileNavigationSystemPresenter >> initializePresenters [
 	hiddenFilter := FDHidenFilter new.
 	previewer := Previewer.
@@ -326,13 +336,14 @@ FDFileNavigationSystemPresenter >> initializePresenters [
 	nextButton := self newButton.
 
 	currentPathTextInputPresenter presenterUI: self.
+
 	nextButton icon: (self iconNamed: #glamorousDiveRight).
 	previousButton icon: (self iconNamed: #back).
 	nameText autoAccept: true.
 	self initializeFilesTable.
 	self initializeFiltersDropList.
 	self updateWidgetWithFileReference: self lastVisitedDirectory.
-	readPointerHistoryParcour := DoubleLink value: currentDirectory.
+	self initializeHistoryIteratorWith: currentDirectory.
 
 	self focusOrder
 		add: previousButton;
@@ -360,14 +371,7 @@ FDFileNavigationSystemPresenter >> nextButton [
 
 { #category : #accessing }
 FDFileNavigationSystemPresenter >> nextButtonAction [
-	nextButton
-		action: [ readPointerHistoryParcour hasSuccessor
-				ifFalse: [ self
-						inform:
-							'this button is use to go after clicking on <- button to return on the last directory' ]
-				ifTrue: [ readPointerHistoryParcour := readPointerHistoryParcour nextLink.
-					self
-						updateWidgetWithFileReference: readPointerHistoryParcour value ] ]
+	nextButton action: [ history redoIfEmpty: [ self inform: 'Nothing to redo.' ] ]
 ]
 
 { #category : #accessing }
@@ -378,8 +382,7 @@ FDFileNavigationSystemPresenter >> notebookPreviewer [
 { #category : #utilities }
 FDFileNavigationSystemPresenter >> openFolder: aFileReference [
 	self updateWidgetWithFileReference: aFileReference.
-	self updateHistoryList.
-	
+	history register: currentDirectory
 ]
 
 { #category : #acccessing }
@@ -394,12 +397,7 @@ FDFileNavigationSystemPresenter >> previewer: aPreviewer [
 
 { #category : #'initialize-actions' }
 FDFileNavigationSystemPresenter >> previousBeforeButtonAction [
-	previousButton
-		action: [ readPointerHistoryParcour hasPredecessor
-				ifFalse: [ self inform: 'this button is used to go to the last directory ' ]
-				ifTrue:
-					[ readPointerHistoryParcour := readPointerHistoryParcour previousLink.
-					self updateWidgetWithFileReference: readPointerHistoryParcour value  ] ]
+	previousButton action: [ history undoIfEmpty: [ self inform: 'Nothing to undo' ] ]
 ]
 
 { #category : #accessing }
@@ -413,16 +411,6 @@ FDFileNavigationSystemPresenter >> toggleHiddenFiles [
 		ifTrue: [ hiddenFilter := FDHidenFilter new ]
 		ifFalse: [ hiddenFilter := FDDefaultFilter new ].
 	self updateTableContent
-]
-
-{ #category : #utilities }
-FDFileNavigationSystemPresenter >> updateHistoryList [
-	readPointerHistoryParcour
-		nextLink:
-			((DoubleLink value: currentDirectory)
-				previousLink: readPointerHistoryParcour;
-				yourself).
-	readPointerHistoryParcour := readPointerHistoryParcour nextLink
 ]
 
 { #category : #utilities }
