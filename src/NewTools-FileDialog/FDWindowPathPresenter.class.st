@@ -120,5 +120,5 @@ FDWindowPathPresenter >> presenterUI: anObject [
 FDWindowPathPresenter >> select: fileReference [
 	self currentDirectory: fileReference.
 	self flag: #todo. "just refresh"
-	presenterUI openOn: self currentDirectory
+	presenterUI openFolder: self currentDirectory
 ]

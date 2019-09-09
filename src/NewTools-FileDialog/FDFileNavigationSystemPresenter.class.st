@@ -176,12 +176,12 @@ FDFileNavigationSystemPresenter >> connectPresenters [
 	self nextButtonAction
 ]
 
-{ #category : #utils }
+{ #category : #utilities }
 FDFileNavigationSystemPresenter >> createDirectory [
 	^ self createDirectory: 'new-folder'
 ]
 
-{ #category : #utils }
+{ #category : #utilities }
 FDFileNavigationSystemPresenter >> createDirectory: initialName [
 	| name path |
 	name := (UIManager default
@@ -383,18 +383,11 @@ FDFileNavigationSystemPresenter >> notebookPreviewer [
 	^ notebookPreviewer
 ]
 
-{ #category : #utils }
+{ #category : #utilities }
 FDFileNavigationSystemPresenter >> openFolder: aFileReference [
 	self updateWidgetWithFileReference: aFileReference.
 	self updateHistoryList.
 	
-]
-
-{ #category : #utils }
-FDFileNavigationSystemPresenter >> openOn: anAbsolutePath [
-	currentDirectory := anAbsolutePath asFileReference.
-	self updateTableContent.
-	self updateHistoryList
 ]
 
 { #category : #acccessing }
@@ -427,7 +420,7 @@ FDFileNavigationSystemPresenter >> readPointerHistoryParcour [
 	^ readPointerHistoryParcour
 ]
 
-{ #category : #utils }
+{ #category : #utilities }
 FDFileNavigationSystemPresenter >> toggleHiddenFiles [
 	(hiddenFilter equals: FDDefaultFilter  new)
 		ifTrue: [ hiddenFilter := FDHidenFilter new ]
@@ -435,7 +428,7 @@ FDFileNavigationSystemPresenter >> toggleHiddenFiles [
 	self updateTableContent
 ]
 
-{ #category : #utils }
+{ #category : #utilities }
 FDFileNavigationSystemPresenter >> updateHistoryList [
 	readPointerHistoryParcour
 		nextLink:
@@ -445,7 +438,7 @@ FDFileNavigationSystemPresenter >> updateHistoryList [
 	readPointerHistoryParcour := readPointerHistoryParcour nextLink
 ]
 
-{ #category : #utils }
+{ #category : #utilities }
 FDFileNavigationSystemPresenter >> updateTableContent [
 	fileReferenceTable
 		items:
@@ -453,7 +446,7 @@ FDFileNavigationSystemPresenter >> updateTableContent [
 				applyOn: (filtersDropList selectedItem applyOn: currentDirectory children))
 ]
 
-{ #category : #utils }
+{ #category : #utilities }
 FDFileNavigationSystemPresenter >> updateWidgetWithFileReference: aFileReference [
 	currentDirectory := aFileReference.
 	self updateTableContent.
