@@ -23,7 +23,6 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'textInput',
-		'presenterUI',
 		'editButton',
 		'path'
 	],
@@ -106,19 +105,8 @@ FDWindowPathPresenter >> path [
 	^ path
 ]
 
-{ #category : #accessing }
-FDWindowPathPresenter >> presenterUI [
-	^ presenterUI
-]
-
-{ #category : #accessing }
-FDWindowPathPresenter >> presenterUI: anObject [
-	presenterUI := anObject
-]
-
 { #category : #initialization }
 FDWindowPathPresenter >> select: fileReference [
 	self currentDirectory: fileReference.
-	self flag: #todo. "just refresh"
-	presenterUI openFolder: self currentDirectory
+	self owner openFolder: self currentDirectory
 ]

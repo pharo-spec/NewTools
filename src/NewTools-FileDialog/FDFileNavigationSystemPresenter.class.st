@@ -206,8 +206,9 @@ FDFileNavigationSystemPresenter >> currentDirectory [
 ]
 
 { #category : #accessing }
-FDFileNavigationSystemPresenter >> currentDirectory: anObject [
-	currentDirectory := anObject
+FDFileNavigationSystemPresenter >> currentDirectory: aFileReference [
+	currentDirectory := aFileReference.
+	LastVisitedDirectory := currentDirectory
 ]
 
 { #category : #'initialize-actions' }
@@ -253,8 +254,7 @@ FDFileNavigationSystemPresenter >> filesListAction [
 	fileReferenceTable
 		whenSelectionChangedDo: [ :aFileReference | 
 			notebookPreviewer
-				page: (previewer previewOn: aFileReference selectedItem) ].
-	fileReferenceTable whenModelChangedDo: [ LastVisitedDirectory := currentDirectory ]
+				page: (previewer previewOn: aFileReference selectedItem) ]
 ]
 
 { #category : #'api-customization' }
@@ -334,8 +334,6 @@ FDFileNavigationSystemPresenter >> initializePresenters [
 	filtersDropList := self newDropList.
 	previousButton := self newButton.
 	nextButton := self newButton.
-
-	currentPathTextInputPresenter presenterUI: self.
 
 	nextButton icon: (self iconNamed: #glamorousDiveRight).
 	previousButton icon: (self iconNamed: #back).
