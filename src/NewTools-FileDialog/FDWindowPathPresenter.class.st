@@ -33,10 +33,7 @@ Class {
 FDWindowPathPresenter class >> defaultSpec [
 	^ SpBoxLayout newHorizontal
 		add: #path;
-		add: #editButton
-			expand: false
-			fill: false
-			padding: 0;
+		add: #editButton expand: false fill: false padding: 0;
 		yourself
 ]
 

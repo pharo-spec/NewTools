@@ -107,16 +107,10 @@ FDFileDialogPresenter class >> defaultOkActionBlock [
 
 { #category : #specs }
 FDFileDialogPresenter class >> defaultSpec [
-	^ SpBoxLayout newVertical
-		add:
-			(SpPanedLayout newHorizontal
-				position: 200;
-				add: #bookmarksTreeTable;
-				add:
-					(SpBoxLayout newVertical
-						add: #fileNavigationSystem;
-						yourself);
-				yourself);
+	^ SpPanedLayout newHorizontal
+		position: 200;
+		add: #bookmarksTreeTable;
+		add: #fileNavigationSystem;
 		yourself
 ]
 

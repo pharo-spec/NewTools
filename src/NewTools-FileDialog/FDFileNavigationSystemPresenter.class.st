@@ -111,11 +111,11 @@ FDFileNavigationSystemPresenter class >> defaultSpec [
 	^ SpBoxLayout newVertical
 		add:
 			(SpBoxLayout newHorizontal
-				add: #previousButton withConstraints: [ :contraint | contraint width: 30 ];
-				add: #nextButton withConstraints: [ :contraint | contraint width: 30 ];
+				add: #previousButton expand: false fill: false padding: 0;
+				add: #nextButton expand: false fill: false padding: 0;
 				add: #currentPathTextInputPresenter;
 				yourself)
-			withConstraints: [ :contraint | contraint height: self toolbarHeight ];
+			 expand: false fill: false padding: 0;
 		add:
 			(SpPanedLayout newVertical
 				add: #fileReferenceTable;
@@ -124,9 +124,9 @@ FDFileNavigationSystemPresenter class >> defaultSpec [
 		add:
 			(SpBoxLayout newHorizontal
 				add: #nameText;
-				add: #filtersDropList withConstraints: [ :contraint | contraint width: 140 ];
+				add: #filtersDropList expand: false fill: false padding: 0;
 				yourself)
-			withConstraints: [ :contraint | contraint height: self toolbarHeight ];
+			 expand: false fill: false padding: 0;
 		yourself
 ]
 
