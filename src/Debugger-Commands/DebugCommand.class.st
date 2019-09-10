@@ -83,7 +83,8 @@ DebugCommand >> appliesToDebugger: aDebugger [
 
 { #category : #accessing }
 DebugCommand >> currentContext [
-	^self debugger context
+
+	^ self debugger currentContext
 ]
 
 { #category : #accessing }

@@ -426,6 +426,7 @@ SpecDebugger >> selectTopContext [
 
 { #category : #'accessing context' }
 SpecDebugger >> selectedContext [
+
 	^ self stackTable selection selectedItem
 ]
 
