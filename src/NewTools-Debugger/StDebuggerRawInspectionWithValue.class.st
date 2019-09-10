@@ -4,13 +4,15 @@ Class {
 	#category : #'NewTools-Debugger-View'
 }
 
+{ #category : #building }
+StDebuggerRawInspectionWithValue >> addValuesColumn [
+	
+	attributeTable addColumn: self valuesColumn
+]
+
 { #category : #initialization }
 StDebuggerRawInspectionWithValue >> initializeWidgets [
 
 	super initializeWidgets.
-	attributeTable 
-		showColumnHeaders;
-		addColumn: (SpStringTableColumn 
-			title: 'Value' 
-			evaluated: [ :each | each gtDisplayString ])
+	attributeTable showColumnHeaders
 ]
