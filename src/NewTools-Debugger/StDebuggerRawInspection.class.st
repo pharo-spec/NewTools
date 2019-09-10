@@ -39,6 +39,7 @@ StDebuggerRawInspection >> table [
 StDebuggerRawInspection >> variablesColumn [
 
 	^ SpCompositeTableColumn new
+		title: 'Variable';
 		addColumn: (SpImageTableColumn new
 			width: 20;
 			evaluated: #icon;

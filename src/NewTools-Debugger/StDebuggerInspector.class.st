@@ -58,7 +58,7 @@ StDebuggerInspector class >> variablesListOnTop [
 	^ SpBoxLayout newVertical 
 		add: #contextLabel expand: false fill: false padding: 5;
 		add: (SpPanedLayout newVertical
-			position: 40 percent;
+			position: 25 percent;
 			add: #contextInspector;
 			add: #inspector;
 			yourself);
@@ -69,14 +69,12 @@ StDebuggerInspector class >> variablesListOnTop [
 StDebuggerInspector >> initializeContextInspector [
 
 	contextInspector := self 
-		instantiate: StDebuggerRawInspection 
+		instantiate: StDebuggerRawInspectionWithValue 
 		on: self model inspectedObject.
 	contextInspector table selectPath: #(1).
-	contextInspector table
-		whenSelectionChangedDo: [ inspector model
-				inspectedObject:
-					(contextInspector table selectedItem
-						ifNotNil: [ :node | node rawValue ]).
+	contextInspector table whenSelectionChangedDo: [ 
+		inspector model inspectedObject: (contextInspector table selectedItem
+				ifNotNil: [ :node | node rawValue ]).
 			self flag: 'TODO replace initialize with refresh (when it works...'.
 			inspector initialize ]
 ]
