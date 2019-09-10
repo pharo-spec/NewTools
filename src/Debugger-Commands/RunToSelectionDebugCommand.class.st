@@ -28,6 +28,6 @@ RunToSelectionDebugCommand class >> defaultShortcut [
 { #category : #hooks }
 RunToSelectionDebugCommand >> execute [
 	self session
-		runToSelection: self debugger code getSelection
+		runToSelection: self debugger code selection
 		inContext: self currentContext
 ]

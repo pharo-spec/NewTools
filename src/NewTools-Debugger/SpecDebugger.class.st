@@ -44,18 +44,19 @@ SpecDebugger class >> defaultSpec [
 
 	^ SpPanedLayout newVertical
 		position: 70 percent;
-		add: (SpPanedLayout newVertical
-			position: 40 percent;
-			add: #stackTable;
-			add: (SpBoxLayout newVertical 
-				add: #toolbar expand: false fill: false padding: 0;
-				add: #code;
-				yourself);
-			yourself);
 		add: (SpPanedLayout newHorizontal
-			add: #receiverInspector;
-			add: #contextInspector;
+			position: 65 percent;
+			add: (SpPanedLayout newVertical
+				position: 40 percent;
+				add: #stackTable;
+				add: (SpBoxLayout newVertical 
+					add: #toolbar expand: false fill: false padding: 0;
+					add: #code;
+					yourself);
+				yourself);
+			add: #contextInspector withConstraints: [ :c | c spec: #variablesListOnTop ];
 			yourself);
+		add: #receiverInspector withConstraints: [ :c | c spec: #inspectorAlone ];
 		yourself
 ]
 
@@ -158,6 +159,27 @@ SpecDebugger class >> taskbarIconName [
 	^#smallDebugIcon
 ]
 
+{ #category : #specs }
+SpecDebugger class >> traditionalSpec [
+	"<spec: #default>"
+
+	^ SpPanedLayout newVertical
+		position: 70 percent;
+		add: (SpPanedLayout newVertical
+			position: 40 percent;
+			add: #stackTable;
+			add: (SpBoxLayout newVertical 
+				add: #toolbar expand: false fill: false padding: 0;
+				add: #code;
+				yourself);
+			yourself);
+		add: (SpPanedLayout newHorizontal
+			add: #receiverInspector withConstraints: [ :c | c spec: #basicSpec ];
+			add: #contextInspector;
+			yourself);
+		yourself
+]
+
 { #category : #actions }
 SpecDebugger >> clear [
 	self removeActionsForSession: self session.
@@ -211,14 +233,14 @@ SpecDebugger >> initialExtent [
 	"This code was taken from the old debugger to get the same behavior. Fell free to refactor"
 
 	RealEstateAgent standardWindowExtent y < 400 "a tiny screen" 
-		ifTrue: [^ 700@500].
+		ifTrue: [ ^ 700@500 ].
 	
 	^ [ | w h |
 		w := Display width.
 		h := Display height.
 		(w - (w // 3)) @ (h - (h // 5)) ]
 		on: Error
-		do: [ 850@600 ]
+		do: [ 850@650 ]
 ]
 
 { #category : #initialization }
@@ -239,7 +261,7 @@ SpecDebugger >> initialize [
 { #category : #initialization }
 SpecDebugger >> initializeInspectors [
 
-	receiverInspector := self 
+	receiverInspector := self
 		instantiate: StDebuggerInspector 
 		on: (StInspectorModel on: nil). 
 	receiverInspector label: 'Receiver'.
@@ -327,6 +349,7 @@ SpecDebugger >> labelHolder [
 
 { #category : #api }
 SpecDebugger >> okToChange [
+
 	self code canDiscardEdits
 		ifTrue: [ ^ true ].
 	self code changed: #wantToChange.
