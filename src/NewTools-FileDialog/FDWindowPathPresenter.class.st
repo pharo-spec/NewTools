@@ -84,7 +84,7 @@ FDWindowPathPresenter >> initializePresenters [
 
 	isTextInput := false.
 
-	path action: [ :fileReference | self select: fileReference ].
+	path action: [ :fileReference | self owner openFolder: fileReference ].
 
 	textInput
 		autoAccept: false;
@@ -100,10 +100,4 @@ FDWindowPathPresenter >> initializePresenters [
 { #category : #accessing }
 FDWindowPathPresenter >> path [
 	^ path
-]
-
-{ #category : #initialization }
-FDWindowPathPresenter >> select: fileReference [
-	self currentDirectory: fileReference.
-	self owner openFolder: self currentDirectory
 ]
