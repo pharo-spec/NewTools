@@ -21,13 +21,14 @@ StDebuggerInspector class >> basicSpec [
 { #category : #specs }
 StDebuggerInspector class >> defaultSpec [
 	<spec: #default>
-	^ SpPanedLayout newHorizontal
-		position: 40 percent;
-		add: (SpBoxLayout newVertical 
-			add: #contextLabel expand: false fill: false padding: 5;
+
+	^ SpBoxLayout newVertical 
+		add: #contextLabel expand: false fill: false padding: 5;
+		add: (SpPanedLayout newHorizontal
+			position: 40 percent;
 			add: #contextInspector;
+			add: #inspector;
 			yourself);
-		add: #inspector;
 		yourself
 ]
 
