@@ -44,18 +44,19 @@ SpecDebugger class >> defaultSpec [
 
 	^ SpPanedLayout newVertical
 		position: 70 percent;
-		add: (SpPanedLayout newVertical
-			position: 40 percent;
-			add: #stackTable;
-			add: (SpBoxLayout newVertical 
-				add: #toolbar expand: false fill: false padding: 0;
-				add: #code;
-				yourself);
-			yourself);
 		add: (SpPanedLayout newHorizontal
-			add: #receiverInspector withConstraints: [ :c | c spec: #basicSpec ];
-			add: #contextInspector;
+			position: 65 percent;
+			add: (SpPanedLayout newVertical
+				position: 40 percent;
+				add: #stackTable;
+				add: (SpBoxLayout newVertical 
+					add: #toolbar expand: false fill: false padding: 0;
+					add: #code;
+					yourself);
+				yourself);
+			add: #contextInspector withConstraints: [ :c | c spec: #variablesListOnTop ];
 			yourself);
+		add: #receiverInspector withConstraints: [ :c | c spec: #inspectorAlone ];
 		yourself
 ]
 
@@ -156,6 +157,27 @@ SpecDebugger class >> spanNewSessionFrom: anotherSession [
 SpecDebugger class >> taskbarIconName [
 
 	^#smallDebugIcon
+]
+
+{ #category : #specs }
+SpecDebugger class >> traditionalSpec [
+	"<spec: #default>"
+
+	^ SpPanedLayout newVertical
+		position: 70 percent;
+		add: (SpPanedLayout newVertical
+			position: 40 percent;
+			add: #stackTable;
+			add: (SpBoxLayout newVertical 
+				add: #toolbar expand: false fill: false padding: 0;
+				add: #code;
+				yourself);
+			yourself);
+		add: (SpPanedLayout newHorizontal
+			add: #receiverInspector withConstraints: [ :c | c spec: #basicSpec ];
+			add: #contextInspector;
+			yourself);
+		yourself
 ]
 
 { #category : #actions }

@@ -32,6 +32,15 @@ StDebuggerInspector class >> defaultSpec [
 		yourself
 ]
 
+{ #category : #specs }
+StDebuggerInspector class >> inspectorAlone [
+
+	^ SpBoxLayout newVertical 
+		add: #contextLabel expand: false fill: false padding: 5;
+		add: #inspector;
+		yourself
+]
+
 { #category : #'instance creation' }
 StDebuggerInspector class >> openOn: anObject [
 
@@ -41,6 +50,19 @@ StDebuggerInspector class >> openOn: anObject [
 { #category : #specs }
 StDebuggerInspector class >> title [
 	 ^'Debugger Inspection'
+]
+
+{ #category : #specs }
+StDebuggerInspector class >> variablesListOnTop [
+
+	^ SpBoxLayout newVertical 
+		add: #contextLabel expand: false fill: false padding: 5;
+		add: (SpPanedLayout newVertical
+			position: 40 percent;
+			add: #contextInspector;
+			add: #inspector;
+			yourself);
+		yourself
 ]
 
 { #category : #initialization }
