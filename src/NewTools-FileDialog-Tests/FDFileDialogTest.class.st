@@ -100,7 +100,7 @@ FDFileDialogTest >> testWhenAddingBookmarkOnDefaultBookmarksShouldBeAddToAllInst
 
 { #category : #tests }
 FDFileDialogTest >> testWhenAddingBookmarkOnIsolateBookmarksShouldBeAddToAllInstance [
-	| anOtherInstance addCommand beforeAdding |
+	| anOtherInstance addCommand |
 	dialog isolate.
 	addCommand := FDAddBookmarkCommand new.
 	addCommand context: dialog.

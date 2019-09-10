@@ -23,7 +23,6 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'textInput',
-		'presenterUI',
 		'editButton',
 		'path'
 	],
@@ -34,10 +33,7 @@ Class {
 FDWindowPathPresenter class >> defaultSpec [
 	^ SpBoxLayout newHorizontal
 		add: #path;
-		add: #editButton
-			expand: false
-			fill: false
-			padding: 0;
+		add: #editButton expand: false fill: false padding: 0;
 		yourself
 ]
 
@@ -88,7 +84,7 @@ FDWindowPathPresenter >> initializePresenters [
 
 	isTextInput := false.
 
-	path action: [ :fileReference | self select: fileReference ].
+	path action: [ :fileReference | self owner openFolder: fileReference ].
 
 	textInput
 		autoAccept: false;
@@ -104,21 +100,4 @@ FDWindowPathPresenter >> initializePresenters [
 { #category : #accessing }
 FDWindowPathPresenter >> path [
 	^ path
-]
-
-{ #category : #accessing }
-FDWindowPathPresenter >> presenterUI [
-	^ presenterUI
-]
-
-{ #category : #accessing }
-FDWindowPathPresenter >> presenterUI: anObject [
-	presenterUI := anObject
-]
-
-{ #category : #initialization }
-FDWindowPathPresenter >> select: fileReference [
-	self currentDirectory: fileReference.
-	self flag: #todo. "just refresh"
-	presenterUI openOn: self currentDirectory
 ]
