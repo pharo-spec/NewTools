@@ -7,6 +7,13 @@ Class {
 	#category : #'NewTools-FileDialog-Commands'
 }
 
+{ #category : #converting }
+FDInspectCommand >> asSpecCommand [
+	^ super asSpecCommand
+		iconName: #smallInspectIt;
+		yourself
+]
+
 { #category : #hooks }
 FDInspectCommand >> execute [
 	"Execute the actions that should be done by the command.

@@ -7,6 +7,13 @@ Class {
 	#category : #'NewTools-FileDialog-Commands'
 }
 
+{ #category : #converting }
+FDNewFolderCommand >> asSpecCommand [
+	^ super asSpecCommand
+		iconName: #add;
+		yourself
+]
+
 { #category : #hooks }
 FDNewFolderCommand >> execute [
 	"Execute the actions that should be done by the command.

@@ -8,6 +8,13 @@ Class {
 	#category : #'NewTools-FileDialog-Commands'
 }
 
+{ #category : #converting }
+FDToggleHiddenFilesCommand >> asSpecCommand [
+	^ super asSpecCommand
+		iconName: #lock;
+		yourself
+]
+
 { #category : #hooks }
 FDToggleHiddenFilesCommand >> execute [
 	"Execute the actions that should be done by the command.

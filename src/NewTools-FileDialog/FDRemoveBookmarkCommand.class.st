@@ -9,6 +9,13 @@ Class {
 	#category : #'NewTools-FileDialog-Commands'
 }
 
+{ #category : #converting }
+FDRemoveBookmarkCommand >> asSpecCommand [
+	^ super asSpecCommand
+		iconName: #remotesManagerRemoveRemote;
+		yourself
+]
+
 { #category : #hooks }
 FDRemoveBookmarkCommand >> execute [
 	| collection tmpBookmark collectionSize |

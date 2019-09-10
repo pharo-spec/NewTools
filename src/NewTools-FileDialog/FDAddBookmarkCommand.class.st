@@ -7,6 +7,13 @@ Class {
 	#category : #'NewTools-FileDialog-Commands'
 }
 
+{ #category : #converting }
+FDAddBookmarkCommand >> asSpecCommand [
+	^ super asSpecCommand
+		iconName: #add;
+		yourself
+]
+
 { #category : #testing }
 FDAddBookmarkCommand >> canBeExecuted [
 	^ self context selectedEntry isDirectory
