@@ -86,7 +86,7 @@ FDFileDialogTest >> testWhenAddingBookmarkOnDefaultBookmarksShouldBeAddToAllInst
 		assertCollection: anOtherInstance bookmarks
 		hasSameElements: dialog bookmarks.
 	addCommand := FDAddBookmarkCommand new.
-	addCommand context: dialog.
+	addCommand context: dialog fileNavigationSystem.
 	dialog fileReferenceTable
 		selectIndex: ((dialog fileReferenceTable items collect: #basename) indexOf: 'dir').
 	addCommand execute.
@@ -103,7 +103,7 @@ FDFileDialogTest >> testWhenAddingBookmarkOnIsolateBookmarksShouldBeAddToAllInst
 	| anOtherInstance addCommand |
 	dialog isolate.
 	addCommand := FDAddBookmarkCommand new.
-	addCommand context: dialog.
+	addCommand context: dialog fileNavigationSystem.
 	dialog fileReferenceTable
 		selectIndex: ((dialog fileReferenceTable items collect: #basename) indexOf: 'dir'). 
 	addCommand execute.

@@ -4,7 +4,7 @@ I'm a inspect command use to inspect the selectedFile
 Class {
 	#name : #FDInspectCommand,
 	#superclass : #CmCommand,
-	#category : #'NewTools-FileDialog-Menu'
+	#category : #'NewTools-FileDialog-Commands'
 }
 
 { #category : #hooks }
@@ -12,7 +12,7 @@ FDInspectCommand >> execute [
 	"Execute the actions that should be done by the command.
 	 This method expect that the context has been put in #context inst. var. if any context is relevant."
 
-	self context fileReferenceTable selection selectedItem inspect
+	self context selectedEntry inspect
 ]
 
 { #category : #initialization }

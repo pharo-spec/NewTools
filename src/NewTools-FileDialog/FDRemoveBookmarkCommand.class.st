@@ -6,7 +6,7 @@ I'm a command use to remove bookmark
 Class {
 	#name : #FDRemoveBookmarkCommand,
 	#superclass : #CmCommand,
-	#category : #'NewTools-FileDialog-Menu'
+	#category : #'NewTools-FileDialog-Commands'
 }
 
 { #category : #hooks }
@@ -24,6 +24,6 @@ FDRemoveBookmarkCommand >> execute [
 FDRemoveBookmarkCommand >> initialize [
 	super initialize.
 	self
-		basicName: 'remove bookmark';
-		basicDescription: 'remove the selected bookmark'
+		basicName: 'Remove';
+		basicDescription: 'Remove the selected bookmark'
 ]

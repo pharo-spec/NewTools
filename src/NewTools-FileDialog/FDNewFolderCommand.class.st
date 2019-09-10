@@ -2,22 +2,22 @@
 i'm manage ContextMenu to creat Directory
 "
 Class {
-	#name : #FDCreateDirectoryCommand,
+	#name : #FDNewFolderCommand,
 	#superclass : #CmCommand,
-	#category : #'NewTools-FileDialog-Menu'
+	#category : #'NewTools-FileDialog-Commands'
 }
 
 { #category : #hooks }
-FDCreateDirectoryCommand >> execute [
+FDNewFolderCommand >> execute [
 	"Execute the actions that should be done by the command.
 	 This method expect that the context has been put in #context inst. var. if any context is relevant."
 	self context createDirectory
 ]
 
 { #category : #initialization }
-FDCreateDirectoryCommand >> initialize [
+FDNewFolderCommand >> initialize [
 	super initialize.
 	self
-		basicName: 'Create a directory';
-		basicDescription: 'create a directory '
+		basicName: 'New folder';
+		basicDescription: 'Create a new folder inside the selected one.'
 ]

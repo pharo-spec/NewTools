@@ -5,7 +5,7 @@ i'm manage ContextMenu to display/NotDisplay hidenFile
 Class {
 	#name : #FDToggleHiddenFilesCommand,
 	#superclass : #CmCommand,
-	#category : #'NewTools-FileDialog-Menu'
+	#category : #'NewTools-FileDialog-Commands'
 }
 
 { #category : #hooks }

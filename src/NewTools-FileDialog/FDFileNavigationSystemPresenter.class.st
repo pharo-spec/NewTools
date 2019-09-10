@@ -79,10 +79,14 @@ Class {
 FDFileNavigationSystemPresenter class >> buildCommandsGroupWith: presenter forRoot: rootCommandGroup [
 	rootCommandGroup
 		register:
-			((CmCommandGroup named: 'interact with file') asSpecGroup
-				register: (FDCreateDirectoryCommand forSpec context: presenter);
-				register: (FDToggleHiddenFilesCommand forSpec context: presenter);
-				register: (FDInspectCommand forSpec context: presenter);
+			((CmCommandGroup named: 'Menu') asSpecGroup
+				register: FDNewFolderCommand forSpec;
+				register: FDToggleHiddenFilesCommand forSpec;
+				register: FDInspectCommand forSpec;
+				register:
+					((CmCommandGroup named: 'Bookmarks') asSpecGroup
+						register: FDAddBookmarkCommand forSpec;
+						yourself);
 				yourself)
 ]
 
@@ -296,13 +300,13 @@ FDFileNavigationSystemPresenter >> initialize [
 
 { #category : #'initialize-widgets' }
 FDFileNavigationSystemPresenter >> initializeFilesTable [
-	fileReferenceTable contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'interact with file' ].
 	fileReferenceTable
 		beResizable;
 		columns: FDAbstractColumn columns;
 		sortingBlock: [ :a :b | 
 			(a isDirectory & b isDirectory not or: [ a isDirectory & b isDirectory & (a basename asLowercase < b basename asLowercase) ])
-				or: [ a isFile & b isFile & (a basename asLowercase < b basename asLowercase) ] ]
+				or: [ a isFile & b isFile & (a basename asLowercase < b basename asLowercase) ] ];
+		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'Menu' ]
 ]
 
 { #category : #'initialize-widgets' }
@@ -387,7 +391,7 @@ FDFileNavigationSystemPresenter >> openFolder: aFileReference [
 	history register: currentDirectory
 ]
 
-{ #category : #acccessing }
+{ #category : #accessing }
 FDFileNavigationSystemPresenter >> previewer [
 	^ previewer
 ]
@@ -405,6 +409,11 @@ FDFileNavigationSystemPresenter >> previousBeforeButtonAction [
 { #category : #accessing }
 FDFileNavigationSystemPresenter >> previousButton [
 	^ previousButton
+]
+
+{ #category : #accessing }
+FDFileNavigationSystemPresenter >> selectedEntry [
+	^ fileReferenceTable selectedItem
 ]
 
 { #category : #utilities }

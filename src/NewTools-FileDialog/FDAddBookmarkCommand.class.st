@@ -4,33 +4,27 @@ I'm a command use to add bookmark
 Class {
 	#name : #FDAddBookmarkCommand,
 	#superclass : #CmCommand,
-	#category : #'NewTools-FileDialog-Menu'
+	#category : #'NewTools-FileDialog-Commands'
 }
 
-{ #category : #hooks }
-FDAddBookmarkCommand >> canBeRun [
-	^ self context fileNavigationSystem fileReferenceTable selection selectedItem
-		isDirectory
+{ #category : #testing }
+FDAddBookmarkCommand >> canBeExecuted [
+	^ self context selectedEntry isDirectory
 ]
 
-{ #category : #hooks }
+{ #category : #executing }
 FDAddBookmarkCommand >> execute [
 	| fileReference |
-	fileReference := self context fileNavigationSystem fileReferenceTable selection
-		selectedItem.
-	self context bookmarks
-		add:
-			(FDBookmark
-				name: fileReference basename
-				location: fileReference
-				icon: nil).
-	self context bookmarksTreeTable roots: self context bookmarks
+	fileReference := self context selectedEntry.
+	self context owner bookmarks add: (FDBookmark name: fileReference basename location: fileReference icon: nil).
+	self flag: #todo.	"We can do better here."
+	self context owner bookmarksTreeTable roots: self context owner bookmarks
 ]
 
 { #category : #initialization }
 FDAddBookmarkCommand >> initialize [
 	super initialize.
 	self
-		basicName: 'add bookmark';
-		basicDescription: 'add the selected file to the bookmarks'
+		basicName: 'Add to bookmarks';
+		basicDescription: 'Add the selected file to the bookmarks.'
 ]

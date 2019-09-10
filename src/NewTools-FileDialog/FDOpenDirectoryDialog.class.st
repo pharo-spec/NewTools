@@ -39,9 +39,6 @@ FDOpenDirectoryDialog >> nameChanged [
 
 { #category : #actions }
 FDOpenDirectoryDialog >> selectedEntry [
-	fileNavigationSystem fileReferenceTable selection selectedItem
-		ifNotNil: [ :fileReference | 
-			fileReference isDirectory
-				ifTrue: [ ^ fileReference ] ].
+	fileNavigationSystem selectedEntry ifNotNil: [ :fileReference | fileReference isDirectory ifTrue: [ ^ fileReference ] ].
 	self inform: 'you must select a directory'
 ]
