@@ -92,11 +92,8 @@ FDFileDialogPresenter class >> allIcons [
 FDFileDialogPresenter class >> buildCommandsGroupWith: presenter forRoot: rootCommandGroup [
 	rootCommandGroup
 		register:
-			((CmCommandGroup named: 'interact with bookmark') asSpecGroup
-				register: (FDAddBookmarkCommand  forSpec context: presenter )
-				yourself);
-			register: ((CmCommandGroup named: 'bookmarkCommand') asSpecGroup
-				register: (FDRemoveBookmarkCommand forSpec context: presenter);
+			((CmCommandGroup named: 'Menu') asSpecGroup
+				register: FDRemoveBookmarkCommand forSpec;
 				yourself)
 ]
 
@@ -322,11 +319,10 @@ FDFileDialogPresenter >> initializeBookmarksTreeTable [
 			((SpImageTableColumn evaluated: [ :each | each icon ])
 				width: 50;
 				yourself);
-		addColumn: (SpStringTableColumn evaluated: [ :fdGroupBookMark | fdGroupBookMark name ]).
-	bookmarksTreeTable
+		addColumn: (SpStringTableColumn evaluated: [ :fdGroupBookMark | fdGroupBookMark name ]);
 		roots: bookmarks;
 		children: #children;
-		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'bookmarkCommand' ]
+		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'Menu' ]
 ]
 
 { #category : #initialization }
@@ -339,23 +335,12 @@ FDFileDialogPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 		cancelAction: [ self delete ]
 ]
 
-{ #category : #'initialize-widgets' }
-FDFileDialogPresenter >> initializeFilesList [
-	fileNavigationSystem fileReferenceTable
-		contextMenu: [ 
-			fileNavigationSystem rootCommandsGroup
-				register: (self rootCommandsGroup / 'interact with bookmark');
-			 	beRoot;
-				asMenuPresenter ]
-]
-
 { #category : #initialization }
 FDFileDialogPresenter >> initializePresenters [
 	bookmarksTreeTable := self newTreeTable.
 	fileNavigationSystem := self instantiate: FDFileNavigationSystemPresenter.
 
 	self initializeBookmarksTreeTable.
-	self initializeFilesList.
 	self focusOrder
 		add: bookmarksTreeTable;
 		add: fileNavigationSystem
@@ -384,7 +369,7 @@ FDFileDialogPresenter >> previewer: aPreviewer [
 
 { #category : #utilities }
 FDFileDialogPresenter >> selectFile: aFile [
-	fileNavigationSystem fileReferenceTable selection selectedItem = aFile
+	fileNavigationSystem selectedEntry = aFile
 		ifFalse: [ fileNavigationSystem fileReferenceTable
 				selectIndex: (fileNavigationSystem fileReferenceTable items indexOf: aFile) ].
 	fileNavigationSystem nameText text: aFile basename

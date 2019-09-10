@@ -25,5 +25,5 @@ FDOpenFileDialog >> initializePresenters [
 
 { #category : #accessing }
 FDOpenFileDialog >> selectedEntry [
-	^ fileNavigationSystem fileReferenceTable selection selectedItem
+	^ fileNavigationSystem selectedEntry
 ]

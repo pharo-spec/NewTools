@@ -121,7 +121,7 @@ FDNavigationSystemTest >> testWhenFilesListSelectionChangedAndIsAPNGShouldprevie
 						indexOf: 'patate.png') ]
 		raise: Error.
 	self
-		assert: dialog fileReferenceTable selection selectedItem basename
+		assert: dialog selectedEntry basename
 		equals: 'patate.png'
 ]
 
