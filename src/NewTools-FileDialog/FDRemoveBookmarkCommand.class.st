@@ -31,6 +31,6 @@ FDRemoveBookmarkCommand >> execute [
 FDRemoveBookmarkCommand >> initialize [
 	super initialize.
 	self
-		basicName: 'Remove';
-		basicDescription: 'Remove the selected bookmark'
+		name: 'Remove';
+		description: 'Remove the selected bookmark'
 ]

@@ -26,6 +26,6 @@ FDInspectCommand >> execute [
 FDInspectCommand >> initialize [
 	super initialize.
 	self
-		basicName: 'Inspect file';
-		basicDescription: 'Inspect the selected file'
+		name: 'Inspect file';
+		description: 'Inspect the selected file'
 ]

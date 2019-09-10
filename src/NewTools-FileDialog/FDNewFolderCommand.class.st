@@ -25,6 +25,6 @@ FDNewFolderCommand >> execute [
 FDNewFolderCommand >> initialize [
 	super initialize.
 	self
-		basicName: 'New folder';
-		basicDescription: 'Create a new folder inside the selected one.'
+		name: 'New folder';
+		description: 'Create a new folder inside the selected one.'
 ]

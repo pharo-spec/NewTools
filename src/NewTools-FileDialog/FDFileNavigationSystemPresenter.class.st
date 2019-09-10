@@ -400,7 +400,7 @@ FDFileNavigationSystemPresenter >> previousButton [
 
 { #category : #accessing }
 FDFileNavigationSystemPresenter >> selectedEntry [
-	^ fileReferenceTable selectedItem
+	^ fileReferenceTable selection selectedItem
 ]
 
 { #category : #utilities }
