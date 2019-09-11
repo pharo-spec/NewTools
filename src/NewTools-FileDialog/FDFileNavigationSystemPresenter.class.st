@@ -90,11 +90,6 @@ FDFileNavigationSystemPresenter class >> buildCommandsGroupWith: presenter forRo
 ]
 
 { #category : #defaults }
-FDFileNavigationSystemPresenter class >> defaultColumns [
-	^ {FDIconColumn . FDNameColumn . FDSizeColumn . FDRightsColumn} collect: #column
-]
-
-{ #category : #defaults }
 FDFileNavigationSystemPresenter class >> defaultDirectory [
 	^ FileLocator imageDirectory
 ]
@@ -286,7 +281,7 @@ FDFileNavigationSystemPresenter >> hiddenFilter [
 
 { #category : #initialization }
 FDFileNavigationSystemPresenter >> initialize [
-	hiddenFilter := FDHidenFilter new.
+	hiddenFilter := FDVisibleFilter new.
 	previewer := Previewer.
 	super initialize
 ]
@@ -406,7 +401,7 @@ FDFileNavigationSystemPresenter >> selectedEntry [
 { #category : #utilities }
 FDFileNavigationSystemPresenter >> toggleHiddenFiles [
 	(hiddenFilter equals: FDNilFilter  new)
-		ifTrue: [ hiddenFilter := FDHidenFilter new ]
+		ifTrue: [ hiddenFilter := FDVisibleFilter new ]
 		ifFalse: [ hiddenFilter := FDNilFilter new ].
 	self updateTableContent
 ]
