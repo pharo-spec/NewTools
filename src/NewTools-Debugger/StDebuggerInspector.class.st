@@ -34,8 +34,9 @@ StDebuggerInspector class >> defaultSpec [
 
 { #category : #specs }
 StDebuggerInspector class >> inspectorAlone [
+	"do not show variables list (not needed, since there will always be one)"
 
-	^ SpBoxLayout newVertical 
+	^ SpBoxLayout newVertical
 		add: #contextLabel expand: false fill: false padding: 5;
 		add: #inspector;
 		yourself
@@ -54,6 +55,7 @@ StDebuggerInspector class >> title [
 
 { #category : #specs }
 StDebuggerInspector class >> variablesListOnTop [
+	"show variables list on top"
 
 	^ SpBoxLayout newVertical 
 		add: #contextLabel expand: false fill: false padding: 5;
