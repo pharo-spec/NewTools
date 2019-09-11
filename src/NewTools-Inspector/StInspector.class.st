@@ -136,10 +136,8 @@ StInspector >> refresh [
 	self withWindowDo: [ :window | window title: self title ].
 	evaluator doItReceiver: self model inspectedObject.
 	views 
-		removeAll;
 		pages: self allPages;
 		selectPageIndex: 1.
-	
 ]
 
 { #category : #private }
