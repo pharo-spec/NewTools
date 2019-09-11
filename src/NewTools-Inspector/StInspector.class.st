@@ -120,6 +120,9 @@ StInspector >> model [
 { #category : #'model access' }
 StInspector >> model: anInspectorModel [
 
+	"if same object, I do not want to update to not trigger infinite updates"
+	model inspectedObject == anInspectorModel inspectedObject 
+		ifTrue: [ ^ self ].
 	model := anInspectorModel.
 	self refresh
 ]
