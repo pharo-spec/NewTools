@@ -61,6 +61,15 @@ Object >> rawInspection [
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
+Object >> stDisplayString [
+
+	self gtDisplayString linesDo: [ :each | 
+		^ each contractTo: 200 ].
+
+	^ ''
+]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
 Object >> stInspect [
 	"Temporary to experiment, should be replaced by inspect later"
 

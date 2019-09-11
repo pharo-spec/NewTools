@@ -305,7 +305,7 @@ SpecDebugger >> initializeStack [
 			evaluated: [ :item | item method selector ]);
 		addColumn: (SpStringTableColumn 
 			title: 'Context' 
-			evaluated: [ :item | item sender ]).
+			evaluated: [ :item | item sender stDisplayString ]).
 	
 	stackTable contextMenu: [ 
 		self stackMenuActions beRoot asMenuPresenter ].

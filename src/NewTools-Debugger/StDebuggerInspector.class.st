@@ -80,7 +80,7 @@ StDebuggerInspector >> initializeContextInspector [
 StDebuggerInspector >> initializeInspector [
 
 	inspector := self 
-		instantiate: StInspector 
+		instantiate: StDebuggerEmbeddedInspector 
 		on: (StInspectorModel on: contextInspector selectedItem hostObject)
 ]
 

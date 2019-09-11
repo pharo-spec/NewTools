@@ -132,8 +132,7 @@ StInspector >> refresh [
 	"model changed?  
 	 update inspector values."
 
-	self flag: #TODO.	"not finished, clearly :P"
-	self withWindowDo: [ :window | window title: self title ].
+	self updateTitle.
 	evaluator doItReceiver: self model inspectedObject.
 	views 
 		pages: self allPages;
@@ -158,4 +157,11 @@ StInspector >> setModelBeforeInitialization: anInspectorModel [
 StInspector >> title [
 
 	^ self class titleFor: self model inspectedObject
+]
+
+{ #category : #private }
+StInspector >> updateTitle [
+		
+	self withWindowDo: [ :window | 
+		window title: self title ].
 ]

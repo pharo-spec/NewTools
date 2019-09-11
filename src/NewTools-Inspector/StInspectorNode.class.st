@@ -87,8 +87,7 @@ StInspectorNode >> save: aValue [
 { #category : #accessing }
 StInspectorNode >> stringValue [
 
-	^ self value gtDisplayString
-	
+	^ self value stDisplayString
 ]
 
 { #category : #accessing }

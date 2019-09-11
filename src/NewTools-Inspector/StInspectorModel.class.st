@@ -27,6 +27,7 @@ StInspectorModel >> debuggerInspectorNodes [
 
 { #category : #accessing }
 StInspectorModel >> inspectedObject [
+
 	^ inspectedObject
 ]
 

@@ -69,7 +69,7 @@ StRawInspection >> variablesColumn [
 		title: 'Variable';
 		width: 170;
 		addColumn: (SpImageTableColumn new
-			width: 20;
+			beNotExpandable;
 			evaluated: #icon;
 			yourself);
 		addColumn: (SpStringTableColumn new
