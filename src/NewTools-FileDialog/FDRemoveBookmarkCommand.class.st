@@ -9,6 +9,13 @@ Class {
 	#category : #'NewTools-FileDialog-Commands'
 }
 
+{ #category : #converting }
+FDRemoveBookmarkCommand >> asSpecCommand [
+	^ super asSpecCommand
+		iconName: #remotesManagerRemoveRemote;
+		yourself
+]
+
 { #category : #hooks }
 FDRemoveBookmarkCommand >> execute [
 	| collection tmpBookmark collectionSize |
@@ -24,6 +31,6 @@ FDRemoveBookmarkCommand >> execute [
 FDRemoveBookmarkCommand >> initialize [
 	super initialize.
 	self
-		basicName: 'Remove';
-		basicDescription: 'Remove the selected bookmark'
+		name: 'Remove';
+		description: 'Remove the selected bookmark'
 ]

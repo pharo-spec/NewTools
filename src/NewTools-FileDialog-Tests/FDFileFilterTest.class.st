@@ -8,7 +8,7 @@ Class {
 FDFileFilterTest >> testDefaultFilterShouldReturnEveryTimeTrue [
 	| beforeFilter defaultFilter |
 	beforeFilter := root children.
-	defaultFilter := FDDefaultFilter new.
+	defaultFilter := FDNilFilter new.
 	self assert: (root children select: [ :fileReference | defaultFilter predicate: fileReference ]) equals: beforeFilter
 ]
 
@@ -24,7 +24,7 @@ FDFileFilterTest >> testHiddenFilter [
 { #category : #tests }
 FDFileFilterTest >> testJPGFilterShouldFilterOnlyJPGFile [
 	| filterBis |
-	filterBis := FDDotJPGFilter new.
+	filterBis := FDJPEGFilter new.
 	self
 		assert:
 			((root children select: [ :fileReference | filterBis predicate: fileReference ])
@@ -34,7 +34,7 @@ FDFileFilterTest >> testJPGFilterShouldFilterOnlyJPGFile [
 { #category : #tests }
 FDFileFilterTest >> testPNGFilterShouldFilterOnlyPNGFile [
 	| filterBis |
-	filterBis := FDDotPNGFilter new.
+	filterBis := FDPNGFilter new.
 	self
 		assert:
 			((root children select: [ :fileReference | filterBis predicate: fileReference ])

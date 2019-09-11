@@ -7,6 +7,13 @@ Class {
 	#category : #'NewTools-FileDialog-Commands'
 }
 
+{ #category : #converting }
+FDInspectCommand >> asSpecCommand [
+	^ super asSpecCommand
+		iconName: #smallInspectIt;
+		yourself
+]
+
 { #category : #hooks }
 FDInspectCommand >> execute [
 	"Execute the actions that should be done by the command.
@@ -19,6 +26,6 @@ FDInspectCommand >> execute [
 FDInspectCommand >> initialize [
 	super initialize.
 	self
-		basicName: 'Inspect file';
-		basicDescription: 'Inspect the selected file'
+		name: 'Inspect file';
+		description: 'Inspect the selected file'
 ]

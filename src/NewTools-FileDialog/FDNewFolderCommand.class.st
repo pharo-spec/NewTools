@@ -7,6 +7,13 @@ Class {
 	#category : #'NewTools-FileDialog-Commands'
 }
 
+{ #category : #converting }
+FDNewFolderCommand >> asSpecCommand [
+	^ super asSpecCommand
+		iconName: #add;
+		yourself
+]
+
 { #category : #hooks }
 FDNewFolderCommand >> execute [
 	"Execute the actions that should be done by the command.
@@ -18,6 +25,6 @@ FDNewFolderCommand >> execute [
 FDNewFolderCommand >> initialize [
 	super initialize.
 	self
-		basicName: 'New folder';
-		basicDescription: 'Create a new folder inside the selected one.'
+		name: 'New folder';
+		description: 'Create a new folder inside the selected one.'
 ]

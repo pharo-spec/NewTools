@@ -164,7 +164,7 @@ FDFileDialogPresenter class >> fullExample [
 	presenter previewer: FDContentPreviewer new.	
 	"with this when you select a png file it will display it"
 	
-	presenter filtersCustomization: {FDJPGOrPNGFilter new}.
+	presenter filtersCustomization: {FDPNGFilter new}.
 	"with you add filter and there always the 'no filter'"
 	
 	presenter defaultFolder: FileLocator home asFileReference.

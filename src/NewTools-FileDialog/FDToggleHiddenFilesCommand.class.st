@@ -8,6 +8,13 @@ Class {
 	#category : #'NewTools-FileDialog-Commands'
 }
 
+{ #category : #converting }
+FDToggleHiddenFilesCommand >> asSpecCommand [
+	^ super asSpecCommand
+		iconName: #lock;
+		yourself
+]
+
 { #category : #hooks }
 FDToggleHiddenFilesCommand >> execute [
 	"Execute the actions that should be done by the command.
@@ -19,6 +26,6 @@ FDToggleHiddenFilesCommand >> execute [
 FDToggleHiddenFilesCommand >> initialize [
 	super initialize.
 	self
-		basicName: 'Toggle hidden files';
-		basicDescription: 'appear/unappear hidden files'
+		name: 'Toggle hidden files';
+		description: 'appear/unappear hidden files'
 ]

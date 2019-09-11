@@ -1,15 +1,20 @@
 "
-I'm selecting only directory
+I am a filter that will only select directories. I will reject all the files of the FileDialog.
 "
 Class {
 	#name : #FDDirectoryFilter,
-	#superclass : #FDAbstractSimpleFilter,
+	#superclass : #FDAbstractFilter,
 	#category : #'NewTools-FileDialog-Filtering'
 }
 
 { #category : #accessing }
+FDDirectoryFilter class >> priority [
+	^ 130
+]
+
+{ #category : #accessing }
 FDDirectoryFilter >> name [
-	^ 'directory filter'
+	^ 'Folders'
 ]
 
 { #category : #accessing }

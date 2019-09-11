@@ -7,6 +7,13 @@ Class {
 	#category : #'NewTools-FileDialog-Commands'
 }
 
+{ #category : #converting }
+FDAddBookmarkCommand >> asSpecCommand [
+	^ super asSpecCommand
+		iconName: #add;
+		yourself
+]
+
 { #category : #testing }
 FDAddBookmarkCommand >> canBeExecuted [
 	^ self context selectedEntry isDirectory
@@ -25,6 +32,6 @@ FDAddBookmarkCommand >> execute [
 FDAddBookmarkCommand >> initialize [
 	super initialize.
 	self
-		basicName: 'Add to bookmarks';
-		basicDescription: 'Add the selected file to the bookmarks.'
+		name: 'Add to bookmarks';
+		description: 'Add the selected file to the bookmarks.'
 ]

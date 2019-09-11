@@ -39,7 +39,7 @@ FDNavigationSystemTest >> testInitializeCurrentPathTextInputShouldSet [
 
 { #category : #tests }
 FDNavigationSystemTest >> testInitializeFilterDropListSelectedItemShouldBeDefaultFilter [
-	self assert: dialog filtersDropList selectedItem name equals: FDDefaultFilter new name
+	self assert: dialog filtersDropList selectedItem name equals: FDNilFilter new name
 ]
 
 { #category : #tests }
@@ -93,18 +93,18 @@ FDNavigationSystemTest >> testWhenCurrentDirectoryChangeshouldNewFileDialogOpenO
 { #category : #tests }
 FDNavigationSystemTest >> testWhenCustomizeFilterShouldFilterDropListPresenterIncludeIt [
 	| aCollectionOfFilter |
-	aCollectionOfFilter := {FDDefaultFilter new . FDDotJPGFilter new}.
+	aCollectionOfFilter := {FDNilFilter new . FDJPEGFilter new}.
 	dialog filtersCustomization: aCollectionOfFilter.
-	self assert: dialog filtersDropList selectedItem name equals: FDDefaultFilter new name.
+	self assert: dialog filtersDropList selectedItem name equals: FDNilFilter new name.
 	self assert: (dialog filtersDropList listItems includesAll: aCollectionOfFilter)
 ]
 
 { #category : #tests }
 FDNavigationSystemTest >> testWhenCustomizeFilterWithoutDefaultFilterShouldFilterDropListPresenterIncludeDefaultFilterAndSelectIt [
 	| aCollectionOfFilter |
-	aCollectionOfFilter := {FDDotJPGFilter new}.
+	aCollectionOfFilter := {FDJPEGFilter new}.
 	dialog filtersCustomization: aCollectionOfFilter.
-	self assert: dialog filtersDropList selectedItem name equals: FDDefaultFilter new name.
+	self assert: dialog filtersDropList selectedItem name equals: FDNilFilter new name.
 	self assert: (dialog filtersDropList listItems includesAll: aCollectionOfFilter)
 ]
 
@@ -127,7 +127,7 @@ FDNavigationSystemTest >> testWhenFilesListSelectionChangedAndIsAPNGShouldprevie
 
 { #category : #tests }
 FDNavigationSystemTest >> testWhenOpenADirectoryShouldDisplayHisChildrenFilterByCurrentFilter [
-	dialog filtersDropList selectedIndex: ((dialog filtersDropList listItems collect: #name) indexOf: FDDotPNGFilter new name).
+	dialog filtersDropList selectedIndex: ((dialog filtersDropList listItems collect: #name) indexOf: FDPNGFilter new name).
 	self fileListAllMustBeFilterByPNGFIlter.
 	dialog fileReferenceTable selectIndex: ((dialog fileReferenceTable items collect: #basename) indexOf: 'dir').
 	dialog fileReferenceTable selectIndex: dialog fileReferenceTable selection selectedIndex.
