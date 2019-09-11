@@ -259,6 +259,19 @@ SpecDebugger >> initialize [
 ]
 
 { #category : #initialization }
+SpecDebugger >> initializeCode [
+
+	code := self newCode.
+	code acceptBlock: [ :text :notifyer | 
+		self
+			recompileMethodTo: text string
+			inContext: self stackTable selection selectedItem
+			notifying: notifyer ]
+	"self code selection whenChangedSend: #selectionChanged to: self"
+
+]
+
+{ #category : #initialization }
 SpecDebugger >> initializeInspectors [
 
 	receiverInspector := self
@@ -298,18 +311,20 @@ SpecDebugger >> initializeStack [
 ]
 
 { #category : #initialization }
+SpecDebugger >> initializeToolbar [
+
+	toolbar := self newToolBar.
+	toolbar beIcons.
+	self updateToolbar
+]
+
+{ #category : #initialization }
 SpecDebugger >> initializeWidgets [
 
 	self initializeStack.
-	toolbar := self newDynamicToolbar.
-	code := self newCode.
-	self initializeInspectors.
-	self code acceptBlock: [ :text :notifyer | 
-		self
-			recompileMethodTo: text string
-			inContext: self stackTable selection selectedItem
-			notifying: notifyer ]
-	"self code selection whenChangedSend: #selectionChanged to: self"
+	self initializeToolbar.
+	self initializeCode.
+	self initializeInspectors
 ]
 
 { #category : #initialization }
@@ -570,7 +585,11 @@ SpecDebugger >> updateStepThrough [
 
 { #category : #'updating widgets' }
 SpecDebugger >> updateToolbar [
-	self toolbar update
+
+	toolbar removeAllItems.
+	SpToolBarPresenterBuilder new 
+		toolbarPresenter: toolbar;
+		visit: self toolbarActions
 ]
 
 { #category : #'updating widgets' }
