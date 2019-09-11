@@ -132,8 +132,11 @@ StInspector >> refresh [
 	self flag: #TODO.	"not finished, clearly :P"
 	self withWindowDo: [ :window | window title: self title ].
 	evaluator doItReceiver: self model inspectedObject.
-	views pagesChanged.
-	self update
+	views 
+		removeAll;
+		pages: self allPages;
+		selectPageIndex: 1.
+	
 ]
 
 { #category : #private }

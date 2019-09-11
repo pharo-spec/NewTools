@@ -271,7 +271,6 @@ SpecDebugger >> initialize [
 SpecDebugger >> initializeCode [
 
 	code := self newCode.
-	code withoutSyntaxHighlight.
 	code acceptBlock: [ :text :notifyer | 
 		self
 			recompileMethodTo: text string
