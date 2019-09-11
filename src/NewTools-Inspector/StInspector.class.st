@@ -81,6 +81,12 @@ StInspector >> buildToolBar [
 ]
 
 { #category : #initialization }
+StInspector >> defineInputPorts [
+
+	^ { SpModelPort new }
+]
+
+{ #category : #initialization }
 StInspector >> initializeWidgets [
 
 	views := self newNotebook.
@@ -124,11 +130,16 @@ StInspector >> refresh [
 	 update inspector values."
 
 	self flag: #TODO.	"not finished, clearly :P"
-	self withWindowDo: [ :window | 
-		window title: self title ].
+	self withWindowDo: [ :window | window title: self title ].
 	evaluator doItReceiver: self model inspectedObject.
 	views pagesChanged.
 	self update
+]
+
+{ #category : #private }
+StInspector >> setModel: aModel [
+
+	self model: aModel
 ]
 
 { #category : #'model access' }
@@ -141,5 +152,6 @@ StInspector >> setModelBeforeInitialization: anInspectorModel [
 
 { #category : #accessing }
 StInspector >> title [
+
 	^ self class titleFor: self model inspectedObject
 ]

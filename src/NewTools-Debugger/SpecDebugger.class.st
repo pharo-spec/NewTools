@@ -188,6 +188,15 @@ SpecDebugger >> clear [
 	self session terminate
 ]
 
+{ #category : #'updating widgets' }
+SpecDebugger >> clearCode [
+	
+	self code
+		text: '';
+		behavior: nil;
+		setSelection: (1 to: 0)
+]
+
 { #category : #actions }
 SpecDebugger >> close [
 	self withWindowDo: #close
@@ -262,13 +271,12 @@ SpecDebugger >> initialize [
 SpecDebugger >> initializeCode [
 
 	code := self newCode.
+	code withoutSyntaxHighlight.
 	code acceptBlock: [ :text :notifyer | 
 		self
 			recompileMethodTo: text string
 			inContext: self stackTable selection selectedItem
 			notifying: notifyer ]
-	"self code selection whenChangedSend: #selectionChanged to: self"
-
 ]
 
 { #category : #initialization }
@@ -277,7 +285,7 @@ SpecDebugger >> initializeInspectors [
 	receiverInspector := self
 		instantiate: StDebuggerInspector 
 		on: (StInspectorModel on: nil). 
-	receiverInspector label: 'Receiver'.
+	receiverInspector label: 'Receiver (self)'.
 
 	contextInspector := self 
 		instantiate: StDebuggerInspector 
@@ -285,29 +293,28 @@ SpecDebugger >> initializeInspectors [
 	contextInspector label: 'Context'
 ]
 
-{ #category : #stack }
+{ #category : #initialization }
 SpecDebugger >> initializeStack [
+
 	stackTable := self newTable.
 	stackTable
-		addColumn:
-			(SpStringTableColumn
-				title: 'Class'
-				evaluated: [ :item | item receiver class ]);
-		addColumn:
-			(SpStringTableColumn
-				title: 'Method'
-				evaluated: [ :item | item method selector ]);
-		addColumn:
-			(SpStringTableColumn title: 'Context' evaluated: [ :item | item sender ]).
-	stackTable
-		whenSelectionChangedDo: [ :selection | 
-			| context |
-			context := selection selectedItem.
-			self updateCodeFromContext: context.
-			self updateInspectorsFromContext: context.
-			self updateToolbar ].
-	stackTable
-		contextMenu: [ self stackMenuActions beRoot asMenuPresenter ]
+		addColumn: (SpStringTableColumn
+			title: 'Class'
+			evaluated: [ :item | item receiver class ]);
+		addColumn: (SpStringTableColumn
+			title: 'Method'
+			evaluated: [ :item | item method selector ]);
+		addColumn: (SpStringTableColumn 
+			title: 'Context' 
+			evaluated: [ :item | item sender ]).
+	
+	stackTable contextMenu: [ 
+		self stackMenuActions beRoot asMenuPresenter ].
+	
+	stackTable transmitDo: [ :context | 
+		self updateCodeFromContext: context.
+		self updateInspectorsFromContext: context.
+		self updateToolbar ].
 ]
 
 { #category : #initialization }
@@ -504,27 +511,23 @@ SpecDebugger >> toolbarActions [
 
 { #category : #'updating widgets' }
 SpecDebugger >> updateCodeFromContext [
-	self updateCodeFromContext: self currentContext.
+
+	self updateCodeFromContext: self currentContext
 ]
 
 { #category : #'updating widgets' }
 SpecDebugger >> updateCodeFromContext: aContext [
-	aContext
-		ifNil: [ self code
-				withoutSyntaxHighlight;
-				text: '';
-				behavior: nil;
-				setSelection: (1 to: 0) ]
-		ifNotNil: [ | selectionInterval |
-			selectionInterval := self session
-				selectedCodeRangeForContext: aContext.
-			self code
-				withSyntaxHighlight;
-				text: aContext sourceCode;
-				doItReceiver: aContext home receiver;
-				doItContext: aContext;
-				behavior: aContext home receiver class;
-				selection: selectionInterval ]
+	| selectionInterval |
+	
+	aContext ifNil: [ ^ self clearCode ].
+
+	selectionInterval := self session selectedCodeRangeForContext: aContext.
+	self code
+		text: aContext sourceCode;
+		doItReceiver: aContext home receiver;
+		doItContext: aContext;
+		behavior: aContext home receiver class;
+		selection: selectionInterval
 ]
 
 { #category : #'updating actions' }
@@ -537,6 +540,7 @@ SpecDebugger >> updateContextChanged [
 
 { #category : #updating }
 SpecDebugger >> updateInspectorsFromContext: aContext [
+
 	contextInspector updateWith: aContext.
 	receiverInspector updateWith: aContext home receiver
 ]

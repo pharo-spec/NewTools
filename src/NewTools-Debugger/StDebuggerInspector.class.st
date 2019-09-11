@@ -72,13 +72,8 @@ StDebuggerInspector >> initializeContextInspector [
 
 	contextInspector := self 
 		instantiate: StDebuggerRawInspectionWithValue 
-		on: self model inspectedObject.
-	contextInspector table selectPath: #(1).
-	contextInspector table whenSelectionChangedDo: [ 
-		inspector model inspectedObject: (contextInspector table selectedItem
-				ifNotNil: [ :node | node rawValue ]).
-			self flag: 'TODO replace initialize with refresh (when it works...'.
-			inspector initialize ]
+		on: self model.
+	contextInspector selectFirst
 ]
 
 { #category : #initialization }
@@ -86,7 +81,7 @@ StDebuggerInspector >> initializeInspector [
 
 	inspector := self 
 		instantiate: StInspector 
-		on: (StInspectorModel on: contextInspector table selectedItem hostObject)
+		on: (StInspectorModel on: contextInspector selectedItem hostObject)
 ]
 
 { #category : #initialization }
@@ -94,7 +89,12 @@ StDebuggerInspector >> initializeWidgets [
 
 	contextLabel := self newLabel.
 	self initializeContextInspector.
-	self initializeInspector
+	self initializeInspector.
+	
+	contextInspector
+		transmitTo: inspector 
+		transform: [ :item | 
+			StInspectorModel on: (item ifNotNil: #rawValue) ]
 ]
 
 { #category : #accessing }
@@ -109,18 +109,26 @@ StDebuggerInspector >> label: aString [
 	contextLabel label: aString
 ]
 
+{ #category : #initialization }
+StDebuggerInspector >> model: aModel [
+
+	super model: aModel.
+	contextInspector model: aModel.
+	inspector model: aModel
+]
+
 { #category : #updating }
 StDebuggerInspector >> updateWith: inspectedObject [
 	| oldPath oldItem |
 
-	oldPath := contextInspector table selection selectedPath.
-	oldItem := contextInspector table selectedItem hostObject.
-	self model inspectedObject: inspectedObject.
-	contextInspector model: inspectedObject.
-	contextInspector setAttributeTable.
-	contextInspector table
-		selectPath:
-			(inspectedObject == oldItem
-				ifTrue: [ oldPath ]
-				ifFalse: [ #(1) ])
+	self model inspectedObject = inspectedObject ifTrue: [ ^ self ].
+
+	oldPath := contextInspector selectedPath.
+	oldItem := contextInspector selectedItem hostObject.
+
+	self model: (StInspectorModel on: inspectedObject).
+	
+	inspectedObject == oldItem 
+		ifTrue: [ contextInspector selectPath: oldPath ]
+		ifFalse: [ contextInspector selectFirst ]
 ]

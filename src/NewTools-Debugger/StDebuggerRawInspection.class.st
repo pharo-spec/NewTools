@@ -18,6 +18,12 @@ StDebuggerRawInspection >> addValuesColumn [
 ]
 
 { #category : #initialization }
+StDebuggerRawInspection >> defineOutputPorts [
+
+	^ { SpListSelectionPort newDelegate: [ self table ] }
+]
+
+{ #category : #initialization }
 StDebuggerRawInspection >> initializeWidgets [
 
 	super initializeWidgets.
@@ -28,6 +34,37 @@ StDebuggerRawInspection >> initializeWidgets [
 StDebuggerRawInspection >> inspectorNodes [
 
 	^ self model debuggerInspectorNodes
+]
+
+{ #category : #initialization }
+StDebuggerRawInspection >> model: aModel [
+
+	super model: aModel.
+	self setAttributeTable
+]
+
+{ #category : #accessing }
+StDebuggerRawInspection >> selectFirst [
+
+	self table selectPath: #(1)
+]
+
+{ #category : #accessing }
+StDebuggerRawInspection >> selectPath: aPath [
+
+	self table selectPath: aPath
+]
+
+{ #category : #accessing }
+StDebuggerRawInspection >> selectedItem [
+
+	^ self table selectedItem
+]
+
+{ #category : #accessing }
+StDebuggerRawInspection >> selectedPath [
+
+	^ self table selection selectedPath
 ]
 
 { #category : #accessing }
