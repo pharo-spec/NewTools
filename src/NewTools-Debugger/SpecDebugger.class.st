@@ -53,9 +53,9 @@ SpecDebugger class >> defaultSpec [
 					add: #stackTable;
 					yourself);
 				add: (SpBoxLayout newVertical 
-					add: #toolbar expand: false fill: false padding: 0;
+					add: 'Source' expand: false fill: false padding: 5;
 					add: #code;
-					addLast: 'Source' expand: false fill: false padding: 5;
+					addLast: #toolbar expand: false fill: false padding: 0;
 					yourself);
 				yourself);
 			add: #contextInspector withConstraints: [ :c | c spec: #variablesListOnTop ];
