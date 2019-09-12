@@ -48,10 +48,14 @@ SpecDebugger class >> defaultSpec [
 			position: 65 percent;
 			add: (SpPanedLayout newVertical
 				position: 40 percent;
-				add: #stackTable;
+				add: (SpBoxLayout newVertical 
+					add: 'Stack' expand: false fill: false padding: 5;
+					add: #stackTable;
+					yourself);
 				add: (SpBoxLayout newVertical 
 					add: #toolbar expand: false fill: false padding: 0;
 					add: #code;
+					addLast: 'Source' expand: false fill: false padding: 5;
 					yourself);
 				yourself);
 			add: #contextInspector withConstraints: [ :c | c spec: #variablesListOnTop ];
@@ -284,7 +288,7 @@ SpecDebugger >> initializeInspectors [
 	receiverInspector := self
 		instantiate: StDebuggerInspector 
 		on: (StInspectorModel on: nil). 
-	receiverInspector label: 'Receiver (self)'.
+	receiverInspector label: 'Receiver'.
 
 	contextInspector := self 
 		instantiate: StDebuggerInspector 
