@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'root'
 	],
-	#category : #'NewTools-FileDialog-Tests'
+	#category : #'NewTools-FileDialog-Tests-Utils'
 }
 
 { #category : #accessing }

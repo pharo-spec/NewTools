@@ -1,42 +1,15 @@
 Class {
 	#name : #FDFileFilterTest,
-	#superclass : #FDTest,
-	#category : #'NewTools-FileDialog-Tests'
+	#superclass : #FDAbstractFilterTest,
+	#category : #'NewTools-FileDialog-Tests-UI'
 }
 
-{ #category : #tests }
-FDFileFilterTest >> testDefaultFilterShouldReturnEveryTimeTrue [
-	| beforeFilter defaultFilter |
-	beforeFilter := root children.
-	defaultFilter := FDNilFilter new.
-	self assert: (root children select: [ :fileReference | defaultFilter predicate: fileReference ]) equals: beforeFilter
+{ #category : #accessing }
+FDFileFilterTest >> actualClass [
+	^ FDFileFilter
 ]
 
 { #category : #tests }
-FDFileFilterTest >> testHiddenFilter [
-	| hiddenFilter |
-	hiddenFilter := FDHidenFilter new.
-	self
-		assert: ((root children select: [ :item | hiddenFilter predicate: item ]) collect: #basename) asSet
-		equals: {'sth.ext' . 'banana.jpg' . 'sth.aaa' . 'patate.png' . 'dir.ext' . 'dir'} asSet
-]
-
-{ #category : #tests }
-FDFileFilterTest >> testJPGFilterShouldFilterOnlyJPGFile [
-	| filterBis |
-	filterBis := FDJPEGFilter new.
-	self
-		assert:
-			((root children select: [ :fileReference | filterBis predicate: fileReference ])
-				allSatisfy: [ :item | (item basename endsWith: '.jpg') or: [ item isDirectory ] ])
-]
-
-{ #category : #tests }
-FDFileFilterTest >> testPNGFilterShouldFilterOnlyPNGFile [
-	| filterBis |
-	filterBis := FDPNGFilter new.
-	self
-		assert:
-			((root children select: [ :fileReference | filterBis predicate: fileReference ])
-				allSatisfy: [ :item | (item basename endsWith: '.png') or: [ item isDirectory ] ])
+FDFileFilterTest >> testPredicate [
+	self assertCollection: (filter applyOn: root children) hasSameElements: (root children select: #isFile)
 ]

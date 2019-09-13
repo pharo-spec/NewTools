@@ -1,10 +1,10 @@
 Class {
 	#name : #FDWindowPathPresenterTest,
-	#superclass : #FDTest,
+	#superclass : #FDTestCase,
 	#instVars : [
 		'windowPathUI'
 	],
-	#category : #'NewTools-FileDialog-Tests'
+	#category : #'NewTools-FileDialog-Tests-UI'
 }
 
 { #category : #running }

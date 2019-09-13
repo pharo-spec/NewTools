@@ -1,11 +1,11 @@
 Class {
 	#name : #FDFileDialogTest,
-	#superclass : #FDTest,
+	#superclass : #FDTestCase,
 	#instVars : [
 		'dialog',
 		'window'
 	],
-	#category : #'NewTools-FileDialog-Tests'
+	#category : #'NewTools-FileDialog-Tests-UI'
 }
 
 { #category : #testing }
