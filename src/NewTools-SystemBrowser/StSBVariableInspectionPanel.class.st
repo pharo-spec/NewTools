@@ -36,7 +36,7 @@ StSBVariableInspectionPanel >> defineOutputPorts [
 ]
 
 { #category : #initialization }
-StSBVariableInspectionPanel >> initializeWidgets [
+StSBVariableInspectionPanel >> initializePresenters [
 	
 	variableList := self newTable 
 		hideColumnHeaders;

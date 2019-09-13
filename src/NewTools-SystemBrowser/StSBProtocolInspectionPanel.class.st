@@ -36,7 +36,7 @@ StSBProtocolInspectionPanel >> defineOutputPorts [
 ]
 
 { #category : #initialization }
-StSBProtocolInspectionPanel >> initializeWidgets [
+StSBProtocolInspectionPanel >> initializePresenters [
 	
 	protocolList := self newTable 
 		hideColumnHeaders;

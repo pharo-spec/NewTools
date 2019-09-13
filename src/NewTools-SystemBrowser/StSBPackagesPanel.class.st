@@ -40,7 +40,7 @@ StSBPackagesPanel >> gotoPackage: aPackage [
 ]
 
 { #category : #initialization }
-StSBPackagesPanel >> initializeWidgets [
+StSBPackagesPanel >> initializePresenters [
 	
 	packageTree := self newTreeTable
 		hideColumnHeaders;

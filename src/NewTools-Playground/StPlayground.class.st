@@ -76,7 +76,7 @@ StPlayground >> buildToolBar [
 ]
 
 { #category : #initialization }
-StPlayground >> initializeWidgets [
+StPlayground >> initializePresenters [
 	
 	text := self newCode
 ]

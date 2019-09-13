@@ -68,7 +68,7 @@ StBreakpointInspection >> haltsSelectors [
 ]
 
 { #category : #initialization }
-StBreakpointInspection >> initializeWidgets [
+StBreakpointInspection >> initializePresenters [
 	| allMethodsForModel breakpointData |
 	
 	breakpointData := SortedCollection sortBlock:[ :a :b | (a at: #method) name < (b at: #method) name].

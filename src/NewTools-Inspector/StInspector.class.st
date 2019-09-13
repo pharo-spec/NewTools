@@ -87,7 +87,7 @@ StInspector >> defineInputPorts [
 ]
 
 { #category : #initialization }
-StInspector >> initializeWidgets [
+StInspector >> initializePresenters [
 
 	views := self newNotebook.
 	evaluator := self newCode.

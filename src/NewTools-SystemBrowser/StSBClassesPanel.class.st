@@ -45,7 +45,7 @@ StSBClassesPanel >> gotoClass: aClass [
 ]
 
 { #category : #initialization }
-StSBClassesPanel >> initializeWidgets [
+StSBClassesPanel >> initializePresenters [
 	
 	classList := self newTable
 		hideColumnHeaders;

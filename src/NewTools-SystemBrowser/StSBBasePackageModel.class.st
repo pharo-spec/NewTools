@@ -26,7 +26,7 @@ StSBBasePackageModel >> classes [
 	^ self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 StSBBasePackageModel >> comment [
 
 	^ self package packageComment

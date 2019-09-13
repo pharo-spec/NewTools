@@ -169,13 +169,6 @@ StSystemBrowser >> initializePresenters [
 ]
 
 { #category : #initialization }
-StSystemBrowser >> initializeWidgets [
-
-	self initializePresenters.	
-	self connectPresenters
-]
-
-{ #category : #initialization }
 StSystemBrowser >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter

@@ -28,7 +28,7 @@ StRawInspection >> addVariablesColumn [
 ]
 
 { #category : #initialization }
-StRawInspection >> initializeWidgets [
+StRawInspection >> initializePresenters [
 
 	attributeTable := self newTreeTable.
 	self addVariablesColumn.
