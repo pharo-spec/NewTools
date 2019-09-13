@@ -11,8 +11,8 @@ StDebuggerRawInspectionWithValue >> addValuesColumn [
 ]
 
 { #category : #initialization }
-StDebuggerRawInspectionWithValue >> initializeWidgets [
+StDebuggerRawInspectionWithValue >> initializePresenters [
 
-	super initializeWidgets.
+	super initializePresenters.
 	attributeTable showColumnHeaders
 ]

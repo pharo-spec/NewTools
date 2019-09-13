@@ -25,7 +25,7 @@ SpDynamicToolbarPresenter >> actions [
 ]
 
 { #category : #initialization }
-SpDynamicToolbarPresenter >> initializeWidgets [
+SpDynamicToolbarPresenter >> initializePresenters [
 
 	self refreshWidgets
 ]

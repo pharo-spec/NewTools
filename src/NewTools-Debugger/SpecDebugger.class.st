@@ -297,6 +297,15 @@ SpecDebugger >> initializeInspectors [
 ]
 
 { #category : #initialization }
+SpecDebugger >> initializePresenters [
+
+	self initializeStack.
+	self initializeToolbar.
+	self initializeCode.
+	self initializeInspectors
+]
+
+{ #category : #initialization }
 SpecDebugger >> initializeStack [
 
 	stackTable := self newTable.
@@ -327,15 +336,6 @@ SpecDebugger >> initializeToolbar [
 	self flag: #TODO. "This needs to come from the application configuration"
 	toolbar beIcons.
 	self updateToolbar
-]
-
-{ #category : #initialization }
-SpecDebugger >> initializeWidgets [
-
-	self initializeStack.
-	self initializeToolbar.
-	self initializeCode.
-	self initializeInspectors
 ]
 
 { #category : #initialization }

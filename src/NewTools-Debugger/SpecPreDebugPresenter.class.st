@@ -29,7 +29,7 @@ SpecPreDebugPresenter >> debugger [
 ]
 
 { #category : #initialization }
-SpecPreDebugPresenter >> initializeWidgets [
+SpecPreDebugPresenter >> initializePresenters [
 	toolbar := self newDynamicToolbar.
 	toolbar update.
 	textPresenter := self newText.

@@ -85,7 +85,7 @@ StDebuggerInspector >> initializeInspector [
 ]
 
 { #category : #initialization }
-StDebuggerInspector >> initializeWidgets [
+StDebuggerInspector >> initializePresenters [
 
 	contextLabel := self newLabel.
 	self initializeContextInspector.

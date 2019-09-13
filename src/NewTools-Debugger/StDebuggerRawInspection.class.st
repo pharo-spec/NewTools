@@ -24,9 +24,9 @@ StDebuggerRawInspection >> defineOutputPorts [
 ]
 
 { #category : #initialization }
-StDebuggerRawInspection >> initializeWidgets [
+StDebuggerRawInspection >> initializePresenters [
 
-	super initializeWidgets.
+	super initializePresenters.
 	attributeTable hideColumnHeaders
 ]
 
