@@ -68,14 +68,8 @@ StPlayground >> buildStatusBar [
 
 { #category : #'private builder' }
 StPlayground >> buildToolBar [
-	^ CmCommandGroup forSpec
-		register:
-			(CmCommandGroup forSpec
-				register: (StPlaygroundDoItCommand forSpecContext: self);
-				register: (StPlaygroundPublishCommand forSpecContext: self);
-				register: (StPlaygroundBindingsCommand forSpecContext: self);
-				register: (StPlaygroundPagesCommand forSpecContext: self);
-				yourself);
+
+	^ self toolbarActions 
 		asToolbarPresenterWith: [ :presenter | 
 			self flag: #TODO.	"This comes from a configuration"
 			presenter beIcons ]
@@ -108,4 +102,17 @@ StPlayground >> text [
 { #category : #'accessing ui' }
 StPlayground >> text: anObject [
 	text := anObject
+]
+
+{ #category : #'private builder' }
+StPlayground >> toolbarActions [
+
+	^ CmCommandGroup forSpec
+		register: (CmCommandGroup forSpec
+			register: (StPlaygroundDoItCommand forSpecContext: self);
+			register: (StPlaygroundPublishCommand forSpecContext: self);
+			register: (StPlaygroundBindingsCommand forSpecContext: self);
+			register: (StPlaygroundPagesCommand forSpecContext: self);
+			yourself);
+		yourself
 ]
