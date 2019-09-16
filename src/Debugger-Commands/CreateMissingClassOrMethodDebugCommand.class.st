@@ -28,8 +28,7 @@ CreateMissingClassOrMethodDebugCommand class >> defaultShortcut [
 { #category : #testing }
 CreateMissingClassOrMethodDebugCommand >> appliesToDebugger: aDebugger [
 
-	"^ aDebugger session isInterruptedContextDoesNotUnderstand"
-	^ false
+	^ aDebugger session isInterruptedContextDoesNotUnderstand
 ]
 
 { #category : #private }

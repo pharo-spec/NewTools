@@ -39,6 +39,34 @@ SpecDebugger class >> closeAllDebuggers [
 ]
 
 { #category : #specs }
+SpecDebugger class >> columnInspectorsSpec [
+	"<spec: #default>"
+
+	^ SpBoxLayout newVertical
+		"position: 70 percent;"
+		add: (SpPanedLayout newHorizontal
+			position: 65 percent;
+			add: (SpPanedLayout newVertical
+				position: 40 percent;
+				add: (SpBoxLayout newVertical 
+					add: 'Stack' expand: false fill: false padding: 5;
+					add: #stackTable;
+					yourself);
+				add: (SpBoxLayout newVertical 
+					add: 'Source' expand: false fill: false padding: 5;
+					add: #toolbar expand: false fill: false padding: 0;
+					add: #code;
+					yourself);
+				yourself);
+			add: (SpPanedLayout newVertical 
+				add: #contextInspector withConstraints: [ :c | c spec: #variablesListOnTop ];
+				add: #receiverInspector withConstraints: [ :c | c spec: #inspectorAlone ];
+				yourself);
+			yourself);
+		yourself
+]
+
+{ #category : #specs }
 SpecDebugger class >> defaultSpec [
 	<spec: #default>
 

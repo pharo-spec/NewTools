@@ -103,6 +103,11 @@ DebugCommand >> initialize [
 			<< self class defaultDescription ])
 ]
 
+{ #category : #hooks }
+DebugCommand >> interruptedContext [
+	^ self debugger interruptedContext
+]
+
 { #category : #accessing }
 DebugCommand >> session [
 	^self debugger session
