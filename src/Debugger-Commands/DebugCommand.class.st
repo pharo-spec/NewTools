@@ -94,10 +94,13 @@ DebugCommand >> debugger [
 
 { #category : #initialization }
 DebugCommand >> initialize [
+
 	super initialize.
-	"self
-		basicName: self debugCommandName;
-		basicDescription: self debugCommandDescription. "
+	self description: (String streamContents: [ :stream | 
+		stream 
+			<< self class defaultName
+			<< ': '
+			<< self class defaultDescription ])
 ]
 
 { #category : #accessing }
