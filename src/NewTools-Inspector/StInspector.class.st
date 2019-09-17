@@ -149,8 +149,6 @@ StInspector >> setModel: aModel [
 StInspector >> setModelBeforeInitialization: anInspectorModel [
 
 	model := anInspectorModel
-
-	
 ]
 
 { #category : #accessing }
@@ -164,4 +162,8 @@ StInspector >> updateTitle [
 		
 	self withWindowDo: [ :window | 
 		window title: self title ].
+]
+
+{ #category : #enumerating }
+StInspector >> whenActivatedDo: aBlock [
 ]
