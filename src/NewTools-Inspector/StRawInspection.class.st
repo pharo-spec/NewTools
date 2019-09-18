@@ -28,6 +28,12 @@ StRawInspection >> addVariablesColumn [
 ]
 
 { #category : #initialization }
+StRawInspection >> defineOutputPorts [
+
+	^ { SpActivationPort newDelegate: [ attributeTable ] }
+]
+
+{ #category : #initialization }
 StRawInspection >> initializePresenters [
 
 	attributeTable := self newTreeTable.

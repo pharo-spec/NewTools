@@ -9,6 +9,13 @@ Class {
 	#category : #'NewTools-Debugger-View'
 }
 
+{ #category : #initialization }
+StDebuggerEmbeddedInspector >> initializeViews [
+
+	views := self newNotebook.
+	views pages: self allPages
+]
+
 { #category : #private }
 StDebuggerEmbeddedInspector >> updateTitle [
 	"just don't"

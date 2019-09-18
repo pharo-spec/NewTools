@@ -33,8 +33,19 @@ StMillerInspector >> initializePresenters [
 
 	millerList := self instantiate: SpMillerColumnPresenter.
 	millerList 
-		presenterBlock: [ :aModel | StInspector onObject: aModel ];
+		presenterBlock: [ :aModel | StInspector on: aModel ];
 		setRootModel: self model
+]
+
+{ #category : #initialization }
+StMillerInspector >> initializeWindow: aWindowPresenter [
+
+	super initializeWindow: aWindowPresenter.
+	aWindowPresenter 
+		title: (StInspector titleFor: self model inspectedObject);
+		initialExtent: StInspector preferredExtent;
+		whenResizingDo: [ :ann | 
+			StInspector preferredExtent: ann newSize ]
 ]
 
 { #category : #accessing }

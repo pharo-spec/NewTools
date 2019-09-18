@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'views',
 		'evaluator',
-		'model'
+		'model',
+		'activationBlock'
 	],
 	#classVars : [
 		'PreferredExtent'
@@ -60,9 +61,22 @@ StInspector class >> preferredExtent [
 ]
 
 { #category : #accessing }
+StInspector class >> preferredExtent: aPoint [
+	
+	PreferredExtent := aPoint
+]
+
+{ #category : #accessing }
 StInspector class >> titleFor: anObject [ 
 
 	^ 'Inspector on {1}' format: { anObject gtDisplayString  }
+]
+
+{ #category : #private }
+StInspector >> activate: aSelection [
+
+	activationBlock ifNil: [ ^ self ].
+	activationBlock cull: aSelection
 ]
 
 { #category : #private }
@@ -87,14 +101,36 @@ StInspector >> defineInputPorts [
 ]
 
 { #category : #initialization }
+StInspector >> defineOutputPorts [
+
+	^ { SpActivationPort new }
+]
+
+{ #category : #initialization }
+StInspector >> initializeEvaluator [
+	
+	evaluator := self newCode
+]
+
+{ #category : #initialization }
 StInspector >> initializePresenters [
 
-	views := self newNotebook.
-	evaluator := self newCode.
-
-	views pages: self allPages.
-		
+	self initializeViews.
+	self initializeEvaluator.
+			
 	self refresh
+]
+
+{ #category : #initialization }
+StInspector >> initializeViews [
+
+	views := self newNotebook.
+	views pages: self allPages.
+	views pages do: [ :each |
+		(each hasPortNamed: 'activation') ifTrue: [ 
+			each 
+				transmitPort: 'activation' 
+				do: [ :selection | self activate: selection ] ] ]
 ]
 
 { #category : #initialization }
@@ -164,6 +200,8 @@ StInspector >> updateTitle [
 		window title: self title ].
 ]
 
-{ #category : #enumerating }
+{ #category : #'api-events' }
 StInspector >> whenActivatedDo: aBlock [
+
+	activationBlock := aBlock
 ]
