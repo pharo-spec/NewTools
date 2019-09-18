@@ -33,8 +33,8 @@ StMillerInspector >> initializePresenters [
 
 	millerList := self instantiate: SpMillerColumnPresenter.
 	millerList 
-		presenterBlock: [ :aModel | StInspector on: aModel ];
-		setRootModel: self model
+		presenterBlock: [ :aModel | StInspector onObject: aModel ];
+		setRootModel: self model inspectedObject
 ]
 
 { #category : #initialization }

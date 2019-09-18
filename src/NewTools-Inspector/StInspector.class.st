@@ -80,9 +80,26 @@ StInspector >> activate: aSelection [
 ]
 
 { #category : #private }
-StInspector >> allPages [
+StInspector >> addActivationTo: aPresenter [
+	
+	(aPresenter hasPortNamed: 'activation') ifFalse: [ ^ self ]. 
+	
+	aPresenter
+		transmitPort: 'activation'
+		do: [ :selection | self activate: selection ]
+]
 
-	^ self model objectInspectionPages
+{ #category : #private }
+StInspector >> allPages [
+	| pages |
+
+	pages := self model objectInspectionPages.
+	pages do: [ :each | 
+		each whenRetrievedDo: [ :presenter | 
+			self addActivationTo: presenter ] ].
+	
+	^ pages
+	
 ]
 
 { #category : #'private builder' }
@@ -101,36 +118,12 @@ StInspector >> defineInputPorts [
 ]
 
 { #category : #initialization }
-StInspector >> defineOutputPorts [
-
-	^ { SpActivationPort new }
-]
-
-{ #category : #initialization }
-StInspector >> initializeEvaluator [
-	
-	evaluator := self newCode
-]
-
-{ #category : #initialization }
 StInspector >> initializePresenters [
 
-	self initializeViews.
-	self initializeEvaluator.
+	views := self newNotebook.	
+	evaluator := self newCode.
 			
 	self refresh
-]
-
-{ #category : #initialization }
-StInspector >> initializeViews [
-
-	views := self newNotebook.
-	views pages: self allPages.
-	views pages do: [ :each |
-		(each hasPortNamed: 'activation') ifTrue: [ 
-			each 
-				transmitPort: 'activation' 
-				do: [ :selection | self activate: selection ] ] ]
 ]
 
 { #category : #initialization }
