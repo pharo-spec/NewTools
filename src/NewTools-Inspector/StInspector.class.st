@@ -70,12 +70,6 @@ StInspector class >> preferredExtent: aPoint [
 	PreferredExtent := aPoint
 ]
 
-{ #category : #accessing }
-StInspector class >> titleFor: anObject [ 
-
-	^ 'Inspector on {1}' format: { anObject gtDisplayString  }
-]
-
 { #category : #private }
 StInspector >> activate: aSelection [
 
