@@ -1,6 +1,6 @@
 Class {
 	#name : #StMillerInspector,
-	#superclass : #SpMillerColumnPresenter,
+	#superclass : #StPresenter,
 	#instVars : [
 		'millerList',
 		'model'
