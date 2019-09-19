@@ -5,7 +5,8 @@ Class {
 		'views',
 		'evaluator',
 		'model',
-		'activationBlock'
+		'activationBlock',
+		'header'
 	],
 	#classVars : [
 		'PreferredExtent'
@@ -17,10 +18,13 @@ Class {
 StInspector class >> defaultSpec [
 	<spec: #default>
 	
-	^ SpPanedLayout newVertical
-		position: 70 percent;
-		add: #views;
-		add: #evaluator;
+	^ SpBoxLayout newVertical 
+		add: #header expand: false fill: false padding: 5;
+		add: (SpPanedLayout newVertical
+			position: 70 percent;
+			add: #views;
+			add: #evaluator;
+			yourself);
 		yourself
 ]
 
@@ -120,6 +124,7 @@ StInspector >> defineInputPorts [
 { #category : #initialization }
 StInspector >> initializePresenters [
 
+	header := self instantiate: StHeaderBar.
 	views := self newNotebook.	
 	evaluator := self newCode.
 			
@@ -162,6 +167,7 @@ StInspector >> refresh [
 	 update inspector values."
 
 	self updateTitle.
+	self updateHeaderBar.
 	evaluator doItReceiver: self model inspectedObject.
 	views 
 		pages: self allPages;
@@ -184,6 +190,12 @@ StInspector >> setModelBeforeInitialization: anInspectorModel [
 StInspector >> title [
 
 	^ self class titleFor: self model inspectedObject
+]
+
+{ #category : #private }
+StInspector >> updateHeaderBar [
+		
+	header label: self title
 ]
 
 { #category : #private }
