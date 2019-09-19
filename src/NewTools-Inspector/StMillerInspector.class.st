@@ -42,7 +42,7 @@ StMillerInspector >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
-		title: (StInspector titleFor: self model inspectedObject);
+		title: self model windowTitle;
 		initialExtent: StInspector preferredExtent;
 		whenResizingDo: [ :ann | 
 			StInspector preferredExtent: ann newSize ]

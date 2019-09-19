@@ -189,13 +189,13 @@ StInspector >> setModelBeforeInitialization: anInspectorModel [
 { #category : #accessing }
 StInspector >> title [
 
-	^ self class titleFor: self model inspectedObject
+	^ self model windowTitle
 ]
 
 { #category : #private }
 StInspector >> updateHeaderBar [
 		
-	header label: self title
+	header label: self model descriptionString
 ]
 
 { #category : #private }
