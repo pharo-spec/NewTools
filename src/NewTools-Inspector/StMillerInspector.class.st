@@ -11,7 +11,7 @@ Class {
 { #category : #specs }
 StMillerInspector class >> defaultSpec [
 
-	^ SpScrollableLayout new 
+	^ SpBoxLayout newVertical
 		add: #millerList;
 		yourself
 ]
