@@ -2,9 +2,9 @@ Extension { #name : #Dictionary }
 
 { #category : #'*NewTools-Inspector-Extensions' }
 Dictionary >> inspectorItems [
+	<inspectorPresentationOrder: 0 title: 'Items'> 
 	
 	^ SpTablePresenter new 
-		title: 'Items';
 		addColumn: (SpStringTableColumn 
 			title: 'Key'
 			evaluated: [ :each | GTObjectPrinter asTruncatedTextFrom: each key ]);
