@@ -8,6 +8,12 @@ Class {
 	#category : #'NewTools-Inspector-View'
 }
 
+{ #category : #accessing }
+StMillerInspector class >> defaultSpacing [
+
+	^ 3
+]
+
 { #category : #specs }
 StMillerInspector class >> defaultSpec [
 
@@ -33,6 +39,7 @@ StMillerInspector >> initializePresenters [
 
 	millerList := self instantiate: SpMillerColumnPresenter.
 	millerList 
+		spacing: self spacing;
 		presenterBlock: [ :aModel | self spawnInspectorFor: aModel ];
 		setRootModel: self model inspectedObject
 ]
@@ -65,6 +72,12 @@ StMillerInspector >> model: aModel [
 StMillerInspector >> setModelBeforeInitialization: anInspectorModel [
 
 	model := anInspectorModel
+]
+
+{ #category : #accessing }
+StMillerInspector >> spacing [
+	
+	^ self class defaultSpacing
 ]
 
 { #category : #initialization }
