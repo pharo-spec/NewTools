@@ -34,12 +34,6 @@ StInspector class >> defaultTitle [
 	^ 'Inspector'
 ]
 
-{ #category : #accessing }
-StInspector class >> extensionsPragma [
-
-	^ #inspectorPresentationOrder:title:
-]
-
 { #category : #'tools registry' }
 StInspector class >> inspect: anObject [
 
