@@ -38,7 +38,7 @@ StInspectionCollector >> collectPages [
 		thenCollect: [ :eachPragma | 
 			SpNotebookPage 
 				title: (eachPragma argumentAt: 2)
-				provider: [ self inspectedObject perform: eachPragma methodSelector ] ]
+				provider: [ (self inspectedObject perform: eachPragma methodSelector) asInspection ] ]
 ]
 
 { #category : #private }

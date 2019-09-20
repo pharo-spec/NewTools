@@ -34,6 +34,13 @@ StRawInspection >> defineOutputPorts [
 ]
 
 { #category : #initialization }
+StRawInspection >> initialize [ 
+
+	super initialize.
+	
+]
+
+{ #category : #initialization }
 StRawInspection >> initializePresenters [
 
 	attributeTable := self newTreeTable.

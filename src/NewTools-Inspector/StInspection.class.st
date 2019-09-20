@@ -7,6 +7,12 @@ Class {
 	#category : #'NewTools-Inspector-View'
 }
 
+{ #category : #converting }
+StInspection >> asInspection [
+
+	^ self
+]
+
 { #category : #'model access' }
 StInspection >> model [
 	^ model
