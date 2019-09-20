@@ -33,7 +33,7 @@ StMillerInspector >> initializePresenters [
 
 	millerList := self instantiate: SpMillerColumnPresenter.
 	millerList 
-		presenterBlock: [ :aModel | StInspector onObject: aModel ];
+		presenterBlock: [ :aModel | self spawnInspectorFor: aModel ];
 		setRootModel: self model inspectedObject
 ]
 
@@ -65,4 +65,14 @@ StMillerInspector >> model: aModel [
 StMillerInspector >> setModelBeforeInitialization: anInspectorModel [
 
 	model := anInspectorModel
+]
+
+{ #category : #initialization }
+StMillerInspector >> spawnInspectorFor: aModel [
+		
+	self flag: #HACK. "I do not like to use this, but I really do not want to add a method 
+	#isInspectorNode in Object :("
+	^ StInspector onObject: ((aModel isKindOf: StInspectorNode)
+		ifTrue: [ aModel rawValue ]
+		ifFalse: [ aModel ])
 ]
