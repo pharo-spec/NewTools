@@ -31,9 +31,14 @@ AbstractFileReference >> inspectorContents [
 { #category : #'*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectorItems [
 	<inspectorPresentationOrder: 0 title: 'Items' if: #isDirectory>
+	| items |
 	
+	items := 	self directories, self files.
+	self isRoot ifFalse: [ 
+		items := items copyWithFirst: self parent ]. 
+
 	^ SpTablePresenter new 
-		items: (self directories, self files);
+		items: items;
 		addColumn: (SpCompositeTableColumn new 
 			title: 'Name';
 			addColumn: (SpImageTableColumn evaluated: [ :each |
