@@ -12,8 +12,9 @@ Class {
 StHeaderBar class >> defaultSpec [
 
 	^ SpBoxLayout newHorizontal
+		beNotHomogeneous;
 		add: #titleLabel;
-		addLast: #toolbar;
+		addLast: #toolbar expand: false;
 		yourself
 ]
 
