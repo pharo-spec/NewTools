@@ -14,9 +14,21 @@ StInspectorIndexedNode class >> hostObject: anObject index: index [
 		yourself
 ]
 
+{ #category : #comparing }
+StInspectorIndexedNode >> = anObject [
+
+	^ super = anObject and: [ index = anObject index ]
+]
+
 { #category : #accessing }
 StInspectorIndexedNode >> errorMessage [
 	^ 'error obtaining indexed attribute value'
+]
+
+{ #category : #comparing }
+StInspectorIndexedNode >> hash [
+
+	^ index hash
 ]
 
 { #category : #accessing }

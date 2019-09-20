@@ -14,6 +14,12 @@ StInspectorSlotNode class >> hostObject: anObject slot: aSlot [
 		yourself
 ]
 
+{ #category : #comparing }
+StInspectorSlotNode >> = anObject [
+
+	^ super = anObject and: [ slot = anObject slot ]
+]
+
 { #category : #accessing }
 StInspectorSlotNode >> browsingActionsForNode [
 
@@ -30,6 +36,12 @@ StInspectorSlotNode >> browsingActionsForNode [
 { #category : #accessing }
 StInspectorSlotNode >> errorMessage [
 	^ 'error obtaining attribute value'
+]
+
+{ #category : #comparing }
+StInspectorSlotNode >> hash [
+
+	^ super hash bitXor: slot hash
 ]
 
 { #category : #accessing }

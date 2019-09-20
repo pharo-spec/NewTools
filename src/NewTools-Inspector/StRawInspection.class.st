@@ -55,6 +55,13 @@ StRawInspection >> inspectorNodes [
 	^ self model allInspectorNodes
 ]
 
+{ #category : #accessing }
+StRawInspection >> refresh [
+
+	self inspectorNodes = (attributeTable roots) ifTrue: [ ^ self ].
+	'OK' crLog.
+]
+
 { #category : #building }
 StRawInspection >> setAttributeTable [
 

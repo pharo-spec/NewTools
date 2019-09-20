@@ -14,6 +14,14 @@ StInspectorNode class >> hostObject: anObject [
 		yourself
 ]
 
+{ #category : #comparing }
+StInspectorNode >> = anObject [
+
+	self == anObject ifTrue: [ ^ true ].
+	self class = anObject class ifFalse: [ ^ false ].
+	^ hostObject == anObject hostObject
+]
+
 { #category : #accessing }
 StInspectorNode >> children [ 
 	
@@ -23,6 +31,12 @@ StInspectorNode >> children [
 { #category : #accessing }
 StInspectorNode >> errorMessage [
 	^ 'error obtaining value'
+]
+
+{ #category : #comparing }
+StInspectorNode >> hash [
+
+	^ hostObject hash
 ]
 
 { #category : #accessing }
