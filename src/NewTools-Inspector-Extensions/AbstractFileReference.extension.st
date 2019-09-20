@@ -62,3 +62,14 @@ AbstractFileReference >> inspectorItems [
 				do: [ 'N/A' translated  ] ]);
 		yourself
 ]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
+AbstractFileReference >> inspectorStScript [
+	<inspectorPresentationOrder: 0 
+		title: 'Script' 
+		if: '[ :each | each isFile and: [ each extension = ''st''] ]'>
+	
+	^ SpCodePresenter new 
+		text: (self readStreamDo: #contents);
+		yourself
+]
