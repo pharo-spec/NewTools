@@ -1,8 +1,21 @@
 Class {
 	#name : #StInspectorBrowseCommand,
-	#superclass : #CmCommand,
+	#superclass : #StInspectorCommand,
 	#category : #'NewTools-Inspector-Command'
 }
+
+{ #category : #default }
+StInspectorBrowseCommand class >> defaultDescription [
+
+	^ 'Browse this instance class definition'
+]
+
+{ #category : #default }
+StInspectorBrowseCommand class >> defaultName [
+	<toolbarInspectCommand: 10>
+
+	^ 'Browse'
+]
 
 { #category : #converting }
 StInspectorBrowseCommand >> asSpecCommand [
@@ -18,17 +31,10 @@ StInspectorBrowseCommand >> execute [
 	self model inspectedObject browse
 ]
 
-{ #category : #initialization }
-StInspectorBrowseCommand >> initialize [
-	super initialize.
-	self
-		name: 'Browse';
-		description: 'Browse instance class.'
-]
-
 { #category : #accessing }
 StInspectorBrowseCommand >> model [
-	^ self owner presenter
+
+	^ self context model
 ]
 
 { #category : #accessing }

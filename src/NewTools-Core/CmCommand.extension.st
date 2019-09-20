@@ -7,7 +7,7 @@ CmCommand >> appliesTo: aTool [
 ]
 
 { #category : #'*NewTools-Core' }
-CmCommand class >> commandClassesForPragma: aSymbol [
+CmCommand class >> commandClassesFromPragma: aSymbol [
 	"Collects command classes matching the pragma aSymbol. 
 	 WARNING: The collection will happen takign the caller class and subclasses. If you 
 	 execute: CmCommand commandClassesForPragma: #myPragma:, it will scan all commands in 
@@ -34,4 +34,12 @@ CmCommand class >> instantiateCommands: commandClasses for: aTool [
 	^ commandClasses
 		collect: [ :commandClass | commandClass forSpecContext: aTool ]
 		thenSelect: [ :debugCommand | debugCommand decoratedCommand appliesTo: aTool ]
+]
+
+{ #category : #'*NewTools-Core' }
+CmCommand class >> instantiateCommandsFromPragma: pragmaName for: aTool [
+
+	^ self 
+		instantiateCommands: (self commandClassesFromPragma: pragmaName) 
+		for: aTool
 ]

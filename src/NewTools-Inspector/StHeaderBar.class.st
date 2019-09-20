@@ -2,7 +2,8 @@ Class {
 	#name : #StHeaderBar,
 	#superclass : #SpPresenter,
 	#instVars : [
-		'titleLabel'
+		'titleLabel',
+		'toolbar'
 	],
 	#category : #'NewTools-Inspector-View'
 }
@@ -12,17 +13,29 @@ StHeaderBar class >> defaultSpec [
 
 	^ SpBoxLayout newHorizontal
 		add: #titleLabel;
+		addLast: #toolbar;
 		yourself
 ]
 
 { #category : #initialization }
 StHeaderBar >> initializePresenters [
 
-	titleLabel := self newLabel
+	titleLabel := self newLabel.
+	toolbar := self newToolBar.
+	toolbar beIcons
 ]
 
 { #category : #accessing }
 StHeaderBar >> label: aString [
 
 	titleLabel label: aString
+]
+
+{ #category : #accessing }
+StHeaderBar >> toolbarActions: aCommandGroup [
+
+	toolbar removeAllItems.
+	SpToolBarPresenterBuilder new 
+		toolbarPresenter: toolbar;
+		visit: aCommandGroup
 ]

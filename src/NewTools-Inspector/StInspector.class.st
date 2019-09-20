@@ -187,9 +187,21 @@ StInspector >> title [
 ]
 
 { #category : #private }
+StInspector >> toolbarActions [
+	| group |
+	
+	group := (CmCommandGroup named: 'Toolbar') asSpecGroup.
+	(StInspectorCommand toolbarCommandsFor: self)
+		do: [ :cmd | group register: cmd ].
+	
+	^ group
+]
+
+{ #category : #private }
 StInspector >> updateHeaderBar [
 		
-	header label: self model descriptionString
+	header label: self model descriptionString.
+	header toolbarActions: self toolbarActions
 ]
 
 { #category : #private }

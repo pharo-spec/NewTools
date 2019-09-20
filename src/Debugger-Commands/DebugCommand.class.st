@@ -8,7 +8,7 @@ Class {
 DebugCommand class >> codeContextMenuCommandsForDebugger: debugger [
 
 	^ self
-		instantiateCommands: (self commandClassesForPragma: #CodeContextMenuDebugCommand)
+		instantiateCommandsFromPragma: #CodeContextMenuDebugCommand
 		for: debugger
 ]
 
@@ -35,7 +35,7 @@ DebugCommand class >> forSpecContext: anObject [
 DebugCommand class >> preDebugCommandsForDebugger: debugger [
 	
 	^ self
-		instantiateCommands: (self commandClassesForPragma: #PreDebugCommand)
+		instantiateCommandsFromPragma: #PreDebugCommand
 		for: debugger
 ]
 
@@ -43,7 +43,7 @@ DebugCommand class >> preDebugCommandsForDebugger: debugger [
 DebugCommand class >> stackContextMenuCommandsForDebugger: debugger [
 	
 	^ self
-		instantiateCommands: (self commandClassesForPragma: #StackContextMenuDebugCommand)
+		instantiateCommandsFromPragma: #StackContextMenuDebugCommand
 		for: debugger
 ]
 
@@ -51,7 +51,7 @@ DebugCommand class >> stackContextMenuCommandsForDebugger: debugger [
 DebugCommand class >> toolbarCommandsForDebugger: debugger [
 
 	^ self
-		instantiateCommands: (self commandClassesForPragma: #toolbarDebugCommand:)
+		instantiateCommandsFromPragma: #toolbarDebugCommand:
 		for: debugger
 ]
 
