@@ -6,27 +6,10 @@ Class {
 
 { #category : #'instance creation' }
 DebugCommand class >> codeContextMenuCommandsForDebugger: debugger [
-	^ self
-		instantiateCommands: (self debugCommandClassesForPragma: #CodeContextMenuDebugCommand)
-		forDebugger: debugger
-]
 
-{ #category : #accessing }
-DebugCommand class >> debugCommandClassesForPragma: aSymbol [
-	| commandsClasses |
-	
-	commandsClasses := OrderedCollection new.
-	(self allSubclasses reject: [ :sc | sc hasAbstractMethods ])
-		do: [ :commandClass | 
-			commandsClasses addAll: (Pragma
-				allNamed: aSymbol
-				from: commandClass class
-				to: commandClass class) ].
-	
-	^ ((aSymbol last = $:)
-		ifTrue: [ commandsClasses sorted: [ :a :b | (a argumentAt: 1) < (b argumentAt: 1) ] ]
-		ifFalse: [ commandsClasses ])
-		collect: [ :pragma | pragma methodClass soleInstance ]
+	^ self
+		instantiateCommands: (self commandClassesForPragma: #CodeContextMenuDebugCommand)
+		for: debugger
 ]
 
 { #category : #initialization }
@@ -49,35 +32,38 @@ DebugCommand class >> forSpecContext: anObject [
 ]
 
 { #category : #'instance creation' }
-DebugCommand class >> instantiateCommands: commandClasses forDebugger: debugger [
-	^ commandClasses
-		collect: [ :commandClass | commandClass forSpecContext: debugger ]
-		thenSelect: [ :debugCommand | debugCommand decoratedCommand appliesToDebugger: debugger ]
-]
-
-{ #category : #'instance creation' }
 DebugCommand class >> preDebugCommandsForDebugger: debugger [
+	
 	^ self
-		instantiateCommands: (self debugCommandClassesForPragma: #PreDebugCommand)
-		forDebugger: debugger
+		instantiateCommands: (self commandClassesForPragma: #PreDebugCommand)
+		for: debugger
 ]
 
 { #category : #'instance creation' }
 DebugCommand class >> stackContextMenuCommandsForDebugger: debugger [
+	
 	^ self
-		instantiateCommands: (self debugCommandClassesForPragma: #StackContextMenuDebugCommand)
-		forDebugger: debugger
+		instantiateCommands: (self commandClassesForPragma: #StackContextMenuDebugCommand)
+		for: debugger
 ]
 
 { #category : #'instance creation' }
 DebugCommand class >> toolbarCommandsForDebugger: debugger [
+
 	^ self
-		instantiateCommands: (self debugCommandClassesForPragma: #toolbarDebugCommand:)
-		forDebugger: debugger
+		instantiateCommands: (self commandClassesForPragma: #toolbarDebugCommand:)
+		for: debugger
+]
+
+{ #category : #testing }
+DebugCommand >> appliesTo: aDebugger [
+
+	^ self appliesToDebugger: aDebugger
 ]
 
 { #category : #testing }
 DebugCommand >> appliesToDebugger: aDebugger [
+
 	^ true
 ]
 
