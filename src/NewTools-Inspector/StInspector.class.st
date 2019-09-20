@@ -4,7 +4,9 @@ Class {
 	#instVars : [
 		'views',
 		'evaluator',
-		'model'
+		'model',
+		'activationBlock',
+		'header'
 	],
 	#classVars : [
 		'PreferredExtent'
@@ -16,10 +18,13 @@ Class {
 StInspector class >> defaultSpec [
 	<spec: #default>
 	
-	^ SpPanedLayout newVertical
-		position: 70 percent;
-		add: #views;
-		add: #evaluator;
+	^ SpBoxLayout newVertical 
+		add: #header expand: false fill: false padding: 5;
+		add: (SpPanedLayout newVertical
+			position: 70 percent;
+			add: #views;
+			add: #evaluator;
+			yourself);
 		yourself
 ]
 
@@ -27,12 +32,6 @@ StInspector class >> defaultSpec [
 StInspector class >> defaultTitle [
 
 	^ 'Inspector'
-]
-
-{ #category : #accessing }
-StInspector class >> extensionsPragma [
-
-	^ #inspectorPresentationOrder:title:
 ]
 
 { #category : #'tools registry' }
@@ -60,15 +59,39 @@ StInspector class >> preferredExtent [
 ]
 
 { #category : #accessing }
-StInspector class >> titleFor: anObject [ 
+StInspector class >> preferredExtent: aPoint [
+	
+	PreferredExtent := aPoint
+]
 
-	^ 'Inspector on {1}' format: { anObject gtDisplayString  }
+{ #category : #private }
+StInspector >> activate: aSelection [
+
+	activationBlock ifNil: [ ^ self ].
+	activationBlock cull: aSelection
+]
+
+{ #category : #private }
+StInspector >> addActivationTo: aPresenter [
+	
+	(aPresenter hasPortNamed: 'activation') ifFalse: [ ^ self ]. 
+	
+	aPresenter
+		transmitPort: 'activation'
+		do: [ :selection | self activate: selection ]
 ]
 
 { #category : #private }
 StInspector >> allPages [
+	| pages |
 
-	^ self model objectInspectionPages
+	pages := self model objectInspectionPages.
+	pages do: [ :each | 
+		each whenRetrievedDo: [ :presenter | 
+			self addActivationTo: presenter ] ].
+	
+	^ pages
+	
 ]
 
 { #category : #'private builder' }
@@ -89,11 +112,10 @@ StInspector >> defineInputPorts [
 { #category : #initialization }
 StInspector >> initializePresenters [
 
-	views := self newNotebook.
+	header := self instantiate: StHeaderBar.
+	views := self newNotebook.	
 	evaluator := self newCode.
-
-	views pages: self allPages.
-		
+			
 	self refresh
 ]
 
@@ -133,6 +155,7 @@ StInspector >> refresh [
 	 update inspector values."
 
 	self updateTitle.
+	self updateHeaderBar.
 	evaluator doItReceiver: self model inspectedObject.
 	views 
 		pages: self allPages;
@@ -149,14 +172,30 @@ StInspector >> setModel: aModel [
 StInspector >> setModelBeforeInitialization: anInspectorModel [
 
 	model := anInspectorModel
-
-	
 ]
 
 { #category : #accessing }
 StInspector >> title [
 
-	^ self class titleFor: self model inspectedObject
+	^ self model windowTitle
+]
+
+{ #category : #private }
+StInspector >> toolbarActions [
+	| group |
+	
+	group := (CmCommandGroup named: 'Toolbar') asSpecGroup.
+	(StInspectorCommand toolbarCommandsFor: self)
+		do: [ :cmd | group register: cmd ].
+	
+	^ group
+]
+
+{ #category : #private }
+StInspector >> updateHeaderBar [
+		
+	header label: self model descriptionString.
+	header toolbarActions: self toolbarActions
 ]
 
 { #category : #private }
@@ -164,4 +203,10 @@ StInspector >> updateTitle [
 		
 	self withWindowDo: [ :window | 
 		window title: self title ].
+]
+
+{ #category : #'api-events' }
+StInspector >> whenActivatedDo: aBlock [
+
+	activationBlock := aBlock
 ]

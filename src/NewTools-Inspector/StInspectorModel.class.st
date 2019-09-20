@@ -26,6 +26,24 @@ StInspectorModel >> debuggerInspectorNodes [
 ]
 
 { #category : #accessing }
+StInspectorModel >> descriptionString [
+	| header printString object |
+	
+	object := self inspectedObject.
+	header := (object class name first isVowel
+		ifTrue: [ 'an ' ]
+		ifFalse: [ 'a ' ]) , 
+		object class name.
+	
+	printString := (GTObjectPrinter asTruncatedTextFrom: object) asString.
+	^ (printString beginsWith: header)
+		ifTrue: [ printString ]
+		ifFalse: [ 
+			String streamContents: [ :out | 
+				out << header; << ' ('; << printString; << ')' ] ]
+]
+
+{ #category : #accessing }
 StInspectorModel >> inspectedObject [
 
 	^ inspectedObject
@@ -40,4 +58,10 @@ StInspectorModel >> inspectedObject: anObject [
 StInspectorModel >> objectInspectionPages [
 
 	^ self inspectedObject inspectionPages
+]
+
+{ #category : #accessing }
+StInspectorModel >> windowTitle [
+
+	^ 'Inspector on {1}' format: { self inspectedObject gtDisplayString }
 ]

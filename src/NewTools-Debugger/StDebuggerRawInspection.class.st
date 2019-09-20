@@ -20,7 +20,7 @@ StDebuggerRawInspection >> addValuesColumn [
 { #category : #initialization }
 StDebuggerRawInspection >> defineOutputPorts [
 
-	^ { SpListSelectionPort newDelegate: [ self table ] }
+	^ { SpListSelectionPort newDelegate: [ self table ] }, super defineOutputPorts
 ]
 
 { #category : #initialization }
