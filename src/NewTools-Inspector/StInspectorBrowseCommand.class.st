@@ -22,6 +22,7 @@ StInspectorBrowseCommand >> asSpecCommand [
 
 	^ super asSpecCommand 
 		iconName: #smallSystemBrowser;
+		beDisplayedOnRightSide;
 		yourself
 ]
 
