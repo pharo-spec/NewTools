@@ -20,6 +20,12 @@ StInspectorModel class >> on: anObject [
 ]
 
 { #category : #accessing }
+StInspectorModel >> behavior [ 
+	
+	^ self inspectedObject class
+]
+
+{ #category : #accessing }
 StInspectorModel >> debuggerInspectorNodes [
 
 	^ self inspectedObject debuggerInspectorNodes
@@ -36,11 +42,11 @@ StInspectorModel >> descriptionString [
 		object class name.
 	
 	printString := (GTObjectPrinter asTruncatedTextFrom: object) asString.
-	^ (printString beginsWith: header)
+	^ ((printString beginsWith: header)
 		ifTrue: [ printString ]
 		ifFalse: [ 
 			String streamContents: [ :out | 
-				out << header; << ' ('; << printString; << ')' ] ]
+				out << header; << ' ('; << printString; << ')' ] ])
 ]
 
 { #category : #accessing }
@@ -52,6 +58,12 @@ StInspectorModel >> inspectedObject [
 { #category : #accessing }
 StInspectorModel >> inspectedObject: anObject [
 	inspectedObject := anObject
+]
+
+{ #category : #accessing }
+StInspectorModel >> labelString [
+	
+	^ self descriptionString truncateWithElipsisTo: 60
 ]
 
 { #category : #accessing }

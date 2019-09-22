@@ -49,6 +49,13 @@ StInspectorSlotNode >> key [
 	^ self slot name
 ]
 
+{ #category : #printing }
+StInspectorSlotNode >> printOn: stream [ 
+
+	super printOn: stream.
+	stream << '(' << self slot name << ')'
+]
+
 { #category : #accessing }
 StInspectorSlotNode >> rawValue [
 	^ self hostObject readSlot: slot

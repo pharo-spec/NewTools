@@ -149,17 +149,15 @@ StInspector >> model: anInspectorModel [
 	self refresh
 ]
 
-{ #category : #private }
+{ #category : #'private updating' }
 StInspector >> refresh [
 	"model changed?  
 	 update inspector values."
 
 	self updateTitle.
 	self updateHeaderBar.
-	evaluator doItReceiver: self model inspectedObject.
-	views 
-		pages: self allPages;
-		selectPageIndex: 1.
+	self updateEvaluator.
+	self updatePages
 ]
 
 { #category : #private }
@@ -191,14 +189,30 @@ StInspector >> toolbarActions [
 	^ group
 ]
 
-{ #category : #private }
+{ #category : #'private updating' }
+StInspector >> updateEvaluator [
+
+	evaluator
+		doItReceiver: self model inspectedObject;
+		behavior: self model behavior
+]
+
+{ #category : #'private updating' }
 StInspector >> updateHeaderBar [
 		
-	header label: self model descriptionString.
+	header label: self model labelString.
 	header toolbarActions: self toolbarActions
 ]
 
-{ #category : #private }
+{ #category : #'private updating' }
+StInspector >> updatePages [
+
+	views 
+		pages: self allPages;
+		selectPageIndex: 1
+]
+
+{ #category : #'private updating' }
 StInspector >> updateTitle [
 		
 	self withWindowDo: [ :window | 
