@@ -89,6 +89,12 @@ StInspectorNode >> label [
 ]
 
 { #category : #accessing }
+StInspectorNode >> mementoValue [
+
+	^ self rawValue copy
+]
+
+{ #category : #accessing }
 StInspectorNode >> rawValue [
 	"Answer the object value of this object variable (slot, indexed attribute, computed value)."
 	^ self subclassResponsibility

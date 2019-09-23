@@ -2,7 +2,8 @@ Class {
 	#name : #StRawInspection,
 	#superclass : #StInspection,
 	#instVars : [
-		'attributeTable'
+		'attributeTable',
+		'mementoNodes'
 	],
 	#category : #'NewTools-Inspector-View'
 }
@@ -55,19 +56,35 @@ StRawInspection >> inspectorNodes [
 	^ self model allInspectorNodes
 ]
 
-{ #category : #accessing }
-StRawInspection >> refresh [
-
-	self inspectorNodes = (attributeTable roots) ifTrue: [ ^ self ].
-	'OK' crLog.
-]
-
 { #category : #building }
 StRawInspection >> setAttributeTable [
 
 	attributeTable
 		roots: self inspectorNodes;
 		children: [ :node | node children ]
+]
+
+{ #category : #stepping }
+StRawInspection >> step [
+	| rootNodes selectedPath |
+
+	rootNodes := self model allInspectorNodes.
+	mementoNodes ifNil: [ 
+		mementoNodes := self takeMementoValues: rootNodes.
+		^ self ].
+	(rootNodes collect: #rawValue) = mementoNodes ifTrue: [ ^ self ].
+	
+	mementoNodes := self takeMementoValues: rootNodes.
+	selectedPath := attributeTable selection selectedPath.
+	attributeTable roots: rootNodes.
+	selectedPath ifNotNil: [ 
+		attributeTable selectPath: selectedPath ]
+]
+
+{ #category : #stepping }
+StRawInspection >> takeMementoValues: aCollection [ 
+
+	^ aCollection collect: #mementoValue
 ]
 
 { #category : #building }

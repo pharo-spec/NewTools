@@ -57,6 +57,7 @@ StInspectorModel >> inspectedObject [
 
 { #category : #accessing }
 StInspectorModel >> inspectedObject: anObject [
+
 	inspectedObject := anObject
 ]
 

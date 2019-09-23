@@ -3,7 +3,8 @@ Class {
 	#superclass : #StPresenter,
 	#instVars : [
 		'millerList',
-		'model'
+		'model',
+		'stepService'
 	],
 	#category : #'NewTools-Inspector-View'
 }
@@ -51,8 +52,9 @@ StMillerInspector >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		title: self model windowTitle;
 		initialExtent: StInspector preferredExtent;
-		whenResizingDo: [ :ann | 
-			StInspector preferredExtent: ann newSize ]
+		whenOpenedDo: [ self startStepping ];
+		whenClosedDo: [ self stopStepping ];
+		whenResizingDo: [ :ann | StInspector preferredExtent: ann newSize ]
 ]
 
 { #category : #accessing }
@@ -88,4 +90,26 @@ StMillerInspector >> spawnInspectorFor: aModel [
 	^ StInspector onObject: ((aModel isKindOf: StInspectorNode)
 		ifTrue: [ aModel rawValue ]
 		ifFalse: [ aModel ])
+]
+
+{ #category : #'private stepping' }
+StMillerInspector >> startStepping [
+
+	stepService := TKTParameterizableService new.
+	stepService name: self className, ': Refresh service'.
+	stepService step: [ self step ].
+	stepService start
+]
+
+{ #category : #'private stepping' }
+StMillerInspector >> step [ 
+
+	millerList pages
+		do: [ :each | each step ]
+]
+
+{ #category : #'private stepping' }
+StMillerInspector >> stopStepping [
+
+	stepService stop
 ]

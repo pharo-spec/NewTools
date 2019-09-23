@@ -1,3 +1,6 @@
+"
+I am a variable node for representing the slots of an object. I used the name of a slot as a key. I extract the value from the host object every time #rawValue is called.
+"
 Class {
 	#name : #StInspectorSlotNode,
 	#superclass : #StInspectorNode,
@@ -58,6 +61,7 @@ StInspectorSlotNode >> printOn: stream [
 
 { #category : #accessing }
 StInspectorSlotNode >> rawValue [
+
 	^ self hostObject readSlot: slot
 ]
 

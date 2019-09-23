@@ -6,7 +6,8 @@ Class {
 		'evaluator',
 		'model',
 		'activationBlock',
-		'header'
+		'header',
+		'alivePresentersByPage'
 	],
 	#classVars : [
 		'PreferredExtent'
@@ -88,6 +89,7 @@ StInspector >> allPages [
 	pages := self model objectInspectionPages.
 	pages do: [ :each | 
 		each whenRetrievedDo: [ :presenter | 
+			self keepPresenter: presenter.
 			self addActivationTo: presenter ] ].
 	
 	^ pages
@@ -107,6 +109,15 @@ StInspector >> buildToolBar [
 StInspector >> defineInputPorts [
 
 	^ { SpModelPort new }
+]
+
+{ #category : #initialization }
+StInspector >> initialize [
+
+	super initialize.
+	"I keep the presenters I'm showing in this variable because they can change (and they are 
+	 initialized lazily in the notebook)"
+	alivePresentersByPage := WeakSet new	
 ]
 
 { #category : #initialization }
@@ -131,6 +142,12 @@ StInspector >> initializeWindow: aWindowPresenter [
 { #category : #'model access' }
 StInspector >> inspectedObject [ 	
 	^self model inspectedObject
+]
+
+{ #category : #private }
+StInspector >> keepPresenter: aPresenter [
+
+	alivePresentersByPage add: aPresenter
 ]
 
 { #category : #'model access' }
@@ -170,6 +187,13 @@ StInspector >> setModel: aModel [
 StInspector >> setModelBeforeInitialization: anInspectorModel [
 
 	model := anInspectorModel
+]
+
+{ #category : #stepping }
+StInspector >> step [
+
+	alivePresentersByPage 
+		do: [ :each | each step ]
 ]
 
 { #category : #accessing }

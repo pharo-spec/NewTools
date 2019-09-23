@@ -29,3 +29,8 @@ StInspection >> setModelBeforeInitialization: anInspectionModel [
 
 	model := anInspectionModel
 ]
+
+{ #category : #stepping }
+StInspection >> step [
+	"do nothing, it depends on my children"
+]

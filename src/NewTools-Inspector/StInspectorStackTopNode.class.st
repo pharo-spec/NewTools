@@ -17,6 +17,7 @@ StInspectorStackTopNode >> key [
 
 { #category : #accessing }
 StInspectorStackTopNode >> rawValue [
+
 	^ self hostObject stackPtr > 0
 		ifTrue: [ self hostObject top ]
 		ifFalse: [ #emptyStack ]
