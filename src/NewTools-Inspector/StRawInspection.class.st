@@ -70,21 +70,15 @@ StRawInspection >> step [
 
 	rootNodes := self model allInspectorNodes.
 	mementoNodes ifNil: [ 
-		mementoNodes := self takeMementoValues: rootNodes.
+		mementoNodes := rootNodes collect: #mementoValue.
 		^ self ].
 	(rootNodes collect: #rawValue) = mementoNodes ifTrue: [ ^ self ].
-	
-	mementoNodes := self takeMementoValues: rootNodes.
+
+	mementoNodes := rootNodes collect: #mementoValue.
 	selectedPath := attributeTable selection selectedPath.
 	attributeTable roots: rootNodes.
 	selectedPath ifNotNil: [ 
 		attributeTable selectPath: selectedPath ]
-]
-
-{ #category : #stepping }
-StRawInspection >> takeMementoValues: aCollection [ 
-
-	^ aCollection collect: #mementoValue
 ]
 
 { #category : #building }
