@@ -12,6 +12,7 @@ BaselineOfNewTools >> baseline: spec [
 			
 		self
 			spec: spec;
+			taskit: spec;
 			sindarin: spec.
 
 		spec
@@ -55,4 +56,12 @@ BaselineOfNewTools >> spec: spec [
 	spec 
 		baseline: 'Spec2' 
 		with: [ spec repository: 'github://pharo-spec/Spec/src' ]
+]
+
+{ #category : #dependencies }
+BaselineOfNewTools >> taskit: spec [
+
+	spec 
+		baseline: 'TaskIt' 
+		with: [ spec repository: 'github://sbragagnolo/taskit' ]
 ]
