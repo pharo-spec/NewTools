@@ -29,17 +29,5 @@ StInspectorBrowseCommand >> asSpecCommand [
 { #category : #execution }
 StInspectorBrowseCommand >> execute [ 
 
-	self model inspectedObject browse
-]
-
-{ #category : #accessing }
-StInspectorBrowseCommand >> model [
-
-	^ self context model
-]
-
-{ #category : #accessing }
-StInspectorBrowseCommand >> owner [ 
-	
-	^ context owner
+	self interestingObject browse
 ]

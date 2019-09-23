@@ -28,3 +28,21 @@ StInspectorCommand >> initialize [
 			<< ': '
 			<< self class defaultDescription ])	
 ]
+
+{ #category : #execution }
+StInspectorCommand >> interestingObject [
+
+	^ self model inspectedObject
+]
+
+{ #category : #accessing }
+StInspectorCommand >> model [
+
+	^ self context model
+]
+
+{ #category : #accessing }
+StInspectorCommand >> owner [ 
+	
+	^ self context owner
+]

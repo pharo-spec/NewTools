@@ -33,7 +33,8 @@ StRawInspection >> attributesTableMenu [
 	
 	^ CmCommandGroup forSpec
 		beDisplayedAsGroup;
-		register: (StInspectorBrowseCommand forSpecContext: self);
+		register: (StInspectorInspectSelectedCommand forSpecContext: self);
+		register: (StInspectorBrowseSelectedCommand forSpecContext: self);
 		asMenuPresenter
 ]
 
@@ -65,6 +66,12 @@ StRawInspection >> initializePresenters [
 StRawInspection >> inspectorNodes [
 
 	^ self model allInspectorNodes
+]
+
+{ #category : #accessing }
+StRawInspection >> selectedObject [
+
+	^ attributeTable selectedItem value
 ]
 
 { #category : #building }

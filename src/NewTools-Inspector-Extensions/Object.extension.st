@@ -62,5 +62,5 @@ Object >> stDisplayString [
 Object >> stInspect [
 	"Temporary to experiment, should be replaced by inspect later"
 
-	^ StInspector inspect: self
+	^ StMillerInspector inspect: self
 ]

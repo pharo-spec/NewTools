@@ -24,6 +24,12 @@ StMillerInspector class >> defaultSpec [
 ]
 
 { #category : #'instance creation' }
+StMillerInspector class >> inspect: anObject [
+
+	^ self openOn: anObject
+]
+
+{ #category : #'instance creation' }
 StMillerInspector class >> onObject: anObject [
 
 	^ self on: (StInspectorModel on: anObject)
