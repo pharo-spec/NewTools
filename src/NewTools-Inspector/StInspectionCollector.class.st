@@ -1,3 +1,19 @@
+"
+I collect inspections from an object which wants to be inspected.
+I traverse the hierarchy of the object collecting #extensionPragmas and applying them.
+
+For now, I have two pragmas that receive 2 or 3 arguments: 
+
+- inspectorPresentationOrder:title:
+- inspectorPresentationOrder:title:if:
+
+order: inspection appearance order
+title: inspection title
+if: a block receiving ONE argument that will be evaluated to determine if that inspection needs to be shown.
+
+The arguments of the pragmas are required because the tabs are calculated lazily and this information 
+is required before.
+"
 Class {
 	#name : #StInspectionCollector,
 	#superclass : #Object,
@@ -7,7 +23,7 @@ Class {
 	#category : #'NewTools-Inspector-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #defaults }
 StInspectionCollector class >> defaultExtensionPragmas [
 
 	^ #(
