@@ -29,6 +29,15 @@ StRawInspection >> addVariablesColumn [
 ]
 
 { #category : #initialization }
+StRawInspection >> attributesTableMenu [
+	
+	^ CmCommandGroup forSpec
+		beDisplayedAsGroup;
+		register: (StInspectorBrowseCommand forSpecContext: self);
+		asMenuPresenter
+]
+
+{ #category : #initialization }
 StRawInspection >> defineOutputPorts [
 
 	^ { SpActivationPort newDelegate: [ attributeTable ] }
@@ -44,7 +53,9 @@ StRawInspection >> initialize [
 { #category : #initialization }
 StRawInspection >> initializePresenters [
 
-	attributeTable := self newTreeTable.
+	attributeTable := self newTreeTable
+		contextMenu: self attributesTableMenu;
+		yourself.
 	self addVariablesColumn.
 	self addValuesColumn.
 	self setAttributeTable

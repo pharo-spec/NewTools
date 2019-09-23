@@ -5,15 +5,6 @@ Class {
 }
 
 { #category : #'instance creation' }
-StInspectorCommand class >> instantiateCommands: commandClasses forInspector: inspector [
-	
-	^ commandClasses
-		collect: [ :commandClass | commandClass forSpecContext: inspector  ]
-		thenSelect: [ :debugCommand | 
-			debugCommand decoratedCommand appliesToInspector: inspector ]
-]
-
-{ #category : #'instance creation' }
 StInspectorCommand class >> toolbarCommandsFor: inspector [
 
 	^ self
