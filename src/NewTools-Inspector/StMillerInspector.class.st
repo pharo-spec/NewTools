@@ -3,8 +3,7 @@ Class {
 	#superclass : #StPresenter,
 	#instVars : [
 		'millerList',
-		'model',
-		'stepService'
+		'model'
 	],
 	#category : #'NewTools-Inspector-View'
 }
@@ -100,11 +99,8 @@ StMillerInspector >> spawnInspectorFor: aModel [
 
 { #category : #'private stepping' }
 StMillerInspector >> startStepping [
-
-	stepService := TKTParameterizableService new.
-	stepService name: self className, ': Refresh service'.
-	stepService step: [ self step ].
-	stepService start
+	
+	StInspectorRefreshService uniqueInstance register: self
 ]
 
 { #category : #'private stepping' }
@@ -117,5 +113,5 @@ StMillerInspector >> step [
 { #category : #'private stepping' }
 StMillerInspector >> stopStepping [
 
-	stepService stop
+	StInspectorRefreshService uniqueInstance unregister: self
 ]
