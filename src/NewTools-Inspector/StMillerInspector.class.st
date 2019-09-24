@@ -56,10 +56,10 @@ StMillerInspector >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
 		title: self model windowTitle;
-		initialExtent: StInspector preferredExtent;
+		initialExtent: StObjectInspector preferredExtent;
 		whenOpenedDo: [ self startStepping ];
 		whenClosedDo: [ self stopStepping ];
-		whenResizingDo: [ :ann | StInspector preferredExtent: ann newSize ]
+		whenResizingDo: [ :ann | StObjectInspector preferredExtent: ann newSize ]
 ]
 
 { #category : #accessing }
@@ -92,7 +92,7 @@ StMillerInspector >> spawnInspectorFor: aModel [
 		
 	self flag: #HACK. "I do not like to use this, but I really do not want to add a method 
 	#isInspectorNode in Object :("
-	^ StInspector onObject: ((aModel isKindOf: StInspectorNode)
+	^ StObjectInspector onObject: ((aModel isKindOf: StInspectorNode)
 		ifTrue: [ aModel rawValue ]
 		ifFalse: [ aModel ])
 ]

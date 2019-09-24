@@ -5,7 +5,7 @@ The difference is minor, but important: An embedded debugger does not triggers u
 "
 Class {
 	#name : #StDebuggerEmbeddedInspector,
-	#superclass : #StInspector,
+	#superclass : #StObjectInspector,
 	#category : #'NewTools-Debugger-View'
 }
 
