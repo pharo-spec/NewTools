@@ -96,26 +96,7 @@ SpecDebugger class >> contextRightColumnSpec [
 { #category : #specs }
 SpecDebugger class >> defaultSpec [
 
-	^ SpPanedLayout newVertical
-		position: 70 percent;
-		add: (SpPanedLayout newHorizontal
-			position: 65 percent;
-			add: (SpPanedLayout newVertical
-				position: 40 percent;
-				add: (SpBoxLayout newVertical 
-					add: 'Stack' expand: false fill: false padding: 5;
-					add: #stackTable;
-					yourself);
-				add: (SpBoxLayout newVertical 
-					add: 'Source' expand: false fill: false padding: 5;
-					add: #toolbar expand: false fill: false padding: 0;
-					add: #code;
-					yourself);
-				yourself);
-			add: #contextInspector withConstraints: [ :c | c spec: #variablesListOnTop ];
-			yourself);
-		add: #receiverInspector withConstraints: [ :c | c spec: #inspectorAlone ];
-		yourself
+	^ self perform: self usingSpecSelector
 ]
 
 { #category : #'menu code' }
@@ -236,6 +217,19 @@ SpecDebugger class >> traditionalSpec [
 			add: #contextInspector;
 			yourself);
 		yourself
+]
+
+{ #category : #specs }
+SpecDebugger class >> useSpecSelector: aSelector [
+
+	UsingSpecSelector := aSelector
+]
+
+{ #category : #specs }
+SpecDebugger class >> usingSpecSelector [
+
+	^ UsingSpecSelector ifNil: [ 
+		UsingSpecSelector := #contextRightColumnSpec ]
 ]
 
 { #category : #actions }
