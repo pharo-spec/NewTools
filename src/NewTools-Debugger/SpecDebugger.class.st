@@ -213,7 +213,7 @@ SpecDebugger class >> traditionalSpec [
 				yourself);
 			yourself);
 		add: (SpPanedLayout newHorizontal
-			add: #receiverInspector withConstraints: [ :c | c spec: #basicSpec ];
+			add: #receiverInspector withConstraints: [ :c | c spec: #inspectorAlone ];
 			add: #contextInspector;
 			yourself);
 		yourself

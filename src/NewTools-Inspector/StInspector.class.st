@@ -125,11 +125,7 @@ StInspector >> model: anInspectorModel [
 { #category : #private }
 StInspector >> newInspectorFor: aModel [
 		
-	self flag: #HACK. "I do not like to use this, but I really do not want to add a method 
-	#isInspectorNode in Object :("
-	^ StObjectInspector on: ((aModel isKindOf: StInspectorNode)
-		ifTrue: [ StInspectorModel on: aModel rawValue ]
-		ifFalse: [ aModel ])
+	^ StObjectInspector on: (self toInspectorModel: aModel)
 ]
 
 { #category : #private }
@@ -167,6 +163,17 @@ StInspector >> step [
 StInspector >> stopStepping [
 
 	StInspectorRefreshService uniqueInstance unregister: self
+]
+
+{ #category : #private }
+StInspector >> toInspectorModel: aModel [
+
+	self flag: #HACK. "I do not like to use this, but I really do not want to add a double 
+	dispatch to solve this problem :("
+	(aModel isKindOf: StInspectorModel) ifTrue: [ ^ aModel ].
+	(aModel isKindOf: StInspectorNode) ifTrue: [ ^ StInspectorModel on: aModel rawValue ].
+
+	^ StInspectorModel on: aModel
 ]
 
 { #category : #'private updating' }
