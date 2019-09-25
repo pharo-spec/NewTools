@@ -1,3 +1,9 @@
+"
+I am a single object inspector.
+I present a notebook with the possible inspection of the object.
+
+I am usually embedded into an StInspector, but I can be used standalone.
+"
 Class {
 	#name : #StObjectInspector,
 	#superclass : #StPresenter,
@@ -51,18 +57,6 @@ StObjectInspector class >> onObject: anObject [
 StObjectInspector class >> openOn: anObject [
 
 	^ (self onObject: anObject) openWithSpec
-]
-
-{ #category : #accessing }
-StObjectInspector class >> preferredExtent [
-	
-	^ PreferredExtent ifNil: [ PreferredExtent := 600@400 ]
-]
-
-{ #category : #accessing }
-StObjectInspector class >> preferredExtent: aPoint [
-	
-	PreferredExtent := aPoint
 ]
 
 { #category : #private }
@@ -239,6 +233,7 @@ StObjectInspector >> updatePages [
 { #category : #'private updating' }
 StObjectInspector >> updateTitle [
 		
+	self isRoot ifFalse: [ ^ self ].
 	self withWindowDo: [ :window | 
 		window title: self title ].
 ]

@@ -20,6 +20,12 @@ StInspectorModel class >> on: anObject [
 ]
 
 { #category : #accessing }
+StInspectorModel >> allInspectorNodes [
+
+	^ self inspectedObject allInspectorNodes
+]
+
+{ #category : #accessing }
 StInspectorModel >> behavior [ 
 	
 	^ self inspectedObject class

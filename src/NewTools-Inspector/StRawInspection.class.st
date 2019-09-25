@@ -41,7 +41,9 @@ StRawInspection >> attributesTableMenu [
 { #category : #initialization }
 StRawInspection >> defineOutputPorts [
 
-	^ { SpActivationPort newDelegate: [ attributeTable ] }
+	^ { 
+	SpListSelectionPort newDelegate: [ attributeTable ].
+	SpActivationPort newDelegate: [ attributeTable ] }
 ]
 
 { #category : #initialization }
@@ -68,10 +70,41 @@ StRawInspection >> inspectorNodes [
 	^ self model allInspectorNodes
 ]
 
+{ #category : #'model access' }
+StRawInspection >> model: aModel [
+
+	super model: aModel.
+	self setAttributeTable
+]
+
+{ #category : #accessing }
+StRawInspection >> selectFirst [
+
+	self selectPath: #(1)
+]
+
+{ #category : #accessing }
+StRawInspection >> selectPath: aPath [
+
+	attributeTable selectPath: aPath
+]
+
+{ #category : #accessing }
+StRawInspection >> selectedItem [
+
+	^ attributeTable selectedItem
+]
+
 { #category : #accessing }
 StRawInspection >> selectedObject [
 
 	^ attributeTable selectedItem value
+]
+
+{ #category : #accessing }
+StRawInspection >> selectedPath [
+
+	^ attributeTable selection selectedPath
 ]
 
 { #category : #building }

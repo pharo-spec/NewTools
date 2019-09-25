@@ -1,10 +1,11 @@
 Class {
 	#name : #StDebuggerInspector,
-	#superclass : #StInspection,
+	#superclass : #SpPresenter,
 	#instVars : [
 		'contextLabel',
 		'contextInspector',
-		'inspector'
+		'inspector',
+		'model'
 	],
 	#category : #'NewTools-Debugger-View'
 }
@@ -45,7 +46,7 @@ StDebuggerInspector class >> inspectorAlone [
 { #category : #'instance creation' }
 StDebuggerInspector class >> openOn: anObject [
 
-	^ (self on: (StInspectorModel on: anObject)) openWithSpec
+	^ (self on: (StDebuggerInspectorModel on: anObject)) openWithSpec
 ]
 
 { #category : #specs }
@@ -71,7 +72,7 @@ StDebuggerInspector class >> variablesListOnTop [
 StDebuggerInspector >> initializeContextInspector [
 
 	contextInspector := self 
-		instantiate: StDebuggerRawInspectionWithValue 
+		instantiate: StRawInspection 
 		on: self model.
 	contextInspector selectFirst
 ]
@@ -80,8 +81,8 @@ StDebuggerInspector >> initializeContextInspector [
 StDebuggerInspector >> initializeInspector [
 
 	inspector := self 
-		instantiate: StDebuggerEmbeddedInspector 
-		on: (StInspectorModel on: contextInspector selectedItem hostObject)
+		instantiate: StInspector 
+		on: (StDebuggerInspectorModel on: contextInspector selectedItem hostObject)
 ]
 
 { #category : #initialization }
@@ -93,8 +94,8 @@ StDebuggerInspector >> initializePresenters [
 	
 	contextInspector
 		transmitTo: inspector 
-		transform: [ :item | 
-			StInspectorModel on: (item ifNotNil: #rawValue) ]
+		transform: [ :item |
+			StDebuggerInspectorModel on: (item ifNotNil: #rawValue) ]
 ]
 
 { #category : #accessing }
@@ -109,12 +110,24 @@ StDebuggerInspector >> label: aString [
 	contextLabel label: aString
 ]
 
-{ #category : #initialization }
+{ #category : #'accessing model' }
+StDebuggerInspector >> model [
+
+	^ model
+]
+
+{ #category : #'accessing model' }
 StDebuggerInspector >> model: aModel [
 
-	super model: aModel.
-	contextInspector model: aModel.
-	inspector model: aModel
+	model := aModel asDebuggerInspectorModel.
+	contextInspector model: model.
+	inspector model: model
+]
+
+{ #category : #'accessing model' }
+StDebuggerInspector >> setModelBeforeInitialization: aModel [
+
+	model := aModel asDebuggerInspectorModel
 ]
 
 { #category : #updating }
@@ -126,7 +139,7 @@ StDebuggerInspector >> updateWith: inspectedObject [
 	oldPath := contextInspector selectedPath.
 	oldItem := contextInspector selectedItem hostObject.
 
-	self model: (StInspectorModel on: inspectedObject).
+	self model: (StDebuggerInspectorModel on: inspectedObject).
 	
 	inspectedObject == oldItem 
 		ifTrue: [ contextInspector selectPath: oldPath ]

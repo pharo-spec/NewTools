@@ -17,9 +17,11 @@ Class {
 		'stackTable'
 	],
 	#classVars : [
+		'DefaultSpec',
 		'ErrorRecursion',
 		'FilterCommonMessageSends',
-		'LogDebuggerStackToFile'
+		'LogDebuggerStackToFile',
+		'UsingSpecSelector'
 	],
 	#category : #'NewTools-Debugger-View'
 }
@@ -339,12 +341,12 @@ SpecDebugger >> initializeInspectors [
 
 	receiverInspector := self
 		instantiate: StDebuggerInspector 
-		on: (StInspectorModel on: nil). 
+		on: (StDebuggerInspectorModel on: nil). 
 	receiverInspector label: 'Receiver'.
 
 	contextInspector := self 
 		instantiate: StDebuggerInspector 
-		on: (StInspectorModel on: [ ] asContext).
+		on: (StDebuggerInspectorModel on: [ ] asContext).
 	contextInspector label: 'Context'
 ]
 
@@ -361,24 +363,24 @@ SpecDebugger >> initializePresenters [
 SpecDebugger >> initializeStack [
 
 	stackTable := self newTable.
-	stackTable
+	stackTable 
 		addColumn: (SpStringTableColumn
 			title: 'Class'
 			evaluated: [ :item | item receiver class ]);
 		addColumn: (SpStringTableColumn
 			title: 'Method'
 			evaluated: [ :item | item method selector ]);
-		addColumn: (SpStringTableColumn 
-			title: 'Context' 
+		addColumn: (SpStringTableColumn
+			title: 'Context'
 			evaluated: [ :item | item sender stDisplayString ]).
 	
 	stackTable contextMenu: [ 
 		self stackMenuActions beRoot asMenuPresenter ].
 	
 	stackTable transmitDo: [ :context | 
-		self updateCodeFromContext: context.
 		self updateInspectorsFromContext: context.
-		self updateToolbar ].
+		self updateCodeFromContext: context.
+		self updateToolbar ]
 ]
 
 { #category : #initialization }
