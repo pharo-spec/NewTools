@@ -7,7 +7,7 @@ Class {
 	#classVars : [
 		'Current'
 	],
-	#category : #'NewTools-Core'
+	#category : #'NewTools-Core-Application'
 }
 
 { #category : #accessing }

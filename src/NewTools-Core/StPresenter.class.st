@@ -1,7 +1,7 @@
 Class {
 	#name : #StPresenter,
 	#superclass : #SpPresenter,
-	#category : #'NewTools-Core'
+	#category : #'NewTools-Core-Presenters'
 }
 
 { #category : #private }
