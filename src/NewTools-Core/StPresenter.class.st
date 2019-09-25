@@ -58,3 +58,16 @@ StPresenter >> preferredExtent [
 
 	^ self class preferredExtent
 ]
+
+{ #category : #private }
+StPresenter >> shortcutForPanel: aNumber [
+	"This is a convenience method to assign shortcuts to panels. 
+	 panels will be different areas of a tool: a package panel in a browser, an inspector in 
+	 the debugger."
+	| char |
+	
+	char := aNumber asString first.
+	^ char command mac 
+		| char control win 
+		| char control unix
+]
