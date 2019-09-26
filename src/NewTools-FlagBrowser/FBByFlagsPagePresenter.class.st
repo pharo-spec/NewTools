@@ -73,13 +73,15 @@ FBByFlagsPagePresenter >> flagsList: anObject [
 { #category : #initialization }
 FBByFlagsPagePresenter >> initializePresenter [
 	super initializePresenter.
-
-	flagsList transmitTo: locationsTable transform: #locations postTransmission: [ :destination | destination selectIndex: 1 ].
-
-	modeDropbox transmitTo: flagsList transform: #allFlags postTransmission: [ :destination | destination selectIndex: 1 ].
-
-	modeDropbox selectedItem: FBSymbolFlag.
-
+	flagsList
+		transmitTo: locationsTable
+		transform: #locations
+		postTransmission: [ :destination | destination selectIndex: 1 ].
+	modeDropbox
+		transmitTo: flagsList
+		transform: #allFlags
+		postTransmission: [ :destination | destination selectIndex: 1 ].
+	modeDropbox selectItem: FBSymbolFlag.
 	caseCheckbox
 		whenChangedDo: [ :value | 
 			FBFlag caseSensitive: value.
