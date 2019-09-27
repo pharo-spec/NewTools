@@ -21,7 +21,7 @@ StHeaderBar class >> defaultSpec [
 		beNotHomogeneous;
 		borderWidth: 3;
 		spacing: 3;
-		add: #closeButton expand: false;
+		"add: #closeButton expand: false;"
 		add: #titleLabel expand: false;
 		add: #shortcutLabel expand: false;
 		addLast: #toolbar expand: false;
