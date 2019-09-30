@@ -87,7 +87,7 @@ AbstractFileReference >> inspectorFuel [
 AbstractFileReference >> inspectorGif [
 	<inspectorPresentationOrder: 0
 		title: 'Picture' 
-		if: #isImageGig>
+		if: #isImageGif>
 	
 	^ SpMorphPresenter new
 		morph: (self binaryReadStreamDo: [ :stream | GIFReadWriter formFromStream: stream ]);
