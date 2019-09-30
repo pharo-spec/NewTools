@@ -91,7 +91,7 @@ StInspectorNode >> label [
 { #category : #accessing }
 StInspectorNode >> mementoValue [
 
-	^ self rawValue
+	^ self value
 ]
 
 { #category : #accessing }

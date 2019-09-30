@@ -123,7 +123,7 @@ StRawInspection >> step [
 	mementoNodes ifNil: [ 
 		mementoNodes := rootNodes collect: #mementoValue.
 		^ self ].
-	(rootNodes collect: #rawValue) = mementoNodes ifTrue: [ ^ self ].
+	(rootNodes collect: #value) = mementoNodes ifTrue: [ ^ self ].
 
 	mementoNodes := rootNodes collect: #mementoValue.
 	selectedPath := attributeTable selection selectedPath.
