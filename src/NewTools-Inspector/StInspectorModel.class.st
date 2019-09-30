@@ -79,6 +79,15 @@ StInspectorModel >> objectInspectionPages [
 	^ self inspectedObject inspectionPages
 ]
 
+{ #category : #printing }
+StInspectorModel >> printOn: stream [
+
+	super printOn: stream.
+	stream << '('.
+	stream print: self inspectedObject.
+	stream << ')'
+]
+
 { #category : #accessing }
 StInspectorModel >> windowTitle [
 
