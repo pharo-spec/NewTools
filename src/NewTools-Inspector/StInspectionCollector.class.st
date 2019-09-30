@@ -44,14 +44,14 @@ StInspectionCollector class >> on: anObject [
 StInspectionCollector >> collectPages [ 
 	| pragmas |
 	
-	pragmas := self extensionPragmas 
+	pragmas := self uniquePragmas: ((self extensionPragmas
 		inject: #()
-		into: [ :all :each | all, (self collectPragmas: each) ].	
+		into: [ :all :each | all, (self collectPragmas: each) ])
+		select: [ :eachPragma | self pageShouldBeShown: eachPragma ]). 
 
 	^ (pragmas 
 		sort: [ :a :b | (a argumentAt: 1) < (b argumentAt: 1) ])
-		select: [ :eachPragma | self pageShouldBeShown: eachPragma ] 
-		thenCollect: [ :eachPragma | 
+		collect: [ :eachPragma | 
 			SpNotebookPage 
 				title: (eachPragma argumentAt: 2)
 				provider: [ (self inspectedObject perform: eachPragma methodSelector) asInspection ] ]
@@ -94,4 +94,16 @@ StInspectionCollector >> pageShouldBeShown: aPragma [
 		ifTrue: [ condition ]
 		ifFalse: [ self class compiler evaluate: condition ])
 		value: self inspectedObject
+]
+
+{ #category : #private }
+StInspectionCollector >> uniquePragmas: aCollection [
+	| unique |
+	
+	unique := OrderedDictionary new.
+	aCollection do: [ :each |
+		unique
+			at: each methodSelector
+			ifAbsentPut: [ each ] ].
+	^ unique values
 ]

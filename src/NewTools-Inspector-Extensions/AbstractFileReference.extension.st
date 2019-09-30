@@ -3,7 +3,7 @@ Extension { #name : #AbstractFileReference }
 { #category : #'*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectorCompressedItems [
 	<inspectorPresentationOrder: 0
-		title: 'Items' 
+		title: 'Compressed Items' 
 		if: #isCompressedFile>
 
 	| items children root |
@@ -172,7 +172,7 @@ AbstractFileReference >> inspectorStScript [
 { #category : #'*NewTools-Inspector-Extensions' }
 AbstractFileReference >> isCompressedFile [
 
-	^ #(''zip'' ''jar'' ''ear'' ''war'' ''mcz'') includes: self extension
+	^ #('zip' 'jar' 'ear' 'war' 'mcz') includes: self extension
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
