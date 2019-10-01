@@ -105,7 +105,8 @@ StInspector >> initializeWindow: aWindowPresenter [
 		title: self model windowTitle;
 		initialExtent: self class preferredExtent;
 		whenOpenedDo: [ self startStepping ];
-		whenClosedDo: [ self stopStepping ]
+		whenClosedDo: [ self stopStepping ];
+		whenResizingDo: [ :ann | self class preferredExtent: ann newSize ]
 ]
 
 { #category : #accessing }
