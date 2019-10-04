@@ -27,7 +27,7 @@ StPharoGtkConfiguration >> configureUnix: anApplication [
 
 	self unixThemeName 
 		ifNotNil: [ :aName | self installTheme: aName ].
-	self addProviderFromString: '.code { font: 11pt "Sans Regular" }'
+	self addProviderFromString: '.code { font: 11pt "Monospace Regular" }'
 ]
 
 { #category : #configuring }
