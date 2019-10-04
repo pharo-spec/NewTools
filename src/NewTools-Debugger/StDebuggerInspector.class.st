@@ -125,6 +125,7 @@ StDebuggerInspector >> setModelBeforeInitialization: aModel [
 StDebuggerInspector >> updateWith: inspectedObject [
 	| oldPath oldItem |
 
+	self flag: 'Suspicious test: should not be == ?'.
 	self model inspectedObject = inspectedObject ifTrue: [ ^ self ].
 
 	oldPath := contextInspector selectedPath.

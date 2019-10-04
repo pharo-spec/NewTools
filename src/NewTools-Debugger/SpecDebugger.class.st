@@ -9,7 +9,6 @@ Class {
 	#superclass : #StPresenter,
 	#instVars : [
 		'sessionHolder',
-		'labelHolder',
 		'code',
 		'toolbar',
 		'contextInspector',
@@ -306,7 +305,6 @@ SpecDebugger >> initialExtent [
 
 { #category : #initialization }
 SpecDebugger >> initialize [
-
 	super initialize.
 	self whenWindowChanged: [ :w | w whenClosedDo: [ self clear ] ].
 	self sessionHolder
@@ -314,8 +312,8 @@ SpecDebugger >> initialize [
 			self removeActionsForSession: oldSession.
 			self registerActionsForSession: newSession.
 			self updateToolbar.
-			self updateStackFromSession: newSession ].
-	self labelHolder whenChangedDo: [ self updateTitle ].
+			self updateStackFromSession: newSession.
+			self updateTitle ].
 	self sessionHolder valueChanged
 ]
 
@@ -374,7 +372,8 @@ SpecDebugger >> initializeStack [
 	stackTable transmitDo: [ :context | 
 		self updateInspectorsFromContext: context.
 		self updateCodeFromContext: context.
-		self updateToolbar ]
+		self updateToolbar.
+		self updateTitle ]
 ]
 
 { #category : #initialization }
@@ -404,21 +403,6 @@ SpecDebugger >> interruptedContext [
 SpecDebugger >> interruptedProcess [
 
 	^ self session interruptedProcess
-]
-
-{ #category : #accessing }
-SpecDebugger >> label [
-	^ self labelHolder value
-]
-
-{ #category : #accessing }
-SpecDebugger >> label: aString [
-	self labelHolder value: aString
-]
-
-{ #category : #accessing }
-SpecDebugger >> labelHolder [
-	^ labelHolder ifNil: [ labelHolder := nil asValueHolder ]
 ]
 
 { #category : #api }
@@ -511,8 +495,7 @@ SpecDebugger >> session [
 
 { #category : #accessing }
 SpecDebugger >> session: aSession [
-	self sessionHolder value: aSession.
-	self label: aSession asString
+	self sessionHolder value: aSession
 ]
 
 { #category : #accessing }
@@ -537,10 +520,9 @@ SpecDebugger >> stackMenuActions [
 
 { #category : #api }
 SpecDebugger >> title [
-
-	^ ((self session isContextPostMortem: self interruptedContext)  
-			ifTrue: [ 'PostMortem: ' ]
-			ifFalse: [ '' ]), (self label ifNil: [ '' ])
+	^ ((self session isContextPostMortem: self interruptedContext)
+		ifTrue: [ 'PostMortem: ' ]
+		ifFalse: [ '' ]) , self currentContext asString
 ]
 
 { #category : #'accessing widgets' }
@@ -637,6 +619,11 @@ SpecDebugger >> updateStepOver [
 SpecDebugger >> updateStepThrough [
 
 	self updateStep 
+]
+
+{ #category : #'updating widgets' }
+SpecDebugger >> updateTitle [
+	self withWindowDo: [ :window | window title: self title ]
 ]
 
 { #category : #'updating widgets' }
