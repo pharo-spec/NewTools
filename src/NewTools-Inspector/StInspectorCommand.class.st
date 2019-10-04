@@ -12,7 +12,7 @@ StInspectorCommand class >> toolbarCommandsFor: inspector [
 		for: inspector
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 StInspectorCommand >> appliesTo: anInspector [
 
 	^ true

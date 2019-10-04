@@ -1,6 +1,6 @@
 Class {
 	#name : #StPlaygroundPublishCommand,
-	#superclass : #CmCommand,
+	#superclass : #StPlaygroundCommand,
 	#category : #'NewTools-Playground-Command'
 }
 

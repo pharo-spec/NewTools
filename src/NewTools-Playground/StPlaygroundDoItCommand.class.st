@@ -1,6 +1,6 @@
 Class {
 	#name : #StPlaygroundDoItCommand,
-	#superclass : #CmCommand,
+	#superclass : #StPlaygroundCommand,
 	#category : #'NewTools-Playground-Command'
 }
 

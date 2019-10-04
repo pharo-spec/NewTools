@@ -1,6 +1,6 @@
 Class {
 	#name : #StPlaygroundBindingsCommand,
-	#superclass : #CmCommand,
+	#superclass : #StPlaygroundCommand,
 	#category : #'NewTools-Playground-Command'
 }
 
