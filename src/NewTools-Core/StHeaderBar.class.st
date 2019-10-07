@@ -54,7 +54,7 @@ StHeaderBar >> label: aString [
 { #category : #accessing }
 StHeaderBar >> shortcut: aShortcut [ 
 
-	self shortcutLabel: (StShortcutPrinter toString: aShortcut)
+	self shortcutLabel: (KMShortcutPrinter toString: aShortcut)
 ]
 
 { #category : #accessing }
