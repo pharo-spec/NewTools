@@ -1,7 +1,7 @@
 "
 I'm an util to convert a shortcut into the representation used in a platform (they change, as the shortcut themselves are different sometimes)
 
-TODO: This is not for Spec exlusive usage, we need promote SpShortcutPrinter to its own package.
+TODO: This is not for Spec exlusive usage, we need promote StShortcutPrinter to its own package.
 
 "
 Class {
@@ -56,22 +56,36 @@ StShortcutPrinter >> shortcut: aShortcut [
 	shortcut := aShortcut
 ]
 
+{ #category : #private }
+StShortcutPrinter >> shortcutModifiers [
+	| modifiers |
+	
+	modifiers := (shortcut spModifier asString substrings: '+') collect: #trimBoth.
+	"Ensure shift is first"
+	((modifiers includes: 'Shift') 
+		and: [ modifiers first ~= 'Shift' ])
+		ifTrue: [ modifiers := (modifiers copyWithout: 'Shift') copyWithFirst: 'Shift' ].
+	
+	^ modifiers		
+]
+
 { #category : #visiting }
 StShortcutPrinter >> visitGeneric: aPlatform [
-
-	^ shortcut asString
+	
+	^ String streamContents: [ :stream |
+		self shortcutModifiers
+			do: [ :each | stream << each ]
+			separatedBy: [ stream << '+' ].
+		stream << '+'.
+		stream << shortcut spCurrentCharacter asUppercase ]
+	
 ]
 
 { #category : #visiting }
 StShortcutPrinter >> visitMacOS: aPlatform [
 	| keyParts symbols |
 
-	keyParts := (shortcut spModifier asString substrings: '+') collect: #trimBoth.
-	"Ensure shift is first"
-	((keyParts includes: 'Shift') 
-		and: [ keyParts first ~= 'Shift' ])
-		ifTrue: [ keyParts := (keyParts copyWithout: 'Shift') copyWithFirst: 'Shift' ].
-		
+	keyParts := self shortcutModifiers.
 	symbols := keyParts 
 		inject: ''
 		into: [ :s :each | 
