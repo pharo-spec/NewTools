@@ -179,6 +179,18 @@ StObjectInspector >> refreshContent [
 	views selectedPage resetContent
 ]
 
+{ #category : #accessing }
+StObjectInspector >> selectedPage [
+
+	^ views selectedPage
+]
+
+{ #category : #accessing }
+StObjectInspector >> selectedPageName [
+
+	^ self selectedPage title
+]
+
 { #category : #private }
 StObjectInspector >> setModel: aModel [
 
@@ -213,6 +225,16 @@ StObjectInspector >> toolbarActions [
 		do: [ :cmd | group register: cmd ].
 	
 	^ group
+]
+
+{ #category : #accessing }
+StObjectInspector >> trySelectPageNamed: aString [
+	"Tries to select a page with the name indicated. If there is no match, 
+	 just stay as before (used to keep the flow when included in a miller list)."
+
+	views pages 
+		detect: [ :each | each title = aString ]
+		ifFound: [ :aPage | views selectPage: aPage ]
 ]
 
 { #category : #'private updating' }

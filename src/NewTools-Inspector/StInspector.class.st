@@ -123,10 +123,15 @@ StInspector >> model: anInspectorModel [
 	self updateList
 ]
 
-{ #category : #private }
+{ #category : #'private factory' }
 StInspector >> newInspectorFor: aModel [
-		
-	^ StObjectInspector on: (self toInspectorModel: aModel)
+	| newInspector |
+	
+	newInspector := StObjectInspector on: (self toInspectorModel: aModel). 
+	millerList pages ifNotEmpty: [ :pages |
+		newInspector trySelectPageNamed: pages last selectedPageName ].
+	
+	^ newInspector
 ]
 
 { #category : #private }
