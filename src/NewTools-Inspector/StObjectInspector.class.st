@@ -133,9 +133,10 @@ StObjectInspector >> initializeWindow: aWindowPresenter [
 		toolBar: self buildToolBar
 ]
 
-{ #category : #'model access' }
-StObjectInspector >> inspectedObject [ 	
-	^self model inspectedObject
+{ #category : #accessing }
+StObjectInspector >> inspectedObject [
+ 	
+	^ self model inspectedObject
 ]
 
 { #category : #private }
@@ -169,6 +170,13 @@ StObjectInspector >> refresh [
 	self updateHeaderBar.
 	self updateEvaluator.
 	self updatePages
+]
+
+{ #category : #accessing }
+StObjectInspector >> refreshContent [
+	"I force a refresh of current page contents. "
+
+	views selectedPage resetContent
 ]
 
 { #category : #private }
