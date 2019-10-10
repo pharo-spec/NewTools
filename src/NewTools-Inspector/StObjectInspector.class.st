@@ -133,9 +133,10 @@ StObjectInspector >> initializeWindow: aWindowPresenter [
 		toolBar: self buildToolBar
 ]
 
-{ #category : #'model access' }
-StObjectInspector >> inspectedObject [ 	
-	^self model inspectedObject
+{ #category : #accessing }
+StObjectInspector >> inspectedObject [
+ 	
+	^ self model inspectedObject
 ]
 
 { #category : #private }
@@ -169,6 +170,25 @@ StObjectInspector >> refresh [
 	self updateHeaderBar.
 	self updateEvaluator.
 	self updatePages
+]
+
+{ #category : #accessing }
+StObjectInspector >> refreshContent [
+	"I force a refresh of current page contents. "
+
+	views selectedPage resetContent
+]
+
+{ #category : #accessing }
+StObjectInspector >> selectedPage [
+
+	^ views selectedPage
+]
+
+{ #category : #accessing }
+StObjectInspector >> selectedPageName [
+
+	^ self selectedPage title
 ]
 
 { #category : #private }
@@ -205,6 +225,16 @@ StObjectInspector >> toolbarActions [
 		do: [ :cmd | group register: cmd ].
 	
 	^ group
+]
+
+{ #category : #accessing }
+StObjectInspector >> trySelectPageNamed: aString [
+	"Tries to select a page with the name indicated. If there is no match, 
+	 just stay as before (used to keep the flow when included in a miller list)."
+
+	views pages 
+		detect: [ :each | each title = aString ]
+		ifFound: [ :aPage | views selectPage: aPage ]
 ]
 
 { #category : #'private updating' }
