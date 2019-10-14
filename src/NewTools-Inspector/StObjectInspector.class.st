@@ -231,7 +231,7 @@ StObjectInspector >> toolbarActions [
 StObjectInspector >> trySelectAnyPageNamed: aCollection [
 	"Tries to select a the first page of aCollection that exists in the pages list"
 
-	aCollection do: [ :eachName |
+	aCollection removeDuplicates do: [ :eachName |
 		views pages 
 			detect: [ :each | each title = eachName ]
 			ifFound: [ :aPage | 
