@@ -228,6 +228,18 @@ StObjectInspector >> toolbarActions [
 ]
 
 { #category : #accessing }
+StObjectInspector >> trySelectAnyPageNamed: aCollection [
+	"Tries to select a the first page of aCollection that exists in the pages list"
+
+	aCollection do: [ :eachName |
+		views pages 
+			detect: [ :each | each title = eachName ]
+			ifFound: [ :aPage | 
+				views selectPage: aPage.
+				^ self ] ]
+]
+
+{ #category : #accessing }
 StObjectInspector >> trySelectPageNamed: aString [
 	"Tries to select a page with the name indicated. If there is no match, 
 	 just stay as before (used to keep the flow when included in a miller list)."

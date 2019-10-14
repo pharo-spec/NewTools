@@ -16,7 +16,8 @@ Class {
 	#superclass : #StPresenter,
 	#instVars : [
 		'millerList',
-		'model'
+		'model',
+		'lastPageSelectedTabName'
 	],
 	#classVars : [
 		'PreferredExtent'
@@ -94,7 +95,8 @@ StInspector >> initializePresenters [
 	millerList 
 		spacing: self spacing;
 		presenterBlock: [ :aModel | self newInspectorFor: aModel ];
-		setRootModel: self model
+		setRootModel: self model;
+		whenColumnsWillChangeDo: [ :insertIndex | self keepLastPageSelectedTabName ]
 ]
 
 { #category : #initialization }
@@ -107,6 +109,14 @@ StInspector >> initializeWindow: aWindowPresenter [
 		whenOpenedDo: [ self startStepping ];
 		whenClosedDo: [ self stopStepping ];
 		whenResizingDo: [ :ann | self class preferredExtent: ann newSize ]
+]
+
+{ #category : #private }
+StInspector >> keepLastPageSelectedTabName [
+	
+	lastPageSelectedTabName := millerList pages 
+		ifNotEmpty: [ :pages | pages last selectedPageName ]
+		ifEmpty: [ nil ]
 ]
 
 { #category : #accessing }
@@ -129,7 +139,9 @@ StInspector >> newInspectorFor: aModel [
 	
 	newInspector := StObjectInspector on: (self toInspectorModel: aModel). 
 	millerList pages ifNotEmpty: [ :pages |
-		newInspector trySelectPageNamed: pages last selectedPageName ].
+		newInspector trySelectAnyPageNamed: { 
+			lastPageSelectedTabName. 
+			pages last selectedPageName } ].
 	
 	^ newInspector
 ]
