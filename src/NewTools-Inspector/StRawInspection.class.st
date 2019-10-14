@@ -42,7 +42,7 @@ StRawInspection >> attributesTableMenu [
 StRawInspection >> defineOutputPorts [
 
 	^ { 
-	SpListSelectionPort newDelegate: [ attributeTable ].
+	SpSelectionPort newDelegate: [ attributeTable ].
 	SpActivationPort newDelegate: [ attributeTable ] }
 ]
 

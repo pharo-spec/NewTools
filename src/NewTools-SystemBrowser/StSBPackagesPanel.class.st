@@ -24,7 +24,7 @@ StSBPackagesPanel >> defineInputPorts [
 { #category : #initialization }
 StSBPackagesPanel >> defineOutputPorts [ 
 
-	^ { SpListSelectionPort newDelegate: [ self packageTree ] }
+	^ { SpSelectionPort newDelegate: [ self packageTree ] }
 ]
 
 { #category : #accessing }

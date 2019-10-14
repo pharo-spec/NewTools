@@ -30,8 +30,8 @@ StSBVariableInspectionPanel >> defineInputPorts [
 StSBVariableInspectionPanel >> defineOutputPorts [
 
 	^ { 
-	SpListSelectionPort newDelegate: [ self methodList ].
-	SpListSelectionPort newName: #'variable-selection' delegate: [ self variableList ]
+	SpSelectionPort newDelegate: [ self methodList ].
+	SpSelectionPort newName: #'variable-selection' delegate: [ self variableList ]
 	}
 ]
 

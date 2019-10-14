@@ -30,8 +30,8 @@ StSBProtocolInspectionPanel >> defineInputPorts [
 StSBProtocolInspectionPanel >> defineOutputPorts [
 
 	^ { 
-	SpListSelectionPort newDelegate: [ self methodList ].
-	SpListSelectionPort newName: #'protocol-selection' delegate: [ self protocolList ]. 
+	SpSelectionPort newDelegate: [ self methodList ].
+	SpSelectionPort newName: #'protocol-selection' delegate: [ self protocolList ]. 
 	}
 ]
 

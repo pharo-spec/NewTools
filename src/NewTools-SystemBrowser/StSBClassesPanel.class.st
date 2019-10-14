@@ -29,7 +29,7 @@ StSBClassesPanel >> defineInputPorts [
 { #category : #initialization }
 StSBClassesPanel >> defineOutputPorts [
 
-	^ { SpListSelectionPort newDelegate: [ self classList ] }
+	^ { SpSelectionPort newDelegate: [ self classList ] }
 ]
 
 { #category : #accessing }
