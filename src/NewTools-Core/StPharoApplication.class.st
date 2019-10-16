@@ -1,9 +1,6 @@
 Class {
 	#name : #StPharoApplication,
 	#superclass : #SpApplication,
-	#instVars : [
-		'properties'
-	],
 	#classVars : [
 		'Current'
 	],
@@ -14,75 +11,6 @@ Class {
 StPharoApplication class >> current [ 
 	
 	^ Current
-]
-
-{ #category : #initialization }
-StPharoApplication >> initialize [
-
-	super initialize.
-	properties := Dictionary new
-]
-
-{ #category : #accessing }
-StPharoApplication >> properties [
-
-	^ properties
-]
-
-{ #category : #accessing }
-StPharoApplication >> propertyAt: aKey [
-
-	^ properties at: aKey
-]
-
-{ #category : #accessing }
-StPharoApplication >> propertyAt: aKey ifAbsent: aBlock [
-
-	properties 
-		at: aKey
-		ifAbsent: aBlock
-]
-
-{ #category : #accessing }
-StPharoApplication >> propertyAt: aKey ifAbsentPut: aBlock [
-
-	properties 
-		at: aKey
-		ifAbsentPut: aBlock
-]
-
-{ #category : #accessing }
-StPharoApplication >> propertyAt: aKey ifPresent: aBlock [
-
-	properties
-		at: aKey 
-		ifPresent: aBlock
-]
-
-{ #category : #accessing }
-StPharoApplication >> propertyAt: aKey ifPresent: aBlock ifAbsent: absentBlock [
-
-	properties
-		at: aKey 
-		ifPresent: aBlock
-		ifAbsent: absentBlock
-]
-
-{ #category : #accessing }
-StPharoApplication >> propertyAt: aKey ifPresent: aBlock ifAbsentPut: absentBlock [
-
-	properties
-		at: aKey 
-		ifPresent: aBlock
-		ifAbsentPut: absentBlock
-]
-
-{ #category : #accessing }
-StPharoApplication >> propertyAt: aKey put: aValue [
-
-	properties 
-		at: aKey
-		put: aValue
 ]
 
 { #category : #running }
