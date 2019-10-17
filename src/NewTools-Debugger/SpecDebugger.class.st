@@ -306,14 +306,12 @@ SpecDebugger >> initialExtent [
 { #category : #initialization }
 SpecDebugger >> initialize [
 	super initialize.
-	self whenWindowChanged: [ :w | w whenClosedDo: [ self clear ] ].
-	self sessionHolder
-		whenChangedDo: [ :newSession :oldSession | 
-			self removeActionsForSession: oldSession.
-			self registerActionsForSession: newSession.
-			self updateToolbar.
-			self updateStackFromSession: newSession.
-			self updateTitle ].
+	self sessionHolder whenChangedDo: [ :newSession :oldSession | 
+		self removeActionsForSession: oldSession.
+		self registerActionsForSession: newSession.
+		self updateToolbar.
+		self updateStackFromSession: newSession.
+		self updateTitle ].
 	self sessionHolder valueChanged
 ]
 
@@ -390,7 +388,8 @@ SpecDebugger >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter 
 		title: self title;
-		initialExtent: self initialExtent
+		initialExtent: self initialExtent;
+		 whenClosedDo: [ self clear ]
 ]
 
 { #category : #'accessing context' }
