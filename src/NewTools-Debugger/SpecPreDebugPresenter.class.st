@@ -3,8 +3,8 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'debugger',
-		'textPresenter',
-		'toolbar'
+		'buttonBar',
+		'text'
 	],
 	#category : #'NewTools-Debugger-View'
 }
@@ -13,8 +13,8 @@ Class {
 SpecPreDebugPresenter class >> defaultSpec [
 
 	^ SpBoxLayout newVertical
-		add: #toolbar expand: false fill: false padding: 0;
-		add: #textPresenter;
+		add: #text;
+		add: #buttonBar expand: false;
 		yourself
 ]
 
@@ -30,13 +30,13 @@ SpecPreDebugPresenter >> debugger [
 
 { #category : #initialization }
 SpecPreDebugPresenter >> initializePresenters [
-	toolbar := self newDynamicToolbar.
-	toolbar update.
-	textPresenter := self newText.
-	textPresenter disable.
-	self focusOrder
-		add: toolbar;
-		add: textPresenter
+
+	text := self newText.
+	text disable.
+	
+	buttonBar := self newButtonBar placeAtEnd.
+	buttonBar items: (self toolbarActions allCommands 
+		collect: [ :each | each asButtonPresenter ])
 ]
 
 { #category : #initialization }
@@ -49,7 +49,7 @@ SpecPreDebugPresenter >> initializeWindow: aWindowPresenter [
 
 { #category : #accessing }
 SpecPreDebugPresenter >> message: aString [
-	textPresenter text: aString
+	text text: aString
 ]
 
 { #category : #actions }
