@@ -11,17 +11,16 @@ BaselineOfNewTools >> baseline: spec [
 	spec for: #common do: [ 
 			
 		self
-			spec: spec;
 			taskit: spec;
 			sindarin: spec.
 
 		spec
-			package: 'NewTools-Core' with: [ spec requires: #('Spec2') ];
-			package: 'NewTools-Morphic' with: [ spec requires: #('Spec2') ];
-			package: 'NewTools-Gtk' with: [ spec requires: #('Spec2') ];
+			package: 'NewTools-Core';
+			package: 'NewTools-Morphic';
+			package: 'NewTools-Gtk';
 			"inspector"
-			package: 'NewTools-Inspector-Extensions' with: [ spec requires: #('NewTools-Core' 'Spec2') ];
-			package: 'NewTools-Inspector' with: [ spec requires: #('Spec2' 'NewTools-Inspector-Extensions') ];
+			package: 'NewTools-Inspector-Extensions' with: [ spec requires: #('NewTools-Core') ];
+			package: 'NewTools-Inspector' with: [ spec requires: #( 'NewTools-Inspector-Extensions') ];
 			"playground"
 			package: 'NewTools-Playground' with: [ spec requires: #('NewTools-Inspector') ];
 			"browser"
@@ -48,14 +47,6 @@ BaselineOfNewTools >> sindarin: spec [
 	spec 
 		baseline: 'Sindarin' 
 		with: [ spec repository: 'github://dupriezt/ScriptableDebugger' ]
-]
-
-{ #category : #dependencies }
-BaselineOfNewTools >> spec: spec [
-
-	spec 
-		baseline: 'Spec2' 
-		with: [ spec repository: 'github://pharo-spec/Spec/src' ]
 ]
 
 { #category : #dependencies }
