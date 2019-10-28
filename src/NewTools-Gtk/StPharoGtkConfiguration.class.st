@@ -19,7 +19,9 @@ StPharoGtkConfiguration >> addProviderFromString: aString [
 StPharoGtkConfiguration >> configureOSX: anApplication [
 
 	self installTheme: self macThemeName.
-	self addProviderFromString: '.code { font: 12pt "Monaco" }'
+	self addProviderFromString: '
+.code { font: 12pt "Monaco" }
+.dim { color: LightSlateGrey }'
 ]
 
 { #category : #configuring }
@@ -27,14 +29,18 @@ StPharoGtkConfiguration >> configureUnix: anApplication [
 
 	self unixThemeName 
 		ifNotNil: [ :aName | self installTheme: aName ].
-	self addProviderFromString: '.code { font: 11pt "Monospace Regular" }'
+	self addProviderFromString: '
+.code { font: 11pt "Monospace Regular" }
+.dim { color: LightSlateGrey }'
 ]
 
 { #category : #configuring }
 StPharoGtkConfiguration >> configureWindows: anApplication [
 
 	self installTheme: self windowsThemeName.
-	self addProviderFromString: '.code { font: 10pt "Microsoft Sans Serif" }'
+	self addProviderFromString: '
+.code { font: 10pt "Microsoft Sans Serif" }
+.dim { color: LightSlateGrey }'
 ]
 
 { #category : #private }
