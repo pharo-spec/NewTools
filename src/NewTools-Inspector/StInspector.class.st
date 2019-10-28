@@ -40,7 +40,33 @@ StInspector class >> defaultSpec [
 ]
 
 { #category : #'instance creation' }
+StInspector class >> explore: anObject [
+ 
+	self openOn: anObject.
+	^ anObject
+]
+
+{ #category : #'instance creation' }
 StInspector class >> inspect: anObject [
+
+	^ self openOn: anObject
+]
+
+{ #category : #'instance creation' }
+StInspector class >> inspect: anObject label: aString [
+
+	(self openOn: anObject) title: aString.
+	^ anObject
+
+]
+
+{ #category : #'instance creation' }
+StInspector class >> inspector: anObject [
+	
+	self 
+		deprecated: 'Use #inspect: instead.'
+		transformWith: '`@receiver inspector: `@statements1'
+				-> '`@receiver inspect: `@statements1'.
 
 	^ self openOn: anObject
 ]
