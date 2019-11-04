@@ -180,6 +180,11 @@ StObjectInspector >> refreshContent [
 ]
 
 { #category : #accessing }
+StObjectInspector >> selectedObject [
+	^ self inspectedObject
+]
+
+{ #category : #accessing }
 StObjectInspector >> selectedPage [
 
 	^ views selectedPage
