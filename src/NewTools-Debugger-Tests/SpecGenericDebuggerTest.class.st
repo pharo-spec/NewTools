@@ -11,7 +11,7 @@ Class {
 { #category : #'helpers - debugger control' }
 SpecGenericDebuggerTest >> clickStepInto [
 	self debugger updateToolbar.
-	(self debugger toolbar widgets value at: #stepIntoSpecId) click
+	(self debugger toolbar items detect:[:item| item label = 'Into']) click
 ]
 
 { #category : #'helpers - debugger control' }
@@ -22,7 +22,7 @@ SpecGenericDebuggerTest >> clickStepInto: n [
 { #category : #'helpers - debugger control' }
 SpecGenericDebuggerTest >> clickStepOver [
 	self debugger updateToolbar.
-	(self debugger toolbar widgets value at: #stepOverSpecId) click
+	(self debugger toolbar items detect:[:item| item label = 'Over']) click
 ]
 
 { #category : #'helpers - debugger control' }
@@ -32,12 +32,29 @@ SpecGenericDebuggerTest >> clickStepOver: n [
 
 { #category : #accessing }
 SpecGenericDebuggerTest >> debugger [
-	^ debugger ifNil: [ debugger := self debuggerClass new ]
+	^ debugger ifNil: [ debugger := self debuggerClass basicNew ]
 ]
 
 { #category : #accessing }
 SpecGenericDebuggerTest >> debuggerClass [
 	^ SpecDebugger
+]
+
+{ #category : #accessing }
+SpecGenericDebuggerTest >> debuggerOn: aDebugSession [
+	^self debugger session: aDebugSession; initialize
+]
+
+{ #category : #accessing }
+SpecGenericDebuggerTest >> initializedDebugger [
+	^ self debugger initialize
+]
+
+{ #category : #accessing }
+SpecGenericDebuggerTest >> inspectorTableFor: inspector [
+	|contextInspector|
+	contextInspector := (inspector class slotNamed: #contextInspector) read: inspector.
+	^(contextInspector class slotNamed: #attributeTable) read: contextInspector
 ]
 
 { #category : #running }
@@ -81,8 +98,7 @@ SpecGenericDebuggerTest >> testCodeSelectionAfterStepOver [
 { #category : #'tests - context inspector' }
 SpecGenericDebuggerTest >> testContextChangedAfterStepIn [ 
 	| dbg |
-	dbg := self debugger.
-	dbg session: session.
+	dbg := self debuggerOn: session.
 	
 	self clickStepInto. "We enter the block context"
 	self assert: dbg contextInspector inspectedObject == session shortStack first.
@@ -95,8 +111,7 @@ SpecGenericDebuggerTest >> testContextChangedAfterStepIn [
 { #category : #'tests - context inspector' }
 SpecGenericDebuggerTest >> testContextChangedAfterStepOverAndReturn [
 	| dbg currentContext |
-	dbg := self debugger.
-	dbg session: session.	
+	dbg := self debuggerOn: session.	
 	
 	self clickStepInto: 2. "getting into Number>>squared"
 	currentContext := dbg contextInspector inspectedObject.
@@ -115,12 +130,12 @@ SpecGenericDebuggerTest >> testContextInspectorMenu [
 
 { #category : #'tests - context inspector' }
 SpecGenericDebuggerTest >> testContextTempVarList [
-	| dbg contextItems |
-	dbg := self debugger.
-	dbg session: session.
+	| dbg contextItems inspectorTable|
+	dbg := self debuggerOn: session.
+	inspectorTable := self inspectorTableFor: dbg contextInspector.
 	
 	self clickStepInto: 5.	
-	contextItems := dbg contextInspector inspectorTable roots.
+	contextItems := inspectorTable roots.
 	self assert: contextItems first rawValue equals: session shortStack first. "thisContext"
 	self assert: contextItems second rawValue equals: 1. "stackTop"
 	self assert: (contextItems detect:[:node| node key = #i]) rawValue equals: 1.
@@ -129,7 +144,7 @@ SpecGenericDebuggerTest >> testContextTempVarList [
 	"We add 2 to the num temps in the context inspector, 
 	for the thisContext and the stackTop nodes"
 	self
-		assert: dbg contextInspector inspectorTable roots size
+		assert: inspectorTable roots size
 		equals: dbg contextInspector inspectedObject tempNames size + 2
 
 ]
@@ -137,8 +152,7 @@ SpecGenericDebuggerTest >> testContextTempVarList [
 { #category : #'tests - context inspector' }
 SpecGenericDebuggerTest >> testContextUnchangedAfterStepOver [
 	| dbg currentContext |
-	dbg := self debugger.
-	dbg session: session.	
+	dbg := self debuggerOn: session.	
 	
 	self clickStepInto: 2. "getting into Number>>squared"
 	currentContext := dbg contextInspector inspectedObject.
@@ -155,8 +169,7 @@ SpecGenericDebuggerTest >> testDiscardCodeModification [
 { #category : #'tests - receiver inspector' }
 SpecGenericDebuggerTest >> testReceiverChangedAfterStepIn [ 
 	| dbg |
-	dbg := self debugger.
-	dbg session: session.
+	dbg := self debuggerOn: session.
 	
 	self clickStepInto. "We enter the block context"
 	self assert: dbg receiverInspector inspectedObject == session shortStack first receiver.
@@ -170,8 +183,7 @@ SpecGenericDebuggerTest >> testReceiverChangedAfterStepIn [
 { #category : #'tests - receiver inspector' }
 SpecGenericDebuggerTest >> testReceiverChangedAfterStepOverAndReturn [
 	| dbg currentReceiver |
-	dbg := self debugger.
-	dbg session: session.	
+	dbg := self debuggerOn: session.	
 	
 	self clickStepInto: 2. "getting into Number>>squared"
 	currentReceiver := dbg receiverInspector inspectedObject.
@@ -191,8 +203,7 @@ SpecGenericDebuggerTest >> testReceiverInspectorMenu [
 { #category : #'tests - receiver inspector' }
 SpecGenericDebuggerTest >> testReceiverList [
 	| dbg currentReceiver |
-	dbg := self debugger.
-	dbg session: session.	
+	dbg := self debuggerOn: session.	
 	
 	self clickStepInto: 2. "getting into Number>>squared"
 	currentReceiver := dbg receiverInspector inspectedObject.	
@@ -203,8 +214,7 @@ SpecGenericDebuggerTest >> testReceiverList [
 { #category : #'tests - receiver inspector' }
 SpecGenericDebuggerTest >> testReceiverUnchangedAfterStepOver [ 
 	| dbg currentReceiver |
-	dbg := self debugger.
-	dbg session: session.	
+	dbg := self debuggerOn: session.	
 	
 	self clickStepInto: 2. "getting into Number>>squared"
 	currentReceiver := dbg receiverInspector inspectedObject.
@@ -222,8 +232,7 @@ SpecGenericDebuggerTest >> testSaveCodeModification [
 { #category : #'tests - stack table' }
 SpecGenericDebuggerTest >> testSelectLastStackElementWithMoreElements [
 	| dbg stackTable |
-	dbg := self debugger.
-	dbg session: session.
+	dbg := self debuggerOn: session.
 	stackTable := dbg stackTable.
 	
 	self clickStepInto.
@@ -243,8 +252,7 @@ SpecGenericDebuggerTest >> testSelectLastStackElementWithMoreElements [
 { #category : #'tests - stack table' }
 SpecGenericDebuggerTest >> testSelectLastStackElementWithoutMoreElements [
 	| dbg stackTable startingStackSize |
-	dbg := self debugger.
-	dbg session: session.
+	dbg := self debuggerOn: session.
 	stackTable := dbg stackTable.
 	startingStackSize := stackTable items size.
 	stackTable selectItem: stackTable items last.
@@ -259,69 +267,75 @@ SpecGenericDebuggerTest >> testSelectionMenu [
 
 { #category : #'tests - stack table' }
 SpecGenericDebuggerTest >> testStackTableAfterReturn [
-	|dbg stackTableItems stackSizeAfterStepIn|
-	dbg := self debugger.		
-	dbg session: session.
-	
+	| dbg stackTableItems stackSizeAfterStepIn |
+	dbg := self debuggerOn: session.
+
 	"we dive into a method"
 	self clickStepInto: 2.
-
-	
 	stackSizeAfterStepIn := dbg stackTable items size.
-	
+
 	"we return from it"
 	self clickStepOver: 2.
-	
 	stackTableItems := dbg stackTable items.
-	self assert: dbg stackTable selectedIndex equals: 1.
-	self assert: dbg stackTable selectedItem == session shortStack first.
+	self assert: dbg stackTable selection selectedIndex equals: 1.
+	self
+		assert: dbg stackTable selection selectedItem == session shortStack first.
 	self assert: stackTableItems size equals: stackSizeAfterStepIn - 1.
-	self assert: stackTableItems equals: session shortStack 
-	
+	self assert: stackTableItems equals: session shortStack
 ]
 
 { #category : #'tests - stack table' }
 SpecGenericDebuggerTest >> testStackTableAfterStepIn [
-	|dbg stackTableItems startingStackSize|
-	dbg := self debugger.		
-	dbg session: session.
-	startingStackSize := dbg stackTable items size.	
-		
+	| dbg stackTableItems startingStackSize |
+	dbg := self debuggerOn: session.
+	startingStackSize := dbg stackTable items size.
 	self clickStepInto: 2.
-
 	stackTableItems := dbg stackTable items.
-	self assert: dbg stackTable selectedIndex equals: 1.
-	self assert: dbg stackTable selectedItem == session shortStack first.
+	self assert: dbg stackTable selection selectedIndex equals: 1.
+	self
+		assert: dbg stackTable selection selectedItem == session shortStack first.
 	self assert: stackTableItems size equals: startingStackSize + 1.
-	self assert: stackTableItems equals: session shortStack 
+	self assert: stackTableItems equals: session shortStack
 ]
 
 { #category : #'tests - stack table' }
 SpecGenericDebuggerTest >> testStackTableInitialization [
 
-	self assert: self debugger stackTable items isEmpty
+	self assert: (self debuggerOn: DebugSession new) stackTable items isEmpty
 ]
 
 { #category : #'tests - stack table' }
 SpecGenericDebuggerTest >> testStackTableSelectionChanged [
-	|dbg|
-	dbg := self debugger.
-	dbg session: session.
+	| dbg |
+	dbg := self debuggerOn: session.
 	self clickStepInto: 2.
 	dbg stackTable selectItem: dbg stackTable items second.
-	self assert: dbg contextInspector inspectedObject == dbg stackTable selectedItem.
-	self assert: dbg receiverInspector inspectedObject == dbg stackTable selectedItem receiver.
-	self assert: dbg code text equals: dbg stackTable items second sourceCode
+	self
+		assert:
+			dbg contextInspector inspectedObject
+				== dbg stackTable selection selectedItem.
+	self
+		assert:
+			dbg receiverInspector inspectedObject
+				== dbg stackTable selection selectedItem receiver.
+	self
+		assert: dbg code text
+		equals: dbg stackTable items second sourceCode
 ]
 
 { #category : #'tests - stack table' }
 SpecGenericDebuggerTest >> testStackTableWithNewSession [
 	self debugger session: session.
 	self
-		assert: self debugger stackTable items
+		assert: (self initializedDebugger stackTable) items
 		equals: session shortStack.
-	self assert: self debugger stackTable selectedIndex equals: 1.
-	self assert: self debugger stackTable selectedItem == session shortStack first
+	self
+		assert: self debugger stackTable selection selectedIndex
+		equals: 1.
+	self
+		assert:
+			self debugger stackTable selection selectedItem
+				== session shortStack first
 ]
 
 { #category : #'tests - code pane' }
