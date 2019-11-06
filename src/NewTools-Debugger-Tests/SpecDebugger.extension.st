@@ -11,8 +11,3 @@ SpecDebugger >> receiverInspector [
 
 	^ receiverInspector
 ]
-
-{ #category : #'*NewTools-Debugger-Tests' }
-SpecDebugger >> stackTable [
-	^stackTable
-]

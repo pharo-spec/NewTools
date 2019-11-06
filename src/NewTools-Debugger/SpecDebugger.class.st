@@ -517,6 +517,11 @@ SpecDebugger >> stackMenuActions [
 	^ group
 ]
 
+{ #category : #'accessing widgets' }
+SpecDebugger >> stackTable [
+	^stackTable
+]
+
 { #category : #api }
 SpecDebugger >> title [
 	^ ((self session isContextPostMortem: self interruptedContext)
