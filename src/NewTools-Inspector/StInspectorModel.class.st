@@ -32,12 +32,6 @@ StInspectorModel >> behavior [
 ]
 
 { #category : #accessing }
-StInspectorModel >> debuggerInspectorNodes [
-
-	^ self inspectedObject debuggerInspectorNodes
-]
-
-{ #category : #accessing }
 StInspectorModel >> descriptionString [
 	| header printString object |
 	

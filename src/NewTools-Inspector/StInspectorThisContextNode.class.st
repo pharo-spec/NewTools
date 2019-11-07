@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : #accessing }
+StInspectorThisContextNode >> children [ 
+	
+	^ self value allInspectorNodes
+]
+
+{ #category : #accessing }
 StInspectorThisContextNode >> key [
 	^ 'thisContext'
 ]

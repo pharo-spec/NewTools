@@ -172,10 +172,10 @@ SpecGenericDebuggerTest >> testReceiverChangedAfterStepIn [
 	dbg := self debuggerOn: session.
 	
 	self clickStepInto. "We enter the block context"
-	self assert: dbg receiverInspector inspectedObject == session shortStack first receiver.
+	self assert: dbg inspector inspectedObject == session shortStack first receiver.
 	
 	self clickStepInto. "We step into the first message"
-	self assert: dbg receiverInspector inspectedObject == session shortStack first receiver.
+	self assert: dbg inspector inspectedObject == session shortStack first receiver.
 
 
 ]
@@ -186,10 +186,10 @@ SpecGenericDebuggerTest >> testReceiverChangedAfterStepOverAndReturn [
 	dbg := self debuggerOn: session.	
 	
 	self clickStepInto: 2. "getting into Number>>squared"
-	currentReceiver := dbg receiverInspector inspectedObject.
+	currentReceiver := dbg inspector inspectedObject.
 	self clickStepOver: 2. "stepping over ^self * self (i.e. returning)"
 	self
-		deny: dbg receiverInspector inspectedObject
+		deny: dbg inspector inspectedObject
 		equals: currentReceiver
 ]
 
@@ -206,7 +206,7 @@ SpecGenericDebuggerTest >> testReceiverList [
 	dbg := self debuggerOn: session.	
 	
 	self clickStepInto: 2. "getting into Number>>squared"
-	currentReceiver := dbg receiverInspector inspectedObject.	
+	currentReceiver := dbg inspector inspectedObject.	
 	self assert: currentReceiver equals: 1
 
 ]
@@ -217,10 +217,10 @@ SpecGenericDebuggerTest >> testReceiverUnchangedAfterStepOver [
 	dbg := self debuggerOn: session.	
 	
 	self clickStepInto: 2. "getting into Number>>squared"
-	currentReceiver := dbg receiverInspector inspectedObject.
+	currentReceiver := dbg inspector inspectedObject.
 	"stepping over one time ^self * self (i.e. we are on the return node but still in the same context)"
 	self clickStepOver. 
-	self assert: dbg receiverInspector inspectedObject ==  currentReceiver
+	self assert: dbg inspector inspectedObject ==  currentReceiver
 
 ]
 
@@ -316,7 +316,7 @@ SpecGenericDebuggerTest >> testStackTableSelectionChanged [
 				== dbg stackTable selection selectedItem.
 	self
 		assert:
-			dbg receiverInspector inspectedObject
+			dbg inspector inspectedObject
 				== dbg stackTable selection selectedItem receiver.
 	self
 		assert: dbg code text

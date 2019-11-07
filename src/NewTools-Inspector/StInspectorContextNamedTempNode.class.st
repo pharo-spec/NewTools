@@ -36,7 +36,7 @@ StInspectorContextNamedTempNode >> key [
 
 { #category : #accessing }
 StInspectorContextNamedTempNode >> label [
-	^ '[' , self key , ']'
+	^ self key
 ]
 
 { #category : #accessing }
