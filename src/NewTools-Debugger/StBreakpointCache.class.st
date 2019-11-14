@@ -3,7 +3,9 @@ I cache all message nodes that:
 - are halts
 - have a breakpoint on them
 
-The cache is built when I am initialized, then I register to the method changes system announcement to update the cache each time a method is added, modified or removed.
+The cache is built when I am initialized,  then I register to the method changes system announcement to update the cache each time a method is added, modified or removed.
+
+I associate the selector of methods in which I found halts and breakpoints to a collection holding the AST nodes of those halts and breakpoints.
 "
 Class {
 	#name : #StBreakpointCache,
@@ -41,9 +43,9 @@ StBreakpointCache >> buildCacheFor: aCompiledMethod [
 	haltAndBreakpointNodes
 		addAll: (ast allChildren select: [ :node | node hasBreakpoint ]).
 	haltAndBreakpointNodes
-		ifEmpty: [ self uncacheMethod: aCompiledMethod.
+		ifEmpty: [ self uncacheMethod: aCompiledMethod selector.
 			^ self ].
-	methodsWithHalts at: aCompiledMethod put: haltAndBreakpointNodes
+	methodsWithHalts at: aCompiledMethod selector put: haltAndBreakpointNodes
 ]
 
 { #category : #initialization }
@@ -67,11 +69,17 @@ StBreakpointCache >> methodChanged: methodCModifiedAnnouncement [
 
 { #category : #notifying }
 StBreakpointCache >> methodRemoved: methodRemovedAnnouncement [
-	self uncacheMethod: methodRemovedAnnouncement methodRemoved
+	self uncacheMethod: methodRemovedAnnouncement methodRemoved selector
+]
+
+{ #category : #accessing }
+StBreakpointCache >> methodsWithHalts [
+	^ methodsWithHalts
 ]
 
 { #category : #cache }
-StBreakpointCache >> uncacheMethod: aCompiledMethod [
+StBreakpointCache >> uncacheMethod: aMethodSelector [
 	"Methods not in the cache are irrelevant, so we don't care if they are absent from the dictionary"
-	methodsWithHalts removeKey: aCompiledMethod ifAbsent: [  ]
+
+	methodsWithHalts removeKey: aMethodSelector ifAbsent: [  ]
 ]
