@@ -60,9 +60,9 @@ StBreakpointCacheTest >> testInitialCacheBuild [
 					
 			self assert: (cache methodsWithHalts keys includes: method selector).
 			
-			nodeCache := cache methodsWithHalts at: method selector.
+			nodeCache := cache nodeCacheForSelector: method selector.
 			self assert: nodeCache size equals: 1.
-			self assert: nodeCache first == haltNode ]
+			self assert: nodeCache asOrderedCollection first == haltNode ]
 ]
 
 { #category : #'testing - halts' }
@@ -74,19 +74,19 @@ StBreakpointCacheTest >> testMethodAddition [
 	haltNode := (self testClass>>#mHalt2) ast statements first.	
 	
 	self assert: cache methodsWithHalts size equals: methodCacheForSimpleHalt + 1.
-	self assert: (cache methodsWithHalts at: #mHalt2) size equals: 1.
-	self assert: (cache methodsWithHalts at: #mHalt2) first == haltNode.
+	self assert: (cache nodeCacheForSelector: #mHalt2) size equals: 1.
+	self assert: (cache nodeCacheForSelector: #mHalt2) asOrderedCollection first == haltNode.
 
 ]
 
 { #category : #'testing - halts' }
 StBreakpointCacheTest >> testMethodModification [ 
 	|nodeCacheForSimpleHalt originalNodeCacheSize|
-	nodeCacheForSimpleHalt := cache methodsWithHalts at: #mHalt.
+	nodeCacheForSimpleHalt := cache nodeCacheForSelector: #mHalt.
 	originalNodeCacheSize := nodeCacheForSimpleHalt size.
 	
 	self testClass compile: 'mHalt self halt. self halt'.
-	nodeCacheForSimpleHalt := cache methodsWithHalts at: #mHalt.
+	nodeCacheForSimpleHalt := cache nodeCacheForSelector: #mHalt.
 	self assert: nodeCacheForSimpleHalt size equals: originalNodeCacheSize + 1.
 	(self testClass >> #mHalt) ast statements 
 		do:[:node| self assert: (nodeCacheForSimpleHalt includes: node)].
