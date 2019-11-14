@@ -5,7 +5,7 @@ I cache all message nodes that:
 
 The cache is built when I am initialized,  then I register to the method changes system announcement to update the cache each time a method is added, modified or removed.
 
-I associate the selector of methods in which I found halts and breakpoints to a collection holding the AST nodes of those halts and breakpoints.
+I associate the selector of methods in which I found halts and breakpoints to a set holding the AST nodes of those halts and breakpoints.
 "
 Class {
 	#name : #StBreakpointCache,
@@ -27,11 +27,18 @@ StBreakpointCache class >> defaultCache [
 { #category : #cache }
 StBreakpointCache >> buildCache [
 	SystemNavigation new allHalts
-		do: [ :compiledMethod | self buildCacheFor: compiledMethod ]
+		do: [ :compiledMethod | self buildCacheForMethod: compiledMethod ].
+	Breakpoint all do:[:bp| self buildCacheForBreakpoint: bp]
 ]
 
 { #category : #cache }
-StBreakpointCache >> buildCacheFor: aCompiledMethod [
+StBreakpointCache >> buildCacheForBreakpoint: aBreakpoint [
+	(self nodeCacheForSelector: aBreakpoint node methodNode selector)
+		add: aBreakpoint node
+]
+
+{ #category : #cache }
+StBreakpointCache >> buildCacheForMethod: aCompiledMethod [
 	"- extract all halt nodes from the method's ast
 	- extract all nodes with installed breakpoints from the method's ast
 	- cache all extracted nodes into the methodsWithHalts dictionary"
@@ -45,7 +52,9 @@ StBreakpointCache >> buildCacheFor: aCompiledMethod [
 	haltAndBreakpointNodes
 		ifEmpty: [ self uncacheMethod: aCompiledMethod selector.
 			^ self ].
-	methodsWithHalts at: aCompiledMethod selector put: haltAndBreakpointNodes
+	self
+		setNodeCache: haltAndBreakpointNodes
+		forSelector: aCompiledMethod selector
 ]
 
 { #category : #initialization }
@@ -59,12 +68,12 @@ StBreakpointCache >> initialize [
 
 { #category : #notifying }
 StBreakpointCache >> methodAdded: methodAddedAnnouncement [
-	self buildCacheFor: methodAddedAnnouncement methodAdded
+	self buildCacheForMethod: methodAddedAnnouncement methodAdded
 ]
 
 { #category : #notifying }
 StBreakpointCache >> methodChanged: methodCModifiedAnnouncement [
-	self buildCacheFor: methodCModifiedAnnouncement newMethod
+	self buildCacheForMethod: methodCModifiedAnnouncement newMethod
 ]
 
 { #category : #notifying }
@@ -75,6 +84,18 @@ StBreakpointCache >> methodRemoved: methodRemovedAnnouncement [
 { #category : #accessing }
 StBreakpointCache >> methodsWithHalts [
 	^ methodsWithHalts
+]
+
+{ #category : #cache }
+StBreakpointCache >> nodeCacheForSelector: aMethodSelector [
+	^ methodsWithHalts
+		at: aMethodSelector
+		ifAbsentPut: IdentitySet new
+]
+
+{ #category : #cache }
+StBreakpointCache >> setNodeCache: haltAndBreakpointNodes forSelector: aSelector [
+	methodsWithHalts at: aSelector put: haltAndBreakpointNodes
 ]
 
 { #category : #cache }
