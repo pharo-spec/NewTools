@@ -23,6 +23,7 @@ StHaltAndBreakpointControlTest >> methodWithHaltSources [
 	sources add: 'mHaltOnce self haltOnce'.
 	sources add: 'mHaltOnCount: n self haltOnCount: n'.
 	sources add: 'mHaltIfNil self haltIfNil'.
+	sources add: 'mNoHalt ^self printString'.
 	^sources
 ]
 
