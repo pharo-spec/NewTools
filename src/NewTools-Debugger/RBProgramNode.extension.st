@@ -1,16 +1,16 @@
 Extension { #name : #RBProgramNode }
 
 { #category : #'*NewTools-Debugger' }
-RBProgramNode >> isActiveHaltOrBreakpoint [
-	^self propertyAt: #isActiveHaltOrBreakpoint ifAbsent: [ false ]
+RBProgramNode >> enableForHaltOrBreakpoint: aBoolean [
+	^self propertyAt: #enabledForHaltOrBreakpoint put: aBoolean
+]
+
+{ #category : #'*NewTools-Debugger' }
+RBProgramNode >> enabledForHaltOrBreakpoint [
+	^self propertyAt: #enabledForHaltOrBreakpoint ifAbsent: [ true ]
 ]
 
 { #category : #'*NewTools-Debugger' }
 RBProgramNode >> isHaltNode [
 	^ false
-]
-
-{ #category : #'*NewTools-Debugger' }
-RBProgramNode >> setActiveHaltOrBreakpoint: aBoolean [
-	^self propertyAt: #isActiveHaltOrBreakpoint put: aBoolean
 ]
