@@ -25,7 +25,7 @@ StHaltCacheTest >> testAddingHaltToMethod [
 { #category : #'testing - cache building' }
 StHaltCacheTest >> testInitialCacheBuild [
 	self assert: cache methodsWithHalts size >= 6.
-	self testClass methods
+	(self testClass methods reject:[:m| m selector = #mNoHalt])
 		do:
 			[ :method | 
 			|haltNode nodeCache|

@@ -26,6 +26,11 @@ StHaltCache class >> defaultCache [
 	^ DefaultCache ifNil: [ DefaultCache := self new ]
 ]
 
+{ #category : #'accessing - cache' }
+StHaltCache class >> reset [
+	DefaultCache := self new
+]
+
 { #category : #cache }
 StHaltCache >> buildCache [
 	SystemNavigation new allHalts
