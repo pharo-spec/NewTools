@@ -44,6 +44,18 @@ StHaltAndBreakpointControllerTest >> testDisableHalt [
 ]
 
 { #category : #tests }
+StHaltAndBreakpointControllerTest >> testDisabledBreakpointisDisabled [
+]
+
+{ #category : #tests }
+StHaltAndBreakpointControllerTest >> testDisabledHaltIsDisabled [
+	| node |
+	node := (cache nodeCacheForSelector: #mHalt) first.
+	haltController disableHaltOrBreakpointFor: node.
+	self deny: (haltController areHaltsAndBreakpoinsEnabledFor: node)
+]
+
+{ #category : #tests }
 StHaltAndBreakpointControllerTest >> testEnableDisabledBreakpoint [
 ]
 
@@ -55,6 +67,17 @@ StHaltAndBreakpointControllerTest >> testEnableDisabledHalt [
 	self shouldnt: [ testObject mHalt ] raise: Halt.
 	haltController enableHaltOrBreakpointFor: node.
 	self should: [ testObject mHalt ] raise: Halt
+]
+
+{ #category : #tests }
+StHaltAndBreakpointControllerTest >> testEnabledBreakpointIsEnabled [
+]
+
+{ #category : #tests }
+StHaltAndBreakpointControllerTest >> testEnabledHaltIsEnabled [
+	| node |
+	node := (cache nodeCacheForSelector: #mHalt) first.
+	self assert: (haltController areHaltsAndBreakpoinsEnabledFor: node)
 ]
 
 { #category : #tests }

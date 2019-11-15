@@ -38,6 +38,11 @@ StHaltAndBreakpointController class >> tracer: aTracer [
 	tracer := aTracer
 ]
 
+{ #category : #API }
+StHaltAndBreakpointController >> areHaltsAndBreakpoinsEnabledFor: aProgramNode [
+	^ aProgramNode enabledForHaltOrBreakpoint
+]
+
 { #category : #control }
 StHaltAndBreakpointController >> disableBreakpointNode: aProgramNode [
 ]
@@ -61,7 +66,8 @@ StHaltAndBreakpointController >> disableHaltNode: aMessageNode [
 StHaltAndBreakpointController >> disableHaltOrBreakpointFor: aProgramNode [
 	aProgramNode isHaltNode
 		ifTrue: [ self disableHaltNode: aProgramNode ].
-	self disableBreakpointNode: aProgramNode
+	self disableBreakpointNode: aProgramNode.
+	aProgramNode enableForHaltOrBreakpoint: false
 ]
 
 { #category : #control }
@@ -79,10 +85,6 @@ StHaltAndBreakpointController >> enableHaltNode: aMessageNode [
 StHaltAndBreakpointController >> enableHaltOrBreakpointFor: aProgramNode [
 	aProgramNode isHaltNode
 		ifTrue: [ self enableHaltNode: aProgramNode ].
-	self enableBreakpointNode: aProgramNode
-]
-
-{ #category : #API }
-StHaltAndBreakpointController >> haltOrBreakpointNodeActiveOn: aProgramNode [
-	^ aProgramNode enabledForHaltOrBreakpoint
+	self enableBreakpointNode: aProgramNode.
+	aProgramNode enableForHaltOrBreakpoint: true
 ]
