@@ -6,6 +6,11 @@ RBProgramNode >> isActiveHaltOrBreakpoint [
 ]
 
 { #category : #'*NewTools-Debugger' }
+RBProgramNode >> isHaltNode [
+	^ false
+]
+
+{ #category : #'*NewTools-Debugger' }
 RBProgramNode >> setActiveHaltOrBreakpoint: aBoolean [
 	^self propertyAt: #isActiveHaltOrBreakpoint put: aBoolean
 ]
