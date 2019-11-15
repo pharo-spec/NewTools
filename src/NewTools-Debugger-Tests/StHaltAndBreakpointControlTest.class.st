@@ -45,3 +45,8 @@ StHaltAndBreakpointControlTest >> tearDown [
 	super tearDown.
 	self removeMethodsWithHalts
 ]
+
+{ #category : #accessors }
+StHaltAndBreakpointControlTest >> testClass [
+	^ StDummyTestClassWithHalts
+]

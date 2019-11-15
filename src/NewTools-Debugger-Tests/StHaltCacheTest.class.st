@@ -22,11 +22,6 @@ StHaltCacheTest >> testAddingHaltToMethod [
 
 ]
 
-{ #category : #accessors }
-StHaltCacheTest >> testClass [
-	^ StDummyTestClassWithHalts
-]
-
 { #category : #'testing - cache building' }
 StHaltCacheTest >> testInitialCacheBuild [
 	self assert: cache methodsWithHalts size >= 6.
