@@ -179,6 +179,24 @@ SpecDebugger class >> sessionClass [
 	^ DebugSession
 ]
 
+{ #category : #specs }
+SpecDebugger class >> singleInspectorSpec [
+	"<spec: #default>"
+
+	^ SpPanedLayout newVertical
+		position: 55 percent;
+		add: (SpPanedLayout newVertical
+			position: 40 percent;
+			add: #stackTable;
+			add: (SpBoxLayout newVertical 
+				add: #toolbar expand: false fill: false padding: 0;
+				add: #code;
+				yourself);
+			yourself);
+		add: #inspector;
+		yourself
+]
+
 { #category : #accessing }
 SpecDebugger class >> spanNewSessionFrom: anotherSession [
 	self flag: 'Where is that used? 2019-06-28'.
