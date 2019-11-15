@@ -518,6 +518,12 @@ SpecDebugger >> setModelBeforeInitialization: aSession [
 	self session: aSession
 ]
 
+{ #category : #stack }
+SpecDebugger >> showFullStack [
+	stackTable items: self session stack
+
+]
+
 { #category : #actions }
 SpecDebugger >> stackMenuActions [
 	| group |

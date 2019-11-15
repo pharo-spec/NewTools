@@ -29,5 +29,5 @@ FullStackDebugCommand class >> defaultShortcut [
 FullStackDebugCommand >> execute [
 	self flag: 'Broken'.
 	self flag: 'What is the usage?'.
-	self debugger stack expandBy: self expandedStackSize
+	self debugger showFullStack
 ]
