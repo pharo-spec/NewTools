@@ -140,6 +140,7 @@ StRawInspection >> valuesColumn [
 		beEditable;
 		onAcceptEdition: [ :node :value | 
 			self inform: node label , '=' , value asString	"node value: value" ];
+		sortFunction: #stringValue ascending;
 		yourself
 ]
 
@@ -156,5 +157,6 @@ StRawInspection >> variablesColumn [
 		addColumn: (SpStringTableColumn new
 			evaluated: #label;
 			yourself);
+		sortFunction: #label ascending;
 		yourself
 ]
