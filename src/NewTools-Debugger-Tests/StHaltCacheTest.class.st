@@ -1,48 +1,8 @@
 Class {
 	#name : #StHaltCacheTest,
-	#superclass : #TestCase,
-	#instVars : [
-		'cache'
-	],
+	#superclass : #StHaltAndBreakpointControlTest,
 	#category : #'NewTools-Debugger-Tests'
 }
-
-{ #category : #helpers }
-StHaltCacheTest >> compileMethodsWithHalts [
-	self methodWithHaltSources
-		do: [ :source | self testClass compile: source ]
-]
-
-{ #category : #helpers }
-StHaltCacheTest >> methodWithHaltSources [
-	| sources |
-	sources := OrderedCollection new.
-	sources add: 'mHalt self halt'.
-	sources add: 'mHaltIf self haltIf: [true]'.
-	sources add: 'mHalt: arg self halt: arg'.
-	sources add: 'mHaltOnce self haltOnce'.
-	sources add: 'mHaltOnCount: n self haltOnCount: n'.
-	sources add: 'mHaltIfNil self haltIfNil'.
-	^sources
-]
-
-{ #category : #helpers }
-StHaltCacheTest >> removeMethodsWithHalts [
-	self testClass methods
-		do: [ :method | self testClass removeSelector: method selector]
-]
-
-{ #category : #running }
-StHaltCacheTest >> setUp [
-	self compileMethodsWithHalts.
-	cache := StHaltCache new
-
-]
-
-{ #category : #running }
-StHaltCacheTest >> tearDown [
-	self removeMethodsWithHalts
-]
 
 { #category : #'testing - halts cache' }
 StHaltCacheTest >> testAddingHaltToMethod [
