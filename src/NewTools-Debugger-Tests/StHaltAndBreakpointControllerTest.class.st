@@ -41,7 +41,7 @@ StHaltAndBreakpointControllerTest >> setUp [
 	haltController := StHaltAndBreakpointController new.
 	oldTracer := StHaltAndBreakpointController tracer.
 	StHaltAndBreakpointController tracer: self.
-	breakpoint := self installBreakpointOn: self nodeForBreakpoint.
+	breakpoint := self installBreakpointOn: self nodeForBreakpoint
 ]
 
 { #category : #running }

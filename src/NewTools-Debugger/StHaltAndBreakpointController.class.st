@@ -46,7 +46,7 @@ StHaltAndBreakpointController >> areHaltsAndBreakpoinsEnabledFor: aProgramNode [
 { #category : #control }
 StHaltAndBreakpointController >> disableBreakpointNode: aProgramNode [
 	aProgramNode allBreakpointLinks do: [ :link | link condition: [false]; disable ].
-	self installSkipLinkOn: aProgramNode
+	self skipNode: aProgramNode
 ]
 
 { #category : #links }
@@ -61,15 +61,15 @@ StHaltAndBreakpointController >> disableHaltLink: control [
 
 { #category : #control }
 StHaltAndBreakpointController >> disableHaltNode: aMessageNode [
-	self installSkipLinkOn: aMessageNode
+	self skipNode: aMessageNode
 ]
 
 { #category : #API }
 StHaltAndBreakpointController >> disableHaltOrBreakpointFor: aProgramNode [
 	aProgramNode isHaltNode
 		ifTrue: [ self disableHaltNode: aProgramNode ].
-	self disableBreakpointNode: aProgramNode.
-	aProgramNode enableForHaltOrBreakpoint: false
+	aProgramNode hasBreakpoint
+		ifTrue: [ self disableBreakpointNode: aProgramNode ]
 ]
 
 { #category : #control }
@@ -87,7 +87,8 @@ StHaltAndBreakpointController >> enableHaltNode: aMessageNode [
 StHaltAndBreakpointController >> enableHaltOrBreakpointFor: aProgramNode [
 	aProgramNode isHaltNode
 		ifTrue: [ self enableHaltNode: aProgramNode ].
-	self enableBreakpointNode: aProgramNode.
+	aProgramNode hasBreakpoint
+		ifTrue: [ self enableBreakpointNode: aProgramNode ].
 	aProgramNode enableForHaltOrBreakpoint: true
 ]
 
@@ -106,4 +107,12 @@ StHaltAndBreakpointController >> removeSkipLinksFor: aNode [
 		select:
 			[ :link | link control = #instead and: [ link metaObject == self class ] ])
 		do: [ :link | link uninstall ]
+]
+
+{ #category : #control }
+StHaltAndBreakpointController >> skipNode: aNode [
+	(self areHaltsAndBreakpoinsEnabledFor: aNode)
+		ifFalse: [ ^ self ].
+	aNode enableForHaltOrBreakpoint: false.
+	self installSkipLinkOn: aNode
 ]
