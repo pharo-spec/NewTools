@@ -24,7 +24,7 @@ StHaltCacheTest >> testAddingHaltToMethod [
 
 { #category : #accessors }
 StHaltCacheTest >> testClass [
-	^ StBreakpointCacheDummyClassWithHalts
+	^ StDummyTestClassWithHalts
 ]
 
 { #category : #'testing - cache building' }
