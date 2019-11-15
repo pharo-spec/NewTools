@@ -45,21 +45,23 @@ StHaltAndBreakpointController >> areHaltsAndBreakpoinsEnabledFor: aProgramNode [
 
 { #category : #control }
 StHaltAndBreakpointController >> disableBreakpointNode: aProgramNode [
+	aProgramNode allBreakpointLinks do: [ :link | link condition: [false]; disable ].
+	self installSkipLinkOn: aProgramNode
 ]
 
 { #category : #links }
-StHaltAndBreakpointController >> disableHaltLink [
+StHaltAndBreakpointController >> disableHaltLink: control [
 	^ MetaLink new
 		metaObject: self class;
 		selector: #skipHaltNode:;
 		arguments: #(node);
-		control: #instead;
+		control: control;
 		yourself
 ]
 
 { #category : #control }
 StHaltAndBreakpointController >> disableHaltNode: aMessageNode [
-	aMessageNode link: self disableHaltLink
+	self installSkipLinkOn: aMessageNode
 ]
 
 { #category : #API }
@@ -72,13 +74,13 @@ StHaltAndBreakpointController >> disableHaltOrBreakpointFor: aProgramNode [
 
 { #category : #control }
 StHaltAndBreakpointController >> enableBreakpointNode: aProgramNode [
+	aProgramNode allBreakpointLinks do: [ :link | link condition: [true]; enable ].
+	self removeSkipLinksFor: aProgramNode
 ]
 
 { #category : #control }
 StHaltAndBreakpointController >> enableHaltNode: aMessageNode [
-	(aMessageNode links
-		select: [ :link | link control = #instead and: [ link metaObject == self class ] ])
-		do: [ :link | link uninstall ]
+	self removeSkipLinksFor: aMessageNode
 ]
 
 { #category : #API }
@@ -87,4 +89,21 @@ StHaltAndBreakpointController >> enableHaltOrBreakpointFor: aProgramNode [
 		ifTrue: [ self enableHaltNode: aProgramNode ].
 	self enableBreakpointNode: aProgramNode.
 	aProgramNode enableForHaltOrBreakpoint: true
+]
+
+{ #category : #links }
+StHaltAndBreakpointController >> installSkipLinkOn: aMessageNode [
+	| control |
+	control := aMessageNode isReturn
+		ifTrue: [ #before ]
+		ifFalse: [ #instead ].
+	aMessageNode link: (self disableHaltLink: control)
+]
+
+{ #category : #links }
+StHaltAndBreakpointController >> removeSkipLinksFor: aNode [
+	(aNode links
+		select:
+			[ :link | link control = #instead and: [ link metaObject == self class ] ])
+		do: [ :link | link uninstall ]
 ]
