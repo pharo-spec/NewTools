@@ -1,14 +1,16 @@
 "
-I cache all message nodes that:
-- are halts
-- have a breakpoint on them
+I cache all message nodes that are halts in the system. 
+There is already a breakpoint cache in the Breakpoint class.
 
 The cache is built when I am initialized,  then I register to the method changes system announcement to update the cache each time a method is added, modified or removed.
 
-I associate the selector of methods in which I found halts and breakpoints to a set holding the AST nodes of those halts and breakpoints.
+I associate the selector of methods in which I found halts to a set holding the AST nodes of those halts.
+
+For now it is a simple cache that does not require as much functionality than AbstractCache provides, so it does not subclass it.
+However, it might be interesting if I evolve later, or if I need safe concurrent access (which AbstractCache provides).
 "
 Class {
-	#name : #StBreakpointCache,
+	#name : #StHaltCache,
 	#superclass : #Object,
 	#instVars : [
 		'methodsWithHalts'
@@ -20,45 +22,40 @@ Class {
 }
 
 { #category : #'accessing - cache' }
-StBreakpointCache class >> defaultCache [
+StHaltCache class >> defaultCache [
 	^ DefaultCache ifNil: [ DefaultCache := self new ]
 ]
 
 { #category : #cache }
-StBreakpointCache >> buildCache [
+StHaltCache >> buildCache [
 	SystemNavigation new allHalts
-		do: [ :compiledMethod | self buildCacheForMethod: compiledMethod ].
-	Breakpoint all do:[:bp| self buildCacheForBreakpoint: bp]
+		do: [ :compiledMethod | self buildCacheForMethod: compiledMethod ]
 ]
 
 { #category : #cache }
-StBreakpointCache >> buildCacheForBreakpoint: aBreakpoint [
-	(self nodeCacheForSelector: aBreakpoint node methodNode selector)
-		add: aBreakpoint node
-]
-
-{ #category : #cache }
-StBreakpointCache >> buildCacheForMethod: aCompiledMethod [
+StHaltCache >> buildCacheForMethod: aCompiledMethod [
 	"- extract all halt nodes from the method's ast
 	- extract all nodes with installed breakpoints from the method's ast
 	- cache all extracted nodes into the methodsWithHalts dictionary"
 
-	| ast haltAndBreakpointNodes |
+	| ast haltNodes |
 	ast := aCompiledMethod ast.
-	haltAndBreakpointNodes := ast sendNodes
+	haltNodes := ast sendNodes
 		select: [ :node | '*halt*' match: node selector ].
-	haltAndBreakpointNodes
-		addAll: (ast allChildren select: [ :node | node hasBreakpoint ]).
-	haltAndBreakpointNodes
+	haltNodes
 		ifEmpty: [ self uncacheMethod: aCompiledMethod selector.
 			^ self ].
-	self
-		setNodeCache: haltAndBreakpointNodes
-		forSelector: aCompiledMethod selector
+	self setNodeCache: haltNodes forSelector: aCompiledMethod selector
+]
+
+{ #category : #cache }
+StHaltCache >> cacheNode: aNode forSelector: aMethodSelector [
+	(methodsWithHalts at: aMethodSelector ifAbsentPut: IdentitySet new)
+		add: aNode
 ]
 
 { #category : #initialization }
-StBreakpointCache >> initialize [
+StHaltCache >> initialize [
 	methodsWithHalts := Dictionary new.
 	self buildCache.
 	SystemAnnouncer uniqueInstance weak when: MethodModified send: #methodChanged: to: self.
@@ -67,39 +64,37 @@ StBreakpointCache >> initialize [
 ]
 
 { #category : #notifying }
-StBreakpointCache >> methodAdded: methodAddedAnnouncement [
+StHaltCache >> methodAdded: methodAddedAnnouncement [
 	self buildCacheForMethod: methodAddedAnnouncement methodAdded
 ]
 
 { #category : #notifying }
-StBreakpointCache >> methodChanged: methodCModifiedAnnouncement [
+StHaltCache >> methodChanged: methodCModifiedAnnouncement [
 	self buildCacheForMethod: methodCModifiedAnnouncement newMethod
 ]
 
 { #category : #notifying }
-StBreakpointCache >> methodRemoved: methodRemovedAnnouncement [
+StHaltCache >> methodRemoved: methodRemovedAnnouncement [
 	self uncacheMethod: methodRemovedAnnouncement methodRemoved selector
 ]
 
 { #category : #accessing }
-StBreakpointCache >> methodsWithHalts [
+StHaltCache >> methodsWithHalts [
 	^ methodsWithHalts
 ]
 
 { #category : #cache }
-StBreakpointCache >> nodeCacheForSelector: aMethodSelector [
-	^ methodsWithHalts
-		at: aMethodSelector
-		ifAbsentPut: IdentitySet new
+StHaltCache >> nodeCacheForSelector: aMethodSelector [
+	^ methodsWithHalts at: aMethodSelector ifAbsent: #()
 ]
 
 { #category : #cache }
-StBreakpointCache >> setNodeCache: haltAndBreakpointNodes forSelector: aSelector [
+StHaltCache >> setNodeCache: haltAndBreakpointNodes forSelector: aSelector [
 	methodsWithHalts at: aSelector put: haltAndBreakpointNodes
 ]
 
 { #category : #cache }
-StBreakpointCache >> uncacheMethod: aMethodSelector [
+StHaltCache >> uncacheMethod: aMethodSelector [
 	"Methods not in the cache are irrelevant, so we don't care if they are absent from the dictionary"
 
 	methodsWithHalts removeKey: aMethodSelector ifAbsent: [  ]
