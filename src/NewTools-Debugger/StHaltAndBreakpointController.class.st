@@ -11,13 +11,16 @@ Class {
 	#category : #'NewTools-Debugger-Model'
 }
 
+{ #category : #Helpers }
+StHaltAndBreakpointController class >> printSkipTextFor: aProgramNode [
+	^ aProgramNode methodNode source asText
+		makeBoldFrom: aProgramNode start to: aProgramNode stop;
+		yourself
+]
+
 { #category : #API }
 StHaltAndBreakpointController class >> skipHaltNode: aProgramNode [
-	self
-		trace:
-			(aProgramNode methodNode source asText
-				makeBoldFrom: aProgramNode start to: aProgramNode stop;
-				yourself)
+	self trace: (self printSkipTextFor: aProgramNode)
 ]
 
 { #category : #Helpers }
