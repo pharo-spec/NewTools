@@ -1,7 +1,7 @@
 Extension { #name : #Context }
 
 { #category : #'*NewTools-Debugger-Extensions' }
-Context >> debuggerInspectorNodes [
+Context >> debuggerInspectorTempsNodes [
 	
-	^  (StNodeCollector for: self) collectContextNodes
+	^  (StNodeCollector for: self) collectTempsNodes
 ]

@@ -17,19 +17,10 @@ StNodeCollector class >> for: anObject [
 
 { #category : #building }
 StNodeCollector >> collectContextNodes [
-	| nodes |
-	nodes := OrderedCollection new.
-	nodes add: (StInspectorThisContextNode hostObject: self object).
-	nodes add: (StInspectorStackTopNode hostObject: self object).
-	self object tempNames
-		withIndexDo: [ :name :index | 
-			nodes
-				add:
-					(StInspectorContextNamedTempNode
-						hostObject: self object
-						tempName: name
-						tempIndex: index) ].
-	^ nodes
+	^ OrderedCollection
+		with: (StInspectorThisContextNode hostObject: self object context)
+		with: (StInspectorStackTopNode hostObject: self object context)
+		with: (StDebugSessionInspectorNode hostObject: self object session)
 ]
 
 { #category : #building }
@@ -38,6 +29,21 @@ StNodeCollector >> collectNodes [
 	^ 
 	self indexedNodes,	
 	self slotNodes
+]
+
+{ #category : #building }
+StNodeCollector >> collectTempsNodes [
+	| nodes |
+	nodes := OrderedCollection new.
+	self object context tempNames
+		withIndexDo: [ :name :index | 
+			nodes
+				add:
+					(StInspectorContextNamedTempNode
+						hostObject: self object context
+						tempName: name
+						tempIndex: index) ].
+	^ nodes
 ]
 
 { #category : #private }

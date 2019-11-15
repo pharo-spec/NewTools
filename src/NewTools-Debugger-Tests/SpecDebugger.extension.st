@@ -3,16 +3,11 @@ Extension { #name : #SpecDebugger }
 { #category : #'*NewTools-Debugger-Tests' }
 SpecDebugger >> contextInspector [
 
-	^ contextInspector
+	self halt: 'Broken'
 ]
 
 { #category : #'*NewTools-Debugger-Tests' }
-SpecDebugger >> receiverInspector [
+SpecDebugger >> inspector [
 
-	^ receiverInspector
-]
-
-{ #category : #'*NewTools-Debugger-Tests' }
-SpecDebugger >> stackTable [
-	^stackTable
+	^ inspector
 ]

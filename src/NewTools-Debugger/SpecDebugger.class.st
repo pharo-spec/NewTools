@@ -11,9 +11,8 @@ Class {
 		'sessionHolder',
 		'code',
 		'toolbar',
-		'contextInspector',
-		'receiverInspector',
-		'stackTable'
+		'stackTable',
+		'inspector'
 	],
 	#classVars : [
 		'DefaultSpec',
@@ -59,10 +58,10 @@ SpecDebugger class >> columnInspectorsSpec [
 					add: #code;
 					yourself);
 				yourself);
-			add: (SpPanedLayout newVertical 
+			"add: (SpPanedLayout newVertical 
 				add: #contextInspector withConstraints: [ :c | c spec: #variablesListOnTop ];
-				add: #receiverInspector withConstraints: [ :c | c spec: #inspectorAlone ];
-				yourself);
+				add: #inspector withConstraints: [ :c | c spec: #inspectorAlone ];
+				yourself);"
 			yourself);
 		yourself
 ]
@@ -86,9 +85,9 @@ SpecDebugger class >> contextRightColumnSpec [
 					add: #code;
 					yourself);
 				yourself);
-			add: #contextInspector withConstraints: [ :c | c spec: #variablesListOnTop ];
+			"add: #contextInspector withConstraints: [ :c | c spec: #variablesListOnTop ];"
 			yourself);
-		add: #receiverInspector withConstraints: [ :c | c spec: #inspectorAlone ];
+		add: #inspector;
 		yourself
 ]
 
@@ -212,8 +211,7 @@ SpecDebugger class >> traditionalSpec [
 				yourself);
 			yourself);
 		add: (SpPanedLayout newHorizontal
-			add: #receiverInspector withConstraints: [ :c | c spec: #inspectorAlone ];
-			add: #contextInspector;
+			add: #inspector;
 			yourself);
 		yourself
 ]
@@ -327,17 +325,11 @@ SpecDebugger >> initializeCode [
 ]
 
 { #category : #initialization }
-SpecDebugger >> initializeInspectors [
-
-	receiverInspector := self
-		instantiate: StDebuggerInspector 
-		on: (StDebuggerInspectorModel on: nil). 
-	receiverInspector label: 'Receiver'.
-
-	contextInspector := self 
-		instantiate: StDebuggerInspector 
-		on: (StDebuggerInspectorModel on: [ ] asContext).
-	contextInspector label: 'Context'
+SpecDebugger >> initializeInspector [
+	inspector := self
+		instantiate: StDebuggerInspector
+		on: (StInspectorModel on: nil).
+	inspector label: 'Receiver'
 ]
 
 { #category : #initialization }
@@ -346,7 +338,7 @@ SpecDebugger >> initializePresenters [
 	self initializeStack.
 	self initializeToolbar.
 	self initializeCode.
-	self initializeInspectors
+	self initializeInspector
 ]
 
 { #category : #initialization }
@@ -368,7 +360,7 @@ SpecDebugger >> initializeStack [
 		self stackMenuActions beRoot asMenuPresenter ].
 	
 	stackTable transmitDo: [ :context | 
-		self updateInspectorsFromContext: context.
+		self updateInspectorFromContext: context.
 		self updateCodeFromContext: context.
 		self updateToolbar.
 		self updateTitle ]
@@ -517,6 +509,11 @@ SpecDebugger >> stackMenuActions [
 	^ group
 ]
 
+{ #category : #'accessing widgets' }
+SpecDebugger >> stackTable [
+	^stackTable
+]
+
 { #category : #api }
 SpecDebugger >> title [
 	^ ((self session isContextPostMortem: self interruptedContext)
@@ -571,10 +568,8 @@ SpecDebugger >> updateContextChanged [
 ]
 
 { #category : #updating }
-SpecDebugger >> updateInspectorsFromContext: aContext [
-
-	contextInspector updateWith: aContext.
-	receiverInspector updateWith: aContext home receiver
+SpecDebugger >> updateInspectorFromContext: aContext [
+	inspector updateWith: (StDebuggerContext context: aContext session: self session)
 ]
 
 { #category : #'updating actions' }

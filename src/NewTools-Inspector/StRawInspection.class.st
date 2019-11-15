@@ -66,7 +66,6 @@ StRawInspection >> initializePresenters [
 
 { #category : #accessing }
 StRawInspection >> inspectorNodes [
-
 	^ self model allInspectorNodes
 ]
 
