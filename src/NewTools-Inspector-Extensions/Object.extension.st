@@ -12,7 +12,7 @@ Object >> allInspectorNodes [
 Object >> breakpointInspection [
 	<inspectorPresentationOrder: 998 title: 'Breakpoints'>
 
-	^ StBreakpointInspection on: self
+	^ StObjectBreakpointInspection on: self
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
