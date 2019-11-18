@@ -7,7 +7,8 @@ Class {
 	#instVars : [
 		'attributeTable',
 		'methodsWithBreakpoints',
-		'breakpointsInSourceCode'
+		'breakpointsInSourceCode',
+		'breakpointController'
 	],
 	#category : #'NewTools-Inspector-View'
 }
@@ -27,18 +28,16 @@ StObjectBreakpointInspection >> breakpointDataFor: aMethod [
 
 	| breakpointsForMethod breakpointData |
 	breakpointsForMethod := Breakpoint all
-		select: [ :b | b link methods includes: aMethod ].
+		select: [ :b | b link methods includes: aMethod compiledMethod].
 	
 	breakpointData := breakpointsForMethod
 		collect: [ :b | 
 			| data |
 			data := Dictionary new.
+			data at: #node put: b node.
 			data at: #method put: aMethod.
 			data at: #type put: 'Breakpoint'.
-			data at: #onceOrAlways
-				  put:	(b link optionOneShot	ifTrue: [ 'once' ] ifFalse: [ 'always' ]).
 			data at: #interval put: (b node start to: b node stop).
-			data at: #target put: 'instances of ', aMethod methodClass name.
 			data ].
 		^breakpointData 
 ]
@@ -49,7 +48,7 @@ StObjectBreakpointInspection >> buildHaltAndBreakpointData [
 	breakpointData := SortedCollection
 		sortBlock: [ :a :b | (a at: #method) name < (b at: #method) name ].
 	allMethodsForModel := model class allMethods
-		select: [ :m | m hasBreakpoint or: [ m containsHalt ] ].
+		select: [ :m | m hasBreakpoint or: [ m containsHalt ] ].		
 	breakpointData
 		addAll: (allMethodsForModel flatCollect: [ :m | self breakpointDataFor: m ]).
 	breakpointData
@@ -64,21 +63,21 @@ StObjectBreakpointInspection >> buildHaltAndBreakpointTable [
 	methodsWithBreakpoints := self newTable.
 	methodsWithBreakpoints
 		addColumn:
+			((SpCheckBoxTableColumn
+				title: ' '
+				evaluated: [ :item | breakpointController areHaltsAndBreakpoinsEnabledFor: (item at: #node) ])
+				onActivation: [ :item | breakpointController enableHaltOrBreakpointFor: (item at: #node)  ];
+				onDesactivation: [ :item | breakpointController disableHaltOrBreakpointFor: (item at: #node)  ];
+				width: 20;
+				yourself);
+		addColumn:
 			(SpStringTableColumn
 				title: 'Type'
 				evaluated: [ :item | item at: #type ]);
 		addColumn:
 			(SpStringTableColumn
 				title: 'Method'
-				evaluated: [ :item | (item at: #method) name ]);
-		addColumn:
-			(SpStringTableColumn
-				title: 'When'
-				evaluated: [ :item | item at: #onceOrAlways ]);
-		addColumn:
-			(SpStringTableColumn
-				title: 'Target(s)'
-				evaluated: [ :item | item at: #target ]).
+				evaluated: [ :item | (item at: #method) name ]).
 	methodsWithBreakpoints
 		whenSelectionChangedDo: [ :selection | 
 			| selectedItem |
@@ -96,24 +95,27 @@ StObjectBreakpointInspection >> buildSourceCode [
 	breakpointsInSourceCode disable
 ]
 
+{ #category : #presenters }
+StObjectBreakpointInspection >> buildTableData [
+	methodsWithBreakpoints items: self buildHaltAndBreakpointData
+]
+
 { #category : #private }
 StObjectBreakpointInspection >> haltDataFor: aMethod [
 	"Returns a collection of dictionaries containing halt data for the given method."
 
 	| messageNodesForMethod haltNodesForMethod breakpointData |
-	messageNodesForMethod := aMethod ast allChildren select:[:n| n isMessage].
+	messageNodesForMethod := aMethod compiledMethod ast allChildren select:[:n| n isMessage].
 	haltNodesForMethod := messageNodesForMethod select:[:node| self haltsSelectors includes: node selector].
 	
 	breakpointData := haltNodesForMethod
 		collect: [ :haltNode | 
 			| data |
 			data := Dictionary new.
+			data at: #node put: haltNode.
 			data at: #method put: aMethod.
 			data at: #type put: 'Halt'.
-			data at: #onceOrAlways
-				  put:	(self labelForHaltSelector: haltNode selector).
 			data at: #interval put: (haltNode start to: haltNode stop).
-			data at: #target put: 'instances of ', aMethod methodClass name.
 			data ].
 		^breakpointData 
 ]
@@ -124,13 +126,28 @@ StObjectBreakpointInspection >> haltsSelectors [
 ]
 
 { #category : #initialization }
+StObjectBreakpointInspection >> initialize [
+	breakpointController := StHaltAndBreakpointController new.
+	super initialize
+]
+
+{ #category : #initialization }
 StObjectBreakpointInspection >> initializePresenters [
 	self buildSourceCode.
 	self buildHaltAndBreakpointTable.
-	methodsWithBreakpoints items: self buildHaltAndBreakpointData
+	self buildTableData.
+	SystemAnnouncer uniqueInstance weak when: StHaltCacheChanged send: #buildTableData to: self.
+	SystemAnnouncer uniqueInstance weak when: MetalinkChanged send: #buildTableData to: self
 ]
 
-{ #category : #private }
+{ #category : #initialization }
+StObjectBreakpointInspection >> initializeWindow: aWindowPresenter [
+	super initializeWindow: aWindowPresenter.
+	aWindowPresenter
+		whenClosedDo: [ SystemAnnouncer uniqueInstance unsubscribe: self ]
+]
+
+{ #category : #presenters }
 StObjectBreakpointInspection >> labelForHaltSelector: aSelector [
 	(#(haltIf: haltIfNil) includes: aSelector)
 		ifTrue: [ ^ 'condition' ].
