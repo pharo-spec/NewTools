@@ -168,3 +168,8 @@ StObjectBreakpointInspection >> labelForHaltSelector: aSelector [
 		ifTrue: [ ^ 'once' ].
 	^ 'always'
 ]
+
+{ #category : #'system subscription' }
+StObjectBreakpointInspection >> unsubscribeFromCacheChanges [
+	SystemAnnouncer uniqueInstance unsubscribe: self
+]

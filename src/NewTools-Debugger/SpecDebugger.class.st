@@ -250,8 +250,9 @@ SpecDebugger class >> usingSpecSelector [
 
 { #category : #actions }
 SpecDebugger >> clear [
+	breakpointInspector unsubscribeFromCacheChanges.
 	self removeActionsForSession: self session.
-
+	
 	"No more code should follow after this, as the session might terminate this process."
 	self session terminate
 ]
