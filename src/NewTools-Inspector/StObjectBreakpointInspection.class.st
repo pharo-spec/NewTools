@@ -43,16 +43,18 @@ StObjectBreakpointInspection >> breakpointDataFor: aMethod [
 ]
 
 { #category : #private }
+StObjectBreakpointInspection >> buildBreakpointData [
+	^ (model class allMethods select: [ :m | m hasBreakpoint ])
+		flatCollect: [ :m | self breakpointDataFor: m ]
+]
+
+{ #category : #private }
 StObjectBreakpointInspection >> buildHaltAndBreakpointData [
-	| allMethodsForModel breakpointData |
+	| breakpointData |
 	breakpointData := SortedCollection
 		sortBlock: [ :a :b | (a at: #method) name < (b at: #method) name ].
-	allMethodsForModel := model class allMethods
-		select: [ :m | m hasBreakpoint or: [ m containsHalt ] ].		
-	breakpointData
-		addAll: (allMethodsForModel flatCollect: [ :m | self breakpointDataFor: m ]).
-	breakpointData
-		addAll: (allMethodsForModel flatCollect: [ :m | self haltDataFor: m ]).
+	breakpointData addAll: self buildBreakpointData.
+	breakpointData addAll: self buildHaltData.
 	^ breakpointData
 ]
 
@@ -86,6 +88,15 @@ StObjectBreakpointInspection >> buildHaltAndBreakpointTable [
 			breakpointsInSourceCode selection: (selectedItem at: #interval) ]
 ]
 
+{ #category : #private }
+StObjectBreakpointInspection >> buildHaltData [
+	| selectors |
+	selectors := model class allMethods collect: [ :m | m selector ].	
+	^ (selectors
+		flatCollect: [ :s | StHaltCache defaultCache nodeCacheForSelector: s ])
+		collect: [ :node | self haltDataFor: node ]
+]
+
 { #category : #presenters }
 StObjectBreakpointInspection >> buildSourceCode [
 	"Source code of methods in which breakpoint are installed"
@@ -101,23 +112,16 @@ StObjectBreakpointInspection >> buildTableData [
 ]
 
 { #category : #private }
-StObjectBreakpointInspection >> haltDataFor: aMethod [
-	"Returns a collection of dictionaries containing halt data for the given method."
+StObjectBreakpointInspection >> haltDataFor: aNode [
+	"Returns a dictionary containing halt data for the given halt node."
 
-	| messageNodesForMethod haltNodesForMethod breakpointData |
-	messageNodesForMethod := aMethod compiledMethod ast allChildren select:[:n| n isMessage].
-	haltNodesForMethod := messageNodesForMethod select:[:node| self haltsSelectors includes: node selector].
-	
-	breakpointData := haltNodesForMethod
-		collect: [ :haltNode | 
-			| data |
-			data := Dictionary new.
-			data at: #node put: haltNode.
-			data at: #method put: aMethod.
-			data at: #type put: 'Halt'.
-			data at: #interval put: (haltNode start to: haltNode stop).
-			data ].
-		^breakpointData 
+	| data |
+	data := Dictionary new.
+	data at: #node put: aNode.
+	data at: #method put: aNode methodNode method.
+	data at: #type put: 'Halt'.
+	data at: #interval put: (aNode start to: aNode stop).
+	^ data
 ]
 
 { #category : #private }
