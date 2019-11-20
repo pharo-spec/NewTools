@@ -28,6 +28,7 @@ StHaltCache class >> defaultCache [
 
 { #category : #'accessing - cache' }
 StHaltCache class >> reset [
+	<script>
 	DefaultCache := self new
 ]
 
