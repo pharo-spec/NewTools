@@ -69,15 +69,20 @@ StObjectBreakpointInspection >> buildHaltAndBreakpointTable [
 		addColumn:
 			((SpCheckBoxTableColumn
 				title: ' '
-				evaluated: [ :item | breakpointController areHaltsAndBreakpoinsEnabledFor: (item at: #node) ])
-				onActivation: [ :item | breakpointController enableHaltOrBreakpointFor: (item at: #node)  ];
-				onDesactivation: [ :item | breakpointController disableHaltOrBreakpointFor: (item at: #node)  ];
+				evaluated:
+					[ :item | breakpointController areHaltsAndBreakpoinsEnabledFor: (item at: #node) ])
+				onActivation:
+						[ :item | breakpointController enableHaltOrBreakpointFor: (item at: #node) ];
+				onDesactivation:
+						[ :item | breakpointController disableHaltOrBreakpointFor: (item at: #node) ];
 				width: 20;
 				yourself);
 		addColumn:
-			(SpStringTableColumn
+			((SpStringTableColumn
 				title: 'Type'
-				evaluated: [ :item | item at: #type ]);
+				evaluated: [ :item | item at: #type ])
+				width: 65;
+				yourself);
 		addColumn:
 			(SpStringTableColumn
 				title: 'Method'
