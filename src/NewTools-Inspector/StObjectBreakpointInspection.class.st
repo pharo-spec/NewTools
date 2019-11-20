@@ -23,29 +23,31 @@ StObjectBreakpointInspection class >> defaultSpec [
 ]
 
 { #category : #private }
-StObjectBreakpointInspection >> breakpointDataFor: aMethod [
-	"Returns a collection of dictionaries containing breakpoint data for the given method."
+StObjectBreakpointInspection >> breakPointsForModel [
+	| methodsWithBreakpoint |
+	methodsWithBreakpoint := model class allMethods
+		select: [ :m | m hasBreakpoint ].
+	^ methodsWithBreakpoint
+		flatCollect: [ :m | Breakpoint all select: [ :b | b link methods includes: m ] ]
+]
 
-	| breakpointsForMethod breakpointData |
-	breakpointsForMethod := Breakpoint all
-		select: [ :b | b link methods includes: aMethod compiledMethod].
-	
-	breakpointData := breakpointsForMethod
-		collect: [ :b | 
-			| data |
-			data := Dictionary new.
-			data at: #node put: b node.
-			data at: #method put: aMethod.
-			data at: #type put: 'Breakpoint'.
-			data at: #interval put: (b node start to: b node stop).
-			data ].
-		^breakpointData 
+{ #category : #private }
+StObjectBreakpointInspection >> breakpointDataFor: aBreakpoint [
+	"Returns a dictionary containing breakpoint data for the given breakpoint."
+
+	| data |
+	data := Dictionary new.
+	data at: #node put: aBreakpoint node.
+	data at: #method put: aBreakpoint node methodNode method.
+	data at: #type put: 'Breakpoint'.
+	data at: #interval put: (aBreakpoint node start to: aBreakpoint node stop).
+	^ data
 ]
 
 { #category : #private }
 StObjectBreakpointInspection >> buildBreakpointData [
-	^ (model class allMethods select: [ :m | m hasBreakpoint ])
-		flatCollect: [ :m | self breakpointDataFor: m ]
+	^ self breakPointsForModel
+		collect: [ :b | self breakpointDataFor: b ]
 ]
 
 { #category : #private }
