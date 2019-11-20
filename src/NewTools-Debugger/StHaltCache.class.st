@@ -50,7 +50,13 @@ StHaltCache >> buildCacheForMethod: aCompiledMethod [
 	haltNodes
 		ifEmpty: [ self uncacheMethod: aCompiledMethod selector.
 			^ self ].
-	self setNodeCache: haltNodes forSelector: aCompiledMethod selector
+	self setNodeCache: haltNodes forSelector: aCompiledMethod selector.
+	self cacheChanged
+]
+
+{ #category : #notifying }
+StHaltCache >> cacheChanged [
+	SystemAnnouncer uniqueInstance announce: StHaltCacheChanged
 ]
 
 { #category : #cache }
@@ -102,5 +108,6 @@ StHaltCache >> setNodeCache: haltAndBreakpointNodes forSelector: aSelector [
 StHaltCache >> uncacheMethod: aMethodSelector [
 	"Methods not in the cache are irrelevant, so we don't care if they are absent from the dictionary"
 
-	methodsWithHalts removeKey: aMethodSelector ifAbsent: [  ]
+	methodsWithHalts removeKey: aMethodSelector ifAbsent: [  ].
+	self cacheChanged
 ]
