@@ -43,8 +43,9 @@ StHaltAndBreakpointControlTest >> setUp [
 
 { #category : #running }
 StHaltAndBreakpointControlTest >> tearDown [
-	super tearDown.
-	self removeMethodsWithHalts
+	cache := nil.
+	self removeMethodsWithHalts.
+	super tearDown
 ]
 
 { #category : #accessors }
