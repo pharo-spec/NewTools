@@ -45,6 +45,8 @@ StHaltCache >> buildCacheForMethod: aCompiledMethod [
 	- cache all extracted nodes into the methodsWithHalts dictionary"
 
 	| ast haltNodes |
+	(self shouldConsiderMethod: aCompiledMethod)
+		ifFalse: [ ^ self ].
 	ast := aCompiledMethod ast.
 	haltNodes := ast sendNodes
 		select: [ :node | '*halt*' match: node selector ].
@@ -105,10 +107,21 @@ StHaltCache >> setNodeCache: haltAndBreakpointNodes forSelector: aSelector [
 	methodsWithHalts at: aSelector put: haltAndBreakpointNodes
 ]
 
+{ #category : #testing }
+StHaltCache >> shouldConsiderMethod: aCompiledMethod [
+	"We do not consider test methods"
+
+	^ (('test*' match: aCompiledMethod selector)
+		"or: [ '*test*' match: aCompiledMethod methodClass name asLowercase ]")
+		not
+]
+
 { #category : #cache }
 StHaltCache >> uncacheMethod: aMethodSelector [
 	"Methods not in the cache are irrelevant, so we don't care if they are absent from the dictionary"
 
-	methodsWithHalts removeKey: aMethodSelector ifAbsent: [  ].
+	(methodsWithHalts keys includes: aMethodSelector)
+		ifFalse: [ ^ self ].
+	methodsWithHalts removeKey: aMethodSelector.
 	self cacheChanged
 ]
