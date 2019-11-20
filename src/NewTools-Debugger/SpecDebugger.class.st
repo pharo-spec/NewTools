@@ -12,7 +12,8 @@ Class {
 		'code',
 		'toolbar',
 		'stackTable',
-		'inspector'
+		'inspector',
+		'breakpointInspector'
 	],
 	#classVars : [
 		'DefaultSpec',
@@ -85,7 +86,7 @@ SpecDebugger class >> contextRightColumnSpec [
 					add: #code;
 					yourself);
 				yourself);
-			"add: #contextInspector withConstraints: [ :c | c spec: #variablesListOnTop ];"
+			add: #breakpointInspector;
 			yourself);
 		add: #inspector;
 		yourself
@@ -332,6 +333,14 @@ SpecDebugger >> initialize [
 ]
 
 { #category : #initialization }
+SpecDebugger >> initializeBreakpointInspector [
+	breakpointInspector := self
+		instantiate: StDebuggerBreakpointInspection
+		on: (StInspectorModel on: nil).
+	"inspector label: 'Receiver'"
+]
+
+{ #category : #initialization }
 SpecDebugger >> initializeCode [
 
 	code := self newCode.
@@ -356,7 +365,8 @@ SpecDebugger >> initializePresenters [
 	self initializeStack.
 	self initializeToolbar.
 	self initializeCode.
-	self initializeInspector
+	self initializeInspector.
+	self initializeBreakpointInspector
 ]
 
 { #category : #initialization }
