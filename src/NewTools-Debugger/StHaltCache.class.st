@@ -29,7 +29,9 @@ StHaltCache class >> defaultCache [
 { #category : #'accessing - cache' }
 StHaltCache class >> reset [
 	<script>
-	DefaultCache := self new
+	DefaultCache
+		ifNotNil: [ DefaultCache removeSubscriptions.
+			DefaultCache := nil ]
 ]
 
 { #category : #cache }
@@ -100,6 +102,11 @@ StHaltCache >> methodsWithHalts [
 { #category : #cache }
 StHaltCache >> nodeCacheForSelector: aMethodSelector [
 	^ methodsWithHalts at: aMethodSelector ifAbsent: #()
+]
+
+{ #category : #subscription }
+StHaltCache >> removeSubscriptions [
+	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
 { #category : #cache }

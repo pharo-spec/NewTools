@@ -36,9 +36,9 @@ StHaltAndBreakpointControlTest >> removeMethodsWithHalts [
 { #category : #running }
 StHaltAndBreakpointControlTest >> setUp [
 	super setUp.
+	StHaltCache reset.
 	self compileMethodsWithHalts.
 	cache := StHaltCache new
-
 ]
 
 { #category : #running }
