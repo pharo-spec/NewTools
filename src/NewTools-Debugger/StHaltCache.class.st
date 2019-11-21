@@ -13,8 +13,7 @@ Class {
 	#name : #StHaltCache,
 	#superclass : #Object,
 	#instVars : [
-		'methodsWithHalts',
-		'shouldNotifyCacheChanges'
+		'methodsWithHalts'
 	],
 	#classVars : [
 		'DefaultCache'
@@ -62,7 +61,6 @@ StHaltCache >> buildCacheForMethod: aCompiledMethod [
 
 { #category : #notifying }
 StHaltCache >> cacheChanged [
-	self shouldNotifyCacheChanges ifFalse:[^self].
 	SystemAnnouncer uniqueInstance announce: StHaltCacheChanged
 ]
 
@@ -76,9 +74,7 @@ StHaltCache >> cacheNode: aNode forSelector: aMethodSelector [
 StHaltCache >> initialize [
 	methodsWithHalts := Dictionary new.
 	self buildCache.
-	SystemAnnouncer uniqueInstance weak when: MethodModified send: #methodChanged: to: self.
-	SystemAnnouncer uniqueInstance weak when: MethodRemoved send: #methodRemoved: to: self.
-	SystemAnnouncer uniqueInstance weak when: MethodAdded send: #methodAdded: to: self
+	self registerSubscriptions
 ]
 
 { #category : #notifying }
@@ -106,7 +102,14 @@ StHaltCache >> nodeCacheForSelector: aMethodSelector [
 	^ methodsWithHalts at: aMethodSelector ifAbsent: #()
 ]
 
-{ #category : #subscription }
+{ #category : #'system subscription' }
+StHaltCache >> registerSubscriptions [
+	SystemAnnouncer uniqueInstance weak when: MethodModified send: #methodChanged: to: self.
+	SystemAnnouncer uniqueInstance weak when: MethodRemoved send: #methodRemoved: to: self.
+	SystemAnnouncer uniqueInstance weak when: MethodAdded send: #methodAdded: to: self
+]
+
+{ #category : #'system subscription' }
 StHaltCache >> removeSubscriptions [
 	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
@@ -123,16 +126,6 @@ StHaltCache >> shouldConsiderMethod: aCompiledMethod [
 	^ (('test*' match: aCompiledMethod selector)
 		"or: [ '*test*' match: aCompiledMethod methodClass name asLowercase ]")
 		not
-]
-
-{ #category : #accessing }
-StHaltCache >> shouldNotifyCacheChanges [
-	^ shouldNotifyCacheChanges ifNil:[true]
-]
-
-{ #category : #accessing }
-StHaltCache >> shouldNotifyCacheChanges: anObject [
-	shouldNotifyCacheChanges := anObject
 ]
 
 { #category : #cache }
