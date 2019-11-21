@@ -13,7 +13,8 @@ Class {
 	#name : #StHaltCache,
 	#superclass : #Object,
 	#instVars : [
-		'methodsWithHalts'
+		'methodsWithHalts',
+		'shouldNotifyCacheChanges'
 	],
 	#classVars : [
 		'DefaultCache'
@@ -61,6 +62,7 @@ StHaltCache >> buildCacheForMethod: aCompiledMethod [
 
 { #category : #notifying }
 StHaltCache >> cacheChanged [
+	self shouldNotifyCacheChanges ifFalse:[^self].
 	SystemAnnouncer uniqueInstance announce: StHaltCacheChanged
 ]
 
@@ -121,6 +123,16 @@ StHaltCache >> shouldConsiderMethod: aCompiledMethod [
 	^ (('test*' match: aCompiledMethod selector)
 		"or: [ '*test*' match: aCompiledMethod methodClass name asLowercase ]")
 		not
+]
+
+{ #category : #accessing }
+StHaltCache >> shouldNotifyCacheChanges [
+	^ shouldNotifyCacheChanges ifNil:[true]
+]
+
+{ #category : #accessing }
+StHaltCache >> shouldNotifyCacheChanges: anObject [
+	shouldNotifyCacheChanges := anObject
 ]
 
 { #category : #cache }

@@ -36,13 +36,15 @@ StHaltAndBreakpointControlTest >> removeMethodsWithHalts [
 { #category : #running }
 StHaltAndBreakpointControlTest >> setUp [
 	super setUp.
-	StHaltCache reset.
+	StHaltCache defaultCache shouldNotifyCacheChanges: false.
 	self compileMethodsWithHalts.
-	cache := StHaltCache new
+	cache := StHaltCache new.
+	cache shouldNotifyCacheChanges: false
 ]
 
 { #category : #running }
 StHaltAndBreakpointControlTest >> tearDown [
+	StHaltCache defaultCache shouldNotifyCacheChanges: true.
 	cache := nil.
 	self removeMethodsWithHalts.
 	super tearDown
