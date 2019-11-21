@@ -26,7 +26,7 @@ StHaltAndBreakpointControllerTest >> installBreakpointOn: aNode [
 
 { #category : #helper }
 StHaltAndBreakpointControllerTest >> node [
-	^ (cache nodeCacheForSelector: #mHalt) first 
+	^ (cache nodeCacheForSelector: 'StDummyTestClassWithHalts>>#mHalt') first 
 ]
 
 { #category : #helper }
