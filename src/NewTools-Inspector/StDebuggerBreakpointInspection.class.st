@@ -44,3 +44,8 @@ StDebuggerBreakpointInspection >> initializePresenters [
 StDebuggerBreakpointInspection >> labelString [
 	^ 'Breakpoints and Halts'
 ]
+
+{ #category : #presenters }
+StDebuggerBreakpointInspection >> updateSourceCodeBehaviorFor: node [
+	breakpointsInSourceCode behavior: node methodNode methodClass
+]

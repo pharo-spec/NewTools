@@ -38,7 +38,6 @@ StObjectBreakpointInspection >> breakpointDataFor: aBreakpoint [
 	| data |
 	data := Dictionary new.
 	data at: #node put: aBreakpoint node.
-	data at: #method put: aBreakpoint node methodNode method.
 	data at: #type put: 'Breakpoint'.
 	data at: #interval put: (aBreakpoint node start to: aBreakpoint node stop).
 	^ data
@@ -54,7 +53,7 @@ StObjectBreakpointInspection >> buildBreakpointData [
 StObjectBreakpointInspection >> buildHaltAndBreakpointData [
 	| breakpointData |
 	breakpointData := SortedCollection
-		sortBlock: [ :a :b | (a at: #method) name < (b at: #method) name ].
+		sortBlock: [ :a :b | (a at: #node) methodNode selector < (b at: #node) methodNode selector ].
 	breakpointData addAll: self buildBreakpointData.
 	breakpointData addAll: self buildHaltData.
 	^ breakpointData
@@ -86,13 +85,10 @@ StObjectBreakpointInspection >> buildHaltAndBreakpointTable [
 		addColumn:
 			(SpStringTableColumn
 				title: 'Method'
-				evaluated: [ :item | (item at: #method) name ]).
-	methodsWithBreakpoints
-		whenSelectionChangedDo: [ :selection | 
-			| selectedItem |
-			selectedItem := selection selectedItem.
-			breakpointsInSourceCode text: (selectedItem at: #method) sourceCode.
-			breakpointsInSourceCode selection: (selectedItem at: #interval) ]
+				evaluated: [ :item | 
+					(item at: #node) methodNode methodClass name , '>>'
+						, (item at: #node) methodNode selector ]).
+	
 ]
 
 { #category : #private }
@@ -109,13 +105,24 @@ StObjectBreakpointInspection >> buildSourceCode [
 	"Source code of methods in which breakpoint are installed"
 
 	breakpointsInSourceCode := self newCode.
-	breakpointsInSourceCode behavior: model class.
 	breakpointsInSourceCode disable
 ]
 
 { #category : #presenters }
 StObjectBreakpointInspection >> buildTableData [
 	methodsWithBreakpoints items: self buildHaltAndBreakpointData
+]
+
+{ #category : #presenters }
+StObjectBreakpointInspection >> configureSourceCodeUpdate [
+	methodsWithBreakpoints
+		whenSelectionChangedDo: [ :selection | 
+			| selectedItem node |
+			selectedItem := selection selectedItem.
+			node := selectedItem at: #node.
+			breakpointsInSourceCode text: node methodNode source.
+			breakpointsInSourceCode selection: (selectedItem at: #interval).
+			self updateSourceCodeBehaviorFor: node ]
 ]
 
 { #category : #private }
@@ -125,7 +132,6 @@ StObjectBreakpointInspection >> haltDataFor: aNode [
 	| data |
 	data := Dictionary new.
 	data at: #node put: aNode.
-	data at: #method put: aNode methodNode method.
 	data at: #type put: 'Halt'.
 	data at: #interval put: (aNode start to: aNode stop).
 	^ data
@@ -146,6 +152,7 @@ StObjectBreakpointInspection >> initialize [
 StObjectBreakpointInspection >> initializePresenters [
 	self buildSourceCode.
 	self buildHaltAndBreakpointTable.
+	self configureSourceCodeUpdate.
 	self buildTableData.
 	SystemAnnouncer uniqueInstance weak when: StHaltCacheChanged send: #buildTableData to: self.
 	SystemAnnouncer uniqueInstance weak when: MetalinkChanged send: #buildTableData to: self
@@ -172,4 +179,9 @@ StObjectBreakpointInspection >> labelForHaltSelector: aSelector [
 { #category : #'system subscription' }
 StObjectBreakpointInspection >> unsubscribeFromCacheChanges [
 	SystemAnnouncer uniqueInstance unsubscribe: self
+]
+
+{ #category : #presenters }
+StObjectBreakpointInspection >> updateSourceCodeBehaviorFor: node [
+	breakpointsInSourceCode behavior: model class
 ]
