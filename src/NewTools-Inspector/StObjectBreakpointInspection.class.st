@@ -93,10 +93,8 @@ StObjectBreakpointInspection >> buildHaltAndBreakpointTable [
 
 { #category : #private }
 StObjectBreakpointInspection >> buildHaltData [
-	| selectors |
-	selectors := model class allMethods collect: [ :m | m selector ].	
-	^ (selectors
-		flatCollect: [ :s | StHaltCache defaultCache nodeCacheForSelector: s ])
+	^ (model class allMethods
+		flatCollect: [ :m | StHaltCache defaultCache nodeCacheForSelector: m printString ])
 		collect: [ :node | self haltDataFor: node ]
 ]
 

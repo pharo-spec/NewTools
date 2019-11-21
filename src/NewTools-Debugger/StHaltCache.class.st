@@ -53,9 +53,9 @@ StHaltCache >> buildCacheForMethod: aCompiledMethod [
 	haltNodes := ast sendNodes
 		select: [ :node | '*halt*' match: node selector ].
 	haltNodes
-		ifEmpty: [ self uncacheMethod: aCompiledMethod selector.
+		ifEmpty: [ self uncacheMethod: aCompiledMethod printString.
 			^ self ].
-	self setNodeCache: haltNodes forSelector: aCompiledMethod selector.
+	self setNodeCache: haltNodes forSelector: aCompiledMethod printString.
 	self cacheChanged
 ]
 
@@ -89,7 +89,7 @@ StHaltCache >> methodChanged: methodCModifiedAnnouncement [
 
 { #category : #notifying }
 StHaltCache >> methodRemoved: methodRemovedAnnouncement [
-	self uncacheMethod: methodRemovedAnnouncement methodRemoved selector
+	self uncacheMethod: methodRemovedAnnouncement methodRemoved printString
 ]
 
 { #category : #accessing }
