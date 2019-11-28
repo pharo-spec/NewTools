@@ -16,6 +16,12 @@ StPharoGtkConfiguration >> addProviderFromString: aString [
 ]
 
 { #category : #configuring }
+StPharoGtkConfiguration >> configure: anApplication [
+
+	GtkRunLoop defer: [ super configure: anApplication ]
+]
+
+{ #category : #configuring }
 StPharoGtkConfiguration >> configureOSX: anApplication [
 
 	self installTheme: self macThemeName.
