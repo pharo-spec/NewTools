@@ -98,6 +98,12 @@ SpecDebugger class >> defaultSpec [
 	^ self perform: self usingSpecSelector
 ]
 
+{ #category : #opening }
+SpecDebugger class >> defaultTitle [
+	"GTDebugger needs this to create its action to switch to other debuggers (in this case to the Spec Debugger). I don't know if switching to this debugger actually works, but if the action cannot be created, the GTDebugger crashes when being opened. This method can be removed if the GTDebugger is removed"
+	^ 'SpecDebugger'
+]
+
 { #category : #'menu code' }
 SpecDebugger class >> dynamicCodeContextMenu: aBuilder [
 	<contextMenu>
@@ -123,6 +129,13 @@ SpecDebugger class >> handlesContext: aContext [
 	^ true
 ]
 
+{ #category : #'debugger declaration' }
+SpecDebugger class >> iAmADebugger [
+	"Leave blank for intermediate classes. Add the <iAmADebugger> pragma for concrete debugger classes. This pragma is used by the system to find all available debuggers"
+	"For compatibility with DebuggerSelector https://github.com/dupriezt/DebuggerSelector"
+	<iAmADebugger>
+]
+
 { #category : #'class initialization' }
 SpecDebugger class >> initialize [ 
 	
@@ -132,7 +145,7 @@ SpecDebugger class >> initialize [
 	(Smalltalk tools respondsTo: #registerDebugger:withRank:) ifFalse: [ ^ self ].
 
 	"Add ourselves to registry. See [Smalltalk tools]" 
-	Smalltalk tools registerDebugger: self withRank: 80.
+	Smalltalk tools registerDebugger: self withRank: self rank.
 	
 ]
 
@@ -156,8 +169,22 @@ SpecDebugger class >> openOn: aDebugSession withFullView: aBool [
 SpecDebugger class >> openOn: aDebugSession withFullView: aBool andNotification: aString [
 	| debugger |
 	debugger := self on: aDebugSession.
+	[aDebugSession keepAlive: debugger] on: MessageNotUnderstood do: [ ]. "For compatibility with DebuggerSelector https://github.com/dupriezt/DebuggerSelector
+	The on:do: can be removed once DebuggerSelector is integrated into the image, so that DebugSession has the #keepAlive: method"
 	debugger openWithFullView.
 	^ debugger
+]
+
+{ #category : #'class initialization' }
+SpecDebugger class >> rank [
+	^ 80
+]
+
+{ #category : #'class initialization' }
+SpecDebugger class >> rankDebugSession: aDebugSession [
+	"Returns an integer representing how much this debugger is suitable to debug @aDebugSession. The higher the integer returned, the more suitable this debugger is. Signal the DebugSessionCannotBeOpenedByThisDebugger exception if this debugger absolutely cannot debug @aDebugSession (for example if this debugger can only handle debug sessions from test executions, and @aDebugSession does not come from a test execution)"
+	"For compatibility with DebuggerSelector https://github.com/dupriezt/DebuggerSelector"
+	^ self rank.
 ]
 
 { #category : #'tools registry' }
@@ -254,7 +281,8 @@ SpecDebugger >> clear [
 	self removeActionsForSession: self session.
 	
 	"No more code should follow after this, as the session might terminate this process."
-	self session terminate
+	[self session stopKeepingAlive: self] on: MessageNotUnderstood do: [ self session terminate ] "For compatibility with DebuggerSelector https://github.com/dupriezt/DebuggerSelector
+	If DebugSelector is in the image (i.e. the debug session understands the #stopKeepingAlive: message), it is responsible for terminating debug sessions, so we just let it do it. If DebugSelector is not in the image (handler block), then we terminate the debug session ourselves"
 ]
 
 { #category : #'updating widgets' }
