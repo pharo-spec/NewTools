@@ -334,6 +334,22 @@ SpecDebugger >> currentContext [
 		ifFalse: [ self selectedContext ]
 ]
 
+{ #category : #stack }
+SpecDebugger >> filterStack: aStack [
+	^ aStack reject: [ :aContext | 
+		  aContext method hasPragmaNamed: #debuggerCompleteToSender ]
+]
+
+{ #category : #stack }
+SpecDebugger >> findFirstRelevantStackIndexIn: aStack [
+	| counter |
+	counter := 1.
+	aStack do: [ :context | 
+		context method methodClass == TestAsserter ifFalse: [ ^ counter ].
+		counter := counter + 1 ].
+	^ 1
+]
+
 { #category : #api }
 SpecDebugger >> initialExtent [ 
 	"This code was taken from the old debugger to get the same behavior. Fell free to refactor"
@@ -559,7 +575,7 @@ SpecDebugger >> setModelBeforeInitialization: aSession [
 
 { #category : #stack }
 SpecDebugger >> showFullStack [
-	stackTable items: self session stack
+	stackTable items: (self filterStack: self session stack)
 
 ]
 
@@ -650,8 +666,10 @@ SpecDebugger >> updateResume [
 
 { #category : #stack }
 SpecDebugger >> updateStackFromSession: aSession [
-	stackTable items: aSession shortStack.
-	stackTable selectIndex: 1
+	|stack|
+	stack := (self filterStack: aSession shortStack).
+	stackTable items: stack.
+	stackTable selectIndex: (self findFirstRelevantStackIndexIn: stack)
 ]
 
 { #category : #'updating actions' }
