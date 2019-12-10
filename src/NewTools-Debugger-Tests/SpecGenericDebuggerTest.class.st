@@ -254,7 +254,7 @@ SpecGenericDebuggerTest >> testSaveCodeModification [
 
 { #category : #'tests - stack table' }
 SpecGenericDebuggerTest >> testSelectLastStackElementWithMoreElements [
-	| dbg stackTable |
+	| dbg stackTable selectedItem |
 	dbg := self debuggerOn: session.
 	stackTable := dbg stackTable.
 	
@@ -263,12 +263,16 @@ SpecGenericDebuggerTest >> testSelectLastStackElementWithMoreElements [
 	stackTable items: (session stackOfSize: 1).
 	
 	self assert: stackTable items size equals: 1.
-	self assert: stackTable items last equals: session stack first.
-	stackTable selectItem: stackTable items last.
-
+	self assert: stackTable items last equals: session stack first.	
+		
+	"As we select the last element of the stack table, 
+	it should expand the size of the displayed stack"
+	selectedItem := stackTable items last.
+	stackTable selectItem: selectedItem.
 	self assert: stackTable items size equals: session stack size.
 	self assert: stackTable items equals: session stack.
-	
+	self assert: stackTable selection selectedItem identicalTo: selectedItem
+
 	
 ]
 
@@ -323,8 +327,7 @@ SpecGenericDebuggerTest >> testStackTableAfterStepIn [
 
 { #category : #'tests - stack table' }
 SpecGenericDebuggerTest >> testStackTableInitialization [
-
-	self assert: (self debuggerOn: DebugSession new) stackTable items isEmpty
+	self assert: self debugger stackTable isNil
 ]
 
 { #category : #'tests - stack table' }
@@ -335,11 +338,11 @@ SpecGenericDebuggerTest >> testStackTableSelectionChanged [
 	dbg stackTable selectItem: dbg stackTable items second.
 	self
 		assert:
-			dbg contextInspector inspectedObject
+			dbg inspector inspectedObject context
 				== dbg stackTable selection selectedItem.
 	self
 		assert:
-			dbg inspector inspectedObject
+			dbg inspector inspectedObject context receiver
 				== dbg stackTable selection selectedItem receiver.
 	self
 		assert: dbg code text
