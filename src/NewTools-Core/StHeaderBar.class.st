@@ -37,7 +37,7 @@ StHeaderBar >> initializePresenters [
 		action: [ ];
 		hide;
 		yourself.
-	titleLabel := self newLabel.
+	titleLabel := self newLabel addStyle: 'label.header'; yourself.
 	shortcutLabel := self newLabel
 		addStyle: 'label.shortcut';
 		yourself.
