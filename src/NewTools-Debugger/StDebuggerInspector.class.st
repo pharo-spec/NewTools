@@ -65,6 +65,16 @@ StDebuggerInspector >> setModelBeforeInitialization: aModel [
 ]
 
 { #category : #updating }
+StDebuggerInspector >> updateEvaluationPaneReceiver [
+
+	|receiver evaluator|
+	receiver := self model inspectedObject context receiver.
+	evaluator := inspector millerList presenters first evaluator.
+	evaluator doItReceiver: receiver.
+	evaluator behavior: receiver class.
+]
+
+{ #category : #updating }
 StDebuggerInspector >> updateWith: inspectedObject [
 	| oldPath oldItem |
 
@@ -75,6 +85,7 @@ StDebuggerInspector >> updateWith: inspectedObject [
 	oldItem := inspector selectedItem hostObject.
 "
 	self model: (StDebuggerInspectorModel on: inspectedObject).
+	self updateEvaluationPaneReceiver.
 	
 "	inspectedObject == oldItem 
 		ifTrue: [ inspector selectPath: oldPath ]
