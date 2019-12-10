@@ -179,6 +179,17 @@ SpecGenericDebuggerTest >> testInspectorHeaderLabel [
 ]
 
 { #category : #'tests - receiver inspector' }
+SpecGenericDebuggerTest >> testInspectorSelfBinding [
+	| dbg evaluator receiver |
+	dbg := self debuggerOn: session.
+	evaluator := (dbg inspector instVarNamed: #inspector) millerList
+		             presenters first evaluator.
+	receiver := dbg inspector model inspectedObject context receiver.
+	self assert: evaluator doItReceiver identicalTo: receiver.
+	self assert: evaluator behavior identicalTo: receiver class
+]
+
+{ #category : #'tests - receiver inspector' }
 SpecGenericDebuggerTest >> testReceiverChangedAfterStepIn [ 
 	| dbg |
 	dbg := self debuggerOn: session.
