@@ -351,6 +351,16 @@ SpecDebugger >> currentContext [
 ]
 
 { #category : #stack }
+SpecDebugger >> expandStackIfLastItemIsSelected [
+	| selection |
+	selection := stackTable selection.
+	selection selectedItem == stackTable items last ifFalse: [ ^ self ].
+	stackTable items: (self filterStack:
+			 (self session stackOfSize: 2 * stackTable items size)).
+	stackTable selectIndex: selection selectedIndex
+]
+
+{ #category : #stack }
 SpecDebugger >> filterStack: aStack [
 	^ aStack reject: [ :aContext | 
 		  aContext method hasPragmaNamed: #debuggerCompleteToSender ]
@@ -455,7 +465,8 @@ SpecDebugger >> initializeStack [
 		self updateInspectorFromContext: context.
 		self updateCodeFromContext: context.
 		self updateToolbar.
-		self updateTitle ].
+		self updateTitle.
+		self expandStackIfLastItemIsSelected  ].
 	
 	stackHeader := self instantiate: StHeaderBar.
 	stackHeader label: 'Stack'.
