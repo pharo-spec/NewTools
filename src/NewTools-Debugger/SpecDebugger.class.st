@@ -384,7 +384,7 @@ SpecDebugger >> initializeCode [
 SpecDebugger >> initializeInspector [
 	inspector := self
 		instantiate: StDebuggerInspector
-		on: (StInspectorModel on: nil).
+		on: (StDebuggerInspectorModel on: nil).
 	inspector label: 'Receiver'
 ]
 

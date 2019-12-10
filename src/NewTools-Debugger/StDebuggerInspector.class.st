@@ -12,12 +12,8 @@ Class {
 { #category : #specs }
 StDebuggerInspector class >> defaultSpec [
 	^ SpBoxLayout newVertical
-		add: #label
-			expand: false
-			fill: false
-			padding: 5;
-		add: #inspector;
-		yourself
+		  add: #inspector;
+		  yourself
 ]
 
 { #category : #'instance creation' }
@@ -34,9 +30,7 @@ StDebuggerInspector class >> title [
 { #category : #initialization }
 StDebuggerInspector >> initializePresenters [
 	label := self newLabel.
-	inspector := self
-		instantiate: StInspector
-		on: (StInspectorModel on: self model inspectedObject)
+	inspector := self instantiate: StInspector on: self model
 ]
 
 { #category : #accessing }
@@ -80,7 +74,7 @@ StDebuggerInspector >> updateWith: inspectedObject [
 	oldPath := inspector selectedPath.
 	oldItem := inspector selectedItem hostObject.
 "
-	self model: (StInspectorModel on: inspectedObject).
+	self model: (StDebuggerInspectorModel on: inspectedObject).
 	
 "	inspectedObject == oldItem 
 		ifTrue: [ inspector selectPath: oldPath ]
