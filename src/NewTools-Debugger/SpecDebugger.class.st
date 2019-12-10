@@ -13,7 +13,9 @@ Class {
 		'toolbar',
 		'stackTable',
 		'inspector',
-		'breakpointInspector'
+		'breakpointInspector',
+		'stackHeader',
+		'codeHeader'
 	],
 	#classVars : [
 		'DefaultSpec',
@@ -69,27 +71,41 @@ SpecDebugger class >> columnInspectorsSpec [
 
 { #category : #specs }
 SpecDebugger class >> contextRightColumnSpec [
-
 	^ SpPanedLayout newVertical
-		position: 70 percent;
-		add: (SpPanedLayout newHorizontal
-			position: 65 percent;
-			add: (SpPanedLayout newVertical
-				position: 40 percent;
-				add: (SpBoxLayout newVertical 
-					add: 'Stack' expand: false fill: false padding: 5;
-					add: #stackTable;
-					yourself);
-				add: (SpBoxLayout newVertical 
-					add: 'Source' expand: false fill: false padding: 5;
-					add: #toolbar expand: false fill: false padding: 0;
-					add: #code;
-					yourself);
-				yourself);
-			add: #breakpointInspector;
-			yourself);
-		add: #inspector;
-		yourself
+		  position: 70 percent;
+		  add: (SpPanedLayout newHorizontal
+				   position: 65 percent;
+				   add: (SpPanedLayout newVertical
+						    position: 40 percent;
+						    add: (SpBoxLayout newVertical
+								     add: #stackHeader
+								     expand: false
+								     fill: false
+								     padding: 0;
+								     add: #stackTable;
+								     yourself);
+						    add: (SpBoxLayout newVertical
+								     add: (SpBoxLayout newHorizontal
+										      add: #codeHeader
+										      expand: true
+										      fill: true
+										      padding: 0;
+										      add: #toolbar
+										      expand: false
+										      fill: false
+										      padding: 0;
+										      yourself)
+								     withConstraints: [ :constraints | 
+									     constraints
+										     expand: false;
+										     height: self toolbarHeight ];
+								     add: #code;
+								     yourself);
+						    yourself);
+				   add: #breakpointInspector;
+				   yourself);
+		  add: #inspector;
+		  yourself
 ]
 
 { #category : #specs }
@@ -393,7 +409,10 @@ SpecDebugger >> initializeCode [
 		self
 			recompileMethodTo: text string
 			inContext: self stackTable selection selectedItem
-			notifying: notifyer ]
+			notifying: notifyer ].
+		
+	codeHeader := self instantiate: StHeaderBar.
+	codeHeader label: 'Source'.
 ]
 
 { #category : #initialization }
@@ -436,7 +455,10 @@ SpecDebugger >> initializeStack [
 		self updateInspectorFromContext: context.
 		self updateCodeFromContext: context.
 		self updateToolbar.
-		self updateTitle ]
+		self updateTitle ].
+	
+	stackHeader := self instantiate: StHeaderBar.
+	stackHeader label: 'Stack'.
 ]
 
 { #category : #initialization }
