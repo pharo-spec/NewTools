@@ -54,8 +54,8 @@ StDebuggerFailingAssertionInspector >> expectedObject: anObject [
 { #category : #initialization }
 StDebuggerFailingAssertionInspector >> initializeMillerList: list forObject: object [
 	list
-		presenterBlock: [ :aModel | self tableInspectionFor: aModel ];
-		setRootModel: object
+		presenterBlock: [ :aModel | self treeTableInspectionFor: aModel ];
+		setRootModel: object 
 ]
 
 { #category : #initialization }
@@ -82,11 +82,11 @@ StDebuggerFailingAssertionInspector >> initializePresenters [
 ]
 
 { #category : #views }
-StDebuggerFailingAssertionInspector >> tableInspectionFor: aModel [
+StDebuggerFailingAssertionInspector >> treeTableInspectionFor: aModel [
 	| rawInspection |
 	rawInspection := StRawInspection new.
 	^ self newTreeTable
-		  roots: aModel allInspectorNodes;
+		  roots: aModel value allInspectorNodes;
 		  children: [ :node | node children ];
 		  addColumn: rawInspection variablesColumn;
 		  addColumn: rawInspection valuesColumn;
