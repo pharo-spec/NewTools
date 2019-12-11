@@ -123,9 +123,7 @@ SpecGenericDebuggerTest >> testContextChangedAfterStepOverAndReturn [
 
 { #category : #'tests - context inspector' }
 SpecGenericDebuggerTest >> testContextInspectorMenu [
-	self assert: false.
-	self flag: 'TODO'
-
+	self assert: 1 @ 1 equals: 2 @ 2
 ]
 
 { #category : #'tests - context inspector' }

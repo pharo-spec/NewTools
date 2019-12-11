@@ -7,7 +7,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'context',
-		'session'
+		'session',
+		'assertionContext'
 	],
 	#category : #'NewTools-Debugger-Model'
 }
@@ -35,6 +36,22 @@ StDebuggerContext >> context [
 { #category : #accessing }
 StDebuggerContext >> context: anObject [
 	context := anObject
+]
+
+{ #category : #'accessing widgets' }
+StDebuggerContext >> diffPresenterForFailingAssertions [
+	<inspectorPresentationOrder: -1 title: 'Failed assertion' if:
+	#isTopContextFailingAssertion>
+	^ StDebuggerFailingAssertionInspector
+		  diffInspectorsFromActual: (assertionContext tempAt: 1)
+		  expected: (assertionContext tempAt: 2)
+]
+
+{ #category : #'accessing widgets' }
+StDebuggerContext >> isTopContextFailingAssertion [
+	assertionContext := self session stack first findContextSuchThat: [ 
+		                    :ctx | ctx selector = #assert:equals: ].
+	^ assertionContext notNil
 ]
 
 { #category : #printing }
