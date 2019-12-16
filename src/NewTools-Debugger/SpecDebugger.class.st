@@ -731,6 +731,7 @@ SpecDebugger >> updateStackFromSession: aSession [
 
 { #category : #'updating actions' }
 SpecDebugger >> updateStep [
+	self updateInspectorFromContext: self context.
 	self updateStackFromSession: self session.
 	self updateCodeHeaderLabel
 ]

@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'inspector',
 		'model',
-		'label'
+		'label',
+		'rawInspectionSelectionCache'
 	],
 	#category : #'NewTools-Debugger-View'
 }
@@ -25,6 +26,25 @@ StDebuggerInspector class >> openOn: anObject [
 { #category : #specs }
 StDebuggerInspector class >> title [
 	 ^'Debugger Inspection'
+]
+
+{ #category : #updating }
+StDebuggerInspector >> forceRawInspectionUpdate [
+	self getRawInspectorPresenterOrNil ifNotNil: [ :inspection | 
+		inspection update ]
+]
+
+{ #category : #private }
+StDebuggerInspector >> getRawInspectorPresenterOrNil [
+	^ inspector millerList pages first rawInspectorPageOrNil
+		  activePresenter
+]
+
+{ #category : #private }
+StDebuggerInspector >> getRawInspectorSelectedPath [
+	^ self getRawInspectorPresenterOrNil
+		  ifNil: [ #(  ) ]
+		  ifNotNil: [ :raw | raw selectedPath ]
 ]
 
 { #category : #initialization }
@@ -58,6 +78,29 @@ StDebuggerInspector >> model: aModel [
 	inspector model: model
 ]
 
+{ #category : #accessing }
+StDebuggerInspector >> rawInspectionSelectionCache [
+	^ rawInspectionSelectionCache ifNil: [ 
+		  rawInspectionSelectionCache := Dictionary new ]
+]
+
+{ #category : #private }
+StDebuggerInspector >> restoreRawInspectionSelectionForContext: aContext [
+	aContext ifNil: [ ^ self ].
+	self getRawInspectorPresenterOrNil ifNotNil: [ :raw | 
+		raw selectPath: (self rawInspectionSelectionCache
+				 at: aContext receiver class -> aContext selector
+				 ifAbsent: [ #() ]) ]
+]
+
+{ #category : #private }
+StDebuggerInspector >> saveRawInspectionSelectionForContext: aContext [
+	aContext ifNil: [ ^ self ].
+	self rawInspectionSelectionCache
+		at: aContext receiver class -> aContext selector
+		put: self getRawInspectorSelectedPath
+]
+
 { #category : #'accessing model' }
 StDebuggerInspector >> setModelBeforeInitialization: aModel [
 
@@ -76,18 +119,17 @@ StDebuggerInspector >> updateEvaluationPaneReceiver [
 
 { #category : #updating }
 StDebuggerInspector >> updateWith: inspectedObject [
-	| oldPath oldItem |
-
-	self flag: 'Suspicious test: should not be == ?'.
-	self model inspectedObject = inspectedObject ifTrue: [ ^ self ].
-"
-	oldPath := inspector selectedPath.
-	oldItem := inspector selectedItem hostObject.
-"
+	| oldContext newContext |
+	oldContext := self model inspectedObject ifNotNil: [ :dbgCtx | 
+		              dbgCtx context ].
+	newContext := inspectedObject ifNotNil: [ :dbgCtx | dbgCtx context ].
+	(oldContext notNil and: [ newContext notNil ]) ifTrue: [ 
+		(oldContext receiver == newContext receiver and: [ 
+			 oldContext selector == newContext selector ]) ifTrue: [ 
+			self forceRawInspectionUpdate.
+			^ self ] ].
+	self saveRawInspectionSelectionForContext: oldContext.
 	self model: (StDebuggerInspectorModel on: inspectedObject).
 	self updateEvaluationPaneReceiver.
-	
-"	inspectedObject == oldItem 
-		ifTrue: [ inspector selectPath: oldPath ]
-		ifFalse: [ inspector selectFirst ]"
+	self restoreRawInspectionSelectionForContext: newContext
 ]
