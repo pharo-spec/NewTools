@@ -85,20 +85,17 @@ SpecDebugger class >> contextRightColumnSpec [
 								     add: #stackTable;
 								     yourself);
 						    add: (SpBoxLayout newVertical
-								     add: (SpBoxLayout newHorizontal
+								     add: (SpBoxLayout newVertical
+								 				add: #toolbar;
 										      add: #codeHeader
 										      expand: true
 										      fill: true
 										      padding: 0;
-										      add: #toolbar
-										     " expand: false
-										      fill: false
-										      padding: 0";
 										      yourself)
 								     withConstraints: [ :constraints | 
 									     constraints
 										     expand: false;
-										     height: self toolbarHeight ];
+										     height: self toolbarHeight * 2 ];
 								     add: #code;
 								     yourself);
 						    yourself);
@@ -422,7 +419,8 @@ SpecDebugger >> initializeCode [
 			notifying: notifyer ].
 		
 	codeHeader := self instantiate: StHeaderBar.
-	codeHeader label: 'Source'.
+	codeHeader applyStyleToLabel: 'label.headerError'.
+	codeHeader label: self session name.
 ]
 
 { #category : #initialization }
@@ -672,6 +670,20 @@ SpecDebugger >> updateCodeFromContext: aContext [
 ]
 
 { #category : #'updating actions' }
+SpecDebugger >> updateCodeHeaderLabel [
+	codeHeader removeStyleFromLabel: 'label.headerError'.
+	(self context tempNames includes: #exception) ifTrue: [ 
+		(self context tempNamed: #exception) ifNotNil: [ :ex | 
+			codeHeader applyStyleToLabel: 'label.headerError'.
+			codeHeader label: ex description.
+			^ self ] ].
+	codeHeader label: (self context currentNode isHaltNode
+			 ifTrue: [ 'Halt' ]
+			 ifFalse: [ 
+			 self context receiver class name , '>>' , self context selector ])
+]
+
+{ #category : #'updating actions' }
 SpecDebugger >> updateContextChanged [
 	| selection |
 	selection := self stackTable selection selectedItem.
@@ -707,7 +719,8 @@ SpecDebugger >> updateStackFromSession: aSession [
 
 { #category : #'updating actions' }
 SpecDebugger >> updateStep [
-	self updateStackFromSession: self session
+	self updateStackFromSession: self session.
+	self updateCodeHeaderLabel
 ]
 
 { #category : #'updating actions' }

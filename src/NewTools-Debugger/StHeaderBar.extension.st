@@ -4,3 +4,8 @@ Extension { #name : #StHeaderBar }
 StHeaderBar >> applyStyleToLabel: aStyleName [
 	titleLabel addStyle: aStyleName
 ]
+
+{ #category : #'*NewTools-Debugger' }
+StHeaderBar >> removeStyleFromLabel: aStyleName [
+	titleLabel removeStyle: aStyleName
+]

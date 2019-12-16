@@ -8,7 +8,8 @@ Class {
 	#instVars : [
 		'context',
 		'session',
-		'assertionContext'
+		'assertionContext',
+		'exceptionContext'
 	],
 	#category : #'NewTools-Debugger-Model'
 }
