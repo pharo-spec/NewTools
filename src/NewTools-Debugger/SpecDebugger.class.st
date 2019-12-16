@@ -410,7 +410,7 @@ SpecDebugger >> initializeBreakpointInspector [
 
 { #category : #initialization }
 SpecDebugger >> initializeCode [
-
+	self flag: 'Add metalink information in the gutter!'.
 	code := self newCode.
 	code acceptBlock: [ :text :notifyer | 
 		self
@@ -660,7 +660,7 @@ SpecDebugger >> toolbar [
 { #category : #actions }
 SpecDebugger >> toolbarActions [
 	| group |
-	
+	self flag: 'Add metalink inspect button'.
 	group := (CmCommandGroup named: 'Toolbar') asSpecGroup.
 	(DebugCommand toolbarCommandsForDebugger: self)
 		do: [ :cmd | group register: cmd ].
