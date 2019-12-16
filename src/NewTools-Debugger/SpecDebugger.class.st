@@ -81,7 +81,7 @@ SpecDebugger class >> contextRightColumnSpec [
 								     add: #stackHeader
 								     expand: false
 								     fill: false
-								     padding: 0;
+								     padding: 5;
 								     add: #stackTable;
 								     yourself);
 						    add: (SpBoxLayout newVertical
@@ -91,9 +91,9 @@ SpecDebugger class >> contextRightColumnSpec [
 										      fill: true
 										      padding: 0;
 										      add: #toolbar
-										      expand: false
+										     " expand: false
 										      fill: false
-										      padding: 0;
+										      padding: 0";
 										      yourself)
 								     withConstraints: [ :constraints | 
 									     constraints
