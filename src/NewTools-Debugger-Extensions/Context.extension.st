@@ -9,7 +9,7 @@ Context >> debuggerInspectorTempsNodes [
 { #category : #'*NewTools-Debugger-Extensions' }
 Context >> findContextSuchThat: testBlock depth: depth [
 	"Search self and my sender chain for first one that satisfies testBlock.  Return nil if none satisfy.
-	I limit the search to the 10 first senders of the sender chain."
+	I limit the search to the depth first senders of the sender chain."
 
 	| context counter |
 	context := self.
