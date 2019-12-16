@@ -161,6 +161,11 @@ StObjectInspector >> model: anInspectorModel [
 	self refresh
 ]
 
+{ #category : #accessing }
+StObjectInspector >> rawInspectorPageOrNil [
+	^ views pages detect: [ :page | page title = 'Raw' ] ifNone: [ nil ]
+]
+
 { #category : #'private updating' }
 StObjectInspector >> refresh [
 	"model changed?  
