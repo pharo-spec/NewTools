@@ -249,11 +249,11 @@ SpecGenericDebuggerTest >> testReceiverUnchangedAfterStepOver [
 
 ]
 
-{ #category : #'tests - receiver inspector' }
+{ #category : #'tests - raw inspection' }
 SpecGenericDebuggerTest >> testRestoreReceiverRawInspectionSelection [
 ]
 
-{ #category : #'tests - receiver inspector' }
+{ #category : #'tests - raw inspection' }
 SpecGenericDebuggerTest >> testRestoreReceiverRawInspectionSelectionAfterContextChange [
 ]
 
@@ -262,11 +262,11 @@ SpecGenericDebuggerTest >> testSaveCodeModification [
 	self assert: false
 ]
 
-{ #category : #'tests - receiver inspector' }
+{ #category : #'tests - raw inspection' }
 SpecGenericDebuggerTest >> testSaveReceiverRawInspectionSelection [
 ]
 
-{ #category : #'tests - receiver inspector' }
+{ #category : #'tests - raw inspection' }
 SpecGenericDebuggerTest >> testSaveReceiverRawInspectionSelectionAfterContextChange [
 ]
 
