@@ -702,11 +702,7 @@ SpecDebugger >> updateCodeHeaderLabel [
 
 { #category : #'updating actions' }
 SpecDebugger >> updateContextChanged [
-	| selection |
-	self flag: 'What is the use of that besides updateStep?'.
-	selection := self stackTable selection selectedItem.
 	self updateStep
-	"	self stack selectItem: selection"
 ]
 
 { #category : #'updating widgets' }
@@ -716,9 +712,7 @@ SpecDebugger >> updateInspectorFromContext: aContext [
 
 { #category : #'updating actions' }
 SpecDebugger >> updateRestart [
-
-	self updateStep 
-	
+	self updateStep
 ]
 
 { #category : #'updating actions' }
@@ -743,8 +737,7 @@ SpecDebugger >> updateStep [
 
 { #category : #'updating actions' }
 SpecDebugger >> updateStepInto [
-
-	self updateStep 
+	self updateStep
 ]
 
 { #category : #'updating actions' }
