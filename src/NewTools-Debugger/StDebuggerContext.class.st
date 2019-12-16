@@ -50,8 +50,10 @@ StDebuggerContext >> diffPresenterForFailingAssertions [
 
 { #category : #'accessing widgets' }
 StDebuggerContext >> isTopContextFailingAssertion [
-	assertionContext := self session stack first findContextSuchThat: [ 
-		                    :ctx | ctx selector = #assert:equals: ].
+	assertionContext := self session stack first
+		                    findContextSuchThat: [ :ctx | 
+		                    ctx selector = #assert:equals: ]
+		                    depth: 10.
 	^ assertionContext notNil
 ]
 
