@@ -624,6 +624,26 @@ SpecDebugger >> stackTable [
 	^stackTable
 ]
 
+{ #category : #accessing }
+SpecDebugger >> statusLabelStyleForCurrentContext [
+	(self context tempNames includes: #exception) ifTrue: [ 
+		(self context tempNamed: #exception) ifNotNil: [ :ex | 
+			^ 'label.headerError' ] ].
+	self context currentNode isHaltNode ifTrue: [ ^ 'label.headerError' ].
+	^ 'label.header'
+]
+
+{ #category : #accessing }
+SpecDebugger >> statusLabelTextForCurrentContext [
+	(self context tempNames includes: #exception) ifTrue: [ 
+		(self context tempNamed: #exception) ifNotNil: [ :ex | 
+			^ ex description ] ].
+	^ self context currentNode isHaltNode
+		  ifTrue: [ 'Halt' ]
+		  ifFalse: [ 
+		  self context receiver class name , '>>' , self context selector ]
+]
+
 { #category : #api }
 SpecDebugger >> title [
 	^ ((self session isContextPostMortem: self interruptedContext)
@@ -671,18 +691,13 @@ SpecDebugger >> updateCodeFromContext: aContext [
 
 { #category : #'updating actions' }
 SpecDebugger >> updateCodeHeaderLabel [
-	codeHeader removeStyleFromLabel: 'label.headerError'.
-	(self context tempNames includes: #exception) ifTrue: [ 
-		(self context tempNamed: #exception) ifNotNil: [ :ex | 
-			codeHeader applyStyleToLabel: 'label.headerError'.
-			codeHeader label: ex description.
-			codeHeader update.
-			^ self ] ].
-	codeHeader label: (self context currentNode isHaltNode
-			 ifTrue: [codeHeader applyStyleToLabel: 'label.headerError'. 'Halt' ]
-			 ifFalse: [ 
-			 self context receiver class name , '>>' , self context selector ]).
+	
+	codeHeader removeStyleFromLabel: 'label.headerError'.	
+	codeHeader removeStyleFromLabel: 'label.header'.	
+	codeHeader label: self statusLabelTextForCurrentContext.
+	codeHeader applyStyleToLabel: self statusLabelStyleForCurrentContext.
 	codeHeader update
+	
 ]
 
 { #category : #'updating actions' }
