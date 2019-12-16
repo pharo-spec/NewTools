@@ -572,7 +572,7 @@ self flag: 'Kill it'.
 			removeActionsForEvent:#contextChanged ]. 
 ]
 
-{ #category : #'accessing context' }
+{ #category : #stack }
 SpecDebugger >> selectTopContext [
 	stackTable selectIndex: 1
 ]
@@ -624,7 +624,7 @@ SpecDebugger >> stackTable [
 	^stackTable
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing context' }
 SpecDebugger >> statusLabelStyleForCurrentContext [
 	(self context tempNames includes: #exception) ifTrue: [ 
 		(self context tempNamed: #exception) ifNotNil: [ :ex | 
@@ -633,7 +633,7 @@ SpecDebugger >> statusLabelStyleForCurrentContext [
 	^ 'label.header'
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing context' }
 SpecDebugger >> statusLabelTextForCurrentContext [
 	(self context tempNames includes: #exception) ifTrue: [ 
 		(self context tempNamed: #exception) ifNotNil: [ :ex | 
@@ -689,7 +689,7 @@ SpecDebugger >> updateCodeFromContext: aContext [
 		selection: selectionInterval
 ]
 
-{ #category : #'updating actions' }
+{ #category : #'updating widgets' }
 SpecDebugger >> updateCodeHeaderLabel [
 	
 	codeHeader removeStyleFromLabel: 'label.headerError'.	
@@ -703,12 +703,13 @@ SpecDebugger >> updateCodeHeaderLabel [
 { #category : #'updating actions' }
 SpecDebugger >> updateContextChanged [
 	| selection |
+	self flag: 'What is the use of that besides updateStep?'.
 	selection := self stackTable selection selectedItem.
 	self updateStep
 	"	self stack selectItem: selection"
 ]
 
-{ #category : #updating }
+{ #category : #'updating widgets' }
 SpecDebugger >> updateInspectorFromContext: aContext [
 	inspector updateWith: (StDebuggerContext context: aContext session: self session)
 ]
