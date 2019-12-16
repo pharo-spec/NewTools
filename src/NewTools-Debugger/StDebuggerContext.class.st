@@ -30,6 +30,13 @@ StDebuggerContext >> allInspectorNodes [
 ]
 
 { #category : #accessing }
+StDebuggerContext >> assertionSelectors [
+	^ #( #assert:equals: #assert:closeTo:precision:
+	     #assert:closeTo: #assert:identicalTo: #assertCollection:equals:
+	     #assertCollection:hasSameElements: )
+]
+
+{ #category : #accessing }
 StDebuggerContext >> context [
 	^ context
 ]
@@ -39,7 +46,7 @@ StDebuggerContext >> context: anObject [
 	context := anObject
 ]
 
-{ #category : #'accessing widgets' }
+{ #category : #'dynamic views' }
 StDebuggerContext >> diffPresenterForFailingAssertions [
 	<inspectorPresentationOrder: -1 title: 'Failed assertion' if:
 	#isTopContextFailingAssertion>
@@ -48,11 +55,11 @@ StDebuggerContext >> diffPresenterForFailingAssertions [
 		  expected: (assertionContext tempAt: 2)
 ]
 
-{ #category : #'accessing widgets' }
+{ #category : #'dynamic views' }
 StDebuggerContext >> isTopContextFailingAssertion [
 	assertionContext := self session stack first
 		                    findContextSuchThat: [ :ctx | 
-		                    ctx selector = #assert:equals: ]
+		                    self assertionSelectors includes: ctx selector ]
 		                    depth: 10.
 	^ assertionContext notNil
 ]
