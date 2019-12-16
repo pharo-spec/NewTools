@@ -215,6 +215,10 @@ SpecGenericDebuggerTest >> testReceiverChangedAfterStepOverAndReturn [
 ]
 
 { #category : #'tests - receiver inspector' }
+SpecGenericDebuggerTest >> testReceiverInitialRawInspectionSelection [
+]
+
+{ #category : #'tests - receiver inspector' }
 SpecGenericDebuggerTest >> testReceiverInspectorMenu [
 	self assert: false.
 	self flag: 'TODO'
@@ -245,9 +249,25 @@ SpecGenericDebuggerTest >> testReceiverUnchangedAfterStepOver [
 
 ]
 
+{ #category : #'tests - receiver inspector' }
+SpecGenericDebuggerTest >> testRestoreReceiverRawInspectionSelection [
+]
+
+{ #category : #'tests - receiver inspector' }
+SpecGenericDebuggerTest >> testRestoreReceiverRawInspectionSelectionAfterContextChange [
+]
+
 { #category : #'tests - code pane' }
 SpecGenericDebuggerTest >> testSaveCodeModification [
 	self assert: false
+]
+
+{ #category : #'tests - receiver inspector' }
+SpecGenericDebuggerTest >> testSaveReceiverRawInspectionSelection [
+]
+
+{ #category : #'tests - receiver inspector' }
+SpecGenericDebuggerTest >> testSaveReceiverRawInspectionSelectionAfterContextChange [
 ]
 
 { #category : #'tests - stack table' }
