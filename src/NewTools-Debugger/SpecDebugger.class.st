@@ -773,8 +773,3 @@ SpecDebugger >> updateToolbar [
 		toolbarPresenter: toolbar;
 		visit: self toolbarActions
 ]
-
-{ #category : #'updating widgets' }
-SpecDebugger >> updateToolbarFromSession: aSession [
-	"self toolbar session: aSession"
-]
