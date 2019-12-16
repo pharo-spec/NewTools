@@ -676,11 +676,13 @@ SpecDebugger >> updateCodeHeaderLabel [
 		(self context tempNamed: #exception) ifNotNil: [ :ex | 
 			codeHeader applyStyleToLabel: 'label.headerError'.
 			codeHeader label: ex description.
+			codeHeader update.
 			^ self ] ].
 	codeHeader label: (self context currentNode isHaltNode
-			 ifTrue: [ 'Halt' ]
+			 ifTrue: [codeHeader applyStyleToLabel: 'label.headerError'. 'Halt' ]
 			 ifFalse: [ 
-			 self context receiver class name , '>>' , self context selector ])
+			 self context receiver class name , '>>' , self context selector ]).
+	codeHeader update
 ]
 
 { #category : #'updating actions' }
