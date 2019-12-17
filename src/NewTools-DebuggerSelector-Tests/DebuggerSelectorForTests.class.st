@@ -1,6 +1,6 @@
 Class {
 	#name : #DebuggerSelectorForTests,
-	#superclass : #Object,
+	#superclass : #DebuggerSelector,
 	#instVars : [
 		'debuggerSelectionAttempts',
 		'debuggerClasses'
