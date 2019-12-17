@@ -15,7 +15,6 @@ Class {
 		'icon',
 		'iconBlock',
 		'title',
-		'styles',
 		'interval'
 	],
 	#category : #'NewTools-SpTextPresenterDecorators'
@@ -29,16 +28,6 @@ SpTextPresenterDecorator class >> highlightStyleName [
 { #category : #'as yet unclassified' }
 SpTextPresenterDecorator class >> underlineStyleName [
 	^#underline
-]
-
-{ #category : #styles }
-SpTextPresenterDecorator >> addHighlightDecoration [
-	self styles add: self class highlightStyleName
-]
-
-{ #category : #styles }
-SpTextPresenterDecorator >> addUnderlineDecoration [
-	self styles add: self class underlineStyleName
 ]
 
 { #category : #accessing }
@@ -91,16 +80,6 @@ SpTextPresenterDecorator >> interval: anObject [
 	interval := anObject
 ]
 
-{ #category : #styles }
-SpTextPresenterDecorator >> removeHighlightDecoration [
-	self styles remove: self class highlightStyleName ifAbsent: [  ]
-]
-
-{ #category : #styles }
-SpTextPresenterDecorator >> removeUnderlineDecoration [
-	self styles remove: self class underlineStyleName ifAbsent: [  ]
-]
-
 { #category : #accessing }
 SpTextPresenterDecorator >> start [ 
 	^interval first
@@ -109,11 +88,6 @@ SpTextPresenterDecorator >> start [
 { #category : #accessing }
 SpTextPresenterDecorator >> stop [ 
 	^interval last
-]
-
-{ #category : #accessing }
-SpTextPresenterDecorator >> styles [
-	^ styles ifNil: [ styles := Set new ]
 ]
 
 { #category : #accessing }
