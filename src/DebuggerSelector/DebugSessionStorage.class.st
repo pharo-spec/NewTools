@@ -1,3 +1,23 @@
+"
+I store debug sessions (see class DebugSession) when they are created because an exception was signalled but not caught.
+I implement the singleton design pattern. My singleton can be obtained by executing `DebugSessionStorage singleton`.
+Upon storing a debug session, I wrap it in a new DebugSessionStorageUnit, to also store the time at which the session was stored.
+There is a limit to how many debug sessions I keep, defined by my @storageLimitForDebugSessionsNotKeptAlive variable. Oldest debug sessions are removed first. I always keep debug sessions that are currently open in a debugger (see DebugSession>>#keepAlive:), and they do not count towards the storage limit.
+# Variables
+- storage  |  OrderedCollection<DebugSessionStorageUnit>
+	The list in which debug sessions are stored
+- storageLimitForDebugSessionsNotKeptAlive  |  Integer
+	How many debug sessions not currently open in a debugger should I keep
+- subscribersOnStorageLimitUpdate  |  WeakOrderedCollection<Object>
+- subscribersOnStorageUpdate  |  WeakOrderedCollection<Object>
+# Long Description
+**Description**
+When a DebugSession is created (typically when an exception is signaled but not caught, before it is debugged), `DebugSessionStorage` stores it. To avoid cluttering the image with tons of processes (because storing a DebugSession means keeping the process it is debugging), `DebugSessionStorage` has a (configurable) limit on how many DebugSessions it can hold. When the limit is exceeded, the oldest DebugSessions are terminated (along with the process they debug) to make room. The exception is if a debugger is currently open on a DebugSession. A DebugSession currently opened in a debugger is not terminated, and does not count towards the storage limit. It will go back to counting towards the limit if the debugger in which it was opened is closed.
+**The Point**
+This allows to reopen previously closed DebugSessions, and to do so with a different debugger. The ability to open DebugSessions with a different debugger already exists in some fashion, but it is internal to the GTDebugger (you can see it at play if you click """"Bytecode"""" in the top right corner of the GTDebugger, it will switch the debugger to the GTBytecodeDebugger), so it is not easy to support new non-GT debuggers.
+**Additional Detail on DebugSessions life-cycle**
+To maintain a DebugSession alive, a debugger has to call `#keepAlive:` on it (with itself as argument). To release the DebugSession, it has to call `#stopKeepingAlive:` (again, with itself as argument).
+"
 Class {
 	#name : #DebugSessionStorage,
 	#superclass : #Object,

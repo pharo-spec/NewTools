@@ -1,3 +1,6 @@
+"
+Instances of this class are used to store debug sessions by DebugSessionStorage. Their main feature is that they also store the time at which they were created.
+"
 Class {
 	#name : #DebugSessionStorageUnit,
 	#superclass : #Object,

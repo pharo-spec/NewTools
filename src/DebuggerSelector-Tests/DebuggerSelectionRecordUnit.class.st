@@ -5,7 +5,7 @@ Class {
 		'debuggerClass',
 		'success'
 	],
-	#category : #DebuggerSelector
+	#category : #'DebuggerSelector-Tests'
 }
 
 { #category : #'instance creation' }
