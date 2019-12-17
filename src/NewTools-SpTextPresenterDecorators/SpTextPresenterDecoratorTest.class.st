@@ -53,3 +53,10 @@ SpTextPresenterDecoratorTest >> testRemoveUnderlineStyle [
 	decorator removeUnderlineDecoration.
 	self assertEmpty: decorator styles
 ]
+
+{ #category : #tests }
+SpTextPresenterDecoratorTest >> testStartStop [
+	decorator interval: (0 to: 10).
+	self assert: decorator start equals: 0.
+	self assert: decorator stop equals: 10.
+]

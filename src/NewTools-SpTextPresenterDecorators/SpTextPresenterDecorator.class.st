@@ -102,6 +102,16 @@ SpTextPresenterDecorator >> removeUnderlineDecoration [
 ]
 
 { #category : #accessing }
+SpTextPresenterDecorator >> start [ 
+	^interval first
+]
+
+{ #category : #accessing }
+SpTextPresenterDecorator >> stop [ 
+	^interval last
+]
+
+{ #category : #accessing }
 SpTextPresenterDecorator >> styles [
 	^ styles ifNil: [ styles := Set new ]
 ]
