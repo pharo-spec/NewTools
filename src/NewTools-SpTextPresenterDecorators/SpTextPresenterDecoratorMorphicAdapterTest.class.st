@@ -2,7 +2,9 @@ Class {
 	#name : #SpTextPresenterDecoratorMorphicAdapterTest,
 	#superclass : #TestCase,
 	#instVars : [
-		'decorator'
+		'decorator',
+		'adapter',
+		'widget'
 	],
 	#category : #'NewTools-SpTextPresenterDecorators'
 }
@@ -18,7 +20,10 @@ SpTextPresenterDecoratorMorphicAdapterTest >> setUp [
 	decorator title: 'Test segment decoration'.
 	decorator icon: (self iconNamed: #halt).
 	decorator iconBlock: [ :seg| seg].
-	decorator interval: (1 to: 42)
+	decorator interval: (1 to: 42).
+	adapter := SpMorphicTextAdapter new.
+	widget := RubScrolledTextMorph on: adapter.
+	adapter widget: adapter
 ]
 
 { #category : #tests }
