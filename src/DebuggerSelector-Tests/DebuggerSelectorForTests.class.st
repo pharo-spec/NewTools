@@ -5,7 +5,7 @@ Class {
 		'debuggerSelectionAttempts',
 		'debuggerClasses'
 	],
-	#category : #DebuggerSelector
+	#category : #'DebuggerSelector-Tests'
 }
 
 { #category : #helper }

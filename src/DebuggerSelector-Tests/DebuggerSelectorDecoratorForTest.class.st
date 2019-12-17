@@ -5,7 +5,7 @@ Class {
 		'decoratedDebuggerSelector',
 		'debuggerSelectionAttempts'
 	],
-	#category : #DebuggerSelector
+	#category : #'DebuggerSelector-Tests'
 }
 
 { #category : #'instance creation' }

@@ -7,7 +7,7 @@ Class {
 		'debugSession',
 		'testDebuggerClass'
 	],
-	#category : #DebuggerSelector
+	#category : #'DebuggerSelector-Tests'
 }
 
 { #category : #helper }

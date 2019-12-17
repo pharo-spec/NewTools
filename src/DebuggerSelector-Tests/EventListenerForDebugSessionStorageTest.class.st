@@ -5,7 +5,7 @@ Class {
 		'nbOfDebugSessionStorageLimitUpdateEventReceived',
 		'nbOfDebugSessionStorageUpdateEventReceived'
 	],
-	#category : #DebuggerSelector
+	#category : #'DebuggerSelector-Tests'
 }
 
 { #category : #initialization }

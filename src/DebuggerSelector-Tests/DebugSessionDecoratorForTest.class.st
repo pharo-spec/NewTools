@@ -5,7 +5,7 @@ Class {
 		'nbOfTimesTerminateWasCalled',
 		'decoratedDebugSession'
 	],
-	#category : #DebuggerSelector
+	#category : #'DebuggerSelector-Tests'
 }
 
 { #category : #'instance creation' }

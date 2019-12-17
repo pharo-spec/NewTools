@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'nbOfMainDebuggerClassUpdateEventReceived'
 	],
-	#category : #DebuggerSelector
+	#category : #'DebuggerSelector-Tests'
 }
 
 { #category : #initialization }
