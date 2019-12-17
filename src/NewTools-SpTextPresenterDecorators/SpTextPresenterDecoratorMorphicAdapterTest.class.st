@@ -17,7 +17,8 @@ SpTextPresenterDecoratorMorphicAdapterTest >> setUp [
 	decorator underlineColor: Color green.
 	decorator title: 'Test segment decoration'.
 	decorator icon: (self iconNamed: #halt).
-	decorator iconBlock: [ :seg| seg]
+	decorator iconBlock: [ :seg| seg].
+	decorator interval: (1 to: 42)
 ]
 
 { #category : #tests }

@@ -15,7 +15,8 @@ Class {
 		'icon',
 		'iconBlock',
 		'title',
-		'styles'
+		'styles',
+		'interval'
 	],
 	#category : #'NewTools-SpTextPresenterDecorators'
 }
@@ -78,6 +79,16 @@ SpTextPresenterDecorator >> iconBlock [
 { #category : #accessing }
 SpTextPresenterDecorator >> iconBlock: anObject [
 	iconBlock := anObject
+]
+
+{ #category : #accessing }
+SpTextPresenterDecorator >> interval [
+	^ interval
+]
+
+{ #category : #accessing }
+SpTextPresenterDecorator >> interval: anObject [
+	interval := anObject
 ]
 
 { #category : #styles }
