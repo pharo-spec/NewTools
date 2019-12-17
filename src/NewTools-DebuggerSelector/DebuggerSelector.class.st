@@ -64,13 +64,6 @@ DebuggerSelector >> getDebuggerClasses [
 	^ result
 ]
 
-{ #category : #'open debugger' }
-DebuggerSelector >> getDebuggerClassesReal [
-	"Since #getDebuggerClasses is overriden for testing purposes in this class, we need another way to test the normal implementation of #getDebuggerClass"
-
-	^ super getDebuggerClasses
-]
-
 { #category : #accessing }
 DebuggerSelector >> ignoreDummyDebuggerForTests [
 	"If true, this class will ignore the DummyDebuggerForTests class when selecting a debugger. This is intended to be overriden for testing purposes"

@@ -31,6 +31,13 @@ DebuggerSelectorForTests >> getDebuggerClasses [
 ]
 
 { #category : #accessing }
+DebuggerSelectorForTests >> getDebuggerClassesReal [
+	"Since #getDebuggerClasses is overriden for testing purposes in this class, we need another way to test the normal implementation of #getDebuggerClass"
+
+	^ super getDebuggerClasses
+]
+
+{ #category : #accessing }
 DebuggerSelectorForTests >> ignoreDummyDebuggerForTests [
 	^ false
 ]
