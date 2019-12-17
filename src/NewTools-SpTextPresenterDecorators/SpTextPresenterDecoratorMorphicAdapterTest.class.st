@@ -21,13 +21,16 @@ SpTextPresenterDecoratorMorphicAdapterTest >> setUp [
 	decorator icon: (self iconNamed: #halt).
 	decorator iconBlock: [ :seg| seg].
 	decorator interval: (1 to: 42).
-	adapter := SpMorphicTextAdapter new.
-	widget := RubScrolledTextMorph on: adapter.
-	adapter widget: adapter
+	adapter := SpMorphicTextAdapter adapt: SpTextPresenter new.
+	widget := adapter widget
 ]
 
 { #category : #tests }
 SpTextPresenterDecoratorMorphicAdapterTest >> testAddTextPresenterDecorator [
+	self assertEmpty: widget segments.
+	adapter addTextSegmentDecoration: decorator.
+	self assert: widget segments size equals: 1.
+	self assert: widget segments first class identicalTo: RubUnderlinedSegmentMorph 
 ]
 
 { #category : #tests }
