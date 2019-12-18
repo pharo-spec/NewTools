@@ -706,11 +706,10 @@ SpecDebugger >> updateCodeHeaderLabel [
 SpecDebugger >> updateCodeTextSegmentDecoratorsIn: aContext forInterval: selectionInterval [
 	self code removeAllTextSegmentDecorations.
 	
-	"This decorates the progression of the current statement"
+	"This decorates the receiver and the next node with an underline"
 	self code
 		addTextSegmentDecoration:
 			(SpTextPresenterDecorator new
-				highlightColor: (Color white alpha: 0);
 				underlineColor: Color orange;
 				interval: (aContext currentNode start to: aContext currentNode stop + 1);
 				yourself).
