@@ -123,8 +123,8 @@ StHaltCache >> setNodeCache: haltAndBreakpointNodes forSelector: aSelector [
 StHaltCache >> shouldConsiderMethod: aCompiledMethod [
 	"We do not consider test methods"
 
-	^ (('test*' match: aCompiledMethod selector)
-		"or: [ '*test*' match: aCompiledMethod methodClass name asLowercase ]")
+	^ ((aCompiledMethod hasPragmaNamed: #haltOrBreakpointForTesting)
+		or: [ aCompiledMethod hasPragmaNamed: #haltOrBreakpointForDevelopment ])
 		not
 ]
 
