@@ -13,9 +13,7 @@ Class {
 SpTextPresenterDecoratorMorphicAdapterTest >> setUp [
 	super setUp.
 	decorator := SpTextPresenterDecorator new.
-	decorator addHighlightDecoration.
 	decorator highlightColor: Color red.	
-	decorator addUnderlineDecoration.
 	decorator underlineColor: Color green.
 	decorator title: 'Test segment decoration'.
 	decorator icon: (self iconNamed: #halt).
@@ -31,6 +29,14 @@ SpTextPresenterDecoratorMorphicAdapterTest >> testAddTextPresenterDecorator [
 	adapter addTextSegmentDecoration: decorator.
 	self assert: widget segments size equals: 1.
 	self assert: widget segments first class identicalTo: RubUnderlinedSegmentMorph 
+]
+
+{ #category : #tests }
+SpTextPresenterDecoratorMorphicAdapterTest >> testRemoveAllTextPresenterDecorators [
+	self assertEmpty: widget segments.
+	adapter addTextSegmentDecoration: decorator.
+	adapter removeAllTextSegmentDecorations.
+	self assertEmpty: widget segments
 ]
 
 { #category : #tests }
