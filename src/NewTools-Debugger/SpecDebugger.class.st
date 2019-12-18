@@ -677,16 +677,18 @@ SpecDebugger >> updateCodeFromContext [
 { #category : #'updating widgets' }
 SpecDebugger >> updateCodeFromContext: aContext [
 	| selectionInterval |
-	
 	aContext ifNil: [ ^ self clearCode ].
-
-	selectionInterval := self session selectedCodeRangeForContext: aContext.
+	selectionInterval := self session
+		selectedCodeRangeForContext: aContext.
 	self code
 		text: aContext sourceCode;
 		doItReceiver: aContext home receiver;
 		doItContext: aContext;
 		behavior: aContext home receiver class;
-		selection: selectionInterval
+		selection: selectionInterval.
+	self
+		updateCodeTextSegmentDecoratorsIn: aContext
+		forInterval: selectionInterval
 ]
 
 { #category : #'updating widgets' }
@@ -698,6 +700,33 @@ SpecDebugger >> updateCodeHeaderLabel [
 	codeHeader applyStyleToLabel: self statusLabelStyleForCurrentContext.
 	codeHeader update
 	
+]
+
+{ #category : #'updating widgets' }
+SpecDebugger >> updateCodeTextSegmentDecoratorsIn: aContext forInterval: selectionInterval [
+	self code removeAllTextSegmentDecorations.
+	
+	"This decorates the progression of the current statement"
+	self code
+		addTextSegmentDecoration:
+			(SpTextPresenterDecorator new
+				highlightColor: (Color white alpha: 0);
+				underlineColor: Color orange;
+				interval: (aContext currentNode start to: aContext currentNode stop + 1);
+				yourself).
+				
+	"This decorates the next executing node"
+	self code
+		addTextSegmentDecoration:
+			(SpTextPresenterDecorator new
+				highlightColor: (Color orange alpha: 0.5);
+				underlineColor: (Color white alpha: 0);
+				interval: (selectionInterval first to: selectionInterval last + 1);
+				yourself).
+				
+			"	icon: (self iconNamed: #warning);
+				iconBlock: [ :n | n inspect ];
+				title: 'Click me!';"
 ]
 
 { #category : #'updating actions' }
