@@ -87,18 +87,30 @@ StDebuggerInspector >> rawInspectionSelectionCache [
 { #category : #private }
 StDebuggerInspector >> restoreRawInspectionSelectionForContext: aContext [
 	aContext ifNil: [ ^ self ].
-	self getRawInspectorPresenterOrNil ifNotNil: [ :raw | 
-		raw selectPath: (self rawInspectionSelectionCache
-				 at: aContext receiver class -> aContext selector
-				 ifAbsent: [ #() ]) ]
+	self getRawInspectorPresenterOrNil
+		ifNotNil: [ :raw | 
+			| receiverClass selector |
+			receiverClass := aContext receiver class.
+			selector := aContext selector.
+			raw
+				selectPath:
+					(self rawInspectionSelectionCache
+						at: receiverClass -> selector
+						ifAbsent:
+							[ self rawInspectionSelectionCache at: receiverClass ifAbsent: [ #() ] ]) ]
 ]
 
 { #category : #private }
 StDebuggerInspector >> saveRawInspectionSelectionForContext: aContext [
+	| selectionPath |
 	aContext ifNil: [ ^ self ].
+	selectionPath := self getRawInspectorSelectedPath.
 	self rawInspectionSelectionCache
 		at: aContext receiver class -> aContext selector
-		put: self getRawInspectorSelectedPath
+		put: selectionPath.
+	self rawInspectionSelectionCache
+		at: aContext receiver class
+		put: selectionPath
 ]
 
 { #category : #'accessing model' }
