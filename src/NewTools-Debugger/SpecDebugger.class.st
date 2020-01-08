@@ -327,6 +327,7 @@ SpecDebugger >> codeContextCommandsGroup [
 	rootCommandGroup := CmCommandGroup forSpec beRoot.
 	rootCommandGroup register: self codeSelectionActionCommands.
 	rootCommandGroup register: self codeSearchCommands.
+	rootCommandGroup register: self codeEditionCommands.
 	rootCommandGroup register: self codeAcceptCommands.	
 	^rootCommandGroup 	
 
@@ -339,7 +340,7 @@ SpecDebugger >> codeEditionCommands [
 	group
 		description: 'Commands to edit the code selection.';
 		beDisplayedAsGroup.
-	SpCodeSelectionCommand
+	SpCodeEditionCommand
 		allSubclassesDo: [ :cmdClass | group register: (cmdClass forSpecContext: code) ].
 	^ group
 ]
