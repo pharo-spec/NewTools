@@ -326,7 +326,8 @@ SpecDebugger >> codeContextCommandsGroup [
 	| rootCommandGroup |
 	rootCommandGroup := CmCommandGroup forSpec beRoot.
 	rootCommandGroup register: self codeSelectionActionCommands.
-	rootCommandGroup register: self codeAcceptCommands.
+	rootCommandGroup register: self codeSearchCommands.
+	rootCommandGroup register: self codeAcceptCommands.	
 	^rootCommandGroup 	
 
 ]
@@ -339,7 +340,7 @@ SpecDebugger >> codeEditionCommands [
 		description: 'Commands to edit the code selection.';
 		beDisplayedAsGroup.
 	SpCodeSelectionCommand
-		allSubclassesDo: [ :cmdClass | group register: cmdClass forSpec ].
+		allSubclassesDo: [ :cmdClass | group register: (cmdClass forSpecContext: code) ].
 	^ group
 ]
 
@@ -350,22 +351,28 @@ SpecDebugger >> codeSearchCommands [
 	group
 		description: 'Commands to search the system from the code selection.';
 		beDisplayedAsGroup.
-	SpCodeSelectionCommand
-		allSubclassesDo: [ :cmdClass | group register: cmdClass forSpec ].
+	SpCodeBrowsingCommand
+		allSubclassesDo: [ :cmdClass | group register: (cmdClass forSpecContext: code) ].
 	^ group
 ]
 
 { #category : #'commands - code' }
 SpecDebugger >> codeSelectionActionCommands [
 	| group |
+	self flag: 'Needs better care about how to recover commands'.
 	group := (CmCommandGroup named: 'Selection action commands')
 		asSpecGroup.
 	group
 		description: 'Commands actions on the code selection.';
 		beDisplayedAsGroup.
 	group register: (RunToSelectionDebugCommand forSpecContext: self).
-	SpCodeSelectionCommand
-		allSubclassesDo: [ :cmdClass | group register: (cmdClass forSpecContext: code) ].
+	(SpCodeSelectionCommand allSubclasses
+		reject: [ :class | 
+			{SpCodeEditionCommand.
+			SpCodeBrowsingCommand}
+				anySatisfy:
+					[ :filter | class == filter or: [ filter allSubclasses includes: class ] ] ])
+		do: [ :cmdClass | group register: (cmdClass forSpecContext: code) ].
 	^ group
 ]
 
@@ -460,7 +467,7 @@ SpecDebugger >> initializeCode [
 			recompileMethodTo: text string
 			inContext: self stackTable selection selectedItem
 			notifying: notifyer ].
-	"code contextMenu: self codeContextCommandsGroup asMenuPresenter."
+	code contextMenu: self codeContextCommandsGroup asMenuPresenter.
 		
 	codeHeader := self instantiate: StHeaderBar.
 	codeHeader applyStyleToLabel: 'label.headerError'.
