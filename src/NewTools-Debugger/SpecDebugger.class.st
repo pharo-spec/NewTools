@@ -677,6 +677,7 @@ SpecDebugger >> stackTable [
 
 { #category : #'accessing context' }
 SpecDebugger >> statusLabelStyleForCurrentContext [
+"true ifTrue: [ ^ 'label.headerError' ]."
 	(self context tempNames includes: #exception) ifTrue: [ 
 		(self context tempNamed: #exception) ifNotNil: [ :ex | 
 			^ 'label.headerError' ] ].
@@ -686,13 +687,13 @@ SpecDebugger >> statusLabelStyleForCurrentContext [
 
 { #category : #'accessing context' }
 SpecDebugger >> statusLabelTextForCurrentContext [
-	(self context tempNames includes: #exception) ifTrue: [ 
-		(self context tempNamed: #exception) ifNotNil: [ :ex | 
-			^ ex description ] ].
+	(self context tempNames includes: #exception)
+		ifTrue: [ (self context tempNamed: #exception)
+				ifNotNil: [ :ex | ^ ex description ] ].
 	^ self context currentNode isHaltNode
-		  ifTrue: [ 'Halt' ]
-		  ifFalse: [ 
-		  self context receiver class name , '>>' , self context selector ]
+		ifTrue: [ 'Halt' ]
+		ifFalse:
+			[ self context receiver class name , '>>' , self context selector ]
 ]
 
 { #category : #api }

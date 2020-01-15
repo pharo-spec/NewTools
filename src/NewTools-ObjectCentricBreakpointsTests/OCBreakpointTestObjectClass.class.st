@@ -1,5 +1,5 @@
 Class {
-	#name : #MyTestObject,
+	#name : #OCBreakpointTestObjectClass,
 	#superclass : #Object,
 	#instVars : [
 		'ivar'
@@ -8,17 +8,22 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-MyTestObject >> m1 [
+OCBreakpointTestObjectClass >> ivarAccess [
+	^ivar 
+]
+
+{ #category : #'as yet unclassified' }
+OCBreakpointTestObjectClass >> m1 [
 	^'m1'
 ]
 
 { #category : #'as yet unclassified' }
-MyTestObject >> m2 [
+OCBreakpointTestObjectClass >> m2 [
 	^'m2'
 ]
 
 { #category : #'as yet unclassified' }
-MyTestObject >> m3 [
+OCBreakpointTestObjectClass >> m3 [
 	self m1.
 	^0
 ]

@@ -3,20 +3,41 @@ Class {
 	#superclass : #TestCase,
 	#instVars : [
 		'object1',
-		'object2'
+		'object2',
+		'breakpoint'
 	],
 	#category : #'NewTools-ObjectCentricBreakpointsTests'
 }
 
+{ #category : #helpers }
+OCBreakpointTest >> assertBreakpointIsRegistered [
+	self
+		assert: (breakpoint registry registryAt: breakpoint targetObject) size
+		equals: 1.
+	self
+		assertCollection: (breakpoint registry registryAt: breakpoint targetObject)
+		includesAll: {breakpoint}
+]
+
+{ #category : #helpers }
+OCBreakpointTest >> assertOnlyTargetObjectBreaks [
+	self should: [ object1 m1 ] raise: Break.
+	self shouldnt: [ object1 m2 ] raise: Break.
+	self shouldnt: [ object2 m1 ] raise: Break
+]
+
 { #category : #running }
 OCBreakpointTest >> setUp [
-	object1 := MyTestObject new.
-	object2 := MyTestObject new
+	super setUp.
+	object1 := OCBreakpointTestObjectClass new.
+	object2 := OCBreakpointTestObjectClass new
 ]
 
 { #category : #running }
 OCBreakpointTest >> tearDown [
-	OCBreakpoint uninstallAll
+	OCBreakpoint uninstallAll.
+	breakpoint := nil.
+	super tearDown
 ]
 
 { #category : #'api - object' }
@@ -57,20 +78,10 @@ OCBreakpointTest >> testHaltOnAllAccessesToIvar [
 	self shouldnt: [ obj2 ivarReadAndWrite ] raise: Halt
 ]
 
-{ #category : #'api - on call' }
+{ #category : #'api - object' }
 OCBreakpointTest >> testHaltOnCallTo [
 	object1 haltOnCallTo: #m1.
-	self should: [ object1 m1 ] raise: Break.
-	self shouldnt: [ object1 m2 ] raise: Break.
-	self shouldnt: [ object2 m1 ] raise: Break
-]
-
-{ #category : #'api - object' }
-OCBreakpointTest >> testHaltOnCallToObjectAPI [
-	object1 haltOnCallTo: #m1.
-	self should: [ object1 m1 ] raise: Break.
-	self shouldnt: [ object1 m2 ] raise: Break.
-	self shouldnt: [ object2 m1 ] raise: Break
+	self assertOnlyTargetObjectBreaks
 ]
 
 { #category : #'api - object' }
@@ -123,22 +134,37 @@ OCBreakpointTest >> testHaltTargetOnAccessTo [
 
 { #category : #'api - on call' }
 OCBreakpointTest >> testHaltTargetOnCallTo [
-	object1 haltOnCallTo: #m1.
-	self should: [ object1 m1 ] raise: Break.
-	self shouldnt: [ object1 m2 ] raise: Break.
-	self shouldnt: [ object2 m1 ] raise: Break
+	OCBreakpoint new haltTarget: object1 onCallTo: #m1.
+	self assertOnlyTargetObjectBreaks
 ]
 
 { #category : #installing }
 OCBreakpointTest >> testInstallOnFor [
+	breakpoint := OCBreakpoint new.
+	breakpoint targetObject: object1.
+	breakpoint installOn: object1 for: #m1.
+	self assertOnlyTargetObjectBreaks
+]
+
+{ #category : #installing }
+OCBreakpointTest >> testInstrumentedObjectClass [
+	breakpoint := OCBreakpoint new haltTarget: object1 onCallTo: #m1.
+	self assert: object1 class identicalTo: OCBreakpointTestObjectClass.
+	self assertCollection: breakpoint link nodes hasSameElements: {(object1 species>>#m1) ast}.
 ]
 
 { #category : #'registry access' }
 OCBreakpointTest >> testRegisterObjectCentricBreakpoint [
+	breakpoint := OCBreakpoint new.
+	breakpoint targetObject: object1.
+	breakpoint registerObjectCentricBreakpoint.
+	self assertBreakpointIsRegistered 
 ]
 
 { #category : #'registry access' }
 OCBreakpointTest >> testRegistry [
+
+	self assert: OCBreakpoint new registry identicalTo: OCBreakpoint 
 ]
 
 { #category : #'api - object' }
@@ -158,16 +184,27 @@ OCBreakpointTest >> testRemoveHaltOnAccesses [
 
 { #category : #installing }
 OCBreakpointTest >> testTargetObject [
+	breakpoint := OCBreakpoint new haltTarget: object1 onCallTo: #m1.
+	self assert: breakpoint targetObject identicalTo: object1
 ]
 
 { #category : #installing }
 OCBreakpointTest >> testUninstall [
+	breakpoint := OCBreakpoint new haltTarget: object1 onCallTo: #m1.
+	breakpoint uninstall.
+	self shouldnt: [ object1 m1 ] raise: Break.
+	self assertEmpty: (breakpoint registry registryAt: object1). 
+	breakpoint := OCBreakpoint new haltTarget: object1 onAccess: #read to: #ivar.
+	breakpoint uninstall.
+	self shouldnt: [ object1 ivarAccess ] raise: Break.
+	self assertEmpty: (breakpoint registry registryAt: object1). 
 ]
 
 { #category : #installing }
 OCBreakpointTest >> testinstallOnMethodNamed [
-	object1 haltOnCallTo: #m1.
-	self should: [ object1 m1 ] raise: Break.
-	self shouldnt: [ object1 m2 ] raise: Break.
-	self shouldnt: [ object2 m1 ] raise: Break
+	breakpoint := OCBreakpoint new.
+	breakpoint targetObject: object1.
+	breakpoint installOnMethodNamed: #m1.
+	self assertOnlyTargetObjectBreaks.
+	self assertBreakpointIsRegistered 
 ]
