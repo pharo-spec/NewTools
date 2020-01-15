@@ -16,9 +16,9 @@ OCBreakpoint class >> breakpointForObject: anObject [
 ]
 
 { #category : #registry }
-OCBreakpoint class >> registerBreakpoint: permalink forObject: anObject [
+OCBreakpoint class >> registerBreakpoint: ocBreakpoint forObject: anObject [
 	self setClassIndirectionForObjectCentricInstrumentedObject: anObject.
-	(self breakpointForObject: anObject) add: permalink
+	(self breakpointForObject: anObject) add: ocBreakpoint
 ]
 
 { #category : #accessing }
@@ -57,11 +57,25 @@ OCBreakpoint class >> uninstallAll [
 		do: [ :anObject | self removeObjectCentricBreakpointsFrom: anObject ]
 ]
 
+{ #category : #registry }
+OCBreakpoint class >> uninstallAllForObject: anObject [
+	<script>
+	self removeObjectCentricBreakpointsFrom: anObject
+]
+
 { #category : #links }
 OCBreakpoint >> haltOnAccessLink [
 	^ MetaLink new
 		metaObject: Halt;
 		selector: #now
+]
+
+{ #category : #'api - state access' }
+OCBreakpoint >> haltTarget: anObject onAccess: access to: instVarName [
+	targetObject := anObject.
+	self always.
+	targetObject link: self link toSlotNamed: instVarName option: access.
+	self registerObjectCentricBreakpoint
 ]
 
 { #category : #'api - on call' }
@@ -74,24 +88,6 @@ OCBreakpoint >> haltTarget: anObject onCallTo: methodSelector [
 { #category : #install }
 OCBreakpoint >> installOn: anObject for: methodName [
 	self always.
-	anObject link: self link toMethodNamed: methodName
-]
-
-{ #category : #install }
-OCBreakpoint >> installOn: anObject for: methodName condition: conditionBlock arguments: anArray [
-	<debuggerCompleteToSender>
-	self always.
-	self link
-		metaObject: [ :context :selector | 
-			"| originalContext |
-		
-			originalContext := context.
-			[ originalContext selector = selector ] whileFalse: [ originalContext := originalContext sender ].
-			context terminateTo: originalContext sender."
-			Break break.			
-			 ];
-		selector: #value:value:;
-		"condition: conditionBlock" arguments: anArray.
 	anObject link: self link toMethodNamed: methodName
 ]
 
