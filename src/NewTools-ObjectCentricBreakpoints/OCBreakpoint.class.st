@@ -1,3 +1,13 @@
+"
+I am a breakpoint that is scoped to one single specific object.
+I halt the object's execution when it receives a particular message or when one of its instance variable is accessed.
+
+There are uncovered behavior, such as if you try to halt on a state access defined in one of my super classes.
+
+API: see Object > class > NewTools-ObjectCentricBreakpoints extension.
+
+
+"
 Class {
 	#name : #OCBreakpoint,
 	#superclass : #Breakpoint,
