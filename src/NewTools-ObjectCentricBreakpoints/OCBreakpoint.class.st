@@ -73,6 +73,13 @@ OCBreakpoint class >> uninstallAllForObject: anObject [
 	self removeObjectCentricBreakpointsFrom: anObject
 ]
 
+{ #category : #registry }
+OCBreakpoint class >> unregisterBreakpoint: ocBreakpoint forObject: targetObject [
+	(self registryAt: targetObject)
+		remove: ocBreakpoint
+		ifAbsent: [ "should not happen but should not be blocking either" ]
+]
+
 { #category : #'api - state access' }
 OCBreakpoint >> haltTarget: anObject onAccess: access to: instVarName [
 	targetObject := anObject.
@@ -123,5 +130,6 @@ OCBreakpoint >> targetObject: anObject [
 { #category : #install }
 OCBreakpoint >> uninstall [
 	self link linkInstaller uninstallPermaLinkFor: self link.
-	self link uninstall
+	self link uninstall.
+	self registry unregisterBreakpoint: self forObject: targetObject
 ]
