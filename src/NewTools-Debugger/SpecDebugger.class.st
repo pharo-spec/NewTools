@@ -114,6 +114,7 @@ SpecDebugger class >> defaultSpec [
 { #category : #opening }
 SpecDebugger class >> defaultTitle [
 	"GTDebugger needs this to create its action to switch to other debuggers (in this case to the Spec Debugger). I don't know if switching to this debugger actually works, but if the action cannot be created, the GTDebugger crashes when being opened. This method can be removed if the GTDebugger is removed"
+	self flag: 'Why constraining us because of GT?'.
 	^ 'SpecDebugger'
 ]
 
@@ -136,8 +137,11 @@ SpecDebugger class >> handlesContext: aContext [
 { #category : #'debugger declaration' }
 SpecDebugger class >> iAmADebugger [
 	"Leave blank for intermediate classes. Add the <iAmADebugger> pragma for concrete debugger classes. This pragma is used by the system to find all available debuggers"
+
 	"For compatibility with DebuggerSelector https://github.com/dupriezt/DebuggerSelector"
+
 	<iAmADebugger>
+	self flag: 'I am not sure this is good design'
 ]
 
 { #category : #'class initialization' }
@@ -375,11 +379,6 @@ SpecDebugger >> codeSelectionActionCommands [
 					[ :filter | class == filter or: [ filter allSubclasses includes: class ] ] ])
 		do: [ :cmdClass | group register: (cmdClass forSpecContext: code) ].
 	^ group
-]
-
-{ #category : #accessing }
-SpecDebugger >> color: aColor [
-	"Hack to make the spec debugger availlable in tests too"
 ]
 
 { #category : #'accessing context' }
