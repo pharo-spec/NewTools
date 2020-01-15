@@ -73,13 +73,6 @@ OCBreakpoint class >> uninstallAllForObject: anObject [
 	self removeObjectCentricBreakpointsFrom: anObject
 ]
 
-{ #category : #links }
-OCBreakpoint >> haltOnAccessLink [
-	^ MetaLink new
-		metaObject: Halt;
-		selector: #now
-]
-
 { #category : #'api - state access' }
 OCBreakpoint >> haltTarget: anObject onAccess: access to: instVarName [
 	targetObject := anObject.
