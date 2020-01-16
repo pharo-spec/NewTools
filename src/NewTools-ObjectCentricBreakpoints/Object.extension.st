@@ -27,7 +27,7 @@ Object >> haltOnRead [
 ]
 
 { #category : #'*NewTools-ObjectCentricBreakpoints' }
-Object >> haltOnReadAccessTo: anInstVarName [
+Object >> haltOnReadTo: anInstVarName [
 	^self haltOnAccess: #read to: anInstVarName asSymbol
 ]
 
