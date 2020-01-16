@@ -10,7 +10,8 @@ MorphicUIManager >> debugProcess: process context: context label: title fullView
 	debugSession := process
 		                newDebugSessionNamed: title
 		                startedAt: context.
-	DebugSessionStorage singleton storeDebugSession: debugSession.
+	self flag: 'The following commented line seems to block the image on DNU'.
+	"DebugSessionStorage singleton storeDebugSession: debugSession."
 	debugSession logStackToFileIfNeeded.
 	debugSession isAboutUIProcess ifTrue: [ 
 		DefaultExecutionEnvironment beActiveDuring: [ self spawnNewProcess ] ].

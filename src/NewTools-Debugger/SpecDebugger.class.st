@@ -114,16 +114,8 @@ SpecDebugger class >> defaultSpec [
 { #category : #opening }
 SpecDebugger class >> defaultTitle [
 	"GTDebugger needs this to create its action to switch to other debuggers (in this case to the Spec Debugger). I don't know if switching to this debugger actually works, but if the action cannot be created, the GTDebugger crashes when being opened. This method can be removed if the GTDebugger is removed"
+	self flag: 'Why constraining us because of GT?'.
 	^ 'SpecDebugger'
-]
-
-{ #category : #'menu code' }
-SpecDebugger class >> dynamicCodeContextMenu: aBuilder [
-	<contextMenu>
-	<specDebuggerCodeContextMenu>
-	self flag: 'BROKEN 2019-06-28'.
-	aBuilder model codeContextMenuDebuggingActions do: [ :anAction | 
-		anAction asMenuRegistrationIn: aBuilder ]
 ]
 
 { #category : #settings }
@@ -145,8 +137,11 @@ SpecDebugger class >> handlesContext: aContext [
 { #category : #'debugger declaration' }
 SpecDebugger class >> iAmADebugger [
 	"Leave blank for intermediate classes. Add the <iAmADebugger> pragma for concrete debugger classes. This pragma is used by the system to find all available debuggers"
+
 	"For compatibility with DebuggerSelector https://github.com/dupriezt/DebuggerSelector"
+
 	<iAmADebugger>
+	self flag: 'I am not sure this is good design'
 ]
 
 { #category : #'class initialization' }
@@ -318,17 +313,72 @@ SpecDebugger >> code [
 	^ code
 ]
 
-{ #category : #'actions code' }
-SpecDebugger >> codeContextMenuDebuggingActions [
-	self deprecated: 'Commands should be used from now on'.
-	^ self session class 
-		debuggingActionsForPragmas: #(contextMenuCodeDebuggingAction) 
-		for: self
+{ #category : #'commands - code' }
+SpecDebugger >> codeAcceptCommands [
+	| group |
+	group := (CmCommandGroup named: 'Accept commands') asSpecGroup.
+	group
+		description: 'Commands to accept or cancel changes.';
+		beDisplayedAsGroup.
+	group register: (SpAcceptChangesCommand forSpecContext: code).
+	group register: (SpCancelChangesCommand forSpecContext: code).
+	^ group
 ]
 
-{ #category : #accessing }
-SpecDebugger >> color: aColor [
-	"Hack to make the spec debugger availlable in tests too"
+{ #category : #'commands - code' }
+SpecDebugger >> codeContextCommandsGroup [
+	| rootCommandGroup |
+	rootCommandGroup := CmCommandGroup forSpec beRoot.
+	rootCommandGroup register: self codeSelectionActionCommands.
+	rootCommandGroup register: self codeSearchCommands.
+	rootCommandGroup register: self codeEditionCommands.
+	rootCommandGroup register: self codeAcceptCommands.	
+	^rootCommandGroup 	
+
+]
+
+{ #category : #'commands - code' }
+SpecDebugger >> codeEditionCommands [
+	| group |
+	group := (CmCommandGroup named: 'Selection edition commands') asSpecGroup.
+	group
+		description: 'Commands to edit the code selection.';
+		beDisplayedAsGroup.
+	SpCodeEditionCommand
+		allSubclassesDo: [ :cmdClass | group register: (cmdClass forSpecContext: code) ].
+	^ group
+]
+
+{ #category : #'commands - code' }
+SpecDebugger >> codeSearchCommands [
+	| group |
+	group := (CmCommandGroup named: 'Selection search commands') asSpecGroup.
+	group
+		description: 'Commands to search the system from the code selection.';
+		beDisplayedAsGroup.
+	SpCodeBrowsingCommand
+		allSubclassesDo: [ :cmdClass | group register: (cmdClass forSpecContext: code) ].
+	^ group
+]
+
+{ #category : #'commands - code' }
+SpecDebugger >> codeSelectionActionCommands [
+	| group |
+	self flag: 'Needs better care about how to recover commands'.
+	group := (CmCommandGroup named: 'Selection action commands')
+		asSpecGroup.
+	group
+		description: 'Commands actions on the code selection.';
+		beDisplayedAsGroup.
+	group register: (RunToSelectionDebugCommand forSpecContext: self).
+	(SpCodeSelectionCommand allSubclasses
+		reject: [ :class | 
+			{SpCodeEditionCommand.
+			SpCodeBrowsingCommand}
+				anySatisfy:
+					[ :filter | class == filter or: [ filter allSubclasses includes: class ] ] ])
+		do: [ :cmdClass | group register: (cmdClass forSpecContext: code) ].
+	^ group
 ]
 
 { #category : #'accessing context' }
@@ -417,6 +467,7 @@ SpecDebugger >> initializeCode [
 			recompileMethodTo: text string
 			inContext: self stackTable selection selectedItem
 			notifying: notifyer ].
+	code contextMenu: self codeContextCommandsGroup asMenuPresenter.
 		
 	codeHeader := self instantiate: StHeaderBar.
 	codeHeader applyStyleToLabel: 'label.headerError'.
@@ -626,6 +677,7 @@ SpecDebugger >> stackTable [
 
 { #category : #'accessing context' }
 SpecDebugger >> statusLabelStyleForCurrentContext [
+"true ifTrue: [ ^ 'label.headerError' ]."
 	(self context tempNames includes: #exception) ifTrue: [ 
 		(self context tempNamed: #exception) ifNotNil: [ :ex | 
 			^ 'label.headerError' ] ].
@@ -635,13 +687,13 @@ SpecDebugger >> statusLabelStyleForCurrentContext [
 
 { #category : #'accessing context' }
 SpecDebugger >> statusLabelTextForCurrentContext [
-	(self context tempNames includes: #exception) ifTrue: [ 
-		(self context tempNamed: #exception) ifNotNil: [ :ex | 
-			^ ex description ] ].
+	(self context tempNames includes: #exception)
+		ifTrue: [ (self context tempNamed: #exception)
+				ifNotNil: [ :ex | ^ ex description ] ].
 	^ self context currentNode isHaltNode
-		  ifTrue: [ 'Halt' ]
-		  ifFalse: [ 
-		  self context receiver class name , '>>' , self context selector ]
+		ifTrue: [ 'Halt' ]
+		ifFalse:
+			[ self context receiver class name , '>>' , self context selector ]
 ]
 
 { #category : #api }
