@@ -130,6 +130,35 @@ OCBreakpointTest >> testHaltOnWriteAccessToIvar [
 
 { #category : #'api - state access' }
 OCBreakpointTest >> testHaltTargetOnAccessTo [
+
+	breakpoint := OCBreakpoint new haltTarget: object1 onAccess: #all to: #ivar.
+	self should: [ object1 ivarRead ] raise: Break.
+	self should: [ object1 ivarWrite ] raise: Break.
+	self should: [ object1 ivarReadWrite] raise: Break.
+	self shouldnt: [ object2 ivarRead ] raise: Break.
+	self shouldnt: [ object2 ivarWrite ] raise: Break.
+	self shouldnt: [ object2 ivarReadWrite] raise: Break.
+	self assertBreakpointIsRegistered.
+	
+	breakpoint uninstall.
+	breakpoint := OCBreakpoint new haltTarget: object1 onAccess: #read to: #ivar.
+	self should: [ object1 ivarRead ] raise: Break.
+	self shouldnt: [ object1 ivarWrite ] raise: Break.
+	self should: [ object1 ivarReadWrite] raise: Break.
+	self shouldnt: [ object2 ivarRead ] raise: Break.
+	self shouldnt: [ object2 ivarWrite ] raise: Break.
+	self shouldnt: [ object2 ivarReadWrite] raise: Break.
+	self assertBreakpointIsRegistered.
+	
+	breakpoint uninstall.
+	breakpoint := OCBreakpoint new haltTarget: object1 onAccess: #write to: #ivar.
+	self shouldnt: [ object1 ivarRead ] raise: Break.
+	self should: [ object1 ivarWrite ] raise: Break.
+	self should: [ object1 ivarReadWrite] raise: Break.
+	self shouldnt: [ object2 ivarRead ] raise: Break.
+	self shouldnt: [ object2 ivarWrite ] raise: Break.
+	self shouldnt: [ object2 ivarReadWrite] raise: Break.
+	self assertBreakpointIsRegistered.
 ]
 
 { #category : #'api - on call' }
