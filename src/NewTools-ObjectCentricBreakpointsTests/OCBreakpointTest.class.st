@@ -20,6 +20,36 @@ OCBreakpointTest >> assertBreakpointIsRegistered [
 ]
 
 { #category : #helpers }
+OCBreakpointTest >> assertObject1BreaksOnAccess [
+	self should: [ object1 ivarRead ] raise: Break.
+	self should: [ object1 ivarWrite ] raise: Break.
+	self should: [ object1 ivarReadWrite] raise: Break
+]
+
+{ #category : #helpers }
+OCBreakpointTest >> assertObject1BreaksOnReadAccess [
+	self should: [ object1 ivarRead ] raise: Break.
+	self shouldnt: [ object1 ivarWrite ] raise: Break.
+	self should: [ object1 ivarReadWrite] raise: Break
+]
+
+{ #category : #helpers }
+OCBreakpointTest >> assertObject1BreaksOnWriteAccess [
+	self shouldnt: [ object1 ivarRead ] raise: Break.
+	self should: [ object1 ivarWrite ] raise: Break.
+	self should: [ object1 ivarReadWrite] raise: Break
+]
+
+{ #category : #helpers }
+OCBreakpointTest >> assertObject2DoesNotBreakOnStateAccess [
+	
+	self shouldnt: [ object2 ivarRead ] raise: Break.
+	self shouldnt: [ object2 ivarWrite ] raise: Break.
+	self shouldnt: [ object2 ivarReadWrite] raise: Break.
+	
+]
+
+{ #category : #helpers }
 OCBreakpointTest >> assertOnlyTargetObjectBreaks [
 	self should: [ object1 m1 ] raise: Break.
 	self shouldnt: [ object1 m2 ] raise: Break.
@@ -132,32 +162,20 @@ OCBreakpointTest >> testHaltOnWriteAccessToIvar [
 OCBreakpointTest >> testHaltTargetOnAccessTo [
 
 	breakpoint := OCBreakpoint new haltTarget: object1 onAccess: #all to: #ivar.
-	self should: [ object1 ivarRead ] raise: Break.
-	self should: [ object1 ivarWrite ] raise: Break.
-	self should: [ object1 ivarReadWrite] raise: Break.
-	self shouldnt: [ object2 ivarRead ] raise: Break.
-	self shouldnt: [ object2 ivarWrite ] raise: Break.
-	self shouldnt: [ object2 ivarReadWrite] raise: Break.
+	self assertObject1BreaksOnAccess.
+	self assertObject2DoesNotBreakOnStateAccess.
 	self assertBreakpointIsRegistered.
 	
 	breakpoint uninstall.
 	breakpoint := OCBreakpoint new haltTarget: object1 onAccess: #read to: #ivar.
-	self should: [ object1 ivarRead ] raise: Break.
-	self shouldnt: [ object1 ivarWrite ] raise: Break.
-	self should: [ object1 ivarReadWrite] raise: Break.
-	self shouldnt: [ object2 ivarRead ] raise: Break.
-	self shouldnt: [ object2 ivarWrite ] raise: Break.
-	self shouldnt: [ object2 ivarReadWrite] raise: Break.
+	self assertObject1BreaksOnReadAccess.
+	self assertObject2DoesNotBreakOnStateAccess.
 	self assertBreakpointIsRegistered.
 	
 	breakpoint uninstall.
 	breakpoint := OCBreakpoint new haltTarget: object1 onAccess: #write to: #ivar.
-	self shouldnt: [ object1 ivarRead ] raise: Break.
-	self should: [ object1 ivarWrite ] raise: Break.
-	self should: [ object1 ivarReadWrite] raise: Break.
-	self shouldnt: [ object2 ivarRead ] raise: Break.
-	self shouldnt: [ object2 ivarWrite ] raise: Break.
-	self shouldnt: [ object2 ivarReadWrite] raise: Break.
+	self assertObject1BreaksOnWriteAccess.
+	self assertObject2DoesNotBreakOnStateAccess.
 	self assertBreakpointIsRegistered.
 ]
 
