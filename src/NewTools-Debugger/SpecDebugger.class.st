@@ -737,7 +737,7 @@ SpecDebugger >> updateCodeFromContext: aContext [
 		doItReceiver: aContext home receiver;
 		doItContext: aContext;
 		behavior: aContext home receiver class;
-		selection: selectionInterval.
+		selectionInterval: selectionInterval.
 	self
 		updateCodeTextSegmentDecoratorsIn: aContext
 		forInterval: selectionInterval
