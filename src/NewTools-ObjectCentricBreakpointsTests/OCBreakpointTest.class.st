@@ -20,33 +20,69 @@ OCBreakpointTest >> assertBreakpointIsRegistered [
 ]
 
 { #category : #helpers }
-OCBreakpointTest >> assertObject1BreaksOnAccess [
-	self should: [ object1 ivarRead ] raise: Break.
-	self should: [ object1 ivarWrite ] raise: Break.
-	self should: [ object1 ivarReadWrite] raise: Break
+OCBreakpointTest >> assertObject1BreaksOnIvar2Access [
+	self should: [ object1 ivar2Read ] raise: Break.
+	self should: [ object1 ivar2Write ] raise: Break.
+	self should: [ object1 ivar2ReadWrite ] raise: Break
 ]
 
 { #category : #helpers }
-OCBreakpointTest >> assertObject1BreaksOnReadAccess [
+OCBreakpointTest >> assertObject1BreaksOnIvar2ReadAccess [
+	self should: [ object1 ivar2Read ] raise: Break.
+	self shouldnt: [ object1 ivar2Write ] raise: Break.
+	self should: [ object1 ivar2ReadWrite] raise: Break.
+]
+
+{ #category : #helpers }
+OCBreakpointTest >> assertObject1BreaksOnIvar2WriteAccess [
+	self shouldnt: [ object1 ivar2Read ] raise: Break.
+	self should: [ object1 ivar2Write ] raise: Break.
+	self should: [ object1 ivar2ReadWrite] raise: Break.
+]
+
+{ #category : #helpers }
+OCBreakpointTest >> assertObject1BreaksOnIvarAccess [
+	self should: [ object1 ivarRead ] raise: Break.
+	self should: [ object1 ivarWrite ] raise: Break.
+	self should: [ object1 ivarReadWrite ] raise: Break
+]
+
+{ #category : #helpers }
+OCBreakpointTest >> assertObject1BreaksOnIvarReadAccess [
 	self should: [ object1 ivarRead ] raise: Break.
 	self shouldnt: [ object1 ivarWrite ] raise: Break.
 	self should: [ object1 ivarReadWrite] raise: Break
 ]
 
 { #category : #helpers }
-OCBreakpointTest >> assertObject1BreaksOnWriteAccess [
+OCBreakpointTest >> assertObject1BreaksOnIvarWriteAccess [
 	self shouldnt: [ object1 ivarRead ] raise: Break.
 	self should: [ object1 ivarWrite ] raise: Break.
 	self should: [ object1 ivarReadWrite] raise: Break
 ]
 
 { #category : #helpers }
-OCBreakpointTest >> assertObject2DoesNotBreakOnStateAccess [
+OCBreakpointTest >> assertObject1ShouldNotBreaksOnIvar2Access [
+	self shouldnt: [ object1 ivar2Read ] raise: Break.
+	self shouldnt: [ object1 ivar2Write ] raise: Break.
+	self shouldnt: [ object1 ivar2ReadWrite] raise: Break.
+]
+
+{ #category : #helpers }
+OCBreakpointTest >> assertObject2ShouldNotBreakOnIvarAccess [
 	
 	self shouldnt: [ object2 ivarRead ] raise: Break.
 	self shouldnt: [ object2 ivarWrite ] raise: Break.
 	self shouldnt: [ object2 ivarReadWrite] raise: Break.
 	
+]
+
+{ #category : #helpers }
+OCBreakpointTest >> assertObject2ShouldNotBreaksOnIvar2Access [
+
+	self shouldnt: [ object2 ivar2Read ] raise: Break.
+	self shouldnt: [ object2 ivar2Write ] raise: Break.
+	self shouldnt: [ object2 ivar2ReadWrite] raise: Break.
 ]
 
 { #category : #helpers }
@@ -72,40 +108,20 @@ OCBreakpointTest >> tearDown [
 
 { #category : #'api - object' }
 OCBreakpointTest >> testHaltOnAllAccesses [
-	| obj1 obj2 cpt |
-	obj1 := ReflectivityExamples new.
-	obj2 := ReflectivityExamples new.
-	obj1 haltOnAccess: #all.
-	cpt := 0.
-	[ obj1 ivarReadAndWrite.
-	obj1 tag.
-	obj1 tagExec: nil ]
-		on: Halt
-		do: [ :halt | 
-			cpt := cpt + 1.
-			halt resume ].
-	self assert: cpt equals: 4.
-	self
-		shouldnt: [ obj2 ivarReadAndWrite.
-			obj2 tag.
-			obj2 tagExec: nil ]
-		raise: Halt
+	object1 haltOnStateAccess.
+	self assertObject1BreaksOnIvarAccess.
+	self assertObject1BreaksOnIvar2Access.
+	self assertObject2ShouldNotBreakOnIvarAccess.
+	self assertObject2ShouldNotBreaksOnIvar2Access 
 ]
 
 { #category : #'api - object' }
 OCBreakpointTest >> testHaltOnAllAccessesToIvar [
-	| obj1 obj2 cpt |
-	obj1 := ReflectivityExamples new.
-	obj2 := ReflectivityExamples new.
-	obj1 haltOnAccess: #all to: #ivar.
-	cpt := 0.
-	[ obj1 ivarReadAndWrite ]
-		on: Halt
-		do: [ :halt | 
-			cpt := cpt + 1.
-			halt resume ].
-	self assert: cpt equals: 2.	
-	self shouldnt: [ obj2 ivarReadAndWrite ] raise: Halt
+	object1 haltOnAccessTo: #ivar.
+	self assertObject1BreaksOnIvarAccess.
+	self assertObject1ShouldNotBreaksOnIvar2Access.
+	self assertObject2ShouldNotBreakOnIvarAccess.
+	self assertObject2ShouldNotBreaksOnIvar2Access 
 ]
 
 { #category : #'api - object' }
@@ -116,66 +132,61 @@ OCBreakpointTest >> testHaltOnCallTo [
 
 { #category : #'api - object' }
 OCBreakpointTest >> testHaltOnReadAccess [
-	| obj1 obj2 |
-	obj1 := ReflectivityExamples new.
-	obj2 := ReflectivityExamples new.
-	obj1 haltOnAccess: #read.
-	self should: [ obj1 ivarRead ] raise: Halt.
-	self should: [ obj1 tag ] raise: Halt.
-	self shouldnt: [ obj2 ivarRead ] raise: Halt.
-	self shouldnt: [ obj2 tag ] raise: Halt
+	object1 haltOnRead.
+	self assertObject1BreaksOnIvarReadAccess.
+	self assertObject1BreaksOnIvar2ReadAccess.
+	self assertObject2ShouldNotBreakOnIvarAccess.
+	self assertObject2ShouldNotBreaksOnIvar2Access
 ]
 
 { #category : #'api - object' }
 OCBreakpointTest >> testHaltOnReadAccessToIvar [
-	| obj1 obj2 |
-	obj1 := ReflectivityExamples new.
-	obj2 := ReflectivityExamples new.
-	obj1 haltOnAccess: #read to: #ivar.
-	self should: [ obj1 ivarRead ] raise: Halt.
-	self shouldnt: [ obj2 ivarRead ] raise: Halt
+	object1 haltOnReadTo: #ivar.
+	self assertObject1BreaksOnIvarReadAccess.
+	self assertObject1ShouldNotBreaksOnIvar2Access.
+	self assertObject2ShouldNotBreakOnIvarAccess.
+	self assertObject2ShouldNotBreaksOnIvar2Access 
 ]
 
 { #category : #'api - object' }
 OCBreakpointTest >> testHaltOnWriteAccess [
-	| obj1 obj2 |
-	obj1 := ReflectivityExamples new.
-	obj2 := ReflectivityExamples new.
-	obj1 haltOnAccess: #write.
-	self should: [ obj1 ivarWrite ] raise: Halt.
-	self should: [ obj1 tagExec: nil ] raise: Halt.
-	self shouldnt: [ obj2 ivarWrite ] raise: Halt.
-	self shouldnt: [ obj2 tagExec: nil ] raise: Halt
+	object1 haltOnWrite.
+	self assertObject1BreaksOnIvarWriteAccess.
+	self assertObject1BreaksOnIvar2WriteAccess.
+	self assertObject2ShouldNotBreakOnIvarAccess.
+	self assertObject2ShouldNotBreaksOnIvar2Access
 ]
 
 { #category : #'api - object' }
 OCBreakpointTest >> testHaltOnWriteAccessToIvar [
-	| obj1 obj2 |
-	obj1 := ReflectivityExamples new.
-	obj2 := ReflectivityExamples new.
-	obj1 haltOnAccess: #write to: #ivar.
-	self should: [ obj1 ivarWrite ] raise: Halt.
-	self shouldnt: [ obj2 ivarWrite ] raise: Halt
+	object1 haltOnWriteTo: #ivar.
+	self assertObject1BreaksOnIvarWriteAccess.
+	self assertObject1ShouldNotBreaksOnIvar2Access.
+	self assertObject2ShouldNotBreakOnIvarAccess.
+	self assertObject2ShouldNotBreaksOnIvar2Access
 ]
 
 { #category : #'api - state access' }
 OCBreakpointTest >> testHaltTargetOnAccessTo [
 
 	breakpoint := OCBreakpoint new haltTarget: object1 onAccess: #all to: #ivar.
-	self assertObject1BreaksOnAccess.
-	self assertObject2DoesNotBreakOnStateAccess.
+	self assertObject1BreaksOnIvarAccess.
+	self assertObject1ShouldNotBreaksOnIvar2Access.
+	self assertObject2ShouldNotBreakOnIvarAccess.
 	self assertBreakpointIsRegistered.
 	
 	breakpoint uninstall.
 	breakpoint := OCBreakpoint new haltTarget: object1 onAccess: #read to: #ivar.
-	self assertObject1BreaksOnReadAccess.
-	self assertObject2DoesNotBreakOnStateAccess.
+	self assertObject1BreaksOnIvarReadAccess.
+	self assertObject1ShouldNotBreaksOnIvar2Access.
+	self assertObject2ShouldNotBreakOnIvarAccess.
 	self assertBreakpointIsRegistered.
 	
 	breakpoint uninstall.
 	breakpoint := OCBreakpoint new haltTarget: object1 onAccess: #write to: #ivar.
-	self assertObject1BreaksOnWriteAccess.
-	self assertObject2DoesNotBreakOnStateAccess.
+	self assertObject1BreaksOnIvarWriteAccess.
+	self assertObject1ShouldNotBreaksOnIvar2Access.
+	self assertObject2ShouldNotBreakOnIvarAccess.
 	self assertBreakpointIsRegistered.
 ]
 
@@ -221,21 +232,6 @@ OCBreakpointTest >> testRegistry [
 	self assert: OCBreakpoint new registry identicalTo: OCBreakpoint 
 ]
 
-{ #category : #'api - object' }
-OCBreakpointTest >> testRemoveHaltOnAccesses [
-	| obj1 |
-	obj1 := ReflectivityExamples new.
-	obj1 haltOnAccess: #all.
-	self assert: obj1 class isAnonymous.
-	obj1 removeStateAccessHalts.
-	self deny: obj1 class isAnonymous.
-	self
-		shouldnt: [ obj1 ivarReadAndWrite.
-			obj1 tag.
-			obj1 tagExec: nil ]
-		raise: Halt
-]
-
 { #category : #installing }
 OCBreakpointTest >> testTargetObject [
 	breakpoint := OCBreakpoint new haltTarget: object1 onCallTo: #m1.
@@ -250,7 +246,7 @@ OCBreakpointTest >> testUninstall [
 	self assertEmpty: (breakpoint registry registryAt: object1). 
 	breakpoint := OCBreakpoint new haltTarget: object1 onAccess: #read to: #ivar.
 	breakpoint uninstall.
-	self shouldnt: [ object1 ivarAccess ] raise: Break.
+	self shouldnt: [ object1 ivarRead ] raise: Break.
 	self assertEmpty: (breakpoint registry registryAt: object1). 
 ]
 
