@@ -52,7 +52,8 @@ OCBreakpoint class >> removeObjectCentricBreakpointsFrom: anObject [
 OCBreakpoint class >> setClassIndirectionForObjectCentricInstrumentedObject: anObject [
 	| class |
 	self
-		flag: 'This should be moved to the object-centric mechanism as an option.'.
+		flag: 'This should be moved to the object-centric mechanism as an option.
+		Also, implementation is a bit "rough"...'.
 	class := anObject class.
 	class isAnonymous
 		ifTrue: [ class methodDict
