@@ -129,7 +129,6 @@ OCBreakpoint >> targetObject: anObject [
 
 { #category : #install }
 OCBreakpoint >> uninstall [
-	self link linkInstaller uninstallPermaLinkFor: self link.
 	self link uninstall.
 	self registry unregisterBreakpoint: self forObject: targetObject
 ]
