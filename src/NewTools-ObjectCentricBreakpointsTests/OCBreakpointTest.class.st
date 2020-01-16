@@ -195,9 +195,16 @@ OCBreakpointTest >> testInstallOnFor [
 
 { #category : #installing }
 OCBreakpointTest >> testInstrumentedObjectClass [
+	|realClass|
+	
 	breakpoint := OCBreakpoint new haltTarget: object1 onCallTo: #m1.
 	self assert: object1 class identicalTo: OCBreakpointTestObjectClass.
 	self assertCollection: breakpoint link nodes hasSameElements: {(object1 species>>#m1) ast}.
+	
+	realClass := (MetaLinkAnonymousClassBuilder new requestClassOfObject: object1).
+	self assert: realClass isAnonymous. 
+	self assert: realClass superclass identicalTo: OCBreakpointTestObjectClass.
+	self assertCollection: breakpoint link nodes hasSameElements: {(realClass>>#m1) ast}.
 ]
 
 { #category : #'registry access' }

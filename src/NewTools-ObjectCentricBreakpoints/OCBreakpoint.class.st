@@ -57,7 +57,10 @@ OCBreakpoint class >> setClassIndirectionForObjectCentricInstrumentedObject: anO
 	class isAnonymous
 		ifTrue: [ class methodDict
 				at: #class
-				ifAbsent: [ class compile: 'class ^super class superclass' ] ]
+				ifAbsent: [ class compile: 'class 					
+					thisContext sender methodClass == MetaLinkAnonymousClassBuilder 
+						ifTrue:[^super class].
+					^super class superclass' ] ]
 ]
 
 { #category : #registry }
