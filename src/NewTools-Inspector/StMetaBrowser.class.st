@@ -10,6 +10,14 @@ Class {
 	#category : #'NewTools-Inspector-View'
 }
 
+{ #category : #commands }
+StMetaBrowser class >> buildCommandsGroupWith: presenter forRoot: aCmCommandsGroup [
+	aCmCommandsGroup
+		beDisplayedAsGroup;
+		register: (StInspectorInspectSelectedCommand forSpecContext: presenter);
+		register: (StInspectorBrowseSelectedCommand forSpecContext: presenter)
+]
+
 { #category : #specs }
 StMetaBrowser class >> defaultSpec [
 	
@@ -71,11 +79,21 @@ StMetaBrowser >> initializeMethodList [
 
 { #category : #initialization }
 StMetaBrowser >> initializePresenters [
-
 	classes := self newTreeTable.
 	methods := self newList.
 	methodFilter := self newTextInput.
-	source := self newCode
+	source := self newCode.
+	methods contextMenu: [ self rootCommandsGroup asMenuPresenter ]
+]
+
+{ #category : #accessing }
+StMetaBrowser >> selectedMethod [
+	^ methods selection selectedItem
+]
+
+{ #category : #accessing }
+StMetaBrowser >> selectedObject [ 
+	^self selectedMethod
 ]
 
 { #category : #updating }
