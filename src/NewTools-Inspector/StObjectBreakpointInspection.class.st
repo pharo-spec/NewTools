@@ -119,7 +119,8 @@ StObjectBreakpointInspection >> configureSourceCodeUpdate [
 			selectedItem := selection selectedItem.
 			node := selectedItem at: #node.
 			breakpointsInSourceCode text: node methodNode source.
-			breakpointsInSourceCode selection: (selectedItem at: #interval).
+			breakpointsInSourceCode
+				selectionInterval: (selectedItem at: #interval).
 			self updateSourceCodeBehaviorFor: node ]
 ]
 
