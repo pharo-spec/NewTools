@@ -8,6 +8,14 @@ Class {
 	#category : #'NewTools-Inspector-View'
 }
 
+{ #category : #commands }
+StRawInspection class >> buildCommandsGroupWith: presenter forRoot: aCmCommandsGroup [
+	aCmCommandsGroup
+		beDisplayedAsGroup;
+		register: (StInspectorInspectSelectedCommand forSpecContext: presenter);
+		register: (StInspectorBrowseSelectedCommand forSpecContext: presenter)
+]
+
 { #category : #specs }
 StRawInspection class >> defaultSpec [
 
@@ -29,16 +37,6 @@ StRawInspection >> addVariablesColumn [
 ]
 
 { #category : #initialization }
-StRawInspection >> attributesTableMenu [
-	
-	^ CmCommandGroup forSpec
-		beDisplayedAsGroup;
-		register: (StInspectorInspectSelectedCommand forSpecContext: self);
-		register: (StInspectorBrowseSelectedCommand forSpecContext: self);
-		asMenuPresenter
-]
-
-{ #category : #initialization }
 StRawInspection >> defineOutputPorts [
 
 	^ { 
@@ -55,9 +53,8 @@ StRawInspection >> initialize [
 
 { #category : #initialization }
 StRawInspection >> initializePresenters [
-
 	attributeTable := self newTreeTable
-		contextMenu: self attributesTableMenu;
+		contextMenu: [ self rootCommandsGroup asMenuPresenter ];
 		yourself.
 	self addVariablesColumn.
 	self addValuesColumn.
