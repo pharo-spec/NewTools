@@ -21,6 +21,15 @@ Class {
 	#category : #'NewTools-Inspector-View'
 }
 
+{ #category : #commands }
+StObjectInspector class >> buildCommandsGroupWith: presenter forRoot: aCmCommandsGroup [
+	| group |
+	group := (CmCommandGroup named: 'Toolbar') asSpecGroup.
+	(StInspectorCommand toolbarCommandsFor: self)
+		do: [ :cmd | group register: cmd ].
+	aCmCommandsGroup register: group
+]
+
 { #category : #specs }
 StObjectInspector class >> defaultSpec [
 	<spec: #default>
@@ -92,10 +101,7 @@ StObjectInspector >> allPages [
 
 { #category : #'private builder' }
 StObjectInspector >> buildToolBar [
-
-	^ CmCommandGroup forSpec
-		register: (StInspectorBrowseCommand forSpecContext: self);
-		register: (StInspectorHelpCommand forSpecContext: self);
+	^ self rootCommandsGroup
 		asToolbarPresenterWith: [ :presenter | presenter beIcons ]
 ]
 
@@ -226,17 +232,6 @@ StObjectInspector >> title [
 	^ self model windowTitle
 ]
 
-{ #category : #private }
-StObjectInspector >> toolbarActions [
-	| group |
-	
-	group := (CmCommandGroup named: 'Toolbar') asSpecGroup.
-	(StInspectorCommand toolbarCommandsFor: self)
-		do: [ :cmd | group register: cmd ].
-	
-	^ group
-]
-
 { #category : #accessing }
 StObjectInspector >> trySelectAnyPageNamed: aCollection [
 	"Tries to select a the first page of aCollection that exists in the pages list"
@@ -272,7 +267,7 @@ StObjectInspector >> updateEvaluator [
 StObjectInspector >> updateHeaderBar [
 		
 	header label: self model labelString.
-	header toolbarActions: self toolbarActions
+	header toolbarActions: self rootCommandsGroup 
 ]
 
 { #category : #'private updating' }
