@@ -18,5 +18,5 @@ OCHaltOnStateAccessCommand class >> defaultName [
 
 { #category : #executing }
 OCHaltOnStateAccessCommand >> execute [
-	context inspect
+	^context haltInspectedObjectOnStateAccess
 ]

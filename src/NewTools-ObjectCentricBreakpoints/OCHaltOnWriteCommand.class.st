@@ -18,5 +18,5 @@ OCHaltOnWriteCommand class >> defaultName [
 
 { #category : #executing }
 OCHaltOnWriteCommand >> execute [
-	context inspect
+	^context haltInspectedObjectOnWriteAccess
 ]

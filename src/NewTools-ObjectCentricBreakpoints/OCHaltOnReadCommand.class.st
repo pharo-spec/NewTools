@@ -18,5 +18,5 @@ OCHaltOnReadCommand class >> defaultName [
 
 { #category : #executing }
 OCHaltOnReadCommand >> execute [
-	context inspect
+	^context haltInspectedObjectOnReadAccess
 ]
