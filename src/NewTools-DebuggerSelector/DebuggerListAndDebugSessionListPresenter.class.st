@@ -92,7 +92,7 @@ DebuggerListAndDebugSessionListPresenter >> addCorrectMainDebuggerButtonToToolBa
 						addItem:
 							(SpToolBarButton new
 								label: 'Main Debugger';
-								icon: (self iconManager iconNamed: #checkboxSelected);
+								icon: (self iconNamed: #checkboxSelected);
 								action: [ DebuggerSelector singleton setNoMainDebuggerClass.
 									self refreshDebuggerList.
 									self refreshDebuggerListToolBar ];
@@ -104,7 +104,7 @@ DebuggerListAndDebugSessionListPresenter >> addCorrectMainDebuggerButtonToToolBa
 		addItem:
 			(SpToolBarButton new
 				label: 'Main Debugger';
-				icon: (self iconManager iconNamed: #checkboxUnselected);
+				icon: (self iconNamed: #checkboxUnselected);
 				action: [ debuggerList selectedItems
 						ifEmpty: [ self inform: 'You need to select a debugger' ]
 						ifNotEmpty:
@@ -216,11 +216,6 @@ DebuggerListAndDebugSessionListPresenter >> getWhenClosedBlock [
 	^ [ self setInitialSubscriptions: false ]
 ]
 
-{ #category : #icon }
-DebuggerListAndDebugSessionListPresenter >> iconManager [
-	^ Smalltalk ui icons
-]
-
 { #category : #initialization }
 DebuggerListAndDebugSessionListPresenter >> initializeWidgets [
 	| timeOfStorageColumnWidth refsColumnWidth |
@@ -293,7 +288,7 @@ DebuggerListAndDebugSessionListPresenter >> makeDebugSessionListToolbar [
 		addItem:
 			(SpToolBarButton new
 				label: 'Debug';
-				icon: (self iconManager iconNamed: #glamorousBug);
+				icon: (self iconNamed: #glamorousBug);
 				action: [ self debugDebugSessionAction ];
 				help:
 					'Opens the selected debug session with the debugger the image would normally choose to debug it').
@@ -301,14 +296,14 @@ DebuggerListAndDebugSessionListPresenter >> makeDebugSessionListToolbar [
 		addItem:
 			(SpToolBarButton new
 				label: 'Debug With';
-				icon: (self iconManager iconNamed: #glamorousBug);
+				icon: (self iconNamed: #glamorousBug);
 				action: [ self debugDebugSessionWithSpecificDebuggerAction ];
 				help: 'Opens the selected debug session with the selected debugger').
 	toolBar
 		addItem:
 			(SpToolBarButton new
 				label: 'Inspect';
-				icon: (self iconManager iconNamed: #smallFind);
+				icon: (self iconNamed: #smallFind);
 				action: [ debugSessionList selectedItems
 						ifNotEmpty: [ :selectedItems | (selectedItems at: 1) inspect ] ]);
 		help: 'Inspect the selected debug session'.
@@ -316,7 +311,7 @@ DebuggerListAndDebugSessionListPresenter >> makeDebugSessionListToolbar [
 		addItem:
 			(SpToolBarButton new
 				label: 'Terminate';
-				icon: (self iconManager iconNamed: #remotesManagerRemoveRemote);
+				icon: (self iconNamed: #remotesManagerRemoveRemote);
 				action: [ debugSessionList selectedItems
 						ifNotEmpty: [ :selectedItems | 
 							DebugSessionStorage singleton terminate: (selectedItems at: 1).
@@ -327,7 +322,7 @@ DebuggerListAndDebugSessionListPresenter >> makeDebugSessionListToolbar [
 		addItem:
 			(SpToolBarButton new
 				label: 'Terminate All';
-				icon: (self iconManager iconNamed: #glamorousTrash);
+				icon: (self iconNamed: #glamorousTrash);
 				action: [ DebugSessionStorage singleton terminateAll.
 					self refreshDebugSessionList ]);
 		help: 'Terminate all debug sessions'.
@@ -384,7 +379,7 @@ DebuggerListAndDebugSessionListPresenter >> refreshDebuggerListToolBar [
 		addItem:
 			(SpToolBarButton new
 				label: 'Browse';
-				icon: (self iconManager iconNamed: #smallFind);
+				icon: (self iconNamed: #smallFind);
 				action: [ debuggerList selectedItems
 						ifEmpty: [ self inform: 'You need to select a debugger' ]
 						ifNotEmpty:
