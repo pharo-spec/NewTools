@@ -36,6 +36,11 @@ Class {
 }
 
 { #category : #singleton }
+DebuggerSelector class >> initialize [
+	Smalltalk tools debuggerTool: self singleton
+]
+
+{ #category : #singleton }
 DebuggerSelector class >> singleton [
 	singleton ifNil: [ singleton := self new ].
 	^ singleton
@@ -69,6 +74,13 @@ DebuggerSelector >> ignoreDummyDebuggerForTests [
 	"If true, this class will ignore the DummyDebuggerForTests class when selecting a debugger. This is intended to be overriden for testing purposes"
 
 	^ true
+]
+
+{ #category : #'open debugger' }
+DebuggerSelector >> isObsolete [
+	"Method required for DebuggerSelector to be set as the debugger tool in 'Smalltalk tools'
+	I do not really know what it means"
+	^ false
 ]
 
 { #category : #'open debugger' }
@@ -125,6 +137,16 @@ DebuggerSelector >> notifySubscribersOfAMainDebuggerClassUpdate [
 		do: [ :subscriber_ | 
 			subscriber_
 				ifNotNil: [ :subscriber | subscriber onMainDebuggerClassUpdate ] ]
+]
+
+{ #category : #'open debugger' }
+DebuggerSelector >> openOn: aDebugSession withFullView: aBoolean [
+	"This method makes DebuggerSelector compatible with the rubric text editor. More specifically, the 'Debug it' option of Rubric's right-click menu will send #openOn:withFullView: to 'Smalltalk tools debugger' (see RubSmalltalkEditor>>#debug:receiver:in:. So to be able to set DebuggerSelector as the main debugger tool of 'Smalltalk tools', it needs to understand this message"
+
+	self
+		selectDebuggerAndOpen: aDebugSession
+		withFullView: aBoolean
+		andNotification: nil
 ]
 
 { #category : #'publish events' }
