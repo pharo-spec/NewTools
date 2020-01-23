@@ -46,7 +46,7 @@ FBFlagPresentationPresenter >> initializePresenter [
 		postTransmission: [ :destination :origin :location | 
 			destination
 				behavior: location classLocation;
-				selection: location interval ]
+				selectionInterval: location interval ]
 ]
 
 { #category : #initialization }

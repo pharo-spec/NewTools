@@ -356,7 +356,7 @@ SpecDebugger >> codeSearchCommands [
 	group
 		description: 'Commands to search the system from the code selection.';
 		beDisplayedAsGroup.
-	SpCodeBrowsingCommand
+	SpSystemNavigationCommand
 		allSubclassesDo: [ :cmdClass | group register: (cmdClass forSpecContext: code) ].
 	^ group
 ]
@@ -374,7 +374,7 @@ SpecDebugger >> codeSelectionActionCommands [
 	(SpCodeSelectionCommand allSubclasses
 		reject: [ :class | 
 			{SpCodeEditionCommand.
-			SpCodeBrowsingCommand}
+			SpSystemNavigationCommand}
 				anySatisfy:
 					[ :filter | class == filter or: [ filter allSubclasses includes: class ] ] ])
 		do: [ :cmdClass | group register: (cmdClass forSpecContext: code) ].
@@ -469,9 +469,12 @@ SpecDebugger >> initializeCode [
 			notifying: notifyer ].
 	code contextMenu: self codeContextCommandsGroup asMenuPresenter.
 		
-	codeHeader := self instantiate: StHeaderBar.
+	codeHeader := self instantiate: StHeaderBar.	
+	codeHeader removeStyleFromLabel: 'label.header'.	
 	codeHeader applyStyleToLabel: 'label.headerError'.
-	codeHeader label: self session name.
+	codeHeader label: self session name
+	
+
 ]
 
 { #category : #initialization }
