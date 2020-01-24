@@ -1,6 +1,6 @@
 Extension { #name : #SystemNavigation }
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : #'*NewTools-Debugger-Extensions' }
 SystemNavigation >> allHalts [
 
 	^ self allBehaviors

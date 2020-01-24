@@ -1,6 +1,6 @@
 Extension { #name : #StInspector }
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : #'*NewTools-Debugger-Extensions' }
 StInspector >> millerList [
 	^millerList
 ]

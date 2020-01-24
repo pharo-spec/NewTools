@@ -1,6 +1,6 @@
 Extension { #name : #CompiledCode }
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : #'*NewTools-Debugger-Extensions' }
 CompiledCode >> hasHalts [
 	"Answer whether the receiver references halts literals.
 	This is ugly but fast."
