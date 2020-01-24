@@ -313,74 +313,6 @@ SpecDebugger >> code [
 	^ code
 ]
 
-{ #category : #'commands - code' }
-SpecDebugger >> codeAcceptCommands [
-	| group |
-	group := (CmCommandGroup named: 'Accept commands') asSpecGroup.
-	group
-		description: 'Commands to accept or cancel changes.';
-		beDisplayedAsGroup.
-	group register: (SpAcceptChangesCommand forSpecContext: code).
-	group register: (SpCancelChangesCommand forSpecContext: code).
-	^ group
-]
-
-{ #category : #'commands - code' }
-SpecDebugger >> codeContextCommandsGroup [
-	| rootCommandGroup |
-	rootCommandGroup := CmCommandGroup forSpec beRoot.
-	rootCommandGroup register: self codeSelectionActionCommands.
-	rootCommandGroup register: self codeSearchCommands.
-	rootCommandGroup register: self codeEditionCommands.
-	rootCommandGroup register: self codeAcceptCommands.	
-	^rootCommandGroup 	
-
-]
-
-{ #category : #'commands - code' }
-SpecDebugger >> codeEditionCommands [
-	| group |
-	group := (CmCommandGroup named: 'Selection edition commands') asSpecGroup.
-	group
-		description: 'Commands to edit the code selection.';
-		beDisplayedAsGroup.
-	SpCodeEditionCommand
-		allSubclassesDo: [ :cmdClass | group register: (cmdClass forSpecContext: code) ].
-	^ group
-]
-
-{ #category : #'commands - code' }
-SpecDebugger >> codeSearchCommands [
-	| group |
-	group := (CmCommandGroup named: 'Selection search commands') asSpecGroup.
-	group
-		description: 'Commands to search the system from the code selection.';
-		beDisplayedAsGroup.
-	SpSystemNavigationCommand
-		allSubclassesDo: [ :cmdClass | group register: (cmdClass forSpecContext: code) ].
-	^ group
-]
-
-{ #category : #'commands - code' }
-SpecDebugger >> codeSelectionActionCommands [
-	| group |
-	self flag: 'Needs better care about how to recover commands'.
-	group := (CmCommandGroup named: 'Selection action commands')
-		asSpecGroup.
-	group
-		description: 'Commands actions on the code selection.';
-		beDisplayedAsGroup.
-	group register: (RunToSelectionDebugCommand forSpecContext: self).
-	(SpCodeSelectionCommand allSubclasses
-		reject: [ :class | 
-			{SpCodeEditionCommand.
-			SpSystemNavigationCommand}
-				anySatisfy:
-					[ :filter | class == filter or: [ filter allSubclasses includes: class ] ] ])
-		do: [ :cmdClass | group register: (cmdClass forSpecContext: code) ].
-	^ group
-]
-
 { #category : #'accessing context' }
 SpecDebugger >> context [
  
@@ -467,8 +399,7 @@ SpecDebugger >> initializeCode [
 			recompileMethodTo: text string
 			inContext: self stackTable selection selectedItem
 			notifying: notifyer ].
-	code contextMenu: self codeContextCommandsGroup asMenuPresenter.
-		
+			
 	codeHeader := self instantiate: StHeaderBar.	
 	codeHeader removeStyleFromLabel: 'label.header'.	
 	codeHeader applyStyleToLabel: 'label.headerError'.
