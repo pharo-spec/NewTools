@@ -10,6 +10,11 @@ OCHaltOnReadCommand class >> defaultDescription [
 	^ 'Halts when the selected or any variable is read'
 ]
 
+{ #category : #deafult }
+OCHaltOnReadCommand class >> defaultIconName [
+	^#image	
+]
+
 { #category : #default }
 OCHaltOnReadCommand class >> defaultName [ 
 

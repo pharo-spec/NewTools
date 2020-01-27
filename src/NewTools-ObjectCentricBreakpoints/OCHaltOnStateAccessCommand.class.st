@@ -10,6 +10,11 @@ OCHaltOnStateAccessCommand class >> defaultDescription [
 	^ 'Halts when the selected or any variable is read or written'
 ]
 
+{ #category : #deafult }
+OCHaltOnStateAccessCommand class >> defaultIconName [
+	^#remotesManagerEditRemote
+]
+
 { #category : #default }
 OCHaltOnStateAccessCommand class >> defaultName [ 
 
