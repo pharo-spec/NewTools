@@ -26,8 +26,7 @@ CopyStackToClipboardDebugCommand class >> defaultShortcut [
 ]
 
 { #category : #hooks }
-CopyStackToClipboardDebugCommand >> execute [
-	self flag: 'Where is this command called?'.
+CopyStackToClipboardDebugCommand >> execute [	
 	Clipboard clipboardText: (String streamContents: [ :s| 
 		self debugger interruptedContext shortDebugStackOn: s ])
 ]

@@ -17,6 +17,7 @@ FullStackDebugCommand class >> defaultIconName [
 { #category : #default }
 FullStackDebugCommand class >> defaultName [
 	<toolbarDebugCommand: 999>
+	<StackContextMenuDebugCommand>
 	^ 'Full stack'
 ]
 
@@ -27,7 +28,5 @@ FullStackDebugCommand class >> defaultShortcut [
 
 { #category : #hooks }
 FullStackDebugCommand >> execute [
-	self flag: 'Broken'.
-	self flag: 'What is the usage?'.
 	self debugger showFullStack
 ]

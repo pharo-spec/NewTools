@@ -23,6 +23,7 @@ ReturnValueDebugCommand class >> defaultLabel [
 { #category : #accessing }
 ReturnValueDebugCommand class >> defaultName [
 	<toolbarDebugCommand: 910>
+	<StackContextMenuDebugCommand>
 	
 	^ 'Return'
 ]
@@ -35,6 +36,7 @@ ReturnValueDebugCommand class >> defaultShortcut [
 { #category : #actions }
 ReturnValueDebugCommand >> execute [
 	|expression value|
+	self flag: 'Move this behavior to debugger'.
 	
 	expression := UIManager default request: 'Enter expression for return value:'.
 	value := self class compiler
