@@ -373,9 +373,9 @@ SpecDebugger >> findFirstRelevantStackIndexIn: aStack [
 { #category : #api }
 SpecDebugger >> initialExtent [ 
 	"This code was taken from the old debugger to get the same behavior. Fell free to refactor"
-
-	RealEstateAgent standardWindowExtent y < 400 "a tiny screen" 
-		ifTrue: [ ^ 700@500 ].
+	self flag: 'Do it better'.
+	"RealEstateAgent standardWindowExtent y < 400"true "a tiny screen" 
+		ifTrue: [ ^ 1000@800 ].
 	
 	^ [ | w h |
 		w := Display width.
@@ -414,7 +414,7 @@ SpecDebugger >> initializeCode [
 			recompileMethodTo: text string
 			inContext: self stackTable selection selectedItem
 			notifying: notifyer ].
-	code contextMenu: [self debuggerCodeCommandsForRootGroup: code rootCommandsGroup].
+	code contextMenu: [self codeContextMenuCommandsForRootGroup: code rootCommandsGroup].
 			
 	codeHeader := self instantiate: StHeaderBar.	
 	codeHeader removeStyleFromLabel: 'label.header'.	
@@ -458,7 +458,7 @@ SpecDebugger >> initializeStack [
 			evaluated: [ :item | item sender stDisplayString ]).
 	
 	stackTable contextMenu: [ 
-		self stackMenuActions beRoot asMenuPresenter ].
+		(self stackContextMenuCommandsForRootGroup: stackTable rootCommandsGroup)  ].
 	
 	stackTable transmitDo: [ :context | 
 		self updateInspectorFromContext: context.
@@ -476,7 +476,7 @@ SpecDebugger >> initializeToolbar [
 
 	toolbar := self newToolBar.
 	self flag: #TODO. "This needs to come from the application configuration"
-	toolbar beIcons.
+	toolbar beBoth.
 	self updateToolbar
 ]
 
@@ -611,7 +611,33 @@ SpecDebugger >> showFullStack [
 
 ]
 
-{ #category : #actions }
+{ #category : #commands }
+SpecDebugger >> stackContextMenuCommandsForRootGroup: aRootCmCommandsGroup [
+	
+	| group |
+	
+	group := (CmCommandGroup named: 'Navigation')
+		asSpecGroup.
+	group
+		description: 'Navigate the system from the stack.';
+		beDisplayedAsGroup.
+	group
+		register: ((SpBrowseClassCommand forSpecContext: [stackTable selection selectedItem method]) name: 'Browse Method'; yourself);
+		register: ((SpBrowseClassCommand forSpecContext: [stackTable selection selectedItem receiver]) name: 'Browse Receiver'; yourself).	
+	aRootCmCommandsGroup decoratedGroup register: group.
+	
+	group := (CmCommandGroup named: 'Stack actions') decorateWith: SpCommandGroup.
+	group
+		description: 'Actions related to the stack.';
+		beDisplayedAsGroup.
+	(DebugCommand stackContextMenuCommandsForDebugger: self)
+		do: [ :cmd | group register: cmd ].
+
+	aRootCmCommandsGroup decoratedGroup register: group.
+	^aRootCmCommandsGroup asMenuPresenter
+]
+
+{ #category : #commands }
 SpecDebugger >> stackMenuActions [
 	| group |
 	group := (CmCommandGroup named: 'Stack') decorateWith: SpCommandGroup.
