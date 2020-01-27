@@ -329,6 +329,23 @@ SpecDebugger >> currentContext [
 		ifFalse: [ self selectedContext ]
 ]
 
+{ #category : #commands }
+SpecDebugger >> debuggerCodeCommandsForRootGroup: aRootCmCommandsGroup [
+	<extensionCommands>
+	| group |	
+	group := (CmCommandGroup named: 'Debugger actions on code selection')
+		asSpecGroup.
+	group
+		description: 'Debugger actions on code selection.';
+		beDisplayedAsGroup.
+	group
+		register: (RunToSelectionDebugCommand forSpecContext: self);
+		register: (SkipAllToSelectionDebugCommand forSpecContext: self).
+
+	aRootCmCommandsGroup decoratedGroup registerFirst: group.
+	^aRootCmCommandsGroup asMenuPresenter
+]
+
 { #category : #stack }
 SpecDebugger >> expandStackIfLastItemIsSelected [
 	| selection |
@@ -399,6 +416,7 @@ SpecDebugger >> initializeCode [
 			recompileMethodTo: text string
 			inContext: self stackTable selection selectedItem
 			notifying: notifyer ].
+	code contextMenu: [self debuggerCodeCommandsForRootGroup: code rootCommandsGroup].
 			
 	codeHeader := self instantiate: StHeaderBar.	
 	codeHeader removeStyleFromLabel: 'label.header'.	
