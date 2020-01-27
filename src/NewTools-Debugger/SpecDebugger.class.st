@@ -313,6 +313,21 @@ SpecDebugger >> code [
 	^ code
 ]
 
+{ #category : #commands }
+SpecDebugger >> codeContextMenuCommandsForRootGroup: aRootCmCommandsGroup [
+	| group |
+	group := (CmCommandGroup named: 'Debugger actions on code selection')
+		asSpecGroup.
+	group
+		description: 'Debugger actions on code selection.';
+		beDisplayedAsGroup.
+	group
+		register: (RunToSelectionDebugCommand forSpecContext: self);
+		register: (SkipAllToSelectionDebugCommand forSpecContext: self).
+	aRootCmCommandsGroup decoratedGroup registerFirst: group.
+	^ aRootCmCommandsGroup asMenuPresenter
+]
+
 { #category : #'accessing context' }
 SpecDebugger >> context [
  
@@ -327,23 +342,6 @@ SpecDebugger >> currentContext [
 	^ self selectedContext isNil 
 		ifTrue: [ self interruptedContext ]
 		ifFalse: [ self selectedContext ]
-]
-
-{ #category : #commands }
-SpecDebugger >> debuggerCodeCommandsForRootGroup: aRootCmCommandsGroup [
-	<extensionCommands>
-	| group |	
-	group := (CmCommandGroup named: 'Debugger actions on code selection')
-		asSpecGroup.
-	group
-		description: 'Debugger actions on code selection.';
-		beDisplayedAsGroup.
-	group
-		register: (RunToSelectionDebugCommand forSpecContext: self);
-		register: (SkipAllToSelectionDebugCommand forSpecContext: self).
-
-	aRootCmCommandsGroup decoratedGroup registerFirst: group.
-	^aRootCmCommandsGroup asMenuPresenter
 ]
 
 { #category : #stack }
