@@ -637,15 +637,6 @@ SpecDebugger >> stackContextMenuCommandsForRootGroup: aRootCmCommandsGroup [
 	^aRootCmCommandsGroup asMenuPresenter
 ]
 
-{ #category : #commands }
-SpecDebugger >> stackMenuActions [
-	| group |
-	group := (CmCommandGroup named: 'Stack') decorateWith: SpCommandGroup.
-	(DebugCommand stackContextMenuCommandsForDebugger: self)
-		do: [ :cmd | group register: cmd ].
-	^ group
-]
-
 { #category : #'accessing widgets' }
 SpecDebugger >> stackTable [
 	^stackTable
