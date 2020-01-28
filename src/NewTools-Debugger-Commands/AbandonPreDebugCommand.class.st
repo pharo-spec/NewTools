@@ -1,7 +1,7 @@
 Class {
 	#name : #AbandonPreDebugCommand,
 	#superclass : #PreDebugCommand,
-	#category : #'Debugger-Commands'
+	#category : #'NewTools-Debugger-Commands'
 }
 
 { #category : #default }

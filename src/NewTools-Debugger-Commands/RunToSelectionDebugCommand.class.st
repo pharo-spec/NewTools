@@ -1,7 +1,7 @@
 Class {
 	#name : #RunToSelectionDebugCommand,
 	#superclass : #DebugCommand,
-	#category : #'Debugger-Commands'
+	#category : #'NewTools-Debugger-Commands'
 }
 
 { #category : #'as yet unclassified' }

@@ -1,7 +1,7 @@
 Class {
 	#name : #StepOverDebugCommand,
 	#superclass : #DebugCommand,
-	#category : #'Debugger-Commands'
+	#category : #'NewTools-Debugger-Commands'
 }
 
 { #category : #accessing }

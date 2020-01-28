@@ -1,7 +1,7 @@
 Class {
 	#name : #DebugCommand,
 	#superclass : #CmCommand,
-	#category : #'Debugger-Commands'
+	#category : #'NewTools-Debugger-Commands'
 }
 
 { #category : #'instance creation' }

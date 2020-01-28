@@ -1,7 +1,7 @@
 Class {
 	#name : #SkipAllToSelectionDebugCommand,
 	#superclass : #DebugCommand,
-	#category : #'Debugger-Commands'
+	#category : #'NewTools-Debugger-Commands'
 }
 
 { #category : #'as yet unclassified' }

@@ -26,7 +26,7 @@ BaselineOfNewTools >> baseline: spec [
 			"browser"
 			package: 'NewTools-SystemBrowser' with: [ spec requires: #('NewTools-Inspector') ];
 			"debugger"
-			package: 'Debugger-Commands';
+			package: 'NewTools-Debugger-Commands';
 			package: 'NewTools-Debugger' with: [ spec requires: #('NewTools-Inspector' 'Debugger-Commands') ];
 			package: 'NewTools-Debugger-Extensions';
 			package: 'NewTools-Debugger-Tests' with: [ spec requires: #('NewTools-Debugger') ];

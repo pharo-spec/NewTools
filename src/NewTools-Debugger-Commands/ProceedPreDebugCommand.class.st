@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'proceedDebugCommand'
 	],
-	#category : #'Debugger-Commands'
+	#category : #'NewTools-Debugger-Commands'
 }
 
 { #category : #initialization }
