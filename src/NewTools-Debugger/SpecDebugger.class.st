@@ -501,6 +501,15 @@ SpecDebugger >> interruptedProcess [
 	^ self session interruptedProcess
 ]
 
+{ #category : #commands }
+SpecDebugger >> navigationCommand: aCommandClass forContext: anObject [
+	| cmd |
+	cmd := aCommandClass
+		forSpecContext: [ stackTable selection selectedItem method selector ].
+	cmd name: aCommandClass shortName.
+	^ cmd
+]
+
 { #category : #api }
 SpecDebugger >> okToChange [
 
@@ -613,28 +622,64 @@ SpecDebugger >> showFullStack [
 
 { #category : #commands }
 SpecDebugger >> stackContextMenuCommandsForRootGroup: aRootCmCommandsGroup [
-	
+	aRootCmCommandsGroup decoratedGroup register: self stackContextMenuNavigationCommands.
+	aRootCmCommandsGroup decoratedGroup register: self stackContextMenuStackActionsCommands.
+	^ aRootCmCommandsGroup asMenuPresenter
+]
+
+{ #category : #commands }
+SpecDebugger >> stackContextMenuNavigationCommands [
 	| group |
-	
-	group := (CmCommandGroup named: 'Navigation')
-		asSpecGroup.
+	group := (CmCommandGroup named: 'Browse') asSpecGroup.
+	group description: 'Navigate the system from the stack.'.
+	group iconName: #smallSystemBrowser.
 	group
-		description: 'Navigate the system from the stack.';
-		beDisplayedAsGroup.
+		register:
+			((SpBrowseClassCommand
+				forSpecContext: [ stackTable selection selectedItem method ])
+				name: 'method';
+				shortcutKey: nil;
+				yourself).
 	group
-		register: ((SpBrowseClassCommand forSpecContext: [stackTable selection selectedItem method]) name: 'Browse Method'; yourself);
-		register: ((SpBrowseClassCommand forSpecContext: [stackTable selection selectedItem receiver]) name: 'Browse Receiver'; yourself).	
-	aRootCmCommandsGroup decoratedGroup register: group.
-	
-	group := (CmCommandGroup named: 'Stack actions') decorateWith: SpCommandGroup.
+		register:
+			((SpBrowseClassCommand
+				forSpecContext: [ stackTable selection selectedItem receiver class])
+				name: 'receiver';
+				shortcutKey: nil;
+				yourself).
+				
+	"Commands using the selected context's method selector as context "
+	{ 
+		SpBrowseImplementorsCommand.
+		SpBrowseSendersCommand.
+		SpBrowseReferencesCommand.		
+	 } do:[:navCmdClass| 	
+			group register: 
+				(self navigationCommand: navCmdClass forContext: [ stackTable selection selectedItem method selector ] )].
+		
+	"Commands using the selected context's receiver class as context "
+	{ 
+		SpBrowseClassHierarchyCommand.
+		SpBrowseClassVariablesCommand.
+		SpBrowseClassVarRefsCommand.		
+	 } do:[:navCmdClass| 	
+			group register: (navCmdClass forSpecContext: [ stackTable selection selectedItem receiver class ])].
+			
+
+	^ group
+]
+
+{ #category : #commands }
+SpecDebugger >> stackContextMenuStackActionsCommands [
+	| group |
+	group := (CmCommandGroup named: 'Stack actions')
+		decorateWith: SpCommandGroup.
 	group
 		description: 'Actions related to the stack.';
 		beDisplayedAsGroup.
-	(DebugCommand stackContextMenuCommandsForDebugger: self)
+	(StDebugCommand stackContextMenuCommandsForDebugger: self)
 		do: [ :cmd | group register: cmd ].
-
-	aRootCmCommandsGroup decoratedGroup register: group.
-	^aRootCmCommandsGroup asMenuPresenter
+	^ group
 ]
 
 { #category : #'accessing widgets' }
@@ -681,7 +726,7 @@ SpecDebugger >> toolbarActions [
 	| group |
 	self flag: 'Add metalink inspect button'.
 	group := (CmCommandGroup named: 'Toolbar') asSpecGroup.
-	(DebugCommand toolbarCommandsForDebugger: self)
+	(StDebugCommand toolbarCommandsForDebugger: self)
 		do: [ :cmd | group register: cmd ].
 	
 	^ group

@@ -81,7 +81,7 @@ SpecPreDebugPresenter >> toolbarActions [
 	| group |
 	
 	group := (CmCommandGroup named: 'Toolbar') asSpecGroup.
-	(DebugCommand preDebugCommandsForDebugger: self debugger)
+	(StDebugCommand preDebugCommandsForDebugger: self debugger)
 		do: [ :cmd | 
 			cmd decoratedCommand context: self.
 			group register: cmd ].
