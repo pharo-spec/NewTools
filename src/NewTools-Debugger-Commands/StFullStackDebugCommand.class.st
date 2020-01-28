@@ -1,32 +1,32 @@
 Class {
-	#name : #FullStackDebugCommand,
-	#superclass : #DebugCommand,
+	#name : #StFullStackDebugCommand,
+	#superclass : #StDebugCommand,
 	#category : #'NewTools-Debugger-Commands'
 }
 
 { #category : #default }
-FullStackDebugCommand class >> defaultDescription [
+StFullStackDebugCommand class >> defaultDescription [
 	^ 'Open a full debugger to navigate in the full bugged stack.'
 ]
 
 { #category : #initialization }
-FullStackDebugCommand class >> defaultIconName [
+StFullStackDebugCommand class >> defaultIconName [
 	^ #glamorousMore
 ]
 
 { #category : #default }
-FullStackDebugCommand class >> defaultName [
+StFullStackDebugCommand class >> defaultName [
 	<toolbarDebugCommand: 999>
 	<StackContextMenuDebugCommand>
-	^ 'Full stack'
+	^ 'Show full stack'
 ]
 
 { #category : #initialization }
-FullStackDebugCommand class >> defaultShortcut [
+StFullStackDebugCommand class >> defaultShortcut [
 	^ nil
 ]
 
 { #category : #hooks }
-FullStackDebugCommand >> execute [
+StFullStackDebugCommand >> execute [
 	self debugger showFullStack
 ]

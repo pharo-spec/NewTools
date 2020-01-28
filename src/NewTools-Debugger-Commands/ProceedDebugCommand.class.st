@@ -1,6 +1,6 @@
 Class {
 	#name : #ProceedDebugCommand,
-	#superclass : #DebugCommand,
+	#superclass : #StDebugCommand,
 	#category : #'NewTools-Debugger-Commands'
 }
 

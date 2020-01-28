@@ -1,6 +1,6 @@
 Class {
 	#name : #StepOverDebugCommand,
-	#superclass : #DebugCommand,
+	#superclass : #StDebugCommand,
 	#category : #'NewTools-Debugger-Commands'
 }
 

@@ -1,32 +1,32 @@
 Class {
-	#name : #CopyStackToClipboardDebugCommand,
-	#superclass : #DebugCommand,
+	#name : #StCopyStackToClipboardDebugCommand,
+	#superclass : #StDebugCommand,
 	#category : #'NewTools-Debugger-Commands'
 }
 
 { #category : #initialization }
-CopyStackToClipboardDebugCommand class >> defaultDescription [
+StCopyStackToClipboardDebugCommand class >> defaultDescription [
 	^ 'Copy a short debugging stack to the clipboard.'
 ]
 
 { #category : #initialization }
-CopyStackToClipboardDebugCommand class >> defaultIconName [
+StCopyStackToClipboardDebugCommand class >> defaultIconName [
 	^ #smallCopy
 ]
 
 { #category : #initialization }
-CopyStackToClipboardDebugCommand class >> defaultName [
+StCopyStackToClipboardDebugCommand class >> defaultName [
 	<StackContextMenuDebugCommand>
 	^ 'Copy Stack to Clipboard'
 ]
 
 { #category : #initialization }
-CopyStackToClipboardDebugCommand class >> defaultShortcut [
+StCopyStackToClipboardDebugCommand class >> defaultShortcut [
 	^ nil
 ]
 
 { #category : #hooks }
-CopyStackToClipboardDebugCommand >> execute [	
+StCopyStackToClipboardDebugCommand >> execute [	
 	Clipboard clipboardText: (String streamContents: [ :s| 
 		self debugger interruptedContext shortDebugStackOn: s ])
 ]

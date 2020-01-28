@@ -1,6 +1,6 @@
 Class {
 	#name : #WhereIsDebugCommand,
-	#superclass : #DebugCommand,
+	#superclass : #StDebugCommand,
 	#category : #'NewTools-Debugger-Commands'
 }
 

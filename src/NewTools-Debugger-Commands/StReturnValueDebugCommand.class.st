@@ -1,40 +1,40 @@
 Class {
-	#name : #ReturnValueDebugCommand,
-	#superclass : #DebugCommand,
+	#name : #StReturnValueDebugCommand,
+	#superclass : #StDebugCommand,
 	#category : #'NewTools-Debugger-Commands'
 }
 
 { #category : #accessing }
-ReturnValueDebugCommand class >> defaultDescription [
+StReturnValueDebugCommand class >> defaultDescription [
 	^ 'Return of a given value to the previous context.'
 ]
 
 { #category : #initialization }
-ReturnValueDebugCommand class >> defaultIconName [
+StReturnValueDebugCommand class >> defaultIconName [
 	^ #refresh
 ]
 
 { #category : #accessing }
-ReturnValueDebugCommand class >> defaultLabel [
+StReturnValueDebugCommand class >> defaultLabel [
 
 	^ 'Return entered value'
 ]
 
 { #category : #accessing }
-ReturnValueDebugCommand class >> defaultName [
+StReturnValueDebugCommand class >> defaultName [
 	<toolbarDebugCommand: 910>
 	<StackContextMenuDebugCommand>
 	
-	^ 'Return'
+	^ 'Return entered value'
 ]
 
 { #category : #initialization }
-ReturnValueDebugCommand class >> defaultShortcut [
+StReturnValueDebugCommand class >> defaultShortcut [
 	^ nil
 ]
 
 { #category : #actions }
-ReturnValueDebugCommand >> execute [
+StReturnValueDebugCommand >> execute [
 	|expression value|
 	self flag: 'Move this behavior to debugger'.
 	

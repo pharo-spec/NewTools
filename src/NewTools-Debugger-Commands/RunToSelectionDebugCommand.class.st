@@ -1,6 +1,6 @@
 Class {
 	#name : #RunToSelectionDebugCommand,
-	#superclass : #DebugCommand,
+	#superclass : #StDebugCommand,
 	#category : #'NewTools-Debugger-Commands'
 }
 

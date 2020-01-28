@@ -1,11 +1,11 @@
 Class {
-	#name : #DebugCommand,
+	#name : #StDebugCommand,
 	#superclass : #CmCommand,
 	#category : #'NewTools-Debugger-Commands'
 }
 
 { #category : #'instance creation' }
-DebugCommand class >> codeContextMenuCommandsForDebugger: debugger [
+StDebugCommand class >> codeContextMenuCommandsForDebugger: debugger [
 
 	^ self
 		instantiateCommandsFromPragma: #CodeContextMenuDebugCommand
@@ -13,17 +13,17 @@ DebugCommand class >> codeContextMenuCommandsForDebugger: debugger [
 ]
 
 { #category : #initialization }
-DebugCommand class >> defaultIconName [
+StDebugCommand class >> defaultIconName [
 	^ self subclassResponsibility
 ]
 
 { #category : #initialization }
-DebugCommand class >> defaultShortcut [
+StDebugCommand class >> defaultShortcut [
 	^ self subclassResponsibility
 ]
 
 { #category : #'instance creation' }
-DebugCommand class >> forSpecContext: anObject [
+StDebugCommand class >> forSpecContext: anObject [
 	^ (self
 		forSpecWithIconNamed: self defaultIconName
 		shortcutKey: self defaultShortcut)
@@ -32,7 +32,7 @@ DebugCommand class >> forSpecContext: anObject [
 ]
 
 { #category : #'instance creation' }
-DebugCommand class >> preDebugCommandsForDebugger: debugger [
+StDebugCommand class >> preDebugCommandsForDebugger: debugger [
 	
 	^ self
 		instantiateCommandsFromPragma: #PreDebugCommand
@@ -40,7 +40,7 @@ DebugCommand class >> preDebugCommandsForDebugger: debugger [
 ]
 
 { #category : #'instance creation' }
-DebugCommand class >> stackContextMenuCommandsForDebugger: debugger [
+StDebugCommand class >> stackContextMenuCommandsForDebugger: debugger [
 	
 	^ self
 		instantiateCommandsFromPragma: #StackContextMenuDebugCommand
@@ -48,7 +48,7 @@ DebugCommand class >> stackContextMenuCommandsForDebugger: debugger [
 ]
 
 { #category : #'instance creation' }
-DebugCommand class >> toolbarCommandsForDebugger: debugger [
+StDebugCommand class >> toolbarCommandsForDebugger: debugger [
 
 	^ self
 		instantiateCommandsFromPragma: #toolbarDebugCommand:
@@ -56,30 +56,30 @@ DebugCommand class >> toolbarCommandsForDebugger: debugger [
 ]
 
 { #category : #testing }
-DebugCommand >> appliesTo: aDebugger [
+StDebugCommand >> appliesTo: aDebugger [
 
 	^ self appliesToDebugger: aDebugger
 ]
 
 { #category : #testing }
-DebugCommand >> appliesToDebugger: aDebugger [
+StDebugCommand >> appliesToDebugger: aDebugger [
 
 	^ true
 ]
 
 { #category : #accessing }
-DebugCommand >> currentContext [
+StDebugCommand >> currentContext [
 
 	^ self debugger currentContext
 ]
 
 { #category : #accessing }
-DebugCommand >> debugger [
+StDebugCommand >> debugger [
 	^self context
 ]
 
 { #category : #initialization }
-DebugCommand >> initialize [
+StDebugCommand >> initialize [
 
 	super initialize.
 	self description: (String streamContents: [ :stream | 
@@ -90,11 +90,11 @@ DebugCommand >> initialize [
 ]
 
 { #category : #hooks }
-DebugCommand >> interruptedContext [
+StDebugCommand >> interruptedContext [
 	^ self debugger interruptedContext
 ]
 
 { #category : #accessing }
-DebugCommand >> session [
+StDebugCommand >> session [
 	^self debugger session
 ]

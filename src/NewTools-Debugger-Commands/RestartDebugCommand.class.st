@@ -1,6 +1,6 @@
 Class {
 	#name : #RestartDebugCommand,
-	#superclass : #DebugCommand,
+	#superclass : #StDebugCommand,
 	#category : #'NewTools-Debugger-Commands'
 }
 

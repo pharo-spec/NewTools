@@ -1,32 +1,32 @@
 Class {
-	#name : #PeelToFirstDebugCommand,
-	#superclass : #DebugCommand,
+	#name : #StPeelToFirstDebugCommand,
+	#superclass : #StDebugCommand,
 	#category : #'NewTools-Debugger-Commands'
 }
 
 { #category : #accessing }
-PeelToFirstDebugCommand class >> defaultDescription [
+StPeelToFirstDebugCommand class >> defaultDescription [
 	^ 'Peels the stack back to the second occurance of the currently selected message.'
 ]
 
 { #category : #initialization }
-PeelToFirstDebugCommand class >> defaultIconName [
+StPeelToFirstDebugCommand class >> defaultIconName [
 	^ #down
 ]
 
 { #category : #accessing }
-PeelToFirstDebugCommand class >> defaultName [
+StPeelToFirstDebugCommand class >> defaultName [
 	<StackContextMenuDebugCommand>
 	^ 'Peel to first like this'
 ]
 
 { #category : #initialization }
-PeelToFirstDebugCommand class >> defaultShortcut [
+StPeelToFirstDebugCommand class >> defaultShortcut [
 	^ nil
 ]
 
 { #category : #actions }
-PeelToFirstDebugCommand >> execute [
+StPeelToFirstDebugCommand >> execute [
 
 	self session peelToFirstLike: self currentContext 
 ]
