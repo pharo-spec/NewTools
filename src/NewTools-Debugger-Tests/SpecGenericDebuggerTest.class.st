@@ -8,6 +8,31 @@ Class {
 	#category : #'NewTools-Debugger-Tests'
 }
 
+{ #category : #'tests - stack table context menu' }
+SpecGenericDebuggerTest >> assertCommandGroup: cmdGroup hasCommands: expectedCommands withContext: expectedContext [
+	| commands |
+	self deny: cmdGroup isRoot.
+	self assert: cmdGroup displayStrategy class identicalTo: CmUIDisplayAsGroup.
+	commands := cmdGroup decoratedGroup entries
+		collect: [ :spCommand | spCommand decoratedCommand ].
+	self
+		assertCollection: (commands collect: [ :cmd | cmd class ])
+		hasSameElements: expectedCommands.
+	commands
+		do: [ :cmd | self assert: cmd context identicalTo: expectedContext ]
+]
+
+{ #category : #'tests - stack table context menu' }
+SpecGenericDebuggerTest >> assertCommands: commands equals: expectedCommands [
+	self assert: commands size equals: expectedCommands size.
+	commands
+		with: expectedCommands
+		do: [ :actual :expected | 
+			self assert: actual name equals: expected name.
+			self assert: actual context identicalTo: expected context.
+			self assert: actual class identicalTo: expected class ]
+]
+
 { #category : #'helpers - debugger control' }
 SpecGenericDebuggerTest >> clickStepInto [
 	self debugger updateToolbar.
@@ -28,6 +53,11 @@ SpecGenericDebuggerTest >> clickStepOver [
 { #category : #'helpers - debugger control' }
 SpecGenericDebuggerTest >> clickStepOver: n [
 	n timesRepeat: [ self clickStepOver ]
+]
+
+{ #category : #'tests - stack table context menu' }
+SpecGenericDebuggerTest >> commandsFromSpecGroup: group [
+	^ group decoratedGroup entries collect: [ :cmd | cmd decoratedCommand ]
 ]
 
 { #category : #accessing }
@@ -308,6 +338,104 @@ SpecGenericDebuggerTest >> testSelectLastStackElementWithoutMoreElements [
 { #category : #'tests - code pane' }
 SpecGenericDebuggerTest >> testSelectionMenu [
 	self assert: false
+]
+
+{ #category : #'tests - stack table context menu' }
+SpecGenericDebuggerTest >> testStackContextMenuNavigationCommands [
+	| dbg cmdGroup groupEntries cmdEntries expectedEntries|	
+	dbg := self debuggerOn: session.
+	cmdGroup := dbg stackContextMenuNavigationCommands.
+	groupEntries := cmdGroup decoratedGroup entries.
+	
+	self deny: cmdGroup isRoot.
+	self assert: groupEntries size equals: 4.
+	self assert: cmdGroup name equals: 'Browse'.
+	self assert: cmdGroup displayStrategy class identicalTo: CmUIDisplayAsSubMenu.
+	
+	cmdEntries := self commandsFromSpecGroup: groupEntries first.
+	expectedEntries := self commandsFromSpecGroup: dbg stackContextNavigationCommands. 	
+	self assertCommands: cmdEntries equals: expectedEntries.
+	
+	cmdEntries := self commandsFromSpecGroup: groupEntries second.
+	expectedEntries := self commandsFromSpecGroup: dbg stackMethodNavigationCommands. 	
+	self assertCommands: cmdEntries equals: expectedEntries.
+	
+	cmdEntries := self commandsFromSpecGroup: groupEntries third.
+	expectedEntries := self commandsFromSpecGroup: dbg stackMethodSelectorNavigationCommands. 	
+	self assertCommands: cmdEntries equals: expectedEntries.
+	
+	cmdEntries := self commandsFromSpecGroup: groupEntries fourth.
+	expectedEntries := self commandsFromSpecGroup: dbg stackReceiverClassNavigationCommands. 	
+	self assertCommands: cmdEntries equals: expectedEntries.
+	
+]
+
+{ #category : #'tests - stack table context menu' }
+SpecGenericDebuggerTest >> testStackContextNavigationCommands [
+	| dbg stackTable cmdGroup commands|	
+	dbg := self debuggerOn: session.
+	stackTable := dbg stackTable.
+	stackTable selectItem: stackTable items first.
+	cmdGroup := dbg stackContextNavigationCommands.
+	commands := cmdGroup decoratedGroup entries
+		collect: [ :spCommand | spCommand decoratedCommand ].
+		
+	self deny: cmdGroup isRoot.
+	
+	self assert: commands first class identicalTo: SpBrowseClassCommand.
+	self assert: commands first name equals: 'method'.
+	self assert: commands first context identicalTo: stackTable selection selectedItem method.
+	
+	self assert: commands second class identicalTo: SpBrowseClassCommand.
+	self assert: commands second name equals: 'receiver'.
+	self assert: commands second context identicalTo: stackTable selection selectedItem receiver class.
+	
+	
+]
+
+{ #category : #'tests - stack table context menu' }
+SpecGenericDebuggerTest >> testStackMethodNavigationCommands [
+	| dbg stackTable |
+	dbg := self debuggerOn: session.
+	stackTable := dbg stackTable.
+	stackTable selectItem: stackTable items first.
+	self
+		assertCommandGroup: dbg stackMethodNavigationCommands
+		hasCommands:
+			{SpBrowseMethodInheritanceCommand.
+			SpBrowseMethodVersionsCommand}
+		withContext: stackTable selection selectedItem method
+]
+
+{ #category : #'tests - stack table context menu' }
+SpecGenericDebuggerTest >> testStackMethodSelectorNavigationCommands [
+	| dbg stackTable |
+	dbg := self debuggerOn: session.
+	stackTable := dbg stackTable.
+	stackTable selectItem: stackTable items first.
+	self
+		assertCommandGroup: dbg stackMethodSelectorNavigationCommands
+		hasCommands:
+			{SpBrowseImplementorsCommand.
+			SpBrowseSendersCommand.
+			SpBrowseMethodReferencesCommand}
+		withContext: stackTable selection selectedItem method selector
+]
+
+{ #category : #'tests - stack table context menu' }
+SpecGenericDebuggerTest >> testStackReceiverClassNavigationCommands [
+	| dbg stackTable |
+	dbg := self debuggerOn: session.
+	stackTable := dbg stackTable.
+	stackTable selectItem: stackTable items first.
+	self
+		assertCommandGroup: dbg stackReceiverClassNavigationCommands
+		hasCommands:
+			{SpBrowseClassReferencesCommand.
+			SpBrowseClassHierarchyCommand.
+			SpBrowseClassVariablesCommand.
+			SpBrowseClassVarRefsCommand}
+		withContext: stackTable selection selectedItem receiver class
 ]
 
 { #category : #'tests - stack table' }
