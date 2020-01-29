@@ -685,7 +685,7 @@ SpecDebugger >> stackContextMenuStackEditionsCommands [
 	group := (CmCommandGroup named: 'Stack') asSpecGroup.
 	group description: 'Stack edition.'.
 	group iconName: #edit.
-	(StDebugCommand stackContextMenuCommandsForDebugger: self)
+	(StDebugCommand stackContextMenuEditionCommandsForDebugger: self)
 		do: [ :cmd | group register: cmd ].
 	^ group
 ]

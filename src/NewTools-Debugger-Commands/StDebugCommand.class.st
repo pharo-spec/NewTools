@@ -40,10 +40,10 @@ StDebugCommand class >> preDebugCommandsForDebugger: debugger [
 ]
 
 { #category : #'instance creation' }
-StDebugCommand class >> stackContextMenuCommandsForDebugger: debugger [
+StDebugCommand class >> stackContextMenuEditionCommandsForDebugger: debugger [
 	
 	^ self
-		instantiateCommandsFromPragma: #StackContextMenuDebugCommand
+		instantiateCommandsFromPragma: #StackContextMenuEditionDebugCommand
 		for: debugger
 ]
 

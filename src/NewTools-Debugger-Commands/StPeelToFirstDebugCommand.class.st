@@ -16,7 +16,7 @@ StPeelToFirstDebugCommand class >> defaultIconName [
 
 { #category : #accessing }
 StPeelToFirstDebugCommand class >> defaultName [
-	<StackContextMenuDebugCommand>
+	<StackContextMenuEditionDebugCommand>
 	^ 'Peel to first like this'
 ]
 
