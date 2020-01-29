@@ -721,7 +721,8 @@ SpecDebugger >> stackReceiverClassNavigationCommands [
 		SpBrowseClassReferencesCommand.
 		SpBrowseClassHierarchyCommand.
 		SpBrowseClassVariablesCommand.
-		SpBrowseClassVarRefsCommand.		
+		SpBrowseClassVarRefsCommand.
+		SpBrowseInstVarRefsCommand		
 	 } do:[:navCmdClass| 	
 			group register: (self navigationCommand: navCmdClass forContext:  [ stackTable selection selectedItem receiver class ])].		
 	^ group

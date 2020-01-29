@@ -434,7 +434,8 @@ SpecGenericDebuggerTest >> testStackReceiverClassNavigationCommands [
 			{SpBrowseClassReferencesCommand.
 			SpBrowseClassHierarchyCommand.
 			SpBrowseClassVariablesCommand.
-			SpBrowseClassVarRefsCommand}
+			SpBrowseClassVarRefsCommand.
+			SpBrowseInstVarRefsCommand}
 		withContext: stackTable selection selectedItem receiver class
 ]
 
