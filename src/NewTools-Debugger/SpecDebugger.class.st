@@ -623,7 +623,7 @@ SpecDebugger >> showFullStack [
 SpecDebugger >> stackContextMenuCommandsForRootGroup: aRootCmCommandsGroup [
 	aRootCmCommandsGroup decoratedGroup register: self stackContextMenuNavigationCommands.
 	aRootCmCommandsGroup decoratedGroup register: self stackContextMenuExplorationCommands.
-	aRootCmCommandsGroup decoratedGroup register: self stackContextMenuStackActionsCommands.
+	aRootCmCommandsGroup decoratedGroup register: self stackContextMenuStackEditionsCommands.
 	^ aRootCmCommandsGroup asMenuPresenter
 ]
 
@@ -654,13 +654,11 @@ SpecDebugger >> stackContextMenuNavigationCommands [
 ]
 
 { #category : #commands }
-SpecDebugger >> stackContextMenuStackActionsCommands [
+SpecDebugger >> stackContextMenuStackEditionsCommands [
 	| group |
-	group := (CmCommandGroup named: 'Stack actions')
-		decorateWith: SpCommandGroup.
-	group
-		description: 'Actions related to the stack.';
-		beDisplayedAsGroup.
+	group := (CmCommandGroup named: 'Stack') asSpecGroup.
+	group description: 'Stack edition.'.
+	group iconName: #edit.
 	(StDebugCommand stackContextMenuCommandsForDebugger: self)
 		do: [ :cmd | group register: cmd ].
 	^ group

@@ -306,6 +306,11 @@ SpecGenericDebuggerTest >> testRestoreReceiverRawInspectionSelection [
 SpecGenericDebuggerTest >> testRestoreReceiverRawInspectionSelectionAfterContextChange [
 ]
 
+{ #category : #'tests - session' }
+SpecGenericDebuggerTest >> testReturnEnteredValue [
+	self fail
+]
+
 { #category : #'tests - code pane' }
 SpecGenericDebuggerTest >> testSaveCodeModification [
 	self assert: false
