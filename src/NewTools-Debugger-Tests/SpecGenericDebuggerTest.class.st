@@ -395,6 +395,21 @@ SpecGenericDebuggerTest >> testStackContextMenuNavigationCommands [
 ]
 
 { #category : #'tests - stack table context menu' }
+SpecGenericDebuggerTest >> testStackContextMenuStackEditionsCommands [
+	| dbg stackTable |
+	dbg := self debuggerOn: session.
+	stackTable := dbg stackTable.
+	stackTable selectItem: stackTable items first.
+	self
+		assertCommandGroup: dbg stackContextMenuStackEditionsCommands
+		hasSameCommands:
+			(CmCommand
+				commandClassesFromPragma: #StackContextMenuEditionDebugCommand)
+		withContext: dbg
+		displayStrategy: CmUIDisplayAsSubMenu
+]
+
+{ #category : #'tests - stack table context menu' }
 SpecGenericDebuggerTest >> testStackContextNavigationCommands [
 	| dbg stackTable cmdGroup commands|	
 	dbg := self debuggerOn: session.
