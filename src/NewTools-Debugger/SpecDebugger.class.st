@@ -664,7 +664,7 @@ SpecDebugger >> stackContextMenuNavigationCommands [
 	{ 
 		SpBrowseImplementorsCommand.
 		SpBrowseSendersCommand.
-		SpBrowseReferencesCommand.		
+		SpBrowseMethodReferencesCommand.		
 	 } do:[:navCmdClass| 	
 			group register: 
 				(self navigationCommand: navCmdClass forContext: [ stackTable selection selectedItem method selector ] )].
