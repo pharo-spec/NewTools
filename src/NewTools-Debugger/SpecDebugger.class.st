@@ -622,8 +622,22 @@ SpecDebugger >> showFullStack [
 { #category : #commands }
 SpecDebugger >> stackContextMenuCommandsForRootGroup: aRootCmCommandsGroup [
 	aRootCmCommandsGroup decoratedGroup register: self stackContextMenuNavigationCommands.
+	aRootCmCommandsGroup decoratedGroup register: self stackContextMenuExplorationCommands.
 	aRootCmCommandsGroup decoratedGroup register: self stackContextMenuStackActionsCommands.
 	^ aRootCmCommandsGroup asMenuPresenter
+]
+
+{ #category : #commands }
+SpecDebugger >> stackContextMenuExplorationCommands [
+	| group |
+	group := (CmCommandGroup named: 'Explore') asSpecGroup.
+	group description: 'Explore the receiver object''s graph.'.
+	group iconName: SpSystemDiscoveryCommand defaultIconName.
+	
+	group register: (self navigationCommand: SpBrowseInstancesCommand forContext: [stackTable selection selectedItem receiver class]).
+	group register: (self navigationCommand: SpBrowseSubInstancesCommand forContext: [stackTable selection selectedItem receiver class]).
+	group register: (self navigationCommand: SpBrowsePointersToCommand forContext: [stackTable selection selectedItem receiver]).
+	^ group
 ]
 
 { #category : #commands }
