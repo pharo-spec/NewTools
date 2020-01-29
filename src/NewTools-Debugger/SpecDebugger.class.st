@@ -632,54 +632,10 @@ SpecDebugger >> stackContextMenuNavigationCommands [
 	group := (CmCommandGroup named: 'Browse') asSpecGroup.
 	group description: 'Navigate the system from the stack.'.
 	group iconName: #smallSystemBrowser.
-	group
-		register:
-			((SpBrowseClassCommand
-				forSpecContext: [ stackTable selection selectedItem method ])
-				name: 'method';
-				shortcutKey: nil;
-				yourself).
-	group
-		register:
-			((SpBrowseClassCommand
-				forSpecContext: [ stackTable selection selectedItem receiver class])
-				name: 'receiver';
-				shortcutKey: nil;
-				yourself).
-				
-	group 
-		register: 
-		(self navigationCommand: SpBrowseClassReferencesCommand 
-				forContext: [ stackTable selection selectedItem receiver class ]).
-	
-	"Commands using the selected context's method "	
-	{ 
-		SpBrowseMethodInheritanceCommand.
-		SpBrowseMethodVersionsCommand.		
-	 } do:[:navCmdClass| 	
-			group register: 
-				(self navigationCommand: navCmdClass forContext: [ stackTable selection selectedItem method ] )].				
-				
-	"Commands using the selected context's method selector as context "
-	{ 
-		SpBrowseImplementorsCommand.
-		SpBrowseSendersCommand.
-		SpBrowseMethodReferencesCommand.		
-	 } do:[:navCmdClass| 	
-			group register: 
-				(self navigationCommand: navCmdClass forContext: [ stackTable selection selectedItem method selector ] )].
-		
-	"Commands using the selected context's receiver class as context "
-	{ 
-		SpBrowseClassHierarchyCommand.
-		SpBrowseClassVariablesCommand.
-		SpBrowseClassVarRefsCommand.		
-	 } do:[:navCmdClass| 	
-			group register: (self navigationCommand: navCmdClass forContext:  [ stackTable selection selectedItem receiver class ])].
-			
-			
-		
-
+	group register: self stackContextNavigationCommands.
+	group register: self stackMethodNavigationCommands.
+	group register: self stackMethodSelectorNavigationCommands.
+	group register: self stackReceiverClassNavigationCommands.
 	^ group
 ]
 
@@ -693,6 +649,81 @@ SpecDebugger >> stackContextMenuStackActionsCommands [
 		beDisplayedAsGroup.
 	(StDebugCommand stackContextMenuCommandsForDebugger: self)
 		do: [ :cmd | group register: cmd ].
+	^ group
+]
+
+{ #category : #commands }
+SpecDebugger >> stackContextNavigationCommands [
+	"Commands to navigate the context"
+	
+	| group |
+	group := (CmCommandGroup named: 'Receiver class code navigation commands') asSpecGroup.
+	group beDisplayedAsGroup.
+	group
+		register:
+			((SpBrowseClassCommand
+				forSpecContext: [ stackTable selection selectedItem method ])
+				name: 'method';
+				shortcutKey: nil;
+				yourself).
+	group
+		register:
+			((SpBrowseClassCommand
+				forSpecContext: [ stackTable selection selectedItem receiver class])
+				name: 'receiver';
+				shortcutKey: nil;
+				yourself).				
+	
+	^ group
+]
+
+{ #category : #commands }
+SpecDebugger >> stackMethodNavigationCommands [
+	"Commands to navigate the selected context's method "
+	
+	| group |
+	group := (CmCommandGroup named: 'Selected method navigation commands') asSpecGroup.
+	group beDisplayedAsGroup.		
+	{ 
+		SpBrowseMethodInheritanceCommand.
+		SpBrowseMethodVersionsCommand.		
+	 } do:[:navCmdClass| 	
+			group register: 
+				(self navigationCommand: navCmdClass forContext: [ stackTable selection selectedItem method ] )].		
+	^ group
+]
+
+{ #category : #commands }
+SpecDebugger >> stackMethodSelectorNavigationCommands [
+	"Commands to navigate the selected context's method selector as context "
+	
+	| group |
+	group := (CmCommandGroup named: 'Selected method''s selector navigation commands') asSpecGroup.
+	group beDisplayedAsGroup.		
+	{ 
+		SpBrowseImplementorsCommand.
+		SpBrowseSendersCommand.
+		SpBrowseMethodReferencesCommand.		
+	 } do:[:navCmdClass| 	
+			group register: 
+				(self navigationCommand: navCmdClass forContext: [ stackTable selection selectedItem method selector ] )].
+	^ group
+]
+
+{ #category : #commands }
+SpecDebugger >> stackReceiverClassNavigationCommands [
+	"Commands to navigate the selected context's receiver class as context "
+	
+	| group |
+	group := (CmCommandGroup named: 'Receiver class navigation commands') asSpecGroup.
+	group beDisplayedAsGroup.	
+	{ 
+		SpBrowseClassReferencesCommand.
+		SpBrowseClassHierarchyCommand.
+		SpBrowseClassVariablesCommand.
+		SpBrowseClassVarRefsCommand.		
+	 } do:[:navCmdClass| 	
+			group register: (self navigationCommand: navCmdClass forContext:  [ stackTable selection selectedItem receiver class ])].		
 	^ group
 ]
 
