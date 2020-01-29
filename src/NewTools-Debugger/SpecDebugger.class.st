@@ -667,19 +667,6 @@ SpecDebugger >> stackContextMenuNavigationCommands [
 ]
 
 { #category : #commands }
-SpecDebugger >> stackContextMenuStackCommands [
-	| group |
-	group := (CmCommandGroup named: 'Stack') asSpecGroup.
-	group description: 'Stack edition.'.
-	group iconName: #edit.
-	
-	group register: (self navigationCommand: SpBrowseInstancesCommand forContext: [stackTable selection selectedItem receiver class]).
-	group register: (self navigationCommand: SpBrowseSubInstancesCommand forContext: [stackTable selection selectedItem receiver class]).
-	group register: (self navigationCommand: SpBrowsePointersToCommand forContext: [stackTable selection selectedItem receiver]).
-	^ group
-]
-
-{ #category : #commands }
 SpecDebugger >> stackContextMenuStackEditionsCommands [
 	| group |
 	group := (CmCommandGroup named: 'Stack') asSpecGroup.
