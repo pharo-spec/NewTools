@@ -354,6 +354,14 @@ SpecDebugger >> expandStackIfLastItemIsSelected [
 	stackTable selectIndex: selection selectedIndex
 ]
 
+{ #category : #actions }
+SpecDebugger >> fileOutSelectedContext [
+	| selectedContextMethod |
+	selectedContextMethod := stackTable selection selectedItem method.
+	selectedContextMethod methodClass
+		fileOutMethod: selectedContextMethod selector
+]
+
 { #category : #stack }
 SpecDebugger >> filterStack: aStack [
 	^ aStack reject: [ :aContext | 
