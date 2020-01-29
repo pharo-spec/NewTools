@@ -633,7 +633,20 @@ SpecDebugger >> showFullStack [
 ]
 
 { #category : #commands }
+SpecDebugger >> stackContextMenuActionsCommands [
+	| group |
+	group := (CmCommandGroup named: 'Context Actions') asSpecGroup.
+	group beDisplayedAsGroup.
+	group description: 'Actions on the selected context.'.
+	group iconName: #smallDoIt.
+	(StDebugCommand stackContextMenuActionsCommandsForDebugger: self)
+		do: [ :cmd | group register: cmd ].
+	^ group
+]
+
+{ #category : #commands }
 SpecDebugger >> stackContextMenuCommandsForRootGroup: aRootCmCommandsGroup [
+	aRootCmCommandsGroup decoratedGroup register: self stackContextMenuActionsCommands.
 	aRootCmCommandsGroup decoratedGroup register: self stackContextMenuNavigationCommands.
 	aRootCmCommandsGroup decoratedGroup register: self stackContextMenuExplorationCommands.
 	aRootCmCommandsGroup decoratedGroup register: self stackContextMenuStackEditionsCommands.
