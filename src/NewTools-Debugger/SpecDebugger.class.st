@@ -504,8 +504,7 @@ SpecDebugger >> interruptedProcess [
 { #category : #commands }
 SpecDebugger >> navigationCommand: aCommandClass forContext: anObject [
 	| cmd |
-	cmd := aCommandClass
-		forSpecContext: [ stackTable selection selectedItem method selector ].
+	cmd := aCommandClass forSpecContext: anObject.
 	cmd name: aCommandClass shortName.
 	^ cmd
 ]
