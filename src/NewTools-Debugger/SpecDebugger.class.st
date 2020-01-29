@@ -648,6 +648,19 @@ SpecDebugger >> stackContextMenuNavigationCommands [
 				shortcutKey: nil;
 				yourself).
 				
+	group 
+		register: 
+		(self navigationCommand: SpBrowseClassReferencesCommand 
+				forContext: [ stackTable selection selectedItem receiver class ]).
+	
+	"Commands using the selected context's method "	
+	{ 
+		SpBrowseMethodInheritanceCommand.
+		SpBrowseMethodVersionsCommand.		
+	 } do:[:navCmdClass| 	
+			group register: 
+				(self navigationCommand: navCmdClass forContext: [ stackTable selection selectedItem method ] )].				
+				
 	"Commands using the selected context's method selector as context "
 	{ 
 		SpBrowseImplementorsCommand.
@@ -663,8 +676,10 @@ SpecDebugger >> stackContextMenuNavigationCommands [
 		SpBrowseClassVariablesCommand.
 		SpBrowseClassVarRefsCommand.		
 	 } do:[:navCmdClass| 	
-			group register: (navCmdClass forSpecContext: [ stackTable selection selectedItem receiver class ])].
+			group register: (self navigationCommand: navCmdClass forContext:  [ stackTable selection selectedItem receiver class ])].
 			
+			
+		
 
 	^ group
 ]
