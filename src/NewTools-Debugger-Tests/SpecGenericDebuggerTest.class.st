@@ -9,17 +9,30 @@ Class {
 }
 
 { #category : #'tests - stack table context menu' }
-SpecGenericDebuggerTest >> assertCommandGroup: cmdGroup hasCommands: expectedCommands withContext: expectedContext [
+SpecGenericDebuggerTest >> assertCommandGroup: cmdGroup hasDisplayStrategy: displayStrategy [
+	self
+		assert: cmdGroup displayStrategy class
+		identicalTo: displayStrategy
+]
+
+{ #category : #'tests - stack table context menu' }
+SpecGenericDebuggerTest >> assertCommandGroup: cmdGroup hasSameCommands: expectedCommands withContext: expectedContext displayStrategy: displayStrategy [
 	| commands |
 	self deny: cmdGroup isRoot.
-	self assert: cmdGroup displayStrategy class identicalTo: CmUIDisplayAsGroup.
+	self assertCommandGroup: cmdGroup hasDisplayStrategy: displayStrategy.
 	commands := cmdGroup decoratedGroup entries
 		collect: [ :spCommand | spCommand decoratedCommand ].
 	self
+		assertCommandGroupEntries: commands
+		hasCommands: expectedCommands.
+	self assertCommands: commands haveContext: expectedContext
+]
+
+{ #category : #'tests - stack table context menu' }
+SpecGenericDebuggerTest >> assertCommandGroupEntries: commands hasCommands: expectedCommands [
+	self
 		assertCollection: (commands collect: [ :cmd | cmd class ])
-		hasSameElements: expectedCommands.
-	commands
-		do: [ :cmd | self assert: cmd context identicalTo: expectedContext ]
+		hasSameElements: expectedCommands
 ]
 
 { #category : #'tests - stack table context menu' }
@@ -31,6 +44,12 @@ SpecGenericDebuggerTest >> assertCommands: commands equals: expectedCommands [
 			self assert: actual name equals: expected name.
 			self assert: actual context identicalTo: expected context.
 			self assert: actual class identicalTo: expected class ]
+]
+
+{ #category : #'tests - stack table context menu' }
+SpecGenericDebuggerTest >> assertCommands: commands haveContext: expectedContext [
+	commands
+		do: [ :cmd | self assert: cmd context identicalTo: expectedContext ]
 ]
 
 { #category : #'helpers - debugger control' }
@@ -401,10 +420,11 @@ SpecGenericDebuggerTest >> testStackMethodNavigationCommands [
 	stackTable selectItem: stackTable items first.
 	self
 		assertCommandGroup: dbg stackMethodNavigationCommands
-		hasCommands:
+		hasSameCommands:
 			{SpBrowseMethodInheritanceCommand.
 			SpBrowseMethodVersionsCommand}
 		withContext: stackTable selection selectedItem method
+		displayStrategy: CmUIDisplayAsGroup
 ]
 
 { #category : #'tests - stack table context menu' }
@@ -415,11 +435,12 @@ SpecGenericDebuggerTest >> testStackMethodSelectorNavigationCommands [
 	stackTable selectItem: stackTable items first.
 	self
 		assertCommandGroup: dbg stackMethodSelectorNavigationCommands
-		hasCommands:
+		hasSameCommands:
 			{SpBrowseImplementorsCommand.
 			SpBrowseSendersCommand.
 			SpBrowseMethodReferencesCommand}
 		withContext: stackTable selection selectedItem method selector
+		displayStrategy: CmUIDisplayAsGroup
 ]
 
 { #category : #'tests - stack table context menu' }
@@ -430,13 +451,14 @@ SpecGenericDebuggerTest >> testStackReceiverClassNavigationCommands [
 	stackTable selectItem: stackTable items first.
 	self
 		assertCommandGroup: dbg stackReceiverClassNavigationCommands
-		hasCommands:
+		hasSameCommands:
 			{SpBrowseClassReferencesCommand.
 			SpBrowseClassHierarchyCommand.
 			SpBrowseClassVariablesCommand.
 			SpBrowseClassVarRefsCommand.
 			SpBrowseInstVarRefsCommand}
 		withContext: stackTable selection selectedItem receiver class
+		displayStrategy: CmUIDisplayAsGroup
 ]
 
 { #category : #'tests - stack table' }
@@ -513,4 +535,34 @@ SpecGenericDebuggerTest >> testStackTableWithNewSession [
 { #category : #'tests - code pane' }
 SpecGenericDebuggerTest >> testUnauthorizedCodeModification [
 	self assert: false
+]
+
+{ #category : #'tests - stack table context menu' }
+SpecGenericDebuggerTest >> teststackContextMenuExplorationCommands [
+	| dbg stackTable cmdGroup cmdEntries |
+	dbg := self debuggerOn: session.
+	stackTable := dbg stackTable.
+	stackTable selectItem: stackTable items first.
+	cmdGroup := dbg stackContextMenuExplorationCommands.
+	cmdEntries := cmdGroup decoratedGroup entries collect:[:spCmd| spCmd decoratedCommand].
+	self deny: cmdGroup isRoot.
+	self assert: cmdEntries size equals: 3.
+	self assert: cmdGroup name equals: 'Explore'.
+	self
+		assertCommandGroupEntries: cmdEntries
+		hasCommands:
+			{SpBrowseInstancesCommand.
+			SpBrowseSubInstancesCommand.
+			SpBrowsePointersToCommand}.
+	self
+		assertCommandGroup: cmdGroup
+		hasDisplayStrategy: CmUIDisplayAsSubMenu.
+	self
+		assertCommands:
+			{cmdEntries first.
+			cmdEntries second}
+		haveContext:  stackTable selection selectedItem receiver class .
+	self
+		assertCommands: {cmdEntries last}
+		haveContext: stackTable selection selectedItem receiver 
 ]
