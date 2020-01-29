@@ -323,8 +323,7 @@ SpecGenericDebuggerTest >> testStackTableAfterReturn [
 	self clickStepOver: 2.
 	stackTableItems := dbg stackTable items.
 	self assert: dbg stackTable selection selectedIndex equals: 1.
-	self
-		assert: dbg stackTable selection selectedItem == session shortStack first.
+	self assert: dbg stackTable selection selectedItem identicalTo: session shortStack first.
 	self assert: stackTableItems size equals: stackSizeAfterStepIn - 1.
 	self assert: stackTableItems equals: session shortStack
 ]
@@ -357,11 +356,11 @@ SpecGenericDebuggerTest >> testStackTableSelectionChanged [
 	self
 		assert:
 			dbg inspector inspectedObject context
-				== dbg stackTable selection selectedItem.
+				identicalTo: dbg stackTable selection selectedItem.
 	self
 		assert:
 			dbg inspector inspectedObject context receiver
-				== dbg stackTable selection selectedItem receiver.
+				identicalTo: dbg stackTable selection selectedItem receiver.
 	self
 		assert: dbg code text
 		equals: dbg stackTable items second sourceCode
@@ -379,7 +378,7 @@ SpecGenericDebuggerTest >> testStackTableWithNewSession [
 	self
 		assert:
 			self debugger stackTable selection selectedItem
-				== session shortStack first
+				identicalTo: session shortStack first
 ]
 
 { #category : #'tests - code pane' }
