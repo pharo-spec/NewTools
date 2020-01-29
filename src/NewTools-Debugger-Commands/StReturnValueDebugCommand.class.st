@@ -35,15 +35,5 @@ StReturnValueDebugCommand class >> defaultShortcut [
 
 { #category : #actions }
 StReturnValueDebugCommand >> execute [
-	|expression value|
-	self flag: 'Move this behavior to debugger'.
-	
-	expression := UIManager default request: 'Enter expression for return value:'.
-	value := self class compiler
-			source: expression;
-			context: self currentContext;
-			receiver: self currentContext receiver;
-			evaluate.
-
-	self session returnValue: value from: self currentContext
+	self debugger returnEnteredValue
 ]

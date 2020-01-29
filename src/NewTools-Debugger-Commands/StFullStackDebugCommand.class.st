@@ -6,7 +6,7 @@ Class {
 
 { #category : #default }
 StFullStackDebugCommand class >> defaultDescription [
-	^ 'Open a full debugger to navigate in the full bugged stack.'
+	^ 'Shows the full stack.'
 ]
 
 { #category : #initialization }

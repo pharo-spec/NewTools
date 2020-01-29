@@ -581,6 +581,19 @@ self flag: 'Kill it'.
 			removeActionsForEvent:#contextChanged ]. 
 ]
 
+{ #category : #session }
+SpecDebugger >> returnEnteredValue [
+	| expression value |
+	expression := UIManager default
+		request: 'Enter expression for return value:'.
+	value := self class compiler
+		source: expression;
+		context: self currentContext;
+		receiver: self currentContext receiver;
+		evaluate.
+	self session returnValue: value from: self currentContext
+]
+
 { #category : #stack }
 SpecDebugger >> selectTopContext [
 	stackTable selectIndex: 1
@@ -650,6 +663,19 @@ SpecDebugger >> stackContextMenuNavigationCommands [
 	group register: self stackMethodNavigationCommands.
 	group register: self stackMethodSelectorNavigationCommands.
 	group register: self stackReceiverClassNavigationCommands.
+	^ group
+]
+
+{ #category : #commands }
+SpecDebugger >> stackContextMenuStackCommands [
+	| group |
+	group := (CmCommandGroup named: 'Stack') asSpecGroup.
+	group description: 'Stack edition.'.
+	group iconName: #edit.
+	
+	group register: (self navigationCommand: SpBrowseInstancesCommand forContext: [stackTable selection selectedItem receiver class]).
+	group register: (self navigationCommand: SpBrowseSubInstancesCommand forContext: [stackTable selection selectedItem receiver class]).
+	group register: (self navigationCommand: SpBrowsePointersToCommand forContext: [stackTable selection selectedItem receiver]).
 	^ group
 ]
 
