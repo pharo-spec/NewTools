@@ -13,7 +13,10 @@ StRawInspection class >> buildCommandsGroupWith: presenter forRoot: aCmCommandsG
 	aCmCommandsGroup
 		beDisplayedAsGroup;
 		register: (StInspectorInspectSelectedCommand forSpecContext: presenter);
-		register: (StInspectorBrowseSelectedCommand forSpecContext: presenter)
+		register: (StInspectorBrowseSelectedCommand forSpecContext: presenter);
+		register:
+			(SpBrowsePointersToCommand
+				forSpecContext: [ presenter selectedItem value ])
 ]
 
 { #category : #specs }
