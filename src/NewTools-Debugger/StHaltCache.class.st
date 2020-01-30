@@ -8,12 +8,15 @@ I associate the selector of methods in which I found halts to a set holding the 
 
 For now it is a simple cache that does not require as much functionality than AbstractCache provides, so it does not subclass it.
 However, it might be interesting if I evolve later, or if I need safe concurrent access (which AbstractCache provides).
+
+By default, the cache does not lookup halts in all the system's methods. This can be enabled in a settings under tools>debugging>halt cache. The cache must be refreshed to effectively perform the lookup (StHaltCache refresh).
 "
 Class {
 	#name : #StHaltCache,
 	#superclass : #Object,
 	#instVars : [
-		'methodsWithHalts'
+		'methodsWithHalts',
+		'scanAllSystem'
 	],
 	#classVars : [
 		'DefaultCache'
@@ -26,6 +29,27 @@ StHaltCache class >> defaultCache [
 	^ DefaultCache ifNil: [ DefaultCache := self new ]
 ]
 
+{ #category : #settings }
+StHaltCache class >> haltCacheSettingsOn: aBuilder [
+	<systemsettings>
+	(aBuilder group: #haltcache)
+		label: 'Halt Cache';
+		parent: #debugging;
+		description: 'Halt cache settings';
+		with: [ (aBuilder setting: #scanAllSystem)
+				label: 'Perform a system-wide lookup to find all halts and breakpoints';
+				target: self defaultCache;
+				default: false;
+				description:
+					'If true, then the halt cache will check for halts in all methods from the system. This can be slow for large systems (with lots of methods).' ]
+]
+
+{ #category : #'accessing - cache' }
+StHaltCache class >> refresh [
+	<script>
+	self defaultCache buildCache
+]
+
 { #category : #'accessing - cache' }
 StHaltCache class >> reset [
 	<script>
@@ -36,6 +60,7 @@ StHaltCache class >> reset [
 
 { #category : #cache }
 StHaltCache >> buildCache [
+	self scanAllSystem ifFalse:[^self].
 	SystemNavigation new allHalts
 		do: [ :compiledMethod | self buildCacheForMethod: compiledMethod ]
 ]
@@ -112,6 +137,16 @@ StHaltCache >> registerSubscriptions [
 { #category : #'system subscription' }
 StHaltCache >> removeSubscriptions [
 	SystemAnnouncer uniqueInstance unsubscribe: self
+]
+
+{ #category : #accessing }
+StHaltCache >> scanAllSystem [
+	^scanAllSystem ifNil:[scanAllSystem := false] 
+]
+
+{ #category : #accessing }
+StHaltCache >> scanAllSystem: aBoolean [
+	scanAllSystem := aBoolean
 ]
 
 { #category : #cache }
