@@ -47,7 +47,7 @@ StHaltCache class >> haltCacheSettingsOn: aBuilder [
 { #category : #'accessing - cache' }
 StHaltCache class >> refresh [
 	<script>
-	self defaultCache buildCache
+	self defaultCache refreshCache
 ]
 
 { #category : #'accessing - cache' }
@@ -125,6 +125,11 @@ StHaltCache >> methodsWithHalts [
 { #category : #cache }
 StHaltCache >> nodeCacheForSelector: aMethodSelector [
 	^ methodsWithHalts at: aMethodSelector ifAbsent: #()
+]
+
+{ #category : #cache }
+StHaltCache >> refreshCache [
+	self buildCache
 ]
 
 { #category : #'system subscription' }

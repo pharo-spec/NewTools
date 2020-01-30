@@ -72,8 +72,16 @@ StHaltCacheTest >> testRefreshCacheWithScanAllSystem [
 	|newCache|
 	newCache := StHaltCache new.
 	newCache scanAllSystem: true.
-	newCache buildCache.
+	newCache refreshCache.
 	self assert: cache methodsWithHalts size >= 6
+]
+
+{ #category : #'testing - cache building' }
+StHaltCacheTest >> testRefreshCacheWithoutScanAllSystem [
+	|newCache|
+	newCache := StHaltCache new.
+	newCache refreshCache.
+	self assert: newCache methodsWithHalts isEmpty
 ]
 
 { #category : #'testing - halts cache' }
