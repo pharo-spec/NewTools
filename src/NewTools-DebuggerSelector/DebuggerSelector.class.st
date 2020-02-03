@@ -52,6 +52,18 @@ DebuggerSelector >> addSubscriberOnMainDebuggerClassUpdate: anObject [
 ]
 
 { #category : #'open debugger' }
+DebuggerSelector >> closeAllDebuggers [
+	self flag: 'Ugly temporary hack: Thomas can you fix this?'.
+	self flag: 'GTGenericStackDebugger is ultra slow to close its windows...'.
+	self getDebuggerClasses
+		do: [ :dbgClass | 
+			(dbgClass respondsTo: #closeAllDebuggers)
+				ifTrue: [ dbgClass closeAllDebuggers ] ]
+
+
+]
+
+{ #category : #'open debugger' }
 DebuggerSelector >> getDebuggerClasses [
 	| result classesWithDummyDebuggerPragma |
 	result := ((PragmaCollector
