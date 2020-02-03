@@ -228,5 +228,5 @@ DebuggerSelector >> tryToOpenDebugSession: aDebugSession withDebuggerClass: aDeb
 		andNotification: aString.
 	^ true ]
 		on: Error
-		do: [ :e | errorString := 'Debugger ', aDebuggerClass name, ' crashed when opening a debug session: ', aDebugSession name. self crTrace: errorString. self inform: errorString. ^ false ]
+		do: [ :e | errorString := 'Debugger ', aDebuggerClass name, ' crashed when opening a debug session: ', aDebugSession name. self crTrace: errorString. self inform: errorString. e inspect. ^ false ]
 ]
