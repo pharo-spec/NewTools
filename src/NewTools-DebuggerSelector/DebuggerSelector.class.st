@@ -221,11 +221,12 @@ DebuggerSelector >> subscribersOnMainDebuggerClassUpdate [
 DebuggerSelector >> tryToOpenDebugSession: aDebugSession withDebuggerClass: aDebuggerClass withFullView: aBool andNotification: aString [
 	"Tries to open @aDebugSession with debugger @aDebuggerClass. If an Error is raised doing so, returns false, otherwise return true"
 
+	| errorString |
 	[ aDebuggerClass
 		openOn: aDebugSession
 		withFullView: aBool
 		andNotification: aString.
 	^ true ]
 		on: Error
-		do: [ ^ false ]
+		do: [ :e | errorString := 'Debugger ', aDebuggerClass name, ' crashed when opening a debug session: ', aDebugSession name. self crTrace: errorString. self inform: errorString. ^ false ]
 ]
