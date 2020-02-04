@@ -184,3 +184,8 @@ StObjectBreakpointInspection >> unsubscribeFromCacheChanges [
 StObjectBreakpointInspection >> updateSourceCodeBehaviorFor: node [
 	breakpointsInSourceCode behavior: model class
 ]
+
+{ #category : #updating }
+StObjectBreakpointInspection >> windowIsClosing [
+	^ self unsubscribeFromCacheChanges
+]
