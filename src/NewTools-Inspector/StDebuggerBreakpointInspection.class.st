@@ -1,25 +1,21 @@
 Class {
 	#name : #StDebuggerBreakpointInspection,
 	#superclass : #StObjectBreakpointInspection,
-	#instVars : [
-		'header'
-	],
 	#category : #'NewTools-Inspector-View'
 }
 
 { #category : #specs }
 StDebuggerBreakpointInspection class >> defaultSpec [
-	^ SpBoxLayout newVertical
-		add: #header
-			expand: false
-			fill: false
-			padding: 0;
-		add:
-			(SpPanedLayout newVertical
-				add: #methodsWithBreakpoints;
-				add: #breakpointsInSourceCode;
-				yourself);
+	^ SpPanedLayout newVertical
+		add: #methodsWithBreakpoints;
+		add: #breakpointsInSourceCode;
 		yourself
+]
+
+{ #category : #specs }
+StDebuggerBreakpointInspection class >> extendedDebuggingToolTitle [
+	<debuggerExtensionPresentationOrder: 1>
+	^ 'Breakpoints and Halts'
 ]
 
 { #category : #private }
@@ -35,14 +31,7 @@ StDebuggerBreakpointInspection >> buildHaltData [
 
 { #category : #initialization }
 StDebuggerBreakpointInspection >> initializePresenters [
-	header := self instantiate: StHeaderBar.
-	header label: self labelString.
-	super initializePresenters.
-]
-
-{ #category : #accessing }
-StDebuggerBreakpointInspection >> labelString [
-	^ 'Breakpoints and Halts'
+	super initializePresenters
 ]
 
 { #category : #presenters }
