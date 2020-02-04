@@ -60,20 +60,18 @@ StDebuggerFailingAssertionInspector >> initializeMillerList: list forObject: obj
 
 { #category : #initialization }
 StDebuggerFailingAssertionInspector >> initializePresenters [
+
 	actualObjectHeader := (self instantiate: StHeaderBar)
-		                      label:
-			                      'Actual object: ' , actualObject printString;
-		                      yourself.
+		label: 'Actual object: ', actualObject printString;
+		yourself.
 	actualObjectHeader applyStyleToLabel: 'label.headerError'.
 	actualObjectMillerList := SpMillerColumnPresenter new.
 	self
 		initializeMillerList: actualObjectMillerList
 		forObject: actualObject.
 	expectedObjectHeader := (self instantiate: StHeaderBar)
-		                        label:
-			                        'Expected object: '
-			                        , expectedObject printString;
-		                        yourself.
+		label: 'Expected object: ' , expectedObject printString;
+		yourself.
 	expectedObjectHeader applyStyleToLabel: 'label.headerSuccess'.
 	expectedObjectMillerList := SpMillerColumnPresenter new.
 	self

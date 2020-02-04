@@ -56,6 +56,7 @@ StRawInspection >> initialize [
 
 { #category : #initialization }
 StRawInspection >> initializePresenters [
+
 	attributeTable := self newTreeTable
 		contextMenu: [ self rootCommandsGroup asMenuPresenter ];
 		yourself.

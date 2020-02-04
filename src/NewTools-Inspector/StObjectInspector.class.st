@@ -102,7 +102,8 @@ StObjectInspector >> allPages [
 { #category : #'private builder' }
 StObjectInspector >> buildToolBar [
 	^ self rootCommandsGroup
-		asToolbarPresenterWith: [ :presenter | presenter beIcons ]
+		asToolbarPresenterWith: [ :presenter | 
+			presenter displayMode: self application displayMode ]
 ]
 
 { #category : #initialization }
