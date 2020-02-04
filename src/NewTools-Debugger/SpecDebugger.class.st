@@ -15,7 +15,8 @@ Class {
 		'inspector',
 		'breakpointInspector',
 		'stackHeader',
-		'codeHeader'
+		'codeHeader',
+		'extendedToolsNotebook'
 	],
 	#classVars : [
 		'DefaultSpec',
@@ -39,6 +40,13 @@ SpecDebugger class >> closeAllDebuggers [
 	<script>
 	SpecDebugger allInstancesDo: [ :dbg | dbg close ].
 	SpecPreDebugPresenter allInstancesDo: [ :dbg | dbg close ]
+]
+
+{ #category : #'tools registry' }
+SpecDebugger class >> collectExtendedToolsPragmas [
+
+	^ (PragmaCollector
+				filter: [ :prg | prg selector = self extendedToolsPragma]) reset collected
 ]
 
 { #category : #specs }
@@ -99,7 +107,7 @@ SpecDebugger class >> contextRightColumnSpec [
 								     add: #code;
 								     yourself);
 						    yourself);
-				   add: #breakpointInspector;
+				   add: #extendedToolsNotebook;
 				   yourself);
 		  add: #inspector;
 		  yourself
@@ -116,6 +124,12 @@ SpecDebugger class >> defaultTitle [
 	"GTDebugger needs this to create its action to switch to other debuggers (in this case to the Spec Debugger). I don't know if switching to this debugger actually works, but if the action cannot be created, the GTDebugger crashes when being opened. This method can be removed if the GTDebugger is removed"
 	self flag: 'Why constraining us because of GT?'.
 	^ 'SpecDebugger'
+]
+
+{ #category : #'tools registry' }
+SpecDebugger class >> extendedToolsPragma [	
+
+	^ #debuggerExtensionPresentationOrder:
 ]
 
 { #category : #settings }
@@ -285,7 +299,7 @@ SpecDebugger class >> usingSpecSelector [
 
 { #category : #actions }
 SpecDebugger >> clear [
-	breakpointInspector unsubscribeFromCacheChanges.
+	extendedToolsNotebook pages do:[:page| page activePresenter windowIsClosing].
 	self removeActionsForSession: self session.
 	
 	"No more code should follow after this, as the session might terminate this process."
@@ -410,7 +424,6 @@ SpecDebugger >> initializeBreakpointInspector [
 	breakpointInspector := self
 		instantiate: StDebuggerBreakpointInspection
 		on: (StInspectorModel on: nil).
-	"inspector label: 'Receiver'"
 ]
 
 { #category : #initialization }
@@ -433,6 +446,16 @@ SpecDebugger >> initializeCode [
 ]
 
 { #category : #initialization }
+SpecDebugger >> initializeExtendedTools [
+	| pages |
+	extendedToolsNotebook := self newNotebook.
+	pages := (self class collectExtendedToolsPragmas
+		sort: [ :a :b | (a argumentAt: 1) < (b argumentAt: 1) ])
+		collect: [ :pragma | self instantiateExtendedToolsPageFromPragma: pragma ].
+	extendedToolsNotebook pages: pages
+]
+
+{ #category : #initialization }
 SpecDebugger >> initializeInspector [
 	inspector := self
 		instantiate: StDebuggerInspector
@@ -447,7 +470,7 @@ SpecDebugger >> initializePresenters [
 	self initializeToolbar.
 	self initializeCode.
 	self initializeInspector.
-	self initializeBreakpointInspector
+	self initializeExtendedTools
 ]
 
 { #category : #initialization }
@@ -495,6 +518,16 @@ SpecDebugger >> initializeWindow: aWindowPresenter [
 		title: self title;
 		initialExtent: self initialExtent;
 		 whenClosedDo: [ self clear ]
+]
+
+{ #category : #initialization }
+SpecDebugger >> instantiateExtendedToolsPageFromPragma: pragma [
+	| toolClass toolInstance |
+	toolClass := pragma methodClass soleInstance. 
+	toolInstance := self instantiate: toolClass.
+	^ SpNotebookPage
+		title: toolClass extendedDebuggingToolTitle
+		provider: [ toolInstance ]
 ]
 
 { #category : #'accessing context' }
