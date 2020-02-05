@@ -27,8 +27,8 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-SystemBrowser' with: [ spec requires: #('NewTools-Inspector') ];
 			"debugger"
 			package: 'NewTools-Debugger-Commands';
-			package: 'NewTools-Debugger' with: [ spec requires: #('NewTools-Inspector' 'NewTools-Debugger-Commands') ];
 			package: 'NewTools-Debugger-Extensions';
+			package: 'NewTools-Debugger' with: [ spec requires: #('NewTools-Inspector' 'NewTools-Debugger-Commands' 'NewTools-Debugger-Extensions') ];			
 			package: 'NewTools-Debugger-Tests' with: [ spec requires: #('NewTools-Debugger') ];
 			"extras"
 			package: 'HelpCenter' with: [ spec requires: #('NewTools-Core') ];
@@ -41,8 +41,8 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-ObjectCentricBreakpointsTests';
 			package: 'NewTools-DebuggerSelector' with: [ spec requires: #('NewTools-SpTextPresenterDecorators') ];
 			package: 'NewTools-Sindarin-commands';
-			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #('NewTools-FlagBrowser-Tests' 'NewTools-Sindarin-commands') ];
-			package: 'NewTools-DebuggerSelector' with: [ spec requires: #('NewTools-Sindarin-Tools') ];
+			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #('NewTools-Sindarin-commands' 'Sindarin') ];
+			package: 'NewTools-DebuggerSelector';
 			package: 'NewTools-DebuggerSelector-Tests' with: [ spec requires: #('NewTools-DebuggerSelector') ]
 			
 		]
