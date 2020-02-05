@@ -16,7 +16,8 @@ Class {
 		'breakpointInspector',
 		'stackHeader',
 		'codeHeader',
-		'extendedToolsNotebook'
+		'extensionTools',
+		'extensionToolsNotebook'
 	],
 	#classVars : [
 		'DefaultSpec',
@@ -107,7 +108,7 @@ SpecDebugger class >> contextRightColumnSpec [
 								     add: #code;
 								     yourself);
 						    yourself);
-				   add: #extendedToolsNotebook;
+				   add: #extensionToolsNotebook;
 				   yourself);
 		  add: #inspector;
 		  yourself
@@ -299,7 +300,7 @@ SpecDebugger class >> usingSpecSelector [
 
 { #category : #actions }
 SpecDebugger >> clear [
-	extendedToolsNotebook pages do:[:page| page activePresenter windowIsClosing].
+	extensionToolsNotebook pages do:[:page| page activePresenter windowIsClosing].
 	self removeActionsForSession: self session.
 	
 	"No more code should follow after this, as the session might terminate this process."
@@ -368,6 +369,17 @@ SpecDebugger >> expandStackIfLastItemIsSelected [
 	stackTable selectIndex: selection selectedIndex
 ]
 
+{ #category : #extensions }
+SpecDebugger >> extensionToolNamed: anExtension ifAbsent: aBlock [
+
+	^self extensionTools at: anExtension ifAbsent: aBlock
+]
+
+{ #category : #extensions }
+SpecDebugger >> extensionTools [
+	^ extensionTools ifNil: [ extensionTools := Dictionary new ]
+]
+
 { #category : #actions }
 SpecDebugger >> fileOutSelectedContext [
 	| selectedContextMethod |
@@ -392,6 +404,11 @@ SpecDebugger >> findFirstRelevantStackIndexIn: aStack [
 	^ 1
 ]
 
+{ #category : #'updating session' }
+SpecDebugger >> forceSessionUpdate [
+	self sessionHolder valueChanged
+]
+
 { #category : #api }
 SpecDebugger >> initialExtent [ 
 	"This code was taken from the old debugger to get the same behavior. Fell free to refactor"
@@ -410,13 +427,8 @@ SpecDebugger >> initialExtent [
 { #category : #initialization }
 SpecDebugger >> initialize [
 	super initialize.
-	self sessionHolder whenChangedDo: [ :newSession :oldSession | 
-		self removeActionsForSession: oldSession.
-		self registerActionsForSession: newSession.
-		self updateToolbar.
-		self updateStackFromSession: newSession.
-		self updateTitle ].
-	self sessionHolder valueChanged
+	self setSessionHolderSubscriptions.
+	self forceSessionUpdate
 ]
 
 { #category : #initialization }
@@ -445,14 +457,14 @@ SpecDebugger >> initializeCode [
 
 ]
 
-{ #category : #initialization }
-SpecDebugger >> initializeExtendedTools [
+{ #category : #extensions }
+SpecDebugger >> initializeExtensionTools [
 	| pages |
-	extendedToolsNotebook := self newNotebook.
+	extensionToolsNotebook := self newNotebook.
 	pages := (self class collectExtendedToolsPragmas
 		sort: [ :a :b | (a argumentAt: 1) < (b argumentAt: 1) ])
-		collect: [ :pragma | self instantiateExtendedToolsPageFromPragma: pragma ].
-	extendedToolsNotebook pages: pages
+		collect: [ :pragma | self instantiateExtensionToolsPageFromPragma: pragma ].
+	extensionToolsNotebook pages: pages
 ]
 
 { #category : #initialization }
@@ -470,7 +482,7 @@ SpecDebugger >> initializePresenters [
 	self initializeToolbar.
 	self initializeCode.
 	self initializeInspector.
-	self initializeExtendedTools
+	self initializeExtensionTools
 ]
 
 { #category : #initialization }
@@ -519,11 +531,11 @@ SpecDebugger >> initializeWindow: aWindowPresenter [
 		 whenClosedDo: [ self clear ]
 ]
 
-{ #category : #initialization }
-SpecDebugger >> instantiateExtendedToolsPageFromPragma: pragma [
+{ #category : #extensions }
+SpecDebugger >> instantiateExtensionToolsPageFromPragma: pragma [
 	| toolClass toolInstance |
 	toolClass := pragma methodClass soleInstance. 
-	toolInstance := self instantiate: toolClass.
+	toolInstance := self instantiate: toolClass on: self.
 	^ SpNotebookPage
 		title: toolClass extendedDebuggingToolTitle
 		provider: [ toolInstance ]
@@ -608,6 +620,12 @@ SpecDebugger >> registerActionsForSession: aSession [
 			when: #contextChanged send: #updateContextChanged to: self  ]
 ]
 
+{ #category : #extensions }
+SpecDebugger >> registerExtensionTool: anExtension [
+
+	^self extensionTools at: anExtension debuggerExtensionKey put: anExtension
+]
+
 { #category : #session }
 SpecDebugger >> removeActionsForSession: aSession [
 self flag: 'Kill it'.
@@ -619,6 +637,11 @@ self flag: 'Kill it'.
 			removeActionsForEvent: #stepOver;
 			removeActionsForEvent: #stepThrough;
 			removeActionsForEvent:#contextChanged ]. 
+]
+
+{ #category : #'updating session' }
+SpecDebugger >> removeSessionHolderSubscriptions [
+	sessionHolder announcer unsubscribe: sessionHolder
 ]
 
 { #category : #session }
@@ -664,6 +687,17 @@ SpecDebugger >> sessionHolder [
 SpecDebugger >> setModelBeforeInitialization: aSession [
 
 	self session: aSession
+]
+
+{ #category : #'updating session' }
+SpecDebugger >> setSessionHolderSubscriptions [
+	self sessionHolder
+		whenChangedDo: [ :newSession :oldSession | 
+			self removeActionsForSession: oldSession.
+			self registerActionsForSession: newSession.
+			self updateToolbar.
+			self updateStackFromSession: newSession.
+			self updateTitle ]
 ]
 
 { #category : #stack }
