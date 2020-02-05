@@ -15,7 +15,7 @@ SindarinRunScriptCommand class >> defaultDescription [
 
 { #category : #initialization }
 SindarinRunScriptCommand class >> defaultIconName [
-	^#smallDoItt
+	^#smallDoIt
 ]
 
 { #category : #initialization }

@@ -1,3 +1,10 @@
+"
+I am a StDebugger extension for scripting the developer's debugging session.
+I provides ways to:
+- write a live script directly in the debugger (and affecting the debug session)
+- save/load scripts
+- create debugging commands from scripts
+"
 Class {
 	#name : #StSindarinDebuggerScriptingPresenter,
 	#superclass : #SpPresenter,
@@ -47,5 +54,30 @@ StSindarinDebuggerScriptingPresenter >> initializePresenters [
 	"code contextMenu: [  ]."
 	code text: 'self stepOver'.
 	resultInspection := nil rawInspection.
-	toolbar := self newToolBar
+	self initializeToolbar
+]
+
+{ #category : #initialization }
+StSindarinDebuggerScriptingPresenter >> initializeToolbar [
+	toolbar := self newToolBar.
+	toolbar beIcons.
+	SpToolBarPresenterBuilder new
+		toolbarPresenter: toolbar;
+		visit: self toolbarActions
+]
+
+{ #category : #actions }
+StSindarinDebuggerScriptingPresenter >> toolbarActions [
+	| group |
+	group := (CmCommandGroup named: 'Toolbar') asSpecGroup.
+	
+	group register: (SindarinRunScriptCommand forSpecContext: self).
+	group register: (SindarinSaveScriptCommand forSpecContext: self).
+	group register: (SindarinLoadScriptCommand forSpecContext: self).
+	group register: (SindarinCreateCommandFromScriptCommand forSpecContext: self).
+	group register: (SindarinRemoveCommandCommand forSpecContext: self).
+	group register: (StInspectorHelpCommand forSpecContext: self).
+
+	
+	^ group
 ]
