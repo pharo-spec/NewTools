@@ -606,18 +606,17 @@ SpecDebugger >> recompileMethodTo: aString inContext: aContext notifying: aNotif
 			self session recompileMethodTo: aString inContext: aContext notifying: aNotifyer ]
 ]
 
-{ #category : #session }
+{ #category : #'updating session' }
 SpecDebugger >> registerActionsForSession: aSession [
-	self flag: 'Kill it'.
-
-	aSession ifNotNil: [
-		aSession
-			when: #restart send: #updateRestart to: self;
-			when: #resume send: #updateResume to: self;
-			when: #stepInto send: #updateStepInto to: self;
-			when: #stepOver send: #updateStepOver to: self;
-			when: #stepThrough send: #updateStepThrough to: self;
-			when: #contextChanged send: #updateContextChanged to: self  ]
+	self flag: 'Rewrite it'.
+	aSession
+		ifNotNil: [ aSession
+				when: #restart send: #updateRestart to: self;
+				when: #resume send: #updateResume to: self;
+				when: #stepInto send: #updateStepInto to: self;
+				when: #stepOver send: #updateStepOver to: self;
+				when: #stepThrough send: #updateStepThrough to: self;
+				when: #contextChanged send: #updateContextChanged to: self ]
 ]
 
 { #category : #extensions }
@@ -626,25 +625,26 @@ SpecDebugger >> registerExtensionTool: anExtension [
 	^self extensionTools at: anExtension debuggerExtensionKey put: anExtension
 ]
 
-{ #category : #session }
+{ #category : #'updating session' }
 SpecDebugger >> removeActionsForSession: aSession [
-self flag: 'Kill it'.
-	aSession ifNotNil: [ 
-		aSession  
-			removeActionsForEvent: #restart;
-			removeActionsForEvent: #resume;
-			removeActionsForEvent: #stepInto;
-			removeActionsForEvent: #stepOver;
-			removeActionsForEvent: #stepThrough;
-			removeActionsForEvent:#contextChanged ]. 
+	self flag: 'Rewrite it'.
+	aSession
+		ifNotNil: [ aSession
+				removeActionsForEvent: #restart;
+				removeActionsForEvent: #resume;
+				removeActionsForEvent: #stepInto;
+				removeActionsForEvent: #stepOver;
+				removeActionsForEvent: #stepThrough;
+				removeActionsForEvent: #contextChanged ]
 ]
 
 { #category : #'updating session' }
 SpecDebugger >> removeSessionHolderSubscriptions [
-	sessionHolder announcer unsubscribe: sessionHolder
+	self sessionHolder announcer unsubscribe: self sessionHolder.
+	self removeActionsForSession: self session
 ]
 
-{ #category : #session }
+{ #category : #actions }
 SpecDebugger >> returnEnteredValue [
 	| expression value |
 	expression := UIManager default
