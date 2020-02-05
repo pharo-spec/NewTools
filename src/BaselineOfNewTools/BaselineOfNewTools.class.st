@@ -40,8 +40,8 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-ObjectCentricBreakpoints';
 			package: 'NewTools-ObjectCentricBreakpointsTests';
 			package: 'NewTools-DebuggerSelector' with: [ spec requires: #('NewTools-SpTextPresenterDecorators') ];
-			package: 'NewTools-Sindarin-commands';
-			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #('NewTools-Sindarin-commands' 'Sindarin') ];
+			package: 'NewTools-Sindarin-Commands';
+			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ];
 			package: 'NewTools-DebuggerSelector';
 			package: 'NewTools-DebuggerSelector-Tests' with: [ spec requires: #('NewTools-DebuggerSelector') ]
 			
