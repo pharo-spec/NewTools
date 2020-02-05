@@ -11,6 +11,7 @@ SindarinCommand class >> defaultIconName [
 
 { #category : #'instance creation' }
 SindarinCommand class >> forSpecContext: anObject [
+	self flag: 'Why is this class needed besides this helper?'.
 	^ (self forSpecWithIconNamed: self defaultIconName)
 		context: anObject;
 		yourself
