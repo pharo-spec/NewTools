@@ -39,6 +39,12 @@ StPharoApplication >> start [
 	
 ]
 
+{ #category : #settings }
+StPharoApplication >> toolbarDisplayMode [
+
+	^ StPharoSettings toolbarDisplayMode
+]
+
 { #category : #convenience }
 StPharoApplication >> useGtk [
 

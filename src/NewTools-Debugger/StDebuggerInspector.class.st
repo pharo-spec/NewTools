@@ -49,6 +49,7 @@ StDebuggerInspector >> getRawInspectorSelectedPath [
 
 { #category : #initialization }
 StDebuggerInspector >> initializePresenters [
+
 	label := self newLabel.
 	inspector := self instantiate: StInspector on: self model
 ]

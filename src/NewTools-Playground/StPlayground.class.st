@@ -71,8 +71,7 @@ StPlayground >> buildToolBar [
 
 	^ self toolbarActions 
 		asToolbarPresenterWith: [ :presenter | 
-			self flag: #TODO.	"This comes from a configuration"
-			presenter beIcons ]
+			presenter displayMode: self application toolbarDisplayMode ]
 ]
 
 { #category : #initialization }

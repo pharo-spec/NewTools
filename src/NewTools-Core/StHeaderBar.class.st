@@ -42,7 +42,7 @@ StHeaderBar >> initializePresenters [
 		addStyle: 'label.shortcut';
 		yourself.
 	toolbar := self newToolBar.
-	toolbar beBoth
+	toolbar displayMode: self application toolbarDisplayMode
 ]
 
 { #category : #accessing }

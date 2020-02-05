@@ -506,8 +506,7 @@ SpecDebugger >> initializeStack [
 SpecDebugger >> initializeToolbar [
 
 	toolbar := self newToolBar.
-	self flag: #TODO. "This needs to come from the application configuration"
-	toolbar beBoth.
+	toolbar displayMode: self application toolbarDisplayMode.
 	self updateToolbar
 ]
 

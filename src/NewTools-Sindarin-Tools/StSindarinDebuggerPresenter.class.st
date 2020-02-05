@@ -42,7 +42,8 @@ StSindarinDebuggerPresenter >> buildToolBar [
 	group := CmCommandGroup forSpec.
 	SindarinCommand allSubclasses
 		do: [ :cmd | group register: (cmd forSpecContext: self) ].
-	^ group asToolbarPresenterWith: [ :presenter | presenter beIcons ]
+	^ group asToolbarPresenterWith: [ :presenter | 
+		presenter displayMode: self application displayMode ]
 ]
 
 { #category : #initialization }
