@@ -26,5 +26,5 @@ SindarinCreateCommandFromScriptCommand class >> defaultName [
 
 { #category : #executing }
 SindarinCreateCommandFromScriptCommand >> execute [
-	self flag: 'todo'
+	self context createCommandFromScript
 ]

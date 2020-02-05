@@ -25,5 +25,5 @@ SindarinRunScriptCommand class >> defaultName [
 
 { #category : #executing }
 SindarinRunScriptCommand >> execute [
-	self flag: 'todo'
+	self context executeScript
 ]

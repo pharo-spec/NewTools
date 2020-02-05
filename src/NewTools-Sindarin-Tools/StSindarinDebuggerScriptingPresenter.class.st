@@ -11,7 +11,8 @@ Class {
 	#instVars : [
 		'code',
 		'resultInspection',
-		'toolbar'
+		'toolbar',
+		'sindarinDebugger'
 	],
 	#category : #'NewTools-Sindarin-Tools'
 }
@@ -30,6 +31,24 @@ StSindarinDebuggerScriptingPresenter class >> defaultSpec [
 StSindarinDebuggerScriptingPresenter class >> extendedDebuggingToolTitle [
 	<debuggerExtensionPresentationOrder: -1>
 	^ 'Sindarin'
+]
+
+{ #category : #actions }
+StSindarinDebuggerScriptingPresenter >> createCommandFromScript [
+	self flag: 'todo'
+]
+
+{ #category : #actions }
+StSindarinDebuggerScriptingPresenter >> executeScript [
+	|script|
+	script := code text.
+	"specDebugger stack stopAutoUpdate.
+	OpalCompiler new
+		bindings: { #dbg -> specDebuggerWrapper }	asDictionary;
+		evaluate: aString.
+	specDebugger stack updateContentFromSession.
+	specDebugger stack startAutoUpdate."
+	
 ]
 
 { #category : #actions }
@@ -67,6 +86,21 @@ StSindarinDebuggerScriptingPresenter >> initializeToolbar [
 ]
 
 { #category : #actions }
+StSindarinDebuggerScriptingPresenter >> loadScript [
+	self flag: 'todo'
+]
+
+{ #category : #actions }
+StSindarinDebuggerScriptingPresenter >> removeScriptCommand [
+	self flag: 'todo'
+]
+
+{ #category : #actions }
+StSindarinDebuggerScriptingPresenter >> saveScript [
+	self flag: 'todo'
+]
+
+{ #category : #building }
 StSindarinDebuggerScriptingPresenter >> toolbarActions [
 	| group |
 	group := (CmCommandGroup named: 'Toolbar') asSpecGroup.

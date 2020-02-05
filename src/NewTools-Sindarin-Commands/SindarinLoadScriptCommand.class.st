@@ -24,5 +24,5 @@ SindarinLoadScriptCommand class >> defaultName [
 
 { #category : #executing }
 SindarinLoadScriptCommand >> execute [
-	self flag: 'todo'
+	self context loadScript
 ]

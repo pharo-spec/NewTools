@@ -24,5 +24,5 @@ SindarinRemoveCommandCommand class >> defaultName [
 
 { #category : #executing }
 SindarinRemoveCommandCommand >> execute [
-	self flag: 'todo'
+	self context removeScriptCommand
 ]

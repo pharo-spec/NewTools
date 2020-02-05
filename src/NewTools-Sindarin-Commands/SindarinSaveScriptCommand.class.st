@@ -24,5 +24,5 @@ SindarinSaveScriptCommand class >> defaultName [
 
 { #category : #executing }
 SindarinSaveScriptCommand >> execute [
-	self flag: 'todo'
+	self context saveScript
 ]
