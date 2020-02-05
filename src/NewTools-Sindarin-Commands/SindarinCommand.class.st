@@ -1,7 +1,7 @@
 Class {
 	#name : #SindarinCommand,
 	#superclass : #CmCommand,
-	#category : #'NewTools-Sindarin-Tools'
+	#category : #'NewTools-Sindarin-Commands'
 }
 
 { #category : #initialization }

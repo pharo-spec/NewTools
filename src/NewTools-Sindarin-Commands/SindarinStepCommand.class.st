@@ -1,7 +1,7 @@
 Class {
 	#name : #SindarinStepCommand,
 	#superclass : #SindarinCommand,
-	#category : #'NewTools-Sindarin-Tools'
+	#category : #'NewTools-Sindarin-Commands'
 }
 
 { #category : #default }
