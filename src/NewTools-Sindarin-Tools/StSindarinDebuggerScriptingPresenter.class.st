@@ -51,27 +51,13 @@ StSindarinDebuggerScriptingPresenter >> executeScript [
 	|scriptString|
 	scriptString := code text.
 	self debugger removeSessionHolderSubscriptions.
-
+	
 	OpalCompiler new
 		bindings: { #sindarin -> (self sindarin) }	asDictionary;
 		evaluate: scriptString.
 		
-	self debugger updateContextChanged.
 	self debugger setSessionHolderSubscriptions. 
 	self debugger forceSessionUpdate
-	
-]
-
-{ #category : #actions }
-StSindarinDebuggerScriptingPresenter >> executeScriptingBoxContent: aString [
-	self flag: 'todo'
-	"self executeScriptingBoxContent: self scriptingBox getText asString"
-	"specDebugger stack stopAutoUpdate.
-	OpalCompiler new
-		bindings: { #dbg -> specDebuggerWrapper }	asDictionary;
-		evaluate: aString.
-	specDebugger stack updateContentFromSession.
-	specDebugger stack startAutoUpdate."
 	
 ]
 
