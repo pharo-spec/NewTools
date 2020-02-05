@@ -4,6 +4,8 @@ I provides ways to:
 - write a live script directly in the debugger (and affecting the debug session)
 - save/load scripts
 - create debugging commands from scripts
+
+My owner must be a spec debugger
 "
 Class {
 	#name : #StSindarinDebuggerScriptingPresenter,
@@ -12,7 +14,8 @@ Class {
 		'code',
 		'resultInspection',
 		'toolbar',
-		'sindarinDebugger'
+		'sindarinDebugger',
+		'stDebugger'
 	],
 	#category : #'NewTools-Sindarin-Tools'
 }
@@ -38,16 +41,24 @@ StSindarinDebuggerScriptingPresenter >> createCommandFromScript [
 	self flag: 'todo'
 ]
 
+{ #category : #accessing }
+StSindarinDebuggerScriptingPresenter >> debugger [ 
+	^stDebugger
+]
+
 { #category : #actions }
 StSindarinDebuggerScriptingPresenter >> executeScript [
-	|script|
-	script := code text.
-	"specDebugger stack stopAutoUpdate.
+	|scriptString|
+	scriptString := code text.
+	self debugger removeSessionHolderSubscriptions.
+
 	OpalCompiler new
-		bindings: { #dbg -> specDebuggerWrapper }	asDictionary;
-		evaluate: aString.
-	specDebugger stack updateContentFromSession.
-	specDebugger stack startAutoUpdate."
+		bindings: { #sindarin -> (self sindarin) }	asDictionary;
+		evaluate: scriptString.
+		
+	self debugger updateContextChanged.
+	self debugger setSessionHolderSubscriptions. 
+	self debugger forceSessionUpdate
 	
 ]
 
@@ -71,7 +82,7 @@ StSindarinDebuggerScriptingPresenter >> initializePresenters [
 	code autoAccept: true.
 	code acceptBlock: [ :txt |  ].
 	"code contextMenu: [  ]."
-	code text: 'self stepOver'.
+	code text: 'sindarin stepOver'.
 	resultInspection := nil rawInspection.
 	self initializeToolbar
 ]
@@ -98,6 +109,18 @@ StSindarinDebuggerScriptingPresenter >> removeScriptCommand [
 { #category : #actions }
 StSindarinDebuggerScriptingPresenter >> saveScript [
 	self flag: 'todo'
+]
+
+{ #category : #accessing }
+StSindarinDebuggerScriptingPresenter >> setModelBeforeInitialization: aStDebugger [
+	"My original model is the debugger presenter that I extend"
+	stDebugger := aStDebugger.
+	sindarinDebugger := aStDebugger sindarinDebugger
+]
+
+{ #category : #accessing }
+StSindarinDebuggerScriptingPresenter >> sindarin [
+	^sindarinDebugger 
 ]
 
 { #category : #building }
