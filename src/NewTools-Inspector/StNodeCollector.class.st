@@ -33,17 +33,7 @@ StNodeCollector >> collectNodes [
 
 { #category : #building }
 StNodeCollector >> collectTempsNodes [
-	| nodes |
-	nodes := OrderedCollection new.
-	self object context tempNames
-		withIndexDo: [ :name :index | 
-			nodes
-				add:
-					(StInspectorContextNamedTempNode
-						hostObject: self object context
-						tempName: name
-						tempIndex: index) ].
-	^ nodes
+	^self tempNodesForContext: object context
 ]
 
 { #category : #private }
@@ -97,4 +87,19 @@ StNodeCollector >> slotNodes [
 			StInspectorSlotNode 
 				hostObject: self object 
 				slot: each ]
+]
+
+{ #category : #building }
+StNodeCollector >> tempNodesForContext: aContext [
+	| nodes |
+	nodes := OrderedCollection new.
+	aContext tempNames
+		withIndexDo: [ :name :index | 
+			nodes
+				add:
+					(StInspectorContextNamedTempNode
+						hostObject: aContext
+						tempName: name
+						tempIndex: index) ].
+	^ nodes
 ]
