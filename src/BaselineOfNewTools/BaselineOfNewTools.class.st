@@ -18,18 +18,23 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Core';
 			package: 'NewTools-Morphic';
 			package: 'NewTools-Gtk';
+			
 			"inspector"
 			package: 'NewTools-Inspector-Extensions' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-Inspector' with: [ spec requires: #( 'NewTools-Inspector-Extensions') ];
+			
 			"playground"
 			package: 'NewTools-Playground' with: [ spec requires: #('NewTools-Inspector') ];
+			
 			"browser"
 			package: 'NewTools-SystemBrowser' with: [ spec requires: #('NewTools-Inspector') ];
+			
 			"debugger"
 			package: 'NewTools-Debugger-Commands';
 			package: 'NewTools-Debugger-Extensions';
 			package: 'NewTools-Debugger' with: [ spec requires: #('NewTools-Inspector' 'NewTools-Debugger-Commands' 'NewTools-Debugger-Extensions') ];			
 			package: 'NewTools-Debugger-Tests' with: [ spec requires: #('NewTools-Debugger') ];
+			
 			"extras"
 			package: 'HelpCenter' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-FlagBrowser' with: [ spec requires: #('NewTools-Core') ];
@@ -37,11 +42,18 @@ BaselineOfNewTools >> baseline: spec [
 			"package: 'NewTools-FileDialog' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-FileDialog-Tests' with: [ spec requires: #('NewTools-FileDialog') ];"
 			package: 'NewTools-SpTextPresenterDecorators';
+			
+			"Object-centric breakpoints"
 			package: 'NewTools-ObjectCentricBreakpoints';
 			package: 'NewTools-ObjectCentricBreakpointsTests';
-			package: 'NewTools-DebuggerSelector' with: [ spec requires: #('NewTools-SpTextPresenterDecorators') ];
+			
+			"Sindarin"
 			package: 'NewTools-Sindarin-Commands';
-			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ]";
+			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ]
+			
+			"Debugger Selector"
+			";
+			package: 'NewTools-DebuggerSelector' with: [ spec requires: #('NewTools-SpTextPresenterDecorators') ];
 			package: 'NewTools-DebuggerSelector';
 			package: 'NewTools-DebuggerSelector-Tests' with: [ spec requires: #('NewTools-DebuggerSelector') ]"
 			
