@@ -1,13 +1,18 @@
 Extension { #name : #SindarinDebugger }
 
 { #category : #'*NewTools-Sindarin-Tools' }
-SindarinDebugger class >> debuggerExtensionKey [
-	^ #sindarin
+SindarinDebugger >> currentBytecode [
+	^ self context method symbolicBytecodes
 ]
 
 { #category : #'*NewTools-Sindarin-Tools' }
 SindarinDebugger >> debuggerExtensionKey [
 	^self class debuggerExtensionKey
+]
+
+{ #category : #'*NewTools-Sindarin-Tools' }
+SindarinDebugger class >> debuggerExtensionKey [
+	^ #sindarin
 ]
 
 { #category : #'*NewTools-Sindarin-Tools' }
@@ -21,8 +26,23 @@ SindarinDebugger >> open [
 ]
 
 { #category : #'*NewTools-Sindarin-Tools' }
+SindarinDebugger >> pc [
+	^ self context pc
+]
+
+{ #category : #'*NewTools-Sindarin-Tools' }
 SindarinDebugger >> sindarinDebuggerInspection [
 	<inspectorPresentationOrder: -10 title: 'Sindarin'>
 
 	^ StSindarinDebuggerPresenter on: self
+]
+
+{ #category : #'*NewTools-Sindarin-Tools' }
+SindarinDebugger >> stepBytecode [
+	"Executes the next bytecode"
+
+	self flag: 'Needs to be tested'.
+	self signalExceptionIfDebuggedExecutionHasSignalledException.
+	process completeStep: self debugSession context.
+	self debugSession updateContextTo: process suspendedContext
 ]
