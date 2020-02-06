@@ -301,6 +301,7 @@ SpecDebugger class >> usingSpecSelector [
 { #category : #actions }
 SpecDebugger >> clear [
 	extensionToolsNotebook pages do:[:page| page activePresenter windowIsClosing].
+	extensionTools := nil.
 	self removeActionsForSession: self session.
 	
 	"No more code should follow after this, as the session might terminate this process."
@@ -370,14 +371,8 @@ SpecDebugger >> expandStackIfLastItemIsSelected [
 ]
 
 { #category : #extensions }
-SpecDebugger >> extensionToolNamed: anExtension ifAbsent: aBlock [
-
-	^self extensionTools at: anExtension ifAbsent: aBlock
-]
-
-{ #category : #extensions }
 SpecDebugger >> extensionTools [
-	^ extensionTools ifNil: [ extensionTools := Dictionary new ]
+	^ extensionTools ifNil: [ extensionTools := OrderedCollection new ]
 ]
 
 { #category : #actions }
@@ -536,6 +531,7 @@ SpecDebugger >> instantiateExtensionToolsPageFromPragma: pragma [
 	| toolClass toolInstance |
 	toolClass := pragma methodClass soleInstance. 
 	toolInstance := self instantiate: toolClass on: self.
+	self registerExtensionTool: toolInstance.
 	^ SpNotebookPage
 		title: toolClass extendedDebuggingToolTitle
 		provider: [ toolInstance ]
@@ -622,7 +618,7 @@ SpecDebugger >> registerActionsForSession: aSession [
 { #category : #extensions }
 SpecDebugger >> registerExtensionTool: anExtension [
 
-	^self extensionTools at: anExtension debuggerExtensionKey put: anExtension
+	^self extensionTools add: anExtension
 ]
 
 { #category : #'updating session' }
@@ -697,7 +693,8 @@ SpecDebugger >> setSessionHolderSubscriptions [
 			self registerActionsForSession: newSession.
 			self updateToolbar.
 			self updateStackFromSession: newSession.
-			self updateTitle ]
+			self updateTitle.
+			self updateExtensionsFrom: newSession ]
 ]
 
 { #category : #stack }
@@ -956,6 +953,11 @@ SpecDebugger >> updateContextChanged [
 ]
 
 { #category : #'updating widgets' }
+SpecDebugger >> updateExtensionsFrom: newSession [
+	self extensionTools do:[:tool| tool updatePresenter]
+]
+
+{ #category : #'updating widgets' }
 SpecDebugger >> updateInspectorFromContext: aContext [
 	inspector updateWith: (StDebuggerContext context: aContext session: self session)
 ]
@@ -983,7 +985,8 @@ SpecDebugger >> updateStackFromSession: aSession [
 SpecDebugger >> updateStep [
 	self updateInspectorFromContext: self context.
 	self updateStackFromSession: self session.
-	self updateCodeHeaderLabel
+	self updateCodeHeaderLabel.
+	self updateExtensionsFrom: self session
 ]
 
 { #category : #'updating actions' }
