@@ -364,10 +364,12 @@ SpecDebugger class >> useSpecSelector: aSelector [
 
 { #category : #specs }
 SpecDebugger class >> usingSpecSelector [
-	^ self
-		setExtensionActivationSpecFrom:
-			(UsingSpecSelector
-				ifNil: [ UsingSpecSelector := #debuggerWithoutExtensionsSpec ])
+	| selector |
+	selector := (UsingSpecSelector isNil
+		or: [ (self respondsTo: UsingSpecSelector) not ])
+		ifTrue: [ UsingSpecSelector := #debuggerWithExtensionsSpec ]
+		ifFalse: [ UsingSpecSelector ].
+	^ self setExtensionActivationSpecFrom: selector
 ]
 
 { #category : #actions }
