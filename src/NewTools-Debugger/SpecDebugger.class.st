@@ -144,41 +144,41 @@ SpecDebugger class >> debuggerWithExtensionsSpec [
 { #category : #specs }
 SpecDebugger class >> debuggerWithoutExtensionsSpec [
 	^ SpPanedLayout newVertical
-		  position: 70 percent;
-		  add: (SpPanedLayout newHorizontal
-				   position: 65 percent;
-				   add: (SpPanedLayout newVertical
-						    position: 40 percent;
-						    add: (SpBoxLayout newVertical
-								     add: #stackHeader
-								     expand: false
-								     fill: false
-								     padding: 5;
-								     add: #stackTable;
-								     yourself);
-						    add: (SpBoxLayout newVertical
-								     add: (SpBoxLayout newVertical
-								 				add: #toolbar;
-										      add: #codeHeader
-										      expand: true
-										      fill: true
-										      padding: 0;
-										      yourself)
-								     withConstraints: [ :constraints | 
-									     constraints
-										     expand: false;
-										     height: self toolbarHeight * 2 ];
-								     add: #code;
-								     yourself);
-						    yourself);
-				   yourself);
-		  add: #inspector;
-		  yourself
+		position: 70 percent;
+		add:
+			(SpPanedLayout newVertical
+				position: 40 percent;
+				add:
+					(SpBoxLayout newVertical
+						add: #stackHeader
+							expand: false
+							fill: false
+							padding: 5;
+						add: #stackTable;
+						yourself);
+				add:
+					(SpBoxLayout newVertical
+						add:
+							(SpBoxLayout newVertical
+								add: #toolbar;
+								add: #codeHeader
+									expand: true
+									fill: true
+									padding: 0;
+								yourself)
+							withConstraints: [ :constraints | 
+								constraints
+									expand: false;
+									height: self toolbarHeight * 2 ];
+						add: #code;
+						yourself);
+				yourself);
+		add: #inspector;
+		yourself
 ]
 
 { #category : #specs }
 SpecDebugger class >> defaultSpec [
-
 	^ self perform: self usingSpecSelector
 ]
 
@@ -293,6 +293,15 @@ SpecDebugger class >> sessionClass [
 ]
 
 { #category : #specs }
+SpecDebugger class >> setExtensionActivationSpecFrom: aSpecSelector [
+	aSpecSelector = #debuggerWithExtensionsSpec
+		ifFalse: [ ^ aSpecSelector ].
+	self activateDebuggerExtensions
+		ifFalse: [ ^ #debuggerWithoutExtensionsSpec ].
+	^ aSpecSelector
+]
+
+{ #category : #specs }
 SpecDebugger class >> singleInspectorSpec [
 	"<spec: #default>"
 
@@ -355,9 +364,10 @@ SpecDebugger class >> useSpecSelector: aSelector [
 
 { #category : #specs }
 SpecDebugger class >> usingSpecSelector [
-
-	^ UsingSpecSelector ifNil: [ 
-		UsingSpecSelector := #debuggerWithExtensionsSpec ]
+	^ self
+		setExtensionActivationSpecFrom:
+			(UsingSpecSelector
+				ifNil: [ UsingSpecSelector := #debuggerWithoutExtensionsSpec ])
 ]
 
 { #category : #actions }
