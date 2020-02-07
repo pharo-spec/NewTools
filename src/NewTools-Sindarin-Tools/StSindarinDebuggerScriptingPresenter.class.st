@@ -17,8 +17,36 @@ Class {
 		'sindarinDebugger',
 		'stDebugger'
 	],
+	#classInstVars : [
+		'debuggerExtensionOrder'
+	],
 	#category : #'NewTools-Sindarin-Tools'
 }
+
+{ #category : #accessing }
+StSindarinDebuggerScriptingPresenter class >> debuggerExtensionOrder [
+	^ debuggerExtensionOrder
+]
+
+{ #category : #accessing }
+StSindarinDebuggerScriptingPresenter class >> debuggerExtensionOrder: anObject [
+	debuggerExtensionOrder := anObject
+]
+
+{ #category : #specs }
+StSindarinDebuggerScriptingPresenter class >> debuggerExtensionOrderSettingsOn: aBuilder [
+	<systemsettings>
+	(aBuilder group: #sindarinScriptingPane)
+		label: 'Sindarin';
+		parent: #debuggerExtensions;
+		description: 'Sindarin scriptable debugger';
+		with: [ (aBuilder pickOne: #debuggerExtensionOrder)
+				label: 'Order';
+				target: self;
+				default: 1;
+				domainValues: (1 to: 100) asArray;
+				description: 'Position of the tool tab in the debugger right column.' ]
+]
 
 { #category : #specs }
 StSindarinDebuggerScriptingPresenter class >> defaultSpec [
