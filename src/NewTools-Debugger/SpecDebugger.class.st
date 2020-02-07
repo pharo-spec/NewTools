@@ -26,8 +26,21 @@ Class {
 		'LogDebuggerStackToFile',
 		'UsingSpecSelector'
 	],
+	#classInstVars : [
+		'activateDebuggerExtensions'
+	],
 	#category : #'NewTools-Debugger-View'
 }
+
+{ #category : #accessing }
+SpecDebugger class >> activateDebuggerExtensions [
+	^ activateDebuggerExtensions
+]
+
+{ #category : #accessing }
+SpecDebugger class >> activateDebuggerExtensions: anObject [
+	activateDebuggerExtensions := anObject
+]
 
 { #category : #'tools registry' }
 SpecDebugger class >> availableAutomatically [
@@ -112,6 +125,20 @@ SpecDebugger class >> contextRightColumnSpec [
 				   yourself);
 		  add: #inspector;
 		  yourself
+]
+
+{ #category : #settings }
+SpecDebugger class >> debuggerExtensionSettingsOn: aBuilder [
+	<systemsettings>
+	(aBuilder group: #debuggerExtensions)
+		label: 'Debugger Extensions';
+		parent: #debugging;
+		description: 'Tools that extend the StDebugger and appear in the right column of the debugger';
+		with:[(aBuilder setting: #activateDebuggerExtensions)
+				label: 'Activate extensions';
+				target: self;
+				default: true;				
+				description: '(De)Activate the debugger extensions tools in the debugger right column.']
 ]
 
 { #category : #specs }
