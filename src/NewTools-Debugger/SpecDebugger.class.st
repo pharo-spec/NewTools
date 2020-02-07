@@ -91,8 +91,22 @@ SpecDebugger class >> columnInspectorsSpec [
 		yourself
 ]
 
+{ #category : #settings }
+SpecDebugger class >> debuggerExtensionSettingsOn: aBuilder [
+	<systemsettings>
+	(aBuilder group: #debuggerExtensions)
+		label: 'Debugger Extensions';
+		parent: #debugging;
+		description: 'Tools that extend the StDebugger and appear in the right column of the debugger';
+		with:[(aBuilder setting: #activateDebuggerExtensions)
+				label: 'Activate extensions';
+				target: self;
+				default: true;				
+				description: '(De)Activate the debugger extensions tools in the debugger right column.']
+]
+
 { #category : #specs }
-SpecDebugger class >> contextRightColumnSpec [
+SpecDebugger class >> debuggerWithExtensionsSpec [
 	^ SpPanedLayout newVertical
 		  position: 70 percent;
 		  add: (SpPanedLayout newHorizontal
@@ -127,18 +141,39 @@ SpecDebugger class >> contextRightColumnSpec [
 		  yourself
 ]
 
-{ #category : #settings }
-SpecDebugger class >> debuggerExtensionSettingsOn: aBuilder [
-	<systemsettings>
-	(aBuilder group: #debuggerExtensions)
-		label: 'Debugger Extensions';
-		parent: #debugging;
-		description: 'Tools that extend the StDebugger and appear in the right column of the debugger';
-		with:[(aBuilder setting: #activateDebuggerExtensions)
-				label: 'Activate extensions';
-				target: self;
-				default: true;				
-				description: '(De)Activate the debugger extensions tools in the debugger right column.']
+{ #category : #specs }
+SpecDebugger class >> debuggerWithoutExtensionsSpec [
+	^ SpPanedLayout newVertical
+		  position: 70 percent;
+		  add: (SpPanedLayout newHorizontal
+				   position: 65 percent;
+				   add: (SpPanedLayout newVertical
+						    position: 40 percent;
+						    add: (SpBoxLayout newVertical
+								     add: #stackHeader
+								     expand: false
+								     fill: false
+								     padding: 5;
+								     add: #stackTable;
+								     yourself);
+						    add: (SpBoxLayout newVertical
+								     add: (SpBoxLayout newVertical
+								 				add: #toolbar;
+										      add: #codeHeader
+										      expand: true
+										      fill: true
+										      padding: 0;
+										      yourself)
+								     withConstraints: [ :constraints | 
+									     constraints
+										     expand: false;
+										     height: self toolbarHeight * 2 ];
+								     add: #code;
+								     yourself);
+						    yourself);
+				   yourself);
+		  add: #inspector;
+		  yourself
 ]
 
 { #category : #specs }
@@ -322,7 +357,7 @@ SpecDebugger class >> useSpecSelector: aSelector [
 SpecDebugger class >> usingSpecSelector [
 
 	^ UsingSpecSelector ifNil: [ 
-		UsingSpecSelector := #contextRightColumnSpec ]
+		UsingSpecSelector := #debuggerWithExtensionsSpec ]
 ]
 
 { #category : #actions }
