@@ -208,6 +208,11 @@ SpecGenericDebuggerTest >> testContextUnchangedAfterStepOver [
 	self assert: dbg contextInspector inspectedObject ==  currentContext
 ]
 
+{ #category : #'tests - initialization' }
+SpecGenericDebuggerTest >> testDebuggerApplication [
+	self assert: self debugger application identicalTo: SpecDebugger currentApplication 
+]
+
 { #category : #'tests - code pane' }
 SpecGenericDebuggerTest >> testDiscardCodeModification [
 	self assert: false

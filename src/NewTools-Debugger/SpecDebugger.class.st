@@ -372,6 +372,11 @@ SpecDebugger class >> usingSpecSelector [
 	^ self setExtensionActivationSpecFrom: selector
 ]
 
+{ #category : #accessing }
+SpecDebugger >> application [
+	^ self class currentApplication
+]
+
 { #category : #actions }
 SpecDebugger >> clear [
 	extensionToolsNotebook pages do:[:page| page activePresenter windowIsClosing].
