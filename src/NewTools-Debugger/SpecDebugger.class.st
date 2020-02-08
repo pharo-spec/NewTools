@@ -215,6 +215,12 @@ SpecDebugger class >> handlesContext: aContext [
 	^ true
 ]
 
+{ #category : #'tools registry' }
+SpecDebugger class >> hasAnyActivatedExtension [
+	^ (self collectExtendedToolsClasses
+		select: [ :toolClass | toolClass showInDebugger ]) notEmpty
+]
+
 { #category : #'debugger declaration' }
 SpecDebugger class >> iAmADebugger [
 	"Leave blank for intermediate classes. Add the <iAmADebugger> pragma for concrete debugger classes. This pragma is used by the system to find all available debuggers"

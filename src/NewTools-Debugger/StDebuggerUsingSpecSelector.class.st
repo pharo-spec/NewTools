@@ -23,6 +23,11 @@ Class {
 	#category : #'NewTools-Debugger-Model'
 }
 
+{ #category : #accessing }
+StDebuggerUsingSpecSelector class >> debuggerClass [ 	
+	^SpecDebugger
+]
+
 { #category : #'default spec selectors' }
 StDebuggerUsingSpecSelector class >> defaultDebuggerWithExtensionSpecSelector [
 	^#debuggerWithExtensionsSpec
@@ -43,26 +48,29 @@ StDebuggerUsingSpecSelector class >> on: aSelector [
 	^self new specSelector: aSelector
 ]
 
+{ #category : #accessing }
+StDebuggerUsingSpecSelector >> debuggerClass [ 
+	^self class debuggerClass
+]
+
+{ #category : #'specs - selectors' }
+StDebuggerUsingSpecSelector >> isDefaultSelector: aSelector [
+	^ {self class defaultDebuggerWithExtensionSpecSelector.
+	self class defaultDebuggerWithoutExtensionSpecSelector}
+		includes: aSelector
+]
+
 { #category : #'specs - selectors' }
 StDebuggerUsingSpecSelector >> selectExtensionActivationSpecFrom: aSpecSelector [
-"Three cases:
-	- custom selector: returned as is
-	- selector is one of the display strategy with or without debugger extensions
-		- extensions activated: force return of spec selector with extensions
-		- extensions not activated: force return of spec selector without extensions
-		
-	Checks performed to tell if extensions are activated:
-		- activateDebuggerExtensions must be true
-		- AND at least one existing extension class is activated as debugger extension"
-	|activatedExtensions|
-	({self class defaultDebuggerWithExtensionSpecSelector.
-	self class defaultDebuggerWithoutExtensionSpecSelector}
-		includes: aSpecSelector)
+	"If the current selector is not a default one, it is returned.
+	If it is a default one, it is altered depending on the current configuration of the debugger extensions.
+	The selection just adds or remove the extensions from the spec selector"
+
+	(self isDefaultSelector: aSpecSelector)
 		ifFalse: [ ^ aSpecSelector ].
-	activatedExtensions := SpecDebugger collectExtendedToolsClasses select:[:toolClass| toolClass showInDebugger].
-	^ (SpecDebugger activateDebuggerExtensions and:[activatedExtensions notEmpty])
-		ifTrue: [ self class defaultDebuggerWithExtensionSpecSelector ]
-		ifFalse: [ self class defaultDebuggerWithoutExtensionSpecSelector ]
+	^ self
+		selectorForDebuggerStatus: self debuggerClass activateDebuggerExtensions
+		extensionsStatus: self debuggerClass hasAnyActivatedExtension
 ]
 
 { #category : #'specs - selectors' }
@@ -73,10 +81,22 @@ StDebuggerUsingSpecSelector >> selectSpecSelector [
 	- current selector exists: select a version with or without debugger extensions"
 	| selector |
 	selector := (specSelector isNil
-		or: [ (SpecDebugger respondsTo: specSelector) not ])
+		or: [ (self debuggerClass respondsTo: specSelector) not ])
 		ifTrue: [ self class defaultDebuggerWithExtensionSpecSelector ]
 		ifFalse: [ specSelector ].
 	^ self selectExtensionActivationSpecFrom: selector
+]
+
+{ #category : #'specs - selectors' }
+StDebuggerUsingSpecSelector >> selectorForDebuggerStatus: debuggerExtensionsActivated extensionsStatus: debuggerHasExtensions [
+	^ (debuggerExtensionsActivated and: [ debuggerHasExtensions ])
+		ifTrue: [ self class defaultDebuggerWithExtensionSpecSelector ]
+		ifFalse: [ self class defaultDebuggerWithoutExtensionSpecSelector ]
+]
+
+{ #category : #'default spec selectors' }
+StDebuggerUsingSpecSelector >> specSelector [
+	^ specSelector
 ]
 
 { #category : #accessing }
