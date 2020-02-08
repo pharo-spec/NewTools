@@ -208,17 +208,6 @@ SpecGenericDebuggerTest >> testContextUnchangedAfterStepOver [
 	self assert: dbg contextInspector inspectedObject ==  currentContext
 ]
 
-{ #category : #'tests - spec' }
-SpecGenericDebuggerTest >> testCustomUsingSpecSelector [
-	|oldSelector usingSelector|
-	oldSelector := SpecDebugger usingSpecSelector.
-	SpecDebugger useSpecSelector: #columnInspectorsSpec.
-	usingSelector := SpecDebugger usingSpecSelector.
-	SpecDebugger useSpecSelector: oldSelector.
-	
-	self assert: usingSelector equals: #columnInspectorsSpec
-]
-
 { #category : #'tests - initialization' }
 SpecGenericDebuggerTest >> testDebuggerApplication [
 	self assert: self debugger application identicalTo: SpecDebugger currentApplication 
@@ -374,36 +363,6 @@ SpecGenericDebuggerTest >> testSaveReceiverRawInspectionSelection [
 
 { #category : #'tests - raw inspection' }
 SpecGenericDebuggerTest >> testSaveReceiverRawInspectionSelectionAfterContextChange [
-]
-
-{ #category : #'tests - spec' }
-SpecGenericDebuggerTest >> testSelectExtensionActivationSpecFrom [
-	| oldExtensionActivation selector |
-	oldExtensionActivation := SpecDebugger activateDebuggerExtensions.
-
-	"Any selector not refering to extensions should return that selector"
-	selector := SpecDebugger
-		selectExtensionActivationSpecFrom: #anySelector.
-	self assert: selector equals: #anySelector.
-
-
-	"No extensions activated: should return defaultDebuggerWithoutExtensionSpecSelector"
-	SpecDebugger activateDebuggerExtensions: false.
-	selector := SpecDebugger
-		selectExtensionActivationSpecFrom: SpecDebugger defaultDebuggerWithExtensionSpecSelector.
-	SpecDebugger activateDebuggerExtensions: oldExtensionActivation.
-	self
-		assert: selector
-		equals: SpecDebugger defaultDebuggerWithoutExtensionSpecSelector.
-
-	"Extensions activated: should return defaultDebuggerWithExtensionSpecSelector"
-	SpecDebugger activateDebuggerExtensions: true.
-	selector := SpecDebugger
-		selectExtensionActivationSpecFrom: SpecDebugger defaultDebuggerWithoutExtensionSpecSelector.
-	SpecDebugger activateDebuggerExtensions: oldExtensionActivation.
-	self
-		assert: selector
-		equals: SpecDebugger defaultDebuggerWithExtensionSpecSelector
 ]
 
 { #category : #'tests - stack table' }
@@ -652,62 +611,6 @@ SpecGenericDebuggerTest >> testStackTableWithNewSession [
 { #category : #'tests - code pane' }
 SpecGenericDebuggerTest >> testUnauthorizedCodeModification [
 	self assert: false
-]
-
-{ #category : #'tests - spec' }
-SpecGenericDebuggerTest >> testUnknownUsingSpecSelectorNoExtensions [
-	|oldSelector oldExtensionActivation usingSelector|
-	oldSelector := SpecDebugger usingSpecSelector.
-	oldExtensionActivation := SpecDebugger activateDebuggerExtensions.
-	SpecDebugger activateDebuggerExtensions: false.
-	SpecDebugger useSpecSelector: #unknownSelector.
-	usingSelector := SpecDebugger usingSpecSelector.
-	SpecDebugger useSpecSelector: oldSelector.
-	SpecDebugger activateDebuggerExtensions: oldExtensionActivation.
-	
-	self assert: usingSelector equals: SpecDebugger defaultDebuggerWithoutExtensionSpecSelector
-]
-
-{ #category : #'tests - spec' }
-SpecGenericDebuggerTest >> testUnknownUsingSpecSelectorWithExtensions [
-	|oldSelector oldExtensionActivation usingSelector|
-	oldSelector := SpecDebugger usingSpecSelector.
-	oldExtensionActivation := SpecDebugger activateDebuggerExtensions.
-	SpecDebugger activateDebuggerExtensions: true.
-	SpecDebugger useSpecSelector: #unknownSelector.
-	usingSelector := SpecDebugger usingSpecSelector.
-	SpecDebugger useSpecSelector: oldSelector.
-	SpecDebugger activateDebuggerExtensions: oldExtensionActivation.
-	
-	self assert: usingSelector equals: SpecDebugger defaultDebuggerWithExtensionSpecSelector
-]
-
-{ #category : #'tests - spec' }
-SpecGenericDebuggerTest >> testUsingSpecSelectorNoExtensions [
-	|oldSelector oldExtensionActivation usingSelector|
-	oldSelector := SpecDebugger usingSpecSelector.
-	oldExtensionActivation := SpecDebugger activateDebuggerExtensions.
-	SpecDebugger activateDebuggerExtensions: false.
-	SpecDebugger useSpecSelector: SpecDebugger defaultDebuggerWithExtensionSpecSelector.
-	usingSelector := SpecDebugger usingSpecSelector.
-	SpecDebugger useSpecSelector: oldSelector.
-	SpecDebugger activateDebuggerExtensions: oldExtensionActivation.
-	
-	self assert: usingSelector equals: SpecDebugger defaultDebuggerWithoutExtensionSpecSelector
-]
-
-{ #category : #'tests - spec' }
-SpecGenericDebuggerTest >> testUsingSpecSelectorWithExtensions [
-	|oldSelector oldExtensionActivation usingSelector|
-	oldSelector := SpecDebugger usingSpecSelector.
-	oldExtensionActivation := SpecDebugger activateDebuggerExtensions.
-	SpecDebugger activateDebuggerExtensions: true.
-	SpecDebugger useSpecSelector: SpecDebugger defaultDebuggerWithoutExtensionSpecSelector.
-	usingSelector := SpecDebugger usingSpecSelector.
-	SpecDebugger useSpecSelector: oldSelector.
-	SpecDebugger activateDebuggerExtensions: oldExtensionActivation.
-	
-	self assert: usingSelector equals: SpecDebugger defaultDebuggerWithExtensionSpecSelector
 ]
 
 { #category : #'tests - stack table context menu' }
