@@ -592,14 +592,15 @@ SpecDebugger >> initializeCode [
 { #category : #extensions }
 SpecDebugger >> initializeExtensionTools [
 	| settingsToClasses sortedSettings pages |
-	self class hasAnyActivatedExtension ifFalse:[^self].
+	extensionToolsNotebook := self newNotebook.
+	self class hasAnyActivatedExtension
+		ifFalse: [ ^ self ].
 	settingsToClasses := self class
 		availableExtentionToolsClassesSettings.
 	sortedSettings := SortedCollection
 		sortBlock: [ :s1 :s2 | s1 displayOrder <= s2 displayOrder ].
 	sortedSettings addAll: settingsToClasses keys.
 	sortedSettings := sortedSettings select: [ :s | s showInDebugger ].
-	extensionToolsNotebook := self newNotebook.
 	pages := sortedSettings
 		collect: [ :s | self instantiateExtensionToolsPage: (settingsToClasses at: s) ].
 	extensionToolsNotebook pages: pages
