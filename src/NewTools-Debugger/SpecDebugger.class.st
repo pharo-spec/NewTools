@@ -230,7 +230,7 @@ SpecDebugger class >> defaultTitle [
 { #category : #'tools registry' }
 SpecDebugger class >> extendedToolsPragma [	
 
-	^ #debuggerExtension
+	^ #debuggerExtensionOrder:showByDefault:
 ]
 
 { #category : #'tools registry' }

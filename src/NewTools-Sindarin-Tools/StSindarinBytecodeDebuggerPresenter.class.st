@@ -27,7 +27,7 @@ StSindarinBytecodeDebuggerPresenter class >> defaultSpec [
 
 { #category : #specs }
 StSindarinBytecodeDebuggerPresenter class >> extendedDebuggingToolTitle [
-	<debuggerExtension>
+	<debuggerExtensionOrder: 1 showByDefault: true>
 	^ 'Bytecode'
 ]
 

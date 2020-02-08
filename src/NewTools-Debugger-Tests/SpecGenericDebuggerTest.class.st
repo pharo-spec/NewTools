@@ -229,7 +229,7 @@ SpecGenericDebuggerTest >> testExtendedToolsClassesFor [
 
 { #category : #'tests - extensions' }
 SpecGenericDebuggerTest >> testExtendedToolsPragma [
-	self assert: SpecDebugger extendedToolsPragma equals: #debuggerExtension
+	self assert: SpecDebugger extendedToolsPragma equals: #debuggerExtensionOrder:showByDefault:
 ]
 
 { #category : #'tests - receiver inspector' }
