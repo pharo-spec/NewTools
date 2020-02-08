@@ -22,6 +22,7 @@ Class {
 	#classVars : [
 		'DefaultSpec',
 		'ErrorRecursion',
+		'ExtensionToolsSettings',
 		'FilterCommonMessageSends',
 		'LogDebuggerStackToFile',
 		'UsingSpecSelector'
@@ -199,6 +200,19 @@ SpecDebugger class >> extendedToolsPragma [
 	^ #debuggerExtension
 ]
 
+{ #category : #'tools registry' }
+SpecDebugger class >> extensionToolSettingsFor: aToolClass [
+	^ self extensionToolsSettings
+		at: aToolClass extendedDebuggingToolTitle
+		ifAbsentPut:
+			[ StDebuggerExtensionSetting fromDebuggerExtensionClass: aToolClass ]
+]
+
+{ #category : #'tools registry' }
+SpecDebugger class >> extensionToolsSettings [
+	^ExtensionToolsSettings ifNil:[ExtensionToolsSettings := Dictionary new]
+]
+
 { #category : #settings }
 SpecDebugger class >> filterCommonMessageSends [
 	^ FilterCommonMessageSends ifNil: [FilterCommonMessageSends := false]
@@ -284,13 +298,13 @@ SpecDebugger class >> rankDebugSession: aDebugSession [
 
 { #category : #'tools registry' }
 SpecDebugger class >> register [
-
+	self flag: 'Maybe this is no longer necessary now that we have DebuggerSelector?'.
 	self registerToolsOn: Smalltalk tools
 ]
 
 { #category : #'tools registry' }
 SpecDebugger class >> registerToolsOn: registry [
-
+	self flag: 'Maybe this is no longer necessary now that we have DebuggerSelector?'.
 	"Add ourselves to registry. See [Smalltalk tools]" 
 	registry register: self as: #debugger.
 
