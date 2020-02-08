@@ -50,6 +50,19 @@ SpecDebugger class >> availableAutomatically [
 	^ true
 ]
 
+{ #category : #'tools registry' }
+SpecDebugger class >> availableExtentionToolsClassesSettings [
+	| settingToClass |
+	settingToClass := Dictionary new.
+	self collectExtendedToolsClasses
+		do: [ :toolClass | 
+			self extensionToolsSettings
+				at: toolClass debuggingExtensionToolName
+				ifPresent:
+					[ :settings | settings do: [ :s | settingToClass at: s put: toolClass ] ] ].
+	^ settingToClass 
+]
+
 { #category : #utilities }
 SpecDebugger class >> closeAllDebuggers [
 	<script>
@@ -264,8 +277,10 @@ SpecDebugger class >> handlesContext: aContext [
 
 { #category : #'tools registry' }
 SpecDebugger class >> hasAnyActivatedExtension [
-	^ (self collectExtendedToolsClasses
-		select: [ :toolClass | toolClass showInDebugger ]) notEmpty
+	^ self extensionToolsSettings values
+		anySatisfy:
+			[ :toolSettings | toolSettings anySatisfy: [ :setting | setting showInDebugger ] ]
+		
 ]
 
 { #category : #'debugger declaration' }
@@ -578,10 +593,17 @@ SpecDebugger >> initializeCode [
 
 { #category : #extensions }
 SpecDebugger >> initializeExtensionTools [
-	| pages |
+	| settingsToClasses sortedSettings pages |
+	self class hasAnyActivatedExtension ifFalse:[^self].
+	settingsToClasses := self class
+		availableExtentionToolsClassesSettings.
+	sortedSettings := SortedCollection
+		sortBlock: [ :s1 :s2 | s1 displayOrder <= s2 displayOrder ].
+	sortedSettings addAll: settingsToClasses keys.
+	sortedSettings := sortedSettings select: [ :s | s showInDebugger ].
 	extensionToolsNotebook := self newNotebook.
-	pages := self class collectExtendedToolsClasses
-		collect: [ :toolClass | self instantiateExtensionToolsPage: toolClass ].
+	pages := sortedSettings
+		collect: [ :s | self instantiateExtensionToolsPage: (settingsToClasses at: s) ].
 	extensionToolsNotebook pages: pages
 ]
 
