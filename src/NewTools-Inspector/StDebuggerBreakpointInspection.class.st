@@ -1,6 +1,9 @@
 Class {
 	#name : #StDebuggerBreakpointInspection,
 	#superclass : #StObjectBreakpointInspection,
+	#classInstVars : [
+		'showInDebugger'
+	],
 	#category : #'NewTools-Inspector-View'
 }
 
@@ -16,6 +19,16 @@ StDebuggerBreakpointInspection class >> defaultSpec [
 StDebuggerBreakpointInspection class >> extendedDebuggingToolTitle [
 	<debuggerExtension>
 	^ 'Breakpoints'
+]
+
+{ #category : #accessing }
+StDebuggerBreakpointInspection class >> showInDebugger [
+	^ showInDebugger ifNil:[showInDebugger := false]
+]
+
+{ #category : #accessing }
+StDebuggerBreakpointInspection class >> showInDebugger: anObject [
+	showInDebugger := anObject
 ]
 
 { #category : #private }

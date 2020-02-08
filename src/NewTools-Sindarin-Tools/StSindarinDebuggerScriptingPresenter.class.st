@@ -35,7 +35,7 @@ StSindarinDebuggerScriptingPresenter class >> debuggerExtensionOrder: anObject [
 ]
 
 { #category : #specs }
-StSindarinDebuggerScriptingPresenter class >> debuggerExtensionOrderSettingsOn: aBuilder [
+StSindarinDebuggerScriptingPresenter class >> debuggerExtensionSettingsOn: aBuilder [
 	<systemsettings>
 	(aBuilder group: #sindarinScriptingPane)
 		label: 'Sindarin';
@@ -72,7 +72,7 @@ StSindarinDebuggerScriptingPresenter class >> extendedDebuggingToolTitle [
 
 { #category : #accessing }
 StSindarinDebuggerScriptingPresenter class >> showInDebugger [
-	^ showInDebugger
+	^ showInDebugger ifNil:[showInDebugger := false]
 ]
 
 { #category : #accessing }

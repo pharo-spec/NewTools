@@ -10,6 +10,9 @@ Class {
 		'bytecodeList',
 		'currentPC'
 	],
+	#classInstVars : [
+		'showInDebugger'
+	],
 	#category : #'NewTools-Sindarin-Tools'
 }
 
@@ -26,6 +29,16 @@ StSindarinBytecodeDebuggerPresenter class >> defaultSpec [
 StSindarinBytecodeDebuggerPresenter class >> extendedDebuggingToolTitle [
 	<debuggerExtension>
 	^ 'Bytecode'
+]
+
+{ #category : #accessing }
+StSindarinBytecodeDebuggerPresenter class >> showInDebugger [
+	^ showInDebugger ifNil:[showInDebugger := false]
+]
+
+{ #category : #accessing }
+StSindarinBytecodeDebuggerPresenter class >> showInDebugger: anObject [
+	showInDebugger := anObject
 ]
 
 { #category : #accessing }
