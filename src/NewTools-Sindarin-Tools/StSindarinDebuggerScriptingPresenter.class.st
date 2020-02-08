@@ -17,42 +17,8 @@ Class {
 		'sindarinDebugger',
 		'stDebugger'
 	],
-	#classInstVars : [
-		'debuggerExtensionOrder',
-		'showInDebugger'
-	],
 	#category : #'NewTools-Sindarin-Tools'
 }
-
-{ #category : #accessing }
-StSindarinDebuggerScriptingPresenter class >> debuggerExtensionOrder [
-	^ debuggerExtensionOrder
-]
-
-{ #category : #accessing }
-StSindarinDebuggerScriptingPresenter class >> debuggerExtensionOrder: anObject [
-	debuggerExtensionOrder := anObject
-]
-
-{ #category : #specs }
-StSindarinDebuggerScriptingPresenter class >> debuggerExtensionSettingsOn: aBuilder [
-	<systemsettings>
-	(aBuilder group: #sindarinScriptingPane)
-		label: 'Sindarin';
-		parent: #debuggerExtensions;
-		description: 'Sindarin scriptable debugger';
-		with: [ (aBuilder pickOne: #debuggerExtensionOrder)
-				label: 'Order';
-				target: self;
-				default: 1;
-				domainValues: (1 to: 100) asArray;
-				description: 'Position of the tool tab in the debugger right column.'.
-			(aBuilder setting: #showInDebugger)
-				label: 'Show in debugger';
-				target: self;
-				default: true;
-				description: 'Activate the tool tab in the debugger right column.' ]
-]
 
 { #category : #specs }
 StSindarinDebuggerScriptingPresenter class >> defaultSpec [
@@ -68,16 +34,6 @@ StSindarinDebuggerScriptingPresenter class >> defaultSpec [
 StSindarinDebuggerScriptingPresenter class >> extendedDebuggingToolTitle [
 	<debuggerExtensionOrder: 1 showByDefault: true>
 	^ 'Sindarin'
-]
-
-{ #category : #accessing }
-StSindarinDebuggerScriptingPresenter class >> showInDebugger [
-	^ showInDebugger ifNil:[showInDebugger := false]
-]
-
-{ #category : #accessing }
-StSindarinDebuggerScriptingPresenter class >> showInDebugger: anObject [
-	showInDebugger := anObject
 ]
 
 { #category : #actions }
