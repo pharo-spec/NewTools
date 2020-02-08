@@ -97,17 +97,50 @@ SpecDebugger class >> columnInspectorsSpec [
 ]
 
 { #category : #settings }
+SpecDebugger class >> debuggerExtensionSettingsForClass: toolClass builder: aBuilder [
+	| settings |
+	settings := self extensionToolSettingsFor: toolClass.
+	settings
+		do: [ :s | 
+			(aBuilder group: toolClass extendedDebuggingToolTitle asSymbol)
+				label: toolClass extendedDebuggingToolTitle;
+				description: 'Sindarin scriptable debugger';
+				with: [ (aBuilder setting: #showInDebugger)
+						label: 'Show in debugger';
+						target: s;
+						description: 'Activate the tool tab in the debugger right column.'.
+					(aBuilder setting: #displayOrder)
+						label: 'Show in debugger';
+						target: s;
+						description: 'Position of the tool tab in the debugger right column.' ] ]
+]
+
+{ #category : #settings }
 SpecDebugger class >> debuggerExtensionSettingsOn: aBuilder [
 	<systemsettings>
 	(aBuilder group: #debuggerExtensions)
 		label: 'Debugger Extensions';
 		parent: #debugging;
-		description: 'Tools that extend the StDebugger and appear in the right column of the debugger';
-		with:[(aBuilder setting: #activateDebuggerExtensions)
+		description:
+			'Tools that extend the StDebugger and appear in the right column of the debugger';
+		with: [ | settingsGroup |
+			settingsGroup := (aBuilder setting: #activateDebuggerExtensions)
 				label: 'Activate extensions';
 				target: self;
-				default: true;				
-				description: '(De)Activate the debugger extensions tools in the debugger right column.']
+				default: true;
+				description:
+					'(De)Activate the debugger extensions tools in the debugger right column.'.
+			self
+				debuggerExtensionsSettingsOn: aBuilder
+				parentGroup: settingsGroup ]
+]
+
+{ #category : #settings }
+SpecDebugger class >> debuggerExtensionsSettingsOn: aBuilder parentGroup: settingsGroup [
+	settingsGroup
+		with: [ self collectExtendedToolsClasses
+				do:
+					[ :toolClass | self debuggerExtensionSettingsForClass: toolClass builder: aBuilder ] ]
 ]
 
 { #category : #specs }
