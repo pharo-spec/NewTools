@@ -1038,7 +1038,12 @@ SpecDebugger >> updateExtensionsFrom: newSession [
 
 { #category : #'updating widgets' }
 SpecDebugger >> updateInspectorFromContext: aContext [
-	inspector updateWith: (StDebuggerContext context: aContext session: self session)
+	inspector
+		updateWith:
+			(StDebuggerContext
+				context: aContext
+				session: self session
+				debugger: self)
 ]
 
 { #category : #'updating actions' }
