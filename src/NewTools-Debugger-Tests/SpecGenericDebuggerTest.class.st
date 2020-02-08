@@ -262,7 +262,7 @@ SpecGenericDebuggerTest >> testInstantiateExtensionToolsPage [
 	toolPage := dbg instantiateExtensionToolsPage: StDebuggerDummyTestPresenter.
 	self assert: toolPage class identicalTo: SpNotebookPage.
 	self assert: toolPage presenterProvider value class identicalTo: StDebuggerDummyTestPresenter.
-	self assert: toolPage title equals: StDebuggerDummyTestPresenter extendedDebuggingToolTitle.
+	self assert: toolPage title equals: StDebuggerDummyTestPresenter debuggingExtensionToolName.
 	self assertCollection: dbg extensionTools includesAll: { toolPage presenterProvider value}.
 	 
 ]

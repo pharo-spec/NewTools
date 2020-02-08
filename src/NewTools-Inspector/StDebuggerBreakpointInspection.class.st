@@ -5,17 +5,17 @@ Class {
 }
 
 { #category : #specs }
+StDebuggerBreakpointInspection class >> debuggingExtensionToolName [
+	<debuggerExtensionOrder: 1 showByDefault: true>
+	^ 'Breakpoints'
+]
+
+{ #category : #specs }
 StDebuggerBreakpointInspection class >> defaultSpec [
 	^ SpPanedLayout newVertical
 		add: #methodsWithBreakpoints;
 		add: #breakpointsInSourceCode;
 		yourself
-]
-
-{ #category : #specs }
-StDebuggerBreakpointInspection class >> extendedDebuggingToolTitle [
-	<debuggerExtensionOrder: 1 showByDefault: true>
-	^ 'Breakpoints'
 ]
 
 { #category : #private }

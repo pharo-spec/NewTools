@@ -23,7 +23,7 @@ StDebuggerExtensionSetting class >> fromDebuggerExtensionClass: aClass [
 		collect: [ :pragma | 
 			| setting |
 			setting := self new.
-			setting extensionName: aClass extendedDebuggingToolTitle.
+			setting extensionName: aClass debuggingExtensionToolName.
 			setting displayOrder: (pragma argumentAt: 1).
 			setting showInDebugger: (pragma argumentAt: 2).
 			setting ]

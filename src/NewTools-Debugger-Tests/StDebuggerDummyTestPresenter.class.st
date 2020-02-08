@@ -11,7 +11,7 @@ StDebuggerDummyTestPresenter class >> debuggerExtensionTestPragma [
 ]
 
 { #category : #accessing }
-StDebuggerDummyTestPresenter class >> extendedDebuggingToolTitle [
+StDebuggerDummyTestPresenter class >> debuggingExtensionToolName [
 	^'Test extendedDebuggingToolTitle'
 	
 ]

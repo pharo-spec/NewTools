@@ -102,8 +102,8 @@ SpecDebugger class >> debuggerExtensionSettingsForClass: toolClass builder: aBui
 	settings := self extensionToolSettingsFor: toolClass.
 	settings
 		do: [ :s | 
-			(aBuilder group: toolClass extendedDebuggingToolTitle asSymbol)
-				label: toolClass extendedDebuggingToolTitle;
+			(aBuilder group: toolClass debuggingExtensionToolName asSymbol)
+				label: toolClass debuggingExtensionToolName;
 				description: 'Sindarin scriptable debugger';
 				with: [ (aBuilder setting: #showInDebugger)
 						label: 'Show in debugger';
@@ -236,7 +236,7 @@ SpecDebugger class >> extendedToolsPragma [
 { #category : #'tools registry' }
 SpecDebugger class >> extensionToolSettingsFor: aToolClass [
 	^ self extensionToolsSettings
-		at: aToolClass extendedDebuggingToolTitle
+		at: aToolClass debuggingExtensionToolName
 		ifAbsentPut:
 			[ StDebuggerExtensionSetting fromDebuggerExtensionClass: aToolClass ]
 ]
@@ -655,7 +655,7 @@ SpecDebugger >> instantiateExtensionToolsPage: aToolClass [
 	toolInstance := self instantiate: aToolClass on: self.
 	self registerExtensionTool: toolInstance.
 	^ SpNotebookPage
-		title: aToolClass extendedDebuggingToolTitle
+		title: aToolClass debuggingExtensionToolName
 		provider: [ toolInstance ]
 ]
 
