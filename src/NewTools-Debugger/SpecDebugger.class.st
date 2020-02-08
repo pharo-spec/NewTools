@@ -181,16 +181,6 @@ SpecDebugger class >> debuggerWithoutExtensionsSpec [
 		yourself
 ]
 
-{ #category : #'specs - selectors' }
-SpecDebugger class >> defaultDebuggerWithExtensionSpecSelector [
-	^#debuggerWithExtensionsSpec
-]
-
-{ #category : #'specs - selectors' }
-SpecDebugger class >> defaultDebuggerWithoutExtensionSpecSelector [
-	^#debuggerWithoutExtensionsSpec
-]
-
 { #category : #specs }
 SpecDebugger class >> defaultSpec [
 	^ self perform: self usingSpecSelector
@@ -300,25 +290,6 @@ SpecDebugger class >> registerToolsOn: registry [
 
 ]
 
-{ #category : #'specs - selectors' }
-SpecDebugger class >> selectExtensionActivationSpecFrom: aSpecSelector [
-"Three cases:
-	- custom selector: returned as is
-	- selector is one of the display strategy with or without debugger extensions
-		- extensions activated: force return of spec selector with extensions
-		- extensions not activated: force return of spec selector without extensions
-		
-	Checks performed to tell if extensions are activated:
-		- activateDebuggerExtensions must be true"
-	({self defaultDebuggerWithExtensionSpecSelector.
-	self defaultDebuggerWithoutExtensionSpecSelector}
-		includes: aSpecSelector)
-		ifFalse: [ ^ aSpecSelector ].
-	^ self activateDebuggerExtensions
-		ifTrue: [ self defaultDebuggerWithExtensionSpecSelector ]
-		ifFalse: [ self defaultDebuggerWithoutExtensionSpecSelector ]
-]
-
 { #category : #accessing }
 SpecDebugger class >> sessionClass [
 	self flag: 'Should be replaced by Sindarin - should even be removed in that case!'.
@@ -383,21 +354,14 @@ SpecDebugger class >> traditionalSpec [
 { #category : #'specs - selectors' }
 SpecDebugger class >> useSpecSelector: aSelector [
 
-	UsingSpecSelector := aSelector
+	UsingSpecSelector := StDebuggerUsingSpecSelector on: aSelector
 ]
 
 { #category : #'specs - selectors' }
 SpecDebugger class >> usingSpecSelector [
-	"Sets and returns the spec selector to be use by the presenter.
-	Two cases:
-	- current selector exists or is not valid: returns default spec selector with extensions
-	- current selector exists: select a version with or without debugger extensions"
-	| selector |
-	selector := (UsingSpecSelector isNil
-		or: [ (self respondsTo: UsingSpecSelector) not ])
-		ifTrue: [ self defaultDebuggerWithExtensionSpecSelector ]
-		ifFalse: [ UsingSpecSelector ].
-	^ UsingSpecSelector := self selectExtensionActivationSpecFrom: selector
+	^ (UsingSpecSelector
+		ifNil: [ UsingSpecSelector := StDebuggerUsingSpecSelector defaultSelector ])
+		selectSpecSelector
 ]
 
 { #category : #accessing }
