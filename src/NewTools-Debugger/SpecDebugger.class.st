@@ -104,14 +104,14 @@ SpecDebugger class >> debuggerExtensionSettingsForClass: toolClass builder: aBui
 		do: [ :s | 
 			(aBuilder group: toolClass debuggingExtensionToolName asSymbol)
 				label: toolClass debuggingExtensionToolName;
-				description: 'Sindarin scriptable debugger';
 				with: [ (aBuilder setting: #showInDebugger)
 						label: 'Show in debugger';
 						target: s;
 						description: 'Activate the tool tab in the debugger right column.'.
-					(aBuilder setting: #displayOrder)
-						label: 'Show in debugger';
+					(aBuilder pickOne: #displayOrder)
+						label: 'Position';
 						target: s;
+						domainValues: (1 to: 100) asArray;
 						description: 'Position of the tool tab in the debugger right column.' ] ]
 ]
 
