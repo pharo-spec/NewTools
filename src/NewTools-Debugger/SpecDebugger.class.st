@@ -20,6 +20,7 @@ Class {
 		'extensionToolsNotebook'
 	],
 	#classVars : [
+		'ActivateDebuggerExtensions',
 		'DefaultSpec',
 		'ErrorRecursion',
 		'ExtensionToolsSettings',
@@ -27,20 +28,17 @@ Class {
 		'LogDebuggerStackToFile',
 		'UsingSpecSelector'
 	],
-	#classInstVars : [
-		'activateDebuggerExtensions'
-	],
 	#category : #'NewTools-Debugger-View'
 }
 
 { #category : #accessing }
 SpecDebugger class >> activateDebuggerExtensions [
-	^ activateDebuggerExtensions
+	^ ActivateDebuggerExtensions
 ]
 
 { #category : #accessing }
 SpecDebugger class >> activateDebuggerExtensions: anObject [
-	activateDebuggerExtensions := anObject
+	ActivateDebuggerExtensions := anObject
 ]
 
 { #category : #'tools registry' }
@@ -277,10 +275,10 @@ SpecDebugger class >> handlesContext: aContext [
 
 { #category : #'tools registry' }
 SpecDebugger class >> hasAnyActivatedExtension [
-	^ self extensionToolsSettings values
-		anySatisfy:
-			[ :toolSettings | toolSettings anySatisfy: [ :setting | setting showInDebugger ] ]
-		
+	^ self activateDebuggerExtensions
+		and: [ self extensionToolsSettings values
+				anySatisfy:
+					[ :toolSettings | toolSettings anySatisfy: [ :setting | setting showInDebugger ] ] ]
 ]
 
 { #category : #'debugger declaration' }
