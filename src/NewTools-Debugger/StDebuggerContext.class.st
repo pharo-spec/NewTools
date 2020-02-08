@@ -57,11 +57,10 @@ StDebuggerContext >> debugger: anObject [
 StDebuggerContext >> diffPresenterForFailingAssertions [
 	<inspectorPresentationOrder: -1 title: 'Failed assertion' if: #isTopContextFailingAssertion>
 	self flag: 'Had to pass the application by hand. This seems very wrong and should be fixed.'.
-	^ (StDebuggerFailingAssertionInspector
+	^ StDebuggerFailingAssertionInspector
 		diffInspectorsFromActual: (assertionContext tempAt: 1)
-		expected: (assertionContext tempAt: 2))
-		application: debugger application;
-		yourself
+		expected: (assertionContext tempAt: 2)
+		application: debugger application
 ]
 
 { #category : #'dynamic views' }
