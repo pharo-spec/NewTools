@@ -14,8 +14,8 @@ StDebuggerBreakpointInspection class >> defaultSpec [
 
 { #category : #specs }
 StDebuggerBreakpointInspection class >> extendedDebuggingToolTitle [
-	<debuggerExtensionPresentationOrder: 1>
-	^ 'Breakpoints and Halts'
+	<debuggerExtension>
+	^ 'Breakpoints'
 ]
 
 { #category : #private }

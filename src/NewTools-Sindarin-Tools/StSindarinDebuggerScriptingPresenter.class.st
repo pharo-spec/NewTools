@@ -66,7 +66,7 @@ StSindarinDebuggerScriptingPresenter class >> defaultSpec [
 
 { #category : #specs }
 StSindarinDebuggerScriptingPresenter class >> extendedDebuggingToolTitle [
-	<debuggerExtensionPresentationOrder: -1>
+	<debuggerExtension>
 	^ 'Sindarin'
 ]
 
