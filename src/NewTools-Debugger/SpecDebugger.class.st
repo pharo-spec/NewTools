@@ -57,10 +57,14 @@ SpecDebugger class >> closeAllDebuggers [
 ]
 
 { #category : #'tools registry' }
-SpecDebugger class >> collectExtendedToolsPragmas [
+SpecDebugger class >> collectExtendedToolsClasses [
+	^ self collectExtendedToolsClassesFor: self extendedToolsPragma
+]
 
-	^ (PragmaCollector
-				filter: [ :prg | prg selector = self extendedToolsPragma]) reset collected
+{ #category : #'tools registry' }
+SpecDebugger class >> collectExtendedToolsClassesFor: pragmaSelector [
+	^ (PragmaCollector filter: [ :prg | prg selector = pragmaSelector ])
+		reset collected collect: [ :prg | prg methodClass soleInstance ]
 ]
 
 { #category : #specs }
@@ -192,7 +196,7 @@ SpecDebugger class >> defaultTitle [
 { #category : #'tools registry' }
 SpecDebugger class >> extendedToolsPragma [	
 
-	^ #debuggerExtensionPresentationOrder:
+	^ #debuggerExtension
 ]
 
 { #category : #settings }
@@ -500,7 +504,7 @@ SpecDebugger >> initialExtent [
 
 { #category : #initialization }
 SpecDebugger >> initialize [
-	super initialize.
+	super initialize.	
 	self setSessionHolderSubscriptions.
 	self forceSessionUpdate
 ]
@@ -535,9 +539,8 @@ SpecDebugger >> initializeCode [
 SpecDebugger >> initializeExtensionTools [
 	| pages |
 	extensionToolsNotebook := self newNotebook.
-	pages := (self class collectExtendedToolsPragmas
-		sort: [ :a :b | (a argumentAt: 1) < (b argumentAt: 1) ])
-		collect: [ :pragma | self instantiateExtensionToolsPageFromPragma: pragma ].
+	pages := self class collectExtendedToolsClasses
+		collect: [ :toolClass | self instantiateExtensionToolsPage: toolClass ].
 	extensionToolsNotebook pages: pages
 ]
 
@@ -606,13 +609,12 @@ SpecDebugger >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : #extensions }
-SpecDebugger >> instantiateExtensionToolsPageFromPragma: pragma [
-	| toolClass toolInstance |
-	toolClass := pragma methodClass soleInstance. 
-	toolInstance := self instantiate: toolClass on: self.
+SpecDebugger >> instantiateExtensionToolsPage: aToolClass [
+	| toolInstance |
+	toolInstance := self instantiate: aToolClass on: self.
 	self registerExtensionTool: toolInstance.
 	^ SpNotebookPage
-		title: toolClass extendedDebuggingToolTitle
+		title: aToolClass extendedDebuggingToolTitle
 		provider: [ toolInstance ]
 ]
 
@@ -696,8 +698,7 @@ SpecDebugger >> registerActionsForSession: aSession [
 
 { #category : #extensions }
 SpecDebugger >> registerExtensionTool: anExtension [
-
-	^self extensionTools add: anExtension
+	self extensionTools add: anExtension
 ]
 
 { #category : #'updating session' }
