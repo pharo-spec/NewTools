@@ -21,6 +21,12 @@ Class {
 }
 
 { #category : #specs }
+StSindarinDebuggerScriptingPresenter class >> debuggingExtensionToolName [
+	<debuggerExtensionOrder: 1 showByDefault: true>
+	^ 'Sindarin'
+]
+
+{ #category : #specs }
 StSindarinDebuggerScriptingPresenter class >> defaultSpec [
 	^ SpBoxLayout newVertical
 		add: #toolbar expand: false fill: false padding: 0;
@@ -28,12 +34,6 @@ StSindarinDebuggerScriptingPresenter class >> defaultSpec [
 		add: 'Result (right click to see more...)' expand: false fill: false padding: 5;
 		add: #resultInspection;
 		yourself
-]
-
-{ #category : #specs }
-StSindarinDebuggerScriptingPresenter class >> extendedDebuggingToolTitle [
-	<debuggerExtensionPresentationOrder: -1>
-	^ 'Sindarin'
 ]
 
 { #category : #actions }

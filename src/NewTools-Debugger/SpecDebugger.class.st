@@ -20,8 +20,10 @@ Class {
 		'extensionToolsNotebook'
 	],
 	#classVars : [
+		'ActivateDebuggerExtensions',
 		'DefaultSpec',
 		'ErrorRecursion',
+		'ExtensionToolsSettings',
 		'FilterCommonMessageSends',
 		'LogDebuggerStackToFile',
 		'UsingSpecSelector'
@@ -29,11 +31,34 @@ Class {
 	#category : #'NewTools-Debugger-View'
 }
 
+{ #category : #accessing }
+SpecDebugger class >> activateDebuggerExtensions [
+	^ ActivateDebuggerExtensions
+]
+
+{ #category : #accessing }
+SpecDebugger class >> activateDebuggerExtensions: anObject [
+	ActivateDebuggerExtensions := anObject
+]
+
 { #category : #'tools registry' }
 SpecDebugger class >> availableAutomatically [
 	"Should this debugger be taken into account when looking for a debugger to handle an exception."
 
 	^ true
+]
+
+{ #category : #'tools registry' }
+SpecDebugger class >> availableExtentionToolsClassesSettings [
+	| settingToClass |
+	settingToClass := Dictionary new.
+	self collectExtendedToolsClasses
+		do: [ :toolClass | 
+			self extensionToolsSettings
+				at: toolClass debuggingExtensionToolName
+				ifPresent:
+					[ :settings | settings do: [ :s | settingToClass at: s put: toolClass ] ] ].
+	^ settingToClass 
 ]
 
 { #category : #utilities }
@@ -44,10 +69,14 @@ SpecDebugger class >> closeAllDebuggers [
 ]
 
 { #category : #'tools registry' }
-SpecDebugger class >> collectExtendedToolsPragmas [
+SpecDebugger class >> collectExtendedToolsClasses [
+	^ self collectExtendedToolsClassesFor: self extendedToolsPragma
+]
 
-	^ (PragmaCollector
-				filter: [ :prg | prg selector = self extendedToolsPragma]) reset collected
+{ #category : #'tools registry' }
+SpecDebugger class >> collectExtendedToolsClassesFor: pragmaSelector [
+	^ (PragmaCollector filter: [ :prg | prg selector = pragmaSelector ])
+		reset collected collect: [ :prg | prg methodClass soleInstance ]
 ]
 
 { #category : #specs }
@@ -78,8 +107,55 @@ SpecDebugger class >> columnInspectorsSpec [
 		yourself
 ]
 
+{ #category : #settings }
+SpecDebugger class >> debuggerExtensionSettingsForClass: toolClass builder: aBuilder [
+	| settings |
+	settings := self extensionToolSettingsFor: toolClass.
+	settings
+		do: [ :s | 
+			(aBuilder group: toolClass debuggingExtensionToolName asSymbol)
+				label: toolClass debuggingExtensionToolName;
+				with: [ (aBuilder setting: #showInDebugger)
+						label: 'Show in debugger';
+						target: s;
+						description: 'Activate the tool tab in the debugger right column.'.
+					(aBuilder pickOne: #displayOrder)
+						label: 'Position';
+						target: s;
+						domainValues: (1 to: 100) asArray;
+						description: 'Position of the tool tab in the debugger right column.' ] ]
+]
+
+{ #category : #settings }
+SpecDebugger class >> debuggerExtensionSettingsOn: aBuilder [
+	<systemsettings>
+	(aBuilder group: #debuggerExtensions)
+		label: 'Debugger Extensions';
+		parent: #debugging;
+		description:
+			'Tools that extend the StDebugger and appear in the right column of the debugger';
+		with: [ | settingsGroup |
+			settingsGroup := (aBuilder setting: #activateDebuggerExtensions)
+				label: 'Activate extensions';
+				target: self;
+				default: true;
+				description:
+					'(De)Activate the debugger extensions tools in the debugger right column.'.
+			self
+				debuggerExtensionsSettingsOn: aBuilder
+				parentGroup: settingsGroup ]
+]
+
+{ #category : #settings }
+SpecDebugger class >> debuggerExtensionsSettingsOn: aBuilder parentGroup: settingsGroup [
+	settingsGroup
+		with: [ self collectExtendedToolsClasses
+				do:
+					[ :toolClass | self debuggerExtensionSettingsForClass: toolClass builder: aBuilder ] ]
+]
+
 { #category : #specs }
-SpecDebugger class >> contextRightColumnSpec [
+SpecDebugger class >> debuggerWithExtensionsSpec [
 	^ SpPanedLayout newVertical
 		  position: 70 percent;
 		  add: (SpPanedLayout newHorizontal
@@ -115,8 +191,43 @@ SpecDebugger class >> contextRightColumnSpec [
 ]
 
 { #category : #specs }
-SpecDebugger class >> defaultSpec [
+SpecDebugger class >> debuggerWithoutExtensionsSpec [
+	^ SpPanedLayout newVertical
+		position: 70 percent;
+		add:
+			(SpPanedLayout newVertical
+				position: 40 percent;
+				add:
+					(SpBoxLayout newVertical
+						add: #stackHeader
+							expand: false
+							fill: false
+							padding: 5;
+						add: #stackTable;
+						yourself);
+				add:
+					(SpBoxLayout newVertical
+						add:
+							(SpBoxLayout newVertical
+								add: #toolbar;
+								add: #codeHeader
+									expand: true
+									fill: true
+									padding: 0;
+								yourself)
+							withConstraints: [ :constraints | 
+								constraints
+									expand: false;
+									height: self toolbarHeight * 2 ];
+						add: #code;
+						yourself);
+				yourself);
+		add: #inspector;
+		yourself
+]
 
+{ #category : #specs }
+SpecDebugger class >> defaultSpec [
 	^ self perform: self usingSpecSelector
 ]
 
@@ -130,7 +241,20 @@ SpecDebugger class >> defaultTitle [
 { #category : #'tools registry' }
 SpecDebugger class >> extendedToolsPragma [	
 
-	^ #debuggerExtensionPresentationOrder:
+	^ #debuggerExtensionOrder:showByDefault:
+]
+
+{ #category : #'tools registry' }
+SpecDebugger class >> extensionToolSettingsFor: aToolClass [
+	^ self extensionToolsSettings
+		at: aToolClass debuggingExtensionToolName
+		ifAbsentPut:
+			[ StDebuggerExtensionSetting fromDebuggerExtensionClass: aToolClass ]
+]
+
+{ #category : #'tools registry' }
+SpecDebugger class >> extensionToolsSettings [
+	^ExtensionToolsSettings ifNil:[ExtensionToolsSettings := Dictionary new]
 ]
 
 { #category : #settings }
@@ -147,6 +271,14 @@ SpecDebugger class >> filterCommonMessageSends: aBoolean [
 SpecDebugger class >> handlesContext: aContext [
 
 	^ true
+]
+
+{ #category : #'tools registry' }
+SpecDebugger class >> hasAnyActivatedExtension [
+	^ self activateDebuggerExtensions
+		and: [ self extensionToolsSettings values
+				anySatisfy:
+					[ :toolSettings | toolSettings anySatisfy: [ :setting | setting showInDebugger ] ] ]
 ]
 
 { #category : #'debugger declaration' }
@@ -212,13 +344,13 @@ SpecDebugger class >> rankDebugSession: aDebugSession [
 
 { #category : #'tools registry' }
 SpecDebugger class >> register [
-
+	self flag: 'Maybe this is no longer necessary now that we have DebuggerSelector?'.
 	self registerToolsOn: Smalltalk tools
 ]
 
 { #category : #'tools registry' }
 SpecDebugger class >> registerToolsOn: registry [
-
+	self flag: 'Maybe this is no longer necessary now that we have DebuggerSelector?'.
 	"Add ourselves to registry. See [Smalltalk tools]" 
 	registry register: self as: #debugger.
 
@@ -285,17 +417,22 @@ SpecDebugger class >> traditionalSpec [
 		yourself
 ]
 
-{ #category : #specs }
+{ #category : #'specs - selectors' }
 SpecDebugger class >> useSpecSelector: aSelector [
 
-	UsingSpecSelector := aSelector
+	UsingSpecSelector := StDebuggerUsingSpecSelector on: aSelector
 ]
 
-{ #category : #specs }
+{ #category : #'specs - selectors' }
 SpecDebugger class >> usingSpecSelector [
+	^ (UsingSpecSelector
+		ifNil: [ UsingSpecSelector := StDebuggerUsingSpecSelector defaultSelector ])
+		selectSpecSelector
+]
 
-	^ UsingSpecSelector ifNil: [ 
-		UsingSpecSelector := #contextRightColumnSpec ]
+{ #category : #accessing }
+SpecDebugger >> application [
+	^ self class currentApplication
 ]
 
 { #category : #actions }
@@ -421,7 +558,7 @@ SpecDebugger >> initialExtent [
 
 { #category : #initialization }
 SpecDebugger >> initialize [
-	super initialize.
+	super initialize.	
 	self setSessionHolderSubscriptions.
 	self forceSessionUpdate
 ]
@@ -454,11 +591,18 @@ SpecDebugger >> initializeCode [
 
 { #category : #extensions }
 SpecDebugger >> initializeExtensionTools [
-	| pages |
+	| settingsToClasses sortedSettings pages |
 	extensionToolsNotebook := self newNotebook.
-	pages := (self class collectExtendedToolsPragmas
-		sort: [ :a :b | (a argumentAt: 1) < (b argumentAt: 1) ])
-		collect: [ :pragma | self instantiateExtensionToolsPageFromPragma: pragma ].
+	self class hasAnyActivatedExtension
+		ifFalse: [ ^ self ].
+	settingsToClasses := self class
+		availableExtentionToolsClassesSettings.
+	sortedSettings := SortedCollection
+		sortBlock: [ :s1 :s2 | s1 displayOrder <= s2 displayOrder ].
+	sortedSettings addAll: settingsToClasses keys.
+	sortedSettings := sortedSettings select: [ :s | s showInDebugger ].
+	pages := sortedSettings
+		collect: [ :s | self instantiateExtensionToolsPage: (settingsToClasses at: s) ].
 	extensionToolsNotebook pages: pages
 ]
 
@@ -527,13 +671,12 @@ SpecDebugger >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : #extensions }
-SpecDebugger >> instantiateExtensionToolsPageFromPragma: pragma [
-	| toolClass toolInstance |
-	toolClass := pragma methodClass soleInstance. 
-	toolInstance := self instantiate: toolClass on: self.
+SpecDebugger >> instantiateExtensionToolsPage: aToolClass [
+	| toolInstance |
+	toolInstance := self instantiate: aToolClass on: self.
 	self registerExtensionTool: toolInstance.
 	^ SpNotebookPage
-		title: toolClass extendedDebuggingToolTitle
+		title: aToolClass debuggingExtensionToolName
 		provider: [ toolInstance ]
 ]
 
@@ -617,8 +760,7 @@ SpecDebugger >> registerActionsForSession: aSession [
 
 { #category : #extensions }
 SpecDebugger >> registerExtensionTool: anExtension [
-
-	^self extensionTools add: anExtension
+	self extensionTools add: anExtension
 ]
 
 { #category : #'updating session' }
@@ -959,7 +1101,12 @@ SpecDebugger >> updateExtensionsFrom: newSession [
 
 { #category : #'updating widgets' }
 SpecDebugger >> updateInspectorFromContext: aContext [
-	inspector updateWith: (StDebuggerContext context: aContext session: self session)
+	inspector
+		updateWith:
+			(StDebuggerContext
+				context: aContext
+				session: self session
+				debugger: self)
 ]
 
 { #category : #'updating actions' }

@@ -9,16 +9,18 @@ Class {
 		'context',
 		'session',
 		'assertionContext',
-		'exceptionContext'
+		'exceptionContext',
+		'debugger'
 	],
 	#category : #'NewTools-Debugger-Model'
 }
 
 { #category : #'instance creation' }
-StDebuggerContext class >> context: aContext session: aDebugSession [
+StDebuggerContext class >> context: aContext session: aDebugSession debugger: sourceDebugger [
 	^ self new
 		context: aContext;
 		session: aDebugSession;
+		debugger: sourceDebugger;
 		yourself
 ]
 
@@ -46,13 +48,19 @@ StDebuggerContext >> context: anObject [
 	context := anObject
 ]
 
+{ #category : #accessing }
+StDebuggerContext >> debugger: anObject [
+	debugger := anObject
+]
+
 { #category : #'dynamic views' }
 StDebuggerContext >> diffPresenterForFailingAssertions [
-	<inspectorPresentationOrder: -1 title: 'Failed assertion' if:
-	#isTopContextFailingAssertion>
+	<inspectorPresentationOrder: -1 title: 'Failed assertion' if: #isTopContextFailingAssertion>
+	self flag: 'Had to pass the application by hand. This seems very wrong and should be fixed.'.
 	^ StDebuggerFailingAssertionInspector
-		  diffInspectorsFromActual: (assertionContext tempAt: 1)
-		  expected: (assertionContext tempAt: 2)
+		diffInspectorsFromActual: (assertionContext tempAt: 1)
+		expected: (assertionContext tempAt: 2)
+		application: debugger application
 ]
 
 { #category : #'dynamic views' }

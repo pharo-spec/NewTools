@@ -34,11 +34,12 @@ StDebuggerFailingAssertionInspector class >> defaultSpec [
 ]
 
 { #category : #'instance creation' }
-StDebuggerFailingAssertionInspector class >> diffInspectorsFromActual: actualObject expected: expectedObject [
+StDebuggerFailingAssertionInspector class >> diffInspectorsFromActual: actualObject expected: expectedObject application: aStApplication [
 	^ self basicNew
-		  actualObject: actualObject;
-		  expectedObject: expectedObject;
-		  initialize
+		application: aStApplication;
+		actualObject: actualObject;
+		expectedObject: expectedObject;
+		initialize
 ]
 
 { #category : #accessing }

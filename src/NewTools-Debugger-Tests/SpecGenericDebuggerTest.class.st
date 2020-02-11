@@ -208,9 +208,28 @@ SpecGenericDebuggerTest >> testContextUnchangedAfterStepOver [
 	self assert: dbg contextInspector inspectedObject ==  currentContext
 ]
 
+{ #category : #'tests - initialization' }
+SpecGenericDebuggerTest >> testDebuggerApplication [
+	self assert: self debugger application identicalTo: SpecDebugger currentApplication 
+]
+
 { #category : #'tests - code pane' }
 SpecGenericDebuggerTest >> testDiscardCodeModification [
 	self assert: false
+]
+
+{ #category : #'tests - extensions' }
+SpecGenericDebuggerTest >> testExtendedToolsClassesFor [
+	self
+		assertCollection:
+			(SpecDebugger
+				collectExtendedToolsClassesFor: #debuggerExtensionTestPragma)
+		includesAll: {StDebuggerDummyTestPresenter}
+]
+
+{ #category : #'tests - extensions' }
+SpecGenericDebuggerTest >> testExtendedToolsPragma [
+	self assert: SpecDebugger extendedToolsPragma equals: #debuggerExtensionOrder:showByDefault:
 ]
 
 { #category : #'tests - receiver inspector' }
@@ -234,6 +253,18 @@ SpecGenericDebuggerTest >> testInspectorSelfBinding [
 	receiver := dbg inspector model inspectedObject context receiver.
 	self assert: evaluator doItReceiver identicalTo: receiver.
 	self assert: evaluator behavior identicalTo: receiver class
+]
+
+{ #category : #'tests - extensions' }
+SpecGenericDebuggerTest >> testInstantiateExtensionToolsPage [
+	|dbg toolPage|
+	dbg := self debugger.
+	toolPage := dbg instantiateExtensionToolsPage: StDebuggerDummyTestPresenter.
+	self assert: toolPage class identicalTo: SpNotebookPage.
+	self assert: toolPage presenterProvider value class identicalTo: StDebuggerDummyTestPresenter.
+	self assert: toolPage title equals: StDebuggerDummyTestPresenter debuggingExtensionToolName.
+	self assertCollection: dbg extensionTools includesAll: { toolPage presenterProvider value}.
+	 
 ]
 
 { #category : #'tests - receiver inspector' }
@@ -296,6 +327,16 @@ SpecGenericDebuggerTest >> testReceiverUnchangedAfterStepOver [
 	self clickStepOver. 
 	self assert: dbg inspector inspectedObject ==  currentReceiver
 
+]
+
+{ #category : #'tests - extensions' }
+SpecGenericDebuggerTest >> testRegisterExtensionTool [
+	|dbg object|
+	dbg := self debugger.
+	self assertEmpty: dbg extensionTools.
+	dbg registerExtensionTool: (object := Object new).
+	self assert: dbg extensionTools size equals: 1.
+	self assertCollection: dbg extensionTools includesAll: { object }
 ]
 
 { #category : #'tests - raw inspection' }

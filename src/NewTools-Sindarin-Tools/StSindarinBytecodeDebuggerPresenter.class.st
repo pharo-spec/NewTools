@@ -14,18 +14,18 @@ Class {
 }
 
 { #category : #specs }
+StSindarinBytecodeDebuggerPresenter class >> debuggingExtensionToolName [
+	<debuggerExtensionOrder: 1 showByDefault: true>
+	^ 'Bytecode'
+]
+
+{ #category : #specs }
 StSindarinBytecodeDebuggerPresenter class >> defaultSpec [
 	^ SpBoxLayout newVertical
 		add: #toolbar expand: false fill: false padding: 0;
 		add: #bytecode;		
 		add: #bcContextInspection;
 		yourself
-]
-
-{ #category : #specs }
-StSindarinBytecodeDebuggerPresenter class >> extendedDebuggingToolTitle [
-	<debuggerExtensionPresentationOrder: -2>
-	^ 'Bytecode debugger'
 ]
 
 { #category : #accessing }
