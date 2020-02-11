@@ -26,11 +26,6 @@ SindarinDebugger >> open [
 ]
 
 { #category : #'*NewTools-Sindarin-Tools' }
-SindarinDebugger >> pc [
-	^ self context pc
-]
-
-{ #category : #'*NewTools-Sindarin-Tools' }
 SindarinDebugger >> sindarinDebuggerInspection [
 	<inspectorPresentationOrder: -10 title: 'Sindarin'>
 
