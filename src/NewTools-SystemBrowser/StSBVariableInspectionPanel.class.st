@@ -18,21 +18,15 @@ StSBVariableInspectionPanel class >> defaultSpec [
 ]
 
 { #category : #initialization }
-StSBVariableInspectionPanel >> defineInputPorts [
+StSBVariableInspectionPanel >> defaultInputPort [
 
-	^ { 
-	SpListItemsPort newDelegate: [ self variableList ].
-	SpListItemsPort newName: 'method-items' delegate: [ self methodList ] 
-	}	
+	^ self inputItemsPort
 ]
 
 { #category : #initialization }
-StSBVariableInspectionPanel >> defineOutputPorts [
+StSBVariableInspectionPanel >> defaultOutputPort [
 
-	^ { 
-	SpSelectionPort newDelegate: [ self methodList ].
-	SpSelectionPort newName: #'variable-selection' delegate: [ self variableList ]
-	}
+	^ self outputSelectionPort
 ]
 
 { #category : #initialization }
@@ -52,9 +46,41 @@ StSBVariableInspectionPanel >> initializePresenters [
 	variableList whenModelChangedDo: [ methodList items: #() ].	
 ]
 
+{ #category : #initialization }
+StSBVariableInspectionPanel >> inputItemsPort [
+
+	^ (SpListItemsPort newPresenter: self) 
+		delegateTo: [ self variableList ];
+		yourself
+]
+
+{ #category : #initialization }
+StSBVariableInspectionPanel >> inputMethodItemsPort [
+
+	^ (SpListItemsPort newPresenter: self) 
+		delegateTo: [ self methodList ];
+		yourself
+]
+
 { #category : #accessing }
 StSBVariableInspectionPanel >> methodList [
 	^ methodList
+]
+
+{ #category : #initialization }
+StSBVariableInspectionPanel >> outputSelectionPort [
+	
+	^ (SpSelectionPort newPresenter: self)
+		delegateTo: [ self methodList ];
+		yourself
+]
+
+{ #category : #initialization }
+StSBVariableInspectionPanel >> outputVariableSelectionPort [
+	
+	^ (SpSelectionPort newPresenter: self)
+		delegateTo: [ self variableList ];
+		yourself
 ]
 
 { #category : #accessing }

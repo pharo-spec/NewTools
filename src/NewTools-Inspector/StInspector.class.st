@@ -109,9 +109,9 @@ StInspector class >> registerToolsOn: registry [
 ]
 
 { #category : #initialization }
-StInspector >> defineInputPorts [
+StInspector >> defaultInputPort [
 
-	^ { SpModelPort new }
+	^ self inputModelPort
 ]
 
 { #category : #initialization }
@@ -135,6 +135,12 @@ StInspector >> initializeWindow: aWindowPresenter [
 		whenOpenedDo: [ self startStepping ];
 		whenClosedDo: [ self stopStepping ];
 		whenResizingDo: [ :ann | self class preferredExtent: ann newSize ]
+]
+
+{ #category : #initialization }
+StInspector >> inputModelPort [
+
+	^ SpModelPort newPresenter: self
 ]
 
 { #category : #private }

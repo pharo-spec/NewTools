@@ -18,21 +18,15 @@ StSBProtocolInspectionPanel class >> defaultSpec [
 ]
 
 { #category : #initialization }
-StSBProtocolInspectionPanel >> defineInputPorts [
+StSBProtocolInspectionPanel >> defaultInputPort [
 
-	^ { 
-	SpListItemsPort newDelegate: [ self protocolList ].
-	SpListItemsPort newName: 'method-items' delegate: [ self methodList ]
-	}
+	^ self inputItemsPort
 ]
 
 { #category : #initialization }
-StSBProtocolInspectionPanel >> defineOutputPorts [
+StSBProtocolInspectionPanel >> defaultOutputPort [
 
-	^ { 
-	SpSelectionPort newDelegate: [ self methodList ].
-	SpSelectionPort newName: #'protocol-selection' delegate: [ self protocolList ]. 
-	}
+	^ self outputSelectionPort
 ]
 
 { #category : #initialization }
@@ -52,9 +46,41 @@ StSBProtocolInspectionPanel >> initializePresenters [
 	protocolList whenModelChangedDo: [ methodList items: #() ].
 ]
 
+{ #category : #initialization }
+StSBProtocolInspectionPanel >> inputItemsPort [
+
+	^ (SpListItemsPort newPresenter: self) 
+		delegateTo: [ self protocolList ];
+		yourself
+]
+
+{ #category : #initialization }
+StSBProtocolInspectionPanel >> inputMethodItemsPort [
+
+	^ (SpListItemsPort newPresenter: self) 
+		delegateTo: [ self methodList ];
+		yourself
+]
+
 { #category : #accessing }
 StSBProtocolInspectionPanel >> methodList [
 	^ methodList
+]
+
+{ #category : #initialization }
+StSBProtocolInspectionPanel >> outputProtocolSelectionPort [
+	
+	^ (SpSelectionPort newPresenter: self)
+		delegateTo: [ self protocolList ];
+		yourself
+]
+
+{ #category : #initialization }
+StSBProtocolInspectionPanel >> outputSelectionPort [
+	
+	^ (SpSelectionPort newPresenter: self)
+		delegateTo: [ self methodList ];
+		yourself
 ]
 
 { #category : #accessing }

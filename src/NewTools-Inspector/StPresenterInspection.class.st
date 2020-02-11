@@ -23,24 +23,23 @@ StPresenterInspection class >> for: aPresenter [
 		yourself
 ]
 
-{ #category : #initialization }
-StPresenterInspection >> defineInputPorts [ 
+{ #category : #ports }
+StPresenterInspection >> defaultOutputPort [
 	
-	^ self presenter defineInputPorts
-		collect: [ :each | 
-			each copy 
-				delegateTo: [ self presenter ];
-				yourself ]
+	^ self presenter defaultOutputPort
 ]
 
-{ #category : #initialization }
-StPresenterInspection >> defineOutputPorts [ 
+{ #category : #testing }
+StPresenterInspection >> hasOutputActivationPort [
+
+	^ self presenter respondsTo: #outputActivationPort
 	
-	^ self presenter defineOutputPorts
-		collect: [ :each | 
-			each copy 
-				delegateTo: [ self presenter ];
-				yourself ]
+]
+
+{ #category : #ports }
+StPresenterInspection >> outputActivationPort [
+
+	^ self presenter outputActivationPort
 ]
 
 { #category : #accessing }

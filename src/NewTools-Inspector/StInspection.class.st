@@ -13,6 +13,12 @@ StInspection >> asInspection [
 	^ self
 ]
 
+{ #category : #testing }
+StInspection >> hasOutputActivationPort [
+
+	^ false
+]
+
 { #category : #'model access' }
 StInspection >> model [
 	^ model

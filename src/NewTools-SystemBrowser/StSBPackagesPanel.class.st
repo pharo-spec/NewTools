@@ -16,15 +16,15 @@ StSBPackagesPanel class >> defaultSpec [
 ]
 
 { #category : #initialization }
-StSBPackagesPanel >> defineInputPorts [ 
+StSBPackagesPanel >> defaultInputPort [
 
-	^ { SpListItemsPort newDelegate: [ self packageTree ] }
+	^ self inputItemsPort
 ]
 
 { #category : #initialization }
-StSBPackagesPanel >> defineOutputPorts [ 
+StSBPackagesPanel >> defaultOutputPort [
 
-	^ { SpSelectionPort newDelegate: [ self packageTree ] }
+	^ self outputSelectionPort
 ]
 
 { #category : #accessing }
@@ -49,6 +49,22 @@ StSBPackagesPanel >> initializePresenters [
 			with: (SpStringTableColumn evaluated: #name));
 		roots: self model allPackages;
 		children: #children;
+		yourself
+]
+
+{ #category : #initialization }
+StSBPackagesPanel >> inputItemsPort [
+
+	^ (SpListItemsPort newPresenter: self) 
+		delegateTo: [ self packageTree ];
+		yourself
+]
+
+{ #category : #initialization }
+StSBPackagesPanel >> outputSelectionPort [
+	
+	^ (SpSelectionPort newPresenter: self)
+		delegateTo: [ self packageTree ];
 		yourself
 ]
 
