@@ -24,23 +24,9 @@ StPresenterInspection class >> for: aPresenter [
 ]
 
 { #category : #initialization }
-StPresenterInspection >> defineInputPorts [ 
+StPresenterInspection >> defaultOutputPort [
 	
-	^ self presenter defineInputPorts
-		collect: [ :each | 
-			each copy 
-				delegateTo: [ self presenter ];
-				yourself ]
-]
-
-{ #category : #initialization }
-StPresenterInspection >> defineOutputPorts [ 
-	
-	^ self presenter defineOutputPorts
-		collect: [ :each | 
-			each copy 
-				delegateTo: [ self presenter ];
-				yourself ]
+	^ self presenter defaultOutputPort
 ]
 
 { #category : #accessing }

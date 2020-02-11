@@ -78,11 +78,10 @@ StObjectInspector >> activate: aSelection [
 { #category : #private }
 StObjectInspector >> addActivationTo: aPresenter [
 	
-	(aPresenter hasPortNamed: 'activation') ifFalse: [ ^ self ]. 
-	
-	aPresenter
-		transmitPort: 'activation'
-		do: [ :selection | self activate: selection ]
+	(aPresenter respondsTo: #outputActivationPort ) ifFalse: [ ^ self ]. 
+
+	aPresenter outputActivationPort 
+		transmitDo: [ :selection | self activate: selection ]
 ]
 
 { #category : #private }
@@ -107,9 +106,9 @@ StObjectInspector >> buildToolBar [
 ]
 
 { #category : #initialization }
-StObjectInspector >> defineInputPorts [
+StObjectInspector >> defaultInputPort [
 
-	^ { SpModelPort new }
+	^ self inputModelPort
 ]
 
 { #category : #initialization }
@@ -138,6 +137,12 @@ StObjectInspector >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		title: self title;
 		toolBar: self buildToolBar
+]
+
+{ #category : #initialization }
+StObjectInspector >> inputModelPort [
+
+	^ SpModelPort newPresenter: self
 ]
 
 { #category : #accessing }

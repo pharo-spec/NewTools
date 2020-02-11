@@ -21,15 +21,15 @@ StSBClassesPanel >> classList [
 ]
 
 { #category : #initialization }
-StSBClassesPanel >> defineInputPorts [
+StSBClassesPanel >> defaultInputPort [
 
-	^ { SpListItemsPort newDelegate: [ self classList ] }
+	^ self inputItemsPort
 ]
 
 { #category : #initialization }
-StSBClassesPanel >> defineOutputPorts [
+StSBClassesPanel >> defaultOutputPort [
 
-	^ { SpSelectionPort newDelegate: [ self classList ] }
+	^ self outputSelectionPort
 ]
 
 { #category : #accessing }
@@ -52,5 +52,21 @@ StSBClassesPanel >> initializePresenters [
 		addColumn: (SpCompositeTableColumn 
 			with: (SpImageTableColumn evaluated: #icon) beNotExpandable
 			with: (SpStringTableColumn evaluated: #name));
+		yourself
+]
+
+{ #category : #initialization }
+StSBClassesPanel >> inputItemsPort [
+
+	^ (SpListItemsPort newPresenter: self)
+		delegateTo: [ self classList ];
+		yourself
+]
+
+{ #category : #initialization }
+StSBClassesPanel >> outputSelectionPort [
+	
+	^ (SpSelectionPort newPresenter: self)
+		delegateTo: [ self classList ];
 		yourself
 ]

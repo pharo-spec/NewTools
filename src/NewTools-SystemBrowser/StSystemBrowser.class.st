@@ -110,7 +110,7 @@ StSystemBrowser >> buildToolBar [
 		register: (StInspectorBrowseCommand forSpecContext: self);
 		register: (StInspectorHelpCommand forSpecContext: self);
 		asToolbarPresenterWith: [ :presenter | 
-			presenter displayMode: self application displayMode ]
+			presenter displayMode: self application toolbarDisplayMode ]
 ]
 
 { #category : #initialization }
