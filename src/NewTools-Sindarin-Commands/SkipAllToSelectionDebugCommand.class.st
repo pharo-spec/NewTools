@@ -1,7 +1,7 @@
 Class {
 	#name : #SkipAllToSelectionDebugCommand,
-	#superclass : #StDebugCommand,
-	#category : #'NewTools-Debugger-Commands'
+	#superclass : #SindarinCommand,
+	#category : #'NewTools-Sindarin-Commands'
 }
 
 { #category : #'as yet unclassified' }

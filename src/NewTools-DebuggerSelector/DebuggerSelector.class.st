@@ -63,7 +63,7 @@ DebuggerSelector >> closeAllDebuggers [
 
 ]
 
-{ #category : #'open debugger' }
+{ #category : #'as yet unclassified' }
 DebuggerSelector >> getDebuggerClasses [
 	| result classesWithDummyDebuggerPragma |
 	result := ((PragmaCollector
