@@ -33,7 +33,9 @@ Class {
 
 { #category : #accessing }
 SpecDebugger class >> activateDebuggerExtensions [
-	^ ActivateDebuggerExtensions
+
+	^ ActivateDebuggerExtensions ifNil: [ 
+		ActivateDebuggerExtensions := true ]
 ]
 
 { #category : #accessing }
