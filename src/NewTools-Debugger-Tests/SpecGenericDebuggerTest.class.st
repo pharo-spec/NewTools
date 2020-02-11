@@ -223,8 +223,8 @@ SpecGenericDebuggerTest >> testExtendedToolsClassesFor [
 	self
 		assertCollection:
 			(SpecDebugger
-				collectExtendedToolsClassesFor: #debuggerExtensionTestPragma)
-		includesAll: {StDebuggerDummyTestPresenter}
+				collectExtendedToolsPragmaFor: #debuggerExtensionTestPragma)
+		includesAll: (StDebuggerDummyTestPresenter class>>#debuggerExtensionTestPragma) pragmas 
 ]
 
 { #category : #'tests - extensions' }

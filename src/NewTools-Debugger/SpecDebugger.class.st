@@ -75,8 +75,14 @@ SpecDebugger class >> collectExtendedToolsClasses [
 
 { #category : #'tools registry' }
 SpecDebugger class >> collectExtendedToolsClassesFor: pragmaSelector [
+	^ (self collectExtendedToolsPragmaFor: pragmaSelector)
+		collect: [ :prg | prg methodClass soleInstance ]
+]
+
+{ #category : #'tools registry' }
+SpecDebugger class >> collectExtendedToolsPragmaFor: pragmaSelector [
 	^ (PragmaCollector filter: [ :prg | prg selector = pragmaSelector ])
-		reset collected collect: [ :prg | prg methodClass soleInstance ]
+		reset collected
 ]
 
 { #category : #specs }
