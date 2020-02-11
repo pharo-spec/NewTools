@@ -480,11 +480,25 @@ SpecDebugger >> codeContextMenuCommandsForRootGroup: aRootCmCommandsGroup [
 	group
 		description: 'Debugger actions on code selection.';
 		beDisplayedAsGroup.
-	group
-		register: (RunToSelectionDebugCommand forSpecContext: self);
-		register: (SindarinSkipAllToSelectionCommand forSpecContext: self).
+	group register: (RunToSelectionDebugCommand forSpecContext: self).
 	aRootCmCommandsGroup decoratedGroup registerFirst: group.
+	self codeContextMenuExtensionsForParentGroup: aRootCmCommandsGroup.
 	^ aRootCmCommandsGroup asMenuPresenter
+]
+
+{ #category : #commands }
+SpecDebugger >> codeContextMenuExtensionsForParentGroup: aCmCommandsGroup [
+	| extensionPragmas group |
+	extensionPragmas := self class
+		collectExtendedToolsPragmaFor: #codeExtensionDebugCommand:.
+	group := (CmCommandGroup
+		named: 'Debugger extended actions on code selection') asSpecGroup.
+	group
+		description: 'Debugger extended actions on code selection.';
+		beDisplayedAsGroup.
+	(extensionPragmas collect: [ :prg | prg methodClass soleInstance ])
+		do: [ :extCmdClass | group register: (extCmdClass forSpecContext: self) ].
+	aCmCommandsGroup decoratedGroup register: group
 ]
 
 { #category : #'accessing context' }
