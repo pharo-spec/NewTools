@@ -27,6 +27,7 @@ RunToSelectionDebugCommand class >> defaultShortcut [
 
 { #category : #hooks }
 RunToSelectionDebugCommand >> execute [
+	self flag: 'Such access to the debugger internal state is suspicious...'.
 	self session
 		runToSelection: self debugger code selectionInterval
 		inContext: self currentContext
