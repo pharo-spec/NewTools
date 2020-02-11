@@ -476,7 +476,7 @@ SpecDebugger >> codeContextMenuCommandsForRootGroup: aRootCmCommandsGroup [
 		beDisplayedAsGroup.
 	group
 		register: (RunToSelectionDebugCommand forSpecContext: self);
-		register: (SkipAllToSelectionDebugCommand forSpecContext: self).
+		register: (SindarinSkipAllToSelectionCommand forSpecContext: self).
 	aRootCmCommandsGroup decoratedGroup registerFirst: group.
 	^ aRootCmCommandsGroup asMenuPresenter
 ]

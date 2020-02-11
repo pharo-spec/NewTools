@@ -1,32 +1,32 @@
 Class {
-	#name : #SkipAllToSelectionDebugCommand,
+	#name : #SindarinSkipAllToSelectionCommand,
 	#superclass : #SindarinCommand,
 	#category : #'NewTools-Sindarin-Commands'
 }
 
 { #category : #'as yet unclassified' }
-SkipAllToSelectionDebugCommand class >> defaultDescription [
+SindarinSkipAllToSelectionCommand class >> defaultDescription [
 	^ 'Jump to the text cursor position without executing code and return debugger control.'
 ]
 
 { #category : #initialization }
-SkipAllToSelectionDebugCommand class >> defaultIconName [
+SindarinSkipAllToSelectionCommand class >> defaultIconName [
 	^ #glamorousRightSide
 ]
 
 { #category : #'as yet unclassified' }
-SkipAllToSelectionDebugCommand class >> defaultName [
+SindarinSkipAllToSelectionCommand class >> defaultName [
 	<toolbarDebugCommand: 50>
 	^ 'Jump to cursor'
 ]
 
 { #category : #initialization }
-SkipAllToSelectionDebugCommand class >> defaultShortcut [
+SindarinSkipAllToSelectionCommand class >> defaultShortcut [
 	^ nil
 ]
 
 { #category : #hooks }
-SkipAllToSelectionDebugCommand >> execute [
+SindarinSkipAllToSelectionCommand >> execute [
 	self flag: 'TODO'.
 	self inform: 'NOT IMPLEMENTED YET'
 ]
