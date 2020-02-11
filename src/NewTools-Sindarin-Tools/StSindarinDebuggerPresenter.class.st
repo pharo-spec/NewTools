@@ -43,7 +43,8 @@ StSindarinDebuggerPresenter >> buildToolBar [
 	SindarinCommand allSubclasses
 		do: [ :cmd | group register: (cmd forSpecContext: self) ].
 	^ group asToolbarPresenterWith: [ :presenter | 
-		presenter displayMode: self application displayMode ]
+		self flag: 'This is not right, but the application is not set properly in notebook pages. For now I need this hack.'.
+		presenter displayMode: StPharoApplication current toolbarDisplayMode ]
 ]
 
 { #category : #initialization }
@@ -57,24 +58,24 @@ StSindarinDebuggerPresenter >> initializeWidgets [
 				ifNotNil: [ | node |
 					node := selection selectedItem currentNode.
 					inspector model: node.
-					inspector setAttributeTable. 
+					inspector setAttributeTable.
 					currentNodeSource text: node source.
 					currentNodeSource behavior: node methodNode methodClass.
-					currentNodeSource setSelection: (node start to: node stop).
+					currentNodeSource selectionInterval: (node start to: node stop).
 					currentNodeSource
 						doItReceiver: selection selectedItem home receiver;
 						doItContext: selection selectedItem ].
-					currentNodeSource accept].
+			currentNodeSource accept ].
 	stack items: self model stack.
 	inspector := StRawInspection on: self model stack first.
 	currentNodeSource := self newCode.
 	currentNodeSource
 		whenBuiltDo: [ :ann | ann widget font: StandardFonts codeFont ].
 	currentNodeSource withSyntaxHighlight.
-	currentNodeSource text: self model currentNode source.
+	currentNodeSource text: self model node source.
 	currentNodeSource behavior: self model method methodClass.
 	stack selectIndex: 1.
-	toolbar := self buildToolBar.
+	toolbar := self buildToolBar
 ]
 
 { #category : #stepping }
