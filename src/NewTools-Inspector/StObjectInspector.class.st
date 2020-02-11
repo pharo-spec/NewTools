@@ -78,8 +78,7 @@ StObjectInspector >> activate: aSelection [
 { #category : #private }
 StObjectInspector >> addActivationTo: aPresenter [
 	
-	(aPresenter respondsTo: #outputActivationPort ) ifFalse: [ ^ self ]. 
-
+	aPresenter hasOutputActivationPort ifFalse: [ ^ self ]. 
 	aPresenter outputActivationPort 
 		transmitDo: [ :selection | self activate: selection ]
 ]

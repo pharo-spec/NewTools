@@ -39,10 +39,16 @@ StRawInspection >> addVariablesColumn [
 	attributeTable addColumn: self variablesColumn
 ]
 
-{ #category : #initialization }
+{ #category : #ports }
 StRawInspection >> defaultOutputPort [
 
 	^ self outputSelectionPort
+]
+
+{ #category : #testing }
+StRawInspection >> hasOutputActivationPort [
+
+	^ true
 ]
 
 { #category : #initialization }
@@ -75,7 +81,7 @@ StRawInspection >> model: aModel [
 	self setAttributeTable
 ]
 
-{ #category : #initialization }
+{ #category : #ports }
 StRawInspection >> outputActivationPort [
 	
 	^ (SpActivationPort newPresenter: self) 
@@ -83,7 +89,7 @@ StRawInspection >> outputActivationPort [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : #ports }
 StRawInspection >> outputSelectionPort [
 	
 	^ (SpSelectionPort newPresenter: self)

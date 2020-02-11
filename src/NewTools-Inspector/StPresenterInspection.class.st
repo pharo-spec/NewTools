@@ -23,10 +23,23 @@ StPresenterInspection class >> for: aPresenter [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : #ports }
 StPresenterInspection >> defaultOutputPort [
 	
 	^ self presenter defaultOutputPort
+]
+
+{ #category : #testing }
+StPresenterInspection >> hasOutputActivationPort [
+
+	^ self presenter respondsTo: #outputActivationPort
+	
+]
+
+{ #category : #ports }
+StPresenterInspection >> outputActivationPort [
+
+	^ self presenter outputActivationPort
 ]
 
 { #category : #accessing }
