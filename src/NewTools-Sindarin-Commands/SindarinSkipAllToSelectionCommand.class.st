@@ -17,7 +17,8 @@ SindarinSkipAllToSelectionCommand class >> defaultIconName [
 { #category : #'as yet unclassified' }
 SindarinSkipAllToSelectionCommand class >> defaultName [
 	<toolbarDebugCommand: 50>
-	^ 'Jump to cursor'
+	<codeExtensionDebugCommand: 50>
+	^ 'Skip everything up to cursor'
 ]
 
 { #category : #initialization }
