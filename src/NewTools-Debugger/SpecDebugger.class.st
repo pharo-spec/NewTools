@@ -63,6 +63,13 @@ SpecDebugger class >> availableExtentionToolsClassesSettings [
 	^ settingToClass 
 ]
 
+{ #category : #commands }
+SpecDebugger class >> buildCommandsGroupWith: stDebuggerInstance forRoot: rootCommandGroup [
+	StDebuggerStackCommandTreeBuilder
+		buildCommandsGroupWith: stDebuggerInstance
+		forRoot: rootCommandGroup
+]
+
 { #category : #utilities }
 SpecDebugger class >> closeAllDebuggers [
 	<script>
@@ -581,6 +588,7 @@ SpecDebugger >> initialExtent [
 { #category : #initialization }
 SpecDebugger >> initialize [
 	super initialize.	
+	self initializeContextMenus.
 	self setSessionHolderSubscriptions.
 	self forceSessionUpdate
 ]
@@ -609,6 +617,14 @@ SpecDebugger >> initializeCode [
 	codeHeader label: self session name
 	
 
+]
+
+{ #category : #initialization }
+SpecDebugger >> initializeContextMenus [
+	| debuggerCommandGroup stackGroup |
+	debuggerCommandGroup := self rootCommandsGroup.
+	stackGroup := debuggerCommandGroup / StDebuggerStackCommandTreeBuilder groupName.
+	stackTable contextMenu: [ stackGroup asMenuPresenter ]
 ]
 
 { #category : #extensions }
@@ -659,10 +675,7 @@ SpecDebugger >> initializeStack [
 			evaluated: [ :item | item method selector ]);
 		addColumn: (SpStringTableColumn
 			title: 'Context'
-			evaluated: [ :item | item sender stDisplayString ]).
-	
-	stackTable contextMenu: [ 
-		(self stackContextMenuCommandsForRootGroup: stackTable rootCommandsGroup)  ].
+			evaluated: [ :item | item sender stDisplayString ]).	
 	
 	stackTable transmitDo: [ :context | 
 		self updateInspectorFromContext: context.
