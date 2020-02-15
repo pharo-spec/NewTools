@@ -109,6 +109,7 @@ StDebuggerTest >> inspectorTableFor: inspector [
 { #category : #running }
 StDebuggerTest >> setUp [
 	| context process |
+	super setUp.
 	context := [ | i |
 	i := 1 squared.
 	i = 1
