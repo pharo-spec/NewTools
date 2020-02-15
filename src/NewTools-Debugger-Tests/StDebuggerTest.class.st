@@ -1,5 +1,5 @@
 Class {
-	#name : #SpecGenericDebuggerTest,
+	#name : #StDebuggerTest,
 	#superclass : #TestCase,
 	#instVars : [
 		'session',
@@ -9,14 +9,14 @@ Class {
 }
 
 { #category : #'tests - stack table context menu' }
-SpecGenericDebuggerTest >> assertCommandGroup: cmdGroup hasDisplayStrategy: displayStrategy [
+StDebuggerTest >> assertCommandGroup: cmdGroup hasDisplayStrategy: displayStrategy [
 	self
 		assert: cmdGroup displayStrategy class
 		identicalTo: displayStrategy
 ]
 
 { #category : #'tests - stack table context menu' }
-SpecGenericDebuggerTest >> assertCommandGroup: cmdGroup hasSameCommands: expectedCommands withContext: expectedContext displayStrategy: displayStrategy [
+StDebuggerTest >> assertCommandGroup: cmdGroup hasSameCommands: expectedCommands withContext: expectedContext displayStrategy: displayStrategy [
 	| commands |
 	self deny: cmdGroup isRoot.
 	self assertCommandGroup: cmdGroup hasDisplayStrategy: displayStrategy.
@@ -29,14 +29,14 @@ SpecGenericDebuggerTest >> assertCommandGroup: cmdGroup hasSameCommands: expecte
 ]
 
 { #category : #'tests - stack table context menu' }
-SpecGenericDebuggerTest >> assertCommandGroupEntries: commands hasCommands: expectedCommands [
+StDebuggerTest >> assertCommandGroupEntries: commands hasCommands: expectedCommands [
 	self
 		assertCollection: (commands collect: [ :cmd | cmd class ])
 		hasSameElements: expectedCommands
 ]
 
 { #category : #'tests - stack table context menu' }
-SpecGenericDebuggerTest >> assertCommands: commands equals: expectedCommands [
+StDebuggerTest >> assertCommands: commands equals: expectedCommands [
 	self assert: commands size equals: expectedCommands size.
 	commands
 		with: expectedCommands
@@ -47,67 +47,67 @@ SpecGenericDebuggerTest >> assertCommands: commands equals: expectedCommands [
 ]
 
 { #category : #'tests - stack table context menu' }
-SpecGenericDebuggerTest >> assertCommands: commands haveContext: expectedContext [
+StDebuggerTest >> assertCommands: commands haveContext: expectedContext [
 	commands
 		do: [ :cmd | self assert: cmd context identicalTo: expectedContext ]
 ]
 
 { #category : #'helpers - debugger control' }
-SpecGenericDebuggerTest >> clickStepInto [
+StDebuggerTest >> clickStepInto [
 	self debugger updateToolbar.
 	(self debugger toolbar items detect:[:item| item label = 'Into']) click
 ]
 
 { #category : #'helpers - debugger control' }
-SpecGenericDebuggerTest >> clickStepInto: n [
+StDebuggerTest >> clickStepInto: n [
 	n timesRepeat: [ self clickStepInto ]
 ]
 
 { #category : #'helpers - debugger control' }
-SpecGenericDebuggerTest >> clickStepOver [
+StDebuggerTest >> clickStepOver [
 	self debugger updateToolbar.
 	(self debugger toolbar items detect:[:item| item label = 'Over']) click
 ]
 
 { #category : #'helpers - debugger control' }
-SpecGenericDebuggerTest >> clickStepOver: n [
+StDebuggerTest >> clickStepOver: n [
 	n timesRepeat: [ self clickStepOver ]
 ]
 
 { #category : #'tests - stack table context menu' }
-SpecGenericDebuggerTest >> commandsFromSpecGroup: group [
+StDebuggerTest >> commandsFromSpecGroup: group [
 	^ group decoratedGroup entries collect: [ :cmd | cmd decoratedCommand ]
 ]
 
 { #category : #accessing }
-SpecGenericDebuggerTest >> debugger [
+StDebuggerTest >> debugger [
 	^ debugger ifNil: [ debugger := self debuggerClass basicNew ]
 ]
 
 { #category : #accessing }
-SpecGenericDebuggerTest >> debuggerClass [
+StDebuggerTest >> debuggerClass [
 	^ SpecDebugger
 ]
 
 { #category : #accessing }
-SpecGenericDebuggerTest >> debuggerOn: aDebugSession [
+StDebuggerTest >> debuggerOn: aDebugSession [
 	^self debugger session: aDebugSession; initialize
 ]
 
 { #category : #accessing }
-SpecGenericDebuggerTest >> initializedDebugger [
+StDebuggerTest >> initializedDebugger [
 	^ self debugger initialize
 ]
 
 { #category : #accessing }
-SpecGenericDebuggerTest >> inspectorTableFor: inspector [
+StDebuggerTest >> inspectorTableFor: inspector [
 	|contextInspector|
 	contextInspector := (inspector class slotNamed: #contextInspector) read: inspector.
 	^(contextInspector class slotNamed: #attributeTable) read: contextInspector
 ]
 
 { #category : #running }
-SpecGenericDebuggerTest >> setUp [
+StDebuggerTest >> setUp [
 	| context process |
 	context := [ | i |
 	i := 1 squared.
@@ -125,27 +125,27 @@ SpecGenericDebuggerTest >> setUp [
 ]
 
 { #category : #running }
-SpecGenericDebuggerTest >> tearDown [
+StDebuggerTest >> tearDown [
 	session clear
 ]
 
 { #category : #'tests - code pane' }
-SpecGenericDebuggerTest >> testCodeChangeAfterContextChange [
+StDebuggerTest >> testCodeChangeAfterContextChange [
 	self assert: false
 ]
 
 { #category : #'tests - code pane' }
-SpecGenericDebuggerTest >> testCodeModification [
+StDebuggerTest >> testCodeModification [
 	self assert: false
 ]
 
 { #category : #'tests - code pane' }
-SpecGenericDebuggerTest >> testCodeSelectionAfterStepOver [
+StDebuggerTest >> testCodeSelectionAfterStepOver [
 	self assert: false
 ]
 
 { #category : #'tests - context inspector' }
-SpecGenericDebuggerTest >> testContextChangedAfterStepIn [ 
+StDebuggerTest >> testContextChangedAfterStepIn [ 
 	| dbg |
 	dbg := self debuggerOn: session.
 	
@@ -158,7 +158,7 @@ SpecGenericDebuggerTest >> testContextChangedAfterStepIn [
 ]
 
 { #category : #'tests - context inspector' }
-SpecGenericDebuggerTest >> testContextChangedAfterStepOverAndReturn [
+StDebuggerTest >> testContextChangedAfterStepOverAndReturn [
 	| dbg currentContext |
 	dbg := self debuggerOn: session.	
 	
@@ -171,12 +171,12 @@ SpecGenericDebuggerTest >> testContextChangedAfterStepOverAndReturn [
 ]
 
 { #category : #'tests - context inspector' }
-SpecGenericDebuggerTest >> testContextInspectorMenu [
+StDebuggerTest >> testContextInspectorMenu [
 	self assert: 1 @ 1 equals: 2 @ 2
 ]
 
 { #category : #'tests - context inspector' }
-SpecGenericDebuggerTest >> testContextTempVarList [
+StDebuggerTest >> testContextTempVarList [
 	| dbg contextItems inspectorTable|
 	dbg := self debuggerOn: session.
 	inspectorTable := self inspectorTableFor: dbg contextInspector.
@@ -197,7 +197,7 @@ SpecGenericDebuggerTest >> testContextTempVarList [
 ]
 
 { #category : #'tests - context inspector' }
-SpecGenericDebuggerTest >> testContextUnchangedAfterStepOver [
+StDebuggerTest >> testContextUnchangedAfterStepOver [
 	| dbg currentContext |
 	dbg := self debuggerOn: session.	
 	
@@ -209,17 +209,17 @@ SpecGenericDebuggerTest >> testContextUnchangedAfterStepOver [
 ]
 
 { #category : #'tests - initialization' }
-SpecGenericDebuggerTest >> testDebuggerApplication [
+StDebuggerTest >> testDebuggerApplication [
 	self assert: self debugger application identicalTo: SpecDebugger currentApplication 
 ]
 
 { #category : #'tests - code pane' }
-SpecGenericDebuggerTest >> testDiscardCodeModification [
+StDebuggerTest >> testDiscardCodeModification [
 	self assert: false
 ]
 
 { #category : #'tests - extensions' }
-SpecGenericDebuggerTest >> testExtendedToolsClassesFor [
+StDebuggerTest >> testExtendedToolsClassesFor [
 	self
 		assertCollection:
 			(SpecDebugger
@@ -228,12 +228,12 @@ SpecGenericDebuggerTest >> testExtendedToolsClassesFor [
 ]
 
 { #category : #'tests - extensions' }
-SpecGenericDebuggerTest >> testExtendedToolsPragma [
+StDebuggerTest >> testExtendedToolsPragma [
 	self assert: SpecDebugger extendedToolsPragma equals: #debuggerExtensionOrder:showByDefault:
 ]
 
 { #category : #'tests - receiver inspector' }
-SpecGenericDebuggerTest >> testInspectorHeaderLabel [
+StDebuggerTest >> testInspectorHeaderLabel [
 	| dbg displayedLabel |
 	dbg := self debuggerOn: session.
 	displayedLabel := ((((dbg inspector instVarNamed: #inspector) 
@@ -245,7 +245,7 @@ SpecGenericDebuggerTest >> testInspectorHeaderLabel [
 ]
 
 { #category : #'tests - receiver inspector' }
-SpecGenericDebuggerTest >> testInspectorSelfBinding [
+StDebuggerTest >> testInspectorSelfBinding [
 	| dbg evaluator receiver |
 	dbg := self debuggerOn: session.
 	evaluator := (dbg inspector instVarNamed: #inspector) millerList
@@ -256,7 +256,7 @@ SpecGenericDebuggerTest >> testInspectorSelfBinding [
 ]
 
 { #category : #'tests - extensions' }
-SpecGenericDebuggerTest >> testInstantiateExtensionToolsPage [
+StDebuggerTest >> testInstantiateExtensionToolsPage [
 	|dbg toolPage|
 	dbg := self debugger.
 	toolPage := dbg instantiateExtensionToolsPage: StDebuggerDummyTestPresenter.
@@ -268,7 +268,7 @@ SpecGenericDebuggerTest >> testInstantiateExtensionToolsPage [
 ]
 
 { #category : #'tests - receiver inspector' }
-SpecGenericDebuggerTest >> testReceiverChangedAfterStepIn [ 
+StDebuggerTest >> testReceiverChangedAfterStepIn [ 
 	| dbg |
 	dbg := self debuggerOn: session.
 	
@@ -282,7 +282,7 @@ SpecGenericDebuggerTest >> testReceiverChangedAfterStepIn [
 ]
 
 { #category : #'tests - receiver inspector' }
-SpecGenericDebuggerTest >> testReceiverChangedAfterStepOverAndReturn [
+StDebuggerTest >> testReceiverChangedAfterStepOverAndReturn [
 	| dbg currentReceiver |
 	dbg := self debuggerOn: session.	
 	
@@ -295,18 +295,18 @@ SpecGenericDebuggerTest >> testReceiverChangedAfterStepOverAndReturn [
 ]
 
 { #category : #'tests - receiver inspector' }
-SpecGenericDebuggerTest >> testReceiverInitialRawInspectionSelection [
+StDebuggerTest >> testReceiverInitialRawInspectionSelection [
 ]
 
 { #category : #'tests - receiver inspector' }
-SpecGenericDebuggerTest >> testReceiverInspectorMenu [
+StDebuggerTest >> testReceiverInspectorMenu [
 	self assert: false.
 	self flag: 'TODO'
 
 ]
 
 { #category : #'tests - receiver inspector' }
-SpecGenericDebuggerTest >> testReceiverList [
+StDebuggerTest >> testReceiverList [
 	| dbg currentReceiver |
 	dbg := self debuggerOn: session.	
 	
@@ -317,7 +317,7 @@ SpecGenericDebuggerTest >> testReceiverList [
 ]
 
 { #category : #'tests - receiver inspector' }
-SpecGenericDebuggerTest >> testReceiverUnchangedAfterStepOver [ 
+StDebuggerTest >> testReceiverUnchangedAfterStepOver [ 
 	| dbg currentReceiver |
 	dbg := self debuggerOn: session.	
 	
@@ -330,7 +330,7 @@ SpecGenericDebuggerTest >> testReceiverUnchangedAfterStepOver [
 ]
 
 { #category : #'tests - extensions' }
-SpecGenericDebuggerTest >> testRegisterExtensionTool [
+StDebuggerTest >> testRegisterExtensionTool [
 	|dbg object|
 	dbg := self debugger.
 	self assertEmpty: dbg extensionTools.
@@ -340,33 +340,33 @@ SpecGenericDebuggerTest >> testRegisterExtensionTool [
 ]
 
 { #category : #'tests - raw inspection' }
-SpecGenericDebuggerTest >> testRestoreReceiverRawInspectionSelection [
+StDebuggerTest >> testRestoreReceiverRawInspectionSelection [
 ]
 
 { #category : #'tests - raw inspection' }
-SpecGenericDebuggerTest >> testRestoreReceiverRawInspectionSelectionAfterContextChange [
+StDebuggerTest >> testRestoreReceiverRawInspectionSelectionAfterContextChange [
 ]
 
 { #category : #'tests - session' }
-SpecGenericDebuggerTest >> testReturnEnteredValue [
+StDebuggerTest >> testReturnEnteredValue [
 	self fail
 ]
 
 { #category : #'tests - code pane' }
-SpecGenericDebuggerTest >> testSaveCodeModification [
+StDebuggerTest >> testSaveCodeModification [
 	self assert: false
 ]
 
 { #category : #'tests - raw inspection' }
-SpecGenericDebuggerTest >> testSaveReceiverRawInspectionSelection [
+StDebuggerTest >> testSaveReceiverRawInspectionSelection [
 ]
 
 { #category : #'tests - raw inspection' }
-SpecGenericDebuggerTest >> testSaveReceiverRawInspectionSelectionAfterContextChange [
+StDebuggerTest >> testSaveReceiverRawInspectionSelectionAfterContextChange [
 ]
 
 { #category : #'tests - stack table' }
-SpecGenericDebuggerTest >> testSelectLastStackElementWithMoreElements [
+StDebuggerTest >> testSelectLastStackElementWithMoreElements [
 	| dbg stackTable selectedItem |
 	dbg := self debuggerOn: session.
 	stackTable := dbg stackTable.
@@ -390,7 +390,7 @@ SpecGenericDebuggerTest >> testSelectLastStackElementWithMoreElements [
 ]
 
 { #category : #'tests - stack table' }
-SpecGenericDebuggerTest >> testSelectLastStackElementWithoutMoreElements [
+StDebuggerTest >> testSelectLastStackElementWithoutMoreElements [
 	| dbg stackTable startingStackSize |
 	dbg := self debuggerOn: session.
 	stackTable := dbg stackTable.
@@ -401,12 +401,12 @@ SpecGenericDebuggerTest >> testSelectLastStackElementWithoutMoreElements [
 ]
 
 { #category : #'tests - code pane' }
-SpecGenericDebuggerTest >> testSelectionMenu [
+StDebuggerTest >> testSelectionMenu [
 	self assert: false
 ]
 
 { #category : #'tests - stack table context menu' }
-SpecGenericDebuggerTest >> testStackContextMenuActionsCommands [
+StDebuggerTest >> testStackContextMenuActionsCommands [
 	| dbg stackTable |
 	dbg := self debuggerOn: session.
 	stackTable := dbg stackTable.
@@ -421,7 +421,7 @@ SpecGenericDebuggerTest >> testStackContextMenuActionsCommands [
 ]
 
 { #category : #'tests - stack table context menu' }
-SpecGenericDebuggerTest >> testStackContextMenuNavigationCommands [
+StDebuggerTest >> testStackContextMenuNavigationCommands [
 	| dbg cmdGroup groupEntries cmdEntries expectedEntries|	
 	dbg := self debuggerOn: session.
 	cmdGroup := dbg stackContextMenuNavigationCommands.
@@ -451,7 +451,7 @@ SpecGenericDebuggerTest >> testStackContextMenuNavigationCommands [
 ]
 
 { #category : #'tests - stack table context menu' }
-SpecGenericDebuggerTest >> testStackContextMenuStackEditionsCommands [
+StDebuggerTest >> testStackContextMenuStackEditionsCommands [
 	| dbg stackTable |
 	dbg := self debuggerOn: session.
 	stackTable := dbg stackTable.
@@ -466,7 +466,7 @@ SpecGenericDebuggerTest >> testStackContextMenuStackEditionsCommands [
 ]
 
 { #category : #'tests - stack table context menu' }
-SpecGenericDebuggerTest >> testStackContextNavigationCommands [
+StDebuggerTest >> testStackContextNavigationCommands [
 	| dbg stackTable cmdGroup commands|	
 	dbg := self debuggerOn: session.
 	stackTable := dbg stackTable.
@@ -489,7 +489,7 @@ SpecGenericDebuggerTest >> testStackContextNavigationCommands [
 ]
 
 { #category : #'tests - stack table context menu' }
-SpecGenericDebuggerTest >> testStackMethodNavigationCommands [
+StDebuggerTest >> testStackMethodNavigationCommands [
 	| dbg stackTable |
 	dbg := self debuggerOn: session.
 	stackTable := dbg stackTable.
@@ -504,7 +504,7 @@ SpecGenericDebuggerTest >> testStackMethodNavigationCommands [
 ]
 
 { #category : #'tests - stack table context menu' }
-SpecGenericDebuggerTest >> testStackMethodSelectorNavigationCommands [
+StDebuggerTest >> testStackMethodSelectorNavigationCommands [
 	| dbg stackTable |
 	dbg := self debuggerOn: session.
 	stackTable := dbg stackTable.
@@ -520,7 +520,7 @@ SpecGenericDebuggerTest >> testStackMethodSelectorNavigationCommands [
 ]
 
 { #category : #'tests - stack table context menu' }
-SpecGenericDebuggerTest >> testStackReceiverClassNavigationCommands [
+StDebuggerTest >> testStackReceiverClassNavigationCommands [
 	| dbg stackTable |
 	dbg := self debuggerOn: session.
 	stackTable := dbg stackTable.
@@ -538,7 +538,7 @@ SpecGenericDebuggerTest >> testStackReceiverClassNavigationCommands [
 ]
 
 { #category : #'tests - stack table' }
-SpecGenericDebuggerTest >> testStackTableAfterReturn [
+StDebuggerTest >> testStackTableAfterReturn [
 	| dbg stackTableItems stackSizeAfterStepIn |
 	dbg := self debuggerOn: session.
 
@@ -556,7 +556,7 @@ SpecGenericDebuggerTest >> testStackTableAfterReturn [
 ]
 
 { #category : #'tests - stack table' }
-SpecGenericDebuggerTest >> testStackTableAfterStepIn [
+StDebuggerTest >> testStackTableAfterStepIn [
 	| dbg stackTableItems startingStackSize |
 	dbg := self debuggerOn: session.
 	startingStackSize := dbg stackTable items size.
@@ -570,12 +570,12 @@ SpecGenericDebuggerTest >> testStackTableAfterStepIn [
 ]
 
 { #category : #'tests - stack table' }
-SpecGenericDebuggerTest >> testStackTableInitialization [
+StDebuggerTest >> testStackTableInitialization [
 	self assert: self debugger stackTable isNil
 ]
 
 { #category : #'tests - stack table' }
-SpecGenericDebuggerTest >> testStackTableSelectionChanged [
+StDebuggerTest >> testStackTableSelectionChanged [
 	| dbg |
 	dbg := self debuggerOn: session.
 	self clickStepInto: 2.
@@ -594,7 +594,7 @@ SpecGenericDebuggerTest >> testStackTableSelectionChanged [
 ]
 
 { #category : #'tests - stack table' }
-SpecGenericDebuggerTest >> testStackTableWithNewSession [
+StDebuggerTest >> testStackTableWithNewSession [
 	self debugger session: session.
 	self
 		assert: (self initializedDebugger stackTable) items
@@ -609,12 +609,12 @@ SpecGenericDebuggerTest >> testStackTableWithNewSession [
 ]
 
 { #category : #'tests - code pane' }
-SpecGenericDebuggerTest >> testUnauthorizedCodeModification [
+StDebuggerTest >> testUnauthorizedCodeModification [
 	self assert: false
 ]
 
 { #category : #'tests - stack table context menu' }
-SpecGenericDebuggerTest >> teststackContextMenuExplorationCommands [
+StDebuggerTest >> teststackContextMenuExplorationCommands [
 	| dbg stackTable cmdGroup cmdEntries |
 	dbg := self debuggerOn: session.
 	stackTable := dbg stackTable.
