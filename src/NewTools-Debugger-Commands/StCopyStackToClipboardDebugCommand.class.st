@@ -16,7 +16,6 @@ StCopyStackToClipboardDebugCommand class >> defaultIconName [
 
 { #category : #initialization }
 StCopyStackToClipboardDebugCommand class >> defaultName [
-	<StackContextMenuEditionDebugCommand>
 	^ 'Copy Stack to Clipboard'
 ]
 

@@ -15,8 +15,7 @@ StFileOutMethodDebugCommand class >> defaultIconName [
 ]
 
 { #category : #accessing }
-StFileOutMethodDebugCommand class >> defaultName [
-	<StackContextMenuEditionDebugCommand>
+StFileOutMethodDebugCommand class >> defaultName [	
 	^ 'File out method'
 ]
 

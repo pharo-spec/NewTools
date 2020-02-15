@@ -40,22 +40,6 @@ StDebugCommand class >> preDebugCommandsForDebugger: debugger [
 ]
 
 { #category : #'instance creation' }
-StDebugCommand class >> stackContextMenuActionsCommandsForDebugger: debugger [
-
-	^ self
-		instantiateCommandsFromPragma: #StackContextMenuActionsCommand
-		for: debugger
-]
-
-{ #category : #'instance creation' }
-StDebugCommand class >> stackContextMenuEditionCommandsForDebugger: debugger [
-	
-	^ self
-		instantiateCommandsFromPragma: #StackContextMenuEditionDebugCommand
-		for: debugger
-]
-
-{ #category : #'instance creation' }
 StDebugCommand class >> toolbarCommandsForDebugger: debugger [
 
 	^ self

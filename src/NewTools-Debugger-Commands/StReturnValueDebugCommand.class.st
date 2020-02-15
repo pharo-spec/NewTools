@@ -23,8 +23,6 @@ StReturnValueDebugCommand class >> defaultLabel [
 { #category : #accessing }
 StReturnValueDebugCommand class >> defaultName [
 	<toolbarDebugCommand: 910>
-	<StackContextMenuActionsCommand>
-	
 	^ 'Return entered value'
 ]
 
