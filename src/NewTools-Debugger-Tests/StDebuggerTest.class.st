@@ -5,7 +5,7 @@ Class {
 		'session',
 		'debugger'
 	],
-	#category : #'NewTools-Debugger-Tests'
+	#category : #'NewTools-Debugger-Tests-Debugger - views'
 }
 
 { #category : #'tests - stack table context menu' }

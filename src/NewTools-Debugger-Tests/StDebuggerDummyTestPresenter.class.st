@@ -1,7 +1,7 @@
 Class {
 	#name : #StDebuggerDummyTestPresenter,
 	#superclass : #SpPresenter,
-	#category : #'NewTools-Debugger-Tests'
+	#category : #'NewTools-Debugger-Tests-Debugger - views'
 }
 
 { #category : #accessing }

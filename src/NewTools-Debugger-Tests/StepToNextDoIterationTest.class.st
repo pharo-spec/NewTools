@@ -1,7 +1,7 @@
 Class {
 	#name : #StepToNextDoIterationTest,
 	#superclass : #StepTest,
-	#category : #'NewTools-Debugger-Tests'
+	#category : #'NewTools-Debugger-Tests-Broken'
 }
 
 { #category : #testing }

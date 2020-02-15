@@ -6,7 +6,7 @@ Class {
 		'session',
 		'process'
 	],
-	#category : #'NewTools-Debugger-Tests'
+	#category : #'NewTools-Debugger-Tests-Broken'
 }
 
 { #category : #'as yet unclassified' }

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'instanceVariable'
 	],
-	#category : #'NewTools-Debugger-Tests'
+	#category : #'NewTools-Debugger-Tests-Broken'
 }
 
 { #category : #tests }
