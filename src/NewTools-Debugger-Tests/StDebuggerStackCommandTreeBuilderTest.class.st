@@ -97,14 +97,13 @@ StDebuggerStackCommandTreeBuilderTest >> testStackContextMenuActionsCommands [
 
 { #category : #tests }
 StDebuggerStackCommandTreeBuilderTest >> testStackContextMenuNavigationCommands [
-	|builder cmdGroup groups cmdEntries expectedEntries|	
+	|builder cmdGroup cmdEntries expectedEntries|	
 	
 	builder := self newBuilder.
 	cmdGroup := builder stackContextMenuNavigationCommands.
-	groups := cmdGroup groups.
 	
 	self deny: cmdGroup isRoot.
-	self assert: groups size equals: 4.
+	self assert: cmdGroup groups size equals: 4.
 	self assert: cmdGroup name equals: builder browseGroupName.
 	self assert: cmdGroup description equals: builder browseGroupDescription.
 	self assert: cmdGroup displayStrategy class identicalTo: CmUIDisplayAsSubMenu.
