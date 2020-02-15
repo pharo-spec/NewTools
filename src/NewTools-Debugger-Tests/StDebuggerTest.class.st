@@ -8,50 +8,6 @@ Class {
 	#category : #'NewTools-Debugger-Tests-Debugger - views'
 }
 
-{ #category : #'tests - stack table context menu' }
-StDebuggerTest >> assertCommandGroup: cmdGroup hasDisplayStrategy: displayStrategy [
-	self
-		assert: cmdGroup displayStrategy class
-		identicalTo: displayStrategy
-]
-
-{ #category : #'tests - stack table context menu' }
-StDebuggerTest >> assertCommandGroup: cmdGroup hasSameCommands: expectedCommands withContext: expectedContext displayStrategy: displayStrategy [
-	| commands |
-	self deny: cmdGroup isRoot.
-	self assertCommandGroup: cmdGroup hasDisplayStrategy: displayStrategy.
-	commands := cmdGroup decoratedGroup entries
-		collect: [ :spCommand | spCommand decoratedCommand ].
-	self
-		assertCommandGroupEntries: commands
-		hasCommands: expectedCommands.
-	self assertCommands: commands haveContext: expectedContext
-]
-
-{ #category : #'tests - stack table context menu' }
-StDebuggerTest >> assertCommandGroupEntries: commands hasCommands: expectedCommands [
-	self
-		assertCollection: (commands collect: [ :cmd | cmd class ])
-		hasSameElements: expectedCommands
-]
-
-{ #category : #'tests - stack table context menu' }
-StDebuggerTest >> assertCommands: commands equals: expectedCommands [
-	self assert: commands size equals: expectedCommands size.
-	commands
-		with: expectedCommands
-		do: [ :actual :expected | 
-			self assert: actual name equals: expected name.
-			self assert: actual context identicalTo: expected context.
-			self assert: actual class identicalTo: expected class ]
-]
-
-{ #category : #'tests - stack table context menu' }
-StDebuggerTest >> assertCommands: commands haveContext: expectedContext [
-	commands
-		do: [ :cmd | self assert: cmd context identicalTo: expectedContext ]
-]
-
 { #category : #'helpers - debugger control' }
 StDebuggerTest >> clickStepInto [
 	self debugger updateToolbar.
@@ -72,11 +28,6 @@ StDebuggerTest >> clickStepOver [
 { #category : #'helpers - debugger control' }
 StDebuggerTest >> clickStepOver: n [
 	n timesRepeat: [ self clickStepOver ]
-]
-
-{ #category : #'tests - stack table context menu' }
-StDebuggerTest >> commandsFromSpecGroup: group [
-	^ group decoratedGroup entries collect: [ :cmd | cmd decoratedCommand ]
 ]
 
 { #category : #accessing }
@@ -404,51 +355,6 @@ StDebuggerTest >> testSelectLastStackElementWithoutMoreElements [
 { #category : #'tests - code pane' }
 StDebuggerTest >> testSelectionMenu [
 	self assert: false
-]
-
-{ #category : #'tests - stack table context menu' }
-StDebuggerTest >> testStackContextMenuActionsCommands [
-	| dbg stackTable |
-	dbg := self debuggerOn: session.
-	stackTable := dbg stackTable.
-	stackTable selectItem: stackTable items first.
-	self
-		assertCommandGroup: dbg stackContextMenuActionsCommands
-		hasSameCommands:
-			(CmCommand
-				commandClassesFromPragma: #StackContextMenuActionsCommand)
-		withContext: dbg
-		displayStrategy: CmUIDisplayAsGroup
-]
-
-{ #category : #'tests - stack table context menu' }
-StDebuggerTest >> testStackContextMenuNavigationCommands [
-	| dbg cmdGroup groupEntries cmdEntries expectedEntries|	
-	dbg := self debuggerOn: session.
-	cmdGroup := dbg stackContextMenuNavigationCommands.
-	groupEntries := cmdGroup decoratedGroup entries.
-	
-	self deny: cmdGroup isRoot.
-	self assert: groupEntries size equals: 4.
-	self assert: cmdGroup name equals: 'Browse'.
-	self assert: cmdGroup displayStrategy class identicalTo: CmUIDisplayAsSubMenu.
-	
-	cmdEntries := self commandsFromSpecGroup: groupEntries first.
-	expectedEntries := self commandsFromSpecGroup: dbg stackContextNavigationCommands. 	
-	self assertCommands: cmdEntries equals: expectedEntries.
-	
-	cmdEntries := self commandsFromSpecGroup: groupEntries second.
-	expectedEntries := self commandsFromSpecGroup: dbg stackMethodNavigationCommands. 	
-	self assertCommands: cmdEntries equals: expectedEntries.
-	
-	cmdEntries := self commandsFromSpecGroup: groupEntries third.
-	expectedEntries := self commandsFromSpecGroup: dbg stackMethodSelectorNavigationCommands. 	
-	self assertCommands: cmdEntries equals: expectedEntries.
-	
-	cmdEntries := self commandsFromSpecGroup: groupEntries fourth.
-	expectedEntries := self commandsFromSpecGroup: dbg stackReceiverClassNavigationCommands. 	
-	self assertCommands: cmdEntries equals: expectedEntries.
-	
 ]
 
 { #category : #'tests - stack table context menu' }
