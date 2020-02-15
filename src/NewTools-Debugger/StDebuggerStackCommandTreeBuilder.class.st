@@ -14,6 +14,16 @@ StDebuggerStackCommandTreeBuilder class >> groupName [
 	^'Stack'
 ]
 
+{ #category : #accessing }
+StDebuggerStackCommandTreeBuilder >> browseGroupDescription [
+	^ 'Navigate the system from the stack.'
+]
+
+{ #category : #accessing }
+StDebuggerStackCommandTreeBuilder >> browseGroupName [
+	^ 'Browse'
+]
+
 { #category : #building }
 StDebuggerStackCommandTreeBuilder >> buildDebuggerCommandGroup [
 	|stackGroup|
@@ -37,13 +47,23 @@ StDebuggerStackCommandTreeBuilder >> navigationCommand: aCommandClass forContext
 { #category : #commands }
 StDebuggerStackCommandTreeBuilder >> stackContextMenuActionsCommands [
 	| group |
-	group := (CmCommandGroup named: 'Context Actions') asSpecGroup.
+	group := (CmCommandGroup named: self stackContextMenuActionsGroupName) asSpecGroup.
 	group beDisplayedAsGroup.
-	group description: 'Actions on the selected context.'.
+	group description: self stackContextMenuActionsDescription.
 	group iconName: #smallDoIt.
 	(StDebugCommand stackContextMenuActionsCommandsForDebugger: stDebuggerInstance)
 		do: [ :cmd | group register: cmd ].
 	^ group
+]
+
+{ #category : #accessing }
+StDebuggerStackCommandTreeBuilder >> stackContextMenuActionsDescription [
+	^ 'Actions on the selected context.'
+]
+
+{ #category : #accessing }
+StDebuggerStackCommandTreeBuilder >> stackContextMenuActionsGroupName [
+	^ 'Context Actions'
 ]
 
 { #category : #commands }
@@ -58,8 +78,8 @@ StDebuggerStackCommandTreeBuilder >> stackContextMenuCommandsForRootGroup: aRoot
 { #category : #commands }
 StDebuggerStackCommandTreeBuilder >> stackContextMenuExplorationCommands [
 	| group |
-	group := (CmCommandGroup named: 'Explore') asSpecGroup.
-	group description: 'Explore the receiver object''s graph.'.
+	group := (CmCommandGroup named: self stackContextMenuExplorationGroupName) asSpecGroup.
+	group description: self stackContextMenuExplorationDescription.
 	group iconName: SpSystemDiscoveryCommand defaultIconName.
 	group
 		register:
@@ -79,11 +99,21 @@ StDebuggerStackCommandTreeBuilder >> stackContextMenuExplorationCommands [
 	^ group
 ]
 
+{ #category : #accessing }
+StDebuggerStackCommandTreeBuilder >> stackContextMenuExplorationDescription [
+	^ 'Explore the receiver object''s graph.'
+]
+
+{ #category : #accessing }
+StDebuggerStackCommandTreeBuilder >> stackContextMenuExplorationGroupName [
+	^ 'Explore'
+]
+
 { #category : #commands }
 StDebuggerStackCommandTreeBuilder >> stackContextMenuNavigationCommands [
 	| group |
-	group := (CmCommandGroup named: 'Browse') asSpecGroup.
-	group description: 'Navigate the system from the stack.'.
+	group := (CmCommandGroup named: self browseGroupName) asSpecGroup.
+	group description: self browseGroupDescription.
 	group iconName: #smallSystemBrowser.
 	group register: self stackContextNavigationCommands.
 	group register: self stackMethodNavigationCommands.
@@ -95,8 +125,8 @@ StDebuggerStackCommandTreeBuilder >> stackContextMenuNavigationCommands [
 { #category : #commands }
 StDebuggerStackCommandTreeBuilder >> stackContextMenuStackEditionsCommands [
 	| group |
-	group := (CmCommandGroup named: 'Stack') asSpecGroup.
-	group description: 'Stack edition.'.
+	group := (CmCommandGroup named: self stackGroupName) asSpecGroup.
+	group description: self stackGroupDescription.
 	group iconName: #edit.
 	(StDebugCommand stackContextMenuEditionCommandsForDebugger: stDebuggerInstance)
 		do: [ :cmd | group register: cmd ].
@@ -108,8 +138,8 @@ StDebuggerStackCommandTreeBuilder >> stackContextNavigationCommands [
 	"Commands to navigate the context"
 
 	| group |
-	group := (CmCommandGroup
-		named: 'Receiver class code navigation commands') asSpecGroup.
+	group := (CmCommandGroup named: self stackContextNavigationGroupName)
+		asSpecGroup.
 	group beDisplayedAsGroup.
 	group
 		register:
@@ -128,12 +158,27 @@ StDebuggerStackCommandTreeBuilder >> stackContextNavigationCommands [
 	^ group
 ]
 
+{ #category : #accessing }
+StDebuggerStackCommandTreeBuilder >> stackContextNavigationGroupName [
+	^ 'Receiver class code navigation commands'
+]
+
+{ #category : #accessing }
+StDebuggerStackCommandTreeBuilder >> stackGroupDescription [
+	^ 'Stack edition.'
+]
+
+{ #category : #accessing }
+StDebuggerStackCommandTreeBuilder >> stackGroupName [
+	^ 'Stack'
+]
+
 { #category : #commands }
 StDebuggerStackCommandTreeBuilder >> stackMethodNavigationCommands [
 	"Commands to navigate the selected context's method "
 
 	| group |
-	group := (CmCommandGroup named: 'Selected method navigation commands')
+	group := (CmCommandGroup named: self stackMethodNavigationGroupName)
 		asSpecGroup.
 	group beDisplayedAsGroup.
 	{SpBrowseMethodInheritanceCommand.
@@ -147,14 +192,18 @@ StDebuggerStackCommandTreeBuilder >> stackMethodNavigationCommands [
 	^ group
 ]
 
+{ #category : #accessing }
+StDebuggerStackCommandTreeBuilder >> stackMethodNavigationGroupName [
+	^ 'Selected method navigation commands'
+]
+
 { #category : #commands }
 StDebuggerStackCommandTreeBuilder >> stackMethodSelectorNavigationCommands [
 	"Commands to navigate the selected context's method selector as context "
 
 	| group |
 	group := (CmCommandGroup
-		named: 'Selected method''s selector navigation commands')
-		asSpecGroup.
+		named: self stackMethodSelectorNavigationGroupName) asSpecGroup.
 	group beDisplayedAsGroup.
 	{SpBrowseImplementorsCommand.
 	SpBrowseSendersCommand.
@@ -168,12 +217,17 @@ StDebuggerStackCommandTreeBuilder >> stackMethodSelectorNavigationCommands [
 	^ group
 ]
 
+{ #category : #accessing }
+StDebuggerStackCommandTreeBuilder >> stackMethodSelectorNavigationGroupName [
+	^ 'Selected method''s selector navigation commands'
+]
+
 { #category : #commands }
 StDebuggerStackCommandTreeBuilder >> stackReceiverClassNavigationCommands [
 	"Commands to navigate the selected context's receiver class as context "
 
 	| group |
-	group := (CmCommandGroup named: 'Receiver class navigation commands')
+	group := (CmCommandGroup named: self stackReceiverClassNavigationGroupName)
 		asSpecGroup.
 	group beDisplayedAsGroup.
 	{SpBrowseClassReferencesCommand.
@@ -188,4 +242,9 @@ StDebuggerStackCommandTreeBuilder >> stackReceiverClassNavigationCommands [
 						navigationCommand: navCmdClass
 						forContext: stDebuggerInstance stackSelectionReceiverClassContext) ].
 	^ group
+]
+
+{ #category : #accessing }
+StDebuggerStackCommandTreeBuilder >> stackReceiverClassNavigationGroupName [
+	^ 'Receiver class navigation commands'
 ]
