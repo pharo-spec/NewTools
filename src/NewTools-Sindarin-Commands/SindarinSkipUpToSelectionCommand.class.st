@@ -11,7 +11,7 @@ SindarinSkipUpToSelectionCommand class >> defaultDescription [
 
 { #category : #'as yet unclassified' }
 SindarinSkipUpToSelectionCommand class >> defaultName [
-	<toolbarDebugCommand: 50>
+	<toolbarExtensionDebugCommand: 50>
 	<codeExtensionDebugCommand: 50>
 	^ 'Skip up to instruction (will stop before)'
 ]

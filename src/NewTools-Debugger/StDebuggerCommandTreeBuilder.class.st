@@ -19,14 +19,47 @@ StDebuggerCommandTreeBuilder class >> buildCommandsGroupWith: aStDebuggerInstanc
 	^self new buildCommandsGroupWith: aStDebuggerInstance forRoot: aRootCommandGroup
 ]
 
-{ #category : #commands }
+{ #category : #converting }
+StDebuggerCommandTreeBuilder >> asMenuPresenter [ 	
+	^rootCommandGroup asMenuPresenter
+]
+
+{ #category : #building }
+StDebuggerCommandTreeBuilder >> buildAndRegisterGroup [
+	"builds the group that will register under the provided root command group"
+
+	| group |
+	group := (CmCommandGroup named: self groupName) asSpecGroup.
+	group description: self groupDescription.
+	rootCommandGroup register: group.
+	^ group
+]
+
+{ #category : #building }
 StDebuggerCommandTreeBuilder >> buildCommandsGroupWith: aStDebuggerInstance forRoot: aRootCommandGroup [
 	stDebuggerInstance := aStDebuggerInstance.
 	rootCommandGroup := aRootCommandGroup.
 	self buildDebuggerCommandGroup
 ]
 
-{ #category : #commands }
+{ #category : #building }
 StDebuggerCommandTreeBuilder >> buildDebuggerCommandGroup [
 	self subclassResponsibility 
+]
+
+{ #category : #accessing }
+StDebuggerCommandTreeBuilder >> group [
+	^ rootCommandGroup
+		commandOrGroupNamed: self groupName
+		ifNone: [ self buildAndRegisterGroup ]
+]
+
+{ #category : #accessing }
+StDebuggerCommandTreeBuilder >> groupDescription [
+	^self subclassResponsibility 
+]
+
+{ #category : #accessing }
+StDebuggerCommandTreeBuilder >> groupName [
+	^self subclassResponsibility 
 ]

@@ -11,7 +11,7 @@ SindarinSkipThroughSelectionCommand class >> defaultDescription [
 
 { #category : #'as yet unclassified' }
 SindarinSkipThroughSelectionCommand class >> defaultName [
-	<toolbarDebugCommand: 50>
+	<toolbarExtensionDebugCommand: 50>
 	<codeExtensionDebugCommand: 50>
 	^ 'Skip through instruction (will stop after)'
 ]
