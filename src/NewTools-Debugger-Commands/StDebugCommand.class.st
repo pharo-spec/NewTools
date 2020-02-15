@@ -39,6 +39,11 @@ StDebugCommand class >> preDebugCommandsForDebugger: debugger [
 		for: debugger
 ]
 
+{ #category : #default }
+StDebugCommand class >> shortName [
+	^self defaultName
+]
+
 { #category : #'instance creation' }
 StDebugCommand class >> toolbarCommandsForDebugger: debugger [
 
