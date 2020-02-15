@@ -450,6 +450,14 @@ SpecDebugger >> application [
 	^ self class currentApplication
 ]
 
+{ #category : #initialization }
+SpecDebugger >> buildContextMenus [
+	| debuggerCommandGroup stackGroup |
+	debuggerCommandGroup := self rootCommandsGroup.
+	stackGroup := debuggerCommandGroup / StDebuggerStackCommandTreeBuilder groupName.
+	stackTable contextMenu: [ stackGroup asMenuPresenter ]
+]
+
 { #category : #actions }
 SpecDebugger >> clear [
 	extensionToolsNotebook pages do:[:page| page activePresenter windowIsClosing].
@@ -618,14 +626,6 @@ SpecDebugger >> initializeCode [
 
 ]
 
-{ #category : #initialization }
-SpecDebugger >> initializeContextMenus [
-	| debuggerCommandGroup stackGroup |
-	debuggerCommandGroup := self rootCommandsGroup.
-	stackGroup := debuggerCommandGroup / StDebuggerStackCommandTreeBuilder groupName.
-	stackTable contextMenu: [ stackGroup asMenuPresenter ]
-]
-
 { #category : #extensions }
 SpecDebugger >> initializeExtensionTools [
 	| settingsToClasses sortedSettings pages |
@@ -680,7 +680,7 @@ SpecDebugger >> initializeStack [
 		self updateCodeFromContext: context.
 		self updateToolbar.
 		self updateTitle.
-		self expandStackIfLastItemIsSelected  ].
+		self expandStackIfLastItemIsSelected ].
 	
 	stackHeader := self instantiate: StHeaderBar.
 	stackHeader label: 'Stack'.
@@ -738,8 +738,10 @@ SpecDebugger >> okToChange [
 SpecDebugger >> openWithFullView [
 	"Create and schedule a full debugger with the given label. Do not
 	terminate the current active process."
-	self 
+
+	self
 		openWithSpec;
+		buildContextMenus;
 		updateToolbar;
 		updateCodeFromContext
 ]
@@ -1045,7 +1047,7 @@ SpecDebugger >> updateStep [
 	self updateStackFromSession: self session.
 	self updateCodeHeaderLabel.
 	self updateExtensionsFrom: self session.
-	self initializeContextMenus
+	self buildContextMenus
 ]
 
 { #category : #'updating actions' }
