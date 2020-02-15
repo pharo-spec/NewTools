@@ -90,7 +90,9 @@ StDebuggerStackCommandTreeBuilderTest >> setUp [
 StDebuggerStackCommandTreeBuilderTest >> testBuildDebuggerCommandGroup [
 	|stackGroup|
 	self assert: rootGroup entries size equals: 1.
-	stackGroup := rootGroup groups first.
+	stackGroup := rootGroup groups first.	
+	self deny: stackGroup isRoot.
+	self assertCommandGroup: stackGroup hasDisplayStrategy: CmUIDisplayAsSubMenu.
 	self assert: stackGroup name equals: builder class groupName.
 	self assert: stackGroup description equals: builder class groupDescription.
 	self assert: stackGroup entries size equals: 4.

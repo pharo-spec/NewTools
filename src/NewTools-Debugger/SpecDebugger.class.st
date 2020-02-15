@@ -450,12 +450,12 @@ SpecDebugger >> application [
 	^ self class currentApplication
 ]
 
-{ #category : #initialization }
+{ #category : #commands }
 SpecDebugger >> buildContextMenus [
 	| debuggerCommandGroup stackGroup |
 	debuggerCommandGroup := self rootCommandsGroup.
 	stackGroup := debuggerCommandGroup / StDebuggerStackCommandTreeBuilder groupName.
-	stackTable contextMenu: [ stackGroup asMenuPresenter ]
+	stackTable contextMenu: [ stackGroup beRoot asMenuPresenter ]
 ]
 
 { #category : #actions }

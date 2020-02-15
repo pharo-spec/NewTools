@@ -35,7 +35,7 @@ StDebuggerStackCommandTreeBuilder >> browseGroupName [
 { #category : #building }
 StDebuggerStackCommandTreeBuilder >> buildDebuggerCommandGroup [
 	|stackGroup|
-	stackGroup := self group.		
+	stackGroup := self group.
 	stackGroup decoratedGroup register: self stackContextMenuBrowseCommands.
 	stackGroup decoratedGroup register: self stackContextMenuExplorationCommands.	
 	stackGroup decoratedGroup register: self stackContextMenuStackEditionsCommands.
