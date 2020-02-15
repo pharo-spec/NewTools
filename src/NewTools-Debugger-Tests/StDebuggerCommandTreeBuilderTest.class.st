@@ -1,5 +1,45 @@
 Class {
 	#name : #StDebuggerCommandTreeBuilderTest,
 	#superclass : #TestCase,
+	#instVars : [
+		'builder'
+	],
 	#category : #'NewTools-Debugger-Tests-Debugger - model'
 }
+
+{ #category : #running }
+StDebuggerCommandTreeBuilderTest >> setUp [
+	"Hooks that subclasses may override to define the fixture of test."
+	builder := StDebuggerMockCommandTreeBuilder new
+]
+
+{ #category : #tests }
+StDebuggerCommandTreeBuilderTest >> testGroup [
+	|rootGroup|
+	rootGroup := (CmCommandGroup named: 'root') asSpecGroup.
+	builder buildCommandsGroupWith: SpecDebugger basicNew forRoot: rootGroup.
+	self assert: builder group identicalTo: rootGroup / builder class groupName.
+	self assert: builder group name equals: builder class groupName.
+	self assert: builder group description equals: builder class groupDescription
+]
+
+{ #category : #tests }
+StDebuggerCommandTreeBuilderTest >> testGroupBuilding [
+	|rootGroup|
+	rootGroup := (CmCommandGroup named: 'root') asSpecGroup.
+	builder buildCommandsGroupWith: SpecDebugger basicNew forRoot: rootGroup.
+	builder buildAndRegisterGroup.
+	self assert: rootGroup groups size equals: 1.
+	self assert: rootGroup groups first identicalTo: rootGroup / builder class groupName.
+	self assert: rootGroup groups first name equals: builder class groupName
+]
+
+{ #category : #tests }
+StDebuggerCommandTreeBuilderTest >> testGroupDescription [
+	self assert: builder groupDescription equals: builder class groupDescription
+]
+
+{ #category : #tests }
+StDebuggerCommandTreeBuilderTest >> testGroupName [
+	self assert: builder groupName equals: builder class groupName
+]
