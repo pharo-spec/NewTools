@@ -19,6 +19,16 @@ StDebuggerCommandTreeBuilder class >> buildCommandsGroupWith: aStDebuggerInstanc
 	^self new buildCommandsGroupWith: aStDebuggerInstance forRoot: aRootCommandGroup
 ]
 
+{ #category : #accessing }
+StDebuggerCommandTreeBuilder class >> groupDescription [
+	^self subclassResponsibility 
+]
+
+{ #category : #accessing }
+StDebuggerCommandTreeBuilder class >> groupName [
+	^self subclassResponsibility 
+]
+
 { #category : #converting }
 StDebuggerCommandTreeBuilder >> asMenuPresenter [ 	
 	^rootCommandGroup asMenuPresenter
@@ -56,10 +66,10 @@ StDebuggerCommandTreeBuilder >> group [
 
 { #category : #accessing }
 StDebuggerCommandTreeBuilder >> groupDescription [
-	^self subclassResponsibility 
+	^self class groupDescription
 ]
 
 { #category : #accessing }
-StDebuggerCommandTreeBuilder >> groupName [
-	^self subclassResponsibility 
+StDebuggerCommandTreeBuilder >> groupName [ 
+	^self class groupName
 ]

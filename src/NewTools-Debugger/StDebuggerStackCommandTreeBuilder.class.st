@@ -4,6 +4,16 @@ Class {
 	#category : #'NewTools-Debugger-Model'
 }
 
+{ #category : #accessing }
+StDebuggerStackCommandTreeBuilder class >> groupDescription [
+	^ 'Actions on the debugger stack.'
+]
+
+{ #category : #accessing }
+StDebuggerStackCommandTreeBuilder class >> groupName [ 	
+	^'Stack'
+]
+
 { #category : #building }
 StDebuggerStackCommandTreeBuilder >> buildDebuggerCommandGroup [
 	|stackGroup|
@@ -14,16 +24,6 @@ StDebuggerStackCommandTreeBuilder >> buildDebuggerCommandGroup [
 	stackGroup decoratedGroup register: self stackContextMenuStackEditionsCommands
 
 	
-]
-
-{ #category : #accessing }
-StDebuggerStackCommandTreeBuilder >> groupDescription [
-	^ 'Actions on the debugger stack.'
-]
-
-{ #category : #accessing }
-StDebuggerStackCommandTreeBuilder >> groupName [ 	
-	^'Stack'
 ]
 
 { #category : #commands }
