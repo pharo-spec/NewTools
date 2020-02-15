@@ -587,8 +587,7 @@ SpecDebugger >> initialExtent [
 
 { #category : #initialization }
 SpecDebugger >> initialize [
-	super initialize.	
-	self initializeContextMenus.
+	super initialize.
 	self setSessionHolderSubscriptions.
 	self forceSessionUpdate
 ]
@@ -654,7 +653,6 @@ SpecDebugger >> initializeInspector [
 
 { #category : #initialization }
 SpecDebugger >> initializePresenters [
-
 	self initializeStack.
 	self initializeToolbar.
 	self initializeCode.
@@ -676,7 +674,7 @@ SpecDebugger >> initializeStack [
 		addColumn: (SpStringTableColumn
 			title: 'Context'
 			evaluated: [ :item | item sender stDisplayString ]).	
-	
+		
 	stackTable transmitDo: [ :context | 
 		self updateInspectorFromContext: context.
 		self updateCodeFromContext: context.
@@ -1046,7 +1044,8 @@ SpecDebugger >> updateStep [
 	self updateInspectorFromContext: self context.
 	self updateStackFromSession: self session.
 	self updateCodeHeaderLabel.
-	self updateExtensionsFrom: self session
+	self updateExtensionsFrom: self session.
+	self initializeContextMenus
 ]
 
 { #category : #'updating actions' }
