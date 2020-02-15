@@ -94,14 +94,14 @@ StDebuggerStackCommandTreeBuilderTest >> testBuildDebuggerCommandGroup [
 	self assert: stackGroup name equals: builder class groupName.
 	self assert: stackGroup description equals: builder class groupDescription.
 	self assert: stackGroup entries size equals: 4.
-	self assert: stackGroup groups first name equals: builder stackContextMenuActionsGroupName.
-	self assert: stackGroup groups first description equals: builder stackContextMenuActionsDescription.
-	self assert: stackGroup groups second name equals: builder browseGroupName.
-	self assert: stackGroup groups second description equals: builder browseGroupDescription.
-	self assert: stackGroup groups third name equals: builder stackContextMenuExplorationGroupName.
-	self assert: stackGroup groups third description equals: builder stackContextMenuExplorationDescription.
-	self assert: stackGroup groups fourth name equals: builder stackGroupName.
-	self assert: stackGroup groups fourth description equals: builder stackGroupDescription
+	self assert: stackGroup groups first name equals: builder browseGroupName.
+	self assert: stackGroup groups first description equals: builder browseGroupDescription.
+	self assert: stackGroup groups second name equals: builder stackContextMenuExplorationGroupName.
+	self assert: stackGroup groups second description equals: builder stackContextMenuExplorationDescription.
+	self assert: stackGroup groups third name equals: builder stackGroupName.
+	self assert: stackGroup groups third description equals: builder stackGroupDescription.
+	self assert: stackGroup groups fourth name equals: builder stackContextMenuActionsGroupName.
+	self assert: stackGroup groups fourth description equals: builder stackContextMenuActionsDescription.
 ]
 
 { #category : #tests }
