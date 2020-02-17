@@ -17,7 +17,8 @@ Class {
 	#instVars : [
 		'millerList',
 		'model',
-		'lastPageSelectedTabName'
+		'lastPageSelectedTabName',
+		'withHeaderBar'
 	],
 	#classVars : [
 		'PreferredExtent'
@@ -174,7 +175,8 @@ StInspector >> newInspectorFor: aModel [
 		newInspector trySelectAnyPageNamed: { 
 			lastPageSelectedTabName. 
 			pages last selectedPageName } ].
-	
+	self withHeaderBar ifFalse:[newInspector buildWithSpec: #noHeaderSpec].
+
 	^ newInspector
 ]
 
@@ -240,4 +242,14 @@ StInspector >> updateTitle [
 	self isRoot ifFalse: [ ^ self ].
 	self withWindowDo: [ :window | 
 		window title: self title ].
+]
+
+{ #category : #accessing }
+StInspector >> withHeaderBar [
+	 ^withHeaderBar ifNil:[withHeaderBar := true]
+]
+
+{ #category : #accessing }
+StInspector >> withHeaderBar: bool [
+	withHeaderBar := bool
 ]
