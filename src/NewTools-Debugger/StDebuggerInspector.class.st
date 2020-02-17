@@ -99,7 +99,8 @@ StDebuggerInspector >> restoreRawInspectionSelectionForContext: aContext [
 					(self rawInspectionSelectionCache
 						at: receiverClass -> selector
 						ifAbsent:
-							[ self rawInspectionSelectionCache at: receiverClass ifAbsent: [ #() ] ]) ]
+							[ 
+							self rawInspectionSelectionCache at: receiverClass ifAbsent: [ #(2 1) ] ]) ]
 ]
 
 { #category : #private }
