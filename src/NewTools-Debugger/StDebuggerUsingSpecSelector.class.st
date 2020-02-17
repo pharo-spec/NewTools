@@ -89,6 +89,7 @@ StDebuggerUsingSpecSelector >> selectSpecSelector [
 
 { #category : #'specs - selectors' }
 StDebuggerUsingSpecSelector >> selectorForDebuggerStatus: debuggerExtensionsActivated extensionsStatus: debuggerHasExtensions [
+	self flag: 'This seems wrong: we should adapt the layout and its size directly and not testing and choosing other selectors because this does not scale...'.
 	^ (debuggerExtensionsActivated and: [ debuggerHasExtensions ])
 		ifTrue: [ self class defaultDebuggerWithExtensionSpecSelector ]
 		ifFalse: [ self class defaultDebuggerWithoutExtensionSpecSelector ]
