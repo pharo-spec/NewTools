@@ -63,6 +63,12 @@ SpecDebugger class >> availableExtentionToolsClassesSettings [
 	^ settingToClass 
 ]
 
+{ #category : #specs }
+SpecDebugger class >> availableSpecSelectors [
+	^ (self class allSelectorsInProtocol: #specs )
+		reject: [ :selector | selector = #defaultSpec ]
+]
+
 { #category : #commands }
 SpecDebugger class >> buildCommandsGroupWith: stDebuggerInstance forRoot: rootCommandGroup [
 	StDebuggerStackCommandTreeBuilder
@@ -200,6 +206,18 @@ SpecDebugger class >> debuggerHorizontalWithExtensionsSpec [
 				add: #extensionToolsNotebook;
 				yourself);
 		yourself
+]
+
+{ #category : #settings }
+SpecDebugger class >> debuggerLayoutSettingsOn: aBuilder [
+	<systemsettings>
+	(aBuilder pickOne: #usingSpecSelector)
+		label: 'Default debugger spec layout';
+		target: self;
+		default: #debuggerHorizontalWithExtensionsSpec;
+		parent: #debugging;
+		domainValues: self availableSpecSelectors;
+		description: 'Sets the default spec layout of the debugger.'
 ]
 
 { #category : #specs }
@@ -466,16 +484,16 @@ SpecDebugger class >> traditionalSpec [
 ]
 
 { #category : #'specs - selectors' }
-SpecDebugger class >> useSpecSelector: aSelector [
-
-	UsingSpecSelector := StDebuggerUsingSpecSelector on: aSelector
-]
-
-{ #category : #'specs - selectors' }
 SpecDebugger class >> usingSpecSelector [
 	^ (UsingSpecSelector
 		ifNil: [ UsingSpecSelector := StDebuggerUsingSpecSelector defaultSelector ])
 		selectSpecSelector
+]
+
+{ #category : #'specs - selectors' }
+SpecDebugger class >> usingSpecSelector: aSelector [
+
+	UsingSpecSelector := StDebuggerUsingSpecSelector on: aSelector
 ]
 
 { #category : #accessing }
