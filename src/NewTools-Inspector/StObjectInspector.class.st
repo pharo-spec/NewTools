@@ -18,6 +18,9 @@ Class {
 	#classVars : [
 		'PreferredExtent'
 	],
+	#classInstVars : [
+		'header'
+	],
 	#category : #'NewTools-Inspector-View'
 }
 
@@ -125,7 +128,7 @@ StObjectInspector >> initializePresenters [
 	header := self instantiate: StHeaderBar.
 	views := self newNotebook.	
 	evaluator := self newCode.
-			
+	evaluator text: '"Code evaluator"'.
 	self refresh
 ]
 
