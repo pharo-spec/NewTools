@@ -141,7 +141,7 @@ StObjectInspector >> initializePresenters [
 	header := self instantiate: StHeaderBar.
 	views := self newNotebook.	
 	evaluator := self newCode.
-	evaluator text: '"Code evaluator"'.
+	evaluator text: '"Inspector evaluator"'.
 	self refresh
 ]
 
