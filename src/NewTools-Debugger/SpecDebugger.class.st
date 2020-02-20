@@ -179,25 +179,21 @@ SpecDebugger class >> debuggerExtensionsSettingsOn: aBuilder parentGroup: settin
 SpecDebugger class >> debuggerHorizontalWithExtensionsSpec [
 	^ SpPanedLayout newHorizontal
 		add:
-			(SpPanedLayout newVertical
-				position: 40 percent;
-				add: #stackTable;
+			(SpBoxLayout newVertical
+				add: #stackTable
+					withConstraints:
+						[ :constraints | constraints height: self toolbarHeight * 10 ];
 				add:
 					(SpBoxLayout newVertical
-						add:
-							(SpBoxLayout newVertical
-								add: #toolbar;
-								add: #codeHeader
-									expand: true
-									fill: true
-									padding: 0;
-								yourself)
-							withConstraints: [ :constraints | 
-								constraints
-									expand: false;
-									height: self toolbarHeight * 2 ];
-						add: #code;
-						yourself);
+						add: #toolbar;
+						add: #codeHeader
+							expand: true
+							fill: true
+							padding: 0;
+						yourself)
+					withConstraints:
+						[ :constraints | constraints height: self toolbarHeight * 2 ];
+				add: #code expand: true;
 				yourself);
 		add:
 			(SpPanedLayout newVertical
