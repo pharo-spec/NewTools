@@ -6,7 +6,7 @@ Class {
 
 { #category : #specs }
 StDebuggerBreakpointInspection class >> debuggingExtensionToolName [
-	<debuggerExtensionOrder: 1 showByDefault: true>
+	<debuggerExtensionOrder: 3 showByDefault: true>
 	^ 'Breakpoints'
 ]
 

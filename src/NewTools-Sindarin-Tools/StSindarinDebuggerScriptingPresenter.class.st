@@ -22,7 +22,7 @@ Class {
 
 { #category : #specs }
 StSindarinDebuggerScriptingPresenter class >> debuggingExtensionToolName [
-	<debuggerExtensionOrder: 1 showByDefault: true>
+	<debuggerExtensionOrder: 4 showByDefault: true>
 	^ 'Sindarin'
 ]
 
