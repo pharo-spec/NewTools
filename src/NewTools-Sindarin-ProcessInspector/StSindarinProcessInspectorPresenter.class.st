@@ -31,14 +31,14 @@ StSindarinProcessInspectorPresenter >> initializePresenters [
 	attributesTable := self newTable.
 	attributesTable
 		addColumn:
-			(SpStringTableColumn evaluated: [ :item | item ])
-				yourself;
+			((SpStringTableColumn evaluated: [ :item | item ]) width: 80) ;
 		addColumn:
-			(SpStringTableColumn			
-				evaluated: [ :item | (processData at: item) asString  ]) yourself.
-				
-		attributesTable items: {'name'. 'priority'. 'active'. 'suspended'. 'terminating'. 'terminated'}
-
+			(SpStringTableColumn
+				evaluated: [ :item | (processData at: item) asString ]) yourself.
+	attributesTable
+		items:
+			{'name' . 'priority' . 'active' . 'suspended' . 'terminating'.
+			'terminated'}
 ]
 
 { #category : #'accessing model' }
