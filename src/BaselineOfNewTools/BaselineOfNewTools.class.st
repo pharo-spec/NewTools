@@ -49,7 +49,9 @@ BaselineOfNewTools >> baseline: spec [
 			
 			"Sindarin"
 			package: 'NewTools-Sindarin-Commands';
-			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ]
+			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ];
+			
+			package: 'NewTools-Sindarin-ProcessInspector' with: [ spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ]
 			
 			"Debugger Selector"
 			";
