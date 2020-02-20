@@ -1,9 +1,13 @@
+"
+Simple process inspector as a demo extension to show how extension work.
+"
 Class {
 	#name : #StSindarinProcessInspectorPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
 		'attributesTable',
-		'sindarinDebugger'
+		'sindarinDebugger',
+		'processData'
 	],
 	#category : #'NewTools-Sindarin-ProcessInspector'
 }
@@ -27,29 +31,14 @@ StSindarinProcessInspectorPresenter >> initializePresenters [
 	attributesTable := self newTable.
 	attributesTable
 		addColumn:
-			(SpStringTableColumn title: 'name' evaluated: [ :item | item name ])
+			(SpStringTableColumn evaluated: [ :item | item ])
 				yourself;
 		addColumn:
-			(SpStringTableColumn
-				title: 'priority'
-				evaluated: [ :item | item priority ]) yourself;
-		addColumn:
-			(SpStringTableColumn
-				title: 'active'
-				evaluated: [ :item | item isActiveProcess ]) yourself;
-		addColumn:
-			(SpStringTableColumn
-				title: 'suspended'
-				evaluated: [ :item | item isSuspended ]) yourself;
-		addColumn:
-			(SpStringTableColumn
-				title: 'terminating'
-				evaluated: [ :item | item isTerminated ]) yourself;
-		addColumn:
-			(SpStringTableColumn
-				title: 'terminated'
-				evaluated: [ :item | item isTerminating ]) yourself.
-		attributesTable items: { sindarinDebugger currentProcess }
+			(SpStringTableColumn			
+				evaluated: [ :item | (processData at: item) asString  ]) yourself.
+				
+		attributesTable items: {'name'. 'priority'. 'active'. 'suspended'. 'terminating'. 'terminated'}
+
 ]
 
 { #category : #'accessing model' }
@@ -60,5 +49,19 @@ StSindarinProcessInspectorPresenter >> setModelBeforeInitialization: aStDebugger
 
 { #category : #'accessing model' }
 StSindarinProcessInspectorPresenter >> updatePresenter [
+	self updateProcessData
+]
+
+{ #category : #'accessing model' }
+StSindarinProcessInspectorPresenter >> updateProcessData [
+	|process|
+	processData := Dictionary new.
+	process := sindarinDebugger currentProcess.
+	processData at: 'name' put: process name.
+	processData at: 'priority' put: process priority.
+	processData at: 'active' put: process isActiveProcess.
+	processData at: 'suspended' put: process isSuspended.
+	processData at: 'terminating' put: process isTerminated.
+	processData at: 'terminated' put: process isTerminating.
 	
 ]
