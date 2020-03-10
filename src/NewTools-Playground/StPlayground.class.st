@@ -78,6 +78,14 @@ StPlayground >> buildToolBar [
 StPlayground >> initializePresenters [
 	
 	text := self newCode
+		doItReceiver: self;
+		completionEngine: (SpCodeCompletionEngine new 
+			scripting: true;
+			doItRequestor: self;
+			doItContext: nil;
+			completionClass: nil;
+			yourself);
+		yourself
 ]
 
 { #category : #initialization }
@@ -114,4 +122,10 @@ StPlayground >> toolbarActions [
 			register: (StPlaygroundPagesCommand forSpecContext: self);
 			yourself);
 		yourself
+]
+
+{ #category : #'as yet unclassified' }
+StPlayground >> variableBindingNames [
+	
+	^ #()
 ]

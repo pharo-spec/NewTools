@@ -21,7 +21,7 @@ StPharoSettings class >> toolbarDisplayMode [
 
 { #category : #settings }
 StPharoSettings class >> toolbarDisplayMode: aMode [
-	"e.g. SpToolBarDisplayMode modeIcon"
+	"self toolbarDisplayMode: SpToolBarDisplayMode modeIcon"
 	
 	ToolbarDisplayMode := aMode
 ]
