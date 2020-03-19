@@ -13,7 +13,7 @@ Class {
 }
 
 { #category : #accessing }
-StDebuggerStackCommandTreeBuilder class >> commandDisplayStrategy [
+StDebuggerStackCommandTreeBuilder class >> displayStrategy [
 	^CmUIDisplayAsSubMenu
 ]
 
@@ -41,6 +41,7 @@ StDebuggerStackCommandTreeBuilder >> browseGroupName [
 StDebuggerStackCommandTreeBuilder >> buildDebuggerCommandGroup [
 	|stackGroup|
 	stackGroup := self group.
+	stackGroup displayStrategy: self displayStrategy.
 	stackGroup decoratedGroup register: self stackContextMenuBrowseCommands.
 	stackGroup decoratedGroup register: self stackContextMenuExplorationCommands.	
 	stackGroup decoratedGroup register: self stackContextMenuStackEditionsCommands.

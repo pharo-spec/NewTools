@@ -20,7 +20,7 @@ StDebuggerCommandTreeBuilder class >> buildCommandsGroupWith: aStDebuggerInstanc
 ]
 
 { #category : #accessing }
-StDebuggerCommandTreeBuilder class >> commandDisplayStrategy [
+StDebuggerCommandTreeBuilder class >> displayStrategy [
 	^self subclassResponsibility 
 ]
 
@@ -60,6 +60,11 @@ StDebuggerCommandTreeBuilder >> buildCommandsGroupWith: aStDebuggerInstance forR
 { #category : #building }
 StDebuggerCommandTreeBuilder >> buildDebuggerCommandGroup [
 	self subclassResponsibility 
+]
+
+{ #category : #accessing }
+StDebuggerCommandTreeBuilder >> displayStrategy [
+	^self class displayStrategy new
 ]
 
 { #category : #accessing }

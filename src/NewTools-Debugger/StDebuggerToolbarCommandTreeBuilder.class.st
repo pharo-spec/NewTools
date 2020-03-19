@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #accessing }
-StDebuggerToolbarCommandTreeBuilder class >> commandDisplayStrategy [
+StDebuggerToolbarCommandTreeBuilder class >> displayStrategy [
 	^CmUIDisplayAsGroup
 ]
 

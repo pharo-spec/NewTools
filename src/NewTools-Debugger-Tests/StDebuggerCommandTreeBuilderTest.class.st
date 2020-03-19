@@ -14,6 +14,11 @@ StDebuggerCommandTreeBuilderTest >> setUp [
 ]
 
 { #category : #tests }
+StDebuggerCommandTreeBuilderTest >> testDisplayStrategy [
+	self assert: builder displayStrategy class equals: builder class displayStrategy
+]
+
+{ #category : #tests }
 StDebuggerCommandTreeBuilderTest >> testGroup [
 	|rootGroup|
 	rootGroup := (CmCommandGroup named: 'root') asSpecGroup.

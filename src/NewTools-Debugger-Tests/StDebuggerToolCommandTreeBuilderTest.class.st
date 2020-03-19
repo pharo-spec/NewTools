@@ -89,7 +89,7 @@ StDebuggerToolCommandTreeBuilderTest >> testCommandGroupDefinition [
 	|group|
 	group := rootGroup groups first.	
 	self deny: group isRoot.
-	self assertCommandGroup: group hasDisplayStrategy: builder class commandDisplayStrategy.
+	self assertCommandGroup: group hasDisplayStrategy: builder class displayStrategy.
 	self assert: group name equals: builder class groupName.
 	self assert: group description equals: builder class groupDescription
 ]
