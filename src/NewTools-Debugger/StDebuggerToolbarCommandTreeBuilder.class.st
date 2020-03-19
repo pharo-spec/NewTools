@@ -18,3 +18,14 @@ StDebuggerToolbarCommandTreeBuilder class >> groupDescription [
 StDebuggerToolbarCommandTreeBuilder class >> groupName [ 	
 	^'Toolbar'
 ]
+
+{ #category : #building }
+StDebuggerToolbarCommandTreeBuilder >> buildDebuggerCommandGroup [
+	|group|
+	group := self group.
+	group displayStrategy: self displayStrategy.
+	group decoratedGroup register: self stackContextMenuBrowseCommands.
+	group decoratedGroup register: self stackContextMenuExplorationCommands.	
+	group decoratedGroup register: self stackContextMenuStackEditionsCommands.
+	group decoratedGroup register: self stackContextMenuActionsCommands.
+]

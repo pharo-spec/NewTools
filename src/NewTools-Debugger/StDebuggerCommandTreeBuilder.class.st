@@ -46,6 +46,7 @@ StDebuggerCommandTreeBuilder >> buildAndRegisterGroup [
 	| group |
 	group := (CmCommandGroup named: self groupName) asSpecGroup.
 	group description: self groupDescription.
+	group displayStrategy: self displayStrategy.
 	rootCommandGroup register: group.
 	^ group
 ]
