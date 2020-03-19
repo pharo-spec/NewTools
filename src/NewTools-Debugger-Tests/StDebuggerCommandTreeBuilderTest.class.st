@@ -36,7 +36,10 @@ StDebuggerCommandTreeBuilderTest >> testGroupBuilding [
 	builder buildAndRegisterGroup.
 	self assert: rootGroup groups size equals: 1.
 	self assert: rootGroup groups first identicalTo: rootGroup / builder class groupName.
-	self assert: rootGroup groups first name equals: builder class groupName
+	self assert: rootGroup groups first name equals: builder class groupName.
+	self assert: rootGroup groups first description equals: builder class groupDescription.
+	self assert: rootGroup groups first displayStrategy class identicalTo: builder class displayStrategy.
+	self deny: rootGroup groups first isRoot
 ]
 
 { #category : #tests }

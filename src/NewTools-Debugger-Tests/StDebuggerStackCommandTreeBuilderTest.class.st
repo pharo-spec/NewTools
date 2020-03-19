@@ -12,11 +12,6 @@ StDebuggerStackCommandTreeBuilderTest >> newBuilder [
 ]
 
 { #category : #tests }
-StDebuggerStackCommandTreeBuilderTest >> testCommandGroupDefinition [
-	^super testCommandGroupDefinition
-]
-
-{ #category : #tests }
 StDebuggerStackCommandTreeBuilderTest >> testCommandGroupStructure [
 	|stackGroup|
 	stackGroup := rootGroup groups first.	

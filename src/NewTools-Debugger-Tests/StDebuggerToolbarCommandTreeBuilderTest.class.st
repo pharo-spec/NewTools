@@ -10,8 +10,3 @@ StDebuggerToolbarCommandTreeBuilderTest >> newBuilder [
 		buildCommandsGroupWith: debugger
 		forRoot: rootGroup
 ]
-
-{ #category : #tests }
-StDebuggerToolbarCommandTreeBuilderTest >> testCommandGroupDefinition [
-	^super testCommandGroupDefinition
-]
