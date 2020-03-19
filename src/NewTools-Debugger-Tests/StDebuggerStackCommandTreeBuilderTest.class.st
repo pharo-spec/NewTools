@@ -1,12 +1,6 @@
 Class {
 	#name : #StDebuggerStackCommandTreeBuilderTest,
-	#superclass : #TestCase,
-	#instVars : [
-		'session',
-		'debugger',
-		'rootGroup',
-		'builder'
-	],
+	#superclass : #StDebuggerToolCommandTreeBuilderTest,
 	#category : #'NewTools-Debugger-Tests-Debugger - model'
 }
 
@@ -64,26 +58,6 @@ StDebuggerStackCommandTreeBuilderTest >> newBuilder [
 	^ StDebuggerStackCommandTreeBuilder
 		buildCommandsGroupWith: debugger
 		forRoot: rootGroup
-]
-
-{ #category : #running }
-StDebuggerStackCommandTreeBuilderTest >> setUp [
-	| context process |
-	super setUp.
-	context := [ ^1 + 1 ] asContext.
-	process := Process
-		forContext: context
-		priority: Processor userInterruptPriority.
-	session := DebugSession
-		named: 'test session'
-		on: process
-		startedAt: context.
-	debugger := SpecDebugger basicNew
-		session: session;
-		initialize.
-	debugger stackTable selectItem: debugger stackTable items first.
-	rootGroup := (CmCommandGroup named: 'root') asSpecGroup.
-	builder := self newBuilder
 ]
 
 { #category : #tests }
