@@ -13,6 +13,11 @@ Class {
 }
 
 { #category : #accessing }
+StDebuggerStackCommandTreeBuilder class >> commandDisplayStrategy [
+	^CmUIDisplayAsSubMenu
+]
+
+{ #category : #accessing }
 StDebuggerStackCommandTreeBuilder class >> groupDescription [
 	^ 'Actions on the debugger stack.'
 ]

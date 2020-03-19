@@ -20,6 +20,11 @@ StDebuggerCommandTreeBuilder class >> buildCommandsGroupWith: aStDebuggerInstanc
 ]
 
 { #category : #accessing }
+StDebuggerCommandTreeBuilder class >> commandDisplayStrategy [
+	^self subclassResponsibility 
+]
+
+{ #category : #accessing }
 StDebuggerCommandTreeBuilder class >> groupDescription [
 	^self subclassResponsibility 
 ]
