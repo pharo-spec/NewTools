@@ -4,55 +4,6 @@ Class {
 	#category : #'NewTools-Debugger-Tests-Debugger - model'
 }
 
-{ #category : #assertions }
-StDebuggerStackCommandTreeBuilderTest >> assertCommandGroup: cmdGroup hasDisplayStrategy: displayStrategy [
-	self
-		assert: cmdGroup displayStrategy class
-		identicalTo: displayStrategy
-]
-
-{ #category : #assertions }
-StDebuggerStackCommandTreeBuilderTest >> assertCommandGroup: cmdGroup hasSameCommands: expectedCommands withContext: expectedContext displayStrategy: displayStrategy [
-	| commands |
-	self deny: cmdGroup isRoot.
-	self assertCommandGroup: cmdGroup hasDisplayStrategy: displayStrategy.
-	commands := cmdGroup allCommands
-		collect: [ :spCommand | spCommand decoratedCommand ].
-	self
-		assertCommandGroupEntries: commands
-		hasCommands: expectedCommands.
-	self assertCommands: commands haveContext: expectedContext
-]
-
-{ #category : #assertions }
-StDebuggerStackCommandTreeBuilderTest >> assertCommandGroupEntries: commands hasCommands: expectedCommands [
-	self
-		assertCollection: (commands collect: [ :cmd | cmd class ])
-		hasSameElements: expectedCommands
-]
-
-{ #category : #assertions }
-StDebuggerStackCommandTreeBuilderTest >> assertCommands: commands equals: expectedCommands [
-	self assert: commands size equals: expectedCommands size.
-	commands
-		with: expectedCommands
-		do: [ :actual :expected | 
-			self assert: actual name equals: expected name.
-			self assert: actual context identicalTo: expected context.
-			self assert: actual class identicalTo: expected class ]
-]
-
-{ #category : #assertions }
-StDebuggerStackCommandTreeBuilderTest >> assertCommands: commands haveContext: expectedContext [
-	commands
-		do: [ :cmd | self assert: cmd context identicalTo: expectedContext ]
-]
-
-{ #category : #helper }
-StDebuggerStackCommandTreeBuilderTest >> commandsFromSpecGroup: group [
-	^ group decoratedGroup entries collect: [ :cmd | cmd decoratedCommand ]
-]
-
 { #category : #helper }
 StDebuggerStackCommandTreeBuilderTest >> newBuilder [
 	^ StDebuggerStackCommandTreeBuilder
@@ -61,14 +12,14 @@ StDebuggerStackCommandTreeBuilderTest >> newBuilder [
 ]
 
 { #category : #tests }
-StDebuggerStackCommandTreeBuilderTest >> testBuildDebuggerCommandGroup [
+StDebuggerStackCommandTreeBuilderTest >> testCommandGroupDefinition [
+	^super testCommandGroupDefinition
+]
+
+{ #category : #tests }
+StDebuggerStackCommandTreeBuilderTest >> testCommandGroupStructure [
 	|stackGroup|
-	self assert: rootGroup entries size equals: 1.
 	stackGroup := rootGroup groups first.	
-	self deny: stackGroup isRoot.
-	self assertCommandGroup: stackGroup hasDisplayStrategy: CmUIDisplayAsSubMenu.
-	self assert: stackGroup name equals: builder class groupName.
-	self assert: stackGroup description equals: builder class groupDescription.
 	self assert: stackGroup entries size equals: 4.
 	self assert: stackGroup groups first name equals: builder browseGroupName.
 	self assert: stackGroup groups first description equals: builder browseGroupDescription.

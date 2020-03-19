@@ -3,3 +3,8 @@ Class {
 	#superclass : #StDebuggerToolCommandTreeBuilderTest,
 	#category : #'NewTools-Debugger-Tests-Debugger - model'
 }
+
+{ #category : #tests }
+StDebuggerCodeCommandTreeBuilderTest >> testCommandGroupDefinition [
+	^super testCommandGroupDefinition
+]
