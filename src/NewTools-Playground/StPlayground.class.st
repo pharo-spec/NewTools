@@ -17,7 +17,8 @@ Class {
 	#superclass : #StPresenter,
 	#instVars : [
 		'text',
-		'statusBar'
+		'statusBar',
+		'bindings'
 	],
 	#category : #'NewTools-Playground-View'
 }
@@ -48,6 +49,14 @@ StPlayground class >> open [
 	^ self new openWithSpec
 ]
 
+{ #category : #binding }
+StPlayground >> bindingOf: aString [
+
+	(bindings includesKey: aString)
+		ifFalse: [ bindings add: (WorkspaceVariable key: aString asSymbol) ].
+	^ bindings associationAt: aString
+]
+
 { #category : #'private builder' }
 StPlayground >> buildMenu [
 	| menuSpec |
@@ -74,16 +83,48 @@ StPlayground >> buildToolBar [
 			presenter displayMode: self application toolbarDisplayMode ]
 ]
 
+{ #category : #binding }
+StPlayground >> doItContext [
+
+	^ nil
+]
+
+{ #category : #binding }
+StPlayground >> doItReceiver [
+
+	^ nil
+]
+
+{ #category : #binding }
+StPlayground >> hasBindingOf: aString [
+
+	^ bindings includesKey: aString asSymbol
+]
+
+{ #category : #binding }
+StPlayground >> hasBindingThatBeginsWith: aString [
+
+	^ self variableBindingNames 
+		anySatisfy: [ :each | each beginsWith: aString ]
+]
+
+{ #category : #initialization }
+StPlayground >> initialize [
+
+	bindings := Dictionary new.
+	super initialize
+]
+
 { #category : #initialization }
 StPlayground >> initializePresenters [
 	
 	text := self newCode
-		doItReceiver: self;
+		interactionModel: self;
 		completionEngine: (SpCodeCompletionEngine new 
 			scripting: true;
 			doItRequestor: self;
-			doItContext: nil;
-			completionClass: nil;
+			doItContext: self doItContext;
+			completionClass: self selectedClassOrMetaClass;
 			yourself);
 		yourself
 ]
@@ -99,6 +140,19 @@ StPlayground >> initializeWindow: aWindowPresenter [
 	
 	self flag: #TODO. "This just has sense if this is the 'main' window"
 	"aWindowPresenter menu: self newMenu"
+]
+
+{ #category : #binding }
+StPlayground >> selectedClassOrMetaClass [
+
+	^ nil
+]
+
+{ #category : #accessing }
+StPlayground >> setBindings: aDictionary [
+	"Sets the Workspace to use the specified dictionary as its namespace"
+
+	bindings := aDictionary
 ]
 
 { #category : #'accessing ui' }
@@ -124,8 +178,8 @@ StPlayground >> toolbarActions [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 StPlayground >> variableBindingNames [
 	
-	^ #()
+	^ bindings keys
 ]
