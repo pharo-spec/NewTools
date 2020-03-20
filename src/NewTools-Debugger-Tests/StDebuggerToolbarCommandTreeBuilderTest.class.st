@@ -24,7 +24,7 @@ StDebuggerToolbarCommandTreeBuilderTest >> testCommandGroupStructure [
 StDebuggerToolbarCommandTreeBuilderTest >> testToolbarDefaultActionsCommands [
 	self
 		assertCommandGroup: builder toolbarDefaultDebuggingCommands
-		hasSameCommands: builder defaultDebugCommandsClasses
+		hasSameCommands: (builder defaultDebugCommands collect:[:c| c decoratedCommand class])
 		withContext: debugger
 		displayStrategy: CmUIDisplayAsGroup
 ]

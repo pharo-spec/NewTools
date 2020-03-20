@@ -37,8 +37,8 @@ StDebuggerToolbarCommandTreeBuilder >> defaultDebugActionsGroupName [
 	^'Debugging actions'
 ]
 
-{ #category : #'accessing - commands classes' }
-StDebuggerToolbarCommandTreeBuilder >> defaultDebugCommandsClasses [
+{ #category : #commands }
+StDebuggerToolbarCommandTreeBuilder >> defaultDebugCommands [
 	^ StDebugCommand toolbarCommandsForDebugger: stDebuggerInstance
 ]
 
@@ -50,6 +50,6 @@ StDebuggerToolbarCommandTreeBuilder >> toolbarDefaultDebuggingCommands [
 	group beDisplayedAsGroup.
 	group description: self defaultDebugActionsDescription.
 	group iconName: #smallDebug.
-	self defaultDebugCommandsClasses do: [ :cmd | group register: cmd ].
+	self defaultDebugCommands do: [ :cmd | group register: cmd ].
 	^ group
 ]
