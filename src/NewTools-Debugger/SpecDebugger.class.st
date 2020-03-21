@@ -219,30 +219,30 @@ SpecDebugger class >> debuggerLayoutSettingsOn: aBuilder [
 { #category : #specs }
 SpecDebugger class >> debuggerWithExtensionsSpec [
 	^ SpPanedLayout newVertical
-		  position: 70 percent;
+		  position: 65 percent;
 		  add: (SpPanedLayout newHorizontal
 				   position: 65 percent;
 				   add: (SpPanedLayout newVertical
-						    position: 40 percent;
-						    add: (SpBoxLayout newVertical
+						    position: 30 percent;
+						    add: #stackTable"(SpBoxLayout newVertical
 								     add: #stackHeader
 								     expand: false
 								     fill: false
 								     padding: 5;
 								     add: #stackTable;
-								     yourself);
+								     yourself)";
 						    add: (SpBoxLayout newVertical
 								     add: (SpBoxLayout newVertical
 								 				add: #toolbar;
-										      add: #codeHeader
+										      "add: #codeHeader
 										      expand: true
 										      fill: true
-										      padding: 0;
+										      padding: 0;"
 										      yourself)
 								     withConstraints: [ :constraints | 
 									     constraints
 										     expand: false;
-										     height: self toolbarHeight * 2 ];
+										     height: self toolbarHeight "* 2 "];
 								     add: #code;
 								     yourself);
 						    yourself);
@@ -255,32 +255,32 @@ SpecDebugger class >> debuggerWithExtensionsSpec [
 { #category : #specs }
 SpecDebugger class >> debuggerWithoutExtensionsSpec [
 	^ SpPanedLayout newVertical
-		position: 70 percent;
+		position: 65 percent;
 		add:
 			(SpPanedLayout newVertical
-				position: 40 percent;
-				add:
-					(SpBoxLayout newVertical
+				position: 30 percent;
+				add:#stackTable
+					"(SpBoxLayout newVertical
 						add: #stackHeader
 							expand: false
 							fill: false
 							padding: 5;
 						add: #stackTable;
-						yourself);
+						yourself)";
 				add:
 					(SpBoxLayout newVertical
 						add:
 							(SpBoxLayout newVertical
 								add: #toolbar;
-								add: #codeHeader
+								"add: #codeHeader
 									expand: true
 									fill: true
-									padding: 0;
+									padding: 0;"
 								yourself)
 							withConstraints: [ :constraints | 
 								constraints
 									expand: false;
-									height: self toolbarHeight * 2 ];
+									height: self toolbarHeight" * 2 "];
 						add: #code;
 						yourself);
 				yourself);
