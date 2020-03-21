@@ -1,3 +1,7 @@
+"
+I retrieve context nodes from a StDebuggerContext object.
+My children are extracted from a StDebugger context.
+"
 Class {
 	#name : #StDebuggerContextInspectorContextNode,
 	#superclass : #StDebuggerContextInspectorNode,

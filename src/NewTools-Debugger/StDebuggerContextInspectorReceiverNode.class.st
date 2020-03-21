@@ -1,3 +1,7 @@
+"
+I retrieve receiver nodes from a StDebuggerContext object.
+My children are extracted from a StDebugger context's receiver.
+"
 Class {
 	#name : #StDebuggerContextInspectorReceiverNode,
 	#superclass : #StDebuggerContextInspectorNode,
