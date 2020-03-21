@@ -6,7 +6,8 @@ Class {
 
 { #category : #accessing }
 StDebuggerContextInspectorReceiverNode >> computeChildrenFromSourceObject [
-	^ hostObject context home receiver allInspectorNodes 
+	^ hostObject context home receiver allInspectorNodes
+		reject: [ :node | node key = 'self' ]
 ]
 
 { #category : #accessing }
