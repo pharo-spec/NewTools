@@ -16,6 +16,11 @@ Object >> breakpointInspection [
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
+Object >> defaultObjectInspectorClass [
+	^StObjectInspector
+]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
 Object >> inspectionPages [
 	"This is a utility method that collects all presentations for the current object.
 	By default, it simply looks for the #gtInspectorPresentationOrder: pragma.
