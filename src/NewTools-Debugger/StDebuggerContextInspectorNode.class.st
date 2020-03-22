@@ -1,3 +1,6 @@
+"
+I represent a node in the debugger inspector list, with special computation for retrieving my children and my key (= displayed label).
+"
 Class {
 	#name : #StDebuggerContextInspectorNode,
 	#superclass : #StInspectorNode,

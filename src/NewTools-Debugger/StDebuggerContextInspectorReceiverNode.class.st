@@ -1,3 +1,7 @@
+"
+I retrieve receiver nodes from a StDebuggerContext object.
+My children are extracted from a StDebugger context's receiver.
+"
 Class {
 	#name : #StDebuggerContextInspectorReceiverNode,
 	#superclass : #StDebuggerContextInspectorNode,
@@ -6,7 +10,8 @@ Class {
 
 { #category : #accessing }
 StDebuggerContextInspectorReceiverNode >> computeChildrenFromSourceObject [
-	^ hostObject context home receiver allInspectorNodes 
+	^ hostObject context home receiver allInspectorNodes
+		reject: [ :node | node key = 'self' ]
 ]
 
 { #category : #accessing }

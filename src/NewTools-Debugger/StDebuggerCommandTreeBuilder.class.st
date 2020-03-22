@@ -20,6 +20,11 @@ StDebuggerCommandTreeBuilder class >> buildCommandsGroupWith: aStDebuggerInstanc
 ]
 
 { #category : #accessing }
+StDebuggerCommandTreeBuilder class >> displayStrategy [
+	^self subclassResponsibility 
+]
+
+{ #category : #accessing }
 StDebuggerCommandTreeBuilder class >> groupDescription [
 	^self subclassResponsibility 
 ]
@@ -41,6 +46,7 @@ StDebuggerCommandTreeBuilder >> buildAndRegisterGroup [
 	| group |
 	group := (CmCommandGroup named: self groupName) asSpecGroup.
 	group description: self groupDescription.
+	group displayStrategy: self displayStrategy.
 	rootCommandGroup register: group.
 	^ group
 ]
@@ -55,6 +61,11 @@ StDebuggerCommandTreeBuilder >> buildCommandsGroupWith: aStDebuggerInstance forR
 { #category : #building }
 StDebuggerCommandTreeBuilder >> buildDebuggerCommandGroup [
 	self subclassResponsibility 
+]
+
+{ #category : #accessing }
+StDebuggerCommandTreeBuilder >> displayStrategy [
+	^self class displayStrategy new
 ]
 
 { #category : #accessing }

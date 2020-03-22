@@ -1,7 +1,12 @@
+"
+Breakpoint inspection specialized for the debugger.
+Instead of showing breakpoints and halts in the inspected object, shows them for the whole system.
+Data is taken from system's and tools' caches.
+"
 Class {
 	#name : #StDebuggerBreakpointInspection,
 	#superclass : #StObjectBreakpointInspection,
-	#category : #'NewTools-Inspector-View'
+	#category : #'NewTools-Debugger-View'
 }
 
 { #category : #specs }

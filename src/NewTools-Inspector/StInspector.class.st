@@ -169,14 +169,15 @@ StInspector >> model: anInspectorModel [
 { #category : #'private factory' }
 StInspector >> newInspectorFor: aModel [
 	| newInspector |
-	
-	newInspector := StObjectInspector on: (self toInspectorModel: aModel). 
-	millerList pages ifNotEmpty: [ :pages |
-		newInspector trySelectAnyPageNamed: { 
-			lastPageSelectedTabName. 
-			pages last selectedPageName } ].
-	self withHeaderBar ifFalse:[newInspector buildWithSpec: #noHeaderSpec].
-
+	newInspector := aModel defaultObjectInspectorClass on: (self toInspectorModel: aModel). 
+	millerList pages
+		ifNotEmpty: [ :pages | 
+			newInspector
+				trySelectAnyPageNamed:
+					{lastPageSelectedTabName.
+					pages last selectedPageName} ].
+	self withHeaderBar
+		ifFalse: [ newInspector buildWithSpec: #noHeaderSpec ].
 	^ newInspector
 ]
 

@@ -219,30 +219,30 @@ SpecDebugger class >> debuggerLayoutSettingsOn: aBuilder [
 { #category : #specs }
 SpecDebugger class >> debuggerWithExtensionsSpec [
 	^ SpPanedLayout newVertical
-		  position: 70 percent;
+		  position: 65 percent;
 		  add: (SpPanedLayout newHorizontal
 				   position: 65 percent;
 				   add: (SpPanedLayout newVertical
-						    position: 40 percent;
-						    add: (SpBoxLayout newVertical
+						    position: 30 percent;
+						    add: #stackTable"(SpBoxLayout newVertical
 								     add: #stackHeader
 								     expand: false
 								     fill: false
 								     padding: 5;
 								     add: #stackTable;
-								     yourself);
+								     yourself)";
 						    add: (SpBoxLayout newVertical
 								     add: (SpBoxLayout newVertical
 								 				add: #toolbar;
-										      add: #codeHeader
+										      "add: #codeHeader
 										      expand: true
 										      fill: true
-										      padding: 0;
+										      padding: 0;"
 										      yourself)
 								     withConstraints: [ :constraints | 
 									     constraints
 										     expand: false;
-										     height: self toolbarHeight * 2 ];
+										     height: self toolbarHeight "* 2 "];
 								     add: #code;
 								     yourself);
 						    yourself);
@@ -255,32 +255,32 @@ SpecDebugger class >> debuggerWithExtensionsSpec [
 { #category : #specs }
 SpecDebugger class >> debuggerWithoutExtensionsSpec [
 	^ SpPanedLayout newVertical
-		position: 70 percent;
+		position: 65 percent;
 		add:
 			(SpPanedLayout newVertical
-				position: 40 percent;
-				add:
-					(SpBoxLayout newVertical
+				position: 30 percent;
+				add:#stackTable
+					"(SpBoxLayout newVertical
 						add: #stackHeader
 							expand: false
 							fill: false
 							padding: 5;
 						add: #stackTable;
-						yourself);
+						yourself)";
 				add:
 					(SpBoxLayout newVertical
 						add:
 							(SpBoxLayout newVertical
 								add: #toolbar;
-								add: #codeHeader
+								"add: #codeHeader
 									expand: true
 									fill: true
-									padding: 0;
+									padding: 0;"
 								yourself)
 							withConstraints: [ :constraints | 
 								constraints
 									expand: false;
-									height: self toolbarHeight * 2 ];
+									height: self toolbarHeight" * 2 "];
 						add: #code;
 						yourself);
 				yourself);
@@ -946,6 +946,7 @@ SpecDebugger >> stackTable [
 
 { #category : #'accessing context' }
 SpecDebugger >> statusLabelStyleForCurrentContext [
+	self flag: 'deprecated?'.
 "true ifTrue: [ ^ 'label.headerError' ]."
 	(self context tempNames includes: #exception) ifTrue: [ 
 		(self context tempNamed: #exception) ifNotNil: [ :ex | 
@@ -956,6 +957,7 @@ SpecDebugger >> statusLabelStyleForCurrentContext [
 
 { #category : #'accessing context' }
 SpecDebugger >> statusLabelTextForCurrentContext [
+	self flag: 'deprecated?'.
 	(self context tempNames includes: #exception)
 		ifTrue: [ (self context tempNamed: #exception)
 				ifNotNil: [ :ex | ^ ex description ] ].
@@ -968,8 +970,19 @@ SpecDebugger >> statusLabelTextForCurrentContext [
 { #category : #api }
 SpecDebugger >> title [
 	^ ((self session isContextPostMortem: self interruptedContext)
-		ifTrue: [ 'PostMortem: ' ]
-		ifFalse: [ '' ]) , self currentContext asString
+		ifTrue: [ '[PostMortem] ' ]
+		ifFalse: [ '' ]) , self titlePrefixTextForCurrentContext, self currentContext asString
+]
+
+{ #category : #'accessing context' }
+SpecDebugger >> titlePrefixTextForCurrentContext [
+	((self context tempNames includes: #exception)
+		and: [ self context sender == self currentContext ])
+		ifTrue: [ (self context tempNamed: #exception)
+				ifNotNil: [ :ex | ^ ex description , ' in ' ] ].
+	^ self currentContext currentNode isHaltNode
+		ifTrue: [ 'Halt in ' ]
+		ifFalse: [ '' ]
 ]
 
 { #category : #'accessing widgets' }
@@ -1014,7 +1027,7 @@ SpecDebugger >> updateCodeFromContext: aContext [
 
 { #category : #'updating widgets' }
 SpecDebugger >> updateCodeHeaderLabel [
-	
+	self flag: 'deprecated?'.
 	codeHeader removeStyleFromLabel: 'label.headerError'.	
 	codeHeader removeStyleFromLabel: 'label.header'.	
 	codeHeader label: self statusLabelTextForCurrentContext.
@@ -1094,7 +1107,8 @@ SpecDebugger >> updateStep [
 	self updateStackFromSession: self session.
 	self updateCodeHeaderLabel.
 	self updateExtensionsFrom: self session.
-	self buildContextMenus
+	self buildContextMenus.
+	self updateTitle
 ]
 
 { #category : #'updating actions' }
@@ -1117,7 +1131,7 @@ SpecDebugger >> updateStepThrough [
 
 { #category : #'updating widgets' }
 SpecDebugger >> updateTitle [
-	self withWindowDo: [ :window | window title: self title ]
+	self withWindowDo: [ :window | window title: self title]
 ]
 
 { #category : #'updating widgets' }

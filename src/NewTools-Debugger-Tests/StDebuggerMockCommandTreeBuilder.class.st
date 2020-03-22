@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #accessing }
+StDebuggerMockCommandTreeBuilder class >> displayStrategy [
+	^CmUIDisplayAsSubMenu
+]
+
+{ #category : #accessing }
 StDebuggerMockCommandTreeBuilder class >> groupDescription [
 	^'mock group'
 ]
