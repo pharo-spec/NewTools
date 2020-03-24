@@ -16,7 +16,7 @@ StDebuggerContextInspectorReceiverNode >> computeChildrenFromSourceObject [
 
 { #category : #accessing }
 StDebuggerContextInspectorReceiverNode >> label [
-	^ 'Receiver'
+	^ 'Self'
 ]
 
 { #category : #accessing }
