@@ -27,10 +27,23 @@ StDebuggerContext class >> context: aContext session: aDebugSession debugger: so
 { #category : #accessing }
 StDebuggerContext >> allInspectorNodes [
 	self flag: 'Removing the context from the inspected variables in the debugger. Should be added back as a debugger extension.'.
-	^ {(StDebuggerContextInspectorReceiverNode hostObject: self).
+	^ (self argumentsNodes)  addAll: ({	
+	(StDebuggerContextInspectorReceiverNode hostObject: self).
 	(StDebuggerContextInspectorTempsNode hostObject: self).
 	(StInspectorStackTopNode hostObject: self context)
-	"(StDebuggerContextInspectorContextNode hostObject: self)"}
+	"(StDebuggerContextInspectorContextNode hostObject: self)"}); yourself
+]
+
+{ #category : #accessing }
+StDebuggerContext >> argumentsNodes [
+	| argNames |
+	argNames := self context method argumentNames.
+	^ (argNames
+		collect: [ :argName | 
+			StInspectorDynamicNode
+				hostObject: self context
+				label: '[arg] ' , argName
+				value: (self context tempNamed: argName) ]) asOrderedCollection
 ]
 
 { #category : #accessing }
