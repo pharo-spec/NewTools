@@ -52,7 +52,7 @@ StDebuggerInspector >> initializePresenters [
 
 	label := self newLabel.
 	inspector := self instantiate: StInspector on: self model.
-	inspector withHeaderBar: false.
+	inspector withHeaderBar: true.
 ]
 
 { #category : #accessing }

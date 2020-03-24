@@ -217,39 +217,74 @@ SpecDebugger class >> debuggerLayoutSettingsOn: aBuilder [
 ]
 
 { #category : #specs }
+SpecDebugger class >> debuggerNoHeadersWithExtensionsSpec [
+	^ SpPanedLayout newVertical
+		position: 65 percent;
+		add:
+			(SpPanedLayout newHorizontal
+				position: 65 percent;
+				add:
+					(SpPanedLayout newVertical
+						position: 30 percent;
+						add: #stackTable;
+						add:
+							(SpBoxLayout newVertical
+								add:
+									(SpBoxLayout newVertical
+										add: #toolbar;
+										yourself)
+									withConstraints: [ :constraints | 
+										constraints
+											expand: false;
+											height: self toolbarHeight + 10 ];
+								add: #code;
+								yourself);
+						yourself);
+				add: #extensionToolsNotebook;
+				yourself);
+		add: #inspector;
+		yourself
+]
+
+{ #category : #specs }
 SpecDebugger class >> debuggerWithExtensionsSpec [
 	^ SpPanedLayout newVertical
-		  position: 65 percent;
-		  add: (SpPanedLayout newHorizontal
-				   position: 65 percent;
-				   add: (SpPanedLayout newVertical
-						    position: 30 percent;
-						    add: #stackTable"(SpBoxLayout newVertical
-								     add: #stackHeader
-								     expand: false
-								     fill: false
-								     padding: 5;
-								     add: #stackTable;
-								     yourself)";
-						    add: (SpBoxLayout newVertical
-								     add: (SpBoxLayout newVertical
-								 				add: #toolbar;
-										      "add: #codeHeader
-										      expand: true
-										      fill: true
-										      padding: 0;"
-										      yourself)
-								     withConstraints: [ :constraints | 
-									     constraints
-										     expand: false;
-										     height: self toolbarHeight "* 2 "];
-								     add: #code;
-								     yourself);
-						    yourself);
-				   add: #extensionToolsNotebook;
-				   yourself);
-		  add: #inspector;
-		  yourself
+		position: 65 percent;
+		add:
+			(SpPanedLayout newHorizontal
+				position: 65 percent;
+				add:
+					(SpPanedLayout newVertical
+						position: 30 percent;						
+						add:
+							(SpBoxLayout newVertical
+								add: #stackHeader
+									expand: false
+									fill: false
+									padding: 5;
+								add: #stackTable;
+								yourself);
+						add:
+							(SpBoxLayout newVertical
+								add:
+									(SpBoxLayout newVertical
+										add: #toolbar;
+										add: #codeHeader
+											expand: true
+											fill: true
+											padding: 0;
+										yourself)
+									withConstraints: [ :constraints | 
+										constraints
+											expand: false;
+											height: self toolbarHeight *2  ];
+								add: #code;
+								yourself);
+						yourself);
+				add: #extensionToolsNotebook;
+				yourself);
+		add: #inspector;
+		yourself
 ]
 
 { #category : #specs }
@@ -258,29 +293,29 @@ SpecDebugger class >> debuggerWithoutExtensionsSpec [
 		position: 65 percent;
 		add:
 			(SpPanedLayout newVertical
-				position: 30 percent;
-				add:#stackTable
-					"(SpBoxLayout newVertical
+				position: 30 percent;				
+				add:
+					(SpBoxLayout newVertical
 						add: #stackHeader
 							expand: false
 							fill: false
 							padding: 5;
 						add: #stackTable;
-						yourself)";
+						yourself);
 				add:
 					(SpBoxLayout newVertical
 						add:
 							(SpBoxLayout newVertical
 								add: #toolbar;
-								"add: #codeHeader
+								add: #codeHeader
 									expand: true
 									fill: true
-									padding: 0;"
+									padding: 0;
 								yourself)
 							withConstraints: [ :constraints | 
 								constraints
 									expand: false;
-									height: self toolbarHeight" * 2 "];
+									height: self toolbarHeight * 2 ];
 						add: #code;
 						yourself);
 				yourself);
