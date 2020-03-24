@@ -5,7 +5,8 @@ Class {
 		'inspector',
 		'model',
 		'label',
-		'rawInspectionSelectionCache'
+		'rawInspectionSelectionCache',
+		'withHeaderBar'
 	],
 	#category : #'NewTools-Debugger-View'
 }
@@ -26,6 +27,12 @@ StDebuggerInspector class >> openOn: anObject [
 { #category : #specs }
 StDebuggerInspector class >> title [
 	 ^'Debugger Inspection'
+]
+
+{ #category : #accessing }
+StDebuggerInspector >> displayHeaderBar: anObject [
+	withHeaderBar := anObject.
+	inspector withHeaderBar: self withHeaderBar
 ]
 
 { #category : #updating }
@@ -52,7 +59,7 @@ StDebuggerInspector >> initializePresenters [
 
 	label := self newLabel.
 	inspector := self instantiate: StInspector on: self model.
-	inspector withHeaderBar: true.
+	inspector withHeaderBar: self withHeaderBar
 ]
 
 { #category : #accessing }
@@ -147,4 +154,9 @@ StDebuggerInspector >> updateWith: inspectedObject [
 	self model: (StDebuggerInspectorModel on: inspectedObject).
 	self updateEvaluationPaneReceiver.
 	self restoreRawInspectionSelectionForContext: newContext
+]
+
+{ #category : #accessing }
+StDebuggerInspector >> withHeaderBar [
+	^withHeaderBar ifNil:[withHeaderBar := true]
 ]
