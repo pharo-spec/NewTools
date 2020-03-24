@@ -1014,6 +1014,7 @@ SpecDebugger >> updateCodeFromContext: aContext [
 	aContext ifNil: [ ^ self clearCode ].
 	selectionInterval := self session
 		selectedCodeRangeForContext: aContext.
+
 	self code
 		text: aContext sourceCode;
 		doItReceiver: aContext home receiver;

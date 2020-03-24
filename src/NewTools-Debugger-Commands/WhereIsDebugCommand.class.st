@@ -27,8 +27,10 @@ WhereIsDebugCommand class >> defaultShortcut [
 
 { #category : #hooks }
 WhereIsDebugCommand >> execute [
-	self flag: 'Should the action have this responsibility on the debugger code pane?'.
+	self
+		flag:
+			'Should the action have this responsibility on the debugger code pane?'.
 	self flag: 'Bound to the bytecode execution model.'.
 	self debugger code
-		selection: (self session pcRangeForContext: self currentContext)
+		selectionInterval: (self session pcRangeForContext: self currentContext)
 ]

@@ -17,7 +17,7 @@ StFullStackDebugCommand class >> defaultIconName [
 { #category : #default }
 StFullStackDebugCommand class >> defaultName [
 	<toolbarDebugCommand: 999>
-	^ 'Show full stack'
+	^ 'Stack'
 ]
 
 { #category : #initialization }

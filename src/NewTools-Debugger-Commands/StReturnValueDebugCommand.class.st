@@ -23,7 +23,7 @@ StReturnValueDebugCommand class >> defaultLabel [
 { #category : #accessing }
 StReturnValueDebugCommand class >> defaultName [
 	<toolbarDebugCommand: 910>
-	^ 'Return entered value'
+	^ 'Return'
 ]
 
 { #category : #initialization }
