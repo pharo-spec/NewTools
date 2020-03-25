@@ -51,7 +51,7 @@ SpecDebugger class >> availableAutomatically [
 ]
 
 { #category : #'tools registry' }
-SpecDebugger class >> availableExtentionToolsClassesSettings [
+SpecDebugger class >> availableExtensionToolsClassesSettings [
 	| settingToClass |
 	settingToClass := Dictionary new.
 	self collectExtendedToolsClasses
@@ -96,6 +96,7 @@ SpecDebugger class >> collectExtendedToolsClassesFor: pragmaSelector [
 
 { #category : #'tools registry' }
 SpecDebugger class >> collectExtendedToolsPragmaFor: pragmaSelector [
+	self flag: 'PragmaCollector might be changed in the near future?'.
 	^ (PragmaCollector filter: [ :prg | prg selector = pragmaSelector ])
 		reset collected
 ]
@@ -217,39 +218,74 @@ SpecDebugger class >> debuggerLayoutSettingsOn: aBuilder [
 ]
 
 { #category : #specs }
+SpecDebugger class >> debuggerNoHeadersWithExtensionsSpec [
+	^ SpPanedLayout newVertical
+		position: 65 percent;
+		add:
+			(SpPanedLayout newHorizontal
+				position: 65 percent;
+				add:
+					(SpPanedLayout newVertical
+						position: 30 percent;
+						add: #stackTable;
+						add:
+							(SpBoxLayout newVertical
+								add:
+									(SpBoxLayout newVertical
+										add: #toolbar;
+										yourself)
+									withConstraints: [ :constraints | 
+										constraints
+											expand: false;
+											height: self toolbarHeight + 10 ];
+								add: #code;
+								yourself);
+						yourself);
+				add: #extensionToolsNotebook;
+				yourself);
+		add: #inspector;
+		yourself
+]
+
+{ #category : #specs }
 SpecDebugger class >> debuggerWithExtensionsSpec [
 	^ SpPanedLayout newVertical
-		  position: 65 percent;
-		  add: (SpPanedLayout newHorizontal
-				   position: 65 percent;
-				   add: (SpPanedLayout newVertical
-						    position: 30 percent;
-						    add: #stackTable"(SpBoxLayout newVertical
-								     add: #stackHeader
-								     expand: false
-								     fill: false
-								     padding: 5;
-								     add: #stackTable;
-								     yourself)";
-						    add: (SpBoxLayout newVertical
-								     add: (SpBoxLayout newVertical
-								 				add: #toolbar;
-										      "add: #codeHeader
-										      expand: true
-										      fill: true
-										      padding: 0;"
-										      yourself)
-								     withConstraints: [ :constraints | 
-									     constraints
-										     expand: false;
-										     height: self toolbarHeight "* 2 "];
-								     add: #code;
-								     yourself);
-						    yourself);
-				   add: #extensionToolsNotebook;
-				   yourself);
-		  add: #inspector;
-		  yourself
+		position: 65 percent;
+		add:
+			(SpPanedLayout newHorizontal
+				position: 65 percent;
+				add:
+					(SpPanedLayout newVertical
+						position: 30 percent;						
+						add:
+							(SpBoxLayout newVertical
+								add: #stackHeader
+									expand: false
+									fill: false
+									padding: 5;
+								add: #stackTable;
+								yourself);
+						add:
+							(SpBoxLayout newVertical
+								add:
+									(SpBoxLayout newVertical
+										add: #toolbar;
+										add: #codeHeader
+											expand: true
+											fill: true
+											padding: 0;
+										yourself)
+									withConstraints: [ :constraints | 
+										constraints
+											expand: false;
+											height: self toolbarHeight *2  ];
+								add: #code;
+								yourself);
+						yourself);
+				add: #extensionToolsNotebook;
+				yourself);
+		add: #inspector;
+		yourself
 ]
 
 { #category : #specs }
@@ -258,29 +294,29 @@ SpecDebugger class >> debuggerWithoutExtensionsSpec [
 		position: 65 percent;
 		add:
 			(SpPanedLayout newVertical
-				position: 30 percent;
-				add:#stackTable
-					"(SpBoxLayout newVertical
+				position: 30 percent;				
+				add:
+					(SpBoxLayout newVertical
 						add: #stackHeader
 							expand: false
 							fill: false
 							padding: 5;
 						add: #stackTable;
-						yourself)";
+						yourself);
 				add:
 					(SpBoxLayout newVertical
 						add:
 							(SpBoxLayout newVertical
 								add: #toolbar;
-								"add: #codeHeader
+								add: #codeHeader
 									expand: true
 									fill: true
-									padding: 0;"
+									padding: 0;
 								yourself)
 							withConstraints: [ :constraints | 
 								constraints
 									expand: false;
-									height: self toolbarHeight" * 2 "];
+									height: self toolbarHeight * 2 ];
 						add: #code;
 						yourself);
 				yourself);
@@ -298,6 +334,12 @@ SpecDebugger class >> defaultTitle [
 	"GTDebugger needs this to create its action to switch to other debuggers (in this case to the Spec Debugger). I don't know if switching to this debugger actually works, but if the action cannot be created, the GTDebugger crashes when being opened. This method can be removed if the GTDebugger is removed"
 	self flag: 'Why constraining us because of GT?'.
 	^ 'SpecDebugger'
+]
+
+{ #category : #settings }
+SpecDebugger class >> displayInspectorHeaderBar [
+	self flag: 'Temporary hack to disable header bars on inspectors'.
+	^(self usingSpecSelector = #debuggerNoHeadersWithExtensionsSpec) not
 ]
 
 { #category : #'tools registry' }
@@ -680,7 +722,7 @@ SpecDebugger >> initializeExtensionTools [
 	self class hasAnyActivatedExtension
 		ifFalse: [ ^ self ].
 	settingsToClasses := self class
-		availableExtentionToolsClassesSettings.
+		availableExtensionToolsClassesSettings.
 	sortedSettings := SortedCollection
 		sortBlock: [ :s1 :s2 | s1 displayOrder <= s2 displayOrder ].
 	sortedSettings addAll: settingsToClasses keys.
@@ -695,7 +737,9 @@ SpecDebugger >> initializeInspector [
 	inspector := self
 		instantiate: StDebuggerInspector
 		on: (StDebuggerInspectorModel on: nil).
-	inspector label: 'Receiver'
+	inspector label: 'Receiver'.
+	self flag: 'Temporary hack to disable header bars on inspectors'.
+	inspector displayHeaderBar: self class displayInspectorHeaderBar
 ]
 
 { #category : #initialization }
@@ -1014,6 +1058,7 @@ SpecDebugger >> updateCodeFromContext: aContext [
 	aContext ifNil: [ ^ self clearCode ].
 	selectionInterval := self session
 		selectedCodeRangeForContext: aContext.
+
 	self code
 		text: aContext sourceCode;
 		doItReceiver: aContext home receiver;
