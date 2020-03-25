@@ -51,7 +51,7 @@ SpecDebugger class >> availableAutomatically [
 ]
 
 { #category : #'tools registry' }
-SpecDebugger class >> availableExtentionToolsClassesSettings [
+SpecDebugger class >> availableExtensionToolsClassesSettings [
 	| settingToClass |
 	settingToClass := Dictionary new.
 	self collectExtendedToolsClasses
@@ -721,7 +721,7 @@ SpecDebugger >> initializeExtensionTools [
 	self class hasAnyActivatedExtension
 		ifFalse: [ ^ self ].
 	settingsToClasses := self class
-		availableExtentionToolsClassesSettings.
+		availableExtensionToolsClassesSettings.
 	sortedSettings := SortedCollection
 		sortBlock: [ :s1 :s2 | s1 displayOrder <= s2 displayOrder ].
 	sortedSettings addAll: settingsToClasses keys.
