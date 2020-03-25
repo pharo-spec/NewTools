@@ -96,6 +96,7 @@ SpecDebugger class >> collectExtendedToolsClassesFor: pragmaSelector [
 
 { #category : #'tools registry' }
 SpecDebugger class >> collectExtendedToolsPragmaFor: pragmaSelector [
+	self flag: 'PragmaCollector might be changed in the near future?'.
 	^ (PragmaCollector filter: [ :prg | prg selector = pragmaSelector ])
 		reset collected
 ]
