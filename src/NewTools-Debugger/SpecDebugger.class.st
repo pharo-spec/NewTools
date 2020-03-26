@@ -699,20 +699,19 @@ SpecDebugger >> initializeBreakpointInspector [
 { #category : #initialization }
 SpecDebugger >> initializeCode [
 	self flag: 'Add metalink information in the gutter!'.
+	
 	code := self newCode.
-	code acceptBlock: [ :text :notifyer | 
+	code whenSubmitDo: [ :text :notifyer | 
 		self
 			recompileMethodTo: text string
 			inContext: self stackTable selection selectedItem
 			notifying: notifyer ].
-	code contextMenu: [self codeContextMenuCommandsForRootGroup: code rootCommandsGroup].
+	code contextMenu: [ self codeContextMenuCommandsForRootGroup: code rootCommandsGroup ].
 			
 	codeHeader := self instantiate: StHeaderBar.	
 	codeHeader removeStyleFromLabel: 'label.header'.	
 	codeHeader applyStyleToLabel: 'label.headerError'.
 	codeHeader label: self session name
-	
-
 ]
 
 { #category : #extensions }
@@ -744,6 +743,7 @@ SpecDebugger >> initializeInspector [
 
 { #category : #initialization }
 SpecDebugger >> initializePresenters [
+
 	self initializeStack.
 	self initializeToolbar.
 	self initializeCode.
@@ -791,7 +791,7 @@ SpecDebugger >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		title: self title;
 		initialExtent: self initialExtent;
-		 whenClosedDo: [ self clear ]
+		whenClosedDo: [ self clear ]
 ]
 
 { #category : #extensions }
@@ -1055,16 +1055,18 @@ SpecDebugger >> updateCodeFromContext [
 { #category : #'updating widgets' }
 SpecDebugger >> updateCodeFromContext: aContext [
 	| selectionInterval |
-	aContext ifNil: [ ^ self clearCode ].
-	selectionInterval := self session
-		selectedCodeRangeForContext: aContext.
 
+	aContext ifNil: [ ^ self clearCode ].
+
+	selectionInterval := self session selectedCodeRangeForContext: aContext.
+	
 	self code
 		text: aContext sourceCode;
 		doItReceiver: aContext home receiver;
 		doItContext: aContext;
 		behavior: aContext home receiver class;
 		selectionInterval: selectionInterval.
+	
 	self
 		updateCodeTextSegmentDecoratorsIn: aContext
 		forInterval: selectionInterval

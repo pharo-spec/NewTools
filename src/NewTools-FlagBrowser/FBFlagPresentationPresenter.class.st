@@ -39,7 +39,8 @@ FBFlagPresentationPresenter >> code: anObject [
 
 { #category : #initialization }
 FBFlagPresentationPresenter >> initializePresenter [
-	code whenTextIsAcceptedDo: [ :text | code behavior compile: text ].
+
+	code whenSubmitDo: [ :text | code behavior compile: text ].
 	locationsTable
 		transmitTo: code
 		transform: #sourceCode

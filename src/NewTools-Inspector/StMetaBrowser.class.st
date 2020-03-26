@@ -60,8 +60,6 @@ StMetaBrowser >> initializeClassTree [
 { #category : #initialization }
 StMetaBrowser >> initializeMethodFilter [
 
-	methodFilter autoAccept: true.
-	methodFilter acceptBlock: [ :text|  ]
 ]
 
 { #category : #initialization }

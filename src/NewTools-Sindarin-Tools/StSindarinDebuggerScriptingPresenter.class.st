@@ -65,8 +65,6 @@ StSindarinDebuggerScriptingPresenter >> executeScript [
 StSindarinDebuggerScriptingPresenter >> initializePresenters [
 	code := self newCode.
 	code syntaxHighlight: true.
-	code autoAccept: true.
-	code acceptBlock: [ :txt |  ].
 	"code contextMenu: [  ]."
 	code text: 'sindarin stepOver'.
 	self flag: 'Build a generic sindarin script class with sidnarin as an instance var and its instance should be the receiver of the code'.
