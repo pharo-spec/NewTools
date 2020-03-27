@@ -701,11 +701,11 @@ SpecDebugger >> initializeCode [
 	self flag: 'Add metalink information in the gutter!'.
 	
 	code := self newCode.
-	code whenSubmitDo: [ :text :notifyer | 
+	code whenSubmitDo: [ :text | 
 		self
 			recompileMethodTo: text string
 			inContext: self stackTable selection selectedItem
-			notifying: notifyer ].
+			notifying: nil ].
 	code whenResetDo: [ self updateCodeFromContext ].
 	code contextMenu: [ self codeContextMenuCommandsForRootGroup: code rootCommandsGroup ].
 			
