@@ -23,6 +23,9 @@ GTSUnitDebugger class >> rank [
 
 { #category : #'*NewTools-DebuggerSelector' }
 GTSUnitDebugger class >> rankDebugSession: aDebugSession [
-	"Returns an integer representing how much this debugger is suitable to debug @aDebugSession. The higher the integer returned, the more suitable this debugger is. Signal the DebugSessionCannotBeOpenedByThisDebugger exception if this debugger absolutely cannot debug @aDebugSession (for example if this debugger can only handle debug sessions from test executions, and @aDebugSession does not come from a test execution)"
-	(self handlesContext: aDebugSession interruptedContext) ifTrue: [ ^ self rank ] ifFalse: [ DebugSessionCannotBeOpenedByThisDebugger signal ]
+	"Returns an integer representing how much this debugger is suitable to debug aDebugSession. The higher the integer returned, the more suitable this debugger is. Returns default rank if this debugger absolutely cannot debug aDebugSession (for example if this debugger can only handle debug sessions from test executions, and DebugSession does not come from a test execution)"
+
+	^ (self handlesContext: aDebugSession interruptedContext)
+		ifTrue: [ self rank ]
+		ifFalse: [ self defaultDebugSessionRank ]
 ]
