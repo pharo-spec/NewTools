@@ -269,6 +269,16 @@ DebuggerSelector >> setNoMainDebuggerClass [
 	self mainDebuggerClass: nil
 ]
 
+{ #category : #debuggers }
+DebuggerSelector >> sortedDebuggerClassesFor: aDebugSession [
+	^ (self getDebuggerClasses
+		select:
+			[ :aDebuggerClass | [ (aDebuggerClass rankDebugSession: aDebugSession) > 0 ] ])
+		sort: [ :dbgClass1 :dbgClass2 | 
+			(dbgClass1 rankDebugSession: aDebugSession)
+				>= (dbgClass2 rankDebugSession: aDebugSession) ]
+]
+
 { #category : #'publish events' }
 DebuggerSelector >> subscribersOnMainDebuggerClassUpdate [
 	subscribersOnMainDebuggerClassUpdate
