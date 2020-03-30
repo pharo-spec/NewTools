@@ -64,6 +64,11 @@ DebuggerSelector >> closeAllDebuggers [
 
 ]
 
+{ #category : #'debugging - levels' }
+DebuggerSelector >> decreaseDebuggingLevel [
+	debuggingLevel := debuggingLevel - 1
+]
+
 { #category : #accessing }
 DebuggerSelector >> getDebuggerClasses [
 	| result classesWithDummyDebuggerPragma |
@@ -87,6 +92,17 @@ DebuggerSelector >> ignoreDummyDebuggerForTests [
 	"If true, this class will ignore the DummyDebuggerForTests class when selecting a debugger. This is intended to be overriden for testing purposes"
 
 	^ true
+]
+
+{ #category : #'debugging - levels' }
+DebuggerSelector >> increaseDebuggingLevel [
+	debuggingLevel := debuggingLevel + 1
+]
+
+{ #category : #'open debugger' }
+DebuggerSelector >> initialize [ 
+	super initialize.
+	debuggingLevel := 0
 ]
 
 { #category : #'open debugger' }
@@ -219,6 +235,19 @@ DebuggerSelector >> removeSubscriberOnMainDebuggerClassUpdate: anObject [
 ]
 
 { #category : #'open debugger' }
+DebuggerSelector >> requestActionOnDebuggerError: error [
+	^ (UIManager default
+		chooseFrom:
+			{'Open the original exception in another debugger?'.
+			'Open the debugger exception in another debugger?'}
+		values: {true . false}
+		message:
+			'An exception occured while opening your debugger:'
+				, error printString
+		title: 'Your debugger is broken...') ifNil: [ false ]
+]
+
+{ #category : #'open debugger' }
 DebuggerSelector >> selectDebuggerAndOpen: aDebugSession andNotification: notificationString [
 	"Open aDebugSession with the most suitable debugger class in the system. "
 
@@ -255,6 +284,9 @@ DebuggerSelector >> tryToOpenDebugSession: aDebugSession withDebuggerClass: aDeb
 		andNotification: aString ]
 		on: Error
 		do: [ :err | 
-			err inspect. ^false ].
+			(self requestActionOnDebuggerError: err) ifFalse: [ ^ false ].
+			self increaseDebuggingLevel.
+			err debug.
+			self decreaseDebuggingLevel ].
 	^ true
 ]
