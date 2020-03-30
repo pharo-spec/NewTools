@@ -50,8 +50,8 @@ DebuggerSelectorForTests >> initialize [
 ]
 
 { #category : #helper }
-DebuggerSelectorForTests >> selectDebuggerAndOpen: a andNotification: c [
-	super selectDebuggerAndOpen: a andNotification: c
+DebuggerSelectorForTests >> selectAndOpenDebuggerFor: a withNotification: c [
+	super selectAndOpenDebuggerFor: a withNotification: c
 ]
 
 { #category : #helper }

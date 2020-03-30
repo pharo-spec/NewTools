@@ -211,7 +211,7 @@ DebuggerSelector >> notifySubscribersOfAMainDebuggerClassUpdate [
 DebuggerSelector >> openOn: aDebugSession withFullView: aBoolean [
 	"This method makes DebuggerSelector compatible with the rubric text editor. More specifically, the 'Debug it' option of Rubric's right-click menu will send #openOn:withFullView: to 'Smalltalk tools debugger' (see RubSmalltalkEditor>>#debug:receiver:in:. So to be able to set DebuggerSelector as the main debugger tool of 'Smalltalk tools', it needs to understand this message"
 
-	self selectDebuggerAndOpen: aDebugSession andNotification: nil
+	self selectAndOpenDebuggerFor: aDebugSession withNotification: nil
 ]
 
 { #category : #'debuggers - opening' }
@@ -250,7 +250,7 @@ DebuggerSelector >> requestActionOnDebuggerError: error [
 ]
 
 { #category : #'debuggers - opening' }
-DebuggerSelector >> selectDebuggerAndOpen: aDebugSession andNotification: notificationString [
+DebuggerSelector >> selectAndOpenDebuggerFor: aDebugSession withNotification: notificationString [
 	"Open aDebugSession with the most suitable debugger class in the system. "
 
 	self mainDebuggerClass
@@ -273,7 +273,7 @@ DebuggerSelector >> setNoMainDebuggerClass [
 DebuggerSelector >> sortedDebuggerClassesFor: aDebugSession [
 	^ (self getDebuggerClasses
 		select:
-			[ :aDebuggerClass | [ (aDebuggerClass rankDebugSession: aDebugSession) > 0 ] ])
+			[ :aDebuggerClass |  (aDebuggerClass rankDebugSession: aDebugSession) > 0  ])
 		sort: [ :dbgClass1 :dbgClass2 | 
 			(dbgClass1 rankDebugSession: aDebugSession)
 				>= (dbgClass2 rankDebugSession: aDebugSession) ]

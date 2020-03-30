@@ -71,8 +71,8 @@ DebuggerSelectorTest >> testMainDebuggerAlgorithm [
 
 	debuggerSelector mainDebuggerClass: DummyDebuggerForTests_RankZero.
 	debuggerSelector
-		selectDebuggerAndOpen: debugSession
-		andNotification: nil.
+		selectAndOpenDebuggerFor: debugSession
+		withNotification: nil.
 	self
 		assert: debuggerSelector debuggerSelectionAttempts size
 		equals: 1.
@@ -88,8 +88,8 @@ DebuggerSelectorTest >> testMainDebuggerAlgorithm_MainDebuggerCannotOpen [
 	debuggerSelector
 		mainDebuggerClass: DummyDebuggerForTests_CannotOpenDebugSession.
 	debuggerSelector
-		selectDebuggerAndOpen: debugSession
-		andNotification: nil.
+		selectAndOpenDebuggerFor: debugSession
+		withNotification: nil.
 	self
 		assert: debuggerSelector debuggerSelectionAttempts size
 		equals: 3.
@@ -138,8 +138,8 @@ DebuggerSelectorTest >> testSelectDebuggerIgnoresDebuggersSayingTheyCannotOpenTh
 		add: DummyDebuggerForTests_RejectAllDebugSessions;
 		add: DummyDebuggerForTests_RankZero.
 	debuggerSelector
-		selectDebuggerAndOpen: debugSession
-		andNotification: nil.
+		selectAndOpenDebuggerFor: debugSession
+		withNotification: nil.
 	self
 		assert: debuggerSelector debuggerSelectionAttempts size
 		equals: 1.

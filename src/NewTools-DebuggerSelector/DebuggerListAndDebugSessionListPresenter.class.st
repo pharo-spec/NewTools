@@ -135,8 +135,8 @@ DebuggerListAndDebugSessionListPresenter >> debugDebugSessionAction [
 			^ self ]
 		ifNotEmpty: [ :selectedItems | selectedItems at: 1 ]) debugSession.
 	DebuggerSelector singleton
-		selectDebuggerAndOpen: debugSession
-		andNotification: nil
+		selectAndOpenDebuggerFor: debugSession
+		withNotification: nil
 ]
 
 { #category : #'button action' }

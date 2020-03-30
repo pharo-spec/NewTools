@@ -22,8 +22,8 @@ MorphicUIManager >> debugProcess: process context: context label: title fullView
 			redraw problems after opening a debugger e.g. from
 			the testrunner."
 			[ DebuggerSelector singleton
-				selectDebuggerAndOpen: debugSession
-				andNotification: notificationString ]
+				selectAndOpenDebuggerFor: debugSession
+				withNotification: notificationString ]
 				on: Error
 				do: [ :ex | debugSession signalDebuggerError: ex ] ].
 	process suspend
