@@ -28,3 +28,15 @@ MorphicUIManager >> debugProcess: process context: context label: title fullView
 				do: [ :ex | debugSession signalDebuggerError: ex ] ].
 	process suspend
 ]
+
+{ #category : #'*NewTools-DebuggerSelector' }
+MorphicUIManager >> debugProcess: process level: debuggerLevel context: context label: title fullView: bool notification: notificationString [
+	DebuggerSelector singleton
+		debugProcess: process
+		level: debuggerLevel
+		context: context
+		label: title
+		fullView: bool
+		notification: notificationString
+		fromUIManager: self
+]

@@ -64,6 +64,33 @@ DebuggerSelector >> closeAllDebuggers [
 
 ]
 
+{ #category : #'system - integration' }
+DebuggerSelector >> debugProcess: process level: debuggerLevel context: context label: title fullView: bool notification: notificationString fromUIManager: uiManager [
+	"Open a notifier in response to an error, halt, or notify. A notifier view
+	just shows a short view of the sender stack and provides a menu that
+	lets the user open a full debugger."
+
+	| debugSession |
+	debugSession := process
+		newDebugSessionNamed: title
+		startedAt: context.
+	debugSession logStackToFileIfNeeded.
+	debugSession isAboutUIProcess
+		ifTrue: [ DefaultExecutionEnvironment
+				beActiveDuring: [ uiManager spawnNewProcess ] ].
+	uiManager
+		defer: [ "schedule debugger in deferred UI message to address
+			redraw problems after opening a debugger e.g. from
+			the testrunner."
+			[ self
+				lookupDebuggerAndOpen: debugSession
+				debuggerLevel: debuggerLevel
+				notification: notificationString ]
+				on: Error
+				do: [ :ex | debugSession signalDebuggerError: ex ] ].
+	process suspend
+]
+
 { #category : #'debugging - levels' }
 DebuggerSelector >> decreaseDebuggingLevel [
 	debuggingLevel := debuggingLevel - 1
@@ -150,20 +177,44 @@ DebuggerSelector >> isThisClassADebugger: aClass [
 ]
 
 { #category : #'debuggers - lookup' }
+DebuggerSelector >> lookupDebuggerAndOpen: aDebugSession debuggerLevel: debuggerLevel notification: notificationString [
+	"Try to open aDebugSession with the highest ranking debugger. 
+	If this raises an Error, try with the second highest ranking debugger instead, etc.
+	If no debugger can open the debug session, then the emergency debugger opens."
+
+	| debuggers |
+	debuggers := self sortedDebuggerClassesFor: aDebugSession.
+	debuggerLevel < debuggers size	ifFalse: [ ^ false ].
+	debuggerLevel timesRepeat: [ debuggers removeFirst ].
+
+	"We open the first debugger that can open the debug session."
+	debuggers
+		do: [ :aDebuggerClass | 
+			(self
+				tryToOpenDebugSession: aDebugSession
+				debuggerLevel: debuggerLevel
+				withDebuggerClass: aDebuggerClass
+				andNotification: notificationString)
+				ifTrue: [ ^ true ] ].
+	"No debugger could open this debug session"
+	^ false
+]
+
+{ #category : #'debuggers - lookup' }
 DebuggerSelector >> lookupDebuggerAndOpen: aDebugSession notification: notificationString [
 	"Try to open aDebugSession with the highest ranking debugger. 
 	If this raises an Error, try with the second highest ranking debugger instead, etc.
 	If no debugger can open the debug session, then the emergency debugger opens."
 
 	(self sortedDebuggerClassesFor: aDebugSession)
-		do: [ :aDebuggerClass | 
-			(self
+		detect: [ :aDebuggerClass | 
+			"We open the first debugger that can open the debug session."
+			self
 				tryToOpenDebugSession: aDebugSession
 				withDebuggerClass: aDebuggerClass
-				andNotification: notificationString)
-				ifTrue:
-					[ ^ self	"We opened @aDebugSession with a suitable debugger. We are done here" ] ].
-	self inform: 'No debugger could open this debug session'
+				andNotification: notificationString ].
+	"No debugger could open this debug session"
+	^ false
 ]
 
 { #category : #accessing }
@@ -201,9 +252,9 @@ DebuggerSelector >> openOn: aDebugSession withFullView: aBoolean [
 
 { #category : #'debuggers - opening' }
 DebuggerSelector >> openWithMainDebugger: aDebugSession andNotification: notificationString [
-	"Open aDebugSession with the main debugger class in the system. Look at the comments below for the detailed algorithm selecting the most suitable debugger"
+	"Open aDebugSession with the main debugger class in the system. "
 
-	[ self
+	^[ self
 		tryToOpenDebugSession: aDebugSession
 		withDebuggerClass: self mainDebuggerClass
 		andNotification: notificationString ]
@@ -258,7 +309,7 @@ DebuggerSelector >> setNoMainDebuggerClass [
 DebuggerSelector >> sortedDebuggerClassesFor: aDebugSession [
 	^ (self getDebuggerClasses
 		select:
-			[ :aDebuggerClass |  (aDebuggerClass rankDebugSession: aDebugSession) > 0  ])
+			[ :aDebuggerClass | (aDebuggerClass rankDebugSession: aDebugSession) > 0 ])
 		sort: [ :dbgClass1 :dbgClass2 | 
 			(dbgClass1 rankDebugSession: aDebugSession)
 				>= (dbgClass2 rankDebugSession: aDebugSession) ]
@@ -272,7 +323,7 @@ DebuggerSelector >> subscribersOnMainDebuggerClassUpdate [
 ]
 
 { #category : #'debuggers - opening' }
-DebuggerSelector >> tryToOpenDebugSession: aDebugSession withDebuggerClass: aDebuggerClass andNotification: aString [
+DebuggerSelector >> tryToOpenDebugSession: aDebugSession debuggerLevel: debuggerLevel withDebuggerClass: aDebuggerClass andNotification: aString [
 	"Tries to open @aDebugSession with debugger @aDebuggerClass. If an Error is raised doing so, returns false, otherwise return true"
 
 	[ aDebuggerClass
@@ -282,8 +333,19 @@ DebuggerSelector >> tryToOpenDebugSession: aDebugSession withDebuggerClass: aDeb
 		on: Error
 		do: [ :err | 
 			(self requestActionOnDebuggerError: err) ifFalse: [ ^ false ].
-			self increaseDebuggingLevel.
-			err debug.
-			self decreaseDebuggingLevel ].
+			err debug: debuggerLevel + 1 ].
+	^ true
+]
+
+{ #category : #'debuggers - opening' }
+DebuggerSelector >> tryToOpenDebugSession: aDebugSession withDebuggerClass: aDebuggerClass andNotification: aString [
+	"Tries to open @aDebugSession with debugger @aDebuggerClass. If an Error is raised doing so, returns false, otherwise return true"
+
+	[ aDebuggerClass
+		openOn: aDebugSession
+		withFullView: true
+		andNotification: aString ]
+		on: Error
+		do: [ :err | ^ false ].
 	^ true
 ]
