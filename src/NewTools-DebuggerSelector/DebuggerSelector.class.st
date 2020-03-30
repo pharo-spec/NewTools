@@ -151,24 +151,11 @@ DebuggerSelector >> isThisClassADebugger: aClass [
 
 { #category : #'debuggers - lookup' }
 DebuggerSelector >> lookupDebuggerAndOpen: aDebugSession notification: notificationString [
-	| debuggerClasses |
-	"Exclude all debugger classes that signal the DebugSessionCannotBeOpenedByThisDebugger exception when asked to rank @aDebugSession, as these cannot open @aDebugSession"
-	debuggerClasses := self getDebuggerClasses
-		select: [ :aDebuggerClass | 
-			[ aDebuggerClass rankDebugSession: aDebugSession.
-			true ]
-				on: DebugSessionCannotBeOpenedByThisDebugger
-				do: [ false ] ].	
+	"Try to open aDebugSession with the highest ranking debugger. 
+	If this raises an Error, try with the second highest ranking debugger instead, etc.
+	If no debugger can open the debug session, then the emergency debugger opens."
 
-	"Ask each debugger class to rank @aDebugSession, and sort them from highest rank to lowest."
-	debuggerClasses := ((debuggerClasses
-		collect: [ :aDebuggerClass | 
-			{aDebuggerClass.
-			(aDebuggerClass rankDebugSession: aDebugSession)} ])
-		sort: [ :val1 :val2 | (val1 at: 2) >= (val2 at: 2) ])
-		collect: [ :couple | couple at: 1 ].	
-		
-	debuggerClasses
+	(self sortedDebuggerClassesFor: aDebugSession)
 		do: [ :aDebuggerClass | 
 			(self
 				tryToOpenDebugSession: aDebugSession
@@ -176,8 +163,6 @@ DebuggerSelector >> lookupDebuggerAndOpen: aDebugSession notification: notificat
 				andNotification: notificationString)
 				ifTrue:
 					[ ^ self	"We opened @aDebugSession with a suitable debugger. We are done here" ] ].
-
-	"Try to open @aDebugSession with the highest ranking debugger. If this raises an Error, try with the second highest ranking debugger instead. If this raises an Error, try with the third highest..."
 	self inform: 'No debugger could open this debug session'
 ]
 
