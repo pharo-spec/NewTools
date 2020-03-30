@@ -292,6 +292,7 @@ DebuggerSelector >> setNoMainDebuggerClass [
 
 { #category : #debuggers }
 DebuggerSelector >> sortedDebuggerClassesFor: aDebugSession [
+	self flag:'if maindebugger class exist, put it first'.
 	^ (self getDebuggerClasses
 		select:
 			[ :aDebuggerClass | (aDebuggerClass rankDebugSession: aDebugSession) > 0 ])
