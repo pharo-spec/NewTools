@@ -91,11 +91,6 @@ DebuggerSelector >> debugProcess: process level: debuggerLevel context: context 
 	process suspend
 ]
 
-{ #category : #'debugging - levels' }
-DebuggerSelector >> decreaseDebuggingLevel [
-	debuggingLevel := debuggingLevel - 1
-]
-
 { #category : #debuggers }
 DebuggerSelector >> getDebuggerClasses [
 	| result classesWithDummyDebuggerPragma |
@@ -119,11 +114,6 @@ DebuggerSelector >> ignoreDummyDebuggerForTests [
 	"If true, this class will ignore the DummyDebuggerForTests class when selecting a debugger. This is intended to be overriden for testing purposes"
 
 	^ true
-]
-
-{ #category : #'debugging - levels' }
-DebuggerSelector >> increaseDebuggingLevel [
-	debuggingLevel := debuggingLevel + 1
 ]
 
 { #category : #initialize }
@@ -228,11 +218,6 @@ DebuggerSelector >> mainDebuggerClass: aClass [
 		ifFalse: [ CannotSetAsMainDebuggerAClassThatIsNotADebuggerClass signal ].
 	mainDebuggerClass := aClass.
 	self notifySubscribersOfAMainDebuggerClassUpdate
-]
-
-{ #category : #'debugging - levels' }
-DebuggerSelector >> maximumDebuggingLevel [
-	^1
 ]
 
 { #category : #'publish events' }
