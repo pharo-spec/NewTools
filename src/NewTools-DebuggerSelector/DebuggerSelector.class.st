@@ -345,7 +345,11 @@ DebuggerSelector >> tryToOpenDebugSession: aDebugSession withDebuggerClass: aDeb
 		openOn: aDebugSession
 		withFullView: true
 		andNotification: aString ]
-		on: Error
-		do: [ :err | ^ false ].
+		on: Exception
+		do: [ :err | 
+			(self requestActionOnDebuggerError: err)
+				ifFalse: [ ^ false ].
+			err debug: 1.
+			^ false ].
 	^ true
 ]
