@@ -83,7 +83,7 @@ DebuggerSelector >> getDebuggerClasses [
 				filter: [ :prg | prg selector = #iAmADummyDebuggerForTest ]) reset
 				collected
 				collect: [ :debuggerMethod | debuggerMethod methodClass soleInstance ].
-			result removeAll: classesWithDummyDebuggerPragma ].
+			"result removeAll: classesWithDummyDebuggerPragma "].
 	^ result
 ]
 
