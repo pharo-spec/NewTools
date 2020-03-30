@@ -52,7 +52,7 @@ DebuggerSelector >> addSubscriberOnMainDebuggerClassUpdate: anObject [
 	self subscribersOnMainDebuggerClassUpdate add: anObject
 ]
 
-{ #category : #'open debugger' }
+{ #category : #'debuggers - opening' }
 DebuggerSelector >> closeAllDebuggers [
 	self flag: 'Ugly temporary hack: Thomas can you fix this?'.
 	self flag: 'GTGenericStackDebugger is ultra slow to close its windows...'.
@@ -69,7 +69,7 @@ DebuggerSelector >> decreaseDebuggingLevel [
 	debuggingLevel := debuggingLevel - 1
 ]
 
-{ #category : #accessing }
+{ #category : #debuggers }
 DebuggerSelector >> getDebuggerClasses [
 	| result classesWithDummyDebuggerPragma |
 	result := ((PragmaCollector
@@ -87,7 +87,7 @@ DebuggerSelector >> getDebuggerClasses [
 	^ result
 ]
 
-{ #category : #accessing }
+{ #category : #debuggers }
 DebuggerSelector >> ignoreDummyDebuggerForTests [
 	"If true, this class will ignore the DummyDebuggerForTests class when selecting a debugger. This is intended to be overriden for testing purposes"
 
@@ -99,20 +99,22 @@ DebuggerSelector >> increaseDebuggingLevel [
 	debuggingLevel := debuggingLevel + 1
 ]
 
-{ #category : #'open debugger' }
+{ #category : #initialize }
 DebuggerSelector >> initialize [ 
 	super initialize.
 	debuggingLevel := 0
 ]
 
-{ #category : #'open debugger' }
+{ #category : #'system - integration' }
 DebuggerSelector >> isObsolete [
 	"Method required for DebuggerSelector to be set as the debugger tool in 'Smalltalk tools'
 	I do not really know what it means"
+	self flag: 'Thomas, you cannot code stuff that you do not know what it means.
+	Please investigate.'.
 	^ false
 ]
 
-{ #category : #'open debugger' }
+{ #category : #debuggers }
 DebuggerSelector >> isThisClassADebugger: aClass [
 	"Returns whether @aClass implements the required methods to be considered a debugger class. It must:
 	- have a #iAmADebugger method, with the #iAmADebugger pragma
@@ -147,7 +149,7 @@ DebuggerSelector >> isThisClassADebugger: aClass [
 	^ true
 ]
 
-{ #category : #'open debugger' }
+{ #category : #'debuggers - lookup' }
 DebuggerSelector >> lookupDebuggerAndOpen: aDebugSession notification: notificationString [
 	| debuggerClasses |
 	"Exclude all debugger classes that signal the DebugSessionCannotBeOpenedByThisDebugger exception when asked to rank @aDebugSession, as these cannot open @aDebugSession"
@@ -205,14 +207,14 @@ DebuggerSelector >> notifySubscribersOfAMainDebuggerClassUpdate [
 				ifNotNil: [ :subscriber | subscriber onMainDebuggerClassUpdate ] ]
 ]
 
-{ #category : #'open debugger' }
+{ #category : #'debuggers - opening' }
 DebuggerSelector >> openOn: aDebugSession withFullView: aBoolean [
 	"This method makes DebuggerSelector compatible with the rubric text editor. More specifically, the 'Debug it' option of Rubric's right-click menu will send #openOn:withFullView: to 'Smalltalk tools debugger' (see RubSmalltalkEditor>>#debug:receiver:in:. So to be able to set DebuggerSelector as the main debugger tool of 'Smalltalk tools', it needs to understand this message"
 
 	self selectDebuggerAndOpen: aDebugSession andNotification: nil
 ]
 
-{ #category : #'open debugger' }
+{ #category : #'debuggers - opening' }
 DebuggerSelector >> openWithMainDebugger: aDebugSession andNotification: notificationString [
 	"Open aDebugSession with the main debugger class in the system. Look at the comments below for the detailed algorithm selecting the most suitable debugger"
 
@@ -234,7 +236,7 @@ DebuggerSelector >> removeSubscriberOnMainDebuggerClassUpdate: anObject [
 			[ "It's a weak collection, its elements can be nilled by the garbage collector at any time if they are not referenced elsewhere, so it can happen not to find the object to remove because it has already been nilled" ]
 ]
 
-{ #category : #'open debugger' }
+{ #category : #'debuggers - opening' }
 DebuggerSelector >> requestActionOnDebuggerError: error [
 	^ (UIManager default
 		chooseFrom:
@@ -247,7 +249,7 @@ DebuggerSelector >> requestActionOnDebuggerError: error [
 		title: 'Your debugger is broken...') ifNil: [ false ]
 ]
 
-{ #category : #'open debugger' }
+{ #category : #'debuggers - opening' }
 DebuggerSelector >> selectDebuggerAndOpen: aDebugSession andNotification: notificationString [
 	"Open aDebugSession with the most suitable debugger class in the system. "
 
@@ -260,7 +262,7 @@ DebuggerSelector >> selectDebuggerAndOpen: aDebugSession andNotification: notifi
 		andNotification: notificationString
 ]
 
-{ #category : #accessing }
+{ #category : #debuggers }
 DebuggerSelector >> setNoMainDebuggerClass [
 	"Removes the main debugger class if there was any"
 
@@ -274,7 +276,7 @@ DebuggerSelector >> subscribersOnMainDebuggerClassUpdate [
 	^ subscribersOnMainDebuggerClassUpdate
 ]
 
-{ #category : #'open debugger' }
+{ #category : #'debuggers - opening' }
 DebuggerSelector >> tryToOpenDebugSession: aDebugSession withDebuggerClass: aDebuggerClass andNotification: aString [
 	"Tries to open @aDebugSession with debugger @aDebuggerClass. If an Error is raised doing so, returns false, otherwise return true"
 
