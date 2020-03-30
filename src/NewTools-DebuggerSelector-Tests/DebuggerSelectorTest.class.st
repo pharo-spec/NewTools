@@ -72,14 +72,12 @@ DebuggerSelectorTest >> testMainDebuggerAlgorithm [
 	debuggerSelector mainDebuggerClass: DummyDebuggerForTests_RankZero.
 	debuggerSelector
 		selectDebuggerAndOpen: debugSession
-		withFullView: nil
 		andNotification: nil.
 	self
 		assert: debuggerSelector debuggerSelectionAttempts size
 		equals: 1.
 	self
-		assert:
-		(debuggerSelector debuggerSelectionAttempts at: 1) debuggerClass
+		assert: (debuggerSelector debuggerSelectionAttempts at: 1) debuggerClass
 		equals: DummyDebuggerForTests_RankZero
 ]
 
@@ -87,34 +85,30 @@ DebuggerSelectorTest >> testMainDebuggerAlgorithm [
 DebuggerSelectorTest >> testMainDebuggerAlgorithm_MainDebuggerCannotOpen [
 	"Tests that the first debugger that DebuggerSelector will try to open is the one that has been set as main debugger, even if another debugger has a higher rank"
 
-	debuggerSelector mainDebuggerClass:
-		DummyDebuggerForTests_CannotOpenDebugSession.
+	debuggerSelector
+		mainDebuggerClass: DummyDebuggerForTests_CannotOpenDebugSession.
 	debuggerSelector
 		selectDebuggerAndOpen: debugSession
-		withFullView: nil
 		andNotification: nil.
 	self
 		assert: debuggerSelector debuggerSelectionAttempts size
 		equals: 3.
 	"Assert the debuggerSelector tried to open the main debugger first, but failed (as this particular debugger fails to open any debug session)"
 	self
-		assert:
-		(debuggerSelector debuggerSelectionAttempts at: 1) debuggerClass
+		assert: (debuggerSelector debuggerSelectionAttempts at: 1) debuggerClass
 		equals: DummyDebuggerForTests_CannotOpenDebugSession.
-	self assert:
-		(debuggerSelector debuggerSelectionAttempts at: 1) success not.
+	self
+		assert: (debuggerSelector debuggerSelectionAttempts at: 1) success not.
 	"Assert that after failing to open the main debugger, the debuggerSelector reverted to the standard algorithm of trying to open the highest ranked debugger first. The highest ranked debugger happen to be DummyDebuggerForTests_CannotOpenDebugSession"
 	self
-		assert:
-		(debuggerSelector debuggerSelectionAttempts at: 2) debuggerClass
+		assert: (debuggerSelector debuggerSelectionAttempts at: 2) debuggerClass
 		equals: DummyDebuggerForTests_CannotOpenDebugSession.
 	"Assert that the next debugger tried could open the debug session"
 	self
-		assert:
-		(debuggerSelector debuggerSelectionAttempts at: 3) debuggerClass
+		assert: (debuggerSelector debuggerSelectionAttempts at: 3) debuggerClass
 		equals: DummyDebuggerForTests.
-	self assert:
-		(debuggerSelector debuggerSelectionAttempts at: 3) success
+	self
+		assert: (debuggerSelector debuggerSelectionAttempts at: 3) success
 ]
 
 { #category : #tests }
@@ -145,14 +139,12 @@ DebuggerSelectorTest >> testSelectDebuggerIgnoresDebuggersSayingTheyCannotOpenTh
 		add: DummyDebuggerForTests_RankZero.
 	debuggerSelector
 		selectDebuggerAndOpen: debugSession
-		withFullView: true
 		andNotification: nil.
 	self
 		assert: debuggerSelector debuggerSelectionAttempts size
 		equals: 1.
 	self
-		assert:
-		(debuggerSelector debuggerSelectionAttempts at: 1) debuggerClass
+		assert: (debuggerSelector debuggerSelectionAttempts at: 1) debuggerClass
 		equals: DummyDebuggerForTests_RankZero
 ]
 
@@ -172,15 +164,13 @@ DebuggerSelectorTest >> testTryToOpenDebugSession [
 	debuggerSelector
 		tryToOpenDebugSession: debugSession
 		withDebuggerClass: testDebuggerClass
-		withFullView: nil
 		andNotification: nil.
 	self
 		assert: debuggerSelector debuggerSelectionAttempts size
 		equals: 1.
-	self assert:
-		(debuggerSelector debuggerSelectionAttempts at: 1) success.
 	self
-		assert:
-		(debuggerSelector debuggerSelectionAttempts at: 1) debuggerClass
+		assert: (debuggerSelector debuggerSelectionAttempts at: 1) success.
+	self
+		assert: (debuggerSelector debuggerSelectionAttempts at: 1) debuggerClass
 		equals: testDebuggerClass
 ]

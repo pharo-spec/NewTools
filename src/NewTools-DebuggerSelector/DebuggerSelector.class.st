@@ -27,7 +27,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'mainDebuggerClass',
-		'subscribersOnMainDebuggerClassUpdate'
+		'subscribersOnMainDebuggerClassUpdate',
+		'debuggingLevel'
 	],
 	#classVars : [
 		'singleton'
@@ -63,7 +64,7 @@ DebuggerSelector >> closeAllDebuggers [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 DebuggerSelector >> getDebuggerClasses [
 	| result classesWithDummyDebuggerPragma |
 	result := ((PragmaCollector
@@ -130,6 +131,38 @@ DebuggerSelector >> isThisClassADebugger: aClass [
 	^ true
 ]
 
+{ #category : #'open debugger' }
+DebuggerSelector >> lookupDebuggerAndOpen: aDebugSession notification: notificationString [
+	| debuggerClasses |
+	"Exclude all debugger classes that signal the DebugSessionCannotBeOpenedByThisDebugger exception when asked to rank @aDebugSession, as these cannot open @aDebugSession"
+	debuggerClasses := self getDebuggerClasses
+		select: [ :aDebuggerClass | 
+			[ aDebuggerClass rankDebugSession: aDebugSession.
+			true ]
+				on: DebugSessionCannotBeOpenedByThisDebugger
+				do: [ false ] ].	
+
+	"Ask each debugger class to rank @aDebugSession, and sort them from highest rank to lowest."
+	debuggerClasses := ((debuggerClasses
+		collect: [ :aDebuggerClass | 
+			{aDebuggerClass.
+			(aDebuggerClass rankDebugSession: aDebugSession)} ])
+		sort: [ :val1 :val2 | (val1 at: 2) >= (val2 at: 2) ])
+		collect: [ :couple | couple at: 1 ].	
+		
+	debuggerClasses
+		do: [ :aDebuggerClass | 
+			(self
+				tryToOpenDebugSession: aDebugSession
+				withDebuggerClass: aDebuggerClass
+				andNotification: notificationString)
+				ifTrue:
+					[ ^ self	"We opened @aDebugSession with a suitable debugger. We are done here" ] ].
+
+	"Try to open @aDebugSession with the highest ranking debugger. If this raises an Error, try with the second highest ranking debugger instead. If this raises an Error, try with the third highest..."
+	self inform: 'No debugger could open this debug session'
+]
+
 { #category : #accessing }
 DebuggerSelector >> mainDebuggerClass [
 	^ mainDebuggerClass
@@ -141,6 +174,11 @@ DebuggerSelector >> mainDebuggerClass: aClass [
 		ifFalse: [ CannotSetAsMainDebuggerAClassThatIsNotADebuggerClass signal ].
 	mainDebuggerClass := aClass.
 	self notifySubscribersOfAMainDebuggerClassUpdate
+]
+
+{ #category : #'debugging - levels' }
+DebuggerSelector >> maximumDebuggingLevel [
+	^1
 ]
 
 { #category : #'publish events' }
@@ -155,10 +193,21 @@ DebuggerSelector >> notifySubscribersOfAMainDebuggerClassUpdate [
 DebuggerSelector >> openOn: aDebugSession withFullView: aBoolean [
 	"This method makes DebuggerSelector compatible with the rubric text editor. More specifically, the 'Debug it' option of Rubric's right-click menu will send #openOn:withFullView: to 'Smalltalk tools debugger' (see RubSmalltalkEditor>>#debug:receiver:in:. So to be able to set DebuggerSelector as the main debugger tool of 'Smalltalk tools', it needs to understand this message"
 
-	self
-		selectDebuggerAndOpen: aDebugSession
-		withFullView: aBoolean
-		andNotification: nil
+	self selectDebuggerAndOpen: aDebugSession andNotification: nil
+]
+
+{ #category : #'open debugger' }
+DebuggerSelector >> openWithMainDebugger: aDebugSession andNotification: notificationString [
+	"Open aDebugSession with the main debugger class in the system. Look at the comments below for the detailed algorithm selecting the most suitable debugger"
+
+	[ self
+		tryToOpenDebugSession: aDebugSession
+		withDebuggerClass: self mainDebuggerClass
+		andNotification: notificationString ]
+		on: Error
+		do: [ self
+				lookupDebuggerAndOpen: aDebugSession
+				notification: notificationString ]
 ]
 
 { #category : #'publish events' }
@@ -170,49 +219,16 @@ DebuggerSelector >> removeSubscriberOnMainDebuggerClassUpdate: anObject [
 ]
 
 { #category : #'open debugger' }
-DebuggerSelector >> selectDebuggerAndOpen: aDebugSession withFullView: aBool andNotification: aString [
-	"Open @aDebugSession with the most suitable debugger class in the system. Look at the comments below for the detailed algorithm selecting the most suitable debugger"
+DebuggerSelector >> selectDebuggerAndOpen: aDebugSession andNotification: notificationString [
+	"Open aDebugSession with the most suitable debugger class in the system. "
 
-	"The @aBool and @aString arguments do not seem super useful, so you can probably get away with respectively giving true and nil as values for them"
-
-	| debuggerClasses |
-	"If a main debugger has been set (variable mainDebuggerClass), we try it first"
-	[ (self mainDebuggerClass
-		ifNotNil: [ :theMainDebuggerClass | 
-			self
-				tryToOpenDebugSession: aDebugSession
-				withDebuggerClass: theMainDebuggerClass
-				withFullView: aBool
-				andNotification: aString ])
-		ifTrue:
-			[ ^ self	"the main debugger class managed to open @aDebugSession. We are done here" ] ]
-		on: Error
-		do:
-			[ "Prevent exceptions potentially signalled by the mainDebuggerClass from propagating, to avoid infinite debugger loops" ].
-	"If the main debugger class cannot open @aDebugSession, we use the standard algorithm to find a suitable debugger class"
-	debuggerClasses := self getDebuggerClasses.	"Get all debugger classes in the system"
-	debuggerClasses := debuggerClasses
-		select: [ :aDebuggerClass | 
-			[ aDebuggerClass rankDebugSession: aDebugSession.
-			true ]
-				on: DebugSessionCannotBeOpenedByThisDebugger
-				do: [ false ] ].	"Exclude all debugger classes that signal the DebugSessionCannotBeOpenedByThisDebugger exception when asked to rank @aDebugSession, as these cannot open @aDebugSession"
-	debuggerClasses := ((debuggerClasses
-		collect: [ :aDebuggerClass | 
-			{aDebuggerClass.
-			(aDebuggerClass rankDebugSession: aDebugSession)} ])
-		sort: [ :val1 :val2 | (val1 at: 2) >= (val2 at: 2) ])
-		collect: [ :couple | couple at: 1 ].	"Ask each debugger class to rank @aDebugSession, and sort them from highest rank to lowest."
-	debuggerClasses
-		do: [ :aDebuggerClass | 
-			(self
-				tryToOpenDebugSession: aDebugSession
-				withDebuggerClass: aDebuggerClass
-				withFullView: aBool
-				andNotification: aString)
-				ifTrue:
-					[ ^ self	"We opened @aDebugSession with a suitable debugger. We are done here" ] ].	"Try to open @aDebugSession with the highest ranking debugger. If this raises an Error, try with the second highest ranking debugger instead. If this raises an Error, try with the third highest..."
-	self inform: 'No debugger could open this debug session'
+	self mainDebuggerClass
+		ifNil: [ ^ self
+				lookupDebuggerAndOpen: aDebugSession
+				notification: notificationString ].
+	self
+		openWithMainDebugger: aDebugSession
+		andNotification: notificationString
 ]
 
 { #category : #accessing }
@@ -229,16 +245,16 @@ DebuggerSelector >> subscribersOnMainDebuggerClassUpdate [
 	^ subscribersOnMainDebuggerClassUpdate
 ]
 
-{ #category : #helper }
-DebuggerSelector >> tryToOpenDebugSession: aDebugSession withDebuggerClass: aDebuggerClass withFullView: aBool andNotification: aString [
+{ #category : #'open debugger' }
+DebuggerSelector >> tryToOpenDebugSession: aDebugSession withDebuggerClass: aDebuggerClass andNotification: aString [
 	"Tries to open @aDebugSession with debugger @aDebuggerClass. If an Error is raised doing so, returns false, otherwise return true"
 
-	| errorString |
 	[ aDebuggerClass
 		openOn: aDebugSession
-		withFullView: aBool
-		andNotification: aString.
-	^ true ]
+		withFullView: true
+		andNotification: aString ]
 		on: Error
-		do: [ :e | errorString := 'Debugger ', aDebuggerClass name, ' crashed when opening a debug session: ', aDebugSession name. self crTrace: errorString. self inform: errorString. e inspect. ^ false ]
+		do: [ :err | 
+			err inspect. ^false ].
+	^ true
 ]

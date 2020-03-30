@@ -136,7 +136,6 @@ DebuggerListAndDebugSessionListPresenter >> debugDebugSessionAction [
 		ifNotEmpty: [ :selectedItems | selectedItems at: 1 ]) debugSession.
 	DebuggerSelector singleton
 		selectDebuggerAndOpen: debugSession
-		withFullView: true
 		andNotification: nil
 ]
 

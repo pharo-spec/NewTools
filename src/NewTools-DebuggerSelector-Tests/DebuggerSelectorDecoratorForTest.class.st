@@ -44,7 +44,7 @@ DebuggerSelectorDecoratorForTest >> initialize [
 ]
 
 { #category : #helper }
-DebuggerSelectorDecoratorForTest >> tryToOpenDebugSession: aDebugSession withDebuggerClass: aDebuggerClass withFullView: aBool andNotification: aString [
+DebuggerSelectorDecoratorForTest >> tryToOpenDebugSession: aDebugSession withDebuggerClass: aDebuggerClass andNotification: aString [
 	"Tries to open @aDebugSession with debugger @aDebuggerClass. Record this attempt in debuggerSelectionAttempts, with success = true if it succeeded, or success = false if it signaled an exception"
 
 	[ 

@@ -50,12 +50,12 @@ DebuggerSelectorForTests >> initialize [
 ]
 
 { #category : #helper }
-DebuggerSelectorForTests >> selectDebuggerAndOpen: a withFullView: b andNotification: c [
-	super selectDebuggerAndOpen: a withFullView: b andNotification: c
+DebuggerSelectorForTests >> selectDebuggerAndOpen: a andNotification: c [
+	super selectDebuggerAndOpen: a andNotification: c
 ]
 
 { #category : #helper }
-DebuggerSelectorForTests >> tryToOpenDebugSession: aDebugSession withDebuggerClass: aDebuggerClass withFullView: aBool andNotification: aString [
+DebuggerSelectorForTests >> tryToOpenDebugSession: aDebugSession withDebuggerClass: aDebuggerClass andNotification: aString [
 	"This method is the same as that of the superclass, with the difference that it logs which debuggers this class tried to open in the debuggerSelectionAttempts variable, along with whether the opening succeeded or not"
 
 	[ 
