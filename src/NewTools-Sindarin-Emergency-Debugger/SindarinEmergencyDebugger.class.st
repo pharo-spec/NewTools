@@ -51,7 +51,7 @@ SindarinEmergencyDebugger >> composeHelpText [
 SindarinEmergencyDebugger >> composeMethodText [
 	| str stack context node text |
 	str := self newTextStream.
-	self writeSectionTitle: 'STACK' on: str.
+	self writeSectionTitle: 'SOURCE' on: str.
 	stack := sindarinDebugger debugSession stackOfSize: self maxStackSize.
 	context := stack at: stackSelectionIndex.
 	node := sindarinDebugger nodeForContext: context.
@@ -80,7 +80,7 @@ SindarinEmergencyDebugger >> composeStackText [
 	str := self newTextStream.
 	stack := sindarinDebugger debugSession stackOfSize: self maxStackSize.
 	str cr.
-	self writeSectionTitle: 'SOURCE' on: str.
+	self writeSectionTitle: 'STACK' on: str.
 	1 to: stack size do: [ :i | 
 		| text |
 		text := (stack at: i) method name asText.
