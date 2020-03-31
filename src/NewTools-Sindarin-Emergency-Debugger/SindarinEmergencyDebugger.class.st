@@ -11,7 +11,20 @@ Class {
 	#instVars : [
 		'sindarinDebugger',
 		'rwStream',
-		'rawDisplay'
+		'rawDisplay',
+		'stackSelectionIndex'
 	],
 	#category : #'NewTools-Sindarin-Emergency-Debugger'
 }
+
+{ #category : #accessing }
+SindarinEmergencyDebugger class >> displayStackSize [
+	^10
+]
+
+{ #category : #initialization }
+SindarinEmergencyDebugger >> initialize [
+	rwStream := SEDReadWriteStream forDebugger: self.
+	rawDisplay := SEDDisplayInterface new.
+	stackSelectionIndex := 1
+]
