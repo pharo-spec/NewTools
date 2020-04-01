@@ -37,14 +37,12 @@ SindarinEmergencyDebugger class >> displayStackSize [
 SindarinEmergencyDebugger >> composeHelpText [
 	| str |
 	str := self newTextStream.
-	str cr.
-	self writeSectionTitle: 'HELP' on: str.
 	str << 'exit: terminate the debug session and exit the debugger' asText.
 	str cr.
 	str << 'proceed: proceeds the execution' asText.
 	str cr.
 	str << 'revert: revert the selected method to its last known version' asText.
-	^str contents
+	^self composeResult: str contents title: 'HELP'
 ]
 
 { #category : #'text - composing' }
@@ -72,6 +70,16 @@ SindarinEmergencyDebugger >> composePromptWith: aString [
 	str << '> ' asText allBold.
 	str << aString trim asText.
 	input := str contents
+]
+
+{ #category : #'text - composing' }
+SindarinEmergencyDebugger >> composeResult: text title: title [
+	| str |
+	str := self newTextStream.
+	str cr.
+	self writeSectionTitle: title on: str.
+	str << text.
+	result := str contents
 ]
 
 { #category : #'text - composing' }
@@ -112,7 +120,7 @@ SindarinEmergencyDebugger >> debug: aDebugSession [
 SindarinEmergencyDebugger >> eval: command [
 	command = 'exit'
 		ifTrue: [ self terminate ].
-	command = 'h' ifTrue:[result := self composeHelpText].
+	command = 'h' ifTrue:[self composeHelpText].
 	self composePromptWith: ''.
 	self updateDisplay
 ]
@@ -123,7 +131,7 @@ SindarinEmergencyDebugger >> initialize [
 	rawDisplay := SEDDisplayInterface new.
 	stackSelectionIndex := 1.
 	input := Text new.
-	result := Text new.
+	self composeResult: Text new title: 'TYPE h FOR HELP' asText.
 	isRunning := false
 ]
 
