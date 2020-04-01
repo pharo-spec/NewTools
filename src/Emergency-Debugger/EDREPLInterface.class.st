@@ -4,6 +4,9 @@ Class {
 	#instVars : [
 		'debugger'
 	],
+	#pools : [
+		'EventSensorConstants'
+	],
 	#category : #'Emergency-Debugger'
 }
 
@@ -14,16 +17,29 @@ EDREPLInterface class >> forDebugger: aSindarinDebugger [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
-EDREPLInterface >> charIsBackspace: aChar [ 
-	^aChar = Character backspace
-	
+{ #category : #utilities }
+EDREPLInterface class >> nextChar [
+	[| evt type | 
+		(Delay forMilliseconds: 20) wait.
+		self sensor nextEvent
+		ifNotNil: [:evtBuf | 
+			type := evtBuf first.
+			type = EventTypeKeyboard
+				ifTrue: [evt := self currentWorld currentHand generateKeyboardEvent: evtBuf.
+					evt isKeystroke
+						ifTrue: [| c |
+							c := evt keyCharacter.
+							(c asciiValue < 128
+									or: [c isSeparator
+											or: [c isSpecial
+													or: [c = Character backspace]]])
+								ifTrue: [self sensor flushKeyboard.
+									^ evt keyCharacter]]]]] repeat
 ]
 
-{ #category : #'as yet unclassified' }
-EDREPLInterface >> charIsCR: aChar [ 
-	^aChar = Character cr
-	
+{ #category : #accessing }
+EDREPLInterface class >> sensor [
+	^Sensor
 ]
 
 { #category : #accessing }
@@ -31,25 +47,25 @@ EDREPLInterface >> debugger: anObject [
 	debugger := anObject
 ]
 
-{ #category : #'as yet unclassified' }
-EDREPLInterface >> getChar [
-	
+{ #category : #accessing }
+EDREPLInterface >> nextChar [
+	^ self class nextChar
 ]
 
 { #category : #'command line' }
 EDREPLInterface >> readEvalPrint [
-	Sensor flushKeyboard.
+	self sensor flushKeyboard.
 	[ debugger isRunning ]
-		whileTrue: [ debugger eval: (self request: '> ').
+		whileTrue: [ debugger eval: self requestLine.
 			self on: (String new: 100) ]
 ]
 
 { #category : #'command line' }
-EDREPLInterface >> request: prompt [
+EDREPLInterface >> requestLine [
 	| startPos char contents |
 	startPos := position.
-	Sensor flushKeyboard.
-	[ (char := Transcripter nextChar) = Character cr ]
+	self sensor flushKeyboard.
+	[ (char := self nextChar) = Character cr ]
 		whileFalse: [ 
 			char = Character arrowUp  ifTrue:[debugger moveUpInStack; updateDisplay].
 			char = Character arrowDown ifTrue:[debugger moveDownInStack; updateDisplay].
@@ -59,4 +75,9 @@ EDREPLInterface >> request: prompt [
 			debugger updatePrompt: self contents. ].
 	contents := self contents.	
 	^ contents copyFrom: startPos + 1 to: contents size
+]
+
+{ #category : #accessing }
+EDREPLInterface >> sensor [
+	^self class sensor
 ]
