@@ -5,5 +5,8 @@ I return a set of CmCommands exposing my interface.
 Class {
 	#name : #EDDebuggingAPI,
 	#superclass : #Object,
-	#category : #'NewTools-Sindarin-Emergency-Debugger'
+	#instVars : [
+		'session'
+	],
+	#category : #'Emergency-Debugger'
 }

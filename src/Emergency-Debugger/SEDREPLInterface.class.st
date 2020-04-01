@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'debugger'
 	],
-	#category : #'NewTools-Sindarin-Emergency-Debugger'
+	#category : #'Emergency-Debugger'
 }
 
 { #category : #'instance creation' }

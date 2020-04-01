@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'frame'
 	],
-	#category : #'NewTools-Sindarin-Emergency-Debugger'
+	#category : #'Emergency-Debugger'
 }
 
 { #category : #'display - properties' }

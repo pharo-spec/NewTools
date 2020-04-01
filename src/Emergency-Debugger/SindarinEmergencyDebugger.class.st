@@ -20,7 +20,7 @@ Class {
 		'result',
 		'isRunning'
 	],
-	#category : #'NewTools-Sindarin-Emergency-Debugger'
+	#category : #'Emergency-Debugger'
 }
 
 { #category : #'instance creation' }
