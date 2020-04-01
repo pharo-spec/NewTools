@@ -1,3 +1,10 @@
+"
+I am a simple REPL interface for the ED emergency debugger.
+Basically I am a readwrite stream that reads character pressed events to:
+- forward them to the debugger in case it must perform special actions
+- put them in myself to build a line
+When I read the Character cr event, I send my contents (the line) to the debugger, then I reinitialize myself.
+"
 Class {
 	#name : #EDREPLInterface,
 	#superclass : #ReadWriteStream,
