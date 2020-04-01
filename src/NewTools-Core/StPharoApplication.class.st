@@ -44,21 +44,3 @@ StPharoApplication >> toolbarDisplayMode [
 
 	^ StPharoSettings toolbarDisplayMode
 ]
-
-{ #category : #convenience }
-StPharoApplication >> useGtk [
-
-	self useBackend: #Gtk with: StPharoGtkConfiguration new
-]
-
-{ #category : #convenience }
-StPharoApplication >> useGtkDark [
-
-	self useBackend: #Gtk with: StPharoGtkDarkConfiguration new
-]
-
-{ #category : #convenience }
-StPharoApplication >> useMorphic [
-
-	self useBackend: #Morphic
-]
