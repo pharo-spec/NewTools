@@ -42,7 +42,7 @@ StInspectorContextNamedTempNode >> label [
 { #category : #accessing }
 StInspectorContextNamedTempNode >> rawValue [
 
-	^ self hostObject debuggerMap namedTempAt: tempIndex in: self hostObject
+	^ self hostObject namedTempAt: tempIndex
 ]
 
 { #category : #accessing }
