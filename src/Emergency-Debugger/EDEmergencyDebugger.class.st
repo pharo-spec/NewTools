@@ -18,7 +18,11 @@ Class {
 		'repl',
 		'input',
 		'result',
-		'isRunning'
+		'isRunning',
+		'debugAPI'
+	],
+	#classVars : [
+		'DefaultDebugAPI'
 	],
 	#category : #'Emergency-Debugger'
 }
@@ -26,11 +30,6 @@ Class {
 { #category : #'instance creation' }
 EDEmergencyDebugger class >> debug: aDebugSession [
 	^ self new debug: aDebugSession
-]
-
-{ #category : #accessing }
-EDEmergencyDebugger class >> displayStackSize [
-	^5
 ]
 
 { #category : #'text - composing' }
@@ -50,7 +49,7 @@ EDEmergencyDebugger >> composeMethodText [
 	| str stack context node text |
 	str := self newTextStream.
 	self writeSectionTitle: 'SOURCE' on: str.
-	stack := sindarinDebugger debugSession stackOfSize: self maxStackSize.
+	stack := debugAPI stack.
 	context := stack at: stackSelectionIndex.
 	node := sindarinDebugger nodeForContext: context.
 	text := context method sourceCode asText.
@@ -86,7 +85,7 @@ EDEmergencyDebugger >> composeResult: text title: title [
 EDEmergencyDebugger >> composeStackText [
 	| str stack |
 	str := self newTextStream.
-	stack := sindarinDebugger debugSession stackOfSize: self maxStackSize.
+	stack := debugAPI stack.
 	str cr.
 	self writeSectionTitle: 'STACK' on: str.
 	1 to: stack size do: [ :i | 
@@ -141,13 +140,8 @@ EDEmergencyDebugger >> isRunning [
 ]
 
 { #category : #stack }
-EDEmergencyDebugger >> maxStackSize [
-	^self class displayStackSize
-]
-
-{ #category : #stack }
 EDEmergencyDebugger >> moveDownInStack [
-	stackSelectionIndex := (stackSelectionIndex + 1) min: self maxStackSize.
+	stackSelectionIndex := (stackSelectionIndex + 1) min: debugAPI maxStackSize.
 	self composeStackText.
 	self composeMethodText  
 
