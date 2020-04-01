@@ -32,6 +32,16 @@ EDEmergencyDebugger class >> debug: aDebugSession [
 	^ self new debug: aDebugSession
 ]
 
+{ #category : #accessing }
+EDEmergencyDebugger class >> debugAPI [
+	^self defaultDebugAPI
+]
+
+{ #category : #accessing }
+EDEmergencyDebugger class >> defaultDebugAPI [
+	^ DefaultDebugAPI ifNil: [ DefaultDebugAPI := EDDebuggingAPI ]
+]
+
 { #category : #'text - composing' }
 EDEmergencyDebugger >> composeHelpText [
 	| str |
@@ -105,7 +115,8 @@ EDEmergencyDebugger >> composeTitleText [
 
 { #category : #initialization }
 EDEmergencyDebugger >> debug: aDebugSession [
-	sindarinDebugger := SindarinDebugger attachTo: aDebugSession.
+	debugAPI := self class debugAPI attachTo: aDebugSession.
+	debugAPI debugger: self.
 	isRunning := true.
 	self composeTitleText.
 	self composeStackText.

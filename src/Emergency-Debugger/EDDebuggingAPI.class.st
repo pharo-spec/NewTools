@@ -12,6 +12,13 @@ Class {
 	#category : #'Emergency-Debugger'
 }
 
+{ #category : #start }
+EDDebuggingAPI class >> attachTo: aDebugSession [
+	^ self new
+		session: aDebugSession;
+		yourself
+]
+
 { #category : #accessing }
 EDDebuggingAPI class >> displayStackSize [
 	^5
