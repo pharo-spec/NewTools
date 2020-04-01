@@ -1,3 +1,6 @@
+"
+I am a simple interface to the Display screen canvas to draw text.
+"
 Class {
 	#name : #EDDisplayInterface,
 	#superclass : #Object,
