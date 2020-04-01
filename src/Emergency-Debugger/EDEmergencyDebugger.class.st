@@ -43,6 +43,21 @@ EDEmergencyDebugger class >> defaultDebugAPI [
 	^ DefaultDebugAPI ifNil: [ DefaultDebugAPI := EDDebuggingAPI ]
 ]
 
+{ #category : #actions }
+EDEmergencyDebugger >> availableActions [ 
+	^actions ifNil:[actions := self buildDefaultActions]
+]
+
+{ #category : #actions }
+EDEmergencyDebugger >> buildDefaultActions [
+	|dic|
+	dic := Dictionary new.
+	dic at: Character escape put: [debugAPI terminateSession ].
+	dic at: Character arrowUp put: [self moveUpInStack ].
+	dic at: Character arrowDown put: [self moveDownInStack ].
+	^dic
+]
+
 { #category : #'text - composing' }
 EDEmergencyDebugger >> composeHelpText [
 	| str |
@@ -170,6 +185,10 @@ EDEmergencyDebugger >> moveUpInStack [
 { #category : #'text - composing' }
 EDEmergencyDebugger >> newTextStream [
 	^WriteStream on: Text new
+]
+
+{ #category : #evaluation }
+EDEmergencyDebugger >> performActionForChar: aCharacter [
 ]
 
 { #category : #'text - composing' }
