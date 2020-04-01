@@ -80,6 +80,18 @@ EDDebuggingAPI >> terminateSession [
 	"session terminate"
 ]
 
+{ #category : #'API - Debugging support' }
+EDDebuggingAPI >> tryReopenSessionWithDebugger [
+	self closeEmergencySession.
+	UIManager default
+		defer: [ [ Smalltalk tools debugger
+				openOn: session
+				withFullView: true
+				andNotification: nil ]
+				on: Error
+				do: [ :ex | session signalDebuggerError: ex ] ]
+]
+
 { #category : #'API - Revert' }
 EDDebuggingAPI >> versionsForMethod: aMethod [
 	^ (self changeRecordsForMethod: (self rgMethodHistorical: aMethod))

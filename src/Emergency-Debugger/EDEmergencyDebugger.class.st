@@ -54,6 +54,7 @@ EDEmergencyDebugger >> buildDefaultActions [
 	dic := Dictionary new.
 	dic at: Character escape put: [ debugAPI terminateSession ].
 	dic at: 'exit' put: [ debugAPI terminateSession ].
+	dic at: 'retry' put: [ debugAPI tryReopenSessionWithDebugger ].
 	dic at: Character arrowUp put: [ self moveUpInStack ].
 	dic at: Character arrowDown put: [ self moveDownInStack ].
 	^dic
