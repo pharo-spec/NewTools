@@ -57,7 +57,7 @@ EDREPLInterface >> readEvalPrint [
 	self sensor flushKeyboard.
 	[ debugger isRunning ]
 		whileTrue: [ debugger eval: self requestLine.
-			self on: (String new: 100) ]
+			self resetREPL ]
 ]
 
 { #category : #'command line' }
@@ -75,6 +75,11 @@ EDREPLInterface >> requestLine [
 			debugger updatePrompt: self contents. ].
 	contents := self contents.	
 	^ contents copyFrom: startPos + 1 to: contents size
+]
+
+{ #category : #private }
+EDREPLInterface >> resetREPL [
+	self on: (String new: 100)
 ]
 
 { #category : #accessing }
