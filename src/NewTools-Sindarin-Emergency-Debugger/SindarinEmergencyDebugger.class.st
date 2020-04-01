@@ -101,7 +101,7 @@ SindarinEmergencyDebugger >> composeStackText [
 
 { #category : #'text - composing' }
 SindarinEmergencyDebugger >> composeTitleText [
-	titleText := 'ED - your emergency debugger. Type h for help!' asText allBold
+	titleText := 'Hi, I''m ED - What is the nature of your debugging emergency?' asText allBold
 ]
 
 { #category : #initialization }
