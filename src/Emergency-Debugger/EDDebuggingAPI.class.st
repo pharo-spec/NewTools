@@ -10,3 +10,36 @@ Class {
 	],
 	#category : #'Emergency-Debugger'
 }
+
+{ #category : #'API - Revert' }
+EDDebuggingAPI >> changeRecordsForMethod: aRgMethodHistoricalRingDefinition [
+	^ SourceFiles
+		changeRecordsFrom: aRgMethodHistoricalRingDefinition sourcePointer
+		className: aRgMethodHistoricalRingDefinition instanceSideParentName
+		isMeta: aRgMethodHistoricalRingDefinition isMetaSide
+]
+
+{ #category : #'API - Revert' }
+EDDebuggingAPI >> revert: method to: aChangeRecord [
+	"Reverts the given method to the given change record"
+
+	method asRingDefinition realClass
+		compile: aChangeRecord sourceCode
+		classified: aChangeRecord category
+		withStamp: aChangeRecord stamp
+		notifying: nil
+]
+
+{ #category : #'API - Revert' }
+EDDebuggingAPI >> rgMethodHistorical: aMethod [
+	^ aMethod asHistoricalRingDefinition
+]
+
+{ #category : #'API - Revert' }
+EDDebuggingAPI >> versionsForMethod: aMethod [
+	^ (self changeRecordsForMethod: (self rgMethodHistorical: aMethod))
+		collectWithIndex: [ :c :i | 
+			| rg |
+			rg := c asRingDefinition.
+			rg annotationNamed: #versionIndex put: i ]
+]
