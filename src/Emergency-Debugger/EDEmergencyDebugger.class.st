@@ -6,7 +6,7 @@ I use a ReadWriteStream to handle user input and output my results.
 I use Display and DisplayScreen to show my results.
 "
 Class {
-	#name : #SindarinEmergencyDebugger,
+	#name : #EDEmergencyDebugger,
 	#superclass : #Object,
 	#instVars : [
 		'sindarinDebugger',
@@ -24,17 +24,17 @@ Class {
 }
 
 { #category : #'instance creation' }
-SindarinEmergencyDebugger class >> debug: aDebugSession [
+EDEmergencyDebugger class >> debug: aDebugSession [
 	^ self new debug: aDebugSession
 ]
 
 { #category : #accessing }
-SindarinEmergencyDebugger class >> displayStackSize [
+EDEmergencyDebugger class >> displayStackSize [
 	^5
 ]
 
 { #category : #'text - composing' }
-SindarinEmergencyDebugger >> composeHelpText [
+EDEmergencyDebugger >> composeHelpText [
 	| str |
 	str := self newTextStream.
 	str << 'exit: terminate the debug session and exit the debugger' asText.
@@ -46,7 +46,7 @@ SindarinEmergencyDebugger >> composeHelpText [
 ]
 
 { #category : #'text - composing' }
-SindarinEmergencyDebugger >> composeMethodText [
+EDEmergencyDebugger >> composeMethodText [
 	| str stack context node text |
 	str := self newTextStream.
 	self writeSectionTitle: 'SOURCE' on: str.
@@ -62,7 +62,7 @@ SindarinEmergencyDebugger >> composeMethodText [
 ]
 
 { #category : #'text - composing' }
-SindarinEmergencyDebugger >> composePromptWith: aString [
+EDEmergencyDebugger >> composePromptWith: aString [
 	| str  |
 	str := self newTextStream.	
 	str cr.
@@ -73,7 +73,7 @@ SindarinEmergencyDebugger >> composePromptWith: aString [
 ]
 
 { #category : #'text - composing' }
-SindarinEmergencyDebugger >> composeResult: text title: title [
+EDEmergencyDebugger >> composeResult: text title: title [
 	| str |
 	str := self newTextStream.
 	str cr.
@@ -83,7 +83,7 @@ SindarinEmergencyDebugger >> composeResult: text title: title [
 ]
 
 { #category : #'text - composing' }
-SindarinEmergencyDebugger >> composeStackText [
+EDEmergencyDebugger >> composeStackText [
 	| str stack |
 	str := self newTextStream.
 	stack := sindarinDebugger debugSession stackOfSize: self maxStackSize.
@@ -100,12 +100,12 @@ SindarinEmergencyDebugger >> composeStackText [
 ]
 
 { #category : #'text - composing' }
-SindarinEmergencyDebugger >> composeTitleText [
+EDEmergencyDebugger >> composeTitleText [
 	titleText := 'Hi, I''m ED - What is the nature of your debugging emergency?' asText allBold
 ]
 
 { #category : #initialization }
-SindarinEmergencyDebugger >> debug: aDebugSession [
+EDEmergencyDebugger >> debug: aDebugSession [
 	sindarinDebugger := SindarinDebugger attachTo: aDebugSession.
 	isRunning := true.
 	self composeTitleText.
@@ -117,7 +117,7 @@ SindarinEmergencyDebugger >> debug: aDebugSession [
 ]
 
 { #category : #evaluation }
-SindarinEmergencyDebugger >> eval: command [
+EDEmergencyDebugger >> eval: command [
 	command = 'exit'
 		ifTrue: [ self terminate ].
 	command = 'h' ifTrue:[self composeHelpText].
@@ -126,9 +126,9 @@ SindarinEmergencyDebugger >> eval: command [
 ]
 
 { #category : #initialization }
-SindarinEmergencyDebugger >> initialize [
-	repl := SEDREPLInterface forDebugger: self.
-	rawDisplay := SEDDisplayInterface new.
+EDEmergencyDebugger >> initialize [
+	repl := EDREPLInterface forDebugger: self.
+	rawDisplay := EDDisplayInterface new.
 	stackSelectionIndex := 1.
 	input := Text new.
 	self composeResult: Text new title: 'TYPE h FOR HELP' asText.
@@ -136,17 +136,17 @@ SindarinEmergencyDebugger >> initialize [
 ]
 
 { #category : #'debugging support' }
-SindarinEmergencyDebugger >> isRunning [
+EDEmergencyDebugger >> isRunning [
 	^isRunning 
 ]
 
 { #category : #stack }
-SindarinEmergencyDebugger >> maxStackSize [
+EDEmergencyDebugger >> maxStackSize [
 	^self class displayStackSize
 ]
 
 { #category : #stack }
-SindarinEmergencyDebugger >> moveDownInStack [
+EDEmergencyDebugger >> moveDownInStack [
 	stackSelectionIndex := (stackSelectionIndex + 1) min: self maxStackSize.
 	self composeStackText.
 	self composeMethodText  
@@ -154,7 +154,7 @@ SindarinEmergencyDebugger >> moveDownInStack [
 ]
 
 { #category : #stack }
-SindarinEmergencyDebugger >> moveUpInStack [
+EDEmergencyDebugger >> moveUpInStack [
 	stackSelectionIndex := (stackSelectionIndex - 1) max: 1.
 	self composeStackText.
 	self composeMethodText  
@@ -162,37 +162,37 @@ SindarinEmergencyDebugger >> moveUpInStack [
 ]
 
 { #category : #'text - composing' }
-SindarinEmergencyDebugger >> newTextStream [
+EDEmergencyDebugger >> newTextStream [
 	^WriteStream on: Text new
 ]
 
 { #category : #'text - composing' }
-SindarinEmergencyDebugger >> separator [ 
+EDEmergencyDebugger >> separator [ 
 	^'--------------------' asText makeAllColor: Color gray
 ]
 
 { #category : #'debugging support' }
-SindarinEmergencyDebugger >> terminate [
+EDEmergencyDebugger >> terminate [
 	isRunning := false.
 	self currentWorld restoreMorphicDisplay.
 	"sindarinDebugger debugSession terminate"
 ]
 
 { #category : #updating }
-SindarinEmergencyDebugger >> updateDisplay [
+EDEmergencyDebugger >> updateDisplay [
 	rawDisplay clear.
 	rawDisplay show: (titleText , stackText, methodText, input, result )
 
 ]
 
 { #category : #updating }
-SindarinEmergencyDebugger >> updatePrompt: aString [
+EDEmergencyDebugger >> updatePrompt: aString [
 	self composePromptWith: aString.
 	self updateDisplay
 ]
 
 { #category : #'text - composing' }
-SindarinEmergencyDebugger >> writeSectionTitle: aString on: aStream [
+EDEmergencyDebugger >> writeSectionTitle: aString on: aStream [
 	self writeSeparatorOn: aStream.
 	aStream <<( aString asText makeAllColor: Color gray).
 	aStream cr.
@@ -200,7 +200,7 @@ SindarinEmergencyDebugger >> writeSectionTitle: aString on: aStream [
 ]
 
 { #category : #'text - composing' }
-SindarinEmergencyDebugger >> writeSeparatorOn: aStream [
+EDEmergencyDebugger >> writeSeparatorOn: aStream [
 	aStream << self separator.
 	aStream cr
 ]

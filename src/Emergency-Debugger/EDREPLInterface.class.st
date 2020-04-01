@@ -1,5 +1,5 @@
 Class {
-	#name : #SEDREPLInterface,
+	#name : #EDREPLInterface,
 	#superclass : #ReadWriteStream,
 	#instVars : [
 		'debugger'
@@ -8,36 +8,36 @@ Class {
 }
 
 { #category : #'instance creation' }
-SEDREPLInterface class >> forDebugger: aSindarinDebugger [
+EDREPLInterface class >> forDebugger: aSindarinDebugger [
 	^ (self on: (String new: 100))
 		debugger: aSindarinDebugger;
 		yourself
 ]
 
 { #category : #'as yet unclassified' }
-SEDREPLInterface >> charIsBackspace: aChar [ 
+EDREPLInterface >> charIsBackspace: aChar [ 
 	^aChar = Character backspace
 	
 ]
 
 { #category : #'as yet unclassified' }
-SEDREPLInterface >> charIsCR: aChar [ 
+EDREPLInterface >> charIsCR: aChar [ 
 	^aChar = Character cr
 	
 ]
 
 { #category : #accessing }
-SEDREPLInterface >> debugger: anObject [
+EDREPLInterface >> debugger: anObject [
 	debugger := anObject
 ]
 
 { #category : #'as yet unclassified' }
-SEDREPLInterface >> getChar [
+EDREPLInterface >> getChar [
 	
 ]
 
 { #category : #'command line' }
-SEDREPLInterface >> readEvalPrint [
+EDREPLInterface >> readEvalPrint [
 	Sensor flushKeyboard.
 	[ debugger isRunning ]
 		whileTrue: [ debugger eval: (self request: '> ').
@@ -45,7 +45,7 @@ SEDREPLInterface >> readEvalPrint [
 ]
 
 { #category : #'command line' }
-SEDREPLInterface >> request: prompt [
+EDREPLInterface >> request: prompt [
 	| startPos char contents |
 	startPos := position.
 	Sensor flushKeyboard.

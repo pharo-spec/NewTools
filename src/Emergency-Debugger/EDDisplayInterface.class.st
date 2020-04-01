@@ -1,5 +1,5 @@
 Class {
-	#name : #SEDDisplayInterface,
+	#name : #EDDisplayInterface,
 	#superclass : #Object,
 	#instVars : [
 		'frame'
@@ -8,12 +8,12 @@ Class {
 }
 
 { #category : #'display - properties' }
-SEDDisplayInterface >> black [
+EDDisplayInterface >> black [
 	^ Color black
 ]
 
 { #category : #'display - API' }
-SEDDisplayInterface >> clear [
+EDDisplayInterface >> clear [
 	self displayCanvas
 		frameAndFillRectangle: self frame
 		fillColor: self white
@@ -22,7 +22,7 @@ SEDDisplayInterface >> clear [
 ]
 
 { #category : #'text - private' }
-SEDDisplayInterface >> composeParagraphWith: aText inFrame: aRect [
+EDDisplayInterface >> composeParagraphWith: aText inFrame: aRect [
 	| paragraph |
 	paragraph := Paragraph new.
 	paragraph
@@ -34,7 +34,7 @@ SEDDisplayInterface >> composeParagraphWith: aText inFrame: aRect [
 ]
 
 { #category : #'display - private' }
-SEDDisplayInterface >> display: aParagraph in: aRect [
+EDDisplayInterface >> display: aParagraph in: aRect [
 	self displayCanvas
 		paragraph: aParagraph
 		bounds: aRect
@@ -42,34 +42,34 @@ SEDDisplayInterface >> display: aParagraph in: aRect [
 ]
 
 { #category : #'display - properties' }
-SEDDisplayInterface >> displayCanvas [
+EDDisplayInterface >> displayCanvas [
 	^Display getCanvas
 ]
 
 { #category : #'display - properties' }
-SEDDisplayInterface >> frame [
+EDDisplayInterface >> frame [
 	^ frame
 		ifNil: [ frame := 0 @ 0 corner: DisplayScreen actualScreenSize * (0.3 @ 1) ]
 ]
 
 { #category : #'display - properties' }
-SEDDisplayInterface >> red [
+EDDisplayInterface >> red [
 	^ Color red
 ]
 
 { #category : #'display - API' }
-SEDDisplayInterface >> show: aText [
+EDDisplayInterface >> show: aText [
 	self
 		display: (self composeParagraphWith: aText inFrame: self frame)
 		in: self frame
 ]
 
 { #category : #'text - private' }
-SEDDisplayInterface >> textStyle [
+EDDisplayInterface >> textStyle [
 	^ TextStyle default
 ]
 
 { #category : #'display - properties' }
-SEDDisplayInterface >> white [
+EDDisplayInterface >> white [
 	^ Color white
 ]
