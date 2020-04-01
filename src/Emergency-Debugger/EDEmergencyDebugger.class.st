@@ -19,7 +19,8 @@ Class {
 		'input',
 		'result',
 		'isRunning',
-		'debugAPI'
+		'debugAPI',
+		'actions'
 	],
 	#classVars : [
 		'DefaultDebugAPI'
@@ -145,7 +146,7 @@ EDEmergencyDebugger >> initialize [
 	isRunning := false
 ]
 
-{ #category : #'debugging support' }
+{ #category : #accessing }
 EDEmergencyDebugger >> isRunning [
 	^isRunning 
 ]
@@ -176,11 +177,9 @@ EDEmergencyDebugger >> separator [
 	^'--------------------' asText makeAllColor: Color gray
 ]
 
-{ #category : #'debugging support' }
+{ #category : #initialization }
 EDEmergencyDebugger >> terminate [
-	isRunning := false.
-	self currentWorld restoreMorphicDisplay.
-	"sindarinDebugger debugSession terminate"
+	isRunning := false
 ]
 
 { #category : #updating }

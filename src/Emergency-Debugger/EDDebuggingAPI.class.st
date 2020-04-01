@@ -68,6 +68,13 @@ EDDebuggingAPI >> stack [
 	^session stackOfSize: self maxStackSize
 ]
 
+{ #category : #'API - Debugging support' }
+EDDebuggingAPI >> terminateSession [
+	debugger terminate.
+	self currentWorld restoreMorphicDisplay.
+	"session terminate"
+]
+
 { #category : #'API - Revert' }
 EDDebuggingAPI >> versionsForMethod: aMethod [
 	^ (self changeRecordsForMethod: (self rgMethodHistorical: aMethod))
