@@ -32,6 +32,12 @@ EDDebuggingAPI >> changeRecordsForMethod: aRgMethodHistoricalRingDefinition [
 		isMeta: aRgMethodHistoricalRingDefinition isMetaSide
 ]
 
+{ #category : #'API - Debugging support' }
+EDDebuggingAPI >> closeEmergencySession [
+	debugger terminate.
+	self currentWorld restoreMorphicDisplay
+]
+
 { #category : #accessing }
 EDDebuggingAPI >> debugger: anObject [
 	debugger := anObject
@@ -70,8 +76,7 @@ EDDebuggingAPI >> stack [
 
 { #category : #'API - Debugging support' }
 EDDebuggingAPI >> terminateSession [
-	debugger terminate.
-	self currentWorld restoreMorphicDisplay.
+	self closeEmergencySession.
 	"session terminate"
 ]
 
