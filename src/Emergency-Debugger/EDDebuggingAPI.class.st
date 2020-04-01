@@ -12,6 +12,11 @@ Class {
 	#category : #'Emergency-Debugger'
 }
 
+{ #category : #accessing }
+EDDebuggingAPI class >> displayStackSize [
+	^5
+]
+
 { #category : #'API - Revert' }
 EDDebuggingAPI >> changeRecordsForMethod: aRgMethodHistoricalRingDefinition [
 	^ SourceFiles
@@ -23,6 +28,11 @@ EDDebuggingAPI >> changeRecordsForMethod: aRgMethodHistoricalRingDefinition [
 { #category : #accessing }
 EDDebuggingAPI >> debugger: anObject [
 	debugger := anObject
+]
+
+{ #category : #'API - Stack' }
+EDDebuggingAPI >> maxStackSize [
+	^self class displayStackSize
 ]
 
 { #category : #'API - Revert' }
@@ -44,6 +54,11 @@ EDDebuggingAPI >> rgMethodHistorical: aMethod [
 { #category : #accessing }
 EDDebuggingAPI >> session: anObject [
 	session := anObject
+]
+
+{ #category : #'API - Stack' }
+EDDebuggingAPI >> stack [ 	
+	^session stackOfSize: self maxStackSize
 ]
 
 { #category : #'API - Revert' }
