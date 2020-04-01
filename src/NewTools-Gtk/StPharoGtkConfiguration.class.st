@@ -21,7 +21,7 @@ StPharoGtkConfiguration >> commonStyle [
 	^ '
 .dim { color: LightSlateGrey }
 .codePopover { }
-.codePopoverScrollBar { min-height: 250px }
+.scrollbarPopoverLarge { min-height: 350px }
 '
 ]
 
