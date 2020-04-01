@@ -6,7 +6,8 @@ Class {
 	#name : #EDDebuggingAPI,
 	#superclass : #Object,
 	#instVars : [
-		'session'
+		'session',
+		'debugger'
 	],
 	#category : #'Emergency-Debugger'
 }
@@ -17,6 +18,11 @@ EDDebuggingAPI >> changeRecordsForMethod: aRgMethodHistoricalRingDefinition [
 		changeRecordsFrom: aRgMethodHistoricalRingDefinition sourcePointer
 		className: aRgMethodHistoricalRingDefinition instanceSideParentName
 		isMeta: aRgMethodHistoricalRingDefinition isMetaSide
+]
+
+{ #category : #accessing }
+EDDebuggingAPI >> debugger: anObject [
+	debugger := anObject
 ]
 
 { #category : #'API - Revert' }
@@ -33,6 +39,11 @@ EDDebuggingAPI >> revert: method to: aChangeRecord [
 { #category : #'API - Revert' }
 EDDebuggingAPI >> rgMethodHistorical: aMethod [
 	^ aMethod asHistoricalRingDefinition
+]
+
+{ #category : #accessing }
+EDDebuggingAPI >> session: anObject [
+	session := anObject
 ]
 
 { #category : #'API - Revert' }
