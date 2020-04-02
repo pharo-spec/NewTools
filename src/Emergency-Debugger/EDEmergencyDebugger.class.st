@@ -67,7 +67,7 @@ EDEmergencyDebugger >> buildDefaultActions [
 	dic at: Character arrowLeft put: [ "self showMoreRecentMethodVersion "].
 	dic at: Character arrowRight put: [ "self showOlderMethodVersion "].
 	dic at: 'revert' put: [ '' ].
-	dic at: 'killAll' put: [ '' ].
+	dic at: 'killAll' put: [ debugAPI terminateAllProcesses ].
 	^dic
 ]
 
