@@ -47,6 +47,11 @@ EDDebuggingAPI >> closeEmergencySession [
 	self currentWorld restoreMorphicDisplay
 ]
 
+{ #category : #'API - Context' }
+EDDebuggingAPI >> contextAt: index [
+	^self stackAt: index
+]
+
 { #category : #accessing }
 EDDebuggingAPI >> debugger: anObject [
 	debugger := anObject
@@ -67,6 +72,16 @@ EDDebuggingAPI >> forbiddenProcesses [
 { #category : #'API - Stack' }
 EDDebuggingAPI >> maxStackSize [
 	^self class displayStackSize
+]
+
+{ #category : #'API - Context' }
+EDDebuggingAPI >> methodAt: index [
+	^(self contextAt: index) method
+]
+
+{ #category : #'API - Context' }
+EDDebuggingAPI >> nodeAt: index [
+	^ self nodeForContext: (self contextAt: index)
 ]
 
 { #category : #'API - Context' }
@@ -98,6 +113,11 @@ EDDebuggingAPI >> session: anObject [
 { #category : #'API - Stack' }
 EDDebuggingAPI >> stack [ 	
 	^session stackOfSize: self maxStackSize
+]
+
+{ #category : #'API - Stack' }
+EDDebuggingAPI >> stackAt: index [
+	^self stack at: index
 ]
 
 { #category : #'API - Processes' }

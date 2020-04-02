@@ -11,6 +11,7 @@ Class {
 	#instVars : [
 		'rawDisplay',
 		'stackSelectionIndex',
+		'methodVersionSelectionIndex',
 		'methodText',
 		'stackText',
 		'titleText',
@@ -20,7 +21,8 @@ Class {
 		'isRunning',
 		'debugAPI',
 		'actions',
-		'actionsDescriptions'
+		'actionsDescriptions',
+		'selectedMethod'
 	],
 	#classVars : [
 		'DefaultDebugAPI'
@@ -99,14 +101,13 @@ EDEmergencyDebugger >> composeHelpText [
 
 { #category : #'text - composing' }
 EDEmergencyDebugger >> composeMethodText [
-	| str stack context node text |
+	| str method node text |
 	str := self newTextStream.
 	self writeSectionTitle: 'SOURCE' on: str.
-	stack := debugAPI stack.
-	context := stack at: stackSelectionIndex.
-	node := debugAPI nodeForContext: context.
-	text := context method sourceCode asText.
-	text makeBoldFrom: 1 to: context method selector size + 1.
+	method := debugAPI methodAt: stackSelectionIndex.
+	node := debugAPI nodeAt: stackSelectionIndex.
+	text := method sourceCode asText.
+	text makeBoldFrom: 1 to: method selector size + 1.
 	text makeColor: rawDisplay red from: node start to: node stop.
 	str << text.
 	str cr.
