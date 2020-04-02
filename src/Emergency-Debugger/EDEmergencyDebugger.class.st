@@ -88,12 +88,14 @@ EDEmergencyDebugger >> buildDefaultActionsDescriptions [
 EDEmergencyDebugger >> composeHelpText [
 	| str |
 	str := self newTextStream.
-	str << 'exit: terminate the debug session and exit the debugger' asText.
-	str cr.
-	str << 'proceed: proceeds the execution' asText.
-	str cr.
-	str << 'revert: revert the selected method to its last known version' asText.
-	^self composeResult: str contents title: 'HELP'
+	self availableActionsDescriptions
+		keysAndValuesDo: [ :cmd :desc | 
+			|text|
+			text := (cmd, ': ') asText allBold, desc asText.
+			text makeAllColor: rawDisplay gray.
+			str << text.		
+			str cr ].
+	^ self composeResult: str contents title: 'HELP'
 ]
 
 { #category : #'text - composing' }
