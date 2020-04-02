@@ -106,7 +106,7 @@ EDEmergencyDebugger >> composeMethodText [
 	node := debugAPI nodeForContext: context.
 	text := context method sourceCode asText.
 	text makeBoldFrom: 1 to: context method selector size + 1.
-	text makeColor: Color red from: node start to: node stop.
+	text makeColor: rawDisplay red from: node start to: node stop.
 	str << text.
 	str cr.
 	methodText := str contents
@@ -220,7 +220,7 @@ EDEmergencyDebugger >> performActionForChar: aCharacter [
 
 { #category : #'text - composing' }
 EDEmergencyDebugger >> separator [ 
-	^'--------------------' asText makeAllColor: Color gray
+	^'--------------------' asText makeAllColor: rawDisplay gray
 ]
 
 { #category : #initialization }
@@ -244,7 +244,7 @@ EDEmergencyDebugger >> updatePrompt: aString [
 { #category : #'text - composing' }
 EDEmergencyDebugger >> writeSectionTitle: aString on: aStream [
 	self writeSeparatorOn: aStream.
-	aStream <<( aString asText makeAllColor: Color gray).
+	aStream <<( aString asText makeAllColor: rawDisplay gray).
 	aStream cr.
 	self writeSeparatorOn: aStream
 ]

@@ -57,6 +57,11 @@ EDDisplayInterface >> frame [
 ]
 
 { #category : #'display - properties' }
+EDDisplayInterface >> gray [
+	^ Color gray
+]
+
+{ #category : #'display - properties' }
 EDDisplayInterface >> red [
 	^ Color red
 ]
