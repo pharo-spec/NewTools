@@ -212,7 +212,7 @@ EDEmergencyDebugger >> eval: command [
 { #category : #evaluation }
 EDEmergencyDebugger >> evalCommand: aString [
 	| action |
-	action := self availableActions at: aString ifAbsent: [ ^ self ].
+	action := self availableActions at: aString ifAbsent: [ ^ false ].
 	[ action value ]
 		on: Exception
 		do: [ self
@@ -220,7 +220,8 @@ EDEmergencyDebugger >> evalCommand: aString [
 					('Cannot ' , (self descriptionFromPromptCommand: aString)) asText
 						allBold
 				title: 'ERROR' ].
-	self updateDisplay
+	self updateDisplay.
+	^ true
 ]
 
 { #category : #initialization }
@@ -266,7 +267,7 @@ EDEmergencyDebugger >> newTextStream [
 
 { #category : #evaluation }
 EDEmergencyDebugger >> performActionForChar: aCharacter [
-	self evalCommand: aCharacter
+	^self evalCommand: aCharacter
 ]
 
 { #category : #methods }
