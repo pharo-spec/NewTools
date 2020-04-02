@@ -58,6 +58,7 @@ EDEmergencyDebugger >> availableActionsDescriptions [
 EDEmergencyDebugger >> buildDefaultActions [
 	|dic|
 	dic := Dictionary new.
+	dic at: 'qx' put: [ debugAPI closeEmergencySession ].
 	dic at: 'q' put: [ debugAPI terminateSession ].
 	dic at: 'exit' put: [ debugAPI terminateSession ].
 	dic at: 'retry' put: [ debugAPI tryReopenSessionWithDebugger ].
