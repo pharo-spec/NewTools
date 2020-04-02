@@ -48,6 +48,11 @@ EDDebuggingAPI >> maxStackSize [
 	^self class displayStackSize
 ]
 
+{ #category : #'API - Context' }
+EDDebuggingAPI >> nodeForContext: aContext [
+	^ aContext method sourceNodeForPC: aContext pc
+]
+
 { #category : #'API - Revert' }
 EDDebuggingAPI >> revert: method to: aChangeRecord [
 	"Reverts the given method to the given change record"

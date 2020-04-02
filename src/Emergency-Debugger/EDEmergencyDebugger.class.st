@@ -79,13 +79,14 @@ EDEmergencyDebugger >> composeMethodText [
 	self writeSectionTitle: 'SOURCE' on: str.
 	stack := debugAPI stack.
 	context := stack at: stackSelectionIndex.
-	node := sindarinDebugger nodeForContext: context.
+	node := debugAPI nodeForContext: context.
 	text := context method sourceCode asText.
 	text makeBoldFrom: 1 to: context method selector size + 1.
 	text makeColor: Color red from: node start to: node stop.
 	str << text.
 	str cr.
-	methodText := str contents
+	methodText := str contents.
+	self terminate
 ]
 
 { #category : #'text - composing' }
