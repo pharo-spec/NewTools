@@ -8,7 +8,8 @@ Class {
 	#instVars : [
 		'session',
 		'debugger',
-		'forbiddenProcesses'
+		'forbiddenProcesses',
+		'changesForMethods'
 	],
 	#category : #'Emergency-Debugger'
 }
@@ -69,6 +70,11 @@ EDDebuggingAPI >> forbiddenProcesses [
 			[ Delay schedulingProcess ]} ]
 ]
 
+{ #category : #initialization }
+EDDebuggingAPI >> initialize [
+	changesForMethods := Dictionary new
+]
+
 { #category : #'API - Stack' }
 EDDebuggingAPI >> maxStackSize [
 	^self class displayStackSize
@@ -77,6 +83,16 @@ EDDebuggingAPI >> maxStackSize [
 { #category : #'API - Context' }
 EDDebuggingAPI >> methodAt: index [
 	^(self contextAt: index) method
+]
+
+{ #category : #'API - Revert' }
+EDDebuggingAPI >> methodVersionAt: index [
+	^ self versionsForMethod: (self methodAt: index)
+]
+
+{ #category : #'API - Revert' }
+EDDebuggingAPI >> methodVersionSizeAt: index [
+	^ (self versionsForMethod: (self methodAt: index)) size
 ]
 
 { #category : #'API - Context' }
@@ -147,9 +163,11 @@ EDDebuggingAPI >> tryReopenSessionWithDebugger [
 
 { #category : #'API - Revert' }
 EDDebuggingAPI >> versionsForMethod: aMethod [
-	^ (self changeRecordsForMethod: (self rgMethodHistorical: aMethod))
-		collectWithIndex: [ :c :i | 
-			| rg |
-			rg := c asRingDefinition.
-			rg annotationNamed: #versionIndex put: i ]
+	^ changesForMethods
+		at: aMethod
+		ifAbsentPut: [ (self changeRecordsForMethod: (self rgMethodHistorical: aMethod))
+				collectWithIndex: [ :c :i | 
+					| rg |
+					rg := c asRingDefinition.
+					rg annotationNamed: #versionIndex put: i ] ]
 ]
