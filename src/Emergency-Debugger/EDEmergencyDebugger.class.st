@@ -217,7 +217,7 @@ EDEmergencyDebugger >> moveUpInStack [
 
 ]
 
-{ #category : #'text - composing' }
+{ #category : #'text - helpers' }
 EDEmergencyDebugger >> newTextStream [
 	^WriteStream on: Text new
 ]
@@ -230,7 +230,13 @@ EDEmergencyDebugger >> performActionForChar: aCharacter [
 	self updateDisplay
 ]
 
-{ #category : #'text - composing' }
+{ #category : #stack }
+EDEmergencyDebugger >> selectMethod: aCompiledMethod [
+	selectedMethod := aCompiledMethod.
+	methodVersionSelectionIndex := 1.
+]
+
+{ #category : #'text - helpers' }
 EDEmergencyDebugger >> separator [ 
 	^'--------------------' asText makeAllColor: rawDisplay gray
 ]
@@ -253,7 +259,7 @@ EDEmergencyDebugger >> updatePrompt: aString [
 	self updateDisplay
 ]
 
-{ #category : #'text - composing' }
+{ #category : #'text - helpers' }
 EDEmergencyDebugger >> writeSectionTitle: aString on: aStream [
 	self writeSeparatorOn: aStream.
 	aStream <<( aString asText makeAllColor: rawDisplay gray).
@@ -261,7 +267,7 @@ EDEmergencyDebugger >> writeSectionTitle: aString on: aStream [
 	self writeSeparatorOn: aStream
 ]
 
-{ #category : #'text - composing' }
+{ #category : #'text - helpers' }
 EDEmergencyDebugger >> writeSeparatorOn: aStream [
 	aStream << self separator.
 	aStream cr
