@@ -23,11 +23,11 @@ EDDisplayInterface >> clear [
 		fillColor: self white
 		borderWidth: 2
 		borderColor: self red.
-	self displayCanvas
+"	self displayCanvas
 		frameAndFillRectangle: self methodFrame
 		fillColor: self white
 		borderWidth: 2
-		borderColor: self red
+		borderColor: self red"
 ]
 
 { #category : #'text - private' }
@@ -82,9 +82,9 @@ EDDisplayInterface >> show: aText [
 	self
 		display: (self composeParagraphWith: aText inFrame: self frame)
 		in: self frame.
-	self
+	"self
 		display: (self composeParagraphWith: aText inFrame: self frame)
-		in: self methodFrame.
+		in: self methodFrame."
 ]
 
 { #category : #'text - private' }
