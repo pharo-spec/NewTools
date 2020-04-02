@@ -22,7 +22,9 @@ Class {
 		'debugAPI',
 		'actions',
 		'actionsDescriptions',
-		'selectedMethod'
+		'selectedMethod',
+		'shortStack',
+		'shortStackIndex'
 	],
 	#classVars : [
 		'DefaultDebugAPI'
@@ -163,14 +165,17 @@ EDEmergencyDebugger >> composeResult: text title: title [
 EDEmergencyDebugger >> composeStackText [
 	| str stack |
 	str := self newTextStream.
-	stack := debugAPI stack.
+	stack := self shortStack.
 	str cr.
-	self writeSectionTitle: 'STACK' on: str.
+	self
+		writeSectionTitle:
+			'STACK (' , stackSelectionIndex printString , '/'
+				, debugAPI stackSize printString , ')'
+		on: str.
 	1 to: stack size do: [ :i | 
 		| text |
 		text := (stack at: i) method name asText.
-		stackSelectionIndex = i
-			ifTrue: [ text allBold ].
+		i = shortStackIndex ifTrue: [ text allBold ].
 		str << text.
 		str cr ].
 	stackText := str contents
@@ -229,6 +234,7 @@ EDEmergencyDebugger >> initialize [
 	repl := EDREPLInterface forDebugger: self.
 	rawDisplay := EDDisplayInterface new.
 	stackSelectionIndex := 1.
+	shortStackIndex := 1.
 	methodVersionSelectionIndex := 0.
 	input := Text new.
 	self composeResult: Text new title: 'TYPE h FOR HELP' asText.
@@ -242,22 +248,24 @@ EDEmergencyDebugger >> isRunning [
 
 { #category : #stack }
 EDEmergencyDebugger >> moveDownInStack [
-	stackSelectionIndex := (stackSelectionIndex + 1) min: debugAPI maxStackSize.
+	stackSelectionIndex := (stackSelectionIndex + 1) min: debugAPI stackSize.
+	shortStackIndex := shortStackIndex + 1.
+	self updateShortStack.
 	methodVersionSelectionIndex := 0.
 	self composeStackText.
 	self composeMethodText.
 	self composeHelpText
-
 ]
 
 { #category : #stack }
 EDEmergencyDebugger >> moveUpInStack [
 	stackSelectionIndex := (stackSelectionIndex - 1) max: 1.
+	shortStackIndex := shortStackIndex - 1.
+	self updateShortStack.
 	methodVersionSelectionIndex := 0.
 	self composeStackText.
 	self composeMethodText.
-	self composeHelpText   
-
+	self composeHelpText
 ]
 
 { #category : #'text - helpers' }
@@ -286,6 +294,12 @@ EDEmergencyDebugger >> selectedMethodVersionsSize [
 { #category : #'text - helpers' }
 EDEmergencyDebugger >> separator [ 
 	^'--------------------' asText makeAllColor: rawDisplay gray
+]
+
+{ #category : #stack }
+EDEmergencyDebugger >> shortStack [
+	^ shortStack
+		ifNil: [ shortStack := debugAPI stackFrom: 1 to: debugAPI displayStackSize ]
 ]
 
 { #category : #methods }
@@ -331,6 +345,33 @@ EDEmergencyDebugger >> updateDisplay [
 EDEmergencyDebugger >> updatePrompt: aString [
 	self composePromptWith: aString.
 	self updateDisplay
+]
+
+{ #category : #stack }
+EDEmergencyDebugger >> updateShortStack [
+	| start stop |
+	self flag: 'This is shit. Change it!'.
+	((1 to: debugAPI displayStackSize) includes: shortStackIndex)
+		ifTrue: [ ^ shortStack ].
+	shortStackIndex > debugAPI displayStackSize
+		ifTrue: [ 
+			stackSelectionIndex >= (debugAPI stackSize - debugAPI displayStackSize)
+				ifTrue: [ start := debugAPI stackSize - debugAPI displayStackSize.
+					stop := debugAPI stackSize ]
+				ifFalse: [ 
+					start := stackSelectionIndex.
+					stop := stackSelectionIndex + debugAPI displayStackSize
+						min: debugAPI stackSize ] ].
+				
+				
+	shortStackIndex = 0
+		ifTrue: [ (stackSelectionIndex = 1
+				or: [ stackSelectionIndex = debugAPI stackSize ])
+				ifTrue: [ shortStackIndex := stackSelectionIndex ]
+				ifFalse: [ shortStackIndex := debugAPI displayStackSize.
+					start := stackSelectionIndex - debugAPI displayStackSize + 1.
+					stop := stackSelectionIndex ] ].
+	^ shortStack := debugAPI stackFrom: start to: stop
 ]
 
 { #category : #'text - helpers' }

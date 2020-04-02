@@ -9,7 +9,8 @@ Class {
 		'session',
 		'debugger',
 		'forbiddenProcesses',
-		'changesForMethods'
+		'changesForMethods',
+		'longStack'
 	],
 	#category : #'Emergency-Debugger'
 }
@@ -24,6 +25,11 @@ EDDebuggingAPI class >> attachTo: aDebugSession [
 { #category : #accessing }
 EDDebuggingAPI class >> displayStackSize [
 	^5
+]
+
+{ #category : #accessing }
+EDDebuggingAPI class >> longStackSize [
+	^100
 ]
 
 { #category : #'API - Processes' }
@@ -58,6 +64,11 @@ EDDebuggingAPI >> debugger: anObject [
 	debugger := anObject
 ]
 
+{ #category : #'API - Stack' }
+EDDebuggingAPI >> displayStackSize [
+	^self class displayStackSize
+]
+
 { #category : #'API - Processes' }
 EDDebuggingAPI >> forbiddenProcesses [
 	^ forbiddenProcesses
@@ -76,8 +87,14 @@ EDDebuggingAPI >> initialize [
 ]
 
 { #category : #'API - Stack' }
-EDDebuggingAPI >> maxStackSize [
-	^self class displayStackSize
+EDDebuggingAPI >> longStack [
+	^ longStack
+		ifNil: [ longStack := session stackOfSize: self longStackSize ]
+]
+
+{ #category : #'API - Stack' }
+EDDebuggingAPI >> longStackSize [
+	^self class longStackSize
 ]
 
 { #category : #'API - Context' }
@@ -128,12 +145,23 @@ EDDebuggingAPI >> session: anObject [
 
 { #category : #'API - Stack' }
 EDDebuggingAPI >> stack [ 	
-	^session stackOfSize: self maxStackSize
+	^self longStack
 ]
 
 { #category : #'API - Stack' }
 EDDebuggingAPI >> stackAt: index [
 	^self stack at: index
+]
+
+{ #category : #'API - Stack' }
+EDDebuggingAPI >> stackFrom: start to: stop [
+	^ ((start max: 1) to: (stop min: self stackSize))
+		collect: [ :i | self longStack at: i ]
+]
+
+{ #category : #'API - Stack' }
+EDDebuggingAPI >> stackSize [
+	^ self longStack size
 ]
 
 { #category : #'API - Processes' }
