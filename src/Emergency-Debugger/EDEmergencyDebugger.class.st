@@ -78,7 +78,7 @@ EDEmergencyDebugger >> buildDefaultActionsDescriptions [
 	dic at: 'retry' put: 'Retry opening a graphical debugger'.
 	dic at: '<UP/DOWN ARROWS>' put: 'Move up/down in the stack'.
 	dic at: '<RIGHT/LEFT ARROWS>' put: 'Navigate the current method versions'.
-	dic at: 'revert' put: 'Revert the current method to the selected version'.
+	dic at: 'revert' put: 'Revert the current method to the selected method version'.
 	dic at: 'killAll' put: 'Terminate all non-essential processes (will terminate Ed)'.
 	^dic
 ]
