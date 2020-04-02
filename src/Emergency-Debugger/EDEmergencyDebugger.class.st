@@ -20,7 +20,8 @@ Class {
 		'result',
 		'isRunning',
 		'debugAPI',
-		'actions'
+		'actions',
+		'actionsDescriptions'
 	],
 	#classVars : [
 		'DefaultDebugAPI'
@@ -49,6 +50,11 @@ EDEmergencyDebugger >> availableActions [
 ]
 
 { #category : #actions }
+EDEmergencyDebugger >> availableActionsDescriptions [ 
+	^actionsDescriptions ifNil:[actionsDescriptions := self buildDefaultActionsDescriptions]
+]
+
+{ #category : #actions }
 EDEmergencyDebugger >> buildDefaultActions [
 	|dic|
 	dic := Dictionary new.
@@ -57,6 +63,24 @@ EDEmergencyDebugger >> buildDefaultActions [
 	dic at: 'retry' put: [ debugAPI tryReopenSessionWithDebugger ].
 	dic at: Character arrowUp put: [ self moveUpInStack ].
 	dic at: Character arrowDown put: [ self moveDownInStack ].
+	dic at: Character arrowLeft put: [ "self showMoreRecentMethodVersion "].
+	dic at: Character arrowRight put: [ "self showOlderMethodVersion "].
+	dic at: 'revert' put: [ '' ].
+	dic at: 'killAll' put: [ '' ].
+	^dic
+]
+
+{ #category : #actions }
+EDEmergencyDebugger >> buildDefaultActionsDescriptions [
+	|dic|
+	dic := Dictionary new.
+	dic at: '<ESCAPE>' put: 'Exits the emergency debugger'.
+	dic at: 'exit' put: 'Exits the emergency debugger'.
+	dic at: 'retry' put: 'Retry opening a graphical debugger'.
+	dic at: '<UP/DOWN ARROWS>' put: 'Move up/down in the stack'.
+	dic at: '<RIGHT/LEFT ARROWS>' put: 'Navigate the current method versions'.
+	dic at: 'revert' put: 'Revert the current method to the selected version'.
+	dic at: 'killAll' put: 'Terminate all non-essential processes (will terminate Ed)'.
 	^dic
 ]
 
@@ -85,8 +109,7 @@ EDEmergencyDebugger >> composeMethodText [
 	text makeColor: Color red from: node start to: node stop.
 	str << text.
 	str cr.
-	methodText := str contents.
-	self terminate
+	methodText := str contents
 ]
 
 { #category : #'text - composing' }

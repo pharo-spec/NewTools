@@ -5,7 +5,8 @@ Class {
 	#name : #EDDisplayInterface,
 	#superclass : #Object,
 	#instVars : [
-		'frame'
+		'frame',
+		'methodFrame'
 	],
 	#category : #'Emergency-Debugger'
 }
