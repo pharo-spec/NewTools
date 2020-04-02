@@ -72,7 +72,7 @@ EDEmergencyDebugger >> buildDefaultActions [
 	dic at: Character arrowDown put: [ self moveDownInStack ].
 	dic at: Character arrowLeft put: [ self showMoreRecentMethodVersion ].
 	dic at: Character arrowRight put: [ self showOlderMethodVersion ].
-	dic at: 'h' put: [ self composeHelpText ].
+	dic at: 'help' put: [ self composeHelpText ].
 	dic at: 'revert' put: [ '' ].
 	dic at: 'killAll' put: [ debugAPI terminateAllProcesses ].
 	^dic
@@ -83,6 +83,7 @@ EDEmergencyDebugger >> buildDefaultActionsDescriptions [
 	|dic|
 	dic := Dictionary new.
 	dic at: 'exit/q' put: 'Exit the emergency debugger'.
+	dic at: 'help' put: 'Show this help.'.
 	dic at: 'retry' put: 'Retry opening a graphical debugger'.
 	dic at: '<UP/DOWN ARROWS>' put: 'Move up/down in the stack'.
 	dic at: '<RIGHT/LEFT ARROWS>' put: 'Navigate the current method versions'.
@@ -103,6 +104,7 @@ EDEmergencyDebugger >> buildDefaultActionsDescriptionsMap [
 	dic at: Character arrowLeft put: '<RIGHT/LEFT ARROWS>'.
 	dic at: Character arrowRight put: '<RIGHT/LEFT ARROWS>'.
 	dic at: 'revert' put: 'revert'.
+	dic at: 'help' put: 'help'.
 	dic at: 'killAll' put: 'killAll'.
 	^dic
 ]
