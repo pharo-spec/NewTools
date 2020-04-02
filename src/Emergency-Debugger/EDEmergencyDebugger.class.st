@@ -259,15 +259,49 @@ EDEmergencyDebugger >> performActionForChar: aCharacter [
 	self updateDisplay
 ]
 
-{ #category : #stack }
-EDEmergencyDebugger >> selectMethod: aCompiledMethod [
-	selectedMethod := aCompiledMethod.
-	methodVersionSelectionIndex := 1.
+{ #category : #methods }
+EDEmergencyDebugger >> selectedMethodVersion [
+	|versions |	
+	versions := debugAPI methodVersionAt: stackSelectionIndex.
+	^versions at: methodVersionSelectionIndex.
+	
+]
+
+{ #category : #methods }
+EDEmergencyDebugger >> selectedMethodVersionsSize [
+	^ debugAPI methodVersionSizeAt: stackSelectionIndex
 ]
 
 { #category : #'text - helpers' }
 EDEmergencyDebugger >> separator [ 
 	^'--------------------' asText makeAllColor: rawDisplay gray
+]
+
+{ #category : #methods }
+EDEmergencyDebugger >> showMoreRecentMethodVersion [
+	methodVersionSelectionIndex := methodVersionSelectionIndex - 1 max: 1.
+	self showSelectedMethodVersion
+]
+
+{ #category : #methods }
+EDEmergencyDebugger >> showOlderMethodVersion [
+	methodVersionSelectionIndex := methodVersionSelectionIndex + 1
+		min: self selectedMethodVersionsSize.
+	self showSelectedMethodVersion
+]
+
+{ #category : #methods }
+EDEmergencyDebugger >> showSelectedMethodVersion [
+	| selectedVersion text |
+	selectedVersion := self selectedMethodVersion.
+	text := selectedVersion sourceCode asText.
+	text makeBoldFrom: 1 to: selectedVersion selector size.
+	self
+		composeResult: text
+		title:
+			'VERSIONS (' , methodVersionSelectionIndex printString , '/'
+				, self selectedMethodVersionsSize printString , ')'.
+	self updateDisplay
 ]
 
 { #category : #initialization }
