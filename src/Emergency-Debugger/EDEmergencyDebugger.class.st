@@ -58,7 +58,7 @@ EDEmergencyDebugger >> availableActionsDescriptions [
 EDEmergencyDebugger >> buildDefaultActions [
 	|dic|
 	dic := Dictionary new.
-	dic at: Character escape put: [ debugAPI terminateSession ].
+	dic at: 'q' put: [ debugAPI terminateSession ].
 	dic at: 'exit' put: [ debugAPI terminateSession ].
 	dic at: 'retry' put: [ debugAPI tryReopenSessionWithDebugger ].
 	dic at: Character arrowUp put: [ self moveUpInStack ].
@@ -74,8 +74,7 @@ EDEmergencyDebugger >> buildDefaultActions [
 EDEmergencyDebugger >> buildDefaultActionsDescriptions [
 	|dic|
 	dic := Dictionary new.
-	dic at: '<ESCAPE>' put: 'Exits the emergency debugger'.
-	dic at: 'exit' put: 'Exits the emergency debugger'.
+	dic at: 'exit/q' put: 'Exit the emergency debugger'.
 	dic at: 'retry' put: 'Retry opening a graphical debugger'.
 	dic at: '<UP/DOWN ARROWS>' put: 'Move up/down in the stack'.
 	dic at: '<RIGHT/LEFT ARROWS>' put: 'Navigate the current method versions'.
@@ -173,10 +172,16 @@ EDEmergencyDebugger >> debug: aDebugSession [
 
 { #category : #evaluation }
 EDEmergencyDebugger >> eval: command [
-	command = 'exit'
-		ifTrue: [ self terminate ].
-	command = 'h' ifTrue:[self composeHelpText].
+	self evalCommand: command.
 	self composePromptWith: ''.
+	self updateDisplay
+]
+
+{ #category : #evaluation }
+EDEmergencyDebugger >> evalCommand: aString [
+	| action |
+	action := self availableActions at: aString ifAbsent: [ ^ self ].
+	action value.
 	self updateDisplay
 ]
 
@@ -218,6 +223,10 @@ EDEmergencyDebugger >> newTextStream [
 
 { #category : #evaluation }
 EDEmergencyDebugger >> performActionForChar: aCharacter [
+	| action |
+	action := self availableActions at: aCharacter ifAbsent: [ ^ self ].
+	action value.
+	self updateDisplay
 ]
 
 { #category : #'text - composing' }

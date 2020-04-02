@@ -74,8 +74,7 @@ EDREPLInterface >> requestLine [
 	self sensor flushKeyboard.
 	[ (char := self nextChar) = Character cr ]
 		whileFalse: [ 
-			char = Character arrowUp  ifTrue:[debugger moveUpInStack; updateDisplay].
-			char = Character arrowDown ifTrue:[debugger moveDownInStack; updateDisplay].
+			debugger performActionForChar: char.			
 			char = Character backspace
 				ifTrue: [ readLimit := position := position - 1 max: startPos ]
 				ifFalse: [ self nextPut: char ].
