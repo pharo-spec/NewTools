@@ -60,8 +60,8 @@ BaselineOfNewTools >> baseline: spec [
 				'NewTools-Sindarin-Tools'
 				'NewTools-Sindarin-ProcessInspector');
 			group: #development with: #(default
-				'NewTools-DebuggerSelector' 'NewTools-DebuggerSelector-Tests'
-				'NewTools-FileDialog' 'NewTools-FileDialog-Tests').
+				'NewTools-DebuggerSelector' 'NewTools-DebuggerSelector-Tests');
+			group: #broken with: #('NewTools-FileDialog' 'NewTools-FileDialog-Tests')
 	]
 ]
 
