@@ -7,7 +7,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'session',
-		'debugger'
+		'debugger',
+		'forbiddenProcesses'
 	],
 	#category : #'Emergency-Debugger'
 }
@@ -22,6 +23,14 @@ EDDebuggingAPI class >> attachTo: aDebugSession [
 { #category : #accessing }
 EDDebuggingAPI class >> displayStackSize [
 	^5
+]
+
+{ #category : #'API - Processes' }
+EDDebuggingAPI >> allRunningProcesses [
+	^ Process allSubInstances
+		reject: [ :each | 
+			each isTerminated
+				or: [ forbiddenProcesses anySatisfy: [ :block | block value == each ] ] ]
 ]
 
 { #category : #'API - Revert' }
@@ -53,6 +62,18 @@ EDDebuggingAPI >> nodeForContext: aContext [
 	^ aContext method sourceNodeForPC: aContext pc
 ]
 
+{ #category : #'API - Processes' }
+EDDebuggingAPI >> processesThatShouldNotBeTerminated [
+	^ forbiddenProcesses
+		ifNil: [ forbiddenProcesses := {[  ].
+			[ Smalltalk lowSpaceWatcherProcess ].
+			[ WeakArray runningFinalizationProcess ].
+			[ Processor backgroundProcess ].
+			[ InputEventFetcher default fetcherProcess ].
+			[ UIManager default uiProcess ].
+			[ Delay schedulingProcess ]} ]
+]
+
 { #category : #'API - Revert' }
 EDDebuggingAPI >> revert: method to: aChangeRecord [
 	"Reverts the given method to the given change record"
@@ -79,10 +100,17 @@ EDDebuggingAPI >> stack [
 	^session stackOfSize: self maxStackSize
 ]
 
+{ #category : #'API - Processes' }
+EDDebuggingAPI >> terminateAllProcesses [
+	self terminateSession.
+	self allRunningProcesses
+		do: [ :process | process ifNotNil: [ process terminate ] ]
+]
+
 { #category : #'API - Debugging support' }
 EDDebuggingAPI >> terminateSession [
 	self closeEmergencySession.
-	"session terminate"
+	session terminate
 ]
 
 { #category : #'API - Debugging support' }
