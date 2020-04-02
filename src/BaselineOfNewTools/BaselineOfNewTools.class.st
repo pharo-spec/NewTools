@@ -18,7 +18,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Morphic';
 			package: 'NewTools-Gtk';
 			"inspector"
-			package: 'NewTools-Inspector' with: [ spec requires: #('NewTools-Inspector-Extensions') ];
+			package: 'NewTools-Inspector' with: [ spec requires: #('NewTools-Inspector-Extensions' 'TaskIt') ];
 			package: 'NewTools-Inspector-Extensions' with: [ spec requires: #('NewTools-Core') ];
 			"debugger"
 			package: 'NewTools-Debugger' with: [ spec requires: #('NewTools-Inspector' 'NewTools-Debugger-Commands' 'NewTools-Debugger-Extensions') ];
