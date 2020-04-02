@@ -140,6 +140,7 @@ EDEmergencyDebugger >> debug: aDebugSession [
 	self composeTitleText.
 	self composeStackText.
 	self composeMethodText.
+	self composeHelpText.
 	self composePromptWith: ''.
 	self updateDisplay.
 	repl readEvalPrint 
