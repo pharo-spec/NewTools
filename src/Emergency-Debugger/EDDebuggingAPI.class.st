@@ -30,7 +30,7 @@ EDDebuggingAPI >> allRunningProcesses [
 	^ Process allSubInstances
 		reject: [ :each | 
 			each isTerminated
-				or: [ forbiddenProcesses anySatisfy: [ :block | block value == each ] ] ]
+				or: [ self forbiddenProcesses anySatisfy: [ :block | block value == each ] ] ]
 ]
 
 { #category : #'API - Revert' }
@@ -52,18 +52,8 @@ EDDebuggingAPI >> debugger: anObject [
 	debugger := anObject
 ]
 
-{ #category : #'API - Stack' }
-EDDebuggingAPI >> maxStackSize [
-	^self class displayStackSize
-]
-
-{ #category : #'API - Context' }
-EDDebuggingAPI >> nodeForContext: aContext [
-	^ aContext method sourceNodeForPC: aContext pc
-]
-
 { #category : #'API - Processes' }
-EDDebuggingAPI >> processesThatShouldNotBeTerminated [
+EDDebuggingAPI >> forbiddenProcesses [
 	^ forbiddenProcesses
 		ifNil: [ forbiddenProcesses := {[  ].
 			[ Smalltalk lowSpaceWatcherProcess ].
@@ -72,6 +62,16 @@ EDDebuggingAPI >> processesThatShouldNotBeTerminated [
 			[ InputEventFetcher default fetcherProcess ].
 			[ UIManager default uiProcess ].
 			[ Delay schedulingProcess ]} ]
+]
+
+{ #category : #'API - Stack' }
+EDDebuggingAPI >> maxStackSize [
+	^self class displayStackSize
+]
+
+{ #category : #'API - Context' }
+EDDebuggingAPI >> nodeForContext: aContext [
+	^ aContext method sourceNodeForPC: aContext pc
 ]
 
 { #category : #'API - Revert' }
