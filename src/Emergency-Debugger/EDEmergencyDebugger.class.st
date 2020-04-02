@@ -56,6 +56,11 @@ EDEmergencyDebugger >> availableActionsDescriptions [
 ]
 
 { #category : #actions }
+EDEmergencyDebugger >> availableActionsDescriptionsMap [
+	^self buildDefaultActionsDescriptionsMap 
+]
+
+{ #category : #actions }
 EDEmergencyDebugger >> buildDefaultActions [
 	|dic|
 	dic := Dictionary new.
@@ -65,8 +70,9 @@ EDEmergencyDebugger >> buildDefaultActions [
 	dic at: 'retry' put: [ debugAPI tryReopenSessionWithDebugger ].
 	dic at: Character arrowUp put: [ self moveUpInStack ].
 	dic at: Character arrowDown put: [ self moveDownInStack ].
-	dic at: Character arrowLeft put: [ "self showMoreRecentMethodVersion "].
-	dic at: Character arrowRight put: [ "self showOlderMethodVersion "].
+	dic at: Character arrowLeft put: [ self showMoreRecentMethodVersion ].
+	dic at: Character arrowRight put: [ self showOlderMethodVersion ].
+	dic at: 'h' put: [ self composeHelpText ].
 	dic at: 'revert' put: [ '' ].
 	dic at: 'killAll' put: [ debugAPI terminateAllProcesses ].
 	^dic
@@ -82,6 +88,22 @@ EDEmergencyDebugger >> buildDefaultActionsDescriptions [
 	dic at: '<RIGHT/LEFT ARROWS>' put: 'Navigate the current method versions'.
 	dic at: 'revert' put: 'Revert the current method to the selected method version'.
 	dic at: 'killAll' put: 'Terminate all non-essential processes (will terminate Ed)'.
+	^dic
+]
+
+{ #category : #actions }
+EDEmergencyDebugger >> buildDefaultActionsDescriptionsMap [
+	|dic|
+	dic := Dictionary new.	
+	dic at: 'exit' put: 'exit/q'.
+	dic at: 'q' put: 'exit/q'.
+	dic at: 'retry' put: 'retry'.
+	dic at: Character arrowUp put: '<UP/DOWN ARROWS>'.
+	dic at: Character arrowDown put: '<UP/DOWN ARROWS>'.
+	dic at: Character arrowLeft put: '<RIGHT/LEFT ARROWS>'.
+	dic at: Character arrowRight put: '<RIGHT/LEFT ARROWS>'.
+	dic at: 'revert' put: 'revert'.
+	dic at: 'killAll' put: 'killAll'.
 	^dic
 ]
 
@@ -169,6 +191,13 @@ EDEmergencyDebugger >> debug: aDebugSession [
 	self composePromptWith: ''.
 	self updateDisplay.
 	repl readEvalPrint 
+]
+
+{ #category : #actions }
+EDEmergencyDebugger >> descriptionFromPromptCommand: aString [
+	|key|
+	key := self availableActionsDescriptionsMap at: aString.
+	^self availableActionsDescriptions at: key
 ]
 
 { #category : #evaluation }

@@ -22,6 +22,11 @@ EDDisplayInterface >> clear [
 		frameAndFillRectangle: self frame
 		fillColor: self white
 		borderWidth: 2
+		borderColor: self red.
+	self displayCanvas
+		frameAndFillRectangle: self methodFrame
+		fillColor: self white
+		borderWidth: 2
 		borderColor: self red
 ]
 
@@ -62,6 +67,12 @@ EDDisplayInterface >> gray [
 ]
 
 { #category : #'display - properties' }
+EDDisplayInterface >> methodFrame [
+	^ methodFrame
+		ifNil: [ methodFrame := self frame corner corner: DisplayScreen actualScreenSize ]
+]
+
+{ #category : #'display - properties' }
 EDDisplayInterface >> red [
 	^ Color red
 ]
@@ -70,7 +81,10 @@ EDDisplayInterface >> red [
 EDDisplayInterface >> show: aText [
 	self
 		display: (self composeParagraphWith: aText inFrame: self frame)
-		in: self frame
+		in: self frame.
+	self
+		display: (self composeParagraphWith: aText inFrame: self frame)
+		in: self methodFrame.
 ]
 
 { #category : #'text - private' }
