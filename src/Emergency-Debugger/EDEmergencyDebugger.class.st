@@ -220,6 +220,7 @@ EDEmergencyDebugger >> initialize [
 	repl := EDREPLInterface forDebugger: self.
 	rawDisplay := EDDisplayInterface new.
 	stackSelectionIndex := 1.
+	methodVersionSelectionIndex := 0.
 	input := Text new.
 	self composeResult: Text new title: 'TYPE h FOR HELP' asText.
 	isRunning := false
@@ -233,16 +234,20 @@ EDEmergencyDebugger >> isRunning [
 { #category : #stack }
 EDEmergencyDebugger >> moveDownInStack [
 	stackSelectionIndex := (stackSelectionIndex + 1) min: debugAPI maxStackSize.
+	methodVersionSelectionIndex := 0.
 	self composeStackText.
-	self composeMethodText  
+	self composeMethodText.
+	self composeHelpText
 
 ]
 
 { #category : #stack }
 EDEmergencyDebugger >> moveUpInStack [
 	stackSelectionIndex := (stackSelectionIndex - 1) max: 1.
+	methodVersionSelectionIndex := 0.
 	self composeStackText.
-	self composeMethodText  
+	self composeMethodText.
+	self composeHelpText   
 
 ]
 
