@@ -9,7 +9,6 @@ Class {
 	#name : #EDEmergencyDebugger,
 	#superclass : #Object,
 	#instVars : [
-		'sindarinDebugger',
 		'rawDisplay',
 		'stackSelectionIndex',
 		'methodText',
