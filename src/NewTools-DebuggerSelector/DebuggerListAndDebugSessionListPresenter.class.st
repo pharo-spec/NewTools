@@ -217,7 +217,7 @@ DebuggerListAndDebugSessionListPresenter >> getWhenClosedBlock [
 ]
 
 { #category : #initialization }
-DebuggerListAndDebugSessionListPresenter >> initializeWidgets [
+DebuggerListAndDebugSessionListPresenter >> initializePresenters [
 	| timeOfStorageColumnWidth refsColumnWidth |
 	debuggerList := self newTable
 		addColumn:
@@ -230,8 +230,8 @@ DebuggerListAndDebugSessionListPresenter >> initializeWidgets [
 				evaluated: [ :debuggerClass | self debuggerClassToNameOfDebugger: debuggerClass ]);
 		whenSelectionChangedDo: [ self refreshDebuggerListToolBar ].
 	"Items are added to this list by #refreshDebuggerList"
-	self refreshDebuggerList.
 	debuggerListToolBar := self newToolBar.
+	self refreshDebuggerList.
 	self refreshDebuggerListToolBar.
 	timeOfStorageColumnWidth := 115.
 	refsColumnWidth := 40.
