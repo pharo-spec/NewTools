@@ -90,7 +90,7 @@ DebuggerListAndDebugSessionListPresenter >> addCorrectMainDebuggerButtonToToolBa
 					[ "A debugger is selected in the list, and it is the main debugger class, so we add a button allowing the user to remove this debugger from the main debugger class"
 					aToolBar
 						addItem:
-							(SpToolBarButton new
+							(SpToolBarButtonPresenter new
 								label: 'Main Debugger';
 								icon: (self iconNamed: #checkboxSelected);
 								action: [ DebuggerSelector singleton setNoMainDebuggerClass.
@@ -102,7 +102,7 @@ DebuggerListAndDebugSessionListPresenter >> addCorrectMainDebuggerButtonToToolBa
 	"Otherwise (no debugger is selected, or a debugger is selected and it is not the main debugger class), we add a buttont allowing to set the selected debugger as main debugger"
 	aToolBar
 		addItem:
-			(SpToolBarButton new
+			(SpToolBarButtonPresenter new
 				label: 'Main Debugger';
 				icon: (self iconNamed: #checkboxUnselected);
 				action: [ debuggerList selectedItems
@@ -286,7 +286,7 @@ DebuggerListAndDebugSessionListPresenter >> makeDebugSessionListToolbar [
 	toolBar := self newToolBar.
 	toolBar
 		addItem:
-			(SpToolBarButton new
+			(SpToolBarButtonPresenter new
 				label: 'Debug';
 				icon: (self iconNamed: #glamorousBug);
 				action: [ self debugDebugSessionAction ];
@@ -294,14 +294,14 @@ DebuggerListAndDebugSessionListPresenter >> makeDebugSessionListToolbar [
 					'Opens the selected debug session with the debugger the image would normally choose to debug it').
 	toolBar
 		addItem:
-			(SpToolBarButton new
+			(SpToolBarButtonPresenter new
 				label: 'Debug With';
 				icon: (self iconNamed: #glamorousBug);
 				action: [ self debugDebugSessionWithSpecificDebuggerAction ];
 				help: 'Opens the selected debug session with the selected debugger').
 	toolBar
 		addItem:
-			(SpToolBarButton new
+			(SpToolBarButtonPresenter new
 				label: 'Inspect';
 				icon: (self iconNamed: #smallFind);
 				action: [ debugSessionList selectedItems
@@ -309,7 +309,7 @@ DebuggerListAndDebugSessionListPresenter >> makeDebugSessionListToolbar [
 		help: 'Inspect the selected debug session'.
 	toolBar
 		addItem:
-			(SpToolBarButton new
+			(SpToolBarButtonPresenter new
 				label: 'Terminate';
 				icon: (self iconNamed: #remotesManagerRemoveRemote);
 				action: [ debugSessionList selectedItems
@@ -320,7 +320,7 @@ DebuggerListAndDebugSessionListPresenter >> makeDebugSessionListToolbar [
 					'Terminate the selected debug session (and the corresponding process), removing it from the list').
 	toolBar
 		addItem:
-			(SpToolBarButton new
+			(SpToolBarButtonPresenter new
 				label: 'Terminate All';
 				icon: (self iconNamed: #glamorousTrash);
 				action: [ DebugSessionStorage singleton terminateAll.
@@ -377,7 +377,7 @@ DebuggerListAndDebugSessionListPresenter >> refreshDebuggerListToolBar [
 	debuggerListToolBar removeAllItems.
 	debuggerListToolBar
 		addItem:
-			(SpToolBarButton new
+			(SpToolBarButtonPresenter new
 				label: 'Browse';
 				icon: (self iconNamed: #smallFind);
 				action: [ debuggerList selectedItems
