@@ -18,36 +18,15 @@ Class {
 
 { #category : #specs }
 DebuggerSelectorPresenter class >> defaultSpec [
-	^ SpPanedLayout newHorizontal
-		add:
-			(SpBoxLayout newVertical
-				add: 'Debuggers' height: 20;
-				add: #debuggerList;
-				add: #debuggerListToolBar
-					withConstraints: [ :cstr | cstr height: 35 ];
-				yourself);
-		add:
-			(SpBoxLayout newVertical
-				add:
-					(SpBoxLayout newHorizontal
-						add: 'Debug Sessions' width: 200;
-						add:
-							(SpBoxLayout newHorizontal
-								add: #storageLimitLabel width: 80;
-								add: #storageLimitInputField width: 70;
-								yourself);
-						yourself)
-					height: 20;
-				add: #debugSessionList;
-				add: #debugSessionListToolBar
-					withConstraints: [ :cstr | cstr height: 35 ];
-				yourself);
+	^ SpBoxLayout newVertical
+		add: #debuggerListToolBar withConstraints: [ :cstr | cstr height: 35 ];
+		add: #debuggerList;
 		yourself
 ]
 
 { #category : #specs }
 DebuggerSelectorPresenter class >> initialExtent [
-	^ 750@300
+	^ 750@350
 ]
 
 { #category : #'world menu' }
@@ -74,7 +53,7 @@ DebuggerSelectorPresenter class >> open [
 
 { #category : #specs }
 DebuggerSelectorPresenter class >> title [
-	^ 'Debuggers and Debug Sessions'
+	^ 'Available Debuggers'
 ]
 
 { #category : #helpers }
@@ -86,7 +65,7 @@ DebuggerSelectorPresenter >> addCorrectMainDebuggerButtonToToolBar: aToolBar [
 					[ "A debugger is selected in the list, and it is the main debugger class, so we add a button allowing the user to remove this debugger from the main debugger class"
 					aToolBar
 						addItem:
-							(SpToolBarButton new
+							((self instantiate: SpToolBarButtonPresenter)
 								label: 'Main Debugger';
 								icon: (self iconNamed: #checkboxSelected);
 								action: [ DebuggerSelector singleton setNoMainDebuggerClass.
@@ -98,7 +77,7 @@ DebuggerSelectorPresenter >> addCorrectMainDebuggerButtonToToolBar: aToolBar [
 	"Otherwise (no debugger is selected, or a debugger is selected and it is not the main debugger class), we add a buttont allowing to set the selected debugger as main debugger"
 	aToolBar
 		addItem:
-			(SpToolBarButton new
+			((self instantiate: SpToolBarButtonPresenter)
 				label: 'Main Debugger';
 				icon: (self iconNamed: #checkboxUnselected);
 				action: [ debuggerList selectedItems
@@ -215,9 +194,10 @@ DebuggerSelectorPresenter >> debuggerClassToRankToDisplay: aDebuggerClass [
 { #category : #'presenter building' }
 DebuggerSelectorPresenter >> debuggerList [
 	^ self newTable
-		addColumn: (SpStringTableColumn
+		addColumn: ((SpStringTableColumn
 			title: 'Rank'
-			evaluated: [ :aDebuggerClass | self debuggerClassToRankToDisplay: aDebuggerClass ]);
+			evaluated: [ :aDebuggerClass | self debuggerClassToRankToDisplay: aDebuggerClass ])
+			width: 150);
 		addColumn: (SpStringTableColumn
 			title: 'Debugger'
 			evaluated: [ :debuggerClass | self debuggerClassToNameOfDebugger: debuggerClass ]);
@@ -255,36 +235,20 @@ DebuggerSelectorPresenter >> getWhenClosedBlock [
 
 { #category : #initialization }
 DebuggerSelectorPresenter >> initialize [
+	super initialize.
 	shouldUpdateStorageLimitInputField := true
 ]
 
 { #category : #initialization }
 DebuggerSelectorPresenter >> initializePresenters [
+	super initializePresenters.
 	debuggerList := self debuggerList.
 	debuggerListToolBar := self newToolBar.
-	debugSessionList := self debugSessionList.
-	debugSessionListToolBar := self makeDebugSessionListToolbar.
-	storageLimitLabel := self newLabel
-		label: 'storage limit:';
-		help: self storageLimitHelp;
-		yourself.
-	storageLimitInputField := self newNumberInput
-		help: self storageLimitHelp;
-		numberType: Integer;
-		minimum: 1;
-		number: DebugSessionStorage singleton storageLimitForDebugSessionsNotKeptAlive;
-		whenNumberChangedDo: [ :newNumber | 
-			"Disable the automatic refreshing of this value in the UI during the update of the value, to avoid infinite loop"
-			shouldUpdateStorageLimitInputField := false.
-			DebugSessionStorage singleton
-				storageLimitForDebugSessionsNotKeptAlive: newNumber.
-			shouldUpdateStorageLimitInputField := true.
-			self ].
+
 	self setInitialSubscriptions: true.
 
 	self refreshDebuggerList.
 	self refreshDebuggerListToolBar.
-	self refreshDebugSessionList.
 
 ]
 
@@ -292,24 +256,28 @@ DebuggerSelectorPresenter >> initializePresenters [
 DebuggerSelectorPresenter >> makeDebugSessionListToolbar [
 	^ self newToolBar
 		addItem:
-			(SpToolBarButton new label: 'Debug';
+			((self instantiate: SpToolBarButtonPresenter)
+				label: 'Debug';
 				icon: (self iconNamed: #glamorousBug);
 				action: [ self debugDebugSessionAction ];
 				help:
 					'Opens the selected debug session with the debugger the image would normally choose to debug it');
 		addItem:
-			(SpToolBarButton new label: 'Debug With';
+			((self instantiate: SpToolBarButtonPresenter)
+				label: 'Debug With';
 				icon: (self iconNamed: #glamorousBug);
 				action: [ self debugDebugSessionWithSpecificDebuggerAction ];
 				help: 'Opens the selected debug session with the selected debugger');
 		addItem:
-			(SpToolBarButton new label: 'Inspect';
+			((self instantiate: SpToolBarButtonPresenter)
+				label: 'Inspect';
 				icon: (self iconNamed: #smallFind);
 				action: [ debugSessionList selectedItems
 						ifNotEmpty: [ :selectedItems | (selectedItems at: 1) inspect ] ];
 				help: 'Inspect the selected debug session');
 		addItem:
-			(SpToolBarButton new label: 'Terminate';
+			((self instantiate: SpToolBarButtonPresenter)
+				label: 'Terminate';
 				icon: (self iconNamed: #remotesManagerRemoveRemote);
 				action: [ debugSessionList selectedItems
 						ifNotEmpty: [ :selectedItems | 
@@ -317,7 +285,8 @@ DebuggerSelectorPresenter >> makeDebugSessionListToolbar [
 							self refreshDebugSessionList ] ];
 				help: 'Terminate the selected debug session (and the corresponding process), removing it from the list');
 		addItem:
-			(SpToolBarButton new label: 'Terminate All';
+			((self instantiate: SpToolBarButtonPresenter)
+				label: 'Terminate All';
 				icon: (self iconNamed: #glamorousTrash);
 				action: [ DebugSessionStorage singleton terminateAll.
 					self refreshDebugSessionList ];
@@ -372,7 +341,7 @@ DebuggerSelectorPresenter >> refreshDebuggerListToolBar [
 	debuggerListToolBar removeAllItems.
 	debuggerListToolBar
 		addItem:
-			(SpToolBarButton new
+			((self instantiate: SpToolBarButtonPresenter)
 				label: 'Browse';
 				icon: (self iconNamed: #smallFind);
 				action: [ debuggerList selectedItems
