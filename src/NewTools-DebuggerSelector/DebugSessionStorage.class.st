@@ -30,7 +30,7 @@ Class {
 	#classVars : [
 		'singleton'
 	],
-	#category : #'NewTools-DebuggerSelector'
+	#category : #'NewTools-DebuggerSelector-Core'
 }
 
 { #category : #singleton }
@@ -41,12 +41,12 @@ DebugSessionStorage class >> singleton [
 
 { #category : #'publish events' }
 DebugSessionStorage >> addSubscriberOnStorageLimitUpdate: anObject [
-	self subscribersOnStorageLimitUpdate add: anObject
+	subscribersOnStorageLimitUpdate add: anObject
 ]
 
 { #category : #'publish events' }
 DebugSessionStorage >> addSubscriberOnStorageUpdate: anObject [
-	self subscribersOnStorageUpdate add: anObject
+	subscribersOnStorageUpdate add: anObject
 ]
 
 { #category : #private }
@@ -54,7 +54,7 @@ DebugSessionStorage >> clear [
 	"This method should only be used for development purposes. It does not call #terminate on the stored debug sessions, and therefore does not let the debugged process be removed from the system (they will linger on)"
 
 	<script>
-	self storage removeAll.
+	storage removeAll.
 	self notifySubscribersOfAStorageUpdate
 ]
 
@@ -66,33 +66,39 @@ DebugSessionStorage >> enforceStorageLimit [
 
 	| debugSessionStorageUnits |
 	"Smalltalk garbageCollect.""This is to make sure that closed debuggers are garbage collected so that they stop keeping alive their debug sessions. Doing a gabage collect here is maybe a bit heavy-handed. There maybe is a better solution"
-	debugSessionStorageUnits := self storage reject: [ 
-		                            :aDebugSessionStorageUnit | 
-		                            aDebugSessionStorageUnit debugSession
-			                            shouldBeKeptAlive ]. "Select all the stored debug sessions that are not being kept alive"
-	debugSessionStorageUnits := debugSessionStorageUnits sort: [ :el1 
-		                            :el2 | 
-		                            el1 timeOfCreation <= el2 timeOfCreation ]. "Sort the debug sessions from oldest to newest"
-	1
-		to: debugSessionStorageUnits size
-			- self storageLimitForDebugSessionsNotKeptAlive
-		do: [ :i | 
-			self terminate_NoNotification: (debugSessionStorageUnits at: i) ].
+	debugSessionStorageUnits := storage
+		reject:
+			[ :aDebugSessionStorageUnit | aDebugSessionStorageUnit debugSession shouldBeKeptAlive ].	"Select all the stored debug sessions that are not being kept alive"
+	debugSessionStorageUnits := debugSessionStorageUnits
+		sort:
+			[ :el1 :el2 | el1 timeOfCreation <= el2 timeOfCreation ].	"Sort the debug sessions from oldest to newest"
+	1 to:
+		debugSessionStorageUnits size
+			- storageLimitForDebugSessionsNotKeptAlive do:
+		[ :i | self terminate_NoNotification: (debugSessionStorageUnits at: i) ].
 	self notifySubscribersOfAStorageUpdate
+]
+
+{ #category : #initialization }
+DebugSessionStorage >> initialize [
+	storage := OrderedCollection new.
+	storageLimitForDebugSessionsNotKeptAlive := 5.
+	subscribersOnStorageLimitUpdate := WeakOrderedCollection new.
+	subscribersOnStorageUpdate := WeakOrderedCollection new.
 ]
 
 { #category : #'publish events' }
 DebugSessionStorage >> notifySubscribersOfAStorageLimitUpdate [
-	self subscribersOnStorageLimitUpdate do: [ :subscriber_ | 
-		subscriber_ ifNotNil: [ :subscriber | 
-			subscriber onDebugSessionStorageLimitUpdate ] ]
+	subscribersOnStorageLimitUpdate
+		select: [ :each | each notNil ]
+		thenDo: [ :subscriber | subscriber onDebugSessionStorageLimitUpdate ]
 ]
 
 { #category : #'publish events' }
 DebugSessionStorage >> notifySubscribersOfAStorageUpdate [
-	self subscribersOnStorageUpdate do: [ :subscriber_ | 
-		subscriber_ ifNotNil: [ :subscriber | 
-			subscriber onDebugSessionStorageUpdate ] ]
+	subscribersOnStorageUpdate
+		select: [ :each | each notNil ]
+	 	thenDo: [ :subscriber | subscriber onDebugSessionStorageUpdate ]
 ]
 
 { #category : #'react to events' }
@@ -109,7 +115,7 @@ DebugSessionStorage >> onDebugSession: aDebugSession stoppingGettingKeptAliveBy:
 
 { #category : #'publish events' }
 DebugSessionStorage >> removeSubscriberOnStorageLimitUpdate: anObject [
-	self subscribersOnStorageLimitUpdate
+	subscribersOnStorageLimitUpdate
 		remove: anObject
 		ifAbsent: [ "It's a weak collection, its elements can be nilled by the garbage collector at any time if they are not referenced elsewhere, so it can happen not to find the object to remove because it has already been nilled"
 			 ]
@@ -117,7 +123,7 @@ DebugSessionStorage >> removeSubscriberOnStorageLimitUpdate: anObject [
 
 { #category : #'publish events' }
 DebugSessionStorage >> removeSubscriberOnStorageUpdate: anObject [
-	self subscribersOnStorageUpdate
+	subscribersOnStorageUpdate
 		remove: anObject
 		ifAbsent: [ "It's a weak collection, its elements can be nilled by the garbage collector at any time if they are not referenced elsewhere, so it can happen not to find the object to remove because it has already been nilled"
 			 ]
@@ -125,21 +131,19 @@ DebugSessionStorage >> removeSubscriberOnStorageUpdate: anObject [
 
 { #category : #accessing }
 DebugSessionStorage >> storage [
-	storage ifNil: [ storage := OrderedCollection new ].
 	^ storage
 ]
 
 { #category : #accessing }
 DebugSessionStorage >> storageLimitForDebugSessionsNotKeptAlive [
-	storageLimitForDebugSessionsNotKeptAlive ifNil: [ 
-		storageLimitForDebugSessionsNotKeptAlive := 5 ].
 	^ storageLimitForDebugSessionsNotKeptAlive
 ]
 
 { #category : #accessing }
 DebugSessionStorage >> storageLimitForDebugSessionsNotKeptAlive: anInteger [
-	anInteger isInteger not | anInteger <= 0 ifTrue: [ 
-		InvalidValueForStorageLimit signal ].
+	anInteger isInteger & anInteger > 0
+		ifFalse: [ InvalidSessionLimit signal ].
+	
 	storageLimitForDebugSessionsNotKeptAlive := anInteger.
 	self notifySubscribersOfAStorageLimitUpdate.
 	self enforceStorageLimit
@@ -149,25 +153,11 @@ DebugSessionStorage >> storageLimitForDebugSessionsNotKeptAlive: anInteger [
 DebugSessionStorage >> storeDebugSession: aDebugSession [
 	| storageUnit |
 	storageUnit := DebugSessionStorageUnit newFrom: aDebugSession.
-	self storage add: storageUnit.
+	storage add: storageUnit.
 	aDebugSession addSubscriberToKeepAliveEvents: self.
 	self notifySubscribersOfAStorageUpdate.
 	self enforceStorageLimit.
 	^ storageUnit
-]
-
-{ #category : #accessing }
-DebugSessionStorage >> subscribersOnStorageLimitUpdate [
-	subscribersOnStorageLimitUpdate ifNil: [ 
-		subscribersOnStorageLimitUpdate := WeakOrderedCollection new ].
-	^ subscribersOnStorageLimitUpdate
-]
-
-{ #category : #accessing }
-DebugSessionStorage >> subscribersOnStorageUpdate [
-	subscribersOnStorageUpdate ifNil: [ 
-		subscribersOnStorageUpdate := WeakOrderedCollection new ].
-	^ subscribersOnStorageUpdate
 ]
 
 { #category : #termination }
@@ -181,7 +171,7 @@ DebugSessionStorage >> terminate: aDebugSessionStorageUnit [
 { #category : #termination }
 DebugSessionStorage >> terminateAll [
 	<script>
-	self storage copy do: [ :aDebugSessionStorageUnit | 
+	storage copy do: [ :aDebugSessionStorageUnit | 
 		self terminate: aDebugSessionStorageUnit ]
 ]
 
@@ -189,6 +179,6 @@ DebugSessionStorage >> terminateAll [
 DebugSessionStorage >> terminate_NoNotification: aDebugSessionStorageUnit [
 	"Terminating the debug session in addition to removing it from the storage is necessary to ensure the debugged process is destroyed and does not linger in the image"
 
-	self storage remove: aDebugSessionStorageUnit.
+	storage remove: aDebugSessionStorageUnit.
 	aDebugSessionStorageUnit debugSession terminate
 ]

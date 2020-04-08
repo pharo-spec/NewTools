@@ -8,7 +8,7 @@ Class {
 		'debugSession',
 		'timeOfCreation'
 	],
-	#category : #'NewTools-DebuggerSelector'
+	#category : #'NewTools-DebuggerSelector-Core'
 }
 
 { #category : #'instance creation' }

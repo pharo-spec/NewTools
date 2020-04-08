@@ -154,7 +154,7 @@ DebuggerSelectorTest >> testSettingNonDebuggerAsMainDebuggerSignalsException [
 
 	self
 		should: [ debuggerSelector mainDebuggerClass: Object ]
-		raise: CannotSetAsMainDebuggerAClassThatIsNotADebuggerClass
+		raise: CannotSetAsDebugger
 ]
 
 { #category : #tests }

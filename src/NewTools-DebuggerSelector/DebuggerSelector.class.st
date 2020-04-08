@@ -33,7 +33,7 @@ Class {
 	#classVars : [
 		'singleton'
 	],
-	#category : #'NewTools-DebuggerSelector'
+	#category : #'NewTools-DebuggerSelector-Core'
 }
 
 { #category : #singleton }
@@ -49,7 +49,7 @@ DebuggerSelector class >> singleton [
 
 { #category : #'publish events' }
 DebuggerSelector >> addSubscriberOnMainDebuggerClassUpdate: anObject [
-	self subscribersOnMainDebuggerClassUpdate add: anObject
+	subscribersOnMainDebuggerClassUpdate add: anObject
 ]
 
 { #category : #'debuggers - opening' }
@@ -119,7 +119,8 @@ DebuggerSelector >> ignoreDummyDebuggerForTests [
 { #category : #initialize }
 DebuggerSelector >> initialize [ 
 	super initialize.
-	debuggingLevel := 0
+	debuggingLevel := 0.
+	subscribersOnMainDebuggerClassUpdate := WeakOrderedCollection new
 ]
 
 { #category : #'system - integration' }
@@ -215,17 +216,16 @@ DebuggerSelector >> mainDebuggerClass [
 { #category : #accessing }
 DebuggerSelector >> mainDebuggerClass: aClass [
 	(aClass isNil or: [ self isThisClassADebugger: aClass ])
-		ifFalse: [ CannotSetAsMainDebuggerAClassThatIsNotADebuggerClass signal ].
+		ifFalse: [ CannotSetAsDebugger signal ].
 	mainDebuggerClass := aClass.
 	self notifySubscribersOfAMainDebuggerClassUpdate
 ]
 
 { #category : #'publish events' }
 DebuggerSelector >> notifySubscribersOfAMainDebuggerClassUpdate [
-	self subscribersOnMainDebuggerClassUpdate
-		do: [ :subscriber_ | 
-			subscriber_
-				ifNotNil: [ :subscriber | subscriber onMainDebuggerClassUpdate ] ]
+	subscribersOnMainDebuggerClassUpdate
+		select: #notNil
+		thenCollect: [ :subscriber | subscriber onMainDebuggerClassUpdate ]
 ]
 
 { #category : #'debuggers - opening' }
@@ -251,7 +251,7 @@ DebuggerSelector >> openWithMainDebugger: aDebugSession andNotification: notific
 
 { #category : #'publish events' }
 DebuggerSelector >> removeSubscriberOnMainDebuggerClassUpdate: anObject [
-	self subscribersOnMainDebuggerClassUpdate
+	subscribersOnMainDebuggerClassUpdate
 		remove: anObject
 		ifAbsent:
 			[ "It's a weak collection, its elements can be nilled by the garbage collector at any time if they are not referenced elsewhere, so it can happen not to find the object to remove because it has already been nilled" ]
@@ -299,13 +299,6 @@ DebuggerSelector >> sortedDebuggerClassesFor: aDebugSession [
 		sort: [ :dbgClass1 :dbgClass2 | 
 			(dbgClass1 rankDebugSession: aDebugSession)
 				>= (dbgClass2 rankDebugSession: aDebugSession) ]
-]
-
-{ #category : #'publish events' }
-DebuggerSelector >> subscribersOnMainDebuggerClassUpdate [
-	subscribersOnMainDebuggerClassUpdate
-		ifNil: [ subscribersOnMainDebuggerClassUpdate := WeakOrderedCollection new ].
-	^ subscribersOnMainDebuggerClassUpdate
 ]
 
 { #category : #'debuggers - opening' }
