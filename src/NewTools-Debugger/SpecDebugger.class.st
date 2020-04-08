@@ -770,11 +770,9 @@ SpecDebugger >> initializeStack [
 				evaluated: [ :item | item sender stDisplayString ]).
 	stackTable
 		transmitDo: [ :context | 
-			context
-				ifNotNil: [ :ctx | 
-					self flag: 'Why can context be nil?? I want to avoid nil checks!'.
-					self updateInspectorFromContext: ctx.
-					self updateCodeFromContext: ctx.
+			stackTable selection isEmpty
+				ifFalse: [ self updateInspectorFromContext: context.
+					self updateCodeFromContext: context.
 					self updateToolbar.
 					self updateTitle.
 					self expandStackIfLastItemIsSelected ] ].

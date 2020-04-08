@@ -116,12 +116,13 @@ StObjectBreakpointInspection >> configureSourceCodeUpdate [
 	methodsWithBreakpoints
 		whenSelectionChangedDo: [ :selection | 
 			| selectedItem node |
-			selectedItem := selection selectedItem.
-			node := selectedItem at: #node.
-			breakpointsInSourceCode text: node methodNode source.
-			breakpointsInSourceCode
-				selectionInterval: (selectedItem at: #interval).
-			self updateSourceCodeBehaviorFor: node ]
+			selection isEmpty
+				ifFalse: [ selectedItem := selection selectedItem.
+					node := selectedItem at: #node.
+					breakpointsInSourceCode text: node methodNode source.
+					breakpointsInSourceCode
+						selectionInterval: (selectedItem at: #interval).
+					self updateSourceCodeBehaviorFor: node ] ]
 ]
 
 { #category : #private }
