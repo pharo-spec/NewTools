@@ -754,28 +754,30 @@ SpecDebugger >> initializePresenters [
 
 { #category : #initialization }
 SpecDebugger >> initializeStack [
-
 	stackTable := self newTable.
-	stackTable 
-		addColumn: (SpStringTableColumn
-			title: 'Class'
-			evaluated: [ :item | item receiver class ]);
-		addColumn: (SpStringTableColumn
-			title: 'Method'
-			evaluated: [ :item | item method selector ]);
-		addColumn: (SpStringTableColumn
-			title: 'Context'
-			evaluated: [ :item | item sender stDisplayString ]).	
-		
-	stackTable transmitDo: [ :context | 
-		self updateInspectorFromContext: context.
-		self updateCodeFromContext: context.
-		self updateToolbar.
-		self updateTitle.
-		self expandStackIfLastItemIsSelected ].
-	
+	stackTable
+		addColumn:
+			(SpStringTableColumn
+				title: 'Class'
+				evaluated: [ :item | item receiver class ]);
+		addColumn:
+			(SpStringTableColumn
+				title: 'Method'
+				evaluated: [ :item | item method selector ]);
+		addColumn:
+			(SpStringTableColumn
+				title: 'Context'
+				evaluated: [ :item | item sender stDisplayString ]).
+	stackTable
+		transmitDo: [ :context | 
+			stackTable selection isEmpty
+				ifFalse: [ self updateInspectorFromContext: context.
+					self updateCodeFromContext: context.
+					self updateToolbar.
+					self updateTitle.
+					self expandStackIfLastItemIsSelected ] ].
 	stackHeader := self instantiate: StHeaderBar.
-	stackHeader label: 'Stack'.
+	stackHeader label: 'Stack'
 ]
 
 { #category : #initialization }
