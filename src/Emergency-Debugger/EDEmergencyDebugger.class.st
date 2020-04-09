@@ -43,6 +43,11 @@ EDEmergencyDebugger class >> debugAPI [
 ]
 
 { #category : #accessing }
+EDEmergencyDebugger class >> debugAPI: aDebugAPIClass [
+	DefaultDebugAPI := aDebugAPIClass 
+]
+
+{ #category : #accessing }
 EDEmergencyDebugger class >> defaultDebugAPI [
 	^ DefaultDebugAPI ifNil: [ DefaultDebugAPI := EDDebuggingAPI ]
 ]
