@@ -147,9 +147,43 @@ EDEmergencyDebuggerTest >> testIsRunning [
 	self assert: ed isRunning 
 ]
 
+{ #category : #'api - stack' }
+EDEmergencyDebuggerTest >> testMoveDownInStack [ 
+	|selectionIndexBefore shortStackIndexBefore|
+	selectionIndexBefore := ed stackSelectionIndex.
+	shortStackIndexBefore := ed shortStackIndex.
+	ed moveDownInStack.
+	self assert: ed stackSelectionIndex 
+			equals: ((selectionIndexBefore + 1) min: debugAPI stackSize).
+	self assert: ed shortStackIndex equals: (shortStackIndexBefore + 1).
+	self assert: ed methodVersionSelectionIndex equals: 0		
+]
+
+{ #category : #'api - stack' }
+EDEmergencyDebuggerTest >> testMoveUpInStack [ 
+	|selectionIndexBefore shortStackIndexBefore|
+	selectionIndexBefore := ed stackSelectionIndex.
+	shortStackIndexBefore := ed shortStackIndex.
+	ed moveUpInStack.
+	self assert: ed stackSelectionIndex equals: ((selectionIndexBefore - 1) max: 1).
+	self assert: ed shortStackIndex equals: (shortStackIndexBefore - 1).
+	self assert: ed methodVersionSelectionIndex equals: 0		
+]
+
+{ #category : #'api - stack' }
+EDEmergencyDebuggerTest >> testShortStack [ 
+	self assert: ed shortStack size equals: 5.	
+	self assertCollection: (session stackOfSize: 5) hasSameElements: ed shortStack
+]
+
 { #category : #setup }
 EDEmergencyDebuggerTest >> testTerminate [
 	
 	ed terminate.
 	self deny: ed isRunning 
+]
+
+{ #category : #'api - stack' }
+EDEmergencyDebuggerTest >> testUpdateShortStackForDisplay [ 
+	
 ]
