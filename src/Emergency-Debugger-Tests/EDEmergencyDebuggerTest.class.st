@@ -67,3 +67,19 @@ EDEmergencyDebuggerTest >> tearDown [
 	session terminate.
 	super tearDown
 ]
+
+{ #category : #'Debug API' }
+EDEmergencyDebuggerTest >> testDebugAPI [
+	|api|
+	api := EDMockObjectForTests new.
+	EDEmergencyDebugger debugAPI: api.
+	self assert: EDEmergencyDebugger debugAPI identicalTo: api
+	
+]
+
+{ #category : #'Debug API' }
+EDEmergencyDebuggerTest >> testDefaultDebugAPI [
+	
+	self assert: EDEmergencyDebugger debugAPI identicalTo: EDDebuggingAPI
+	
+]
