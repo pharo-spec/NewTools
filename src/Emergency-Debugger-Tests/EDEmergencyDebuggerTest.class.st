@@ -83,3 +83,12 @@ EDEmergencyDebuggerTest >> testDefaultDebugAPI [
 	self assert: EDEmergencyDebugger debugAPI identicalTo: EDDebuggingAPI
 	
 ]
+
+{ #category : #setup }
+EDEmergencyDebuggerTest >> testIsRunning [
+	
+	"This is a new Ed, we did not call #debug: so it is not running"
+	self deny: EDEmergencyDebugger new isRunning.
+	"This Ed, we called #debug: in the test setup so it is running"
+	self assert: ed isRunning 
+]
