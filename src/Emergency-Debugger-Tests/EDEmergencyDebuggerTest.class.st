@@ -92,3 +92,10 @@ EDEmergencyDebuggerTest >> testIsRunning [
 	"This Ed, we called #debug: in the test setup so it is running"
 	self assert: ed isRunning 
 ]
+
+{ #category : #setup }
+EDEmergencyDebuggerTest >> testTerminate [
+	
+	ed terminate.
+	self deny: ed isRunning 
+]
