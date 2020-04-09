@@ -205,6 +205,11 @@ EDEmergencyDebugger >> debug: aDebugSession [
 	repl readEvalPrint 
 ]
 
+{ #category : #'text - helpers' }
+EDEmergencyDebugger >> defaultResultText [
+	^ 'TYPE h FOR HELP' asText
+]
+
 { #category : #actions }
 EDEmergencyDebugger >> descriptionFromPromptCommand: aString [
 	|key|
@@ -242,11 +247,11 @@ EDEmergencyDebugger >> initialize [
 	shortStackIndex := 1.
 	methodVersionSelectionIndex := 0.
 	input := Text new.
-	self composeResult: Text new title: 'TYPE h FOR HELP' asText.
+	self composeResult: Text new title: self defaultResultText.
 	isRunning := false
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 EDEmergencyDebugger >> isRunning [
 	^isRunning 
 ]
@@ -281,6 +286,11 @@ EDEmergencyDebugger >> newTextStream [
 { #category : #evaluation }
 EDEmergencyDebugger >> performActionForChar: aCharacter [
 	^self evalCommand: aCharacter
+]
+
+{ #category : #accessing }
+EDEmergencyDebugger >> resultText [
+	^ result
 ]
 
 { #category : #methods }
