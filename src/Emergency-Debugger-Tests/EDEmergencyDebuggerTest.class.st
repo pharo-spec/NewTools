@@ -139,18 +139,6 @@ EDEmergencyDebuggerTest >> testDefaultDebugAPI [
 ]
 
 { #category : #setup }
-EDEmergencyDebuggerTest >> testInitialize [	
-	
-	self assert: ed stackSelectionIndex equals: 1. 
-	self assert: ed shortStackIndex equals: 1.
-	self assert: ed methodVersionSelectionIndex equals: 0.
-	self assert: ed input equals: Text new.
-	self assert: ed resultText 
-			  equals:
-				((WriteStream on: Text new) << ed defaultResultText; cr; contents)
-]
-
-{ #category : #setup }
 EDEmergencyDebuggerTest >> testIsRunning [
 	
 	"This is a new Ed, we did not call #debug: so it is not running"
