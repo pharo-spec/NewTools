@@ -395,7 +395,7 @@ EDEmergencyDebugger >> updatePrompt: aString [
 { #category : #'text - helpers' }
 EDEmergencyDebugger >> writeSectionTitle: aString on: aStream [
 	self writeSeparatorOn: aStream.
-	aStream <<( aString asText makeAllColor: rawDisplay gray).
+	aStream << (aString asText makeAllColor: rawDisplay gray).
 	aStream cr.
 	self writeSeparatorOn: aStream
 ]

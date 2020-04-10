@@ -138,6 +138,12 @@ EDEmergencyDebuggerTest >> testDefaultDebugAPI [
 	
 ]
 
+{ #category : #'text - helpers' }
+EDEmergencyDebuggerTest >> testDefaultResultText [
+
+	self assert: ed defaultResultText equals: 'TYPE h FOR HELP'
+]
+
 { #category : #setup }
 EDEmergencyDebuggerTest >> testIsRunning [
 	
@@ -191,6 +197,20 @@ EDEmergencyDebuggerTest >> testMoveUpInStackFromFirstElement [
 	self assert: ed methodVersionSelectionIndex equals: 0		
 ]
 
+{ #category : #'text - helpers' }
+EDEmergencyDebuggerTest >> testNewTextStream [
+	|str|
+	str := ed newTextStream.
+	self assert: str isStream.
+	self assert: str contents equals: Text new
+]
+
+{ #category : #'text - helpers' }
+EDEmergencyDebuggerTest >> testSeparator [
+
+	self assert: ed separator asString equals: '--------------------'
+]
+
 { #category : #'api - stack' }
 EDEmergencyDebuggerTest >> testShiftDownShortStack [
 	ed stackSelectionIndex: debugAPI displayStackSize.
@@ -232,4 +252,36 @@ EDEmergencyDebuggerTest >> testTerminate [
 { #category : #'api - stack' }
 EDEmergencyDebuggerTest >> testUpdateShortStackForDisplay [ 
 	
+]
+
+{ #category : #'text - helpers' }
+EDEmergencyDebuggerTest >> testWriteSectionTitleOn [
+	| expectedTextStream actualTextStream |
+	
+	expectedTextStream := WriteStream on: Text new.
+	ed writeSeparatorOn: expectedTextStream.
+	expectedTextStream << 'TEST'.
+	expectedTextStream cr.
+	ed writeSeparatorOn: expectedTextStream. 
+	
+	actualTextStream := WriteStream on: Text new.	
+	ed writeSectionTitle: 'TEST' on: actualTextStream.
+
+	self assert: actualTextStream contents asString 
+		  equals: expectedTextStream contents asString
+]
+
+{ #category : #'text - helpers' }
+EDEmergencyDebuggerTest >> testWriteSeparatorOn [
+	| expectedTextStream actualTextStream |
+	
+	expectedTextStream := WriteStream on: Text new.
+	expectedTextStream << ed separator.
+	expectedTextStream cr.
+	
+	actualTextStream := WriteStream on: Text new.	
+	ed writeSeparatorOn: actualTextStream.
+
+	self assert: actualTextStream contents asString 
+		  equals: expectedTextStream contents asString
 ]
