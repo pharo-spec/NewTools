@@ -179,9 +179,12 @@ EDEmergencyDebugger >> composeStackText [
 				, debugAPI stackSize printString , ')'
 		on: str.
 	1 to: stack size do: [ :i | 
-		| text |
-		text := (stack at: i) method name asText.
-		i = shortStackIndex ifTrue: [ text allBold ].
+		| textStream text |
+		textStream := self newTextStream.
+		(stack at: i) printWithArgsValueOn: textStream.
+		text := textStream contents.
+		i = shortStackIndex
+			ifTrue: [ text allBold ].
 		str << text.
 		str cr ].
 	stackText := str contents
