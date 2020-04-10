@@ -26,6 +26,16 @@ EDEmergencyDebugger >> shortStackIndex [
 ]
 
 { #category : #'*Emergency-Debugger-Tests' }
+EDEmergencyDebugger >> shortStackIndex: newIndex [
+	shortStackIndex := newIndex
+]
+
+{ #category : #'*Emergency-Debugger-Tests' }
 EDEmergencyDebugger >> stackSelectionIndex [
 	^stackSelectionIndex
+]
+
+{ #category : #'*Emergency-Debugger-Tests' }
+EDEmergencyDebugger >> stackSelectionIndex: newIndex [
+	stackSelectionIndex := newIndex
 ]

@@ -139,6 +139,18 @@ EDEmergencyDebuggerTest >> testDefaultDebugAPI [
 ]
 
 { #category : #setup }
+EDEmergencyDebuggerTest >> testInitialize [	
+	
+	self assert: ed stackSelectionIndex equals: 1. 
+	self assert: ed shortStackIndex equals: 1.
+	self assert: ed methodVersionSelectionIndex equals: 0.
+	self assert: ed input equals: Text new.
+	self assert: ed resultText 
+			  equals:
+				((WriteStream on: Text new) << ed defaultResultText; cr; contents)
+]
+
+{ #category : #setup }
 EDEmergencyDebuggerTest >> testIsRunning [
 	
 	"This is a new Ed, we did not call #debug: so it is not running"
@@ -160,14 +172,60 @@ EDEmergencyDebuggerTest >> testMoveDownInStack [
 ]
 
 { #category : #'api - stack' }
+EDEmergencyDebuggerTest >> testMoveDownInStackFromLastElement [ 
+	|selectionIndexBefore shortStackIndexBefore|
+	ed stackSelectionIndex: debugAPI stackSize.
+	selectionIndexBefore := ed stackSelectionIndex.
+	shortStackIndexBefore := ed shortStackIndex.
+	ed moveDownInStack.
+	self assert: ed stackSelectionIndex equals: selectionIndexBefore.
+	self assert: ed shortStackIndex equals: shortStackIndexBefore
+]
+
+{ #category : #'api - stack' }
 EDEmergencyDebuggerTest >> testMoveUpInStack [ 
+	ed stackSelectionIndex: debugAPI stackSize.
+	ed shortStackIndex: debugAPI stackSize.
+	ed moveUpInStack.
+	self assert: ed stackSelectionIndex equals: (debugAPI stackSize - 1).
+	self assert: ed shortStackIndex equals: (debugAPI stackSize - 1).
+	self assert: ed methodVersionSelectionIndex equals: 0		
+]
+
+{ #category : #'api - stack' }
+EDEmergencyDebuggerTest >> testMoveUpInStackFromFirstElement [ 
 	|selectionIndexBefore shortStackIndexBefore|
 	selectionIndexBefore := ed stackSelectionIndex.
 	shortStackIndexBefore := ed shortStackIndex.
 	ed moveUpInStack.
-	self assert: ed stackSelectionIndex equals: ((selectionIndexBefore - 1) max: 1).
-	self assert: ed shortStackIndex equals: (shortStackIndexBefore - 1).
+	self assert: ed stackSelectionIndex equals: selectionIndexBefore.
+	self assert: ed shortStackIndex equals: shortStackIndexBefore.
 	self assert: ed methodVersionSelectionIndex equals: 0		
+]
+
+{ #category : #'api - stack' }
+EDEmergencyDebuggerTest >> testShiftDownShortStack [
+	ed stackSelectionIndex: debugAPI displayStackSize.
+	ed shortStackIndex: debugAPI displayStackSize.
+	ed moveDownInStack.
+	self assert: ed shortStackIndex equals: 1.
+	self
+		assertCollection: ed shortStack
+		hasSameElements:
+			(session stack
+				copyFrom: debugAPI displayStackSize + 1
+				to: debugAPI displayStackSize * 2)
+]
+
+{ #category : #'api - stack' }
+EDEmergencyDebuggerTest >> testShiftUpShortStack [
+	ed stackSelectionIndex: debugAPI displayStackSize + 1.
+	ed shortStackIndex: 1.
+	ed moveUpInStack.
+	self assert: ed shortStackIndex equals: debugAPI displayStackSize.
+	self
+		assertCollection: ed shortStack
+		hasSameElements: (session stack copyFrom: 1 to: debugAPI displayStackSize)
 ]
 
 { #category : #'api - stack' }
