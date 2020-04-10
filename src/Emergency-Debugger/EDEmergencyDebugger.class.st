@@ -136,10 +136,11 @@ EDEmergencyDebugger >> composeMethodText [
 	str := self newTextStream.
 	self writeSectionTitle: 'SOURCE' on: str.
 	method := debugAPI methodAt: stackSelectionIndex.
-	node := debugAPI nodeAt: stackSelectionIndex.
+	node := debugAPI nodeAt: stackSelectionIndex.	
 	text := method sourceCode asText.
-	text makeBoldFrom: 1 to: method selector size + 1.
 	text makeColor: rawDisplay red from: node start to: node stop.
+	str << method methodClass name.
+	str << '>>'.
 	str << text.
 	str cr.
 	methodText := str contents

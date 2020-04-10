@@ -122,6 +122,20 @@ EDEmergencyDebuggerTest >> tearDown [
 	super tearDown
 ]
 
+{ #category : #'text - composition' }
+EDEmergencyDebuggerTest >> testComposeMethodText [
+	| method expectedTextStream |
+	method := debugAPI methodAt: ed stackSelectionIndex.
+	expectedTextStream := WriteStream on: Text new.
+	ed writeSectionTitle: 'SOURCE' on: expectedTextStream.
+	expectedTextStream << method methodClass name.
+	expectedTextStream << '>>'.
+	expectedTextStream << method sourceCode.
+	expectedTextStream cr.
+	ed composeMethodText.
+	self assert: ed methodText asString equals: expectedTextStream contents asString
+]
+
 { #category : #'debug API' }
 EDEmergencyDebuggerTest >> testDebugAPI [
 	|api|

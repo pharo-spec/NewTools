@@ -11,6 +11,11 @@ EDEmergencyDebugger >> input [
 ]
 
 { #category : #'*Emergency-Debugger-Tests' }
+EDEmergencyDebugger >> methodText [
+	^methodText
+]
+
+{ #category : #'*Emergency-Debugger-Tests' }
 EDEmergencyDebugger >> methodVersionSelectionIndex [
 	^methodVersionSelectionIndex
 ]
