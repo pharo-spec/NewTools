@@ -155,6 +155,7 @@ EDDebuggingAPI >> stackAt: index [
 
 { #category : #'API - Stack' }
 EDDebuggingAPI >> stackFrom: start to: stop [
+	self flag: 'Why not copyFrom:to: ?'.
 	^ ((start max: 1) to: (stop min: self stackSize))
 		collect: [ :i | self longStack at: i ]
 ]
