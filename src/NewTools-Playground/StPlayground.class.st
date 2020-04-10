@@ -142,10 +142,22 @@ StPlayground >> initializeWindow: aWindowPresenter [
 	"aWindowPresenter menu: self newMenu"
 ]
 
+{ #category : #accessing }
+StPlayground >> selectAll [
+	
+	^ text selectAll
+]
+
 { #category : #binding }
 StPlayground >> selectedClassOrMetaClass [
 
 	^ nil
+]
+
+{ #category : #accessing }
+StPlayground >> selectedTextOrLine [
+	
+	^ text selectedTextOrLine
 ]
 
 { #category : #accessing }

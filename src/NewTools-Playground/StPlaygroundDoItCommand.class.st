@@ -1,3 +1,7 @@
+"
+I'm a ""do it and inspect"" command.
+I will select all contents of a playground and I will execute it, inspecting the result.
+"
 Class {
 	#name : #StPlaygroundDoItCommand,
 	#superclass : #StPlaygroundCommand,
@@ -15,7 +19,8 @@ StPlaygroundDoItCommand >> asSpecCommand [
 { #category : #execution }
 StPlaygroundDoItCommand >> execute [ 
 
-	self inform: 'TODO'
+	self selectAll.
+	(SpCodeInspectItCommand forContext: context) execute
 ]
 
 { #category : #initialization }
@@ -24,4 +29,10 @@ StPlaygroundDoItCommand >> initialize [
 	self
 		name: 'Do it';
 		description: 'Do it all and inspect.'
+]
+
+{ #category : #execution }
+StPlaygroundDoItCommand >> selectAll [
+	
+	context selectAll
 ]
