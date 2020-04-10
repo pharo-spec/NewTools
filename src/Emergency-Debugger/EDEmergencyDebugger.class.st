@@ -43,6 +43,11 @@ EDEmergencyDebugger class >> debugAPI [
 ]
 
 { #category : #accessing }
+EDEmergencyDebugger class >> debugAPI: aDebugAPIClass [
+	DefaultDebugAPI := aDebugAPIClass 
+]
+
+{ #category : #accessing }
 EDEmergencyDebugger class >> defaultDebugAPI [
 	^ DefaultDebugAPI ifNil: [ DefaultDebugAPI := EDDebuggingAPI ]
 ]
@@ -200,6 +205,11 @@ EDEmergencyDebugger >> debug: aDebugSession [
 	repl readEvalPrint 
 ]
 
+{ #category : #'text - helpers' }
+EDEmergencyDebugger >> defaultResultText [
+	^ 'TYPE h FOR HELP' asText
+]
+
 { #category : #actions }
 EDEmergencyDebugger >> descriptionFromPromptCommand: aString [
 	|key|
@@ -237,11 +247,11 @@ EDEmergencyDebugger >> initialize [
 	shortStackIndex := 1.
 	methodVersionSelectionIndex := 0.
 	input := Text new.
-	self composeResult: Text new title: 'TYPE h FOR HELP' asText.
+	self composeResult: Text new title: self defaultResultText.
 	isRunning := false
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 EDEmergencyDebugger >> isRunning [
 	^isRunning 
 ]
@@ -250,7 +260,7 @@ EDEmergencyDebugger >> isRunning [
 EDEmergencyDebugger >> moveDownInStack [
 	stackSelectionIndex := (stackSelectionIndex + 1) min: debugAPI stackSize.
 	shortStackIndex := shortStackIndex + 1.
-	self updateShortStack.
+	self updateShortStackForDisplay.
 	methodVersionSelectionIndex := 0.
 	self composeStackText.
 	self composeMethodText.
@@ -261,7 +271,7 @@ EDEmergencyDebugger >> moveDownInStack [
 EDEmergencyDebugger >> moveUpInStack [
 	stackSelectionIndex := (stackSelectionIndex - 1) max: 1.
 	shortStackIndex := shortStackIndex - 1.
-	self updateShortStack.
+	self updateShortStackForDisplay.
 	methodVersionSelectionIndex := 0.
 	self composeStackText.
 	self composeMethodText.
@@ -276,6 +286,11 @@ EDEmergencyDebugger >> newTextStream [
 { #category : #evaluation }
 EDEmergencyDebugger >> performActionForChar: aCharacter [
 	^self evalCommand: aCharacter
+]
+
+{ #category : #accessing }
+EDEmergencyDebugger >> resultText [
+	^ result
 ]
 
 { #category : #methods }
@@ -348,7 +363,7 @@ EDEmergencyDebugger >> updatePrompt: aString [
 ]
 
 { #category : #stack }
-EDEmergencyDebugger >> updateShortStack [
+EDEmergencyDebugger >> updateShortStackForDisplay [
 	| start stop |
 	self flag: 'This is shit. Change it!'.
 	((1 to: debugAPI displayStackSize) includes: shortStackIndex)
@@ -371,7 +386,7 @@ EDEmergencyDebugger >> updateShortStack [
 				ifFalse: [ shortStackIndex := debugAPI displayStackSize.
 					start := stackSelectionIndex - debugAPI displayStackSize + 1.
 					stop := stackSelectionIndex ] ].
-	^ shortStack := debugAPI stackFrom: start to: stop
+	^ shortStack := debugAPI stackFrom: stackSelectionIndex to: stackSelectionIndex + debugAPI displayStackSize
 ]
 
 { #category : #'text - helpers' }
