@@ -88,6 +88,11 @@ DebuggerSelector class >> sortedDebuggersByRank [
 		asSortedCollection
 ]
 
+{ #category : #debuggers }
+DebuggerSelector >> availableDebuggers [
+	^ self class availableDebuggers
+]
+
 { #category : #'debuggers - opening' }
 DebuggerSelector >> closeAllDebuggers [
 	self flag: 'Ugly temporary hack: Thomas can you fix this?'.
