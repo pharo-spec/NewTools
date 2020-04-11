@@ -15,7 +15,8 @@ StPlaygroundDoItCommand >> asSpecCommand [
 { #category : #execution }
 StPlaygroundDoItCommand >> execute [ 
 
-	self inform: 'TODO'
+	self selectAll.
+	(SpCodeInspectItCommand forContext: context) execute
 ]
 
 { #category : #initialization }
@@ -24,4 +25,10 @@ StPlaygroundDoItCommand >> initialize [
 	self
 		name: 'Do it';
 		description: 'Do it all and inspect.'
+]
+
+{ #category : #execution }
+StPlaygroundDoItCommand >> selectAll [
+	
+	context selectAll
 ]
