@@ -207,7 +207,7 @@ DebuggerSelectorTest >> testSortedDebuggersByRank [
 		includesAll: (systemDebuggers collect: [ :assoc | assoc key ]).
 	sortedRanks := assocs collect: [ :assoc | assoc key ].
 	expectedRanks := (systemDebuggers collect: [ :assoc | assoc value ]) asSortedCollection.
-	self assert: sortedRanks equals: expectedRanks asOrderedCollection
+	self assert: sortedRanks equals: expectedRanks asOrderedCollection reversed
 ]
 
 { #category : #tests }

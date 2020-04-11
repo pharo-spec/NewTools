@@ -85,7 +85,7 @@ DebuggerSelector class >> singleton [
 DebuggerSelector class >> sortedDebuggersByRank [
 	^ (self debuggersWithRanks
 		collect: [ :ass | Association key: ass value value: ass key ])
-		asSortedCollection
+		asSortedCollection reversed
 ]
 
 { #category : #debuggers }
