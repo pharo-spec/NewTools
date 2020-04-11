@@ -35,8 +35,7 @@ DebuggerSelectorTest >> setUp [
 		add: DummyDebuggerForTests_RankZero.
 	debugSession := self createDebugSessionForTesting.
 	eventListener := EventListenerForDebuggerSelectorTest new.
-	debuggerSelector addSubscriberOnMainDebuggerClassUpdate:
-		eventListener.
+
 	testDebuggerClass := DummyDebuggerForTests
 ]
 

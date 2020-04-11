@@ -88,35 +88,6 @@ DebuggerSelectorPresenter >> compareRank: rank1 to: rank2 [
 	^ rank1 >= rank2	"Otherwise, both ranks are int, we return the result of their comparison"
 ]
 
-{ #category : #'presenter building' }
-DebuggerSelectorPresenter >> debugSessionList [
-	| timeOfStorageColumnWidth refsColumnWidth |
-	timeOfStorageColumnWidth := 115.
-	refsColumnWidth := 40.
-
-	^ self newTable
-		addColumn: ((SpStringTableColumn
-			title: 'Refs'
-			evaluated: [ :aDebugSessionStorageUnit | 
-				aDebugSessionStorageUnit debugSession
-					countObjectsThatWantToKeepMeAlive asString ])
-			width: refsColumnWidth;
-			yourself);
-		addColumn: (SpStringTableColumn
-			title: 'Name'
-			evaluated: [ :aDebugSessionStorageUnit | aDebugSessionStorageUnit debugSession name ]);
-		addColumn: ((SpStringTableColumn
-			title: 'Time of Storage'
-			evaluated: [ :aDebugSessionStorageUnit | self printDateAndTime: aDebugSessionStorageUnit timeOfCreation ])
-			width: timeOfStorageColumnWidth;
-			yourself);
-		sortingBlock: [ :dbSessionUnitStorage1 :dbSessionUnitStorage2 | 
-			self
-				sortDebugSessionUnitStorage: dbSessionUnitStorage1
-				and: dbSessionUnitStorage2 ];
-		yourself
-]
-
 { #category : #helpers }
 DebuggerSelectorPresenter >> debuggerClassToNameOfDebugger: aDebuggerClass [
 	"Returns the name of @aDebuggerClass, to be displayed in the list of debuggers. If @aDebuggerClass is the main debugger defined in DebuggerSelector, return the name as a Text styled in bold"
@@ -233,9 +204,4 @@ DebuggerSelectorPresenter >> sortDebugSessionUnitStorage: aDebugSessionUnitStora
 
 	^ aDebugSessionUnitStorage timeOfCreation
 		>= aDebugSessionUnitStorage2 timeOfCreation
-]
-
-{ #category : #'presenter building' }
-DebuggerSelectorPresenter >> storageLimitHelp [
-	^ 'Determines the maximum number of debug sessions to be stored. Oldest debug sessions are terminated first. Debug sessions currently opened in any debugger are never terminated and do not count towards this limit'
 ]

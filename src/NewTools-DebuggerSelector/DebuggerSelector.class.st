@@ -27,8 +27,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'mainDebuggerClass',
-		'subscribersOnMainDebuggerClassUpdate',
-		'debuggingLevel'
+		'subscribersOnMainDebuggerClassUpdate'
 	],
 	#classVars : [
 		'singleton'
@@ -45,11 +44,6 @@ DebuggerSelector class >> initialize [
 DebuggerSelector class >> singleton [
 	singleton ifNil: [ singleton := self new ].
 	^ singleton
-]
-
-{ #category : #'publish events' }
-DebuggerSelector >> addSubscriberOnMainDebuggerClassUpdate: anObject [
-	subscribersOnMainDebuggerClassUpdate add: anObject
 ]
 
 { #category : #'debuggers - opening' }
@@ -114,13 +108,6 @@ DebuggerSelector >> ignoreDummyDebuggerForTests [
 	"If true, this class will ignore the DummyDebuggerForTests class when selecting a debugger. This is intended to be overriden for testing purposes"
 
 	^ true
-]
-
-{ #category : #initialize }
-DebuggerSelector >> initialize [ 
-	super initialize.
-	debuggingLevel := 0.
-	subscribersOnMainDebuggerClassUpdate := WeakOrderedCollection new
 ]
 
 { #category : #'system - integration' }
@@ -218,14 +205,6 @@ DebuggerSelector >> mainDebuggerClass: aClass [
 	(aClass isNil or: [ self isThisClassADebugger: aClass ])
 		ifFalse: [ CannotSetAsDebugger signal ].
 	mainDebuggerClass := aClass.
-	self notifySubscribersOfAMainDebuggerClassUpdate
-]
-
-{ #category : #'publish events' }
-DebuggerSelector >> notifySubscribersOfAMainDebuggerClassUpdate [
-	subscribersOnMainDebuggerClassUpdate
-		select: #notNil
-		thenCollect: [ :subscriber | subscriber onMainDebuggerClassUpdate ]
 ]
 
 { #category : #'debuggers - opening' }
@@ -247,14 +226,6 @@ DebuggerSelector >> openWithMainDebugger: aDebugSession andNotification: notific
 		do: [ self
 				lookupDebuggerAndOpen: aDebugSession
 				notification: notificationString ]
-]
-
-{ #category : #'publish events' }
-DebuggerSelector >> removeSubscriberOnMainDebuggerClassUpdate: anObject [
-	subscribersOnMainDebuggerClassUpdate
-		remove: anObject
-		ifAbsent:
-			[ "It's a weak collection, its elements can be nilled by the garbage collector at any time if they are not referenced elsewhere, so it can happen not to find the object to remove because it has already been nilled" ]
 ]
 
 { #category : #'debuggers - opening' }
