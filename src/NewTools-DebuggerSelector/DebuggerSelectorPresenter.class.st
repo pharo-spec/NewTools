@@ -160,12 +160,6 @@ DebuggerSelectorPresenter >> initializePresenters [
 
 ]
 
-{ #category : #'react to events' }
-DebuggerSelectorPresenter >> onMainDebuggerClassUpdate [
-	self refreshDebuggerList.
-	self refreshDebuggerListToolBar
-]
-
 { #category : #helpers }
 DebuggerSelectorPresenter >> printDateAndTime: aDateAndTime [
 	| d |
