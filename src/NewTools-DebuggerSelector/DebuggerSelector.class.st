@@ -35,15 +35,57 @@ Class {
 	#category : #'NewTools-DebuggerSelector-Core'
 }
 
+{ #category : #debuggers }
+DebuggerSelector class >> availableDebuggers [
+	^ self labeledDebuggers: self sortedDebuggersByRank
+]
+
+{ #category : #debuggers }
+DebuggerSelector class >> debuggerRankDependsOnSession: debuggerClass [
+	self flag: 'Ugly hack because GT debuggers may apply to specific sessions. 
+	We need to find a clever way to rank those debuggers in the UI.'.
+	^ GTGenericStackDebugger allSubclasses includes: debuggerClass
+]
+
+{ #category : #debuggers }
+DebuggerSelector class >> debuggersWithRanks [	
+	^ Smalltalk tools debuggers
+]
+
 { #category : #singleton }
 DebuggerSelector class >> initialize [
 	Smalltalk tools debuggerTool: self singleton
+]
+
+{ #category : #debuggers }
+DebuggerSelector class >> labeledDebuggers: debuggers [
+	^ debuggers
+		collect: [ :assoc | 
+			| dbgClass rank label |
+			rank := assoc key.
+			dbgClass := assoc value.
+			label := rank = 999
+				ifTrue: [ 'Main' ]
+				ifFalse: [ self flag: 'Ulgy! Can we do better?'.
+					rank printString
+						,
+							((self debuggerRankDependsOnSession: dbgClass)
+								ifTrue: [ ' (session dependant)' ]
+								ifFalse: [ '' ]) ].
+			dbgClass -> label ]
 ]
 
 { #category : #singleton }
 DebuggerSelector class >> singleton [
 	singleton ifNil: [ singleton := self new ].
 	^ singleton
+]
+
+{ #category : #debuggers }
+DebuggerSelector class >> sortedDebuggersByRank [
+	^ (self debuggersWithRanks
+		collect: [ :ass | Association key: ass value value: ass key ])
+		asSortedCollection
 ]
 
 { #category : #'debuggers - opening' }

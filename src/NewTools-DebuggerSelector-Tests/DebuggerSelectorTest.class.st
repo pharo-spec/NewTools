@@ -39,6 +39,34 @@ DebuggerSelectorTest >> setUp [
 	testDebuggerClass := DummyDebuggerForTests
 ]
 
+{ #category : #'tests - debuggers' }
+DebuggerSelectorTest >> testAvailableDebuggers [
+	|availableDebuggerClasses sortedDebuggerClasses|
+	availableDebuggerClasses := DebuggerSelector availableDebuggers collect:[:assoc| assoc key].
+	sortedDebuggerClasses := DebuggerSelector sortedDebuggersByRank collect:[:assoc| assoc value].  
+	self assertCollection: availableDebuggerClasses equals: sortedDebuggerClasses 
+]
+
+{ #category : #'tests - debuggers' }
+DebuggerSelectorTest >> testDebuggerRankDependsOnSession [
+	self flag: 'Ugly hack because GT debuggers may apply to specific sessions. 
+	We need to find a clever way to rank those debuggers in the UI.
+	
+	We don nott even know what should really do the "tested" method:
+	this should be defined'.
+	self assert: false
+]
+
+{ #category : #'tests - debuggers' }
+DebuggerSelectorTest >> testDebuggersWithRanks [
+	|assocs systemDebuggers|
+	assocs := DebuggerSelector debuggersWithRanks.
+	systemDebuggers := Smalltalk tools debuggers.
+	self assert: assocs size equals: systemDebuggers size.
+	self assertCollection: assocs equals: systemDebuggers
+
+]
+
 { #category : #tests }
 DebuggerSelectorTest >> testGetDebuggerClasses [
 	"Test that #getDebuggerClasses returns at least the dummy test classes"
@@ -62,6 +90,19 @@ DebuggerSelectorTest >> testIsThisClassADebugger [
 	self assert: (debuggerSelector isThisClassADebugger:
 			 DummyDebuggerForTests_CannotOpenDebugSession).
 	self assert: (debuggerSelector isThisClassADebugger: self class) not
+]
+
+{ #category : #'tests - debuggers' }
+DebuggerSelectorTest >> testLabeledDebuggers [
+	|dbgs labeledDebuggers|
+	dbgs := {999->'main dbg'. 80 -> 'a dbg'. 5 -> 'another dbg'.}.
+	labeledDebuggers := DebuggerSelector labeledDebuggers: dbgs.
+	self assert: labeledDebuggers first key equals: 'main dbg'.
+	self assert: labeledDebuggers first value equals: 'Main'.
+	self assert: labeledDebuggers second key equals: 'a dbg'.
+	self assert: labeledDebuggers second value equals: '80'.
+	self assert: labeledDebuggers third key equals: 'another dbg'.
+	self assert: labeledDebuggers third value equals: '5'.
 ]
 
 { #category : #tests }
@@ -154,6 +195,19 @@ DebuggerSelectorTest >> testSettingNonDebuggerAsMainDebuggerSignalsException [
 	self
 		should: [ debuggerSelector mainDebuggerClass: Object ]
 		raise: CannotSetAsDebugger
+]
+
+{ #category : #'tests - debuggers' }
+DebuggerSelectorTest >> testSortedDebuggersByRank [
+	| assocs systemDebuggers sortedRanks expectedRanks |
+	assocs := DebuggerSelector sortedDebuggersByRank.
+	systemDebuggers := Smalltalk tools debuggers.
+	self
+		assertCollection: (assocs collect: [ :assoc | assoc value ])
+		includesAll: (systemDebuggers collect: [ :assoc | assoc key ]).
+	sortedRanks := assocs collect: [ :assoc | assoc key ].
+	expectedRanks := (systemDebuggers collect: [ :assoc | assoc value ]) asSortedCollection.
+	self assert: sortedRanks equals: expectedRanks asOrderedCollection
 ]
 
 { #category : #tests }
