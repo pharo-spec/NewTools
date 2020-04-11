@@ -6,12 +6,7 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'debuggerList',
-		'debuggerListToolBar',
-		'debugSessionList',
-		'debugSessionListToolBar',
-		'storageLimitLabel',
-		'storageLimitInputField',
-		'shouldUpdateStorageLimitInputField'
+		'debuggerListToolBar'
 	],
 	#category : #'NewTools-DebuggerSelector-Core'
 }
@@ -43,12 +38,7 @@ DebuggerSelectorPresenter class >> menuCommandOn: aBuilder [
 { #category : #api }
 DebuggerSelectorPresenter class >> open [
 	<example>
-	| windowPresenter presenter |
-	presenter := self new.
-	windowPresenter := presenter openWithSpec.
-	windowPresenter whenClosedDo: presenter getWhenClosedBlock.
-	windowPresenter window extent: self initialExtent.
-	^ windowPresenter
+	self new openWithSpec
 ]
 
 { #category : #specs }
@@ -96,44 +86,6 @@ DebuggerSelectorPresenter >> compareRank: rank1 to: rank2 [
 	rank2 isInteger
 		ifFalse: [ ^ true ].	"If rank2 is not an integer, (typically a string), then it is smaller than rank1"
 	^ rank1 >= rank2	"Otherwise, both ranks are int, we return the result of their comparison"
-]
-
-{ #category : #'button action' }
-DebuggerSelectorPresenter >> debugDebugSessionAction [
-	"Describe the action performed by the 'Debug' button under the Debug Session List.
-	Requires a debug session to be selected in the list of debug sessions. If this condition is not met, inform the user and stop.
-	If it is met, select a debugger according to the same algorithm used by the image (see class DebuggerSelector) and debug the selected debug session with it"
-
-	| debugSession |
-	debugSession := (debugSessionList selectedItems
-		ifEmpty: [ self inform: 'You must selected a Debug Session to debug'.
-			^ self ]
-		ifNotEmpty: [ :selectedItems | selectedItems at: 1 ]) debugSession.
-	DebuggerSelector singleton
-		selectAndOpenDebuggerFor: debugSession
-		withNotification: nil
-]
-
-{ #category : #'button action' }
-DebuggerSelectorPresenter >> debugDebugSessionWithSpecificDebuggerAction [
-	"Describe the action performed by the 'Debug With' button under the Debug Session List.
-	Requires a debug session to be selected in the list of debug sessions, and a debugger to be selected in the list of debuggers. If these conditions are not met, inform the user and stop.
-	If they are met, tell the selected debugger to open the selected debug session"
-
-	| debugSession debuggerClass |
-	debugSession := (debugSessionList selectedItems
-		ifEmpty: [ self inform: 'You must selected a Debug Session to debug'.
-			^ self ]
-		ifNotEmpty: [ :selectedItems | selectedItems at: 1 ]) debugSession.
-	debuggerClass := debuggerList selectedItems
-		ifEmpty: [ self inform: 'You must select a debugger'.
-			^ self ]
-		ifNotEmpty: [ :selectedItems | selectedItems at: 1 ].
-	debuggerClass rankDebugSession: debugSession.	"Give debuggerClass a chance to signal the DebugSessionCannotBeOpenedByThisDebugger exception if it cannot open debugSession"
-	debuggerClass
-		openOn: debugSession
-		withFullView: true
-		andNotification: nil
 ]
 
 { #category : #'presenter building' }
@@ -226,87 +178,15 @@ DebuggerSelectorPresenter >> getSortingBlock [
 		self compareRank: rank1 to: rank2 ]
 ]
 
-{ #category : #helpers }
-DebuggerSelectorPresenter >> getWhenClosedBlock [
-	"Returns the block to be executed when the windows containing this presenter is closed by the user"
-
-	^ [ self setInitialSubscriptions: false ]
-]
-
-{ #category : #initialization }
-DebuggerSelectorPresenter >> initialize [
-	super initialize.
-	shouldUpdateStorageLimitInputField := true
-]
-
 { #category : #initialization }
 DebuggerSelectorPresenter >> initializePresenters [
 	super initializePresenters.
 	debuggerList := self debuggerList.
 	debuggerListToolBar := self newToolBar.
 
-	self setInitialSubscriptions: true.
-
 	self refreshDebuggerList.
 	self refreshDebuggerListToolBar.
 
-]
-
-{ #category : #'presenter building' }
-DebuggerSelectorPresenter >> makeDebugSessionListToolbar [
-	^ self newToolBar
-		addItem:
-			((self instantiate: SpToolBarButtonPresenter)
-				label: 'Debug';
-				icon: (self iconNamed: #glamorousBug);
-				action: [ self debugDebugSessionAction ];
-				help:
-					'Opens the selected debug session with the debugger the image would normally choose to debug it');
-		addItem:
-			((self instantiate: SpToolBarButtonPresenter)
-				label: 'Debug With';
-				icon: (self iconNamed: #glamorousBug);
-				action: [ self debugDebugSessionWithSpecificDebuggerAction ];
-				help: 'Opens the selected debug session with the selected debugger');
-		addItem:
-			((self instantiate: SpToolBarButtonPresenter)
-				label: 'Inspect';
-				icon: (self iconNamed: #smallFind);
-				action: [ debugSessionList selectedItems
-						ifNotEmpty: [ :selectedItems | (selectedItems at: 1) inspect ] ];
-				help: 'Inspect the selected debug session');
-		addItem:
-			((self instantiate: SpToolBarButtonPresenter)
-				label: 'Terminate';
-				icon: (self iconNamed: #remotesManagerRemoveRemote);
-				action: [ debugSessionList selectedItems
-						ifNotEmpty: [ :selectedItems | 
-							DebugSessionStorage singleton terminate: (selectedItems at: 1).
-							self refreshDebugSessionList ] ];
-				help: 'Terminate the selected debug session (and the corresponding process), removing it from the list');
-		addItem:
-			((self instantiate: SpToolBarButtonPresenter)
-				label: 'Terminate All';
-				icon: (self iconNamed: #glamorousTrash);
-				action: [ DebugSessionStorage singleton terminateAll.
-					self refreshDebugSessionList ];
-				help: 'Terminate all debug sessions');
-		yourself
-]
-
-{ #category : #'react to events' }
-DebuggerSelectorPresenter >> onDebugSessionStorageLimitUpdate [
-	shouldUpdateStorageLimitInputField ifFalse: [ ^ self ].
-
-	shouldUpdateStorageLimitInputField := false.
-	storageLimitInputField
-		number: DebugSessionStorage singleton storageLimitForDebugSessionsNotKeptAlive.
-	shouldUpdateStorageLimitInputField := true
-]
-
-{ #category : #'react to events' }
-DebuggerSelectorPresenter >> onDebugSessionStorageUpdate [
-	self refreshDebugSessionList
 ]
 
 { #category : #'react to events' }
@@ -322,11 +202,6 @@ DebuggerSelectorPresenter >> printDateAndTime: aDateAndTime [
 	^ ' ' , d hour asString , ':' , d minute asString , ' '
 		, d year asString , '-' , d month asString , '-'
 		, d dayOfMonth asString
-]
-
-{ #category : #helpers }
-DebuggerSelectorPresenter >> refreshDebugSessionList [
-	debugSessionList items: DebugSessionStorage singleton storage
 ]
 
 { #category : #refresh }
@@ -350,23 +225,6 @@ DebuggerSelectorPresenter >> refreshDebuggerListToolBar [
 							[ :debuggerList_ | (debuggerList_ at: 1) browse switchToMetaLevelScope: ClyClassSideScope ] ]);
 		help: 'Browse the class of the selected debugger'.
 	self addCorrectMainDebuggerButtonToToolBar: debuggerListToolBar
-]
-
-{ #category : #announcement }
-DebuggerSelectorPresenter >> setInitialSubscriptions: aBoolean [
-	"If @aBoolean is true, perform the initial subscriptions needed to keep the UI up to date. If it is false, unsubscribe. The point of having both the subscriptions and unsubscriptions in the same method is not to forget to add unsubscription statement in the future when new subscription are added"
-
-	aBoolean
-		ifTrue: [ DebugSessionStorage singleton addSubscriberOnStorageUpdate: self.
-			DebugSessionStorage singleton
-				addSubscriberOnStorageLimitUpdate: self.
-			DebuggerSelector singleton
-				addSubscriberOnMainDebuggerClassUpdate: self ]
-		ifFalse: [ DebugSessionStorage singleton removeSubscriberOnStorageUpdate: self.
-			DebugSessionStorage singleton
-				removeSubscriberOnStorageLimitUpdate: self.
-			DebuggerSelector singleton
-				removeSubscriberOnMainDebuggerClassUpdate: self ]
 ]
 
 { #category : #helpers }
