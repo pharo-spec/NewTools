@@ -11,6 +11,15 @@ Class {
 	#category : #'Emergency-Debugger-Tests'
 }
 
+{ #category : #'methods version' }
+EDEmergencyDebuggerTest >> compileMethodVersion: version [
+	EDMockObjectForTests
+		compile:
+			'm: i', version, '
+	i = 1 ifTrue:[^1].
+	^i + (self m: i - 1)'
+]
+
 { #category : #running }
 EDEmergencyDebuggerTest >> configureDebugSession [
 
@@ -143,6 +152,7 @@ EDEmergencyDebuggerTest >> setUp [
 EDEmergencyDebuggerTest >> tearDown [
 	EDEmergencyDebugger debugAPI: currentDebuggingAPI.
 	session terminate.
+	self compileMethodVersion: ''.
 	super tearDown
 ]
 
@@ -295,6 +305,11 @@ EDEmergencyDebuggerTest >> testDefaultResultText [
 	self assert: ed defaultResultText equals: 'TYPE h FOR HELP'
 ]
 
+{ #category : #'methods version' }
+EDEmergencyDebuggerTest >> testInitialMethodVersion [
+	self assert: ed methodVersionSelectionIndex equals: 0
+]
+
 { #category : #setup }
 EDEmergencyDebuggerTest >> testIsRunning [
 	
@@ -356,6 +371,18 @@ EDEmergencyDebuggerTest >> testNewTextStream [
 	self assert: str contents equals: Text new
 ]
 
+{ #category : #'methods version' }
+EDEmergencyDebuggerTest >> testSelectedMethodVersion [
+
+	
+]
+
+{ #category : #'methods version' }
+EDEmergencyDebuggerTest >> testSelectedMethodVersionsSize [
+
+	
+]
+
 { #category : #'text - helpers' }
 EDEmergencyDebuggerTest >> testSeparator [
 
@@ -391,6 +418,30 @@ EDEmergencyDebuggerTest >> testShiftUpShortStack [
 EDEmergencyDebuggerTest >> testShortStack [ 
 	self assert: ed shortStack size equals: 5.	
 	self assertCollection: (session stackOfSize: 5) hasSameElements: ed shortStack
+]
+
+{ #category : #'methods version' }
+EDEmergencyDebuggerTest >> testShowMoreRecentMethodVersion [
+	ed showMoreRecentMethodVersion.
+	self assert: ed methodVersionSelectionIndex equals: 1.
+	ed showOlderMethodVersion.
+	ed showMoreRecentMethodVersion.
+	self assert: ed methodVersionSelectionIndex equals: 1
+]
+
+{ #category : #'methods version' }
+EDEmergencyDebuggerTest >> testShowOlderMethodVersion [
+	self compileMethodVersion: '2'.
+	ed showOlderMethodVersion.
+	self assert: ed methodVersionSelectionIndex equals: 1.
+	ed showOlderMethodVersion.
+	self assert: ed methodVersionSelectionIndex equals: 2
+]
+
+{ #category : #'methods version' }
+EDEmergencyDebuggerTest >> testShowSelectedMethodVersion [
+
+	
 ]
 
 { #category : #setup }
