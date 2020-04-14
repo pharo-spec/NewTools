@@ -87,6 +87,19 @@ EDEmergencyDebuggerTest >> configureDebugSession [
 
 ]
 
+{ #category : #'text - composition' }
+EDEmergencyDebuggerTest >> methodDisplayTextStringExample [
+	| method expectedTextStream |
+	method := debugAPI methodAt: ed stackSelectionIndex.
+	expectedTextStream := WriteStream on: Text new.
+	ed writeSectionTitle: 'SOURCE' on: expectedTextStream.
+	expectedTextStream << method methodClass name.
+	expectedTextStream << '>>'.
+	expectedTextStream << method sourceCode.
+	expectedTextStream cr.
+	^expectedTextStream contents asString
+]
+
 { #category : #running }
 EDEmergencyDebuggerTest >> newEd [
 	ed := EDEmergencyDebugger new.
@@ -94,6 +107,16 @@ EDEmergencyDebuggerTest >> newEd [
 	ed displayInterface: EDMockDisplayInterface new.
 	ed debug: session
 
+]
+
+{ #category : #'text - composition' }
+EDEmergencyDebuggerTest >> resultTextStringExample [
+	| expectedTextStream |
+	expectedTextStream := WriteStream on: Text new.
+	expectedTextStream cr.
+	ed writeSectionTitle: 'RES' on: expectedTextStream.
+	expectedTextStream << 'result'.
+	^ expectedTextStream contents asString
 ]
 
 { #category : #running }
@@ -124,16 +147,121 @@ EDEmergencyDebuggerTest >> tearDown [
 
 { #category : #'text - composition' }
 EDEmergencyDebuggerTest >> testComposeMethodText [
-	| method expectedTextStream |
-	method := debugAPI methodAt: ed stackSelectionIndex.
-	expectedTextStream := WriteStream on: Text new.
-	ed writeSectionTitle: 'SOURCE' on: expectedTextStream.
-	expectedTextStream << method methodClass name.
-	expectedTextStream << '>>'.
-	expectedTextStream << method sourceCode.
-	expectedTextStream cr.
 	ed composeMethodText.
-	self assert: ed methodText asString equals: expectedTextStream contents asString
+	self
+		assert: ed methodText asString
+		equals: self methodDisplayTextStringExample
+]
+
+{ #category : #'text - composition' }
+EDEmergencyDebuggerTest >> testComposePromptWith [
+	| rs |
+	ed composePromptWith: 'prompt'.
+	rs := ed input asString readStream.
+	self assert: rs next equals: Character cr.
+	self assert: (rs upTo: Character cr) equals: ed separator asString.
+	self assert: rs next equals: $>.
+	self assert: rs next equals: Character space.
+	self assert: rs upToEnd equals: 'prompt'.
+
+]
+
+{ #category : #'text - composition' }
+EDEmergencyDebuggerTest >> testComposeResultTitle [
+	ed composeResult: 'result' title: 'RES'.
+	self assert: ed result asString equals: self resultTextStringExample
+]
+
+{ #category : #'text - composition' }
+EDEmergencyDebuggerTest >> testComposeStackTest [
+	| rs ws stack |
+	ed composeStackText.
+	rs := ed stackText asString readStream.
+	
+	self assert: rs next equals: Character cr.
+	self assert: (rs upTo: Character cr) equals: ed separator asString.
+	self
+		assert: (rs upTo: Character cr)
+		equals:
+			'STACK (' , ed stackSelectionIndex printString , '/'
+				, debugAPI stackSize printString , ')'.				
+	self assert: (rs upTo: Character cr) equals: ed separator asString.
+	
+	
+	stack := debugAPI stack copyFrom: 1 to: debugAPI displayStackSize.
+	
+	ws := WriteStream on: String new.
+	(stack at: 1) printWithArgsValueOn: ws.
+	self assert: (rs upTo: Character cr) equals: ws contents.
+	
+	ws := WriteStream on: String new.
+	(stack at: 2) printWithArgsValueOn: ws.
+	self assert: (rs upTo: Character cr) equals: ws contents.
+	
+	ws := WriteStream on: String new.
+	(stack at: 3) printWithArgsValueOn: ws.
+	self assert: (rs upTo: Character cr) equals: ws contents.
+	
+	ws := WriteStream on: String new.
+	(stack at: 4) printWithArgsValueOn: ws.
+	self assert: (rs upTo: Character cr) equals: ws contents.
+	
+	ws := WriteStream on: String new.
+	(stack at: 5) printWithArgsValueOn: ws.
+	self assert: (rs upTo: Character cr) equals: ws contents.
+	
+	self assert: rs atEnd
+	 
+]
+
+{ #category : #'text - composition' }
+EDEmergencyDebuggerTest >> testComposeStackText [
+	| rs ws stack |
+	ed composeStackText.
+	rs := ed stackText asString readStream.
+	
+	self assert: rs next equals: Character cr.
+	self assert: (rs upTo: Character cr) equals: ed separator asString.
+	self
+		assert: (rs upTo: Character cr)
+		equals:
+			'STACK (' , ed stackSelectionIndex printString , '/'
+				, debugAPI stackSize printString , ')'.				
+	self assert: (rs upTo: Character cr) equals: ed separator asString.
+	
+	
+	stack := debugAPI stack copyFrom: 1 to: debugAPI displayStackSize.
+	
+	ws := WriteStream on: String new.
+	(stack at: 1) printWithArgsValueOn: ws.
+	self assert: (rs upTo: Character cr) equals: ws contents.
+	
+	ws := WriteStream on: String new.
+	(stack at: 2) printWithArgsValueOn: ws.
+	self assert: (rs upTo: Character cr) equals: ws contents.
+	
+	ws := WriteStream on: String new.
+	(stack at: 3) printWithArgsValueOn: ws.
+	self assert: (rs upTo: Character cr) equals: ws contents.
+	
+	ws := WriteStream on: String new.
+	(stack at: 4) printWithArgsValueOn: ws.
+	self assert: (rs upTo: Character cr) equals: ws contents.
+	
+	ws := WriteStream on: String new.
+	(stack at: 5) printWithArgsValueOn: ws.
+	self assert: (rs upTo: Character cr) equals: ws contents.
+	
+	self assert: rs atEnd
+	 
+]
+
+{ #category : #'text - composition' }
+EDEmergencyDebuggerTest >> testComposeTitleText [
+	ed composeMethodText.
+	self
+		assert: ed titleText
+		equals: self titleDisplayTextStringExample
 ]
 
 { #category : #'debug API' }
@@ -298,4 +426,9 @@ EDEmergencyDebuggerTest >> testWriteSeparatorOn [
 
 	self assert: actualTextStream contents asString 
 		  equals: expectedTextStream contents asString
+]
+
+{ #category : #'text - composition' }
+EDEmergencyDebuggerTest >> titleDisplayTextStringExample [
+	^ 'Hi, I''m ED - What is the nature of your debugging emergency?'
 ]

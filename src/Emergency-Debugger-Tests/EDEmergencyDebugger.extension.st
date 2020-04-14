@@ -26,6 +26,11 @@ EDEmergencyDebugger >> repl: aREPLInterface [
 ]
 
 { #category : #'*Emergency-Debugger-Tests' }
+EDEmergencyDebugger >> result [
+	^result
+]
+
+{ #category : #'*Emergency-Debugger-Tests' }
 EDEmergencyDebugger >> shortStackIndex [
 	^shortStackIndex
 ]
@@ -43,4 +48,14 @@ EDEmergencyDebugger >> stackSelectionIndex [
 { #category : #'*Emergency-Debugger-Tests' }
 EDEmergencyDebugger >> stackSelectionIndex: newIndex [
 	stackSelectionIndex := newIndex
+]
+
+{ #category : #'*Emergency-Debugger-Tests' }
+EDEmergencyDebugger >> stackText [
+	^stackText
+]
+
+{ #category : #'*Emergency-Debugger-Tests' }
+EDEmergencyDebugger >> titleText [
+	^titleText
 ]
