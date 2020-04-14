@@ -147,6 +147,14 @@ EDEmergencyDebuggerTest >> tearDown [
 ]
 
 { #category : #'text - composition' }
+EDEmergencyDebuggerTest >> testComposeDisplayText [
+	| displayText |
+	displayText := ed titleText , ed stackText , ed methodText , ed input
+		, ed result.
+	self assert: ed composeDisplayText equals: displayText
+]
+
+{ #category : #'text - composition' }
 EDEmergencyDebuggerTest >> testComposeMethodText [
 	ed composeMethodText.
 	self
