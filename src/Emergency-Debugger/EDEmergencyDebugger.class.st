@@ -117,6 +117,12 @@ EDEmergencyDebugger >> buildDefaultActionsDescriptionsMap [
 ]
 
 { #category : #'text - composing' }
+EDEmergencyDebugger >> composeDisplayText [
+	^(titleText , stackText, methodText, input, result )
+
+]
+
+{ #category : #'text - composing' }
 EDEmergencyDebugger >> composeHelpText [
 	| str |
 	str := self newTextStream.
@@ -386,7 +392,7 @@ EDEmergencyDebugger >> terminate [
 { #category : #updating }
 EDEmergencyDebugger >> updateDisplay [
 	rawDisplay clear.
-	rawDisplay show: (titleText , stackText, methodText, input, result )
+	rawDisplay show: self composeDisplayText 
 
 ]
 
