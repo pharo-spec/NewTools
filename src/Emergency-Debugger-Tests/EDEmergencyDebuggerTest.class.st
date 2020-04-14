@@ -5,7 +5,8 @@ Class {
 		'ed',
 		'session',
 		'currentDebuggingAPI',
-		'debugAPI'
+		'debugAPI',
+		'mockDisplayAPI'
 	],
 	#category : #'Emergency-Debugger-Tests'
 }
@@ -104,7 +105,7 @@ EDEmergencyDebuggerTest >> methodDisplayTextStringExample [
 EDEmergencyDebuggerTest >> newEd [
 	ed := EDEmergencyDebugger new.
 	ed repl: EDMockREPLInterface new.
-	ed displayInterface: EDMockDisplayInterface new.
+	ed displayInterface: (mockDisplayAPI := EDMockDisplayInterface new).
 	ed debug: session
 
 ]
@@ -389,6 +390,24 @@ EDEmergencyDebuggerTest >> testTerminate [
 	
 	ed terminate.
 	self deny: ed isRunning 
+]
+
+{ #category : #updating }
+EDEmergencyDebuggerTest >> testUpdateDisplay [
+	ed updateDisplay.
+	self assert: mockDisplayAPI isCleared.
+	self assert: mockDisplayAPI displayData equals: ed composeDisplayText 
+]
+
+{ #category : #updating }
+EDEmergencyDebuggerTest >> testUpdatePrompt [
+	| promptUpdate rs |
+	promptUpdate := 'PROMPT UPDATE'.
+	ed updatePrompt: promptUpdate.
+	rs := ed input readStream.
+	rs upTo: $>.
+	rs upTo: Character space.
+	self assert: (rs upTo: Character cr) equals: promptUpdate
 ]
 
 { #category : #'api - stack' }
