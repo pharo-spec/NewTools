@@ -57,6 +57,12 @@ StPlayground >> bindingOf: aString [
 	^ bindings associationAt: aString
 ]
 
+{ #category : #binding }
+StPlayground >> bindings [
+	
+	^ bindings
+]
+
 { #category : #'private builder' }
 StPlayground >> buildMenu [
 	| menuSpec |
