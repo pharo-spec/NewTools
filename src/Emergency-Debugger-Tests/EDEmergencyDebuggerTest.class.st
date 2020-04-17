@@ -5,10 +5,20 @@ Class {
 		'ed',
 		'session',
 		'currentDebuggingAPI',
-		'debugAPI'
+		'debugAPI',
+		'mockDisplayAPI'
 	],
 	#category : #'Emergency-Debugger-Tests'
 }
+
+{ #category : #'methods version' }
+EDEmergencyDebuggerTest >> compileMethodVersion: version [
+	EDMockObjectForTests
+		compile:
+			'm: i', version, '
+	i = 1 ifTrue:[^1].
+	^i + (self m: i - 1)'
+]
 
 { #category : #running }
 EDEmergencyDebuggerTest >> configureDebugSession [
@@ -87,13 +97,36 @@ EDEmergencyDebuggerTest >> configureDebugSession [
 
 ]
 
+{ #category : #'text - composition' }
+EDEmergencyDebuggerTest >> methodDisplayTextStringExample [
+	| method expectedTextStream |
+	method := debugAPI methodAt: ed stackSelectionIndex.
+	expectedTextStream := WriteStream on: Text new.
+	ed writeSectionTitle: 'SOURCE' on: expectedTextStream.
+	expectedTextStream << method methodClass name.
+	expectedTextStream << '>>'.
+	expectedTextStream << method sourceCode.
+	expectedTextStream cr.
+	^expectedTextStream contents asString
+]
+
 { #category : #running }
 EDEmergencyDebuggerTest >> newEd [
 	ed := EDEmergencyDebugger new.
 	ed repl: EDMockREPLInterface new.
-	ed displayInterface: EDMockDisplayInterface new.
+	ed displayInterface: (mockDisplayAPI := EDMockDisplayInterface new).
 	ed debug: session
 
+]
+
+{ #category : #'text - composition' }
+EDEmergencyDebuggerTest >> resultTextStringExample [
+	| expectedTextStream |
+	expectedTextStream := WriteStream on: Text new.
+	expectedTextStream cr.
+	ed writeSectionTitle: 'RES' on: expectedTextStream.
+	expectedTextStream << 'result'.
+	^ expectedTextStream contents asString
 ]
 
 { #category : #running }
@@ -119,21 +152,135 @@ EDEmergencyDebuggerTest >> setUp [
 EDEmergencyDebuggerTest >> tearDown [
 	EDEmergencyDebugger debugAPI: currentDebuggingAPI.
 	session terminate.
+	self compileMethodVersion: ''.
 	super tearDown
 ]
 
 { #category : #'text - composition' }
+EDEmergencyDebuggerTest >> testComposeDisplayText [
+	| displayText |
+	displayText := ed titleText , ed stackText , ed methodText , ed input
+		, ed result.
+	self assert: ed composeDisplayText equals: displayText
+]
+
+{ #category : #'text - composition' }
 EDEmergencyDebuggerTest >> testComposeMethodText [
-	| method expectedTextStream |
-	method := debugAPI methodAt: ed stackSelectionIndex.
-	expectedTextStream := WriteStream on: Text new.
-	ed writeSectionTitle: 'SOURCE' on: expectedTextStream.
-	expectedTextStream << method methodClass name.
-	expectedTextStream << '>>'.
-	expectedTextStream << method sourceCode.
-	expectedTextStream cr.
 	ed composeMethodText.
-	self assert: ed methodText asString equals: expectedTextStream contents asString
+	self
+		assert: ed methodText asString
+		equals: self methodDisplayTextStringExample
+]
+
+{ #category : #'text - composition' }
+EDEmergencyDebuggerTest >> testComposePromptWith [
+	| rs |
+	ed composePromptWith: 'prompt'.
+	rs := ed input asString readStream.
+	self assert: rs next equals: Character cr.
+	self assert: (rs upTo: Character cr) equals: ed separator asString.
+	self assert: rs next equals: $>.
+	self assert: rs next equals: Character space.
+	self assert: rs upToEnd equals: 'prompt'.
+
+]
+
+{ #category : #'text - composition' }
+EDEmergencyDebuggerTest >> testComposeResultTitle [
+	ed composeResult: 'result' title: 'RES'.
+	self assert: ed result asString equals: self resultTextStringExample
+]
+
+{ #category : #'text - composition' }
+EDEmergencyDebuggerTest >> testComposeStackTest [
+	| rs ws stack |
+	ed composeStackText.
+	rs := ed stackText asString readStream.
+	
+	self assert: rs next equals: Character cr.
+	self assert: (rs upTo: Character cr) equals: ed separator asString.
+	self
+		assert: (rs upTo: Character cr)
+		equals:
+			'STACK (' , ed stackSelectionIndex printString , '/'
+				, debugAPI stackSize printString , ')'.				
+	self assert: (rs upTo: Character cr) equals: ed separator asString.
+	
+	
+	stack := debugAPI stack copyFrom: 1 to: debugAPI displayStackSize.
+	
+	ws := WriteStream on: String new.
+	(stack at: 1) printWithArgsValueOn: ws.
+	self assert: (rs upTo: Character cr) equals: ws contents.
+	
+	ws := WriteStream on: String new.
+	(stack at: 2) printWithArgsValueOn: ws.
+	self assert: (rs upTo: Character cr) equals: ws contents.
+	
+	ws := WriteStream on: String new.
+	(stack at: 3) printWithArgsValueOn: ws.
+	self assert: (rs upTo: Character cr) equals: ws contents.
+	
+	ws := WriteStream on: String new.
+	(stack at: 4) printWithArgsValueOn: ws.
+	self assert: (rs upTo: Character cr) equals: ws contents.
+	
+	ws := WriteStream on: String new.
+	(stack at: 5) printWithArgsValueOn: ws.
+	self assert: (rs upTo: Character cr) equals: ws contents.
+	
+	self assert: rs atEnd
+	 
+]
+
+{ #category : #'text - composition' }
+EDEmergencyDebuggerTest >> testComposeStackText [
+	| rs ws stack |
+	ed composeStackText.
+	rs := ed stackText asString readStream.
+	
+	self assert: rs next equals: Character cr.
+	self assert: (rs upTo: Character cr) equals: ed separator asString.
+	self
+		assert: (rs upTo: Character cr)
+		equals:
+			'STACK (' , ed stackSelectionIndex printString , '/'
+				, debugAPI stackSize printString , ')'.				
+	self assert: (rs upTo: Character cr) equals: ed separator asString.
+	
+	
+	stack := debugAPI stack copyFrom: 1 to: debugAPI displayStackSize.
+	
+	ws := WriteStream on: String new.
+	(stack at: 1) printWithArgsValueOn: ws.
+	self assert: (rs upTo: Character cr) equals: ws contents.
+	
+	ws := WriteStream on: String new.
+	(stack at: 2) printWithArgsValueOn: ws.
+	self assert: (rs upTo: Character cr) equals: ws contents.
+	
+	ws := WriteStream on: String new.
+	(stack at: 3) printWithArgsValueOn: ws.
+	self assert: (rs upTo: Character cr) equals: ws contents.
+	
+	ws := WriteStream on: String new.
+	(stack at: 4) printWithArgsValueOn: ws.
+	self assert: (rs upTo: Character cr) equals: ws contents.
+	
+	ws := WriteStream on: String new.
+	(stack at: 5) printWithArgsValueOn: ws.
+	self assert: (rs upTo: Character cr) equals: ws contents.
+	
+	self assert: rs atEnd
+	 
+]
+
+{ #category : #'text - composition' }
+EDEmergencyDebuggerTest >> testComposeTitleText [
+	ed composeMethodText.
+	self
+		assert: ed titleText
+		equals: self titleDisplayTextStringExample
 ]
 
 { #category : #'debug API' }
@@ -156,6 +303,11 @@ EDEmergencyDebuggerTest >> testDefaultDebugAPI [
 EDEmergencyDebuggerTest >> testDefaultResultText [
 
 	self assert: ed defaultResultText equals: 'TYPE h FOR HELP'
+]
+
+{ #category : #'methods version' }
+EDEmergencyDebuggerTest >> testInitialMethodVersion [
+	self assert: ed methodVersionSelectionIndex equals: 0
 ]
 
 { #category : #setup }
@@ -219,6 +371,18 @@ EDEmergencyDebuggerTest >> testNewTextStream [
 	self assert: str contents equals: Text new
 ]
 
+{ #category : #'methods version' }
+EDEmergencyDebuggerTest >> testSelectedMethodVersion [
+
+	
+]
+
+{ #category : #'methods version' }
+EDEmergencyDebuggerTest >> testSelectedMethodVersionsSize [
+
+	
+]
+
 { #category : #'text - helpers' }
 EDEmergencyDebuggerTest >> testSeparator [
 
@@ -256,11 +420,53 @@ EDEmergencyDebuggerTest >> testShortStack [
 	self assertCollection: (session stackOfSize: 5) hasSameElements: ed shortStack
 ]
 
+{ #category : #'methods version' }
+EDEmergencyDebuggerTest >> testShowMoreRecentMethodVersion [
+	ed showMoreRecentMethodVersion.
+	self assert: ed methodVersionSelectionIndex equals: 1.
+	ed showOlderMethodVersion.
+	ed showMoreRecentMethodVersion.
+	self assert: ed methodVersionSelectionIndex equals: 1
+]
+
+{ #category : #'methods version' }
+EDEmergencyDebuggerTest >> testShowOlderMethodVersion [
+	self compileMethodVersion: '2'.
+	ed showOlderMethodVersion.
+	self assert: ed methodVersionSelectionIndex equals: 1.
+	ed showOlderMethodVersion.
+	self assert: ed methodVersionSelectionIndex equals: 2
+]
+
+{ #category : #'methods version' }
+EDEmergencyDebuggerTest >> testShowSelectedMethodVersion [
+
+	
+]
+
 { #category : #setup }
 EDEmergencyDebuggerTest >> testTerminate [
 	
 	ed terminate.
 	self deny: ed isRunning 
+]
+
+{ #category : #updating }
+EDEmergencyDebuggerTest >> testUpdateDisplay [
+	ed updateDisplay.
+	self assert: mockDisplayAPI isCleared.
+	self assert: mockDisplayAPI displayData equals: ed composeDisplayText 
+]
+
+{ #category : #updating }
+EDEmergencyDebuggerTest >> testUpdatePrompt [
+	| promptUpdate rs |
+	promptUpdate := 'PROMPT UPDATE'.
+	ed updatePrompt: promptUpdate.
+	rs := ed input readStream.
+	rs upTo: $>.
+	rs upTo: Character space.
+	self assert: (rs upTo: Character cr) equals: promptUpdate
 ]
 
 { #category : #'api - stack' }
@@ -298,4 +504,9 @@ EDEmergencyDebuggerTest >> testWriteSeparatorOn [
 
 	self assert: actualTextStream contents asString 
 		  equals: expectedTextStream contents asString
+]
+
+{ #category : #'text - composition' }
+EDEmergencyDebuggerTest >> titleDisplayTextStringExample [
+	^ 'Hi, I''m ED - What is the nature of your debugging emergency?'
 ]
