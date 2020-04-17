@@ -21,7 +21,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Inspector' with: [ spec requires: #('NewTools-Inspector-Extensions' 'TaskIt') ];
 			package: 'NewTools-Inspector-Extensions' with: [ spec requires: #('NewTools-Core') ];
 			"debugger"
-			package: 'NewTools-Debugger' with: [ spec requires: #('NewTools-Inspector' 'NewTools-Debugger-Commands' 'NewTools-Debugger-Extensions') ];
+			package: 'NewTools-Debugger' with: [ spec requires: #('NewTools-Inspector' 'NewTools-Debugger-Commands' 'NewTools-Debugger-Extensions' 'NewTools-SpTextPresenterDecorators') ];
 			package: 'NewTools-Debugger-Commands';
 			package: 'NewTools-Debugger-Extensions';
 			package: 'NewTools-Debugger-Tests' with: [ spec requires: #('NewTools-Debugger') ];
