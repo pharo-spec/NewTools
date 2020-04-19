@@ -15,7 +15,7 @@ StPlaygroundBindingsCommand >> asSpecCommand [
 { #category : #execution }
 StPlaygroundBindingsCommand >> execute [ 
 
-	self inform: #TODO.
+	(StPlaygroundBindingsPresenter on: context) openDialogWithSpec
 ]
 
 { #category : #initialization }

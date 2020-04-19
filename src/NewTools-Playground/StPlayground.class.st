@@ -1,16 +1,6 @@
 "
 Playground is the correspondent of a classic Smalltalk Workspace. The problem with the name Workspace is that it implies that work should be carried out in this space, while this is not a best practice. Playground describes better the intention of providing a place in which we can quickly play with some code.
 
-The model behind a Playground instance is a PlaygroundModel object.
-
-!!Use cases
-The Playground can be used in two ways
-
-# As a place to construct and try out code snippets.
-# as an entry point into an inspection process.
-
-In both cases, the ability of diving into objects to the right is an important feature.
-
 "
 Class {
 	#name : #StPlayground,
@@ -47,6 +37,31 @@ StPlayground class >> defaultTitle [
 StPlayground class >> open [ 
 
 	^ self new openWithSpec
+]
+
+{ #category : #'instance creation' }
+StPlayground class >> openContents: aString [
+	"Open a new workspace with the given contents. It looks better when aString is code since the style is applied"
+
+	^ self new
+		contents: aString;
+		openWithSpec
+]
+
+{ #category : #'tools registry' }
+StPlayground class >> register [
+	"Add ourselves to registry. See [Smalltalk tools]" 
+	<script>
+
+	self registerToolsOn: Smalltalk tools
+]
+
+{ #category : #'tools registry' }
+StPlayground class >> registerToolsOn: registry [
+	"Add ourselves to registry. See [Smalltalk tools]" 
+
+	registry register: self as: #workspace
+
 ]
 
 { #category : #binding }
@@ -87,6 +102,12 @@ StPlayground >> buildToolBar [
 	^ self toolbarActions 
 		asToolbarPresenterWith: [ :presenter | 
 			presenter displayMode: self application toolbarDisplayMode ]
+]
+
+{ #category : #accessing }
+StPlayground >> contents: aString [
+
+	text text: aString
 ]
 
 { #category : #binding }
@@ -141,6 +162,7 @@ StPlayground >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		title: self class defaultTitle;
 		initialExtent: self class defaultExtent;
+		windowIcon: self windowIcon;
 		toolBar: self buildToolBar;
 		statusBar: (statusBar := self buildStatusBar).
 	
@@ -200,4 +222,10 @@ StPlayground >> toolbarActions [
 StPlayground >> variableBindingNames [
 	
 	^ bindings keys
+]
+
+{ #category : #initialization }
+StPlayground >> windowIcon [
+	
+	^ self application iconNamed: #workspace
 ]
