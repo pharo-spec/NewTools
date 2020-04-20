@@ -12,13 +12,14 @@ Class {
 { #category : #accessing }
 StPlaygroundBindingsPresenter class >> defaultExtent [
 
-	^ 650@400
+	^ 600@400
 ]
 
 { #category : #specs }
 StPlaygroundBindingsPresenter class >> defaultSpec [
 
 	^ SpPanedLayout newHorizontal
+		position: 30 percent;
 		add: #bindingList;
 		add: #inspector;
 		yourself
@@ -52,13 +53,14 @@ StPlaygroundBindingsPresenter >> initializePresenters [
 	bindingList := self newList
 		display: [ :each | each key ];
 		yourself.
-	inspector := StInspector new.
-	
-	bindingList 
-		transmitTo: inspector
-		transform: [ :anAssociation | 
-			anAssociation ifNotNil: [ anAssociation value ] ].
-	 
+
+	self flag: #TODO. "Temporal? This is to avoid a dependency (while making inspector work 
+	properly)"
+	inspector := self class environment 
+		at: #StInspector
+		ifPresent: [ :aClass | self newInspectorWithTransmission: aClass ]
+		ifAbsent: [ self newCodeWithTransmission ].
+
 	self updatePresenter
 ]
 
@@ -81,6 +83,37 @@ StPlaygroundBindingsPresenter >> newBindingPresenterList [
 
 	^ self bindings associations collect: [ :eachAssoc |
 		self newBindingPresenter: eachAssoc ]
+]
+
+{ #category : #initialization }
+StPlaygroundBindingsPresenter >> newCodeWithTransmission [
+	| presenter |
+	
+	presenter := self newCode 
+		beNotEditable;
+		withoutSyntaxHighlight;
+		withoutLineNumbers.
+	bindingList 
+		transmitTo: presenter
+		transform: [ :anAssociation | 
+			anAssociation 
+				ifNotNil: [ anAssociation value printString ]
+				ifNil: [ '' ] ].
+	
+	^ presenter
+]
+
+{ #category : #initialization }
+StPlaygroundBindingsPresenter >> newInspectorWithTransmission: aClass [
+	| presenter |
+	
+	presenter := self instantiate: aClass.
+	bindingList 
+		transmitTo: presenter
+		transform: [ :anAssociation | 
+			anAssociation ifNotNil: [ anAssociation value ] ].
+		
+	^ presenter
 ]
 
 { #category : #'accessing model' }

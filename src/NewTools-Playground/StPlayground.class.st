@@ -10,13 +10,16 @@ Class {
 		'statusBar',
 		'bindings'
 	],
+	#classVars : [
+		'PreferredExtent'
+	],
 	#category : #'NewTools-Playground-View'
 }
 
 { #category : #accessing }
 StPlayground class >> defaultExtent [
 
-	^ 550 @ 350
+	^ 600@400
 ]
 
 { #category : #specs }
@@ -46,6 +49,18 @@ StPlayground class >> openContents: aString [
 	^ self new
 		contents: aString;
 		openWithSpec
+]
+
+{ #category : #private }
+StPlayground class >> preferredExtent [
+
+	^ PreferredExtent ifNil: [ PreferredExtent := self class defaultExtent ]
+]
+
+{ #category : #private }
+StPlayground class >> preferredExtent: aPoint [
+
+	PreferredExtent := aPoint
 ]
 
 { #category : #'tools registry' }
@@ -110,6 +125,12 @@ StPlayground >> contents: aString [
 	text text: aString
 ]
 
+{ #category : #'api-focus' }
+StPlayground >> defaultKeyboardFocus [
+
+	^ text
+]
+
 { #category : #binding }
 StPlayground >> doItContext [
 
@@ -164,10 +185,10 @@ StPlayground >> initializeWindow: aWindowPresenter [
 		initialExtent: self class defaultExtent;
 		windowIcon: self windowIcon;
 		toolBar: self buildToolBar;
-		statusBar: (statusBar := self buildStatusBar).
-	
-	self flag: #TODO. "This just has sense if this is the 'main' window"
-	"aWindowPresenter menu: self newMenu"
+		statusBar: (statusBar := self buildStatusBar);
+		whenResizingDo: [ :ann | self class preferredExtent: ann newSize ];
+		whenOpenedDo: [ self takeKeyboardFocus ]
+
 ]
 
 { #category : #accessing }
@@ -193,16 +214,6 @@ StPlayground >> setBindings: aDictionary [
 	"Sets the Workspace to use the specified dictionary as its namespace"
 
 	bindings := aDictionary
-]
-
-{ #category : #'accessing ui' }
-StPlayground >> text [
-	^ text
-]
-
-{ #category : #'accessing ui' }
-StPlayground >> text: anObject [
-	text := anObject
 ]
 
 { #category : #'private builder' }
