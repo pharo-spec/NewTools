@@ -37,6 +37,27 @@ StPlaygroundBindingsPresenter >> bindings [
 	^ playground bindings
 ]
 
+{ #category : #private }
+StPlaygroundBindingsPresenter >> contextMenu [
+
+	^ self contextMenuActions asMenuPresenter
+]
+
+{ #category : #private }
+StPlaygroundBindingsPresenter >> contextMenuActions [
+
+	^ CmCommandGroup forSpec
+		beRoot;
+		register: (StRemoveBindingCommand forSpecContext: self);
+		yourself
+]
+
+{ #category : #private }
+StPlaygroundBindingsPresenter >> contextMenuKeyBindings [
+
+	^ self contextMenuActions asKMCategory
+]
+
 { #category : #initialization }
 StPlaygroundBindingsPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
@@ -52,6 +73,8 @@ StPlaygroundBindingsPresenter >> initializePresenters [
 
 	bindingList := self newList
 		display: [ :each | each key ];
+		contextMenu: [ self contextMenu ];
+		contextKeyBindings: self contextMenuKeyBindings;
 		yourself.
 
 	self flag: #TODO. "Temporal? This is to avoid a dependency (while making inspector work 
