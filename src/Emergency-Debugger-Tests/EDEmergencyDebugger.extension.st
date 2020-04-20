@@ -1,6 +1,16 @@
 Extension { #name : #EDEmergencyDebugger }
 
 { #category : #'*Emergency-Debugger-Tests' }
+EDEmergencyDebugger >> debugAPI [
+	^debugAPI
+]
+
+{ #category : #'*Emergency-Debugger-Tests' }
+EDEmergencyDebugger >> debugAPI: aDebugAPI [
+	debugAPI := aDebugAPI
+]
+
+{ #category : #'*Emergency-Debugger-Tests' }
 EDEmergencyDebugger >> displayInterface: aDisplayInterface [
 	rawDisplay := aDisplayInterface
 ]

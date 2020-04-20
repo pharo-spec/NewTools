@@ -115,8 +115,25 @@ EDEmergencyDebuggerTest >> newEd [
 	ed := EDEmergencyDebugger new.
 	ed repl: EDMockREPLInterface new.
 	ed displayInterface: (mockDisplayAPI := EDMockDisplayInterface new).
+	ed debugAPI: debugAPI.
 	ed debug: session
 
+]
+
+{ #category : #'methods version' }
+EDEmergencyDebuggerTest >> prepareMethodVersionTest [
+	| context |
+	EDMockObjectForTests compile: 'mWithVersion ^1 '.
+	EDMockObjectForTests compile: 'mWithVersion ^2 '.
+	context := Context
+		newForMethod: EDMockObjectForTests >> #mWithVersion.
+	context
+		setSender: nil
+		receiver: nil
+		method: EDMockObjectForTests >> #mWithVersion
+		closure: nil
+		startpc: nil.
+	ed debugAPI stack addFirst: context
 ]
 
 { #category : #'text - composition' }
@@ -152,7 +169,7 @@ EDEmergencyDebuggerTest >> setUp [
 EDEmergencyDebuggerTest >> tearDown [
 	EDEmergencyDebugger debugAPI: currentDebuggingAPI.
 	session terminate.
-	self compileMethodVersion: ''.
+	EDMockObjectForTests removeSelector: #mWithVersion.
 	super tearDown
 ]
 
@@ -379,8 +396,8 @@ EDEmergencyDebuggerTest >> testSelectedMethodVersion [
 
 { #category : #'methods version' }
 EDEmergencyDebuggerTest >> testSelectedMethodVersionsSize [
-
-	
+	self prepareMethodVersionTest.
+	self assert: ed selectedMethodVersionsSize equals: 2
 ]
 
 { #category : #'text - helpers' }
@@ -422,6 +439,7 @@ EDEmergencyDebuggerTest >> testShortStack [
 
 { #category : #'methods version' }
 EDEmergencyDebuggerTest >> testShowMoreRecentMethodVersion [
+	self prepareMethodVersionTest.
 	ed showMoreRecentMethodVersion.
 	self assert: ed methodVersionSelectionIndex equals: 1.
 	ed showOlderMethodVersion.
@@ -431,7 +449,7 @@ EDEmergencyDebuggerTest >> testShowMoreRecentMethodVersion [
 
 { #category : #'methods version' }
 EDEmergencyDebuggerTest >> testShowOlderMethodVersion [
-	self compileMethodVersion: '2'.
+	self prepareMethodVersionTest.
 	ed showOlderMethodVersion.
 	self assert: ed methodVersionSelectionIndex equals: 1.
 	ed showOlderMethodVersion.
