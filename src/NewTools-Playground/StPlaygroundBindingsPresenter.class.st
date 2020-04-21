@@ -95,19 +95,6 @@ StPlaygroundBindingsPresenter >> initializeWindow: aWindowPresenter [
 		initialExtent: self class defaultExtent
 ]
 
-{ #category : #'private factory' }
-StPlaygroundBindingsPresenter >> newBindingPresenter: anAssociation [
-
-	^ StPlaygroundBindingPresenter on: anAssociation
-]
-
-{ #category : #'private factory' }
-StPlaygroundBindingsPresenter >> newBindingPresenterList [
-
-	^ self bindings associations collect: [ :eachAssoc |
-		self newBindingPresenter: eachAssoc ]
-]
-
 { #category : #initialization }
 StPlaygroundBindingsPresenter >> newCodeWithTransmission [
 	| presenter |
