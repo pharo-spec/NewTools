@@ -484,6 +484,12 @@ SpecDebugger class >> singleInspectorSpec [
 		yourself
 ]
 
+{ #category : #accessing }
+SpecDebugger class >> spanNewSessionFrom: anotherSession [
+	self flag: 'Where is that used? 2019-06-28'.
+	^ anotherSession spanNewSession
+]
+
 { #category : #icons }
 SpecDebugger class >> taskbarIconName [
 
