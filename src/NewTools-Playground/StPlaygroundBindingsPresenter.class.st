@@ -1,3 +1,8 @@
+"
+I am a presenter to show all bindings of parent Playground.
+I show a list of active bindings. 
+A panel to inspect each of the bindings values is shown too.
+"
 Class {
 	#name : #StPlaygroundBindingsPresenter,
 	#superclass : #StPresenter,
