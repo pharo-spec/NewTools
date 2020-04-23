@@ -125,12 +125,6 @@ StPlayground >> contents: aString [
 	text text: aString
 ]
 
-{ #category : #'api-focus' }
-StPlayground >> defaultKeyboardFocus [
-
-	^ text
-]
-
 { #category : #binding }
 StPlayground >> doItContext [
 
@@ -167,6 +161,8 @@ StPlayground >> initialize [
 StPlayground >> initializePresenters [
 	
 	text := self newCode
+		contextMenu: [ self menuActions asMenuPresenter ];
+		contextKeyBindings: self menuActions asKMCategory;
 		interactionModel: self;
 		completionEngine: (SpCodeCompletionEngine new 
 			scripting: true;
@@ -187,8 +183,22 @@ StPlayground >> initializeWindow: aWindowPresenter [
 		toolBar: self buildToolBar;
 		statusBar: (statusBar := self buildStatusBar);
 		whenResizingDo: [ :ann | self class preferredExtent: ann newSize ];
-		whenOpenedDo: [ self takeKeyboardFocus ]
+		whenOpenedDo: [ text takeKeyboardFocus ]
 
+]
+
+{ #category : #private }
+StPlayground >> menuActions [
+
+	^ CmCommandGroup forSpec
+		beRoot;
+		register: ((CmCommandGroup named: 'Playground') asSpecGroup
+			"beDisplayedAsGroup;"
+			register: (StPlaygroundPublishCommand forSpecContext: self);
+			register: (StPlaygroundBindingsCommand forSpecContext: self);
+			register: (StPlaygroundPagesCommand forSpecContext: self);
+			yourself);
+		yourself	
 ]
 
 { #category : #accessing }
