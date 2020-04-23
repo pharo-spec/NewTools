@@ -182,7 +182,7 @@ StPlayground >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter 
 		title: self class defaultTitle;
-		initialExtent: self class defaultExtent;
+		initialExtent: self class preferredExtent;
 		windowIcon: self windowIcon;
 		toolBar: self buildToolBar;
 		statusBar: (statusBar := self buildStatusBar);
