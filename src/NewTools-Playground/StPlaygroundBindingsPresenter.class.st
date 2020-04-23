@@ -37,6 +37,18 @@ StPlaygroundBindingsPresenter class >> defaultTitle [
 ]
 
 { #category : #accessing }
+StPlaygroundBindingsPresenter class >> emptyMessage [
+
+	^ 'There are no bindings to list.'
+]
+
+{ #category : #accessing }
+StPlaygroundBindingsPresenter class >> unselectedMessage [
+
+	^ 'Select a variable to inspect its value.'
+]
+
+{ #category : #accessing }
 StPlaygroundBindingsPresenter >> bindings [
 
 	^ playground bindings
@@ -82,13 +94,22 @@ StPlaygroundBindingsPresenter >> initializePresenters [
 		contextKeyBindings: self contextMenuKeyBindings;
 		yourself.
 
-	self flag: #TODO. "Temporal? This is to avoid a dependency (while making inspector work 
-	properly)"
-	inspector := self class environment 
-		at: #StInspector
-		ifPresent: [ :aClass | self newInspectorWithTransmission: aClass ]
-		ifAbsent: [ self newCodeWithTransmission ].
-
+	inspector := self newPresenterSelector
+		when: [ :aBinding | aBinding notNil ] show: [ :aBinding | 
+			self flag: #TODO. "Temporal? This is to avoid a dependency (while making 
+			inspector work properly)"
+			self class environment 
+				at: #StInspector
+				ifPresent: [ :aClass | self newInspectorWithTransmission: aClass on: aBinding ]
+				ifAbsent: [ self newCodeWithTransmissionOn: aBinding ] ];
+		when: [ :aBinding | aBinding isNil ] show: [ 
+			bindingList items
+				ifNotEmpty: [ self class unselectedMessage ]
+				ifEmpty: [ self class emptyMessage ] ];
+		updatePresenter.
+	
+	bindingList transmitTo: inspector.
+	
 	self updatePresenter
 ]
 
@@ -101,34 +122,22 @@ StPlaygroundBindingsPresenter >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : #initialization }
-StPlaygroundBindingsPresenter >> newCodeWithTransmission [
-	| presenter |
+StPlaygroundBindingsPresenter >> newCodeWithTransmissionOn: aBinding [
 	
-	presenter := self newCode 
+	^ self newCode 
+		text: aBinding value printString;
 		beNotEditable;
 		withoutSyntaxHighlight;
-		withoutLineNumbers.
-	bindingList 
-		transmitTo: presenter
-		transform: [ :anAssociation | 
-			anAssociation 
-				ifNotNil: [ anAssociation value printString ]
-				ifNil: [ '' ] ].
-	
-	^ presenter
+		withoutLineNumbers; 
+		yourself
 ]
 
 { #category : #initialization }
-StPlaygroundBindingsPresenter >> newInspectorWithTransmission: aClass [
-	| presenter |
+StPlaygroundBindingsPresenter >> newInspectorWithTransmission: aClass on: aBinding [
 	
-	presenter := self instantiate: aClass.
-	bindingList 
-		transmitTo: presenter
-		transform: [ :anAssociation | 
-			anAssociation ifNotNil: [ anAssociation value ] ].
-		
-	^ presenter
+	^ self 
+		instantiate: aClass 
+		on: aBinding value
 ]
 
 { #category : #'accessing model' }
@@ -147,6 +156,13 @@ StPlaygroundBindingsPresenter >> title [
 
 { #category : #initialization }
 StPlaygroundBindingsPresenter >> updatePresenter [
+	| newBindings oldBindings |
 
-	bindingList items: self bindings associations
+	newBindings := self bindings associations. 
+	oldBindings := bindingList items.
+	newBindings = oldBindings ifTrue: [ ^ self ].
+	
+	bindingList items: newBindings.
+	newBindings ifNotEmpty: [ 
+		bindingList selectIndex: 1 ]
 ]
