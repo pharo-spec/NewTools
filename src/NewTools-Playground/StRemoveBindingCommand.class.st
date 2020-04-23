@@ -14,8 +14,8 @@ StRemoveBindingCommand >> application [
 StRemoveBindingCommand >> asSpecCommand [ 
 	
 	^ super asSpecCommand 
-		"iconProvider: self application;
-		iconName: #smallDelete;"
+		iconProvider: self application;
+		iconName: #smallDelete;
 		shortcutKey: $x control unix | $x control win | $x command mac;
 		yourself
 ]
