@@ -20,6 +20,12 @@ StRemoveBindingCommand >> asSpecCommand [
 		yourself
 ]
 
+{ #category : #executing }
+StRemoveBindingCommand >> execute [
+	
+	context removeSelectedBinding
+]
+
 { #category : #initialization }
 StRemoveBindingCommand >> initialize [
 	super initialize.

@@ -80,17 +80,34 @@ StPlayground class >> registerToolsOn: registry [
 ]
 
 { #category : #binding }
+StPlayground >> addBinding: aBinding [
+
+	bindings add: aBinding
+]
+
+{ #category : #binding }
 StPlayground >> bindingOf: aString [
 
-	(bindings includesKey: aString)
-		ifFalse: [ bindings add: (WorkspaceVariable key: aString asSymbol) ].
-	^ bindings associationAt: aString
+	(self bindings includesKey: aString)
+		ifFalse: [ self addBinding: (WorkspaceVariable key: aString asSymbol) ].
+	^ self bindings associationAt: aString
 ]
 
 { #category : #binding }
 StPlayground >> bindings [
+	"Combining shared bindings and local bindings needs to be done like this because the 
+	 #add: method of Dictionary stores the whole association (which in this case is a 
+	 WorkspaceVariable and we need that. #at:put: cannot be used because it will create 
+	 an Association and want to keep the WorkspaceVariable."
+	| joinedBindings |
 	
-	^ bindings
+	"just a small optimisation"
+	self application sharedBindings ifEmpty: [ ^ bindings ].
+	
+	joinedBindings := self application sharedBindings copy.
+	bindings associations 
+		do: [ :each | joinedBindings add: each ].
+	^ joinedBindings
 ]
 
 { #category : #'private builder' }
@@ -140,7 +157,7 @@ StPlayground >> doItReceiver [
 { #category : #binding }
 StPlayground >> hasBindingOf: aString [
 
-	^ bindings includesKey: aString asSymbol
+	^ self bindings includesKey: aString asSymbol
 ]
 
 { #category : #binding }
@@ -153,7 +170,7 @@ StPlayground >> hasBindingThatBeginsWith: aString [
 { #category : #initialization }
 StPlayground >> initialize [
 
-	bindings := Dictionary new.
+	self setBindings: Dictionary new.
 	super initialize
 ]
 
@@ -201,6 +218,12 @@ StPlayground >> menuActions [
 		yourself	
 ]
 
+{ #category : #binding }
+StPlayground >> removeBinding: aBinding [
+ 
+	bindings removeKey: aBinding key
+]
+
 { #category : #accessing }
 StPlayground >> selectAll [
 	
@@ -242,7 +265,7 @@ StPlayground >> toolbarActions [
 { #category : #accessing }
 StPlayground >> variableBindingNames [
 	
-	^ bindings keys
+	^ self bindings keys
 ]
 
 { #category : #initialization }

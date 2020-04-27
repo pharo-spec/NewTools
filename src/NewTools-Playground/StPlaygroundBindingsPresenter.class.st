@@ -66,6 +66,7 @@ StPlaygroundBindingsPresenter >> contextMenuActions [
 	^ CmCommandGroup forSpec
 		beRoot;
 		register: (StRemoveBindingCommand forSpecContext: self);
+		register: (StMoveBindingCommand forSpecContext: self);
 		yourself
 ]
 
@@ -73,6 +74,12 @@ StPlaygroundBindingsPresenter >> contextMenuActions [
 StPlaygroundBindingsPresenter >> contextMenuKeyBindings [
 
 	^ self contextMenuActions asKMCategory
+]
+
+{ #category : #testing }
+StPlaygroundBindingsPresenter >> hasSelectedBinding [
+
+	^ self selectedBinding notNil
 ]
 
 { #category : #initialization }
@@ -88,8 +95,12 @@ StPlaygroundBindingsPresenter >> initializeDialogWindow: aDialogWindowPresenter 
 { #category : #initialization }
 StPlaygroundBindingsPresenter >> initializePresenters [
 
-	bindingList := self newList
-		display: [ :each | each key ];
+	bindingList := self newTable
+		addColumn: (SpStringTableColumn title: 'Name' evaluated: [ :each | each key ]);
+		addColumn: (SpStringTableColumn 
+			title: 'Scope' 
+			evaluated: [ :each | self scopeNameFor: each ]) 
+			beNotExpandable;
 		contextMenu: [ self contextMenu ];
 		contextKeyBindings: self contextMenuKeyBindings;
 		yourself.
@@ -104,8 +115,8 @@ StPlaygroundBindingsPresenter >> initializePresenters [
 				ifAbsent: [ self newCodeWithTransmissionOn: aBinding ] ];
 		when: [ :aBinding | aBinding isNil ] show: [ 
 			bindingList items
-				ifNotEmpty: [ self class unselectedMessage ]
-				ifEmpty: [ self class emptyMessage ] ];
+				ifNotEmpty: [ self class unselectedMessage asPresenter ]
+				ifEmpty: [ self class emptyMessage asPresenter ] ];
 		updatePresenter.
 	
 	bindingList transmitTo: inspector.
@@ -119,6 +130,30 @@ StPlaygroundBindingsPresenter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		title: self title;
 		initialExtent: self class defaultExtent
+]
+
+{ #category : #testing }
+StPlaygroundBindingsPresenter >> isLocalBinding: aBinding [
+
+	^ (self application sharedBindings includesKey: aBinding key) not
+]
+
+{ #category : #private }
+StPlaygroundBindingsPresenter >> moveSelectedBindingToLocalScope [
+	| selection |
+		
+	selection := self selectedBinding.
+	self application removeSharedBinding: selection.
+	playground addBinding: selection
+]
+
+{ #category : #private }
+StPlaygroundBindingsPresenter >> moveSelectedBindingToSharedScope [
+	| selection |
+		
+	selection := self selectedBinding.
+	playground removeBinding: selection.
+	self application addSharedBinding: selection
 ]
 
 { #category : #initialization }
@@ -140,10 +175,50 @@ StPlaygroundBindingsPresenter >> newInspectorWithTransmission: aClass on: aBindi
 		on: aBinding value
 ]
 
+{ #category : #actions }
+StPlaygroundBindingsPresenter >> removeSelectedBinding [
+
+	self selectedBindingIsLocal 
+		ifTrue: [ playground removeBinding: self selectedBinding ]
+		ifFalse: [ self application removeSharedBinding: self selectedBinding ].
+	self updatePresenterKeepingSelection
+]
+
+{ #category : #private }
+StPlaygroundBindingsPresenter >> scopeNameFor: aBinding [
+
+	^ self application sharedBindings
+		at: aBinding key
+		ifPresent: [ :found | 'shared' ]
+		ifAbsent: [ 'local' ]
+]
+
+{ #category : #accessing }
+StPlaygroundBindingsPresenter >> selectedBinding [
+
+	^ bindingList ifNotNil: [ bindingList selection selectedItem ]
+]
+
+{ #category : #testing }
+StPlaygroundBindingsPresenter >> selectedBindingIsLocal [
+	| selection |
+
+	selection := self selectedBinding.
+	selection ifNil: [ ^ false ].
+	
+	^ self isLocalBinding: selection
+]
+
 { #category : #'accessing model' }
 StPlaygroundBindingsPresenter >> setModelBeforeInitialization: anObject [
 
 	playground := anObject
+]
+
+{ #category : #accessing }
+StPlaygroundBindingsPresenter >> sortedBindingAssociations [
+
+	^ self bindings associations sort: [ :a | self isLocalBinding: a ] ascending
 ]
 
 { #category : #initialization }
@@ -154,15 +229,39 @@ StPlaygroundBindingsPresenter >> title [
 	^ self class defaultTitle
 ]
 
+{ #category : #actions }
+StPlaygroundBindingsPresenter >> toggleSelectedBindingScope [
+
+	self selectedBindingIsLocal 
+		ifTrue: [ self moveSelectedBindingToSharedScope ]
+		ifFalse: [ self moveSelectedBindingToLocalScope ].
+	self updatePresenterKeepingSelection
+]
+
 { #category : #initialization }
 StPlaygroundBindingsPresenter >> updatePresenter [
+	
+	self updatePresenterWithSelection: [ 
+		bindingList selectIndex: 1 ]
+]
+
+{ #category : #initialization }
+StPlaygroundBindingsPresenter >> updatePresenterKeepingSelection [
+	| selection |
+	
+	selection := self selectedBinding.
+	self updatePresenterWithSelection: [ 
+		bindingList selectItem: (selection ifNil: [ bindingList items first ]) ]
+]
+
+{ #category : #initialization }
+StPlaygroundBindingsPresenter >> updatePresenterWithSelection: aBlock [
 	| newBindings oldBindings |
 
-	newBindings := self bindings associations. 
+	newBindings := self sortedBindingAssociations. 
 	oldBindings := bindingList items.
 	newBindings = oldBindings ifTrue: [ ^ self ].
 	
 	bindingList items: newBindings.
-	newBindings ifNotEmpty: [ 
-		bindingList selectIndex: 1 ]
+	newBindings ifNotEmpty: aBlock
 ]
