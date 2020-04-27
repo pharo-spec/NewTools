@@ -15,7 +15,10 @@ StPlaygroundBindingsCommand >> asSpecCommand [
 { #category : #execution }
 StPlaygroundBindingsCommand >> execute [ 
 
-	(StPlaygroundBindingsPresenter on: context) openDialogWithSpec
+	(StPlaygroundBindingsPresenter 
+		newApplication: context application 
+		model: context) 
+		openDialogWithSpec
 ]
 
 { #category : #initialization }

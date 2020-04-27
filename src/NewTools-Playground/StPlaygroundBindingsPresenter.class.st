@@ -251,7 +251,9 @@ StPlaygroundBindingsPresenter >> updatePresenterKeepingSelection [
 	
 	selection := self selectedBinding.
 	self updatePresenterWithSelection: [ 
-		bindingList selectItem: (selection ifNil: [ bindingList items first ]) ]
+		bindingList selectItem: ((bindingList items includes: selection) 
+			ifTrue: [ selection ]
+			ifFalse: [ bindingList items first ]) ]
 ]
 
 { #category : #initialization }
@@ -260,8 +262,8 @@ StPlaygroundBindingsPresenter >> updatePresenterWithSelection: aBlock [
 
 	newBindings := self sortedBindingAssociations. 
 	oldBindings := bindingList items.
-	newBindings = oldBindings ifTrue: [ ^ self ].
-	
+	"I re-set the items even if they are the same because I want to force a refresh"	
 	bindingList items: newBindings.
+	newBindings = oldBindings ifTrue: [ ^ self ].
 	newBindings ifNotEmpty: aBlock
 ]
