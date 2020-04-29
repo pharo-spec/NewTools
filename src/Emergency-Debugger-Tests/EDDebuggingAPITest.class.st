@@ -18,6 +18,27 @@ EDDebuggingAPITest >> testContextAt [
 			identicalTo: (session stack at: i) ]
 ]
 
+{ #category : #'tests - stack' }
+EDDebuggingAPITest >> testDisplayStackSize [
+	self
+		assert: debugAPI displayStackSize
+		equals: debugAPI class displayStackSize
+]
+
+{ #category : #'tests - stack' }
+EDDebuggingAPITest >> testLongStack [
+	self
+		assertCollection: debugAPI longStack
+		equals: (session stackOfSize: debugAPI longStackSize)
+]
+
+{ #category : #'tests - stack' }
+EDDebuggingAPITest >> testLongStackSize [
+	self
+		assert: debugAPI longStackSize
+		equals: debugAPI class longStackSize
+]
+
 { #category : #'tests - context' }
 EDDebuggingAPITest >> testMethodAt [
 	1 to: session stack size do: [ :i | 
@@ -43,4 +64,31 @@ EDDebuggingAPITest >> testNodeForContext [
 	self
 		assert: (debugAPI nodeForContext: context)
 		identicalTo: (context method sourceNodeForPC: context pc)
+]
+
+{ #category : #'tests - stack' }
+EDDebuggingAPITest >> testStack [ 
+	self assert: debugAPI stack identicalTo: debugAPI longStack
+]
+
+{ #category : #'tests - stack' }
+EDDebuggingAPITest >> testStackAt [
+	1 to: session stack size do:
+		[ :i | self assert: (debugAPI stackAt: i) equals: (session stack at: i) ]
+]
+
+{ #category : #'tests - stack' }
+EDDebuggingAPITest >> testStackFromTo [
+	| stackExtract |
+	stackExtract := (session stack copyFrom: 5 to: 10).
+	self
+		assertCollection: (debugAPI stackFrom: 5 to: 10)
+		equals: stackExtract
+]
+
+{ #category : #'tests - stack' }
+EDDebuggingAPITest >> testStackSize [
+	self
+		assert: debugAPI stackSize
+		equals: debugAPI stack size
 ]
