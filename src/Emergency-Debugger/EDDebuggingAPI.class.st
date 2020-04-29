@@ -9,11 +9,18 @@ Class {
 		'session',
 		'debugger',
 		'changesForMethods',
-		'longStack',
-		'forbiddenProcesses'
+		'longStack'
 	],
 	#category : #'Emergency-Debugger'
 }
+
+{ #category : #'API - Processes' }
+EDDebuggingAPI class >> allRunningProcesses [
+	^ Process allSubInstances
+		reject: [ :each | 
+			each isTerminated
+				or: [ self forbiddenProcesses anySatisfy: [ :block | block value == each ] ] ]
+]
 
 { #category : #start }
 EDDebuggingAPI class >> attachTo: aDebugSession [
@@ -27,17 +34,26 @@ EDDebuggingAPI class >> displayStackSize [
 	^5
 ]
 
+{ #category : #'API - Processes' }
+EDDebuggingAPI class >> forbiddenProcesses [
+	^ {[  ].
+	[ Smalltalk lowSpaceWatcherProcess ].
+	[ WeakArray runningFinalizationProcess ].
+	[ Processor backgroundProcess ].
+	[ InputEventFetcher default fetcherProcess ].
+	[ UIManager default uiProcess ].
+	[ Delay schedulingProcess ]}
+]
+
 { #category : #accessing }
 EDDebuggingAPI class >> longStackSize [
 	^100
 ]
 
 { #category : #'API - Processes' }
-EDDebuggingAPI >> allRunningProcesses [
-	^ Process allSubInstances
-		reject: [ :each | 
-			each isTerminated
-				or: [ self forbiddenProcesses anySatisfy: [ :block | block value == each ] ] ]
+EDDebuggingAPI class >> terminateAllProcesses [
+	self allRunningProcesses
+		do: [ :process | process ifNotNil: [ process terminate ] ]
 ]
 
 { #category : #'API - Revert' }
@@ -67,18 +83,6 @@ EDDebuggingAPI >> debugger: anObject [
 { #category : #'API - Stack' }
 EDDebuggingAPI >> displayStackSize [
 	^self class displayStackSize
-]
-
-{ #category : #'API - Processes' }
-EDDebuggingAPI >> forbiddenProcesses [
-	^ forbiddenProcesses
-		ifNil: [ forbiddenProcesses := {[  ].
-			[ Smalltalk lowSpaceWatcherProcess ].
-			[ WeakArray runningFinalizationProcess ].
-			[ Processor backgroundProcess ].
-			[ InputEventFetcher default fetcherProcess ].
-			[ UIManager default uiProcess ].
-			[ Delay schedulingProcess ]} ]
 ]
 
 { #category : #initialization }
@@ -166,8 +170,7 @@ EDDebuggingAPI >> stackSize [
 { #category : #'API - Processes' }
 EDDebuggingAPI >> terminateAllProcesses [
 	self terminateSession.
-	self allRunningProcesses
-		do: [ :process | process ifNotNil: [ process terminate ] ]
+	self class terminateAllProcesses
 ]
 
 { #category : #'API - Debugging support' }
