@@ -67,6 +67,13 @@ EDEmergencyDebugger >> availableActionsDescriptionsMap [
 	^self buildDefaultActionsDescriptionsMap 
 ]
 
+{ #category : #initialization }
+EDEmergencyDebugger >> basicDebug: aDebugSession [
+	debugAPI := self class debugAPI attachTo: aDebugSession.
+	debugAPI debugger: self.
+	isRunning := true
+]
+
 { #category : #actions }
 EDEmergencyDebugger >> buildDefaultActions [
 	|dic|
@@ -203,9 +210,7 @@ EDEmergencyDebugger >> composeTitleText [
 
 { #category : #initialization }
 EDEmergencyDebugger >> debug: aDebugSession [
-	debugAPI := self class debugAPI attachTo: aDebugSession.
-	debugAPI debugger: self.
-	isRunning := true.
+	self basicDebug: aDebugSession.
 	self composeTitleText.
 	self composeStackText.
 	self composeMethodText.

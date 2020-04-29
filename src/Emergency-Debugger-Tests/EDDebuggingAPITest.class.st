@@ -15,6 +15,13 @@ EDDebuggingAPITest >> testAttachTo [
 	self assert: debugAPI session identicalTo: session
 ]
 
+{ #category : #'tests - debugging support' }
+EDDebuggingAPITest >> testCloseEmergencySession [
+
+	|ed|
+	ed := EDEmergencyDebugger new.
+]
+
 { #category : #'tests - context' }
 EDDebuggingAPITest >> testContextAt [
 	1 to: session stack size do: [ :i | 

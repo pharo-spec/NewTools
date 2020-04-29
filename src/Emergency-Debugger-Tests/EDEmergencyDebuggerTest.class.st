@@ -83,6 +83,15 @@ EDEmergencyDebuggerTest >> tearDown [
 	super tearDown
 ]
 
+{ #category : #'debug API' }
+EDEmergencyDebuggerTest >> testBasicDebug [
+	ed := EDEmergencyDebugger new.
+	ed basicDebug: session.
+	self assert: ed debugAPI debugger identicalTo: ed.
+	self assert: ed isRunning
+	
+]
+
 { #category : #'text - composition' }
 EDEmergencyDebuggerTest >> testComposeDisplayText [
 	| displayText |
