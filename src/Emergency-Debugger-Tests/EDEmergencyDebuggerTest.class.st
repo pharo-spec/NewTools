@@ -252,6 +252,29 @@ EDEmergencyDebuggerTest >> testNewTextStream [
 ]
 
 { #category : #'methods version' }
+EDEmergencyDebuggerTest >> testRevertCurrentMethodToSelectedVersion [
+	|secondContext originalPC newContext| 
+	secondContext := ed shortStack second.
+	originalPC := secondContext pc.
+	ed stackSelectionIndex: 2.
+	ed methodVersionSelectionIndex: 1.
+	ed revertCurrentMethodToSelectedVersion.
+	newContext := ed shortStack first.
+	self assert: newContext identicalTo: secondContext.
+	self assert: ed stackSelectionIndex equals: 1.
+	self assert: ed methodVersionSelectionIndex equals: 1.
+	self assert: newContext pc < originalPC.
+	
+	"When the context is restarted, the interpreter automatically steps over
+	so-called uninteresting bytecodes, i.e., bytecodes that are not sends nor returns.
+	The test method, originally EDMockObjectForTests>>#m:, starts with an equality check
+	that is 2 bytecodes long, then the interpreter stops on the first send.
+	The PC should be equal to the method's initial PC + 2."  
+	self assert: ed shortStack first pc 
+	     equals: ed shortStack first method initialPC + 2
+]
+
+{ #category : #'methods version' }
 EDEmergencyDebuggerTest >> testSelectedMethodVersion [
 
 	

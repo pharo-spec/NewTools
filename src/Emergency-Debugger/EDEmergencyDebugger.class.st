@@ -87,7 +87,7 @@ EDEmergencyDebugger >> buildDefaultActions [
 	dic at: Character arrowLeft put: [ self showMoreRecentMethodVersion ].
 	dic at: Character arrowRight put: [ self showOlderMethodVersion ].
 	dic at: 'help' put: [ self composeHelpText ].
-	dic at: 'revert' put: [ '' ].
+	dic at: 'revert' put: [ self revertCurrentMethodToSelectedVersion ].
 	dic at: 'killAll' put: [ debugAPI terminateAllProcesses ].
 	^dic
 ]
@@ -312,6 +312,27 @@ EDEmergencyDebugger >> performActionForChar: aCharacter [
 { #category : #accessing }
 EDEmergencyDebugger >> resultText [
 	^ result
+]
+
+{ #category : #methods }
+EDEmergencyDebugger >> revertCurrentMethodToSelectedVersion [
+	"should:
+		- revert method from the current selected context to the selected method version
+		- restart the context
+		- update texts"
+	|method methodVersion|
+	method := debugAPI methodAt: stackSelectionIndex.
+	methodVersion := (debugAPI methodVersionAt: stackSelectionIndex) at: methodVersionSelectionIndex.
+	debugAPI revert: method to: methodVersion.
+	debugAPI restartContextAt: stackSelectionIndex.
+	shortStack := nil.
+	
+	stackSelectionIndex := 1.
+	self composeStackText.
+	self composeMethodText.
+	
+	methodVersionSelectionIndex := 1.
+	self showSelectedMethodVersion
 ]
 
 { #category : #methods }

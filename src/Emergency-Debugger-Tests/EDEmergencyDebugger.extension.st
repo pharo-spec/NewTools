@@ -31,6 +31,11 @@ EDEmergencyDebugger >> methodVersionSelectionIndex [
 ]
 
 { #category : #'*Emergency-Debugger-Tests' }
+EDEmergencyDebugger >> methodVersionSelectionIndex: anInteger [
+	methodVersionSelectionIndex := anInteger
+]
+
+{ #category : #'*Emergency-Debugger-Tests' }
 EDEmergencyDebugger >> repl: aREPLInterface [
 	repl := aREPLInterface
 ]
