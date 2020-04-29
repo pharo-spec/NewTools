@@ -182,14 +182,6 @@ EDDebuggingAPITest >> testRevertTo [
 				equals: (changes collect:[:c| c sourceCode])
 ]
 
-{ #category : #'tests - reverting methods' }
-EDDebuggingAPITest >> testRgMethodHistorical [
-	self prepareMethodVersionTest.
-	self
-		assert: (debugAPI rgMethodHistorical: EDMockObjectForTests >> #mWithVersion)
-		equals: (EDMockObjectForTests >> #mWithVersion) asHistoricalRingDefinition
-]
-
 { #category : #'tests - stack' }
 EDDebuggingAPITest >> testStack [ 
 	self assert: debugAPI stack identicalTo: debugAPI longStack

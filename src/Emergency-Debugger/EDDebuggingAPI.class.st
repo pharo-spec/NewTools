@@ -57,11 +57,11 @@ EDDebuggingAPI class >> terminateAllProcesses [
 ]
 
 { #category : #'API - Revert' }
-EDDebuggingAPI >> changeRecordsForMethod: aRgMethodHistoricalRingDefinition [
+EDDebuggingAPI >> changeRecordsForMethod: aCompiledMethod [
 	^ SourceFiles
-		changeRecordsFrom: aRgMethodHistoricalRingDefinition sourcePointer
-		className: aRgMethodHistoricalRingDefinition instanceSideParentName
-		isMeta: aRgMethodHistoricalRingDefinition isMetaSide
+		changeRecordsFrom: aCompiledMethod sourcePointer
+		className: aCompiledMethod methodClass name
+		isMeta: aCompiledMethod methodClass isMeta
 ]
 
 { #category : #'API - Debugging support' }
@@ -127,19 +127,14 @@ EDDebuggingAPI >> nodeForContext: aContext [
 ]
 
 { #category : #'API - Revert' }
-EDDebuggingAPI >> revert: method to: aChangeRecord [
+EDDebuggingAPI >> revert: aCompiledMethod to: aChangeRecord [
 	"Reverts the given method to the given change record"
 
-	method asRingDefinition realClass
+	aCompiledMethod methodClass
 		compile: aChangeRecord sourceCode
 		classified: aChangeRecord category
 		withStamp: aChangeRecord stamp
 		notifying: nil
-]
-
-{ #category : #'API - Revert' }
-EDDebuggingAPI >> rgMethodHistorical: aMethod [
-	^ aMethod asHistoricalRingDefinition
 ]
 
 { #category : #accessing }
@@ -193,9 +188,8 @@ EDDebuggingAPI >> tryReopenSessionWithDebugger [
 ]
 
 { #category : #'API - Revert' }
-EDDebuggingAPI >> versionsForMethod: aMethod [
+EDDebuggingAPI >> versionsForMethod: aCompiledMethod [
 	^ changesForMethods
-		at: aMethod
-		ifAbsentPut:
-			[ self changeRecordsForMethod: (self rgMethodHistorical: aMethod) ]
+		at: aCompiledMethod
+		ifAbsentPut: [ self changeRecordsForMethod: aCompiledMethod ]
 ]
