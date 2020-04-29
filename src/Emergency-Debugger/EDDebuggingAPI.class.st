@@ -126,6 +126,17 @@ EDDebuggingAPI >> nodeForContext: aContext [
 	^ aContext method sourceNodeForPC: aContext pc
 ]
 
+{ #category : #'API - Stack' }
+EDDebuggingAPI >> resetStack [
+	longStack := nil
+]
+
+{ #category : #'API - Context' }
+EDDebuggingAPI >> restartContextAt: anIndex [
+	session restart: (self contextAt: anIndex).
+	self resetStack
+]
+
 { #category : #'API - Revert' }
 EDDebuggingAPI >> revert: aCompiledMethod to: aChangeRecord [
 	"Reverts the given method to the given change record"

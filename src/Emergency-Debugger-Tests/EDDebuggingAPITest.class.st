@@ -152,6 +152,23 @@ EDDebuggingAPITest >> testNodeForContext [
 		identicalTo: (context method sourceNodeForPC: context pc)
 ]
 
+{ #category : #'tests - stack' }
+EDDebuggingAPITest >> testResetStack [
+	debugAPI longStack removeAll.
+	debugAPI resetStack.
+	self
+		assertCollection: debugAPI longStack
+		equals: (session stackOfSize: debugAPI longStackSize)
+]
+
+{ #category : #'tests - context' }
+EDDebuggingAPITest >> testRestartContextAt [
+	| secondContext |
+	secondContext := debugAPI longStack second.
+	debugAPI restartContextAt: 2.
+	self assert: debugAPI longStack first identicalTo: secondContext
+]
+
 { #category : #'tests - reverting methods' }
 EDDebuggingAPITest >> testRevertTo [
 	|method changes|
