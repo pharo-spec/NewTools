@@ -4,12 +4,6 @@ Class {
 	#category : #'Emergency-Debugger-Tests'
 }
 
-{ #category : #running }
-EDDebuggingAPITest >> setUp [
-	super setUp
-	
-]
-
 { #category : #'tests - initialization' }
 EDDebuggingAPITest >> testAttachTo [
 	self assert: debugAPI session identicalTo: session

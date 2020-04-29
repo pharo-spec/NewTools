@@ -2,8 +2,11 @@ Class {
 	#name : #EDTests,
 	#superclass : #TestCase,
 	#instVars : [
+		'ed',
 		'session',
-		'debugAPI'
+		'debugAPI',
+		'mockDisplayAPI',
+		'currentDebuggingAPI'
 	],
 	#category : #'Emergency-Debugger-Tests'
 }
@@ -90,10 +93,20 @@ EDTests >> configureDebugSession [
 
 ]
 
+{ #category : #'instance creation' }
+EDTests >> newEd [
+	ed := EDEmergencyDebugger new.
+	ed repl: EDMockREPLInterface new.
+	ed displayInterface: (mockDisplayAPI := EDMockDisplayInterface new).
+	ed debugAPI: debugAPI.
+	ed debug: session
+]
+
 { #category : #running }
 EDTests >> setUp [
 	|context process|
 	super setUp.
+	currentDebuggingAPI := EDEmergencyDebugger debugAPI.
 	context := [ EDMockObjectForTests new m: 20 ] asContext.
 	process := Process
 		forContext: context
@@ -104,5 +117,14 @@ EDTests >> setUp [
 		startedAt: context.
 	self configureDebugSession.
 	debugAPI := EDDebuggingAPI attachTo: session.
+	EDEmergencyDebugger debugAPI: nil.
+	self newEd
+]
 
+{ #category : #running }
+EDTests >> tearDown [
+	EDEmergencyDebugger debugAPI: currentDebuggingAPI.
+	session terminate.
+	EDMockObjectForTests removeSelector: #mWithVersion.
+	super tearDown
 ]

@@ -1,11 +1,6 @@
 Class {
 	#name : #EDEmergencyDebuggerTest,
 	#superclass : #EDTests,
-	#instVars : [
-		'ed',
-		'currentDebuggingAPI',
-		'mockDisplayAPI'
-	],
 	#category : #'Emergency-Debugger-Tests'
 }
 
@@ -29,16 +24,6 @@ EDEmergencyDebuggerTest >> methodDisplayTextStringExample [
 	expectedTextStream << method sourceCode.
 	expectedTextStream cr.
 	^expectedTextStream contents asString
-]
-
-{ #category : #running }
-EDEmergencyDebuggerTest >> newEd [
-	ed := EDEmergencyDebugger new.
-	ed repl: EDMockREPLInterface new.
-	ed displayInterface: (mockDisplayAPI := EDMockDisplayInterface new).
-	ed debugAPI: debugAPI.
-	ed debug: session
-
 ]
 
 { #category : #'methods version' }
@@ -65,22 +50,6 @@ EDEmergencyDebuggerTest >> resultTextStringExample [
 	ed writeSectionTitle: 'RES' on: expectedTextStream.
 	expectedTextStream << 'result'.
 	^ expectedTextStream contents asString
-]
-
-{ #category : #running }
-EDEmergencyDebuggerTest >> setUp [
-	super setUp.	
-	currentDebuggingAPI := EDEmergencyDebugger debugAPI.
-	EDEmergencyDebugger debugAPI: nil.
-	self newEd
-]
-
-{ #category : #running }
-EDEmergencyDebuggerTest >> tearDown [
-	EDEmergencyDebugger debugAPI: currentDebuggingAPI.
-	session terminate.
-	EDMockObjectForTests removeSelector: #mWithVersion.
-	super tearDown
 ]
 
 { #category : #'debug API' }
