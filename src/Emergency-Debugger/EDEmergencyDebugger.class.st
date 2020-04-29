@@ -380,7 +380,7 @@ EDEmergencyDebugger >> showSelectedMethodVersion [
 	| selectedVersion text |
 	selectedVersion := self selectedMethodVersion.
 	text := selectedVersion sourceCode asText.
-	text makeBoldFrom: 1 to: selectedVersion selector size.
+	text makeBoldFrom: 1 to: selectedVersion methodSelector size.
 	self
 		composeResult: text
 		title:
