@@ -196,9 +196,6 @@ EDDebuggingAPI >> tryReopenSessionWithDebugger [
 EDDebuggingAPI >> versionsForMethod: aMethod [
 	^ changesForMethods
 		at: aMethod
-		ifAbsentPut: [ (self changeRecordsForMethod: (self rgMethodHistorical: aMethod))
-				collectWithIndex: [ :c :i | 
-					| rg |
-					rg := c asRingDefinition.
-					rg annotationNamed: #versionIndex put: i ] ]
+		ifAbsentPut:
+			[ self changeRecordsForMethod: (self rgMethodHistorical: aMethod) ]
 ]

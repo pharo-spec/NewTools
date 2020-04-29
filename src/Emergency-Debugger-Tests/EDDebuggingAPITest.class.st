@@ -16,6 +16,21 @@ EDDebuggingAPITest >> forbiddenProcesses [
 	[ Delay schedulingProcess ]}
 ]
 
+{ #category : #helpers }
+EDDebuggingAPITest >> injectContextWithMethodWithChanges [
+	| context |
+	self prepareMethodVersionTest.
+	context := Context
+		newForMethod: EDMockObjectForTests >> #mWithVersion.
+	context
+		setSender: nil
+		receiver: nil
+		method: EDMockObjectForTests >> #mWithVersion
+		closure: nil
+		startpc: nil.
+	debugAPI stack addFirst: context
+]
+
 { #category : #'tests - processes' }
 EDDebuggingAPITest >> testAllRunningProcesses [
 	| processes |
@@ -30,6 +45,17 @@ EDDebuggingAPITest >> testAllRunningProcesses [
 { #category : #'tests - initialization' }
 EDDebuggingAPITest >> testAttachTo [
 	self assert: debugAPI session identicalTo: session
+]
+
+{ #category : #'tests - reverting methods' }
+EDDebuggingAPITest >> testChangeRecordsForMethod [
+	| changes |
+	self prepareMethodVersionTest.
+	changes := debugAPI
+		changeRecordsForMethod: (EDMockObjectForTests >> #mWithVersion) asHistoricalRingDefinition.
+	self assert: changes size equals: 2.
+	self assert: changes first sourceCode equals: self sampleMethodSourceCodeVersion2.
+	self assert: changes second sourceCode equals: self sampleMethodSourceCodeVersion1
 ]
 
 { #category : #'tests - debugging support' }
@@ -93,6 +119,20 @@ EDDebuggingAPITest >> testMethodAt [
 			identicalTo: (session stack at: i) method ]
 ]
 
+{ #category : #'tests - reverting methods' }
+EDDebuggingAPITest >> testMethodVersionAt [
+	self injectContextWithMethodWithChanges.
+	self
+		assert: (debugAPI methodVersionAt: 1)
+		equals: (debugAPI changesForMethods at: EDMockObjectForTests >> #mWithVersion)
+]
+
+{ #category : #'tests - reverting methods' }
+EDDebuggingAPITest >> testMethodVersionSizeAt [
+	self injectContextWithMethodWithChanges.
+	self assert: (debugAPI methodVersionAt: 1) size equals: 2
+]
+
 { #category : #'tests - context' }
 EDDebuggingAPITest >> testNodeAt [
 	1 to: session stack size do: [ :i | 
@@ -110,6 +150,44 @@ EDDebuggingAPITest >> testNodeForContext [
 	self
 		assert: (debugAPI nodeForContext: context)
 		identicalTo: (context method sourceNodeForPC: context pc)
+]
+
+{ #category : #'tests - reverting methods' }
+EDDebuggingAPITest >> testRevertTo [
+	|method changes|
+	self prepareMethodVersionTest.
+	method := (EDMockObjectForTests >> #mWithVersion).
+	changes := debugAPI
+		changeRecordsForMethod: method asHistoricalRingDefinition.
+		
+	self assert: method sourceCode equals: self sampleMethodSourceCodeVersion2.
+	debugAPI revert: (EDMockObjectForTests >> #mWithVersion) to: changes second.
+	
+	"Method version is now the reverted one"
+	method := (EDMockObjectForTests >> #mWithVersion).
+	self assert: method sourceCode equals: self sampleMethodSourceCodeVersion1.
+	
+	"Changes now include new version, equals to the first one"
+	changes := debugAPI
+		changeRecordsForMethod: method asHistoricalRingDefinition.
+	self assert: changes size equals: 3.
+	self assert: changes first sourceCode equals: self sampleMethodSourceCodeVersion1.
+	self assert: changes second sourceCode equals: self sampleMethodSourceCodeVersion2.
+	self assert: changes third sourceCode equals: self sampleMethodSourceCodeVersion1.
+	
+	"Changes cache should be updated: 
+	we test for source code version, as changes cannot compare otherwise than using identity check =="
+	self assert: (debugAPI versionsForMethod: method)  size equals: 3.
+	self assertCollection: ((debugAPI versionsForMethod: method) collect:[:c| c sourceCode])
+				equals: (changes collect:[:c| c sourceCode])
+]
+
+{ #category : #'tests - reverting methods' }
+EDDebuggingAPITest >> testRgMethodHistorical [
+	self prepareMethodVersionTest.
+	self
+		assert: (debugAPI rgMethodHistorical: EDMockObjectForTests >> #mWithVersion)
+		equals: (EDMockObjectForTests >> #mWithVersion) asHistoricalRingDefinition
 ]
 
 { #category : #'tests - stack' }
@@ -157,4 +235,14 @@ EDDebuggingAPITest >> testTerminateSession [
 	ed debugAPI terminateSession.
 	self assert: ed debugAPI session interruptedProcess isNil.
 	self assert: process isTerminated
+]
+
+{ #category : #'tests - reverting methods' }
+EDDebuggingAPITest >> testVersionsForMethod [
+	|changes|
+	self prepareMethodVersionTest.
+	changes := debugAPI versionsForMethod: (EDMockObjectForTests >> #mWithVersion).	
+	self assert: debugAPI changesForMethods size equals: 1.
+	self assert: (debugAPI changesForMethods at: (EDMockObjectForTests >> #mWithVersion))
+			identicalTo: changes
 ]
