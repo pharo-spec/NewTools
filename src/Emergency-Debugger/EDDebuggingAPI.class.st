@@ -8,9 +8,9 @@ Class {
 	#instVars : [
 		'session',
 		'debugger',
-		'forbiddenProcesses',
 		'changesForMethods',
-		'longStack'
+		'longStack',
+		'forbiddenProcesses'
 	],
 	#category : #'Emergency-Debugger'
 }

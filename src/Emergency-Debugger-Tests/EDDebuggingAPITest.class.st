@@ -10,6 +10,11 @@ EDDebuggingAPITest >> setUp [
 	
 ]
 
+{ #category : #'tests - initialization' }
+EDDebuggingAPITest >> testAttachTo [
+	self assert: debugAPI session identicalTo: session
+]
+
 { #category : #'tests - context' }
 EDDebuggingAPITest >> testContextAt [
 	1 to: session stack size do: [ :i | 
@@ -23,6 +28,12 @@ EDDebuggingAPITest >> testDisplayStackSize [
 	self
 		assert: debugAPI displayStackSize
 		equals: debugAPI class displayStackSize
+]
+
+{ #category : #'tests - initialization' }
+EDDebuggingAPITest >> testInitialize [
+	self assert: debugAPI debugger isNil.
+	self assertEmpty: debugAPI changesForMethods
 ]
 
 { #category : #'tests - stack' }
