@@ -4,15 +4,6 @@ Class {
 	#category : #'Emergency-Debugger-Tests'
 }
 
-{ #category : #'methods version' }
-EDEmergencyDebuggerTest >> compileMethodVersion: version [
-	EDMockObjectForTests
-		compile:
-			'm: i', version, '
-	i = 1 ifTrue:[^1].
-	^i + (self m: i - 1)'
-]
-
 { #category : #'text - composition' }
 EDEmergencyDebuggerTest >> methodDisplayTextStringExample [
 	| method expectedTextStream |
@@ -24,22 +15,6 @@ EDEmergencyDebuggerTest >> methodDisplayTextStringExample [
 	expectedTextStream << method sourceCode.
 	expectedTextStream cr.
 	^expectedTextStream contents asString
-]
-
-{ #category : #'methods version' }
-EDEmergencyDebuggerTest >> prepareMethodVersionTest [
-	| context |
-	EDMockObjectForTests compile: 'mWithVersion ^1 '.
-	EDMockObjectForTests compile: 'mWithVersion ^2 '.
-	context := Context
-		newForMethod: EDMockObjectForTests >> #mWithVersion.
-	context
-		setSender: nil
-		receiver: nil
-		method: EDMockObjectForTests >> #mWithVersion
-		closure: nil
-		startpc: nil.
-	ed debugAPI stack addFirst: context
 ]
 
 { #category : #'text - composition' }

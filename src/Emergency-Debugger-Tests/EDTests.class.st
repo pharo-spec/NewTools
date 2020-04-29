@@ -102,6 +102,32 @@ EDTests >> newEd [
 	ed debug: session
 ]
 
+{ #category : #'methods version' }
+EDTests >> prepareMethodVersionTest [
+	| context |
+	EDMockObjectForTests compile: self sampleMethodSourceCodeVersion1.
+	EDMockObjectForTests compile: self sampleMethodSourceCodeVersion2.
+	context := Context
+		newForMethod: EDMockObjectForTests >> #mWithVersion.
+	context
+		setSender: nil
+		receiver: nil
+		method: EDMockObjectForTests >> #mWithVersion
+		closure: nil
+		startpc: nil.
+	ed debugAPI stack addFirst: context
+]
+
+{ #category : #'methods version' }
+EDTests >> sampleMethodSourceCodeVersion1 [
+	^ 'mWithVersion ^1 '
+]
+
+{ #category : #'methods version' }
+EDTests >> sampleMethodSourceCodeVersion2 [
+	^ 'mWithVersion ^2 '
+]
+
 { #category : #running }
 EDTests >> setUp [
 	|context process|
