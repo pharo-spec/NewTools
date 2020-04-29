@@ -20,6 +20,9 @@ EDDebuggingAPITest >> testCloseEmergencySession [
 
 	|ed|
 	ed := EDEmergencyDebugger new.
+	ed basicDebug: session.
+	ed debugAPI closeEmergencySession.
+	self deny: ed isRunning
 ]
 
 { #category : #'tests - context' }
@@ -109,4 +112,16 @@ EDDebuggingAPITest >> testStackSize [
 	self
 		assert: debugAPI stackSize
 		equals: debugAPI stack size
+]
+
+{ #category : #'tests - debugging support' }
+EDDebuggingAPITest >> testTerminateSession [
+
+	|ed process|
+	ed := EDEmergencyDebugger new.
+	ed basicDebug: session.
+	process := ed debugAPI session interruptedProcess.
+	ed debugAPI terminateSession.
+	self assert: ed debugAPI session interruptedProcess isNil.
+	self assert: process isTerminated
 ]
