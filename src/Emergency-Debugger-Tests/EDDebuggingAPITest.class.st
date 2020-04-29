@@ -4,6 +4,29 @@ Class {
 	#category : #'Emergency-Debugger-Tests'
 }
 
+{ #category : #helpers }
+EDDebuggingAPITest >> forbiddenProcesses [
+	self flag: 'This is a fixed list of processes we do not want to kill if they exist. This is too magickal, but we lack tools to have such information and we do not want to depend on process browser packages (information is taken from there).'.
+	^ {[  ].
+	[ Smalltalk lowSpaceWatcherProcess ].
+	[ WeakArray runningFinalizationProcess ].
+	[ Processor backgroundProcess ].
+	[ InputEventFetcher default fetcherProcess ].
+	[ UIManager default uiProcess ].
+	[ Delay schedulingProcess ]}
+]
+
+{ #category : #'tests - processes' }
+EDDebuggingAPITest >> testAllRunningProcesses [
+	| processes |
+	processes := EDDebuggingAPI allRunningProcesses.
+	self assertCollection: Process allSubInstances includesAll: processes.
+	self
+		denyCollection: processes
+		includesAny: EDDebuggingAPI forbiddenProcesses.
+	processes do: [ :p | self deny: p isTerminated ]
+]
+
 { #category : #'tests - initialization' }
 EDDebuggingAPITest >> testAttachTo [
 	self assert: debugAPI session identicalTo: session
@@ -32,6 +55,14 @@ EDDebuggingAPITest >> testDisplayStackSize [
 	self
 		assert: debugAPI displayStackSize
 		equals: debugAPI class displayStackSize
+]
+
+{ #category : #'tests - processes' }
+EDDebuggingAPITest >> testForbiddenProcesses [
+	EDDebuggingAPI forbiddenProcesses
+		with: self forbiddenProcesses
+		do:
+			[ :actualProcess :expectedProcess | self assert: actualProcess value identicalTo: expectedProcess value ]
 ]
 
 { #category : #'tests - initialization' }
@@ -106,6 +137,14 @@ EDDebuggingAPITest >> testStackSize [
 	self
 		assert: debugAPI stackSize
 		equals: debugAPI stack size
+]
+
+{ #category : #'tests - processes' }
+EDDebuggingAPITest >> testTerminateAllProcesses [
+	|edProcess|
+	edProcess := ed debugAPI session interruptedProcess.
+	ed debugAPI terminateAllProcesses.
+	self assert: edProcess isTerminated 
 ]
 
 { #category : #'tests - debugging support' }
