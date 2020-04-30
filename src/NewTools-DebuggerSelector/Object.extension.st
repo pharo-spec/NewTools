@@ -6,6 +6,12 @@ Object >> defaultDebugSessionRank [
 ]
 
 { #category : #'*NewTools-DebuggerSelector' }
+Object class >> handlesContext: aContext [
+	"Whether I'm a competent debugger for aContext"
+	^ false
+]
+
+{ #category : #'*NewTools-DebuggerSelector' }
 Object >> rankDebugSession: aDebugSession [
 	^self defaultDebugSessionRank
 ]
