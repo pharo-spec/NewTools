@@ -87,7 +87,7 @@ StPlayground class >> openContents: aString [
 { #category : #private }
 StPlayground class >> preferredExtent [
 
-	^ PreferredExtent ifNil: [ PreferredExtent := self class defaultExtent ]
+	^ PreferredExtent ifNil: [ PreferredExtent := self defaultExtent ]
 ]
 
 { #category : #private }
