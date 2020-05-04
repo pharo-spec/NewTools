@@ -67,9 +67,11 @@ NewDebuggerSelector >> debuggers: availableDebuggers [
 NewDebuggerSelector >> openOn: aDebugSession [
 	| candidateDebugger |
 	candidateDebugger := debuggers detect: [ :each |
-		(each handlesContext: aDebugSession context)
-			and: [ aDebugSession exception isHandlableBy: each ] ]
-		ifNone: [ aDebugSession inspect ].
+		"(each handlesContext: aDebugSession context)
+			and: [" aDebugSession exception isHandleableBy: each "]" ]
+		ifNone: [ "aDebugSession inspect" nil ].
+	Transcript show: candidateDebugger class.
+	candidateDebugger ifNil: [ "emergency debugger" aDebugSession inspect. ^ self ].
 	self
 		tryOpen: candidateDebugger
 		on: aDebugSession
@@ -84,9 +86,9 @@ NewDebuggerSelector >> tryOpen: aDebugger on: aDebugSession [
 			andNotification: nil.
 		self flag: 'TODO remove notifications'
 	]
-	on: Exception
+	on: Error
 	do: [ :err | 
 		"(self requestActionOnDebuggerError: err)
 			ifFalse: [ ^ false ]."
-		(DebuggerFailure of: aDebugger on: err) inspect ]
+		(DebuggerFailure of: aDebugger on: err) signal ]
 ]

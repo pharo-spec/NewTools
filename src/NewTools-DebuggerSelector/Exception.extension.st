@@ -11,7 +11,7 @@ Exception >> debug: debuggerLevel [
 ]
 
 { #category : #'*NewTools-DebuggerSelector' }
-Exception >> isHandlableBy: aDebugger [
+Exception >> isHandleableBy: aDebugger [
 	^ true
 ]
 

@@ -31,12 +31,22 @@ DebuggerFailure >> debugger: aDebugger exception: anException [
 ]
 
 { #category : #testing }
-DebuggerFailure >> isHandlableBy: aDebugger [
+DebuggerFailure >> isHandleableBy: aDebugger [
+(FileSystem workingDirectory / 'test' ) writeStream
+	nextPutAll: ((FileSystem workingDirectory / 'test' ) readStream contents);
+	nextPutAll: aDebugger name; space; nextPutAll: self class name; cr; close.
+	
+	aDebugger = GTGenericStackDebugger ifTrue: [ ^ true ].
 	^ aDebugger ~= failedDebugger
-		and: [ innerException isHandlableBy: aDebugger ]
+		and: [ innerException isHandleableBy: aDebugger ]
 ]
 
 { #category : #testing }
 DebuggerFailure >> originException [
 	^ innerException originException
+]
+
+{ #category : #accessing }
+DebuggerFailure >> signalerContext [
+	^ self originException signalerContext
 ]
