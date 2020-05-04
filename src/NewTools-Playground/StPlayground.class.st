@@ -44,10 +44,18 @@ Class {
 		'bindings'
 	],
 	#classVars : [
+		'CacheDirectory',
 		'PreferredExtent'
 	],
 	#category : #'NewTools-Playground-View'
 }
+
+{ #category : #private }
+StPlayground class >> cacheDirectory [
+	" lazy initialize the cache and always ensure its existence - especially while the image is running"
+	
+	^ CacheDirectory ifNil: [ CacheDirectory := FileLocator localDirectory / 'play-cache' ]
+]
 
 { #category : #accessing }
 StPlayground class >> defaultExtent [
