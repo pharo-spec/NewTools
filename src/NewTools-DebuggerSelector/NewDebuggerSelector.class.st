@@ -86,8 +86,8 @@ NewDebuggerSelector >> debugException: exception inProcess: process from: uiMana
 
 	| debugSession |
 	debugSession := self
-		newSessionFromException: process
-		forProcess: exception.
+		newSessionFromException: exception
+		forProcess: process.
 	debugSession isAboutUIProcess
 		ifTrue: [ DefaultExecutionEnvironment
 				beActiveDuring: [ uiManager spawnNewProcess ] ].

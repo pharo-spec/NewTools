@@ -7,3 +7,8 @@ Class {
 	#superclass : #DummyDebugger,
 	#category : #'NewTools-DebuggerSelector-Tests'
 }
+
+{ #category : #testing }
+DummyUnusableDebugger >> handlesContext: aContext [
+	^false
+]

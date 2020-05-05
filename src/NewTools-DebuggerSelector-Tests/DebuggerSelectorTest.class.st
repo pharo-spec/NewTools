@@ -13,9 +13,13 @@ Class {
 
 { #category : #helper }
 DebuggerSelectorTest >> session [
+	| process |
+	process := [  ] newProcess.
 	^ debuggerSelector
-		newSessionFromException: DebuggerSelectorNullException new
-		forProcess: [  ] newProcess
+		newSessionFromException:
+			(DebuggerSelectorNullException
+				fromSignallerContext: process suspendedContext)
+		forProcess: process
 ]
 
 { #category : #running }
@@ -23,9 +27,11 @@ DebuggerSelectorTest >> setUp [
 	"Hooks that subclasses may override to define the fixture of test."
 
 	super setUp.
-	debuggers := {(DummyUnusableDebugger named: #A).
-	(DummyDebugger named: #B).
-	(DummyDebugger named: #C)}.
+	debuggers := OrderedCollection
+		withAll:
+			{(DummyUnusableDebugger named: #A).
+			(DummyDebugger named: #B).
+			(DummyDebugger named: #C)}.
 	debuggerSelector := NewDebuggerSelector with: debuggers copy
 ]
 
@@ -58,17 +64,31 @@ DebuggerSelectorTest >> testDebuggersWithRanks [
 ]
 
 { #category : #'tests -  debugger-selector' }
-DebuggerSelectorTest >> testFindDebuggerForSession [
+DebuggerSelectorTest >> testFindDebuggerForDebuggerFailure [
+	| process semaphore exception session |
+	semaphore := Semaphore new.
+	process := [ [ 1 / 0 ]
+		on: Error
+		do: [ :err | exception := DebuggerFailure of: debuggers second on: err ] ]
+		newProcess.
+	[[ process resume ]
+		ensure: [ semaphore signal ]] fork.
+	semaphore wait.
+	
+	session := debuggerSelector
+		newSessionFromException: exception
+		forProcess: process.
+		
 	self
-		assertCollection: (debuggerSelector findDebuggerForSession: self session)
-		equals: nil
+		assert: (debuggerSelector findDebuggerForSession: session)
+		identicalTo: debuggers third
 ]
 
 { #category : #'tests -  debugger-selector' }
 DebuggerSelectorTest >> testFindDebuggerToHandleContext [
 	self
-		assertCollection: (debuggerSelector findDebuggerForSession: self session)
-		equals: (debuggers removeFirst)
+		assert: (debuggerSelector findDebuggerForSession: self session)
+		identicalTo: debuggers second
 ]
 
 { #category : #tests }
@@ -171,6 +191,31 @@ DebuggerSelectorTest >> testMainDebuggerSetGet [
 	self
 		assert: eventListener nbOfMainDebuggerClassUpdateEventReceived
 		equals: 2
+]
+
+{ #category : #'tests - sessions' }
+DebuggerSelectorTest >> testNewSessionFromExceptionForProcess [
+]
+
+{ #category : #'tests -  debugger-selector' }
+DebuggerSelectorTest >> testNoDebuggerForDebuggerFailure [
+	| process semaphore exception session |
+	semaphore := Semaphore new.
+	process := [ [ 1 / 0 ]
+		on: Error
+		do: [ :err | exception := DebuggerFailure of: debuggers second on: err ] ]
+		newProcess.
+	[[ process resume ]
+		ensure: [ semaphore signal ]] fork.
+	semaphore wait.
+	
+	exception := DebuggerFailure of: debuggers third on: exception.
+	session := debuggerSelector
+		newSessionFromException: exception
+		forProcess: process.
+		
+	self
+		assert: (debuggerSelector findDebuggerForSession: session) isNil
 ]
 
 { #category : #tests }
