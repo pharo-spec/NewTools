@@ -1,5 +1,9 @@
+"
+I am a dummy debugger.
+My instances simulate debugger classes that are named, and can handle any context.
+"
 Class {
-	#name : #DummyDebuggerForTests,
+	#name : #DummyDebugger,
 	#superclass : #Object,
 	#instVars : [
 		'name'
@@ -8,21 +12,21 @@ Class {
 }
 
 { #category : #'instance creation' }
-DummyDebuggerForTests class >> named: aString [
+DummyDebugger class >> named: aString [
 	^self new name: aString
 ]
 
 { #category : #testing }
-DummyDebuggerForTests >> handlesContext: aContext [
+DummyDebugger >> handlesContext: aContext [
 	^true
 ]
 
 { #category : #accessing }
-DummyDebuggerForTests >> name [
+DummyDebugger >> name [
 	^ name
 ]
 
 { #category : #accessing }
-DummyDebuggerForTests >> name: anObject [
+DummyDebugger >> name: anObject [
 	name := anObject
 ]
