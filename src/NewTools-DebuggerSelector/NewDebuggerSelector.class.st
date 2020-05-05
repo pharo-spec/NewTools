@@ -17,10 +17,13 @@ NewDebuggerSelector class >> availableDebuggers [
 
 { #category : #'debug - exceptions' }
 NewDebuggerSelector class >> debugException: exception inProcess: process from: uiManager [
-	^ (self with: self availableDebuggers)
+	^ [ (self with: self availableDebuggers)
 		debugException: exception
 		inProcess: process
-		from: uiManager
+		from: uiManager ]
+		on: Error
+		do: [ self flag: 'Create a local method for primitive errors'.
+			DebugSession new signalDebuggerError: exception ]
 ]
 
 { #category : #'debug - processes' }
@@ -114,7 +117,7 @@ NewDebuggerSelector >> findDebuggerForSession: aDebugSession [
 ]
 
 { #category : #sessions }
-NewDebuggerSelector >> newSessionFromException: process forProcess: exception [
+NewDebuggerSelector >> newSessionFromException: exception forProcess: process [
 	"Open a debugger on the exception"
 
 	| debugSession |

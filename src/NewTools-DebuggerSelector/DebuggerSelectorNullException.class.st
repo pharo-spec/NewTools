@@ -13,6 +13,11 @@ DebuggerSelectorNullException class >> fromSignallerContext: aContext [
 	^self new signalIn: aContext
 ]
 
+{ #category : #accessing }
+DebuggerSelectorNullException >> description [
+	^'I am a NULL debugging exception'
+]
+
 { #category : #signaling }
 DebuggerSelectorNullException >> signalIn: context [
 	"This exception is not signalled but started from a given context, that is its direct signaller context. Therefore the exception is not signalled after setting its signal context"
