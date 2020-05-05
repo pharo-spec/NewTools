@@ -190,6 +190,7 @@ StPlayground >> buildStatusBar [
 
 	(newStatusBar := SpPresenter new)
 		layout: (SpBoxLayout newHorizontal
+			borderWidth: 3;
 			add: (lineLabel := newStatusBar newLabel) expand: false;
 			addLast: (toggleLineNumberButton := newStatusBar newToggleButton) expand: false;
 			yourself).
@@ -267,8 +268,10 @@ StPlayground >> initializePresenters [
 			yourself);
 		yourself.
 		
-	text eventHandler whenKeyUpDo: [ :event |
-		self updateLineNumber ].
+	text eventHandler 
+		whenKeyUpDo: [ :event | self updateLineNumber ];
+		"before taking focus position will be nil, ensure I have the correct one"
+		whenFocusReceivedDo: [ self updateLineNumber ].
 		
 	self updatePresenter
 ]
@@ -379,7 +382,7 @@ StPlayground >> updateLineNumber [
 	pos := text cursorPosition.
 	lineLabel label: (pos 
 		ifNotNil: [ ('Line: {1}:{2}' format: { pos y. pos x }) ]
-		ifNil: [ '?' ])
+		ifNil: [ '' ])
 ]
 
 { #category : #initialization }
