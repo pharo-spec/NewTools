@@ -74,3 +74,8 @@ DebuggerSelectorForTests >> tryToOpenDebugSession: aDebugSession withDebuggerCla
 					 withSuccess: false).
 			^ false ]
 ]
+
+{ #category : #'as yet unclassified' }
+DebuggerSelectorForTests >> warnTest [
+	Warning signal: 'test'
+]

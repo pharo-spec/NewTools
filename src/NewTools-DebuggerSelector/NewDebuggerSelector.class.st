@@ -35,9 +35,44 @@ NewDebuggerSelector class >> debugProcess: aProcess fromContext: aContext labele
 		from: UIManager default
 ]
 
+{ #category : #warnings }
+NewDebuggerSelector class >> debuggerWarning: aWarningException from: aUIManager [
+	^ aUIManager warningDefaultAction: aWarningException
+]
+
+{ #category : #warnings }
+NewDebuggerSelector class >> debuggerWarning: aWarningException inProcess: aProcess from: aUIManager [
+	DSWarningPresenter basicNew
+		exception: aWarningException;
+		process: aProcess;
+		uiManager: aUIManager;
+		notificationString: (self debuggerWarningNotificationFor: aWarningException);
+		initialize;
+		openModalWithSpec.
+		self flag: 'super wrong: we do not want a modal here, but if we do not, the process from which the warning originated is proceeded and it cannot be debugged nor proceeded anymore'
+]
+
+{ #category : #warnings }
+NewDebuggerSelector class >> debuggerWarningNotificationFor: aWarningException [
+	^ aWarningException messageText
+		,
+			'\\Select Proceed to continue, or close this window to cancel the operation.'
+				withCRs
+]
+
+{ #category : #opening }
+NewDebuggerSelector class >> openOnSession: aDebugSession [	
+	self flag: 'To do'
+]
+
 { #category : #debuggers }
 NewDebuggerSelector class >> registeredDebuggersWithRanks [
 	^ Smalltalk tools debuggers
+]
+
+{ #category : #exceptions }
+NewDebuggerSelector class >> resumeException: anException [
+	anException resume
 ]
 
 { #category : #'instance creation' }
@@ -67,7 +102,7 @@ NewDebuggerSelector >> debugException: exception inProcess: process from: uiMana
 				on: Error
 				do: [ :ex | debugSession signalDebuggerError: ex ] ].
 			
-	process suspend
+	process isSuspended ifFalse:[process suspend]
 ]
 
 { #category : #initialization }
