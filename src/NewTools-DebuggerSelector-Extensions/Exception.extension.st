@@ -1,6 +1,16 @@
 Extension { #name : #Exception }
 
 { #category : #'*NewTools-DebuggerSelector-Extensions' }
+Exception >> debug [
+	"open a debugger on myself"
+
+	NewDebuggerSelector
+		debugException: self
+		inProcess: Processor activeProcess
+		from: UIManager default
+]
+
+{ #category : #'*NewTools-DebuggerSelector-Extensions' }
 Exception >> debug: debuggerLevel [
 	self flag: 'Bad selector choice, confusing with other #debug: messages'.
 	Processor activeProcess

@@ -15,15 +15,6 @@ DebuggerFailure class >> of: aDebugger on: anException [
 		yourself
 ]
 
-{ #category : #handling }
-DebuggerFailure >> debug [
-	"open a debugger on myself"
-	
-	Processor activeProcess 
-		debug: self signalerContext
-		title: self description
-]
-
 { #category : #initialization }
 DebuggerFailure >> debugger: aDebugger exception: anException [
 	failedDebugger := aDebugger.
