@@ -11,16 +11,6 @@ Class {
 }
 
 { #category : #helper }
-DebuggerSelectorTest >> createDebugSessionForTesting [
-	| dbSession process |
-	process := [ 'hello' ] fork.
-	dbSession := process
-		             newDebugSessionNamed: 'forTest'
-		             startedAt: process suspendedContext.
-	^ dbSession
-]
-
-{ #category : #'tests -  debugger-selector' }
 DebuggerSelectorTest >> session [
 	^ debuggerSelector
 		newSessionFromException: DebuggerSelectorNullException new
@@ -31,8 +21,12 @@ DebuggerSelectorTest >> session [
 DebuggerSelectorTest >> setUp [
 	"Hooks that subclasses may override to define the fixture of test."
 
-	super setUp.	
-	debuggerSelector := NewDebuggerSelector new
+	super setUp.
+	debuggerSelector := NewDebuggerSelector
+		with:
+			{(DummyDebugger named: #A).
+			(DummyDebugger named: #B).
+			(DummyDebugger named: #C)}
 ]
 
 { #category : #'tests - debuggers' }
@@ -77,7 +71,7 @@ DebuggerSelectorTest >> testGetDebuggerClasses [
 
 	| debuggerClasses |
 	debuggerClasses := debuggerSelector getDebuggerClassesReal.
-	self assert: (debuggerClasses includes: DummyDebuggerForTests).
+	self assert: (debuggerClasses includes: DummyDebugger).
 	self assert: (debuggerClasses includes:
 			 DummyDebuggerForTests_CannotOpenDebugSession).
 	self assert:
@@ -88,7 +82,7 @@ DebuggerSelectorTest >> testGetDebuggerClasses [
 { #category : #tests }
 DebuggerSelectorTest >> testIsThisClassADebugger [
 	self assert:
-		(debuggerSelector isThisClassADebugger: DummyDebuggerForTests).
+		(debuggerSelector isThisClassADebugger: DummyDebugger).
 	self assert: (debuggerSelector isThisClassADebugger:
 			 DummyDebuggerForTests_CannotOpenDebugSession).
 	self assert: (debuggerSelector isThisClassADebugger: self class) not
@@ -148,7 +142,7 @@ DebuggerSelectorTest >> testMainDebuggerAlgorithm_MainDebuggerCannotOpen [
 	"Assert that the next debugger tried could open the debug session"
 	self
 		assert: (debuggerSelector debuggerSelectionAttempts at: 3) debuggerClass
-		equals: DummyDebuggerForTests.
+		equals: DummyDebugger.
 	self
 		assert: (debuggerSelector debuggerSelectionAttempts at: 3) success
 ]
