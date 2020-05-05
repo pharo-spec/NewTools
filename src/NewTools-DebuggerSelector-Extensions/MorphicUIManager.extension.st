@@ -41,3 +41,13 @@ MorphicUIManager >> debugProcess: process level: debuggerLevel context: context 
 		notification: notificationString
 		fromUIManager: self
 ]
+
+{ #category : #'*NewTools-DebuggerSelector-Extensions' }
+MorphicUIManager >> handleError: anError log: shouldLog [
+	shouldLog
+		ifTrue: [ self logError: anError ].
+	NewDebuggerSelector
+		debugException: anError
+		inProcess: Processor activeProcess
+		from: self
+]
