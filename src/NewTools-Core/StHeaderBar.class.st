@@ -11,7 +11,7 @@ Class {
 		'closeButton',
 		'shortcutLabel'
 	],
-	#category : #'NewTools-Core'
+	#category : #'NewTools-Core-Presenters'
 }
 
 { #category : #specs }
