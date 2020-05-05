@@ -1,6 +1,6 @@
 Extension { #name : #Exception }
 
-{ #category : #'*NewTools-DebuggerSelector' }
+{ #category : #'*NewTools-DebuggerSelector-Extensions' }
 Exception >> debug: debuggerLevel [
 	self flag: 'Bad selector choice, confusing with other #debug: messages'.
 	Processor activeProcess
@@ -10,12 +10,12 @@ Exception >> debug: debuggerLevel [
 		full: true
 ]
 
-{ #category : #'*NewTools-DebuggerSelector' }
+{ #category : #'*NewTools-DebuggerSelector-Extensions' }
 Exception >> isHandleableBy: aDebugger [
 	^ true
 ]
 
-{ #category : #'*NewTools-DebuggerSelector' }
+{ #category : #'*NewTools-DebuggerSelector-Extensions' }
 Exception >> originException [
 	^ self
 ]

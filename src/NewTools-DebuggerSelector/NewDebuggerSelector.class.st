@@ -70,7 +70,6 @@ NewDebuggerSelector >> openOn: aDebugSession [
 		"(each handlesContext: aDebugSession context)
 			and: [" aDebugSession exception isHandleableBy: each "]" ]
 		ifNone: [ "aDebugSession inspect" nil ].
-	Transcript show: candidateDebugger class.
 	candidateDebugger ifNil: [ "emergency debugger" aDebugSession inspect. ^ self ].
 	self
 		tryOpen: candidateDebugger

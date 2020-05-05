@@ -1,6 +1,6 @@
 Extension { #name : #Process }
 
-{ #category : #'*NewTools-DebuggerSelector' }
+{ #category : #'*NewTools-DebuggerSelector-Extensions' }
 Process >> debug: context level: debuggerLevel title: title full: bool [
 	^ UIManager default
 		debugProcess: self
@@ -11,7 +11,7 @@ Process >> debug: context level: debuggerLevel title: title full: bool [
 		notification: nil
 ]
 
-{ #category : #'*NewTools-DebuggerSelector' }
+{ #category : #'*NewTools-DebuggerSelector-Extensions' }
 Process >> debugException: anException [
 	NewDebuggerSelector
 		debugException: anException
