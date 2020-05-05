@@ -20,23 +20,19 @@ DebuggerSelectorTest >> createDebugSessionForTesting [
 	^ dbSession
 ]
 
+{ #category : #'tests -  debugger-selector' }
+DebuggerSelectorTest >> session [
+	^ debuggerSelector
+		newSessionFromException: DebuggerSelectorNullException new
+		forProcess: [  ] newProcess
+]
+
 { #category : #running }
 DebuggerSelectorTest >> setUp [
 	"Hooks that subclasses may override to define the fixture of test."
 
-	super setUp.
-	"	debuggerSelector := DebuggerSelector new.
-	debuggerSelector := DebuggerSelectorDecoratorForTest newOn: debuggerSelector."
-	debuggerSelector := DebuggerSelectorForTests new.
-	"Adding the test debugger classes the tests will work with"
-	debuggerSelector debuggerClasses
-		add: DummyDebuggerForTests;
-		add: DummyDebuggerForTests_CannotOpenDebugSession;
-		add: DummyDebuggerForTests_RankZero.
-	debugSession := self createDebugSessionForTesting.
-	eventListener := EventListenerForDebuggerSelectorTest new.
-
-	testDebuggerClass := DummyDebuggerForTests
+	super setUp.	
+	debuggerSelector := NewDebuggerSelector new
 ]
 
 { #category : #'tests - debuggers' }
@@ -65,6 +61,12 @@ DebuggerSelectorTest >> testDebuggersWithRanks [
 	self assert: assocs size equals: systemDebuggers size.
 	self assertCollection: assocs equals: systemDebuggers
 
+]
+
+{ #category : #'tests -  debugger-selector' }
+DebuggerSelectorTest >> testFindDebuggerForSession [
+	|session|
+	session := self session.
 ]
 
 { #category : #tests }
