@@ -18,3 +18,18 @@ Process >> debugException: anException [
 		inProcess: self
 		from: UIManager default
 ]
+
+{ #category : #'*NewTools-DebuggerSelector-Extensions' }
+Process >> debugWithTitle: title [
+	"Open debugger on self"
+
+	| context |
+	self flag: #TESTME.
+	context := self isActiveProcess
+		ifTrue: [ thisContext ]
+		ifFalse: [ self suspendedContext ].
+	^ NewDebuggerSelector
+		debugProcess: self
+		fromContext: context
+		labeled: title
+]

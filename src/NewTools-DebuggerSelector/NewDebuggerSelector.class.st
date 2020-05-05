@@ -23,6 +23,18 @@ NewDebuggerSelector class >> debugException: exception inProcess: process from: 
 		from: uiManager
 ]
 
+{ #category : #opening }
+NewDebuggerSelector class >> debugProcess: aProcess fromContext: aContext labeled: aString [
+	| exception |
+	self flag: #TESTME.
+	exception := DebuggerSelectorNullException fromSignallerContext: aContext.
+	exception messageText: aString.
+	self
+		debugException: exception
+		inProcess: aProcess
+		from: UIManager default
+]
+
 { #category : #debuggers }
 NewDebuggerSelector class >> registeredDebuggersWithRanks [
 	^ Smalltalk tools debuggers
