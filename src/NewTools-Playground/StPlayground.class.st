@@ -41,11 +41,14 @@ Class {
 	#instVars : [
 		'text',
 		'statusBar',
-		'bindings'
+		'bindings',
+		'lineLabel',
+		'toggleLineNumberButton'
 	],
 	#classVars : [
 		'CacheDirectory',
-		'PreferredExtent'
+		'PreferredExtent',
+		'ShowLineNumbers'
 	],
 	#category : #'NewTools-Playground-View'
 }
@@ -61,6 +64,12 @@ StPlayground class >> cacheDirectory [
 StPlayground class >> defaultExtent [
 
 	^ 600@400
+]
+
+{ #category : #accessing }
+StPlayground class >> defaultShowLineNumbers [
+
+	^ true
 ]
 
 { #category : #specs }
@@ -120,6 +129,18 @@ StPlayground class >> registerToolsOn: registry [
 
 ]
 
+{ #category : #private }
+StPlayground class >> showLineNumbers [
+
+	^ ShowLineNumbers ifNil: [ ShowLineNumbers := self defaultShowLineNumbers ]
+]
+
+{ #category : #private }
+StPlayground class >> showLineNumbers: aBoolean [
+
+	ShowLineNumbers := aBoolean
+]
+
 { #category : #binding }
 StPlayground >> addBinding: aBinding [
 
@@ -165,8 +186,23 @@ StPlayground >> buildMenu [
 
 { #category : #'private builder' }
 StPlayground >> buildStatusBar [ 
+	| newStatusBar |
 
-	^ SpStatusBarPresenter new
+	(newStatusBar := SpPresenter new)
+		layout: (SpBoxLayout newHorizontal
+			add: (lineLabel := newStatusBar newLabel) expand: false;
+			addLast: (toggleLineNumberButton := newStatusBar newToggleButton) expand: false;
+			yourself).
+
+	lineLabel addStyle: 'dim'.
+	self updateLineNumber.
+	toggleLineNumberButton
+		label: (StShowLineNumbersCommand iconLabelFor: self showLineNumbers);
+		help: StShowLineNumbersCommand defaultDescription;
+		state: self showLineNumbers;
+		whenChangedDo: [ :state | self showLineNumbers: state ].
+
+	^ newStatusBar
 ]
 
 { #category : #'private builder' }
@@ -219,6 +255,7 @@ StPlayground >> initialize [
 StPlayground >> initializePresenters [
 	
 	text := self newCode
+		lineNumbers: self showLineNumbers;
 		contextMenu: [ self menuActions asMenuPresenter ];
 		contextKeyBindings: self menuActions asKMCategory;
 		interactionModel: self;
@@ -228,7 +265,12 @@ StPlayground >> initializePresenters [
 			doItContext: self doItContext;
 			completionClass: self selectedClassOrMetaClass;
 			yourself);
-		yourself
+		yourself.
+		
+	text eventHandler whenKeyUpDo: [ :event |
+		self updateLineNumber ].
+		
+	self updatePresenter
 ]
 
 { #category : #initialization }
@@ -251,12 +293,18 @@ StPlayground >> menuActions [
 	^ CmCommandGroup forSpec
 		beRoot;
 		register: ((CmCommandGroup named: 'Playground') asSpecGroup
-			"beDisplayedAsGroup;"
-			register: (StPlaygroundPublishCommand forSpecContext: self);
-			register: (StPlaygroundBindingsCommand forSpecContext: self);
-			register: (StPlaygroundPagesCommand forSpecContext: self);
+			register: ((CmCommandGroup named: 'Base options') asSpecGroup
+				beDisplayedAsGroup;
+				register: (StPlaygroundPublishCommand forSpecContext: self);
+				register: (StPlaygroundBindingsCommand forSpecContext: self);
+				register: (StPlaygroundPagesCommand forSpecContext: self);
+				yourself);
+			register: ((CmCommandGroup named: 'Miscelaneous options') asSpecGroup
+				beDisplayedAsGroup;
+				register: (StShowLineNumbersCommand forSpecContext: self);
+				yourself);
 			yourself);
-		yourself	
+		yourself
 ]
 
 { #category : #binding }
@@ -290,6 +338,26 @@ StPlayground >> setBindings: aDictionary [
 	bindings := aDictionary
 ]
 
+{ #category : #private }
+StPlayground >> showLineNumbers [
+
+	^ self class showLineNumbers
+]
+
+{ #category : #'private actions' }
+StPlayground >> showLineNumbers: aBoolean [
+
+	self class showLineNumbers: aBoolean.
+	text lineNumbers: aBoolean.
+	toggleLineNumberButton label: (StShowLineNumbersCommand iconLabelFor: self showLineNumbers)
+]
+
+{ #category : #actions }
+StPlayground >> toggleShowLineNumbers [
+
+	self showLineNumbers: self showLineNumbers not
+]
+
 { #category : #'private builder' }
 StPlayground >> toolbarActions [
 
@@ -301,6 +369,23 @@ StPlayground >> toolbarActions [
 			register: (StPlaygroundPagesCommand forSpecContext: self);
 			yourself);
 		yourself
+]
+
+{ #category : #initialization }
+StPlayground >> updateLineNumber [
+	| pos |
+	
+	lineLabel ifNil: [ ^ self ].	
+	pos := text cursorPosition.
+	lineLabel label: (pos 
+		ifNotNil: [ ('Line: {1}:{2}' format: { pos y. pos x }) ]
+		ifNil: [ '?' ])
+]
+
+{ #category : #initialization }
+StPlayground >> updatePresenter [
+
+	self updateLineNumber
 ]
 
 { #category : #accessing }
