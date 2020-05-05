@@ -5,7 +5,8 @@ Class {
 		'debuggerSelector',
 		'eventListener',
 		'debugSession',
-		'testDebuggerClass'
+		'testDebuggerClass',
+		'debuggers'
 	],
 	#category : #'NewTools-DebuggerSelector-Tests'
 }
@@ -22,11 +23,10 @@ DebuggerSelectorTest >> setUp [
 	"Hooks that subclasses may override to define the fixture of test."
 
 	super setUp.
-	debuggerSelector := NewDebuggerSelector
-		with:
-			{(DummyDebugger named: #A).
-			(DummyDebugger named: #B).
-			(DummyDebugger named: #C)}
+	debuggers := {(DummyUnusableDebugger named: #A).
+	(DummyDebugger named: #B).
+	(DummyDebugger named: #C)}.
+	debuggerSelector := NewDebuggerSelector with: debuggers copy
 ]
 
 { #category : #'tests - debuggers' }
@@ -59,8 +59,16 @@ DebuggerSelectorTest >> testDebuggersWithRanks [
 
 { #category : #'tests -  debugger-selector' }
 DebuggerSelectorTest >> testFindDebuggerForSession [
-	|session|
-	session := self session.
+	self
+		assertCollection: (debuggerSelector findDebuggerForSession: self session)
+		equals: nil
+]
+
+{ #category : #'tests -  debugger-selector' }
+DebuggerSelectorTest >> testFindDebuggerToHandleContext [
+	self
+		assertCollection: (debuggerSelector findDebuggerForSession: self session)
+		equals: (debuggers removeFirst)
 ]
 
 { #category : #tests }
