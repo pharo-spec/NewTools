@@ -15,7 +15,7 @@ NewDebuggerSelector class >> availableDebuggers [
 			collect: #key
 ]
 
-{ #category : #opening }
+{ #category : #'debug - exceptions' }
 NewDebuggerSelector class >> debugException: exception inProcess: process from: uiManager [
 	^ (self with: self availableDebuggers)
 		debugException: exception
@@ -23,7 +23,7 @@ NewDebuggerSelector class >> debugException: exception inProcess: process from: 
 		from: uiManager
 ]
 
-{ #category : #opening }
+{ #category : #'debug - processes' }
 NewDebuggerSelector class >> debugProcess: aProcess fromContext: aContext labeled: aString [
 	| exception |
 	self flag: #TESTME.
@@ -35,12 +35,12 @@ NewDebuggerSelector class >> debugProcess: aProcess fromContext: aContext labele
 		from: UIManager default
 ]
 
-{ #category : #warnings }
+{ #category : #'debug - warnings' }
 NewDebuggerSelector class >> debuggerWarning: aWarningException from: aUIManager [
 	^ aUIManager warningDefaultAction: aWarningException
 ]
 
-{ #category : #warnings }
+{ #category : #'debug - warnings' }
 NewDebuggerSelector class >> debuggerWarning: aWarningException inProcess: aProcess from: aUIManager [
 	DSWarningPresenter basicNew
 		exception: aWarningException;
@@ -52,17 +52,12 @@ NewDebuggerSelector class >> debuggerWarning: aWarningException inProcess: aProc
 		self flag: 'super wrong: we do not want a modal here, but if we do not, the process from which the warning originated is proceeded and it cannot be debugged nor proceeded anymore'
 ]
 
-{ #category : #warnings }
+{ #category : #'debug - warnings' }
 NewDebuggerSelector class >> debuggerWarningNotificationFor: aWarningException [
 	^ aWarningException messageText
 		,
 			'\\Select Proceed to continue, or close this window to cancel the operation.'
 				withCRs
-]
-
-{ #category : #opening }
-NewDebuggerSelector class >> openOnSession: aDebugSession [	
-	self flag: 'To do'
 ]
 
 { #category : #debuggers }
@@ -85,29 +80,41 @@ NewDebuggerSelector class >> with: availableDebuggers [
 { #category : #opening }
 NewDebuggerSelector >> debugException: exception inProcess: process from: uiManager [
 	"Open a debugger on the exception"
+
+	| debugSession |
+	debugSession := self
+		newSessionFromException: process
+		forProcess: exception.
+	debugSession isAboutUIProcess
+		ifTrue: [ DefaultExecutionEnvironment
+				beActiveDuring: [ uiManager spawnNewProcess ] ].
+		
+	"Schedule debugger in deferred UI message to address redraw problems after opening a debugger e.g. from the testrunner."
+	uiManager
+		defer: [  self openOn: debugSession ].
+	process suspend.
+	
+	self flag: 'If we are from a debug-it, the debug session must be stepped until we get into the method to debug, but for now it is not clear how to simply do that'.
+		"debugSession
+		stepIntoUntil: [ :currentContext | currentContext method == aCompiledMethod ]"
+]
+
+{ #category : #initialization }
+NewDebuggerSelector >> debuggers: availableDebuggers [
+	debuggers := availableDebuggers
+]
+
+{ #category : #sessions }
+NewDebuggerSelector >> newSessionFromException: process forProcess: exception [
+	"Open a debugger on the exception"
+
 	| debugSession |
 	debugSession := process
 		newDebugSessionNamed: exception description
 		startedAt: exception signalerContext.
 	debugSession exception: exception.
 	debugSession logStackToFileIfNeeded.
-	debugSession isAboutUIProcess
-		ifTrue: [ DefaultExecutionEnvironment beActiveDuring: [ uiManager spawnNewProcess ] ].
-		
-	uiManager defer: [
-		 "schedule debugger in deferred UI message to address
-			redraw problems after opening a debugger e.g. from
-			the testrunner."
-			[ self openOn: debugSession ]
-				on: Error
-				do: [ :ex | debugSession signalDebuggerError: ex ] ].
-			
-	process isSuspended ifFalse:[process suspend]
-]
-
-{ #category : #initialization }
-NewDebuggerSelector >> debuggers: availableDebuggers [
-	debuggers := availableDebuggers
+	^ debugSession
 ]
 
 { #category : #opening }
@@ -116,9 +123,11 @@ NewDebuggerSelector >> openOn: aDebugSession [
 	candidateDebugger := aDebugSession exception class = DebuggerFailure
 		ifTrue: [ GTGenericStackDebugger ]
 		ifFalse: [ SpecDebugger ].
-	debuggers inspect.
-		
-		"| candidateDebugger |
+	candidateDebugger
+		ifNil: [ aDebugSession signalDebuggerError: aDebugSession exception.
+			^ self ].
+
+	"| candidateDebugger |
 	candidateDebugger := debuggers detect: [ :each |
 		(each handlesContext: aDebugSession context)
 			and: [ aDebugSession exception isHandleableBy: each ] ]
