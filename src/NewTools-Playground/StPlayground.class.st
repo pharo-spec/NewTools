@@ -270,6 +270,7 @@ StPlayground >> initializePresenters [
 		
 	text eventHandler 
 		whenKeyUpDo: [ :event | self updateLineNumber ];
+		whenMouseUpDo: [ :event | self updateLineNumber ];
 		"before taking focus position will be nil, ensure I have the correct one"
 		whenFocusReceivedDo: [ self updateLineNumber ].
 		
