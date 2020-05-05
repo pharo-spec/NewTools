@@ -4,12 +4,22 @@ Class {
 	#category : #'NewTools-Playground-Command'
 }
 
-{ #category : #converting }
-StPlaygroundBindingsCommand >> asSpecCommand [ 
-	
-	^ super asSpecCommand 
-		iconName: #glamorousTable;
-		yourself
+{ #category : #default }
+StPlaygroundBindingsCommand class >> defaultDescription [
+
+	^ 'Edit bindings list.'
+]
+
+{ #category : #default }
+StPlaygroundBindingsCommand class >> defaultIconName [
+
+	^ #glamorousTable
+]
+
+{ #category : #default }
+StPlaygroundBindingsCommand class >> defaultName [
+
+	^ 'Bindings'
 ]
 
 { #category : #execution }
@@ -19,12 +29,4 @@ StPlaygroundBindingsCommand >> execute [
 		newApplication: context application 
 		model: context) 
 		openDialogWithSpec
-]
-
-{ #category : #initialization }
-StPlaygroundBindingsCommand >> initialize [
-	super initialize.
-	self
-		name: 'Bindings';
-		description: 'Edit bindings list.'
 ]

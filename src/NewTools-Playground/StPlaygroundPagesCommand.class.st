@@ -1,28 +1,32 @@
+"
+I open the page selector persenter and allow the user to chose a page to load.
+"
 Class {
 	#name : #StPlaygroundPagesCommand,
 	#superclass : #StPlaygroundCommand,
 	#category : #'NewTools-Playground-Command'
 }
 
-{ #category : #converting }
-StPlaygroundPagesCommand >> asSpecCommand [ 
-	
-	^ super asSpecCommand 
-		iconName: #glamorousMore;
-		yourself
+{ #category : #default }
+StPlaygroundPagesCommand class >> defaultDescription [
 
+	^ 'Load a saved page'
+]
+
+{ #category : #accessing }
+StPlaygroundPagesCommand class >> defaultIconName [
+
+	^ #glamorousMore
+]
+
+{ #category : #default }
+StPlaygroundPagesCommand class >> defaultName [
+
+	^ 'Pages'
 ]
 
 { #category : #execution }
 StPlaygroundPagesCommand >> execute [ 
 
-	self inform: #TODO.
-]
-
-{ #category : #initialization }
-StPlaygroundPagesCommand >> initialize [
-	super initialize.
-	self
-		name: 'Pages';
-		description: 'Load a saved page.'
+	(StPlaygroundPagesPresenter newApplication: context application) openWithSpec.
 ]

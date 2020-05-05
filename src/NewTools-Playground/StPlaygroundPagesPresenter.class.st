@@ -1,3 +1,9 @@
+"
+I am a presenter to show saved pages from a playground. 
+A playground saves (or tries to save) everything you will put in a playground and it will store in the playground cache to make it available later (or even outside the image).
+
+I show a list and a preview of a page content, to allow users to chose a page to load.
+"
 Class {
 	#name : #StPlaygroundPagesPresenter,
 	#superclass : #StPresenter,
@@ -61,10 +67,15 @@ StPlaygroundPagesPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 { #category : #initialization }
 StPlaygroundPagesPresenter >> initializePresenters [
 
-	pageList := self newComponentList.
+	pageList := self newComponentList
+		presenters: self pagesAsPresenters;
+		yourself.
+		
 	pagePreview := self newPresenterSelector
 		when: [ :aPage | aPage notNil ] show: [ :aPage | 
-			self newCode text: aPage contents ];
+			self newCode 
+				editable: false;
+				text: aPage contents ];
 		when: [ :aPage | aPage isNil ] show: [ 
 			pageList items
 				ifNotEmpty: [ self class unselectedMessage asPresenter ]
@@ -72,8 +83,6 @@ StPlaygroundPagesPresenter >> initializePresenters [
 		updatePresenter.
 	
 	pageList transmitTo: pagePreview.
-	
-	self updatePresenter.
 	
 	pageList items ifNotEmpty: [ 
 		pageList selectIndex: 1 ]
@@ -100,12 +109,6 @@ StPlaygroundPagesPresenter >> pagesAsPresenters [
 
 	^ self pages collect: [ :each | 
 		self 
-			instantiate: SpPlaygroundPagePresenter
+			instantiate: SpPlaygroundPageSummaryPresenter
 			on: each  ]
-]
-
-{ #category : #initialization }
-StPlaygroundPagesPresenter >> updatePresenter [
-
-	pageList items: self pagesAsPresenters
 ]

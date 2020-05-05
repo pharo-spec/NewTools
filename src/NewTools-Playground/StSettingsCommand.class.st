@@ -4,13 +4,22 @@ Class {
 	#category : #'NewTools-Playground-Command'
 }
 
-{ #category : #converting }
-StSettingsCommand >> asSpecCommand [ 
-	
-	^ super asSpecCommand 
-		iconName: #configuration;
-		yourself
+{ #category : #default }
+StSettingsCommand class >> defaulDescription [
 
+	^ 'Open settings browser.'
+]
+
+{ #category : #accessing }
+StSettingsCommand class >> defaultIconName [
+
+	^ #configuration
+]
+
+{ #category : #default }
+StSettingsCommand class >> defaultName [
+
+	^ 'Settings'
 ]
 
 { #category : #execution }
@@ -20,13 +29,4 @@ StSettingsCommand >> execute [
 		changePackageSet: { (RPackageOrganizer default packageNamed: 'GT-Playground') }; 
 		open; 
 		expandAll	
-]
-
-{ #category : #initialization }
-StSettingsCommand >> initialize [ 
-	
-	super initialize.
-	self 
-		basicName: 'Settings';
-		basicDescription: 'Open settings browser.'
 ]
