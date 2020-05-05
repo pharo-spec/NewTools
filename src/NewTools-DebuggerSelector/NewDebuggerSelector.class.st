@@ -78,14 +78,18 @@ NewDebuggerSelector >> debuggers: availableDebuggers [
 { #category : #opening }
 NewDebuggerSelector >> openOn: aDebugSession [
 	| candidateDebugger |
+	candidateDebugger := aDebugSession exception class = DebuggerFailure
+		ifTrue: [ GTGenericStackDebugger ]
+		ifFalse: [ SpecDebugger ].
+	debuggers inspect.
+		
+		"| candidateDebugger |
 	candidateDebugger := debuggers detect: [ :each |
-		"(each handlesContext: aDebugSession context)
-			and: [" aDebugSession exception isHandleableBy: each "]" ]
-		ifNone: [ "aDebugSession inspect" nil ].
-	candidateDebugger ifNil: [ "emergency debugger" aDebugSession inspect. ^ self ].
-	self
-		tryOpen: candidateDebugger
-		on: aDebugSession
+		(each handlesContext: aDebugSession context)
+			and: [ aDebugSession exception isHandleableBy: each ] ]
+		ifNone: [nil ].
+	candidateDebugger ifNil: [  aDebugSessionInspect]."
+	self tryOpen: candidateDebugger on: aDebugSession
 ]
 
 { #category : #opening }
@@ -101,5 +105,5 @@ NewDebuggerSelector >> tryOpen: aDebugger on: aDebugSession [
 	do: [ :err | 
 		"(self requestActionOnDebuggerError: err)
 			ifFalse: [ ^ false ]."
-		(DebuggerFailure of: aDebugger on: err) signal ]
+		(DebuggerFailure of: aDebugger on: err) debug ]
 ]
