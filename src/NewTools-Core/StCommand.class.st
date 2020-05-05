@@ -12,6 +12,18 @@ Class {
 }
 
 { #category : #accessing }
+StCommand class >> defaultIconName [
+
+	^ nil
+]
+
+{ #category : #accessing }
+StCommand class >> defaultShortcut [
+
+	^ nil
+]
+
+{ #category : #accessing }
 StCommand >> application [
 
 	^ context application
