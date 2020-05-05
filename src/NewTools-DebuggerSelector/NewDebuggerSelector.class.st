@@ -104,6 +104,15 @@ NewDebuggerSelector >> debuggers: availableDebuggers [
 	debuggers := availableDebuggers
 ]
 
+{ #category : #debuggers }
+NewDebuggerSelector >> findDebuggerForSession: aDebugSession [
+	^ debuggers
+		detect: [ :each | 
+			(each handlesContext: aDebugSession context)
+				and: [ aDebugSession exception isHandleableBy: each ] ]
+		ifNone: [ nil ]
+]
+
 { #category : #sessions }
 NewDebuggerSelector >> newSessionFromException: process forProcess: exception [
 	"Open a debugger on the exception"
