@@ -10,7 +10,9 @@ Class {
 	#instVars : [
 		'parent',
 		'pageList',
-		'pagePreview'
+		'pagePreview',
+		'pageListHeader',
+		'pagePreviewHeader'
 	],
 	#category : #'NewTools-Playground-View'
 }
@@ -26,8 +28,14 @@ StPlaygroundPagesPresenter class >> defaultSpec [
 
 	^ SpPanedLayout newHorizontal
 		position: 30 percent;
-		add: #pageList;
-		add: #pagePreview;
+		add: (SpBoxLayout newVertical
+			add: #pageListHeader expand: false;
+			add: #pageList;
+			yourself);
+		add: (SpBoxLayout newVertical 
+			add: #pagePreviewHeader expand: false;
+			add: #pagePreview;
+			yourself);
 		yourself
 ]
 
@@ -68,12 +76,20 @@ StPlaygroundPagesPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 { #category : #initialization }
 StPlaygroundPagesPresenter >> initializePresenters [
 
+	pageListHeader := self instantiate: StHeaderBar.
+	pageListHeader 
+		label: 'Pages';
+		shortcut: (self shortcutForPanel: 1).
 	pageList := self newComponentList
 		presenters: self pagesAsPresenters;
 		whenActivatedDo: [ self loadSelectedPage ];
 		bindKeyCombination: Character cr asKeyCombination toAction: [ self loadSelectedPage ];
 		yourself.
 		
+	pagePreviewHeader := self instantiate: StHeaderBar.
+	pagePreviewHeader
+		label: 'Preview';
+		shortcut: (self shortcutForPanel: 2).
 	pagePreview := self newPresenterSelector
 		when: [ :aPage | aPage notNil ] show: [ :aPage | 
 			self newCode 
@@ -97,7 +113,11 @@ StPlaygroundPagesPresenter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		title: self class defaultTitle;
 		initialExtent: self class defaultExtent;
-		whenOpenedDo: [ pageList takeKeyboardFocus ]
+		whenOpenedDo: [ pageList takeKeyboardFocus ];
+		bindKeyCombination: (self shortcutForPanel: 1) 
+			toAction: [ pageList takeKeyboardFocus ];
+		bindKeyCombination: (self shortcutForPanel: 2) 
+			toAction: [ pagePreview takeKeyboardFocus ]		
 ]
 
 { #category : #actions }
