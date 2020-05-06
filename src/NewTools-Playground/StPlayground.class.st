@@ -53,11 +53,23 @@ Class {
 	#category : #'NewTools-Playground-View'
 }
 
-{ #category : #private }
+{ #category : #accessing }
 StPlayground class >> cacheDirectory [
-	" lazy initialize the cache and always ensure its existence - especially while the image is running"
 	
-	^ CacheDirectory ifNil: [ CacheDirectory := FileLocator localDirectory / 'play-cache' ]
+	^ CacheDirectory ifNil: [ self defaultCacheDirectory ]
+]
+
+{ #category : #accessing }
+StPlayground class >> cacheDirectory: aDirectory [
+	
+	self flag: #TODO. "This go to settings"
+	CacheDirectory := aDirectory ensureCreateDirectory
+]
+
+{ #category : #private }
+StPlayground class >> defaultCacheDirectory [
+	
+	^ FileLocator localDirectory / 'play-cache'
 ]
 
 { #category : #accessing }
@@ -220,6 +232,12 @@ StPlayground >> contents: aString [
 	text text: aString
 ]
 
+{ #category : #'api-focus' }
+StPlayground >> defaultKeyboardFocus [
+
+	^ text
+]
+
 { #category : #binding }
 StPlayground >> doItContext [
 
@@ -289,6 +307,12 @@ StPlayground >> initializeWindow: aWindowPresenter [
 		whenResizingDo: [ :ann | self class preferredExtent: ann newSize ];
 		whenOpenedDo: [ text takeKeyboardFocus ]
 
+]
+
+{ #category : #actions }
+StPlayground >> loadPage: aFileReference [
+
+	text text: aFileReference contents
 ]
 
 { #category : #private }

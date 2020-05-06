@@ -36,6 +36,12 @@ SpPlaygroundPageSummaryPresenter >> initializePresenters [
 		label: page creationTime asString
 ]
 
+{ #category : #accessing }
+SpPlaygroundPageSummaryPresenter >> page [
+
+	^ page
+]
+
 { #category : #initialization }
 SpPlaygroundPageSummaryPresenter >> pageFirstLine [
 		

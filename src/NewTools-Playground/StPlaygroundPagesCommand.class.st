@@ -28,5 +28,8 @@ StPlaygroundPagesCommand class >> defaultName [
 { #category : #execution }
 StPlaygroundPagesCommand >> execute [ 
 
-	(StPlaygroundPagesPresenter newApplication: context application) openWithSpec.
+	(StPlaygroundPagesPresenter 
+		newApplication: context application
+		model: context) 
+		openDialogWithSpec
 ]

@@ -8,8 +8,8 @@ Class {
 	#superclass : #StPresenter,
 	#instVars : [
 		'bindingList',
-		'playground',
-		'inspector'
+		'inspector',
+		'parent'
 	],
 	#category : #'NewTools-Playground-View'
 }
@@ -51,7 +51,7 @@ StPlaygroundBindingsPresenter class >> unselectedMessage [
 { #category : #accessing }
 StPlaygroundBindingsPresenter >> bindings [
 
-	^ playground bindings
+	^ parent bindings
 ]
 
 { #category : #private }
@@ -86,7 +86,7 @@ StPlaygroundBindingsPresenter >> hasSelectedBinding [
 StPlaygroundBindingsPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
 	aDialogWindowPresenter 
-		centeredRelativeTo: playground window;
+		centeredRelativeTo: parent window;
 		addButton: 'Close' do: [ :presenter | 
 			presenter triggerOkAction.
 			presenter close ]
@@ -144,7 +144,7 @@ StPlaygroundBindingsPresenter >> moveSelectedBindingToLocalScope [
 		
 	selection := self selectedBinding.
 	self application removeSharedBinding: selection.
-	playground addBinding: selection
+	parent addBinding: selection
 ]
 
 { #category : #private }
@@ -152,7 +152,7 @@ StPlaygroundBindingsPresenter >> moveSelectedBindingToSharedScope [
 	| selection |
 		
 	selection := self selectedBinding.
-	playground removeBinding: selection.
+	parent removeBinding: selection.
 	self application addSharedBinding: selection
 ]
 
@@ -179,7 +179,7 @@ StPlaygroundBindingsPresenter >> newInspectorWithTransmission: aClass on: aBindi
 StPlaygroundBindingsPresenter >> removeSelectedBinding [
 
 	self selectedBindingIsLocal 
-		ifTrue: [ playground removeBinding: self selectedBinding ]
+		ifTrue: [ parent removeBinding: self selectedBinding ]
 		ifFalse: [ self application removeSharedBinding: self selectedBinding ].
 	self updatePresenterKeepingSelection
 ]
@@ -210,9 +210,9 @@ StPlaygroundBindingsPresenter >> selectedBindingIsLocal [
 ]
 
 { #category : #'accessing model' }
-StPlaygroundBindingsPresenter >> setModelBeforeInitialization: anObject [
+StPlaygroundBindingsPresenter >> setModelBeforeInitialization: aPlayground [
 
-	playground := anObject
+	parent := aPlayground
 ]
 
 { #category : #accessing }
@@ -224,7 +224,7 @@ StPlaygroundBindingsPresenter >> sortedBindingAssociations [
 { #category : #initialization }
 StPlaygroundBindingsPresenter >> title [
 
-	playground withWindowDo: [ :w | 
+	parent withWindowDo: [ :w | 
 		^ 'Bindings for {1}' format: { w title } ].
 	^ self class defaultTitle
 ]

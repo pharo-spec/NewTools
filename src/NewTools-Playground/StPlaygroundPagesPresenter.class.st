@@ -8,6 +8,7 @@ Class {
 	#name : #StPlaygroundPagesPresenter,
 	#superclass : #StPresenter,
 	#instVars : [
+		'parent',
 		'pageList',
 		'pagePreview'
 	],
@@ -69,6 +70,8 @@ StPlaygroundPagesPresenter >> initializePresenters [
 
 	pageList := self newComponentList
 		presenters: self pagesAsPresenters;
+		whenActivatedDo: [ self loadSelectedPage ];
+		bindKeyCombination: Character cr asKeyCombination toAction: [ self loadSelectedPage ];
 		yourself.
 		
 	pagePreview := self newPresenterSelector
@@ -97,6 +100,20 @@ StPlaygroundPagesPresenter >> initializeWindow: aWindowPresenter [
 		whenOpenedDo: [ pageList takeKeyboardFocus ]
 ]
 
+{ #category : #actions }
+StPlaygroundPagesPresenter >> loadPage: aPage [
+
+	parent loadPage: aPage.
+	self window close.
+	parent takeKeyboardFocus 
+]
+
+{ #category : #actions }
+StPlaygroundPagesPresenter >> loadSelectedPage [
+
+	self loadPage: pageList selection selectedItem page
+]
+
 { #category : #accessing }
 StPlaygroundPagesPresenter >> pages [
 	
@@ -111,4 +128,10 @@ StPlaygroundPagesPresenter >> pagesAsPresenters [
 		self 
 			instantiate: SpPlaygroundPageSummaryPresenter
 			on: each  ]
+]
+
+{ #category : #'accessing model' }
+StPlaygroundPagesPresenter >> setModelBeforeInitialization: aPlayground [
+
+	parent := aPlayground
 ]
