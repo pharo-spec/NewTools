@@ -165,7 +165,7 @@ EDDebuggingAPI >> stackAt: index [
 
 { #category : #'API - Stack' }
 EDDebuggingAPI >> stackFrom: start to: stop [
-	^ self longStack copyFrom: start to: stop
+	^ self longStack copyFrom: (start max: 0) to: (stop min: session stack size)
 ]
 
 { #category : #'API - Stack' }

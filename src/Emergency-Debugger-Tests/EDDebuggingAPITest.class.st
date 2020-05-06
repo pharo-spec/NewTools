@@ -212,11 +212,19 @@ EDDebuggingAPITest >> testStackAt [
 
 { #category : #'tests - stack' }
 EDDebuggingAPITest >> testStackFromTo [
-	| stackExtract |
-	stackExtract := (session stack copyFrom: 5 to: 10).
+	| stack stackExtract |
+	stack := session stack.
+	stackExtract := (stack copyFrom: 5 to: 10).
 	self
 		assertCollection: (debugAPI stackFrom: 5 to: 10)
-		equals: stackExtract
+		equals: stackExtract.
+		
+	stackExtract := (stack copyFrom: (stack size - 2) to: (stack size)).
+	self
+		assertCollection: (debugAPI stackFrom: (stack size - 2) to: (stack size + 5))
+		equals: stackExtract.
+		
+	
 ]
 
 { #category : #'tests - stack' }
