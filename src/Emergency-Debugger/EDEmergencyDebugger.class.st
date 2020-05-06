@@ -88,7 +88,8 @@ EDEmergencyDebugger >> buildDefaultActions [
 	dic at: Character arrowRight put: [ self showOlderMethodVersion ].
 	dic at: 'help' put: [ self composeHelpText ].
 	dic at: 'revert' put: [ self revertCurrentMethodToSelectedVersion ].
-	dic at: 'killAll' put: [ debugAPI terminateAllProcesses ].
+	dic at: 'terminateAll' put: [ debugAPI terminateAllProcesses ].
+	dic at: 'proceed' put: [ debugAPI resume ].
 	^dic
 ]
 
@@ -102,7 +103,8 @@ EDEmergencyDebugger >> buildDefaultActionsDescriptions [
 	dic at: '<UP/DOWN> arrows' put: 'Move up/down in the stack'.
 	dic at: '<RIGHT/LEFT> arrows' put: 'Navigate the current method versions'.
 	dic at: 'revert' put: 'Revert the current method to the selected method version'.
-	dic at: 'killAll' put: 'Terminate all non-essential processes (will terminate Ed)'.
+	dic at: 'terminateAll' put: 'Terminate all non-essential processes (will terminate Ed)'.
+	dic at: 'proceed' put: 'Proceeds the execution'.
 	^dic
 ]
 
@@ -113,13 +115,15 @@ EDEmergencyDebugger >> buildDefaultActionsDescriptionsMap [
 	dic at: 'exit' put: 'exit/q'.
 	dic at: 'q' put: 'exit/q'.
 	dic at: 'retry' put: 'retry'.
-	dic at: Character arrowUp put: '<UP/DOWN ARROWS>'.
-	dic at: Character arrowDown put: '<UP/DOWN ARROWS>'.
-	dic at: Character arrowLeft put: '<RIGHT/LEFT ARROWS>'.
-	dic at: Character arrowRight put: '<RIGHT/LEFT ARROWS>'.
+	dic at: Character arrowUp put: '<UP/DOWN> arrows'.
+	dic at: Character arrowDown put: '<UP/DOWN> arrows'.
+	dic at: Character arrowLeft put: '<RIGHT/LEFT> arrows'.
+	dic at: Character arrowRight put: '<RIGHT/LEFT> arrows'.
 	dic at: 'revert' put: 'revert'.
 	dic at: 'help' put: 'help'.
-	dic at: 'killAll' put: 'killAll'.
+	dic at: 'terminateAll' put: 'terminateAll'.
+	dic at: 'proceed' put: 'proceed'.
+	
 	^dic
 ]
 

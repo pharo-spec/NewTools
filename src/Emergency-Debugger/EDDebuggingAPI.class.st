@@ -137,6 +137,11 @@ EDDebuggingAPI >> restartContextAt: anIndex [
 	self resetStack
 ]
 
+{ #category : #'API - Debugging support' }
+EDDebuggingAPI >> resume [ 
+	session resume
+]
+
 { #category : #'API - Revert' }
 EDDebuggingAPI >> revert: aCompiledMethod to: aChangeRecord [
 	"Reverts the given method to the given change record"
