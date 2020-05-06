@@ -99,8 +99,8 @@ EDEmergencyDebugger >> buildDefaultActionsDescriptions [
 	dic at: 'exit/q' put: 'Exit the emergency debugger'.
 	dic at: 'help' put: 'Show this help.'.
 	dic at: 'retry' put: 'Retry opening a graphical debugger'.
-	dic at: '<UP/DOWN ARROWS>' put: 'Move up/down in the stack'.
-	dic at: '<RIGHT/LEFT ARROWS>' put: 'Navigate the current method versions'.
+	dic at: '<UP/DOWN> arrows' put: 'Move up/down in the stack'.
+	dic at: '<RIGHT/LEFT> arrows' put: 'Navigate the current method versions'.
 	dic at: 'revert' put: 'Revert the current method to the selected method version'.
 	dic at: 'killAll' put: 'Terminate all non-essential processes (will terminate Ed)'.
 	^dic
