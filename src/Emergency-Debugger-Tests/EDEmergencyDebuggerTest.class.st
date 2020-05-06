@@ -257,11 +257,13 @@ EDEmergencyDebuggerTest >> testRevertCurrentMethodToSelectedVersion [
 	secondContext := ed shortStack second.
 	originalPC := secondContext pc.
 	ed stackSelectionIndex: 2.
+	ed shortStackIndex: 2.
 	ed methodVersionSelectionIndex: 1.
 	ed revertCurrentMethodToSelectedVersion.
 	newContext := ed shortStack first.
 	self assert: newContext identicalTo: secondContext.
 	self assert: ed stackSelectionIndex equals: 1.
+	self assert: ed shortStackIndex equals: 1.
 	self assert: ed methodVersionSelectionIndex equals: 1.
 	self assert: newContext pc < originalPC.
 	

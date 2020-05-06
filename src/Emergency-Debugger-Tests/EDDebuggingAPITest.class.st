@@ -174,8 +174,7 @@ EDDebuggingAPITest >> testRevertTo [
 	|method changes|
 	self prepareMethodVersionTest.
 	method := (EDMockObjectForTests >> #mWithVersion).
-	changes := debugAPI
-		changeRecordsForMethod: method asHistoricalRingDefinition.
+	changes := debugAPI changeRecordsForMethod: method.
 		
 	self assert: method sourceCode equals: self sampleMethodSourceCodeVersion2.
 	debugAPI revert: (EDMockObjectForTests >> #mWithVersion) to: changes second.

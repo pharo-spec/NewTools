@@ -328,6 +328,7 @@ EDEmergencyDebugger >> revertCurrentMethodToSelectedVersion [
 	shortStack := nil.
 	
 	stackSelectionIndex := 1.
+	shortStackIndex := 1.
 	self composeStackText.
 	self composeMethodText.
 	
