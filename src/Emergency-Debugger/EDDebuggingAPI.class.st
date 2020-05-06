@@ -138,7 +138,8 @@ EDDebuggingAPI >> restartContextAt: anIndex [
 ]
 
 { #category : #'API - Debugging support' }
-EDDebuggingAPI >> resume [ 
+EDDebuggingAPI >> resume [
+	self closeEmergencySession.
 	session resume
 ]
 
