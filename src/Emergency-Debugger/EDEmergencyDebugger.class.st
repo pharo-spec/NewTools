@@ -34,7 +34,7 @@ Class {
 
 { #category : #'instance creation' }
 EDEmergencyDebugger class >> debug: aDebugSession [
-	^ self new debug: aDebugSession
+	^ self new emergencyDebug: aDebugSession
 ]
 
 { #category : #accessing }
@@ -232,6 +232,13 @@ EDEmergencyDebugger >> descriptionFromPromptCommand: aString [
 	^self availableActionsDescriptions at: key
 ]
 
+{ #category : #initialization }
+EDEmergencyDebugger >> emergencyDebug: aDebugSession [
+	[ self debug: aDebugSession ]
+		on: Error
+		do: [ :err | self signalDebuggerError: err forSession: aDebugSession]
+]
+
 { #category : #evaluation }
 EDEmergencyDebugger >> eval: command [
 	self evalCommand: command.
@@ -245,13 +252,25 @@ EDEmergencyDebugger >> evalCommand: aString [
 	action := self availableActions at: aString ifAbsent: [ ^ false ].
 	[ action value ]
 		on: Exception
-		do: [ self
-				composeResult:
-					('Cannot ' , (self descriptionFromPromptCommand: aString)) asText
-						allBold
-				title: 'ERROR' ].
+		do:
+			[ :e | self handleEmergencyDebuggerError: e description: aString ].
 	self updateDisplay.
 	^ true
+]
+
+{ #category : #'error handling' }
+EDEmergencyDebugger >> handleEmergencyDebuggerError: e description: commandString [
+	self
+		composeResult:
+			('Cannot ' , (self descriptionFromPromptCommand: commandString))
+				asText allBold
+		title: 'ERROR: ' , e printString.
+	isRunning := false.
+	[ [ e debug ]
+		on: Error
+		do: [ :err | self signalDebuggerError: err forSession: debugAPI session ] ]
+		ensure: [ isRunning := true.
+			repl readEvalPrint ]
 ]
 
 { #category : #initialization }
@@ -409,6 +428,32 @@ EDEmergencyDebugger >> showSelectedMethodVersion [
 			'VERSIONS (' , methodVersionSelectionIndex printString , '/'
 				, self selectedMethodVersionsSize printString , ')'.
 	self updateDisplay
+]
+
+{ #category : #'error handling' }
+EDEmergencyDebugger >> signalDebuggerError: anError [
+	| errDescription errStream |
+	errDescription := [ anError description ]
+		on: Error
+		do: [ 'a ' , anError class printString ].
+	errStream := WriteStream on: String new.
+	errStream << 'Original error: ' , debugAPI session name asString , '.'.
+	errStream << 'Smalltalk tools debugger error: ' , errDescription.
+	errStream cr.
+	self primitiveError: errStream contents
+]
+
+{ #category : #'error handling' }
+EDEmergencyDebugger >> signalDebuggerError: anError forSession: aDebugSession [
+	| errDescription errStream |
+	errDescription := [ anError description ]
+		on: Error
+		do: [ 'a ' , anError class printString ].
+	errStream := WriteStream on: String new.
+	errStream << 'Original error: ' , aDebugSession name asString , '.'.
+	errStream << 'Smalltalk tools debugger error: ' , errDescription.
+	errStream cr.
+	self primitiveError: errStream contents
 ]
 
 { #category : #initialization }

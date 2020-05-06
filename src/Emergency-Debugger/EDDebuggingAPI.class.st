@@ -149,6 +149,11 @@ EDDebuggingAPI >> revert: aCompiledMethod to: aChangeRecord [
 ]
 
 { #category : #accessing }
+EDDebuggingAPI >> session [
+	^session
+]
+
+{ #category : #accessing }
 EDDebuggingAPI >> session: anObject [
 	session := anObject
 ]

@@ -9,8 +9,3 @@ EDDebuggingAPI >> changesForMethods [
 EDDebuggingAPI >> debugger [
 	^debugger
 ]
-
-{ #category : #'*Emergency-Debugger-Tests' }
-EDDebuggingAPI >> session [
-	^session
-]
