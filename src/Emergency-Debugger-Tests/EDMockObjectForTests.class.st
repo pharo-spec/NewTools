@@ -23,6 +23,13 @@ EDMockObjectForTests >> m2 [
 ]
 
 { #category : #'as yet unclassified' }
+EDMockObjectForTests >> m4 [
+	|i|
+	i := 1.
+	^i squared
+]
+
+{ #category : #'as yet unclassified' }
 EDMockObjectForTests >> m: i [
 	i = 1 ifTrue:[^1].
 	^i + (self m: i - 1)

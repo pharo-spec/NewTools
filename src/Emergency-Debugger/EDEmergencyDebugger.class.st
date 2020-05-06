@@ -346,15 +346,15 @@ EDEmergencyDebugger >> revertCurrentMethodToSelectedVersion [
 	|method methodVersion|
 	method := debugAPI methodAt: stackSelectionIndex.
 	methodVersion := (debugAPI methodVersionAt: stackSelectionIndex) at: methodVersionSelectionIndex.
-	debugAPI revert: method to: methodVersion.
-	debugAPI restartContextAt: stackSelectionIndex.
+	debugAPI revert: method to: methodVersion inContext: (debugAPI contextAt: stackSelectionIndex).
+	"debugAPI restartContextAt: stackSelectionIndex."
 	shortStack := nil.
 	
 	stackSelectionIndex := 1.
 	shortStackIndex := 1.
 	self composeStackText.
 	self composeMethodText.
-	
+	isRunning := false.
 	methodVersionSelectionIndex := 1.
 	self showSelectedMethodVersion
 ]

@@ -170,14 +170,16 @@ EDDebuggingAPITest >> testRestartContextAt [
 ]
 
 { #category : #'tests - reverting methods' }
-EDDebuggingAPITest >> testRevertTo [
+EDDebuggingAPITest >> testRevertToInContext [
 	|method changes|
 	self prepareMethodVersionTest.
 	method := (EDMockObjectForTests >> #mWithVersion).
 	changes := debugAPI changeRecordsForMethod: method.
 		
 	self assert: method sourceCode equals: self sampleMethodSourceCodeVersion2.
-	debugAPI revert: (EDMockObjectForTests >> #mWithVersion) to: changes second.
+	debugAPI revert: (EDMockObjectForTests >> #mWithVersion) 
+				to: changes second 
+				inContext: debugAPI stack first.
 	
 	"Method version is now the reverted one"
 	method := (EDMockObjectForTests >> #mWithVersion).

@@ -255,7 +255,7 @@ EDEmergencyDebuggerTest >> testNewTextStream [
 EDEmergencyDebuggerTest >> testRevertCurrentMethodToSelectedVersion [
 	|secondContext originalPC newContext| 
 	secondContext := ed shortStack second.
-	originalPC := secondContext pc.
+	originalPC := secondContext pc.	
 	ed stackSelectionIndex: 2.
 	ed shortStackIndex: 2.
 	ed methodVersionSelectionIndex: 1.
@@ -266,6 +266,7 @@ EDEmergencyDebuggerTest >> testRevertCurrentMethodToSelectedVersion [
 	self assert: ed shortStackIndex equals: 1.
 	self assert: ed methodVersionSelectionIndex equals: 1.
 	self assert: newContext pc < originalPC.
+	self assert: newContext method sourceCode equals: secondContext method sourceCode.
 	
 	"When the context is restarted, the interpreter automatically steps over
 	so-called uninteresting bytecodes, i.e., bytecodes that are not sends nor returns.

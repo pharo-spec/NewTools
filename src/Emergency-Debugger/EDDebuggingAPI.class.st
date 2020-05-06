@@ -144,14 +144,19 @@ EDDebuggingAPI >> resume [
 ]
 
 { #category : #'API - Revert' }
-EDDebuggingAPI >> revert: aCompiledMethod to: aChangeRecord [
+EDDebuggingAPI >> revert: aCompiledMethod to: aChangeRecord inContext: aContext [
 	"Reverts the given method to the given change record"
 
-	aCompiledMethod methodClass
+	session
+		recompileMethodTo: aChangeRecord sourceCode
+		inContext: aContext
+		notifying: nil
+
+	"aCompiledMethod methodClass
 		compile: aChangeRecord sourceCode
 		classified: aChangeRecord category
 		withStamp: aChangeRecord stamp
-		notifying: nil
+		notifying: nil"
 ]
 
 { #category : #accessing }
