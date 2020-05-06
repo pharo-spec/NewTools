@@ -184,8 +184,7 @@ EDDebuggingAPITest >> testRevertTo [
 	self assert: method sourceCode equals: self sampleMethodSourceCodeVersion1.
 	
 	"Changes now include new version, equals to the first one"
-	changes := debugAPI
-		changeRecordsForMethod: method asHistoricalRingDefinition.
+	changes := debugAPI changeRecordsForMethod: method. 
 	self assert: changes size equals: 3.
 	self assert: changes first sourceCode equals: self sampleMethodSourceCodeVersion1.
 	self assert: changes second sourceCode equals: self sampleMethodSourceCodeVersion2.
@@ -193,7 +192,7 @@ EDDebuggingAPITest >> testRevertTo [
 	
 	"Changes cache should be updated: 
 	we test for source code version, as changes cannot compare otherwise than using identity check =="
-	self assert: (debugAPI versionsForMethod: method)  size equals: 3.
+	self assert: (debugAPI versionsForMethod: method) size equals: 3.
 	self assertCollection: ((debugAPI versionsForMethod: method) collect:[:c| c sourceCode])
 				equals: (changes collect:[:c| c sourceCode])
 ]
