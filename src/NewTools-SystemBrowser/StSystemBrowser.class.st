@@ -172,6 +172,7 @@ StSystemBrowser >> initializePresenters [
 { #category : #initialization }
 StSystemBrowser >> initializeWindow: aWindowPresenter [
 
+	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
 		title: self initialTitle;
 		initialExtent: self preferredExtent;

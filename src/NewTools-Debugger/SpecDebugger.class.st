@@ -786,6 +786,7 @@ SpecDebugger >> initializeToolbar [
 { #category : #initialization }
 SpecDebugger >> initializeWindow: aWindowPresenter [
 
+	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
 		title: self title;
 		initialExtent: self initialExtent;

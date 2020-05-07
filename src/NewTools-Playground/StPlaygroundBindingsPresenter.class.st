@@ -9,7 +9,9 @@ Class {
 	#instVars : [
 		'bindingList',
 		'inspector',
-		'parent'
+		'parent',
+		'bindingPanel',
+		'inspectorPanel'
 	],
 	#category : #'NewTools-Playground-View'
 }
@@ -25,8 +27,8 @@ StPlaygroundBindingsPresenter class >> defaultSpec [
 
 	^ SpPanedLayout newHorizontal
 		position: 30 percent;
-		add: #bindingList;
-		add: #inspector;
+		add: #bindingPanel;
+		add: #inspectorPanel;
 		yourself
 ]
 
@@ -93,17 +95,11 @@ StPlaygroundBindingsPresenter >> initializeDialogWindow: aDialogWindowPresenter 
 ]
 
 { #category : #initialization }
-StPlaygroundBindingsPresenter >> initializePresenters [
+StPlaygroundBindingsPresenter >> initializeInspectorPanel [
 
-	bindingList := self newTable
-		addColumn: (SpStringTableColumn title: 'Name' evaluated: [ :each | each key ]);
-		addColumn: (SpStringTableColumn 
-			title: 'Scope' 
-			evaluated: [ :each | self scopeNameFor: each ]) 
-			beNotExpandable;
-		contextMenu: [ self contextMenu ];
-		contextKeyBindings: self contextMenuKeyBindings;
-		yourself.
+	inspectorPanel := (self instantiate: StHeaderPanel)
+		number: 2;
+		label: 'Inspector'.
 
 	inspector := self newPresenterSelector
 		when: [ :aBinding | aBinding notNil ] show: [ :aBinding | 
@@ -118,6 +114,35 @@ StPlaygroundBindingsPresenter >> initializePresenters [
 				ifNotEmpty: [ self class unselectedMessage asPresenter ]
 				ifEmpty: [ self class emptyMessage asPresenter ] ];
 		updatePresenter.
+
+	inspectorPanel presenter: inspector
+]
+
+{ #category : #initialization }
+StPlaygroundBindingsPresenter >> initializeListPanel [
+
+	bindingPanel := (self instantiate: StHeaderPanel)
+		number: 1;
+		label: 'Bindings'.
+		
+	bindingList := self newTable
+		addColumn: (SpStringTableColumn title: 'Name' evaluated: [ :each | each key ]);
+		addColumn: (SpStringTableColumn 
+			title: 'Scope' 
+			evaluated: [ :each | self scopeNameFor: each ]) 
+			beNotExpandable;
+		contextMenu: [ self contextMenu ];
+		contextKeyBindings: self contextMenuKeyBindings;
+		yourself.
+	
+	bindingPanel presenter: bindingList
+]
+
+{ #category : #initialization }
+StPlaygroundBindingsPresenter >> initializePresenters [
+
+	self initializeListPanel.
+	self initializeInspectorPanel.
 	
 	bindingList transmitTo: inspector.
 	
@@ -127,6 +152,7 @@ StPlaygroundBindingsPresenter >> initializePresenters [
 { #category : #initialization }
 StPlaygroundBindingsPresenter >> initializeWindow: aWindowPresenter [
 
+	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
 		title: self title;
 		initialExtent: self class defaultExtent

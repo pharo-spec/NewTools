@@ -33,7 +33,7 @@ SpPlaygroundPageSummaryPresenter >> initializePresenters [
 	firstLineLabel label: self pageFirstLine.
 	timeLabel 
 		addStyle: 'dim';
-		label: page creationTime asString
+		label: page creationTime epiceaBrowsersAsString
 ]
 
 { #category : #accessing }

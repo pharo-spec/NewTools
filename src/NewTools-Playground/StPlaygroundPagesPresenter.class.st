@@ -12,7 +12,9 @@ Class {
 		'pageList',
 		'pagePreview',
 		'pageListHeader',
-		'pagePreviewHeader'
+		'pagePreviewHeader',
+		'pageListPanel',
+		'pagePreviewPanel'
 	],
 	#category : #'NewTools-Playground-View'
 }
@@ -28,14 +30,8 @@ StPlaygroundPagesPresenter class >> defaultSpec [
 
 	^ SpPanedLayout newHorizontal
 		position: 30 percent;
-		add: (SpBoxLayout newVertical
-			add: #pageListHeader expand: false;
-			add: #pageList;
-			yourself);
-		add: (SpBoxLayout newVertical 
-			add: #pagePreviewHeader expand: false;
-			add: #pagePreview;
-			yourself);
+		add: #pageListPanel;
+		add: #pagePreviewPanel;
 		yourself
 ]
 
@@ -76,48 +72,44 @@ StPlaygroundPagesPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 { #category : #initialization }
 StPlaygroundPagesPresenter >> initializePresenters [
 
-	pageListHeader := self instantiate: StHeaderBar.
-	pageListHeader 
+	(pageListPanel := self instantiate: StHeaderPanel)		
+		number: 1;
 		label: 'Pages';
-		shortcut: (self shortcutForPanel: 1).
-	pageList := self newComponentList
-		presenters: self pagesAsPresenters;
-		whenActivatedDo: [ self loadSelectedPage ];
-		bindKeyCombination: Character cr asKeyCombination toAction: [ self loadSelectedPage ];
-		yourself.
+		presenter: (pageList := self newComponentList
+			presenters: self pagesAsPresenters;
+			whenActivatedDo: [ self loadSelectedPage ];
+			bindKeyCombination: Character cr asKeyCombination toAction: [ self loadSelectedPage ];
+			yourself).
 		
-	pagePreviewHeader := self instantiate: StHeaderBar.
-	pagePreviewHeader
+	(pagePreviewPanel := self instantiate: StHeaderPanel)
+		number: 2;
 		label: 'Preview';
-		shortcut: (self shortcutForPanel: 2).
-	pagePreview := self newPresenterSelector
-		when: [ :aPage | aPage notNil ] show: [ :aPage | 
-			self newCode 
-				editable: false;
-				text: aPage contents ];
-		when: [ :aPage | aPage isNil ] show: [ 
-			pageList items
-				ifNotEmpty: [ self class unselectedMessage asPresenter ]
-				ifEmpty: [ self class emptyMessage asPresenter ] ];
-		updatePresenter.
+		presenter: (pagePreview := self newPresenterSelector
+			when: [ :aPage | aPage notNil ] show: [ :aPage | 
+				self newCode 
+					editable: false;
+					text: aPage contents ];
+			when: [ :aPage | aPage isNil ] show: [ 
+				pageList items
+					ifNotEmpty: [ self class unselectedMessage asPresenter ]
+					ifEmpty: [ self class emptyMessage asPresenter ] ];
+			yourself).
 	
 	pageList transmitTo: pagePreview.
 	
-	pageList items ifNotEmpty: [ 
-		pageList selectIndex: 1 ]
+	pageList items 
+		ifNotEmpty: [ pageList selectIndex: 1 ]
+		ifEmpty: [ pagePreview updatePresenter ]
 ]
 
 { #category : #initialization }
 StPlaygroundPagesPresenter >> initializeWindow: aWindowPresenter [
 
+	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
 		title: self class defaultTitle;
 		initialExtent: self class defaultExtent;
-		whenOpenedDo: [ pageList takeKeyboardFocus ];
-		bindKeyCombination: (self shortcutForPanel: 1) 
-			toAction: [ pageList takeKeyboardFocus ];
-		bindKeyCombination: (self shortcutForPanel: 2) 
-			toAction: [ pagePreview takeKeyboardFocus ]		
+		whenOpenedDo: [ pageList takeKeyboardFocus ]
 ]
 
 { #category : #actions }

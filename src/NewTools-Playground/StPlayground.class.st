@@ -301,6 +301,7 @@ StPlayground >> initializePresenters [
 { #category : #initialization }
 StPlayground >> initializeWindow: aWindowPresenter [
 
+	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
 		title: self class defaultTitle;
 		initialExtent: self class preferredExtent;
