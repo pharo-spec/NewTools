@@ -43,7 +43,8 @@ Class {
 		'statusBar',
 		'bindings',
 		'lineLabel',
-		'toggleLineNumberButton'
+		'toggleLineNumberButton',
+		'page'
 	],
 	#classVars : [
 		'CacheDirectory',
@@ -267,6 +268,7 @@ StPlayground >> hasBindingThatBeginsWith: aString [
 StPlayground >> initialize [
 
 	self setBindings: Dictionary new.
+	page := StPlaygroundPage new.
 	super initialize
 ]
 
@@ -284,6 +286,7 @@ StPlayground >> initializePresenters [
 			doItContext: self doItContext;
 			completionClass: self selectedClassOrMetaClass;
 			yourself);
+		whenTextChangedDo: [ :aString | page contents: aString ];
 		yourself.
 		
 	text eventHandler 
@@ -312,7 +315,8 @@ StPlayground >> initializeWindow: aWindowPresenter [
 { #category : #actions }
 StPlayground >> loadPage: aFileReference [
 
-	text text: aFileReference contents
+	page := StPlaygroundPage fromReference: aFileReference.
+	text text: page contents
 ]
 
 { #category : #private }
