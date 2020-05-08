@@ -11,7 +11,7 @@ Class {
 		'changesForMethods',
 		'longStack'
 	],
-	#category : #'Emergency-Debugger'
+	#category : #'Emergency-Debugger-Core'
 }
 
 { #category : #'API - Processes' }
@@ -64,6 +64,11 @@ EDDebuggingAPI >> changeRecordsForMethod: aCompiledMethod [
 		isMeta: aCompiledMethod methodClass isMeta
 ]
 
+{ #category : #'as yet unclassified' }
+EDDebuggingAPI >> changesForMethods [
+	^changesForMethods
+]
+
 { #category : #'API - Debugging support' }
 EDDebuggingAPI >> closeEmergencySession [
 	debugger terminate.
@@ -73,6 +78,11 @@ EDDebuggingAPI >> closeEmergencySession [
 { #category : #'API - Context' }
 EDDebuggingAPI >> contextAt: index [
 	^self stackAt: index
+]
+
+{ #category : #'as yet unclassified' }
+EDDebuggingAPI >> debugger [
+	^debugger
 ]
 
 { #category : #accessing }

@@ -7,7 +7,7 @@ Class {
 	#classVars : [
 		'defaultEmergencyDebugger'
 	],
-	#category : #'Emergency-Debugger'
+	#category : #'Emergency-Debugger-Core'
 }
 
 { #category : #accessing }

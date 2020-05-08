@@ -29,7 +29,7 @@ Class {
 	#classVars : [
 		'DefaultDebugAPI'
 	],
-	#category : #'Emergency-Debugger'
+	#category : #'Emergency-Debugger-Core'
 }
 
 { #category : #'instance creation' }
@@ -234,6 +234,16 @@ EDEmergencyDebugger >> debug: aDebugSession [
 	repl readEvalPrint 
 ]
 
+{ #category : #'as yet unclassified' }
+EDEmergencyDebugger >> debugAPI [
+	^debugAPI
+]
+
+{ #category : #'as yet unclassified' }
+EDEmergencyDebugger >> debugAPI: aDebugAPI [
+	debugAPI := aDebugAPI
+]
+
 { #category : #'text - helpers' }
 EDEmergencyDebugger >> defaultResultText [
 	^ 'TYPE h FOR HELP' asText
@@ -244,6 +254,11 @@ EDEmergencyDebugger >> descriptionFromPromptCommand: aString [
 	|key|
 	key := self availableActionsDescriptionsMap at: aString.
 	^self availableActionsDescriptions at: key
+]
+
+{ #category : #'as yet unclassified' }
+EDEmergencyDebugger >> displayInterface: aDisplayInterface [
+	rawDisplay := aDisplayInterface
 ]
 
 { #category : #initialization }
@@ -306,9 +321,29 @@ EDEmergencyDebugger >> initialize [
 	isRunning := false
 ]
 
+{ #category : #'as yet unclassified' }
+EDEmergencyDebugger >> input [
+	^input
+]
+
 { #category : #testing }
 EDEmergencyDebugger >> isRunning [
 	^isRunning 
+]
+
+{ #category : #'as yet unclassified' }
+EDEmergencyDebugger >> methodText [
+	^methodText
+]
+
+{ #category : #'as yet unclassified' }
+EDEmergencyDebugger >> methodVersionSelectionIndex [
+	^methodVersionSelectionIndex
+]
+
+{ #category : #'as yet unclassified' }
+EDEmergencyDebugger >> methodVersionSelectionIndex: anInteger [
+	methodVersionSelectionIndex := anInteger
 ]
 
 { #category : #stack }
@@ -347,6 +382,16 @@ EDEmergencyDebugger >> newTextStream [
 { #category : #evaluation }
 EDEmergencyDebugger >> performActionForChar: aCharacter [
 	^self evalCommand: aCharacter
+]
+
+{ #category : #'as yet unclassified' }
+EDEmergencyDebugger >> repl: aREPLInterface [
+	repl := aREPLInterface
+]
+
+{ #category : #'as yet unclassified' }
+EDEmergencyDebugger >> result [
+	^result
 ]
 
 { #category : #accessing }
@@ -434,6 +479,16 @@ EDEmergencyDebugger >> shortStack [
 		ifNil: [ shortStack := debugAPI stackFrom: 1 to: debugAPI displayStackSize ]
 ]
 
+{ #category : #'as yet unclassified' }
+EDEmergencyDebugger >> shortStackIndex [
+	^shortStackIndex
+]
+
+{ #category : #'as yet unclassified' }
+EDEmergencyDebugger >> shortStackIndex: newIndex [
+	shortStackIndex := newIndex
+]
+
 { #category : #methods }
 EDEmergencyDebugger >> showMoreRecentMethodVersion [
 	methodVersionSelectionIndex := methodVersionSelectionIndex - 1 max: 1.
@@ -472,9 +527,29 @@ EDEmergencyDebugger >> signalDebuggerError: anError forSession: aDebugSession [
 	self primitiveError: errStream contents
 ]
 
+{ #category : #'as yet unclassified' }
+EDEmergencyDebugger >> stackSelectionIndex [
+	^stackSelectionIndex
+]
+
+{ #category : #'as yet unclassified' }
+EDEmergencyDebugger >> stackSelectionIndex: newIndex [
+	stackSelectionIndex := newIndex
+]
+
+{ #category : #'as yet unclassified' }
+EDEmergencyDebugger >> stackText [
+	^stackText
+]
+
 { #category : #initialization }
 EDEmergencyDebugger >> terminate [
 	isRunning := false
+]
+
+{ #category : #'as yet unclassified' }
+EDEmergencyDebugger >> titleText [
+	^titleText
 ]
 
 { #category : #updating }
