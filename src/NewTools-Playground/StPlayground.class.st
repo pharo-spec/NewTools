@@ -340,6 +340,12 @@ StPlayground >> menuActions [
 		yourself
 ]
 
+{ #category : #accessing }
+StPlayground >> page [
+
+	^ page
+]
+
 { #category : #binding }
 StPlayground >> removeBinding: aBinding [
  
