@@ -219,7 +219,6 @@ EDEmergencyDebugger >> composeTitleText [
 
 { #category : #initialization }
 EDEmergencyDebugger >> debug: aDebugSession [
-	self a.
 	self basicDebug: aDebugSession.
 	self composeTitleText.
 	self composeStackText.
