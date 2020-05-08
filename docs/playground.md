@@ -1,12 +1,9 @@
-# The Tools Handbook
+# The Playground
 
 # Table of contents
 
-- [Pharo Tools](#PharoTools)
-
 - [The Playground](#ThePlayground)
   - [The Playground](#StPlayground)
-
 # The Playground
 It is useful to explore ideas or learn something before writing it to a more definitive place.
 In older versions of Pharo, this tool was known as Workspace.
