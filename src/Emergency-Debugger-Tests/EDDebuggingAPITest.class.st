@@ -170,6 +170,34 @@ EDDebuggingAPITest >> testRestartContextAt [
 ]
 
 { #category : #'tests - reverting methods' }
+EDDebuggingAPITest >> testRevertTo [
+	|method changes|
+	self prepareMethodVersionTest.
+	method := (EDMockObjectForTests >> #mWithVersion).
+	changes := debugAPI changeRecordsForMethod: method.
+		
+	self assert: method sourceCode equals: self sampleMethodSourceCodeVersion2.
+	debugAPI revert: (EDMockObjectForTests >> #mWithVersion) to: changes second.
+	
+	"Method version is now the reverted one"
+	method := (EDMockObjectForTests >> #mWithVersion).
+	self assert: method sourceCode equals: self sampleMethodSourceCodeVersion1.
+	
+	"Changes now include new version, equals to the first one"
+	changes := debugAPI changeRecordsForMethod: method. 
+	self assert: changes size equals: 3.
+	self assert: changes first sourceCode equals: self sampleMethodSourceCodeVersion1.
+	self assert: changes second sourceCode equals: self sampleMethodSourceCodeVersion2.
+	self assert: changes third sourceCode equals: self sampleMethodSourceCodeVersion1.
+	
+	"Changes cache should be updated: 
+	we test for source code version, as changes cannot compare otherwise than using identity check =="
+	self assert: (debugAPI versionsForMethod: method) size equals: 3.
+	self assertCollection: ((debugAPI versionsForMethod: method) collect:[:c| c sourceCode])
+				equals: (changes collect:[:c| c sourceCode])
+]
+
+{ #category : #'tests - reverting methods' }
 EDDebuggingAPITest >> testRevertToInContext [
 	|method changes|
 	self prepareMethodVersionTest.

@@ -88,6 +88,7 @@ EDEmergencyDebugger >> buildDefaultActions [
 	dic at: Character arrowRight put: [ self showOlderMethodVersion ].
 	dic at: 'help' put: [ self composeHelpText ].
 	dic at: 'revert' put: [ self revertCurrentMethodToSelectedVersion ].
+	dic at: 'forceRevert' put: [ self revertCurrentMethodToSelectedVersionAndQuit ].
 	dic at: 'terminateAll' put: [ debugAPI terminateAllProcesses ].
 	dic at: 'proceed' put: [ debugAPI resume ].
 	^dic
@@ -102,9 +103,12 @@ EDEmergencyDebugger >> buildDefaultActionsDescriptions [
 	dic at: 'retry' put: 'Retry opening a graphical debugger'.
 	dic at: '<UP/DOWN> arrows' put: 'Move up/down in the stack'.
 	dic at: '<RIGHT/LEFT> arrows' put: 'Navigate the current method versions'.
-	dic at: 'revert' put: 'Revert the current method to the selected method version'.
+	dic at: 'revert' put: 'Revert the current method to the selected method version in the current context'.
+	dic at: 'forceRevert' put: 'Recompiles the current method to the selected method version and quits the emergency debugger'.
 	dic at: 'terminateAll' put: 'Terminate all non-essential processes (will terminate Ed)'.
 	dic at: 'proceed' put: 'Proceeds the execution'.
+	
+	
 	^dic
 ]
 
@@ -120,6 +124,7 @@ EDEmergencyDebugger >> buildDefaultActionsDescriptionsMap [
 	dic at: Character arrowLeft put: '<RIGHT/LEFT> arrows'.
 	dic at: Character arrowRight put: '<RIGHT/LEFT> arrows'.
 	dic at: 'revert' put: 'revert'.
+	dic at: 'forceRevert' put: 'forceRevert'.	
 	dic at: 'help' put: 'help'.
 	dic at: 'terminateAll' put: 'terminateAll'.
 	dic at: 'proceed' put: 'proceed'.
@@ -347,16 +352,26 @@ EDEmergencyDebugger >> revertCurrentMethodToSelectedVersion [
 	method := debugAPI methodAt: stackSelectionIndex.
 	methodVersion := (debugAPI methodVersionAt: stackSelectionIndex) at: methodVersionSelectionIndex.
 	debugAPI revert: method to: methodVersion inContext: (debugAPI contextAt: stackSelectionIndex).
-	"debugAPI restartContextAt: stackSelectionIndex."
 	shortStack := nil.
 	
 	stackSelectionIndex := 1.
 	shortStackIndex := 1.
 	self composeStackText.
 	self composeMethodText.
-	isRunning := false.
 	methodVersionSelectionIndex := 1.
 	self showSelectedMethodVersion
+]
+
+{ #category : #methods }
+EDEmergencyDebugger >> revertCurrentMethodToSelectedVersionAndQuit [
+	"should:
+		- revert method from the current selected context to the selected method version
+		- quit the emergency debugger"
+	|method methodVersion|
+	method := debugAPI methodAt: stackSelectionIndex.
+	methodVersion := (debugAPI methodVersionAt: stackSelectionIndex) at: methodVersionSelectionIndex.
+	debugAPI revert: method to: methodVersion inContext: (debugAPI contextAt: stackSelectionIndex).
+	debugAPI terminateSession
 ]
 
 { #category : #methods }
