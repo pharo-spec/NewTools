@@ -64,7 +64,7 @@ EDDebuggingAPI >> changeRecordsForMethod: aCompiledMethod [
 		isMeta: aCompiledMethod methodClass isMeta
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 EDDebuggingAPI >> changesForMethods [
 	^changesForMethods
 ]
@@ -80,7 +80,7 @@ EDDebuggingAPI >> contextAt: index [
 	^self stackAt: index
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 EDDebuggingAPI >> debugger [
 	^debugger
 ]

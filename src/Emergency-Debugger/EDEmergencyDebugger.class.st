@@ -234,12 +234,12 @@ EDEmergencyDebugger >> debug: aDebugSession [
 	repl readEvalPrint 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 EDEmergencyDebugger >> debugAPI [
 	^debugAPI
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 EDEmergencyDebugger >> debugAPI: aDebugAPI [
 	debugAPI := aDebugAPI
 ]
@@ -256,7 +256,7 @@ EDEmergencyDebugger >> descriptionFromPromptCommand: aString [
 	^self availableActionsDescriptions at: key
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 EDEmergencyDebugger >> displayInterface: aDisplayInterface [
 	rawDisplay := aDisplayInterface
 ]
@@ -321,7 +321,7 @@ EDEmergencyDebugger >> initialize [
 	isRunning := false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 EDEmergencyDebugger >> input [
 	^input
 ]
@@ -331,17 +331,17 @@ EDEmergencyDebugger >> isRunning [
 	^isRunning 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 EDEmergencyDebugger >> methodText [
 	^methodText
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 EDEmergencyDebugger >> methodVersionSelectionIndex [
 	^methodVersionSelectionIndex
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 EDEmergencyDebugger >> methodVersionSelectionIndex: anInteger [
 	methodVersionSelectionIndex := anInteger
 ]
@@ -384,12 +384,12 @@ EDEmergencyDebugger >> performActionForChar: aCharacter [
 	^self evalCommand: aCharacter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 EDEmergencyDebugger >> repl: aREPLInterface [
 	repl := aREPLInterface
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 EDEmergencyDebugger >> result [
 	^result
 ]
@@ -479,12 +479,12 @@ EDEmergencyDebugger >> shortStack [
 		ifNil: [ shortStack := debugAPI stackFrom: 1 to: debugAPI displayStackSize ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 EDEmergencyDebugger >> shortStackIndex [
 	^shortStackIndex
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 EDEmergencyDebugger >> shortStackIndex: newIndex [
 	shortStackIndex := newIndex
 ]
@@ -527,17 +527,17 @@ EDEmergencyDebugger >> signalDebuggerError: anError forSession: aDebugSession [
 	self primitiveError: errStream contents
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 EDEmergencyDebugger >> stackSelectionIndex [
 	^stackSelectionIndex
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 EDEmergencyDebugger >> stackSelectionIndex: newIndex [
 	stackSelectionIndex := newIndex
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 EDEmergencyDebugger >> stackText [
 	^stackText
 ]
@@ -547,7 +547,7 @@ EDEmergencyDebugger >> terminate [
 	isRunning := false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 EDEmergencyDebugger >> titleText [
 	^titleText
 ]
