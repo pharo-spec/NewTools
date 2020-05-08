@@ -47,6 +47,11 @@ EDEmergencyDebugger class >> debugAPI: aDebugAPIClass [
 	DefaultDebugAPI := aDebugAPIClass 
 ]
 
+{ #category : #'instance creation' }
+EDEmergencyDebugger class >> debugError: anError fromSession: aDebugSession [
+	^ self new emergencyDebug: aDebugSession
+]
+
 { #category : #accessing }
 EDEmergencyDebugger class >> defaultDebugAPI [
 	^ DefaultDebugAPI ifNil: [ DefaultDebugAPI := EDDebuggingAPI ]
