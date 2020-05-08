@@ -20,21 +20,21 @@ StPlayground openContents: 'Some scripting'
 ]]]
 
 !! Using the playground
-Most of the functionalities a playground does can be found in the context menu of it (<meta+t> or right button click), and we will not explain in detail each of them. But there are some usages that may requirse some more documentation than ""self discovery"". Here are some hints you may find useful: 
+Most of the functionalities a playground does can be found in the context menu of it (==<meta+t>== or right button click), and we will not explain in detail each of them. But there are some usages that may requirse some more documentation than ""self discovery"". Here are some hints you may find useful: 
 
 !!! Keyboard friendly
-There is a shortcut, ==<Meta+t>==, that will show the context menu corresponding to the playground. Additionaly, there will be entries to control also what you can find in the toolbar or status bar. This redundancy is intentional and it will allow the user to navigate through all the options of the playgrounds without needing a secondary device (which, of course, can be used anyway if desired).
+There is a shortcut, ==<meta+t>==, that will show the context menu corresponding to the playground. Additionaly, there will be entries to control also what you can find in the toolbar or status bar. This redundancy is intentional and it will allow the user to navigate through all the options of the playgrounds without needing a secondary device (which, of course, can be used anyway if desired).
 
 !!! The print it popover
 If you try to print results of a computation, you will see that you receive a popover with the results of the execution (e.g. ==21*2== will show a popover with the ==42== number). There are some other things you can do with this popover besides just dismiss it (pressing ==<esc>==, ==<backspace>== or just focusing somewhere else).
 You can also: 
 
-- press <cr> to print the result into your playground (it will be shown enclosed with ""quotation marks"", as a comment.
-- press <meta+i> to inspect the result.
+- press ==<cr>== to print the result into your playground (it will be shown enclosed with ""quotation marks"", as a comment.
+- press ==<meta+i>== to inspect the result.
 
 !!! The bindings window
 The bindings window will be shown by selecting the ""Bindings"" option of the context menu or toolbar.
-You will see the variables panel and an inspector allowing you to explore/modify the values of a variable. There is also a context menu in the variables list that will allow you some other options. One interesting option you will see is the ""make variable shared"" option. This option will make the variable common to all playgrounds! This is an easy way to explore some posibilities in a separated space, not modifying what you already have there.
+You will see the variables panel and an inspector allowing you to explore/modify the values of a variable. There is also a context menu in the variables list that will allow you some other options. One interesting option you will see is the ""make variable shared"" option. This option will make the variable common to all playgrounds. It is an easy way to explore some posibilities in a separated space, not modifying what you already have there.
 
 See *class:StPlaygroundBindingsPresenter*
 
