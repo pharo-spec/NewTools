@@ -219,6 +219,7 @@ EDEmergencyDebugger >> composeTitleText [
 
 { #category : #initialization }
 EDEmergencyDebugger >> debug: aDebugSession [
+	self a.
 	self basicDebug: aDebugSession.
 	self composeTitleText.
 	self composeStackText.
@@ -248,6 +249,13 @@ EDEmergencyDebugger >> emergencyDebug: aDebugSession [
 		do: [ :err | self signalDebuggerError: err forSession: aDebugSession]
 ]
 
+{ #category : #'error handling' }
+EDEmergencyDebugger >> errorDescriptionFrom: anError [
+	^ [ anError description ]
+		on: Error
+		do: [ 'a ' , anError class printString ]
+]
+
 { #category : #evaluation }
 EDEmergencyDebugger >> eval: command [
 	self evalCommand: command.
@@ -273,13 +281,13 @@ EDEmergencyDebugger >> handleEmergencyDebuggerError: e description: commandStrin
 		composeResult:
 			('Cannot ' , (self descriptionFromPromptCommand: commandString))
 				asText allBold
-		title: 'ERROR: ' , e printString.
-	isRunning := false.
+		title: 'ERROR: ' , (self errorDescriptionFrom: e)
+	"isRunning := false.
 	[ [ e debug ]
 		on: Error
 		do: [ :err | self signalDebuggerError: err forSession: debugAPI session ] ]
 		ensure: [ isRunning := true.
-			repl readEvalPrint ]
+			repl readEvalPrint ]"
 ]
 
 { #category : #initialization }
@@ -450,27 +458,12 @@ EDEmergencyDebugger >> showSelectedMethodVersion [
 ]
 
 { #category : #'error handling' }
-EDEmergencyDebugger >> signalDebuggerError: anError [
-	| errDescription errStream |
-	errDescription := [ anError description ]
-		on: Error
-		do: [ 'a ' , anError class printString ].
-	errStream := WriteStream on: String new.
-	errStream << 'Original error: ' , debugAPI session name asString , '.'.
-	errStream << 'Smalltalk tools debugger error: ' , errDescription.
-	errStream cr.
-	self primitiveError: errStream contents
-]
-
-{ #category : #'error handling' }
 EDEmergencyDebugger >> signalDebuggerError: anError forSession: aDebugSession [
 	| errDescription errStream |
-	errDescription := [ anError description ]
-		on: Error
-		do: [ 'a ' , anError class printString ].
+	errDescription := self errorDescriptionFrom: anError.
 	errStream := WriteStream on: String new.
-	errStream << 'Original error: ' , aDebugSession name asString , '.'.
-	errStream << 'Smalltalk tools debugger error: ' , errDescription.
+	errStream << ('Original error: ' , aDebugSession name asString , '.').
+	errStream << ('Smalltalk tools debugger error: ' , errDescription).
 	errStream cr.
 	self primitiveError: errStream contents
 ]
