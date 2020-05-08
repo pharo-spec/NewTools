@@ -167,6 +167,7 @@ StPlayground class >> showLineNumbers: aBoolean [
 { #category : #binding }
 StPlayground >> addBinding: aBinding [
 
+	(self isGlobalVariable: aBinding key) ifTrue: [ ^ self ].
 	bindings add: aBinding
 ]
 
@@ -321,6 +322,12 @@ StPlayground >> initializeWindow: aWindowPresenter [
 		whenResizingDo: [ :ann | self class preferredExtent: ann newSize ];
 		whenOpenedDo: [ text takeKeyboardFocus ]
 
+]
+
+{ #category : #private }
+StPlayground >> isGlobalVariable: aSymbol [
+
+	^ (self class environment classNamed: aSymbol) notNil
 ]
 
 { #category : #actions }
