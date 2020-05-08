@@ -138,7 +138,7 @@ StPlaygroundPagesPresenter >> pagesAsPresenters [
 
 	^ self pages collect: [ :each | 
 		self 
-			instantiate: SpPlaygroundPageSummaryPresenter
+			instantiate: StPlaygroundPageSummaryPresenter
 			on: each  ]
 ]
 

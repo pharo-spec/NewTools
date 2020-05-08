@@ -4,7 +4,7 @@ It will include the first line of the page and the creation date.
 I am meant to be used in StPlaygroundPagesPresenter, as element of a list.
 "
 Class {
-	#name : #SpPlaygroundPageSummaryPresenter,
+	#name : #StPlaygroundPageSummaryPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
 		'page',
@@ -15,13 +15,13 @@ Class {
 }
 
 { #category : #accessing }
-SpPlaygroundPageSummaryPresenter >> contents [
+StPlaygroundPageSummaryPresenter >> contents [
 
 	^ page contents
 ]
 
 { #category : #initialization }
-SpPlaygroundPageSummaryPresenter >> initializePresenters [
+StPlaygroundPageSummaryPresenter >> initializePresenters [
 
 	layout := SpBoxLayout newVertical
 		borderWidth: 1;
@@ -37,13 +37,13 @@ SpPlaygroundPageSummaryPresenter >> initializePresenters [
 ]
 
 { #category : #accessing }
-SpPlaygroundPageSummaryPresenter >> page [
+StPlaygroundPageSummaryPresenter >> page [
 
 	^ page
 ]
 
 { #category : #initialization }
-SpPlaygroundPageSummaryPresenter >> pageFirstLine [
+StPlaygroundPageSummaryPresenter >> pageFirstLine [
 		
 	page readStreamDo: [ :stream | | line |
 		[ stream atEnd not and: [ (line := stream nextLine trimmed) isEmpty ] ] whileTrue.
@@ -53,7 +53,7 @@ SpPlaygroundPageSummaryPresenter >> pageFirstLine [
 ]
 
 { #category : #'accessing model' }
-SpPlaygroundPageSummaryPresenter >> setModelBeforeInitialization: aPage [
+StPlaygroundPageSummaryPresenter >> setModelBeforeInitialization: aPage [
 
 	page := aPage
 ]
