@@ -34,6 +34,7 @@ Class {
 
 { #category : #'instance creation' }
 EDEmergencyDebugger class >> debug: aDebugSession [
+	self flag: 'Not good, must add and test the error too!'.
 	^ self new emergencyDebug: aDebugSession
 ]
 
