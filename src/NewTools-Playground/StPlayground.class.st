@@ -174,6 +174,9 @@ StPlayground >> addBinding: aBinding [
 { #category : #binding }
 StPlayground >> bindingOf: aString [
 
+	"prevent the case when a tool (like completion) asks for a global binding"
+	(self class bindingOf: aString) ifNotNil: [ :aBinding | ^ aBinding ].
+	"if there is no binding, I will include a key"
 	(self bindings includesKey: aString)
 		ifFalse: [ self addBinding: (WorkspaceVariable key: aString asSymbol) ].
 	^ self bindings associationAt: aString

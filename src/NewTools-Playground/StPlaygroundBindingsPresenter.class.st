@@ -267,7 +267,7 @@ StPlaygroundBindingsPresenter >> toggleSelectedBindingScope [
 { #category : #initialization }
 StPlaygroundBindingsPresenter >> updatePresenter [
 	
-	self updatePresenterWithSelection: [ 
+	self updatePresenterWithSelection: [
 		bindingList selectIndex: 1 ]
 ]
 
