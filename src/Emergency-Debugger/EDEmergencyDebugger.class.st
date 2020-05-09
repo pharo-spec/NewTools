@@ -24,7 +24,9 @@ Class {
 		'actionsDescriptions',
 		'selectedMethod',
 		'shortStack',
-		'shortStackIndex'
+		'shortStackIndex',
+		'error',
+		'errorText'
 	],
 	#classVars : [
 		'DefaultDebugAPI'
@@ -50,7 +52,10 @@ EDEmergencyDebugger class >> debugAPI: aDebugAPIClass [
 
 { #category : #'instance creation' }
 EDEmergencyDebugger class >> debugError: anError fromSession: aDebugSession [
-	^ self new emergencyDebug: aDebugSession
+	^ self new
+		fromError: anError;
+		emergencyDebug: aDebugSession;
+		yourself
 ]
 
 { #category : #accessing }
@@ -140,7 +145,7 @@ EDEmergencyDebugger >> buildDefaultActionsDescriptionsMap [
 
 { #category : #'text - composing' }
 EDEmergencyDebugger >> composeDisplayText [
-	^(titleText , stackText, methodText, input, result )
+	^(titleText , errorText, stackText, methodText, input, result )
 
 ]
 
@@ -276,6 +281,16 @@ EDEmergencyDebugger >> errorDescriptionFrom: anError [
 		do: [ 'a ' , anError class printString ]
 ]
 
+{ #category : #accessing }
+EDEmergencyDebugger >> errorText [
+	^errorText
+]
+
+{ #category : #accessing }
+EDEmergencyDebugger >> errorText: aText [
+	errorText := aText 
+]
+
 { #category : #evaluation }
 EDEmergencyDebugger >> eval: command [
 	self evalCommand: command.
@@ -293,6 +308,17 @@ EDEmergencyDebugger >> evalCommand: aString [
 			[ :e | self handleEmergencyDebuggerError: e description: aString ].
 	self updateDisplay.
 	^ true
+]
+
+{ #category : #initialization }
+EDEmergencyDebugger >> fromError: anError [
+	| errStream |
+	errStream := WriteStream on: Text new.
+	errStream cr.
+	self writeSeparatorOn: errStream.
+	errStream << anError description.
+	errorText := errStream contents.
+	error := anError
 ]
 
 { #category : #'error handling' }
@@ -319,7 +345,8 @@ EDEmergencyDebugger >> initialize [
 	methodVersionSelectionIndex := 0.
 	input := Text new.
 	self composeResult: Text new title: self defaultResultText.
-	isRunning := false
+	isRunning := false.
+	errorText := ''
 ]
 
 { #category : #accessing }
