@@ -150,6 +150,16 @@ EDEmergencyDebugger >> composeDisplayText [
 ]
 
 { #category : #'text - composing' }
+EDEmergencyDebugger >> composeErrorTextFrom: anError [
+	| errStream |
+	errStream := WriteStream on: Text new.
+	errStream cr.
+	self writeSeparatorOn: errStream.
+	errStream << anError description.
+	errorText := errStream contents
+]
+
+{ #category : #'text - composing' }
 EDEmergencyDebugger >> composeHelpText [
 	| str |
 	str := self newTextStream.
@@ -312,12 +322,7 @@ EDEmergencyDebugger >> evalCommand: aString [
 
 { #category : #initialization }
 EDEmergencyDebugger >> fromError: anError [
-	| errStream |
-	errStream := WriteStream on: Text new.
-	errStream cr.
-	self writeSeparatorOn: errStream.
-	errStream << anError description.
-	errorText := errStream contents.
+	self composeErrorTextFrom: anError.
 	error := anError
 ]
 
@@ -346,7 +351,7 @@ EDEmergencyDebugger >> initialize [
 	input := Text new.
 	self composeResult: Text new title: self defaultResultText.
 	isRunning := false.
-	errorText := ''
+	errorText := Text new
 ]
 
 { #category : #accessing }
@@ -405,6 +410,11 @@ EDEmergencyDebugger >> moveUpInStack [
 { #category : #'text - helpers' }
 EDEmergencyDebugger >> newTextStream [
 	^WriteStream on: Text new
+]
+
+{ #category : #accessing }
+EDEmergencyDebugger >> originalError [
+	^error
 ]
 
 { #category : #evaluation }

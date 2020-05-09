@@ -4,7 +4,17 @@ Class {
 	#category : #'Emergency-Debugger-Tests'
 }
 
-{ #category : #'text - composition' }
+{ #category : #helpers }
+EDEmergencyDebuggerTest >> errorText: error [ 	
+	| errStream |
+	errStream := WriteStream on: Text new.
+	errStream cr.
+	ed writeSeparatorOn: errStream.
+	errStream << error description.
+	^errStream contents
+]
+
+{ #category : #helpers }
 EDEmergencyDebuggerTest >> methodDisplayTextStringExample [
 	| method expectedTextStream |
 	method := debugAPI methodAt: ed stackSelectionIndex.
@@ -17,7 +27,7 @@ EDEmergencyDebuggerTest >> methodDisplayTextStringExample [
 	^expectedTextStream contents asString
 ]
 
-{ #category : #'text - composition' }
+{ #category : #helpers }
 EDEmergencyDebuggerTest >> resultTextStringExample [
 	| expectedTextStream |
 	expectedTextStream := WriteStream on: Text new.
@@ -42,6 +52,19 @@ EDEmergencyDebuggerTest >> testComposeDisplayText [
 	displayText := ed titleText , ed stackText , ed methodText , ed input
 		, ed result.
 	self assert: ed composeDisplayText equals: displayText
+]
+
+{ #category : #'text - composition' }
+EDEmergencyDebuggerTest >> testComposeErrorTextFrom [
+	|error rs|
+	error := self zeroDivideErrorInstance.
+	ed composeErrorTextFrom: error.
+	rs := ed errorText readStream.
+	self assert: rs next equals: Character cr.
+	self assert: (rs next: ed separator asString size) equals: ed separator asString.
+	self assert: rs next equals: Character cr.
+	self assert: (rs next: error description size) equals: error description.
+	self assert: rs atEnd
 ]
 
 { #category : #'text - composition' }
@@ -183,6 +206,17 @@ EDEmergencyDebuggerTest >> testDefaultDebugAPI [
 EDEmergencyDebuggerTest >> testDefaultResultText [
 
 	self assert: ed defaultResultText equals: 'TYPE h FOR HELP'
+]
+
+{ #category : #setup }
+EDEmergencyDebuggerTest >> testFromError [
+	|error|
+	error := self zeroDivideErrorInstance.
+	self assert: ed originalError isNil.
+	self assert: ed errorText equals: Text new.	
+	ed fromError: error.
+	self assert: ed originalError identicalTo: error.
+	self assert: ed errorText equals: (self errorText: error)
 ]
 
 { #category : #'methods version' }
@@ -413,7 +447,14 @@ EDEmergencyDebuggerTest >> testWriteSeparatorOn [
 		  equals: expectedTextStream contents asString
 ]
 
-{ #category : #'text - composition' }
+{ #category : #helpers }
 EDEmergencyDebuggerTest >> titleDisplayTextStringExample [
 	^ 'Hi, I''m ED - What is the nature of your debugging emergency?'
+]
+
+{ #category : #helpers }
+EDEmergencyDebuggerTest >> zeroDivideErrorInstance [
+	[ 1 / 0 ]
+		on: Error
+		do: [ :err | ^ err ]
 ]
