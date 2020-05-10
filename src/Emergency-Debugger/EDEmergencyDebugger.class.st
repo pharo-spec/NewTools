@@ -54,8 +54,7 @@ EDEmergencyDebugger class >> debugAPI: aDebugAPIClass [
 EDEmergencyDebugger class >> debugError: anError fromSession: aDebugSession [
 	^ self new
 		fromError: anError;
-		emergencyDebug: aDebugSession;
-		yourself
+		emergencyDebug: aDebugSession
 ]
 
 { #category : #accessing }
