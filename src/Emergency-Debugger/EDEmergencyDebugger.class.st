@@ -90,6 +90,7 @@ EDEmergencyDebugger >> buildDefaultActions [
 	dic := Dictionary new.
 	dic at: 'q!' put: [ debugAPI closeEmergencySession ].
 	dic at: 'q' put: [ debugAPI terminateSession ].
+	dic at: 'showDebuggerError' put: [ self showDebuggerError ].
 	dic at: 'exit' put: [ debugAPI terminateSession ].
 	dic at: 'retry' put: [ debugAPI tryReopenSessionWithDebugger ].
 	dic at: Character arrowUp put: [ self moveUpInStack ].
@@ -117,7 +118,7 @@ EDEmergencyDebugger >> buildDefaultActionsDescriptions [
 	dic at: 'forceRevert' put: 'Recompiles the current method to the selected method version and quits the emergency debugger'.
 	dic at: 'terminateAll' put: 'Terminate all non-essential processes (will terminate Ed)'.
 	dic at: 'proceed' put: 'Proceeds the execution'.
-	
+	dic at: 'showDebuggerError' put: 'Display debugger error stack, i.e., why you are here.'.
 	
 	^dic
 ]
@@ -138,7 +139,7 @@ EDEmergencyDebugger >> buildDefaultActionsDescriptionsMap [
 	dic at: 'help' put: 'help'.
 	dic at: 'terminateAll' put: 'terminateAll'.
 	dic at: 'proceed' put: 'proceed'.
-	
+	dic at: 'showDebuggerError' put: 'showDebuggerError'.	
 	^dic
 ]
 
@@ -534,6 +535,24 @@ EDEmergencyDebugger >> shortStackIndex [
 { #category : #accessing }
 EDEmergencyDebugger >> shortStackIndex: newIndex [
 	shortStackIndex := newIndex
+]
+
+{ #category : #private }
+EDEmergencyDebugger >> showDebuggerError [
+	| context text |
+	error
+		ifNil: [ self composeResult: '' title: 'No error.'.
+			^ self updateDisplay ].
+	context := error signalerContext.
+	text := String
+		streamContents: [ :s | 
+			20
+				timesRepeat: [ context == nil
+						ifFalse: [ s
+								cr;
+								print: (context := context sender) ] ] ].
+	self composeResult: text title: error description.
+	self updateDisplay
 ]
 
 { #category : #methods }
