@@ -120,7 +120,8 @@ EDTests >> prepareMethodVersionTest [
 	session stepOver.
 	session stepInto.
 	session stepOver.
-	debugAPI session: session
+	debugAPI session: session.
+	self newEd
 ]
 
 { #category : #'methods version' }

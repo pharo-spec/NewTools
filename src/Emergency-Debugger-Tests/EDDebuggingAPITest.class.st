@@ -213,6 +213,10 @@ EDDebuggingAPITest >> testRevertToInContext [
 	method := (EDMockObjectForTests >> #mWithVersion).
 	self assert: method sourceCode equals: self sampleMethodSourceCodeVersion1.
 	
+	"Stack is updated"
+	self assertCollection: debugAPI longStack 
+		  equals: (debugAPI session stackOfSize: debugAPI longStackSize).
+	
 	"Changes now include new version, equals to the first one"
 	changes := debugAPI changeRecordsForMethod: method. 
 	self assert: changes size equals: 3.

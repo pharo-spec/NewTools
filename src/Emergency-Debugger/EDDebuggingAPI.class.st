@@ -166,12 +166,14 @@ EDDebuggingAPI >> revert: aCompiledMethod to: aChangeRecord [
 
 { #category : #'API - Revert' }
 EDDebuggingAPI >> revert: aCompiledMethod to: aChangeRecord inContext: aContext [
-	"Reverts the given method to the given change record in the given context"
+	"Reverts the given method to the given change record in the given context. 
+	The cached stack is updated."
 
 	session
 		recompileMethodTo: aChangeRecord sourceCode
 		inContext: aContext
-		notifying: nil
+		notifying: nil.
+	longStack := nil
 ]
 
 { #category : #accessing }
