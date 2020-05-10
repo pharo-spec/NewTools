@@ -49,7 +49,7 @@ EDEmergencyDebuggerTest >> testBasicDebug [
 { #category : #'text - composition' }
 EDEmergencyDebuggerTest >> testComposeDisplayText [
 	| displayText |
-	displayText := ed titleText , ed stackText , ed methodText , ed input
+	displayText := ed titleText , ed composeSessionTitle, ed stackText , ed methodText , ed input
 		, ed result.
 	self assert: ed composeDisplayText equals: displayText
 ]

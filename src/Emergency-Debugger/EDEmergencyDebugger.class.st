@@ -145,7 +145,7 @@ EDEmergencyDebugger >> buildDefaultActionsDescriptionsMap [
 
 { #category : #'text - composing' }
 EDEmergencyDebugger >> composeDisplayText [
-	^(titleText , errorText, stackText, methodText, input, result )
+	^(titleText , (self composeSessionTitle), stackText, methodText, input, result )
 
 ]
 
@@ -208,6 +208,16 @@ EDEmergencyDebugger >> composeResult: text title: title [
 	self writeSectionTitle: title on: str.
 	str << text.
 	result := str contents
+]
+
+{ #category : #'text - composing' }
+EDEmergencyDebugger >> composeSessionTitle [
+	| errStream |
+	errStream := WriteStream on: Text new.
+	errStream cr.
+	self writeSeparatorOn: errStream.
+	errStream << debugAPI session name.
+	^errStream contents
 ]
 
 { #category : #'text - composing' }
