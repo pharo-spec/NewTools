@@ -145,8 +145,7 @@ StPlaygroundBindingsPresenter >> initializePresenters [
 	self initializeInspectorPanel.
 	
 	bindingList transmitTo: inspector.
-	
-	self updatePresenter
+
 ]
 
 { #category : #initialization }
