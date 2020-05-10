@@ -102,6 +102,7 @@ EDEmergencyDebugger >> buildDefaultActions [
 	dic at: 'forceRevert' put: [ self revertCurrentMethodToSelectedVersionAndQuit ].
 	dic at: 'terminateAll' put: [ debugAPI terminateAllProcesses ].
 	dic at: 'proceed' put: [ debugAPI resume ].
+	dic at: 'debug' put:[self debugDebuggerError].
 	^dic
 ]
 
@@ -268,6 +269,12 @@ EDEmergencyDebugger >> debugAPI [
 { #category : #accessing }
 EDEmergencyDebugger >> debugAPI: aDebugAPI [
 	debugAPI := aDebugAPI
+]
+
+{ #category : #private }
+EDEmergencyDebugger >> debugDebuggerError [
+	self terminate.
+	error debug
 ]
 
 { #category : #'text - helpers' }
