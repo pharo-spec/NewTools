@@ -8,12 +8,22 @@ Class {
 	#category : #'NewTools-Playground-Command'
 }
 
-{ #category : #converting }
-StPlaygroundDoItCommand >> asSpecCommand [ 
-	
-	^ super asSpecCommand 
-		iconName: #glamorousGo;
-		yourself
+{ #category : #default }
+StPlaygroundDoItCommand class >> defaultDescription [
+
+	^ 'Do it all and inspect.'
+]
+
+{ #category : #default }
+StPlaygroundDoItCommand class >> defaultIconName [
+
+	^ #glamorousGo
+]
+
+{ #category : #default }
+StPlaygroundDoItCommand class >> defaultName [
+
+	^ 'Do it'
 ]
 
 { #category : #execution }
@@ -21,14 +31,6 @@ StPlaygroundDoItCommand >> execute [
 
 	self selectAll.
 	(SpCodeInspectItCommand forContext: context) execute
-]
-
-{ #category : #initialization }
-StPlaygroundDoItCommand >> initialize [
-	super initialize.
-	self
-		name: 'Do it';
-		description: 'Do it all and inspect.'
 ]
 
 { #category : #execution }

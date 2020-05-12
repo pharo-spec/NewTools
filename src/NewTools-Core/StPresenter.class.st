@@ -49,8 +49,10 @@ StPresenter class >> preferredExtent [
 
 { #category : #initialization }
 StPresenter >> initializeWindow: aWindowPresenter [
+	"All tools should call its parent"
 
-	aWindowPresenter initialExtent: self preferredExtent	
+	self traversePresentersDo: [ :each |
+		each addWindowShortcutsTo: aWindowPresenter ]
 ]
 
 { #category : #initialization }

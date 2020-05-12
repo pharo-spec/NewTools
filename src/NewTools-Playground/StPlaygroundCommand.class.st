@@ -1,5 +1,5 @@
 Class {
 	#name : #StPlaygroundCommand,
-	#superclass : #CmCommand,
+	#superclass : #StCommand,
 	#category : #'NewTools-Playground-Command'
 }

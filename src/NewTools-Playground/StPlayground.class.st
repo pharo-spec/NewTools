@@ -1,15 +1,48 @@
 "
-Playground is the correspondent of a classic Smalltalk Workspace. The problem with the name Workspace is that it implies that work should be carried out in this space, while this is not a best practice. Playground describes better the intention of providing a place in which we can quickly play with some code.
+! The Playground
+It is useful to explore ideas or learn something before writing it to a more definitive place.
+In older versions of Pharo, this tool was known as Workspace.
 
-The model behind a Playground instance is a PlaygroundModel object.
+The idea of a playground is not new in smalltalk systems and many other dynamic languages have implemented in one way or another some features of it, usually through a REPL, which shares much of a playground functionality. 
 
-!!Use cases
-The Playground can be used in two ways
+Some of the things a playground can do for you: 
 
-# As a place to construct and try out code snippets.
-# as an entry point into an inspection process.
+- it can execute code (and print its results).
+- it can debug some piece of code you just typed.
+- it can search references, implementors and senders
+- it can store variables (both locally or shared to all playgrounds).
 
-In both cases, the ability of diving into objects to the right is an important feature.
+!! Opening:
+You usually will open a playground by choosing it from the Pharo menu (Playground option), but it can also be opened programatically. 
+[[[language=Smalltalk
+StPlayground open.
+StPlayground openContents: 'Some scripting'
+]]]
+
+!! Using the playground
+Most of the functionalities a playground does can be found in the context menu of it (==<meta+t>== or right button click), and we will not explain in detail each of them. But there are some usages that may requirse some more documentation than ""self discovery"". Here are some hints you may find useful: 
+
+!!! Keyboard friendly
+There is a shortcut, ==<meta+t>==, that will show the context menu corresponding to the playground. Additionaly, there will be entries to control also what you can find in the toolbar or status bar. This redundancy is intentional and it will allow the user to navigate through all the options of the playgrounds without needing a secondary device (which, of course, can be used anyway if desired).
+
+!!! The print it popover
+If you try to print results of a computation, you will see that you receive a popover with the results of the execution (e.g. ==21*2== will show a popover with the ==42== number). There are some other things you can do with this popover besides just dismiss it (pressing ==<esc>==, ==<backspace>== or just focusing somewhere else).
+You can also: 
+
+- press ==<cr>== to print the result into your playground (it will be shown enclosed with ""quotation marks"", as a comment.
+- press ==<meta+i>== to inspect the result.
+
+!!! The bindings window
+The bindings window will be shown by selecting the ""Bindings"" option of the context menu or toolbar.
+You will see the variables panel and an inspector allowing you to explore/modify the values of a variable. There is also a context menu in the variables list that will allow you some other options. One interesting option you will see is the ""make variable shared"" option. This option will make the variable common to all playgrounds. It is an easy way to explore some posibilities in a separated space, not modifying what you already have there.
+
+See *class:StPlaygroundBindingsPresenter*
+
+!!! The pages window
+The pages window will be shown by selecting the ""Pages"" option of the context menu or toolbar.
+This window will list all playgrounds pages stored in the playground cache directory. You can choose any playground edited in any moment and load it into your playgroud.
+
+See *class:StPlaygroundPagesPresenter*
 
 "
 Class {
@@ -18,15 +51,48 @@ Class {
 	#instVars : [
 		'text',
 		'statusBar',
-		'bindings'
+		'bindings',
+		'lineLabel',
+		'toggleLineNumberButton',
+		'page'
+	],
+	#classVars : [
+		'CacheDirectory',
+		'PreferredExtent',
+		'ShowLineNumbers'
 	],
 	#category : #'NewTools-Playground-View'
 }
 
 { #category : #accessing }
+StPlayground class >> cacheDirectory [
+	
+	^ CacheDirectory ifNil: [ self defaultCacheDirectory ]
+]
+
+{ #category : #accessing }
+StPlayground class >> cacheDirectory: aDirectory [
+	
+	self flag: #TODO. "This go to settings"
+	CacheDirectory := aDirectory ensureCreateDirectory
+]
+
+{ #category : #private }
+StPlayground class >> defaultCacheDirectory [
+	
+	^ FileLocator localDirectory / 'play-cache'
+]
+
+{ #category : #accessing }
 StPlayground class >> defaultExtent [
 
-	^ 550 @ 350
+	^ 600@400
+]
+
+{ #category : #accessing }
+StPlayground class >> defaultShowLineNumbers [
+
+	^ true
 ]
 
 { #category : #specs }
@@ -49,12 +115,88 @@ StPlayground class >> open [
 	^ self new openWithSpec
 ]
 
+{ #category : #'instance creation' }
+StPlayground class >> openContents: aString [
+	"Open a new workspace with the given contents. It looks better when aString is code since the style is applied"
+
+	^ self new
+		contents: aString;
+		openWithSpec
+]
+
+{ #category : #private }
+StPlayground class >> preferredExtent [
+
+	^ PreferredExtent ifNil: [ PreferredExtent := self defaultExtent ]
+]
+
+{ #category : #private }
+StPlayground class >> preferredExtent: aPoint [
+
+	PreferredExtent := aPoint
+]
+
+{ #category : #'tools registry' }
+StPlayground class >> register [
+	"Add ourselves to registry. See [Smalltalk tools]" 
+	<script>
+
+	self registerToolsOn: Smalltalk tools
+]
+
+{ #category : #'tools registry' }
+StPlayground class >> registerToolsOn: registry [
+	"Add ourselves to registry. See [Smalltalk tools]" 
+
+	registry register: self as: #workspace
+
+]
+
+{ #category : #private }
+StPlayground class >> showLineNumbers [
+
+	^ ShowLineNumbers ifNil: [ ShowLineNumbers := self defaultShowLineNumbers ]
+]
+
+{ #category : #private }
+StPlayground class >> showLineNumbers: aBoolean [
+
+	ShowLineNumbers := aBoolean
+]
+
+{ #category : #binding }
+StPlayground >> addBinding: aBinding [
+
+	(self isGlobalVariable: aBinding key) ifTrue: [ ^ self ].
+	bindings add: aBinding
+]
+
 { #category : #binding }
 StPlayground >> bindingOf: aString [
 
-	(bindings includesKey: aString)
-		ifFalse: [ bindings add: (WorkspaceVariable key: aString asSymbol) ].
-	^ bindings associationAt: aString
+	"prevent the case when a tool (like completion) asks for a global binding"
+	(self class bindingOf: aString) ifNotNil: [ :aBinding | ^ aBinding ].
+	"if there is no binding, I will include a key"
+	(self bindings includesKey: aString)
+		ifFalse: [ self addBinding: (WorkspaceVariable key: aString asSymbol) ].
+	^ self bindings associationAt: aString
+]
+
+{ #category : #binding }
+StPlayground >> bindings [
+	"Combining shared bindings and local bindings needs to be done like this because the 
+	 #add: method of Dictionary stores the whole association (which in this case is a 
+	 WorkspaceVariable and we need that. #at:put: cannot be used because it will create 
+	 an Association and want to keep the WorkspaceVariable."
+	| joinedBindings |
+	
+	"just a small optimisation"
+	self application sharedBindings ifEmpty: [ ^ bindings ].
+	
+	joinedBindings := self application sharedBindings copy.
+	bindings associations 
+		do: [ :each | joinedBindings add: each ].
+	^ joinedBindings
 ]
 
 { #category : #'private builder' }
@@ -71,8 +213,24 @@ StPlayground >> buildMenu [
 
 { #category : #'private builder' }
 StPlayground >> buildStatusBar [ 
+	| newStatusBar |
 
-	^ SpStatusBarPresenter new
+	(newStatusBar := SpPresenter new)
+		layout: (SpBoxLayout newHorizontal
+			borderWidth: 3;
+			add: (lineLabel := newStatusBar newLabel) expand: false;
+			addLast: (toggleLineNumberButton := newStatusBar newToggleButton) expand: false;
+			yourself).
+
+	lineLabel addStyle: 'dim'.
+	self updateLineNumber.
+	toggleLineNumberButton
+		label: (StShowLineNumbersCommand iconLabelFor: self showLineNumbers);
+		help: StShowLineNumbersCommand defaultDescription;
+		state: self showLineNumbers;
+		whenChangedDo: [ :state | self showLineNumbers: state ].
+
+	^ newStatusBar
 ]
 
 { #category : #'private builder' }
@@ -81,6 +239,18 @@ StPlayground >> buildToolBar [
 	^ self toolbarActions 
 		asToolbarPresenterWith: [ :presenter | 
 			presenter displayMode: self application toolbarDisplayMode ]
+]
+
+{ #category : #accessing }
+StPlayground >> contents: aString [
+
+	text text: aString
+]
+
+{ #category : #'api-focus' }
+StPlayground >> defaultKeyboardFocus [
+
+	^ text
 ]
 
 { #category : #binding }
@@ -98,7 +268,7 @@ StPlayground >> doItReceiver [
 { #category : #binding }
 StPlayground >> hasBindingOf: aString [
 
-	^ bindings includesKey: aString asSymbol
+	^ self bindings includesKey: aString asSymbol
 ]
 
 { #category : #binding }
@@ -111,7 +281,8 @@ StPlayground >> hasBindingThatBeginsWith: aString [
 { #category : #initialization }
 StPlayground >> initialize [
 
-	bindings := Dictionary new.
+	self setBindings: Dictionary new.
+	page := StPlaygroundPage new.
 	super initialize
 ]
 
@@ -119,6 +290,9 @@ StPlayground >> initialize [
 StPlayground >> initializePresenters [
 	
 	text := self newCode
+		lineNumbers: self showLineNumbers;
+		contextMenu: [ self menuActions asMenuPresenter ];
+		contextKeyBindings: self menuActions asKMCategory;
 		interactionModel: self;
 		completionEngine: (SpCodeCompletionEngine new 
 			scripting: true;
@@ -126,20 +300,76 @@ StPlayground >> initializePresenters [
 			doItContext: self doItContext;
 			completionClass: self selectedClassOrMetaClass;
 			yourself);
-		yourself
+		whenTextChangedDo: [ :aString | page contents: aString ];
+		yourself.
+		
+	text eventHandler 
+		whenKeyUpDo: [ :event | self updateLineNumber ];
+		whenMouseUpDo: [ :event | self updateLineNumber ];
+		"before taking focus position will be nil, ensure I have the correct one"
+		whenFocusReceivedDo: [ self updateLineNumber ].
+		
+	self updatePresenter
 ]
 
 { #category : #initialization }
 StPlayground >> initializeWindow: aWindowPresenter [
 
+	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
 		title: self class defaultTitle;
-		initialExtent: self class defaultExtent;
+		initialExtent: self class preferredExtent;
+		windowIcon: self windowIcon;
 		toolBar: self buildToolBar;
-		statusBar: (statusBar := self buildStatusBar).
-	
-	self flag: #TODO. "This just has sense if this is the 'main' window"
-	"aWindowPresenter menu: self newMenu"
+		statusBar: (statusBar := self buildStatusBar);
+		whenResizingDo: [ :ann | self class preferredExtent: ann newSize ];
+		whenOpenedDo: [ text takeKeyboardFocus ]
+
+]
+
+{ #category : #private }
+StPlayground >> isGlobalVariable: aSymbol [
+
+	^ (self class environment classNamed: aSymbol) notNil
+]
+
+{ #category : #actions }
+StPlayground >> loadPage: aFileReference [
+
+	page := StPlaygroundPage fromReference: aFileReference.
+	text text: page contents
+]
+
+{ #category : #private }
+StPlayground >> menuActions [
+
+	^ CmCommandGroup forSpec
+		beRoot;
+		register: ((CmCommandGroup named: 'Playground') asSpecGroup
+			register: ((CmCommandGroup named: 'Base options') asSpecGroup
+				beDisplayedAsGroup;
+				register: (StPlaygroundPublishCommand forSpecContext: self);
+				register: (StPlaygroundBindingsCommand forSpecContext: self);
+				register: (StPlaygroundPagesCommand forSpecContext: self);
+				yourself);
+			register: ((CmCommandGroup named: 'Miscelaneous options') asSpecGroup
+				beDisplayedAsGroup;
+				register: (StShowLineNumbersCommand forSpecContext: self);
+				yourself);
+			yourself);
+		yourself
+]
+
+{ #category : #accessing }
+StPlayground >> page [
+
+	^ page
+]
+
+{ #category : #binding }
+StPlayground >> removeBinding: aBinding [
+ 
+	bindings removeKey: aBinding key
 ]
 
 { #category : #accessing }
@@ -167,14 +397,24 @@ StPlayground >> setBindings: aDictionary [
 	bindings := aDictionary
 ]
 
-{ #category : #'accessing ui' }
-StPlayground >> text [
-	^ text
+{ #category : #private }
+StPlayground >> showLineNumbers [
+
+	^ self class showLineNumbers
 ]
 
-{ #category : #'accessing ui' }
-StPlayground >> text: anObject [
-	text := anObject
+{ #category : #'private actions' }
+StPlayground >> showLineNumbers: aBoolean [
+
+	self class showLineNumbers: aBoolean.
+	text lineNumbers: aBoolean.
+	toggleLineNumberButton label: (StShowLineNumbersCommand iconLabelFor: self showLineNumbers)
+]
+
+{ #category : #actions }
+StPlayground >> toggleShowLineNumbers [
+
+	self showLineNumbers: self showLineNumbers not
 ]
 
 { #category : #'private builder' }
@@ -190,8 +430,31 @@ StPlayground >> toolbarActions [
 		yourself
 ]
 
+{ #category : #initialization }
+StPlayground >> updateLineNumber [
+	| pos |
+	
+	lineLabel ifNil: [ ^ self ].	
+	pos := text cursorPosition.
+	lineLabel label: (pos 
+		ifNotNil: [ ('Line: {1}:{2}' format: { pos y. pos x }) ]
+		ifNil: [ '' ])
+]
+
+{ #category : #initialization }
+StPlayground >> updatePresenter [
+
+	self updateLineNumber
+]
+
 { #category : #accessing }
 StPlayground >> variableBindingNames [
 	
-	^ bindings keys
+	^ self bindings keys
+]
+
+{ #category : #initialization }
+StPlayground >> windowIcon [
+	
+	^ self application iconNamed: #workspace
 ]

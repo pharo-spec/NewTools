@@ -11,7 +11,7 @@ Class {
 		'closeButton',
 		'shortcutLabel'
 	],
-	#category : #'NewTools-Core'
+	#category : #'NewTools-Core-Presenters'
 }
 
 { #category : #specs }
@@ -57,7 +57,7 @@ StHeaderBar >> shortcut: aShortcut [
 	self shortcutLabel: (KMShortcutPrinter toString: aShortcut)
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 StHeaderBar >> shortcutLabel: aString [ 
 
 	shortcutLabel label: aString
