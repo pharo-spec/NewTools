@@ -198,5 +198,5 @@ NewDebuggerSelector >> tryOpen: aDebugger on: aDebugSession [
 		do: [ :err | "(self requestActionOnDebuggerError: err)
 			ifFalse: [ ^ false ]." 
 			self flag: 'We should give the choice of which exception to debug, or add an action in the debugger to switch context'.
-			(DebuggerFailure of: aDebugger on: err) debug ]
+			(DebuggerFailure of: aDebugger on: err) signal ]
 ]
