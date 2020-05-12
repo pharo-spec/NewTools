@@ -215,7 +215,7 @@ DebuggerSelectorTest >> testNoDebuggerForDebuggerFailure [
 		forProcess: process.
 		
 	self
-		assert: (debuggerSelector findDebuggerForSession: session) isNil
+		assert: (debuggerSelector findDebuggerForSession: session) identicalTo: Transcripter
 ]
 
 { #category : #tests }

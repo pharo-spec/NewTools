@@ -113,7 +113,10 @@ NewDebuggerSelector >> findDebuggerForSession: aDebugSession [
 		detect: [ :each | 
 			(each handlesContext: aDebugSession context)
 				and: [ aDebugSession exception isHandleableBy: each ] ]
-		ifNone: [ nil ]
+		ifNone: [ self
+				flag:
+					'we return the Emergency evaluator for now, but we should return the value from a setting! (see Ed)'.
+			Transcripter ]
 ]
 
 { #category : #sessions }
@@ -132,34 +135,18 @@ NewDebuggerSelector >> newSessionFromException: exception forProcess: process [
 { #category : #opening }
 NewDebuggerSelector >> openOn: aDebugSession [
 	| candidateDebugger |
-	candidateDebugger := aDebugSession exception class = DebuggerFailure
-		ifTrue: [ GTGenericStackDebugger ]
-		ifFalse: [ SpecDebugger ].
+	candidateDebugger := self findDebuggerForSession: aDebugSession.
 	candidateDebugger
-		ifNil: [ aDebugSession signalDebuggerError: aDebugSession exception.
-			^ self ].
-
-	"| candidateDebugger |
-	candidateDebugger := debuggers detect: [ :each |
-		(each handlesContext: aDebugSession context)
-			and: [ aDebugSession exception isHandleableBy: each ] ]
-		ifNone: [nil ].
-	candidateDebugger ifNil: [  aDebugSessionInspect]."
+		ifNil: [ ^ aDebugSession signalDebuggerError: aDebugSession exception ].
 	self tryOpen: candidateDebugger on: aDebugSession
 ]
 
 { #category : #opening }
 NewDebuggerSelector >> tryOpen: aDebugger on: aDebugSession [
-
-	[ aDebugger
-			openOn: aDebugSession
-			withFullView: true
-			andNotification: nil.
-		self flag: 'TODO remove notifications'
-	]
-	on: Error
-	do: [ :err | 
-		"(self requestActionOnDebuggerError: err)
-			ifFalse: [ ^ false ]."
-		(DebuggerFailure of: aDebugger on: err) debug ]
+	[ aDebugger debugSession: aDebugSession ]
+		on: Error
+		do: [ :err | "(self requestActionOnDebuggerError: err)
+			ifFalse: [ ^ false ]." 
+			self flag: 'We should give the choice of which exception to debug, or add an action in the debugger to switch context'.
+			(DebuggerFailure of: aDebugger on: err) debug ]
 ]
