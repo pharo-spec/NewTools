@@ -2,7 +2,8 @@ Class {
 	#name : #NewDebuggerSelector,
 	#superclass : #Object,
 	#instVars : [
-		'debuggers'
+		'debuggers',
+		'preDebugAction'
 	],
 	#category : #'NewTools-DebuggerSelector-Core'
 }
@@ -88,6 +89,7 @@ NewDebuggerSelector >> debugException: exception inProcess: process from: uiMana
 	debugSession := self
 		newSessionFromException: exception
 		forProcess: process.
+	self performPreDebugActionsOn: debugSession.
 	debugSession isAboutUIProcess
 		ifTrue: [ DefaultExecutionEnvironment
 				beActiveDuring: [ uiManager spawnNewProcess ] ].
@@ -95,11 +97,7 @@ NewDebuggerSelector >> debugException: exception inProcess: process from: uiMana
 	"Schedule debugger in deferred UI message to address redraw problems after opening a debugger e.g. from the testrunner."
 	uiManager
 		defer: [  self openOn: debugSession ].
-	process suspend.
-	
-	self flag: 'If we are from a debug-it, the debug session must be stepped until we get into the method to debug, but for now it is not clear how to simply do that'.
-		"debugSession
-		stepIntoUntil: [ :currentContext | currentContext method == aCompiledMethod ]"
+	process suspend
 ]
 
 { #category : #initialization }
@@ -139,6 +137,21 @@ NewDebuggerSelector >> openOn: aDebugSession [
 	candidateDebugger
 		ifNil: [ ^ aDebugSession signalDebuggerError: aDebugSession exception ].
 	self tryOpen: candidateDebugger on: aDebugSession
+]
+
+{ #category : #sessions }
+NewDebuggerSelector >> performPreDebugActionsOn: aDebugSession [
+	self preDebugAction value: aDebugSession
+]
+
+{ #category : #accessing }
+NewDebuggerSelector >> preDebugAction [
+	^ preDebugAction ifNil: [ preDebugAction := [ :session |  ] ]
+]
+
+{ #category : #accessing }
+NewDebuggerSelector >> preDebugAction: anObject [
+	preDebugAction := anObject
 ]
 
 { #category : #opening }
