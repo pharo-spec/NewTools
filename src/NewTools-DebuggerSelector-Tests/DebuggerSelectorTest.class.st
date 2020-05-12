@@ -261,7 +261,10 @@ DebuggerSelectorTest >> testPerformPreDebugActionsOn [
 { #category : #'tests - debugging' }
 DebuggerSelectorTest >> testPreDebugActionForDebugItMethod [
 	| tag |
-	self assert: debuggerSelector preDebugAction notNil.
+	"Default debug action is an empty block with 1 parameter"
+	debuggerSelector performPreDebugActionsOn: #tag.
+	
+	"Custom debug action should execute the give block"
 	debuggerSelector preDebugAction: [ :session | tag := session ].
 	debuggerSelector performPreDebugActionsOn: #tag.
 	self assert: tag equals: #tag
@@ -311,7 +314,34 @@ DebuggerSelectorTest >> testSortedDebuggersByRank [
 
 { #category : #'tests - debugging' }
 DebuggerSelectorTest >> testTryOpenOn [
-	self fail
+	| debugger session |
+	session := self session.
+
+	"In case of error, it should raise a debugger failure."
+	debugger := DummyUnusableDebugger new.
+	self
+		should: [ debuggerSelector tryOpen: debugger on: session ]
+		raise: DebuggerFailure.
+	[ debuggerSelector tryOpen: debugger on: session ]
+		on: DebuggerFailure
+		do: [ :dbgFailure | 
+			self assert: dbgFailure signaler identicalTo: debugger.
+			self assert: dbgFailure failedDebugger identicalTo: debugger.
+			self deny: (dbgFailure isHandleableBy: debugger).
+			self
+				assert: dbgFailure innerException
+				identicalTo: dbgFailure originException.
+			self
+				assert: dbgFailure innerException
+				identicalTo: debugger tag.
+			 ].
+
+	"A bit simplistic: we just check that tryOpen:On: 
+	sends debugSession: to the debugger with the session
+	as argument."
+	debugger := DummyDebugger new.
+	debuggerSelector tryOpen: debugger on: session.
+	self assert: debugger tag identicalTo: session
 ]
 
 { #category : #tests }

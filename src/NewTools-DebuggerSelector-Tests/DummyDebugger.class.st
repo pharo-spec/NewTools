@@ -6,7 +6,8 @@ Class {
 	#name : #DummyDebugger,
 	#superclass : #Object,
 	#instVars : [
-		'name'
+		'name',
+		'tag'
 	],
 	#category : #'NewTools-DebuggerSelector-Tests'
 }
@@ -14,6 +15,11 @@ Class {
 { #category : #'instance creation' }
 DummyDebugger class >> named: aString [
 	^self new name: aString
+]
+
+{ #category : #'instance creation' }
+DummyDebugger >> debugSession: aDebugSession [
+	tag := aDebugSession
 ]
 
 { #category : #testing }
@@ -29,4 +35,14 @@ DummyDebugger >> name [
 { #category : #accessing }
 DummyDebugger >> name: anObject [
 	name := anObject
+]
+
+{ #category : #accessing }
+DummyDebugger >> tag [
+	^ tag
+]
+
+{ #category : #accessing }
+DummyDebugger >> tag: anObject [
+	tag := anObject
 ]
