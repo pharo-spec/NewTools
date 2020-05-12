@@ -1,5 +1,5 @@
 Class {
 	#name : #CannotSetAsDebugger,
 	#superclass : #DebuggerSelectorError,
-	#category : #'NewTools-DebuggerSelector-Core'
+	#category : #'NewTools-DebuggerSelector-Deprecated'
 }
