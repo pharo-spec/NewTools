@@ -38,24 +38,46 @@ DebuggerSelectorTest >> setUp [
 { #category : #'tests - debuggers' }
 DebuggerSelectorTest >> testAvailableDebuggers [
 	|availableDebuggerClasses sortedDebuggerClasses|
+	self fail.
 	availableDebuggerClasses := DebuggerSelector availableDebuggers collect:[:assoc| assoc key].
 	sortedDebuggerClasses := DebuggerSelector sortedDebuggersByRank collect:[:assoc| assoc value].  
 	self assertCollection: availableDebuggerClasses equals: sortedDebuggerClasses 
 ]
 
-{ #category : #'tests - debuggers' }
-DebuggerSelectorTest >> testDebuggerRankDependsOnSession [
-	self flag: 'Ugly hack because GT debuggers may apply to specific sessions. 
-	We need to find a clever way to rank those debuggers in the UI.
-	
-	We don nott even know what should really do the "tested" method:
-	this should be defined'.
-	self assert: false
+{ #category : #'tests - debugging API' }
+DebuggerSelectorTest >> testDebugExceptionInProcessFrom [
+	self fail
+]
+
+{ #category : #'tests - debugging' }
+DebuggerSelectorTest >> testDebugExceptionInProcessFromWith [
+	self fail
+]
+
+{ #category : #'tests - debugging API' }
+DebuggerSelectorTest >> testDebugMethodInProcessFromContextLabeled [
+	self fail
+]
+
+{ #category : #'tests - debugging API' }
+DebuggerSelectorTest >> testDebugProcessFromContextLabeled [
+	self fail
+]
+
+{ #category : #'tests - debugging API' }
+DebuggerSelectorTest >> testDebuggerWarningFrom [
+	self fail
+]
+
+{ #category : #'tests - debugging API' }
+DebuggerSelectorTest >> testDebuggerWarningInProcessFrom [
+	self fail
 ]
 
 { #category : #'tests - debuggers' }
 DebuggerSelectorTest >> testDebuggersWithRanks [
 	|assocs systemDebuggers|
+	self fail.
 	assocs := DebuggerSelector debuggersWithRanks.
 	systemDebuggers := Smalltalk tools debuggers.
 	self assert: assocs size equals: systemDebuggers size.
@@ -63,7 +85,7 @@ DebuggerSelectorTest >> testDebuggersWithRanks [
 
 ]
 
-{ #category : #'tests -  debugger-selector' }
+{ #category : #'tests -  algorithm' }
 DebuggerSelectorTest >> testFindDebuggerForDebuggerFailure [
 	| process semaphore exception session |
 	semaphore := Semaphore new.
@@ -84,7 +106,7 @@ DebuggerSelectorTest >> testFindDebuggerForDebuggerFailure [
 		identicalTo: debuggers third
 ]
 
-{ #category : #'tests -  debugger-selector' }
+{ #category : #'tests -  algorithm' }
 DebuggerSelectorTest >> testFindDebuggerToHandleContext [
 	self
 		assert: (debuggerSelector findDebuggerForSession: self session)
@@ -118,15 +140,18 @@ DebuggerSelectorTest >> testIsThisClassADebugger [
 
 { #category : #'tests - debuggers' }
 DebuggerSelectorTest >> testLabeledDebuggers [
-	|dbgs labeledDebuggers|
-	dbgs := {999->'main dbg'. 80 -> 'a dbg'. 5 -> 'another dbg'.}.
+	| dbgs labeledDebuggers |
+	self fail.
+	dbgs := {(999 -> 'main dbg').
+	(80 -> 'a dbg').
+	(5 -> 'another dbg')}.
 	labeledDebuggers := DebuggerSelector labeledDebuggers: dbgs.
 	self assert: labeledDebuggers first key equals: 'main dbg'.
 	self assert: labeledDebuggers first value equals: 'Main'.
 	self assert: labeledDebuggers second key equals: 'a dbg'.
 	self assert: labeledDebuggers second value equals: '80'.
 	self assert: labeledDebuggers third key equals: 'another dbg'.
-	self assert: labeledDebuggers third value equals: '5'.
+	self assert: labeledDebuggers third value equals: '5'
 ]
 
 { #category : #tests }
@@ -197,7 +222,7 @@ DebuggerSelectorTest >> testMainDebuggerSetGet [
 DebuggerSelectorTest >> testNewSessionFromExceptionForProcess [
 ]
 
-{ #category : #'tests -  debugger-selector' }
+{ #category : #'tests -  algorithm' }
 DebuggerSelectorTest >> testNoDebuggerForDebuggerFailure [
 	| process semaphore exception session |
 	semaphore := Semaphore new.
@@ -216,6 +241,26 @@ DebuggerSelectorTest >> testNoDebuggerForDebuggerFailure [
 		
 	self
 		assert: (debuggerSelector findDebuggerForSession: session) identicalTo: Transcripter
+]
+
+{ #category : #'tests - debugging' }
+DebuggerSelectorTest >> testNullExceptionForNamed [
+	self fail
+]
+
+{ #category : #'tests - debugging' }
+DebuggerSelectorTest >> testOpenOn [
+	self fail
+]
+
+{ #category : #'tests - sessions' }
+DebuggerSelectorTest >> testPerformPreDebugActionsOn [
+	self fail
+]
+
+{ #category : #'tests - debugging' }
+DebuggerSelectorTest >> testPreDebugActionForDebugItMethod [
+	self fail
 ]
 
 { #category : #tests }
@@ -249,6 +294,7 @@ DebuggerSelectorTest >> testSettingNonDebuggerAsMainDebuggerSignalsException [
 { #category : #'tests - debuggers' }
 DebuggerSelectorTest >> testSortedDebuggersByRank [
 	| assocs systemDebuggers sortedRanks expectedRanks |
+	self fail.
 	assocs := DebuggerSelector sortedDebuggersByRank.
 	systemDebuggers := Smalltalk tools debuggers.
 	self
@@ -257,6 +303,11 @@ DebuggerSelectorTest >> testSortedDebuggersByRank [
 	sortedRanks := assocs collect: [ :assoc | assoc key ].
 	expectedRanks := (systemDebuggers collect: [ :assoc | assoc value ]) asSortedCollection.
 	self assert: sortedRanks equals: expectedRanks asOrderedCollection reversed
+]
+
+{ #category : #'tests - debugging' }
+DebuggerSelectorTest >> testTryOpenOn [
+	self fail
 ]
 
 { #category : #tests }
