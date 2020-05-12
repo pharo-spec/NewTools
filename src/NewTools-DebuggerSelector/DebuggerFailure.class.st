@@ -33,8 +33,6 @@ DebuggerFailure >> innerException [
 
 { #category : #testing }
 DebuggerFailure >> isHandleableBy: aDebugger [
-	aDebugger = GTGenericStackDebugger
-		ifTrue: [ ^ true ].
 	^ aDebugger ~= failedDebugger
 		and: [ innerException isHandleableBy: aDebugger ]
 ]
