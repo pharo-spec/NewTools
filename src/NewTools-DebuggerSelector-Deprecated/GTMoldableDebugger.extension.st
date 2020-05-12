@@ -2,9 +2,7 @@ Extension { #name : #GTMoldableDebugger }
 
 { #category : #'*NewTools-DebuggerSelector-Deprecated' }
 GTMoldableDebugger >> actOnBrowserClosing: ann [
-	"Terminating debug sessions is now handled by DebugSessionStorage, to allow other debuggers to re-open the debug session debugged by a GTDebugger after the latter has been closed"
-	"self session ifNotNil: [ :aSession | aSession terminate ]"
-	self session ifNotNil: [ :aSession | aSession stopKeepingAlive: self ]
+	self session ifNotNil: [ :aSession | aSession terminate ]
 ]
 
 { #category : #'*NewTools-DebuggerSelector-Deprecated' }

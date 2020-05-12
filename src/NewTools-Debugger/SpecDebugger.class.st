@@ -552,10 +552,7 @@ SpecDebugger >> clear [
 	extensionToolsNotebook pages do:[:page| page activePresenter windowIsClosing].
 	extensionTools := nil.
 	self removeActionsForSession: self session.
-	
-	"No more code should follow after this, as the session might terminate this process."
-	[self session stopKeepingAlive: self] on: MessageNotUnderstood do: [ self session terminate ] "For compatibility with DebuggerSelector https://github.com/dupriezt/DebuggerSelector
-	If DebugSelector is in the image (i.e. the debug session understands the #stopKeepingAlive: message), it is responsible for terminating debug sessions, so we just let it do it. If DebugSelector is not in the image (handler block), then we terminate the debug session ourselves"
+	self session terminate
 ]
 
 { #category : #'updating widgets' }
