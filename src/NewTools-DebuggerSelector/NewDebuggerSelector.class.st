@@ -171,8 +171,6 @@ NewDebuggerSelector >> newSessionFromException: exception forProcess: process [
 NewDebuggerSelector >> openOn: aDebugSession [
 	| candidateDebugger |
 	candidateDebugger := self findDebuggerForSession: aDebugSession.
-	candidateDebugger
-		ifNil: [ ^ aDebugSession signalDebuggerError: aDebugSession exception ].
 	self tryOpen: candidateDebugger on: aDebugSession
 ]
 

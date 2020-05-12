@@ -250,7 +250,13 @@ DebuggerSelectorTest >> testNullExceptionForNamed [
 
 { #category : #'tests - debugging' }
 DebuggerSelectorTest >> testOpenOn [
-	self fail
+	"Basically openOn: finds a debugger and calls tryOpen:on:.
+	So the first usable debugger (second in the list, see setUp)
+	should work"
+	| session |
+	session := self session.
+	debuggerSelector openOn: session.
+	self assert: debuggers second tag identicalTo: session
 ]
 
 { #category : #'tests - sessions' }
