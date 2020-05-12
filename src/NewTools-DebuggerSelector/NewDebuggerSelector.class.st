@@ -16,52 +16,62 @@ NewDebuggerSelector class >> availableDebuggers [
 			collect: #key
 ]
 
-{ #category : #'debug - exceptions' }
+{ #category : #'debug - API' }
 NewDebuggerSelector class >> debugException: exception inProcess: process from: uiManager [
-	^ [ (self with: self availableDebuggers)
+	^ self
+		debugException: exception
+		inProcess: process
+		from: uiManager
+		with: self newDebuggerSelector
+]
+
+{ #category : #'debug - private' }
+NewDebuggerSelector class >> debugException: exception inProcess: process from: uiManager with: aDebuggerSelectorInstance [
+	^ [ aDebuggerSelectorInstance
 		debugException: exception
 		inProcess: process
 		from: uiManager ]
 		on: Error
-		do: [ self flag: 'Create a local method for primitive errors'.
-			DebugSession new signalDebuggerError: exception ]
+		do: [ self signalDebuggerError: exception ]
 ]
 
-{ #category : #'debug - processes' }
+{ #category : #'debug - API' }
 NewDebuggerSelector class >> debugProcess: aProcess fromContext: aContext labeled: aString [
-	| exception |
-	self flag: #TESTME.
-	exception := DebuggerSelectorNullException fromSignallerContext: aContext.
-	exception messageText: aString.
 	self
-		debugException: exception
+		debugException: (self nullExceptionFor: aContext named: aString)
 		inProcess: aProcess
 		from: UIManager default
 ]
 
-{ #category : #'debug - warnings' }
+{ #category : #'debug - API' }
 NewDebuggerSelector class >> debuggerWarning: aWarningException from: aUIManager [
 	^ aUIManager warningDefaultAction: aWarningException
 ]
 
-{ #category : #'debug - warnings' }
+{ #category : #'debug - API' }
 NewDebuggerSelector class >> debuggerWarning: aWarningException inProcess: aProcess from: aUIManager [
-	DSWarningPresenter basicNew
-		exception: aWarningException;
-		process: aProcess;
-		uiManager: aUIManager;
-		notificationString: (self debuggerWarningNotificationFor: aWarningException);
-		initialize;
-		openModalWithSpec.
-		self flag: 'super wrong: we do not want a modal here, but if we do not, the process from which the warning originated is proceeded and it cannot be debugged nor proceeded anymore'
+	^self debugException: aWarningException inProcess: aProcess from: aUIManager
 ]
 
-{ #category : #'debug - warnings' }
-NewDebuggerSelector class >> debuggerWarningNotificationFor: aWarningException [
-	^ aWarningException messageText
-		,
-			'\\Select Proceed to continue, or close this window to cancel the operation.'
-				withCRs
+{ #category : #'instance creation' }
+NewDebuggerSelector class >> newDebuggerSelector [
+	^ (self with: self availableDebuggers)
+]
+
+{ #category : #'debug - private' }
+NewDebuggerSelector class >> nullExceptionFor: aContext named: aString [
+	| exception |
+	exception := DebuggerSelectorNullException
+		fromSignallerContext: aContext.
+	exception messageText: aString.
+	^ exception
+]
+
+{ #category : #'debug - private' }
+NewDebuggerSelector class >> preDebugActionForDebugItMethod: aCompiledMethod [
+	^ [ :session | 
+	session
+		stepIntoUntil: [ :currentContext | currentContext method == aCompiledMethod ] ]
 ]
 
 { #category : #debuggers }
@@ -72,6 +82,15 @@ NewDebuggerSelector class >> registeredDebuggersWithRanks [
 { #category : #exceptions }
 NewDebuggerSelector class >> resumeException: anException [
 	anException resume
+]
+
+{ #category : #'debug - private' }
+NewDebuggerSelector class >> signalDebuggerError: exception [
+	| failingSession |
+	failingSession := DebugSession new
+		name: 'Debugger selector failure';
+		yourself.
+	failingSession signalDebuggerError: exception
 ]
 
 { #category : #'instance creation' }
