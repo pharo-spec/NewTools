@@ -331,3 +331,10 @@ DebuggerSelectorTest >> testTryToOpenDebugSession [
 		assert: (debuggerSelector debuggerSelectionAttempts at: 1) debuggerClass
 		equals: testDebuggerClass
 ]
+
+{ #category : #'tests - debugging' }
+DebuggerSelectorTest >> testWith [
+	|trace|
+	trace := Object new.
+	self assert: (NewDebuggerSelector with: trace) availableDebuggers identicalTo: trace
+]

@@ -113,6 +113,11 @@ NewDebuggerSelector class >> with: availableDebuggers [
 		yourself
 ]
 
+{ #category : #accessing }
+NewDebuggerSelector >> availableDebuggers [
+	^debuggers
+]
+
 { #category : #opening }
 NewDebuggerSelector >> debugException: exception inProcess: process from: uiManager [
 	"Open a debugger on the exception"
