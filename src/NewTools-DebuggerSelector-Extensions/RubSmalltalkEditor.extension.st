@@ -9,8 +9,8 @@ RubSmalltalkEditor >> debug: aCompiledMethod receiver: anObject in: evalContext 
 		newProcess.
 	suspendedContext := process suspendedContext.
 	NewDebuggerSelector
-		debugProcess: process
+		debugMethod: aCompiledMethod
+		inProcess: process
 		fromContext: suspendedContext
-		labeled: 'debug it'.
-	
+		labeled: 'debug it'
 ]

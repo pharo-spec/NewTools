@@ -36,6 +36,19 @@ NewDebuggerSelector class >> debugException: exception inProcess: process from: 
 ]
 
 { #category : #'debug - API' }
+NewDebuggerSelector class >> debugMethod: aCompiledMethod inProcess: aProcess fromContext: aContext labeled: aString [
+	| debuggerSelectorInstance |
+	debuggerSelectorInstance := self newDebuggerSelector.
+	debuggerSelectorInstance
+		preDebugAction: (self preDebugActionForDebugItMethod: aCompiledMethod).
+	self
+		debugException: (self nullExceptionFor: aContext named: aString)
+		inProcess: aProcess
+		from: UIManager default
+		with: debuggerSelectorInstance
+]
+
+{ #category : #'debug - API' }
 NewDebuggerSelector class >> debugProcess: aProcess fromContext: aContext labeled: aString [
 	self
 		debugException: (self nullExceptionFor: aContext named: aString)

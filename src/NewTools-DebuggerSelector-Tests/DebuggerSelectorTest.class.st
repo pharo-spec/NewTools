@@ -260,7 +260,11 @@ DebuggerSelectorTest >> testPerformPreDebugActionsOn [
 
 { #category : #'tests - debugging' }
 DebuggerSelectorTest >> testPreDebugActionForDebugItMethod [
-	self fail
+	| tag |
+	self assert: debuggerSelector preDebugAction notNil.
+	debuggerSelector preDebugAction: [ :session | tag := session ].
+	debuggerSelector performPreDebugActionsOn: #tag.
+	self assert: tag equals: #tag
 ]
 
 { #category : #tests }

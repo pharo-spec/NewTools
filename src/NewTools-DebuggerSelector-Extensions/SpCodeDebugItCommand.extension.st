@@ -9,9 +9,8 @@ SpCodeDebugItCommand >> debug: aCompiledMethod receiver: anObject in: evalContex
 		newProcess.
 	suspendedContext := process suspendedContext.
 	NewDebuggerSelector
-		debugProcess: process
+		debugMethod: aCompiledMethod
+		inProcess: process
 		fromContext: suspendedContext
-		labeled: 'debug it'.
-	"debugSession
-		stepIntoUntil: [ :currentContext | currentContext method == aCompiledMethod ]"
+		labeled: 'debug it'
 ]
