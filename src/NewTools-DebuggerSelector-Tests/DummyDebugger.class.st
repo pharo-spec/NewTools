@@ -20,16 +20,17 @@ DummyDebugger class >> named: aString [
 { #category : #'instance creation' }
 DummyDebugger >> debugSession: aDebugSession [
 	tag := aDebugSession
+	
+]
+
+{ #category : #'deferred message' }
+DummyDebugger >> defer: aBlock [
+	aBlock value 
 ]
 
 { #category : #testing }
 DummyDebugger >> handlesContext: aContext [
 	^true
-]
-
-{ #category : #accessing }
-DummyDebugger >> name [
-	^ name
 ]
 
 { #category : #accessing }
@@ -45,4 +46,9 @@ DummyDebugger >> tag [
 { #category : #accessing }
 DummyDebugger >> tag: anObject [
 	tag := anObject
+]
+
+{ #category : #'as yet unclassified' }
+DummyDebugger >> zeroDivide [
+	1/0
 ]

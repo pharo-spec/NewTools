@@ -35,6 +35,15 @@ DebuggerSelectorTest >> setUp [
 	debuggerSelector := NewDebuggerSelector with: debuggers copy
 ]
 
+{ #category : #running }
+DebuggerSelectorTest >> tearDown [
+	debuggers
+		do: [ :dbg | 
+			(dbg tag isKindOf: DebugSession)
+				ifTrue: [ dbg tag terminate ] ].
+	super tearDown
+]
+
 { #category : #'tests - debuggers' }
 DebuggerSelectorTest >> testAvailableDebuggers [
 	|availableDebuggerClasses sortedDebuggerClasses|
@@ -51,7 +60,38 @@ DebuggerSelectorTest >> testDebugExceptionInProcessFrom [
 
 { #category : #'tests - debugging' }
 DebuggerSelectorTest >> testDebugExceptionInProcessFromWith [
-	self fail
+	| process exception context |
+	context := [ DummyDebugger new zeroDivide ] asContext.
+	process := Process
+		forContext: context
+		priority: Processor activePriority.
+	self flag: 'Process are not the same, which is OK from the API point of view, but not accurate from the execution point of view'.
+	[ DummyDebugger new zeroDivide ]
+		on: Exception
+		do: [ :e | 
+			exception := e.
+			context := exception signalerContext.
+			context privRefresh.
+			NewDebuggerSelector
+				debugException: exception
+				inProcess: process
+				from: DummyDebugger new
+				with: debuggerSelector ].
+
+	"With this test, we ensure that calling the API opens a debugger on a debug session,
+	that holds the exception, its signaler context and the interrupted process.
+	We check the second debugger because it is the one that is selected (first always fails)."
+	self assert: debuggers second tag class equals: DebugSession.
+	self assert: debuggers second tag exception identicalTo: exception.
+	
+	"The interrupted process is the one given to the API, 
+	whatever this process is."	
+	self
+		assert: debuggers second tag interruptedProcess
+		identicalTo: process.
+	self deny: process isTerminating.
+	self deny: process isTerminated.
+	self assert: process isSuspended
 ]
 
 { #category : #'tests - debugging API' }
@@ -245,7 +285,13 @@ DebuggerSelectorTest >> testNoDebuggerForDebuggerFailure [
 
 { #category : #'tests - debugging' }
 DebuggerSelectorTest >> testNullExceptionForNamed [
-	self fail
+	|ctx e|
+	ctx := Context newForMethod: (DummyDebugger>>#tag).
+	ctx receiver: self.
+	e := NewDebuggerSelector nullExceptionFor: ctx named: #tag.
+	self assert: e receiver identicalTo: self.
+	self assert: e signalerContext identicalTo: ctx.
+	self assert: e messageText equals: #tag
 ]
 
 { #category : #'tests - debugging' }
