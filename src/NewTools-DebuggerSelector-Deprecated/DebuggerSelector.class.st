@@ -32,7 +32,7 @@ Class {
 	#classVars : [
 		'singleton'
 	],
-	#category : #'NewTools-DebuggerSelector-Core'
+	#category : #'NewTools-DebuggerSelector-Deprecated'
 }
 
 { #category : #debuggers }
