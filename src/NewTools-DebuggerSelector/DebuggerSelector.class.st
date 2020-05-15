@@ -1,5 +1,5 @@
 Class {
-	#name : #NewDebuggerSelector,
+	#name : #DebuggerSelector,
 	#superclass : #Object,
 	#instVars : [
 		'debuggers',
@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : #debuggers }
-NewDebuggerSelector class >> availableDebuggers [
+DebuggerSelector class >> availableDebuggers [
 	self flag: 'debuggers should know their own ranks (we could sort: #rank descending)'.
 	^ (self registeredDebuggersWithRanks
 				sort: #value descending)
@@ -17,7 +17,7 @@ NewDebuggerSelector class >> availableDebuggers [
 ]
 
 { #category : #'debug - API' }
-NewDebuggerSelector class >> debugException: exception inProcess: process from: uiManager [
+DebuggerSelector class >> debugException: exception inProcess: process from: uiManager [
 	^ self
 		debugException: exception
 		inProcess: process
@@ -26,7 +26,7 @@ NewDebuggerSelector class >> debugException: exception inProcess: process from: 
 ]
 
 { #category : #'debug - private' }
-NewDebuggerSelector class >> debugException: exception inProcess: process from: uiManager with: aDebuggerSelectorInstance [
+DebuggerSelector class >> debugException: exception inProcess: process from: uiManager with: aDebuggerSelectorInstance [
 	^ [ aDebuggerSelectorInstance
 		debugException: exception
 		inProcess: process
@@ -36,7 +36,7 @@ NewDebuggerSelector class >> debugException: exception inProcess: process from: 
 ]
 
 { #category : #'debug - API' }
-NewDebuggerSelector class >> debugMethod: aCompiledMethod inProcess: aProcess fromContext: aContext labeled: aString [
+DebuggerSelector class >> debugMethod: aCompiledMethod inProcess: aProcess fromContext: aContext labeled: aString [
 	| debuggerSelectorInstance |
 	debuggerSelectorInstance := self newDebuggerSelector.
 	debuggerSelectorInstance
@@ -49,7 +49,7 @@ NewDebuggerSelector class >> debugMethod: aCompiledMethod inProcess: aProcess fr
 ]
 
 { #category : #'debug - API' }
-NewDebuggerSelector class >> debugProcess: aProcess fromContext: aContext labeled: aString [
+DebuggerSelector class >> debugProcess: aProcess fromContext: aContext labeled: aString [
 	self
 		debugException: (self nullExceptionFor: aContext named: aString)
 		inProcess: aProcess
@@ -57,22 +57,22 @@ NewDebuggerSelector class >> debugProcess: aProcess fromContext: aContext labele
 ]
 
 { #category : #'debug - API' }
-NewDebuggerSelector class >> debuggerWarning: aWarningException from: aUIManager [
+DebuggerSelector class >> debuggerWarning: aWarningException from: aUIManager [
 	^ aUIManager warningDefaultAction: aWarningException
 ]
 
 { #category : #'debug - API' }
-NewDebuggerSelector class >> debuggerWarning: aWarningException inProcess: aProcess from: aUIManager [
+DebuggerSelector class >> debuggerWarning: aWarningException inProcess: aProcess from: aUIManager [
 	^self debugException: aWarningException inProcess: aProcess from: aUIManager
 ]
 
 { #category : #'instance creation' }
-NewDebuggerSelector class >> newDebuggerSelector [
+DebuggerSelector class >> newDebuggerSelector [
 	^ (self with: self availableDebuggers)
 ]
 
 { #category : #'debug - private' }
-NewDebuggerSelector class >> nullExceptionFor: aContext named: aString [
+DebuggerSelector class >> nullExceptionFor: aContext named: aString [
 	| exception |
 	exception := DebuggerSelectorNullException
 		fromSignallerContext: aContext.
@@ -81,24 +81,24 @@ NewDebuggerSelector class >> nullExceptionFor: aContext named: aString [
 ]
 
 { #category : #'debug - private' }
-NewDebuggerSelector class >> preDebugActionForDebugItMethod: aCompiledMethod [
+DebuggerSelector class >> preDebugActionForDebugItMethod: aCompiledMethod [
 	^ [ :session | 
 	session
 		stepIntoUntil: [ :currentContext | currentContext method == aCompiledMethod ] ]
 ]
 
 { #category : #debuggers }
-NewDebuggerSelector class >> registeredDebuggersWithRanks [
+DebuggerSelector class >> registeredDebuggersWithRanks [
 	^ Smalltalk tools debuggers
 ]
 
 { #category : #exceptions }
-NewDebuggerSelector class >> resumeException: anException [
+DebuggerSelector class >> resumeException: anException [
 	anException resume
 ]
 
 { #category : #'debug - private' }
-NewDebuggerSelector class >> signalDebuggerError: exception [
+DebuggerSelector class >> signalDebuggerError: exception [
 	| failingSession |
 	failingSession := DebugSession new
 		name: 'Debugger selector failure';
@@ -107,19 +107,19 @@ NewDebuggerSelector class >> signalDebuggerError: exception [
 ]
 
 { #category : #'instance creation' }
-NewDebuggerSelector class >> with: availableDebuggers [
+DebuggerSelector class >> with: availableDebuggers [
 	^ self new
 		debuggers: availableDebuggers;
 		yourself
 ]
 
 { #category : #accessing }
-NewDebuggerSelector >> availableDebuggers [
+DebuggerSelector >> availableDebuggers [
 	^debuggers
 ]
 
 { #category : #opening }
-NewDebuggerSelector >> debugException: exception inProcess: process from: uiManager [
+DebuggerSelector >> debugException: exception inProcess: process from: uiManager [
 	"Open a debugger on the exception"
 
 	| debugSession |
@@ -138,12 +138,12 @@ NewDebuggerSelector >> debugException: exception inProcess: process from: uiMana
 ]
 
 { #category : #initialization }
-NewDebuggerSelector >> debuggers: availableDebuggers [
+DebuggerSelector >> debuggers: availableDebuggers [
 	debuggers := availableDebuggers
 ]
 
 { #category : #debuggers }
-NewDebuggerSelector >> findDebuggerForSession: aDebugSession [
+DebuggerSelector >> findDebuggerForSession: aDebugSession [
 	^ debuggers
 		detect: [ :each | 
 			(each handlesContext: aDebugSession context)
@@ -155,7 +155,7 @@ NewDebuggerSelector >> findDebuggerForSession: aDebugSession [
 ]
 
 { #category : #sessions }
-NewDebuggerSelector >> newSessionFromException: exception forProcess: process [
+DebuggerSelector >> newSessionFromException: exception forProcess: process [
 	"Open a debugger on the exception"
 
 	| debugSession |
@@ -168,29 +168,29 @@ NewDebuggerSelector >> newSessionFromException: exception forProcess: process [
 ]
 
 { #category : #opening }
-NewDebuggerSelector >> openOn: aDebugSession [
+DebuggerSelector >> openOn: aDebugSession [
 	| candidateDebugger |
 	candidateDebugger := self findDebuggerForSession: aDebugSession.
 	self tryOpen: candidateDebugger on: aDebugSession
 ]
 
 { #category : #sessions }
-NewDebuggerSelector >> performPreDebugActionsOn: aDebugSession [
+DebuggerSelector >> performPreDebugActionsOn: aDebugSession [
 	self preDebugAction value: aDebugSession
 ]
 
 { #category : #accessing }
-NewDebuggerSelector >> preDebugAction [
+DebuggerSelector >> preDebugAction [
 	^ preDebugAction ifNil: [ preDebugAction := [ :session |  ] ]
 ]
 
 { #category : #accessing }
-NewDebuggerSelector >> preDebugAction: anObject [
+DebuggerSelector >> preDebugAction: anObject [
 	preDebugAction := anObject
 ]
 
 { #category : #opening }
-NewDebuggerSelector >> tryOpen: aDebugger on: aDebugSession [
+DebuggerSelector >> tryOpen: aDebugger on: aDebugSession [
 	[ aDebugger debugSession: aDebugSession ]
 		on: Error
 		do: [ :err | "(self requestActionOnDebuggerError: err)

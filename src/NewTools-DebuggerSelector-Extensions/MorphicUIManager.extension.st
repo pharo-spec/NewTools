@@ -16,7 +16,7 @@ MorphicUIManager >> debugProcess: process level: debuggerLevel context: context 
 MorphicUIManager >> handleError: anError log: shouldLog [
 	shouldLog
 		ifTrue: [ self logError: anError ].
-	NewDebuggerSelector
+	DebuggerSelector
 		debugException: anError
 		inProcess: Processor activeProcess
 		from: self

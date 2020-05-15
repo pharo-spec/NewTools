@@ -48,6 +48,11 @@ DummyDebugger >> tag: anObject [
 	tag := anObject
 ]
 
+{ #category : #'ui requests' }
+DummyDebugger >> warningDefaultAction: aWarningException [
+	tag := aWarningException
+]
+
 { #category : #'as yet unclassified' }
 DummyDebugger >> zeroDivide [
 	1/0

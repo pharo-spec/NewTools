@@ -11,6 +11,22 @@ Class {
 	#category : #'NewTools-DebuggerSelector-Tests'
 }
 
+{ #category : #'tests - debugging' }
+DebuggerSelectorTest >> assertDebuggerOpened: aDebugger onException: anException inProcess: aProcess [
+	| session process |
+	session := aDebugger tag.
+	self assert: session class equals: DebugSession.
+	self assert: session exception identicalTo: anException.
+
+	"The interrupted process is the one given to the API, 
+	whatever this process is."
+	process := session interruptedProcess.
+	self assert: session interruptedProcess identicalTo: aProcess.
+	self deny: process isTerminating.
+	self deny: process isTerminated.
+	self assert: process isSuspended
+]
+
 { #category : #helper }
 DebuggerSelectorTest >> session [
 	| process |
@@ -32,7 +48,8 @@ DebuggerSelectorTest >> setUp [
 			{(DummyUnusableDebugger named: #A).
 			(DummyDebugger named: #B).
 			(DummyDebugger named: #C)}.
-	debuggerSelector := NewDebuggerSelector with: debuggers copy
+	debuggerSelector := DebuggerSelector with: debuggers copy.
+	DummyDebuggerSelector debuggers: debuggers
 ]
 
 { #category : #running }
@@ -41,6 +58,7 @@ DebuggerSelectorTest >> tearDown [
 		do: [ :dbg | 
 			(dbg tag isKindOf: DebugSession)
 				ifTrue: [ dbg tag terminate ] ].
+	DummyDebuggerSelector debuggers: nil.
 	super tearDown
 ]
 
@@ -48,8 +66,8 @@ DebuggerSelectorTest >> tearDown [
 DebuggerSelectorTest >> testAvailableDebuggers [
 	|availableDebuggerClasses sortedDebuggerClasses|
 	self fail.
-	availableDebuggerClasses := DebuggerSelector availableDebuggers collect:[:assoc| assoc key].
-	sortedDebuggerClasses := DebuggerSelector sortedDebuggersByRank collect:[:assoc| assoc value].  
+	availableDebuggerClasses := OldDebuggerSelector availableDebuggers collect:[:assoc| assoc key].
+	sortedDebuggerClasses := OldDebuggerSelector sortedDebuggersByRank collect:[:assoc| assoc value].  
 	self assertCollection: availableDebuggerClasses equals: sortedDebuggerClasses 
 ]
 
@@ -72,7 +90,7 @@ DebuggerSelectorTest >> testDebugExceptionInProcessFromWith [
 			exception := e.
 			context := exception signalerContext.
 			context privRefresh.
-			NewDebuggerSelector
+			DebuggerSelector
 				debugException: exception
 				inProcess: process
 				from: DummyDebugger new
@@ -81,17 +99,8 @@ DebuggerSelectorTest >> testDebugExceptionInProcessFromWith [
 	"With this test, we ensure that calling the API opens a debugger on a debug session,
 	that holds the exception, its signaler context and the interrupted process.
 	We check the second debugger because it is the one that is selected (first always fails)."
-	self assert: debuggers second tag class equals: DebugSession.
-	self assert: debuggers second tag exception identicalTo: exception.
+	self assertDebuggerOpened: debuggers second onException: exception inProcess: process
 	
-	"The interrupted process is the one given to the API, 
-	whatever this process is."	
-	self
-		assert: debuggers second tag interruptedProcess
-		identicalTo: process.
-	self deny: process isTerminating.
-	self deny: process isTerminated.
-	self assert: process isSuspended
 ]
 
 { #category : #'tests - debugging API' }
@@ -106,19 +115,34 @@ DebuggerSelectorTest >> testDebugProcessFromContextLabeled [
 
 { #category : #'tests - debugging API' }
 DebuggerSelectorTest >> testDebuggerWarningFrom [
-	self fail
+	| dbg |
+	dbg := DummyDebugger new.
+	DebuggerSelector debuggerWarning: #tag from: dbg.
+	self assert: dbg tag equals: #tag
 ]
 
 { #category : #'tests - debugging API' }
 DebuggerSelectorTest >> testDebuggerWarningInProcessFrom [
-	self fail
+	|e p|
+	[ Warning signal: #tag ]
+		on: Warning
+		do: [ :w | 
+			e := w.
+			"we use the dummy debugger selector to control the debuggers list.
+			we do not actually want to raise a real warning but just to ensure
+			the API gets the system to the opening of a debugger with the exception."
+			DummyDebuggerSelector
+				debuggerWarning: w
+				inProcess: (p := [  ] newProcess)
+				from: DummyDebugger new ].
+	self assertDebuggerOpened: debuggers second onException: e inProcess: p
 ]
 
 { #category : #'tests - debuggers' }
 DebuggerSelectorTest >> testDebuggersWithRanks [
 	|assocs systemDebuggers|
 	self fail.
-	assocs := DebuggerSelector debuggersWithRanks.
+	assocs := OldDebuggerSelector debuggersWithRanks.
 	systemDebuggers := Smalltalk tools debuggers.
 	self assert: assocs size equals: systemDebuggers size.
 	self assertCollection: assocs equals: systemDebuggers
@@ -160,7 +184,7 @@ DebuggerSelectorTest >> testLabeledDebuggers [
 	dbgs := {(999 -> 'main dbg').
 	(80 -> 'a dbg').
 	(5 -> 'another dbg')}.
-	labeledDebuggers := DebuggerSelector labeledDebuggers: dbgs.
+	labeledDebuggers := OldDebuggerSelector labeledDebuggers: dbgs.
 	self assert: labeledDebuggers first key equals: 'main dbg'.
 	self assert: labeledDebuggers first value equals: 'Main'.
 	self assert: labeledDebuggers second key equals: 'a dbg'.
@@ -171,6 +195,14 @@ DebuggerSelectorTest >> testLabeledDebuggers [
 
 { #category : #'tests - sessions' }
 DebuggerSelectorTest >> testNewSessionFromExceptionForProcess [
+
+	|exception process session|
+	exception := DebuggerSelectorNullException new signalIn: [] asContext; yourself.
+	process := [  ] newProcess.
+	session := debuggerSelector newSessionFromException: exception forProcess: process.
+	self assert: session interruptedProcess identicalTo: process.
+	self assert: session exception identicalTo: exception.
+	self assert: session interruptedContext identicalTo: exception signalerContext
 ]
 
 { #category : #'tests -  algorithm' }
@@ -199,7 +231,7 @@ DebuggerSelectorTest >> testNullExceptionForNamed [
 	|ctx e|
 	ctx := Context newForMethod: (DummyDebugger>>#tag).
 	ctx receiver: self.
-	e := NewDebuggerSelector nullExceptionFor: ctx named: #tag.
+	e := DebuggerSelector nullExceptionFor: ctx named: #tag.
 	self assert: e receiver identicalTo: self.
 	self assert: e signalerContext identicalTo: ctx.
 	self assert: e messageText equals: #tag
@@ -218,15 +250,10 @@ DebuggerSelectorTest >> testOpenOn [
 
 { #category : #'tests - sessions' }
 DebuggerSelectorTest >> testPerformPreDebugActionsOn [
-	self fail
-]
-
-{ #category : #'tests - debugging' }
-DebuggerSelectorTest >> testPreDebugActionForDebugItMethod [
 	| tag |
 	"Default debug action is an empty block with 1 parameter"
 	debuggerSelector performPreDebugActionsOn: #tag.
-	
+
 	"Custom debug action should execute the give block"
 	debuggerSelector preDebugAction: [ :session | tag := session ].
 	debuggerSelector performPreDebugActionsOn: #tag.
@@ -237,7 +264,7 @@ DebuggerSelectorTest >> testPreDebugActionForDebugItMethod [
 DebuggerSelectorTest >> testSortedDebuggersByRank [
 	| assocs systemDebuggers sortedRanks expectedRanks |
 	self fail.
-	assocs := DebuggerSelector sortedDebuggersByRank.
+	assocs := OldDebuggerSelector sortedDebuggersByRank.
 	systemDebuggers := Smalltalk tools debuggers.
 	self
 		assertCollection: (assocs collect: [ :assoc | assoc value ])
@@ -283,5 +310,5 @@ DebuggerSelectorTest >> testTryOpenOn [
 DebuggerSelectorTest >> testWith [
 	|trace|
 	trace := Object new.
-	self assert: (NewDebuggerSelector with: trace) availableDebuggers identicalTo: trace
+	self assert: (DebuggerSelector with: trace) availableDebuggers identicalTo: trace
 ]

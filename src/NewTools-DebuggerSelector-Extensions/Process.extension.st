@@ -13,7 +13,7 @@ Process >> debug: context level: debuggerLevel title: title full: bool [
 
 { #category : #'*NewTools-DebuggerSelector-Extensions' }
 Process >> debugException: anException [
-	NewDebuggerSelector
+	DebuggerSelector
 		debugException: anException
 		inProcess: self
 		from: UIManager default
@@ -28,7 +28,7 @@ Process >> debugWithTitle: title [
 	context := self isActiveProcess
 		ifTrue: [ thisContext ]
 		ifFalse: [ self suspendedContext ].
-	^ NewDebuggerSelector
+	^ DebuggerSelector
 		debugProcess: self
 		fromContext: context
 		labeled: title

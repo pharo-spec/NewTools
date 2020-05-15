@@ -4,7 +4,7 @@ Extension { #name : #Context }
 Context >> cannotReturn: result [
 	closureOrNil
 		ifNotNil: [ ^ BlockCannotReturn result: result from: self home ].
-	NewDebuggerSelector
+	DebuggerSelector
 		debugProcess: Processor activeProcess
 		fromContext: thisContext
 		labeled: 'computation has been terminated'

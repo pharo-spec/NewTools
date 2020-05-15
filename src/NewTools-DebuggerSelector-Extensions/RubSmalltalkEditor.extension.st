@@ -8,7 +8,7 @@ RubSmalltalkEditor >> debug: aCompiledMethod receiver: anObject in: evalContext 
 		arguments: (evalContext ifNil: [ #() ] ifNotNil: [ {evalContext} ]) ]
 		newProcess.
 	suspendedContext := process suspendedContext.
-	NewDebuggerSelector
+	DebuggerSelector
 		debugMethod: aCompiledMethod
 		inProcess: process
 		fromContext: suspendedContext

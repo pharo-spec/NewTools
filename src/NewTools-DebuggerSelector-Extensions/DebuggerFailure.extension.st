@@ -4,7 +4,7 @@ Extension { #name : #DebuggerFailure }
 DebuggerFailure >> debug [
 	"open a debugger on myself"
 
-	NewDebuggerSelector
+	DebuggerSelector
 		debugException: self
 		inProcess: Processor activeProcess
 		from: UIManager default

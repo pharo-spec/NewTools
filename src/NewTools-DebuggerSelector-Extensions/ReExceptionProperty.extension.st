@@ -6,7 +6,7 @@ ReExceptionProperty >> actions [
 		icon: (self iconNamed: #smallDebug);
 		description: 'Debug the exception';
 		action: [ :prop | 
-			NewDebuggerSelector
+			DebuggerSelector
 				debugProcess: Processor activeProcess
 				fromContext: prop stack
 				labeled: prop message ];

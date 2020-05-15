@@ -8,7 +8,7 @@ SpCodeDebugItCommand >> debug: aCompiledMethod receiver: anObject in: evalContex
 		arguments: (evalContext ifNil: [ #() ] ifNotNil: [ {evalContext} ]) ]
 		newProcess.
 	suspendedContext := process suspendedContext.
-	NewDebuggerSelector
+	DebuggerSelector
 		debugMethod: aCompiledMethod
 		inProcess: process
 		fromContext: suspendedContext
