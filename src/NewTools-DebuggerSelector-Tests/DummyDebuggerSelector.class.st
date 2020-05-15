@@ -22,6 +22,11 @@ DummyDebuggerSelector class >> debugException: exception inProcess: process from
 		with: aDebuggerSelectorInstance
 ]
 
+{ #category : #'debug - private' }
+DummyDebuggerSelector class >> debugSessionClass [
+	^DummyDebugger 
+]
+
 { #category : #initialization }
 DummyDebuggerSelector class >> debuggers: debuggers [
 	staticDebuggers := debuggers

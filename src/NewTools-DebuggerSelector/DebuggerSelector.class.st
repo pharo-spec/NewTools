@@ -81,6 +81,11 @@ DebuggerSelector class >> debugProcess: aProcess fromContext: aContext labeled: 
 		from: UIManager default
 ]
 
+{ #category : #'debug - private' }
+DebuggerSelector class >> debugSessionClass [
+	^ DebugSession
+]
+
 { #category : #'debug - API' }
 DebuggerSelector class >> debuggerWarning: aWarningException from: aUIManager [
 	^ aUIManager warningDefaultAction: aWarningException
@@ -125,10 +130,15 @@ DebuggerSelector class >> resumeException: anException [
 { #category : #'debug - private' }
 DebuggerSelector class >> signalDebuggerError: exception [
 	| failingSession |
-	failingSession := DebugSession new
-		name: 'Debugger selector failure';
+	failingSession := self debugSessionClass new
+		name: self signalDebuggerErrorMessage;
 		yourself.
 	failingSession signalDebuggerError: exception
+]
+
+{ #category : #'debug - private' }
+DebuggerSelector class >> signalDebuggerErrorMessage [
+	^ 'Debugger selector failure'
 ]
 
 { #category : #'instance creation' }

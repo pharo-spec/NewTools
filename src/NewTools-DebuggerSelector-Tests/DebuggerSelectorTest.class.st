@@ -171,6 +171,11 @@ DebuggerSelectorTest >> testDebugProcessFromContextLabeled [
 	self assert: DummyDebuggerSelector uiManager deferred 
 ]
 
+{ #category : #'tests - debugging' }
+DebuggerSelectorTest >> testDebugSessionClass [
+	self assert: DebuggerSelector debugSessionClass equals: DebugSession
+]
+
 { #category : #'tests - debugging API' }
 DebuggerSelectorTest >> testDebuggerWarningFrom [
 	| dbg |
@@ -251,6 +256,16 @@ DebuggerSelectorTest >> testLabeledDebuggers [
 	self assert: labeledDebuggers third value equals: '5'
 ]
 
+{ #category : #'tests - debuggers' }
+DebuggerSelectorTest >> testNewDebuggerSelector [
+	| dbgsel |
+	dbgsel := DebuggerSelector newDebuggerSelector.
+	self assert: dbgsel class equals: DebuggerSelector.
+	self
+		assertCollection: dbgsel availableDebuggers
+		equals: DebuggerSelector availableDebuggers
+]
+
 { #category : #'tests - sessions' }
 DebuggerSelectorTest >> testNewSessionFromExceptionForProcess [
 
@@ -318,6 +333,65 @@ DebuggerSelectorTest >> testPerformPreDebugActionsOn [
 	self assert: tag equals: #tag
 ]
 
+{ #category : #'tests - debugging' }
+DebuggerSelectorTest >> testPreDebugActionForDebugItMethod [
+	| session process suspendedContext |
+	process := [ DummyDebugger new methodToDebug ] newProcess.
+	suspendedContext := process suspendedContext.
+	session := debuggerSelector
+		newSessionFromException: (DebuggerSelector nullExceptionFor: suspendedContext named: #tag)
+		forProcess: process.
+	(DebuggerSelector
+		preDebugActionForDebugItMethod: DummyDebugger >> #methodToDebug)
+		value: session.
+
+	"Debugger Selector must have put us right at the entry of the method.
+	If we step over, we should be on the first ast node of the method"
+	self
+		assert: session interruptedContext method
+		identicalTo: DummyDebugger >> #methodToDebug.
+	session stepOver.
+	self
+		assert:
+			(DummyDebugger >> #methodToDebug
+				sourceNodeForPC: session interruptedContext pc)
+		identicalTo: (DummyDebugger >> #methodToDebug) ast statements first
+]
+
+{ #category : #'tests - debuggers' }
+DebuggerSelectorTest >> testRegisteredDebuggersWithRanks [
+	self fail
+]
+
+{ #category : #'tests - debugging' }
+DebuggerSelectorTest >> testResumeException [
+	| res |
+	[ res := DummyExceptionToResume signal ]
+		on: DummyExceptionToResume
+		do: [ :e | DebuggerSelector resumeException: e ].
+	self assert: res equals: #tag
+]
+
+{ #category : #'tests - debugging' }
+DebuggerSelectorTest >> testSignalDebuggerError [
+	"The dummy debugger selector uses a debug session object that does not actually signal a debugger error."
+
+	| exception signalerBlock |
+	exception := DebuggerSelectorNullException
+		fromSignallerContext: [  ] asContext.
+	signalerBlock := [ DummyDebuggerSelector
+		signalDebuggerError: exception ].
+	
+	self should: signalerBlock raise: DebuggerFailure.
+	signalerBlock
+		on: DebuggerFailure
+		do: [ :e | 
+			self
+				assert: e failedDebugger name
+				equals: DebuggerSelector signalDebuggerErrorMessage.
+			self assert: e innerException identicalTo: exception ]
+]
+
 { #category : #'tests - debuggers' }
 DebuggerSelectorTest >> testSortedDebuggersByRank [
 	| assocs systemDebuggers sortedRanks expectedRanks |
@@ -364,7 +438,7 @@ DebuggerSelectorTest >> testTryOpenOn [
 	self assert: debugger tag identicalTo: session
 ]
 
-{ #category : #'tests - debugging' }
+{ #category : #'tests - debuggers' }
 DebuggerSelectorTest >> testWith [
 	|trace|
 	trace := Object new.

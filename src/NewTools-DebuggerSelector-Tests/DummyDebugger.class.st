@@ -49,8 +49,18 @@ DummyDebugger >> methodToDebug [
 ]
 
 { #category : #accessing }
+DummyDebugger >> name [
+	^ name
+]
+
+{ #category : #accessing }
 DummyDebugger >> name: anObject [
 	name := anObject
+]
+
+{ #category : #debugging }
+DummyDebugger >> signalDebuggerError: exception [
+	(DebuggerFailure of: self on: exception) signal
 ]
 
 { #category : #accessing }
