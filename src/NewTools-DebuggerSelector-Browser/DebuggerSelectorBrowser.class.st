@@ -2,7 +2,7 @@
 Lists all the debuggers available in the image, along with their rank (provided they always return the same rank regardless of the debug session). Also list all the debug sessions stored in DebugSessionStorage.
 "
 Class {
-	#name : #DebuggerSelectorPresenter,
+	#name : #DebuggerSelectorBrowser,
 	#superclass : #SpPresenter,
 	#instVars : [
 		'debuggerListToolBar',
@@ -12,7 +12,7 @@ Class {
 }
 
 { #category : #specs }
-DebuggerSelectorPresenter class >> defaultSpec [
+DebuggerSelectorBrowser class >> defaultSpec [
 	^ SpBoxLayout newVertical
 		add: #debuggerListToolBar withConstraints: [ :cstr | cstr height: 35 ];
 		add: #debuggerTable;
@@ -20,12 +20,12 @@ DebuggerSelectorPresenter class >> defaultSpec [
 ]
 
 { #category : #specs }
-DebuggerSelectorPresenter class >> initialExtent [
+DebuggerSelectorBrowser class >> initialExtent [
 	^ 750@350
 ]
 
 { #category : #'world menu' }
-DebuggerSelectorPresenter class >> menuCommandOn: aBuilder [
+DebuggerSelectorBrowser class >> menuCommandOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #'List Debuggers and Debug Sessions')
 		parent: #Debugging;
@@ -36,18 +36,18 @@ DebuggerSelectorPresenter class >> menuCommandOn: aBuilder [
 ]
 
 { #category : #api }
-DebuggerSelectorPresenter class >> open [
+DebuggerSelectorBrowser class >> open [
 	<example>
 	self new openWithSpec
 ]
 
 { #category : #specs }
-DebuggerSelectorPresenter class >> title [
+DebuggerSelectorBrowser class >> title [
 	^ 'Available Debuggers'
 ]
 
 { #category : #deprecated }
-DebuggerSelectorPresenter >> addCorrectMainDebuggerButtonToToolBar: aToolBar [
+DebuggerSelectorBrowser >> addCorrectMainDebuggerButtonToToolBar: aToolBar [
 	debuggerTable selectedItems
 		ifNotEmpty: [ :debuggerList_ | 
 			OldDebuggerSelector singleton mainDebuggerClass == (debuggerList_ at: 1)
@@ -80,7 +80,7 @@ DebuggerSelectorPresenter >> addCorrectMainDebuggerButtonToToolBar: aToolBar [
 ]
 
 { #category : #initialization }
-DebuggerSelectorPresenter >> initializeDebuggerTable [
+DebuggerSelectorBrowser >> initializeDebuggerTable [
 	debuggerTable := self newTable
 		addColumn:
 			(SpStringTableColumn
@@ -94,7 +94,7 @@ DebuggerSelectorPresenter >> initializeDebuggerTable [
 ]
 
 { #category : #initialization }
-DebuggerSelectorPresenter >> initializePresenters [
+DebuggerSelectorBrowser >> initializePresenters [
 	super initializePresenters.
 	self initializeDebuggerTable.
 	debuggerListToolBar := self newToolBar.
@@ -102,7 +102,7 @@ DebuggerSelectorPresenter >> initializePresenters [
 ]
 
 { #category : #deprecated }
-DebuggerSelectorPresenter >> refreshDebuggerListToolBar [
+DebuggerSelectorBrowser >> refreshDebuggerListToolBar [
 	debuggerListToolBar removeAllItems.
 	debuggerListToolBar
 		addItem:
@@ -118,6 +118,6 @@ DebuggerSelectorPresenter >> refreshDebuggerListToolBar [
 ]
 
 { #category : #refresh }
-DebuggerSelectorPresenter >> updateDebuggerTable [
+DebuggerSelectorBrowser >> updateDebuggerTable [
 	debuggerTable items: OldDebuggerSelector availableDebuggers
 ]
