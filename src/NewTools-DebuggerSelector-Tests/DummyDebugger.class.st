@@ -7,7 +7,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'name',
-		'tag'
+		'tag',
+		'deferred'
 	],
 	#category : #'NewTools-DebuggerSelector-Tests'
 }
@@ -25,12 +26,26 @@ DummyDebugger >> debugSession: aDebugSession [
 
 { #category : #'deferred message' }
 DummyDebugger >> defer: aBlock [
-	aBlock value 
+	aBlock value.
+	deferred := true 
+]
+
+{ #category : #accessing }
+DummyDebugger >> deferred [
+	^ deferred ifNil:[deferred := false]
 ]
 
 { #category : #testing }
 DummyDebugger >> handlesContext: aContext [
 	^true
+]
+
+{ #category : #helpers }
+DummyDebugger >> methodToDebug [
+	| i |
+	i := 0.
+	10 timesRepeat: [ i := i + 1 ].
+	^ i
 ]
 
 { #category : #accessing }
@@ -53,7 +68,7 @@ DummyDebugger >> warningDefaultAction: aWarningException [
 	tag := aWarningException
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #helpers }
 DummyDebugger >> zeroDivide [
 	1/0
 ]

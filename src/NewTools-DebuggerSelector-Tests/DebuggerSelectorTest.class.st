@@ -49,7 +49,9 @@ DebuggerSelectorTest >> setUp [
 			(DummyDebugger named: #B).
 			(DummyDebugger named: #C)}.
 	debuggerSelector := DebuggerSelector with: debuggers copy.
-	DummyDebuggerSelector debuggers: debuggers
+	DummyDebuggerSelector
+		debuggers: debuggers;
+		uiManager: nil
 ]
 
 { #category : #running }
@@ -73,44 +75,100 @@ DebuggerSelectorTest >> testAvailableDebuggers [
 
 { #category : #'tests - debugging API' }
 DebuggerSelectorTest >> testDebugExceptionInProcessFrom [
-	self fail
+	| exception process |
+	[ DummyDebugger new zeroDivide ]
+		on: Exception
+		do: [ :e | 
+			exception := e.
+			DummyDebuggerSelector
+				debugException: exception
+				inProcess: (process := [  ] newProcess)
+				from: DummyDebugger new ].
+	self
+		assertDebuggerOpened: debuggers second
+		onException: exception
+		inProcess: process
 ]
 
 { #category : #'tests - debugging' }
 DebuggerSelectorTest >> testDebugExceptionInProcessFromWith [
-	| process exception context |
-	context := [ DummyDebugger new zeroDivide ] asContext.
-	process := Process
-		forContext: context
-		priority: Processor activePriority.
+	| process exception dummyUIManager |
+	
 	self flag: 'Process are not the same, which is OK from the API point of view, but not accurate from the execution point of view'.
 	[ DummyDebugger new zeroDivide ]
 		on: Exception
 		do: [ :e | 
 			exception := e.
-			context := exception signalerContext.
-			context privRefresh.
 			DebuggerSelector
 				debugException: exception
-				inProcess: process
-				from: DummyDebugger new
+				inProcess: (process := [ ] newProcess)
+				from: (dummyUIManager := DummyDebugger new)
 				with: debuggerSelector ].
 
 	"With this test, we ensure that calling the API opens a debugger on a debug session,
 	that holds the exception, its signaler context and the interrupted process.
 	We check the second debugger because it is the one that is selected (first always fails)."
-	self assertDebuggerOpened: debuggers second onException: exception inProcess: process
+	self assertDebuggerOpened: debuggers second onException: exception inProcess: process.
+	
+	""
+	self assert: dummyUIManager deferred
 	
 ]
 
 { #category : #'tests - debugging API' }
 DebuggerSelectorTest >> testDebugMethodInProcessFromContextLabeled [
-	self fail
+	| dbg session process suspendedContext |
+	process := [ DummyDebugger new methodToDebug ] newProcess.
+	suspendedContext := process suspendedContext.
+	DummyDebuggerSelector
+		debugMethod: DummyDebugger >> #methodToDebug
+		inProcess: process
+		fromContext: suspendedContext
+		labeled: 'debug it'.
+	dbg := debuggers second.
+	session := dbg tag.
+	self
+		assertDebuggerOpened: dbg
+		onException: session exception
+		inProcess: process.
+	self
+		assert: session interruptedContext method
+		identicalTo: DummyDebugger >> #methodToDebug.
+	self
+		assert: session exception class
+		equals: DebuggerSelectorNullException.
+		
+	"Debugger Selector must have put us right at the entry of the method.
+	If we step over, we should be on the first ast node of the method"
+	session stepOver.
+	self
+		assert: ((DummyDebugger >> #methodToDebug) sourceNodeForPC: session interruptedContext pc)
+		identicalTo: (DummyDebugger >> #methodToDebug) ast statements first.
 ]
 
 { #category : #'tests - debugging API' }
 DebuggerSelectorTest >> testDebugProcessFromContextLabeled [
-	self fail
+	| context process session interruptedProcess exception |	
+	context := [  ] asContext.
+	process := [  ] newProcess.
+	"we use the dummy debugger selector to control the debuggers list and the ui manager.
+	we do not actually want to raise a real warning but just to ensure
+	the API gets the system to the opening of a debugger with the exception."
+	DummyDebuggerSelector
+		debugProcess: process
+		fromContext: context
+		labeled: #tag.
+	session := debuggers second tag.
+	interruptedProcess := session interruptedProcess.
+	exception := session exception.
+	self assert: session class equals: DebugSession.
+	self assert: interruptedProcess identicalTo: process.
+	self assert: interruptedProcess isSuspended.
+	self assert: session interruptedContext identicalTo: context.
+	self assert: exception class equals: DebuggerSelectorNullException.
+	self assert: exception signalerContext identicalTo: context.
+	self assert: exception messageText equals: #tag.
+	self assert: DummyDebuggerSelector uiManager deferred 
 ]
 
 { #category : #'tests - debugging API' }
