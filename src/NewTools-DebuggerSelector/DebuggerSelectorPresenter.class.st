@@ -50,7 +50,7 @@ DebuggerSelectorPresenter class >> title [
 DebuggerSelectorPresenter >> addCorrectMainDebuggerButtonToToolBar: aToolBar [
 	debuggerTable selectedItems
 		ifNotEmpty: [ :debuggerList_ | 
-			DebuggerSelector singleton mainDebuggerClass == (debuggerList_ at: 1)
+			OldDebuggerSelector singleton mainDebuggerClass == (debuggerList_ at: 1)
 				ifTrue:
 					[ "A debugger is selected in the list, and it is the main debugger class, so we add a button allowing the user to remove this debugger from the main debugger class"
 					aToolBar
@@ -58,7 +58,7 @@ DebuggerSelectorPresenter >> addCorrectMainDebuggerButtonToToolBar: aToolBar [
 							((self instantiate: SpToolBarButtonPresenter)
 								label: 'Main Debugger';
 								icon: (self iconNamed: #checkboxSelected);
-								action: [ DebuggerSelector singleton setNoMainDebuggerClass.
+								action: [ OldDebuggerSelector singleton setNoMainDebuggerClass.
 									self updateDebuggerTable.
 									self refreshDebuggerListToolBar ];
 								help: 'Set this debugger to no longer be the main debugger').
@@ -73,7 +73,7 @@ DebuggerSelectorPresenter >> addCorrectMainDebuggerButtonToToolBar: aToolBar [
 				action: [ debuggerTable selectedItems
 						ifEmpty: [ self inform: 'You need to select a debugger' ]
 						ifNotEmpty:
-							[ :debuggerList_ | DebuggerSelector singleton mainDebuggerClass: (debuggerList_ at: 1) ].
+							[ :debuggerList_ | OldDebuggerSelector singleton mainDebuggerClass: (debuggerList_ at: 1) ].
 					self updateDebuggerTable.
 					self refreshDebuggerListToolBar ];
 				help: 'Set this debugger to be the main debugger')
@@ -119,5 +119,5 @@ DebuggerSelectorPresenter >> refreshDebuggerListToolBar [
 
 { #category : #refresh }
 DebuggerSelectorPresenter >> updateDebuggerTable [
-	debuggerTable items: DebuggerSelector availableDebuggers
+	debuggerTable items: OldDebuggerSelector availableDebuggers
 ]

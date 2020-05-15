@@ -9,10 +9,10 @@ Class {
 
 { #category : #'code-critics' }
 ManifestNewToolsDebuggerSelector class >> ruleReAllAnyNoneSatisfyRuleV1FalsePositive [
-	^ #(#(#(#RGMethodDefinition #(#DebuggerSelector #lookupDebuggerAndOpen:debuggerLevel:notification: #false)) #'2020-03-30T17:17:38.949496+02:00') )
+	^ #(#(#(#RGMethodDefinition #(#OldDebuggerSelector #lookupDebuggerAndOpen:debuggerLevel:notification: #false)) #'2020-03-30T17:17:38.949496+02:00') )
 ]
 
 { #category : #'code-critics' }
 ManifestNewToolsDebuggerSelector class >> ruleReDetectContainsRuleV1FalsePositive [
-	^ #(#(#(#RGClassDefinition #(#DebuggerSelector)) #'2020-03-30T17:17:34.964612+02:00') )
+	^ #(#(#(#RGClassDefinition #(#OldDebuggerSelector)) #'2020-03-30T17:17:34.964612+02:00') )
 ]

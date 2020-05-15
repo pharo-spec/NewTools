@@ -4,7 +4,7 @@ Extension { #name : #AbstractDebugger }
 AbstractDebugger class >> beCurrent [
 	self isAbstract ifTrue: [ 
 		self error: 'Cannot register an abstract debugger' ].
-	DebuggerSelector singleton mainDebuggerClass: self
+	OldDebuggerSelector singleton mainDebuggerClass: self
 ]
 
 { #category : #'*NewTools-DebuggerSelector-Extensions' }

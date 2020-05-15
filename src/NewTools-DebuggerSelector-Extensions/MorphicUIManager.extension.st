@@ -2,7 +2,7 @@ Extension { #name : #MorphicUIManager }
 
 { #category : #'*NewTools-DebuggerSelector-Extensions' }
 MorphicUIManager >> debugProcess: process level: debuggerLevel context: context label: title fullView: bool notification: notificationString [
-	DebuggerSelector singleton
+	OldDebuggerSelector singleton
 		debugProcess: process
 		level: debuggerLevel
 		context: context

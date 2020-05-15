@@ -23,7 +23,7 @@ The algorithm outlined above gives the main idea. In addition to that:
 - `DebuggerSelector` has a `mainDebuggerClass` variable. If a debugger class is in this variable, `DebuggerSelector` will always attempt to open the DebugSession with it first, and only if that signals an Error will it fall back on the default algorithm. A use for this is to manually set a specific debugger for images in production mode, for example one that only logs the exception in a file but does not open a graphical debugger allowing the user to modify code.
 "
 Class {
-	#name : #DebuggerSelector,
+	#name : #OldDebuggerSelector,
 	#superclass : #Object,
 	#instVars : [
 		'mainDebuggerClass',
@@ -36,29 +36,29 @@ Class {
 }
 
 { #category : #debuggers }
-DebuggerSelector class >> availableDebuggers [
+OldDebuggerSelector class >> availableDebuggers [
 	^ self labeledDebuggers: self sortedDebuggersByRank
 ]
 
 { #category : #debuggers }
-DebuggerSelector class >> debuggerRankDependsOnSession: debuggerClass [
+OldDebuggerSelector class >> debuggerRankDependsOnSession: debuggerClass [
 	self flag: 'Ugly hack because GT debuggers may apply to specific sessions. 
 	We need to find a clever way to rank those debuggers in the UI.'.
 	^ GTGenericStackDebugger allSubclasses includes: debuggerClass
 ]
 
 { #category : #debuggers }
-DebuggerSelector class >> debuggersWithRanks [	
+OldDebuggerSelector class >> debuggersWithRanks [	
 	^ Smalltalk tools debuggers
 ]
 
 { #category : #singleton }
-DebuggerSelector class >> initialize [
+OldDebuggerSelector class >> initialize [
 	Smalltalk tools debuggerTool: self singleton
 ]
 
 { #category : #debuggers }
-DebuggerSelector class >> labeledDebuggers: debuggers [
+OldDebuggerSelector class >> labeledDebuggers: debuggers [
 	^ debuggers
 		collect: [ :assoc | 
 			| dbgClass rank label |
@@ -76,25 +76,25 @@ DebuggerSelector class >> labeledDebuggers: debuggers [
 ]
 
 { #category : #singleton }
-DebuggerSelector class >> singleton [
+OldDebuggerSelector class >> singleton [
 	singleton ifNil: [ singleton := self new ].
 	^ singleton
 ]
 
 { #category : #debuggers }
-DebuggerSelector class >> sortedDebuggersByRank [
+OldDebuggerSelector class >> sortedDebuggersByRank [
 	^ (self debuggersWithRanks
 		collect: [ :ass | Association key: ass value value: ass key ])
 		asSortedCollection reversed
 ]
 
 { #category : #debuggers }
-DebuggerSelector >> availableDebuggers [
+OldDebuggerSelector >> availableDebuggers [
 	^ self class availableDebuggers
 ]
 
 { #category : #'debuggers - opening' }
-DebuggerSelector >> closeAllDebuggers [
+OldDebuggerSelector >> closeAllDebuggers [
 	self flag: 'Ugly temporary hack: Thomas can you fix this?'.
 	self flag: 'GTGenericStackDebugger is ultra slow to close its windows...'.
 	self getDebuggerClasses
@@ -106,7 +106,7 @@ DebuggerSelector >> closeAllDebuggers [
 ]
 
 { #category : #'system - integration' }
-DebuggerSelector >> debugProcess: process level: debuggerLevel context: context label: title fullView: bool notification: notificationString fromUIManager: uiManager [
+OldDebuggerSelector >> debugProcess: process level: debuggerLevel context: context label: title fullView: bool notification: notificationString fromUIManager: uiManager [
 	"Open a notifier in response to an error, halt, or notify. A notifier view
 	just shows a short view of the sender stack and provides a menu that
 	lets the user open a full debugger."
@@ -133,7 +133,7 @@ DebuggerSelector >> debugProcess: process level: debuggerLevel context: context 
 ]
 
 { #category : #debuggers }
-DebuggerSelector >> getDebuggerClasses [
+OldDebuggerSelector >> getDebuggerClasses [
 	| result classesWithDummyDebuggerPragma |
 	result := ((PragmaCollector
 		filter: [ :prg | prg selector = #iAmADebugger ]) reset collected
@@ -151,14 +151,14 @@ DebuggerSelector >> getDebuggerClasses [
 ]
 
 { #category : #debuggers }
-DebuggerSelector >> ignoreDummyDebuggerForTests [
+OldDebuggerSelector >> ignoreDummyDebuggerForTests [
 	"If true, this class will ignore the DummyDebuggerForTests class when selecting a debugger. This is intended to be overriden for testing purposes"
 
 	^ true
 ]
 
 { #category : #'system - integration' }
-DebuggerSelector >> isObsolete [
+OldDebuggerSelector >> isObsolete [
 	"Method required for DebuggerSelector to be set as the debugger tool in 'Smalltalk tools'
 	I do not really know what it means"
 	self flag: 'Thomas, you cannot code stuff that you do not know what it means.
@@ -167,7 +167,7 @@ DebuggerSelector >> isObsolete [
 ]
 
 { #category : #debuggers }
-DebuggerSelector >> isThisClassADebugger: aClass [
+OldDebuggerSelector >> isThisClassADebugger: aClass [
 	"Returns whether @aClass implements the required methods to be considered a debugger class. It must:
 	- have a #iAmADebugger method, with the #iAmADebugger pragma
 	- implement all the class methods from class AbstractDebugger that are marked as being subclass responsibility
@@ -202,7 +202,7 @@ DebuggerSelector >> isThisClassADebugger: aClass [
 ]
 
 { #category : #'debuggers - lookup' }
-DebuggerSelector >> lookupDebuggerAndOpen: aDebugSession debuggerLevel: debuggerLevel notification: notificationString [
+OldDebuggerSelector >> lookupDebuggerAndOpen: aDebugSession debuggerLevel: debuggerLevel notification: notificationString [
 	"Try to open aDebugSession with the highest ranking debugger. 
 	If this raises an Error, try with the second highest ranking debugger instead, etc.
 	If no debugger can open the debug session, then the emergency debugger opens."
@@ -226,7 +226,7 @@ DebuggerSelector >> lookupDebuggerAndOpen: aDebugSession debuggerLevel: debugger
 ]
 
 { #category : #'debuggers - lookup' }
-DebuggerSelector >> lookupDebuggerAndOpen: aDebugSession notification: notificationString [
+OldDebuggerSelector >> lookupDebuggerAndOpen: aDebugSession notification: notificationString [
 	"Try to open aDebugSession with the highest ranking debugger. 
 	If this raises an Error, try with the second highest ranking debugger instead, etc.
 	If no debugger can open the debug session, then the emergency debugger opens."
@@ -243,26 +243,26 @@ DebuggerSelector >> lookupDebuggerAndOpen: aDebugSession notification: notificat
 ]
 
 { #category : #accessing }
-DebuggerSelector >> mainDebuggerClass [
+OldDebuggerSelector >> mainDebuggerClass [
 	^ mainDebuggerClass
 ]
 
 { #category : #accessing }
-DebuggerSelector >> mainDebuggerClass: aClass [
+OldDebuggerSelector >> mainDebuggerClass: aClass [
 	(aClass isNil or: [ self isThisClassADebugger: aClass ])
 		ifFalse: [ CannotSetAsDebugger signal ].
 	mainDebuggerClass := aClass.
 ]
 
 { #category : #'debuggers - opening' }
-DebuggerSelector >> openOn: aDebugSession withFullView: aBoolean [
+OldDebuggerSelector >> openOn: aDebugSession withFullView: aBoolean [
 	"This method makes DebuggerSelector compatible with the rubric text editor. More specifically, the 'Debug it' option of Rubric's right-click menu will send #openOn:withFullView: to 'Smalltalk tools debugger' (see RubSmalltalkEditor>>#debug:receiver:in:. So to be able to set DebuggerSelector as the main debugger tool of 'Smalltalk tools', it needs to understand this message"
 
 	self selectAndOpenDebuggerFor: aDebugSession withNotification: nil
 ]
 
 { #category : #'debuggers - opening' }
-DebuggerSelector >> openWithMainDebugger: aDebugSession andNotification: notificationString [
+OldDebuggerSelector >> openWithMainDebugger: aDebugSession andNotification: notificationString [
 	"Open aDebugSession with the main debugger class in the system. "
 
 	^[ self
@@ -276,7 +276,7 @@ DebuggerSelector >> openWithMainDebugger: aDebugSession andNotification: notific
 ]
 
 { #category : #'debuggers - opening' }
-DebuggerSelector >> requestActionOnDebuggerError: error [
+OldDebuggerSelector >> requestActionOnDebuggerError: error [
 	^ (UIManager default
 		chooseFrom:
 			{'Open the original exception in another debugger?'.
@@ -289,7 +289,7 @@ DebuggerSelector >> requestActionOnDebuggerError: error [
 ]
 
 { #category : #'debuggers - opening' }
-DebuggerSelector >> selectAndOpenDebuggerFor: aDebugSession withNotification: notificationString [
+OldDebuggerSelector >> selectAndOpenDebuggerFor: aDebugSession withNotification: notificationString [
 	"Open aDebugSession with the most suitable debugger class in the system. "
 
 	self mainDebuggerClass
@@ -302,14 +302,14 @@ DebuggerSelector >> selectAndOpenDebuggerFor: aDebugSession withNotification: no
 ]
 
 { #category : #debuggers }
-DebuggerSelector >> setNoMainDebuggerClass [
+OldDebuggerSelector >> setNoMainDebuggerClass [
 	"Removes the main debugger class if there was any"
 
 	self mainDebuggerClass: nil
 ]
 
 { #category : #debuggers }
-DebuggerSelector >> sortedDebuggerClassesFor: aDebugSession [
+OldDebuggerSelector >> sortedDebuggerClassesFor: aDebugSession [
 	self flag:'if maindebugger class exist, put it first'.
 	^ (self getDebuggerClasses
 		select:
@@ -320,7 +320,7 @@ DebuggerSelector >> sortedDebuggerClassesFor: aDebugSession [
 ]
 
 { #category : #'debuggers - opening' }
-DebuggerSelector >> tryToOpenDebugSession: aDebugSession debuggerLevel: debuggerLevel withDebuggerClass: aDebuggerClass andNotification: aString [
+OldDebuggerSelector >> tryToOpenDebugSession: aDebugSession debuggerLevel: debuggerLevel withDebuggerClass: aDebuggerClass andNotification: aString [
 	"Tries to open @aDebugSession with debugger @aDebuggerClass. If an Error is raised doing so, returns false, otherwise return true"
 
 	[ aDebuggerClass
@@ -335,7 +335,7 @@ DebuggerSelector >> tryToOpenDebugSession: aDebugSession debuggerLevel: debugger
 ]
 
 { #category : #'debuggers - opening' }
-DebuggerSelector >> tryToOpenDebugSession: aDebugSession withDebuggerClass: aDebuggerClass andNotification: aString [
+OldDebuggerSelector >> tryToOpenDebugSession: aDebugSession withDebuggerClass: aDebuggerClass andNotification: aString [
 	"Tries to open @aDebugSession with debugger @aDebuggerClass. If an Error is raised doing so, returns false, otherwise return true"
 
 	[ aDebuggerClass
