@@ -8,7 +8,7 @@ Class {
 		'debuggerListToolBar',
 		'debuggerTable'
 	],
-	#category : #'NewTools-DebuggerSelector-Core'
+	#category : #'NewTools-DebuggerSelector-Browser'
 }
 
 { #category : #specs }
