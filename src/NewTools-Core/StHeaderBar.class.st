@@ -42,7 +42,8 @@ StHeaderBar >> initializePresenters [
 		addStyle: 'label.shortcut';
 		yourself.
 	toolbar := self newToolBar.
-	toolbar displayMode: self application toolbarDisplayMode
+	"toolbar displayMode: self application toolbarDisplayMode"
+	toolbar beIcons. "is a mini toolbar, items should be... tiny :)"
 ]
 
 { #category : #accessing }
