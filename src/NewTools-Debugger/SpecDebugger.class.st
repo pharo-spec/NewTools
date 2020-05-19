@@ -1073,8 +1073,7 @@ SpecDebugger >> updateCodeFromContext: aContext [
 
 { #category : #'updating widgets' }
 SpecDebugger >> updateCodeHeaderLabel [
-	codeHeader label: self statusLabelTextForCurrentContext.
-	codeHeader update
+	codeHeader label: self statusLabelTextForCurrentContext
 ]
 
 { #category : #'updating widgets' }
