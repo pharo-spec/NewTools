@@ -1175,11 +1175,13 @@ SpecDebugger >> updateTitle [
 
 { #category : #'updating widgets' }
 SpecDebugger >> updateToolbar [
-	| newCommandGroup |
+	| decoratedCommands newCommandGroup |
+	self flag: 'In the future, all commands should be cached and not only the toolbar ones.'.
+	decoratedCommands := toolbarCommands allCommands collect:[:spCm| spCm decoratedCommand].
 	newCommandGroup := self toolbarActions.
 	(newCommandGroup allCommands
-		anySatisfy: [ :cm | (toolbarCommands hasCommand: cm) not ])
-		ifTrue: [ ^ self ].
+		anySatisfy: [ :spCm | (decoratedCommands includes: spCm decoratedCommand) not])
+		ifFalse: [ ^ self ].
 	toolbarCommands := newCommandGroup.
 	toolbar removeAllItems.
 	SpToolBarPresenterBuilder new
