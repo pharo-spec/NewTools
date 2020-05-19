@@ -340,7 +340,7 @@ SpecDebugger class >> defaultTitle [
 { #category : #settings }
 SpecDebugger class >> displayInspectorHeaderBar [
 	self flag: 'Temporary hack to disable header bars on inspectors'.
-	^(self usingSpecSelector = #debuggerNoHeadersWithExtensionsSpec) not
+	^"(self usingSpecSelector = #debuggerNoHeadersWithExtensionsSpec) not"false
 ]
 
 { #category : #'tools registry' }
