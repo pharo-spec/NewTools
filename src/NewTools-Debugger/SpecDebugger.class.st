@@ -1069,13 +1069,8 @@ SpecDebugger >> updateCodeFromContext: aContext [
 
 { #category : #'updating widgets' }
 SpecDebugger >> updateCodeHeaderLabel [
-	self flag: 'deprecated?'.
-	codeHeader removeStyleFromLabel: 'label.headerError'.	
-	codeHeader removeStyleFromLabel: 'label.header'.	
 	codeHeader label: self statusLabelTextForCurrentContext.
-	codeHeader applyStyleToLabel: self statusLabelStyleForCurrentContext.
 	codeHeader update
-	
 ]
 
 { #category : #'updating widgets' }
