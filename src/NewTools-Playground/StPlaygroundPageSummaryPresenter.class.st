@@ -47,7 +47,7 @@ StPlaygroundPageSummaryPresenter >> pageFirstLine [
 		
 	page readStreamDo: [ :stream | | line |
 		[ stream atEnd not and: [ (line := stream nextLine trimmed) isEmpty ] ] whileTrue.
-		line ifNotEmpty: [ ^ line ] ].
+		line isEmptyOrNil ifFalse: [ ^ line ] ].
 
 	^ 'Empty'
 ]
