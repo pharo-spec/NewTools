@@ -298,10 +298,10 @@ SpecDebugger class >> debuggerWithoutExtensionsSpec [
 				position: 30 percent;				
 				add:
 					(SpBoxLayout newVertical
-						add: #stackHeader
+						"add: #stackHeader
 							expand: false
 							fill: false
-							padding: 5;
+							padding: 5;"
 						add: #stackTable;
 						yourself);
 				add:
@@ -309,10 +309,10 @@ SpecDebugger class >> debuggerWithoutExtensionsSpec [
 						add:
 							(SpBoxLayout newVertical
 								add: #toolbar;
-								add: #codeHeader
+								"add: #codeHeader
 									expand: true
 									fill: true
-									padding: 0;
+									padding: 0;"
 								yourself)
 							withConstraints: [ :constraints | 
 								constraints
