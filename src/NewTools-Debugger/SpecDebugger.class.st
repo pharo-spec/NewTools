@@ -17,7 +17,8 @@ Class {
 		'stackHeader',
 		'codeHeader',
 		'extensionTools',
-		'extensionToolsNotebook'
+		'extensionToolsNotebook',
+		'toolbarCommands'
 	],
 	#classVars : [
 		'ActivateDebuggerExtensions',
@@ -297,10 +298,10 @@ SpecDebugger class >> debuggerWithoutExtensionsSpec [
 				position: 30 percent;				
 				add:
 					(SpBoxLayout newVertical
-						add: #stackHeader
+						"add: #stackHeader
 							expand: false
 							fill: false
-							padding: 5;
+							padding: 5;"
 						add: #stackTable;
 						yourself);
 				add:
@@ -308,10 +309,10 @@ SpecDebugger class >> debuggerWithoutExtensionsSpec [
 						add:
 							(SpBoxLayout newVertical
 								add: #toolbar;
-								add: #codeHeader
+								"add: #codeHeader
 									expand: true
 									fill: true
-									padding: 0;
+									padding: 0;"
 								yourself)
 							withConstraints: [ :constraints | 
 								constraints
@@ -339,7 +340,7 @@ SpecDebugger class >> defaultTitle [
 { #category : #settings }
 SpecDebugger class >> displayInspectorHeaderBar [
 	self flag: 'Temporary hack to disable header bars on inspectors'.
-	^(self usingSpecSelector = #debuggerNoHeadersWithExtensionsSpec) not
+	^"(self usingSpecSelector = #debuggerNoHeadersWithExtensionsSpec) not"false
 ]
 
 { #category : #'tools registry' }
@@ -776,6 +777,7 @@ SpecDebugger >> initializeToolbar [
 
 	toolbar := self newToolBar.
 	toolbar displayMode: self application toolbarDisplayMode.
+	toolbarCommands := CmCommandGroup new.
 	self updateToolbar
 ]
 
@@ -1049,33 +1051,29 @@ SpecDebugger >> updateCodeFromContext [
 
 { #category : #'updating widgets' }
 SpecDebugger >> updateCodeFromContext: aContext [
-	| selectionInterval |
+	| selectionInterval home behavior|
 
 	aContext ifNil: [ ^ self clearCode ].
 
 	selectionInterval := self session selectedCodeRangeForContext: aContext.
+	home := aContext home.
+	behavior := home receiver class.
 	
-	self code
-		text: aContext sourceCode;
-		doItReceiver: aContext home receiver;
-		doItContext: aContext;
-		behavior: aContext home receiver class;
-		selectionInterval: selectionInterval.
+	aContext sourceCode = self code text ifFalse:[self code	text: aContext sourceCode].
+	self code doItReceiver: home receiver.
+	self code	doItContext: aContext.
+	behavior = self code behavior ifFalse:[self code behavior: behavior].	
+	self code selectionInterval: selectionInterval.
 	
-	self
+"	self
 		updateCodeTextSegmentDecoratorsIn: aContext
-		forInterval: selectionInterval
+		forInterval: selectionInterval."
+	
 ]
 
 { #category : #'updating widgets' }
 SpecDebugger >> updateCodeHeaderLabel [
-	self flag: 'deprecated?'.
-	codeHeader removeStyleFromLabel: 'label.headerError'.	
-	codeHeader removeStyleFromLabel: 'label.header'.	
-	codeHeader label: self statusLabelTextForCurrentContext.
-	codeHeader applyStyleToLabel: self statusLabelStyleForCurrentContext.
-	codeHeader update
-	
+	codeHeader label: self statusLabelTextForCurrentContext
 ]
 
 { #category : #'updating widgets' }
@@ -1178,9 +1176,16 @@ SpecDebugger >> updateTitle [
 
 { #category : #'updating widgets' }
 SpecDebugger >> updateToolbar [
-
+	| decoratedCommands newCommandGroup |
+	self flag: 'In the future, all commands should be cached and not only the toolbar ones.'.
+	decoratedCommands := toolbarCommands allCommands collect:[:spCm| spCm decoratedCommand].
+	newCommandGroup := self toolbarActions.
+	(newCommandGroup allCommands
+		anySatisfy: [ :spCm | (decoratedCommands includes: spCm decoratedCommand) not])
+		ifFalse: [ ^ self ].
+	toolbarCommands := newCommandGroup.
 	toolbar removeAllItems.
-	SpToolBarPresenterBuilder new 
+	SpToolBarPresenterBuilder new
 		toolbarPresenter: toolbar;
-		visit: self toolbarActions
+		visit: toolbarCommands
 ]

@@ -148,7 +148,8 @@ StDebuggerInspector >> updateWith: inspectedObject [
 	(oldContext notNil and: [ newContext notNil ]) ifTrue: [ 
 		(oldContext receiver == newContext receiver and: [ 
 			 oldContext selector == newContext selector ]) ifTrue: [ 
-			self forceRawInspectionUpdate.
+			self flag: 'Why do we need to force update of the raw inspection? Disabling it seems to not have an impact. Keep an eye on it.'.
+			"self forceRawInspectionUpdate."
 			^ self ] ].
 	self saveRawInspectionSelectionForContext: oldContext.
 	self model: (StDebuggerInspectorModel on: inspectedObject).
