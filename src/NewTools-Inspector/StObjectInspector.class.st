@@ -120,10 +120,18 @@ StObjectInspector >> buildToolBar [
 			presenter displayMode: self application displayMode ]
 ]
 
-{ #category : #initialization }
+{ #category : #transmission }
 StObjectInspector >> defaultInputPort [
 
 	^ self inputModelPort
+]
+
+{ #category : #'api-focus' }
+StObjectInspector >> defaultKeyboardFocus [
+
+	^ views pages 
+		ifNotEmpty: [ :pages | pages first activePresenter ] 
+		ifEmpty: [ self ]
 ]
 
 { #category : #initialization }
@@ -154,7 +162,7 @@ StObjectInspector >> initializeWindow: aWindowPresenter [
 		toolBar: self buildToolBar
 ]
 
-{ #category : #initialization }
+{ #category : #transmission }
 StObjectInspector >> inputModelPort [
 
 	^ SpModelPort newPresenter: self
