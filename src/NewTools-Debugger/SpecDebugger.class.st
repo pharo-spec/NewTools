@@ -1051,22 +1051,24 @@ SpecDebugger >> updateCodeFromContext [
 
 { #category : #'updating widgets' }
 SpecDebugger >> updateCodeFromContext: aContext [
-	| selectionInterval |
+	| selectionInterval home behavior|
 
 	aContext ifNil: [ ^ self clearCode ].
 
 	selectionInterval := self session selectedCodeRangeForContext: aContext.
+	home := aContext home.
+	behavior := home receiver class.
 	
-	self code
-		text: aContext sourceCode;
-		doItReceiver: aContext home receiver;
-		doItContext: aContext;
-		behavior: aContext home receiver class;
-		selectionInterval: selectionInterval.
+	aContext sourceCode = self code text ifFalse:[self code	text: aContext sourceCode].
+	self code doItReceiver: home receiver.
+	self code	doItContext: aContext.
+	behavior = self code behavior ifFalse:[self code behavior: behavior].	
+	self code selectionInterval: selectionInterval.
 	
-	self
+"	self
 		updateCodeTextSegmentDecoratorsIn: aContext
-		forInterval: selectionInterval
+		forInterval: selectionInterval."
+	
 ]
 
 { #category : #'updating widgets' }
