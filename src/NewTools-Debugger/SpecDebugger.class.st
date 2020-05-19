@@ -428,8 +428,6 @@ SpecDebugger class >> openOn: aDebugSession withFullView: aBool [
 SpecDebugger class >> openOn: aDebugSession withFullView: aBool andNotification: aString [
 	| debugger |
 	debugger := self on: aDebugSession.
-	[aDebugSession keepAlive: debugger] on: MessageNotUnderstood do: [ ]. "For compatibility with DebuggerSelector https://github.com/dupriezt/DebuggerSelector
-	The on:do: can be removed once DebuggerSelector is integrated into the image, so that DebugSession has the #keepAlive: method"
 	debugger openWithFullView.
 	^ debugger
 ]
@@ -544,13 +542,11 @@ SpecDebugger >> buildContextMenus [
 
 { #category : #actions }
 SpecDebugger >> clear [
-	extensionToolsNotebook pages do:[:page| page activePresenter windowIsClosing].
+	extensionToolsNotebook pages
+		do: [ :page | page activePresenter windowIsClosing ].
 	extensionTools := nil.
 	self removeActionsForSession: self session.
-	
-	"No more code should follow after this, as the session might terminate this process."
-	[self session stopKeepingAlive: self] on: MessageNotUnderstood do: [ self session terminate ] "For compatibility with DebuggerSelector https://github.com/dupriezt/DebuggerSelector
-	If DebugSelector is in the image (i.e. the debug session understands the #stopKeepingAlive: message), it is responsible for terminating debug sessions, so we just let it do it. If DebugSelector is not in the image (handler block), then we terminate the debug session ourselves"
+	self session terminate
 ]
 
 { #category : #'updating widgets' }

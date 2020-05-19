@@ -1,103 +1,20 @@
 Class {
 	#name : #EDEmergencyDebuggerTest,
-	#superclass : #TestCase,
-	#instVars : [
-		'ed',
-		'session',
-		'currentDebuggingAPI',
-		'debugAPI',
-		'mockDisplayAPI'
-	],
+	#superclass : #EDTests,
 	#category : #'Emergency-Debugger-Tests'
 }
 
-{ #category : #'methods version' }
-EDEmergencyDebuggerTest >> compileMethodVersion: version [
-	EDMockObjectForTests
-		compile:
-			'm: i', version, '
-	i = 1 ifTrue:[^1].
-	^i + (self m: i - 1)'
+{ #category : #helpers }
+EDEmergencyDebuggerTest >> errorText: error [ 	
+	| errStream |
+	errStream := WriteStream on: Text new.
+	errStream cr.
+	ed writeSeparatorOn: errStream.
+	errStream << error description.
+	^errStream contents
 ]
 
-{ #category : #running }
-EDEmergencyDebuggerTest >> configureDebugSession [
-
-	"Configure a debug session and moves it to the following stack:
-	EDMockObjectForTests>>m: 5
-	EDMockObjectForTests>>m: 6
-	EDMockObjectForTests>>m: 7
-	EDMockObjectForTests>>m: 8
-	EDMockObjectForTests>>m: 9
-	EDMockObjectForTests>>m: 10
-	EDMockObjectForTests>>m: 11
-	EDMockObjectForTests>>m: 12
-	EDMockObjectForTests>>m: 13
-	EDMockObjectForTests>>m: 14
-	EDMockObjectForTests>>m: 15
-	EDMockObjectForTests>>m: 16
-	EDMockObjectForTests>>m: 17
-	EDMockObjectForTests>>m: 18
-	EDMockObjectForTests>>m: 19
-	EDMockObjectForTests>>m: 20
-	[ EDMockObjectForTests new m: 20 ] in UndefinedObject>>DoIt"
-	
-	session stepThrough.
-	session stepOver.
-	session stepInto.
-	session stepOver.
-	session stepOver.
-	session stepInto.
-	session stepOver.
-	session stepOver.
-	session stepInto.	
-	session stepOver.
-	session stepOver.
-	session stepInto.
-	
-	session stepOver.
-	session stepOver.
-	session stepInto.
-	session stepOver.
-	session stepOver.
-	session stepInto.	
-	session stepOver.
-	session stepOver.
-	session stepInto.
-	
-	session stepOver.
-	session stepOver.
-	session stepInto.
-	session stepOver.
-	session stepOver.
-	session stepInto.	
-	session stepOver.
-	session stepOver.
-	session stepInto.
-	
-	session stepOver.
-	session stepOver.
-	session stepInto.
-	session stepOver.
-	session stepOver.
-	session stepInto.	
-	session stepOver.
-	session stepOver.
-	session stepInto.
-	
-	session stepOver.
-	session stepOver.
-	session stepInto.
-	session stepOver.
-	session stepOver.
-	session stepInto.	
-	session stepOver.
-	session stepOver.
-	session stepInto.
-
-]
-
-{ #category : #'text - composition' }
+{ #category : #helpers }
 EDEmergencyDebuggerTest >> methodDisplayTextStringExample [
 	| method expectedTextStream |
 	method := debugAPI methodAt: ed stackSelectionIndex.
@@ -110,16 +27,7 @@ EDEmergencyDebuggerTest >> methodDisplayTextStringExample [
 	^expectedTextStream contents asString
 ]
 
-{ #category : #running }
-EDEmergencyDebuggerTest >> newEd [
-	ed := EDEmergencyDebugger new.
-	ed repl: EDMockREPLInterface new.
-	ed displayInterface: (mockDisplayAPI := EDMockDisplayInterface new).
-	ed debug: session
-
-]
-
-{ #category : #'text - composition' }
+{ #category : #helpers }
 EDEmergencyDebuggerTest >> resultTextStringExample [
 	| expectedTextStream |
 	expectedTextStream := WriteStream on: Text new.
@@ -129,39 +37,34 @@ EDEmergencyDebuggerTest >> resultTextStringExample [
 	^ expectedTextStream contents asString
 ]
 
-{ #category : #running }
-EDEmergencyDebuggerTest >> setUp [
-	| context process |
-	super setUp.	
-	currentDebuggingAPI := EDEmergencyDebugger debugAPI.
-	EDEmergencyDebugger debugAPI: nil.
-	context := [ EDMockObjectForTests new m: 20 ] asContext.
-	process := Process
-		forContext: context
-		priority: Processor userInterruptPriority.
-	session := DebugSession
-		named: 'test session'
-		on: process
-		startedAt: context.
-	self configureDebugSession.
-	debugAPI := EDDebuggingAPI attachTo: session.
-	self newEd
-]
-
-{ #category : #running }
-EDEmergencyDebuggerTest >> tearDown [
-	EDEmergencyDebugger debugAPI: currentDebuggingAPI.
-	session terminate.
-	self compileMethodVersion: ''.
-	super tearDown
+{ #category : #'debug API' }
+EDEmergencyDebuggerTest >> testBasicDebug [
+	ed := EDEmergencyDebugger new.
+	ed basicDebug: session.
+	self assert: ed debugAPI debugger identicalTo: ed.
+	self assert: ed isRunning
+	
 ]
 
 { #category : #'text - composition' }
 EDEmergencyDebuggerTest >> testComposeDisplayText [
 	| displayText |
-	displayText := ed titleText , ed stackText , ed methodText , ed input
+	displayText := ed titleText , ed composeSessionTitle, ed stackText , ed methodText , ed input
 		, ed result.
 	self assert: ed composeDisplayText equals: displayText
+]
+
+{ #category : #'text - composition' }
+EDEmergencyDebuggerTest >> testComposeErrorTextFrom [
+	|error rs|
+	error := self zeroDivideErrorInstance.
+	ed composeErrorTextFrom: error.
+	rs := ed errorText readStream.
+	self assert: rs next equals: Character cr.
+	self assert: (rs next: ed separator asString size) equals: ed separator asString.
+	self assert: rs next equals: Character cr.
+	self assert: (rs next: error description size) equals: error description.
+	self assert: rs atEnd
 ]
 
 { #category : #'text - composition' }
@@ -305,6 +208,17 @@ EDEmergencyDebuggerTest >> testDefaultResultText [
 	self assert: ed defaultResultText equals: 'TYPE h FOR HELP'
 ]
 
+{ #category : #setup }
+EDEmergencyDebuggerTest >> testFromError [
+	|error|
+	error := self zeroDivideErrorInstance.
+	self assert: ed originalError isNil.
+	self assert: ed errorText equals: Text new.	
+	ed fromError: error.
+	self assert: ed originalError identicalTo: error.
+	self assert: ed errorText equals: (self errorText: error)
+]
+
 { #category : #'methods version' }
 EDEmergencyDebuggerTest >> testInitialMethodVersion [
 	self assert: ed methodVersionSelectionIndex equals: 0
@@ -372,6 +286,32 @@ EDEmergencyDebuggerTest >> testNewTextStream [
 ]
 
 { #category : #'methods version' }
+EDEmergencyDebuggerTest >> testRevertCurrentMethodToSelectedVersion [
+	|secondContext originalPC newContext| 
+	secondContext := ed shortStack second.
+	originalPC := secondContext pc.	
+	ed stackSelectionIndex: 2.
+	ed shortStackIndex: 2.
+	ed methodVersionSelectionIndex: 1.
+	ed revertCurrentMethodToSelectedVersion.
+	newContext := ed shortStack first.
+	self assert: newContext identicalTo: secondContext.
+	self assert: ed stackSelectionIndex equals: 1.
+	self assert: ed shortStackIndex equals: 1.
+	self assert: ed methodVersionSelectionIndex equals: 1.
+	self assert: newContext pc < originalPC.
+	self assert: newContext method sourceCode equals: secondContext method sourceCode.
+	
+	"When the context is restarted, the interpreter automatically steps over
+	so-called uninteresting bytecodes, i.e., bytecodes that are not sends nor returns.
+	The test method, originally EDMockObjectForTests>>#m:, starts with an equality check
+	that is 2 bytecodes long, then the interpreter stops on the first send.
+	The PC should be equal to the method's initial PC + 2."  
+	self assert: ed shortStack first pc 
+	     equals: ed shortStack first method initialPC + 2
+]
+
+{ #category : #'methods version' }
 EDEmergencyDebuggerTest >> testSelectedMethodVersion [
 
 	
@@ -379,8 +319,8 @@ EDEmergencyDebuggerTest >> testSelectedMethodVersion [
 
 { #category : #'methods version' }
 EDEmergencyDebuggerTest >> testSelectedMethodVersionsSize [
-
-	
+	self prepareMethodVersionTest.
+	self assert: ed selectedMethodVersionsSize equals: 2
 ]
 
 { #category : #'text - helpers' }
@@ -422,6 +362,7 @@ EDEmergencyDebuggerTest >> testShortStack [
 
 { #category : #'methods version' }
 EDEmergencyDebuggerTest >> testShowMoreRecentMethodVersion [
+	self prepareMethodVersionTest.
 	ed showMoreRecentMethodVersion.
 	self assert: ed methodVersionSelectionIndex equals: 1.
 	ed showOlderMethodVersion.
@@ -431,7 +372,7 @@ EDEmergencyDebuggerTest >> testShowMoreRecentMethodVersion [
 
 { #category : #'methods version' }
 EDEmergencyDebuggerTest >> testShowOlderMethodVersion [
-	self compileMethodVersion: '2'.
+	self prepareMethodVersionTest.
 	ed showOlderMethodVersion.
 	self assert: ed methodVersionSelectionIndex equals: 1.
 	ed showOlderMethodVersion.
@@ -506,7 +447,14 @@ EDEmergencyDebuggerTest >> testWriteSeparatorOn [
 		  equals: expectedTextStream contents asString
 ]
 
-{ #category : #'text - composition' }
+{ #category : #helpers }
 EDEmergencyDebuggerTest >> titleDisplayTextStringExample [
 	^ 'Hi, I''m ED - What is the nature of your debugging emergency?'
+]
+
+{ #category : #helpers }
+EDEmergencyDebuggerTest >> zeroDivideErrorInstance [
+	[ 1 / 0 ]
+		on: Error
+		do: [ :err | ^ err ]
 ]
