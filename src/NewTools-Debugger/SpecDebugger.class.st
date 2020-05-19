@@ -17,7 +17,8 @@ Class {
 		'stackHeader',
 		'codeHeader',
 		'extensionTools',
-		'extensionToolsNotebook'
+		'extensionToolsNotebook',
+		'toolbarCommands'
 	],
 	#classVars : [
 		'ActivateDebuggerExtensions',
@@ -776,6 +777,7 @@ SpecDebugger >> initializeToolbar [
 
 	toolbar := self newToolBar.
 	toolbar displayMode: self application toolbarDisplayMode.
+	toolbarCommands := CmCommandGroup new.
 	self updateToolbar
 ]
 
@@ -1173,9 +1175,14 @@ SpecDebugger >> updateTitle [
 
 { #category : #'updating widgets' }
 SpecDebugger >> updateToolbar [
-
+	| newCommandGroup |
+	newCommandGroup := self toolbarActions.
+	(newCommandGroup allCommands
+		anySatisfy: [ :cm | (toolbarCommands hasCommand: cm) not ])
+		ifTrue: [ ^ self ].
+	toolbarCommands := newCommandGroup.
 	toolbar removeAllItems.
-	SpToolBarPresenterBuilder new 
+	SpToolBarPresenterBuilder new
 		toolbarPresenter: toolbar;
-		visit: self toolbarActions
+		visit: toolbarCommands
 ]
