@@ -4,7 +4,7 @@ The command classes I instantiate are specified under the ""accessing - commands
 The group names and descriptions are specified under the ""accessing"" protocol.
 
 You can evolve the default groups names and descriptions and the default command classes, but you cannot extend me.
-Using me to add command in the tree makes them default for the debugger stack presente.
+Using me to add command in the tree makes them default for the debugger stack presenter.
 "
 Class {
 	#name : #StDebuggerStackCommandTreeBuilder,
@@ -29,7 +29,7 @@ StDebuggerStackCommandTreeBuilder class >> groupName [
 
 { #category : #accessing }
 StDebuggerStackCommandTreeBuilder >> browseGroupDescription [
-	^ 'Navigate the system from the stack.'
+	^ 'Navigate the system from the stack'
 ]
 
 { #category : #accessing }
@@ -81,7 +81,7 @@ StDebuggerStackCommandTreeBuilder >> stackContextMenuActionsCommands [
 
 { #category : #accessing }
 StDebuggerStackCommandTreeBuilder >> stackContextMenuActionsDescription [
-	^ 'Actions on the selected context.'
+	^ 'Actions on the selected context'
 ]
 
 { #category : #accessing }
@@ -128,7 +128,7 @@ StDebuggerStackCommandTreeBuilder >> stackContextMenuExplorationCommands [
 
 { #category : #accessing }
 StDebuggerStackCommandTreeBuilder >> stackContextMenuExplorationDescription [
-	^ 'Explore the receiver object''s graph.'
+	^ 'Explore the receiver object''s graph'
 ]
 
 { #category : #accessing }
@@ -199,7 +199,7 @@ StDebuggerStackCommandTreeBuilder >> stackExplorationCommandsClasses [
 
 { #category : #accessing }
 StDebuggerStackCommandTreeBuilder >> stackGroupDescription [
-	^ 'Stack edition.'
+	^ 'Stack edition'
 ]
 
 { #category : #accessing }

@@ -10,6 +10,11 @@ Class {
 	#category : #'NewTools-Debugger-Tests-Debugger - model'
 }
 
+{ #category : #testing }
+StDebuggerToolCommandTreeBuilderTest class >> isAbstract [ 
+	^self class = StDebuggerToolCommandTreeBuilderTest 
+]
+
 { #category : #assertions }
 StDebuggerToolCommandTreeBuilderTest >> assertCommandGroup: cmdGroup hasDisplayStrategy: displayStrategy [
 	self

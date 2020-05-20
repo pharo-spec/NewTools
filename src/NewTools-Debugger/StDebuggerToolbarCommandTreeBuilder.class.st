@@ -11,7 +11,7 @@ StDebuggerToolbarCommandTreeBuilder class >> displayStrategy [
 
 { #category : #accessing }
 StDebuggerToolbarCommandTreeBuilder class >> groupDescription [
-	^ 'Debug actions.'
+	^ 'Debug actions'
 ]
 
 { #category : #accessing }

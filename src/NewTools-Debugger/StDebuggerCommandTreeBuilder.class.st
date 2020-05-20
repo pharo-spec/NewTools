@@ -3,6 +3,12 @@ I am an abstract class which provides interfaces for building a tree of commands
 I set the debugger instance and the root command group on which the tree is going to be built, and instantiation interface on class side.
 My subclasses must implement buildDebugerCommandGroup in which they build their particular subgroup of commands.
 My subclasses know how to inject their subgroup into the main command tree.  
+
+My subclasses are responsible to provide groups of commands classes that are instantiated on the given context and presenter. 
+
+For instance: 
+- an ""accessing"" protocol with methods returning names of groups
+- an ""accessing-command classes"" protocol returning arrays of methods (i.e., groups)
 "
 Class {
 	#name : #StDebuggerCommandTreeBuilder,
