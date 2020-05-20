@@ -6,8 +6,3 @@ Class {
 	#superclass : #PackageManifest,
 	#category : #'NewTools-Debugger-Commands-Manifest'
 }
-
-{ #category : #'code-critics' }
-ManifestDebuggerCommands class >> ruleRBClassNameInSelectorRuleV1FalsePositive [
-	^ #(#(#(#RGMethodDefinition #(#'DebugCommand class' #preDebugCommandsForDebugger: #true)) #'2019-07-23T15:30:12.510854+02:00') )
-]

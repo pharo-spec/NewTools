@@ -31,14 +31,6 @@ StDebugCommand class >> forSpecContext: anObject [
 		yourself
 ]
 
-{ #category : #'instance creation' }
-StDebugCommand class >> preDebugCommandsForDebugger: debugger [
-	
-	^ self
-		instantiateCommandsFromPragma: #PreDebugCommand
-		for: debugger
-]
-
 { #category : #default }
 StDebugCommand class >> shortName [
 	^self defaultName

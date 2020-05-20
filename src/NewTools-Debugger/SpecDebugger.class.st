@@ -80,8 +80,7 @@ SpecDebugger class >> buildCommandsGroupWith: stDebuggerInstance forRoot: rootCo
 { #category : #utilities }
 SpecDebugger class >> closeAllDebuggers [
 	<script>
-	SpecDebugger allInstancesDo: [ :dbg | dbg close ].
-	SpecPreDebugPresenter allInstancesDo: [ :dbg | dbg close ]
+	SpecDebugger allInstancesDo: [ :dbg | dbg close ]
 ]
 
 { #category : #'tools registry' }
@@ -836,19 +835,7 @@ SpecDebugger >> openWithFullView [
 
 { #category : #opening }
 SpecDebugger >> openWithNotification: notificationString [
-	"Create and schedule a notifier view with the given label and message.
-	A notifier view shows just the message or the first several lines of the
-	stack, with a menu that allows the user to open a full debugger if so
-	desired. "
-
-	"NOTE: When this method returns, a new process has been scheduled to
-	run the windows, and thus this notifier, but the previous active porcess
-	has not been suspended. The sender will do this."
-
-	(SpecPreDebugPresenter on: self)
-		message: notificationString;
-		openWithSpec;
-		setTitle: self title
+	self openWithFullView
 ]
 
 { #category : #actions }
@@ -1185,6 +1172,7 @@ SpecDebugger >> updateToolbar [
 		ifFalse: [ ^ self ].
 	toolbarCommands := newCommandGroup.
 	toolbar removeAllItems.
+	
 	SpToolBarPresenterBuilder new
 		toolbarPresenter: toolbar;
 		visit: toolbarCommands
