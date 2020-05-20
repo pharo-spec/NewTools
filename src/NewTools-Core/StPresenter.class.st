@@ -17,14 +17,6 @@ StPresenter class >> new [
 ]
 
 { #category : #'instance creation' }
-StPresenter class >> on: anObject [ 
-
-	^ self 
-		newApplication: self currentApplication
-		model: anObject
-]
-
-{ #category : #'instance creation' }
 StPresenter class >> owner: anOwningPresenter [
 
 	^ self 
