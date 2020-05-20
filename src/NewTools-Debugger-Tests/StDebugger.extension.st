@@ -1,13 +1,13 @@
-Extension { #name : #SpecDebugger }
+Extension { #name : #StDebugger }
 
 { #category : #'*NewTools-Debugger-Tests' }
-SpecDebugger >> contextInspector [
+StDebugger >> contextInspector [
 	<haltOrBreakpointForDevelopment>
 	self halt: 'Broken'
 ]
 
 { #category : #'*NewTools-Debugger-Tests' }
-SpecDebugger >> inspector [
+StDebugger >> inspector [
 
 	^ inspector
 ]

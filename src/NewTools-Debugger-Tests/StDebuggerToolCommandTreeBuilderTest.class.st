@@ -81,7 +81,7 @@ StDebuggerToolCommandTreeBuilderTest >> setUp [
 		named: 'test session'
 		on: process
 		startedAt: context.
-	debugger := SpecDebugger basicNew
+	debugger := StDebugger basicNew
 		session: session;
 		initialize.
 	debugger stackTable selectItem: debugger stackTable items first.

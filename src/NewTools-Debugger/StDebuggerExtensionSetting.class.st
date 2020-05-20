@@ -17,7 +17,7 @@ Class {
 StDebuggerExtensionSetting class >> fromDebuggerExtensionClass: aClass [
 	| pragmas |
 	pragmas := Pragma
-		allNamed: SpecDebugger extendedToolsPragma
+		allNamed: StDebugger extendedToolsPragma
 		in: aClass class.
 	^ pragmas
 		collect: [ :pragma | 
