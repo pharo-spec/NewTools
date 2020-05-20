@@ -33,6 +33,7 @@ StDebuggerRawObjectInspector class >> noHeaderSpec [
 StDebuggerRawObjectInspector >> initializePresenters [
 	super initializePresenters.
 	raw := self model rawInspection.
+	raw owner: self.
 	self addActivationTo: raw
 ]
 
