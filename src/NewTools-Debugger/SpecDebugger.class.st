@@ -18,7 +18,7 @@ Class {
 		'codeHeader',
 		'extensionTools',
 		'extensionToolsNotebook',
-		'toolbarCommands'
+		'toolbarCommandGroup'
 	],
 	#classVars : [
 		'ActivateDebuggerExtensions',
@@ -73,6 +73,9 @@ SpecDebugger class >> availableSpecSelectors [
 { #category : #commands }
 SpecDebugger class >> buildCommandsGroupWith: stDebuggerInstance forRoot: rootCommandGroup [
 	StDebuggerStackCommandTreeBuilder
+		buildCommandsGroupWith: stDebuggerInstance
+		forRoot: rootCommandGroup.
+	StDebuggerToolbarCommandTreeBuilder
 		buildCommandsGroupWith: stDebuggerInstance
 		forRoot: rootCommandGroup
 ]
@@ -536,8 +539,15 @@ SpecDebugger >> application [
 SpecDebugger >> buildContextMenus [
 	| debuggerCommandGroup stackGroup |
 	debuggerCommandGroup := self rootCommandsGroup.
-	stackGroup := debuggerCommandGroup / StDebuggerStackCommandTreeBuilder groupName.
-	stackTable contextMenu: [ stackGroup beRoot asMenuPresenter ]
+	stackGroup := debuggerCommandGroup
+		/ StDebuggerStackCommandTreeBuilder groupName.
+	stackTable contextMenu: [ stackGroup beRoot asMenuPresenter ].
+	toolbarCommandGroup := debuggerCommandGroup
+		/ StDebuggerToolbarCommandTreeBuilder groupName.
+	SpToolBarPresenterBuilder new
+		toolbarPresenter: toolbar;
+		visit: toolbarCommandGroup.
+	self updateToolbarDebugActions
 ]
 
 { #category : #actions }
@@ -764,7 +774,6 @@ SpecDebugger >> initializeStack [
 			stackTable selection isEmpty
 				ifFalse: [ self updateInspectorFromContext: context.
 					self updateCodeFromContext: context.
-					self updateToolbar.
 					self updateTitle.
 					self expandStackIfLastItemIsSelected ] ].
 	stackHeader := self instantiate: StHeaderBar.
@@ -773,11 +782,8 @@ SpecDebugger >> initializeStack [
 
 { #category : #initialization }
 SpecDebugger >> initializeToolbar [
-
 	toolbar := self newToolBar.
-	toolbar displayMode: self application toolbarDisplayMode.
-	toolbarCommands := CmCommandGroup new.
-	self updateToolbar
+	toolbar displayMode: self application toolbarDisplayMode
 ]
 
 { #category : #initialization }
@@ -829,7 +835,6 @@ SpecDebugger >> openWithFullView [
 	self
 		openWithSpec;
 		buildContextMenus;
-		updateToolbar;
 		updateCodeFromContext
 ]
 
@@ -935,7 +940,6 @@ SpecDebugger >> setSessionHolderSubscriptions [
 		whenChangedDo: [ :newSession :oldSession | 
 			self removeActionsForSession: oldSession.
 			self registerActionsForSession: newSession.
-			self updateToolbar.
 			self updateStackFromSession: newSession.
 			self updateTitle.
 			self updateExtensionsFrom: newSession ]
@@ -1052,7 +1056,8 @@ SpecDebugger >> updateCodeFromContext: aContext [
 	behavior = self code behavior ifFalse:[self code behavior: behavior].	
 	self code selectionInterval: selectionInterval.
 	
-"	self
+	self flag: #DBG, 'the following leaves highlighted text everywhere when the code pane is not updated.'
+	"self
 		updateCodeTextSegmentDecoratorsIn: aContext
 		forInterval: selectionInterval."
 	
@@ -1134,8 +1139,8 @@ SpecDebugger >> updateStep [
 	self updateStackFromSession: self session.
 	self updateCodeHeaderLabel.
 	self updateExtensionsFrom: self session.
-	self buildContextMenus.
-	self updateTitle
+	self updateTitle.
+	self updateToolbarDebugActions.
 ]
 
 { #category : #'updating actions' }
@@ -1162,18 +1167,7 @@ SpecDebugger >> updateTitle [
 ]
 
 { #category : #'updating widgets' }
-SpecDebugger >> updateToolbar [
-	| decoratedCommands newCommandGroup |
-	self flag: 'In the future, all commands should be cached and not only the toolbar ones.'.
-	decoratedCommands := toolbarCommands allCommands collect:[:spCm| spCm decoratedCommand].
-	newCommandGroup := self toolbarActions.
-	(newCommandGroup allCommands
-		anySatisfy: [ :spCm | (decoratedCommands includes: spCm decoratedCommand) not])
-		ifFalse: [ ^ self ].
-	toolbarCommands := newCommandGroup.
-	toolbar removeAllItems.
-	
-	SpToolBarPresenterBuilder new
-		toolbarPresenter: toolbar;
-		visit: toolbarCommands
+SpecDebugger >> updateToolbarDebugActions [
+	toolbarCommandGroup allCommands
+		do: [ :spCommand | spCommand updateEnableStatus ]
 ]

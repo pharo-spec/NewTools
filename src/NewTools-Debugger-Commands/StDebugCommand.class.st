@@ -64,8 +64,12 @@ StDebugCommand >> appliesTo: aDebugger [
 
 { #category : #testing }
 StDebugCommand >> appliesToDebugger: aDebugger [
+	^ aDebugger session isInterruptedContextDoesNotUnderstand not
+]
 
-	^ true
+{ #category : #accessing }
+StDebugCommand >> canBeExecuted [ 
+	^self appliesToDebugger: self debugger
 ]
 
 { #category : #accessing }

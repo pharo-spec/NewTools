@@ -17,7 +17,7 @@ CreateSubclassResponsabilityDebugCommand class >> defaultIconName [
 { #category : #accessing }
 CreateSubclassResponsabilityDebugCommand class >> defaultName [
 	<toolbarDebugCommand: 10>
-	^ 'Create'
+	^ 'Create subclass responsibility'
 ]
 
 { #category : #initialization }
@@ -41,7 +41,7 @@ CreateSubclassResponsabilityDebugCommand >> appliesToDebugger: aDebugger [
 { #category : #private }
 CreateSubclassResponsabilityDebugCommand >> askForSuperclassOf: aClass to: aSuperclass toImplement: aSelector ifCancel: cancelBlock [
 	| classes currentSuperclass chosenClassIndex |
-	
+	self flag: 'Should clearly not be there!'.
 	classes := OrderedCollection new.
 	classes add: aClass.
 	currentSuperclass := aClass superclass.

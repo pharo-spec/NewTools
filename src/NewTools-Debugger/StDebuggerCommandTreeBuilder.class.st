@@ -69,6 +69,11 @@ StDebuggerCommandTreeBuilder >> buildDebuggerCommandGroup [
 	self subclassResponsibility 
 ]
 
+{ #category : #building }
+StDebuggerCommandTreeBuilder >> buildSpecCommand: aCommandClass forContext: anObject [
+	^ aCommandClass forSpecContext: anObject
+]
+
 { #category : #accessing }
 StDebuggerCommandTreeBuilder >> displayStrategy [
 	^self class displayStrategy new

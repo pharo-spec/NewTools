@@ -31,6 +31,12 @@ StReturnValueDebugCommand class >> defaultShortcut [
 	^ nil
 ]
 
+{ #category : #accessing }
+StReturnValueDebugCommand >> canBeExecuted [
+	"I can always return from a context, for ex. if I'm stuck because of a DNU."
+	^ true
+]
+
 { #category : #actions }
 StReturnValueDebugCommand >> execute [
 	self debugger returnEnteredValue

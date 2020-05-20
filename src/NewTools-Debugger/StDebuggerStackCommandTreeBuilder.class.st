@@ -50,9 +50,9 @@ StDebuggerStackCommandTreeBuilder >> buildDebuggerCommandGroup [
 ]
 
 { #category : #building }
-StDebuggerStackCommandTreeBuilder >> navigationCommand: aCommandClass forContext: anObject [
+StDebuggerStackCommandTreeBuilder >> buildSpecCommand: aCommandClass forContext: anObject [
 	| cmd |
-	cmd := aCommandClass forSpecContext: anObject.
+	cmd := super buildSpecCommand: aCommandClass forContext: anObject.
 	cmd name: aCommandClass shortName.
 	^ cmd
 ]
@@ -75,7 +75,7 @@ StDebuggerStackCommandTreeBuilder >> stackContextMenuActionsCommands [
 	self stackActionsCommandsClasses
 		do: [ :cmdClass | 
 			group
-				register: (self navigationCommand: cmdClass forContext: stDebuggerInstance) ].
+				register: (self buildSpecCommand: cmdClass forContext: stDebuggerInstance) ].
 	^ group
 ]
 
@@ -114,14 +114,14 @@ StDebuggerStackCommandTreeBuilder >> stackContextMenuExplorationCommands [
 			group
 				register:
 					(self
-						navigationCommand: cmdClass
+						buildSpecCommand: cmdClass
 						forContext: stDebuggerInstance stackSelectionReceiverClassContext) ].
 	self stackReceiverExplorationCommandsClasses
 		do: [ :cmdClass | 
 			group
 				register:
 					(self
-						navigationCommand: cmdClass
+						buildSpecCommand: cmdClass
 						forContext: stDebuggerInstance stackSelectionReceiverContext) ].
 	^ group
 ]
@@ -145,7 +145,7 @@ StDebuggerStackCommandTreeBuilder >> stackContextMenuStackEditionsCommands [
 	self stackEditionCommandsClasses
 		do: [ :cmdClass | 
 			group
-				register: (self navigationCommand: cmdClass forContext: stDebuggerInstance) ].
+				register: (self buildSpecCommand: cmdClass forContext: stDebuggerInstance) ].
 	^ group
 ]
 
@@ -228,7 +228,7 @@ StDebuggerStackCommandTreeBuilder >> stackMethodNavigationCommands [
 			group
 				register:
 					(self
-						navigationCommand: navCmdClass
+						buildSpecCommand: navCmdClass
 						forContext: stDebuggerInstance stackSelectionMethodContext) ].
 	^ group
 ]
@@ -260,7 +260,7 @@ StDebuggerStackCommandTreeBuilder >> stackMethodSelectorNavigationCommands [
 			group
 				register:
 					(self
-						navigationCommand: navCmdClass
+						buildSpecCommand: navCmdClass
 						forContext: stDebuggerInstance stackSelectionMethodSelectorContext) ].
 	^ group
 ]
@@ -291,7 +291,7 @@ StDebuggerStackCommandTreeBuilder >> stackReceiverClassNavigationCommands [
 			group
 				register:
 					(self
-						navigationCommand: navCmdClass
+						buildSpecCommand: navCmdClass
 						forContext: stDebuggerInstance stackSelectionReceiverClassContext) ].
 	^ group
 ]
