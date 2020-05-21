@@ -109,10 +109,18 @@ StInspector class >> registerToolsOn: registry [
 	registry register: self as: #inspector
 ]
 
-{ #category : #initialization }
+{ #category : #transmission }
 StInspector >> defaultInputPort [
 
 	^ self inputModelPort
+]
+
+{ #category : #'api-focus' }
+StInspector >> defaultKeyboardFocus [
+
+	^ millerList presenters 
+		ifNotEmpty: [ :list | list first ] 
+		ifEmpty: [ self ]
 ]
 
 { #category : #initialization }
@@ -133,12 +141,14 @@ StInspector >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		title: self model windowTitle;
 		initialExtent: self class preferredExtent;
-		whenOpenedDo: [ self startStepping ];
+		whenOpenedDo: [ 
+			self startStepping.
+			self takeKeyboardFocus ];
 		whenClosedDo: [ self stopStepping ];
 		whenResizingDo: [ :ann | self class preferredExtent: ann newSize ]
 ]
 
-{ #category : #initialization }
+{ #category : #transmission }
 StInspector >> inputModelPort [
 
 	^ SpModelPort newPresenter: self
