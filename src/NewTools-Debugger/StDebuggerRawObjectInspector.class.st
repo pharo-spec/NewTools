@@ -41,3 +41,9 @@ StDebuggerRawObjectInspector >> initializePresenters [
 StDebuggerRawObjectInspector >> rawInspectorPageOrNil [
 	^raw
 ]
+
+{ #category : #stepping }
+StDebuggerRawObjectInspector >> step [
+	super step.
+	raw step
+]

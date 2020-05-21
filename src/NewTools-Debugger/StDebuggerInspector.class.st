@@ -129,6 +129,11 @@ StDebuggerInspector >> setModelBeforeInitialization: aModel [
 	model := aModel
 ]
 
+{ #category : #stepping }
+StDebuggerInspector >> step [
+	inspector step
+]
+
 { #category : #updating }
 StDebuggerInspector >> updateEvaluationPaneReceiver [
 
@@ -142,15 +147,14 @@ StDebuggerInspector >> updateEvaluationPaneReceiver [
 { #category : #updating }
 StDebuggerInspector >> updateWith: inspectedObject [
 	| oldContext newContext |
-	oldContext := self model inspectedObject ifNotNil: [ :dbgCtx | 
-		              dbgCtx context ].
+	oldContext := self model inspectedObject
+		ifNotNil: [ :dbgCtx | dbgCtx context ].
 	newContext := inspectedObject ifNotNil: [ :dbgCtx | dbgCtx context ].
-	(oldContext notNil and: [ newContext notNil ]) ifTrue: [ 
-		(oldContext receiver == newContext receiver and: [ 
-			 oldContext selector == newContext selector ]) ifTrue: [ 
-			self flag: 'Why do we need to force update of the raw inspection? Disabling it seems to not have an impact. Keep an eye on it.'.
-			"self forceRawInspectionUpdate."
-			^ self ] ].
+	(oldContext notNil and: [ newContext notNil ])
+		ifTrue: [ (oldContext receiver == newContext receiver
+				and: [ oldContext selector == newContext selector ])
+				ifTrue: [ self step.
+					^ self ] ].
 	self saveRawInspectionSelectionForContext: oldContext.
 	self model: (StDebuggerInspectorModel on: inspectedObject).
 	self updateEvaluationPaneReceiver.

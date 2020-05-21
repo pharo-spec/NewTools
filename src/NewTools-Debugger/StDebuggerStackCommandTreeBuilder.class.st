@@ -4,7 +4,7 @@ The command classes I instantiate are specified under the ""accessing - commands
 The group names and descriptions are specified under the ""accessing"" protocol.
 
 You can evolve the default groups names and descriptions and the default command classes, but you cannot extend me.
-Using me to add command in the tree makes them default for the debugger stack presente.
+Using me to add command in the tree makes them default for the debugger stack presenter.
 "
 Class {
 	#name : #StDebuggerStackCommandTreeBuilder,
@@ -29,7 +29,7 @@ StDebuggerStackCommandTreeBuilder class >> groupName [
 
 { #category : #accessing }
 StDebuggerStackCommandTreeBuilder >> browseGroupDescription [
-	^ 'Navigate the system from the stack.'
+	^ 'Navigate the system from the stack'
 ]
 
 { #category : #accessing }
@@ -50,9 +50,9 @@ StDebuggerStackCommandTreeBuilder >> buildDebuggerCommandGroup [
 ]
 
 { #category : #building }
-StDebuggerStackCommandTreeBuilder >> navigationCommand: aCommandClass forContext: anObject [
+StDebuggerStackCommandTreeBuilder >> buildSpecCommand: aCommandClass forContext: anObject [
 	| cmd |
-	cmd := aCommandClass forSpecContext: anObject.
+	cmd := super buildSpecCommand: aCommandClass forContext: anObject.
 	cmd name: aCommandClass shortName.
 	^ cmd
 ]
@@ -75,13 +75,13 @@ StDebuggerStackCommandTreeBuilder >> stackContextMenuActionsCommands [
 	self stackActionsCommandsClasses
 		do: [ :cmdClass | 
 			group
-				register: (self navigationCommand: cmdClass forContext: stDebuggerInstance) ].
+				register: (self buildSpecCommand: cmdClass forContext: stDebuggerInstance) ].
 	^ group
 ]
 
 { #category : #accessing }
 StDebuggerStackCommandTreeBuilder >> stackContextMenuActionsDescription [
-	^ 'Actions on the selected context.'
+	^ 'Actions on the selected context'
 ]
 
 { #category : #accessing }
@@ -114,21 +114,21 @@ StDebuggerStackCommandTreeBuilder >> stackContextMenuExplorationCommands [
 			group
 				register:
 					(self
-						navigationCommand: cmdClass
+						buildSpecCommand: cmdClass
 						forContext: stDebuggerInstance stackSelectionReceiverClassContext) ].
 	self stackReceiverExplorationCommandsClasses
 		do: [ :cmdClass | 
 			group
 				register:
 					(self
-						navigationCommand: cmdClass
+						buildSpecCommand: cmdClass
 						forContext: stDebuggerInstance stackSelectionReceiverContext) ].
 	^ group
 ]
 
 { #category : #accessing }
 StDebuggerStackCommandTreeBuilder >> stackContextMenuExplorationDescription [
-	^ 'Explore the receiver object''s graph.'
+	^ 'Explore the receiver object''s graph'
 ]
 
 { #category : #accessing }
@@ -145,7 +145,7 @@ StDebuggerStackCommandTreeBuilder >> stackContextMenuStackEditionsCommands [
 	self stackEditionCommandsClasses
 		do: [ :cmdClass | 
 			group
-				register: (self navigationCommand: cmdClass forContext: stDebuggerInstance) ].
+				register: (self buildSpecCommand: cmdClass forContext: stDebuggerInstance) ].
 	^ group
 ]
 
@@ -199,7 +199,7 @@ StDebuggerStackCommandTreeBuilder >> stackExplorationCommandsClasses [
 
 { #category : #accessing }
 StDebuggerStackCommandTreeBuilder >> stackGroupDescription [
-	^ 'Stack edition.'
+	^ 'Stack edition'
 ]
 
 { #category : #accessing }
@@ -228,7 +228,7 @@ StDebuggerStackCommandTreeBuilder >> stackMethodNavigationCommands [
 			group
 				register:
 					(self
-						navigationCommand: navCmdClass
+						buildSpecCommand: navCmdClass
 						forContext: stDebuggerInstance stackSelectionMethodContext) ].
 	^ group
 ]
@@ -260,7 +260,7 @@ StDebuggerStackCommandTreeBuilder >> stackMethodSelectorNavigationCommands [
 			group
 				register:
 					(self
-						navigationCommand: navCmdClass
+						buildSpecCommand: navCmdClass
 						forContext: stDebuggerInstance stackSelectionMethodSelectorContext) ].
 	^ group
 ]
@@ -291,7 +291,7 @@ StDebuggerStackCommandTreeBuilder >> stackReceiverClassNavigationCommands [
 			group
 				register:
 					(self
-						navigationCommand: navCmdClass
+						buildSpecCommand: navCmdClass
 						forContext: stDebuggerInstance stackSelectionReceiverClassContext) ].
 	^ group
 ]

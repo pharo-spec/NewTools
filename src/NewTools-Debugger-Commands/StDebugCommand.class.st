@@ -31,14 +31,6 @@ StDebugCommand class >> forSpecContext: anObject [
 		yourself
 ]
 
-{ #category : #'instance creation' }
-StDebugCommand class >> preDebugCommandsForDebugger: debugger [
-	
-	^ self
-		instantiateCommandsFromPragma: #PreDebugCommand
-		for: debugger
-]
-
 { #category : #default }
 StDebugCommand class >> shortName [
 	^self defaultName
@@ -72,8 +64,12 @@ StDebugCommand >> appliesTo: aDebugger [
 
 { #category : #testing }
 StDebugCommand >> appliesToDebugger: aDebugger [
+	^ aDebugger session isInterruptedContextDoesNotUnderstand not
+]
 
-	^ true
+{ #category : #accessing }
+StDebugCommand >> canBeExecuted [ 
+	^self appliesToDebugger: self debugger
 ]
 
 { #category : #accessing }

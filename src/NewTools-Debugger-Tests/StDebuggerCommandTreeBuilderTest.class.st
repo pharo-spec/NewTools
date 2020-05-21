@@ -22,7 +22,7 @@ StDebuggerCommandTreeBuilderTest >> testDisplayStrategy [
 StDebuggerCommandTreeBuilderTest >> testGroup [
 	|rootGroup|
 	rootGroup := (CmCommandGroup named: 'root') asSpecGroup.
-	builder buildCommandsGroupWith: SpecDebugger basicNew forRoot: rootGroup.
+	builder buildCommandsGroupWith: StDebugger basicNew forRoot: rootGroup.
 	self assert: builder group identicalTo: rootGroup / builder class groupName.
 	self assert: builder group name equals: builder class groupName.
 	self assert: builder group description equals: builder class groupDescription
@@ -32,7 +32,7 @@ StDebuggerCommandTreeBuilderTest >> testGroup [
 StDebuggerCommandTreeBuilderTest >> testGroupBuilding [
 	|rootGroup|
 	rootGroup := (CmCommandGroup named: 'root') asSpecGroup.
-	builder buildCommandsGroupWith: SpecDebugger basicNew forRoot: rootGroup.
+	builder buildCommandsGroupWith: StDebugger basicNew forRoot: rootGroup.
 	builder buildAndRegisterGroup.
 	self assert: rootGroup groups size equals: 1.
 	self assert: rootGroup groups first identicalTo: rootGroup / builder class groupName.
