@@ -16,16 +16,16 @@ StDebuggerToolbarCommandTreeBuilderTest >> testBuildCommandGroupFromNamedDescrip
 	| group spCommands |
 	group := builder
 		buildCommandGroupFrom:
-			{StepIntoDebugCommand.
-			StepOverDebugCommand}
+			{StMockDebugCommand.
+			StMockDebugCommand}
 		named: #testName
 		description: #testDescription.
 	self assert: group name equals: #testName.	
 	self assert: group description equals: #testDescription.
 	spCommands := group allCommands.
 	self assert: spCommands size equals: 2.
-	self assert: spCommands first decoratedCommand class equals: StepIntoDebugCommand.
-	self assert: spCommands second decoratedCommand class equals: StepOverDebugCommand.
+	self assert: spCommands first decoratedCommand class equals: StMockDebugCommand.
+	self assert: spCommands second decoratedCommand class equals: StMockDebugCommand.
 	self assert: spCommands first context identicalTo: debugger.
 	self assert: spCommands second context identicalTo: debugger
 ]
