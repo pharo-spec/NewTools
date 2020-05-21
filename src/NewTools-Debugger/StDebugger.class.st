@@ -342,7 +342,7 @@ StDebugger class >> defaultTitle [
 { #category : #settings }
 StDebugger class >> displayInspectorHeaderBar [
 	self flag: 'Temporary hack to disable header bars on inspectors'.
-	^"(self usingSpecSelector = #debuggerNoHeadersWithExtensionsSpec) not"false
+	^"(self usingSpecSelector = #debuggerNoHeadersWithExtensionsSpec) not"true
 ]
 
 { #category : #'tools registry' }
@@ -1106,6 +1106,7 @@ StDebugger >> updateExtensionsFrom: newSession [
 
 { #category : #'updating widgets' }
 StDebugger >> updateInspectorFromContext: aContext [
+	
 	inspector
 		updateWith:
 			(StDebuggerContext
@@ -1135,7 +1136,6 @@ StDebugger >> updateStackFromSession: aSession [
 
 { #category : #'updating actions' }
 StDebugger >> updateStep [
-	self updateInspectorFromContext: self context.
 	self updateStackFromSession: self session.
 	self updateCodeHeaderLabel.
 	self updateExtensionsFrom: self session.

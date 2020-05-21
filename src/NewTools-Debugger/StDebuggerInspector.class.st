@@ -129,6 +129,11 @@ StDebuggerInspector >> setModelBeforeInitialization: aModel [
 	model := aModel
 ]
 
+{ #category : #stepping }
+StDebuggerInspector >> step [
+	inspector step
+]
+
 { #category : #updating }
 StDebuggerInspector >> updateEvaluationPaneReceiver [
 
@@ -148,9 +153,7 @@ StDebuggerInspector >> updateWith: inspectedObject [
 	(oldContext notNil and: [ newContext notNil ])
 		ifTrue: [ (oldContext receiver == newContext receiver
 				and: [ oldContext selector == newContext selector ])
-				ifTrue: [ 
-					self flag: 'If we do not update manually, the inspector view is not updated. Why?'.
-					self update.
+				ifTrue: [ self step.
 					^ self ] ].
 	self saveRawInspectionSelectionForContext: oldContext.
 	self model: (StDebuggerInspectorModel on: inspectedObject).
