@@ -530,11 +530,6 @@ StDebugger class >> usingSpecSelector: aSelector [
 	UsingSpecSelector := StDebuggerUsingSpecSelector on: aSelector
 ]
 
-{ #category : #accessing }
-StDebugger >> application [
-	^ self class currentApplication
-]
-
 { #category : #commands }
 StDebugger >> buildContextMenus [
 	| debuggerCommandGroup stackGroup |
