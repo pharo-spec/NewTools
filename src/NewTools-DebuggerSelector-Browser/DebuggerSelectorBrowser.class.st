@@ -119,5 +119,5 @@ DebuggerSelectorBrowser >> refreshDebuggerListToolBar [
 
 { #category : #refresh }
 DebuggerSelectorBrowser >> updateDebuggerTable [
-	debuggerTable items: OldDebuggerSelector availableDebuggers
+	debuggerTable items: DebuggerSelector availableDebuggers
 ]

@@ -44,7 +44,9 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ];
 			package: 'NewTools-Sindarin-ProcessInspector' with: [ spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ];
 			"Debugger Selector"
-			package: 'NewTools-DebuggerSelector' with: [ spec requires: #('NewTools-SpTextPresenterDecorators') ];
+			package: 'NewTools-DebuggerSelector' with: [ spec requires: #('NewTools-DebuggerSelector-Extensions' 'NewTools-SpTextPresenterDecorators') ];
+			package: 'NewTools-DebuggerSelector-Browser' with: [ spec requires: 'NewTools-DebuggerSelector' ];
+			package: 'NewTools-DebuggerSelector-Extensions';
 			package: 'NewTools-DebuggerSelector-Tests' with: [ spec requires: #('NewTools-DebuggerSelector') ].
 		
 		spec
@@ -60,7 +62,7 @@ BaselineOfNewTools >> baseline: spec [
 				'NewTools-Sindarin-Tools'
 				'NewTools-Sindarin-ProcessInspector');
 			group: #development with: #(default
-				'NewTools-DebuggerSelector' 'NewTools-DebuggerSelector-Tests');
+				'NewTools-DebuggerSelector' 'NewTools-DebuggerSelector-Browser' 'NewTools-DebuggerSelector-Tests');
 			group: #broken with: #('NewTools-FileDialog' 'NewTools-FileDialog-Tests')
 	]
 ]
