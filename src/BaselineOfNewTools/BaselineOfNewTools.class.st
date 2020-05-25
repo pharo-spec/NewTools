@@ -44,11 +44,11 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ];
 			package: 'NewTools-Sindarin-ProcessInspector' with: [ spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ];
 			"Debugger Selector"
-			package: 'NewTools-DebuggerSelector' with: [ spec requires: #('NewTools-DebuggerSelector-Extensions' 'NewTools-SpTextPresenterDecorators') ];
+			package: 'NewTools-DebuggerSelector' with: [ spec requires: #('NewTools-SpTextPresenterDecorators') ];
 			package: 'NewTools-DebuggerSelector-Browser' with: [ spec requires: 'NewTools-DebuggerSelector' ];
-			package: 'NewTools-DebuggerSelector-Extensions';
+			package: 'NewTools-DebuggerSelector-Extensions' with: [ spec requires: #('NewTools-DebuggerSelector') ];
 			package: 'NewTools-DebuggerSelector-Tests' with: [ spec requires: #('NewTools-DebuggerSelector') ].
-		
+
 		spec
 			group: #default with: #(
 				'NewTools-Core' 'NewTools-Morphic' 'NewTools-Gtk'
@@ -62,7 +62,7 @@ BaselineOfNewTools >> baseline: spec [
 				'NewTools-Sindarin-Tools'
 				'NewTools-Sindarin-ProcessInspector');
 			group: #development with: #(default
-				'NewTools-DebuggerSelector' 'NewTools-DebuggerSelector-Browser' 'NewTools-DebuggerSelector-Tests');
+				'NewTools-DebuggerSelector' 'NewTools-DebuggerSelector-Browser' 'NewTools-DebuggerSelector-Extensions' 'NewTools-DebuggerSelector-Tests');
 			group: #broken with: #('NewTools-FileDialog' 'NewTools-FileDialog-Tests')
 	]
 ]
@@ -70,15 +70,15 @@ BaselineOfNewTools >> baseline: spec [
 { #category : #dependencies }
 BaselineOfNewTools >> sindarin: spec [
 
-	spec 
-		baseline: 'Sindarin' 
+	spec
+		baseline: 'Sindarin'
 		with: [ spec repository: 'github://dupriezt/ScriptableDebugger' ]
 ]
 
 { #category : #dependencies }
 BaselineOfNewTools >> spec: spec [
 
-	spec 
+	spec
 		baseline: 'Spec2'
 		with: [ spec repository: 'github://pharo-spec/Spec:master/src' ]
 ]
@@ -86,7 +86,7 @@ BaselineOfNewTools >> spec: spec [
 { #category : #dependencies }
 BaselineOfNewTools >> taskit: spec [
 
-	spec 
-		baseline: 'TaskIt' 
+	spec
+		baseline: 'TaskIt'
 		with: [ spec repository: 'github://sbragagnolo/taskit' ]
 ]
