@@ -60,7 +60,7 @@ StSindarinDebuggerPresenter >> initializePresenter [
 					inspector model: node.
 					inspector setAttributeTable.
 					currentNodeSource text: node source.
-					currentNodeSource behavior: node methodNode methodClass.
+					currentNodeSource beForBehavior: node methodNode methodClass.
 					currentNodeSource selectionInterval: (node start to: node stop).
 					currentNodeSource
 						doItReceiver: selection selectedItem home receiver;
@@ -73,7 +73,7 @@ StSindarinDebuggerPresenter >> initializePresenter [
 		whenBuiltDo: [ :ann | ann widget font: StandardFonts codeFont ].
 	currentNodeSource withSyntaxHighlight.
 	currentNodeSource text: self model node source.
-	currentNodeSource behavior: self model method methodClass.
+	currentNodeSource beForBehavior: self model method methodClass.
 	stack selectIndex: 1.
 	toolbar := self buildToolBar
 ]

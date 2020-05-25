@@ -46,7 +46,7 @@ FBFlagPresentationPresenter >> initializePresenter [
 		transform: #sourceCode
 		postTransmission: [ :destination :origin :location | 
 			destination
-				behavior: location classLocation;
+				beForMethod: location compiledMethod;
 				selectionInterval: location interval ]
 ]
 

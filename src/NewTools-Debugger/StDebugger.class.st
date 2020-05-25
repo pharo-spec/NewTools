@@ -300,10 +300,10 @@ StDebugger class >> debuggerWithoutExtensionsSpec [
 				position: 30 percent;				
 				add:
 					(SpBoxLayout newVertical
-						"add: #stackHeader
+						add: #stackHeader
 							expand: false
 							fill: false
-							padding: 5;"
+							padding: 5;
 						add: #stackTable;
 						yourself);
 				add:
@@ -311,10 +311,10 @@ StDebugger class >> debuggerWithoutExtensionsSpec [
 						add:
 							(SpBoxLayout newVertical
 								add: #toolbar;
-								"add: #codeHeader
+								add: #codeHeader
 									expand: true
 									fill: true
-									padding: 0;"
+									padding: 0;
 								yourself)
 							withConstraints: [ :constraints | 
 								constraints
@@ -533,15 +533,17 @@ StDebugger class >> usingSpecSelector: aSelector [
 { #category : #commands }
 StDebugger >> buildContextMenus [
 	| debuggerCommandGroup stackGroup |
+
 	debuggerCommandGroup := self rootCommandsGroup.
-	stackGroup := debuggerCommandGroup
-		/ StDebuggerStackCommandTreeBuilder groupName.
+	stackGroup := debuggerCommandGroup / StDebuggerStackCommandTreeBuilder groupName.
 	stackTable contextMenu: [ stackGroup beRoot asMenuPresenter ].
-	toolbarCommandGroup := debuggerCommandGroup
-		/ StDebuggerToolbarCommandTreeBuilder groupName.
+	
+	toolbarCommandGroup := debuggerCommandGroup / StDebuggerToolbarCommandTreeBuilder groupName.
+	
 	SpToolBarPresenterBuilder new
 		toolbarPresenter: toolbar;
 		visit: toolbarCommandGroup.
+	
 	self updateToolbarDebugActions
 ]
 
@@ -558,9 +560,9 @@ StDebugger >> clear [
 StDebugger >> clearCode [
 	
 	self code
-		text: '';
-		behavior: nil;
-		setSelection: (1 to: 0)
+		clearInteractionModel;
+		clearSelection;
+		clearContent
 ]
 
 { #category : #actions }
@@ -1037,18 +1039,14 @@ StDebugger >> updateCodeFromContext [
 
 { #category : #'updating widgets' }
 StDebugger >> updateCodeFromContext: aContext [
-	| selectionInterval home behavior|
+	| selectionInterval |
 
 	aContext ifNil: [ ^ self clearCode ].
 
 	selectionInterval := self session selectedCodeRangeForContext: aContext.
-	home := aContext home.
-	behavior := home receiver class.
-	
-	aContext sourceCode = self code text ifFalse:[self code	text: aContext sourceCode].
-	self code doItReceiver: home receiver.
-	self code	doItContext: aContext.
-	behavior = self code behavior ifFalse:[self code behavior: behavior].	
+	aContext sourceCode = self code text 
+		ifFalse: [ self code text: aContext sourceCode ].
+	self code beForContext: aContext.
 	self code selectionInterval: selectionInterval.
 	
 	self flag: #DBG, 'the following leaves highlighted text everywhere when the code pane is not updated.'
@@ -1163,6 +1161,7 @@ StDebugger >> updateTitle [
 
 { #category : #'updating widgets' }
 StDebugger >> updateToolbarDebugActions [
+	
 	toolbarCommandGroup allCommands
 		do: [ :spCommand | spCommand updateEnableStatus ]
 ]

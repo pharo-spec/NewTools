@@ -136,12 +136,12 @@ StDebuggerInspector >> step [
 
 { #category : #updating }
 StDebuggerInspector >> updateEvaluationPaneReceiver [
-
-	|receiver evaluator|
-	receiver := self model inspectedObject context receiver.
+	| context evaluator |
+	
+	context := self model inspectedObject context.
 	evaluator := inspector millerList presenters first evaluator.
-	evaluator doItReceiver: receiver.
-	evaluator behavior: receiver class.
+
+	evaluator beForContextReceiver: context
 ]
 
 { #category : #updating }

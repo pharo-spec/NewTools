@@ -221,7 +221,7 @@ StSystemBrowser >> newDefinitionFor: aModel [
 
 	^ self newCode
 		text: aModel definition;
-		behavior: aModel behavior;
+		in: [ :this | aModel installInteractionModelTo: this ];
 		yourself
 ]
 

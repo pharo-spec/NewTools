@@ -53,7 +53,7 @@ StPlaygroundBindingsPresenter class >> unselectedMessage [
 { #category : #accessing }
 StPlaygroundBindingsPresenter >> bindings [
 
-	^ parent bindings
+	^ parent interactionModel bindings
 ]
 
 { #category : #private }

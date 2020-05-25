@@ -29,6 +29,12 @@ StSBMethodModel >> definition [
 ]
 
 { #category : #accessing }
+StSBMethodModel >> installInteractionModelTo: aCodePresenter [
+
+	aCodePresenter beForMethod: self method
+]
+
+{ #category : #accessing }
 StSBMethodModel >> method [
 	^ method
 ]

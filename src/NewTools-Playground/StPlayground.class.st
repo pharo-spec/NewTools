@@ -164,41 +164,6 @@ StPlayground class >> showLineNumbers: aBoolean [
 	ShowLineNumbers := aBoolean
 ]
 
-{ #category : #binding }
-StPlayground >> addBinding: aBinding [
-
-	(self isGlobalVariable: aBinding key) ifTrue: [ ^ self ].
-	bindings add: aBinding
-]
-
-{ #category : #binding }
-StPlayground >> bindingOf: aString [
-
-	"prevent the case when a tool (like completion) asks for a global binding"
-	(self class bindingOf: aString) ifNotNil: [ :aBinding | ^ aBinding ].
-	"if there is no binding, I will include a key"
-	(self bindings includesKey: aString)
-		ifFalse: [ self addBinding: (WorkspaceVariable key: aString asSymbol) ].
-	^ self bindings associationAt: aString
-]
-
-{ #category : #binding }
-StPlayground >> bindings [
-	"Combining shared bindings and local bindings needs to be done like this because the 
-	 #add: method of Dictionary stores the whole association (which in this case is a 
-	 WorkspaceVariable and we need that. #at:put: cannot be used because it will create 
-	 an Association and want to keep the WorkspaceVariable."
-	| joinedBindings |
-	
-	"just a small optimisation"
-	self application sharedBindings ifEmpty: [ ^ bindings ].
-	
-	joinedBindings := self application sharedBindings copy.
-	bindings associations 
-		do: [ :each | joinedBindings add: each ].
-	^ joinedBindings
-]
-
 { #category : #'private builder' }
 StPlayground >> buildMenu [
 	| menuSpec |
@@ -253,35 +218,9 @@ StPlayground >> defaultKeyboardFocus [
 	^ text
 ]
 
-{ #category : #binding }
-StPlayground >> doItContext [
-
-	^ nil
-]
-
-{ #category : #binding }
-StPlayground >> doItReceiver [
-
-	^ nil
-]
-
-{ #category : #binding }
-StPlayground >> hasBindingOf: aString [
-
-	^ self bindings includesKey: aString asSymbol
-]
-
-{ #category : #binding }
-StPlayground >> hasBindingThatBeginsWith: aString [
-
-	^ self variableBindingNames 
-		anySatisfy: [ :each | each beginsWith: aString ]
-]
-
 { #category : #initialization }
 StPlayground >> initialize [
 
-	self setBindings: Dictionary new.
 	page := StPlaygroundPage new.
 	super initialize
 ]
@@ -290,16 +229,10 @@ StPlayground >> initialize [
 StPlayground >> initializePresenters [
 	
 	text := self newCode
+		interactionModel: StPlaygroundInteractionModel new;
 		lineNumbers: self showLineNumbers;
 		contextMenu: [ self menuActions asMenuPresenter ];
 		contextKeyBindings: self menuActions asKMCategory;
-		interactionModel: self;
-		completionEngine: (SpCodeCompletionEngine new 
-			scripting: true;
-			doItRequestor: self;
-			doItContext: self doItContext;
-			completionClass: self selectedClassOrMetaClass;
-			yourself);
 		whenTextChangedDo: [ :aString | page contents: aString ];
 		yourself.
 		
@@ -327,10 +260,10 @@ StPlayground >> initializeWindow: aWindowPresenter [
 
 ]
 
-{ #category : #private }
-StPlayground >> isGlobalVariable: aSymbol [
+{ #category : #accessing }
+StPlayground >> interactionModel [
 
-	^ (self class environment classNamed: aSymbol) notNil
+	^ text interactionModel
 ]
 
 { #category : #actions }
@@ -366,35 +299,16 @@ StPlayground >> page [
 	^ page
 ]
 
-{ #category : #binding }
-StPlayground >> removeBinding: aBinding [
- 
-	bindings removeKey: aBinding key
-]
-
 { #category : #accessing }
 StPlayground >> selectAll [
 	
 	^ text selectAll
 ]
 
-{ #category : #binding }
-StPlayground >> selectedClassOrMetaClass [
-
-	^ nil
-]
-
 { #category : #accessing }
 StPlayground >> selectedTextOrLine [
 	
 	^ text selectedTextOrLine
-]
-
-{ #category : #accessing }
-StPlayground >> setBindings: aDictionary [
-	"Sets the Workspace to use the specified dictionary as its namespace"
-
-	bindings := aDictionary
 ]
 
 { #category : #private }
@@ -430,7 +344,7 @@ StPlayground >> toolbarActions [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : #'private updating' }
 StPlayground >> updateLineNumber [
 	| pos |
 	
@@ -441,16 +355,10 @@ StPlayground >> updateLineNumber [
 		ifNil: [ '' ])
 ]
 
-{ #category : #initialization }
+{ #category : #'private updating' }
 StPlayground >> updatePresenter [
 
 	self updateLineNumber
-]
-
-{ #category : #accessing }
-StPlayground >> variableBindingNames [
-	
-	^ self bindings keys
 ]
 
 { #category : #initialization }
