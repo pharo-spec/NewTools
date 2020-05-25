@@ -1,3 +1,6 @@
+"
+Debugger command tree builder mock to test general behavior outside of a debugger
+"
 Class {
 	#name : #StDebuggerMockCommandTreeBuilder,
 	#superclass : #StDebuggerCommandTreeBuilder,

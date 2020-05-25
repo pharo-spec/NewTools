@@ -428,6 +428,11 @@ StDebuggerTest >> testStackTableWithNewSession [
 				identicalTo: session shortStack first
 ]
 
+{ #category : #'tests - toolbar' }
+StDebuggerTest >> testToolbarDependingOnContext [
+	self fail
+]
+
 { #category : #'tests - code pane' }
 StDebuggerTest >> testUnauthorizedCodeModification [
 	self assert: false

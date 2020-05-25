@@ -112,11 +112,6 @@ StDebuggerToolbarCommandTreeBuilder >> defaultDebugActionsGroupName [
 	^'Debugging actions'
 ]
 
-{ #category : #deprecated }
-StDebuggerToolbarCommandTreeBuilder >> defaultDebugCommands [
-	^ StDebugCommand toolbarCommandsForDebugger: stDebuggerInstance
-]
-
 { #category : #'accessing - commands classes' }
 StDebuggerToolbarCommandTreeBuilder >> executionControlCommandClasses [
 	^ {
@@ -146,16 +141,4 @@ StDebuggerToolbarCommandTreeBuilder >> executionControlGroupDescription [
 { #category : #accessing }
 StDebuggerToolbarCommandTreeBuilder >> executionControlGroupName [
 	^'Execution control'
-]
-
-{ #category : #deprecated }
-StDebuggerToolbarCommandTreeBuilder >> toolbarDefaultDebuggingCommands [
-	| group |
-	group := (CmCommandGroup named: self defaultDebugActionsGroupName)
-		asSpecGroup.
-	group beDisplayedAsGroup.
-	group description: self defaultDebugActionsDescription.
-	group iconName: #smallDebug.
-	self defaultDebugCommands do: [ :cmd | group register: cmd ].
-	^ group
 ]
