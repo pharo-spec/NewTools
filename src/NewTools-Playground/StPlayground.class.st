@@ -111,7 +111,8 @@ StPlayground class >> defaultTitle [
 
 { #category : #'instance creation' }
 StPlayground class >> open [ 
-
+	<script>
+	
 	^ self new openWithSpec
 ]
 
