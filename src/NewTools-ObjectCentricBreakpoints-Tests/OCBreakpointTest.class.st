@@ -6,7 +6,7 @@ Class {
 		'object2',
 		'breakpoint'
 	],
-	#category : #'NewTools-ObjectCentricBreakpointsTests'
+	#category : #'NewTools-ObjectCentricBreakpoints-Tests'
 }
 
 { #category : #helpers }

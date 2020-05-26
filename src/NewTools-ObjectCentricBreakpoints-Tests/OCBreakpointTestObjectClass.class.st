@@ -5,7 +5,7 @@ Class {
 		'ivar',
 		'ivar2'
 	],
-	#category : #'NewTools-ObjectCentricBreakpointsTests'
+	#category : #'NewTools-ObjectCentricBreakpoints-Tests'
 }
 
 { #category : #initialization }
