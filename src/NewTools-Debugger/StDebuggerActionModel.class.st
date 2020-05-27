@@ -15,6 +15,14 @@ StDebuggerActionModel class >> on: aStDebugger [
 	^ self new debugger: aStDebugger
 ]
 
+{ #category : #'debug actions' }
+StDebuggerActionModel >> copyStackToClipboard [
+	Clipboard
+		clipboardText:
+			(String
+				streamContents: [ :s | self interruptedContext shortDebugStackOn: s ])
+]
+
 { #category : #accessing }
 StDebuggerActionModel >> currentContext [
 	^ self debugger currentContext

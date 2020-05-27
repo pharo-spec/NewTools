@@ -1,3 +1,6 @@
+"
+Requests the debugger to copy its stack on the Clipboard
+"
 Class {
 	#name : #StCopyStackToClipboardDebugCommand,
 	#superclass : #StDebugCommand,
@@ -25,7 +28,6 @@ StCopyStackToClipboardDebugCommand class >> defaultShortcut [
 ]
 
 { #category : #hooks }
-StCopyStackToClipboardDebugCommand >> execute [	
-	Clipboard clipboardText: (String streamContents: [ :s| 
-		self debugger interruptedContext shortDebugStackOn: s ])
+StCopyStackToClipboardDebugCommand >> execute [
+	self debugger copyStackToClipboard
 ]
