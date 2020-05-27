@@ -566,7 +566,7 @@ StDebugger >> clearCode [
 		clearContent
 ]
 
-{ #category : #actions }
+{ #category : #opening }
 StDebugger >> close [
 	self withWindowDo: #close
 ]
