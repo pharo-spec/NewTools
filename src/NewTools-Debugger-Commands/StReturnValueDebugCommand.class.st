@@ -1,3 +1,6 @@
+"
+Requests the debugger to return from the current context with the result of the evaluation of a user-defined expression.
+"
 Class {
 	#name : #StReturnValueDebugCommand,
 	#superclass : #StDebugCommand,

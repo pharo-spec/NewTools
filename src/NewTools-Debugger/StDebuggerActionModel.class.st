@@ -66,6 +66,17 @@ StDebuggerActionModel >> restartContext: aContext [
 ]
 
 { #category : #'debug - execution' }
+StDebuggerActionModel >> returnValueFromExpression: aString [
+	| value |
+	value := self debugger class compiler
+		source: aString;
+		context: self currentContext;
+		receiver: self currentContext receiver;
+		evaluate.
+	self session returnValue: value from: self currentContext
+]
+
+{ #category : #'debug - execution' }
 StDebuggerActionModel >> runToSelection: aSelectionInterval inContext: aContext [
 	self session runToSelection: aSelectionInterval inContext: aContext
 ]
