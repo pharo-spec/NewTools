@@ -1,3 +1,6 @@
+"
+Requests the debugger to file out the method of the selected context in the stack
+"
 Class {
 	#name : #StFileOutMethodDebugCommand,
 	#superclass : #StDebugCommand,
@@ -26,6 +29,5 @@ StFileOutMethodDebugCommand class >> defaultShortcut [
 
 { #category : #actions }
 StFileOutMethodDebugCommand >> execute [
-	
-	self context fileOutSelectedContext
+	self debugger fileOutSelectedContext
 ]

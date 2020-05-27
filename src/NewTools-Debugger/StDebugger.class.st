@@ -645,10 +645,8 @@ StDebugger >> extensionTools [
 
 { #category : #actions }
 StDebugger >> fileOutSelectedContext [
-	| selectedContextMethod |
-	selectedContextMethod := stackTable selection selectedItem method.
-	selectedContextMethod methodClass
-		fileOutMethod: selectedContextMethod selector
+	self debuggerActionModel
+		fileOutMethod: stackTable selection selectedItem method
 ]
 
 { #category : #stack }
