@@ -965,7 +965,7 @@ StDebugger >> setSessionHolderSubscriptions [
 			self updateExtensionsFrom: newSession ]
 ]
 
-{ #category : #stack }
+{ #category : #actions }
 StDebugger >> showFullStack [
 	stackTable items: (self filterStack: self session stack)
 

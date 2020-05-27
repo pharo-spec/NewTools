@@ -1,3 +1,6 @@
+"
+Request the debugger to show all the stack in its stack pane
+"
 Class {
 	#name : #StFullStackDebugCommand,
 	#superclass : #StDebugCommand,
