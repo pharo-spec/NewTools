@@ -612,6 +612,11 @@ StDebugger >> context [
 	^ self interruptedContext
 ]
 
+{ #category : #actions }
+StDebugger >> copyStackToClipboard [
+	self debuggerActionModel peelToFirstLike: self currentContext
+]
+
 { #category : #'accessing context' }
 StDebugger >> currentContext [
 	"I answer the context on which an action should be executed.

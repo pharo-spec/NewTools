@@ -1,3 +1,6 @@
+"
+Requests the debugger to peel the stack to the first occurrence of the currently selected message in the stack
+"
 Class {
 	#name : #StPeelToFirstDebugCommand,
 	#superclass : #StDebugCommand,
@@ -26,6 +29,5 @@ StPeelToFirstDebugCommand class >> defaultShortcut [
 
 { #category : #actions }
 StPeelToFirstDebugCommand >> execute [
-
-	self session peelToFirstLike: self currentContext 
+	self debugger copyStackToClipboard
 ]

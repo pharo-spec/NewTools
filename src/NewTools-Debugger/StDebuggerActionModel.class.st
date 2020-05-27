@@ -48,6 +48,11 @@ StDebuggerActionModel >> interruptedContext [
 	^self session interruptedContext
 ]
 
+{ #category : #'debug - stack' }
+StDebuggerActionModel >> peelToFirstLike: aContext [
+	self session peelToFirstLike: aContext
+]
+
 { #category : #'debug - execution' }
 StDebuggerActionModel >> proceedDebugSession [
 	self session
