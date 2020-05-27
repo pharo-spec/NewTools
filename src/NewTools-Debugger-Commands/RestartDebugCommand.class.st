@@ -1,3 +1,6 @@
+"
+Request the debugger to restart its current context
+"
 Class {
 	#name : #RestartDebugCommand,
 	#superclass : #StDebugCommand,
@@ -28,5 +31,5 @@ RestartDebugCommand class >> defaultShortcut [
 
 { #category : #hooks }
 RestartDebugCommand >> execute [
-	self session restart: self currentContext
+	self debugger restartCurrentContext
 ]

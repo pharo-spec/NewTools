@@ -900,6 +900,11 @@ StDebugger >> removeSessionHolderSubscriptions [
 ]
 
 { #category : #actions }
+StDebugger >> restartCurrentContext [
+	self debuggerActionModel restartContext: self currentContext
+]
+
+{ #category : #actions }
 StDebugger >> returnEnteredValue [
 	| expression value |
 	expression := UIManager default

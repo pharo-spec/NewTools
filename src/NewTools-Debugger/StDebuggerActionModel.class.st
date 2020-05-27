@@ -42,6 +42,11 @@ StDebuggerActionModel >> proceedDebugSession [
 		clear
 ]
 
+{ #category : #'debug actions' }
+StDebuggerActionModel >> restartContext: aContext [
+	self session restart: aContext
+]
+
 { #category : #accessing }
 StDebuggerActionModel >> session [
 	^self debugger session
