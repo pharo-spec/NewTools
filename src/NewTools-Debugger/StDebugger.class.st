@@ -917,6 +917,13 @@ StDebugger >> returnEnteredValue [
 	self session returnValue: value from: self currentContext
 ]
 
+{ #category : #actions }
+StDebugger >> runToSelection [
+	self debuggerActionModel
+		runToSelection: self code selectionInterval
+		inContext: self currentContext
+]
+
 { #category : #stack }
 StDebugger >> selectTopContext [
 	stackTable selectIndex: 1

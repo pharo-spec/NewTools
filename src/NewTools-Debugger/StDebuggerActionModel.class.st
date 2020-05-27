@@ -47,6 +47,11 @@ StDebuggerActionModel >> restartContext: aContext [
 	self session restart: aContext
 ]
 
+{ #category : #'debug actions' }
+StDebuggerActionModel >> runToSelection: aSelectionInterval inContext: aContext [
+	self session runToSelection: aSelectionInterval inContext: aContext
+]
+
 { #category : #accessing }
 StDebuggerActionModel >> session [
 	^self debugger session

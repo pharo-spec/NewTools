@@ -1,3 +1,6 @@
+"
+Request the debugger to run the execution up to the cursor selection
+"
 Class {
 	#name : #RunToSelectionDebugCommand,
 	#superclass : #StDebugCommand,
@@ -27,8 +30,5 @@ RunToSelectionDebugCommand class >> defaultShortcut [
 
 { #category : #hooks }
 RunToSelectionDebugCommand >> execute [
-	self flag: 'Such access to the debugger internal state is suspicious...'.
-	self session
-		runToSelection: self debugger code selectionInterval
-		inContext: self currentContext
+	self debugger runToSelection
 ]
