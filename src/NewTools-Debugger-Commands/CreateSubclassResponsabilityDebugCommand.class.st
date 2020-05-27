@@ -26,7 +26,7 @@ CreateSubclassResponsabilityDebugCommand class >> defaultShortcut [
 ]
 
 { #category : #testing }
-CreateSubclassResponsabilityDebugCommand >> appliesToDebugger: aDebugger [
+CreateSubclassResponsabilityDebugCommand >> appliesTo: aDebugger [
 	| interruptedContext |
 	
 	interruptedContext := aDebugger session interruptedContext.

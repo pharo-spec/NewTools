@@ -1,3 +1,6 @@
+"
+I command actions that can be requested from a debugger
+"
 Class {
 	#name : #StDebugCommand,
 	#superclass : #CmCommand,
@@ -58,24 +61,12 @@ StDebugCommand >> = anObject [
 
 { #category : #testing }
 StDebugCommand >> appliesTo: aDebugger [
-
-	^ self appliesToDebugger: aDebugger
-]
-
-{ #category : #testing }
-StDebugCommand >> appliesToDebugger: aDebugger [
 	^ aDebugger session isInterruptedContextDoesNotUnderstand not
 ]
 
 { #category : #accessing }
-StDebugCommand >> canBeExecuted [ 
-	^self appliesToDebugger: self debugger
-]
-
-{ #category : #accessing }
-StDebugCommand >> currentContext [
-
-	^ self debugger currentContext
+StDebugCommand >> canBeExecuted [
+	^ self appliesTo: self debugger
 ]
 
 { #category : #accessing }
@@ -99,11 +90,6 @@ StDebugCommand >> initialize [
 			<< self class defaultName
 			<< ': '
 			<< self class defaultDescription ])
-]
-
-{ #category : #hooks }
-StDebugCommand >> interruptedContext [
-	^ self debugger interruptedContext
 ]
 
 { #category : #accessing }
