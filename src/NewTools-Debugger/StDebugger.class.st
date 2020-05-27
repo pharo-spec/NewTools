@@ -1019,6 +1019,21 @@ StDebugger >> statusLabelTextForCurrentContext [
 			[ self context receiver class name , '>>' , self context selector ]
 ]
 
+{ #category : #actions }
+StDebugger >> stepInto [
+	self debuggerActionModel stepInto
+]
+
+{ #category : #actions }
+StDebugger >> stepOver [
+	self debuggerActionModel stepOver
+]
+
+{ #category : #actions }
+StDebugger >> stepThrough [
+	self debuggerActionModel stepThrough
+]
+
 { #category : #api }
 StDebugger >> title [
 	^ ((self session isContextPostMortem: self interruptedContext)

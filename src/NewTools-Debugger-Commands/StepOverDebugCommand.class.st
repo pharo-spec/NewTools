@@ -1,3 +1,6 @@
+"
+Requests the debugger to step over the next expression evaluation
+"
 Class {
 	#name : #StepOverDebugCommand,
 	#superclass : #StDebugCommand,
@@ -28,5 +31,5 @@ StepOverDebugCommand class >> defaultShortcut [
 
 { #category : #hooks }
 StepOverDebugCommand >> execute [
-	self session stepOver: self currentContext
+	self debugger stepOver
 ]

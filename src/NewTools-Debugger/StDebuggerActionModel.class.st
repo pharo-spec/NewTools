@@ -85,3 +85,13 @@ StDebuggerActionModel >> runToSelection: aSelectionInterval inContext: aContext 
 StDebuggerActionModel >> session [
 	^self debugger session
 ]
+
+{ #category : #'debug - stepping' }
+StDebuggerActionModel >> stepInto [ 
+	self session stepInto: self currentContext
+]
+
+{ #category : #'debug - stepping' }
+StDebuggerActionModel >> stepOver [
+	self session stepOver: self currentContext
+]
