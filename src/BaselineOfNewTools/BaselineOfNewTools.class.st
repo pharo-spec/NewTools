@@ -38,7 +38,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-SpTextPresenterDecorators';
 			"Object-centric breakpoints"
 			package: 'NewTools-ObjectCentricBreakpoints';
-			package: 'NewTools-ObjectCentricBreakpointsTests';
+			package: 'NewTools-ObjectCentricBreakpoints-Tests';
 			"Sindarin"
 			package: 'NewTools-Sindarin-Commands';
 			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ];
@@ -56,7 +56,7 @@ BaselineOfNewTools >> baseline: spec [
 				'NewTools-SystemBrowser'
 				'HelpCenter'
 				'NewTools-FlagBrowser' 'NewTools-FlagBrowser-Tests'
-				'NewTools-ObjectCentricBreakpoints' 'NewTools-ObjectCentricBreakpointsTests'
+				'NewTools-ObjectCentricBreakpoints' 'NewTools-ObjectCentricBreakpoints-Tests'
 				'NewTools-Sindarin-Tools'
 				'NewTools-Sindarin-ProcessInspector');
 			group: #development with: #(default
