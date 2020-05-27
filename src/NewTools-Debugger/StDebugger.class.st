@@ -1020,17 +1020,6 @@ StDebugger >> toolbar [
 	^ toolbar
 ]
 
-{ #category : #actions }
-StDebugger >> toolbarActions [
-	| group |
-	self flag: 'Add metalink inspect button'.
-	group := (CmCommandGroup named: 'Toolbar') asSpecGroup.
-	(StDebugCommand toolbarCommandsForDebugger: self)
-		do: [ :cmd | group register: cmd ].
-	
-	^ group
-]
-
 { #category : #'updating widgets' }
 StDebugger >> updateCodeFromContext [
 
