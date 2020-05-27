@@ -1,3 +1,6 @@
+"
+Requests the debugger to reselect in its code pane the next expression to be executed
+"
 Class {
 	#name : #WhereIsDebugCommand,
 	#superclass : #StDebugCommand,
@@ -27,10 +30,5 @@ WhereIsDebugCommand class >> defaultShortcut [
 
 { #category : #hooks }
 WhereIsDebugCommand >> execute [
-	self
-		flag:
-			'Should the action have this responsibility on the debugger code pane?'.
-	self flag: 'Bound to the bytecode execution model.'.
-	self debugger code
-		selectionInterval: (self session pcRangeForContext: self currentContext)
+	self debugger selectNextExecutedExpression
 ]

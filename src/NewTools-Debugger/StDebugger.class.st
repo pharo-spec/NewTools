@@ -922,6 +922,12 @@ StDebugger >> runToSelection [
 		inContext: self currentContext
 ]
 
+{ #category : #actions }
+StDebugger >> selectNextExecutedExpression [
+	self code
+		selectionInterval: (self session pcRangeForContext: self currentContext)
+]
+
 { #category : #stack }
 StDebugger >> selectTopContext [
 	stackTable selectIndex: 1
