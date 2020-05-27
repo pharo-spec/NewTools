@@ -18,7 +18,8 @@ Class {
 		'codeHeader',
 		'extensionTools',
 		'extensionToolsNotebook',
-		'toolbarCommandGroup'
+		'toolbarCommandGroup',
+		'debuggerActionModel'
 	],
 	#classVars : [
 		'ActivateDebuggerExtensions',
@@ -619,6 +620,12 @@ StDebugger >> currentContext [
 	^ self selectedContext isNil 
 		ifTrue: [ self interruptedContext ]
 		ifFalse: [ self selectedContext ]
+]
+
+{ #category : #accessing }
+StDebugger >> debuggerActionModel [
+	^ debuggerActionModel
+		ifNil: [ debuggerActionModel := StDebuggerActionModel on: self ]
 ]
 
 { #category : #stack }
