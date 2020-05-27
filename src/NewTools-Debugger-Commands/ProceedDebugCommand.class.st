@@ -1,3 +1,6 @@
+"
+Request the debugger to proceed the debug session
+"
 Class {
 	#name : #ProceedDebugCommand,
 	#superclass : #StDebugCommand,
@@ -27,8 +30,5 @@ ProceedDebugCommand class >> defaultShortcut [
 
 { #category : #hooks }
 ProceedDebugCommand >> execute [
-	self session
-		resume;
-		clear.
-	self debugger close
+	self debugger proceedDebugSession
 ]

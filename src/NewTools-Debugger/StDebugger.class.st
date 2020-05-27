@@ -848,6 +848,12 @@ StDebugger >> openWithNotification: notificationString [
 ]
 
 { #category : #actions }
+StDebugger >> proceedDebugSession [ 
+	self debuggerActionModel proceedDebugSession.
+	self close
+]
+
+{ #category : #actions }
 StDebugger >> recompileMethodTo: aString inContext: aContext notifying: aNotifyer [
 
 	^ aContext 

@@ -35,6 +35,13 @@ StDebuggerActionModel >> interruptedContext [
 	^self session interruptedContext
 ]
 
+{ #category : #'debug actions' }
+StDebuggerActionModel >> proceedDebugSession [
+	self session
+		resume;
+		clear
+]
+
 { #category : #accessing }
 StDebuggerActionModel >> session [
 	^self debugger session
