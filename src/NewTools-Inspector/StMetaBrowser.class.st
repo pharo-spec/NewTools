@@ -36,44 +36,18 @@ StMetaBrowser class >> defaultSpec [
 ]
 
 { #category : #initialization }
-StMetaBrowser >> connectPresenters [
-
-	self initializeMethodList.
-	self initializeClassTree
-]
-
-{ #category : #initialization }
-StMetaBrowser >> initializeClassTree [
+StMetaBrowser >> initializePresenters [
 	| classHierarchy |
 	
 	classHierarchy := self model class withAllSuperclasses reversed.
-	classes whenSelectionChangedDo: [ :classTreeSelection | self updateMethods: classTreeSelection ].
-	classes addColumn: (SpStringTableColumn title: 'Class hierarchy' evaluated: #name).
-	classes roots: {classHierarchy first}.
-	classes children: [ :aClass | 
-		classHierarchy select: [ :subclass | subclass superclass == aClass ] ].
-	classes selectPath: (Array new: classHierarchy size withAll: 1)
-]
 
-{ #category : #initialization }
-StMetaBrowser >> initializeMethodFilter [
-
-]
-
-{ #category : #initialization }
-StMetaBrowser >> initializeMethodList [
-
-	methods display: [ :each | each selector ].	
-	methods whenSelectionChangedDo: [ :selection | 
-		self updateSourceWith: selection selectedItem ].
-
-]
-
-{ #category : #initialization }
-StMetaBrowser >> initializePresenters [
-
-	classes := self newTreeTable.
+	classes := self newTreeTable
+		addColumn: (SpStringTableColumn title: 'Class hierarchy' evaluated: #name);
+		roots: { classHierarchy first };
+		children: [ :aClass | classHierarchy select: [ :subclass | subclass superclass == aClass ] ];
+		yourself.
 	methods := self newList
+		display: [ :each | each selector ];	
 		contextMenu: [ self rootCommandsGroup asMenuPresenter ];
 		yourself.
 	methodFilter := self newTextInput.
@@ -83,7 +57,20 @@ StMetaBrowser >> initializePresenters [
 		"contextMenu: [ self menuActions asMenuPresenter ];
 		contextKeyBindings: self menuActions asKMCategory;"
 		beForMethod: self selectedMethod;
-		yourself
+		yourself.
+		
+	classes transmitTo: methods transform: [ :aClass | self methodsOf: aClass ].
+	methods transmitDo: [ :aMethod | self updateSourceWith: aMethod ].
+
+	classes selectPath: (Array new: classHierarchy size withAll: 1)
+]
+
+{ #category : #private }
+StMetaBrowser >> methodsOf: aClass [
+
+	aClass ifNil: [ ^ #() ].
+	^ aClass methods sorted: #selector ascending
+
 ]
 
 { #category : #accessing }
@@ -98,7 +85,7 @@ StMetaBrowser >> selectedObject [
 	^ self selectedMethod
 ]
 
-{ #category : #updating }
+{ #category : #'private updating' }
 StMetaBrowser >> updateMethods: classTreeSelection [
 	| class |
 
@@ -113,7 +100,7 @@ StMetaBrowser >> updateMethods: classTreeSelection [
 	methods unselectAll
 ]
 
-{ #category : #initialization }
+{ #category : #'private updating' }
 StMetaBrowser >> updateSourceWith: method [
 
 	source userActionDuring: [
