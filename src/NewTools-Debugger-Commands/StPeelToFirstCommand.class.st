@@ -2,32 +2,32 @@
 Requests the debugger to peel the stack to the first occurrence of the currently selected message in the stack
 "
 Class {
-	#name : #StPeelToFirstDebugCommand,
-	#superclass : #StDebugCommand,
+	#name : #StPeelToFirstCommand,
+	#superclass : #StDebuggerCommand,
 	#category : #'NewTools-Debugger-Commands'
 }
 
 { #category : #accessing }
-StPeelToFirstDebugCommand class >> defaultDescription [
+StPeelToFirstCommand class >> defaultDescription [
 	^ 'Peels the stack back to the second occurance of the currently selected message.'
 ]
 
 { #category : #initialization }
-StPeelToFirstDebugCommand class >> defaultIconName [
+StPeelToFirstCommand class >> defaultIconName [
 	^ #down
 ]
 
 { #category : #accessing }
-StPeelToFirstDebugCommand class >> defaultName [
+StPeelToFirstCommand class >> defaultName [
 	^ 'Peel to first like this'
 ]
 
 { #category : #initialization }
-StPeelToFirstDebugCommand class >> defaultShortcut [
+StPeelToFirstCommand class >> defaultShortcut [
 	^ nil
 ]
 
 { #category : #actions }
-StPeelToFirstDebugCommand >> execute [
+StPeelToFirstCommand >> execute [
 	self debugger copyStackToClipboard
 ]

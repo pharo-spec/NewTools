@@ -2,33 +2,33 @@
 Requests the debugger to reselect in its code pane the next expression to be executed
 "
 Class {
-	#name : #WhereIsDebugCommand,
-	#superclass : #StDebugCommand,
+	#name : #StWhereIsCommand,
+	#superclass : #StDebuggerCommand,
 	#category : #'NewTools-Debugger-Commands'
 }
 
 { #category : #default }
-WhereIsDebugCommand class >> defaultDescription [
+StWhereIsCommand class >> defaultDescription [
 	^ 'Highligh the next method to be executed (step) by the debugger.'
 ]
 
 { #category : #initialization }
-WhereIsDebugCommand class >> defaultIconName [
+StWhereIsCommand class >> defaultIconName [
 	^ #glamorousSearch 
 ]
 
 { #category : #default }
-WhereIsDebugCommand class >> defaultName [
+StWhereIsCommand class >> defaultName [
 	<toolbarDebugCommand: 1000>
 	^ 'Where is?'
 ]
 
 { #category : #initialization }
-WhereIsDebugCommand class >> defaultShortcut [
+StWhereIsCommand class >> defaultShortcut [
 	^ nil
 ]
 
 { #category : #hooks }
-WhereIsDebugCommand >> execute [
+StWhereIsCommand >> execute [
 	self debugger selectNextExecutedExpression
 ]

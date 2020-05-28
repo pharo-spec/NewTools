@@ -2,33 +2,33 @@
 Request the debugger to show all the stack in its stack pane
 "
 Class {
-	#name : #StFullStackDebugCommand,
-	#superclass : #StDebugCommand,
+	#name : #StShowFullStackCommand,
+	#superclass : #StDebuggerCommand,
 	#category : #'NewTools-Debugger-Commands'
 }
 
 { #category : #default }
-StFullStackDebugCommand class >> defaultDescription [
+StShowFullStackCommand class >> defaultDescription [
 	^ 'Shows the full stack.'
 ]
 
 { #category : #initialization }
-StFullStackDebugCommand class >> defaultIconName [
+StShowFullStackCommand class >> defaultIconName [
 	^ #glamorousMore
 ]
 
 { #category : #default }
-StFullStackDebugCommand class >> defaultName [
+StShowFullStackCommand class >> defaultName [
 	<toolbarDebugCommand: 999>
 	^ 'Stack'
 ]
 
 { #category : #initialization }
-StFullStackDebugCommand class >> defaultShortcut [
+StShowFullStackCommand class >> defaultShortcut [
 	^ nil
 ]
 
 { #category : #hooks }
-StFullStackDebugCommand >> execute [
+StShowFullStackCommand >> execute [
 	self debugger showFullStack
 ]

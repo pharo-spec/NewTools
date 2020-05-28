@@ -2,34 +2,34 @@
 Requests the debugger to step over the next expression evaluation
 "
 Class {
-	#name : #StepOverDebugCommand,
-	#superclass : #StDebugCommand,
+	#name : #StStepOverCommand,
+	#superclass : #StDebuggerCommand,
 	#category : #'NewTools-Debugger-Commands'
 }
 
 { #category : #accessing }
-StepOverDebugCommand class >> defaultDescription [
+StStepOverCommand class >> defaultDescription [
 	^'Step over the highlighted message, i.e. do not follow the sent message, taking debugger control after the method invoked returns.'
 ]
 
 { #category : #initialization }
-StepOverDebugCommand class >> defaultIconName [
+StStepOverCommand class >> defaultIconName [
 	^ #glamorousOver
 ]
 
 { #category : #accessing }
-StepOverDebugCommand class >> defaultName [
+StStepOverCommand class >> defaultName [
 	<toolbarDebugCommand: 40>
 
 	^ 'Over'
 ]
 
 { #category : #initialization }
-StepOverDebugCommand class >> defaultShortcut [
+StStepOverCommand class >> defaultShortcut [
 	^ PharoShortcuts current stepOverShortcut
 ]
 
 { #category : #hooks }
-StepOverDebugCommand >> execute [
+StStepOverCommand >> execute [
 	self debugger stepOver
 ]

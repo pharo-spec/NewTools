@@ -2,22 +2,22 @@
 I request the debugger to define a missing method in case the current context is interrupted on a DNU exception
 "
 Class {
-	#name : #StDefineMethodDebugCommand,
-	#superclass : #StDefineMissingEntityDebugCommand,
+	#name : #StDefineMethodCommand,
+	#superclass : #StDefineMissingEntityCommand,
 	#category : #'NewTools-Debugger-Commands'
 }
 
 { #category : #accessing }
-StDefineMethodDebugCommand class >> defaultName [
+StDefineMethodCommand class >> defaultName [
 	^ 'Create missing command'
 ]
 
 { #category : #testing }
-StDefineMethodDebugCommand >> appliesTo: aDebugger [
+StDefineMethodCommand >> appliesTo: aDebugger [
 	^ aDebugger canExecuteCreateMissingMethodCommand
 ]
 
 { #category : #hooks }
-StDefineMethodDebugCommand >> execute [
+StDefineMethodCommand >> execute [
 	self debugger createMissingMethod
 ]

@@ -60,7 +60,7 @@ StDebuggerStackCommandTreeBuilder >> buildSpecCommand: aCommandClass forContext:
 { #category : #'accessing - commands classes' }
 StDebuggerStackCommandTreeBuilder >> stackActionsCommandsClasses [
 	^ {
-	StReturnValueDebugCommand
+	StReturnValueCommand
 	}
 ]
 
@@ -182,10 +182,10 @@ StDebuggerStackCommandTreeBuilder >> stackContextNavigationGroupName [
 { #category : #'accessing - commands classes' }
 StDebuggerStackCommandTreeBuilder >> stackEditionCommandsClasses [
 	^ {
-	StCopyStackToClipboardDebugCommand.
-	StFullStackDebugCommand.
-	StPeelToFirstDebugCommand.
-	StFileOutMethodDebugCommand
+	StCopyStackToClipboardCommand.
+	StShowFullStackCommand.
+	StPeelToFirstCommand.
+	StFileOutMethodCommand
 	}
 ]
 

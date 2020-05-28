@@ -2,32 +2,32 @@
 Requests the debugger to copy its stack on the Clipboard
 "
 Class {
-	#name : #StCopyStackToClipboardDebugCommand,
-	#superclass : #StDebugCommand,
+	#name : #StCopyStackToClipboardCommand,
+	#superclass : #StDebuggerCommand,
 	#category : #'NewTools-Debugger-Commands'
 }
 
 { #category : #initialization }
-StCopyStackToClipboardDebugCommand class >> defaultDescription [
+StCopyStackToClipboardCommand class >> defaultDescription [
 	^ 'Copy a short debugging stack to the clipboard.'
 ]
 
 { #category : #initialization }
-StCopyStackToClipboardDebugCommand class >> defaultIconName [
+StCopyStackToClipboardCommand class >> defaultIconName [
 	^ #smallCopy
 ]
 
 { #category : #initialization }
-StCopyStackToClipboardDebugCommand class >> defaultName [
+StCopyStackToClipboardCommand class >> defaultName [
 	^ 'Copy Stack to Clipboard'
 ]
 
 { #category : #initialization }
-StCopyStackToClipboardDebugCommand class >> defaultShortcut [
+StCopyStackToClipboardCommand class >> defaultShortcut [
 	^ nil
 ]
 
 { #category : #hooks }
-StCopyStackToClipboardDebugCommand >> execute [
+StCopyStackToClipboardCommand >> execute [
 	self debugger copyStackToClipboard
 ]

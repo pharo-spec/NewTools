@@ -9,8 +9,8 @@ For a given debugging context (i.e., the context of the debugger's debug session
 For instance, if we are in the context of a DNU, it makes only sense to propose to create the missing method (StCreateMissingMethodDebugCommand) and all other subcommands are inapplicable.
 "
 Class {
-	#name : #StDefineMissingEntityDebugCommand,
-	#superclass : #StDebugCommand,
+	#name : #StDefineMissingEntityCommand,
+	#superclass : #StDebuggerCommand,
 	#instVars : [
 		'subCommands'
 	],
@@ -18,52 +18,52 @@ Class {
 }
 
 { #category : #accessing }
-StDefineMissingEntityDebugCommand class >> defaultDescription [
+StDefineMissingEntityCommand class >> defaultDescription [
     ^ 'Create the missing class or method in the user prompted class, and restart the debugger at the location where it can be edited.'
 ]
 
 { #category : #initialization }
-StDefineMissingEntityDebugCommand class >> defaultIconName [
+StDefineMissingEntityCommand class >> defaultIconName [
 	^ #changeAdd
 ]
 
 { #category : #accessing }
-StDefineMissingEntityDebugCommand class >> defaultName [
+StDefineMissingEntityCommand class >> defaultName [
 	^ 'Create'
 ]
 
 { #category : #initialization }
-StDefineMissingEntityDebugCommand class >> defaultShortcut [
+StDefineMissingEntityCommand class >> defaultShortcut [
 	^ nil
 ]
 
 { #category : #private }
-StDefineMissingEntityDebugCommand >> applicableCommand [
+StDefineMissingEntityCommand >> applicableCommand [
 	^ subCommands
 		detect: [ :subCommand | subCommand canBeExecuted ]
 		ifNone: [ nil ]
 ]
 
 { #category : #testing }
-StDefineMissingEntityDebugCommand >> appliesTo: aDebugger [
+StDefineMissingEntityCommand >> appliesTo: aDebugger [
 	^ subCommands
 		anySatisfy: [ :subCommand | subCommand appliesTo: aDebugger ]
 ]
 
 { #category : #accessing }
-StDefineMissingEntityDebugCommand >> context: aDebugger [
+StDefineMissingEntityCommand >> context: aDebugger [
 	super context: aDebugger.
 	subCommands := self class allSubclasses
 		collect: [ :subCommand | subCommand forContext: aDebugger ]
 ]
 
 { #category : #executing }
-StDefineMissingEntityDebugCommand >> execute [
+StDefineMissingEntityCommand >> execute [
 	self applicableCommand ifNotNil: [ :cmd | cmd execute ]
 ]
 
 { #category : #initialization }
-StDefineMissingEntityDebugCommand >> initialize [
+StDefineMissingEntityCommand >> initialize [
 	super initialize.
 	subCommands := OrderedCollection new
 ]

@@ -2,33 +2,33 @@
 Request the debugger to proceed the debug session
 "
 Class {
-	#name : #ProceedDebugCommand,
-	#superclass : #StDebugCommand,
+	#name : #StProceedCommand,
+	#superclass : #StDebuggerCommand,
 	#category : #'NewTools-Debugger-Commands'
 }
 
 { #category : #default }
-ProceedDebugCommand class >> defaultDescription [
+StProceedCommand class >> defaultDescription [
 	^ 'Relinquish debugger control and proceed execution from the current point of debugger control.'
 ]
 
 { #category : #initialization }
-ProceedDebugCommand class >> defaultIconName [
+StProceedCommand class >> defaultIconName [
 	^ #glamorousGo
 ]
 
 { #category : #default }
-ProceedDebugCommand class >> defaultName [
+StProceedCommand class >> defaultName [
 	<toolbarDebugCommand: 10>
 	^ 'Proceed'
 ]
 
 { #category : #initialization }
-ProceedDebugCommand class >> defaultShortcut [
+StProceedCommand class >> defaultShortcut [
 	^ PharoShortcuts current resumeExecutionShortcut
 ]
 
 { #category : #hooks }
-ProceedDebugCommand >> execute [
+StProceedCommand >> execute [
 	self debugger proceedDebugSession
 ]

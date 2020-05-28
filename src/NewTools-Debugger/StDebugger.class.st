@@ -613,7 +613,7 @@ StDebugger >> codeContextMenuCommandsForRootGroup: aRootCmCommandsGroup [
 	group
 		description: 'Debugger actions on code selection.';
 		beDisplayedAsGroup.
-	group register: (RunToSelectionDebugCommand forSpecContext: self).
+	group register: (StRunToSelectionCommand forSpecContext: self).
 	aRootCmCommandsGroup decoratedGroup registerFirst: group.
 	self codeContextMenuExtensionsForParentGroup: aRootCmCommandsGroup.
 	^ aRootCmCommandsGroup asMenuPresenter

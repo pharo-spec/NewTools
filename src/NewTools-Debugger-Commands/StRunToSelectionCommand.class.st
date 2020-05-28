@@ -2,33 +2,33 @@
 Request the debugger to run the execution up to the cursor selection
 "
 Class {
-	#name : #RunToSelectionDebugCommand,
-	#superclass : #StDebugCommand,
+	#name : #StRunToSelectionCommand,
+	#superclass : #StDebuggerCommand,
 	#category : #'NewTools-Debugger-Commands'
 }
 
 { #category : #'as yet unclassified' }
-RunToSelectionDebugCommand class >> defaultDescription [
+StRunToSelectionCommand class >> defaultDescription [
 	^ 'Execute methods up to the text cursor position and return debugger control.'
 ]
 
 { #category : #initialization }
-RunToSelectionDebugCommand class >> defaultIconName [
+StRunToSelectionCommand class >> defaultIconName [
 	^ #glamorousRightSide
 ]
 
 { #category : #'as yet unclassified' }
-RunToSelectionDebugCommand class >> defaultName [
+StRunToSelectionCommand class >> defaultName [
 	<toolbarDebugCommand: 50>
 	^ 'Run to'
 ]
 
 { #category : #initialization }
-RunToSelectionDebugCommand class >> defaultShortcut [
+StRunToSelectionCommand class >> defaultShortcut [
 	^ nil
 ]
 
 { #category : #hooks }
-RunToSelectionDebugCommand >> execute [
+StRunToSelectionCommand >> execute [
 	self debugger runToSelection
 ]
