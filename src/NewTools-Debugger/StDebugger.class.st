@@ -548,13 +548,41 @@ StDebugger >> buildContextMenus [
 	self updateToolbarDebugActions
 ]
 
+{ #category : #commands }
+StDebugger >> canExecuteCreateMissingClassCommand [
+	^ self session isInterruptedContextDoesNotUnderstand
+		and: [ (self interruptedContext tempAt: 2) class == VariableNotDeclared ]
+]
+
+{ #category : #commands }
+StDebugger >> canExecuteCreateMissingMethodCommand [
+	^ self session isInterruptedContextDoesNotUnderstand
+]
+
+{ #category : #commands }
+StDebugger >> canExecuteCreateSubclassResponsibilityCommand [
+	^ self interruptedContext selector == #subclassResponsibility
+
+	"### Comments says it should not happen, so why keeping the code? Let's experiment
+	and:
+			["	"If we work with an instance of the abstract class (shouldn't normally happen) do not add this action, 
+		as the abstract class alredy contains the the method."
+	"		interruptedContext sender receiver class
+				~~ interruptedContext sender methodClass ]"
+]
+
+{ #category : #commands }
+StDebugger >> canExecuteDebugCommand [
+	^ self session isInterruptedContextDoesNotUnderstand not
+]
+
 { #category : #actions }
 StDebugger >> clear [
 	extensionToolsNotebook pages
 		do: [ :page | page activePresenter windowIsClosing ].
 	extensionTools := nil.
 	self removeActionsForSession: self session.
-	self session terminate
+	self debuggerActionModel clearDebugSession
 ]
 
 { #category : #'updating widgets' }
@@ -615,6 +643,68 @@ StDebugger >> context [
 { #category : #actions }
 StDebugger >> copyStackToClipboard [
 	self debuggerActionModel peelToFirstLike: self currentContext
+]
+
+{ #category : #actions }
+StDebugger >> createMissingClass [
+	| message exception variableNode |
+	message := self interruptedContext tempAt: 1.
+	exception := self interruptedContext tempAt: 2.
+	variableNode := exception variableNode.
+	[ OCUndeclaredVariableWarning new
+		node: variableNode;
+		defineClass: variableNode name ]
+		on: Abort
+		do: [ ^ self ].
+	self
+		createMissingMethodFor: message
+		in: self interruptedContext receiver class.
+	self debuggerActionModel restartContext: self interruptedContext
+]
+
+{ #category : #actions }
+StDebugger >> createMissingMethod [
+	| msg chosenClass |
+	msg := self interruptedContext tempAt: 1.
+	chosenClass := (self
+		requestSuperclassOf: self interruptedContext receiver class
+		to: ProtoObject
+		toImplement: msg selector
+		ifCancel: [ ^ self ]) value.
+	self createMissingMethodFor: msg in: chosenClass
+]
+
+{ #category : #actions }
+StDebugger >> createMissingMethodFor: aMessage in: aClass [
+	| msgCategory |
+	msgCategory := self requestCategoryIn: aClass.
+	self debuggerActionModel
+		implement: aMessage
+		classified: msgCategory
+		inClass: aClass
+		forContext: self interruptedContext.
+	self selectTopContext
+]
+
+{ #category : #actions }
+StDebugger >> createSubclassResponsibility [
+	| senderContext msg msgCategory chosenClass |
+	senderContext := self interruptedContext sender.
+	msg := Message
+		selector: senderContext selector
+		arguments: senderContext arguments.
+	msgCategory := senderContext methodClass organization
+		categoryOfElement: msg selector.
+	chosenClass := (self
+		requestSuperclassOf: senderContext receiver class
+		to: senderContext methodClass
+		toImplement: senderContext selector
+		ifCancel: [ ^ self ]) value.
+	self debuggerActionModel
+		implement: msg
+		classified: msgCategory
+		inClass: chosenClass
+		forContext: senderContext
 ]
 
 { #category : #'accessing context' }
@@ -900,6 +990,34 @@ StDebugger >> removeActionsForSession: aSession [
 StDebugger >> removeSessionHolderSubscriptions [
 	self sessionHolder announcer unsubscribe: self sessionHolder.
 	self removeActionsForSession: self session
+]
+
+{ #category : #'ui requests' }
+StDebugger >> requestCategoryIn: aClass [
+	| defaultAnswer categoryName |
+	defaultAnswer := 'as yet unclassified'.
+	categoryName := AbstractTool
+		requestProtocolNameFor: aClass
+		initialAnswer: defaultAnswer.
+	^ (#(nil '') includes: categoryName)
+		ifTrue: [ defaultAnswer ]
+		ifFalse: [ categoryName ]
+]
+
+{ #category : #'ui requests' }
+StDebugger >> requestSuperclassOf: aClass to: aSuperclass toImplement: aSelector ifCancel: cancelBlock [
+	| classes |
+	classes := OrderedCollection with: aClass.
+	classes addAll: (aClass allSuperclassesIncluding: aSuperclass).
+	classes
+		addAll: (aClass traits sort: [ :t1 :t2 | t1 asString < t2 asString ]).
+	classes size = 1
+		ifTrue: [ ^ classes first ].
+	^ (UIManager default
+		chooseFrom: (classes collect: [ :c | c name ])
+		values: classes
+		title: 'Define #' , aSelector , ' in which class?')
+		ifNil: [ cancelBlock ]
 ]
 
 { #category : #actions }

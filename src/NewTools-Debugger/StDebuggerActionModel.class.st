@@ -15,6 +15,11 @@ StDebuggerActionModel class >> on: aStDebugger [
 	^ self new debugger: aStDebugger
 ]
 
+{ #category : #'debug - execution' }
+StDebuggerActionModel >> clearDebugSession [
+	self session terminate
+]
+
 { #category : #'debug - stack' }
 StDebuggerActionModel >> copyStackToClipboard [
 	Clipboard
@@ -41,6 +46,15 @@ StDebuggerActionModel >> debugger: anObject [
 { #category : #'debug - stack' }
 StDebuggerActionModel >> fileOutMethod: aMethod [
 	aMethod methodClass fileOutMethod: aMethod selector
+]
+
+{ #category : #'debug - session' }
+StDebuggerActionModel >> implement: aMessage classified: messageCategory inClass: aClass forContext: aContext [
+	self session
+		implement: aMessage
+		classified: messageCategory
+		inClass: aClass
+		forContext: aContext
 ]
 
 { #category : #accessing }

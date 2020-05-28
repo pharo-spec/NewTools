@@ -61,7 +61,7 @@ StDebugCommand >> = anObject [
 
 { #category : #testing }
 StDebugCommand >> appliesTo: aDebugger [
-	^ aDebugger session isInterruptedContextDoesNotUnderstand not
+	^ aDebugger canExecuteDebugCommand
 ]
 
 { #category : #accessing }
@@ -90,9 +90,4 @@ StDebugCommand >> initialize [
 			<< self class defaultName
 			<< ': '
 			<< self class defaultDescription ])
-]
-
-{ #category : #accessing }
-StDebugCommand >> session [
-	^self debugger session
 ]
