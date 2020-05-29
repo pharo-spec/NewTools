@@ -1030,7 +1030,9 @@ StDebugger >> returnEnteredValue [
 	| expression |
 	expression := UIManager default
 		request: 'Enter expression for return value:'.
-	self debuggerActionModel returnValueFromExpression: expression
+	self debuggerActionModel
+		returnValueFromExpression: expression
+		fromContext: self currentContext
 ]
 
 { #category : #actions }

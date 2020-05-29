@@ -80,14 +80,14 @@ StDebuggerActionModel >> restartContext: aContext [
 ]
 
 { #category : #'debug - execution' }
-StDebuggerActionModel >> returnValueFromExpression: aString [
+StDebuggerActionModel >> returnValueFromExpression: aString fromContext: aContext [
 	| value |
 	value := self debugger class compiler
 		source: aString;
-		context: self currentContext;
-		receiver: self currentContext receiver;
+		context: aContext;
+		receiver: aContext receiver;
 		evaluate.
-	self session returnValue: value from: self currentContext
+	self session returnValue: value from: aContext
 ]
 
 { #category : #'debug - execution' }
