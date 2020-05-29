@@ -17,7 +17,8 @@ StDebuggerActionModelTest >> session [
 
 { #category : #helper }
 StDebuggerActionModelTest >> setResult [
-	result := 2 squared
+	result := 2 squared.
+	^result
 ]
 
 { #category : #running }
@@ -48,6 +49,16 @@ StDebuggerActionModelTest >> tearDown [
 ]
 
 { #category : #tests }
+StDebuggerActionModelTest >> testClearDebugSession [
+	| process |
+	process := session interruptedProcess.
+	self deny: process isTerminated.
+	debugActionModel clearDebugSession.
+	self assert: process isTerminated.
+	self assert: session interruptedContext isNil
+]
+
+{ #category : #tests }
 StDebuggerActionModelTest >> testInitialization [
 	self assert: debugActionModel debugger identicalTo: debugger.
 	self assert: debugActionModel currentContext identicalTo: debugger currentContext.
@@ -67,11 +78,34 @@ StDebuggerActionModelTest >> testProceedDebugSession [
 ]
 
 { #category : #tests }
-StDebuggerActionModelTest >> testReturnValueFromExpression [
+StDebuggerActionModelTest >> testRestartContext [
+	|topContext topPC|
+	topContext := 
+	session interruptedContext.
+	topPC := topContext pc.
+	session stepInto.
+	self deny: session interruptedContext identicalTo: topContext.
+	debugActionModel restartContext: topContext.
+	self assert: session interruptedContext identicalTo: topContext.
+	self assert: session interruptedContext pc equals: topPC
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testReturnValueFromExpressionFromContext [
 	session stepInto.
 	session stepInto.
 	debugActionModel returnValueFromExpression: '0' fromContext: session interruptedContext.
 	self assert: session interruptedContext top equals: 0.
 	session resume.
 	self assert: result equals: 0
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testRunToSelectionInContext [
+	|method node|
+	method := (self class >> #setResult).
+	node :=  method ast statements second.
+	debugActionModel runToSelection: (node start to: node stop) inContext: session interruptedContext.
+	self assert: result equals: 4.
+	self assert: (method sourceNodeForPC: session interruptedContext pc) identicalTo: node
 ]
