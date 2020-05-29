@@ -1,6 +1,6 @@
-Extension { #name : #SpecDebugger }
+Extension { #name : #StDebugger }
 
 { #category : #'*NewTools-DebuggerSelector-Extensions' }
-SpecDebugger classSide >> debugSession: aDebugSession [
+StDebugger class >> debugSession: aDebugSession [
  	^self openOn: aDebugSession withFullView: true andNotification: nil
 ]
