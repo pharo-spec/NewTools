@@ -1,7 +1,7 @@
 Extension { #name : #DebugSession }
 
 { #category : #'*NewTools-DebuggerSelector-Extensions' }
-DebugSession >> exception [
+DebugSession >> exception [ 
 	^ exception
 		ifNil: [ exception := DebuggerSelectorNullException
 				fromSignallerContext: self interruptedContext ]

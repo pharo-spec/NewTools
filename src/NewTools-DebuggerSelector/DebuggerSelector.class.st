@@ -237,7 +237,7 @@ DebuggerSelector >> tryOpen: aDebugger on: aDebugSession [
 				== aDebugSession exception
 				ifTrue: [ err ]
 				ifFalse: [ aDebugSession exception ].
-				err inspect.
+				"exceptionToWrap inspect."
 			self
 				flag:
 					'We should give the choice of which exception to debug, or add an action in the debugger to switch context'.
