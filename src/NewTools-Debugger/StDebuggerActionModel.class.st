@@ -5,14 +5,15 @@ Class {
 	#name : #StDebuggerActionModel,
 	#superclass : #Object,
 	#instVars : [
-		'debugger'
+		'debugger',
+		'session'
 	],
 	#category : #'NewTools-Debugger-Model'
 }
 
 { #category : #'instance creation' }
-StDebuggerActionModel class >> on: aStDebugger [
-	^ self new debugger: aStDebugger
+StDebuggerActionModel class >> on: aDebugSession [
+	^ self new session: aDebugSession
 ]
 
 { #category : #'debug - execution' }
@@ -26,21 +27,6 @@ StDebuggerActionModel >> copyStackToClipboard [
 		clipboardText:
 			(String
 				streamContents: [ :s | self interruptedContext shortDebugStackOn: s ])
-]
-
-{ #category : #accessing }
-StDebuggerActionModel >> currentContext [
-	^ self debugger currentContext
-]
-
-{ #category : #accessing }
-StDebuggerActionModel >> debugger [
-	^ debugger
-]
-
-{ #category : #accessing }
-StDebuggerActionModel >> debugger: anObject [
-	debugger := anObject
 ]
 
 { #category : #'debug - stack' }
@@ -82,7 +68,7 @@ StDebuggerActionModel >> restartContext: aContext [
 { #category : #'debug - execution' }
 StDebuggerActionModel >> returnValueFromExpression: aString fromContext: aContext [
 	| value |
-	value := self debugger class compiler
+	value := session class compiler
 		source: aString;
 		context: aContext;
 		receiver: aContext receiver;
@@ -97,7 +83,12 @@ StDebuggerActionModel >> runToSelection: aSelectionInterval inContext: aContext 
 
 { #category : #accessing }
 StDebuggerActionModel >> session [
-	^self debugger session
+	^session
+]
+
+{ #category : #accessing }
+StDebuggerActionModel >> session: aDebugSession [
+	session := aDebugSession
 ]
 
 { #category : #'debug - stepping' }

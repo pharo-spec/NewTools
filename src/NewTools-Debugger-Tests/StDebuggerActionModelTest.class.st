@@ -39,7 +39,7 @@ StDebuggerActionModelTest >> setUp [
 		session: session;
 		initialize.
 	debugger removeSessionHolderSubscriptions.
-	debugActionModel := StDebuggerActionModel on: debugger
+	debugActionModel := StDebuggerActionModel on: session
 ]
 
 { #category : #running }
@@ -60,8 +60,6 @@ StDebuggerActionModelTest >> testClearDebugSession [
 
 { #category : #tests }
 StDebuggerActionModelTest >> testInitialization [
-	self assert: debugActionModel debugger identicalTo: debugger.
-	self assert: debugActionModel currentContext identicalTo: debugger currentContext.
 	self assert: debugActionModel session identicalTo: session.
 	self
 		assert: debugActionModel interruptedContext

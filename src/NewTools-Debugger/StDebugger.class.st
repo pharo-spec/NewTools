@@ -720,7 +720,7 @@ StDebugger >> currentContext [
 { #category : #accessing }
 StDebugger >> debuggerActionModel [
 	^ debuggerActionModel
-		ifNil: [ debuggerActionModel := StDebuggerActionModel on: self ]
+		ifNil: [ debuggerActionModel := StDebuggerActionModel on: self session]
 ]
 
 { #category : #stack }
