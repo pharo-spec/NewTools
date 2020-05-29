@@ -36,11 +36,10 @@ StHeaderBar >> initializePresenters [
 		action: [  ];
 		hide;
 		yourself.
-	"	addStyle: 'button.mini';"
-	titleLabel := self newLabel.	"addStyle: 'label.header'; yourself"
-	shortcutLabel := self newLabel.
-	"addStyle: 'label.shortcut';
-		yourself"
+	titleLabel := self newLabel.
+	shortcutLabel := self newLabel
+		addStyle: 'shortcut';
+		yourself.
 	toolbar := self newToolBar.
 	"toolbar displayMode: self application toolbarDisplayMode"
 	toolbar beIcons	"is a mini toolbar, items should be... tiny :)"
