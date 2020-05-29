@@ -227,12 +227,12 @@ DebuggerSelector >> preDebugAction: anObject [
 { #category : #opening }
 DebuggerSelector >> tryOpen: aDebugger on: aDebugSession [
 	[ aDebugger debugSession: aDebugSession ]
-		on: Error
+		on: Error, UnhandledException 
 		do: [ :err | 
 			| exceptionToWrap |
 			exceptionToWrap := aDebugSession exception isDebuggerFailure
 				ifTrue: [ aDebugSession exception ]
 				ifFalse: [ err ].
-			exceptionToWrap inspect.
+			exceptionToWrap inspect.			
 			(DebuggerFailure of: aDebugger on: exceptionToWrap) signal ]
 ]
