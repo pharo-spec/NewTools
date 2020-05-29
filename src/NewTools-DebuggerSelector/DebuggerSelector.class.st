@@ -229,17 +229,10 @@ DebuggerSelector >> tryOpen: aDebugger on: aDebugSession [
 	[ aDebugger debugSession: aDebugSession ]
 		on: Error
 		do: [ :err | 
-			"(self requestActionOnDebuggerError: err)
-			ifFalse: [ ^ false ]."
 			| exceptionToWrap |
-			self flag: 'Hack to fix'.
-			exceptionToWrap := aDebugSession exception originException
-				== aDebugSession exception
-				ifTrue: [ err ]
-				ifFalse: [ aDebugSession exception ].
-				"exceptionToWrap inspect."
-			self
-				flag:
-					'We should give the choice of which exception to debug, or add an action in the debugger to switch context'.
+			exceptionToWrap := aDebugSession exception isDebuggerFailure
+				ifTrue: [ aDebugSession exception ]
+				ifFalse: [ err ].
+			exceptionToWrap inspect.
 			(DebuggerFailure of: aDebugger on: exceptionToWrap) signal ]
 ]

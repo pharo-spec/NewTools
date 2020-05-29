@@ -42,6 +42,11 @@ DebuggerFailure >> innerException [
 ]
 
 { #category : #testing }
+DebuggerFailure >> isDebuggerFailure [
+	^true
+]
+
+{ #category : #testing }
 DebuggerFailure >> isHandleableBy: aDebugger [
 	^ aDebugger ~= failedDebugger
 		and: [ innerException isHandleableBy: aDebugger ]

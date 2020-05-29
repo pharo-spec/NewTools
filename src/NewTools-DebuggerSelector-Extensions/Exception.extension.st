@@ -11,6 +11,11 @@ Exception >> debug [
 ]
 
 { #category : #'*NewTools-DebuggerSelector-Extensions' }
+Exception >> isDebuggerFailure [
+	^false
+]
+
+{ #category : #'*NewTools-DebuggerSelector-Extensions' }
 Exception >> isHandleableBy: aDebugger [
 	^ true
 ]
