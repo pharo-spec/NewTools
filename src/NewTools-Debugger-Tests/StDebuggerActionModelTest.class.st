@@ -11,6 +11,16 @@ Class {
 }
 
 { #category : #helper }
+StDebuggerActionModelTest >> fileOutMethod: anObject [
+	result := anObject
+]
+
+{ #category : #helper }
+StDebuggerActionModelTest >> methodClass [
+	^self
+]
+
+{ #category : #helper }
 StDebuggerActionModelTest >> session [
 	^debugger session
 ]
@@ -59,11 +69,37 @@ StDebuggerActionModelTest >> testClearDebugSession [
 ]
 
 { #category : #tests }
+StDebuggerActionModelTest >> testCopyStackToClipboard [
+	debugActionModel copyStackToClipboard.
+	self
+		assert: Clipboard clipboardText string
+		equals:
+			(String
+				streamContents: [ :s | session interruptedContext shortDebugStackOn: s ])
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testFileOutMethod [
+	debugActionModel fileOutMethod: self.
+	self assert: result equals: self selector
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testImplementClassifiedInClassForContext [
+	self fail
+]
+
+{ #category : #tests }
 StDebuggerActionModelTest >> testInitialization [
 	self assert: debugActionModel session identicalTo: session.
 	self
 		assert: debugActionModel interruptedContext
 		identicalTo: session interruptedContext
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testPeelToFirstLike [
+	self fail
 ]
 
 { #category : #tests }
