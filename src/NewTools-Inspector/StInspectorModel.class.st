@@ -41,7 +41,7 @@ StInspectorModel >> descriptionString [
 		ifFalse: [ 'a ' ]) , 
 		object class name.
 	
-	printString := (GTObjectPrinter asTruncatedTextFrom: object) asString.
+	printString := self smallDescriptionString.
 	^ ((printString beginsWith: header)
 		ifTrue: [ printString ]
 		ifFalse: [ 
@@ -80,6 +80,12 @@ StInspectorModel >> printOn: stream [
 	stream << '('.
 	stream print: self inspectedObject.
 	stream << ')'
+]
+
+{ #category : #accessing }
+StInspectorModel >> smallDescriptionString [
+	
+	^ (GTObjectPrinter asTruncatedTextFrom: self inspectedObject) asString
 ]
 
 { #category : #accessing }

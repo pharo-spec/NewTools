@@ -33,7 +33,7 @@ Class >> classCommentInspection [
 	
 	^ SpTextPresenter new
 		text: self comment;
-		acceptBlock: [ :text | 
+		whenSubmitDo: [ :text | 
 			self 
 				comment: text 
 				stamp: Author changeStamp ]

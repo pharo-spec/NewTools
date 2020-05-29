@@ -113,16 +113,14 @@ StObjectBreakpointInspection >> buildTableData [
 
 { #category : #presenters }
 StObjectBreakpointInspection >> configureSourceCodeUpdate [
-	methodsWithBreakpoints
-		whenSelectionChangedDo: [ :selection | 
-			| selectedItem node |
-			selection isEmpty
-				ifFalse: [ selectedItem := selection selectedItem.
-					node := selectedItem at: #node.
-					breakpointsInSourceCode text: node methodNode source.
-					breakpointsInSourceCode
-						selectionInterval: (selectedItem at: #interval).
-					self updateSourceCodeBehaviorFor: node ] ]
+
+	methodsWithBreakpoints whenSelectionChangedDo: [ :selection | 
+		selection isEmpty ifFalse: [ | selectedItem node |
+			selectedItem := selection selectedItem.
+			node := selectedItem at: #node.
+			breakpointsInSourceCode text: node methodNode source.
+			breakpointsInSourceCode selectionInterval: (selectedItem at: #interval).
+			self updateSourceCodeBehaviorFor: node ] ]
 ]
 
 { #category : #private }
@@ -183,7 +181,8 @@ StObjectBreakpointInspection >> unsubscribeFromCacheChanges [
 
 { #category : #presenters }
 StObjectBreakpointInspection >> updateSourceCodeBehaviorFor: node [
-	breakpointsInSourceCode behavior: model class
+
+	breakpointsInSourceCode beForBehavior: model class
 ]
 
 { #category : #updating }

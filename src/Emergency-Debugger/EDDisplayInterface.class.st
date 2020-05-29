@@ -8,7 +8,7 @@ Class {
 		'frame',
 		'methodFrame'
 	],
-	#category : #'Emergency-Debugger'
+	#category : #'Emergency-Debugger-Core'
 }
 
 { #category : #'display - properties' }

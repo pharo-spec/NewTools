@@ -37,7 +37,7 @@ StDebuggerTest >> debugger [
 
 { #category : #accessing }
 StDebuggerTest >> debuggerClass [
-	^ SpecDebugger
+	^ StDebugger
 ]
 
 { #category : #accessing }
@@ -162,7 +162,7 @@ StDebuggerTest >> testContextUnchangedAfterStepOver [
 
 { #category : #'tests - initialization' }
 StDebuggerTest >> testDebuggerApplication [
-	self assert: self debugger application identicalTo: SpecDebugger currentApplication 
+	self assert: self debugger application identicalTo: StDebugger currentApplication 
 ]
 
 { #category : #'tests - code pane' }
@@ -174,14 +174,14 @@ StDebuggerTest >> testDiscardCodeModification [
 StDebuggerTest >> testExtendedToolsClassesFor [
 	self
 		assertCollection:
-			(SpecDebugger
+			(StDebugger
 				collectExtendedToolsPragmaFor: #debuggerExtensionTestPragma)
 		includesAll: (StDebuggerDummyTestPresenter class>>#debuggerExtensionTestPragma) pragmas 
 ]
 
 { #category : #'tests - extensions' }
 StDebuggerTest >> testExtendedToolsPragma [
-	self assert: SpecDebugger extendedToolsPragma equals: #debuggerExtensionOrder:showByDefault:
+	self assert: StDebugger extendedToolsPragma equals: #debuggerExtensionOrder:showByDefault:
 ]
 
 { #category : #'tests - receiver inspector' }
@@ -426,6 +426,11 @@ StDebuggerTest >> testStackTableWithNewSession [
 		assert:
 			self debugger stackTable selection selectedItem
 				identicalTo: session shortStack first
+]
+
+{ #category : #'tests - toolbar' }
+StDebuggerTest >> testToolbarDependingOnContext [
+	self fail
 ]
 
 { #category : #'tests - code pane' }

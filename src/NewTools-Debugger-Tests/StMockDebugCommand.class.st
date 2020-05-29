@@ -1,3 +1,6 @@
+"
+A mock command for dezbugger command tree builder tests
+"
 Class {
 	#name : #StMockDebugCommand,
 	#superclass : #StDebugCommand,
@@ -7,6 +10,11 @@ Class {
 { #category : #initialization }
 StMockDebugCommand class >> defaultIconName [
 	^ #defaultIconName
+]
+
+{ #category : #initialization }
+StMockDebugCommand class >> defaultName [
+	^ Time now asNanoSeconds printString
 ]
 
 { #category : #initialization }

@@ -10,6 +10,11 @@ Class {
 	#category : #'NewTools-Debugger-Tests-Debugger - model'
 }
 
+{ #category : #testing }
+StDebuggerToolCommandTreeBuilderTest class >> isAbstract [ 
+	^self class = StDebuggerToolCommandTreeBuilderTest 
+]
+
 { #category : #assertions }
 StDebuggerToolCommandTreeBuilderTest >> assertCommandGroup: cmdGroup hasDisplayStrategy: displayStrategy [
 	self
@@ -76,7 +81,7 @@ StDebuggerToolCommandTreeBuilderTest >> setUp [
 		named: 'test session'
 		on: process
 		startedAt: context.
-	debugger := SpecDebugger basicNew
+	debugger := StDebugger basicNew
 		session: session;
 		initialize.
 	debugger stackTable selectItem: debugger stackTable items first.

@@ -47,10 +47,8 @@ StMetaBrowser >> initializeClassTree [
 	| classHierarchy |
 	
 	classHierarchy := self model class withAllSuperclasses reversed.
-	classes
-		whenSelectionChangedDo: [ :classTreeSelection | self updateMethods: classTreeSelection ].
-	classes
-		addColumn: (SpStringTableColumn title: 'Class hierarchy' evaluated: #name).
+	classes whenSelectionChangedDo: [ :classTreeSelection | self updateMethods: classTreeSelection ].
+	classes addColumn: (SpStringTableColumn title: 'Class hierarchy' evaluated: #name).
 	classes roots: {classHierarchy first}.
 	classes children: [ :aClass | 
 		classHierarchy select: [ :subclass | subclass superclass == aClass ] ].
@@ -64,34 +62,40 @@ StMetaBrowser >> initializeMethodFilter [
 
 { #category : #initialization }
 StMetaBrowser >> initializeMethodList [
-	methods
-		whenSelectionChangedDo: [ :selection | 
-			| method |
-			method := selection selectedItem.
-			method
-				ifNil: [ source text: '' ]
-				ifNotNil: [ source behavior: method methodClass.
-					source text: method sourceCode ] ].
-	methods display: [ :each | each selector ]
+
+	methods display: [ :each | each selector ].	
+	methods whenSelectionChangedDo: [ :selection | 
+		self updateSourceWith: selection selectedItem ].
+
 ]
 
 { #category : #initialization }
 StMetaBrowser >> initializePresenters [
+
 	classes := self newTreeTable.
-	methods := self newList.
+	methods := self newList
+		contextMenu: [ self rootCommandsGroup asMenuPresenter ];
+		yourself.
 	methodFilter := self newTextInput.
-	source := self newCode.
-	methods contextMenu: [ self rootCommandsGroup asMenuPresenter ]
+
+	source := self newCode
+		lineNumbers: true;
+		"contextMenu: [ self menuActions asMenuPresenter ];
+		contextKeyBindings: self menuActions asKMCategory;"
+		beForMethod: self selectedMethod;
+		yourself
 ]
 
 { #category : #accessing }
 StMetaBrowser >> selectedMethod [
+
 	^ methods selection selectedItem
 ]
 
 { #category : #accessing }
-StMetaBrowser >> selectedObject [ 
-	^self selectedMethod
+StMetaBrowser >> selectedObject [
+
+	^ self selectedMethod
 ]
 
 { #category : #updating }
@@ -107,4 +111,15 @@ StMetaBrowser >> updateMethods: classTreeSelection [
 			sortedMethods addAll: class methods.
 			methods items: sortedMethods ].
 	methods unselectAll
+]
+
+{ #category : #initialization }
+StMetaBrowser >> updateSourceWith: method [
+
+	source userActionDuring: [
+		method
+			ifNotNil: [ 
+				source text: method sourceCode; beForMethod: method  ]
+			ifNil: [ 
+				source text: ''; clearInteractionModel ] ]
 ]

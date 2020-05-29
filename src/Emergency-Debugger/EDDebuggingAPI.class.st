@@ -8,12 +8,19 @@ Class {
 	#instVars : [
 		'session',
 		'debugger',
-		'forbiddenProcesses',
 		'changesForMethods',
 		'longStack'
 	],
-	#category : #'Emergency-Debugger'
+	#category : #'Emergency-Debugger-Core'
 }
+
+{ #category : #'API - Processes' }
+EDDebuggingAPI class >> allRunningProcesses [
+	^ Process allSubInstances
+		reject: [ :each | 
+			each isTerminated
+				or: [ self forbiddenProcesses anySatisfy: [ :block | block value == each ] ] ]
+]
 
 { #category : #start }
 EDDebuggingAPI class >> attachTo: aDebugSession [
@@ -27,25 +34,39 @@ EDDebuggingAPI class >> displayStackSize [
 	^5
 ]
 
+{ #category : #'API - Processes' }
+EDDebuggingAPI class >> forbiddenProcesses [
+	^ {[  ].
+	[ Smalltalk lowSpaceWatcherProcess ].
+	[ WeakArray runningFinalizationProcess ].
+	[ Processor backgroundProcess ].
+	[ InputEventFetcher default fetcherProcess ].
+	[ UIManager default uiProcess ].
+	[ Delay schedulingProcess ]}
+]
+
 { #category : #accessing }
 EDDebuggingAPI class >> longStackSize [
 	^100
 ]
 
 { #category : #'API - Processes' }
-EDDebuggingAPI >> allRunningProcesses [
-	^ Process allSubInstances
-		reject: [ :each | 
-			each isTerminated
-				or: [ self forbiddenProcesses anySatisfy: [ :block | block value == each ] ] ]
+EDDebuggingAPI class >> terminateAllProcesses [
+	self allRunningProcesses
+		do: [ :process | process ifNotNil: [ process terminate ] ]
 ]
 
 { #category : #'API - Revert' }
-EDDebuggingAPI >> changeRecordsForMethod: aRgMethodHistoricalRingDefinition [
+EDDebuggingAPI >> changeRecordsForMethod: aCompiledMethod [
 	^ SourceFiles
-		changeRecordsFrom: aRgMethodHistoricalRingDefinition sourcePointer
-		className: aRgMethodHistoricalRingDefinition instanceSideParentName
-		isMeta: aRgMethodHistoricalRingDefinition isMetaSide
+		changeRecordsFrom: aCompiledMethod sourcePointer
+		className: aCompiledMethod methodClass name
+		isMeta: aCompiledMethod methodClass isMeta
+]
+
+{ #category : #accessing }
+EDDebuggingAPI >> changesForMethods [
+	^changesForMethods
 ]
 
 { #category : #'API - Debugging support' }
@@ -60,6 +81,11 @@ EDDebuggingAPI >> contextAt: index [
 ]
 
 { #category : #accessing }
+EDDebuggingAPI >> debugger [
+	^debugger
+]
+
+{ #category : #accessing }
 EDDebuggingAPI >> debugger: anObject [
 	debugger := anObject
 ]
@@ -67,18 +93,6 @@ EDDebuggingAPI >> debugger: anObject [
 { #category : #'API - Stack' }
 EDDebuggingAPI >> displayStackSize [
 	^self class displayStackSize
-]
-
-{ #category : #'API - Processes' }
-EDDebuggingAPI >> forbiddenProcesses [
-	^ forbiddenProcesses
-		ifNil: [ forbiddenProcesses := {[  ].
-			[ Smalltalk lowSpaceWatcherProcess ].
-			[ WeakArray runningFinalizationProcess ].
-			[ Processor backgroundProcess ].
-			[ InputEventFetcher default fetcherProcess ].
-			[ UIManager default uiProcess ].
-			[ Delay schedulingProcess ]} ]
 ]
 
 { #category : #initialization }
@@ -122,11 +136,28 @@ EDDebuggingAPI >> nodeForContext: aContext [
 	^ aContext method sourceNodeForPC: aContext pc
 ]
 
+{ #category : #'API - Stack' }
+EDDebuggingAPI >> resetStack [
+	longStack := nil
+]
+
+{ #category : #'API - Context' }
+EDDebuggingAPI >> restartContextAt: anIndex [
+	session restart: (self contextAt: anIndex).
+	self resetStack
+]
+
+{ #category : #'API - Debugging support' }
+EDDebuggingAPI >> resume [
+	self closeEmergencySession.
+	session resume
+]
+
 { #category : #'API - Revert' }
-EDDebuggingAPI >> revert: method to: aChangeRecord [
+EDDebuggingAPI >> revert: aCompiledMethod to: aChangeRecord [
 	"Reverts the given method to the given change record"
 
-	method asRingDefinition realClass
+	aCompiledMethod methodClass
 		compile: aChangeRecord sourceCode
 		classified: aChangeRecord category
 		withStamp: aChangeRecord stamp
@@ -134,8 +165,20 @@ EDDebuggingAPI >> revert: method to: aChangeRecord [
 ]
 
 { #category : #'API - Revert' }
-EDDebuggingAPI >> rgMethodHistorical: aMethod [
-	^ aMethod asHistoricalRingDefinition
+EDDebuggingAPI >> revert: aCompiledMethod to: aChangeRecord inContext: aContext [
+	"Reverts the given method to the given change record in the given context. 
+	The cached stack is updated."
+
+	session
+		recompileMethodTo: aChangeRecord sourceCode
+		inContext: aContext
+		notifying: nil.
+	longStack := nil
+]
+
+{ #category : #accessing }
+EDDebuggingAPI >> session [
+	^session
 ]
 
 { #category : #accessing }
@@ -155,8 +198,7 @@ EDDebuggingAPI >> stackAt: index [
 
 { #category : #'API - Stack' }
 EDDebuggingAPI >> stackFrom: start to: stop [
-	^ ((start max: 1) to: (stop min: self stackSize))
-		collect: [ :i | self longStack at: i ]
+	^ self longStack copyFrom: (start max: 0) to: (stop min: session stack size)
 ]
 
 { #category : #'API - Stack' }
@@ -167,8 +209,7 @@ EDDebuggingAPI >> stackSize [
 { #category : #'API - Processes' }
 EDDebuggingAPI >> terminateAllProcesses [
 	self terminateSession.
-	self allRunningProcesses
-		do: [ :process | process ifNotNil: [ process terminate ] ]
+	self class terminateAllProcesses
 ]
 
 { #category : #'API - Debugging support' }
@@ -180,6 +221,7 @@ EDDebuggingAPI >> terminateSession [
 { #category : #'API - Debugging support' }
 EDDebuggingAPI >> tryReopenSessionWithDebugger [
 	self closeEmergencySession.
+	self flag: 'This should be removed once the debugging system is in place'.
 	UIManager default
 		defer: [ [ Smalltalk tools debugger
 				openOn: session
@@ -190,12 +232,8 @@ EDDebuggingAPI >> tryReopenSessionWithDebugger [
 ]
 
 { #category : #'API - Revert' }
-EDDebuggingAPI >> versionsForMethod: aMethod [
+EDDebuggingAPI >> versionsForMethod: aCompiledMethod [
 	^ changesForMethods
-		at: aMethod
-		ifAbsentPut: [ (self changeRecordsForMethod: (self rgMethodHistorical: aMethod))
-				collectWithIndex: [ :c :i | 
-					| rg |
-					rg := c asRingDefinition.
-					rg annotationNamed: #versionIndex put: i ] ]
+		at: aCompiledMethod
+		ifAbsentPut: [ self changeRecordsForMethod: aCompiledMethod ]
 ]

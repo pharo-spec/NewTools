@@ -64,7 +64,7 @@ StDebuggerUsingSpecSelectorTest >> testCustomSelectSpecSelector [
 
 { #category : #'tests - spec' }
 StDebuggerUsingSpecSelectorTest >> testDebuggerClass [
-	self assert: specSelector debuggerClass identicalTo: SpecDebugger
+	self assert: specSelector debuggerClass identicalTo: StDebugger
 ]
 
 { #category : #'tests - spec' }

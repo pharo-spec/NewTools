@@ -4,13 +4,22 @@ Class {
 	#category : #'NewTools-Playground-Command'
 }
 
-{ #category : #converting }
-StPlaygroundHelpCommand >> asSpecCommand [ 
-	
-	^ super asSpecCommand 
-		iconName: #glamorousHelp;
-		yourself
+{ #category : #default }
+StPlaygroundHelpCommand class >> defaultDescription [
 
+	^ 'Open help browser'
+]
+
+{ #category : #accessing }
+StPlaygroundHelpCommand class >> defaultIconName [
+
+	^ #glamorousHelp
+]
+
+{ #category : #default }
+StPlaygroundHelpCommand class >> defaultName [
+
+	^ 'Help'
 ]
 
 { #category : #execution }
@@ -20,13 +29,4 @@ StPlaygroundHelpCommand >> execute [
 		each owner notNil 
 			and: [ (each owner key = GTPlaygroundHelp key) 
 			and: [ each title = 'Overview' ] ] ]
-]
-
-{ #category : #initialization }
-StPlaygroundHelpCommand >> initialize [ 
-	
-	super initialize.
-	self 
-		basicName: 'Help';
-		basicDescription: 'Open help browser.'
 ]

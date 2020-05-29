@@ -11,7 +11,7 @@ Class {
 		'closeButton',
 		'shortcutLabel'
 	],
-	#category : #'NewTools-Core'
+	#category : #'NewTools-Core-Presenters'
 }
 
 { #category : #specs }
@@ -30,19 +30,20 @@ StHeaderBar class >> defaultSpec [
 
 { #category : #initialization }
 StHeaderBar >> initializePresenters [
-
+	self flag: 'Temp hack for headers: removing header styles'.
 	closeButton := self newButton
-		addStyle: 'button.mini';
 		icon: (self application iconNamed: #windowClose);
-		action: [ ];
+		action: [  ];
 		hide;
 		yourself.
-	titleLabel := self newLabel addStyle: 'label.header'; yourself.
-	shortcutLabel := self newLabel
-		addStyle: 'label.shortcut';
-		yourself.
+	"	addStyle: 'button.mini';"
+	titleLabel := self newLabel.	"addStyle: 'label.header'; yourself"
+	shortcutLabel := self newLabel.
+	"addStyle: 'label.shortcut';
+		yourself"
 	toolbar := self newToolBar.
-	toolbar displayMode: self application toolbarDisplayMode
+	"toolbar displayMode: self application toolbarDisplayMode"
+	toolbar beIcons	"is a mini toolbar, items should be... tiny :)"
 ]
 
 { #category : #accessing }
@@ -57,7 +58,7 @@ StHeaderBar >> shortcut: aShortcut [
 	self shortcutLabel: (KMShortcutPrinter toString: aShortcut)
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 StHeaderBar >> shortcutLabel: aString [ 
 
 	shortcutLabel label: aString

@@ -17,7 +17,8 @@ Object >> breakpointInspection [
 
 { #category : #'*NewTools-Inspector-Extensions' }
 Object >> defaultObjectInspectorClass [
-	^StObjectInspector
+
+	^ StObjectInspector
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }

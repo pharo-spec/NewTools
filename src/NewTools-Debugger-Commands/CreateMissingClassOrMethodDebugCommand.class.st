@@ -16,7 +16,6 @@ CreateMissingClassOrMethodDebugCommand class >> defaultIconName [
 
 { #category : #accessing }
 CreateMissingClassOrMethodDebugCommand class >> defaultName [
-	<toolbarDebugCommand: 0>
 	^ 'Create'
 ]
 

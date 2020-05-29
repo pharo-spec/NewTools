@@ -25,7 +25,7 @@ Class {
 
 { #category : #accessing }
 StDebuggerUsingSpecSelector class >> debuggerClass [ 	
-	^SpecDebugger
+	^StDebugger
 ]
 
 { #category : #'default spec selectors' }

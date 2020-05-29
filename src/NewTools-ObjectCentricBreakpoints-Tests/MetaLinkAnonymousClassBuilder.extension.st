@@ -1,6 +1,6 @@
 Extension { #name : #MetaLinkAnonymousClassBuilder }
 
-{ #category : #'*NewTools-ObjectCentricBreakpointsTests' }
+{ #category : #'*NewTools-ObjectCentricBreakpoints-Tests' }
 MetaLinkAnonymousClassBuilder >> requestClassOfObject: anObject [
 	^anObject class
 ]

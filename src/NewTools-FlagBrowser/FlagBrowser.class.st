@@ -54,6 +54,8 @@ FlagBrowser >> initializeWidgets [
 
 { #category : #initialization }
 FlagBrowser >> initializeWindow: aWindowPresenter [
+
+	super initializeWindow: aWindowPresenter.
 	aWindowPresenter title: 'Flags Browser'.
 	aWindowPresenter initialExtent: (1000 @ 500) scaledByDisplayScaleFactor
 ]

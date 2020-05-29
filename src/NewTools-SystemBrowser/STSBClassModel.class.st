@@ -60,6 +60,12 @@ StSBClassModel >> icon [
 ]
 
 { #category : #accessing }
+StSBClassModel >> installInteractionModelTo: aCodePresenter [
+
+	aCodePresenter beForBehavior: self behavior
+]
+
+{ #category : #accessing }
 StSBClassModel >> instanceProtocols [
 
 	^ self instanceQuery execute items collect: [ :each |

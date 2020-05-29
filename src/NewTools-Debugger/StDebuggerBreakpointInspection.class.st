@@ -41,5 +41,6 @@ StDebuggerBreakpointInspection >> initializePresenters [
 
 { #category : #presenters }
 StDebuggerBreakpointInspection >> updateSourceCodeBehaviorFor: node [
-	breakpointsInSourceCode behavior: node methodNode methodClass
+
+	breakpointsInSourceCode beForBehavior: node methodNode methodClass
 ]

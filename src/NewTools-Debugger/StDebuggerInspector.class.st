@@ -129,27 +129,32 @@ StDebuggerInspector >> setModelBeforeInitialization: aModel [
 	model := aModel
 ]
 
+{ #category : #stepping }
+StDebuggerInspector >> step [
+	inspector step
+]
+
 { #category : #updating }
 StDebuggerInspector >> updateEvaluationPaneReceiver [
-
-	|receiver evaluator|
-	receiver := self model inspectedObject context receiver.
+	| context evaluator |
+	
+	context := self model inspectedObject context.
 	evaluator := inspector millerList presenters first evaluator.
-	evaluator doItReceiver: receiver.
-	evaluator behavior: receiver class.
+
+	evaluator beForContextReceiver: context
 ]
 
 { #category : #updating }
 StDebuggerInspector >> updateWith: inspectedObject [
 	| oldContext newContext |
-	oldContext := self model inspectedObject ifNotNil: [ :dbgCtx | 
-		              dbgCtx context ].
+	oldContext := self model inspectedObject
+		ifNotNil: [ :dbgCtx | dbgCtx context ].
 	newContext := inspectedObject ifNotNil: [ :dbgCtx | dbgCtx context ].
-	(oldContext notNil and: [ newContext notNil ]) ifTrue: [ 
-		(oldContext receiver == newContext receiver and: [ 
-			 oldContext selector == newContext selector ]) ifTrue: [ 
-			self forceRawInspectionUpdate.
-			^ self ] ].
+	(oldContext notNil and: [ newContext notNil ])
+		ifTrue: [ (oldContext receiver == newContext receiver
+				and: [ oldContext selector == newContext selector ])
+				ifTrue: [ self step.
+					^ self ] ].
 	self saveRawInspectionSelectionForContext: oldContext.
 	self model: (StDebuggerInspectorModel on: inspectedObject).
 	self updateEvaluationPaneReceiver.

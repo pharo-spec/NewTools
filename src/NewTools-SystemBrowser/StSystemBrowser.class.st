@@ -42,6 +42,18 @@ StSystemBrowser class >> defaultSpec [
 		yourself
 ]
 
+{ #category : #'instance creation' }
+StSystemBrowser class >> onDefaultEnvironment [
+
+	^ self on: (StSBEnvironmentModel newEnvironment: self defaultEnvironment)
+]
+
+{ #category : #'instance creation' }
+StSystemBrowser class >> onEnvironment: anEnvironment [
+
+	^ self on: (StSBEnvironmentModel newEnvironment: anEnvironment)
+]
+
 { #category : #opening }
 StSystemBrowser class >> open [
 	<script>
@@ -52,7 +64,7 @@ StSystemBrowser class >> open [
 { #category : #opening }
 StSystemBrowser class >> openOn: anEnvironment [
 
-	^ (self on: (StSBEnvironmentModel newEnvironment: anEnvironment)) openWithSpec
+	^ (self onEnvironment: (StSBEnvironmentModel newEnvironment: anEnvironment)) openWithSpec
 ]
 
 { #category : #opening }
@@ -172,6 +184,7 @@ StSystemBrowser >> initializePresenters [
 { #category : #initialization }
 StSystemBrowser >> initializeWindow: aWindowPresenter [
 
+	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
 		title: self initialTitle;
 		initialExtent: self preferredExtent;
@@ -208,7 +221,7 @@ StSystemBrowser >> newDefinitionFor: aModel [
 
 	^ self newCode
 		text: aModel definition;
-		behavior: aModel behavior;
+		in: [ :this | aModel installInteractionModelTo: this ];
 		yourself
 ]
 

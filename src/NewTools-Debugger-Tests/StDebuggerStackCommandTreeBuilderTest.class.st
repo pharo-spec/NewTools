@@ -29,7 +29,7 @@ StDebuggerStackCommandTreeBuilderTest >> testCommandGroupStructure [
 { #category : #tests }
 StDebuggerStackCommandTreeBuilderTest >> testNavigationCommandForContext [
 	|cmd|
-	cmd := builder navigationCommand: StMockDebugCommand forContext: self.
+	cmd := builder buildSpecCommand: StMockDebugCommand forContext: self.
 	self assert: cmd decoratedCommand class identicalTo: StMockDebugCommand.
 	self assert: cmd context identicalTo: self
 ]

@@ -120,10 +120,26 @@ StObjectInspector >> buildToolBar [
 			presenter displayMode: self application displayMode ]
 ]
 
-{ #category : #initialization }
+{ #category : #transmission }
 StObjectInspector >> defaultInputPort [
 
 	^ self inputModelPort
+]
+
+{ #category : #'api-focus' }
+StObjectInspector >> defaultKeyboardFocus [
+
+	^ views pages 
+		ifNotEmpty: [ :pages | pages first activePresenter ] 
+		ifEmpty: [ self ]
+]
+
+{ #category : #private }
+StObjectInspector >> evaluatorInitialText [
+
+	^ '"{1}"
+self ' 
+	format: { self model smallDescriptionString }
 ]
 
 { #category : #initialization }
@@ -140,8 +156,10 @@ StObjectInspector >> initializePresenters [
 
 	header := self instantiate: StHeaderBar.
 	views := self newNotebook.	
-	evaluator := self newCode.
-	evaluator text: '"Inspector evaluator"'.
+	evaluator := self newCode
+		beForObject: self model inspectedObject;
+		yourself.
+	evaluator text: self evaluatorInitialText.
 	self refresh
 ]
 
@@ -154,7 +172,7 @@ StObjectInspector >> initializeWindow: aWindowPresenter [
 		toolBar: self buildToolBar
 ]
 
-{ #category : #initialization }
+{ #category : #transmission }
 StObjectInspector >> inputModelPort [
 
 	^ SpModelPort newPresenter: self
@@ -279,9 +297,7 @@ StObjectInspector >> trySelectPageNamed: aString [
 { #category : #'private updating' }
 StObjectInspector >> updateEvaluator [
 
-	evaluator
-		doItReceiver: self model inspectedObject;
-		behavior: self model behavior
+	evaluator beForObject: self model inspectedObject
 ]
 
 { #category : #'private updating' }
