@@ -15,6 +15,16 @@ DebuggerFailure class >> of: aDebugger on: anException [
 		yourself
 ]
 
+{ #category : #debugging }
+DebuggerFailure >> debug [
+	"open a debugger on myself"
+
+	DebuggerSelector
+		debugException: self
+		inProcess: Processor activeProcess
+		from: UIManager default
+]
+
 { #category : #initialization }
 DebuggerFailure >> debugger: aDebugger exception: anException [
 	failedDebugger := aDebugger.

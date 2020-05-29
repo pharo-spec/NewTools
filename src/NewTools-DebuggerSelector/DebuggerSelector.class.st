@@ -228,8 +228,18 @@ DebuggerSelector >> preDebugAction: anObject [
 DebuggerSelector >> tryOpen: aDebugger on: aDebugSession [
 	[ aDebugger debugSession: aDebugSession ]
 		on: Error
-		do: [ :err | "(self requestActionOnDebuggerError: err)
-			ifFalse: [ ^ false ]." 
-			self flag: 'We should give the choice of which exception to debug, or add an action in the debugger to switch context'.
-			(DebuggerFailure of: aDebugger on: err) signal ]
+		do: [ :err | 
+			"(self requestActionOnDebuggerError: err)
+			ifFalse: [ ^ false ]."
+			| exceptionToWrap |
+			self flag: 'Hack to fix'.
+			exceptionToWrap := aDebugSession exception originException
+				== aDebugSession exception
+				ifTrue: [ err ]
+				ifFalse: [ aDebugSession exception ].
+				err inspect.
+			self
+				flag:
+					'We should give the choice of which exception to debug, or add an action in the debugger to switch context'.
+			(DebuggerFailure of: aDebugger on: exceptionToWrap) signal ]
 ]

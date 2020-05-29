@@ -10,8 +10,3 @@ Object class >> handlesContext: aContext [
 	"Whether I'm a competent debugger for aContext"
 	^ false
 ]
-
-{ #category : #'*NewTools-DebuggerSelector-Extensions' }
-Object >> rankDebugSession: aDebugSession [
-	^self defaultDebugSessionRank
-]

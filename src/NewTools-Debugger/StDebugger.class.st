@@ -388,16 +388,6 @@ StDebugger class >> hasAnyActivatedExtension [
 					[ :toolSettings | toolSettings anySatisfy: [ :setting | setting showInDebugger ] ] ]
 ]
 
-{ #category : #'debugger declaration' }
-StDebugger class >> iAmADebugger [
-	"Leave blank for intermediate classes. Add the <iAmADebugger> pragma for concrete debugger classes. This pragma is used by the system to find all available debuggers"
-
-	"For compatibility with DebuggerSelector https://github.com/dupriezt/DebuggerSelector"
-
-	<iAmADebugger>
-	self flag: 'I am not sure this is good design'
-]
-
 { #category : #'class initialization' }
 StDebugger class >> initialize [ 
 	
@@ -433,18 +423,6 @@ StDebugger class >> openOn: aDebugSession withFullView: aBool andNotification: a
 	debugger := self on: aDebugSession.
 	debugger openWithFullView.
 	^ debugger
-]
-
-{ #category : #'class initialization' }
-StDebugger class >> rank [
-	^ 80
-]
-
-{ #category : #'class initialization' }
-StDebugger class >> rankDebugSession: aDebugSession [
-	"Returns an integer representing how much this debugger is suitable to debug @aDebugSession. The higher the integer returned, the more suitable this debugger is. Signal the DebugSessionCannotBeOpenedByThisDebugger exception if this debugger absolutely cannot debug @aDebugSession (for example if this debugger can only handle debug sessions from test executions, and @aDebugSession does not come from a test execution)"
-	"For compatibility with DebuggerSelector https://github.com/dupriezt/DebuggerSelector"
-	^ self rank.
 ]
 
 { #category : #'tools registry' }
@@ -684,7 +662,8 @@ StDebugger >> initialExtent [
 StDebugger >> initialize [
 	super initialize.
 	self setSessionHolderSubscriptions.
-	self forceSessionUpdate
+	self forceSessionUpdate.
+"	self halt."
 ]
 
 { #category : #initialization }

@@ -1,6 +1,0 @@
-Extension { #name : #SpecDebugger }
-
-{ #category : #'*NewTools-DebuggerSelector-Extensions' }
-SpecDebugger classSide >> debugSession: aDebugSession [
- 	^self openOn: aDebugSession withFullView: true andNotification: nil
-]
