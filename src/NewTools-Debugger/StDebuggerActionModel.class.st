@@ -101,11 +101,16 @@ StDebuggerActionModel >> session [
 ]
 
 { #category : #'debug - stepping' }
-StDebuggerActionModel >> stepInto [ 
-	self session stepInto: self currentContext
+StDebuggerActionModel >> stepInto: aContext [ 
+	self session stepInto: aContext
 ]
 
 { #category : #'debug - stepping' }
-StDebuggerActionModel >> stepOver [
-	self session stepOver: self currentContext
+StDebuggerActionModel >> stepOver: aContext [
+	self session stepOver: aContext
+]
+
+{ #category : #'debug - stepping' }
+StDebuggerActionModel >> stepThrough: aContext [
+	self session stepThrough: aContext
 ]

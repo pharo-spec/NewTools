@@ -1147,17 +1147,17 @@ StDebugger >> statusLabelTextForCurrentContext [
 
 { #category : #actions }
 StDebugger >> stepInto [
-	self debuggerActionModel stepInto
+	self debuggerActionModel stepInto: self currentContext
 ]
 
 { #category : #actions }
 StDebugger >> stepOver [
-	self debuggerActionModel stepOver
+	self debuggerActionModel stepOver: self currentContext
 ]
 
 { #category : #actions }
 StDebugger >> stepThrough [
-	self debuggerActionModel stepThrough
+	self debuggerActionModel stepThrough: self currentContext
 ]
 
 { #category : #api }

@@ -109,3 +109,44 @@ StDebuggerActionModelTest >> testRunToSelectionInContext [
 	self assert: result equals: 4.
 	self assert: (method sourceNodeForPC: session interruptedContext pc) identicalTo: node
 ]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testStepInto [
+	|ctx|
+	ctx := session interruptedContext.
+	debugActionModel stepInto: ctx.
+	self assert: session interruptedContext sender identicalTo: ctx.
+	self assert: session stack second identicalTo: ctx
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testStepOver [
+	| method ctx |
+	method := self class >> #setResult.
+	ctx := session interruptedContext.
+	debugActionModel stepOver: ctx.
+	self assert: session interruptedContext identicalTo: ctx.
+	self assert: ctx top equals: 4.
+	debugActionModel stepOver: ctx.
+	self assert: session interruptedContext identicalTo: ctx.
+	self assert: result equals: 4.
+	self
+		assert: (method sourceNodeForPC: session interruptedContext pc)
+		identicalTo: method ast statements second
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testStepThrough [
+	| method ctx |
+	method := self class >> #setResult.
+	ctx := session interruptedContext.
+	debugActionModel stepThrough: ctx.
+	self assert: session interruptedContext identicalTo: ctx.
+	self assert: ctx top equals: 4.
+	debugActionModel stepThrough: ctx.
+	self assert: session interruptedContext identicalTo: ctx.
+	self assert: result equals: 4.
+	self
+		assert: (method sourceNodeForPC: session interruptedContext pc)
+		identicalTo: method ast statements second
+]
