@@ -1,32 +1,35 @@
+"
+Requests the debugger to step over the next expression evaluation
+"
 Class {
-	#name : #StepThroughDebugCommand,
-	#superclass : #StDebugCommand,
+	#name : #StStepThroughCommand,
+	#superclass : #StDebuggerCommand,
 	#category : #'NewTools-Debugger-Commands'
 }
 
 { #category : #default }
-StepThroughDebugCommand class >> defaultDescription [
+StStepThroughCommand class >> defaultDescription [
 	^ 'Step over the highlighted message, i.e. do not follow the sent message, taking debugger control after the method invoked returns or whenever execution should return inside a block used as an argument before that.'
 ]
 
 { #category : #initialization }
-StepThroughDebugCommand class >> defaultIconName [
+StStepThroughCommand class >> defaultIconName [
 	^ #glamorousThrough 
 ]
 
 { #category : #default }
-StepThroughDebugCommand class >> defaultName [
+StStepThroughCommand class >> defaultName [
 	<toolbarDebugCommand: 30>
 
 	^ 'Through'
 ]
 
 { #category : #initialization }
-StepThroughDebugCommand class >> defaultShortcut [
+StStepThroughCommand class >> defaultShortcut [
 	^ PharoShortcuts current stepThroughShortcut
 ]
 
 { #category : #hooks }
-StepThroughDebugCommand >> execute [
-	self session stepThrough: self currentContext
+StStepThroughCommand >> execute [
+	self debugger stepThrough
 ]

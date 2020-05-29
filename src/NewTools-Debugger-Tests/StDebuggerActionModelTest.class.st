@@ -1,0 +1,186 @@
+Class {
+	#name : #StDebuggerActionModelTest,
+	#superclass : #TestCase,
+	#instVars : [
+		'session',
+		'debugActionModel',
+		'debugger',
+		'result'
+	],
+	#category : #'NewTools-Debugger-Tests-Debugger - model'
+}
+
+{ #category : #helper }
+StDebuggerActionModelTest >> fileOutMethod: anObject [
+	result := anObject
+]
+
+{ #category : #helper }
+StDebuggerActionModelTest >> methodClass [
+	^self
+]
+
+{ #category : #helper }
+StDebuggerActionModelTest >> session [
+	^debugger session
+]
+
+{ #category : #helper }
+StDebuggerActionModelTest >> setResult [
+	result := 2 squared.
+	^result
+]
+
+{ #category : #running }
+StDebuggerActionModelTest >> setUp [
+	| method context process |
+	super setUp.
+	method := self class >> #setResult.
+	process := [ method valueWithReceiver: self arguments: #() ]
+		newProcess.
+	context := process suspendedContext.
+	session := process
+		newDebugSessionNamed: 'test session'
+		startedAt: context.
+	session
+		stepIntoUntil: [ :currentContext | currentContext method == method ].
+	debugger := StDebugger basicNew
+		application: StDebugger currentApplication;
+		session: session;
+		initialize.
+	debugger removeSessionHolderSubscriptions.
+	debugActionModel := StDebuggerActionModel on: session
+]
+
+{ #category : #running }
+StDebuggerActionModelTest >> tearDown [ 
+	session interruptedContext ifNotNil:[session resume].
+	super tearDown 
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testClearDebugSession [
+	| process |
+	process := session interruptedProcess.
+	self deny: process isTerminated.
+	debugActionModel clearDebugSession.
+	self assert: process isTerminated.
+	self assert: session interruptedContext isNil
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testCopyStackToClipboard [
+	debugActionModel copyStackToClipboard.
+	self
+		assert: Clipboard clipboardText string
+		equals:
+			(String
+				streamContents: [ :s | session interruptedContext shortDebugStackOn: s ])
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testFileOutMethod [
+	debugActionModel fileOutMethod: self.
+	self assert: result equals: self selector
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testImplementClassifiedInClassForContext [
+	self fail
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testInitialization [
+	self assert: debugActionModel session identicalTo: session.
+	self
+		assert: debugActionModel interruptedContext
+		identicalTo: session interruptedContext
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testPeelToFirstLike [
+	self fail
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testProceedDebugSession [
+	self deny: session interruptedContext isNil.
+	self assert: result isNil.
+	debugActionModel proceedDebugSession.
+	self assert: session interruptedContext isNil.
+	self assert: result equals: 4
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testRestartContext [
+	|topContext topPC|
+	topContext := 
+	session interruptedContext.
+	topPC := topContext pc.
+	session stepInto.
+	self deny: session interruptedContext identicalTo: topContext.
+	debugActionModel restartContext: topContext.
+	self assert: session interruptedContext identicalTo: topContext.
+	self assert: session interruptedContext pc equals: topPC
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testReturnValueFromExpressionFromContext [
+	session stepInto.
+	session stepInto.
+	debugActionModel returnValueFromExpression: '0' fromContext: session interruptedContext.
+	self assert: session interruptedContext top equals: 0.
+	session resume.
+	self assert: result equals: 0
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testRunToSelectionInContext [
+	|method node|
+	method := (self class >> #setResult).
+	node :=  method ast statements second.
+	debugActionModel runToSelection: (node start to: node stop) inContext: session interruptedContext.
+	self assert: result equals: 4.
+	self assert: (method sourceNodeForPC: session interruptedContext pc) identicalTo: node
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testStepInto [
+	|ctx|
+	ctx := session interruptedContext.
+	debugActionModel stepInto: ctx.
+	self assert: session interruptedContext sender identicalTo: ctx.
+	self assert: session stack second identicalTo: ctx
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testStepOver [
+	| method ctx |
+	method := self class >> #setResult.
+	ctx := session interruptedContext.
+	debugActionModel stepOver: ctx.
+	self assert: session interruptedContext identicalTo: ctx.
+	self assert: ctx top equals: 4.
+	debugActionModel stepOver: ctx.
+	self assert: session interruptedContext identicalTo: ctx.
+	self assert: result equals: 4.
+	self
+		assert: (method sourceNodeForPC: session interruptedContext pc)
+		identicalTo: method ast statements second
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testStepThrough [
+	| method ctx |
+	method := self class >> #setResult.
+	ctx := session interruptedContext.
+	debugActionModel stepThrough: ctx.
+	self assert: session interruptedContext identicalTo: ctx.
+	self assert: ctx top equals: 4.
+	debugActionModel stepThrough: ctx.
+	self assert: session interruptedContext identicalTo: ctx.
+	self assert: result equals: 4.
+	self
+		assert: (method sourceNodeForPC: session interruptedContext pc)
+		identicalTo: method ast statements second
+]

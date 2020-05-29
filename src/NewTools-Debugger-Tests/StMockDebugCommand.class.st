@@ -3,7 +3,7 @@ A mock command for dezbugger command tree builder tests
 "
 Class {
 	#name : #StMockDebugCommand,
-	#superclass : #StDebugCommand,
+	#superclass : #StDebuggerCommand,
 	#category : #'NewTools-Debugger-Tests-Debugger - model'
 }
 

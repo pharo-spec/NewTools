@@ -54,9 +54,7 @@ StDebuggerToolbarCommandTreeBuilder >> buildDebuggerCommandGroup [
 
 { #category : #'accessing - commands classes' }
 StDebuggerToolbarCommandTreeBuilder >> contextControlCommandClasses [
-	^ {
-	CreateMissingClassOrMethodDebugCommand
-	}
+	^ {StDefineMissingEntityCommand}
 ]
 
 { #category : #commands }
@@ -80,7 +78,7 @@ StDebuggerToolbarCommandTreeBuilder >> contextControlGroupName [
 { #category : #'accessing - commands classes' }
 StDebuggerToolbarCommandTreeBuilder >> contextRequestCommandClasses [
 	^ {
-	WhereIsDebugCommand
+	StWhereIsCommand
 	}
 ]
 
@@ -115,13 +113,13 @@ StDebuggerToolbarCommandTreeBuilder >> defaultDebugActionsGroupName [
 { #category : #'accessing - commands classes' }
 StDebuggerToolbarCommandTreeBuilder >> executionControlCommandClasses [
 	^ {
-	ProceedDebugCommand.
-	StepIntoDebugCommand.
-	StepOverDebugCommand.
-	StepThroughDebugCommand.
-	RunToSelectionDebugCommand.
-	RestartDebugCommand.
-	StReturnValueDebugCommand
+	StProceedCommand.
+	StStepIntoommand.
+	StStepOverCommand.
+	StStepThroughCommand.
+	StRunToSelectionCommand.
+	StRestartCommand.
+	StReturnValueCommand
 	}
 ]
 
