@@ -255,7 +255,7 @@ StPlayground >> initializeWindow: aWindowPresenter [
 		windowIcon: self windowIcon;
 		toolBar: self buildToolBar;
 		statusBar: (statusBar := self buildStatusBar);
-		whenResizingDo: [ :ann | self class preferredExtent: ann newSize ];
+		whenResizingDo: [ :ann | self preferredExtent: ann newSize ];
 		whenOpenedDo: [ text takeKeyboardFocus ]
 
 ]
@@ -297,6 +297,15 @@ StPlayground >> menuActions [
 StPlayground >> page [
 
 	^ page
+]
+
+{ #category : #private }
+StPlayground >> preferredExtent: aSize [
+
+	(self window isMaximized 
+		or: [ self window isMinimized ])
+		ifTrue: [ ^ self ].
+	self class preferredExtent: aSize
 ]
 
 { #category : #accessing }
