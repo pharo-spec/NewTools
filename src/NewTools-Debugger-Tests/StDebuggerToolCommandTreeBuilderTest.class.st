@@ -73,7 +73,7 @@ StDebuggerToolCommandTreeBuilderTest >> newBuilder [
 StDebuggerToolCommandTreeBuilderTest >> setUp [
 	| context process |
 	super setUp.
-	context := [ ^1 + 1 ] asContext.
+	context := [ ^ 1 + 1 ] asContext.
 	process := Process
 		forContext: context
 		priority: Processor userInterruptPriority.
@@ -82,6 +82,7 @@ StDebuggerToolCommandTreeBuilderTest >> setUp [
 		on: process
 		startedAt: context.
 	debugger := StDebugger basicNew
+		application: StDebugger currentApplication;
 		session: session;
 		initialize.
 	debugger stackTable selectItem: debugger stackTable items first.
