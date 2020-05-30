@@ -204,7 +204,7 @@ StPlaygroundBindingsPresenter >> newInspectorWithTransmission: aClass on: aBindi
 StPlaygroundBindingsPresenter >> removeSelectedBinding [
 
 	self selectedBindingIsLocal 
-		ifTrue: [ parent removeBinding: self selectedBinding ]
+		ifTrue: [ parent interactionModel removeBinding: self selectedBinding ]
 		ifFalse: [ self application removeSharedBinding: self selectedBinding ].
 	self updatePresenterKeepingSelection
 ]
