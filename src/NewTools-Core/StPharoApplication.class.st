@@ -25,6 +25,17 @@ StPharoApplication class >> validateSession [
 	session := Smalltalk session
 ]
 
+{ #category : #initialization }
+StPharoApplication >> initialize [
+
+	super initialize.
+	self flag: #TODO. "Replace this with a proper initialization mechanism (which is not
+	implemented at the moment, and we need to choose the backend from it)"
+	self class environment 
+		at: #StPharoMorphicConfiguration
+		ifPresent: [ :aClass | self useBackend: #Morphic with: aClass new ]
+]
+
 { #category : #running }
 StPharoApplication >> run [ 
 
