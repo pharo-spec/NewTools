@@ -4,7 +4,7 @@ A FBLocationTest is a test class for testing the behavior of FBLocation
 Class {
 	#name : #FBLocationTest,
 	#superclass : #TestCase,
-	#category : #'NewTools-FlagBrowser-Tests'
+	#category : #'NewTools-FlagBrowser-Tests-Base'
 }
 
 { #category : #private }
