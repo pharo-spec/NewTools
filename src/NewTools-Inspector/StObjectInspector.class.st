@@ -28,7 +28,7 @@ Class {
 StObjectInspector class >> buildCommandsGroupWith: presenter forRoot: aCmCommandsGroup [
 	| group |
 	group := (CmCommandGroup named: 'Toolbar') asSpecGroup.
-	(StInspectorCommand toolbarCommandsFor: self)
+	(StInspectorCommand toolbarCommandsFor: presenter)
 		do: [ :cmd | group register: cmd ].
 	aCmCommandsGroup register: group
 ]
