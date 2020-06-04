@@ -576,6 +576,12 @@ StDebugger >> canExecuteDebugCommand [
 	^ self session isInterruptedContextDoesNotUnderstand not
 ]
 
+{ #category : #commands }
+StDebugger >> canExecuteRestartCommand [
+	^ (self session isContextPostMortem: self session interruptedContext)
+		not
+]
+
 { #category : #actions }
 StDebugger >> clear [
 	extensionToolsNotebook pages

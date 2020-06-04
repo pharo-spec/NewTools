@@ -27,6 +27,11 @@ StPeelToFirstCommand class >> defaultShortcut [
 	^ nil
 ]
 
+{ #category : #testing }
+StPeelToFirstCommand >> appliesTo: aDebugger [
+	^ true
+]
+
 { #category : #actions }
 StPeelToFirstCommand >> execute [
 	self debugger copyStackToClipboard

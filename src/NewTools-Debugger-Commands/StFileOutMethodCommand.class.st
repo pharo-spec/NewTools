@@ -27,6 +27,11 @@ StFileOutMethodCommand class >> defaultShortcut [
 	^ nil
 ]
 
+{ #category : #testing }
+StFileOutMethodCommand >> appliesTo: aDebugger [
+	^ true
+]
+
 { #category : #actions }
 StFileOutMethodCommand >> execute [
 	self debugger fileOutSelectedContext
