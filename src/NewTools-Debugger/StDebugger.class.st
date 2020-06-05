@@ -550,36 +550,27 @@ StDebugger >> buildContextMenus [
 
 { #category : #commands }
 StDebugger >> canExecuteCreateMissingClassCommand [
-	^ self session isInterruptedContextDoesNotUnderstand
-		and: [ (self interruptedContext tempAt: 2) class == VariableNotDeclared ]
+	^ self debuggerActionModel isInterruptedContextMissingClassException
 ]
 
 { #category : #commands }
 StDebugger >> canExecuteCreateMissingMethodCommand [
-	^ self session isInterruptedContextDoesNotUnderstand
+	^ self debuggerActionModel isInterruptedContextDoesNotUnderstand
 ]
 
 { #category : #commands }
 StDebugger >> canExecuteCreateSubclassResponsibilityCommand [
-	^ self interruptedContext selector == #subclassResponsibility
-
-	"### Comments says it should not happen, so why keeping the code? Let's experiment
-	and:
-			["	"If we work with an instance of the abstract class (shouldn't normally happen) do not add this action, 
-		as the abstract class alredy contains the the method."
-	"		interruptedContext sender receiver class
-				~~ interruptedContext sender methodClass ]"
+	^ self debuggerActionModel isInterruptedContextSubclassResponsibilityException
 ]
 
 { #category : #commands }
 StDebugger >> canExecuteDebugCommand [
-	^ self session isInterruptedContextDoesNotUnderstand not
+	^ self debuggerActionModel isContextSteppable
 ]
 
 { #category : #commands }
 StDebugger >> canExecuteRestartCommand [
-	^ (self session isContextPostMortem: self session interruptedContext)
-		not
+	^ self debuggerActionModel isInterruptedContextPostMortem not
 ]
 
 { #category : #actions }

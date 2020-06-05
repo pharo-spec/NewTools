@@ -112,3 +112,8 @@ tag := thisContext method selector.
 StDummyDebuggerPresenter >> tag [
 	^ tag
 ]
+
+{ #category : #mocks }
+StDummyDebuggerPresenter >> unimplementedSubclassResponsibility [
+	self subclassResponsibility 
+]

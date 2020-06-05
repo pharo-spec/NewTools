@@ -67,3 +67,8 @@ StDefineMissingEntityCommand >> initialize [
 	super initialize.
 	subCommands := OrderedCollection new
 ]
+
+{ #category : #accessing }
+StDefineMissingEntityCommand >> subCommands [
+	^subCommands
+]

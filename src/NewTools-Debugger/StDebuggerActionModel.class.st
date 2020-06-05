@@ -48,6 +48,55 @@ StDebuggerActionModel >> interruptedContext [
 	^self session interruptedContext
 ]
 
+{ #category : #'debug - predicates' }
+StDebuggerActionModel >> isContextSteppable [
+	^ (self isInterruptedContextError
+		or: [ self isInterruptedContextATest
+				or: [ self isInterruptedContextPostMortem
+						or: [ self isInterruptedContextDoesNotUnderstand
+								or: [ self isInterruptedContextMissingClassException
+										or: [ self isInterruptedContextSubclassResponsibilityException ] ] ] ] ])
+		not
+]
+
+{ #category : #'debug - predicates' }
+StDebuggerActionModel >> isInterruptedContextATest [
+	^ self session isInterruptedContextATest
+]
+
+{ #category : #'debug - predicates' }
+StDebuggerActionModel >> isInterruptedContextDoesNotUnderstand [
+	^self session isInterruptedContextDoesNotUnderstand
+]
+
+{ #category : #'debug - predicates' }
+StDebuggerActionModel >> isInterruptedContextError [
+	^self interruptedContext receiver isKindOf: Error
+]
+
+{ #category : #'debug - predicates' }
+StDebuggerActionModel >> isInterruptedContextMissingClassException [
+	^ self isInterruptedContextDoesNotUnderstand
+		and: [ (self interruptedContext tempAt: 2) class == VariableNotDeclared ]
+]
+
+{ #category : #'debug - predicates' }
+StDebuggerActionModel >> isInterruptedContextPostMortem [
+	^ self session isContextPostMortem: self session interruptedContext
+]
+
+{ #category : #'debug - predicates' }
+StDebuggerActionModel >> isInterruptedContextSubclassResponsibilityException [
+	^ self interruptedContext selector == #subclassResponsibility
+	
+		"### Comments says it should not happen, so why keeping the code? Let's experiment
+	and:
+			["	"If we work with an instance of the abstract class (shouldn't normally happen) do not add this action, 
+		as the abstract class alredy contains the the method."
+	"		interruptedContext sender receiver class
+				~~ interruptedContext sender methodClass ]"
+]
+
 { #category : #'debug - stack' }
 StDebuggerActionModel >> peelToFirstLike: aContext [
 	self session peelToFirstLike: aContext

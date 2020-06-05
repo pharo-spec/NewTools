@@ -48,6 +48,7 @@ StDebuggerContext >> argumentsNodes [
 
 { #category : #accessing }
 StDebuggerContext >> assertionSelectors [
+	self flag: 'A bit magickal, also is this the right place?'.
 	^ #( #assert:equals: #assert:closeTo:precision:
 	     #assert:closeTo: #assert:identicalTo: #assertCollection:equals:
 	     #assertCollection:hasSameElements: )
