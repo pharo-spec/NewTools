@@ -26,85 +26,85 @@ StDummyDebuggerPresenter class >> debuggingExtensionToolName [
 
 { #category : #mocks }
 StDummyDebuggerPresenter >> copyStackToClipboard [
-tag := #copyStackToClipboard.
+tag := thisContext method selector.
 ^true
 ]
 
 { #category : #mocks }
 StDummyDebuggerPresenter >> createMissingClass [
-tag := #createMissingClass.
+tag := thisContext method selector.
 ^true
 ]
 
 { #category : #mocks }
 StDummyDebuggerPresenter >> createMissingMethod [
-tag := #createMissingMethod.
+tag := thisContext method selector.
 ^true
 ]
 
 { #category : #mocks }
 StDummyDebuggerPresenter >> createSubclassResponsibility [
-tag := #createSubclassResponsibility.
+tag := thisContext method selector.
 ^true
 ]
 
 { #category : #mocks }
 StDummyDebuggerPresenter >> fileOutSelectedContext [
-tag := #fileOutSelectedContext.
+tag := thisContext method selector.
 ^true
 ]
 
 { #category : #mocks }
 StDummyDebuggerPresenter >> proceedDebugSession [
-tag := #proceedDebugSession.
+tag := thisContext method selector.
 ^true
 ]
 
 { #category : #mocks }
 StDummyDebuggerPresenter >> restartCurrentContext [
-tag := #restartCurrentContext.
+tag := thisContext method selector.
 ^true
 ]
 
 { #category : #mocks }
 StDummyDebuggerPresenter >> returnEnteredValue [
-tag := #returnEnteredValue.
+tag := thisContext method selector.
 ^true
 ]
 
 { #category : #mocks }
 StDummyDebuggerPresenter >> runToSelection [
-tag := #runToSelection.
+tag := thisContext method selector.
 ^true
 ]
 
 { #category : #mocks }
 StDummyDebuggerPresenter >> selectNextExecutedExpression [
-tag := #selectNextExecutedExpression.
+tag := thisContext method selector.
 ^true
 ]
 
 { #category : #mocks }
 StDummyDebuggerPresenter >> showFullStack [
-tag := #showFullStack.
+tag := thisContext method selector.
 ^true
 ]
 
 { #category : #mocks }
 StDummyDebuggerPresenter >> stepInto [
-tag := #stepInto.
+tag := thisContext method selector.
 ^true
 ]
 
 { #category : #mocks }
 StDummyDebuggerPresenter >> stepOver [
-tag := #stepOver.
+tag := thisContext method selector.
 ^true
 ]
 
 { #category : #mocks }
 StDummyDebuggerPresenter >> stepThrough [
-tag := #stepThrough.
+tag := thisContext method selector.
 ^true
 ]
 
