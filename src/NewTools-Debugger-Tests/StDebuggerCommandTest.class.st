@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'debuggerProvider'
 	],
-	#category : #'NewTools-Debugger-Tests-Debugger - model'
+	#category : #'NewTools-Debugger-Tests-Model'
 }
 
 { #category : #running }

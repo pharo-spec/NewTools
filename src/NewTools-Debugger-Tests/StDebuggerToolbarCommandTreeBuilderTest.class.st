@@ -1,7 +1,7 @@
 Class {
 	#name : #StDebuggerToolbarCommandTreeBuilderTest,
 	#superclass : #StDebuggerToolCommandTreeBuilderTest,
-	#category : #'NewTools-Debugger-Tests-Debugger - model'
+	#category : #'NewTools-Debugger-Tests-Model'
 }
 
 { #category : #'instance creation' }

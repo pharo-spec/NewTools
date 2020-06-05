@@ -8,7 +8,7 @@ Class {
 		'withDebuggerExtensions',
 		'withActivatedExtensions'
 	],
-	#category : #'NewTools-Debugger-Tests-Debugger - model'
+	#category : #'NewTools-Debugger-Tests-Utils'
 }
 
 { #category : #initialization }

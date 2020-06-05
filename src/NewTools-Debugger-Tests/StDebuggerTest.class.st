@@ -5,7 +5,7 @@ Class {
 		'session',
 		'debugger'
 	],
-	#category : #'NewTools-Debugger-Tests-Debugger - views'
+	#category : #'NewTools-Debugger-Tests-Presenters'
 }
 
 { #category : #'helpers - debugger control' }

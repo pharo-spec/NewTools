@@ -4,7 +4,7 @@ A mock command for dezbugger command tree builder tests
 Class {
 	#name : #StMockDebugCommand,
 	#superclass : #StDebuggerCommand,
-	#category : #'NewTools-Debugger-Tests-Debugger - model'
+	#category : #'NewTools-Debugger-Tests-Utils'
 }
 
 { #category : #initialization }

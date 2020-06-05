@@ -7,7 +7,7 @@ Class {
 		'debugger',
 		'result'
 	],
-	#category : #'NewTools-Debugger-Tests-Debugger - model'
+	#category : #'NewTools-Debugger-Tests-Model'
 }
 
 { #category : #helper }

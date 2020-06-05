@@ -7,7 +7,7 @@ Class {
 		'rootGroup',
 		'builder'
 	],
-	#category : #'NewTools-Debugger-Tests-Debugger - model'
+	#category : #'NewTools-Debugger-Tests-Model'
 }
 
 { #category : #testing }

@@ -4,7 +4,7 @@ Debugger command tree builder mock to test general behavior outside of a debugge
 Class {
 	#name : #StDebuggerMockCommandTreeBuilder,
 	#superclass : #StDebuggerCommandTreeBuilder,
-	#category : #'NewTools-Debugger-Tests-Debugger - model'
+	#category : #'NewTools-Debugger-Tests-Utils'
 }
 
 { #category : #accessing }
