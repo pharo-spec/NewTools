@@ -11,6 +11,12 @@ Class {
 }
 
 { #category : #helpers }
+StTestDebuggerProvider >> debuggerWithContext: aContext [
+	self sessionFor: aContext.
+	^ self newDebugger
+]
+
+{ #category : #helpers }
 StTestDebuggerProvider >> debuggerWithDNUContext [
 	[ Object new toto ]
 		on: Error

@@ -39,16 +39,10 @@ StDebuggerActionModelTest >> setUp [
 	process := [ method valueWithReceiver: self arguments: #() ]
 		newProcess.
 	context := process suspendedContext.
-	session := process
-		newDebugSessionNamed: 'test session'
-		startedAt: context.
+	session := (StTestDebuggerProvider new debuggerWithContext: context)
+		session.
 	session
 		stepIntoUntil: [ :currentContext | currentContext method == method ].
-	debugger := StDebugger basicNew
-		application: StDebugger currentApplication;
-		session: session;
-		initialize.
-	debugger removeSessionHolderSubscriptions.
 	debugActionModel := StDebuggerActionModel on: session
 ]
 
