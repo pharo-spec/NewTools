@@ -56,8 +56,3 @@ DebuggerFailure >> isHandleableBy: aDebugger [
 DebuggerFailure >> originException [
 	^ innerException originException
 ]
-
-{ #category : #accessing }
-DebuggerFailure >> signalerContext [
-	^ self originException signalerContext
-]
