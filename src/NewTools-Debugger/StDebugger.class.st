@@ -667,8 +667,7 @@ StDebugger >> initialExtent [
 StDebugger >> initialize [
 	super initialize.
 	self setSessionHolderSubscriptions.
-	self forceSessionUpdate a. 
-	"self halt"
+	self forceSessionUpdate.
 ]
 
 { #category : #initialization }
