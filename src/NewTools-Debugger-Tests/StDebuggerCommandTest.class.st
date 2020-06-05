@@ -2,100 +2,22 @@ Class {
 	#name : #StDebuggerCommandTest,
 	#superclass : #TestCase,
 	#instVars : [
-		'session'
+		'debuggerProvider'
 	],
 	#category : #'NewTools-Debugger-Tests-Debugger - model'
 }
-
-{ #category : #helpers }
-StDebuggerCommandTest >> debuggerWithDNUContext [
-	[ Object new toto ]
-		on: Error
-		do: [ :err | 
-			self sessionFor: err signalerContext.
-			^ self newDebugger ]
-]
-
-{ #category : #helpers }
-StDebuggerCommandTest >> debuggerWithErrorContext [
-	[ 1 / 0 ]
-		on: Error
-		do: [ :err | 
-			self sessionFor: err signalerContext.
-			^ self newDebugger ]
-]
-
-{ #category : #helpers }
-StDebuggerCommandTest >> debuggerWithFailingTestContext [
-	[ self produceTestFailure ]
-		on: TestFailure
-		do: [ :err | 
-			self sessionFor: err signalerContext.
-			^ self newDebugger ]
-]
-
-{ #category : #helpers }
-StDebuggerCommandTest >> debuggerWithMissingClassContext [
-	[ MissingClass new]
-		on: Error
-		do: [ :err | 
-			self sessionFor: err signalerContext copy.
-			^ self newDebugger ]
-]
-
-{ #category : #helpers }
-StDebuggerCommandTest >> debuggerWithMissingSubclassResponsibilityContext [
-	[ StDummyDebuggerPresenter new unimplementedSubclassResponsibility ]
-		on: Error
-		do: [ :err | 
-			self sessionFor: err signalerContext.
-			^ self newDebugger ]
-]
-
-{ #category : #helpers }
-StDebuggerCommandTest >> debuggerWithRunnableContext [
-	[ Halt now ]
-		on: Halt
-		do: [ :err | 
-			self sessionFor: err signalerContext.
-			^ self newDebugger ]
-]
-
-{ #category : #helpers }
-StDebuggerCommandTest >> newDebugger [
-	^ StDebugger basicNew
-		session: session;
-		yourself
-]
-
-{ #category : #helpers }
-StDebuggerCommandTest >> produceTestFailure [
-	<expectedFailure>
-	self fail
-]
-
-{ #category : #helpers }
-StDebuggerCommandTest >> sessionFor: aContext [
-	| process |
-	process := Process
-		forContext: aContext
-		priority: Processor userInterruptPriority.
-	session := DebugSession
-		named: 'test session'
-		on: process
-		startedAt: aContext
-]
 
 { #category : #running }
 StDebuggerCommandTest >> setUp [
 	"Hooks that subclasses may override to define the fixture of test."
 
-	super setUp
+	super setUp.
+	debuggerProvider := StTestDebuggerProvider new
 ]
 
 { #category : #running }
 StDebuggerCommandTest >> tearDown [ 
-	session ifNotNil:[session terminate].
+	debuggerProvider terminate.
 	super tearDown
 ]
 
@@ -103,7 +25,7 @@ StDebuggerCommandTest >> tearDown [
 StDebuggerCommandTest >> testCommandsInDNUContext [
 
 	|debugger|
-	debugger := self debuggerWithDNUContext.
+	debugger := debuggerProvider debuggerWithDNUContext.
 	
 	"Executable commands relative to context"
 	self assert: (StDefineMethodCommand forContext: debugger) canBeExecuted.
@@ -134,7 +56,7 @@ StDebuggerCommandTest >> testCommandsInErrorContext [
 	|debugger|
 	self flag: 'This test cannot pass until the debug session holds the exception.
 	Waiting for Debugger-Selector integration.'.
-	debugger := self debuggerWithErrorContext.
+	debugger := debuggerProvider debuggerWithErrorContext.
 		
 	"Executable commands relative to context"	
 	self assert: (StRestartCommand forContext: debugger) canBeExecuted. 
@@ -163,7 +85,7 @@ StDebuggerCommandTest >> testCommandsInErrorContext [
 StDebuggerCommandTest >> testCommandsInFailingTestContext [
 
 	|debugger|
-	debugger := self debuggerWithFailingTestContext.
+	debugger := debuggerProvider debuggerWithFailingTestContext.
 	self flag:'Cannot work until we can properly detect a failing assertion context'.
 	
 	"Executable commands relative to context"	
@@ -195,7 +117,7 @@ StDebuggerCommandTest >> testCommandsInMissingClassContext [
 	Define new class and define new method must be possible. "
 
 	|debugger|
-	debugger := self debuggerWithMissingClassContext.
+	debugger := debuggerProvider debuggerWithMissingClassContext.
 	
 	"Executable commands relative to context"	
 	self assert: (StDefineClassCommand forContext: debugger) canBeExecuted.	
@@ -225,7 +147,7 @@ StDebuggerCommandTest >> testCommandsInMissingClassContext [
 StDebuggerCommandTest >> testCommandsInMissingSubclassResponsibilityContext [
 
 	|debugger|
-	debugger := self debuggerWithMissingSubclassResponsibilityContext.
+	debugger := debuggerProvider debuggerWithMissingSubclassResponsibilityContext.
 	
 	"Executable commands relative to context"
 	self assert: (StDefineSubclassResponsabilityCommand forContext: debugger) canBeExecuted.
@@ -254,7 +176,7 @@ StDebuggerCommandTest >> testCommandsInMissingSubclassResponsibilityContext [
 StDebuggerCommandTest >> testCommandsInRunnableContext [
 
 	|debugger|
-	debugger := self debuggerWithRunnableContext.
+	debugger := debuggerProvider debuggerWithRunnableContext.
 	
 	"Executable commands relative to context"
 	self assert: (StStepIntoCommand forContext: debugger) canBeExecuted. 
@@ -316,7 +238,7 @@ StDebuggerCommandTest >> testStDefineMethodCommandExecution [
 { #category : #'tests - execution' }
 StDebuggerCommandTest >> testStDefineMissingEntityCommandExecution [
 	| debugger command |
-	debugger := self debuggerWithDNUContext.
+	debugger := debuggerProvider debuggerWithDNUContext.
 	command := StDefineMissingEntityCommand forContext: debugger.
 	self
 		assertCollection: (command subCommands collect: [ :c | c class ])
@@ -325,13 +247,13 @@ StDebuggerCommandTest >> testStDefineMissingEntityCommandExecution [
 		assert: command applicableCommand class
 		identicalTo: StDefineMethodCommand.
 		
-	debugger := self debuggerWithMissingClassContext.
+	debugger := debuggerProvider debuggerWithMissingClassContext.
 	command := StDefineMissingEntityCommand forContext: debugger.
 	self
 		assert: command applicableCommand class
 		identicalTo: StDefineClassCommand.
 		
-	debugger := self debuggerWithMissingSubclassResponsibilityContext.
+	debugger := debuggerProvider debuggerWithMissingSubclassResponsibilityContext.
 	command := StDefineMissingEntityCommand forContext: debugger.
 	self
 		assert: command applicableCommand class
