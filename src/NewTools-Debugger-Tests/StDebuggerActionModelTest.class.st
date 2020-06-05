@@ -11,6 +11,14 @@ Class {
 }
 
 { #category : #helper }
+StDebuggerActionModelTest >> changeSession: aDebugSession [
+
+	session terminate.
+	session := aDebugSession.
+	debugActionModel := StDebuggerActionModel on: session
+]
+
+{ #category : #helper }
 StDebuggerActionModelTest >> fileOutMethod: anObject [
 	result := anObject
 ]
@@ -48,7 +56,7 @@ StDebuggerActionModelTest >> setUp [
 
 { #category : #running }
 StDebuggerActionModelTest >> tearDown [ 
-	session interruptedContext ifNotNil:[session resume].
+	session interruptedContext ifNotNil:[session terminate].
 	super tearDown 
 ]
 
@@ -89,6 +97,51 @@ StDebuggerActionModelTest >> testInitialization [
 	self
 		assert: debugActionModel interruptedContext
 		identicalTo: session interruptedContext
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testIsContextSteppable [
+	self assert: debugActionModel isContextSteppable
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testIsInterruptedContextATest [
+	self flag: 'Cannot work until we know how to characterize the context of a failing assertion'.
+	self changeSession: StTestDebuggerProvider new debuggerWithFailingTestContext session.
+	self assert: debugActionModel isInterruptedContextATest
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testIsInterruptedContextDoesNotUnderstand [
+	self changeSession: StTestDebuggerProvider new debuggerWithDNUContext session.
+	self assert: debugActionModel isInterruptedContextDoesNotUnderstand
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testIsInterruptedContextError [
+	self flag: 'Cannot work until debug sessions are able to hold exceptions that raised them (see Debugger-Selector PR)'.
+	self changeSession: StTestDebuggerProvider new debuggerWithErrorContext session.
+	self assert: debugActionModel isInterruptedContextError
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testIsInterruptedContextMissingClassException [
+	self
+		changeSession: StTestDebuggerProvider new debuggerWithMissingClassContext session.
+	self
+		assert: debugActionModel isInterruptedContextMissingClassException
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testIsInterruptedContextPostMortem [
+	session resume.
+	self assert: debugActionModel isInterruptedContextPostMortem
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testIsInterruptedContextSubclassResponsibilityException [
+	self changeSession: StTestDebuggerProvider new debuggerWithMissingSubclassResponsibilityContext session.
+	self assert: debugActionModel isInterruptedContextSubclassResponsibilityException
 ]
 
 { #category : #tests }
