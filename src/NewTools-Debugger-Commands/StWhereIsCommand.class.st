@@ -28,6 +28,11 @@ StWhereIsCommand class >> defaultShortcut [
 	^ nil
 ]
 
+{ #category : #testing }
+StWhereIsCommand >> appliesTo: aDebugger [
+	^ true
+]
+
 { #category : #hooks }
 StWhereIsCommand >> execute [
 	self debugger selectNextExecutedExpression

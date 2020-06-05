@@ -114,7 +114,7 @@ StDebuggerToolbarCommandTreeBuilder >> defaultDebugActionsGroupName [
 StDebuggerToolbarCommandTreeBuilder >> executionControlCommandClasses [
 	^ {
 	StProceedCommand.
-	StStepIntoommand.
+	StStepIntoCommand.
 	StStepOverCommand.
 	StStepThroughCommand.
 	StRunToSelectionCommand.

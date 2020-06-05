@@ -28,6 +28,11 @@ StShowFullStackCommand class >> defaultShortcut [
 	^ nil
 ]
 
+{ #category : #testing }
+StShowFullStackCommand >> appliesTo: aDebugger [
+	^ true
+]
+
 { #category : #hooks }
 StShowFullStackCommand >> execute [
 	self debugger showFullStack

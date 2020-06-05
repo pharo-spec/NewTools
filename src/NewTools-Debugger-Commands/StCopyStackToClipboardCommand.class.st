@@ -27,6 +27,11 @@ StCopyStackToClipboardCommand class >> defaultShortcut [
 	^ nil
 ]
 
+{ #category : #testing }
+StCopyStackToClipboardCommand >> appliesTo: aDebugger [
+	^ true
+]
+
 { #category : #hooks }
 StCopyStackToClipboardCommand >> execute [
 	self debugger copyStackToClipboard

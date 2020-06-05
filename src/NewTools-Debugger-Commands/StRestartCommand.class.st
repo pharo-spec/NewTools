@@ -29,6 +29,11 @@ StRestartCommand class >> defaultShortcut [
 	^ PharoShortcuts current restartExecutionShortcut
 ]
 
+{ #category : #testing }
+StRestartCommand >> appliesTo: aDebugger [
+	^ aDebugger canExecuteRestartCommand
+]
+
 { #category : #hooks }
 StRestartCommand >> execute [
 	self debugger restartCurrentContext
