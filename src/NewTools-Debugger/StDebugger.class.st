@@ -425,6 +425,11 @@ StDebugger class >> openOn: aDebugSession withFullView: aBool andNotification: a
 	^ debugger
 ]
 
+{ #category : #rank }
+StDebugger class >> rank [
+	^ 80
+]
+
 { #category : #'tools registry' }
 StDebugger class >> register [
 	self flag: 'Maybe this is no longer necessary now that we have DebuggerSelector?'.
