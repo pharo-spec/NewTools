@@ -8,7 +8,7 @@ Class {
 		'oldTracer',
 		'breakpoint'
 	],
-	#category : #'NewTools-Debugger-Tests-tools - to move'
+	#category : #'NewTools-Debugger-Breakpoints-Tools-Tests'
 }
 
 { #category : #helper }

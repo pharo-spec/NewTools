@@ -21,7 +21,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Inspector' with: [ spec requires: #('NewTools-Inspector-Extensions' 'TaskIt') ];
 			package: 'NewTools-Inspector-Extensions' with: [ spec requires: #('NewTools-Core') ];
 			"debugger"
-			package: 'NewTools-Debugger' with: [ spec requires: #('NewTools-Inspector' 'NewTools-Debugger-Commands' 'NewTools-Debugger-Extensions' 'NewTools-SpTextPresenterDecorators') ];
+			package: 'NewTools-Debugger' with: [ spec requires: #('NewTools-Inspector' 'NewTools-Debugger-Commands' 'NewTools-Debugger-Extensions' 'NewTools-SpTextPresenterDecorators') ];			
 			package: 'NewTools-Debugger-Commands';
 			package: 'NewTools-Debugger-Extensions';
 			package: 'NewTools-Debugger-Tests' with: [ spec requires: #('NewTools-Debugger') ];
@@ -36,6 +36,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-FileDialog' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-FileDialog-Tests' with: [ spec requires: #('NewTools-FileDialog') ];
 			package: 'NewTools-SpTextPresenterDecorators';
+			package: 'NewTools-Debugger-Breakpoints-Tools' with: [ spec requires: #('NewTools-Inspector') ];
 			"Object-centric breakpoints"
 			package: 'NewTools-ObjectCentricBreakpoints';
 			package: 'NewTools-ObjectCentricBreakpoints-Tests';
@@ -58,7 +59,8 @@ BaselineOfNewTools >> baseline: spec [
 				'NewTools-FlagBrowser' 'NewTools-FlagBrowser-Tests'
 				'NewTools-ObjectCentricBreakpoints' 'NewTools-ObjectCentricBreakpoints-Tests'
 				'NewTools-Sindarin-Tools'
-				'NewTools-Sindarin-ProcessInspector');
+				'NewTools-Sindarin-ProcessInspector'
+				'NewTools-Debugger-Breakpoints-Tools');
 			group: #development with: #(default
 				'NewTools-DebuggerSelector' 'NewTools-DebuggerSelector-Tests');
 			group: #broken with: #('NewTools-FileDialog' 'NewTools-FileDialog-Tests')

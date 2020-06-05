@@ -6,7 +6,7 @@ Data is taken from system's and tools' caches.
 Class {
 	#name : #StDebuggerBreakpointInspection,
 	#superclass : #StObjectBreakpointInspection,
-	#category : #'NewTools-Debugger-View'
+	#category : #'NewTools-Debugger-Breakpoints-Tools-Presenters'
 }
 
 { #category : #specs }

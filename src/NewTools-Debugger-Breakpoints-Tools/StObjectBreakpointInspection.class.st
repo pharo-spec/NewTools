@@ -10,7 +10,7 @@ Class {
 		'breakpointsInSourceCode',
 		'breakpointController'
 	],
-	#category : #'NewTools-Inspector-View'
+	#category : #'NewTools-Debugger-Breakpoints-Tools-Presenters'
 }
 
 { #category : #specs }

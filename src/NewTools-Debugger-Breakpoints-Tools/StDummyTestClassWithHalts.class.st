@@ -5,5 +5,5 @@ Compile method with and without breakpoints, but remove them after the tests.
 Class {
 	#name : #StDummyTestClassWithHalts,
 	#superclass : #Object,
-	#category : #'NewTools-Debugger-Tests-tools - to move'
+	#category : #'NewTools-Debugger-Breakpoints-Tools-Tests'
 }

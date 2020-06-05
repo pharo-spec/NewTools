@@ -1,7 +1,7 @@
 Class {
 	#name : #StHaltCacheTest,
 	#superclass : #StHaltAndBreakpointControlTest,
-	#category : #'NewTools-Debugger-Tests-tools - to move'
+	#category : #'NewTools-Debugger-Breakpoints-Tools-Tests'
 }
 
 { #category : #'testing - halts cache' }

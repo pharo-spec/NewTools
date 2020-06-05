@@ -9,13 +9,6 @@ Object >> allInspectorNodes [
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
-Object >> breakpointInspection [
-	<inspectorPresentationOrder: 998 title: 'Breakpoints'>
-
-	^ StObjectBreakpointInspection on: self
-]
-
-{ #category : #'*NewTools-Inspector-Extensions' }
 Object >> defaultObjectInspectorClass [
 
 	^ StObjectInspector

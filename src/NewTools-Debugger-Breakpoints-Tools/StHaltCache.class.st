@@ -21,7 +21,7 @@ Class {
 	#classVars : [
 		'DefaultCache'
 	],
-	#category : #'NewTools-Debugger-Model'
+	#category : #'NewTools-Debugger-Breakpoints-Tools-Model'
 }
 
 { #category : #'accessing - cache' }
