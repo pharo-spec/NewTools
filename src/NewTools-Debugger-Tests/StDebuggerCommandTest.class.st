@@ -274,3 +274,168 @@ StDebuggerCommandTest >> testCommandsInRunnableContext [
 	self assert: (StProceedCommand forContext: debugger) canBeExecuted.  	 
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted. 
 ]
+
+{ #category : #'tests - execution' }
+StDebuggerCommandTest >> testStCopyStackToClipboardCommandExecution [
+	"Generated 5 June 2020"
+	|debugger command|
+	debugger := StDummyDebuggerPresenter new.
+	command := StCopyStackToClipboardCommand forContext: debugger.
+	"StCopyStackToClipboardCommand command calls the #copyStackToClipboard action interface of the debugger object"
+	command execute.
+	self assert: debugger tag equals: #copyStackToClipboard
+]
+
+{ #category : #'tests - execution' }
+StDebuggerCommandTest >> testStDefineClassCommandExecution [
+	"Generated 5 June 2020"
+	|debugger command|
+	debugger := StDummyDebuggerPresenter new.
+	command := StDefineClassCommand forContext: debugger.
+	"StDefineClassCommand command calls the #createMissingClass action interface of the debugger object"
+	command execute.
+	self assert: debugger tag equals: #createMissingClass
+]
+
+{ #category : #'tests - execution' }
+StDebuggerCommandTest >> testStDefineMethodCommandExecution [
+	"Generated 5 June 2020"
+	|debugger command|
+	debugger := StDummyDebuggerPresenter new.
+	command := StDefineMethodCommand forContext: debugger.
+	"StDefineMethodCommand command calls the #createMissingMethod action interface of the debugger object"
+	command execute.
+	self assert: debugger tag equals: #createMissingMethod
+]
+
+{ #category : #'tests - execution' }
+StDebuggerCommandTest >> testStDefineSubclassResponsabilityCommandExecution [
+	"Generated 5 June 2020"
+	|debugger command|
+	debugger := StDummyDebuggerPresenter new.
+	command := StDefineSubclassResponsabilityCommand forContext: debugger.
+	"StDefineSubclassResponsabilityCommand command calls the #createSubclassResponsibility action interface of the debugger object"
+	command execute.
+	self assert: debugger tag equals: #createSubclassResponsibility
+]
+
+{ #category : #'tests - execution' }
+StDebuggerCommandTest >> testStFileOutMethodCommandExecution [
+	"Generated 5 June 2020"
+	|debugger command|
+	debugger := StDummyDebuggerPresenter new.
+	command := StFileOutMethodCommand forContext: debugger.
+	"StFileOutMethodCommand command calls the #fileOutSelectedContext action interface of the debugger object"
+	command execute.
+	self assert: debugger tag equals: #fileOutSelectedContext
+]
+
+{ #category : #'tests - execution' }
+StDebuggerCommandTest >> testStPeelToFirstCommandExecution [
+	"Generated 5 June 2020"
+	|debugger command|
+	debugger := StDummyDebuggerPresenter new.
+	command := StPeelToFirstCommand forContext: debugger.
+	"StPeelToFirstCommand command calls the #copyStackToClipboard action interface of the debugger object"
+	command execute.
+	self assert: debugger tag equals: #copyStackToClipboard
+]
+
+{ #category : #'tests - execution' }
+StDebuggerCommandTest >> testStProceedCommandExecution [
+	"Generated 5 June 2020"
+	|debugger command|
+	debugger := StDummyDebuggerPresenter new.
+	command := StProceedCommand forContext: debugger.
+	"StProceedCommand command calls the #proceedDebugSession action interface of the debugger object"
+	command execute.
+	self assert: debugger tag equals: #proceedDebugSession
+]
+
+{ #category : #'tests - execution' }
+StDebuggerCommandTest >> testStRestartCommandExecution [
+	"Generated 5 June 2020"
+	|debugger command|
+	debugger := StDummyDebuggerPresenter new.
+	command := StRestartCommand forContext: debugger.
+	"StRestartCommand command calls the #restartCurrentContext action interface of the debugger object"
+	command execute.
+	self assert: debugger tag equals: #restartCurrentContext
+]
+
+{ #category : #'tests - execution' }
+StDebuggerCommandTest >> testStReturnValueCommandExecution [
+	"Generated 5 June 2020"
+	|debugger command|
+	debugger := StDummyDebuggerPresenter new.
+	command := StReturnValueCommand forContext: debugger.
+	"StReturnValueCommand command calls the #returnEnteredValue action interface of the debugger object"
+	command execute.
+	self assert: debugger tag equals: #returnEnteredValue
+]
+
+{ #category : #'tests - execution' }
+StDebuggerCommandTest >> testStRunToSelectionCommandExecution [
+	"Generated 5 June 2020"
+	|debugger command|
+	debugger := StDummyDebuggerPresenter new.
+	command := StRunToSelectionCommand forContext: debugger.
+	"StRunToSelectionCommand command calls the #runToSelection action interface of the debugger object"
+	command execute.
+	self assert: debugger tag equals: #runToSelection
+]
+
+{ #category : #'tests - execution' }
+StDebuggerCommandTest >> testStShowFullStackCommandExecution [
+	"Generated 5 June 2020"
+	|debugger command|
+	debugger := StDummyDebuggerPresenter new.
+	command := StShowFullStackCommand forContext: debugger.
+	"StShowFullStackCommand command calls the #showFullStack action interface of the debugger object"
+	command execute.
+	self assert: debugger tag equals: #showFullStack
+]
+
+{ #category : #'tests - execution' }
+StDebuggerCommandTest >> testStStepIntoCommandExecution [
+	"Generated 5 June 2020"
+	|debugger command|
+	debugger := StDummyDebuggerPresenter new.
+	command := StStepIntoCommand forContext: debugger.
+	"StStepIntoCommand command calls the #stepInto action interface of the debugger object"
+	command execute.
+	self assert: debugger tag equals: #stepInto
+]
+
+{ #category : #'tests - execution' }
+StDebuggerCommandTest >> testStStepOverCommandExecution [
+	"Generated 5 June 2020"
+	|debugger command|
+	debugger := StDummyDebuggerPresenter new.
+	command := StStepOverCommand forContext: debugger.
+	"StStepOverCommand command calls the #stepOver action interface of the debugger object"
+	command execute.
+	self assert: debugger tag equals: #stepOver
+]
+
+{ #category : #'tests - execution' }
+StDebuggerCommandTest >> testStStepThroughCommandExecution [
+	"Generated 5 June 2020"
+	|debugger command|
+	debugger := StDummyDebuggerPresenter new.
+	command := StStepThroughCommand forContext: debugger.
+	"StStepThroughCommand command calls the #stepThrough action interface of the debugger object"
+	command execute.
+	self assert: debugger tag equals: #stepThrough
+]
+
+{ #category : #'tests - execution' }
+StDebuggerCommandTest >> testStWhereIsCommandExecution [
+	"Generated 5 June 2020"
+	|debugger command|
+	debugger := StDummyDebuggerPresenter new.
+	command := StWhereIsCommand forContext: debugger.
+	"StWhereIsCommand command calls the #selectNextExecutedExpression action interface of the debugger object"
+	command execute.
+	self assert: debugger tag equals: #selectNextExecutedExpression
+]

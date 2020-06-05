@@ -176,7 +176,7 @@ StDebuggerTest >> testExtendedToolsClassesFor [
 		assertCollection:
 			(StDebugger
 				collectExtendedToolsPragmaFor: #debuggerExtensionTestPragma)
-		includesAll: (StDebuggerDummyTestPresenter class>>#debuggerExtensionTestPragma) pragmas 
+		includesAll: (StDummyDebuggerPresenter class>>#debuggerExtensionTestPragma) pragmas 
 ]
 
 { #category : #'tests - extensions' }
@@ -211,10 +211,10 @@ StDebuggerTest >> testInspectorSelfBinding [
 StDebuggerTest >> testInstantiateExtensionToolsPage [
 	|dbg toolPage|
 	dbg := self debugger.
-	toolPage := dbg instantiateExtensionToolsPage: StDebuggerDummyTestPresenter.
+	toolPage := dbg instantiateExtensionToolsPage: StDummyDebuggerPresenter.
 	self assert: toolPage class identicalTo: SpNotebookPage.
-	self assert: toolPage presenterProvider value class identicalTo: StDebuggerDummyTestPresenter.
-	self assert: toolPage title equals: StDebuggerDummyTestPresenter debuggingExtensionToolName.
+	self assert: toolPage presenterProvider value class identicalTo: StDummyDebuggerPresenter.
+	self assert: toolPage title equals: StDummyDebuggerPresenter debuggingExtensionToolName.
 	self assertCollection: dbg extensionTools includesAll: { toolPage presenterProvider value}.
 	 
 ]
