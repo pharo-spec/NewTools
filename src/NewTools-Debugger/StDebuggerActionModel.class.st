@@ -71,7 +71,7 @@ StDebuggerActionModel >> isInterruptedContextDoesNotUnderstand [
 
 { #category : #'debug - predicates' }
 StDebuggerActionModel >> isInterruptedContextError [
-	^ (self session interruptedProcess suspendedContext temporaries
+	^ (self session interruptedContext temporaries
 		at: #exception
 		ifAbsent: [ ^ false ]) notNil
 ]
