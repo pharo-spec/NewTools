@@ -71,6 +71,7 @@ StDebuggerActionModel >> isInterruptedContextDoesNotUnderstand [
 
 { #category : #'debug - predicates' }
 StDebuggerActionModel >> isInterruptedContextError [
+	self flag: 'Does not pass yet: we need a secure way of knowing the session was opened from **any** kind of exception'.
 	^ (self session interruptedContext temporaries
 		at: #exception
 		ifAbsent: [ ^ false ]) notNil
