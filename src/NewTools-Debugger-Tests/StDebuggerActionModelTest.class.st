@@ -124,7 +124,6 @@ StDebuggerActionModelTest >> testIsInterruptedContextDoesNotUnderstand [
 
 { #category : #tests }
 StDebuggerActionModelTest >> testIsInterruptedContextError [
-	self flag: 'Cannot work until debug sessions are able to hold exceptions that raised them (see Debugger-Selector PR)'.
 	self changeSession: StTestDebuggerProvider new debuggerWithErrorContext session.
 	self assert: debugActionModel isInterruptedContextError
 ]

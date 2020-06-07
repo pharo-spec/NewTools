@@ -71,8 +71,9 @@ StDebuggerActionModel >> isInterruptedContextDoesNotUnderstand [
 
 { #category : #'debug - predicates' }
 StDebuggerActionModel >> isInterruptedContextError [
-		self flag: 'Cannot work until debug sessions are able to hold exceptions that raised them (see Debugger-Selector PR)'.
-	^self interruptedContext receiver isKindOf: Error
+	^ (self session interruptedProcess suspendedContext temporaries
+		at: #exception
+		ifAbsent: [ ^ false ]) notNil
 ]
 
 { #category : #'debug - predicates' }

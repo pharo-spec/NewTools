@@ -27,7 +27,7 @@ StTestDebuggerProvider >> debuggerWithDNUContext [
 
 { #category : #helpers }
 StTestDebuggerProvider >> debuggerWithErrorContext [
-	[ 1 / 0 ]
+	[ 1 a ]
 		on: Error
 		do: [ :err | 
 			self sessionFor: err signalerContext copy.
