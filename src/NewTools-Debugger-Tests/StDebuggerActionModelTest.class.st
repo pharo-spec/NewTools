@@ -235,8 +235,3 @@ StDebuggerActionModelTest >> testStepThrough [
 		assert: (method sourceNodeForPC: session interruptedContext pc)
 		identicalTo: method ast statements second
 ]
-
-{ #category : #tests }
-StDebuggerActionModelTest >> testTesting [ 
-	self assert: 4 equals: 2
-]
