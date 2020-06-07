@@ -30,7 +30,16 @@ StTestDebuggerProvider >> debuggerWithErrorContext [
 	[ 1 / 0 ]
 		on: Error
 		do: [ :err | 
-			self sessionFor: err signalerContext.
+			self sessionFor: err signalerContext copy.
+			^ self newDebugger ]
+]
+
+{ #category : #helpers }
+StTestDebuggerProvider >> debuggerWithFailingAssertionContext [
+	[ self produceAssertionFailure ]
+		on: TestFailure
+		do: [ :err | 
+			self sessionFor: err signalerContext copy.
 			^ self newDebugger ]
 ]
 
@@ -39,7 +48,7 @@ StTestDebuggerProvider >> debuggerWithFailingTestContext [
 	[ self produceTestFailure ]
 		on: TestFailure
 		do: [ :err | 
-			self sessionFor: err signalerContext.
+			self sessionFor: err signalerContext copy.
 			^ self newDebugger ]
 ]
 
@@ -75,6 +84,11 @@ StTestDebuggerProvider >> newDebugger [
 	^ StDebugger basicNew
 		session: session;
 		yourself
+]
+
+{ #category : #helpers }
+StTestDebuggerProvider >> produceAssertionFailure [
+	TestCase new assert: 4 equals: 2
 ]
 
 { #category : #helpers }

@@ -105,10 +105,15 @@ StDebuggerActionModelTest >> testIsContextSteppable [
 ]
 
 { #category : #tests }
-StDebuggerActionModelTest >> testIsInterruptedContextATest [
-	self flag: 'Cannot work until we know how to characterize the context of a failing assertion'.
+StDebuggerActionModelTest >> testIsInterruptedContextATestFailure [
 	self changeSession: StTestDebuggerProvider new debuggerWithFailingTestContext session.
-	self assert: debugActionModel isInterruptedContextATest
+	self assert: debugActionModel isInterruptedContextATestFailure
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testIsInterruptedContextAnAssertionFailure [
+	self changeSession: StTestDebuggerProvider new debuggerWithFailingAssertionContext session.
+	self assert: debugActionModel isInterruptedContextATestFailure
 ]
 
 { #category : #tests }
@@ -230,4 +235,9 @@ StDebuggerActionModelTest >> testStepThrough [
 	self
 		assert: (method sourceNodeForPC: session interruptedContext pc)
 		identicalTo: method ast statements second
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testTesting [ 
+	self assert: 4 equals: 2
 ]

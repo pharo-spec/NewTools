@@ -51,7 +51,7 @@ StDebuggerActionModel >> interruptedContext [
 { #category : #'debug - predicates' }
 StDebuggerActionModel >> isContextSteppable [
 	^ (self isInterruptedContextError
-		or: [ self isInterruptedContextATest
+		or: [ self isInterruptedContextATestFailure
 				or: [ self isInterruptedContextPostMortem
 						or: [ self isInterruptedContextDoesNotUnderstand
 								or: [ self isInterruptedContextMissingClassException
@@ -60,8 +60,8 @@ StDebuggerActionModel >> isContextSteppable [
 ]
 
 { #category : #'debug - predicates' }
-StDebuggerActionModel >> isInterruptedContextATest [
-	^ self session isInterruptedContextATest
+StDebuggerActionModel >> isInterruptedContextATestFailure [
+	^ self session isInterruptedContextAnAssertionFailure 
 ]
 
 { #category : #'debug - predicates' }
@@ -71,6 +71,7 @@ StDebuggerActionModel >> isInterruptedContextDoesNotUnderstand [
 
 { #category : #'debug - predicates' }
 StDebuggerActionModel >> isInterruptedContextError [
+		self flag: 'Cannot work until debug sessions are able to hold exceptions that raised them (see Debugger-Selector PR)'.
 	^self interruptedContext receiver isKindOf: Error
 ]
 
