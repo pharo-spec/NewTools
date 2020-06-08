@@ -6,7 +6,8 @@ Class {
 	#name : #StDebuggerRawObjectInspector,
 	#superclass : #StObjectInspector,
 	#instVars : [
-		'raw'
+		'raw',
+		'frontPage'
 	],
 	#category : #'NewTools-Debugger-View'
 }
@@ -46,4 +47,11 @@ StDebuggerRawObjectInspector >> rawInspectorPageOrNil [
 StDebuggerRawObjectInspector >> step [
 	super step.
 	raw step
+]
+
+{ #category : #'private updating' }
+StDebuggerRawObjectInspector >> updateViewsForAssertionFailure [
+	self updatePages.
+	raw := views.
+	raw pages: (raw pages copyFrom: 1 to: 2)
 ]

@@ -6,10 +6,19 @@ Class {
 		'model',
 		'label',
 		'rawInspectionSelectionCache',
-		'withHeaderBar'
+		'withHeaderBar',
+		'assertionFailure'
 	],
 	#category : #'NewTools-Debugger-View'
 }
+
+{ #category : #specs }
+StDebuggerInspector class >> assertionFailureSpec [
+	^ SpBoxLayout newVertical
+		  add: #assertionFailure;
+		  add: #inspector;		 
+		  yourself
+]
 
 { #category : #specs }
 StDebuggerInspector class >> defaultSpec [
@@ -27,6 +36,11 @@ StDebuggerInspector class >> openOn: anObject [
 { #category : #specs }
 StDebuggerInspector class >> title [
 	 ^'Debugger Inspection'
+]
+
+{ #category : #accessing }
+StDebuggerInspector >> assertionFailure [
+	^assertionFailure 
 ]
 
 { #category : #accessing }
@@ -145,18 +159,36 @@ StDebuggerInspector >> updateEvaluationPaneReceiver [
 ]
 
 { #category : #updating }
+StDebuggerInspector >> updateLayoutForContexts: aContext isAssertionFailure: isTopContextFailingAssertion [
+
+	isTopContextFailingAssertion
+		ifFalse: [ self layout = self class defaultSpec
+				ifTrue: [ ^ self ].
+			self layout: self class defaultSpec.
+			^ self ].		
+	self layout =  self class assertionFailureSpec ifTrue:[^self].
+	self flag: 'Way too much magickal: why these indexes?'.
+	assertionFailure := StDebuggerFailingAssertionInspector
+		diffInspectorsFromActual: ((aContext at: 2) at: 2)
+		expected: ((aContext at: 2) at: 1)
+		application: self application.
+	^ self layout: self class assertionFailureSpec
+]
+
+{ #category : #updating }
 StDebuggerInspector >> updateWith: inspectedObject [
 	| oldContext newContext |
 	oldContext := self model inspectedObject
 		ifNotNil: [ :dbgCtx | dbgCtx context ].
 	newContext := inspectedObject ifNotNil: [ :dbgCtx | dbgCtx context ].
+	
 	(oldContext notNil and: [ newContext notNil ])
 		ifTrue: [ (oldContext receiver == newContext receiver
 				and: [ oldContext selector == newContext selector ])
 				ifTrue: [ self step.
 					^ self ] ].
 	self saveRawInspectionSelectionForContext: oldContext.
-	self model: (StDebuggerInspectorModel on: inspectedObject).
+	self model: (StDebuggerInspectorModel on: inspectedObject).			
 	self updateEvaluationPaneReceiver.
 	self restoreRawInspectionSelectionForContext: newContext
 ]

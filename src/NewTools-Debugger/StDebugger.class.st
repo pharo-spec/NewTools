@@ -1249,7 +1249,9 @@ StDebugger >> updateExtensionsFrom: newSession [
 
 { #category : #'updating widgets' }
 StDebugger >> updateInspectorFromContext: aContext [
-	
+	inspector
+		updateLayoutForContexts: self session interruptedContext
+		isAssertionFailure: self debuggerActionModel isInterruptedContextATestFailure.
 	inspector
 		updateWith:
 			(StDebuggerContext

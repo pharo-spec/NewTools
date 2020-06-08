@@ -43,8 +43,18 @@ StDebuggerFailingAssertionInspector class >> diffInspectorsFromActual: actualObj
 ]
 
 { #category : #accessing }
+StDebuggerFailingAssertionInspector >> actualObject [
+	^ actualObject
+]
+
+{ #category : #accessing }
 StDebuggerFailingAssertionInspector >> actualObject: anObject [
 	actualObject := anObject
+]
+
+{ #category : #accessing }
+StDebuggerFailingAssertionInspector >> expectedObject [
+	^ expectedObject
 ]
 
 { #category : #accessing }

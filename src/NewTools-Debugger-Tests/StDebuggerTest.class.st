@@ -437,3 +437,24 @@ StDebuggerTest >> testToolbarDependingOnContext [
 StDebuggerTest >> testUnauthorizedCodeModification [
 	self assert: false
 ]
+
+{ #category : #'tests - receiver inspector' }
+StDebuggerTest >> testUpdateLayoutForContextsIfAssertionFailure [
+	| assertionFailure |
+	debugger := StTestDebuggerProvider new
+		debuggerWithFailingAssertionContext.
+	session := debugger session.
+	debugger application: StDebugger currentApplication.
+	debugger initialize.
+	debugger updateInspectorFromContext: session interruptedContext.
+	assertionFailure := debugger inspector assertionFailure.
+	self
+		assert: debugger inspector layout
+		equals: StDebuggerInspector assertionFailureSpec.
+	self
+		assert: assertionFailure actualObject
+		equals: ((session interruptedContext tempNamed: #aStringOrBlock) at: 2).
+	self
+		assert: assertionFailure expectedObject
+		equals: ((session interruptedContext tempNamed: #aStringOrBlock) at: 1)
+]
