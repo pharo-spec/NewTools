@@ -10,7 +10,7 @@ Class {
 { #category : #settings }
 StPharoSettings class >> defaultToolbarDisplayMode [
 
-	^ SpToolBarDisplayMode modeIconAndLabel
+	^ SpToolbarDisplayMode modeIconAndLabel
 ]
 
 { #category : #settings }

@@ -114,9 +114,9 @@ StObjectInspector >> allPages [
 ]
 
 { #category : #'private builder' }
-StObjectInspector >> buildToolBar [
-	^ self rootCommandsGroup
-		asToolbarPresenterWith: [ :presenter | 
+StObjectInspector >> buildToolbar [
+
+	^ self rootCommandsGroup asToolbarPresenterWith: [ :presenter | 
 			presenter displayMode: self application displayMode ]
 ]
 
@@ -169,7 +169,7 @@ StObjectInspector >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
 		title: self title;
-		toolBar: self buildToolBar
+		toolbar: self buildToolbar
 ]
 
 { #category : #transmission }

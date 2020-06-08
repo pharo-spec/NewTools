@@ -116,7 +116,7 @@ StSystemBrowser >> buildStatusBar [
 ]
 
 { #category : #initialization }
-StSystemBrowser >> buildToolBar [
+StSystemBrowser >> buildToolbar [
 
 	^ CmCommandGroup forSpec
 		register: (StInspectorBrowseCommand forSpecContext: self);
@@ -188,7 +188,7 @@ StSystemBrowser >> initializeWindow: aWindowPresenter [
 	aWindowPresenter
 		title: self initialTitle;
 		initialExtent: self preferredExtent;
-		toolBar: self buildToolBar;
+		toolbar: self buildToolbar;
 		statusBar: (statusBar := self buildStatusBar)
 ]
 

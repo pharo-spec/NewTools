@@ -541,7 +541,7 @@ StDebugger >> buildContextMenus [
 	
 	toolbarCommandGroup := debuggerCommandGroup / StDebuggerToolbarCommandTreeBuilder groupName.
 	
-	SpToolBarPresenterBuilder new
+	SpToolbarPresenterBuilder new
 		toolbarPresenter: toolbar;
 		visit: toolbarCommandGroup.
 	
@@ -885,7 +885,7 @@ StDebugger >> initializeStack [
 
 { #category : #initialization }
 StDebugger >> initializeToolbar [
-	toolbar := self newToolBar.
+	toolbar := self newToolbar.
 	toolbar displayMode: self application toolbarDisplayMode
 ]
 
