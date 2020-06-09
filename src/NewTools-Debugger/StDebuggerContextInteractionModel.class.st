@@ -1,8 +1,17 @@
 Class {
 	#name : #StDebuggerContextInteractionModel,
 	#superclass : #SpCodeObjectInteractionModel,
+	#instVars : [
+		'context'
+	],
 	#category : #'NewTools-Debugger-Model'
 }
+
+{ #category : #'instance creation' }
+StDebuggerContextInteractionModel class >> on: aContext [
+
+	^ self new context: aContext
+]
 
 { #category : #accessing }
 StDebuggerContextInteractionModel >> behavior [
@@ -13,7 +22,12 @@ StDebuggerContextInteractionModel >> behavior [
 { #category : #accessing }
 StDebuggerContextInteractionModel >> context [
 
-	^ self object
+	^context
+]
+
+{ #category : #accessing }
+StDebuggerContextInteractionModel >> context: aContext [
+	context := aContext
 ]
 
 { #category : #accessing }
@@ -26,4 +40,10 @@ StDebuggerContextInteractionModel >> doItContext [
 StDebuggerContextInteractionModel >> doItReceiver [
 
 	^ self context receiver
+]
+
+{ #category : #accessing }
+StDebuggerContextInteractionModel >> object [
+
+	^ self doItReceiver
 ]
