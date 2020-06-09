@@ -16,6 +16,11 @@ StDebuggerActionModel class >> on: aDebugSession [
 	^ self new session: aDebugSession
 ]
 
+{ #category : #accessing }
+StDebuggerActionModel >> assertEqualsSelectors [
+	^ #(#assert:equals: #assert:closeTo:precision: #assert:closeTo: #assert:identicalTo: #assertCollection:equals: #assertCollection:hasSameElements:)
+]
+
 { #category : #'debug - execution' }
 StDebuggerActionModel >> clearDebugSession [
 	self session terminate
@@ -61,7 +66,19 @@ StDebuggerActionModel >> isContextSteppable [
 
 { #category : #'debug - predicates' }
 StDebuggerActionModel >> isInterruptedContextATestFailure [
-	^ self session isInterruptedContextAnAssertionFailure 
+	^ self session isInterruptedContextAnAssertionFailure
+]
+
+{ #category : #'debug - predicates' }
+StDebuggerActionModel >> isInterruptedContextAnAssertEqualsFailure [
+	^ self isInterruptedContextATestFailure
+		and: [ | failure |
+			failure := self interruptedContext temporaries
+				at: #aStringOrBlock
+				ifAbsent: [ nil ].
+			failure notNil
+				and: [ failure isString not
+						and: [ self assertEqualsSelectors includes: failure outerContext selector ] ] ]
 ]
 
 { #category : #'debug - predicates' }

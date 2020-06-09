@@ -7,7 +7,9 @@ Class {
 		'label',
 		'rawInspectionSelectionCache',
 		'withHeaderBar',
-		'assertionFailure'
+		'assertionFailure',
+		'currentLayout',
+		'currentLayoutSpec'
 	],
 	#category : #'NewTools-Debugger-View'
 }
@@ -44,6 +46,21 @@ StDebuggerInspector >> assertionFailure [
 	^assertionFailure 
 ]
 
+{ #category : #layout }
+StDebuggerInspector >> assertionLayoutSpec [
+	^#assertionFailureSpec
+]
+
+{ #category : #layout }
+StDebuggerInspector >> currentLayoutSpec [
+	^currentLayoutSpec
+]
+
+{ #category : #layout }
+StDebuggerInspector >> defaultLayoutSpec [
+	^#defaultSpec
+]
+
 { #category : #accessing }
 StDebuggerInspector >> displayHeaderBar: anObject [
 	withHeaderBar := anObject.
@@ -74,7 +91,8 @@ StDebuggerInspector >> initializePresenters [
 
 	label := self newLabel.
 	inspector := self instantiate: StInspector on: self model.
-	inspector withHeaderBar: self withHeaderBar
+	inspector withHeaderBar: self withHeaderBar.
+	currentLayoutSpec := self defaultLayoutSpec.
 ]
 
 { #category : #accessing }
@@ -138,6 +156,19 @@ StDebuggerInspector >> saveRawInspectionSelectionForContext: aContext [
 		put: selectionPath
 ]
 
+{ #category : #layout }
+StDebuggerInspector >> setAssertionLayout [
+	currentLayoutSpec := self assertionLayoutSpec.
+	self layout: self class assertionFailureSpec
+]
+
+{ #category : #layout }
+StDebuggerInspector >> setDefaultLayout [
+	
+	currentLayoutSpec := self defaultLayoutSpec.
+	self layout: self class defaultSpec
+]
+
 { #category : #'accessing model' }
 StDebuggerInspector >> setModelBeforeInitialization: aModel [
 
@@ -159,21 +190,21 @@ StDebuggerInspector >> updateEvaluationPaneReceiver [
 	evaluator beForContextReceiver: context
 ]
 
-{ #category : #updating }
+{ #category : #layout }
 StDebuggerInspector >> updateLayoutForContexts: aContext isAssertionFailure: isTopContextFailingAssertion [
 	isTopContextFailingAssertion
-		ifFalse: [ self layout = self class defaultSpec
+		ifFalse: [ currentLayoutSpec = self defaultLayoutSpec
 				ifTrue: [ ^ self ].
-			self layout: self class defaultSpec.
+			self setDefaultLayout.
 			^ self ].
-	self layout = self class assertionFailureSpec
+	currentLayoutSpec = self assertionLayoutSpec
 		ifTrue: [ ^ self ].
 	self flag: 'Way too much magickal: why these indexes?'.
 	assertionFailure := StDebuggerFailingAssertionInspector
 		diffInspectorsFromActual: ((aContext at: 2) at: 2)
 		expected: ((aContext at: 2) at: 1)
 		application: self application.
-	^ self layout: self class assertionFailureSpec
+	self setAssertionLayout
 ]
 
 { #category : #updating }

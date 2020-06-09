@@ -69,25 +69,6 @@ StDebuggerContext >> debugger: anObject [
 	debugger := anObject
 ]
 
-{ #category : #'dynamic views' }
-StDebuggerContext >> diffPresenterForFailingAssertions [
-	<inspectorPresentationOrder: -1 title: 'Failed assertion' if: #isTopContextFailingAssertion>
-	self flag: 'Had to pass the application by hand. This seems very wrong and should be fixed.'.
-	^ StDebuggerFailingAssertionInspector
-		diffInspectorsFromActual: (assertionContext tempAt: 1)
-		expected: (assertionContext tempAt: 2)
-		application: debugger application
-]
-
-{ #category : #'dynamic views' }
-StDebuggerContext >> isTopContextFailingAssertion [
-	assertionContext := self session stack first
-		                    findContextSuchThat: [ :ctx | 
-		                    self assertionSelectors includes: ctx selector ]
-		                    depth: 10.
-	^ assertionContext notNil
-]
-
 { #category : #printing }
 StDebuggerContext >> printOn: aStream [
 	aStream nextPutAll: context asString 
