@@ -14,10 +14,11 @@ Class {
 
 { #category : #specs }
 StDebuggerInspector class >> assertionFailureSpec [
-	^ SpBoxLayout newVertical
-		  add: #assertionFailure;
-		  add: #inspector;		 
-		  yourself
+	^ SpPanedLayout newVertical
+		position: 40 percent;
+		add: #assertionFailure;
+		add: #inspector;
+		yourself
 ]
 
 { #category : #specs }
@@ -160,13 +161,13 @@ StDebuggerInspector >> updateEvaluationPaneReceiver [
 
 { #category : #updating }
 StDebuggerInspector >> updateLayoutForContexts: aContext isAssertionFailure: isTopContextFailingAssertion [
-
 	isTopContextFailingAssertion
 		ifFalse: [ self layout = self class defaultSpec
 				ifTrue: [ ^ self ].
 			self layout: self class defaultSpec.
-			^ self ].		
-	self layout =  self class assertionFailureSpec ifTrue:[^self].
+			^ self ].
+	self layout = self class assertionFailureSpec
+		ifTrue: [ ^ self ].
 	self flag: 'Way too much magickal: why these indexes?'.
 	assertionFailure := StDebuggerFailingAssertionInspector
 		diffInspectorsFromActual: ((aContext at: 2) at: 2)
