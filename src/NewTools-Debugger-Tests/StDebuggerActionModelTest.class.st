@@ -111,6 +111,14 @@ StDebuggerActionModelTest >> testIsInterruptedContextATestFailure [
 ]
 
 { #category : #tests }
+StDebuggerActionModelTest >> testIsInterruptedContextAnAssertEqualsFailure [
+	self changeSession: StTestDebuggerProvider new debuggerWithFailingAssertionContext session.
+	self assert: debugActionModel isInterruptedContextAnAssertEqualsFailure.
+	self changeSession: StTestDebuggerProvider new debuggerWithFailingTestContext session.
+	self deny: debugActionModel isInterruptedContextAnAssertEqualsFailure.
+]
+
+{ #category : #tests }
 StDebuggerActionModelTest >> testIsInterruptedContextAnAssertionFailure [
 	self changeSession: StTestDebuggerProvider new debuggerWithFailingAssertionContext session.
 	self assert: debugActionModel isInterruptedContextATestFailure
