@@ -7,7 +7,7 @@ Class {
 { #category : #accessing }
 StDebuggerContextInteractionModel >> behavior [
 
-	^ self context home receiver class
+	^ self context receiver class
 ]
 
 { #category : #accessing }
@@ -25,5 +25,5 @@ StDebuggerContextInteractionModel >> doItContext [
 { #category : #accessing }
 StDebuggerContextInteractionModel >> doItReceiver [
 
-	^ self context home receiver
+	^ self context receiver
 ]

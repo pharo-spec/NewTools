@@ -40,7 +40,7 @@ StHeaderBar >> initializePresenters [
 	shortcutLabel := self newLabel
 		addStyle: 'shortcut';
 		yourself.
-	toolbar := self newToolBar.
+	toolbar := self newToolbar.
 	"toolbar displayMode: self application toolbarDisplayMode"
 	toolbar beIcons	"is a mini toolbar, items should be... tiny :)"
 ]
@@ -67,7 +67,7 @@ StHeaderBar >> shortcutLabel: aString [
 StHeaderBar >> toolbarActions: aCommandGroup [
 
 	toolbar removeAllItems.
-	SpToolBarPresenterBuilder new 
+	SpToolbarPresenterBuilder new 
 		toolbarPresenter: toolbar;
 		visit: aCommandGroup
 ]

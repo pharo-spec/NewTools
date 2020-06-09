@@ -200,7 +200,7 @@ StPlayground >> buildStatusBar [
 ]
 
 { #category : #'private builder' }
-StPlayground >> buildToolBar [
+StPlayground >> buildToolbar [
 
 	^ self toolbarActions 
 		asToolbarPresenterWith: [ :presenter | 
@@ -254,7 +254,7 @@ StPlayground >> initializeWindow: aWindowPresenter [
 		title: self class defaultTitle;
 		initialExtent: self class preferredExtent;
 		windowIcon: self windowIcon;
-		toolBar: self buildToolBar;
+		toolbar: self buildToolbar;
 		statusBar: (statusBar := self buildStatusBar);
 		whenResizingDo: [ :ann | self preferredExtent: ann newSize ];
 		whenOpenedDo: [ text takeKeyboardFocus ]

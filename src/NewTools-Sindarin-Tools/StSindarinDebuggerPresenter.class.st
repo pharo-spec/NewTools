@@ -37,7 +37,7 @@ StSindarinDebuggerPresenter class >> title [
 ]
 
 { #category : #initialization }
-StSindarinDebuggerPresenter >> buildToolBar [
+StSindarinDebuggerPresenter >> buildToolbar [
 	| group |
 	group := CmCommandGroup forSpec.
 	SindarinCommand allSubclasses
@@ -75,7 +75,7 @@ StSindarinDebuggerPresenter >> initializePresenter [
 	currentNodeSource text: self model node source.
 	currentNodeSource beForBehavior: self model method methodClass.
 	stack selectIndex: 1.
-	toolbar := self buildToolBar
+	toolbar := self buildToolbar
 ]
 
 { #category : #stepping }

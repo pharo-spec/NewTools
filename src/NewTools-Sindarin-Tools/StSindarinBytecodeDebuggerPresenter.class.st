@@ -43,9 +43,9 @@ StSindarinBytecodeDebuggerPresenter >> initializePresenters [
 
 { #category : #initialization }
 StSindarinBytecodeDebuggerPresenter >> initializeToolbar [
-	toolbar := self newToolBar.
+	toolbar := self newToolbar.
 	toolbar beIcons.
-	SpToolBarPresenterBuilder new
+	SpToolbarPresenterBuilder new
 		toolbarPresenter: toolbar;
 		visit: self toolbarActions
 ]

@@ -177,7 +177,7 @@ StPlaygroundBindingsPresenter >> moveSelectedBindingToSharedScope [
 	| selection |
 		
 	selection := self selectedBinding.
-	parent removeBinding: selection.
+	parent interactionModel removeBinding: selection.
 	self application addSharedBinding: selection
 ]
 
