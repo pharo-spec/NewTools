@@ -18,7 +18,8 @@ Class {
 		'actualObject',
 		'expectedObject',
 		'actualObjectMillerList',
-		'expectedObjectMillerList'
+		'expectedObjectMillerList',
+		'stringDiff'
 	],
 	#category : #'NewTools-Debugger-View'
 }
@@ -46,11 +47,24 @@ StFailingAssertionInspector class >> defaultSpec [
 
 { #category : #'instance creation' }
 StFailingAssertionInspector class >> diffInspectorsFromActual: actualObject expected: expectedObject application: aStApplication [
-	^ self basicNew
+	| diffPresenter |
+	diffPresenter := self basicNew
 		application: aStApplication;
 		actualObject: actualObject;
 		expectedObject: expectedObject;
-		initialize
+		initialize.
+		
+	self flag: 'Not nice but works. This needs improvement.'.
+	(actualObject isString and: [ expectedObject isString ])
+		ifTrue: [ diffPresenter buildWithSpec: #stringSpec ].
+	^ diffPresenter
+]
+
+{ #category : #specs }
+StFailingAssertionInspector class >> stringSpec [
+	^ SpBoxLayout newVertical
+		add: #stringDiff;
+		yourself
 ]
 
 { #category : #accessing }
@@ -82,9 +96,12 @@ StFailingAssertionInspector >> initializeMillerList: list forObject: object [
 
 { #category : #initialization }
 StFailingAssertionInspector >> initializePresenters [
-
+	self flag: 'Not nice but works. This needs improvement.'.
+	(actualObject isString and: [ expectedObject isString ])
+		ifTrue: [ ^ self initializePresentersForString ].
+		
 	actualObjectHeader := (self instantiate: StHeaderBar)
-		label: 'Actual object: ', actualObject printString;
+		label: 'Actual object: ' , actualObject printString;
 		yourself.
 	actualObjectHeader applyStyleToLabel: 'label.headerError'.
 	actualObjectMillerList := SpMillerColumnPresenter new.
@@ -99,6 +116,17 @@ StFailingAssertionInspector >> initializePresenters [
 	self
 		initializeMillerList: expectedObjectMillerList
 		forObject: expectedObject
+]
+
+{ #category : #initialization }
+StFailingAssertionInspector >> initializePresentersForString [
+	
+	stringDiff := self newDiff.
+	stringDiff showOptions: false.
+	stringDiff leftLabel: 'Actual result (left) versus expected result (right)'.
+	stringDiff rightLabel: ''.
+	stringDiff leftText: actualObject.
+	stringDiff rightText: expectedObject
 ]
 
 { #category : #views }
