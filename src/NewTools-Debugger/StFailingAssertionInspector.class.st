@@ -1,5 +1,16 @@
+"
+I present a side-by-side view of a failing assert, with at my left an inspector on the failing object and at my left the expected object.
+
+Only opens for following assertions failures:
+#assert:equals: 
+#assert:closeTo:precision: 
+#assert:closeTo: 
+#assert:identicalTo: 
+#assertCollection:equals: 
+#assertCollection:hasSameElements:
+"
 Class {
-	#name : #StDebuggerFailingAssertionInspector,
+	#name : #StFailingAssertionInspector,
 	#superclass : #SpPresenter,
 	#instVars : [
 		'actualObjectHeader',
@@ -13,7 +24,7 @@ Class {
 }
 
 { #category : #specs }
-StDebuggerFailingAssertionInspector class >> defaultSpec [
+StFailingAssertionInspector class >> defaultSpec [
 	^ SpPanedLayout newHorizontal
 		  position: 50 percent;
 		  add: (SpBoxLayout newVertical
@@ -34,7 +45,7 @@ StDebuggerFailingAssertionInspector class >> defaultSpec [
 ]
 
 { #category : #'instance creation' }
-StDebuggerFailingAssertionInspector class >> diffInspectorsFromActual: actualObject expected: expectedObject application: aStApplication [
+StFailingAssertionInspector class >> diffInspectorsFromActual: actualObject expected: expectedObject application: aStApplication [
 	^ self basicNew
 		application: aStApplication;
 		actualObject: actualObject;
@@ -43,34 +54,34 @@ StDebuggerFailingAssertionInspector class >> diffInspectorsFromActual: actualObj
 ]
 
 { #category : #accessing }
-StDebuggerFailingAssertionInspector >> actualObject [
+StFailingAssertionInspector >> actualObject [
 	^ actualObject
 ]
 
 { #category : #accessing }
-StDebuggerFailingAssertionInspector >> actualObject: anObject [
+StFailingAssertionInspector >> actualObject: anObject [
 	actualObject := anObject
 ]
 
 { #category : #accessing }
-StDebuggerFailingAssertionInspector >> expectedObject [
+StFailingAssertionInspector >> expectedObject [
 	^ expectedObject
 ]
 
 { #category : #accessing }
-StDebuggerFailingAssertionInspector >> expectedObject: anObject [
+StFailingAssertionInspector >> expectedObject: anObject [
 	expectedObject := anObject
 ]
 
 { #category : #initialization }
-StDebuggerFailingAssertionInspector >> initializeMillerList: list forObject: object [
+StFailingAssertionInspector >> initializeMillerList: list forObject: object [
 	list
 		presenterBlock: [ :aModel | self treeTableInspectionFor: aModel ];
 		setRootModel: object 
 ]
 
 { #category : #initialization }
-StDebuggerFailingAssertionInspector >> initializePresenters [
+StFailingAssertionInspector >> initializePresenters [
 
 	actualObjectHeader := (self instantiate: StHeaderBar)
 		label: 'Actual object: ', actualObject printString;
@@ -91,7 +102,7 @@ StDebuggerFailingAssertionInspector >> initializePresenters [
 ]
 
 { #category : #views }
-StDebuggerFailingAssertionInspector >> treeTableInspectionFor: aModel [
+StFailingAssertionInspector >> treeTableInspectionFor: aModel [
 	| rawInspection |
 	rawInspection := StRawInspection new.
 	^ self newTreeTable
