@@ -55,6 +55,7 @@ StDebuggerActionModel >> interruptedContext [
 
 { #category : #'debug - predicates' }
 StDebuggerActionModel >> isContextSteppable [
+	self flag: 'Too complex: could we reify debugging predicates for more clarity and simplicity?'.
 	^ (self isInterruptedContextError
 		or: [ self isInterruptedContextATestFailure
 				or: [ self isInterruptedContextPostMortem
@@ -71,6 +72,7 @@ StDebuggerActionModel >> isInterruptedContextATestFailure [
 
 { #category : #'debug - predicates' }
 StDebuggerActionModel >> isInterruptedContextAnAssertEqualsFailure [
+	self flag: 'Way too much complex: could we reify debugging predicates for more clarity and simplicity?'.
 	^ self isInterruptedContextATestFailure
 		and: [ | failure |
 			failure := self interruptedContext temporaries
