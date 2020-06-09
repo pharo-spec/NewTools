@@ -12,8 +12,11 @@ DebugSession >> isInterruptedContextAnAssertionFailure [
 	exceptionClass := self interruptedContext temporaries
 		at: #exception
 		ifAbsent: [ ^ false ].
+	self flag: 'Will be simplified when debug sessions will know their exception'.
 	^ exceptionClass notNil
-		and: [ exceptionClass includesBehavior: TestFailure ]
+		and: [ (exceptionClass isKindOf: TestFailure)
+				or: [ exceptionClass isClass
+						and: [ exceptionClass includesBehavior: TestFailure ] ] ]
 ]
 
 { #category : #'*NewTools-Debugger-Extensions' }
