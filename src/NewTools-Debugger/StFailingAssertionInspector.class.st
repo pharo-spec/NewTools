@@ -78,6 +78,11 @@ StFailingAssertionInspector >> actualObject: anObject [
 ]
 
 { #category : #accessing }
+StFailingAssertionInspector >> actualObjectMillerList [
+	^ actualObjectMillerList
+]
+
+{ #category : #accessing }
 StFailingAssertionInspector >> expectedObject [
 	^ expectedObject
 ]
@@ -85,6 +90,11 @@ StFailingAssertionInspector >> expectedObject [
 { #category : #accessing }
 StFailingAssertionInspector >> expectedObject: anObject [
 	expectedObject := anObject
+]
+
+{ #category : #accessing }
+StFailingAssertionInspector >> expectedObjectMillerList [
+	^ expectedObjectMillerList
 ]
 
 { #category : #initialization }
@@ -127,6 +137,11 @@ StFailingAssertionInspector >> initializePresentersForString [
 	stringDiff rightLabel: ''.
 	stringDiff leftText: actualObject.
 	stringDiff rightText: expectedObject
+]
+
+{ #category : #accessing }
+StFailingAssertionInspector >> stringDiff [
+	^stringDiff
 ]
 
 { #category : #views }
