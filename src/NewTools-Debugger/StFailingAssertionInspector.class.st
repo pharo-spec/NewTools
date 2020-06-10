@@ -111,7 +111,7 @@ StFailingAssertionInspector >> initializePresenters [
 		ifTrue: [ ^ self initializePresentersForString ].
 		
 	actualObjectHeader := (self instantiate: StHeaderBar)
-		label: 'Actual object: ' , actualObject printString;
+		label: 'Actual object: ' , (actualObject printStringLimitedTo: 40);
 		yourself.
 	actualObjectHeader applyStyleToLabel: 'label.headerError'.
 	actualObjectMillerList := SpMillerColumnPresenter new.
@@ -119,7 +119,7 @@ StFailingAssertionInspector >> initializePresenters [
 		initializeMillerList: actualObjectMillerList
 		forObject: actualObject.
 	expectedObjectHeader := (self instantiate: StHeaderBar)
-		label: 'Expected object: ' , expectedObject printString;
+		label: 'Expected object: ' , (expectedObject printStringLimitedTo: 40);
 		yourself.
 	expectedObjectHeader applyStyleToLabel: 'label.headerSuccess'.
 	expectedObjectMillerList := SpMillerColumnPresenter new.
