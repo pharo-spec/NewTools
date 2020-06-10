@@ -611,9 +611,9 @@ StDebugger >> codeContextMenuCommandsForRootGroup: aRootCmCommandsGroup [
 		description: 'Debugger actions on code selection.';
 		beDisplayedAsGroup.
 	group register: (StRunToSelectionCommand forSpecContext: self).
-	aRootCmCommandsGroup decoratedGroup registerFirst: group.
-	self codeContextMenuExtensionsForParentGroup: aRootCmCommandsGroup.
-	^ aRootCmCommandsGroup asMenuPresenter
+	self codeContextMenuExtensionsForParentGroup: group.
+	"aRootCmCommandsGroup decoratedGroup registerFirst: group."
+	^ group asMenuPresenter
 ]
 
 { #category : #commands }
@@ -621,14 +621,14 @@ StDebugger >> codeContextMenuExtensionsForParentGroup: aCmCommandsGroup [
 	| extensionPragmas group |
 	extensionPragmas := self class
 		collectExtendedToolsPragmaFor: #codeExtensionDebugCommand:.
-	group := (CmCommandGroup
+	"group := (CmCommandGroup
 		named: 'Debugger extended actions on code selection') asSpecGroup.
 	group
 		description: 'Debugger extended actions on code selection.';
-		beDisplayedAsGroup.
+		beDisplayedAsGroup."
 	(extensionPragmas collect: [ :prg | prg methodClass soleInstance ])
-		do: [ :extCmdClass | group register: (extCmdClass forSpecContext: self) ].
-	aCmCommandsGroup decoratedGroup register: group
+		do: [ :extCmdClass | aCmCommandsGroup register: (extCmdClass forSpecContext: self) ].
+
 ]
 
 { #category : #'accessing context' }
@@ -802,7 +802,7 @@ StDebugger >> initializeCode [
 			inContext: self stackTable selection selectedItem
 			notifying: nil ].
 	code whenResetDo: [ self updateCodeFromContext ].
-	code contextMenu: [ self codeContextMenuCommandsForRootGroup: code rootCommandsGroup ].
+	code contextMenu:  (self codeContextMenuCommandsForRootGroup: code rootCommandsGroup) .
 			
 	codeHeader := self instantiate: StHeaderBar.	
 	codeHeader removeStyleFromLabel: 'label.header'.	
