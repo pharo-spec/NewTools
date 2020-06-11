@@ -1,13 +1,13 @@
 "
-An object inspector showing only a raw view instead of a notebook.
-Used in the particular case of the debugger context inspector to see variables in an large and without useless noisy details (e.g., tabs, ...).
+An object inspector specialized for debuggers.
+I show only a compacted raw view instead of a notebook page, in particular I remove tabs and provide an optional layout without a header.
+Activating one of my items (by clicking or double-clicking on it) shows a miller list with a standard object inspector.
 "
 Class {
 	#name : #StDebuggerRawObjectInspector,
 	#superclass : #StObjectInspector,
 	#instVars : [
-		'raw',
-		'frontPage'
+		'raw'
 	],
 	#category : #'NewTools-Debugger-View'
 }
@@ -47,11 +47,4 @@ StDebuggerRawObjectInspector >> rawInspectorPageOrNil [
 StDebuggerRawObjectInspector >> step [
 	super step.
 	raw step
-]
-
-{ #category : #'private updating' }
-StDebuggerRawObjectInspector >> updateViewsForAssertionFailure [
-	self updatePages.
-	raw := views.
-	raw pages: (raw pages copyFrom: 1 to: 2)
 ]

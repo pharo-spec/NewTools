@@ -1,3 +1,10 @@
+"
+I am an inspector dedicated to the debugger.
+I wrap a StInspector object which provides inspection views for the inspected object.
+I add specific debugger functionalities:
+- I remember selection in the inspector list depending on the context
+- I dynamically change my layout depending on the context (e.g., I show a diff view in case of an assertion failure)
+"
 Class {
 	#name : #StDebuggerInspector,
 	#superclass : #SpPresenter,
