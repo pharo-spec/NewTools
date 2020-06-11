@@ -19,7 +19,9 @@ Class {
 		'extensionTools',
 		'extensionToolsNotebook',
 		'toolbarCommandGroup',
-		'debuggerActionModel'
+		'debuggerActionModel',
+		'codeCommands',
+		'debuggerCommandGroup'
 	],
 	#classVars : [
 		'ActivateDebuggerExtensions',
@@ -77,6 +79,9 @@ StDebugger class >> buildCommandsGroupWith: stDebuggerInstance forRoot: rootComm
 		buildCommandsGroupWith: stDebuggerInstance
 		forRoot: rootCommandGroup.
 	StDebuggerToolbarCommandTreeBuilder
+		buildCommandsGroupWith: stDebuggerInstance
+		forRoot: rootCommandGroup.
+	StDebuggerCodeCommandTreeBuilder
 		buildCommandsGroupWith: stDebuggerInstance
 		forRoot: rootCommandGroup
 ]
@@ -532,20 +537,32 @@ StDebugger class >> usingSpecSelector: aSelector [
 ]
 
 { #category : #commands }
-StDebugger >> buildContextMenus [
-	| debuggerCommandGroup stackGroup |
+StDebugger >> buildCommandTree [
+	debuggerCommandGroup := self rootCommandsGroup
+]
 
-	debuggerCommandGroup := self rootCommandsGroup.
-	stackGroup := debuggerCommandGroup / StDebuggerStackCommandTreeBuilder groupName.
-	stackTable contextMenu: [ stackGroup beRoot asMenuPresenter ].
-	
-	toolbarCommandGroup := debuggerCommandGroup / StDebuggerToolbarCommandTreeBuilder groupName.
-	
+{ #category : #commands }
+StDebugger >> buildContextMenus [
+	| stackGroup |
+	self buildCommandTree.
+
+	"Stack"
+	stackGroup := debuggerCommandGroup
+		/ StDebuggerStackCommandTreeBuilder groupName.
+	stackTable contextMenu: stackGroup beRoot asMenuPresenter.
+
+	"Toolbar"
+	toolbarCommandGroup := debuggerCommandGroup
+		/ StDebuggerToolbarCommandTreeBuilder groupName.
 	SpToolbarPresenterBuilder new
 		toolbarPresenter: toolbar;
 		visit: toolbarCommandGroup.
-	
-	self updateToolbarDebugActions
+	self updateToolbarDebugActions.
+
+	"Code"
+	codeCommands := debuggerCommandGroup
+		/ StDebuggerCodeCommandTreeBuilder groupName.
+	code contextMenu: codeCommands beRoot asMenuPresenter
 ]
 
 { #category : #commands }
@@ -600,35 +617,6 @@ StDebugger >> close [
 StDebugger >> code [
 
 	^ code
-]
-
-{ #category : #commands }
-StDebugger >> codeContextMenuCommandsForRootGroup: aRootCmCommandsGroup [
-	| group |
-	group := (CmCommandGroup named: 'Debugger actions on code selection')
-		asSpecGroup.
-	group
-		description: 'Debugger actions on code selection.';
-		beDisplayedAsGroup.
-	group register: (StRunToSelectionCommand forSpecContext: self).
-	self codeContextMenuExtensionsForParentGroup: group.
-	"aRootCmCommandsGroup decoratedGroup registerFirst: group."
-	^ group asMenuPresenter
-]
-
-{ #category : #commands }
-StDebugger >> codeContextMenuExtensionsForParentGroup: aCmCommandsGroup [
-	| extensionPragmas group |
-	extensionPragmas := self class
-		collectExtendedToolsPragmaFor: #codeExtensionDebugCommand:.
-	"group := (CmCommandGroup
-		named: 'Debugger extended actions on code selection') asSpecGroup.
-	group
-		description: 'Debugger extended actions on code selection.';
-		beDisplayedAsGroup."
-	(extensionPragmas collect: [ :prg | prg methodClass soleInstance ])
-		do: [ :extCmdClass | aCmCommandsGroup register: (extCmdClass forSpecContext: self) ].
-
 ]
 
 { #category : #'accessing context' }
@@ -793,7 +781,8 @@ StDebugger >> initializeBreakpointInspector [
 
 { #category : #initialization }
 StDebugger >> initializeCode [
-	self flag: 'Add metalink information in the gutter!'.
+	self flag: #DBG_IMPROVE.
+	 "Add metalink information in the gutter!"
 	
 	code := self newCode.
 	code whenSubmitDo: [ :text | 
@@ -801,8 +790,7 @@ StDebugger >> initializeCode [
 			recompileMethodTo: text string
 			inContext: self stackTable selection selectedItem
 			notifying: nil ].
-	code whenResetDo: [ self updateCodeFromContext ].
-	code contextMenu:  (self codeContextMenuCommandsForRootGroup: code rootCommandsGroup) .
+	code whenResetDo: [ self updateCodeFromContext ].	
 			
 	codeHeader := self instantiate: StHeaderBar.	
 	codeHeader removeStyleFromLabel: 'label.header'.	

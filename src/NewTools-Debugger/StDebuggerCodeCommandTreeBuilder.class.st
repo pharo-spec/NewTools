@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 StDebuggerCodeCommandTreeBuilder class >> displayStrategy [
-	^CmUIDisplayAsGroup
+	^CmUIDisplayAsSubMenu 
 ]
 
 { #category : #accessing }
@@ -23,7 +23,8 @@ StDebuggerCodeCommandTreeBuilder class >> groupName [
 StDebuggerCodeCommandTreeBuilder >> buildDebuggerCommandGroup [
 	| codeGroup |
 	codeGroup := self group.
-	codeGroup decoratedGroup register: self codeDebugCommands
+	codeGroup decoratedGroup register: self codeDebugCommands.
+	codeGroup beDisplayedAsGroup
 ]
 
 { #category : #commands }

@@ -42,12 +42,19 @@ StDebuggerTest >> debuggerClass [
 
 { #category : #accessing }
 StDebuggerTest >> debuggerOn: aDebugSession [
-	^self debugger session: aDebugSession; initialize
+	^ self debugger
+		session: aDebugSession;
+		application: self debuggerClass currentApplication;
+		initialize
 ]
 
 { #category : #accessing }
 StDebuggerTest >> initializedDebugger [
-	^ self debugger initialize
+	| dbg |
+	dbg := self debugger.
+	dbg application: self debuggerClass currentApplication.
+	dbg initialize.
+	^ dbg
 ]
 
 { #category : #accessing }
