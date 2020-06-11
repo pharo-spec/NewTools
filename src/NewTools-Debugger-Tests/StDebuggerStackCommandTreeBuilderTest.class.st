@@ -84,7 +84,7 @@ StDebuggerStackCommandTreeBuilderTest >> testStackContextMenuExplorationCommands
 	self assert: cmdGroup description equals: builder stackContextMenuExplorationDescription.
 	self
 		assertCommandGroupEntries: cmdEntries
-		hasCommands: 	builder stackExplorationCommandsClasses.
+		hasCommands: builder stackExplorationCommandsClasses.
 	self
 		assertCommandGroup: cmdGroup
 		hasDisplayStrategy: CmUIDisplayAsSubMenu.
