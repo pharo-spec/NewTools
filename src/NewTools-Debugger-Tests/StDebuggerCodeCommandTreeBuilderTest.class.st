@@ -12,6 +12,19 @@ StDebuggerCodeCommandTreeBuilderTest >> newBuilder [
 ]
 
 { #category : #tests }
+StDebuggerCodeCommandTreeBuilderTest >> testCodeDebugCommands [
+	|codeCommandClasses|
+	codeCommandClasses := OrderedCollection new.
+	codeCommandClasses addAll: builder codeExecutionControlCommandsClasses.
+	codeCommandClasses addAll: builder codeExtensionCommandsClasses.
+	self
+		assertCommandGroup: builder codeDebugCommands
+		hasSameCommands: codeCommandClasses
+		withContext: debugger
+		displayStrategy: CmUIDisplayAsGroup
+]
+
+{ #category : #tests }
 StDebuggerCodeCommandTreeBuilderTest >> testCodeDebugCommandsDescription [
 	self assert: builder  codeDebugCommandsDescription equals: 'Execution control'
 ]
