@@ -90,11 +90,8 @@ Class {
 	],
 	#classVars : [
 		'ActivateDebuggerExtensions',
-		'DefaultSpec',
 		'ErrorRecursion',
 		'ExtensionToolsSettings',
-		'FilterCommonMessageSends',
-		'LogDebuggerStackToFile',
 		'UsingSpecSelector'
 	],
 	#category : #'NewTools-Debugger-View'
@@ -306,16 +303,6 @@ StDebugger class >> extensionToolsSettings [
 	^ExtensionToolsSettings ifNil:[ExtensionToolsSettings := Dictionary new]
 ]
 
-{ #category : #settings }
-StDebugger class >> filterCommonMessageSends [
-	^ FilterCommonMessageSends ifNil: [FilterCommonMessageSends := false]
-]
-
-{ #category : #settings }
-StDebugger class >> filterCommonMessageSends: aBoolean [
-	FilterCommonMessageSends := aBoolean
-]
-
 { #category : #'tools registry' }
 StDebugger class >> handlesContext: aContext [
 
@@ -351,16 +338,6 @@ StDebugger class >> initialize [
 	"Add ourselves to registry. See [Smalltalk tools]" 
 	Smalltalk tools registerDebugger: self withRank: self rank.
 	
-]
-
-{ #category : #settings }
-StDebugger class >> logDebuggerStackToFile [
-	^ LogDebuggerStackToFile ifNil: [LogDebuggerStackToFile := true]
-]
-
-{ #category : #settings }
-StDebugger class >> logDebuggerStackToFile: aBoolean [
-	 LogDebuggerStackToFile := aBoolean
 ]
 
 { #category : #opening }
