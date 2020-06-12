@@ -13,7 +13,6 @@ Class {
 		'model',
 		'label',
 		'rawInspectionSelectionCache',
-		'withHeaderBar',
 		'assertionFailure',
 		'currentLayout',
 		'currentLayoutSpec'
@@ -68,12 +67,6 @@ StDebuggerInspector >> defaultLayoutSpec [
 	^#defaultSpec
 ]
 
-{ #category : #accessing }
-StDebuggerInspector >> displayHeaderBar: anObject [
-	withHeaderBar := anObject.
-	inspector withHeaderBar: self withHeaderBar
-]
-
 { #category : #updating }
 StDebuggerInspector >> forceRawInspectionUpdate [
 	self getRawInspectorPresenterOrNil ifNotNil: [ :inspection | 
@@ -98,7 +91,6 @@ StDebuggerInspector >> initializePresenters [
 
 	label := self newLabel.
 	inspector := self instantiate: StInspector on: self model.
-	inspector withHeaderBar: self withHeaderBar.
 	currentLayoutSpec := self defaultLayoutSpec.
 ]
 
@@ -230,9 +222,4 @@ StDebuggerInspector >> updateWith: inspectedObject [
 	self model: (StDebuggerInspectorModel on: inspectedObject).			
 	self updateEvaluationPaneReceiver.
 	self restoreRawInspectionSelectionForContext: newContext
-]
-
-{ #category : #accessing }
-StDebuggerInspector >> withHeaderBar [
-	^withHeaderBar ifNil:[withHeaderBar := true]
 ]

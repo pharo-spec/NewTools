@@ -59,19 +59,6 @@ StObjectInspector class >> inspect: anObject [
 	^ self openOn: anObject
 ]
 
-{ #category : #specs }
-StObjectInspector class >> noHeaderSpec [
-	<spec: #default>
-	
-	^ SpBoxLayout newVertical
-		add: (SpPanedLayout newVertical
-			position: 70 percent;
-			add: #views;
-			add: #evaluator;
-			yourself);
-		yourself
-]
-
 { #category : #opening }
 StObjectInspector class >> onObject: anObject [
 

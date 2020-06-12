@@ -410,12 +410,6 @@ StDebugger class >> defaultTitle [
 	^ 'SpecDebugger'
 ]
 
-{ #category : #settings }
-StDebugger class >> displayInspectorHeaderBar [
-	self flag: 'Temporary hack to disable header bars on inspectors'.
-	^"(self usingSpecSelector = #debuggerNoHeadersWithExtensionsSpec) not"true
-]
-
 { #category : #'tools registry' }
 StDebugger class >> extendedToolsPragma [	
 
@@ -885,9 +879,7 @@ StDebugger >> initializeInspector [
 	inspector := self
 		instantiate: StDebuggerInspector
 		on: (StDebuggerInspectorModel on: nil).
-	inspector label: 'Receiver'.
-	self flag: 'Temporary hack to disable header bars on inspectors'.
-	inspector displayHeaderBar: self class displayInspectorHeaderBar
+	inspector label: 'Receiver'
 ]
 
 { #category : #initialization }
