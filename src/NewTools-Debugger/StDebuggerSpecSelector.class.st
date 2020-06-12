@@ -15,7 +15,7 @@ Three cases:
 		- AND at least one existing extension class is activated as debugger extension
 "
 Class {
-	#name : #StDebuggerUsingSpecSelector,
+	#name : #StDebuggerSpecSelector,
 	#superclass : #Object,
 	#instVars : [
 		'specSelector'
@@ -24,44 +24,44 @@ Class {
 }
 
 { #category : #accessing }
-StDebuggerUsingSpecSelector class >> debuggerClass [ 	
+StDebuggerSpecSelector class >> debuggerClass [ 	
 	^StDebugger
 ]
 
 { #category : #'default spec selectors' }
-StDebuggerUsingSpecSelector class >> defaultDebuggerWithExtensionSpecSelector [
+StDebuggerSpecSelector class >> defaultDebuggerWithExtensionSpecSelector [
 	^#debuggerWithExtensionsSpec
 ]
 
 { #category : #'default spec selectors' }
-StDebuggerUsingSpecSelector class >> defaultDebuggerWithoutExtensionSpecSelector [
+StDebuggerSpecSelector class >> defaultDebuggerWithoutExtensionSpecSelector [
 	^#debuggerWithoutExtensionsSpec
 ]
 
 { #category : #'instance creation' }
-StDebuggerUsingSpecSelector class >> defaultSelector [
+StDebuggerSpecSelector class >> defaultSelector [
 	^self on: self defaultDebuggerWithExtensionSpecSelector
 ]
 
 { #category : #'instance creation' }
-StDebuggerUsingSpecSelector class >> on: aSelector [
+StDebuggerSpecSelector class >> on: aSelector [
 	^self new specSelector: aSelector
 ]
 
 { #category : #accessing }
-StDebuggerUsingSpecSelector >> debuggerClass [ 
+StDebuggerSpecSelector >> debuggerClass [ 
 	^self class debuggerClass
 ]
 
 { #category : #'specs - selectors' }
-StDebuggerUsingSpecSelector >> isDefaultSelector: aSelector [
+StDebuggerSpecSelector >> isDefaultSelector: aSelector [
 	^ {self class defaultDebuggerWithExtensionSpecSelector.
 	self class defaultDebuggerWithoutExtensionSpecSelector}
 		includes: aSelector
 ]
 
 { #category : #'specs - selectors' }
-StDebuggerUsingSpecSelector >> selectExtensionActivationSpecFrom: aDefaultSpecSelector [
+StDebuggerSpecSelector >> selectExtensionActivationSpecFrom: aDefaultSpecSelector [
 	"Altered depending on the current configuration of the debugger extensions.
 	The selection just adds or remove the extensions from the spec selector"
 
@@ -74,7 +74,7 @@ StDebuggerUsingSpecSelector >> selectExtensionActivationSpecFrom: aDefaultSpecSe
 ]
 
 { #category : #'specs - selectors' }
-StDebuggerUsingSpecSelector >> selectSpecSelector [
+StDebuggerSpecSelector >> selectSpecSelector [
 	"Sets and returns the spec selector to be use by the presenter.
 	Two cases:
 	- current selector exists or is not valid: returns default spec selector with extensions
@@ -90,7 +90,7 @@ StDebuggerUsingSpecSelector >> selectSpecSelector [
 ]
 
 { #category : #'specs - selectors' }
-StDebuggerUsingSpecSelector >> selectorForDebuggerStatus: debuggerExtensionsActivated extensionsStatus: debuggerHasExtensions [
+StDebuggerSpecSelector >> selectorForDebuggerStatus: debuggerExtensionsActivated extensionsStatus: debuggerHasExtensions [
 	"This is only relevant in the case we use default StDebugger specs for which the extension column can be configured in settings"
 
 	^ (debuggerExtensionsActivated and: [ debuggerHasExtensions ])
@@ -99,11 +99,11 @@ StDebuggerUsingSpecSelector >> selectorForDebuggerStatus: debuggerExtensionsActi
 ]
 
 { #category : #'default spec selectors' }
-StDebuggerUsingSpecSelector >> specSelector [
+StDebuggerSpecSelector >> specSelector [
 	^ specSelector
 ]
 
 { #category : #accessing }
-StDebuggerUsingSpecSelector >> specSelector: anObject [
+StDebuggerSpecSelector >> specSelector: anObject [
 	specSelector := anObject
 ]

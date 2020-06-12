@@ -3,7 +3,7 @@ I mock the state of StDebuggerUsingSpecSelector to test variations in its state.
 "
 Class {
 	#name : #StDebuggerUsingSpecSelectorMock,
-	#superclass : #StDebuggerUsingSpecSelector,
+	#superclass : #StDebuggerSpecSelector,
 	#instVars : [
 		'withDebuggerExtensions',
 		'withActivatedExtensions'

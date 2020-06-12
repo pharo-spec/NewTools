@@ -1,5 +1,5 @@
 Class {
-	#name : #StDebuggerUsingSpecSelectorTest,
+	#name : #StDebuggerSpecSelectorTest,
 	#superclass : #TestCase,
 	#instVars : [
 		'specSelector'
@@ -8,26 +8,26 @@ Class {
 }
 
 { #category : #helpers }
-StDebuggerUsingSpecSelectorTest >> defaultSelectorWithExtensions [
-	^ StDebuggerUsingSpecSelector
+StDebuggerSpecSelectorTest >> defaultSelectorWithExtensions [
+	^ StDebuggerSpecSelector
 		defaultDebuggerWithExtensionSpecSelector
 ]
 
 { #category : #helpers }
-StDebuggerUsingSpecSelectorTest >> defaultSelectorWithoutExtensions [
-	^ StDebuggerUsingSpecSelector
+StDebuggerSpecSelectorTest >> defaultSelectorWithoutExtensions [
+	^ StDebuggerSpecSelector
 		defaultDebuggerWithoutExtensionSpecSelector
 ]
 
 { #category : #running }
-StDebuggerUsingSpecSelectorTest >> setUp [
+StDebuggerSpecSelectorTest >> setUp [
 	"Hooks that subclasses may override to define the fixture of test."
 	super setUp.
-	specSelector := StDebuggerUsingSpecSelector new
+	specSelector := StDebuggerSpecSelector new
 ]
 
 { #category : #'tests - spec' }
-StDebuggerUsingSpecSelectorTest >> testCustomSelectExtensionActivationSpecFrom [
+StDebuggerSpecSelectorTest >> testCustomSelectExtensionActivationSpecFrom [
 	| customSelector mockSelector |
 	customSelector := #anySelector.
 	mockSelector := StDebuggerUsingSpecSelectorMock new.
@@ -54,7 +54,7 @@ StDebuggerUsingSpecSelectorTest >> testCustomSelectExtensionActivationSpecFrom [
 ]
 
 { #category : #'tests - spec' }
-StDebuggerUsingSpecSelectorTest >> testCustomSelectSpecSelector [
+StDebuggerSpecSelectorTest >> testCustomSelectSpecSelector [
 	| customSelector mockSelector |
 	mockSelector := StDebuggerUsingSpecSelectorMock new.
 	customSelector := mockSelector nonDefaultSelector.	
@@ -74,19 +74,19 @@ StDebuggerUsingSpecSelectorTest >> testCustomSelectSpecSelector [
 ]
 
 { #category : #'tests - spec' }
-StDebuggerUsingSpecSelectorTest >> testDebuggerClass [
+StDebuggerSpecSelectorTest >> testDebuggerClass [
 	self assert: specSelector debuggerClass identicalTo: StDebugger
 ]
 
 { #category : #'tests - spec' }
-StDebuggerUsingSpecSelectorTest >> testDefaultSelector [
+StDebuggerSpecSelectorTest >> testDefaultSelector [
 	self
-		assert: StDebuggerUsingSpecSelector defaultSelector specSelector
+		assert: StDebuggerSpecSelector defaultSelector specSelector
 		equals: specSelector class defaultDebuggerWithExtensionSpecSelector
 ]
 
 { #category : #'tests - spec' }
-StDebuggerUsingSpecSelectorTest >> testIsDefaultSelector [
+StDebuggerSpecSelectorTest >> testIsDefaultSelector [
 	self deny: (specSelector isDefaultSelector: #anySelector).
 	self
 		assert:
@@ -99,7 +99,7 @@ StDebuggerUsingSpecSelectorTest >> testIsDefaultSelector [
 ]
 
 { #category : #'tests - spec' }
-StDebuggerUsingSpecSelectorTest >> testNilSelectSpecSelector [
+StDebuggerSpecSelectorTest >> testNilSelectSpecSelector [
 	| withExtensionSelector withoutExtensionSelector  mockSelector |
 	withExtensionSelector := self defaultSelectorWithExtensions.
 	withoutExtensionSelector := self defaultSelectorWithoutExtensions.	
@@ -120,7 +120,7 @@ StDebuggerUsingSpecSelectorTest >> testNilSelectSpecSelector [
 ]
 
 { #category : #'tests - spec' }
-StDebuggerUsingSpecSelectorTest >> testSelectExtensionActivationSpecFrom [
+StDebuggerSpecSelectorTest >> testSelectExtensionActivationSpecFrom [
 	| withExtensionSelector withoutExtensionSelector mockSelector |
 	withExtensionSelector := self defaultSelectorWithExtensions.
 	withoutExtensionSelector := self defaultSelectorWithoutExtensions.	
@@ -160,7 +160,7 @@ StDebuggerUsingSpecSelectorTest >> testSelectExtensionActivationSpecFrom [
 ]
 
 { #category : #'tests - spec' }
-StDebuggerUsingSpecSelectorTest >> testSelectNonDefaultSpecSelector [
+StDebuggerSpecSelectorTest >> testSelectNonDefaultSpecSelector [
 	| nonDefaultSelector mockSelector |		
 	mockSelector := StDebuggerUsingSpecSelectorMock new.	
 	nonDefaultSelector := mockSelector nonDefaultSelector.
@@ -189,7 +189,7 @@ StDebuggerUsingSpecSelectorTest >> testSelectNonDefaultSpecSelector [
 ]
 
 { #category : #'tests - spec' }
-StDebuggerUsingSpecSelectorTest >> testSelectSpecSelectorWithExtensions [
+StDebuggerSpecSelectorTest >> testSelectSpecSelectorWithExtensions [
 	| withExtensionSelector withoutExtensionSelector mockSelector |
 	withExtensionSelector := self defaultSelectorWithExtensions.
 	withoutExtensionSelector := self defaultSelectorWithoutExtensions.			
@@ -218,7 +218,7 @@ StDebuggerUsingSpecSelectorTest >> testSelectSpecSelectorWithExtensions [
 ]
 
 { #category : #'tests - spec' }
-StDebuggerUsingSpecSelectorTest >> testSelectSpecSelectorWithoutExtensions [
+StDebuggerSpecSelectorTest >> testSelectSpecSelectorWithoutExtensions [
 	| withoutExtensionSelector mockSelector |
 	withoutExtensionSelector := self defaultSelectorWithoutExtensions.			
 	mockSelector := StDebuggerUsingSpecSelectorMock new.
@@ -246,7 +246,7 @@ StDebuggerUsingSpecSelectorTest >> testSelectSpecSelectorWithoutExtensions [
 ]
 
 { #category : #'tests - spec' }
-StDebuggerUsingSpecSelectorTest >> testSelectorForDebuggerStatusExtensionsStatus [
+StDebuggerSpecSelectorTest >> testSelectorForDebuggerStatusExtensionsStatus [
 	| selector |
 	selector := specSelector
 		selectorForDebuggerStatus: false

@@ -444,14 +444,14 @@ StDebugger class >> taskbarIconName [
 { #category : #specs }
 StDebugger class >> usingSpecSelector [
 	^ (UsingSpecSelector
-		ifNil: [ UsingSpecSelector := StDebuggerUsingSpecSelector defaultSelector ])
+		ifNil: [ UsingSpecSelector := StDebuggerSpecSelector defaultSelector ])
 		selectSpecSelector
 ]
 
 { #category : #specs }
 StDebugger class >> usingSpecSelector: aSelector [
 
-	UsingSpecSelector := StDebuggerUsingSpecSelector on: aSelector
+	UsingSpecSelector := StDebuggerSpecSelector on: aSelector
 ]
 
 { #category : #commands }
