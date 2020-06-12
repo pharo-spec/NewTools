@@ -134,8 +134,7 @@ StDebugger class >> availableExtensionToolsClassesSettings [
 
 { #category : #specs }
 StDebugger class >> availableSpecSelectors [
-	^ (self class allSelectorsInProtocol: #specs )
-		reject: [ :selector | selector = #defaultSpec ]
+	^ self class allSelectorsInProtocol: 'specs - selectors'
 ]
 
 { #category : #commands }
@@ -157,6 +156,25 @@ StDebugger class >> closeAllDebuggers [
 	StDebugger allInstancesDo: [ :dbg | dbg close ]
 ]
 
+{ #category : #specs }
+StDebugger class >> codeLayout [
+	^ SpBoxLayout newVertical
+		add:
+			(SpBoxLayout newVertical
+				add: #toolbar;
+				add: #codeHeader
+					expand: true
+					fill: true
+					padding: 0;
+				yourself)
+			withConstraints: [ :constraints | 
+				constraints
+					expand: false;
+					height: self toolbarHeight * 2 ];
+		add: #code;
+		yourself
+]
+
 { #category : #'tools registry' }
 StDebugger class >> collectExtendedToolsClasses [
 	^ self collectExtendedToolsClassesFor: self extendedToolsPragma
@@ -173,34 +191,6 @@ StDebugger class >> collectExtendedToolsPragmaFor: pragmaSelector [
 	self flag: 'PragmaCollector might be changed in the near future?'.
 	^ (PragmaCollector filter: [ :prg | prg selector = pragmaSelector ])
 		reset collected
-]
-
-{ #category : #specs }
-StDebugger class >> columnInspectorsSpec [
-	"<spec: #default>"
-
-	^ SpBoxLayout newVertical
-		"position: 70 percent;"
-		add: (SpPanedLayout newHorizontal
-			position: 65 percent;
-			add: (SpPanedLayout newVertical
-				position: 40 percent;
-				add: (SpBoxLayout newVertical 
-					add: 'Stack' expand: false fill: false padding: 5;
-					add: #stackTable;
-					yourself);
-				add: (SpBoxLayout newVertical 
-					add: 'Source' expand: false fill: false padding: 5;
-					add: #toolbar expand: false fill: false padding: 0;
-					add: #code;
-					yourself);
-				yourself);
-			"add: (SpPanedLayout newVertical 
-				add: #contextInspector withConstraints: [ :c | c spec: #variablesListOnTop ];
-				add: #inspector withConstraints: [ :c | c spec: #inspectorAlone ];
-				yourself);"
-			yourself);
-		yourself
 ]
 
 { #category : #settings }
@@ -250,150 +240,37 @@ StDebugger class >> debuggerExtensionsSettingsOn: aBuilder parentGroup: settings
 					[ :toolClass | self debuggerExtensionSettingsForClass: toolClass builder: aBuilder ] ]
 ]
 
-{ #category : #specs }
-StDebugger class >> debuggerHorizontalWithExtensionsSpec [
-	^ SpPanedLayout newHorizontal
-		add:
-			(SpBoxLayout newVertical
-				add: #stackTable
-					withConstraints:
-						[ :constraints | constraints height: self toolbarHeight * 10 ];
-				add:
-					(SpBoxLayout newVertical
-						add: #toolbar;
-						add: #codeHeader
-							expand: true
-							fill: true
-							padding: 0;
-						yourself)
-					withConstraints:
-						[ :constraints | constraints height: self toolbarHeight * 2 ];
-				add: #code expand: true;
-				yourself);
-		add:
-			(SpPanedLayout newVertical
-				position: 60 percent;
-				add: #inspector;
-				add: #extensionToolsNotebook;
-				yourself);
-		yourself
-]
-
 { #category : #settings }
 StDebugger class >> debuggerLayoutSettingsOn: aBuilder [
 	<systemsettings>
 	(aBuilder pickOne: #usingSpecSelector)
 		label: 'Default debugger spec layout';
 		target: self;
-		default: #debuggerHorizontalWithExtensionsSpec;
+		default: #debuggerWithoutExtensionsSpec;
 		parent: #debugging;
 		domainValues: self availableSpecSelectors;
 		description: 'Sets the default spec layout of the debugger.'
 ]
 
-{ #category : #specs }
-StDebugger class >> debuggerNoHeadersWithExtensionsSpec [
-	^ SpPanedLayout newVertical
-		position: 65 percent;
-		add:
-			(SpPanedLayout newHorizontal
-				position: 65 percent;
-				add:
-					(SpPanedLayout newVertical
-						position: 30 percent;
-						add: #stackTable;
-						add:
-							(SpBoxLayout newVertical
-								add:
-									(SpBoxLayout newVertical
-										add: #toolbar;
-										yourself)
-									withConstraints: [ :constraints | 
-										constraints
-											expand: false;
-											height: self toolbarHeight + 10 ];
-								add: #code;
-								yourself);
-						yourself);
-				add: #extensionToolsNotebook;
-				yourself);
-		add: #inspector;
-		yourself
-]
-
-{ #category : #specs }
+{ #category : #'specs - selectors' }
 StDebugger class >> debuggerWithExtensionsSpec [
 	^ SpPanedLayout newVertical
 		position: 65 percent;
 		add:
 			(SpPanedLayout newHorizontal
 				position: 65 percent;
-				add:
-					(SpPanedLayout newVertical
-						position: 30 percent;						
-						add:
-							(SpBoxLayout newVertical
-								add: #stackHeader
-									expand: false
-									fill: false
-									padding: 5;
-								add: #stackTable;
-								yourself);
-						add:
-							(SpBoxLayout newVertical
-								add:
-									(SpBoxLayout newVertical
-										add: #toolbar;
-										add: #codeHeader
-											expand: true
-											fill: true
-											padding: 0;
-										yourself)
-									withConstraints: [ :constraints | 
-										constraints
-											expand: false;
-											height: self toolbarHeight *2  ];
-								add: #code;
-								yourself);
-						yourself);
+				add: self stackAndCodeLayout;
 				add: #extensionToolsNotebook;
 				yourself);
 		add: #inspector;
 		yourself
 ]
 
-{ #category : #specs }
+{ #category : #'specs - selectors' }
 StDebugger class >> debuggerWithoutExtensionsSpec [
 	^ SpPanedLayout newVertical
 		position: 65 percent;
-		add:
-			(SpPanedLayout newVertical
-				position: 30 percent;				
-				add:
-					(SpBoxLayout newVertical
-						add: #stackHeader
-							expand: false
-							fill: false
-							padding: 5;
-						add: #stackTable;
-						yourself);
-				add:
-					(SpBoxLayout newVertical
-						add:
-							(SpBoxLayout newVertical
-								add: #toolbar;
-								add: #codeHeader
-									expand: true
-									fill: true
-									padding: 0;
-								yourself)
-							withConstraints: [ :constraints | 
-								constraints
-									expand: false;
-									height: self toolbarHeight * 2 ];
-						add: #code;
-						yourself);
-				yourself);
+		add: self stackAndCodeLayout;
 		add: #inspector;
 		yourself
 ]
@@ -532,28 +409,30 @@ StDebugger class >> sessionClass [
 	^ DebugSession
 ]
 
-{ #category : #specs }
-StDebugger class >> singleInspectorSpec [
-	"<spec: #default>"
-
-	^ SpPanedLayout newVertical
-		position: 55 percent;
-		add: (SpPanedLayout newVertical
-			position: 40 percent;
-			add: #stackTable;
-			add: (SpBoxLayout newVertical 
-				add: #toolbar expand: false fill: false padding: 0;
-				add: #code;
-				yourself);
-			yourself);
-		add: #inspector;
-		yourself
-]
-
 { #category : #accessing }
 StDebugger class >> spanNewSessionFrom: anotherSession [
 	self flag: 'Where is that used? 2019-06-28'.
 	^ anotherSession spanNewSession
+]
+
+{ #category : #specs }
+StDebugger class >> stackAndCodeLayout [
+	^ SpPanedLayout newVertical
+		position: 30 percent;
+		add: self stackLayout;
+		add: self codeLayout;
+		yourself
+]
+
+{ #category : #specs }
+StDebugger class >> stackLayout [
+	^ SpBoxLayout newVertical
+		add: #stackHeader
+			expand: false
+			fill: false
+			padding: 5;
+		add: #stackTable;
+		yourself
 ]
 
 { #category : #icons }
@@ -563,33 +442,13 @@ StDebugger class >> taskbarIconName [
 ]
 
 { #category : #specs }
-StDebugger class >> traditionalSpec [
-	"<spec: #default>"
-
-	^ SpPanedLayout newVertical
-		position: 70 percent;
-		add: (SpPanedLayout newVertical
-			position: 40 percent;
-			add: #stackTable;
-			add: (SpBoxLayout newVertical 
-				add: #toolbar expand: false fill: false padding: 0;
-				add: #code;
-				yourself);
-			yourself);
-		add: (SpPanedLayout newHorizontal
-			add: #inspector;
-			yourself);
-		yourself
-]
-
-{ #category : #'specs - selectors' }
 StDebugger class >> usingSpecSelector [
 	^ (UsingSpecSelector
 		ifNil: [ UsingSpecSelector := StDebuggerUsingSpecSelector defaultSelector ])
 		selectSpecSelector
 ]
 
-{ #category : #'specs - selectors' }
+{ #category : #specs }
 StDebugger class >> usingSpecSelector: aSelector [
 
 	UsingSpecSelector := StDebuggerUsingSpecSelector on: aSelector
