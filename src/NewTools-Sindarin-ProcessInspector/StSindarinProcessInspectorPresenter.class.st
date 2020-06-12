@@ -14,7 +14,7 @@ Class {
 
 { #category : #specs }
 StSindarinProcessInspectorPresenter class >> debuggingExtensionToolName [
-	<debuggerExtensionOrder: 1 showByDefault: true>
+	<debuggerExtensionOrder: 1 showByDefault: false>
 	^ 'Process'
 ]
 

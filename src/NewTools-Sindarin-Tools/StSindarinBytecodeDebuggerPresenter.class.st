@@ -15,7 +15,7 @@ Class {
 
 { #category : #specs }
 StSindarinBytecodeDebuggerPresenter class >> debuggingExtensionToolName [
-	<debuggerExtensionOrder: 2 showByDefault: true>
+	<debuggerExtensionOrder: 2 showByDefault: false>
 	^ 'Bytecode'
 ]
 

@@ -99,9 +99,8 @@ Class {
 
 { #category : #accessing }
 StDebugger class >> activateDebuggerExtensions [
-
-	^ ActivateDebuggerExtensions ifNil: [ 
-		ActivateDebuggerExtensions := true ]
+	^ ActivateDebuggerExtensions
+		ifNil: [ ActivateDebuggerExtensions := true ]
 ]
 
 { #category : #accessing }
@@ -300,7 +299,8 @@ StDebugger class >> extensionToolSettingsFor: aToolClass [
 
 { #category : #'tools registry' }
 StDebugger class >> extensionToolsSettings [
-	^ExtensionToolsSettings ifNil:[ExtensionToolsSettings := Dictionary new]
+	^ ExtensionToolsSettings
+		ifNil: [ ExtensionToolsSettings := Dictionary new ]
 ]
 
 { #category : #'tools registry' }
