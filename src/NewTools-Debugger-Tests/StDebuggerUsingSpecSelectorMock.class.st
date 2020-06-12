@@ -12,28 +12,35 @@ Class {
 }
 
 { #category : #initialization }
-StDebuggerUsingSpecSelectorMock class >> initializeExtensionsActivated [
-	^self new initializeExtensionsActivated
+StDebuggerUsingSpecSelectorMock class >> initializeWithExtensionsAllActivated [
+	^self new initializeWithExtensionsAllActivated
 ]
 
 { #category : #initialization }
-StDebuggerUsingSpecSelectorMock class >> initializeExtensionsNoneActivated [
-	^self new initializeExtensionsNoneActivated
+StDebuggerUsingSpecSelectorMock class >> initializeWithExtensionsNoneActivated [
+	^self new initializeWithExtensionsNoneActivated
 ]
 
 { #category : #initialization }
-StDebuggerUsingSpecSelectorMock class >> initializeNoExtensionsActivated [
-	^self new initializeNoExtensionsActivated
+StDebuggerUsingSpecSelectorMock class >> initializeWithoutExtensionsAllActivated [
+	^self new initializeWithoutExtensionsAllActivated
 ]
 
 { #category : #initialization }
-StDebuggerUsingSpecSelectorMock class >> initializeNoExtensionsNoneActivated [
-	^self new initializeNoExtensionsNoneActivated
+StDebuggerUsingSpecSelectorMock class >> initializeWithoutExtensionsNoneActivated [
+	^self new initializeWithoutExtensionsNoneActivated
 ]
 
 { #category : #accessing }
 StDebuggerUsingSpecSelectorMock >> activateDebuggerExtensions [
 	^withDebuggerExtensions 
+]
+
+{ #category : #accessing }
+StDebuggerUsingSpecSelectorMock >> availableSpecSelectors [
+	^ StDebugger availableSpecSelectors
+		add: self nonDefaultSelector;
+		yourself
 ]
 
 { #category : #specs }
@@ -51,25 +58,30 @@ StDebuggerUsingSpecSelectorMock >> hasAnyActivatedExtension [
 ]
 
 { #category : #initialization }
-StDebuggerUsingSpecSelectorMock >> initializeExtensionsActivated [
+StDebuggerUsingSpecSelectorMock >> initializeWithExtensionsAllActivated [
 	withDebuggerExtensions := true.
 	withActivatedExtensions := true
 ]
 
 { #category : #initialization }
-StDebuggerUsingSpecSelectorMock >> initializeExtensionsNoneActivated [
+StDebuggerUsingSpecSelectorMock >> initializeWithExtensionsNoneActivated [
 	withDebuggerExtensions := true.
 	withActivatedExtensions := false
 ]
 
 { #category : #initialization }
-StDebuggerUsingSpecSelectorMock >> initializeNoExtensionsActivated [
+StDebuggerUsingSpecSelectorMock >> initializeWithoutExtensionsAllActivated [
 	withDebuggerExtensions := false.
 	withActivatedExtensions := true
 ]
 
 { #category : #initialization }
-StDebuggerUsingSpecSelectorMock >> initializeNoExtensionsNoneActivated [
+StDebuggerUsingSpecSelectorMock >> initializeWithoutExtensionsNoneActivated [
 	withDebuggerExtensions := false.
 	withActivatedExtensions := false
+]
+
+{ #category : #accessing }
+StDebuggerUsingSpecSelectorMock >> nonDefaultSelector [
+	^#nonDefaultSelector
 ]
