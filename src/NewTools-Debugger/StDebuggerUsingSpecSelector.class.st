@@ -61,13 +61,13 @@ StDebuggerUsingSpecSelector >> isDefaultSelector: aSelector [
 ]
 
 { #category : #'specs - selectors' }
-StDebuggerUsingSpecSelector >> selectExtensionActivationSpecFrom: aSpecSelector [
-	"If the current selector is not a default one, it is returned.
-	If it is a default one, it is altered depending on the current configuration of the debugger extensions.
+StDebuggerUsingSpecSelector >> selectExtensionActivationSpecFrom: aDefaultSpecSelector [
+	"Altered depending on the current configuration of the debugger extensions.
 	The selection just adds or remove the extensions from the spec selector"
 
-	(self isDefaultSelector: aSpecSelector)
-		ifFalse: [ ^ aSpecSelector ].
+	self class defaultDebuggerWithoutExtensionSpecSelector
+		= aDefaultSpecSelector
+		ifTrue: [ ^ aDefaultSpecSelector ].
 	^ self
 		selectorForDebuggerStatus: self debuggerClass activateDebuggerExtensions
 		extensionsStatus: self debuggerClass hasAnyActivatedExtension
@@ -79,17 +79,20 @@ StDebuggerUsingSpecSelector >> selectSpecSelector [
 	Two cases:
 	- current selector exists or is not valid: returns default spec selector with extensions
 	- current selector exists: select a version with or without debugger extensions"
+
 	| selector |
-	selector := (specSelector isNil
-		or: [ (self debuggerClass respondsTo: specSelector) not ])
-		ifTrue: [ self class defaultDebuggerWithExtensionSpecSelector ]
-		ifFalse: [ specSelector ].
+	selector := (self debuggerClass availableSpecSelectors
+		includes: specSelector)
+		ifTrue: [ specSelector ]
+		ifFalse: [ self class defaultDebuggerWithExtensionSpecSelector ].
+	(self isDefaultSelector: selector) ifFalse:[^selector].
 	^ self selectExtensionActivationSpecFrom: selector
 ]
 
 { #category : #'specs - selectors' }
 StDebuggerUsingSpecSelector >> selectorForDebuggerStatus: debuggerExtensionsActivated extensionsStatus: debuggerHasExtensions [
-	self flag: 'This seems wrong: we should adapt the layout and its size directly and not testing and choosing other selectors because this does not scale...'.
+	"This is only relevant in the case we use default StDebugger specs for which the extension column can be configured in settings"
+
 	^ (debuggerExtensionsActivated and: [ debuggerHasExtensions ])
 		ifTrue: [ self class defaultDebuggerWithExtensionSpecSelector ]
 		ifFalse: [ self class defaultDebuggerWithoutExtensionSpecSelector ]
