@@ -189,52 +189,57 @@ StDebuggerUsingSpecSelectorTest >> testSelectNonDefaultSpecSelector [
 ]
 
 { #category : #'tests - spec' }
-StDebuggerUsingSpecSelectorTest >> testSelectSpecSelector [
+StDebuggerUsingSpecSelectorTest >> testSelectSpecSelectorWithExtensions [
 	| withExtensionSelector withoutExtensionSelector mockSelector |
 	withExtensionSelector := self defaultSelectorWithExtensions.
 	withoutExtensionSelector := self defaultSelectorWithoutExtensions.			
 	mockSelector := StDebuggerUsingSpecSelectorMock new.
-	
-	mockSelector initializeWithExtensionsNoneActivated.
 	mockSelector specSelector: withExtensionSelector.	
+			
+	mockSelector initializeWithExtensionsNoneActivated.
 	self
 		assert: mockSelector selectSpecSelector
-		equals: withoutExtensionSelector.
-		
-	mockSelector specSelector: withoutExtensionSelector.	
-	self
-		assert: mockSelector selectSpecSelector
-		equals: withoutExtensionSelector.
+		equals: withoutExtensionSelector.	
 		
 	mockSelector initializeWithoutExtensionsNoneActivated.
-	mockSelector specSelector: withExtensionSelector.	
-	self
-		assert: mockSelector selectSpecSelector
-		equals: withoutExtensionSelector.
-		
-	mockSelector specSelector: withoutExtensionSelector.	
 	self
 		assert: mockSelector selectSpecSelector
 		equals: withoutExtensionSelector.
 		
 	mockSelector initializeWithoutExtensionsAllActivated.
-	mockSelector specSelector: withExtensionSelector.	
-	self
-		assert: mockSelector selectSpecSelector
-		equals: withoutExtensionSelector.
-		
-	mockSelector specSelector: withoutExtensionSelector.	
 	self
 		assert: mockSelector selectSpecSelector
 		equals: withoutExtensionSelector.
 		
 	mockSelector initializeWithExtensionsAllActivated.
-	mockSelector specSelector: withExtensionSelector.	
 	self
 		assert: mockSelector selectSpecSelector
-		equals: withExtensionSelector.
-		
+		equals: withExtensionSelector
+]
+
+{ #category : #'tests - spec' }
+StDebuggerUsingSpecSelectorTest >> testSelectSpecSelectorWithoutExtensions [
+	| withoutExtensionSelector mockSelector |
+	withoutExtensionSelector := self defaultSelectorWithoutExtensions.			
+	mockSelector := StDebuggerUsingSpecSelectorMock new.
 	mockSelector specSelector: withoutExtensionSelector.	
+		
+	mockSelector initializeWithExtensionsNoneActivated.		
+	self
+		assert: mockSelector selectSpecSelector
+		equals: withoutExtensionSelector.
+		
+	mockSelector initializeWithoutExtensionsNoneActivated.	
+	self
+		assert: mockSelector selectSpecSelector
+		equals: withoutExtensionSelector.
+		
+	mockSelector initializeWithoutExtensionsAllActivated.	
+	self
+		assert: mockSelector selectSpecSelector
+		equals: withoutExtensionSelector.
+		
+	mockSelector initializeWithExtensionsAllActivated.	
 	self
 		assert: mockSelector selectSpecSelector
 		equals: withoutExtensionSelector.
