@@ -57,7 +57,7 @@ BaselineOfNewTools >> baseline: spec [
 				'NewTools-SystemBrowser'
 				'HelpCenter'
 				'NewTools-FlagBrowser' 'NewTools-FlagBrowser-Tests'
-				'NewTools-ObjectCentricBreakpoints' 'NewTools-ObjectCentricBreakpoints-Tests'
+				"'NewTools-ObjectCentricBreakpoints' 'NewTools-ObjectCentricBreakpoints-Tests'"
 				'NewTools-Sindarin-Tools'
 				'NewTools-Sindarin-ProcessInspector'
 				'NewTools-Debugger-Breakpoints-Tools');
