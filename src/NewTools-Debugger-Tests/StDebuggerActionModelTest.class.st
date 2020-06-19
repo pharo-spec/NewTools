@@ -81,6 +81,18 @@ StDebuggerActionModelTest >> testCopyStackToClipboard [
 ]
 
 { #category : #tests }
+StDebuggerActionModelTest >> testExceptionInContextOrNil [
+	|exOrNil|			
+	exOrNil := debugActionModel exceptionInContextOrNil: session interruptedContext. 
+	self assert: exOrNil equals: nil.
+	
+	self
+		changeSession: StTestDebuggerProvider new debuggerWithMissingClassContext session.		
+	exOrNil := debugActionModel exceptionInContextOrNil: session interruptedContext. 
+	self assert: exOrNil class identicalTo: VariableNotDeclared. 
+]
+
+{ #category : #tests }
 StDebuggerActionModelTest >> testFileOutMethod [
 	debugActionModel fileOutMethod: self.
 	self assert: result equals: self selector

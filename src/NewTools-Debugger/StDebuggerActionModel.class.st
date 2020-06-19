@@ -35,6 +35,15 @@ StDebuggerActionModel >> copyStackToClipboard [
 ]
 
 { #category : #'debug - stack' }
+StDebuggerActionModel >> exceptionInContextOrNil: aContext [
+	| ex |
+	ex := aContext temporaries at: #exception ifAbsent: [ nil ].
+	ex isClass
+		ifTrue: [ ^ nil ].
+	^ ex
+]
+
+{ #category : #'debug - stack' }
 StDebuggerActionModel >> fileOutMethod: aMethod [
 	aMethod methodClass fileOutMethod: aMethod selector
 ]

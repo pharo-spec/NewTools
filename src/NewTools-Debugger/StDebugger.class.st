@@ -1013,14 +1013,11 @@ StDebugger >> statusLabelStyleForCurrentContext [
 
 { #category : #'accessing context' }
 StDebugger >> statusLabelTextForCurrentContext [
-	self flag: 'deprecated?'.
-	(self context tempNames includes: #exception)
-		ifTrue: [ (self context tempNamed: #exception)
-				ifNotNil: [ :ex | ^ ex description ] ].
+	(debuggerActionModel exceptionInContextOrNil: self context)
+		ifNotNil: [ :ex | ^ ex description ].
 	^ self context currentNode isHaltNode
 		ifTrue: [ 'Halt' ]
-		ifFalse:
-			[ self context receiver class name , '>>' , self context selector ]
+		ifFalse: [ self context receiver class name , '>>' , self context selector ]
 ]
 
 { #category : #actions }
@@ -1047,9 +1044,8 @@ StDebugger >> title [
 
 { #category : #'accessing context' }
 StDebugger >> titlePrefixTextForCurrentContext [
-	((self context tempNames includes: #exception)
-		and: [ self context sender == self currentContext ])
-		ifTrue: [ (self context tempNamed: #exception)
+	self context sender == self currentContext
+		ifTrue: [ (debuggerActionModel exceptionInContextOrNil: self context)
 				ifNotNil: [ :ex | ^ ex description , ' in ' ] ].
 	^ self currentContext currentNode isHaltNode
 		ifTrue: [ 'Halt in ' ]
