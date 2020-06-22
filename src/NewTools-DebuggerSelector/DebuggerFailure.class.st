@@ -19,10 +19,7 @@ DebuggerFailure class >> of: aDebugger on: anException [
 DebuggerFailure >> debug [
 	"open a debugger on myself"
 
-	DebuggerSelector
-		debugException: self
-		inProcess: Processor activeProcess
-		from: UIManager default
+	(DebugRequest newForException: self) submit
 ]
 
 { #category : #initialization }

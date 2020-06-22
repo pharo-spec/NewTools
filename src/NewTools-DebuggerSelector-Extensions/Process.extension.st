@@ -2,10 +2,8 @@ Extension { #name : #Process }
 
 { #category : #'*NewTools-DebuggerSelector-Extensions' }
 Process >> debugException: anException [
-	DebuggerSelector
-		debugException: anException
-		inProcess: self
-		from: UIManager default
+	
+	(DebugRequest newForException: anException) process: self; submit.
 ]
 
 { #category : #'*NewTools-DebuggerSelector-Extensions' }
@@ -16,8 +14,5 @@ Process >> debugWithTitle: title [
 	context := self isActiveProcess
 		ifTrue: [ thisContext ]
 		ifFalse: [ self suspendedContext ].
-	^ DebuggerSelector
-		debugProcess: self
-		fromContext: context
-		labeled: title
+	(DebugRequest newForContext: context) process: self; label: title; submit
 ]
