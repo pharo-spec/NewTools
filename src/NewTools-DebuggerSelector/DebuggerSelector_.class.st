@@ -32,6 +32,11 @@ DebuggerSelector_ class >> with: availableDebuggers [
 		yourself
 ]
 
+{ #category : #accessing }
+DebuggerSelector_ >> debuggers: availableDebuggers [
+	debuggers := availableDebuggers
+]
+
 { #category : #'instance creation' }
 DebuggerSelector_ >> findDebuggerForSession: aDebugSession [
 	^ debuggers
