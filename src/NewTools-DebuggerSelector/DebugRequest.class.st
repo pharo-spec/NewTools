@@ -60,6 +60,8 @@ DebugRequest >> compiledMethod: anObject [
 
 { #category : #preDebugActions }
 DebugRequest >> computePreDebugActions [
+	"Fill the preDebugActions variable."
+	"If compiledMethod is not nil, this DebugRequest has been created to debug the execution of a specific method. Add a pre-debug action to step the execution until that method is reached"
 	compiledMethod ifNotNil: [ self preDebugActions add: (self preDebugActionForDebugItMethod: compiledMethod) ]
 ]
 
@@ -144,6 +146,5 @@ DebugRequest >> process: anObject [
 { #category : #submit }
 DebugRequest >> submit [
 	"Submit this debug request to the system. The system will typically open a debugger for it"
-	self computePreDebugActions.
 	DebuggerSystem handleDebugRequest: self
 ]
