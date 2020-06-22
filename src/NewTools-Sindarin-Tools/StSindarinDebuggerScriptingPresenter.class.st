@@ -48,16 +48,26 @@ StSindarinDebuggerScriptingPresenter >> debugger [
 
 { #category : #actions }
 StSindarinDebuggerScriptingPresenter >> executeScript [
-	|scriptString|
-	scriptString := code text.
+	| stream result model receiver evaluationContext |
 	self debugger removeSessionHolderSubscriptions.
 	
-	OpalCompiler new
-		bindings: { #sindarin -> (self sindarin) }	asDictionary;
-		evaluate: scriptString.
+	stream := code text readStream.	
+	model := code interactionModel.
+	receiver := model doItReceiver.
+	evaluationContext := model doItContext.
+	result := receiver class compiler
+		source: stream;
+		context: evaluationContext;
+		receiver: receiver;
+		requestor: model;
+		failBlock:  [ nil ];
+		evaluate.		
+	resultInspection model: result.
+	resultInspection update.
 		
 	self debugger setSessionHolderSubscriptions. 
-	self debugger forceSessionUpdate
+	self debugger forceSessionUpdate.
+
 	
 ]
 
@@ -67,6 +77,7 @@ StSindarinDebuggerScriptingPresenter >> initializePresenters [
 	code syntaxHighlight: true.
 	"code contextMenu: [  ]."
 	code text: 'sindarin stepOver'.
+	self updateCode.
 	self flag: 'Build a generic sindarin script class with sidnarin as an instance var and its instance should be the receiver of the code'.
 	self flag: 'set the doit conetxt of the code to the current selected context'.
 	resultInspection := nil rawInspection.
@@ -124,4 +135,16 @@ StSindarinDebuggerScriptingPresenter >> toolbarActions [
 
 	
 	^ group
+]
+
+{ #category : #initialization }
+StSindarinDebuggerScriptingPresenter >> updateCode [
+	code beForContext: self debugger currentContext.
+	code interactionModel bindings at: #sindarin put: self sindarin
+]
+
+{ #category : #initialization }
+StSindarinDebuggerScriptingPresenter >> updatePresenter [ 	
+	self updateCode.
+	super updatePresenter 
 ]
