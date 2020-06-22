@@ -5,7 +5,7 @@ Class {
 	#name : #DummyDebugRequest,
 	#superclass : #DebugRequest,
 	#instVars : [
-		'dummyPreDebugActionExecuted'
+		'dummyPreDebugActionExecutedCount'
 	],
 	#category : #'NewTools-DebuggerSelector-Tests'
 }
@@ -13,11 +13,11 @@ Class {
 { #category : #preDebugActions }
 DummyDebugRequest >> computePreDebugActions [
 	"For test purposes. Instead of computing preDebugActions as usual, insert a dummy pre debug action"
-	self preDebugActions add: [:dbSession|  dummyPreDebugActionExecuted := true ]
+	self preDebugActions add: [:dbSession|  dummyPreDebugActionExecutedCount := self dummyPreDebugActionExecutedCount + 1 ]
 ]
 
 { #category : #preDebugActions }
-DummyDebugRequest >> dummyPreDebugActionExecuted [
-	dummyPreDebugActionExecuted ifNil: [ dummyPreDebugActionExecuted := false ].
-	^ dummyPreDebugActionExecuted
+DummyDebugRequest >> dummyPreDebugActionExecutedCount [
+	dummyPreDebugActionExecutedCount ifNil: [ dummyPreDebugActionExecutedCount := 0 ].
+	^ dummyPreDebugActionExecutedCount
 ]

@@ -28,6 +28,7 @@ DebuggerSystemTest >> createDummyDebugRequestForUIProcess [
 
 { #category : #tests }
 DebuggerSystemTest >> testNonUIProcessIsRecognised [
+	"Tests that a DebuggerSystem opening a DebugRequest that is NOT on the ui process does NOT spawn a new UI process"
 	| debuggerSystem |
 	debuggerSystem := DummyDebuggerSystem new.
 	debuggerSystem openDebuggerOnRequest: self createDummyDebugRequestForNotUIProcess.
@@ -37,16 +38,19 @@ DebuggerSystemTest >> testNonUIProcessIsRecognised [
 
 { #category : #tests }
 DebuggerSystemTest >> testPreDebugActionExecuted [
+	"Test that a DebuggerSystem opening a DebugRequest with a pre-debug action will execute it exactly once"
 	| debuggerSystem debugRequest |
 	debuggerSystem := DummyDebuggerSystem new.
 	debugRequest := self createDummyDebugRequest.
+	self assert: debugRequest dummyPreDebugActionExecutedCount equals: 0.
 	debuggerSystem openDebuggerOnRequest: debugRequest.
-	self assert: debugRequest dummyPreDebugActionExecuted
+	self assert: debugRequest dummyPreDebugActionExecutedCount equals: 1
 	
 ]
 
 { #category : #tests }
 DebuggerSystemTest >> testUIProcessIsRecognised [
+	"Test that a DebuggerSystem opening a DebugRequest on the ui process will spawn a new UI process"
 	| debuggerSystem |
 	debuggerSystem := DummyDebuggerSystem new.
 	debuggerSystem openDebuggerOnRequest: self createDummyDebugRequestForUIProcess.
