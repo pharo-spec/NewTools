@@ -1,3 +1,11 @@
+"
+I build the default command tree for the debugger code presenter.
+The command classes I instantiate are specified under the ""accessing - commands classes"" protocol.
+The group names and descriptions are specified under the ""accessing"" protocol.
+
+You can evolve the default groups names and descriptions and the default command classes, but you cannot extend me.
+Using me to add command in the tree makes them default for the debugger toolbar presenter.
+"
 Class {
 	#name : #StDebuggerCodeCommandTreeBuilder,
 	#superclass : #StDebuggerCommandTreeBuilder,
