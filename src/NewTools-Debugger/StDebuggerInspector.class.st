@@ -130,16 +130,20 @@ StDebuggerInspector >> restoreRawInspectionSelectionForContext: aContext [
 	aContext ifNil: [ ^ self ].
 	self getRawInspectorPresenterOrNil
 		ifNotNil: [ :raw | 
-			| receiverClass selector |
+			| receiverClass selector path |
 			receiverClass := aContext receiver class.
 			selector := aContext selector.
-			raw
-				selectPath:
-					(self rawInspectionSelectionCache
-						at: receiverClass -> selector
-						ifAbsent:
-							[ 
-							self rawInspectionSelectionCache at: receiverClass ifAbsent: [ #(2 1) ] ]) ]
+			path := self rawInspectionSelectionCache
+				at: receiverClass -> selector
+				ifAbsent: [ #() ].
+			path ifEmpty: [ self rawInspectionSelectionCache at: receiverClass ifAbsent: [ #() ] ].
+			path ifEmpty: [ | roots pathStart |
+					roots := raw attributeTable roots.
+					pathStart := 1.
+					1 to: roots size do: [ :i | 
+						(roots at: i) key = 'Temps' ifTrue: [ pathStart := i ] ].
+					path := {pathStart. 1} ].
+			raw selectPath: path ]
 ]
 
 { #category : #private }
