@@ -50,7 +50,8 @@ StSindarinDebuggerScriptingPresenter >> debugger [
 StSindarinDebuggerScriptingPresenter >> executeScript [
 	| stream result model receiver evaluationContext |
 	self debugger removeSessionHolderSubscriptions.
-	
+	self flag: #SINDARIN.
+	"duplicated and adapted code from SpCodeDoItCommand but it could be refactored and mutualized"
 	stream := code text readStream.	
 	model := code interactionModel.
 	receiver := model doItReceiver.
