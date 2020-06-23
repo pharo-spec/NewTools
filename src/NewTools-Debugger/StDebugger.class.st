@@ -90,6 +90,8 @@ Class {
 	],
 	#classVars : [
 		'ActivateDebuggerExtensions',
+		'Available',
+		'DefaultDebugger',
 		'ErrorRecursion',
 		'ExtensionToolsSettings',
 		'UsingSpecSelector'
@@ -111,8 +113,7 @@ StDebugger class >> activateDebuggerExtensions: anObject [
 { #category : #'tools registry' }
 StDebugger class >> availableAutomatically [
 	"Should this debugger be taken into account when looking for a debugger to handle an exception."
-
-	^ true
+	^Available ifNil:[Available := true]
 ]
 
 { #category : #'tools registry' }
@@ -269,6 +270,29 @@ StDebugger class >> debuggerWithoutExtensionsSpec [
 		add: self stackAndCodeLayout;
 		add: #inspector;
 		yourself
+]
+
+{ #category : #settings }
+StDebugger class >> defaultDebugger [
+	^DefaultDebugger
+]
+
+{ #category : #settings }
+StDebugger class >> defaultDebugger: aSymbol [
+	Available := (aSymbol = #GT) not.
+	DefaultDebugger := aSymbol 
+]
+
+{ #category : #settings }
+StDebugger class >> defaultDebuggerSettingsOn: aBuilder [
+	<systemsettings>
+	(aBuilder pickOne: #defaultDebugger)
+		label: 'Default debugger';
+		target: self;
+		default: #NewTools;
+		parent: #debugging;
+		domainValues: #(#GT #NewTools);
+		description: 'Sets the default debugger.'
 ]
 
 { #category : #specs }
