@@ -7,7 +7,7 @@ StObjectInspector >> haltInspectedObjectOnReadAccess [
 
 { #category : #'*NewTools-ObjectCentricBreakpoints' }
 StObjectInspector >> haltInspectedObjectOnStateAccess [
-	^ self inspectedObject haltOnStateAccess 
+	^ self inspectedObject haltOnAccess 
 ]
 
 { #category : #'*NewTools-ObjectCentricBreakpoints' }

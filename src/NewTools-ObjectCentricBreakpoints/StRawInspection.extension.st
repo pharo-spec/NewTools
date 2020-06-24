@@ -3,7 +3,7 @@ Extension { #name : #StRawInspection }
 { #category : #'*NewTools-ObjectCentricBreakpoints' }
 StRawInspection >> haltInspectedObjectOnAccess: access [
 	| selectedItem |
-	selectedItem := self selectedItem.	
+	selectedItem := self selectedItem.
 	selectedItem ifNil:[
 		"No selection: halt on all accesses"
 		^ self model haltOnAccess: access ].
