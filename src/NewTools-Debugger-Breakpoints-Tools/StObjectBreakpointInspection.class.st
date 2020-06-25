@@ -108,7 +108,7 @@ StObjectBreakpointInspection >> buildHaltAndBreakpointTable [
 		addColumn:
 			((SpStringTableColumn
 				title: 'Target'
-				evaluated: [ :item | (item at: #target) ])
+				evaluated: [ :item | item at: #target ])
 				width: 120;
 				yourself);
 		addColumn:
@@ -116,7 +116,9 @@ StObjectBreakpointInspection >> buildHaltAndBreakpointTable [
 				title: 'Method'
 				evaluated: [ :item | 
 					(item at: #node) methodNode methodClass name , '>>'
-						, (item at: #node) methodNode selector ])
+						, (item at: #node) methodNode selector ]).
+	methodsWithBreakpoints
+		contextMenu: self rootCommandsGroup asMenuPresenter
 ]
 
 { #category : #private }
@@ -236,6 +238,11 @@ StObjectBreakpointInspection >> labelForHaltSelector: aSelector [
 	(#(haltOnce) includes: aSelector)
 		ifTrue: [ ^ 'once' ].
 	^ 'always'
+]
+
+{ #category : #accessing }
+StObjectBreakpointInspection >> methodsWithBreakpoints [
+	^ methodsWithBreakpoints
 ]
 
 { #category : #private }

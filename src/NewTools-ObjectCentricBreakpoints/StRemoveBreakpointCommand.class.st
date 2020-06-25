@@ -1,5 +1,5 @@
 Class {
 	#name : #StRemoveBreakpointCommand,
-	#superclass : #StBreakpointCommand,
+	#superclass : #SpToolCommand,
 	#category : #'NewTools-ObjectCentricBreakpoints'
 }
