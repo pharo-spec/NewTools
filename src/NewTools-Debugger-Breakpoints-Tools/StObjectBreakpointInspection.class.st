@@ -22,41 +22,52 @@ StObjectBreakpointInspection class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #breakpoints }
-StObjectBreakpointInspection >> areHaltsAndBreakpoinsEnabledFor: breakpointData [
-	(self isBreakpointObjectCentric: breakpointData)
-		ifTrue: [ ^ breakpointController
-				isObjectCentricBreakpointEnabled: (breakpointData at: #Breakpoint) ].
-	^ breakpointController
-		areHaltsAndBreakpoinsEnabledFor: (breakpointData at: #node)
-]
-
 { #category : #private }
 StObjectBreakpointInspection >> breakPointsForModel [
-	| methodsWithBreakpoint | 
+	| methodsWithBreakpoint breakpoints |
+	breakpoints := OrderedCollection new.
 	methodsWithBreakpoint := model class allMethods
 		select: [ :m | m hasBreakpoint ].
-	^ methodsWithBreakpoint
-		flatCollect: [ :m | Breakpoint all select: [ :b | b link methods includes: m ] ]
+	breakpoints
+		addAll:
+			(methodsWithBreakpoint
+				flatCollect: [ :m | 
+					Breakpoint all
+						select: [ :b | b isObjectCentric not and: [ b link methods includes: m ] ] ]).
+	breakpoints
+		addAll:
+			(Breakpoint all
+				select: [ :b | 
+					b isObjectCentric
+						and: [ b targetInstance == self model and: [ b isVariableBreakpoint not ] ] ]).
+	breakpoints
+		addAll:
+			(Breakpoint all
+				select: [ :b | 
+					b isVariableBreakpoint
+						and: [ b targetClassOrMethod == self model class ] ]).
+	^ breakpoints
 ]
 
 { #category : #private }
 StObjectBreakpointInspection >> breakpointDataFor: aBreakpoint [
 	"Returns a dictionary containing breakpoint data for the given breakpoint."
 
-	| data |
-	data := Dictionary new.
-	data at: #node put: aBreakpoint node.
-	data at: #type put: 'Breakpoint'.
-	data at: #interval put: (aBreakpoint node start to: aBreakpoint node stop).
-	data at: #breakpoint put: aBreakpoint.
-	^ data
+	^ aBreakpoint link nodes
+		collect: [ :node | 
+			| data |
+			data := Dictionary new.
+			data at: #node put: node.
+			data at: #type put: 'Breakpoint'.
+			data at: #interval put: (node start to: node stop).
+			data at: #breakpoint put: aBreakpoint.
+			data ]
 ]
 
 { #category : #private }
 StObjectBreakpointInspection >> buildBreakpointData [
 	^ self breakPointsForModel
-		collect: [ :b | self breakpointDataFor: b ]
+		flatCollect: [ :b | self breakpointDataFor: b ]
 ]
 
 { #category : #private }
@@ -78,12 +89,9 @@ StObjectBreakpointInspection >> buildHaltAndBreakpointTable [
 		addColumn:
 			((SpCheckBoxTableColumn
 				title: ' '
-				evaluated:
-					[ :item | breakpointController areHaltsAndBreakpoinsEnabledFor: (item at: #node) ])
-				onActivation:
-						[ :item | breakpointController enableHaltOrBreakpointFor: (item at: #node) ];
-				onDesactivation:
-						[ :item | breakpointController disableHaltOrBreakpointFor: (item at: #node) ];
+				evaluated: [ :item | self haltsAndBreakpoinsEnabledFor: item ])
+				onActivation: [ :item | self enableHaltOrBreakpointFor: item ];
+				onDesactivation: [ :item | self disableHaltOrBreakpointFor: item ];
 				width: 20;
 				yourself);
 		addColumn:
@@ -97,8 +105,7 @@ StObjectBreakpointInspection >> buildHaltAndBreakpointTable [
 				title: 'Method'
 				evaluated: [ :item | 
 					(item at: #node) methodNode methodClass name , '>>'
-						, (item at: #node) methodNode selector ]).
-	
+						, (item at: #node) methodNode selector ])
 ]
 
 { #category : #private }
@@ -137,7 +144,7 @@ StObjectBreakpointInspection >> configureSourceCodeUpdate [
 StObjectBreakpointInspection >> disableHaltOrBreakpointFor: breakpointData [
 	(self isBreakpointObjectCentric: breakpointData)
 		ifTrue: [ ^ breakpointController
-				disableObjectCentricBreakpoint: (breakpointData at: #Breakpoint) ].
+				disableObjectCentricBreakpoint: (breakpointData at: #breakpoint) ].
 	^ breakpointController
 		disableHaltOrBreakpointFor: (breakpointData at: #node)
 ]
@@ -146,7 +153,7 @@ StObjectBreakpointInspection >> disableHaltOrBreakpointFor: breakpointData [
 StObjectBreakpointInspection >> enableHaltOrBreakpointFor: breakpointData [
 	(self isBreakpointObjectCentric: breakpointData)
 		ifTrue: [ ^ breakpointController
-				enableObjectCentricBreakpoint: (breakpointData at: #Breakpoint) ].
+				enableObjectCentricBreakpoint: (breakpointData at: #breakpoint) ].
 	^ breakpointController
 		enableHaltOrBreakpointFor: (breakpointData at: #node)
 ]
@@ -161,6 +168,15 @@ StObjectBreakpointInspection >> haltDataFor: aNode [
 	data at: #type put: 'Halt'.
 	data at: #interval put: (aNode start to: aNode stop).
 	^ data
+]
+
+{ #category : #breakpoints }
+StObjectBreakpointInspection >> haltsAndBreakpoinsEnabledFor: breakpointData [
+	(self isBreakpointObjectCentric: breakpointData)
+		ifTrue: [ ^ breakpointController
+				isObjectCentricBreakpointEnabled: (breakpointData at: #breakpoint) ].
+	^ breakpointController
+		areHaltsAndBreakpoinsEnabledFor: (breakpointData at: #node)
 ]
 
 { #category : #private }
@@ -194,8 +210,9 @@ StObjectBreakpointInspection >> initializeWindow: aWindowPresenter [
 { #category : #breakpoints }
 StObjectBreakpointInspection >> isBreakpointObjectCentric: breakpointData [
 	| breakpoint |
-	breakpoint := breakpointData at: #Breakpoint ifAbsent: [ ^ false ].
+	breakpoint := breakpointData at: #breakpoint ifAbsent: [ ^ false ].
 	^ breakpoint isObjectCentric
+		and: [ breakpoint isVariableBreakpoint not ]
 ]
 
 { #category : #presenters }
@@ -209,6 +226,15 @@ StObjectBreakpointInspection >> labelForHaltSelector: aSelector [
 	^ 'always'
 ]
 
+{ #category : #private }
+StObjectBreakpointInspection >> objectCentricBreakpointsForModel [
+	| methodsWithBreakpoint | 
+	methodsWithBreakpoint := model class allMethods
+		select: [ :m | m hasBreakpoint ].
+	^ methodsWithBreakpoint
+		flatCollect: [ :m | Breakpoint all select: [ :b | b link methods includes: m ] ]
+]
+
 { #category : #'system subscription' }
 StObjectBreakpointInspection >> unsubscribeFromCacheChanges [
 	SystemAnnouncer uniqueInstance unsubscribe: self
@@ -218,6 +244,15 @@ StObjectBreakpointInspection >> unsubscribeFromCacheChanges [
 StObjectBreakpointInspection >> updateSourceCodeBehaviorFor: node [
 
 	breakpointsInSourceCode beForBehavior: model class
+]
+
+{ #category : #private }
+StObjectBreakpointInspection >> variableBreakpointsForModel [
+	| methodsWithBreakpoint | 
+	methodsWithBreakpoint := model class allMethods
+		select: [ :m | m hasBreakpoint ].
+	^ methodsWithBreakpoint
+		flatCollect: [ :m | Breakpoint all select: [ :b | b link methods includes: m ] ]
 ]
 
 { #category : #updating }

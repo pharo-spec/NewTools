@@ -74,6 +74,8 @@ StHaltAndBreakpointController >> disableHaltOrBreakpointFor: aProgramNode [
 
 { #category : #API }
 StHaltAndBreakpointController >> disableObjectCentricBreakpoint: anObjectCentricBreakpoint [
+	anObjectCentricBreakpoint targetInstance ifNil:[^self].
+	anObjectCentricBreakpoint link condition: [false]; disable
 ]
 
 { #category : #control }
@@ -98,6 +100,8 @@ StHaltAndBreakpointController >> enableHaltOrBreakpointFor: aProgramNode [
 
 { #category : #API }
 StHaltAndBreakpointController >> enableObjectCentricBreakpoint: anObjectCentricBreakpoint [
+	anObjectCentricBreakpoint targetInstance ifNil: [ ^ self ].
+	anObjectCentricBreakpoint link condition: [true]; enable
 ]
 
 { #category : #links }
@@ -111,6 +115,8 @@ StHaltAndBreakpointController >> installSkipLinkOn: aMessageNode [
 
 { #category : #API }
 StHaltAndBreakpointController >> isObjectCentricBreakpointEnabled: anObjectCentricBreakpoint [
+	anObjectCentricBreakpoint targetInstance ifNil: [ ^ false ].
+	^ anObjectCentricBreakpoint node enabledForHaltOrBreakpoint
 ]
 
 { #category : #links }
