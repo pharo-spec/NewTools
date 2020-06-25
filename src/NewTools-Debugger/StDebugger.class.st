@@ -300,13 +300,6 @@ StDebugger class >> defaultSpec [
 	^ self perform: self usingSpecSelector
 ]
 
-{ #category : #opening }
-StDebugger class >> defaultTitle [
-	"GTDebugger needs this to create its action to switch to other debuggers (in this case to the Spec Debugger). I don't know if switching to this debugger actually works, but if the action cannot be created, the GTDebugger crashes when being opened. This method can be removed if the GTDebugger is removed"
-	self flag: 'Why constraining us because of GT?'.
-	^ 'SpecDebugger'
-]
-
 { #category : #'tools registry' }
 StDebugger class >> extendedToolsPragma [	
 
@@ -327,10 +320,9 @@ StDebugger class >> extensionToolsSettings [
 		ifNil: [ ExtensionToolsSettings := Dictionary new ]
 ]
 
-{ #category : #'tools registry' }
+{ #category : #opening }
 StDebugger class >> handlesContext: aContext [
-
-	^ true
+	^self availableAutomatically 
 ]
 
 { #category : #'tools registry' }
