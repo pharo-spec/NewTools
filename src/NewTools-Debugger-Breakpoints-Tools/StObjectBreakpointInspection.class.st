@@ -22,9 +22,18 @@ StObjectBreakpointInspection class >> defaultSpec [
 		yourself
 ]
 
+{ #category : #breakpoints }
+StObjectBreakpointInspection >> areHaltsAndBreakpoinsEnabledFor: breakpointData [
+	(self isBreakpointObjectCentric: breakpointData)
+		ifTrue: [ ^ breakpointController
+				isObjectCentricBreakpointEnabled: (breakpointData at: #Breakpoint) ].
+	^ breakpointController
+		areHaltsAndBreakpoinsEnabledFor: (breakpointData at: #node)
+]
+
 { #category : #private }
 StObjectBreakpointInspection >> breakPointsForModel [
-	| methodsWithBreakpoint |
+	| methodsWithBreakpoint | 
 	methodsWithBreakpoint := model class allMethods
 		select: [ :m | m hasBreakpoint ].
 	^ methodsWithBreakpoint
@@ -40,6 +49,7 @@ StObjectBreakpointInspection >> breakpointDataFor: aBreakpoint [
 	data at: #node put: aBreakpoint node.
 	data at: #type put: 'Breakpoint'.
 	data at: #interval put: (aBreakpoint node start to: aBreakpoint node stop).
+	data at: #breakpoint put: aBreakpoint.
 	^ data
 ]
 
@@ -123,6 +133,24 @@ StObjectBreakpointInspection >> configureSourceCodeUpdate [
 			self updateSourceCodeBehaviorFor: node ] ]
 ]
 
+{ #category : #breakpoints }
+StObjectBreakpointInspection >> disableHaltOrBreakpointFor: breakpointData [
+	(self isBreakpointObjectCentric: breakpointData)
+		ifTrue: [ ^ breakpointController
+				disableObjectCentricBreakpoint: (breakpointData at: #Breakpoint) ].
+	^ breakpointController
+		disableHaltOrBreakpointFor: (breakpointData at: #node)
+]
+
+{ #category : #breakpoints }
+StObjectBreakpointInspection >> enableHaltOrBreakpointFor: breakpointData [
+	(self isBreakpointObjectCentric: breakpointData)
+		ifTrue: [ ^ breakpointController
+				enableObjectCentricBreakpoint: (breakpointData at: #Breakpoint) ].
+	^ breakpointController
+		enableHaltOrBreakpointFor: (breakpointData at: #node)
+]
+
 { #category : #private }
 StObjectBreakpointInspection >> haltDataFor: aNode [
 	"Returns a dictionary containing halt data for the given halt node."
@@ -161,6 +189,13 @@ StObjectBreakpointInspection >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
 		whenClosedDo: [ SystemAnnouncer uniqueInstance unsubscribe: self ]
+]
+
+{ #category : #breakpoints }
+StObjectBreakpointInspection >> isBreakpointObjectCentric: breakpointData [
+	| breakpoint |
+	breakpoint := breakpointData at: #Breakpoint ifAbsent: [ ^ false ].
+	^ breakpoint isObjectCentric
 ]
 
 { #category : #presenters }
