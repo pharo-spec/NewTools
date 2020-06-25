@@ -61,6 +61,11 @@ StObjectBreakpointInspection >> breakpointDataFor: aBreakpoint [
 			data at: #type put: 'Breakpoint'.
 			data at: #interval put: (node start to: node stop).
 			data at: #breakpoint put: aBreakpoint.
+			data at: #target
+				put:
+					(aBreakpoint isObjectCentric
+						ifTrue: [ 'self' ]
+						ifFalse: [ node methodNode methodClass name ]).
 			data ]
 ]
 
@@ -99,6 +104,12 @@ StObjectBreakpointInspection >> buildHaltAndBreakpointTable [
 				title: 'Type'
 				evaluated: [ :item | item at: #type ])
 				width: 65;
+				yourself);
+		addColumn:
+			((SpStringTableColumn
+				title: 'Target'
+				evaluated: [ :item | (item at: #target) ])
+				width: 120;
 				yourself);
 		addColumn:
 			(SpStringTableColumn
@@ -167,6 +178,7 @@ StObjectBreakpointInspection >> haltDataFor: aNode [
 	data at: #node put: aNode.
 	data at: #type put: 'Halt'.
 	data at: #interval put: (aNode start to: aNode stop).
+	data at: #target put: aNode methodNode methodClass name.
 	^ data
 ]
 
