@@ -254,6 +254,12 @@ StObjectBreakpointInspection >> objectCentricBreakpointsForModel [
 		flatCollect: [ :m | Breakpoint all select: [ :b | b link methods includes: m ] ]
 ]
 
+{ #category : #breakpoints }
+StObjectBreakpointInspection >> removeBreakpoint: aBreakpoint [
+	aBreakpoint remove.
+	self buildTableData 
+]
+
 { #category : #'system subscription' }
 StObjectBreakpointInspection >> unsubscribeFromCacheChanges [
 	SystemAnnouncer uniqueInstance unsubscribe: self
