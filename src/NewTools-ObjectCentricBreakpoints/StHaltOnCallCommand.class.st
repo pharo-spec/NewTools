@@ -1,22 +1,22 @@
 Class {
-	#name : #OCHaltOnCallCommand,
-	#superclass : #OCBreakpointCommand,
+	#name : #StHaltOnCallCommand,
+	#superclass : #StBreakpointCommand,
 	#category : #'NewTools-ObjectCentricBreakpoints'
 }
 
 { #category : #default }
-OCHaltOnCallCommand class >> defaultDescription [
+StHaltOnCallCommand class >> defaultDescription [
 
 	^ 'Halts when this method is called'
 ]
 
 { #category : #default }
-OCHaltOnCallCommand class >> defaultName [ 
+StHaltOnCallCommand class >> defaultName [ 
 
 	^ 'Halt on call'
 ]
 
 { #category : #executing }
-OCHaltOnCallCommand >> execute [
+StHaltOnCallCommand >> execute [
 	^context haltInspectedObjectOnCallToSelectedMethod
 ]

@@ -11,5 +11,5 @@ StMetaBrowser >> haltInspectedObjectOnCallToSelectedMethod [
 StMetaBrowser class >> objectCentricBreakpointCommandsWith: presenter forRootGroup: aRootCmCommandsGroup [
 	<extensionCommands>
 	aRootCmCommandsGroup
-		register: OCHaltOnCallCommand forSpec
+		register: StHaltOnCallCommand forSpec
 ]

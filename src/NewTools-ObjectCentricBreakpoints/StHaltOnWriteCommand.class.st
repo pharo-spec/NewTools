@@ -1,27 +1,27 @@
 Class {
-	#name : #OCHaltOnWriteCommand,
-	#superclass : #OCBreakpointCommand,
+	#name : #StHaltOnWriteCommand,
+	#superclass : #StBreakpointCommand,
 	#category : #'NewTools-ObjectCentricBreakpoints'
 }
 
 { #category : #default }
-OCHaltOnWriteCommand class >> defaultDescription [
+StHaltOnWriteCommand class >> defaultDescription [
 
 	^ 'Halts when the selected or any variable is written'
 ]
 
 { #category : #deafult }
-OCHaltOnWriteCommand class >> defaultIconName [
+StHaltOnWriteCommand class >> defaultIconName [
 	^#smallLoadProject	
 ]
 
 { #category : #default }
-OCHaltOnWriteCommand class >> defaultName [ 
+StHaltOnWriteCommand class >> defaultName [ 
 
 	^ 'Halt on write'
 ]
 
 { #category : #executing }
-OCHaltOnWriteCommand >> execute [
+StHaltOnWriteCommand >> execute [
 	^context haltInspectedObjectOnWriteAccess
 ]

@@ -1,27 +1,27 @@
 Class {
-	#name : #OCHaltOnStateAccessCommand,
-	#superclass : #OCBreakpointCommand,
+	#name : #StHaltOnStateAccessCommand,
+	#superclass : #StBreakpointCommand,
 	#category : #'NewTools-ObjectCentricBreakpoints'
 }
 
 { #category : #default }
-OCHaltOnStateAccessCommand class >> defaultDescription [
+StHaltOnStateAccessCommand class >> defaultDescription [
 
 	^ 'Halts when the selected or any variable is read or written'
 ]
 
 { #category : #deafult }
-OCHaltOnStateAccessCommand class >> defaultIconName [
+StHaltOnStateAccessCommand class >> defaultIconName [
 	^#remotesManagerEditRemote
 ]
 
 { #category : #default }
-OCHaltOnStateAccessCommand class >> defaultName [ 
+StHaltOnStateAccessCommand class >> defaultName [ 
 
 	^ 'Halt on state access'
 ]
 
 { #category : #executing }
-OCHaltOnStateAccessCommand >> execute [
+StHaltOnStateAccessCommand >> execute [
 	^context haltInspectedObjectOnStateAccess
 ]

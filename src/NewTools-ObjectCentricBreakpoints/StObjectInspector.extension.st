@@ -19,7 +19,7 @@ StObjectInspector >> haltInspectedObjectOnWriteAccess [
 StObjectInspector class >> objectCentricBreakpointCommandsWith: presenter forRootGroup: aRootCmCommandsGroup [
 	<extensionCommands>
 	aRootCmCommandsGroup
-		register: OCHaltOnReadCommand forSpec;
-		register: OCHaltOnWriteCommand forSpec;
-		register: OCHaltOnStateAccessCommand forSpec
+		register: StHaltOnReadCommand forSpec;
+		register: StHaltOnWriteCommand forSpec;
+		register: StHaltOnStateAccessCommand forSpec
 ]
