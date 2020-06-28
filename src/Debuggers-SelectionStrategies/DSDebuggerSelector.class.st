@@ -48,7 +48,8 @@ DSDebuggerSelector >> nextDebugger [
 DSDebuggerSelector >> nextDebuggerForSession: aDebugSession [
 	| debugger |
 	debugger := self nextDebugger.
-	[ debugger handlesContext: aDebugSession context ]
+	[ (debugger handlesContext: aDebugSession context)
+		and: [ aDebugSession exception isHandleableBy: debugger ] ]
 		whileFalse: [ debugger := self nextDebugger ].
 	^ debugger
 ]

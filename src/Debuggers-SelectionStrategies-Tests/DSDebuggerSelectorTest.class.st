@@ -139,6 +139,19 @@ DSDebuggerSelectorTest >> testNextDebugger [
 ]
 
 { #category : #'tests -  algorithm' }
+DSDebuggerSelectorTest >> testNextDebuggerForDebuggerFailure [
+	"Upon a debugger failure, we call the nextDebuggerForSession: interface to get the next debugger"
+	|session|
+	session := self session.
+	session exception: (DebuggerFailure of: debuggers first on: session exception).
+	self
+		assert: (debuggerSelector nextDebuggerForSession: session)
+		identicalTo: debuggers second
+
+	
+]
+
+{ #category : #'tests -  algorithm' }
 DSDebuggerSelectorTest >> testNextDebuggerForSession [
 	"Upon a debugger failure, we call the nextDebuggerForSession: interface to get the next debugger"
 	
