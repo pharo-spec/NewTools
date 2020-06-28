@@ -4,8 +4,33 @@ Class {
 	#instVars : [
 		'debuggers'
 	],
+	#classInstVars : [
+		'debuggerSelectionStrategy'
+	],
 	#category : #'Debuggers-SelectionStrategies'
 }
+
+{ #category : #settings }
+DSDebuggerSelectionStrategy class >> debuggeSelectionStrategySettingsOn: aBuilder [
+	<systemsettings>
+	(aBuilder pickOne: #debuggerSelectionStrategy)
+		label: 'Debugger selection strategy';
+		target: DSDebuggerSelectionStrategy;
+		default: DSSingleDebuggerSelector;
+		parent: #debugging;
+		domainValues: (DSDebuggerSelectionStrategy allSubclasses);
+		description: 'Sets the strategy to open a debugger.'
+]
+
+{ #category : #settings }
+DSDebuggerSelectionStrategy class >> debuggerSelectionStrategy [
+	^debuggerSelectionStrategy ifNil:[debuggerSelectionStrategy := DSSingleDebuggerSelector]
+]
+
+{ #category : #settings }
+DSDebuggerSelectionStrategy class >> debuggerSelectionStrategy: aClass [
+	debuggerSelectionStrategy := aClass
+]
 
 { #category : #instance }
 DSDebuggerSelectionStrategy class >> with: aCollection [
