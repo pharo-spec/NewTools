@@ -9,7 +9,8 @@ Class {
 		'name',
 		'tag',
 		'deferred',
-		'usable'
+		'usable',
+		'error'
 	],
 	#category : #'Debuggers-SelectionStrategies-Tests'
 }
@@ -20,14 +21,23 @@ DSDummyDebugger class >> named: aString [
 ]
 
 { #category : #accessing }
+DSDummyDebugger >> beError [
+	error := true
+]
+
+{ #category : #accessing }
 DSDummyDebugger >> beUnusable [
 	usable := false
 ]
 
 { #category : #'instance creation' }
 DSDummyDebugger >> debugSession: aDebugSession [
-	tag := aDebugSession
-	
+	self isError
+		ifFalse: [ tag := aDebugSession.
+			^ self ].
+	tag := Error new.
+	tag signalIn: thisContext.
+	tag signal
 ]
 
 { #category : #'deferred message' }
@@ -43,7 +53,17 @@ DSDummyDebugger >> deferred [
 
 { #category : #testing }
 DSDummyDebugger >> handlesContext: aContext [
-	^usable ifNil:[true]
+	^self isUsable 
+]
+
+{ #category : #accessing }
+DSDummyDebugger >> isError [
+	^ error ifNil: [ error := false ]
+]
+
+{ #category : #accessing }
+DSDummyDebugger >> isUsable [
+	^ usable ifNil: [ usable := true ]
 ]
 
 { #category : #helpers }
