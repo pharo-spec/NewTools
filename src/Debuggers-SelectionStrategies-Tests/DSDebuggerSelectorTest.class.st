@@ -166,11 +166,42 @@ DSDebuggerSelectorTest >> testNoNextDebugger [
 ]
 
 { #category : #'tests -  algorithm' }
+DSDebuggerSelectorTest >> testOpenDebuggerError [
+	| session |
+	session := self session.
+	session exception: (DebuggerFailure of: debuggers first on: session exception).
+	debuggers first beError.
+	debuggers second beError.
+	
+	"Because we are debugging a debugger error, we cannot raise another DebuggerFailure:
+	we want to find a debugger to debug the failing debugger."
+	debuggerSelector handlesDebuggerErrors: true.	
+	self shouldnt: [debuggerSelector openDebuggerForSession: session] raise: DebuggerFailure.	
+		
+	"Because the first debugger originated the debugger failure,
+	it is not considered in the algorithm anymore."
+	self assert: debuggers first tag equals: nil.
+	self assert: debuggers second tag class identicalTo: Error.
+	self assert: debuggers third tag identicalTo: session.
+	self assert: debuggerSelector handled
+]
+
+{ #category : #'tests -  algorithm' }
 DSDebuggerSelectorTest >> testOpenDebuggerForSession [
 	| session |
 	session := self session.
+	debuggerSelector openDebuggerForSession: session.
+	self assert: debuggers first tag identicalTo: session.
+	self assert: debuggerSelector handled
+]
+
+{ #category : #'tests -  algorithm' }
+DSDebuggerSelectorTest >> testOpenDebuggerWithErrorForSession [
+	| session |
+	session := self session.
 	debuggers first beError.
-	debuggers second beError.	
+	debuggers second beError.			
+	debuggerSelector handlesDebuggerErrors: false.
 	debuggerSelector openDebuggerForSession: session.
 	self assert: debuggers first tag class identicalTo: Error.
 	self assert: debuggers second tag class identicalTo: Error.	
