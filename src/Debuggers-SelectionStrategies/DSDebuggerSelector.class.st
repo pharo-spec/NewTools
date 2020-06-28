@@ -30,3 +30,12 @@ DSDebuggerSelector >> nextDebugger [
 		ifTrue: [ ^ Transcripter ].
 	^ debuggers pop
 ]
+
+{ #category : #debuggers }
+DSDebuggerSelector >> nextDebuggerForSession: aDebugSession [
+	| debugger |
+	debugger := self nextDebugger.
+	[ debugger handlesContext: aDebugSession context ]
+		whileFalse: [ debugger := self nextDebugger ].
+	^ debugger
+]

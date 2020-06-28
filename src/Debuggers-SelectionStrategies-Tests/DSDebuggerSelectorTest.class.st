@@ -26,13 +26,15 @@ DSDebuggerSelectorTest >> assertDebuggerOpened: aDebugger onException: anExcepti
 
 { #category : #helper }
 DSDebuggerSelectorTest >> session [
-	| process |
-	process := [  ] newProcess.
-	^ debuggerSelector
-		newSessionFromException:
-			(DebuggerSelectorNullException
-				fromSignallerContext: process suspendedContext)
-		forProcess: process
+	| context process session |
+	context := [ Set new ] asContext.
+	process := Process
+		forContext: context
+		priority: Processor userInterruptPriority.
+	session := process
+		newDebugSessionNamed: 'test session'
+		startedAt: context.
+	^ session
 ]
 
 { #category : #running }
@@ -42,7 +44,7 @@ DSDebuggerSelectorTest >> setUp [
 	super setUp.
 	debuggers := OrderedCollection
 		withAll:
-			{(DSDummyDebugger named: #A) beUnusable.
+			{(DSDummyDebugger named: #A).
 			(DSDummyDebugger named: #B).
 			(DSDummyDebugger named: #C)}.
 	debuggerSelector := DSDebuggerSelector with: debuggers copy
@@ -234,10 +236,16 @@ DSDebuggerSelectorTest >> testFindDebuggerForDebuggerFailure [
 ]
 
 { #category : #'tests -  algorithm' }
-DSDebuggerSelectorTest >> testFindDebuggerToHandleContext [
+DSDebuggerSelectorTest >> testFirstUsableDebuggerForSession [
+	
+	debuggerSelector debuggers first beUnusable.
+	debuggerSelector debuggers second beUnusable.
+
 	self
-		assert: (debuggerSelector findDebuggerForSession: self session)
-		identicalTo: debuggers second
+		assert: (debuggerSelector nextDebuggerForSession: self session)
+		identicalTo: debuggers third
+	
+	
 ]
 
 { #category : #'tests - debuggers' }
@@ -285,24 +293,26 @@ DSDebuggerSelectorTest >> testNextDebugger [
 ]
 
 { #category : #'tests -  algorithm' }
-DSDebuggerSelectorTest >> testNoDebuggerForDebuggerFailure [
-	| process semaphore exception session |
-	semaphore := Semaphore new.
-	process := [ [ 1 / 0 ]
-		on: Error
-		do: [ :err | exception := DebuggerFailure of: debuggers second on: err ] ]
-		newProcess.
-	[[ process resume ]
-		ensure: [ semaphore signal ]] fork.
-	semaphore wait.
+DSDebuggerSelectorTest >> testNextDebuggerForSession [
 	
-	exception := DebuggerFailure of: debuggers third on: exception.
-	session := debuggerSelector
-		newSessionFromException: exception
-		forProcess: process.
+	self
+		assert: (debuggerSelector nextDebuggerForSession: self session)
+		identicalTo: debuggers first.
+	
+	self
+		assert: (debuggerSelector nextDebuggerForSession: self session)
+		identicalTo: debuggers second.
 		
 	self
-		assert: (debuggerSelector findDebuggerForSession: session) identicalTo: Transcripter
+		assert: (debuggerSelector nextDebuggerForSession: self session)
+		identicalTo: debuggers last.
+		
+	self
+		assert: (debuggerSelector nextDebuggerForSession: self session)
+		identicalTo: Transcripter.
+		
+	
+	
 ]
 
 { #category : #tests }
