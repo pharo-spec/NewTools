@@ -16,8 +16,32 @@ Class {
 		'handled',
 		'handlesDebuggerErrors'
 	],
+	#classInstVars : [
+		'handleDebuggerErrors'
+	],
 	#category : #'Debuggers-SelectionStrategies'
 }
+
+{ #category : #settings }
+DSDebuggerSelector class >> handleDebuggerErrors [
+	^ handleDebuggerErrors ifNil: [ handleDebuggerErrors := false ]
+]
+
+{ #category : #settings }
+DSDebuggerSelector class >> handleDebuggerErrors: aBoolean [
+	handleDebuggerErrors := aBoolean
+]
+
+{ #category : #settings }
+DSDebuggerSelector class >> handleDebuggerErrorsSettingsOn: aBuilder [
+	<systemsettings>
+	(aBuilder setting: #handleDebuggerErrors)
+		label: 'Handle debugger errors';
+		target: self;
+		default: false;
+		parent: #debugging;
+		description: 'Try to debug debugger errors when they occur.'
+]
 
 { #category : #accessing }
 DSDebuggerSelector >> debuggers: aCollection [
