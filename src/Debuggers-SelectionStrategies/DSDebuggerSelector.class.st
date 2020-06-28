@@ -5,7 +5,7 @@ Class {
 		'debuggers',
 		'handled',
 		'debuggerError',
-		'handleDebuggerErrors'
+		'handlesDebuggerErrors'
 	],
 	#category : #'Debuggers-SelectionStrategies'
 }
@@ -28,18 +28,18 @@ DSDebuggerSelector >> debuggers: aCollection [
 ]
 
 { #category : #accessing }
-DSDebuggerSelector >> handleDebuggerErrors [
-	^handleDebuggerErrors ifNil:[handleDebuggerErrors := false]
-]
-
-{ #category : #accessing }
-DSDebuggerSelector >> handleDebuggerErrors: aBoolean [ 
-	handleDebuggerErrors := aBoolean
-]
-
-{ #category : #accessing }
 DSDebuggerSelector >> handled [
 	^handled ifNil:[handled := false]
+]
+
+{ #category : #accessing }
+DSDebuggerSelector >> handlesDebuggerErrors [
+	^handlesDebuggerErrors ifNil:[handlesDebuggerErrors := false]
+]
+
+{ #category : #accessing }
+DSDebuggerSelector >> handlesDebuggerErrors: aBoolean [ 
+	handlesDebuggerErrors := aBoolean
 ]
 
 { #category : #iterating }
@@ -74,7 +74,7 @@ DSDebuggerSelector >> tryOpen: aDebugSession with: aDebugger [
 	handled := true ]
 		on: Error , UnhandledException
 		do: [ :err | 
-			(self handleDebuggerErrors
+			(self handlesDebuggerErrors
 				and: [ aDebugSession exception isDebuggerFailure not ])
 				ifTrue: [ (DebuggerFailure of: aDebugger on: err) signal ] ]
 ]

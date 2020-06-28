@@ -105,15 +105,15 @@ DSDebuggerSelectorTest >> testFirstUsableDebuggerForSession [
 ]
 
 { #category : #'tests - debugging' }
-DSDebuggerSelectorTest >> testHandleDebuggerErrors [
-	self deny: debuggerSelector handleDebuggerErrors.
-	debuggerSelector handleDebuggerErrors: true.
-	self assert: debuggerSelector handleDebuggerErrors
+DSDebuggerSelectorTest >> testHandled [
+	self deny: debuggerSelector handled
 ]
 
 { #category : #'tests - debugging' }
-DSDebuggerSelectorTest >> testHandled [
-	self deny: debuggerSelector handled
+DSDebuggerSelectorTest >> testHandlesDebuggerErrors [
+	self deny: debuggerSelector handlesDebuggerErrors.
+	debuggerSelector handlesDebuggerErrors: true.
+	self assert: debuggerSelector handlesDebuggerErrors
 ]
 
 { #category : #tests }
@@ -232,7 +232,7 @@ DSDebuggerSelectorTest >> testTryOpenWithSignalsError [
 		raise: DebuggerFailure.
 	self deny: debuggerSelector handled.	
 
-	debuggerSelector handleDebuggerErrors: true.
+	debuggerSelector handlesDebuggerErrors: true.
 	self
 		should: [ debuggerSelector tryOpen: session with: debuggers second ]
 		raise: DebuggerFailure.
