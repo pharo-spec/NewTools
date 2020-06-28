@@ -9,22 +9,6 @@ Class {
 }
 
 { #category : #helper }
-DSDebuggerSelectorTest >> assertDebuggerOpened: aDebugger onException: anException inProcess: aProcess [
-	| session process |
-	session := aDebugger tag.
-	self assert: session class equals: DebugSession.
-	self assert: session exception identicalTo: anException.
-
-	"The interrupted process is the one given to the API, 
-	whatever this process is."
-	process := session interruptedProcess.
-	self assert: session interruptedProcess identicalTo: aProcess.
-	self deny: process isTerminating.
-	self deny: process isTerminated.
-	self assert: process isSuspended
-]
-
-{ #category : #helper }
 DSDebuggerSelectorTest >> session [
 	^DSDummyDebugger dummySession
 ]
@@ -47,7 +31,7 @@ DSDebuggerSelectorTest >> tearDown [
 	super tearDown
 ]
 
-{ #category : #tests }
+{ #category : #'tests - debuggers' }
 DSDebuggerSelectorTest >> testDebuggers [
 	self
 		assertCollection: debuggerSelector debuggers asOrderedCollection
@@ -79,7 +63,7 @@ DSDebuggerSelectorTest >> testHandlesDebuggerErrors [
 	self assert: debuggerSelector handlesDebuggerErrors
 ]
 
-{ #category : #tests }
+{ #category : #'tests - debuggers' }
 DSDebuggerSelectorTest >> testNextDebugger [
 	debuggers
 		do: [ :dbg | self assert: debuggerSelector nextDebugger identicalTo: dbg ]
@@ -115,17 +99,28 @@ DSDebuggerSelectorTest >> testNextDebuggerForSession [
 		identicalTo: debuggers last.
 		
 	self
-		assert: (debuggerSelector nextDebuggerForSession: self session)
-		identicalTo: Transcripter.
+		should: [ debuggerSelector nextDebuggerForSession: self session]
+		raise: CollectionIsEmpty
 		
-	
-	
+		
+
 ]
 
-{ #category : #tests }
+{ #category : #'tests -  algorithm' }
+DSDebuggerSelectorTest >> testNoDebuggerForSession [
+	debuggerSelector debuggers: #().
+	self
+		shouldnt: [ debuggerSelector openDebuggerForSession: self session ]
+		raise: CollectionIsEmpty.
+	self deny: debuggerSelector handled
+]
+
+{ #category : #'tests - debuggers' }
 DSDebuggerSelectorTest >> testNoNextDebugger [
 	debuggerSelector debuggers: #().
-	self assert: debuggerSelector nextDebugger identicalTo: Transcripter
+	self
+		should: [ debuggerSelector nextDebugger ]
+		raise: CollectionIsEmpty
 ]
 
 { #category : #'tests -  algorithm' }

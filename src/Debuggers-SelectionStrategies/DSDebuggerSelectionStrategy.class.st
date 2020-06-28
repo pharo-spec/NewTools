@@ -1,5 +1,5 @@
 Class {
-	#name : #DSAbstractDebuggerSelector,
+	#name : #DSDebuggerSelectionStrategy,
 	#superclass : #Object,
 	#instVars : [
 		'debuggers'
@@ -8,28 +8,28 @@ Class {
 }
 
 { #category : #instance }
-DSAbstractDebuggerSelector class >> with: aCollection [
+DSDebuggerSelectionStrategy class >> with: aCollection [
 	^ self new
 		debuggers: aCollection;
 		yourself
 ]
 
 { #category : #accessing }
-DSAbstractDebuggerSelector >> debuggers [
+DSDebuggerSelectionStrategy >> debuggers [
 	^ debuggers
 ]
 
 { #category : #accessing }
-DSAbstractDebuggerSelector >> debuggers: aCollection [ 
+DSDebuggerSelectionStrategy >> debuggers: aCollection [ 
 	debuggers := aCollection
 ]
 
 { #category : #iterating }
-DSAbstractDebuggerSelector >> nextDebugger [
+DSDebuggerSelectionStrategy >> nextDebugger [
 	^ self subclassResponsibility
 ]
 
 { #category : #debuggers }
-DSAbstractDebuggerSelector >> openDebuggerForSession: aDebugSession [
+DSDebuggerSelectionStrategy >> openDebuggerForSession: aDebugSession [
 	self subclassResponsibility 
 ]

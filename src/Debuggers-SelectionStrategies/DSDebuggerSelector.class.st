@@ -1,6 +1,17 @@
+"
+I take as input a sorted list of debuggers and a debug session.
+I will try to open the debug session with the first applicable debugger in this list.
+
+If this first applicable debugger encounters an error, I will either try the next applicable debugger or if I am configured to handle debugger errors (see handlesDebuggerErrors:) I will raise a DebuggerFailure exception.
+
+When I try to open a debug session created from a DebuggerFailure, I exclude the debugger that produced the debugger failure from my debugger list.
+
+When I succeeded to open a debugger, my instance variable ""handled"" becomes true. 
+If I failed to find any debugger, or to open the debug session with any debugger, ""handled"" stays false. This is the responsibility of my clients to deal with this situation (i.e., the system was unable to open a debugger).
+"
 Class {
 	#name : #DSDebuggerSelector,
-	#superclass : #DSAbstractDebuggerSelector,
+	#superclass : #DSDebuggerSelectionStrategy,
 	#instVars : [
 		'handled',
 		'handlesDebuggerErrors'
@@ -30,8 +41,6 @@ DSDebuggerSelector >> handlesDebuggerErrors: aBoolean [
 
 { #category : #iterating }
 DSDebuggerSelector >> nextDebugger [
-	debuggers isEmpty
-		ifTrue: [ ^ Transcripter ].
 	^ debuggers pop
 ]
 
@@ -48,7 +57,7 @@ DSDebuggerSelector >> nextDebuggerForSession: aDebugSession [
 { #category : #debuggers }
 DSDebuggerSelector >> openDebuggerForSession: aDebugSession [
 	handled := false.
-	[ handled ]
+	[ handled or:[self debuggers isEmpty ]]
 		whileFalse: [ self
 				tryOpen: aDebugSession
 				with: (self nextDebuggerForSession: aDebugSession) ]

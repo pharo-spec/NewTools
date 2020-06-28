@@ -6,7 +6,7 @@ I am equivalent to the debugger selection strategy encoded in MorphicUIManager p
 "
 Class {
 	#name : #DSSingleDebuggerSelector,
-	#superclass : #DSAbstractDebuggerSelector,
+	#superclass : #DSDebuggerSelectionStrategy,
 	#category : #'Debuggers-SelectionStrategies'
 }
 
