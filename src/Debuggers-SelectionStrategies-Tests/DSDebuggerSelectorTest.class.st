@@ -19,7 +19,8 @@ DSDebuggerSelectorTest >> setUp [
 
 	super setUp.
 	debuggers := DSDummyDebugger dummyDebuggerList.
-	debuggerSelector := DSDebuggerSelector with: debuggers copy
+	debuggerSelector := DSDebuggerSelector with: debuggers copy.
+	debuggerSelector handlesDebuggerErrors: false
 ]
 
 { #category : #running }
@@ -60,7 +61,10 @@ DSDebuggerSelectorTest >> testHandled [
 DSDebuggerSelectorTest >> testHandlesDebuggerErrors [
 	self deny: debuggerSelector handlesDebuggerErrors.
 	debuggerSelector handlesDebuggerErrors: true.
-	self assert: debuggerSelector handlesDebuggerErrors
+	self assert: debuggerSelector handlesDebuggerErrors.
+	self
+		assert: DSDebuggerSelector new handlesDebuggerErrors
+		equals: DSDebuggerSelector handleDebuggerErrors
 ]
 
 { #category : #'tests - debuggers' }

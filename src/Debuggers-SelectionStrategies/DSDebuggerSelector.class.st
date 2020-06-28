@@ -55,7 +55,8 @@ DSDebuggerSelector >> handled [
 
 { #category : #accessing }
 DSDebuggerSelector >> handlesDebuggerErrors [
-	^handlesDebuggerErrors ifNil:[handlesDebuggerErrors := false]
+	^ handlesDebuggerErrors
+		ifNil: [ handlesDebuggerErrors := self class handleDebuggerErrors ]
 ]
 
 { #category : #accessing }
