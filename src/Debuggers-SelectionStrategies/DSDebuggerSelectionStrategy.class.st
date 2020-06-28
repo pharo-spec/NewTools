@@ -11,7 +11,17 @@ Class {
 }
 
 { #category : #settings }
-DSDebuggerSelectionStrategy class >> debuggeSelectionStrategySettingsOn: aBuilder [
+DSDebuggerSelectionStrategy class >> debuggerSelectionStrategy [
+	^debuggerSelectionStrategy ifNil:[debuggerSelectionStrategy := DSSingleDebuggerSelector]
+]
+
+{ #category : #settings }
+DSDebuggerSelectionStrategy class >> debuggerSelectionStrategy: aClass [
+	debuggerSelectionStrategy := aClass
+]
+
+{ #category : #settings }
+DSDebuggerSelectionStrategy class >> debuggerSelectionStrategySettingsOn: aBuilder [
 	<systemsettings>
 	(aBuilder pickOne: #debuggerSelectionStrategy)
 		label: 'Debugger selection strategy';
@@ -20,16 +30,6 @@ DSDebuggerSelectionStrategy class >> debuggeSelectionStrategySettingsOn: aBuilde
 		parent: #debugging;
 		domainValues: (DSDebuggerSelectionStrategy allSubclasses);
 		description: 'Sets the strategy to open a debugger.'
-]
-
-{ #category : #settings }
-DSDebuggerSelectionStrategy class >> debuggerSelectionStrategy [
-	^debuggerSelectionStrategy ifNil:[debuggerSelectionStrategy := DSSingleDebuggerSelector]
-]
-
-{ #category : #settings }
-DSDebuggerSelectionStrategy class >> debuggerSelectionStrategy: aClass [
-	debuggerSelectionStrategy := aClass
 ]
 
 { #category : #instance }
