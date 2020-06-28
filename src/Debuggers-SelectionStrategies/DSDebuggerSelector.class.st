@@ -2,25 +2,11 @@ Class {
 	#name : #DSDebuggerSelector,
 	#superclass : #DSAbstractDebuggerSelector,
 	#instVars : [
-		'debuggers',
 		'handled',
-		'debuggerError',
 		'handlesDebuggerErrors'
 	],
 	#category : #'Debuggers-SelectionStrategies'
 }
-
-{ #category : #instance }
-DSDebuggerSelector class >> with: aCollection [
-	^ self new
-		debuggers: aCollection;
-		yourself
-]
-
-{ #category : #accessing }
-DSDebuggerSelector >> debuggers [
-	^ debuggers
-]
 
 { #category : #accessing }
 DSDebuggerSelector >> debuggers: aCollection [

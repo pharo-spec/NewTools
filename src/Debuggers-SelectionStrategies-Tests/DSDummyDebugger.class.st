@@ -15,6 +15,28 @@ Class {
 	#category : #'Debuggers-SelectionStrategies-Tests'
 }
 
+{ #category : #helpers }
+DSDummyDebugger class >> dummyDebuggerList [
+	^ OrderedCollection
+		withAll:
+			{(self named: #A).
+			(self named: #B).
+			(self named: #C)}
+]
+
+{ #category : #helpers }
+DSDummyDebugger class >> dummySession [
+	| context process session |
+	context := [ Set new ] asContext.
+	process := Process
+		forContext: context
+		priority: Processor userInterruptPriority.
+	session := process
+		newDebugSessionNamed: 'test session'
+		startedAt: context.
+	^ session
+]
+
 { #category : #'instance creation' }
 DSDummyDebugger class >> named: aString [
 	^self new name: aString

@@ -26,15 +26,7 @@ DSDebuggerSelectorTest >> assertDebuggerOpened: aDebugger onException: anExcepti
 
 { #category : #helper }
 DSDebuggerSelectorTest >> session [
-	| context process session |
-	context := [ Set new ] asContext.
-	process := Process
-		forContext: context
-		priority: Processor userInterruptPriority.
-	session := process
-		newDebugSessionNamed: 'test session'
-		startedAt: context.
-	^ session
+	^DSDummyDebugger dummySession
 ]
 
 { #category : #running }
@@ -42,11 +34,7 @@ DSDebuggerSelectorTest >> setUp [
 	"Hooks that subclasses may override to define the fixture of test."
 
 	super setUp.
-	debuggers := OrderedCollection
-		withAll:
-			{(DSDummyDebugger named: #A).
-			(DSDummyDebugger named: #B).
-			(DSDummyDebugger named: #C)}.
+	debuggers := DSDummyDebugger dummyDebuggerList.
 	debuggerSelector := DSDebuggerSelector with: debuggers copy
 ]
 
