@@ -8,7 +8,7 @@ Class {
 	#category : #'Debuggers-SelectionStrategies-Tests'
 }
 
-{ #category : #'tests - debugging' }
+{ #category : #helper }
 DSDebuggerSelectorTest >> assertDebuggerOpened: aDebugger onException: anException inProcess: aProcess [
 	| session process |
 	session := aDebugger tag.
@@ -92,27 +92,6 @@ DSDebuggerSelectorTest >> testDebuggers [
 ]
 
 { #category : #'tests -  algorithm' }
-DSDebuggerSelectorTest >> testFindDebuggerForDebuggerFailure [
-	| process semaphore exception session |
-	semaphore := Semaphore new.
-	process := [ [ 1 / 0 ]
-		on: Error
-		do: [ :err | exception := DebuggerFailure of: debuggers second on: err ] ]
-		newProcess.
-	[[ process resume ]
-		ensure: [ semaphore signal ]] fork.
-	semaphore wait.
-	
-	session := debuggerSelector
-		newSessionFromException: exception
-		forProcess: process.
-		
-	self
-		assert: (debuggerSelector findDebuggerForSession: session)
-		identicalTo: debuggers third
-]
-
-{ #category : #'tests -  algorithm' }
 DSDebuggerSelectorTest >> testFirstUsableDebuggerForSession [
 	
 	debuggerSelector debuggers first beUnusable.
@@ -130,6 +109,11 @@ DSDebuggerSelectorTest >> testHandleDebuggerErrors [
 	self deny: debuggerSelector handleDebuggerErrors.
 	debuggerSelector handleDebuggerErrors: true.
 	self assert: debuggerSelector handleDebuggerErrors
+]
+
+{ #category : #'tests - debugging' }
+DSDebuggerSelectorTest >> testHandled [
+	self deny: debuggerSelector handled
 ]
 
 { #category : #tests }
@@ -181,6 +165,19 @@ DSDebuggerSelectorTest >> testNoNextDebugger [
 	self assert: debuggerSelector nextDebugger identicalTo: Transcripter
 ]
 
+{ #category : #'tests -  algorithm' }
+DSDebuggerSelectorTest >> testOpenDebuggerForSession [
+	| session |
+	session := self session.
+	debuggers first beError.
+	debuggers second beError.	
+	debuggerSelector openDebuggerForSession: session.
+	self assert: debuggers first tag class identicalTo: Error.
+	self assert: debuggers second tag class identicalTo: Error.	
+	self assert: debuggers third tag identicalTo: session.
+	self assert: debuggerSelector handled
+]
+
 { #category : #'tests - debugging' }
 DSDebuggerSelectorTest >> testOpenOn [
 	"Basically openOn: finds a debugger and calls tryOpen:on:.
@@ -212,34 +209,32 @@ DSDebuggerSelectorTest >> testSignalDebuggerError [
 			self assert: e innerException identicalTo: exception ]
 ]
 
-{ #category : #'tests - debugging' }
-DSDebuggerSelectorTest >> testTryOpenOn [
-	| debugger session |
+{ #category : #'tests -  algorithm' }
+DSDebuggerSelectorTest >> testTryOpenWith [
+	| session |
 	session := self session.
-
-	"In case of error, it should raise a debugger failure."
-	debugger := DummyUnusableDebugger new.
 	self
-		should: [ debuggerSelector tryOpen: debugger on: session ]
+		shouldnt: [ debuggerSelector tryOpen: session with: debuggers first ]
 		raise: DebuggerFailure.
-	[ debuggerSelector tryOpen: debugger on: session ]
-		on: DebuggerFailure
-		do: [ :dbgFailure | 
-			self assert: dbgFailure signaler identicalTo: debugger.
-			self assert: dbgFailure failedDebugger identicalTo: debugger.
-			self deny: (dbgFailure isHandleableBy: debugger).
-			self
-				assert: dbgFailure innerException
-				identicalTo: dbgFailure originException.
-			self
-				assert: dbgFailure innerException
-				identicalTo: debugger tag.
-			 ].
+	self assert: debuggers first tag identicalTo: session.
+	self assert: debuggerSelector handled
+]
 
-	"A bit simplistic: we just check that tryOpen:On: 
-	sends debugSession: to the debugger with the session
-	as argument."
-	debugger := DSDummyDebugger new.
-	debuggerSelector tryOpen: debugger on: session.
-	self assert: debugger tag identicalTo: session
+{ #category : #'tests -  algorithm' }
+DSDebuggerSelectorTest >> testTryOpenWithSignalsError [
+	| session |
+	session := self session.
+	debuggers first beError.
+	debuggers second beError.
+	
+	self
+		shouldnt: [ debuggerSelector tryOpen: session with: debuggers first ]
+		raise: DebuggerFailure.
+	self deny: debuggerSelector handled.	
+
+	debuggerSelector handleDebuggerErrors: true.
+	self
+		should: [ debuggerSelector tryOpen: session with: debuggers second ]
+		raise: DebuggerFailure.
+	self deny: debuggerSelector handled
 ]

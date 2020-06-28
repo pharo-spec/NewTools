@@ -37,6 +37,11 @@ DSDebuggerSelector >> handleDebuggerErrors: aBoolean [
 	handleDebuggerErrors := aBoolean
 ]
 
+{ #category : #accessing }
+DSDebuggerSelector >> handled [
+	^handled ifNil:[handled := false]
+]
+
 { #category : #iterating }
 DSDebuggerSelector >> nextDebugger [
 	debuggers isEmpty
@@ -68,5 +73,8 @@ DSDebuggerSelector >> tryOpen: aDebugSession with: aDebugger [
 	[ aDebugger debugSession: aDebugSession.
 	handled := true ]
 		on: Error , UnhandledException
-		do: [ :err | debuggerError := err ]
+		do: [ :err | 
+			(self handleDebuggerErrors
+				and: [ aDebugSession exception isDebuggerFailure not ])
+				ifTrue: [ (DebuggerFailure of: aDebugger on: err) signal ] ]
 ]
