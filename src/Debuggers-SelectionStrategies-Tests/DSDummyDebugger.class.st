@@ -8,7 +8,8 @@ Class {
 	#instVars : [
 		'name',
 		'tag',
-		'deferred'
+		'deferred',
+		'usable'
 	],
 	#category : #'Debuggers-SelectionStrategies-Tests'
 }
@@ -16,6 +17,11 @@ Class {
 { #category : #'instance creation' }
 DSDummyDebugger class >> named: aString [
 	^self new name: aString
+]
+
+{ #category : #accessing }
+DSDummyDebugger >> beUnusable [
+	usable := false
 ]
 
 { #category : #'instance creation' }
@@ -37,7 +43,7 @@ DSDummyDebugger >> deferred [
 
 { #category : #testing }
 DSDummyDebugger >> handlesContext: aContext [
-	^true
+	^usable ifNil:[true]
 ]
 
 { #category : #helpers }

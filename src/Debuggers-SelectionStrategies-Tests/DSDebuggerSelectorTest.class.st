@@ -42,13 +42,10 @@ DSDebuggerSelectorTest >> setUp [
 	super setUp.
 	debuggers := OrderedCollection
 		withAll:
-			{(DummyUnusableDebugger named: #A).
+			{(DSDummyDebugger named: #A) beUnusable.
 			(DSDummyDebugger named: #B).
 			(DSDummyDebugger named: #C)}.
-	debuggerSelector := DebuggerSelector with: debuggers copy.
-	DummyDebuggerSelector
-		debuggers: debuggers;
-		uiManager: nil
+	debuggerSelector := DSDebuggerSelector with: debuggers copy
 ]
 
 { #category : #running }
@@ -57,7 +54,6 @@ DSDebuggerSelectorTest >> tearDown [
 		do: [ :dbg | 
 			(dbg tag isKindOf: DebugSession)
 				ifTrue: [ dbg tag terminate ] ].
-	DummyDebuggerSelector debuggers: nil.
 	super tearDown
 ]
 
