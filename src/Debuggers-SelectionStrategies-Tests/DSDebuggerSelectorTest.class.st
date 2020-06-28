@@ -125,6 +125,13 @@ DSDebuggerSelectorTest >> testFirstUsableDebuggerForSession [
 	
 ]
 
+{ #category : #'tests - debugging' }
+DSDebuggerSelectorTest >> testHandleDebuggerErrors [
+	self deny: debuggerSelector handleDebuggerErrors.
+	debuggerSelector handleDebuggerErrors: true.
+	self assert: debuggerSelector handleDebuggerErrors
+]
+
 { #category : #tests }
 DSDebuggerSelectorTest >> testNextDebugger [
 	debuggers
