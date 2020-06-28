@@ -59,31 +59,6 @@ DSDebuggerSelectorTest >> tearDown [
 	super tearDown
 ]
 
-{ #category : #'tests - debugging' }
-DSDebuggerSelectorTest >> testDebugExceptionInProcessFromWith [
-	| process exception dummyUIManager |
-	
-	self flag: 'Process are not the same, which is OK from the API point of view, but not accurate from the execution point of view'.
-	[ DSDummyDebugger new zeroDivide ]
-		on: Exception
-		do: [ :e | 
-			exception := e.
-			DebuggerSelector
-				debugException: exception
-				inProcess: (process := [ ] newProcess)
-				from: (dummyUIManager := DSDummyDebugger new)
-				with: debuggerSelector ].
-
-	"With this test, we ensure that calling the API opens a debugger on a debug session,
-	that holds the exception, its signaler context and the interrupted process.
-	We check the second debugger because it is the one that is selected (first always fails)."
-	self assertDebuggerOpened: debuggers second onException: exception inProcess: process.
-	
-	""
-	self assert: dummyUIManager deferred
-	
-]
-
 { #category : #tests }
 DSDebuggerSelectorTest >> testDebuggers [
 	self
@@ -207,37 +182,6 @@ DSDebuggerSelectorTest >> testOpenDebuggerWithErrorForSession [
 	self assert: debuggers second tag class identicalTo: Error.	
 	self assert: debuggers third tag identicalTo: session.
 	self assert: debuggerSelector handled
-]
-
-{ #category : #'tests - debugging' }
-DSDebuggerSelectorTest >> testOpenOn [
-	"Basically openOn: finds a debugger and calls tryOpen:on:.
-	So the first usable debugger (second in the list, see setUp)
-	should work"
-	| session |
-	session := self session.
-	debuggerSelector openOn: session.
-	self assert: debuggers second tag identicalTo: session
-]
-
-{ #category : #'tests - debugging' }
-DSDebuggerSelectorTest >> testSignalDebuggerError [
-	"The dummy debugger selector uses a debug session object that does not actually signal a debugger error."
-
-	| exception signalerBlock |
-	exception := DebuggerSelectorNullException
-		fromSignallerContext: [  ] asContext.
-	signalerBlock := [ DummyDebuggerSelector
-		signalDebuggerError: exception ].
-	
-	self should: signalerBlock raise: DebuggerFailure.
-	signalerBlock
-		on: DebuggerFailure
-		do: [ :e | 
-			self
-				assert: e failedDebugger name
-				equals: DebuggerSelector signalDebuggerErrorMessage.
-			self assert: e innerException identicalTo: exception ]
 ]
 
 { #category : #'tests -  algorithm' }
