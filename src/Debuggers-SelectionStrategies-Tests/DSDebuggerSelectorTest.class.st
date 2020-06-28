@@ -294,6 +294,7 @@ DSDebuggerSelectorTest >> testNextDebugger [
 
 { #category : #'tests -  algorithm' }
 DSDebuggerSelectorTest >> testNextDebuggerForSession [
+	"Upon a debugger failure, we call the nextDebuggerForSession: interface to get the next debugger"
 	
 	self
 		assert: (debuggerSelector nextDebuggerForSession: self session)
