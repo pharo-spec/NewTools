@@ -13,3 +13,10 @@ StBreakpointCommand class >> defaultIconName [
 StBreakpointCommand class >> forSpec [ 
 	^self forSpecWithIconNamed: self defaultIconName
 ]
+
+{ #category : #testing }
+StBreakpointCommand >> appliesTo: aTool [
+	^ [ aTool owner class ~= StDebuggerRawObjectInspector ]
+		on: Error
+		do: [ false ]
+]

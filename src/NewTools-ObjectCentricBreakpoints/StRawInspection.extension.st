@@ -32,9 +32,9 @@ StRawInspection >> haltInspectedObjectOnWriteAccess [
 { #category : #'*NewTools-ObjectCentricBreakpoints' }
 StRawInspection class >> objectCentricBreakpointCommandsWith: presenter forRootGroup: aRootCmCommandsGroup [
 	<extensionCommands>
-	aRootCmCommandsGroup
-		register: StHaltOnReadCommand forSpec;
-		register: StHaltOnWriteCommand forSpec;
-		register: StHaltOnStateAccessCommand forSpec
-		
+	({StHaltOnReadCommand forSpec.
+	StHaltOnWriteCommand forSpec.
+	StHaltOnStateAccessCommand forSpec}
+		select: [ :spCommand | spCommand decoratedCommand appliesTo: presenter ])
+		do: [ :spCommand | aRootCmCommandsGroup register: spCommand ]
 ]
