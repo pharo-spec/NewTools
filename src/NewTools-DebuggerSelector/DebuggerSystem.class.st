@@ -36,6 +36,13 @@ DebuggerSystem class >> openDebuggerOnRequest: aDebugRequest [
 	^ self default openDebuggerOnRequest: aDebugRequest
 ]
 
+{ #category : #'instance creation' }
+DebuggerSystem >> availableDebuggers [
+	^ (Smalltalk tools debuggers
+			sort: #value descending)
+			collect: #key
+]
+
 { #category : #'default values' }
 DebuggerSystem >> defaultDebuggerSelectionStrategy [
 	^ DebuggerSelector_
