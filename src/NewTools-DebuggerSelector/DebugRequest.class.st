@@ -44,13 +44,18 @@ Class {
 }
 
 { #category : #'instance creation' }
+DebugRequest class >> new [
+	self shouldNotImplement
+]
+
+{ #category : #'instance creation' }
 DebugRequest class >> newForContext: aContext [
-	^ self new context: aContext; yourself
+	^ self basicNew context: aContext; yourself
 ]
 
 { #category : #'instance creation' }
 DebugRequest class >> newForException: anException [
-	^ self new exception: anException; yourself
+	^ self basicNew exception: anException; yourself
 ]
 
 { #category : #setter }
