@@ -88,6 +88,7 @@ DSDebuggerSelector >> tryOpen: aDebugSession with: aDebugger [
 	handled := true ]
 		on: Error , UnhandledException
 		do: [ :err | 
+			error := err.
 			(self handlesDebuggerErrors
 				and: [ aDebugSession exception isDebuggerFailure not ])
 				ifTrue: [ (DebuggerFailure of: aDebugger on: err) signal ] ]

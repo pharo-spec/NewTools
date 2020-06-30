@@ -163,7 +163,9 @@ DSDebuggerSelectorTest >> testOpenDebuggerWithErrorForSession [
 	self assert: debuggers first tag class identicalTo: Error.
 	self assert: debuggers second tag class identicalTo: Error.	
 	self assert: debuggers third tag identicalTo: session.
-	self assert: debuggerSelector handled
+	self assert: debuggerSelector handled.
+	self assert: debuggerSelector hasErrors.
+	self assert: debuggerSelector error class identicalTo: Error
 ]
 
 { #category : #'tests -  algorithm' }

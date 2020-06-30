@@ -25,5 +25,7 @@ DSSingleDebuggerSelector >> nextDebugger [
 DSSingleDebuggerSelector >> openDebuggerForSession: aDebugSession [
 	[ self nextDebugger debugSession: aDebugSession ]
 		on: Error
-		do: [ handled := false ]
+		do: [ :err | 
+			error := err.
+			handled := false ]
 ]
