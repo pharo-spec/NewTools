@@ -73,7 +73,7 @@ DebugRequest >> context: anObject [
 { #category : #getter }
 DebugRequest >> debugSession [
 	"If a DebugSession is requested for this debug request, ask the process to create one. Subsequent calls to this method will return the same DebugSession (and not create another one)"
-	debugSession ifNil: [ debugSession := self process newDebugSessionNamed: self exception description startedAt: self exception signalerContext ].
+	debugSession ifNil: [ debugSession := (self process newDebugSessionNamed: self exception description startedAt: self exception signalerContext) exception: self exception; yourself ].
 	^ debugSession.
 ]
 
