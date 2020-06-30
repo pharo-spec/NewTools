@@ -65,10 +65,10 @@ DebuggerSystem >> openDebuggerOnRequest: aDebugRequest [
 	
 	self performPreDebugActionsIn: aDebugRequest.
 	self spawnNewUIProcessIfNecessary: aDebugRequest.
-	debuggerOpeningStrategy := self defaultDebuggerSelectionStrategy newDebuggerSelector.
+	debuggerOpeningStrategy := DSDebuggerSelectionStrategy debuggerSelectionStrategy with: self availableDebuggers.
 	"Schedule the debugger opening in a deferred UI message to address redraw problems after opening a debugger e.g. from the testrunner."
-	self defaultUIManager defer: [ debuggerOpeningStrategy openOn: aDebugRequest debugSession ].
-	self suspendDebuggedProcess: aDebugRequest
+	self defaultUIManager defer: [ debuggerOpeningStrategy openDebuggerForSession: aDebugRequest debugSession ].
+	self suspendDebuggedProcess: aDebugRequest.
 ]
 
 { #category : #helpers }
