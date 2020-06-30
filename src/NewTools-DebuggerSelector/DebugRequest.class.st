@@ -83,8 +83,7 @@ DebugRequest >> debugSession [
 ]
 
 { #category : #'default values' }
-DebugRequest >> defaultLabel_ [
-	"The underscore is to prevent conflicting with Object>>#defaultLabel, which is a morphic method"
+DebugRequest >> defaultLabel [
 	^ 'No label was provided'
 ]
 
@@ -101,7 +100,7 @@ DebugRequest >> defaultUIManager [
 { #category : #getter }
 DebugRequest >> exception [
 	"If an exception was provided, return it, otherwise create a dummy exception using the provided context and label (if no label was provided, use the result of 'self defaultLabel_' "
-	^ exception ifNil: [ self nullExceptionFor: context named: (label ifNil: [ self defaultLabel_ ]) ]
+	^ exception ifNil: [ self nullExceptionFor: context named: (label ifNil: [ self defaultLabel ]) ]
 ]
 
 { #category : #setter }
