@@ -12,7 +12,7 @@ Class {
 
 { #category : #settings }
 DSDebuggerSelectionStrategy class >> debuggerSelectionStrategy [
-	^debuggerSelectionStrategy ifNil:[debuggerSelectionStrategy := DSSingleDebuggerSelector]
+	^debuggerSelectionStrategy ifNil:[debuggerSelectionStrategy := DSDebuggerSelector]
 ]
 
 { #category : #settings }
