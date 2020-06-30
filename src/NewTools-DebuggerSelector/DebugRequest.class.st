@@ -115,16 +115,15 @@ DebugRequest >> label: anObject [
 
 { #category : #helper }
 DebugRequest >> nullExceptionFor: aContext named: aString [
-	| exception_ |
-	exception_ := DebuggerSelectorNullException
-		fromSignallerContext: aContext.
-	exception_ messageText: aString.
-	^ exception_
+	^ (DebuggerSelectorNullException fromSignallerContext: aContext)
+		messageText: aString;
+		yourself
 ]
 
 { #category : #preDebugActions }
 DebugRequest >> preDebugActionForDebugItMethod: aCompiledMethod [
 	"Return a PreDebug action that will step the debugged execution until it is in a call to @aCompiledMethod"
+
 	^ [ :session | 
 	session
 		stepIntoUntil: [ :currentContext | currentContext method == aCompiledMethod ] ]
