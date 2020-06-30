@@ -53,11 +53,6 @@ DSDebuggerSelectorTest >> testFirstUsableDebuggerForSession [
 ]
 
 { #category : #'tests - debugging' }
-DSDebuggerSelectorTest >> testHandled [
-	self deny: debuggerSelector handled
-]
-
-{ #category : #'tests - debugging' }
 DSDebuggerSelectorTest >> testHandlesDebuggerErrors [
 	self deny: debuggerSelector handlesDebuggerErrors.
 	debuggerSelector handlesDebuggerErrors: true.

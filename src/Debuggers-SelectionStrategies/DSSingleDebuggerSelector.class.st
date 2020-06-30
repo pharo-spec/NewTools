@@ -10,6 +10,12 @@ Class {
 	#category : #'Debuggers-SelectionStrategies'
 }
 
+{ #category : #initialization }
+DSSingleDebuggerSelector >> initialize [
+	super initialize.
+	handled := true
+]
+
 { #category : #iterating }
 DSSingleDebuggerSelector >> nextDebugger [
 	^ debuggers first
@@ -17,5 +23,7 @@ DSSingleDebuggerSelector >> nextDebugger [
 
 { #category : #debuggers }
 DSSingleDebuggerSelector >> openDebuggerForSession: aDebugSession [
-	self nextDebugger debugSession: aDebugSession
+	[ self nextDebugger debugSession: aDebugSession ]
+		on: Error
+		do: [ handled := false ]
 ]

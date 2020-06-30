@@ -27,6 +27,18 @@ DSSingleDebuggerSelectorTest >> tearDown [
 ]
 
 { #category : #tests }
+DSSingleDebuggerSelectorTest >> testHandled [
+	| session |
+	session := DSDummyDebugger dummySession.
+	debuggers first beError.
+	
+	self assert: debuggerSelector handled.
+	
+	debuggerSelector openDebuggerForSession: session.
+	self deny: debuggerSelector handled
+]
+
+{ #category : #tests }
 DSSingleDebuggerSelectorTest >> testNextDebugger [
 	self
 		assert: debuggerSelector nextDebugger

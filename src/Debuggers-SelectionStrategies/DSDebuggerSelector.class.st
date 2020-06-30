@@ -13,7 +13,6 @@ Class {
 	#name : #DSDebuggerSelector,
 	#superclass : #DSDebuggerSelectionStrategy,
 	#instVars : [
-		'handled',
 		'handlesDebuggerErrors'
 	],
 	#classInstVars : [
@@ -46,11 +45,6 @@ DSDebuggerSelector class >> handleDebuggerErrorsSettingsOn: aBuilder [
 { #category : #accessing }
 DSDebuggerSelector >> debuggers: aCollection [
 	debuggers := Stack newFrom: aCollection
-]
-
-{ #category : #accessing }
-DSDebuggerSelector >> handled [
-	^handled ifNil:[handled := false]
 ]
 
 { #category : #accessing }

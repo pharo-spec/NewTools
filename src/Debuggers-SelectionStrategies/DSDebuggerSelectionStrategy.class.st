@@ -2,7 +2,8 @@ Class {
 	#name : #DSDebuggerSelectionStrategy,
 	#superclass : #Object,
 	#instVars : [
-		'debuggers'
+		'debuggers',
+		'handled'
 	],
 	#classInstVars : [
 		'debuggerSelectionStrategy'
@@ -47,6 +48,11 @@ DSDebuggerSelectionStrategy >> debuggers [
 { #category : #accessing }
 DSDebuggerSelectionStrategy >> debuggers: aCollection [ 
 	debuggers := aCollection
+]
+
+{ #category : #accessing }
+DSDebuggerSelectionStrategy >> handled [
+	^handled ifNil:[handled := false]
 ]
 
 { #category : #iterating }
