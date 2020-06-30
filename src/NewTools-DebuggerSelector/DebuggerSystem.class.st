@@ -94,9 +94,7 @@ DebuggerSystem >> spawnNewUIProcess [
 { #category : #helpers }
 DebuggerSystem >> spawnNewUIProcessIfNecessary: aDebugRequest [
 	"If @aDebugRequest is about debugging the UI process, we must create a new UI process to take its place. Because the debugged process will be suspended at some point, and suspending the UI process means freezing the UI of the image"
-	| defaultUIManager |
-	defaultUIManager := self defaultUIManager.
-	(aDebugRequest process == defaultUIManager uiProcess) ifTrue: [ self spawnNewUIProcess ]
+	(aDebugRequest debugSession isAboutUIProcess) ifTrue: [ self spawnNewUIProcess ].
 ]
 
 { #category : #helpers }
