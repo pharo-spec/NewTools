@@ -5,36 +5,8 @@ I handle DebugRequests by asking the default UI Manager what to do about them. T
 Class {
 	#name : #DebuggerSystem,
 	#superclass : #Object,
-	#classVars : [
-		'default'
-	],
 	#category : #'NewTools-DebuggerSelector-Core'
 }
-
-{ #category : #accessing }
-DebuggerSystem class >> default [
-	"Return singleton instance"
-	default ifNil: [ default := self new ].
-	^ default
-]
-
-{ #category : #'handle debug requests' }
-DebuggerSystem class >> handleDebugRequest: aDebugRequest [
-	"Forwards call to singleton instance"
-	^ self default handleDebugRequest: aDebugRequest
-]
-
-{ #category : #'handle debug requests' }
-DebuggerSystem class >> handleWarningDebugRequest: aWarningDebugRequest [
-	"Forwards call to singleton instance"
-	^ self default handleWarningDebugRequest: aWarningDebugRequest
-]
-
-{ #category : #'open debugger' }
-DebuggerSystem class >> openDebuggerOnRequest: aDebugRequest [
-	"Forwards call to singleton instance"
-	^ self default openDebuggerOnRequest: aDebugRequest
-]
 
 { #category : #'instance creation' }
 DebuggerSystem >> availableDebuggers [
@@ -43,9 +15,10 @@ DebuggerSystem >> availableDebuggers [
 			collect: #key
 ]
 
-{ #category : #'default values' }
-DebuggerSystem >> defaultDebuggerSelectionStrategy [
-	^ DebuggerSelector_
+{ #category : #'open debugger' }
+DebuggerSystem >> debuggerSelectionStrategy [
+	^ DSDebuggerSelectionStrategy debuggerSelectionStrategy
+		with: self availableDebuggers
 ]
 
 { #category : #'default values' }
@@ -72,7 +45,7 @@ DebuggerSystem >> openDebuggerOnRequest: aDebugRequest [
 	
 	self performPreDebugActionsIn: aDebugRequest.
 	self spawnNewUIProcessIfNecessary: aDebugRequest.
-	debuggerOpeningStrategy := DSDebuggerSelectionStrategy debuggerSelectionStrategy with: self availableDebuggers.
+	debuggerOpeningStrategy := self debuggerSelectionStrategy.
 	"Schedule the debugger opening in a deferred UI message to address redraw problems after opening a debugger e.g. from the testrunner."
 	self defaultUIManager defer: [ debuggerOpeningStrategy openDebuggerForSession: aDebugRequest debugSession ].
 	self suspendDebuggedProcess: aDebugRequest.

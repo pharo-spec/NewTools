@@ -11,8 +11,8 @@ Class {
 }
 
 { #category : #'default values' }
-DummyDebuggerSystem >> defaultDebuggerSelectionStrategy [
-	^ DummyDebuggerSelectionStrategy
+DummyDebuggerSystem >> debuggerSelectionStrategy [
+	^ DummyDebuggerSelectionStrategy new
 ]
 
 { #category : #accessing }

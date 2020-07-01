@@ -3,7 +3,7 @@ Extension { #name : #MorphicUIManager }
 { #category : #'*NewTools-DebuggerSelector-Extensions' }
 MorphicUIManager >> handleDebugRequest: aDebugRequest [
 
-	DebuggerSystem openDebuggerOnRequest: aDebugRequest
+	DebuggerSystem new openDebuggerOnRequest: aDebugRequest
 ]
 
 { #category : #'*NewTools-DebuggerSelector-Extensions' }
@@ -16,7 +16,7 @@ MorphicUIManager >> handleError: anError log: shouldLog [
 { #category : #'*NewTools-DebuggerSelector-Extensions' }
 MorphicUIManager >> handleWarningDebugRequest: aWarningDebugRequest [
 
-	DebuggerSystem openDebuggerOnRequest: aWarningDebugRequest
+	DebuggerSystem new openDebuggerOnRequest: aWarningDebugRequest
 ]
 
 { #category : #'*NewTools-DebuggerSelector-Extensions' }

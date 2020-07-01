@@ -8,6 +8,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-DummyDebuggerSelectionStrategy >> openOn: aDebugSession [
+DummyDebuggerSelectionStrategy >> openDebuggerForSession: aDebugSession [
+	"Do nothing, to avoid opening a debugger during tests"
 	^ 1
 ]

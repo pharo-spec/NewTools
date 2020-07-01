@@ -149,5 +149,5 @@ DebugRequest >> process: anObject [
 { #category : #submit }
 DebugRequest >> submit [
 	"Submit this debug request to the system. The system will typically open a debugger for it"
-	DebuggerSystem handleDebugRequest: self
+	DebuggerSystem new handleDebugRequest: self
 ]

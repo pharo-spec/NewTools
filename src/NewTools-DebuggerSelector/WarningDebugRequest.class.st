@@ -6,5 +6,5 @@ Class {
 
 { #category : #submit }
 WarningDebugRequest >> submit [
-	DebuggerSystem handleWarningDebugRequest: self
+	DebuggerSystem new handleWarningDebugRequest: self
 ]
