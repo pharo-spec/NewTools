@@ -1,6 +1,9 @@
 Class {
 	#name : #DebuggerSystemTest,
 	#superclass : #TestCase,
+	#instVars : [
+		'debuggerSystem'
+	],
 	#category : #'NewTools-DebuggerSelector-Tests'
 }
 
@@ -26,18 +29,25 @@ DebuggerSystemTest >> createDummyDebugRequestForUIProcess [
 	^ DummyDebugRequest newForException: exception
 ]
 
+{ #category : #running }
+DebuggerSystemTest >> setUp [
+	super setUp.
+	
+	"Put here a common initialization logic for tests"
+	debuggerSystem := DummyDebuggerSystem new.
+]
+
 { #category : #tests }
 DebuggerSystemTest >> testAvailableDebuggers [
 	"Tests that DebuggerSystem>>#availableDebuggers returns a list"
-	self assert: DebuggerSystem new availableDebuggers isSequenceable
+	self assert: debuggerSystem availableDebuggers isSequenceable
 	
 ]
 
 { #category : #tests }
 DebuggerSystemTest >> testHandleDebugRequest [
 	"Tests that a DebuggerSystem tasked to handle a DebugRequest calls the #handleDebugRequest: of its uiManager with that DebugRequest"
-	| debuggerSystem debugRequest |
-	debuggerSystem := DummyDebuggerSystem new.
+	| debugRequest |
 	debuggerSystem customUIManager: DummyUIManagerForDebuggerSystemTests new.
 	debugRequest := DebugRequest basicNew.
 	self assert: debuggerSystem defaultUIManager callsToHandleDebugRequest equals: 0.
@@ -50,8 +60,7 @@ DebuggerSystemTest >> testHandleDebugRequest [
 { #category : #tests }
 DebuggerSystemTest >> testHandleWarningDebugRequest [
 	"Tests that a DebuggerSystem tasked to handle a WarningDebugRequest calls the #handleWarningDebugRequest: of its uiManager with that DebugRequest"
-	| debuggerSystem debugRequest |
-	debuggerSystem := DummyDebuggerSystem new.
+	| debugRequest |
 	debuggerSystem customUIManager: DummyUIManagerForDebuggerSystemTests new.
 	debugRequest := DebugRequest basicNew.
 	self assert: debuggerSystem defaultUIManager callsToHandleWarningDebugRequest equals: 0.
@@ -64,8 +73,6 @@ DebuggerSystemTest >> testHandleWarningDebugRequest [
 { #category : #tests }
 DebuggerSystemTest >> testNonUIProcessIsRecognised [
 	"Tests that a DebuggerSystem opening a DebugRequest that is NOT on the ui process does NOT spawn a new UI process"
-	| debuggerSystem |
-	debuggerSystem := DummyDebuggerSystem new.
 	debuggerSystem openDebuggerOnRequest: self createDummyDebugRequestForNotUIProcess.
 	self assert: debuggerSystem newUIProcessSpawned not
 	
@@ -74,8 +81,7 @@ DebuggerSystemTest >> testNonUIProcessIsRecognised [
 { #category : #tests }
 DebuggerSystemTest >> testPreDebugActionExecuted [
 	"Test that a DebuggerSystem opening a DebugRequest with a pre-debug action will execute it exactly once"
-	| debuggerSystem debugRequest |
-	debuggerSystem := DummyDebuggerSystem new.
+	| debugRequest |
 	debugRequest := self createDummyDebugRequest.
 	self assert: debugRequest dummyPreDebugActionExecutedCount equals: 0.
 	debuggerSystem openDebuggerOnRequest: debugRequest.
@@ -86,8 +92,6 @@ DebuggerSystemTest >> testPreDebugActionExecuted [
 { #category : #tests }
 DebuggerSystemTest >> testUIProcessIsRecognised [
 	"Test that a DebuggerSystem opening a DebugRequest on the ui process will spawn a new UI process"
-	| debuggerSystem |
-	debuggerSystem := DummyDebuggerSystem new.
 	debuggerSystem openDebuggerOnRequest: self createDummyDebugRequestForUIProcess.
 	self assert: debuggerSystem newUIProcessSpawned
 	
