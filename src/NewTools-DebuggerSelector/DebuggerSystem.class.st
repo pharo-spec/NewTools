@@ -30,13 +30,13 @@ DebuggerSystem >> defaultUIManager [
 { #category : #'handle debug requests' }
 DebuggerSystem >> handleDebugRequest: aDebugRequest [
 	"A DebugRequest has been submitted. Ask what to do to the default UIManager. Typically, the UIManager will call back my #openDebuggerOnRequest: method to open a debugger"
-	self defaultUIManager handleDebugRequest: aDebugRequest
+	[ self defaultUIManager handleDebugRequest: aDebugRequest ] on: Error do: [ self signalDebuggerError: aDebugRequest ]
 ]
 
 { #category : #'handle debug requests' }
 DebuggerSystem >> handleWarningDebugRequest: aWarningDebugRequest [
 	"A WarningDebugRequest has been submitted. Ask what to do to the default UIManager. Typically, the UIManager will call back my #openDebuggerOnRequest: method to open a debugger"
-	self defaultUIManager handleWarningDebugRequest: aWarningDebugRequest
+	[ self defaultUIManager handleWarningDebugRequest: aWarningDebugRequest ] on: Error do: [ self signalDebuggerError: aWarningDebugRequest ]
 ]
 
 { #category : #'open debugger' }
@@ -57,6 +57,20 @@ DebuggerSystem >> performPreDebugActionsIn: aDebugRequest [
 	"Get the preDebug actions stored in @aDebugRequest. Applies them to the debugSession held by aDebugRequest"
 	aDebugRequest computePreDebugActions.
 	aDebugRequest preDebugActions do: [ :preDebugAction | preDebugAction value: aDebugRequest debugSession ]
+]
+
+{ #category : #'error management' }
+DebuggerSystem >> signalDebuggerError: aDebugRequest [
+	| failingSession |
+	failingSession := aDebugRequest debugSession
+		name: self signalDebuggerErrorMessage;
+		yourself.
+	failingSession signalDebuggerError: aDebugRequest exception
+]
+
+{ #category : #'error management' }
+DebuggerSystem >> signalDebuggerErrorMessage [
+	^ 'DebuggerSystem failure'
 ]
 
 { #category : #helpers }
