@@ -53,7 +53,7 @@ DebuggerSystem >> openDebuggerOnRequest: aDebugRequest [
 
 { #category : #helpers }
 DebuggerSystem >> performPreDebugActionsIn: aDebugRequest [
-	"Get the preDebug actions stored in @aDebugRequest. Applies them to the debugSession held by @aDebugRequest"
+	"Get the preDebug actions stored in @aDebugRequest. Applies them to the debugSession held by aDebugRequest"
 	aDebugRequest computePreDebugActions.
 	aDebugRequest preDebugActions do: [ :preDebugAction | preDebugAction value: aDebugRequest debugSession ]
 ]
@@ -66,7 +66,7 @@ DebuggerSystem >> spawnNewUIProcess [
 
 { #category : #helpers }
 DebuggerSystem >> spawnNewUIProcessIfNecessary: aDebugRequest [
-	"If @aDebugRequest is about debugging the UI process, we must create a new UI process to take its place. Because the debugged process will be suspended at some point, and suspending the UI process means freezing the UI of the image"
+	"If aDebugRequest is about debugging the UI process, we must create a new UI process to take its place. Because the debugged process will be suspended at some point, and suspending the UI process means freezing the UI of the image"
 	(aDebugRequest debugSession isAboutUIProcess) ifTrue: [ self spawnNewUIProcess ].
 ]
 
