@@ -15,8 +15,9 @@ DebuggerSystem >> availableDebuggers [
 			collect: #key
 ]
 
-{ #category : #'open debugger' }
+{ #category : #helpers }
 DebuggerSystem >> debuggerSelectionStrategy [
+	"Returns the debugger selection strategy to be used by this DebuggerSystem. This is the value of the corresponding setting"
 	^ DSDebuggerSelectionStrategy debuggerSelectionStrategy
 		with: self availableDebuggers
 ]
