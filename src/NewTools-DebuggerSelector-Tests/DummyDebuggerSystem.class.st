@@ -6,10 +6,15 @@ Class {
 	#superclass : #DebuggerSystem,
 	#instVars : [
 		'newUIProcessSpawned',
-		'uiManager'
+		'customUIManager'
 	],
 	#category : #'NewTools-DebuggerSelector-Tests'
 }
+
+{ #category : #'default values' }
+DummyDebuggerSystem >> customUIManager: aUIManager [
+	customUIManager := aUIManager
+]
 
 { #category : #'default values' }
 DummyDebuggerSystem >> debuggerSelectionStrategy [
@@ -18,8 +23,8 @@ DummyDebuggerSystem >> debuggerSelectionStrategy [
 
 { #category : #'default values' }
 DummyDebuggerSystem >> defaultUIManager [
-	uiManager ifNil: [ uiManager := DummyUIManagerForDebuggerSystemTests new].
-	^ uiManager
+	customUIManager ifNil: [ ^ super defaultUIManager ].
+	^ customUIManager
 ]
 
 { #category : #accessing }

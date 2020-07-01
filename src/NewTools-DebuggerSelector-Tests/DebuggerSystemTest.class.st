@@ -38,6 +38,7 @@ DebuggerSystemTest >> testHandleDebugRequest [
 	"Tests that a DebuggerSystem tasked to handle a DebugRequest calls the #handleDebugRequest: of its uiManager with that DebugRequest"
 	| debuggerSystem debugRequest |
 	debuggerSystem := DummyDebuggerSystem new.
+	debuggerSystem customUIManager: DummyUIManagerForDebuggerSystemTests new.
 	debugRequest := DebugRequest basicNew.
 	self assert: debuggerSystem defaultUIManager callsToHandleDebugRequest equals: 0.
 	debuggerSystem handleDebugRequest: debugRequest.
@@ -51,6 +52,7 @@ DebuggerSystemTest >> testHandleWarningDebugRequest [
 	"Tests that a DebuggerSystem tasked to handle a WarningDebugRequest calls the #handleWarningDebugRequest: of its uiManager with that DebugRequest"
 	| debuggerSystem debugRequest |
 	debuggerSystem := DummyDebuggerSystem new.
+	debuggerSystem customUIManager: DummyUIManagerForDebuggerSystemTests new.
 	debugRequest := DebugRequest basicNew.
 	self assert: debuggerSystem defaultUIManager callsToHandleWarningDebugRequest equals: 0.
 	debuggerSystem handleWarningDebugRequest: debugRequest.
