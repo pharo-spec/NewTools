@@ -169,7 +169,9 @@ StDebuggerTest >> testContextUnchangedAfterStepOver [
 
 { #category : #'tests - initialization' }
 StDebuggerTest >> testDebuggerApplication [
-	self assert: self debugger application identicalTo: StDebugger currentApplication 
+	self
+		assert: (StDebugger on: DebugSession new) application
+		identicalTo: StDebugger currentApplication
 ]
 
 { #category : #'tests - code pane' }
