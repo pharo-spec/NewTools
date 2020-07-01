@@ -107,12 +107,13 @@ StDebuggerTest >> testCodeSelectionAfterStepOver [
 StDebuggerTest >> testContextChangedAfterStepIn [ 
 	| dbg |
 	dbg := self debuggerOn: session.
+	dbg buildContextMenus.	
 	
-	self clickStepInto. "We enter the block context"
-	self assert: dbg contextInspector inspectedObject == session shortStack first.
+	dbg stepInto. "We enter the block context"
+	self assert: dbg inspector inspectedObject context identicalTo: session shortStack first.
 	
-	self clickStepInto. "We step into the first message"
-	self assert: dbg contextInspector inspectedObject == session shortStack first.
+	dbg stepInto. "We step into the first message"
+	self assert: dbg inspector inspectedObject context identicalTo:session shortStack first.
 
 ]
 
@@ -120,27 +121,24 @@ StDebuggerTest >> testContextChangedAfterStepIn [
 StDebuggerTest >> testContextChangedAfterStepOverAndReturn [
 	| dbg currentContext |
 	dbg := self debuggerOn: session.	
-	
-	self clickStepInto: 2. "getting into Number>>squared"
-	currentContext := dbg contextInspector inspectedObject.
-	self clickStepOver: 2. "stepping over ^self * self (i.e. returning)"
+	dbg buildContextMenus.	
+		
+	dbg stepOver; stepOver. "getting into Number>>squared"
+	currentContext := dbg inspector inspectedObject context.
+	dbg stepOver; stepOver.  "stepping over ^self * self (i.e. returning)"
 	self
-		deny: dbg contextInspector inspectedObject
+		deny: dbg inspector inspectedObject context
 		equals: currentContext
-]
-
-{ #category : #'tests - context inspector' }
-StDebuggerTest >> testContextInspectorMenu [
-	self assert: 1 @ 1 equals: 2 @ 2
 ]
 
 { #category : #'tests - context inspector' }
 StDebuggerTest >> testContextTempVarList [
 	| dbg contextItems inspectorTable|
 	dbg := self debuggerOn: session.
-	inspectorTable := self inspectorTableFor: dbg contextInspector.
+	dbg buildContextMenus.
+	inspectorTable := dbg inspector attributeTable.
 	
-	self clickStepInto: 5.	
+	5 timesRepeat: [ dbg stepInto  ].	
 	contextItems := inspectorTable roots.
 	self assert: contextItems first rawValue equals: session shortStack first. "thisContext"
 	self assert: contextItems second rawValue equals: 1. "stackTop"
@@ -440,6 +438,14 @@ StDebuggerTest >> testStackTableWithNewSession [
 { #category : #'tests - toolbar' }
 StDebuggerTest >> testToolbarDependingOnContext [
 	self fail
+]
+
+{ #category : #'tests - toolbar' }
+StDebuggerTest >> testToolbarDisplayMode [
+	debugger := StDebugger on: DebugSession new.
+	self
+		assert: debugger toolbar displayMode
+		equals: debugger application toolbarDisplayMode
 ]
 
 { #category : #'tests - code pane' }
