@@ -27,6 +27,39 @@ DebuggerSystemTest >> createDummyDebugRequestForUIProcess [
 ]
 
 { #category : #tests }
+DebuggerSystemTest >> testAvailableDebuggers [
+	"Tests that DebuggerSystem>>#availableDebuggers returns a list"
+	self assert: DebuggerSystem new availableDebuggers isSequenceable
+	
+]
+
+{ #category : #tests }
+DebuggerSystemTest >> testHandleDebugRequest [
+	"Tests that a DebuggerSystem tasked to handle a DebugRequest calls the #handleDebugRequest: of its uiManager with that DebugRequest"
+	| debuggerSystem debugRequest |
+	debuggerSystem := DummyDebuggerSystem new.
+	debugRequest := DebugRequest basicNew.
+	self assert: debuggerSystem defaultUIManager callsToHandleDebugRequest equals: 0.
+	debuggerSystem handleDebugRequest: debugRequest.
+	self assert: debuggerSystem defaultUIManager callsToHandleDebugRequest equals: 1.
+	self assert: debuggerSystem defaultUIManager debugRequestSentToHandleDebugRequest identicalTo: debugRequest
+	
+]
+
+{ #category : #tests }
+DebuggerSystemTest >> testHandleWarningDebugRequest [
+	"Tests that a DebuggerSystem tasked to handle a WarningDebugRequest calls the #handleWarningDebugRequest: of its uiManager with that DebugRequest"
+	| debuggerSystem debugRequest |
+	debuggerSystem := DummyDebuggerSystem new.
+	debugRequest := DebugRequest basicNew.
+	self assert: debuggerSystem defaultUIManager callsToHandleWarningDebugRequest equals: 0.
+	debuggerSystem handleWarningDebugRequest: debugRequest.
+	self assert: debuggerSystem defaultUIManager callsToHandleWarningDebugRequest equals: 1.
+	self assert: debuggerSystem defaultUIManager debugRequestSentToHandleWarningDebugRequest identicalTo: debugRequest
+	
+]
+
+{ #category : #tests }
 DebuggerSystemTest >> testNonUIProcessIsRecognised [
 	"Tests that a DebuggerSystem opening a DebugRequest that is NOT on the ui process does NOT spawn a new UI process"
 	| debuggerSystem |
