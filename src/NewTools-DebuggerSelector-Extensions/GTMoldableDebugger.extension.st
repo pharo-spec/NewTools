@@ -2,8 +2,9 @@ Extension { #name : #GTMoldableDebugger }
 
 { #category : #'*NewTools-DebuggerSelector-Extensions' }
 GTMoldableDebugger class >> debugSession: aDebugSession [
-	
-	self openOn: aDebugSession withFullView: true andNotification: nil
+    | debugger |
+    debugger := self on: (self spanNewSessionFrom: aDebugSession).
+    debugger openWithFullView
 ]
 
 { #category : #'*NewTools-DebuggerSelector-Extensions' }
