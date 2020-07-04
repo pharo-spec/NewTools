@@ -33,7 +33,7 @@ StObjectBreakpointInspection >> breakPointsForModel [
 			(methodsWithBreakpoint
 				flatCollect: [ :m | 
 					Breakpoint all
-						select: [ :b | b isObjectCentric not and: [ b link methods includes: m ] ] ]).
+						select: [ :b | b isObjectCentric not and: [ b link methods includes: m compiledMethod] ] ]).
 	breakpoints
 		addAll:
 			(Breakpoint all
