@@ -37,15 +37,15 @@ StObjectBreakpointInspection >> breakPointsForModel [
 	breakpoints
 		addAll:
 			(Breakpoint all
-				select: [ :b | 
-					b isObjectCentric
-						and: [ b targetInstance == self model and: [ b isVariableBreakpoint not ] ] ]).
+				select:
+					[ :b | b isObjectCentric and: [ b targetInstance == self model ] ]).
 	breakpoints
 		addAll:
 			(Breakpoint all
 				select: [ :b | 
 					b isVariableBreakpoint
-						and: [ b targetClassOrMethod == self model class ] ]).
+						and: [ b targetClassOrMethod == self model class
+								and: [ b isObjectCentric not ] ] ]).
 	^ breakpoints
 ]
 
