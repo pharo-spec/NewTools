@@ -166,7 +166,7 @@ StHaltCache >> shouldConsiderHaltNode: aNode [
 	shouldRejectNode := ('*haltOnRead*' match: selector)
 		or: [ ('*haltOnWrite*' match: selector)
 				or: [ '*haltOnAccess*' match: selector ] ].
-	^ shouldRejectNode not and: [ '*halt*' match: selector ]
+	^ shouldRejectNode not and: [ 'halt*' match: selector ]
 ]
 
 { #category : #testing }

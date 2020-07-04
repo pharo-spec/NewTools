@@ -135,6 +135,9 @@ StHaltCacheTest >> testShouldConsiderHaltNode [
 	node := RBMessageNode receiver: RBSelfNode new selector: #haltOnAccess.
 	self deny: (cache shouldConsiderHaltNode: node).
 	
+	node := RBMessageNode receiver: RBSelfNode new selector: #mhalt.
+	self deny: (cache shouldConsiderHaltNode: node).
+	
 	node := RBMessageNode receiver: RBSelfNode new selector: #halt.
 	self assert: (cache shouldConsiderHaltNode: node).
 	
