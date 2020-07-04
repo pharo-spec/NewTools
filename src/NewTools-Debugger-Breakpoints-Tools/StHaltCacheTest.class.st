@@ -31,7 +31,9 @@ StHaltCacheTest >> testAddingHaltToMethod [
 StHaltCacheTest >> testInitialCacheBuild [
 	self assert: cache methodsWithHalts size equals: 6.
 	(self testClass methods
-		reject: [ :m | m printString = 'StDummyTestClassWithHalts>>#mNoHalt' ])
+		reject: [ :m | 
+			#('StDummyTestClassWithHalts>>#mNoHalt' 'StDummyTestClassWithHalts>>#mRejectHalt')
+				includes: m printString ])
 		do: [ :method | 
 			| haltNode nodeCache |
 			haltNode := method ast statements first.
@@ -39,7 +41,9 @@ StHaltCacheTest >> testInitialCacheBuild [
 				assert: (cache methodsWithHalts keys includes: method printString).
 			nodeCache := cache nodeCacheForSelector: method printString.
 			self assert: nodeCache size equals: 1.
-			self assert: nodeCache asOrderedCollection first identicalTo: haltNode ]
+			self
+				assert: nodeCache asOrderedCollection first
+				identicalTo: haltNode ]
 ]
 
 { #category : #'testing - halts cache' }
@@ -114,4 +118,34 @@ StHaltCacheTest >> testScanAllSystemEnabled [
 	newCache scanAllSystem: true.
 	newCache initialize.
 	self assert: cache methodsWithHalts size >= 6
+]
+
+{ #category : #'testing - halts cache' }
+StHaltCacheTest >> testShouldConsiderHaltNode [
+	| node |
+	node := RBMessageNode receiver: RBSelfNode new selector: #haltOnAccessTo.
+	self deny: (cache shouldConsiderHaltNode: node).
+		
+	node := RBMessageNode receiver: RBSelfNode new selector: #haltOnRead.
+	self deny: (cache shouldConsiderHaltNode: node).
+	
+	node := RBMessageNode receiver: RBSelfNode new selector: #haltOnWrite.
+	self deny: (cache shouldConsiderHaltNode: node).
+	
+	node := RBMessageNode receiver: RBSelfNode new selector: #haltOnAccess.
+	self deny: (cache shouldConsiderHaltNode: node).
+	
+	node := RBMessageNode receiver: RBSelfNode new selector: #halt.
+	self assert: (cache shouldConsiderHaltNode: node).
+	
+	node := RBMessageNode receiver: RBSelfNode new selector: #haltOnce.
+	self assert: (cache shouldConsiderHaltNode: node).
+	
+	node := RBMessageNode receiver: RBSelfNode new selector: #haltIf.
+	self assert: (cache shouldConsiderHaltNode: node).
+	
+	node := RBMessageNode receiver: RBSelfNode new selector: #haltOnCallTo.
+	self assert: (cache shouldConsiderHaltNode: node).
+	
+	
 ]

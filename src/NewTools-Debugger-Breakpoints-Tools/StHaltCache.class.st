@@ -76,7 +76,7 @@ StHaltCache >> buildCacheForMethod: aCompiledMethod [
 		ifFalse: [ ^ self ].
 	ast := aCompiledMethod ast.
 	haltNodes := ast sendNodes
-		select: [ :node | '*halt*' match: node selector ].
+		select: [ :node | self shouldConsiderHaltNode: node ].
 	haltNodes
 		ifEmpty: [ self uncacheMethod: aCompiledMethod printString.
 			^ self ].
@@ -160,9 +160,18 @@ StHaltCache >> setNodeCache: haltAndBreakpointNodes forSelector: aSelector [
 ]
 
 { #category : #testing }
-StHaltCache >> shouldConsiderMethod: aCompiledMethod [
-	"We do not consider test methods"
+StHaltCache >> shouldConsiderHaltNode: aNode [
+	| selector shouldRejectNode |
+	selector := aNode selector.
+	shouldRejectNode := ('*haltOnRead*' match: selector)
+		or: [ ('*haltOnWrite*' match: selector)
+				or: [ '*haltOnAccess*' match: selector ] ].
+	^ shouldRejectNode not and: [ '*halt*' match: selector ]
+]
 
+{ #category : #testing }
+StHaltCache >> shouldConsiderMethod: aCompiledMethod [
+	"We do not consider test methods" 
 	^ ((aCompiledMethod hasPragmaNamed: #haltOrBreakpointForTesting)
 		or: [ aCompiledMethod hasPragmaNamed: #haltOrBreakpointForDevelopment ])
 		not
