@@ -115,8 +115,13 @@ StObjectBreakpointInspection >> buildHaltAndBreakpointTable [
 			(SpStringTableColumn
 				title: 'Method'
 				evaluated: [ :item | 
-					(item at: #node) methodNode methodClass name , '>>'
-						, (item at: #node) methodNode selector ]).
+					| node class name |
+					node := item at: #node.
+					class := node methodNode methodClass.
+					name := class isAnonymous
+						ifTrue: [ class superclass name ]
+						ifFalse: [ class name ].
+					name , '>>' , node methodNode selector ]).
 	methodsWithBreakpoints
 		contextMenu: self rootCommandsGroup asMenuPresenter
 ]
@@ -124,7 +129,9 @@ StObjectBreakpointInspection >> buildHaltAndBreakpointTable [
 { #category : #private }
 StObjectBreakpointInspection >> buildHaltData [
 	^ (model class allMethods
-		flatCollect: [ :m | StHaltCache defaultCache nodeCacheForSelector: m printString ])
+		flatCollect: [ :m | 
+			StHaltCache defaultCache
+				nodeCacheForSelector: m compiledMethod printString ])
 		collect: [ :node | self haltDataFor: node ]
 ]
 
