@@ -71,8 +71,15 @@ StObjectBreakpointInspection >> breakpointDataFor: aBreakpoint [
 
 { #category : #private }
 StObjectBreakpointInspection >> buildBreakpointData [
-	^ self breakPointsForModel
-		flatCollect: [ :b | self breakpointDataFor: b ]
+	^ (self breakPointsForModel
+		flatCollect: [ :b | self breakpointDataFor: b ])
+		reject: [ :data | 
+			| node breakpoint |
+			node := data at: #node.
+			breakpoint := data at: #breakpoint.
+			node methodNode methodClass isAnonymous
+				and: [ breakpoint isObjectCentric not
+						or: [ breakpoint isVariableBreakpoint ] ] ]
 ]
 
 { #category : #private }
