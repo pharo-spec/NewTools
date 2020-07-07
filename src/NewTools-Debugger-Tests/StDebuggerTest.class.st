@@ -126,9 +126,8 @@ StDebuggerTest >> testContextChangedAfterStepIn [
 StDebuggerTest >> testContextChangedAfterStepOverAndReturn [
 	| dbg currentContext |
 	dbg := self debuggerOn: session.	
-	dbg buildContextMenus.	
 		
-	dbg stepOver; stepOver. "getting into Number>>squared"
+	dbg stepInto; stepInto. "getting into Number>>squared"
 	currentContext := dbg inspector inspectedObject context.
 	dbg stepOver; stepOver.  "stepping over ^self * self (i.e. returning)"
 	self
@@ -140,22 +139,13 @@ StDebuggerTest >> testContextChangedAfterStepOverAndReturn [
 StDebuggerTest >> testContextTempVarList [
 	| dbg contextItems inspectorTable|
 	dbg := self debuggerOn: session.
-	dbg buildContextMenus.
-	inspectorTable := dbg inspector attributeTable.
+	inspectorTable := dbg inspector getRawInspectorPresenterOrNil attributeTable.
 	
 	5 timesRepeat: [ dbg stepInto  ].	
 	contextItems := inspectorTable roots.
-	self assert: contextItems first rawValue equals: session shortStack first. "thisContext"
-	self assert: contextItems second rawValue equals: 1. "stackTop"
-	self assert: (contextItems detect:[:node| node key = #i]) rawValue equals: 1.
-	
-	
-	"We add 2 to the num temps in the context inspector, 
-	for the thisContext and the stackTop nodes"
-	self
-		assert: inspectorTable roots size
-		equals: dbg contextInspector inspectedObject tempNames size + 2
-
+	self assert: contextItems first rawValue equals: session shortStack first receiver. "receiver"	
+	self assert: (contextItems second rawValue at: #i) equals: 1.
+	self assert: contextItems last rawValue equals: 1. "stackTop"
 ]
 
 { #category : #'tests - context inspector' }
@@ -173,7 +163,7 @@ StDebuggerTest >> testContextUnchangedAfterStepOver [
 { #category : #'tests - initialization' }
 StDebuggerTest >> testDebuggerApplication [
 	self
-		assert: (StDebugger on: DebugSession new) application
+		assert: (self debuggerOn: session) application
 		identicalTo: StDebugger currentApplication
 ]
 
@@ -451,7 +441,7 @@ StDebuggerTest >> testToolbarDependingOnContext [
 
 { #category : #'tests - toolbar' }
 StDebuggerTest >> testToolbarDisplayMode [
-	debugger := StDebugger on: DebugSession new.
+	debugger := self debuggerOn: session.
 	self
 		assert: debugger toolbar displayMode
 		equals: debugger application toolbarDisplayMode
