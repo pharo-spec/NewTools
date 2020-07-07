@@ -227,11 +227,11 @@ StDebuggerTest >> testReceiverChangedAfterStepIn [
 	| dbg |
 	dbg := self debuggerOn: session.
 	
-	self clickStepInto. "We enter the block context"
-	self assert: dbg inspector inspectedObject == session shortStack first receiver.
+	dbg stepInto. "We enter the block context"
+	self assert: dbg inspector inspectedObject context receiver identicalTo: session shortStack first receiver.
 	
-	self clickStepInto. "We step into the first message"
-	self assert: dbg inspector inspectedObject == session shortStack first receiver.
+	dbg stepInto. "We step into the first message"
+	self assert: dbg inspector inspectedObject context receiver identicalTo: session shortStack first receiver.
 
 
 ]
@@ -241,9 +241,9 @@ StDebuggerTest >> testReceiverChangedAfterStepOverAndReturn [
 	| dbg currentReceiver |
 	dbg := self debuggerOn: session.	
 	
-	self clickStepInto: 2. "getting into Number>>squared"
+	dbg stepInto; stepInto. "getting into Number>>squared"
 	currentReceiver := dbg inspector inspectedObject.
-	self clickStepOver: 2. "stepping over ^self * self (i.e. returning)"
+	dbg stepOver; stepOver. "stepping over ^self * self (i.e. returning)"
 	self
 		deny: dbg inspector inspectedObject
 		equals: currentReceiver
@@ -264,8 +264,8 @@ StDebuggerTest >> testReceiverList [
 	| dbg currentReceiver |
 	dbg := self debuggerOn: session.	
 	
-	self clickStepInto: 2. "getting into Number>>squared"
-	currentReceiver := dbg inspector inspectedObject.	
+	dbg stepInto; stepInto. "getting into Number>>squared"
+	currentReceiver := dbg inspector inspectedObject context receiver.	
 	self assert: currentReceiver equals: 1
 
 ]
@@ -275,11 +275,11 @@ StDebuggerTest >> testReceiverUnchangedAfterStepOver [
 	| dbg currentReceiver |
 	dbg := self debuggerOn: session.	
 	
-	self clickStepInto: 2. "getting into Number>>squared"
-	currentReceiver := dbg inspector inspectedObject.
+	dbg stepInto; stepInto. "getting into Number>>squared"
+	currentReceiver := dbg inspector inspectedObject context receiver.
 	"stepping over one time ^self * self (i.e. we are on the return node but still in the same context)"
-	self clickStepOver. 
-	self assert: dbg inspector inspectedObject ==  currentReceiver
+	dbg stepOver. 
+	self assert: dbg inspector inspectedObject context receiver identicalTo:  currentReceiver
 
 ]
 
@@ -327,8 +327,7 @@ StDebuggerTest >> testSelectLastStackElementWithMoreElements [
 	dbg := self debuggerOn: session.
 	stackTable := dbg stackTable.
 	
-	self clickStepInto.
-	self clickStepInto.
+	dbg stepInto; stepInto.
 	stackTable items: (session stackOfSize: 1).
 	
 	self assert: stackTable items size equals: 1.
@@ -368,11 +367,11 @@ StDebuggerTest >> testStackTableAfterReturn [
 	dbg := self debuggerOn: session.
 
 	"we dive into a method"
-	self clickStepInto: 2.
+	dbg stepInto; stepInto.
 	stackSizeAfterStepIn := dbg stackTable items size.
 
 	"we return from it"
-	self clickStepOver: 2.
+	dbg stepOver; stepOver.
 	stackTableItems := dbg stackTable items.
 	self assert: dbg stackTable selection selectedIndex equals: 1.
 	self assert: dbg stackTable selection selectedItem identicalTo: session shortStack first.
@@ -385,7 +384,7 @@ StDebuggerTest >> testStackTableAfterStepIn [
 	| dbg stackTableItems startingStackSize |
 	dbg := self debuggerOn: session.
 	startingStackSize := dbg stackTable items size.
-	self clickStepInto: 2.
+	dbg stepInto; stepInto.
 	stackTableItems := dbg stackTable items.
 	self assert: dbg stackTable selection selectedIndex equals: 1.
 	self
@@ -403,7 +402,7 @@ StDebuggerTest >> testStackTableInitialization [
 StDebuggerTest >> testStackTableSelectionChanged [
 	| dbg |
 	dbg := self debuggerOn: session.
-	self clickStepInto: 2.
+	dbg stepInto; stepInto.
 	dbg stackTable selectItem: dbg stackTable items second.
 	self
 		assert:
