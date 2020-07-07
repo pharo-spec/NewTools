@@ -43,9 +43,11 @@ StDebuggerTest >> debuggerClass [
 { #category : #accessing }
 StDebuggerTest >> debuggerOn: aDebugSession [
 	^ self debugger
-		session: aDebugSession;
-		application: self debuggerClass currentApplication;
-		initialize
+		  session: aDebugSession;
+		  application: self debuggerClass currentApplication;
+		  initialize;
+		  buildContextMenus;
+		  yourself
 ]
 
 { #category : #accessing }
@@ -90,17 +92,20 @@ StDebuggerTest >> tearDown [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testCodeChangeAfterContextChange [
-	self assert: false
+	self skip.
+	self flag: #DBG_TEST
 ]
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testCodeModification [
-	self assert: false
+	self skip.
+	self flag: #DBG_TEST
 ]
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testCodeSelectionAfterStepOver [
-	self assert: false
+	self skip.
+	self flag: #DBG_TEST
 ]
 
 { #category : #'tests - context inspector' }
@@ -158,11 +163,11 @@ StDebuggerTest >> testContextUnchangedAfterStepOver [
 	| dbg currentContext |
 	dbg := self debuggerOn: session.	
 	
-	self clickStepInto: 2. "getting into Number>>squared"
-	currentContext := dbg contextInspector inspectedObject.
+	dbg stepInto; stepInto. "getting into Number>>squared"
+	currentContext := dbg inspector inspectedObject.
 	"stepping over one time ^self * self (i.e. we are on the return node but still in the same context)"
-	self clickStepOver. 
-	self assert: dbg contextInspector inspectedObject ==  currentContext
+	dbg stepOver. 
+	self assert: dbg inspector inspectedObject ==  currentContext
 ]
 
 { #category : #'tests - initialization' }
@@ -174,7 +179,8 @@ StDebuggerTest >> testDebuggerApplication [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testDiscardCodeModification [
-	self assert: false
+	self skip.
+	self flag: #DBG_TEST
 ]
 
 { #category : #'tests - extensions' }
@@ -259,9 +265,8 @@ StDebuggerTest >> testReceiverInitialRawInspectionSelection [
 
 { #category : #'tests - receiver inspector' }
 StDebuggerTest >> testReceiverInspectorMenu [
-	self assert: false.
-	self flag: 'TODO'
-
+	self skip.
+	self flag: #DBG_TEST
 ]
 
 { #category : #'tests - receiver inspector' }
@@ -308,12 +313,14 @@ StDebuggerTest >> testRestoreReceiverRawInspectionSelectionAfterContextChange [
 
 { #category : #'tests - session' }
 StDebuggerTest >> testReturnEnteredValue [
-	self fail
+	self skip.
+	self flag: #DBG_TEST
 ]
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testSaveCodeModification [
-	self assert: false
+	self skip.
+	self flag: #DBG_TEST
 ]
 
 { #category : #'tests - raw inspection' }
@@ -361,7 +368,8 @@ StDebuggerTest >> testSelectLastStackElementWithoutMoreElements [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testSelectionMenu [
-	self assert: false
+	self skip.
+	self flag: #DBG_TEST
 ]
 
 { #category : #'tests - stack table' }
@@ -437,7 +445,8 @@ StDebuggerTest >> testStackTableWithNewSession [
 
 { #category : #'tests - toolbar' }
 StDebuggerTest >> testToolbarDependingOnContext [
-	self fail
+	self skip.
+	self flag: #DBG_TEST
 ]
 
 { #category : #'tests - toolbar' }
@@ -450,7 +459,8 @@ StDebuggerTest >> testToolbarDisplayMode [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testUnauthorizedCodeModification [
-	self assert: false
+	self skip.
+	self flag: #DBG_TEST
 ]
 
 { #category : #'tests - receiver inspector' }
