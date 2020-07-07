@@ -54,6 +54,8 @@ StDebuggerCommandTest >> testCommandsInDNUContext [
 StDebuggerCommandTest >> testCommandsInErrorContext [
 
 	|debugger|
+	self skip.
+	self flag: #DBG_TEST.
 	self flag: 'This test cannot pass until the debug session holds the exception.
 	Waiting for Debugger-Selector integration.'.
 	debugger := debuggerProvider debuggerWithErrorContext.

@@ -57,7 +57,7 @@ StDebuggerCodeCommandTreeBuilderTest >> testCodeExtensionCommandsClasses [
 
 { #category : #tests }
 StDebuggerCodeCommandTreeBuilderTest >> testDisplayStrategy [
-	self assert: builder class displayStrategy equals: CmUIDisplayAsGroup
+	self assert: builder class displayStrategy equals: CmUIDisplayAsSubMenu
 ]
 
 { #category : #tests }
