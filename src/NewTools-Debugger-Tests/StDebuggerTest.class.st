@@ -454,21 +454,30 @@ StDebuggerTest >> testUnauthorizedCodeModification [
 
 { #category : #'tests - receiver inspector' }
 StDebuggerTest >> testUpdateLayoutForContextsIfAssertionFailure [
-	| assertionFailure |
+	| assertionFailure currentLayout expectedLayout |
 	debugger := StTestDebuggerProvider new
-		debuggerWithFailingAssertionContext.
+		            debuggerWithFailingAssertionContext.
 	session := debugger session.
 	debugger application: StDebugger currentApplication.
 	debugger initialize.
 	debugger updateInspectorFromContext: session interruptedContext.
 	assertionFailure := debugger inspector assertionFailure.
+	currentLayout := debugger inspector layout.
+	expectedLayout := StDebuggerInspector assertionFailureSpec.
+	self assert: currentLayout direction equals: expectedLayout direction.
 	self
-		assert: debugger inspector layout
-		equals: StDebuggerInspector assertionFailureSpec.
+		assertCollection: currentLayout children
+		equals: expectedLayout children.
+	self assert: currentLayout position equals: expectedLayout position.
+	self
+		assert: currentLayout children size
+		equals: expectedLayout children size.
 	self
 		assert: assertionFailure actualObject
-		equals: ((session interruptedContext tempNamed: #aStringOrBlock) at: 2).
+		equals:
+		((session interruptedContext tempNamed: #aStringOrBlock) at: 2).
 	self
 		assert: assertionFailure expectedObject
-		equals: ((session interruptedContext tempNamed: #aStringOrBlock) at: 1)
+		equals:
+		((session interruptedContext tempNamed: #aStringOrBlock) at: 1)
 ]
