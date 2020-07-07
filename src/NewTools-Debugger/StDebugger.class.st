@@ -1106,24 +1106,25 @@ StDebugger >> updateCodeHeaderLabel [
 
 { #category : #'updating widgets' }
 StDebugger >> updateCodeTextSegmentDecoratorsIn: aContext forInterval: selectionInterval [
-	self code removeAllTextSegmentDecorations.
+	self flag: #DBG, 'this is temporarily removed for NewTools integration into Pharo 9. We need better support for this.'
+	"self code removeAllTextSegmentDecorations."
 	
 	"This decorates the receiver and the next node with an underline"
-	self code
+	"self code
 		addTextSegmentDecoration:
 			(SpTextPresenterDecorator new
 				underlineColor: Color orange;
 				interval: (aContext currentNode start to: aContext currentNode stop + 1);
-				yourself).
+				yourself)."
 				
 	"This decorates the next executing node"
-	self code
+	"self code
 		addTextSegmentDecoration:
 			(SpTextPresenterDecorator new
 				highlightColor: (Color orange alpha: 0.5);
 				underlineColor: (Color white alpha: 0);
 				interval: (selectionInterval first to: selectionInterval last + 1);
-				yourself).
+				yourself)."
 				
 			"	icon: (self iconNamed: #warning);
 				iconBlock: [ :n | n inspect ];
