@@ -13,7 +13,8 @@ SindarinSkipThroughSelectionCommand class >> defaultDescription [
 SindarinSkipThroughSelectionCommand class >> defaultName [
 	<toolbarExtensionDebugCommand: 50>
 	<codeExtensionDebugCommand: 50>
-	^ 'Skip through instruction (will stop after)'
+	"^ 'Skip through instruction (will stop after)'"
+	^ '[Exp.] Skip through (stop after)'
 ]
 
 { #category : #hooks }

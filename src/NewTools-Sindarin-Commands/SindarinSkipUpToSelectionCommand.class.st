@@ -13,7 +13,7 @@ SindarinSkipUpToSelectionCommand class >> defaultDescription [
 SindarinSkipUpToSelectionCommand class >> defaultName [
 	<toolbarExtensionDebugCommand: 50>
 	<codeExtensionDebugCommand: 50>
-	^ 'Skip up to instruction (will stop before)'
+	^ '[Exp.] Skip up to (stop before)'
 ]
 
 { #category : #hooks }
