@@ -8,11 +8,7 @@ Class {
 BaselineOfNewTools >> baseline: spec [
 	<baseline>
 	spec for: #common do: [
-		self
-			taskit: spec;
-			spec: spec;
-			sindarin: spec.
-
+		self sindarin: spec.
 		spec
 			package: 'NewTools-Core' with: [ spec requires: #('Spec2') ];
 			package: 'NewTools-Morphic';
