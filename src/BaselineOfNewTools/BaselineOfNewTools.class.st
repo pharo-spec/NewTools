@@ -10,11 +10,11 @@ BaselineOfNewTools >> baseline: spec [
 	spec for: #common do: [
 		self sindarin: spec.
 		spec
-			package: 'NewTools-Core' with: [ spec requires: #('Spec2') ];
+			package: 'NewTools-Core';
 			package: 'NewTools-Morphic';
 			package: 'NewTools-Gtk';
 			"inspector"
-			package: 'NewTools-Inspector' with: [ spec requires: #('NewTools-Inspector-Extensions' 'TaskIt') ];
+			package: 'NewTools-Inspector' with: [ spec requires: #('NewTools-Inspector-Extensions') ];
 			package: 'NewTools-Inspector-Extensions' with: [ spec requires: #('NewTools-Core') ];
 			"debugger"
 			package: 'NewTools-Debugger' with: [ spec requires: #('NewTools-Inspector' 'NewTools-Debugger-Commands' 'NewTools-Debugger-Extensions' 'NewTools-SpTextPresenterDecorators') ];			
