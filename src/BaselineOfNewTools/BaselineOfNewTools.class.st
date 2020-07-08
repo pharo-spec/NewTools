@@ -71,7 +71,7 @@ BaselineOfNewTools >> sindarin: spec [
 
 	spec 
 		baseline: 'Sindarin' 
-		with: [ spec repository: 'github://dupriezt/ScriptableDebugger' ]
+		with: [ spec repository: 'github://pharo-spec/ScriptableDebugger' ]
 ]
 
 { #category : #dependencies }
