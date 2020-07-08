@@ -9,6 +9,7 @@ BaselineOfNewTools >> baseline: spec [
 	<baseline>
 	spec for: #common do: [
 		self sindarin: spec.
+
 		spec
 			package: 'NewTools-Core';
 			package: 'NewTools-Morphic';
@@ -79,23 +80,9 @@ BaselineOfNewTools >> baseline: spec [
 { #category : #dependencies }
 BaselineOfNewTools >> sindarin: spec [
 
-	spec 
-		baseline: 'Sindarin' 
-		with: [ spec repository: 'github://pharo-spec/ScriptableDebugger' ]
-]
-
-{ #category : #dependencies }
-BaselineOfNewTools >> spec: spec [
-
-	spec 
-		baseline: 'Spec2'
-		with: [ spec repository: 'github://pharo-spec/Spec:master/src' ]
-]
-
-{ #category : #dependencies }
-BaselineOfNewTools >> taskit: spec [
-
-	spec 
-		baseline: 'TaskIt' 
-		with: [ spec repository: 'github://pharo-contributions/taskit' ]
+	spec baseline: 'Sindarin' with: [ 
+		spec
+			repository: (self packageRepositoryURL 
+				ifEmpty: [ 'github://pharo-spec/ScriptableDebugger' ]);
+			loads: 'Core' ]
 ]
