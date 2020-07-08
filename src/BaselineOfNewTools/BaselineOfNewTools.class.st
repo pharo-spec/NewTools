@@ -48,22 +48,36 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-DebuggerSelector-Tests' with: [ spec requires: #('NewTools-DebuggerSelector') ].
 		
 		spec
-			group: #default with: #(
-				'NewTools-Core' 'NewTools-Morphic' 'NewTools-Gtk'
-				'NewTools-Inspector'
-				'NewTools-Debugger' 'NewTools-Debugger-Tests'
-				'NewTools-Playground'
-				'NewTools-SystemBrowser'
-				'HelpCenter'
-				'NewTools-FlagBrowser' 'NewTools-FlagBrowser-Tests'
+			group: 'Core' with: #('NewTools-Core' 'NewTools-Morphic');
+			group: 'Playground' with: #('Core' 'NewTools-Playground');
+			group: 'Inspector' with: #('Core' 'NewTools-Inspector');
+			group: 'Debugger' with: #(
+				'Core' 
+				'Inspector' 
+				'NewTools-Debugger-Commands'
+				'NewTools-Debugger-Extensions'
+				'NewTools-Debugger' 
 				'NewTools-ObjectCentricBreakpoints'
 				'NewTools-Sindarin-Tools'
-				"'NewTools-Sindarin-ProcessInspector'"
-				'NewTools-Debugger-Breakpoints-Tools');
-			group: #development with: #(default
-				'NewTools-DebuggerSelector' 'NewTools-DebuggerSelector-Tests');
-			group: #broken with: #('NewTools-FileDialog' 'NewTools-FileDialog-Tests')
-	]
+				'NewTools-Sindarin-Commands'
+				'NewTools-Debugger-Breakpoints-Tools'
+				'NewTools-Debugger-Tests');
+			group: 'FlagBrowser' with: #(
+				'Core' 
+				'NewTools-FlagBrowser' 
+				'NewTools-FlagBrowser-Tests');
+			group: #development with: #('default'
+				'NewTools-DebuggerSelector' 
+				'NewTools-DebuggerSelector-Tests');
+			group: #broken with: #(
+				'NewTools-FileDialog' 
+				'NewTools-FileDialog-Tests');
+			group: 'default' with: #(
+				'Core'
+				'Playground'
+				'Inspector'
+				'Debugger'
+				'FlagBrowser') ]
 ]
 
 { #category : #dependencies }
