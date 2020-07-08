@@ -109,6 +109,13 @@ StPlayground class >> defaultTitle [
 	^ 'Playground'
 ]
 
+{ #category : #'class initialization' }
+StPlayground class >> initialize [
+
+	"Make playground active by default"
+	self register
+]
+
 { #category : #'instance creation' }
 StPlayground class >> open [ 
 	<script>
