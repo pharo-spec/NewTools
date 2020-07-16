@@ -50,7 +50,8 @@ StPharoGtkConfiguration >> configureUnix: anApplication [
 	self unixThemeName ifNotNil: [ :aName | self installTheme: aName ].
 	self addProviderFromString: self commonStyle.
 	self addProviderFromString: '
-.code { font: 11pt "Monospace Regular" }
+.code { }
+.stToolbar { font-size: smaller }
 '
 ]
 
