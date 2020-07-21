@@ -59,6 +59,9 @@ StDebuggerActionModelTest >> tearDown [
 	session interruptedContext ifNotNil: [ session terminate ].
 	(StDebuggerUsingSpecSelectorMock lookupSelector: #testMethod) 
 		ifNotNil: [ :method | method removeFromSystem ].
+	(StTestDebuggerProvider lookupSelector:
+		 #buildDebuggerWithMissingClassContext) ifNotNil: [ :method | 
+		method removeFromSystem ].
 	super tearDown
 ]
 
@@ -89,10 +92,7 @@ StDebuggerActionModelTest >> testCreateMissingMethod [
 { #category : #tests }
 StDebuggerActionModelTest >> testExceptionInContextOrNil [
 	|exOrNil|	
-		
-	self flag: #TODO. "Temporary disabled"
-	true ifTrue: [ ^ self skip ].
-		
+	StTestDebuggerProvider compileMissingClassContextBuilder.
 	exOrNil := debugActionModel exceptionInContextOrNil: session interruptedContext. 
 	self assert: exOrNil equals: nil.
 	
@@ -175,11 +175,8 @@ StDebuggerActionModelTest >> testIsInterruptedContextError [
 ]
 
 { #category : #tests }
-StDebuggerActionModelTest >> testIsInterruptedContextMissingClassException [
-
-	self flag: #TODO. "Temporary disabled"
-	true ifTrue: [ ^ self skip ].
-
+StDebuggerActionModelTest >> testIsInterruptedContextMissingClassException [	
+	StTestDebuggerProvider compileMissingClassContextBuilder.
 	self changeSession: StTestDebuggerProvider new debuggerWithMissingClassContext session.
 	self assert: debugActionModel isInterruptedContextMissingClassException
 ]
