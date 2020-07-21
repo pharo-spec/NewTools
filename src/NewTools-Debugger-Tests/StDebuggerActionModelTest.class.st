@@ -55,9 +55,11 @@ StDebuggerActionModelTest >> setUp [
 ]
 
 { #category : #running }
-StDebuggerActionModelTest >> tearDown [ 
-	session interruptedContext ifNotNil:[session terminate].
-	super tearDown 
+StDebuggerActionModelTest >> tearDown [
+	session interruptedContext ifNotNil: [ session terminate ].
+	(StDebuggerUsingSpecSelectorMock lookupSelector: #testMethod) 
+		ifNotNil: [ :method | method removeFromSystem ].
+	super tearDown
 ]
 
 { #category : #tests }
@@ -78,6 +80,10 @@ StDebuggerActionModelTest >> testCopyStackToClipboard [
 		equals:
 			(String
 				streamContents: [ :s | session interruptedContext shortDebugStackOn: s ])
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testCreateMissingMethod [
 ]
 
 { #category : #tests }
@@ -104,8 +110,21 @@ StDebuggerActionModelTest >> testFileOutMethod [
 
 { #category : #tests }
 StDebuggerActionModelTest >> testImplementClassifiedInClassForContext [
-	self skip.
-	self flag: #DBG_TEST
+	|method|
+	method := (StDebuggerUsingSpecSelectorMock lookupSelector: #testMethod).
+	self assert:	method equals: nil.
+	[ StDebuggerUsingSpecSelectorMock new testMethod ]
+		on: Error
+		do: [ :dnu | 
+			debugActionModel
+				implement: dnu message
+				classified: Protocol unclassified
+				inClass: StDebuggerUsingSpecSelectorMock
+				forContext: dnu signalerContext ].
+	method := (StDebuggerUsingSpecSelectorMock lookupSelector: #testMethod).
+	self deny: method	equals: nil.
+	self assert: method methodClass identicalTo: StDebuggerUsingSpecSelectorMock.
+	self assert: method protocol equals: Protocol unclassified
 ]
 
 { #category : #tests }
