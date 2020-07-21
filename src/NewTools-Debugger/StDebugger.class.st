@@ -548,6 +548,7 @@ StDebugger >> copyStackToClipboard [
 { #category : #actions }
 StDebugger >> createMissingClass [
 	| message exception variableNode |
+	self flag: #DBG_MISSINGTEST.
 	message := self interruptedContext tempAt: 1.
 	exception := self interruptedContext tempAt: 2.
 	variableNode := exception variableNode.
@@ -565,6 +566,7 @@ StDebugger >> createMissingClass [
 { #category : #actions }
 StDebugger >> createMissingMethod [
 	| msg chosenClass |
+	self flag: #DBG_MISSINGTEST.
 	msg := self interruptedContext tempAt: 1.
 	"chosenClass := (self
 		requestSuperclassOf: self interruptedContext receiver class
@@ -577,6 +579,7 @@ StDebugger >> createMissingMethod [
 
 { #category : #actions }
 StDebugger >> createMissingMethodFor: aMessage in: aClass [
+	self flag: #DBG_MISSINGTEST.
 	self debuggerActionModel
 		implement: aMessage
 		classified: Protocol unclassified
