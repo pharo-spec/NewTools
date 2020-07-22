@@ -23,3 +23,8 @@ StDebuggerContextInspectorReceiverNode >> label [
 StDebuggerContextInspectorReceiverNode >> rawValue [
 	^ hostObject context home receiver
 ]
+
+{ #category : #accessing }
+StDebuggerContextInspectorReceiverNode >> stringValue [
+	^self rawValue printString
+]
