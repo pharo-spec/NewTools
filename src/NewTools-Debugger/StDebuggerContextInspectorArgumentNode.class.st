@@ -19,7 +19,7 @@ StDebuggerContextInspectorArgumentNode >> computeChildrenFromSourceObject [
 
 { #category : #accessing }
 StDebuggerContextInspectorArgumentNode >> label [
-	^('[arg] ' , argumentName) asText makeAllColor: self colorForArgNode
+	^('[arg] ' , argumentName) "asText makeAllColor: self colorForArgNode"
 ]
 
 { #category : #accessing }
@@ -29,5 +29,5 @@ StDebuggerContextInspectorArgumentNode >> rawValue [
 
 { #category : #accessing }
 StDebuggerContextInspectorArgumentNode >> stringValue [
-	^self rawValue printString asText makeAllColor: self colorForArgNode
+	^self rawValue printString "asText makeAllColor: self colorForArgNode"
 ]

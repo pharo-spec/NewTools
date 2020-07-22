@@ -15,7 +15,7 @@ StDebuggerContextInspectorTempsNode >> computeChildrenFromSourceObject [
 
 { #category : #accessing }
 StDebuggerContextInspectorTempsNode >> label [
-	^ 'temps' asText makeAllColor: self colorForTempNode
+	^ 'temps'" asText makeAllColor: self colorForTempNode"
 ]
 
 { #category : #accessing }
