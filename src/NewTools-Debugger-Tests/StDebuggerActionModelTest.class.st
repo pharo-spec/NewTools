@@ -10,6 +10,46 @@ Class {
 	#category : #'NewTools-Debugger-Tests-Model'
 }
 
+{ #category : #benchmarking }
+StDebuggerActionModelTest class >> benchFilterStack [
+	<script>
+	^self new benchmarkFilterStack inspect
+]
+
+{ #category : #benchmarks }
+StDebuggerActionModelTest >> bench: aBlock [
+	^ aBlock timeToRun asNanoSeconds
+]
+
+{ #category : #benchmarks }
+StDebuggerActionModelTest >> benchmarkFilterStack [
+	| stack1 stack2 beforeResults afterResults |
+	[ self method1: 0 ]
+		on: Halt
+		do: [ :halt | 
+			session := Process new
+				           newDebugSessionNamed: 'profiling'
+				           startedAt: halt signalerContext.
+			stack1 := session stack.	
+			stack2 := stack1 copy.		
+			debugActionModel := StDebuggerActionModel new.
+			debugActionModel session: session.
+			beforeResults := 0.
+			10000 timesRepeat: [ 
+				beforeResults := beforeResults + (self bench: [ 
+					                  stack1 reject: [ :aContext | 
+						                  aContext method hasPragmaNamed:
+							                  #debuggerCompleteToSender ] ]) ].
+			afterResults := 0.
+			10000 timesRepeat: [ 
+				afterResults := afterResults
+				                +
+				                (self bench: [ 
+					                 debugActionModel filterStack: stack2 ]) ] ].
+	^'Old behavior: ', beforeResults printString, ' nanoseconds measured. 
+	New behavior: ', afterResults printString, ' nanoseconds measured.'
+]
+
 { #category : #helper }
 StDebuggerActionModelTest >> changeSession: aDebugSession [
 
@@ -21,6 +61,17 @@ StDebuggerActionModelTest >> changeSession: aDebugSession [
 { #category : #helper }
 StDebuggerActionModelTest >> fileOutMethod: anObject [
 	result := anObject
+]
+
+{ #category : #benchmarks }
+StDebuggerActionModelTest >> method1: i [
+	^self method2: i+1
+]
+
+{ #category : #benchmarks }
+StDebuggerActionModelTest >> method2: i [
+	i = 9999 ifTrue: [ self halt. ^i ].
+	^self method1: i+1
 ]
 
 { #category : #helper }
