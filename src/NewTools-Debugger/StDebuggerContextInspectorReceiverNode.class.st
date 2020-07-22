@@ -16,7 +16,7 @@ StDebuggerContextInspectorReceiverNode >> computeChildrenFromSourceObject [
 
 { #category : #accessing }
 StDebuggerContextInspectorReceiverNode >> label [
-	^ 'self'
+	^ 'self' asText makeAllColor: self colorForSelfNode
 ]
 
 { #category : #accessing }
@@ -26,5 +26,5 @@ StDebuggerContextInspectorReceiverNode >> rawValue [
 
 { #category : #accessing }
 StDebuggerContextInspectorReceiverNode >> stringValue [
-	^self rawValue printString
+	^self rawValue printString asText makeAllColor: self colorForSelfNode
 ]
