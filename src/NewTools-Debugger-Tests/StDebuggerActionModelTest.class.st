@@ -59,16 +59,27 @@ StDebuggerActionModelTest >> changeSession: aDebugSession [
 ]
 
 { #category : #helper }
+StDebuggerActionModelTest >> emptyContextForMethod: aCompiledMethod [
+	^ (Context newForMethod: aCompiledMethod)
+		  initializeWith: nil
+		  stackPtr: nil
+		  method: aCompiledMethod
+		  receiver: nil
+		  sender: nil;
+		  yourself
+]
+
+{ #category : #helper }
 StDebuggerActionModelTest >> fileOutMethod: anObject [
 	result := anObject
 ]
 
-{ #category : #benchmarks }
+{ #category : #helper }
 StDebuggerActionModelTest >> method1: i [
 	^self method2: i+1
 ]
 
-{ #category : #benchmarks }
+{ #category : #helper }
 StDebuggerActionModelTest >> method2: i [
 	i = 9999 ifTrue: [ self halt. ^i ].
 	^self method1: i+1
@@ -77,6 +88,11 @@ StDebuggerActionModelTest >> method2: i [
 { #category : #helper }
 StDebuggerActionModelTest >> methodClass [
 	^self
+]
+
+{ #category : #helper }
+StDebuggerActionModelTest >> methodWithPragma [
+	<debuggerCompleteToSender>
 ]
 
 { #category : #helper }
@@ -157,6 +173,30 @@ StDebuggerActionModelTest >> testExceptionInContextOrNil [
 StDebuggerActionModelTest >> testFileOutMethod [
 	debugActionModel fileOutMethod: self.
 	self assert: result equals: self selector
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testFilterStack [
+
+	|stack filteredStack|
+	stack := OrderedCollection new.
+	"First context references a method with the <debuggerCompleteToSender> pragma"
+	stack add: (self emptyContextForMethod: (self class>>#methodWithPragma)).
+	stack add: (self emptyContextForMethod: (self class>>#method1:)).
+	stack add: (self emptyContextForMethod: (self class>>#method2:)).
+	
+	filteredStack := debugActionModel filterStack: stack copy.
+	
+	self assert: filteredStack size equals: 2.
+	self assert: filteredStack first identicalTo: stack second.
+	self assert: filteredStack second identicalTo: stack third.
+	
+	stack := OrderedCollection new.
+	stack add: (self emptyContextForMethod: (self class>>#method1:)).
+	stack add: (self emptyContextForMethod: (self class>>#method2:)).
+	
+	filteredStack := debugActionModel filterStack: stack copy.
+	self assertCollection: filteredStack equals: stack 
 ]
 
 { #category : #tests }
