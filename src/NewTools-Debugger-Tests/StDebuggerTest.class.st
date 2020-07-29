@@ -406,6 +406,28 @@ StDebuggerTest >> testStackTableAfterStepIn [
 ]
 
 { #category : #'tests - stack table' }
+StDebuggerTest >> testStackTableElementsPrinting [
+	| columns classColumn methodColumn senderColumn method block context |
+	self debugger session: session.
+	columns := self initializedDebugger stackTable columns.
+	classColumn := columns first.
+	methodColumn := columns second.
+	senderColumn := columns third.
+	method := self class >> #testStackTableElementsPrinting.
+	block := [ :a | a ].
+	
+	context := (Context newForMethod: method) setSender: self receiver: self method: method arguments: #(  ).
+	self assert: (classColumn evaluation value: context) equals: self class.
+	self assert: (methodColumn evaluation value: context) equals: method selector.
+	self assert: (senderColumn evaluation value: context) equals: self stDisplayString.
+	
+	context := (Context newForMethod: method) setSender: self receiver: self method: block method arguments: #(  ).
+	self assert: (classColumn evaluation value: context) equals: self class.
+	self assert: (methodColumn evaluation value: context) equals: block sourceNode sourceCode.
+	self assert: (senderColumn evaluation value: context) equals: self stDisplayString.
+]
+
+{ #category : #'tests - stack table' }
 StDebuggerTest >> testStackTableInitialization [
 	self assert: self debugger stackTable isNil
 ]
