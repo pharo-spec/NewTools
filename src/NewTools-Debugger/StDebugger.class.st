@@ -542,7 +542,7 @@ StDebugger >> context [
 
 { #category : #actions }
 StDebugger >> copyStackToClipboard [
-	self debuggerActionModel peelToFirstLike: self currentContext
+	self debuggerActionModel copyStackToClipboard
 ]
 
 { #category : #actions }

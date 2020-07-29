@@ -162,6 +162,16 @@ StDebuggerTest >> testContextUnchangedAfterStepOver [
 	self assert: dbg inspector inspectedObject ==  currentContext
 ]
 
+{ #category : #'tests - actions' }
+StDebuggerTest >> testCopyStackToClipboard [
+	debugger := self debuggerOn: session.
+	debugger copyStackToClipboard.
+	self
+		assert: Clipboard clipboardText string
+		equals: (String streamContents: [ :s | 
+				 session interruptedContext shortDebugStackOn: s ])
+]
+
 { #category : #'tests - initialization' }
 StDebuggerTest >> testDebuggerApplication [
 	self
