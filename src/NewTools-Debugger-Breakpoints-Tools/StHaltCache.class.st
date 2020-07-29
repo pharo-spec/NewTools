@@ -14,12 +14,15 @@ By default, the cache does not lookup halts in all the system's methods. This ca
 Class {
 	#name : #StHaltCache,
 	#superclass : #Object,
+	#traits : 'TObservable',
+	#classTraits : 'TObservable classTrait',
 	#instVars : [
-		'methodsWithHalts',
-		'scanAllSystem'
+		'#isActive => ObservableSlot',
+		'#methodsWithHalts',
+		'#scanAllSystem'
 	],
 	#classVars : [
-		'DefaultCache'
+		'#DefaultCache'
 	],
 	#category : #'NewTools-Debugger-Breakpoints-Tools-Model'
 }
@@ -99,7 +102,18 @@ StHaltCache >> cacheNode: aNode forSelector: aMethodSelector [
 StHaltCache >> initialize [
 	methodsWithHalts := Dictionary new.
 	self buildCache.
-	self registerSubscriptions
+	self class initializeSlots: self.
+	self property: #isActive whenChangedDo: [ self updateSubscriptions ]
+]
+
+{ #category : #accessing }
+StHaltCache >> isActive [
+	^ isActive ifNil: [ isActive := false ]
+]
+
+{ #category : #accessing }
+StHaltCache >> isActive: aBoolean [
+	isActive := aBoolean
 ]
 
 { #category : #notifying }
@@ -185,4 +199,10 @@ StHaltCache >> uncacheMethod: aMethodSelector [
 		ifFalse: [ ^ self ].
 	methodsWithHalts removeKey: aMethodSelector.
 	self cacheChanged
+]
+
+{ #category : #'system subscription' }
+StHaltCache >> updateSubscriptions [
+	self isActive ifTrue: [ ^ self registerSubscriptions ].
+	^ self removeSubscriptions
 ]
