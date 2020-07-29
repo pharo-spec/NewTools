@@ -39,12 +39,23 @@ StHaltCache class >> haltCacheSettingsOn: aBuilder [
 		label: 'Halt Cache';
 		parent: #debugging;
 		description: 'Halt cache settings';
-		with: [ (aBuilder setting: #scanAllSystem)
-				label: 'Perform a system-wide lookup to find all halts and breakpoints';
+		with: [ 
+			(aBuilder setting: #scanAllSystem)
+				label:
+					'Perform a system-wide lookup to find all halts and breakpoints';
 				target: self defaultCache;
 				default: false;
 				description:
-					'If true, then the halt cache will check for halts in all methods from the system. This can be slow for large systems (with lots of methods).' ]
+					'If true, then the halt cache will check for halts in all methods from the system. 
+This can be slow for large systems (with lots of methods).' ];
+		with: [ 
+			(aBuilder setting: #isActive)
+				label: 'Subscribe to method changes';
+				target: self defaultCache;
+				default: false;
+				description:
+					'Activates or deactivate system subscriptions to method changes. 
+If deactivated, the list of halts will not be updated in the debugging tools browsers.' ]
 ]
 
 { #category : #'accessing - cache' }
