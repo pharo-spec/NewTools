@@ -8,9 +8,10 @@ DebugSession >> browse: aContext [
 
 { #category : #'*NewTools-Debugger-Extensions' }
 DebugSession >> isInterruptedContextAnAssertionFailure [
-	| exceptionClass |
-	exceptionClass := (self interruptedContext temporaryVariableNamed:
-		                   #exception) ifNil: [ ^ false ].
+	| variable exceptionClass |
+	variable := (self interruptedContext temporaryVariableNamed:
+		             #exception) ifNil: [ ^ false ].
+	exceptionClass := variable readInContext: self interruptedContext.
 	self flag:
 		'Will be simplified when debug sessions will know their exception'.
 	^ exceptionClass notNil and: [ 
