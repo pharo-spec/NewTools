@@ -1143,7 +1143,8 @@ StDebugger >> updateInspectorFromContext: aContext [
 	inspector updateWith: (StDebuggerContext
 			 context: aContext
 			 session: self session
-			 debugger: self)
+			 debugger: self).
+	inspector getRawInspectorPresenterOrNil ifNotNil: [:p| p update].
 ]
 
 { #category : #'updating actions' }
@@ -1172,6 +1173,7 @@ StDebugger >> updateStep [
 	self updateExtensionsFrom: self session.
 	self updateTitle.
 	self updateToolbarDebugActions.
+	inspector getRawInspectorPresenterOrNil ifNotNil: [:p| p update].
 ]
 
 { #category : #'updating actions' }
