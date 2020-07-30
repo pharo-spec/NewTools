@@ -1138,13 +1138,12 @@ StDebugger >> updateExtensionsFrom: newSession [
 StDebugger >> updateInspectorFromContext: aContext [
 	inspector
 		updateLayoutForContexts: self session interruptedContext
-		isAssertionFailure: self debuggerActionModel isInterruptedContextAnAssertEqualsFailure.
-	inspector
-		updateWith:
-			(StDebuggerContext
-				context: aContext
-				session: self session
-				debugger: self)
+		isAssertionFailure:
+		self debuggerActionModel isInterruptedContextAnAssertEqualsFailure.
+	inspector updateWith: (StDebuggerContext
+			 context: aContext
+			 session: self session
+			 debugger: self)
 ]
 
 { #category : #'updating actions' }

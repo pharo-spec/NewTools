@@ -27,6 +27,7 @@ StDebuggerContext class >> context: aContext session: aDebugSession debugger: so
 { #category : #accessing }
 StDebuggerContext >> allInspectorNodes [
 	self flag: 'Removing the context from the inspected variables in the debugger. Should be added back as a debugger extension.'.
+
 	^ (self argumentsNodes)  addAll: ({	
 	(StDebuggerContextInspectorReceiverNode hostObject: self).
 	(StDebuggerContextInspectorTempsNode hostObject: self).
