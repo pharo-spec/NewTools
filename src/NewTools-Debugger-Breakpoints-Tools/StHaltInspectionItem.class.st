@@ -1,0 +1,84 @@
+"
+I am a data holder for halts and breakpoints to be displayed in StObjectBreakpointInspection tables.
+"
+Class {
+	#name : #StHaltInspectionItem,
+	#superclass : #Object,
+	#instVars : [
+		'node',
+		'type',
+		'interval',
+		'target',
+		'displayEntity'
+	],
+	#category : #'NewTools-Debugger-Breakpoints-Tools-Presenters'
+}
+
+{ #category : #'as yet unclassified' }
+StHaltInspectionItem class >> forBreakpoint: aBreakpoint [ 
+	^StBreakpointInspectionItem new forBreakpoint: aBreakpoint 
+]
+
+{ #category : #'as yet unclassified' }
+StHaltInspectionItem class >> forHalt: aRBMessageNode [ 
+	^self new forHalt: aRBMessageNode
+]
+
+{ #category : #accessing }
+StHaltInspectionItem >> displayEntity [
+	^ displayEntity
+]
+
+{ #category : #initialization }
+StHaltInspectionItem >> forHalt: aRBMessageNode [ 
+	node := aRBMessageNode.
+	type := Halt name asString.
+	interval := node start to: node stop.
+	target := aRBMessageNode methodNode methodClass.
+	displayEntity := aRBMessageNode methodNode
+]
+
+{ #category : #accessing }
+StHaltInspectionItem >> interval [
+	^ interval
+]
+
+{ #category : #accessing }
+StHaltInspectionItem >> interval: anObject [
+	interval := anObject
+]
+
+{ #category : #accessing }
+StHaltInspectionItem >> node [
+	^ node
+]
+
+{ #category : #accessing }
+StHaltInspectionItem >> node: anObject [
+	node := anObject
+]
+
+{ #category : #printing }
+StHaltInspectionItem >> printTarget [
+	^displayEntity sourceCode
+]
+
+{ #category : #accessing }
+StHaltInspectionItem >> target [
+	^ target
+]
+
+{ #category : #accessing }
+StHaltInspectionItem >> target: anObject [
+	target := anObject
+]
+
+{ #category : #accessing }
+StHaltInspectionItem >> type [
+	^ type
+]
+
+{ #category : #accessing }
+StHaltInspectionItem >> type: anObject [
+	type := anObject
+]
