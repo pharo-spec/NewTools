@@ -30,8 +30,9 @@ StDebuggerBreakpointInspection >> breakPointsForModel [
 
 { #category : #private }
 StDebuggerBreakpointInspection >> buildHaltData [
-	^ StHaltCache defaultCache methodsWithHalts values flattened
-		collect: [ :node | self haltDataFor: node ]
+
+	^ StHaltCache defaultCache methodsWithHalts values flattened 
+		  collect: [ :node | StHaltInspectionItem forHalt: node ]
 ]
 
 { #category : #initialization }

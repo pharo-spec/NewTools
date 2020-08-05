@@ -25,7 +25,7 @@ StObjectBreakpointInspection class >> defaultSpec [
 { #category : #private }
 StObjectBreakpointInspection >> breakPointsForModel [
 	| methodsWithBreakpoint breakpoints |
-	self flag: #DBG_FIXME.
+	self flag: #DBG_FIX_TEST.
 	breakpoints := OrderedCollection new.
 	methodsWithBreakpoint := model class allMethods
 		select: [ :m | m hasBreakpoint ].
@@ -48,26 +48,6 @@ StObjectBreakpointInspection >> breakPointsForModel [
 						and: [ b targetClassOrMethod == self model class
 								and: [ b isObjectCentric not ] ] ]).
 	^ breakpoints asSet
-]
-
-{ #category : #private }
-StObjectBreakpointInspection >> breakpointDataFor: aBreakpoint [
-	"Returns a dictionary containing breakpoint data for the given breakpoint."
-
-	^ aBreakpoint link nodes
-		collect: [ :node | 
-			| data |
-			data := Dictionary new.
-			data at: #node put: node.
-			data at: #type put: 'Breakpoint'.
-			data at: #interval put: (node start to: node stop).
-			data at: #breakpoint put: aBreakpoint.
-			data at: #target
-				put:
-					(aBreakpoint isObjectCentric
-						ifTrue: [ 'self' ]
-						ifFalse: [ node methodNode methodClass name ]).
-			data ]
 ]
 
 { #category : #private }
@@ -98,7 +78,7 @@ StObjectBreakpointInspection >> buildHaltAndBreakpointTable [
 	"List of methods in which a breakpoint is installed"
 
 	methodsWithBreakpoints := self newTable.
-	methodsWithBreakpoints
+	methodsWithBreakpoints 
 		"addColumn:
 			((SpCheckBoxTableColumn
 				title: ' '
@@ -180,19 +160,6 @@ StObjectBreakpointInspection >> enableHaltOrBreakpointFor: breakpointData [
 		enableHaltOrBreakpointFor: (breakpointData at: #node)
 ]
 
-{ #category : #private }
-StObjectBreakpointInspection >> haltDataFor: aNode [
-	"Returns a dictionary containing halt data for the given halt node."
-
-	| data |
-	data := Dictionary new.
-	data at: #node put: aNode.
-	data at: #type put: 'Halt'.
-	data at: #interval put: (aNode start to: aNode stop).
-	data at: #target put: aNode methodNode methodClass name.
-	^ data
-]
-
 { #category : #breakpoints }
 StObjectBreakpointInspection >> haltsAndBreakpoinsEnabledFor: breakpointData [
 	(self isBreakpointObjectCentric: breakpointData)
@@ -200,11 +167,6 @@ StObjectBreakpointInspection >> haltsAndBreakpoinsEnabledFor: breakpointData [
 				isObjectCentricBreakpointEnabled: (breakpointData at: #breakpoint) ].
 	^ breakpointController
 		areHaltsAndBreakpoinsEnabledFor: (breakpointData at: #node)
-]
-
-{ #category : #private }
-StObjectBreakpointInspection >> haltsSelectors [
-	^#( halt halt: haltIf: haltIfNil haltOnCount: haltOnce)
 ]
 
 { #category : #initialization }
@@ -257,6 +219,7 @@ StObjectBreakpointInspection >> methodsWithBreakpoints [
 { #category : #private }
 StObjectBreakpointInspection >> objectCentricBreakpointsForModel [
 	| methodsWithBreakpoint | 
+	self flag: #DBG_FIX_TEST.
 	methodsWithBreakpoint := model class allMethods
 		select: [ :m | m hasBreakpoint ].
 	^ methodsWithBreakpoint
@@ -283,6 +246,7 @@ StObjectBreakpointInspection >> updateSourceCodeBehaviorFor: aHaltOrBreakpointIn
 { #category : #private }
 StObjectBreakpointInspection >> variableBreakpointsForModel [
 	| methodsWithBreakpoint | 
+	self flag: #DBG_FIX_TEST.
 	methodsWithBreakpoint := model class allMethods
 		select: [ :m | m hasBreakpoint ].
 	^ methodsWithBreakpoint
