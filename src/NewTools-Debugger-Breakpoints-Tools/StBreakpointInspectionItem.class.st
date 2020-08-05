@@ -21,7 +21,7 @@ StBreakpointInspectionItem >> buildBreakpointItemFor: aBreakpoint [
 	node := aBreakpoint node.
 	interval := node start to: node stop.
 	type := Break name asString.
-	target := aBreakpoint isObjectCentric
+	scope := aBreakpoint isObjectCentric
 		          ifTrue: [ aBreakpoint targetInstance ]
 		          ifFalse: [ node methodNode methodClass ].
 	displayEntity := aBreakpoint
@@ -31,7 +31,7 @@ StBreakpointInspectionItem >> buildBreakpointItemFor: aBreakpoint [
 StBreakpointInspectionItem >> buildVariableBreakpointItemFor: aVariableBreakpoint [
 
 	type := Break name asString.
-	target := aVariableBreakpoint isObjectCentric
+	scope := aVariableBreakpoint isObjectCentric
 		          ifTrue: [ aVariableBreakpoint targetInstance ]
 		          ifFalse: [ aVariableBreakpoint targetClassOrMethod ].
 	displayEntity := aVariableBreakpoint
@@ -44,6 +44,18 @@ StBreakpointInspectionItem >> forBreakpoint: aBreakpoint [
 ]
 
 { #category : #printing }
-StBreakpointInspectionItem >> printTarget [
-	^displayEntity printForBreakpointInspection
+StBreakpointInspectionItem >> printContents [
+	^displayEntity printContentsForBreakpointInspection
+]
+
+{ #category : #printing }
+StBreakpointInspectionItem >> printEntity [
+	self flag: #TEST.
+	^displayEntity printTargetForBreakpointInspection
+]
+
+{ #category : #printing }
+StBreakpointInspectionItem >> printScope [
+	breakpoint isObjectCentric ifTrue:[^'self'].
+	^ scope printString
 ]

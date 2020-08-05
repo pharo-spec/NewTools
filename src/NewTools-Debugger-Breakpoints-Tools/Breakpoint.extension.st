@@ -6,6 +6,11 @@ Breakpoint >> asBreakpointInspectionItemIn: aStBreakpointInspectionItem [
 ]
 
 { #category : #'*NewTools-Debugger-Breakpoints-Tools' }
-Breakpoint >> printForBreakpointInspection [
+Breakpoint >> printContentsForBreakpointInspection [
 	^node methodNode sourceCode
+]
+
+{ #category : #'*NewTools-Debugger-Breakpoints-Tools' }
+Breakpoint >> printTargetForBreakpointInspection [
+	^node methodNode method printString
 ]

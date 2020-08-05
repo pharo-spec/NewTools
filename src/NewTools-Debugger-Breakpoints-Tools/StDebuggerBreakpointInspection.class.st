@@ -40,7 +40,7 @@ StDebuggerBreakpointInspection >> initializePresenters [
 ]
 
 { #category : #presenters }
-StDebuggerBreakpointInspection >> updateSourceCodeBehaviorFor: node [
-
-	breakpointsInSourceCode beForBehavior: node methodNode methodClass
+StDebuggerBreakpointInspection >> updateSourceCodeBehaviorFor: aHaltOrBreakpointInspectionItem [
+	self flag: 'todo'"
+	breakpointsInSourceCode beForBehavior: node methodNode methodClass"
 ]

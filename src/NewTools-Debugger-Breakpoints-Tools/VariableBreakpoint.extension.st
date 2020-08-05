@@ -6,7 +6,7 @@ VariableBreakpoint >> asBreakpointInspectionItemIn: aStBreakpointInspectionItem 
 ]
 
 { #category : #'*NewTools-Debugger-Breakpoints-Tools' }
-VariableBreakpoint >> printForBreakpointInspection [
+VariableBreakpoint >> printContentsForBreakpointInspection [
 
 	| str |
 	self flag: #DBG.
@@ -33,7 +33,28 @@ VariableBreakpoint >> printForBreakpointInspection [
 	str space.
 	str << (targetClassOrMethod isCompiledMethod
 		 ifTrue: [ 'method.' ]
-		 ifFalse: [ 'class and its super classes.' ]).
+		 ifFalse: [ 'instances and its super classes.' ]).
 
+	^ str contents
+]
+
+{ #category : #'*NewTools-Debugger-Breakpoints-Tools' }
+VariableBreakpoint >> printTargetForBreakpointInspection [
+
+	| str |
+	str := WriteStream on: String new.
+	str << accessStrategy asString.
+	str space.
+	str << 'accesses to'.
+	str space.
+	str << (targetClassOrMethod isCompiledMethod
+		 ifTrue: [ 'temp' ]
+		 ifFalse: [ 'inst' ]).
+	str space.
+	str << 'var(s):'.
+	str space.
+	targetVariableNames do: [ :name | 
+		str nextPutAll: name.
+		str space ].
 	^ str contents
 ]

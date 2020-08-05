@@ -8,8 +8,8 @@ Class {
 		'node',
 		'type',
 		'interval',
-		'target',
-		'displayEntity'
+		'displayEntity',
+		'scope'
 	],
 	#category : #'NewTools-Debugger-Breakpoints-Tools-Presenters'
 }
@@ -34,7 +34,7 @@ StHaltInspectionItem >> forHalt: aRBMessageNode [
 	node := aRBMessageNode.
 	type := Halt name asString.
 	interval := node start to: node stop.
-	target := aRBMessageNode methodNode methodClass.
+	scope := aRBMessageNode methodNode methodClass.
 	displayEntity := aRBMessageNode methodNode
 ]
 
@@ -59,18 +59,30 @@ StHaltInspectionItem >> node: anObject [
 ]
 
 { #category : #printing }
-StHaltInspectionItem >> printTarget [
+StHaltInspectionItem >> printContents [
 	^displayEntity sourceCode
 ]
 
-{ #category : #accessing }
-StHaltInspectionItem >> target [
-	^ target
+{ #category : #printing }
+StHaltInspectionItem >> printEntity [
+	self flag: #TEST.
+	^displayEntity method printString
+]
+
+{ #category : #printing }
+StHaltInspectionItem >> printScope [
+
+	^ scope printString
 ]
 
 { #category : #accessing }
-StHaltInspectionItem >> target: anObject [
-	target := anObject
+StHaltInspectionItem >> scope [
+	^ scope
+]
+
+{ #category : #accessing }
+StHaltInspectionItem >> scope: anObject [
+	scope := anObject
 ]
 
 { #category : #accessing }

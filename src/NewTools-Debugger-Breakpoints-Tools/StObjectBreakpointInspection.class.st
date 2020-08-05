@@ -25,6 +25,7 @@ StObjectBreakpointInspection class >> defaultSpec [
 { #category : #private }
 StObjectBreakpointInspection >> breakPointsForModel [
 	| methodsWithBreakpoint breakpoints |
+	self flag: #DBG_FIXME.
 	breakpoints := OrderedCollection new.
 	methodsWithBreakpoint := model class allMethods
 		select: [ :m | m hasBreakpoint ].
@@ -46,7 +47,7 @@ StObjectBreakpointInspection >> breakPointsForModel [
 					b isVariableBreakpoint
 						and: [ b targetClassOrMethod == self model class
 								and: [ b isObjectCentric not ] ] ]).
-	^ breakpoints
+	^ breakpoints asSet
 ]
 
 { #category : #private }
@@ -72,21 +73,21 @@ StObjectBreakpointInspection >> breakpointDataFor: aBreakpoint [
 { #category : #private }
 StObjectBreakpointInspection >> buildBreakpointData [
 	^ (self breakPointsForModel
-		flatCollect: [ :b | self breakpointDataFor: b ])
-		reject: [ :data | 
+		collect: [ :b | StBreakpointInspectionItem forBreakpoint: b ])
+	"	reject: [ :data | 
 			| node breakpoint |
 			node := data at: #node.
 			breakpoint := data at: #breakpoint.
 			node methodNode methodClass isAnonymous
 				and: [ breakpoint isObjectCentric not
-						or: [ breakpoint isVariableBreakpoint ] ] ]
+						or: [ breakpoint isVariableBreakpoint ] ] ]"
 ]
 
 { #category : #private }
 StObjectBreakpointInspection >> buildHaltAndBreakpointData [
 	| breakpointData |
-	breakpointData := SortedCollection
-		sortBlock: [ :a :b | (a at: #node) methodNode selector < (b at: #node) methodNode selector ].
+	breakpointData := OrderedCollection new."SortedCollection
+		sortBlock: [ :a :b | (a at: #node) methodNode selector < (b at: #node) methodNode selector ]."
 	breakpointData addAll: self buildBreakpointData.
 	breakpointData addAll: self buildHaltData.
 	^ breakpointData
@@ -98,48 +99,41 @@ StObjectBreakpointInspection >> buildHaltAndBreakpointTable [
 
 	methodsWithBreakpoints := self newTable.
 	methodsWithBreakpoints
-		addColumn:
+		"addColumn:
 			((SpCheckBoxTableColumn
 				title: ' '
 				evaluated: [ :item | self haltsAndBreakpoinsEnabledFor: item ])
 				onActivation: [ :item | self enableHaltOrBreakpointFor: item ];
 				onDeactivation: [ :item | self disableHaltOrBreakpointFor: item ];
 				width: 20;
-				yourself);
+				yourself);"
 		addColumn:
 			((SpStringTableColumn
 				title: 'Type'
-				evaluated: [ :item | item at: #type ])
+				evaluated: [ :item | item type ])
 				width: 65;
 				yourself);
 		addColumn:
 			((SpStringTableColumn
-				title: 'Target'
-				evaluated: [ :item | item at: #target ])
+				title: 'Scope'
+				evaluated: [ :item | item printScope])
 				width: 120;
 				yourself);
 		addColumn:
 			(SpStringTableColumn
-				title: 'Method'
-				evaluated: [ :item | 
-					| node class name |
-					node := item at: #node.
-					class := node methodNode methodClass.
-					name := class isAnonymous
-						ifTrue: [ class superclass name ]
-						ifFalse: [ class name ].
-					name , '>>' , node methodNode selector ]).
+				title: 'Target'
+				evaluated: [ :item | item printEntity]).
 	methodsWithBreakpoints
 		contextMenu: self rootCommandsGroup asMenuPresenter
 ]
 
 { #category : #private }
 StObjectBreakpointInspection >> buildHaltData [
-	^ (model class allMethods
-		flatCollect: [ :m | 
-			StHaltCache defaultCache
-				nodeCacheForSelector: m compiledMethod printString ])
-		collect: [ :node | self haltDataFor: node ]
+
+	^ (model class allMethods flatCollect: [ :m | 
+		   StHaltCache defaultCache nodeCacheForSelector:
+			   m compiledMethod printString ]) collect: [ :node | 
+		  StHaltInspectionItem forHalt: node ]
 ]
 
 { #category : #presenters }
@@ -159,12 +153,13 @@ StObjectBreakpointInspection >> buildTableData [
 StObjectBreakpointInspection >> configureSourceCodeUpdate [
 
 	methodsWithBreakpoints whenSelectionChangedDo: [ :selection | 
-		selection isEmpty ifFalse: [ | selectedItem node |
+		selection isEmpty ifFalse: [ 
+			| selectedItem |
 			selectedItem := selection selectedItem.
-			node := selectedItem at: #node.
-			breakpointsInSourceCode text: node methodNode source.
-			breakpointsInSourceCode selectionInterval: (selectedItem at: #interval).
-			self updateSourceCodeBehaviorFor: node ] ]
+			breakpointsInSourceCode text: selectedItem printContents.
+			selectedItem interval ifNotNil: [ 
+				breakpointsInSourceCode selectionInterval: selectedItem interval ].
+			self updateSourceCodeBehaviorFor: selectedItem ] ]
 ]
 
 { #category : #breakpoints }
@@ -280,9 +275,9 @@ StObjectBreakpointInspection >> unsubscribeFromCacheChanges [
 ]
 
 { #category : #presenters }
-StObjectBreakpointInspection >> updateSourceCodeBehaviorFor: node [
-
-	breakpointsInSourceCode beForBehavior: model class
+StObjectBreakpointInspection >> updateSourceCodeBehaviorFor: aHaltOrBreakpointInspectionItem [
+	self flag: 'todo'"
+	breakpointsInSourceCode beForBehavior: model class"
 ]
 
 { #category : #private }
