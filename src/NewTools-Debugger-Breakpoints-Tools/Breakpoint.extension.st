@@ -6,6 +6,14 @@ Breakpoint >> asBreakpointInspectionItemIn: aStBreakpointInspectionItem [
 ]
 
 { #category : #'*NewTools-Debugger-Breakpoints-Tools' }
+Breakpoint >> isForModel: anObject [
+
+	self isObjectCentric ifTrue: [ ^ targetInstance == anObject ].
+	^ self isObjectCentric not and: [ 
+		  node methodNode methodClass = anObject class ]
+]
+
+{ #category : #'*NewTools-Debugger-Breakpoints-Tools' }
 Breakpoint >> printContentsForBreakpointInspection [
 	^node methodNode sourceCode
 ]

@@ -6,6 +6,16 @@ VariableBreakpoint >> asBreakpointInspectionItemIn: aStBreakpointInspectionItem 
 ]
 
 { #category : #'*NewTools-Debugger-Breakpoints-Tools' }
+VariableBreakpoint >> isForModel: anObject [
+
+	self isObjectCentric ifTrue: [ ^ targetInstance == anObject ].
+	^ (targetClassOrMethod isClass and: [ 
+		   targetClassOrMethod = anObject class ]) or: [ 
+		  targetClassOrMethod isCompiledMethod and: [ 
+			  targetClassOrMethod methodClass = anObject class ] ]
+]
+
+{ #category : #'*NewTools-Debugger-Breakpoints-Tools' }
 VariableBreakpoint >> printContentsForBreakpointInspection [
 
 	| str |

@@ -24,7 +24,8 @@ StObjectBreakpointInspection class >> defaultSpec [
 
 { #category : #private }
 StObjectBreakpointInspection >> breakPointsForModel [
-	| methodsWithBreakpoint breakpoints |
+	^self breakpointsForModel 
+	"| methodsWithBreakpoint breakpoints |
 	self flag: #DBG_FIX_TEST.
 	breakpoints := OrderedCollection new.
 	methodsWithBreakpoint := model class allMethods
@@ -47,7 +48,13 @@ StObjectBreakpointInspection >> breakPointsForModel [
 					b isVariableBreakpoint
 						and: [ b targetClassOrMethod == self model class
 								and: [ b isObjectCentric not ] ] ]).
-	^ breakpoints asSet
+	^ breakpoints asSet"
+]
+
+{ #category : #private }
+StObjectBreakpointInspection >> breakpointsForModel [
+
+	^ Breakpoint all select: [ :bp | bp isForModel: model ]
 ]
 
 { #category : #private }
