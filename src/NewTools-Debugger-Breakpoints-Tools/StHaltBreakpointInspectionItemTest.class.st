@@ -52,7 +52,7 @@ StHaltBreakpointInspectionItemTest >> testNewBreakpointItem [
 	self assert: item breakpoint identicalTo: bp. 
 	self assert: item node identicalTo: bp node.
 	self assert: item interval equals: (bp node start to: bp node stop).
-	self assert: item target identicalTo: bp node methodNode method methodClass.
+	self assert: item scope identicalTo: bp node methodNode method methodClass.
 	self assert: item displayEntity identicalTo: bp.
 	self assert: item type equals: Break printString
 ]
@@ -63,7 +63,7 @@ StHaltBreakpointInspectionItemTest >> testNewHaltItem [
 	item := StHaltInspectionItem forHalt: self haltNode.
 	self assert: item node identicalTo: self haltNode.
 	self assert: item interval equals: (self haltNode start to: self haltNode stop).
-	self assert: item target identicalTo: self haltNode methodNode method methodClass.
+	self assert: item scope identicalTo: self haltNode methodNode method methodClass.
 	self assert: item displayEntity identicalTo: self haltNode methodNode.
 	self assert: item type equals: Halt name asString
 ]
@@ -74,7 +74,7 @@ StHaltBreakpointInspectionItemTest >> testNewObjectCentricBreakpointItem [
 	bp := self breakpoint.
 	bp scopeTo: self.
 	item := StHaltInspectionItem forBreakpoint: bp.
-	self assert: item target identicalTo: self
+	self assert: item scope identicalTo: self
 ]
 
 { #category : #'tests - initialization' }
@@ -83,7 +83,7 @@ StHaltBreakpointInspectionItemTest >> testNewObjectCentricVariableBreakpointItem
 	bp := self variableBreakpoint.
 	bp scopeTo: self.
 	item := StHaltInspectionItem forBreakpoint: bp.
-	self assert: item target identicalTo: self
+	self assert: item scope identicalTo: self
 ]
 
 { #category : #'tests - initialization' }
@@ -94,7 +94,7 @@ StHaltBreakpointInspectionItemTest >> testNewVariableBreakpointItem [
 	self assert: item breakpoint identicalTo: bp. 
 	self assert: item node isNil.
 	self assert: item interval isNil.
-	self assert: item target identicalTo: bp targetClassOrMethod.
+	self assert: item scope identicalTo: bp targetClassOrMethod.
 	self assertCollection: item displayEntity equals: bp.
 	self assert: item type equals: Break printString
 ]
@@ -105,7 +105,15 @@ StHaltBreakpointInspectionItemTest >> testPrintBreakpointItem [
 	|bp item|
 	bp := self breakpoint.
 	item := StHaltInspectionItem forBreakpoint: bp.
-	self assert: item printTarget equals: bp node methodNode sourceCode
+	self assert: item printContents equals: bp node methodNode sourceCode.
+	self assert: item printEntity equals: bp printTargetForBreakpointInspection.
+	self assert: item printScope equals: bp node methodNode methodClass printString.
+	
+	self flag: 'This is not super nice...'.
+	"If the breakpoint is scoped to an object, it should show 'self' in that object's inspector.
+	This has no meaning outside the inspected object."	
+	bp scopeTo: Object new.
+	self assert: item printScope equals: 'self'.
 ]
 
 { #category : #'tests - printing' }
@@ -113,7 +121,9 @@ StHaltBreakpointInspectionItemTest >> testPrintHaltItem [
 
 	|item|
 	item := StHaltInspectionItem forHalt: self haltNode.
-	self assert: item printTarget equals: self haltNode methodNode sourceCode
+	self assert: item printContents equals: self haltNode methodNode sourceCode.
+	self assert: item printEntity equals: self haltNode methodNode method printString.
+	self assert: item printScope equals: self haltNode methodNode methodClass printString
 ]
 
 { #category : #'tests - printing' }
@@ -122,7 +132,15 @@ StHaltBreakpointInspectionItemTest >> testPrintVariableBreakpointItem [
 	| bp item |
 	bp := self variableBreakpoint.
 	item := StHaltInspectionItem forBreakpoint: bp.
-	self assert: item printTarget equals: bp printForBreakpointInspection
+	self assert: item printContents equals: bp printContentsForBreakpointInspection.
+	self assert: item printEntity equals: bp printTargetForBreakpointInspection.
+	self assert: item printScope equals: bp targetClassOrMethod printString.
+	
+	self flag: 'This is not super nice...'.
+	"If the breakpoint is scoped to an object, it should show 'self' in that object's inspector.
+	This has no meaning outside the inspected object."	
+	bp scopeTo: Object new.
+	self assert: item printScope equals: 'self'.
 ]
 
 { #category : #helpers }
