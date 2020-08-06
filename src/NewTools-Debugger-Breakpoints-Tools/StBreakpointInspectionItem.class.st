@@ -37,6 +37,14 @@ StBreakpointInspectionItem >> buildVariableBreakpointItemFor: aVariableBreakpoin
 	displayEntity := aVariableBreakpoint
 ]
 
+{ #category : #accessing }
+StBreakpointInspectionItem >> entityToBrowse [
+
+	breakpoint isVariableBreakpoint ifTrue: [ 
+		^ breakpoint targetClassOrMethod ].
+	^ breakpoint node methodNode method
+]
+
 { #category : #initialization }
 StBreakpointInspectionItem >> forBreakpoint: aBreakpoint [ 
 	breakpoint := aBreakpoint.
@@ -57,6 +65,12 @@ StBreakpointInspectionItem >> printEntity [
 StBreakpointInspectionItem >> printScope [
 	breakpoint isObjectCentric ifTrue:[^'self'].
 	^ scope printString
+]
+
+{ #category : #updating }
+StBreakpointInspectionItem >> removeInPresenterContext: aStObjectBreakpointInspection [ 
+	breakpoint remove.
+	aStObjectBreakpointInspection update
 ]
 
 { #category : #updating }

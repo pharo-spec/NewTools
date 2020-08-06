@@ -34,14 +34,3 @@ StDebuggerBreakpointInspection >> buildHaltData [
 	^ StHaltCache defaultCache methodsWithHalts values flattened 
 		  collect: [ :node | StHaltInspectionItem forHalt: node ]
 ]
-
-{ #category : #initialization }
-StDebuggerBreakpointInspection >> initializePresenters [
-	super initializePresenters
-]
-
-{ #category : #presenters }
-StDebuggerBreakpointInspection >> updateSourceCodeBehaviorFor: aHaltOrBreakpointInspectionItem [
-	self flag: 'todo'"
-	breakpointsInSourceCode beForBehavior: node methodNode methodClass"
-]

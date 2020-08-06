@@ -29,6 +29,12 @@ StHaltInspectionItem >> displayEntity [
 	^ displayEntity
 ]
 
+{ #category : #accessing }
+StHaltInspectionItem >> entityToBrowse [
+
+	^ node methodNode method
+]
+
 { #category : #initialization }
 StHaltInspectionItem >> forHalt: aRBMessageNode [ 
 	node := aRBMessageNode.
@@ -72,6 +78,11 @@ StHaltInspectionItem >> printEntity [
 StHaltInspectionItem >> printScope [
 
 	^ scope printString
+]
+
+{ #category : #updating }
+StHaltInspectionItem >> removeInPresenterContext: aStObjectBreakpointInspection [ 
+	self inform: 'Edit your code to remove halts'
 ]
 
 { #category : #accessing }
