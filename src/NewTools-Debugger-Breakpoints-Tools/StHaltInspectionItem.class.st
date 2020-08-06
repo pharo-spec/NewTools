@@ -14,17 +14,17 @@ Class {
 	#category : #'NewTools-Debugger-Breakpoints-Tools-Presenters'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 StHaltInspectionItem class >> forBreakpoint: aBreakpoint [ 
 	^StBreakpointInspectionItem new forBreakpoint: aBreakpoint 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 StHaltInspectionItem class >> forHalt: aRBMessageNode [ 
 	^self new forHalt: aRBMessageNode
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #control }
 StHaltInspectionItem >> disableInContext: aStHaltAndBreakpointController [ 
 	aStHaltAndBreakpointController disableHaltNode: node
 ]
@@ -34,7 +34,7 @@ StHaltInspectionItem >> displayEntity [
 	^ displayEntity
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #control }
 StHaltInspectionItem >> enableInContext: aStHaltAndBreakpointController [ 
 	aStHaltAndBreakpointController enableHaltNode: node
 ]
@@ -64,7 +64,7 @@ StHaltInspectionItem >> interval: anObject [
 	interval := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #control }
 StHaltInspectionItem >> isEnabledInContext: aStHaltAndBreakpointController [ 
 	^aStHaltAndBreakpointController isHaltNodeEnabled: node
 ]

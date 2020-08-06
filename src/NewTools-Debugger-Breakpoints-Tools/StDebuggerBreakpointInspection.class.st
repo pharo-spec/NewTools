@@ -15,14 +15,6 @@ StDebuggerBreakpointInspection class >> debuggingExtensionToolName [
 	^ 'Breakpoints'
 ]
 
-{ #category : #specs }
-StDebuggerBreakpointInspection class >> defaultSpec [
-	^ SpPanedLayout newVertical
-		add: #methodsWithBreakpoints;
-		add: #breakpointsInSourceCode;
-		yourself
-]
-
 { #category : #private }
 StDebuggerBreakpointInspection >> breakPointsForModel [
 	^ Breakpoint all

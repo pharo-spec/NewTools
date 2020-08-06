@@ -37,12 +37,12 @@ StBreakpointInspectionItem >> buildVariableBreakpointItemFor: aVariableBreakpoin
 	displayEntity := aVariableBreakpoint
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #control }
 StBreakpointInspectionItem >> disableInContext: aStHaltAndBreakpointController [ 
 	aStHaltAndBreakpointController disableBreakpoint: breakpoint
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #control }
 StBreakpointInspectionItem >> enableInContext: aStHaltAndBreakpointController [ 
 	aStHaltAndBreakpointController enableBreakpoint: breakpoint
 ]
@@ -61,7 +61,7 @@ StBreakpointInspectionItem >> forBreakpoint: aBreakpoint [
 	^aBreakpoint asBreakpointInspectionItemIn: self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #control }
 StBreakpointInspectionItem >> isEnabledInContext: aStHaltAndBreakpointController [ 
 	^aStHaltAndBreakpointController isBreakpointEnabled: breakpoint
 ]

@@ -1,3 +1,6 @@
+"
+Removes a breakpoint from a selected breakpoint item in a StObjectBreakpointInspection. 
+"
 Class {
 	#name : #StRemoveBreakpointCommand,
 	#superclass : #SpToolCommand,

@@ -5,7 +5,6 @@ Class {
 	#name : #StObjectBreakpointInspection,
 	#superclass : #StInspection,
 	#instVars : [
-		'attributeTable',
 		'methodsWithBreakpoints',
 		'breakpointsInSourceCode',
 		'breakpointController'
