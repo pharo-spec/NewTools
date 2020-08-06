@@ -57,14 +57,14 @@ StObjectBreakpointInspection >> buildHaltAndBreakpointTable [
 
 	methodsWithBreakpoints := self newTable.
 	methodsWithBreakpoints 
-		"addColumn:
+		addColumn:
 			((SpCheckBoxTableColumn
 				title: ' '
-				evaluated: [ :item | self haltsAndBreakpoinsEnabledFor: item ])
+				evaluated: [ :item | 	self haltOrBreakpoinsEnabledFor: item ])
 				onActivation: [ :item | self enableHaltOrBreakpointFor: item ];
 				onDeactivation: [ :item | self disableHaltOrBreakpointFor: item ];
 				width: 20;
-				yourself);"
+				yourself);
 		addColumn:
 			((SpStringTableColumn
 				title: 'Type'
@@ -119,30 +119,22 @@ StObjectBreakpointInspection >> configureSourceCodeUpdate [
 ]
 
 { #category : #breakpoints }
-StObjectBreakpointInspection >> disableHaltOrBreakpointFor: breakpointData [
-	(self isBreakpointObjectCentric: breakpointData)
-		ifTrue: [ ^ breakpointController
-				disableObjectCentricBreakpoint: (breakpointData at: #breakpoint) ].
-	^ breakpointController
-		disableHaltOrBreakpointFor: (breakpointData at: #node)
+StObjectBreakpointInspection >> disableHaltOrBreakpointFor: haltOrBreakpointItem [
+
+	breakpointController disableHaltOrBreakpointFor: haltOrBreakpointItem
 ]
 
 { #category : #breakpoints }
-StObjectBreakpointInspection >> enableHaltOrBreakpointFor: breakpointData [
-	(self isBreakpointObjectCentric: breakpointData)
-		ifTrue: [ ^ breakpointController
-				enableObjectCentricBreakpoint: (breakpointData at: #breakpoint) ].
-	^ breakpointController
-		enableHaltOrBreakpointFor: (breakpointData at: #node)
+StObjectBreakpointInspection >> enableHaltOrBreakpointFor: haltOrBreakpointItem [
+
+	breakpointController enableHaltOrBreakpointFor: haltOrBreakpointItem
 ]
 
 { #category : #breakpoints }
-StObjectBreakpointInspection >> haltsAndBreakpoinsEnabledFor: breakpointData [
-	(self isBreakpointObjectCentric: breakpointData)
-		ifTrue: [ ^ breakpointController
-				isObjectCentricBreakpointEnabled: (breakpointData at: #breakpoint) ].
-	^ breakpointController
-		areHaltsAndBreakpoinsEnabledFor: (breakpointData at: #node)
+StObjectBreakpointInspection >> haltOrBreakpoinsEnabledFor: haltOrBreakpointItem [
+
+	^ breakpointController isHaltOrBreakpointEnabled:
+		  haltOrBreakpointItem
 ]
 
 { #category : #initialization }
@@ -192,12 +184,6 @@ StObjectBreakpointInspection >> labelForHaltSelector: aSelector [
 { #category : #accessing }
 StObjectBreakpointInspection >> methodsWithBreakpoints [
 	^ methodsWithBreakpoints
-]
-
-{ #category : #breakpoints }
-StObjectBreakpointInspection >> removeBreakpoint: aBreakpoint [
-	aBreakpoint remove.
-	self buildTableData 
 ]
 
 { #category : #'system subscription' }

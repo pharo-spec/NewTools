@@ -24,9 +24,19 @@ StHaltInspectionItem class >> forHalt: aRBMessageNode [
 	^self new forHalt: aRBMessageNode
 ]
 
+{ #category : #'as yet unclassified' }
+StHaltInspectionItem >> disableInContext: aStHaltAndBreakpointController [ 
+	aStHaltAndBreakpointController disableHaltNode: node
+]
+
 { #category : #accessing }
 StHaltInspectionItem >> displayEntity [
 	^ displayEntity
+]
+
+{ #category : #'as yet unclassified' }
+StHaltInspectionItem >> enableInContext: aStHaltAndBreakpointController [ 
+	aStHaltAndBreakpointController enableHaltNode: node
 ]
 
 { #category : #accessing }
@@ -52,6 +62,11 @@ StHaltInspectionItem >> interval [
 { #category : #accessing }
 StHaltInspectionItem >> interval: anObject [
 	interval := anObject
+]
+
+{ #category : #'as yet unclassified' }
+StHaltInspectionItem >> isEnabledInContext: aStHaltAndBreakpointController [ 
+	^aStHaltAndBreakpointController isHaltNodeEnabled: node
 ]
 
 { #category : #accessing }
