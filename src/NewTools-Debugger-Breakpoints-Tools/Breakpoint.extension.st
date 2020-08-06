@@ -6,14 +6,6 @@ Breakpoint >> asBreakpointInspectionItemIn: aStBreakpointInspectionItem [
 ]
 
 { #category : #'*NewTools-Debugger-Breakpoints-Tools' }
-Breakpoint >> isForModel: anObject [
-
-	self isObjectCentric ifTrue: [ ^ targetInstance == anObject ].
-	^ self isObjectCentric not and: [ 
-		  node methodNode methodClass = anObject class ]
-]
-
-{ #category : #'*NewTools-Debugger-Breakpoints-Tools' }
 Breakpoint >> printContentsForBreakpointInspection [
 	^node methodNode sourceCode
 ]
@@ -21,4 +13,12 @@ Breakpoint >> printContentsForBreakpointInspection [
 { #category : #'*NewTools-Debugger-Breakpoints-Tools' }
 Breakpoint >> printTargetForBreakpointInspection [
 	^node methodNode method printString
+]
+
+{ #category : #'*NewTools-Debugger-Breakpoints-Tools' }
+Breakpoint >> scopeIncludes: anObject [
+
+	self isObjectCentric ifTrue: [ ^ targetInstance == anObject ].
+	^ self isObjectCentric not and: [ 
+		  node methodNode methodClass = anObject class ]
 ]

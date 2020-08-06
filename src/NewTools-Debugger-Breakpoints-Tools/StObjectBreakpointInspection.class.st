@@ -23,43 +23,14 @@ StObjectBreakpointInspection class >> defaultSpec [
 ]
 
 { #category : #private }
-StObjectBreakpointInspection >> breakPointsForModel [
-	^self breakpointsForModel 
-	"| methodsWithBreakpoint breakpoints |
-	self flag: #DBG_FIX_TEST.
-	breakpoints := OrderedCollection new.
-	methodsWithBreakpoint := model class allMethods
-		select: [ :m | m hasBreakpoint ].
-	breakpoints
-		addAll:
-			(methodsWithBreakpoint
-				flatCollect: [ :m | 
-					Breakpoint all
-						select: [ :b | b isObjectCentric not and: [ b link methods includes: m compiledMethod] ] ]).
-	breakpoints
-		addAll:
-			(Breakpoint all
-				select:
-					[ :b | b isObjectCentric and: [ b targetInstance == self model ] ]).
-	breakpoints
-		addAll:
-			(Breakpoint all
-				select: [ :b | 
-					b isVariableBreakpoint
-						and: [ b targetClassOrMethod == self model class
-								and: [ b isObjectCentric not ] ] ]).
-	^ breakpoints asSet"
-]
-
-{ #category : #private }
 StObjectBreakpointInspection >> breakpointsForModel [
 
-	^ Breakpoint all select: [ :bp | bp isForModel: model ]
+	^ Breakpoint all select: [ :bp | bp scopeIncludes: model ]
 ]
 
 { #category : #private }
 StObjectBreakpointInspection >> buildBreakpointData [
-	^ (self breakPointsForModel
+	^ (self breakpointsForModel
 		collect: [ :b | StBreakpointInspectionItem forBreakpoint: b ])
 	"	reject: [ :data | 
 			| node breakpoint |
@@ -223,16 +194,6 @@ StObjectBreakpointInspection >> methodsWithBreakpoints [
 	^ methodsWithBreakpoints
 ]
 
-{ #category : #private }
-StObjectBreakpointInspection >> objectCentricBreakpointsForModel [
-	| methodsWithBreakpoint | 
-	self flag: #DBG_FIX_TEST.
-	methodsWithBreakpoint := model class allMethods
-		select: [ :m | m hasBreakpoint ].
-	^ methodsWithBreakpoint
-		flatCollect: [ :m | Breakpoint all select: [ :b | b link methods includes: m ] ]
-]
-
 { #category : #breakpoints }
 StObjectBreakpointInspection >> removeBreakpoint: aBreakpoint [
 	aBreakpoint remove.
@@ -248,16 +209,6 @@ StObjectBreakpointInspection >> unsubscribeFromCacheChanges [
 StObjectBreakpointInspection >> updateSourceCodeBehaviorFor: aHaltOrBreakpointInspectionItem [
 	self flag: 'todo'"
 	breakpointsInSourceCode beForBehavior: model class"
-]
-
-{ #category : #private }
-StObjectBreakpointInspection >> variableBreakpointsForModel [
-	| methodsWithBreakpoint | 
-	self flag: #DBG_FIX_TEST.
-	methodsWithBreakpoint := model class allMethods
-		select: [ :m | m hasBreakpoint ].
-	^ methodsWithBreakpoint
-		flatCollect: [ :m | Breakpoint all select: [ :b | b link methods includes: m ] ]
 ]
 
 { #category : #updating }
