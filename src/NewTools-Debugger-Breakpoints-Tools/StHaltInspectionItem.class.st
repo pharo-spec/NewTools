@@ -65,7 +65,6 @@ StHaltInspectionItem >> printContents [
 
 { #category : #printing }
 StHaltInspectionItem >> printEntity [
-	self flag: #TEST.
 	^displayEntity method printString
 ]
 

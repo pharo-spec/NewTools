@@ -50,7 +50,6 @@ StBreakpointInspectionItem >> printContents [
 
 { #category : #printing }
 StBreakpointInspectionItem >> printEntity [
-	self flag: #TEST.
 	^displayEntity printTargetForBreakpointInspection
 ]
 
