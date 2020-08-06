@@ -99,7 +99,7 @@ StObjectBreakpointInspection >> buildSourceCode [
 	"Source code of methods in which breakpoint are installed"
 
 	breakpointsInSourceCode := self newCode.
-	breakpointsInSourceCode disable
+	breakpointsInSourceCode beNotEditable
 ]
 
 { #category : #presenters }
@@ -115,9 +115,7 @@ StObjectBreakpointInspection >> configureSourceCodeUpdate [
 			| selectedItem |
 			selectedItem := selection selectedItem.
 			breakpointsInSourceCode text: selectedItem printContents.
-			selectedItem interval ifNotNil: [ 
-				breakpointsInSourceCode selectionInterval: selectedItem interval ].
-			self updateSourceCodeBehaviorFor: selectedItem ] ]
+			selectedItem updateSourceCodePaneFor: self ] ]
 ]
 
 { #category : #breakpoints }
@@ -205,10 +203,30 @@ StObjectBreakpointInspection >> unsubscribeFromCacheChanges [
 	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
-{ #category : #presenters }
-StObjectBreakpointInspection >> updateSourceCodeBehaviorFor: aHaltOrBreakpointInspectionItem [
-	self flag: 'todo'"
-	breakpointsInSourceCode beForBehavior: model class"
+{ #category : #updating }
+StObjectBreakpointInspection >> updateSourceCodeForBreakpointItem: aStBreakpointInspectionItem [
+
+	"Halts and standard breakpoints items both behave the same"
+
+	self updateSourceCodeForHaltItem: aStBreakpointInspectionItem
+]
+
+{ #category : #updating }
+StObjectBreakpointInspection >> updateSourceCodeForHaltItem: aStHaltInspectionItem [
+
+	breakpointsInSourceCode withLineNumbers.
+	breakpointsInSourceCode selectionInterval:
+		aStHaltInspectionItem interval.
+	breakpointsInSourceCode beForBehavior: model class
+]
+
+{ #category : #updating }
+StObjectBreakpointInspection >> updateSourceCodeForVariableBreakpointItem: aStBreakpointInspectionItem [
+
+	breakpointsInSourceCode
+		beForObject: model;
+		withoutLineNumbers.
+	breakpointsInSourceCode beForBehavior: model class
 ]
 
 { #category : #updating }

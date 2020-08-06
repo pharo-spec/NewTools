@@ -59,3 +59,13 @@ StBreakpointInspectionItem >> printScope [
 	breakpoint isObjectCentric ifTrue:[^'self'].
 	^ scope printString
 ]
+
+{ #category : #updating }
+StBreakpointInspectionItem >> updateSourceCodePaneFor: aStObjectBreakpointInspection [
+
+	breakpoint isVariableBreakpoint ifTrue: [ 
+		aStObjectBreakpointInspection 
+			updateSourceCodeForVariableBreakpointItem: self.
+		^ self ].
+	aStObjectBreakpointInspection updateSourceCodeForHaltItem: self
+]

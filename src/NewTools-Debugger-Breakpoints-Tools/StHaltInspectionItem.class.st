@@ -94,3 +94,8 @@ StHaltInspectionItem >> type [
 StHaltInspectionItem >> type: anObject [
 	type := anObject
 ]
+
+{ #category : #updating }
+StHaltInspectionItem >> updateSourceCodePaneFor: aStObjectBreakpointInspection [ 
+	aStObjectBreakpointInspection updateSourceCodeForHaltItem: self
+]
