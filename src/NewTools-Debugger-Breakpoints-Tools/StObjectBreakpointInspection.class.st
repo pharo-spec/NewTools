@@ -178,6 +178,8 @@ StObjectBreakpointInspection >> isBreakpointObjectCentric: breakpointData [
 
 { #category : #presenters }
 StObjectBreakpointInspection >> labelForHaltSelector: aSelector [
+	"This was intended to be used to display more precise information about the kind of halt we display in the presenter."
+	self flag: 'Not used yet. Kept as documentation for further use'.
 	(#(haltIf: haltIfNil) includes: aSelector)
 		ifTrue: [ ^ 'condition' ].
 	(#(haltOnCount:) includes: aSelector)
