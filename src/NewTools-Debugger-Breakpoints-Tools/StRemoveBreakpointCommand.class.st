@@ -1,7 +1,7 @@
 Class {
 	#name : #StRemoveBreakpointCommand,
 	#superclass : #SpToolCommand,
-	#category : #'NewTools-ObjectCentricBreakpoints'
+	#category : #'NewTools-Debugger-Breakpoints-Tools-Model'
 }
 
 { #category : #default }
