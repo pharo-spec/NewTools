@@ -708,9 +708,7 @@ StDebugger >> initializeCode [
 			notifying: nil ].
 	code whenResetDo: [ self updateCodeFromContext ].	
 			
-	codeHeader := self instantiate: StHeaderBar.	
-	codeHeader removeStyleFromLabel: 'label.header'.	
-	codeHeader applyStyleToLabel: 'label.headerError'.
+	codeHeader := self instantiate: StHeaderBar.
 	codeHeader label: self session name
 ]
 
@@ -1035,17 +1033,6 @@ StDebugger >> stackSelectionReceiverContext [
 { #category : #'accessing widgets' }
 StDebugger >> stackTable [
 	^stackTable
-]
-
-{ #category : #'accessing context' }
-StDebugger >> statusLabelStyleForCurrentContext [
-	self flag: 'deprecated?'.
-"true ifTrue: [ ^ 'label.headerError' ]."
-	(self context tempNames includes: #exception) ifTrue: [ 
-		(self context tempNamed: #exception) ifNotNil: [ :ex | 
-			^ 'label.headerError' ] ].
-	self context currentNode isHaltNode ifTrue: [ ^ 'label.headerError' ].
-	^ 'label.header'
 ]
 
 { #category : #'accessing context' }
