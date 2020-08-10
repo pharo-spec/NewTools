@@ -915,8 +915,9 @@ StDebugger >> restartCurrentContext [
 { #category : #actions }
 StDebugger >> returnEnteredValue [
 	| expression |
-	expression := UIManager default
-		request: 'Enter expression for return value:'.
+	self flag: #DBG_HowToTestNilIfUserCancels.
+	expression := (UIManager default
+		request: 'Enter expression for return value:') ifNil: [^self].
 	self debuggerActionModel
 		returnValueFromExpression: expression
 		fromContext: self currentContext
