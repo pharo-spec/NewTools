@@ -750,6 +750,30 @@ StDebugger >> initializePresenters [
 ]
 
 { #category : #initialization }
+StDebugger >> initializeShortcuts: aWindowPresenter [
+
+	self flag: #DBG_TempSolvesSpecBug_RemoveWhenFixed.
+	"This is only because of a problem in presenters, where shortcuts only work in the scope of their presenter.
+	Consequently, debug shortcuts from the debugger toolbar only work if the mouse is over the toolbar button.
+	This should be removed once the spec bug is fixed"
+	aWindowPresenter
+		bindKeyCombination: StProceedCommand defaultShortcut
+		toAction: [ self proceedDebugSession ].
+	aWindowPresenter
+		bindKeyCombination: StStepIntoCommand defaultShortcut
+		toAction: [ self stepInto ].
+	aWindowPresenter
+		bindKeyCombination: StStepOverCommand defaultShortcut
+		toAction: [ self stepOver ].
+	aWindowPresenter
+		bindKeyCombination: StStepThroughCommand defaultShortcut
+		toAction: [ self stepThrough ].
+	aWindowPresenter
+		bindKeyCombination: StRestartCommand defaultShortcut
+		toAction: [ self restartCurrentContext ]
+]
+
+{ #category : #initialization }
 StDebugger >> initializeStack [
 	stackTable := self newTable.
 	stackTable
@@ -786,10 +810,12 @@ StDebugger >> initializeToolbar [
 StDebugger >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
-	aWindowPresenter 
+	aWindowPresenter
 		title: self title;
 		initialExtent: self initialExtent;
-		whenClosedDo: [ self clear ]
+		whenClosedDo: [ self clear ].
+
+	self initializeShortcuts: aWindowPresenter
 ]
 
 { #category : #extensions }
@@ -909,6 +935,7 @@ StDebugger >> requestSuperclassOf: aClass to: aSuperclass toImplement: aSelector
 
 { #category : #actions }
 StDebugger >> restartCurrentContext [
+
 	self debuggerActionModel restartContext: self currentContext
 ]
 
