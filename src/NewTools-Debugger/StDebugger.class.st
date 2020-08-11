@@ -84,8 +84,7 @@ Class {
 		'extensionTools',
 		'extensionToolsNotebook',
 		'toolbarCommandGroup',
-		'debuggerActionModel',
-		'debuggerCommandGroup'
+		'debuggerActionModel'
 	],
 	#classVars : [
 		'ActivateDebuggerExtensions',
@@ -451,14 +450,9 @@ StDebugger class >> usingSpecSelector: aSelector [
 ]
 
 { #category : #commands }
-StDebugger >> buildCommandTree [
-	debuggerCommandGroup := self rootCommandsGroup
-]
-
-{ #category : #commands }
 StDebugger >> buildContextMenus [
-	| stackGroup codeCommands|
-	self buildCommandTree.
+	| stackGroup codeCommands debuggerCommandGroup |
+	debuggerCommandGroup := self rootCommandsGroup.
 
 	"Stack"
 	stackGroup := debuggerCommandGroup
