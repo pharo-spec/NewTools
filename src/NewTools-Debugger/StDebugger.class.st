@@ -85,7 +85,6 @@ Class {
 		'extensionToolsNotebook',
 		'toolbarCommandGroup',
 		'debuggerActionModel',
-		'codeCommands',
 		'debuggerCommandGroup'
 	],
 	#classVars : [
@@ -458,7 +457,7 @@ StDebugger >> buildCommandTree [
 
 { #category : #commands }
 StDebugger >> buildContextMenus [
-	| stackGroup |
+	| stackGroup codeCommands|
 	self buildCommandTree.
 
 	"Stack"
