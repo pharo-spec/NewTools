@@ -3,7 +3,8 @@ Class {
 	#superclass : #TestCase,
 	#instVars : [
 		'session',
-		'debugger'
+		'debugger',
+		'oldFastTDD'
 	],
 	#category : #'NewTools-Debugger-Tests-Presenters'
 }
@@ -82,13 +83,16 @@ StDebuggerTest >> setUp [
 	session := DebugSession
 		named: 'test session'
 		on: process
-		startedAt: context
+		startedAt: context.
+	oldFastTDD := self debuggerClass fastTDD.
+	self debuggerClass fastTDD: true
 ]
 
 { #category : #running }
 StDebuggerTest >> tearDown [
 
 	session clear.
+	self debuggerClass fastTDD: oldFastTDD.
 	super tearDown
 ]
 
@@ -200,6 +204,12 @@ StDebuggerTest >> testExtendedToolsPragma [
 	self assert: StDebugger extendedToolsPragma equals: #debuggerExtensionOrder:showByDefault:
 ]
 
+{ #category : #'tests - initialization' }
+StDebuggerTest >> testFastTDD [
+	self debuggerClass fastTDD: nil.
+	self deny: self debuggerClass fastTDD
+]
+
 { #category : #'tests - receiver inspector' }
 StDebuggerTest >> testInspectorHeaderLabel [
 	| dbg displayedLabel |
@@ -304,6 +314,22 @@ StDebuggerTest >> testRegisterExtensionTool [
 	dbg registerExtensionTool: (object := Object new).
 	self assert: dbg extensionTools size equals: 1.
 	self assertCollection: dbg extensionTools includesAll: { object }
+]
+
+{ #category : #'tests - actions' }
+StDebuggerTest >> testRequestClassFrom [
+
+	self
+		assert: (self debugger requestClassFrom: self class)
+		identicalTo: self class
+]
+
+{ #category : #'tests - actions' }
+StDebuggerTest >> testRequestProtocolIn [
+
+	self
+		assert: (self debugger requestProtocolIn: self class)
+		equals: Protocol unclassified
 ]
 
 { #category : #'tests - raw inspection' }

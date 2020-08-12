@@ -91,6 +91,7 @@ Class {
 		'DefaultDebugger',
 		'ErrorRecursion',
 		'ExtensionToolsSettings',
+		'FastTDD',
 		'UsingSpecSelector'
 	],
 	#category : #'NewTools-Debugger-View'
@@ -313,6 +314,29 @@ StDebugger class >> extensionToolSettingsFor: aToolClass [
 StDebugger class >> extensionToolsSettings [
 	^ ExtensionToolsSettings
 		ifNil: [ ExtensionToolsSettings := Dictionary new ]
+]
+
+{ #category : #settings }
+StDebugger class >> fastTDD [
+	^FastTDD ifNil:[FastTDD := false]
+]
+
+{ #category : #settings }
+StDebugger class >> fastTDD: aBoolean [
+
+	FastTDD := aBoolean
+]
+
+{ #category : #settings }
+StDebugger class >> fastTDDSettingsOn: aBuilder [
+	<systemsettings>
+	(aBuilder setting: #fastTDD)
+		label: 'Fast TDD';
+		target: self;
+		default: false;
+		parent: #debugging;
+		description: 'Create classes and methods directly in the receiver''s class
+without requesting information from the user'
 ]
 
 { #category : #opening }
@@ -551,15 +575,14 @@ StDebugger >> createMissingClass [
 
 { #category : #actions }
 StDebugger >> createMissingMethod [
+
 	| msg chosenClass |
 	self flag: #DBG_MISSINGTEST.
 	msg := self interruptedContext tempAt: 1.
-	"chosenClass := (self
-		requestSuperclassOf: self interruptedContext receiver class
-		to: ProtoObject
-		toImplement: msg selector
-		ifCancel: [ ^ self ]) value."
-	chosenClass := self interruptedContext receiver class.
+	chosenClass := self requestClassFrom:
+		               self interruptedContext receiver class.
+	chosenClass ifNil: [ ^ self ].
+
 	self createMissingMethodFor: msg in: chosenClass
 ]
 
@@ -568,7 +591,7 @@ StDebugger >> createMissingMethodFor: aMessage in: aClass [
 	self flag: #DBG_MISSINGTEST.
 	self debuggerActionModel
 		implement: aMessage
-		classified: Protocol unclassified
+		classified: (self requestProtocolIn: aClass)
 		inClass: aClass
 		forContext: self interruptedContext.
 	self selectTopContext
@@ -576,18 +599,16 @@ StDebugger >> createMissingMethodFor: aMessage in: aClass [
 
 { #category : #actions }
 StDebugger >> createSubclassResponsibility [
+
 	| senderContext msg msgCategory chosenClass |
 	senderContext := self interruptedContext sender.
 	msg := Message
-		selector: senderContext selector
-		arguments: senderContext arguments.
-	msgCategory := senderContext methodClass organization
-		categoryOfElement: msg selector.
-	chosenClass := (self
-		requestSuperclassOf: senderContext receiver class
-		to: senderContext methodClass
-		toImplement: senderContext selector
-		ifCancel: [ ^ self ]) value.
+		       selector: senderContext selector
+		       arguments: senderContext arguments.
+	msgCategory := senderContext methodClass organization 
+		               categoryOfElement: msg selector.
+	chosenClass := self requestClassFrom: senderContext receiver class.
+	chosenClass ifNil: [ ^ self ].
 	self debuggerActionModel
 		implement: msg
 		classified: msgCategory
@@ -909,19 +930,45 @@ StDebugger >> removeSessionHolderSubscriptions [
 ]
 
 { #category : #'ui requests' }
-StDebugger >> requestSuperclassOf: aClass to: aSuperclass toImplement: aSelector ifCancel: cancelBlock [
+StDebugger >> requestClassFrom: aClass [
+
+	self class fastTDD ifTrue: [ ^ aClass ].
+	^ self requestSuperclassOf: aClass to: ProtoObject
+]
+
+{ #category : #'ui requests' }
+StDebugger >> requestProtocolIn: aClass [
+
+	| entryCompletion applicants |
+	self class fastTDD ifTrue: [ ^ Protocol unclassified ].
+	applicants := AbstractTool protocolSuggestionsFor: aClass.
+	entryCompletion := EntryCompletion new
+		                   dataSourceBlock: [ :currText | applicants ];
+		                   filterBlock: [ :currApplicant :currText | 
+			                   currText size > 3 and: [ 
+					                   currApplicant asLowercase includesSubstring:
+							                   currText asString asLowercase ] ].
+	^ (UIManager default
+		   request: 'Start typing for suggestions (3 characters minimum)'
+		   initialAnswer: Protocol unclassified
+		   title: 'Choose a protocol'
+		   entryCompletion: entryCompletion) ifEmpty: [ 
+		  Protocol unclassified ]
+]
+
+{ #category : #'ui requests' }
+StDebugger >> requestSuperclassOf: aClass to: aSuperclass [
+
 	| classes |
 	classes := OrderedCollection with: aClass.
 	classes addAll: (aClass allSuperclassesIncluding: aSuperclass).
-	classes
-		addAll: (aClass traits sort: [ :t1 :t2 | t1 asString < t2 asString ]).
-	classes size = 1
-		ifTrue: [ ^ classes first ].
-	^ (UIManager default
-		chooseFrom: (classes collect: [ :c | c name ])
-		values: classes
-		title: 'Define #' , aSelector , ' in which class?')
-		ifNil: [ cancelBlock ]
+	classes addAll:
+		(aClass traits sort: [ :t1 :t2 | t1 asString < t2 asString ]).
+	classes size = 1 ifTrue: [ ^ classes first ].
+	^ UIManager default
+		  chooseFrom: (classes collect: [ :c | c name ])
+		  values: classes
+		  title: 'Define selector in:'
 ]
 
 { #category : #actions }
