@@ -80,7 +80,6 @@ Class {
 		'inspector',
 		'breakpointInspector',
 		'stackHeader',
-		'codeHeader',
 		'extensionTools',
 		'extensionToolsNotebook',
 		'toolbarCommandGroup',
@@ -153,21 +152,15 @@ StDebugger class >> closeAllDebuggers [
 
 { #category : #specs }
 StDebugger class >> codeLayout [
+	self flag: #DBG_SPEC.
+	"Tool bar height is not enough to contain the buttons with icons (issue #94)."
 	^ SpBoxLayout newVertical
-		add:
-			(SpBoxLayout newVertical
-				add: #toolbar;
-				add: #codeHeader
-					expand: true
-					fill: true
-					padding: 0;
-				yourself)
-			withConstraints: [ :constraints | 
-				constraints
-					expand: false;
-					height: self toolbarHeight * 2 ];
-		add: #code;
-		yourself
+		  add: #toolbar withConstraints: [ :constraints | 
+			  constraints
+				  expand: true;
+				  height: self toolbarHeight + 12];
+		  add: #code;
+		  yourself
 ]
 
 { #category : #'tools registry' }
@@ -699,10 +692,7 @@ StDebugger >> initializeCode [
 			recompileMethodTo: text string
 			inContext: self stackTable selection selectedItem
 			notifying: nil ].
-	code whenResetDo: [ self updateCodeFromContext ].	
-			
-	codeHeader := self instantiate: StHeaderBar.
-	codeHeader label: self session name
+	code whenResetDo: [ self updateCodeFromContext ]
 ]
 
 { #category : #extensions }
@@ -785,7 +775,6 @@ StDebugger >> initializeStack [
 		stackTable selection isEmpty ifFalse: [ 
 			self updateInspectorFromContext: context.
 			self updateCodeFromContext: context.
-			self updateTitle.
 			self expandStackIfLastItemIsSelected ] ].
 	stackHeader := self instantiate: StHeaderBar.
 	stackHeader label: 'Stack'
@@ -802,7 +791,7 @@ StDebugger >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
-		title: self title;
+		title: self session name;
 		initialExtent: self initialExtent;
 		whenClosedDo: [ self clear ].
 
@@ -829,6 +818,15 @@ StDebugger >> interruptedContext [
 StDebugger >> interruptedProcess [
 
 	^ self session interruptedProcess
+]
+
+{ #category : #'accessing context' }
+StDebugger >> newTitleString [
+	(debuggerActionModel exceptionInContextOrNil: self context)
+		ifNotNil: [ :ex | ^ ex description ].
+	^ self context currentNode isHaltNode
+		ifTrue: [ 'Halt' ]
+		ifFalse: [ self context receiver class name , '>>' , self context selector ]
 ]
 
 { #category : #api }
@@ -993,7 +991,6 @@ StDebugger >> setSessionHolderSubscriptions [
 			self removeActionsForSession: oldSession.
 			self registerActionsForSession: newSession.
 			self updateStackFromSession: newSession.
-			self updateTitle.
 			self updateExtensionsFrom: newSession ]
 ]
 
@@ -1026,15 +1023,6 @@ StDebugger >> stackSelectionReceiverContext [
 { #category : #'accessing widgets' }
 StDebugger >> stackTable [
 	^stackTable
-]
-
-{ #category : #'accessing context' }
-StDebugger >> statusLabelTextForCurrentContext [
-	(debuggerActionModel exceptionInContextOrNil: self context)
-		ifNotNil: [ :ex | ^ ex description ].
-	^ self context currentNode isHaltNode
-		ifTrue: [ 'Halt' ]
-		ifFalse: [ self context receiver class name , '>>' , self context selector ]
 ]
 
 { #category : #actions }
@@ -1098,11 +1086,6 @@ StDebugger >> updateCodeFromContext: aContext [
 		updateCodeTextSegmentDecoratorsIn: aContext
 		forInterval: selectionInterval."
 	
-]
-
-{ #category : #'updating widgets' }
-StDebugger >> updateCodeHeaderLabel [
-	codeHeader label: self statusLabelTextForCurrentContext
 ]
 
 { #category : #'updating widgets' }
@@ -1177,13 +1160,13 @@ StDebugger >> updateStackFromSession: aSession [
 
 { #category : #'updating actions' }
 StDebugger >> updateStep [
+
 	self updateStackFromSession: self session.
-	self updateCodeHeaderLabel.
+	self updateTitle: self newTitleString.
 	self updateExtensionsFrom: self session.
-	self updateTitle.
 	self updateToolbarDebugActions.
 	self flag: #DBG_INSPECTOR_UPDATE_BUG.
-	inspector getRawInspectorPresenterOrNil ifNotNil: [:p| p update].
+	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p | p update ]
 ]
 
 { #category : #'updating actions' }
@@ -1205,8 +1188,9 @@ StDebugger >> updateStepThrough [
 ]
 
 { #category : #'updating widgets' }
-StDebugger >> updateTitle [
-	self withWindowDo: [ :window | window title: self title]
+StDebugger >> updateTitle: statusString [
+
+	self withWindowDo: [ :window | window title: statusString ]
 ]
 
 { #category : #'updating widgets' }
