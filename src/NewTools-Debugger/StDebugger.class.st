@@ -683,15 +683,16 @@ StDebugger >> initializeBreakpointInspector [
 
 { #category : #initialization }
 StDebugger >> initializeCode [
-	self flag: #DBG_IMPROVE.
-	 "Add metalink information in the gutter!"
-	
+	self flag: #DBG.
+	"It is wrong here that I have to use code adapter widget.
+	It is expected down in the compilation call chain that the notified requestor answers to textMorph.
+	This is for modifying the source code when declaring temps"
 	code := self newCode.
 	code whenSubmitDo: [ :text | 
 		self
 			recompileMethodTo: text string
 			inContext: self stackTable selection selectedItem
-			notifying: nil ].
+			notifying: code adapter widget ].
 	code whenResetDo: [ self updateCodeFromContext ]
 ]
 
@@ -863,10 +864,11 @@ StDebugger >> proceedDebugSession [
 { #category : #actions }
 StDebugger >> recompileMethodTo: aString inContext: aContext notifying: aNotifyer [
 
-	^ aContext 
-		ifNil: [ false ]
-		ifNotNil: [
-			self session recompileMethodTo: aString inContext: aContext notifying: aNotifyer ]
+	aContext ifNil: [ ^ self ].
+	self session
+		recompileMethodTo: aString
+		inContext: aContext
+		notifying: aNotifyer
 ]
 
 { #category : #'updating session' }
