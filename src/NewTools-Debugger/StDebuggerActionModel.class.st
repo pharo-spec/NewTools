@@ -36,10 +36,13 @@ StDebuggerActionModel >> copyStackToClipboard [
 
 { #category : #'debug - stack' }
 StDebuggerActionModel >> exceptionInContextOrNil: aContext [
-	| ex |
-	ex := aContext temporaries at: #exception ifAbsent: [ nil ].
-	ex isClass
-		ifTrue: [ ^ nil ].
+
+	| var ex |
+	self flag: #DBG_REMOVE_NIL_CHECKS.
+	var := aContext temporaryVariableNamed: #exception.
+	var ifNotNil: [ 
+		ex := var readInContext: aContext.
+		ex isClass ifTrue: [ ^ nil ] ].
 	^ ex
 ]
 
@@ -96,15 +99,18 @@ StDebuggerActionModel >> isInterruptedContextATestFailure [
 
 { #category : #'debug - predicates' }
 StDebuggerActionModel >> isInterruptedContextAnAssertEqualsFailure [
-	self flag: 'Way too much complex: could we reify debugging predicates for more clarity and simplicity?'.
-	^ self isInterruptedContextATestFailure
-		and: [ | failure |
-			failure := self interruptedContext temporaries
-				at: #aStringOrBlock
-				ifAbsent: [ nil ].
-			failure notNil
-				and: [ failure isString not
-						and: [ self assertEqualsSelectors includes: failure outerContext selector ] ] ]
+
+	self flag:
+		'Way too much complex: could we reify debugging predicates for more clarity and simplicity?'.
+	^ self isInterruptedContextATestFailure and: [ 
+		  | variable failure |
+		  variable := self interruptedContext temporaryVariableNamed:
+			              #aStringOrBlock.
+		  variable notNil and: [ 
+			  failure := variable readInContext: self interruptedContext.
+			  failure isString not and: [ 
+				  self assertEqualsSelectors includes:
+					  failure outerContext selector ] ] ]
 ]
 
 { #category : #'debug - predicates' }
