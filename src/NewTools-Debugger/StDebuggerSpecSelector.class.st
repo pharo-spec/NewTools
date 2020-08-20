@@ -70,7 +70,7 @@ StDebuggerSpecSelector >> selectExtensionActivationSpecFrom: aDefaultSpecSelecto
 		ifTrue: [ ^ aDefaultSpecSelector ].
 	^ self
 		selectorForDebuggerStatus: self debuggerClass activateDebuggerExtensions
-		extensionsStatus: self debuggerClass hasAnyActivatedExtension
+		extensionsStatus: (self debuggerClass hasAnyActivatedExtension: nil)
 ]
 
 { #category : #'specs - selectors' }
