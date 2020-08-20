@@ -120,7 +120,7 @@ StDebugger class >> availableAutomatically [
 StDebugger class >> availableExtensionToolsClassesSettings [
 	| settingToClass |
 	settingToClass := Dictionary new.
-	self collectExtendedToolsClasses
+	self extensionToolsClasses
 		do: [ :toolClass | 
 			self extensionToolsSettings
 				at: toolClass debuggingExtensionToolName
@@ -164,24 +164,6 @@ StDebugger class >> codeLayout [
 				  height: self toolbarHeight + 12];
 		  add: #code;
 		  yourself
-]
-
-{ #category : #'tools registry' }
-StDebugger class >> collectExtendedToolsClasses [
-	^ self collectExtendedToolsClassesFor: self extendedToolsPragma
-]
-
-{ #category : #'tools registry' }
-StDebugger class >> collectExtendedToolsClassesFor: pragmaSelector [
-	^ (self collectExtendedToolsPragmaFor: pragmaSelector)
-		collect: [ :prg | prg methodClass soleInstance ]
-]
-
-{ #category : #'tools registry' }
-StDebugger class >> collectExtendedToolsPragmaFor: pragmaSelector [
-	self flag: 'PragmaCollector might be changed in the near future?'.
-	^ (PragmaCollector filter: [ :prg | prg selector = pragmaSelector ])
-		reset collected
 ]
 
 { #category : #settings }
@@ -231,7 +213,7 @@ StDebugger class >> debuggerExtensionSettingsOn: aBuilder [
 StDebugger class >> debuggerExtensionsSettingsOn: aBuilder parentGroup: settingsGroup [
 	
 	settingsGroup with: [ 
-		self collectExtendedToolsClasses do: [ :toolClass | 
+		self extensionToolsClasses do: [ :toolClass | 
 			self debuggerExtensionSettingsForClass: toolClass builder: aBuilder ] ]
 ]
 
@@ -299,17 +281,16 @@ StDebugger class >> defaultSpec [
 ]
 
 { #category : #'tools registry' }
-StDebugger class >> extendedToolsPragma [	
-
-	^ #debuggerExtensionOrder:showByDefault:
-]
-
-{ #category : #'tools registry' }
 StDebugger class >> extensionToolSettingsFor: aToolClass [
 	^ self extensionToolsSettings
 		at: aToolClass debuggingExtensionToolName
 		ifAbsentPut:
 			[ StDebuggerExtensionSetting fromDebuggerExtensionClass: aToolClass ]
+]
+
+{ #category : #'tools registry' }
+StDebugger class >> extensionToolsClasses [
+	^TStDebuggerExtension users
 ]
 
 { #category : #'tools registry' }
@@ -722,7 +703,9 @@ StDebugger >> initializeCode [
 { #category : #extensions }
 StDebugger >> initializeExtensionTools [
 	| settingsToClasses sortedSettings pages |
-	extensionToolsNotebook := self newNotebook.
+		extensionToolsNotebook := self newNotebook.
+	true ifTrue: [ ^self ].
+
 	self class hasAnyActivatedExtension
 		ifFalse: [ ^ self ].
 	settingsToClasses := self class

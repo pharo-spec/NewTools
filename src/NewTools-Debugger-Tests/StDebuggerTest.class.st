@@ -191,17 +191,11 @@ StDebuggerTest >> testDiscardCodeModification [
 ]
 
 { #category : #'tests - extensions' }
-StDebuggerTest >> testExtendedToolsClassesFor [
-	self
-		assertCollection:
-			(StDebugger
-				collectExtendedToolsPragmaFor: #debuggerExtensionTestPragma)
-		includesAll: (StDummyDebuggerPresenter class>>#debuggerExtensionTestPragma) pragmas 
-]
+StDebuggerTest >> testExtensionToolsClasses [
 
-{ #category : #'tests - extensions' }
-StDebuggerTest >> testExtendedToolsPragma [
-	self assert: StDebugger extendedToolsPragma equals: #debuggerExtensionOrder:showByDefault:
+	self
+		assertCollection: StDebugger extensionToolsClasses
+		equals: TStDebuggerExtension users
 ]
 
 { #category : #'tests - initialization' }
@@ -313,7 +307,7 @@ StDebuggerTest >> testRegisterExtensionTool [
 	self assertEmpty: dbg extensionTools.
 	dbg registerExtensionTool: (object := Object new).
 	self assert: dbg extensionTools size equals: 1.
-	self assertCollection: dbg extensionTools includesAll: { object }
+	self assertCollection: dbg extensionTools equals: { object } asOrderedCollection 
 ]
 
 { #category : #'tests - actions' }
