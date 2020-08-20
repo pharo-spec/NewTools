@@ -53,6 +53,11 @@ StDebuggerUsingSpecSelectorMock >> debuggerClass [
 ]
 
 { #category : #accessing }
+StDebuggerUsingSpecSelectorMock >> extensionToolsClasses [
+	^{}
+]
+
+{ #category : #accessing }
 StDebuggerUsingSpecSelectorMock >> hasAnyActivatedExtension: anObject [
 	^ withActivatedExtensions
 ]
