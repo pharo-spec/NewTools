@@ -108,8 +108,10 @@ StDebugger class >> activateDebuggerExtensions: anObject [
 	ActivateDebuggerExtensions := anObject
 ]
 
-{ #category : #'tools registry' }
+{ #category : #deprecated }
 StDebugger class >> availableAutomatically [
+	self flag: #DBG.
+	self flag: 'will be removed after Oups is integrated'.
 	"Should this debugger be taken into account when looking for a debugger to handle an exception."
 	^Available ifNil:[Available := true]
 ]
