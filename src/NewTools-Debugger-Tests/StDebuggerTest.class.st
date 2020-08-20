@@ -190,14 +190,6 @@ StDebuggerTest >> testDiscardCodeModification [
 	self flag: #DBG_TEST
 ]
 
-{ #category : #'tests - extensions' }
-StDebuggerTest >> testExtensionToolsClasses [
-
-	self
-		assertCollection: StDebugger extensionToolsClasses
-		equals: TStDebuggerExtension users
-]
-
 { #category : #'tests - initialization' }
 StDebuggerTest >> testFastTDD [
 	self debuggerClass fastTDD: nil.
@@ -225,18 +217,6 @@ StDebuggerTest >> testInspectorSelfBinding [
 	receiver := dbg inspector model inspectedObject context receiver.
 	self assert: evaluator doItReceiver identicalTo: receiver.
 	self assert: evaluator behavior identicalTo: receiver class
-]
-
-{ #category : #'tests - extensions' }
-StDebuggerTest >> testInstantiateExtensionToolsPage [
-	|dbg toolPage|
-	dbg := self debugger.
-	toolPage := dbg instantiateExtensionToolsPage: StDummyDebuggerPresenter.
-	self assert: toolPage class identicalTo: SpNotebookPage.
-	self assert: toolPage presenterProvider value class identicalTo: StDummyDebuggerPresenter.
-	self assert: toolPage title equals: StDummyDebuggerPresenter debuggingExtensionToolName.
-	self assertCollection: dbg extensionTools includesAll: { toolPage presenterProvider value}.
-	 
 ]
 
 { #category : #'tests - receiver inspector' }
@@ -298,16 +278,6 @@ StDebuggerTest >> testReceiverUnchangedAfterStepOver [
 	dbg stepOver. 
 	self assert: dbg inspector inspectedObject context receiver identicalTo:  currentReceiver
 
-]
-
-{ #category : #'tests - extensions' }
-StDebuggerTest >> testRegisterExtensionTool [
-	|dbg object|
-	dbg := self debugger.
-	self assertEmpty: dbg extensionTools.
-	dbg registerExtensionTool: (object := Object new).
-	self assert: dbg extensionTools size equals: 1.
-	self assertCollection: dbg extensionTools equals: { object } asOrderedCollection 
 ]
 
 { #category : #'tests - actions' }

@@ -328,11 +328,10 @@ StDebugger class >> handlesContext: aContext [
 ]
 
 { #category : #'tools registry' }
-StDebugger class >> hasAnyActivatedExtension [
-	^ self activateDebuggerExtensions
-		and: [ self extensionToolsSettings values
-				anySatisfy:
-					[ :toolSettings | toolSettings anySatisfy: [ :setting | setting showInDebugger ] ] ]
+StDebugger class >> hasAnyActivatedExtension: extensionsClasses [
+
+	^ extensionsClasses anySatisfy: [ :toolClass | 
+		  toolClass showInDebugger ]
 ]
 
 { #category : #'debugger declaration' }
@@ -434,6 +433,13 @@ StDebugger class >> stackLayout [
 StDebugger class >> taskbarIconName [
 
 	^#smallDebugIcon
+]
+
+{ #category : #'tools registry' }
+StDebugger class >> usesExtensions [
+
+	^ self activateDebuggerExtensions and: [ 
+		  self hasAnyActivatedExtension: self extensionToolsClasses ]
 ]
 
 { #category : #specs }
