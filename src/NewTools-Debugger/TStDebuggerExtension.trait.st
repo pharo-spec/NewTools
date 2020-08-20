@@ -26,12 +26,12 @@ TStDebuggerExtension classSide >> displayOrder: anInteger [
 ]
 
 { #category : #'debugger extension' }
-TStDebuggerExtension classSide >> showByDefault [
+TStDebuggerExtension classSide >> showInDebugger [
 	^showDebuggerExtension ifNil: [showDebuggerExtension := false]
 ]
 
 { #category : #'debugger extension' }
-TStDebuggerExtension classSide >> showByDefault: aBoolean [
+TStDebuggerExtension classSide >> showInDebugger: aBoolean [
 	showDebuggerExtension := aBoolean
 ]
 

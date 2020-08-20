@@ -71,9 +71,9 @@ TStDebuggerExtensionTest >> testExtensionToolNameIsExplicitRequirement [
 ]
 
 { #category : #tests }
-TStDebuggerExtensionTest >> testShowByDefault [
+TStDebuggerExtensionTest >> testShowInDebugger [
 
-	self deny: TStDebuggerExtension showByDefault.
-	traitUser class showByDefault: true.
-	self assert: traitUser class showByDefault
+	self deny: TStDebuggerExtension showInDebugger.
+	traitUser class showInDebugger: true.
+	self assert: traitUser class showInDebugger
 ]
