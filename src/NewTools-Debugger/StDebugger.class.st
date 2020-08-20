@@ -187,12 +187,12 @@ StDebugger class >> debuggerWithoutExtensionsSpec [
 		yourself
 ]
 
-{ #category : #settings }
+{ #category : #deprecated }
 StDebugger class >> defaultDebugger [
 	^DefaultDebugger
 ]
 
-{ #category : #settings }
+{ #category : #deprecated }
 StDebugger class >> defaultDebugger: aSymbol [
 	Available := (aSymbol = #GT) not.
 	DefaultDebugger := aSymbol 
@@ -255,7 +255,7 @@ StDebugger class >> hasAnyActivatedExtension: extensionsClasses [
 		  toolClass showInDebugger ]
 ]
 
-{ #category : #'debugger declaration' }
+{ #category : #deprecated }
 StDebugger class >> iAmADebugger [
 	"Leave blank for intermediate classes. Add the <iAmADebugger> pragma for concrete debugger classes. This pragma is used by the system to find all available debuggers"
 
@@ -292,12 +292,12 @@ StDebugger class >> openOn: aDebugSession withFullView: aBool andNotification: a
 	^ debugger
 ]
 
-{ #category : #'class initialization' }
+{ #category : #deprecated }
 StDebugger class >> rank [
 	^ 80
 ]
 
-{ #category : #'class initialization' }
+{ #category : #deprecated }
 StDebugger class >> rankDebugSession: aDebugSession [
 	"Returns an integer representing how much this debugger is suitable to debug @aDebugSession. The higher the integer returned, the more suitable this debugger is. Signal the DebugSessionCannotBeOpenedByThisDebugger exception if this debugger absolutely cannot debug @aDebugSession (for example if this debugger can only handle debug sessions from test executions, and @aDebugSession does not come from a test execution)"
 	"For compatibility with DebuggerSelector https://github.com/dupriezt/DebuggerSelector"
@@ -350,7 +350,7 @@ StDebugger class >> stackLayout [
 		yourself
 ]
 
-{ #category : #icons }
+{ #category : #deprecated }
 StDebugger class >> taskbarIconName [
 
 	^#smallDebugIcon
