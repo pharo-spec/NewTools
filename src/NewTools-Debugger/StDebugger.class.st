@@ -384,13 +384,13 @@ StDebugger class >> rankDebugSession: aDebugSession [
 	^ self rank.
 ]
 
-{ #category : #'tools registry' }
+{ #category : #deprecated }
 StDebugger class >> register [
 	self flag: 'Maybe this is no longer necessary now that we have DebuggerSelector?'.
 	self registerToolsOn: Smalltalk tools
 ]
 
-{ #category : #'tools registry' }
+{ #category : #deprecated }
 StDebugger class >> registerToolsOn: registry [
 	self flag: 'Maybe this is no longer necessary now that we have DebuggerSelector?'.
 	"Add ourselves to registry. See [Smalltalk tools]" 
