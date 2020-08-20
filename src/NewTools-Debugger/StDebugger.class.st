@@ -90,7 +90,6 @@ Class {
 		'Available',
 		'DefaultDebugger',
 		'ErrorRecursion',
-		'ExtensionToolsSettings',
 		'FastTDD',
 		'UsingSpecSelector'
 	],
