@@ -167,57 +167,6 @@ StDebugger class >> codeLayout [
 ]
 
 { #category : #settings }
-StDebugger class >> debuggerExtensionSettingsForClass: toolClass builder: aBuilder [
-	| settings |
-
-	settings := self extensionToolSettingsFor: toolClass.
-	settings
-		do: [ :s | 
-			(aBuilder group: toolClass debuggingExtensionToolName asSymbol)
-				label: toolClass debuggingExtensionToolName;
-				with: [ 
-					(aBuilder setting: #showInDebugger)
-						label: 'Show in debugger';
-						target: s;
-						default: s defaultShowInDebugger;
-						description: 'Activate the tool tab in the debugger right column.'.
-					(aBuilder pickOne: #displayOrder)
-						label: 'Position';
-						target: s;
-						default: s defaultDisplayOrder;
-						domainValues: (1 to: 100) asArray;
-						description: 'Position of the tool tab in the debugger right column.' ] ]
-]
-
-{ #category : #settings }
-StDebugger class >> debuggerExtensionSettingsOn: aBuilder [
-	<systemsettings>
-	(aBuilder group: #debuggerExtensions)
-		label: 'Debugger Extensions';
-		parent: #debugging;
-		description:
-			'Tools that extend the StDebugger and appear in the right column of the debugger';
-		with: [ | settingsGroup |
-			settingsGroup := (aBuilder setting: #activateDebuggerExtensions)
-				label: 'Activate extensions';
-				target: self;
-				default: true;
-				description:
-					'(De)Activate the debugger extensions tools in the debugger right column.'.
-			self
-				debuggerExtensionsSettingsOn: aBuilder
-				parentGroup: settingsGroup ]
-]
-
-{ #category : #settings }
-StDebugger class >> debuggerExtensionsSettingsOn: aBuilder parentGroup: settingsGroup [
-	
-	settingsGroup with: [ 
-		self extensionToolsClasses do: [ :toolClass | 
-			self debuggerExtensionSettingsForClass: toolClass builder: aBuilder ] ]
-]
-
-{ #category : #settings }
 StDebugger class >> debuggerLayoutSettingsOn: aBuilder [
 	<systemsettings>
 	(aBuilder pickOne: #usingSpecSelector)
