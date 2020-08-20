@@ -116,19 +116,6 @@ StDebugger class >> availableAutomatically [
 	^Available ifNil:[Available := true]
 ]
 
-{ #category : #'tools registry' }
-StDebugger class >> availableExtensionToolsClassesSettings [
-	| settingToClass |
-	settingToClass := Dictionary new.
-	self extensionToolsClasses
-		do: [ :toolClass | 
-			self extensionToolsSettings
-				at: toolClass debuggingExtensionToolName
-				ifPresent:
-					[ :settings | settings do: [ :s | settingToClass at: s put: toolClass ] ] ].
-	^ settingToClass 
-]
-
 { #category : #specs }
 StDebugger class >> availableSpecSelectors [
 	^ self class allSelectorsInProtocol: 'specs - selectors'
@@ -230,22 +217,8 @@ StDebugger class >> defaultSpec [
 ]
 
 { #category : #'tools registry' }
-StDebugger class >> extensionToolSettingsFor: aToolClass [
-	^ self extensionToolsSettings
-		at: aToolClass debuggingExtensionToolName
-		ifAbsentPut:
-			[ StDebuggerExtensionSetting fromDebuggerExtensionClass: aToolClass ]
-]
-
-{ #category : #'tools registry' }
 StDebugger class >> extensionToolsClasses [
 	^TStDebuggerExtension users
-]
-
-{ #category : #'tools registry' }
-StDebugger class >> extensionToolsSettings [
-	^ ExtensionToolsSettings
-		ifNil: [ ExtensionToolsSettings := Dictionary new ]
 ]
 
 { #category : #settings }
@@ -657,20 +630,15 @@ StDebugger >> initializeCode [
 
 { #category : #extensions }
 StDebugger >> initializeExtensionTools [
-	| settingsToClasses sortedSettings pages |
-		extensionToolsNotebook := self newNotebook.
-	true ifTrue: [ ^self ].
 
-	self class hasAnyActivatedExtension
-		ifFalse: [ ^ self ].
-	settingsToClasses := self class
-		availableExtensionToolsClassesSettings.
-	sortedSettings := SortedCollection
-		sortBlock: [ :s1 :s2 | s1 displayOrder <= s2 displayOrder ].
-	sortedSettings addAll: settingsToClasses keys.
-	sortedSettings := sortedSettings select: [ :s | s showInDebugger ].
-	pages := sortedSettings
-		collect: [ :s | self instantiateExtensionToolsPage: (settingsToClasses at: s) ].
+	| sortedToolClasses pages |
+	extensionToolsNotebook := self newNotebook.
+
+	self class usesExtensions ifFalse: [ ^ self ].
+	sortedToolClasses := SortedCollection new sortBlock: [ :s1 :s2 | s1 displayOrder <= s2 displayOrder ].
+	sortedToolClasses addAll: (self class extensionToolsClasses select: [ :s | s showInDebugger ]).
+	pages := sortedToolClasses collect: [ :toolClass | 
+		         self instantiateExtensionToolsPage: toolClass ].
 	extensionToolsNotebook pages: pages
 ]
 
@@ -766,7 +734,7 @@ StDebugger >> instantiateExtensionToolsPage: aToolClass [
 	toolInstance := self instantiate: aToolClass on: self.
 	self registerExtensionTool: toolInstance.
 	^ SpNotebookPage
-		title: aToolClass debuggingExtensionToolName
+		title: toolInstance debuggerExtensionToolName
 		provider: [ toolInstance ]
 ]
 
