@@ -263,7 +263,7 @@ StDebugger class >> defaultDebugger: aSymbol [
 	DefaultDebugger := aSymbol 
 ]
 
-{ #category : #settings }
+{ #category : #deprecated }
 StDebugger class >> defaultDebuggerSettingsOn: aBuilder [
 	<systemsettings>
 	(aBuilder pickOne: #defaultDebugger)
