@@ -8,42 +8,17 @@ Class {
 }
 
 { #category : #running }
-TStDebuggerExtensionTest >> generateTestClass [
-
-	Object
-		subclass: #TStDebuggerExtensionTestClass
-		uses: TStDebuggerExtension
-		instanceVariableNames: ''
-		classVariableNames: ''
-		package: 'NewTools-Debugger-Tests-Model'
-]
-
-{ #category : #running }
-TStDebuggerExtensionTest >> removeTestClass [
-
-	Smalltalk
-		at: #TStDebuggerExtensionTestClass
-		ifPresent: [ :class | class removeFromSystem ]
-]
-
-{ #category : #running }
 TStDebuggerExtensionTest >> setUp [
 	super setUp.
-	self generateTestClass.
-	traitUser := self testClass new
+	StDebuggerExtensionGeneratorForTests generateTestClass.
+	traitUser := StDebuggerExtensionGeneratorForTests testClass new
 ]
 
 { #category : #running }
 TStDebuggerExtensionTest >> tearDown [
 	traitUser := nil.
-	self removeTestClass.
+	StDebuggerExtensionGeneratorForTests removeTestClass.
 	super tearDown
-]
-
-{ #category : #running }
-TStDebuggerExtensionTest >> testClass [
-
-	^ Smalltalk at: #TStDebuggerExtensionTestClass
 ]
 
 { #category : #tests }
