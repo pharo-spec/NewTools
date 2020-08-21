@@ -9,28 +9,6 @@ Class {
 	#category : #'NewTools-Debugger-Tests-Presenters'
 }
 
-{ #category : #'helpers - debugger control' }
-StDebuggerTest >> clickStepInto [
-	self debugger updateToolbar.
-	(self debugger toolbar items detect:[:item| item label = 'Into']) click
-]
-
-{ #category : #'helpers - debugger control' }
-StDebuggerTest >> clickStepInto: n [
-	n timesRepeat: [ self clickStepInto ]
-]
-
-{ #category : #'helpers - debugger control' }
-StDebuggerTest >> clickStepOver [
-	self debugger updateToolbar.
-	(self debugger toolbar items detect:[:item| item label = 'Over']) click
-]
-
-{ #category : #'helpers - debugger control' }
-StDebuggerTest >> clickStepOver: n [
-	n timesRepeat: [ self clickStepOver ]
-]
-
 { #category : #accessing }
 StDebuggerTest >> debugger [
 	^ debugger ifNil: [ debugger := self debuggerClass basicNew ]
