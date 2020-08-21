@@ -68,11 +68,16 @@ StDebuggerActionModel >> filterStack: aStack [
 
 { #category : #'debug - session' }
 StDebuggerActionModel >> implement: aMessage classified: messageCategory inClass: aClass forContext: aContext [
+
+	| method |
 	self session
 		implement: aMessage
 		classified: messageCategory
 		inClass: aClass
-		forContext: aContext
+		forContext: aContext.
+	method := aClass lookupSelector: aMessage selector.
+	method protocol = Protocol unclassified ifTrue: [ 
+		MethodClassifier classify: method ]
 ]
 
 { #category : #accessing }
@@ -83,7 +88,7 @@ StDebuggerActionModel >> interruptedContext [
 { #category : #'debug - predicates' }
 StDebuggerActionModel >> isContextSteppable [
 	self flag: 'Too complex: could we reify debugging predicates for more clarity and simplicity?'.
-
+	self interruptedContext ifNil:[^false].
 	^ (self isInterruptedContextError
 		or: [ self isInterruptedContextATestFailure
 				or: [ self isInterruptedContextPostMortem

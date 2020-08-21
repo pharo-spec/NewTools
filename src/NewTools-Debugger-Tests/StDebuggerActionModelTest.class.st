@@ -123,12 +123,12 @@ StDebuggerActionModelTest >> setUp [
 
 { #category : #running }
 StDebuggerActionModelTest >> tearDown [
+
 	session interruptedContext ifNotNil: [ session terminate ].
-	(StDebuggerUsingSpecSelectorMock lookupSelector: #testMethod) 
-		ifNotNil: [ :method | method removeFromSystem ].
-	(StTestDebuggerProvider lookupSelector:
-		 #buildDebuggerWithMissingClassContext) ifNotNil: [ :method | 
-		method removeFromSystem ].
+	StDebuggerUsingSpecSelectorMock removeSelector: #testMethod.
+	StDebuggerUsingSpecSelectorMock removeSelector: #method.
+	StDebuggerUsingSpecSelectorMock removeSelector: #unclassifiedMethod.
+	StTestDebuggerProvider removeSelector: #buildDebuggerWithMissingClassContext.
 	StTestDebuggerProvider removeSelector: #foobar.
 	super tearDown
 ]
@@ -203,8 +203,34 @@ StDebuggerActionModelTest >> testFilterStack [
 { #category : #tests }
 StDebuggerActionModelTest >> testImplementClassifiedInClassForContext [
 	|method|
-	method := (StDebuggerUsingSpecSelectorMock lookupSelector: #testMethod).
+	method := (StDebuggerUsingSpecSelectorMock lookupSelector: #method).
 	self assert:	method equals: nil.
+	[ StDebuggerUsingSpecSelectorMock new method ]
+		on: Error
+		do: [ :dnu | 
+			debugActionModel
+				implement: dnu message
+				classified: Protocol unclassified
+				inClass: StDebuggerUsingSpecSelectorMock
+				forContext: dnu signalerContext ].
+	method := (StDebuggerUsingSpecSelectorMock lookupSelector: #method).
+	self deny: method	equals: nil.
+	self assert: method methodClass identicalTo: StDebuggerUsingSpecSelectorMock
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testImplementMethodClassification [
+
+	| method |
+	[ StDebuggerUsingSpecSelectorMock new method ]
+		on: Error
+		do: [ :dnu | 
+			debugActionModel
+				implement: dnu message
+				classified: Protocol unclassified
+				inClass: StDebuggerUsingSpecSelectorMock
+				forContext: dnu signalerContext ].
+
 	[ StDebuggerUsingSpecSelectorMock new testMethod ]
 		on: Error
 		do: [ :dnu | 
@@ -213,9 +239,23 @@ StDebuggerActionModelTest >> testImplementClassifiedInClassForContext [
 				classified: Protocol unclassified
 				inClass: StDebuggerUsingSpecSelectorMock
 				forContext: dnu signalerContext ].
-	method := (StDebuggerUsingSpecSelectorMock lookupSelector: #testMethod).
-	self deny: method	equals: nil.
-	self assert: method methodClass identicalTo: StDebuggerUsingSpecSelectorMock.
+
+	[ StDebuggerUsingSpecSelectorMock new unclassifiedMethod ]
+		on: Error
+		do: [ :dnu | 
+			debugActionModel
+				implement: dnu message
+				classified: Protocol unclassified
+				inClass: StDebuggerUsingSpecSelectorMock
+				forContext: dnu signalerContext ].
+
+	method := StDebuggerUsingSpecSelectorMock lookupSelector: #method.
+	self assert: method protocol equals: 'accessing'.
+	
+	method := StDebuggerUsingSpecSelectorMock lookupSelector: #testMethod.
+	self assert: method protocol equals: 'tests'.
+	
+	method := StDebuggerUsingSpecSelectorMock lookupSelector: #unclassifiedMethod.
 	self assert: method protocol equals: Protocol unclassified
 ]
 
