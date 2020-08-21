@@ -30,7 +30,7 @@ StTestDebuggerProvider >> debuggerWithContext: aContext [
 
 { #category : #helpers }
 StTestDebuggerProvider >> debuggerWithDNUContext [
-	[ Object new toto ]
+	[ StMockDebugCommand new toto ]
 		on: Error
 		do: [ :err | 
 			self sessionFor: err signalerContext.

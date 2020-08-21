@@ -115,7 +115,14 @@ StDebuggerActionModel >> isInterruptedContextAnAssertEqualsFailure [
 
 { #category : #'debug - predicates' }
 StDebuggerActionModel >> isInterruptedContextDoesNotUnderstand [
-	^self session isInterruptedContextDoesNotUnderstand
+	self flag: #DBG_IMPROVE.
+	self flag: 'maybe move this later in debug session?'.
+	^ self session isInterruptedContextDoesNotUnderstand and: [ 
+		  | context message |
+		  context := self interruptedContext.
+		  message := (context temporaryVariableNamed: #aMessage) 
+			             readInContext: context.
+		  (self interruptedContext receiver respondsTo: message selector) not ]
 ]
 
 { #category : #'debug - predicates' }
