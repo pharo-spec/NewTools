@@ -12,18 +12,6 @@ Class {
 	#category : #'NewTools-Debugger-Tests-Utils'
 }
 
-{ #category : #accessing }
-StDummyDebuggerPresenter class >> debuggerExtensionTestPragma [
-	<debuggerExtensionTestPragma>
-	
-]
-
-{ #category : #accessing }
-StDummyDebuggerPresenter class >> debuggingExtensionToolName [
-	^'Test extendedDebuggingToolTitle'
-	
-]
-
 { #category : #mocks }
 StDummyDebuggerPresenter >> copyStackToClipboard [
 tag := thisContext method selector.
@@ -46,6 +34,12 @@ tag := thisContext method selector.
 StDummyDebuggerPresenter >> createSubclassResponsibility [
 tag := thisContext method selector.
 ^true
+]
+
+{ #category : #accessing }
+StDummyDebuggerPresenter >> debuggerExtensionToolName [
+	^'Test extendedDebuggingToolTitle'
+	
 ]
 
 { #category : #mocks }
