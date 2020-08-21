@@ -447,6 +447,7 @@ StDebugger >> clearCode [
 
 { #category : #opening }
 StDebugger >> close [
+	self unsubscribeFromSystemAnnouncer.
 	self withWindowDo: #close
 ]
 

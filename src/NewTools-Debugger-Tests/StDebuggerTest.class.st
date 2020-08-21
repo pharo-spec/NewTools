@@ -66,10 +66,16 @@ StDebuggerTest >> tearDown [
 	session clear.
 	self debuggerClass fastTDD: oldFastTDD.
 	debugger ifNotNil: [ 
-		debugger unsubscribeFromSystemAnnouncer.
+		debugger close.
 		debugger session ifNotNil: [ :s | s clear ] ].
 	StTestDebuggerProvider removeSelector: #foobar.
 	super tearDown
+]
+
+{ #category : #'tests - actions' }
+StDebuggerTest >> testClose [
+	(self debuggerOn: session) close.
+	self deny: (SystemAnnouncer uniqueInstance hasSubscriber: debugger)
 ]
 
 { #category : #'tests - code pane' }
