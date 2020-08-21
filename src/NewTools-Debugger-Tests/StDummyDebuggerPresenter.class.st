@@ -9,7 +9,7 @@ Class {
 	#instVars : [
 		'tag'
 	],
-	#category : #'NewTools-Debugger-Tests-Debugger - views'
+	#category : #'NewTools-Debugger-Tests-Utils'
 }
 
 { #category : #accessing }
