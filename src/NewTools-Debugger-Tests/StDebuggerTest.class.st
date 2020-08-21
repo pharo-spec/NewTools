@@ -68,22 +68,9 @@ StDebuggerTest >> inspectorTableFor: inspector [
 ]
 
 { #category : #running }
-StDebuggerTest >> setUp [
-	| context process |
-	super setUp.
-	context := [ | i |
-	i := 1 squared.
-	i = 1
-		ifTrue: [ | j |
-			j := i + 1 ].
-	^ 1 + i] asContext.
-	process := Process
-		forContext: context
-		priority: Processor userInterruptPriority.
-	session := DebugSession
-		named: 'test session'
-		on: process
-		startedAt: context.
+StDebuggerTest >> setUp [	
+	super setUp.	
+	session := StTestDebuggerProvider new sessionForDebuggerTests.
 	oldFastTDD := self debuggerClass fastTDD.
 	self debuggerClass fastTDD: true
 ]
@@ -93,6 +80,8 @@ StDebuggerTest >> tearDown [
 
 	session clear.
 	self debuggerClass fastTDD: oldFastTDD.
+	debugger ifNotNil: [ 
+		debugger session ifNotNil: [ :s | s clear ] ].
 	super tearDown
 ]
 
