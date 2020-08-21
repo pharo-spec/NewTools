@@ -431,7 +431,9 @@ StDebugger >> clear [
 		do: [ :page | page activePresenter windowIsClosing ].
 	extensionTools := nil.
 	self removeActionsForSession: self session.
-	self debuggerActionModel clearDebugSession
+	self debuggerActionModel clearDebugSession.
+	self unsubscribeFromSystemAnnouncer
+	
 ]
 
 { #category : #'updating widgets' }
@@ -602,7 +604,8 @@ StDebugger >> initialExtent [
 StDebugger >> initialize [
 	super initialize.
 	self setSessionHolderSubscriptions.
-	self forceSessionUpdate
+	self forceSessionUpdate.
+	self subscribeToMethodAddedAnnouncement
 ]
 
 { #category : #initialization }
@@ -996,6 +999,15 @@ StDebugger >> stepThrough [
 	self debuggerActionModel stepThrough: self currentContext
 ]
 
+{ #category : #'system subscriptions' }
+StDebugger >> subscribeToMethodAddedAnnouncement [
+
+	SystemAnnouncer uniqueInstance weak
+		when: MethodAdded
+		send: #updateToolbarDebugActions
+		to: self
+]
+
 { #category : #api }
 StDebugger >> title [
 	^ ((self session isContextPostMortem: self interruptedContext)
@@ -1017,6 +1029,12 @@ StDebugger >> titlePrefixTextForCurrentContext [
 StDebugger >> toolbar [
 
 	^ toolbar
+]
+
+{ #category : #'system subscriptions' }
+StDebugger >> unsubscribeFromSystemAnnouncer [
+
+	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
 { #category : #'updating widgets' }
@@ -1151,7 +1169,7 @@ StDebugger >> updateTitle: statusString [
 
 { #category : #'updating widgets' }
 StDebugger >> updateToolbarDebugActions [
-	
-	toolbarCommandGroup allCommands
-		do: [ :spCommand | spCommand updateEnableStatus ]
+
+	toolbarCommandGroup allCommands do: [ :spCommand | 
+		spCommand updateEnableStatus ]
 ]

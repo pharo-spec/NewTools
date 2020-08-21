@@ -147,6 +147,21 @@ StTestDebuggerProvider >> sessionForDebuggerTests [
 ]
 
 { #category : #helpers }
+StTestDebuggerProvider >> sessionWithDNUAfterStep [
+
+	| context process sessionForTests |
+	context := [ ^ self methodProducingDNU ] asContext.
+	process := Process
+		           forContext: context
+		           priority: Processor userInterruptPriority.
+	sessionForTests := DebugSession
+		                   named: 'test session'
+		                   on: process
+		                   startedAt: context.
+	^ sessionForTests
+]
+
+{ #category : #helpers }
 StTestDebuggerProvider >> terminate [ 
 	session ifNotNil:[session terminate].
 	session := nil

@@ -129,7 +129,7 @@ StDebuggerActionModelTest >> tearDown [
 	(StTestDebuggerProvider lookupSelector:
 		 #buildDebuggerWithMissingClassContext) ifNotNil: [ :method | 
 		method removeFromSystem ].
-	StMockDebugCommand removeSelector: #toto.
+	StTestDebuggerProvider removeSelector: #foobar.
 	super tearDown
 ]
 
@@ -256,7 +256,7 @@ StDebuggerActionModelTest >> testIsInterruptedContextAnAssertionFailure [
 StDebuggerActionModelTest >> testIsInterruptedContextDoesNotUnderstand [
 	self changeSession: StTestDebuggerProvider new debuggerWithDNUContext session.
 	self assert: debugActionModel isInterruptedContextDoesNotUnderstand.
-	StMockDebugCommand compile: 'toto ^self'.
+	StTestDebuggerProvider compile: 'foobar ^self'.
 	self deny: debugActionModel isInterruptedContextDoesNotUnderstand
 ]
 

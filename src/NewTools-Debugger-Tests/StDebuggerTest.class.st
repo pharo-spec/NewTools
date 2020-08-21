@@ -52,6 +52,13 @@ StDebuggerTest >> debuggerOn: aDebugSession [
 ]
 
 { #category : #accessing }
+StDebuggerTest >> executionControlCommandFrom: aDebugger [
+
+	^ debugger toolbarCommandGroup allCommands select: [ :c | 
+		  #( 'Proceed' 'Into' 'Over' 'Through' ) includes: c name ]
+]
+
+{ #category : #accessing }
 StDebuggerTest >> initializedDebugger [
 	| dbg |
 	dbg := self debugger.
@@ -81,7 +88,9 @@ StDebuggerTest >> tearDown [
 	session clear.
 	self debuggerClass fastTDD: oldFastTDD.
 	debugger ifNotNil: [ 
+		debugger unsubscribeFromSystemAnnouncer.
 		debugger session ifNotNil: [ :s | s clear ] ].
+	StTestDebuggerProvider removeSelector: #foobar.
 	super tearDown
 ]
 
@@ -451,8 +460,8 @@ StDebuggerTest >> testStackTableWithNewSession [
 
 { #category : #'tests - toolbar' }
 StDebuggerTest >> testToolbarDependingOnContext [
-	self skip.
-	self flag: #DBG_TEST
+	self skip
+
 ]
 
 { #category : #'tests - toolbar' }
@@ -461,6 +470,31 @@ StDebuggerTest >> testToolbarDisplayMode [
 	self
 		assert: debugger toolbar displayMode
 		equals: debugger application toolbarDisplayMode
+]
+
+{ #category : #'tests - toolbar' }
+StDebuggerTest >> testToolbarInDNUContext [
+	|commands|
+	session clear.
+	session := StTestDebuggerProvider new sessionWithDNUAfterStep.
+
+	self debuggerOn: session.
+	debugger buildContextMenus.		
+	commands := self executionControlCommandFrom: debugger.	
+
+	"We're not in a DNU, buttons are enabled"
+	commands do: [ :c| self assert: c presenter isEnabled].
+
+	"We step into the DNU, buttons should be disabled"
+	debugger stepInto.
+	debugger stepOver.
+	commands do: [ :c| self deny: c presenter isEnabled].
+
+	"We define the missing method from outside the debugger, buttons should automatically be enabled"
+	StTestDebuggerProvider compile: 'foobar ^self'.		
+	commands do: [ :c| self assert: c presenter isEnabled].
+	
+	
 ]
 
 { #category : #'tests - code pane' }

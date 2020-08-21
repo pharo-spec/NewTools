@@ -83,6 +83,7 @@ StDebuggerActionModel >> interruptedContext [
 { #category : #'debug - predicates' }
 StDebuggerActionModel >> isContextSteppable [
 	self flag: 'Too complex: could we reify debugging predicates for more clarity and simplicity?'.
+
 	^ (self isInterruptedContextError
 		or: [ self isInterruptedContextATestFailure
 				or: [ self isInterruptedContextPostMortem
@@ -127,10 +128,16 @@ StDebuggerActionModel >> isInterruptedContextDoesNotUnderstand [
 
 { #category : #'debug - predicates' }
 StDebuggerActionModel >> isInterruptedContextError [
+
+	| exception |
 	self flag:
 		'Does not pass yet: we need a secure way of knowing the session was opened from **any** kind of exception'.
-	^ (self session interruptedContext temporaryVariableNamed: #exception)
-		  notNil
+		
+	exception := self interruptedContext temporaryVariableNamed:
+		             #exception.
+	^ exception notNil and: [ 
+		  ((exception readInContext: self interruptedContext) class
+		   = MessageNotUnderstood) not ]
 ]
 
 { #category : #'debug - predicates' }
