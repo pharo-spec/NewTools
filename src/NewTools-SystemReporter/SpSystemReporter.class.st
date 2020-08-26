@@ -2,7 +2,7 @@
 I'm a little tool that display information about the system.
 
 ```
-SpSystemReporter new openWithSpec
+SpSystemReporter new openWithSpec.
 SpSystemReporter open
 ```
 
@@ -22,6 +22,51 @@ SpSystemReporter class >> systemReporterMenuOn: aBuilder [
 		parent: #System;
 		action: [ self open ];
 		help: 'If you have a bug, use this tool to provide information about your system.'
+]
+
+{ #category : #initialization }
+SpSystemReporter >> connectPresenters [ 
+
+	super connectPresenters.
+	topicList  selectIndex: 1.
+]
+
+{ #category : #utils }
+SpSystemReporter >> extent [
+
+	^ 500@ 600
+]
+
+{ #category : #initialization }
+SpSystemReporter >> fillTopics [ 
+	
+	 {
+		(#Image -> #reportImage:) .
+		(#'Image Parameters' -> #reportImageParameters:).
+		(#'Image Sources' -> #reportSources:).
+		(#'MC Repositories' -> #reportRepositories:).
+		(#'MC Working Copies' -> #reportWorkingCopies:).
+		(#'VM General' -> #reportVM:).
+		(#'VM Options' -> #reportVMOptions:).
+		(#'VM Modules' -> #reportModules:).
+		(#'VM Parameters' -> #reportVMParameters:).
+		(#'VM Stats' -> #reportVMStats:).
+		(#OS -> #reportOS:).
+		(#'OS Environment' -> #reportOSEnvironment:).
+		} do: [ :each | self addTopicSpec: each ].
+		
+	self isWindows
+		ifTrue: [ 
+			{ (#'OS Details' -> #reportWin32OSDetails:).
+			(#'VM Configuration' -> #reportWin32VMConfig:).
+			(#'Hardware Details' -> #reportWin32HardwareDetails:).
+			(#'GFX Hardware Details' -> #reportWin32GFXDetails:).	
+			} do: [ :each | self addTopicSpec: each ]. 
+			].	
+		
+	self isLinux 
+		ifTrue: [ self addTopicSpec: #'OS Details' -> #reportLinuxOSDetails: ].
+	^ topics
 ]
 
 { #category : #utils }
@@ -309,8 +354,6 @@ SpSystemReporter >> title [
 { #category : #initialization }
 SpSystemReporter >> topicSpec [
 	
-	| topics |
-	topics := OrderedCollection new.
 	topics addAll:  {
 		(#Image -> #reportImage:) .
 		(#'Image Parameters' -> #reportImageParameters:).

@@ -20,10 +20,7 @@ Class {
 	#instVars : [
 		'topicList',
 		'reportText',
-		'categoriesSelected',
-		'categories',
-		'sourceTextModel',
-		'categoryList'
+		'topics'
 	],
 	#classInstVars : [
 		'reportText'
@@ -46,13 +43,21 @@ SpReporter class >> open [
 	self new openWithSpec
 ]
 
+{ #category : #adding }
+SpReporter >> addTopicSpec: aPair [
+
+	topics add: aPair
+]
+
 { #category : #initialization }
 SpReporter >> connectPresenters [  
-
+	
 	topicList whenSelectionChangedDo: [ :selection | 
 			selection selectedItems
 				ifNotNil: [ :items |
-								reportText text: (self createTextForReport: items)]]
+								reportText text: (self createTextForReport: items)]].
+						
+	topicList items: topics
 ]
 
 { #category : #'building report' }
@@ -93,6 +98,12 @@ SpReporter >> enumerate: aBlock startAt: first on: aStream [
 				cr ]
 ]
 
+{ #category : #initialization }
+SpReporter >> fillTopics [
+
+	^ self
+]
+
 { #category : #utils }
 SpReporter >> header: aString on: aStream [
 	aStream
@@ -105,29 +116,31 @@ SpReporter >> header: aString on: aStream [
 ]
 
 { #category : #initialization }
+SpReporter >> initialize [
+	topics := OrderedCollection new.
+	self fillTopics.
+	super initialize.
+	
+]
+
+{ #category : #initialization }
 SpReporter >> initializePresenters [ 
 
 	topicList := self newList.
 	topicList beMultipleSelection.
 	topicList display: [ :each | each key ].
-	topicList items: self topicSpec.
 	reportText := self newText.
 ]
 
 { #category : #initialization }
 SpReporter >> initializeWindow: aWindowPresenter [
 
-	aWindowPresenter title: self title
-]
-
-{ #category : #accessing }
-SpReporter >> sourceTextModel [
-	^ sourceTextModel
-		ifNil: [ sourceTextModel := RubScrolledTextModel new interactionModel: self ]
+	aWindowPresenter title: self title.
+	aWindowPresenter initialExtent: self extent
 ]
 
 { #category : #initialization }
 SpReporter >> topicSpec [
 
-	^ #()
+	^ topics
 ]
