@@ -19,11 +19,7 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'topicList',
-		'reportText',
-		'categoriesSelected',
-		'categories',
-		'sourceTextModel',
-		'categoryList'
+		'reportText'
 	],
 	#classInstVars : [
 		'reportText'
