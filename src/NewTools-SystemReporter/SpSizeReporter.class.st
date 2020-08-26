@@ -39,7 +39,9 @@ SpSizeReporter >> computeLocs [
 { #category : #accessing }
 SpSizeReporter >> effectiveClassLoc [
 
-	^ data at: #effectiveClassLoc ifAbsent: [ self computeLocs. data at: #effectiveClassLoc ]
+	^ data at: #effectiveClassLoc ifAbsentPut: [ self computeLocs. 
+			self imageClassLoc - self baselineClassLoc - self testClassLoc - self manifestClassLoc ]
+	
 ]
 
 { #category : #accessing }
@@ -60,7 +62,7 @@ SpSizeReporter >> extent [
 	^ 600@ 400
 ]
 
-{ #category : #'building report' }
+{ #category : #initialization }
 SpSizeReporter >> fillTopics [
 
   {	#'# smart report' -> #reportSmartInfo: .
@@ -136,7 +138,7 @@ SpSizeReporter >> printNumber: aNumber on: aStream [
 
 { #category : #'building report' }
 SpSizeReporter >> reportLOC: aStream [
-
+	
 	self header: 'Number of LinesOfCode' on: aStream.
 	aStream nextPutAll: '# for all classes: '.
 	self printNumber: self imageClassLoc on: aStream.
@@ -151,10 +153,10 @@ SpSizeReporter >> reportLOC: aStream [
 	self printNumber: self baselineClassLoc on: aStream.
 	aStream cr.
 	aStream nextPutAll: '# for effective classes: '.
-	self printNumber: self imageClassLoc - self baselineClassLoc - self testClassLoc - self manifestClassLoc on: aStream.
+	self printNumber: self effectiveClassLoc on: aStream.
 	aStream cr.
-	
-
+	aStream nextPutAll: 'Average LOC per class for effective classes: '.
+	aStream print: (self effectiveClassLoc / self effectiveClasses size) asFloat rounded
 ]
 
 { #category : #'building report' }
@@ -209,6 +211,9 @@ SpSizeReporter >> reportSmartInfo: aStream [
 	aStream cr.
 	aStream nextPutAll: '# average number of methods per classes: '.
 	aStream print: ((self effectiveClasses inject: 0 into: [ :sum :c | sum + c numberOfMethods ]) / self effectiveClasses size) asFloat rounded.
+	
+
+
 ]
 
 { #category : #accessing }
