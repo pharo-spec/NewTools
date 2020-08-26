@@ -3,7 +3,10 @@ I'm a little tool that display information about the system.
 
 ```
 SpSystemReporter new openWithSpec
+SpSystemReporter open
 ```
+
+
 "
 Class {
 	#name : #SpSystemReporter,

@@ -115,9 +115,9 @@ SpReporter >> initializePresenters [
 ]
 
 { #category : #initialization }
-SpReporter >> initializeWindow: aPres [
+SpReporter >> initializeWindow: aWindowPresenter [
 
-	aPres title: self title
+	aWindowPresenter title: self title
 ]
 
 { #category : #accessing }
