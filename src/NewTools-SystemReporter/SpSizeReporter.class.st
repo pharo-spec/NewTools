@@ -9,49 +9,121 @@ Class {
 	#name : #SpSizeReporter,
 	#superclass : #SpReporter,
 	#instVars : [
-		'imageClasses'
+		'data'
 	],
 	#category : #'NewTools-SystemReporter'
 }
 
+{ #category : #compute }
+SpSizeReporter >> baselineClassLoc [
+	^ data at: #baselineClassLoc 
+]
+
+{ #category : #accessing }
+SpSizeReporter >> baselineClasses [
+
+	^ data at: #baselineClasses
+]
+
+{ #category : #compute }
+SpSizeReporter >> computeLocs [ 
+
+	data at: #manifestClassLoc put:  (self manifestClasses inject: 0 into: [ :sum :each | sum + each linesOfCode]).
+	data at: #testClassLoc put: (self testClasses inject: 0 into: [ :sum :each | sum + each linesOfCode]).
+	data at: #baselineClassLoc put: (self baselineClasses inject: 0 into: [ :sum :each | sum + each linesOfCode]).
+	data at: #imageClassLoc put: (self imageClasses inject: 0 into: [ :sum :each | sum + each linesOfCode]).
+]
+
+{ #category : #accessing }
+SpSizeReporter >> effectiveClasses [
+
+	^ data at: #effectiveClasses
+]
+
+{ #category : #compute }
+SpSizeReporter >> imageClassLoc [ 
+	^ data at: #imageClassLoc 
+]
+
+{ #category : #accessing }
+SpSizeReporter >> imageClasses [
+
+	^ data at: #imageClasses
+]
+
 { #category : #initialization }
 SpSizeReporter >> initialize [ 
 	super initialize.
-	imageClasses := self class environment allClasses.
+	data := Dictionary new. 
+	data at: #imageClasses put: self class environment allClasses.
+	data at: #manifestClasses put: (self imageClasses select: [ :each | each isManifest ]).
+	data at: #testClasses put: (self imageClasses select: [ :each | each isTestCase ]).
+	data at: #baselineClasses put: (self imageClasses select: [:c | c name beginsWith: 'BaselineOf' ]).
+	data at: #effectiveClasses put: (self imageClasses reject: [ :c | c isManifest or: [ c isTestCase or: [ c name beginsWith: 'BaselineOf' ] ]])
+]
+
+{ #category : #compute }
+SpSizeReporter >> manifestClassLoc [
+
+	^ data at: #manifestClassLoc 
+	
+]
+
+{ #category : #accessing }
+SpSizeReporter >> manifestClasses [
+
+	^ data at: #manifestClasses
+]
+
+{ #category : #utils }
+SpSizeReporter >> printNumber: aNumber on: aStream [
+
+	aNumber
+		printSeparatedBy: Character space 
+		every: 3
+		signed: false
+		on: aStream
 ]
 
 { #category : #'building report' }
 SpSizeReporter >> reportLOC: aStream [
-	self header: 'Number of LinesOfCode' on: aStream.
-	aStream nextPutAll: '#All classes: '.
-	aStream nextPutAll: (imageClasses inject: 0 into: [ :sum :each | sum + each linesOfCode]) asString
 
+	self header: 'Number of LinesOfCode' on: aStream.
+	self computeLocs.
+
+	aStream nextPutAll: '# for all classes: '.
+	self printNumber: self imageClassLoc on: aStream.
+	aStream cr.
+	aStream nextPutAll: '# for manifest classes: '.
+	self printNumber: self manifestClassLoc on: aStream.
+	aStream cr.
+	aStream nextPutAll: '# for test classes: '.
+	self printNumber: self testClassLoc on: aStream.
+	aStream cr.
+	aStream nextPutAll: '# for baselines: '.
+	self printNumber: self baselineClassLoc on: aStream.
+	aStream cr.
+	aStream nextPutAll: '# for effective classes: '.
+	self printNumber: self imageClassLoc - self baselineClassLoc - self testClassLoc - self manifestClassLoc on: aStream.
+	aStream cr.
+	
 
 ]
 
 { #category : #'building report' }
 SpSizeReporter >> reportNbClasses: aStream [
-	| effectiveClasses manifest tests baselineOf |
 
-	effectiveClasses := imageClasses size. 
-	manifest := (imageClasses count: #isManifest).
-	tests := (imageClasses count: #isTestCase).
-	baselineOf := (imageClasses count: [:c | c name beginsWith: 'BaselineOf' ]).
-	effectiveClasses := effectiveClasses - manifest - tests.
 	self header: 'Number of classes' on: aStream.
-	aStream 
-		nextPutAll: imageClasses size asString; cr ;
-		nextPutAll: 'Tests: ' ;
-		nextPutAll: tests asString ; cr ;
-		"very long to compute :-(
-		nextPutAll: 'Without instances: ' ;
-		nextPutAll: (imageClasses count: [:c | c allInstances isEmpty]) asString ; cr ;"
-		nextPutAll: 'Manifests: ' ;
-		nextPutAll: manifest asString; cr ;
-		nextPutAll: 'BaselineOf-s: ' ;
-		nextPutAll:  baselineOf asString ; cr;
-		nextPutAll: 'Effective classes: ';
-		nextPutAll: effectiveClasses asString; cr.
+	aStream nextPutAll: '# classes: '.
+	self printNumber: self imageClasses size on: aStream.
+	aStream cr; nextPutAll: '# Tests classes: '.
+	self printNumber: self testClasses size on: aStream.
+	aStream cr; nextPutAll: '# Manifest classes: '.
+	self printNumber: self manifestClasses size on: aStream.
+	aStream cr; nextPutAll: '# BaselineOf-s:  '.
+	self printNumber: self baselineClasses size on: aStream.
+	aStream cr; nextPutAll: '# Effective classes:  '.
+	self printNumber: (self imageClasses size - self testClasses size - self manifestClasses size - self baselineClasses size) on: aStream.
 		
 		
 ]
@@ -59,7 +131,7 @@ SpSizeReporter >> reportNbClasses: aStream [
 { #category : #'building report' }
 SpSizeReporter >> reportNbTraits: aStream [
 	| imageTraits |
-	imageTraits := Smalltalk allTraits.
+	imageTraits := self class environment allTraits.
 	self header: 'Number of traits' on: aStream.
 	aStream 
 		nextPutAll: imageTraits size asString; cr ;
@@ -68,13 +140,26 @@ SpSizeReporter >> reportNbTraits: aStream [
 
 ]
 
+{ #category : #compute }
+SpSizeReporter >> testClassLoc [
+
+	^ data at: #testClassLoc
+	
+]
+
+{ #category : #accessing }
+SpSizeReporter >> testClasses [
+
+	^ data at: #testClasses
+]
+
 { #category : #ui }
 SpSizeReporter >> title [ 
 
 	^ 'Size reporter'
 ]
 
-{ #category : #initialization }
+{ #category : #'building report' }
 SpSizeReporter >> topicSpec [
 	| topics |
 	topics := OrderedCollection new.
