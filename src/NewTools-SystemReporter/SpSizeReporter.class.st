@@ -27,6 +27,16 @@ SpSizeReporter >> initialize [
 ]
 
 { #category : #'building report' }
+SpSizeReporter >> printNumber: aNumber on: aStream [
+
+	aNumber
+		printSeparatedBy: Character space 
+		every: 3
+		signed: false
+		on: aStream
+]
+
+{ #category : #'building report' }
 SpSizeReporter >> reportLOC: aStream [
 	| maniLoc testLoc baseLoc all|
 	self header: 'Number of LinesOfCode' on: aStream.
@@ -36,19 +46,19 @@ SpSizeReporter >> reportLOC: aStream [
 	all := imageClasses inject: 0 into: [ :sum :each | sum + each linesOfCode].
 
 	aStream nextPutAll: '#All classes: '.
-	aStream print: all.
+	self printNumber: all on: aStream.
 	aStream cr.
 	aStream nextPutAll: '#Manifest classes: '.
-	aStream print: maniLoc.
+	self printNumber: maniLoc on: aStream.
 	aStream cr.
 	aStream nextPutAll: '#Test classes: '.
-	aStream print: testLoc.
+	self printNumber: testLoc on: aStream.
 	aStream cr.
 	aStream nextPutAll: '#Baseline: '.
-	aStream print: baseLoc.
+	self printNumber: baseLoc on: aStream.
 	aStream cr.
 	aStream nextPutAll: '#Effective classes: '.
-	aStream print: all - baseLoc - testLoc - maniLoc .
+	self printNumber: all - baseLoc - testLoc - maniLoc on: aStream.
 	aStream cr.
 	
 
@@ -58,20 +68,18 @@ SpSizeReporter >> reportLOC: aStream [
 SpSizeReporter >> reportNbClasses: aStream [
 
 	self header: 'Number of classes' on: aStream.
-	aStream 
-		nextPutAll: 'All classes: ';
-		nextPutAll: imageClasses size asString; cr ;
-		nextPutAll: 'Tests: ' ;
-		nextPutAll: testClasses size asString ; cr ;
-		"very long to compute :-(
-		nextPutAll: 'Without instances: ' ;
-		nextPutAll: (imageClasses count: [:c | c allInstances isEmpty]) asString ; cr ;"
-		nextPutAll: 'Manifests: ' ;
-		nextPutAll: manifestClasses size asString; cr ;
-		nextPutAll: 'BaselineOf-s: ' ;
-		nextPutAll:  baselineOf size asString ; cr;
-		nextPutAll: 'Effective classes: ';
-		nextPutAll: (imageClasses size - testClasses size - manifestClasses size - baselineOf size) asString; cr.
+	aStream nextPutAll: '# classes: '.
+	self printNumber: imageClasses size on: aStream.
+	aStream cr; nextPutAll: '# Tests classes: '.
+	self printNumber: testClasses size on: aStream.
+	aStream cr; nextPutAll: '# Manifest classes: '.
+	self printNumber: manifestClasses size on: aStream.
+	aStream cr; nextPutAll: '# BaselineOf-s:  '.
+	self printNumber: baselineOf size on: aStream.
+	aStream cr; nextPutAll: '# Test classes: '.
+	self printNumber: testClasses size on: aStream.
+	aStream cr; nextPutAll: '# Effective classes:  '.
+	self printNumber: (imageClasses size - testClasses size - manifestClasses size - baselineOf size) on: aStream.
 		
 		
 ]
