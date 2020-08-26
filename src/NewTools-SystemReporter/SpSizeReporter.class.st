@@ -54,6 +54,12 @@ SpSizeReporter >> imageClassLoc [
 ]
 
 { #category : #accessing }
+SpSizeReporter >> imageClassPackages [
+
+	^ data at: #imageClassPackages
+]
+
+{ #category : #accessing }
 SpSizeReporter >> imageClasses [
 
 	^ data at: #imageClasses
@@ -64,10 +70,21 @@ SpSizeReporter >> initialize [
 	super initialize.
 	data := Dictionary new. 
 	data at: #imageClasses put: self class environment allClasses.
+	data at: #imageClassPackages put: (self imageClasses collect: [ :each | each package packageName] as: Set).
+	
 	data at: #manifestClasses put: (self imageClasses select: [ :each | each isManifest ]).
+	data at: #manifestClassPackages put: (self manifestClasses collect: [ :each | each package packageName] as: Set).
+	
 	data at: #testClasses put: (self imageClasses select: [ :each | each isTestCase ]).
+	data at: #testClassPackages put: (self testClasses collect: [ :each | each package packageName] as: Set).
+	
 	data at: #baselineClasses put: (self imageClasses select: [:c | c name beginsWith: 'BaselineOf' ]).
-	data at: #effectiveClasses put: (self imageClasses reject: [ :c | c isManifest or: [ c isTestCase or: [ c name beginsWith: 'BaselineOf' ] ]])
+	data at: #baselineClassPackages put: (self baselineClasses collect: [ :each | each package packageName] as: Set).
+	
+	data at: #effectiveClasses put: (self imageClasses reject: [ :c | c isManifest or: [ c isTestCase or: [ c name beginsWith: 'BaselineOf' ] ]]).
+	data at: #effectiveClassPackages put: (self effectiveClasses collect: [ :each | each package packageName] as: Set).
+	
+
 ]
 
 { #category : #accessing }
@@ -122,7 +139,7 @@ SpSizeReporter >> reportLOC: aStream [
 SpSizeReporter >> reportNbClasses: aStream [
 
 	self header: 'Number of classes' on: aStream.
-	aStream nextPutAll: '# classes: '.
+	aStream nextPutAll: '# All classes '.
 	self printNumber: self imageClasses size on: aStream.
 	aStream cr; nextPutAll: '# Tests classes: '.
 	self printNumber: self testClasses size on: aStream.
@@ -145,6 +162,16 @@ SpSizeReporter >> reportNbTraits: aStream [
 		nextPutAll: imageTraits size asString; cr ;
 		nextPutAll: 'not used: ' ;
 		nextPutAll: (imageTraits count: [ :t | t users isEmpty ]) asString; cr
+
+]
+
+{ #category : #'building report' }
+SpSizeReporter >> reportSmartInfo: aStream [
+
+	self header: 'Smarter data' on: aStream.
+	aStream nextPutAll: '# packages '.
+	self printNumber: self imageClassPackages size on: aStream.
+	aStream cr.
 
 ]
 
@@ -172,9 +199,10 @@ SpSizeReporter >> topicSpec [
 	| topics |
 	topics := OrderedCollection new.
 	topics addAll:  {
-		#'# classes' -> #reportNbClasses:  .
-		#'# traits' -> #reportNbTraits: .
-		#'Total LOC' -> #reportLOC:
+		#'# smart' -> #reportSmartInfo: .
+		#'# raw classes' -> #reportNbClasses:  .
+		#'# raw traits' -> #reportNbTraits: .
+		#'# raw LOC' -> #reportLOC:
 		}.
 	^ topics
 		 
