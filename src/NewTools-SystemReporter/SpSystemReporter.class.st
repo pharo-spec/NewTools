@@ -37,6 +37,38 @@ SpSystemReporter >> extent [
 	^ 500@ 600
 ]
 
+{ #category : #initialization }
+SpSystemReporter >> fillTopics [ 
+	
+	 {
+		(#Image -> #reportImage:) .
+		(#'Image Parameters' -> #reportImageParameters:).
+		(#'Image Sources' -> #reportSources:).
+		(#'MC Repositories' -> #reportRepositories:).
+		(#'MC Working Copies' -> #reportWorkingCopies:).
+		(#'VM General' -> #reportVM:).
+		(#'VM Options' -> #reportVMOptions:).
+		(#'VM Modules' -> #reportModules:).
+		(#'VM Parameters' -> #reportVMParameters:).
+		(#'VM Stats' -> #reportVMStats:).
+		(#OS -> #reportOS:).
+		(#'OS Environment' -> #reportOSEnvironment:).
+		} do: [ :each | self addTopicSpec: each ].
+		
+	self isWindows
+		ifTrue: [ 
+			{ (#'OS Details' -> #reportWin32OSDetails:).
+			(#'VM Configuration' -> #reportWin32VMConfig:).
+			(#'Hardware Details' -> #reportWin32HardwareDetails:).
+			(#'GFX Hardware Details' -> #reportWin32GFXDetails:).	
+			} do: [ :each | self addTopicSpec: each ]. 
+			].	
+		
+	self isLinux 
+		ifTrue: [ self addTopicSpec: #'OS Details' -> #reportLinuxOSDetails: ].
+	^ topics
+]
+
 { #category : #utils }
 SpSystemReporter >> isLinux [
 	
