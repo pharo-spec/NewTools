@@ -2,7 +2,7 @@
 I'm a little tool that display information about the system.
 
 ```
-SpSystemReporter new openWithSpec
+SpSystemReporter new openWithSpec.
 SpSystemReporter open
 ```
 
@@ -22,6 +22,19 @@ SpSystemReporter class >> systemReporterMenuOn: aBuilder [
 		parent: #System;
 		action: [ self open ];
 		help: 'If you have a bug, use this tool to provide information about your system.'
+]
+
+{ #category : #initialization }
+SpSystemReporter >> connectPresenters [ 
+
+	super connectPresenters.
+	topicList  selectIndex: 1.
+]
+
+{ #category : #utils }
+SpSystemReporter >> extent [
+
+	^ 500@ 600
 ]
 
 { #category : #utils }

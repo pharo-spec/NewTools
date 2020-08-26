@@ -44,11 +44,11 @@ SpReporter class >> open [
 
 { #category : #initialization }
 SpReporter >> connectPresenters [  
-
+	
 	topicList whenSelectionChangedDo: [ :selection | 
 			selection selectedItems
 				ifNotNil: [ :items |
-								reportText text: (self createTextForReport: items)]]
+								reportText text: (self createTextForReport: items)]].
 ]
 
 { #category : #'building report' }
@@ -113,7 +113,8 @@ SpReporter >> initializePresenters [
 { #category : #initialization }
 SpReporter >> initializeWindow: aWindowPresenter [
 
-	aWindowPresenter title: self title
+	aWindowPresenter title: self title.
+	aWindowPresenter initialExtent: self extent
 ]
 
 { #category : #initialization }

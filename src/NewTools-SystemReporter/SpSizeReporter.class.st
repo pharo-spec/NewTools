@@ -43,9 +43,21 @@ SpSizeReporter >> effectiveClassLoc [
 ]
 
 { #category : #accessing }
+SpSizeReporter >> effectiveClassPackages [
+
+	^ data at: #effectiveClassPackages
+]
+
+{ #category : #accessing }
 SpSizeReporter >> effectiveClasses [
 
 	^ data at: #effectiveClasses
+]
+
+{ #category : #'building report' }
+SpSizeReporter >> extent [
+
+	^ 600@ 400
 ]
 
 { #category : #accessing }
@@ -70,21 +82,21 @@ SpSizeReporter >> initialize [
 	super initialize.
 	data := Dictionary new. 
 	data at: #imageClasses put: self class environment allClasses.
-	data at: #imageClassPackages put: (self imageClasses collect: [ :each | each package packageName] as: Set).
+	data at: #imageClassPackages put: (self imageClasses collect: [ :each | each package ] as: Set).
 	
 	data at: #manifestClasses put: (self imageClasses select: [ :each | each isManifest ]).
-	data at: #manifestClassPackages put: (self manifestClasses collect: [ :each | each package packageName] as: Set).
+	data at: #manifestClassPackages put: (self manifestClasses collect: [ :each | each package ] as: Set).
 	
 	data at: #testClasses put: (self imageClasses select: [ :each | each isTestCase ]).
-	data at: #testClassPackages put: (self testClasses collect: [ :each | each package packageName] as: Set).
+	data at: #testClassPackages put: (self testClasses collect: [ :each | each package ] as: Set).
 	
 	data at: #baselineClasses put: (self imageClasses select: [:c | c name beginsWith: 'BaselineOf' ]).
-	data at: #baselineClassPackages put: (self baselineClasses collect: [ :each | each package packageName] as: Set).
+	data at: #baselineClassPackages put: (self baselineClasses collect: [ :each | each package ] as: Set).
 	
 	data at: #effectiveClasses put: (self imageClasses reject: [ :c | c isManifest or: [ c isTestCase or: [ c name beginsWith: 'BaselineOf' ] ]]).
-	data at: #effectiveClassPackages put: (self effectiveClasses collect: [ :each | each package packageName] as: Set).
+	data at: #effectiveClassPackages put: (self effectiveClasses collect: [ :each | each package ] as: Set).
 	
-
+	topicList selectIndex: 1.
 ]
 
 { #category : #accessing }
@@ -114,8 +126,6 @@ SpSizeReporter >> printNumber: aNumber on: aStream [
 SpSizeReporter >> reportLOC: aStream [
 
 	self header: 'Number of LinesOfCode' on: aStream.
-	self computeLocs.
-
 	aStream nextPutAll: '# for all classes: '.
 	self printNumber: self imageClassLoc on: aStream.
 	aStream cr.
@@ -169,10 +179,24 @@ SpSizeReporter >> reportNbTraits: aStream [
 SpSizeReporter >> reportSmartInfo: aStream [
 
 	self header: 'Smarter data' on: aStream.
-	aStream nextPutAll: '# packages '.
-	self printNumber: self imageClassPackages size on: aStream.
+	aStream nextPutAll: 'Analysis foreffective classes'.
 	aStream cr.
-
+	aStream nextPutAll: ' i.e., no test, baseline, manifest classes'.
+	aStream cr.
+	aStream nextPutAll: '# packages: '.
+	self printNumber: self effectiveClassPackages size on: aStream.
+	aStream cr.
+	aStream nextPutAll: '# classes: '.
+	self printNumber: self effectiveClasses size on: aStream.
+	aStream cr.
+	aStream nextPutAll: '# average number of classes per package: '.
+	aStream print: (self effectiveClasses size / self effectiveClassPackages size) asFloat rounded.
+	aStream cr.
+	aStream nextPutAll: '# max number of classes in a package: '.
+	aStream print: (self effectiveClassPackages asOrderedCollection max: [ :aPackage | aPackage definedClasses size]).
+	aStream cr.
+	aStream nextPutAll: '# average number of methods per classes: '.
+	aStream print: ((self effectiveClasses inject: 0 into: [ :sum :c | sum + c numberOfMethods ]) / self effectiveClasses size) asFloat rounded.
 ]
 
 { #category : #accessing }
@@ -199,7 +223,7 @@ SpSizeReporter >> topicSpec [
 	| topics |
 	topics := OrderedCollection new.
 	topics addAll:  {
-		#'# smart' -> #reportSmartInfo: .
+		#'# smart report' -> #reportSmartInfo: .
 		#'# raw classes' -> #reportNbClasses:  .
 		#'# raw traits' -> #reportNbTraits: .
 		#'# raw LOC' -> #reportLOC:
