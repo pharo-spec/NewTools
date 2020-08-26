@@ -322,8 +322,6 @@ SpSystemReporter >> title [
 { #category : #initialization }
 SpSystemReporter >> topicSpec [
 	
-	| topics |
-	topics := OrderedCollection new.
 	topics addAll:  {
 		(#Image -> #reportImage:) .
 		(#'Image Parameters' -> #reportImageParameters:).

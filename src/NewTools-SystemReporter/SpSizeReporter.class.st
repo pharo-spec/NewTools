@@ -17,7 +17,7 @@ Class {
 
 { #category : #accessing }
 SpSizeReporter >> baselineClassLoc [
-	^ data at: #baselineClassLoc ifAbsent: [ self computeLocs ]
+	^ data at: #baselineClassLoc ifAbsent: [ self computeLocs. data at: #baselineClassLoc ]
 ]
 
 { #category : #accessing }
@@ -39,7 +39,7 @@ SpSizeReporter >> computeLocs [
 { #category : #accessing }
 SpSizeReporter >> effectiveClassLoc [
 
-	^ data at: #effectiveClassLoc  ifAbsent: [ self computeLocs ]
+	^ data at: #effectiveClassLoc ifAbsent: [ self computeLocs. data at: #effectiveClassLoc ]
 ]
 
 { #category : #accessing }
@@ -60,9 +60,21 @@ SpSizeReporter >> extent [
 	^ 600@ 400
 ]
 
+{ #category : #'building report' }
+SpSizeReporter >> fillTopics [
+
+  {	#'# smart report' -> #reportSmartInfo: .
+	#'# raw classes' -> #reportNbClasses:  .
+	#'# raw traits' -> #reportNbTraits: .
+	#'# raw LOC' -> #reportLOC: }
+		do: [ :each | self addTopicSpec: each ].
+
+		 
+]
+
 { #category : #accessing }
 SpSizeReporter >> imageClassLoc [ 
-	^ data at: #imageClassLoc  ifAbsent: [ self computeLocs ]
+	^ data at: #imageClassLoc  ifAbsent: [ self computeLocs. data at: #imageClassLoc ]
 ]
 
 { #category : #accessing }
@@ -102,7 +114,7 @@ SpSizeReporter >> initialize [
 { #category : #accessing }
 SpSizeReporter >> manifestClassLoc [
 
-	^ data at: #manifestClassLoc  ifAbsent: [ self computeLocs ]
+	^ data at: #manifestClassLoc ifAbsent: [ self computeLocs. data at: #manifestClassLoc ]
 	
 ]
 
@@ -202,7 +214,7 @@ SpSizeReporter >> reportSmartInfo: aStream [
 { #category : #accessing }
 SpSizeReporter >> testClassLoc [
 
-	^ data at: #testClassLoc ifAbsent: [ self computeLocs ]
+	^ data at: #testClassLoc ifAbsent: [ self computeLocs. data at: #testClassLoc ]
 	
 ]
 
@@ -220,14 +232,11 @@ SpSizeReporter >> title [
 
 { #category : #'building report' }
 SpSizeReporter >> topicSpec [
-	| topics |
-	topics := OrderedCollection new.
-	topics addAll:  {
-		#'# smart report' -> #reportSmartInfo: .
-		#'# raw classes' -> #reportNbClasses:  .
-		#'# raw traits' -> #reportNbTraits: .
-		#'# raw LOC' -> #reportLOC:
-		}.
+  {	#'# smart report' -> #reportSmartInfo: .
+	#'# raw classes' -> #reportNbClasses:  .
+	#'# raw traits' -> #reportNbTraits: .
+	#'# raw LOC' -> #reportLOC: }
+		do: [ :each | self addTopicSpec: each ].
 	^ topics
 		 
 ]
