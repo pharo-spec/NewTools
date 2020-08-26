@@ -91,7 +91,7 @@ StNodeCollector >> slotNodes [
 
 { #category : #building }
 StNodeCollector >> tempNodesForContext: aContext [
-	^ aContext tempNames collect: [ :name | 
-		  (StInspectorTempNode hostObject: aContext) tempVariable:
-			  (aContext temporaryVariableNamed: name) ]
+^ aContext astScope allTemps collect: [ :temp |
+(StInspectorTempNode hostObject: aContext) tempVariable: temp]
+
 ]
