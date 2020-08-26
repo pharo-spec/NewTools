@@ -9,7 +9,10 @@ Class {
 	#name : #SpSizeReporter,
 	#superclass : #SpReporter,
 	#instVars : [
-		'imageClasses'
+		'imageClasses',
+		'manifestClasses',
+		'testClasses',
+		'baselineOf'
 	],
 	#category : #'NewTools-SystemReporter'
 }
@@ -18,40 +21,57 @@ Class {
 SpSizeReporter >> initialize [ 
 	super initialize.
 	imageClasses := self class environment allClasses.
+	manifestClasses := imageClasses select: [ :each | each isManifest ].
+	testClasses := imageClasses select: [ :each | each isTestCase ].
+	baselineOf := imageClasses select: [:c | c name beginsWith: 'BaselineOf' ].
 ]
 
 { #category : #'building report' }
 SpSizeReporter >> reportLOC: aStream [
+	| maniLoc testLoc baseLoc all|
 	self header: 'Number of LinesOfCode' on: aStream.
-	aStream nextPutAll: '#All classes: '.
-	aStream nextPutAll: (imageClasses inject: 0 into: [ :sum :each | sum + each linesOfCode]) asString
+	maniLoc := manifestClasses inject: 0 into: [ :sum :each | sum + each linesOfCode].
+	testLoc := testClasses  inject: 0 into: [ :sum :each | sum + each linesOfCode].
+	baseLoc := baselineOf inject: 0 into: [ :sum :each | sum + each linesOfCode].
+	all := imageClasses inject: 0 into: [ :sum :each | sum + each linesOfCode].
 
+	aStream nextPutAll: '#All classes: '.
+	aStream print: all.
+	aStream cr.
+	aStream nextPutAll: '#Manifest classes: '.
+	aStream print: maniLoc.
+	aStream cr.
+	aStream nextPutAll: '#Test classes: '.
+	aStream print: testLoc.
+	aStream cr.
+	aStream nextPutAll: '#Baseline: '.
+	aStream print: baseLoc.
+	aStream cr.
+	aStream nextPutAll: '#Effective classes: '.
+	aStream print: all - baseLoc - testLoc - maniLoc .
+	aStream cr.
+	
 
 ]
 
 { #category : #'building report' }
 SpSizeReporter >> reportNbClasses: aStream [
-	| effectiveClasses manifest tests baselineOf |
 
-	effectiveClasses := imageClasses size. 
-	manifest := (imageClasses count: #isManifest).
-	tests := (imageClasses count: #isTestCase).
-	baselineOf := (imageClasses count: [:c | c name beginsWith: 'BaselineOf' ]).
-	effectiveClasses := effectiveClasses - manifest - tests.
 	self header: 'Number of classes' on: aStream.
 	aStream 
+		nextPutAll: 'All classes: ';
 		nextPutAll: imageClasses size asString; cr ;
 		nextPutAll: 'Tests: ' ;
-		nextPutAll: tests asString ; cr ;
+		nextPutAll: testClasses size asString ; cr ;
 		"very long to compute :-(
 		nextPutAll: 'Without instances: ' ;
 		nextPutAll: (imageClasses count: [:c | c allInstances isEmpty]) asString ; cr ;"
 		nextPutAll: 'Manifests: ' ;
-		nextPutAll: manifest asString; cr ;
+		nextPutAll: manifestClasses size asString; cr ;
 		nextPutAll: 'BaselineOf-s: ' ;
-		nextPutAll:  baselineOf asString ; cr;
+		nextPutAll:  baselineOf size asString ; cr;
 		nextPutAll: 'Effective classes: ';
-		nextPutAll: effectiveClasses asString; cr.
+		nextPutAll: (imageClasses size - testClasses size - manifestClasses size - baselineOf size) asString; cr.
 		
 		
 ]
