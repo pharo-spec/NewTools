@@ -116,12 +116,6 @@ SpReporter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter title: self title
 ]
 
-{ #category : #accessing }
-SpReporter >> sourceTextModel [
-	^ sourceTextModel
-		ifNil: [ sourceTextModel := RubScrolledTextModel new interactionModel: self ]
-]
-
 { #category : #initialization }
 SpReporter >> topicSpec [
 
