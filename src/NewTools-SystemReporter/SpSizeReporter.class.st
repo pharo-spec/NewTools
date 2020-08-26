@@ -4,6 +4,7 @@ I'm a reporter dedicated to size of the system.
 ```
 SpSizeReporter new openWithSpec
 ```
+
 "
 Class {
 	#name : #SpSizeReporter,
@@ -14,9 +15,9 @@ Class {
 	#category : #'NewTools-SystemReporter'
 }
 
-{ #category : #compute }
+{ #category : #accessing }
 SpSizeReporter >> baselineClassLoc [
-	^ data at: #baselineClassLoc 
+	^ data at: #baselineClassLoc ifAbsent: [ self computeLocs ]
 ]
 
 { #category : #accessing }
@@ -32,6 +33,13 @@ SpSizeReporter >> computeLocs [
 	data at: #testClassLoc put: (self testClasses inject: 0 into: [ :sum :each | sum + each linesOfCode]).
 	data at: #baselineClassLoc put: (self baselineClasses inject: 0 into: [ :sum :each | sum + each linesOfCode]).
 	data at: #imageClassLoc put: (self imageClasses inject: 0 into: [ :sum :each | sum + each linesOfCode]).
+	data at: #effectiveClassLoc put: self imageClassLoc - self baselineClassLoc - self manifestClassLoc - self testClassLoc
+]
+
+{ #category : #accessing }
+SpSizeReporter >> effectiveClassLoc [
+
+	^ data at: #effectiveClassLoc  ifAbsent: [ self computeLocs ]
 ]
 
 { #category : #accessing }
@@ -40,9 +48,9 @@ SpSizeReporter >> effectiveClasses [
 	^ data at: #effectiveClasses
 ]
 
-{ #category : #compute }
+{ #category : #accessing }
 SpSizeReporter >> imageClassLoc [ 
-	^ data at: #imageClassLoc 
+	^ data at: #imageClassLoc  ifAbsent: [ self computeLocs ]
 ]
 
 { #category : #accessing }
@@ -62,10 +70,10 @@ SpSizeReporter >> initialize [
 	data at: #effectiveClasses put: (self imageClasses reject: [ :c | c isManifest or: [ c isTestCase or: [ c name beginsWith: 'BaselineOf' ] ]])
 ]
 
-{ #category : #compute }
+{ #category : #accessing }
 SpSizeReporter >> manifestClassLoc [
 
-	^ data at: #manifestClassLoc 
+	^ data at: #manifestClassLoc  ifAbsent: [ self computeLocs ]
 	
 ]
 
@@ -140,10 +148,10 @@ SpSizeReporter >> reportNbTraits: aStream [
 
 ]
 
-{ #category : #compute }
+{ #category : #accessing }
 SpSizeReporter >> testClassLoc [
 
-	^ data at: #testClassLoc
+	^ data at: #testClassLoc ifAbsent: [ self computeLocs ]
 	
 ]
 
