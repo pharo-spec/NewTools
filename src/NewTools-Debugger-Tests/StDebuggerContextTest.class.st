@@ -62,6 +62,28 @@ StDebuggerContextTest >> setUp [
 ]
 
 { #category : #tests }
+StDebuggerContextTest >> testArgsPriorityOverTempsWhenDuplicates [
+	|nodes argsNodes argsNames tempNodes tempsNames duplicates|
+	debuggerContext context: self contextWithArgs.
+	nodes := debuggerContext allInspectorNodes.		
+	argsNodes := debuggerContext argumentsNodes.
+	argsNames := (argsNodes collect:[:n| n key]).	
+	tempNodes := debuggerContext temporaryVariablesNodes.	
+	tempsNames := (tempNodes collect:[:n| n key]) asSortedCollection.
+	
+	"Args nodes are counted in the temps, we can detect them by their name"
+	self assertCollection: tempsNames includesAll: argsNames.	
+	
+	"However, the final nodes collection filters duplicates.
+	We select argument rather than temps when there is a duplicate"
+	self assertCollection: nodes includesAll: argsNodes. 
+	
+	"If we check the arguments also counted as temps, those duplicates temps are not in the final nodes collection."
+	duplicates := tempNodes select: [ :node| argsNames includes: node key].
+	self denyCollection: nodes includesAll: duplicates
+]
+
+{ #category : #tests }
 StDebuggerContextTest >> testArgumentsNodes [
 	|nodes| 
 	debuggerContext context: self contextWithArgs.
@@ -70,18 +92,19 @@ StDebuggerContextTest >> testArgumentsNodes [
 	self assert: nodes first key equals: 'i'.
 	self assert: nodes first label equals: '[arg] i'.
 	self assert: nodes first rawValue equals: 4.
+	self assert: nodes first class equals: StDebuggerInspectorTempNode.
 	self assert: nodes second key equals: 'j'.
 	self assert: nodes second label equals: '[arg] j'.
 	self assert: nodes second rawValue equals: 2.
+	self assert: nodes second class equals: StDebuggerInspectorTempNode.
 	self deny: (nodes anySatisfy: [:n| n key = 'self'])
 ]
 
 { #category : #tests }
 StDebuggerContextTest >> testArgumentsNodesInBlock [
-	|ctx nodes|
-
-	ctx := self contextWithArgsInBlock.
-	nodes := debuggerContext argumentsNodes: ctx.	
+	|nodes|
+	debuggerContext context: self contextWithArgsInBlock.
+	nodes := debuggerContext argumentsNodes.	
 	self assert: nodes size equals: 2.
 	self assert: nodes first key equals: 'a'.
 	self assert: nodes first label equals: '[arg] a'.
@@ -102,18 +125,12 @@ StDebuggerContextTest >> testContext [
 
 { #category : #tests }
 StDebuggerContextTest >> testNoDuplicatesBetweenArgsAndTemps [
-	|ctx nodes|
-	self fail.
-	ctx := self contextWithArgs.
-	nodes := debuggerContext argumentsNodes: ctx.	
-	self assert: nodes size equals: 2.
-	self assert: nodes first key equals: 'i'.
-	self assert: nodes first label equals: '[arg] i'.
-	self assert: nodes first rawValue equals: 4.
-	self assert: nodes second key equals: 'j'.
-	self assert: nodes second label equals: '[arg] j'.
-	self assert: nodes second rawValue equals: 2.
-	self deny: (nodes anySatisfy: [:n| n key = 'self'])
+	|nodes nodesNamesArray nodesNamesSet|
+	debuggerContext context: self contextWithArgs.
+	nodes := debuggerContext allInspectorNodes.	
+	nodesNamesArray := (nodes collect:[:n| n key]) asSortedCollection.
+	nodesNamesSet := nodesNamesArray asSet asSortedCollection.
+	self assertCollection: nodesNamesArray equals: nodesNamesSet
 ]
 
 { #category : #tests }
@@ -146,8 +163,10 @@ StDebuggerContextTest >> testTemporaryVariablesNodes [
 	self assert: nodes size equals: 2.
 	self assert: nodes first key equals: 'a'.
 	self assert: nodes first rawValue equals: 0.
+	self assert: nodes first class equals: StDebuggerInspectorTempNode.
 	self assert: nodes second key equals: 'b'.
 	self assert: nodes second rawValue equals: nil.
+	self assert: nodes second class equals: StDebuggerInspectorTempNode.
 	self deny: (nodes anySatisfy: [:n| n key = 'self'])
 ]
 

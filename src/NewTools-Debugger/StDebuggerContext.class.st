@@ -26,13 +26,19 @@ StDebuggerContext class >> context: aContext session: aDebugSession debugger: so
 
 { #category : #accessing }
 StDebuggerContext >> allInspectorNodes [
-	^ self argumentsNodes
-		  addAll: { 
-				  (StDebuggerContextInspectorReceiverNode hostObject: self).
-				  (StDebuggerContextInspectorTempsNode hostObject: self).
-				  (StInspectorStackTopNode hostObject: self context).
-				  (StDebuggerContextInspectorContextNode hostObject: self) };
-		  yourself
+
+	| nodes argsNodes argsKeys tempsNodes |
+	nodes := OrderedCollection new.
+	argsNodes := self argumentsNodes.
+	argsKeys := argsNodes collect: [ :node | node key ].
+	tempsNodes := self temporaryVariablesNodes reject: [ :tempNode | 
+		              argsKeys includes: tempNode key ].
+	nodes addAll: argsNodes.
+	nodes addAll: tempsNodes.
+	nodes addAll: self receiverNodes.
+	nodes add: self stackTopNode.
+	nodes add: self thisContextNode.
+	^ nodes
 ]
 
 { #category : #nodes }
@@ -99,7 +105,7 @@ StDebuggerContext >> stackTopNode [
 StDebuggerContext >> temporaryVariablesNodes [
 
 	^ self context astScope allTemps collect: [ :temp | 
-		  (StInspectorTempNode hostObject: self context) tempVariable: temp ]
+		  (StDebuggerInspectorTempNode hostObject: self context) tempVariable: temp ]
 ]
 
 { #category : #nodes }
