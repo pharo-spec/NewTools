@@ -29,6 +29,11 @@ StDebuggerObjectForTests >> methodWithArg1: i arg2: j [
 ]
 
 { #category : #util }
+StDebuggerObjectForTests >> methodWithArgsInBlock [
+	^[ :a :b| a + b ] value: 4 value: 2
+]
+
+{ #category : #util }
 StDebuggerObjectForTests >> methodWithTemps [
 	|a b|
 	a := 0.

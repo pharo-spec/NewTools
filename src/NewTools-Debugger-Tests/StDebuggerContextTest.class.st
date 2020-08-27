@@ -24,6 +24,21 @@ StDebuggerContextTest >> contextWithArgs [
 ]
 
 { #category : #helpers }
+StDebuggerContextTest >> contextWithArgsInBlock [
+
+	"Creates and returns a context in which we step until we enter a method with arguments in a block, then step 4 times until we're in the block"
+
+	| context |
+	context := [ hostObject methodWithArgsInBlock ] asContext.
+	[ context method selector = #methodWithArgsInBlock ] whileFalse: [ 
+		context := context step ].
+
+	4 timesRepeat: [ context := context step ].
+	context := context step.
+	^ context
+]
+
+{ #category : #helpers }
 StDebuggerContextTest >> contextWithTemps [
 
 	"Creates and returns a context in which we step until we enter a method with temporary variables, then step two times over the assignement of the first temp"
@@ -64,15 +79,15 @@ StDebuggerContextTest >> testArgumentsNodes [
 { #category : #tests }
 StDebuggerContextTest >> testArgumentsNodesInBlock [
 	|ctx nodes|
-	self fail.
-	ctx := self contextWithArgs.
+
+	ctx := self contextWithArgsInBlock.
 	nodes := debuggerContext argumentsNodes: ctx.	
 	self assert: nodes size equals: 2.
-	self assert: nodes first key equals: 'i'.
-	self assert: nodes first label equals: '[arg] i'.
+	self assert: nodes first key equals: 'a'.
+	self assert: nodes first label equals: '[arg] a'.
 	self assert: nodes first rawValue equals: 4.
-	self assert: nodes second key equals: 'j'.
-	self assert: nodes second label equals: '[arg] j'.
+	self assert: nodes second key equals: 'b'.
+	self assert: nodes second label equals: '[arg] b'.
 	self assert: nodes second rawValue equals: 2.
 	self deny: (nodes anySatisfy: [:n| n key = 'self'])
 ]
