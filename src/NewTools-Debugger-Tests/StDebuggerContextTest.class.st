@@ -42,11 +42,17 @@ StDebuggerContextTest >> testReceiverNodes [
 ]
 
 { #category : #tests }
-StDebuggerContextTest >> testStackTopNodes [
+StDebuggerContextTest >> testStackTopNode [	
+	|ctx node|
+	"We step once on the context to be on the value part of the next assignment"
+	ctx := self contextWithTemps step.
+	node := debuggerContext stackTopNode: ctx.	
+	self assert: node key equals: 'stackTop'.
+	self assert: node rawValue equals: 0
 ]
 
 { #category : #tests }
-StDebuggerContextTest >> testTemporaryVariablesNode [
+StDebuggerContextTest >> testTemporaryVariablesNodes [
 	|ctx nodes|
 	ctx := self contextWithTemps.
 	nodes := debuggerContext temporaryVariablesNodes: ctx.
@@ -60,4 +66,9 @@ StDebuggerContextTest >> testTemporaryVariablesNode [
 
 { #category : #tests }
 StDebuggerContextTest >> testThisContextNode [
+	|ctx node|
+	ctx := self contextWithTemps.
+	node := debuggerContext thisContextNode: ctx.	
+	self assert: node key equals: 'thisContext'.
+	self assert: node rawValue identicalTo: ctx
 ]

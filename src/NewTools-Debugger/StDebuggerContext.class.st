@@ -90,8 +90,18 @@ StDebuggerContext >> session: anObject [
 ]
 
 { #category : #nodes }
+StDebuggerContext >> stackTopNode: aContext [ 
+	^StInspectorStackTopNode hostObject: aContext
+]
+
+{ #category : #nodes }
 StDebuggerContext >> temporaryVariablesNodes: aContext [
 
 	^ aContext astScope allTemps collect: [ :temp | 
 		  (StInspectorTempNode hostObject: aContext) tempVariable: temp ]
+]
+
+{ #category : #nodes }
+StDebuggerContext >> thisContextNode: aContext [ 
+	^StInspectorThisContextNode hostObject: aContext
 ]
