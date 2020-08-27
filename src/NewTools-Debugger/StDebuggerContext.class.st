@@ -73,6 +73,12 @@ StDebuggerContext >> printOn: aStream [
 	aStream nextPutAll: context asString 
 ]
 
+{ #category : #nodes }
+StDebuggerContext >> receiverNodes: anObject [
+
+	^ anObject allInspectorNodes reject: [ :node | node key = 'self' ]
+]
+
 { #category : #accessing }
 StDebuggerContext >> session [
 	^ session
@@ -81,4 +87,11 @@ StDebuggerContext >> session [
 { #category : #accessing }
 StDebuggerContext >> session: anObject [
 	session := anObject
+]
+
+{ #category : #nodes }
+StDebuggerContext >> temporaryVariablesNodes: aContext [
+
+	^ aContext astScope allTemps collect: [ :temp | 
+		  (StInspectorTempNode hostObject: aContext) tempVariable: temp ]
 ]
