@@ -21,7 +21,10 @@ StDebuggerObjectForTests >> instVar [
 ]
 
 { #category : #util }
-StDebuggerObjectForTests >> methodWithArg1: a arg2: b [	
+StDebuggerObjectForTests >> methodWithArg1: i arg2: j [
+	|a b|
+	a := i.
+	b := j.	
 	^a + b
 ]
 

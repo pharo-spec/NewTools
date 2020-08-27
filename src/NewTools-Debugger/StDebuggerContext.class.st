@@ -45,6 +45,17 @@ StDebuggerContext >> argumentsNodes [
 		  asOrderedCollection
 ]
 
+{ #category : #nodes }
+StDebuggerContext >> argumentsNodes: aContext [
+
+	| argNames |
+	argNames := aContext sourceNode arguments.
+	^ (argNames collect: [ :argName | 
+		   (StDebuggerInspectorTempNode hostObject: aContext) 
+			   argVariable: (aContext temporaryVariableNamed: argName name) ])
+		  asOrderedCollection
+]
+
 { #category : #accessing }
 StDebuggerContext >> assertionSelectors [
 	self flag: 'A bit magickal, also is this the right place?'.
