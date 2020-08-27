@@ -35,24 +35,14 @@ StDebuggerContext >> allInspectorNodes [
 		  yourself
 ]
 
-{ #category : #accessing }
+{ #category : #nodes }
 StDebuggerContext >> argumentsNodes [
+
 	| argNames |
 	argNames := self context sourceNode arguments.
 	^ (argNames collect: [ :argName | 
-		   (StDebuggerInspectorTempNode hostObject: self context) argVariable:
-			   (self context temporaryVariableNamed: argName name) ])
-		  asOrderedCollection
-]
-
-{ #category : #nodes }
-StDebuggerContext >> argumentsNodes: aContext [
-
-	| argNames |
-	argNames := aContext sourceNode arguments.
-	^ (argNames collect: [ :argName | 
-		   (StDebuggerInspectorTempNode hostObject: aContext) 
-			   argVariable: (aContext temporaryVariableNamed: argName name) ])
+		   (StDebuggerInspectorTempNode hostObject: self context) 
+			   argVariable: (self context temporaryVariableNamed: argName name) ])
 		  asOrderedCollection
 ]
 
@@ -85,9 +75,9 @@ StDebuggerContext >> printOn: aStream [
 ]
 
 { #category : #nodes }
-StDebuggerContext >> receiverNodes: anObject [
+StDebuggerContext >> receiverNodes [
 
-	^ anObject allInspectorNodes reject: [ :node | node key = 'self' ]
+	^ self context receiver allInspectorNodes reject: [ :node | node key = 'self' ]
 ]
 
 { #category : #accessing }
@@ -101,18 +91,18 @@ StDebuggerContext >> session: anObject [
 ]
 
 { #category : #nodes }
-StDebuggerContext >> stackTopNode: aContext [ 
-	^StInspectorStackTopNode hostObject: aContext
+StDebuggerContext >> stackTopNode [
+	^StInspectorStackTopNode hostObject: self context
 ]
 
 { #category : #nodes }
-StDebuggerContext >> temporaryVariablesNodes: aContext [
+StDebuggerContext >> temporaryVariablesNodes [
 
-	^ aContext astScope allTemps collect: [ :temp | 
-		  (StInspectorTempNode hostObject: aContext) tempVariable: temp ]
+	^ self context astScope allTemps collect: [ :temp | 
+		  (StInspectorTempNode hostObject: self context) tempVariable: temp ]
 ]
 
 { #category : #nodes }
-StDebuggerContext >> thisContextNode: aContext [ 
-	^StInspectorThisContextNode hostObject: aContext
+StDebuggerContext >> thisContextNode [ 
+	^StInspectorThisContextNode hostObject: self context
 ]

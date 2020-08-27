@@ -63,9 +63,9 @@ StDebuggerContextTest >> setUp [
 
 { #category : #tests }
 StDebuggerContextTest >> testArgumentsNodes [
-	|ctx nodes|
-	ctx := self contextWithArgs.
-	nodes := debuggerContext argumentsNodes: ctx.	
+	|nodes| 
+	debuggerContext context: self contextWithArgs.
+	nodes := debuggerContext argumentsNodes.	
 	self assert: nodes size equals: 2.
 	self assert: nodes first key equals: 'i'.
 	self assert: nodes first label equals: '[arg] i'.
@@ -118,29 +118,31 @@ StDebuggerContextTest >> testNoDuplicatesBetweenArgsAndTemps [
 
 { #category : #tests }
 StDebuggerContextTest >> testReceiverNodes [
-	|nodes|
-	nodes := debuggerContext receiverNodes: hostObject.
+
+	| nodes |
+	debuggerContext context: self contextWithTemps.
+	nodes := debuggerContext receiverNodes.
 	self assert: nodes size equals: 1.
 	self assert: nodes first key equals: 'instVar'.
 	self assert: nodes first rawValue equals: hostObject instVar.
-	self deny: (nodes anySatisfy: [:n| n key = 'self'])
+	self deny: (nodes anySatisfy: [ :n | n key = 'self' ])
 ]
 
 { #category : #tests }
 StDebuggerContextTest >> testStackTopNode [	
-	|ctx node|
+	| node|
 	"We step once on the context to be on the value part of the next assignment"
-	ctx := self contextWithTemps step.
-	node := debuggerContext stackTopNode: ctx.	
+	debuggerContext context: self contextWithTemps step.
+	node := debuggerContext stackTopNode.	
 	self assert: node key equals: 'stackTop'.
 	self assert: node rawValue equals: 0
 ]
 
 { #category : #tests }
 StDebuggerContextTest >> testTemporaryVariablesNodes [
-	|ctx nodes|
-	ctx := self contextWithTemps.
-	nodes := debuggerContext temporaryVariablesNodes: ctx.
+	|nodes|	
+	debuggerContext context: self contextWithTemps.
+	nodes := debuggerContext temporaryVariablesNodes.
 	self assert: nodes size equals: 2.
 	self assert: nodes first key equals: 'a'.
 	self assert: nodes first rawValue equals: 0.
@@ -153,7 +155,8 @@ StDebuggerContextTest >> testTemporaryVariablesNodes [
 StDebuggerContextTest >> testThisContextNode [
 	|ctx node|
 	ctx := self contextWithTemps.
-	node := debuggerContext thisContextNode: ctx.	
+	debuggerContext context: ctx.
+	node := debuggerContext thisContextNode.	
 	self assert: node key equals: 'thisContext'.
 	self assert: node rawValue identicalTo: ctx
 ]
