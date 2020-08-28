@@ -6,11 +6,7 @@ Class {
 	#name : #StDebuggerContext,
 	#superclass : #Object,
 	#instVars : [
-		'context',
-		'session',
-		'assertionContext',
-		'exceptionContext',
-		'debugger'
+		'context'
 	],
 	#category : #'NewTools-Debugger-Model'
 }
@@ -32,14 +28,6 @@ StDebuggerContext >> argumentsNodes [
 		   (StDebuggerInspectorTempNode hostObject: self context) 
 			   argVariable: (self context temporaryVariableNamed: argName name) ])
 		  asOrderedCollection
-]
-
-{ #category : #accessing }
-StDebuggerContext >> assertionSelectors [
-	self flag: 'A bit magickal, also is this the right place?'.
-	^ #( #assert:equals: #assert:closeTo:precision:
-	     #assert:closeTo: #assert:identicalTo: #assertCollection:equals:
-	     #assertCollection:hasSameElements: )
 ]
 
 { #category : #accessing }
@@ -70,11 +58,6 @@ StDebuggerContext >> context: anObject [
 	context := anObject
 ]
 
-{ #category : #accessing }
-StDebuggerContext >> debugger: anObject [
-	debugger := anObject
-]
-
 { #category : #printing }
 StDebuggerContext >> printOn: aStream [
 	aStream nextPutAll: context asString 
@@ -84,16 +67,6 @@ StDebuggerContext >> printOn: aStream [
 StDebuggerContext >> receiverNodes [
 
 	^ self context receiver allInspectorNodes reject: [ :node | node key = 'self' ]
-]
-
-{ #category : #accessing }
-StDebuggerContext >> session [
-	^ session
-]
-
-{ #category : #accessing }
-StDebuggerContext >> session: anObject [
-	session := anObject
 ]
 
 { #category : #nodes }
