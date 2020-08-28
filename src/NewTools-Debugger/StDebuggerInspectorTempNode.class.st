@@ -5,7 +5,7 @@ Class {
 	#name : #StDebuggerInspectorTempNode,
 	#superclass : #StInspectorTempNode,
 	#instVars : [
-		'label'
+		'variableTag'
 	],
 	#category : #'NewTools-Debugger-Model'
 }
@@ -18,14 +18,14 @@ StDebuggerInspectorTempNode >> = anObject [
 	self == anObject ifTrue: [ ^ true ].
 	self class = anObject class ifFalse: [ ^ false ].
 	^ tempVariable = anObject tempVariable and: [ 
-		  hostObject = anObject hostObject1 and: [ label = anObject label ] ]
+		  hostObject = anObject hostObject1 and: [ variableTag = anObject variableTag ] ]
 ]
 
 { #category : #accessing }
 StDebuggerInspectorTempNode >> argVariable: aVariable [
 
 	super tempVariable: aVariable.
-	label := '[arg] ' , tempVariable name
+	variableTag := 'arg'
 ]
 
 { #category : #accessing }
@@ -43,17 +43,12 @@ StDebuggerInspectorTempNode >> hash [
 
 	"Answer an integer value that is related to the identity of the receiver."
 
-	^ tempVariable hash bitXor: (hostObject hash bitXor: label hash)
+	^ tempVariable hash bitXor: (hostObject hash bitXor: variableTag hash)
 ]
 
 { #category : #accessing }
 StDebuggerInspectorTempNode >> hostObject1 [
 	^ hostObject
-]
-
-{ #category : #accessing }
-StDebuggerInspectorTempNode >> label [
-	^label
 ]
 
 { #category : #accessing }
@@ -65,5 +60,11 @@ StDebuggerInspectorTempNode >> tempVariable [
 StDebuggerInspectorTempNode >> tempVariable: aVariable [
 
 	super tempVariable: aVariable.
-	label := '[temp] ' , tempVariable name
+	variableTag := 'temp'
+]
+
+{ #category : #accessing }
+StDebuggerInspectorTempNode >> variableTag [
+
+	^ variableTag
 ]
