@@ -9,6 +9,12 @@ Class {
 }
 
 { #category : #accessing }
+StDebuggerInspectorModel >> allInspectorNodes [
+
+	^ self inspectedObject buildInspectorNodes
+]
+
+{ #category : #accessing }
 StDebuggerInspectorModel >> defaultObjectInspectorClass [
 	^StDebuggerRawObjectInspector
 ]

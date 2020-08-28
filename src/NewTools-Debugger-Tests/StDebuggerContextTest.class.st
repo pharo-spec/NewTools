@@ -65,7 +65,7 @@ StDebuggerContextTest >> setUp [
 StDebuggerContextTest >> testArgsPriorityOverTempsWhenDuplicates [
 	|nodes argsNodes argsNames tempNodes tempsNames duplicates|
 	debuggerContext context: self contextWithArgs.
-	nodes := debuggerContext allInspectorNodes.		
+	nodes := debuggerContext buildInspectorNodes.		
 	argsNodes := debuggerContext argumentsNodes.
 	argsNames := (argsNodes collect:[:n| n key]).	
 	tempNodes := debuggerContext temporaryVariablesNodes.	
@@ -79,8 +79,8 @@ StDebuggerContextTest >> testArgsPriorityOverTempsWhenDuplicates [
 	self assertCollection: nodes includesAll: argsNodes. 
 	
 	"If we check the arguments also counted as temps, those duplicates temps are not in the final nodes collection."
-	duplicates := tempNodes select: [ :node| argsNames includes: node key].
-	self denyCollection: nodes includesAll: duplicates
+	duplicates := tempNodes select: [ :node| argsNames includes: node key].      
+	self denyCollection: nodes includesAll: duplicates   
 ]
 
 { #category : #tests }

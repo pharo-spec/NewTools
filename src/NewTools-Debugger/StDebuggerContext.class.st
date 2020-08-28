@@ -24,23 +24,6 @@ StDebuggerContext class >> context: aContext session: aDebugSession debugger: so
 		yourself
 ]
 
-{ #category : #accessing }
-StDebuggerContext >> allInspectorNodes [
-
-	| nodes argsNodes argsKeys tempsNodes |
-	nodes := OrderedCollection new.
-	argsNodes := self argumentsNodes.
-	argsKeys := argsNodes collect: [ :node | node key ].
-	tempsNodes := self temporaryVariablesNodes reject: [ :tempNode | 
-		              argsKeys includes: tempNode key ].
-	nodes addAll: argsNodes.
-	nodes addAll: tempsNodes.
-	nodes addAll: self receiverNodes.
-	nodes add: self stackTopNode.
-	nodes add: self thisContextNode.
-	^ nodes
-]
-
 { #category : #nodes }
 StDebuggerContext >> argumentsNodes [
 
@@ -58,6 +41,23 @@ StDebuggerContext >> assertionSelectors [
 	^ #( #assert:equals: #assert:closeTo:precision:
 	     #assert:closeTo: #assert:identicalTo: #assertCollection:equals:
 	     #assertCollection:hasSameElements: )
+]
+
+{ #category : #accessing }
+StDebuggerContext >> buildInspectorNodes [
+
+	| nodes argsNodes argsKeys tempsNodes |
+	nodes := OrderedCollection new.
+	argsNodes := self argumentsNodes.
+	argsKeys := argsNodes collect: [ :node | node key ].
+	tempsNodes := self temporaryVariablesNodes reject: [ :tempNode | 
+		              argsKeys includes: tempNode key ].
+	nodes addAll: argsNodes.
+	nodes addAll: tempsNodes.
+	nodes addAll: self receiverNodes.
+	nodes add: self stackTopNode.
+	nodes add: self thisContextNode.
+	^ nodes
 ]
 
 { #category : #accessing }
