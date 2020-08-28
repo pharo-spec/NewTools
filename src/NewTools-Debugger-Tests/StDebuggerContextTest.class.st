@@ -116,6 +116,32 @@ StDebuggerContextTest >> testArgumentsNodesInBlock [
 ]
 
 { #category : #tests }
+StDebuggerContextTest >> testBuildInspectorNodes [
+	|nodes nodesNames|
+	debuggerContext context: self contextWithArgs.
+	nodes := debuggerContext buildInspectorNodes.		
+	nodesNames := (nodes collect:[:n| n key]).
+	
+	"Args"
+	self assertCollection: nodesNames includesAll: #(#i #j).
+	
+	"Temps"
+	self assertCollection: nodesNames includesAll: #(#a #b).
+
+	"Self"
+	self assertCollection: nodesNames includesAll: #(#instVar).
+	
+	"Stacktop"
+	self assertCollection: nodesNames includesAll: #('stackTop').
+		
+	"thisContext"
+	self assertCollection: nodesNames includesAll: #('thisContext').	
+	
+	"There is no more elements"
+	self assert: nodesNames size equals: 7
+]
+
+{ #category : #tests }
 StDebuggerContextTest >> testContext [
 
 	| closure contextSource ctx |
