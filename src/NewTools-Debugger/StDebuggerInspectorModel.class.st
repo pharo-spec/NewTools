@@ -32,13 +32,6 @@ StDebuggerInspectorModel >> inspectedObject [
 ]
 
 { #category : #accessing }
-StDebuggerInspectorModel >> inspectedObject: anObject [
-
-	anObject isContext ifFalse: [  ].
-	self inspectedObject context: anObject
-]
-
-{ #category : #accessing }
 StDebuggerInspectorModel >> labelString [
 	^ 'Receiver in: ' , super labelString
 ]
