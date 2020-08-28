@@ -13,9 +13,8 @@ StDebuggerContextInspectorTempsNode >> computeChildrenFromSourceObject [
 
 	| context |
 	context := self hostObject context.
-	^ context tempNames collect: [ :name | 
-		  (StDebuggerInspectorTempNode hostObject: context) tempVariable:
-			  (context temporaryVariableNamed: name) ]
+	^ context astScope allTemps collect: [ :temp | 
+		  (StInspectorTempNode hostObject: context) tempVariable: temp ]
 ]
 
 { #category : #accessing }
