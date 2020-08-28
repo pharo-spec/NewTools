@@ -62,7 +62,8 @@ StDebuggerContext >> assertionSelectors [
 
 { #category : #accessing }
 StDebuggerContext >> context [
-	^ context
+
+	^ context ifNil: [ context := [] asContext ]
 ]
 
 { #category : #accessing }

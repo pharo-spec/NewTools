@@ -647,9 +647,11 @@ StDebugger >> initializeExtensionTools [
 
 { #category : #initialization }
 StDebugger >> initializeInspector [
+
 	inspector := self
-		instantiate: StDebuggerInspector
-		on: (StDebuggerInspectorModel on: nil).
+		             instantiate: StDebuggerInspector
+		             on:
+		             (StDebuggerInspectorModel on: StDebuggerContext new).
 	inspector label: 'Receiver'
 ]
 

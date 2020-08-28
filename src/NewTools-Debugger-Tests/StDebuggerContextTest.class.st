@@ -117,7 +117,13 @@ StDebuggerContextTest >> testArgumentsNodesInBlock [
 
 { #category : #tests }
 StDebuggerContextTest >> testContext [
-	|ctx|
+
+	| closure contextSource ctx |
+	closure := debuggerContext context closure.
+	contextSource := closure method sourceCode
+		                 copyFrom: closure sourceNode start
+		                 to: closure sourceNode stop.
+	self assert: contextSource equals: '[]'.
 	ctx := self contextWithArgs.
 	debuggerContext context: ctx.
 	self assert: debuggerContext context identicalTo: ctx
