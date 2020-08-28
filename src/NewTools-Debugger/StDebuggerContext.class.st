@@ -16,12 +16,11 @@ Class {
 }
 
 { #category : #'instance creation' }
-StDebuggerContext class >> context: aContext session: aDebugSession debugger: sourceDebugger [
+StDebuggerContext class >> context: aContext [
+
 	^ self new
-		context: aContext;
-		session: aDebugSession;
-		debugger: sourceDebugger;
-		yourself
+		  context: aContext;
+		  yourself
 ]
 
 { #category : #nodes }

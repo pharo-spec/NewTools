@@ -19,6 +19,25 @@ StDebuggerInspectorModel >> defaultObjectInspectorClass [
 	^StDebuggerRawObjectInspector
 ]
 
+{ #category : #initialize }
+StDebuggerInspectorModel >> initialize [
+	super initialize.
+	inspectedObject := StDebuggerContext new
+]
+
+{ #category : #accessing }
+StDebuggerInspectorModel >> inspectedObject [
+
+	^ inspectedObject ifNil: [ inspectedObject := StDebuggerContext new ]
+]
+
+{ #category : #accessing }
+StDebuggerInspectorModel >> inspectedObject: anObject [
+
+	anObject isContext ifFalse: [  ].
+	self inspectedObject context: anObject
+]
+
 { #category : #accessing }
 StDebuggerInspectorModel >> labelString [
 	^ 'Receiver in: ' , super labelString
