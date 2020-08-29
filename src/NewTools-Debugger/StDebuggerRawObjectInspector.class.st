@@ -7,19 +7,31 @@ Class {
 	#name : #StDebuggerRawObjectInspector,
 	#superclass : #StObjectInspector,
 	#instVars : [
-		'raw'
+		'raw',
+		'filterAllRadio',
+		'filterSelfRadio',
+		'filterTempsRadio',
+		'filterArgsRadio',
+		'filterContextRadio'
 	],
 	#category : #'NewTools-Debugger-View'
 }
 
 { #category : #specs }
 StDebuggerRawObjectInspector class >> defaultSpec [
+
 	<spec: #default>
-	
-	^ SpBoxLayout newVertical 
-		add: #header expand: false fill: false padding: 5;
+	^ SpBoxLayout newVertical
+		add: #header withConstraints: [ :constraints |  constraints height: 22 ];
+		add: (SpBoxLayout newHorizontal
+				   add: #filterAllRadio withConstraints: [ :constraints | constraints width: 40 ];
+				   add: #filterSelfRadio withConstraints: [ :constraints | constraints width: 40 ];
+				   add: #filterTempsRadio withConstraints: [ :constraints | constraints width: 45 ];
+				   add: #filterArgsRadio withConstraints: [ :constraints | constraints width: 25 ];
+				   add: #filterContextRadio withConstraints: [ :constraints | constraints width: 60 ];
+				   yourself) withConstraints: [ :constraints |  constraints height: self toolbarHeight ];
 		add: #raw;
-		yourself
+		  yourself
 ]
 
 { #category : #specs }
@@ -31,12 +43,33 @@ StDebuggerRawObjectInspector class >> noHeaderSpec [
 ]
 
 { #category : #initialization }
+StDebuggerRawObjectInspector >> initializeFiltersRadioButtons [
+	filterAllRadio := self newRadioButton.
+	filterSelfRadio := self newRadioButton.
+	filterTempsRadio := self newRadioButton.
+	filterArgsRadio := self newRadioButton.
+	filterContextRadio := self newRadioButton.
+	
+	filterAllRadio label: 'All'.
+	filterSelfRadio label: 'self'.
+	filterTempsRadio label: 'temps'.
+	filterArgsRadio label: 'args'.
+	filterContextRadio label: 'thisContext'.
+		
+	filterAllRadio associatedRadioButtons: 
+		{filterSelfRadio. filterTempsRadio. filterArgsRadio. filterContextRadio}.
+	filterAllRadio state: true
+	
+]
+
+{ #category : #initialization }
 StDebuggerRawObjectInspector >> initializePresenters [
 	super initializePresenters.
 	raw := self model rawInspection.
 	raw beForDebugger.
 	raw owner: self.
-	self addActivationTo: raw
+	self addActivationTo: raw.
+	self initializeFiltersRadioButtons
 ]
 
 { #category : #initialization }
