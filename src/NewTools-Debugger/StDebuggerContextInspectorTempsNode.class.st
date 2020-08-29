@@ -10,7 +10,11 @@ Class {
 
 { #category : #accessing }
 StDebuggerContextInspectorTempsNode >> computeChildrenFromSourceObject [
-	^ (StNodeCollector for: hostObject) collectTempsNodes
+
+	| context |
+	context := self hostObject context.
+	^ context astScope allTemps collect: [ :temp | 
+		  (StInspectorTempNode hostObject: context) tempVariable: temp ]
 ]
 
 { #category : #accessing }
@@ -20,7 +24,15 @@ StDebuggerContextInspectorTempsNode >> label [
 
 { #category : #accessing }
 StDebuggerContextInspectorTempsNode >> rawValue [
-	^ hostObject context temporaries
+	| context variables mapping |
+	context := self hostObject context.
+	variables := context temporaryVariables.
+	mapping := Dictionary new.
+	variables do: [ :tempVariable | 
+		mapping
+			at: tempVariable name
+			put: (tempVariable readInContext: context) ].
+	^ mapping
 ]
 
 { #category : #accessing }

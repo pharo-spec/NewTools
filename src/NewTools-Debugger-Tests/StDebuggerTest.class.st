@@ -3,32 +3,11 @@ Class {
 	#superclass : #TestCase,
 	#instVars : [
 		'session',
-		'debugger'
+		'debugger',
+		'oldFastTDD'
 	],
 	#category : #'NewTools-Debugger-Tests-Presenters'
 }
-
-{ #category : #'helpers - debugger control' }
-StDebuggerTest >> clickStepInto [
-	self debugger updateToolbar.
-	(self debugger toolbar items detect:[:item| item label = 'Into']) click
-]
-
-{ #category : #'helpers - debugger control' }
-StDebuggerTest >> clickStepInto: n [
-	n timesRepeat: [ self clickStepInto ]
-]
-
-{ #category : #'helpers - debugger control' }
-StDebuggerTest >> clickStepOver [
-	self debugger updateToolbar.
-	(self debugger toolbar items detect:[:item| item label = 'Over']) click
-]
-
-{ #category : #'helpers - debugger control' }
-StDebuggerTest >> clickStepOver: n [
-	n timesRepeat: [ self clickStepOver ]
-]
 
 { #category : #accessing }
 StDebuggerTest >> debugger [
@@ -51,6 +30,13 @@ StDebuggerTest >> debuggerOn: aDebugSession [
 ]
 
 { #category : #accessing }
+StDebuggerTest >> executionControlCommandFrom: aDebugger [
+
+	^ debugger toolbarCommandGroup allCommands select: [ :c | 
+		  #( 'Proceed' 'Into' 'Over' 'Through' ) includes: c name ]
+]
+
+{ #category : #accessing }
 StDebuggerTest >> initializedDebugger [
 	| dbg |
 	dbg := self debugger.
@@ -67,29 +53,29 @@ StDebuggerTest >> inspectorTableFor: inspector [
 ]
 
 { #category : #running }
-StDebuggerTest >> setUp [
-	| context process |
-	super setUp.
-	context := [ | i |
-	i := 1 squared.
-	i = 1
-		ifTrue: [ | j |
-			j := i + 1 ].
-	^ 1 + i] asContext.
-	process := Process
-		forContext: context
-		priority: Processor userInterruptPriority.
-	session := DebugSession
-		named: 'test session'
-		on: process
-		startedAt: context
+StDebuggerTest >> setUp [	
+	super setUp.	
+	session := StTestDebuggerProvider new sessionForDebuggerTests.
+	oldFastTDD := self debuggerClass fastTDD.
+	self debuggerClass fastTDD: true
 ]
 
 { #category : #running }
 StDebuggerTest >> tearDown [
 
 	session clear.
+	self debuggerClass fastTDD: oldFastTDD.
+	debugger ifNotNil: [ 
+		debugger close.
+		debugger session ifNotNil: [ :s | s clear ] ].
+	StTestDebuggerProvider removeSelector: #foobar.
 	super tearDown
+]
+
+{ #category : #'tests - actions' }
+StDebuggerTest >> testClose [
+	(self debuggerOn: session) close.
+	self deny: (SystemAnnouncer uniqueInstance hasSubscriber: debugger)
 ]
 
 { #category : #'tests - code pane' }
@@ -147,7 +133,8 @@ StDebuggerTest >> testContextTempVarList [
 	contextItems := inspectorTable roots.
 	self assert: contextItems first rawValue equals: session shortStack first receiver. "receiver"	
 	self assert: (contextItems second rawValue at: #i) equals: 1.
-	self assert: contextItems last rawValue equals: 1. "stackTop"
+	self assert: contextItems third rawValue equals: 1. "stackTop"
+	self assert: contextItems last rawValue equals: dbg currentContext
 ]
 
 { #category : #'tests - context inspector' }
@@ -160,6 +147,16 @@ StDebuggerTest >> testContextUnchangedAfterStepOver [
 	"stepping over one time ^self * self (i.e. we are on the return node but still in the same context)"
 	dbg stepOver. 
 	self assert: dbg inspector inspectedObject ==  currentContext
+]
+
+{ #category : #'tests - actions' }
+StDebuggerTest >> testCopyStackToClipboard [
+	debugger := self debuggerOn: session.
+	debugger copyStackToClipboard.
+	self
+		assert: Clipboard clipboardText string
+		equals: (String streamContents: [ :s | 
+				 session interruptedContext shortDebugStackOn: s ])
 ]
 
 { #category : #'tests - initialization' }
@@ -175,18 +172,10 @@ StDebuggerTest >> testDiscardCodeModification [
 	self flag: #DBG_TEST
 ]
 
-{ #category : #'tests - extensions' }
-StDebuggerTest >> testExtendedToolsClassesFor [
-	self
-		assertCollection:
-			(StDebugger
-				collectExtendedToolsPragmaFor: #debuggerExtensionTestPragma)
-		includesAll: (StDummyDebuggerPresenter class>>#debuggerExtensionTestPragma) pragmas 
-]
-
-{ #category : #'tests - extensions' }
-StDebuggerTest >> testExtendedToolsPragma [
-	self assert: StDebugger extendedToolsPragma equals: #debuggerExtensionOrder:showByDefault:
+{ #category : #'tests - initialization' }
+StDebuggerTest >> testFastTDD [
+	self debuggerClass fastTDD: nil.
+	self deny: self debuggerClass fastTDD
 ]
 
 { #category : #'tests - receiver inspector' }
@@ -210,18 +199,6 @@ StDebuggerTest >> testInspectorSelfBinding [
 	receiver := dbg inspector model inspectedObject context receiver.
 	self assert: evaluator doItReceiver identicalTo: receiver.
 	self assert: evaluator behavior identicalTo: receiver class
-]
-
-{ #category : #'tests - extensions' }
-StDebuggerTest >> testInstantiateExtensionToolsPage [
-	|dbg toolPage|
-	dbg := self debugger.
-	toolPage := dbg instantiateExtensionToolsPage: StDummyDebuggerPresenter.
-	self assert: toolPage class identicalTo: SpNotebookPage.
-	self assert: toolPage presenterProvider value class identicalTo: StDummyDebuggerPresenter.
-	self assert: toolPage title equals: StDummyDebuggerPresenter debuggingExtensionToolName.
-	self assertCollection: dbg extensionTools includesAll: { toolPage presenterProvider value}.
-	 
 ]
 
 { #category : #'tests - receiver inspector' }
@@ -285,14 +262,20 @@ StDebuggerTest >> testReceiverUnchangedAfterStepOver [
 
 ]
 
-{ #category : #'tests - extensions' }
-StDebuggerTest >> testRegisterExtensionTool [
-	|dbg object|
-	dbg := self debugger.
-	self assertEmpty: dbg extensionTools.
-	dbg registerExtensionTool: (object := Object new).
-	self assert: dbg extensionTools size equals: 1.
-	self assertCollection: dbg extensionTools includesAll: { object }
+{ #category : #'tests - actions' }
+StDebuggerTest >> testRequestClassFrom [
+
+	self
+		assert: (self debugger requestClassFrom: self class)
+		identicalTo: self class
+]
+
+{ #category : #'tests - actions' }
+StDebuggerTest >> testRequestProtocolIn [
+
+	self
+		assert: (self debugger requestProtocolIn: self class)
+		equals: Protocol unclassified
 ]
 
 { #category : #'tests - raw inspection' }
@@ -396,6 +379,31 @@ StDebuggerTest >> testStackTableAfterStepIn [
 ]
 
 { #category : #'tests - stack table' }
+StDebuggerTest >> testStackTableElementsPrinting [
+	| columns classColumn methodColumn method block context |
+	self debugger session: session.
+	columns := self initializedDebugger stackTable columns.
+	classColumn := columns first.
+	methodColumn := columns second.
+	"The following column was removed to experiment a new layout, just keeping the test in case of roolback."
+	"senderColumn := columns third."
+	method := self class >> #testStackTableElementsPrinting.
+	block := [ :a | a ].
+	
+	context := (Context newForMethod: method) setSender: self receiver: self method: method arguments: #(  ).
+	self assert: (classColumn evaluation value: context) equals: self class.
+	self assert: (methodColumn evaluation value: context) equals: method selector.
+	"The following column was removed to experiment a new layout, just keeping the test in case of roolback."
+	"self assert: (senderColumn evaluation value: context) equals: self stDisplayString."
+	
+	context := (Context newForMethod: method) setSender: self receiver: self method: block method arguments: #(  ).
+	self assert: (classColumn evaluation value: context) equals: self class.
+	self assert: (methodColumn evaluation value: context) equals: block sourceNode sourceCode.
+	"The following column was removed to experiment a new layout, just keeping the test in case of roolback."
+	"self assert: (senderColumn evaluation value: context) equals: self stDisplayString."
+]
+
+{ #category : #'tests - stack table' }
 StDebuggerTest >> testStackTableInitialization [
 	self assert: self debugger stackTable isNil
 ]
@@ -436,8 +444,8 @@ StDebuggerTest >> testStackTableWithNewSession [
 
 { #category : #'tests - toolbar' }
 StDebuggerTest >> testToolbarDependingOnContext [
-	self skip.
-	self flag: #DBG_TEST
+	self skip
+
 ]
 
 { #category : #'tests - toolbar' }
@@ -446,6 +454,31 @@ StDebuggerTest >> testToolbarDisplayMode [
 	self
 		assert: debugger toolbar displayMode
 		equals: debugger application toolbarDisplayMode
+]
+
+{ #category : #'tests - toolbar' }
+StDebuggerTest >> testToolbarInDNUContext [
+	|commands|
+	session clear.
+	session := StTestDebuggerProvider new sessionWithDNUAfterStep.
+
+	self debuggerOn: session.
+	debugger buildContextMenus.		
+	commands := self executionControlCommandFrom: debugger.	
+
+	"We're not in a DNU, buttons are enabled"
+	commands do: [ :c| self assert: c presenter isEnabled].
+
+	"We step into the DNU, buttons should be disabled"
+	debugger stepInto.
+	debugger stepOver.
+	commands do: [ :c| self deny: c presenter isEnabled].
+
+	"We define the missing method from outside the debugger, buttons should automatically be enabled"
+	StTestDebuggerProvider compile: 'foobar ^self'.		
+	commands do: [ :c| self assert: c presenter isEnabled].
+	
+	
 ]
 
 { #category : #'tests - code pane' }

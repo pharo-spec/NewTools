@@ -91,15 +91,7 @@ StNodeCollector >> slotNodes [
 
 { #category : #building }
 StNodeCollector >> tempNodesForContext: aContext [
-	| nodes |
-	nodes := OrderedCollection new.
-	aContext tempNames
-		withIndexDo: [ :name :index | 
-			nodes
-				add:
-					(StInspectorContextNamedTempNode
-						hostObject: aContext
-						tempName: name
-						tempIndex: index) ].
-	^ nodes
+^ aContext astScope allTemps collect: [ :temp |
+(StInspectorTempNode hostObject: aContext) tempVariable: temp]
+
 ]

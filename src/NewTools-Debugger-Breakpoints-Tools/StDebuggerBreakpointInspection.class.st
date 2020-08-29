@@ -6,21 +6,15 @@ Data is taken from system's and tools' caches.
 Class {
 	#name : #StDebuggerBreakpointInspection,
 	#superclass : #StObjectBreakpointInspection,
+	#traits : 'TStDebuggerExtension',
+	#classTraits : 'TStDebuggerExtension classTrait',
 	#category : #'NewTools-Debugger-Breakpoints-Tools-Presenters'
 }
 
-{ #category : #specs }
-StDebuggerBreakpointInspection class >> debuggingExtensionToolName [
-	<debuggerExtensionOrder: 3 showByDefault: false>
-	^ 'Breakpoints'
-]
+{ #category : #'debugger extension' }
+StDebuggerBreakpointInspection class >> defaultDisplayOrder [
 
-{ #category : #specs }
-StDebuggerBreakpointInspection class >> defaultSpec [
-	^ SpPanedLayout newVertical
-		add: #methodsWithBreakpoints;
-		add: #breakpointsInSourceCode;
-		yourself
+	^ 3
 ]
 
 { #category : #private }
@@ -30,17 +24,13 @@ StDebuggerBreakpointInspection >> breakPointsForModel [
 
 { #category : #private }
 StDebuggerBreakpointInspection >> buildHaltData [
-	^ StHaltCache defaultCache methodsWithHalts values flattened
-		collect: [ :node | self haltDataFor: node ]
+
+	^ StHaltCache defaultCache methodsWithHalts values flattened 
+		  collect: [ :node | StHaltInspectionItem forHalt: node ]
 ]
 
-{ #category : #initialization }
-StDebuggerBreakpointInspection >> initializePresenters [
-	super initializePresenters
-]
+{ #category : #'debugger extension' }
+StDebuggerBreakpointInspection >> debuggerExtensionToolName [
 
-{ #category : #presenters }
-StDebuggerBreakpointInspection >> updateSourceCodeBehaviorFor: node [
-
-	breakpointsInSourceCode beForBehavior: node methodNode methodClass
+	^ 'Breakpoints'
 ]

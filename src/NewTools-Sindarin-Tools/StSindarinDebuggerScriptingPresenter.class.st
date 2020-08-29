@@ -10,6 +10,8 @@ My owner must be a spec debugger
 Class {
 	#name : #StSindarinDebuggerScriptingPresenter,
 	#superclass : #SpPresenter,
+	#traits : 'TStDebuggerExtension',
+	#classTraits : 'TStDebuggerExtension classTrait',
 	#instVars : [
 		'code',
 		'resultInspection',
@@ -19,12 +21,6 @@ Class {
 	],
 	#category : #'NewTools-Sindarin-Tools'
 }
-
-{ #category : #specs }
-StSindarinDebuggerScriptingPresenter class >> debuggingExtensionToolName [
-	<debuggerExtensionOrder: 4 showByDefault: false>
-	^ 'Sindarin'
-]
 
 { #category : #specs }
 StSindarinDebuggerScriptingPresenter class >> defaultSpec [
@@ -46,35 +42,37 @@ StSindarinDebuggerScriptingPresenter >> debugger [
 	^stDebugger
 ]
 
+{ #category : #'debugger extension' }
+StSindarinDebuggerScriptingPresenter >> debuggerExtensionToolName [
+
+	^ 'Sindarin'
+]
+
 { #category : #actions }
 StSindarinDebuggerScriptingPresenter >> executeScript [
 	| stream result model receiver evaluationContext |
 	self debugger removeSessionHolderSubscriptions.
-	self flag: #SINDARIN.
-	"duplicated and adapted code from SpCodeDoItCommand but it could be refactored and mutualized"
-	stream := code text readStream.	
+	stream := code text readStream.
 	model := code interactionModel.
-	receiver := model doItReceiver.
-	evaluationContext := model doItContext.
+	receiver := model context receiver.
+	evaluationContext := model context.
 	result := receiver class compiler
-		source: stream;
-		context: evaluationContext;
-		receiver: receiver;
-		requestor: model;
-		failBlock:  [ nil ];
-		evaluate.		
+		          source: stream;
+		          context: evaluationContext;
+		          receiver: receiver;
+		          requestor: model;
+		          failBlock: [ nil ];
+		          evaluate.
 	resultInspection model: result.
 	resultInspection update.
-		
-	self debugger setSessionHolderSubscriptions. 
-	self debugger forceSessionUpdate.
-
-	
+	self debugger setSessionHolderSubscriptions.
+	self debugger forceSessionUpdate
 ]
 
 { #category : #initialization }
 StSindarinDebuggerScriptingPresenter >> initializePresenters [
 	code := self newCode.
+	code interactionModel: StSindarinContextInteractionModel new.
 	code syntaxHighlight: true.
 	"code contextMenu: [  ]."
 	code text: 'sindarin stepOver'.
@@ -140,8 +138,7 @@ StSindarinDebuggerScriptingPresenter >> toolbarActions [
 
 { #category : #initialization }
 StSindarinDebuggerScriptingPresenter >> updateCode [
-	code interactionModel:
-		(StSindarinContextInteractionModel on: self debugger currentContext).
+	code interactionModel context: self debugger currentContext.
 	code interactionModel bindings
 		at: #sindarin
 		put: (WorkspaceVariable key: #sindarin value: self sindarin)
