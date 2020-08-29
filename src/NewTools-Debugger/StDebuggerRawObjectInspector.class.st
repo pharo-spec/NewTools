@@ -51,12 +51,11 @@ StDebuggerRawObjectInspector >> initializeFiltersRadioButtons [
 	filterTempsRadio := self newRadioButton.
 	filterArgsRadio := self newRadioButton.
 	filterContextRadio := self newRadioButton.
-	filterSelfRadio borderColor: Color transparent .
 	
 	filterArgsRadio state: true.	
 			
 	filterSelfRadio label: 'self'.
-	filterSelfRadio whenActivatedDo: [ self sortInspectorTable: 'attribute'. filterSelfRadio borderColor: Color transparent . ].
+	filterSelfRadio whenActivatedDo: [ self sortInspectorTable: 'attribute'].
 	filterTempsRadio label: 'temps'.
 	filterTempsRadio whenActivatedDo: [ self sortInspectorTable: 'temp'  ].
 	filterArgsRadio label: 'args'.
