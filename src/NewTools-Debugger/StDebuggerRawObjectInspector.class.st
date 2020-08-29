@@ -12,7 +12,8 @@ Class {
 		'filterSelfRadio',
 		'filterTempsRadio',
 		'filterArgsRadio',
-		'filterContextRadio'
+		'filterContextRadio',
+		'sortLabel'
 	],
 	#category : #'NewTools-Debugger-View'
 }
@@ -24,11 +25,11 @@ StDebuggerRawObjectInspector class >> defaultSpec [
 	^ SpBoxLayout newVertical
 		add: #header withConstraints: [ :constraints |  constraints height: 22 ];
 		add: (SpBoxLayout newHorizontal
-				   add: #filterAllRadio withConstraints: [ :constraints | constraints width: 40 ];
-				   add: #filterSelfRadio withConstraints: [ :constraints | constraints width: 40 ];
-				   add: #filterTempsRadio withConstraints: [ :constraints | constraints width: 45 ];
-				   add: #filterArgsRadio withConstraints: [ :constraints | constraints width: 25 ];
-				   add: #filterContextRadio withConstraints: [ :constraints | constraints width: 60 ];
+				   add: #sortLabel withConstraints: [ :constraints | constraints width: 45 ];			   
+					add: #filterArgsRadio withConstraints: [ :constraints | constraints width: 50 ];
+				   add: #filterTempsRadio withConstraints: [ :constraints | constraints width: 60 ];
+				   add: #filterSelfRadio withConstraints: [ :constraints | constraints width: 35 ];
+				   add: #filterContextRadio withConstraints: [ :constraints | constraints width: 50 ];
 				   yourself) withConstraints: [ :constraints |  constraints height: self toolbarHeight ];
 		add: #raw;
 		  yourself
@@ -44,22 +45,27 @@ StDebuggerRawObjectInspector class >> noHeaderSpec [
 
 { #category : #initialization }
 StDebuggerRawObjectInspector >> initializeFiltersRadioButtons [
-	filterAllRadio := self newRadioButton.
+	sortLabel := self newLabel.
+	sortLabel label: 'Sort by: '.
 	filterSelfRadio := self newRadioButton.
 	filterTempsRadio := self newRadioButton.
 	filterArgsRadio := self newRadioButton.
 	filterContextRadio := self newRadioButton.
+	filterSelfRadio borderColor: Color transparent .
 	
-	filterAllRadio label: 'All'.
+	filterArgsRadio state: true.	
+			
 	filterSelfRadio label: 'self'.
+	filterSelfRadio whenActivatedDo: [ self sortInspectorTable: 'attribute'. filterSelfRadio borderColor: Color transparent . ].
 	filterTempsRadio label: 'temps'.
+	filterTempsRadio whenActivatedDo: [ self sortInspectorTable: 'temp'  ].
 	filterArgsRadio label: 'args'.
-	filterContextRadio label: 'thisContext'.
+	filterArgsRadio whenActivatedDo: [ self sortInspectorTable: 'arg'  ].
+	filterContextRadio label: 'context'.
+	filterContextRadio whenActivatedDo: [ self sortInspectorTable: 'implicit'  ].
 		
-	filterAllRadio associatedRadioButtons: 
-		{filterSelfRadio. filterTempsRadio. filterArgsRadio. filterContextRadio}.
-	filterAllRadio state: true
-	
+	filterArgsRadio associatedRadioButtons: 
+		{filterSelfRadio. filterTempsRadio. filterContextRadio}
 ]
 
 { #category : #initialization }
@@ -75,6 +81,16 @@ StDebuggerRawObjectInspector >> initializePresenters [
 { #category : #initialization }
 StDebuggerRawObjectInspector >> rawInspectorPageOrNil [
 	^raw
+]
+
+{ #category : #initialization }
+StDebuggerRawObjectInspector >> sortInspectorTable: variableTag [
+	|roots newRoots|
+	roots := self rawInspectorPageOrNil attributeTable roots.
+	newRoots := OrderedCollection new.
+	newRoots addAll: (roots select: [:node| node variableTag = variableTag]).
+	newRoots addAll: (roots reject: [:node| node variableTag = variableTag]).
+	self rawInspectorPageOrNil attributeTable roots: newRoots
 ]
 
 { #category : #stepping }
