@@ -50,7 +50,7 @@ StPharoGtkConfiguration >> configureUnix: anApplication [
 	self unixThemeName ifNotNil: [ :aName | self installTheme: aName ].
 	self addProviderFromString: self commonStyle.
 	self addProviderFromString: '
-.code { }
+.code { /* font: 10pt "Source Code Pro" */ }
 .stToolbar { font-size: smaller }
 '
 ]
