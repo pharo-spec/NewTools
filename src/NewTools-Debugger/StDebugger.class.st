@@ -582,9 +582,11 @@ StDebugger >> initializeExtensionTools [
 
 { #category : #initialization }
 StDebugger >> initializeInspector [
+
 	inspector := self
-		instantiate: StDebuggerInspector
-		on: (StDebuggerInspectorModel on: nil).
+		             instantiate: StDebuggerInspector
+		             on:
+		             (StDebuggerInspectorModel on: StDebuggerContext new).
 	inspector label: 'Receiver'
 ]
 
@@ -1037,16 +1039,14 @@ StDebugger >> updateExtensionsFrom: newSession [
 
 { #category : #'updating widgets' }
 StDebugger >> updateInspectorFromContext: aContext [
+
 	inspector
 		updateLayoutForContexts: self session interruptedContext
 		isAssertionFailure:
 		self debuggerActionModel isInterruptedContextAnAssertEqualsFailure.
-	inspector updateWith: (StDebuggerContext
-			 context: aContext
-			 session: self session
-			 debugger: self).
+	inspector updateWith: (StDebuggerContext context: aContext).
 	self flag: #DBG_INSPECTOR_UPDATE_BUG.
-	inspector getRawInspectorPresenterOrNil ifNotNil: [:p| p update].
+	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p | p update ]
 ]
 
 { #category : #'updating actions' }

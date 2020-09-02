@@ -16,14 +16,6 @@ StNodeCollector class >> for: anObject [
 ]
 
 { #category : #building }
-StNodeCollector >> collectContextNodes [
-	^ OrderedCollection
-		with: (StInspectorThisContextNode hostObject: self object context)
-		with: (StInspectorStackTopNode hostObject: self object context)
-		with: (StDebugSessionInspectorNode hostObject: self object session)
-]
-
-{ #category : #building }
 StNodeCollector >> collectNodes [
 
 	^ 
