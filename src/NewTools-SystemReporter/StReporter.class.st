@@ -3,20 +3,20 @@ I'm an abstract class.
 Better use my subclasses: 
 
 ```
-SpSystemReporter new openWithSpec
+StSystemReporter new openWithSpec
 ```
 
 or 
 
 ```
-SpSizeReporter new openWithSpec
+StSizeReporter new openWithSpec
 ```
 
 
 "
 Class {
-	#name : #SpReporter,
-	#superclass : #SpPresenter,
+	#name : #StReporter,
+	#superclass : #StPresenter,
 	#instVars : [
 		'topicList',
 		'reportText',
@@ -29,7 +29,7 @@ Class {
 }
 
 { #category : #specs }
-SpReporter class >> defaultSpec [
+StReporter class >> defaultSpec [
 	"self new openWithSpec"
 	^ (SpBoxLayout newHorizontal 
 			add: #topicList withConstraints: [ :constraints | constraints width: 140 ];
@@ -38,19 +38,19 @@ SpReporter class >> defaultSpec [
 ]
 
 { #category : #specs }
-SpReporter class >> open [ 
+StReporter class >> open [ 
 	<script>
 	self new openWithSpec
 ]
 
 { #category : #adding }
-SpReporter >> addTopicSpec: aPair [
+StReporter >> addTopicSpec: aPair [
 
 	topics add: aPair
 ]
 
 { #category : #initialization }
-SpReporter >> connectPresenters [  
+StReporter >> connectPresenters [  
 	
 	topicList whenSelectionChangedDo: [ :selection | 
 			selection selectedItems
@@ -61,7 +61,7 @@ SpReporter >> connectPresenters [
 ]
 
 { #category : #'building report' }
-SpReporter >> createTextForReport: items [
+StReporter >> createTextForReport: items [
 
 	^ (Text streamContents: [:stream | 
 						items do: [:each |
@@ -70,12 +70,12 @@ SpReporter >> createTextForReport: items [
 ]
 
 { #category : #utils }
-SpReporter >> enumerate: aBlock on: aStream [
+StReporter >> enumerate: aBlock on: aStream [
 	self enumerate: aBlock startAt: 0 on: aStream
 ]
 
 { #category : #utils }
-SpReporter >> enumerate: aBlock startAt: first on: aStream [
+StReporter >> enumerate: aBlock startAt: first on: aStream [
 	"Utility method to enumerate Options or Parameters from first to 1000"
 
 	| idx value |
@@ -99,13 +99,13 @@ SpReporter >> enumerate: aBlock startAt: first on: aStream [
 ]
 
 { #category : #initialization }
-SpReporter >> fillTopics [
+StReporter >> fillTopics [
 
 	^ self
 ]
 
 { #category : #utils }
-SpReporter >> header: aString on: aStream [
+StReporter >> header: aString on: aStream [
 	aStream
 		withAttribute: TextEmphasis bold
 		do: [ aStream
@@ -116,7 +116,7 @@ SpReporter >> header: aString on: aStream [
 ]
 
 { #category : #initialization }
-SpReporter >> initialize [
+StReporter >> initialize [
 	topics := OrderedCollection new.
 	self fillTopics.
 	super initialize.
@@ -124,7 +124,7 @@ SpReporter >> initialize [
 ]
 
 { #category : #initialization }
-SpReporter >> initializePresenters [ 
+StReporter >> initializePresenters [ 
 
 	topicList := self newList.
 	topicList beMultipleSelection.
@@ -133,14 +133,14 @@ SpReporter >> initializePresenters [
 ]
 
 { #category : #initialization }
-SpReporter >> initializeWindow: aWindowPresenter [
+StReporter >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter title: self title.
 	aWindowPresenter initialExtent: self extent
 ]
 
 { #category : #initialization }
-SpReporter >> topicSpec [
+StReporter >> topicSpec [
 
 	^ topics
 ]

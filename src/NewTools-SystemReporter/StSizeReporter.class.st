@@ -2,13 +2,13 @@
 I'm a reporter dedicated to size of the system.
 
 ```
-SpSizeReporter new openWithSpec
+StSizeReporter new openWithSpec
 ```
 
 "
 Class {
-	#name : #SpSizeReporter,
-	#superclass : #SpReporter,
+	#name : #StSizeReporter,
+	#superclass : #StReporter,
 	#instVars : [
 		'data'
 	],
@@ -16,18 +16,18 @@ Class {
 }
 
 { #category : #accessing }
-SpSizeReporter >> baselineClassLoc [
+StSizeReporter >> baselineClassLoc [
 	^ data at: #baselineClassLoc ifAbsent: [ self computeLocs. data at: #baselineClassLoc ]
 ]
 
 { #category : #accessing }
-SpSizeReporter >> baselineClasses [
+StSizeReporter >> baselineClasses [
 
 	^ data at: #baselineClasses
 ]
 
 { #category : #compute }
-SpSizeReporter >> computeLocs [ 
+StSizeReporter >> computeLocs [ 
 
 	data at: #manifestClassLoc put:  (self manifestClasses inject: 0 into: [ :sum :each | sum + each linesOfCode]).
 	data at: #testClassLoc put: (self testClasses inject: 0 into: [ :sum :each | sum + each linesOfCode]).
@@ -37,7 +37,7 @@ SpSizeReporter >> computeLocs [
 ]
 
 { #category : #accessing }
-SpSizeReporter >> effectiveClassLoc [
+StSizeReporter >> effectiveClassLoc [
 
 	^ data at: #effectiveClassLoc ifAbsentPut: [ self computeLocs. 
 			self imageClassLoc - self baselineClassLoc - self testClassLoc - self manifestClassLoc ]
@@ -45,25 +45,25 @@ SpSizeReporter >> effectiveClassLoc [
 ]
 
 { #category : #accessing }
-SpSizeReporter >> effectiveClassPackages [
+StSizeReporter >> effectiveClassPackages [
 
 	^ data at: #effectiveClassPackages
 ]
 
 { #category : #accessing }
-SpSizeReporter >> effectiveClasses [
+StSizeReporter >> effectiveClasses [
 
 	^ data at: #effectiveClasses
 ]
 
 { #category : #'building report' }
-SpSizeReporter >> extent [
+StSizeReporter >> extent [
 
 	^ 600@ 400
 ]
 
 { #category : #initialization }
-SpSizeReporter >> fillTopics [
+StSizeReporter >> fillTopics [
 
   {	#'# smart report' -> #reportSmartInfo: .
 	#'# raw classes' -> #reportNbClasses:  .
@@ -75,24 +75,24 @@ SpSizeReporter >> fillTopics [
 ]
 
 { #category : #accessing }
-SpSizeReporter >> imageClassLoc [ 
+StSizeReporter >> imageClassLoc [ 
 	^ data at: #imageClassLoc  ifAbsent: [ self computeLocs. data at: #imageClassLoc ]
 ]
 
 { #category : #accessing }
-SpSizeReporter >> imageClassPackages [
+StSizeReporter >> imageClassPackages [
 
 	^ data at: #imageClassPackages
 ]
 
 { #category : #accessing }
-SpSizeReporter >> imageClasses [
+StSizeReporter >> imageClasses [
 
 	^ data at: #imageClasses
 ]
 
 { #category : #initialization }
-SpSizeReporter >> initialize [ 
+StSizeReporter >> initialize [ 
 	super initialize.
 	data := Dictionary new. 
 	data at: #imageClasses put: self class environment allClasses.
@@ -114,20 +114,20 @@ SpSizeReporter >> initialize [
 ]
 
 { #category : #accessing }
-SpSizeReporter >> manifestClassLoc [
+StSizeReporter >> manifestClassLoc [
 
 	^ data at: #manifestClassLoc ifAbsent: [ self computeLocs. data at: #manifestClassLoc ]
 	
 ]
 
 { #category : #accessing }
-SpSizeReporter >> manifestClasses [
+StSizeReporter >> manifestClasses [
 
 	^ data at: #manifestClasses
 ]
 
 { #category : #utils }
-SpSizeReporter >> printNumber: aNumber on: aStream [
+StSizeReporter >> printNumber: aNumber on: aStream [
 
 	aNumber
 		printSeparatedBy: Character space 
@@ -137,7 +137,7 @@ SpSizeReporter >> printNumber: aNumber on: aStream [
 ]
 
 { #category : #'building report' }
-SpSizeReporter >> reportLOC: aStream [
+StSizeReporter >> reportLOC: aStream [
 	
 	self header: 'Number of LinesOfCode' on: aStream.
 	aStream nextPutAll: '# for all classes: '.
@@ -160,7 +160,7 @@ SpSizeReporter >> reportLOC: aStream [
 ]
 
 { #category : #'building report' }
-SpSizeReporter >> reportNbClasses: aStream [
+StSizeReporter >> reportNbClasses: aStream [
 
 	self header: 'Number of classes' on: aStream.
 	aStream nextPutAll: '# All classes '.
@@ -178,7 +178,7 @@ SpSizeReporter >> reportNbClasses: aStream [
 ]
 
 { #category : #'building report' }
-SpSizeReporter >> reportNbTraits: aStream [
+StSizeReporter >> reportNbTraits: aStream [
 	| imageTraits |
 	imageTraits := self class environment allTraits.
 	self header: 'Number of traits' on: aStream.
@@ -190,7 +190,7 @@ SpSizeReporter >> reportNbTraits: aStream [
 ]
 
 { #category : #'building report' }
-SpSizeReporter >> reportSmartInfo: aStream [
+StSizeReporter >> reportSmartInfo: aStream [
 
 	self header: 'Smarter data' on: aStream.
 	aStream nextPutAll: 'Analysis foreffective classes'.
@@ -217,26 +217,26 @@ SpSizeReporter >> reportSmartInfo: aStream [
 ]
 
 { #category : #accessing }
-SpSizeReporter >> testClassLoc [
+StSizeReporter >> testClassLoc [
 
 	^ data at: #testClassLoc ifAbsent: [ self computeLocs. data at: #testClassLoc ]
 	
 ]
 
 { #category : #accessing }
-SpSizeReporter >> testClasses [
+StSizeReporter >> testClasses [
 
 	^ data at: #testClasses
 ]
 
 { #category : #ui }
-SpSizeReporter >> title [ 
+StSizeReporter >> title [ 
 
 	^ 'Size reporter'
 ]
 
 { #category : #'building report' }
-SpSizeReporter >> topicSpec [
+StSizeReporter >> topicSpec [
   {	#'# smart report' -> #reportSmartInfo: .
 	#'# raw classes' -> #reportNbClasses:  .
 	#'# raw traits' -> #reportNbTraits: .

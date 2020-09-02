@@ -2,20 +2,20 @@
 I'm a little tool that display information about the system.
 
 ```
-SpSystemReporter new openWithSpec.
-SpSystemReporter open
+StSystemReporter new openWithSpec.
+StSystemReporter open
 ```
 
 
 "
 Class {
-	#name : #SpSystemReporter,
-	#superclass : #SpReporter,
+	#name : #StSystemReporter,
+	#superclass : #StReporter,
 	#category : #'NewTools-SystemReporter'
 }
 
 { #category : #'system menu' }
-SpSystemReporter class >> systemReporterMenuOn: aBuilder [ 
+StSystemReporter class >> systemReporterMenuOn: aBuilder [ 
 	<worldMenu>
 	
 	(aBuilder item: #'System Reporter')
@@ -25,20 +25,20 @@ SpSystemReporter class >> systemReporterMenuOn: aBuilder [
 ]
 
 { #category : #initialization }
-SpSystemReporter >> connectPresenters [ 
+StSystemReporter >> connectPresenters [ 
 
 	super connectPresenters.
 	topicList  selectIndex: 1.
 ]
 
 { #category : #utils }
-SpSystemReporter >> extent [
+StSystemReporter >> extent [
 
 	^ 500@ 600
 ]
 
 { #category : #initialization }
-SpSystemReporter >> fillTopics [ 
+StSystemReporter >> fillTopics [ 
 	
 	 {
 		(#Image -> #reportImage:) .
@@ -70,25 +70,25 @@ SpSystemReporter >> fillTopics [
 ]
 
 { #category : #utils }
-SpSystemReporter >> isLinux [
+StSystemReporter >> isLinux [
 	
 	^Smalltalk os isLinux
 ]
 
 { #category : #utils }
-SpSystemReporter >> isWindows [
+StSystemReporter >> isWindows [
 
 	^Smalltalk os isWindows
 ]
 
 { #category : #'building report' }
-SpSystemReporter >> readContentsSafelyFromFile: osPath andWriteTo: aStream [
+StSystemReporter >> readContentsSafelyFromFile: osPath andWriteTo: aStream [
 	 [ osPath asFileReference readStreamDo: [:s | aStream nextPutAll: s contents ]
     ] on: Error do: [:ex| ex return: ex printString]
 ]
 
 { #category : #'building report' }
-SpSystemReporter >> reportImage: aStream [
+StSystemReporter >> reportImage: aStream [
 	self header: 'Image' on: aStream.
 	aStream 
 		nextPutAll: Smalltalk image imagePath; cr;
@@ -99,13 +99,13 @@ SpSystemReporter >> reportImage: aStream [
 ]
 
 { #category : #'building report' }
-SpSystemReporter >> reportImageParameters: aStream [
+StSystemReporter >> reportImageParameters: aStream [
 	self header: 'Image Commandline Parameters' on: aStream.
 	self enumerate: [:idx | Smalltalk image argumentAt: idx] on: aStream
 ]
 
 { #category : #'building report' }
-SpSystemReporter >> reportLinuxOSDetails: aStream [
+StSystemReporter >> reportLinuxOSDetails: aStream [
 	self header: 'Operating System Details' on: aStream.
 	#(
 		'/etc/issue'
@@ -116,7 +116,7 @@ SpSystemReporter >> reportLinuxOSDetails: aStream [
 ]
 
 { #category : #'building report' }
-SpSystemReporter >> reportModules: aStream [
+StSystemReporter >> reportModules: aStream [
 
 	self header: 'Loaded VM Modules' on: aStream.
 	Smalltalk vm listLoadedModules asSortedCollection do: [:each | aStream nextPutAll: each; cr].
@@ -128,7 +128,7 @@ SpSystemReporter >> reportModules: aStream [
 ]
 
 { #category : #'building report' }
-SpSystemReporter >> reportOS: aStream [
+StSystemReporter >> reportOS: aStream [
 	self header: 'Operating System/Hardware' on: aStream.
 	aStream
 		nextPutAll: Smalltalk os platformName; space;
@@ -138,7 +138,7 @@ SpSystemReporter >> reportOS: aStream [
 ]
 
 { #category : #'building report' }
-SpSystemReporter >> reportOSEnvironment: aStream [
+StSystemReporter >> reportOSEnvironment: aStream [
 	| env |
 	self header: 'Operating System Environment' on: aStream.
 	env := [ Smalltalk os environment] on: Error do: [ ^self ].
@@ -147,20 +147,20 @@ SpSystemReporter >> reportOSEnvironment: aStream [
 ]
 
 { #category : #'building report' }
-SpSystemReporter >> reportRepositories: aStream [
+StSystemReporter >> reportRepositories: aStream [
 	self header: 'Monticello Repositories' on: aStream.
 	MCRepositoryGroup default repositories do: [:each | aStream nextPutAll: each description; cr]
 ]
 
 { #category : #'building report' }
-SpSystemReporter >> reportSources: aStream [
+StSystemReporter >> reportSources: aStream [
 	self header: 'Image Sources' on: aStream.
 	aStream nextPutAll: SourceFiles class printString; cr.
 	aStream nextPutAll: SourceFiles reportString.
 ]
 
 { #category : #'building report' }
-SpSystemReporter >> reportVM: aStream [
+StSystemReporter >> reportVM: aStream [
 	self header: 'Virtual Machine' on: aStream.
 	aStream
 		nextPutAll: Smalltalk vm vmFileName;
@@ -212,13 +212,13 @@ SpSystemReporter >> reportVM: aStream [
 ]
 
 { #category : #'building report' }
-SpSystemReporter >> reportVMOptions: aStream [
+StSystemReporter >> reportVMOptions: aStream [
 	self header: 'Virtual Machine Commandline Options' on: aStream.
 	self enumerate: [:idx | Smalltalk vm optionAt: idx] startAt: 1 on: aStream
 ]
 
 { #category : #'building report' }
-SpSystemReporter >> reportVMParameters: aStream [
+StSystemReporter >> reportVMParameters: aStream [
 	| vmParameters |
 	self header: 'Virtual Machine Parameters' on: aStream.
 	vmParameters := Smalltalk vm getParameters.
@@ -303,32 +303,32 @@ SpSystemReporter >> reportVMParameters: aStream [
 ]
 
 { #category : #'building report' }
-SpSystemReporter >> reportVMStats: aStream [
+StSystemReporter >> reportVMStats: aStream [
 	self header: 'Virtual Machine Statistics' on: aStream.
 	aStream
 		nextPutAll: Smalltalk vm statisticsReport
 ]
 
 { #category : #'building report' }
-SpSystemReporter >> reportWin32GFXDetails: aStream [
+StSystemReporter >> reportWin32GFXDetails: aStream [
 	self header: 'Graphics Hardware Details' on: aStream.
 	aStream nextPutAll: (Smalltalk vm getSystemAttribute: 10003)
 ]
 
 { #category : #'building report' }
-SpSystemReporter >> reportWin32HardwareDetails: aStream [
+StSystemReporter >> reportWin32HardwareDetails: aStream [
 	self header: 'Hardware Details' on: aStream.
 	aStream nextPutAll: (Smalltalk vm getSystemAttribute: 10001)
 ]
 
 { #category : #'building report' }
-SpSystemReporter >> reportWin32OSDetails: aStream [
+StSystemReporter >> reportWin32OSDetails: aStream [
 	self header: 'Operating System Details' on: aStream.
 	aStream nextPutAll: (Smalltalk vm getSystemAttribute: 10002)
 ]
 
 { #category : #'building report' }
-SpSystemReporter >> reportWin32VMConfig: aStream [
+StSystemReporter >> reportWin32VMConfig: aStream [
 	| exePath iniPath |
 	self header: 'VM Configuration' on: aStream.
 	exePath := Smalltalk vm vmFileName.
@@ -339,7 +339,7 @@ SpSystemReporter >> reportWin32VMConfig: aStream [
 ]
 
 { #category : #'building report' }
-SpSystemReporter >> reportWorkingCopies: aStream [
+StSystemReporter >> reportWorkingCopies: aStream [
 	| list |
 	self header: 'Monticello Working Copies' on: aStream.
 	list := MCWorkingCopy allManagers asSortedCollection: [:a :b | a packageName <= b packageName].
@@ -347,12 +347,12 @@ SpSystemReporter >> reportWorkingCopies: aStream [
 ]
 
 { #category : #utils }
-SpSystemReporter >> title [ 
+StSystemReporter >> title [ 
 	^ 'System Reporter'
 ]
 
 { #category : #initialization }
-SpSystemReporter >> topicSpec [
+StSystemReporter >> topicSpec [
 	
 	topics addAll:  {
 		(#Image -> #reportImage:) .
