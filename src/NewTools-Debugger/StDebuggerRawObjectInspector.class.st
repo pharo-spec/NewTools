@@ -70,7 +70,7 @@ StDebuggerRawObjectInspector >> initializeFiltersRadioButtons [
 { #category : #initialization }
 StDebuggerRawObjectInspector >> initializePresenters [
 	super initializePresenters.
-	raw := self model rawInspection.
+	raw := self model inspectionRaw.
 	raw beForDebugger.
 	raw owner: self.
 	self addActivationTo: raw.
