@@ -41,6 +41,8 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-FileDialog-Tests' with: [ spec requires: #('NewTools-FileDialog') ];
 			package: 'NewTools-SpTextPresenterDecorators';
 			package: 'NewTools-Debugger-Breakpoints-Tools' with: [ spec requires: #('NewTools-Inspector') ];
+			package: 'NewTools-ProjectLoader';
+			package: 'NewTools-ProjectLoader-Microdown';
 			"Object-centric breakpoints"
 			package: 'NewTools-ObjectCentricBreakpoints';			
 			"Sindarin"
