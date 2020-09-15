@@ -630,7 +630,7 @@ StDebugger >> initializeStack [
 	stackTable
 		addColumn: (SpStringTableColumn
 				 title: 'Class'
-				 evaluated: [ :item | item receiver class ]);
+				 evaluated: [ :item | self printReceiverClassInContext: item ]);
 		addColumn:
 			(SpStringTableColumn title: 'Method' evaluated: [ :item | 
 					 | method |
@@ -722,6 +722,22 @@ StDebugger >> openWithFullView [
 { #category : #opening }
 StDebugger >> openWithNotification: notificationString [
 	self openWithFullView
+]
+
+{ #category : #printing }
+StDebugger >> printReceiverClassInContext: aContext [
+
+	| receiverClass methodClass |
+	receiverClass := aContext receiver class.
+	methodClass := aContext method methodClass.
+	receiverClass == methodClass ifTrue: [ ^ receiverClass name ].
+	^ (WriteStream on: String new)
+		  nextPutAll: receiverClass name;
+		  space;
+		  nextPut: $(;
+		  nextPutAll: methodClass name;
+		  nextPut: $);
+		  contents
 ]
 
 { #category : #actions }
