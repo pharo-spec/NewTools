@@ -61,6 +61,11 @@ FBByFlagsPagePresenter class >> title [
 ]
 
 { #category : #accessing }
+FBByFlagsPagePresenter >> caseCheckbox [
+	^ caseCheckbox
+]
+
+{ #category : #accessing }
 FBByFlagsPagePresenter >> flagsList [
 	^ flagsList
 ]
