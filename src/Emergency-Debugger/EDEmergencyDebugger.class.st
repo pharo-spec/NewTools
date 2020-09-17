@@ -35,6 +35,13 @@ Class {
 }
 
 { #category : #'instance creation' }
+EDEmergencyDebugger class >> closeAllDebuggers [
+	"Do nothing, because this message does not make sense for the Emergency Debugger. If the emergencyDebugger  is open, it has the focus so the user cannot right-click on the taskbar and click on the 'close all debuggers' button anyway"
+
+	^ self
+]
+
+{ #category : #'instance creation' }
 EDEmergencyDebugger class >> debug: aDebugSession [
 	self flag: 'Not good, must add and test the error too!'.
 	^ self new emergencyDebug: aDebugSession

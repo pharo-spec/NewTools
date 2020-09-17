@@ -1,7 +1,7 @@
 Extension { #name : #Transcripter }
 
 { #category : #'*Emergency-Debugger' }
-Transcripter class >> debugError: anError fromSession: aDebugSession [
+Transcripter classSide >> debugError: anError fromSession: aDebugSession [
 	"The emergency evaluator does not know how to use a debug session, so it is dropped"
 
 	self
