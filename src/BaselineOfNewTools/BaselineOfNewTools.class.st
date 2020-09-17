@@ -33,6 +33,8 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Playground' with: [ spec requires: #('NewTools-Inspector') ];
 			"browser"
 			package: 'NewTools-SystemBrowser' with: [ spec requires: #('NewTools-Inspector') ];
+			"system reporter"
+			package: 'NewTools-SystemReporter' with: [ spec requires: #('NewTools-Core') ];
 			"extras"
 			package: 'HelpCenter' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-FlagBrowser' with: [ spec requires: #('NewTools-Core') ];
@@ -68,6 +70,7 @@ BaselineOfNewTools >> baseline: spec [
 				'NewTools-Sindarin-Commands'
 				'NewTools-Debugger-Breakpoints-Tools'
 				'NewTools-Debugger-Tests');
+			group: 'SystemReporter' with: #('Core' 'NewTools-Inspector');
 			group: 'FlagBrowser' with: #(
 				'Core' 
 				'NewTools-FlagBrowser' 
