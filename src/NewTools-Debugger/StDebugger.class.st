@@ -626,6 +626,7 @@ StDebugger >> initializeShortcuts: aWindowPresenter [
 
 { #category : #initialization }
 StDebugger >> initializeStack [
+
 	stackTable := self newTable.
 	stackTable
 		addColumn: (SpStringTableColumn
@@ -637,10 +638,10 @@ StDebugger >> initializeStack [
 					 method := item method.
 					 method isCompiledBlock
 						 ifTrue: [ method sourceNode sourceCode ]
-						 ifFalse: [ method selector ] ])";
+						 ifFalse: [ method selector ] ]). ";
 		addColumn: (SpStringTableColumn
 				 title: 'Context'
-				 evaluated: [ :item | item sender stDisplayString ])".
+				 evaluated: [ :item | item sender stDisplayString ])"
 	stackTable transmitDo: [ :context | 
 		stackTable selection isEmpty ifFalse: [ 
 			self updateInspectorFromContext: context.
@@ -661,7 +662,7 @@ StDebugger >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
-		title: self session name;
+		title: self newTitle;
 		initialExtent: self initialExtent;
 		whenClosedDo: [ self clear ].
 
@@ -691,12 +692,9 @@ StDebugger >> interruptedProcess [
 ]
 
 { #category : #'accessing context' }
-StDebugger >> newTitleString [
-	(debuggerActionModel exceptionInContextOrNil: self context)
-		ifNotNil: [ :ex | ^ ex description ].
-	^ self context currentNode isHaltNode
-		ifTrue: [ 'Halt' ]
-		ifFalse: [ self context receiver class name , '>>' , self context selector ]
+StDebugger >> newTitle [
+
+	^ debuggerActionModel statusStringForContext
 ]
 
 { #category : #api }
@@ -1088,7 +1086,7 @@ StDebugger >> updateStackFromSession: aSession [
 StDebugger >> updateStep [
 
 	self updateStackFromSession: self session.
-	self updateTitle: self newTitleString.
+	self updateWindowTitle.
 	self updateExtensionsFrom: self session.
 	self updateToolbarDebugActions.
 	self flag: #DBG_INSPECTOR_UPDATE_BUG.
@@ -1114,14 +1112,14 @@ StDebugger >> updateStepThrough [
 ]
 
 { #category : #'updating widgets' }
-StDebugger >> updateTitle: statusString [
-
-	self withWindowDo: [ :window | window title: statusString ]
-]
-
-{ #category : #'updating widgets' }
 StDebugger >> updateToolbarDebugActions [
 
 	toolbarCommandGroup allCommands do: [ :spCommand | 
 		spCommand updateEnableStatus ]
+]
+
+{ #category : #'updating widgets' }
+StDebugger >> updateWindowTitle [
+
+	self withWindowDo: [ :window | window title: self newTitle ].
 ]

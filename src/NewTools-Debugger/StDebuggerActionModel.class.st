@@ -42,6 +42,7 @@ StDebuggerActionModel >> copyStackToClipboard [
 StDebuggerActionModel >> exceptionInContextOrNil: aContext [
 
 	| var ex |
+	true ifTrue:[^self session exception].
 	self flag: #DBG_REMOVE_NIL_CHECKS.
 	var := aContext temporaryVariableNamed: #exception.
 	var ifNotNil: [ 
@@ -214,6 +215,23 @@ StDebuggerActionModel >> session [
 { #category : #accessing }
 StDebuggerActionModel >> session: aDebugSession [
 	session := aDebugSession
+]
+
+{ #category : #'debug - session' }
+StDebuggerActionModel >> statusStringForContext [
+
+	| exception |
+	exception := (self interruptedContext temporaryVariableNamed: #exception) ifNotNil: [ :e| (e readInContext: self interruptedContext)].
+	exception isNil and:[
+	self interruptedContext currentNode isHaltNode ifTrue: [ ^ 'Halt in ', self interruptedContext printString ]].
+	exception ifNil:[exception := self session exception].
+	exception class == OupsNullException ifTrue: [ 
+		^ self interruptedContext printString ].
+	(exception respondsTo: #smartDescription) ifFalse: [ 
+		self flag:
+			'remove that when all exceptions are able to answer that message'.
+		^ exception description ].
+	^ exception smartDescription
 ]
 
 { #category : #'debug - stepping' }
