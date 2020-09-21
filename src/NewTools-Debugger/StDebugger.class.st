@@ -694,7 +694,7 @@ StDebugger >> interruptedProcess [
 StDebugger >> newTitleString [
 	(debuggerActionModel exceptionInContextOrNil: self context)
 		ifNotNil: [ :ex | ^ ex description ].
-	^ self context currentNode isHaltNode
+	^ self context sourceNodeExecuted isHaltNode
 		ifTrue: [ 'Halt' ]
 		ifFalse: [ self context receiver class name , '>>' , self context selector ]
 ]
@@ -974,7 +974,7 @@ StDebugger >> titlePrefixTextForCurrentContext [
 	self context sender == self currentContext
 		ifTrue: [ (debuggerActionModel exceptionInContextOrNil: self context)
 				ifNotNil: [ :ex | ^ ex description , ' in ' ] ].
-	^ self currentContext currentNode isHaltNode
+	^ self currentContext sourceNodeExecuted isHaltNode
 		ifTrue: [ 'Halt in ' ]
 		ifFalse: [ '' ]
 ]
