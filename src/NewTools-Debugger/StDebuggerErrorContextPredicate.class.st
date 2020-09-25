@@ -37,10 +37,11 @@ StDebuggerErrorContextPredicate >> isContextAnAssertionFailure [
 
 	variable := context temporaryVariableNamed: #aStringOrBlock.
 	variable ifNil: [ ^ false ].
-
+	^true
+"
 	failure := variable readInContext: context.
 	^ failure isString not and: [ 
-		  self assertEqualsSelectors includes: failure outerContext selector ]
+		  self assertEqualsSelectors includes: failure outerContext selector ]"
 ]
 
 { #category : #predicates }
@@ -73,7 +74,7 @@ StDebuggerErrorContextPredicate >> isSteppable [
 	self isContextAnAssertionFailure ifTrue:[^false].
 	self isContextDoesNotUnderstand ifTrue:[^false].
 	self isContextMissingClassException ifTrue:[^false].
-	^super isSteppable
+	^super isSteppable and:[(exception isKindOf: Halt)]
 ]
 
 { #category : #printing }

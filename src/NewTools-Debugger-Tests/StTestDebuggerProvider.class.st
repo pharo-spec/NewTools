@@ -98,9 +98,12 @@ StTestDebuggerProvider >> methodProducingDNU [
 
 { #category : #helpers }
 StTestDebuggerProvider >> newDebugger [
-	^ StDebugger basicNew
-		session: session;
-		yourself
+
+	| debugger |
+	debugger := StDebugger basicNew.
+	debugger session: session.
+	debugger debuggerActionModel setDebugSessionOpeningContextDescription.
+	^ debugger
 ]
 
 { #category : #helpers }
