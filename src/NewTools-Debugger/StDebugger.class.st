@@ -327,7 +327,7 @@ StDebugger >> buildContextMenus [
 	SpToolbarPresenterBuilder new
 		toolbarPresenter: toolbar;
 		visit: toolbarCommandGroup.
-	self updateToolbarDebugActions.
+	self updateToolbar.
 
 	"Code"
 	codeCommands := debuggerCommandGroup
@@ -539,6 +539,7 @@ StDebugger >> initialExtent [
 { #category : #initialization }
 StDebugger >> initialize [
 	super initialize.
+	self debuggerActionModel setDebugSessionOpeningContextDescription.			
 	self setSessionHolderSubscriptions.
 	self forceSessionUpdate.
 	self subscribeToMethodAddedAnnouncement
@@ -644,9 +645,12 @@ StDebugger >> initializeStack [
 				 evaluated: [ :item | item sender stDisplayString ])"
 	stackTable transmitDo: [ :context | 
 		stackTable selection isEmpty ifFalse: [ 
+			self flag: 'The following line is disturbing the context predicate building when opening the debugger on an exception'.
+			"self updatePredicatesForContext: context."
 			self updateInspectorFromContext: context.
 			self updateCodeFromContext: context.
-			self expandStackIfLastItemIsSelected ] ].
+			self expandStackIfLastItemIsSelected.			
+			self updateWindowTitle ] ].
 	stackHeader := self instantiate: StHeaderBar.
 	stackHeader label: 'Stack'
 ]
@@ -662,7 +666,7 @@ StDebugger >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
-		title: self newTitle;
+		title: self debuggerActionModel statusStringForContext;
 		initialExtent: self initialExtent;
 		whenClosedDo: [ self clear ].
 
@@ -694,7 +698,7 @@ StDebugger >> interruptedProcess [
 { #category : #'accessing context' }
 StDebugger >> newTitle [
 
-	^ debuggerActionModel statusStringForContext
+	^ self debuggerActionModel statusStringForContext
 ]
 
 { #category : #api }
@@ -810,6 +814,7 @@ StDebugger >> requestProtocolIn: aClass [
 			                   currText size > 3 and: [ 
 					                   currApplicant asLowercase includesSubstring:
 							                   currText asString asLowercase ] ].
+					self flag: 'bug if nil'.
 	^ (UIManager default
 		   request: 'Start typing for suggestions (3 characters minimum)'
 		   initialAnswer: Protocol unclassified
@@ -956,25 +961,8 @@ StDebugger >> subscribeToMethodAddedAnnouncement [
 
 	SystemAnnouncer uniqueInstance weak
 		when: MethodAdded
-		send: #updateToolbarDebugActions
+		send: #updateAfterMethodAdded
 		to: self
-]
-
-{ #category : #api }
-StDebugger >> title [
-	^ ((self session isContextPostMortem: self interruptedContext)
-		ifTrue: [ '[PostMortem] ' ]
-		ifFalse: [ '' ]) , self titlePrefixTextForCurrentContext, self currentContext asString
-]
-
-{ #category : #'accessing context' }
-StDebugger >> titlePrefixTextForCurrentContext [
-	self context sender == self currentContext
-		ifTrue: [ (debuggerActionModel exceptionInContextOrNil: self context)
-				ifNotNil: [ :ex | ^ ex description , ' in ' ] ].
-	^ self currentContext currentNode isHaltNode
-		ifTrue: [ 'Halt in ' ]
-		ifFalse: [ '' ]
 ]
 
 { #category : #'accessing widgets' }
@@ -987,6 +975,12 @@ StDebugger >> toolbar [
 StDebugger >> unsubscribeFromSystemAnnouncer [
 
 	SystemAnnouncer uniqueInstance unsubscribe: self
+]
+
+{ #category : #'updating widgets' }
+StDebugger >> updateAfterMethodAdded [
+	self updatePredicatesForContext: self interruptedContext.
+	self updateToolbar 
 ]
 
 { #category : #'updating widgets' }
@@ -1063,6 +1057,12 @@ StDebugger >> updateInspectorFromContext: aContext [
 	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p | p update ]
 ]
 
+{ #category : #'updating widgets' }
+StDebugger >> updatePredicatesForContext: aContext [
+
+	self debuggerActionModel updateContextDescriptionFor: aContext
+]
+
 { #category : #'updating actions' }
 StDebugger >> updateRestart [
 	self updateStep
@@ -1086,9 +1086,10 @@ StDebugger >> updateStackFromSession: aSession [
 StDebugger >> updateStep [
 
 	self updateStackFromSession: self session.
+	self updatePredicatesForContext: self interruptedContext.
 	self updateWindowTitle.
-	self updateExtensionsFrom: self session.
-	self updateToolbarDebugActions.
+	self updateExtensionsFrom: self session.		
+	self updateToolbar.
 	self flag: #DBG_INSPECTOR_UPDATE_BUG.
 	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p | p update ]
 ]
@@ -1112,8 +1113,8 @@ StDebugger >> updateStepThrough [
 ]
 
 { #category : #'updating widgets' }
-StDebugger >> updateToolbarDebugActions [
-
+StDebugger >> updateToolbar [
+	
 	toolbarCommandGroup allCommands do: [ :spCommand | 
 		spCommand updateEnableStatus ]
 ]
