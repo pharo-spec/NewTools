@@ -18,7 +18,7 @@ StTestDebuggerProvider class >> compileMissingClassContextBuilder [
 	[ MissingClass new ]
 		on: Error
 		do: [ :err | 			
-			self sessionFor: err signalerContext copy.
+			self sessionFor: err signalerContext copy exception: err.
 			^ self newDebugger ]'
 ]
 
@@ -33,7 +33,7 @@ StTestDebuggerProvider >> debuggerWithDNUContext [
 	[ self methodProducingDNU ]
 		on: Error
 		do: [ :err | 
-			self sessionFor: err signalerContext copy.
+			self sessionFor: err signalerContext copy exception: err.					
 			^ self newDebugger ]
 ]
 
@@ -42,7 +42,7 @@ StTestDebuggerProvider >> debuggerWithErrorContext [
 	[ #() at: 1 ]
 		on: Error
 		do: [ :err | 
-			self sessionFor: err signalerContext copy.
+			self sessionFor: err signalerContext copy exception: err.
 			^ self newDebugger ]
 ]
 
@@ -51,7 +51,7 @@ StTestDebuggerProvider >> debuggerWithFailingAssertionContext [
 	[ self produceAssertionFailure ]
 		on: TestFailure
 		do: [ :err | 
-			self sessionFor: err signalerContext copy.
+			self sessionFor: err signalerContext copy exception: err.
 			^ self newDebugger ]
 ]
 
@@ -60,7 +60,7 @@ StTestDebuggerProvider >> debuggerWithFailingTestContext [
 	[ self produceTestFailure ]
 		on: TestFailure
 		do: [ :err | 
-			self sessionFor: err signalerContext copy.
+			self sessionFor: err signalerContext copy exception: err.
 			^ self newDebugger ]
 ]
 
@@ -77,7 +77,7 @@ StTestDebuggerProvider >> debuggerWithMissingSubclassResponsibilityContext [
 	[ StDummyDebuggerPresenter new unimplementedSubclassResponsibility ]
 		on: Error
 		do: [ :err | 
-			self sessionFor: err signalerContext.
+			self sessionFor: err signalerContext exception: err.
 			^ self newDebugger ]
 ]
 
@@ -86,7 +86,7 @@ StTestDebuggerProvider >> debuggerWithRunnableContext [
 	[ Halt now ]
 		on: Halt
 		do: [ :err | 
-			self sessionFor: err signalerContext.
+			self sessionFor: err signalerContext exception: err.
 			^ self newDebugger ]
 ]
 
@@ -132,6 +132,12 @@ StTestDebuggerProvider >> sessionFor: aContext [
 ]
 
 { #category : #helpers }
+StTestDebuggerProvider >> sessionFor: aContext exception: e [
+	self sessionFor: aContext.
+	session exception: (e freezeUpTo: aContext)
+]
+
+{ #category : #helpers }
 StTestDebuggerProvider >> sessionForDebuggerTests [
 
 	| context process sessionForTests |
@@ -149,6 +155,7 @@ StTestDebuggerProvider >> sessionForDebuggerTests [
 		                   named: 'test session'
 		                   on: process
 		                   startedAt: context.
+	sessionForTests exception: (OupsNullException fromSignallerContext: context).
 	^ sessionForTests
 ]
 
@@ -164,6 +171,7 @@ StTestDebuggerProvider >> sessionWithDNUAfterStep [
 		                   named: 'test session'
 		                   on: process
 		                   startedAt: context.
+	sessionForTests exception: (OupsNullException fromSignallerContext: context).
 	^ sessionForTests
 ]
 

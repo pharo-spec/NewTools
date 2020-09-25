@@ -487,7 +487,7 @@ StDebuggerTest >> testToolbarInDNUContext [
 	session := StTestDebuggerProvider new sessionWithDNUAfterStep.
 
 	self debuggerOn: session.
-	debugger buildContextMenus.		
+	debugger buildContextMenus.	
 	commands := self executionControlCommandFrom: debugger.	
 
 	"We're not in a DNU, buttons are enabled"

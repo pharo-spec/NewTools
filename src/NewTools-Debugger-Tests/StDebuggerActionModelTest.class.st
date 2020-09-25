@@ -55,7 +55,8 @@ StDebuggerActionModelTest >> changeSession: aDebugSession [
 
 	session terminate.
 	session := aDebugSession.
-	debugActionModel := StDebuggerActionModel on: session
+	debugActionModel := StDebuggerActionModel on: session.
+	debugActionModel updateContextDescriptionFor: debugActionModel interruptedContext
 ]
 
 { #category : #helper }
@@ -118,6 +119,7 @@ StDebuggerActionModelTest >> setUp [
 		session.
 	session
 		stepIntoUntil: [ :currentContext | currentContext method == method ].
+	session exception: OupsNullException new.
 	debugActionModel := StDebuggerActionModel on: session
 ]
 
@@ -159,15 +161,17 @@ StDebuggerActionModelTest >> testCreateMissingMethod [
 
 { #category : #tests }
 StDebuggerActionModelTest >> testExceptionInContextOrNil [
-	|exOrNil|	
+
+	| ex |
 	StTestDebuggerProvider compileMissingClassContextBuilder.
-	exOrNil := debugActionModel exceptionInContextOrNil: session interruptedContext. 
-	self assert: exOrNil equals: nil.
-	
-	self
-		changeSession: StTestDebuggerProvider new debuggerWithMissingClassContext session.		
-	exOrNil := debugActionModel exceptionInContextOrNil: session interruptedContext. 
-	self assert: exOrNil class identicalTo: VariableNotDeclared. 
+	ex := debugActionModel exceptionInContextOrNil:
+		      session interruptedContext.
+	self assert: ex isNil.
+	self changeSession:
+		StTestDebuggerProvider new debuggerWithMissingClassContext session.
+	ex := debugActionModel exceptionInContextOrNil:
+		      session interruptedContext.
+	self assert: ex class identicalTo: VariableNotDeclared
 ]
 
 { #category : #tests }
@@ -273,12 +277,6 @@ StDebuggerActionModelTest >> testIsContextSteppable [
 ]
 
 { #category : #tests }
-StDebuggerActionModelTest >> testIsInterruptedContextATestFailure [
-	self changeSession: StTestDebuggerProvider new debuggerWithFailingTestContext session.
-	self assert: debugActionModel isInterruptedContextATestFailure
-]
-
-{ #category : #tests }
 StDebuggerActionModelTest >> testIsInterruptedContextAnAssertEqualsFailure [
 	self changeSession: StTestDebuggerProvider new debuggerWithFailingAssertionContext session.
 	self assert: debugActionModel isInterruptedContextAnAssertEqualsFailure.
@@ -302,7 +300,7 @@ StDebuggerActionModelTest >> testIsInterruptedContextDoesNotUnderstand [
 
 { #category : #tests }
 StDebuggerActionModelTest >> testIsInterruptedContextError [
-	self skip.
+	"self skip."
 	self flag: #DBG_TEST.
 	self changeSession: StTestDebuggerProvider new debuggerWithErrorContext session.
 	self assert: debugActionModel isInterruptedContextError
