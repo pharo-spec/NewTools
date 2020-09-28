@@ -22,8 +22,16 @@ StDebuggerActionModel >> clearDebugSession [
 	self session terminate
 ]
 
+{ #category : #accessing }
+StDebuggerActionModel >> contextPredicate [
+
+	^ contextPredicate ifNil: [ 
+		  contextPredicate := self updateContextDescriptionFor:
+			                      self interruptedContext ]
+]
+
 { #category : #context }
-StDebuggerActionModel >> contextDescriptionFor: aContext [
+StDebuggerActionModel >> contextPredicateFor: aContext [
 
 	| postMortem exVar ex |
 	self flag: 'needs testing'.
@@ -33,18 +41,14 @@ StDebuggerActionModel >> contextDescriptionFor: aContext [
 	ex := (exVar readInContext: aContext) ifNil: [ 
 		      self session exception ].
 
+	((ex isKindOf: TestFailure) or: [ 
+		 ex isClass and: [ ex includesBehavior: TestFailure ] ]) ifTrue: [ 
+		^ self predicateFor: aContext failure: ex postMortem: postMortem ].
+
 	(ex isKindOf: Exception) ifFalse: [ 
 		^ self predicateFor: aContext postMortem: postMortem ].
 
 	^ self predicateFor: aContext exception: ex postMortem: postMortem
-]
-
-{ #category : #accessing }
-StDebuggerActionModel >> contextPredicate [
-
-	^ contextPredicate ifNil: [ 
-		  contextPredicate := self updateContextDescriptionFor:
-			                      self interruptedContext ]
 ]
 
 { #category : #'debug - stack' }
@@ -169,6 +173,15 @@ StDebuggerActionModel >> predicateFor: aContext exception: exception postMortem:
 ]
 
 { #category : #context }
+StDebuggerActionModel >> predicateFor: aContext failure: testFailure postMortem: isContextPostMortem [
+
+	^ (StDebuggerTestFailureContextPredicate context: aContext)
+		  failure: testFailure;
+		  postMortem: isContextPostMortem;
+		  yourself
+]
+
+{ #category : #context }
 StDebuggerActionModel >> predicateFor: aContext postMortem: isContextPostMortem [
 
 	^ (StDebuggerContextPredicate context: aContext)
@@ -250,6 +263,6 @@ StDebuggerActionModel >> stepThrough: aContext [
 { #category : #context }
 StDebuggerActionModel >> updateContextDescriptionFor: aContext [
 
-	contextPredicate := self contextDescriptionFor: aContext.
+	contextPredicate := self contextPredicateFor: aContext.
 	^contextPredicate
 ]

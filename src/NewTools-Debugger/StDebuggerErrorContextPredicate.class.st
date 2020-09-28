@@ -28,23 +28,6 @@ StDebuggerErrorContextPredicate >> exception: anObject [
 ]
 
 { #category : #predicates }
-StDebuggerErrorContextPredicate >> isContextAnAssertionFailure [
-
-	| variable failure |
-	((exception isKindOf: TestFailure) or: [ 
-		 exception isClass and: [ exception includesBehavior: TestFailure ] ]) 
-		ifFalse: [ ^ false ].
-
-	variable := context temporaryVariableNamed: #aStringOrBlock.
-	variable ifNil: [ ^ false ].
-	^true
-"
-	failure := variable readInContext: context.
-	^ failure isString not and: [ 
-		  self assertEqualsSelectors includes: failure outerContext selector ]"
-]
-
-{ #category : #predicates }
 StDebuggerErrorContextPredicate >> isContextDoesNotUnderstand [
 	true crTrace.
 	^ context selector == #doesNotUnderstand: and: [ 
