@@ -29,14 +29,14 @@ StDebuggerActionModel >> contextDescriptionFor: aContext [
 	self flag: 'needs testing'.
 	postMortem := self session isContextPostMortem: aContext.
 	exVar := (aContext temporaryVariableNamed: #exception) ifNil: [ 
-		         ^ self descriptionFor: aContext postMortem: postMortem ].
+		         ^ self predicateFor: aContext postMortem: postMortem ].
 	ex := (exVar readInContext: aContext) ifNil: [ 
 		      self session exception ].
 
 	(ex isKindOf: Exception) ifFalse: [ 
-		^ self descriptionFor: aContext postMortem: postMortem ].
+		^ self predicateFor: aContext postMortem: postMortem ].
 
-	^ self descriptionFor: aContext exception: ex postMortem: postMortem
+	^ self predicateFor: aContext exception: ex postMortem: postMortem
 ]
 
 { #category : #accessing }
@@ -53,23 +53,6 @@ StDebuggerActionModel >> copyStackToClipboard [
 		clipboardText:
 			(String
 				streamContents: [ :s | self interruptedContext shortDebugStackOn: s ])
-]
-
-{ #category : #context }
-StDebuggerActionModel >> descriptionFor: aContext exception: exception postMortem: isContextPostMortem [
-
-	^ (StDebuggerErrorContextPredicate context: aContext)
-		  exception: exception;
-		  postMortem: isContextPostMortem;
-		  yourself
-]
-
-{ #category : #context }
-StDebuggerActionModel >> descriptionFor: aContext postMortem: isContextPostMortem [
-
-	^ (StDebuggerContextPredicate context: aContext)
-		  postMortem: isContextPostMortem;
-		  yourself
 ]
 
 { #category : #'debug - stack' }
@@ -124,6 +107,12 @@ StDebuggerActionModel >> interruptedContext [
 ]
 
 { #category : #'debug - predicates' }
+StDebuggerActionModel >> isContextAnAssertionFailure [
+
+	^ self contextPredicate isContextAnAssertionFailure
+]
+
+{ #category : #'debug - predicates' }
 StDebuggerActionModel >> isContextSteppable [
 
 	self interruptedContext ifNil: [ ^ false ].
@@ -170,6 +159,23 @@ StDebuggerActionModel >> peelToFirstLike: aContext [
 	self session peelToFirstLike: aContext
 ]
 
+{ #category : #context }
+StDebuggerActionModel >> predicateFor: aContext exception: exception postMortem: isContextPostMortem [
+
+	^ (StDebuggerErrorContextPredicate context: aContext)
+		  exception: exception;
+		  postMortem: isContextPostMortem;
+		  yourself
+]
+
+{ #category : #context }
+StDebuggerActionModel >> predicateFor: aContext postMortem: isContextPostMortem [
+
+	^ (StDebuggerContextPredicate context: aContext)
+		  postMortem: isContextPostMortem;
+		  yourself
+]
+
 { #category : #'debug - execution' }
 StDebuggerActionModel >> proceedDebugSession [
 	self session
@@ -213,7 +219,7 @@ StDebuggerActionModel >> setDebugSessionOpeningContextDescription [
 
 	self flag: 'needs testing'.
 	contextPredicate := self
-		                      descriptionFor: self interruptedContext
+		                      predicateFor: self interruptedContext
 		                      exception: self session exception
 		                      postMortem:
 		                      (self session isContextPostMortem:
