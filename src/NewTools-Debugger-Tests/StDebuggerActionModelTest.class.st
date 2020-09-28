@@ -55,8 +55,7 @@ StDebuggerActionModelTest >> changeSession: aDebugSession [
 
 	session terminate.
 	session := aDebugSession.
-	debugActionModel := StDebuggerActionModel on: session.
-	debugActionModel updateContextDescriptionFor: debugActionModel interruptedContext
+	debugActionModel := StDebuggerActionModel on: session
 ]
 
 { #category : #helper }
@@ -272,22 +271,23 @@ StDebuggerActionModelTest >> testInitialization [
 ]
 
 { #category : #tests }
+StDebuggerActionModelTest >> testIsContextAnAssertionFailure [
+	self changeSession: StTestDebuggerProvider new debuggerWithFailingAssertionContext session.
+	self assert: debugActionModel isContextAnAssertionFailure
+]
+
+{ #category : #tests }
 StDebuggerActionModelTest >> testIsContextSteppable [
 	self assert: debugActionModel isContextSteppable
 ]
 
 { #category : #tests }
 StDebuggerActionModelTest >> testIsInterruptedContextAnAssertEqualsFailure [
-	self changeSession: StTestDebuggerProvider new debuggerWithFailingAssertionContext session.
-	self assert: debugActionModel isInterruptedContextAnAssertEqualsFailure.
-	self changeSession: StTestDebuggerProvider new debuggerWithFailingTestContext session.
-	self deny: debugActionModel isInterruptedContextAnAssertEqualsFailure.
-]
 
-{ #category : #tests }
-StDebuggerActionModelTest >> testIsInterruptedContextAnAssertionFailure [
-	self changeSession: StTestDebuggerProvider new debuggerWithFailingAssertionContext session.
-	self assert: debugActionModel isInterruptedContextATestFailure
+	self changeSession:
+		StTestDebuggerProvider new debuggerWithFailingAssertionContext
+			session.
+	self assert: debugActionModel isContextAnAssertionFailure
 ]
 
 { #category : #tests }

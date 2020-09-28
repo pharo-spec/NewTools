@@ -37,7 +37,7 @@ StDebuggerTestFailureContextPredicate >> printDescription [
 		ifTrue: [ 
 			| variable |
 			variable := context temporaryVariableNamed: #aStringOrBlock.
-			str << (variable readInContext: context).
+			str << (variable readInContext: context) value.
 			^ str contents ].
 
 	str << 'Cannot print test failure in: '.
