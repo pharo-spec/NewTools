@@ -50,7 +50,7 @@ StDebuggerActionModel >> computeInitialTopContext [
 StDebuggerActionModel >> contextPredicate [
 
 	^ contextPredicate ifNil: [ 
-		  contextPredicate := self updateContextDescriptionFor:
+		  contextPredicate := self updateContextPredicateFor:
 			                      self interruptedContext ]
 ]
 
@@ -300,7 +300,7 @@ StDebuggerActionModel >> topContext [
 ]
 
 { #category : #context }
-StDebuggerActionModel >> updateContextDescriptionFor: aContext [
+StDebuggerActionModel >> updateContextPredicateFor: aContext [
 
 	contextPredicate := self contextPredicateFor: aContext.
 	^contextPredicate

@@ -1060,7 +1060,7 @@ StDebugger >> updateInspectorFromContext: aContext [
 { #category : #'updating widgets' }
 StDebugger >> updatePredicatesForContext: aContext [
 
-	self debuggerActionModel updateContextDescriptionFor: aContext
+	self debuggerActionModel updateContextPredicateFor: aContext
 ]
 
 { #category : #'updating actions' }
