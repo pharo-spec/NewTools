@@ -24,6 +24,11 @@ StDebuggerTestFailureContextPredicate >> isContextAnAssertionFailure [
 ]
 
 { #category : #printing }
+StDebuggerTestFailureContextPredicate >> isSteppable [ 
+	^false
+]
+
+{ #category : #printing }
 StDebuggerTestFailureContextPredicate >> printDescription [
 
 	| str |

@@ -215,21 +215,6 @@ StDebuggerActionModelTest >> testFilterStack [
 	self assertCollection: filteredStack equals: stack 
 ]
 
-{ #category : #'tests - contexts' }
-StDebuggerActionModelTest >> testFindExceptionInContext [
-	|context exceptionContext exception|
-	self changeSession:
-		StTestDebuggerProvider new debuggerWithMissingSubclassResponsibilityContext
-			session.
-	context := debugActionModel interruptedContext.
-	exceptionContext := context findContextSuchThat: [:ctx|
-		ctx receiver isKindOf: Exception		
-		  ].
-	exception := exceptionContext ifNotNil: [:ctx| ctx receiver  ].
-	self assert: exception notNil.
-	self assert: exception class == SubclassResponsibility
-]
-
 { #category : #tests }
 StDebuggerActionModelTest >> testImplementClassifiedInClassForContext [
 	|method|
@@ -323,14 +308,6 @@ StDebuggerActionModelTest >> testIsInterruptedContextDoesNotUnderstand [
 	self assert: debugActionModel isInterruptedContextDoesNotUnderstand.
 	StTestDebuggerProvider compile: 'foobar ^self'.
 	self deny: debugActionModel isInterruptedContextDoesNotUnderstand
-]
-
-{ #category : #'tests - predicates' }
-StDebuggerActionModelTest >> testIsInterruptedContextError [
-	"self skip."
-	self flag: #DBG_TEST.
-	self changeSession: StTestDebuggerProvider new debuggerWithErrorContext session.
-	self assert: debugActionModel isInterruptedContextError
 ]
 
 { #category : #'tests - predicates' }

@@ -51,28 +51,29 @@ StDebuggerActionModel >> contextPredicate [
 
 	^ contextPredicate ifNil: [ 
 		  contextPredicate := self updateContextPredicateFor:
-			                      self interruptedContext ]
+			                      self topContext ]
 ]
 
 { #category : #context }
 StDebuggerActionModel >> contextPredicateFor: aContext [
 
-	| postMortem exVar ex |
-	self flag: 'needs testing'.
+	| postMortem ex |
 	postMortem := self session isContextPostMortem: aContext.
-	exVar := (aContext temporaryVariableNamed: #exception) ifNil: [ 
-		         ^ self predicateFor: aContext postMortem: postMortem ].
-	ex := (exVar readInContext: aContext) ifNil: [ 
-		      self session exception ].
-
-	((ex isKindOf: TestFailure) or: [ 
-		 ex isClass and: [ ex includesBehavior: TestFailure ] ]) ifTrue: [ 
+	
+	(self contextSignalsAnException: aContext) ifFalse:[^ self predicateFor: aContext postMortem: postMortem].
+	
+	ex := aContext receiver.
+	((ex isKindOf: TestFailure) ) ifTrue: [ 
 		^ self predicateFor: aContext failure: ex postMortem: postMortem ].
 
-	(ex isKindOf: Exception) ifFalse: [ 
-		^ self predicateFor: aContext postMortem: postMortem ].
-
 	^ self predicateFor: aContext exception: ex postMortem: postMortem
+]
+
+{ #category : #'debug - predicates' }
+StDebuggerActionModel >> contextSignalsAnException: aContext [
+
+	^ (aContext receiver isKindOf: Exception) and: [ 
+		  aContext selector = #signal ]
 ]
 
 { #category : #'debug - stack' }
@@ -161,13 +162,6 @@ StDebuggerActionModel >> isInterruptedContextAnAssertEqualsFailure [
 StDebuggerActionModel >> isInterruptedContextDoesNotUnderstand [
 	^self contextPredicate isContextDoesNotUnderstand
 
-]
-
-{ #category : #'debug - predicates' }
-StDebuggerActionModel >> isInterruptedContextError [
-
-	^ ((self session exception isKindOf: OupsNullException) or: [ 
-		   self session exception isKindOf: Halt ]) not
 ]
 
 { #category : #'debug - predicates' }
@@ -297,6 +291,12 @@ StDebuggerActionModel >> stepThrough: aContext [
 { #category : #accessing }
 StDebuggerActionModel >> topContext [
 	^ topContext
+]
+
+{ #category : #context }
+StDebuggerActionModel >> updateContextPredicate [
+	
+	^self updateContextPredicateFor: self topContext
 ]
 
 { #category : #context }

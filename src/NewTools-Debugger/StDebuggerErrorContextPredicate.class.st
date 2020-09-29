@@ -29,25 +29,22 @@ StDebuggerErrorContextPredicate >> exception: anObject [
 
 { #category : #predicates }
 StDebuggerErrorContextPredicate >> isContextDoesNotUnderstand [
-	true crTrace.
-	^ context selector == #doesNotUnderstand: and: [ 
+
+	^ exception class = MessageNotUnderstood and: [ 
 		  | message |
-		  message := (context temporaryVariableNamed: #aMessage) 
-			             readInContext: context.
-		  (context receiver respondsTo: message selector) not ]
+		  message := exception message.
+		  (exception receiver respondsTo: message selector) not ]
 ]
 
 { #category : #predicates }
 StDebuggerErrorContextPredicate >> isContextMissingClassException [
 
-	^ self isContextDoesNotUnderstand and: [ 
-		  context size >= 2 and: [ 
-			  (context tempAt: 2) class == VariableNotDeclared ] ]
+	^ exception class == VariableNotDeclared
 ]
 
 { #category : #predicates }
 StDebuggerErrorContextPredicate >> isContextSubclassResponsibilityException [
-	^ context selector == #subclassResponsibility
+	^ exception class == SubclassResponsibility
 ]
 
 { #category : #predicates }
@@ -57,7 +54,7 @@ StDebuggerErrorContextPredicate >> isSteppable [
 	self isContextAnAssertionFailure ifTrue:[^false].
 	self isContextDoesNotUnderstand ifTrue:[^false].
 	self isContextMissingClassException ifTrue:[^false].
-	^super isSteppable and:[(exception isKindOf: Halt)]
+	^super isSteppable
 ]
 
 { #category : #printing }

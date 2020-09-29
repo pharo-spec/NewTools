@@ -979,7 +979,7 @@ StDebugger >> unsubscribeFromSystemAnnouncer [
 
 { #category : #'updating widgets' }
 StDebugger >> updateAfterMethodAdded [
-	self updatePredicatesForContext: self interruptedContext.
+	debuggerActionModel updateContextPredicate.
 	self updateToolbar 
 ]
 
@@ -1060,7 +1060,7 @@ StDebugger >> updateInspectorFromContext: aContext [
 { #category : #'updating widgets' }
 StDebugger >> updatePredicatesForContext: aContext [
 
-	self debuggerActionModel updateContextPredicateFor: aContext
+	self debuggerActionModel updateContextPredicate
 ]
 
 { #category : #'updating actions' }
@@ -1086,9 +1086,11 @@ StDebugger >> updateStackFromSession: aSession [
 StDebugger >> updateStep [
 
 	self updateStackFromSession: self session.
-	self updatePredicatesForContext: self interruptedContext.
+	self flag: #DBG_UPDATE_OF_MODEL_SHOULD_BE_AUTOMATED.
+	debuggerActionModel updateTopContext.
+	debuggerActionModel updateContextPredicate.	
 	self updateWindowTitle.
-	self updateExtensionsFrom: self session.		
+	self updateExtensionsFrom: self session.	
 	self updateToolbar.
 	self flag: #DBG_INSPECTOR_UPDATE_BUG.
 	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p | p update ]
