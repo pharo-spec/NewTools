@@ -39,7 +39,8 @@ StTestDebuggerProvider >> debuggerWithDNUContext [
 
 { #category : #helpers }
 StTestDebuggerProvider >> debuggerWithErrorContext [
-	[ #() at: 1 ]
+
+	[ #(  ) at: 1 ]
 		on: Error
 		do: [ :err | 
 			self sessionFor: err signalerContext copy exception: err.
@@ -75,9 +76,9 @@ StTestDebuggerProvider >> debuggerWithMissingClassContext [
 { #category : #helpers }
 StTestDebuggerProvider >> debuggerWithMissingSubclassResponsibilityContext [
 	[ StDummyDebuggerPresenter new unimplementedSubclassResponsibility ]
-		on: Error
-		do: [ :err | 
-			self sessionFor: err signalerContext exception: err.
+		on: SubclassResponsibility
+		do: [ :err | 			
+			self sessionFor: err signalerContext copy exception: err.
 			^ self newDebugger ]
 ]
 
@@ -86,7 +87,7 @@ StTestDebuggerProvider >> debuggerWithRunnableContext [
 	[ Halt now ]
 		on: Halt
 		do: [ :err | 
-			self sessionFor: err signalerContext exception: err.
+			self sessionFor: err signalerContext copy exception: err.
 			^ self newDebugger ]
 ]
 
