@@ -539,7 +539,7 @@ StDebugger >> initialExtent [
 { #category : #initialization }
 StDebugger >> initialize [
 	super initialize.
-	self debuggerActionModel setDebugSessionOpeningContextDescription.			
+	self debuggerActionModel updateContextPredicate.			
 	self setSessionHolderSubscriptions.
 	self forceSessionUpdate.
 	self subscribeToMethodAddedAnnouncement

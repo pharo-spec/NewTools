@@ -506,10 +506,11 @@ StDebuggerTest >> testToolbarInDNUContext [
 
 	"We're not in a DNU, buttons are enabled"
 	commands do: [ :c| self assert: c presenter isEnabled].
-
+	
 	"We step into the DNU, buttons should be disabled"
 	debugger stepInto.
 	debugger stepOver.
+
 	commands do: [ :c| self deny: c presenter isEnabled].
 
 	"We define the missing method from outside the debugger, buttons should automatically be enabled"

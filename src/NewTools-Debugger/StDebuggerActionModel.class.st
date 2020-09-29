@@ -59,7 +59,7 @@ StDebuggerActionModel >> contextPredicateFor: aContext [
 
 	| postMortem ex |
 	postMortem := self session isContextPostMortem: aContext.
-	
+
 	(self contextSignalsAnException: aContext) ifFalse:[^ self predicateFor: aContext postMortem: postMortem].
 	
 	ex := aContext receiver.
@@ -253,18 +253,6 @@ StDebuggerActionModel >> session: aDebugSession [
 ]
 
 { #category : #context }
-StDebuggerActionModel >> setDebugSessionOpeningContextDescription [
-
-	self flag: 'needs testing'.
-	contextPredicate := self
-		                      predicateFor: self interruptedContext
-		                      exception: self session exception
-		                      postMortem:
-		                      (self session isContextPostMortem:
-			                       self interruptedContext)
-]
-
-{ #category : #context }
 StDebuggerActionModel >> statusStringForContext [
 
 	^ self contextPredicate printDescription
@@ -300,8 +288,7 @@ StDebuggerActionModel >> updateContextPredicate [
 ]
 
 { #category : #context }
-StDebuggerActionModel >> updateContextPredicateFor: aContext [
-
+StDebuggerActionModel >> updateContextPredicateFor: aContext [    
 	contextPredicate := self contextPredicateFor: aContext.
 	^contextPredicate
 ]

@@ -103,7 +103,7 @@ StTestDebuggerProvider >> newDebugger [
 	| debugger |
 	debugger := StDebugger basicNew.
 	debugger session: session.
-	debugger debuggerActionModel setDebugSessionOpeningContextDescription.
+	debugger debuggerActionModel updateContextPredicate.
 	^ debugger
 ]
 

@@ -54,7 +54,7 @@ StDebuggerErrorContextPredicate >> isSteppable [
 	self isContextAnAssertionFailure ifTrue:[^false].
 	self isContextDoesNotUnderstand ifTrue:[^false].
 	self isContextMissingClassException ifTrue:[^false].
-	^super isSteppable
+	^super isSteppable and:[exception isKindOf: Halt]
 ]
 
 { #category : #printing }
