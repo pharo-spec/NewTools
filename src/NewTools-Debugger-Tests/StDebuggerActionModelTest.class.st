@@ -133,7 +133,7 @@ StDebuggerActionModelTest >> tearDown [
 	super tearDown
 ]
 
-{ #category : #tests }
+{ #category : #'tests - actions' }
 StDebuggerActionModelTest >> testClearDebugSession [
 	| process |
 	process := session interruptedProcess.
@@ -156,7 +156,7 @@ StDebuggerActionModelTest >> testComputeInitialTopContext [
 	
 ]
 
-{ #category : #tests }
+{ #category : #'tests - actions' }
 StDebuggerActionModelTest >> testCopyStackToClipboard [
 	debugActionModel copyStackToClipboard.
 	self
@@ -166,11 +166,11 @@ StDebuggerActionModelTest >> testCopyStackToClipboard [
 				streamContents: [ :s | session interruptedContext shortDebugStackOn: s ])
 ]
 
-{ #category : #tests }
+{ #category : #'tests - actions' }
 StDebuggerActionModelTest >> testCreateMissingMethod [
 ]
 
-{ #category : #tests }
+{ #category : #'tests - contexts' }
 StDebuggerActionModelTest >> testExceptionInContextOrNil [
 
 	| ex |
@@ -185,7 +185,7 @@ StDebuggerActionModelTest >> testExceptionInContextOrNil [
 	self assert: ex class identicalTo: VariableNotDeclared
 ]
 
-{ #category : #tests }
+{ #category : #'tests - actions' }
 StDebuggerActionModelTest >> testFileOutMethod [
 	debugActionModel fileOutMethod: self.
 	self assert: result equals: self selector
@@ -215,7 +215,7 @@ StDebuggerActionModelTest >> testFilterStack [
 	self assertCollection: filteredStack equals: stack 
 ]
 
-{ #category : #tests }
+{ #category : #'tests - contexts' }
 StDebuggerActionModelTest >> testFindExceptionInContext [
 	|context exceptionContext exception|
 	self changeSession:
@@ -297,18 +297,18 @@ StDebuggerActionModelTest >> testInitialization [
 		identicalTo: session interruptedContext
 ]
 
-{ #category : #tests }
+{ #category : #'tests - predicates' }
 StDebuggerActionModelTest >> testIsContextAnAssertionFailure [
 	self changeSession: StTestDebuggerProvider new debuggerWithFailingAssertionContext session.
 	self assert: debugActionModel isContextAnAssertionFailure
 ]
 
-{ #category : #tests }
+{ #category : #'tests - predicates' }
 StDebuggerActionModelTest >> testIsContextSteppable [
 	self assert: debugActionModel isContextSteppable
 ]
 
-{ #category : #tests }
+{ #category : #'tests - predicates' }
 StDebuggerActionModelTest >> testIsInterruptedContextAnAssertEqualsFailure [
 
 	self changeSession:
@@ -317,7 +317,7 @@ StDebuggerActionModelTest >> testIsInterruptedContextAnAssertEqualsFailure [
 	self assert: debugActionModel isContextAnAssertionFailure
 ]
 
-{ #category : #tests }
+{ #category : #'tests - predicates' }
 StDebuggerActionModelTest >> testIsInterruptedContextDoesNotUnderstand [
 	self changeSession: StTestDebuggerProvider new debuggerWithDNUContext session.
 	self assert: debugActionModel isInterruptedContextDoesNotUnderstand.
@@ -325,7 +325,7 @@ StDebuggerActionModelTest >> testIsInterruptedContextDoesNotUnderstand [
 	self deny: debugActionModel isInterruptedContextDoesNotUnderstand
 ]
 
-{ #category : #tests }
+{ #category : #'tests - predicates' }
 StDebuggerActionModelTest >> testIsInterruptedContextError [
 	"self skip."
 	self flag: #DBG_TEST.
@@ -333,32 +333,32 @@ StDebuggerActionModelTest >> testIsInterruptedContextError [
 	self assert: debugActionModel isInterruptedContextError
 ]
 
-{ #category : #tests }
+{ #category : #'tests - predicates' }
 StDebuggerActionModelTest >> testIsInterruptedContextMissingClassException [	
 	StTestDebuggerProvider compileMissingClassContextBuilder.
 	self changeSession: StTestDebuggerProvider new debuggerWithMissingClassContext session.
 	self assert: debugActionModel isInterruptedContextMissingClassException
 ]
 
-{ #category : #tests }
+{ #category : #'tests - predicates' }
 StDebuggerActionModelTest >> testIsInterruptedContextPostMortem [
 	session resume.
 	self assert: debugActionModel isInterruptedContextPostMortem
 ]
 
-{ #category : #tests }
+{ #category : #'tests - predicates' }
 StDebuggerActionModelTest >> testIsInterruptedContextSubclassResponsibilityException [
 	self changeSession: StTestDebuggerProvider new debuggerWithMissingSubclassResponsibilityContext session.
 	self assert: debugActionModel isInterruptedContextSubclassResponsibilityException
 ]
 
-{ #category : #tests }
+{ #category : #'tests - actions' }
 StDebuggerActionModelTest >> testPeelToFirstLike [
 	self skip.
 	self flag: #DBG_TEST
 ]
 
-{ #category : #tests }
+{ #category : #'tests - actions' }
 StDebuggerActionModelTest >> testProceedDebugSession [
 	self deny: session interruptedContext isNil.
 	self assert: result isNil.
@@ -367,7 +367,7 @@ StDebuggerActionModelTest >> testProceedDebugSession [
 	self assert: result equals: 4
 ]
 
-{ #category : #tests }
+{ #category : #'tests - actions' }
 StDebuggerActionModelTest >> testRestartContext [
 	|topContext topPC|
 	topContext := 
@@ -380,7 +380,7 @@ StDebuggerActionModelTest >> testRestartContext [
 	self assert: session interruptedContext pc equals: topPC
 ]
 
-{ #category : #tests }
+{ #category : #'tests - actions' }
 StDebuggerActionModelTest >> testReturnValueFromExpressionFromContext [
 	session stepInto.
 	session stepInto.
@@ -390,7 +390,7 @@ StDebuggerActionModelTest >> testReturnValueFromExpressionFromContext [
 	self assert: result equals: 0
 ]
 
-{ #category : #tests }
+{ #category : #'tests - actions' }
 StDebuggerActionModelTest >> testRunToSelectionInContext [
 	|method node|
 	method := (self class >> #setResult).
@@ -400,7 +400,7 @@ StDebuggerActionModelTest >> testRunToSelectionInContext [
 	self assert: (method sourceNodeForPC: session interruptedContext pc) identicalTo: node
 ]
 
-{ #category : #tests }
+{ #category : #'tests - actions' }
 StDebuggerActionModelTest >> testStepInto [
 	|ctx|
 	ctx := session interruptedContext.
@@ -409,7 +409,7 @@ StDebuggerActionModelTest >> testStepInto [
 	self assert: session stack second identicalTo: ctx
 ]
 
-{ #category : #tests }
+{ #category : #'tests - actions' }
 StDebuggerActionModelTest >> testStepOver [
 	| method ctx |
 	method := self class >> #setResult.
@@ -425,7 +425,7 @@ StDebuggerActionModelTest >> testStepOver [
 		identicalTo: method ast statements second
 ]
 
-{ #category : #tests }
+{ #category : #'tests - actions' }
 StDebuggerActionModelTest >> testStepThrough [
 	| method ctx |
 	method := self class >> #setResult.

@@ -33,7 +33,7 @@ StTestDebuggerProvider >> debuggerWithDNUContext [
 	[ self methodProducingDNU ]
 		on: Error
 		do: [ :err | 
-			self sessionFor: err signalerContext copy exception: err.					
+			self sessionFor: err signalerContext exception: err.					
 			^ self newDebugger ]
 ]
 
@@ -43,7 +43,7 @@ StTestDebuggerProvider >> debuggerWithErrorContext [
 	[ #(  ) at: 1 ]
 		on: Error
 		do: [ :err | 
-			self sessionFor: err signalerContext copy exception: err.
+			self sessionFor: err signalerContext exception: err.
 			^ self newDebugger ]
 ]
 
@@ -52,7 +52,7 @@ StTestDebuggerProvider >> debuggerWithFailingAssertionContext [
 	[ self produceAssertionFailure ]
 		on: TestFailure
 		do: [ :err | 
-			self sessionFor: err signalerContext copy exception: err.
+			self sessionFor: err signalerContext exception: err.
 			^ self newDebugger ]
 ]
 
@@ -61,7 +61,7 @@ StTestDebuggerProvider >> debuggerWithFailingTestContext [
 	[ self produceTestFailure ]
 		on: TestFailure
 		do: [ :err | 
-			self sessionFor: err signalerContext copy exception: err.
+			self sessionFor: err signalerContext exception: err.
 			^ self newDebugger ]
 ]
 
