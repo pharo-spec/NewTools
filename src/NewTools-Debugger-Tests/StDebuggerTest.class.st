@@ -172,6 +172,20 @@ StDebuggerTest >> testCopyStackToClipboard [
 ]
 
 { #category : #'tests - initialization' }
+StDebuggerTest >> testDebuggerActionModel [
+	"Checking that when initializing a debugger its action model is correctly set up.
+	We cannot check that by calling the accessor because it is a lazy accessor. 
+	We're using slot reflection instead."
+
+	| slot debuggerActionModel |
+	slot := StDebugger slotNamed: #debuggerActionModel.
+	debugger := self debuggerOn: session.
+	debuggerActionModel := slot read: debugger.
+
+	self assert: debuggerActionModel notNil
+]
+
+{ #category : #'tests - initialization' }
 StDebuggerTest >> testDebuggerApplication [
 	self
 		assert: (self debuggerOn: session) application
