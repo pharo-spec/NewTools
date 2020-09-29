@@ -7,19 +7,43 @@ Class {
 	#instVars : [
 		'debugger',
 		'session',
-		'contextPredicate'
+		'contextPredicate',
+		'topContext'
 	],
 	#category : #'NewTools-Debugger-Model'
 }
 
 { #category : #'instance creation' }
 StDebuggerActionModel class >> on: aDebugSession [
-	^ self new session: aDebugSession
+
+	^ self basicNew
+		  session: aDebugSession;
+		  initialize
+]
+
+{ #category : #'debug - session' }
+StDebuggerActionModel >> autoClassifyMessage: aMessage inClass: aClass [
+
+	| method |
+	method := aClass lookupSelector: aMessage selector.
+	method protocol = Protocol unclassified ifTrue: [ 
+		MethodClassifier classify: method ]
 ]
 
 { #category : #'debug - execution' }
 StDebuggerActionModel >> clearDebugSession [
 	self session terminate
+]
+
+{ #category : #context }
+StDebuggerActionModel >> computeInitialTopContext [
+
+	topContext := session exception signalContext.
+	topContext ifNil: [ 
+		topContext := self interruptedContext.
+		^ self ].
+	(topContext hasContext: self interruptedContext) ifFalse: [ 
+		topContext := self interruptedContext ]
 ]
 
 { #category : #accessing }
@@ -94,15 +118,19 @@ StDebuggerActionModel >> filterStack: aStack [
 { #category : #'debug - session' }
 StDebuggerActionModel >> implement: aMessage classified: messageCategory inClass: aClass forContext: aContext [
 
-	| method |
 	self session
 		implement: aMessage
 		classified: messageCategory
 		inClass: aClass
 		forContext: aContext.
-	method := aClass lookupSelector: aMessage selector.
-	method protocol = Protocol unclassified ifTrue: [ 
-		MethodClassifier classify: method ]
+	self autoClassifyMessage: aMessage inClass: aClass.
+	self updateTopContext
+]
+
+{ #category : #initialize }
+StDebuggerActionModel >> initialize [
+	super initialize.
+	self computeInitialTopContext
 ]
 
 { #category : #accessing }
@@ -198,7 +226,8 @@ StDebuggerActionModel >> proceedDebugSession [
 
 { #category : #'debug - execution' }
 StDebuggerActionModel >> restartContext: aContext [
-	self session restart: aContext
+	self session restart: aContext.
+	self updateTopContext
 ]
 
 { #category : #'debug - execution' }
@@ -209,12 +238,14 @@ StDebuggerActionModel >> returnValueFromExpression: aString fromContext: aContex
 		context: aContext;
 		receiver: aContext receiver;
 		evaluate.
-	self session returnValue: value from: aContext
+	self session returnValue: value from: aContext.
+	self updateTopContext
 ]
 
 { #category : #'debug - execution' }
 StDebuggerActionModel >> runToSelection: aSelectionInterval inContext: aContext [
-	self session runToSelection: aSelectionInterval inContext: aContext
+	self session runToSelection: aSelectionInterval inContext: aContext.
+	self updateTopContext
 ]
 
 { #category : #accessing }
@@ -247,17 +278,25 @@ StDebuggerActionModel >> statusStringForContext [
 
 { #category : #'debug - stepping' }
 StDebuggerActionModel >> stepInto: aContext [ 
-	self session stepInto: aContext
+	self session stepInto: aContext.
+	self updateTopContext
 ]
 
 { #category : #'debug - stepping' }
 StDebuggerActionModel >> stepOver: aContext [
-	self session stepOver: aContext
+	self session stepOver: aContext.
+	self updateTopContext
 ]
 
 { #category : #'debug - stepping' }
 StDebuggerActionModel >> stepThrough: aContext [
-	self session stepThrough: aContext
+	self session stepThrough: aContext.
+	self updateTopContext
+]
+
+{ #category : #accessing }
+StDebuggerActionModel >> topContext [
+	^ topContext
 ]
 
 { #category : #context }
@@ -265,4 +304,10 @@ StDebuggerActionModel >> updateContextDescriptionFor: aContext [
 
 	contextPredicate := self contextPredicateFor: aContext.
 	^contextPredicate
+]
+
+{ #category : #context }
+StDebuggerActionModel >> updateTopContext [
+
+	topContext := self interruptedContext
 ]

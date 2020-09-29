@@ -78,7 +78,7 @@ StTestDebuggerProvider >> debuggerWithMissingSubclassResponsibilityContext [
 	[ StDummyDebuggerPresenter new unimplementedSubclassResponsibility ]
 		on: SubclassResponsibility
 		do: [ :err | 			
-			self sessionFor: err signalerContext copy exception: err.
+			self sessionFor: err signalerContext exception: err.
 			^ self newDebugger ]
 ]
 
@@ -87,7 +87,7 @@ StTestDebuggerProvider >> debuggerWithRunnableContext [
 	[ Halt now ]
 		on: Halt
 		do: [ :err | 
-			self sessionFor: err signalerContext copy exception: err.
+			self sessionFor: err signalerContext exception: err.
 			^ self newDebugger ]
 ]
 
@@ -125,20 +125,24 @@ StTestDebuggerProvider >> session [
 
 { #category : #helpers }
 StTestDebuggerProvider >> sessionFor: aContext [
+
 	| process |
 	process := Process
-		forContext: aContext
-		priority: Processor userInterruptPriority.
+		           forContext: aContext
+		           priority: Processor userInterruptPriority.
 	session := DebugSession
-		named: 'test session'
-		on: process
-		startedAt: aContext
+		           named: 'test session'
+		           on: process
+		           startedAt: aContext.
+	session exception ifNil: [ session exception: OupsNullException new ]
 ]
 
 { #category : #helpers }
 StTestDebuggerProvider >> sessionFor: aContext exception: e [
-	self sessionFor: aContext.
-	session exception: (e freezeUpTo: aContext)
+
+	e freezeUpTo: nil.
+	self sessionFor: e signalerContext.
+	session exception: e
 ]
 
 { #category : #helpers }
