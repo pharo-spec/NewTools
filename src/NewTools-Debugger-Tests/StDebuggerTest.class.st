@@ -205,18 +205,6 @@ StDebuggerTest >> testFastTDD [
 ]
 
 { #category : #'tests - receiver inspector' }
-StDebuggerTest >> testInspectorHeaderLabel [
-	| dbg displayedLabel |
-	dbg := self debuggerOn: session.
-	displayedLabel := ((((dbg inspector instVarNamed: #inspector) 
-		                     instVarNamed: #millerList) presenters first 
-		                    instVarNamed: #header) instVarNamed: #titleLabel)
-		                  label.
-	self assert: (dbg inspector model labelString copyFrom: 1 to: 12) equals: 'Receiver in:'.	
-	self assert: (displayedLabel copyFrom: 1 to: 12) equals: 'Receiver in:'.
-]
-
-{ #category : #'tests - receiver inspector' }
 StDebuggerTest >> testInspectorSelfBinding [
 	| dbg evaluator receiver |
 	dbg := self debuggerOn: session.
