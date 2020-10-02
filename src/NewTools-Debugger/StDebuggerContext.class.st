@@ -66,7 +66,7 @@ StDebuggerContext >> printOn: aStream [
 { #category : #nodes }
 StDebuggerContext >> receiverNodes [
 
-	^ self context receiver allInspectorNodes reject: [ :node | node key = 'self' ]
+	^ self context receiver allInspectorNodes
 ]
 
 { #category : #nodes }
