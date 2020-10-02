@@ -803,7 +803,7 @@ StDebugger >> requestClassFrom: aClass [
 { #category : #'ui requests' }
 StDebugger >> requestProtocolIn: aClass [
 
-	| entryCompletion applicants |
+	| entryCompletion applicants choice |
 	self class fastTDD ifTrue: [ ^ Protocol unclassified ].
 	applicants := AbstractTool protocolSuggestionsFor: aClass.
 	entryCompletion := EntryCompletion new
@@ -812,12 +812,16 @@ StDebugger >> requestProtocolIn: aClass [
 			                   currText size > 3 and: [ 
 					                   currApplicant asLowercase includesSubstring:
 							                   currText asString asLowercase ] ].
-	^ (UIManager default
-		   request: 'Start typing for suggestions (3 characters minimum)'
-		   initialAnswer: Protocol unclassified
-		   title: 'Choose a protocol'
-		   entryCompletion: entryCompletion) ifEmpty: [ 
-		  Protocol unclassified ]
+
+	choice := UIManager default
+		          request:
+		          'Start typing for suggestions (3 characters minimum)'
+		          initialAnswer: Protocol unclassified
+		          title: 'Choose a protocol'
+		          entryCompletion: entryCompletion.
+	^ (#( nil '' ) includes: choice)
+		  ifTrue: [ Protocol unclassified ]
+		  ifFalse: [ choice ]
 ]
 
 { #category : #'ui requests' }
