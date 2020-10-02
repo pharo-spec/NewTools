@@ -405,19 +405,22 @@ StDebugger >> copyStackToClipboard [
 
 { #category : #actions }
 StDebugger >> createMissingClass [
+
 	| message exception variableNode |
 	self flag: #DBG_MISSINGTEST.
 	message := self interruptedContext tempAt: 1.
 	exception := self interruptedContext tempAt: 2.
 	variableNode := exception variableNode.
-	[ OCUndeclaredVariableWarning new
+	[ 
+	OCUndeclaredVariableWarning new
 		node: variableNode;
-		defineClass: variableNode name ]
-		on: Abort
-		do: [ ^ self ].
+		defineClass: variableNode name.
 	self
 		createMissingMethodFor: message
-		in: self interruptedContext receiver class.
+		in: self interruptedContext receiver class ]
+		on: Abort
+		do: [ ^ self ].
+
 	self debuggerActionModel restartContext: self interruptedContext
 ]
 
@@ -427,11 +430,12 @@ StDebugger >> createMissingMethod [
 	| msg chosenClass |
 	self flag: #DBG_MISSINGTEST.
 	msg := self interruptedContext tempAt: 1.
+	[ 
 	chosenClass := self requestClassFrom:
 		               self interruptedContext receiver class.
-	chosenClass ifNil: [ ^ self ].
-
-	self createMissingMethodFor: msg in: chosenClass
+	self createMissingMethodFor: msg in: chosenClass ]
+		on: Abort
+		do: [ ^ self ]
 ]
 
 { #category : #actions }
@@ -813,15 +817,14 @@ StDebugger >> requestProtocolIn: aClass [
 					                   currApplicant asLowercase includesSubstring:
 							                   currText asString asLowercase ] ].
 
-	choice := UIManager default
-		          request:
-		          'Start typing for suggestions (3 characters minimum)'
-		          initialAnswer: Protocol unclassified
-		          title: 'Choose a protocol'
-		          entryCompletion: entryCompletion.
-	^ (#( nil '' ) includes: choice)
-		  ifTrue: [ Protocol unclassified ]
-		  ifFalse: [ choice ]
+	choice := (UIManager default
+		           request:
+		           'Start typing for suggestions (3 characters minimum)'
+		           initialAnswer: Protocol unclassified
+		           title: 'Choose a protocol'
+		           entryCompletion: entryCompletion) ifNil: [ Abort signal ].
+
+	^ choice ifEmpty: [ Protocol unclassified ]
 ]
 
 { #category : #'ui requests' }
@@ -833,10 +836,10 @@ StDebugger >> requestSuperclassOf: aClass to: aSuperclass [
 	classes addAll:
 		(aClass traits sort: [ :t1 :t2 | t1 asString < t2 asString ]).
 	classes size = 1 ifTrue: [ ^ classes first ].
-	^ UIManager default
-		  chooseFrom: (classes collect: [ :c | c name ])
-		  values: classes
-		  title: 'Define selector in:'
+	^ (UIManager default
+		   chooseFrom: (classes collect: [ :c | c name ])
+		   values: classes
+		   title: 'Define selector in:') ifNil: [ Abort signal ]
 ]
 
 { #category : #actions }
