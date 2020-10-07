@@ -1093,11 +1093,11 @@ StDebugger >> updateStackFromSession: aSession [
 
 { #category : #'updating actions' }
 StDebugger >> updateStep [
-
-	self updateStackFromSession: self session.
 	self flag: #DBG_UPDATE_OF_MODEL_SHOULD_BE_AUTOMATED.
 	debuggerActionModel updateTopContext.
 	debuggerActionModel updateContextPredicate.	
+		
+	self updateStackFromSession: self session.
 	self updateWindowTitle.
 	self updateExtensionsFrom: self session.	
 	self updateToolbar.

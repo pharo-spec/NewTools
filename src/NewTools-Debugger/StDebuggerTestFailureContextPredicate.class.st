@@ -13,6 +13,11 @@ Class {
 	#category : #'NewTools-Debugger-Model'
 }
 
+{ #category : #testing }
+StDebuggerTestFailureContextPredicate >> contextSignalsException [
+	^true
+]
+
 { #category : #accessing }
 StDebuggerTestFailureContextPredicate >> failure: anObject [
 	failure := anObject

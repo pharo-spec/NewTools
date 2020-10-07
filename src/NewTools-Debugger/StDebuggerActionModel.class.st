@@ -104,12 +104,12 @@ StDebuggerActionModel >> fileOutMethod: aMethod [
 
 { #category : #'debug - stack' }
 StDebuggerActionModel >> filterStack: aStack [
-	| context contextsToReject |
+	| context contextsToReject |	
 	context := aStack first.
 	contextsToReject := 0.
-	
+
 	[ 
-	context notNil and: [ context ~~ self interruptedContext  ] ] 
+	context notNil and: [ context ~~ self referenceContext  ] ] 
 		whileTrue: [ 
 			contextsToReject := contextsToReject + 1.
 			context := context sender ].
@@ -234,6 +234,15 @@ StDebuggerActionModel >> proceedDebugSession [
 	self session
 		resume;
 		clear
+]
+
+{ #category : #context }
+StDebuggerActionModel >> referenceContext [
+	"The reference context is the context that we wish to see in the debugger's stack.
+	It it either the interrupted context if we are in a non-exception case,
+	or the exception's signaler context in all other cases."
+	self contextPredicate contextSignalsException ifFalse:[^self interruptedContext].
+	^topContext receiver signalerContext 
 ]
 
 { #category : #'debug - execution' }

@@ -22,6 +22,11 @@ StDebuggerErrorContextPredicate >> assertEqualsSelectors [
 	     #assertCollection:hasSameElements: )"
 ]
 
+{ #category : #testing }
+StDebuggerErrorContextPredicate >> contextSignalsException [
+	^true
+]
+
 { #category : #accessing }
 StDebuggerErrorContextPredicate >> exception: anObject [
 	exception := anObject

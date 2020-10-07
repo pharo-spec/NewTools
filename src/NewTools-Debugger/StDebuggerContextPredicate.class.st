@@ -28,8 +28,13 @@ StDebuggerContextPredicate >> context [
 ]
 
 { #category : #accessing }
-StDebuggerContextPredicate >> context: anInteger [ 
-	context := anInteger
+StDebuggerContextPredicate >> context: aContext [
+	context := aContext
+]
+
+{ #category : #testing }
+StDebuggerContextPredicate >> contextSignalsException [
+	^false
 ]
 
 { #category : #initialization }
