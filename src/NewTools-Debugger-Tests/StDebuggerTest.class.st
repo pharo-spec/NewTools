@@ -32,8 +32,8 @@ StDebuggerTest >> debuggerOn: aDebugSession [
 { #category : #accessing }
 StDebuggerTest >> executionControlCommandFrom: aDebugger [
 
-	^ debugger toolbarCommandGroup allCommands select: [ :c | 
-		  #( 'Proceed' 'Into' 'Over' 'Through' ) includes: c name ]
+	^ debugger toolbar leftItems select: [ :p | 
+		  #( 'Proceed' 'Into' 'Over' 'Through' ) includes: p label ]
 ]
 
 { #category : #accessing }
@@ -131,19 +131,20 @@ StDebuggerTest >> testContextTempVarList [
 	
 	5 timesRepeat: [ dbg stepInto  ].	
 	contextItems := inspectorTable roots.
-	self assert: contextItems size equals: 7. 
+	self assert: contextItems size equals: 8. 	
 	
-	"First nodes are temps"
+	"Next nodes are temps"
 	self assert: (contextItems at: 1) class equals: StDebuggerInspectorTempNode.
 	self assert: (contextItems at: 2) class equals: StDebuggerInspectorTempNode.
 	self assert: (contextItems at: 3) class equals: StDebuggerInspectorTempNode.
 	self assert: (contextItems at: 4) class equals: StDebuggerInspectorTempNode.
 	
-	"receiver inst var"		
-	self assert: (contextItems at: 5) rawValue identicalTo: session shortStack first receiver session.
+	"receiver"	
+	self assert: (contextItems at: 5) class equals: StInspectorSelfNode.	
+	self assert: (contextItems at: 6) rawValue identicalTo: session shortStack first receiver session.
 	
 	"stackTop"
-	self assert: (contextItems at: 6) rawValue equals: 1.
+	self assert: (contextItems at: 7) rawValue equals: 1.
 	
 	"thisContext"
 	self assert: contextItems last rawValue identicalTo: dbg currentContext
@@ -489,21 +490,21 @@ StDebuggerTest >> testToolbarInDNUContext [
 	session := StTestDebuggerProvider new sessionWithDNUAfterStep.
 
 	self debuggerOn: session.
-	debugger buildContextMenus.	
+	"debugger buildContextMenus.	"
 	commands := self executionControlCommandFrom: debugger.	
 
 	"We're not in a DNU, buttons are enabled"
-	commands do: [ :c| self assert: c presenter isEnabled].
+	commands do: [ :c| self assert: c isEnabled].
 	
 	"We step into the DNU, buttons should be disabled"
 	debugger stepInto.
 	debugger stepOver.
 
-	commands do: [ :c| self deny: c presenter isEnabled].
+	commands do: [ :c| self deny: c isEnabled].
 
 	"We define the missing method from outside the debugger, buttons should automatically be enabled"
-	StTestDebuggerProvider compile: 'foobar ^self'.		
-	commands do: [ :c| self assert: c presenter isEnabled].
+	StTestDebuggerProvider compile: 'foobar ^self'.
+	commands do: [ :c| self assert: c isEnabled].
 	
 	
 ]

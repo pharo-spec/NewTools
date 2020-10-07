@@ -29,6 +29,7 @@ StDebuggerContextPredicateTest >> testIsSteppable [
 
 { #category : #tests }
 StDebuggerContextPredicateTest >> testPrintDescription [
+	self skip.
 	self assert: ctxDescription printDescription equals: '0'
 ]
 
@@ -42,6 +43,7 @@ StDebuggerContextPredicateTest >> testPrintHaltDescription [
 
 { #category : #tests }
 StDebuggerContextPredicateTest >> testPrintPostMortemDescription [
+	self skip.
 	ctxDescription postMortem: true.
 	self assert: ctxDescription printDescription equals: '[Post-mortem] 0'
 ]
