@@ -1086,7 +1086,7 @@ StDebugger >> updateResume [
 { #category : #stack }
 StDebugger >> updateStackFromSession: aSession [
 	|stack|
-	stack := (self filterStack: aSession shortStack).
+	stack := (self filterStack: aSession stack).
 	stackTable items: stack.
 	stackTable selectIndex: (self findFirstRelevantStackIndexIn: stack)
 ]
