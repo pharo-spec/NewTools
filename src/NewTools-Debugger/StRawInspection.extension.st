@@ -20,7 +20,7 @@ StRawInspection >> attributeTable [
 { #category : #'*NewTools-Debugger' }
 StRawInspection >> beForDebugger [
 
-	attributeTable := self newTreeTable
+	attributeTable := (self instantiate: StDebuggerTreeTablePresenter)
 		                  activateOnSingleClick;
 		                  beResizable;
 		                  contextMenu: [ 
@@ -45,7 +45,7 @@ StRawInspection >> variableTagColumn [
 	^ SpCompositeTableColumn new
 		  title: 'tag';
 		  width: 70;
-		  addColumn: (SpStringTableColumn new
+		  addColumn: ((StVariableTagColumn on: attributeTable)
 				   evaluated: #variableTag;
 				   yourself);
 		  sortFunction: #variableTag ascending;
