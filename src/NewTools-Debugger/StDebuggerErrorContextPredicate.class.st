@@ -52,17 +52,11 @@ StDebuggerErrorContextPredicate >> isSteppable [
 
 	super isSteppable ifFalse: [ ^ false ].
 
-
-
-	((exception isKindOf: OupsNullException) or: [ 
-		 exception isKindOf: Halt ]) ifTrue: [ ^ true ].
-
 	exception class = MessageNotUnderstood ifTrue: [ 
 		^ self isContextDoesNotUnderstand not ].
 
-
-
-	^ false
+	^ ((exception isKindOf: OupsNullException) or: [ 
+		 exception isKindOf: Halt ])
 ]
 
 { #category : #printing }
