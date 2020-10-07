@@ -192,27 +192,66 @@ StDebuggerActionModelTest >> testFileOutMethod [
 ]
 
 { #category : #tests }
-StDebuggerActionModelTest >> testFilterStack [
+StDebuggerActionModelTest >> testFilterDNUStack [
 
 	|stack filteredStack|
+	self changeSession: StTestDebuggerProvider new debuggerWithDNUContext session.
 	stack := OrderedCollection new.
-	"First context references a method with the <debuggerCompleteToSender> pragma"
-	stack add: (self emptyContextForMethod: (self class>>#methodWithPragma)).
+	
+	"First, the stack contains a top context (i.e. from which a signal was sent), then the interrupted context"
+	stack add: debugActionModel topContext.
+	
+	"Second, the stack contexts is a MNU that has a method with the <debuggerCompleteToSender> pragma"
+	stack add: debugActionModel interruptedContext.	
+	
+	"Then we have an imaginary call stack"
 	stack add: (self emptyContextForMethod: (self class>>#method1:)).
 	stack add: (self emptyContextForMethod: (self class>>#method2:)).
 	
 	filteredStack := debugActionModel filterStack: stack copy.
 	
 	self assert: filteredStack size equals: 2.
-	self assert: filteredStack first identicalTo: stack second.
-	self assert: filteredStack second identicalTo: stack third.
+	self assert: filteredStack first identicalTo: stack third.
+	self assert: filteredStack second identicalTo: stack fourth
 	
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testFilterMissingSubclassResponsibilityStack [
+
+	|stack filteredStack|	
+	
+	"We change the stack with an interrupted context that does not contain the <debuggerCompleteToSender> pragma"
+	self changeSession: StTestDebuggerProvider new debuggerWithMissingSubclassResponsibilityContext session.
 	stack := OrderedCollection new.
+	stack add: debugActionModel topContext.
+	stack add: debugActionModel topContext sender.
+	stack add: debugActionModel interruptedContext.
 	stack add: (self emptyContextForMethod: (self class>>#method1:)).
 	stack add: (self emptyContextForMethod: (self class>>#method2:)).
 	
 	filteredStack := debugActionModel filterStack: stack copy.
-	self assertCollection: filteredStack equals: stack 
+	self assert: filteredStack size equals: 3.
+	self assert: filteredStack first identicalTo: debugActionModel interruptedContext.
+	self assert: filteredStack second identicalTo: stack fourth.
+	self assert: filteredStack third identicalTo: stack fifth 
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testFilterStack [
+
+	|stack filteredStack|
+	
+	stack := OrderedCollection new.
+	
+	"First, the stack contains the interrupted context"	
+	stack add: debugActionModel interruptedContext.	
+	
+	"Then we have an imaginary call stack"
+	stack add: (self emptyContextForMethod: (self class>>#method1:)).
+	stack add: (self emptyContextForMethod: (self class>>#method2:)).
+	
+	filteredStack := debugActionModel filterStack: stack copy
 ]
 
 { #category : #tests }

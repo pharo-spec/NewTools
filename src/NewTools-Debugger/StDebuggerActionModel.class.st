@@ -107,6 +107,12 @@ StDebuggerActionModel >> filterStack: aStack [
 	| context contextsToReject |
 	context := aStack first.
 	contextsToReject := 0.
+	
+	[ 
+	context notNil and: [ context ~~ self interruptedContext  ] ] 
+		whileTrue: [ 
+			contextsToReject := contextsToReject + 1.
+			context := context sender ].
 	[ 
 	context notNil and: [ 
 		context method hasPragmaNamed: #debuggerCompleteToSender ] ] 
