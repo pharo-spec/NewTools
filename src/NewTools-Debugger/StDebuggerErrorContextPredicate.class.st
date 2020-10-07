@@ -48,13 +48,21 @@ StDebuggerErrorContextPredicate >> isContextSubclassResponsibilityException [
 ]
 
 { #category : #predicates }
-StDebuggerErrorContextPredicate >> isSteppable [ 	
-	(exception isKindOf: OupsNullException) ifTrue:[false crTrace. ^super isSteppable].
-	self isContextSubclassResponsibilityException ifTrue:[^false].
-	self isContextAnAssertionFailure ifTrue:[^false].
-	self isContextDoesNotUnderstand ifTrue:[^false].
-	self isContextMissingClassException ifTrue:[^false].
-	^super isSteppable and:[exception isKindOf: Halt]
+StDebuggerErrorContextPredicate >> isSteppable [
+
+	super isSteppable ifFalse: [ ^ false ].
+
+
+
+	((exception isKindOf: OupsNullException) or: [ 
+		 exception isKindOf: Halt ]) ifTrue: [ ^ true ].
+
+	exception class = MessageNotUnderstood ifTrue: [ 
+		^ self isContextDoesNotUnderstand not ].
+
+
+
+	^ false
 ]
 
 { #category : #printing }

@@ -124,7 +124,7 @@ StDebuggerCommandTest >> testCommandsInMissingClassContext [
 	
 	"Executable commands relative to context"	
 	self assert: (StDefineClassCommand forContext: debugger) canBeExecuted.	
-	self assert: (StDefineMethodCommand forContext: debugger) canBeExecuted.
+	self deny: (StDefineMethodCommand forContext: debugger) canBeExecuted.
 	self assert: (StDefineMissingEntityCommand forContext: debugger) canBeExecuted.  
 	self assert: (StRestartCommand forContext: debugger) canBeExecuted. 
 	self assert: (StReturnValueCommand forContext: debugger) canBeExecuted. 

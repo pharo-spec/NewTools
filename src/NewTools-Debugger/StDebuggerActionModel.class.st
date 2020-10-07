@@ -58,7 +58,8 @@ StDebuggerActionModel >> contextPredicate [
 StDebuggerActionModel >> contextPredicateFor: aContext [
 
 	| postMortem ex |
-	postMortem := self session isContextPostMortem: aContext.
+	
+	postMortem := self isContextPostMortem: aContext.
 
 	(self contextSignalsAnException: aContext) ifFalse:[^ self predicateFor: aContext postMortem: postMortem].
 	
@@ -143,6 +144,17 @@ StDebuggerActionModel >> interruptedContext [
 StDebuggerActionModel >> isContextAnAssertionFailure [
 
 	^ self contextPredicate isContextAnAssertionFailure
+]
+
+{ #category : #context }
+StDebuggerActionModel >> isContextPostMortem: aContext [
+
+	aContext == topContext ifFalse: [ 
+		^ self session isContextPostMortem: aContext ].
+
+	"If the context is top context, we work on the interrupted context.
+	The top context is not visible from the session"
+	^ self session isContextPostMortem: self interruptedContext
 ]
 
 { #category : #'debug - predicates' }
@@ -283,7 +295,6 @@ StDebuggerActionModel >> topContext [
 
 { #category : #context }
 StDebuggerActionModel >> updateContextPredicate [
-	
 	^self updateContextPredicateFor: self topContext
 ]
 

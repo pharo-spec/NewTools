@@ -2,7 +2,7 @@ Class {
 	#name : #StDebuggerContextPredicateTest,
 	#superclass : #TestCase,
 	#instVars : [
-		'ctxDescription'
+		'predicate'
 	],
 	#category : #'NewTools-Debugger-Tests-Model'
 }
@@ -11,39 +11,39 @@ Class {
 StDebuggerContextPredicateTest >> setUp [
 	super setUp.
 	
-	ctxDescription := (StDebuggerContextPredicate context: 0)
+	predicate := (StDebuggerContextPredicate context: 0)
 ]
 
 { #category : #tests }
 StDebuggerContextPredicateTest >> testContext [
-	self assert: ctxDescription context equals: 0
+	self assert: predicate context equals: 0
 ]
 
 { #category : #tests }
 StDebuggerContextPredicateTest >> testIsSteppable [
 	
-	self assert: ctxDescription isSteppable.
-	ctxDescription postMortem: true.
-	self deny: ctxDescription isSteppable
+	self assert: predicate isSteppable.
+	predicate postMortem: true.
+	self deny: predicate isSteppable
 ]
 
 { #category : #tests }
 StDebuggerContextPredicateTest >> testPrintDescription [
 	self skip.
-	self assert: ctxDescription printDescription equals: '0'
+	self assert: predicate printDescription equals: '0'
 ]
 
 { #category : #tests }
 StDebuggerContextPredicateTest >> testPrintHaltDescription [
 	|haltContext|
 	haltContext := (StTestDebuggerProvider new debuggerWithRunnableContext) interruptedContext.
-	ctxDescription context: haltContext.
-	self assert: ctxDescription printDescription equals: 'Halt in ', haltContext printString
+	predicate context: haltContext.
+	self assert: predicate printDescription equals: 'Halt in ', haltContext printString
 ]
 
 { #category : #tests }
 StDebuggerContextPredicateTest >> testPrintPostMortemDescription [
 	self skip.
-	ctxDescription postMortem: true.
-	self assert: ctxDescription printDescription equals: '[Post-mortem] 0'
+	predicate postMortem: true.
+	self assert: predicate printDescription equals: '[Post-mortem] 0'
 ]

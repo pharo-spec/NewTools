@@ -870,8 +870,11 @@ StDebugger >> runToSelection [
 
 { #category : #actions }
 StDebugger >> selectNextExecutedExpression [
-	self code
-		selectionInterval: (self session pcRangeForContext: self currentContext)
+
+	| sourceNodeExecuted |
+	sourceNodeExecuted := self currentContext sourceNodeExecuted.
+	self code selectionInterval:
+		(sourceNodeExecuted start to: sourceNodeExecuted stop)
 ]
 
 { #category : #stack }
