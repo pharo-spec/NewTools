@@ -32,6 +32,15 @@ StDebuggerErrorContextPredicate >> exception: anObject [
 	exception := anObject
 ]
 
+{ #category : #accessing }
+StDebuggerErrorContextPredicate >> exceptionWhiteList [
+
+	^ { 
+		  Warning.
+		  OupsNullException.
+		  Halt }
+]
+
 { #category : #predicates }
 StDebuggerErrorContextPredicate >> isContextDoesNotUnderstand [
 
@@ -61,8 +70,8 @@ StDebuggerErrorContextPredicate >> isSteppable [
 	exception class = MessageNotUnderstood ifTrue: [ 
 		^ self isContextDoesNotUnderstand not ].
 
-	^ ((exception isKindOf: OupsNullException) or: [ 
-		 exception isKindOf: Halt ])
+	^ self exceptionWhiteList anySatisfy: [ :class | 
+		  exception isKindOf: class ]
 ]
 
 { #category : #printing }
