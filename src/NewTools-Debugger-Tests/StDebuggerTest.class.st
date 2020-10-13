@@ -132,15 +132,17 @@ StDebuggerTest >> testContextTempVarList [
 	5 timesRepeat: [ dbg stepInto  ].	
 	contextItems := inspectorTable roots.
 	self assert: contextItems size equals: 8. 	
+		
+	"First node is self"
+	self assert: (contextItems at: 1) class equals: StInspectorSelfNode.	
 	
 	"Next nodes are temps"
-	self assert: (contextItems at: 1) class equals: StDebuggerInspectorTempNode.
 	self assert: (contextItems at: 2) class equals: StDebuggerInspectorTempNode.
 	self assert: (contextItems at: 3) class equals: StDebuggerInspectorTempNode.
 	self assert: (contextItems at: 4) class equals: StDebuggerInspectorTempNode.
+	self assert: (contextItems at: 5) class equals: StDebuggerInspectorTempNode.
 	
 	"receiver"	
-	self assert: (contextItems at: 5) class equals: StInspectorSelfNode.	
 	self assert: (contextItems at: 6) rawValue identicalTo: session shortStack first receiver session.
 	
 	"stackTop"

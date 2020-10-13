@@ -171,11 +171,19 @@ StDebuggerContextTest >> testReceiverNodes [
 	| nodes |
 	debuggerContext context: self contextWithTemps.
 	nodes := debuggerContext receiverNodes.
-	self assert: nodes size equals: 2.
-	self assert: nodes first key equals: 'self'.
-	self assert: nodes first rawValue identicalTo: hostObject.
-	self assert: nodes second key equals: 'instVar'.
-	self assert: nodes second rawValue equals: hostObject instVar
+	self assert: nodes size equals: 1.
+	self assert: nodes first key equals: 'instVar'.
+	self assert: nodes first rawValue equals: hostObject instVar
+]
+
+{ #category : #tests }
+StDebuggerContextTest >> testSelfNodes [
+
+	| node |
+	debuggerContext context: self contextWithTemps.
+	node := debuggerContext selfNode.
+	self assert: node key equals: 'self'.
+	self assert: node rawValue identicalTo: hostObject.
 ]
 
 { #category : #tests }
