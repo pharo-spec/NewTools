@@ -163,7 +163,6 @@ StRawInspection >> valuesColumn [
 
 	^ SpStringTableColumn new
 		title: 'Value';
-		width: 200;
 		evaluated: #stringValue;
 		beEditable;
 		onAcceptEdition: [ :node :value | 
