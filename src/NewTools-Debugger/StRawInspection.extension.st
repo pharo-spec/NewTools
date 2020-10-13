@@ -48,7 +48,7 @@ StRawInspection >> variableTagColumn [
 		title: 'Type';
 		width: 70;
 		evaluated: [ :aNode | aNode variableTag ];
-		action: [ :aNode | attributeTable toggleFilter: aNode variableTag ];
+		action: [ :aNode |  attributeTable toggleFilter: aNode variableTag. owner updateHeaderBar. ];
 		sortFunction: #variableTag ascending;
 		yourself
 ]

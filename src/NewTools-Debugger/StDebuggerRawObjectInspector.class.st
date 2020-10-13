@@ -7,13 +7,7 @@ Class {
 	#name : #StDebuggerRawObjectInspector,
 	#superclass : #StObjectInspector,
 	#instVars : [
-		'raw',
-		'filterAllRadio',
-		'filterSelfRadio',
-		'filterTempsRadio',
-		'filterArgsRadio',
-		'filterContextRadio',
-		'sortLabel'
+		'raw'
 	],
 	#category : #'NewTools-Debugger-View'
 }
@@ -51,18 +45,21 @@ StDebuggerRawObjectInspector >> rawInspectorPageOrNil [
 	^raw
 ]
 
-{ #category : #initialization }
-StDebuggerRawObjectInspector >> sortInspectorTable: variableTag [
-	|roots newRoots|
-	roots := self rawInspectorPageOrNil attributeTable roots.
-	newRoots := OrderedCollection new.
-	newRoots addAll: (roots select: [:node| node variableTag = variableTag]).
-	newRoots addAll: (roots reject: [:node| node variableTag = variableTag]).
-	self rawInspectorPageOrNil attributeTable roots: newRoots
-]
-
 { #category : #stepping }
 StDebuggerRawObjectInspector >> step [
 	super step.
 	raw step
+]
+
+{ #category : #'private updating' }
+StDebuggerRawObjectInspector >> updateHeaderBar [
+
+	| filter |
+	super updateHeaderBar.
+	self rawInspectorPageOrNil ifNil: [ ^ self ].
+"	self rawInspectorPageOrNil attributeTable hasActiveFilter ifFalse: [header label: self model labelString. ^ self ]."
+	filter := self rawInspectorPageOrNil attributeTable filter.
+	filter ifNil:[header label: self model labelString. ^self].
+	header label: '(Active filter: ' , filter  , ') '
+		, self model labelString
 ]

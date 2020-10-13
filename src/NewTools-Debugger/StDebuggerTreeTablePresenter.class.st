@@ -14,14 +14,19 @@ StDebuggerTreeTablePresenter >> applyFilter [
 
 	filter ifNil: [ ^items ].
 	self flag: 'Ugly hack because links presenter trigger 2 times their action. But for now it works'.
-	counter > 3 ifTrue:  [ counter := 0. ^items ].
+	counter > 3 ifTrue:  [ counter := 0. filter := nil. ^items ].
 
 	^items select: [:item| item variableTag = filter]
 ]
 
+{ #category : #accessing }
+StDebuggerTreeTablePresenter >> filter [
+	^ filter
+]
+
 { #category : #api }
 StDebuggerTreeTablePresenter >> hasActiveFilter [
-	^counter = 2
+	^counter > 0
 ]
 
 { #category : #initialization }
