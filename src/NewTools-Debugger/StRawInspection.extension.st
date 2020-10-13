@@ -25,9 +25,10 @@ StRawInspection >> beForDebugger [
 		beResizable;
 		contextMenu: [ self rootCommandsGroup asMenuPresenter ];
 		yourself.
-	self addVariableTagColumn.
+	
 	self addVariablesColumn.
 	self addValuesColumn.
+	self addVariableTagColumn.
 
 	attributeTable
 		roots: self inspectorNodes;
