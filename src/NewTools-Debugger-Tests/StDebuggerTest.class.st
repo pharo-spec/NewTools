@@ -485,12 +485,6 @@ StDebuggerTest >> testStackTableWithNewSession [
 ]
 
 { #category : #'tests - toolbar' }
-StDebuggerTest >> testToolbarDependingOnContext [
-	self skip
-
-]
-
-{ #category : #'tests - toolbar' }
 StDebuggerTest >> testToolbarDisplayMode [
 	debugger := self debuggerOn: session.
 	self
