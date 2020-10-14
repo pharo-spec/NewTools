@@ -861,16 +861,6 @@ StDebugger >> restartCurrentContext [
 	self debuggerActionModel restartContext: self currentContext
 ]
 
-{ #category : #'presenter - code' }
-StDebugger >> restoreUnsavedCodeChangesForContext: aContext [
-
-	| codeText |
-	codeText := self unsavedCodeChanges
-		            at: self currentContext
-		            ifAbsent: [ ^ self ].
-	self code text: codeText
-]
-
 { #category : #actions }
 StDebugger >> returnEnteredValue [
 	| expression |
@@ -1040,7 +1030,7 @@ StDebugger >> updateCodeFromContext: aContext [
 	self recordUnsavedCodeChanges.
 	selectionInterval := self session selectedCodeRangeForContext: aContext.
 	aContext sourceCode = self code text 
-		ifFalse: [ self code text: aContext sourceCode ].
+		ifFalse: [ self updateSourceCodeFor: aContext ].
 	self code beForContext: aContext.
 	self code selectionInterval: selectionInterval.
 	
@@ -1115,6 +1105,16 @@ StDebugger >> updateRestart [
 StDebugger >> updateResume [
 
 	
+]
+
+{ #category : #'presenter - code' }
+StDebugger >> updateSourceCodeFor: aContext [
+
+	| codeText |
+	codeText := self unsavedCodeChanges
+		            at: aContext
+		            ifAbsent: [ aContext sourceCode ].
+	self code text: codeText
 ]
 
 { #category : #stack }

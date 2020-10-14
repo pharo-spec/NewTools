@@ -86,14 +86,15 @@ StDebuggerTest >> testCodeChangeAfterContextChange [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testCodeChangedNotSaved [
-	| dbg |
+	| dbg lastContext |
 	dbg := self debuggerOn: session.
-	dbg buildContextMenus.	
-	self assert: (dbg unsavedCodeChangesFor: dbg stackTable items first) equals: nil.
+	dbg stepInto; stepInto.
+	lastContext := dbg stackTable items last.	
 	dbg code text: 'a'.
 	self assert: dbg code text equals: 'a'.
 	self deny: dbg selectedContext sourceCode equals: dbg code text.
-	dbg stackTable selectItem: dbg stackTable items last.
+	dbg stackTable selectItem: lastContext.
+	self assert: dbg code text equals: lastContext sourceCode.
 	self assert: (dbg unsavedCodeChangesFor: dbg stackTable items first) equals: 'a'
 ]
 
@@ -326,6 +327,23 @@ StDebuggerTest >> testRestoreReceiverRawInspectionSelection [
 
 { #category : #'tests - raw inspection' }
 StDebuggerTest >> testRestoreReceiverRawInspectionSelectionAfterContextChange [
+]
+
+{ #category : #'tests - code pane' }
+StDebuggerTest >> testRestoreUnsavedCodeChanges [
+	| dbg firstContext lastContext |
+	dbg := self debuggerOn: session.
+	dbg stepInto; stepInto.
+	firstContext := dbg stackTable items first.
+	lastContext := dbg stackTable items last.
+	
+	self assert: dbg code text equals: firstContext sourceCode.
+	dbg code text: 'a'.
+	dbg stackTable selectItem: lastContext.
+	self assert: dbg code text equals: lastContext sourceCode.
+	
+	dbg stackTable selectItem: firstContext.
+	self assert: dbg code text equals: 'a'
 ]
 
 { #category : #'tests - session' }
