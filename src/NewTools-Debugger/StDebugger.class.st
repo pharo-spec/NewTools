@@ -85,7 +85,8 @@ Class {
 		'extensionTools',
 		'extensionToolsNotebook',
 		'toolbarCommandGroup',
-		'debuggerActionModel'
+		'debuggerActionModel',
+		'unsavedCodeChanges'
 	],
 	#classVars : [
 		'ActivateDebuggerExtensions',
@@ -762,6 +763,16 @@ StDebugger >> recompileMethodTo: aString inContext: aContext notifying: aNotifye
 		notifying: aNotifyer
 ]
 
+{ #category : #'presenter - code' }
+StDebugger >> recordUnsavedCodeChanges [
+
+	|codeInteractionModel codeText|
+	codeInteractionModel := self code interactionModel.
+	codeInteractionModel hasUnsavedCodeChanges ifFalse:[^self].
+	codeText := self code text.
+	self unsavedCodeChanges at: codeInteractionModel context put: codeText
+]
+
 { #category : #'updating session' }
 StDebugger >> registerActionsForSession: aSession [
 	self flag: 'Rewrite it'.
@@ -848,6 +859,16 @@ StDebugger >> requestSuperclassOf: aClass to: aSuperclass [
 StDebugger >> restartCurrentContext [
 
 	self debuggerActionModel restartContext: self currentContext
+]
+
+{ #category : #'presenter - code' }
+StDebugger >> restoreUnsavedCodeChangesForContext: aContext [
+
+	| codeText |
+	codeText := self unsavedCodeChanges
+		            at: self currentContext
+		            ifAbsent: [ ^ self ].
+	self code text: codeText
 ]
 
 { #category : #actions }
@@ -980,6 +1001,18 @@ StDebugger >> toolbar [
 	^ toolbar
 ]
 
+{ #category : #'presenter - code' }
+StDebugger >> unsavedCodeChanges [
+
+	^ unsavedCodeChanges ifNil: [ 
+		  unsavedCodeChanges := IdentityDictionary new ]
+]
+
+{ #category : #'presenter - code' }
+StDebugger >> unsavedCodeChangesFor: aContext [ 
+	^self unsavedCodeChanges at: aContext
+]
+
 { #category : #'system subscriptions' }
 StDebugger >> unsubscribeFromSystemAnnouncer [
 
@@ -1003,7 +1036,8 @@ StDebugger >> updateCodeFromContext: aContext [
 	| selectionInterval |
 
 	aContext ifNil: [ ^ self clearCode ].
-
+	
+	self recordUnsavedCodeChanges.
 	selectionInterval := self session selectedCodeRangeForContext: aContext.
 	aContext sourceCode = self code text 
 		ifFalse: [ self code text: aContext sourceCode ].

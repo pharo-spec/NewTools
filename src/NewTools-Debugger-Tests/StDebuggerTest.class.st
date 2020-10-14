@@ -85,6 +85,19 @@ StDebuggerTest >> testCodeChangeAfterContextChange [
 ]
 
 { #category : #'tests - code pane' }
+StDebuggerTest >> testCodeChangedNotSaved [
+	| dbg |
+	dbg := self debuggerOn: session.
+	dbg buildContextMenus.	
+	self assert: (dbg unsavedCodeChangesFor: dbg stackTable items first) equals: nil.
+	dbg code text: 'a'.
+	self assert: dbg code text equals: 'a'.
+	self deny: dbg selectedContext sourceCode equals: dbg code text.
+	dbg stackTable selectItem: dbg stackTable items last.
+	self assert: (dbg unsavedCodeChangesFor: dbg stackTable items first) equals: 'a'
+]
+
+{ #category : #'tests - code pane' }
 StDebuggerTest >> testCodeModification [
 	self skip.
 	self flag: #DBG_TEST
@@ -515,6 +528,25 @@ StDebuggerTest >> testToolbarInDNUContext [
 StDebuggerTest >> testUnauthorizedCodeModification [
 	self skip.
 	self flag: #DBG_TEST
+]
+
+{ #category : #'tests - code pane' }
+StDebuggerTest >> testUnsavedCodeChangesDictionary [
+	| dbg |
+	dbg := self debuggerOn: session.
+	self assert: dbg unsavedCodeChanges class identicalTo: IdentityDictionary.
+	self assertEmpty: dbg unsavedCodeChanges 
+]
+
+{ #category : #'tests - code pane' }
+StDebuggerTest >> testUnsavedCodeChangesFor [
+	| dbg ctx codeChanges |
+	dbg := self debuggerOn: session.
+	self should: [dbg unsavedCodeChangesFor: dbg currentContext] raise: KeyNotFound.
+	dbg unsavedCodeChanges at: (ctx := Object new) put: (codeChanges := Object new).
+	self assert: (dbg unsavedCodeChangesFor: ctx) identicalTo: codeChanges
+	
+
 ]
 
 { #category : #'tests - receiver inspector' }
