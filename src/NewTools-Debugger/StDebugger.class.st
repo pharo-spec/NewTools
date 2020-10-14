@@ -1031,7 +1031,7 @@ StDebugger >> updateCodeFromContext [
 	self updateCodeFromContext: self currentContext
 ]
 
-{ #category : #'updating widgets' }
+{ #category : #'presenter - code' }
 StDebugger >> updateCodeFromContext: aContext [
 	| selectionInterval |
 
