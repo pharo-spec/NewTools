@@ -91,20 +91,9 @@ StDebuggerTest >> testCodeChangeAfterContextChange [
 	self assert: dbg code text equals: lastContext sourceCode.
 	dbg stackTable selectItem: firstContext.
 	self assert: dbg code text equals: firstContext sourceCode.
-]
-
-{ #category : #'tests - code pane' }
-StDebuggerTest >> testCodeChangedNotSaved [
-	| dbg lastContext |
-	dbg := self debuggerOn: session.
-	dbg stepInto; stepInto.
-	lastContext := dbg stackTable items last.	
-	dbg code text: 'a'.
-	self assert: dbg code text equals: 'a'.
-	self deny: dbg selectedContext sourceCode equals: dbg code text.
-	dbg stackTable selectItem: lastContext.
-	self assert: dbg code text equals: lastContext sourceCode.
-	self assert: (dbg unsavedCodeChangesFor: dbg stackTable items first) equals: 'a'
+	
+	self should: [ dbg unsavedCodeChangesFor:  firstContext] raise: KeyNotFound.	
+	self should: [ dbg unsavedCodeChangesFor:  lastContext] raise: KeyNotFound
 ]
 
 { #category : #'tests - code pane' }
@@ -308,6 +297,23 @@ StDebuggerTest >> testReceiverUnchangedAfterStepOver [
 
 ]
 
+{ #category : #'tests - code pane' }
+StDebuggerTest >> testRecordUnsavedCodeChanges [
+	| dbg lastContext |
+	dbg := self debuggerOn: session.
+	dbg stepInto; stepInto.
+	lastContext := dbg stackTable items last.		
+	dbg code type: 'a'.
+	dbg code update.
+	
+	self assert: dbg code text equals: 'a'.
+	self deny: dbg selectedContext sourceCode equals: dbg code text.
+
+	dbg stackTable selectItem: lastContext.
+	self assert: dbg code text equals: lastContext sourceCode.
+	self assert: (dbg unsavedCodeChangesFor: dbg stackTable items first) equals: 'a'
+]
+
 { #category : #'tests - actions' }
 StDebuggerTest >> testRequestClassFrom [
 
@@ -341,7 +347,9 @@ StDebuggerTest >> testRestoreUnsavedCodeChanges [
 	lastContext := dbg stackTable items last.
 	
 	self assert: dbg code text equals: firstContext sourceCode.
-	dbg code text: 'a'.
+	dbg code type: 'a'.
+	dbg update.
+	
 	dbg stackTable selectItem: lastContext.
 	self assert: dbg code text equals: lastContext sourceCode.
 	
@@ -534,7 +542,7 @@ StDebuggerTest >> testToolbarInDNUContext [
 ]
 
 { #category : #'tests - code pane' }
-StDebuggerTest >> testUnsavedCodeChangesDictionary [
+StDebuggerTest >> testUnsavedCodeChanges [
 	| dbg |
 	dbg := self debuggerOn: session.
 	self assert: dbg unsavedCodeChanges class identicalTo: IdentityDictionary.

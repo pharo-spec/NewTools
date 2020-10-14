@@ -769,7 +769,8 @@ StDebugger >> recordUnsavedCodeChanges [
 	|codeInteractionModel codeText|
 	codeInteractionModel := self code interactionModel.
 	codeInteractionModel hasUnsavedCodeChanges ifFalse:[^self].
-	codeText := self code text.
+	
+	codeText := self code text asString .
 	self unsavedCodeChanges at: codeInteractionModel context put: codeText
 ]
 
@@ -1110,11 +1111,11 @@ StDebugger >> updateResume [
 { #category : #'presenter - code' }
 StDebugger >> updateSourceCodeFor: aContext [
 
-	| codeText |	
+	| codeText |
 	codeText := self unsavedCodeChanges
 		            at: aContext
 		            ifAbsent: [ aContext sourceCode ].
-	self code text: codeText asString
+	self code text: codeText
 ]
 
 { #category : #stack }
