@@ -1110,11 +1110,11 @@ StDebugger >> updateResume [
 { #category : #'presenter - code' }
 StDebugger >> updateSourceCodeFor: aContext [
 
-	| codeText |
+	| codeText |	
 	codeText := self unsavedCodeChanges
 		            at: aContext
 		            ifAbsent: [ aContext sourceCode ].
-	self code text: codeText
+	self code text: codeText asString
 ]
 
 { #category : #stack }
