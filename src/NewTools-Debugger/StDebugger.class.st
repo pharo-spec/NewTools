@@ -557,8 +557,9 @@ StDebugger >> initializeBreakpointInspector [
 		on: (StInspectorModel on: nil).
 ]
 
-{ #category : #initialization }
+{ #category : #'presenter - code' }
 StDebugger >> initializeCode [
+
 	self flag: #DBG.
 	"It is wrong here that I have to use code adapter widget.
 	It is expected down in the compilation call chain that the notified requestor answers to textMorph.
@@ -569,7 +570,8 @@ StDebugger >> initializeCode [
 			recompileMethodTo: text string
 			inContext: self stackTable selection selectedItem
 			notifying: code adapter widget ].
-	code whenResetDo: [ self updateCodeFromContext ]
+	code whenResetDo: [ 
+		self restoreModifiedCodeFor: self selectedContext ]
 ]
 
 { #category : #extensions }
@@ -635,26 +637,31 @@ StDebugger >> initializeStack [
 
 	stackTable := self newTable.
 	stackTable
-		addColumn: (SpStringTableColumn
-				 title: 'Class'
-				 evaluated: [ :item | self printReceiverClassInContext: item ]);
+		addColumn: ((SpImageTableColumn
+				  title: ''
+				  evaluated: [ :context | self stackIconForContext: context ])
+				 width: 8;
+				 sortFunction: nil;
+				 yourself);
+		addColumn: ((SpStringTableColumn
+				  title: 'Class'
+				  evaluated: [ :item | self printReceiverClassInContext: item ])
+				 sortFunction: nil;
+				 yourself);
 		addColumn:
-			(SpStringTableColumn title: 'Method' evaluated: [ :item | 
-					 | method |
-					 method := item method.
-					 method isCompiledBlock
-						 ifTrue: [ method sourceNode sourceCode ]
-						 ifFalse: [ method selector ] ]). ";
-		addColumn: (SpStringTableColumn
-				 title: 'Context'
-				 evaluated: [ :item | item sender stDisplayString ])"
+			((SpStringTableColumn title: 'Method' evaluated: [ :item | 
+					  | method |
+					  method := item method.
+					  method isCompiledBlock
+						  ifTrue: [ method sourceNode sourceCode ]
+						  ifFalse: [ method selector ] ])
+				 sortFunction: nil;
+				 yourself).
 	stackTable transmitDo: [ :context | 
 		stackTable selection isEmpty ifFalse: [ 
-			self flag: 'The following line is disturbing the context predicate building when opening the debugger on an exception'.
-			"self updatePredicatesForContext: context."
 			self updateInspectorFromContext: context.
 			self updateCodeFromContext: context.
-			self expandStackIfLastItemIsSelected.			
+			self expandStackIfLastItemIsSelected.
 			self updateWindowTitle ] ].
 	stackHeader := self instantiate: StHeaderBar.
 	stackHeader label: 'Stack'
@@ -770,7 +777,7 @@ StDebugger >> recordUnsavedCodeChanges [
 	codeInteractionModel := self code interactionModel.
 	codeInteractionModel hasUnsavedCodeChanges ifFalse:[^self].
 	
-	codeText := self code text asString .
+	codeText := self code text asString.
 	self unsavedCodeChanges at: codeInteractionModel context put: codeText
 ]
 
@@ -862,6 +869,13 @@ StDebugger >> restartCurrentContext [
 	self debuggerActionModel restartContext: self currentContext
 ]
 
+{ #category : #'presenter - code' }
+StDebugger >> restoreModifiedCodeFor: aContext [
+	
+	self unsavedCodeChanges remove:  aContext ifAbsent:[].
+	self code text: aContext sourceCode
+]
+
 { #category : #actions }
 StDebugger >> returnEnteredValue [
 	| expression |
@@ -935,6 +949,13 @@ StDebugger >> setSessionHolderSubscriptions [
 StDebugger >> showFullStack [
 	stackTable items: (self filterStack: self session stack)
 
+]
+
+{ #category : #stack }
+StDebugger >> stackIconForContext: context [
+
+	self unsavedCodeChanges at: context ifAbsent: [ ^ nil].
+	^ self iconNamed: #overlayDirty
 ]
 
 { #category : #commands }
