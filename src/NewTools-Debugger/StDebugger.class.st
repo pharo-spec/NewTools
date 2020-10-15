@@ -490,7 +490,7 @@ StDebugger >> discardCodeChangesFor: aContext [
 
 	self unsavedCodeChanges removeKey: aContext ifAbsent: [  ].
 	self code text: aContext sourceCode.
-	stackTable update
+	self update
 ]
 
 { #category : #stack }
