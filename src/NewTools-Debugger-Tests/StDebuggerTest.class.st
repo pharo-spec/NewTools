@@ -202,9 +202,24 @@ StDebuggerTest >> testDebuggerApplication [
 ]
 
 { #category : #'tests - code pane' }
-StDebuggerTest >> testDiscardCodeModification [
-	self skip.
-	self flag: #DBG_TEST
+StDebuggerTest >> testDiscardCodeChangesFor [
+	| dbg lastContext firstContext |
+	dbg := self debuggerOn: session.
+	dbg stepInto; stepInto.
+	lastContext := dbg stackTable items last.
+	firstContext := dbg stackTable items first.		
+	dbg code type: 'a'.
+	dbg code update.
+	dbg stackTable selectItem: lastContext.
+	
+	self assert: (dbg unsavedCodeChangesFor: firstContext) equals: 'a'.
+	dbg stackTable selectItem: firstContext.
+	dbg discardCodeChangesFor: firstContext.
+	
+	self should: [ (dbg unsavedCodeChangesFor: firstContext) ] raise: KeyNotFound.
+	self assert: dbg code text equals: firstContext sourceCode
+	
+	
 ]
 
 { #category : #'tests - initialization' }

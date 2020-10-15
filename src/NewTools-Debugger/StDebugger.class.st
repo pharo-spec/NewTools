@@ -485,6 +485,14 @@ StDebugger >> debuggerActionModel [
 		ifNil: [ debuggerActionModel := StDebuggerActionModel on: self session]
 ]
 
+{ #category : #'presenter - code' }
+StDebugger >> discardCodeChangesFor: aContext [
+
+	self unsavedCodeChanges removeKey: aContext ifAbsent: [  ].
+	self code text: aContext sourceCode.
+	stackTable update
+]
+
 { #category : #stack }
 StDebugger >> expandStackIfLastItemIsSelected [
 	| selection |
@@ -571,7 +579,7 @@ StDebugger >> initializeCode [
 			inContext: self stackTable selection selectedItem
 			notifying: code adapter widget ].
 	code whenResetDo: [ 
-		self restoreModifiedCodeFor: self selectedContext ]
+		self discardCodeChangesFor: self selectedContext ]
 ]
 
 { #category : #extensions }
@@ -869,13 +877,6 @@ StDebugger >> restartCurrentContext [
 	self debuggerActionModel restartContext: self currentContext
 ]
 
-{ #category : #'presenter - code' }
-StDebugger >> restoreModifiedCodeFor: aContext [
-	
-	self unsavedCodeChanges remove:  aContext ifAbsent:[].
-	self code text: aContext sourceCode
-]
-
 { #category : #actions }
 StDebugger >> returnEnteredValue [
 	| expression |
@@ -954,7 +955,7 @@ StDebugger >> showFullStack [
 { #category : #stack }
 StDebugger >> stackIconForContext: context [
 
-	self unsavedCodeChanges at: context ifAbsent: [ ^ nil].
+	self unsavedCodeChanges at: context ifAbsent: [ ^ nil ].
 	^ self iconNamed: #overlayDirty
 ]
 
