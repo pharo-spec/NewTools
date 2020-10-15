@@ -68,8 +68,50 @@ StDebuggerTest >> tearDown [
 	debugger ifNotNil: [ 
 		debugger close.
 		debugger session ifNotNil: [ :s | s clear ] ].
-	StTestDebuggerProvider removeSelector: #foobar.
+	StTestDebuggerProvider removeSelector: #foobar. 
+	StDebuggerObjectForTests compile: 'haltingMethod self halt. ^self' classified: 'util'.
 	super tearDown
+]
+
+{ #category : #'tests - code pane' }
+StDebuggerTest >> testAcceptCodeChangesForContext [
+
+	| dbg context newSource |
+	dbg := StTestDebuggerProvider new debuggerWithObjectHalting.
+	dbg
+		application: dbg class currentApplication;
+		initialize;
+		buildContextMenus.
+	context := dbg stackTable items first.
+	newSource := 'haltingMethod ^1+1 squared'.	
+	dbg code type: newSource.
+	dbg code update.
+	dbg unsavedCodeChanges at: 4 put: 2.
+	
+	dbg acceptCodeChanges: newSource forContext: context.
+	self assertEmpty: dbg unsavedCodeChanges.
+	self assert: dbg code text equals: newSource
+]
+
+{ #category : #'tests - code pane' }
+StDebuggerTest >> testCancelCodeChangesFor [
+	| dbg firstContext lastContext |
+	dbg := self debuggerOn: session.
+	dbg stepInto; stepInto.
+	firstContext := dbg stackTable items first.	
+	lastContext := dbg stackTable items last.		
+	dbg code type: 'a'.
+	dbg code update.
+	dbg stackTable selectItem: lastContext.
+	
+	self assert: (dbg unsavedCodeChangesFor: firstContext) equals: 'a'.
+	dbg stackTable selectItem: firstContext.
+	
+	dbg code triggerResetAction.
+	self should: [ (dbg unsavedCodeChangesFor: firstContext) ] raise: KeyNotFound.
+	self assert: dbg code text equals: firstContext sourceCode
+	
+	
 ]
 
 { #category : #'tests - actions' }
@@ -214,8 +256,8 @@ StDebuggerTest >> testDiscardCodeChangesFor [
 	
 	self assert: (dbg unsavedCodeChangesFor: firstContext) equals: 'a'.
 	dbg stackTable selectItem: firstContext.
-	dbg discardCodeChangesFor: firstContext.
 	
+	dbg discardCodeChangesFor: firstContext.	
 	self should: [ (dbg unsavedCodeChangesFor: firstContext) ] raise: KeyNotFound.
 	self assert: dbg code text equals: firstContext sourceCode
 	
@@ -411,8 +453,25 @@ StDebuggerTest >> testReturnEnteredValue [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testSaveCodeModification [
-	self skip.
-	self flag: #DBG_TEST
+	| dbg context newSource |
+	dbg := StTestDebuggerProvider new debuggerWithObjectHalting.
+	dbg
+		application: dbg class currentApplication;
+		initialize;
+		buildContextMenus.
+	context := dbg stackTable items first.
+	newSource := 'haltingMethod ^1+1 squared'.	
+	dbg code type: newSource.
+	dbg code update.
+	dbg unsavedCodeChanges at: 4 put: 2.
+	
+	dbg code triggerSubmitAction.	
+	self assertEmpty: dbg unsavedCodeChanges.
+	self assert: context sourceCode equals: newSource.
+	self assert: dbg code text equals: context sourceCode
+	
+	
+
 ]
 
 { #category : #'tests - raw inspection' }

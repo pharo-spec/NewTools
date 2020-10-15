@@ -312,6 +312,20 @@ StDebugger class >> usingSpecSelector: aSelector [
 	UsingSpecSelector := StDebuggerSpecSelector on: aSelector
 ]
 
+{ #category : #'presenter - code' }
+StDebugger >> acceptCodeChanges: newSource forContext: aContext [
+
+	"It is wrong here that I have to use code adapter widget.
+	It is expected down in the compilation call chain that the notified requestor answers to textMorph.
+	This is for modifying the source code when declaring temps"
+
+	self
+		recompileMethodTo: newSource
+		inContext: aContext
+		notifying: code adapter widget.
+	self clearUnsavedCodeChanges
+]
+
 { #category : #commands }
 StDebugger >> buildContextMenus [
 	| stackGroup codeCommands debuggerCommandGroup |
@@ -574,19 +588,10 @@ StDebugger >> initializeBreakpointInspector [
 { #category : #'presenter - code' }
 StDebugger >> initializeCode [
 
-	self flag: #DBG.
-	"It is wrong here that I have to use code adapter widget.
-	It is expected down in the compilation call chain that the notified requestor answers to textMorph.
-	This is for modifying the source code when declaring temps"
 	code := self newCode.
 	code whenSubmitDo: [ :text | 
-		self
-			recompileMethodTo: text string
-			inContext: self stackTable selection selectedItem
-			notifying: code adapter widget.
-		self clearUnsavedCodeChanges ].
-	code whenResetDo: [ 
-		self discardCodeChangesFor: self selectedContext ]
+		self acceptCodeChanges: text string forContext: self selectedContext ].
+	code whenResetDo: [ self discardCodeChangesFor: self selectedContext ]
 ]
 
 { #category : #extensions }
