@@ -494,8 +494,8 @@ StDebuggerTest >> testStackTableElementsPrinting [
 	| columns classColumn methodColumn method block context |
 	self debugger session: session.
 	columns := self initializedDebugger stackTable columns.
-	classColumn := columns first.
-	methodColumn := columns second.
+	classColumn := columns second.
+	methodColumn := columns third.
 	"The following column was removed to experiment a new layout, just keeping the test in case of roolback."
 	"senderColumn := columns third."
 	method := self class >> #testStackTableElementsPrinting.
