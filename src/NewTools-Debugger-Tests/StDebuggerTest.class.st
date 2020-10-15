@@ -203,11 +203,11 @@ StDebuggerTest >> testDebuggerApplication [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testDiscardCodeChangesFor [
-	| dbg lastContext firstContext |
+	| dbg firstContext lastContext |
 	dbg := self debuggerOn: session.
 	dbg stepInto; stepInto.
-	lastContext := dbg stackTable items last.
-	firstContext := dbg stackTable items first.		
+	firstContext := dbg stackTable items first.	
+	lastContext := dbg stackTable items last.		
 	dbg code type: 'a'.
 	dbg code update.
 	dbg stackTable selectItem: lastContext.
@@ -343,6 +343,37 @@ StDebuggerTest >> testRequestProtocolIn [
 	self
 		assert: (self debugger requestProtocolIn: self class)
 		equals: Protocol unclassified
+]
+
+{ #category : #'tests - session' }
+StDebuggerTest >> testRestartContext [
+
+	| dbg firstContext lastContext |
+	dbg := self debuggerOn: session.
+	dbg stepInto; stepInto.
+	firstContext := dbg stackTable items first.	
+	lastContext := dbg stackTable items last.
+		
+	"We select the last context and we change the code but we do not save.
+	The unsaved code change is kept when we select another context (the first one)"	
+	dbg stackTable selectItem: lastContext.	
+	dbg code type: 'a'.
+	dbg code update.	
+	dbg stackTable selectItem: firstContext.	
+	self assert: (dbg unsavedCodeChangesFor: lastContext) equals: 'a'.	
+		
+	"We select again the last context and restart it:
+	- unsaved code changes are dropped
+	- the restarted context is now the first context of the stack
+	- the code is reset to the source of the restarted context"	
+	dbg stackTable selectItem: lastContext.				
+	dbg restartCurrentContext. 	
+	self assertEmpty: dbg unsavedCodeChanges.
+	self assert: dbg code text equals: lastContext sourceCode.
+	self assert: dbg stackTable items first equals: lastContext
+	
+	
+
 ]
 
 { #category : #'tests - raw inspection' }

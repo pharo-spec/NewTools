@@ -381,6 +381,12 @@ StDebugger >> clearCode [
 		clearContent
 ]
 
+{ #category : #'presenter - code' }
+StDebugger >> clearUnsavedCodeChanges [
+
+	unsavedCodeChanges := IdentityDictionary new
+]
+
 { #category : #opening }
 StDebugger >> close [
 	self unsubscribeFromSystemAnnouncer.
@@ -577,7 +583,8 @@ StDebugger >> initializeCode [
 		self
 			recompileMethodTo: text string
 			inContext: self stackTable selection selectedItem
-			notifying: code adapter widget ].
+			notifying: code adapter widget.
+		self clearUnsavedCodeChanges ].
 	code whenResetDo: [ 
 		self discardCodeChangesFor: self selectedContext ]
 ]
@@ -874,7 +881,9 @@ StDebugger >> requestSuperclassOf: aClass to: aSuperclass [
 { #category : #actions }
 StDebugger >> restartCurrentContext [
 
-	self debuggerActionModel restartContext: self currentContext
+	self debuggerActionModel restartContext: self currentContext.
+	self clearUnsavedCodeChanges.
+	self code text: self currentContext sourceCode
 ]
 
 { #category : #actions }
