@@ -114,6 +114,16 @@ StDebuggerTest >> testCancelCodeChangesFor [
 	
 ]
 
+{ #category : #'tests - code pane' }
+StDebuggerTest >> testClearUnsavedChanges [
+
+	| dbg |
+	dbg := self debuggerOn: session.
+	dbg unsavedCodeChanges at: 4 put: 2.
+	dbg clearUnsavedCodeChanges.
+	self assertEmpty: dbg unsavedCodeChanges
+]
+
 { #category : #'tests - actions' }
 StDebuggerTest >> testClose [
 	(self debuggerOn: session) close.
