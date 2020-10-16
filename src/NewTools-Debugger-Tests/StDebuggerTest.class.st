@@ -226,7 +226,7 @@ StDebuggerTest >> testContextUnchangedAfterStepOver [
 	currentContext := dbg inspector inspectedObject.
 	"stepping over one time ^self * self (i.e. we are on the return node but still in the same context)"
 	dbg stepOver. 
-	self assert: dbg inspector inspectedObject ==  currentContext
+	self assert: dbg inspector inspectedObject identicalTo:  currentContext
 ]
 
 { #category : #'tests - actions' }
@@ -338,16 +338,6 @@ StDebuggerTest >> testReceiverChangedAfterStepOverAndReturn [
 ]
 
 { #category : #'tests - receiver inspector' }
-StDebuggerTest >> testReceiverInitialRawInspectionSelection [
-]
-
-{ #category : #'tests - receiver inspector' }
-StDebuggerTest >> testReceiverInspectorMenu [
-	self skip.
-	self flag: #DBG_TEST
-]
-
-{ #category : #'tests - receiver inspector' }
 StDebuggerTest >> testReceiverList [
 	| dbg currentReceiver |
 	dbg := self debuggerOn: session.	
@@ -437,10 +427,15 @@ StDebuggerTest >> testRestartContext [
 
 { #category : #'tests - raw inspection' }
 StDebuggerTest >> testRestoreReceiverRawInspectionSelection [
+	self skip.
+	self flag: #DBG_TEST
 ]
 
 { #category : #'tests - raw inspection' }
 StDebuggerTest >> testRestoreReceiverRawInspectionSelectionAfterContextChange [
+
+	self skip.
+	self flag: #DBG_TEST
 ]
 
 { #category : #'tests - code pane' }
@@ -493,10 +488,16 @@ StDebuggerTest >> testSaveCodeModification [
 
 { #category : #'tests - raw inspection' }
 StDebuggerTest >> testSaveReceiverRawInspectionSelection [
+
+	self skip.
+	self flag: #DBG_TEST
 ]
 
 { #category : #'tests - raw inspection' }
 StDebuggerTest >> testSaveReceiverRawInspectionSelectionAfterContextChange [
+
+	self skip.
+	self flag: #DBG_TEST
 ]
 
 { #category : #'tests - stack table' }
@@ -560,7 +561,7 @@ StDebuggerTest >> testStackTableAfterStepIn [
 	stackTableItems := dbg stackTable items.
 	self assert: dbg stackTable selection selectedIndex equals: 1.
 	self
-		assert: dbg stackTable selection selectedItem == session shortStack first.
+		assert: dbg stackTable selection selectedItem identicalTo: session shortStack first.
 	self assert: stackTableItems size equals: startingStackSize + 1.
 	self assert: stackTableItems equals: session shortStack
 ]
