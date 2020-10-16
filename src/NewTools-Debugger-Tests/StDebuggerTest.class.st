@@ -150,8 +150,15 @@ StDebuggerTest >> testCodeChangeAfterContextChange [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testCodeSelectionAfterStepOver [
-	self skip.
-	self flag: #DBG_TEST
+
+	| dbg |
+	dbg := self debuggerOn: session.
+	dbg
+		stepInto;
+		stepInto.
+	self
+		assert: dbg code selectionInterval
+		equals: (session pcRangeForContext: dbg currentContext)
 ]
 
 { #category : #'tests - context inspector' }
