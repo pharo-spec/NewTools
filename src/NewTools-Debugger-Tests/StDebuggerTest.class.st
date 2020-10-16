@@ -149,7 +149,7 @@ StDebuggerTest >> testCodeChangeAfterContextChange [
 ]
 
 { #category : #'tests - code pane' }
-StDebuggerTest >> testCodeSelectionAfterStepOver [
+StDebuggerTest >> testCodeSelectionAfterStepping [
 
 	| dbg |
 	dbg := self debuggerOn: session.
