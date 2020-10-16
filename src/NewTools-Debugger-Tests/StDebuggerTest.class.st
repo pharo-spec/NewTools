@@ -704,3 +704,17 @@ StDebuggerTest >> testUpdateLayoutForContextsIfAssertionFailure [
 		equals:
 		((session interruptedContext tempNamed: #aStringOrBlock) at: 1)
 ]
+
+{ #category : #'tests - code pane' }
+StDebuggerTest >> testUpdateSourceCodeFor [
+
+	| dbg |
+	dbg := self debuggerOn: session.
+	dbg unsavedCodeChanges at: 4 put: '2'.
+	
+	dbg updateSourceCodeFor: 4.
+	self assert: dbg code text equals: '2'.
+	
+	dbg updateSourceCodeFor: (self class>>#testUpdateSourceCodeFor).
+	self assert: dbg code text equals: (self class>>#testUpdateSourceCodeFor) sourceCode.
+]
