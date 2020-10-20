@@ -1,0 +1,11 @@
+language: smalltalk
+sudo: false
+
+os:
+  - linux
+
+smalltalk:
+  - Pharo64-9.0
+  
+matrix:
+  fast_finish: true
