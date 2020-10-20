@@ -22,7 +22,7 @@ StDebuggerContextInteractionModel >> behavior [
 { #category : #binding }
 StDebuggerContextInteractionModel >> bindingOf: aString [
 
-	^context lookupVar: aString
+	^ (context lookupVar: aString) asForeignVariableFrom: context
 ]
 
 { #category : #accessing }
