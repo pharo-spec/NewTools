@@ -80,7 +80,7 @@ StPharoGtkConfiguration >> macThemeName [
 { #category : #accessing }
 StPharoGtkConfiguration >> unixThemeName [
 
-	^ 'Adwaita'
+	^ nil "'Adwaita'"
 ]
 
 { #category : #accessing }

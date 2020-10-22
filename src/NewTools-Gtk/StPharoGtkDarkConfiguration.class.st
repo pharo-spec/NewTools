@@ -17,7 +17,7 @@ StPharoGtkDarkConfiguration >> macThemeName [
 { #category : #accessing }
 StPharoGtkDarkConfiguration >> unixThemeName [
 
-	^ 'Adwaita-dark'
+	^ nil "'Adwaita-dark'"
 ]
 
 { #category : #accessing }
