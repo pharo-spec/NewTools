@@ -89,6 +89,19 @@ BaselineOfNewTools >> baseline: spec [
 				'FlagBrowser') ]
 ]
 
+{ #category : #dependencies }
+BaselineOfNewTools >> packageRepositoryURL [
+	| url |
+	
+	url := super packageRepositoryURL.
+	url ifEmpty: [ ^ url ].
+	
+	"Verify if I am running in CI"
+	(url includesSubstring: 'pharo-spec') ifTrue: [ ^ '' ].
+	
+	^ url
+]
+
 { #category : #actions }
 BaselineOfNewTools >> postload: loader package: packageSpec [
 
