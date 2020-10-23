@@ -1,7 +1,7 @@
 # NewTools
 All development tools for Pharo, developed with Spec.
 
-[![Build Status](https://travis-ci.com/pharo-spec/NewTools.svg?branch=master)](https://travis-ci.org/pharo-spec/NewTools)
+[![Build Status](https://travis-ci.com/pharo-spec/NewTools.svg?branch=master)](https://travis-ci.com/pharo-spec/NewTools)
 
 
 # Installation
