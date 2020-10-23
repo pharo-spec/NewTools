@@ -86,7 +86,7 @@ BaselineOfNewTools >> baseline: spec [
 				'Playground'
 				'Inspector'
 				'Debugger'
-				'FlagBrowser') ]
+				"'FlagBrowser'") ]
 ]
 
 { #category : #dependencies }
