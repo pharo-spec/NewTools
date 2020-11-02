@@ -18,6 +18,7 @@ Class {
 	#name : #StReporter,
 	#superclass : #StPresenter,
 	#instVars : [
+		'reporter',
 		'topicList',
 		'reportText',
 		'topics'
@@ -65,37 +66,8 @@ StReporter >> createTextForReport: items [
 
 	^ (Text streamContents: [:stream | 
 						items do: [:each |
-								self perform: each value with: stream.
+								reporter perform: each value with: stream.
 								stream cr]])
-]
-
-{ #category : #utils }
-StReporter >> enumerate: aBlock on: aStream [
-	self enumerate: aBlock startAt: 0 on: aStream
-]
-
-{ #category : #utils }
-StReporter >> enumerate: aBlock startAt: first on: aStream [
-	"Utility method to enumerate Options or Parameters from first to 1000"
-
-	| idx value |
-	idx := first.
-	[ 
-	value := aBlock value: idx.
-	value isNil or: [ idx > 1000 ] ]
-		whileFalse: [ 
-			aStream
-				nextPut: $#;
-				nextPutAll: idx printString;
-				tab;
-				nextPutAll: value;
-				cr.
-			idx := idx + 1 ].
-	idx = first
-		ifTrue: [ 
-			aStream
-				nextPutAll: 'none';
-				cr ]
 ]
 
 { #category : #initialization }
@@ -118,6 +90,7 @@ StReporter >> header: aString on: aStream [
 { #category : #initialization }
 StReporter >> initialize [
 	topics := OrderedCollection new.
+	reporter := SystemReporter new.
 	self fillTopics.
 	super initialize.
 	
