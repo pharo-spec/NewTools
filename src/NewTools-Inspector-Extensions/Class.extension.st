@@ -46,5 +46,5 @@ Class >> inspectionClassDefinition [
 	
 	^ SpCodePresenter new
 		text: self definition;
-		disable
+		beNotEditable
 ]

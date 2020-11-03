@@ -35,6 +35,19 @@ StObjectInspector class >> buildCommandsGroupWith: presenter forRoot: aCmCommand
 	aCmCommandsGroup register: group
 ]
 
+{ #category : #commands }
+StObjectInspector class >> buildRootCommandsGroupFor: aPresenter [
+	| rootCommandGroup |
+	
+	rootCommandGroup := CmCommandGroup forSpec beRoot.
+	"Register extension commands first."
+	self buildExtensionCommandsWith: aPresenter forRoot: rootCommandGroup.
+	"Register default commands."
+	self buildCommandsGroupWith: aPresenter forRoot: rootCommandGroup.
+	
+	^ rootCommandGroup
+]
+
 { #category : #specs }
 StObjectInspector class >> defaultSpec [
 	<spec: #default>

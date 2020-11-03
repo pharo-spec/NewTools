@@ -19,8 +19,13 @@ StObjectInspector >> haltInspectedObjectOnWriteAccess [
 StObjectInspector class >> objectCentricBreakpointCommandsWith: aPresenter forRootGroup: aRootCommandsGroup [
 	<extensionCommands>
 	
-	aRootCommandsGroup
-		register: StHaltOnReadCommand forSpec;
-		register: StHaltOnWriteCommand forSpec;
-		register: StHaltOnStateAccessCommand forSpec
+	aRootCommandsGroup 
+		register: (CmCommandGroup forSpec
+			beToolbarMenuButton;
+			name: 'Halt';
+			icon: (aPresenter application iconNamed: #smallObjects);
+			register: (StHaltOnReadCommand forSpec);
+			register: (StHaltOnWriteCommand forSpec);
+			register: (StHaltOnStateAccessCommand forSpec);
+			yourself)
 ]
