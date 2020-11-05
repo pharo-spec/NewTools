@@ -21,7 +21,7 @@ StObjectInspector class >> objectCentricBreakpointCommandsWith: aPresenter forRo
 	
 	aRootCommandsGroup 
 		register: (CmCommandGroup forSpec
-			beToolbarMenuButton;
+			beToolbarPopoverButton;
 			name: 'Halt';
 			icon: (aPresenter application iconNamed: #smallObjects);
 			register: (StHaltOnReadCommand forSpec);
