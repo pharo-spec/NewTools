@@ -199,10 +199,12 @@ StInspector >> newInspectorFor: aModel [
 		on: (self toInspectorModel: aModel).
 	
 	millerList pages ifNotEmpty: [ :pages | 
+		newInspector whenClosedDo: [ 
+			millerList removeAllFrom: newInspector  ].
 		newInspector trySelectAnyPageNamed: {
 			lastPageSelectedTabName.
 			pages last selectedPageName } ].
-	
+		
 	^ newInspector
 ]
 

@@ -212,7 +212,10 @@ StObjectInspector >> model: anInspectorModel [
 
 { #category : #accessing }
 StObjectInspector >> rawInspectorPageOrNil [
-	^ views pages detect: [ :page | page title = 'Raw' ] ifNone: [ nil ]
+
+	^ views pages 
+		detect: [ :page | page title = 'Raw' ] 
+		ifNone: [ nil ]
 ]
 
 { #category : #'private updating' }
@@ -331,4 +334,10 @@ StObjectInspector >> updateTitle [
 StObjectInspector >> whenActivatedDo: aBlock [
 
 	activationBlock := aBlock
+]
+
+{ #category : #'api-events' }
+StObjectInspector >> whenClosedDo: aBlock [
+
+	header whenClosedDo: aBlock
 ]
