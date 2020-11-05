@@ -86,7 +86,8 @@ Class {
 		'extensionToolsNotebook',
 		'toolbarCommandGroup',
 		'debuggerActionModel',
-		'unsavedCodeChanges'
+		'unsavedCodeChanges',
+		'hasProceeded'
 	],
 	#classVars : [
 		'ActivateDebuggerExtensions',
@@ -377,10 +378,16 @@ StDebugger >> canExecuteRestartCommand [
 
 { #category : #actions }
 StDebugger >> clear [
+	
 	extensionToolsNotebook pages
 		do: [ :page | page activePresenter windowIsClosing ].
 	extensionTools := nil.
 	self removeActionsForSession: self session.
+
+	"If I have been proceeded the window has been closed programmatically and I do not need to do this".
+	hasProceeded 
+		ifTrue: [ ^self ].
+
 	self debuggerActionModel clearDebugSession.
 	self unsubscribeFromSystemAnnouncer
 	
@@ -587,7 +594,9 @@ StDebugger >> initialize [
 	self debuggerActionModel updateContextPredicate.			
 	self setSessionHolderSubscriptions.
 	self forceSessionUpdate.
-	self subscribeToMethodAddedAnnouncement
+	self subscribeToMethodAddedAnnouncement.
+	
+	hasProceeded := false.
 ]
 
 { #category : #initialization }
@@ -788,6 +797,8 @@ StDebugger >> printReceiverClassInContext: aContext [
 
 { #category : #actions }
 StDebugger >> proceedDebugSession [ 
+
+	hasProceeded := true.
 	self debuggerActionModel proceedDebugSession.
 	self close
 ]
