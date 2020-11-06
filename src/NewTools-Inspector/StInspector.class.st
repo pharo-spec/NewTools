@@ -197,9 +197,11 @@ StInspector >> newInspectorFor: aModel [
 	newInspector := self
 		instantiate: aModel defaultObjectInspectorClass
 		on: (self toInspectorModel: aModel).
+	self flag: #TODO. "Make this a setting"
+	newInspector activateOnSingleClick.
 	
 	millerList pages ifNotEmpty: [ :pages | 
-		newInspector whenClosedDo: [ 
+		newInspector whenClosedDo: [
 			millerList removeAllFrom: newInspector  ].
 		newInspector trySelectAnyPageNamed: {
 			lastPageSelectedTabName.

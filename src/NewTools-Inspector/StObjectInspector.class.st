@@ -13,7 +13,8 @@ Class {
 		'model',
 		'activationBlock',
 		'header',
-		'alivePresentersByPage'
+		'alivePresentersByPage',
+		'activateOnSingleClick'
 	],
 	#classVars : [
 		'PreferredExtent'
@@ -93,10 +94,24 @@ StObjectInspector >> activate: aSelection [
 	activationBlock cull: aSelection
 ]
 
+{ #category : #accessing }
+StObjectInspector >> activateOnDoubleClick [
+
+	activateOnSingleClick := true
+]
+
+{ #category : #accessing }
+StObjectInspector >> activateOnSingleClick [
+
+	activateOnSingleClick := true
+]
+
 { #category : #private }
 StObjectInspector >> addActivationTo: aPresenter [
 	
+	aPresenter crTrace.
 	aPresenter hasOutputActivationPort ifFalse: [ ^ self ]. 
+	activateOnSingleClick ifTrue: [ aPresenter activateOnSingleClick ].
 	aPresenter outputActivationPort 
 		transmitDo: [ :selection | self activate: selection ]
 ]
@@ -150,9 +165,10 @@ self '
 StObjectInspector >> initialize [
 
 	super initialize.
+	activateOnSingleClick := false.
 	"I keep the presenters I'm showing in this variable because they can change (and they are 
 	 initialized lazily in the notebook)"
-	alivePresentersByPage := WeakSet new	
+	alivePresentersByPage := WeakSet new
 ]
 
 { #category : #initialization }

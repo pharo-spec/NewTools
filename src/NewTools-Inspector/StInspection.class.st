@@ -7,6 +7,15 @@ Class {
 	#category : #'NewTools-Inspector-View'
 }
 
+{ #category : #api }
+StInspection >> activateOnDoubleClick [
+
+]
+
+{ #category : #api }
+StInspection >> activateOnSingleClick [
+]
+
 { #category : #converting }
 StInspection >> asInspection [
 
