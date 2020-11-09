@@ -109,7 +109,6 @@ StObjectInspector >> activateOnSingleClick [
 { #category : #private }
 StObjectInspector >> addActivationTo: aPresenter [
 	
-	aPresenter crTrace.
 	aPresenter hasOutputActivationPort ifFalse: [ ^ self ]. 
 	activateOnSingleClick ifTrue: [ aPresenter activateOnSingleClick ].
 	aPresenter outputActivationPort 
@@ -164,8 +163,8 @@ self '
 { #category : #initialization }
 StObjectInspector >> initialize [
 
-	super initialize.
 	activateOnSingleClick := false.
+	super initialize.
 	"I keep the presenters I'm showing in this variable because they can change (and they are 
 	 initialized lazily in the notebook)"
 	alivePresentersByPage := WeakSet new
