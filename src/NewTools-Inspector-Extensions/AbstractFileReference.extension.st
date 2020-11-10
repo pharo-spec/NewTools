@@ -2,11 +2,9 @@ Extension { #name : #AbstractFileReference }
 
 { #category : #'*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionCompressedItems [
-	<inspectorPresentationOrder: 0
-		title: 'Compressed Items' 
-		if: #isCompressedFile>
-
+	<inspectorPresentationOrder: 0 title: 'Compressed Items'>
 	| items children root |
+
 	root := (FileSystem zip: self) open workingDirectory.
 	children := root directories, root files.
 	items := self isRoot 
@@ -41,10 +39,14 @@ AbstractFileReference >> inspectionCompressedItems [
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
+AbstractFileReference >> inspectionCompressedItemsContext: aContext [ 
+	
+	aContext active: self isCompressedFile
+]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionContents [
-	<inspectorPresentationOrder: 0 
-		title: 'Contents' 
-		if: #isFile> 
+	<inspectorPresentationOrder: 0 title: 'Contents'> 
 	| maxBytes buffer atEnd stringContents displayStream displayString |
 	
 	maxBytes := 10000.
@@ -71,10 +73,14 @@ AbstractFileReference >> inspectionContents [
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
+AbstractFileReference >> inspectionContentsContext: aContext [ 
+	
+	aContext active: self isFile
+]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionFuel [
-	<inspectorPresentationOrder: 40
-		title: 'Fuel Header' 
-		if: #isFuel>
+	<inspectorPresentationOrder: 40 title: 'Fuel Header'>
 	
 	^ SpTablePresenter new
 		items: (FLMaterializer materializeHeaderFromFileNamed: self fullName) stFuelMetaData;
@@ -84,10 +90,14 @@ AbstractFileReference >> inspectionFuel [
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
+AbstractFileReference >> inspectionFuelContext: aContext [ 
+	
+	aContext active: self isFuel
+]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionGif [
-	<inspectorPresentationOrder: 0
-		title: 'Picture' 
-		if: #isImageGif>
+	<inspectorPresentationOrder: 0 title: 'Picture'>
 	
 	^ SpMorphPresenter new
 		morph: (self binaryReadStreamDo: [ :stream | GIFReadWriter formFromStream: stream ]);
@@ -95,10 +105,14 @@ AbstractFileReference >> inspectionGif [
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
+AbstractFileReference >> inspectionGifContext: aContext [ 
+	
+	aContext active: self isImageGif
+]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionItems [
-	<inspectorPresentationOrder: 0 
-		title: 'Items' 
-		if: #isDirectory>
+	<inspectorPresentationOrder: 0 title: 'Items'>
 	| items |
 	
 	items := 	self directories, self files.
@@ -137,10 +151,14 @@ AbstractFileReference >> inspectionItems [
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
+AbstractFileReference >> inspectionItemsContext: aContext [ 
+	
+	aContext active: self isDirectory
+]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionJpeg [
-	<inspectorPresentationOrder: 0
-		title: 'Picture' 
-		if: #isImageJpeg>
+	<inspectorPresentationOrder: 0 title: 'Picture'>
 	
 	^ SpMorphPresenter new
 		morph: (self binaryReadStreamDo: [ :stream | ImageReadWriter formFromStream: stream ]);
@@ -148,10 +166,14 @@ AbstractFileReference >> inspectionJpeg [
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
+AbstractFileReference >> inspectionJpegContext: aContext [ 
+	
+	aContext active: self isImageJpeg
+]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionPng [
-	<inspectorPresentationOrder: 0
-		title: 'Picture' 
-		if: #isImagePng>
+	<inspectorPresentationOrder: 0 title: 'Picture'>
 	
 	^ SpMorphPresenter new
 		morph: (self binaryReadStreamDo: [ :stream | PNGReadWriter formFromStream: stream ]);
@@ -159,14 +181,24 @@ AbstractFileReference >> inspectionPng [
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
+AbstractFileReference >> inspectionPngContext: aContext [ 
+	
+	aContext active: self isImagePng
+]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionStScript [
-	<inspectorPresentationOrder: 0 
-		title: 'Script' 
-		if: #isScript>
+	<inspectorPresentationOrder: 0 title: 'Script'>
 	
 	^ SpCodePresenter new 
 		text: (self readStreamDo: #contents);
 		yourself
+]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
+AbstractFileReference >> inspectionStScriptContext: aContext [ 
+	
+	aContext active: self isScript
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }

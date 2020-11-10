@@ -28,7 +28,6 @@ StInspectionCollector class >> defaultExtensionPragmas [
 
 	^ #(
 	inspectorPresentationOrder:title:
-	inspectorPresentationOrder:title:if:
 	)
 ]
 
@@ -42,19 +41,21 @@ StInspectionCollector class >> on: anObject [
 
 { #category : #accessing }
 StInspectionCollector >> collectPages [ 
-	| pragmas |
+	| pragmas contexts |
 	
-	pragmas := self uniquePragmas: ((self extensionPragmas
+	pragmas := self uniquePragmas: (self extensionPragmas
 		inject: #()
-		into: [ :all :each | all, (self collectPragmas: each) ])
-		select: [ :eachPragma | self pageShouldBeShown: eachPragma ]). 
+		into: [ :all :each | all, (self collectPragmas: each) ]).
 
-	^ (pragmas 
-		sort: [ :a :b | (a argumentAt: 1) < (b argumentAt: 1) ])
-		collect: [ :eachPragma | 
-			SpNotebookPage 
-				title: (eachPragma argumentAt: 2)
-				provider: [ (self inspectedObject perform: eachPragma methodSelector) asInspection ] ]
+	contexts := (pragmas 
+		collect: [ :each | self contextFromPragma: each ]
+		thenSelect: [ :each | each isActive ])
+		sorted: #order ascending. 
+
+	^ contexts collect: [ :eachContext | 
+		SpNotebookPage
+			title: eachContext title
+			provider: [ (self inspectedObject perform: eachContext methodSelector) asInspection ] ]
 ]
 
 { #category : #private }
@@ -64,6 +65,19 @@ StInspectionCollector >> collectPragmas: aPragmaName [
 		allNamed: aPragmaName
 		from: self inspectedObject class
 		to: ProtoObject
+]
+
+{ #category : #private }
+StInspectionCollector >> contextFromPragma: aPragma [
+	| context |
+	
+	context := StInspectionContext fromPragma: aPragma.
+	(aPragma methodClass includesSelector: context contextMethodSelector) ifTrue: [ 
+		self inspectedObject 
+			perform: context contextMethodSelector
+			with: context ].
+
+	^ context
 ]
 
 { #category : #private }
@@ -80,20 +94,6 @@ StInspectionCollector >> inspectedObject [
 { #category : #accessing }
 StInspectionCollector >> inspectedObject: anObject [
 	inspectedObject := anObject
-]
-
-{ #category : #private }
-StInspectionCollector >> pageShouldBeShown: aPragma [
-	| condition |
-	
-	aPragma numArgs < 3 ifTrue: [ ^ true ].
-	
-	"3rd argument is #if: and it needs to be a block with one argument"
-	condition := aPragma argumentAt: 3.
-	^ (condition isSymbol 
-		ifTrue: [ condition ]
-		ifFalse: [ self class compiler evaluate: condition ])
-		value: self inspectedObject
 ]
 
 { #category : #private }
