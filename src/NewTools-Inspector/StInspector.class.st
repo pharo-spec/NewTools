@@ -197,8 +197,8 @@ StInspector >> newInspectorFor: aModel [
 	newInspector := self
 		instantiate: aModel defaultObjectInspectorClass
 		on: (self toInspectorModel: aModel).
-	self flag: #TODO. "Make this a setting"
-	newInspector activateOnSingleClick.
+	StPharoSettings inspectorDiveOnSingleClick 
+		ifTrue: [ newInspector activateOnSingleClick ].
 	
 	millerList pages ifNotEmpty: [ :pages | 
 		newInspector whenClosedDo: [
