@@ -224,7 +224,7 @@ StPlayground >> initialize [
 
 { #category : #initialization }
 StPlayground >> initializePresenters [
-	
+
 	text := self newCode
 		interactionModel: StPlaygroundInteractionModel new;
 		lineNumbers: self showLineNumbers;
