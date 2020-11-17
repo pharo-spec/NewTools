@@ -23,9 +23,8 @@ StDebuggerRawObjectInspector class >> noHeaderSpec [
 { #category : #initialization }
 StDebuggerRawObjectInspector >> initializePresenters [
 
-	header := self instantiate: StHeaderBar.
 	super initializePresenters.
-	
+
 	raw := self model inspectionRaw.
 	raw beForDebugger.
 	raw owner: self.
