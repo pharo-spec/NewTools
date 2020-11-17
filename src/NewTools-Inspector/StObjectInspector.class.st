@@ -143,14 +143,20 @@ StObjectInspector >> initialize [
 ]
 
 { #category : #initialization }
+StObjectInspector >> initializeLayout [
+	
+	self layout: (SpBoxLayout newVertical 
+		add: header expand: false fill: false padding: 5;
+		add: views;
+		yourself)
+]
+
+{ #category : #initialization }
 StObjectInspector >> initializePresenters [
 
 	views := self newNotebook.
 	header := self instantiate: StHeaderBar.
-	self layout: (SpBoxLayout newVertical 
-		add: header expand: false fill: false padding: 5;
-		add: views;
-		yourself).
+	self initializeLayout.
 
 	self refresh
 ]

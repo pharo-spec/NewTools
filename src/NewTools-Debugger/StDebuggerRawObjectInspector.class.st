@@ -21,21 +21,25 @@ StDebuggerRawObjectInspector class >> noHeaderSpec [
 ]
 
 { #category : #initialization }
-StDebuggerRawObjectInspector >> initializePresenters [
-
-	super initializePresenters.
-
-	raw := self model inspectionRaw.
-	raw beForDebugger.
-	raw owner: self.
-	self addActivationTo: raw.
+StDebuggerRawObjectInspector >> initializeLayout [
 	
 	self layout: (SpBoxLayout newVertical 
 		add: header expand: false fill: false padding: 5;
 		add: raw;
 		yourself).
 
-	self refresh
+]
+
+{ #category : #initialization }
+StDebuggerRawObjectInspector >> initializePresenters [
+
+
+	raw := self model inspectionRaw.
+	raw beForDebugger.
+	raw owner: self.
+	self addActivationTo: raw.
+	
+	super initializePresenters
 ]
 
 { #category : #initialization }
