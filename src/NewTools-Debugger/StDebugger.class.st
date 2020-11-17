@@ -463,7 +463,9 @@ StDebugger >> createMissingMethod [
 		               self interruptedContext receiver class.
 	self createMissingMethodFor: msg in: chosenClass ]
 		on: Abort
-		do: [ ^ self ]
+		do: [ ^ self ].
+		
+	code takeKeyboardFocus 
 ]
 
 { #category : #actions }
