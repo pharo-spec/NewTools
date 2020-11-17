@@ -22,6 +22,12 @@ StInspectorNode >> = anObject [
 	^ hostObject == anObject hostObject
 ]
 
+{ #category : #converting }
+StInspectorNode >> asInspectorModel [
+
+	^ StInspectorModel on: self rawValue
+]
+
 { #category : #accessing }
 StInspectorNode >> children [ 
 	

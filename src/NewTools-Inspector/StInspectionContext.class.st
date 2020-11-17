@@ -1,14 +1,23 @@
+"
+An object to control the visibility and properties of inspections. 
+It will be passed to the objects defining the inspections, in case they implement the method defined in `StInspectionContext>>#contextMethodSelector`.
+
+## Example
+If you define a method `Object>>#inspectionMeta`, you can define a context method `Object>>#inspectionMetaContext:`.
+"
 Class {
 	#name : #StInspectionContext,
 	#superclass : #Object,
 	#instVars : [
+		'inspectedObject',
 		'active',
 		'default',
 		'title',
 		'order',
-		'methodSelector'
+		'methodSelector',
+		'evaluator'
 	],
-	#category : #'NewTools-Inspector-View'
+	#category : #'NewTools-Inspector-Model'
 }
 
 { #category : #'instance creation' }
@@ -26,9 +35,21 @@ StInspectionContext >> active: aBoolean [
 ]
 
 { #category : #accessing }
+StInspectionContext >> beActive [
+
+	self active: true
+]
+
+{ #category : #accessing }
 StInspectionContext >> beDefault [
 
 	self default: true
+]
+
+{ #category : #accessing }
+StInspectionContext >> beInactive [
+
+	self active: false
 ]
 
 { #category : #accessing }
@@ -43,6 +64,12 @@ StInspectionContext >> default: aBoolean [
 	default := aBoolean
 ]
 
+{ #category : #accessing }
+StInspectionContext >> evaluator: aBoolean [
+
+	evaluator := aBoolean
+]
+
 { #category : #initialization }
 StInspectionContext >> fromPragma: aPragma [
 
@@ -52,12 +79,31 @@ StInspectionContext >> fromPragma: aPragma [
 		methodSelector: aPragma methodSelector
 ]
 
+{ #category : #testing }
+StInspectionContext >> hasEvaluator [
+
+	^ evaluator
+]
+
 { #category : #initialization }
 StInspectionContext >> initialize [
 
 	super initialize.
 	active := true.
-	default := false
+	default := false.
+	evaluator := true
+]
+
+{ #category : #accessing }
+StInspectionContext >> inspectedObject [
+
+	^ inspectedObject
+]
+
+{ #category : #accessing }
+StInspectionContext >> inspectedObject: anObject [
+
+	inspectedObject := anObject
 ]
 
 { #category : #testing }
@@ -78,8 +124,17 @@ StInspectionContext >> methodSelector [
 ]
 
 { #category : #accessing }
-StInspectionContext >> methodSelector: anObject [
-	methodSelector := anObject
+StInspectionContext >> methodSelector: aSelector [
+
+	methodSelector := aSelector
+]
+
+{ #category : #factory }
+StInspectionContext >> newInspectionView [
+
+	^ (self inspectedObject perform: self methodSelector) asInspection
+		context: self;
+		yourself
 ]
 
 { #category : #accessing }
@@ -88,8 +143,9 @@ StInspectionContext >> order [
 ]
 
 { #category : #accessing }
-StInspectionContext >> order: anObject [
-	order := anObject
+StInspectionContext >> order: aNumber [
+
+	order := aNumber
 ]
 
 { #category : #accessing }
@@ -100,4 +156,16 @@ StInspectionContext >> title [
 { #category : #accessing }
 StInspectionContext >> title: anObject [
 	title := anObject
+]
+
+{ #category : #accessing }
+StInspectionContext >> withEvaluator [
+
+	self evaluator: true
+]
+
+{ #category : #accessing }
+StInspectionContext >> withoutEvaluator [
+
+	self evaluator: false
 ]

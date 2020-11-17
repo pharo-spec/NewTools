@@ -49,20 +49,6 @@ StObjectInspector class >> buildRootCommandsGroupFor: aPresenter [
 	^ rootCommandGroup
 ]
 
-{ #category : #specs }
-StObjectInspector class >> defaultSpec [
-	<spec: #default>
-	
-	^ SpBoxLayout newVertical 
-		add: #header expand: false fill: false padding: 5;
-		add: (SpPanedLayout newVertical
-			position: 70 percent;
-			add: #views;
-			add: #evaluator;
-			yourself);
-		yourself
-]
-
 { #category : #accessing }
 StObjectInspector class >> defaultTitle [
 
@@ -117,15 +103,9 @@ StObjectInspector >> addActivationTo: aPresenter [
 
 { #category : #private }
 StObjectInspector >> allPages [
-	| pages |
-
-	pages := self model objectInspectionPages.
-	pages do: [ :each | 
-		each whenRetrievedDo: [ :presenter | 
-			self keepPresenter: presenter.
-			self addActivationTo: presenter ] ].
 	
-	^ pages
+	^ self model objectInspectionContexts 
+		collect: [ :each | self newPageForContext: each ]
 	
 ]
 
@@ -152,14 +132,6 @@ StObjectInspector >> defaultKeyboardFocus [
 		ifEmpty: [ self ]
 ]
 
-{ #category : #private }
-StObjectInspector >> evaluatorInitialText [
-
-	^ '"{1}"
-self ' 
-	format: { self model smallDescriptionString }
-]
-
 { #category : #initialization }
 StObjectInspector >> initialize [
 
@@ -173,12 +145,13 @@ StObjectInspector >> initialize [
 { #category : #initialization }
 StObjectInspector >> initializePresenters [
 
+	views := self newNotebook.
 	header := self instantiate: StHeaderBar.
-	views := self newNotebook.	
-	evaluator := self newCode
-		beForObject: self model inspectedObject;
-		yourself.
-	evaluator text: self evaluatorInitialText.
+	self layout: (SpBoxLayout newVertical 
+		add: header expand: false fill: false padding: 5;
+		add: views;
+		yourself).
+
 	self refresh
 ]
 
@@ -223,6 +196,28 @@ StObjectInspector >> model: anInspectorModel [
 		ifTrue: [ ^ self ].
 	model := anInspectorModel.
 	self refresh
+]
+
+{ #category : #'private factory' }
+StObjectInspector >> newInspectionForContext: aContext [
+	
+	^ StObjectContextPresenter on: (StObjectContextModel new 
+		inspection: self model;
+		inspectedObject: self inspectedObject;
+		context: aContext; 
+		yourself)
+]
+
+{ #category : #'private factory' }
+StObjectInspector >> newPageForContext: aContext [ 
+
+	^ SpNotebookPage new
+		title: aContext title;
+		presenterProvider: [ self newInspectionForContext: aContext ];
+		whenRetrievedDo: [ :presenter | 
+			self keepPresenter: presenter.
+			self addActivationTo: presenter ];
+		yourself
 ]
 
 { #category : #accessing }
@@ -319,7 +314,7 @@ StObjectInspector >> trySelectPageNamed: aString [
 { #category : #'private updating' }
 StObjectInspector >> updateEvaluator [
 
-	evaluator beForObject: self model inspectedObject
+	"evaluator beForObject: self model inspectedObject"
 ]
 
 { #category : #'private updating' }

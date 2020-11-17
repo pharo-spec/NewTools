@@ -196,7 +196,7 @@ StInspector >> newInspectorFor: aModel [
 	
 	newInspector := self
 		instantiate: aModel defaultObjectInspectorClass
-		on: (self toInspectorModel: aModel).
+		on: aModel asInspectorModel.
 	StPharoSettings inspectorDiveOnSingleClick 
 		ifTrue: [ newInspector activateOnSingleClick ].
 	
@@ -245,17 +245,6 @@ StInspector >> step [
 StInspector >> stopStepping [
 
 	StInspectorRefreshService uniqueInstance unregister: self
-]
-
-{ #category : #private }
-StInspector >> toInspectorModel: aModel [
-
-	self flag: #HACK. "I do not like to use this, but I really do not want to add a double 
-	dispatch to solve this problem :("
-	(aModel isKindOf: StInspectorModel) ifTrue: [ ^ aModel ].
-	(aModel isKindOf: StInspectorNode) ifTrue: [ ^ StInspectorModel on: aModel rawValue ].
-
-	^ StInspectorModel on: aModel
 ]
 
 { #category : #'private updating' }

@@ -154,7 +154,9 @@ AbstractFileReference >> inspectionItems [
 { #category : #'*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionItemsContext: aContext [ 
 	
-	aContext active: self isDirectory
+	aContext 
+		beDefault;
+		active: self isDirectory
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
@@ -167,7 +169,7 @@ AbstractFileReference >> inspectionJpeg [
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
-AbstractFileReference >> inspectionJpegContext: aContext [ 
+AbstractFileReference >> inspectionJpegContext: aContext [
 	
 	aContext active: self isImageJpeg
 ]

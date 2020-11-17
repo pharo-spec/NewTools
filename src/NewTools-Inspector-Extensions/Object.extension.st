@@ -9,9 +9,25 @@ Object >> allInspectorNodes [
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
+Object >> asInspectorModel [
+
+	^ StInspectorModel on: self
+]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
 Object >> defaultObjectInspectorClass [
 
 	^ StObjectInspector
+]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
+Object >> inspectionContexts [
+	"This is a utility method that collects all presentations for the current object.
+	By default, it simply looks for the #gtInspectorPresentationOrder: pragma.
+	The inspector can decice whether or not a presentation should be dispayed.
+	Subclasses might want to override it for more special behavior."
+
+	^ (StInspectionCollector on: self) collectInspectionContexts
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
@@ -22,14 +38,9 @@ Object >> inspectionMeta [
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
-Object >> inspectionPages [
-	"This is a utility method that collects all presentations for the current object.
-	By default, it simply looks for the #gtInspectorPresentationOrder: pragma.
-	The inspector can decice whether or not a presentation should be dispayed.
-	Subclasses might want to override it for more special behavior."
+Object >> inspectionMetaContext: aContext [
 
-	^ (StInspectionCollector on: self) collectPages
-
+	aContext withoutEvaluator
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }

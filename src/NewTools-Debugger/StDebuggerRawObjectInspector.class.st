@@ -13,17 +13,6 @@ Class {
 }
 
 { #category : #specs }
-StDebuggerRawObjectInspector class >> defaultSpec [
-
-	<spec: #default>
-	^ SpBoxLayout newVertical
-		  add: #header
-		  withConstraints: [ :constraints | constraints height: 22 ];
-		  add: #raw;
-		  yourself
-]
-
-{ #category : #specs }
 StDebuggerRawObjectInspector class >> noHeaderSpec [
 	<spec: #default>
 	^ SpBoxLayout newVertical
@@ -33,11 +22,21 @@ StDebuggerRawObjectInspector class >> noHeaderSpec [
 
 { #category : #initialization }
 StDebuggerRawObjectInspector >> initializePresenters [
+
+	header := self instantiate: StHeaderBar.
 	super initializePresenters.
+	
 	raw := self model inspectionRaw.
 	raw beForDebugger.
 	raw owner: self.
-	self addActivationTo: raw
+	self addActivationTo: raw.
+	
+	self layout: (SpBoxLayout newVertical 
+		add: header expand: false fill: false padding: 5;
+		add: raw;
+		yourself).
+
+	self refresh
 ]
 
 { #category : #initialization }
@@ -53,13 +52,14 @@ StDebuggerRawObjectInspector >> step [
 
 { #category : #'private updating' }
 StDebuggerRawObjectInspector >> updateHeaderBar [
-
 	| filter |
+
 	super updateHeaderBar.
 	self rawInspectorPageOrNil ifNil: [ ^ self ].
 "	self rawInspectorPageOrNil attributeTable hasActiveFilter ifFalse: [header label: self model labelString. ^ self ]."
 	filter := self rawInspectorPageOrNil attributeTable filter.
-	filter ifNil:[header label: self model labelString. ^self].
-	header label: '(Active filter: ' , filter  , ') '
-		, self model labelString
+	filter ifNil:[ 
+		header label: self model labelString. 
+		^ self].
+	header label: '[Active filter: ', filter, '] ', self model labelString
 ]
