@@ -1,3 +1,7 @@
+"
+An model to provide inspector data on an inspected object.
+The inspector wraps all inspected objects with this to being able to display values. 
+"
 Class {
 	#name : #StInspectorModel,
 	#superclass : #Object,
@@ -23,6 +27,12 @@ StInspectorModel class >> on: anObject [
 StInspectorModel >> allInspectorNodes [
 
 	^ self inspectedObject allInspectorNodes
+]
+
+{ #category : #converting }
+StInspectorModel >> asInspectorModel [
+
+	^ self
 ]
 
 { #category : #accessing }
@@ -68,9 +78,9 @@ StInspectorModel >> labelString [
 ]
 
 { #category : #accessing }
-StInspectorModel >> objectInspectionPages [
+StInspectorModel >> objectInspectionContexts [
 
-	^ self inspectedObject inspectionPages
+	^ self inspectedObject inspectionContexts
 ]
 
 { #category : #printing }

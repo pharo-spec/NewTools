@@ -40,22 +40,17 @@ StInspectionCollector class >> on: anObject [
 ]
 
 { #category : #accessing }
-StInspectionCollector >> collectPages [ 
-	| pragmas contexts |
+StInspectionCollector >> collectInspectionContexts [
+	| pragmas |
 	
 	pragmas := self uniquePragmas: (self extensionPragmas
 		inject: #()
 		into: [ :all :each | all, (self collectPragmas: each) ]).
 
-	contexts := (pragmas 
+	^ (pragmas 
 		collect: [ :each | self contextFromPragma: each ]
 		thenSelect: [ :each | each isActive ])
-		sorted: #order ascending. 
-
-	^ contexts collect: [ :eachContext | 
-		SpNotebookPage
-			title: eachContext title
-			provider: [ (self inspectedObject perform: eachContext methodSelector) asInspection ] ]
+		sorted: #order ascending
 ]
 
 { #category : #private }
@@ -72,6 +67,8 @@ StInspectionCollector >> contextFromPragma: aPragma [
 	| context |
 	
 	context := StInspectionContext fromPragma: aPragma.
+	context inspectedObject: self inspectedObject.
+	
 	(aPragma methodClass includesSelector: context contextMethodSelector) ifTrue: [ 
 		self inspectedObject 
 			perform: context contextMethodSelector

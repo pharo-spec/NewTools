@@ -8,7 +8,14 @@ Class {
 StPlaygroundInteractionModel >> addBinding: aBinding [
 
 	(self isGlobalVariable: aBinding key) ifTrue: [ ^ self ].
+	bindings ifNil: [ bindings := Dictionary new ].
 	bindings add: aBinding
+]
+
+{ #category : #binding }
+StPlaygroundInteractionModel >> addBindings: aCollection [
+
+	aCollection do: [ :each | self addBinding: each ]
 ]
 
 { #category : #accessing }

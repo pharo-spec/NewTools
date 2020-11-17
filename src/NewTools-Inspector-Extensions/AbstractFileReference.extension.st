@@ -99,8 +99,8 @@ AbstractFileReference >> inspectionFuelContext: aContext [
 AbstractFileReference >> inspectionGif [
 	<inspectorPresentationOrder: 0 title: 'Picture'>
 	
-	^ SpMorphPresenter new
-		morph: (self binaryReadStreamDo: [ :stream | GIFReadWriter formFromStream: stream ]);
+	^ SpImagePresenter new
+		image: (self binaryReadStreamDo: [ :stream | GIFReadWriter formFromStream: stream ]);
 		yourself
 ]
 
@@ -120,6 +120,7 @@ AbstractFileReference >> inspectionItems [
 		items := items copyWithFirst: self parent ]. 
 
 	^ SpTablePresenter new 
+		beResizable;
 		items: items;
 		addColumn: (SpCompositeTableColumn new 
 			title: 'Name';
@@ -153,20 +154,22 @@ AbstractFileReference >> inspectionItems [
 { #category : #'*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionItemsContext: aContext [ 
 	
-	aContext active: self isDirectory
+	aContext 
+		beDefault;
+		active: self isDirectory
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionJpeg [
 	<inspectorPresentationOrder: 0 title: 'Picture'>
 	
-	^ SpMorphPresenter new
-		morph: (self binaryReadStreamDo: [ :stream | ImageReadWriter formFromStream: stream ]);
+	^ SpImagePresenter new
+		image: (self binaryReadStreamDo: [ :stream | ImageReadWriter formFromStream: stream ]);
 		yourself
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
-AbstractFileReference >> inspectionJpegContext: aContext [ 
+AbstractFileReference >> inspectionJpegContext: aContext [
 	
 	aContext active: self isImageJpeg
 ]
@@ -175,8 +178,8 @@ AbstractFileReference >> inspectionJpegContext: aContext [
 AbstractFileReference >> inspectionPng [
 	<inspectorPresentationOrder: 0 title: 'Picture'>
 	
-	^ SpMorphPresenter new
-		morph: (self binaryReadStreamDo: [ :stream | PNGReadWriter formFromStream: stream ]);
+	^ SpImagePresenter new
+		image: (self binaryReadStreamDo: [ :stream | PNGReadWriter formFromStream: stream ]);
 		yourself
 ]
 

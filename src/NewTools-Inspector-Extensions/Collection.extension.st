@@ -18,3 +18,9 @@ Collection >> inspectionItems [
 		items: self asOrderedCollection;
 		yourself
 ]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
+Collection >> inspectionItemsContext: aContext [
+	
+	aContext beDefault
+]
