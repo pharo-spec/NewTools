@@ -26,9 +26,7 @@ Class {
 { #category : #defaults }
 StInspectionCollector class >> defaultExtensionPragmas [
 
-	^ #(
-	inspectorPresentationOrder:title:
-	)
+	^ #(inspectorPresentationOrder:title:)
 ]
 
 { #category : #'instance creation' }

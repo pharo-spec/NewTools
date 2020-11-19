@@ -201,11 +201,13 @@ StInspector >> newInspectorFor: aModel [
 		ifTrue: [ newInspector activateOnSingleClick ].
 	
 	millerList pages ifNotEmpty: [ :pages | 
-		newInspector whenClosedDo: [
-			millerList removeAllFrom: newInspector  ].
-		newInspector trySelectAnyPageNamed: {
-			lastPageSelectedTabName.
-			pages last selectedPageName } ].
+		newInspector 
+			"prepare to close"
+			whenClosedDo: [ millerList removeAllFrom: newInspector  ];
+			"select last shown page (or default)"
+			trySelectAnyPageWithName: { 
+				lastPageSelectedTabName. 
+				pages last selectedPageName } ].
 		
 	^ newInspector
 ]

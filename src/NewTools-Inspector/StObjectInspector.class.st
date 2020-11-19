@@ -14,7 +14,8 @@ Class {
 		'activationBlock',
 		'header',
 		'alivePresentersByPage',
-		'activateOnSingleClick'
+		'activateOnSingleClick',
+		'contexts'
 	],
 	#classVars : [
 		'PreferredExtent'
@@ -102,9 +103,15 @@ StObjectInspector >> addActivationTo: aPresenter [
 ]
 
 { #category : #private }
+StObjectInspector >> allContexts [
+
+	^ contexts ifNil: [ contexts := self model objectInspectionContexts ]
+]
+
+{ #category : #private }
 StObjectInspector >> allPages [
 	
-	^ self model objectInspectionContexts 
+	^ self allContexts 
 		collect: [ :each | self newPageForContext: each ]
 	
 ]
@@ -295,26 +302,21 @@ StObjectInspector >> title [
 ]
 
 { #category : #accessing }
-StObjectInspector >> trySelectAnyPageNamed: aCollection [
-	"Tries to select a the first page of aCollection that exists in the pages list"
+StObjectInspector >> trySelectAnyPageWithName: aCollection [
+	"Tries to select a the first page of aCollection that exists in the pages list."
+	| pagesToSearch |
 
-	(aCollection asOrderedCollection reject: #isNil) removeDuplicates 
-		do: [ :eachName |
-			views pages 
-				detect: [ :each | each title = eachName ]
-				ifFound: [ :aPage | 
-					views selectPage: aPage.
-					^ self ] ]
-]
+	pagesToSearch := (aCollection asOrderedCollection 
+		reject: [ :each | each isNil ])
+		removeDuplicates.
+	pagesToSearch ifEmpty: [ ^ self ].
 
-{ #category : #accessing }
-StObjectInspector >> trySelectPageNamed: aString [
-	"Tries to select a page with the name indicated. If there is no match, 
-	 just stay as before (used to keep the flow when included in a miller list)."
-
-	views pages 
-		detect: [ :each | each title = aString ]
-		ifFound: [ :aPage | views selectPage: aPage ]
+	pagesToSearch do: [ :eachName |
+		views pages 
+			detect: [ :each | each title = eachName ]
+			ifFound: [ :aPage | 
+				views selectPage: aPage.
+				^ self ] ]
 ]
 
 { #category : #'private updating' }

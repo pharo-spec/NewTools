@@ -14,9 +14,3 @@ Dictionary >> inspectionItems [
 		items: self associations;
 		yourself
 ]
-
-{ #category : #'*NewTools-Inspector-Extensions' }
-Dictionary >> inspectionItemsContext: aContext [
-	
-	aContext beDefault
-]

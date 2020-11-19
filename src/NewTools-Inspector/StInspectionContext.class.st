@@ -11,7 +11,6 @@ Class {
 	#instVars : [
 		'inspectedObject',
 		'active',
-		'default',
 		'title',
 		'order',
 		'methodSelector',
@@ -41,12 +40,6 @@ StInspectionContext >> beActive [
 ]
 
 { #category : #accessing }
-StInspectionContext >> beDefault [
-
-	self default: true
-]
-
-{ #category : #accessing }
 StInspectionContext >> beInactive [
 
 	self active: false
@@ -56,12 +49,6 @@ StInspectionContext >> beInactive [
 StInspectionContext >> contextMethodSelector [
 
 	^ (self methodSelector, 'Context:') asSymbol
-]
-
-{ #category : #accessing }
-StInspectionContext >> default: aBoolean [
-
-	default := aBoolean
 ]
 
 { #category : #accessing }
@@ -90,7 +77,6 @@ StInspectionContext >> initialize [
 
 	super initialize.
 	active := true.
-	default := false.
 	evaluator := true
 ]
 
@@ -110,12 +96,6 @@ StInspectionContext >> inspectedObject: anObject [
 StInspectionContext >> isActive [
 
 	^ active
-]
-
-{ #category : #testing }
-StInspectionContext >> isDefault [
-
-	^ default
 ]
 
 { #category : #accessing }

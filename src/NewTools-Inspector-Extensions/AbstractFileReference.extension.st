@@ -124,17 +124,20 @@ AbstractFileReference >> inspectionItems [
 		items: items;
 		addColumn: (SpCompositeTableColumn new 
 			title: 'Name';
+			width: 300;
 			addColumn: (SpImageTableColumn evaluated: [ :each |
 				each isDirectory 
 					ifTrue: [ self iconNamed: #glamorousFolder ] 
-					ifFalse: [ self iconNamed: #glamorousBrowse ] ]) beNotExpandable;
+					ifFalse: [ self iconNamed: #glamorousBrowse ] ]) 
+				beNotExpandable;
 			addColumn: (SpStringTableColumn evaluated: [ :each | 
 				(self isChildOf: each) 
 					ifTrue: [ '..' ] 
-					ifFalse: [ each basename ]]);
+					ifFalse: [ each basename ] ]);
 			yourself);
-		addColumn: (SpStringTableColumn 
-			title: 'Size'
+		addColumn: (SpStringTableColumn new 
+			title: 'Size';
+			width: 100;
 			evaluated: [ :each | 
 				[ each humanReadableSize ]
 					on: Error 
@@ -145,7 +148,7 @@ AbstractFileReference >> inspectionItems [
 				[ String streamContents: [ :s | 
 					each creationTime printYMDOn: s.
 					s nextPut: Character space.
-					each creationTime printHMSOn: s ]]
+					each creationTime printHMSOn: s ] ]
 				on: Error 
 				do: [ 'N/A' translated  ] ]);
 		yourself
@@ -154,9 +157,7 @@ AbstractFileReference >> inspectionItems [
 { #category : #'*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionItemsContext: aContext [ 
 	
-	aContext 
-		beDefault;
-		active: self isDirectory
+	aContext active: self isDirectory
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }

@@ -45,6 +45,7 @@ Class >> inspectionClassDefinition [
 	<inspectorPresentationOrder: 15 title: 'Definition'>
 	
 	^ SpCodePresenter new
+		beForScripting;
 		text: self definition;
 		beNotEditable
 ]

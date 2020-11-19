@@ -46,7 +46,7 @@ Object >> inspectionMetaContext: aContext [
 { #category : #'*NewTools-Inspector-Extensions' }
 Object >> inspectionRaw [
 	"This is the most basic presentation showing the state of the object"
-	<inspectorPresentationOrder: -1 title: 'Raw'>
+	<inspectorPresentationOrder: 900 title: 'Raw'>
 
 	^ StRawInspection on: self
 ]
