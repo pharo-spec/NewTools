@@ -8,7 +8,8 @@ Class {
 	#instVars : [
 		'view',
 		'evaluator',
-		'model'
+		'model',
+		'activationBlock'
 	],
 	#category : #'NewTools-Inspector-View'
 }
@@ -16,21 +17,51 @@ Class {
 { #category : #api }
 StObjectContextPresenter >> activateOnDoubleClick [
 	
+	view hasOutputActivationPort ifFalse: [ ^ self ].
 	view activateOnDoubleClick
 ]
 
 { #category : #api }
 StObjectContextPresenter >> activateOnSingleClick [
 	
+	view hasOutputActivationPort ifFalse: [ ^ self ].
 	view activateOnSingleClick
+]
+
+{ #category : #commands }
+StObjectContextPresenter >> doEvaluateAndGo [
+	| value |
+	
+	activationBlock ifNil: [ ^ self ].
+	
+	value := evaluator 
+		evaluate: evaluator selectedTextOrLine
+		ifError: [ :e | 
+			evaluator insertErrorPopover: (SpCodePopoverErrorPresenter 
+				newCode: evaluator 
+				message: e messageText) 
+		atIndex: evaluator selectionInterval end - 1 ].
+	
+	activationBlock value: (StEvaluatedSelectionModel newValue: value)
+]
+
+{ #category : #private }
+StObjectContextPresenter >> evaluatorActions [
+	
+	^ CmCommandGroup forSpec
+		beDisplayedAsGroup;
+		register: (StEvaluateCommand forSpecContext: self);
+		yourself
 ]
 
 { #category : #private }
 StObjectContextPresenter >> evaluatorInitialText [
 
 	^ '"{1}"
-self ' 
-	format: { self model smallDescriptionString }
+{2}' 
+	format: { 
+		self model smallDescriptionString.
+		self model codeSnippet }
 ]
 
 { #category : #testing }
@@ -42,7 +73,7 @@ StObjectContextPresenter >> hasEvaluator [
 { #category : #testing }
 StObjectContextPresenter >> hasOutputActivationPort [
 	
-	^ view hasOutputActivationPort
+	^ self hasEvaluator or: [ view hasOutputActivationPort ]
 ]
 
 { #category : #initialization }
@@ -60,6 +91,9 @@ StObjectContextPresenter >> intializePresentersWithEvaluator [
 	evaluator := self newCode
 		beForObject: self model inspectedObject;
 		text: self evaluatorInitialText;
+		contextMenu: [ self evaluatorActions asMenuPresenter ];
+		contextKeyBindings: self evaluatorActions asKMCategory;
+		whenTextChangedDo: [ :aString | self model codeSnippet: aString ];
 		yourself.
 	
 	self layout: (SpPanedLayout newVertical
@@ -83,14 +117,22 @@ StObjectContextPresenter >> model [
 	^ model
 ]
 
-{ #category : #ports }
+{ #category : #transmission }
 StObjectContextPresenter >> outputActivationPort [
-	
-	^ view outputActivationPort
+
+	^ view hasOutputActivationPort 
+		ifTrue: [ (SpActivationPort newPresenter: self), view outputActivationPort ]
+		ifFalse: [ SpActivationPort newPresenter: self ]
 ]
 
 { #category : #'accessing model' }
 StObjectContextPresenter >> setModelBeforeInitialization: aModel [
 	
 	model := aModel
+]
+
+{ #category : #'api-events' }
+StObjectContextPresenter >> whenActivatedDo: aBlock [
+
+	activationBlock := aBlock
 ]

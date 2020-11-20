@@ -31,6 +31,12 @@ StRawInspection class >> defaultSpec [
 		yourself
 ]
 
+{ #category : #accessing }
+StRawInspection class >> label [
+
+	^ 'Raw'
+]
+
 { #category : #api }
 StRawInspection >> activateOnDoubleClick [
 

@@ -14,8 +14,7 @@ Class {
 		'activationBlock',
 		'header',
 		'alivePresentersByPage',
-		'activateOnSingleClick',
-		'contexts'
+		'activateOnSingleClick'
 	],
 	#classVars : [
 		'PreferredExtent'
@@ -105,7 +104,7 @@ StObjectInspector >> addActivationTo: aPresenter [
 { #category : #private }
 StObjectInspector >> allContexts [
 
-	^ contexts ifNil: [ contexts := self model objectInspectionContexts ]
+	^ self model objectInspectionContexts
 ]
 
 { #category : #private }
@@ -306,8 +305,9 @@ StObjectInspector >> trySelectAnyPageWithName: aCollection [
 	"Tries to select a the first page of aCollection that exists in the pages list."
 	| pagesToSearch |
 
-	pagesToSearch := (aCollection asOrderedCollection 
+	pagesToSearch := ((aCollection asOrderedCollection 
 		reject: [ :each | each isNil ])
+		reject: [ :each | each = StRawInspection label ])
 		removeDuplicates.
 	pagesToSearch ifEmpty: [ ^ self ].
 

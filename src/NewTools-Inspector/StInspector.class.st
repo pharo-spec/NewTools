@@ -137,6 +137,24 @@ StInspector >> defaultKeyboardFocus [
 		ifEmpty: [ self ]
 ]
 
+{ #category : #'accessing snippets' }
+StInspector >> evaluatorSnippetFor: anObject [
+	"Answer code snippets used in inspector"
+
+	^ self evaluatorSnippets 
+		at: anObject class
+		ifAbsent: [ '' ]
+]
+
+{ #category : #'accessing snippets' }
+StInspector >> evaluatorSnippetFor: anObject value: aString [
+	"Answer code snippets used in inspector"
+
+	^ self evaluatorSnippets 
+		at: anObject class
+		put: aString
+]
+
 { #category : #initialization }
 StInspector >> initializePresenters [
 

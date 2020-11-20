@@ -14,8 +14,51 @@ Class {
 		'context',
 		'inspectedObject'
 	],
+	#classVars : [
+		'CodeSnippets'
+	],
 	#category : #'NewTools-Inspector-View'
 }
+
+{ #category : #private }
+StObjectContextModel class >> codeSnippetFor: aClass ifAbsent: aBlock [
+
+	^ self codeSnippets 
+		at: aClass
+		ifAbsent: aBlock
+]
+
+{ #category : #private }
+StObjectContextModel class >> codeSnippetFor: aClass value: aString [
+
+	self codeSnippets 	
+		at: aClass 
+		put: aString
+]
+
+{ #category : #private }
+StObjectContextModel class >> codeSnippets [
+
+	^ CodeSnippets ifNil: [ CodeSnippets := WeakIdentityKeyDictionary new ]
+]
+
+{ #category : #accessing }
+StObjectContextModel >> codeSnippet [
+
+	^ self class 
+		codeSnippetFor: self inspectedObject class
+		ifAbsent: [ 'self' ]
+]
+
+{ #category : #accessing }
+StObjectContextModel >> codeSnippet: aString [
+
+	(self stringWithoutInitialCommentFrom: aString asString) 
+		ifNotEmpty: [ :snippet |
+			self class 
+				codeSnippetFor: self inspectedObject class
+				value: snippet ]
+]
 
 { #category : #accessing }
 StObjectContextModel >> context [
@@ -27,7 +70,7 @@ StObjectContextModel >> context: anObject [
 	context := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 StObjectContextModel >> hasEvaluator [
 	
 	^ self context hasEvaluator
@@ -53,7 +96,7 @@ StObjectContextModel >> inspection: anObject [
 	inspection := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #factory }
 StObjectContextModel >> newInspectionView [
 
 	^ self context newInspectionView
@@ -63,4 +106,28 @@ StObjectContextModel >> newInspectionView [
 StObjectContextModel >> smallDescriptionString [
 
 	^ self inspection smallDescriptionString
+]
+
+{ #category : #'private building' }
+StObjectContextModel >> stringWithoutInitialCommentFrom: aString [
+
+	^ (aString trimLeft notEmpty and: [ aString trimLeft first = $" ])
+		ifFalse: [ aString trimRight ]
+		ifTrue: [ | startIndex doubleQuoteCounter |
+			startIndex := aString findAnySubstring: '"' startingAt: (aString indexOf: $") + 1.
+			doubleQuoteCounter := 1.
+			"we need to iterate over the whole string queuing quotes to support nested double quotes"
+			[ startIndex <= aString size
+				and: [ doubleQuoteCounter % 2 = 1
+					or: [ (aString at: startIndex) = $"
+						or: [ (aString at: startIndex) isSeparator ] ] ] ]
+			whileTrue: [ 
+				(aString at: startIndex) = $" ifTrue: [ 
+					doubleQuoteCounter := doubleQuoteCounter + 1 ].
+				startIndex := startIndex + 1 ].
+	
+			(startIndex >= (aString size + 1)) ifTrue: [ "No content if a comment cannot be identified. " ^ '' ].
+			(aString
+				copyFrom: startIndex
+				to: aString size) trimBoth ]
 ]
