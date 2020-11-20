@@ -171,13 +171,14 @@ StInspector >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
-		title: self model windowTitle;
+		title: self windowTitle;
+		windowIcon: self windowIcon;
 		initialExtent: self class preferredExtent;
 		whenOpenedDo: [ 
 			self startStepping.
 			self takeKeyboardFocus ];
 		whenClosedDo: [ self stopStepping ];
-		whenResizingDo: [ :ann | self class preferredExtent: ann newSize ]
+		whenResizingDo: [ :ann | self preferredExtent: ann newSize ]
 ]
 
 { #category : #transmission }
@@ -231,6 +232,15 @@ StInspector >> newInspectorFor: aModel [
 ]
 
 { #category : #private }
+StInspector >> preferredExtent: aSize [
+
+	(self window isMaximized 
+		or: [ self window isMinimized ])
+		ifTrue: [ ^ self ].
+	self class preferredExtent: aSize
+]
+
+{ #category : #private }
 StInspector >> setModel: aModel [
 
 	self model: aModel
@@ -281,6 +291,18 @@ StInspector >> updateTitle [
 	self isRoot ifFalse: [ ^ self ].
 	self withWindowDo: [ :window | 
 		window title: self title ].
+]
+
+{ #category : #initialization }
+StInspector >> windowIcon [
+	
+	^ self application iconNamed: #smallInspectIt
+]
+
+{ #category : #initialization }
+StInspector >> windowTitle [
+
+	^ self model windowTitle
 ]
 
 { #category : #accessing }
