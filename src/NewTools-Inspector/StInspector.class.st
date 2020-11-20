@@ -61,6 +61,12 @@ StInspector class >> indexableDisplayLimit: aNumber [
 	IndexableDisplayLimit := aNumber
 ]
 
+{ #category : #'class initialization' }
+StInspector class >> initialize [
+
+	self register
+]
+
 { #category : #'instance creation' }
 StInspector class >> inspect: anObject [
 
