@@ -1,22 +1,22 @@
-Extension { #name : #StObjectInspector }
+Extension { #name : #StObjectInspectorPresenter }
 
 { #category : #'*NewTools-ObjectCentricBreakpoints' }
-StObjectInspector >> haltInspectedObjectOnReadAccess [
+StObjectInspectorPresenter >> haltInspectedObjectOnReadAccess [
 	^self inspectedObject haltOnRead
 ]
 
 { #category : #'*NewTools-ObjectCentricBreakpoints' }
-StObjectInspector >> haltInspectedObjectOnStateAccess [
+StObjectInspectorPresenter >> haltInspectedObjectOnStateAccess [
 	^ self inspectedObject haltOnAccess 
 ]
 
 { #category : #'*NewTools-ObjectCentricBreakpoints' }
-StObjectInspector >> haltInspectedObjectOnWriteAccess [
+StObjectInspectorPresenter >> haltInspectedObjectOnWriteAccess [
 	^ self inspectedObject haltOnWrite
 ]
 
 { #category : #'*NewTools-ObjectCentricBreakpoints' }
-StObjectInspector class >> objectCentricBreakpointCommandsWith: aPresenter forRootGroup: aRootCommandsGroup [
+StObjectInspectorPresenter class >> objectCentricBreakpointCommandsWith: aPresenter forRootGroup: aRootCommandsGroup [
 	<extensionCommands>
 	
 	aRootCommandsGroup 

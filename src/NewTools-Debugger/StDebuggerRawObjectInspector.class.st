@@ -5,7 +5,7 @@ Activating one of my items (by clicking or double-clicking on it) shows a miller
 "
 Class {
 	#name : #StDebuggerRawObjectInspector,
-	#superclass : #StObjectInspector,
+	#superclass : #StObjectInspectorPresenter,
 	#instVars : [
 		'raw'
 	],

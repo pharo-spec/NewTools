@@ -17,7 +17,7 @@ Object >> asInspectorModel [
 { #category : #'*NewTools-Inspector-Extensions' }
 Object >> defaultObjectInspectorClass [
 
-	^ StObjectInspector
+	^ StObjectInspectorPresenter
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
