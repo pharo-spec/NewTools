@@ -74,3 +74,25 @@ CompiledCode >> inspectionSource [
 				action: [ self methodClass browse ] ] ]);
 		yourself
 ]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
+CompiledCode >> inspectorNodes [
+	"Answer a list of attributes as nodes"
+	| nodes |
+
+	nodes := OrderedCollection new.
+	nodes addAll: (self literals 
+		collectWithIndex: [ :aLiteral :anIndex | 
+			StInspectorDynamicNode 
+				hostObject: self 
+				label: ('literal', anIndex asString) 
+				value: aLiteral ]).
+	
+	self initialPC to: self size do: [ :index |
+		nodes add: (StInspectorDynamicNode 
+			hostObject: self 
+			label: ('bc ', index asString) 
+			value: (self at: index) ) ] .
+	
+	^ nodes
+]

@@ -56,7 +56,6 @@ Object >> inspectorNodes [
 	"Answer a list of attributes as nodes"
 	
 	^ (StNodeCollector for: self) collectNodes
-	  
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
