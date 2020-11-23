@@ -216,6 +216,11 @@ StInspector >> keepLastPageSelectedTabName [
 ]
 
 { #category : #accessing }
+StInspector >> millerList [
+	^millerList
+]
+
+{ #category : #accessing }
 StInspector >> model [
 
 	^ model

@@ -138,6 +138,11 @@ StObjectInspectorPresenter >> defaultKeyboardFocus [
 		ifEmpty: [ self ]
 ]
 
+{ #category : #accessing }
+StObjectInspectorPresenter >> evaluator [ 
+	^evaluator
+]
+
 { #category : #initialization }
 StObjectInspectorPresenter >> initialize [
 
