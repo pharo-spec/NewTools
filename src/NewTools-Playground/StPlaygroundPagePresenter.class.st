@@ -1,3 +1,7 @@
+"
+The content of a playground page. 
+Since `StPlayground` is in fact a miller list that allows users to navigate, the actual ""playground"" resides here.
+"
 Class {
 	#name : #StPlaygroundPagePresenter,
 	#superclass : #StPresenter,

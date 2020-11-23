@@ -169,6 +169,12 @@ StInspector >> evaluatorSnippetFor: anObject value: aString [
 		put: aString
 ]
 
+{ #category : #accessing }
+StInspector >> firstPage [
+
+	^ millerList pages first
+]
+
 { #category : #initialization }
 StInspector >> initializePresenters [
 

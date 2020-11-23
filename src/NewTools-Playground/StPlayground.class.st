@@ -1,5 +1,4 @@
 "
-! The Playground
 It is useful to explore ideas or learn something before writing it to a more definitive place.
 In older versions of Pharo, this tool was known as Workspace.
 
@@ -130,7 +129,7 @@ StPlayground class >> registerToolsOn: registry [
 { #category : #'api-focus' }
 StPlayground >> defaultKeyboardFocus [
 
-	^ millerList pages first
+	^ self firstPage
 ]
 
 { #category : #initialization }
@@ -138,6 +137,12 @@ StPlayground >> initialize [
 
 	self setModelBeforeInitialization: StPlaygroundPage new.
 	super initialize.
+]
+
+{ #category : #actions }
+StPlayground >> loadPage: aFileReference [
+
+	self firstPage loadPage: aFileReference
 ]
 
 { #category : #initialization }
