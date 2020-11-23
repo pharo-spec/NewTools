@@ -5,7 +5,7 @@ Use the context menu to browse the method that defines the shortcut.
 "
 Class {
 	#name : #SpKeymapPresenter,
-	#superclass : #SpPresenter,
+	#superclass : #StPresenter,
 	#instVars : [
 		'clearFilterButton',
 		'filterField',

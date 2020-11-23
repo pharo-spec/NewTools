@@ -6,7 +6,7 @@ A `SpDualChangeSorterPresenter is a dual change sorter. It manages two sets of c
 "
 Class {
 	#name : #SpDualChangeSorterPresenter,
-	#superclass : #SpPresenter,
+	#superclass : #StPresenter,
 	#instVars : [
 		'model',
 		'changeSorterLeft',

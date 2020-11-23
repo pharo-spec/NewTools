@@ -3,7 +3,7 @@ I am an abstract class for browsers centered around messages such as class `Mess
 "
 Class {
 	#name : #AbstractMessageCentricBrowser,
-	#superclass : #SpPresenter,
+	#superclass : #StPresenter,
 	#instVars : [
 		'messageList',
 		'textConverter',

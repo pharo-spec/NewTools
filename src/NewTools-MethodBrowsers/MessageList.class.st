@@ -24,7 +24,7 @@ Class {
 		'model',
 		'method'
 	],
-	#category : #'NewTools-MethodBrowsers-Senders'
+	#category : #'NewTools-MethodBrowsers-Base'
 }
 
 { #category : #specs }

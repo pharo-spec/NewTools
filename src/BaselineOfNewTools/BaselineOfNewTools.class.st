@@ -22,6 +22,10 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Core';
 			package: 'NewTools-Morphic';
 			package: 'NewTools-Gtk';
+			"Basic tools (inherited from Spec)"
+			package: 'NewTools-MethodBrowsers';
+			package: 'NewTools-ChangeSorter';
+			package: 'NewTools-KeymapBrowser';
 			"inspector"
 			package: 'NewTools-Inspector' with: [ spec requires: #('NewTools-Inspector-Extensions') ];
 			package: 'NewTools-Inspector-Extensions' with: [ spec requires: #('NewTools-Core') ];
@@ -72,6 +76,10 @@ BaselineOfNewTools >> baseline: spec [
 				'NewTools-Debugger-Breakpoints-Tools'
 				'NewTools-Debugger-Tests');
 			group: 'SystemReporter' with: #('Core' 'NewTools-SystemReporter');
+			group: 'Methods' with: #('Core' 'NewTools-MethodBrowsers');
+			"Not in the image for the moment, we need a pass on them"
+			"group: 'ChangeSorter' with: #('Core' 'NewTools-ChangeSorter');
+			group: 'KeymapBrowser' with: #('Core' 'NewTools-KeymapBrowser');"
 			group: 'FlagBrowser' with: #(
 				'Core' 
 				'NewTools-FlagBrowser' 
@@ -87,6 +95,9 @@ BaselineOfNewTools >> baseline: spec [
 				'Playground'
 				'Inspector'
 				'Debugger'
+				'Methods'
+				"'ChangeSorter'"
+				"'KeymapBrowser'"
 				"'FlagBrowser'");
 			"A group for running CI"
 			group: 'CI' with: #('Spec2' 'default') ]
