@@ -22,11 +22,19 @@ Class {
 		'paginator'
 	],
 	#classVars : [
-		'IndexableDisplayLimit',
-		'PreferredExtent'
+		'IndexableDisplayLimit'
+	],
+	#classInstVars : [
+		'preferredExtent'
 	],
 	#category : #'NewTools-Inspector-View'
 }
+
+{ #category : #accessing }
+StInspector class >> defaultPreferredExtent [
+
+	^ 700@500
+]
 
 { #category : #accessing }
 StInspector class >> defaultSpacing [
@@ -107,13 +115,13 @@ StInspector class >> openOn: anObject [
 { #category : #accessing }
 StInspector class >> preferredExtent [
 	
-	^ PreferredExtent ifNil: [ PreferredExtent := 600@400 ]
+	^ preferredExtent ifNil: [ preferredExtent := self defaultPreferredExtent ]
 ]
 
 { #category : #accessing }
 StInspector class >> preferredExtent: aPoint [
 	
-	PreferredExtent := aPoint
+	preferredExtent := aPoint
 ]
 
 { #category : #'tools registry' }

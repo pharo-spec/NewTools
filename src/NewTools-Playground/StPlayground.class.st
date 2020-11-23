@@ -111,18 +111,6 @@ StPlayground class >> openContents: aString [
 		openWithSpec
 ]
 
-{ #category : #private }
-StPlayground class >> preferredExtent [
-
-	^ PreferredExtent ifNil: [ PreferredExtent := self defaultExtent ]
-]
-
-{ #category : #private }
-StPlayground class >> preferredExtent: aPoint [
-
-	PreferredExtent := aPoint
-]
-
 { #category : #'tools registry' }
 StPlayground class >> register [
 	"Add ourselves to registry. See [Smalltalk tools]" 
