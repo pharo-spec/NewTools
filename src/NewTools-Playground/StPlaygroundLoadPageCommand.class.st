@@ -1,7 +1,11 @@
+"
+Load selected page on current playground. 
+This command is to be used on `StPlaygroundPagesPresenter`
+"
 Class {
 	#name : #StPlaygroundLoadPageCommand,
 	#superclass : #StPlaygroundCommand,
-	#category : #'NewTools-Playground-View'
+	#category : #'NewTools-Playground-Command'
 }
 
 { #category : #default }

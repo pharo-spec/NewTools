@@ -1,7 +1,7 @@
 Class {
 	#name : #StPlaygroundInteractionModel,
 	#superclass : #SpCodeScriptingInteractionModel,
-	#category : #'NewTools-Playground-View'
+	#category : #'NewTools-Playground-Model'
 }
 
 { #category : #binding }
