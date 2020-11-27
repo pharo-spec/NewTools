@@ -86,7 +86,8 @@ Class {
 		'extensionToolsNotebook',
 		'toolbarCommandGroup',
 		'debuggerActionModel',
-		'unsavedCodeChanges'
+		'unsavedCodeChanges',
+		'hasProceeded'
 	],
 	#classVars : [
 		'ActivateDebuggerExtensions',
