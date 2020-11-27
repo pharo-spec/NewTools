@@ -226,7 +226,10 @@ StPlaygroundPagePresenter >> menuActions [
 
 	^ CmCommandGroup forSpec
 		beRoot;
-		register: (StEvaluateCommand forSpecContext: self);
+		register: ((CmCommandGroup named: 'Extra') asSpecGroup
+			beDisplayedAsGroup;
+			register: (StEvaluateCommand forSpecContext: self);
+			yourself);
 		register: ((CmCommandGroup named: 'Playground') asSpecGroup
 			register: ((CmCommandGroup named: 'Base options') asSpecGroup
 				beDisplayedAsGroup;
