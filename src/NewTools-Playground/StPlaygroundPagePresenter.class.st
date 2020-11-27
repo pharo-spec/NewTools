@@ -116,6 +116,13 @@ StPlaygroundPagePresenter >> defaultKeyboardFocus [
 ]
 
 { #category : #commands }
+StPlaygroundPagePresenter >> doEvaluateAllAndGo [
+
+	self selectAll.
+	self doEvaluateAndGo
+]
+
+{ #category : #commands }
 StPlaygroundPagePresenter >> doEvaluateAndGo [
 	| value |
 	
