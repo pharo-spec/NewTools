@@ -62,6 +62,11 @@ StDebuggerInspector >> currentLayoutSpec [
 	^currentLayoutSpec
 ]
 
+{ #category : #accessing }
+StDebuggerInspector >> debuggerInspectorModelClass [
+	^ StDebuggerInspectorModel
+]
+
 { #category : #layout }
 StDebuggerInspector >> defaultLayoutSpec [
 	^#defaultSpec
@@ -221,7 +226,7 @@ StDebuggerInspector >> updateWith: inspectedObject [
 			 oldContext selector == newContext selector ]) ifTrue: [ ^ self ] ].
 
 	self saveRawInspectionSelectionForContext: oldContext.
-	self model: (StDebuggerInspectorModel on: inspectedObject).
+	self model: (self debuggerInspectorModelClass on: inspectedObject).
 	self updateEvaluationPaneReceiver.
 	self restoreRawInspectionSelectionForContext: newContext
 ]

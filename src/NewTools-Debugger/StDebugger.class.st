@@ -86,8 +86,7 @@ Class {
 		'extensionToolsNotebook',
 		'toolbarCommandGroup',
 		'debuggerActionModel',
-		'unsavedCodeChanges',
-		'hasProceeded'
+		'unsavedCodeChanges'
 	],
 	#classVars : [
 		'ActivateDebuggerExtensions',
@@ -514,6 +513,21 @@ StDebugger >> debuggerActionModel [
 		ifNil: [ debuggerActionModel := StDebuggerActionModel on: self session]
 ]
 
+{ #category : #accessing }
+StDebugger >> debuggerContextClass [
+	^ StDebuggerContext
+]
+
+{ #category : #accessing }
+StDebugger >> debuggerInspectorClass [
+	^ StDebuggerInspector
+]
+
+{ #category : #accessing }
+StDebugger >> debuggerInspectorModelClass [
+	^ StDebuggerInspectorModel
+]
+
 { #category : #'presenter - code' }
 StDebugger >> discardCodeChangesFor: aContext [
 
@@ -635,9 +649,9 @@ StDebugger >> initializeExtensionTools [
 StDebugger >> initializeInspector [
 
 	inspector := self
-		             instantiate: StDebuggerInspector
+		             instantiate: self debuggerInspectorClass
 		             on:
-		             (StDebuggerInspectorModel on: StDebuggerContext new).
+		             (self debuggerInspectorModelClass on: self debuggerContextClass new).
 	inspector label: 'Receiver'
 ]
 
@@ -1153,7 +1167,7 @@ StDebugger >> updateInspectorFromContext: aContext [
 		updateLayoutForContexts: self session interruptedContext
 		isAssertionFailure:
 		self debuggerActionModel isInterruptedContextAnAssertEqualsFailure.
-	inspector updateWith: (StDebuggerContext context: aContext).
+	inspector updateWith: (self debuggerContextClass context: aContext).
 	self flag: #DBG_INSPECTOR_UPDATE_BUG.
 	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p | p update ]
 ]
