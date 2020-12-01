@@ -53,14 +53,14 @@ StInspectorRefreshService >> register: anInspector [
 { #category : #stepping }
 StInspectorRefreshService >> stepService [
 
-	inspectors do: #step
+	inspectors do: [ :each | each step ]
 ]
 
 { #category : #registry }
 StInspectorRefreshService >> unregister: anInspector [
 
 	mutex critical: [ 
-		inspectors remove: anInspector ifAbsent: [].
+		inspectors remove: anInspector ifAbsent: [ ].
 		inspectors ifEmpty: [ 
 			self stop ] ]
 ]
