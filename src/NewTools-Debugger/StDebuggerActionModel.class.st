@@ -32,7 +32,8 @@ StDebuggerActionModel >> autoClassifyMessage: aMessage inClass: aClass [
 
 { #category : #'debug - execution' }
 StDebuggerActionModel >> clearDebugSession [
-	self session terminate
+	contextPredicate := nil.
+	self session terminate; clear
 ]
 
 { #category : #context }
@@ -219,6 +220,8 @@ StDebuggerActionModel >> predicateFor: aContext postMortem: isContextPostMortem 
 
 { #category : #'debug - execution' }
 StDebuggerActionModel >> proceedDebugSession [
+
+	contextPredicate := nil.
 	self session
 		resume;
 		clear

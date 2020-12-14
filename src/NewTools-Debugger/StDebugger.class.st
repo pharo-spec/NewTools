@@ -87,7 +87,7 @@ Class {
 		'toolbarCommandGroup',
 		'debuggerActionModel',
 		'unsavedCodeChanges',
-		'hasProceeded'
+		'programmaticallyClosed'
 	],
 	#classVars : [
 		'ActivateDebuggerExtensions',
@@ -378,19 +378,16 @@ StDebugger >> canExecuteRestartCommand [
 
 { #category : #actions }
 StDebugger >> clear [
-	
-	extensionToolsNotebook pages
-		do: [ :page | page activePresenter windowIsClosing ].
+
+	extensionToolsNotebook pages do: [ :page | 
+		page activePresenter windowIsClosing ].
 	extensionTools := nil.
+	self unsubscribeFromSystemAnnouncer.	
 	self removeActionsForSession: self session.
-
-	"If I have been proceeded the window has been closed programmatically and I do not need to do this".
-	hasProceeded 
-		ifTrue: [ ^self ].
-
-	self debuggerActionModel clearDebugSession.
-	self unsubscribeFromSystemAnnouncer
 	
+	"When we programmatically close the window, we do not need to terminate the session as it was already cleared"
+	programmaticallyClosed ifTrue: [ ^ self ].
+	debuggerActionModel clearDebugSession
 ]
 
 { #category : #'updating widgets' }
@@ -410,8 +407,10 @@ StDebugger >> clearUnsavedCodeChanges [
 
 { #category : #opening }
 StDebugger >> close [
-	self unsubscribeFromSystemAnnouncer.
-	self withWindowDo: #close
+
+	programmaticallyClosed := true.
+	[ self withWindowDo: #close ] ensure: [ 
+		self debuggerActionModel clearDebugSession ]
 ]
 
 { #category : #'accessing widgets' }
@@ -514,6 +513,21 @@ StDebugger >> debuggerActionModel [
 		ifNil: [ debuggerActionModel := StDebuggerActionModel on: self session]
 ]
 
+{ #category : #accessing }
+StDebugger >> debuggerContextClass [
+	^ StDebuggerContext
+]
+
+{ #category : #accessing }
+StDebugger >> debuggerInspectorClass [
+	^ StDebuggerInspector
+]
+
+{ #category : #accessing }
+StDebugger >> debuggerInspectorModelClass [
+	^ StDebuggerInspectorModel
+]
+
 { #category : #'presenter - code' }
 StDebugger >> discardCodeChangesFor: aContext [
 
@@ -598,7 +612,7 @@ StDebugger >> initialize [
 	self forceSessionUpdate.
 	self subscribeToMethodAddedAnnouncement.
 	
-	hasProceeded := false.
+	programmaticallyClosed := false.
 ]
 
 { #category : #initialization }
@@ -635,9 +649,9 @@ StDebugger >> initializeExtensionTools [
 StDebugger >> initializeInspector [
 
 	inspector := self
-		             instantiate: StDebuggerInspector
+		             instantiate: self debuggerInspectorClass
 		             on:
-		             (StDebuggerInspectorModel on: StDebuggerContext new).
+		             (self debuggerInspectorModelClass on: self debuggerContextClass new).
 	inspector label: 'Receiver'
 ]
 
@@ -804,9 +818,9 @@ StDebugger >> printReceiverClassInContext: aContext [
 ]
 
 { #category : #actions }
-StDebugger >> proceedDebugSession [ 
+StDebugger >> proceedDebugSession [
 
-	hasProceeded := true.
+	self removeActionsForSession: self session.
 	self debuggerActionModel proceedDebugSession.
 	self close
 ]
@@ -1153,7 +1167,7 @@ StDebugger >> updateInspectorFromContext: aContext [
 		updateLayoutForContexts: self session interruptedContext
 		isAssertionFailure:
 		self debuggerActionModel isInterruptedContextAnAssertEqualsFailure.
-	inspector updateWith: (StDebuggerContext context: aContext).
+	inspector updateWith: (self debuggerContextClass context: aContext).
 	self flag: #DBG_INSPECTOR_UPDATE_BUG.
 	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p | p update ]
 ]
