@@ -3,10 +3,18 @@ Class {
 	#superclass : #StPresenter,
 	#instVars : [
 		'searchText',
-		'resultList'
+		'resultList',
+		'processor'
 	],
 	#category : #'NewTools-Spotter'
 }
+
+{ #category : #initialization }
+StSpotter >> initialize [
+
+	processor := StSpotterProcessor new.
+	super initialize
+]
 
 { #category : #initialization }
 StSpotter >> initializeDialogWindow: aDialogWindowPresenter [
@@ -43,4 +51,10 @@ StSpotter >> initializeWindow: aWindowPresenter [
 		withoutDecorations;
 		initialExtent: 750@400;
 		centered
+]
+
+{ #category : #accessing }
+StSpotter >> processor [
+	
+	^ processor
 ]
