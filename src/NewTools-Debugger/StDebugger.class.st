@@ -539,13 +539,13 @@ StDebugger >> discardCodeChangesFor: aContext [
 { #category : #commands }
 StDebugger >> doBrowseClass [
 
-	self systemNavigation browse: self stackSelectionMethodContext
+	self systemNavigation browse: self stackSelectionMethodContext value
 ]
 
 { #category : #commands }
 StDebugger >> doBrowseReceiverClass [
 
-	self systemNavigation browse: self stackSelectionReceiverClassContext
+	self systemNavigation browse: self stackSelectionReceiverClassContext value
 ]
 
 { #category : #stack }
@@ -1020,7 +1020,7 @@ StDebugger >> stackIconForContext: context [
 
 { #category : #'command support' }
 StDebugger >> stackSelectionMethodContext [
-	^ [ stackTable selection selectedItem method ]
+	^ [ stackTable selection selectedItem home method ]
 ]
 
 { #category : #'command support' }
