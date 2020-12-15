@@ -6,6 +6,7 @@ RBProgramNode >> inspectionASTDump [
 
 	^ SpCodePresenter new 
 		text: (RBParser parseExpression: self dump) formattedCode; 
+		beForScripting; "this is an expression"
 		yourself
 ]
 
