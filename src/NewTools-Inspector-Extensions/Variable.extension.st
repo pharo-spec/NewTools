@@ -6,7 +6,7 @@ Variable >> inspectionUsingMethods [
 	| usingMethods allClassesReferencing sortBlock treeTable childrenBlock |
 	
 	usingMethods := self usingMethods.
-	sortBlock := [ :x :y | x name < y name ].
+	sortBlock := [ :x :y | x name < y name ]. 
 	
 	"Roots: classes with references to Variable"	
 	allClassesReferencing := (usingMethods
@@ -22,6 +22,5 @@ Variable >> inspectionUsingMethods [
 		roots: allClassesReferencing;
 		children: childrenBlock.
 	treeTable addColumn: (SpStringTableColumn title: 'Using Methods' evaluated: #name).
-	
 	^ treeTable
 ]
