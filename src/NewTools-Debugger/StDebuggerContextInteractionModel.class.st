@@ -22,7 +22,8 @@ StDebuggerContextInteractionModel >> behavior [
 { #category : #binding }
 StDebuggerContextInteractionModel >> bindingOf: aString [
 
-	^ (context lookupVar: aString) asDoItVariableFrom: context
+	^ (context lookupVar: aString) ifNotNil: [ :var | 
+		  var asDoItVariableFrom: context ]
 ]
 
 { #category : #accessing }
