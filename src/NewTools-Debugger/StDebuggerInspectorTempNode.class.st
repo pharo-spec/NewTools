@@ -22,13 +22,6 @@ StDebuggerInspectorTempNode >> = anObject [
 ]
 
 { #category : #accessing }
-StDebuggerInspectorTempNode >> argVariable: aVariable [
-
-	super tempVariable: aVariable.
-	variableTag := 'arg'
-]
-
-{ #category : #accessing }
 StDebuggerInspectorTempNode >> children [
 	^ #()
 ]
@@ -66,7 +59,9 @@ StDebuggerInspectorTempNode >> tempVariable [
 StDebuggerInspectorTempNode >> tempVariable: aVariable [
 
 	super tempVariable: aVariable.
-	variableTag := 'temp'
+	variableTag := aVariable isArgumentVariable 
+		ifTrue: [ 'arg' ]
+		ifFalse: [ 'temp' ]
 ]
 
 { #category : #accessing }

@@ -19,26 +19,14 @@ StDebuggerContext class >> context: aContext [
 		  yourself
 ]
 
-{ #category : #nodes }
-StDebuggerContext >> argumentsNodes [
-
-	| argNames |
-	argNames := self context sourceNode arguments.
-	^ (argNames collect: [ :argName | 
-		   (StDebuggerInspectorTempNode hostObject: self context) 
-			   argVariable: (self context temporaryVariableNamed: argName name) ])
-		  asOrderedCollection
-]
-
 { #category : #accessing }
 StDebuggerContext >> buildInspectorNodes [
 
-	| nodes argsNodes argsKeys tempsNodes |
+	| nodes argsNodes tempsNodes tempsAndArgs |
 	nodes := OrderedCollection new.
-	argsNodes := self argumentsNodes.
-	argsKeys := argsNodes collect: [ :node | node key ].
-	tempsNodes := self temporaryVariablesNodes reject: [ :tempNode | 
-		              argsKeys includes: tempNode key ].
+	tempsAndArgs := self temporaryVariablesNodes.
+	argsNodes := tempsAndArgs select: [ :tempNode | tempNode tempVariable isArgumentVariable ].
+	tempsNodes := tempsAndArgs select: [ :tempNode | tempNode tempVariable isTempVariable ].
 	nodes add: self selfNode.
 	nodes addAll: argsNodes.
 	nodes addAll: tempsNodes.
