@@ -14,7 +14,7 @@ RBProgramNode >> inspectionSourceCode [
 	<inspectorPresentationOrder: 30 title: 'Source code'>
 
 	^ SpCodePresenter new 
-		beForBehavior: (self methodNode compilationContext ifNotNil: [ :ctx | ctx getClass ]);
+		beForBehavior: self methodNode methodClass;
 		text: (self source ifNil: [self formattedCode]);
 		selectionInterval: self sourceInterval;
 		yourself
