@@ -26,6 +26,11 @@ StInspectorTempNode >> rawValue [
 ]
 
 { #category : #accessing }
+StInspectorTempNode >> tempVariable [
+	^ tempVariable
+]
+
+{ #category : #accessing }
 StInspectorTempNode >> tempVariable: anObject [
 	tempVariable := anObject
 ]

@@ -18,7 +18,7 @@ StDebuggerInspectorTempNode >> = anObject [
 	self == anObject ifTrue: [ ^ true ].
 	self class = anObject class ifFalse: [ ^ false ].
 	^ tempVariable = anObject tempVariable and: [ 
-		  hostObject = anObject hostObject1 and: [ variableTag = anObject variableTag ] ]
+		  hostObject = anObject hostObject and: [ variableTag = anObject variableTag ] ]
 ]
 
 { #category : #accessing }
@@ -33,12 +33,7 @@ StDebuggerInspectorTempNode >> children [
 	^ #()
 ]
 
-{ #category : #accessing }
-StDebuggerInspectorTempNode >> computeChildrenFromSourceObject [
-	^ self value allInspectorNodes reject: [ :node | node key = 'self' ]
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #ui }
 StDebuggerInspectorTempNode >> debuggerColor [
 	variableTag = 'arg' ifTrue:[^(SHRBTextStyler new attributesFor: #true) first color].
 	^(SHRBTextStyler new attributesFor: #string) first color
@@ -50,16 +45,6 @@ StDebuggerInspectorTempNode >> hash [
 	"Answer an integer value that is related to the identity of the receiver."
 
 	^ tempVariable hash bitXor: (hostObject hash bitXor: variableTag hash)
-]
-
-{ #category : #accessing }
-StDebuggerInspectorTempNode >> hostObject1 [
-	^ hostObject
-]
-
-{ #category : #accessing }
-StDebuggerInspectorTempNode >> tempVariable [
-	^ tempVariable
 ]
 
 { #category : #accessing }
