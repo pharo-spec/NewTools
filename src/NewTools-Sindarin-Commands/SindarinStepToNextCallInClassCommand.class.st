@@ -27,19 +27,22 @@ SindarinStepToNextCallInClassCommand class >> defaultName [
 { #category : #hooks }
 SindarinStepToNextCallInClassCommand >> execute [
 
-	| receiverClass debugger maxDepth depth |
+	| receiverClass callingMethod debugger maxDepth depth |
 	self context removeSessionHolderSubscriptions.
 	debugger := self context sindarinDebugger.
-	receiverClass := debugger context receiver class.
+	receiverClass := debugger receiver class.
+	callingMethod := debugger method.
 	debugger step.
-	
-	maxDepth := 50.
+
+	maxDepth := 1000.
 	depth := 0.
 	[ 
-	debugger context receiver class ~= receiverClass and: [ 
-		depth < maxDepth ] ] whileTrue: [ 
-		debugger step.
-		depth := depth + 1 ].
+	debugger method ~= callingMethod and: [ 
+		debugger receiver class ~= receiverClass and: [ depth < maxDepth ] ] ] 
+		whileTrue: [ 			
+			debugger step.
+			depth := depth + 1.
+			debugger hasSignalledUnhandledException ifTrue:[depth := 1000] ].
 
 	self context
 		setSessionHolderSubscriptions;
