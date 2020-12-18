@@ -8,6 +8,11 @@ Class {
 }
 
 { #category : #visiting }
+SindarinTestVisitor >> visit: anObject [
+	anObject acceptVisitor: self
+]
+
+{ #category : #visiting }
 SindarinTestVisitor >> visitTestObject: anObject [
 
 	^self
