@@ -14,6 +14,13 @@ SindarinTestObjectToVisit >> acceptVisitor: aVisitor [
 ]
 
 { #category : #visitors }
+SindarinTestObjectToVisit >> acceptVisitorMultipleObjects: aVisitor [
+
+	self class new acceptVisitor: aVisitor.
+	aVisitor visitTestObject: self
+]
+
+{ #category : #visitors }
 SindarinTestObjectToVisit >> acceptVisitorNeverFinishes: aVisitor [
 
 	10000 timesRepeat: [ self doStuff ]

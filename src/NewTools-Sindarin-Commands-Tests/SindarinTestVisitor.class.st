@@ -18,6 +18,12 @@ SindarinTestVisitor >> visit: anObject [
 ]
 
 { #category : #visiting }
+SindarinTestVisitor >> visitMultipleObjects: anObject [
+	
+	anObject acceptVisitorMultipleObjects: self
+]
+
+{ #category : #visiting }
 SindarinTestVisitor >> visitNeverFinish: anObject [
 	anObject acceptVisitorNeverFinishes: self
 ]

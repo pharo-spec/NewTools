@@ -27,7 +27,7 @@ SindarinCommandsTest >> tearDown [
 	super tearDown
 ]
 
-{ #category : #tests }
+{ #category : #'tests - step to next call' }
 SindarinCommandsTest >> testStepToNextCallInClass [
 
 	| command |
@@ -48,7 +48,7 @@ SindarinCommandsTest >> testStepToNextCallInClass [
 		identicalTo: visitor class >> #visitTestObject:
 ]
 
-{ #category : #tests }
+{ #category : #'tests - step to next call' }
 SindarinCommandsTest >> testStepToNextCallInClassFailure [
 
 	| command |
@@ -69,7 +69,7 @@ SindarinCommandsTest >> testStepToNextCallInClassFailure [
 		identicalTo: visitor class >> #doNotVisit:
 ]
 
-{ #category : #tests }
+{ #category : #'tests - step to next call' }
 SindarinCommandsTest >> testStepToNextCallInClassNeverFinishes [
 
 	| command |
@@ -92,7 +92,7 @@ SindarinCommandsTest >> testStepToNextCallInClassNeverFinishes [
 	self assert: debugger session context receiver equals: 10000
 ]
 
-{ #category : #tests }
+{ #category : #'tests - step to next call' }
 SindarinCommandsTest >> testStepToNextCallInClassWithError [
 
 	| command |
@@ -110,4 +110,27 @@ SindarinCommandsTest >> testStepToNextCallInClassWithError [
 	self
 		assert: debugger session context method selector
 		equals: #doesNotUnderstand:
+]
+
+{ #category : #'tests - step to next call' }
+SindarinCommandsTest >> testStepToNextCallInObject [
+
+	| command originalReceiver |
+	debugger := SindarinTestCommandDebugger new.
+	debugger session: 
+	(StTestDebuggerProvider new debuggerWithContext:
+		            [ visitor visitMultipleObjects: object ] asContext) session.
+
+	debugger session stepIntoUntil: [ :currentContext | 
+		currentContext method == (visitor class >> #visitMultipleObjects:) ].
+	command := SindarinStepToNextCallInObjectCommand forContext: debugger.
+	self
+		assert: debugger session context method
+		identicalTo: visitor class >> #visitMultipleObjects:.
+	originalReceiver := debugger session context receiver.
+	command execute.
+	self
+		assert: debugger session context method
+		identicalTo: visitor class >> #visitTestObject:.
+	self assert: debugger session context receiver identicalTo: originalReceiver
 ]
