@@ -54,6 +54,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-ObjectCentricBreakpoints';			
 			"Sindarin"
 			package: 'NewTools-Sindarin-Commands';
+			package: 'NewTools-Sindarin-Commands-Tests' with: [  spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ];
 			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ];
 			"package: 'NewTools-Sindarin-ProcessInspector' with: [ spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ];"
 			"Debugger Selector"
@@ -74,6 +75,7 @@ BaselineOfNewTools >> baseline: spec [
 				'NewTools-ObjectCentricBreakpoints'
 				'NewTools-Sindarin-Tools'
 				'NewTools-Sindarin-Commands'
+				'NewTools-Sindarin-Commands-Tests'
 				'NewTools-Debugger-Breakpoints-Tools'
 				'NewTools-Debugger-Tests'
 				'NewTools-Debugger-Fuel');
