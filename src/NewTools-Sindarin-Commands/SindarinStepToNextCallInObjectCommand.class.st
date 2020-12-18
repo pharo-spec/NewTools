@@ -9,14 +9,14 @@ Class {
 
 { #category : #default }
 SindarinStepToNextCallInObjectCommand class >> defaultDescription [
-	^ 'Steps execution until the next call in the current class, then returns debugger control.'
+	^ 'Steps execution until the next call in the current receiver, then returns debugger control.'
 ]
 
 { #category : #default }
 SindarinStepToNextCallInObjectCommand class >> defaultName [
 	<toolbarExtensionDebugCommand: 50>
 	<codeExtensionDebugCommand: 50>
-	^ '[Exp.] Step until next call in class'
+	^ '[Exp.] Step until next call in receiver'
 ]
 
 { #category : #predicates }
