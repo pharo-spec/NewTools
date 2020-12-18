@@ -58,7 +58,8 @@ BaselineOfNewTools >> baseline: spec [
 			"package: 'NewTools-Sindarin-ProcessInspector' with: [ spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ];"
 			"Debugger Selector"
 			package: 'NewTools-DebuggerSelector' with: [ spec requires: #('NewTools-SpTextPresenterDecorators') ];
-			package: 'NewTools-DebuggerSelector-Tests' with: [ spec requires: #('NewTools-DebuggerSelector') ].
+			package: 'NewTools-DebuggerSelector-Tests' with: [ spec requires: #('NewTools-DebuggerSelector') ];
+			package: 'NewTools-Debugger-Fuel'.
 
 		spec
 			group: 'Core' with: #('NewTools-Core' 'NewTools-Morphic');
@@ -74,7 +75,8 @@ BaselineOfNewTools >> baseline: spec [
 				'NewTools-Sindarin-Tools'
 				'NewTools-Sindarin-Commands'
 				'NewTools-Debugger-Breakpoints-Tools'
-				'NewTools-Debugger-Tests');
+				'NewTools-Debugger-Tests'
+				'NewTools-Debugger-Fuel');
 			group: 'SystemReporter' with: #('Core' 'NewTools-SystemReporter');
 			group: 'Methods' with: #('Core' 'NewTools-MethodBrowsers');
 			"Not in the image for the moment, we need a pass on them"
