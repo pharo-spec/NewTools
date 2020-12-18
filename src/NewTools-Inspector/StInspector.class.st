@@ -197,6 +197,7 @@ StInspector >> initializeWindow: aWindowPresenter [
 		whenOpenedDo: [ self takeKeyboardFocus ];
 		whenFocusReceivedDo: [ self startStepping ];
 		whenFocusLostDo: [ self stopStepping ];
+		whenClosedDo: [ self stopStepping ];
 		whenResizingDo: [ :ann | self preferredExtent: ann newSize ]
 ]
 
