@@ -47,3 +47,67 @@ SindarinCommandsTest >> testStepToNextCallInClass [
 		assert: debugger session context method
 		identicalTo: visitor class >> #visitTestObject:
 ]
+
+{ #category : #tests }
+SindarinCommandsTest >> testStepToNextCallInClassFailure [
+
+	| command |
+	debugger := SindarinTestCommandDebugger new.
+	debugger session: 
+	(StTestDebuggerProvider new debuggerWithContext:
+		            [ visitor doNotVisit: object ] asContext) session.
+
+	debugger session stepIntoUntil: [ :currentContext | 
+		currentContext method == (visitor class >> #doNotVisit:) ].
+	command := SindarinStepToNextCallInClassCommand forContext: debugger.
+	self
+		assert: debugger session context method
+		identicalTo: visitor class >> #doNotVisit:.
+	command execute.
+	self
+		assert: debugger session context method
+		identicalTo: visitor class >> #doNotVisit:
+]
+
+{ #category : #tests }
+SindarinCommandsTest >> testStepToNextCallInClassNeverFinishes [
+
+	| command |
+	debugger := SindarinTestCommandDebugger new.
+	debugger session: (StTestDebuggerProvider new debuggerWithContext:
+			 [ visitor visitNeverFinish: object ] asContext) session.
+
+	debugger session stepIntoUntil: [ :currentContext | 
+		currentContext method == (visitor class >> #visitNeverFinish:) ].
+	command := SindarinStepToNextCallInClassCommand forContext: debugger.
+	self
+		assert: debugger session context method
+		identicalTo: visitor class >> #visitNeverFinish:.
+	command execute.
+	
+	"We're stuck in a loop so the debugger interrupted..."
+	self
+		assert: debugger session context method selector
+		equals: #timesRepeat:.
+	self assert: debugger session context receiver equals: 10000
+]
+
+{ #category : #tests }
+SindarinCommandsTest >> testStepToNextCallInClassWithError [
+
+	| command |
+	debugger := SindarinTestCommandDebugger new.
+	debugger session: (StTestDebuggerProvider new debuggerWithContext:
+			 [ visitor visitWithError: object ] asContext) session.
+
+	debugger session stepIntoUntil: [ :currentContext | 
+		currentContext method == (visitor class >> #visitWithError:) ].
+	command := SindarinStepToNextCallInClassCommand forContext: debugger.
+	self
+		assert: debugger session context method
+		identicalTo: visitor class >> #visitWithError:.
+	command execute.
+	self
+		assert: debugger session context method selector
+		equals: #doesNotUnderstand:
+]

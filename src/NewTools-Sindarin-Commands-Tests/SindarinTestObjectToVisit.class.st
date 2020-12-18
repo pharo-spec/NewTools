@@ -14,9 +14,22 @@ SindarinTestObjectToVisit >> acceptVisitor: aVisitor [
 ]
 
 { #category : #visitors }
+SindarinTestObjectToVisit >> acceptVisitorNeverFinishes: aVisitor [
+
+	10000 timesRepeat: [ self doStuff ]
+]
+
+{ #category : #visitors }
+SindarinTestObjectToVisit >> acceptVisitorWithError: visitor [
+
+	visitor dnu
+  
+]
+
+{ #category : #visitors }
 SindarinTestObjectToVisit >> doNotAcceptVisitor: aVisitor [
 
-	100 timesRepeat: [ self doStuff ]
+	10 timesRepeat: [ self doStuff ]
 ]
 
 { #category : #visitors }
