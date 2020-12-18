@@ -3,18 +3,13 @@ I will step the execution from a context until the next call to the same class a
 "
 Class {
 	#name : #SindarinStepToNextCallInClassCommand,
-	#superclass : #SindarinCommand,
+	#superclass : #SindarinStepToNextCallCommand,
 	#category : #'NewTools-Sindarin-Commands'
 }
 
 { #category : #default }
 SindarinStepToNextCallInClassCommand class >> defaultDescription [
 	^ 'Steps execution until the next call in the current class, then returns debugger control.'
-]
-
-{ #category : #initialization }
-SindarinStepToNextCallInClassCommand class >> defaultIconName [
-	^ #glamorousInto
 ]
 
 { #category : #default }
@@ -24,27 +19,13 @@ SindarinStepToNextCallInClassCommand class >> defaultName [
 	^ '[Exp.] Step until next call in class'
 ]
 
-{ #category : #hooks }
-SindarinStepToNextCallInClassCommand >> execute [
+{ #category : #predicates }
+SindarinStepToNextCallInClassCommand >> setConditionValue [
 
-	| receiverClass callingMethod debugger maxDepth depth |
-	self context removeSessionHolderSubscriptions.
-	debugger := self context sindarinDebugger.
-	receiverClass := debugger receiver class.
-	callingMethod := debugger method.
-	debugger step.
+	conditionValue := debugger receiver class
+]
 
-	maxDepth := 1000.
-	depth := 0.
-	[ 
-	debugger method ~= callingMethod and: [ 
-		debugger receiver class ~= receiverClass and: [ depth < maxDepth ] ] ] 
-		whileTrue: [ 			
-			debugger step.
-			depth := depth + 1.
-			debugger hasSignalledUnhandledException ifTrue:[depth := 1000] ].
-
-	self context
-		setSessionHolderSubscriptions;
-		forceSessionUpdate
+{ #category : #predicates }
+SindarinStepToNextCallInClassCommand >> targetCondition [ 
+	^debugger receiver class ~= conditionValue
 ]
