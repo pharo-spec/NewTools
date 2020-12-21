@@ -31,11 +31,6 @@ StNodeCollector >> collectNodes [
 	self slotNodes
 ]
 
-{ #category : #building }
-StNodeCollector >> collectTempsNodes [
-	^self tempNodesForContext: object context
-]
-
 { #category : #private }
 StNodeCollector >> indexedNodes [
 	| nodes indexableDisplayLimit top bottom topLimit bottomLimit |
