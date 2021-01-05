@@ -134,3 +134,19 @@ SindarinCommandsTest >> testStepToNextCallInObject [
 		identicalTo: visitor class >> #visitTestObject:.
 	self assert: debugger session context receiver identicalTo: originalReceiver
 ]
+
+{ #category : #'tests - step to next call' }
+SindarinCommandsTest >> testStepToNextInstanceCreation [
+
+	| command |
+	debugger := SindarinTestCommandDebugger new.
+	debugger session: (StTestDebuggerProvider new debuggerWithContext:
+			 [ object createInstanceWithNew ] asContext) session.
+
+	command := SindarinStepToNextInstanceCreation forContext: debugger.
+	command execute.
+	self
+		assert: debugger session context method
+		identicalTo: (object class class lookupSelector: #new).
+	self assert: debugger session context receiver identicalTo: object class
+]
