@@ -18,7 +18,7 @@ SindarinStepToReturnCommand class >> defaultIconName [
 SindarinStepToReturnCommand class >> defaultName [
 	<toolbarExtensionDebugCommand: 50>
 	<codeExtensionDebugCommand: 50>
-	^ 'Step to return'
+	^ 'To return'
 ]
 
 { #category : #executing }

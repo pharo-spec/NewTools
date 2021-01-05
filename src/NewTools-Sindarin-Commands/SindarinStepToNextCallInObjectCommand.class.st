@@ -16,7 +16,7 @@ SindarinStepToNextCallInObjectCommand class >> defaultDescription [
 SindarinStepToNextCallInObjectCommand class >> defaultName [
 	<toolbarExtensionDebugCommand: 50>
 	<codeExtensionDebugCommand: 50>
-	^ '[Exp.] Step until next call in receiver'
+	^ 'To next call in receiver'
 ]
 
 { #category : #predicates }
