@@ -31,6 +31,7 @@ StInspectorRefreshService class >> uniqueInstance [
 StInspectorRefreshService >> initialize [
 
 	super initialize.
+	self stepDelay: 1000 milliSeconds.
 	mutex := Mutex new.
 	inspectors := Set new
 ]
