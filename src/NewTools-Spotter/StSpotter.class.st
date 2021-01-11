@@ -4,17 +4,10 @@ Class {
 	#instVars : [
 		'searchText',
 		'resultList',
-		'processor'
+		'model'
 	],
 	#category : #'NewTools-Spotter'
 }
-
-{ #category : #initialization }
-StSpotter >> initialize [
-
-	processor := StSpotterProcessor new.
-	super initialize
-]
 
 { #category : #initialization }
 StSpotter >> initializeDialogWindow: aDialogWindowPresenter [
@@ -39,7 +32,8 @@ StSpotter >> initializePresenters [
 		
 	searchText 
 		placeholder: 'Search...';
-		addStyle: 'stSpotter'
+		addStyle: 'stSpotter';
+		whenTextChangedDo: [ :aString | self updateSearch: aString ]
 ]
 
 { #category : #initialization }
@@ -54,7 +48,24 @@ StSpotter >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : #accessing }
-StSpotter >> processor [
+StSpotter >> model [
+
+	^ model ifNil: [ 
+		model := StSpotterModel new
+			whenSearchUpdatedDo: [ self updateResultList ];
+			yourself ]
+]
+
+{ #category : #'private updating' }
+StSpotter >> updateResultList [ 
+
+	resultList updateItemsKeepingSelection: (self model results sorted: #className ascending, #asString ascending)
+]
+
+{ #category : #'private updating' }
+StSpotter >> updateSearch: aString [
+
+	aString size < 3 ifTrue: [ ^ self ].
 	
-	^ processor
+	self model asyncProcess: aString
 ]
