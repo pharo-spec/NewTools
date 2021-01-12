@@ -12,6 +12,19 @@ Class {
 }
 
 { #category : #private }
+StSpotterModel >> allCandidatesAdded: ann [
+	
+	ann candidateLinks ifEmpty: [ ^ self ].
+	ann candidateLinks 
+		collect: [ :each | each value ]
+		thenDo: [ :each | 
+			(results includes: each) 
+				ifFalse: [ results add: each ] ].
+		
+	self announceSearchUpdated
+]
+
+{ #category : #private }
 StSpotterModel >> announceSearchUpdated [
 
 	searchUpdatedAction ifNil: [ ^ self ].
@@ -68,7 +81,7 @@ StSpotterModel >> newContextFor: aStream text: aString [
 { #category : #'private factory' }
 StSpotterModel >> newStreamFor: candidates [
 
-	^ GTSpotterUIThreadStream new
+	^ StSpotterStream new
 		onAddedSelector: #addCandidate:in:;
 		onRemoveSelector: #removeAllCandidatesOf:;
 		receiver: candidates;
@@ -81,10 +94,9 @@ StSpotterModel >> process: aString [
 		
 	candidates := GTSpotterCandidatesList new.
 	candidates announcer 
-		when: GTSpotterCandidateAdded send: #candidateAdded: to: self.
-	"
-		when: GTSpotterAllCandidatesAdded send: #onCandidateAdded to: self;
-		when: GTSpotterAllCandidatesRemoved do: [ self deselect ];
+		when: GTSpotterCandidateAdded send: #candidateAdded: to: self;
+		when: GTSpotterAllCandidatesAdded send: #allCandidatesAdded: to: self.
+		"when: GTSpotterAllCandidatesRemoved do: [ self deselect ];
 		when: GTSpotterQueryStarted send: #propagateEvent: to: self;
 		when: GTSpotterQueryEnded send: #propagateEvent: to: self."
 
