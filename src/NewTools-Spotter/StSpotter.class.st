@@ -25,16 +25,16 @@ StSpotter >> initializePresenters [
 		add: (SpBoxLayout newHorizontal
 			beHomogeneous;
 			spacing: 5;
-			add: (resultList := self newList);
+			add: (resultList := self newComponentList);
 			add: self newLabel;
 			yourself);
 		yourself).
 		
-	resultList 
+	"resultList 
 		display: [ :anEntry | anEntry asString ];
 		displayIcon: [ :anEntry | anEntry icon ]; 
 		bindKeyCombination: Character arrowUp asKeyCombination 
-			toAction: [ self transferFocusToSearchText ].
+			toAction: [ self transferFocusToSearchText ]."
 		
 	searchText 
 		placeholder: 'Search...';
@@ -87,7 +87,14 @@ StSpotter >> transferFocusToSearchText [
 StSpotter >> updateResultList [ 
 
 	self application defer: [ 
-		resultList updateItemsKeepingSelection: (self model results sorted: #className ascending, #asString ascending) ]
+		| resultsByClass presenters |
+		
+		resultsByClass := self model results groupedBy: #class.
+		presenters := resultsByClass associations flatCollect: [ :eachAssoc | 
+			{ self instantiate: StSpotterHeaderPresenter on: eachAssoc key }, 
+			((eachAssoc value sorted: #className ascending, #asString ascending)
+				collect: [ :eachEntry | self instantiate: StSpotterEntryPresenter on: eachEntry ]) ].
+		resultList updateItemsKeepingSelection: presenters ]
 ]
 
 { #category : #'private updating' }

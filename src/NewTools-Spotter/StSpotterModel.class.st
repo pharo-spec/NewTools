@@ -11,7 +11,7 @@ Class {
 	#category : #'NewTools-Spotter'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 StSpotterModel >> announceSearchUpdated [
 
 	searchUpdatedAction ifNil: [ ^ self ].
@@ -24,7 +24,7 @@ StSpotterModel >> asyncProcess: aString [
 	[ self process: aString ] schedule
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 StSpotterModel >> candidateAdded: ann [
 	| candidate |
 	
@@ -107,7 +107,7 @@ StSpotterModel >> results [
 	^ results
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #events }
 StSpotterModel >> whenSearchUpdatedDo: aBlock [
 
 	searchUpdatedAction := aBlock
