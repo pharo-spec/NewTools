@@ -26,14 +26,22 @@ StSpotter >> initializePresenters [
 			beHomogeneous;
 			spacing: 5;
 			add: (resultList := self newList);
-			add: self newList;
+			add: self newLabel;
 			yourself);
 		yourself).
+		
+	resultList 
+		display: [ :anEntry | anEntry asString ];
+		displayIcon: [ :anEntry | anEntry icon ]; 
+		bindKeyCombination: Character arrowUp asKeyCombination 
+			toAction: [ self transferFocusToSearchText ].
 		
 	searchText 
 		placeholder: 'Search...';
 		addStyle: 'stSpotter';
-		whenTextChangedDo: [ :aString | self updateSearch: aString ]
+		whenTextChangedDo: [ :aString | self updateSearch: aString ];
+		bindKeyCombination: Character arrowDown asKeyCombination 
+			toAction: [ self transferFocusToResultList ]
 ]
 
 { #category : #initialization }
@@ -56,10 +64,30 @@ StSpotter >> model [
 			yourself ]
 ]
 
+{ #category : #private }
+StSpotter >> transferFocusToResultList [
+
+	resultList items isEmptyOrNil ifTrue: [ ^ self ].
+	
+	resultList 
+		selectIndex: 1;
+		takeKeyboardFocus
+]
+
+{ #category : #private }
+StSpotter >> transferFocusToSearchText [
+
+	(resultList items notEmpty and: [ resultList selection selectedIndex = 1 ])
+		ifTrue: [ searchText takeKeyboardFocus ].
+		
+	
+]
+
 { #category : #'private updating' }
 StSpotter >> updateResultList [ 
 
-	resultList updateItemsKeepingSelection: (self model results sorted: #className ascending, #asString ascending)
+	self application defer: [ 
+		resultList updateItemsKeepingSelection: (self model results sorted: #className ascending, #asString ascending) ]
 ]
 
 { #category : #'private updating' }
