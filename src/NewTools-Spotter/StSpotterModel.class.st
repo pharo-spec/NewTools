@@ -26,7 +26,10 @@ StSpotterModel >> announceSearchUpdated [
 { #category : #processing }
 StSpotterModel >> asyncProcess: aString [
 
-	[ self process: aString ] schedule
+	[ 
+		Processor yield.
+		self process: aString. 
+	] schedule
 ]
 
 { #category : #initialization }
@@ -34,6 +37,14 @@ StSpotterModel >> initialize [
 
 	super initialize.
 	queries := OrderedCollection new
+]
+
+{ #category : #accessing }
+StSpotterModel >> links [
+
+	^ activeQuery 
+		ifNotNil: [ :aQuery | aQuery links ]
+		ifNil: [ #() ]
 ]
 
 { #category : #processing }
@@ -70,6 +81,7 @@ StSpotterModel >> results [
 { #category : #processing }
 StSpotterModel >> startProcessing [
 
+	"First query: empty (to bring windows, menu, etc.)"
 	self asyncProcess: ''
 ]
 

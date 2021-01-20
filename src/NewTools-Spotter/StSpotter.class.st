@@ -4,14 +4,37 @@ Class {
 	#instVars : [
 		'searchText',
 		'resultList',
-		'model'
+		'model',
+		'updating'
 	],
 	#category : #'NewTools-Spotter'
 }
 
+{ #category : #private }
+StSpotter >> activate: aPresenter [
+
+	self window close.
+	aPresenter model doEvaluate
+]
+
+{ #category : #'private updating' }
+StSpotter >> deferredUpdateResultList [
+	| resultsByClass presenters |
+	
+	resultsByClass := (self model links groupedBy: #processor) associations
+		sorted: [ :each | each key order ] ascending.
+	presenters := resultsByClass flatCollect: [ :eachAssoc | 
+		{ self instantiate: StSpotterHeaderPresenter on: eachAssoc key }, 
+		((eachAssoc value sorted: #className ascending, #asString ascending)
+			collect: [ :eachLink | self instantiate: StSpotterEntryPresenter on: eachLink value ]) ].
+	
+	resultList updateItemsKeepingSelection: presenters
+]
+
 { #category : #initialization }
 StSpotter >> initialize [
 
+	updating := false.
 	super initialize
 ]
 
@@ -41,7 +64,9 @@ StSpotter >> initializePresenters [
 		displayIcon: [ :anEntry | anEntry icon ]; 
 		bindKeyCombination: Character arrowUp asKeyCombination 
 			toAction: [ self transferFocusToSearchText ]."
-		
+	resultList whenActivatedDo: [ :selection | 
+		self activate: selection selectedItem ].
+
 	searchText 
 		placeholder: 'Search...';
 		addStyle: 'stSpotter';
@@ -58,8 +83,7 @@ StSpotter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		withoutDecorations;
 		initialExtent: 750@400;
-		whenOpenedDo: [ 
-			[ Processor yield. self model ] schedule ];
+		whenOpenedDo: [ self startProcessing ];
 		centered
 ]
 
@@ -69,8 +93,14 @@ StSpotter >> model [
 	^ model ifNil: [ 
 		model := StSpotterModel new
 			whenSearchUpdatedDo: [ self updateResultList ];
-			startProcessing;
 			yourself ]
+]
+
+{ #category : #private }
+StSpotter >> startProcessing [
+	"Start the process."
+
+	[ self model startProcessing ] schedule
 ]
 
 { #category : #private }
@@ -95,15 +125,11 @@ StSpotter >> transferFocusToSearchText [
 { #category : #'private updating' }
 StSpotter >> updateResultList [ 
 
+	updating ifTrue: [ ^ self  ].
+	updating := true.
 	self application defer: [ 
-		| resultsByClass presenters |
-		
-		resultsByClass := self model results groupedBy: #class.
-		presenters := resultsByClass associations flatCollect: [ :eachAssoc | 
-			{ self instantiate: StSpotterHeaderPresenter on: eachAssoc key }, 
-			((eachAssoc value sorted: #className ascending, #asString ascending)
-				collect: [ :eachEntry | self instantiate: StSpotterEntryPresenter on: eachEntry ]) ].
-		resultList updateItemsKeepingSelection: presenters ]
+		[ self deferredUpdateResultList ]
+		ensure: [ updating := false ] ]
 ]
 
 { #category : #'private updating' }

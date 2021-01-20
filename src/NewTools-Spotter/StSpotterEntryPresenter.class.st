@@ -20,7 +20,7 @@ StSpotterEntryPresenter >> initializePresenters [
 		yourself).
 		
 	iconPresenter image: self model icon.
-	labelPresenter label: self model asString
+	labelPresenter label: self model label
 ]
 
 { #category : #'accessing model' }

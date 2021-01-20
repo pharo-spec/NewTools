@@ -16,8 +16,8 @@ StSpotterHeaderPresenter >> initializePresenters [
 		spacing: 5;
 		add: (labelPresenter := self newLabel);
 		yourself).
-		
-	labelPresenter label: self model name
+
+	labelPresenter label: self model title
 ]
 
 { #category : #'accessing model' }
@@ -27,7 +27,7 @@ StSpotterHeaderPresenter >> model [
 ]
 
 { #category : #'accessing model' }
-StSpotterHeaderPresenter >> setModelBeforeInitialization: anEntry [
+StSpotterHeaderPresenter >> setModelBeforeInitialization: aProcessor [
 
-	model := anEntry
+	model := aProcessor
 ]

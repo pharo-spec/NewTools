@@ -5,7 +5,7 @@ Class {
 		'text',
 		'candidatesList',
 		'processors',
-		'results'
+		'candidateLinks'
 	],
 	#category : #'NewTools-Spotter'
 }
@@ -22,9 +22,7 @@ StSpotterQuery class >> on: aString [
 StSpotterQuery >> allCandidatesAdded: ann [
 	
 	ann candidateLinks ifEmpty: [ ^ self ].
-	ann candidateLinks 
-		collect: [ :each | each value ]
-		thenDo: [ :each | results add: each ]
+	candidateLinks addAll: ann candidateLinks
 ]
 
 { #category : #accessing }
@@ -36,8 +34,7 @@ StSpotterQuery >> announcer [
 { #category : #private }
 StSpotterQuery >> candidateAdded: ann [
 
-	results add: ann candidate
-	
+	candidateLinks add: ann candidateLink
 ]
 
 { #category : #accessing }
@@ -65,7 +62,7 @@ StSpotterQuery >> initialize [
 
 	super initialize.
 	self initializeCandidatesList.
-	results := Set new
+	candidateLinks := Set new
 ]
 
 { #category : #initialization }
@@ -79,6 +76,12 @@ StSpotterQuery >> initializeCandidatesList [
 		when: GTSpotterQueryStarted send: #propagateEvent: to: self;
 		when: GTSpotterQueryEnded send: #propagateEvent: to: self."
 
+]
+
+{ #category : #accessing }
+StSpotterQuery >> links [
+
+	^ candidateLinks
 ]
 
 { #category : #'private factory' }
@@ -122,7 +125,7 @@ StSpotterQuery >> processors [
 { #category : #accessing }
 StSpotterQuery >> results [
 
-	^ results
+	^ self links collect: [ :each | each value ]
 ]
 
 { #category : #accessing }
