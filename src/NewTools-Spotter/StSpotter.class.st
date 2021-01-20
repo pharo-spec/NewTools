@@ -10,6 +10,12 @@ Class {
 }
 
 { #category : #initialization }
+StSpotter >> initialize [
+
+	super initialize
+]
+
+{ #category : #initialization }
 StSpotter >> initializeDialogWindow: aDialogWindowPresenter [
 
 	aDialogWindowPresenter closeOnBackdropClick: true
@@ -52,6 +58,8 @@ StSpotter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		withoutDecorations;
 		initialExtent: 750@400;
+		whenOpenedDo: [ 
+			[ Processor yield. self model ] schedule ];
 		centered
 ]
 
@@ -61,6 +69,7 @@ StSpotter >> model [
 	^ model ifNil: [ 
 		model := StSpotterModel new
 			whenSearchUpdatedDo: [ self updateResultList ];
+			startProcessing;
 			yourself ]
 ]
 
@@ -100,7 +109,5 @@ StSpotter >> updateResultList [
 { #category : #'private updating' }
 StSpotter >> updateSearch: aString [
 
-	aString size < 3 ifTrue: [ ^ self ].
-	
 	self model asyncProcess: aString
 ]

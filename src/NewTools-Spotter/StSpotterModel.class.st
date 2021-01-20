@@ -67,6 +67,12 @@ StSpotterModel >> results [
 		ifNil: [ #() ]
 ]
 
+{ #category : #processing }
+StSpotterModel >> startProcessing [
+
+	self asyncProcess: ''
+]
+
 { #category : #events }
 StSpotterModel >> whenSearchUpdatedDo: aBlock [
 
