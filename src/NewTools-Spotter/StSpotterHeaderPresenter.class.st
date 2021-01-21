@@ -3,9 +3,10 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'labelPresenter',
-		'model'
+		'model',
+		'shortcutPresenter'
 	],
-	#category : #'NewTools-Spotter'
+	#category : #'NewTools-Spotter-View'
 }
 
 { #category : #initialization }
@@ -15,9 +16,10 @@ StSpotterHeaderPresenter >> initializePresenters [
 		borderWidth: 2;
 		spacing: 5;
 		add: (labelPresenter := self newLabel);
+		add: (shortcutPresenter := self newLabel);
 		yourself).
 
-	labelPresenter label: self model title
+	shortcutPresenter addStyle: 'dim'
 ]
 
 { #category : #'accessing model' }
@@ -30,4 +32,10 @@ StSpotterHeaderPresenter >> model [
 StSpotterHeaderPresenter >> setModelBeforeInitialization: aProcessor [
 
 	model := aProcessor
+]
+
+{ #category : #initialization }
+StSpotterHeaderPresenter >> updatePresenter [
+
+	labelPresenter label: self model title
 ]

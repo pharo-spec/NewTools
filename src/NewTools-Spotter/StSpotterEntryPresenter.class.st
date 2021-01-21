@@ -6,7 +6,7 @@ Class {
 		'labelPresenter',
 		'model'
 	],
-	#category : #'NewTools-Spotter'
+	#category : #'NewTools-Spotter-View'
 }
 
 { #category : #initialization }

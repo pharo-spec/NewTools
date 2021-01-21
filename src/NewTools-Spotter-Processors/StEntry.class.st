@@ -75,6 +75,12 @@ StEntry >> icon [
 	^ self subclassResponsibility
 ]
 
+{ #category : #accessing }
+StEntry >> label [
+
+	^ self asString
+]
+
 { #category : #printing }
 StEntry >> printOn: aStream [
 	aStream

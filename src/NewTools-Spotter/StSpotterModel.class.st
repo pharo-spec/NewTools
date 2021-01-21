@@ -7,7 +7,7 @@ Class {
 		'queries',
 		'activeQuery'
 	],
-	#category : #'NewTools-Spotter'
+	#category : #'NewTools-Spotter-Model'
 }
 
 { #category : #private }

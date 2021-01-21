@@ -25,6 +25,12 @@ StMethodEntry >> icon [
 	^ content systemIcon
 ]
 
+{ #category : #accessing }
+StMethodEntry >> label [
+
+	^ content printString
+]
+
 { #category : #showing }
 StMethodEntry >> render [ 
 

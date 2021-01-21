@@ -7,7 +7,7 @@ Class {
 		'processors',
 		'candidateLinks'
 	],
-	#category : #'NewTools-Spotter'
+	#category : #'NewTools-Spotter-Model'
 }
 
 { #category : #'instance creation' }
@@ -52,7 +52,7 @@ StSpotterQuery >> candidatesList: anObject [
 { #category : #accessing }
 StSpotterQuery >> defaultProcessors [
 
-	^ (AbstractSpotterProcessor allEnabledSubclasses 
+	^ (StSpotterProcessor allEnabledSubclasses 
 		collect: [ :each | each new ])
 		sort: #order ascending
 ]

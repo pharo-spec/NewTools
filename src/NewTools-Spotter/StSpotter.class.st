@@ -7,7 +7,7 @@ Class {
 		'model',
 		'updating'
 	],
-	#category : #'NewTools-Spotter'
+	#category : #'NewTools-Spotter-View'
 }
 
 { #category : #private }
@@ -59,9 +59,7 @@ StSpotter >> initializePresenters [
 			yourself);
 		yourself).
 		
-	"resultList 
-		display: [ :anEntry | anEntry asString ];
-		displayIcon: [ :anEntry | anEntry icon ]; 
+	"resultList
 		bindKeyCombination: Character arrowUp asKeyCombination 
 			toAction: [ self transferFocusToSearchText ]."
 	resultList whenActivatedDo: [ :selection | 

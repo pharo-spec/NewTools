@@ -7,7 +7,7 @@ Class {
 		'receiver',
 		'timestamp'
 	],
-	#category : #'NewTools-Spotter'
+	#category : #'NewTools-Spotter-Model'
 }
 
 { #category : #'adding/removing' }
