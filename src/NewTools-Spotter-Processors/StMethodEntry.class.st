@@ -30,11 +30,3 @@ StMethodEntry >> label [
 
 	^ content printString
 ]
-
-{ #category : #showing }
-StMethodEntry >> render [ 
-
-	^ GTSpotterItemBrick new
-		icon: self icon;
-		text: content printString
-]

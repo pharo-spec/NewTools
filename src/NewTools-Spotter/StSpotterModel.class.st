@@ -56,8 +56,8 @@ StSpotterModel >> process: aString [
 
 	query := StSpotterQuery on: aString.
 	query announcer 
-		when: GTSpotterCandidateAdded send: #announceSearchUpdated to: self;
-		when: GTSpotterAllCandidatesAdded send: #announceSearchUpdated to: self.
+		when: StSpotterCandidateAdded send: #announceSearchUpdated to: self;
+		when: StSpotterAllCandidatesAdded send: #announceSearchUpdated to: self.
 	self activateQuery: query.
 	query process
 ]

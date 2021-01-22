@@ -83,24 +83,23 @@ StEntry >> label [
 
 { #category : #printing }
 StEntry >> printOn: aStream [
+
+	super printOn: aStream.	
 	aStream
-		<< self class name;
 		<< '( ';
 		print: content;
 		<< ' )'
 ]
 
-{ #category : #showing }
-StEntry >> render [ 
-
-	^ GTSpotterItemBrick new
-		icon: self icon;
-		text: self asString
-]
-
 { #category : #'spotter-extensions' }
 StEntry >> spotterActDefault [
 	^ content spotterActDefault 
+]
+
+{ #category : #accessing }
+StEntry >> spotterPreview [
+
+	^ content spotterPreview: SpPresenterBuilder new
 ]
 
 { #category : #'spotter-extensions' }

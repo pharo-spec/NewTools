@@ -28,7 +28,7 @@ StHistoryProcessor class >> title [
 { #category : #filtering }
 StHistoryProcessor >> collection [
 
-	^ GTSpotter history reject: [ :e | e isNil ]
+	^ StSpotter history
 ]
 
 { #category : #filtering }

@@ -5,16 +5,55 @@ Class {
 		'searchText',
 		'resultList',
 		'model',
-		'updating'
+		'updating',
+		'previewContainer'
+	],
+	#classVars : [
+		'History'
 	],
 	#category : #'NewTools-Spotter-View'
 }
 
 { #category : #private }
+StSpotter class >> basicHistory [
+
+	^ History ifNil: [ History := WeakOrderedCollection new ]
+]
+
+{ #category : #private }
+StSpotter class >> historize: aCandidateLink [
+
+	self basicHistory 
+		removeAllSuchThat: [ :each | each value = aCandidateLink value ];
+		addFirst: aCandidateLink
+]
+
+{ #category : #accessing }
+StSpotter class >> history [
+
+	^ self basicHistory reject: [ :each | each isNil ]
+]
+
+{ #category : #accessing }
+StSpotter class >> resetHistory [
+	<script>
+	"
+	self resetHistory
+	"
+	History := nil
+]
+
+{ #category : #'private actions' }
 StSpotter >> activate: aPresenter [
 
+	aPresenter isHeader ifTrue: [ 
+		self diveInProcessor: aPresenter model.
+		^ self ].
+
 	self window close.
-	aPresenter model doEvaluate
+	self historize: aPresenter model.
+	aPresenter model value doEvaluate.
+
 ]
 
 { #category : #'private updating' }
@@ -24,11 +63,23 @@ StSpotter >> deferredUpdateResultList [
 	resultsByClass := (self model links groupedBy: #processor) associations
 		sorted: [ :each | each key order ] ascending.
 	presenters := resultsByClass flatCollect: [ :eachAssoc | 
-		{ self instantiate: StSpotterHeaderPresenter on: eachAssoc key }, 
+		{ self newSpotterHeaderPresenter: eachAssoc key }, 
 		((eachAssoc value sorted: #className ascending, #asString ascending)
-			collect: [ :eachLink | self instantiate: StSpotterEntryPresenter on: eachLink value ]) ].
+			collect: [ :eachLink | self newSpotterCandidateLinkPresenter: eachLink ]) ].
 	
 	resultList updateItemsKeepingSelection: presenters
+]
+
+{ #category : #'private actions' }
+StSpotter >> diveInProcessor: aProcessor [
+	
+	self halt.
+]
+
+{ #category : #'private actions' }
+StSpotter >> historize: aCandidateLink [
+
+	self class historize: aCandidateLink
 ]
 
 { #category : #initialization }
@@ -55,15 +106,18 @@ StSpotter >> initializePresenters [
 			beHomogeneous;
 			spacing: 5;
 			add: (resultList := self newComponentList);
-			add: self newLabel;
+			add: (previewContainer := SpBoxLayout newVertical);
 			yourself);
 		yourself).
 		
 	"resultList
 		bindKeyCombination: Character arrowUp asKeyCombination 
 			toAction: [ self transferFocusToSearchText ]."
-	resultList whenActivatedDo: [ :selection | 
-		self activate: selection selectedItem ].
+	resultList 
+		whenSelectionChangedDo: [ :selection | 
+			self showPreview: selection selectedItem ];
+		whenActivatedDo: [ :selection | 
+			self activate: selection selectedItem ].
 
 	searchText 
 		placeholder: 'Search...';
@@ -92,6 +146,34 @@ StSpotter >> model [
 		model := StSpotterModel new
 			whenSearchUpdatedDo: [ self updateResultList ];
 			yourself ]
+]
+
+{ #category : #'private updating' }
+StSpotter >> newSpotterCandidateLinkPresenter: aLink [
+
+	^ self instantiate: StSpotterCandidateLinkPresenter on: aLink
+]
+
+{ #category : #'private updating' }
+StSpotter >> newSpotterHeaderPresenter: aProcessor [
+
+	^ (self instantiate: StSpotterHeaderPresenter on: aProcessor)
+		whenDiveInDo: [ :processor | self diveInProcessor: processor ];
+		yourself
+]
+
+{ #category : #'private actions' }
+StSpotter >> showPreview: aPresenter [
+
+	previewContainer removeAll.	
+	(aPresenter isNil or: [ aPresenter isHeader ]) 
+		ifTrue: [ ^ self ].
+
+	aPresenter model value spotterPreview 
+		ifNotNil: [ :previewPresenter | 
+			previewContainer add: (previewPresenter 
+				owner: self; 
+				yourself) ]
 ]
 
 { #category : #private }

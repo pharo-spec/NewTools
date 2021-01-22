@@ -1,6 +1,6 @@
 Class {
-	#name : #StSpotterEntryPresenter,
-	#superclass : #SpPresenter,
+	#name : #StSpotterCandidateLinkPresenter,
+	#superclass : #StSpotterPresenter,
 	#instVars : [
 		'iconPresenter',
 		'labelPresenter',
@@ -9,8 +9,14 @@ Class {
 	#category : #'NewTools-Spotter-View'
 }
 
+{ #category : #accessing }
+StSpotterCandidateLinkPresenter >> entry [
+
+	^ self model value
+]
+
 { #category : #initialization }
-StSpotterEntryPresenter >> initializePresenters [
+StSpotterCandidateLinkPresenter >> initializePresenters [
 
 	self layout: (SpBoxLayout newHorizontal
 		borderWidth: 2;
@@ -19,18 +25,18 @@ StSpotterEntryPresenter >> initializePresenters [
 		add: (labelPresenter := self newLabel);
 		yourself).
 		
-	iconPresenter image: self model icon.
-	labelPresenter label: self model label
+	iconPresenter image: self entry icon.
+	labelPresenter label: self entry label
 ]
 
 { #category : #'accessing model' }
-StSpotterEntryPresenter >> model [
+StSpotterCandidateLinkPresenter >> model [
 
 	^ model
 ]
 
 { #category : #'accessing model' }
-StSpotterEntryPresenter >> setModelBeforeInitialization: anEntry [
+StSpotterCandidateLinkPresenter >> setModelBeforeInitialization: anEntry [
 
 	model := anEntry
 ]

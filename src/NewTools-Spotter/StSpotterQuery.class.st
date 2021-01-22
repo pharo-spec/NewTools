@@ -68,10 +68,10 @@ StSpotterQuery >> initialize [
 { #category : #initialization }
 StSpotterQuery >> initializeCandidatesList [
 
-	candidatesList := GTSpotterCandidatesList new.
+	candidatesList := StSpotterCandidatesList new.
 	candidatesList announcer 
-		when: GTSpotterCandidateAdded send: #candidateAdded: to: self;
-		when: GTSpotterAllCandidatesAdded send: #allCandidatesAdded: to: self.
+		when: StSpotterCandidateAdded send: #candidateAdded: to: self;
+		when: StSpotterAllCandidatesAdded send: #allCandidatesAdded: to: self.
 		"when: GTSpotterAllCandidatesRemoved do: [ self deselect ];
 		when: GTSpotterQueryStarted send: #propagateEvent: to: self;
 		when: GTSpotterQueryEnded send: #propagateEvent: to: self."
