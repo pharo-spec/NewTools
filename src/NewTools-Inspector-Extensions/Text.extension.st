@@ -5,6 +5,9 @@ Text >> inspectionText [
 	<inspectorPresentationOrder: 0 title: 'Text'>
 
 	^ SpMorphPresenter new 
-		morph: self asMorph asReadOnlyMorph;
+		morph: (RubScrolledTextMorph new 
+			setText: self;
+			in: [ :this | this textArea readOnly: true ];
+			yourself);
 		yourself
 ]
