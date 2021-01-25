@@ -49,14 +49,6 @@ StSpotterQuery >> candidatesList: anObject [
 	candidatesList := anObject
 ]
 
-{ #category : #accessing }
-StSpotterQuery >> defaultProcessors [
-
-	^ (StSpotterProcessor allEnabledSubclasses 
-		collect: [ :each | each new ])
-		sort: #order ascending
-]
-
 { #category : #initialization }
 StSpotterQuery >> initialize [
 
@@ -119,7 +111,13 @@ StSpotterQuery >> process [
 { #category : #accessing }
 StSpotterQuery >> processors [
 
-	^ processors ifNil: [ processors := self defaultProcessors ]
+	^ processors
+]
+
+{ #category : #accessing }
+StSpotterQuery >> processors: aCollection [
+
+	processors := aCollection
 ]
 
 { #category : #accessing }

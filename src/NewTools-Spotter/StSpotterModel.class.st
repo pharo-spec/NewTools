@@ -32,6 +32,14 @@ StSpotterModel >> asyncProcess: aString [
 	] schedule
 ]
 
+{ #category : #accessing }
+StSpotterModel >> defaultProcessors [
+
+	^ (StSpotterProcessor allEnabledSubclasses 
+		collect: [ :each | each new ])
+		sort: #order ascending
+]
+
 { #category : #initialization }
 StSpotterModel >> initialize [
 
@@ -55,6 +63,7 @@ StSpotterModel >> process: aString [
 	query ifNotNil: [ ^ self activateQuery: query ].
 
 	query := StSpotterQuery on: aString.
+	query processors: self defaultProcessors.
 	query announcer 
 		when: StSpotterCandidateAdded send: #announceSearchUpdated to: self;
 		when: StSpotterAllCandidatesAdded send: #announceSearchUpdated to: self.
