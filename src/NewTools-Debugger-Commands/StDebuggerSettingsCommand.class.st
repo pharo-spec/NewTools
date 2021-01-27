@@ -19,5 +19,16 @@ StDebuggerSettingsCommand class >> defaultName [
 
 { #category : #executing }
 StDebuggerSettingsCommand >> execute [
-	self inspect
+	| regexpSearch browser window path |
+	regexpSearch := SettingBrowser regexpSearch.
+	SettingBrowser regexpSearch: true.
+	
+	browser := SettingBrowser new 
+		changeSearchedText: 'Debugging';
+		yourself.
+		 
+	window := browser open.
+	path := (window submorphs detect: [ :each | (each isKindOf: MorphTreeMorph)  ]) nodeList.
+	browser expandNodePath: path first contents first contents first path.
+	SettingBrowser regexpSearch: regexpSearch
 ]
