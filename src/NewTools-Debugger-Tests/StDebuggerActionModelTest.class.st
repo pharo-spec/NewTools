@@ -176,7 +176,7 @@ StDebuggerActionModelTest >> testCopyStackToClipboard [
 StDebuggerActionModelTest >> testCreateMissingMethod [
 ]
 
-{ #category : #tests }
+{ #category : #'tests - stack filtering' }
 StDebuggerActionModelTest >> testDefaultShouldFilterStack [
 
 	self assert: StDebuggerActionModel shouldFilterStack
@@ -188,7 +188,7 @@ StDebuggerActionModelTest >> testFileOutMethod [
 	self assert: result equals: self selector
 ]
 
-{ #category : #tests }
+{ #category : #'tests - stack filtering' }
 StDebuggerActionModelTest >> testFilterDNUStack [
 
 	|stack filteredStack|
@@ -213,7 +213,7 @@ StDebuggerActionModelTest >> testFilterDNUStack [
 	
 ]
 
-{ #category : #tests }
+{ #category : #'tests - stack filtering' }
 StDebuggerActionModelTest >> testFilterMissingSubclassResponsibilityStack [
 
 	|stack filteredStack|	
@@ -233,7 +233,7 @@ StDebuggerActionModelTest >> testFilterMissingSubclassResponsibilityStack [
 	self assert: filteredStack second identicalTo: stack fifth
 ]
 
-{ #category : #tests }
+{ #category : #'tests - stack filtering' }
 StDebuggerActionModelTest >> testFilterStack [
 
 	|stack filteredStack|
