@@ -34,6 +34,17 @@ StDebuggerActionModel class >> shouldFilterStack: aBoolean [
 	ShouldFilterStack := aBoolean
 ]
 
+{ #category : #settings }
+StDebuggerActionModel class >> shouldFilterStackSettingsOn: aBuilder [
+	<systemsettings>
+	(aBuilder setting: #shouldFilterStack)
+		label: 'Filter the debugger stack';
+		target: self;
+		default: true;
+		parent: #debugging;
+		description: 'Defines if methods with pragma #debuggerCompleteToSender are filtered (hidden) in the debugger stack'
+]
+
 { #category : #'debug - session' }
 StDebuggerActionModel >> autoClassifyMessage: aMessage inClass: aClass [
 
