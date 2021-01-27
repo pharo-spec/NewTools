@@ -736,7 +736,8 @@ StDebugger >> initializeStack [
 			self expandStackIfLastItemIsSelected.
 			self updateWindowTitle ] ].
 	stackHeader := self instantiate: StHeaderBar.
-	stackHeader label: 'Stack'
+	stackHeader label: 'Stack'.
+	stackHeader toolbarActions: (CmCommandGroup new register: (StDebuggerSettingsCommand forSpecWithIconNamed: #configuration); asSpecGroup)
 ]
 
 { #category : #initialization }
