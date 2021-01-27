@@ -10,6 +10,9 @@ Class {
 		'contextPredicate',
 		'topContext'
 	],
+	#classVars : [
+		'ShouldFilterStack'
+	],
 	#category : #'NewTools-Debugger-Model'
 }
 
@@ -19,6 +22,16 @@ StDebuggerActionModel class >> on: aDebugSession [
 	^ self basicNew
 		  session: aDebugSession;
 		  initialize
+]
+
+{ #category : #asserting }
+StDebuggerActionModel class >> shouldFilterStack [
+	^ShouldFilterStack ifNil:[ShouldFilterStack := true]
+]
+
+{ #category : #asserting }
+StDebuggerActionModel class >> shouldFilterStack: aBoolean [
+	ShouldFilterStack := aBoolean
 ]
 
 { #category : #'debug - session' }
@@ -94,6 +107,7 @@ StDebuggerActionModel >> fileOutMethod: aMethod [
 { #category : #'debug - stack' }
 StDebuggerActionModel >> filterStack: aStack [
 	| context contextsToReject |	
+	self class shouldFilterStack ifFalse: [  ^aStack ].
 	context := aStack first.
 	contextsToReject := 0.
 

@@ -5,7 +5,8 @@ Class {
 		'session',
 		'debugActionModel',
 		'debugger',
-		'result'
+		'result',
+		'shouldFilterStack'
 	],
 	#category : #'NewTools-Debugger-Tests-Model'
 }
@@ -120,7 +121,8 @@ StDebuggerActionModelTest >> setUp [
 		session.
 	session
 		stepIntoUntil: [ :currentContext | currentContext method == method ].
-	debugActionModel := StDebuggerActionModel on: session
+	debugActionModel := StDebuggerActionModel on: session.
+	shouldFilterStack := StDebuggerActionModel shouldFilterStack.
 ]
 
 { #category : #running }
@@ -133,6 +135,7 @@ StDebuggerActionModelTest >> tearDown [
 	StDebuggerUsingSpecSelectorMock removeSelector: #unclassifiedMethod.
 	StTestDebuggerProvider removeSelector: #buildDebuggerWithMissingClassContext.
 	StTestDebuggerProvider removeSelector: #foobar.
+	StDebuggerActionModel shouldFilterStack: shouldFilterStack.
 	super tearDown
 ]
 
@@ -171,6 +174,12 @@ StDebuggerActionModelTest >> testCopyStackToClipboard [
 
 { #category : #'tests - actions' }
 StDebuggerActionModelTest >> testCreateMissingMethod [
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testDefaultShouldFilterStack [
+
+	self assert: StDebuggerActionModel shouldFilterStack
 ]
 
 { #category : #'tests - actions' }
@@ -228,17 +237,26 @@ StDebuggerActionModelTest >> testFilterMissingSubclassResponsibilityStack [
 StDebuggerActionModelTest >> testFilterStack [
 
 	|stack filteredStack|
-	
+	self changeSession: StTestDebuggerProvider new debuggerWithDNUContext session.
 	stack := OrderedCollection new.
 	
-	"First, the stack contains the interrupted context"	
+	"First, add to the stack a MNU context that has a method with the <debuggerCompleteToSender> pragma"
 	stack add: debugActionModel interruptedContext.	
 	
 	"Then we have an imaginary call stack"
 	stack add: (self emptyContextForMethod: (self class>>#method1:)).
 	stack add: (self emptyContextForMethod: (self class>>#method2:)).
 	
-	filteredStack := debugActionModel filterStack: stack copy
+	
+	StDebuggerActionModel shouldFilterStack: false.
+	filteredStack := debugActionModel filterStack: stack copy.
+	self assertCollection:  filteredStack equals: stack.
+	
+	StDebuggerActionModel shouldFilterStack: true.
+	filteredStack := debugActionModel filterStack: stack copy.
+	self assert: filteredStack size equals: 2.
+	self assert: filteredStack first identicalTo: stack second.
+	self assert: filteredStack second identicalTo: stack third
 ]
 
 { #category : #tests }
