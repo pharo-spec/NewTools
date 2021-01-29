@@ -36,3 +36,23 @@ ProtoObject >> inspectorNodes [
 				slotName: ivName ]) 
 		sort: [ :aNode :anotherNode | aNode label < anotherNode label ]	
 ]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
+ProtoObject >> inspectorPerform: aSymbol [
+	"This method is required by the inspector infrastructure (in order to inspect properly 
+	 ProtoObject and its direct decendants). 
+	 DO NOT USE IT!"
+	
+	<primitive: 83>
+	^ self primitiveFailed
+]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
+ProtoObject >> inspectorPerform: aSymbol with: anObject [
+	"This method is required by the inspector infrastructure (in order to inspect properly 
+	 ProtoObject and its direct decendants). 
+	 DO NOT USE IT!"
+	
+	<primitive: 83>
+	^ self primitiveFailed
+]

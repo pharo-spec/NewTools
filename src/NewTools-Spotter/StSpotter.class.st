@@ -67,7 +67,11 @@ StSpotter >> deferredUpdateResultList [
 		((eachAssoc value sorted: #className ascending, #asString ascending)
 			collect: [ :eachLink | self newSpotterCandidateLinkPresenter: eachLink ]) ].
 	
-	resultList updateItemsKeepingSelection: presenters
+	resultList disableActivationDuring: [ 
+		| index |
+		index := resultList selection selectedIndex.
+		resultList items: presenters.
+		resultList selectIndex: index ]
 ]
 
 { #category : #'private actions' }

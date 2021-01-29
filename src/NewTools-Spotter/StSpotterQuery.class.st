@@ -3,6 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'text',
+		'connected',
 		'candidatesList',
 		'processors',
 		'candidateLinks'
@@ -49,12 +50,25 @@ StSpotterQuery >> candidatesList: anObject [
 	candidatesList := anObject
 ]
 
+{ #category : #accessing }
+StSpotterQuery >> connect [
+
+	connected := true
+]
+
+{ #category : #accessing }
+StSpotterQuery >> disconnect [
+
+	connected := false
+]
+
 { #category : #initialization }
 StSpotterQuery >> initialize [
 
 	super initialize.
 	self initializeCandidatesList.
-	candidateLinks := Set new
+	candidateLinks := Set new.
+	connected := false
 ]
 
 { #category : #initialization }
@@ -68,6 +82,12 @@ StSpotterQuery >> initializeCandidatesList [
 		when: GTSpotterQueryStarted send: #propagateEvent: to: self;
 		when: GTSpotterQueryEnded send: #propagateEvent: to: self."
 
+]
+
+{ #category : #testing }
+StSpotterQuery >> isConnected [
+
+	^ connected
 ]
 
 { #category : #accessing }

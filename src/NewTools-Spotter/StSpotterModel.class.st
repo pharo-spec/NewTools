@@ -13,7 +13,9 @@ Class {
 { #category : #private }
 StSpotterModel >> activateQuery: aQuery [
 
-	activeQuery := aQuery
+	activeQuery ifNotNil: [ self disconnectQuery: aQuery ].
+	activeQuery := aQuery.
+	self connectQuery: aQuery
 ]
 
 { #category : #private }
@@ -32,12 +34,26 @@ StSpotterModel >> asyncProcess: aString [
 	] schedule
 ]
 
+{ #category : #private }
+StSpotterModel >> connectQuery: aQuery [
+
+	aQuery announcer
+		when: StSpotterCandidateAdded send: #announceSearchUpdated to: self;
+		when: StSpotterAllCandidatesAdded send: #announceSearchUpdated to: self.	
+]
+
 { #category : #accessing }
 StSpotterModel >> defaultProcessors [
 
 	^ (StSpotterProcessor allEnabledSubclasses 
 		collect: [ :each | each new ])
 		sort: #order ascending
+]
+
+{ #category : #private }
+StSpotterModel >> disconnectQuery: aQuery [
+
+	aQuery announcer unsubscribe: self
 ]
 
 { #category : #initialization }
@@ -64,9 +80,6 @@ StSpotterModel >> process: aString [
 
 	query := StSpotterQuery on: aString.
 	query processors: self defaultProcessors.
-	query announcer 
-		when: StSpotterCandidateAdded send: #announceSearchUpdated to: self;
-		when: StSpotterAllCandidatesAdded send: #announceSearchUpdated to: self.
 	self activateQuery: query.
 	query process
 ]
