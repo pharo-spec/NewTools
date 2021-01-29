@@ -259,6 +259,7 @@ MessageList >> removeMethods [
 
 { #category : #selecting }
 MessageList >> selectIndex: anInteger [
+
 	listPresenter selectIndex: anInteger
 ]
 
