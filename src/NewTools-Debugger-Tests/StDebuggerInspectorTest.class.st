@@ -52,6 +52,21 @@ StDebuggerInspectorTest >> testSetDefaultLayoutSpec [
 ]
 
 { #category : #tests }
+StDebuggerInspectorTest >> testShouldUpdateContext [
+
+	| debugger |
+	debugger := StTestDebuggerProvider new
+		            debuggerWithFailingAssertionContext.
+	session := debugger session.
+	self assert: (inspector
+			 shouldUpdateContext: session interruptedContext sender
+			 with: session interruptedContext).
+	self deny: (inspector
+			 shouldUpdateContext: session interruptedContext
+			 with: session interruptedContext)
+]
+
+{ #category : #tests }
 StDebuggerInspectorTest >> testUpdateLayoutForContextsWithAssertionFailure [
 	| debugger assertionFailure |
 	debugger := StTestDebuggerProvider new
@@ -70,6 +85,21 @@ StDebuggerInspectorTest >> testUpdateLayoutForContextsWithAssertionFailure [
 	self
 		assert: assertionFailure expectedObject
 		equals: ((session interruptedContext tempNamed: #aStringOrBlock) at: 1)
+]
+
+{ #category : #tests }
+StDebuggerInspectorTest >> testUpdateLayoutForContextsWithShouldntRaiseFailure [
+	| debugger assertionFailure |
+	debugger := StTestDebuggerProvider new debuggerWithFailingShouldntRaiseContext.
+	session := debugger session.
+	inspector
+		updateLayoutForContexts: session interruptedContext
+		isAssertionFailure: true.
+	assertionFailure := inspector assertionFailure.
+	self
+		deny: inspector currentLayoutSpec
+		equals: inspector assertionLayoutSpec.
+	
 ]
 
 { #category : #tests }

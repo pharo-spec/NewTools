@@ -27,6 +27,58 @@ SindarinCommandsTest >> tearDown [
 	super tearDown
 ]
 
+{ #category : #'tests - step to instance creation' }
+SindarinCommandsTest >> testDebuggerOnNextInstanceCreation [
+
+	| command |
+	debugger := SindarinTestCommandDebugger new.
+	debugger session: (StTestDebuggerProvider new debuggerWithContext:
+			 [ Object new ] asContext) session.
+
+	command := SindarinStepToNextInstanceCreation forContext: debugger.
+	command execute.
+	self
+		assert: debugger session context method
+		identicalTo: (Object class lookupSelector: #new).
+	self
+		assert: debugger session context receiver
+		identicalTo: Object
+]
+
+{ #category : #'tests - step to instance creation' }
+SindarinCommandsTest >> testNoNextInstanceCreationAfterMaxSearchDepth [
+
+	| command |
+	debugger := SindarinTestCommandDebugger new.
+	debugger session: (StTestDebuggerProvider new debuggerWithContext:
+			 [ object acceptVisitor: visitor ] asContext) session.
+			
+	debugger session stepIntoUntil: [ :currentContext | 
+		currentContext method == (object class >> #acceptVisitor:) ].
+
+	command := SindarinStepToNextInstanceCreation forContext: debugger.
+	command execute.
+	self
+		assert: command errorString
+		equals: command notFoundInCurrentContextString
+]
+
+{ #category : #'tests - step to instance creation' }
+SindarinCommandsTest >> testNoNextInstanceCreationBeforeContextReturn [
+
+	| command |
+	debugger := SindarinTestCommandDebugger new.
+	debugger session: (StTestDebuggerProvider new debuggerWithContext:
+			 [ object doNotAcceptVisitor: nil ] asContext) session.
+
+	command := SindarinStepToNextInstanceCreation forContext: debugger.
+	command maxDepth: 2.
+	command execute.
+	self
+		assert: command errorString
+		equals: command notFoundErrorString
+]
+
 { #category : #'tests - step to next call' }
 SindarinCommandsTest >> testStepToNextCallInClass [
 
@@ -133,4 +185,20 @@ SindarinCommandsTest >> testStepToNextCallInObject [
 		assert: debugger session context method
 		identicalTo: visitor class >> #visitTestObject:.
 	self assert: debugger session context receiver identicalTo: originalReceiver
+]
+
+{ #category : #'tests - step to instance creation' }
+SindarinCommandsTest >> testStepToNextInstanceCreation [
+
+	| command |
+	debugger := SindarinTestCommandDebugger new.
+	debugger session: (StTestDebuggerProvider new debuggerWithContext:
+			 [ object createInstanceWithNew ] asContext) session.
+
+	command := SindarinStepToNextInstanceCreation forContext: debugger.
+	command execute.
+	self
+		assert: debugger session context method
+		identicalTo: (object class class lookupSelector: #new).
+	self assert: debugger session context receiver identicalTo: object class
 ]

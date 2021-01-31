@@ -10,6 +10,9 @@ Class {
 		'contextPredicate',
 		'topContext'
 	],
+	#classVars : [
+		'ShouldFilterStack'
+	],
 	#category : #'NewTools-Debugger-Model'
 }
 
@@ -19,6 +22,27 @@ StDebuggerActionModel class >> on: aDebugSession [
 	^ self basicNew
 		  session: aDebugSession;
 		  initialize
+]
+
+{ #category : #asserting }
+StDebuggerActionModel class >> shouldFilterStack [
+	^ShouldFilterStack ifNil:[ShouldFilterStack := true]
+]
+
+{ #category : #asserting }
+StDebuggerActionModel class >> shouldFilterStack: aBoolean [
+	ShouldFilterStack := aBoolean
+]
+
+{ #category : #settings }
+StDebuggerActionModel class >> shouldFilterStackSettingsOn: aBuilder [
+	<systemsettings>
+	(aBuilder setting: #shouldFilterStack)
+		label: 'Filter the debugger stack';
+		target: self;
+		default: true;
+		parent: #debugging;
+		description: 'Defines if methods with pragma #debuggerCompleteToSender are filtered (hidden) in the debugger stack'
 ]
 
 { #category : #'debug - session' }
@@ -94,6 +118,7 @@ StDebuggerActionModel >> fileOutMethod: aMethod [
 { #category : #'debug - stack' }
 StDebuggerActionModel >> filterStack: aStack [
 	| context contextsToReject |	
+	self class shouldFilterStack ifFalse: [  ^aStack ].
 	context := aStack first.
 	contextsToReject := 0.
 
@@ -166,6 +191,11 @@ StDebuggerActionModel >> isInterruptedContextAnAssertEqualsFailure [
 ]
 
 { #category : #'debug - predicates' }
+StDebuggerActionModel >> isInterruptedContextDead [
+	^ self contextPredicate isContextDead
+]
+
+{ #category : #'debug - predicates' }
 StDebuggerActionModel >> isInterruptedContextDoesNotUnderstand [
 	^self contextPredicate isContextDoesNotUnderstand
 
@@ -187,9 +217,10 @@ StDebuggerActionModel >> isInterruptedContextSubclassResponsibilityException [
 	^ self contextPredicate isContextSubclassResponsibilityException
 ]
 
-{ #category : #'debug - stack' }
+{ #category : #'debug - execution' }
 StDebuggerActionModel >> peelToFirstLike: aContext [
-	self session peelToFirstLike: aContext
+	self session peelToFirstLike: aContext.
+	self updateTopContext
 ]
 
 { #category : #context }

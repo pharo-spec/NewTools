@@ -7,6 +7,16 @@ Class {
 	#category : #'NewTools-Sindarin-Commands-Tests'
 }
 
+{ #category : #lessons }
+SindarinTestObjectToVisit class >> basicNewInstantiation [
+	^self basicNew
+]
+
+{ #category : #lessons }
+SindarinTestObjectToVisit class >> newInstantiation [
+	^self new
+]
+
 { #category : #visitors }
 SindarinTestObjectToVisit >> acceptVisitor: aVisitor [
 
@@ -31,6 +41,16 @@ SindarinTestObjectToVisit >> acceptVisitorWithError: visitor [
 
 	visitor dnu
   
+]
+
+{ #category : #'instance creation' }
+SindarinTestObjectToVisit >> createInstanceWithBasicNew [
+	^self class basicNewInstantiation 
+]
+
+{ #category : #'instance creation' }
+SindarinTestObjectToVisit >> createInstanceWithNew [
+	^self class newInstantiation 
 ]
 
 { #category : #visitors }

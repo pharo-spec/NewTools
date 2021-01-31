@@ -42,3 +42,15 @@ SindarinTestCommandDebugger >> setSessionHolderSubscriptions [
 SindarinTestCommandDebugger >> sindarinDebugger [
 	^ SindarinDebugger attachTo: session
 ]
+
+{ #category : #removing }
+SindarinTestCommandDebugger >> toolbar [
+
+	^ self
+]
+
+{ #category : #gui }
+SindarinTestCommandDebugger >> warning: aString for: aSindarinTestCommandDebugger [
+
+	^ self
+]
