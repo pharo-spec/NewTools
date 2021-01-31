@@ -237,14 +237,14 @@ StExternalBrowserPresenter >> refreshClasses: pack [
 	self resetClassSelection.
 	pack 
 		ifNil: [ classes items: #() ] 
-		ifNotNil: [ classes items: (self classesOfPackage: pack)]. 
+		ifNotNil: [ classes items: (self classesOfPackage: pack) asArray]. 
 
 ]
 
 { #category : #refresh }
 StExternalBrowserPresenter >> resetClassSelection [
-	self flag: #fixme.
-	"does not work self classes selectIndex: 1"
+	
+	self classes unselectAll
 ]
 
 { #category : #refresh }
@@ -255,18 +255,13 @@ StExternalBrowserPresenter >> resetMethodBodyPane [
 
 { #category : #refresh }
 StExternalBrowserPresenter >> resetProtocolSelection [
-	self flag: #fixme.
-	" 
-	self protocols selectIndex: 1
-	does not work
-	"
+
+	self protocols unselectAll
 ]
 
 { #category : #refresh }
 StExternalBrowserPresenter >> resetSelectorSelection [
-	self flag: #fixme.
-	
-	"does not work self selectors selectIndex: 1"
+	self selectors unselectAll
 ]
 
 { #category : #accessing }
@@ -324,7 +319,7 @@ StExternalBrowserPresenter >> wireClasses [
 { #category : #initialization }
 StExternalBrowserPresenter >> wirePackages [
 	packages whenSelectionChangedDo: [ :selection | 
-		self halt. self refreshClasses: selection selectedItem ].
+		self refreshClasses: selection selectedItem ].
 
 
 	
