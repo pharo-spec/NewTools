@@ -125,21 +125,18 @@ StExternalChangesBrowserPresenter class >> taskbarIconName [
 { #category : #menu }
 StExternalChangesBrowserPresenter >> buildMenu: aMenu [
 
-	aMenu
-		add: 'File in all selected'
-		target: self
-		selector: #fileIn:
-		argumentList: { changes selectedItems }.
-	
-	aMenu
-		addToggle: 'Compare method to current'
-		target: self
-		selector: #compareToCurrent:
-		getStateSelector:nil
-		enablementSelector: #canCompareToCurrent
-		argumentList: { changes selectedItem }.
-
-	^ aMenu
+	aMenu addGroup: [:aGroup |
+		aGroup addItem: [ :item |
+			item
+				name: 'File in all selected';
+				action: [ self fileIn: changes selectedItems ]
+				].
+		aGroup addItem: [ :item |
+			item
+				name: 'Compare method to current';
+				action: [ self compareToCurrent: changes selectedItem ]
+				]]
+		
 ]
 
 { #category : #menu }
@@ -227,7 +224,7 @@ StExternalChangesBrowserPresenter >> fileInSelectedButton [
 { #category : #initialization }
 StExternalChangesBrowserPresenter >> initialExtent [
 
-	^ 500@600
+	^ 500@900
 ]
 
 { #category : #initialization }
@@ -237,6 +234,9 @@ StExternalChangesBrowserPresenter >> initializePresenters [
 	changes := self newList.
 	changes display: [ :elem | self changeDescription: elem ].
 	changes beMultipleSelection.
+		self flag: #fixMe.
+		"What is the pattern"
+	changes contextMenu: (self buildMenu: SpMenuPresenter new).
 
 	selectAllButton := self newButton.
 	selectAllButton
