@@ -736,7 +736,8 @@ StDebugger >> initializeStack [
 			self expandStackIfLastItemIsSelected.
 			self updateWindowTitle ] ].
 	stackHeader := self instantiate: StHeaderBar.
-	stackHeader label: 'Stack'
+	stackHeader label: 'Stack'.
+	stackHeader toolbarActions: (CmCommandGroup new register: (StDebuggerSettingsCommand forSpecWithIconNamed: #configuration); asSpecGroup)
 ]
 
 { #category : #initialization }
@@ -1132,7 +1133,7 @@ StDebugger >> updateCodeFromContext: aContext [
 	aContext sourceCode = self code text 
 		ifFalse: [ self updateSourceCodeFor: aContext ].
 	self code beForContext: aContext.
-	
+	self code selectionInterval: (selectionInterval last to: selectionInterval last - 1).
 	self
 		updateCodeTextSegmentDecoratorsIn: aContext
 		forInterval: selectionInterval.
