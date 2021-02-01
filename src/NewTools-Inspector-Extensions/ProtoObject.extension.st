@@ -34,7 +34,7 @@ ProtoObject >> inspectorNodes [
 			StInspectorProtoObjectNode 
 				hostObject: self index: index 
 				slotName: ivName ]) 
-		sort: [ :aNode :anotherNode | aNode label < anotherNode label ]	
+		sort: [ :aNode :anotherNode | aNode label < anotherNode label ]
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
