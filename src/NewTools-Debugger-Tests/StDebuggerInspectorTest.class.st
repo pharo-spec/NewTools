@@ -73,6 +73,15 @@ StDebuggerInspectorTest >> testShouldUpdateContext [
 ]
 
 { #category : #tests }
+StDebuggerInspectorTest >> testToggleMaximizeAssertionSpec [
+
+	|oldFlag|
+	oldFlag := StDebuggerInspector maximizeAssertionSpec.
+	StDebuggerInspector toggleMaximizeAssertionSpec.
+	self assert: StDebuggerInspector maximizeAssertionSpec equals: oldFlag not
+]
+
+{ #category : #tests }
 StDebuggerInspectorTest >> testUpdateLayoutForContextsWithAssertionFailure [
 	| debugger assertionFailure |
 	debugger := StTestDebuggerProvider new

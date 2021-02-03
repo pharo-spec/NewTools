@@ -60,6 +60,11 @@ StDebuggerInspector class >> title [
 	 ^'Debugger Inspection'
 ]
 
+{ #category : #specs }
+StDebuggerInspector class >> toggleMaximizeAssertionSpec [
+	self maximizeAssertionSpec: self maximizeAssertionSpec not
+]
+
 { #category : #accessing }
 StDebuggerInspector >> assertionFailure [
 	^assertionFailure 
