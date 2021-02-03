@@ -17,6 +17,9 @@ Class {
 		'currentLayout',
 		'currentLayoutSpec'
 	],
+	#classInstVars : [
+		'maximizeAssertionSpec'
+	],
 	#category : #'NewTools-Debugger-View'
 }
 
@@ -34,6 +37,16 @@ StDebuggerInspector class >> defaultSpec [
 	^ SpBoxLayout newVertical
 		  add: #inspector;
 		  yourself
+]
+
+{ #category : #specs }
+StDebuggerInspector class >> maximizeAssertionSpec [
+	^maximizeAssertionSpec ifNil:[maximizeAssertionSpec := false]
+]
+
+{ #category : #specs }
+StDebuggerInspector class >> maximizeAssertionSpec: aboolean [
+	maximizeAssertionSpec := aboolean
 ]
 
 { #category : #'instance creation' }

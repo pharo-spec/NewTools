@@ -18,6 +18,7 @@ StDebuggerInspectorTest >> setUp [
 { #category : #running }
 StDebuggerInspectorTest >> tearDown [
 	session ifNotNil:[session clear].
+	StDebuggerInspector maximizeAssertionSpec: nil.
 	super tearDown
 ]
 
@@ -25,6 +26,11 @@ StDebuggerInspectorTest >> tearDown [
 StDebuggerInspectorTest >> testDefaultLayoutSpec [
 	
 	self assert: inspector currentLayoutSpec equals: inspector defaultLayoutSpec
+]
+
+{ #category : #tests }
+StDebuggerInspectorTest >> testMaximizeAssertionSpec [
+	self deny: StDebuggerInspector maximizeAssertionSpec
 ]
 
 { #category : #tests }
