@@ -15,18 +15,37 @@ Class {
 		'rawInspectionSelectionCache',
 		'assertionFailure',
 		'currentLayout',
-		'currentLayoutSpec'
+		'currentLayoutSpec',
+		'lateralToolbar'
+	],
+	#classInstVars : [
+		'maximizeAssertionSpec'
 	],
 	#category : #'NewTools-Debugger-View'
 }
 
 { #category : #specs }
 StDebuggerInspector class >> assertionFailureSpec [
-	^ SpPanedLayout newVertical
-		position: 40 percent;
-		add: #assertionFailure;
-		add: #inspector;
-		yourself
+
+	| assertionFailureLayout |
+	assertionFailureLayout := SpPanedLayout newVertical.
+	assertionFailureLayout position: (self maximizeAssertionSpec
+			 ifTrue: [ 95 percent ]
+			 ifFalse: [ 40 percent ]).
+	assertionFailureLayout add: (SpBoxLayout newHorizontal
+			 add: (SpBoxLayout newVertical
+					  add: #lateralToolbar
+					  expand: false
+					  fill: false
+					  padding: 0;
+					  yourself)
+			 expand: false;
+			 add: #assertionFailure;
+			 yourself).
+
+	self maximizeAssertionSpec ifFalse: [ 
+		assertionFailureLayout add: #inspector ].
+	^ assertionFailureLayout
 ]
 
 { #category : #specs }
@@ -34,6 +53,16 @@ StDebuggerInspector class >> defaultSpec [
 	^ SpBoxLayout newVertical
 		  add: #inspector;
 		  yourself
+]
+
+{ #category : #specs }
+StDebuggerInspector class >> maximizeAssertionSpec [
+	^maximizeAssertionSpec ifNil:[maximizeAssertionSpec := false]
+]
+
+{ #category : #specs }
+StDebuggerInspector class >> maximizeAssertionSpec: aboolean [
+	maximizeAssertionSpec := aboolean
 ]
 
 { #category : #'instance creation' }
@@ -45,6 +74,11 @@ StDebuggerInspector class >> openOn: anObject [
 { #category : #specs }
 StDebuggerInspector class >> title [
 	 ^'Debugger Inspection'
+]
+
+{ #category : #specs }
+StDebuggerInspector class >> toggleMaximizeAssertionSpec [
+	self maximizeAssertionSpec: self maximizeAssertionSpec not
 ]
 
 { #category : #accessing }
@@ -92,11 +126,32 @@ StDebuggerInspector >> getRawInspectorSelectedPath [
 ]
 
 { #category : #initialization }
+StDebuggerInspector >> initializeLateralToolbar [
+
+	| button |
+	lateralToolbar := self newToolbar.
+	lateralToolbar beIcons.
+	button := self newToolbarButton.
+
+	button
+		label: '';
+		icon: (self iconNamed: #expandBox);
+		help: 'Expand the diff view';
+		action: [ 
+			self class toggleMaximizeAssertionSpec.
+			self setAssertionLayout ];
+		borderWidth: 0.
+
+	lateralToolbar add: button
+]
+
+{ #category : #initialization }
 StDebuggerInspector >> initializePresenters [
 
 	label := self newLabel.
 	inspector := self instantiate: StInspector on: self model.
-	currentLayoutSpec := self defaultLayoutSpec
+	currentLayoutSpec := self defaultLayoutSpec.
+	self initializeLateralToolbar
 ]
 
 { #category : #accessing }
