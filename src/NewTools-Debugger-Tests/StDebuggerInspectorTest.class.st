@@ -34,6 +34,29 @@ StDebuggerInspectorTest >> testMaximizeAssertionSpec [
 ]
 
 { #category : #tests }
+StDebuggerInspectorTest >> testMaximizedAssertionLayoutSpec [
+	|inspectorLayout|
+	
+	inspector class maximizeAssertionSpec: true.
+	inspector setAssertionLayout. 
+	inspectorLayout := inspector layout.
+	self assert: inspectorLayout children size equals: 1.
+	self assert: inspectorLayout children first class identicalTo: SpBoxLayout 
+]
+
+{ #category : #tests }
+StDebuggerInspectorTest >> testMinimizedAssertionLayoutSpec [
+	|inspectorLayout|
+	
+	inspector class maximizeAssertionSpec: false.
+	inspector setAssertionLayout. 
+	inspectorLayout := inspector layout.
+	self assert: inspectorLayout children size equals: 2.
+	self assert: inspectorLayout children first class identicalTo: SpBoxLayout.
+	self assert: inspectorLayout children second equals: #inspector
+]
+
+{ #category : #tests }
 StDebuggerInspectorTest >> testSetAssertionLayoutSpec [
 	|inspectorLayout expectedLayout|
 	inspector setAssertionLayout. 
