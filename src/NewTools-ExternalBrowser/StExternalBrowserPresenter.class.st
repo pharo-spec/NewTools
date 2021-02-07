@@ -24,21 +24,21 @@ StExternalBrowserPresenter class >> browseStream: aStream [
 StExternalBrowserPresenter class >> defaultSpec [
 	<spec: #default>
 	
-	^ SpBoxLayout  
-			newTopToBottom 
-			add: 
-			 ( SpBoxLayout newLeftToRight
-					add:  
-					(SpBoxLayout newTopToBottom
-						add: #packages;
-						add: #showClassSide height: 16;
-						yourself);
-					 
-					add: #classes;
-					add: #protocols;
-					add: #selectors ;
+	^ SpPanedLayout newTopToBottom 
+		add: (SpPanedLayout newLeftToRight
+			add: (SpPanedLayout newLeftToRight 
+				add: (SpBoxLayout newTopToBottom
+					add: #packages;
+					add: #showClassSide expand: false;
 					yourself);
-			add: #method; 
+				add: #classes;
+				yourself);
+			add: (SpPanedLayout newLeftToRight 
+				add: #protocols;
+				add: #selectors ;
+				yourself);
+			yourself);
+		add: #method; 
 		yourself
 ]
 
@@ -61,10 +61,7 @@ StExternalBrowserPresenter class >> fileReaderServicesForFile: fullName suffix: 
 { #category : #'instance creation' }
 StExternalBrowserPresenter class >> openOn: model [
 
-	self basicNew
-		model: model;
-		initialize;
-		openWithSpec
+	^ (self on: model) openWithSpec
 ]
 
 { #category : #'System-FileRegistry' }
@@ -113,19 +110,14 @@ StExternalBrowserPresenter >> classesOfPackage: aPackage [
 
 { #category : #initialization }
 StExternalBrowserPresenter >> connectPresenters [
+	
 	self wirePackages.
 	self wireClasses.
 	self wireProtocols.
 	self wireSelectors.
 	
-	showClassSide 
-		whenChangedDo: [ self refreshClasses: self packages selectedItem ]
-]
-
-{ #category : #initialization }
-StExternalBrowserPresenter >> initialExtent [
-
-	^ 800@600
+	showClassSide whenChangedDo: [ 
+		self refreshClasses: self packages selectedItem ]
 ]
 
 { #category : #initialization }
@@ -135,6 +127,7 @@ StExternalBrowserPresenter >> initializeClassList [
 
 { #category : #initialization }
 StExternalBrowserPresenter >> initializeMethodBodyPane [
+
 	method := self newCode
 ]
 
@@ -147,6 +140,7 @@ StExternalBrowserPresenter >> initializePackageList [
 
 { #category : #initialization }
 StExternalBrowserPresenter >> initializePresenters [
+
 	self initializePackageList.
 	self initializeClassList.
 	self initializeProtocolList.
@@ -155,15 +149,7 @@ StExternalBrowserPresenter >> initializePresenters [
 	
 	showClassSide := self newCheckBox.
 	showClassSide label: 'Class side'.
-	showClassSide state: false.
-	
-	self flag: #fixMe.
-	self focusOrder
-		add: packages;
-		add: classes;
-		add: protocols;
-		add: selectors;
-		add: method
+	showClassSide state: false
 ]
 
 { #category : #initialization }
@@ -182,7 +168,9 @@ StExternalBrowserPresenter >> initializeSelectorList [
 { #category : #initialization }
 StExternalBrowserPresenter >> initializeWindow: aWindowPresenter [
 
-	aWindowPresenter title: self title
+	aWindowPresenter 
+		initialExtent: self application defaultWindowExtent;
+		title: self title
 ]
 
 { #category : #accessing }
@@ -285,6 +273,12 @@ StExternalBrowserPresenter >> selectorsOfProtocol: aProtocol [
 		methodsInProtocol: self protocols selectedItem) collect: [:each | each selector]
 ]
 
+{ #category : #'accessing model' }
+StExternalBrowserPresenter >> setModelBeforeInitialization: aModel [
+
+	model := aModel
+]
+
 { #category : #'structure accessing' }
 StExternalBrowserPresenter >> showClassDefinition [
 
@@ -344,5 +338,8 @@ StExternalBrowserPresenter >> wireSelectors [
 			selector := selection selectedItem.  
 			selector 
 				ifNil: [ self resetMethodBodyPane ] 
-				ifNotNil: [ method text:  (self methodFor: selector) ]]
+				ifNotNil: [ 
+					method 
+						text: (self methodFor: selector);
+						beForMethod: self classes selectedItem >> selector ] ]
 ]

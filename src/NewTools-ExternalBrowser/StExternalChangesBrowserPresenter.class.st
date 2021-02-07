@@ -57,11 +57,13 @@ StExternalChangesBrowserPresenter class >> example2 [
 StExternalChangesBrowserPresenter class >> fileReaderServicesForFile: fullName suffix: suffix [
 	<fileService>
 	| services |
+	
 	services := OrderedCollection new.
-	(ExternalBrowserPresenter sourceFileSuffixes includes: suffix) |
+	(StExternalBrowserPresenter sourceFileSuffixes includes: suffix) |
 	('changes' = suffix) | (suffix = '*')
 		ifTrue: [ services add: self serviceBrowseCSOrSTFile ].
-	^services
+	
+	^ services
 ]
 
 { #category : #'instance creation' }
