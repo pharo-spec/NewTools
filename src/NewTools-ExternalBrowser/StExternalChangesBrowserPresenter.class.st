@@ -1,6 +1,6 @@
 Class {
 	#name : #StExternalChangesBrowserPresenter,
-	#superclass : #SpPresenter,
+	#superclass : #StPresenter,
 	#instVars : [
 		'changes',
 		'codePane',
@@ -22,19 +22,19 @@ StExternalChangesBrowserPresenter class >> browseRecentLog [
 { #category : #specs }
 StExternalChangesBrowserPresenter class >> defaultSpec [
 	<spec: #default>
-	self flag: #fixme. 
-	"how to avoid hardcoding 24"
-	^ SpBoxLayout 
-		newTopToBottom 
-				add: #changes;
-				add: 
-					(SpBoxLayout 
-						newLeftToRight
+
+	^ SpPanedLayout newTopToBottom
+			position: 45 percent;		 
+			add: #changes;
+			add: (SpBoxLayout newTopToBottom 
+				add: (SpBoxLayout newLeftToRight
 						add: #selectAllButton;
 						add: #deselectAllButton;
-						add: #fileInSelectedButton; yourself )
-				height: 24 ;
-				add: #codePane; 
+						add: #fileInSelectedButton; 
+						yourself)
+					expand: false;
+				add: #codePane;
+				yourself); 
 		yourself
 ]
 
@@ -124,21 +124,16 @@ StExternalChangesBrowserPresenter class >> taskbarIconName [
 	^#smallSaveIcon
 ]
 
-{ #category : #menu }
-StExternalChangesBrowserPresenter >> buildMenu: aMenu [
+{ #category : #initialization }
+StExternalChangesBrowserPresenter >> buildMenu [
 
-	aMenu addGroup: [:aGroup |
-		aGroup addItem: [ :item |
-			item
-				name: 'File in all selected';
-				action: [ self fileIn: changes selectedItems ]
-				].
-		aGroup addItem: [ :item |
-			item
-				name: 'Compare method to current';
-				action: [ self compareToCurrent: changes selectedItem ]
-				]]
-		
+	^ self newMenu 
+		addItem: [ :item | item
+			name: 'File in all selected';
+			action: [ self fileIn: changes selectedItems ] ];
+		addItem: [ :item | item
+			name: 'Compare method to current';
+			action: [ self compareToCurrent: changes selectedItem ] ]
 ]
 
 { #category : #menu }
@@ -196,12 +191,15 @@ StExternalChangesBrowserPresenter >> compareToCurrent: aMethodDeclaration [
 
 { #category : #initialization }
 StExternalChangesBrowserPresenter >> connectPresenters [
+
 	super connectPresenters.
-	changes whenSelectionChangedDo: [ :selection | selection selectedItem  
-														ifNotNil: [ codePane text: selection selectedItem contents ] ].
-	changes contextMenu: [ :menu :shifted | self buildMenu: menu ].
+	changes whenSelectionChangedDo: [ :selection | 
+		selection selectedItem ifNotNil: [ 
+			codePane 
+				interactionModel: (SpCodeNullInteractionModel new);
+				text: selection selectedItem contents ] ].
 	selectAllButton action: [ changes selectAll ].
-	deselectAllButton action: [ changes resetSelection ].
+	deselectAllButton action: [ changes unselectAll ].
 	fileInSelectedButton action: [ self fileIn: changes selectedItemsSorted ]
 ]
 
@@ -236,29 +234,26 @@ StExternalChangesBrowserPresenter >> initializePresenters [
 	changes := self newList.
 	changes display: [ :elem | self changeDescription: elem ].
 	changes beMultipleSelection.
-		self flag: #fixMe.
-		"What is the pattern"
-	changes contextMenu: (self buildMenu: SpMenuPresenter new).
+	changes contextMenu: self buildMenu.
 
 	selectAllButton := self newButton.
-	selectAllButton
-		label: 'select all'.
+	selectAllButton label: 'select all'.
 
 	deselectAllButton := self newButton.
-	deselectAllButton
-		label: 'deselect all'.
+	deselectAllButton label: 'deselect all'.
 		
 	fileInSelectedButton := self newButton.
-	fileInSelectedButton
-		label: 'file in selected'.
+	fileInSelectedButton label: 'file in selected'.
 
-	codePane := self newCode.
+	codePane := self newCode
 ]
 
 { #category : #initialization }
 StExternalChangesBrowserPresenter >> initializeWindow: aWindowPresenter [
 
-	aWindowPresenter title: 'Change Browser'
+	aWindowPresenter 
+		initialExtent: self application defaultWindowExtent;
+		title: 'Change Browser'
 ]
 
 { #category : #accessing }

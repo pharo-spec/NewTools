@@ -271,7 +271,7 @@ StExternalBrowserPresenter >> selectorsOfProtocol: aProtocol [
 		ifFalse: [ self classes selectedItem ]
 		ifTrue: [ self classes selectedItem classSide ].
 	^ ((theSelectedClass methodsInProtocol: self protocols selectedItem) 
-		collect: [:each | each selector ])
+		collect: [ :each | each selector ])
 		sorted
 ]
 
