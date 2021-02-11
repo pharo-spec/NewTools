@@ -1,6 +1,6 @@
 Class {
 	#name : #StExternalBrowserPresenter,
-	#superclass : #SpPresenter,
+	#superclass : #StPresenter,
 	#instVars : [
 		'classes',
 		'packages',
@@ -100,12 +100,13 @@ StExternalBrowserPresenter >> classes [
 
 { #category : #'structure accessing' }
 StExternalBrowserPresenter >> classesOfPackage: aPackage [
-
 	| theClasses |
+
 	theClasses := aPackage classes.
-	^ self showClassSide state
+	^ (self showClassSide state
 		ifTrue: [ theClasses collect: [:each | each classSide ] ]
-		ifFalse: [ theClasses ]
+		ifFalse: [ theClasses ])
+		sorted: #name ascending
 ]
 
 { #category : #initialization }
@@ -217,7 +218,7 @@ StExternalBrowserPresenter >> protocols [
 { #category : #'structure accessing' }
 StExternalBrowserPresenter >> protocolsOfClass: aClass [
 
-	^ aClass protocols
+	^ aClass protocols sorted
 ]
 
 { #category : #refresh }
@@ -264,13 +265,14 @@ StExternalBrowserPresenter >> selectors: anObject [
 
 { #category : #'structure accessing' }
 StExternalBrowserPresenter >> selectorsOfProtocol: aProtocol [ 
-	
 	| theSelectedClass |
+
 	theSelectedClass := self showClassSide state
 		ifFalse: [ self classes selectedItem ]
 		ifTrue: [ self classes selectedItem classSide ].
-	^ (theSelectedClass 
-		methodsInProtocol: self protocols selectedItem) collect: [:each | each selector]
+	^ ((theSelectedClass methodsInProtocol: self protocols selectedItem) 
+		collect: [:each | each selector ])
+		sorted
 ]
 
 { #category : #'accessing model' }
@@ -312,6 +314,7 @@ StExternalBrowserPresenter >> wireClasses [
 
 { #category : #initialization }
 StExternalBrowserPresenter >> wirePackages [
+
 	packages whenSelectionChangedDo: [ :selection | 
 		self refreshClasses: selection selectedItem ].
 
