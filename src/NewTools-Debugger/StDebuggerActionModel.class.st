@@ -98,8 +98,9 @@ StDebuggerActionModel >> contextPredicateFor: aContext [
 { #category : #'debug - predicates' }
 StDebuggerActionModel >> contextSignalsAnException: aContext [
 
-	^ (aContext receiver isKindOf: Exception) and: [ 
-		  aContext selector = #signal ]
+	^ aContext notNil 
+		and: [ (aContext receiver isKindOf: Exception) 
+		and: [  aContext selector = #signal ] ]
 ]
 
 { #category : #'debug - stack' }
