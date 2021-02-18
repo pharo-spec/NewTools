@@ -23,14 +23,9 @@ StMetaBrowser class >> buildCommandsGroupWith: presenter forRoot: aCmCommandsGro
 StMetaBrowser class >> defaultSpec [
 	
 	^ SpPanedLayout newVertical
-		add: (SpBoxLayout newHorizontal
-			spacing: 2;
+		add: (SpPanedLayout newHorizontal
 			add: #classes;
-			add: (SpBoxLayout newVertical
-				spacing: 2;
-				add: #methods;
-				addLast: #methodFilter expand: false fill: false padding: 0;
-				yourself);
+			add: #methods;
 			yourself);
 		add: #source;
 		yourself
@@ -65,11 +60,10 @@ StMetaBrowser >> initializePresenters [
 		roots: { classHierarchy first };
 		children: [ :aClass | classHierarchy select: [ :subclass | subclass superclass == aClass ] ];
 		yourself.
-	methods := self newList
+	methods := (self instantiate: SpFilteringListPresenter)
 		display: [ :each | each selector ];	
 		contextMenu: [ self rootCommandsGroup asMenuPresenter ];
 		yourself.
-	methodFilter := self newTextInput.
 
 	source := self newCode
 		lineNumbers: StPharoSettings codeShowLineNumbers;
@@ -78,8 +72,11 @@ StMetaBrowser >> initializePresenters [
 		whenResetDo: [ self updateSourceWith: self selectedMethod  ];
 		yourself.
 		
-	classes transmitTo: methods transform: [ :aClass | self methodsOf: aClass ].
-	methods transmitDo: [ :aMethod | self updateSourceWith: aMethod ].
+	classes 
+		transmitTo: methods 
+		transform: [ :aClass | self methodsOf: aClass ].
+	methods 
+		transmitDo: [ :aMethod | self updateSourceWith: aMethod ].
 
 	classes selectPath: (Array new: classHierarchy size withAll: 1)
 ]
@@ -101,7 +98,7 @@ StMetaBrowser >> selectedClass [
 { #category : #accessing }
 StMetaBrowser >> selectedMethod [
 
-	^ methods selection selectedItem
+	^ methods selectedItem
 ]
 
 { #category : #accessing }
