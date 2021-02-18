@@ -14,9 +14,15 @@ Class {
 StMetaBrowser class >> buildCommandsGroupWith: presenter forRoot: aCmCommandsGroup [
 
 	aCmCommandsGroup
-		beDisplayedAsGroup;
-		register: (StInspectorInspectSelectedCommand forSpecContext: presenter);
-		register: (StInspectorBrowseSelectedCommand forSpecContext: presenter)
+		register: ((CmCommandGroup named: 'classes') asSpecGroup
+			beDisplayedAsGroup;
+			register: (StInspectorBrowseSelectedCommand forSpecContext: presenter);
+			yourself);
+		register: ((CmCommandGroup named: 'methods') asSpecGroup
+			beDisplayedAsGroup;
+			register: (StInspectorInspectSelectedCommand forSpecContext: presenter);
+			register: (StInspectorBrowseSelectedCommand forSpecContext: presenter);
+			yourself)
 ]
 
 { #category : #specs }
@@ -29,6 +35,12 @@ StMetaBrowser class >> defaultSpec [
 			yourself);
 		add: #source;
 		yourself
+]
+
+{ #category : #initialization }
+StMetaBrowser >> classListMenu [
+	
+	^ (self rootCommandsGroup / 'classes') asMenuPresenter 
 ]
 
 { #category : #'private actions' }
@@ -59,10 +71,11 @@ StMetaBrowser >> initializePresenters [
 		addColumn: (SpStringTableColumn title: 'Class hierarchy' evaluated: #name);
 		roots: { classHierarchy first };
 		children: [ :aClass | classHierarchy select: [ :subclass | subclass superclass == aClass ] ];
+		contextMenu: [ self classListMenu ];
 		yourself.
 	methods := (self instantiate: SpFilteringListPresenter)
 		display: [ :each | each selector ];	
-		contextMenu: [ self rootCommandsGroup asMenuPresenter ];
+		contextMenu: [ self methodListMenu ];
 		yourself.
 
 	source := self newCode
@@ -79,6 +92,12 @@ StMetaBrowser >> initializePresenters [
 		transmitDo: [ :aMethod | self updateSourceWith: aMethod ].
 
 	classes selectPath: (Array new: classHierarchy size withAll: 1)
+]
+
+{ #category : #initialization }
+StMetaBrowser >> methodListMenu [
+	
+	^ (self rootCommandsGroup / 'methods') asMenuPresenter
 ]
 
 { #category : #private }
