@@ -149,8 +149,12 @@ StDebugger class >> codeLayout [
 { #category : #'instance creation' }
 StDebugger class >> debugSession: aDebugSession [
 	| debugger |
+
 	debugger := self on: aDebugSession.
+	aDebugSession application 
+		ifNotNil: [ :app | debugger application: app ].
 	debugger openWithFullView.
+	
 	^ debugger
 ]
 
