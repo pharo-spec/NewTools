@@ -36,12 +36,11 @@ StSendersProcessor >> executeQuery [
 ]
 
 { #category : #'key-bindings' }
-StSendersProcessor >> installKeymappingsOn: aGTSpotterMorph [
+StSendersProcessor >> installKeymappingsOn: aPresenter [
 
-	aGTSpotterMorph
+	aPresenter
 		bindKeyCombination: $n meta
-		ofProcessor: self
-		toAction: [ aGTSpotterMorph onKeyProcessor: self ]
+		toAction: [ aPresenter onKeyProcessor: self ]
 ]
 
 { #category : #filtering }

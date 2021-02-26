@@ -26,9 +26,7 @@ StQuery >> addResult: anEntry [
 
 	spotterContext stream
 		performSymbol: #addCandidate:in:
-		withArguments: {anEntry. processor }.
-
-
+		withArguments: { anEntry. processor }
 ]
 
 { #category : #accessing }
@@ -40,15 +38,13 @@ StQuery >> categoriesSelected [
 { #category : #configuring }
 StQuery >> filterClasses [
 
-	modifiers add: #Classes.
-	self updateSearchingMorph
+	modifiers add: #Classes
 ]
 
 { #category : #configuring }
 StQuery >> filterImplementors [
 
-	modifiers add: #Implementors.
-	self updateSearchingMorph
+	modifiers add: #Implementors
 ]
 
 { #category : #results }
@@ -56,7 +52,7 @@ StQuery >> informAllResultAmount: anInteger [
 
 	spotterContext stream
 		performSymbol: #onAmountChanged:in:
-		withArguments: {anInteger. processor }.
+		withArguments: { anInteger. processor }.
 	
 ]
 
@@ -76,12 +72,14 @@ StQuery >> isSearchEmpty [
 
 { #category : #accessing }
 StQuery >> processor [
+
 	^ processor
 ]
 
 { #category : #accessing }
-StQuery >> processor: anObject [
-	processor := anObject
+StQuery >> processor: aProcessor [
+
+	processor := aProcessor
 ]
 
 { #category : #accessing }
@@ -90,37 +88,20 @@ StQuery >> searchingText [
 	^ query
 ]
 
-{ #category : #accessing }
-StQuery >> textInSearchBar [
-	^ String
-		streamContents: [ :s | 
-			modifiers do: [ :e | s print:e; space ].
-			s nextPutAll: query ]
-]
-
 { #category : #updating }
-StQuery >> updateFromContext: aGTSpotterContext [
+StQuery >> updateFromContext: aSpotterContext [
 	| textParts texts |
 
 	modifiers removeAll.
-	texts := (aGTSpotterContext search ifNil:['']) trimBoth.
-	textParts := texts
-		substrings:
-			{Character space.
-			Character tab}.
+	texts := (aSpotterContext search ifNil:[ '' ]) trimBoth.
+	textParts := texts substrings: { Character space. Character tab }.
 	query := ''.
-
-	textParts
-		do: [ :aPart | 
-			((aPart beginsWith: '#') and: [((texts copyWithout: Character space) includesSubstring: '>>#') not])
-				ifTrue: [ modifiers add: aPart allButFirst asSymbol. ]
-				ifFalse: [ query := (query , ' ' , aPart) trimBoth ] ].
 	
-	spotterContext := aGTSpotterContext
-]
+	textParts do: [ :aPart | 
+		((aPart beginsWith: '#') 
+			and: [ ((texts copyWithout: Character space) includesSubstring: '>>#') not ])
+			ifTrue: [ modifiers add: aPart allButFirst asSymbol ]
+			ifFalse: [ query := (query, ' ', aPart) trimBoth ] ].
 
-{ #category : #updating }
-StQuery >> updateSearchingMorph [
-
-	self processor spotterMorph updateText: self textInSearchBar
+	spotterContext := aSpotterContext
 ]

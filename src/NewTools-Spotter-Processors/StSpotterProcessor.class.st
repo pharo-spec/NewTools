@@ -19,7 +19,6 @@ Class {
 		'filter',
 		'results',
 		'query',
-		'spotterMorph',
 		'running',
 		'textFilteringIterators'
 	],
@@ -130,12 +129,6 @@ StSpotterProcessor >> actLogic [
 ]
 
 { #category : #'spotter-api' }
-StSpotterProcessor >> actOn: anEntry for: aGTSpotterStep [ 
-
-	^ anEntry evaluateFor: aGTSpotterStep
-]
-
-{ #category : #'spotter-api' }
 StSpotterProcessor >> allFilteredCandidates [
 
 	self configureFilter.		
@@ -146,8 +139,8 @@ StSpotterProcessor >> allFilteredCandidates [
 StSpotterProcessor >> configureFilter [
 
 	self ensureFilter.
-	textFilteringIterators do: [:e | 
-		e filteringText: self query searchingText]
+	textFilteringIterators do: [ :each | 
+		each filteringText: self query searchingText ]
 ]
 
 { #category : #configuring }
@@ -160,30 +153,28 @@ StSpotterProcessor >> configureOn: aGTSpotterStep [
 StSpotterProcessor >> ensureFilter [
 
 	^ filter ifNil: [
-		filter := self newSource]
+		filter := self newSource ]
 ]
 
 { #category : #filtering }
 StSpotterProcessor >> executeQuery [
 
-	(self query isSearchEmpty and: [self showForEmptyQuery not]) 
+	(self query isSearchEmpty and: [ self showForEmptyQuery not ]) 
 		ifTrue: [ ^ self ].
 	
 	self configureFilter.
 		
 	results := OrderedCollection new.
-
 	[ self filter atEnd or: [ results size = self maxResults ] ] 
-		whileFalse: [ self filter next ifNotNil: [ :aResult | 
+		whileFalse: [ 
+			self filter next ifNotNil: [ :aResult | 
 				self query addResult: aResult.
-				results add:aResult.
-		]].
+				results add: aResult ] ].
 
-	(results size = self maxResults ) 
+	(results size = self maxResults)
 		ifTrue: [ ^ self ].
 
-	self query informAllResultAmount: results size.	
-
+	self query informAllResultAmount: results size
 ]
 
 { #category : #filtering }
@@ -210,8 +201,7 @@ StSpotterProcessor >> initialize [
 ]
 
 { #category : #'key-bindings' }
-StSpotterProcessor >> installKeymappingsOn: aGTSpotterMorph [ 
-	
+StSpotterProcessor >> installKeymappingsOn: aPresenter [ 
 	"Nothing to do"
 ]
 
@@ -303,7 +293,16 @@ StSpotterProcessor >> order [
 { #category : #accessing }
 StSpotterProcessor >> query [
 
-	^ query ifNil: [ query := StQuery new processor: self; yourself ]
+	^ query ifNil: [ 
+		query := StQuery new 
+			processor: self; 
+			yourself ]
+]
+
+{ #category : #accessing }
+StSpotterProcessor >> query: aQuery [
+
+	query := aQuery
 ]
 
 { #category : #filtering }
@@ -316,11 +315,6 @@ StSpotterProcessor >> render: anEntry [
 StSpotterProcessor >> showForEmptyQuery [
 
 	^ false
-]
-
-{ #category : #accessing }
-StSpotterProcessor >> spotterMorph [
-	^ spotterMorph
 ]
 
 { #category : #accessing }

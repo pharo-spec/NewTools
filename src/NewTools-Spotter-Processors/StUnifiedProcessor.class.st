@@ -75,7 +75,6 @@ StUnifiedProcessor >> calculateLowercaseSourcesOn: anStream [
 
 { #category : #sources }
 StUnifiedProcessor >> calculateUppercaseSourcesOn: anStream [
-
 	| classesBeginsWith classesIncludesString packagesBeginsWith packagesIncludesString wordsAwareClassesSource wordsAwarePackageSource classAndSelectorImplementors |
 	
 	(self categoriesIncludes: #Classes) 
@@ -86,7 +85,9 @@ StUnifiedProcessor >> calculateUppercaseSourcesOn: anStream [
 
 	(self categoriesIncludes: #Packages) 
 		ifTrue: [
-			packagesBeginsWith := (StPackageIterator new collect: [ :e | StPackageEntry on: e ]) asBeginsWithFilter.			
+			packagesBeginsWith := (StPackageIterator new 
+				collect: [ :each | StPackageEntry on: each ]) 
+				asBeginsWithFilter.			
 			textFilteringIterators add: packagesBeginsWith.
 			anStream nextPut: packagesBeginsWith ].
 
@@ -98,13 +99,17 @@ StUnifiedProcessor >> calculateUppercaseSourcesOn: anStream [
 		
 	(self categoriesIncludes: #Packages) 
 		ifTrue: [
-			packagesIncludesString := (StPackageIterator new collect: [ :e | StPackageEntry on: e ]) asSubstringFilter.		
+			packagesIncludesString := (StPackageIterator new 
+				collect: [ :each | StPackageEntry on: each ]) 
+				asSubstringFilter.		
 			textFilteringIterators add: packagesIncludesString.
-			anStream nextPut: packagesIncludesString].
+			anStream nextPut: packagesIncludesString ].
 		
 	(self categoriesIncludes: #Classes) 
 		ifTrue: [
-			wordsAwareClassesSource := StWordsAwareFilter new inner: (StSourceFactory current classesSubstringSource); yourself.
+			wordsAwareClassesSource := StWordsAwareFilter new 
+				inner: (StSourceFactory current classesSubstringSource); 
+				yourself.
 			textFilteringIterators add: wordsAwareClassesSource.
 			anStream nextPut: wordsAwareClassesSource ].
 
@@ -114,20 +119,26 @@ StUnifiedProcessor >> calculateUppercaseSourcesOn: anStream [
 				inner: (StSourceFactory current implementorsSubstringSource); 
 				yourself.
 			textFilteringIterators add: classAndSelectorImplementors.
-			anStream nextPut: classAndSelectorImplementors].
+			anStream nextPut: classAndSelectorImplementors ].
 
 	(self categoriesIncludes: #Packages) 
 		ifTrue: [
-			wordsAwarePackageSource := StWordsAwareFilter new inner: ((StPackageIterator new collect: [ :e | StPackageEntry on: e ]) asSubstringFilter); yourself.
+			wordsAwarePackageSource := StWordsAwareFilter new 
+				inner: ((StPackageIterator new 
+					collect: [ :each | StPackageEntry on: each ]) 
+					asSubstringFilter); 
+				yourself.
 			textFilteringIterators add: wordsAwarePackageSource.
-			anStream nextPut: wordsAwarePackageSource ].
-
+			anStream nextPut: wordsAwarePackageSource ]
 ]
 
 { #category : #sources }
 StUnifiedProcessor >> categoriesIncludes: aCategory [
 
-	^ categories isNil or: [ categories isEmpty or: [ categories includes: aCategory ] ] 
+	^ categories isNil 
+		or: [ categories isEmpty 
+		or: [ (categories includes: aCategory)
+		or: [ categories anySatisfy: [ :each | aCategory asLowercase beginsWith: each asLowercase ] ] ] ]
 ]
 
 { #category : #filtering }
@@ -136,29 +147,28 @@ StUnifiedProcessor >> configureFilter [
 	(categories ~= self query categoriesSelected)
 		ifTrue: [
 			categories := self query categoriesSelected.
-			filter := nil].
+			filter := nil ].
 
 	super configureFilter.
 	
 	"I will clear the duplicates, as a new query have done"
-	filter clearDuplicates.
-	
-
+	filter clearDuplicates
 ]
 
 { #category : #'key-bindings' }
-StUnifiedProcessor >> installKeymappingsOn: aSpotterMorph [
+StUnifiedProcessor >> installKeymappingsOn: aPresenter [
 
-	spotterMorph := aSpotterMorph.
+	aPresenter
+		bindKeyCombination: $b meta
+		toAction: (MessageSend 
+			receiver: self query 
+			selector: #filterClasses).
 
-	aSpotterMorph kmDispatcher
-				bindKeyCombination: $b meta
-				toAction: (MessageSend receiver: self query selector: #filterClasses).
-
-	aSpotterMorph kmDispatcher
-				bindKeyCombination: $m meta
-				toAction: (MessageSend receiver: self query selector: #filterImplementors).
-	
+	aPresenter
+		bindKeyCombination: $m meta
+		toAction: (MessageSend 
+			receiver: self query 
+			selector: #filterImplementors).
 ]
 
 { #category : #'spotter-api' }
@@ -170,12 +180,13 @@ StUnifiedProcessor >> isRelevantForQuery: aString [
 
 { #category : #filtering }
 StUnifiedProcessor >> newSource [
-
 	| uppercaseIterators lowercaseIterators caseSelectorIterator root |
+	
 	textFilteringIterators := OrderedCollection new.
-
-	lowercaseIterators := OrderedCollection streamContents: [ :s | self calculateLowercaseSourcesOn: s].
-	uppercaseIterators := OrderedCollection streamContents: [ :s | self calculateUppercaseSourcesOn: s].
+	lowercaseIterators := OrderedCollection streamContents: [ :stream | 
+		self calculateLowercaseSourcesOn: stream ].
+	uppercaseIterators := OrderedCollection streamContents: [ :stream | 
+		self calculateUppercaseSourcesOn: stream ].
 
 	caseSelectorIterator := StCaseSelectorIterator new 
 		lowercaseIterator: (StSequenceIterator with: lowercaseIterators);
@@ -186,7 +197,10 @@ StUnifiedProcessor >> newSource [
 	root := caseSelectorIterator asWithoutDuplicates.
 		
 	^ root
+]
 
-
-
+{ #category : #filtering }
+StUnifiedProcessor >> newTextFilteringSource [
+	"It should not arrive here"
+	^ nil
 ]

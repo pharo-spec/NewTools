@@ -56,6 +56,14 @@ StSpotter >> activate: aPresenter [
 
 ]
 
+{ #category : #private }
+StSpotter >> defaultModel [
+
+	^ StSpotterModel new
+		whenSearchUpdatedDo: [ self updateResultList ];
+		yourself
+]
+
 { #category : #'private updating' }
 StSpotter >> deferredUpdateResultList [
 	| resultsByClass presenters |
@@ -78,6 +86,14 @@ StSpotter >> deferredUpdateResultList [
 StSpotter >> diveInProcessor: aProcessor [
 	
 	self halt.
+]
+
+{ #category : #private }
+StSpotter >> handleKeyEvent: anEvent [
+			
+	"go back to search text"
+	anEvent keyCharacter isAlphaNumeric 
+		ifTrue: [ searchText takeKeyboardFocus ]
 ]
 
 { #category : #'private actions' }
@@ -113,15 +129,18 @@ StSpotter >> initializePresenters [
 			add: (previewContainer := SpBoxLayout newVertical);
 			yourself);
 		yourself).
-		
-	"resultList
+
+	resultList
 		bindKeyCombination: Character arrowUp asKeyCombination 
-			toAction: [ self transferFocusToSearchText ]."
-	resultList 
+			toAction: [ :target :widget :event |
+				self transferFocusToSearchText.
+				event wasHandled: false ];
 		whenSelectionChangedDo: [ :selection | 
 			self showPreview: selection selectedItem ];
 		whenActivatedDo: [ :selection | 
 			self activate: selection selectedItem ].
+	resultList eventHandler 
+		whenKeyDownDo: [ :anEvent | self handleKeyEvent: anEvent ].
 
 	searchText 
 		placeholder: 'Search...';
@@ -140,16 +159,16 @@ StSpotter >> initializeWindow: aWindowPresenter [
 		withoutDecorations;
 		initialExtent: 750@400;
 		whenOpenedDo: [ self startProcessing ];
-		centered
+		centered.
+
+	self model processors do: [ :each | 
+		each installKeymappingsOn: aWindowPresenter ]
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing model' }
 StSpotter >> model [
 
-	^ model ifNil: [ 
-		model := StSpotterModel new
-			whenSearchUpdatedDo: [ self updateResultList ];
-			yourself ]
+	^ model ifNil: [ model := self defaultModel ]
 ]
 
 { #category : #'private updating' }
@@ -164,6 +183,13 @@ StSpotter >> newSpotterHeaderPresenter: aProcessor [
 	^ (self instantiate: StSpotterHeaderPresenter on: aProcessor)
 		whenDiveInDo: [ :processor | self diveInProcessor: processor ];
 		yourself
+]
+
+{ #category : #'accessing model' }
+StSpotter >> setModelBeforeInitialization: aSpotterModel [
+
+	model := aSpotterModel.
+	model whenSearchUpdatedDo: [  ]
 ]
 
 { #category : #'private actions' }

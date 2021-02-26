@@ -58,7 +58,7 @@ StSpotterHeaderPresenter >> setModelBeforeInitialization: aProcessor [
 { #category : #initialization }
 StSpotterHeaderPresenter >> updatePresenter [
 
-	labelPresenter label: self model title
+	labelPresenter label: '#', self model title
 ]
 
 { #category : #enumerating }

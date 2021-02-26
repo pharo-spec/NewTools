@@ -5,7 +5,8 @@ Class {
 		'candidateAddedAction',
 		'searchUpdatedAction',
 		'queries',
-		'activeQuery'
+		'activeQuery',
+		'processors'
 	],
 	#category : #'NewTools-Spotter-Model'
 }
@@ -42,7 +43,7 @@ StSpotterModel >> connectQuery: aQuery [
 		when: StSpotterAllCandidatesAdded send: #announceSearchUpdated to: self.	
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 StSpotterModel >> defaultProcessors [
 
 	^ (StSpotterProcessor allEnabledSubclasses 
@@ -79,16 +80,22 @@ StSpotterModel >> process: aString [
 	query ifNotNil: [ ^ self activateQuery: query ].
 
 	query := StSpotterQuery on: aString.
-	query processors: self defaultProcessors.
+	query processors: self processors.
 	self activateQuery: query.
 	query process
+]
+
+{ #category : #accessing }
+StSpotterModel >> processors [
+
+	^ processors ifNil: [ processors := self defaultProcessors ]
 ]
 
 { #category : #private }
 StSpotterModel >> queryFor: aString [
 
 	^ queries 
-		detect: [ :each | each text = aString ]
+		detect: [ :each | each searchText = aString ]
 		ifNone: [ nil ]
 ]
 
