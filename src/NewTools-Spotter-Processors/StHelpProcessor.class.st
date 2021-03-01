@@ -32,12 +32,11 @@ StHelpProcessor >> collection [
 ]
 
 { #category : #'key-bindings' }
-StHelpProcessor >> installKeymappingsOn: aGTSpotterMorph [
+StHelpProcessor >> installKeymappingsOn: aPresenter [
 
-	aGTSpotterMorph
+	aPresenter
 		bindKeyCombination: $h meta
-		ofProcessor: self
-		toAction: [ aGTSpotterMorph onKeyProcessor: self ]
+		toAction: [ aPresenter onKeyProcessor: self ]
 ]
 
 { #category : #filtering }

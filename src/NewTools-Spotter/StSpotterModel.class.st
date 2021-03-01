@@ -5,7 +5,9 @@ Class {
 		'candidateAddedAction',
 		'searchUpdatedAction',
 		'queries',
-		'activeQuery'
+		'activeQuery',
+		'processors',
+		'amountChangedAction'
 	],
 	#category : #'NewTools-Spotter-Model'
 }
@@ -19,10 +21,28 @@ StSpotterModel >> activateQuery: aQuery [
 ]
 
 { #category : #private }
-StSpotterModel >> announceSearchUpdated [
+StSpotterModel >> announceAllCandidatesAdded: ann [
 
 	searchUpdatedAction ifNil: [ ^ self ].
-	searchUpdatedAction value
+	
+	ann candidateLinks do: [ :each |
+		searchUpdatedAction value: each ]
+]
+
+{ #category : #private }
+StSpotterModel >> announceAmountChanged: ann [
+
+	amountChangedAction ifNil: [ ^ self ].
+	amountChangedAction 
+		value: ann category 
+		value: ann amount
+]
+
+{ #category : #private }
+StSpotterModel >> announceCandidateAdded: ann [
+
+	searchUpdatedAction ifNil: [ ^ self ].
+	searchUpdatedAction value: ann candidateLink
 ]
 
 { #category : #processing }
@@ -38,11 +58,12 @@ StSpotterModel >> asyncProcess: aString [
 StSpotterModel >> connectQuery: aQuery [
 
 	aQuery announcer
-		when: StSpotterCandidateAdded send: #announceSearchUpdated to: self;
-		when: StSpotterAllCandidatesAdded send: #announceSearchUpdated to: self.	
+		when: StSpotterCandidateAdded send: #announceCandidateAdded: to: self;
+		when: StSpotterAllCandidatesAdded send: #announceAllCandidatesAdded: to: self;
+		when: StSpotterCandidatesAmountChanged send: #announceAmountChanged: to: self.	
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 StSpotterModel >> defaultProcessors [
 
 	^ (StSpotterProcessor allEnabledSubclasses 
@@ -79,16 +100,22 @@ StSpotterModel >> process: aString [
 	query ifNotNil: [ ^ self activateQuery: query ].
 
 	query := StSpotterQuery on: aString.
-	query processors: self defaultProcessors.
+	query processors: self processors.
 	self activateQuery: query.
 	query process
+]
+
+{ #category : #accessing }
+StSpotterModel >> processors [
+
+	^ processors ifNil: [ processors := self defaultProcessors ]
 ]
 
 { #category : #private }
 StSpotterModel >> queryFor: aString [
 
 	^ queries 
-		detect: [ :each | each text = aString ]
+		detect: [ :each | each searchText = aString ]
 		ifNone: [ nil ]
 ]
 
@@ -105,6 +132,12 @@ StSpotterModel >> startProcessing [
 
 	"First query: empty (to bring windows, menu, etc.)"
 	self asyncProcess: ''
+]
+
+{ #category : #events }
+StSpotterModel >> whenAmountChangedDo: aBlock [
+
+	amountChangedAction := aBlock
 ]
 
 { #category : #events }

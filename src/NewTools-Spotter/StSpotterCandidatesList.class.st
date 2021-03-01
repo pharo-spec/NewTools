@@ -181,11 +181,11 @@ StSpotterCandidatesList >> onAmountChanged: anInteger in: aProcessor [
 	"Amount must be non-negative"
 	"If amount is not positive there is no need to do anything"
 	
-	"anInteger <= 0 ifTrue: [ ^ self ].
-	self announcer announce: (GTSpotterCandidatesAmountChanged new 
+	anInteger <= 0 ifTrue: [ ^ self ].
+	self announcer announce: (StSpotterCandidatesAmountChanged new 
 		amount: anInteger; 
 		category: aProcessor; 
-		yourself)"
+		yourself)
 ]
 
 { #category : #processors }

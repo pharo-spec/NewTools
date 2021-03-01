@@ -2,20 +2,26 @@ Class {
 	#name : #StSpotterQuery,
 	#superclass : #Object,
 	#instVars : [
-		'text',
 		'connected',
 		'candidatesList',
 		'processors',
-		'candidateLinks'
+		'candidateLinks',
+		'searchText'
 	],
 	#category : #'NewTools-Spotter-Model'
 }
 
 { #category : #'instance creation' }
+StSpotterQuery class >> new [
+
+	self error: 'Use #on:'
+]
+
+{ #category : #'instance creation' }
 StSpotterQuery class >> on: aString [
 
-	^ self new 
-		text: aString; 
+	^ self basicNew 
+		initializeText: aString; 
 		yourself
 ]
 
@@ -62,6 +68,15 @@ StSpotterQuery >> disconnect [
 	connected := false
 ]
 
+{ #category : #private }
+StSpotterQuery >> filteringText [
+		
+	^ self searchText substrings 
+		detect: [ :each | each beginsWith: '#' ]
+		ifFound: [ :categoryQuery | categoryQuery ]
+		ifNone: [ nil ]
+]
+
 { #category : #initialization }
 StSpotterQuery >> initialize [
 
@@ -82,6 +97,13 @@ StSpotterQuery >> initializeCandidatesList [
 		when: GTSpotterQueryStarted send: #propagateEvent: to: self;
 		when: GTSpotterQueryEnded send: #propagateEvent: to: self."
 
+]
+
+{ #category : #initialization }
+StSpotterQuery >> initializeText: aString [ 
+
+	searchText := aString.
+	self initialize
 ]
 
 { #category : #testing }
@@ -118,13 +140,12 @@ StSpotterQuery >> newStreamFor: candidates [
 ]
 
 { #category : #processing }
-StSpotterQuery >> process [ 
-	| context stream |
+StSpotterQuery >> process [
+	| stream context |
 
 	stream := self newStreamFor: candidatesList.
-	context := self newContextFor: stream text: self text.
-	
-	self processors
+	context := self newContextFor: stream text: self searchText.
+	self relevantProcessors
 		do: [ :each | each filterInContext: context ]
 ]
 
@@ -140,6 +161,20 @@ StSpotterQuery >> processors: aCollection [
 	processors := aCollection
 ]
 
+{ #category : #private }
+StSpotterQuery >> relevantProcessors [
+
+	^ self filteringText
+		ifNotNil: [ :aString | self relevantProcessorsFor: aString ]
+		ifNil: [ self processors ]
+]
+
+{ #category : #private }
+StSpotterQuery >> relevantProcessorsFor: aString [
+		
+	^ (self processors select: [ :each | each isRelevantForQuery: aString ])
+]
+
 { #category : #accessing }
 StSpotterQuery >> results [
 
@@ -147,13 +182,7 @@ StSpotterQuery >> results [
 ]
 
 { #category : #accessing }
-StSpotterQuery >> text [
+StSpotterQuery >> searchText [
 
-	^ text
-]
-
-{ #category : #accessing }
-StSpotterQuery >> text: anObject [
-
-	text := anObject
+	^ searchText
 ]
