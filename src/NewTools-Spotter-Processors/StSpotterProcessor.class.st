@@ -123,11 +123,6 @@ StSpotterProcessor class >> title [
 	^ self subclassResponsibility 
 ]
 
-{ #category : #compatibility }
-StSpotterProcessor >> actLogic [
-	^ [ :anItem :aStep | anItem evaluateFor: aStep ]
-]
-
 { #category : #'spotter-api' }
 StSpotterProcessor >> allFilteredCandidates [
 
@@ -141,12 +136,6 @@ StSpotterProcessor >> configureFilter [
 	self ensureFilter.
 	textFilteringIterators do: [ :each | 
 		each filteringText: self query searchingText ]
-]
-
-{ #category : #configuring }
-StSpotterProcessor >> configureOn: aGTSpotterStep [ 
-
-	^ aGTSpotterStep addProcessor: self
 ]
 
 { #category : #filtering }
@@ -216,22 +205,6 @@ StSpotterProcessor >> isRelevantForQuery: categoryQueryPrefix [
 StSpotterProcessor >> isRunning [ 
 
 	^ running
-]
-
-{ #category : #compatibility }
-StSpotterProcessor >> itemFilterName [
-
-	^ self title
-]
-
-{ #category : #compatibility }
-StSpotterProcessor >> itemIcon [
-	^ [ :anItem | anItem icon ]
-]
-
-{ #category : #compatibility }
-StSpotterProcessor >> itemName [
-	^ [ :anItem | anItem asString ]
 ]
 
 { #category : #'key-bindings' }

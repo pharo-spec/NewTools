@@ -5,8 +5,9 @@ Class {
 		'searchText',
 		'resultList',
 		'model',
-		'updating',
-		'previewContainer'
+		'previewContainer',
+		'categories',
+		'mutex'
 	],
 	#classVars : [
 		'History'
@@ -57,24 +58,35 @@ StSpotter >> activate: aPresenter [
 ]
 
 { #category : #private }
+StSpotter >> configureModel: aModel [ 
+
+	aModel 
+		whenSearchUpdatedDo: [ :aCandidateLink | self updateResultList: aCandidateLink ];
+		whenAmountChangedDo: [ :processor :amount | 
+			self updateResultProcessor: processor amount: amount ]
+]
+
+{ #category : #private }
 StSpotter >> defaultModel [
 
 	^ StSpotterModel new
-		whenSearchUpdatedDo: [ self updateResultList ];
+		in: [ :this | self configureModel: this ];
 		yourself
 ]
 
 { #category : #'private updating' }
-StSpotter >> deferredUpdateResultList [
-	| resultsByClass presenters |
+StSpotter >> deferredUpdateResultList: aCandidateLink [
+	| categoryPresenter presenters |
+
+	categoryPresenter := categories 
+		at: aCandidateLink processor
+		ifAbsentPut: [ self newSpotterHeaderPresenter: aCandidateLink processor ].
+		
+	categoryPresenter addCandidate: aCandidateLink inSpotter: self.
 	
-	resultsByClass := (self model links groupedBy: #processor) associations
-		sorted: [ :each | each key order ] ascending.
-	presenters := resultsByClass flatCollect: [ :eachAssoc | 
-		{ self newSpotterHeaderPresenter: eachAssoc key }, 
-		((eachAssoc value sorted: #className ascending, #asString ascending)
-			collect: [ :eachLink | self newSpotterCandidateLinkPresenter: eachLink ]) ].
-	
+	presenters := (categories values 
+		sorted: [ :each | each model order ] ascending)
+		flatCollect: [ :each | each withCandidates ]. 
 	resultList disableActivationDuring: [ 
 		| index |
 		index := resultList selection selectedIndex.
@@ -105,8 +117,9 @@ StSpotter >> historize: aCandidateLink [
 { #category : #initialization }
 StSpotter >> initialize [
 
-	updating := false.
-	super initialize
+	mutex ifNil: [ mutex := Mutex new ].
+	categories := Dictionary new.
+	super initialize.
 ]
 
 { #category : #initialization }
@@ -185,11 +198,19 @@ StSpotter >> newSpotterHeaderPresenter: aProcessor [
 		yourself
 ]
 
+{ #category : #'private updating' }
+StSpotter >> newSpotterHeaderPresenter: aProcessor amount: aNumber [
+
+	^ (self newSpotterHeaderPresenter: aProcessor)
+		"updateAmount: aNumber;"
+		yourself
+]
+
 { #category : #'accessing model' }
 StSpotter >> setModelBeforeInitialization: aSpotterModel [
 
 	model := aSpotterModel.
-	model whenSearchUpdatedDo: [  ]
+	self configureModel: model
 ]
 
 { #category : #'private actions' }
@@ -233,17 +254,24 @@ StSpotter >> transferFocusToSearchText [
 ]
 
 { #category : #'private updating' }
-StSpotter >> updateResultList [ 
+StSpotter >> updateResultList: aCandidateLink [
 
-	updating ifTrue: [ ^ self  ].
-	updating := true.
 	self application defer: [ 
-		[ self deferredUpdateResultList ]
-		ensure: [ updating := false ] ]
+		mutex critical: [ 
+			self deferredUpdateResultList: aCandidateLink ] ]
+]
+
+{ #category : #'private updating' }
+StSpotter >> updateResultProcessor: processor amount: amount [
+
+	categories 
+		at: processor 
+		ifPresent: [ :aPresenter | aPresenter finalAmount: amount ]
 ]
 
 { #category : #'private updating' }
 StSpotter >> updateSearch: aString [
 
+	categories removeAll.
 	self model asyncProcess: aString
 ]

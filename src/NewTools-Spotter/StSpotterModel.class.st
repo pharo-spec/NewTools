@@ -6,7 +6,8 @@ Class {
 		'searchUpdatedAction',
 		'queries',
 		'activeQuery',
-		'processors'
+		'processors',
+		'amountChangedAction'
 	],
 	#category : #'NewTools-Spotter-Model'
 }
@@ -20,10 +21,28 @@ StSpotterModel >> activateQuery: aQuery [
 ]
 
 { #category : #private }
-StSpotterModel >> announceSearchUpdated [
+StSpotterModel >> announceAllCandidatesAdded: ann [
 
 	searchUpdatedAction ifNil: [ ^ self ].
-	searchUpdatedAction value
+	
+	ann candidateLinks do: [ :each |
+		searchUpdatedAction value: each ]
+]
+
+{ #category : #private }
+StSpotterModel >> announceAmountChanged: ann [
+
+	amountChangedAction ifNil: [ ^ self ].
+	amountChangedAction 
+		value: ann category 
+		value: ann amount
+]
+
+{ #category : #private }
+StSpotterModel >> announceCandidateAdded: ann [
+
+	searchUpdatedAction ifNil: [ ^ self ].
+	searchUpdatedAction value: ann candidateLink
 ]
 
 { #category : #processing }
@@ -39,8 +58,9 @@ StSpotterModel >> asyncProcess: aString [
 StSpotterModel >> connectQuery: aQuery [
 
 	aQuery announcer
-		when: StSpotterCandidateAdded send: #announceSearchUpdated to: self;
-		when: StSpotterAllCandidatesAdded send: #announceSearchUpdated to: self.	
+		when: StSpotterCandidateAdded send: #announceCandidateAdded: to: self;
+		when: StSpotterAllCandidatesAdded send: #announceAllCandidatesAdded: to: self;
+		when: StSpotterCandidatesAmountChanged send: #announceAmountChanged: to: self.	
 ]
 
 { #category : #private }
@@ -112,6 +132,12 @@ StSpotterModel >> startProcessing [
 
 	"First query: empty (to bring windows, menu, etc.)"
 	self asyncProcess: ''
+]
+
+{ #category : #events }
+StSpotterModel >> whenAmountChangedDo: aBlock [
+
+	amountChangedAction := aBlock
 ]
 
 { #category : #events }
