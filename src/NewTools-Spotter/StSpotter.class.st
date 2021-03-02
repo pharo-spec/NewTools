@@ -155,12 +155,14 @@ StSpotter >> initializePresenters [
 	resultList eventHandler 
 		whenKeyDownDo: [ :anEvent | self handleKeyEvent: anEvent ].
 
+	self addStyle: 'stSpotter'.
 	searchText 
 		placeholder: 'Search...';
-		addStyle: 'stSpotter';
+		addStyle: 'stSpotterSearch';
 		whenTextChangedDo: [ :aString | self updateSearch: aString ];
 		bindKeyCombination: Character arrowDown asKeyCombination 
-			toAction: [ self transferFocusToResultList ]
+			toAction: [ self transferFocusToResultList ].
+	resultList addStyle: 'stSpotterList'
 ]
 
 { #category : #initialization }

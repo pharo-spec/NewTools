@@ -21,10 +21,12 @@ StSpotterCandidateLinkPresenter >> initializePresenters [
 	self layout: (SpBoxLayout newHorizontal
 		borderWidth: 2;
 		spacing: 5;
+		vAlignCenter;
 		add: (iconPresenter := self newImage) expand: false;
 		add: (labelPresenter := self newLabel);
 		yourself).
 		
+	self addStyle: 'stSpotterLink'.
 	iconPresenter image: self entry icon.
 	labelPresenter label: self entry label
 ]

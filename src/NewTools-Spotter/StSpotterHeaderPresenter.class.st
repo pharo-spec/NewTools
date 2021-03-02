@@ -52,6 +52,7 @@ StSpotterHeaderPresenter >> initializePresenters [
 	self layout: (SpBoxLayout newHorizontal
 		borderWidth: 5;
 		spacing: 5;
+		vAlignCenter;
 		add: (labelPresenter := self newLabel) expand: false;
 		add: (amountLabelPresenter := self newLabel) expand: false;
 		addLast: (diveButtonPresenter := self newImage) expand: false; 
