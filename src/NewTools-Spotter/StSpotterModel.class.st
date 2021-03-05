@@ -7,7 +7,10 @@ Class {
 		'queries',
 		'activeQuery',
 		'processors',
-		'amountChangedAction'
+		'amountChangedAction',
+		'workerSemaphore',
+		'worker',
+		'requestedText'
 	],
 	#category : #'NewTools-Spotter-Model'
 }
@@ -17,7 +20,8 @@ StSpotterModel >> activateQuery: aQuery [
 
 	activeQuery ifNotNil: [ self disconnectQuery: aQuery ].
 	activeQuery := aQuery.
-	self connectQuery: aQuery
+	self connectQuery: aQuery.
+	self refreshQueryStatus: aQuery.
 ]
 
 { #category : #private }
@@ -48,10 +52,8 @@ StSpotterModel >> announceCandidateAdded: ann [
 { #category : #processing }
 StSpotterModel >> asyncProcess: aString [
 
-	[ 
-		Processor yield.
-		self process: aString. 
-	] schedule
+	requestedText := aString.
+	self triggerWorker
 ]
 
 { #category : #private }
@@ -77,6 +79,24 @@ StSpotterModel >> disconnectQuery: aQuery [
 	aQuery announcer unsubscribe: self
 ]
 
+{ #category : #'private processing' }
+StSpotterModel >> ensureWorkerRunning [
+
+	(worker isNotNil and: [ worker isTerminated not ])
+		ifTrue: [ ^ self ].
+
+	workerSemaphore := Semaphore new.
+	worker := [
+		[ true ] whileTrue: [
+			requestedText ifNotNil: [ 
+				self process: requestedText.
+				requestedText := nil ].
+			workerSemaphore wait ] 
+	] 
+	forkAt: Processor lowIOPriority 
+	named: 'Spotter Worker'
+]
+
 { #category : #initialization }
 StSpotterModel >> initialize [
 
@@ -92,7 +112,7 @@ StSpotterModel >> links [
 		ifNil: [ #() ]
 ]
 
-{ #category : #processing }
+{ #category : #'private processing' }
 StSpotterModel >> process: aString [
 	| query |
 	
@@ -119,6 +139,21 @@ StSpotterModel >> queryFor: aString [
 		ifNone: [ nil ]
 ]
 
+{ #category : #private }
+StSpotterModel >> refreshQueryStatus: aQuery [
+
+	aQuery links ifEmpty: [ ^ self ].
+
+	self announceAllCandidatesAdded: (StSpotterAllCandidatesAdded new
+		candidateLinks: aQuery links;
+		yourself).
+
+	aQuery isFinished ifTrue: [ 
+		self announceAmountChanged: (StSpotterCandidatesAmountChanged new 
+			amount: aQuery links size;
+			yourself) ]
+]
+
 { #category : #accessing }
 StSpotterModel >> results [
 
@@ -130,8 +165,21 @@ StSpotterModel >> results [
 { #category : #processing }
 StSpotterModel >> startProcessing [
 
-	"First query: empty (to bring windows, menu, etc.)"
+	self ensureWorkerRunning.
 	self asyncProcess: ''
+]
+
+{ #category : #processing }
+StSpotterModel >> stopProcessing [
+
+	worker terminate
+	
+]
+
+{ #category : #'private processing' }
+StSpotterModel >> triggerWorker [
+
+	workerSemaphore signal
 ]
 
 { #category : #events }

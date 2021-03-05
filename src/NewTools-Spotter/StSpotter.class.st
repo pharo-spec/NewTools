@@ -35,6 +35,19 @@ StSpotter class >> history [
 	^ self basicHistory reject: [ :each | each isNil ]
 ]
 
+{ #category : #'instance creation' }
+StSpotter class >> open [
+
+	^ self new openModalWithSpec
+]
+
+{ #category : #'tools registry' }
+StSpotter class >> registerToolsOn: registry [
+	"self registerToolsOn: Smalltalk tools"
+
+	registry register: self as: #spotter
+]
+
 { #category : #accessing }
 StSpotter class >> resetHistory [
 	<script>
@@ -174,6 +187,7 @@ StSpotter >> initializeWindow: aWindowPresenter [
 		withoutDecorations;
 		initialExtent: 750@400;
 		whenOpenedDo: [ self startProcessing ];
+		whenClosedDo: [ self stopProcessing ];
 		centered.
 
 	self model processors do: [ :each | 
@@ -233,7 +247,14 @@ StSpotter >> showPreview: aPresenter [
 StSpotter >> startProcessing [
 	"Start the process."
 
-	[ self model startProcessing ] schedule
+	self model startProcessing
+]
+
+{ #category : #private }
+StSpotter >> stopProcessing [
+	"Start the process."
+
+	self model stopProcessing
 ]
 
 { #category : #private }

@@ -2,11 +2,13 @@ Class {
 	#name : #StSpotterQuery,
 	#superclass : #Object,
 	#instVars : [
+		'process',
 		'connected',
 		'candidatesList',
 		'processors',
 		'candidateLinks',
-		'searchText'
+		'searchText',
+		'finished'
 	],
 	#category : #'NewTools-Spotter-Model'
 }
@@ -82,6 +84,8 @@ StSpotterQuery >> initialize [
 
 	super initialize.
 	self initializeCandidatesList.
+	process := Processor activeProcess.
+	finished := false.	
 	candidateLinks := Set new.
 	connected := false
 ]
@@ -110,6 +114,12 @@ StSpotterQuery >> initializeText: aString [
 StSpotterQuery >> isConnected [
 
 	^ connected
+]
+
+{ #category : #testing }
+StSpotterQuery >> isFinished [
+
+	^ finished
 ]
 
 { #category : #accessing }
@@ -143,10 +153,12 @@ StSpotterQuery >> newStreamFor: candidates [
 StSpotterQuery >> process [
 	| stream context |
 
+	finished := false.
 	stream := self newStreamFor: candidatesList.
 	context := self newContextFor: stream text: self searchText.
 	self relevantProcessors
-		do: [ :each | each filterInContext: context ]
+		do: [ :each | each filterInContext: context ].
+	finished := true
 ]
 
 { #category : #accessing }
