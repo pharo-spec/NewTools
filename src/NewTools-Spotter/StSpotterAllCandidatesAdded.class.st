@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'candidateLinks'
 	],
-	#category : #'NewTools-Spotter-Model'
+	#category : #'NewTools-Spotter-Announcements'
 }
 
 { #category : #accessing }

@@ -11,7 +11,9 @@ Class {
 		'workerSemaphore',
 		'worker',
 		'requestedText',
-		'mutex'
+		'mutex',
+		'queryStartedAction',
+		'queryEndedAction'
 	],
 	#category : #'NewTools-Spotter-Model'
 }
@@ -25,7 +27,7 @@ StSpotterModel >> activateQuery: aQuery [
 	self refreshQueryStatus: aQuery.
 ]
 
-{ #category : #private }
+{ #category : #'private announcing' }
 StSpotterModel >> announceAllCandidatesAdded: ann [
 
 	searchUpdatedAction ifNil: [ ^ self ].
@@ -33,7 +35,7 @@ StSpotterModel >> announceAllCandidatesAdded: ann [
 		do: [ :each | searchUpdatedAction value: each ]
 ]
 
-{ #category : #private }
+{ #category : #'private announcing' }
 StSpotterModel >> announceAmountChanged: ann [
 
 	amountChangedAction ifNil: [ ^ self ].
@@ -42,11 +44,25 @@ StSpotterModel >> announceAmountChanged: ann [
 		value: ann amount
 ]
 
-{ #category : #private }
+{ #category : #'private announcing' }
 StSpotterModel >> announceCandidateAdded: ann [
 
 	searchUpdatedAction ifNil: [ ^ self ].
 	searchUpdatedAction value: ann candidateLink
+]
+
+{ #category : #'private announcing' }
+StSpotterModel >> announceQueryEnded: ann [
+
+	queryEndedAction ifNil: [ ^ self ].
+	queryEndedAction value
+]
+
+{ #category : #'private announcing' }
+StSpotterModel >> announceQueryStarted: ann [
+
+	queryStartedAction ifNil: [ ^ self ].
+	queryStartedAction value
 ]
 
 { #category : #processing }
@@ -65,7 +81,9 @@ StSpotterModel >> connectQuery: aQuery [
 	aQuery announcer
 		when: StSpotterCandidateAdded send: #announceCandidateAdded: to: self;
 		when: StSpotterAllCandidatesAdded send: #announceAllCandidatesAdded: to: self;
-		when: StSpotterCandidatesAmountChanged send: #announceAmountChanged: to: self.	
+		when: StSpotterCandidatesAmountChanged send: #announceAmountChanged: to: self;
+		when: StSpotterQueryStarted send: #announceQueryStarted: to: self;
+		when: StSpotterQueryEnded send: #announceQueryEnded: to: self.
 ]
 
 { #category : #private }
@@ -190,6 +208,18 @@ StSpotterModel >> triggerWorker [
 StSpotterModel >> whenAmountChangedDo: aBlock [
 
 	amountChangedAction := aBlock
+]
+
+{ #category : #events }
+StSpotterModel >> whenQueryEndedDo: aBlock [
+
+	queryEndedAction := aBlock
+]
+
+{ #category : #events }
+StSpotterModel >> whenQueryStartedDo: aBlock [
+
+	queryStartedAction := aBlock
 ]
 
 { #category : #events }

@@ -98,9 +98,8 @@ StSpotterQuery >> initializeCandidatesList [
 		when: StSpotterCandidateAdded send: #candidateAdded: to: self;
 		when: StSpotterAllCandidatesAdded send: #allCandidatesAdded: to: self.
 		"when: GTSpotterAllCandidatesRemoved do: [ self deselect ];
-		when: GTSpotterQueryStarted send: #propagateEvent: to: self;
-		when: GTSpotterQueryEnded send: #propagateEvent: to: self."
-
+		when: StSpotterQueryStarted send: #queryStarted: to: self;
+		when: StSpotterQueryEnded send: #queryEnded: to: self."
 ]
 
 { #category : #initialization }

@@ -279,7 +279,7 @@ StSpotterCandidatesList >> privateAddCandidate: aCandidateLink weightedInNotFull
 StSpotterCandidatesList >> processorEnded: aProcessor [
 
 	(self processors noneSatisfy: [ :e | e isRunning ])
-		ifTrue: [ self announcer announce: GTSpotterQueryEnded new ] 
+		ifTrue: [ self announcer announce: StSpotterQueryEnded new ] 
 	
 ]
 
@@ -293,7 +293,7 @@ StSpotterCandidatesList >> processorLinksMap [
 { #category : #notifying }
 StSpotterCandidatesList >> processorStarted: aProcessor [
 	
-	self announcer announce: GTSpotterQueryStarted new.
+	self announcer announce: StSpotterQueryStarted new.
 ]
 
 { #category : #accessing }

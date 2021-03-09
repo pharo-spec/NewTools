@@ -7,7 +7,8 @@ Class {
 		'model',
 		'previewContainer',
 		'categories',
-		'mutex'
+		'mutex',
+		'spinner'
 	],
 	#classVars : [
 		'History'
@@ -84,9 +85,12 @@ StSpotter >> activate: aPresenter [
 StSpotter >> configureModel: aModel [ 
 
 	aModel 
-		whenSearchUpdatedDo: [ :aCandidateLink | self updateResultList: aCandidateLink ];
+		whenSearchUpdatedDo: [ :aCandidateLink | 
+			self updateResultList: aCandidateLink ];
 		whenAmountChangedDo: [ :processor :amount | 
-			self updateResultProcessor: processor amount: amount ]
+			self updateResultProcessor: processor amount: amount ];
+		whenQueryStartedDo: [ self showSpinner ];
+		whenQueryEndedDo: [ self hideSpinner ]
 ]
 
 { #category : #private }
@@ -131,6 +135,12 @@ StSpotter >> handleKeyEvent: anEvent [
 ]
 
 { #category : #'private actions' }
+StSpotter >> hideSpinner [
+
+	spinner hide
+]
+
+{ #category : #'private actions' }
 StSpotter >> historize: aCandidateLink [
 
 	self class historize: aCandidateLink
@@ -164,9 +174,11 @@ StSpotter >> initializePresenters [
 				add: (resultList := self newComponentList);
 				add: (previewContainer := SpBoxLayout newVertical);
 				yourself);
-			"addOverlay: self newSpinner withConstraints: [ :c | c vAlignCenter; hAlignCenter ];" 
+			addOverlay: (spinner := self newSpinner) withConstraints: [ :c | c vAlignCenter; hAlignCenter ];
 			yourself);
 		yourself).
+
+	spinner hide.
 
 	resultList
 		bindKeyCombination: Character arrowUp asKeyCombination 
@@ -253,6 +265,12 @@ StSpotter >> showPreview: aPresenter [
 			previewContainer add: (previewPresenter 
 				owner: self; 
 				yourself) ]
+]
+
+{ #category : #'private actions' }
+StSpotter >> showSpinner [
+
+	spinner show
 ]
 
 { #category : #private }
