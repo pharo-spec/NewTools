@@ -12,6 +12,9 @@ Class {
 	#classVars : [
 		'History'
 	],
+	#classInstVars : [
+		'spotterWindow'
+	],
 	#category : #'NewTools-Spotter-View'
 }
 
@@ -38,7 +41,8 @@ StSpotter class >> history [
 { #category : #'instance creation' }
 StSpotter class >> open [
 
-	^ self new openModalWithSpec
+	self reset.
+	^ spotterWindow := self new openModalWithSpec
 ]
 
 { #category : #'tools registry' }
@@ -46,6 +50,12 @@ StSpotter class >> registerToolsOn: registry [
 	"self registerToolsOn: Smalltalk tools"
 
 	registry register: self as: #spotter
+]
+
+{ #category : #private }
+StSpotter class >> reset [
+	
+	spotterWindow ifNotNil: [ spotterWindow close ]
 ]
 
 { #category : #accessing }
@@ -115,10 +125,9 @@ StSpotter >> diveInProcessor: aProcessor [
 
 { #category : #private }
 StSpotter >> handleKeyEvent: anEvent [
-			
-	"go back to search text"
-	anEvent keyCharacter isAlphaNumeric 
-		ifTrue: [ searchText takeKeyboardFocus ]
+	
+	(#( 30 "arrow up" 31 "arrow down" 13 "cr") includes: anEvent keyCharacter asInteger)
+		ifFalse: [ searchText takeKeyboardFocus ]
 ]
 
 { #category : #'private actions' }
@@ -148,11 +157,14 @@ StSpotter >> initializePresenters [
 		borderWidth: 10;
 		spacing: 5;
 		add: (searchText := self newSearchInput) expand: false;
-		add: (SpBoxLayout newHorizontal
-			beHomogeneous;
-			spacing: 5;
-			add: (resultList := self newComponentList);
-			add: (previewContainer := SpBoxLayout newVertical);
+		add: (SpOverlayLayout new
+			child: (SpBoxLayout newHorizontal
+				beHomogeneous;
+				spacing: 5;
+				add: (resultList := self newComponentList);
+				add: (previewContainer := SpBoxLayout newVertical);
+				yourself);
+			"addOverlay: self newSpinner withConstraints: [ :c | c vAlignCenter; hAlignCenter ];" 
 			yourself);
 		yourself).
 
@@ -185,7 +197,7 @@ StSpotter >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
 		withoutDecorations;
-		initialExtent: 750@400;
+		initialExtent: 750@450;
 		whenOpenedDo: [ self startProcessing ];
 		whenClosedDo: [ self stopProcessing ];
 		centered.
@@ -247,7 +259,11 @@ StSpotter >> showPreview: aPresenter [
 StSpotter >> startProcessing [
 	"Start the process."
 
-	self model startProcessing
+	[ 
+		"100 is a magic number we tested is enough to allow the UI to display the spotter"
+		100 milliSeconds wait.
+		self model startProcessing 
+	] schedule
 ]
 
 { #category : #private }
@@ -279,9 +295,11 @@ StSpotter >> transferFocusToSearchText [
 { #category : #'private updating' }
 StSpotter >> updateResultList: aCandidateLink [
 
-	self application defer: [ 
-		mutex critical: [ 
-			self deferredUpdateResultList: aCandidateLink ] ]
+	[
+		self application defer: [ 
+			mutex critical: [
+				self deferredUpdateResultList: aCandidateLink ] ]
+	] schedule
 ]
 
 { #category : #'private updating' }

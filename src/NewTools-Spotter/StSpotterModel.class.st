@@ -10,7 +10,8 @@ Class {
 		'amountChangedAction',
 		'workerSemaphore',
 		'worker',
-		'requestedText'
+		'requestedText',
+		'mutex'
 	],
 	#category : #'NewTools-Spotter-Model'
 }
@@ -28,9 +29,8 @@ StSpotterModel >> activateQuery: aQuery [
 StSpotterModel >> announceAllCandidatesAdded: ann [
 
 	searchUpdatedAction ifNil: [ ^ self ].
-	
-	ann candidateLinks do: [ :each |
-		searchUpdatedAction value: each ]
+	ann candidateLinks 
+		do: [ :each | searchUpdatedAction value: each ]
 ]
 
 { #category : #private }
@@ -52,8 +52,11 @@ StSpotterModel >> announceCandidateAdded: ann [
 { #category : #processing }
 StSpotterModel >> asyncProcess: aString [
 
-	requestedText := aString.
-	self triggerWorker
+	[
+		mutex critical: [ 
+			requestedText := aString.
+			self triggerWorker ] ]
+	schedule
 ]
 
 { #category : #private }
@@ -101,6 +104,7 @@ StSpotterModel >> ensureWorkerRunning [
 StSpotterModel >> initialize [
 
 	super initialize.
+	mutex := Mutex new.
 	queries := OrderedCollection new
 ]
 
