@@ -47,9 +47,6 @@ See *class:StPlaygroundPagesPresenter*
 Class {
 	#name : #StPlayground,
 	#superclass : #StInspector,
-	#instVars : [
-		'page'
-	],
 	#classVars : [
 		'CacheDirectory'
 	],
