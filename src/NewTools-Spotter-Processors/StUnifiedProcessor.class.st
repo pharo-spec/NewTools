@@ -156,19 +156,19 @@ StUnifiedProcessor >> configureFilter [
 ]
 
 { #category : #'key-bindings' }
-StUnifiedProcessor >> installKeymappingsOn: aPresenter [
+StUnifiedProcessor >> installKeymappingsOn: aPresenter onExecution: aBlock [
 
 	aPresenter
 		bindKeyCombination: $b meta
-		toAction: (MessageSend 
-			receiver: self query 
-			selector: #filterClasses).
+		toAction: [
+			self query filterClasses.
+			aBlock cull: self ].
 
 	aPresenter
 		bindKeyCombination: $m meta
-		toAction: (MessageSend 
-			receiver: self query 
-			selector: #filterImplementors).
+		toAction: [ 
+			self query filterImplementors.
+			aBlock cull: self ]
 ]
 
 { #category : #'spotter-api' }

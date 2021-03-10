@@ -88,6 +88,14 @@ StQuery >> searchingText [
 	^ query
 ]
 
+{ #category : #accessing }
+StQuery >> textInSearchBar [
+
+	^ String streamContents: [ :stream | 
+		modifiers do: [ :each | stream print:each; space ].
+		stream nextPutAll: query ]
+]
+
 { #category : #updating }
 StQuery >> updateFromContext: aSpotterContext [
 	| textParts texts |

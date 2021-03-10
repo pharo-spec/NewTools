@@ -215,7 +215,9 @@ StSpotter >> initializeWindow: aWindowPresenter [
 		centered.
 
 	self model processors do: [ :each | 
-		each installKeymappingsOn: aWindowPresenter ]
+		each 
+			installKeymappingsOn: aWindowPresenter
+			onExecution: [ :aProcessor | self updateSearchFromProcessor: aProcessor ] ]
 ]
 
 { #category : #'accessing model' }
@@ -333,4 +335,10 @@ StSpotter >> updateSearch: aString [
 
 	categories removeAll.
 	self model asyncProcess: aString
+]
+
+{ #category : #'private updating' }
+StSpotter >> updateSearchFromProcessor: aProcessor [
+
+	searchText text: aProcessor query textInSearchBar
 ]

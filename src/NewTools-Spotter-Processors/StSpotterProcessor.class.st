@@ -194,6 +194,12 @@ StSpotterProcessor >> installKeymappingsOn: aPresenter [
 	"Nothing to do"
 ]
 
+{ #category : #'key-bindings' }
+StSpotterProcessor >> installKeymappingsOn: aPresenter onExecution: aBlock [
+
+	self installKeymappingsOn: aPresenter
+]
+
 { #category : #'spotter-api' }
 StSpotterProcessor >> isRelevantForQuery: categoryQueryPrefix [
 

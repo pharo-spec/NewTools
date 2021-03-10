@@ -36,11 +36,13 @@ StSendersProcessor >> executeQuery [
 ]
 
 { #category : #'key-bindings' }
-StSendersProcessor >> installKeymappingsOn: aPresenter [
+StSendersProcessor >> installKeymappingsOn: aPresenter onExecution: aBlock [
 
 	aPresenter
 		bindKeyCombination: $n meta
-		toAction: [ aPresenter onKeyProcessor: self ]
+		toAction: [ 
+			aPresenter onKeyProcessor: self.
+			aBlock cull: self ]
 ]
 
 { #category : #filtering }
