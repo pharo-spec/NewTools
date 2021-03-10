@@ -68,12 +68,11 @@ StDebuggerErrorContextPredicate >> isSteppable [
 
 	super isSteppable ifFalse: [ ^ false ].
 
-	exception class = MessageNotUnderstood ifTrue: [ 
+	(exception isKindOf: MessageNotUnderstood) ifTrue: [ 
 		^ self isContextDoesNotUnderstand not and: [ 
 			  self isContextMissingClassException not ] ].
 
-	^ self exceptionWhiteList anySatisfy: [ :class | 
-		  exception isKindOf: class ]
+	^ exception isResumable
 ]
 
 { #category : #printing }
