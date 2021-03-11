@@ -126,6 +126,12 @@ StPlayground class >> registerToolsOn: registry [
 
 ]
 
+{ #category : #accessing }
+StPlayground >> contents: aString [ 
+
+	self firstPage contents: aString
+]
+
 { #category : #'api-focus' }
 StPlayground >> defaultKeyboardFocus [
 
