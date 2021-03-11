@@ -332,9 +332,11 @@ StSpotter >> updateResultProcessor: processor amount: amount [
 
 { #category : #'private updating' }
 StSpotter >> updateSearch: aString [
-
-	categories removeAll.
-	self model asyncProcess: aString
+	
+	[
+		categories removeAll.
+		self model asyncProcess: aString 
+	] schedule
 ]
 
 { #category : #'private updating' }

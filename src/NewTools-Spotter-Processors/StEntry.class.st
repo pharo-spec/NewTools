@@ -99,7 +99,9 @@ StEntry >> spotterActDefault [
 { #category : #accessing }
 StEntry >> spotterPreview [
 
-	^ content spotterPreview: SpPresenterBuilder new
+	^ (content spotterPreview: SpPresenterBuilder new)
+		addStyle: 'stSpotterPreview';
+		yourself
 ]
 
 { #category : #'spotter-extensions' }
