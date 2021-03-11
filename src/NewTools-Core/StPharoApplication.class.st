@@ -89,14 +89,8 @@ StPharoApplication >> start [
 
 { #category : #'system startup' }
 StPharoApplication >> startUp: resuming [
-]
 
-{ #category : #'accessing resources' }
-StPharoApplication >> styleSheet [
-
-	^ StPharoStyleContributor allSubclasses 
-			inject: super styleSheet 
-			into: [ :accum :each | accum , (each new styleSheetContribution) ]
+	self resetConfiguration
 ]
 
 { #category : #settings }

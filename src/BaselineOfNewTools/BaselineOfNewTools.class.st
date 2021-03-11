@@ -35,6 +35,9 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Debugger-Tests' with: [ spec requires: #('NewTools-Debugger') ];
 			"playground"
 			package: 'NewTools-Playground' with: [ spec requires: #('NewTools-Inspector') ];
+			"spotter"
+			package: 'NewTools-Spotter' with: [ spec requires: #('NewTools-Core') ];
+			package: 'NewTools-Morphic-Spotter' with: [ spec requires: #('NewTools-Morphic') ];
 			"browser"
 			package: 'NewTools-SystemBrowser' with: [ spec requires: #('NewTools-Inspector') ];
 			"system reporter"
@@ -78,6 +81,7 @@ BaselineOfNewTools >> baseline: spec [
 				'NewTools-Debugger-Breakpoints-Tools'
 				'NewTools-Debugger-Tests'
 				'NewTools-Debugger-Fuel');
+			group: 'SystemReporter' with: #('Spotter' 'NewTools-Spotter');
 			group: 'SystemReporter' with: #('Core' 'NewTools-SystemReporter');
 			group: 'Methods' with: #('Core' 'NewTools-MethodBrowsers');
 			"Not in the image for the moment, we need a pass on them"
