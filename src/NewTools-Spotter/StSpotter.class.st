@@ -8,10 +8,13 @@ Class {
 		'previewContainer',
 		'categories',
 		'mutex',
-		'spinner'
+		'spinner',
+		'tip'
 	],
 	#classVars : [
-		'History'
+		'History',
+		'Preview',
+		'Tips'
 	],
 	#classInstVars : [
 		'spotterWindow'
@@ -26,6 +29,32 @@ StSpotter class >> basicHistory [
 ]
 
 { #category : #private }
+StSpotter class >> createTips [
+
+	^ {
+		'<meta+n> filters for Classes'.
+		'<meta+m> filters for Implementros'.
+		'<meta+h> filters for Help topics'.
+		'Adding #Classes in the query filters for Classes'.
+		'Adding #Implementors in the query filters for Implementros'.
+		'Adding #Help in the query filters for Help Topics'.
+		'Adding #Packages in the query filters for Packages'.
+		'Adding #Menu in the query filters for System Menu entries'.
+		'Using words separated with spaces looks up for all of them'.
+		'Using camel case looks up for all of the parts'.
+		'Clicking in the question mark shows another tip'.
+		'Clicking in this tip shows another tip'.
+	}
+]
+
+{ #category : #accessing }
+StSpotter class >> hidePreview [
+	<script>
+
+	Preview := false
+]
+
+{ #category : #private }
 StSpotter class >> historize: aCandidateLink [
 
 	self basicHistory 
@@ -37,6 +66,18 @@ StSpotter class >> historize: aCandidateLink [
 StSpotter class >> history [
 
 	^ self basicHistory reject: [ :each | each isNil ]
+]
+
+{ #category : #'class initialization' }
+StSpotter class >> initialize [
+
+	self showPreview
+]
+
+{ #category : #testing }
+StSpotter class >> isShowingPreview [
+
+	^ Preview
 ]
 
 { #category : #'instance creation' }
@@ -68,6 +109,19 @@ StSpotter class >> resetHistory [
 	History := nil
 ]
 
+{ #category : #accessing }
+StSpotter class >> showPreview [
+	<script>
+	
+	Preview := true
+]
+
+{ #category : #'as yet unclassified' }
+StSpotter class >> tips [ 
+
+	^ Tips ifNil: [ Tips := self createTips ]
+]
+
 { #category : #'private actions' }
 StSpotter >> activate: aPresenter [
 
@@ -78,6 +132,14 @@ StSpotter >> activate: aPresenter [
 	self window close.
 	self historize: aPresenter model.
 	aPresenter model value doEvaluate.
+
+]
+
+{ #category : #private }
+StSpotter >> allowUIToDraw [
+
+	"5 is a magic number we tested is enough to allow the UI to display the spotter"
+	5 timesRepeat: [ Processor yield ].
 
 ]
 
@@ -114,6 +176,7 @@ StSpotter >> deferredUpdateResultList: aCandidateLink [
 	presenters := (categories values 
 		sorted: [ :each | each model order ] ascending)
 		flatCollect: [ :each | each withCandidates ]. 
+	
 	resultList disableActivationDuring: [ 
 		| index |
 		index := resultList selection selectedIndex.
@@ -125,6 +188,12 @@ StSpotter >> deferredUpdateResultList: aCandidateLink [
 StSpotter >> diveInProcessor: aProcessor [
 	
 	self halt.
+]
+
+{ #category : #'private actions' }
+StSpotter >> feedTip [
+	
+	"tip label: self class tips atRandom"
 ]
 
 { #category : #private }
@@ -147,6 +216,15 @@ StSpotter >> historize: aCandidateLink [
 ]
 
 { #category : #initialization }
+StSpotter >> initialExtent [
+
+	self flag: #TODO. "Maybe calculate coordinates?"
+	^ self isShowingPreview 
+		ifTrue: [ 750@450 ]
+		ifFalse: [ 500@450 ]
+]
+
+{ #category : #initialization }
 StSpotter >> initialize [
 
 	mutex ifNil: [ mutex := Mutex new ].
@@ -163,19 +241,29 @@ StSpotter >> initializeDialogWindow: aDialogWindowPresenter [
 { #category : #initialization }
 StSpotter >> initializePresenters [
 
+	| contentsLayout |
 	self layout: (SpBoxLayout newVertical
 		borderWidth: 10;
 		spacing: 5;
 		add: (searchText := self newSearchInput) expand: false;
 		add: (SpOverlayLayout new
-			child: (SpBoxLayout newHorizontal
+			child: ((contentsLayout := SpBoxLayout newHorizontal)
 				beHomogeneous;
 				spacing: 5;
 				add: (resultList := self newComponentList);
-				add: (previewContainer := SpBoxLayout newVertical);
 				yourself);
-			addOverlay: (spinner := self newSpinner) withConstraints: [ :c | c vAlignCenter; hAlignCenter ];
+			addOverlay: (spinner := self newSpinner) 
+				withConstraints: [ :c | c vAlignCenter; hAlignCenter ];
 			yourself);
+		"add: (SpBoxLayout newHorizontal
+				vAlignCenter;
+				add: (tip := self newLabel);
+				addLast: (self newButton 
+					label: 'More...';
+					action: [ self feedTip ];
+					yourself);
+				yourself)
+			expand: false;"
 		yourself).
 
 	spinner hide.
@@ -185,12 +273,15 @@ StSpotter >> initializePresenters [
 			toAction: [ :target :widget :event |
 				self transferFocusToSearchText.
 				event wasHandled: false ];
-		whenSelectionChangedDo: [ :selection | 
-			self showPreview: selection selectedItem ];
 		whenActivatedDo: [ :selection | 
 			self activate: selection selectedItem ].
 	resultList eventHandler 
 		whenKeyDownDo: [ :anEvent | self handleKeyEvent: anEvent ].
+		
+	self isShowingPreview ifTrue: [ 
+		contentsLayout 	add: (previewContainer := SpBoxLayout newVertical).
+		resultList whenSelectionChangedDo: [ :selection | 
+			self showPreview: selection selectedItem ] ].
 
 	self addStyle: 'stSpotter'.
 	searchText 
@@ -199,17 +290,16 @@ StSpotter >> initializePresenters [
 		whenTextChangedDo: [ :aString | self updateSearch: aString ];
 		bindKeyCombination: Character arrowDown asKeyCombination 
 			toAction: [ self transferFocusToResultList ].
-	resultList addStyle: 'stSpotterList'
+	resultList addStyle: 'stSpotterList'.
 ]
 
 { #category : #initialization }
 StSpotter >> initializeWindow: aWindowPresenter [
 
-	self flag: #TODO. "Maybe calculate coordinates?"
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
 		withoutDecorations;
-		initialExtent: 750@450;
+		initialExtent: self initialExtent;
 		whenOpenedDo: [ self startProcessing ];
 		whenClosedDo: [ self stopProcessing ];
 		centered.
@@ -218,6 +308,12 @@ StSpotter >> initializeWindow: aWindowPresenter [
 		each 
 			installKeymappingsOn: aWindowPresenter
 			onExecution: [ :aProcessor | self updateSearchFromProcessor: aProcessor ] ]
+]
+
+{ #category : #testing }
+StSpotter >> isShowingPreview [
+
+	^ self class isShowingPreview
 ]
 
 { #category : #'accessing model' }
@@ -280,8 +376,7 @@ StSpotter >> startProcessing [
 	"Start the process."
 
 	[ 
-		"100 is a magic number we tested is enough to allow the UI to display the spotter"
-		100 milliSeconds wait.
+		self allowUIToDraw.
 		self model startProcessing 
 	] schedule
 ]
@@ -312,6 +407,12 @@ StSpotter >> transferFocusToSearchText [
 	
 ]
 
+{ #category : #initialization }
+StSpotter >> updatePresenter [
+
+	self feedTip
+]
+
 { #category : #'private updating' }
 StSpotter >> updateResultList: aCandidateLink [
 
@@ -334,8 +435,11 @@ StSpotter >> updateResultProcessor: processor amount: amount [
 StSpotter >> updateSearch: aString [
 	
 	[
+		"clean"
+		"resultList presenters: #()."
+		self allowUIToDraw.
 		categories removeAll.
-		self model asyncProcess: aString 
+		self model asyncProcess: aString.
 	] schedule
 ]
 
