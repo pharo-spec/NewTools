@@ -240,8 +240,8 @@ StSpotter >> initializeDialogWindow: aDialogWindowPresenter [
 
 { #category : #initialization }
 StSpotter >> initializePresenters [
-
 	| contentsLayout |
+
 	self layout: (SpBoxLayout newVertical
 		borderWidth: 10;
 		spacing: 5;

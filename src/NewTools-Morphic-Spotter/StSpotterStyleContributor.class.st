@@ -8,24 +8,25 @@ Class {
 StSpotterStyleContributor >> styleSheetContribution [
 	
 	^ SpStyle newApplication 
-		addClass: 'presenter' with: [ :presenter |	presenter 
-			addClass: 'stSpotter' with: [ :spotter | spotter 
-				addPropertyDrawWith: [ :draw | draw color: Color transparent ] ];
-			addClass: 'stSpotterLink' with: [ :spotter | spotter 
+		addClass: 'presenter' with: [ :class |	class 
+			addClass: 'stSpotter' with: [ :spotterClass | spotterClass 
+				addPropertyDrawWith: [ :draw | draw backgroundColor: Color red ] ];
+			addClass: 'stSpotterLink' with: [ :spotterLinkClass | spotterLinkClass 
 				addPropertyGeometryWith: [ :geometry | geometry height: 22; vResizing: false ] ] ]; 
 		addClass: 'componentList' with: [ :componentList | componentList 
 			addClass: 'stSpotterList' with: [ :spotter | spotter 
 				addPropertyDrawWith: [ :draw | draw color: Color transparent ] ] ];
-		addClass: 'searchInputField' with: [ :searchInputField | searchInputField 
-			addClass: 'stSpotterSearch' with: [ :spotter | spotter
+		addClass: 'searchInputField' with: [ :class | class 
+			addClass: 'stSpotterSearch' with: [ :spotterClass | spotterClass
 				addPropertyDrawWith: [ :draw | draw color: Color transparent ];
-				addPropertyGeometryWith: [ :geometry | geometry minHeight: 30; vResizing: false ];
+				addPropertyTextWith: [ :text | text drawKeyboardFocus: false ];
+				addPropertyGeometryWith: [ :geometry | geometry minHeight: 35; vResizing: false ];
 				addPropertyFontWith: [ :font | font size: 12 ] ] ];
-		addClass: 'text' with: [ :text | text 
+		addClass: 'text' with: [ :class | class 
 			addClass: 'stSpotterPreview' with: [ :spotter | spotter
 				addPropertyDrawWith: [ :draw | draw color: Color transparent ] ] ];
-		addClass: 'code' with: [ :text | text 
-			addClass: 'stSpotterPreview' with: [ :spotter | spotter
+		addClass: 'code' with: [ :class | class 
+			addClass: 'stSpotterPreview' with: [ :spotterClass | spotterClass
 				addPropertyDrawWith: [ :draw | draw color: Color transparent ] ] ];
 		yourself
 ]
