@@ -155,7 +155,7 @@ StSpotterProcessor >> executeQuery [
 		
 	results := OrderedCollection new.
 	[ self filter atEnd or: [ results size = self maxResults ] ] 
-		whileFalse: [ 
+		whileFalse: [
 			self filter next ifNotNil: [ :aResult | 
 				self query addResult: aResult.
 				results add: aResult ] ].
@@ -179,7 +179,6 @@ StSpotterProcessor >> filterInContext: aSpotterContext [
 	self query updateFromContext: aSpotterContext.
 	self executeQuery.
 	self notifyEnded: aSpotterContext.
-
 ]
 
 { #category : #initialization }

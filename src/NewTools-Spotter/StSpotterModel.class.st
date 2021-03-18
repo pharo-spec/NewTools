@@ -2,15 +2,10 @@ Class {
 	#name : #StSpotterModel,
 	#superclass : #Object,
 	#instVars : [
+		'steps',
 		'candidateAddedAction',
 		'searchUpdatedAction',
-		'queries',
-		'activeQuery',
-		'processors',
 		'amountChangedAction',
-		'workerSemaphore',
-		'worker',
-		'requestedText',
 		'mutex',
 		'queryStartedAction',
 		'queryEndedAction'
@@ -18,13 +13,10 @@ Class {
 	#category : #'NewTools-Spotter-Model'
 }
 
-{ #category : #private }
-StSpotterModel >> activateQuery: aQuery [
+{ #category : #accessing }
+StSpotterModel >> activeStep [
 
-	activeQuery ifNotNil: [ self disconnectQuery: aQuery ].
-	activeQuery := aQuery.
-	self connectQuery: aQuery.
-	self refreshQueryStatus: aQuery.
+	^ steps last
 ]
 
 { #category : #'private announcing' }
@@ -69,21 +61,9 @@ StSpotterModel >> announceQueryStarted: ann [
 StSpotterModel >> asyncProcess: aString [
 
 	[
-		mutex critical: [ 
-			requestedText := aString.
-			self triggerWorker ] ]
-	schedule
-]
-
-{ #category : #private }
-StSpotterModel >> connectQuery: aQuery [
-
-	aQuery announcer
-		when: StSpotterCandidateAdded send: #announceCandidateAdded: to: self;
-		when: StSpotterAllCandidatesAdded send: #announceAllCandidatesAdded: to: self;
-		when: StSpotterCandidatesAmountChanged send: #announceAmountChanged: to: self;
-		when: StSpotterQueryStarted send: #announceQueryStarted: to: self;
-		when: StSpotterQueryEnded send: #announceQueryEnded: to: self.
+		mutex critical: [
+			self process: aString ]
+	] schedule
 ]
 
 { #category : #private }
@@ -94,114 +74,76 @@ StSpotterModel >> defaultProcessors [
 		sort: #order ascending
 ]
 
-{ #category : #private }
-StSpotterModel >> disconnectQuery: aQuery [
-
-	aQuery announcer unsubscribe: self
-]
-
-{ #category : #'private processing' }
-StSpotterModel >> ensureWorkerRunning [
-
-	(worker isNotNil and: [ worker isTerminated not ])
-		ifTrue: [ ^ self ].
-
-	workerSemaphore := Semaphore new.
-	worker := [
-		[ true ] whileTrue: [
-			requestedText ifNotNil: [ 
-				self process: requestedText.
-				requestedText := nil ].
-			workerSemaphore wait ] 
-	] 
-	forkAt: Processor lowIOPriority 
-	named: 'Spotter Worker'
-]
-
 { #category : #initialization }
 StSpotterModel >> initialize [
 
 	super initialize.
 	mutex := Mutex new.
-	queries := OrderedCollection new
+	steps := OrderedCollection with: self newDefaultStep
 ]
 
 { #category : #accessing }
 StSpotterModel >> links [
 
-	^ activeQuery 
-		ifNotNil: [ :aQuery | aQuery links ]
-		ifNil: [ #() ]
+	^ self activeStep links
+]
+
+{ #category : #'private factory' }
+StSpotterModel >> newDefaultStep [
+
+	^ self newStep: self defaultProcessors
+]
+
+{ #category : #'private factory' }
+StSpotterModel >> newStep: processors [
+
+	^ StSpotterStep 
+		newModel: self
+		processors: processors
 ]
 
 { #category : #'private processing' }
 StSpotterModel >> process: aString [
-	| query |
 	
-	query := self queryFor: aString.
-	query ifNotNil: [ ^ self activateQuery: query ].
-
-	query := StSpotterQuery on: aString.
-	query processors: self processors.
-	self activateQuery: query.
-	query process
+	self activeStep process: aString
 ]
 
 { #category : #accessing }
 StSpotterModel >> processors [
 
-	^ processors ifNil: [ processors := self defaultProcessors ]
+	^ self activeStep processors
 ]
 
 { #category : #private }
-StSpotterModel >> queryFor: aString [
+StSpotterModel >> pushStep: aStep [
+	| lastQuery |
 
-	^ queries 
-		detect: [ :each | each searchText = aString ]
-		ifNone: [ nil ]
+	lastQuery := self activeStep activeQuery.
+	self activeStep deactivate.
+	steps addLast: aStep
 ]
 
-{ #category : #private }
-StSpotterModel >> refreshQueryStatus: aQuery [
+{ #category : #accessing }
+StSpotterModel >> pushStepForProcessor: aProcessor [
 
-	aQuery links ifEmpty: [ ^ self ].
-
-	self announceAllCandidatesAdded: (StSpotterAllCandidatesAdded new
-		candidateLinks: aQuery links;
-		yourself).
-
-	aQuery isFinished ifTrue: [ 
-		self announceAmountChanged: (StSpotterCandidatesAmountChanged new 
-			amount: aQuery links size;
-			yourself) ]
+	self pushStep: (self newStep: { aProcessor })
+	
 ]
 
 { #category : #accessing }
 StSpotterModel >> results [
 
-	^ activeQuery 
-		ifNotNil: [ :aQuery | aQuery results ]
-		ifNil: [ #() ]
+	^ self activeStep results
 ]
 
 { #category : #processing }
 StSpotterModel >> startProcessing [
 
-	self ensureWorkerRunning.
 	self asyncProcess: ''
 ]
 
 { #category : #processing }
 StSpotterModel >> stopProcessing [
-
-	worker terminate
-	
-]
-
-{ #category : #'private processing' }
-StSpotterModel >> triggerWorker [
-
-	workerSemaphore signal
 ]
 
 { #category : #events }

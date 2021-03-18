@@ -278,7 +278,7 @@ StSpotterCandidatesList >> privateAddCandidate: aCandidateLink weightedInNotFull
 { #category : #notifying }
 StSpotterCandidatesList >> processorEnded: aProcessor [
 
-	(self processors noneSatisfy: [ :e | e isRunning ])
+	(self processors noneSatisfy: [ :each | each isRunning ])
 		ifTrue: [ self announcer announce: StSpotterQueryEnded new ] 
 	
 ]

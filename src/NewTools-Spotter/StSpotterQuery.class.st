@@ -2,7 +2,6 @@ Class {
 	#name : #StSpotterQuery,
 	#superclass : #Object,
 	#instVars : [
-		'process',
 		'connected',
 		'candidatesList',
 		'processors',
@@ -84,7 +83,6 @@ StSpotterQuery >> initialize [
 
 	super initialize.
 	self initializeCandidatesList.
-	process := Processor activeProcess.
 	finished := false.	
 	candidateLinks := Set new.
 	connected := false

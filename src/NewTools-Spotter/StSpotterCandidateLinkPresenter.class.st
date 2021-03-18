@@ -1,6 +1,10 @@
+"
+A presenter to show a candidate (an option that can be choosen). 
+
+"
 Class {
 	#name : #StSpotterCandidateLinkPresenter,
-	#superclass : #StSpotterPresenter,
+	#superclass : #StSpotterBasePresenter,
 	#instVars : [
 		'iconPresenter',
 		'labelPresenter',

@@ -1,0 +1,153 @@
+"
+A ""step"" in spotter is part of the nested structure created by diving into a category.
+""Diving"" means enter to a particular category (or ""processor"" in spotter definition) to show more in detail its results.
+The old spotter allowed also other kinds of diving, but current implementation removed that (since it was not really used).
+"
+Class {
+	#name : #StSpotterStep,
+	#superclass : #Object,
+	#instVars : [
+		'model',
+		'queries',
+		'activeQuery',
+		'processors'
+	],
+	#category : #'NewTools-Spotter-Model'
+}
+
+{ #category : #'instance creation' }
+StSpotterStep class >> newModel: aSpotterModel processors: aCollection [
+
+	^ self new 
+		model: aSpotterModel;
+		processors: aCollection;
+		yourself
+]
+
+{ #category : #accessing }
+StSpotterStep >> activate [
+
+	activeQuery ifNil: [ ^ self ].
+	self activateQuery: activeQuery
+]
+
+{ #category : #private }
+StSpotterStep >> activateQuery: aQuery [
+
+	activeQuery ifNotNil: [ self disconnectQuery: aQuery ].
+	activeQuery := aQuery.
+	self connectQuery: aQuery.
+	self refreshQueryStatus: aQuery
+]
+
+{ #category : #accessing }
+StSpotterStep >> activeQuery [
+
+	^ activeQuery
+]
+
+{ #category : #private }
+StSpotterStep >> connectQuery: aQuery [
+
+	aQuery announcer
+		when: StSpotterCandidateAdded send: #announceCandidateAdded: to: self model;
+		when: StSpotterAllCandidatesAdded send: #announceAllCandidatesAdded: to: self model;
+		when: StSpotterCandidatesAmountChanged send: #announceAmountChanged: to: self model;
+		when: StSpotterQueryStarted send: #announceQueryStarted: to: self model;
+		when: StSpotterQueryEnded send: #announceQueryEnded: to: self model.
+]
+
+{ #category : #accessing }
+StSpotterStep >> deactivate [
+
+	self disconnectQuery: activeQuery
+]
+
+{ #category : #private }
+StSpotterStep >> disconnectQuery: aQuery [
+
+	aQuery announcer unsubscribe: self model
+]
+
+{ #category : #initialization }
+StSpotterStep >> initialize [
+
+	super initialize.
+	queries := OrderedCollection new
+]
+
+{ #category : #accessing }
+StSpotterStep >> links [
+
+	^ activeQuery 
+		ifNotNil: [ :aQuery | aQuery links ]
+		ifNil: [ #() ]
+]
+
+{ #category : #accessing }
+StSpotterStep >> model [
+
+	^ model
+]
+
+{ #category : #accessing }
+StSpotterStep >> model: aSpotterModel [
+
+	model := aSpotterModel
+]
+
+{ #category : #processing }
+StSpotterStep >> process: aString [
+	| query |
+	
+	query := self queryFor: aString.
+	query ifNotNil: [ ^ self activateQuery: query ].
+
+	query := StSpotterQuery on: aString.
+	query processors: self processors.
+	self activateQuery: query.
+	query process
+]
+
+{ #category : #accessing }
+StSpotterStep >> processors [
+
+	^ processors
+]
+
+{ #category : #accessing }
+StSpotterStep >> processors: aCollection [
+
+	processors := aCollection
+]
+
+{ #category : #private }
+StSpotterStep >> queryFor: aString [
+
+	^ queries 
+		detect: [ :each | each searchText = aString ]
+		ifNone: [ nil ]
+]
+
+{ #category : #private }
+StSpotterStep >> refreshQueryStatus: aQuery [
+
+	aQuery links ifEmpty: [ ^ self ].
+
+	self model announceAllCandidatesAdded: (StSpotterAllCandidatesAdded new
+		candidateLinks: aQuery links;
+		yourself).
+
+	aQuery isFinished ifTrue: [ 
+		self model announceAmountChanged: (StSpotterCandidatesAmountChanged new 
+			amount: aQuery links size;
+			yourself) ]
+]
+
+{ #category : #accessing }
+StSpotterStep >> results [
+
+	^ activeQuery 
+		ifNotNil: [ :aQuery | aQuery results ]
+		ifNil: [ #() ]
+]

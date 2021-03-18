@@ -1,3 +1,23 @@
+"
+When exploring the system, is useful to have a single entry point that will allow users to search for different component of the system. 
+Spotter provides such entry point and is usually available by pressing <meta+enter>.
+
+Spotter is just a front-end to show the result of different processors (see *StSpotterProcessor*) that provide results. Those processors can be configured in different ways and will provide different access options. 
+
+Some known processors and options are: 
+
+## Classes processor: 
+- Type #classes in the search bar
+- Press <meta+b>
+
+## Implementors processor: 
+- Type #implementors in the search bar
+- Press <meta+m>
+
+## Senders processor: 
+- Type #senders in the search bar
+- Press <meta+n>
+"
 Class {
 	#name : #StSpotter,
 	#superclass : #StPresenter,
@@ -9,7 +29,8 @@ Class {
 		'categories',
 		'mutex',
 		'spinner',
-		'tip'
+		'tip',
+		'label'
 	],
 	#classVars : [
 		'History',
@@ -116,7 +137,7 @@ StSpotter class >> showPreview [
 	Preview := true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 StSpotter class >> tips [ 
 
 	^ Tips ifNil: [ Tips := self createTips ]
@@ -186,8 +207,9 @@ StSpotter >> deferredUpdateResultList: aCandidateLink [
 
 { #category : #'private actions' }
 StSpotter >> diveInProcessor: aProcessor [
-	
-	self halt.
+
+	self removeAll.
+	self model pushStepForProcessor: aProcessor
 ]
 
 { #category : #'private actions' }
@@ -206,7 +228,9 @@ StSpotter >> handleKeyEvent: anEvent [
 { #category : #'private actions' }
 StSpotter >> hideSpinner [
 
-	spinner hide
+	[
+		self application defer: [ spinner hide ]
+	] schedule
 ]
 
 { #category : #'private actions' }
@@ -245,6 +269,7 @@ StSpotter >> initializePresenters [
 	self layout: (SpBoxLayout newVertical
 		borderWidth: 10;
 		spacing: 5;
+		"add: (label := self newLabel) expand: false;"
 		add: (searchText := self newSearchInput) expand: false;
 		add: (SpOverlayLayout new
 			child: ((contentsLayout := SpBoxLayout newHorizontal)
@@ -284,6 +309,7 @@ StSpotter >> initializePresenters [
 			self showPreview: selection selectedItem ] ].
 
 	self addStyle: 'stSpotter'.
+	"label label: 'Spotter'."
 	searchText 
 		placeholder: 'Search...';
 		addStyle: 'stSpotterSearch';
@@ -344,6 +370,14 @@ StSpotter >> newSpotterHeaderPresenter: aProcessor amount: aNumber [
 		yourself
 ]
 
+{ #category : #private }
+StSpotter >> removeAll [
+
+	"resultList presenters: #()."
+	self allowUIToDraw.
+	categories removeAll
+]
+
 { #category : #'accessing model' }
 StSpotter >> setModelBeforeInitialization: aSpotterModel [
 
@@ -368,7 +402,10 @@ StSpotter >> showPreview: aPresenter [
 { #category : #'private actions' }
 StSpotter >> showSpinner [
 
-	spinner show
+	spinner isVisible ifTrue: [ ^ self ].
+	[
+		self application defer: [ spinner show ]
+	] schedule
 ]
 
 { #category : #private }
@@ -417,7 +454,7 @@ StSpotter >> updatePresenter [
 StSpotter >> updateResultList: aCandidateLink [
 
 	[
-		self application defer: [ 
+		self application defer: [
 			mutex critical: [
 				self deferredUpdateResultList: aCandidateLink ] ]
 	] schedule
@@ -426,21 +463,17 @@ StSpotter >> updateResultList: aCandidateLink [
 { #category : #'private updating' }
 StSpotter >> updateResultProcessor: processor amount: amount [
 
-	categories 
-		at: processor 
-		ifPresent: [ :aPresenter | aPresenter finalAmount: amount ]
+	self application defer: [ 
+		categories 
+			at: processor 
+			ifPresent: [ :aPresenter | aPresenter finalAmount: amount ] ]
 ]
 
 { #category : #'private updating' }
 StSpotter >> updateSearch: aString [
 	
-	[
-		"clean"
-		"resultList presenters: #()."
-		self allowUIToDraw.
-		categories removeAll.
-		self model asyncProcess: aString.
-	] schedule
+	self removeAll.
+	self model asyncProcess: aString
 ]
 
 { #category : #'private updating' }

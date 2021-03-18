@@ -1,6 +1,12 @@
+"
+A presenter to display a group of results.
+Each processor define a group. 
+Each group has a list of children (instances of *StSpotterCandidateListPresenter). 
+
+"
 Class {
 	#name : #StSpotterHeaderPresenter,
-	#superclass : #StSpotterPresenter,
+	#superclass : #StSpotterBasePresenter,
 	#instVars : [
 		'model',
 		'candidatePresentersList',
