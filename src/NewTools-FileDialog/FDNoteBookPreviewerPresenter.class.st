@@ -126,10 +126,11 @@ FDNoteBookPreviewerPresenter >> page [
 
 { #category : #adding }
 FDNoteBookPreviewerPresenter >> page: aPresenter [
+
 	page := aPresenter.
 	notebook removePageAt: 1.
 	notebook addPage: self initializePage;
-	selectedPageIndex: 1.
+	selectPageIndex: 1.
 ]
 
 { #category : #initialization }

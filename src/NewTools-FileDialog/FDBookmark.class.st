@@ -75,6 +75,21 @@ FDBookmark class >> root [
 ]
 
 { #category : #'default bookmarks' }
+FDBookmark class >> tmp [
+	^ FDBookmark
+		name: 'tmp'
+		location: FileLocator temp asFileReference
+		icon: Smalltalk ui icons open
+]
+
+{ #category : #'default bookmarks' }
+FDBookmark class >> windowsDrives [
+	^ FileLocator root asFileReference directories
+		collect:
+			[ :each | FDBookmark name: each basename location: each icon: Smalltalk ui icons smallWindow ]
+]
+
+{ #category : #'default bookmarks' }
 FDBookmark class >> workingDirectory [
 	^ self
 		name: 'Working directory'
@@ -100,6 +115,16 @@ FDBookmark >> hash [
 	^ (self icon hash bitXor: self location hash) bitXor: self name hash
 ]
 
+{ #category : #accessing }
+FDBookmark >> icon [
+	^ icon
+]
+
+{ #category : #accessing }
+FDBookmark >> icon: anIcon [
+	icon := anIcon
+]
+
 { #category : #testing }
 FDBookmark >> isComposite [
 	^ false
@@ -113,6 +138,16 @@ FDBookmark >> location [
 { #category : #accessing }
 FDBookmark >> location: aFileReference [
 	location := aFileReference
+]
+
+{ #category : #accessing }
+FDBookmark >> name [
+	^ name
+]
+
+{ #category : #accessing }
+FDBookmark >> name: aString [
+	name := aString
 ]
 
 { #category : #printing }

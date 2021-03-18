@@ -5,7 +5,10 @@ Class {
 	#name : #FDSaveFileDialog,
 	#superclass : #FDFileDialogPresenter,
 	#instVars : [
-		'extensionMather'
+		'extensionMather',
+		'currentDirectory',
+		'nameText',
+		'confirmButton'
 	],
 	#classVars : [
 		'Matcher'
@@ -67,6 +70,18 @@ FDSaveFileDialog >> initialTitle [
 FDSaveFileDialog >> initialize [
 	super initialize.
 	extensionMather := Matcher
+]
+
+{ #category : #initialization }
+FDSaveFileDialog >> initializePresenters [
+	| ec |
+	
+	super initializePresenters.
+	(ec := EntryCompletion new)
+		dataSourceBlock: [ :text | currentDirectory children collect: #basename ];
+		filterBlock: [ :opt :text | opt beginsWith: text ].
+	nameText entryCompletion: ec.
+	confirmButton label: 'Save'
 ]
 
 { #category : #accessing }

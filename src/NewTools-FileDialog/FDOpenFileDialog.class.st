@@ -9,6 +9,10 @@ examples see class side method example
 Class {
 	#name : #FDOpenFileDialog,
 	#superclass : #FDFileDialogPresenter,
+	#instVars : [
+		'nameText',
+		'confirmButton'
+	],
 	#category : #'NewTools-FileDialog-UI'
 }
 
@@ -20,7 +24,9 @@ FDOpenFileDialog >> initialTitle [
 { #category : #initialization }
 FDOpenFileDialog >> initializePresenters [
 	super initializePresenters.
-	fileNavigationSystem nameText disable
+	fileNavigationSystem nameText disable.
+	nameText disable.
+	confirmButton label: 'Open'	
 ]
 
 { #category : #accessing }

@@ -20,8 +20,8 @@ Internal Representation and Key Implementation Points.
 Class {
 	#name : #FDPathPresenter,
 	#superclass : #SpPresenter,
-	#traits : 'TSpDynamicPresenter',
-	#classTraits : 'TSpDynamicPresenter classTrait',
+	#traits : 'SpTDynamicPresenter',
+	#classTraits : 'SpTDynamicPresenter classTrait',
 	#instVars : [
 		'action',
 		'count'

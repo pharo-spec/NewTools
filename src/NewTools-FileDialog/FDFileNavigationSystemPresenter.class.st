@@ -101,25 +101,26 @@ FDFileNavigationSystemPresenter class >> defaultPreviewer [
 
 { #category : #specs }
 FDFileNavigationSystemPresenter class >> defaultSpec [
-	^ SpBoxLayout newVertical
+
+	^ SpBoxLayout newTopToBottom
 		add:
-			(SpBoxLayout newHorizontal
-				add: #previousButton expand: false fill: false padding: 0;
-				add: #nextButton expand: false fill: false padding: 0;
+			(SpBoxLayout newLeftToRight
+				add: #previousButton expand: false;
+				add: #nextButton expand: false;
 				add: #currentPathTextInputPresenter;
 				yourself)
-			 expand: false fill: false padding: 0;
+			 expand: false;
 		add:
-			(SpPanedLayout newVertical
+			(SpPanedLayout newTopToBottom
 				add: #fileReferenceTable;
 				add: #notebookPreviewer;
 				yourself);
 		add:
-			(SpBoxLayout newHorizontal
+			(SpBoxLayout newLeftToRight
 				add: #nameText;
-				add: #filtersDropList expand: false fill: false padding: 0;
+				add: #filtersDropList expand: false;
 				yourself)
-			 expand: false fill: false padding: 0;
+			 expand: false;
 		yourself
 ]
 
@@ -205,12 +206,14 @@ FDFileNavigationSystemPresenter >> currentDirectory: aFileReference [
 
 { #category : #'initialize-actions' }
 FDFileNavigationSystemPresenter >> currentPathTextInputAction [
+
 	currentPathTextInputPresenter entityText 
-		whenTextIsAcceptedDo: [ :text | 
+		whenSubmitDo: [ :text | 
 			text asFileReference exists
-				ifFalse: [ self
-						inform: 'you have to write an absolute path and an existing one' ]
-				ifTrue: [ self openFolder: text asFileReference ] ]
+				ifFalse: [ 
+					self inform: 'you have to write an absolute path and an existing one' ]
+				ifTrue: [ 
+					self openFolder: text asFileReference ] ]
 ]
 
 { #category : #accessing }
@@ -236,9 +239,14 @@ FDFileNavigationSystemPresenter >> fileReferenceTable [
 
 { #category : #'initialize-actions' }
 FDFileNavigationSystemPresenter >> filesListAction [
+
 	fileReferenceTable
 		transmitTo: nameText
-		transform: [ :selectedItem | selectedItem basename ].
+		transform: [ :selectedItem | 
+			selectedItem 
+				ifNotNil: [ selectedItem basename ]
+				ifNil: [ '' ] ].
+	
 	fileReferenceTable
 		whenActivatedDo: [ :selectedItem | 
 			selectedItem selectedItem isDirectory
@@ -299,10 +307,11 @@ FDFileNavigationSystemPresenter >> initializeFilesTable [
 
 { #category : #'initialize-widgets' }
 FDFileNavigationSystemPresenter >> initializeFiltersDropList [
+	
 	filtersDropList
 		items: FDAbstractFilter defaultFilters;
 		display: [ :item | item name ];
-		selectedIndex: 1
+		selectIndex: 1
 ]
 
 { #category : #initialization }

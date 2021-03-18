@@ -42,6 +42,13 @@ FDFileDialogTest >> tearDown [
 ]
 
 { #category : #tests }
+FDFileDialogTest >> testCanonicalize [
+	| location |
+	location := FileLocator imageDirectory asFileReference.
+	self assert: (dialog canonicalize: location / '..') fullName equals: location parent fullName
+]
+
+{ #category : #tests }
 FDFileDialogTest >> testIsRootDirectory [
 	self assert: (dialog isRootDirectory: FileLocator root)
 ]
@@ -57,6 +64,14 @@ FDFileDialogTest >> testIsRootDirectoryWindowsDrive [
 FDFileDialogTest >> testOpen [
 	"will it even open?"
 	window := dialog openDialogWithSpec.
+]
+
+{ #category : #tests }
+FDFileDialogTest >> testOpenFolder [
+	window := dialog open.
+	self assert: dialog currentDirectory equals: root.
+	dialog openFolder: root / 'dir'.
+	self assert: dialog currentDirectory equals: root / 'dir'
 ]
 
 { #category : #tests }

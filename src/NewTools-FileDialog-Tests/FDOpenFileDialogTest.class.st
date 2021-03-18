@@ -10,6 +10,18 @@ FDOpenFileDialogTest >> dialogClass [
 ]
 
 { #category : #tests }
+FDOpenFileDialogTest >> testArrayFilters [
+	dialog fileFilters: #('*.ston' '*.image').
+	self assert: dialog fileFilters equals: {'*.ston, *.image' -> #('*.ston' '*.image')}
+]
+
+{ #category : #tests }
+FDOpenFileDialogTest >> testExtensions [
+	dialog extensionFilters: {'Ext files' -> #(ext)}.
+	self assert: dialog fileFilters equals: {'Ext files (*.ext)' -> #('*.ext')}
+]
+
+{ #category : #tests }
 FDOpenFileDialogTest >> testSelectFile [
 	| selectedFile |
 	dialog okAction: [ :file | selectedFile := file ].
