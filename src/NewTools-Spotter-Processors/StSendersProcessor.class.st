@@ -26,10 +26,23 @@ StSendersProcessor class >> title [
 	^ 'Senders'
 ]
 
+{ #category : #testing }
+StSendersProcessor >> askingForSenders [
+
+	^ query categoriesSelected 
+		anySatisfy: [ :each | each asLowercase beginsWith: #s ]
+]
+
+{ #category : #testing }
+StSendersProcessor >> categoriesIncludes: aCategory [
+
+	^ aCategory asLowercase beginsWith: #s
+]
+
 { #category : #filtering }
 StSendersProcessor >> executeQuery [
 
-	(query categoriesSelected includes: 'Senders')
+	self askingForSenders
 		ifFalse: [ ^ self ].
 
 	^ super executeQuery 
@@ -41,8 +54,15 @@ StSendersProcessor >> installKeymappingsOn: aPresenter onExecution: aBlock [
 	aPresenter
 		bindKeyCombination: $n meta
 		toAction: [ 
-			aPresenter onKeyProcessor: self.
+			self query filterSenders.
 			aBlock cull: self ]
+]
+
+{ #category : #'spotter-api' }
+StSendersProcessor >> isRelevantForQuery: aString [ 
+	
+	"I will handle... I am old enough"
+	^ true
 ]
 
 { #category : #filtering }

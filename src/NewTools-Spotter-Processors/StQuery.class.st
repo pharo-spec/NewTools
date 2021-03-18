@@ -47,6 +47,12 @@ StQuery >> filterImplementors [
 	modifiers add: #Implementors
 ]
 
+{ #category : #configuring }
+StQuery >> filterSenders [
+
+	modifiers add: #Senders
+]
+
 { #category : #results }
 StQuery >> informAllResultAmount: anInteger [ 
 
