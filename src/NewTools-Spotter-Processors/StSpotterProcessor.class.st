@@ -123,6 +123,12 @@ StSpotterProcessor class >> title [
 	^ self subclassResponsibility 
 ]
 
+{ #category : #accessing }
+StSpotterProcessor >> actLogic [
+
+	^ [ :anItem :aStep | anItem evaluateFor: aStep ]
+]
+
 { #category : #'spotter-api' }
 StSpotterProcessor >> allFilteredCandidates [
 
@@ -212,6 +218,18 @@ StSpotterProcessor >> isRunning [
 	^ running
 ]
 
+{ #category : #accessing }
+StSpotterProcessor >> itemIcon [
+
+	^ [ :anItem | anItem icon ]
+]
+
+{ #category : #accessing }
+StSpotterProcessor >> itemName [
+
+	^ [ :anItem | anItem asString ]
+]
+
 { #category : #'key-bindings' }
 StSpotterProcessor >> keyBinding [ 
 	^ nil
@@ -265,7 +283,13 @@ StSpotterProcessor >> notifyStarted: aSpotterContext [
 { #category : #accessing }
 StSpotterProcessor >> order [
 
-	^ self class order
+	^ order ifNil: [ self class order ]
+]
+
+{ #category : #accessing }
+StSpotterProcessor >> order: aNumber [
+
+	^ order
 ]
 
 { #category : #accessing }

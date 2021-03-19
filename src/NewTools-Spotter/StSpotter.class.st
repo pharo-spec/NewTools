@@ -324,16 +324,17 @@ StSpotter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
+		title: 'Spotter';
 		withoutDecorations;
 		initialExtent: self initialExtent;
 		whenOpenedDo: [ self startProcessing ];
 		whenClosedDo: [ self stopProcessing ];
 		centered.
 
-	self model processors do: [ :each | 
+	"self model processors do: [ :each | 
 		each 
 			installKeymappingsOn: aWindowPresenter
-			onExecution: [ :aProcessor | self updateSearchFromProcessor: aProcessor ] ]
+			onExecution: [ :aProcessor | self updateSearchFromProcessor: aProcessor ] ]"
 ]
 
 { #category : #testing }

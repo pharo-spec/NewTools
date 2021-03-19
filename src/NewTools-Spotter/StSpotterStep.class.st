@@ -8,6 +8,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'model',
+		'origin',
 		'queries',
 		'activeQuery',
 		'processors'
@@ -16,11 +17,10 @@ Class {
 }
 
 { #category : #'instance creation' }
-StSpotterStep class >> newModel: aSpotterModel processors: aCollection [
+StSpotterStep class >> newModel: aSpotterModel [
 
 	^ self new 
 		model: aSpotterModel;
-		processors: aCollection;
 		yourself
 ]
 
@@ -44,6 +44,20 @@ StSpotterStep >> activateQuery: aQuery [
 StSpotterStep >> activeQuery [
 
 	^ activeQuery
+]
+
+{ #category : #accessing }
+StSpotterStep >> addProcessor: processor [
+	
+	processors add: processor
+]
+
+{ #category : #accessing }
+StSpotterStep >> candidatesList [
+
+	^ activeQuery 
+		ifNotNil: [ :aQuery | aQuery candidatesList ]
+		ifNil: [ #() ]
 ]
 
 { #category : #private }
@@ -84,6 +98,16 @@ StSpotterStep >> links [
 		ifNil: [ #() ]
 ]
 
+{ #category : #factory }
+StSpotterStep >> listProcessor [
+	| processor |
+	
+	processor := GTSpotterCandidatesListProcessor new.
+	self addProcessor: processor.
+	
+	^ processor
+]
+
 { #category : #accessing }
 StSpotterStep >> model [
 
@@ -96,6 +120,31 @@ StSpotterStep >> model: aSpotterModel [
 	model := aSpotterModel
 ]
 
+{ #category : #accessing }
+StSpotterStep >> origin [
+
+	^ origin
+]
+
+{ #category : #accessing }
+StSpotterStep >> origin: anObject [
+
+	origin := anObject
+]
+
+{ #category : #accessing }
+StSpotterStep >> previousProcessorFrom: aCollection [
+
+	aCollection do: [ :each | 
+		" we assume they are all identical "
+		each asStSpotterCandidateLink processor ifNotNil: [ ^ each processor ] ]. 
+	
+	^ GTSpotterCandidatesListProcessor new
+		title: 'Items';
+		filter: GTFilterSubstring;
+		yourself
+]
+
 { #category : #processing }
 StSpotterStep >> process: aString [
 	| query |
@@ -104,7 +153,7 @@ StSpotterStep >> process: aString [
 	query ifNotNil: [ ^ self activateQuery: query ].
 
 	query := StSpotterQuery on: aString.
-	query processors: self processors.
+	query processors: (self processors sort: #order ascending).
 	self activateQuery: query.
 	query process
 ]
@@ -112,7 +161,10 @@ StSpotterStep >> process: aString [
 { #category : #accessing }
 StSpotterStep >> processors [
 
-	^ processors
+	^ processors ifNil: [ 
+		processors := OrderedCollection new.
+		self origin stSpotterProcessorsFor: self.
+		processors ]
 ]
 
 { #category : #accessing }

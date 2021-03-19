@@ -117,13 +117,7 @@ StEntry >> spotterPreviewIn: aComposite inContext: aSpotter [
 ]
 
 { #category : #'spotter-extensions' }
-StEntry >> spotterProcessorsFor: aSpotterStep [
+StEntry >> stSpotterProcessorsFor: aSpotterStep [
 
-	^ content spotterProcessorsFor: aSpotterStep
-]
-
-{ #category : #'spotter-extensions' }
-StEntry >> spotterProcessorsFor: aSpotterStep pragma: aPragma [
-
-	^ content spotterProcessorsFor: aSpotterStep pragma: aPragma
+	^ content stSpotterProcessorsFor: aSpotterStep
 ]

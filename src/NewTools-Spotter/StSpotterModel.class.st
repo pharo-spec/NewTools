@@ -91,27 +91,21 @@ StSpotterModel >> links [
 { #category : #'private factory' }
 StSpotterModel >> newDefaultStep [
 
-	^ self newStep: self defaultProcessors
+	^ self newStep
+		origin: self;
+		yourself
 ]
 
 { #category : #'private factory' }
-StSpotterModel >> newStep: processors [
+StSpotterModel >> newStep [
 
-	^ StSpotterStep 
-		newModel: self
-		processors: processors
+	^ StSpotterStep newModel: self
 ]
 
 { #category : #'private processing' }
 StSpotterModel >> process: aString [
 	
 	self activeStep process: aString
-]
-
-{ #category : #accessing }
-StSpotterModel >> processors [
-
-	^ self activeStep processors
 ]
 
 { #category : #private }
@@ -125,15 +119,28 @@ StSpotterModel >> pushStep: aStep [
 
 { #category : #accessing }
 StSpotterModel >> pushStepForProcessor: aProcessor [
+	| step allCandidates processorLink |
 
-	self pushStep: (self newStep: { aProcessor })
-	
+	step := self newStep.
+	processorLink := aProcessor asStSpotterProcessorLink.
+	allCandidates := aProcessor allFilteredCandidates collect: [ :each | 
+		each asStSpotterCandidateLink renderingProcessor: processorLink ].
+	step origin: allCandidates.
+	self pushStep: step.
+	self asyncProcess: ''
 ]
 
 { #category : #accessing }
 StSpotterModel >> results [
 
 	^ self activeStep results
+]
+
+{ #category : #'as yet unclassified' }
+StSpotterModel >> stSpotterProcessorsFor: aStep [
+
+	self defaultProcessors 
+		do: [ :each | aStep addProcessor: each ]
 ]
 
 { #category : #processing }
