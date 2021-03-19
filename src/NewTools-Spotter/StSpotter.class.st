@@ -189,7 +189,7 @@ StSpotter >> deferredUpdateResultList: aCandidateLink [
 	| categoryPresenter presenters |
 
 	categoryPresenter := categories 
-		at: aCandidateLink processor
+		at: aCandidateLink value class
 		ifAbsentPut: [ self newSpotterHeaderPresenter: aCandidateLink processor ].
 		
 	categoryPresenter addCandidate: aCandidateLink inSpotter: self.
@@ -359,14 +359,6 @@ StSpotter >> newSpotterHeaderPresenter: aProcessor [
 
 	^ (self instantiate: StSpotterHeaderPresenter on: aProcessor)
 		whenDiveInDo: [ :processor | self diveInProcessor: processor ];
-		yourself
-]
-
-{ #category : #'private updating' }
-StSpotter >> newSpotterHeaderPresenter: aProcessor amount: aNumber [
-
-	^ (self newSpotterHeaderPresenter: aProcessor)
-		"updateAmount: aNumber;"
 		yourself
 ]
 

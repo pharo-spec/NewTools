@@ -14,7 +14,9 @@ Class {
 		'diveButtonPresenter',
 		'diveInAction',
 		'finalAmount',
-		'amountLabelPresenter'
+		'amountLabelPresenter',
+		'entryClass',
+		'helpLabelPresenter'
 	],
 	#category : #'NewTools-Spotter-View'
 }
@@ -61,11 +63,13 @@ StSpotterHeaderPresenter >> initializePresenters [
 		vAlignCenter;
 		add: (labelPresenter := self newLabel) expand: false;
 		add: (amountLabelPresenter := self newLabel) expand: false;
+		"add: (helpLabelPresenter := self newLabel) expand: false;"
 		addLast: (diveButtonPresenter := self newImage) expand: false; 
 		yourself).
 
 	self addStyle: 'stSpotterHeader'.
 	amountLabelPresenter addStyle: 'dim'.
+	"helpLabelPresenter addStyle: 'dim'."
 	diveButtonPresenter image: (self application iconNamed: #smallForward).
 	diveButtonPresenter eventHandler
 		whenMouseDownDo: [ :event | 
@@ -102,9 +106,9 @@ StSpotterHeaderPresenter >> updateAmount [
 StSpotterHeaderPresenter >> updatePresenter [
 
 	labelPresenter label: '#', self model title.
-	amountLabelPresenter label: (self model keyBinding 
+	"helpLabelPresenter label: (self keyBinding 
 		ifNotNil: [ :binding | binding asString ]
-		ifNil: [ '' ])
+		ifNil: [ '' ])"
 ]
 
 { #category : #enumerating }
