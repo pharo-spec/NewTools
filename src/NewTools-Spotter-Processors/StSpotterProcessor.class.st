@@ -238,7 +238,7 @@ StSpotterProcessor >> keyBinding [
 { #category : #configuration }
 StSpotterProcessor >> maxResults [
 
-	^ GTSpotterPragmaBasedProcessor defaultItemsLimit 
+	^ StSpotterPragmaBasedProcessor defaultItemsLimit
 ]
 
 { #category : #filtering }

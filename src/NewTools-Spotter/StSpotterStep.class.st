@@ -102,7 +102,7 @@ StSpotterStep >> links [
 StSpotterStep >> listProcessor [
 	| processor |
 	
-	processor := GTSpotterCandidatesListProcessor new.
+	processor := StSpotterCandidatesListProcessor new.
 	self addProcessor: processor.
 	
 	^ processor
@@ -139,9 +139,9 @@ StSpotterStep >> previousProcessorFrom: aCollection [
 		" we assume they are all identical "
 		each asStSpotterCandidateLink processor ifNotNil: [ ^ each processor ] ]. 
 	
-	^ GTSpotterCandidatesListProcessor new
+	^ StSpotterCandidatesListProcessor new
 		title: 'Items';
-		filter: GTFilterSubstring;
+		filter: StFilterSubstring;
 		yourself
 ]
 

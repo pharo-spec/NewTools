@@ -24,7 +24,7 @@ StSpotterCandidatesList >> addAllCandidates: aCollection in: aProcessor [
 		self updateCycleConnectionFor: candidateLink.
 		candidateLink ].
 
-	self announcer announce: (GTSpotterAllCandidatesAdded new
+	self announcer announce: (StSpotterAllCandidatesAdded new
 		candidateLinks: allLinks;
 		category: aProcessor;
 		yourself)
@@ -163,8 +163,7 @@ StSpotterCandidatesList >> nextProcessorLinkOf: aProcessorLink [
 { #category : #notifying }
 StSpotterCandidatesList >> notifyAllCandidatesRemoved [
 
-	self halt.
-	self announcer announce: (GTSpotterAllCandidatesRemoved new)
+	"self announcer announce: (GTSpotterAllCandidatesRemoved new)"
 ]
 
 { #category : #notifying }
