@@ -192,6 +192,8 @@ StSpotter >> deferredUpdateResultList: aCandidateLink [
 		headerCategoryFor: aCandidateLink
 		on: self.
 		
+	(categoryPresenter includesLink: aCandidateLink) ifTrue: [ ^ self ].
+	
 	categoryPresenter addCandidate: aCandidateLink inSpotter: self.
 	
 	presenters := (categories values 

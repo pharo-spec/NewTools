@@ -47,6 +47,12 @@ StSpotterHeaderPresenter >> finalAmount: aNumber [
 	finalAmount := aNumber
 ]
 
+{ #category : #testing }
+StSpotterHeaderPresenter >> includesLink: aLink [
+
+	^ candidatePresentersList anySatisfy: [ :each | each entry = aLink value ]
+]
+
 { #category : #initialization }
 StSpotterHeaderPresenter >> initialize [
 
