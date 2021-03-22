@@ -188,9 +188,9 @@ StSpotter >> defaultModel [
 StSpotter >> deferredUpdateResultList: aCandidateLink [
 	| categoryPresenter presenters |
 
-	categoryPresenter := categories 
-		at: aCandidateLink value class
-		ifAbsentPut: [ self newSpotterHeaderPresenter: aCandidateLink processor ].
+	categoryPresenter := aCandidateLink processor 
+		headerCategoryFor: aCandidateLink
+		on: self.
 		
 	categoryPresenter addCandidate: aCandidateLink inSpotter: self.
 	
@@ -223,6 +223,25 @@ StSpotter >> handleKeyEvent: anEvent [
 	
 	(#( 30 "arrow up" 31 "arrow down" 13 "cr") includes: anEvent keyCharacter asInteger)
 		ifFalse: [ searchText takeKeyboardFocus ]
+]
+
+{ #category : #'private updating' }
+StSpotter >> headerCategoryFor: aLink [
+
+	^ categories 
+		at: aLink processor
+		ifAbsentPut: [ self newSpotterHeaderPresenter: aLink processor ]
+]
+
+{ #category : #'private updating' }
+StSpotter >> headerCategoryUnifiedFor: aLink [
+
+	^ categories 
+		at: aLink value class
+		ifAbsentPut: [ 
+			(self newSpotterHeaderPresenter: aLink processor)
+				type: aLink value class;
+				yourself ]
 ]
 
 { #category : #'private actions' }
@@ -331,10 +350,12 @@ StSpotter >> initializeWindow: aWindowPresenter [
 		whenClosedDo: [ self stopProcessing ];
 		centered.
 
-	"self model processors do: [ :each | 
+	self flag: #TODO. "This is more or less hacky, since I am using the processors that are
+	relevant to the first level of spotter as the only ones, but for now it is working"
+	self model activeProcessors do: [ :each | 
 		each 
 			installKeymappingsOn: aWindowPresenter
-			onExecution: [ :aProcessor | self updateSearchFromProcessor: aProcessor ] ]"
+			onExecution: [ :aProcessor | self updateSearchFromProcessor: aProcessor ] ]
 ]
 
 { #category : #testing }

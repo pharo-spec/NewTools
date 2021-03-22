@@ -14,6 +14,12 @@ Class {
 }
 
 { #category : #accessing }
+StSpotterModel >> activeProcessors [
+
+	^ self activeStep processors
+]
+
+{ #category : #accessing }
 StSpotterModel >> activeStep [
 
 	^ steps last

@@ -63,13 +63,13 @@ StSpotterHeaderPresenter >> initializePresenters [
 		vAlignCenter;
 		add: (labelPresenter := self newLabel) expand: false;
 		add: (amountLabelPresenter := self newLabel) expand: false;
-		"add: (helpLabelPresenter := self newLabel) expand: false;"
+		add: (helpLabelPresenter := self newLabel) expand: false;
 		addLast: (diveButtonPresenter := self newImage) expand: false; 
 		yourself).
 
 	self addStyle: 'stSpotterHeader'.
 	amountLabelPresenter addStyle: 'dim'.
-	"helpLabelPresenter addStyle: 'dim'."
+	helpLabelPresenter addStyle: 'dim'.
 	diveButtonPresenter image: (self application iconNamed: #smallForward).
 	diveButtonPresenter eventHandler
 		whenMouseDownDo: [ :event | 
@@ -88,10 +88,30 @@ StSpotterHeaderPresenter >> model [
 	^ model
 ]
 
+{ #category : #accessing }
+StSpotterHeaderPresenter >> prepareAsClasses [
+
+	labelPresenter label: '#Classes'.
+	helpLabelPresenter label: (KMShortcutPrinter toString: self model keyBindingForClasses).
+]
+
+{ #category : #accessing }
+StSpotterHeaderPresenter >> prepareAsImplementors [
+
+	labelPresenter label: '#Implementors'.
+	helpLabelPresenter label: (KMShortcutPrinter toString: self model keyBindingForImplementors).
+]
+
 { #category : #'accessing model' }
 StSpotterHeaderPresenter >> setModelBeforeInitialization: aProcessor [
 
 	model := aProcessor
+]
+
+{ #category : #accessing }
+StSpotterHeaderPresenter >> type: aClass [
+
+	 aClass prepareUnifiedHeaderDescriptionFor: self
 ]
 
 { #category : #'private updating' }
@@ -106,9 +126,9 @@ StSpotterHeaderPresenter >> updateAmount [
 StSpotterHeaderPresenter >> updatePresenter [
 
 	labelPresenter label: '#', self model title.
-	"helpLabelPresenter label: (self keyBinding 
+	helpLabelPresenter label: (self model keyBinding 
 		ifNotNil: [ :binding | binding asString ]
-		ifNil: [ '' ])"
+		ifNil: [ '' ])
 ]
 
 { #category : #enumerating }

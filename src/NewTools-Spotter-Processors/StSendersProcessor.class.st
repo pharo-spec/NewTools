@@ -52,7 +52,7 @@ StSendersProcessor >> executeQuery [
 StSendersProcessor >> installKeymappingsOn: aPresenter onExecution: aBlock [
 
 	aPresenter
-		bindKeyCombination: $n meta
+		bindKeyCombination: self keyBinding
 		toAction: [ 
 			self query filterSenders.
 			aBlock cull: self ]
@@ -63,6 +63,12 @@ StSendersProcessor >> isRelevantForQuery: aString [
 	
 	"I will handle... I am old enough"
 	^ true
+]
+
+{ #category : #'key-bindings' }
+StSendersProcessor >> keyBinding [
+
+	^ $n meta
 ]
 
 { #category : #filtering }
