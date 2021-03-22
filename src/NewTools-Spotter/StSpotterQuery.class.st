@@ -128,7 +128,7 @@ StSpotterQuery >> links [
 { #category : #'private factory' }
 StSpotterQuery >> newContextFor: aStream text: aString [
 
-	^ GTSpotterContext new 
+	^ StSpotterContext new 
 		step: self;
 		stream: aStream;
 		text: aString;
