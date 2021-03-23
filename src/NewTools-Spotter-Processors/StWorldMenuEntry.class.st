@@ -24,13 +24,3 @@ StWorldMenuEntry >> icon [
 
 	^ content icon
 ]
-
-{ #category : #'spotter-extensions' }
-StWorldMenuEntry >> spotterPreviewIn: aComposite inContext: aSpotter [
-
-	^ GTSpotterItemBrick new
-		text: content contents;
-		icon: content icon;
-		disable;
-		yourself
-]

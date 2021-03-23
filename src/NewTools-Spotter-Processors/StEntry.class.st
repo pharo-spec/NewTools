@@ -105,18 +105,6 @@ StEntry >> spotterPreview [
 ]
 
 { #category : #'spotter-extensions' }
-StEntry >> spotterPreviewIn: aComposite [
-
-	^ content spotterPreviewIn: aComposite
-]
-
-{ #category : #'spotter-extensions' }
-StEntry >> spotterPreviewIn: aComposite inContext: aSpotter [
-
-	^ self spotterPreviewIn: aComposite
-]
-
-{ #category : #'spotter-extensions' }
 StEntry >> stSpotterProcessorsFor: aSpotterStep [
 
 	^ content stSpotterProcessorsFor: aSpotterStep

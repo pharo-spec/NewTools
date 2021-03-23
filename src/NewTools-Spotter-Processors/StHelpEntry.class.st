@@ -24,9 +24,3 @@ StHelpEntry >> icon [
 	
 	^ content gtTopicIcon
 ]
-
-{ #category : #'spotter-extensions' }
-StHelpEntry >> spotterPreviewIn: aComposite inContext: aSpotter [
-
-	content spotterPreviewIn: aComposite inContext: aSpotter
-]

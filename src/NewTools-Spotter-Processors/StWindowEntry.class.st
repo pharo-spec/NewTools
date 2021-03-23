@@ -23,11 +23,3 @@ StWindowEntry >> icon [
 	
 	^ content taskbarIcon
 ]
-
-{ #category : #'spotter-extensions' }
-StWindowEntry >> spotterPreviewIn: aComposite inContext: aContext [
-
-	^ content spotterPreviewIn: aComposite inContext: aContext
-
-
-]
