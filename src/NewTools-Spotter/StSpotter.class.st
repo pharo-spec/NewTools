@@ -143,6 +143,12 @@ StSpotter class >> tips [
 	^ Tips ifNil: [ Tips := self createTips ]
 ]
 
+{ #category : #private }
+StSpotter class >> windowClosed [
+
+	spotterWindow := nil
+]
+
 { #category : #'private actions' }
 StSpotter >> activate: aPresenter [
 
@@ -349,7 +355,9 @@ StSpotter >> initializeWindow: aWindowPresenter [
 		withoutDecorations;
 		initialExtent: self initialExtent;
 		whenOpenedDo: [ self startProcessing ];
-		whenClosedDo: [ self stopProcessing ];
+		whenClosedDo: [ 
+			self stopProcessing.
+			self class windowClosed ];
 		centered.
 
 	self flag: #TODO. "This is more or less hacky, since I am using the processors that are
