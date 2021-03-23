@@ -494,9 +494,7 @@ StSpotter >> updateSearch: aString [
 
 { #category : #'private updating' }
 StSpotter >> updateSearchFromProcessor: aProcessor [
-	| index |
 
-	index := searchText cursorPositionIndex.
 	searchText text: aProcessor query textInSearchBar.
-	searchText cursorPositionIndex: index
+	searchText cursorPositionIndex: searchText text size + 1.
 ]
