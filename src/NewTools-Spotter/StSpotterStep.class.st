@@ -9,7 +9,6 @@ Class {
 	#instVars : [
 		'model',
 		'origin',
-		'queries',
 		'activeQuery',
 		'processors'
 	],
@@ -83,13 +82,6 @@ StSpotterStep >> disconnectQuery: aQuery [
 	aQuery announcer unsubscribe: self model
 ]
 
-{ #category : #initialization }
-StSpotterStep >> initialize [
-
-	super initialize.
-	queries := OrderedCollection new
-]
-
 { #category : #accessing }
 StSpotterStep >> links [
 
@@ -149,9 +141,6 @@ StSpotterStep >> previousProcessorFrom: aCollection [
 StSpotterStep >> process: aString [
 	| query |
 	
-	query := self queryFor: aString.
-	query ifNotNil: [ ^ self activateQuery: query ].
-
 	query := StSpotterQuery on: aString.
 	query processors: (self processors sort: #order ascending).
 	self activateQuery: query.
@@ -171,14 +160,6 @@ StSpotterStep >> processors [
 StSpotterStep >> processors: aCollection [
 
 	processors := aCollection
-]
-
-{ #category : #private }
-StSpotterStep >> queryFor: aString [
-
-	^ queries 
-		detect: [ :each | each searchText = aString ]
-		ifNone: [ nil ]
 ]
 
 { #category : #private }
