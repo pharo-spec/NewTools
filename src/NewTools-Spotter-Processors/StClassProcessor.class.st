@@ -23,7 +23,7 @@ StClassProcessor class >> hideInSettings [
 { #category : #accessing }
 StClassProcessor class >> order [
 	
-	^ 10
+	^ 100
 ]
 
 { #category : #accessing }

@@ -19,13 +19,18 @@ Class {
 
 { #category : #public }
 StSpotterContext >> addItem: anObject [
-	self stream addObject: anObject inProcessor: self processor
+
+	self stream 
+		addObject: anObject 
+		inProcessor: self processor
 ]
 
 { #category : #public }
 StSpotterContext >> addItems: aCollection [
 
-	self stream addObjects: aCollection inProcessor: self processor
+	self stream 
+		addObjects: aCollection 
+		inProcessor: self processor
 ]
 
 { #category : #accessing }

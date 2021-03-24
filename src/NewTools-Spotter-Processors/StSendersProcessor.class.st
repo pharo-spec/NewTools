@@ -17,7 +17,7 @@ StSendersProcessor class >> defaultEnabled [
 { #category : #accessing }
 StSendersProcessor class >> order [
 	
-	^ 15
+	^ 150
 ]
 
 { #category : #accessing }

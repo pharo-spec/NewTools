@@ -16,7 +16,7 @@ StHistoryProcessor class >> defaultEnabled [
 { #category : #accessing }
 StHistoryProcessor class >> order [
 	
-	^ 8
+	^ 80
 ]
 
 { #category : #accessing }

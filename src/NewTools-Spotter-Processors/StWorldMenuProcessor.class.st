@@ -16,7 +16,7 @@ StWorldMenuProcessor class >> defaultEnabled [
 { #category : #accessing }
 StWorldMenuProcessor class >> order [
 	
-	^ 9
+	^ 90
 ]
 
 { #category : #accessing }

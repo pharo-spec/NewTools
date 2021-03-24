@@ -16,7 +16,7 @@ StWindowsProcessor class >> defaultEnabled [
 { #category : #accessing }
 StWindowsProcessor class >> order [
 	
-	^ 5
+	^ 50
 ]
 
 { #category : #accessing }

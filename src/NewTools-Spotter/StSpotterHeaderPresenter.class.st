@@ -16,7 +16,8 @@ Class {
 		'finalAmount',
 		'amountLabelPresenter',
 		'entryClass',
-		'helpLabelPresenter'
+		'helpLabelPresenter',
+		'order'
 	],
 	#category : #'NewTools-Spotter-View'
 }
@@ -57,7 +58,7 @@ StSpotterHeaderPresenter >> includesLink: aLink [
 StSpotterHeaderPresenter >> initialize [
 
 	candidatePresentersList := OrderedCollection new.
-	super initialize.
+	super initialize
 ]
 
 { #category : #initialization }
@@ -95,6 +96,12 @@ StSpotterHeaderPresenter >> model [
 ]
 
 { #category : #accessing }
+StSpotterHeaderPresenter >> order [
+
+	^ order ifNil: [ self model order ]
+]
+
+{ #category : #accessing }
 StSpotterHeaderPresenter >> prepareAsClasses [
 
 	labelPresenter label: '#Classes'.
@@ -104,8 +111,16 @@ StSpotterHeaderPresenter >> prepareAsClasses [
 { #category : #accessing }
 StSpotterHeaderPresenter >> prepareAsImplementors [
 
+	order := self model order + 1.
 	labelPresenter label: '#Implementors'.
 	helpLabelPresenter label: (KMShortcutPrinter toString: self model keyBindingForImplementors).
+]
+
+{ #category : #accessing }
+StSpotterHeaderPresenter >> prepareAsPackages [
+
+	order := self model order - 1.
+	labelPresenter label: '#Packages'
 ]
 
 { #category : #'accessing model' }

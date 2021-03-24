@@ -203,7 +203,7 @@ StSpotter >> deferredUpdateResultList: aCandidateLink [
 	categoryPresenter addCandidate: aCandidateLink inSpotter: self.
 	
 	presenters := (categories values 
-		sorted: [ :each | each model order ] ascending)
+		sorted: [ :each | each order ] ascending)
 		flatCollect: [ :each | each withCandidates ]. 
 	
 	resultList disableActivationDuring: [ 

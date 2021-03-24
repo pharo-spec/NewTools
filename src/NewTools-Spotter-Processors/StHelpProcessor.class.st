@@ -16,7 +16,7 @@ StHelpProcessor class >> defaultEnabled [
 { #category : #accessing }
 StHelpProcessor class >> order [
 	
-	^ 200
+	^ 2000
 ]
 
 { #category : #accessing }

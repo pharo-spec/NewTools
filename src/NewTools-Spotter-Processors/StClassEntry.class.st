@@ -7,12 +7,6 @@ Class {
 	#category : #'NewTools-Spotter-Processors-Entries'
 }
 
-{ #category : #'as yet unclassified' }
-StClassEntry class >> prepareUnifiedHeaderDescriptionFor: aHeaderPresenter [
-
-	^ aHeaderPresenter prepareAsClasses
-]
-
 { #category : #converting }
 StClassEntry >> asString [
 

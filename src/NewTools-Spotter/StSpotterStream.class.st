@@ -13,14 +13,18 @@ Class {
 { #category : #'adding/removing' }
 StSpotterStream >> addObject: firstObject inProcessor: secondObject [
 
-	self performSymbol: self onAddedSelector withArguments: { firstObject. secondObject }.
+	self 
+		performSymbol: self onAddedSelector 
+		withArguments: { firstObject. secondObject }.
 	Processor yield
 ]
 
 { #category : #'adding/removing' }
 StSpotterStream >> addObjects: aCollection inProcessor: aProcessor [
 
-	self performSymbol: #addAllCandidates:in: withArguments: { aCollection . aProcessor }.
+	self 
+		performSymbol: #addAllCandidates:in: 
+		withArguments: { aCollection . aProcessor }.
 	Processor yield
 ]
 
@@ -74,7 +78,9 @@ StSpotterStream >> receiver: anObject [
 { #category : #'adding/removing' }
 StSpotterStream >> removeAllCandidates [
 
-	self performSymbol: #removeAllCandidates withArguments: { }.
+	self 
+		performSymbol: #removeAllCandidates 
+		withArguments: { }.
 	Processor yield
 ]
 

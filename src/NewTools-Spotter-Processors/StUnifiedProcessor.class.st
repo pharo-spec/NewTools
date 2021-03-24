@@ -28,7 +28,7 @@ StUnifiedProcessor class >> defaultEnabled [
 { #category : #accessing }
 StUnifiedProcessor class >> order [
 	
-	^ 10
+	^ 100
 ]
 
 { #category : #settings }

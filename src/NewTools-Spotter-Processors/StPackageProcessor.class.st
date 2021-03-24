@@ -23,7 +23,7 @@ StPackageProcessor class >> hideInSettings [
 { #category : #accessing }
 StPackageProcessor class >> order [
 	
-	^ 10
+	^ 100
 ]
 
 { #category : #accessing }

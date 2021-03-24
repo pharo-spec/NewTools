@@ -17,7 +17,7 @@ StCatalogProjectsProcessor class >> defaultEnabled [
 { #category : #accessing }
 StCatalogProjectsProcessor class >> order [
 	
-	^ 90
+	^ 900
 ]
 
 { #category : #accessing }
