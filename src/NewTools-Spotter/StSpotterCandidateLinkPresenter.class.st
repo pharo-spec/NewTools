@@ -13,6 +13,12 @@ Class {
 	#category : #'NewTools-Spotter-View'
 }
 
+{ #category : #actions }
+StSpotterCandidateLinkPresenter >> activateOn: spotterPresenter [
+
+	spotterPresenter activateLink: self model
+]
+
 { #category : #accessing }
 StSpotterCandidateLinkPresenter >> entry [
 

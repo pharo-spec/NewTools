@@ -88,6 +88,12 @@ StSpotterModel >> initialize [
 	steps := OrderedCollection with: self newDefaultStep
 ]
 
+{ #category : #testing }
+StSpotterModel >> isNested [
+
+	^ steps size > 1
+]
+
 { #category : #accessing }
 StSpotterModel >> links [
 
@@ -108,13 +114,27 @@ StSpotterModel >> newStep [
 	^ StSpotterStep newModel: self
 ]
 
+{ #category : #accessing }
+StSpotterModel >> popStep [
+	| lastQuery |
+
+	"Do not pop first"
+	steps size > 1 ifFalse: [ ^ self ]. 
+
+	lastQuery := self activeStep activeQuery.
+	self activeStep deactivate.
+	steps removeLast.
+	self activeStep activate.
+	self asyncProcess: ''
+]
+
 { #category : #'private processing' }
 StSpotterModel >> process: aString [
 	
 	self activeStep process: aString
 ]
 
-{ #category : #private }
+{ #category : #accessing }
 StSpotterModel >> pushStep: aStep [
 	| lastQuery |
 
@@ -132,8 +152,7 @@ StSpotterModel >> pushStepForProcessor: aProcessor [
 	allCandidates := aProcessor allFilteredCandidates collect: [ :each | 
 		each asStSpotterCandidateLink renderingProcessor: processorLink ].
 	step origin: allCandidates.
-	self pushStep: step.
-	self asyncProcess: ''
+	self pushStep: step
 ]
 
 { #category : #accessing }
@@ -142,7 +161,7 @@ StSpotterModel >> results [
 	^ self activeStep results
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 StSpotterModel >> stSpotterProcessorsFor: aStep [
 
 	self defaultProcessors 

@@ -29,8 +29,7 @@ Class {
 		'categories',
 		'mutex',
 		'spinner',
-		'tip',
-		'label'
+		'tip'
 	],
 	#classVars : [
 		'History',
@@ -152,13 +151,15 @@ StSpotter class >> windowClosed [
 { #category : #'private actions' }
 StSpotter >> activate: aPresenter [
 
-	aPresenter isHeader ifTrue: [ 
-		self diveInProcessor: aPresenter model.
-		^ self ].
+	aPresenter activateOn: self
+]
+
+{ #category : #'private actions' }
+StSpotter >> activateLink: aCandidateLink [
 
 	self window close.
-	self historize: aPresenter model.
-	aPresenter model value doEvaluate.
+	self historize: aCandidateLink.
+	aCandidateLink value doEvaluate.
 
 ]
 
@@ -216,8 +217,20 @@ StSpotter >> deferredUpdateResultList: aCandidateLink [
 { #category : #'private actions' }
 StSpotter >> diveInProcessor: aProcessor [
 
+	[
+		self showSpinner.
+		resultList presenters: #().
+		self removeAll.
+		self model pushStepForProcessor: aProcessor.
+		searchText text: '' 
+	] schedule
+]
+
+{ #category : #'private actions' }
+StSpotter >> diveOut [
+
 	self removeAll.
-	self model pushStepForProcessor: aProcessor
+	self model popStep
 ]
 
 { #category : #'private actions' }
@@ -280,7 +293,7 @@ StSpotter >> initialize [
 
 	mutex ifNil: [ mutex := Mutex new ].
 	categories := Dictionary new.
-	super initialize.
+	super initialize
 ]
 
 { #category : #initialization }
@@ -296,7 +309,6 @@ StSpotter >> initializePresenters [
 	self layout: (SpBoxLayout newVertical
 		borderWidth: 10;
 		spacing: 5;
-		"add: (label := self newLabel) expand: false;"
 		add: (searchText := self newSearchInput) expand: false;
 		add: (SpOverlayLayout new
 			child: ((contentsLayout := SpBoxLayout newHorizontal)
@@ -336,13 +348,14 @@ StSpotter >> initializePresenters [
 			self showPreview: selection selectedItem ] ].
 
 	self addStyle: 'stSpotter'.
-	"label label: 'Spotter'."
 	searchText 
 		placeholder: 'Search...';
 		addStyle: 'stSpotterSearch';
 		whenTextChangedDo: [ :aString | self updateSearch: aString ];
 		bindKeyCombination: Character arrowDown asKeyCombination 
-			toAction: [ self transferFocusToResultList ].
+			toAction: [ self transferFocusToResultList ];
+		bindKeyCombination: Character arrowUp asKeyCombination 
+			toAction: [ self transferFocusToResultListAtLast ].
 	resultList addStyle: 'stSpotterList'.
 ]
 
@@ -380,17 +393,19 @@ StSpotter >> model [
 	^ model ifNil: [ model := self defaultModel ]
 ]
 
-{ #category : #'private updating' }
+{ #category : #'private factory' }
 StSpotter >> newSpotterCandidateLinkPresenter: aLink [
 
 	^ self instantiate: StSpotterCandidateLinkPresenter on: aLink
 ]
 
-{ #category : #'private updating' }
+{ #category : #'private factory' }
 StSpotter >> newSpotterHeaderPresenter: aProcessor [
 
 	^ (self instantiate: StSpotterHeaderPresenter on: aProcessor)
+		nested: self model isNested;
 		whenDiveInDo: [ :processor | self diveInProcessor: processor ];
+		whenDiveOutDo: [ self diveOut ];
 		yourself
 ]
 
@@ -452,11 +467,23 @@ StSpotter >> stopProcessing [
 { #category : #private }
 StSpotter >> transferFocusToResultList [
 
+	self transferFocusToResultListAt: 1
+]
+
+{ #category : #private }
+StSpotter >> transferFocusToResultListAt: index [
+
 	resultList items isEmptyOrNil ifTrue: [ ^ self ].
 	
 	resultList 
-		selectIndex: 1;
+		selectIndex: index;
 		takeKeyboardFocus
+]
+
+{ #category : #private }
+StSpotter >> transferFocusToResultListAtLast [ 
+
+	self transferFocusToResultListAt: (resultList presenters size)
 ]
 
 { #category : #private }

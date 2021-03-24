@@ -7,6 +7,12 @@ Class {
 	#category : #'NewTools-Spotter-View'
 }
 
+{ #category : #actions }
+StSpotterBasePresenter >> activateOn: spotterPresenter [
+
+	self subclassResponsibility
+]
+
 { #category : #testing }
 StSpotterBasePresenter >> isHeader [
 

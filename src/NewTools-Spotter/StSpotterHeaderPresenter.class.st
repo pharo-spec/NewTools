@@ -17,10 +17,18 @@ Class {
 		'amountLabelPresenter',
 		'entryClass',
 		'helpLabelPresenter',
-		'order'
+		'order',
+		'diveOutAction',
+		'nested'
 	],
 	#category : #'NewTools-Spotter-View'
 }
+
+{ #category : #actions }
+StSpotterHeaderPresenter >> activateOn: spotterPresenter [
+
+	self doDive
+]
 
 { #category : #accessing }
 StSpotterHeaderPresenter >> addCandidate: aCandidateLink inSpotter: spotterPresenter [
@@ -34,6 +42,21 @@ StSpotterHeaderPresenter >> diveIn [
 
 	diveInAction ifNil: [ ^ self ].
 	diveInAction cull: self model
+]
+
+{ #category : #'private actions' }
+StSpotterHeaderPresenter >> diveOut [
+
+	diveOutAction ifNil: [ ^ self ].
+	diveOutAction cull: self model
+]
+
+{ #category : #actions }
+StSpotterHeaderPresenter >> doDive [
+
+	nested 
+		ifTrue: [ self diveOut ]
+		ifFalse: [ self diveIn ]
 ]
 
 { #category : #accessing }
@@ -58,6 +81,7 @@ StSpotterHeaderPresenter >> includesLink: aLink [
 StSpotterHeaderPresenter >> initialize [
 
 	candidatePresentersList := OrderedCollection new.
+	nested := false.
 	super initialize
 ]
 
@@ -80,7 +104,7 @@ StSpotterHeaderPresenter >> initializePresenters [
 	diveButtonPresenter image: (self application iconNamed: #smallForward).
 	diveButtonPresenter eventHandler
 		whenMouseDownDo: [ :event | 
-			event isPrimaryButton ifTrue: [ self diveIn ] ].
+			event isPrimaryButton ifTrue: [ self doDive ] ].
 ]
 
 { #category : #testing }
@@ -93,6 +117,17 @@ StSpotterHeaderPresenter >> isHeader [
 StSpotterHeaderPresenter >> model [
 
 	^ model
+]
+
+{ #category : #accessing }
+StSpotterHeaderPresenter >> nested: aBoolean [
+
+	nested = aBoolean ifTrue: [ ^ self ].
+
+	nested := aBoolean.
+	diveButtonPresenter image: (self application iconNamed: (nested 
+		ifTrue: [ #smallBack ]
+		ifFalse: [ #smallForward ]))
 ]
 
 { #category : #accessing }
@@ -152,10 +187,16 @@ StSpotterHeaderPresenter >> updatePresenter [
 		ifNil: [ '' ])
 ]
 
-{ #category : #enumerating }
+{ #category : #events }
 StSpotterHeaderPresenter >> whenDiveInDo: aBlock [
 
 	diveInAction := aBlock
+]
+
+{ #category : #events }
+StSpotterHeaderPresenter >> whenDiveOutDo: aBlock [
+
+	diveOutAction := aBlock
 ]
 
 { #category : #accessing }
