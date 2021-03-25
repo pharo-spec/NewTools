@@ -81,7 +81,11 @@ BaselineOfNewTools >> baseline: spec [
 				'NewTools-Debugger-Breakpoints-Tools'
 				'NewTools-Debugger-Tests'
 				'NewTools-Debugger-Fuel');
-			group: 'SystemReporter' with: #('Spotter' 'NewTools-Spotter');
+			group: 'Spotter' with: #(
+				'NewTools-Spotter-Processors' 
+				'NewTools-Spotter' 
+				'NewTools-Spotter-Extensions'
+				'NewTools-Spotter-Processors-Tests');
 			group: 'SystemReporter' with: #('Core' 'NewTools-SystemReporter');
 			group: 'Methods' with: #('Core' 'NewTools-MethodBrowsers');
 			"Not in the image for the moment, we need a pass on them"
@@ -103,6 +107,7 @@ BaselineOfNewTools >> baseline: spec [
 				'Inspector'
 				'Debugger'
 				'Methods'
+				'Spotter'
 				"'ChangeSorter'"
 				"'KeymapBrowser'"
 				"'FlagBrowser'");
