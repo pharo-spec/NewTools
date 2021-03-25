@@ -15,6 +15,7 @@ BaselineOfNewTools >> baseline: spec [
 		spec preLoadDoIt: #'preload:package:'.
 		spec postLoadDoIt: #'postload:package:'.
 
+		self spec: spec.
 		self sindarin: spec.
 
 		spec
@@ -42,6 +43,12 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-SystemBrowser' with: [ spec requires: #('NewTools-Inspector') ];
 			"system reporter"
 			package: 'NewTools-SystemReporter' with: [ spec requires: #('NewTools-Core') ];
+			"spotter"
+			package: 'NewTools-Spotter-Processors';
+			package: 'NewTools-Spotter' with: [ spec requires: #('NewTools-Core' 'NewTools-Spotter-Processors') ];
+			package: 'NewTools-Spotter-Extensions' with: [ spec requires: #('NewTools-Spotter') ];
+			package: 'NewTools-Spotter-Processors-Tests' with: [ spec requires: #('NewTools-Spotter-Processors') ];
+			package: 'NewTools-Morphic-Spotter' with: [ spec requires: #('NewTools-Morphic') ];
 			"extras"
 			package: 'HelpCenter' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-FlagBrowser' with: [ spec requires: #('NewTools-Core') ];
@@ -82,6 +89,7 @@ BaselineOfNewTools >> baseline: spec [
 				'NewTools-Debugger-Tests'
 				'NewTools-Debugger-Fuel');
 			group: 'Spotter' with: #(
+				'NewTools-Morphic-Spotter' 
 				'NewTools-Spotter-Processors' 
 				'NewTools-Spotter' 
 				'NewTools-Spotter-Extensions'
