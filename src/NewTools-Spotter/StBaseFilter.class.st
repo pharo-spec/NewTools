@@ -10,12 +10,14 @@ Class {
 }
 
 { #category : #public }
-StBaseFilter class >> gtFilter [
+StBaseFilter class >> stFilter [
+
 	^ self new
 ]
 
 { #category : #public }
-StBaseFilter class >> gtListFilter [
+StBaseFilter class >> stListFilter [
+
 	^ self new
 ]
 
@@ -94,16 +96,6 @@ StBaseFilter >> filteredItems: aCollection [
 	filteredItems := aCollection
 ]
 
-{ #category : #public }
-StBaseFilter >> gtFilter [
-	^ self
-]
-
-{ #category : #public }
-StBaseFilter >> gtListFilter [
-	^ self
-]
-
 { #category : #testing }
 StBaseFilter >> hasFilteredItems [
 	^ self filteredItems isEmptyOrNil not
@@ -138,6 +130,18 @@ StBaseFilter >> prepareFilterInContext: aSpotterContext [
 { #category : #'private-model' }
 StBaseFilter >> processor [
 	^ self context processor
+]
+
+{ #category : #public }
+StBaseFilter >> stFilter [
+
+	^ self
+]
+
+{ #category : #public }
+StBaseFilter >> stListFilter [
+
+	^ self
 ]
 
 { #category : #'private-model' }

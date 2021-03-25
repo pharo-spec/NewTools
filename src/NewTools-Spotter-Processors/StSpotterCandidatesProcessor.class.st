@@ -51,7 +51,9 @@ StSpotterCandidatesProcessor >> continueItemsLimit [
 { #category : #private }
 StSpotterCandidatesProcessor >> doFilterInContext: aSpotterContext [
 
-	^ aSpotterContext doFilter: StFilterBlock gtFilter forProcessor: self
+	^ aSpotterContext 
+		doFilter: StFilterBlock stFilter 
+		forProcessor: self
 ]
 
 { #category : #private }

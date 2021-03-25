@@ -68,7 +68,10 @@ StSpotterCandidatesListProcessor >> defaultItemsLimit [
 
 { #category : #private }
 StSpotterCandidatesListProcessor >> doFilterInContext: aSpotterContext [
-	^ aSpotterContext doFilter: filterBlock gtFilter forProcessor: self
+
+	^ aSpotterContext 
+		doFilter: filterBlock stFilter 
+		forProcessor: self
 ]
 
 { #category : #accessing }
@@ -157,6 +160,7 @@ StSpotterCandidatesListProcessor >> keyBinding: anObject [
 
 { #category : #'scripting-convenience' }
 StSpotterCandidatesListProcessor >> match: aBlockWithTwoArguments [
+
 	self filter: (StFilterBlock new 
 		matcher: aBlockWithTwoArguments;
 		yourself)

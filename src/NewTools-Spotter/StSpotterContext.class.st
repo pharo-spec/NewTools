@@ -132,13 +132,15 @@ StSpotterContext >> doContinueFilterForProcessor: aGTProcessor [
 ]
 
 { #category : #private }
-StSpotterContext >> doFilter: aGTFilter forProcessor: aGTProcessor [
-	self processor: aGTProcessor.
-	self filter: aGTFilter.
+StSpotterContext >> doFilter: aFilter forProcessor: aProcessor [
+
+	self processor: aProcessor.
+	self filter: aFilter.
 	self streamed: (OrderedCollection new: 100). " not a limitation, just a reasonable start size "
-	(self cache at: #processorsAndFilters) at: aGTProcessor put: aGTFilter.
-	(self cache at: #processorsAndStreamed) at: aGTProcessor put: streamed.
-	^ aGTFilter value: self
+	(self cache at: #processorsAndFilters) at: aProcessor put: aFilter.
+	(self cache at: #processorsAndStreamed) at: aProcessor put: streamed.
+
+	^ aFilter value: self
 ]
 
 { #category : #comparing }

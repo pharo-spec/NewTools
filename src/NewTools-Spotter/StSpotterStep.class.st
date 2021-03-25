@@ -140,8 +140,7 @@ StSpotterStep >> previousProcessorFrom: aCollection [
 { #category : #processing }
 StSpotterStep >> process: aString [
 	| query |
-	
-	aString crTrace.
+
 	query := StSpotterQuery on: aString.
 	query processors: (self processors sort: #order ascending).
 	self activateQuery: query.

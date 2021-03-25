@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #public }
-StNullFilter class >> gtListFilter [
+StNullFilter class >> stListFilter [
 
 	^ StFilterSubstring new
 ]
@@ -29,7 +29,7 @@ StNullFilter >> doApplyFilterWithQuery [
 ]
 
 { #category : #public }
-StNullFilter >> gtListFilter [
+StNullFilter >> stListFilter [
 
 	^ StFilterSubstring new
 ]
