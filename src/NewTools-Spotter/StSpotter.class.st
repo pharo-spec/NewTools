@@ -337,6 +337,10 @@ StSpotter >> initializePresenters [
 			toAction: [ :target :widget :event |
 				self transferFocusToSearchText.
 				event wasHandled: false ];
+		bindKeyCombination: Character arrowRight asKeyCombination 
+			toAction: [ self tryDiveIn ];
+		bindKeyCombination: Character arrowLeft asKeyCombination 
+			toAction: [ self tryDiveOut ];
 		whenActivatedDo: [ :selection | 
 			self activate: selection selectedItem ].
 	resultList eventHandler 
@@ -493,6 +497,28 @@ StSpotter >> transferFocusToSearchText [
 		ifTrue: [ searchText takeKeyboardFocus ].
 		
 	
+]
+
+{ #category : #'private actions' }
+StSpotter >> tryDiveIn [
+	| item |
+	
+	self model isNested ifTrue: [ ^ self ].
+	item := resultList selectedItem.
+	item ifNil: [ ^ self ].
+	item isHeader ifFalse: [ ^ self ].
+	item diveIn
+]
+
+{ #category : #'private actions' }
+StSpotter >> tryDiveOut [
+	| item |
+	
+	self model isNested ifFalse: [ ^ self ].
+	item := resultList selectedItem.
+	item ifNil: [ ^ self ].
+	item isHeader ifFalse: [ ^ self ].
+	item diveOut
 ]
 
 { #category : #initialization }
