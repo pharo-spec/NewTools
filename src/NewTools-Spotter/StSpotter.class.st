@@ -34,8 +34,7 @@ Class {
 	#classVars : [
 		'History',
 		'Preview',
-		'Tips',
-		'Window'
+		'Tips'
 	],
 	#classInstVars : [
 		'spotter'
@@ -332,7 +331,7 @@ StSpotter >> initialize [
 { #category : #initialization }
 StSpotter >> initializeDialogWindow: aDialogWindowPresenter [
 
-	"aDialogWindowPresenter closeOnBackdropClick: true"
+	aDialogWindowPresenter closeOnBackdropClick: true
 ]
 
 { #category : #initialization }
