@@ -34,10 +34,11 @@ Class {
 	#classVars : [
 		'History',
 		'Preview',
-		'Tips'
+		'Tips',
+		'Window'
 	],
 	#classInstVars : [
-		'spotterWindow'
+		'spotter'
 	],
 	#category : #'NewTools-Spotter-View'
 }
@@ -104,7 +105,8 @@ StSpotter class >> isShowingPreview [
 StSpotter class >> open [
 
 	self reset.
-	^ spotterWindow := self new openModalWithSpec
+	spotter := self new.
+	^ spotter openModalWithSpec
 ]
 
 { #category : #settings }
@@ -129,7 +131,9 @@ StSpotter class >> registerToolsOn: registry [
 { #category : #private }
 StSpotter class >> reset [
 	
-	spotterWindow ifNotNil: [ spotterWindow close ]
+	spotter ifNotNil: [ 
+		spotter window close.
+		spotter := nil ]
 ]
 
 { #category : #accessing }
@@ -174,7 +178,7 @@ StSpotter class >> tips [
 { #category : #private }
 StSpotter class >> windowClosed [
 
-	spotterWindow := nil
+	spotter := nil
 ]
 
 { #category : #'private actions' }
@@ -328,7 +332,7 @@ StSpotter >> initialize [
 { #category : #initialization }
 StSpotter >> initializeDialogWindow: aDialogWindowPresenter [
 
-	aDialogWindowPresenter closeOnBackdropClick: true
+	"aDialogWindowPresenter closeOnBackdropClick: true"
 ]
 
 { #category : #initialization }
