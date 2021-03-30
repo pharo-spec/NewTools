@@ -8,7 +8,8 @@ Class {
 		'amountChangedAction',
 		'mutex',
 		'queryStartedAction',
-		'queryEndedAction'
+		'queryEndedAction',
+		'noResultsAction'
 	],
 	#category : #'NewTools-Spotter-Model'
 }
@@ -47,6 +48,13 @@ StSpotterModel >> announceCandidateAdded: ann [
 
 	searchUpdatedAction ifNil: [ ^ self ].
 	searchUpdatedAction value: ann candidateLink
+]
+
+{ #category : #'private announcing' }
+StSpotterModel >> announceNoResults [
+
+	noResultsAction ifNil: [ ^ self ].
+	noResultsAction value
 ]
 
 { #category : #'private announcing' }
@@ -182,6 +190,12 @@ StSpotterModel >> stopProcessing [
 StSpotterModel >> whenAmountChangedDo: aBlock [
 
 	amountChangedAction := aBlock
+]
+
+{ #category : #events }
+StSpotterModel >> whenNoResultsDo: aBlock [
+
+	noResultsAction := aBlock
 ]
 
 { #category : #events }

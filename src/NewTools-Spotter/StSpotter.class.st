@@ -286,6 +286,7 @@ StSpotter >> allowUIToDraw [
 StSpotter >> configureModel: aModel [ 
 
 	aModel 
+		whenNoResultsDo: [ self removeAllResults ];
 		whenSearchUpdatedDo: [ :aCandidateLink | 
 			self updateResultList: aCandidateLink ];
 		whenAmountChangedDo: [ :processor :amount | 
@@ -538,6 +539,13 @@ StSpotter >> removeAll [
 	"resultList presenters: #()."
 	self allowUIToDraw.
 	categories removeAll
+]
+
+{ #category : #private }
+StSpotter >> removeAllResults [
+
+	resultList presenters: #().
+	self removeAll
 ]
 
 { #category : #'accessing model' }

@@ -144,7 +144,9 @@ StSpotterStep >> process: aString [
 	query := StSpotterQuery on: (aString ifNotEmpty: [ aString, ' ' ]).
 	query processors: (self processors sort: #order ascending).
 	self activateQuery: query.
-	query process
+	query process.
+	query candidatesList isEmpty 
+		ifTrue: [ self model announceNoResults ]
 ]
 
 { #category : #accessing }
