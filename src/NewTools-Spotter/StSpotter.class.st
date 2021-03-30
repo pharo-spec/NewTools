@@ -53,8 +53,10 @@ StSpotter class >> basicHistory [
 StSpotter class >> createTips [
 
 	^ {
-		'<meta+n> filters for Classes'.
-		'<meta+m> filters for Implementros'.
+		'<meta+b> filters for Classes'.
+		'<meta+m> filters for Implementors'.
+		'<meta+n> filters for Senders'.
+		'<meta+p> filters for Packages'.
 		'<meta+h> filters for Help topics'.
 		'Adding #Classes in the query filters for Classes'.
 		'Adding #Implementors in the query filters for Implementros'.
