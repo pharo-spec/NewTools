@@ -33,8 +33,9 @@ Class {
 	],
 	#classVars : [
 		'History',
-		'Preview',
-		'Tips'
+		'PreviewVisible',
+		'Tips',
+		'TipsVisible'
 	],
 	#classInstVars : [
 		'spotter'
@@ -71,7 +72,14 @@ StSpotter class >> createTips [
 StSpotter class >> hidePreview [
 	<script>
 
-	Preview := false
+	PreviewVisible := false
+]
+
+{ #category : #accessing }
+StSpotter class >> hideTips [
+	<script>
+
+	TipsVisible := false
 ]
 
 { #category : #private }
@@ -91,13 +99,20 @@ StSpotter class >> history [
 { #category : #'class initialization' }
 StSpotter class >> initialize [
 
-	self showPreview
+	self showPreview.
+	self showTips
 ]
 
 { #category : #testing }
 StSpotter class >> isShowingPreview [
 
-	^ Preview
+	^ PreviewVisible
+]
+
+{ #category : #testing }
+StSpotter class >> isShowingTips [
+
+	^ TipsVisible
 ]
 
 { #category : #'instance creation' }
@@ -111,13 +126,13 @@ StSpotter class >> open [
 { #category : #settings }
 StSpotter class >> previewVisible [
 		
-	^ Preview
+	^ PreviewVisible
 ]
 
 { #category : #settings }
 StSpotter class >> previewVisible: aBoolean [
 	
-	Preview := aBoolean
+	PreviewVisible := aBoolean
 ]
 
 { #category : #'tools registry' }
@@ -159,19 +174,45 @@ StSpotter class >> settingsOn: aBuilder [
 		target: self;
 		description: 'If Spotter will show the preview panel on the right of spotter';
 		label: 'Show Preview Panel'.
+		
+	(aBuilder setting: #tipsVisible)
+		parent: #spotter;
+		default: self isShowingTips;
+		target: self;
+		description: 'If Spotter will show the tips at the bottom of spotter';
+		label: 'Show Tips Panel'.
 ]
 
 { #category : #accessing }
 StSpotter class >> showPreview [
 	<script>
 	
-	Preview := true
+	PreviewVisible := true
+]
+
+{ #category : #accessing }
+StSpotter class >> showTips [
+	<script>
+	
+	TipsVisible := true
 ]
 
 { #category : #private }
 StSpotter class >> tips [ 
 
 	^ Tips ifNil: [ Tips := self createTips ]
+]
+
+{ #category : #settings }
+StSpotter class >> tipsVisible [
+		
+	^ TipsVisible
+]
+
+{ #category : #settings }
+StSpotter class >> tipsVisible: aBoolean [
+		
+	TipsVisible := aBoolean
 ]
 
 { #category : #private }
@@ -193,6 +234,40 @@ StSpotter >> activateLink: aCandidateLink [
 	self historize: aCandidateLink.
 	aCandidateLink value doEvaluate.
 
+]
+
+{ #category : #initialization }
+StSpotter >> addPreviewPanelTo: contentsLayout [
+	
+	contentsLayout 	add: (previewContainer := SpBoxLayout newVertical).
+		resultList whenSelectionChangedDo: [ :selection | 
+			self showPreview: selection selectedItem ]
+]
+
+{ #category : #initialization }
+StSpotter >> addTipsPanel [ 
+
+	self layout: (SpBoxLayout newVertical
+		add: (self layout);
+		add: (SpBoxLayout newHorizontal
+				vAlignCenter;
+				spacing: 5;
+				add: (self newImage 
+					image: (self application iconNamed: #smallHelp);
+					in: [ :this | this eventHandler whenMouseDownDo: [ :anEvent | self feedTip ] ];
+					yourself)
+					expand: false;
+				add: (tip := self newLabel);
+				addLast: (SpBoxLayout newVertical 
+					add: (self newLink 
+						label: 'Advanced Search...';
+						action: [ self openFinder ];
+						yourself);
+					yourself)
+					expand: false;
+				yourself)
+			expand: false;
+		yourself)
 ]
 
 { #category : #private }
@@ -268,6 +343,7 @@ StSpotter >> diveOut [
 { #category : #actions }
 StSpotter >> feedTip [
 	
+	tip ifNil: [ ^ self ].
 	tip label: self class tips atRandom
 ]
 
@@ -339,40 +415,25 @@ StSpotter >> initializePresenters [
 	| contentsLayout |
 
 	self layout: (SpBoxLayout newVertical
-		add: (SpBoxLayout newVertical
-			borderWidth: 10;
-			spacing: 5;
-			add: (searchText := self newSearchInput) expand: false;
-			add: (SpOverlayLayout new
-				child: ((contentsLayout := SpBoxLayout newHorizontal)
-					beHomogeneous;
-					spacing: 5;
-					add: (resultList := self newComponentList);
-					yourself);
-				addOverlay: (spinner := self newSpinner) 
-					withConstraints: [ :c | c vAlignCenter; hAlignCenter ];
-				yourself)
-			yourself);
-		add: (SpBoxLayout newHorizontal
-				vAlignCenter;
+		borderWidth: 10;
+		spacing: 5;
+		add: (searchText := self newSearchInput) expand: false;
+		add: (SpOverlayLayout new
+			child: ((contentsLayout := SpBoxLayout newHorizontal)
+				beHomogeneous;
 				spacing: 5;
-				add: (self newImage 
-					image: (self application iconNamed: #smallHelp);
-					in: [ :this | this eventHandler whenMouseDownDo: [ :anEvent | self feedTip ] ];
-					yourself)
-					expand: false;
-				add: (tip := self newLabel);
-				addLast: (SpBoxLayout newVertical 
-					add: (self newLink 
-						label: 'Advanced Search...';
-						action: [ self openFinder ];
-						yourself);
-					yourself)
-					expand: false;
-				yourself)
-			expand: false;
+				add: (resultList := self newComponentList);
+				yourself);
+			addOverlay: (spinner := self newSpinner) 
+				withConstraints: [ :c | c vAlignCenter; hAlignCenter ];
+			yourself)
 		yourself).
 
+	self isShowingPreview ifTrue: [ self addPreviewPanelTo: contentsLayout ].
+	self isShowingTips ifTrue: [ self addTipsPanel ].
+
+	self addStyle: 'stSpotter'.
+	
 	spinner hide.
 
 	resultList
@@ -388,13 +449,7 @@ StSpotter >> initializePresenters [
 			self activate: selection selectedItem ].
 	resultList eventHandler 
 		whenKeyDownDo: [ :anEvent | self handleKeyEvent: anEvent ].
-		
-	self isShowingPreview ifTrue: [ 
-		contentsLayout 	add: (previewContainer := SpBoxLayout newVertical).
-		resultList whenSelectionChangedDo: [ :selection | 
-			self showPreview: selection selectedItem ] ].
-
-	self addStyle: 'stSpotter'.
+	
 	searchText 
 		placeholder: 'Search...';
 		addStyle: 'stSpotterSearch';
@@ -432,6 +487,12 @@ StSpotter >> initializeWindow: aWindowPresenter [
 StSpotter >> isShowingPreview [
 
 	^ self class isShowingPreview
+]
+
+{ #category : #testing }
+StSpotter >> isShowingTips [
+
+	^ self class isShowingTips
 ]
 
 { #category : #'accessing model' }
