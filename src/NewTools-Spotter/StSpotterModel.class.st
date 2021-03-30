@@ -149,9 +149,7 @@ StSpotterModel >> process: aString [
 
 { #category : #accessing }
 StSpotterModel >> pushStep: aStep [
-	| lastQuery |
 
-	lastQuery := self activeStep activeQuery.
 	self activeStep deactivate.
 	steps addLast: aStep
 ]
@@ -160,12 +158,14 @@ StSpotterModel >> pushStep: aStep [
 StSpotterModel >> pushStepForProcessor: aProcessor [
 	| step allCandidates processorLink |
 
+	self activeStep deactivate.
+
 	step := self newStep.
 	processorLink := aProcessor asStSpotterProcessorLink.
 	allCandidates := aProcessor allFilteredCandidates collect: [ :each | 
 		each asStSpotterCandidateLink renderingProcessor: processorLink ].
 	step origin: allCandidates.
-	self pushStep: step
+	steps addLast: step
 ]
 
 { #category : #accessing }

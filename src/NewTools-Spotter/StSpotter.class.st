@@ -59,7 +59,7 @@ StSpotter class >> createTips [
 		'<meta+p> filters for Packages'.
 		'<meta+h> filters for Help topics'.
 		'Adding #Classes in the query filters for Classes'.
-		'Adding #Implementors in the query filters for Implementros'.
+		'Adding #Implementors in the query filters for Implementors'.
 		'Adding #Help in the query filters for Help Topics'.
 		'Adding #Packages in the query filters for Packages'.
 		'Adding #Menu in the query filters for System Menu entries'.
@@ -308,6 +308,8 @@ StSpotter >> defaultModel [
 StSpotter >> deferredUpdateResultList: aCandidateLink [
 	| categoryPresenter presenters |
 
+	aCandidateLink value ifNil: [ ^ self ].
+
 	categoryPresenter := aCandidateLink processor 
 		headerCategoryFor: aCandidateLink
 		on: self.
@@ -332,9 +334,10 @@ StSpotter >> diveInProcessor: aProcessor [
 
 	[
 		self showSpinner.
-		resultList presenters: #().
-		self removeAll.
+		self model activeStep deactivate.
+		self removeAllResults.
 		self model pushStepForProcessor: aProcessor.
+		resultList verticalAlignment desiredVisibleRow: 1.
 		searchText text: '' 
 	] schedule
 ]

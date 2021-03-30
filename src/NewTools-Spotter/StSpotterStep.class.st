@@ -73,6 +73,7 @@ StSpotterStep >> connectQuery: aQuery [
 { #category : #accessing }
 StSpotterStep >> deactivate [
 
+	self activeQuery processors do: [ :each | each stop ].
 	self disconnectQuery: activeQuery
 ]
 
