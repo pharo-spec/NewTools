@@ -141,7 +141,7 @@ StSpotterStep >> previousProcessorFrom: aCollection [
 StSpotterStep >> process: aString [
 	| query |
 
-	query := StSpotterQuery on: aString.
+	query := StSpotterQuery on: (aString ifNotEmpty: [ aString, ' ' ]).
 	query processors: (self processors sort: #order ascending).
 	self activateQuery: query.
 	query process
