@@ -339,20 +339,23 @@ StSpotter >> initializePresenters [
 	| contentsLayout |
 
 	self layout: (SpBoxLayout newVertical
-		borderWidth: 10;
-		spacing: 5;
-		add: (searchText := self newSearchInput) expand: false;
-		add: (SpOverlayLayout new
-			child: ((contentsLayout := SpBoxLayout newHorizontal)
-				beHomogeneous;
-				spacing: 5;
-				add: (resultList := self newComponentList);
-				yourself);
-			addOverlay: (spinner := self newSpinner) 
-				withConstraints: [ :c | c vAlignCenter; hAlignCenter ];
+		add: (SpBoxLayout newVertical
+			borderWidth: 10;
+			spacing: 5;
+			add: (searchText := self newSearchInput) expand: false;
+			add: (SpOverlayLayout new
+				child: ((contentsLayout := SpBoxLayout newHorizontal)
+					beHomogeneous;
+					spacing: 5;
+					add: (resultList := self newComponentList);
+					yourself);
+				addOverlay: (spinner := self newSpinner) 
+					withConstraints: [ :c | c vAlignCenter; hAlignCenter ];
+				yourself)
 			yourself);
 		add: (SpBoxLayout newHorizontal
-				vAlignEnd;
+				vAlignCenter;
+				spacing: 5;
 				add: (self newImage 
 					image: (self application iconNamed: #smallHelp);
 					in: [ :this | this eventHandler whenMouseDownDo: [ :anEvent | self feedTip ] ];
