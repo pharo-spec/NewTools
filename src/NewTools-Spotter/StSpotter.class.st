@@ -250,10 +250,11 @@ StSpotter >> addPreviewPanelTo: contentsLayout [
 StSpotter >> addTipsPanel [ 
 
 	self layout: (SpBoxLayout newVertical
-		add: (self layout);
+		add: self layout;
 		add: (SpBoxLayout newHorizontal
 				vAlignCenter;
-				spacing: 5;
+				borderWidth: 3;
+				spacing: 3;
 				add: (self newImage 
 					image: (self application iconNamed: #smallHelp);
 					in: [ :this | this eventHandler whenMouseDownDo: [ :anEvent | self feedTip ] ];
@@ -342,7 +343,9 @@ StSpotter >> diveInProcessor: aProcessor [
 StSpotter >> diveOut [
 
 	self removeAll.
-	self model popStep
+	self model popStep.
+	self model lastSearchText 
+		ifNotNil: [ :aString | searchText text: aString ]
 ]
 
 { #category : #actions }

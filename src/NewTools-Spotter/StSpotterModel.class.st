@@ -103,6 +103,12 @@ StSpotterModel >> isNested [
 ]
 
 { #category : #accessing }
+StSpotterModel >> lastSearchText [
+
+	^ self activeStep lastSearchText
+]
+
+{ #category : #accessing }
 StSpotterModel >> links [
 
 	^ self activeStep links
@@ -132,8 +138,7 @@ StSpotterModel >> popStep [
 	lastQuery := self activeStep activeQuery.
 	self activeStep deactivate.
 	steps removeLast.
-	self activeStep activate.
-	self asyncProcess: ''
+	self activeStep activate
 ]
 
 { #category : #'private processing' }

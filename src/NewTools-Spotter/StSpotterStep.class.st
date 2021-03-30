@@ -83,6 +83,12 @@ StSpotterStep >> disconnectQuery: aQuery [
 ]
 
 { #category : #accessing }
+StSpotterStep >> lastSearchText [
+
+	^ self activeQuery searchText
+]
+
+{ #category : #accessing }
 StSpotterStep >> links [
 
 	^ activeQuery 
