@@ -259,7 +259,9 @@ StSpotter >> addTipsPanel [
 					in: [ :this | this eventHandler whenMouseDownDo: [ :anEvent | self feedTip ] ];
 					yourself)
 					expand: false;
-				add: (tip := self newLabel);
+				add: ((tip := self newLabel)
+					in: [ :this | this eventHandler whenMouseDownDo: [ :anEvent | self feedTip ] ];
+					yourself);
 				addLast: (SpBoxLayout newVertical 
 					add: (self newLink 
 						label: 'Advanced Search...';
@@ -441,7 +443,11 @@ StSpotter >> initializePresenters [
 	resultList
 		bindKeyCombination: Character arrowUp asKeyCombination 
 			toAction: [ :target :widget :event |
-				self transferFocusToSearchText.
+				self transferFocusToSearchTextArrowUp.
+				event wasHandled: false ];
+		bindKeyCombination: Character arrowDown asKeyCombination 
+			toAction: [ :target :widget :event | 
+				self transferFocusToSearchTextArrowDown.
 				event wasHandled: false ];
 		bindKeyCombination: Character arrowRight asKeyCombination 
 			toAction: [ self tryDiveIn ];
@@ -604,12 +610,19 @@ StSpotter >> transferFocusToResultListAtLast [
 ]
 
 { #category : #private }
-StSpotter >> transferFocusToSearchText [
+StSpotter >> transferFocusToSearchTextArrowDown [
 
-	(resultList items notEmpty and: [ resultList selection selectedIndex = 1 ])
-		ifTrue: [ searchText takeKeyboardFocus ].
-		
-	
+	(resultList items notEmpty 
+		and: [ resultList selection selectedIndex = resultList items size ])
+		ifTrue: [ searchText takeKeyboardFocus ]
+]
+
+{ #category : #private }
+StSpotter >> transferFocusToSearchTextArrowUp [
+
+	(resultList items notEmpty 
+		and: [ resultList selection selectedIndex = 1 ])
+		ifTrue: [ searchText takeKeyboardFocus ]
 ]
 
 { #category : #'private actions' }
