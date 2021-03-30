@@ -265,10 +265,10 @@ StSpotter >> diveOut [
 	self model popStep
 ]
 
-{ #category : #'private actions' }
+{ #category : #actions }
 StSpotter >> feedTip [
 	
-	"tip label: self class tips atRandom"
+	tip label: self class tips atRandom
 ]
 
 { #category : #private }
@@ -351,15 +351,23 @@ StSpotter >> initializePresenters [
 			addOverlay: (spinner := self newSpinner) 
 				withConstraints: [ :c | c vAlignCenter; hAlignCenter ];
 			yourself);
-		"add: (SpBoxLayout newHorizontal
-				vAlignCenter;
+		add: (SpBoxLayout newHorizontal
+				vAlignEnd;
+				add: (self newImage 
+					image: (self application iconNamed: #smallHelp);
+					in: [ :this | this eventHandler whenMouseDownDo: [ :anEvent | self feedTip ] ];
+					yourself)
+					expand: false;
 				add: (tip := self newLabel);
-				addLast: (self newButton 
-					label: 'More...';
-					action: [ self feedTip ];
-					yourself);
+				addLast: (SpBoxLayout newVertical 
+					add: (self newLink 
+						label: 'Advanced Search...';
+						action: [ self openFinder ];
+						yourself);
+					yourself)
+					expand: false;
 				yourself)
-			expand: false;"
+			expand: false;
 		yourself).
 
 	spinner hide.
@@ -443,6 +451,13 @@ StSpotter >> newSpotterHeaderPresenter: aProcessor [
 		whenDiveInDo: [ :processor | self diveInProcessor: processor ];
 		whenDiveOutDo: [ self diveOut ];
 		yourself
+]
+
+{ #category : #actions }
+StSpotter >> openFinder [
+
+	self window close.
+	Finder open
 ]
 
 { #category : #private }
