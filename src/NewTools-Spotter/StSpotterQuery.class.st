@@ -2,7 +2,6 @@ Class {
 	#name : #StSpotterQuery,
 	#superclass : #Object,
 	#instVars : [
-		'process',
 		'candidatesList',
 		'processors',
 		'candidateLinks',
@@ -76,7 +75,6 @@ StSpotterQuery >> initialize [
 
 	super initialize.
 	self initializeCandidatesList.
-	process := Processor activeProcess.
 	finished := false.	
 	candidateLinks := Set new
 ]
@@ -196,8 +194,5 @@ StSpotterQuery >> spotter: aSpotterPresenter [
 { #category : #accessing }
 StSpotterQuery >> terminate [
 
-	self processors do: [ :each | each stop ].
-	process ifNotNil: [ 
-		process terminate.
-		process := nil ]
+	self processors do: [ :each | each stop ]
 ]
