@@ -311,10 +311,13 @@ StSpotter >> diveInProcessor: aProcessor [
 
 	[
 		self showSpinner.
-		self removeAllResults.
-		self model pushStepForProcessor: aProcessor.
-		resultList verticalAlignment desiredVisibleRow: 1.
-		searchText text: '' 
+		[
+			self removeAllResults.
+			self model pushStepForProcessor: aProcessor.
+			resultList verticalAlignment desiredVisibleRow: 1.
+			searchText text: '' ]
+		on: Error 
+		fork: [ :e | e pass ]
 	] schedule
 ]
 
@@ -601,7 +604,9 @@ StSpotter >> startProcessing [
 
 	[ 
 		self allowUIToDraw.
-		self model startProcessingOn: self 
+		[ self model startProcessingOn: self ]
+		on: Error 
+		fork: [ :e | e pass ]
 	] schedule
 ]
 
@@ -703,9 +708,12 @@ StSpotter >> updateResultProcessor: processor amount: amount [
 StSpotter >> updateSearch: aString [
 	
 	[
-		self model 
-			processSearch: aString 
-			on: self
+		[
+			self model 
+				processSearch: aString 
+				on: self ]
+		on: Error 
+		fork: [ :e | e pass ]
 	] schedule
 ]
 

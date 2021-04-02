@@ -147,8 +147,10 @@ StSpotterModel >> processSearch: aString on: spotter [
 StSpotterModel >> pushQuery: aQuery [
 
 	[ 
-		mutex critical: [ 
-			self activeStep pushQuery: aQuery ]
+		[
+			mutex critical: [ self activeStep pushQuery: aQuery ] ]
+		on: Error 
+		fork: [ :e | e pass ]
 	] schedule
 ]
 
