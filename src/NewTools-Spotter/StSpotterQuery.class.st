@@ -137,7 +137,10 @@ StSpotterQuery >> process [
 	context := self newContextFor: stream text: self searchText.
 	self relevantProcessors
 		do: [ :each | each filterInContext: context ].
-	finished := true
+	finished := true.
+
+	self candidatesList isEmpty 
+		ifTrue: [ spotterPresenter removeAllResults ]
 ]
 
 { #category : #accessing }

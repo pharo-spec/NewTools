@@ -309,16 +309,13 @@ StSpotter >> defaultModel [
 { #category : #'private actions' }
 StSpotter >> diveInProcessor: aProcessor [
 
-	[
+	self model schedule: [
 		self showSpinner.
-		[
-			self removeAllResults.
-			self model pushStepForProcessor: aProcessor.
-			resultList verticalAlignment desiredVisibleRow: 1.
-			searchText text: '' ]
-		on: Error 
-		fork: [ :e | e pass ]
-	] schedule
+		self removeAllResults.
+		self model pushStepForProcessor: aProcessor.
+		resultList verticalAlignment desiredVisibleRow: 1.
+		searchText text: ''
+	]
 ]
 
 { #category : #'private actions' }
@@ -367,9 +364,8 @@ StSpotter >> headerCategoryUnifiedFor: aLink [
 { #category : #'private actions' }
 StSpotter >> hideSpinner [
 
-	[
-		self application defer: [ spinner hide ]
-	] schedule
+	self model schedule: [
+		self application defer: [ spinner hide ] ]
 ]
 
 { #category : #'private actions' }
@@ -556,7 +552,7 @@ StSpotter >> queuedUpdateResultList [
 { #category : #private }
 StSpotter >> removeAll [
 
-	mutex critical: [ queue removeAll  ]. 
+	mutex critical: [ queue removeAll ]. 
 	categories removeAll.
 	self allowUIToDraw
 ]
@@ -593,21 +589,19 @@ StSpotter >> showPreview: aPresenter [
 StSpotter >> showSpinner [
 
 	spinner isVisible ifTrue: [ ^ self ].
-	[
+	self model schedule: [
 		self application defer: [ spinner show ]
-	] schedule
+	]
 ]
 
 { #category : #private }
 StSpotter >> startProcessing [
 	"Start the process."
 
-	[ 
+	self model schedule: [ 
 		self allowUIToDraw.
-		[ self model startProcessingOn: self ]
-		on: Error 
-		fork: [ :e | e pass ]
-	] schedule
+		self model startProcessingOn: self
+	]
 ]
 
 { #category : #private }
@@ -689,10 +683,10 @@ StSpotter >> updateResultList: aCandidateLink [
 	mutex critical: [ queue add: aCandidateLink ].
 	updating ifTrue: [ ^ self ].
 	
-	[
+	self model schedule: [
 		self application defer: [ 
 			self queuedUpdateResultList ]
-	] schedule
+	]
 ]
 
 { #category : #'private updating' }
@@ -707,14 +701,10 @@ StSpotter >> updateResultProcessor: processor amount: amount [
 { #category : #'private updating' }
 StSpotter >> updateSearch: aString [
 	
-	[
-		[
-			self model 
-				processSearch: aString 
-				on: self ]
-		on: Error 
-		fork: [ :e | e pass ]
-	] schedule
+	self model schedule: [
+		self model 
+			processSearch: aString 
+			on: self ]
 ]
 
 { #category : #'private updating' }

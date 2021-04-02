@@ -9,7 +9,8 @@ Class {
 		'mutex',
 		'queryStartedAction',
 		'queryEndedAction',
-		'noResultsAction'
+		'noResultsAction',
+		'scheduler'
 	],
 	#category : #'NewTools-Spotter-Model'
 }
@@ -83,6 +84,11 @@ StSpotterModel >> defaultProcessors [
 StSpotterModel >> initialize [
 
 	super initialize.
+	
+	scheduler := TKTWorkerPool new.
+	scheduler poolMaxSize: 5.
+	scheduler start.
+	
 	mutex := Mutex new.
 	steps := OrderedCollection with: self newDefaultStep
 ]
@@ -135,7 +141,7 @@ StSpotterModel >> popStep [
 { #category : #'accessing query' }
 StSpotterModel >> processSearch: aString on: spotter [
 	| query |
-	
+
 	query := StSpotterQuery 
 		newSearch: aString 
 		on: spotter.
@@ -146,12 +152,9 @@ StSpotterModel >> processSearch: aString on: spotter [
 { #category : #'accessing query' }
 StSpotterModel >> pushQuery: aQuery [
 
-	[ 
-		[
-			mutex critical: [ self activeStep pushQuery: aQuery ] ]
-		on: Error 
-		fork: [ :e | e pass ]
-	] schedule
+	self schedule: [ 
+		mutex critical: [ self activeStep pushQuery: aQuery ]
+	]
 ]
 
 { #category : #accessing }
@@ -175,6 +178,15 @@ StSpotterModel >> results [
 ]
 
 { #category : #accessing }
+StSpotterModel >> schedule: aBlock [
+
+	scheduler schedule: [
+		aBlock 
+			on: Error 
+			fork: [ :e | e pass ] ]
+]
+
+{ #category : #accessing }
 StSpotterModel >> stSpotterProcessorsFor: aStep [
 
 	self defaultProcessors 
@@ -183,14 +195,16 @@ StSpotterModel >> stSpotterProcessorsFor: aStep [
 
 { #category : #'accessing query' }
 StSpotterModel >> startProcessingOn: spotter [
-	
+
 	self processSearch: '' on: spotter
 ]
 
 { #category : #'accessing query' }
 StSpotterModel >> stopProcessing [
 
-	self activeStep deactivate
+	self activeStep deactivate.
+	scheduler stop
+	
 ]
 
 { #category : #events }

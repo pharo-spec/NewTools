@@ -164,9 +164,7 @@ StSpotterStep >> pushQuery: aQuery [
 	
 	aQuery processors: (self processors sort: #order ascending).
 	self activateQuery: aQuery.
-	aQuery process.
-	aQuery candidatesList isEmpty 
-		ifTrue: [ self model announceNoResults ]
+	aQuery process
 ]
 
 { #category : #private }
