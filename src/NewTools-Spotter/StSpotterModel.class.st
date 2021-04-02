@@ -71,15 +71,6 @@ StSpotterModel >> announceQueryStarted: ann [
 	queryStartedAction value
 ]
 
-{ #category : #processing }
-StSpotterModel >> asyncProcess: aString [
-
-	[
-		mutex critical: [
-			self process: aString ]
-	] schedule
-]
-
 { #category : #private }
 StSpotterModel >> defaultProcessors [
 
@@ -125,7 +116,7 @@ StSpotterModel >> newDefaultStep [
 { #category : #'private factory' }
 StSpotterModel >> newStep [
 
-	^ StSpotterStep newModel: self
+	^ StSpotterStep on: self
 ]
 
 { #category : #accessing }
@@ -141,17 +132,24 @@ StSpotterModel >> popStep [
 	self activeStep activate
 ]
 
-{ #category : #'private processing' }
-StSpotterModel >> process: aString [
+{ #category : #'accessing query' }
+StSpotterModel >> processSearch: aString on: spotter [
+	| query |
 	
-	self activeStep process: aString
+	query := StSpotterQuery 
+		newSearch: aString 
+		on: spotter.
+	self pushQuery: query
+	
 ]
 
-{ #category : #accessing }
-StSpotterModel >> pushStep: aStep [
+{ #category : #'accessing query' }
+StSpotterModel >> pushQuery: aQuery [
 
-	self activeStep deactivate.
-	steps addLast: aStep
+	[ 
+		mutex critical: [ 
+			self activeStep pushQuery: aQuery ]
+	] schedule
 ]
 
 { #category : #accessing }
@@ -181,14 +179,16 @@ StSpotterModel >> stSpotterProcessorsFor: aStep [
 		do: [ :each | aStep addProcessor: each ]
 ]
 
-{ #category : #processing }
-StSpotterModel >> startProcessing [
-
-	self asyncProcess: ''
+{ #category : #'accessing query' }
+StSpotterModel >> startProcessingOn: spotter [
+	
+	self processSearch: '' on: spotter
 ]
 
-{ #category : #processing }
+{ #category : #'accessing query' }
 StSpotterModel >> stopProcessing [
+
+	self activeStep deactivate
 ]
 
 { #category : #events }

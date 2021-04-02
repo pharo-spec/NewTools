@@ -29,7 +29,9 @@ Class {
 		'categories',
 		'mutex',
 		'spinner',
-		'tip'
+		'tip',
+		'queue',
+		'updating'
 	],
 	#classVars : [
 		'History',
@@ -288,8 +290,8 @@ StSpotter >> configureModel: aModel [
 
 	aModel 
 		whenNoResultsDo: [ self removeAllResults ];
-		whenSearchUpdatedDo: [ :aCandidateLink | 
-			self updateResultList: aCandidateLink ];
+		"whenSearchUpdatedDo: [ :aCandidateLink | 
+			self updateResultList: aCandidateLink ];"
 		whenAmountChangedDo: [ :processor :amount | 
 			self updateResultProcessor: processor amount: amount ];
 		whenQueryStartedDo: [ self showSpinner ];
@@ -304,37 +306,11 @@ StSpotter >> defaultModel [
 		yourself
 ]
 
-{ #category : #'private updating' }
-StSpotter >> deferredUpdateResultList: aCandidateLink [
-	| categoryPresenter presenters |
-
-	aCandidateLink value ifNil: [ ^ self ].
-
-	categoryPresenter := aCandidateLink processor 
-		headerCategoryFor: aCandidateLink
-		on: self.
-		
-	(categoryPresenter includesLink: aCandidateLink) ifTrue: [ ^ self ].
-	
-	categoryPresenter addCandidate: aCandidateLink inSpotter: self.
-	
-	presenters := (categories values 
-		sorted: [ :each | each order ] ascending)
-		flatCollect: [ :each | each withCandidates ]. 
-	
-	resultList disableActivationDuring: [ 
-		| index |
-		index := resultList selection selectedIndex.
-		resultList items: presenters.
-		resultList selectIndex: index ]
-]
-
 { #category : #'private actions' }
 StSpotter >> diveInProcessor: aProcessor [
 
 	[
 		self showSpinner.
-		self model activeStep deactivate.
 		self removeAllResults.
 		self model pushStepForProcessor: aProcessor.
 		resultList verticalAlignment desiredVisibleRow: 1.
@@ -347,8 +323,9 @@ StSpotter >> diveOut [
 
 	self removeAll.
 	self model popStep.
-	self model lastSearchText 
-		ifNotNil: [ :aString | searchText text: aString ]
+	self model lastSearchText ifNotNil: [ :aString | 
+		searchText text: aString.
+		searchText cursorPositionIndex: aString size + 1 ]
 ]
 
 { #category : #actions }
@@ -411,6 +388,8 @@ StSpotter >> initialExtent [
 StSpotter >> initialize [
 
 	mutex ifNil: [ mutex := Mutex new ].
+	queue := OrderedCollection new.
+	updating := false.
 	categories := Dictionary new.
 	super initialize
 ]
@@ -539,12 +518,44 @@ StSpotter >> openFinder [
 	Finder open
 ]
 
+{ #category : #'private updating' }
+StSpotter >> queuedUpdateResultList [
+	| categoryPresenter presenters |
+
+	updating ifTrue: [ ^ self ].
+	updating := true.
+
+	[  
+		[ queue isEmpty ] 
+		whileFalse: [  | aCandidateLink |
+			mutex critical: [ aCandidateLink := queue removeFirst ].
+			categoryPresenter := aCandidateLink processor 
+			headerCategoryFor: aCandidateLink
+			on: self.
+		
+			(categoryPresenter includesLink: aCandidateLink) ifFalse: [ 
+				categoryPresenter addCandidate: aCandidateLink inSpotter: self ] ].
+	
+		presenters := (categories values 
+			sorted: [ :each | each order ] ascending)
+			flatCollect: [ :each | each withCandidates ]. 
+			
+		resultList disableActivationDuring: [ 
+			| index |
+			index := resultList selection selectedIndex.
+			resultList items: presenters.
+			resultList selectIndex: index ] 
+	]
+	ensure: [ 
+		updating := false ]
+]
+
 { #category : #private }
 StSpotter >> removeAll [
 
-	"resultList presenters: #()."
-	self allowUIToDraw.
-	categories removeAll
+	mutex critical: [ queue removeAll  ]. 
+	categories removeAll.
+	self allowUIToDraw
 ]
 
 { #category : #private }
@@ -590,7 +601,7 @@ StSpotter >> startProcessing [
 
 	[ 
 		self allowUIToDraw.
-		self model startProcessing 
+		self model startProcessingOn: self 
 	] schedule
 ]
 
@@ -670,10 +681,12 @@ StSpotter >> updatePresenter [
 { #category : #'private updating' }
 StSpotter >> updateResultList: aCandidateLink [
 
+	mutex critical: [ queue add: aCandidateLink ].
+	updating ifTrue: [ ^ self ].
+	
 	[
-		self application defer: [
-			mutex critical: [
-				self deferredUpdateResultList: aCandidateLink ] ]
+		self application defer: [ 
+			self queuedUpdateResultList ]
 	] schedule
 ]
 
@@ -689,8 +702,11 @@ StSpotter >> updateResultProcessor: processor amount: amount [
 { #category : #'private updating' }
 StSpotter >> updateSearch: aString [
 	
-	self removeAll.
-	self model asyncProcess: aString
+	[
+		self model 
+			processSearch: aString 
+			on: self
+	] schedule
 ]
 
 { #category : #'private updating' }
