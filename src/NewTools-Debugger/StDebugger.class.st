@@ -434,6 +434,15 @@ StDebugger >> code [
 	^ code
 ]
 
+{ #category : #initialization }
+StDebugger >> connectPresenters [
+
+	super connectPresenters.
+	self whenDisplayDo: [ 
+		self updateToolbar.
+		self updateCodeFromContext ]
+]
+
 { #category : #'accessing context' }
 StDebugger >> context [
  
@@ -663,15 +672,6 @@ StDebugger >> initializeInspector [
 		             on:
 		             (self debuggerInspectorModelClass on: self newDebuggerContext).
 	inspector label: 'Receiver'
-]
-
-{ #category : #initialization }
-StDebugger >> initializePresenter [
-
-	super initializePresenter.
-	self whenDisplayDo: [ 
-		self updateToolbar.
-		self updateCodeFromContext ]
 ]
 
 { #category : #initialization }

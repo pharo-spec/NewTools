@@ -45,7 +45,7 @@ StSindarinDebuggerPresenter >> buildToolbar [
 ]
 
 { #category : #initialization }
-StSindarinDebuggerPresenter >> initializePresenter [
+StSindarinDebuggerPresenter >> initializePresenters [
 	stack := self newList.
 	stack
 		whenSelectionChangedDo: [ :selection | 
