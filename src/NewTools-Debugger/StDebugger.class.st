@@ -178,10 +178,10 @@ StDebugger class >> debuggerLayoutSettingsOn: aBuilder [
 { #category : #'specs - selectors' }
 StDebugger class >> debuggerWithExtensionsSpec [
 	^ SpPanedLayout newVertical
-		position: 65 percent;
+		positionOfSlider: 65 percent;
 		add:
 			(SpPanedLayout newHorizontal
-				position: 65 percent;
+				positionOfSlider: 65 percent;
 				add: self stackAndCodeLayout;
 				add: #extensionToolsNotebook;
 				yourself);
@@ -191,8 +191,9 @@ StDebugger class >> debuggerWithExtensionsSpec [
 
 { #category : #'specs - selectors' }
 StDebugger class >> debuggerWithoutExtensionsSpec [
+
 	^ SpPanedLayout newVertical
-		position: 65 percent;
+		positionOfSlider: 65 percent;
 		add: self stackAndCodeLayout;
 		add: #inspector;
 		yourself
@@ -278,8 +279,9 @@ StDebugger class >> spanNewSessionFrom: anotherSession [
 
 { #category : #specs }
 StDebugger class >> stackAndCodeLayout [
+
 	^ SpPanedLayout newVertical
-		position: 30 percent;
+		positionOfSlider: 30 percent;
 		add: self stackLayout;
 		add: self codeLayout;
 		yourself
