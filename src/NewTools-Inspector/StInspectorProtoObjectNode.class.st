@@ -1,3 +1,11 @@
+"
+A variable node for representing the slots of objects that subclass ProtoObject directly and not Object. 
+
+It main responsability is to extract the value of a slot using `thisContext` and not a direct message send to the object.  
+Uses the name of a slot as a key. 
+Extracts the value from the host object every time #rawValue is called.
+
+"
 Class {
 	#name : #StInspectorProtoObjectNode,
 	#superclass : #StInspectorNode,
