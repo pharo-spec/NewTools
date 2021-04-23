@@ -101,7 +101,7 @@ StMetaBrowser >> initializePresenters [
 
 { #category : #initialization }
 StMetaBrowser >> methodListMenu [
-	
+
 	^ (self rootCommandsGroup / 'methods') asMenuPresenter
 ]
 
