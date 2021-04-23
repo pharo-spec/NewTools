@@ -28,13 +28,9 @@ ProtoObject >> inspectionRaw [
 
 { #category : #'*NewTools-Inspector-Extensions' }
 ProtoObject >> inspectorNodes [
-
-	^ (self class allInstVarNames 
-		collectWithIndex: [ :ivName :index | 
-			StInspectorProtoObjectNode 
-				hostObject: self index: index 
-				slotName: ivName ]) 
-		sort: [ :aNode :anotherNode | aNode label < anotherNode label ]
+	"Answer a list of attributes as nodes"
+	
+	^ (StNodeCollector for: self) slotNodes
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
