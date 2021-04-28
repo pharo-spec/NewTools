@@ -16,11 +16,42 @@ StPlaygroundPageVersionsPresenter class >> preferredExtent [
 	^ 700@400
 ]
 
+{ #category : #actions }
+StPlaygroundPageVersionsPresenter >> adoptSelectedVersion [
+
+	self adoptVersion: versionList selectedItem
+]
+
+{ #category : #actions }
+StPlaygroundPageVersionsPresenter >> adoptVersion: anEntry [
+
+	self parent contents: anEntry content.
+	self window close.
+	self parent takeKeyboardFocus
+]
+
 { #category : #private }
 StPlaygroundPageVersionsPresenter >> displayValueFor: aDateAndTime [
 
 	"^ ((DateAndTime now - aDateAndTime) truncateTo: 2 minutes) humanReadablePrintString"
 	^ aDateAndTime epiceaBrowsersAsString
+]
+
+{ #category : #actions }
+StPlaygroundPageVersionsPresenter >> doAdoptVersion [
+
+	self adoptSelectedVersion
+]
+
+{ #category : #actions }
+StPlaygroundPageVersionsPresenter >> doAdoptVersionOnNewPlayground [
+	| playground |
+	
+	(playground := StPlayground new) 
+		contents: versionList selectedItem content;
+		openWithSpec.
+	self window close.
+	playground takeKeyboardFocus
 ]
 
 { #category : #initialization }
@@ -29,7 +60,7 @@ StPlaygroundPageVersionsPresenter >> initializeDialogWindow: aDialogWindowPresen
 	aDialogWindowPresenter
 		addButton: 'Adopt' do: [ :presenter | 
 			presenter triggerOkAction.
-			presenter close ];
+			self adoptSelectedVersion ];
 		addButton: 'Close' do: [ :presenter | 
 			presenter triggerCancelAction.
 			presenter close ]	
@@ -44,8 +75,9 @@ StPlaygroundPageVersionsPresenter >> initializePresenters [
 		add: (sourceCode := self newCode);
 		yourself).
 		
-	versionList display: [ :anEntry | 
-		self displayValueFor: (anEntry tagAt: #timestamp) ].
+	versionList
+		 display: [ :anEntry | self displayValueFor: (anEntry tagAt: #timestamp) ];
+		 contextMenu: [ self versionsActions asMenuPresenter ].
 	sourceCode 
 		beForScripting;
 		beNotEditable.
@@ -67,8 +99,25 @@ StPlaygroundPageVersionsPresenter >> initializeWindow: aWindowPresenter [
 		initialExtent: self class preferredExtent
 ]
 
+{ #category : #private }
+StPlaygroundPageVersionsPresenter >> parent [
+	"a synonym to be clearer"
+
+	^ self model
+]
+
 { #category : #initialization }
 StPlaygroundPageVersionsPresenter >> updatePresenter [
 
 	versionList items: self model page versions reversed
+]
+
+{ #category : #initialization }
+StPlaygroundPageVersionsPresenter >> versionsActions [
+
+	^ CmCommandGroup forSpec
+		beRoot;
+		register: (StPlaygroundAdoptVersionCommand forSpecContext: self);
+		register: (StPlaygroundAdoptVersionOnNewPlaygroundCommand forSpecContext: self);
+		yourself
 ]
