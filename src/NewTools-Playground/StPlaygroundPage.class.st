@@ -132,6 +132,7 @@ StPlaygroundPage >> fileReference [
 StPlaygroundPage >> flush [
 
 	mutex critical: [ 
+		flushContents ifNil: [ ^ self ].
 		self fileReference parent ensureCreateDirectory.
 		self fileReference 
 			ensureDelete;
