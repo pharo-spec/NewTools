@@ -110,6 +110,13 @@ StPlaygroundPage >> defaultObjectInspectorClass [
 ]
 
 { #category : #accessing }
+StPlaygroundPage >> ensureContentsFlushed [
+
+	self contents isEmptyOrNil ifTrue: [ ^ self ].
+	self flush
+]
+
+{ #category : #accessing }
 StPlaygroundPage >> fileName [
 
 	^ fileName ifNil: [ fileName := self creationTimeForFileName ]
@@ -168,7 +175,7 @@ StPlaygroundPage >> spawnFlushProcess [
 	] fork
 ]
 
-{ #category : #'accessing versions' }
+{ #category : #private }
 StPlaygroundPage >> storeVersion [
 	| entry |
 

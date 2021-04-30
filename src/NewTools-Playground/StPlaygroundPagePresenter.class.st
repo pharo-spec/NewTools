@@ -123,6 +123,12 @@ StPlaygroundPagePresenter >> doEvaluateAndGo [
 	activationBlock value: (StEvaluatedSelectionModel newValue: value)
 ]
 
+{ #category : #accessing }
+StPlaygroundPagePresenter >> ensureContentsFlushed [
+	
+	self page ensureContentsFlushed
+]
+
 { #category : #testing }
 StPlaygroundPagePresenter >> hasOutputActivationPort [
 	

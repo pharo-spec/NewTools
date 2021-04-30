@@ -139,7 +139,7 @@ StPlayground >> defaultKeyboardFocus [
 StPlayground >> initialize [
 
 	self setModelBeforeInitialization: StPlaygroundPage new.
-	super initialize.
+	super initialize
 ]
 
 { #category : #actions }
@@ -157,7 +157,8 @@ StPlayground >> startStepping [
 { #category : #'private stepping' }
 StPlayground >> stopStepping [
 	
-	"A playground does not steps"
+	"A playground does not steps, but it needs to force a flush of last changes"
+	self firstPage ensureContentsFlushed
 ]
 
 { #category : #initialization }
