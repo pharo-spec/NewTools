@@ -25,9 +25,12 @@ CompiledMethod >> spotterForImplementorsFor: aStep [
 { #category : #'*NewTools-Spotter-Extensions' }
 CompiledMethod >> spotterForMessagesFor: aStep [
 	<stSpotterOrder: 12>
+
 	aStep listProcessor
 			title: 'Messages';
-			allCandidates: [ self messages asSortedCollection collect: [:each | StSelector new name: each ] ];
+			allCandidates: [ 
+				self messages asSortedCollection 
+					collect: [:each | StSelector new name: each ] ];
 			filter: StFilterSubstring
 ]
 

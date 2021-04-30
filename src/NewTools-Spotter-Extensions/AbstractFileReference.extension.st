@@ -45,7 +45,7 @@ AbstractFileReference >> spotterForZipDirectoriesFor: aStep [
 			title: 'Directories';
 			candidatesLimit: Float infinity;
 			itemName: #basename;
-			itemIcon: [ GLMUIThemeExtraIcons glamorousFolder ];
+			itemIcon: [ self iconNamed: #glamorousFolder ];
 			filter: StFilterSubstring
 ]
 
