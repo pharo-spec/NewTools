@@ -112,7 +112,7 @@ StPlaygroundPage >> defaultObjectInspectorClass [
 { #category : #accessing }
 StPlaygroundPage >> ensureContentsFlushed [
 
-	self contents isEmptyOrNil ifTrue: [ ^ self ].
+	flushContents isEmptyOrNil ifTrue: [ ^ self ].
 	self flush
 ]
 
