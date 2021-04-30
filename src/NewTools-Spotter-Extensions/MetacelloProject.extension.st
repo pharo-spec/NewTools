@@ -11,6 +11,6 @@ MetacelloProject >> spotterForVersionsFor: aStep [
 				collect: [ :each | [ self perform: each ] on: Error do: [  nil ] ]) 
 				reject: [ :each | each isNil ] ];
 		itemName: [ :version | version versionString ];
-		filter: GTFilterSubstring;
+		filter: StFilterSubstring;
 		wantsToDisplayOnEmptyQuery: true
 ]

@@ -16,11 +16,11 @@ StHelpEntry >> asString [
 { #category : #evaluating }
 StHelpEntry >> doEvaluate [ 
 
-	content spotterActDefault 
+	content stActDefault 
 ]
 
 { #category : #accessing }
 StHelpEntry >> icon [
 	
-	^ content gtTopicIcon
+	^ content stTopicIcon
 ]

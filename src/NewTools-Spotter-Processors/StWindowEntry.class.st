@@ -15,7 +15,7 @@ StWindowEntry >> asString [
 
 { #category : #evaluating }
 StWindowEntry >> doEvaluate [
-	content spotterActDefault
+	content stActDefault
 ]
 
 { #category : #accessing }

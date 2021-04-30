@@ -8,5 +8,10 @@ SystemWindow >> spotterWindowsFor: aStep [
 			title: 'Windows';
 			allCandidates: [ self class allSubInstances ];
 			itemName: [ :window | '**', window label, '**' ];
-			filter: GTFilterSubstring
+			filter: StFilterSubstring
+]
+
+{ #category : #'*NewTools-Spotter-Extensions' }
+SystemWindow >> stActDefault [
+	self method compiledMethod browse
 ]

@@ -1,16 +1,23 @@
 Extension { #name : #AbstractFileReference }
 
 { #category : #'*NewTools-Spotter-Extensions' }
+AbstractFileReference >> isZipFile [
+
+	^ self isFile and: [ #('zip' 'jar' 'ear' 'war') includes: self extension ]
+]
+
+{ #category : #'*NewTools-Spotter-Extensions' }
 AbstractFileReference >> spotterForDirectoriesFor: aStep [
 	<stSpotterOrder: 10>
+	
 	^ self isDirectory ifTrue: [
 		aStep listProcessor
 			allCandidates: [ self directories ];
 			title: 'Directories';
 			candidatesLimit: Float infinity;
 			itemName: #basename;
-			itemIcon: [ GLMUIThemeExtraIcons glamorousFolder ];
-			filter: GTFilterSubstring ]
+			itemIcon: [ self iconNamed: #glamorousFolder ];
+			filter: StFilterSubstring ]
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
@@ -22,8 +29,8 @@ AbstractFileReference >> spotterForFilesFor: aStep [
 			title: 'Files';
 			candidatesLimit: Float infinity;
 			itemName: #basename;
-			itemIcon: [ GLMUIThemeExtraIcons glamorousBrowse ];
-			filter: GTFilterSubstring ]
+			itemIcon: [ self iconNamed: #glamorousBrowse ];
+			filter: StFilterSubstring ]
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
@@ -39,13 +46,14 @@ AbstractFileReference >> spotterForZipDirectoriesFor: aStep [
 			candidatesLimit: Float infinity;
 			itemName: #basename;
 			itemIcon: [ GLMUIThemeExtraIcons glamorousFolder ];
-			filter: GTFilterSubstring
+			filter: StFilterSubstring
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
 AbstractFileReference >> spotterForZipFilesFor: aStep [
 	<stSpotterOrder: 10>
 	| zipFileSystem |
+	
 	self isZipFile ifFalse: [ ^ self ].
 	aStep listProcessor
 			allCandidates: [ 
@@ -54,7 +62,7 @@ AbstractFileReference >> spotterForZipFilesFor: aStep [
 			title: 'Files';
 			candidatesLimit: Float infinity;
 			itemName: #basename;
-			itemIcon: [ GLMUIThemeExtraIcons glamorousBrowse ];
-			filter: GTFilterSubstring
+			itemIcon: [ self iconNamed: #glamorousBrowse ];
+			filter: StFilterSubstring
 	
 ]

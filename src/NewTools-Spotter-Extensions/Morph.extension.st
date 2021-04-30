@@ -16,7 +16,7 @@ Morph >> spotterForSubmorphsFor: aStep [
 			title: 'Submorphs';
 			allCandidates: [ self submorphs ];
 			candidatesLimit: 5;
-			filter: GTFilterSubstring
+			filter: StFilterSubstring
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }

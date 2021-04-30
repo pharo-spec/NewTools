@@ -8,7 +8,7 @@ MCPackage >> spotterForPackageFor: aStep [
 		allCandidates: [ Array with: self correspondingRPackage ];
 		itemName: [ :package | package name ];
 		itemIcon: [ Smalltalk ui icons iconNamed: #packageIcon ];
-		filter: GTFilterSubstring
+		filter: StFilterSubstring
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
@@ -18,5 +18,5 @@ MCPackage >> spotterMonticelloWorkingCopyFor: aStep [
 		title: 'Monticello Working Copy';
 		allCandidates: [ Array with: self workingCopy ];
 		itemIcon: [ Smalltalk ui icons iconNamed: #versionControlIcon ];
-		filter: GTFilterSubstring
+		filter: StFilterSubstring
 ]

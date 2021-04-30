@@ -7,6 +7,6 @@ GTInspector class >> spotterExtensionsFor: aStep [
 			allCandidates: [ self inspectorExtendingMethods ];
 			title: 'Extensions';
 			itemName:[ :each | each displayString ];
-			filter: GTFilterSubstring;
+			filter: StFilterSubstring;
 			wantsToDisplayOnEmptyQuery: true
 ]

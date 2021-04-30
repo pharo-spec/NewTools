@@ -14,6 +14,6 @@ Collection >> spotterItemsFor: aStep [
 		itemName: processor itemName;
 		itemIcon: processor itemIcon;
 		actLogic: processor actLogic; 
-		filter: processor filter gtListFilter;
+		filter: processor filter stListFilter;
 		wantsToDisplayOnEmptyQuery: true
 ]

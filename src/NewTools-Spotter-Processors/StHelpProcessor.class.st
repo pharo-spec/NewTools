@@ -28,7 +28,7 @@ StHelpProcessor class >> title [
 { #category : #filtering }
 StHelpProcessor >> collection [
 
-	^ SystemHelp asHelpTopic gtAllSubtopics
+	^ SystemHelp asHelpTopic stAllSubtopics
 ]
 
 { #category : #'private extraction' }

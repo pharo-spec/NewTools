@@ -7,5 +7,5 @@ SettingTree >> spotterForSettingsFor: aStep [
 		title: 'Settings';
 		allCandidates: [ self nodeList ];
 		itemName: [ :each | each spotterLabel ];
-		filter: GTFilterSubstring
+		filter: StFilterSubstring
 ]

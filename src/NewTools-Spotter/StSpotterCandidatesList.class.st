@@ -56,7 +56,7 @@ StSpotterCandidatesList >> addCandidate: anObjectOrLink in: aProcessor [
 StSpotterCandidatesList >> addProcessor: aProcessor [
 	| processorLink |
 	
-	processorLink := aProcessor asSpotterProcessorLink.
+	processorLink := aProcessor asStSpotterProcessorLink.
 	"linking processor with it's link"
 	self processorLinksMap add: (aProcessor -> processorLink).
 	self processors addLast: processorLink.
@@ -204,12 +204,12 @@ StSpotterCandidatesList >> previousProcessorLinkOf: aProcessorLink [
 	aProcessorLink ifNil: [ ^ aProcessorLink ].
 	
 	current := aProcessorLink previousLink.
-	current ifNil: [ current := self processors tail ].
+	current ifNil: [ current := self processors stTail ].
 	
 	[ current = aProcessorLink ] whileFalse: [
 		(current isEmpty) ifFalse: [ ^ current ].
 		current := current previousLink.
-		current ifNil: [ current := self processors tail ] ].
+		current ifNil: [ current := self processors stTail ] ].
 
 	^ aProcessorLink
 	
@@ -285,7 +285,7 @@ StSpotterCandidatesList >> privateAddCandidate: aCandidateLink weightedInNotFull
 { #category : #notifying }
 StSpotterCandidatesList >> processorEnded: aProcessor [
 
-	(self processors noneSatisfy: [ :each | each isRunning ])
+	(self processors stNoneSatisfy: [ :each | each isRunning ])
 		ifTrue: [ self announcer announce: StSpotterQueryEnded new ] 
 	
 ]
@@ -328,16 +328,16 @@ StSpotterCandidatesList >> removeAllCandidatesOf: aProcessor [
 	tail := processorLink tailLink.
 		
 	(head = tail) ifTrue: [
-		self candidates removeCycledLink: head.
+		self candidates stRemoveCycledLink: head.
 		processorLink clear. ].
 	
 	current := head.
 	[ current = tail ] whileFalse: [ | nextCurrent |
 		nextCurrent := current nextLink.
-		self candidates removeCycledLink: current.
+		self candidates stRemoveCycledLink: current.
 		current := nextCurrent ].
 	
-	self candidates removeCycledLink: current.
+	self candidates stRemoveCycledLink: current.
 	
 	processorLink clear.
 	
@@ -349,7 +349,7 @@ StSpotterCandidatesList >> removeAllCandidatesOf: aProcessor [
 ]
 
 { #category : #candidates }
-StSpotterCandidatesList >> tail [
+StSpotterCandidatesList >> stTail [
 
-	^ self candidates tail
+	^ self candidates stTail
 ]

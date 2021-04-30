@@ -23,7 +23,7 @@ StWorldMenuEntry >> asString [
 { #category : #evaluating }
 StWorldMenuEntry >> doEvaluate [ 
 
-	content spotterActDefault
+	content stActDefault
 ]
 
 { #category : #accessing }

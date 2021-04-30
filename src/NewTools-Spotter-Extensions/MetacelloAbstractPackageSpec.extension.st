@@ -7,7 +7,7 @@ MetacelloAbstractPackageSpec >> spotterForIncludesFor: aStep [
 		title: 'Includes';
 		allCandidates: [ self includes ];
 		itemName: [ :item | item name ];
-		filter: GTFilterSubstring;
+		filter: StFilterSubstring;
 		wantsToDisplayOnEmptyQuery: true
 ]
 
@@ -18,6 +18,6 @@ MetacelloAbstractPackageSpec >> spotterForRequiresFor: aStep [
 		title: 'Requires';
 		allCandidates: [ self requires ];
 		itemName: [ :item | item name ];
-		filter: GTFilterSubstring;
+		filter: StFilterSubstring;
 		wantsToDisplayOnEmptyQuery: true
 ]

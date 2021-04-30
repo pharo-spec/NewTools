@@ -85,9 +85,10 @@ StSpotterCandidatesListProcessor >> filter: aGTFilterOrBlockWithOneArgument [
 ]
 
 { #category : #scripting }
-StSpotterCandidatesListProcessor >> filter: aGTFilter item: aGTSpotterIterator [ 
-	self filter: aGTFilter.
-	self items: aGTSpotterIterator gtIterator.
+StSpotterCandidatesListProcessor >> filter: aFilter item: anIterator [ 
+
+	self filter: aFilter.
+	self items: anIterator stIterator.
 	
 ]
 
@@ -98,7 +99,8 @@ StSpotterCandidatesListProcessor >> filterUsing: aFilter [
 
 { #category : #testing }
 StSpotterCandidatesListProcessor >> hasDynamicItems [
-	^ allCandidatesBlock hasDynamicItems
+
+	^ allCandidatesBlock stHasDynamicItems
 ]
 
 { #category : #accessing }

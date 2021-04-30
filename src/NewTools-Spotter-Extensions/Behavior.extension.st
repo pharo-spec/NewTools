@@ -9,7 +9,7 @@ Behavior >> spotterClassInstanceVariablesFor: aStep [
 		title: 'Class instance variables';
 		allCandidates: [ self class classLayout allSlots ];
 		itemName: [ :each | each name asString ];
-		filter: GTFilterSubstring
+		filter: StFilterSubstring
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
@@ -19,7 +19,7 @@ Behavior >> spotterCompositionFor: aStep [
 			title: 'Composing traits';
 			allCandidates: [ self allTraits ];
 			itemIcon: #systemIcon;
-			filter: GTFilterSubstring
+			filter: StFilterSubstring
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
@@ -31,7 +31,7 @@ Behavior >> spotterInstanceVariablesFor: aStep [
 		title: 'Instance variables';
 		allCandidates: [ self classLayout allSlots ];
 		itemName: [ :each | each name asString ];
-		filter: GTFilterSubstring
+		filter: StFilterSubstring
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
@@ -41,7 +41,7 @@ Behavior >> spotterSubclassesFor: aStep [
 			title: 'All subclasses';
 			allCandidates: [ self allSubclasses ];
 			itemIcon: #systemIcon;
-			filter: GTFilterSubstring
+			filter: StFilterSubstring
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
@@ -51,7 +51,7 @@ Behavior >> spotterSuperclassesFor: aStep [
 			title: 'All superclasses';
 			allCandidates: [ self allSuperclasses ];
 			itemIcon: #systemIcon;
-			filter: GTFilterSubstring
+			filter: StFilterSubstring
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
@@ -60,9 +60,9 @@ Behavior >> spotterTraitUsersFor: aStep [
 	self isTrait ifFalse: [ ^ self ].
 	aStep listProcessor
 			title: 'Users';
-			allCandidates: [ self traitUsers asArray ];
+			allCandidates: [ self users asArray ];
 			itemIcon: #systemIcon;
-			filter: GTFilterSubstring
+			filter: StFilterSubstring
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
@@ -72,7 +72,7 @@ Behavior >> spotterUsedSlotsFor: aStep [
 			title: 'Full Definition Slots';
 			allCandidates: [ self slots select: [ :slot | slot needsFullDefinition ] ];
 			itemName: [ :item | item definitionString ];
-			filter: GTFilterSubstring
+			filter: StFilterSubstring
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
@@ -82,5 +82,5 @@ Behavior >> spotterUsedTraitsFor: aStep [
 			title: 'Uses Traits';
 			allCandidates: [ self traits asArray ];
 			itemIcon: #systemIcon;
-			filter: GTFilterSubstring
+			filter: StFilterSubstring
 ]

@@ -11,5 +11,5 @@ Slot >> spotterAccessesFor: aStep [
 				allCandidates: [  
 						(aStep previousStep origin slotNamed: self name) usingMethods ];
 				itemName: [:each | each asString];
-				filter: GTFilterSubstring ]
+				filter: StFilterSubstring ]
 ]

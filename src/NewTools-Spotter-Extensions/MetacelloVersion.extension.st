@@ -7,7 +7,7 @@ MetacelloVersion >> spotterForGroupsFor: aStep [
 		title: 'Groups';
 		allCandidates: [ self groups ];
 		itemName: [ :item | item name ];
-		filter: GTFilterSubstring;
+		filter: StFilterSubstring;
 		wantsToDisplayOnEmptyQuery: true
 ]
 
@@ -18,6 +18,6 @@ MetacelloVersion >> spotterForPackagesFor: aStep [
 		title: 'Packages';
 		allCandidates: [ self packages ];
 		itemName: [ :item | item file ];
-		filter: GTFilterSubstring;
+		filter: StFilterSubstring;
 		wantsToDisplayOnEmptyQuery: true
 ]

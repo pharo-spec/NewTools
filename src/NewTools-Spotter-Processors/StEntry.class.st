@@ -91,11 +91,6 @@ StEntry >> printOn: aStream [
 		<< ' )'
 ]
 
-{ #category : #'spotter-extensions' }
-StEntry >> spotterActDefault [
-	^ content spotterActDefault 
-]
-
 { #category : #accessing }
 StEntry >> spotterPreview [
 

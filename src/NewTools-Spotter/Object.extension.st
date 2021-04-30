@@ -19,6 +19,12 @@ Object >> spotterPreview: aBuilder [
 ]
 
 { #category : #'*NewTools-Spotter' }
+Object >> stActDefault [
+
+	^ self inspect
+]
+
+{ #category : #'*NewTools-Spotter' }
 Object >> stFilter [
 
 	^ StFilterBlock stFilter
