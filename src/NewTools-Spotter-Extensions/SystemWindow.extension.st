@@ -1,7 +1,15 @@
 Extension { #name : #SystemWindow }
 
 { #category : #'*NewTools-Spotter-Extensions' }
-SystemWindow >> spotterWindowsFor: aStep [
+SystemWindow >> stActDefault [
+
+	^ self isTopWindow
+		ifTrue: [ self comeToFront ] "rise above non-window morphs"
+		ifFalse:[ self activate ]
+]
+
+{ #category : #'*NewTools-Spotter-Extensions' }
+SystemWindow >> stWindowsFor: aStep [
 	<stSpotterOrder: 100>
 
 	aStep listProcessor
@@ -9,9 +17,4 @@ SystemWindow >> spotterWindowsFor: aStep [
 			allCandidates: [ self class allSubInstances ];
 			itemName: [ :window | '**', window label, '**' ];
 			filter: StFilterSubstring
-]
-
-{ #category : #'*NewTools-Spotter-Extensions' }
-SystemWindow >> stActDefault [
-	self method compiledMethod browse
 ]
