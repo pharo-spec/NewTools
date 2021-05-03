@@ -42,7 +42,7 @@ StPlaygroundPagePresenter class >> defaultCacheDirectory [
 { #category : #specs }
 StPlaygroundPagePresenter class >> defaultSpec [
 
-	^ SpBoxLayout newVertical
+	^ SpBoxLayout newTopToBottom
 		spacing: 3;
 		add: #toolbar expand: false;
 		add: #text;
@@ -162,7 +162,7 @@ StPlaygroundPagePresenter >> initializePresenters [
 StPlaygroundPagePresenter >> initializeStatusbar [ 
 
 	(statusbar := self instantiate: SpPresenter)
-		layout: (SpBoxLayout newHorizontal
+		layout: (SpBoxLayout newLeftToRight
 			borderWidth: 3;
 			vAlignCenter;
 			add: (lineLabel := statusbar newLabel) expand: false;

@@ -19,7 +19,7 @@ Class {
 { #category : #specs }
 SpDualChangeSorterPresenter class >> defaultSpec [
 	<spec>
-	^ SpPanedLayout newHorizontal
+	^ SpPanedLayout newLeftToRight
 		add: #changeSorterLeft;
 		add: #changeSorterRight;
 		yourself

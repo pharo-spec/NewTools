@@ -27,13 +27,13 @@ Class {
 { #category : #specs }
 StFailingAssertionInspector class >> defaultSpec [
 
-	^ SpPanedLayout newHorizontal
+	^ SpPanedLayout newLeftToRight
 		  positionOfSlider: 50 percent;
-		  add: (SpBoxLayout newVertical
+		  add: (SpBoxLayout newTopToBottom
 				   add: #actualObjectHeader expand: false;
 				   add: #actualObjectMillerList;
 				   yourself);
-		  add: (SpBoxLayout newVertical
+		  add: (SpBoxLayout newTopToBottom
 				   add: #expectedObjectHeader expand: false;
 				   add: #expectedObjectMillerList;
 				   yourself);
@@ -57,7 +57,7 @@ StFailingAssertionInspector class >> diffInspectorsFromActual: actualObject expe
 
 { #category : #specs }
 StFailingAssertionInspector class >> stringSpec [
-	^ SpBoxLayout newVertical
+	^ SpBoxLayout newTopToBottom
 		add: #stringDiff;
 		yourself
 ]

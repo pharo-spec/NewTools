@@ -155,7 +155,7 @@ StObjectInspectorPresenter >> initialize [
 { #category : #initialization }
 StObjectInspectorPresenter >> initializeLayout [
 	
-	self layout: (SpBoxLayout newVertical 
+	self layout: (SpBoxLayout newTopToBottom 
 		add: header expand: false fill: false padding: 5;
 		add: views;
 		yourself)

@@ -27,17 +27,14 @@ Class {
 StDebuggerInspector class >> assertionFailureSpec [
 	| assertionFailureLayout |
 	
-	assertionFailureLayout := SpPanedLayout newVertical.
+	assertionFailureLayout := SpPanedLayout newTopToBottom.
 	assertionFailureLayout positionOfSlider: (self maximizeAssertionSpec
 			 ifTrue: [ 95 percent ]
 			 ifFalse: [ 40 percent ]).
-	assertionFailureLayout add: (SpBoxLayout newHorizontal
-			 add: (SpBoxLayout newVertical
-					  add: #lateralToolbar
-					  expand: false
-					  fill: false
-					  padding: 0;
-					  yourself)
+	assertionFailureLayout add: (SpBoxLayout newLeftToRight
+			 add: (SpBoxLayout newTopToBottom
+				add: #lateralToolbar expand: false;
+				yourself)
 			 expand: false;
 			 add: #assertionFailure;
 			 yourself).
@@ -49,7 +46,7 @@ StDebuggerInspector class >> assertionFailureSpec [
 
 { #category : #specs }
 StDebuggerInspector class >> defaultSpec [
-	^ SpBoxLayout newVertical
+	^ SpBoxLayout newTopToBottom
 		  add: #inspector;
 		  yourself
 ]

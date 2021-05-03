@@ -15,7 +15,7 @@ Class {
 { #category : #specs }
 StDebuggerRawObjectInspector class >> noHeaderSpec [
 	<spec: #default>
-	^ SpBoxLayout newVertical
+	^ SpBoxLayout newTopToBottom
 		add: #raw;
 		yourself
 ]
@@ -23,7 +23,7 @@ StDebuggerRawObjectInspector class >> noHeaderSpec [
 { #category : #initialization }
 StDebuggerRawObjectInspector >> initializeLayout [
 	
-	self layout: (SpBoxLayout newVertical 
+	self layout: (SpBoxLayout newTopToBottom 
 		add: header expand: false fill: false padding: 5;
 		add: raw;
 		yourself).

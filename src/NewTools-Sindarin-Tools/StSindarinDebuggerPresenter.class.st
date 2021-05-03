@@ -13,13 +13,13 @@ Class {
 { #category : #specs }
 StSindarinDebuggerPresenter class >> defaultSpec [
 
-	^ SpBoxLayout newVertical
+	^ SpBoxLayout newTopToBottom
 		add: #toolbar expand: false;
 		add:
-			(SpPanedLayout newVertical
+			(SpPanedLayout newTopToBottom
 				add: #stack;
 				add:
-					(SpPanedLayout newHorizontal
+					(SpPanedLayout newLeftToRight
 						add: #inspector;
 						add: #currentNodeSource;
 						yourself);

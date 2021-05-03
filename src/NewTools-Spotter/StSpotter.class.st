@@ -258,7 +258,7 @@ StSpotter >> activateLink: aCandidateLink [
 { #category : #initialization }
 StSpotter >> addPreviewPanelTo: contentsLayout [
 	
-	contentsLayout 	add: (previewContainer := SpBoxLayout newVertical).
+	contentsLayout 	add: (previewContainer := SpBoxLayout newTopToBottom).
 		resultList whenSelectionChangedDo: [ :selection | 
 			self showPreview: selection selectedItem ]
 ]
@@ -266,9 +266,9 @@ StSpotter >> addPreviewPanelTo: contentsLayout [
 { #category : #initialization }
 StSpotter >> addTipsPanel [ 
 
-	self layout: (SpBoxLayout newVertical
+	self layout: (SpBoxLayout newTopToBottom
 		add: self layout;
-		add: (SpBoxLayout newHorizontal
+		add: (SpBoxLayout newLeftToRight
 				vAlignCenter;
 				borderWidth: 3;
 				spacing: 3;
@@ -280,7 +280,7 @@ StSpotter >> addTipsPanel [
 				add: ((tip := self newLabel)
 					in: [ :this | this eventHandler whenMouseDownDo: [ :anEvent | self feedTip ] ];
 					yourself);
-				addLast: (SpBoxLayout newVertical 
+				addLast: (SpBoxLayout newTopToBottom 
 					add: (self newLink 
 						label: 'Advanced Search...';
 						action: [ self openFinder ];
@@ -419,12 +419,12 @@ StSpotter >> initializeDialogWindow: aDialogWindowPresenter [
 StSpotter >> initializePresenters [
 	| contentsLayout |
 
-	self layout: (SpBoxLayout newVertical
+	self layout: (SpBoxLayout newTopToBottom
 		borderWidth: 10;
 		spacing: 5;
 		add: (searchText := self newSearchInput) expand: false;
 		add: (SpOverlayLayout new
-			child: ((contentsLayout := SpBoxLayout newHorizontal)
+			child: ((contentsLayout := SpBoxLayout newLeftToRight)
 				beHomogeneous;
 				spacing: 5;
 				add: (resultList := self newComponentList);

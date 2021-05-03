@@ -32,7 +32,7 @@ StHeaderPanel >> initializePresenters [
 
 	headerBar := self instantiate: StHeaderBar.
 	
-	layout := SpBoxLayout newVertical
+	layout := SpBoxLayout newTopToBottom
 		add: headerBar expand: false;
 		yourself
 ]

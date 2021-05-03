@@ -93,7 +93,7 @@ StObjectContextPresenter >> intializePresentersWithEvaluator [
 		contextKeyBindings: (self menuActionsFor: evaluator) asKMCategory;
 		whenTextChangedDo: [ :aString | self model codeSnippet: aString ].
 	
-	self layout: (SpPanedLayout newVertical
+	self layout: (SpPanedLayout newTopToBottom
 		positionOfSlider: 70 percent;
 		add: view;
 		add: evaluator;
@@ -103,7 +103,7 @@ StObjectContextPresenter >> intializePresentersWithEvaluator [
 { #category : #initialization }
 StObjectContextPresenter >> intializePresentersWithoutEvaluator [
 	
-	self layout: (SpBoxLayout newVertical
+	self layout: (SpBoxLayout newTopToBottom
 		add: view;
 		yourself)
 ]

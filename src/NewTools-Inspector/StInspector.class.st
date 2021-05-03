@@ -44,7 +44,7 @@ StInspector class >> defaultSpacing [
 { #category : #specs }
 StInspector class >> defaultSpec [
 
-	^ SpBoxLayout newVertical
+	^ SpBoxLayout newTopToBottom
 		add: #millerList;
 		yourself
 ]

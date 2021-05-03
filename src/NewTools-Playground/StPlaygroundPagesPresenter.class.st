@@ -26,7 +26,7 @@ StPlaygroundPagesPresenter class >> defaultExtent [
 { #category : #specs }
 StPlaygroundPagesPresenter class >> defaultSpec [
 
-	^ SpPanedLayout newHorizontal
+	^ SpPanedLayout newLeftToRight
 		positionOfSlider: 30 percent;
 		add: #pageListPanel;
 		add: #pagePreviewPanel;

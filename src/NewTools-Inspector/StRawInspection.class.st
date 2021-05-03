@@ -26,7 +26,7 @@ StRawInspection class >> buildCommandsGroupWith: presenter forRoot: aCmCommandsG
 { #category : #specs }
 StRawInspection class >> defaultSpec [
 
-	^ SpBoxLayout newVertical 
+	^ SpBoxLayout newTopToBottom 
 		add: #attributeTable;
 		yourself
 ]
