@@ -208,7 +208,8 @@ StPlaygroundPagePresenter >> interactionModel [
 StPlaygroundPagePresenter >> loadPage: aFileReference [
 
 	page := StPlaygroundPage fromReference: aFileReference.
-	text text: page contents
+	text text: page contents.
+	^ page
 ]
 
 { #category : #private }

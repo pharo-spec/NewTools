@@ -257,7 +257,7 @@ StSpotter >> activateLink: aCandidateLink [
 
 { #category : #initialization }
 StSpotter >> addPreviewPanelTo: contentsLayout [
-	
+
 	contentsLayout 	add: (previewContainer := SpBoxLayout newTopToBottom).
 		resultList whenSelectionChangedDo: [ :selection | 
 			self showPreview: selection selectedItem ]
@@ -442,6 +442,7 @@ StSpotter >> initializePresenters [
 	spinner hide.
 
 	resultList
+		addStyle: 'stSpotterList';		
 		bindKeyCombination: Character arrowUp asKeyCombination 
 			toAction: [ :target :widget :event |
 				self transferFocusToSearchTextArrowUp.
@@ -453,12 +454,12 @@ StSpotter >> initializePresenters [
 		bindKeyCombination: Character arrowRight asKeyCombination 
 			toAction: [ self tryDiveIn ];
 		bindKeyCombination: Character arrowLeft asKeyCombination 
-			toAction: [ self tryDiveOut ];
+			toAction: [ self tryDiveOut ]; 
 		whenActivatedDo: [ :selection | 
 			self activate: selection selectedItem ].
 	resultList eventHandler 
 		whenKeyDownDo: [ :anEvent | self handleKeyEvent: anEvent ].
-	
+
 	searchText 
 		placeholder: 'Search...';
 		addStyle: 'stSpotterSearch';
@@ -466,9 +467,10 @@ StSpotter >> initializePresenters [
 		bindKeyCombination: Character arrowDown asKeyCombination 
 			toAction: [ self transferFocusToResultList ];
 		bindKeyCombination: Character arrowUp asKeyCombination 
-			toAction: [ self transferFocusToResultListAtLast ].
+			toAction: [ self transferFocusToResultListAtLast ];
+		bindKeyCombination: Character cr asKeyCombination 
+			toAction: [ self maybeActivateFirstElementOfResultList ].
 	
-	resultList addStyle: 'stSpotterList'
 ]
 
 { #category : #initialization }
@@ -519,6 +521,16 @@ StSpotter >> keepLastSelectedEntry [
 		ifNotNil: [ :aPresenter | aPresenter model value ]
 ]
 
+{ #category : #'private actions' }
+StSpotter >> maybeActivateFirstElementOfResultList [
+	| text |
+
+	text := searchText text trimmed.
+	resultList presenters
+		detect: [ :each | each model value asString = text ]
+		ifFound: [ :aPresnter | self activate: aPresnter ]
+]
+
 { #category : #'accessing model' }
 StSpotter >> model [
 
@@ -543,18 +555,21 @@ StSpotter >> newSpotterHeaderPresenter: aProcessor [
 
 { #category : #'private updating' }
 StSpotter >> nextSelectablePresenter: selectedPresenter oldPresenters: oldPresenters newPresenters: newPresenters [
-	
+
+	"look for current selected presenter"	
 	(selectedPresenter notNil and: [ selectedPresenter model notNil ]) ifTrue: [ 	
 		newPresenters 
 			detect: [ :each | each model value = selectedPresenter model value ]
 			ifFound: [ :aPresenter | ^ aPresenter ] ].
-		
 	"not found, look for last selected"
 	lastSelectedEntry ifNotNil: [ 
 		newPresenters 
 			detect: [ :each | each model value = lastSelectedEntry ]
 			ifFound: [ :aPresenter | ^ aPresenter ] ].
-
+	"just select first in list"
+	"newPresenters 
+		detect: [ :each | each isHeader not ]
+		ifFound: [ :aPresenter |  ^ aPresenter ]. "
 	^ nil
 ]
 
@@ -681,7 +696,7 @@ StSpotter >> stopProcessing [
 { #category : #private }
 StSpotter >> transferFocusToResultList [
 
-	self transferFocusToResultListAt: 1
+	self transferFocusToResultListAt: 1"(resultList selection selectedIndex)"
 ]
 
 { #category : #private }

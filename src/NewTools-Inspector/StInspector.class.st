@@ -194,9 +194,9 @@ StInspector >> initializeWindow: aWindowPresenter [
 		windowIcon: self windowIcon;
 		initialExtent: self class preferredExtent;
 		whenOpenedDo: [ self takeKeyboardFocus ];
-		whenFocusReceivedDo: [ self startStepping ];
-		whenFocusLostDo: [ self stopStepping ];
-		whenClosedDo: [ self stopStepping ];
+		whenFocusReceivedDo: [ self startProcessing ];
+		whenFocusLostDo: [ self stopProcessing ];
+		whenClosedDo: [ self stopProcessing ];
 		whenResizingDo: [ :ann | self preferredExtent: ann newSize ]
 ]
 
@@ -283,7 +283,7 @@ StInspector >> spacing [
 ]
 
 { #category : #'private stepping' }
-StInspector >> startStepping [
+StInspector >> startProcessing [
 
 	StInspectorRefreshService uniqueInstance register: self
 ]
@@ -296,7 +296,7 @@ StInspector >> step [
 ]
 
 { #category : #'private stepping' }
-StInspector >> stopStepping [
+StInspector >> stopProcessing [
 
 	StInspectorRefreshService uniqueInstance unregister: self
 ]

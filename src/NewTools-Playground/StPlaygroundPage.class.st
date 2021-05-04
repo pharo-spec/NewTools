@@ -145,6 +145,8 @@ StPlaygroundPage >> flush [
 { #category : #initialization }
 StPlaygroundPage >> fromReference: aFileReference [
 
+	aFileReference parent = self baseDirectory 
+		ifFalse: [ self baseDirectory: aFileReference parent ].
 	fileName := aFileReference basenameWithoutExtension.
 	creationTime := aFileReference creationTime
 ]

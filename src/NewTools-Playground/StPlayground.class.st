@@ -138,7 +138,6 @@ StPlayground >> defaultKeyboardFocus [
 { #category : #initialization }
 StPlayground >> initialize [
 
-	self setModelBeforeInitialization: StPlaygroundPage new.
 	super initialize
 ]
 
@@ -148,14 +147,32 @@ StPlayground >> loadPage: aFileReference [
 	self firstPage loadPage: aFileReference
 ]
 
-{ #category : #'private stepping' }
-StPlayground >> startStepping [
-	
-	"A playground does not steps"
+{ #category : #'private factory' }
+StPlayground >> newDefaultPlaygroundPage [
+
+	^ StPlaygroundPage new
+]
+
+{ #category : #'private factory' }
+StPlayground >> newInspectorFor: aModel [
+
+	^ super newInspectorFor: (aModel ifNil: [ self newDefaultPlaygroundPage ])
+]
+
+{ #category : #accessing }
+StPlayground >> page [
+
+	^ self firstPage page
 ]
 
 { #category : #'private stepping' }
-StPlayground >> stopStepping [
+StPlayground >> startProcessing [
+	
+	"A playground does not steps, do nothing"
+]
+
+{ #category : #'private stepping' }
+StPlayground >> stopProcessing [
 	
 	"A playground does not steps, but it needs to force a flush of last changes"
 	self firstPage ensureContentsFlushed
