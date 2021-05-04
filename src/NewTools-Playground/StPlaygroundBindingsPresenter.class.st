@@ -168,8 +168,7 @@ StPlaygroundBindingsPresenter >> moveSelectedBindingToLocalScope [
 	| selection |
 		
 	selection := self selectedBinding.
-	self application removeSharedBinding: selection.
-	parent interactionModel addBinding: selection
+	parent interactionModel makeBindingLocal: selection
 ]
 
 { #category : #private }
@@ -177,8 +176,7 @@ StPlaygroundBindingsPresenter >> moveSelectedBindingToSharedScope [
 	| selection |
 		
 	selection := self selectedBinding.
-	parent interactionModel removeBinding: selection.
-	self application addSharedBinding: selection
+	parent interactionModel makeBindingShared: selection
 ]
 
 { #category : #initialization }

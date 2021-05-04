@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'playground',
 		'backendForTest',
-		'memoryFileSystem'
+		'memoryFileSystem',
+		'application'
 	],
 	#category : #'NewTools-Playground-Tests'
 }
@@ -22,7 +23,7 @@ StPlaygroundTest >> newPage [
 StPlaygroundTest >> newPlayground [
 
 	^ StPlayground 
-		newApplication: StPharoApplication new 
+		newApplication: application
 		model: self newPage
 		
 ]
@@ -33,6 +34,7 @@ StPlaygroundTest >> setUp [
 	
 	memoryFileSystem := FileSystem memory.
 	backendForTest := SpMorphicBackendForTest new.
+	application := StPharoApplication new.
 	playground := self newPlayground
 ]
 
