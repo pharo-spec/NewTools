@@ -1,6 +1,6 @@
 Class {
 	#name : #StPlaygroundInteractionModelTest,
-	#superclass : #TestCase,
+	#superclass : #SpCodeScriptingInteractionModelTest,
 	#instVars : [
 		'application'
 	],
