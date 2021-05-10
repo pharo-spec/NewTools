@@ -29,19 +29,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         timeout-minutes: 15
-      - name: Coveralls GitHub Action
-        uses: coverallsapp/github-action@v1.1.1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          # This name must be unique for each job
-          flag-name: ${{matrix.os}}-${{matrix.smalltalk}}
-          parallel: true
-  finish:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - name: Coveralls Finished
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.github_token }}
-        parallel-finished: true
+#      - name: Coveralls GitHub Action
+#        uses: coverallsapp/github-action@v1.1.1
+#        with:
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
+#          # This name must be unique for each job
+#          flag-name: ${{matrix.os}}-${{matrix.smalltalk}}
+#          parallel: true
+#  finish:
+#    needs: build
+#    runs-on: ubuntu-latest
+#    steps:
+#    - name: Coveralls Finished
+#      uses: coverallsapp/github-action@master
+#      with:
+#        github-token: ${{ secrets.github_token }}
+#        parallel-finished: true

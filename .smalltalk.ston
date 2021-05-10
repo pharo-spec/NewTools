@@ -8,10 +8,5 @@ SmalltalkCISpec {
       #onUpgrade : #useIncoming,
       #ignoreImage : true
     }
-  ],
-  #testing : {
-    #coverage : {
-      #packages : [ 'NewTools.*' ]
-    }
-  }
+  ]
 }
