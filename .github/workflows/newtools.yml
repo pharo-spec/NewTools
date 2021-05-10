@@ -37,7 +37,7 @@ jobs:
           flag-name: ${{matrix.os}}-${{matrix.smalltalk}}
           parallel: true
   finish:
-    needs: Load Image and Run Tests
+    needs: build
     runs-on: ubuntu-latest
     steps:
     - name: Coveralls Finished
