@@ -137,9 +137,10 @@ BaselineOfNewTools >> packageRepositoryURL [
 	
 	url := super packageRepositoryURL.
 	url ifEmpty: [ ^ url ].
-	url crTrace.
 	"Verify if I am running in CI"
-	(url includesSubstring: 'pharo-spec') ifTrue: [ ^ '' ].
+	"travis or github actions"
+	((url includesSubstring: 'pharo-spec') 
+		or: [ url beginsWith: 'tonel:///home/runner/' ]) ifTrue: [ ^ '' ].
 	
 	^ url
 ]
