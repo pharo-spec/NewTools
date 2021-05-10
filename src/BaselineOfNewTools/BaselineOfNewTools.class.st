@@ -81,7 +81,7 @@ BaselineOfNewTools >> baseline: spec [
 
 		spec
 			group: 'Core' with: #('NewTools-Core' 'NewTools-Morphic');
-			group: 'Playground' with: #('Core' 'NewTools-Playground');
+			group: 'Playground' with: #('Core' 'NewTools-Playground' 'NewTools-Playground-Tests');
 			group: 'Inspector' with: #('Core' 'NewTools-Inspector');
 			group: 'Debugger' with: #(
 				'Core' 
