@@ -1,22 +1,19 @@
 Class {
 	#name : #StPlaygroundTest,
-	#superclass : #TestCase,
-	#instVars : [
-		'playground',
-		'backendForTest',
-		'memoryFileSystem',
-		'application'
-	],
+	#superclass : #StPlaygroundBaseTest,
 	#category : #'NewTools-Playground-Tests'
 }
 
-{ #category : #'instance creation' }
-StPlaygroundTest >> newPage [ 
+{ #category : #running }
+StPlaygroundTest >> classToTest [
 
-	^ StPlaygroundPage new 
-		timeToWait: 5 milliSeconds;
-		baseDirectory: memoryFileSystem;
-		yourself
+	^ StPlayground
+]
+
+{ #category : #running }
+StPlaygroundTest >> initializeInstanceBeforeInitialization: aPresenter [
+
+	aPresenter setModelBeforeInitialization: self newPage
 ]
 
 { #category : #'instance creation' }
@@ -28,32 +25,15 @@ StPlaygroundTest >> newPlayground [
 		
 ]
 
-{ #category : #running }
-StPlaygroundTest >> setUp [
-	super setUp.
-	
-	memoryFileSystem := FileSystem memory.
-	backendForTest := SpMorphicBackendForTest new.
-	application := StPharoApplication new.
-	playground := self newPlayground
-]
-
-{ #category : #running }
-StPlaygroundTest >> tearDown [
-
-	playground window close.
-	super tearDown
-]
-
 { #category : #tests }
 StPlaygroundTest >> testContents [
 
-	playground openWithSpec.
+	presenter openWithSpec.
 	self waitUntilUIRedrawed.
-	playground contents: 'Test'.
-	playground page flush.
+	presenter contents: 'Test'.
+	presenter page flush.
 	self 
-		assert: playground model contents 
+		assert: presenter model contents 
 		equals: 'Test'.
 		
 	
@@ -63,19 +43,19 @@ StPlaygroundTest >> testContents [
 StPlaygroundTest >> testLoadPage [
 	| page |
 
-	playground openWithSpec.
+	presenter openWithSpec.
 	self waitUntilUIRedrawed.
-	playground contents: 'Test 1'.
-	playground page flush.
+	presenter contents: 'Test 1'.
+	presenter page flush.
 
 	page := self newPage
 		contents: 'Test 2';
 		flush;
 		yourself.
-	playground loadPage: page fileReference.
+	presenter loadPage: page fileReference.
 	self waitUntilUIRedrawed.
 	self 
-		assert: playground page contents 
+		assert: presenter page contents 
 		equals: page contents
 ]
 
@@ -83,34 +63,21 @@ StPlaygroundTest >> testLoadPage [
 StPlaygroundTest >> testStopProcessing [
 	| page |
 
-	playground openWithSpec.
+	presenter openWithSpec.
 	self waitUntilUIRedrawed.
 	page := self newPage
 		contents: 'Test 1';
 		flush;
 		yourself.
-	playground loadPage: page fileReference.
+	presenter loadPage: page fileReference.
 	self waitUntilUIRedrawed.
 	"a lot of time"
-	playground page timeToWait: 1 minute.
-	playground contents: 'Test 2'.
+	presenter page timeToWait: 1 minute.
+	presenter contents: 'Test 2'.
 	"no time to flush"
 	self assert: page contents equals: 'Test 1'.
 	"now we can close and test."
-	playground window close.
+	presenter window close.
 	self assert: page contents equals: 'Test 2'.
 	
-]
-
-{ #category : #private }
-StPlaygroundTest >> waitUntilContentsAreFlush [
-		
-	20 milliSeconds wait
-	
-]
-
-{ #category : #private }
-StPlaygroundTest >> waitUntilUIRedrawed [
-
-	backendForTest waitUntilUIRedrawed
 ]

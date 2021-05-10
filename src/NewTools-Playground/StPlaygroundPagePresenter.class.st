@@ -90,6 +90,12 @@ StPlaygroundPagePresenter >> activateOnSingleClick [
 	"For compatibility, playground will not activate on single or double click (but in <meta+g>)"
 ]
 
+{ #category : #private }
+StPlaygroundPagePresenter >> basicPage: aPage [ 
+
+	page := aPage
+]
+
 { #category : #accessing }
 StPlaygroundPagePresenter >> contents: aString [
 
@@ -207,7 +213,7 @@ StPlaygroundPagePresenter >> interactionModel [
 { #category : #actions }
 StPlaygroundPagePresenter >> loadPage: aFileReference [
 
-	page := StPlaygroundPage fromReference: aFileReference.
+	self basicPage: (StPlaygroundPage fromReference: aFileReference).
 	text text: page contents.
 	^ page
 ]
@@ -298,6 +304,12 @@ StPlaygroundPagePresenter >> showLineNumbers: aBoolean [
 	StPharoSettings codeShowLineNumbers: aBoolean.
 	text lineNumbers: aBoolean.
 	toggleLineNumberButton label: (StShowLineNumbersCommand iconLabelFor: self showLineNumbers)
+]
+
+{ #category : #private }
+StPlaygroundPagePresenter >> text [
+
+	^ text
 ]
 
 { #category : #actions }
