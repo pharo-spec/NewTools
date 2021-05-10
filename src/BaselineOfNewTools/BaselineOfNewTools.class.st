@@ -137,7 +137,7 @@ BaselineOfNewTools >> packageRepositoryURL [
 	
 	url := super packageRepositoryURL.
 	url ifEmpty: [ ^ url ].
-	
+	url crTrace.
 	"Verify if I am running in CI"
 	(url includesSubstring: 'pharo-spec') ifTrue: [ ^ '' ].
 	
