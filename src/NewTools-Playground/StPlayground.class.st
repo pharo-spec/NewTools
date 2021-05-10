@@ -135,12 +135,6 @@ StPlayground >> defaultKeyboardFocus [
 	^ self firstPage
 ]
 
-{ #category : #initialization }
-StPlayground >> initialize [
-
-	super initialize
-]
-
 { #category : #actions }
 StPlayground >> loadPage: aFileReference [
 
