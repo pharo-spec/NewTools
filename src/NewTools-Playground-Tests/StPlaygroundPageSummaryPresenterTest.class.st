@@ -13,7 +13,7 @@ StPlaygroundPageSummaryPresenterTest >> classToTest [
 { #category : #initialization }
 StPlaygroundPageSummaryPresenterTest >> initializeInstanceBeforeInitialization: aPresenter [
 
-	aPresenter setModelBeforeInitialization: memoryFileSystem / 'test1.sh'
+	aPresenter setModelBeforeInitialization: memoryFileSystem / 'test1.ph'
 ]
 
 { #category : #initialization }
@@ -29,7 +29,7 @@ StPlaygroundPageSummaryPresenterTest >> initializeMemoryFileSystem: aFileSystem 
 StPlaygroundPageSummaryPresenterTest >> testContents [
 
 	self assert: presenter contents equals: ''.
-	presenter setModelBeforeInitialization: memoryFileSystem / 'test2.sh'.
+	presenter setModelBeforeInitialization: memoryFileSystem / 'test2.ph'.
 	self assert: presenter contents equals: 'Test
 Test 2'	
 ]
@@ -38,6 +38,6 @@ Test 2'
 StPlaygroundPageSummaryPresenterTest >> testPageFirstLine [
 	
 	self assert: presenter pageFirstLine equals: 'Empty'.	
-	presenter setModelBeforeInitialization: memoryFileSystem / 'test2.sh'.
+	presenter setModelBeforeInitialization: memoryFileSystem / 'test2.ph'.
 	self assert: presenter pageFirstLine equals: 'Test'
 ]
