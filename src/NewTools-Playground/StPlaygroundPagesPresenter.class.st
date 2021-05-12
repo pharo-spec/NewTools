@@ -134,9 +134,9 @@ StPlaygroundPagesPresenter >> initializeWindow: aWindowPresenter [
 { #category : #actions }
 StPlaygroundPagesPresenter >> loadPage: aPage [
 
-	parent loadPage: aPage.
+	self parent loadPage: aPage.
 	self window close.
-	parent takeKeyboardFocus 
+	self parent takeKeyboardFocus 
 ]
 
 { #category : #actions }
@@ -169,6 +169,12 @@ StPlaygroundPagesPresenter >> pagesAsPresenters [
 		self 
 			instantiate: StPlaygroundPageSummaryPresenter
 			on: each  ]
+]
+
+{ #category : #private }
+StPlaygroundPagesPresenter >> parent [
+
+	^ parent
 ]
 
 { #category : #accessing }
