@@ -19,8 +19,8 @@ StPlaygroundPageSummaryPresenterTest >> initializeInstanceBeforeInitialization: 
 { #category : #initialization }
 StPlaygroundPageSummaryPresenterTest >> initializeMemoryFileSystem: aFileSystem [
 
-	aFileSystem / 'test1.sh' writeStreamDo: [ :stream | stream << '' ].
-	aFileSystem / 'test2.sh' writeStreamDo: [ :stream | 
+	aFileSystem / 'test1.ph' writeStreamDo: [ :stream | stream << '' ].
+	aFileSystem / 'test2.ph' writeStreamDo: [ :stream | 
 		stream << 'Test'; cr.
 		stream << 'Test 2' ].
 ]

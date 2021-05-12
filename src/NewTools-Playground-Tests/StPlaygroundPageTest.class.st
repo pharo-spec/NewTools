@@ -61,6 +61,19 @@ StPlaygroundPageTest >> testFlush [
 ]
 
 { #category : #tests }
+StPlaygroundPageTest >> testFromReference [
+	| memory file page |
+	
+	memory := FileSystem memory.
+	file := memory / 'test.ph'.
+	file writeStreamDo: [ :stream | stream << 'TEST'].
+	
+	page := StPlaygroundPage fromReference: file. 
+	self assert: page fileReference equals: file.
+
+]
+
+{ #category : #tests }
 StPlaygroundPageTest >> testStoreVersion [
 	| v1 page |
 	
