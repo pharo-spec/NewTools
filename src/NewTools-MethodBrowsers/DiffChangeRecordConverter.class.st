@@ -8,12 +8,12 @@ Class {
 }
 
 { #category : #private }
-DiffChangeRecordConverter >> internalGetText [	
+DiffChangeRecordConverter >> internalGetText [
 
-	^TextDiffBuilder
-		 buildDisplayPatchFrom: ((self priorVersionOfAMethod: method) sourceCode) 
-		to: (method sourceCode) 
-		inClass: (method className)
+	^ TextDiffBuilder
+		  buildDisplayPatchFrom: (self priorVersionOfAMethod: method) sourceCode
+		  to: method sourceCode
+		  inClass: method className
 ]
 
 { #category : #private }
