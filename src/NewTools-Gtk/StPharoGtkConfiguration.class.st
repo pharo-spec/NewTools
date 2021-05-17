@@ -25,10 +25,13 @@ toolbar toolbutton > button { padding: 2px; margin: 2px }
 '
 ]
 
-{ #category : #accessing }
+{ #category : #configuring }
 StPharoGtkConfiguration >> configureGeneral: anApplication [ 
 
-	self addCSSProviderFromString: self commonStyle
+	self addCSSProviderFromString: self commonStyle.
+	anApplication 
+		propertyAt: #syntaxHighlightTheme
+		put: self syntaxHighlightThemeName
 ]
 
 { #category : #configuring }
@@ -62,6 +65,12 @@ StPharoGtkConfiguration >> configureWindows: anApplication [
 StPharoGtkConfiguration >> macThemeName [
 		
 	^ 'Sierra-light'
+]
+
+{ #category : #accessing }
+StPharoGtkConfiguration >> syntaxHighlightThemeName [
+
+	^ 'Blue'
 ]
 
 { #category : #accessing }
