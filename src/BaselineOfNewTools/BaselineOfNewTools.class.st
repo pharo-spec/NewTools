@@ -119,15 +119,13 @@ BaselineOfNewTools >> baseline: spec [
 				'NewTools-FileDialog' 
 				'NewTools-FileDialog-Tests');
 			group: 'default' with: #(
-				'Core'
-				'Playground'
-				'Inspector'
-				'Debugger'
+				'Playground' 
+				'Inspector' 
+				'Debugger' 
+				'SystemReporter'
+				'ChangeSorter'
 				'Methods'
-				'Spotter'
-				"'ChangeSorter'"
-				"'KeymapBrowser'"
-				"'FlagBrowser'");
+				'Spotter');
 			"A group for running CI"
 			group: 'CI' with: #('Spec2' 'default') ]
 ]
