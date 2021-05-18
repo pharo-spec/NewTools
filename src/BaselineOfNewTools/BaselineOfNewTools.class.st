@@ -135,8 +135,8 @@ BaselineOfNewTools >> packageRepositoryURL [
 	url ifEmpty: [ ^ url ].
 	"Verify if I am running in CI"
 	"travis or github actions"
-	((url includesSubstring: 'NewTools') 
-		or: [ url beginsWith: 'tonel:///home/runner/' ]) ifTrue: [ ^ '' ].
+	"((url includesSubstring: 'pharo-spec') 
+		or: [ url beginsWith: 'tonel:///home/runner/' ]) ifTrue: [ ^ '' ]."
 	
 	^ url
 ]
