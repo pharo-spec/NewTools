@@ -1,6 +1,9 @@
 Class {
 	#name : #BaselineOfNewToolsCI,
 	#superclass : #BaselineOf,
+	#instVars : [
+		'initializersEnabled'
+	],
 	#category : #BaselineOfNewToolsCI
 }
 
@@ -9,11 +12,13 @@ BaselineOfNewToolsCI >> baseline: spec [
 	<baseline>
 
 	spec for: #common do: [
+		spec preLoadDoIt: #'preload:package:'.
+		spec postLoadDoIt: #'postload:package:'.
+
+		self packageRepositoryURL crTrace.
 
 		self spec: spec.
-		self newTools: spec.
-		
-		spec package: 'NewTools-Core' ]
+		self newTools: spec ]
 ]
 
 { #category : #'external projects' }
@@ -35,6 +40,19 @@ BaselineOfNewToolsCI >> packageRepositoryURL [
 		or: [ url beginsWith: 'tonel:///home/runner/' ]) ifTrue: [ ^ '' ].
 	
 	^ url
+]
+
+{ #category : #actions }
+BaselineOfNewToolsCI >> postload: loader package: packageSpec [
+
+	MCMethodDefinition initializersEnabled: initializersEnabled
+]
+
+{ #category : #actions }
+BaselineOfNewToolsCI >> preload: loader package: packageSpec [
+
+	initializersEnabled := MCMethodDefinition initializersEnabled.
+	MCMethodDefinition initializersEnabled: true
 ]
 
 { #category : #'external projects' }
