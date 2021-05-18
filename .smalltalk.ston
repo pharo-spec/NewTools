@@ -1,7 +1,7 @@
 SmalltalkCISpec {
   #loading : [
     SCIMetacelloLoadSpec {
-      #baseline : 'NewTools',
+      #baseline : 'NewToolsCI',
       #directory : 'src',
       #load : 'default',
       #onConflict : #useIncoming,
