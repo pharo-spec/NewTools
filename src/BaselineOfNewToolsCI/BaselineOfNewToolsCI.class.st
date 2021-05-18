@@ -31,7 +31,7 @@ BaselineOfNewToolsCI >> baseline: spec [
 			package: 'NewTools-Debugger-Tests' with: [ spec requires: #('NewTools-Debugger') ];
 			"playground"
 			package: 'NewTools-Playground' with: [ spec requires: #('NewTools-Inspector') ];
-			package: 'NewTools-Playground-Tests' with: [ spec requires: #('NewTools-Playground' 'SpecCode') ];
+			package: 'NewTools-Playground-Tests' with: [ spec requires: #('NewTools-Playground') ];
 			"spotter"
 			package: 'NewTools-Spotter' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-Morphic-Spotter' with: [ spec requires: #('NewTools-Morphic') ];
