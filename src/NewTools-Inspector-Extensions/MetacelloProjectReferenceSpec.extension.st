@@ -24,6 +24,25 @@ MetacelloProjectReferenceSpec >> inspectionProject [
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
+MetacelloProjectReferenceSpec >> inspectionRecord [
+	<inspectorPresentationOrder: 920 title: 'Record'>
+	| specs |
+	
+	specs := (self project version record: self projectReference loads) spec packageSpecsInLoadOrder.
+	specs := specs reject: [ :each | each name = self name ].
+	^ SpTablePresenter new
+		addColumn: (SpStringTableColumn 
+			title: 'Type' 
+			evaluated: [ :aSpec | aSpec type ]) 
+			beNotExpandable;
+		addColumn: (SpStringTableColumn 
+			title: 'Name' 
+			evaluated: [ :aSpec | aSpec name ]);
+		items: (specs sorted: #type ascending, #name ascending);
+		yourself
+]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
 MetacelloProjectReferenceSpec >> type [
 	
 	^ 'project'
