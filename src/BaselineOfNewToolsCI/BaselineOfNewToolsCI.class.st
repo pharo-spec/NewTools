@@ -11,7 +11,9 @@ BaselineOfNewToolsCI >> baseline: spec [
 	spec for: #common do: [
 
 		self spec: spec.
-		self newTools: spec ]
+		self newTools: spec.
+		
+		spec package: 'NewTools-Core' ]
 ]
 
 { #category : #'external projects' }
