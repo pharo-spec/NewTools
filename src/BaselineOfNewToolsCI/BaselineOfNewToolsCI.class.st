@@ -12,6 +12,7 @@ BaselineOfNewToolsCI >> baseline: spec [
 	<baseline>
 
 	spec for: #common do: [
+		
 		self spec: spec.
 		self newTools: spec.
 		"A group for running CI"
@@ -54,6 +55,7 @@ BaselineOfNewToolsCI >> sindarin: spec [
 { #category : #'external projects' }
 BaselineOfNewToolsCI >> spec: spec [ 
 
-	spec baseline: 'Spec2' with: [ 
-		spec repository: 'github://pharo-spec/Spec' ]
+	spec baseline: 'Spec2' with: [
+		spec repository: (self packageRepositoryURL 
+				ifEmpty: [ 'github://pharo-spec/Spec' ]) ]
 ]
