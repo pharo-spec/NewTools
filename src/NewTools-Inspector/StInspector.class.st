@@ -150,24 +150,6 @@ StInspector >> defaultKeyboardFocus [
 		ifEmpty: [ self ]
 ]
 
-{ #category : #'accessing snippets' }
-StInspector >> evaluatorSnippetFor: anObject [
-	"Answer code snippets used in inspector"
-
-	^ self evaluatorSnippets 
-		at: anObject class
-		ifAbsent: [ '' ]
-]
-
-{ #category : #'accessing snippets' }
-StInspector >> evaluatorSnippetFor: anObject value: aString [
-	"Answer code snippets used in inspector"
-
-	^ self evaluatorSnippets 
-		at: anObject class
-		put: aString
-]
-
 { #category : #accessing }
 StInspector >> firstPage [
 
@@ -216,7 +198,8 @@ StInspector >> keepLastPageSelectedTabName [
 
 { #category : #accessing }
 StInspector >> millerList [
-	^millerList
+
+	^ millerList
 ]
 
 { #category : #accessing }
@@ -331,7 +314,7 @@ StInspector >> windowTitle [
 
 { #category : #accessing }
 StInspector >> withHeaderBar [
-	 ^withHeaderBar ifNil:[withHeaderBar := true]
+	 ^withHeaderBar ifNil: [ withHeaderBar := true ]
 ]
 
 { #category : #accessing }

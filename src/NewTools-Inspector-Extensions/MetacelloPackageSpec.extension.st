@@ -2,7 +2,7 @@ Extension { #name : #MetacelloPackageSpec }
 
 { #category : #'*NewTools-Inspector-Extensions' }
 MetacelloPackageSpec >> inspectionRequires [
-	<inspectorPresentationOrder: 910 title: 'Require'>
+	<inspectorPresentationOrder: 10 title: 'Require'>
 	| specs |
 
 	specs := self project version spec packageSpecsInLoadOrder.
@@ -15,11 +15,5 @@ MetacelloPackageSpec >> inspectionRequires [
 { #category : #'*NewTools-Inspector-Extensions' }
 MetacelloPackageSpec >> inspectionRequiresContext: aContext [
 		
-	aContext active: self requires notEmpty
-]
-
-{ #category : #'*NewTools-Inspector-Extensions' }
-MetacelloPackageSpec >> type [
-
-	^ 'package'
+	aContext active: self requires isNotEmpty
 ]

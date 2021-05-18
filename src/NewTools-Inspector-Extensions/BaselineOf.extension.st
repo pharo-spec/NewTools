@@ -2,7 +2,7 @@ Extension { #name : #BaselineOf }
 
 { #category : #'*NewTools-Inspector-Extensions' }
 BaselineOf >> inspectionProject [
-	<inspectorPresentationOrder: 910 title: 'Project'>
+	<inspectorPresentationOrder: 10 title: 'Project'>
 	| specs |
 	
 	specs := self project version spec packageSpecsInLoadOrder.
@@ -20,7 +20,7 @@ BaselineOf >> inspectionProject [
 
 { #category : #'*NewTools-Inspector-Extensions' }
 BaselineOf >> inspectionRecord [
-	<inspectorPresentationOrder: 920 title: 'Record'>
+	<inspectorPresentationOrder: 20 title: 'Record'>
 	| specs |
 	
 	specs := self project version record spec packageSpecsInLoadOrder.

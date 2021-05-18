@@ -225,7 +225,7 @@ StObjectInspectorPresenter >> newInspectionForContext: aContext [
 ]
 
 { #category : #'private factory' }
-StObjectInspectorPresenter >> newPageForContext: aContext [ 
+StObjectInspectorPresenter >> newPageForContext: aContext [
 
 	^ SpNotebookPage new
 		title: aContext title;

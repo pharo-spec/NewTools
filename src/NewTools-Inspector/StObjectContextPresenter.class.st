@@ -34,12 +34,18 @@ StObjectContextPresenter >> doEvaluateAndGo [
 	
 	activationBlock ifNil: [ ^ self ].
 
-	value := evaluator 
-		evaluate: evaluator selectedTextOrLine
+	value := self evaluator 
+		evaluate: self evaluator selectedTextOrLine
 		onCompileError: [ ^ self ]
 		onError: [ :e | e pass ].
 	
 	activationBlock value: (StEvaluatedSelectionModel newValue: value)
+]
+
+{ #category : #private }
+StObjectContextPresenter >> evaluator [
+
+	^ evaluator
 ]
 
 { #category : #private }

@@ -2,7 +2,7 @@ Extension { #name : #MetacelloGroupSpec }
 
 { #category : #'*NewTools-Inspector-Extensions' }
 MetacelloGroupSpec >> inspectionIncludes [
-	<inspectorPresentationOrder: 910 title: 'Includes'>
+	<inspectorPresentationOrder: 10 title: 'Include'>
 	| specs |
 
 	specs := self project version spec packageSpecsInLoadOrder 
@@ -19,10 +19,4 @@ MetacelloGroupSpec >> inspectionIncludes [
 		items: (specs sorted: #type ascending, #name ascending);
 		yourself	
 
-]
-
-{ #category : #'*NewTools-Inspector-Extensions' }
-MetacelloGroupSpec >> type [
-	
-	^ 'group'
 ]

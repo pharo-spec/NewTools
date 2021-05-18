@@ -2,11 +2,11 @@ Extension { #name : #MetacelloProjectReferenceSpec }
 
 { #category : #'*NewTools-Inspector-Extensions' }
 MetacelloProjectReferenceSpec >> inspectionProject [
-	<inspectorPresentationOrder: 910 title: 'Project'>
+	<inspectorPresentationOrder: 10 title: 'Project'>
 	| specs loadedSpecs |
 	
 	specs := self projectReference version spec packageSpecsInLoadOrder.
-	loadedSpecs := self projectReference loads 
+	loadedSpecs := (self projectReference loads ifNil: [ #() ]) 
 		ifNotEmpty: [ :loads | specs select: [ :each | loads includes: each name ] ]
 		ifEmpty: [ specs ].
 	
@@ -25,10 +25,10 @@ MetacelloProjectReferenceSpec >> inspectionProject [
 
 { #category : #'*NewTools-Inspector-Extensions' }
 MetacelloProjectReferenceSpec >> inspectionRecord [
-	<inspectorPresentationOrder: 920 title: 'Record'>
+	<inspectorPresentationOrder: 20 title: 'Record'>
 	| specs |
 	
-	specs := (self project version record: self projectReference loads) spec packageSpecsInLoadOrder.
+	specs := (self project version record: (self projectReference loads ifNil: [ #('default') ])) spec packageSpecsInLoadOrder.
 	specs := specs reject: [ :each | each name = self name ].
 	^ SpTablePresenter new
 		addColumn: (SpStringTableColumn 
@@ -40,10 +40,4 @@ MetacelloProjectReferenceSpec >> inspectionRecord [
 			evaluated: [ :aSpec | aSpec name ]);
 		items: (specs sorted: #type ascending, #name ascending);
 		yourself
-]
-
-{ #category : #'*NewTools-Inspector-Extensions' }
-MetacelloProjectReferenceSpec >> type [
-	
-	^ 'project'
 ]
