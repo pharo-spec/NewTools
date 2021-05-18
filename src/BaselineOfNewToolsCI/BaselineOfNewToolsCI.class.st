@@ -72,7 +72,7 @@ BaselineOfNewToolsCI >> spec: spec [
 		baseline: 'Spec2'
 		with: [ 
 			spec 
-				repository: 'github://pharo-spec/Spec';
+				repository: 'github://pharo-spec/Spec/src';
 				className: 'BaselineOfSpec2';
 				loads: #('default') ].
 ]
