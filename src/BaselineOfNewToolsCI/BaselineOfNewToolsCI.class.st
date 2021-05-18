@@ -68,6 +68,11 @@ BaselineOfNewToolsCI >> sindarin: spec [
 { #category : #'external projects' }
 BaselineOfNewToolsCI >> spec: spec [ 
 
-	spec baseline: 'Spec2' with: [
-		spec repository: 'github://pharo-spec/Spec' ]
+	spec
+		baseline: 'Spec2'
+		with: [ 
+			spec 
+				repository: 'github://pharo-spec/Spec';
+				className: 'BaselineOfSpec2';
+				loads: #('default') ].
 ]
