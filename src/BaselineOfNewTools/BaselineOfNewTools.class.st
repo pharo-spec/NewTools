@@ -23,7 +23,6 @@ BaselineOfNewTools >> baseline: spec [
 		spec preLoadDoIt: #'preload:package:'.
 		spec postLoadDoIt: #'postload:package:'.
 
-		self spec: spec.
 		self sindarin: spec.
 
 		spec
@@ -125,12 +124,10 @@ BaselineOfNewTools >> baseline: spec [
 				'SystemReporter'
 				'ChangeSorter'
 				'Methods'
-				'Spotter');
-			"A group for running CI"
-			group: 'CI' with: #('Spec2' 'default') ]
+				'Spotter') ]
 ]
 
-{ #category : #dependencies }
+{ #category : #'external projects' }
 BaselineOfNewTools >> packageRepositoryURL [
 	| url |
 	
@@ -157,7 +154,7 @@ BaselineOfNewTools >> preload: loader package: packageSpec [
 	MCMethodDefinition initializersEnabled: true
 ]
 
-{ #category : #dependencies }
+{ #category : #'external projects' }
 BaselineOfNewTools >> sindarin: spec [
 
 	spec baseline: 'Sindarin' with: [ 
@@ -165,11 +162,4 @@ BaselineOfNewTools >> sindarin: spec [
 			repository: (self packageRepositoryURL 
 				ifEmpty: [ 'github://pharo-spec/ScriptableDebugger' ]);
 			loads: 'Core' ]
-]
-
-{ #category : #dependencies }
-BaselineOfNewTools >> spec: spec [ 
-
-	spec baseline: 'Spec2' with: [ 
-		spec repository: 'github://pharo-spec/Spec' ]
 ]
