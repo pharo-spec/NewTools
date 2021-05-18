@@ -20,3 +20,9 @@ MetacelloGroupSpec >> inspectionIncludes [
 		yourself	
 
 ]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
+MetacelloGroupSpec >> type [
+
+	^ 'group'
+]

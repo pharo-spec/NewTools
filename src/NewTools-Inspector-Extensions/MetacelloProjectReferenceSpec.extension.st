@@ -41,3 +41,9 @@ MetacelloProjectReferenceSpec >> inspectionRecord [
 		items: (specs sorted: #type ascending, #name ascending);
 		yourself
 ]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
+MetacelloProjectReferenceSpec >> type [
+
+	^ 'project'
+]

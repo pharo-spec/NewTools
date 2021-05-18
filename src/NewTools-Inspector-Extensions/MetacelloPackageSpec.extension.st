@@ -17,3 +17,9 @@ MetacelloPackageSpec >> inspectionRequiresContext: aContext [
 		
 	aContext active: self requires isNotEmpty
 ]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
+MetacelloPackageSpec >> type [
+
+	^ 'package'
+]
