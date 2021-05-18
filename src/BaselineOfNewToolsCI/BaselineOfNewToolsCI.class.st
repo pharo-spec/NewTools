@@ -10,9 +10,9 @@ BaselineOfNewToolsCI >> baseline: spec [
 
 	spec for: #common do: [
 		self spec: spec.
-		self newTools: spec.
+		"self newTools: spec.
 		
-		spec group: 'default' with: #('Spec2' 'NewTools') ]
+		spec group: 'default' with: #('Spec2' 'NewTools')" ]
 ]
 
 { #category : #'external projects' }
