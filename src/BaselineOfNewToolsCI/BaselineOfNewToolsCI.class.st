@@ -56,6 +56,5 @@ BaselineOfNewToolsCI >> sindarin: spec [
 BaselineOfNewToolsCI >> spec: spec [ 
 
 	spec baseline: 'Spec2' with: [
-		spec repository: (self packageRepositoryURL 
-				ifEmpty: [ 'github://pharo-spec/Spec' ]) ]
+		spec repository: 'github://pharo-spec/Spec' ]
 ]
