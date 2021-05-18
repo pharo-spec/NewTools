@@ -1,7 +1,16 @@
 SmalltalkCISpec {
   #loading : [
     SCIMetacelloLoadSpec {
-      #baseline : 'NewToolsCI',
+      #baseline : 'Spec2',
+      #directory : 'src',
+      #load : 'default',
+      #repository : 'https://github.com/pharo-spec/Spec.git',
+      #onConflict : #useIncoming,
+      #onUpgrade : #useIncoming,
+      #ignoreImage : true
+    },
+    SCIMetacelloLoadSpec {
+      #baseline : 'NewTools',
       #directory : 'src',
       #load : 'default',
       #onConflict : #useIncoming,
