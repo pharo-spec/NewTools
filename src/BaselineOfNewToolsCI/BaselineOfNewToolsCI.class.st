@@ -1,9 +1,6 @@
 Class {
 	#name : #BaselineOfNewToolsCI,
 	#superclass : #BaselineOf,
-	#instVars : [
-		'initializersEnabled'
-	],
 	#category : #BaselineOfNewToolsCI
 }
 
@@ -14,9 +11,7 @@ BaselineOfNewToolsCI >> baseline: spec [
 	spec for: #common do: [
 		
 		self spec: spec.
-		self newTools: spec.
-		"A group for running CI"
-		spec group: 'default' with: #('Spec2' 'NewTools') ]
+		self newTools: spec ]
 ]
 
 { #category : #'external projects' }
