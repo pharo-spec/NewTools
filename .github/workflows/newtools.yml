@@ -16,6 +16,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         smalltalk: [ Pharo64-9.0 ]
+        config: [ .smalltalk.ston, .smalltalk-spec.ston ]
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.smalltalk }} on ${{ matrix.os }}
     steps:
@@ -25,7 +26,7 @@ jobs:
         with:
           smalltalk-version: ${{ matrix.smalltalk }}
       - name: Load Image and Run Tests
-        run: smalltalkci -s ${{ matrix.smalltalk }}
+        run: smalltalkci -s ${{ matrix.smalltalk }} ${{ matrix.config }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         timeout-minutes: 15
