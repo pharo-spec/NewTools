@@ -1,0 +1,15 @@
+SmalltalkCISpec {
+  #loading : [
+    SCIMetacelloLoadSpec {
+      #baseline : 'NewTools',
+      #directory : 'src',
+      #load : 'default',
+      #onConflict : #useIncoming,
+      #onUpgrade : #useIncoming,
+      #ignoreImage : true
+    }
+  ],
+  #testing : { 
+  	#packages: [ '.*' ]
+  }
+}
