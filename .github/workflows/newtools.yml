@@ -16,7 +16,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         smalltalk: [ Pharo64-9.0 ]
-        config: [ .smalltalk.ston, .smalltalk-spec.ston ]
+        config: [ .smalltalk.ston, .smalltalk.spec.ston ]
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.smalltalk }} on ${{ matrix.os }}
     steps:
