@@ -2,15 +2,15 @@ Extension { #name : #FileReference }
 
 { #category : #'*NewTools-FileBrowser' }
 FileReference >> isHiddenInWindows [
-	^ (self windowAttributes & 16r2) = 1
+	^ (self windowsAttributes & 16r2) = 1
 ]
 
 { #category : #'*NewTools-FileBrowser' }
-FileReference >> windowAttributes [
-	^ self windowAttributes: self fullName
+FileReference >> windowsAttributes [
+	^ self windowsAttributes: self fullName asWin32WideString 
 ]
 
 { #category : #'*NewTools-FileBrowser' }
-FileReference >> windowAttributes: lpFileName [
-	^ self ffiCall: #(long GetFileAttributesW #(char * lpFileName))
+FileReference >> windowsAttributes: lpFileName [
+	^ self ffiCall: #(long GetFileAttributesW #(Win32WideString lpFileName)) library: #kernel32
 ]

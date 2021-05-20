@@ -9,6 +9,7 @@ StPlaygroundPageTest >> newPage [
 
 	^ StPlaygroundPage new 
 		baseDirectory: FileSystem memory;
+		timeToWait: 10 milliSeconds;
 		yourself
 ]
 
@@ -17,7 +18,6 @@ StPlaygroundPageTest >> testContents [
 	| page |
 	
 	page := self newPage.
-	page timeToWait: 10 milliSeconds.
 	page contents: 'test'.
 	5 milliSeconds wait.
 	self assert: page contents isEmpty.
@@ -58,6 +58,19 @@ StPlaygroundPageTest >> testFlush [
 		
 
 	
+]
+
+{ #category : #tests }
+StPlaygroundPageTest >> testFromReference [
+	| memory file page |
+	
+	memory := FileSystem memory.
+	file := memory / 'test.ph'.
+	file writeStreamDo: [ :stream | stream << 'TEST'].
+	
+	page := StPlaygroundPage fromReference: file. 
+	self assert: page fileReference equals: file.
+
 ]
 
 { #category : #tests }
