@@ -27,8 +27,8 @@ MetacelloProjectReferenceSpec >> inspectionProject [
 MetacelloProjectReferenceSpec >> inspectionRecord [
 	<inspectorPresentationOrder: 20 title: 'Record'>
 	| specs |
-	
-	specs := (self project version record: (self projectReference loads ifNil: [ #('default') ])) spec packageSpecsInLoadOrder.
+
+	specs := (self projectReference version record: (self projectReference loads ifNil: [ #('default') ])) spec packageSpecsInLoadOrder.
 	specs := specs reject: [ :each | each name = self name ].
 	^ SpTablePresenter new
 		addColumn: (SpStringTableColumn 
