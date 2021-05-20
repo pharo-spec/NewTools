@@ -8,5 +8,5 @@ SettingNode >> spotterForSettingsFor: aStep [
 		title: 'Children';
 		allCandidates: [ self allChildren ];
 		itemName: [ :each | each spotterLabel ];
-		filter: GTFilterSubstring
+		filter: StFilterSubstring
 ]

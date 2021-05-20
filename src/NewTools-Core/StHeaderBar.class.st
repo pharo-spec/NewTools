@@ -17,7 +17,7 @@ Class {
 { #category : #specs }
 StHeaderBar class >> defaultSpec [
 
-	^ SpBoxLayout newHorizontal
+	^ SpBoxLayout newLeftToRight
 		beNotHomogeneous;
 		borderWidth: 3;
 		spacing: 3;
@@ -59,7 +59,7 @@ StHeaderBar >> enableCloseDoing: aBlock [
 { #category : #initialization }
 StHeaderBar >> initializePresenters [
 
-	self layout: (SpBoxLayout newHorizontal
+	self layout: (SpBoxLayout newLeftToRight
 		beNotHomogeneous;
 		borderWidth: 3;
 		spacing: 3;

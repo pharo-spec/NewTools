@@ -24,10 +24,13 @@ Class {
 
 { #category : #specs }
 StSindarinDebuggerScriptingPresenter class >> defaultSpec [
-	^ SpBoxLayout newVertical
-		add: #toolbar expand: false fill: false padding: 0;
+	^ SpBoxLayout newTopToBottom
+		add: #toolbar expand: false;
 		add: #code;
-		add: 'Result (right click to see more...)' expand: false fill: false padding: 5;
+		add: 'Result (right click to see more...)' 
+			expand: false 
+			fill: false 
+			padding: 5;
 		add: #resultInspection;
 		yourself
 ]

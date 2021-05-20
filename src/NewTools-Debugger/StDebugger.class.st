@@ -135,13 +135,9 @@ StDebugger class >> closeAllDebuggers [
 
 { #category : #specs }
 StDebugger class >> codeLayout [
-	self flag: #DBG_SPEC.
-	"Tool bar height is not enough to contain the buttons with icons (issue #94)."
-	^ SpBoxLayout newVertical
-		  add: #toolbar withConstraints: [ :constraints | 
-			  constraints
-				  expand: true;
-				  height: self toolbarHeight + 12];
+
+	^ SpBoxLayout newTopToBottom
+		  add: #toolbar expand: false;
 		  add: #code;
 		  yourself
 ]
@@ -177,10 +173,11 @@ StDebugger class >> debuggerLayoutSettingsOn: aBuilder [
 
 { #category : #'specs - selectors' }
 StDebugger class >> debuggerWithExtensionsSpec [
-	^ SpPanedLayout newVertical
+
+	^ SpPanedLayout newTopToBottom
 		positionOfSlider: 65 percent;
 		add:
-			(SpPanedLayout newHorizontal
+			(SpPanedLayout newLeftToRight
 				positionOfSlider: 65 percent;
 				add: self stackAndCodeLayout;
 				add: #extensionToolsNotebook;
@@ -192,7 +189,7 @@ StDebugger class >> debuggerWithExtensionsSpec [
 { #category : #'specs - selectors' }
 StDebugger class >> debuggerWithoutExtensionsSpec [
 
-	^ SpPanedLayout newVertical
+	^ SpPanedLayout newTopToBottom
 		positionOfSlider: 65 percent;
 		add: self stackAndCodeLayout;
 		add: #inspector;
@@ -280,7 +277,7 @@ StDebugger class >> spanNewSessionFrom: anotherSession [
 { #category : #specs }
 StDebugger class >> stackAndCodeLayout [
 
-	^ SpPanedLayout newVertical
+	^ SpPanedLayout newTopToBottom
 		positionOfSlider: 30 percent;
 		add: self stackLayout;
 		add: self codeLayout;
@@ -289,7 +286,7 @@ StDebugger class >> stackAndCodeLayout [
 
 { #category : #specs }
 StDebugger class >> stackLayout [
-	^ SpBoxLayout newVertical
+	^ SpBoxLayout newTopToBottom
 		add: #stackHeader
 			expand: false
 			fill: false
@@ -1322,7 +1319,7 @@ StDebugger >> warning: aString for: aPresenter [
 		relativeTo: aPresenter;
 		position: SpPopoverPosition top;
 		presenter: (SpPresenter new
-				 layout: (SpBoxLayout newVertical
+				 layout: (SpBoxLayout newTopToBottom
 						  borderWidth: 2;
 						  spacing: 0;
 						  add: (self newLabel label: aString);

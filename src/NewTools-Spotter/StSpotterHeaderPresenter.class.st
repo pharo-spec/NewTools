@@ -87,7 +87,7 @@ StSpotterHeaderPresenter >> initialize [
 { #category : #initialization }
 StSpotterHeaderPresenter >> initializePresenters [
 
-	self layout: (SpBoxLayout newHorizontal
+	self layout: (SpBoxLayout newLeftToRight
 		borderWidth: 5;
 		spacing: 5;
 		vAlignCenter;

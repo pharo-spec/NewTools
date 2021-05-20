@@ -23,7 +23,7 @@ StSindarinBytecodeDebuggerPresenter class >> defaultDisplayOrder [
 
 { #category : #specs }
 StSindarinBytecodeDebuggerPresenter class >> defaultSpec [
-	^ SpBoxLayout newVertical
+	^ SpBoxLayout newTopToBottom
 		add: #toolbar expand: false fill: false padding: 0;
 		add: #bytecode;		
 		add: #bcContextInspection;

@@ -110,6 +110,13 @@ StPlaygroundPage >> defaultObjectInspectorClass [
 ]
 
 { #category : #accessing }
+StPlaygroundPage >> ensureContentsFlushed [
+
+	flushContents isEmptyOrNil ifTrue: [ ^ self ].
+	self flush
+]
+
+{ #category : #accessing }
 StPlaygroundPage >> fileName [
 
 	^ fileName ifNil: [ fileName := self creationTimeForFileName ]
@@ -125,6 +132,7 @@ StPlaygroundPage >> fileReference [
 StPlaygroundPage >> flush [
 
 	mutex critical: [ 
+		flushContents ifNil: [ ^ self ].
 		self fileReference parent ensureCreateDirectory.
 		self fileReference 
 			ensureDelete;
@@ -137,6 +145,8 @@ StPlaygroundPage >> flush [
 { #category : #initialization }
 StPlaygroundPage >> fromReference: aFileReference [
 
+	aFileReference parent = self baseDirectory 
+		ifFalse: [ self baseDirectory: aFileReference parent ].
 	fileName := aFileReference basenameWithoutExtension.
 	creationTime := aFileReference creationTime
 ]
@@ -168,7 +178,7 @@ StPlaygroundPage >> spawnFlushProcess [
 	] fork
 ]
 
-{ #category : #'accessing versions' }
+{ #category : #private }
 StPlaygroundPage >> storeVersion [
 	| entry |
 

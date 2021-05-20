@@ -1,12 +1,20 @@
 Extension { #name : #SystemWindow }
 
 { #category : #'*NewTools-Spotter-Extensions' }
-SystemWindow >> spotterWindowsFor: aStep [
+SystemWindow >> stActDefault [
+
+	^ self isTopWindow
+		ifTrue: [ self comeToFront ] "rise above non-window morphs"
+		ifFalse:[ self activate ]
+]
+
+{ #category : #'*NewTools-Spotter-Extensions' }
+SystemWindow >> stWindowsFor: aStep [
 	<stSpotterOrder: 100>
 
 	aStep listProcessor
 			title: 'Windows';
 			allCandidates: [ self class allSubInstances ];
 			itemName: [ :window | '**', window label, '**' ];
-			filter: GTFilterSubstring
+			filter: StFilterSubstring
 ]

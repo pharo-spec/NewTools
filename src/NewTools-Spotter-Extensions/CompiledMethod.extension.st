@@ -3,30 +3,35 @@ Extension { #name : #CompiledMethod }
 { #category : #'*NewTools-Spotter-Extensions' }
 CompiledMethod >> spotterForBytecodesFor: aStep [
 	<stSpotterOrder: 15>
+	
 	aStep listProcessor
 		title: 'Bytecode';
 		allCandidates: [ self symbolicBytecodes ];
 		itemName: #printString;
-		filter: GTFilterSubstring
+		filter: StFilterSubstring
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
 CompiledMethod >> spotterForImplementorsFor: aStep [
 	<stSpotterOrder: 10>
+	
 	aStep listProcessor
 			title: 'Implementors';
 			allCandidates: [ self implementors collect: [:each | each compiledMethod] ];
-			filter: GTFilterSubstring;
+			filter: StFilterSubstring;
 			keyBinding: $m command
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
 CompiledMethod >> spotterForMessagesFor: aStep [
 	<stSpotterOrder: 12>
+
 	aStep listProcessor
 			title: 'Messages';
-			allCandidates: [ self messages asSortedCollection collect: [:each | GTSelector new name: each ] ];
-			filter: GTFilterSubstring
+			allCandidates: [ 
+				self messages asSortedCollection 
+					collect: [:each | StSelector new name: each ] ];
+			filter: StFilterSubstring
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
@@ -35,7 +40,7 @@ CompiledMethod >> spotterForSendersFor: aStep [
 	aStep listProcessor
 			title: 'Senders';
 			allCandidates: [ self senders collect: [:each | each compiledMethod] ];
-			filter: GTFilterSubstring;
+			filter: StFilterSubstring;
 			keyBinding: $n command
 ]
 
@@ -45,7 +50,7 @@ CompiledMethod >> spotterMethodClassFor: aStep [
 	aStep listProcessor
 			allCandidates: [  {self methodClass }];
 			title: 'Class';
-			filter: GTFilterSubstring;
+			filter: StFilterSubstring;
 			itemIcon: #systemIcon
 ]
 
@@ -57,4 +62,9 @@ CompiledMethod >> spotterPreview: aBuilder [
 		beNotEditable;
 		text: self sourceCode;
 		yourself
+]
+
+{ #category : #'*NewTools-Spotter-Extensions' }
+CompiledMethod >> stActDefault [
+	^ self browse
 ]

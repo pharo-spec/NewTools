@@ -15,7 +15,7 @@ Class {
 { #category : #specs }
 StObjectBreakpointInspection class >> defaultSpec [
 
-	^ SpPanedLayout newVertical
+	^ SpPanedLayout newTopToBottom
 		add: #methodsWithBreakpoints;
 		add: #breakpointsInSourceCode;
 		yourself

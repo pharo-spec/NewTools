@@ -22,8 +22,11 @@ StDebuggerContextInteractionModel >> behavior [
 { #category : #binding }
 StDebuggerContextInteractionModel >> bindingOf: aString [
 
-	^ (context lookupVar: aString declare: false) ifNotNil: [ :var | 
-		  var asDoItVariableFrom: context ]
+	"we can not call #lookupVar: without checking first as it would create the variable"
+
+	^ (self hasBindingOf: aString)
+		  ifTrue: [ (context lookupVar: aString) asDoItVariableFrom: context ]
+		  ifFalse: [ nil ]
 ]
 
 { #category : #accessing }
@@ -51,8 +54,8 @@ StDebuggerContextInteractionModel >> doItReceiver [
 
 { #category : #testing }
 StDebuggerContextInteractionModel >> hasBindingOf: aString [
-	"The debugger does not define new bindings"
-	^ false
+	"we lookup the name without creating a new variable"
+	^ (context lookupVar: aString declare: false) notNil
 ]
 
 { #category : #testing }

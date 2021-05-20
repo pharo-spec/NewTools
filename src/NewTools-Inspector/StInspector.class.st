@@ -44,7 +44,7 @@ StInspector class >> defaultSpacing [
 { #category : #specs }
 StInspector class >> defaultSpec [
 
-	^ SpBoxLayout newVertical
+	^ SpBoxLayout newTopToBottom
 		add: #millerList;
 		yourself
 ]
@@ -150,24 +150,6 @@ StInspector >> defaultKeyboardFocus [
 		ifEmpty: [ self ]
 ]
 
-{ #category : #'accessing snippets' }
-StInspector >> evaluatorSnippetFor: anObject [
-	"Answer code snippets used in inspector"
-
-	^ self evaluatorSnippets 
-		at: anObject class
-		ifAbsent: [ '' ]
-]
-
-{ #category : #'accessing snippets' }
-StInspector >> evaluatorSnippetFor: anObject value: aString [
-	"Answer code snippets used in inspector"
-
-	^ self evaluatorSnippets 
-		at: anObject class
-		put: aString
-]
-
 { #category : #accessing }
 StInspector >> firstPage [
 
@@ -194,9 +176,9 @@ StInspector >> initializeWindow: aWindowPresenter [
 		windowIcon: self windowIcon;
 		initialExtent: self class preferredExtent;
 		whenOpenedDo: [ self takeKeyboardFocus ];
-		whenFocusReceivedDo: [ self startStepping ];
-		whenFocusLostDo: [ self stopStepping ];
-		whenClosedDo: [ self stopStepping ];
+		whenFocusReceivedDo: [ self startProcessing ];
+		whenFocusLostDo: [ self stopProcessing ];
+		whenClosedDo: [ self stopProcessing ];
 		whenResizingDo: [ :ann | self preferredExtent: ann newSize ]
 ]
 
@@ -216,7 +198,8 @@ StInspector >> keepLastPageSelectedTabName [
 
 { #category : #accessing }
 StInspector >> millerList [
-	^millerList
+
+	^ millerList
 ]
 
 { #category : #accessing }
@@ -283,7 +266,7 @@ StInspector >> spacing [
 ]
 
 { #category : #'private stepping' }
-StInspector >> startStepping [
+StInspector >> startProcessing [
 
 	StInspectorRefreshService uniqueInstance register: self
 ]
@@ -296,7 +279,7 @@ StInspector >> step [
 ]
 
 { #category : #'private stepping' }
-StInspector >> stopStepping [
+StInspector >> stopProcessing [
 
 	StInspectorRefreshService uniqueInstance unregister: self
 ]
@@ -331,7 +314,7 @@ StInspector >> windowTitle [
 
 { #category : #accessing }
 StInspector >> withHeaderBar [
-	 ^withHeaderBar ifNil:[withHeaderBar := true]
+	 ^withHeaderBar ifNil: [ withHeaderBar := true ]
 ]
 
 { #category : #accessing }

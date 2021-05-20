@@ -6,7 +6,7 @@ RPackage >> spotterClassesFor: aStep [
 	aStep listProcessor
 			allCandidates: [ self definedClasses sorted: [ :a :b | a name < b name ] ];
 			title: 'Classes';
-			filter: GTFilterSubstring
+			filter: StFilterSubstring
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
@@ -15,7 +15,7 @@ RPackage >> spotterExtensionMethodsFor: aStep [
 	aStep listProcessor
 			allCandidates: [ self extensionMethods ];
 			title: 'Extension Methods';
-			filter: GTFilterSubstring
+			filter: StFilterSubstring
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
@@ -27,7 +27,7 @@ RPackage >> spotterMonticelloPackageFor: aStep [
 			ifNotNil: [ :mcPackage | Array with: mcPackage ] 
 			ifNil: [ #() ] ];
 		itemIcon: [ Smalltalk ui icons iconNamed: #monticelloPackageIcon ];
-		filter: GTFilterSubstring
+		filter: StFilterSubstring
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
@@ -39,7 +39,7 @@ RPackage >> spotterMonticelloWorkingCopyFor: aStep [
 			ifNotNil: [ :mcPackage | Array with: mcPackage workingCopy ] 
 			ifNil: [ #() ] ];
 		itemIcon: [ Smalltalk ui icons iconNamed: #versionControlIcon ];
-		filter: GTFilterSubstring
+		filter: StFilterSubstring
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
@@ -50,5 +50,11 @@ RPackage >> spotterTagsFor: aStep [
 			allCandidates: [ self classTags sorted: [ :a :b | a name < b name ] ];
 			title: 'Tags';
 			itemName: [ :item | item name ];
-			filter: GTFilterSubstring
+			filter: StFilterSubstring
+]
+
+{ #category : #'*NewTools-Spotter-Extensions' }
+RPackage >> stActDefault [
+
+	^ Smalltalk tools browser openOnPackage: self
 ]

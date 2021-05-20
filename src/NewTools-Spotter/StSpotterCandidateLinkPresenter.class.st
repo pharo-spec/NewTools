@@ -28,7 +28,7 @@ StSpotterCandidateLinkPresenter >> entry [
 { #category : #initialization }
 StSpotterCandidateLinkPresenter >> initializePresenters [
 
-	self layout: (SpBoxLayout newHorizontal
+	self layout: (SpBoxLayout newLeftToRight
 		borderWidth: 2;
 		spacing: 5;
 		vAlignCenter;

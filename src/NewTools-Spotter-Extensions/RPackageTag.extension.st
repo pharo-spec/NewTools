@@ -6,5 +6,5 @@ RPackageTag >> spotterClassesFor: aStep [
 	aStep listProcessor
 			allCandidates: [ self classes sorted: [ :a :b | a name < b name ] ];
 			title: 'Classes';
-			filter: GTFilterSubstring
+			filter: StFilterSubstring
 ]

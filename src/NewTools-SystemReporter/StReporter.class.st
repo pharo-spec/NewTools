@@ -31,7 +31,7 @@ Class {
 { #category : #specs }
 StReporter class >> defaultSpec [
 	"self new openWithSpec"
-	^ (SpBoxLayout newHorizontal 
+	^ (SpBoxLayout newLeftToRight 
 			add: #topicList withConstraints: [ :constraints | constraints width: 140 ];
 			add: #reportText;
 			yourself)

@@ -14,7 +14,7 @@ Class {
 { #category : #specs }
 StPresenterInspection class >> defaultSpec [
 
-	^ SpBoxLayout newVertical
+	^ SpBoxLayout newTopToBottom
 		add: #presenter;
 		yourself
 ]

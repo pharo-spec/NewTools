@@ -23,7 +23,6 @@ BaselineOfNewTools >> baseline: spec [
 		spec preLoadDoIt: #'preload:package:'.
 		spec postLoadDoIt: #'postload:package:'.
 
-		self spec: spec.
 		self sindarin: spec.
 
 		spec
@@ -44,6 +43,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Debugger-Tests' with: [ spec requires: #('NewTools-Debugger') ];
 			"playground"
 			package: 'NewTools-Playground' with: [ spec requires: #('NewTools-Inspector') ];
+			package: 'NewTools-Playground-Tests' with: [ spec requires: #('NewTools-Playground') ];
 			"spotter"
 			package: 'NewTools-Spotter' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-Morphic-Spotter' with: [ spec requires: #('NewTools-Morphic') ];
@@ -81,7 +81,7 @@ BaselineOfNewTools >> baseline: spec [
 
 		spec
 			group: 'Core' with: #('NewTools-Core' 'NewTools-Morphic');
-			group: 'Playground' with: #('Core' 'NewTools-Playground');
+			group: 'Playground' with: #('Core' 'NewTools-Playground' 'NewTools-Playground-Tests');
 			group: 'Inspector' with: #('Core' 'NewTools-Inspector');
 			group: 'Debugger' with: #(
 				'Core' 
@@ -118,28 +118,25 @@ BaselineOfNewTools >> baseline: spec [
 				'NewTools-FileDialog' 
 				'NewTools-FileDialog-Tests');
 			group: 'default' with: #(
-				'Core'
-				'Playground'
-				'Inspector'
-				'Debugger'
+				'Playground' 
+				'Inspector' 
+				'Debugger' 
+				'SystemReporter'
+				'ChangeSorter'
 				'Methods'
-				'Spotter'
-				"'ChangeSorter'"
-				"'KeymapBrowser'"
-				"'FlagBrowser'");
-			"A group for running CI"
-			group: 'CI' with: #('Spec2' 'default') ]
+				'Spotter') ]
 ]
 
-{ #category : #dependencies }
+{ #category : #'external projects' }
 BaselineOfNewTools >> packageRepositoryURL [
 	| url |
 	
 	url := super packageRepositoryURL.
 	url ifEmpty: [ ^ url ].
-	
 	"Verify if I am running in CI"
-	(url includesSubstring: 'pharo-spec') ifTrue: [ ^ '' ].
+	"travis or github actions"
+	((url includesSubstring: 'pharo-spec') 
+		or: [ url beginsWith: 'tonel:///home/runner/' ]) ifTrue: [ ^ '' ].
 	
 	^ url
 ]
@@ -157,7 +154,7 @@ BaselineOfNewTools >> preload: loader package: packageSpec [
 	MCMethodDefinition initializersEnabled: true
 ]
 
-{ #category : #dependencies }
+{ #category : #'external projects' }
 BaselineOfNewTools >> sindarin: spec [
 
 	spec baseline: 'Sindarin' with: [ 
@@ -165,11 +162,4 @@ BaselineOfNewTools >> sindarin: spec [
 			repository: (self packageRepositoryURL 
 				ifEmpty: [ 'github://pharo-spec/ScriptableDebugger' ]);
 			loads: 'Core' ]
-]
-
-{ #category : #dependencies }
-BaselineOfNewTools >> spec: spec [ 
-
-	spec baseline: 'Spec2' with: [ 
-		spec repository: 'github://pharo-spec/Spec' ]
 ]

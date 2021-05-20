@@ -42,7 +42,7 @@ StPlaygroundPagePresenter class >> defaultCacheDirectory [
 { #category : #specs }
 StPlaygroundPagePresenter class >> defaultSpec [
 
-	^ SpBoxLayout newVertical
+	^ SpBoxLayout newTopToBottom
 		spacing: 3;
 		add: #toolbar expand: false;
 		add: #text;
@@ -90,6 +90,12 @@ StPlaygroundPagePresenter >> activateOnSingleClick [
 	"For compatibility, playground will not activate on single or double click (but in <meta+g>)"
 ]
 
+{ #category : #private }
+StPlaygroundPagePresenter >> basicPage: aPage [ 
+
+	page := aPage
+]
+
 { #category : #accessing }
 StPlaygroundPagePresenter >> contents: aString [
 
@@ -121,6 +127,12 @@ StPlaygroundPagePresenter >> doEvaluateAndGo [
 		onError: [ :e | e pass ].
 	
 	activationBlock value: (StEvaluatedSelectionModel newValue: value)
+]
+
+{ #category : #accessing }
+StPlaygroundPagePresenter >> ensureContentsFlushed [
+	
+	self page ensureContentsFlushed
 ]
 
 { #category : #testing }
@@ -156,7 +168,7 @@ StPlaygroundPagePresenter >> initializePresenters [
 StPlaygroundPagePresenter >> initializeStatusbar [ 
 
 	(statusbar := self instantiate: SpPresenter)
-		layout: (SpBoxLayout newHorizontal
+		layout: (SpBoxLayout newLeftToRight
 			borderWidth: 3;
 			vAlignCenter;
 			add: (lineLabel := statusbar newLabel) expand: false;
@@ -201,8 +213,9 @@ StPlaygroundPagePresenter >> interactionModel [
 { #category : #actions }
 StPlaygroundPagePresenter >> loadPage: aFileReference [
 
-	page := StPlaygroundPage fromReference: aFileReference.
-	text text: page contents
+	self basicPage: (StPlaygroundPage fromReference: aFileReference).
+	text text: page contents.
+	^ page
 ]
 
 { #category : #private }
@@ -291,6 +304,12 @@ StPlaygroundPagePresenter >> showLineNumbers: aBoolean [
 	StPharoSettings codeShowLineNumbers: aBoolean.
 	text lineNumbers: aBoolean.
 	toggleLineNumberButton label: (StShowLineNumbersCommand iconLabelFor: self showLineNumbers)
+]
+
+{ #category : #private }
+StPlaygroundPagePresenter >> text [
+
+	^ text
 ]
 
 { #category : #actions }

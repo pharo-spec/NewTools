@@ -17,3 +17,8 @@ Pragma >> spotterForSendersFor: aStep [
 	<stSpotterOrder: 10>
 	self method spotterForSendersFor: aStep
 ]
+
+{ #category : #'*NewTools-Spotter-Extensions' }
+Pragma >> stActDefault [
+    ^ self method browse
+]

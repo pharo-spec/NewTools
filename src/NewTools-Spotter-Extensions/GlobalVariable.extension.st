@@ -7,7 +7,7 @@ GlobalVariable >> spotterClassFor: aStep [
 			title: 'Class';
 			allCandidates: [ { self value class }];
 			itemIcon: #systemIcon;
-			filter: GTFilterSubstring
+			filter: StFilterSubstring
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
@@ -17,5 +17,10 @@ GlobalVariable >> spotterForReferencesFor: aStep [
 			title: 'References';
 			allCandidates: [ (SystemNavigation default allReferencesTo: self) collect: [:each | each compiledMethod] ];
 			itemName: [ :method | method displayString ];
-			filter: GTFilterSubstring
+			filter: StFilterSubstring
+]
+
+{ #category : #'*NewTools-Spotter-Extensions' }
+GlobalVariable >> stActDefault [
+	self value inspect
 ]

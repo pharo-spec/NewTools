@@ -34,7 +34,7 @@ StPackageProcessorTest >> testGTSpotterNewIsRemovedAfterAddingText [
 	self runForText: 'gt-spotter'.
 	self rerunWithText: 'gt-spotter-new-te'.
 	
-	self denyResultsIncludes: SptClassProcessor package
+	self denyResultsIncludes: StClassProcessor package
 ]
 
 { #category : #tests }

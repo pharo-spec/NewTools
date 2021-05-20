@@ -18,7 +18,7 @@ ClySpotterModel >> spotterForGoToFor: aStep [
 		itemName: #name;
 		itemIcon: #icon;
 		candidatesLimit: 10;
-		filter: GTFilterSubstring;
+		filter: StFilterSubstring;
 		actLogic: [ :assoc :step | 
 			step exit. 
 			assoc activate ]

@@ -11,5 +11,5 @@ KMDispatcher >> spotterForKeysFor: aStep [
 				aKeymap shortcut displayString, 
 				(aKeymap name ifNil: [ '' ] ifNotNil: [ ' [', aKeymap name,']' ]) ];
 			candidatesLimit: 5;
-			filter: GTFilterSubstrings
+			filter: StFilterSubstring
 ]

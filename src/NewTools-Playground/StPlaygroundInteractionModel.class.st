@@ -80,6 +80,20 @@ StPlaygroundInteractionModel >> localBindings [
 ]
 
 { #category : #accessing }
+StPlaygroundInteractionModel >> makeBindingLocal: aBinding [	
+
+	self application removeSharedBinding: aBinding.
+	self addBinding: aBinding
+]
+
+{ #category : #accessing }
+StPlaygroundInteractionModel >> makeBindingShared: aBinding [	
+	
+	self removeBinding: aBinding.
+	self application addSharedBinding: aBinding
+]
+
+{ #category : #accessing }
 StPlaygroundInteractionModel >> sharedBindings [
 	
 	^ self application sharedBindings 

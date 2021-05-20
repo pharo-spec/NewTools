@@ -5,20 +5,18 @@ I will install additional styles needed for the platform (e.g. font style for co
 "
 Class {
 	#name : #StPharoGtkConfiguration,
-	#superclass : #SpApplicationConfiguration,
+	#superclass : #SpGtkConfiguration,
 	#category : #'NewTools-Gtk'
 }
-
-{ #category : #private }
-StPharoGtkConfiguration >> addProviderFromString: aString [
-
-	(GtkCssProvider newFromString: aString) addForApplicationToDefaultScreen
-]
 
 { #category : #accessing }
 StPharoGtkConfiguration >> commonStyle [
 
 	^ '
+/* compact toolbar */
+toolbar { font-size: 0.6em }
+toolbar toolbutton > button { padding: 2px; margin: 2px }
+
 .dim { color: LightSlateGrey }
 .codePopover,  .codePopover text { 
 	background-color: transparent;
@@ -28,18 +26,19 @@ StPharoGtkConfiguration >> commonStyle [
 ]
 
 { #category : #configuring }
-StPharoGtkConfiguration >> configure: anApplication [
+StPharoGtkConfiguration >> configureGeneral: anApplication [ 
 
-	GtkRunLoop defer: [ 
-		super configure: anApplication ]
+	self addCSSProviderFromString: self commonStyle.
+	anApplication 
+		propertyAt: #syntaxHighlightTheme
+		put: self syntaxHighlightThemeName
 ]
 
 { #category : #configuring }
 StPharoGtkConfiguration >> configureOSX: anApplication [
 
 	self installTheme: self macThemeName.
-	self addProviderFromString: self commonStyle.
-	self addProviderFromString: '
+	self addCSSProviderFromString: '
 .code { font: 12pt "Monaco" }
 '
 ]
@@ -48,10 +47,8 @@ StPharoGtkConfiguration >> configureOSX: anApplication [
 StPharoGtkConfiguration >> configureUnix: anApplication [
 
 	self unixThemeName ifNotNil: [ :aName | self installTheme: aName ].
-	self addProviderFromString: self commonStyle.
-	self addProviderFromString: '
+	self addCSSProviderFromString: '
 .code { /* font: 10pt "Source Code Pro" */ }
-.stToolbar { font-size: smaller }
 '
 ]
 
@@ -59,22 +56,21 @@ StPharoGtkConfiguration >> configureUnix: anApplication [
 StPharoGtkConfiguration >> configureWindows: anApplication [
 
 	self installTheme: self windowsThemeName.
-	self addProviderFromString: self commonStyle.
-	self addProviderFromString: '
+	self addCSSProviderFromString: '
 .code { font: 10pt "Microsoft Sans Serif" }
 '
-]
-
-{ #category : #private }
-StPharoGtkConfiguration >> installTheme: aString [
-
-	GtkSettings default themeName: aString
 ]
 
 { #category : #accessing }
 StPharoGtkConfiguration >> macThemeName [
 		
 	^ 'Sierra-light'
+]
+
+{ #category : #accessing }
+StPharoGtkConfiguration >> syntaxHighlightThemeName [
+
+	^ 'Blue'
 ]
 
 { #category : #accessing }

@@ -23,7 +23,7 @@ StPlaygroundPageSummaryPresenter >> contents [
 { #category : #initialization }
 StPlaygroundPageSummaryPresenter >> initializePresenters [
 
-	layout := SpBoxLayout newVertical
+	layout := SpBoxLayout newTopToBottom
 		borderWidth: 1;
 		spacing: 2;
 		add: (firstLineLabel := self newLabel) expand: false;

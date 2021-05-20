@@ -10,7 +10,7 @@ MCWorkingCopy >> spotterAllRepositoriesFor: aStep [
 		actLogic: [ :item :step | 
 			step exit.
 			self spotterCommit: self in: item ];
-		filter: GTFilterSubstring
+		filter: StFilterSubstring
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
@@ -20,7 +20,19 @@ MCWorkingCopy >> spotterAncestorsFor: aStep [
 	aStep listProcessor
 		title: 'Ancestors';
 		allCandidates: [ self allAncestors ];
-		filter: GTFilterSubstring
+		filter: StFilterSubstring
+]
+
+{ #category : #'*NewTools-Spotter-Extensions' }
+MCWorkingCopy >> spotterCommit: workingCopy in: aRepository [
+	| newVersion |
+
+	newVersion := workingCopy newVersionIn: aRepository.
+	newVersion ifNil: [ ^ self ].
+	Cursor wait showWhile: [
+		[ 	aRepository storeVersion: newVersion.
+			aRepository storeDependencies: newVersion ] 
+		ensure: [ (MCVersionInspector new version: newVersion) show ]]
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
@@ -30,7 +42,7 @@ MCWorkingCopy >> spotterMonticelloPackageFor: aStep [
 		title: 'Monticello Package';
 		allCandidates: [ Array with: self package ];
 		itemIcon: [ Smalltalk ui icons iconNamed: #monticelloPackageIcon ];
-		filter: GTFilterSubstring
+		filter: StFilterSubstring
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
@@ -44,7 +56,7 @@ MCWorkingCopy >> spotterPackageFor: aStep [
 			ifNil: [ { } ] ];
 		itemName: [ :item | item name ];
 		itemIcon: [ Smalltalk ui icons iconNamed: #packageIcon ];
-		filter: GTFilterSubstring
+		filter: StFilterSubstring
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
@@ -57,5 +69,5 @@ MCWorkingCopy >> spotterPackageRepositoriesFor: aStep [
 		actLogic: [ :item :step |
 			step exit.
 			self spotterCommit: self in: item ];
-		filter: GTFilterSubstring
+		filter: StFilterSubstring
 ]

@@ -34,12 +34,18 @@ StObjectContextPresenter >> doEvaluateAndGo [
 	
 	activationBlock ifNil: [ ^ self ].
 
-	value := evaluator 
-		evaluate: evaluator selectedTextOrLine
+	value := self evaluator 
+		evaluate: self evaluator selectedTextOrLine
 		onCompileError: [ ^ self ]
 		onError: [ :e | e pass ].
 	
 	activationBlock value: (StEvaluatedSelectionModel newValue: value)
+]
+
+{ #category : #private }
+StObjectContextPresenter >> evaluator [
+
+	^ evaluator
 ]
 
 { #category : #private }
@@ -93,7 +99,7 @@ StObjectContextPresenter >> intializePresentersWithEvaluator [
 		contextKeyBindings: (self menuActionsFor: evaluator) asKMCategory;
 		whenTextChangedDo: [ :aString | self model codeSnippet: aString ].
 	
-	self layout: (SpPanedLayout newVertical
+	self layout: (SpPanedLayout newTopToBottom
 		positionOfSlider: 70 percent;
 		add: view;
 		add: evaluator;
@@ -103,7 +109,7 @@ StObjectContextPresenter >> intializePresentersWithEvaluator [
 { #category : #initialization }
 StObjectContextPresenter >> intializePresentersWithoutEvaluator [
 	
-	self layout: (SpBoxLayout newVertical
+	self layout: (SpBoxLayout newTopToBottom
 		add: view;
 		yourself)
 ]
