@@ -43,7 +43,6 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Debugger-Tests' with: [ spec requires: #('NewTools-Debugger') ];
 			"playground"
 			package: 'NewTools-Playground' with: [ spec requires: #('NewTools-Inspector') ];
-			package: 'NewTools-Playground-Tests' with: [ spec requires: #('NewTools-Playground') ];
 			"spotter"
 			package: 'NewTools-Spotter' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-Morphic-Spotter' with: [ spec requires: #('NewTools-Morphic') ];
@@ -77,11 +76,15 @@ BaselineOfNewTools >> baseline: spec [
 			"Debugger Selector"
 			package: 'NewTools-DebuggerSelector' with: [ spec requires: #('NewTools-SpTextPresenterDecorators') ];
 			package: 'NewTools-DebuggerSelector-Tests' with: [ spec requires: #('NewTools-DebuggerSelector') ];
-			package: 'NewTools-Debugger-Fuel'.
+			
+			"Fuel"
+			package: 'NewTools-Debugger-Fuel';
+			package: 'NewTools-Debugger-Fuel-Tests' with: [ spec requires: #('NewTools-Debugger-Fuel') ];
+			package: 'NewTools-Fuel'.
 
 		spec
 			group: 'Core' with: #('NewTools-Core' 'NewTools-Morphic');
-			group: 'Playground' with: #('Core' 'NewTools-Playground' 'NewTools-Playground-Tests');
+			group: 'Playground' with: #('Core' 'NewTools-Playground');
 			group: 'Inspector' with: #('Core' 'NewTools-Inspector');
 			group: 'Debugger' with: #(
 				'Core' 
@@ -95,7 +98,9 @@ BaselineOfNewTools >> baseline: spec [
 				'NewTools-Sindarin-Commands-Tests'
 				'NewTools-Debugger-Breakpoints-Tools'
 				'NewTools-Debugger-Tests'
-				'NewTools-Debugger-Fuel');
+				'NewTools-Debugger-Fuel'
+				'NewTools-Debugger-Fuel-Tests'
+				'NewTools-Fuel');
 			group: 'Spotter' with: #(
 				'NewTools-Morphic-Spotter' 
 				'NewTools-Spotter-Processors' 
@@ -118,13 +123,17 @@ BaselineOfNewTools >> baseline: spec [
 				'NewTools-FileDialog' 
 				'NewTools-FileDialog-Tests');
 			group: 'default' with: #(
-				'Playground' 
-				'Inspector' 
-				'Debugger' 
-				'SystemReporter'
-				'ChangeSorter'
+				'Core'
+				'Playground'
+				'Inspector'
+				'Debugger'
 				'Methods'
-				'Spotter') ]
+				'Spotter'
+				"'ChangeSorter'"
+				"'KeymapBrowser'"
+				"'FlagBrowser'").
+			"A group for running CI"
+			"spec group: 'CI' with: #('Spec2' 'default')" ]
 ]
 
 { #category : #'external projects' }
