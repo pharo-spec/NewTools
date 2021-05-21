@@ -16,9 +16,6 @@ Class {
 		'alivePresentersByPage',
 		'activateOnSingleClick'
 	],
-	#classInstVars : [
-		'header'
-	],
 	#category : #'NewTools-Inspector-View'
 }
 
@@ -106,7 +103,7 @@ StObjectInspectorPresenter >> allContexts [
 
 { #category : #private }
 StObjectInspectorPresenter >> allPages [
-	
+
 	^ self allContexts 
 		collect: [ :each | self newPageForContext: each ]
 	
