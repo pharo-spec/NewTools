@@ -22,9 +22,6 @@ Class {
 		'reportText',
 		'topics'
 	],
-	#classInstVars : [
-		'reportText'
-	],
 	#category : #'NewTools-SystemReporter'
 }
 
@@ -71,7 +68,11 @@ StReporter >> createTextForReport: items [
 
 { #category : #utils }
 StReporter >> enumerate: aBlock on: aStream [
-	self enumerate: aBlock startAt: 0 on: aStream
+
+	self 
+		enumerate: aBlock 
+		startAt: 0 
+		on: aStream
 ]
 
 { #category : #utils }
