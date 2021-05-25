@@ -53,9 +53,3 @@ Class >> spotterSuperMethodsFor: aStep [
 			allCandidates: [ self allMethods reject: [ :each | each methodClass = self ] ];
 			filter: StFilterSubstring
 ]
-
-{ #category : #'*NewTools-Spotter-Extensions' }
-Class >> stActDefault [
-
-	^ self inspect
-]
