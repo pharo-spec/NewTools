@@ -1,5 +1,9 @@
 name: NewTools-Pharo9.0
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  PHARO_CI_TESTING_ENVIRONMENT: 1
+
 on:
   push:
     branches: [ Pharo9.0 ]
