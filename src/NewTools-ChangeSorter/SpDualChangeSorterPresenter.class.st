@@ -188,13 +188,13 @@ SpDualChangeSorterPresenter >> copyMethodFrom: src to: dest [
 { #category : #initialization }
 SpDualChangeSorterPresenter >> initialize [
 
-	super initialize.
 	model := ChangeSorterModel new.
 	isRefreshing := false.
-	SystemAnnouncer uniqueInstance weak 
-		when: CurrentChangeSetChanged 
-		send: #updateTitle 
-		to: self 
+	super initialize.
+	SystemAnnouncer uniqueInstance weak
+		when: CurrentChangeSetChanged
+		send: #updateTitle
+		to: self
 ]
 
 { #category : #initialization }
