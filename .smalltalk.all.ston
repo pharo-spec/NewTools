@@ -9,7 +9,26 @@ SmalltalkCISpec {
       #ignoreImage : true
     }
   ],
-  #testing : { 
-  	#packages: [ '.*' ]
-  }
+  #testing : {
+  	#include : { 
+  		#packages : [ '.*' ] 
+  	},
+  	#exclude : {
+  		#packages : [ 
+  			'GT-Tests.*', 
+  			'Glamour-Tests.*',
+  			'UnifiedFFI.*',
+  			'ThreadedFFI.*',
+  			'Monticello.*',
+  			'Metacello.*',
+  			'System-Settings-Tests.*',
+  			'ReleaseTests.*' ],
+  		#classes : [
+  			#OutOfMemoryTest,
+  			#TraitFileOutTest,
+  			#PlatformResolverTest,
+  			#ProcessSpecificTest
+  		] 
+  	}
+  }  
 }
