@@ -14,8 +14,8 @@ StPharoGtkConfiguration >> commonStyle [
 
 	^ '
 /* compact toolbar */
-toolbar { font-size: 0.6em }
-toolbar toolbutton > button { padding: 2px; margin: 2px }
+toolbar.stToolbar { font-size: 0.7em }
+toolbar.stToolbar toolbutton > button { padding: 2px; margin: 2px }
 
 .dim { color: LightSlateGrey }
 .codePopover,  .codePopover text { 
