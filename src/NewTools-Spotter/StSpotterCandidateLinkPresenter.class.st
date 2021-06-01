@@ -42,6 +42,12 @@ StSpotterCandidateLinkPresenter >> initializePresenters [
 		labelPresenter label: self entry label ]
 ]
 
+{ #category : #testing }
+StSpotterCandidateLinkPresenter >> matchesText: aString [
+
+	^ self model matchesText: aString
+]
+
 { #category : #'accessing model' }
 StSpotterCandidateLinkPresenter >> model [
 

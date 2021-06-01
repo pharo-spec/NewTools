@@ -112,6 +112,12 @@ StSpotterHeaderPresenter >> isHeader [
 	^ true
 ]
 
+{ #category : #testing }
+StSpotterHeaderPresenter >> matchesText: aString [
+
+	^ false
+]
+
 { #category : #'accessing model' }
 StSpotterHeaderPresenter >> model [
 

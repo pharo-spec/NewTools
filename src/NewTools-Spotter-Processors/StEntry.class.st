@@ -81,6 +81,12 @@ StEntry >> label [
 	^ self asString
 ]
 
+{ #category : #testing }
+StEntry >> matchesText: aString [
+
+	^ self asString = aString
+]
+
 { #category : #printing }
 StEntry >> printOn: aStream [
 
