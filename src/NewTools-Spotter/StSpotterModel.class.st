@@ -100,7 +100,7 @@ StSpotterModel >> initialize [
 	super initialize.
 	
 	scheduler := TKTWorkerPool new.
-	scheduler poolMaxSize: 10.
+	scheduler poolMaxSize: 2.
 	scheduler start.
 	
 	mutex := Mutex new
@@ -175,8 +175,8 @@ StSpotterModel >> processSearch: aString on: spotter [
 StSpotterModel >> pushQuery: aQuery [
 
 	self schedule: [ 
-		mutex critical: [ self activeStep pushQuery: aQuery ]
-	]
+		mutex critical: [ 
+			self activeStep pushQuery: aQuery ] ]
 ]
 
 { #category : #accessing }
@@ -202,6 +202,7 @@ StSpotterModel >> results [
 { #category : #accessing }
 StSpotterModel >> schedule: aBlock [
 
+	scheduler purge.
 	scheduler schedule: [
 		aBlock 
 			on: Error 

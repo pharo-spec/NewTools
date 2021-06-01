@@ -4,8 +4,7 @@ Class {
 	#instVars : [
 		'backendForTest',
 		'application',
-		'presenter',
-		'memoryFileSystem'
+		'presenter'
 	],
 	#category : #'NewTools-Inspector-Tests'
 }

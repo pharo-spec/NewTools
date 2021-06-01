@@ -64,6 +64,12 @@ StSpotterCandidateLink >> isFirst [
 	^ self previousLink processorLink ~= self processorLink
 ]
 
+{ #category : #testing }
+StSpotterCandidateLink >> matchesText: aString [
+	
+	^ self value matchesText: aString
+]
+
 { #category : #accessing }
 StSpotterCandidateLink >> next [
 	^ self nextLink

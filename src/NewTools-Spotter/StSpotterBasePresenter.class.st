@@ -19,6 +19,12 @@ StSpotterBasePresenter >> isHeader [
 	^ false
 ]
 
+{ #category : #testing }
+StSpotterBasePresenter >> matchesText: aString [ 
+	
+	self subclassResponsibility
+]
+
 { #category : #accessing }
 StSpotterBasePresenter >> model [
 

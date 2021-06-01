@@ -525,9 +525,9 @@ StSpotter >> keepLastSelectedEntry [
 StSpotter >> maybeActivateFirstElementOfResultList [
 	| text |
 
-	text := searchText text trimmed.
+	text := self searchingString.
 	resultList presenters
-		detect: [ :each | each model value asString = text ]
+		detect: [ :each | each matchesText: text ]
 		ifFound: [ :aPresnter | self activate: aPresnter ]
 ]
 
@@ -557,6 +557,7 @@ StSpotter >> newSpotterHeaderPresenter: aProcessor [
 StSpotter >> nextSelectablePresenter: selectedPresenter oldPresenters: oldPresenters newPresenters: newPresenters [
 
 	"look for current selected presenter"	
+	| text |
 	(selectedPresenter notNil and: [ selectedPresenter model notNil ]) ifTrue: [ 	
 		newPresenters 
 			detect: [ :each | each model value = selectedPresenter model value ]
@@ -566,10 +567,12 @@ StSpotter >> nextSelectablePresenter: selectedPresenter oldPresenters: oldPresen
 		newPresenters 
 			detect: [ :each | each model value = lastSelectedEntry ]
 			ifFound: [ :aPresenter | ^ aPresenter ] ].
-	"just select first in list"
-	"newPresenters 
-		detect: [ :each | each isHeader not ]
-		ifFound: [ :aPresenter |  ^ aPresenter ]. "
+	"select first in list that matches"
+	text := self searchingString.
+	newPresenters
+		detect: [ :each | each matchesText: text ]
+		ifFound: [ :aPresenter | ^ aPresenter ]. 
+	
 	^ nil
 ]
 
@@ -637,6 +640,12 @@ StSpotter >> removeAllResults [
 StSpotter >> resetLastSelectedEntry [
 	
 	lastSelectedEntry := nil
+]
+
+{ #category : #'private actions' }
+StSpotter >> searchingString [
+		
+	^ searchText text trimmed
 ]
 
 { #category : #'accessing model' }
