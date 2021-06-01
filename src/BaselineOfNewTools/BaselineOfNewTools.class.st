@@ -28,6 +28,7 @@ BaselineOfNewTools >> baseline: spec [
 			"inspector"
 			package: 'NewTools-Inspector' with: [ spec requires: #('NewTools-Inspector-Extensions') ];
 			package: 'NewTools-Inspector-Extensions' with: [ spec requires: #('NewTools-Core') ];
+			package: 'NewTools-Inspector-Tests' with: [ spec requires: #('NewTools-Inspector') ];
 			"debugger"
 			package: 'NewTools-Debugger' with: [ spec requires: #('NewTools-Inspector' 'NewTools-Debugger-Commands' 'NewTools-Debugger-Extensions' 'NewTools-SpTextPresenterDecorators') ];			
 			package: 'NewTools-Debugger-Commands';
@@ -77,8 +78,8 @@ BaselineOfNewTools >> baseline: spec [
 
 		spec
 			group: 'Core' with: #('NewTools-Core' 'NewTools-Morphic');
-			group: 'Playground' with: #('Core' 'NewTools-Playground');
-			group: 'Inspector' with: #('Core' 'NewTools-Inspector');
+			group: 'Playground' with: #('Core' 'NewTools-Playground' 'NewTools-Playground-Tests');
+			group: 'Inspector' with: #('Core' 'NewTools-Inspector' 'NewTools-Inspector-Tests');
 			group: 'Debugger' with: #(
 				'Core' 
 				'Inspector' 
