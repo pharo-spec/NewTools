@@ -788,7 +788,10 @@ StSpotter >> updateResultList: aCandidateLink [
 	
 	self model schedule: [
 		self application defer: [ 
-			mutex critical: [  self queuedUpdateResultList ] ] ]
+			mutex critical: [ 
+				[ self queuedUpdateResultList ]
+				on: Exception 
+				fork: [ :e | e pass ] ] ] ]
 ]
 
 { #category : #'private updating' }
