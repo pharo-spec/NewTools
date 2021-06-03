@@ -643,6 +643,12 @@ StSpotter >> resetLastSelectedEntry [
 	lastSelectedEntry := nil
 ]
 
+{ #category : #private }
+StSpotter >> searchText [
+
+	^ searchText
+]
+
 { #category : #'private actions' }
 StSpotter >> searchingString [
 	| searchString searchChunks |
