@@ -100,7 +100,7 @@ StSpotterModel >> initialize [
 	super initialize.
 	
 	scheduler := TKTWorkerPool new.
-	scheduler poolMaxSize: 2.
+	scheduler poolMaxSize: 5.
 	scheduler start.
 	
 	mutex := Mutex new

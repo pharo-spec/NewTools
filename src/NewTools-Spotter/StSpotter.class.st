@@ -580,6 +580,7 @@ StSpotter >> nextSelectablePresenter: selectedPresenter oldPresenters: oldPresen
 StSpotter >> openFinder [
 
 	self window close.
+	self flag: #TODO. "Move finder to spec (right now is a morph)"
 	Finder open
 ]
 
@@ -642,10 +643,21 @@ StSpotter >> resetLastSelectedEntry [
 	lastSelectedEntry := nil
 ]
 
+{ #category : #private }
+StSpotter >> searchText [
+
+	^ searchText
+]
+
 { #category : #'private actions' }
 StSpotter >> searchingString [
-		
-	^ searchText text trimmed
+	| searchString searchChunks |
+	
+	searchString := searchText text trimmed.
+	searchChunks := searchString substrings.
+	^ (searchChunks anySatisfy: [ :each | each first = $# ])
+		ifTrue: [ ' ' join: (searchChunks reject: [ :each | each first = $# ]) ]
+		ifFalse: [ searchString ]
 ]
 
 { #category : #'accessing model' }
@@ -776,7 +788,10 @@ StSpotter >> updateResultList: aCandidateLink [
 	
 	self model schedule: [
 		self application defer: [ 
-			mutex critical: [  self queuedUpdateResultList ] ] ]
+			mutex critical: [ 
+				[ self queuedUpdateResultList ]
+				on: Exception 
+				fork: [ :e | e pass ] ] ] ]
 ]
 
 { #category : #'private updating' }

@@ -67,7 +67,9 @@ StSpotterCandidateLink >> isFirst [
 { #category : #testing }
 StSpotterCandidateLink >> matchesText: aString [
 	
-	^ self value matchesText: aString
+	^ self value 
+		ifNotNil: [ self value matchesText: aString ]
+		ifNil: [ false ]
 ]
 
 { #category : #accessing }

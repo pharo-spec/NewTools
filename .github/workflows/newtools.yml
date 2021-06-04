@@ -17,7 +17,7 @@ jobs:
         os: [ ubuntu-latest ]
         smalltalk: [ Pharo64-9.0 ]
     runs-on: ${{ matrix.os }}
-    name: ${{ matrix.config }}@${{ matrix.smalltalk }} on ${{ matrix.os }}
+    name: ${{ matrix.smalltalk }} on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
       - name: Setup smalltalkCI

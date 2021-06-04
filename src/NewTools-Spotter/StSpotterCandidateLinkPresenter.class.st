@@ -45,7 +45,9 @@ StSpotterCandidateLinkPresenter >> initializePresenters [
 { #category : #testing }
 StSpotterCandidateLinkPresenter >> matchesText: aString [
 
-	^ self model matchesText: aString
+	^ self model 
+		ifNotNil: [ self model matchesText: aString ]
+		ifNil: [ false ]
 ]
 
 { #category : #'accessing model' }
