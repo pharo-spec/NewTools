@@ -461,13 +461,13 @@ StDebugger >> createMissingClass [
 	message := self interruptedContext tempAt: 1.
 	exception := self interruptedContext tempAt: 2.
 	variableNode := exception variableNode.
-	[ 
-	OCUndeclaredVariableWarning new
+	[ | newClassBinding | 
+	newClassBinding := OCUndeclaredVariableWarning new
 		node: variableNode;
-		defineClass: variableNode name.
+		defineClass: variableNode name. 
 	self
 		createMissingMethodFor: message
-		in: self interruptedContext receiver class ]
+		in: newClassBinding value ]
 		on: Abort
 		do: [ ^ self ].
 
