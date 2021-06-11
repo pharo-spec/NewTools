@@ -523,12 +523,14 @@ StSpotter >> keepLastSelectedEntry [
 
 { #category : #'private actions' }
 StSpotter >> maybeActivateFirstElementOfResultList [
-	| text |
+	"| text |
 
 	text := self searchingString.
 	resultList presenters
 		detect: [ :each | each matchesText: text ]
-		ifFound: [ :aPresnter | self activate: aPresnter ]
+		ifFound: [ :aPresenter | self activate: aPresenter ]."
+		
+	self activate: resultList selectedItem 
 ]
 
 { #category : #'accessing model' }
@@ -572,6 +574,10 @@ StSpotter >> nextSelectablePresenter: selectedPresenter oldPresenters: oldPresen
 	newPresenters
 		detect: [ :each | each matchesText: text ]
 		ifFound: [ :aPresenter | ^ aPresenter ]. 
+	"select first in list that is not a header"
+	newPresenters
+		detect: [ :each | each isHeader not ]
+		ifFound: [ :aPresenter | ^ aPresenter ]. 
 	
 	^ nil
 ]
@@ -607,16 +613,17 @@ StSpotter >> queuedUpdateResultList [
 			sorted: [ :each | each order ] ascending)
 			flatCollect: [ :each | each withCandidates ]. 
 			
-		resultList disableActivationDuring: [ 
-			| selectedPresenter |
+		self model schedule: [
+			resultList disableActivationDuring: [ 
+				| selectedPresenter |
 			
-			selectedPresenter := self 
-				nextSelectablePresenter: resultList selectedItem
-				oldPresenters: resultList presenters
-				newPresenters: presenters.
-			resultList presenters: presenters.
-			selectedPresenter 
-				ifNotNil: [ resultList selectItem: selectedPresenter ] ] 
+				selectedPresenter := self 
+					nextSelectablePresenter: resultList selectedItem
+					oldPresenters: resultList presenters
+					newPresenters: presenters.
+				resultList presenters: presenters.
+				selectedPresenter 
+					ifNotNil: [ resultList selectItem: selectedPresenter ] ] ].
 	]
 	ensure: [ 
 		updating := false ]
@@ -717,7 +724,7 @@ StSpotter >> stopProcessing [
 { #category : #private }
 StSpotter >> transferFocusToResultList [
 
-	self transferFocusToResultListAt: 1"(resultList selection selectedIndex)"
+	self transferFocusToResultListAt: (resultList selection selectedIndex)
 ]
 
 { #category : #private }
