@@ -32,7 +32,8 @@ Class {
 		'tip',
 		'queue',
 		'updating',
-		'lastSelectedEntry'
+		'lastSelectedEntry',
+		'lastUpdateTime'
 	],
 	#classVars : [
 		'History',
@@ -259,8 +260,8 @@ StSpotter >> activateLink: aCandidateLink [
 StSpotter >> addPreviewPanelTo: contentsLayout [
 
 	contentsLayout 	add: (previewContainer := SpBoxLayout newTopToBottom).
-		resultList whenSelectionChangedDo: [ :selection | 
-			self showPreview: selection selectedItem ]
+	resultList whenSelectionChangedDo: [ :selection | 
+		self showPreview: selection selectedItem ]
 ]
 
 { #category : #initialization }
@@ -590,6 +591,12 @@ StSpotter >> openFinder [
 	Finder open
 ]
 
+{ #category : #private }
+StSpotter >> previewContainer [
+
+	^ previewContainer
+]
+
 { #category : #'private updating' }
 StSpotter >> queuedUpdateResultList [
 	| categoryPresenter presenters |
@@ -602,9 +609,8 @@ StSpotter >> queuedUpdateResultList [
 		whileFalse: [ | aCandidateLink |
 			aCandidateLink := queue removeFirst.
 			categoryPresenter := aCandidateLink processor 
-			headerCategoryFor: aCandidateLink
-			on: self.
-		
+				headerCategoryFor: aCandidateLink
+				on: self.
 			(categoryPresenter includesLink: aCandidateLink) ifFalse: [ 
 				categoryPresenter addCandidate: aCandidateLink inSpotter: self ] ].
 	
@@ -612,18 +618,16 @@ StSpotter >> queuedUpdateResultList [
 		presenters := (categories values 
 			sorted: [ :each | each order ] ascending)
 			flatCollect: [ :each | each withCandidates ]. 
-			
-		self model schedule: [
-			resultList disableActivationDuring: [ 
-				| selectedPresenter |
-			
-				selectedPresenter := self 
-					nextSelectablePresenter: resultList selectedItem
-					oldPresenters: resultList presenters
-					newPresenters: presenters.
-				resultList presenters: presenters.
-				selectedPresenter 
-					ifNotNil: [ resultList selectItem: selectedPresenter ] ] ].
+	
+		self model schedule: [ 
+			| selectedPresenter |
+			selectedPresenter := self 
+				nextSelectablePresenter: resultList selectedItem
+				oldPresenters: resultList presenters
+				newPresenters: presenters.
+			resultList presenters: presenters.
+			selectedPresenter 
+				ifNotNil: [ resultList selectItem: selectedPresenter ] ].
 	]
 	ensure: [ 
 		updating := false ]
@@ -791,12 +795,16 @@ StSpotter >> updatePresenter [
 StSpotter >> updateResultList: aCandidateLink [
 
 	mutex critical: [ queue add: aCandidateLink ].
-	updating ifTrue: [ ^ self ].
+	lastUpdateTime ifNil: [ lastUpdateTime := Time millisecondClockValue ].
+	(updating or: [ (Time millisecondClockValue - lastUpdateTime) < 50 ]) 
+		ifTrue: [ ^ self ].
 	
 	self model schedule: [
 		self application defer: [ 
 			mutex critical: [ 
-				[ self queuedUpdateResultList ]
+				[ 
+					self queuedUpdateResultList.
+					lastUpdateTime := Time millisecondClockValue ]
 				on: Exception 
 				fork: [ :e | e pass ] ] ] ]
 ]

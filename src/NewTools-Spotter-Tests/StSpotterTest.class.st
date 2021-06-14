@@ -15,6 +15,22 @@ StSpotterTest >> setUp [
 ]
 
 { #category : #tests }
+StSpotterTest >> testOpenSpotterRefreshesPreviewOnce [
+	| count |
+
+	count := 0.
+	spotter previewContainer whenChildrenAddedDo: [ :ann |
+		count := count + 1 ].
+	
+	spotter openWithSpec.
+	20 timesRepeat: [ MorphicRenderLoop new doOneCycle ].
+	spotter window close.
+	
+	self assert: count equals: 1
+	 
+]
+
+{ #category : #tests }
 StSpotterTest >> testSearchingString [
 
 	spotter searchText text: 'Test'.

@@ -285,9 +285,7 @@ StSpotterCandidatesList >> privateAddCandidate: aCandidateLink weightedInNotFull
 { #category : #notifying }
 StSpotterCandidatesList >> processorEnded: aProcessor [
 
-	(self processors stNoneSatisfy: [ :each | each isRunning ])
-		ifTrue: [ self announcer announce: StSpotterQueryEnded new ] 
-	
+	self announcer announce: (StSpotterProcessorEnded newProcessor: self)
 ]
 
 { #category : #accessing }
@@ -299,8 +297,8 @@ StSpotterCandidatesList >> processorLinksMap [
 
 { #category : #notifying }
 StSpotterCandidatesList >> processorStarted: aProcessor [
-	
-	self announcer announce: StSpotterQueryStarted new.
+
+	self announcer announce: (StSpotterProcessorStarted newProcessor: self)
 ]
 
 { #category : #accessing }
