@@ -209,6 +209,12 @@ StSpotterModel >> schedule: aBlock [
 			fork: [ :e | e pass ] ]
 ]
 
+{ #category : #private }
+StSpotterModel >> scheduler [
+
+	^ scheduler
+]
+
 { #category : #accessing }
 StSpotterModel >> stSpotterProcessorsFor: aStep [
 

@@ -1,6 +1,6 @@
 Class {
 	#name : #StSpotterModelTest,
-	#superclass : #TestCase,
+	#superclass : #StSpotterBaseTest,
 	#category : #'NewTools-Spotter-Tests'
 }
 
@@ -16,6 +16,7 @@ StSpotterModelTest >> testAnnounceQueryEndedIsSentOnce [
 		model processSearch: 'Object' on: StSpotter new.
 	] fork.
 	
-	200 milliSeconds wait.
+	self waitUntilEnded: model.
+	
 	self assert: count equals: 1.
 ]

@@ -1,6 +1,6 @@
 Class {
 	#name : #StSpotterTest,
-	#superclass : #TestCase,
+	#superclass : #StSpotterBaseTest,
 	#instVars : [
 		'spotter'
 	],
@@ -22,8 +22,9 @@ StSpotterTest >> testOpenSpotterRefreshesPreviewOnce [
 	spotter previewContainer whenChildrenAddedDo: [ :ann |
 		count := count + 1 ].
 	
-	spotter openWithSpec.
-	20 timesRepeat: [ MorphicRenderLoop new doOneCycle ].
+	self defer: [ spotter openWithSpec ].
+	self waitUntilEnded: spotter model.
+	20 timesRepeat: [ self waitUntilUIRedrawed ].
 	spotter window close.
 	
 	self assert: count equals: 1
