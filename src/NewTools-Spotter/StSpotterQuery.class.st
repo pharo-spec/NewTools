@@ -1,3 +1,8 @@
+"
+A query (a search) for Spotter.
+A query iterates all defined `relevantProcessors` to retrieve the `results`.
+To produce a result, it takes the `searchText` and `process` it.
+"
 Class {
 	#name : #StSpotterQuery,
 	#superclass : #Object,
