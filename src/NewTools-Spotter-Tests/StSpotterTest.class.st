@@ -19,16 +19,17 @@ StSpotterTest >> testOpenSpotterRefreshesPreviewOnce [
 	| count |
 
 	count := 0.
-	spotter previewContainer whenChildrenAddedDo: [ :ann |
-		count := count + 1 ].
+	spotter previewContainer 
+		whenChildrenAddedDo: [ :ann | count := count + 1 ].
 	
-	self defer: [ spotter openWithSpec ].
+	self defer: [ 
+		spotter openWithSpec.
+		spotter updateSearch: 'Obj' ].
 	self waitUntilEnded: spotter model.
-	20 timesRepeat: [ self waitUntilUIRedrawed ].
+	50 timesRepeat: [ self waitUntilUIRedrawed ].
 	spotter window close.
 	
 	self assert: count equals: 1
-	 
 ]
 
 { #category : #tests }
