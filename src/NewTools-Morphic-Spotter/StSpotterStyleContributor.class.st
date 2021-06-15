@@ -8,12 +8,13 @@ Class {
 StSpotterStyleContributor >> styleSheetContribution [
 	
 	^ SpStyle newApplication 
-		"addClass: 'presenter' with: [ :class | class "
-			addClass: 'stSpotter' with: [ :spotterClass | spotterClass 
-				addPropertyContainerWith: [ :c | c borderColor: Smalltalk ui theme backgroundColor ];
-				addPropertyDrawWith: [ :draw | draw backgroundColor: Smalltalk ui theme backgroundColor ] "]";
-			addClass: 'stSpotterLink' with: [ :spotterLinkClass | spotterLinkClass 
-				addPropertyGeometryWith: [ :geometry | geometry height: 22; vResizing: false ] ] ]; 
+		addClass: 'stSpotter' with: [ :spotterClass | spotterClass 
+			addPropertyContainerWith: [ :c | c borderColor: Smalltalk ui theme backgroundColor ];
+			addPropertyDrawWith: [ :draw | draw backgroundColor: Smalltalk ui theme backgroundColor ] ];
+		addClass: 'stSpotterHeader' with: [ :spotterLinkClass | spotterLinkClass 
+			addPropertyGeometryWith: [ :geometry | geometry height: 30; vResizing: false ] ]; 
+		addClass: 'stSpotterLink' with: [ :spotterLinkClass | spotterLinkClass 
+			addPropertyGeometryWith: [ :geometry | geometry height: 25; vResizing: false ] ];
 		addClass: 'componentList' with: [ :componentList | componentList 
 			addClass: 'stSpotterList' with: [ :spotter | spotter 
 				addPropertyDrawWith: [ :draw | draw color: Color transparent ] ] ];
