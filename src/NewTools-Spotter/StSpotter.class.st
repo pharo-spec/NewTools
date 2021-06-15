@@ -727,8 +727,12 @@ StSpotter >> stopProcessing [
 
 { #category : #private }
 StSpotter >> transferFocusToResultList [
+	| index |
 
-	self transferFocusToResultListAt: (resultList selection selectedIndex)
+	index := resultList selection selectedIndex + 1.
+	self transferFocusToResultListAt: ((index > resultList items size)
+		ifTrue: [ 1 ]
+		ifFalse: [ index ])
 ]
 
 { #category : #private }
