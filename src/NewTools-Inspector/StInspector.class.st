@@ -21,13 +21,20 @@ Class {
 		'withHeaderBar'
 	],
 	#classVars : [
-		'IndexableDisplayLimit'
+		'IndexableDisplayLimit',
+		'InspectorDiveOnSingleClick'
 	],
 	#classInstVars : [
 		'preferredExtent'
 	],
 	#category : #'NewTools-Inspector-View'
 }
+
+{ #category : #settings }
+StInspector class >> defaultInspectorDiveOnSingleClick [
+
+	^ true
+]
 
 { #category : #accessing }
 StInspector class >> defaultPreferredExtent [
@@ -99,6 +106,19 @@ StInspector class >> inspector: anObject [
 	^ self openOn: anObject
 ]
 
+{ #category : #settings }
+StInspector class >> inspectorDiveOnSingleClick [
+
+	^ InspectorDiveOnSingleClick ifNil: [
+		InspectorDiveOnSingleClick := self defaultInspectorDiveOnSingleClick ]
+]
+
+{ #category : #settings }
+StInspector class >> inspectorDiveOnSingleClick: aBoolean [
+
+	InspectorDiveOnSingleClick := aBoolean
+]
+
 { #category : #'instance creation' }
 StInspector class >> onObject: anObject [
 
@@ -134,6 +154,23 @@ StInspector class >> register [
 StInspector class >> registerToolsOn: registry [
 	"self registerToolsOn: Smalltalk tools " 
 	registry register: self as: #inspector
+]
+
+{ #category : #settings }
+StInspector class >> settingsOn: aBuilder [
+	<systemsettings>
+
+	(aBuilder group: #inspector)
+		parent: #tools;
+		label: 'Inspector';
+		description: 'Inspector'.
+		
+	(aBuilder setting: #inspectorDiveOnSingleClick)
+		parent: #inspector;
+		default: self inspectorDiveOnSingleClick;
+		target: self;
+		description: 'Whether inspector will dive with single or double click';
+		label: 'Dive on single click'
 ]
 
 { #category : #transmission }
@@ -223,7 +260,7 @@ StInspector >> newInspectorFor: aModel [
 	newInspector := self
 		instantiate: aModel defaultObjectInspectorClass
 		on: aModel asInspectorModel.
-	StPharoSettings inspectorDiveOnSingleClick 
+	self class inspectorDiveOnSingleClick 
 		ifTrue: [ newInspector activateOnSingleClick ].
 	
 	millerList pages ifNotEmpty: [ :pages | 

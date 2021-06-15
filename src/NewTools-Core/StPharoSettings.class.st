@@ -29,28 +29,31 @@ StPharoSettings class >> defaultCodeShowLineNumbers [
 ]
 
 { #category : #defaults }
-StPharoSettings class >> defaultInspectorDiveOnSingleClick [
-
-	^ true
-]
-
-{ #category : #defaults }
 StPharoSettings class >> defaultToolbarDisplayMode [
 
 	^ SpToolbarDisplayMode modeIconAndLabel
 ]
 
 { #category : #settings }
-StPharoSettings class >> inspectorDiveOnSingleClick [
+StPharoSettings class >> settingsOn: aBuilder [
+	<systemsettings>
 
-	^ InspectorDiveOnSingleClick ifNil: [
-		InspectorDiveOnSingleClick := self defaultInspectorDiveOnSingleClick ]
-]
+	(aBuilder setting: #codeShowLineNumbers)
+		parent: #tools;
+		order: 0;
+		default: self codeShowLineNumbers;
+		target: self;
+		description: 'If code panels will display line numbers';
+		label: 'Show line numbers in code panels'.
 
-{ #category : #settings }
-StPharoSettings class >> inspectorDiveOnSingleClick: aBoolean [
-
-	InspectorDiveOnSingleClick := aBoolean
+	(aBuilder pickOne: #toolbarDisplayMode)
+		parent: #tools;
+		order: 1;
+		default: self toolbarDisplayMode;
+		target: self;
+		domainValues: (SpToolbarDisplayMode all collect: [ :each | each label -> each ]);
+		description: 'Toolbars will be displayed in icon+label, icon, or label mode.';
+		label: 'Toolbar display mode'		
 ]
 
 { #category : #settings }

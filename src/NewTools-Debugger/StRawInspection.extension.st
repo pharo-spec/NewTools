@@ -25,7 +25,7 @@ StRawInspection >> beForDebugger [
 		contextMenu: [ self rootCommandsGroup asMenuPresenter ];
 		yourself.
 		
-	StPharoSettings inspectorDiveOnSingleClick 
+	StInspector inspectorDiveOnSingleClick
 		ifTrue: [ attributeTable activateOnSingleClick ].
 	
 	self addVariableTagColumn.
