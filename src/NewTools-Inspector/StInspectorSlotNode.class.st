@@ -25,7 +25,7 @@ StInspectorSlotNode >> = anObject [
 
 { #category : #accessing }
 StInspectorSlotNode >> errorMessage [
-	^ 'error obtaining attribute value'
+	^ 'error obtaining variable value'
 ]
 
 { #category : #comparing }
@@ -77,5 +77,5 @@ StInspectorSlotNode >> slot: aSlot [
 
 { #category : #accessing }
 StInspectorSlotNode >> variableTag [
-	^ 'attribute'
+	^ 'inst. var'
 ]

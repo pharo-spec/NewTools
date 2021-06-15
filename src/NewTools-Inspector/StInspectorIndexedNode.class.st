@@ -32,7 +32,7 @@ StInspectorIndexedNode >> debuggerColor [
 
 { #category : #accessing }
 StInspectorIndexedNode >> errorMessage [
-	^ 'error obtaining indexed attribute value'
+	^ 'error obtaining indexed variable value'
 ]
 
 { #category : #comparing }
@@ -69,5 +69,5 @@ StInspectorIndexedNode >> save: aValue [
 
 { #category : #accessing }
 StInspectorIndexedNode >> variableTag [
-	^ 'attribute'
+	^ 'inst. var'
 ]
