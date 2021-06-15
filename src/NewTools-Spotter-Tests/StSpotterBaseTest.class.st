@@ -20,7 +20,7 @@ StSpotterBaseTest >> defer: aBlock [
 	self waitUntilUIRedrawed
 ]
 
-{ #category : #private }
+{ #category : #running }
 StSpotterBaseTest >> setUp [
 
 	super setUp.
