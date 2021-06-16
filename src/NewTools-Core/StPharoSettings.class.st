@@ -3,7 +3,6 @@ Class {
 	#superclass : #Object,
 	#classVars : [
 		'CodeShowLineNumbers',
-		'InspectorDiveOnSingleClick',
 		'ToolbarDisplayMode'
 	],
 	#category : #'NewTools-Core-Application'
