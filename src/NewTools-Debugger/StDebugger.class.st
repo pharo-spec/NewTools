@@ -667,9 +667,8 @@ StDebugger >> initializeExtensionTools [
 StDebugger >> initializeInspector [
 
 	inspector := self
-		             instantiate: self debuggerInspectorClass
-		             on:
-		             (self debuggerInspectorModelClass on: self newDebuggerContext).
+		instantiate: self debuggerInspectorClass
+		on: (self debuggerInspectorModelClass on: self newDebuggerContext).
 	inspector label: 'Receiver'
 ]
 

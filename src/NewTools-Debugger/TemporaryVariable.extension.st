@@ -7,5 +7,5 @@ TemporaryVariable >> debuggerColor [
 
 { #category : #'*NewTools-Debugger' }
 TemporaryVariable >> variableTag [
-	^ 'temp'
+	^ 'temp. var'
 ]

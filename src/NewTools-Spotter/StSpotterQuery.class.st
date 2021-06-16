@@ -1,3 +1,8 @@
+"
+A query (a search) for Spotter.
+A query iterates all defined `relevantProcessors` to retrieve the `results`.
+To produce a result, it takes the `searchText` and `process` it.
+"
 Class {
 	#name : #StSpotterQuery,
 	#superclass : #Object,
@@ -53,6 +58,7 @@ StSpotterQuery >> candidateAdded: ann [
 
 	candidateLinks add: ann candidateLink.
 	spotterPresenter updateResultList: ann candidateLink
+	
 ]
 
 { #category : #accessing }
@@ -125,6 +131,18 @@ StSpotterQuery >> newStreamFor: candidates [
 ]
 
 { #category : #processing }
+StSpotterQuery >> notifyEnded: aContext [
+
+	self announcer announce: StSpotterQueryEnded new
+]
+
+{ #category : #processing }
+StSpotterQuery >> notifyStarted: aContext [
+	
+	self announcer announce: StSpotterQueryStarted new
+]
+
+{ #category : #processing }
 StSpotterQuery >> process [
 	| stream context |
 
@@ -133,9 +151,11 @@ StSpotterQuery >> process [
 	finished := false.
 	stream := self newStreamFor: candidatesList.
 	context := self newContextFor: stream text: self searchText.
+	self notifyStarted: context.
 	self relevantProcessors
 		do: [ :each | each filterInContext: context ].
 	finished := true.
+	self notifyEnded: context.
 
 	self candidatesList isEmpty 
 		ifTrue: [ spotterPresenter removeAllResults ]

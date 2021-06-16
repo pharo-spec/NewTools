@@ -1,3 +1,7 @@
+"
+A model to process queries (to be used with StSpotter).
+The main method is `StSpotterModel>>processSearch:on:` (is the entry point to any query).
+"
 Class {
 	#name : #StSpotterModel,
 	#superclass : #Object,
@@ -207,6 +211,12 @@ StSpotterModel >> schedule: aBlock [
 		aBlock 
 			on: Error 
 			fork: [ :e | e pass ] ]
+]
+
+{ #category : #private }
+StSpotterModel >> scheduler [
+
+	^ scheduler
 ]
 
 { #category : #accessing }

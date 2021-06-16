@@ -32,7 +32,8 @@ Class {
 		'tip',
 		'queue',
 		'updating',
-		'lastSelectedEntry'
+		'lastSelectedEntry',
+		'lastUpdateTime'
 	],
 	#classVars : [
 		'History',
@@ -259,8 +260,8 @@ StSpotter >> activateLink: aCandidateLink [
 StSpotter >> addPreviewPanelTo: contentsLayout [
 
 	contentsLayout 	add: (previewContainer := SpBoxLayout newTopToBottom).
-		resultList whenSelectionChangedDo: [ :selection | 
-			self showPreview: selection selectedItem ]
+	resultList whenSelectionChangedDo: [ :selection | 
+		self showPreview: selection selectedItem ]
 ]
 
 { #category : #initialization }
@@ -523,12 +524,14 @@ StSpotter >> keepLastSelectedEntry [
 
 { #category : #'private actions' }
 StSpotter >> maybeActivateFirstElementOfResultList [
-	| text |
+	"| text |
 
 	text := self searchingString.
 	resultList presenters
 		detect: [ :each | each matchesText: text ]
-		ifFound: [ :aPresnter | self activate: aPresnter ]
+		ifFound: [ :aPresenter | self activate: aPresenter ]."
+		
+	self activate: resultList selectedItem 
 ]
 
 { #category : #'accessing model' }
@@ -572,6 +575,10 @@ StSpotter >> nextSelectablePresenter: selectedPresenter oldPresenters: oldPresen
 	newPresenters
 		detect: [ :each | each matchesText: text ]
 		ifFound: [ :aPresenter | ^ aPresenter ]. 
+	"select first in list that is not a header"
+	newPresenters
+		detect: [ :each | each isHeader not ]
+		ifFound: [ :aPresenter | ^ aPresenter ]. 
 	
 	^ nil
 ]
@@ -582,6 +589,12 @@ StSpotter >> openFinder [
 	self window close.
 	self flag: #TODO. "Move finder to spec (right now is a morph)"
 	Finder open
+]
+
+{ #category : #private }
+StSpotter >> previewContainer [
+
+	^ previewContainer
 ]
 
 { #category : #'private updating' }
@@ -596,9 +609,8 @@ StSpotter >> queuedUpdateResultList [
 		whileFalse: [ | aCandidateLink |
 			aCandidateLink := queue removeFirst.
 			categoryPresenter := aCandidateLink processor 
-			headerCategoryFor: aCandidateLink
-			on: self.
-		
+				headerCategoryFor: aCandidateLink
+				on: self.
 			(categoryPresenter includesLink: aCandidateLink) ifFalse: [ 
 				categoryPresenter addCandidate: aCandidateLink inSpotter: self ] ].
 	
@@ -606,17 +618,16 @@ StSpotter >> queuedUpdateResultList [
 		presenters := (categories values 
 			sorted: [ :each | each order ] ascending)
 			flatCollect: [ :each | each withCandidates ]. 
-			
-		resultList disableActivationDuring: [ 
+	
+		self model schedule: [ 
 			| selectedPresenter |
-			
 			selectedPresenter := self 
 				nextSelectablePresenter: resultList selectedItem
 				oldPresenters: resultList presenters
 				newPresenters: presenters.
 			resultList presenters: presenters.
 			selectedPresenter 
-				ifNotNil: [ resultList selectItem: selectedPresenter ] ] 
+				ifNotNil: [ resultList selectItem: selectedPresenter ] ].
 	]
 	ensure: [ 
 		updating := false ]
@@ -716,8 +727,12 @@ StSpotter >> stopProcessing [
 
 { #category : #private }
 StSpotter >> transferFocusToResultList [
+	| index |
 
-	self transferFocusToResultListAt: 1"(resultList selection selectedIndex)"
+	index := resultList selection selectedIndex + 1.
+	self transferFocusToResultListAt: ((index > resultList items size)
+		ifTrue: [ 1 ]
+		ifFalse: [ index ])
 ]
 
 { #category : #private }
@@ -784,12 +799,16 @@ StSpotter >> updatePresenter [
 StSpotter >> updateResultList: aCandidateLink [
 
 	mutex critical: [ queue add: aCandidateLink ].
-	updating ifTrue: [ ^ self ].
+	lastUpdateTime ifNil: [ lastUpdateTime := Time millisecondClockValue ].
+	(updating or: [ (Time millisecondClockValue - lastUpdateTime) < 50 ]) 
+		ifTrue: [ ^ self ].
 	
 	self model schedule: [
 		self application defer: [ 
 			mutex critical: [ 
-				[ self queuedUpdateResultList ]
+				[ 
+					self queuedUpdateResultList.
+					lastUpdateTime := Time millisecondClockValue ]
 				on: Exception 
 				fork: [ :e | e pass ] ] ] ]
 ]

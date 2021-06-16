@@ -1,6 +1,6 @@
 Class {
 	#name : #StSpotterTest,
-	#superclass : #TestCase,
+	#superclass : #StSpotterBaseTest,
 	#instVars : [
 		'spotter'
 	],
@@ -12,6 +12,26 @@ StSpotterTest >> setUp [
 	
 	super setUp.
 	spotter := StSpotter new
+]
+
+{ #category : #tests }
+StSpotterTest >> testOpenSpotterRefreshesPreviewOnce [
+	| count |
+	
+	"I need to skip it because this CI seems to not run it properly"
+	self skipOnPharoCITestingEnvironment.
+	
+	count := 0.
+	spotter previewContainer 
+		whenChildrenAddedDo: [ :ann | count := count + 1 ].
+	
+	spotter openWithSpec.
+	spotter updateSearch: 'Obj'.
+	self waitUntilEnded: spotter model.
+	20 timesRepeat: [ self waitUntilUIRedrawed ].
+	spotter window close.
+	
+	self assert: count equals: 1
 ]
 
 { #category : #tests }

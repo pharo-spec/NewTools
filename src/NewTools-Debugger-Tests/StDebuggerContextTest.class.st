@@ -228,11 +228,11 @@ StDebuggerContextTest >> testTemporaryVariablesNodes [
 	nodes := debuggerContext temporaryVariablesNodes.
 	self assert: nodes size equals: 2.
 	self assert: nodes first key equals: 'a'.
-	self assert: nodes first variableTag equals: 'temp'.	
+	self assert: nodes first variableTag equals: 'temp. var'.	
 	self assert: nodes first rawValue equals: 0.
 	self assert: nodes first tempVariable isTempVariable.
 	self assert: nodes second key equals: 'b'.
-	self assert: nodes second variableTag equals: 'temp'.	
+	self assert: nodes second variableTag equals: 'temp. var'.	
 	self assert: nodes second rawValue equals: nil.
 	self assert: nodes first tempVariable isTempVariable.
 	self deny: (nodes anySatisfy: [:n| n key = 'self'])
