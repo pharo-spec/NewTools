@@ -1,3 +1,6 @@
+"
+Remove a binding.
+"
 Class {
 	#name : #StRemoveBindingCommand,
 	#superclass : #CmCommand,

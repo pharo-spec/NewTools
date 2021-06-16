@@ -1,3 +1,6 @@
+"
+Show the page bindings browser.
+"
 Class {
 	#name : #StPlaygroundBindingsCommand,
 	#superclass : #StPlaygroundCommand,

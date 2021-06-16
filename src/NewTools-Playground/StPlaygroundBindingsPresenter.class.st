@@ -68,7 +68,7 @@ StPlaygroundBindingsPresenter >> contextMenuActions [
 	^ CmCommandGroup forSpec
 		beRoot;
 		register: (StRemoveBindingCommand forSpecContext: self);
-		register: (StMoveBindingCommand forSpecContext: self);
+		register: (StToggleBindingCommand forSpecContext: self);
 		yourself
 ]
 

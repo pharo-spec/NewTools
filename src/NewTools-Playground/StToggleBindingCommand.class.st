@@ -1,41 +1,44 @@
+"
+Toggle the scope of a variable (shared or local)
+"
 Class {
-	#name : #StMoveBindingCommand,
+	#name : #StToggleBindingCommand,
 	#superclass : #StCommand,
 	#category : #'NewTools-Playground-Command'
 }
 
 { #category : #default }
-StMoveBindingCommand class >> defaultDescription [
+StToggleBindingCommand class >> defaultDescription [
 
 	^ 'Switch binding scope from local to shared and viceversa.'
 ]
 
 { #category : #default }
-StMoveBindingCommand class >> defaultName [
+StToggleBindingCommand class >> defaultName [
 
 	^ 'Move to shared/local scope'
 ]
 
 { #category : #accessing }
-StMoveBindingCommand class >> moveToLocalName [
+StToggleBindingCommand class >> moveToLocalName [
 
 	^ 'Make binding local'
 ]
 
 { #category : #accessing }
-StMoveBindingCommand class >> moveToSharedName [
+StToggleBindingCommand class >> moveToSharedName [
 
 	^ 'Make binding shared'
 ]
 
 { #category : #executing }
-StMoveBindingCommand >> execute [
+StToggleBindingCommand >> execute [
 	
 	context toggleSelectedBindingScope
 ]
 
 { #category : #accessing }
-StMoveBindingCommand >> name [
+StToggleBindingCommand >> name [
 
 	context ifNil: [ ^ super name ].
 
