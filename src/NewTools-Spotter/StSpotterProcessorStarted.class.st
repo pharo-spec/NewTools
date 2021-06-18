@@ -1,3 +1,6 @@
+"
+Announce a processor execution started.
+"
 Class {
 	#name : #StSpotterProcessorStarted,
 	#superclass : #Announcement,

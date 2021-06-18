@@ -1,6 +1,8 @@
 "
 A model to process queries (to be used with StSpotter).
 The main method is `StSpotterModel>>processSearch:on:` (is the entry point to any query).
+
+To process searches the spotter model will use a worker pool to schedule a `StSpotterQuery`, which is the actual responsible of processing it.
 "
 Class {
 	#name : #StSpotterModel,
@@ -39,7 +41,7 @@ StSpotterModel >> activeStep [
 ]
 
 { #category : #private }
-StSpotterModel >> addStep: aStep [ 
+StSpotterModel >> addStep: aStep [
 
 	steps ifNil: [ steps := OrderedCollection new ].
 	steps addLast: aStep

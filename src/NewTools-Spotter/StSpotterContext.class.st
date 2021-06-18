@@ -1,3 +1,7 @@
+"
+Defines the context execution of a `StSpotterQuery`. 
+It has the `StSpotterContext>>#text` that is being searched and the `StSpotterContext>>#stream` for it. 
+"
 Class {
 	#name : #StSpotterContext,
 	#superclass : #Object,

@@ -1,3 +1,6 @@
+"
+Announce a new canditate has been found.
+"
 Class {
 	#name : #StSpotterCandidateAdded,
 	#superclass : #StSpotterAnnouncement,

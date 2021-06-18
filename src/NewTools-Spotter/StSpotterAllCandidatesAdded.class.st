@@ -1,3 +1,6 @@
+"
+Announce all candidates has been found.
+"
 Class {
 	#name : #StSpotterAllCandidatesAdded,
 	#superclass : #StSpotterAnnouncement,

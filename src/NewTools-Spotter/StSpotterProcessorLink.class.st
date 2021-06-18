@@ -1,3 +1,7 @@
+"
+a link with a `StSpotterProcessorLink>>#processor`.
+it is intended to work as element of a linked list.
+"
 Class {
 	#name : #StSpotterProcessorLink,
 	#superclass : #DoubleLink,

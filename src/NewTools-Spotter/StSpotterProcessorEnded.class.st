@@ -1,3 +1,6 @@
+"
+Announce a processor execution ended.
+"
 Class {
 	#name : #StSpotterProcessorEnded,
 	#superclass : #Announcement,

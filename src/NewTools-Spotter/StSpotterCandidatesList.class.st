@@ -1,3 +1,6 @@
+"
+Maintains a list of candidates (results of a `StSpotterQuery`).
+"
 Class {
 	#name : #StSpotterCandidatesList,
 	#superclass : #Object,

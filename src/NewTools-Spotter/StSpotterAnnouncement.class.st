@@ -1,3 +1,6 @@
+"
+A base announcement for spotter events.
+"
 Class {
 	#name : #StSpotterAnnouncement,
 	#superclass : #Announcement,
