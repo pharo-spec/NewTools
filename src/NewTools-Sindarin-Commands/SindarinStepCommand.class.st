@@ -4,17 +4,17 @@ Class {
 	#category : #'NewTools-Sindarin-Commands'
 }
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinStepCommand class >> defaultDescription [
 	^ 'Step in'
 ]
 
-{ #category : #initialization }
+{ #category : #'accessing - defaults' }
 SindarinStepCommand class >> defaultIconName [
 	^#glamorousInto
 ]
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinStepCommand class >> defaultName [
 	^ 'Step'
 ]

@@ -19,7 +19,7 @@ StEvaluatedSelectionModel class >> newValue: anObject [
 		yourself
 ]
 
-{ #category : #'api-selection' }
+{ #category : #'api - selection' }
 StEvaluatedSelectionModel >> selectedItem [
 
 	^ self value

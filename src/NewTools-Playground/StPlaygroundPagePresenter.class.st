@@ -102,7 +102,7 @@ StPlaygroundPagePresenter >> contents: aString [
 	text text: aString
 ]
 
-{ #category : #'api-focus' }
+{ #category : #'api - focus' }
 StPlaygroundPagePresenter >> defaultKeyboardFocus [
 
 	^ text
@@ -286,7 +286,7 @@ StPlaygroundPagePresenter >> selectedTextOrLine [
 	^ text selectedTextOrLine
 ]
 
-{ #category : #'accessing model' }
+{ #category : #'accessing - model' }
 StPlaygroundPagePresenter >> setModelBeforeInitialization: aPage [
 
 	page := aPage
@@ -298,7 +298,7 @@ StPlaygroundPagePresenter >> showLineNumbers [
 	^ StPharoSettings codeShowLineNumbers
 ]
 
-{ #category : #'private actions' }
+{ #category : #'private - actions' }
 StPlaygroundPagePresenter >> showLineNumbers: aBoolean [
 
 	StPharoSettings codeShowLineNumbers: aBoolean.
@@ -318,7 +318,7 @@ StPlaygroundPagePresenter >> toggleShowLineNumbers [
 	self showLineNumbers: self showLineNumbers not
 ]
 
-{ #category : #'private builder' }
+{ #category : #'private - builder' }
 StPlaygroundPagePresenter >> toolbarActions [
 
 	^ CmCommandGroup forSpec
@@ -330,7 +330,7 @@ StPlaygroundPagePresenter >> toolbarActions [
 		yourself
 ]
 
-{ #category : #'private updating' }
+{ #category : #'private - updating' }
 StPlaygroundPagePresenter >> updateLineNumber [
 	| pos |
 	
@@ -347,7 +347,7 @@ StPlaygroundPagePresenter >> updatePresenter [
 	self updateLineNumber
 ]
 
-{ #category : #'api-events' }
+{ #category : #'api - events' }
 StPlaygroundPagePresenter >> whenActivatedDo: aBlock [
 
 	activationBlock := aBlock

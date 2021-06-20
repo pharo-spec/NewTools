@@ -10,6 +10,12 @@ Class {
 	#category : #'NewTools-Spotter-Processors-Iterators'
 }
 
+{ #category : #testing }
+StIteratorBlockDecorator class >> isAbstract [
+
+	^ self == StIteratorBlockDecorator
+]
+
 { #category : #'instance creation' }
 StIteratorBlockDecorator class >> on: aStGeneratorIterator with: aBlockClosure [ 
 	

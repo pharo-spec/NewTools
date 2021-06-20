@@ -11,17 +11,17 @@ Class {
 	#category : #'NewTools-Sindarin-Commands'
 }
 
-{ #category : #initialization }
+{ #category : #'accessing - defaults' }
 SindarinStepToNextInstanceCreation class >> defaultIconName [
 	^ #smallNew
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - defaults' }
 SindarinStepToNextInstanceCreation class >> defaultMaxDepth [
 	^1000
 ]
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinStepToNextInstanceCreation class >> defaultName [
 	<toolbarExtensionDebugCommand: 50>
 	<codeExtensionDebugCommand: 50>

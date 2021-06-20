@@ -4,17 +4,17 @@ Class {
 	#category : #'NewTools-Sindarin-Commands'
 }
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinStepOverCommand class >> defaultDescription [
 	^ 'Step over'
 ]
 
-{ #category : #initialization }
+{ #category : #'accessing - defaults' }
 SindarinStepOverCommand class >> defaultIconName [
 	^#glamorousOver
 ]
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinStepOverCommand class >> defaultName [
 	^ 'Step Over'
 ]

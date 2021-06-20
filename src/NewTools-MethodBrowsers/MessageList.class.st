@@ -330,18 +330,18 @@ MessageList >> topologicSort: anObject [
 	topologySort := anObject
 ]
 
-{ #category : #'api-events' }
+{ #category : #'api - events' }
 MessageList >> whenModelChangedDo: aBlock [
 	listPresenter whenModelChangedDo: aBlock
 ]
 
-{ #category : #'api-events' }
+{ #category : #'api - events' }
 MessageList >> whenSelectedDo: aBlock [
 
 	listPresenter whenSelectedDo: aBlock
 ]
 
-{ #category : #'api-events' }
+{ #category : #'api - events' }
 MessageList >> whenSelectionChangedDo: aBlock [
 
 	listPresenter whenSelectionChangedDo: aBlock

@@ -53,7 +53,7 @@ StStringFilter >> caseSensitive: anObject [
 	caseSensitive := anObject
 ]
 
-{ #category : #'accessing-defaults' }
+{ #category : #'accessing - defaults' }
 StStringFilter >> defaultCaseSensitive [
 	^ false
 ]

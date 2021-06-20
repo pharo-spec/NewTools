@@ -91,7 +91,7 @@ StRawInspection >> inspectorNodes [
 	^ self model allInspectorNodes
 ]
 
-{ #category : #'model access' }
+{ #category : #'accessing - model' }
 StRawInspection >> model: aModel [
 
 	super model: aModel.

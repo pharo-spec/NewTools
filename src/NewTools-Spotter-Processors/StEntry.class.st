@@ -13,6 +13,12 @@ Class {
 	#category : #'NewTools-Spotter-Processors-Entries'
 }
 
+{ #category : #testing }
+StEntry class >> isAbstract [ 
+
+	^ self == StEntry
+]
+
 { #category : #wrapping }
 StEntry class >> on: aValue [
 	

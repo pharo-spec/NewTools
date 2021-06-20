@@ -109,7 +109,7 @@ StSpotterQuery >> links [
 	^ candidateLinks
 ]
 
-{ #category : #'private factory' }
+{ #category : #'private - factory' }
 StSpotterQuery >> newContextFor: aStream text: aString [
 
 	^ StSpotterContext new 
@@ -120,7 +120,7 @@ StSpotterQuery >> newContextFor: aStream text: aString [
 		yourself
 ]
 
-{ #category : #'private factory' }
+{ #category : #'private - factory' }
 StSpotterQuery >> newStreamFor: candidates [
 
 	^ StSpotterStream new

@@ -36,7 +36,7 @@ StPharoApplication class >> startUp: resuming [
 	Current startUp: resuming
 ]
 
-{ #category : #'accessing resources' }
+{ #category : #'accessing - resources' }
 StPharoApplication >> defaultWindowExtent [
 	
 	self flag: #TODO. "Replace this with a real real estate"
@@ -54,7 +54,7 @@ StPharoApplication >> initialize [
 		to: self
 ]
 
-{ #category : #'private factory' }
+{ #category : #'private - factory' }
 StPharoApplication >> newIconProvider [
 
 	^ StPharoDefaultIconProvider new
@@ -82,7 +82,7 @@ StPharoApplication >> run [
 StPharoApplication >> shutDown: quitting [
 ]
 
-{ #category : #'private running' }
+{ #category : #'private - running' }
 StPharoApplication >> start [
 
 	
@@ -100,7 +100,7 @@ StPharoApplication >> toolbarDisplayMode [
 	^ StPharoSettings toolbarDisplayMode
 ]
 
-{ #category : #'accessing resources' }
+{ #category : #'accessing - resources' }
 StPharoApplication >> tools [
 
 	^ Smalltalk os tools

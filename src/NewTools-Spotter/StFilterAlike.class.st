@@ -41,13 +41,13 @@ StFilterAlike >> applyFilterWithQuery [
 	self filteredItems: alikeMatches , otherMatches 
 ]
 
-{ #category : #'accessing-defaults' }
+{ #category : #'accessing - defaults' }
 StFilterAlike >> defaultLowerThreshold [
 	" lower threshold: to cut off the large irrelevent chunk before sorting/filtering is appplied "
 	^ 0.33
 ]
 
-{ #category : #'accessing-defaults' }
+{ #category : #'accessing - defaults' }
 StFilterAlike >> defaultUpperThreshold [
 	" upper threshold: to keep a reasonably sized set of interesting matches "
 	^ 0.45

@@ -29,6 +29,12 @@ Class {
 	#category : #'NewTools-Spotter-Processors-Iterators'
 }
 
+{ #category : #testing }
+StIterator class >> isAbstract [
+
+	^ self == StIterator
+]
+
 { #category : #sequencing }
 StIterator >> , aStGeneratorIterator [ 
 	

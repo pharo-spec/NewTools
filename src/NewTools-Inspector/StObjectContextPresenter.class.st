@@ -128,7 +128,7 @@ StObjectContextPresenter >> menuActionsFor: aCodePresenter [
 		yourself
 ]
 
-{ #category : #'accessing model' }
+{ #category : #'accessing - model' }
 StObjectContextPresenter >> model [
 
 	^ model
@@ -142,7 +142,7 @@ StObjectContextPresenter >> outputActivationPort [
 		ifFalse: [ SpActivationPort newPresenter: self ]
 ]
 
-{ #category : #'accessing model' }
+{ #category : #'accessing - model' }
 StObjectContextPresenter >> setModelBeforeInitialization: aModel [
 	
 	model := aModel
@@ -154,7 +154,7 @@ StObjectContextPresenter >> step [
 	view step
 ]
 
-{ #category : #'api-events' }
+{ #category : #'api - events' }
 StObjectContextPresenter >> whenActivatedDo: aBlock [
 
 	activationBlock := aBlock

@@ -330,7 +330,7 @@ SpDualChangeSorterPresenter >> subtractFrom: src to: dest [
 	changeSorterRight setSelectedChangeSet: source.
 ]
 
-{ #category : #'api-window' }
+{ #category : #'api - window' }
 SpDualChangeSorterPresenter >> title [
 	^ String streamContents: [ :stream | stream << self class title << ' on: ' << self model currentChangeSet name ]
 ]

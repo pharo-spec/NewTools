@@ -401,7 +401,7 @@ MessageBrowser >> refreshingBlock: aBlock [
 	refreshingBlock := aBlock
 ]
 
-{ #category : #'announcements-registration' }
+{ #category : #'announcements - registration' }
 MessageBrowser >> registerToAnnouncements [
 
 	SystemAnnouncer uniqueInstance weak		

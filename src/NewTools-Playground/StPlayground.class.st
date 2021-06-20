@@ -129,7 +129,7 @@ StPlayground >> contents: aString [
 	self firstPage contents: aString
 ]
 
-{ #category : #'api-focus' }
+{ #category : #'api - focus' }
 StPlayground >> defaultKeyboardFocus [
 
 	^ self firstPage
@@ -141,13 +141,13 @@ StPlayground >> loadPage: aFileReference [
 	self firstPage loadPage: aFileReference
 ]
 
-{ #category : #'private factory' }
+{ #category : #'private - factory' }
 StPlayground >> newDefaultPlaygroundPage [
 
 	^ StPlaygroundPage new
 ]
 
-{ #category : #'private factory' }
+{ #category : #'private - factory' }
 StPlayground >> newInspectorFor: aModel [
 
 	^ super newInspectorFor: (aModel ifNil: [ self newDefaultPlaygroundPage ])
@@ -159,13 +159,13 @@ StPlayground >> page [
 	^ self firstPage page
 ]
 
-{ #category : #'private stepping' }
+{ #category : #'private - stepping' }
 StPlayground >> startProcessing [
 	
 	"A playground does not steps, do nothing"
 ]
 
-{ #category : #'private stepping' }
+{ #category : #'private - stepping' }
 StPlayground >> stopProcessing [
 	
 	"A playground does not steps, but it needs to force a flush of last changes"

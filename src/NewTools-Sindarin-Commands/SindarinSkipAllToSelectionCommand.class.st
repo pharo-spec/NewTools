@@ -4,13 +4,13 @@ Class {
 	#category : #'NewTools-Sindarin-Commands'
 }
 
-{ #category : #initialization }
+{ #category : #accessing }
 SindarinSkipAllToSelectionCommand class >> debuggerExtensionGroup [
 	"Pragma to find the method. This method should build and return a customize command groups for the debugger"
 
 ]
 
-{ #category : #initialization }
+{ #category : #'accesing - defaults' }
 SindarinSkipAllToSelectionCommand class >> defaultIconName [
 	^ #glamorousRightSide
 ]

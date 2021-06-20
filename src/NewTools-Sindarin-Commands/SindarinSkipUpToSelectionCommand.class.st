@@ -4,12 +4,12 @@ Class {
 	#category : #'NewTools-Sindarin-Commands'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - defaults' }
 SindarinSkipUpToSelectionCommand class >> defaultDescription [
 	^ 'Skips execution and stops before the selected instruction (or the instruction preceding the cursor), then returns debugger control.'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - defaults' }
 SindarinSkipUpToSelectionCommand class >> defaultName [
 	"<toolbarExtensionDebugCommand: 50>
 	<codeExtensionDebugCommand: 50>"
