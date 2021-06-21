@@ -1,3 +1,6 @@
+"
+A filter that searches for substring to each item to obtain matching items.
+"
 Class {
 	#name : #StFilterSubstrings,
 	#superclass : #StUnorderedFilter,

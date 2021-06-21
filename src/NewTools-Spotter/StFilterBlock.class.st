@@ -1,3 +1,6 @@
+"
+A filter that evaluates a block to obtain matching items.
+"
 Class {
 	#name : #StFilterBlock,
 	#superclass : #StUnorderedFilter,

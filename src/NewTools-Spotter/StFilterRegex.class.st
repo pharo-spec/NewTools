@@ -1,3 +1,6 @@
+"
+A filter that executes regex to each item to obtain matching items.
+"
 Class {
 	#name : #StFilterRegex,
 	#superclass : #StUnorderedFilter,

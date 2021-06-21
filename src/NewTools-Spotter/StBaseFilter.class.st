@@ -1,3 +1,10 @@
+"
+A base for spotter filters. 
+A spotter fileter provide the functionality for filtering items based on a query.
+
+It return the list of all items that match the filter, but subclasses should only send to the processor the first  `StBaseFilter>>#itemsLimit` items .
+
+"
 Class {
 	#name : #StBaseFilter,
 	#superclass : #Object,

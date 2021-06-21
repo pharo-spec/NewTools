@@ -1,3 +1,6 @@
+"
+A filter that answers all elements (not a filter at all)
+"
 Class {
 	#name : #StNullFilter,
 	#superclass : #StStringFilter,

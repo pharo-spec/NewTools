@@ -1,3 +1,7 @@
+"
+Filter ""alike"" items.
+It usues the `String>>#alike:` method to obtain the matching elements. 
+"
 Class {
 	#name : #StFilterAlike,
 	#superclass : #StOrderedFilter,
