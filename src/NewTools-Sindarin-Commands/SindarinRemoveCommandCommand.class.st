@@ -7,17 +7,17 @@ Class {
 	#category : #'NewTools-Sindarin-Commands'
 }
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinRemoveCommandCommand class >> defaultDescription [
 	^'Remove the command corresponding to the current debugging script'
 ]
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinRemoveCommandCommand class >> defaultIconName [
 	^#smallCancel
 ]
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinRemoveCommandCommand class >> defaultName [
 	^'Remove command'
 ]

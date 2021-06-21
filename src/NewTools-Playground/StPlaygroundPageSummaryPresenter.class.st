@@ -52,7 +52,7 @@ StPlaygroundPageSummaryPresenter >> pageFirstLine [
 	^ 'Empty'
 ]
 
-{ #category : #'accessing model' }
+{ #category : #'accessing - model' }
 StPlaygroundPageSummaryPresenter >> setModelBeforeInitialization: aPage [
 
 	page := aPage

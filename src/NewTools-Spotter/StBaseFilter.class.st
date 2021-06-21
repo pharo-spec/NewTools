@@ -21,19 +21,19 @@ StBaseFilter class >> stListFilter [
 	^ self new
 ]
 
-{ #category : #'private-model' }
+{ #category : #'private - model' }
 StBaseFilter >> addItem: anItem [
 	self context streamed add: anItem.
 	self context addItem: anItem
 ]
 
-{ #category : #'private-model' }
+{ #category : #'private - model' }
 StBaseFilter >> addItems: aCollection [
 	self context streamed addAll: aCollection.
 	self context addItems: aCollection
 ]
 
-{ #category : #'private-model' }
+{ #category : #'private - model' }
 StBaseFilter >> allItems [
 	" WARNING: #allItems might be a list, block or iterator. we have to evaluate it in order to calculate the remaining/unstreamed items. #allItems are/were designed to be polymorphic to collections and streams. so this should be safe "
 	| allItems |
@@ -44,7 +44,7 @@ StBaseFilter >> allItems [
 		ifFalse: [ allItems ]
 ]
 
-{ #category : #'private-model' }
+{ #category : #'private - model' }
 StBaseFilter >> allItemsDo: aBlock [
 	self allItems do: aBlock
 ]
@@ -77,12 +77,12 @@ StBaseFilter >> context: anObject [
 	context := anObject
 ]
 
-{ #category : #'accessing-defaults' }
+{ #category : #'accessing - defaults' }
 StBaseFilter >> defaultFilteredItems [
 	^ OrderedCollection new: 100 " not a limitation, just a reasonable start size "
 ]
 
-{ #category : #'accessing-defaults' }
+{ #category : #'accessing - defaults' }
 StBaseFilter >> defaultStreamed [
 	^ true
 ]
@@ -109,14 +109,14 @@ StBaseFilter >> initialize [
 	self filteredItems: self defaultFilteredItems
 ]
 
-{ #category : #'private-model' }
+{ #category : #'private - model' }
 StBaseFilter >> itemFilterNameFor: anItem [
 	"I return the string/text representation of an item used by the filter."
 	
 	^ self processor itemFilterNameFor: anItem
 ]
 
-{ #category : #'private-model' }
+{ #category : #'private - model' }
 StBaseFilter >> itemsLimit [
 	^ self context itemsLimit
 ]
@@ -128,7 +128,7 @@ StBaseFilter >> prepareFilterInContext: aSpotterContext [
 	self context: aSpotterContext.
 ]
 
-{ #category : #'private-model' }
+{ #category : #'private - model' }
 StBaseFilter >> processor [
 	^ self context processor
 ]
@@ -145,7 +145,7 @@ StBaseFilter >> stListFilter [
 	^ self
 ]
 
-{ #category : #'private-model' }
+{ #category : #'private - model' }
 StBaseFilter >> step [
 	^ self context step
 ]

@@ -36,14 +36,14 @@ StSpotterHeaderPresenter >> addCandidate: aCandidateLink inSpotter: spotterPrese
 	self updateAmount
 ]
 
-{ #category : #'private actions' }
+{ #category : #'private - actions' }
 StSpotterHeaderPresenter >> diveIn [
 
 	diveInAction ifNil: [ ^ self ].
 	diveInAction cull: self model
 ]
 
-{ #category : #'private actions' }
+{ #category : #'private - actions' }
 StSpotterHeaderPresenter >> diveOut [
 
 	diveOutAction ifNil: [ ^ self ].
@@ -118,7 +118,7 @@ StSpotterHeaderPresenter >> matchesText: aString [
 	^ false
 ]
 
-{ #category : #'accessing model' }
+{ #category : #'accessing - model' }
 StSpotterHeaderPresenter >> model [
 
 	^ model
@@ -164,7 +164,7 @@ StSpotterHeaderPresenter >> prepareAsPackages [
 	helpLabelPresenter label: (self model keyBindingForPackages acceptVisitor: OSPlatform current shortcutPrinter).
 ]
 
-{ #category : #'accessing model' }
+{ #category : #'accessing - model' }
 StSpotterHeaderPresenter >> setModelBeforeInitialization: aProcessor [
 
 	model := aProcessor
@@ -176,7 +176,7 @@ StSpotterHeaderPresenter >> type: aClass [
 	 aClass prepareUnifiedHeaderDescriptionFor: self
 ]
 
-{ #category : #'private updating' }
+{ #category : #'private - updating' }
 StSpotterHeaderPresenter >> updateAmount [
 
 	amountLabelPresenter label: ('{1}/{2}' format: { 

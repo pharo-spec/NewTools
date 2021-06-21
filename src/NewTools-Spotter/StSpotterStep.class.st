@@ -157,7 +157,7 @@ StSpotterStep >> processors: aCollection [
 	processors := aCollection
 ]
 
-{ #category : #'accessing query' }
+{ #category : #'accessing - query' }
 StSpotterStep >> pushQuery: aQuery [
 
 	self deactivate.

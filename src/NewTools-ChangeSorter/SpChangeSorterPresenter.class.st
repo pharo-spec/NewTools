@@ -816,7 +816,7 @@ SpChangeSorterPresenter >> updateWindowTitle [
 	self withWindowDo: [ :window | window title: self title ]
 ]
 
-{ #category : #'api-events' }
+{ #category : #'api - events' }
 SpChangeSorterPresenter >> whenChangesListChanges: aBlock [
 
 	changesListPresenter whenModelChangedDo: aBlock

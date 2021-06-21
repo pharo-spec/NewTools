@@ -241,13 +241,13 @@ StSpotter class >> windowClosed [
 	spotter := nil
 ]
 
-{ #category : #'private actions' }
+{ #category : #'private - actions' }
 StSpotter >> activate: aPresenter [
 
 	aPresenter activateOn: self
 ]
 
-{ #category : #'private actions' }
+{ #category : #'private - actions' }
 StSpotter >> activateLink: aCandidateLink [
 
 	self window close.
@@ -322,7 +322,7 @@ StSpotter >> defaultModel [
 		yourself
 ]
 
-{ #category : #'private actions' }
+{ #category : #'private - actions' }
 StSpotter >> diveInProcessor: aProcessor [
 
 	self model schedule: [
@@ -334,7 +334,7 @@ StSpotter >> diveInProcessor: aProcessor [
 		searchText text: '' ]
 ]
 
-{ #category : #'private actions' }
+{ #category : #'private - actions' }
 StSpotter >> diveOut [
 
 	self resetLastSelectedEntry.
@@ -359,7 +359,7 @@ StSpotter >> handleKeyEvent: anEvent [
 		ifFalse: [ searchText takeKeyboardFocus ]
 ]
 
-{ #category : #'private updating' }
+{ #category : #'private - updating' }
 StSpotter >> headerCategoryFor: aLink [
 
 	^ categories 
@@ -367,7 +367,7 @@ StSpotter >> headerCategoryFor: aLink [
 		ifAbsentPut: [ self newSpotterHeaderPresenter: aLink processor ]
 ]
 
-{ #category : #'private updating' }
+{ #category : #'private - updating' }
 StSpotter >> headerCategoryUnifiedFor: aLink [
 
 	^ categories 
@@ -378,14 +378,14 @@ StSpotter >> headerCategoryUnifiedFor: aLink [
 				yourself ]
 ]
 
-{ #category : #'private actions' }
+{ #category : #'private - actions' }
 StSpotter >> hideSpinner [
 
 	self model schedule: [
 		self application defer: [ spinner hide ] ]
 ]
 
-{ #category : #'private actions' }
+{ #category : #'private - actions' }
 StSpotter >> historize: aCandidateLink [
 
 	self class historize: aCandidateLink
@@ -508,7 +508,7 @@ StSpotter >> isShowingTips [
 	^ self class isShowingTips
 ]
 
-{ #category : #'private processing' }
+{ #category : #'private - processing' }
 StSpotter >> keepLastSelectedEntry [
 	"When starting a process (a new query), it may happen that I have already a selection on the 
 	 result list. Since my new query may be a refination (or expansion) of an existing search. 
@@ -522,7 +522,7 @@ StSpotter >> keepLastSelectedEntry [
 		ifNotNil: [ :aPresenter | aPresenter model value ]
 ]
 
-{ #category : #'private actions' }
+{ #category : #'private - actions' }
 StSpotter >> maybeActivateFirstElementOfResultList [
 	"| text |
 
@@ -534,19 +534,19 @@ StSpotter >> maybeActivateFirstElementOfResultList [
 	self activate: resultList selectedItem 
 ]
 
-{ #category : #'accessing model' }
+{ #category : #'accessing - model' }
 StSpotter >> model [
 
 	^ model ifNil: [ model := self defaultModel ]
 ]
 
-{ #category : #'private factory' }
+{ #category : #'private - factory' }
 StSpotter >> newSpotterCandidateLinkPresenter: aLink [
 
 	^ self instantiate: StSpotterCandidateLinkPresenter on: aLink
 ]
 
-{ #category : #'private factory' }
+{ #category : #'private - factory' }
 StSpotter >> newSpotterHeaderPresenter: aProcessor [
 
 	^ (self instantiate: StSpotterHeaderPresenter on: aProcessor)
@@ -556,7 +556,7 @@ StSpotter >> newSpotterHeaderPresenter: aProcessor [
 		yourself
 ]
 
-{ #category : #'private updating' }
+{ #category : #'private - updating' }
 StSpotter >> nextSelectablePresenter: selectedPresenter oldPresenters: oldPresenters newPresenters: newPresenters [
 
 	"look for current selected presenter"	
@@ -597,7 +597,7 @@ StSpotter >> previewContainer [
 	^ previewContainer
 ]
 
-{ #category : #'private updating' }
+{ #category : #'private - updating' }
 StSpotter >> queuedUpdateResultList [
 	| categoryPresenter presenters |
 
@@ -648,7 +648,7 @@ StSpotter >> removeAllResults [
 	self removeAll
 ]
 
-{ #category : #'private processing' }
+{ #category : #'private - processing' }
 StSpotter >> resetLastSelectedEntry [
 	
 	lastSelectedEntry := nil
@@ -660,7 +660,7 @@ StSpotter >> searchText [
 	^ searchText
 ]
 
-{ #category : #'private actions' }
+{ #category : #'private - actions' }
 StSpotter >> searchingString [
 	| searchString searchChunks |
 	
@@ -671,14 +671,14 @@ StSpotter >> searchingString [
 		ifFalse: [ searchString ]
 ]
 
-{ #category : #'accessing model' }
+{ #category : #'accessing - model' }
 StSpotter >> setModelBeforeInitialization: aSpotterModel [
 
 	model := aSpotterModel.
 	self configureModel: model
 ]
 
-{ #category : #'private actions' }
+{ #category : #'private - actions' }
 StSpotter >> showPreview: aPresenter [
 
 	previewContainer removeAll.	
@@ -692,7 +692,7 @@ StSpotter >> showPreview: aPresenter [
 				yourself) ]
 ]
 
-{ #category : #'private actions' }
+{ #category : #'private - actions' }
 StSpotter >> showSpinner [
 
 	spinner isVisible ifTrue: [ ^ self ].
@@ -767,7 +767,7 @@ StSpotter >> transferFocusToSearchTextArrowUp [
 		ifTrue: [ searchText takeKeyboardFocus ]
 ]
 
-{ #category : #'private actions' }
+{ #category : #'private - actions' }
 StSpotter >> tryDiveIn [
 	| item |
 	
@@ -778,7 +778,7 @@ StSpotter >> tryDiveIn [
 	item diveIn
 ]
 
-{ #category : #'private actions' }
+{ #category : #'private - actions' }
 StSpotter >> tryDiveOut [
 	| item |
 	
@@ -795,7 +795,7 @@ StSpotter >> updatePresenter [
 	self feedTip
 ]
 
-{ #category : #'private updating' }
+{ #category : #'private - updating' }
 StSpotter >> updateResultList: aCandidateLink [
 
 	mutex critical: [ queue add: aCandidateLink ].
@@ -813,7 +813,7 @@ StSpotter >> updateResultList: aCandidateLink [
 				fork: [ :e | e pass ] ] ] ]
 ]
 
-{ #category : #'private updating' }
+{ #category : #'private - updating' }
 StSpotter >> updateResultProcessor: processor amount: amount [
 
 	self application defer: [ 
@@ -822,7 +822,7 @@ StSpotter >> updateResultProcessor: processor amount: amount [
 			ifPresent: [ :aPresenter | aPresenter finalAmount: amount ] ]
 ]
 
-{ #category : #'private updating' }
+{ #category : #'private - updating' }
 StSpotter >> updateSearch: aString [
 	
 	self model schedule: [
@@ -831,7 +831,7 @@ StSpotter >> updateSearch: aString [
 			on: self ]
 ]
 
-{ #category : #'private updating' }
+{ #category : #'private - updating' }
 StSpotter >> updateSearchFromProcessor: aProcessor [
 
 	searchText text: aProcessor query textInSearchBar.

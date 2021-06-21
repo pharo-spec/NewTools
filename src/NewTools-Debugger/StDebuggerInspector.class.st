@@ -162,13 +162,13 @@ StDebuggerInspector >> label: aString [
 	label label: aString
 ]
 
-{ #category : #'accessing model' }
+{ #category : #'accessing - model' }
 StDebuggerInspector >> model [
 
 	^ model
 ]
 
-{ #category : #'accessing model' }
+{ #category : #'accessing - model' }
 StDebuggerInspector >> model: aModel [
 
 	model := aModel.
@@ -228,7 +228,7 @@ StDebuggerInspector >> setDefaultLayout [
 	self layout: self class defaultSpec
 ]
 
-{ #category : #'accessing model' }
+{ #category : #'accessing - model' }
 StDebuggerInspector >> setModelBeforeInitialization: aModel [
 
 	model := aModel

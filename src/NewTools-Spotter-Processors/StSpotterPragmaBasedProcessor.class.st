@@ -12,19 +12,19 @@ Class {
 	#category : #'NewTools-Spotter-Processors'
 }
 
-{ #category : #'accessing-defaults' }
+{ #category : #'accessing - defaults' }
 StSpotterPragmaBasedProcessor class >> defaultItemsLimit [
 
 	^ DefaultItemsLimit ifNil: [ DefaultItemsLimit := 25 ]
 ]
 
-{ #category : #'accessing-defaults' }
+{ #category : #'accessing - defaults' }
 StSpotterPragmaBasedProcessor class >> defaultItemsLimit: aValue [
 
 	DefaultItemsLimit := aValue
 ]
 
-{ #category : #'accessing-defaults' }
+{ #category : #'accessing - defaults' }
 StSpotterPragmaBasedProcessor class >> settingsOn: aBuilder [
 	<systemsettings>
 

@@ -94,7 +94,7 @@ StSpotterContext >> continuing: anObject [
 	continuing := anObject
 ]
 
-{ #category : #'accessing-defaults' }
+{ #category : #'accessing - defaults' }
 StSpotterContext >> defaultCache [
 	^ IdentityDictionary new 
 		at: #processorsAndFilters put: (IdentityDictionary new: 100); " not a limitation, just a reasonable start size "
@@ -102,22 +102,22 @@ StSpotterContext >> defaultCache [
 		yourself
 ]
 
-{ #category : #'accessing-defaults' }
+{ #category : #'accessing - defaults' }
 StSpotterContext >> defaultContinuing [
 	^ false
 ]
 
-{ #category : #'accessing-defaults' }
+{ #category : #'accessing - defaults' }
 StSpotterContext >> defaultText [
 	^ ''
 ]
 
-{ #category : #'accessing-defaults' }
+{ #category : #'accessing - defaults' }
 StSpotterContext >> defaultTextLowercase [
 	^ self textTrimmed asLowercase
 ]
 
-{ #category : #'accessing-defaults' }
+{ #category : #'accessing - defaults' }
 StSpotterContext >> defaultTextTrimmed [
 	^ self text trimBoth
 ]
@@ -212,18 +212,18 @@ StSpotterContext >> removeCacheAt: aSymbol [
 	^ self cache removeKey: aSymbol ifAbsent: [ nil ]
 ]
 
-{ #category : #initializing }
+{ #category : #accessing }
 StSpotterContext >> search [
 	^ search
 ]
 
-{ #category : #initializing }
+{ #category : #accessing }
 StSpotterContext >> search: anObject [
 	" search stores the fully entered text (including categories) "
 	search := anObject
 ]
 
-{ #category : #'accessing-dynamic' }
+{ #category : #'accessing - dynamic' }
 StSpotterContext >> spotter [
 	^ self step spotter
 ]

@@ -31,7 +31,7 @@ StHelpProcessor >> collection [
 	^ SystemHelp asHelpTopic stAllSubtopics
 ]
 
-{ #category : #'private extraction' }
+{ #category : #'private - extraction' }
 StHelpProcessor >> helpTag [
 
 	^ #Help

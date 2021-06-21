@@ -46,18 +46,18 @@ StInspection >> hasOutputActivationPort [
 	^ false
 ]
 
-{ #category : #'model access' }
+{ #category : #'accessing - model' }
 StInspection >> model [
 	^ model
 ]
 
-{ #category : #'model access' }
+{ #category : #'accessing - model' }
 StInspection >> model: anInspectionModel [
 
 	model := anInspectionModel
 ]
 
-{ #category : #'model access' }
+{ #category : #'accessing - model' }
 StInspection >> setModelBeforeInitialization: anInspectionModel [ 
 
 	model := anInspectionModel

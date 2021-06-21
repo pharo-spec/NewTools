@@ -55,13 +55,13 @@ StSpotterCandidatesListProcessor >> defaultCandidatesLimit [
 	^ self defaultItemsLimit
 ]
 
-{ #category : #'accessing-defaults' }
+{ #category : #'accessing - defaults' }
 StSpotterCandidatesListProcessor >> defaultContinueItemsLimit [
 	" Spotter becomes extraordenary slow when rendering too many results. So we set the maximum limit to 100. This is only a temporary solution until we have fixed the problem. Until then no spotter processor will ever generate more then 100 results. "
 	^ 100
 ]
 
-{ #category : #'accessing-defaults' }
+{ #category : #'accessing - defaults' }
 StSpotterCandidatesListProcessor >> defaultItemsLimit [
 	^ self class defaultItemsLimit
 ]
@@ -160,7 +160,7 @@ StSpotterCandidatesListProcessor >> keyBinding: anObject [
 	keyBinding := anObject
 ]
 
-{ #category : #'scripting-convenience' }
+{ #category : #'scripting - convenience' }
 StSpotterCandidatesListProcessor >> match: aBlockWithTwoArguments [
 
 	self filter: (StFilterBlock new 
@@ -168,27 +168,27 @@ StSpotterCandidatesListProcessor >> match: aBlockWithTwoArguments [
 		yourself)
 ]
 
-{ #category : #'scripting-convenience' }
+{ #category : #'scripting - convenience' }
 StSpotterCandidatesListProcessor >> matchAlike [
 	self filter: StFilterAlike
 ]
 
-{ #category : #'scripting-convenience' }
+{ #category : #'scripting - convenience' }
 StSpotterCandidatesListProcessor >> matchRegex [
 	self filter: StFilterRegex
 ]
 
-{ #category : #'scripting-convenience' }
+{ #category : #'scripting - convenience' }
 StSpotterCandidatesListProcessor >> matchString [
 	self filter: StFilterStringMatch
 ]
 
-{ #category : #'scripting-convenience' }
+{ #category : #'scripting - convenience' }
 StSpotterCandidatesListProcessor >> matchSubstring [
 	self filter: StFilterSubstring
 ]
 
-{ #category : #'scripting-convenience' }
+{ #category : #'scripting - convenience' }
 StSpotterCandidatesListProcessor >> matchSubstrings [
 	self filter: StFilterSubstrings
 ]

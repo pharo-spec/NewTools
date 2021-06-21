@@ -10,7 +10,7 @@ Class {
 	#category : #'NewTools-Debugger-Tests-Utils'
 }
 
-{ #category : #util }
+{ #category : #utilities }
 StDebuggerObjectForTests >> haltingMethod [ <haltOrBreakpointForTesting> self halt. ^self
 ]
 
@@ -24,7 +24,7 @@ StDebuggerObjectForTests >> instVar [
 	^ instVar
 ]
 
-{ #category : #util }
+{ #category : #utilities }
 StDebuggerObjectForTests >> methodWithArg1: i arg2: j [
 	|a b|
 	a := i.
@@ -32,12 +32,12 @@ StDebuggerObjectForTests >> methodWithArg1: i arg2: j [
 	^a + b
 ]
 
-{ #category : #util }
+{ #category : #utilities }
 StDebuggerObjectForTests >> methodWithArgsInBlock [
 	^[ :a :b| a + b ] value: 4 value: 2
 ]
 
-{ #category : #util }
+{ #category : #utilities }
 StDebuggerObjectForTests >> methodWithTemps [
 	|a b|
 	a := 0.

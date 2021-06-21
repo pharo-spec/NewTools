@@ -4,17 +4,17 @@ Class {
 	#category : #'NewTools-Sindarin-Commands'
 }
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinRefreshCommand class >> defaultDescription [
 	^ 'Refresh the UI. Necessary after manual control of Sindarin.'
 ]
 
-{ #category : #initialization }
+{ #category : #'accessing - defaults' }
 SindarinRefreshCommand class >> defaultIconName [
 	^#refresh 
 ]
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinRefreshCommand class >> defaultName [
 	^ 'Refresh'
 ]

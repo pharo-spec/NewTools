@@ -50,13 +50,13 @@ StSpotterCandidateLinkPresenter >> matchesText: aString [
 		ifNil: [ false ]
 ]
 
-{ #category : #'accessing model' }
+{ #category : #'accessing - model' }
 StSpotterCandidateLinkPresenter >> model [
 
 	^ model
 ]
 
-{ #category : #'accessing model' }
+{ #category : #'accessing - model' }
 StSpotterCandidateLinkPresenter >> setModelBeforeInitialization: aCandidateLink [
 
 	model := aCandidateLink

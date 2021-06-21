@@ -9,17 +9,17 @@ Class {
 	#category : #'NewTools-Sindarin-Commands'
 }
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinCreateCommandFromScriptCommand class >> defaultDescription [
 	^'Create a command from the current debugging script'
 ]
 
-{ #category : #initialization }
+{ #category : #'accessing - defaults' }
 SindarinCreateCommandFromScriptCommand class >> defaultIconName [
 	^#smallAdd 
 ]
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinCreateCommandFromScriptCommand class >> defaultName [
 	^'Create new command from script'
 ]

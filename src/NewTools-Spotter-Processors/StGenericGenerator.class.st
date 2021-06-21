@@ -27,6 +27,12 @@ Class {
 }
 
 { #category : #testing }
+StGenericGenerator class >> isAbstract [
+
+	^ self == StGenericGenerator
+]
+
+{ #category : #testing }
 StGenericGenerator >> atEnd [ 
 
 	^ generator atEnd

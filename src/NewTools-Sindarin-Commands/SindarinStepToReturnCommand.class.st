@@ -4,17 +4,17 @@ Class {
 	#category : #'NewTools-Sindarin-Commands'
 }
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinStepToReturnCommand class >> defaultDescription [
 	^ 'Steps execution until a new instance is created'
 ]
 
-{ #category : #initialization }
+{ #category : #'accessing - defaults' }
 SindarinStepToReturnCommand class >> defaultIconName [
 	^ #glamorousRightSide
 ]
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinStepToReturnCommand class >> defaultName [
 	<toolbarExtensionDebugCommand: 50>
 	<codeExtensionDebugCommand: 50>

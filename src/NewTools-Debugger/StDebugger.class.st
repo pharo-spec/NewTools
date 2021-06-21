@@ -335,7 +335,7 @@ StDebugger >> acceptCodeChanges: newSource forContext: aContext [
 	self clearUnsavedCodeChanges
 ]
 
-{ #category : #'command support' }
+{ #category : #'commands - support' }
 StDebugger >> buildContextMenus [
 	| stackGroup codeCommands debuggerCommandGroup |
 	
@@ -356,34 +356,34 @@ StDebugger >> buildContextMenus [
 	code contextMenu: codeCommands beRoot asMenuPresenter
 ]
 
-{ #category : #'command support' }
+{ #category : #'commands - support' }
 StDebugger >> canExecuteCreateMissingClassCommand [
 	^ self debuggerActionModel isInterruptedContextMissingClassException
 ]
 
-{ #category : #'command support' }
+{ #category : #'commands - support' }
 StDebugger >> canExecuteCreateMissingMethodCommand [
 	^ self debuggerActionModel isInterruptedContextDoesNotUnderstand
 ]
 
-{ #category : #'command support' }
+{ #category : #'commands - support' }
 StDebugger >> canExecuteCreateSubclassResponsibilityCommand [
 	^ self debuggerActionModel isInterruptedContextSubclassResponsibilityException
 ]
 
-{ #category : #'command support' }
+{ #category : #'commands - support' }
 StDebugger >> canExecuteDebugCommand [
 	^ self debuggerActionModel isContextSteppable
 ]
 
-{ #category : #'command support' }
+{ #category : #'commands - support' }
 StDebugger >> canExecuteRestartCommand [
 
 	^ (self debuggerActionModel isInterruptedContextPostMortem or: [ 
 		   self debuggerActionModel isInterruptedContextDead ]) not
 ]
 
-{ #category : #'command support' }
+{ #category : #'commands - support' }
 StDebugger >> canExecuteReturnCommand [
 
 	^ self debuggerActionModel isInterruptedContextDead not
@@ -403,7 +403,7 @@ StDebugger >> clear [
 	debuggerActionModel clearDebugSession
 ]
 
-{ #category : #'updating widgets' }
+{ #category : #'updating - widgets' }
 StDebugger >> clearCode [
 	
 	self code
@@ -427,7 +427,7 @@ StDebugger >> close [
 			actionModel clearDebugSession ] ]
 ]
 
-{ #category : #'accessing widgets' }
+{ #category : #'accessing - widgets' }
 StDebugger >> code [
 
 	^ code
@@ -442,7 +442,7 @@ StDebugger >> connectPresenters [
 		self updateCodeFromContext ]
 ]
 
-{ #category : #'accessing context' }
+{ #category : #'accessing - context' }
 StDebugger >> context [
  
 	^ self interruptedContext
@@ -520,7 +520,7 @@ StDebugger >> createSubclassResponsibility [
 		forContext: senderContext
 ]
 
-{ #category : #'accessing context' }
+{ #category : #'accessing - context' }
 StDebugger >> currentContext [
 	"I answer the context on which an action should be executed.
 	This is either the selected context or if nothing is selected the interrupted context."
@@ -602,7 +602,7 @@ StDebugger >> findFirstRelevantStackIndexIn: aStack [
 	^ 1
 ]
 
-{ #category : #'updating session' }
+{ #category : #'updating - session' }
 StDebugger >> forceSessionUpdate [
 	self sessionHolder valueChanged
 ]
@@ -784,7 +784,7 @@ StDebugger >> instantiateExtensionToolsPage: aToolClass [
 		provider: [ toolInstance ]
 ]
 
-{ #category : #'accessing context' }
+{ #category : #'accessing - context' }
 StDebugger >> interruptedContext [
 
 	^ self session interruptedContext
@@ -812,7 +812,7 @@ StDebugger >> newDebuggerContextFor: aContext [
 		  yourself
 ]
 
-{ #category : #'accessing context' }
+{ #category : #'accessing - context' }
 StDebugger >> newTitle [
 
 	^ self debuggerActionModel statusStringForContext
@@ -894,7 +894,7 @@ StDebugger >> recordUnsavedCodeChanges [
 	self unsavedCodeChanges at: codeInteractionModel context put: codeText
 ]
 
-{ #category : #'updating session' }
+{ #category : #'updating - session' }
 StDebugger >> registerActionsForSession: aSession [
 	self flag: 'Rewrite it'.
 	aSession
@@ -912,7 +912,7 @@ StDebugger >> registerExtensionTool: anExtension [
 	self extensionTools add: anExtension
 ]
 
-{ #category : #'updating session' }
+{ #category : #'updating - session' }
 StDebugger >> removeActionsForSession: aSession [
 	self flag: 'Rewrite it'.
 	aSession
@@ -925,7 +925,7 @@ StDebugger >> removeActionsForSession: aSession [
 				removeActionsForEvent: #contextChanged ]
 ]
 
-{ #category : #'updating session' }
+{ #category : #'updating - session' }
 StDebugger >> removeSessionHolderSubscriptions [
 	self sessionHolder announcer unsubscribe: self sessionHolder.
 	self removeActionsForSession: self session
@@ -1017,7 +1017,7 @@ StDebugger >> selectTopContext [
 	stackTable selectIndex: 1
 ]
 
-{ #category : #'accessing context' }
+{ #category : #'accessing - context' }
 StDebugger >> selectedContext [
 
 	^ self stackTable selection selectedItem
@@ -1044,7 +1044,7 @@ StDebugger >> setModelBeforeInitialization: aSession [
 	self session: aSession
 ]
 
-{ #category : #'updating session' }
+{ #category : #'updating - session' }
 StDebugger >> setSessionHolderSubscriptions [
 	self sessionHolder
 		whenChangedDo: [ :newSession :oldSession | 
@@ -1067,29 +1067,29 @@ StDebugger >> stackIconForContext: context [
 	^ self iconNamed: #overlayDirty
 ]
 
-{ #category : #'command support' }
+{ #category : #'commands - support' }
 StDebugger >> stackSelectionMethodContext [
 
 	^ [ stackTable selection selectedItem home method ]
 ]
 
-{ #category : #'command support' }
+{ #category : #'commands - support' }
 StDebugger >> stackSelectionMethodSelectorContext [
 
 	^ [ stackTable selection selectedItem method selector ]
 ]
 
-{ #category : #'command support' }
+{ #category : #'commands - support' }
 StDebugger >> stackSelectionReceiverClassContext [
 	^ [ stackTable selection selectedItem receiver class ]
 ]
 
-{ #category : #'command support' }
+{ #category : #'commands - support' }
 StDebugger >> stackSelectionReceiverContext [
 	^ [ stackTable selection selectedItem receiver ]
 ]
 
-{ #category : #'accessing widgets' }
+{ #category : #'accessing - widgets' }
 StDebugger >> stackTable [
 	^stackTable
 ]
@@ -1118,7 +1118,7 @@ StDebugger >> subscribeToMethodAddedAnnouncement [
 		to: self
 ]
 
-{ #category : #'accessing widgets' }
+{ #category : #'accessing - widgets' }
 StDebugger >> toolbar [
 
 	^ toolbar
@@ -1142,13 +1142,13 @@ StDebugger >> unsubscribeFromSystemAnnouncer [
 	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
-{ #category : #'updating widgets' }
+{ #category : #'updating - widgets' }
 StDebugger >> updateAfterMethodAdded [
 	debuggerActionModel updateContextPredicate.
 	self updateToolbar 
 ]
 
-{ #category : #'updating widgets' }
+{ #category : #'updating - widgets' }
 StDebugger >> updateCodeFromContext [
 
 	self updateCodeFromContext: self currentContext
@@ -1172,7 +1172,7 @@ StDebugger >> updateCodeFromContext: aContext [
 	
 ]
 
-{ #category : #'updating widgets' }
+{ #category : #'updating - widgets' }
 StDebugger >> updateCodeTextSegmentDecoratorsIn: aContext forInterval: selectionInterval [
 	
 	self code removeAllTextSegmentDecorations.
@@ -1199,17 +1199,17 @@ StDebugger >> updateCodeTextSegmentDecoratorsIn: aContext forInterval: selection
 				title: 'Click me!';"
 ]
 
-{ #category : #'updating actions' }
+{ #category : #'updating - actions' }
 StDebugger >> updateContextChanged [
 	self updateStep
 ]
 
-{ #category : #'updating widgets' }
+{ #category : #'updating - widgets' }
 StDebugger >> updateExtensionsFrom: newSession [
 	self extensionTools do:[:tool| tool updatePresenter]
 ]
 
-{ #category : #'updating widgets' }
+{ #category : #'updating - widgets' }
 StDebugger >> updateInspectorFromContext: aContext [
 
 	inspector
@@ -1221,7 +1221,7 @@ StDebugger >> updateInspectorFromContext: aContext [
 	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p | p update ]
 ]
 
-{ #category : #'updating widgets' }
+{ #category : #'updating - widgets' }
 StDebugger >> updatePredicatesForContext: aContext [
 
 	self debuggerActionModel updateContextPredicate
@@ -1234,12 +1234,12 @@ StDebugger >> updatePresenter [
 	self buildContextMenus
 ]
 
-{ #category : #'updating actions' }
+{ #category : #'updating - actions' }
 StDebugger >> updateRestart [
 	self updateStep
 ]
 
-{ #category : #'updating actions' }
+{ #category : #'updating - actions' }
 StDebugger >> updateResume [
 
 	
@@ -1263,7 +1263,7 @@ StDebugger >> updateStackFromSession: aSession [
 	stackTable selectIndex: (self findFirstRelevantStackIndexIn: stack)
 ]
 
-{ #category : #'updating actions' }
+{ #category : #'updating - actions' }
 StDebugger >> updateStep [
 	self flag: #DBG_UPDATE_OF_MODEL_SHOULD_BE_AUTOMATED.
 	debuggerActionModel updateTopContext.
@@ -1278,25 +1278,25 @@ StDebugger >> updateStep [
 	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p | p update ]
 ]
 
-{ #category : #'updating actions' }
+{ #category : #'updating - actions' }
 StDebugger >> updateStepInto [
 	self updateStep
 ]
 
-{ #category : #'updating actions' }
+{ #category : #'updating - actions' }
 StDebugger >> updateStepOver [
 
 	self updateStep 
 	
 ]
 
-{ #category : #'updating actions' }
+{ #category : #'updating - actions' }
 StDebugger >> updateStepThrough [
 
 	self updateStep 
 ]
 
-{ #category : #'updating widgets' }
+{ #category : #'updating - widgets' }
 StDebugger >> updateToolbar [
 	
 	toolbarCommandGroup ifNil: [ ^ self ].
@@ -1304,7 +1304,7 @@ StDebugger >> updateToolbar [
 		spCommand updateEnableStatus ]
 ]
 
-{ #category : #'updating widgets' }
+{ #category : #'updating - widgets' }
 StDebugger >> updateWindowTitle [
 
 	self withWindowDo: [ :window | window title: self newTitle ].

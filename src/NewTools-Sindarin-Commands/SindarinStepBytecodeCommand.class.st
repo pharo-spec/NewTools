@@ -4,17 +4,17 @@ Class {
 	#category : #'NewTools-Sindarin-Commands'
 }
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinStepBytecodeCommand class >> defaultDescription [
 	^ 'Step a single bytecode'
 ]
 
-{ #category : #initialization }
+{ #category : #'accessing - defaults' }
 SindarinStepBytecodeCommand class >> defaultIconName [
 	^#glamorousInto 
 ]
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinStepBytecodeCommand class >> defaultName [
 	^ 'Step Bytecode'
 ]
