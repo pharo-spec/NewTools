@@ -37,7 +37,7 @@ StHeaderPanel >> initializePresenters [
 		yourself
 ]
 
-{ #category : #'accessing header' }
+{ #category : #'accessing - header' }
 StHeaderPanel >> label: aString [
 
 	headerBar label: aString
@@ -57,7 +57,7 @@ StHeaderPanel >> presenter: aPresenter [
 	layout add: presenter
 ]
 
-{ #category : #'accessing header' }
+{ #category : #'accessing - header' }
 StHeaderPanel >> shortcut: aShortcut [
 
 	shortcut := aShortcut.
@@ -77,7 +77,7 @@ StHeaderPanel >> shortcutForPanel: aNumber [
 		| char control unix
 ]
 
-{ #category : #'accessing header' }
+{ #category : #'accessing - header' }
 StHeaderPanel >> toolbarActions: aCommandGroup [
 
 	headerBar toolbarActions: aCommandGroup

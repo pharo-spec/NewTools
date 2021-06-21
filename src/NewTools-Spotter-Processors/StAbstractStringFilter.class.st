@@ -18,6 +18,12 @@ Class {
 	#category : #'NewTools-Spotter-Processors-Iterators'
 }
 
+{ #category : #testing }
+StAbstractStringFilter class >> isAbstract [
+
+	^ self == StAbstractStringFilter
+]
+
 { #category : #'instance creation' }
 StAbstractStringFilter class >> on: aStCombinator with: aString [
 

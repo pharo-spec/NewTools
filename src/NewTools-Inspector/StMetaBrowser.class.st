@@ -48,7 +48,7 @@ StMetaBrowser >> classListMenu [
 	^ (self rootCommandsGroup / 'classes') asMenuPresenter 
 ]
 
-{ #category : #'private actions' }
+{ #category : #'private - actions' }
 StMetaBrowser >> compile: aString [
 	| compiledSelector cursorPosition |
 
@@ -131,7 +131,7 @@ StMetaBrowser >> selectedObject [
 	^ self selectedMethod
 ]
 
-{ #category : #'private updating' }
+{ #category : #'private - updating' }
 StMetaBrowser >> updateMethods: aClass [
 	
 	methods items: (aClass
@@ -140,7 +140,7 @@ StMetaBrowser >> updateMethods: aClass [
 	
 ]
 
-{ #category : #'private updating' }
+{ #category : #'private - updating' }
 StMetaBrowser >> updateSourceWith: method [
 
 	source userActionDuring: [

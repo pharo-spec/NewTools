@@ -8,7 +8,7 @@ Class {
 	#category : #'NewTools-Sindarin-Commands'
 }
 
-{ #category : #initialization }
+{ #category : #'accessing - defaults' }
 SindarinStepToNextCallCommand class >> defaultIconName [
 	^ #glamorousInto
 ]

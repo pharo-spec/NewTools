@@ -114,13 +114,13 @@ StInspectionContext >> methodSelector: aSelector [
 	methodSelector := aSelector
 ]
 
-{ #category : #'private testing' }
+{ #category : #'private - testing' }
 StInspectionContext >> methodSelectorNeedsBuilder [
 
 	^ self methodSelector last = $:
 ]
 
-{ #category : #'private factory' }
+{ #category : #'private - factory' }
 StInspectionContext >> newInspectionPresenter [
 
 	^ self methodSelectorNeedsBuilder 
@@ -142,7 +142,7 @@ StInspectionContext >> newInspectionView [
 		yourself
 ]
 
-{ #category : #'private factory' }
+{ #category : #'private - factory' }
 StInspectionContext >> newPresenterBuilder [
 
 	^ SpPresenterBuilder new

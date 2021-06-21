@@ -17,6 +17,12 @@ SindarinCommand class >> forSpecContext: anObject [
 		yourself
 ]
 
+{ #category : #testing }
+SindarinCommand class >> isAbstract [
+
+	^ self == SindarinCommand
+]
+
 { #category : #accessing }
 SindarinCommand >> debuggerPresenter [
 	^self context

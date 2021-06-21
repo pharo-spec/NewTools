@@ -13,6 +13,12 @@ Class {
 }
 
 { #category : #testing }
+StIteratorDecorator class >> isAbstract [
+
+	^ self == StIteratorDecorator
+]
+
+{ #category : #testing }
 StIteratorDecorator >> atEnd [ 
 
 	^ inner atEnd

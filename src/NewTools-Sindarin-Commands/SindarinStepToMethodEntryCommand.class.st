@@ -4,17 +4,17 @@ Class {
 	#category : #'NewTools-Sindarin-Commands'
 }
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinStepToMethodEntryCommand class >> defaultDescription [
 	^ 'Step to the beginning of the next method, then returns debugger control.'
 ]
 
-{ #category : #initialization }
+{ #category : #'accessing - defaults' }
 SindarinStepToMethodEntryCommand class >> defaultIconName [
 	^ #glamorousInto 
 ]
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinStepToMethodEntryCommand class >> defaultName [
 	<toolbarExtensionDebugCommand: 50>
 	<codeExtensionDebugCommand: 50>

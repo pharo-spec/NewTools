@@ -183,7 +183,7 @@ StPlaygroundPagesPresenter >> selectedPage [
 	^ pageList selection selectedItem page
 ]
 
-{ #category : #'accessing model' }
+{ #category : #'accessing - model' }
 StPlaygroundPagesPresenter >> setModelBeforeInitialization: aPlayground [
 
 	parent := aPlayground

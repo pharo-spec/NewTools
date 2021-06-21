@@ -109,7 +109,7 @@ StObjectInspectorPresenter >> allPages [
 	
 ]
 
-{ #category : #'private builder' }
+{ #category : #'private - builder' }
 StObjectInspectorPresenter >> buildToolbar [
 
 	^ self rootCommandsGroup asToolbarPresenterWith: [ :presenter | 
@@ -124,7 +124,7 @@ StObjectInspectorPresenter >> defaultInputPort [
 	^ self inputModelPort
 ]
 
-{ #category : #'api-focus' }
+{ #category : #'api - focus' }
 StObjectInspectorPresenter >> defaultKeyboardFocus [
 
 	views pages ifNotEmpty: [ :pages | 
@@ -211,7 +211,7 @@ StObjectInspectorPresenter >> model: anInspectorModel [
 	self refresh
 ]
 
-{ #category : #'private factory' }
+{ #category : #'private - factory' }
 StObjectInspectorPresenter >> newInspectionForContext: aContext [
 	
 	^ StObjectContextPresenter on: (StObjectContextModel new 
@@ -221,7 +221,7 @@ StObjectInspectorPresenter >> newInspectionForContext: aContext [
 		yourself)
 ]
 
-{ #category : #'private factory' }
+{ #category : #'private - factory' }
 StObjectInspectorPresenter >> newPageForContext: aContext [
 
 	^ SpNotebookPage new
@@ -241,7 +241,7 @@ StObjectInspectorPresenter >> rawInspectorPageOrNil [
 		ifNone: [ nil ]
 ]
 
-{ #category : #'private updating' }
+{ #category : #'private - updating' }
 StObjectInspectorPresenter >> refresh [
 	"model changed?  
 	 update inspector values."
@@ -320,20 +320,20 @@ StObjectInspectorPresenter >> trySelectAnyPageWithName: aCollection [
 				^ self ] ]
 ]
 
-{ #category : #'private updating' }
+{ #category : #'private - updating' }
 StObjectInspectorPresenter >> updateEvaluator [
 
 	"evaluator beForObject: self model inspectedObject"
 ]
 
-{ #category : #'private updating' }
+{ #category : #'private - updating' }
 StObjectInspectorPresenter >> updateHeaderBar [
 		
 	header label: self model labelString.
 	header toolbarActions: self rootCommandsGroup 
 ]
 
-{ #category : #'private updating' }
+{ #category : #'private - updating' }
 StObjectInspectorPresenter >> updatePages [
 
 	views 
@@ -341,7 +341,7 @@ StObjectInspectorPresenter >> updatePages [
 		selectPageIndex: 1
 ]
 
-{ #category : #'private updating' }
+{ #category : #'private - updating' }
 StObjectInspectorPresenter >> updateTitle [
 		
 	self isRoot ifFalse: [ ^ self ].
@@ -349,13 +349,13 @@ StObjectInspectorPresenter >> updateTitle [
 		window title: self title ].
 ]
 
-{ #category : #'api-events' }
+{ #category : #'api - events' }
 StObjectInspectorPresenter >> whenActivatedDo: aBlock [
 
 	activationBlock := aBlock
 ]
 
-{ #category : #'api-events' }
+{ #category : #'api - events' }
 StObjectInspectorPresenter >> whenClosedDo: aBlock [
 
 	header whenClosedDo: aBlock

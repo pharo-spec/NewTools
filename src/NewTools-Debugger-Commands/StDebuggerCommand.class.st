@@ -34,6 +34,12 @@ StDebuggerCommand class >> forSpecContext: anObject [
 		yourself
 ]
 
+{ #category : #testing }
+StDebuggerCommand class >> isAbstract [
+
+	^ self == StDebuggerCommand
+]
+
 { #category : #default }
 StDebuggerCommand class >> shortName [
 	^self defaultName

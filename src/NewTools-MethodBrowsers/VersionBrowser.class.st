@@ -277,7 +277,7 @@ VersionBrowser >> selectItem: item [
 	self installIconStylerFor: item
 ]
 
-{ #category : #'accessing model' }
+{ #category : #'accessing - model' }
 VersionBrowser >> setModelBeforeInitialization: aMethod [
 
 	self setRGMethodFrom: aMethod

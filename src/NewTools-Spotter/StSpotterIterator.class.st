@@ -74,12 +74,12 @@ StSpotterIterator >> cull: aContext [
 	self context: aContext
 ]
 
-{ #category : #'accessing-defaults' }
+{ #category : #'accessing - defaults' }
 StSpotterIterator >> defaultItems [
 	^ self defaultItemsClass new 
 ]
 
-{ #category : #'accessing-defaults' }
+{ #category : #'accessing - defaults' }
 StSpotterIterator >> defaultItemsClass [
 	^ OrderedCollection 
 ]

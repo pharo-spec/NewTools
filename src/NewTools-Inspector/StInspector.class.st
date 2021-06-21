@@ -179,7 +179,7 @@ StInspector >> defaultInputPort [
 	^ self inputModelPort
 ]
 
-{ #category : #'api-focus' }
+{ #category : #'api - focus' }
 StInspector >> defaultKeyboardFocus [
 
 	^ millerList presenters 
@@ -245,7 +245,7 @@ StInspector >> model [
 	^ model
 ]
 
-{ #category : #'accessing model' }
+{ #category : #'accessing - model' }
 StInspector >> model: anInspectorModel [
 
 	model := anInspectorModel.
@@ -253,7 +253,7 @@ StInspector >> model: anInspectorModel [
 	self updateList
 ]
 
-{ #category : #'private factory' }
+{ #category : #'private - factory' }
 StInspector >> newInspectorFor: aModel [
 	| newInspector |
 
@@ -290,7 +290,7 @@ StInspector >> setModel: aModel [
 	self model: aModel
 ]
 
-{ #category : #'accessing model' }
+{ #category : #'accessing - model' }
 StInspector >> setModelBeforeInitialization: anInspectorModel [
 
 	model := anInspectorModel
@@ -302,26 +302,26 @@ StInspector >> spacing [
 	^ self class defaultSpacing
 ]
 
-{ #category : #'private stepping' }
+{ #category : #'private - stepping' }
 StInspector >> startProcessing [
 
 	StInspectorRefreshService uniqueInstance register: self
 ]
 
-{ #category : #'private stepping' }
+{ #category : #'private - stepping' }
 StInspector >> step [ 
 
 	millerList pages
 		do: [ :each | each step ]
 ]
 
-{ #category : #'private stepping' }
+{ #category : #'private - stepping' }
 StInspector >> stopProcessing [
 
 	StInspectorRefreshService uniqueInstance unregister: self
 ]
 
-{ #category : #'private updating' }
+{ #category : #'private - updating' }
 StInspector >> updateList [
 
 	millerList millerListPresenter
@@ -329,7 +329,7 @@ StInspector >> updateList [
 		setRootModel: self model
 ]
 
-{ #category : #'private updating' }
+{ #category : #'private - updating' }
 StInspector >> updateTitle [
 		
 	self isRoot ifFalse: [ ^ self ].

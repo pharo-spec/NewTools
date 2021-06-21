@@ -232,7 +232,7 @@ StPlaygroundBindingsPresenter >> selectedBindingIsLocal [
 	^ self isLocalBinding: selection
 ]
 
-{ #category : #'accessing model' }
+{ #category : #'accessing - model' }
 StPlaygroundBindingsPresenter >> setModelBeforeInitialization: aPlayground [
 
 	parent := aPlayground

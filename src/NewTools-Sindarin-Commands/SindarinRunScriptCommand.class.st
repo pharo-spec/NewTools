@@ -8,17 +8,17 @@ Class {
 	#category : #'NewTools-Sindarin-Commands'
 }
 
-{ #category : #initialization }
+{ #category : #'accessing - defaults' }
 SindarinRunScriptCommand class >> defaultDescription [
 	^'Run the current debugging script'
 ]
 
-{ #category : #initialization }
+{ #category : #'accessing - defaults' }
 SindarinRunScriptCommand class >> defaultIconName [
 	^#smallDoIt
 ]
 
-{ #category : #initialization }
+{ #category : #'accessing - defaults' }
 SindarinRunScriptCommand class >> defaultName [
 	^'Run script'
 ]

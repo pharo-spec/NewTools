@@ -28,12 +28,12 @@ StDebuggerSpecSelector class >> debuggerClass [
 	^StDebugger
 ]
 
-{ #category : #'default spec selectors' }
+{ #category : #'specs - default selectors' }
 StDebuggerSpecSelector class >> defaultDebuggerWithExtensionSpecSelector [
 	^#debuggerWithExtensionsSpec
 ]
 
-{ #category : #'default spec selectors' }
+{ #category : #'specs - default selectors' }
 StDebuggerSpecSelector class >> defaultDebuggerWithoutExtensionSpecSelector [
 	^#debuggerWithoutExtensionsSpec
 ]
@@ -53,7 +53,7 @@ StDebuggerSpecSelector >> debuggerClass [
 	^self class debuggerClass
 ]
 
-{ #category : #'specs - selectors' }
+{ #category : #testing }
 StDebuggerSpecSelector >> isDefaultSelector: aSelector [
 	^ {self class defaultDebuggerWithExtensionSpecSelector.
 	self class defaultDebuggerWithoutExtensionSpecSelector}
@@ -100,7 +100,7 @@ StDebuggerSpecSelector >> selectorForDebuggerStatus: debuggerExtensionsActivated
 		ifFalse: [ self class defaultDebuggerWithoutExtensionSpecSelector ]
 ]
 
-{ #category : #'default spec selectors' }
+{ #category : #'specs - default selector' }
 StDebuggerSpecSelector >> specSelector [
 	^ specSelector
 ]

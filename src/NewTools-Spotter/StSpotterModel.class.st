@@ -47,7 +47,7 @@ StSpotterModel >> addStep: aStep [
 	steps addLast: aStep
 ]
 
-{ #category : #'private announcing' }
+{ #category : #'private - announcing' }
 StSpotterModel >> announceAllCandidatesAdded: ann [
 
 	searchUpdatedAction ifNil: [ ^ self ].
@@ -55,7 +55,7 @@ StSpotterModel >> announceAllCandidatesAdded: ann [
 		do: [ :each | searchUpdatedAction value: each ]
 ]
 
-{ #category : #'private announcing' }
+{ #category : #'private - announcing' }
 StSpotterModel >> announceAmountChanged: ann [
 
 	amountChangedAction ifNil: [ ^ self ].
@@ -64,28 +64,28 @@ StSpotterModel >> announceAmountChanged: ann [
 		value: ann amount
 ]
 
-{ #category : #'private announcing' }
+{ #category : #'private - announcing' }
 StSpotterModel >> announceCandidateAdded: ann [
 
 	searchUpdatedAction ifNil: [ ^ self ].
 	searchUpdatedAction value: ann candidateLink
 ]
 
-{ #category : #'private announcing' }
+{ #category : #'private - announcing' }
 StSpotterModel >> announceNoResults [
 
 	noResultsAction ifNil: [ ^ self ].
 	noResultsAction value
 ]
 
-{ #category : #'private announcing' }
+{ #category : #'private - announcing' }
 StSpotterModel >> announceQueryEnded: ann [
 
 	queryEndedAction ifNil: [ ^ self ].
 	queryEndedAction value
 ]
 
-{ #category : #'private announcing' }
+{ #category : #'private - announcing' }
 StSpotterModel >> announceQueryStarted: ann [
 
 	queryStartedAction ifNil: [ ^ self ].
@@ -139,7 +139,7 @@ StSpotterModel >> links [
 	^ self activeStep links
 ]
 
-{ #category : #'private factory' }
+{ #category : #'private - factory' }
 StSpotterModel >> newDefaultStep [
 
 	^ self newStep
@@ -147,7 +147,7 @@ StSpotterModel >> newDefaultStep [
 		yourself
 ]
 
-{ #category : #'private factory' }
+{ #category : #'private - factory' }
 StSpotterModel >> newStep [
 
 	^ StSpotterStep on: self
@@ -166,7 +166,7 @@ StSpotterModel >> popStep [
 	self activeStep activate
 ]
 
-{ #category : #'accessing query' }
+{ #category : #'accessing - query' }
 StSpotterModel >> processSearch: aString on: spotter [
 	| query |
 
@@ -177,7 +177,7 @@ StSpotterModel >> processSearch: aString on: spotter [
 	
 ]
 
-{ #category : #'accessing query' }
+{ #category : #'accessing - query' }
 StSpotterModel >> pushQuery: aQuery [
 
 	self schedule: [ 
@@ -228,7 +228,7 @@ StSpotterModel >> stSpotterProcessorsFor: aStep [
 		do: [ :each | aStep addProcessor: each ]
 ]
 
-{ #category : #'accessing query' }
+{ #category : #'accessing - query' }
 StSpotterModel >> startProcessingOn: spotter [
 
 	self processSearch: '' on: spotter
@@ -242,7 +242,7 @@ StSpotterModel >> steps [
 		steps ]
 ]
 
-{ #category : #'accessing query' }
+{ #category : #'accessing - query' }
 StSpotterModel >> stopProcessing [
 
 	self activeStep deactivate.

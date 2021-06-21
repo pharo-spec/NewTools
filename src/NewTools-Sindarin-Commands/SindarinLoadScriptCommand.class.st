@@ -7,17 +7,17 @@ Class {
 	#category : #'NewTools-Sindarin-Commands'
 }
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinLoadScriptCommand class >> defaultDescription [
 	^'Load a debugging script'
 ]
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinLoadScriptCommand class >> defaultIconName [
 	^#smallLoadProject
 ]
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinLoadScriptCommand class >> defaultName [
 	^'Load script'
 ]

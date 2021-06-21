@@ -8,13 +8,13 @@ Class {
 	#category : #'NewTools-Playground-Command'
 }
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 StPlaygroundAdoptVersionCommand class >> defaultDescription [
 
 	^ 'Adopt version contents in current playground'
 ]
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 StPlaygroundAdoptVersionCommand class >> defaultName [
 
 	^ 'Adopt'

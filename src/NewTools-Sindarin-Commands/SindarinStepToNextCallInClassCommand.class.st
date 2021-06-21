@@ -7,12 +7,12 @@ Class {
 	#category : #'NewTools-Sindarin-Commands'
 }
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinStepToNextCallInClassCommand class >> defaultDescription [
 	^ 'Steps execution until the next call in the current class, then returns debugger control.'
 ]
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinStepToNextCallInClassCommand class >> defaultName [
 	<toolbarExtensionDebugCommand: 50>
 	<codeExtensionDebugCommand: 50>

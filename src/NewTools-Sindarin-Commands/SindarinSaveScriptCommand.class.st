@@ -7,17 +7,17 @@ Class {
 	#category : #'NewTools-Sindarin-Commands'
 }
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinSaveScriptCommand class >> defaultDescription [
 	^'Save the current debugging script'
 ]
 
-{ #category : #initialization }
+{ #category : #'accessing - defaults' }
 SindarinSaveScriptCommand class >> defaultIconName [
 	^#smallSave
 ]
 
-{ #category : #default }
+{ #category : #'accessing - defaults' }
 SindarinSaveScriptCommand class >> defaultName [
 	^'Save script'
 ]

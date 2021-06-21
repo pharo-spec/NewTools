@@ -59,7 +59,7 @@ StDebuggerRawObjectInspector >> step [
 	raw step
 ]
 
-{ #category : #'private updating' }
+{ #category : #'private - updating' }
 StDebuggerRawObjectInspector >> updateHeaderBar [
 	| filter |
 

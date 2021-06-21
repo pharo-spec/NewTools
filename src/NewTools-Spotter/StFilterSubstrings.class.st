@@ -10,7 +10,7 @@ Class {
 	#category : #'NewTools-Spotter-Filters'
 }
 
-{ #category : #'accessing-defaults' }
+{ #category : #'accessing - defaults' }
 StFilterSubstrings >> defaultSeparators [
 	^ ' '
 ]
