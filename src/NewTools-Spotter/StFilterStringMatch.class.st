@@ -1,3 +1,6 @@
+"
+A filter that executes `String>>#match:` to each item to obtain matching items.
+"
 Class {
 	#name : #StFilterStringMatch,
 	#superclass : #StUnorderedFilter,

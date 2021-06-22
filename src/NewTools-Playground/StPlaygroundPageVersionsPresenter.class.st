@@ -1,3 +1,7 @@
+"
+A presenter to show all stored versions of a page. 
+A version is taken each time we will flush a new version of the page to the disk, making changes in the playground recoverable..
+"
 Class {
 	#name : #StPlaygroundPageVersionsPresenter,
 	#superclass : #StPresenter,

@@ -1,3 +1,6 @@
+"
+Announces the ammount of candidates found changed.
+"
 Class {
 	#name : #StSpotterCandidatesAmountChanged,
 	#superclass : #StSpotterAnnouncement,

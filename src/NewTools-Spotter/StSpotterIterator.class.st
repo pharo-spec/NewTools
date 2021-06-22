@@ -1,3 +1,6 @@
+"
+Define an iterator to be used to feed items to spotter
+"
 Class {
 	#name : #StSpotterIterator,
 	#superclass : #Object,
@@ -245,6 +248,11 @@ StSpotterIterator >> select: aBlock thenDo: aBlock2 [
 { #category : #'mimic collection' }
 StSpotterIterator >> size [
 	^ self items size
+]
+
+{ #category : #public }
+StSpotterIterator >> stIterator [
+	^ self
 ]
 
 { #category : #public }

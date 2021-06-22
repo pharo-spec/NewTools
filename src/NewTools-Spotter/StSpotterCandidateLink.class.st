@@ -1,3 +1,7 @@
+"
+a link with a `StSpotterCandidateLink>>#candidate`.
+it is intended to work as element of a linked list.
+"
 Class {
 	#name : #StSpotterCandidateLink,
 	#superclass : #DoubleLink,

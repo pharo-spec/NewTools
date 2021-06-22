@@ -1,3 +1,7 @@
+"
+Define an iterator on a block to be used to feed items to spotter.
+A block receives the `StSpotterBlockIterator>>#onDo:` event, to call when iterating on an element.
+"
 Class {
 	#name : #StSpotterBlockIterator,
 	#superclass : #StSpotterIterator,

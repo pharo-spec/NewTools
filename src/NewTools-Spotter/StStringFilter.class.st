@@ -1,3 +1,6 @@
+"
+A string based filter.
+"
 Class {
 	#name : #StStringFilter,
 	#superclass : #StBaseFilter,
@@ -28,7 +31,7 @@ StStringFilter >> applyFilterWithQuery [
 StStringFilter >> applyFilterWithoutQuery [
 	" WARNING: this is not a copy of GTNullFilter>>#applyFilterWithoutQuery !!! "
 
-	[self streamed 
+	[ self streamed 
 		ifTrue: [
 			" this will be more responsive (faster) for very large collections and/or expensive filters "
 			| reducedItems |

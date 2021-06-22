@@ -1,3 +1,6 @@
+"
+A place to store the results of a `StSpotterQuery` and to send notifications about it.
+"
 Class {
 	#name : #StSpotterStream,
 	#superclass : #Object,

@@ -1,3 +1,6 @@
+"
+A filter that uses the `FuzzyMatcher` to obtain matching items.
+"
 Class {
 	#name : #StFilterFuzzy,
 	#superclass : #StOrderedFilter,

@@ -1,3 +1,11 @@
+"
+A spotter search has a scope that is composed by its main search, but to dive into categories is also possible. 
+A step encapsulates this scope, making it possible.
+
+So, in the processing search scheme of things: 
+
+a model (`StSpotterModel`) has a step (`StSpotterStep`) which receives a query (`StSpotterQuery`) which is the one performing the actual search.
+"
 Class {
 	#name : #StSpotterStep,
 	#superclass : #Object,

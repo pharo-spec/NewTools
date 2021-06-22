@@ -1,3 +1,6 @@
+"
+Open the page versions browsers.
+"
 Class {
 	#name : #StPlaygroundVersionsCommand,
 	#superclass : #StPlaygroundCommand,

@@ -1,3 +1,7 @@
+"
+An interaction model to be used in playground contexts. 
+It will allow a playground to share variables.
+"
 Class {
 	#name : #StPlaygroundInteractionModel,
 	#superclass : #SpCodeScriptingInteractionModel,

@@ -1,3 +1,6 @@
+"
+Publish the content of a page in [http://ws.stfx.eu](http://ws.stfx.eu)
+"
 Class {
 	#name : #StPlaygroundPublishCommand,
 	#superclass : #StPlaygroundCommand,

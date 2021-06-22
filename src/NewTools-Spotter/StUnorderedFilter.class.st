@@ -1,3 +1,6 @@
+"
+a base filter for ""unordered"" elements (not a collection)
+"
 Class {
 	#name : #StUnorderedFilter,
 	#superclass : #StStringFilter,
