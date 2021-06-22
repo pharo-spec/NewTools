@@ -1,5 +1,5 @@
 "
-A spotter search have a scope that is composed by its main search, but dive into categories is also possible. 
+A spotter search has a scope that is composed by its main search, but to dive into categories is also possible. 
 A step encapsulates this scope, making it possible.
 
 So, in the processing search scheme of things: 
