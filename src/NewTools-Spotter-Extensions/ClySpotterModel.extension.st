@@ -5,7 +5,7 @@ ClySpotterModel >> spotterForCommandsFor: aStep [
 	<stSpotterOrder: 20>
 
 	browser allContextsDo: [ :each | 
-		self commandListProcessorForContext: each step: aStep]
+		self commandListProcessorForContext: each step: aStep ]
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
