@@ -5,8 +5,9 @@ Class {
 }
 
 { #category : #public }
-StFilterImplementor class >> gtListFilter [
-	^ GTFilterSubstring new
+StFilterImplementor class >> stListFilter [
+
+	^ StFilterSubstring new
 ]
 
 { #category : #private }
