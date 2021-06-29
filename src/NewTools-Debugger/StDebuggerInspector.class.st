@@ -123,9 +123,10 @@ StDebuggerInspector >> getRawInspectorSelectedPath [
 
 { #category : #initialization }
 StDebuggerInspector >> initializeLateralToolbar [
-
 	| button |
+	
 	lateralToolbar := self newToolbar.
+	lateralToolbar addStyle: 'stToolbar'.
 	lateralToolbar beIcons.
 	button := self newToolbarButton.
 

@@ -759,6 +759,7 @@ StDebugger >> initializeStack [
 StDebugger >> initializeToolbar [
 
 	toolbar := self newToolbar.
+	toolbar addStyle: 'stToolbar'.
 	toolbar displayMode: self application toolbarDisplayMode
 ]
 

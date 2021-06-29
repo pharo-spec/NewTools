@@ -90,6 +90,7 @@ StSindarinDebuggerScriptingPresenter >> initializePresenters [
 { #category : #initialization }
 StSindarinDebuggerScriptingPresenter >> initializeToolbar [
 	toolbar := self newToolbar.
+	toolbar addStyle: 'stToolbar'.
 	toolbar beIcons.
 	SpToolbarPresenterBuilder new
 		toolbarPresenter: toolbar;
