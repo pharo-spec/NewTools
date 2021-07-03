@@ -104,11 +104,12 @@ StFBFileDialogPresenter class >> defaultOkActionBlock [
 
 { #category : #specs }
 StFBFileDialogPresenter class >> defaultSpec [
+
 	^ SpPanedLayout newHorizontal
-		position: 200;
-		add: #bookmarksTreeTable;
-		add: #fileNavigationSystem;
-		yourself
+		  positionOfSlider: 200;
+		  add: #bookmarksTreeTable;
+		  add: #fileNavigationSystem;
+		  yourself
 ]
 
 { #category : #examples }
