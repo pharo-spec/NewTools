@@ -31,9 +31,11 @@ Class {
 
 { #category : #specs }
 StFBWindowPathPresenter class >> defaultSpec [
-	^ SpBoxLayout newHorizontal
+
+	^ SpBoxLayout newLeftToRight
+		vAlignCenter;
 		add: #path;
-		add: #editButton expand: false fill: false padding: 0;
+		add: #editButton expand: false;
 		yourself
 ]
 
@@ -78,6 +80,7 @@ StFBWindowPathPresenter >> entityText [
 { #category : #initialization }
 StFBWindowPathPresenter >> initializePresenters [
 	| isTextInput |
+	
 	textInput := self newTextInput.
 	path := self instantiate: StFBPathPresenter.
 	editButton := self newButton.
@@ -91,8 +94,11 @@ StFBWindowPathPresenter >> initializePresenters [
 		placeholder: 'path/to/file'.
 
 	editButton
-		icon: (self iconNamed: #edit);
-		action: [ self needRebuild: false.
+		addStyle: 'small';
+		icon: (self application iconNamed: #edit);
+		action: [ 
+			self halt. "This needs to be redone"
+			self needRebuild: false.
 			self buildWithSpecLayout: (isTextInput ifTrue: [ self class defaultSpec ] ifFalse: [ self class otherlayout ]).
 			isTextInput := isTextInput not ]
 ]

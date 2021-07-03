@@ -16,17 +16,22 @@ Class {
 	#category : #'NewTools-FileBrowser-UI'
 }
 
-{ #category : #api }
+{ #category : #'accessing - ui' }
+StFBOpenFileDialog >> confirmLabel [
+
+	^ 'Open'
+]
+
+{ #category : #'accessing - ui' }
 StFBOpenFileDialog >> initialTitle [
 	^ 'Select File To Open'
 ]
 
 { #category : #initialization }
 StFBOpenFileDialog >> initializePresenters [
+
 	super initializePresenters.
-	fileNavigationSystem nameText disable.
-	nameText disable.
-	confirmButton label: 'Open'	
+	fileNavigationSystem nameText disable
 ]
 
 { #category : #accessing }

@@ -49,7 +49,7 @@ StFBOpenDirectoryDialog >> filesFilteringBlock [
 	e ]
 ]
 
-{ #category : #api }
+{ #category : #'accessing - ui' }
 StFBOpenDirectoryDialog >> initialTitle [
 	^ 'Select Directory To Open'
 ]

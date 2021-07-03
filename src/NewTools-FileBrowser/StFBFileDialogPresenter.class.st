@@ -148,11 +148,13 @@ StFBFileDialogPresenter class >> examplePreviewer [
 { #category : #example }
 StFBFileDialogPresenter class >> exampleSaveDialog [
 	<example>
-		^ StFBSaveFileDialog new openDialogWithSpec 
+
+	^ StFBSaveFileDialog new openDialogWithSpec 
 ]
 
 { #category : #example }
 StFBFileDialogPresenter class >> exampleSaveFileDialog [
+
 	^ StFBSaveFileDialog new openDialogWithSpec
 ]
 
@@ -225,7 +227,7 @@ StFBFileDialogPresenter >> bookmarks [
 	^ bookmarks
 ]
 
-{ #category : #'api-customization' }
+{ #category : #'api - customization' }
 StFBFileDialogPresenter >> bookmarks: aCollectionOfFDGroupBookMark [
 	bookmarks := aCollectionOfFDGroupBookMark asOrderedCollection.
 	bookmarksTreeTable roots: bookmarks 
@@ -236,7 +238,13 @@ StFBFileDialogPresenter >> bookmarksTreeTable [
 	^ bookmarksTreeTable
 ]
 
-{ #category : #'api-customization' }
+{ #category : #'accessing - ui' }
+StFBFileDialogPresenter >> cancelLabel [
+
+	^ 'Cancel'
+]
+
+{ #category : #'api - customization' }
 StFBFileDialogPresenter >> columns: aCollectionOfColumns [
 	fileNavigationSystem columns: aCollectionOfColumns 
 ]
@@ -247,6 +255,12 @@ StFBFileDialogPresenter >> confirm [
 		ifNotNil: [ :entry | 
 			okAction cull: entry.
 		 ]
+]
+
+{ #category : #'accessing - ui' }
+StFBFileDialogPresenter >> confirmLabel [
+
+	^ 'Accept'
 ]
 
 { #category : #initialization }
@@ -269,7 +283,7 @@ StFBFileDialogPresenter >> defaultFolder [
 	^ FileLocator imageDirectory asFileReference
 ]
 
-{ #category : #'api-customization' }
+{ #category : #'api - customization' }
 StFBFileDialogPresenter >> defaultFolder: aPath [
 	fileNavigationSystem defaultFolder: aPath
 ]
@@ -284,7 +298,7 @@ StFBFileDialogPresenter >> fileReferenceTable [
 	^ fileNavigationSystem fileReferenceTable
 ]
 
-{ #category : #'api-customization' }
+{ #category : #'api - customization' }
 StFBFileDialogPresenter >> filtersCustomization: aCollection [ 
 	fileNavigationSystem filtersCustomization: aCollection
 ]
@@ -301,7 +315,7 @@ StFBFileDialogPresenter >> iconFor: anEntry [
 		ifAbsent: [ self iconNamed: #page ]
 ]
 
-{ #category : #'initialize-value' }
+{ #category : #'accessing - ui' }
 StFBFileDialogPresenter >> initialTitle [
 	^ self subclassResponsibility
 ]
@@ -313,38 +327,44 @@ StFBFileDialogPresenter >> initialize [
 	super initialize
 ]
 
-{ #category : #'initialize-widgets' }
+{ #category : #initialization }
 StFBFileDialogPresenter >> initializeBookmarksTreeTable [
+
 	bookmarksTreeTable
-		addColumn:
-			((SpImageTableColumn evaluated: [ :each | each icon ])
-				width: 50;
-				yourself);
-		addColumn: (SpStringTableColumn evaluated: [ :fdGroupBookMark | fdGroupBookMark name ]);
+		hideColumnHeaders;
+		addColumn: (SpCompositeTableColumn new
+			addColumn: ((SpImageTableColumn evaluated: [ :each | each icon ]) beNotExpandable);
+			addColumn: (SpStringTableColumn evaluated: [ :fdGroupBookMark | fdGroupBookMark name ]);
+			yourself);
 		roots: bookmarks;
 		children: #children;
-		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'Menu' ]
+		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'Menu' ];
+		expandRoots
 ]
 
 { #category : #initialization }
 StFBFileDialogPresenter >> initializeDialogWindow: aDialogWindowPresenter [
-	super initializeDialogWindow: aDialogWindowPresenter.
+	
 	aDialogWindowPresenter
 		title: self initialTitle;
-		initialExtent: 900 @ 900;
+		initialExtent: 900@900;
 		okAction: [ self confirm ];
-		cancelAction: [ self delete ]
+		cancelAction: [ self delete ];
+		addButton: self cancelLabel do: [ :presenter | 
+			presenter triggerCancelAction.
+			presenter close ];		
+		addButton: self confirmLabel do: [ :presenter | 
+			presenter triggerOkAction.
+			presenter close ]
 ]
 
 { #category : #initialization }
 StFBFileDialogPresenter >> initializePresenters [
+
 	bookmarksTreeTable := self newTreeTable.
 	fileNavigationSystem := self instantiate: StFBFileNavigationSystemPresenter.
 
-	self initializeBookmarksTreeTable.
-	self focusOrder
-		add: bookmarksTreeTable;
-		add: fileNavigationSystem
+	self initializeBookmarksTreeTable
 ]
 
 { #category : #accessing }
@@ -352,18 +372,18 @@ StFBFileDialogPresenter >> isRootDirectory: aDirectory [
 	^ aDirectory isRoot or: [ OSPlatform current isWindows and: [ aDirectory parent isRoot ] ]
 ]
 
-{ #category : #'api-customization' }
+{ #category : #'api - customization' }
 StFBFileDialogPresenter >> isolate [
 	bookmarks := bookmarks copy.
 	
 ]
 
-{ #category : #'api-customization' }
+{ #category : #'api - customization' }
 StFBFileDialogPresenter >> okAction: aOneArgBlock [
 	okAction := aOneArgBlock
 ]
 
-{ #category : #'api-customization' }
+{ #category : #'api - customization' }
 StFBFileDialogPresenter >> previewer: aPreviewer [ 
 	fileNavigationSystem previewer: aPreviewer
 ]
