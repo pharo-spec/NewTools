@@ -1,3 +1,6 @@
+"
+A wrapper for selectors to be used in spotter (so they are something more than just symbols). 
+"
 Class {
 	#name : #StSelector,
 	#superclass : #Object,
@@ -18,11 +21,7 @@ StSelector >> addMethod: aCompiledMethod [
 
 { #category : #displaying }
 StSelector >> displayStringOn: stream [
-	stream nextPutAll: self name
-]
 
-{ #category : #printing }
-StSelector >> gtDisplayOn: stream [
 	stream nextPutAll: self name
 ]
 
@@ -48,9 +47,10 @@ StSelector >> senders [
 	^ SystemNavigation default allSendersOf: self name
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #spotter }
 StSelector >> spotterUsersFor: aStep [
 	<stSpotterOrder: 50>
+
 	^ aStep listProcessor
 		title: 'Senders';
 		filter: StFilterSubstring item: [ :filter :context | 

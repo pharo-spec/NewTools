@@ -70,6 +70,7 @@ StHeaderBar >> initializePresenters [
 
 	shortcutLabel addStyle: 'shortcut'.
 	"toolbar displayMode: self application toolbarDisplayMode"
+	toolbar addStyle: 'stToolbar'.
 	toolbar beIcons	"is a mini toolbar, items should be... tiny :)"
 ]
 

@@ -46,9 +46,16 @@ StFBSaveFileDialog class >> initialize [
 	Matcher := '*'
 ]
 
+{ #category : #'accessing - ui' }
+StFBSaveFileDialog >> confirmLabel [
+
+	^ 'Save'
+]
+
 { #category : #initialization }
 StFBSaveFileDialog >> connectPresenters [
 	| ec |
+
 	super connectPresenters.
 	(ec := EntryCompletion new)
 		dataSourceBlock: [ :text | fileNavigationSystem currentDirectory children collect: #basename ];
@@ -61,7 +68,7 @@ StFBSaveFileDialog >> extension: anExtensionMatcher [
 	extensionMather := anExtensionMatcher
 ]
 
-{ #category : #api }
+{ #category : #'accessing - ui' }
 StFBSaveFileDialog >> initialTitle [
 	^ 'Save As'
 ]
@@ -70,18 +77,6 @@ StFBSaveFileDialog >> initialTitle [
 StFBSaveFileDialog >> initialize [
 	super initialize.
 	extensionMather := Matcher
-]
-
-{ #category : #initialization }
-StFBSaveFileDialog >> initializePresenters [
-	| ec |
-	
-	super initializePresenters.
-	(ec := EntryCompletion new)
-		dataSourceBlock: [ :text | currentDirectory children collect: #basename ];
-		filterBlock: [ :opt :text | opt beginsWith: text ].
-	nameText entryCompletion: ec.
-	confirmButton label: 'Save'
 ]
 
 { #category : #accessing }

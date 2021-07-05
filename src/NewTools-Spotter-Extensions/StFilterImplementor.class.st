@@ -1,3 +1,6 @@
+"
+A filter for implementors. 
+"
 Class {
 	#name : #StFilterImplementor,
 	#superclass : #StFilterSubstring,

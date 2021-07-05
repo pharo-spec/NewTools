@@ -103,20 +103,19 @@ StFBFileNavigationSystemPresenter class >> defaultPreviewer [
 StFBFileNavigationSystemPresenter class >> defaultSpec [
 
 	^ SpBoxLayout newTopToBottom
-		add:
-			(SpBoxLayout newLeftToRight
+		add: (SpBoxLayout newLeftToRight
+				vAlignCenter;
 				add: #previousButton expand: false;
 				add: #nextButton expand: false;
 				add: #currentPathTextInputPresenter;
 				yourself)
 			 expand: false;
-		add:
-			(SpPanedLayout newTopToBottom
+		add: (SpPanedLayout newTopToBottom
 				add: #fileReferenceTable;
 				add: #notebookPreviewer;
 				yourself);
-		add:
-			(SpBoxLayout newLeftToRight
+		add: (SpBoxLayout newLeftToRight
+				vAlignCenter;
 				add: #nameText;
 				add: #filtersDropList expand: false;
 				yourself)
@@ -148,7 +147,7 @@ StFBFileNavigationSystemPresenter class >> lastVisitedDirectory [
 		ifFalse: [ LastVisitedDirectory ]
 ]
 
-{ #category : #'api-customization' }
+{ #category : #'api - customization' }
 StFBFileNavigationSystemPresenter >> columns: aCollectionOfColumns [
 	| tmpColumn |
 	tmpColumn := aCollectionOfColumns asSet.
@@ -204,7 +203,7 @@ StFBFileNavigationSystemPresenter >> currentDirectory: aFileReference [
 	LastVisitedDirectory := currentDirectory
 ]
 
-{ #category : #'initialize-actions' }
+{ #category : #actions }
 StFBFileNavigationSystemPresenter >> currentPathTextInputAction [
 
 	currentPathTextInputPresenter entityText 
@@ -226,7 +225,7 @@ StFBFileNavigationSystemPresenter >> defaultDirectory [
 	^ self class defaultDirectory
 ]
 
-{ #category : #'api-customization' }
+{ #category : #'api - customization' }
 StFBFileNavigationSystemPresenter >> defaultFolder: aFileReference [
 	self updateWidgetWithFileReference: aFileReference.
 	self initializeHistoryIteratorWith: aFileReference
@@ -237,7 +236,7 @@ StFBFileNavigationSystemPresenter >> fileReferenceTable [
 	^ fileReferenceTable
 ]
 
-{ #category : #'initialize-actions' }
+{ #category : #actions }
 StFBFileNavigationSystemPresenter >> filesListAction [
 
 	fileReferenceTable
@@ -247,17 +246,15 @@ StFBFileNavigationSystemPresenter >> filesListAction [
 				ifNotNil: [ selectedItem basename ]
 				ifNil: [ '' ] ].
 	
-	fileReferenceTable
-		whenActivatedDo: [ :selectedItem | 
-			selectedItem selectedItem isDirectory
-				ifTrue: [ self openFolder: selectedItem selectedItem ] ].
-	fileReferenceTable
-		whenSelectionChangedDo: [ :aFileReference | 
-			notebookPreviewer
-				page: (previewer previewOn: aFileReference selectedItem) ]
+	fileReferenceTable whenActivatedDo: [ :selectedItem | 
+		selectedItem selectedItem isDirectory
+			ifTrue: [ self openFolder: selectedItem selectedItem ] ].
+	
+	fileReferenceTable whenSelectedDo: [ :aFileReference	|
+		notebookPreviewer page: (previewer previewOn: aFileReference) ]
 ]
 
-{ #category : #'api-customization' }
+{ #category : #'api - customization' }
 StFBFileNavigationSystemPresenter >> filtersCustomization: aCollectionOfFilter [
 	"i always add the filter 'no filter'"
 
@@ -277,7 +274,7 @@ StFBFileNavigationSystemPresenter >> filtersDropList [
 	^ filtersDropList
 ]
 
-{ #category : #'initialize-actions' }
+{ #category : #actions }
 StFBFileNavigationSystemPresenter >> filtersDropListAction [
 	filtersDropList whenSelectionChangedDo: [ self updateTableContent ]
 ]
@@ -294,7 +291,7 @@ StFBFileNavigationSystemPresenter >> initialize [
 	super initialize
 ]
 
-{ #category : #'initialize-widgets' }
+{ #category : #initialization }
 StFBFileNavigationSystemPresenter >> initializeFilesTable [
 	fileReferenceTable
 		beResizable;
@@ -305,7 +302,7 @@ StFBFileNavigationSystemPresenter >> initializeFilesTable [
 		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'Menu' ]
 ]
 
-{ #category : #'initialize-widgets' }
+{ #category : #initialization }
 StFBFileNavigationSystemPresenter >> initializeFiltersDropList [
 	
 	filtersDropList
@@ -316,6 +313,7 @@ StFBFileNavigationSystemPresenter >> initializeFiltersDropList [
 
 { #category : #initialization }
 StFBFileNavigationSystemPresenter >> initializeHistoryIteratorWith: aFolder [
+
 	history := ConfigurableHistoryIterator
 		undo: [ :folder | history hasPrevious
 			ifTrue: [ self updateWidgetWithFileReference: history current ]
@@ -326,6 +324,7 @@ StFBFileNavigationSystemPresenter >> initializeHistoryIteratorWith: aFolder [
 
 { #category : #initialization }
 StFBFileNavigationSystemPresenter >> initializePresenters [
+
 	notebookPreviewer := self instantiate: StFBNoteBookPreviewerPresenter.
 	fileReferenceTable := self newTable.
 	currentPathTextInputPresenter := self instantiate: StFBWindowPathPresenter.
@@ -334,21 +333,17 @@ StFBFileNavigationSystemPresenter >> initializePresenters [
 	previousButton := self newButton.
 	nextButton := self newButton.
 
-	nextButton icon: (self iconNamed: #glamorousDiveRight).
-	previousButton icon: (self iconNamed: #back).
-	nameText autoAccept: true.
+	nextButton 
+		icon: (self application iconNamed: #forward); 
+		addStyle: 'small'.
+	previousButton 
+		icon: (self application iconNamed: #back); 
+		addStyle: 'small'.
+
 	self initializeFilesTable.
 	self initializeFiltersDropList.
 	self updateWidgetWithFileReference: self lastVisitedDirectory.
-	self initializeHistoryIteratorWith: currentDirectory.
-
-	self focusOrder
-		add: previousButton;
-		add: nextButton;
-		add: currentPathTextInputPresenter;
-		add: fileReferenceTable;
-		add: nameText;
-		add: filtersDropList
+	self initializeHistoryIteratorWith: currentDirectory
 ]
 
 { #category : #accessing }
@@ -387,12 +382,12 @@ StFBFileNavigationSystemPresenter >> previewer [
 	^ previewer
 ]
 
-{ #category : #'api-customization' }
+{ #category : #'api - customization' }
 StFBFileNavigationSystemPresenter >> previewer: aPreviewer [ 
 	previewer := aPreviewer 
 ]
 
-{ #category : #'initialize-actions' }
+{ #category : #actions }
 StFBFileNavigationSystemPresenter >> previousBeforeButtonAction [
 	previousButton action: [ history undoIfEmpty: [ self inform: 'Nothing to undo' ] ]
 ]

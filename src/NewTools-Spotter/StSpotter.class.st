@@ -244,6 +244,7 @@ StSpotter class >> windowClosed [
 { #category : #'private - actions' }
 StSpotter >> activate: aPresenter [
 
+	aPresenter ifNil: [ ^ self ].
 	aPresenter activateOn: self
 ]
 
@@ -810,7 +811,11 @@ StSpotter >> updateResultList: aCandidateLink [
 					self queuedUpdateResultList.
 					lastUpdateTime := Time millisecondClockValue ]
 				on: Exception 
-				fork: [ :e | e pass ] ] ] ]
+				fork: [ :e | 
+					"Allow halts and that, but eat errors (since otherwise, ugly things can happen)"
+					(e isKindOf: Error) 
+						ifTrue: [ ('Spotter error: ', e printString) crTrace ]
+						ifFalse: [ e pass ] ] ] ] ]
 ]
 
 { #category : #'private - updating' }
