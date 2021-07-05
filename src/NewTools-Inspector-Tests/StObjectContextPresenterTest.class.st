@@ -37,3 +37,22 @@ StObjectContextPresenterTest >> testDoEvaluateAndGo [
 	
 	self assert: evaluatedValue equals: 4
 ]
+
+{ #category : #tests }
+StObjectContextPresenterTest >> testDoEvaluateDeclareGlobal [
+	| value |
+	
+	self deny: (Smalltalk globals includesKey: #MyGlobalForTest).
+	
+	self openInstance.
+	
+	presenter evaluator text: 'MyGlobalForTest'. 
+	presenter whenActivatedDo: [ :selection | value := selection value ].
+
+	[presenter doEvaluateAndGo] on: OCUndeclaredVariableWarning do: [ :warn | warn declareGlobal ].
+	
+	self assert: value equals:  nil.
+	
+	self assert: (Smalltalk globals includesKey: #MyGlobalForTest).
+	Smalltalk globals removeKey: #MyGlobalForTest
+]
