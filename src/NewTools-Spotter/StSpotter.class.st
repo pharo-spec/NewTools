@@ -253,8 +253,7 @@ StSpotter >> activateLink: aCandidateLink [
 
 	self window close.
 	self historize: aCandidateLink.
-	aCandidateLink value doEvaluate.
-
+	aCandidateLink value evaluateFor: self
 ]
 
 { #category : #initialization }
@@ -600,7 +599,7 @@ StSpotter >> previewContainer [
 
 { #category : #'private - updating' }
 StSpotter >> queuedUpdateResultList [
-	| categoryPresenter presenters |
+	| categoryPresenter presenters selectedPresenter |
 
 	updating ifTrue: [ ^ self ].
 	updating := true.
@@ -620,15 +619,13 @@ StSpotter >> queuedUpdateResultList [
 			sorted: [ :each | each order ] ascending)
 			flatCollect: [ :each | each withCandidates ]. 
 	
-		self model schedule: [ 
-			| selectedPresenter |
-			selectedPresenter := self 
-				nextSelectablePresenter: resultList selectedItem
-				oldPresenters: resultList presenters
-				newPresenters: presenters.
-			resultList presenters: presenters.
-			selectedPresenter 
-				ifNotNil: [ resultList selectItem: selectedPresenter ] ].
+		selectedPresenter := self 
+			nextSelectablePresenter: resultList selectedItem
+			oldPresenters: resultList presenters
+			newPresenters: presenters.
+		resultList presenters: presenters.
+		selectedPresenter 
+			ifNotNil: [ resultList selectItem: selectedPresenter ].
 	]
 	ensure: [ 
 		updating := false ]
@@ -804,8 +801,8 @@ StSpotter >> updateResultList: aCandidateLink [
 	(updating or: [ (Time millisecondClockValue - lastUpdateTime) < 50 ]) 
 		ifTrue: [ ^ self ].
 	
-	self model schedule: [
-		self application defer: [ 
+	self application defer: [ 
+		self model schedule: [
 			mutex critical: [ 
 				[ 
 					self queuedUpdateResultList.

@@ -6,7 +6,7 @@ Also, I redirect the messages that should be answer by my content
 "
 Class {
 	#name : #StEntry,
-	#superclass : #DisplayableObject,
+	#superclass : #Object,
 	#instVars : [
 		'content'
 	],
@@ -63,10 +63,9 @@ StEntry >> doEvaluate [
 ]
 
 { #category : #evaluating }
-StEntry >> evaluateFor: aGTSpotterStep [ 
+StEntry >> evaluateFor: aSpotter [ 
 
-	self doEvaluate.
-	aGTSpotterStep exit.
+	self doEvaluate
 ]
 
 { #category : #comparing }

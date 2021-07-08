@@ -15,6 +15,7 @@ StWindowEntry >> asString [
 
 { #category : #evaluating }
 StWindowEntry >> doEvaluate [
+
 	content stActDefault
 ]
 
