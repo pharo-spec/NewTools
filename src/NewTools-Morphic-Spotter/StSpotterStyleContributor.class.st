@@ -23,7 +23,7 @@ StSpotterStyleContributor >> styleSheetContribution [
 				addPropertyDrawWith: [ :draw | draw color: Color transparent ];
 				addPropertyTextWith: [ :text | text drawKeyboardFocus: false ];
 				addPropertyGeometryWith: [ :geometry | geometry minHeight: 35; vResizing: false ];
-				addPropertyFontWith: [ :font | font size: 12 ] ] ];
+				addPropertyFontWith: [ :font | font size: (StandardFonts defaultFont pointSize * 1.2) asInteger ] ] ];
 		addClass: 'text' with: [ :class | class 
 			addClass: 'stSpotterPreview' with: [ :spotter | spotter
 				addPropertyDrawWith: [ :draw | draw color: Color transparent ] ] ];
