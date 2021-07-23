@@ -8,7 +8,7 @@ Class {
 StIteratorsTest >> testBeginsWithFilterDoesNotFetchTwiceIfTheFilterIsARefinementOfPreviousText [
 
 	| it |
-	it := (SptGeneratorBlockIterator on: [ :x | x value: 'bbb'; value:'bbb1'; error ]) beginsWithFilter: 'b'.
+	it := (StGeneratorBlockIterator on: [ :x | x value: 'bbb'; value:'bbb1'; error ]) beginsWithFilter: 'b'.
 	it next.
 	it beginsWithFilter: 'bb'.
 	
@@ -19,7 +19,7 @@ StIteratorsTest >> testBeginsWithFilterDoesNotFetchTwiceIfTheFilterIsARefinement
 StIteratorsTest >> testBeginsWithFilterReturnsValidResults [
 
 	| it |
-	it := (SptCollectionIterator on: { 'aaa'. 'bbb'. 'ccc' }) beginsWithFilter: 'b'.
+	it := (StCollectionIterator on: { 'aaa'. 'bbb'. 'ccc' }) beginsWithFilter: 'b'.
 	self assert: it next equals: 'bbb'
 ]
 
@@ -27,7 +27,7 @@ StIteratorsTest >> testBeginsWithFilterReturnsValidResults [
 StIteratorsTest >> testBeginsWithFilterReturnsValidResultsWithTheSameFilter [
 
 	| it |
-	it := (SptCollectionIterator on: { 'aaa'. 'bbb'. 'ccc' }) beginsWithFilter: 'b'.
+	it := (StCollectionIterator on: { 'aaa'. 'bbb'. 'ccc' }) beginsWithFilter: 'b'.
 	it beginsWithFilter: 'b'.
 	
 	self assert: it next equals: 'bbb'
@@ -37,7 +37,7 @@ StIteratorsTest >> testBeginsWithFilterReturnsValidResultsWithTheSameFilter [
 StIteratorsTest >> testIteratorOnACollectedCollectionIsFiltered [
 
 	| it |
-	it := ((SptCollectionIterator on: #(1 2 3)) 
+	it := ((StCollectionIterator on: #(1 2 3)) 
 		collect: [ :e | e * 2 ])
 		select: [:e | e even].
 	self assertCollection: (it next: 3) hasSameElements: #(2 4 6).
@@ -49,7 +49,7 @@ StIteratorsTest >> testIteratorOnACollectionIsFiltered [
 
 	| it |
 
-	it := (SptCollectionIterator on: #(1 2 3)) select: [:e | e even].
+	it := (StCollectionIterator on: #(1 2 3)) select: [:e | e even].
 
 	self assertCollection: (it next: 3) hasSameElements: #(2).
 
@@ -59,7 +59,7 @@ StIteratorsTest >> testIteratorOnACollectionIsFiltered [
 StIteratorsTest >> testIteratorOnACollectionReturnsTheCollection [
 
 	| it |
-	it := SptCollectionIterator on: #(1 2 3).
+	it := StCollectionIterator on: #(1 2 3).
 	self assertCollection: (it next:3) hasSameElements: #(1 2 3)
 ]
 
@@ -68,7 +68,7 @@ StIteratorsTest >> testIteratorOnACollectionReturnsTheFirstValue [
 
 	| it |
 
-	it := SptCollectionIterator on: #(1 2 3).
+	it := StCollectionIterator on: #(1 2 3).
 	self assert: (it next) equals: 1
 ]
 
@@ -77,7 +77,7 @@ StIteratorsTest >> testIteratorOnACollectionReturnsTheFirstValueAndSecondValue [
 
 	| it |
 
-	it := SptCollectionIterator on: #(1 2 3).
+	it := StCollectionIterator on: #(1 2 3).
 	self assert: (it next) equals: 1.
 	self assert: (it next) equals: 2	
 ]
@@ -86,7 +86,7 @@ StIteratorsTest >> testIteratorOnACollectionReturnsTheFirstValueAndSecondValue [
 StIteratorsTest >> testIteratorOnACollectionWithCollectReturnsCorrectFirstValue [
 
 	| it |
-	it := (SptCollectionIterator on: #(1 2 3)) collect: [:e | e * 3].
+	it := (StCollectionIterator on: #(1 2 3)) collect: [:e | e * 3].
 	self assert: (it next) equals: 3.
 
 ]
@@ -95,7 +95,7 @@ StIteratorsTest >> testIteratorOnACollectionWithCollectReturnsCorrectFirstValue 
 StIteratorsTest >> testIteratorOnACollectionWithCollectReturnsCorrectValues [
 
 	| it |
-	it := (SptCollectionIterator on: #(1 2 3)) collect: [:e | e * 3].
+	it := (StCollectionIterator on: #(1 2 3)) collect: [:e | e * 3].
 	self assertCollection: (it next: 3) hasSameElements: #(3 6 9).
 
 ]
@@ -104,7 +104,7 @@ StIteratorsTest >> testIteratorOnACollectionWithCollectReturnsCorrectValues [
 StIteratorsTest >> testIteratorOnACollectionWithTwoCollectReturnsCorrectFirstValue [
 
 	| it |
-	it := ((SptCollectionIterator on: #(1 2 3)) collect: [:e | e * 3]) collect: [:e | e * 2].
+	it := ((StCollectionIterator on: #(1 2 3)) collect: [:e | e * 3]) collect: [:e | e * 2].
 	self assert: it next equals: 6.
 
 ]
