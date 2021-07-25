@@ -76,13 +76,13 @@ StAbstractProcessorTest >> runForText: aText [
 StAbstractProcessorTest >> setUp [ 
 	
 	super setUp.
-	SptDefaultSourceFactory forTest.
+	StDefaultSourceFactory forTest.
 ]
 
 { #category : #running }
 StAbstractProcessorTest >> tearDown [ 
 
-	SptSourceFactory reset.
+	StSourceFactory reset.
 	super tearDown.
 ]
 

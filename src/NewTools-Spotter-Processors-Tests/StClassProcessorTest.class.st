@@ -39,7 +39,7 @@ StClassProcessorTest >> testGTClassProcessorIsRemovedAfterUpdatingText [
 	self runForText: 'gtclass'.
 	self rerunWithText: 'gtclassprocesst'.
 	
-	self denyResultsIncludes: SptClassProcessor
+	self denyResultsIncludes: StClassProcessor
 ]
 
 { #category : #tests }
