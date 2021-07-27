@@ -10,7 +10,7 @@ Class {
 	#category : #'NewTools-Debugger-Tests-Utils'
 }
 
-{ #category : #utilities }
+{ #category : #util }
 StDebuggerObjectForTests >> haltingMethod [ <haltOrBreakpointForTesting> self halt. ^self
 ]
 
