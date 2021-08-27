@@ -14,7 +14,7 @@ StObjectPrinter class >> asNonTruncatedTextFrom: anObject [
 	are replaced by spaces. I return a String unless there is an error 
 	printing the object. In this case I return a Text highlighted in red."
 	^ [ anObject asString replaceAll: String cr with: String space ] 
-			on: Error 
+			on: Exception 
 			do: [ Text string: 'error printing' attribute: TextColor red ]
 ]
 
@@ -24,7 +24,7 @@ StObjectPrinter class >> asTruncatedTextFrom: anObject [
 	are replaced by spaces. I return a String unless there is an error printing the
 	object. In this case I return a Text highlighted in red."
 	^ [ (anObject displayString copyReplaceAll: String cr with: String space) replaceAll: String lf with: String space ]
-		on: Error
+		on: Exception
 		do: [ Text string: 'error printing' attribute: TextColor red ]
 ]
 
