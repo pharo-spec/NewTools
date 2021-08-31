@@ -19,7 +19,6 @@ HaltInCompiledBlockPrintOnTest >> setUp [
 
 { #category : #running }
 HaltInCompiledBlockPrintOnTest >> tearDown [ 
-
 	oldCode ifNotNil: 	[BlockClosure compileSilently: oldCode].
 	super tearDown
 ]

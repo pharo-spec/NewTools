@@ -36,7 +36,7 @@ Object >> inspectorNodes [
 Object >> stDisplayString [
 
 	[ self displayString linesDo: [ :each | ^ each contractTo: 200 ] ]
-		on: Error
+		on: Exception
 		do: [ :err | ^ err stDisplayString ].
 
 	^ ''

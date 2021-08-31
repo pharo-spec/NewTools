@@ -6,6 +6,7 @@ Class {
 
 { #category : #printing }
 ObjectWithPrintingRaisingHalt >> printOn: aStream [
+
 	<haltOrBreakpointForTesting>
 	^ self halt
 ]
