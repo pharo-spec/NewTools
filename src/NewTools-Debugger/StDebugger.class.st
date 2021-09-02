@@ -1071,7 +1071,7 @@ StDebugger >> stackIconForContext: context [
 { #category : #'commands - support' }
 StDebugger >> stackSelectionMethodContext [
 
-	^ [ stackTable selection selectedItem home method ]
+	^ [ stackTable selection selectedItem method ]
 ]
 
 { #category : #'commands - support' }
