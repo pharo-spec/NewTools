@@ -92,7 +92,12 @@ CompiledCode >> inspectorNodes [
 	| nodes |
 
 	nodes := OrderedCollection new.
-	nodes addAll: (self literals 
+	nodes add: (StInspectorDynamicNode 
+				hostObject: self 
+				label: 'literal0'
+				value: self header).
+	
+	nodes addAll: (self allLiterals 
 		collectWithIndex: [ :aLiteral :anIndex | 
 			StInspectorDynamicNode 
 				hostObject: self 
