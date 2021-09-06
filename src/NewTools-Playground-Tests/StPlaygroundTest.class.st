@@ -60,6 +60,15 @@ StPlaygroundTest >> testLoadPage [
 ]
 
 { #category : #tests }
+StPlaygroundTest >> testNewInspectorForWorksWhenModelIsNil [
+	| inspectorPanel |
+
+	inspectorPanel := presenter newInspectorFor: nil.
+	self assert: inspectorPanel notNil.
+	self assert: (inspectorPanel isKindOf: StObjectInspectorPresenter)
+]
+
+{ #category : #tests }
 StPlaygroundTest >> testStopProcessing [
 	| page |
 
