@@ -121,6 +121,18 @@ StSpotter class >> isShowingTips [
 	^ TipsVisible
 ]
 
+{ #category : #'world menu' }
+StSpotter class >> menuCommandOn: aBuilder [
+	<worldMenu>
+	(aBuilder item: #Spotter)
+		action: [ Smalltalk tools spotter open ];
+		keyText: 'Shift + Enter';
+		order: 1;
+		parent: #Searching;
+		help: 'Search tool to explore Pharo system effectively.';
+		iconName: #smallFindIcon
+]
+
 { #category : #'instance creation' }
 StSpotter class >> open [
 

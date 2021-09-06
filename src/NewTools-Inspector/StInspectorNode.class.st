@@ -79,13 +79,11 @@ StInspectorNode >> hostObject: anObject [
 ]
 
 { #category : #accessing }
-StInspectorNode >> icon [ 
+StInspectorNode >> icon [
 
-	^ [ 
-		(self value gtInspectorIcon) ifNil: [ 
-			self value class systemIcon ] ]
-	on: Error do: [ :error | 
-		self iconError: error ]
+	^ [ self value inspectorIcon ifNil: [ self value class systemIcon ] ]
+		  on: Error
+		  do: [ :error | self iconError: error ]
 ]
 
 { #category : #private }
@@ -132,7 +130,7 @@ StInspectorNode >> stringValue [
 StInspectorNode >> value [
 	"Answer the object value of this object variable (slot, indexed attribute, computed value).
 	Return nil in case there is an error obtaining the value"
-	^ [ self rawValue ] on: Error do: [ nil ]
+	^ [ self rawValue ] on: Exception do: [ nil ]
 ]
 
 { #category : #accessing }
