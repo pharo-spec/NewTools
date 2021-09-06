@@ -52,7 +52,7 @@ StInspectionContext >> contextMethodSelector [
 	selector := self methodSelectorNeedsBuilder
 		ifTrue: [ self methodSelector allButLast ]
 		ifFalse: [ self methodSelector ].
-	^ (self methodSelector, 'Context:') asSymbol
+	^ (selector, 'Context:') asSymbol
 ]
 
 { #category : #accessing }
