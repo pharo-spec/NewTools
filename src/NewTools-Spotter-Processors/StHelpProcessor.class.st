@@ -66,9 +66,3 @@ StHelpProcessor >> newEntryOn: anElement [
 
 	^ StHelpEntry on: anElement
 ]
-
-{ #category : #configuration }
-StHelpProcessor >> showForEmptyQuery [ 
-
-	^ true
-]

@@ -28,8 +28,7 @@ StWindowsProcessor class >> title [
 { #category : #filtering }
 StWindowsProcessor >> collection [
 
-	^ (self currentWorld submorphs
-		select: [ :window | window isKindOf: SystemWindow ])
+	^ (self currentWorld submorphs select: [ :window | window isKindOf: SystemWindow ]) 
 		ifNotEmpty: [ :aCollection | aCollection allButFirst ]
 ]
 

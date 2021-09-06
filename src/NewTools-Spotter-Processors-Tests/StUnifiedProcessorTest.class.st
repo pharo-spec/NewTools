@@ -11,6 +11,14 @@ StUnifiedProcessorTest >> processor [
 ]
 
 { #category : #tests }
+StUnifiedProcessorTest >> testFindCloseEnoughMethod [
+
+	self runForText: 'youtself'.
+	
+	self assertResultsIncludes: Object >> #yourself
+]
+
+{ #category : #tests }
 StUnifiedProcessorTest >> testFindStClassProcessorTest [
 
 	self runForText: 'stunifiedprocessortest'.

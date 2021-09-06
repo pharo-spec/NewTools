@@ -30,7 +30,7 @@ StSpotterBaseTest >> setUp [
 { #category : #private }
 StSpotterBaseTest >> waitUntilEnded: model [
 
-	[ 50 milliSeconds wait ] 
+	[ (StSpotterModel delayBeforeQuery + 50 milliSeconds) wait ] 
 	doWhileTrue: [ 
 		model scheduler workers anySatisfy: [ :each | each isBusy ] ].
 
