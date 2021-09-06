@@ -796,6 +796,7 @@ StDebuggerTest >> testUnsavedCodeChangesFor [
 
 { #category : #'tests - receiver inspector' }
 StDebuggerTest >> testUpdateLayoutForContextsIfAssertionFailure [
+
 	| assertionFailure currentLayout expectedLayout |
 	debugger := StTestDebuggerProvider new
 		            debuggerWithFailingAssertionContext.
@@ -815,9 +816,11 @@ StDebuggerTest >> testUpdateLayoutForContextsIfAssertionFailure [
 		assertCollection: currentLayout children first direction
 		equals: expectedLayout children first direction.
 	self
-		assertCollection: currentLayout children second 
+		assertCollection: currentLayout children second
 		equals: expectedLayout children second.
-	self assert: currentLayout position equals: expectedLayout position.
+	self
+		assert: currentLayout positionOfSlider
+		equals: expectedLayout positionOfSlider.
 	self
 		assert: currentLayout children size
 		equals: expectedLayout children size.
