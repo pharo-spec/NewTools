@@ -79,13 +79,11 @@ StInspectorNode >> hostObject: anObject [
 ]
 
 { #category : #accessing }
-StInspectorNode >> icon [ 
+StInspectorNode >> icon [
 
-	^ [ 
-		(self value gtInspectorIcon) ifNil: [ 
-			self value class systemIcon ] ]
-	on: Error do: [ :error | 
-		self iconError: error ]
+	^ [ self value inspectorIcon ifNil: [ self value class systemIcon ] ]
+		  on: Error
+		  do: [ :error | self iconError: error ]
 ]
 
 { #category : #private }
