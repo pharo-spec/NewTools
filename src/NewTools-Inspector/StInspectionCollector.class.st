@@ -66,8 +66,8 @@ StInspectionCollector >> contextFromPragma: aPragma [
 	
 	context := StInspectionContext fromPragma: aPragma.
 	context inspectedObject: self inspectedObject.
-	
-	(aPragma methodClass includesSelector: context contextMethodSelector) ifTrue: [ 
+
+	(self inspectedObject respondsTo: context contextMethodSelector) ifTrue: [ 
 		self inspectedObject 
 			perform: context contextMethodSelector
 			with: context ].
