@@ -89,7 +89,7 @@ StInspectionContext >> debugInspectorPresenter [
 			nextPutAll: methodSelector;
 			nextPutAll: ') pragmas first.'; cr.
 		str nextPutAll: 'context := collector basicContextFromPragma: pragma.'; cr.
-		str nextPutAll: 'context newInspectionPresenter'.
+		str nextPutAll: 'context basicNewInspectionPresenter'.
 	].
 
 	"I am itself an evaluator, no need to some other one."
