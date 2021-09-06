@@ -24,12 +24,43 @@ StInspectorTest >> tearDown [
 ]
 
 { #category : #tests }
+StInspectorTest >> testContextSelectorForBuilderSelector [
+
+	| c |
+	c := StInspectionContext new methodSelector: #selectorWithArgument:.
+	
+	self 
+		assert: c contextMethodSelector
+		equals: #selectorWithArgumentContext:
+]
+
+{ #category : #tests }
+StInspectorTest >> testContextSelectorForNonBuilderSelector [
+
+	| c |
+	c := StInspectionContext new methodSelector: #selectorWithoutArgument.
+	
+	self 
+		assert: c contextMethodSelector
+		equals: #selectorWithoutArgumentContext:
+]
+
+{ #category : #tests }
 StInspectorTest >> testDefaultKeyboardFocus [
 
 	inspector openWithSpec.
 	self 
 		assert: inspector defaultKeyboardFocus 
 		equals: inspector millerList presenters first
+]
+
+{ #category : #tests }
+StInspectorTest >> testDefineContextInSubclass [
+
+	| c |
+	c := StInspectionCollector on: StInspectorMockObjectSubclass new.
+
+	self deny: (c contextFromPragma: (StInspectorMockObject >> #inspectionMock1) pragmas first) isActive
 ]
 
 { #category : #tests }
