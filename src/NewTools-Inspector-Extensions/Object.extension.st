@@ -35,11 +35,7 @@ Object >> inspectorNodes [
 { #category : #'*NewTools-Inspector-Extensions' }
 Object >> stDisplayString [
 
-	[ self displayString linesDo: [ :each | ^ each contractTo: 200 ] ]
-		on: Exception
-		do: [ :err | ^ err stDisplayString ].
-
-	^ ''
+	^ StObjectPrinter asTruncatedTextFrom: self
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
