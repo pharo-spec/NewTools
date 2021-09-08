@@ -29,7 +29,8 @@ StWorldMenuProcessor class >> title [
 StWorldMenuProcessor >> askingForMenu [
 
 	^ (query hasCategoryMatching: #menu) 
-		or: [ query isSearchEmpty not ]
+		or: [ query isSearchEmpty not
+		or: [ query hasAnyCategory not and: [ query isSearchEmpty ] ] ]
 ]
 
 { #category : #filtering }
