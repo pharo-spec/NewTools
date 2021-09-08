@@ -74,6 +74,7 @@ StInspectorMockObject >> methodWithHaltingContext [
 StInspectorMockObject >> methodWithHaltingContextContext: aContext [
 	
 	"This selector is automatically called by concatenating Context: to an inspector presentation"
+	<haltOrBreakpointForTesting>
 	
 	self halt
 ]
@@ -81,6 +82,7 @@ StInspectorMockObject >> methodWithHaltingContextContext: aContext [
 { #category : #'inspector extensions' }
 StInspectorMockObject >> methodWithHaltingPresentation [
 	<inspectorPresentationOrder: 0 title: 'PresentationWithHaltingContext'>
-
+	<haltOrBreakpointForTesting>
+	
 	self halt
 ]
