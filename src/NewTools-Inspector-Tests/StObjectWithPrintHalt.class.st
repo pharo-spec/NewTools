@@ -7,5 +7,7 @@ Class {
 { #category : #printing }
 StObjectWithPrintHalt >> printOn: aString [
 
+	<haltOrBreakpointForTesting>
+
 	^ self halt
 ]
