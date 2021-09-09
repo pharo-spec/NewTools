@@ -2,6 +2,8 @@
 An object to control the visibility and properties of inspections. 
 It will be passed to the objects defining the inspections, in case they implement the method defined in `StInspectionContext>>#contextMethodSelector`.
 
+If I fail to create a presentation, I provide a debug presentation instead.
+
 ## Example
 If you define a method `Object>>#inspectionMeta`, you can define a context method `Object>>#inspectionMetaContext:`.
 "
@@ -33,6 +35,18 @@ StInspectionContext >> active: aBoolean [
 	active := aBoolean
 ]
 
+{ #category : #'private - factory' }
+StInspectionContext >> basicNewInspectionPresenter [
+
+	^ self methodSelectorNeedsBuilder 
+		ifTrue: [ 
+			self inspectedObject 
+				inspectorPerform: self methodSelector 
+				with: self newPresenterBuilder ]
+		ifFalse: [ 
+			self inspectedObject inspectorPerform: self methodSelector ]
+]
+
 { #category : #accessing }
 StInspectionContext >> beActive [
 
@@ -53,6 +67,37 @@ StInspectionContext >> contextMethodSelector [
 		ifTrue: [ self methodSelector allButLast ]
 		ifFalse: [ self methodSelector ].
 	^ (selector, 'Context:') asSymbol
+]
+
+{ #category : #initialization }
+StInspectionContext >> debugInspectorPresenter [
+
+	"Create a debug inspector presenter.
+	
+	I create a code presenter that contains code to recreate this presenter.
+	This is useful for debugging and reporting errors when rendering/building"
+
+	| debugExpression |
+	debugExpression := String streamContents: [ :str |
+		str nextPutAll: '"Error while creating the inspector. Debug it by executing the following:"'; cr.
+		str nextPutAll: '| collector pragma context |'; cr.
+		str nextPutAll: 'collector := StInspectionCollector on: self.'; cr.
+		str
+			nextPutAll: 'pragma := (';
+			nextPutAll: inspectedObject class name;
+			nextPutAll: ' lookupSelector: #';
+			nextPutAll: methodSelector;
+			nextPutAll: ') pragmas first.'; cr.
+		str nextPutAll: 'context := collector basicContextFromPragma: pragma.'; cr.
+		str nextPutAll: 'context basicNewInspectionPresenter'.
+	].
+
+	"I am itself an evaluator, no need to some other one."
+	self withoutEvaluator.
+	^ SpCodePresenter new
+		beForObject: self inspectedObject;
+		text: (Text string: debugExpression attribute: TextColor red);
+		yourself
 ]
 
 { #category : #accessing }
@@ -123,13 +168,11 @@ StInspectionContext >> methodSelectorNeedsBuilder [
 { #category : #'private - factory' }
 StInspectionContext >> newInspectionPresenter [
 
-	^ self methodSelectorNeedsBuilder 
-		ifTrue: [ 
-			self inspectedObject 
-				inspectorPerform: self methodSelector 
-				with: self newPresenterBuilder ]
-		ifFalse: [ 
-			self inspectedObject inspectorPerform: self methodSelector ]
+	"Create an inspection presenter for the current object and pragma.
+	If creation fails, create a debug inspector instead"
+	^ [self basicNewInspectionPresenter]
+		on: Exception do: [ :error |
+			self debugInspectorPresenter ]
 ]
 
 { #category : #factory }

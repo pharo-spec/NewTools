@@ -25,7 +25,15 @@ StObjectPrinter class >> asTruncatedTextFrom: anObject [
 	object. In this case I return a Text highlighted in red."
 	^ [ (anObject displayString copyReplaceAll: String cr with: String space) replaceAll: String lf with: String space ]
 		on: Exception
-		do: [ Text string: 'error printing' attribute: TextColor red ]
+		do: [ :error | self textFromError: error ]
+]
+
+{ #category : #converting }
+StObjectPrinter class >> textFromError: anError [
+
+	| message |
+	message := anError messageText ifEmpty: [ anError class name ].
+	^ Text string: 'Error printing: ', message attribute: TextColor red
 ]
 
 { #category : #printing }

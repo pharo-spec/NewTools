@@ -161,8 +161,13 @@ StPlayground >> newDefaultPlaygroundPage [
 
 { #category : #'private - factory' }
 StPlayground >> newInspectorFor: aModel [
+	| modelToInspectOrPlayground |
+	
+	modelToInspectOrPlayground := (millerList pages isEmpty and: [ aModel isNil ]) 
+		ifTrue: [ self newDefaultPlaygroundPage ]
+		ifFalse: [ aModel ].
 
-	^ super newInspectorFor: (aModel ifNil: [ self newDefaultPlaygroundPage ])
+	^ super newInspectorFor: modelToInspectOrPlayground
 ]
 
 { #category : #accessing }
