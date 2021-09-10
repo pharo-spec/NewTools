@@ -27,7 +27,7 @@ CompiledCode >> inspectionAST [
 
 { #category : #'*NewTools-Inspector-Extensions' }
 CompiledCode >> inspectionBytecode [
-	<inspectorPresentationOrder: 20 title: 'Bytecode'>
+	<inspectorPresentationOrder: 30 title: 'Bytecode'>
 
 	^ SpListPresenter new 
 		items: self symbolicBytecodes;
@@ -46,8 +46,15 @@ CompiledCode >> inspectionHeader [
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
+CompiledCode >> inspectionItemsContext: aContext [
+
+	"Disable items view on compiled code"
+	aContext active: false
+]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
 CompiledCode >> inspectionPragmas [
-	<inspectorPresentationOrder: 30 title: 'Pragmas'> 
+	<inspectorPresentationOrder: 50 title: 'Pragmas'> 
 
 	^ SpListPresenter new
 		items: self pragmas;
@@ -63,7 +70,7 @@ CompiledCode >> inspectionPragmasContext: aContext [
 
 { #category : #'*NewTools-Inspector-Extensions' }
 CompiledCode >> inspectionSource [
-	<inspectorPresentationOrder: 30 title: 'Source'>
+	<inspectorPresentationOrder: 20 title: 'Source'>
 	
 	^ SpCodePresenter new 
 		beForBehavior: self methodClass;
@@ -85,7 +92,12 @@ CompiledCode >> inspectorNodes [
 	| nodes |
 
 	nodes := OrderedCollection new.
-	nodes addAll: (self literals 
+	nodes add: (StInspectorDynamicNode 
+				hostObject: self 
+				label: 'literal0'
+				value: self header).
+	
+	nodes addAll: (self allLiterals 
 		collectWithIndex: [ :aLiteral :anIndex | 
 			StInspectorDynamicNode 
 				hostObject: self 
