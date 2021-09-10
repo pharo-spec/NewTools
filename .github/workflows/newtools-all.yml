@@ -1,4 +1,4 @@
-name: NewTools-Pharo9.0
+name: NewTools-Pharo-Integration
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
