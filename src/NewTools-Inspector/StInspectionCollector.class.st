@@ -39,14 +39,13 @@ StInspectionCollector class >> on: anObject [
 
 { #category : #private }
 StInspectionCollector >> basicContextFromPragma: aPragma [
-	
 	"Get the context for a pragma or fail if an error happens"
 	| context |
 	
 	context := StInspectionContext fromPragma: aPragma.
 	context inspectedObject: self inspectedObject.
-	
-	(aPragma methodClass includesSelector: context contextMethodSelector) ifTrue: [ 
+
+	(self inspectedObject respondsTo: context contextMethodSelector) ifTrue: [ 
 		self inspectedObject 
 			perform: context contextMethodSelector
 			with: context ].
@@ -79,7 +78,6 @@ StInspectionCollector >> collectPragmas: aPragmaName [
 
 { #category : #private }
 StInspectionCollector >> contextFromPragma: aPragma [
-
 	"Return the inspection context for a pragma.
 	Safe version: Return an error context if the context cannot be obtained"
 	[ ^ self basicContextFromPragma: aPragma ]
