@@ -101,13 +101,6 @@ StSpotterPragmaBasedProcessor >> filterInContext: aSpotterContext [
 
 ]
 
-{ #category : #printing }
-StSpotterPragmaBasedProcessor >> gtDisplayOn: stream [
-	stream 
-		nextPutAll: 'Processor: ';
-		nextPutAll: self title asString
-]
-
 { #category : #testing }
 StSpotterPragmaBasedProcessor >> hasFilteredCandidates [
 	^ self allFilteredCandidates notEmpty
