@@ -26,7 +26,7 @@ StWorldMenuProcessorTest >> processor [
 StWorldMenuProcessorTest >> testEmptyQueryShowsResults [
 
 	self runForText: ''.
-	self denyResultsIncludesMenuEntry: 'Iceberg'.
+	self assertResultsIncludesMenuEntry: 'Iceberg'.
 
 ]
 
