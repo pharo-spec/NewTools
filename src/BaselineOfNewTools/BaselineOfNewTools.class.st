@@ -68,16 +68,22 @@ BaselineOfNewTools >> baseline: spec [
 			"Debugger Selector"
 			package: 'NewTools-DebuggerSelector' with: [ spec requires: #('NewTools-SpTextPresenterDecorators') ];
 			package: 'NewTools-DebuggerSelector-Tests' with: [ spec requires: #('NewTools-DebuggerSelector') ];
+			"CritiqueBrowser"
+			package: 'NewTools-CodeCritiques';
+			package: 'NewTools-CodeCritiques-Tests';
 			
 			"Fuel"
 			package: 'NewTools-Debugger-Fuel';
 			package: 'NewTools-Debugger-Fuel-Tests' with: [ spec requires: #('NewTools-Debugger-Fuel') ];
 			package: 'NewTools-Fuel'.
-
+			
+			
+			
 		spec
 			group: 'Core' with: #('NewTools-Core' 'NewTools-Morphic');
 			group: 'Playground' with: #('Core' 'NewTools-Playground' 'NewTools-Playground-Tests');
 			group: 'Inspector' with: #('Core' 'NewTools-Inspector' 'NewTools-Inspector-Tests');
+			group: 'CritiqueBrowser' with: #('NewTools-CodeCritiques' 'NewTools-CodeCritiques-Tests');
 			group: 'Debugger' with: #(
 				'Core' 
 				'Inspector' 
@@ -118,6 +124,7 @@ BaselineOfNewTools >> baseline: spec [
 			group: 'default' with: #(
 				'Playground' 
 				'Inspector' 
+				'CritiqueBrowser'
 				'Debugger' 
 				'SystemReporter'
 				'ChangeSorter'
