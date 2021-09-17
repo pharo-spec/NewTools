@@ -12,7 +12,7 @@ Class {
 { #category : #'tests - accepting faulty code' }
 StDebuggerTest >> compileMethodWithUndeclaredChoosing: choice [
 
-	| context newSource dbg currentUIManager testUIManager |
+	| context newSource dbg |
 	
 	dbg := StTestDebuggerProvider new debuggerWithObjectHalting.
 	dbg
