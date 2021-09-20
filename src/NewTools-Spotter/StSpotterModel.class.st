@@ -15,10 +15,18 @@ Class {
 		'queryStartedAction',
 		'queryEndedAction',
 		'noResultsAction',
-		'scheduler'
+		'scheduler',
+		'pendingQuery',
+		'queryRequestTime'
 	],
 	#category : #'NewTools-Spotter-Model'
 }
+
+{ #category : #'instance creation' }
+StSpotterModel class >> delayBeforeQuery [
+
+	^ 500 milliSeconds 
+]
 
 { #category : #'instance creation' }
 StSpotterModel class >> newOrigin: anObject [ 
@@ -51,6 +59,7 @@ StSpotterModel >> addStep: aStep [
 StSpotterModel >> announceAllCandidatesAdded: ann [
 
 	searchUpdatedAction ifNil: [ ^ self ].
+
 	ann candidateLinks 
 		do: [ :each | searchUpdatedAction value: each ]
 ]
@@ -98,6 +107,16 @@ StSpotterModel >> defaultProcessors [
 	^ (StSpotterProcessor allEnabledSubclasses 
 		collect: [ :each | each new ])
 		sort: #order ascending
+]
+
+{ #category : #'private - queries' }
+StSpotterModel >> doProcessSearch: aString on: spotter [
+
+	pendingQuery := StSpotterQuery 
+		newSearch: aString 
+		on: spotter.
+	
+	self pushQuery: pendingQuery
 ]
 
 { #category : #initialization }
@@ -166,15 +185,14 @@ StSpotterModel >> popStep [
 	self activeStep activate
 ]
 
-{ #category : #'accessing - query' }
+{ #category : #'private - queries' }
 StSpotterModel >> processSearch: aString on: spotter [
-	| query |
 
-	query := StSpotterQuery 
-		newSearch: aString 
-		on: spotter.
-	self pushQuery: query
+	queryRequestTime := Time now.
 	
+	[ self class delayBeforeQuery wait. 
+		((self class delayBeforeQuery + queryRequestTime) <= Time now)
+			ifTrue: [ self doProcessSearch: aString on: spotter ] ] fork.	
 ]
 
 { #category : #'accessing - query' }
@@ -185,7 +203,7 @@ StSpotterModel >> pushQuery: aQuery [
 			self activeStep pushQuery: aQuery ] ]
 ]
 
-{ #category : #accessing }
+{ #category : #'private - queries' }
 StSpotterModel >> pushStepForProcessor: aProcessor [
 	| step allCandidates processorLink |
 
@@ -231,7 +249,8 @@ StSpotterModel >> stSpotterProcessorsFor: aStep [
 { #category : #'accessing - query' }
 StSpotterModel >> startProcessingOn: spotter [
 
-	self processSearch: '' on: spotter
+	self doProcessSearch: '' on: spotter. 
+
 ]
 
 { #category : #private }

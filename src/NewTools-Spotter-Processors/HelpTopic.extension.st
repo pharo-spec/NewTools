@@ -1,14 +1,6 @@
 Extension { #name : #HelpTopic }
 
 { #category : #'*NewTools-Spotter-Processors' }
-HelpTopic >> gtAllSubtopics [
-
-	 ^ self subtopics flatCollect: [:aTopic |
-		aTopic asOrderedCollection, aTopic gtAllSubtopics ]
-		 
-]
-
-{ #category : #'*NewTools-Spotter-Processors' }
 HelpTopic >> stActDefault [
 	HelpBrowser openOn: self
 ]

@@ -42,13 +42,6 @@ StSpotterProcessorLink >> displayStringOn: stream [
 		nextPutAll: self processor title asString
 ]
 
-{ #category : #printing }
-StSpotterProcessorLink >> gtDisplayOn: stream [
-	stream 
-		nextPutAll: 'Processor link: ';
-		nextPutAll: self processor title asString
-]
-
 { #category : #accessing }
 StSpotterProcessorLink >> headLink [
 	^ headLink
