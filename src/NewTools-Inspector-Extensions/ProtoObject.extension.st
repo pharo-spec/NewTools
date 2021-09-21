@@ -27,6 +27,12 @@ ProtoObject >> inspectionRaw [
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
+ProtoObject >> inspectorIcon [
+
+	^ nil
+]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
 ProtoObject >> inspectorNodes [ 
 	"Answer a list of attributes as nodes"
 
