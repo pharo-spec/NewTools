@@ -64,7 +64,7 @@ StHaltCache class >> refresh [
 	self defaultCache refreshCache
 ]
 
-{ #category : #'accessing - cache' }
+{ #category : #'class initialization' }
 StHaltCache class >> reset [
 	<script>
 	DefaultCache
