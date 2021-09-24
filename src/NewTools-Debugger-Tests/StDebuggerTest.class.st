@@ -58,11 +58,6 @@ StDebuggerTest >> inspectorTableFor: inspector [
 StDebuggerTest >> replaceMethodWithQuickMethodStepping [
 
 	"True is a good default value. We step into always by default"
-	self replaceMethodWithQuickMethodSteppingIf: true
-]
-
-{ #category : #'tests - accepting faulty code' }
-StDebuggerTest >> replaceMethodWithQuickMethodSteppingIf: shouldStepIntoQuickMethods [
 
 	| context newSource callerContext |
 	dbg := StTestDebuggerProvider new debuggerWithObjectHalting.
@@ -70,23 +65,19 @@ StDebuggerTest >> replaceMethodWithQuickMethodSteppingIf: shouldStepIntoQuickMet
 		application: dbg class currentApplication;
 		initialize;
 		buildContextMenus.
-	context := dbg stackTable items first.
 
 	"Track the size of the stack before compiling the new method for later checking"
-	stackSizeBefore := context stack size.
-
+	context := dbg stackTable items first. 
+	
 	"We tell the parent that we did not want to step into"
+	stackSizeBefore := context stack size.
 	callerContext := context sender.
-	callerContext stepIntoQuickMethod: shouldStepIntoQuickMethods.
 
-	"Return 1 is a quick method"
 	newSource := 'haltingMethod ^ 1'.
 	dbg code type: newSource.
 	dbg code update.
-
 	dbg acceptCodeChanges: newSource forContext: context.
-	dbg updateStep.
-	^ callerContext
+	dbg updateStep
 ]
 
 { #category : #running }
@@ -626,18 +617,9 @@ StDebuggerTest >> testSavingQuickMethodWhenSteppingIntoStackSizeBeforeIsTheSameA
 StDebuggerTest >> testSavingQuickMethodWhenSteppingIntoStaysInQuickMethod [
 	
 	"We tell the parent that we wanted to step into"
-	self replaceMethodWithQuickMethodSteppingIf: true.
+	self replaceMethodWithQuickMethodStepping.
 	
 	self assert: dbg stackTable items first sourceCode equals: 'haltingMethod ^ 1'
-]
-
-{ #category : #'tests - accepting faulty code' }
-StDebuggerTest >> testSavingQuickMethodsWithoutStepIntoShouldStepBackToCaller [
-
-	| callerContext |
-	"We tell the parent that we did not want to step into"
-	callerContext := self replaceMethodWithQuickMethodSteppingIf: false.
-	self assert: dbg stackTable items first equals: callerContext
 ]
 
 { #category : #'tests - stack table' }
