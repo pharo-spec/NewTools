@@ -5,7 +5,7 @@ Pragma >> inspectionSourceCodeMethod [
 	<inspectorPresentationOrder: 30 title: 'Method'>
 
 	^ SpCodePresenter new 
-		beForBehavior: self methodClass;
+		beForMethod: self method;
 		text: self method sourceCode;
 		yourself
 ]
