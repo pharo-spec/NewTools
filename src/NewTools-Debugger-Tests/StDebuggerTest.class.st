@@ -4,7 +4,9 @@ Class {
 	#instVars : [
 		'session',
 		'debugger',
-		'oldFastTDD'
+		'oldFastTDD',
+		'dbg',
+		'stackSizeBefore'
 	],
 	#category : #'NewTools-Debugger-Tests-Presenters'
 }
@@ -50,6 +52,41 @@ StDebuggerTest >> inspectorTableFor: inspector [
 	|contextInspector|
 	contextInspector := (inspector class slotNamed: #contextInspector) read: inspector.
 	^(contextInspector class slotNamed: #attributeTable) read: contextInspector
+]
+
+{ #category : #'tests - accepting faulty code' }
+StDebuggerTest >> replaceMethodWithQuickMethodStepping [
+
+	"True is a good default value. We step into always by default"
+	self replaceMethodWithQuickMethodSteppingIf: true
+]
+
+{ #category : #'tests - accepting faulty code' }
+StDebuggerTest >> replaceMethodWithQuickMethodSteppingIf: shouldStepIntoQuickMethods [
+
+	| context newSource callerContext |
+	dbg := StTestDebuggerProvider new debuggerWithObjectHalting.
+	dbg
+		application: dbg class currentApplication;
+		initialize;
+		buildContextMenus.
+	context := dbg stackTable items first.
+
+	"Track the size of the stack before compiling the new method for later checking"
+	stackSizeBefore := context stack size.
+
+	"We tell the parent that we did not want to step into"
+	callerContext := context sender.
+	callerContext stepIntoQuickMethod: shouldStepIntoQuickMethods.
+
+	"Return 1 is a quick method"
+	newSource := 'haltingMethod ^ 1'.
+	dbg code type: newSource.
+	dbg code update.
+
+	dbg acceptCodeChanges: newSource forContext: context.
+	dbg updateStep.
+	^ callerContext
 ]
 
 { #category : #running }
@@ -577,6 +614,32 @@ StDebuggerTest >> testSaveReceiverRawInspectionSelectionAfterContextChange [
 	self flag: #DBG_TEST
 ]
 
+{ #category : #'tests - accepting faulty code' }
+StDebuggerTest >> testSavingQuickMethodWhenSteppingIntoStackSizeBeforeIsTheSameAfter [
+
+	self replaceMethodWithQuickMethodStepping.
+
+	self assert: dbg session stack size equals: stackSizeBefore
+]
+
+{ #category : #'tests - accepting faulty code' }
+StDebuggerTest >> testSavingQuickMethodWhenSteppingIntoStaysInQuickMethod [
+	
+	"We tell the parent that we wanted to step into"
+	self replaceMethodWithQuickMethodSteppingIf: true.
+	
+	self assert: dbg stackTable items first sourceCode equals: 'haltingMethod ^ 1'
+]
+
+{ #category : #'tests - accepting faulty code' }
+StDebuggerTest >> testSavingQuickMethodsWithoutStepIntoShouldStepBackToCaller [
+
+	| callerContext |
+	"We tell the parent that we did not want to step into"
+	callerContext := self replaceMethodWithQuickMethodSteppingIf: false.
+	self assert: dbg stackTable items first equals: callerContext
+]
+
 { #category : #'tests - stack table' }
 StDebuggerTest >> testSelectLastStackElementWithMoreElements [
 	| dbg stackTable selectedItem |
@@ -796,6 +859,7 @@ StDebuggerTest >> testUnsavedCodeChangesFor [
 
 { #category : #'tests - receiver inspector' }
 StDebuggerTest >> testUpdateLayoutForContextsIfAssertionFailure [
+
 	| assertionFailure currentLayout expectedLayout |
 	debugger := StTestDebuggerProvider new
 		            debuggerWithFailingAssertionContext.
@@ -815,9 +879,11 @@ StDebuggerTest >> testUpdateLayoutForContextsIfAssertionFailure [
 		assertCollection: currentLayout children first direction
 		equals: expectedLayout children first direction.
 	self
-		assertCollection: currentLayout children second 
+		assertCollection: currentLayout children second
 		equals: expectedLayout children second.
-	self assert: currentLayout position equals: expectedLayout position.
+	self
+		assert: currentLayout positionOfSlider
+		equals: expectedLayout positionOfSlider.
 	self
 		assert: currentLayout children size
 		equals: expectedLayout children size.
