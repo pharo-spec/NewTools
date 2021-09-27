@@ -26,7 +26,8 @@ Class {
 	#instVars : [
 		'rgMethod',
 		'sourcePresenter',
-		'isShowingDiff'
+		'isShowingDiff',
+		'sourceLayout'
 	],
 	#category : #'NewTools-MethodBrowsers-Versions'
 }
@@ -52,13 +53,7 @@ VersionBrowser class >> browseVersionsForMethod: aRingMethod [
 { #category : #specs }
 VersionBrowser class >> defaultSpec [
 	
-	^ SpPanedLayout newTopToBottom
-		add: #messageList;
-		add: (SpBoxLayout newTopToBottom
-			add: #toolbarPresenter expand: false;
-			add: #sourcePresenter;
-			yourself);
-		yourself
+	^ nil
 ]
 
 { #category : #'tools registry' }
@@ -160,12 +155,17 @@ VersionBrowser >> initialize [
 { #category : #initialization }
 VersionBrowser >> initializePresenters [
 
-	messageList := self instantiate: MessageList on: rgMethod.
-	toolbarPresenter := self instantiate: SpMethodToolbarPresenter on: rgMethod.
+	self layout: (SpPanedLayout newTopToBottom
+		add: (messageList := self instantiate: MessageList on: rgMethod);
+		add: ((sourceLayout := SpBoxLayout newTopToBottom)
+			add: (toolbarPresenter := self instantiate: SpMethodToolbarPresenter on: rgMethod) 
+				expand: false;
+			yourself);
+		yourself).
 
 	messageList
 		topologicSort: false;
-		sortingBlock: [ :a :b | (a annotationNamed: #versionIndex ifAbsent: [ 0 ]) < (b annotationNamed: #versionIndex ifAbsent: [ 0 ]) ];
+		sortingBlock: [ :a | a annotationNamed: #versionIndex ifAbsent: [ 0 ] ] ascending;
 		contextMenu: self messageListMenu.
 
 	toolbarPresenter
@@ -178,9 +178,9 @@ VersionBrowser >> initializePresenters [
 		addItemLabeled: 'Diff' do: [ 
 			self showSourceWithConverter: (DiffChangeRecordConverter 
 				methodReference: self textConverter method
-				 referencesList: self changeList) ].
+				referencesList: self changeList) ].
 		
-	toolbarPresenter  versionModel
+	toolbarPresenter versionModel
 		label: 'Revert';
 		action: [ self revert: self selectedMessage ]
 ]
@@ -245,6 +245,25 @@ VersionBrowser >> method [
 ]
 
 { #category : #'instance creation' }
+VersionBrowser >> newSourceDiff [
+
+	^ self newDiff
+]
+
+{ #category : #private }
+VersionBrowser >> replaceSourceWith: aPresenter [
+	
+	sourceLayout children size = 1 
+		ifTrue: [ 
+			sourceLayout add: aPresenter ]
+		ifFalse: [ 
+			sourceLayout replace: sourcePresenter with: aPresenter ].
+		
+	sourcePresenter := aPresenter.
+	messageList selectIndex: messageList selectedIndex
+]
+
+{ #category : #'instance creation' }
 VersionBrowser >> revert: aChangeRecord [
 
 	aChangeRecord ifNil: [ 
@@ -303,27 +322,28 @@ VersionBrowser >> setSourceContentWith: content [
 			sourcePresenter text: content ]
 ]
 
-{ #category : #'instance creation' }
+{ #category : #private }
 VersionBrowser >> showDiffMorphWithConverter: aConverter [
+	| newSource | 
 
-	sourcePresenter := self newDiff.
 	isShowingDiff := true.
-	self needRebuild: false.
-	self buildWithSpec.
-	self textConverter: aConverter.
-	sourcePresenter contextClass: self selectedMessage methodClass.
-	messageList selectIndex: (messageList selectedIndex)
+
+	newSource := self newDiff.
+	newSource contextClass: self selectedMessage methodClass.
+	self replaceSourceWith: newSource
 ]
 
-{ #category : #'instance creation' }
+{ #category : #private }
 VersionBrowser >> showSourceWithConverter: aConverter [
+	| newSource |
 
-	sourcePresenter := self newCode.
 	isShowingDiff := false.
-	self needRebuild: false.
-	self buildWithSpec.
+	
+	newSource := self newCode.
+	newSource whenSubmitDo: [ :text | (self accept: text notifying: nil) notNil ].
+	newSource beForMethod: self selectedMessage.
 	self textConverter: aConverter.
-	sourcePresenter whenSubmitDo: [ :text | (self accept: text notifying: nil) notNil ].
-	sourcePresenter beForMethod: self selectedMessage.
-	messageList selectIndex: (messageList selectedIndex)
+
+	self replaceSourceWith: newSource
+
 ]
