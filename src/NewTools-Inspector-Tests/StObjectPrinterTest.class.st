@@ -14,10 +14,13 @@ StObjectPrinterTest >> assertIsError: aCollection expectedMessage: aMessage [
 { #category : #tests }
 StObjectPrinterTest >> testPrintDoesNotUnderstand [
 
-	| printedValue |
-	printedValue := StObjectPrinter asTruncatedTextFrom: StObjectWithPrintDoesNotUnderstand new.
+	| printedValue selector error |
+	selector := #iShouldNotUnderstandThis.
 	
-	self assertIsError: printedValue expectedMessage: 'StObjectWithPrintDoesNotUnderstand>> #iShouldNotUnderstandThis'
+	error := MessageNotUnderstood new message: ((Message selector: selector) lookupClass: StObjectWithPrintDoesNotUnderstand).
+	printedValue := StObjectPrinter asTruncatedTextFrom: (StObjectWithPrintDoesNotUnderstand withMissingMessageSelector: selector).
+	
+	self assertIsError: printedValue expectedMessage: error messageText
 ]
 
 { #category : #tests }
