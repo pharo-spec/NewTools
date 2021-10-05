@@ -295,7 +295,7 @@ StDebugger class >> stackLayout [
 		yourself
 ]
 
-{ #category : #deprecated }
+{ #category : #accessing }
 StDebugger class >> taskbarIconName [
 
 	^#smallDebugIcon
