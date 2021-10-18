@@ -52,7 +52,7 @@ StHaltAndBreakpointControlTest >> tearDown [
 	super tearDown
 ]
 
-{ #category : #accessors }
+{ #category : #accessing }
 StHaltAndBreakpointControlTest >> testClass [
 	^ StDummyTestClassWithHalts
 ]

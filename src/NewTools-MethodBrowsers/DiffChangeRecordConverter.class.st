@@ -24,3 +24,9 @@ DiffChangeRecordConverter >> priorVersionOfAMethod: aChangeRecord [
 	index := mylist indexOf: aChangeRecord .
 	^ mylist at: index+1 ifAbsent: [ aChangeRecord ]
 ]
+
+{ #category : #updating }
+DiffChangeRecordConverter >> updateContent: content on: aVersionBrowser [ 
+	
+	aVersionBrowser updateDiff: content
+]

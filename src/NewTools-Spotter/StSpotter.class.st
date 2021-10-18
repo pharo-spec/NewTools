@@ -174,7 +174,7 @@ StSpotter class >> registerToolsOn: registry [
 	registry register: self as: #spotter
 ]
 
-{ #category : #private }
+{ #category : #'class initialization' }
 StSpotter class >> reset [
 	
 	spotter ifNotNil: [ 

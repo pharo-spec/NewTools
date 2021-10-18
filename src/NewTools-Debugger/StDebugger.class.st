@@ -295,7 +295,7 @@ StDebugger class >> stackLayout [
 		yourself
 ]
 
-{ #category : #deprecated }
+{ #category : #accessing }
 StDebugger class >> taskbarIconName [
 
 	^#smallDebugIcon
@@ -1187,17 +1187,13 @@ StDebugger >> updateCodeTextSegmentDecoratorsIn: aContext forInterval: selection
 				yourself)."
 				
 	"This decorates the next executing node"
-	self code
-		addTextSegmentDecoration:
-			(SpTextPresenterDecorator new
-				highlightColor: (Color orange alpha: 0.5);
-				underlineColor: (Color white alpha: 0);
-				interval: (selectionInterval first to: selectionInterval last + 1);
-				yourself)
+	self code addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
+		interval: (selectionInterval first to: selectionInterval last + 1);
+		yourself)
 				
-			"	icon: (self iconNamed: #warning);
-				iconBlock: [ :n | n inspect ];
-				title: 'Click me!';"
+	"	icon: (self iconNamed: #warning);
+		iconBlock: [ :n | n inspect ];
+		title: 'Click me!';"
 ]
 
 { #category : #'updating - actions' }

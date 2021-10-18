@@ -129,7 +129,7 @@ StDebuggerTest >> testClearUnsavedChanges [
 StDebuggerTest >> testClose [
 	|windowPresenter|
 	windowPresenter := SpWindowPresenter new.
-	windowPresenter windowIsOpening.
+	windowPresenter windowIsOpened.
 	debugger := (self debuggerOn: session).	
 	windowPresenter presenter: debugger.	
 	debugger initializeWindow: windowPresenter.
