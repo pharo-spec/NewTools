@@ -12,3 +12,9 @@ StPlaygroundCommand class >> isAbstract [
 
 	^ self == StPlaygroundCommand
 ]
+
+{ #category : #accessing }
+StPlaygroundCommand class >> order [
+
+	^ 100
+]

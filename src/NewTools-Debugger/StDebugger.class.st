@@ -176,12 +176,11 @@ StDebugger class >> debuggerWithExtensionsSpec [
 
 	^ SpPanedLayout newTopToBottom
 		positionOfSlider: 65 percent;
-		add:
-			(SpPanedLayout newLeftToRight
-				positionOfSlider: 65 percent;
-				add: self stackAndCodeLayout;
-				add: #extensionToolsNotebook;
-				yourself);
+		add: (SpPanedLayout newLeftToRight
+			positionOfSlider: 65 percent;
+			add: self stackAndCodeLayout;
+			add: #extensionToolsNotebook;
+			yourself);
 		add: #inspector;
 		yourself
 ]

@@ -20,6 +20,18 @@ Class {
 	#category : #'NewTools-Playground-View'
 }
 
+{ #category : #'private commands' }
+StPlaygroundPagePresenter class >> baseToolbarCommands [
+
+	^ { 
+		StPlaygroundDoItCommand.
+		StPlaygroundPublishCommand.
+		StPlaygroundBindingsCommand.				
+		StPlaygroundVersionsCommand.
+		StPlaygroundPagesCommand.
+	}
+]
+
 { #category : #accessing }
 StPlaygroundPagePresenter class >> cacheDirectory [
 	
@@ -56,6 +68,12 @@ StPlaygroundPagePresenter class >> defaultTitle [
 	^ 'Playground'
 ]
 
+{ #category : #'private commands' }
+StPlaygroundPagePresenter class >> extendedToolbarCommands [
+
+	^ StPlaygroundExtensionCommand allSubclasses
+]
+
 { #category : #'instance creation' }
 StPlaygroundPagePresenter class >> open [ 
 	<script>
@@ -80,6 +98,12 @@ StPlaygroundPagePresenter class >> registerToolsOn: registry [
 
 ]
 
+{ #category : #'private commands' }
+StPlaygroundPagePresenter class >> toolbarCommands [
+
+	^ (self baseToolbarCommands, self extendedToolbarCommands) sorted: #order ascending
+]
+
 { #category : #api }
 StPlaygroundPagePresenter >> activateOnDoubleClick [
 	"For compatibility, playground will not activate on single or double click (but in <meta+g>)"
@@ -88,6 +112,13 @@ StPlaygroundPagePresenter >> activateOnDoubleClick [
 { #category : #api }
 StPlaygroundPagePresenter >> activateOnSingleClick [
 	"For compatibility, playground will not activate on single or double click (but in <meta+g>)"
+]
+
+{ #category : #private }
+StPlaygroundPagePresenter >> addToolbarCommandsTo: aGroup [
+
+	self class toolbarCommands do: [ :each | 
+		aGroup register: (each forSpecContext: self) ]
 ]
 
 { #category : #private }
@@ -232,9 +263,7 @@ StPlaygroundPagePresenter >> menuActionsFor: aCodePresenter [
 		register: ((CmCommandGroup named: 'Playground') asSpecGroup
 			register: ((CmCommandGroup named: 'Base options') asSpecGroup
 				beDisplayedAsGroup;
-				register: (StPlaygroundPublishCommand forSpecContext: self);
-				register: (StPlaygroundBindingsCommand forSpecContext: self);
-				register: (StPlaygroundPagesCommand forSpecContext: self);
+				in: [ :this | self addToolbarCommandsTo: this ];
 				yourself);
 			register: ((CmCommandGroup named: 'Miscelaneous options') asSpecGroup
 				beDisplayedAsGroup;
@@ -318,15 +347,11 @@ StPlaygroundPagePresenter >> toggleShowLineNumbers [
 	self showLineNumbers: self showLineNumbers not
 ]
 
-{ #category : #'private - builder' }
+{ #category : #private }
 StPlaygroundPagePresenter >> toolbarActions [
 
 	^ CmCommandGroup forSpec
-		register: (StPlaygroundDoItCommand forSpecContext: self);
-		register: (StPlaygroundPublishCommand forSpecContext: self);
-		register: (StPlaygroundBindingsCommand forSpecContext: self);
-		register: (StPlaygroundVersionsCommand forSpecContext: self);
-		register: (StPlaygroundPagesCommand forSpecContext: self);
+		in: [ :this | self addToolbarCommandsTo: this ];
 		yourself
 ]
 
