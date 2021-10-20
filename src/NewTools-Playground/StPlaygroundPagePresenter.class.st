@@ -69,9 +69,15 @@ StPlaygroundPagePresenter class >> defaultTitle [
 ]
 
 { #category : #'private commands' }
+StPlaygroundPagePresenter class >> extendedMenuCommands [
+
+	^ StPlaygroundMenuExtensionCommand allCommands
+]
+
+{ #category : #'private commands' }
 StPlaygroundPagePresenter class >> extendedToolbarCommands [
 
-	^ StPlaygroundExtensionCommand allSubclasses
+	^ StPlaygroundToolbarExtensionCommand allCommands
 ]
 
 { #category : #'instance creation' }
@@ -112,6 +118,13 @@ StPlaygroundPagePresenter >> activateOnDoubleClick [
 { #category : #api }
 StPlaygroundPagePresenter >> activateOnSingleClick [
 	"For compatibility, playground will not activate on single or double click (but in <meta+g>)"
+]
+
+{ #category : #private }
+StPlaygroundPagePresenter >> addMenuCommandsTo: aGroup [
+
+	self class extendedMenuCommands 
+		do: [ :each | aGroup register: (each forSpecContext: self) ]	
 ]
 
 { #category : #private }
@@ -260,6 +273,7 @@ StPlaygroundPagePresenter >> menuActionsFor: aCodePresenter [
 			yourself);
 		register: (aCodePresenter rootCommandsGroup name: 'Code');
 		register: (aCodePresenter editionCommandsGroup name: 'Edition');
+		in: [ :this | self addMenuCommandsTo: this ];
 		register: ((CmCommandGroup named: 'Playground') asSpecGroup
 			register: ((CmCommandGroup named: 'Base options') asSpecGroup
 				beDisplayedAsGroup;
