@@ -67,8 +67,9 @@ StDebuggerTest >> tearDown [
 	self debuggerClass fastTDD: oldFastTDD.
 	debugger ifNotNil: [ 
 		debugger unsubscribeFromSystemAnnouncer.
+		debugger session ifNotNil: [ :s | s clear ].
 		debugger close.
-		debugger session ifNotNil: [ :s | s clear ] ].
+		].
 	StTestDebuggerProvider removeSelector: #foobar. 
 	StDebuggerObjectForTests compile: 'haltingMethod <haltOrBreakpointForTesting> self halt. ^self' classified: 'util'.
 	super tearDown
@@ -283,6 +284,35 @@ StDebuggerTest >> testCopyStackToClipboard [
 		assert: Clipboard clipboardText string
 		equals: (String streamContents: [ :s | 
 				 session interruptedContext shortDebugStackOn: s ])
+]
+
+{ #category : #'tests - actions' }
+StDebuggerTest >> testCreateMissingMethod [ 
+	debugger := StTestDebuggerProvider new debuggerWithDNUContext.
+	debugger application: self debuggerClass currentApplication.
+	debugger initialize.
+	
+	self assert: (StTestDebuggerProvider lookupSelector: #foobar) isNil.
+	
+	debugger createMissingMethod.
+	self assert: debugger selectedContext method equals: (StTestDebuggerProvider>>#foobar).
+	
+	self flag: 'The next test somehow does no pass, see https://github.com/pharo-spec/NewTools/issues/306'
+	"self assert: debugger code hasKeyboardFocus"
+]
+
+{ #category : #'tests - actions' }
+StDebuggerTest >> testCreateMissingMethodForMessageInClass [
+	debugger := StTestDebuggerProvider new debuggerWithDNUContext.
+	debugger application: self debuggerClass currentApplication.
+	debugger initialize.
+	
+	self assert: (StTestDebuggerProvider lookupSelector: #foobar) isNil.
+	
+	debugger createMissingMethodFor: debugger session exception message in: StTestDebuggerProvider.
+	self assert: debugger selectedContext method equals: (StTestDebuggerProvider>>#foobar).
+	self assert: debugger stackTable selection selectedIndex equals: 1
+	
 ]
 
 { #category : #'tests - initialization' }
