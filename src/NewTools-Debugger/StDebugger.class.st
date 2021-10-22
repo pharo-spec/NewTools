@@ -491,7 +491,7 @@ StDebugger >> createMissingMethod [
 
 { #category : #actions }
 StDebugger >> createMissingMethodFor: aMessage in: aClass [
-	self flag: #DBG_MISSINGTEST.
+
 	self debuggerActionModel
 		implement: aMessage
 		classified: Protocol unclassified
