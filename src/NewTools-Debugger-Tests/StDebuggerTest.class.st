@@ -175,7 +175,7 @@ StDebuggerTest >> testCodeSelectionAfterRestart [
 	
 	pcRangeForContext := (session pcRangeForContext: dbg currentContext).
 	segments := dbg code adapter widget segments.
-	self assert: segments size equals: 1.
+	self assert: segments size equals: 2.
 	highlightSegment := segments first.	
 	
 	self
@@ -199,7 +199,7 @@ StDebuggerTest >> testCodeSelectionAfterStepping [
 	
 	pcRangeForContext := (session pcRangeForContext: dbg currentContext).
 	segments := dbg code adapter widget segments.
-	self assert: segments size equals: 1.
+	self assert: segments size equals: 2.
 	highlightSegment := segments first.	
 	
 	self
@@ -376,13 +376,47 @@ StDebuggerTest >> testInitialCodeSelectionAfterStepping [
 	
 	pcRangeForContext := (session pcRangeForContext: dbg currentContext).
 	segments := dbg code adapter widget segments.
-	self assert: segments size equals: 1.
+	self assert: segments size equals: 2.
 	highlightSegment := segments first.	
 	
 	self
 		assert:  (highlightSegment firstIndex to: highlightSegment lastIndex)
 		equals: (pcRangeForContext first to: pcRangeForContext last + 1)
 	"The pc range is highlighted with an additionnal index to encompass the full text of the node (why?)"
+]
+
+{ #category : #'tests - code pane' }
+StDebuggerTest >> testMethodProtocolIcon [
+
+	| adapter method segments protocolSegment |
+	debugger := StTestDebuggerProvider new debuggerWithDNUContext.
+	debugger application: self debuggerClass currentApplication.
+	debugger initialize.	
+	
+	adapter := SpMorphicCodeAdapter new.
+	adapter adapt: debugger code.	
+	debugger code adapter: adapter.
+	debugger code adapter buildWidget.
+	
+	debugger createMissingMethod.
+	debugger protocolRequestor: StMockProtocolRequestor.
+	
+	
+	method := StTestDebuggerProvider>>#foobar.
+	
+	self assert: method protocol equals: 'accessing'.
+
+	segments := debugger code adapter widget segments.
+	self assert: segments size equals: 2.
+	protocolSegment := segments second.	
+	
+	self
+		assert:  (protocolSegment firstIndex to: protocolSegment lastIndex)
+		equals: (0 to: 1).
+	
+	self assert: protocolSegment label equals: ('Protocol: ', debugger session interruptedContext method method protocol).
+	protocolSegment iconBlock value: debugger.
+	self assert: method protocol equals: StMockProtocolRequestor stDebuggerTestProtocol
 ]
 
 { #category : #'tests - context inspector' }
