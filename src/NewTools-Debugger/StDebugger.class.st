@@ -1184,25 +1184,25 @@ StDebugger >> updateCodeFromContext: aContext [
 
 { #category : #'updating - widgets' }
 StDebugger >> updateCodeTextSegmentDecoratorsIn: aContext forInterval: selectionInterval [
-	
+
+	| methodProtocol |
 	self code removeAllTextSegmentDecorations.
-	
-	"This decorates the receiver and the next node with an underline"
-	"self code
-		addTextSegmentDecoration:
-			(SpTextPresenterDecorator new
-				underlineColor: Color orange;
-				interval: (aContext currentNode start to: aContext currentNode stop + 1);
-				yourself)."
-				
+
 	"This decorates the next executing node"
-	self code addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
-		interval: (selectionInterval first to: selectionInterval last + 1);
-		yourself)
-				
-	"	icon: (self iconNamed: #warning);
-		iconBlock: [ :n | n inspect ];
-		title: 'Click me!';"
+	self code addTextSegmentDecoration: (SpTextPresenterDecorator new
+			 highlightColor: (Color orange alpha: 0.5);
+			 underlineColor: (Color white alpha: 0);
+			 interval: (selectionInterval first to: selectionInterval last + 1);
+			 yourself).
+
+	methodProtocol := aContext method method protocol.
+	methodProtocol ifNil: [ ^ self ].
+	self code addTextSegmentDecoration: (SpTextPresenterDecorator new
+			 interval: (0 to: 1);
+			 icon: (self iconNamed: #edit);
+			 iconBlock: [ :n | self reclassifyMethod: aContext method method ];
+			 title: 'Protocol: ' , methodProtocol;
+			 yourself)
 ]
 
 { #category : #'updating - actions' }
