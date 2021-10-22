@@ -468,6 +468,22 @@ StDebuggerTest >> testReceiverUnchangedAfterStepOver [
 
 ]
 
+{ #category : #'tests - actions' }
+StDebuggerTest >> testReclassifyMethod [
+	|method|
+	debugger := self debuggerOn: session.
+	debugger protocolRequestor: StMockProtocolRequestor.
+	debugger application: debugger class currentApplication.
+	debugger initialize.
+	
+	StTestDebuggerProvider compile: 'foobar ^self'.
+	method := (StTestDebuggerProvider>>#foobar).	
+	self assert: method protocol equals: Protocol unclassified.
+	
+	debugger reclassifyMethod: method.
+	self assert: method protocol equals: StMockProtocolRequestor stDebuggerTestProtocol
+]
+
 { #category : #'tests - code pane' }
 StDebuggerTest >> testRecordUnsavedCodeChanges [
 	| dbg lastContext |
@@ -495,10 +511,12 @@ StDebuggerTest >> testRequestClassFrom [
 
 { #category : #'tests - actions' }
 StDebuggerTest >> testRequestProtocolIn [
+	debugger := self debugger.
+	debugger protocolRequestor: StMockProtocolRequestor.
 
 	self
-		assert: (self debugger requestProtocolIn: self class)
-		equals: Protocol unclassified
+		assert: (debugger requestProtocolFor: (StTestDebuggerProvider >> #session))
+		equals: StMockProtocolRequestor stDebuggerTestProtocol 
 ]
 
 { #category : #'tests - session' }

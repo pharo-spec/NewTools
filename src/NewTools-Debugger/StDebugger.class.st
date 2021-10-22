@@ -87,7 +87,8 @@ Class {
 		'toolbarCommandGroup',
 		'debuggerActionModel',
 		'unsavedCodeChanges',
-		'programmaticallyClosed'
+		'programmaticallyClosed',
+		'protocolRequestor'
 	],
 	#classVars : [
 		'ActivateDebuggerExtensions',
@@ -873,6 +874,32 @@ StDebugger >> proceedDebugSession [
 	self close
 ]
 
+{ #category : #accessing }
+StDebugger >> protocolRequestor [
+
+	^ protocolRequestor ifNil:[protocolRequestor := StDebuggerProtocolRequestor ]
+]
+
+{ #category : #accessing }
+StDebugger >> protocolRequestor: anObject [
+
+	protocolRequestor := anObject
+]
+
+{ #category : #actions }
+StDebugger >> reclassifyMethod: aCompiledMethod [
+
+	| newProtocol |
+	newProtocol := [ self requestProtocolFor: aCompiledMethod ]
+		               on: Abort
+		               do: [ ^ self ].
+	aCompiledMethod methodClass
+		addAndClassifySelector: aCompiledMethod selector
+		withMethod: aCompiledMethod
+		inProtocol: newProtocol.
+	self updateCodeFromContext
+]
+
 { #category : #actions }
 StDebugger >> recompileMethodTo: aString inContext: aContext notifying: aNotifyer [
 
@@ -939,26 +966,9 @@ StDebugger >> requestClassFrom: aClass [
 ]
 
 { #category : #'ui requests' }
-StDebugger >> requestProtocolIn: aClass [
+StDebugger >> requestProtocolFor: aMethod [
 
-	| entryCompletion applicants choice |
-	self class fastTDD ifTrue: [ ^ Protocol unclassified ].
-	applicants := AbstractTool protocolSuggestionsFor: aClass.
-	entryCompletion := EntryCompletion new
-		                   dataSourceBlock: [ :currText | applicants ];
-		                   filterBlock: [ :currApplicant :currText | 
-			                   currText size > 3 and: [ 
-					                   currApplicant asLowercase includesSubstring:
-							                   currText asString asLowercase ] ].
-
-	choice := (UIManager default
-		           request:
-		           'Start typing for suggestions (3 characters minimum)'
-		           initialAnswer: Protocol unclassified
-		           title: 'Choose a protocol'
-		           entryCompletion: entryCompletion) ifNil: [ Abort signal ].
-
-	^ choice ifEmpty: [ Protocol unclassified ]
+		^ self protocolRequestor requestProtocolFor: aMethod
 ]
 
 { #category : #'ui requests' }
