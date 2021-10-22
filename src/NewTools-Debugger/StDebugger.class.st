@@ -478,16 +478,15 @@ StDebugger >> createMissingClass [
 StDebugger >> createMissingMethod [
 
 	| msg chosenClass |
-	self flag: #DBG_MISSINGTEST.
-	msg := self interruptedContext tempAt: 1.
+	msg := self session exception message.
 	[ 
 	chosenClass := self requestClassFrom:
 		               self interruptedContext receiver class.
 	self createMissingMethodFor: msg in: chosenClass ]
 		on: Abort
 		do: [ ^ self ].
-		
-	code takeKeyboardFocus 
+
+	code takeKeyboardFocus
 ]
 
 { #category : #actions }
@@ -495,7 +494,7 @@ StDebugger >> createMissingMethodFor: aMessage in: aClass [
 	self flag: #DBG_MISSINGTEST.
 	self debuggerActionModel
 		implement: aMessage
-		classified: (self requestProtocolIn: aClass)
+		classified: Protocol unclassified
 		inClass: aClass
 		forContext: self interruptedContext.
 	self selectTopContext
