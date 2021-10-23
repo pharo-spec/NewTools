@@ -482,7 +482,7 @@ StDebugger >> createMissingMethod [
 	msg := self session exception message.
 	[ 
 	chosenClass := self requestClassFrom:
-		               self interruptedContext receiver class.
+		                self session exception receiver class.
 	self createMissingMethodFor: msg in: chosenClass ]
 		on: Abort
 		do: [ ^ self ].
