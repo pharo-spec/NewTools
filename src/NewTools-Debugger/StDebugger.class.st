@@ -456,22 +456,18 @@ StDebugger >> copyStackToClipboard [
 { #category : #actions }
 StDebugger >> createMissingClass [
 
-	| message exception variableNode |
-	self flag: #DBG_MISSINGTEST.
-	message := self interruptedContext tempAt: 1.
-	exception := self interruptedContext tempAt: 2.
-	variableNode := exception variableNode.
-	[ | newClassBinding | 
+	| variableNode |
+	variableNode := self session exception variableNode.
+	[ 
+	| newClassBinding |
 	newClassBinding := OCUndeclaredVariableWarning new
-		node: variableNode;
-		defineClass: variableNode name. 
-	self
-		createMissingMethodFor: message
-		in: newClassBinding value ]
+		                   node: variableNode;
+		                   defineClass: variableNode name ]
 		on: Abort
 		do: [ ^ self ].
 
-	self debuggerActionModel restartContext: self interruptedContext
+	self debuggerActionModel restartContext:
+		self interruptedContext sender
 ]
 
 { #category : #actions }
