@@ -4,7 +4,9 @@ Class {
 	#instVars : [
 		'session',
 		'debugger',
-		'oldFastTDD'
+		'oldFastTDD',
+		'dbg',
+		'stackSizeBefore'
 	],
 	#category : #'NewTools-Debugger-Tests-Presenters'
 }
@@ -50,6 +52,32 @@ StDebuggerTest >> inspectorTableFor: inspector [
 	|contextInspector|
 	contextInspector := (inspector class slotNamed: #contextInspector) read: inspector.
 	^(contextInspector class slotNamed: #attributeTable) read: contextInspector
+]
+
+{ #category : #'tests - accepting faulty code' }
+StDebuggerTest >> replaceMethodWithQuickMethodStepping [
+
+	"True is a good default value. We step into always by default"
+
+	| context newSource callerContext |
+	dbg := StTestDebuggerProvider new debuggerWithObjectHalting.
+	dbg
+		application: dbg class currentApplication;
+		initialize;
+		buildContextMenus.
+
+	"Track the size of the stack before compiling the new method for later checking"
+	context := dbg stackTable items first. 
+	
+	"We tell the parent that we did not want to step into"
+	stackSizeBefore := context stack size.
+	callerContext := context sender.
+
+	newSource := 'haltingMethod ^ 1'.
+	dbg code type: newSource.
+	dbg code update.
+	dbg acceptCodeChanges: newSource forContext: context.
+	dbg updateStep
 ]
 
 { #category : #running }
@@ -575,6 +603,23 @@ StDebuggerTest >> testSaveReceiverRawInspectionSelectionAfterContextChange [
 
 	self skip.
 	self flag: #DBG_TEST
+]
+
+{ #category : #'tests - accepting faulty code' }
+StDebuggerTest >> testSavingQuickMethodWhenSteppingIntoStackSizeBeforeIsTheSameAfter [
+
+	self replaceMethodWithQuickMethodStepping.
+
+	self assert: dbg session stack size equals: stackSizeBefore
+]
+
+{ #category : #'tests - accepting faulty code' }
+StDebuggerTest >> testSavingQuickMethodWhenSteppingIntoStaysInQuickMethod [
+	
+	"We tell the parent that we wanted to step into"
+	self replaceMethodWithQuickMethodStepping.
+	
+	self assert: dbg stackTable items first sourceCode equals: 'haltingMethod ^ 1'
 ]
 
 { #category : #'tests - stack table' }
