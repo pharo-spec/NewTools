@@ -60,11 +60,8 @@ StObjectContextPresenter >> evaluatorActions [
 { #category : #private }
 StObjectContextPresenter >> evaluatorInitialText [
 
-	^ '"{1}"
-{2}' 
-	format: { 
-		self model smallDescriptionString.
-		self model codeSnippet }
+	^ self model inspectedObject evaluatorInitialText: self 
+	
 ]
 
 { #category : #testing }

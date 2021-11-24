@@ -25,6 +25,12 @@ StPlaygroundVersionsCommand class >> defaultName [
 	^ 'Versions'
 ]
 
+{ #category : #accessing }
+StPlaygroundVersionsCommand class >> order [
+
+	^ 20
+]
+
 { #category : #execution }
 StPlaygroundVersionsCommand >> execute [ 
 
