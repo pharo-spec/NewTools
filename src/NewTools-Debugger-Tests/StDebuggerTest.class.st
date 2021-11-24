@@ -104,8 +104,8 @@ StDebuggerTest >> tearDown [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testAcceptCodeChangesForContext [
-
-	| dbg context newSource |
+	| context newSource |
+	
 	dbg := StTestDebuggerProvider new debuggerWithObjectHalting.
 	dbg
 		application: dbg class currentApplication;
@@ -124,7 +124,7 @@ StDebuggerTest >> testAcceptCodeChangesForContext [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testCancelCodeChangesFor [
-	| dbg firstContext lastContext |
+	| firstContext lastContext |
 	dbg := self debuggerOn: session.
 	dbg stepInto; stepInto.
 	firstContext := dbg stackTable items first.	
@@ -146,7 +146,6 @@ StDebuggerTest >> testCancelCodeChangesFor [
 { #category : #'tests - code pane' }
 StDebuggerTest >> testClearUnsavedChanges [
 
-	| dbg |
 	dbg := self debuggerOn: session.
 	dbg unsavedCodeChanges at: 4 put: 2.
 	dbg clearUnsavedCodeChanges.
@@ -155,7 +154,8 @@ StDebuggerTest >> testClearUnsavedChanges [
 
 { #category : #'tests - actions' }
 StDebuggerTest >> testClose [
-	|windowPresenter|
+	| windowPresenter |
+	
 	windowPresenter := SpWindowPresenter new.
 	windowPresenter windowIsOpened.
 	debugger := (self debuggerOn: session).	
@@ -170,7 +170,7 @@ StDebuggerTest >> testClose [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testCodeChangeAfterContextChange [
-	| dbg firstContext lastContext |
+	| firstContext lastContext |
 	dbg := self debuggerOn: session.
 	dbg stepInto; stepInto.
 	firstContext := dbg stackTable items first.	
@@ -188,8 +188,8 @@ StDebuggerTest >> testCodeChangeAfterContextChange [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testCodeSelectionAfterRestart [
-
-	| dbg adapter segments highlightSegment pcRangeForContext |
+	| adapter segments highlightSegment pcRangeForContext |
+	
 	dbg := self debuggerOn: session.
 	adapter := SpMorphicCodeAdapter new.
 	adapter adapt: dbg code.	
@@ -213,8 +213,8 @@ StDebuggerTest >> testCodeSelectionAfterRestart [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testCodeSelectionAfterStepping [
-
-	| dbg adapter segments highlightSegment pcRangeForContext |
+	| adapter segments highlightSegment pcRangeForContext |
+	
 	dbg := self debuggerOn: session.
 	adapter := SpMorphicCodeAdapter new.
 	adapter adapt: dbg code.	
@@ -237,7 +237,7 @@ StDebuggerTest >> testCodeSelectionAfterStepping [
 
 { #category : #'tests - context inspector' }
 StDebuggerTest >> testContextChangedAfterStepIn [ 
-	| dbg |
+
 	dbg := self debuggerOn: session.
 	dbg buildContextMenus.	
 	
@@ -251,7 +251,7 @@ StDebuggerTest >> testContextChangedAfterStepIn [
 
 { #category : #'tests - context inspector' }
 StDebuggerTest >> testContextChangedAfterStepOverAndReturn [
-	| dbg currentContext |
+	| currentContext |
 	dbg := self debuggerOn: session.	
 		
 	dbg stepInto; stepInto. "getting into Number>>squared"
@@ -264,7 +264,8 @@ StDebuggerTest >> testContextChangedAfterStepOverAndReturn [
 
 { #category : #'tests - context inspector' }
 StDebuggerTest >> testContextTempVarList [
-	| dbg contextItems inspectorTable|
+	| contextItems inspectorTable |
+	
 	dbg := self debuggerOn: session.
 	inspectorTable := dbg inspector getRawInspectorPresenterOrNil attributeTable.
 	
@@ -293,7 +294,8 @@ StDebuggerTest >> testContextTempVarList [
 
 { #category : #'tests - context inspector' }
 StDebuggerTest >> testContextUnchangedAfterStepOver [
-	| dbg currentContext |
+	| currentContext |
+	
 	dbg := self debuggerOn: session.	
 	
 	dbg stepInto; stepInto. "getting into Number>>squared"
@@ -336,7 +338,8 @@ StDebuggerTest >> testDebuggerApplication [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testDiscardCodeChangesFor [
-	| dbg firstContext lastContext |
+	| firstContext lastContext |
+	
 	dbg := self debuggerOn: session.
 	dbg stepInto; stepInto.
 	firstContext := dbg stackTable items first.	
@@ -363,8 +366,8 @@ StDebuggerTest >> testFastTDD [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testInitialCodeSelectionAfterStepping [
-
-	| dbg adapter segments highlightSegment pcRangeForContext |
+	| adapter segments highlightSegment pcRangeForContext |
+	
 	dbg := self debuggerOn: session.
 	adapter := SpMorphicCodeAdapter new.
 	adapter adapt: dbg code.	
@@ -385,7 +388,8 @@ StDebuggerTest >> testInitialCodeSelectionAfterStepping [
 
 { #category : #'tests - context inspector' }
 StDebuggerTest >> testNewDebuggerContext [
-	|debuggerContext|
+	| debuggerContext |
+	
 	debugger := (self debuggerOn: session).
 	debuggerContext := debugger newDebuggerContext.
 	self assert: debuggerContext class identicalTo: debugger class debuggerContextClass.
@@ -394,7 +398,8 @@ StDebuggerTest >> testNewDebuggerContext [
 
 { #category : #'tests - context inspector' }
 StDebuggerTest >> testNewDebuggerContextFor [
-	|debuggerContext ctx|
+	| debuggerContext ctx |
+	
 	debugger := (self debuggerOn: session).
 	ctx := [  ] asContext.
 	debuggerContext := debugger newDebuggerContextFor: ctx.
