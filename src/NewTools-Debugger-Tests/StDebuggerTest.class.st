@@ -40,10 +40,11 @@ StDebuggerTest >> executionControlCommandFrom: aDebugger [
 
 { #category : #accessing }
 StDebuggerTest >> initializedDebugger [
-	| dbg |
+
 	dbg := self debugger.
 	dbg application: self debuggerClass currentApplication.
 	dbg initialize.
+
 	^ dbg
 ]
 
