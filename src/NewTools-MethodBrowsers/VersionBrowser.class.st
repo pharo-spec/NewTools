@@ -151,16 +151,22 @@ VersionBrowser >> connectPresenters [
 ]
 
 { #category : #initialization }
+VersionBrowser >> defaultLayout [
+	^ SpPanedLayout newTopToBottom
+		add: messageList;
+		add: ((sourceLayout := SpBoxLayout newTopToBottom)
+			add: toolbarPresenter expand: false;
+			yourself);
+		yourself
+]
+
+{ #category : #initialization }
 VersionBrowser >> initializePresenters [
 
-	self layout: (SpPanedLayout newTopToBottom
-		add: (messageList := self instantiate: MessageList on: rgMethod);
-		add: ((sourceLayout := SpBoxLayout newTopToBottom)
-			add: (toolbarPresenter := self instantiate: SpMethodToolbarPresenter on: rgMethod) 
-				expand: false;
-			yourself);
-		yourself).
-
+	messageList := self instantiate: MessageList on: rgMethod.
+	toolbarPresenter := self instantiate: SpMethodToolbarPresenter on: rgMethod.
+	self initializeLayout.
+	 
 	messageList
 		topologicSort: false;
 		sortingBlock: [ :a | a annotationNamed: #versionIndex ifAbsent: [ 0 ] ] ascending;
