@@ -24,34 +24,6 @@ Class {
 }
 
 { #category : #specs }
-StDebuggerInspector class >> assertionFailureSpec [
-	| assertionFailureLayout |
-	
-	assertionFailureLayout := SpPanedLayout newTopToBottom.
-	assertionFailureLayout positionOfSlider: (self maximizeAssertionSpec
-			 ifTrue: [ 95 percent ]
-			 ifFalse: [ 40 percent ]).
-	assertionFailureLayout add: (SpBoxLayout newLeftToRight
-			 add: (SpBoxLayout newTopToBottom
-				add: #lateralToolbar expand: false;
-				yourself)
-			 expand: false;
-			 add: #assertionFailure;
-			 yourself).
-
-	self maximizeAssertionSpec ifFalse: [ 
-		assertionFailureLayout add: #inspector ].
-	^ assertionFailureLayout
-]
-
-{ #category : #specs }
-StDebuggerInspector class >> defaultSpec [
-	^ SpBoxLayout newTopToBottom
-		  add: #inspector;
-		  yourself
-]
-
-{ #category : #specs }
 StDebuggerInspector class >> maximizeAssertionSpec [
 	^maximizeAssertionSpec ifNil:[maximizeAssertionSpec := false]
 ]
@@ -83,6 +55,27 @@ StDebuggerInspector >> assertionFailure [
 ]
 
 { #category : #layout }
+StDebuggerInspector >> assertionFailureLayout [
+	| assertionFailureLayout |
+	
+	assertionFailureLayout := SpPanedLayout newTopToBottom.
+	assertionFailureLayout positionOfSlider: (self class maximizeAssertionSpec
+			 ifTrue: [ 95 percent ]
+			 ifFalse: [ 40 percent ]).
+	assertionFailureLayout add: (SpBoxLayout newLeftToRight
+			 add: (SpBoxLayout newTopToBottom
+				add: #lateralToolbar expand: false;
+				yourself)
+			 expand: false;
+			 add: #assertionFailure;
+			 yourself).
+
+	self class maximizeAssertionSpec ifFalse: [ 
+		assertionFailureLayout add: #inspector ].
+	^ assertionFailureLayout
+]
+
+{ #category : #layout }
 StDebuggerInspector >> assertionLayoutSpec [
 	^#assertionFailureSpec
 ]
@@ -95,6 +88,14 @@ StDebuggerInspector >> currentLayoutSpec [
 { #category : #accessing }
 StDebuggerInspector >> debuggerInspectorModelClass [
 	^ StDebuggerInspectorModel
+]
+
+{ #category : #layout }
+StDebuggerInspector >> defaultLayout [
+
+	^ SpBoxLayout newTopToBottom
+		  add: #inspector;
+		  yourself
 ]
 
 { #category : #layout }
@@ -219,14 +220,14 @@ StDebuggerInspector >> saveRawInspectionSelectionForContext: aContext [
 { #category : #layout }
 StDebuggerInspector >> setAssertionLayout [
 	currentLayoutSpec := self assertionLayoutSpec.
-	self layout: self class assertionFailureSpec
+	self layout: self assertionFailureLayout
 ]
 
 { #category : #layout }
 StDebuggerInspector >> setDefaultLayout [
 	
 	currentLayoutSpec := self defaultLayoutSpec.
-	self layout: self class defaultSpec
+	self layout: self defaultLayout
 ]
 
 { #category : #'accessing - model' }
