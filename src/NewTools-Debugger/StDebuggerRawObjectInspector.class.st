@@ -21,12 +21,12 @@ StDebuggerRawObjectInspector class >> noHeaderSpec [
 ]
 
 { #category : #initialization }
-StDebuggerRawObjectInspector >> initializeLayout [
+StDebuggerRawObjectInspector >> defaultLayout [
 	
-	self layout: (SpBoxLayout newTopToBottom 
+	^ SpBoxLayout newTopToBottom 
 		add: header expand: false fill: false padding: 5;
 		add: raw;
-		yourself).
+		yourself
 
 ]
 

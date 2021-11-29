@@ -134,6 +134,15 @@ StObjectInspectorPresenter >> defaultKeyboardFocus [
 	^ self
 ]
 
+{ #category : #initialization }
+StObjectInspectorPresenter >> defaultLayout [
+	
+	^ SpBoxLayout newTopToBottom 
+		add: header expand: false fill: false padding: 5;
+		add: views;
+		yourself
+]
+
 { #category : #accessing }
 StObjectInspectorPresenter >> evaluator [ 
 	^evaluator
@@ -150,20 +159,10 @@ StObjectInspectorPresenter >> initialize [
 ]
 
 { #category : #initialization }
-StObjectInspectorPresenter >> initializeLayout [
-	
-	self layout: (SpBoxLayout newTopToBottom 
-		add: header expand: false fill: false padding: 5;
-		add: views;
-		yourself)
-]
-
-{ #category : #initialization }
 StObjectInspectorPresenter >> initializePresenters [
 
 	views := self newNotebook.
 	header := self instantiate: StHeaderBar.
-	self initializeLayout.
 
 	self refresh
 ]
