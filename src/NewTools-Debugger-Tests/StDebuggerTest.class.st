@@ -29,13 +29,15 @@ StDebuggerTest >> compileMethodWithUndeclaredChoosing: choice [
 
 	[ dbg acceptCodeChanges: newSource forContext: context ]
 		on: ProvideAnswerNotification
-		do: [ :n | 
+		do: [ :n | | expected |
 			n messageText = 'Edit class definition:' ifTrue: [ 
 				n resume: #default ].
 			n messageText = 'Edit trait definition:' ifTrue: [ 
 				n resume: #default ].
+			expected := 'Unknown variable: NONExistingClassXXX please correct, or cancel:'.
 			self
-				assert: (n messageText includesSubstring: 'Unknown variable: NONExistingClassXXX please correct, or cancel:').
+				assert: (n messageText includesSubstring: expected)
+				description: [self comparingStringBetween: n messageText and: expected].
 			n resume: choice ]
 ]
 
