@@ -183,10 +183,11 @@ StDebuggerTest >> testAcceptCodeChangesWithUndefinedClassDetectsUndefinedClasses
 	"Fail if it the debugger does not detect missing variables"
 	self fail]
 		on: ProvideAnswerNotification
-		do: [ :n |
+		do: [ :n | | expected |
+			expected := 'Unknown variable: NONExistingClassXXX please correct, or cancel:'.
 			self
-				assert: n messageText
-				equals: 'Unknown variable: NONExistingClassXXX please correct, or cancel:' ]
+				assert: (n messageText includesSubstring: expected)
+				description: [self comparingStringBetween: n messageText and: expected]. ]
 ]
 
 { #category : #'tests - accepting faulty code' }
