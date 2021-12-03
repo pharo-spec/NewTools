@@ -35,7 +35,7 @@ StDebuggerTest >> compileMethodWithUndeclaredChoosing: choice [
 			n messageText = 'Edit trait definition:' ifTrue: [ 
 				n resume: #default ].
 			self
-				assert: (n messageText endsWith: 'Unknown variable: NONExistingClassXXX please correct, or cancel:').
+				assert: (n messageText includesSubstring: 'Unknown variable: NONExistingClassXXX please correct, or cancel:').
 			n resume: choice ]
 ]
 
