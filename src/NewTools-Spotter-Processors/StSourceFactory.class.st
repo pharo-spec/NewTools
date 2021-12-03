@@ -46,7 +46,7 @@ StSourceFactory class >> priority [
 	^ self subclassResponsibility 
 ]
 
-{ #category : #accessing }
+{ #category : #'class initialization' }
 StSourceFactory class >> reset [
 
 	Current := nil

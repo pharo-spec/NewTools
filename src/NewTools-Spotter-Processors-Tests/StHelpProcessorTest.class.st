@@ -36,7 +36,7 @@ StHelpProcessorTest >> testBeginsWithQueryShowsResults [
 StHelpProcessorTest >> testEmptyQueryShowsResults [
 
 	self runForText: ''.
-	self assertResultsIncludesHelpTopic: WelcomeHelp asHelpTopic.
+	self denyResultsIncludesHelpTopic: WelcomeHelp asHelpTopic.
 
 ]
 

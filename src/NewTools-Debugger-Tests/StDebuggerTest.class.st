@@ -4,7 +4,9 @@ Class {
 	#instVars : [
 		'session',
 		'debugger',
-		'oldFastTDD'
+		'oldFastTDD',
+		'dbg',
+		'stackSizeBefore'
 	],
 	#category : #'NewTools-Debugger-Tests-Presenters'
 }
@@ -68,10 +70,11 @@ StDebuggerTest >> executionControlCommandFrom: aDebugger [
 
 { #category : #accessing }
 StDebuggerTest >> initializedDebugger [
-	| dbg |
+
 	dbg := self debugger.
 	dbg application: self debuggerClass currentApplication.
 	dbg initialize.
+
 	^ dbg
 ]
 
@@ -80,6 +83,32 @@ StDebuggerTest >> inspectorTableFor: inspector [
 	|contextInspector|
 	contextInspector := (inspector class slotNamed: #contextInspector) read: inspector.
 	^(contextInspector class slotNamed: #attributeTable) read: contextInspector
+]
+
+{ #category : #'tests - accepting faulty code' }
+StDebuggerTest >> replaceMethodWithQuickMethodStepping [
+
+	"True is a good default value. We step into always by default"
+
+	| context newSource callerContext |
+	dbg := StTestDebuggerProvider new debuggerWithObjectHalting.
+	dbg
+		application: dbg class currentApplication;
+		initialize;
+		buildContextMenus.
+
+	"Track the size of the stack before compiling the new method for later checking"
+	context := dbg stackTable items first. 
+	
+	"We tell the parent that we did not want to step into"
+	stackSizeBefore := context stack size.
+	callerContext := context sender.
+
+	newSource := 'haltingMethod ^ 1'.
+	dbg code type: newSource.
+	dbg code update.
+	dbg acceptCodeChanges: newSource forContext: context.
+	dbg updateStep
 ]
 
 { #category : #running }
@@ -116,8 +145,8 @@ StDebuggerTest >> tearDown [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testAcceptCodeChangesForContext [
-
-	| dbg context newSource |
+	| context newSource |
+	
 	dbg := StTestDebuggerProvider new debuggerWithObjectHalting.
 	dbg
 		application: dbg class currentApplication;
@@ -238,7 +267,7 @@ StDebuggerTest >> testAcceptCodeChangesWithUndefinedClassShouldLeaveVariableUnde
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testCancelCodeChangesFor [
-	| dbg firstContext lastContext |
+	| firstContext lastContext |
 	dbg := self debuggerOn: session.
 	dbg stepInto; stepInto.
 	firstContext := dbg stackTable items first.	
@@ -260,7 +289,6 @@ StDebuggerTest >> testCancelCodeChangesFor [
 { #category : #'tests - code pane' }
 StDebuggerTest >> testClearUnsavedChanges [
 
-	| dbg |
 	dbg := self debuggerOn: session.
 	dbg unsavedCodeChanges at: 4 put: 2.
 	dbg clearUnsavedCodeChanges.
@@ -269,9 +297,10 @@ StDebuggerTest >> testClearUnsavedChanges [
 
 { #category : #'tests - actions' }
 StDebuggerTest >> testClose [
-	|windowPresenter|
+	| windowPresenter |
+	
 	windowPresenter := SpWindowPresenter new.
-	windowPresenter windowIsOpening.
+	windowPresenter windowIsOpened.
 	debugger := (self debuggerOn: session).	
 	windowPresenter presenter: debugger.	
 	debugger initializeWindow: windowPresenter.
@@ -284,7 +313,7 @@ StDebuggerTest >> testClose [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testCodeChangeAfterContextChange [
-	| dbg firstContext lastContext |
+	| firstContext lastContext |
 	dbg := self debuggerOn: session.
 	dbg stepInto; stepInto.
 	firstContext := dbg stackTable items first.	
@@ -302,8 +331,8 @@ StDebuggerTest >> testCodeChangeAfterContextChange [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testCodeSelectionAfterRestart [
-
-	| dbg adapter segments highlightSegment pcRangeForContext |
+	| adapter segments highlightSegment pcRangeForContext |
+	
 	dbg := self debuggerOn: session.
 	adapter := SpMorphicCodeAdapter new.
 	adapter adapt: dbg code.	
@@ -327,8 +356,8 @@ StDebuggerTest >> testCodeSelectionAfterRestart [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testCodeSelectionAfterStepping [
-
-	| dbg adapter segments highlightSegment pcRangeForContext |
+	| adapter segments highlightSegment pcRangeForContext |
+	
 	dbg := self debuggerOn: session.
 	adapter := SpMorphicCodeAdapter new.
 	adapter adapt: dbg code.	
@@ -351,7 +380,7 @@ StDebuggerTest >> testCodeSelectionAfterStepping [
 
 { #category : #'tests - context inspector' }
 StDebuggerTest >> testContextChangedAfterStepIn [ 
-	| dbg |
+
 	dbg := self debuggerOn: session.
 	dbg buildContextMenus.	
 	
@@ -365,7 +394,7 @@ StDebuggerTest >> testContextChangedAfterStepIn [
 
 { #category : #'tests - context inspector' }
 StDebuggerTest >> testContextChangedAfterStepOverAndReturn [
-	| dbg currentContext |
+	| currentContext |
 	dbg := self debuggerOn: session.	
 		
 	dbg stepInto; stepInto. "getting into Number>>squared"
@@ -378,7 +407,8 @@ StDebuggerTest >> testContextChangedAfterStepOverAndReturn [
 
 { #category : #'tests - context inspector' }
 StDebuggerTest >> testContextTempVarList [
-	| dbg contextItems inspectorTable|
+	| contextItems inspectorTable |
+	
 	dbg := self debuggerOn: session.
 	inspectorTable := dbg inspector getRawInspectorPresenterOrNil attributeTable.
 	
@@ -407,7 +437,8 @@ StDebuggerTest >> testContextTempVarList [
 
 { #category : #'tests - context inspector' }
 StDebuggerTest >> testContextUnchangedAfterStepOver [
-	| dbg currentContext |
+	| currentContext |
+	
 	dbg := self debuggerOn: session.	
 	
 	dbg stepInto; stepInto. "getting into Number>>squared"
@@ -450,7 +481,8 @@ StDebuggerTest >> testDebuggerApplication [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testDiscardCodeChangesFor [
-	| dbg firstContext lastContext |
+	| firstContext lastContext |
+	
 	dbg := self debuggerOn: session.
 	dbg stepInto; stepInto.
 	firstContext := dbg stackTable items first.	
@@ -477,8 +509,8 @@ StDebuggerTest >> testFastTDD [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testInitialCodeSelectionAfterStepping [
-
-	| dbg adapter segments highlightSegment pcRangeForContext |
+	| adapter segments highlightSegment pcRangeForContext |
+	
 	dbg := self debuggerOn: session.
 	adapter := SpMorphicCodeAdapter new.
 	adapter adapt: dbg code.	
@@ -499,7 +531,8 @@ StDebuggerTest >> testInitialCodeSelectionAfterStepping [
 
 { #category : #'tests - context inspector' }
 StDebuggerTest >> testNewDebuggerContext [
-	|debuggerContext|
+	| debuggerContext |
+	
 	debugger := (self debuggerOn: session).
 	debuggerContext := debugger newDebuggerContext.
 	self assert: debuggerContext class identicalTo: debugger class debuggerContextClass.
@@ -508,7 +541,8 @@ StDebuggerTest >> testNewDebuggerContext [
 
 { #category : #'tests - context inspector' }
 StDebuggerTest >> testNewDebuggerContextFor [
-	|debuggerContext ctx|
+	| debuggerContext ctx |
+	
 	debugger := (self debuggerOn: session).
 	ctx := [  ] asContext.
 	debuggerContext := debugger newDebuggerContextFor: ctx.
@@ -531,21 +565,20 @@ StDebuggerTest >> testPrintReceiverClassInContext [
 
 { #category : #'tests - receiver inspector' }
 StDebuggerTest >> testReceiverChangedAfterStepIn [ 
-	| dbg |
+
 	dbg := self debuggerOn: session.
 	
 	dbg stepInto. "We enter the block context"
 	self assert: dbg inspector inspectedObject context receiver identicalTo: session shortStack first receiver.
 	
 	dbg stepInto. "We step into the first message"
-	self assert: dbg inspector inspectedObject context receiver identicalTo: session shortStack first receiver.
-
-
+	self assert: dbg inspector inspectedObject context receiver identicalTo: session shortStack first receiver
 ]
 
 { #category : #'tests - receiver inspector' }
 StDebuggerTest >> testReceiverChangedAfterStepOverAndReturn [
-	| dbg currentReceiver |
+	| currentReceiver |
+	
 	dbg := self debuggerOn: session.	
 	
 	dbg stepInto; stepInto. "getting into Number>>squared"
@@ -558,7 +591,7 @@ StDebuggerTest >> testReceiverChangedAfterStepOverAndReturn [
 
 { #category : #'tests - receiver inspector' }
 StDebuggerTest >> testReceiverList [
-	| dbg currentReceiver |
+	| currentReceiver |
 	dbg := self debuggerOn: session.	
 	
 	dbg stepInto; stepInto. "getting into Number>>squared"
@@ -569,7 +602,8 @@ StDebuggerTest >> testReceiverList [
 
 { #category : #'tests - receiver inspector' }
 StDebuggerTest >> testReceiverUnchangedAfterStepOver [ 
-	| dbg currentReceiver |
+	| currentReceiver |
+	
 	dbg := self debuggerOn: session.	
 	
 	dbg stepInto; stepInto. "getting into Number>>squared"
@@ -582,7 +616,8 @@ StDebuggerTest >> testReceiverUnchangedAfterStepOver [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testRecordUnsavedCodeChanges [
-	| dbg lastContext |
+	| lastContext |
+	
 	dbg := self debuggerOn: session.
 	dbg stepInto; stepInto.
 	lastContext := dbg stackTable items last.		
@@ -615,8 +650,8 @@ StDebuggerTest >> testRequestProtocolIn [
 
 { #category : #'tests - session' }
 StDebuggerTest >> testRestartContext [
-
-	| dbg firstContext lastContext |
+	| firstContext lastContext |
+	
 	dbg := self debuggerOn: session.
 	dbg stepInto; stepInto.
 	firstContext := dbg stackTable items first.	
@@ -659,7 +694,8 @@ StDebuggerTest >> testRestoreReceiverRawInspectionSelectionAfterContextChange [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testRestoreUnsavedCodeChanges [
-	| dbg firstContext lastContext |
+	| firstContext lastContext |
+	
 	dbg := self debuggerOn: session.
 	dbg stepInto; stepInto.
 	firstContext := dbg stackTable items first.
@@ -684,7 +720,8 @@ StDebuggerTest >> testReturnEnteredValue [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testSaveCodeModification [
-	| dbg context newSource |
+	| context newSource |
+	
 	dbg := StTestDebuggerProvider new debuggerWithObjectHalting.
 	dbg
 		application: dbg class currentApplication;
@@ -719,9 +756,27 @@ StDebuggerTest >> testSaveReceiverRawInspectionSelectionAfterContextChange [
 	self flag: #DBG_TEST
 ]
 
+{ #category : #'tests - accepting faulty code' }
+StDebuggerTest >> testSavingQuickMethodWhenSteppingIntoStackSizeBeforeIsTheSameAfter [
+
+	self replaceMethodWithQuickMethodStepping.
+
+	self assert: dbg session stack size equals: stackSizeBefore
+]
+
+{ #category : #'tests - accepting faulty code' }
+StDebuggerTest >> testSavingQuickMethodWhenSteppingIntoStaysInQuickMethod [
+	
+	"We tell the parent that we wanted to step into"
+	self replaceMethodWithQuickMethodStepping.
+	
+	self assert: dbg stackTable items first sourceCode equals: 'haltingMethod ^ 1'
+]
+
 { #category : #'tests - stack table' }
 StDebuggerTest >> testSelectLastStackElementWithMoreElements [
-	| dbg stackTable selectedItem |
+	| stackTable selectedItem |
+	
 	dbg := self debuggerOn: session.
 	stackTable := dbg stackTable.
 	
@@ -744,7 +799,8 @@ StDebuggerTest >> testSelectLastStackElementWithMoreElements [
 
 { #category : #'tests - stack table' }
 StDebuggerTest >> testSelectLastStackElementWithoutMoreElements [
-	| dbg stackTable startingStackSize |
+	| stackTable startingStackSize |
+	
 	dbg := self debuggerOn: session.
 	stackTable := dbg stackTable.
 	startingStackSize := stackTable items size.
@@ -755,7 +811,8 @@ StDebuggerTest >> testSelectLastStackElementWithoutMoreElements [
 
 { #category : #'tests - stack table' }
 StDebuggerTest >> testStackTableAfterReturn [
-	| dbg stackTableItems stackSizeAfterStepIn |
+	| stackTableItems stackSizeAfterStepIn |
+	
 	dbg := self debuggerOn: session.
 
 	"we dive into a method"
@@ -773,7 +830,8 @@ StDebuggerTest >> testStackTableAfterReturn [
 
 { #category : #'tests - stack table' }
 StDebuggerTest >> testStackTableAfterStepIn [
-	| dbg stackTableItems startingStackSize |
+	| stackTableItems startingStackSize |
+	
 	dbg := self debuggerOn: session.
 	startingStackSize := dbg stackTable items size.
 	dbg stepInto; stepInto.
@@ -788,6 +846,7 @@ StDebuggerTest >> testStackTableAfterStepIn [
 { #category : #'tests - stack table' }
 StDebuggerTest >> testStackTableElementsPrinting [
 	| columns classColumn methodColumn method block context |
+
 	self debugger session: session.
 	columns := self initializedDebugger stackTable columns.
 	classColumn := columns second.
@@ -851,7 +910,7 @@ StDebuggerTest >> testStackTablePackagesLabels [
 
 { #category : #'tests - stack table' }
 StDebuggerTest >> testStackTableSelectionChanged [
-	| dbg |
+
 	dbg := self debuggerOn: session.
 	dbg stepInto; stepInto.
 	dbg stackTable selectItem: dbg stackTable items second.
@@ -919,7 +978,7 @@ StDebuggerTest >> testToolbarInDNUContext [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testUnsavedCodeChanges [
-	| dbg |
+
 	dbg := self debuggerOn: session.
 	self assert: dbg unsavedCodeChanges class identicalTo: IdentityDictionary.
 	self assertEmpty: dbg unsavedCodeChanges 
@@ -927,7 +986,8 @@ StDebuggerTest >> testUnsavedCodeChanges [
 
 { #category : #'tests - code pane' }
 StDebuggerTest >> testUnsavedCodeChangesFor [
-	| dbg ctx codeChanges |
+	| ctx codeChanges |
+	
 	dbg := self debuggerOn: session.
 	self should: [dbg unsavedCodeChangesFor: dbg currentContext] raise: KeyNotFound.
 	dbg unsavedCodeChanges at: (ctx := Object new) put: (codeChanges := Object new).
@@ -938,6 +998,7 @@ StDebuggerTest >> testUnsavedCodeChangesFor [
 
 { #category : #'tests - receiver inspector' }
 StDebuggerTest >> testUpdateLayoutForContextsIfAssertionFailure [
+
 	| assertionFailure currentLayout expectedLayout |
 	debugger := StTestDebuggerProvider new
 		            debuggerWithFailingAssertionContext.
@@ -957,9 +1018,11 @@ StDebuggerTest >> testUpdateLayoutForContextsIfAssertionFailure [
 		assertCollection: currentLayout children first direction
 		equals: expectedLayout children first direction.
 	self
-		assertCollection: currentLayout children second 
+		assertCollection: currentLayout children second
 		equals: expectedLayout children second.
-	self assert: currentLayout position equals: expectedLayout position.
+	self
+		assert: currentLayout positionOfSlider
+		equals: expectedLayout positionOfSlider.
 	self
 		assert: currentLayout children size
 		equals: expectedLayout children size.
@@ -976,7 +1039,6 @@ StDebuggerTest >> testUpdateLayoutForContextsIfAssertionFailure [
 { #category : #'tests - code pane' }
 StDebuggerTest >> testUpdateSourceCodeFor [
 
-	| dbg |
 	dbg := self debuggerOn: session.
 	dbg unsavedCodeChanges at: 4 put: '2'.
 	

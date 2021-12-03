@@ -174,7 +174,7 @@ StSpotter class >> registerToolsOn: registry [
 	registry register: self as: #spotter
 ]
 
-{ #category : #private }
+{ #category : #'class initialization' }
 StSpotter class >> reset [
 	
 	spotter ifNotNil: [ 
@@ -364,6 +364,22 @@ StSpotter >> feedTip [
 	tip label: self class tips atRandom
 ]
 
+{ #category : #'private - updating' }
+StSpotter >> flushPendingUpdates [
+
+	self application defer: [ 
+		self model schedule: [ 
+			mutex critical: [ 
+				[ 
+				self queuedUpdateResultList.
+				lastUpdateTime := Time millisecondClockValue ]
+					on: Exception
+					fork: [ :e | "Allow halts and that, but eat errors (since otherwise, ugly things can happen)"
+						(e isKindOf: Error)
+							ifTrue: [ ('Spotter error: ' , e printString) crTrace ]
+							ifFalse: [ e pass ] ] ] ] ]
+]
+
 { #category : #private }
 StSpotter >> handleKeyEvent: anEvent [
 	
@@ -393,8 +409,7 @@ StSpotter >> headerCategoryUnifiedFor: aLink [
 { #category : #'private - actions' }
 StSpotter >> hideSpinner [
 
-	self model schedule: [
-		self application defer: [ spinner hide ] ]
+	self application defer: [ spinner hide ]
 ]
 
 { #category : #'private - actions' }
@@ -707,8 +722,7 @@ StSpotter >> showSpinner [
 
 	spinner isVisible ifTrue: [ ^ self ].
 	self model schedule: [
-		self application defer: [ spinner show ]
-	]
+		self application defer: [ spinner show ]]
 ]
 
 { #category : #processing }
@@ -813,18 +827,7 @@ StSpotter >> updateResultList: aCandidateLink [
 	(updating or: [ (Time millisecondClockValue - lastUpdateTime) < 50 ]) 
 		ifTrue: [ ^ self ].
 	
-	self application defer: [ 
-		self model schedule: [
-			mutex critical: [ 
-				[ 
-					self queuedUpdateResultList.
-					lastUpdateTime := Time millisecondClockValue ]
-				on: Exception 
-				fork: [ :e | 
-					"Allow halts and that, but eat errors (since otherwise, ugly things can happen)"
-					(e isKindOf: Error) 
-						ifTrue: [ ('Spotter error: ', e printString) crTrace ]
-						ifFalse: [ e pass ] ] ] ] ]
+	self flushPendingUpdates
 ]
 
 { #category : #'private - updating' }

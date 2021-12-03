@@ -13,6 +13,6 @@ Dictionary >> inspectionItems: aBuilder [
 			title: 'Value' 
 			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each value ])
 			beSortable;
-		items: self associations;
+		items: (self associations collect: [:e | StInspectorAssociationNode hostObject: e ]);
 		yourself
 ]

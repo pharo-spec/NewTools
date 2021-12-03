@@ -112,5 +112,8 @@ StInspectorModel >> smallDescriptionStringFor: anObject [
 { #category : #accessing }
 StInspectorModel >> windowTitle [
 
-	^ 'Inspector on {1}' format: { [ self inspectedObject displayString ] on: Error do: [ :e | e printString ]} 
+	^ 'Inspector on {1}' format:
+		  { ([ self inspectedObject displayString ]
+			   on: Exception
+			   do: [ :e | e printString ]) }
 ]

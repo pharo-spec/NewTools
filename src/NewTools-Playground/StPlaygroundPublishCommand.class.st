@@ -26,6 +26,12 @@ StPlaygroundPublishCommand class >> defaultName [
 ]
 
 { #category : #accessing }
+StPlaygroundPublishCommand class >> order [
+
+	^ 5
+]
+
+{ #category : #accessing }
 StPlaygroundPublishCommand class >> urlProvider [
 
 	^ 'http://ws.stfx.eu' asZnUrl

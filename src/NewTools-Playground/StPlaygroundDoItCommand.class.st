@@ -26,6 +26,12 @@ StPlaygroundDoItCommand class >> defaultName [
 	^ 'Do it'
 ]
 
+{ #category : #accessing }
+StPlaygroundDoItCommand class >> order [
+
+	^ 0
+]
+
 { #category : #execution }
 StPlaygroundDoItCommand >> execute [ 
 
