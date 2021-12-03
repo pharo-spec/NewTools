@@ -14,7 +14,7 @@ Class {
 { #category : #'tests - accepting faulty code' }
 StDebuggerTest >> compileMethodWithUndeclaredChoosing: choice [
 
-	| context newSource dbg |
+	| context newSource |
 	
 	dbg := StTestDebuggerProvider new debuggerWithObjectHalting.
 	dbg
@@ -166,7 +166,7 @@ StDebuggerTest >> testAcceptCodeChangesForContext [
 { #category : #'tests - accepting faulty code' }
 StDebuggerTest >> testAcceptCodeChangesWithUndefinedClassDetectsUndefinedClasses [
 
-	| dbg context newSource |
+	| context newSource |
 	dbg := StTestDebuggerProvider new debuggerWithObjectHalting.
 	dbg
 		application: dbg class currentApplication;
