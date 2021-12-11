@@ -16,8 +16,10 @@ RBProgramNode >> inspectionSourceCode [
 
 	^ SpCodePresenter new 
 		beForBehavior: self methodNode methodClass;
-		text: (self source ifNil: [self formattedCode]);
-		selectionInterval: self sourceInterval;
+		text: (self source ifNil: [ self formattedCode ]);
+		addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
+			interval: (self sourceInterval first to: self sourceInterval last + 1);
+			yourself);
 		yourself
 ]
 

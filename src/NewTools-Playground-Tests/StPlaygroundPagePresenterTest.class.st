@@ -1,8 +1,17 @@
 Class {
 	#name : #StPlaygroundPagePresenterTest,
 	#superclass : #StPlaygroundBaseTest,
+	#instVars : [
+		'classFactory'
+	],
 	#category : #'NewTools-Playground-Tests'
 }
+
+{ #category : #private }
+StPlaygroundPagePresenterTest >> classFactory [
+
+	^ classFactory ifNil: [ classFactory := ClassFactoryForTestCase new ]
+]
 
 { #category : #accessing }
 StPlaygroundPagePresenterTest >> classToTest [
@@ -16,7 +25,42 @@ StPlaygroundPagePresenterTest >> initializeInstanceBeforeInitialization: aPresen
 	aPresenter setModelBeforeInitialization: self newPage
 ]
 
-{ #category : #'tests commands' }
+{ #category : #running }
+StPlaygroundPagePresenterTest >> tearDown [
+
+	classFactory ifNotNil: [ 
+		classFactory cleanUp.
+		classFactory := nil ].
+	super tearDown
+]
+
+{ #category : #tests }
+StPlaygroundPagePresenterTest >> testAddMenuCommandsTo [
+	| group commands class |
+
+	class := self classFactory newSubclassOf: StPlaygroundMenuExtensionCommand.
+	
+	group := CmCommandGroup forSpec.
+	presenter addMenuCommandsTo: group.
+	commands := group allCommands collect: [ :each | each innerCommand class ] as: Array.	
+	self assert: (commands includes: class).
+
+]
+
+{ #category : #tests }
+StPlaygroundPagePresenterTest >> testAddToolbarCommandsTo [
+	| group commands class |
+
+	class := self classFactory newSubclassOf: StPlaygroundToolbarExtensionCommand.
+	
+	group := CmCommandGroup forSpec.
+	presenter addToolbarCommandsTo: group.
+	commands := group allCommands collect: [ :each | each innerCommand class ] as: Array.	
+	self assert: (commands includes: class).
+
+]
+
+{ #category : #'tests - commands' }
 StPlaygroundPagePresenterTest >> testDoEvaluateAllAndGo [
 	| value |
 	
@@ -31,7 +75,7 @@ StPlaygroundPagePresenterTest >> testDoEvaluateAllAndGo [
 		equals:  1405006117752879898543142606244511569936384000000000
 ]
 
-{ #category : #'tests commands' }
+{ #category : #'tests - commands' }
 StPlaygroundPagePresenterTest >> testDoEvaluateAndGo [
 	| value |
 	
@@ -53,7 +97,7 @@ StPlaygroundPagePresenterTest >> testDoEvaluateAndGo [
 		equals:  1405006117752879898543142606244511569936384000000000
 ]
 
-{ #category : #'tests commands' }
+{ #category : #'tests - commands' }
 StPlaygroundPagePresenterTest >> testDoEvaluateDeclareGlobal [
 	| value |
 	
@@ -71,4 +115,16 @@ StPlaygroundPagePresenterTest >> testDoEvaluateDeclareGlobal [
 	
 	self assert: (Smalltalk globals includesKey: #MyGlobalForTest).
 	Smalltalk globals removeKey: #MyGlobalForTest
+]
+
+{ #category : #tests }
+StPlaygroundPagePresenterTest >> testToolbarActions [
+	| group commands class |
+
+	class := self classFactory newSubclassOf: StPlaygroundToolbarExtensionCommand.
+	
+	group := presenter toolbarActions.
+	commands := group allCommands collect: [ :each | each innerCommand class ] as: Array.	
+	self assert: (commands includes: class).
+
 ]

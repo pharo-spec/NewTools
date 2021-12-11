@@ -36,6 +36,15 @@ StPharoApplication class >> startUp: resuming [
 	Current startUp: resuming
 ]
 
+{ #category : #private }
+StPharoApplication class >> use: application during: aBlock [ 
+	| oldCurrent |
+	
+	oldCurrent := Current.
+	Current := application.
+	^ aBlock ensure: [ Current := oldCurrent ]
+]
+
 { #category : #'accessing - resources' }
 StPharoApplication >> defaultWindowExtent [
 	

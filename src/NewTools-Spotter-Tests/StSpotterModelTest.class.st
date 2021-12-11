@@ -8,6 +8,8 @@ Class {
 StSpotterModelTest >> testAnnounceQueryEndedIsSentOnce [
 	| model count |
 
+	self skipOnPharoCITestingEnvironment.
+
 	count := 0.
 	(model := StSpotterModel new)
 		whenQueryEndedDo: [ count := count + 1 ].

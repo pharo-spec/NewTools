@@ -25,6 +25,12 @@ StPlaygroundBindingsCommand class >> defaultName [
 	^ 'Bindings'
 ]
 
+{ #category : #accessing }
+StPlaygroundBindingsCommand class >> order [
+
+	^ 10
+]
+
 { #category : #execution }
 StPlaygroundBindingsCommand >> execute [ 
 

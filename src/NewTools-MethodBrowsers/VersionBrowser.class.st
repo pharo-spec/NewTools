@@ -26,7 +26,7 @@ Class {
 	#instVars : [
 		'rgMethod',
 		'sourcePresenter',
-		'isShowingDiff'
+		'sourceLayout'
 	],
 	#category : #'NewTools-MethodBrowsers-Versions'
 }
@@ -52,13 +52,7 @@ VersionBrowser class >> browseVersionsForMethod: aRingMethod [
 { #category : #specs }
 VersionBrowser class >> defaultSpec [
 	
-	^ SpPanedLayout newTopToBottom
-		add: #messageList;
-		add: (SpBoxLayout newTopToBottom
-			add: #toolbarPresenter expand: false;
-			add: #sourcePresenter;
-			yourself);
-		yourself
+	^ nil
 ]
 
 { #category : #'tools registry' }
@@ -95,7 +89,7 @@ VersionBrowser >> browseSenders [
 		autoSelect: rgMethod selector
 ]
 
-{ #category : #'instance creation' }
+{ #category : #'private - factory' }
 VersionBrowser >> buildChangeList [
 	rgMethod sourcePointer ifNil:[ ^ #() ].
 
@@ -116,10 +110,15 @@ VersionBrowser >> changeList [
 { #category : #actions }
 VersionBrowser >> compareTo: anOtherVersion withLabel: aLabel [
 	| versions texts |
+
 	versions := Array with: anOtherVersion with: self selectedMessage.
-	texts := (DiffMorphChangeRecordConverter methodReference: anOtherVersion referencesList: versions) getText.
-	SpDiffPresenter new
-		title: ('Comparison from {1} to {2}' format: {versions second stamp . aLabel});
+	texts := (DiffVersionChangeRecordConverter 
+		methodReference: anOtherVersion 
+		referencesList: versions) 
+		getText.
+
+	(SpDiffPresenter newApplication: self application)
+		title: ('Comparison from {1} to {2}' format: { versions second stamp. aLabel });
 		leftText: texts first;
 		rightText: texts second;
 		openWithSpec
@@ -151,42 +150,41 @@ VersionBrowser >> connectPresenters [
 ]
 
 { #category : #initialization }
-VersionBrowser >> initialize [
-
-	isShowingDiff := false.
-	super initialize
-]
-
-{ #category : #initialization }
 VersionBrowser >> initializePresenters [
 
-	messageList := self instantiate: MessageList on: rgMethod.
-	toolbarPresenter := self instantiate: SpMethodToolbarPresenter on: rgMethod.
+	self layout: (SpPanedLayout newTopToBottom
+		add: (messageList := self instantiate: MessageList on: rgMethod);
+		add: ((sourceLayout := SpBoxLayout newTopToBottom)
+			add: (toolbarPresenter := self instantiate: SpMethodToolbarPresenter on: rgMethod) 
+				expand: false;
+			yourself);
+		yourself).
 
 	messageList
 		topologicSort: false;
-		sortingBlock: [ :a :b | (a annotationNamed: #versionIndex ifAbsent: [ 0 ]) < (b annotationNamed: #versionIndex ifAbsent: [ 0 ]) ];
+		sortingBlock: [ :a | a annotationNamed: #versionIndex ifAbsent: [ 0 ] ] ascending;
 		contextMenu: self messageListMenu.
 
 	toolbarPresenter
-		addItemLabeled: 'Side By Side' do: [ 
-			self showDiffMorphWithConverter: (DiffMorphChangeRecordConverter 
+		addItemLabeled: 'Side By Side' do: [
+			self showDiffMorphWithConverter: (DiffSideBySideChangeRecordConverter 
 				methodReference: self textConverter method 
 				referencesList: self changeList) ];
 		addItemLabeled: 'Source' do: [ 
-			self showSourceWithConverter: (SourceMethodConverter method: self textConverter method) ];
+			self showSourceWithConverter: (DiffSourceMethodConverter method: self textConverter method) ];
 		addItemLabeled: 'Diff' do: [ 
-			self showSourceWithConverter: (DiffChangeRecordConverter 
+			self showDiffLineWithConverter: (DiffLineChangeRecordConverter 
 				methodReference: self textConverter method
-				 referencesList: self changeList) ].
+				referencesList: self changeList) ].
 		
-	toolbarPresenter  versionModel
+	toolbarPresenter versionModel
 		label: 'Revert';
 		action: [ self revert: self selectedMessage ]
 ]
 
 { #category : #initialization }
 VersionBrowser >> initializeWindow: aWindowPresenter [
+
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter title: 'Recent versions of ' , rgMethod displayName
 ]
@@ -196,7 +194,7 @@ VersionBrowser >> installIconStylerFor: anItem [
 	"icons styler are only supported for method definitions (not nil / not for comment definitions    
 	 (those may occure for comment or general string searches)) and in the case the source presenter is not a diff"
 
-	((self isMethodDefinition: anItem) or: [ isShowingDiff not ]) ifFalse: [ ^ self ].
+	(self isMethodDefinition: anItem) ifFalse: [ ^ self ].
 
 	IconStyler withStaticStylers 
 		styleText: sourcePresenter 
@@ -244,7 +242,32 @@ VersionBrowser >> method [
 	^ rgMethod
 ]
 
-{ #category : #'instance creation' }
+{ #category : #'private - factory' }
+VersionBrowser >> newSourceDiff [
+
+	^ self newDiff
+]
+
+{ #category : #'private - factory' }
+VersionBrowser >> newTextConverter [
+
+	^ DiffSideBySideChangeRecordConverter new
+]
+
+{ #category : #private }
+VersionBrowser >> replaceSourceWith: aPresenter [
+	
+	sourceLayout children size = 1 
+		ifTrue: [ 
+			sourceLayout add: aPresenter ]
+		ifFalse: [ 
+			sourceLayout replace: sourcePresenter with: aPresenter ].
+		
+	sourcePresenter := aPresenter.
+	messageList selectIndex: messageList selectedIndex
+]
+
+{ #category : #'private - factory' }
 VersionBrowser >> revert: aChangeRecord [
 
 	aChangeRecord ifNil: [ 
@@ -271,10 +294,7 @@ VersionBrowser >> selectItem: item [
 
 	self setSourceContentWith: (self textConverter
 		method: item;
-		getText).
-
-	sourcePresenter clearUndoManager.
-	self installIconStylerFor: item
+		getText)
 ]
 
 { #category : #'accessing - model' }
@@ -286,44 +306,90 @@ VersionBrowser >> setModelBeforeInitialization: aMethod [
 { #category : #initialization }
 VersionBrowser >> setRGMethodFrom: aMethod [
 "asHistorical, because active RGMethods don't always have the source pointer attached"
+
 	rgMethod := aMethod asRingDefinition asHistorical
 ]
 
 { #category : #private }
 VersionBrowser >> setSourceContentWith: content [
-	
-	isShowingDiff
-		ifTrue: [ 
-			(content isText or: [ content isString ])
-				ifTrue: [ sourcePresenter leftText: ''.
-					sourcePresenter rightText: content ]
-				ifFalse: [ sourcePresenter leftText: content first.
-					sourcePresenter rightText: content second ] ]
-		ifFalse: [ 
-			sourcePresenter text: content ]
+
+	self textConverter 
+		updateContent: content 
+		on: self
 ]
 
-{ #category : #'instance creation' }
+{ #category : #private }
+VersionBrowser >> showDiffLineWithConverter: aConverter [
+	| newSource |
+
+	self textConverter: aConverter.
+
+	newSource := self instantiate: SpPatchPresenter.
+	newSource beForMethod: self selectedMessage.
+
+	self replaceSourceWith: newSource
+
+]
+
+{ #category : #private }
 VersionBrowser >> showDiffMorphWithConverter: aConverter [
+	| newSource | 
 
-	sourcePresenter := self newDiff.
-	isShowingDiff := true.
-	self needRebuild: false.
-	self buildWithSpec.
 	self textConverter: aConverter.
-	sourcePresenter contextClass: self selectedMessage methodClass.
-	messageList selectIndex: (messageList selectedIndex)
+
+	newSource := self newDiff.
+	newSource contextClass: self selectedMessage methodClass.
+	self replaceSourceWith: newSource
 ]
 
-{ #category : #'instance creation' }
+{ #category : #private }
 VersionBrowser >> showSourceWithConverter: aConverter [
+	| newSource |
 
-	sourcePresenter := self newCode.
-	isShowingDiff := false.
-	self needRebuild: false.
-	self buildWithSpec.
 	self textConverter: aConverter.
-	sourcePresenter whenSubmitDo: [ :text | (self accept: text notifying: nil) notNil ].
-	sourcePresenter beForMethod: self selectedMessage.
-	messageList selectIndex: (messageList selectedIndex)
+	
+	newSource := self newCode.
+	newSource whenSubmitDo: [ :text | (self accept: text notifying: nil) notNil ].
+	newSource beForMethod: self selectedMessage.
+
+	self replaceSourceWith: newSource
+
+]
+
+{ #category : #'private - updating' }
+VersionBrowser >> updateDiff: content [
+
+	(content isText or: [ content isString ])
+		ifTrue: [ 
+			sourcePresenter 
+				leftText: '';
+				rightText: content ]
+		ifFalse: [ 
+			sourcePresenter 
+				leftText: content first;
+				rightText: content second ].
+			
+		self installIconStylerFor: self textConverter method
+]
+
+{ #category : #'private - updating' }
+VersionBrowser >> updateDiffLine: content [
+
+	(content isText or: [ content isString ])
+		ifTrue: [ 
+			sourcePresenter 
+				patchFrom: '' 
+				to: content asString ]
+		ifFalse: [ 
+			sourcePresenter 
+				patchFrom: content first asString
+				to: content second asString ].
+			
+	self installIconStylerFor: self textConverter method
+]
+
+{ #category : #'private - updating' }
+VersionBrowser >> updateSource: content [ 
+
+	sourcePresenter text: content
 ]
