@@ -96,7 +96,7 @@ StInspectionContext >> debugInspectorPresenter [
 	self withoutEvaluator.
 	^ SpCodePresenter new
 		beForObject: self inspectedObject;
-		text: (Text string: debugExpression attribute: TextColor red);
+		text: debugExpression;
 		yourself
 ]
 
