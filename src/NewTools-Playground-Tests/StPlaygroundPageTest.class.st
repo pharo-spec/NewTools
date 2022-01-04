@@ -15,17 +15,17 @@ StPlaygroundPageTest >> newPage [
 
 { #category : #tests }
 StPlaygroundPageTest >> testContents [
-	| page |
-	
+
+	| page waitMock |
 	page := self newPage.
+	waitMock := StPlaygroundPageTestMockedWaitable new.
+	page timeToWait: waitMock.
 	page contents: 'test'.
-	5 milliSeconds wait.
 	self assert: page contents isEmpty.
 	page contents: 'test 2'.
 	self assert: page contents isEmpty.
-	20 milliSeconds wait.
-	self assert: page contents equals: 'test 2'.
-
+	waitMock resume.
+	self assert: page contents equals: 'test 2'
 ]
 
 { #category : #tests }
