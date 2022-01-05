@@ -14,6 +14,6 @@ String >> inspectionString [
 	<inspectorPresentationOrder: -10 title: 'Preview'>
 	
 	^ SpTextPresenter new
-		text: (self truncateWithElipsisTo: 10000);
+		text: (self truncateWithElipsisTo: 1000);
 		yourself
 ]
