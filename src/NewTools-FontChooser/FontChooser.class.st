@@ -63,7 +63,7 @@ FontChooser class >> openWithTitle: aTitle initialFont: aFont onAcceptDo: aBlock
 		font: aFont;
 		onAcceptDo: aBlock.
 	
-	presenter := SpFontChooserPresenter on: instance.
+	presenter := StFontChooserPresenter on: instance.
 	
 	isModal 
 		ifTrue: [presenter openModalWithSpec]

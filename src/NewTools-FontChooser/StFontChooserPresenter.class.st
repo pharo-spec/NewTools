@@ -10,7 +10,7 @@ For example to work on a subset of fonts, provide a specific font chooser qs fol
 ```
 "
 Class {
-	#name : #SpFontChooserPresenter,
+	#name : #StFontChooserPresenter,
 	#superclass : #SpPresenterWithModel,
 	#instVars : [
 		'fontFamilyList',
@@ -23,7 +23,7 @@ Class {
 }
 
 { #category : #specs }
-SpFontChooserPresenter class >> defaultSpec [ 
+StFontChooserPresenter class >> defaultSpec [ 
 
 	^ SpBoxLayout newVertical
 		add: (SpBoxLayout newHorizontal 
@@ -44,7 +44,7 @@ SpFontChooserPresenter class >> defaultSpec [
 ]
 
 { #category : #'interface building' }
-SpFontChooserPresenter class >> pangrams [
+StFontChooserPresenter class >> pangrams [
 
 	^ OrderedCollection new
 		add: 'English' -> 'the quick brown fox jumps over the lazy dog';
@@ -96,14 +96,14 @@ SpFontChooserPresenter class >> pangrams [
 ]
 
 { #category : #events }
-SpFontChooserPresenter >> applyChanges [
+StFontChooserPresenter >> applyChanges [
 
 	self model font: self selectedFont.
 	self model onAcceptDo value: self model font
 ]
 
 { #category : #initialization }
-SpFontChooserPresenter >> connectPresenters [ 
+StFontChooserPresenter >> connectPresenters [ 
 	
 	fontFamilyList 
 		whenSelectionChangedDo: [ :selection | 
@@ -126,26 +126,26 @@ SpFontChooserPresenter >> connectPresenters [
 ]
 
 { #category : #accessing }
-SpFontChooserPresenter >> fontFamilyList [ 
+StFontChooserPresenter >> fontFamilyList [ 
 	
 	^ fontFamilyList 
 
 ]
 
 { #category : #accessing }
-SpFontChooserPresenter >> fontSizeList [ 
+StFontChooserPresenter >> fontSizeList [ 
 	
 	^ fontSizeList 
 
 ]
 
 { #category : #accessing }
-SpFontChooserPresenter >> fontStyleList [
+StFontChooserPresenter >> fontStyleList [
 	^ fontStyleList
 ]
 
 { #category : #initialization }
-SpFontChooserPresenter >> initializeDialogWindow: aDialogWindowPresenter [
+StFontChooserPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 	
 	super initializeDialogWindow: aDialogWindowPresenter.
 
@@ -157,7 +157,7 @@ SpFontChooserPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 ]
 
 { #category : #initialization }
-SpFontChooserPresenter >> initializePresenters [ 
+StFontChooserPresenter >> initializePresenters [ 
 	
 	fontFamilyList := self newList.
 	fontFamilyList display: [ :each | each familyName ].
@@ -182,20 +182,20 @@ SpFontChooserPresenter >> initializePresenters [
 ]
 
 { #category : #initialization }
-SpFontChooserPresenter >> initializeWindow: aWindowPresenter [
+StFontChooserPresenter >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter initialExtent: 900 @ 530.
 	aWindowPresenter title: self model title
 ]
 
 { #category : #initialization }
-SpFontChooserPresenter >> modelChanged [  
+StFontChooserPresenter >> modelChanged [  
 	
 	self updateWithFont: self model font
 ]
 
 { #category : #accessing }
-SpFontChooserPresenter >> previewText [
+StFontChooserPresenter >> previewText [
 
 	"Answer the preview text based on current font."
 
@@ -232,7 +232,7 @@ SpFontChooserPresenter >> previewText [
 ]
 
 { #category : #refreshing }
-SpFontChooserPresenter >> refreshFontSizeList [
+StFontChooserPresenter >> refreshFontSizeList [
 	
 	| sizes currentFontSizeValue |
 	
@@ -252,7 +252,7 @@ SpFontChooserPresenter >> refreshFontSizeList [
 ]
 
 { #category : #'font style list' }
-SpFontChooserPresenter >> refreshFontStyleList [
+StFontChooserPresenter >> refreshFontStyleList [
 								
 	| fontStyle toFindName currentFontStyleValue |
 
@@ -274,7 +274,7 @@ SpFontChooserPresenter >> refreshFontStyleList [
 ]
 
 { #category : #accessing }
-SpFontChooserPresenter >> selectedFont [
+StFontChooserPresenter >> selectedFont [
 	
 	^LogicalFont 
 		familyName: self selectedFontFamily familyName 
@@ -285,31 +285,31 @@ SpFontChooserPresenter >> selectedFont [
 ]
 
 { #category : #accessing }
-SpFontChooserPresenter >> selectedFontFamily [
+StFontChooserPresenter >> selectedFontFamily [
 	
 	^ fontFamilyList selectedItem 
 ]
 
 { #category : #accessing }
-SpFontChooserPresenter >> selectedFontSize [
+StFontChooserPresenter >> selectedFontSize [
 	
 	^ fontSizeList selectedItem
 ]
 
 { #category : #accessing }
-SpFontChooserPresenter >> selectedFontStyle [
+StFontChooserPresenter >> selectedFontStyle [
 	
 	^ fontStyleList selectedItem
 ]
 
 { #category : #initialization }
-SpFontChooserPresenter >> title [ 
+StFontChooserPresenter >> title [ 
 
 	^ 'Font Chooser'
 ]
 
 { #category : #events }
-SpFontChooserPresenter >> updateFonts [
+StFontChooserPresenter >> updateFonts [
 	
 	FreeTypeFontProvider current updateFromSystem.
 	self updateWithFont: self selectedFont.
@@ -317,7 +317,7 @@ SpFontChooserPresenter >> updateFonts [
 ]
 
 { #category : #refreshing }
-SpFontChooserPresenter >> updatePreview [
+StFontChooserPresenter >> updatePreview [
 	
 	previewText morph: (TextMorph new
 		wrapFlag: true;
@@ -330,7 +330,7 @@ SpFontChooserPresenter >> updatePreview [
 ]
 
 { #category : #initialization }
-SpFontChooserPresenter >> updateWithFont: aFont [
+StFontChooserPresenter >> updateWithFont: aFont [
 
 	| initialFamily initialStyle |
 	fontFamilyList items: self model fontList.
