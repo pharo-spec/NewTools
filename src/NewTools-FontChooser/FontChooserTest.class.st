@@ -1,15 +1,3 @@
-"
-To open the old font chooser morph
-
-```
-FontChooser
-	openWithWindowTitle: 'Choose the Menu Font'
-	for: StandardFonts
-	setSelector: #menuFont:
-	getSelector: #menuFont
-
-```
-"
 Class {
 	#name : #FontChooserTest,
 	#superclass : #TestCase,
@@ -32,15 +20,8 @@ FontChooserTest >> setUp [
 FontChooserTest >> testFontList [
 	
 	self deny: chooser fontList isEmpty.
-	self assert: chooser fontList first familyName equals: LogicalFontManager current defaultFamilies first familyName
-	
-]
-
-{ #category : #tests }
-FontChooserTest >> testFontListStrings [
-
-	self deny: chooser fontListStrings isEmpty.
 	self 
-		assert: chooser fontListStrings
-		equals: (LogicalFontManager current defaultFamilies collect: [ :each | each familyName ]) 
+		assert: chooser fontList first familyName 
+		equals: LogicalFontManager current defaultFamilies first familyName
+	
 ]
