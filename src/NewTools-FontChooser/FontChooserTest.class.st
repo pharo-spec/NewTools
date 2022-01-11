@@ -7,9 +7,10 @@ Class {
 	#category : #'NewTools-FontChooser'
 }
 
-{ #category : #tests }
+{ #category : #running }
 FontChooserTest >> setUp [
 	
+	super setUp.
 	chooser := FontChooser new.
 	chooser fontList: LogicalFontManager current defaultFamilies.
 	"this is equivalent to FontChooser newWithDefaultFamilies"

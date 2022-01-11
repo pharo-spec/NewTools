@@ -11,6 +11,9 @@ Class {
 StFontChooserPresenterTest >> setUp [
 
 	| fontChooser |
+	
+	super setUp.
+	
 	fontChooser := FontChooser newWithDefaultFamilies
 		font: (LogicalFont familyName: 'Bitmap DejaVu Sans' pointSize: 12);
 		yourself.
