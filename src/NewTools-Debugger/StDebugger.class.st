@@ -1250,10 +1250,12 @@ StDebugger >> updateSourceCodeFor: aContext [
 
 { #category : #stack }
 StDebugger >> updateStackFromSession: aSession [
-	|stack|
-	stack := (self filterStack: aSession stack).
+	| stack |
+	stack := self filterStack: aSession stack.
 	stackTable items: stack.
-	stackTable selectIndex: (self findFirstRelevantStackIndexIn: stack)
+	stackTable
+		selectIndex: (self findFirstRelevantStackIndexIn: stack)
+		scrollToSelection: true
 ]
 
 { #category : #'updating - actions' }
