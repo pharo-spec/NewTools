@@ -54,6 +54,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-FlagBrowser-Tests' with: [ spec requires: #('NewTools-FlagBrowser') ];
 			package: 'NewTools-FileDialog' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-FileDialog-Tests' with: [ spec requires: #('NewTools-FileDialog') ];
+			package: 'NewTools-FontChooser' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-SpTextPresenterDecorators';
 			package: 'NewTools-Debugger-Breakpoints-Tools' with: [ spec requires: #('NewTools-Inspector') ];
 			package: 'NewTools-ProjectLoader';
@@ -71,19 +72,17 @@ BaselineOfNewTools >> baseline: spec [
 			"CritiqueBrowser"
 			package: 'NewTools-CodeCritiques';
 			package: 'NewTools-CodeCritiques-Tests';
-			
 			"Fuel"
 			package: 'NewTools-Debugger-Fuel';
 			package: 'NewTools-Debugger-Fuel-Tests' with: [ spec requires: #('NewTools-Debugger-Fuel') ];
 			package: 'NewTools-Fuel'.
-			
-			
 			
 		spec
 			group: 'Core' with: #('NewTools-Core' 'NewTools-Morphic');
 			group: 'Playground' with: #('Core' 'NewTools-Playground' 'NewTools-Playground-Tests');
 			group: 'Inspector' with: #('Core' 'NewTools-Inspector' 'NewTools-Inspector-Tests');
 			group: 'CritiqueBrowser' with: #('NewTools-CodeCritiques' 'NewTools-CodeCritiques-Tests');
+			group: 'FontChooser' with: #('Core' 'NewTools-FontChooser');
 			group: 'Debugger' with: #(
 				'Core' 
 				'Inspector' 
@@ -128,6 +127,7 @@ BaselineOfNewTools >> baseline: spec [
 				'Debugger' 
 				'SystemReporter'
 				'ChangeSorter'
+				'FontChooser'
 				'Methods'
 				'Spotter') ]
 ]
