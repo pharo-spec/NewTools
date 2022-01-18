@@ -25,21 +25,19 @@ Class {
 { #category : #specs }
 StFontChooserPresenter class >> defaultSpec [ 
 
-	^ SpBoxLayout newVertical
-		add: (SpBoxLayout newHorizontal 
-					add: #fontFamilyList withConstraints: [:c | c padding: 2];
-					add: #fontStyleList withConstraints: [:c | c padding: 2];
-					add: #fontSizeList withConstraints: [:c | c padding: 2];
-					add: #languageList withConstraints: [:c | c padding: 2];
+	^ SpPanedLayout newTopToBottom
+		add: (SpPanedLayout newLeftToRight 
+					add: (SpPanedLayout newLeftToRight
+						add: #fontFamilyList;
+						add: #fontStyleList;
+						yourself);
+					add: (SpPanedLayout newLeftToRight
+						add: #fontSizeList;
+						add: #languageList;
+						yourself);
 					yourself);
-		add: #previewText withConstraints: [:c | c padding: 4];	
-"		add: (SpBoxLayout newHorizontal
-				add: #applyButton;
-				add: #okButton;
-				
-				yourself)
-			withConstraints: [ :c | c height: self buttonHeight ]	
-"		yourself
+		add: #previewText;	
+		yourself
 			
 ]
 
@@ -325,7 +323,7 @@ StFontChooserPresenter >> updatePreview [
 		font: self selectedFont;
 		autoFit: true;
 		lock;
-		hResizing: #shrinkWrap;
+		hResizing: #spaceFill;
 		vResizing: #shrinkWrap)
 ]
 
