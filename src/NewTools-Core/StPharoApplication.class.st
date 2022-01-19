@@ -76,7 +76,9 @@ StPharoApplication >> resetConfiguration [
 	implemented at the moment, and we need to choose the backend from it)"
 	self class environment 
 		at: #StPharoMorphicConfiguration
-		ifPresent: [ :aClass | self useBackend: #Morphic with: aClass new ]
+		ifPresent: [ :aClass | 
+			(self class environment at: #SpStyle) reset.
+			self useBackend: #Morphic with: aClass new ]
 ]
 
 { #category : #running }
