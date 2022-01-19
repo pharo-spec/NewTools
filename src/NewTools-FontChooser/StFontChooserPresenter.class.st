@@ -36,7 +36,7 @@ StFontChooserPresenter class >> defaultSpec [
 						add: #languageList;
 						yourself);
 					yourself);
-		add: #previewText;	
+		add: (SpScrollableLayout with: #previewText);	
 		yourself
 			
 ]
@@ -107,20 +107,19 @@ StFontChooserPresenter >> connectPresenters [
 		whenSelectionChangedDo: [ :selection | 
 			selection selectedItem
 				ifNotNil: [ :family | 
-					self refreshFontStyleList  ]].
+					self refreshFontStyleList  ] ].
 		
 	fontStyleList 
 		whenSelectionChangedDo: [ :selection |
-			selection selectedItem ifNotNil: [ self refreshFontSizeList ]].
+			selection selectedItem ifNotNil: [ self refreshFontSizeList ] ].
 		
 	fontSizeList 
 		whenSelectionChangedDo: [ :selection |
-			selection selectedItem ifNotNil: [ self updatePreview ]].
+			selection selectedItem ifNotNil: [ self updatePreview ] ].
 
 	languageList 
 		whenSelectionChangedDo: [ :selection |
-			selection selectedItem ifNotNil: [ self updatePreview ]].
-		
+			selection selectedItem ifNotNil: [ self updatePreview ] ]
 ]
 
 { #category : #accessing }
@@ -176,13 +175,13 @@ StFontChooserPresenter >> initializePresenters [
 	languageList selectIndex: 1.
 	languageList display: [ :aPangrams | aPangrams key ]	.
 		
-	previewText := self newMorph.
+	previewText := self newMorph
 ]
 
 { #category : #initialization }
 StFontChooserPresenter >> initializeWindow: aWindowPresenter [
 
-	aWindowPresenter initialExtent: 900 @ 530.
+	aWindowPresenter initialExtent: 800@580.
 	aWindowPresenter title: self model title
 ]
 
@@ -317,14 +316,13 @@ StFontChooserPresenter >> updateFonts [
 { #category : #refreshing }
 StFontChooserPresenter >> updatePreview [
 	
-	previewText morph: (TextMorph new
-		wrapFlag: true;
-		contents: self previewText;
+	previewText morph: (RubEditingArea new
+		beWrapped;
+		setTextWith: self previewText;
 		font: self selectedFont;
-		autoFit: true;
-		lock;
-		hResizing: #spaceFill;
-		vResizing: #shrinkWrap)
+		color: Color transparent;
+		in: [ :this | this textArea readOnly: true ];
+		yourself)
 ]
 
 { #category : #initialization }
