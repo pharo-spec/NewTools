@@ -62,6 +62,11 @@ StPlaygroundInteractionModel >> bindings [
 	^ joinedBindings
 ]
 
+{ #category : #'interactive error protocol' }
+StPlaygroundInteractionModel >> correctFrom: anInteger to: anInteger2 with: aString [ 
+	self owner adapter widget correctFrom: anInteger to: anInteger2 with: aString 
+]
+
 { #category : #binding }
 StPlaygroundInteractionModel >> hasBindingOf: aString [
 
