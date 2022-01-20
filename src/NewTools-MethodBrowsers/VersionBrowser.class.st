@@ -6,7 +6,7 @@ I will list of the history of the method available in the sources of the image.
 Examples
 --------------------
 
-	self browseVersionsForClass: self selector: #initializeWidgets
+	self browseVersionsForClass: self selector: #initializePresenters
 	
  
 Internal Representation and Key Implementation Points.
