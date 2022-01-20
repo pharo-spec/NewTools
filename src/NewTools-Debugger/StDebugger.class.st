@@ -826,10 +826,11 @@ StDebugger >> okToChange [
 
 { #category : #opening }
 StDebugger >> openWithFullView [
+
 	"Create and schedule a full debugger with the given label. Do not
 	terminate the current active process."
 
-	self openWithSpec
+	self open
 ]
 
 { #category : #opening }

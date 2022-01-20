@@ -46,7 +46,8 @@ VersionBrowser class >> browseVersionsForClass: aClass selector: aSelector [
 
 { #category : #api }
 VersionBrowser class >> browseVersionsForMethod: aRingMethod [
-	^ (self on: aRingMethod) openWithSpec
+
+	^ (self on: aRingMethod) open
 ]
 
 { #category : #specs }
