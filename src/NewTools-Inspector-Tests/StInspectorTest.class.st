@@ -126,9 +126,9 @@ StInspectorTest >> testContextSelectorForNonBuilderSelector [
 { #category : #tests }
 StInspectorTest >> testDefaultKeyboardFocus [
 
-	inspector openWithSpec.
-	self 
-		assert: inspector defaultKeyboardFocus 
+	inspector open.
+	self
+		assert: inspector defaultKeyboardFocus
 		equals: inspector millerList presenters first
 ]
 
@@ -144,9 +144,10 @@ StInspectorTest >> testDefineContextInSubclass [
 { #category : #tests }
 StInspectorTest >> testFirstPage [
 
-	inspector openWithSpec.
+	inspector open.
 	self assert: inspector firstPage notNil.
-	self assert: (inspector firstPage isKindOf: StObjectInspectorPresenter)
+	self assert:
+		(inspector firstPage isKindOf: StObjectInspectorPresenter)
 ]
 
 { #category : #tests }

@@ -34,7 +34,7 @@ StInspectorBaseTest >> initializeInstanceBeforeInitialization: aPresenter [
 { #category : #'private - utilities' }
 StInspectorBaseTest >> openInstance [
 
-	presenter openWithSpec
+	presenter open
 ]
 
 { #category : #running }

@@ -128,7 +128,7 @@ StInspector class >> onObject: anObject [
 { #category : #'instance creation' }
 StInspector class >> openOn: anObject [
 
-	^ (self onObject: anObject) openWithSpec
+	^ (self onObject: anObject) open
 ]
 
 { #category : #accessing }

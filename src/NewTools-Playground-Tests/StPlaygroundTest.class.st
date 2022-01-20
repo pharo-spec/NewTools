@@ -28,35 +28,29 @@ StPlaygroundTest >> newPlayground [
 { #category : #tests }
 StPlaygroundTest >> testContents [
 
-	presenter openWithSpec.
+	presenter open.
 	self waitUntilUIRedrawed.
 	presenter contents: 'Test'.
 	presenter page flush.
-	self 
-		assert: presenter model contents 
-		equals: 'Test'.
-		
-	
+	self assert: presenter model contents equals: 'Test'
 ]
 
 { #category : #tests }
 StPlaygroundTest >> testLoadPage [
-	| page |
 
-	presenter openWithSpec.
+	| page |
+	presenter open.
 	self waitUntilUIRedrawed.
 	presenter contents: 'Test 1'.
 	presenter page flush.
 
 	page := self newPage
-		contents: 'Test 2';
-		flush;
-		yourself.
+		        contents: 'Test 2';
+		        flush;
+		        yourself.
 	presenter loadPage: page fileReference.
 	self waitUntilUIRedrawed.
-	self 
-		assert: presenter page contents 
-		equals: page contents
+	self assert: presenter page contents equals: page contents
 ]
 
 { #category : #tests }
@@ -70,14 +64,14 @@ StPlaygroundTest >> testNewInspectorForWorksWhenModelIsNil [
 
 { #category : #tests }
 StPlaygroundTest >> testStopProcessing [
-	| page |
 
-	presenter openWithSpec.
+	| page |
+	presenter open.
 	self waitUntilUIRedrawed.
 	page := self newPage
-		contents: 'Test 1';
-		flush;
-		yourself.
+		        contents: 'Test 1';
+		        flush;
+		        yourself.
 	presenter loadPage: page fileReference.
 	self waitUntilUIRedrawed.
 	"a lot of time"
@@ -87,6 +81,5 @@ StPlaygroundTest >> testStopProcessing [
 	self assert: page contents equals: 'Test 1'.
 	"now we can close and test."
 	presenter window close.
-	self assert: page contents equals: 'Test 2'.
-	
+	self assert: page contents equals: 'Test 2'
 ]

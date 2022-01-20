@@ -54,6 +54,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-FlagBrowser-Tests' with: [ spec requires: #('NewTools-FlagBrowser') ];
 			package: 'NewTools-FileDialog' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-FileDialog-Tests' with: [ spec requires: #('NewTools-FileDialog') ];
+			package: 'NewTools-FontChooser' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-SpTextPresenterDecorators';
 			package: 'NewTools-Debugger-Breakpoints-Tools' with: [ spec requires: #('NewTools-Inspector') ];
 			package: 'NewTools-ProjectLoader';
@@ -78,6 +79,7 @@ BaselineOfNewTools >> baseline: spec [
 			group: 'Core' with: #('NewTools-Core' 'NewTools-Morphic');
 			group: 'Playground' with: #('Core' 'NewTools-Playground' 'NewTools-Playground-Tests');
 			group: 'Inspector' with: #('Core' 'NewTools-Inspector' 'NewTools-Inspector-Tests');
+			group: 'FontChooser' with: #('Core' 'NewTools-FontChooser');
 			group: 'Debugger' with: #(
 				'Core' 
 				'Inspector' 
@@ -121,6 +123,7 @@ BaselineOfNewTools >> baseline: spec [
 				'Debugger' 
 				'SystemReporter'
 				'ChangeSorter'
+				'FontChooser'
 				'Methods'
 				'Spotter') ]
 ]
@@ -158,6 +161,6 @@ BaselineOfNewTools >> sindarin: spec [
 	spec baseline: 'Sindarin' with: [ 
 		spec
 			repository: (self packageRepositoryURL 
-				ifEmpty: [ 'github://pharo-spec/ScriptableDebugger' ]);
+				ifEmpty: [ 'github://pharo-spec/ScriptableDebugger:Pharo-10' ]);
 			loads: 'Core' ]
 ]

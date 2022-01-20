@@ -1,46 +1,13 @@
 "
-With the old model (it will not work soon). 
 ```
-(StFontChooserPresenter on: FontChooser new) openWithSpec
-```
-
-```
-(StFontChooserPresenter on: FontChooser new) 
-	setter: #menuFont:;
-	getter: #menuFont;
-	openWithSpec
+(SpFontChooserPresenter on: FontChooser new) openWithSpec
 ```
 
-For example to work on a subset of fonts, provide a specific font chooser as follows:
+For example to work on a subset of fonts, provide a specific font chooser qs follows:
 
 ```
-(StFontChooserPresenter on: NewFontChooserModel newWithDefaultFamilies) openWithSpec
+(SpFontChooserPresenter on: NewFontChooser newWithDefaultFamilies) openWithSpec
 ```
-
-
-It should probably be used as follows but I'm not sure. 
-
-```
-StandardFonts menuFont: (StFontChooser on: FontChooser new) openWithSpec
-```
-
-The old way to open the font chooset is 
-```
-To open the old font chooser morph
-
-FontChooser
- openWithWindowTitle: 'Choose the Menu Font'
- for: StandardFonts
- setSelector: #menuFont:
- getSelector: #menuFont
-```
-
-Then I will have to study
-
-```
-FreeTypeFontSelectorDialogWindow new open
-```
-
 "
 Class {
 	#name : #StFontChooserPresenter,
@@ -49,15 +16,8 @@ Class {
 		'fontFamilyList',
 		'fontStyleList',
 		'fontSizeList',
-		'currentFontStyleIndex',
-		'currentFontStyleValue',
-		'fontSize',
 		'languageList',
-		'renderingResult',
-		'buttonBar',
-		'setterSymbol',
-		'getterSymbol',
-		'target'
+		'previewText'
 	],
 	#category : #'NewTools-FontChooser'
 }
@@ -66,135 +26,23 @@ Class {
 StFontChooserPresenter class >> defaultSpec [ 
 
 	^ SpPanedLayout newTopToBottom
-		add: (SpPanedLayout newLeftToRight
-			add: (SpPanedLayout newLeftToRight 
-				add: #fontFamilyList;
-				add: #fontStyleList;
-				yourself);
-			add: (SpPanedLayout newLeftToRight
-				add: #fontSizeList;
-				add: #languageList;
-				yourself);
-			yourself);
-		add: #renderingResult;
+		add: (SpPanedLayout newLeftToRight 
+					add: (SpPanedLayout newLeftToRight
+						add: #fontFamilyList;
+						add: #fontStyleList;
+						yourself);
+					add: (SpPanedLayout newLeftToRight
+						add: #fontSizeList;
+						add: #languageList;
+						yourself);
+					yourself);
+		add: #previewText;	
 		yourself
 			
 ]
 
-{ #category : #actions }
-StFontChooserPresenter >> apply [
-
-	(target isNil or: [ setterSymbol isNil ]) ifTrue: [ ^ self ].			
-	self selectedFont ifNotNil: [ :font | target perform: setterSymbol with: self font ].
-]
-
-{ #category : #initialization }
-StFontChooserPresenter >> connectPresenters [ 
-	
-	"fontFamilyList 
-		whenSelectedDo: [ :family | 
-			self storeCurrentFontStyleValue.
-			fontStyleList items: family members asOrderedCollection.
-			self refreshFontStyleList ]."
-		
-	fontFamilyList transmitDo: [ self updatePreview ].
-	fontStyleList transmitDo: [ self updatePreview ].
-	fontSizeList transmitDo: [ self updatePreview ].
-	languageList transmitDo: [ self updatePreview ]			
-]
-
-{ #category : #'font style list' }
-StFontChooserPresenter >> firstFontStyleValue [ 
-	"when there is no element that correspond to the previous selection, return the default value"
-	
-	^ 'Regular'	
-				
-]
-
-{ #category : #accessing }
-StFontChooserPresenter >> fontFamilyList [ 
-	
-	^ fontFamilyList 
-
-]
-
-{ #category : #accessing }
-StFontChooserPresenter >> fontSizeList [ 
-	
-	^ fontSize
-
-]
-
-{ #category : #accessing }
-StFontChooserPresenter >> fontStyleList [
-
-	^ fontStyleList
-]
-
-{ #category : #accessing }
-StFontChooserPresenter >> for: anObject [
-	"Specify which object will see its font modified via the getter and setter symbol selector. "
-	
-	target := anObject
-]
-
-{ #category : #accessing }
-StFontChooserPresenter >> getter: aGetterSymbol [
-	"This the selector (e.g., menuFont) of the message that will be sent to the object whose font will be modified on apply."
-	
-	getterSymbol := aGetterSymbol
-]
-
-{ #category : #initialization }
-StFontChooserPresenter >> initializePresenters [
-	<script: '(self on: FontChooser new) openWithSpec'>
-
-	fontFamilyList := self newList.
-	fontFamilyList display: [ :each | each familyName ].
-	fontFamilyList selectFirst.
-
-	fontStyleList := self newList.
-	fontStyleList display: [ :familyMember | 
-		| styleName |
-		styleName := familyMember styleName.
-		familyMember isSimulatedStyle
-			ifTrue: [ '(' , styleName , ')' ]
-			ifFalse: [ styleName ] ].
-	fontStyleList selectFirst.
-
-	fontSizeList := self newList.
-	fontSizeList items: self pointSizeList.
-	fontSizeList selectItem: 12.
-	
-	languageList := self newList.
-	languageList 
-		display: [ :anAssociation | anAssociation key ];
-		items: self pangrams; 
-		selectFirst.
-
-	renderingResult := self newMorph.
-
-	buttonBar := self newButtonBar.
-]
-
-{ #category : #initialization }
-StFontChooserPresenter >> initializeWindow: aWindowPresenter [
-
-	aWindowPresenter initialExtent: 900 @ 530.
-	aWindowPresenter title: self title
-]
-
-{ #category : #initialization }
-StFontChooserPresenter >> modelChanged [  
-	
-	fontFamilyList items: self model fontList.
-	fontFamilyList selectIndex: 1.
-	
-
-]
-
-{ #category : #private }
-StFontChooserPresenter >> pangrams [
+{ #category : #'interface building' }
+StFontChooserPresenter class >> pangrams [
 
 	^ OrderedCollection new
 		add: 'English' -> 'the quick brown fox jumps over the lazy dog';
@@ -245,105 +93,211 @@ StFontChooserPresenter >> pangrams [
 		yourself
 ]
 
-{ #category : #private }
-StFontChooserPresenter >> pointSizeList [
-	
-	^ (1 to: 256) asOrderedCollection "collect: [ :each | each asString padLeftTo: 3 ]"
+{ #category : #events }
+StFontChooserPresenter >> applyChanges [
+
+	self model font: self selectedFont.
+	self model onAcceptDo value: self model font
 ]
 
-{ #category : #private }
-StFontChooserPresenter >> previewText [
-	"Answer the preview text based on current font."
-	| font pangram sample lineLength maxLineLength endOfLineCharacters |
+{ #category : #initialization }
+StFontChooserPresenter >> connectPresenters [ 
+	
+	fontFamilyList 
+		whenSelectionChangedDo: [ :selection | 
+			selection selectedItem
+				ifNotNil: [ :family | 
+					self refreshFontStyleList  ]].
+		
+	fontStyleList 
+		whenSelectionChangedDo: [ :selection |
+			selection selectedItem ifNotNil: [ self refreshFontSizeList ]].
+		
+	fontSizeList 
+		whenSelectionChangedDo: [ :selection |
+			selection selectedItem ifNotNil: [ self updatePreview ]].
 
-	font := self selectedFont.
-	font ifNil: [ ^ '' ].
-	pangram := self selectedPangram.
-	pangram ifNil: [ ^ '' ].
+	languageList 
+		whenSelectionChangedDo: [ :selection |
+			selection selectedItem ifNotNil: [ self updatePreview ]].
+		
+]
+
+{ #category : #accessing }
+StFontChooserPresenter >> fontFamilyList [ 
 	
+	^ fontFamilyList 
+
+]
+
+{ #category : #accessing }
+StFontChooserPresenter >> fontSizeList [ 
+	
+	^ fontSizeList 
+
+]
+
+{ #category : #accessing }
+StFontChooserPresenter >> fontStyleList [
+	^ fontStyleList
+]
+
+{ #category : #initialization }
+StFontChooserPresenter >> initializeDialogWindow: aDialogWindowPresenter [
+	
+	super initializeDialogWindow: aDialogWindowPresenter.
+
+	aDialogWindowPresenter
+		addButton: 'Apply' do: [ :presenter | self applyChanges ];
+		addButton: 'Update' do: [ :presenter | self updateFonts ];
+		okAction: [ self applyChanges ].
+
+]
+
+{ #category : #initialization }
+StFontChooserPresenter >> initializePresenters [ 
+	
+	fontFamilyList := self newList.
+	fontFamilyList display: [ :each | each familyName ].
+	
+	fontStyleList := self newList.
+	fontStyleList display: [ :familyMember |  
+			| styleName |
+			styleName := familyMember styleName.
+			familyMember isSimulatedStyle
+				ifTrue: ['(', styleName, ')']
+				ifFalse: [styleName] ].
+			
+	fontSizeList := self newList.
+	fontSizeList display: [ :fontSize | fontSize asString padLeftTo: 3 ].
+	
+	languageList := self newList.
+	languageList items: self class pangrams.
+	languageList selectIndex: 1.
+	languageList display: [ :aPangrams | aPangrams key ]	.
+		
+	previewText := self newMorph.
+]
+
+{ #category : #initialization }
+StFontChooserPresenter >> initializeWindow: aWindowPresenter [
+
+	aWindowPresenter initialExtent: 900 @ 530.
+	aWindowPresenter title: self model title
+]
+
+{ #category : #initialization }
+StFontChooserPresenter >> modelChanged [  
+	
+	self updateWithFont: self model font
+]
+
+{ #category : #accessing }
+StFontChooserPresenter >> previewText [
+
+	"Answer the preview text based on current font."
+
+	| sample i maxLineLength endOfLineCharacters |
+
 	sample := String new writeStream.
-	font isSymbolFont ifFalse: [ 
-		sample
-			nextPutAll: pangram;
-			cr;
-			nextPutAll: pangram asUppercase;
-			cr ].
-	
-	lineLength := 0.
+
+	self selectedFont isSymbolFont
+		ifFalse: [ | pangram |
+			pangram := languageList selectedItem value.
+			sample
+				nextPutAll: pangram;
+				cr;
+				nextPutAll: pangram asUppercase;
+				cr
+			].
+	i := 0.
+
 	maxLineLength := 30.
 	endOfLineCharacters := '@Z`z'.
 	33 to: 255 do: [ :asciiValue | 
 		| character |
+
 		character := Character value: asciiValue.
 		sample nextPut: character.
-		lineLength := lineLength + 1.
-		((endOfLineCharacters includes: character ) or: [ lineLength = maxLineLength ])
-			ifTrue: [ 
-				lineLength := 0.
-				sample cr ] ].
+		i := i + 1.
+		( ( endOfLineCharacters includes: character ) or: [ i = maxLineLength ] )
+			ifTrue: [ i := 0.
+				sample cr
+				]
+		].
 
 	^ sample contents
 ]
 
+{ #category : #refreshing }
+StFontChooserPresenter >> refreshFontSizeList [
+	
+	| sizes currentFontSizeValue |
+	
+	currentFontSizeValue := fontSizeList selectedItem.
+	
+	sizes := TextStyle pointSizesFor: fontFamilyList selectedItem familyName.
+	sizes ifEmpty: [ sizes := 1 to: 256 ].
+	
+	fontSizeList items: sizes.
+	
+	"If the currentFontSizeValue is not included in the sizes, we select the first"	
+	(sizes includes: currentFontSizeValue)
+		ifTrue: [ fontSizeList selectItem: currentFontSizeValue ]
+		ifFalse: [ (sizes includes: 10)
+			ifTrue: [fontSizeList selectItem: 10] 
+			ifFalse: [fontSizeList selectIndex: 1]].
+]
+
 { #category : #'font style list' }
-StFontChooserPresenter >> refreshFontStyleList [			
-	| fontStyle |
-	"the display logic displays (Oblique) and the font does not store (Oblique) but Oblique.
-	So we have to remove the parentheses if we want to find and select the correct Oblique."
+StFontChooserPresenter >> refreshFontStyleList [
+								
+	| fontStyle toFindName currentFontStyleValue |
+
+	"Keeping current value so we can update the selection"
+	currentFontStyleValue := fontStyleList selection selectedItem.
+	fontStyleList items: self selectedFontFamily members asSortedCollection.
+	
+	"If the selection is null we put Regular as the default"
+	
+	toFindName := currentFontStyleValue 
+		ifNil: ['Regular'] 
+		ifNotNil: [currentFontStyleValue styleName].
 	
 	fontStyle := fontStyleList items detect: [ :aFontStyle | 
-			| previousWithoutParentheses |
-			previousWithoutParentheses := currentFontStyleValue copy.
-			previousWithoutParentheses first = $(
-				ifTrue: [ previousWithoutParentheses := previousWithoutParentheses copyFrom: 2 to: previousWithoutParentheses size - 1 ].
-			aFontStyle styleName = previousWithoutParentheses ] ifNone: [ nil ].
+			aFontStyle styleName = toFindName ] ifNone: [ nil ].
 	fontStyle ifNil: [ "could not work when there are not fontStyles"
 							fontStyleList selectIndex: 1 ]
-				ifNotNil: [ fontStyleList selectItem: fontStyle ]
+				ifNotNil: [ fontStyleList selectItem: fontStyle  ]
 ]
 
-{ #category : #private }
+{ #category : #accessing }
 StFontChooserPresenter >> selectedFont [
 	
-	(fontFamilyList selectedItem isNil 
-		or: [ fontSizeList selectedItem isNil ])
-		ifTrue: [ ^ nil ].
-	
-	^ LogicalFont
-	familyName: 'Source Code Pro'
-	pointSize: 12
-	stretchValue: 1 
-	weightValue: 400 
-	slantValue: 0
-]
-
-{ #category : #private }
-StFontChooserPresenter >> selectedPangram [
-		
-	^ languageList selectedItem value
+	^LogicalFont 
+		familyName: self selectedFontFamily familyName 
+		pointSize: self selectedFontSize 
+		stretchValue: self selectedFontStyle stretchValue
+		weightValue: self selectedFontStyle weightValue
+		slantValue: self selectedFontStyle slantValue
 ]
 
 { #category : #accessing }
-StFontChooserPresenter >> selector: aSymbol [
-	"From this selector we will derive getter and setter (e.g., menuFont: and menuFont) of the message that will be sent to the object whose font will be modified on apply."
+StFontChooserPresenter >> selectedFontFamily [
 	
-	setterSymbol := (#':' , aSymbol) asSymbol.
-	getterSymbol := aSymbol
+	^ fontFamilyList selectedItem 
 ]
 
 { #category : #accessing }
-StFontChooserPresenter >> setter: aSetterSymbol [
-	"This the selector (e.g., menuFont:) of the message that will be sent to the object whose font will be modified on apply."
+StFontChooserPresenter >> selectedFontSize [
 	
-	setterSymbol := aSetterSymbol
+	^ fontSizeList selectedItem
 ]
 
-{ #category : #'font style list' }
-StFontChooserPresenter >> storeCurrentFontStyleValue [ 
-
-	currentFontStyleValue := fontStyleList selection isEmpty
-		ifTrue: [ self firstFontStyleValue ]
-		ifFalse: [  fontStyleList displayValueFor: (fontStyleList selection selectedItem)]. 
+{ #category : #accessing }
+StFontChooserPresenter >> selectedFontStyle [
+	
+	^ fontStyleList selectedItem
 ]
 
 { #category : #initialization }
@@ -352,24 +306,49 @@ StFontChooserPresenter >> title [
 	^ 'Font Chooser'
 ]
 
-{ #category : #actions }
-StFontChooserPresenter >> updateFontList [
-
+{ #category : #events }
+StFontChooserPresenter >> updateFonts [
+	
 	FreeTypeFontProvider current updateFromSystem.
-	self refreshFontList.
-	self changed:#fontListStrings.
+	self updateWithFont: self selectedFont.
+
 ]
 
-{ #category : #private }
+{ #category : #refreshing }
 StFontChooserPresenter >> updatePreview [
+	
+	previewText morph: (TextMorph new
+		wrapFlag: true;
+		contents: self previewText;
+		font: self selectedFont;
+		autoFit: true;
+		lock;
+		hResizing: #spaceFill;
+		vResizing: #shrinkWrap)
+]
 
-	self selectedFont ifNil: [ ^ self ].
+{ #category : #initialization }
+StFontChooserPresenter >> updateWithFont: aFont [
 
-	renderingResult morph: (RubScrolledTextMorph new 
-		hResizing: #spaceFill; 
-		vResizing: #spaceFill;
-		in: [ :this | this textArea readOnly: true ];
-		setText: self previewText;
-		textFont: self selectedFont;
-		yourself).
+	| initialFamily initialStyle |
+	fontFamilyList items: self model fontList.
+
+	initialFamily := fontFamilyList items
+		                 detect: [ :e | e familyName = aFont familyName ]
+		                 ifNone: [ nil ].
+
+	fontFamilyList selectItem: initialFamily.
+
+	initialStyle := self selectedFontFamily members
+		                detect: [ :style | 
+			                style weightValue = aFont weightValue and: [ 
+				                style stretchValue = aFont stretchValue and: [ 
+					                style slantValue = aFont slantValue ] ] ]
+		                ifNone: [ nil ].
+
+	fontStyleList selectItem: initialStyle.
+
+	fontSizeList selectItem: aFont pointSize.
+
+	self updatePreview
 ]
