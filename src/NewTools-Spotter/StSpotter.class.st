@@ -138,7 +138,7 @@ StSpotter class >> open [
 
 	self reset.
 	spotter := self new.
-	^ spotter openModalWithSpec
+	^ spotter openModal
 ]
 
 { #category : #'instance creation' }
