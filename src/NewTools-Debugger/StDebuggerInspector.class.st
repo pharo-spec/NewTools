@@ -14,8 +14,8 @@ Class {
 		'label',
 		'rawInspectionSelectionCache',
 		'assertionFailure',
-		'currentLayoutSpec',
-		'lateralToolbar'
+		'lateralToolbar',
+		'currentLayoutSelector'
 	],
 	#classInstVars : [
 		'maximizeAssertionSpec'
@@ -76,13 +76,13 @@ StDebuggerInspector >> assertionFailureLayout [
 ]
 
 { #category : #layout }
-StDebuggerInspector >> assertionLayoutSpec [
-	^#assertionFailureSpec
+StDebuggerInspector >> assertionLayoutSelector [
+	^#assertionFailureLayout
 ]
 
 { #category : #layout }
-StDebuggerInspector >> currentLayoutSpec [
-	^currentLayoutSpec
+StDebuggerInspector >> currentLayoutSelector [
+	^currentLayoutSelector
 ]
 
 { #category : #accessing }
@@ -99,8 +99,8 @@ StDebuggerInspector >> defaultLayout [
 ]
 
 { #category : #layout }
-StDebuggerInspector >> defaultLayoutSpec [
-	^#defaultSpec
+StDebuggerInspector >> defaultLayoutSelector [
+	^#defaultLayout
 ]
 
 { #category : #updating }
@@ -148,7 +148,7 @@ StDebuggerInspector >> initializePresenters [
 
 	label := self newLabel.
 	inspector := self instantiate: StInspector on: self model.
-	currentLayoutSpec := self defaultLayoutSpec.
+	currentLayoutSelector := self defaultLayoutSelector.
 	self initializeLateralToolbar
 ]
 
@@ -219,14 +219,14 @@ StDebuggerInspector >> saveRawInspectionSelectionForContext: aContext [
 
 { #category : #layout }
 StDebuggerInspector >> setAssertionLayout [
-	currentLayoutSpec := self assertionLayoutSpec.
+	currentLayoutSelector := self assertionLayoutSelector.
 	self layout: self assertionFailureLayout
 ]
 
 { #category : #layout }
 StDebuggerInspector >> setDefaultLayout [
 	
-	currentLayoutSpec := self defaultLayoutSpec.
+	currentLayoutSelector := self defaultLayoutSelector.
 	self layout: self defaultLayout
 ]
 
@@ -261,10 +261,10 @@ StDebuggerInspector >> updateLayoutForContexts: aContext isAssertionFailure: isT
 
 	| assertionResult |
 	isTopContextFailingAssertion ifFalse: [ 
-		currentLayoutSpec = self defaultLayoutSpec ifTrue: [ ^ self ].
+		currentLayoutSelector = self defaultLayoutSelector ifTrue: [ ^ self ].
 		self setDefaultLayout.
 		^self ].
-	currentLayoutSpec = self assertionLayoutSpec ifTrue: [ ^ self ].
+	currentLayoutSelector = self assertionLayoutSelector ifTrue: [ ^ self ].
 
 	[ assertionResult := aContext findFailedAssertionResultsInSenderChain ]
 		on: StDebuggeAssertionFailureContextNotFound
