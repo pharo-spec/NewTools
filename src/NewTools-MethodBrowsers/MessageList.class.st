@@ -27,8 +27,8 @@ Class {
 	#category : #'NewTools-MethodBrowsers-Base'
 }
 
-{ #category : #specs }
-MessageList class >> defaultSpec [
+{ #category : #layout }
+MessageList class >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		add: #listPresenter;
