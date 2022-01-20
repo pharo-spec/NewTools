@@ -133,8 +133,11 @@ StSpotterProcessor >> actLogic [
 { #category : #'spotter-api' }
 StSpotterProcessor >> allFilteredCandidates [
 
-	self configureFilter.		
-	^ self filter upToEnd
+	| result |
+	self configureFilter  .
+	result := OrderedCollection new: 2000.
+	[ self filter atEnd or: [ result size > 2000 ]] whileFalse: [ result add: self filter next ].
+	^ result
 ]
 
 { #category : #filtering }
