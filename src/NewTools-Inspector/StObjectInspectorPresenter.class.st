@@ -164,6 +164,7 @@ StObjectInspectorPresenter >> initializePresenters [
 	views := self newNotebook.
 	header := self instantiate: StHeaderBar.
 
+	self layout: self defaultLayout.
 	self refresh
 ]
 
