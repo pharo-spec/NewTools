@@ -135,8 +135,8 @@ StSpotterProcessor >> allFilteredCandidates [
 
 	| result |
 	self configureFilter  .
-	result := OrderedCollection new: 2000.
-	[ self filter atEnd or: [ result size > 2000 ]] whileFalse: [ result add: self filter next ].
+	result := OrderedCollection new.
+	[ self filter atEnd or: [ result size > StSpotterPragmaBasedProcessor defaultNestedItemsLimit ]] whileFalse: [ result add: self filter next ].
 	^ result
 ]
 
