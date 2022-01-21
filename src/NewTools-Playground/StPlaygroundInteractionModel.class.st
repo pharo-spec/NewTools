@@ -63,8 +63,8 @@ StPlaygroundInteractionModel >> bindings [
 ]
 
 { #category : #'interactive error protocol' }
-StPlaygroundInteractionModel >> correctFrom: anInteger to: anInteger2 with: aString [ 
-	self owner adapter widget correctFrom: anInteger to: anInteger2 with: aString 
+StPlaygroundInteractionModel >> correctFrom: start to: stop with: aString [ 
+	self owner adapter widget correctFrom: start to: stop with: aString 
 ]
 
 { #category : #binding }
