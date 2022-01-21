@@ -78,8 +78,8 @@ MessageBrowser class >> browseSendersOf: aSymbol [
 	^ self browse: aSymbol senders asSendersOf: aSymbol
 ]
 
-{ #category : #specs }
-MessageBrowser class >> defaultSpec [
+{ #category : #layout }
+MessageBrowser class >> defaultLayout [
 
 	^ SpPanedLayout newTopToBottom
 		add: #messageList;

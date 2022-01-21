@@ -23,8 +23,8 @@ StPlaygroundPagesPresenter class >> defaultExtent [
 	^ 700@400
 ]
 
-{ #category : #specs }
-StPlaygroundPagesPresenter class >> defaultSpec [
+{ #category : #layout }
+StPlaygroundPagesPresenter class >> defaultLayout [
 
 	^ SpPanedLayout newLeftToRight
 		positionOfSlider: 30 percent;

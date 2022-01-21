@@ -14,8 +14,8 @@ Class {
 	#category : #'NewTools-Core-Presenters'
 }
 
-{ #category : #specs }
-StHeaderBar class >> defaultSpec [
+{ #category : #layout }
+StHeaderBar class >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
 		beNotHomogeneous;

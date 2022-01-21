@@ -50,8 +50,8 @@ VersionBrowser class >> browseVersionsForMethod: aRingMethod [
 	^ (self on: aRingMethod) open
 ]
 
-{ #category : #specs }
-VersionBrowser class >> defaultSpec [
+{ #category : #layout }
+VersionBrowser class >> defaultLayout [
 	
 	^ nil
 ]

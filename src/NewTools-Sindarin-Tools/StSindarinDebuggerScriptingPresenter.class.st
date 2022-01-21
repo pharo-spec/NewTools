@@ -22,8 +22,8 @@ Class {
 	#category : #'NewTools-Sindarin-Tools'
 }
 
-{ #category : #specs }
-StSindarinDebuggerScriptingPresenter class >> defaultSpec [
+{ #category : #layout }
+StSindarinDebuggerScriptingPresenter class >> defaultLayout [
 	^ SpBoxLayout newTopToBottom
 		add: #toolbar expand: false;
 		add: #code;

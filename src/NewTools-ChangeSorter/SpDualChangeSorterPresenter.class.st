@@ -16,9 +16,9 @@ Class {
 	#category : #'NewTools-ChangeSorter'
 }
 
-{ #category : #specs }
-SpDualChangeSorterPresenter class >> defaultSpec [
-	<spec>
+{ #category : #layout }
+SpDualChangeSorterPresenter class >> defaultLayout [
+
 	^ SpPanedLayout newLeftToRight
 		add: #changeSorterLeft;
 		add: #changeSorterRight;
