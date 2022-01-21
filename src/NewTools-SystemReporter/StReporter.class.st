@@ -25,9 +25,9 @@ Class {
 	#category : #'NewTools-SystemReporter'
 }
 
-{ #category : #specs }
-StReporter class >> defaultSpec [
-	"self new openWithSpec"
+{ #category : #layout }
+StReporter class >> defaultLayout [
+	"self open"
 	^ (SpBoxLayout newLeftToRight 
 			add: #topicList withConstraints: [ :constraints | constraints width: 140 ];
 			add: #reportText;
@@ -35,9 +35,10 @@ StReporter class >> defaultSpec [
 ]
 
 { #category : #specs }
-StReporter class >> open [ 
+StReporter class >> open [
+
 	<script>
-	self new openWithSpec
+	self new open
 ]
 
 { #category : #adding }

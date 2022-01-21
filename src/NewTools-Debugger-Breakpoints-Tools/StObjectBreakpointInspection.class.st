@@ -12,8 +12,8 @@ Class {
 	#category : #'NewTools-Debugger-Breakpoints-Tools-Presenters'
 }
 
-{ #category : #specs }
-StObjectBreakpointInspection class >> defaultSpec [
+{ #category : #layout }
+StObjectBreakpointInspection class >> defaultLayout [
 
 	^ SpPanedLayout newTopToBottom
 		add: #methodsWithBreakpoints;

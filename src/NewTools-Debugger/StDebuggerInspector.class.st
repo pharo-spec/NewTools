@@ -14,42 +14,14 @@ Class {
 		'label',
 		'rawInspectionSelectionCache',
 		'assertionFailure',
-		'currentLayoutSpec',
-		'lateralToolbar'
+		'lateralToolbar',
+		'currentLayoutSelector'
 	],
 	#classInstVars : [
 		'maximizeAssertionSpec'
 	],
 	#category : #'NewTools-Debugger-View'
 }
-
-{ #category : #specs }
-StDebuggerInspector class >> assertionFailureSpec [
-	| assertionFailureLayout |
-	
-	assertionFailureLayout := SpPanedLayout newTopToBottom.
-	assertionFailureLayout positionOfSlider: (self maximizeAssertionSpec
-			 ifTrue: [ 95 percent ]
-			 ifFalse: [ 40 percent ]).
-	assertionFailureLayout add: (SpBoxLayout newLeftToRight
-			 add: (SpBoxLayout newTopToBottom
-				add: #lateralToolbar expand: false;
-				yourself)
-			 expand: false;
-			 add: #assertionFailure;
-			 yourself).
-
-	self maximizeAssertionSpec ifFalse: [ 
-		assertionFailureLayout add: #inspector ].
-	^ assertionFailureLayout
-]
-
-{ #category : #specs }
-StDebuggerInspector class >> defaultSpec [
-	^ SpBoxLayout newTopToBottom
-		  add: #inspector;
-		  yourself
-]
 
 { #category : #specs }
 StDebuggerInspector class >> maximizeAssertionSpec [
@@ -83,13 +55,34 @@ StDebuggerInspector >> assertionFailure [
 ]
 
 { #category : #layout }
-StDebuggerInspector >> assertionLayoutSpec [
-	^#assertionFailureSpec
+StDebuggerInspector >> assertionFailureLayout [
+	| assertionFailureLayout |
+	
+	assertionFailureLayout := SpPanedLayout newTopToBottom.
+	assertionFailureLayout positionOfSlider: (self class maximizeAssertionSpec
+			 ifTrue: [ 95 percent ]
+			 ifFalse: [ 40 percent ]).
+	assertionFailureLayout add: (SpBoxLayout newLeftToRight
+			 add: (SpBoxLayout newTopToBottom
+				add: #lateralToolbar expand: false;
+				yourself)
+			 expand: false;
+			 add: #assertionFailure;
+			 yourself).
+
+	self class maximizeAssertionSpec ifFalse: [ 
+		assertionFailureLayout add: #inspector ].
+	^ assertionFailureLayout
 ]
 
 { #category : #layout }
-StDebuggerInspector >> currentLayoutSpec [
-	^currentLayoutSpec
+StDebuggerInspector >> assertionLayoutSelector [
+	^#assertionFailureLayout
+]
+
+{ #category : #layout }
+StDebuggerInspector >> currentLayoutSelector [
+	^currentLayoutSelector
 ]
 
 { #category : #accessing }
@@ -98,8 +91,16 @@ StDebuggerInspector >> debuggerInspectorModelClass [
 ]
 
 { #category : #layout }
-StDebuggerInspector >> defaultLayoutSpec [
-	^#defaultSpec
+StDebuggerInspector >> defaultLayout [
+
+	^ SpBoxLayout newTopToBottom
+		  add: #inspector;
+		  yourself
+]
+
+{ #category : #layout }
+StDebuggerInspector >> defaultLayoutSelector [
+	^#defaultLayout
 ]
 
 { #category : #updating }
@@ -147,7 +148,7 @@ StDebuggerInspector >> initializePresenters [
 
 	label := self newLabel.
 	inspector := self instantiate: StInspector on: self model.
-	currentLayoutSpec := self defaultLayoutSpec.
+	currentLayoutSelector := self defaultLayoutSelector.
 	self initializeLateralToolbar
 ]
 
@@ -218,15 +219,15 @@ StDebuggerInspector >> saveRawInspectionSelectionForContext: aContext [
 
 { #category : #layout }
 StDebuggerInspector >> setAssertionLayout [
-	currentLayoutSpec := self assertionLayoutSpec.
-	self layout: self class assertionFailureSpec
+	currentLayoutSelector := self assertionLayoutSelector.
+	self layout: self assertionFailureLayout
 ]
 
 { #category : #layout }
 StDebuggerInspector >> setDefaultLayout [
 	
-	currentLayoutSpec := self defaultLayoutSpec.
-	self layout: self class defaultSpec
+	currentLayoutSelector := self defaultLayoutSelector.
+	self layout: self defaultLayout
 ]
 
 { #category : #'accessing - model' }
@@ -260,10 +261,10 @@ StDebuggerInspector >> updateLayoutForContexts: aContext isAssertionFailure: isT
 
 	| assertionResult |
 	isTopContextFailingAssertion ifFalse: [ 
-		currentLayoutSpec = self defaultLayoutSpec ifTrue: [ ^ self ].
+		currentLayoutSelector = self defaultLayoutSelector ifTrue: [ ^ self ].
 		self setDefaultLayout.
 		^self ].
-	currentLayoutSpec = self assertionLayoutSpec ifTrue: [ ^ self ].
+	currentLayoutSelector = self assertionLayoutSelector ifTrue: [ ^ self ].
 
 	[ assertionResult := aContext findFailedAssertionResultsInSenderChain ]
 		on: StDebuggeAssertionFailureContextNotFound

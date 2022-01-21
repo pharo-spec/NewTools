@@ -51,8 +51,8 @@ StPlaygroundPagePresenter class >> defaultCacheDirectory [
 	^ (FileLocator localDirectory / 'play-cache') ensureCreateDirectory
 ]
 
-{ #category : #specs }
-StPlaygroundPagePresenter class >> defaultSpec [
+{ #category : #layout }
+StPlaygroundPagePresenter class >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		spacing: 3;

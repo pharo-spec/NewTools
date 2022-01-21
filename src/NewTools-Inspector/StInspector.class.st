@@ -36,6 +36,14 @@ StInspector class >> defaultInspectorDiveOnSingleClick [
 	^ true
 ]
 
+{ #category : #layout }
+StInspector class >> defaultLayout [
+
+	^ SpBoxLayout newTopToBottom
+		add: #millerList;
+		yourself
+]
+
 { #category : #accessing }
 StInspector class >> defaultPreferredExtent [
 
@@ -46,14 +54,6 @@ StInspector class >> defaultPreferredExtent [
 StInspector class >> defaultSpacing [
 
 	^ 3
-]
-
-{ #category : #specs }
-StInspector class >> defaultSpec [
-
-	^ SpBoxLayout newTopToBottom
-		add: #millerList;
-		yourself
 ]
 
 { #category : #'instance creation' }

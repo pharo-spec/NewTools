@@ -201,8 +201,8 @@ StDebugger class >> defaultDebuggerRank [
 	^ 10
 ]
 
-{ #category : #specs }
-StDebugger class >> defaultSpec [
+{ #category : #layout }
+StDebugger class >> defaultLayout [
 	^ self perform: self usingSpecSelector
 ]
 
