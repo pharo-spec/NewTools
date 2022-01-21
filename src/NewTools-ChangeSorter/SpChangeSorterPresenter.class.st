@@ -38,7 +38,7 @@ SpChangeSorterPresenter class >> defaultLayout [
 SpChangeSorterPresenter class >> open [
 	<script>
 	
-	self new openWithSpec
+	self new open
 ]
 
 { #category : #accessing }

@@ -69,7 +69,7 @@ StPlaygroundPagesPresenter >> doLoadPageOnNewPlayground [
 	
 	(playground := StPlayground new) 
 		loadPage: self selectedPage;
-		openWithSpec.
+		open.
 	self window close.
 	playground takeKeyboardFocus 		
 ]

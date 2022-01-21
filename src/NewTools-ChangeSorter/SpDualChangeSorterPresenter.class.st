@@ -44,7 +44,7 @@ SpDualChangeSorterPresenter class >> menuCommandOn: aBuilder [
 SpDualChangeSorterPresenter class >> open [
 	<script>
 	
-	self new openWithSpec
+	self new open
 ]
 
 { #category : #'tools-registry' }

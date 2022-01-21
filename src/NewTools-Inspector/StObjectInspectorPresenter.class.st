@@ -64,7 +64,7 @@ StObjectInspectorPresenter class >> onObject: anObject [
 { #category : #opening }
 StObjectInspectorPresenter class >> openOn: anObject [
 
-	^ (self onObject: anObject) openWithSpec
+	^ (self onObject: anObject) open
 ]
 
 { #category : #private }

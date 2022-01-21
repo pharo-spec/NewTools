@@ -42,7 +42,7 @@ StFontChooserPresenterTest >> testPresenterOpenAndClose [
 	
 	self shouldnt: [ 
 			| window | 
-			window := presenter openWithSpec.
+			window := presenter open.
 			window close ] raise: Error
 ]
 

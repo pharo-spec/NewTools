@@ -122,7 +122,7 @@ VersionBrowser >> compareTo: anOtherVersion withLabel: aLabel [
 		title: ('Comparison from {1} to {2}' format: { versions second stamp. aLabel });
 		leftText: texts first;
 		rightText: texts second;
-		openWithSpec
+		open
 ]
 
 { #category : #actions }

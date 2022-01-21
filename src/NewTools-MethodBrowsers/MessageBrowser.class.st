@@ -389,7 +389,7 @@ MessageBrowser >> methodRemoved: anAnnouncement [
 { #category : #'messageList interface' }
 MessageBrowser >> open [
 
-	^self openWithSpec
+	^self open
 ]
 
 { #category : #private }
