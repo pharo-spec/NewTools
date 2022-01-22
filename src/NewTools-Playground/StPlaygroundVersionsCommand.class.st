@@ -37,5 +37,5 @@ StPlaygroundVersionsCommand >> execute [
 	(StPlaygroundPageVersionsPresenter 
 		newApplication: context application
 		model: context) 
-		openDialogWithSpec
+		openDialog
 ]
