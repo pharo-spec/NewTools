@@ -36,7 +36,7 @@ StDebuggerInspector class >> maximizeAssertionSpec: aboolean [
 { #category : #'instance creation' }
 StDebuggerInspector class >> openOn: anObject [
 
-	^ (self on: (StInspectorModel on: anObject)) openWithSpec
+	^ (self on: (StInspectorModel on: anObject)) open
 ]
 
 { #category : #specs }

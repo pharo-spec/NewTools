@@ -50,8 +50,8 @@ VersionBrowser class >> browseVersionsForMethod: aRingMethod [
 	^ (self on: aRingMethod) open
 ]
 
-{ #category : #specs }
-VersionBrowser class >> defaultSpec [
+{ #category : #layout }
+VersionBrowser class >> defaultLayout [
 	
 	^ nil
 ]
@@ -122,7 +122,7 @@ VersionBrowser >> compareTo: anOtherVersion withLabel: aLabel [
 		title: ('Comparison from {1} to {2}' format: { versions second stamp. aLabel });
 		leftText: texts first;
 		rightText: texts second;
-		openWithSpec
+		open
 ]
 
 { #category : #actions }

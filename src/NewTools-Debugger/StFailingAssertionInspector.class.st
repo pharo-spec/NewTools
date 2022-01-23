@@ -24,8 +24,8 @@ Class {
 	#category : #'NewTools-Debugger-View'
 }
 
-{ #category : #specs }
-StFailingAssertionInspector class >> defaultSpec [
+{ #category : #layout }
+StFailingAssertionInspector class >> defaultLayout [
 
 	^ SpPanedLayout newLeftToRight
 		  positionOfSlider: 50 percent;
