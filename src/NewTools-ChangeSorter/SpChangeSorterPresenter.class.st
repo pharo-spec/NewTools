@@ -18,9 +18,8 @@ Class {
 	#category : #'NewTools-ChangeSorter'
 }
 
-{ #category : #specs }
-SpChangeSorterPresenter class >> defaultSpec [
-	<spec>
+{ #category : #layout }
+SpChangeSorterPresenter class >> defaultLayout [
 	
 	^ SpPanedLayout newTopToBottom
 		positionOfSlider: 35 percent;
@@ -39,7 +38,7 @@ SpChangeSorterPresenter class >> defaultSpec [
 SpChangeSorterPresenter class >> open [
 	<script>
 	
-	self new openWithSpec
+	self new open
 ]
 
 { #category : #accessing }

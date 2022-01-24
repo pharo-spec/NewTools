@@ -25,7 +25,7 @@ StInspectorIndexedNode >> = anObject [
 	^ super = anObject and: [ index = anObject index ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 StInspectorIndexedNode >> debuggerColor [
 	^(SHRBTextStyler new attributesFor: #instVar) first color
 ]

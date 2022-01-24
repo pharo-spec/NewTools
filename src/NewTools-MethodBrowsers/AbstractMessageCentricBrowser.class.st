@@ -12,8 +12,8 @@ Class {
 	#category : #'NewTools-MethodBrowsers-Base'
 }
 
-{ #category : #specs }
-AbstractMessageCentricBrowser class >> defaultSpec [
+{ #category : #layout }
+AbstractMessageCentricBrowser class >> defaultLayout [
 
 	^ self subclassResponsibility
 ]

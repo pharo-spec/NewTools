@@ -22,6 +22,25 @@ Class {
 	#category : #'NewTools-FontChooser'
 }
 
+{ #category : #layout }
+StFontChooserPresenter class >> defaultLayout [ 
+
+	^ SpPanedLayout newTopToBottom
+		add: (SpPanedLayout newLeftToRight 
+					add: (SpPanedLayout newLeftToRight
+						add: #fontFamilyList;
+						add: #fontStyleList;
+						yourself);
+					add: (SpPanedLayout newLeftToRight
+						add: #fontSizeList;
+						add: #languageList;
+						yourself);
+					yourself);
+		add: #previewText;	
+		yourself
+			
+]
+
 { #category : #specs }
 StFontChooserPresenter class >> defaultSpec [ 
 

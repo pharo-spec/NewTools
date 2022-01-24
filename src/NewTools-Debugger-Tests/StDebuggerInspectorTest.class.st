@@ -25,7 +25,7 @@ StDebuggerInspectorTest >> tearDown [
 { #category : #tests }
 StDebuggerInspectorTest >> testDefaultLayoutSpec [
 	
-	self assert: inspector currentLayoutSpec equals: inspector defaultLayoutSpec
+	self assert: inspector currentLayoutSelector equals: inspector defaultLayoutSelector
 ]
 
 { #category : #tests }
@@ -61,8 +61,8 @@ StDebuggerInspectorTest >> testSetAssertionLayoutSpec [
 	|inspectorLayout expectedLayout|
 	inspector setAssertionLayout. 
 	inspectorLayout := inspector layout.
-	expectedLayout := inspector class assertionFailureSpec.
-	self assert: inspector currentLayoutSpec equals: inspector assertionLayoutSpec.					
+	expectedLayout := inspector assertionFailureLayout.
+	self assert: inspector currentLayoutSelector equals: inspector assertionLayoutSelector.					
 	self assertCollection: inspectorLayout children size equals: expectedLayout children size. 
 	self assert: inspectorLayout children first class identicalTo:  expectedLayout children first class.
 	self assert: inspectorLayout children first direction equals: expectedLayout children first direction.
@@ -73,13 +73,20 @@ StDebuggerInspectorTest >> testSetAssertionLayoutSpec [
 
 { #category : #tests }
 StDebuggerInspectorTest >> testSetDefaultLayoutSpec [
-	|inspectorLayout expectedLayout|
-	inspector setDefaultLayout. 
+
+	| inspectorLayout expectedLayout |
+	inspector setDefaultLayout.
 	inspectorLayout := inspector layout.
-	expectedLayout := inspector class defaultSpec.
-	self assert: inspector currentLayoutSpec equals: inspector defaultLayoutSpec.
-	self assertCollection: inspectorLayout children equals: expectedLayout children. 
-	self assert: inspectorLayout direction equals: expectedLayout direction.
+	expectedLayout := inspector defaultLayout.
+	self
+		assert: inspector currentLayoutSelector
+		equals: inspector defaultLayoutSelector.
+	self
+		assertCollection: inspectorLayout children
+		equals: expectedLayout children.
+	self
+		assert: inspectorLayout direction
+		equals: expectedLayout direction.
 	self assert: inspectorLayout class identicalTo: expectedLayout class
 ]
 
@@ -118,8 +125,8 @@ StDebuggerInspectorTest >> testUpdateLayoutForContextsWithAssertionFailure [
 		isAssertionFailure: true.
 	assertionFailure := inspector assertionFailure.
 	self
-		assert: inspector currentLayoutSpec
-		equals: inspector assertionLayoutSpec.
+		assert: inspector currentLayoutSelector
+		equals: inspector assertionLayoutSelector.
 	self
 		assert: assertionFailure actualObject
 		equals: ((session interruptedContext tempNamed: #aStringOrBlock) at: 2).
@@ -138,8 +145,8 @@ StDebuggerInspectorTest >> testUpdateLayoutForContextsWithShouldntRaiseFailure [
 		isAssertionFailure: true.
 	assertionFailure := inspector assertionFailure.
 	self
-		deny: inspector currentLayoutSpec
-		equals: inspector assertionLayoutSpec.
+		deny: inspector currentLayoutSelector
+		equals: inspector assertionLayoutSelector.
 	
 ]
 
@@ -153,7 +160,7 @@ StDebuggerInspectorTest >> testUpdateLayoutForContextsWithoutAssertionFailure [
 		updateLayoutForContexts: session interruptedContext
 		isAssertionFailure: false.
 	self
-		assert: inspector currentLayoutSpec
-		equals: inspector defaultLayoutSpec.
+		assert: inspector currentLayoutSelector
+		equals: inspector defaultLayoutSelector.
 	self assert: inspector assertionFailure equals: nil
 ]

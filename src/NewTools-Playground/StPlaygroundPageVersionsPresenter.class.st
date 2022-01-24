@@ -53,7 +53,7 @@ StPlaygroundPageVersionsPresenter >> doAdoptVersionOnNewPlayground [
 	
 	(playground := StPlayground new) 
 		contents: versionList selectedItem content;
-		openWithSpec.
+		open.
 	self window close.
 	playground takeKeyboardFocus
 ]

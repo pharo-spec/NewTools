@@ -23,6 +23,6 @@ SindarinDebugger >> open [
 	"<inspectorPresentationOrder: -10 title: 'Sindarin'>"
 
 	| a |
-	a := (StSindarinDebuggerPresenter on: self) openWithSpec.
+	a := (StSindarinDebuggerPresenter on: self) open.
 	a window extent: 550@350.
 ]

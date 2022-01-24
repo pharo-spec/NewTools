@@ -866,7 +866,7 @@ StDebuggerTest >> testUpdateLayoutForContextsIfAssertionFailure [
 	debugger updateInspectorFromContext: session interruptedContext.
 	assertionFailure := debugger inspector assertionFailure.
 	currentLayout := debugger inspector layout.
-	expectedLayout := StDebuggerInspector assertionFailureSpec.
+	expectedLayout := StDebuggerInspector new assertionFailureLayout.
 	StDebuggerInspector maximizeAssertionSpec: false.
 	self assert: currentLayout direction equals: expectedLayout direction.
 	self
