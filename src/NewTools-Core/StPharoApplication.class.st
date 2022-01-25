@@ -72,13 +72,7 @@ StPharoApplication >> newIconProvider [
 { #category : #initialization }
 StPharoApplication >> resetConfiguration [
 	
-	self flag: #TODO. "Replace this with a proper initialization mechanism (which is not
-	implemented at the moment, and we need to choose the backend from it)"
-	self class environment 
-		at: #StPharoMorphicConfiguration
-		ifPresent: [ :aClass | 
-			(self class environment at: #SpStyle) reset.
-			self useBackend: #Morphic with: aClass new ]
+	self configuration resetOn: self
 ]
 
 { #category : #running }

@@ -1,6 +1,6 @@
 Class {
 	#name : #StPharoMorphicConfiguration,
-	#superclass : #SpApplicationConfiguration,
+	#superclass : #SpMorphicConfiguration,
 	#category : #'NewTools-Morphic'
 }
 
@@ -19,31 +19,34 @@ StPharoMorphicConfiguration >> configure: anApplication [
 { #category : #configuring }
 StPharoMorphicConfiguration >> configureOSX: anApplication [
 	
-	anApplication styleSheet: (self styleSheet, self styleSheetOSX)
-	
+	self addStyleSheet: self styleSheetOSX
 ]
 
 { #category : #configuring }
 StPharoMorphicConfiguration >> configureUnix: anApplication [
 	
-	anApplication styleSheet: self styleSheet
 ]
 
 { #category : #configuring }
 StPharoMorphicConfiguration >> configureWindows: anApplication [
-	
-	anApplication styleSheet: self styleSheet
 ]
 
-{ #category : #private }
-StPharoMorphicConfiguration >> styleSheet [
-
+{ #category : #'private - factory' }
+StPharoMorphicConfiguration >> newStyleSheet [
+	
 	^ StPharoStyleContributor availableContributors 
 		inject: SpStyle defaultStyleSheet 
 		into: [ :accum :each | accum, (each styleSheetContribution) ]
 ]
 
-{ #category : #private }
+{ #category : #initialization }
+StPharoMorphicConfiguration >> resetOn: anApplication [
+
+	SpStyle reset.
+	styleSheet := self newStyleSheet
+]
+
+{ #category : #styling }
 StPharoMorphicConfiguration >> styleSheetOSX [
 	"Just an example on how to build styles programatically ;)"
 
