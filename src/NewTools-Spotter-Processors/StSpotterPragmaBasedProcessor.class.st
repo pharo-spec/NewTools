@@ -7,7 +7,8 @@ Class {
 		'running'
 	],
 	#classVars : [
-		'DefaultItemsLimit'
+		'DefaultItemsLimit',
+		'DefaultNestedItemsLimit'
 	],
 	#category : #'NewTools-Spotter-Processors'
 }
@@ -25,6 +26,18 @@ StSpotterPragmaBasedProcessor class >> defaultItemsLimit: aValue [
 ]
 
 { #category : #'accessing - defaults' }
+StSpotterPragmaBasedProcessor class >> defaultNestedItemsLimit [
+
+	^ DefaultNestedItemsLimit ifNil: [ DefaultNestedItemsLimit := 2000 ]
+]
+
+{ #category : #'accessing - defaults' }
+StSpotterPragmaBasedProcessor class >> defaultNestedItemsLimit: aValue [
+
+	DefaultNestedItemsLimit := aValue
+]
+
+{ #category : #'accessing - defaults' }
 StSpotterPragmaBasedProcessor class >> settingsOn: aBuilder [
 	<systemsettings>
 
@@ -34,7 +47,15 @@ StSpotterPragmaBasedProcessor class >> settingsOn: aBuilder [
 		label: 'Number of results per category';
 		default: 25;
 		order: 100;
-		description: 'Number of results per category to show in Spotter'
+		description: 'Number of results per category to show in Spotter'.
+	
+	(aBuilder setting: #defaultNestedItemsLimit)
+		target: self;
+		parent: #spotter;
+		label: 'Number of nested results per category';
+		default: 2000;
+		order: 101;
+		description: 'Number of total results per of category to show in Spotter'
 ]
 
 { #category : #public }
