@@ -7,6 +7,8 @@ SymbolicBytecode >> inspectionSourceCode [
 	^ SpCodePresenter new 
 		beForBehavior: self method methodClass;
 		text: self method sourceCode;
-		selectionInterval: self sourceInterval;
+		addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
+			interval: (self sourceInterval first to: self sourceInterval last + 1);
+			yourself);
 		yourself
 ]

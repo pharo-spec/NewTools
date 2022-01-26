@@ -55,6 +55,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-FileDialog' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-FileDialog-Tests' with: [ spec requires: #('NewTools-FileDialog') ];
 			package: 'NewTools-FontChooser' with: [ spec requires: #('NewTools-Core') ];
+			package: 'NewTools-FontChooser-Tests' with: [ spec requires: #('NewTools-FontChooser') ];
 			package: 'NewTools-SpTextPresenterDecorators';
 			package: 'NewTools-Debugger-Breakpoints-Tools' with: [ spec requires: #('NewTools-Inspector') ];
 			package: 'NewTools-ProjectLoader';
@@ -69,17 +70,18 @@ BaselineOfNewTools >> baseline: spec [
 			"Debugger Selector"
 			package: 'NewTools-DebuggerSelector' with: [ spec requires: #('NewTools-SpTextPresenterDecorators') ];
 			package: 'NewTools-DebuggerSelector-Tests' with: [ spec requires: #('NewTools-DebuggerSelector') ];
-			
+			"CritiqueBrowser"
+			package: 'NewTools-CodeCritiques';
+			package: 'NewTools-CodeCritiques-Tests';
 			"Fuel"
 			package: 'NewTools-Debugger-Fuel';
 			package: 'NewTools-Debugger-Fuel-Tests' with: [ spec requires: #('NewTools-Debugger-Fuel') ];
 			package: 'NewTools-Fuel'.
-
+			
 		spec
 			group: 'Core' with: #('NewTools-Core' 'NewTools-Morphic');
 			group: 'Playground' with: #('Core' 'NewTools-Playground' 'NewTools-Playground-Tests');
 			group: 'Inspector' with: #('Core' 'NewTools-Inspector' 'NewTools-Inspector-Tests');
-			group: 'FontChooser' with: #('Core' 'NewTools-FontChooser');
 			group: 'Debugger' with: #(
 				'Core' 
 				'Inspector' 
@@ -107,6 +109,8 @@ BaselineOfNewTools >> baseline: spec [
 			"Not in the image for the moment, we need a pass on them"
 			group: 'ChangeSorter' with: #('Core' 'NewTools-ChangeSorter');
 			group: 'KeymapBrowser' with: #('Core' 'NewTools-KeymapBrowser');
+			group: 'CritiqueBrowser' with: #('NewTools-CodeCritiques' 'NewTools-CodeCritiques-Tests');
+			group: 'FontChooser' with: #('Core' 'NewTools-FontChooser' 'NewTools-FontChooser-Tests');
 			group: 'FlagBrowser' with: #(
 				'Core' 
 				'NewTools-FlagBrowser' 
@@ -120,6 +124,7 @@ BaselineOfNewTools >> baseline: spec [
 			group: 'default' with: #(
 				'Playground' 
 				'Inspector' 
+				'CritiqueBrowser'
 				'Debugger' 
 				'SystemReporter'
 				'ChangeSorter'

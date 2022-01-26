@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'chooser'
 	],
-	#category : #'NewTools-FontChooser'
+	#category : #'NewTools-FontChooser-Tests'
 }
 
 { #category : #running }

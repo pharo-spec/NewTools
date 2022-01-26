@@ -18,7 +18,7 @@ StObjectPrinter class >> asNonTruncatedTextFrom: anObject [
 	printing the object. In this case I return a Text highlighted in red."
 	^ [ anObject asString replaceAll: String cr with: String space ] 
 			on: Exception 
-			do: [ Text string: 'error printing' attribute: TextColor red ]
+			do: [ 'Error printing' ]
 ]
 
 { #category : #converting }
@@ -59,7 +59,7 @@ StObjectPrinter class >> textFromError: anError [
 
 	| message |
 	message := anError messageText ifEmpty: [ anError class name ].
-	^ Text string: 'Error printing: ', message attribute: TextColor red
+	^ 'Error printing: ', message
 ]
 
 { #category : #printing }
