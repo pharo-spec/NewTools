@@ -26,8 +26,8 @@ Class {
 	#category : #'NewTools-CodeCritiques-Parts'
 }
 
-{ #category : #specs }
-StCritiqueToolbarPresenter class >> defaultSpec [
+{ #category : #layout }
+StCritiqueToolbarPresenter class >> defaultLayout [
 
 	<spec>
 	^ SpBoxLayout newLeftToRight

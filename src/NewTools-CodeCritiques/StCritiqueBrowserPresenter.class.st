@@ -42,8 +42,8 @@ StCritiqueBrowserPresenter class >> critiquesBrowserMenuOn: aBuilder [
 		icon: self icon
 ]
 
-{ #category : #specs }
-StCritiqueBrowserPresenter class >> defaultSpec [
+{ #category : #layout }
+StCritiqueBrowserPresenter class >> defaultLayout [
 
 	^ SpPanedLayout newTopToBottom
 		  add: (SpPanedLayout newLeftToRight
@@ -75,8 +75,9 @@ StCritiqueBrowserPresenter class >> icon [
 
 { #category : #'instance creation' }
 StCritiqueBrowserPresenter class >> open [
+
 	<example>
-	^ self new openWithSpec
+	^ self new open
 ]
 
 { #category : #menu }
@@ -425,12 +426,6 @@ StCritiqueBrowserPresenter >> onWindowClosed [
 		(UIManager default confirm:
 			 'Do you want log all wrong violations in the Manifests
 before closing the Critiques Browser ?') ifTrue: [ cache logInManifest ] ]
-]
-
-{ #category : #display }
-StCritiqueBrowserPresenter >> open [
-
-	^ self openWithSpec
 ]
 
 { #category : #private }
