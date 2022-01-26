@@ -40,7 +40,7 @@ StPharoMorphicConfiguration >> newStyleSheet [
 ]
 
 { #category : #initialization }
-StPharoMorphicConfiguration >> resetOn: anApplication [
+StPharoMorphicConfiguration >> reset [
 
 	SpStyle reset.
 	styleSheet := self newStyleSheet
