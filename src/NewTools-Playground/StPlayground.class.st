@@ -104,10 +104,10 @@ StPlayground class >> menuCommandOn: aBuilder [
 ]
 
 { #category : #'instance creation' }
-StPlayground class >> open [ 
+StPlayground class >> open [
+
 	<script>
-	
-	^ self new openWithSpec
+	^ self new open
 ]
 
 { #category : #'instance creation' }
@@ -116,7 +116,7 @@ StPlayground class >> openContents: aString [
 
 	^ self new
 		contents: aString;
-		openWithSpec
+		open
 ]
 
 { #category : #'tools registry' }

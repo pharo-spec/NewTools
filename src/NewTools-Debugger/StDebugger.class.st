@@ -176,12 +176,11 @@ StDebugger class >> debuggerWithExtensionsSpec [
 
 	^ SpPanedLayout newTopToBottom
 		positionOfSlider: 65 percent;
-		add:
-			(SpPanedLayout newLeftToRight
-				positionOfSlider: 65 percent;
-				add: self stackAndCodeLayout;
-				add: #extensionToolsNotebook;
-				yourself);
+		add: (SpPanedLayout newLeftToRight
+			positionOfSlider: 65 percent;
+			add: self stackAndCodeLayout;
+			add: #extensionToolsNotebook;
+			yourself);
 		add: #inspector;
 		yourself
 ]
@@ -202,8 +201,8 @@ StDebugger class >> defaultDebuggerRank [
 	^ 10
 ]
 
-{ #category : #specs }
-StDebugger class >> defaultSpec [
+{ #category : #layout }
+StDebugger class >> defaultLayout [
 	^ self perform: self usingSpecSelector
 ]
 
@@ -295,7 +294,7 @@ StDebugger class >> stackLayout [
 		yourself
 ]
 
-{ #category : #deprecated }
+{ #category : #accessing }
 StDebugger class >> taskbarIconName [
 
 	^#smallDebugIcon
@@ -456,22 +455,19 @@ StDebugger >> copyStackToClipboard [
 { #category : #actions }
 StDebugger >> createMissingClass [
 
-	| message exception variableNode |
-	self flag: #DBG_MISSINGTEST.
-	message := self interruptedContext tempAt: 1.
-	exception := self interruptedContext tempAt: 2.
-	variableNode := exception variableNode.
-	[ | newClassBinding | 
+	| variableNode |
+	variableNode := self session exception variableNode.
+	[ 
+	| newClassBinding |
+	self flag: 'This method is actually hard to test because it requires user input to complete. How to test that automatically?'.
 	newClassBinding := OCUndeclaredVariableWarning new
-		node: variableNode;
-		defineClass: variableNode name. 
-	self
-		createMissingMethodFor: message
-		in: newClassBinding value ]
+		                   node: variableNode;
+		                   defineClass: variableNode name ]
 		on: Abort
 		do: [ ^ self ].
 
-	self debuggerActionModel restartContext: self interruptedContext
+	self debuggerActionModel restartContext:
+		self interruptedContext sender
 ]
 
 { #category : #actions }
@@ -830,10 +826,11 @@ StDebugger >> okToChange [
 
 { #category : #opening }
 StDebugger >> openWithFullView [
+
 	"Create and schedule a full debugger with the given label. Do not
 	terminate the current active process."
 
-	self openWithSpec
+	self open
 ]
 
 { #category : #opening }
@@ -1187,17 +1184,13 @@ StDebugger >> updateCodeTextSegmentDecoratorsIn: aContext forInterval: selection
 				yourself)."
 				
 	"This decorates the next executing node"
-	self code
-		addTextSegmentDecoration:
-			(SpTextPresenterDecorator new
-				highlightColor: (Color orange alpha: 0.5);
-				underlineColor: (Color white alpha: 0);
-				interval: (selectionInterval first to: selectionInterval last + 1);
-				yourself)
+	self code addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
+		interval: (selectionInterval first to: selectionInterval last + 1);
+		yourself)
 				
-			"	icon: (self iconNamed: #warning);
-				iconBlock: [ :n | n inspect ];
-				title: 'Click me!';"
+	"	icon: (self iconNamed: #warning);
+		iconBlock: [ :n | n inspect ];
+		title: 'Click me!';"
 ]
 
 { #category : #'updating - actions' }
@@ -1258,10 +1251,12 @@ StDebugger >> updateSourceCodeFor: aContext [
 
 { #category : #stack }
 StDebugger >> updateStackFromSession: aSession [
-	|stack|
-	stack := (self filterStack: aSession stack).
+	| stack |
+	stack := self filterStack: aSession stack.
 	stackTable items: stack.
-	stackTable selectIndex: (self findFirstRelevantStackIndexIn: stack)
+	stackTable
+		selectIndex: (self findFirstRelevantStackIndexIn: stack)
+		scrollToSelection: true
 ]
 
 { #category : #'updating - actions' }

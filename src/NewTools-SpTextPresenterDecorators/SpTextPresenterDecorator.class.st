@@ -20,14 +20,37 @@ Class {
 	#category : #'NewTools-SpTextPresenterDecorators'
 }
 
-{ #category : #'as yet unclassified' }
-SpTextPresenterDecorator class >> highlightStyleName [
-	^#highlight
+{ #category : #accessing }
+SpTextPresenterDecorator class >> defaultHighlightColor [
+		
+	^ Color orange alpha: 0.5
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
+SpTextPresenterDecorator class >> defaultUnderlineColor [
+		
+	^ Color white alpha: 0
+]
+
+{ #category : #'instance creation' }
+SpTextPresenterDecorator class >> forHighlight [
+
+	^ self new
+		highlightColor: self defaultHighlightColor;
+		underlineColor: self defaultUnderlineColor;	
+		yourself
+]
+
+{ #category : #accessing }
+SpTextPresenterDecorator class >> highlightStyleName [
+
+	^ #highlight
+]
+
+{ #category : #accessing }
 SpTextPresenterDecorator class >> underlineStyleName [
-	^#underline
+
+	^ #underline
 ]
 
 { #category : #accessing }
@@ -76,8 +99,9 @@ SpTextPresenterDecorator >> interval [
 ]
 
 { #category : #accessing }
-SpTextPresenterDecorator >> interval: anObject [
-	interval := anObject
+SpTextPresenterDecorator >> interval: anInterval [
+
+	interval := anInterval
 ]
 
 { #category : #accessing }

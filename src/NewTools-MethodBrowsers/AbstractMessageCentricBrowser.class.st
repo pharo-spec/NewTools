@@ -12,8 +12,8 @@ Class {
 	#category : #'NewTools-MethodBrowsers-Base'
 }
 
-{ #category : #specs }
-AbstractMessageCentricBrowser class >> defaultSpec [
+{ #category : #layout }
+AbstractMessageCentricBrowser class >> defaultLayout [
 
 	^ self subclassResponsibility
 ]
@@ -26,7 +26,7 @@ AbstractMessageCentricBrowser class >> isAbstract [
 { #category : #initialization }
 AbstractMessageCentricBrowser >> initialize [
 
-	textConverter := SourceMethodConverter new.
+	textConverter := self newTextConverter.
 	super initialize
 	
 ]
@@ -56,6 +56,12 @@ AbstractMessageCentricBrowser >> isMethodDefinition: anItem [
 	"assume it is a compiled method or ring method definition"
 	^ (anItem isRingObject and: [ anItem isMethod and: [ anItem compiledMethod isNotNil ] ])
 		or: [  anItem isCompiledMethod ]
+]
+
+{ #category : #'private - factory' }
+AbstractMessageCentricBrowser >> newTextConverter [
+
+	^ DiffSourceMethodConverter new
 ]
 
 { #category : #api }

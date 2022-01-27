@@ -21,8 +21,8 @@ StSindarinBytecodeDebuggerPresenter class >> defaultDisplayOrder [
 	^ 2
 ]
 
-{ #category : #specs }
-StSindarinBytecodeDebuggerPresenter class >> defaultSpec [
+{ #category : #layout }
+StSindarinBytecodeDebuggerPresenter class >> defaultLayout [
 	^ SpBoxLayout newTopToBottom
 		add: #toolbar expand: false fill: false padding: 0;
 		add: #bytecode;		

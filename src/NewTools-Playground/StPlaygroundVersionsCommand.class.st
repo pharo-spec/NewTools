@@ -25,11 +25,17 @@ StPlaygroundVersionsCommand class >> defaultName [
 	^ 'Versions'
 ]
 
+{ #category : #accessing }
+StPlaygroundVersionsCommand class >> order [
+
+	^ 20
+]
+
 { #category : #execution }
 StPlaygroundVersionsCommand >> execute [ 
 
 	(StPlaygroundPageVersionsPresenter 
 		newApplication: context application
 		model: context) 
-		openDialogWithSpec
+		openDialog
 ]

@@ -36,6 +36,15 @@ StPharoApplication class >> startUp: resuming [
 	Current startUp: resuming
 ]
 
+{ #category : #private }
+StPharoApplication class >> use: application during: aBlock [ 
+	| oldCurrent |
+	
+	oldCurrent := Current.
+	Current := application.
+	^ aBlock ensure: [ Current := oldCurrent ]
+]
+
 { #category : #'accessing - resources' }
 StPharoApplication >> defaultWindowExtent [
 	
@@ -63,11 +72,8 @@ StPharoApplication >> newIconProvider [
 { #category : #initialization }
 StPharoApplication >> resetConfiguration [
 	
-	self flag: #TODO. "Replace this with a proper initialization mechanism (which is not
-	implemented at the moment, and we need to choose the backend from it)"
-	self class environment 
-		at: #StPharoMorphicConfiguration
-		ifPresent: [ :aClass | self useBackend: #Morphic with: aClass new ]
+	self flag: #TODO. "Invalidating for a moment because I need to align with Spec"
+	"self configuration reset"
 ]
 
 { #category : #running }

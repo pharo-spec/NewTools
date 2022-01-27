@@ -22,11 +22,6 @@ StDefineSubclassResponsabilityCommand class >> defaultName [
 	^ 'Create subclass responsibility'
 ]
 
-{ #category : #initialization }
-StDefineSubclassResponsabilityCommand class >> defaultShortcut [
-	^ nil
-]
-
 { #category : #testing }
 StDefineSubclassResponsabilityCommand >> appliesTo: aDebugger [
 	^ aDebugger canExecuteCreateSubclassResponsibilityCommand

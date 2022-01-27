@@ -9,7 +9,7 @@ Collection >> spotterItemsFor: aStep [
 	processor := aStep previousProcessorFrom: self.
 	^ aStep listProcessor
 		title: processor title;
-		candidatesLimit: 100;
+		candidatesLimit: StSpotterPragmaBasedProcessor defaultNestedItemsLimit;
 		items: [ self collect: [ :each | each asStSpotterCandidateLink value ] as: OrderedCollection ];
 		itemName: processor itemName;
 		itemIcon: processor itemIcon;

@@ -20,6 +20,18 @@ Class {
 	#category : #'NewTools-Playground-View'
 }
 
+{ #category : #'private commands' }
+StPlaygroundPagePresenter class >> baseToolbarCommands [
+
+	^ { 
+		StPlaygroundDoItCommand.
+		StPlaygroundPublishCommand.
+		StPlaygroundBindingsCommand.				
+		StPlaygroundVersionsCommand.
+		StPlaygroundPagesCommand.
+	}
+]
+
 { #category : #accessing }
 StPlaygroundPagePresenter class >> cacheDirectory [
 	
@@ -39,8 +51,8 @@ StPlaygroundPagePresenter class >> defaultCacheDirectory [
 	^ (FileLocator localDirectory / 'play-cache') ensureCreateDirectory
 ]
 
-{ #category : #specs }
-StPlaygroundPagePresenter class >> defaultSpec [
+{ #category : #layout }
+StPlaygroundPagePresenter class >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		spacing: 3;
@@ -56,11 +68,23 @@ StPlaygroundPagePresenter class >> defaultTitle [
 	^ 'Playground'
 ]
 
+{ #category : #'private commands' }
+StPlaygroundPagePresenter class >> extendedMenuCommands [
+
+	^ StPlaygroundMenuExtensionCommand allCommands
+]
+
+{ #category : #'private commands' }
+StPlaygroundPagePresenter class >> extendedToolbarCommands [
+
+	^ StPlaygroundToolbarExtensionCommand allCommands
+]
+
 { #category : #'instance creation' }
 StPlaygroundPagePresenter class >> open [ 
 	<script>
 	
-	^ (self on: StPlaygroundPage new) openWithSpec
+	^ (self on: StPlaygroundPage new) open
 ]
 
 { #category : #'instance creation' }
@@ -69,7 +93,7 @@ StPlaygroundPagePresenter class >> openContents: aString [
 
 	^ self new
 		contents: aString;
-		openWithSpec
+		open
 ]
 
 { #category : #'tools registry' }
@@ -80,6 +104,12 @@ StPlaygroundPagePresenter class >> registerToolsOn: registry [
 
 ]
 
+{ #category : #'private commands' }
+StPlaygroundPagePresenter class >> toolbarCommands [
+
+	^ (self baseToolbarCommands, self extendedToolbarCommands) sorted: #order ascending
+]
+
 { #category : #api }
 StPlaygroundPagePresenter >> activateOnDoubleClick [
 	"For compatibility, playground will not activate on single or double click (but in <meta+g>)"
@@ -88,6 +118,20 @@ StPlaygroundPagePresenter >> activateOnDoubleClick [
 { #category : #api }
 StPlaygroundPagePresenter >> activateOnSingleClick [
 	"For compatibility, playground will not activate on single or double click (but in <meta+g>)"
+]
+
+{ #category : #private }
+StPlaygroundPagePresenter >> addMenuCommandsTo: aGroup [
+
+	self class extendedMenuCommands 
+		do: [ :each | aGroup register: (each forSpecContext: self) ]	
+]
+
+{ #category : #private }
+StPlaygroundPagePresenter >> addToolbarCommandsTo: aGroup [
+
+	self class toolbarCommands do: [ :each | 
+		aGroup register: (each forSpecContext: self) ]
 ]
 
 { #category : #private }
@@ -229,12 +273,11 @@ StPlaygroundPagePresenter >> menuActionsFor: aCodePresenter [
 			yourself);
 		register: (aCodePresenter rootCommandsGroup name: 'Code');
 		register: (aCodePresenter editionCommandsGroup name: 'Edition');
+		in: [ :this | self addMenuCommandsTo: this ];
 		register: ((CmCommandGroup named: 'Playground') asSpecGroup
 			register: ((CmCommandGroup named: 'Base options') asSpecGroup
 				beDisplayedAsGroup;
-				register: (StPlaygroundPublishCommand forSpecContext: self);
-				register: (StPlaygroundBindingsCommand forSpecContext: self);
-				register: (StPlaygroundPagesCommand forSpecContext: self);
+				in: [ :this | self addToolbarCommandsTo: this ];
 				yourself);
 			register: ((CmCommandGroup named: 'Miscelaneous options') asSpecGroup
 				beDisplayedAsGroup;
@@ -318,15 +361,11 @@ StPlaygroundPagePresenter >> toggleShowLineNumbers [
 	self showLineNumbers: self showLineNumbers not
 ]
 
-{ #category : #'private - builder' }
+{ #category : #private }
 StPlaygroundPagePresenter >> toolbarActions [
 
 	^ CmCommandGroup forSpec
-		register: (StPlaygroundDoItCommand forSpecContext: self);
-		register: (StPlaygroundPublishCommand forSpecContext: self);
-		register: (StPlaygroundBindingsCommand forSpecContext: self);
-		register: (StPlaygroundVersionsCommand forSpecContext: self);
-		register: (StPlaygroundPagesCommand forSpecContext: self);
+		in: [ :this | self addToolbarCommandsTo: this ];
 		yourself
 ]
 

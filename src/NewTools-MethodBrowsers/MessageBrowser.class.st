@@ -78,8 +78,8 @@ MessageBrowser class >> browseSendersOf: aSymbol [
 	^ self browse: aSymbol senders asSendersOf: aSymbol
 ]
 
-{ #category : #specs }
-MessageBrowser class >> defaultSpec [
+{ #category : #layout }
+MessageBrowser class >> defaultLayout [
 
 	^ SpPanedLayout newTopToBottom
 		add: #messageList;
@@ -295,6 +295,7 @@ MessageBrowser >> initialize [
 
 { #category : #initialization }
 MessageBrowser >> initializeDropList [
+
 	toolbarPresenter 
 		addItemLabeled: 'Source' do: [ self textConverter: SourceMethodConverter new ];
 		addItemLabeled: 'Time stamp' do: [ self textConverter: TimeStampMethodConverter new ]
@@ -388,7 +389,7 @@ MessageBrowser >> methodRemoved: anAnnouncement [
 { #category : #'messageList interface' }
 MessageBrowser >> open [
 
-	^self openWithSpec
+	^self open
 ]
 
 { #category : #private }

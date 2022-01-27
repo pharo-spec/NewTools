@@ -10,7 +10,7 @@ Class {
 	#category : #'NewTools-Morphic'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #api }
 StPharoStyleContributor class >> availableContributors [
 
 	^ self allSubclasses

@@ -25,11 +25,17 @@ StPlaygroundPagesCommand class >> defaultName [
 	^ 'Pages'
 ]
 
+{ #category : #accessing }
+StPlaygroundPagesCommand class >> order [
+
+	^ 30
+]
+
 { #category : #execution }
 StPlaygroundPagesCommand >> execute [ 
 
 	(StPlaygroundPagesPresenter 
 		newApplication: context application
 		model: context) 
-		openDialogWithSpec
+		openDialog
 ]

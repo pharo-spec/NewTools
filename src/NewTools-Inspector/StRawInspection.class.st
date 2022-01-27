@@ -23,8 +23,8 @@ StRawInspection class >> buildCommandsGroupWith: presenter forRoot: aCmCommandsG
 				forSpecContext: [ presenter selectedItem value ])
 ]
 
-{ #category : #specs }
-StRawInspection class >> defaultSpec [
+{ #category : #layout }
+StRawInspection class >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom 
 		add: #attributeTable;

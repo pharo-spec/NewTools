@@ -22,8 +22,8 @@ StPlaygroundBindingsPresenter class >> defaultExtent [
 	^ 600@400
 ]
 
-{ #category : #specs }
-StPlaygroundBindingsPresenter class >> defaultSpec [
+{ #category : #layout }
+StPlaygroundBindingsPresenter class >> defaultLayout [
 
 	^ SpPanedLayout newLeftToRight
 		positionOfSlider: 30 percent;

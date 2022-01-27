@@ -138,7 +138,7 @@ StSpotter class >> open [
 
 	self reset.
 	spotter := self new.
-	^ spotter openModalWithSpec
+	^ spotter openModal
 ]
 
 { #category : #'instance creation' }
@@ -146,7 +146,7 @@ StSpotter class >> openOn: aModel [
 
 	self reset.
 	spotter := self on: aModel.
-	^ spotter openModalWithSpec
+	^ spotter openModal
 ]
 
 { #category : #'instance creation' }
@@ -174,7 +174,7 @@ StSpotter class >> registerToolsOn: registry [
 	registry register: self as: #spotter
 ]
 
-{ #category : #private }
+{ #category : #'class initialization' }
 StSpotter class >> reset [
 	
 	spotter ifNotNil: [ 
@@ -444,31 +444,39 @@ StSpotter >> initializeDialogWindow: aDialogWindowPresenter [
 ]
 
 { #category : #initialization }
-StSpotter >> initializePresenters [
+StSpotter >> initializeLayout [
 	| contentsLayout |
-
+	
 	self layout: (SpBoxLayout newTopToBottom
 		borderWidth: 10;
 		spacing: 5;
-		add: (searchText := self newSearchInput) expand: false;
+		add: searchText expand: false;
 		add: (SpOverlayLayout new
 			child: ((contentsLayout := SpBoxLayout newLeftToRight)
 				beHomogeneous;
 				spacing: 5;
-				add: (resultList := self newComponentList);
+				add: resultList;
 				yourself);
 			addOverlay: (spinner := self newSpinner) 
 				withConstraints: [ :c | c vAlignCenter; hAlignCenter ];
-			yourself)
+			yourself);
 		yourself).
 
 	self isShowingPreview ifTrue: [ self addPreviewPanelTo: contentsLayout ].
 	self isShowingTips ifTrue: [ self addTipsPanel ].
 
 	self addStyle: 'stSpotter'.
-	
 	spinner hide.
+]
 
+{ #category : #initialization }
+StSpotter >> initializePresenters [
+	
+	resultList := self newComponentList.
+	searchText := self newSearchInput.
+	
+	self initializeLayout.
+	
 	resultList
 		addStyle: 'stSpotterList';		
 		bindKeyCombination: Character arrowUp asKeyCombination 
@@ -488,7 +496,7 @@ StSpotter >> initializePresenters [
 	resultList eventHandler 
 		whenKeyDownDo: [ :anEvent | self handleKeyEvent: anEvent ].
 
-	searchText 
+	searchText
 		placeholder: 'Search...';
 		addStyle: 'stSpotterSearch';
 		whenTextChangedDo: [ :aString | self updateSearch: aString ];

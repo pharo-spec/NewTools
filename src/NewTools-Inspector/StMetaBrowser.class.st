@@ -30,8 +30,8 @@ StMetaBrowser class >> buildCommandsGroupWith: presenter forRoot: aCmCommandsGro
 			yourself)
 ]
 
-{ #category : #specs }
-StMetaBrowser class >> defaultSpec [
+{ #category : #layout }
+StMetaBrowser class >> defaultLayout [
 	
 	^ SpPanedLayout newTopToBottom
 		add: (SpPanedLayout newLeftToRight

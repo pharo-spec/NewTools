@@ -24,8 +24,8 @@ Class {
 	#category : #'NewTools-Debugger-View'
 }
 
-{ #category : #specs }
-StFailingAssertionInspector class >> defaultSpec [
+{ #category : #layout }
+StFailingAssertionInspector class >> defaultLayout [
 
 	^ SpPanedLayout newLeftToRight
 		  positionOfSlider: 50 percent;
@@ -42,16 +42,17 @@ StFailingAssertionInspector class >> defaultSpec [
 
 { #category : #'instance creation' }
 StFailingAssertionInspector class >> diffInspectorsFromActual: actualObject expected: expectedObject application: aStApplication [
+
 	| diffPresenter |
 	diffPresenter := self basicNew
-		application: aStApplication;
-		actualObject: actualObject;
-		expectedObject: expectedObject;
-		initialize.
-		
+		                 application: aStApplication;
+		                 actualObject: actualObject;
+		                 expectedObject: expectedObject;
+		                 initialize.
+
 	self flag: 'Not nice but works. This needs improvement.'.
-	(actualObject isString and: [ expectedObject isString ])
-		ifTrue: [ diffPresenter buildWithSpec: #stringSpec ].
+	(actualObject isString and: [ expectedObject isString ]) ifTrue: [ 
+		diffPresenter buildWithSelector: #stringSpec ].
 	^ diffPresenter
 ]
 
