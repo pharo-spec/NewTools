@@ -1,6 +1,12 @@
 Extension { #name : #StPharoApplication }
 
 { #category : #'*NewTools-Gtk' }
+StPharoApplication >> defaultConfigurationForGtk [
+
+	^ StPharoGtkConfiguration new
+]
+
+{ #category : #'*NewTools-Gtk' }
 StPharoApplication >> syntaxHighlightTheme [
 	
 	self flag: #TODO. "This needs to be refactored as common to all platforms, but for now..."
