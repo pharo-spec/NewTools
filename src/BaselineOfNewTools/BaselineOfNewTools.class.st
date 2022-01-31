@@ -109,7 +109,7 @@ BaselineOfNewTools >> baseline: spec [
 			"Not in the image for the moment, we need a pass on them"
 			group: 'ChangeSorter' with: #('Core' 'NewTools-ChangeSorter');
 			group: 'KeymapBrowser' with: #('Core' 'NewTools-KeymapBrowser');
-			group: 'CriticsBrowser' with: #('NewTools-CodeCritiques' 'NewTools-CodeCritiques-Tests');
+			group: 'CritiqueBrowser' with: #('NewTools-CodeCritiques' 'NewTools-CodeCritiques-Tests');
 			group: 'FontChooser' with: #('Core' 'NewTools-FontChooser' 'NewTools-FontChooser-Tests');
 			group: 'FlagBrowser' with: #(
 				'Core' 
@@ -124,7 +124,7 @@ BaselineOfNewTools >> baseline: spec [
 			group: 'default' with: #(
 				'Playground' 
 				'Inspector' 
-				'CriticsBrowser'
+				'CritiqueBrowser'
 				'Debugger' 
 				'SystemReporter'
 				'ChangeSorter'
