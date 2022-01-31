@@ -55,7 +55,7 @@ StRewriteCritiqueChangesBrowserPresenter class >> defaultSpec [
 StRewriteCritiqueChangesBrowserPresenter class >> open [
 
 	<example>
-	^ self new openWithSpec
+	^ self new open
 ]
 
 { #category : #accessing }

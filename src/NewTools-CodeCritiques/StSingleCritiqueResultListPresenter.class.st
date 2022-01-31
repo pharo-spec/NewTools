@@ -76,7 +76,7 @@ StSingleCritiqueResultListPresenter class >> initialize [
 StSingleCritiqueResultListPresenter class >> open [
 
 	<example>
-	^ self new openWithSpec
+	^ self new open
 ]
 
 { #category : #specs }
