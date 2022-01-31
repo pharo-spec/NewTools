@@ -65,7 +65,7 @@ StCritiqueRuleSelectorPresenter class >> openWithEnvironment: anEnvironment remo
 		environment: anEnvironment;
 		removeTestCase: aBoolean;
 		updateTree;
-		openWithSpec
+		open
 		
 ]
 

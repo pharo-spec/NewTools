@@ -23,7 +23,7 @@ Class {
 StCritiquePackageSelectorPresenter class >> open [
 
 	<example>
-	^ self new openWithSpec
+	^ self new open
 ]
 
 { #category : #accessing }

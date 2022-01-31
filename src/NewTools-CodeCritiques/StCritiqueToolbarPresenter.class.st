@@ -41,7 +41,7 @@ StCritiqueToolbarPresenter class >> defaultLayout [
 StCritiqueToolbarPresenter class >> open [
 
 	<example>
-	^ self new openWithSpec
+	^ self new open
 ]
 
 { #category : #specs }
