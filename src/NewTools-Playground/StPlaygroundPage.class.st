@@ -204,14 +204,14 @@ StPlaygroundPage >> timeToWait: aDuration [
 	timeToWait := aDuration
 ]
 
-{ #category : #'accessing versions' }
+{ #category : #'accessing - versions' }
 StPlaygroundPage >> versionLog [
 	
 	^ versionLog ifNil: [ 
 		versionLog := OmFileStore fromFile: (self fileReference withExtension: 'ombu') ]
 ]
 
-{ #category : #'accessing versions' }
+{ #category : #'accessing - versions' }
 StPlaygroundPage >> versions [
 	
 	^ Array streamContents: [ :stream | 
