@@ -36,7 +36,7 @@ tag := thisContext method selector.
 ^true
 ]
 
-{ #category : #'accessing context' }
+{ #category : #'accessing - context' }
 StDummyDebuggerPresenter >> currentContext [
 	^self
 ]
