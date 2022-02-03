@@ -10,7 +10,15 @@ Class {
 { #category : #running }
 StFontChooserPresenterTest >> setUp [
 
-	presenter := StFontChooserPresenter on: NewFontChooserModel newWithDefaultFamilies.
+	| fontChooser |
+	
+	super setUp.
+	
+	fontChooser := FontChooser newWithDefaultFamilies
+		font: (LogicalFont familyName: 'Bitmap DejaVu Sans' pointSize: 12);
+		yourself.
+	
+	presenter := StFontChooserPresenter on: fontChooser.
 	
 ]
 
@@ -34,7 +42,7 @@ StFontChooserPresenterTest >> testPresenterOpenAndClose [
 	
 	self shouldnt: [ 
 			| window | 
-			window := presenter openWithSpec.
+			window := presenter open.
 			window close ] raise: Error
 ]
 

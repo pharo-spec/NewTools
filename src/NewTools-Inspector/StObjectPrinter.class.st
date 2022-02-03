@@ -59,7 +59,7 @@ StObjectPrinter class >> textFromError: anError [
 
 	| message |
 	message := anError messageText ifEmpty: [ anError class name ].
-	^ Text string: 'Error printing: ', message attribute: TextColor red
+	^ 'Error printing: ', message
 ]
 
 { #category : #printing }

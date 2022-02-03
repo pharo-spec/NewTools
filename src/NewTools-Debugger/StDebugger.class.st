@@ -201,8 +201,8 @@ StDebugger class >> defaultDebuggerRank [
 	^ 10
 ]
 
-{ #category : #specs }
-StDebugger class >> defaultSpec [
+{ #category : #layout }
+StDebugger class >> defaultLayout [
 	^ self perform: self usingSpecSelector
 ]
 
@@ -826,10 +826,11 @@ StDebugger >> okToChange [
 
 { #category : #opening }
 StDebugger >> openWithFullView [
+
 	"Create and schedule a full debugger with the given label. Do not
 	terminate the current active process."
 
-	self openWithSpec
+	self open
 ]
 
 { #category : #opening }

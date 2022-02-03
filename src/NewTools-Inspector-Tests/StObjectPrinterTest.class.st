@@ -8,7 +8,6 @@ Class {
 StObjectPrinterTest >> assertIsError: aCollection expectedMessage: aMessage [
 	
 	self assert: aCollection asString equals: 'Error printing: ', aMessage.
-	self assert: aCollection runs anyOne first color equals: Color red
 ]
 
 { #category : #tests }

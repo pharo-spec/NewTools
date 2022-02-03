@@ -51,8 +51,8 @@ StPlaygroundPagePresenter class >> defaultCacheDirectory [
 	^ (FileLocator localDirectory / 'play-cache') ensureCreateDirectory
 ]
 
-{ #category : #specs }
-StPlaygroundPagePresenter class >> defaultSpec [
+{ #category : #layout }
+StPlaygroundPagePresenter class >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		spacing: 3;
@@ -84,7 +84,7 @@ StPlaygroundPagePresenter class >> extendedToolbarCommands [
 StPlaygroundPagePresenter class >> open [ 
 	<script>
 	
-	^ (self on: StPlaygroundPage new) openWithSpec
+	^ (self on: StPlaygroundPage new) open
 ]
 
 { #category : #'instance creation' }
@@ -93,7 +93,7 @@ StPlaygroundPagePresenter class >> openContents: aString [
 
 	^ self new
 		contents: aString;
-		openWithSpec
+		open
 ]
 
 { #category : #'tools registry' }
