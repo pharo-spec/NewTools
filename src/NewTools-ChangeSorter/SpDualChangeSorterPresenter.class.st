@@ -79,7 +79,7 @@ SpDualChangeSorterPresenter >> changeSetMenuFrom: sourcePanel to: destinationPan
 				addItem: [ :anItem | 
 					anItem
 						name: 'Submerge into the other change set';
-						action: [ self submerge: sourcePanel into: destinationPanel ] ];
+						action: [ self submergeFrom: sourcePanel into: destinationPanel ] ];
 				addItem: [ :anItem | 
 					anItem
 						name: 'Subtract the other change set';
