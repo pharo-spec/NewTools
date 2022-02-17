@@ -139,17 +139,17 @@ StUnifiedProcessorTest >> testLookingForDiskStoreWithSpaceReturnsDiskStore [
 ]
 
 { #category : #tests }
+StUnifiedProcessorTest >> testLookingForStoreDiskDoesntReturnDiskStore [
+
+	self runForText: 'StoreDisk'.
+	self denyResultsIncludes: DiskStore
+]
+
+{ #category : #tests }
 StUnifiedProcessorTest >> testLookingForStoreDiskLowercaseReturnsThisMethod [
 
 	self runForText: 'store disk'.
 	self assertResultsIncludes: StUnifiedProcessorTest >> #testLookingForStoreDiskLowercaseReturnsThisMethod
-]
-
-{ #category : #tests }
-StUnifiedProcessorTest >> testLookingForStoreDiskReturnsDiskStore [
-
-	self runForText: 'StoreDisk'.
-	self assertResultsIncludes: DiskStore
 ]
 
 { #category : #tests }
