@@ -58,6 +58,13 @@ StUnifiedProcessorTest >> testFindThisMethodAfterAddingText [
 ]
 
 { #category : #tests }
+StUnifiedProcessorTest >> testFindThisMethodRespectingSearchStringTokensOrder [
+
+	self runForText: 'testFindMethodThis'.
+	self denyResultsIncludes: thisContext method
+]
+
+{ #category : #tests }
 StUnifiedProcessorTest >> testFindThisMethodWithFullClass [
 
 	self runForText: 'StUnifiedProcessorTest >> #testFindThisMethod'.
