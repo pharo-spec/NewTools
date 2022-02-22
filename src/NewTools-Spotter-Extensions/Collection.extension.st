@@ -5,7 +5,7 @@ Collection >> spotterItemsFor: aStep [
 	<stSpotterOrder: 10>
 	| processor |
 
-	(self isEmpty or: [ self size > self collectionSizeThreshold ]) ifTrue: [ ^ self ].
+	(self isEmpty or: [ self size > StSpotterPragmaBasedProcessor defaultNestedItemsLimit ]) ifTrue: [ ^ self ].
 	processor := aStep previousProcessorFrom: self.
 	^ aStep listProcessor
 		title: processor title;

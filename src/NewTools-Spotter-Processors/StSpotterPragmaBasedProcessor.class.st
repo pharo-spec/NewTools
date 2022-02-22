@@ -28,7 +28,7 @@ StSpotterPragmaBasedProcessor class >> defaultItemsLimit: aValue [
 { #category : #'accessing - defaults' }
 StSpotterPragmaBasedProcessor class >> defaultNestedItemsLimit [
 
-	^ DefaultNestedItemsLimit ifNil: [ DefaultNestedItemsLimit := 2000 ]
+	^ DefaultNestedItemsLimit ifNil: [ DefaultNestedItemsLimit := 10000 ]
 ]
 
 { #category : #'accessing - defaults' }
