@@ -21,3 +21,9 @@ StBreakpointCommand >> appliesTo: aTool [
 		on: Error
 		do: [ false ]
 ]
+
+{ #category : #testing }
+StBreakpointCommand >> canBeExecuted [
+
+	^ context selectedItem class == StInspectorSlotNode
+]
