@@ -30,6 +30,8 @@ StDebuggerTest >> compileMethodWithUndeclaredChoosing: choice [
 	[ dbg acceptCodeChanges: newSource forContext: context ]
 		on: ProvideAnswerNotification
 		do: [ :n | | expected |
+			"If the expected answer is a class or a trait definition, use the default one.
+			Otherwise assume it's an unknown variable"
 			(n messageText includesSubstring: 'Edit class definition:') ifTrue: [ 
 				n resume: #default ].
 			(n messageText includesSubstring: 'Edit trait definition:') ifTrue: [ 
