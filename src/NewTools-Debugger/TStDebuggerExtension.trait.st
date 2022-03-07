@@ -32,6 +32,11 @@ TStDebuggerExtension classSide >> displayOrder: anInteger [
 	debuggerExtensionDisplayOrder := anInteger
 ]
 
+{ #category : #'as yet unclassified' }
+TStDebuggerExtension classSide >> showInContext: aContext [
+	^true
+]
+
 { #category : #'debugger extension' }
 TStDebuggerExtension classSide >> showInDebugger [
 	^showDebuggerExtension ifNil: [showDebuggerExtension := false]

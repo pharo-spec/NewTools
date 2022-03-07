@@ -16,8 +16,7 @@ Class {
 		'code',
 		'resultInspection',
 		'toolbar',
-		'sindarinDebugger',
-		'stDebugger'
+		'sindarinDebugger'
 	],
 	#category : #'NewTools-Sindarin-Tools'
 }
@@ -38,11 +37,6 @@ StSindarinDebuggerScriptingPresenter class >> defaultLayout [
 { #category : #actions }
 StSindarinDebuggerScriptingPresenter >> createCommandFromScript [
 	self flag: 'todo'
-]
-
-{ #category : #accessing }
-StSindarinDebuggerScriptingPresenter >> debugger [ 
-	^stDebugger
 ]
 
 { #category : #'debugger extension' }
@@ -115,7 +109,7 @@ StSindarinDebuggerScriptingPresenter >> saveScript [
 { #category : #accessing }
 StSindarinDebuggerScriptingPresenter >> setModelBeforeInitialization: aStDebugger [
 	"My original model is the debugger presenter that I extend"
-	stDebugger := aStDebugger.
+	debugger := aStDebugger.
 	sindarinDebugger := aStDebugger sindarinDebugger
 ]
 

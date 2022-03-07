@@ -8,7 +8,6 @@ Class {
 		'bcContextInspection',
 		'toolbar',
 		'sindarinDebugger',
-		'stDebugger',
 		'bytecodeList',
 		'currentPC'
 	],
@@ -28,11 +27,6 @@ StSindarinBytecodeDebuggerPresenter class >> defaultLayout [
 		add: #bytecode;		
 		add: #bcContextInspection;
 		yourself
-]
-
-{ #category : #accessing }
-StSindarinBytecodeDebuggerPresenter >> debugger [ 
-	^stDebugger
 ]
 
 { #category : #'debugger extension' }
@@ -61,7 +55,7 @@ StSindarinBytecodeDebuggerPresenter >> initializeToolbar [
 { #category : #accessing }
 StSindarinBytecodeDebuggerPresenter >> setModelBeforeInitialization: aStDebugger [
 	"My original model is the debugger presenter that I extend"
-	stDebugger := aStDebugger.
+	debugger := aStDebugger.
 	sindarinDebugger := aStDebugger sindarinDebugger
 ]
 
