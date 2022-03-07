@@ -6,6 +6,8 @@ The debugger interface itself is tested in the debugger test class.
 Class {
 	#name : #StDummyDebuggerPresenter,
 	#superclass : #SpPresenter,
+	#traits : 'TStDebuggerExtension',
+	#classTraits : 'TStDebuggerExtension classTrait',
 	#instVars : [
 		'tag'
 	],

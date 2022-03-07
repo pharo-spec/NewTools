@@ -1,5 +1,12 @@
+"
+All Spec presenters using me will be recognised as debugger extensions when opening a debugger.
+
+"
 Trait {
 	#name : #TStDebuggerExtension,
+	#instVars : [
+		'debugger'
+	],
 	#classInstVars : [
 		'showDebuggerExtension',
 		'debuggerExtensionDisplayOrder'
@@ -35,6 +42,11 @@ TStDebuggerExtension classSide >> showInDebugger: aBoolean [
 	showDebuggerExtension := aBoolean
 ]
 
+{ #category : #accessing }
+TStDebuggerExtension >> debugger [
+	^debugger
+]
+
 { #category : #'debugger extension' }
 TStDebuggerExtension >> debuggerExtensionToolName [
 	^self explicitRequirement 
@@ -43,4 +55,9 @@ TStDebuggerExtension >> debuggerExtensionToolName [
 { #category : #'debugger extension' }
 TStDebuggerExtension >> displayOrder [
 	^self class displayOrder
+]
+
+{ #category : #initialization }
+TStDebuggerExtension >> setModelBeforeInitialization: aDebugger [
+	 debugger := aDebugger
 ]

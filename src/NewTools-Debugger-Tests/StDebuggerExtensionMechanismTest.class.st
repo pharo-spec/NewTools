@@ -60,6 +60,7 @@ StDebuggerExtensionMechanismTest >> testInstantiateExtensionToolsPage [
 	self assert: toolPage class identicalTo: SpNotebookPage.
 	self assert: toolPage presenterProvider value class identicalTo: StDummyDebuggerPresenter.
 	self assert: toolPage title equals: StDummyDebuggerPresenter new debuggerExtensionToolName.
+	self assert: toolPage presenterProvider value debugger identicalTo: dbg.
 	self assertCollection: dbg extensionTools includesAll: { toolPage presenterProvider value}.
 	 
 ]
