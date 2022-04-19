@@ -1,3 +1,10 @@
+"
+I represent an attribute table specialized for debuggers.
+
+I'm used to display all variables that are my roots. I can filter these variables by their variable tag. 
+
+In the debugger, I'm used to display all variables in the selected context and you can filter/unfilter them by clicking/double-clicking one of their variable tag.
+"
 Class {
 	#name : #StDebuggerTreeTablePresenter,
 	#superclass : #SpTreeTablePresenter,
@@ -12,10 +19,12 @@ Class {
 { #category : #api }
 StDebuggerTreeTablePresenter >> applyFilter [
 
-	filter ifNil: [ ^items ].
-	isFiltered ifFalse:  [ filter := nil. ^items ].
+	filter ifNil: [ ^ items ].
+	isFiltered ifFalse: [ 
+		filter := nil.
+		^ items ].
 
-	^items select: [:item| item variableTag = filter]
+	^ items select: [ :item | item variableTag = filter ]
 ]
 
 { #category : #accessing }
@@ -45,9 +54,6 @@ StDebuggerTreeTablePresenter >> roots: aCollection [
 { #category : #api }
 StDebuggerTreeTablePresenter >> toggleFilter: aVariableTag [
 
-"	filter := filter = aVariableTag
-		          ifTrue: [ nil ]
-		          ifFalse: [ aVariableTag ]."
 	filter := aVariableTag.
 	isFiltered := isFiltered not.
 
