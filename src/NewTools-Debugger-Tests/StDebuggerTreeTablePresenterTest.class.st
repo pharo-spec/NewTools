@@ -40,12 +40,9 @@ StDebuggerTreeTablePresenterTest >> testApplyFilterDoesFilterWhenHasActiveFilter
 	filteredItems := presenter applyFilter.
 
 	filteredItems do: [ :filteredItem | 
-		self
-			deny: (rejectedItems includes: filteredItem);
-			assert: filteredItem variableTag equals: 'toto' ].
+		self assert: filteredItem variableTag equals: 'toto' ].
 	self
-		assert: filteredItems size + rejectedItems size
-		equals: inspectorNodes size
+		assertCollection: inspectorNodes hasSameElements: filteredItems , rejectedItems
 ]
 
 { #category : #tests }
@@ -102,10 +99,9 @@ StDebuggerTreeTablePresenterTest >> testToggleFiltersWhenFilteredAndFilterIsNotN
 	presenter toggleFilter: 'toto'.
 
 	presenter roots do: [ :filteredItem | 
-		self 	deny: (rejectedItems includes: filteredItem);
-				assert: filteredItem variableTag equals: 'toto' ].
+		self assert: filteredItem variableTag equals: 'toto' ].
 	self
-		assert: presenter roots size + rejectedItems size equals: inspectorNodes size;
+		assertCollection: presenter roots , rejectedItems hasSameElements: inspectorNodes;
 		assert: presenter filter equals: 'toto';
 		assert: presenter hasActiveFilter
 ]
@@ -113,9 +109,6 @@ StDebuggerTreeTablePresenterTest >> testToggleFiltersWhenFilteredAndFilterIsNotN
 { #category : #tests }
 StDebuggerTreeTablePresenterTest >> testToggleUnFiltersWhenToggledTwice [
 
-	| rejectedItems |
-	rejectedItems := inspectorNodes reject: [ :item | 
-		                 item variableTag = 'toto' ].
 	presenter toggleFilter: 'toto'.
 	presenter toggleFilter: 'toto'.
 
