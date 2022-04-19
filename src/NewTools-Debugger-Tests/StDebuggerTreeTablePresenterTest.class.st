@@ -66,14 +66,6 @@ StDebuggerTreeTablePresenterTest >> testApplyFilterDoesntFilterWhenFilterIsNil [
 ]
 
 { #category : #tests }
-StDebuggerTreeTablePresenterTest >> testApplyFilterDoesntFilterWhenHasActiveFilterIsFalse [
-
-	presenter filter: 'toto'.
-	presenter applyFilter.
-	self assert: presenter roots equals: inspectorNodes
-]
-
-{ #category : #tests }
 StDebuggerTreeTablePresenterTest >> testInitialization [
 
 	self deny: presenter hasActiveFilter.
