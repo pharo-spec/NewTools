@@ -308,6 +308,11 @@ StDebuggerActionModel >> session: aDebugSession [
 	session := aDebugSession
 ]
 
+{ #category : #'accessing - variables' }
+StDebuggerActionModel >> sessionStack [
+	^ self session stack
+]
+
 { #category : #'debug - stack' }
 StDebuggerActionModel >> shouldFilterStack [
 

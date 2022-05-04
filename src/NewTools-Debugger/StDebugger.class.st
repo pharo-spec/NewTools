@@ -1036,6 +1036,12 @@ StDebugger >> sessionHolder [
 	^ sessionHolder ifNil: [ sessionHolder := nil asValueHolder ]
 ]
 
+{ #category : #'accessing - variables' }
+StDebugger >> sessionStack [
+	^ self debuggerActionModel sessionStack 
+
+]
+
 { #category : #initialization }
 StDebugger >> setModelBeforeInitialization: aSession [
 
@@ -1054,7 +1060,7 @@ StDebugger >> setSessionHolderSubscriptions [
 
 { #category : #actions }
 StDebugger >> showFullStack [
-	stackTable items: (self filterStack: self session stack)
+	stackTable items: (self filterStack: self sessionStack)
 
 ]
 

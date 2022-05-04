@@ -511,6 +511,12 @@ StDebuggerActionModelTest >> testRunToSelectionInContext [
 	self assert: (method sourceNodeForPC: session interruptedContext pc) identicalTo: node
 ]
 
+{ #category : #tests }
+StDebuggerActionModelTest >> testSessionStackProvidesSameStackAsTheSessionOne [
+
+	self assert: debugActionModel sessionStack equals: debugActionModel session stack
+]
+
 { #category : #'tests - actions' }
 StDebuggerActionModelTest >> testStepInto [
 	|ctx|
