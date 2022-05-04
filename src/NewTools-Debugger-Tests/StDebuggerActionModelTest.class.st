@@ -590,6 +590,36 @@ StDebuggerActionModelTest >> testSessionStackProvidesSameStackAsTheSessionOne [
 	self assert: debugActionModel sessionStack equals: debugActionModel session stack
 ]
 
+{ #category : #tests }
+StDebuggerActionModelTest >> testStackOfSizeWhenStackIsBigger [
+
+	| oldStack newStack |
+	oldStack := debugActionModel session stack.
+
+	debugActionModel stepInto: debugActionModel interruptedContext.
+	newStack := debugActionModel stackOfSize: oldStack size + 13.
+
+	self assert: newStack size - oldStack size equals: 1.
+	self
+		assertCollection: oldStack
+		equals:
+		(newStack collect: [ :obj | obj ] from: 2 to: oldStack size + 1)
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testStackOfSizeWhenStackIsNotBigger [
+
+	| oldStack newStack |
+	oldStack := debugActionModel session stack.
+
+	newStack := debugActionModel stackOfSize: oldStack size + 13.
+
+	self assert: newStack size - oldStack size equals: 0.
+	self
+		assertCollection: oldStack
+		equals: (newStack collect: [ :obj | obj ] from: 1 to: oldStack size)
+]
+
 { #category : #'tests - actions' }
 StDebuggerActionModelTest >> testStepInto [
 	|ctx|
