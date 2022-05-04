@@ -784,7 +784,7 @@ StDebugger >> instantiateExtensionToolsPage: aToolClass [
 { #category : #'accessing - context' }
 StDebugger >> interruptedContext [
 
-	^ self session interruptedContext
+	^ self debuggerActionModel interruptedContext
 ]
 
 { #category : #accessing }
@@ -1213,7 +1213,7 @@ StDebugger >> updateExtensionsFrom: newSession [
 StDebugger >> updateInspectorFromContext: aContext [
 
 	inspector
-		updateLayoutForContexts: self session interruptedContext
+		updateLayoutForContexts: self interruptedContext
 		isAssertionFailure:
 		self debuggerActionModel isInterruptedContextAnAssertEqualsFailure.
 	inspector updateWith: (self newDebuggerContextFor: aContext).

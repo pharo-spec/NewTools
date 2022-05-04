@@ -388,6 +388,12 @@ StDebuggerActionModelTest >> testInitialization [
 ]
 
 { #category : #tests }
+StDebuggerActionModelTest >> testInterruptedContextProvidesSameContextAsTheSessionOne [
+
+	self assert: debugActionModel interruptedContext equals: debugActionModel session interruptedContext 
+]
+
+{ #category : #tests }
 StDebuggerActionModelTest >> testInterruptedProcessProvidesSameProcessAsTheSessionOne [
 
 	self
