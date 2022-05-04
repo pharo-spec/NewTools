@@ -111,6 +111,11 @@ StDebuggerActionModel >> copyStackToClipboard [
 				streamContents: [ :s | self interruptedContext shortDebugStackOn: s ])
 ]
 
+{ #category : #accessing }
+StDebuggerActionModel >> exception [
+	^ self session exception
+]
+
 { #category : #'debug - stack' }
 StDebuggerActionModel >> fileOutMethod: aMethod [
 	aMethod methodClass fileOutMethod: aMethod selector

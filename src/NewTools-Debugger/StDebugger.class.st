@@ -456,7 +456,7 @@ StDebugger >> copyStackToClipboard [
 StDebugger >> createMissingClass [
 
 	| variableNode |
-	variableNode := self session exception variableNode.
+	variableNode := self exception variableNode.
 	[ 
 	| newClassBinding |
 	self flag: 'This method is actually hard to test because it requires user input to complete. How to test that automatically?'.
@@ -560,6 +560,11 @@ StDebugger >> doBrowseClass [
 StDebugger >> doBrowseReceiverClass [
 
 	self systemNavigation browse: self stackSelectionReceiverClassContext value
+]
+
+{ #category : #accessing }
+StDebugger >> exception [
+	^ self debuggerActionModel exception
 ]
 
 { #category : #stack }
@@ -797,7 +802,7 @@ StDebugger >> interruptedProcess [
 StDebugger >> newDebuggerContext [
 
 	^ self class debuggerContextClass new
-		  exception: self session exception;
+		  exception: self exception;
 		  yourself
 ]
 
