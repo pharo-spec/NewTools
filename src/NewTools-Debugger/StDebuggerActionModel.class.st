@@ -317,6 +317,11 @@ StDebuggerActionModel >> runToSelection: aSelectionInterval inContext: aContext 
 	self updateTopContext
 ]
 
+{ #category : #actions }
+StDebuggerActionModel >> selectedCodeRangeForContext: aContext [ 
+	^ self session selectedCodeRangeForContext: aContext
+]
+
 { #category : #accessing }
 StDebuggerActionModel >> session [
 	^session
