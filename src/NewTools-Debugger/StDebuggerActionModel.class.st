@@ -275,6 +275,15 @@ StDebuggerActionModel >> proceedDebugSession [
 		clear
 ]
 
+{ #category : #actions }
+StDebuggerActionModel >> recompileMethodTo: aString inContext: aContext notifying: aNotifyer [
+	aContext ifNil: [ ^ self ].
+	self session
+		recompileMethodTo: aString
+		inContext: aContext
+		notifying: aNotifyer
+]
+
 { #category : #context }
 StDebuggerActionModel >> referenceContext [
 	"The reference context is the context that we wish to see in the debugger's stack.

@@ -244,9 +244,11 @@ StDebuggerActionModelTest >> testDynamicShouldFilterStackUpdate [
 ]
 
 { #category : #tests }
-StDebuggerActionModelTest >> testExceptionProvidesSameExceptionAsTheSessionOne [ 
+StDebuggerActionModelTest >> testExceptionProvidesSameExceptionAsTheSessionOne [
 
-self assert: debugActionModel exception equals: debugActionModel session exception
+	self
+		assert: debugActionModel exception
+		equals: debugActionModel session exception
 ]
 
 { #category : #'tests - actions' }
@@ -496,6 +498,33 @@ StDebuggerActionModelTest >> testProceedDebugSession [
 	debugActionModel proceedDebugSession.
 	self assert: session interruptedContext isNil.
 	self assert: result equals: 4
+]
+
+{ #category : #tests }
+StDebuggerActionModelTest >> testRecompileMethodToInContextNotifyingUpdatesSourceCodeAndContext [
+
+	| oldStack contextChanged expectedNewStack rejectedFromOldStack |
+	contextChanged := debugActionModel topContext.
+
+	debugActionModel session stepIntoUntil: [ :currentContext | 
+		currentContext selector = #squared ].
+	debugActionModel updateTopContext.
+	oldStack := debugActionModel sessionStack.
+	rejectedFromOldStack := { debugActionModel topContext }.
+
+	expectedNewStack := oldStack copyWithoutFirst.
+
+	debugActionModel
+		recompileMethodTo: contextChanged method sourceCode
+		inContext: contextChanged
+		notifying: nil.
+
+	self
+		denyCollection: debugActionModel sessionStack
+		includesAny: rejectedFromOldStack.
+	self
+		assertCollection: debugActionModel sessionStack
+		hasSameElements: expectedNewStack
 ]
 
 { #category : #'tests - actions' }
