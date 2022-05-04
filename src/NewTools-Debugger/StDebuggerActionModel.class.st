@@ -8,7 +8,9 @@ Class {
 		'session',
 		'contextPredicate',
 		'topContext',
-		'filterStack'
+		'filterStack',
+		'updateEventListeners',
+		'preventUpdate'
 	],
 	#classVars : [
 		'ShouldFilterStack'
@@ -43,6 +45,12 @@ StDebuggerActionModel class >> shouldFilterStackSettingsOn: aBuilder [
 		default: true;
 		parent: #debugging;
 		description: 'Defines if methods with pragma #debuggerCompleteToSender are filtered (hidden) in the debugger stack'
+]
+
+{ #category : #adding }
+StDebuggerActionModel >> addUpdateEventListener: aBlock [
+
+	updateEventListeners add: aBlock
 ]
 
 { #category : #'debug - session' }
@@ -159,7 +167,10 @@ StDebuggerActionModel >> implement: aMessage classified: messageCategory inClass
 StDebuggerActionModel >> initialize [
 	super initialize.
 	self computeInitialTopContext.
-	filterStack := true
+	filterStack := true.
+	updateEventListeners := OrderedCollection new.
+	"flag that will prevent any update as long as it is set"
+	preventUpdate := false
 ]
 
 { #category : #accessing }
@@ -256,6 +267,19 @@ StDebuggerActionModel >> predicateFor: aContext postMortem: isContextPostMortem 
 		  yourself
 ]
 
+{ #category : #'as yet unclassified' }
+StDebuggerActionModel >> preventUpdatesDuring: aBlock [
+
+	"Sets the prevent update flag during the execution of a block. Restores its value after the block 	finishes"
+
+	| oldEventFlag |
+	oldEventFlag := preventUpdate.
+	preventUpdate := true.
+	[ 
+	aBlock value.
+	self update ] ensure: [ preventUpdate := oldEventFlag ]
+]
+
 { #category : #'debug - execution' }
 StDebuggerActionModel >> proceedDebugSession [
 
@@ -265,6 +289,12 @@ StDebuggerActionModel >> proceedDebugSession [
 		clear
 ]
 
+{ #category : #'as yet unclassified' }
+StDebuggerActionModel >> raiseUpdateEvents [
+
+	updateEventListeners do: [ :each | each value ]
+]
+
 { #category : #context }
 StDebuggerActionModel >> referenceContext [
 	"The reference context is the context that we wish to see in the debugger's stack.
@@ -272,6 +302,32 @@ StDebuggerActionModel >> referenceContext [
 	or the exception's signaler context in all other cases."
 	self contextPredicate contextSignalsException ifFalse:[^self interruptedContext].
 	^topContext receiver signalerContext 
+]
+
+{ #category : #'as yet unclassified' }
+StDebuggerActionModel >> registerActionsForSession: aSession [
+	self flag: 'Rewrite it'.
+	aSession
+		ifNotNil: [ aSession
+				when: #restart send: #updateIfAble to: self;
+				when: #resume send: #updateIfAble to: self;
+				when: #stepInto send: #updateIfAble to: self;
+				when: #stepOver send: #updateIfAble to: self;
+				when: #stepThrough send: #updateIfAble to: self;
+				when: #contextChanged send: #updateIfAble to: self ]
+]
+
+{ #category : #'as yet unclassified' }
+StDebuggerActionModel >> removeActionsForSession: aSession [
+	self flag: 'Rewrite it'.
+	aSession
+		ifNotNil: [ aSession
+				removeActionsForEvent: #restart;
+				removeActionsForEvent: #resume;
+				removeActionsForEvent: #stepInto;
+				removeActionsForEvent: #stepOver;
+				removeActionsForEvent: #stepThrough;
+				removeActionsForEvent: #contextChanged ]
 ]
 
 { #category : #'debug - execution' }
@@ -305,7 +361,11 @@ StDebuggerActionModel >> session [
 
 { #category : #accessing }
 StDebuggerActionModel >> session: aDebugSession [
-	session := aDebugSession
+	session ifNotNil: [ self removeActionsForSession: session ].
+	session := aDebugSession.
+	self registerActionsForSession: self session.
+
+	self updateIfAble
 ]
 
 { #category : #'debug - stack' }
@@ -351,6 +411,16 @@ StDebuggerActionModel >> topContext [
 	^ topContext
 ]
 
+{ #category : #accessing }
+StDebuggerActionModel >> update [
+
+	self updateTopContext.
+	self updateContextPredicate.
+	self updateDebugSession.
+
+	self raiseUpdateEvents
+]
+
 { #category : #context }
 StDebuggerActionModel >> updateContextPredicate [
 	^self updateContextPredicateFor: self topContext
@@ -372,6 +442,13 @@ StDebuggerActionModel >> updateDebugSession [
 StDebuggerActionModel >> updateDebugSessionException: e [
 
 	self session exception: e
+]
+
+{ #category : #accessing }
+StDebuggerActionModel >> updateIfAble [
+
+	preventUpdate ifNil: [ ^ self ].
+	preventUpdate ifFalse: [ self update ]
 ]
 
 { #category : #context }

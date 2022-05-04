@@ -301,6 +301,12 @@ StDebugger class >> taskbarIconName [
 	^#smallDebugIcon
 ]
 
+{ #category : #'as yet unclassified' }
+StDebugger class >> updateBlockFor: aDebugger [
+
+	^ [ aDebugger updateStep ]
+]
+
 { #category : #'tools registry' }
 StDebugger class >> usesExtensions [
 
@@ -396,7 +402,7 @@ StDebugger >> clear [
 		page activePresenter windowIsClosing ].
 	extensionTools := nil.
 	self unsubscribeFromSystemAnnouncer.	
-	self removeActionsForSession: self session.
+	self unsubscribeFromActionModel.
 	
 	"When we programmatically close the window, we do not need to terminate the session as it was already cleared"
 	programmaticallyClosed ifTrue: [ ^ self ].
@@ -600,7 +606,10 @@ StDebugger >> findFirstRelevantStackIndexIn: aStack [
 
 { #category : #'updating - session' }
 StDebugger >> forceSessionUpdate [
-	self sessionHolder valueChanged
+
+	self
+		updateStackFromSession: self session;
+		updateExtensionsFrom: self session
 ]
 
 { #category : #api }
@@ -622,7 +631,7 @@ StDebugger >> initialExtent [
 StDebugger >> initialize [
 	super initialize.
 	self debuggerActionModel updateContextPredicate.			
-	self setSessionHolderSubscriptions.
+	self subscribeToActionModel.
 	self forceSessionUpdate.
 	self subscribeToMethodAddedAnnouncement.
 	
@@ -866,7 +875,7 @@ StDebugger >> printReceiverClassInContext: aContext [
 { #category : #actions }
 StDebugger >> proceedDebugSession [
 
-	self removeActionsForSession: self session.
+	self unsubscribeFromActionModel .
 	self debuggerActionModel proceedDebugSession.
 	self close
 ]
@@ -892,41 +901,9 @@ StDebugger >> recordUnsavedCodeChanges [
 	self unsavedCodeChanges at: codeInteractionModel context put: codeText
 ]
 
-{ #category : #'updating - session' }
-StDebugger >> registerActionsForSession: aSession [
-	self flag: 'Rewrite it'.
-	aSession
-		ifNotNil: [ aSession
-				when: #restart send: #updateRestart to: self;
-				when: #resume send: #updateResume to: self;
-				when: #stepInto send: #updateStepInto to: self;
-				when: #stepOver send: #updateStepOver to: self;
-				when: #stepThrough send: #updateStepThrough to: self;
-				when: #contextChanged send: #updateContextChanged to: self ]
-]
-
 { #category : #extensions }
 StDebugger >> registerExtensionTool: anExtension [
 	self extensionTools add: anExtension
-]
-
-{ #category : #'updating - session' }
-StDebugger >> removeActionsForSession: aSession [
-	self flag: 'Rewrite it'.
-	aSession
-		ifNotNil: [ aSession
-				removeActionsForEvent: #restart;
-				removeActionsForEvent: #resume;
-				removeActionsForEvent: #stepInto;
-				removeActionsForEvent: #stepOver;
-				removeActionsForEvent: #stepThrough;
-				removeActionsForEvent: #contextChanged ]
-]
-
-{ #category : #'updating - session' }
-StDebugger >> removeSessionHolderSubscriptions [
-	self sessionHolder announcer unsubscribe: self sessionHolder.
-	self removeActionsForSession: self session
 ]
 
 { #category : #'ui requests' }
@@ -1028,31 +1005,15 @@ StDebugger >> session [
 
 { #category : #accessing }
 StDebugger >> session: aSession [
-	self sessionHolder value: aSession.
 	debuggerActionModel
 		ifNil: [ debuggerActionModel := StDebuggerActionModel on: aSession]
 		ifNotNil: [ debuggerActionModel session: aSession ]
-]
-
-{ #category : #accessing }
-StDebugger >> sessionHolder [
-	^ sessionHolder ifNil: [ sessionHolder := nil asValueHolder ]
 ]
 
 { #category : #initialization }
 StDebugger >> setModelBeforeInitialization: aSession [
 
 	self session: aSession
-]
-
-{ #category : #'updating - session' }
-StDebugger >> setSessionHolderSubscriptions [
-	self sessionHolder
-		whenChangedDo: [ :newSession :oldSession | 
-			self removeActionsForSession: oldSession.
-			self registerActionsForSession: newSession.
-			self updateStackFromSession: newSession.
-			self updateExtensionsFrom: newSession ]
 ]
 
 { #category : #actions }
@@ -1110,6 +1071,12 @@ StDebugger >> stepThrough [
 	self debuggerActionModel stepThrough: self currentContext
 ]
 
+{ #category : #'as yet unclassified' }
+StDebugger >> subscribeToActionModel [
+
+	self debuggerActionModel addUpdateEventListener: (self class updateBlockFor: self)
+]
+
 { #category : #'system subscriptions' }
 StDebugger >> subscribeToMethodAddedAnnouncement [
 
@@ -1135,6 +1102,10 @@ StDebugger >> unsavedCodeChanges [
 { #category : #'presenter - code' }
 StDebugger >> unsavedCodeChangesFor: aContext [ 
 	^self unsavedCodeChanges at: aContext
+]
+
+{ #category : #'as yet unclassified' }
+StDebugger >> unsubscribeFromActionModel [
 ]
 
 { #category : #'system subscriptions' }
@@ -1264,10 +1235,6 @@ StDebugger >> updateStackFromSession: aSession [
 
 { #category : #'updating - actions' }
 StDebugger >> updateStep [
-	self flag: #DBG_UPDATE_OF_MODEL_SHOULD_BE_AUTOMATED.
-	debuggerActionModel updateTopContext.
-	debuggerActionModel updateContextPredicate.	
-	debuggerActionModel updateDebugSession.
 		
 	self updateStackFromSession: self session.
 	self updateWindowTitle.

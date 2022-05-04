@@ -78,7 +78,7 @@ StDebuggerTest >> replaceMethodWithQuickMethodStepping [
 	dbg code type: newSource.
 	dbg code update.
 	dbg acceptCodeChanges: newSource forContext: context.
-	dbg updateStep
+	dbg debuggerActionModel updateIfAble 
 ]
 
 { #category : #running }
