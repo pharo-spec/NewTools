@@ -387,6 +387,15 @@ StDebuggerTest >> testInitialCodeSelectionAfterStepping [
 	"The pc range is highlighted with an additionnal index to encompass the full text of the node (why?)"
 ]
 
+{ #category : #tests }
+StDebuggerTest >> testInterruptedProcessProvidesSameProcessAsTheActionModelOne [
+
+	debugger := self debuggerOn: session.
+	self
+		assert: debugger interruptedProcess
+		equals: debugger debuggerActionModel interruptedProcess
+]
+
 { #category : #'tests - context inspector' }
 StDebuggerTest >> testNewDebuggerContext [
 	| debuggerContext |

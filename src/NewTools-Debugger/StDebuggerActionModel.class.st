@@ -167,6 +167,11 @@ StDebuggerActionModel >> interruptedContext [
 	^self session interruptedContext
 ]
 
+{ #category : #accessing }
+StDebuggerActionModel >> interruptedProcess [
+	^ self session interruptedProcess
+]
+
 { #category : #'debug - predicates' }
 StDebuggerActionModel >> isContextAnAssertionFailure [
 

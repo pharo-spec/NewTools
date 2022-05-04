@@ -790,7 +790,7 @@ StDebugger >> interruptedContext [
 { #category : #accessing }
 StDebugger >> interruptedProcess [
 
-	^ self session interruptedProcess
+	^ self debuggerActionModel  interruptedProcess
 ]
 
 { #category : #'instance creation' }
