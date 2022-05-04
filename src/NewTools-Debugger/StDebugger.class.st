@@ -144,13 +144,14 @@ StDebugger class >> codeLayout [
 
 { #category : #'instance creation' }
 StDebugger class >> debugSession: aDebugSession [
-	| debugger |
 
+	| debugger debugActionModel |
+	debugActionModel := StDebuggerActionModel on: aDebugSession.
 	debugger := self on: aDebugSession.
-	aDebugSession application 
-		ifNotNil: [ :app | debugger application: app ].
+	aDebugSession application ifNotNil: [ :app | 
+		debugger application: app ].
 	debugger openWithFullView.
-	
+
 	^ debugger
 ]
 
@@ -529,7 +530,6 @@ StDebugger >> currentContext [
 { #category : #accessing }
 StDebugger >> debuggerActionModel [
 	^ debuggerActionModel
-		ifNil: [ debuggerActionModel := StDebuggerActionModel on: self session]
 ]
 
 { #category : #accessing }
@@ -1023,12 +1023,15 @@ StDebugger >> selectedContext [
 
 { #category : #accessing }
 StDebugger >> session [
-	^ self sessionHolder value
+	^ self debuggerActionModel session
 ]
 
 { #category : #accessing }
 StDebugger >> session: aSession [
-	self sessionHolder value: aSession
+	self sessionHolder value: aSession.
+	debuggerActionModel
+		ifNil: [ debuggerActionModel := StDebuggerActionModel on: aSession]
+		ifNotNil: [ debuggerActionModel session: aSession ]
 ]
 
 { #category : #accessing }
