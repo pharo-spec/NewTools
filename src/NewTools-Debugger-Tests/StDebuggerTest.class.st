@@ -695,6 +695,15 @@ StDebuggerTest >> testSelectLastStackElementWithoutMoreElements [
 ]
 
 { #category : #tests }
+StDebuggerTest >> testSessionProvidesSameAsTheActionModelOne [
+
+	debugger := self debuggerOn: session.
+	self
+		assert: debugger session
+		identicalTo: debugger debuggerActionModel session
+]
+
+{ #category : #tests }
 StDebuggerTest >> testSessionStackProvidesSameStackAsTheActionModelOne [
 
 	debugger := self debuggerOn: session.
