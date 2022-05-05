@@ -75,7 +75,6 @@ Class {
 	#traits : 'TDebugger',
 	#classTraits : 'TDebugger classTrait',
 	#instVars : [
-		'sessionHolder',
 		'code',
 		'toolbar',
 		'stackTable',
@@ -301,7 +300,7 @@ StDebugger class >> taskbarIconName [
 	^#smallDebugIcon
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'updating - widgets' }
 StDebugger class >> updateBlockFor: aDebugger [
 
 	^ [ aDebugger updateStep ]
