@@ -95,10 +95,10 @@ StDebuggerTest >> tearDown [
 	session clear.
 	self debuggerClass fastTDD: oldFastTDD.
 	debugger ifNotNil: [ 
-		debugger unsubscribeFromSystemAnnouncer.
 		debugger close.
 		debugger debuggerActionModel ifNotNil: [ :actionModel | 
-			actionModel session ifNotNil: [ :s | s clear ] ] ].
+			actionModel session ifNotNil: [ :s | s clear ].
+			actionModel unsubscribeFromSystemAnnouncer ] ].
 	StTestDebuggerProvider removeSelector: #foobar.
 	StDebuggerObjectForTests
 		compile:

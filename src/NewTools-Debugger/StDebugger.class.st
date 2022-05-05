@@ -401,7 +401,7 @@ StDebugger >> clear [
 	extensionToolsNotebook pages do: [ :page | 
 		page activePresenter windowIsClosing ].
 	extensionTools := nil.
-	self unsubscribeFromSystemAnnouncer.	
+	self debuggerActionModel unsubscribeFromSystemAnnouncer.
 	self unsubscribeFromActionModel.
 	
 	"When we programmatically close the window, we do not need to terminate the session as it was already cleared"
@@ -633,7 +633,6 @@ StDebugger >> initialize [
 	self debuggerActionModel updateContextPredicate.			
 	self subscribeToActionModel.
 	self forceSessionUpdate.
-	self subscribeToMethodAddedAnnouncement.
 	
 	programmaticallyClosed := false.
 ]
@@ -1077,15 +1076,6 @@ StDebugger >> subscribeToActionModel [
 	self debuggerActionModel addUpdateEventListener: (self class updateBlockFor: self)
 ]
 
-{ #category : #'system subscriptions' }
-StDebugger >> subscribeToMethodAddedAnnouncement [
-
-	SystemAnnouncer uniqueInstance weak
-		when: MethodAdded
-		send: #updateAfterMethodAdded
-		to: self
-]
-
 { #category : #'accessing - widgets' }
 StDebugger >> toolbar [
 
@@ -1106,18 +1096,6 @@ StDebugger >> unsavedCodeChangesFor: aContext [
 
 { #category : #'as yet unclassified' }
 StDebugger >> unsubscribeFromActionModel [
-]
-
-{ #category : #'system subscriptions' }
-StDebugger >> unsubscribeFromSystemAnnouncer [
-
-	SystemAnnouncer uniqueInstance unsubscribe: self
-]
-
-{ #category : #'updating - widgets' }
-StDebugger >> updateAfterMethodAdded [
-	debuggerActionModel updateContextPredicate.
-	self updateToolbar 
 ]
 
 { #category : #'updating - widgets' }

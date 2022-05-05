@@ -62,6 +62,13 @@ StDebuggerActionModel >> autoClassifyMessage: aMessage inClass: aClass [
 		MethodClassifier classify: method ]
 ]
 
+{ #category : #accessing }
+StDebuggerActionModel >> clear [
+
+	self unsubscribeFromSystemAnnouncer.
+	self removeActionsForSession: self session.
+]
+
 { #category : #'debug - execution' }
 StDebuggerActionModel >> clearDebugSession [
 	contextPredicate := nil.
@@ -167,6 +174,7 @@ StDebuggerActionModel >> implement: aMessage classified: messageCategory inClass
 StDebuggerActionModel >> initialize [
 	super initialize.
 	self computeInitialTopContext.
+	self subscribeToMethodAddedAnnouncement.
 	filterStack := true.
 	updateEventListeners := OrderedCollection new.
 	"flag that will prevent any update as long as it is set"
@@ -406,9 +414,24 @@ StDebuggerActionModel >> stepThrough: aContext [
 	self updateTopContext
 ]
 
+{ #category : #'system subscription' }
+StDebuggerActionModel >> subscribeToMethodAddedAnnouncement [
+
+	SystemAnnouncer uniqueInstance weak
+		when: MethodAdded
+		send: #updateAfterMethodAdded
+		to: self
+]
+
 { #category : #accessing }
 StDebuggerActionModel >> topContext [
 	^ topContext
+]
+
+{ #category : #'system subscription' }
+StDebuggerActionModel >> unsubscribeFromSystemAnnouncer [
+
+	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
 { #category : #accessing }
@@ -419,6 +442,13 @@ StDebuggerActionModel >> update [
 	self updateDebugSession.
 
 	self raiseUpdateEvents
+]
+
+{ #category : #'updating - widgets' }
+StDebuggerActionModel >> updateAfterMethodAdded [
+
+	self updateContextPredicate.
+	self raiseUpdateEvents 
 ]
 
 { #category : #context }
