@@ -1004,8 +1004,11 @@ StDebugger >> session [
 
 { #category : #accessing }
 StDebugger >> session: aSession [
+
 	debuggerActionModel
-		ifNil: [ debuggerActionModel := StDebuggerActionModel on: aSession]
+		ifNil: [ 
+			debuggerActionModel := StDebuggerActionModel on: aSession.
+			self subscribeToActionModel ]
 		ifNotNil: [ debuggerActionModel session: aSession ]
 ]
 
@@ -1073,7 +1076,7 @@ StDebugger >> stepThrough [
 { #category : #subscription }
 StDebugger >> subscribeToActionModel [
 
-	self debuggerActionModel addUpdateEventListener: (self class updateBlockFor: self)
+	self debuggerActionModel addUpdateEventListener: self whenUpdatedDo: (self class updateBlockFor: self)
 ]
 
 { #category : #'accessing - widgets' }
@@ -1096,6 +1099,8 @@ StDebugger >> unsavedCodeChangesFor: aContext [
 
 { #category : #'events - removing' }
 StDebugger >> unsubscribeFromActionModel [
+
+	self debuggerActionModel removeUpdateEventListener: self
 ]
 
 { #category : #'updating - widgets' }

@@ -48,9 +48,9 @@ StDebuggerActionModel class >> shouldFilterStackSettingsOn: aBuilder [
 ]
 
 { #category : #adding }
-StDebuggerActionModel >> addUpdateEventListener: aBlock [
+StDebuggerActionModel >> addUpdateEventListener: aDebugger whenUpdatedDo: aBlock [
 
-	updateEventListeners add: aBlock
+	updateEventListeners at: aDebugger put: aBlock
 ]
 
 { #category : #'debug - session' }
@@ -67,6 +67,7 @@ StDebuggerActionModel >> clear [
 
 	self unsubscribeFromSystemAnnouncer.
 	self removeActionsForSession: self session.
+	updateEventListeners keysDo: [ :key | self removeUpdateEventListener: key ]
 ]
 
 { #category : #'debug - execution' }
@@ -176,7 +177,7 @@ StDebuggerActionModel >> initialize [
 	self computeInitialTopContext.
 	self subscribeToMethodAddedAnnouncement.
 	filterStack := true.
-	updateEventListeners := OrderedCollection new.
+	updateEventListeners := Dictionary new.
 	"flag that will prevent any update as long as it is set"
 	preventUpdate := false
 ]
@@ -300,7 +301,7 @@ StDebuggerActionModel >> proceedDebugSession [
 { #category : #'events-triggering' }
 StDebuggerActionModel >> raiseUpdateEvents [
 
-	updateEventListeners do: [ :each | each value ]
+	updateEventListeners valuesDo: [ :each | each value ]
 ]
 
 { #category : #context }
@@ -336,6 +337,14 @@ StDebuggerActionModel >> removeActionsForSession: aSession [
 				removeActionsForEvent: #stepOver;
 				removeActionsForEvent: #stepThrough;
 				removeActionsForEvent: #contextChanged ]
+]
+
+{ #category : #removing }
+StDebuggerActionModel >> removeUpdateEventListener: anEventListener [
+
+	[ updateEventListeners removeKey: anEventListener ]
+	on: KeyNotFound 
+	do: [ ^ self ]
 ]
 
 { #category : #'debug - execution' }
