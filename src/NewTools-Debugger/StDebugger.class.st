@@ -1070,7 +1070,7 @@ StDebugger >> stepThrough [
 	self debuggerActionModel stepThrough: self currentContext
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #subscription }
 StDebugger >> subscribeToActionModel [
 
 	self debuggerActionModel addUpdateEventListener: (self class updateBlockFor: self)
@@ -1094,7 +1094,7 @@ StDebugger >> unsavedCodeChangesFor: aContext [
 	^self unsavedCodeChanges at: aContext
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'events - removing' }
 StDebugger >> unsubscribeFromActionModel [
 ]
 

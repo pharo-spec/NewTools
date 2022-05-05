@@ -275,7 +275,7 @@ StDebuggerActionModel >> predicateFor: aContext postMortem: isContextPostMortem 
 		  yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #updating }
 StDebuggerActionModel >> preventUpdatesDuring: aBlock [
 
 	"Sets the prevent update flag during the execution of a block. Restores its value after the block 	finishes"
@@ -297,7 +297,7 @@ StDebuggerActionModel >> proceedDebugSession [
 		clear
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'events-triggering' }
 StDebuggerActionModel >> raiseUpdateEvents [
 
 	updateEventListeners do: [ :each | each value ]
@@ -312,7 +312,7 @@ StDebuggerActionModel >> referenceContext [
 	^topContext receiver signalerContext 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'events - handling' }
 StDebuggerActionModel >> registerActionsForSession: aSession [
 	self flag: 'Rewrite it'.
 	aSession
@@ -325,7 +325,7 @@ StDebuggerActionModel >> registerActionsForSession: aSession [
 				when: #contextChanged send: #updateIfAble to: self ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'events - removing' }
 StDebuggerActionModel >> removeActionsForSession: aSession [
 	self flag: 'Rewrite it'.
 	aSession
