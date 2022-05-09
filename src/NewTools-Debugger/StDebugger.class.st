@@ -91,10 +91,8 @@ Class {
 		'stackAndCodeContainer'
 	],
 	#classVars : [
-		'ActivateDebuggerExtensions',
 		'ErrorRecursion',
-		'FastTDD',
-		'UsingSpecSelector'
+		'FastTDD'
 	],
 	#category : #'NewTools-Debugger-View'
 }
@@ -555,6 +553,7 @@ StDebugger >> initialize [
 	self setSessionHolderSubscriptions.
 	self forceSessionUpdate.
 	self subscribeToMethodAddedAnnouncement.
+	SystemAnnouncer uniqueInstance weak when: StDebuggerExtensionActivationToggle send: #updateExtensions to: self.
 	
 	programmaticallyClosed := false.
 ]
@@ -1169,6 +1168,12 @@ StDebugger >> updateCodeTextSegmentDecoratorsIn: aContext forInterval: selection
 { #category : #'updating - actions' }
 StDebugger >> updateContextChanged [
 	self updateStep
+]
+
+{ #category : #initialization }
+StDebugger >> updateExtensions [
+
+	'extension toggled' crTrace 
 ]
 
 { #category : #'updating - widgets' }
