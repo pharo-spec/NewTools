@@ -509,7 +509,7 @@ StDebuggerActionModelTest >> testRecompileMethodToInContextNotifyingUpdatesSourc
 	debugActionModel session stepIntoUntil: [ :currentContext | 
 		currentContext selector = #squared ].
 	debugActionModel updateTopContext.
-	oldStack := debugActionModel sessionStack.
+	oldStack := debugActionModel stack.
 	rejectedFromOldStack := { debugActionModel topContext }.
 
 	expectedNewStack := oldStack copyWithoutFirst.
@@ -518,13 +518,15 @@ StDebuggerActionModelTest >> testRecompileMethodToInContextNotifyingUpdatesSourc
 		recompileMethodTo: contextChanged method sourceCode
 		inContext: contextChanged
 		notifying: nil.
+	debugActionModel updateTopContext.
 
 	self
-		denyCollection: debugActionModel sessionStack
+		denyCollection: debugActionModel stack
 		includesAny: rejectedFromOldStack.
 	self
-		assertCollection: debugActionModel sessionStack
-		hasSameElements: expectedNewStack
+		assertCollection: debugActionModel stack
+		hasSameElements: expectedNewStack.
+	self assert: debugActionModel topContext identicalTo: contextChanged
 ]
 
 { #category : #'tests - actions' }
@@ -587,7 +589,7 @@ StDebuggerActionModelTest >> testSelectedCodeRangeForContext [
 { #category : #tests }
 StDebuggerActionModelTest >> testSessionStackProvidesSameStackAsTheSessionOne [
 
-	self assert: debugActionModel sessionStack equals: debugActionModel session stack
+	self assert: debugActionModel stack equals: debugActionModel session stack
 ]
 
 { #category : #tests }
@@ -597,6 +599,7 @@ StDebuggerActionModelTest >> testStackOfSizeWhenStackIsBigger [
 	oldStack := debugActionModel session stack.
 
 	debugActionModel stepInto: debugActionModel interruptedContext.
+	"We did a step into, so the size of the stack should be increased by 1. Here, I chose to increase the size of the stack by 13 but it could have any number greater than 1. The idea here is just to check that the size of the stack has been increased by only 1 and not more than necessary."
 	newStack := debugActionModel stackOfSize: oldStack size + 13.
 
 	self assert: newStack size - oldStack size equals: 1.
@@ -611,7 +614,7 @@ StDebuggerActionModelTest >> testStackOfSizeWhenStackIsNotBigger [
 
 	| oldStack newStack |
 	oldStack := debugActionModel session stack.
-
+	"Here, I chose to increase the size of the stack by 13 but it could have any number greater than 0. The idea here is just to check that the size of the stack is its exact size, although we provided a greater size as an argument."
 	newStack := debugActionModel stackOfSize: oldStack size + 13.
 
 	self assert: newStack size - oldStack size equals: 0.

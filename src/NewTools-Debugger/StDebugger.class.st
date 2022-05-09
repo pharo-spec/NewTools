@@ -562,7 +562,7 @@ StDebugger >> doBrowseReceiverClass [
 	self systemNavigation browse: self stackSelectionReceiverClassContext value
 ]
 
-{ #category : #accessing }
+{ #category : #'stack - helpers' }
 StDebugger >> exception [
 	^ self debuggerActionModel exception
 ]
@@ -1016,6 +1016,12 @@ StDebugger >> selectTopContext [
 	stackTable selectIndex: 1
 ]
 
+{ #category : #'updating - actions' }
+StDebugger >> selectedCodeRangeForContext: aContext [
+
+	^ self debuggerActionModel selectedCodeRangeForContext: aContext
+]
+
 { #category : #'accessing - context' }
 StDebugger >> selectedContext [
 
@@ -1037,12 +1043,6 @@ StDebugger >> sessionHolder [
 	^ sessionHolder ifNil: [ sessionHolder := nil asValueHolder ]
 ]
 
-{ #category : #'accessing - variables' }
-StDebugger >> sessionStack [
-	^ self debuggerActionModel sessionStack 
-
-]
-
 { #category : #initialization }
 StDebugger >> setModelBeforeInitialization: aSession [
 
@@ -1061,7 +1061,13 @@ StDebugger >> setSessionHolderSubscriptions [
 
 { #category : #actions }
 StDebugger >> showFullStack [
-	stackTable items: (self filterStack: self sessionStack)
+	stackTable items: (self filterStack: self stack)
+
+]
+
+{ #category : #'accessing - variables' }
+StDebugger >> stack [
+	^ self debuggerActionModel stack 
 
 ]
 
@@ -1072,7 +1078,7 @@ StDebugger >> stackIconForContext: context [
 	^ self iconNamed: #overlayDirty
 ]
 
-{ #category : #'presenter - code' }
+{ #category : #'stack - helpers' }
 StDebugger >> stackOfSize: anInteger [
 
 	^ self debuggerActionModel stackOfSize: anInteger
@@ -1172,9 +1178,7 @@ StDebugger >> updateCodeFromContext: aContext [
 	aContext ifNil: [ ^ self clearCode ].
 
 	self recordUnsavedCodeChanges.
-	selectionInterval := selectionInterval := self debuggerActionModel 
-		                                          selectedCodeRangeForContext:
-		                                          aContext.
+	selectionInterval := self selectedCodeRangeForContext: aContext.
 	aContext sourceCode = self code text ifFalse: [ 
 		self updateSourceCodeFor: aContext ].
 	self code beForContext: aContext.

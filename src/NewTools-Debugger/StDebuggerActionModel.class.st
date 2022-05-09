@@ -111,7 +111,7 @@ StDebuggerActionModel >> copyStackToClipboard [
 				streamContents: [ :s | self interruptedContext shortDebugStackOn: s ])
 ]
 
-{ #category : #accessing }
+{ #category : #'stack - helpers' }
 StDebuggerActionModel >> exception [
 	^ self session exception
 ]
@@ -332,18 +332,18 @@ StDebuggerActionModel >> session: aDebugSession [
 	session := aDebugSession
 ]
 
-{ #category : #'accessing - variables' }
-StDebuggerActionModel >> sessionStack [
-	^ self session stack
-]
-
 { #category : #'debug - stack' }
 StDebuggerActionModel >> shouldFilterStack [
 
 	^ self filterStack and: [ self class shouldFilterStack ]
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - variables' }
+StDebuggerActionModel >> stack [
+	^ self session stack
+]
+
+{ #category : #'stack - helpers' }
 StDebuggerActionModel >> stackOfSize: anInteger [ 
 	^ self session stackOfSize: anInteger
 ]

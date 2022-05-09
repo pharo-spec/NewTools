@@ -365,7 +365,7 @@ StDebuggerTest >> testExceptionProvidesSameExceptionAsTheActionModelOne [
 	debugger := self debuggerOn: session.
 	self
 		assert: debugger exception
-		equals: debugger debuggerActionModel exception
+		identicalTo: debugger debuggerActionModel exception
 ]
 
 { #category : #'tests - initialization' }
@@ -402,7 +402,7 @@ StDebuggerTest >> testInterruptedContextProvidesSameContextAsTheActionModelOne [
 	debugger := self debuggerOn: session.
 	self
 		assert: debugger interruptedContext
-		equals: debugger debuggerActionModel interruptedContext
+		identicalTo: debugger debuggerActionModel interruptedContext
 ]
 
 { #category : #tests }
@@ -411,7 +411,7 @@ StDebuggerTest >> testInterruptedProcessProvidesSameProcessAsTheActionModelOne [
 	debugger := self debuggerOn: session.
 	self
 		assert: debugger interruptedProcess
-		equals: debugger debuggerActionModel interruptedProcess
+		identicalTo: debugger debuggerActionModel interruptedProcess
 ]
 
 { #category : #'tests - context inspector' }
@@ -708,8 +708,8 @@ StDebuggerTest >> testSessionStackProvidesSameStackAsTheActionModelOne [
 
 	debugger := self debuggerOn: session.
 	self
-		assert: debugger sessionStack
-		equals: debugger debuggerActionModel sessionStack
+		assertCollection: debugger stack
+		equals: debugger debuggerActionModel stack
 ]
 
 { #category : #'tests - stack table' }
