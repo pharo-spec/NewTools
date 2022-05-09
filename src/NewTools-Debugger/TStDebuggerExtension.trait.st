@@ -39,7 +39,10 @@ TStDebuggerExtension classSide >> showInDebugger [
 
 { #category : #'debugger extension' }
 TStDebuggerExtension classSide >> showInDebugger: aBoolean [
-	showDebuggerExtension := aBoolean
+
+	showDebuggerExtension := aBoolean.
+	SystemAnnouncer uniqueInstance announce:
+		StDebuggerExtensionActivationToggle new
 ]
 
 { #category : #accessing }
