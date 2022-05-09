@@ -81,7 +81,7 @@ StDebuggerExtensionMechanismTest >> testUsesExtensions [
 	testClass := StDebuggerExtensionGeneratorForTests testClass.	
 	testClass showInDebugger: true.
 	self debuggerClass activateDebuggerExtensions: false.
-	self deny: self debuggerClass usesExtensions.
+	self deny: self debuggerClass activatedExtensions.
 	self debuggerClass activateDebuggerExtensions: true.
-	self assert: self debuggerClass usesExtensions
+	self assert: self debuggerClass activatedExtensions
 ]
