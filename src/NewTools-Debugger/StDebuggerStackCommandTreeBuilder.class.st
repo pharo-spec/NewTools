@@ -50,10 +50,13 @@ StDebuggerStackCommandTreeBuilder >> buildDebuggerCommandGroup [
 ]
 
 { #category : #building }
-StDebuggerStackCommandTreeBuilder >> buildSpecCommand: aCommandClass forContext: anObject [
+StDebuggerStackCommandTreeBuilder >> buildSpecCommand: aCommandClass forContext: aBlock [
+
 	| cmd |
-	cmd := super buildSpecCommand: aCommandClass forContext: anObject.
+	cmd := super buildSpecCommand: aCommandClass forContext: stDebuggerInstance.
 	cmd name: aCommandClass shortName.
+	cmd innerCommand transform: aBlock.
+	
 	^ cmd
 ]
 
@@ -211,15 +214,16 @@ StDebuggerStackCommandTreeBuilder >> stackMethodCommandsClasses [
 
 { #category : #commands }
 StDebuggerStackCommandTreeBuilder >> stackMethodNavigationCommands [
-	"Commands to navigate the selected context's method "
-	| group |
 
-	group := (CmCommandGroup named: self stackMethodNavigationGroupName) asSpecGroup.
+	"Commands to navigate the selected context's method "
+
+	| group |
+	group := (CmCommandGroup named: self stackMethodNavigationGroupName)
+		         asSpecGroup.
 	group beDisplayedAsGroup.
 	self stackMethodCommandsClasses do: [ :navCmdClass | 
-		group register: (self
-			buildSpecCommand: navCmdClass
-			forContext: stDebuggerInstance stackSelectionMethodContext) ].
+		group register:
+			(self buildSpecCommand: navCmdClass forContext: stDebuggerInstance) ].
 	^ group
 ]
 
@@ -251,7 +255,7 @@ StDebuggerStackCommandTreeBuilder >> stackMethodSelectorNavigationCommands [
 				register:
 					(self
 						buildSpecCommand: navCmdClass
-						forContext: stDebuggerInstance stackSelectionMethodSelectorContext) ].
+						forContext: stDebuggerInstance "stackSelectionMethodSelectorContext") ].
 	^ group
 ]
 
@@ -282,7 +286,7 @@ StDebuggerStackCommandTreeBuilder >> stackReceiverClassNavigationCommands [
 				register:
 					(self
 						buildSpecCommand: navCmdClass
-						forContext: stDebuggerInstance stackSelectionReceiverClassContext) ].
+						forContext: stDebuggerInstance "stackSelectionReceiverClassContext") ].
 	^ group
 ]
 
