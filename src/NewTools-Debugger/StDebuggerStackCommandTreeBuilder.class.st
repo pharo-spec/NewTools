@@ -157,7 +157,6 @@ StDebuggerStackCommandTreeBuilder >> stackContextNavigationCommands [
 		beDisplayedAsGroup;
 		register: ((SpBrowseClassCommand forSpecContext: stDebuggerInstance)
 			name: 'method';
-			shortcutKey: nil;
 			yourself);
 		register: (((SpBrowseClassCommand forContext: stDebuggerInstance)
 			selector: #doBrowseReceiverClass;
