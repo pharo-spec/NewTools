@@ -129,19 +129,13 @@ StCritiqueRuleSelectorPresenter >> groupRules [
 	#'Unclassified rules'  )
 ]
 
-{ #category : #adding }
-StCritiqueRuleSelectorPresenter >> initalizeSelectedList [
-
-	selectedList := self instantiate: SpTreePresenter
-]
-
 { #category : #initialization }
 StCritiqueRuleSelectorPresenter >> initialize [
 
 	| wrappingBlock selectedRulesChildrenBlock rulesToSelectChildrenBlock |
 	super initialize.
 	self initializeList.
-	self initalizeSelectedList.
+	self initializeSelectedList.
 	selectedRules := Set new.
 	selectedRulesChildrenBlock := [ :rule | 
 	                              rule isComposite
@@ -262,10 +256,16 @@ StCritiqueRuleSelectorPresenter >> initializePresenters [
 
 	self initializeLayout.
 	self initializeList.
-	self initalizeSelectedList.
+	self initializeSelectedList.
 	self initializeButtons.
 	self initializeButtonBar.
 	self initializeNextButton
+]
+
+{ #category : #adding }
+StCritiqueRuleSelectorPresenter >> initializeSelectedList [
+
+	selectedList := self instantiate: SpTreePresenter
 ]
 
 { #category : #initialization }
