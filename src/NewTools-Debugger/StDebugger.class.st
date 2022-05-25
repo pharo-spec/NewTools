@@ -553,13 +553,85 @@ StDebugger >> discardCodeChangesFor: aContext [
 { #category : #commands }
 StDebugger >> doBrowseClass [
 
-	self systemNavigation browse: self stackSelectionMethodContext value
+	self systemNavigation browse:
+		(self stackSelectionMethodContext value: self)
+]
+
+{ #category : #'presenter - code' }
+StDebugger >> doBrowseClassReferences [
+
+	| cls |
+	cls := self stackSelectionReceiverClassContext value: self.
+	cls isTrait
+		ifTrue: [ self systemNavigation browseAllUsersOfTrait: cls ]
+		ifFalse: [ self systemNavigation browseAllCallsOnClass: cls ]
+]
+
+{ #category : #commands }
+StDebugger >> doBrowseHierarchy [
+
+	self systemNavigation browseHierarchy:
+		(self stackSelectionReceiverClassContext value: self)
+]
+
+{ #category : #commands }
+StDebugger >> doBrowseImplementors [
+
+	self systemNavigation browseAllImplementorsOf:
+		(self stackSelectionMethodSelectorContext value: self)
+]
+
+{ #category : #commands }
+StDebugger >> doBrowseMethodInheritance [
+
+	| cls |
+	(self stackSelectionMethodContext value: self) method isDoIt ifTrue: [ 
+		^ self ].
+	cls := self stackSelectionReceiverClassContext value: self.
+	cls isBlock ifTrue: [ 
+		cls := (self stackSelectionMethodContext value: self) methodClass ].
+	self systemNavigation
+		methodHierarchyBrowserForClass:
+		(self stackSelectionReceiverClassContext value: self)
+		selector: (self stackSelectionMethodSelectorContext value: self)
+]
+
+{ #category : #commands }
+StDebugger >> doBrowseMethodReferences [
+
+	self systemNavigation browseAllSendersOrUsersOf:
+		(self stackSelectionMethodSelectorContext value: self)
+]
+
+{ #category : #commands }
+StDebugger >> doBrowseMethodVersions [
+
+	| target |
+	target := self stackSelectionMethodContext.
+	target isBlock ifTrue: [ target := target method ].
+	Smalltalk tools versionBrowser
+		browseVersionsForClass: target methodClass
+		selector: target selector
 ]
 
 { #category : #commands }
 StDebugger >> doBrowseReceiverClass [
 
-	self systemNavigation browse: self stackSelectionReceiverClassContext value
+	self systemNavigation browse:
+		(self stackSelectionReceiverClassContext value: self)
+]
+
+{ #category : #commands }
+StDebugger >> doBrowseSenders [
+
+	self systemNavigation browseAllSendersOf:
+		(self stackSelectionMethodSelectorContext value: self)
+]
+
+{ #category : #accessing }
+StDebugger >> environment [
+
+^ self class environment
 ]
 
 { #category : #stack }
@@ -1068,28 +1140,31 @@ StDebugger >> stackIconForContext: context [
 { #category : #'commands - support' }
 StDebugger >> stackSelectionMethodContext [
 
-	^ [ stackTable selection selectedItem home method ]
+	^ [ :dbg | stackTable selection selectedItem home method ]
 ]
 
 { #category : #'commands - support' }
 StDebugger >> stackSelectionMethodSelectorContext [
 
-	^ [ stackTable selection selectedItem method selector ]
+	^ [ :dbg | stackTable selection selectedItem method selector ]
 ]
 
 { #category : #'commands - support' }
 StDebugger >> stackSelectionReceiverClassContext [
-	^ [ stackTable selection selectedItem receiver class ]
+
+	^ [ :dbg | stackTable selection selectedItem receiver class ]
 ]
 
 { #category : #'commands - support' }
 StDebugger >> stackSelectionReceiverContext [
-	^ [ stackTable selection selectedItem receiver ]
+
+	^ [ :dbg | stackTable selection selectedItem receiver ]
 ]
 
 { #category : #'accessing - widgets' }
 StDebugger >> stackTable [
-	^stackTable
+
+	^ stackTable
 ]
 
 { #category : #actions }

@@ -105,3 +105,9 @@ StDebuggerCommand >> initialize [
 			<< ': '
 			<< self class defaultDescription ])
 ]
+
+{ #category : #'as yet unclassified' }
+StDebuggerCommand >> transform: aBlock [
+
+	^ self
+]
