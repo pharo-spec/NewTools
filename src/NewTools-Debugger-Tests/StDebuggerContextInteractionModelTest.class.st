@@ -8,6 +8,15 @@ Class {
 	#category : #'NewTools-Debugger-Tests-Model'
 }
 
+{ #category : #helpers }
+StDebuggerContextInteractionModelTest >> helperMethodForBindings [
+
+	| tempVariableForTest |
+	instanceVariableForTest := 42.
+	tempVariableForTest := 43.
+	^ 44
+]
+
 { #category : #running }
 StDebuggerContextInteractionModelTest >> setUp [
 
