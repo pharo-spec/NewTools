@@ -456,7 +456,7 @@ StDebugger >> copyStackToClipboard [
 StDebugger >> createMissingClass [
 
 	| variableNode |
-	variableNode := self session exception variableNode.
+	variableNode := self exception variableNode.
 	[ 
 	| newClassBinding |
 	self flag: 'This method is actually hard to test because it requires user input to complete. How to test that automatically?'.
@@ -634,13 +634,18 @@ StDebugger >> environment [
 ^ self class environment
 ]
 
+{ #category : #'stack - helpers' }
+StDebugger >> exception [
+	^ self debuggerActionModel exception
+]
+
 { #category : #stack }
 StDebugger >> expandStackIfLastItemIsSelected [
 	| selection |
 	selection := stackTable selection.
 	selection selectedItem == stackTable items last ifFalse: [ ^ self ].
 	stackTable items: (self filterStack:
-			 (self session stackOfSize: 2 * stackTable items size)).
+			 (self stackOfSize: 2 * stackTable items size)).
 	stackTable selectIndex: selection selectedIndex
 ]
 
@@ -853,20 +858,20 @@ StDebugger >> instantiateExtensionToolsPage: aToolClass [
 { #category : #'accessing - context' }
 StDebugger >> interruptedContext [
 
-	^ self session interruptedContext
+	^ self debuggerActionModel interruptedContext
 ]
 
 { #category : #accessing }
 StDebugger >> interruptedProcess [
 
-	^ self session interruptedProcess
+	^ self debuggerActionModel  interruptedProcess
 ]
 
 { #category : #'instance creation' }
 StDebugger >> newDebuggerContext [
 
 	^ self class debuggerContextClass new
-		  exception: self session exception;
+		  exception: self exception;
 		  yourself
 ]
 
@@ -943,11 +948,7 @@ StDebugger >> proceedDebugSession [
 { #category : #actions }
 StDebugger >> recompileMethodTo: aString inContext: aContext notifying: aNotifyer [
 
-	aContext ifNil: [ ^ self ].
-	self session
-		recompileMethodTo: aString
-		inContext: aContext
-		notifying: aNotifyer
+	^ self debuggerActionModel recompileMethodTo: aString inContext: aContext notifying: aNotifyer.
 ]
 
 { #category : #'presenter - code' }
@@ -1084,6 +1085,12 @@ StDebugger >> selectTopContext [
 	stackTable selectIndex: 1
 ]
 
+{ #category : #'updating - actions' }
+StDebugger >> selectedCodeRangeForContext: aContext [
+
+	^ self debuggerActionModel selectedCodeRangeForContext: aContext
+]
+
 { #category : #'accessing - context' }
 StDebugger >> selectedContext [
 
@@ -1123,7 +1130,13 @@ StDebugger >> setSessionHolderSubscriptions [
 
 { #category : #actions }
 StDebugger >> showFullStack [
-	stackTable items: (self filterStack: self session stack)
+	stackTable items: (self filterStack: self stack)
+
+]
+
+{ #category : #'accessing - variables' }
+StDebugger >> stack [
+	^ self debuggerActionModel stack 
 
 ]
 
@@ -1132,6 +1145,12 @@ StDebugger >> stackIconForContext: context [
 
 	self unsavedCodeChanges at: context ifAbsent: [ ^ nil ].
 	^ self iconNamed: #overlayDirty
+]
+
+{ #category : #'stack - helpers' }
+StDebugger >> stackOfSize: anInteger [
+
+	^ self debuggerActionModel stackOfSize: anInteger
 ]
 
 { #category : #'commands - support' }
@@ -1226,20 +1245,20 @@ StDebugger >> updateCodeFromContext [
 
 { #category : #'presenter - code' }
 StDebugger >> updateCodeFromContext: aContext [
-	| selectionInterval |
 
+	| selectionInterval |
 	aContext ifNil: [ ^ self clearCode ].
-	
+
 	self recordUnsavedCodeChanges.
-	selectionInterval := self session selectedCodeRangeForContext: aContext.
-	aContext sourceCode = self code text 
-		ifFalse: [ self updateSourceCodeFor: aContext ].
+	selectionInterval := self selectedCodeRangeForContext: aContext.
+	aContext sourceCode = self code text ifFalse: [ 
+		self updateSourceCodeFor: aContext ].
 	self code beForContext: aContext.
-	self code selectionInterval: (selectionInterval last to: selectionInterval last - 1).
+	self code selectionInterval:
+		(selectionInterval last to: selectionInterval last - 1).
 	self
 		updateCodeTextSegmentDecoratorsIn: aContext
-		forInterval: selectionInterval.
-	
+		forInterval: selectionInterval
 ]
 
 { #category : #'updating - widgets' }
@@ -1279,7 +1298,7 @@ StDebugger >> updateExtensionsFrom: newSession [
 StDebugger >> updateInspectorFromContext: aContext [
 
 	inspector
-		updateLayoutForContexts: self session interruptedContext
+		updateLayoutForContexts: self interruptedContext
 		isAssertionFailure:
 		self debuggerActionModel isInterruptedContextAnAssertEqualsFailure.
 	inspector updateWith: (self newDebuggerContextFor: aContext).
