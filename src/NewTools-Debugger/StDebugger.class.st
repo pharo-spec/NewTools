@@ -93,8 +93,7 @@ Class {
 	#classVars : [
 		'ActivateDebuggerExtensions',
 		'ErrorRecursion',
-		'FastTDD',
-		'UsingSpecSelector'
+		'FastTDD'
 	],
 	#category : #'NewTools-Debugger-View'
 }
