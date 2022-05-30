@@ -677,10 +677,6 @@ StDebugger >> forceSessionUpdate [
 
 { #category : #api }
 StDebugger >> initialExtent [ 
-	"This code was taken from the old debugger to get the same behavior. Fell free to refactor"
-	self flag: 'Do it better'.
-	"RealEstateAgent standardWindowExtent y < 400"true "a tiny screen" 
-		ifTrue: [ ^ 1000@800 ].
 	
 	^ [ | w h |
 		w := Display width.
