@@ -847,6 +847,7 @@ StDebugger >> initializeWindow: aWindowPresenter [
 StDebugger >> instantiateExtensionToolsPage: aToolClass [
 	| toolInstance |
 	toolInstance := self instantiate: aToolClass on: self.
+	toolInstance layout: toolInstance debuggerLayout.
 	self registerExtensionTool: toolInstance.
 	^ SpNotebookPage
 		title: toolInstance debuggerExtensionToolName
