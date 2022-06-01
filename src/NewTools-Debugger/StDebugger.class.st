@@ -340,15 +340,15 @@ StDebugger >> buildContextMenus [
 	
 	debuggerCommandGroup := self rootCommandsGroup.
 	"Stack"
-	stackGroup := debuggerCommandGroup / StDebuggerStackCommandTreeBuilder groupName.
+	stackGroup := debuggerCommandGroup / StDebuggerStackCommandTreeBuilder groupName. 
 	stackTable contextMenu: stackGroup beRoot asMenuPresenter.
-
+	stackTable contextKeyBindings: (self keybindsForFromContextMenu: stackGroup).
+	 
 	"Toolbar"
 	toolbarCommandGroup := debuggerCommandGroup / StDebuggerToolbarCommandTreeBuilder groupName.
 	SpToolbarPresenterBuilder new
 		toolbarPresenter: toolbar;
 		visit: toolbarCommandGroup.
-	self updateToolbar.
 
 	"Code"
 	codeCommands := debuggerCommandGroup / StDebuggerCodeCommandTreeBuilder groupName.
@@ -865,6 +865,23 @@ StDebugger >> interruptedContext [
 StDebugger >> interruptedProcess [
 
 	^ self debuggerActionModel  interruptedProcess
+]
+
+{ #category : #'commands - support' }
+StDebugger >> keybindsForFromContextMenu: aGroupElement [
+	| keybinds keybindsCommands |
+	keybinds := KMCategory new.
+	
+	keybindsCommands := aGroupElement allCommands select: [ :aCommand | aCommand hasShortcutKey ].
+	
+	keybindsCommands do: [ :aCommand | | action |
+		action := [ :aSelectedElement | aCommand execute ]. 
+		keybinds addKeymapEntry: (KMKeymap
+			shortcut: aCommand shortcutKey
+			action: action).
+		].
+	
+	^ keybinds
 ]
 
 { #category : #'instance creation' }
