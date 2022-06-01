@@ -52,6 +52,12 @@ TStDebuggerExtension >> debuggerExtensionToolName [
 	^self explicitRequirement 
 ]
 
+{ #category : #layout }
+TStDebuggerExtension >> debuggerLayout [
+
+	^ self defaultLayout
+]
+
 { #category : #'debugger extension' }
 TStDebuggerExtension >> displayOrder [
 	^self class displayOrder

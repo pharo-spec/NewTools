@@ -49,6 +49,12 @@ StDummyDebuggerPresenter >> debuggerExtensionToolName [
 	
 ]
 
+{ #category : #layout }
+StDummyDebuggerPresenter >> defaultLayout [
+
+	^ SpBoxLayout newVertical 
+]
+
 { #category : #mocks }
 StDummyDebuggerPresenter >> fileOutSelectedContext [
 tag := thisContext method selector.
