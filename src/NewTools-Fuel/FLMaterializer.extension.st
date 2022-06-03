@@ -10,9 +10,10 @@ FLMaterializer class >> fileReaderServicesForFile: fullName suffix: suffix [
 
 { #category : #'*NewTools-Fuel-FileRegistry' }
 FLMaterializer class >> inspectMaterializationFromFileNamed: aString [
-
 	| result |
-	result := self materializeFromFileNamed: aString.
+	result := self new
+		filePath: aString;
+		materializeRoot.
 	^ result inspect
 ]
 

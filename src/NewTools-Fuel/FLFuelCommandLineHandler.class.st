@@ -78,9 +78,9 @@ FLFuelCommandLineHandler >> manageFile: aFileReference [
 		nextPutAll: 'Materializing from file: ';
 		nextPutAll: aFileReference fullName;
 		lf.
-	aFileReference readStreamDo: [ :stream |
-		stream binary.
-		FLMaterializer new materializeFrom: stream ].
+	FLMaterializer new
+		filePath: aFileReference pathString;
+		materializeRoot.
 	Stdio stdout
 		nextPutAll: 'Materialization finished';
 		lf
