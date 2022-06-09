@@ -85,7 +85,9 @@ AbstractFileReference >> inspectionFuel [
 	<inspectorPresentationOrder: 40 title: 'Fuel Header'>
 	
 	^ SpTablePresenter new
-		items: (FLMaterializer materializeHeaderFromFileNamed: self fullName) stFuelMetaData;
+		items: (FLMaterializer new
+			filePath: self fullName;
+			materializeHeader) stFuelMetaData;
 		addColumn: (SpStringTableColumn title: 'Property' evaluated: [ :assoc | assoc key ]);
 		addColumn: (SpStringTableColumn title: 'Value' evaluated: [ :assoc | assoc value ]);	
 		yourself

@@ -86,13 +86,13 @@ Class {
 		'toolbarCommandGroup',
 		'debuggerActionModel',
 		'unsavedCodeChanges',
-		'programmaticallyClosed'
+		'programmaticallyClosed',
+		'stackAndCodeContainer'
 	],
 	#classVars : [
 		'ActivateDebuggerExtensions',
 		'ErrorRecursion',
-		'FastTDD',
-		'UsingSpecSelector'
+		'FastTDD'
 	],
 	#category : #'NewTools-Debugger-View'
 }
@@ -106,11 +106,6 @@ StDebugger class >> activateDebuggerExtensions [
 { #category : #accessing }
 StDebugger class >> activateDebuggerExtensions: anObject [
 	ActivateDebuggerExtensions := anObject
-]
-
-{ #category : #specs }
-StDebugger class >> availableSpecSelectors [
-	^ self class allSelectorsInProtocol: 'specs - selectors'
 ]
 
 { #category : #commands }
@@ -132,15 +127,6 @@ StDebugger class >> closeAllDebuggers [
 	StDebugger allInstancesDo: [ :dbg | dbg close ]
 ]
 
-{ #category : #specs }
-StDebugger class >> codeLayout [
-
-	^ SpBoxLayout newTopToBottom
-		  add: #toolbar expand: false;
-		  add: #code;
-		  yourself
-]
-
 { #category : #'instance creation' }
 StDebugger class >> debugSession: aDebugSession [
 
@@ -159,51 +145,10 @@ StDebugger class >> debuggerContextClass [
 	^ StDebuggerContext
 ]
 
-{ #category : #settings }
-StDebugger class >> debuggerLayoutSettingsOn: aBuilder [
-	<systemsettings>
-	(aBuilder pickOne: #usingSpecSelector)
-		label: 'Default debugger spec layout';
-		target: self;
-		default: #debuggerWithoutExtensionsSpec;
-		parent: #debugging;
-		domainValues: self availableSpecSelectors;
-		description: 'Sets the default spec layout of the debugger.'
-]
-
-{ #category : #'specs - selectors' }
-StDebugger class >> debuggerWithExtensionsSpec [
-
-	^ SpPanedLayout newTopToBottom
-		positionOfSlider: 65 percent;
-		add: (SpPanedLayout newLeftToRight
-			positionOfSlider: 65 percent;
-			add: self stackAndCodeLayout;
-			add: #extensionToolsNotebook;
-			yourself);
-		add: #inspector;
-		yourself
-]
-
-{ #category : #'specs - selectors' }
-StDebugger class >> debuggerWithoutExtensionsSpec [
-
-	^ SpPanedLayout newTopToBottom
-		positionOfSlider: 65 percent;
-		add: self stackAndCodeLayout;
-		add: #inspector;
-		yourself
-]
-
 { #category : #accessing }
 StDebugger class >> defaultDebuggerRank [
 
 	^ 10
-]
-
-{ #category : #layout }
-StDebugger class >> defaultLayout [
-	^ self perform: self usingSpecSelector
 ]
 
 { #category : #'tools registry' }
@@ -273,27 +218,6 @@ StDebugger class >> spanNewSessionFrom: anotherSession [
 	^ anotherSession spanNewSession
 ]
 
-{ #category : #specs }
-StDebugger class >> stackAndCodeLayout [
-
-	^ SpPanedLayout newTopToBottom
-		positionOfSlider: 30 percent;
-		add: self stackLayout;
-		add: self codeLayout;
-		yourself
-]
-
-{ #category : #specs }
-StDebugger class >> stackLayout [
-	^ SpBoxLayout newTopToBottom
-		add: #stackHeader
-			expand: false
-			fill: false
-			padding: 5;
-		add: #stackTable;
-		yourself
-]
-
 { #category : #accessing }
 StDebugger class >> taskbarIconName [
 
@@ -311,19 +235,6 @@ StDebugger class >> usesExtensions [
 
 	^ self activateDebuggerExtensions and: [ 
 		  self hasAnyActivatedExtension: self extensionToolsClasses ]
-]
-
-{ #category : #specs }
-StDebugger class >> usingSpecSelector [
-	^ (UsingSpecSelector
-		ifNil: [ UsingSpecSelector := StDebuggerSpecSelector defaultSelector ])
-		selectSpecSelector
-]
-
-{ #category : #specs }
-StDebugger class >> usingSpecSelector: aSelector [
-
-	UsingSpecSelector := StDebuggerSpecSelector on: aSelector
 ]
 
 { #category : #'presenter - code' }
@@ -438,6 +349,15 @@ StDebugger >> code [
 	^ code
 ]
 
+{ #category : #specs }
+StDebugger >> codeLayout [
+
+	^ SpBoxLayout newTopToBottom
+		  add: #toolbar expand: false;
+		  add: #code;
+		  yourself
+]
+
 { #category : #initialization }
 StDebugger >> connectPresenters [
 
@@ -545,6 +465,15 @@ StDebugger >> debuggerInspectorClass [
 { #category : #accessing }
 StDebugger >> debuggerInspectorModelClass [
 	^ StDebuggerInspectorModel
+]
+
+{ #category : #layout }
+StDebugger >> defaultLayout [
+	^ SpPanedLayout newTopToBottom
+		positionOfSlider: 65 percent;
+		add: stackAndCodeContainer;
+		add: #inspector;
+		yourself
 ]
 
 { #category : #'presenter - code' }
@@ -755,7 +684,10 @@ StDebugger >> initializePresenters [
 	self initializeToolbar.
 	self initializeCode.
 	self initializeInspector.
-	self initializeExtensionTools
+	self initializeExtensionTools.
+	self setStackAndCodeContainer.
+
+	self layout: self defaultLayout
 ]
 
 { #category : #initialization }
@@ -1110,6 +1042,15 @@ StDebugger >> setModelBeforeInitialization: aSession [
 	self session: aSession
 ]
 
+{ #category : #initialization }
+StDebugger >> setStackAndCodeContainer [
+
+	stackAndCodeContainer := self class usesExtensions
+		                         ifTrue: [ 
+		                         self stackAndCodeWithExtensionsLayout ]
+		                         ifFalse: [ self stackAndCodeLayout ]
+]
+
 { #category : #actions }
 StDebugger >> showFullStack [
 	stackTable items: (self filterStack: self stack)
@@ -1122,6 +1063,26 @@ StDebugger >> stack [
 
 ]
 
+{ #category : #specs }
+StDebugger >> stackAndCodeLayout [
+
+	^ SpPanedLayout newTopToBottom
+		positionOfSlider: 30 percent;
+		add: self stackLayout;
+		add: self codeLayout;
+		yourself
+]
+
+{ #category : #specs }
+StDebugger >> stackAndCodeWithExtensionsLayout [
+
+	^ (SpPanedLayout newLeftToRight
+			positionOfSlider: 65 percent;
+			add: self stackAndCodeLayout;
+			add: #extensionToolsNotebook;
+			yourself)
+]
+
 { #category : #stack }
 StDebugger >> stackIconForContext: context [
 
@@ -1129,6 +1090,17 @@ StDebugger >> stackIconForContext: context [
 	^ self iconNamed: #overlayDirty
 ]
 
+{ #category : #specs }
+StDebugger >> stackLayout [
+	^ SpBoxLayout newTopToBottom
+		add: #stackHeader
+			expand: false
+			fill: false
+			padding: 5;
+		add: #stackTable;
+		yourself
+]
+    
 { #category : #'stack - helpers' }
 StDebugger >> stackOfSize: anInteger [
 

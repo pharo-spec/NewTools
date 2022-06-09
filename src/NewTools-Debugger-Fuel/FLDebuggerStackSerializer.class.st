@@ -17,7 +17,7 @@ FLDebuggerStackSerializer class >> serializeStackFromContext: aContext [
 
 { #category : #serializing }
 FLDebuggerStackSerializer class >> serializeStackFromContext: aContext toFileNamed: aFileName [
-	self newDefault
+	self new
 		serializeStackFromContext: aContext
 		toFileNamed: aFileName
 ]
@@ -75,10 +75,12 @@ FLDebuggerStackSerializer >> serializeStackFromContext: aContext toFileNamed: aF
 	self
 		encodeDebugInformation;
 		addPostMaterializationAction: [ :materialization | 
-		FLDebuggerStackMaterialization new
-			interruptedContext: materialization root;
-			signal ];
-		serialize: aContext copyStack toFileNamed: aFileName
+			FLDebuggerStackMaterialization new
+				interruptedContext: materialization root;
+				signal ];
+		filePath: aFileName;
+		object: aContext copyStack;
+		serialize
 ]
 
 { #category : #private }
