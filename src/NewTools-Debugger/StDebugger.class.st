@@ -1100,7 +1100,7 @@ StDebugger >> stackLayout [
 		add: #stackTable;
 		yourself
 ]
-    
+
 { #category : #'stack - helpers' }
 StDebugger >> stackOfSize: anInteger [
 
@@ -1229,11 +1229,6 @@ StDebugger >> updateCodeTextSegmentDecoratorsIn: aContext forInterval: selection
 		title: 'Click me!';"
 ]
 
-{ #category : #'updating - actions' }
-StDebugger >> updateContextChanged [
-	self updateStep
-]
-
 { #category : #'updating - widgets' }
 StDebugger >> updateExtensionsFrom: newSession [
 	self extensionTools do:[:tool| tool updatePresenter]
@@ -1262,17 +1257,6 @@ StDebugger >> updatePresenter [
 
 	self updateStackFromSession: self session.
 	self buildContextMenus
-]
-
-{ #category : #'updating - actions' }
-StDebugger >> updateRestart [
-	self updateStep
-]
-
-{ #category : #'updating - actions' }
-StDebugger >> updateResume [
-
-	
 ]
 
 { #category : #'presenter - code' }
@@ -1304,24 +1288,6 @@ StDebugger >> updateStep [
 	self updateToolbar.
 	self flag: #DBG_INSPECTOR_UPDATE_BUG.
 	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p | p update ]
-]
-
-{ #category : #'updating - actions' }
-StDebugger >> updateStepInto [
-	self updateStep
-]
-
-{ #category : #'updating - actions' }
-StDebugger >> updateStepOver [
-
-	self updateStep 
-	
-]
-
-{ #category : #'updating - actions' }
-StDebugger >> updateStepThrough [
-
-	self updateStep 
 ]
 
 { #category : #'updating - widgets' }
