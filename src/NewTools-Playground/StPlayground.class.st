@@ -100,7 +100,7 @@ StPlayground class >> menuCommandOn: aBuilder [
 		order: 1;
 		keyText: 'o, w';
 		help: 'A window used as a scratchpad area where fragments of Pharo code can be entered, stored, edited, and evaluated.';
-		icon: (self iconNamed: #workspaceIcon)
+		icon: (self iconNamed: #workspace)
 ]
 
 { #category : #'instance creation' }

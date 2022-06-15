@@ -7,7 +7,7 @@ MCPackage >> spotterForPackageFor: aStep [
 		title: 'Packages';
 		allCandidates: [ Array with: self correspondingRPackage ];
 		itemName: [ :package | package name ];
-		itemIcon: [ Smalltalk ui icons iconNamed: #packageIcon ];
+		itemIcon: [ Smalltalk ui icons iconNamed: #package ];
 		filter: StFilterSubstring
 ]
 
@@ -17,6 +17,6 @@ MCPackage >> spotterMonticelloWorkingCopyFor: aStep [
 	aStep listProcessor
 		title: 'Monticello Working Copy';
 		allCandidates: [ Array with: self workingCopy ];
-		itemIcon: [ Smalltalk ui icons iconNamed: #versionControlIcon ];
+		itemIcon: [ Smalltalk ui icons iconNamed: #versionControl ];
 		filter: StFilterSubstring
 ]

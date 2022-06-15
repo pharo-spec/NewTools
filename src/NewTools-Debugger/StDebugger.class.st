@@ -221,7 +221,7 @@ StDebugger class >> spanNewSessionFrom: anotherSession [
 { #category : #accessing }
 StDebugger class >> taskbarIconName [
 
-	^#smallDebugIcon
+	^#smallDebug
 ]
 
 { #category : #'tools registry' }
@@ -1135,7 +1135,7 @@ StDebugger >> stackLayout [
 		add: #stackTable;
 		yourself
 ]
-    
+
 { #category : #'stack - helpers' }
 StDebugger >> stackOfSize: anInteger [
 

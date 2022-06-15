@@ -16,6 +16,6 @@ HelpTopic >> stAllSubtopics [
 { #category : #'*NewTools-Spotter-Processors' }
 HelpTopic >> stTopicIcon [
 	^ self hasSubtopics
-		ifTrue: [ Smalltalk ui icons iconNamed: #bookIcon ]
-		ifFalse: [ Smalltalk ui icons iconNamed: #pageIcon ]
+		ifTrue: [ Smalltalk ui icons iconNamed: #book ]
+		ifFalse: [ Smalltalk ui icons iconNamed: #page ]
 ]
