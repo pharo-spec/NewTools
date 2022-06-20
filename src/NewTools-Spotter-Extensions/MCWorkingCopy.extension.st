@@ -55,7 +55,7 @@ MCWorkingCopy >> spotterPackageFor: aStep [
 			ifNotNil: [ :rpackage | { rpackage } ] 
 			ifNil: [ { } ] ];
 		itemName: [ :item | item name ];
-		itemIcon: [ Smalltalk ui icons iconNamed: #packageIcon ];
+		itemIcon: [ Smalltalk ui icons iconNamed: #package ];
 		filter: StFilterSubstring
 ]
 

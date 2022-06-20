@@ -121,7 +121,7 @@ StCritiqueBrowserPresenter class >> openOnWorkingConfiguration: aWorkingConfigur
 { #category : #icons }
 StCritiqueBrowserPresenter class >> taskbarIconName [
 
-	^#smallWarningIcon
+	^#smallWarning
 ]
 
 { #category : #window }

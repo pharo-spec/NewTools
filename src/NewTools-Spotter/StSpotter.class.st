@@ -130,7 +130,7 @@ StSpotter class >> menuCommandOn: aBuilder [
 		order: 1;
 		parent: #Searching;
 		help: 'Search tool to explore Pharo system effectively.';
-		iconName: #smallFindIcon
+		iconName: #smallFind
 ]
 
 { #category : #'instance creation' }

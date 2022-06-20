@@ -56,7 +56,7 @@ SpDualChangeSorterPresenter class >> registerToolsOn: registry [
 
 { #category : #icons }
 SpDualChangeSorterPresenter class >> taskbarIconName [
-	^ #changeSorterIcon
+	^ #changeSorter
 ]
 
 { #category : #accessing }

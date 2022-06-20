@@ -89,7 +89,7 @@ StInspectorNode >> icon [
 { #category : #private }
 StInspectorNode >> iconError: error [
 	
-	^ self iconNamed: #smallWarningIcon
+	^ self iconNamed: #smallWarning
 ]
 
 { #category : #accessing }
