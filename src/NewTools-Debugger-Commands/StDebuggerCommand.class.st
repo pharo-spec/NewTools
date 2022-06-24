@@ -103,7 +103,13 @@ StDebuggerCommand >> initialize [
 		stream 
 			<< self class defaultName
 			<< ': '
-			<< self class defaultDescription ])
+			<< self class defaultDescription.
+			self class defaultShortcut ifNotNil: [ :shortCut |
+				stream << '('	
+				<< shortCut printString
+				<< ')'  
+				]
+			])
 ]
 
 { #category : #'as yet unclassified' }
