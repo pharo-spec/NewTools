@@ -345,7 +345,7 @@ VersionBrowser >> showDiffMorphWithConverter: aConverter [
 	self textConverter: aConverter.
 
 	newSource := self newDiff.
-	newSource contextClass: self selectedMessage methodClass.
+	newSource contextClass: (self selectedMessage ifNotNil: [ :message | message methodClass ]).
 	self replaceSourceWith: newSource
 ]
 
