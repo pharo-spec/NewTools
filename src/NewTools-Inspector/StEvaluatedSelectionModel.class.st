@@ -25,6 +25,12 @@ StEvaluatedSelectionModel >> selectedItem [
 	^ self value
 ]
 
+{ #category : #'as yet unclassified' }
+StEvaluatedSelectionModel >> transmission [
+	
+	^ self value
+]
+
 { #category : #accessing }
 StEvaluatedSelectionModel >> value [
 
