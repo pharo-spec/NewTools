@@ -9,7 +9,7 @@ Class {
 
 { #category : #default }
 StRestartCommand class >> defaultDescription [
-	^ 'Go back the start of the current execution context, resetting all local variables and take debugger control.'
+	^ 'Go back to the start of the current execution context, resetting all local variables and take debugger control.'
 ]
 
 { #category : #initialization }
