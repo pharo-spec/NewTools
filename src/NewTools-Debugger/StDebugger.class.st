@@ -427,7 +427,7 @@ StDebugger >> createSubclassResponsibility [
 		       arguments: senderContext arguments.
 	msgCategory := senderContext methodClass organization 
 		               categoryOfElement: msg selector.
-	chosenClass := self requestClassFrom: senderContext receiver class.
+	chosenClass := self requestClassFrom: senderContext receiver class to: senderContext methodClass.
 	chosenClass ifNil: [ ^ self ].
 	self debuggerActionModel
 		implement: msg
@@ -951,8 +951,18 @@ StDebugger >> removeSessionHolderSubscriptions [
 { #category : #'ui requests' }
 StDebugger >> requestClassFrom: aClass [
 
+	^ self requestClassFrom: aClass to: ProtoObject
+
+	
+]
+
+{ #category : #'ui requests' }
+StDebugger >> requestClassFrom: aClass to: aSuperclass [
+
 	self class fastTDD ifTrue: [ ^ aClass ].
-	^ self requestSuperclassOf: aClass to: ProtoObject
+	^ self requestSuperclassOf: aClass to: aSuperclass 
+
+	
 ]
 
 { #category : #'ui requests' }
