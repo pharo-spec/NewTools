@@ -136,9 +136,7 @@ StSpotter class >> menuCommandOn: aBuilder [
 { #category : #'instance creation' }
 StSpotter class >> open [
 
-	self reset.
-	spotter := self new.
-	^ spotter openModal
+	self openWithText: ''
 ]
 
 { #category : #'instance creation' }
@@ -153,6 +151,17 @@ StSpotter class >> openOn: aModel [
 StSpotter class >> openOnOrigin: anObject [
 
 	^ self openOn: (StSpotterModel newOrigin: anObject)
+]
+
+{ #category : #'instance creation' }
+StSpotter class >> openWithText: aText [
+
+	self reset.
+	spotter := self new.
+	spotter searchText
+		text: aText asString.
+	spotter whenDisplayDo: [ spotter searchText cursorPositionIndex: aText size + 1 ].
+	^ spotter open
 ]
 
 { #category : #settings }
