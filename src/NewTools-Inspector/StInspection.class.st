@@ -41,6 +41,11 @@ StInspection >> context: aContext [
 ]
 
 { #category : #testing }
+StInspection >> enableSlotMenuEntries [
+	^false
+]
+
+{ #category : #testing }
 StInspection >> hasOutputActivationPort [
 
 	^ false
