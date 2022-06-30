@@ -7,5 +7,9 @@ ToolShortcutsCategory >> openSpotter [
 
 	^ KMKeymap
 			shortcut: Character cr shift
-			action: [ Smalltalk tools spotter open ]
+			action: [ :target | | selection |
+				selection := target selection.
+				selection ifNotNil: [ Smalltalk tools spotter openWithText: selection ]
+					ifNil: [ Smalltalk tools spotter open ]
+				]
 ]
