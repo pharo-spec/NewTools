@@ -26,6 +26,12 @@ StEvaluatedSelectionModel >> selectedItem [
 ]
 
 { #category : #accessing }
+StEvaluatedSelectionModel >> transmission [
+
+	^ self value
+]
+
+{ #category : #accessing }
 StEvaluatedSelectionModel >> value [
 
 	^ value

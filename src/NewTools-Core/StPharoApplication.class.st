@@ -73,7 +73,7 @@ StPharoApplication >> newIconProvider [
 StPharoApplication >> resetConfiguration [
 	
 	self flag: #TODO. "Invalidating for a moment because I need to align with Spec"
-	"self configuration reset"
+	self configuration reset
 ]
 
 { #category : #running }
