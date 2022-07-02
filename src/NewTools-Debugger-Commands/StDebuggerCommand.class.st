@@ -99,11 +99,16 @@ StDebuggerCommand >> hash [
 StDebuggerCommand >> initialize [
 
 	super initialize.
-	self description: (String streamContents: [ :stream | 
+	self description: (String streamContents: [ :stream | | shortcut |
 		stream 
 			<< self class defaultName
 			<< ': '
-			<< self class defaultDescription ])
+			<< self class defaultDescription.
+		shortcut := self class defaultShortcut.
+		shortcut ifNotNil: [stream	
+			<< ' ['
+			<< shortcut asString
+			<< ']' ]])
 ]
 
 { #category : #'as yet unclassified' }
