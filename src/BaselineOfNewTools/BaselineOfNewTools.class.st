@@ -167,5 +167,5 @@ BaselineOfNewTools >> sindarin: spec [
 		spec
 			repository: (self packageRepositoryURL 
 				ifEmpty: [ 'github://pharo-spec/ScriptableDebugger:Pharo-11' ]);
-			loads: 'Core' ]
+			loads: 'default' ]
 ]
