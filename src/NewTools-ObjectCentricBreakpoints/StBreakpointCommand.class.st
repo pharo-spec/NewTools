@@ -24,6 +24,5 @@ StBreakpointCommand >> appliesTo: aTool [
 
 { #category : #testing }
 StBreakpointCommand >> canBeExecuted [
-
-	^ context selectedItem class == StInspectorSlotNode
+	^ context enableSlotMenuEntries
 ]

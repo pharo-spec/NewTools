@@ -66,6 +66,11 @@ StRawInspection >> defaultOutputPort [
 ]
 
 { #category : #testing }
+StRawInspection >> enableSlotMenuEntries [
+	^ self selectedItem class == StInspectorSlotNode
+]
+
+{ #category : #testing }
 StRawInspection >> hasOutputActivationPort [
 
 	^ true
