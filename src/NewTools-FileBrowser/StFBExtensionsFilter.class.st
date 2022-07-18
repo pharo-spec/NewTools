@@ -25,14 +25,58 @@ StFBExtensionsFilter class >> priority [
 	^ 50
 ]
 
+{ #category : #comparing }
+StFBExtensionsFilter >> = aComparable [
+
+	"Double dispatch"
+
+	^ aComparable equalsToExtensionFilter: self
+]
+
+{ #category : #adding }
+StFBExtensionsFilter >> addExtensionTo: aFileReference [
+
+	(self predicate: aFileReference) ifTrue: [ ^ aFileReference ].
+	self extensions ifEmpty: [ ^ aFileReference ].
+	^ aFileReference , (self extensions first copyWithout: $.)
+]
+
 { #category : #accessing }
 StFBExtensionsFilter >> basename [
 	^ self subclassResponsibility
 ]
 
+{ #category : #comparing }
+StFBExtensionsFilter >> equalsToExtensionFilter: aExtensionFilter [
+
+	"Compare the receiver with the argument and answer with true if the 
+	receiver is equal to the argument. Otherwise answer false."
+
+	^ self extensions asSet = aExtensionFilter extensions asSet
+]
+
 { #category : #accessing }
 StFBExtensionsFilter >> extensions [
+	"Should return sequenceable collection of extensions"
+
 	^ self subclassResponsibility
+]
+
+{ #category : #'as yet unclassified' }
+StFBExtensionsFilter >> extensionsWithDots [
+
+	^ self extensions collect: [ :each | 
+		  each first = $.
+			  ifTrue: [ each ]
+			  ifFalse: [ '.' , each ] ]
+]
+
+{ #category : #comparing }
+StFBExtensionsFilter >> hash [
+
+	"Hash must be redefined whenever = is redefined."
+
+	^ self extensionsWithDots hash
 ]
 
 { #category : #accessing }
@@ -43,7 +87,7 @@ StFBExtensionsFilter >> name [
 				nextPutAll: self basename;
 				space;
 				nextPut: $(.
-			self extensions
+			self extensionsWithDots
 				do: [ :ext | 
 					s
 						nextPut: $*;
@@ -54,10 +98,10 @@ StFBExtensionsFilter >> name [
 
 { #category : #accessing }
 StFBExtensionsFilter >> predicate: aFileReference [
+
 	aFileReference isDirectory ifTrue: [ ^ true ].
 
-	^ self extensions
-		detect: [ :extension | aFileReference basename asLowercase endsWith: extension ]
-		ifFound: [ :ext | true ]
-		ifNone: [ false ]
+	^ (self extensionsWithDots anySatisfy: [ :extension | 
+		   aFileReference basename asLowercase endsWith: extension ]) and: [ 
+		  StFBVisibleFilter new predicate: aFileReference ]
 ]

@@ -59,7 +59,7 @@ Class {
 		'nameText',
 		'filtersDropList',
 		'currentDirectory',
-		'hiddenFilter',
+		'filter',
 		'previewer',
 		'nextButton',
 		'previousButton',
@@ -80,7 +80,6 @@ StFBFileNavigationSystemPresenter class >> buildCommandsGroupWith: presenter for
 		register:
 			((CmCommandGroup named: 'Menu') asSpecGroup
 				register: StFBNewFolderCommand forSpec;
-				register: StFBToggleHiddenFilesCommand forSpec;
 				register: StFBInspectCommand forSpec;
 				register:
 					((CmCommandGroup named: 'Bookmarks') asSpecGroup
@@ -94,13 +93,8 @@ StFBFileNavigationSystemPresenter class >> defaultDirectory [
 	^ FileLocator imageDirectory
 ]
 
-{ #category : #defaults }
-StFBFileNavigationSystemPresenter class >> defaultPreviewer [
-	^ StFBNullPreviewer new
-]
-
 { #category : #specs }
-StFBFileNavigationSystemPresenter class >> defaultSpec [
+StFBFileNavigationSystemPresenter class >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		add: (SpBoxLayout newLeftToRight
@@ -123,12 +117,17 @@ StFBFileNavigationSystemPresenter class >> defaultSpec [
 		yourself
 ]
 
+{ #category : #defaults }
+StFBFileNavigationSystemPresenter class >> defaultPreviewer [
+	^ StFBContentPreviewer new
+]
+
 { #category : #examples }
 StFBFileNavigationSystemPresenter class >> example [
 	<example>
 	| presenter |
 	presenter := self new.
-	"presenter defaultFolder: FileLocator documents."
+	
 	presenter previewer: StFBPNGPreviewer new.
 	presenter openWithSpec.
 	presenter inspect.
@@ -142,9 +141,13 @@ StFBFileNavigationSystemPresenter class >> initialize [
 
 { #category : #defaults }
 StFBFileNavigationSystemPresenter class >> lastVisitedDirectory [
-	^ (LastVisitedDirectory isNil or: [ LastVisitedDirectory exists not ])
-		ifTrue: [ LastVisitedDirectory := self defaultDirectory ]
-		ifFalse: [ LastVisitedDirectory ]
+
+	(LastVisitedDirectory isNotNil and: [ 
+		 [ LastVisitedDirectory exists ]
+			 on: ResolutionRequest
+			 do: [ false ] ]) ifFalse: [ 
+		LastVisitedDirectory := self defaultDirectory ].
+	^ LastVisitedDirectory
 ]
 
 { #category : #'api - customization' }
@@ -161,9 +164,10 @@ StFBFileNavigationSystemPresenter >> columns: aCollectionOfColumns [
 
 { #category : #initialization }
 StFBFileNavigationSystemPresenter >> connectPresenters [
+
 	self filesListAction.
+	self nameTextAction.
 	self filtersDropListAction.
-	self currentPathTextInputAction.
 	self previousBeforeButtonAction.
 	self nextButtonAction
 ]
@@ -199,20 +203,11 @@ StFBFileNavigationSystemPresenter >> currentDirectory [
 
 { #category : #accessing }
 StFBFileNavigationSystemPresenter >> currentDirectory: aFileReference [
+
+	(aFileReference exists and: [ aFileReference isDirectory ]) ifFalse: [ 
+		DirectoryDoesNotExist signalWith: aFileReference ].
 	currentDirectory := aFileReference.
 	LastVisitedDirectory := currentDirectory
-]
-
-{ #category : #actions }
-StFBFileNavigationSystemPresenter >> currentPathTextInputAction [
-
-	currentPathTextInputPresenter entityText 
-		whenSubmitDo: [ :text | 
-			text asFileReference exists
-				ifFalse: [ 
-					self inform: 'you have to write an absolute path and an existing one' ]
-				ifTrue: [ 
-					self openFolder: text asFileReference ] ]
 ]
 
 { #category : #accessing }
@@ -239,19 +234,36 @@ StFBFileNavigationSystemPresenter >> fileReferenceTable [
 { #category : #actions }
 StFBFileNavigationSystemPresenter >> filesListAction [
 
+	| previewProcess |
 	fileReferenceTable
 		transmitTo: nameText
 		transform: [ :selectedItem | 
-			selectedItem 
-				ifNotNil: [ selectedItem basename ]
-				ifNil: [ '' ] ].
-	
+			selectedItem ifNotNil: [ selectedItem basename ] ifNil: [ '' ] ].
+
 	fileReferenceTable whenActivatedDo: [ :selectedItem | 
+		previewProcess ifNotNil: [ 
+			previewProcess isTerminated ifFalse: [ previewProcess terminate ] ].
 		selectedItem selectedItem isDirectory
-			ifTrue: [ self openFolder: selectedItem selectedItem ] ].
-	
-	fileReferenceTable whenSelectedDo: [ :aFileReference	|
-		notebookPreviewer page: (previewer previewOn: aFileReference) ]
+			ifTrue: [ self openFolder: selectedItem selectedItem ]
+			ifFalse: [ self owner confirm ] ].
+
+	fileReferenceTable whenSelectedDo: [ :aFileReference | 
+		previewProcess ifNotNil: [ 
+			previewProcess isTerminated ifFalse: [ previewProcess terminate ] ].
+		previewProcess := [ 
+		                  notebookPreviewer pageContent:
+			                  (previewer previewOn: aFileReference) ]
+			                  forkAt: Processor userBackgroundPriority
+			                  named: 'File Browser preview loader' ]
+]
+
+{ #category : #accessing }
+StFBFileNavigationSystemPresenter >> filter: aFilter [
+
+	filter := aFilter.
+	filtersDropList ifNotNil: [ 
+		filtersDropList listSize isZero ifFalse: [ 
+			self initializeFiltersDropList ] ]
 ]
 
 { #category : #'api - customization' }
@@ -261,12 +273,12 @@ StFBFileNavigationSystemPresenter >> filtersCustomization: aCollectionOfFilter [
 	filtersDropList
 		items:
 			(aCollectionOfFilter asOrderedCollection
-				add: StFBNilFilter new;
+				add: StFBAllFilter new;
 				yourself) asSet asOrderedCollection.
 	filtersDropList
-		selectedIndex:
+		selectIndex:
 			((filtersDropList listItems collect: #name)
-				indexOf: StFBNilFilter new name)
+				indexOf: StFBAllFilter new name)
 ]
 
 { #category : #accessing }
@@ -279,36 +291,34 @@ StFBFileNavigationSystemPresenter >> filtersDropListAction [
 	filtersDropList whenSelectionChangedDo: [ self updateTableContent ]
 ]
 
-{ #category : #accessing }
-StFBFileNavigationSystemPresenter >> hiddenFilter [
-	^ hiddenFilter
-]
-
 { #category : #initialization }
 StFBFileNavigationSystemPresenter >> initialize [
-	hiddenFilter := StFBVisibleFilter new.
+
+	filter := StFBVisibleFilter new.
 	previewer := Previewer.
 	super initialize
 ]
 
 { #category : #initialization }
 StFBFileNavigationSystemPresenter >> initializeFilesTable [
+
 	fileReferenceTable
 		beResizable;
 		columns: StFBAbstractColumn columns;
 		sortingBlock: [ :a :b | 
-			(a isDirectory & b isDirectory not or: [ a isDirectory & b isDirectory & (a basename asLowercase < b basename asLowercase) ])
-				or: [ a isFile & b isFile & (a basename asLowercase < b basename asLowercase) ] ];
+			a isDirectory & b isDirectory not or: [ 
+					a isDirectory = b isDirectory and: [ 
+							a basename asLowercase < b basename asLowercase ] ] ];
 		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'Menu' ]
 ]
 
 { #category : #initialization }
 StFBFileNavigationSystemPresenter >> initializeFiltersDropList [
-	
+
 	filtersDropList
-		items: StFBAbstractFilter defaultFilters;
+		items: (StFBAbstractFilter defaultFiltersWith: filter);
 		display: [ :item | item name ];
-		selectIndex: 1
+		selectItem: filter
 ]
 
 { #category : #initialization }
@@ -327,17 +337,18 @@ StFBFileNavigationSystemPresenter >> initializePresenters [
 
 	notebookPreviewer := self instantiate: StFBNoteBookPreviewerPresenter.
 	fileReferenceTable := self newTable.
-	currentPathTextInputPresenter := self instantiate: StFBWindowPathPresenter.
+	currentPathTextInputPresenter := self instantiate:
+		                                 StFBWindowPathPresenter.
 	nameText := self newTextInput.
 	filtersDropList := self newDropList.
 	previousButton := self newButton.
 	nextButton := self newButton.
 
-	nextButton 
-		icon: (self application iconNamed: #forward); 
+	nextButton
+		icon: (self application iconNamed: #forward);
 		addStyle: 'small'.
-	previousButton 
-		icon: (self application iconNamed: #back); 
+	previousButton
+		icon: (self application iconNamed: #back);
 		addStyle: 'small'.
 
 	self initializeFilesTable.
@@ -354,6 +365,26 @@ StFBFileNavigationSystemPresenter >> lastVisitedDirectory [
 { #category : #accessing }
 StFBFileNavigationSystemPresenter >> nameText [
 	^ nameText
+]
+
+{ #category : #actions }
+StFBFileNavigationSystemPresenter >> nameTextAction [
+
+	nameText whenTextChangedDo: [ :newText | 
+		self nameTextChanged: newText ]
+]
+
+{ #category : #actions }
+StFBFileNavigationSystemPresenter >> nameTextChanged: aText [
+
+	fileReferenceTable selectedItem ifNotNil: [ :item | 
+		(item basename = aText or: [ item basenameWithoutExtension = aText ]) 
+			ifTrue: [ ^ self ] ].
+	fileReferenceTable items
+		detect: [ :item | 
+			item basename = aText or: [ item basenameWithoutExtension = aText ] ]
+		ifFound: [ :item | fileReferenceTable selectItem: item ]
+		ifNone: [ fileReferenceTable unselectAll ]
 ]
 
 { #category : #accessing }
@@ -373,6 +404,7 @@ StFBFileNavigationSystemPresenter >> notebookPreviewer [
 
 { #category : #utilities }
 StFBFileNavigationSystemPresenter >> openFolder: aFileReference [
+
 	self updateWidgetWithFileReference: aFileReference.
 	history register: currentDirectory
 ]
@@ -399,23 +431,19 @@ StFBFileNavigationSystemPresenter >> previousButton [
 
 { #category : #accessing }
 StFBFileNavigationSystemPresenter >> selectedEntry [
-	^ fileReferenceTable selection selectedItem
-]
 
-{ #category : #utilities }
-StFBFileNavigationSystemPresenter >> toggleHiddenFiles [
-	(hiddenFilter equals: StFBNilFilter  new)
-		ifTrue: [ hiddenFilter := StFBVisibleFilter new ]
-		ifFalse: [ hiddenFilter := StFBNilFilter new ].
-	self updateTableContent
+	^ fileReferenceTable selection selectedItem ifNil: [ 
+		  self nameText text trimmed
+			  ifEmpty: [ self currentDirectory ]
+			  ifNotEmpty: [ :text | self currentDirectory / text ] ]
 ]
 
 { #category : #utilities }
 StFBFileNavigationSystemPresenter >> updateTableContent [
-	fileReferenceTable
-		items:
-			(hiddenFilter
-				applyOn: (filtersDropList selectedItem applyOn: currentDirectory children))
+
+	fileReferenceTable items:
+		((filtersDropList selectedItem ifNil: [ filter ]) applyOn:
+			 (currentDirectory children select: #exists))
 ]
 
 { #category : #utilities }

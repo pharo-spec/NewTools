@@ -12,9 +12,25 @@ Class {
 
 { #category : #defaultClassVariable }
 StFBBookmark class >> defaultBookmarks [
+
 	| presets |
-	presets := OrderedCollection withAll: {self root . self home . self workingDirectory . self desktop . self documents . self downloads}.
-	^ OrderedCollection with: (StFBGroupBookmark name: 'Favourites' collection: presets iconName: '')
+	presets := (Smalltalk os isWindows
+		           ifTrue: [ self windowsDrives ]
+		           ifFalse: [ { self root } ]) asOrderedCollection.
+	self flag:
+		'desktop disabled until https://github.com/pharo-project/pharo/issues/9682 is fixed'.
+	presets addAll: { 
+			self home.
+			self workingDirectory.
+			"self desktop."
+			self documents.
+			self downloads }.
+
+	^ OrderedCollection with:
+		  (StFBGroupBookmark
+			   name: 'Favourites'
+			   collection: presets
+			   iconName: '')
 ]
 
 { #category : #'default bookmarks' }
@@ -68,10 +84,11 @@ StFBBookmark class >> name: aName location: aLocation icon: anIcon [
 
 { #category : #'default bookmarks' }
 StFBBookmark class >> root [
+
 	^ self
-		name: '/'
-		location: FileLocator root
-		icon: (self iconNamed: #smallWindow)
+		  name: '/'
+		  location: FileLocator root
+		  icon: (self iconNamed: #smallWindow)
 ]
 
 { #category : #'default bookmarks' }
@@ -84,9 +101,12 @@ StFBBookmark class >> tmp [
 
 { #category : #'default bookmarks' }
 StFBBookmark class >> windowsDrives [
-	^ FileLocator root asFileReference directories
-		collect:
-			[ :each | StFBBookmark name: each basename location: each icon: Smalltalk ui icons smallWindow ]
+
+	^ FileLocator root asFileReference directories collect: [ :each | 
+		  self
+			  name: each basename
+			  location: each
+			  icon: Smalltalk ui icons smallWindow ]
 ]
 
 { #category : #'default bookmarks' }

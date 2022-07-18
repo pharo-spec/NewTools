@@ -1,5 +1,5 @@
 "
-I'm a null patern , the default previewer
+I am a null previewer, I do not show anything
 "
 Class {
 	#name : #StFBNullPreviewer,
@@ -9,7 +9,7 @@ Class {
 
 { #category : #testing }
 StFBNullPreviewer >> canBeUsedOn: aFileReference [
-	^ aFileReference isFile
+	^ true
 ]
 
 { #category : #testing }
@@ -20,6 +20,6 @@ StFBNullPreviewer >> matchingMimeType: aZnMimeType [
 
 { #category : #utils }
 StFBNullPreviewer >> previewActionOn: aFileReference [
-	^ SpTextPresenter new text: aFileReference contents
 
+	^ SpNullPresenter new
 ]
