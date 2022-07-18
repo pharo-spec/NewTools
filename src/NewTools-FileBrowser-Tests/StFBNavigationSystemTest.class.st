@@ -39,14 +39,21 @@ StFBNavigationSystemTest >> testInitializeCurrentPathTextInputShouldSet [
 
 { #category : #tests }
 StFBNavigationSystemTest >> testInitializeFilterDropListSelectedItemShouldBeDefaultFilter [
-	self assert: dialog filtersDropList selectedItem name equals: StFBNilFilter new name
+	self assert: dialog filtersDropList selectedItem name equals: StFBVisibleFilter new name
 ]
 
 { #category : #tests }
 StFBNavigationSystemTest >> testInitializeShouldOnlySeeNotHiddenFile [
+
+	Smalltalk os isWindows ifTrue: [ 
+		self skip:
+			'Too hard to make file hidden in Windows, do not test for it' ].
 	self
-		assertCollection: (dialog fileReferenceTable items collect: #basename)
-		hasSameElements: #('dir' 'dir.ext' 'banana.jpg' 'patate.png' 'sth.aaa' 'sth.ext') asOrderedCollection
+		assertCollection:
+		(dialog fileReferenceTable items collect: #basename)
+		hasSameElements:
+			#( 'dir' 'dir.ext' 'banana.jpg' 'patate.png' 'sth.aaa' 'sth.ext' )
+				asOrderedCollection
 ]
 
 { #category : #tests }
@@ -93,9 +100,9 @@ StFBNavigationSystemTest >> testWhenCurrentDirectoryChangeshouldNewFileDialogOpe
 { #category : #tests }
 StFBNavigationSystemTest >> testWhenCustomizeFilterShouldFilterDropListPresenterIncludeIt [
 	| aCollectionOfFilter |
-	aCollectionOfFilter := {StFBNilFilter new . StFBJPEGFilter new}.
+	aCollectionOfFilter := {StFBAllFilter new . StFBJPEGFilter new}.
 	dialog filtersCustomization: aCollectionOfFilter.
-	self assert: dialog filtersDropList selectedItem name equals: StFBNilFilter new name.
+	self assert: dialog filtersDropList selectedItem name equals: StFBAllFilter new name.
 	self assert: (dialog filtersDropList listItems includesAll: aCollectionOfFilter)
 ]
 
@@ -104,30 +111,26 @@ StFBNavigationSystemTest >> testWhenCustomizeFilterWithoutDefaultFilterShouldFil
 	| aCollectionOfFilter |
 	aCollectionOfFilter := {StFBJPEGFilter new}.
 	dialog filtersCustomization: aCollectionOfFilter.
-	self assert: dialog filtersDropList selectedItem name equals: StFBNilFilter new name.
+	self assert: dialog filtersDropList selectedItem name equals: StFBAllFilter new name.
 	self assert: (dialog filtersDropList listItems includesAll: aCollectionOfFilter)
 ]
 
 { #category : #tests }
-StFBNavigationSystemTest >> testWhenFilesListSelectionChangedAndIsAPNGShouldpreviewContentPresenterIsNotNil [
+StFBNavigationSystemTest >> testWhenFilesListSelectionChangedAndIsAJPGShouldpreviewContentPresenterIsNotNil [
+
 	| previewerUtil |
-	previewerUtil := StFBPNGPreviewer new.
+	previewerUtil := StFBJPGPreviewer new.
 	dialog previewer: previewerUtil.
-	self
-		should: [ "raise an error because banane.jpg don't respect the jpg format"
-			dialog fileReferenceTable
-				selectIndex:
-					((dialog fileReferenceTable items collect: #basename)
-						indexOf: 'patate.png') ]
-		raise: Error.
-	self
-		assert: dialog selectedEntry basename
-		equals: 'patate.png'
+
+	dialog fileReferenceTable selectIndex:
+		((dialog fileReferenceTable items collect: #basename) indexOf:
+			 'banana.jpg').
+	self assert: dialog selectedEntry basename equals: 'banana.jpg'
 ]
 
 { #category : #tests }
 StFBNavigationSystemTest >> testWhenOpenADirectoryShouldDisplayHisChildrenFilterByCurrentFilter [
-	dialog filtersDropList selectedIndex: ((dialog filtersDropList listItems collect: #name) indexOf: StFBPNGFilter new name).
+	dialog filtersDropList selectIndex: ((dialog filtersDropList listItems collect: #name) indexOf: StFBPNGFilter new name).
 	self fileListAllMustBeFilterByPNGFIlter.
 	dialog fileReferenceTable selectIndex: ((dialog fileReferenceTable items collect: #basename) indexOf: 'dir').
 	dialog fileReferenceTable selectIndex: dialog fileReferenceTable selection selectedIndex.
@@ -137,15 +140,12 @@ StFBNavigationSystemTest >> testWhenOpenADirectoryShouldDisplayHisChildrenFilter
 
 { #category : #tests }
 StFBNavigationSystemTest >> testWhenPathTextInputPresenterAcceptShouldChangeFileListWithTheGoodContent [
-	dialog currentPathTextInputPresenter entityText text: dialog currentPathTextInputPresenter entityText text , '/dir/'.
-	dialog currentPathTextInputPresenter entityText accept.
-	self assertCollection: (dialog fileReferenceTable items collect: #basename) hasSameElements: {'klm.png' . 'klm.jpg'}
-]
 
-{ #category : #tests }
-StFBNavigationSystemTest >> testWhenToggleShowHiddenFileShouldHiddenFileAppear [
-	dialog toggleHiddenFiles.
+	dialog currentPathTextInputPresenter pathTextChangedTo:
+		(dialog currentPathTextInputPresenter entityText text asPath / 'dir')
+			pathString.
 	self
-		assertCollection: (dialog fileReferenceTable items collect: #basename) asSet
-		hasSameElements: #('.hidden-dir' 'dir' 'dir.ext' '.hidden' 'banana.jpg' 'patate.png' 'sth.aaa' 'sth.ext')
+		assertCollection:
+		(dialog fileReferenceTable items collect: #basename)
+		hasSameElements: { 'klm.png'. 'klm.jpg' }
 ]

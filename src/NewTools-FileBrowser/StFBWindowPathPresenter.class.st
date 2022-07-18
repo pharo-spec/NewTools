@@ -24,19 +24,35 @@ Class {
 	#instVars : [
 		'textInput',
 		'editButton',
-		'path'
+		'path',
+		'isInEditMode'
 	],
 	#category : #'NewTools-FileBrowser-UI'
 }
 
 { #category : #specs }
-StFBWindowPathPresenter class >> defaultSpec [
+StFBWindowPathPresenter class >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
-		vAlignCenter;
-		add: #path;
-		add: #editButton expand: false;
-		yourself
+		  vAlignCenter;
+		  add: #path;
+		  add: #editButton
+		  expand: false
+		  fill: false
+		  padding: 0;
+		  yourself
+]
+
+{ #category : #specs }
+StFBWindowPathPresenter class >> editablelayout [
+
+	^ SpBoxLayout newLeftToRight
+		  add: #textInput;
+		  add: #editButton
+		  expand: false
+		  fill: false
+		  padding: 0;
+		  yourself
 ]
 
 { #category : #examples }
@@ -47,17 +63,6 @@ StFBWindowPathPresenter class >> example [
 		openWithSpec
 ]
 
-{ #category : #specs }
-StFBWindowPathPresenter class >> otherlayout [
-	^ SpBoxLayout newHorizontal
-		add: #textInput withConstraints: [ :contraint | contraint spec: #fDLayoutFileDialog ];
-		add: #editButton
-			expand: false
-			fill: false
-			padding: 0;
-		yourself
-]
-
 { #category : #accessing }
 StFBWindowPathPresenter >> currentDirectory [
 	^ self owner ifNotNil: #currentDirectory
@@ -65,11 +70,13 @@ StFBWindowPathPresenter >> currentDirectory [
 
 { #category : #api }
 StFBWindowPathPresenter >> currentDirectory: aFileReference [
-	self owner ifNotNil: [ :fileNavigation | fileNavigation currentDirectory: aFileReference asAbsolute ].
+
 	textInput text: aFileReference fullName.
 	path file: aFileReference.
+	self owner ifNotNil: [ :fileNavigation | 
+		fileNavigation currentDirectory: aFileReference asAbsolute ].
 	self needRebuild: false.
-	self buildWithSpec
+	self build
 ]
 
 { #category : #accessing }
@@ -79,31 +86,45 @@ StFBWindowPathPresenter >> entityText [
 
 { #category : #initialization }
 StFBWindowPathPresenter >> initializePresenters [
-	| isTextInput |
-	
+
 	textInput := self newTextInput.
 	path := self instantiate: StFBPathPresenter.
 	editButton := self newButton.
 
-	isTextInput := false.
+	isInEditMode := false.
 
 	path action: [ :fileReference | self owner openFolder: fileReference ].
 
-	textInput
-		autoAccept: false;
-		placeholder: 'path/to/file'.
+	self entityText whenSubmitDo: [ :newText | 
+		self pathTextChangedTo: newText ].
+
+	textInput placeholder: 'path/to/file'.
 
 	editButton
 		addStyle: 'small';
 		icon: (self application iconNamed: #edit);
 		action: [ 
-			self halt. "This needs to be redone"
 			self needRebuild: false.
-			self buildWithSpecLayout: (isTextInput ifTrue: [ self class defaultSpec ] ifFalse: [ self class otherlayout ]).
-			isTextInput := isTextInput not ]
+			isInEditMode
+				ifTrue: [ self pathTextChangedTo: self entityText text ]
+				ifFalse: [ self layout: self class editablelayout ].
+			isInEditMode := isInEditMode not ]
 ]
 
 { #category : #accessing }
 StFBWindowPathPresenter >> path [
 	^ path
+]
+
+{ #category : #'as yet unclassified' }
+StFBWindowPathPresenter >> pathTextChangedTo: aStringOrText [
+
+	| fileReference |
+	fileReference := aStringOrText asString asFileReference.
+	(fileReference exists and: [ fileReference isDirectory ])
+		ifTrue: [ self owner openFolder: fileReference ]
+		ifFalse: [ 
+		self inform: 'You have to input an existing path to a directory' ].
+	isInEditMode := false.
+	self layout: self class defaultLayout
 ]

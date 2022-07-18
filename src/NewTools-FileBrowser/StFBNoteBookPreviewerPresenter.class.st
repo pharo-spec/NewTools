@@ -6,6 +6,7 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'notebook',
+		'pageContent',
 		'page'
 	],
 	#classVars : [
@@ -15,9 +16,9 @@ Class {
 }
 
 { #category : #specs }
-StFBNoteBookPreviewerPresenter class >> defaultSpec [
+StFBNoteBookPreviewerPresenter class >> defaultLayout [
 
-	^ SpBoxLayout newHorizontal	 
+	^ SpBoxLayout newLeftToRight	 
 		add: #notebook;
 		yourself
 ]
@@ -105,35 +106,39 @@ FCjDKXmnHQAAAABJRU5ErkJggg=='
 
 { #category : #initialization }
 StFBNoteBookPreviewerPresenter >> initializePage [
+
 	^ SpNotebookPage
-		title: 'Previewer '  
-		icon: (self iconNamed:#page )
-		provider: [ page ]
-		 
+		  title: 'Previewer '
+		  icon: (self iconNamed: #page)
+		  provider: [ pageContent ]
 ]
 
 { #category : #initialization }
 StFBNoteBookPreviewerPresenter >> initializePresenters [
+
 	notebook := self newNotebook.
-	page := self newText.
-	notebook addPage: self initializePage
+	pageContent := self newText.
+	page := self initializePage.
+	notebook addPage: page
 ]
 
 { #category : #accessing }
-StFBNoteBookPreviewerPresenter >> page [
-	^ page
+StFBNoteBookPreviewerPresenter >> pageContent [
+	^ pageContent
 ]
 
 { #category : #adding }
-StFBNoteBookPreviewerPresenter >> page: aPresenter [
+StFBNoteBookPreviewerPresenter >> pageContent: aPresenter [
 
-	page := aPresenter.
-	notebook removePageAt: 1.
-	notebook addPage: self initializePage;
-	selectPageIndex: 1.
-]
-
-{ #category : #initialization }
-StFBNoteBookPreviewerPresenter >> setNotebookPage: aNotebookPage [
-	notebook addPage: aNotebookPage
+	pageContent := aPresenter.
+	page
+		icon: (self iconNamed: #glamorousRefresh);
+		presenterProvider: [ 
+			self newText
+				text: 'Loading...';
+				yourself ];
+		resetContent;
+		presenterProvider: [ pageContent ];
+		resetContent;
+		icon: (self iconNamed: #page)
 ]
