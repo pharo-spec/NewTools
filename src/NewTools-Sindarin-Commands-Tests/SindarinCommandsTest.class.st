@@ -21,7 +21,6 @@ SindarinCommandsTest >> setUp [
 SindarinCommandsTest >> tearDown [
 
 	debugger ifNotNil: [ 
-		debugger debuggerActionModel clear.
 		debugger session ifNotNil: [ :s | s clear ].
 		debugger session: nil.
 		debugger := nil ].
@@ -31,32 +30,29 @@ SindarinCommandsTest >> tearDown [
 { #category : #'tests - step to instance creation' }
 SindarinCommandsTest >> testDebuggerOnNextInstanceCreation [
 
-	| command dummyActionModel |
+	| command |
 	debugger := SindarinTestCommandDebugger new.
-	dummyActionModel := (StTestDebuggerProvider new debuggerWithContext:
-		                     [ Object new ] asContext) debuggerActionModel.
-	debugger session: dummyActionModel session.
-	dummyActionModel clear.
+	debugger session: (StTestDebuggerProvider new debuggerWithContext:
+			 [ Object new ] asContext) session.
 
 	command := SindarinStepToNextInstanceCreation forContext: debugger.
 	command execute.
 	self
 		assert: debugger session context method
 		identicalTo: (Object class lookupSelector: #new).
-	self assert: debugger session context receiver identicalTo: Object
+	self
+		assert: debugger session context receiver
+		identicalTo: Object
 ]
 
 { #category : #'tests - step to instance creation' }
 SindarinCommandsTest >> testNoNextInstanceCreationAfterMaxSearchDepth [
 
-	| command dummyActionModel |
+	| command |
 	debugger := SindarinTestCommandDebugger new.
-	dummyActionModel := (StTestDebuggerProvider new debuggerWithContext:
-		                     [ object acceptVisitor: visitor ] asContext)
-		                    debuggerActionModel.
-	debugger session: dummyActionModel session.
-	dummyActionModel clear.
-
+	debugger session: (StTestDebuggerProvider new debuggerWithContext:
+			 [ object acceptVisitor: visitor ] asContext) session.
+			
 	debugger session stepIntoUntil: [ :currentContext | 
 		currentContext method == (object class >> #acceptVisitor:) ].
 
@@ -70,30 +66,27 @@ SindarinCommandsTest >> testNoNextInstanceCreationAfterMaxSearchDepth [
 { #category : #'tests - step to instance creation' }
 SindarinCommandsTest >> testNoNextInstanceCreationBeforeContextReturn [
 
-	| command dummyActionModel |
+	| command |
 	debugger := SindarinTestCommandDebugger new.
-	dummyActionModel := (StTestDebuggerProvider new debuggerWithContext:
-		                     [ object doNotAcceptVisitor: nil ] asContext)
-		                    debuggerActionModel.
-	debugger session: dummyActionModel session.
-	dummyActionModel clear.
+	debugger session: (StTestDebuggerProvider new debuggerWithContext:
+			 [ object doNotAcceptVisitor: nil ] asContext) session.
 
 	command := SindarinStepToNextInstanceCreation forContext: debugger.
 	command maxDepth: 2.
 	command execute.
-	self assert: command errorString equals: command notFoundErrorString
+	self
+		assert: command errorString
+		equals: command notFoundErrorString
 ]
 
 { #category : #'tests - step to next call' }
 SindarinCommandsTest >> testStepToNextCallInClass [
 
-	| command dummyActionModel |
+	| command |
 	debugger := SindarinTestCommandDebugger new.
-	dummyActionModel := (StTestDebuggerProvider new debuggerWithContext:
-		                     [ visitor visit: object ] asContext)
-		                    debuggerActionModel.
-	debugger session: dummyActionModel session.
-	dummyActionModel clear.
+	debugger session: 
+	(StTestDebuggerProvider new debuggerWithContext:
+		            [ visitor visit: object ] asContext) session.
 
 	debugger session stepIntoUntil: [ :currentContext | 
 		currentContext method == (visitor class >> #visit:) ].
@@ -110,13 +103,11 @@ SindarinCommandsTest >> testStepToNextCallInClass [
 { #category : #'tests - step to next call' }
 SindarinCommandsTest >> testStepToNextCallInClassFailure [
 
-	| command dummyActionModel |
+	| command |
 	debugger := SindarinTestCommandDebugger new.
-	dummyActionModel := (StTestDebuggerProvider new debuggerWithContext:
-		                     [ visitor doNotVisit: object ] asContext)
-		                    debuggerActionModel.
-	debugger session: dummyActionModel session.
-	dummyActionModel clear.
+	debugger session: 
+	(StTestDebuggerProvider new debuggerWithContext:
+		            [ visitor doNotVisit: object ] asContext) session.
 
 	debugger session stepIntoUntil: [ :currentContext | 
 		currentContext method == (visitor class >> #doNotVisit:) ].
@@ -133,12 +124,10 @@ SindarinCommandsTest >> testStepToNextCallInClassFailure [
 { #category : #'tests - step to next call' }
 SindarinCommandsTest >> testStepToNextCallInClassNeverFinishes [
 
-	| command dummyActionModel |
+	| command |
 	debugger := SindarinTestCommandDebugger new.
-	dummyActionModel := (StTestDebuggerProvider new debuggerWithContext:
-			 [ visitor visitNeverFinish: object ] asContext) debuggerActionModel.
-	debugger session: dummyActionModel session.
-	dummyActionModel clear.
+	debugger session: (StTestDebuggerProvider new debuggerWithContext:
+			 [ visitor visitNeverFinish: object ] asContext) session.
 
 	debugger session stepIntoUntil: [ :currentContext | 
 		currentContext method == (visitor class >> #visitNeverFinish:) ].
@@ -158,12 +147,10 @@ SindarinCommandsTest >> testStepToNextCallInClassNeverFinishes [
 { #category : #'tests - step to next call' }
 SindarinCommandsTest >> testStepToNextCallInClassWithError [
 
-	| command dummyActionModel |
+	| command |
 	debugger := SindarinTestCommandDebugger new.
-	dummyActionModel := (StTestDebuggerProvider new debuggerWithContext:
-			 [ visitor visitWithError: object ] asContext) debuggerActionModel.
-	debugger session: dummyActionModel session.
-	dummyActionModel clear.
+	debugger session: (StTestDebuggerProvider new debuggerWithContext:
+			 [ visitor visitWithError: object ] asContext) session.
 
 	debugger session stepIntoUntil: [ :currentContext | 
 		currentContext method == (visitor class >> #visitWithError:) ].
@@ -180,13 +167,11 @@ SindarinCommandsTest >> testStepToNextCallInClassWithError [
 { #category : #'tests - step to next call' }
 SindarinCommandsTest >> testStepToNextCallInObject [
 
-	| command originalReceiver dummyActionModel |
+	| command originalReceiver |
 	debugger := SindarinTestCommandDebugger new.
-	dummyActionModel := (StTestDebuggerProvider new debuggerWithContext:
-		                     [ visitor visitMultipleObjects: object ]
-			                     asContext) debuggerActionModel.
-	debugger session: dummyActionModel session.
-	dummyActionModel clear.
+	debugger session: 
+	(StTestDebuggerProvider new debuggerWithContext:
+		            [ visitor visitMultipleObjects: object ] asContext) session.
 
 	debugger session stepIntoUntil: [ :currentContext | 
 		currentContext method == (visitor class >> #visitMultipleObjects:) ].
@@ -199,20 +184,16 @@ SindarinCommandsTest >> testStepToNextCallInObject [
 	self
 		assert: debugger session context method
 		identicalTo: visitor class >> #visitTestObject:.
-	self
-		assert: debugger session context receiver
-		identicalTo: originalReceiver
+	self assert: debugger session context receiver identicalTo: originalReceiver
 ]
 
 { #category : #'tests - step to instance creation' }
 SindarinCommandsTest >> testStepToNextInstanceCreation [
 
-	| command dummyActionModel |
+	| command |
 	debugger := SindarinTestCommandDebugger new.
-	dummyActionModel := (StTestDebuggerProvider new debuggerWithContext:
-			 [ object createInstanceWithNew ] asContext) debuggerActionModel.
-	debugger session: dummyActionModel session.
-	dummyActionModel clear.
+	debugger session: (StTestDebuggerProvider new debuggerWithContext:
+			 [ object createInstanceWithNew ] asContext) session.
 
 	command := SindarinStepToNextInstanceCreation forContext: debugger.
 	command execute.
