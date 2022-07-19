@@ -8,9 +8,7 @@ Class {
 		'session',
 		'contextPredicate',
 		'topContext',
-		'filterStack',
-		'updateEventListeners',
-		'preventUpdate'
+		'filterStack'
 	],
 	#classVars : [
 		'ShouldFilterStack'
@@ -47,12 +45,6 @@ StDebuggerActionModel class >> shouldFilterStackSettingsOn: aBuilder [
 		description: 'Defines if methods with pragma #debuggerCompleteToSender are filtered (hidden) in the debugger stack'
 ]
 
-{ #category : #adding }
-StDebuggerActionModel >> addUpdateEventListener: aDebugger whenUpdatedDo: aBlock [
-
-	updateEventListeners at: aDebugger put: aBlock
-]
-
 { #category : #'debug - session' }
 StDebuggerActionModel >> autoClassifyMessage: aMessage inClass: aClass [
 
@@ -60,14 +52,6 @@ StDebuggerActionModel >> autoClassifyMessage: aMessage inClass: aClass [
 	method := aClass lookupSelector: aMessage selector.
 	method protocol = Protocol unclassified ifTrue: [ 
 		MethodClassifier classify: method ]
-]
-
-{ #category : #accessing }
-StDebuggerActionModel >> clear [
-
-	self unsubscribeFromSystemAnnouncer.
-	self removeActionsForSession: self session.
-	updateEventListeners keysDo: [ :key | self removeUpdateEventListener: key ]
 ]
 
 { #category : #'debug - execution' }
@@ -180,11 +164,7 @@ StDebuggerActionModel >> implement: aMessage classified: messageCategory inClass
 StDebuggerActionModel >> initialize [
 	super initialize.
 	self computeInitialTopContext.
-	self subscribeToMethodAddedAnnouncement.
-	filterStack := true.
-	updateEventListeners := Dictionary new.
-	"flag that will prevent any update as long as it is set"
-	preventUpdate := false
+	filterStack := true
 ]
 
 { #category : #accessing }
@@ -286,19 +266,6 @@ StDebuggerActionModel >> predicateFor: aContext postMortem: isContextPostMortem 
 		  yourself
 ]
 
-{ #category : #updating }
-StDebuggerActionModel >> preventUpdatesDuring: aBlock [
-
-	"Sets the prevent update flag during the execution of a block. Restores its value after the block 	finishes"
-
-	| oldEventFlag |
-	oldEventFlag := preventUpdate.
-	preventUpdate := true.
-	[ 
-	aBlock value.
-	self update ] ensure: [ preventUpdate := oldEventFlag ]
-]
-
 { #category : #'debug - execution' }
 StDebuggerActionModel >> proceedDebugSession [
 
@@ -306,12 +273,6 @@ StDebuggerActionModel >> proceedDebugSession [
 	self session
 		resume;
 		clear
-]
-
-{ #category : #'events-triggering' }
-StDebuggerActionModel >> raiseUpdateEvents [
-
-	updateEventListeners valuesDo: [ :each | each value ]
 ]
 
 { #category : #actions }
@@ -330,40 +291,6 @@ StDebuggerActionModel >> referenceContext [
 	or the exception's signaler context in all other cases."
 	self contextPredicate contextSignalsException ifFalse:[^self interruptedContext].
 	^topContext receiver signalerContext 
-]
-
-{ #category : #'events - handling' }
-StDebuggerActionModel >> registerActionsForSession: aSession [
-	self flag: 'Rewrite it'.
-	aSession
-		ifNotNil: [ aSession
-				when: #restart send: #updateIfAble to: self;
-				when: #resume send: #updateIfAble to: self;
-				when: #stepInto send: #updateIfAble to: self;
-				when: #stepOver send: #updateIfAble to: self;
-				when: #stepThrough send: #updateIfAble to: self;
-				when: #contextChanged send: #updateIfAble to: self ]
-]
-
-{ #category : #'events - removing' }
-StDebuggerActionModel >> removeActionsForSession: aSession [
-	self flag: 'Rewrite it'.
-	aSession
-		ifNotNil: [ aSession
-				removeActionsForEvent: #restart;
-				removeActionsForEvent: #resume;
-				removeActionsForEvent: #stepInto;
-				removeActionsForEvent: #stepOver;
-				removeActionsForEvent: #stepThrough;
-				removeActionsForEvent: #contextChanged ]
-]
-
-{ #category : #removing }
-StDebuggerActionModel >> removeUpdateEventListener: anEventListener [
-
-	[ updateEventListeners removeKey: anEventListener ]
-	on: KeyNotFound 
-	do: [ ^ self ]
 ]
 
 { #category : #'debug - execution' }
@@ -402,11 +329,7 @@ StDebuggerActionModel >> session [
 
 { #category : #accessing }
 StDebuggerActionModel >> session: aDebugSession [
-	session ifNotNil: [ self removeActionsForSession: session ].
-	session := aDebugSession.
-	self registerActionsForSession: self session.
-
-	self updateIfAble
+	session := aDebugSession
 ]
 
 { #category : #'debug - stack' }
@@ -457,41 +380,9 @@ StDebuggerActionModel >> stepThrough: aContext [
 	self updateTopContext
 ]
 
-{ #category : #'system subscription' }
-StDebuggerActionModel >> subscribeToMethodAddedAnnouncement [
-
-	SystemAnnouncer uniqueInstance weak
-		when: MethodAdded
-		send: #updateAfterMethodAdded
-		to: self
-]
-
 { #category : #accessing }
 StDebuggerActionModel >> topContext [
 	^ topContext
-]
-
-{ #category : #'system subscription' }
-StDebuggerActionModel >> unsubscribeFromSystemAnnouncer [
-
-	SystemAnnouncer uniqueInstance unsubscribe: self
-]
-
-{ #category : #accessing }
-StDebuggerActionModel >> update [
-
-	self updateTopContext.
-	self updateContextPredicate.
-	self updateDebugSession.
-
-	self raiseUpdateEvents
-]
-
-{ #category : #'updating - widgets' }
-StDebuggerActionModel >> updateAfterMethodAdded [
-
-	self updateContextPredicate.
-	self raiseUpdateEvents 
 ]
 
 { #category : #context }
@@ -515,13 +406,6 @@ StDebuggerActionModel >> updateDebugSession [
 StDebuggerActionModel >> updateDebugSessionException: e [
 
 	self session exception: e
-]
-
-{ #category : #accessing }
-StDebuggerActionModel >> updateIfAble [
-
-	preventUpdate ifNil: [ ^ self ].
-	preventUpdate ifFalse: [ self update ]
 ]
 
 { #category : #context }

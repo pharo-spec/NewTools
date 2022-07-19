@@ -6,16 +6,10 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'session',
-		'tag',
-		'debuggerActionModel'
+		'tag'
 	],
 	#category : #'NewTools-Sindarin-Commands-Tests'
 }
-
-{ #category : #accessing }
-SindarinTestCommandDebugger >> debuggerActionModel [
-	^ debuggerActionModel ifNil: [ debuggerActionModel := StDebuggerActionModel on: self session ]
-]
 
 { #category : #removing }
 SindarinTestCommandDebugger >> forceSessionUpdate [ 
@@ -36,8 +30,7 @@ SindarinTestCommandDebugger >> session [
 { #category : #accessing }
 SindarinTestCommandDebugger >> session: anObject [
 
-	session := anObject.
-	session ifNotNil: [ self debuggerActionModel session: anObject ]
+	session := anObject
 ]
 
 { #category : #removing }
