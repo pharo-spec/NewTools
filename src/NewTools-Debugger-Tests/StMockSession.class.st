@@ -8,6 +8,12 @@ Class {
 	#category : #'NewTools-Debugger-Tests-Utils'
 }
 
+{ #category : #'reflective operations' }
+StMockSession >> doesNotUnderstand: aMessage [
+
+	^ self
+]
+
 { #category : #'debug - session' }
 StMockSession >> implement: aMessage classified: messageCategory inClass: aClass forContext: aContext [
 
