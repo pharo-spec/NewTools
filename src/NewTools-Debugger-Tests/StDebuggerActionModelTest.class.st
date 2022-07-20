@@ -54,7 +54,7 @@ StDebuggerActionModelTest >> benchmarkFilterStack [
 { #category : #helper }
 StDebuggerActionModelTest >> changeSession: aDebugSession [
 
-	session clear.
+	debugActionModel clear; clearDebugSession.
 	session := aDebugSession.
 	debugActionModel := StDebuggerActionModel on: session
 ]
@@ -110,24 +110,27 @@ StDebuggerActionModelTest >> setResult [
 
 { #category : #running }
 StDebuggerActionModelTest >> setUp [
-	| method context process |
+	| method context process dummyActionModel |
 	super setUp.
 	method := self class >> #setResult.
 	process := [ method valueWithReceiver: self arguments: #() ]
 		newProcess.
 	context := process suspendedContext.
 	session ifNotNil: [ session clear ].
-	session := (StTestDebuggerProvider new debuggerWithContext: context)
-		session.
-	session
-		stepIntoUntil: [ :currentContext | currentContext method == method ].
+	dummyActionModel := (StTestDebuggerProvider new debuggerWithContext:
+		                    context) debuggerActionModel.
+	session := dummyActionModel session.
+	dummyActionModel clear.
+	session stepIntoUntil: [ :currentContext | 
+		currentContext method == method ].
 	debugActionModel := StDebuggerActionModel on: session.
 	shouldFilterStack := StDebuggerActionModel shouldFilterStack.
 ]
 
 { #category : #running }
 StDebuggerActionModelTest >> tearDown [
-	debugger ifNotNil: [ debugger close].
+	debugActionModel clear.
+	debugger ifNotNil: [ debugger clear].
 	session ifNotNil: [ session clear ].
 	session := nil.
 	StDebuggerUsingSpecSelectorMock removeSelector: #testMethod.
@@ -151,11 +154,15 @@ StDebuggerActionModelTest >> testClearDebugSession [
 
 { #category : #'tests - contexts' }
 StDebuggerActionModelTest >> testComputeInitialTopContext [
-	|newSession|
-	self changeSession: StTestDebuggerProvider new debuggerWithMissingSubclassResponsibilityContext session.
+	|newSession dummyActionModel |
+	dummyActionModel := StTestDebuggerProvider new debuggerWithMissingSubclassResponsibilityContext debuggerActionModel.
+	self changeSession: dummyActionModel session.
+	dummyActionModel clear.
 	self assert: debugActionModel topContext identicalTo: session exception signalContext.
 	
-	newSession := StTestDebuggerProvider new debuggerWithMissingSubclassResponsibilityContext session.
+	dummyActionModel := StTestDebuggerProvider new debuggerWithMissingSubclassResponsibilityContext debuggerActionModel.
+	newSession := dummyActionModel session.
+	dummyActionModel clear.
 	newSession restart: newSession interruptedContext sender.	
 	self changeSession: newSession.
 	self assert: debugActionModel topContext identicalTo: session interruptedContext
@@ -185,16 +192,20 @@ StDebuggerActionModelTest >> testDefaultShouldFilterStack [
 { #category : #'tests - stack filtering' }
 StDebuggerActionModelTest >> testDynamicShouldFilterStack [
 
-	|mockDebugActionModel|
+	| mockDebugActionModel |
 	mockDebugActionModel := StMockDebuggerActionModel new.
-	
+
 	self assert: mockDebugActionModel filterStack.
-	
+
 	StDebuggerActionModel shouldFilterStack: true.
 	self assert: mockDebugActionModel shouldFilterStack.
-	
+
 	StDebuggerActionModel shouldFilterStack: false.
-	self deny: mockDebugActionModel shouldFilterStack 
+	self deny: mockDebugActionModel shouldFilterStack.
+
+	mockDebugActionModel
+		clear;
+		clearDebugSession
 ]
 
 { #category : #'tests - stack filtering' }
@@ -219,6 +230,8 @@ StDebuggerActionModelTest >> testDynamicShouldFilterStackUpdate [
 	self deny: mockDebugActionModel filterStack.
 	self deny: mockDebugActionModel shouldFilterStack.
 	
+	mockDebugActionModel clear; clearDebugSession.
+	
 	mockDebugActionModel := StMockDebuggerActionModel new.		
 	self assert: mockDebugActionModel filterStack.
 	self assert: mockDebugActionModel shouldFilterStack.
@@ -236,6 +249,8 @@ StDebuggerActionModelTest >> testDynamicShouldFilterStackUpdate [
 	mockDebugActionModel stepOver: context.
 	self assert: mockDebugActionModel filterStack.
 	self assert: mockDebugActionModel shouldFilterStack.
+	
+	mockDebugActionModel clear; clearDebugSession
 	
 	
 	
@@ -260,8 +275,10 @@ StDebuggerActionModelTest >> testFileOutMethod [
 { #category : #'tests - stack filtering' }
 StDebuggerActionModelTest >> testFilterDNUStack [
 
-	|stack filteredStack|
-	self changeSession: StTestDebuggerProvider new debuggerWithDNUContext session.
+	|stack filteredStack dummyActionModel|
+	dummyActionModel := StTestDebuggerProvider new debuggerWithDNUContext debuggerActionModel.
+	self changeSession: dummyActionModel session.
+	dummyActionModel clear.
 	stack := OrderedCollection new.
 	
 	"First, the stack contains a top context (i.e. from which a signal was sent), then the interrupted context"
@@ -285,10 +302,12 @@ StDebuggerActionModelTest >> testFilterDNUStack [
 { #category : #'tests - stack filtering' }
 StDebuggerActionModelTest >> testFilterMissingSubclassResponsibilityStack [
 
-	|stack filteredStack|	
+	|stack filteredStack dummyActionModel|	
 	
 	"We change the stack with an interrupted context that does not contain the <debuggerCompleteToSender> pragma"
-	self changeSession: StTestDebuggerProvider new debuggerWithMissingSubclassResponsibilityContext session.
+	dummyActionModel := StTestDebuggerProvider new debuggerWithMissingSubclassResponsibilityContext debuggerActionModel.
+	self changeSession: dummyActionModel session.
+	dummyActionModel clear.
 	stack := OrderedCollection new.
 	stack add: debugActionModel topContext.
 	stack add: debugActionModel topContext sender.
@@ -305,8 +324,10 @@ StDebuggerActionModelTest >> testFilterMissingSubclassResponsibilityStack [
 { #category : #'tests - stack filtering' }
 StDebuggerActionModelTest >> testFilterStack [
 
-	|stack filteredStack|
-	self changeSession: StTestDebuggerProvider new debuggerWithDNUContext session.
+	|stack filteredStack dummyActionModel|
+	dummyActionModel := StTestDebuggerProvider new debuggerWithDNUContext debuggerActionModel.
+	self changeSession: dummyActionModel session.
+	dummyActionModel clear.
 	stack := OrderedCollection new.
 	
 	"First, add to the stack a MNU context that has a method with the <debuggerCompleteToSender> pragma"
@@ -411,7 +432,10 @@ StDebuggerActionModelTest >> testInterruptedProcessProvidesSameProcessAsTheSessi
 
 { #category : #'tests - predicates' }
 StDebuggerActionModelTest >> testIsContextAnAssertionFailure [
-	self changeSession: StTestDebuggerProvider new debuggerWithFailingAssertionContext session.
+	| dummyActionModel |
+	dummyActionModel := StTestDebuggerProvider new debuggerWithFailingAssertionContext debuggerActionModel.
+	self changeSession: dummyActionModel session.
+	dummyActionModel clear.
 	self assert: debugActionModel isContextAnAssertionFailure
 ]
 
@@ -422,10 +446,12 @@ StDebuggerActionModelTest >> testIsContextSteppable [
 
 { #category : #'tests - predicates' }
 StDebuggerActionModelTest >> testIsInterruptedContextAnAssertEqualsFailure [
-
+	| dummyActionModel |
+	dummyActionModel := StTestDebuggerProvider new debuggerWithFailingAssertionContext debuggerActionModel.
 	self changeSession:
-		StTestDebuggerProvider new debuggerWithFailingAssertionContext
+		dummyActionModel
 			session.
+	dummyActionModel clear.
 	self assert: debugActionModel isContextAnAssertionFailure
 ]
 
@@ -437,16 +463,22 @@ StDebuggerActionModelTest >> testIsInterruptedContextDead [
 
 { #category : #'tests - predicates' }
 StDebuggerActionModelTest >> testIsInterruptedContextDoesNotUnderstand [
-	self changeSession: StTestDebuggerProvider new debuggerWithDNUContext session.
+	| dummyActionModel |
+	dummyActionModel := StTestDebuggerProvider new debuggerWithDNUContext debuggerActionModel.
+	self changeSession: dummyActionModel session.
+	dummyActionModel clear.
 	self assert: debugActionModel isInterruptedContextDoesNotUnderstand.
 	StTestDebuggerProvider compile: 'foobar ^self'.
 	self deny: debugActionModel isInterruptedContextDoesNotUnderstand
 ]
 
 { #category : #'tests - predicates' }
-StDebuggerActionModelTest >> testIsInterruptedContextMissingClassException [	
+StDebuggerActionModelTest >> testIsInterruptedContextMissingClassException [
+	| dummyActionModel |
 	StTestDebuggerProvider compileMissingClassContextBuilder.
-	self changeSession: StTestDebuggerProvider new debuggerWithMissingClassContext session.
+	dummyActionModel := StTestDebuggerProvider new debuggerWithMissingClassContext debuggerActionModel.
+	self changeSession: dummyActionModel session.
+	dummyActionModel clear.
 	self assert: debugActionModel isInterruptedContextMissingClassException
 ]
 
@@ -458,17 +490,21 @@ StDebuggerActionModelTest >> testIsInterruptedContextPostMortem [
 
 { #category : #'tests - predicates' }
 StDebuggerActionModelTest >> testIsInterruptedContextSubclassResponsibilityException [
-	self changeSession: StTestDebuggerProvider new debuggerWithMissingSubclassResponsibilityContext session.
+	| dummyActionModel |
+	dummyActionModel := StTestDebuggerProvider new debuggerWithMissingSubclassResponsibilityContext debuggerActionModel.
+	self changeSession: dummyActionModel session.
+	dummyActionModel clear.
 	self assert: debugActionModel isInterruptedContextSubclassResponsibilityException
 ]
 
 { #category : #'tests - actions' }
 StDebuggerActionModelTest >> testPeelToFirstLike [
 
-	| firstCaller |
-	
+	| firstCaller dummyActionModel |
+	dummyActionModel := StTestDebuggerProvider new debuggerWithRecursiveContext debuggerActionModel.
 	self changeSession:
-		StTestDebuggerProvider new debuggerWithRecursiveContext session.
+		dummyActionModel session.
+	dummyActionModel clear.
 		
 	session stepInto.
 	session stepInto.
@@ -637,7 +673,7 @@ StDebuggerActionModelTest >> testStepInto [
 StDebuggerActionModelTest >> testStepIntoQuickMethods [
 	|ctx|
 	ctx := StMockContext new.
-	debugActionModel session: StMockSession new.
+	debugActionModel clearDebugSession; session: (StMockSession new).
 	debugActionModel stepInto: ctx.
 	
 	"When we step into a context, first that context is configured to step into quick method (aContext stepIntoQuickMethod: true),
@@ -684,9 +720,11 @@ StDebuggerActionModelTest >> testStepThrough [
 { #category : #'tests - predicates' }
 StDebuggerActionModelTest >> testUpdateDebugSession [
 
-	| exception |
-	self changeSession:
-		StTestDebuggerProvider new debuggerWithErrorContext session.
+	| exception dummyActionModel |
+	dummyActionModel := StTestDebuggerProvider new
+		                    debuggerWithErrorContext debuggerActionModel.
+	self changeSession: dummyActionModel session.
+	dummyActionModel clear.
 	exception := session exception.
 	session exception: nil.
 	debugActionModel updateDebugSession.
@@ -697,7 +735,10 @@ StDebuggerActionModelTest >> testUpdateDebugSession [
 { #category : #'tests - contexts' }
 StDebuggerActionModelTest >> testUpdateTopContext [
 	
-	self changeSession: StTestDebuggerProvider new debuggerWithMissingSubclassResponsibilityContext session.
+	| dummyActionModel |
+	dummyActionModel := StTestDebuggerProvider new debuggerWithMissingSubclassResponsibilityContext debuggerActionModel.
+	self changeSession: dummyActionModel session.
+	dummyActionModel clear.
 	self deny: debugActionModel topContext identicalTo: debugActionModel interruptedContext.
 	debugActionModel updateTopContext.		
 	self assert: debugActionModel topContext identicalTo: debugActionModel interruptedContext
@@ -712,31 +753,38 @@ StDebuggerActionModelTest >> testUpdateTopContextAfterSessionOperation [
 	context := [  ] asContext.
 	mockDebugActionModel := StMockDebuggerActionModel new.
 	mockDebugActionModel stepInto: context.
-	self assert: mockDebugActionModel tag equals: #updateTopContext.
+	self assert: mockDebugActionModel tag equals: #updateTopContext.	
+	mockDebugActionModel clear; clearDebugSession.
 	
 	mockDebugActionModel := StMockDebuggerActionModel new.
 	mockDebugActionModel stepOver: context.
 	self assert: mockDebugActionModel tag equals: #updateTopContext.
+	mockDebugActionModel clear; clearDebugSession.
 	
 	mockDebugActionModel := StMockDebuggerActionModel new.
 	mockDebugActionModel stepThrough: context.
 	self assert: mockDebugActionModel tag equals: #updateTopContext.
+	mockDebugActionModel clear; clearDebugSession.
 	
 	mockDebugActionModel := StMockDebuggerActionModel new.
 	mockDebugActionModel restartContext: context.
 	self assert: mockDebugActionModel tag equals: #updateTopContext.
+	mockDebugActionModel clear; clearDebugSession.
 	
 	mockDebugActionModel := StMockDebuggerActionModel new.
 	mockDebugActionModel returnValueFromExpression: 'nil' fromContext: [] asContext.
 	self assert: mockDebugActionModel tag equals: #updateTopContext.
+	mockDebugActionModel clear; clearDebugSession.
 	
 	mockDebugActionModel := StMockDebuggerActionModel new.
 	mockDebugActionModel runToSelection: nil inContext: nil.
 	self assert: mockDebugActionModel tag equals: #updateTopContext.
+	mockDebugActionModel clear; clearDebugSession.
 	
 	mockDebugActionModel := StMockDebuggerActionModel new.
 	mockDebugActionModel implement: nil classified: nil inClass: nil forContext: nil.
-	self assert: mockDebugActionModel tag equals: #updateTopContext
+	self assert: mockDebugActionModel tag equals: #updateTopContext.
+	mockDebugActionModel clear; clearDebugSession.
 	
 	
 	

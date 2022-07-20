@@ -44,25 +44,22 @@ SindarinStepToNextInstanceCreation >> execute [
 
 	| debugger sender depth |
 	debugger := self debuggerPresenter sindarinDebugger.
-	self debuggerPresenter removeSessionHolderSubscriptions.
-	sender := debugger context sender.
+	self debuggerPresenter debuggerActionModel preventUpdatesDuring: [ 
+		sender := debugger context sender.
 
-	depth := 0.
-	errorString := nil.
-	debugger step.
-	[ debugger isAboutToInstantiateClass or: [ errorString notNil ] ] 
-		whileFalse: [ 
-			debugger step.
-			depth := depth + 1.
-			depth = self maxDepth ifTrue: [ errorString := self notFoundErrorString ].
-			debugger context == sender ifTrue: [ 
-				errorString := self notFoundInCurrentContextString ].
-			debugger hasSignalledUnhandledException ifTrue: [ 
-				errorString := self errorDuringSearchString ] ].
-
-	self debuggerPresenter
-		setSessionHolderSubscriptions;
-		forceSessionUpdate.
+		depth := 0.
+		errorString := nil.
+		debugger step.
+		[ debugger isAboutToInstantiateClass or: [ errorString notNil ] ] 
+			whileFalse: [ 
+				debugger step.
+				depth := depth + 1.
+				depth = self maxDepth ifTrue: [ 
+					errorString := self notFoundErrorString ].
+				debugger context == sender ifTrue: [ 
+					errorString := self notFoundInCurrentContextString ].
+				debugger hasSignalledUnhandledException ifTrue: [ 
+					errorString := self errorDuringSearchString ] ] ].
 
 	errorString ifNotNil: [ 
 		self debuggerPresenter
