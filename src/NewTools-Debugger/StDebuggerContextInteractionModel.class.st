@@ -35,10 +35,7 @@ StDebuggerContextInteractionModel >> bindingOf: aString [
 	^ (self hasBindingInContextOf: aString)
 		  ifTrue: [ 
 		  (context lookupVar: aString) asDoItVariableFrom: context ]
-		  ifFalse: [ 
-			  (self hasBindingInInteractionModelOf: aString)
-				  ifTrue: [ self bindings associationAt: aString ]
-				  ifFalse: [ nil ] ]
+		  ifFalse: [ self bindings associationAt: aString ifAbsent: [ nil ] ]
 ]
 
 { #category : #accessing }
