@@ -73,7 +73,7 @@ CompiledCode >> inspectionSource [
 	<inspectorPresentationOrder: 20 title: 'Source'>
 	
 	^ SpCodePresenter new 
-		beForBehavior: self methodClass;
+		beForMethod: self method;
 		text: self sourceCode;
 		contextMenu: (SpMenuPresenter new addGroup: [ :group | group 
 			addItem: [ :item | item 

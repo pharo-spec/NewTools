@@ -15,7 +15,7 @@ RBProgramNode >> inspectionSourceCode [
 	<inspectorPresentationOrder: 30 title: 'Source code'>
 
 	^ SpCodePresenter new 
-		beForBehavior: self methodNode methodClass;
+		beForMethod: self methodNode;
 		text: (self source ifNil: [ self formattedCode ]);
 		addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
 			interval: (self sourceInterval first to: self sourceInterval last + 1);

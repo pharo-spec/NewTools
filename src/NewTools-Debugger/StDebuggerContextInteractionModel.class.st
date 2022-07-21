@@ -94,6 +94,11 @@ StDebuggerContextInteractionModel >> hasUnsavedCodeChanges [
 	^ context notNil and: [ context sourceCode ~= owner text asString ]
 ]
 
+{ #category : #testing }
+StDebuggerContextInteractionModel >> isScripting [
+	^context method isDoIt
+]
+
 { #category : #accessing }
 StDebuggerContextInteractionModel >> object [
 
