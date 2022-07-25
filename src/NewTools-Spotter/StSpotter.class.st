@@ -329,7 +329,7 @@ StSpotter >> configureModel: aModel [
 { #category : #private }
 StSpotter >> defaultModel [
 
-	^ StSpotterModel new
+	^ self newModel
 		in: [ :this | self configureModel: this ];
 		yourself
 ]
@@ -374,7 +374,8 @@ StSpotter >> flushPendingUpdates [
 				self queuedUpdateResultList.
 				lastUpdateTime := Time millisecondClockValue ]
 					on: Exception
-					fork: [ :e | "Allow halts and that, but eat errors (since otherwise, ugly things can happen)"
+					fork: [ :e | 
+						"Allow halts and that, but eat errors (since otherwise, ugly things can happen)"
 						(e isKindOf: Error)
 							ifTrue: [ ('Spotter error: ' , e printString) crTrace ]
 							ifFalse: [ e pass ] ] ] ] ]
@@ -573,6 +574,12 @@ StSpotter >> maybeActivateFirstElementOfResultList [
 StSpotter >> model [
 
 	^ model ifNil: [ model := self defaultModel ]
+]
+
+{ #category : #private }
+StSpotter >> newModel [
+		
+	^ StSpotterModel new
 ]
 
 { #category : #'private - factory' }
