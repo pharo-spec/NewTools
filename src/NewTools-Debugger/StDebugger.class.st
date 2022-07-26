@@ -311,8 +311,8 @@ StDebugger >> clear [
 	extensionToolsNotebook pages do: [ :page | 
 		page activePresenter windowIsClosing ].
 	extensionTools := nil.
-	self debuggerActionModel unsubscribeFromSystemAnnouncer.
 	self unsubscribeFromActionModel.
+	self debuggerActionModel clear.
 	
 	"When we programmatically close the window, we do not need to terminate the session as it was already cleared"
 	programmaticallyClosed ifTrue: [ ^ self ].

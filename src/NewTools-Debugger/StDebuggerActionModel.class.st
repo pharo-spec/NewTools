@@ -182,7 +182,7 @@ StDebuggerActionModel >> initialize [
 	self computeInitialTopContext.
 	self subscribeToMethodAddedAnnouncement.
 	filterStack := true.
-	updateEventListeners := Dictionary new.
+	updateEventListeners := WeakKeyDictionary new.
 	"flag that will prevent any update as long as it is set"
 	preventUpdate := false
 ]
