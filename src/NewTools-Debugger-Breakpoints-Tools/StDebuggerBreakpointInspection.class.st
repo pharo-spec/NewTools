@@ -17,6 +17,12 @@ StDebuggerBreakpointInspection class >> defaultDisplayOrder [
 	^ 3
 ]
 
+{ #category : #visiting }
+StDebuggerBreakpointInspection >> accept: aVisitor [
+
+	^ aVisitor visitBreakpoints: self
+]
+
 { #category : #private }
 StDebuggerBreakpointInspection >> breakPointsForModel [
 	^ Breakpoint all

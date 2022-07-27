@@ -42,6 +42,10 @@ TStDebuggerExtension classSide >> showInDebugger: aBoolean [
 	showDebuggerExtension := aBoolean
 ]
 
+{ #category : #visiting }
+TStDebuggerExtension >> accept: aVisitor [
+]
+
 { #category : #accessing }
 TStDebuggerExtension >> debugger [
 	^debugger

@@ -29,6 +29,12 @@ StSindarinBytecodeDebuggerPresenter class >> defaultLayout [
 		yourself
 ]
 
+{ #category : #visiting }
+StSindarinBytecodeDebuggerPresenter >> accept: aVisitor [
+
+	^ aVisitor visitBytecode: self
+]
+
 { #category : #'debugger extension' }
 StSindarinBytecodeDebuggerPresenter >> debuggerExtensionToolName [
 	^ 'Bytecode' 
