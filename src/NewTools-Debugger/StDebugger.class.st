@@ -743,6 +743,7 @@ StDebugger >> initializeStack [
 		stackTable selection isEmpty ifFalse: [ 
 			self updateInspectorFromContext: context.
 			self updateCodeFromContext: context.
+			self updateExtensionsFrom: self session.
 			self expandStackIfLastItemIsSelected.
 			self updateWindowTitle ] ].
 	stackHeader := self instantiate: StHeaderBar.
