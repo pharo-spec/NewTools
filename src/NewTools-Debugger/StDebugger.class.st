@@ -821,6 +821,7 @@ StDebugger >> newDebuggerContext [
 
 	^ self class debuggerContextClass new
 		  exception: self exception;
+		  debugger: self;
 		  yourself
 ]
 
@@ -829,6 +830,7 @@ StDebugger >> newDebuggerContextFor: aContext [
 
 	^ self newDebuggerContext
 		  context: aContext;
+		  debugger: self;
 		  yourself
 ]
 
