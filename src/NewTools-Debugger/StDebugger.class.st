@@ -1245,14 +1245,19 @@ StDebugger >> updateCodeFromContext [
 { #category : #'presenter - code' }
 StDebugger >> updateCodeFromContext: aContext [
 
-	| selectionInterval |
+	| selectionInterval formerActionModel |
 	aContext ifNil: [ ^ self clearCode ].
 
 	self recordUnsavedCodeChanges.
 	selectionInterval := self selectedCodeRangeForContext: aContext.
 	aContext sourceCode = self code text ifFalse: [ 
 		self updateSourceCodeFor: aContext ].
+	formerActionModel := self code interactionModel.
 	self code beForContext: aContext.
+	"add bindings of the old interaction model in the new one"
+	formerActionModel ifNotNil: [ 
+		formerActionModel bindings associations do: [ :assoc | 
+			self code interactionModel addBinding: assoc ] ].
 	self code selectionInterval:
 		(selectionInterval last to: selectionInterval last - 1).
 	self
