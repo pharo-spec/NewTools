@@ -303,10 +303,9 @@ StDebuggerActionModel >> restartContext: aContext [
 StDebuggerActionModel >> returnValueFromExpression: aString fromContext: aContext [
 	| value |
 	value := session class compiler
-		source: aString;
 		context: aContext;
 		receiver: aContext receiver;
-		evaluate.
+		evaluate: aString.
 	self session returnValue: value from: aContext.
 	self updateTopContext
 ]

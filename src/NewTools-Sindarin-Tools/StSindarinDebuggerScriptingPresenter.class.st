@@ -47,19 +47,17 @@ StSindarinDebuggerScriptingPresenter >> debuggerExtensionToolName [
 
 { #category : #actions }
 StSindarinDebuggerScriptingPresenter >> executeScript [
-	| stream result model receiver evaluationContext |
+	| result model receiver evaluationContext |
 	self debugger removeSessionHolderSubscriptions.
-	stream := code text readStream.
 	model := code interactionModel.
 	receiver := model context receiver.
 	evaluationContext := model context.
 	result := receiver class compiler
-		          source: stream;
 		          context: evaluationContext;
 		          receiver: receiver;
 		          requestor: model;
 		          failBlock: [ nil ];
-		          evaluate.
+		          evaluate: code text asString.
 	resultInspection model: result.
 	resultInspection update.
 	self debugger setSessionHolderSubscriptions.
