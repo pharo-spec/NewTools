@@ -166,6 +166,7 @@ StFBFileNavigationSystemPresenter >> columns: aCollectionOfColumns [
 StFBFileNavigationSystemPresenter >> connectPresenters [
 
 	self filesListAction.
+	self nameTextAction.
 	self filtersDropListAction.
 	self previousBeforeButtonAction.
 	self nextButtonAction
@@ -233,27 +234,27 @@ StFBFileNavigationSystemPresenter >> fileReferenceTable [
 { #category : #actions }
 StFBFileNavigationSystemPresenter >> filesListAction [
 
-	| process |
+	| previewProcess |
 	fileReferenceTable
 		transmitTo: nameText
 		transform: [ :selectedItem | 
 			selectedItem ifNotNil: [ selectedItem basename ] ifNil: [ '' ] ].
 
 	fileReferenceTable whenActivatedDo: [ :selectedItem | 
-		process ifNotNil: [ 
-			process isTerminated ifFalse: [ process terminate ] ].
+		previewProcess ifNotNil: [ 
+			previewProcess isTerminated ifFalse: [ previewProcess terminate ] ].
 		selectedItem selectedItem isDirectory
 			ifTrue: [ self openFolder: selectedItem selectedItem ]
 			ifFalse: [ self owner confirm ] ].
 
 	fileReferenceTable whenSelectedDo: [ :aFileReference | 
-		process ifNotNil: [ 
-			process isTerminated ifFalse: [ process terminate ] ].
-		process := [ 
-		           notebookPreviewer pageContent:
-			           (previewer previewOn: aFileReference) ]
-			           forkAt: Processor userBackgroundPriority
-			           named: 'File Browser preview loader' ]
+		previewProcess ifNotNil: [ 
+			previewProcess isTerminated ifFalse: [ previewProcess terminate ] ].
+		previewProcess := [ 
+		                  notebookPreviewer pageContent:
+			                  (previewer previewOn: aFileReference) ]
+			                  forkAt: Processor userBackgroundPriority
+			                  named: 'File Browser preview loader' ]
 ]
 
 { #category : #accessing }
@@ -364,6 +365,26 @@ StFBFileNavigationSystemPresenter >> lastVisitedDirectory [
 { #category : #accessing }
 StFBFileNavigationSystemPresenter >> nameText [
 	^ nameText
+]
+
+{ #category : #actions }
+StFBFileNavigationSystemPresenter >> nameTextAction [
+
+	nameText whenTextChangedDo: [ :newText | 
+		self nameTextChanged: newText ]
+]
+
+{ #category : #actions }
+StFBFileNavigationSystemPresenter >> nameTextChanged: aText [
+
+	fileReferenceTable selectedItem ifNotNil: [ :item | 
+		(item basename = aText or: [ item basenameWithoutExtension = aText ]) 
+			ifTrue: [ ^ self ] ].
+	fileReferenceTable items
+		detect: [ :item | 
+			item basename = aText or: [ item basenameWithoutExtension = aText ] ]
+		ifFound: [ :item | fileReferenceTable selectItem: item ]
+		ifNone: [ fileReferenceTable unselectAll ]
 ]
 
 { #category : #accessing }

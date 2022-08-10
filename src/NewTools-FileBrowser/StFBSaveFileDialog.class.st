@@ -4,6 +4,9 @@ My responsibility is to provide dialog for SAVING files.
 Class {
 	#name : #StFBSaveFileDialog,
 	#superclass : #StFBFileDialogPresenter,
+	#instVars : [
+		'confirmedOverwrite'
+	],
 	#category : #'NewTools-FileBrowser-UI'
 }
 
@@ -57,8 +60,10 @@ StFBSaveFileDialog >> selectedEntry [
 	entry := super selectedEntry ifNil: [ ^ nil ].
 	entry := filter addExtensionTo: entry.
 	entry exists ifFalse: [ ^ entry ].
+	entry = confirmedOverwrite ifTrue: [ ^ entry ].
 	(UIManager default proceed:
 		 ('File named "{1}" already exists. Do you want to overwrite it?' 
-			  format: { entry printString })) ifTrue: [ ^ entry ].
+			  format: { entry basename })) ifTrue: [ 
+		^ confirmedOverwrite := entry ].
 	^ nil
 ]

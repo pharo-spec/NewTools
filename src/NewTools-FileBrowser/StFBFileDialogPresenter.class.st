@@ -226,13 +226,19 @@ StFBFileDialogPresenter >> columns: aCollectionOfColumns [
 { #category : #actions }
 StFBFileDialogPresenter >> confirm [
 
-	okAction cull: self selectedEntry
+	self withWindowDo: #triggerOkAction
 ]
 
 { #category : #'accessing - ui' }
 StFBFileDialogPresenter >> confirmLabel [
 
 	^ 'Accept'
+]
+
+{ #category : #actions }
+StFBFileDialogPresenter >> confirmed [
+
+	okAction cull: self selectedEntry
 ]
 
 { #category : #initialization }
@@ -352,15 +358,13 @@ StFBFileDialogPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 		okAction: [ 
 			self selectedEntry ifNotNil: [ :entry | 
 					aDialogWindowPresenter beOk.
-					self confirm ] ];
-		addButton: self cancelLabel do: [ :presenter | 
-			presenter triggerCancelAction.
-			presenter close ].
+					aDialogWindowPresenter close.
+					self confirmed ] ];
+		cancelAction: #close;
+		addButton: self cancelLabel do: #triggerCancelAction.
 	confirmButton := aDialogWindowPresenter
 		                 addButton: self confirmLabel
-		                 do: [ :presenter | 
-			                 presenter triggerOkAction.
-			                 presenter close ].
+		                 do: #triggerOkAction.
 	self initializeConfirmButton: confirmButton
 ]
 
