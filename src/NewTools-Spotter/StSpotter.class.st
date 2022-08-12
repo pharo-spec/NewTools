@@ -161,7 +161,7 @@ StSpotter class >> openWithText: aText [
 	spotter searchText
 		text: aText asString.
 	spotter whenDisplayDo: [ spotter searchText cursorPositionIndex: aText size + 1 ].
-	^ spotter open
+	^ spotter openModal
 ]
 
 { #category : #settings }
