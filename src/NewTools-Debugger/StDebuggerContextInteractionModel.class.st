@@ -96,7 +96,7 @@ StDebuggerContextInteractionModel >> hasUnsavedCodeChanges [
 
 { #category : #testing }
 StDebuggerContextInteractionModel >> isScripting [
-	^context method isDoIt
+	^context belongsToDoIt
 ]
 
 { #category : #accessing }
