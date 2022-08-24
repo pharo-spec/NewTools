@@ -158,6 +158,6 @@ BaselineOfNewTools >> sindarin: spec [
 	spec baseline: 'Sindarin' with: [ 
 		spec
 			repository: (self packageRepositoryURL 
-				ifEmpty: [ 'github://pharo-spec/ScriptableDebugger' ]);
+				ifEmpty: [ 'github://pharo-spec/ScriptableDebugger:b2cb7e99cf22136aea7574399e234ca51a032da8' ]);
 			loads: 'Core' ]
 ]
