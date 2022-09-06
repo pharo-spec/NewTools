@@ -12,6 +12,7 @@ Class {
 	#name : #MessageBrowser,
 	#superclass : #AbstractMessageCentricBrowser,
 	#instVars : [
+		'title',
 		'textModel',
 		'refreshingBlock'
 	],
@@ -543,7 +544,15 @@ MessageBrowser >> textModel: aModel [
 
 { #category : #private }
 MessageBrowser >> title [
-	^ self class title , ' [' , messageList numberOfElements printString , ']'
+
+	^ (title ifNil: [ self class title ]), ' [' , messageList numberOfElements printString , ']'
+]
+
+{ #category : #accessing }
+MessageBrowser >> title: aString [
+
+	title := aString.
+	self buildUpdateTitle
 ]
 
 { #category : #accessing }
