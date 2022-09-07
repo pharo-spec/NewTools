@@ -81,6 +81,14 @@ StDebuggerContextPredicateTest >> testPrintHaltIfDescription [
 ]
 
 { #category : #tests }
+StDebuggerContextPredicateTest >> testPrintHaltNowDescription [
+	self assert: (StDebuggerActionModel on: 
+			([ Halt now ] on: Exception do: 
+				[ :e | StTestDebuggerProvider new sessionFor: nil exception: e ]) session) statusStringForContext
+		equals: 'Halt'.
+]
+
+{ #category : #tests }
 StDebuggerContextPredicateTest >> testPrintPostMortemDescription [
 	self skip.
 	predicate postMortem: true.

@@ -351,7 +351,7 @@ StDebuggerActionModel >> stackOfSize: anInteger [
 { #category : #context }
 StDebuggerActionModel >> statusStringForContext [
 
-	^ self contextPredicate printDescription
+	^ self exception description
 ]
 
 { #category : #'debug - stepping' }
