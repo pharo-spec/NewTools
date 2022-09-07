@@ -13,8 +13,8 @@ Class {
 	#superclass : #AbstractMessageCentricBrowser,
 	#instVars : [
 		'title',
-		'textModel',
-		'refreshingBlock'
+		'refreshingBlock',
+		'textPresenter'
 	],
 	#category : #'NewTools-MethodBrowsers-Senders'
 }
@@ -79,18 +79,6 @@ MessageBrowser class >> browseSendersOf: aSymbol [
 	^ self browse: aSymbol senders asSendersOf: aSymbol
 ]
 
-{ #category : #layout }
-MessageBrowser class >> defaultLayout [
-
-	^ SpPanedLayout newTopToBottom
-		add: #messageList;
-		add: (SpBoxLayout newTopToBottom
-			add: #toolbarPresenter expand: false;
-			add: #textModel;
-			yourself);
-		yourself
-]
-
 { #category : #'instance creation - old' }
 MessageBrowser class >> openMessageList: messageList name: aString autoSelect: aSelector refreshingBlockSelector: aRefreshingBlockSelector [
 	
@@ -139,21 +127,13 @@ MessageBrowser >> accept: text notifying: notifyer [
 
 { #category : #'text selection' }
 MessageBrowser >> autoSelect: aSelector [
-	textModel
+	textPresenter
 		readSelectionBlock:
 			[ :text | 
 			self selectedMessage ifNotNil:
 					[ :msg | (self isMethodDefinition: msg)
 						ifFalse: [ self intervalOf: aSelector inCommentText: text ] 
 						ifTrue: [ self intervalOf: aSelector inCode: text of: msg ] ] ]
-]
-
-{ #category : #initialization }
-MessageBrowser >> buildUpdateTitle [
-	"Trying to have a clean subscription, this method is called in #initialize"
-
-	self updateTitle.
-	textModel text: textModel text
 ]
 
 { #category : #announcements }
@@ -163,17 +143,24 @@ MessageBrowser >> classRenamed: anAnnouncement [
 		self handleClassRenamed: anAnnouncement ]
 ]
 
-{ #category : #private }
-MessageBrowser >> codeFont [
-	^ StandardFonts codeFont
-]
-
 { #category : #initialization }
 MessageBrowser >> connectPresenters [
 	messageList
 		whenSelectionChangedDo: [ :selection | self selectItem: selection selectedItem ];
 		whenModelChangedDo: [ self updateTitle ].
-	textModel whenSubmitDo: [ :text | (self accept: text notifying: nil) notNil ]
+	textPresenter whenSubmitDo: [ :text | (self accept: text notifying: nil) notNil ]
+]
+
+{ #category : #layout }
+MessageBrowser >> defaultLayout [
+
+	^ SpPanedLayout newTopToBottom
+		add: messageList;
+		add: (SpBoxLayout newTopToBottom
+			add: toolbarPresenter expand: false;
+			add: textPresenter;
+			yourself);
+		yourself
 ]
 
 { #category : #'text selection' }
@@ -218,14 +205,14 @@ MessageBrowser >> handleMethodAdded: anAnnouncement [
 	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [ ^ self ].
 	((item methodClass notNil) and:[item methodClass isObsolete not]) ifFalse: [ ^ self ].
 	
-	boolean := textModel hasUnacceptedEdits.
-	boolean ifTrue: [ text := textModel pendingText ].
+	boolean := textPresenter hasUnacceptedEdits.
+	boolean ifTrue: [ text := textPresenter pendingText ].
 	
 	sel := self selectedMessage.
 	self messages: (self messages add: item asFullRingDefinition; yourself).
 	self selectedMessage: sel.
 	
-	boolean ifTrue: [ textModel pendingText: text ]
+	boolean ifTrue: [ textPresenter pendingText: text ]
 ]
 
 { #category : #announcements }
@@ -243,9 +230,9 @@ MessageBrowser >> handleMethodModified: anAnnouncement [
 		ifFalse: [ ^ self ].
 	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement)
 		ifFalse: [ ^ self ].
-	edits := textModel hasUnacceptedEdits.
+	edits := textPresenter hasUnacceptedEdits.
 	edits
-		ifTrue: [ text := textModel pendingText ].
+		ifTrue: [ text := textPresenter pendingText ].
 	index := messageList selectedIndex.
 	list := self messages
 		remove: sel ifAbsent: [  ];
@@ -256,8 +243,8 @@ MessageBrowser >> handleMethodModified: anAnnouncement [
 	self setSelectedIndex: index.
 	edits
 		ifFalse: [ ^ self ].
-	textModel pendingText: text.
-	textModel hasEditingConflicts: true
+	textPresenter pendingText: text.
+	textPresenter hasEditingConflicts: true
 ]
 
 { #category : #announcements }
@@ -278,7 +265,7 @@ MessageBrowser >> handleMethodRemoved: anAnnouncement [
 	(removeItem notNil
 		and: [ removeItem methodClass = item methodClass
 				and: [ removeItem selector = item selector ] ])
-		ifTrue: [ textModel hasUnacceptedEdits: false ].
+		ifTrue: [ textPresenter hasUnacceptedEdits: false ].
 	self
 		messages:
 			(self messages
@@ -289,9 +276,9 @@ MessageBrowser >> handleMethodRemoved: anAnnouncement [
 
 { #category : #initialization }
 MessageBrowser >> initialize [
+
 	super initialize.
-	self registerToAnnouncements.
-	self announcer when: SpWidgetBuilt send: #buildUpdateTitle to: self
+	self registerToAnnouncements
 ]
 
 { #category : #initialization }
@@ -306,12 +293,10 @@ MessageBrowser >> initializeDropList [
 MessageBrowser >> initializePresenters [
 	super initializePresenters.
 
-	textModel := self newCode.
+	textPresenter := self newCode.
 	refreshingBlock := [ :item | true ].
 
-	self
-		initializeDropList;
-		setFocus
+	self initializeDropList
 ]
 
 { #category : #initialization }
@@ -332,7 +317,7 @@ MessageBrowser >> installIconStylerFor: anItem [
 		ifFalse: [ ^ self ].
 	
 	IconStyler withStaticStylers 
-		styleText: self textModel 
+		styleText: textPresenter 
 		withAst: anItem ast.
 ]
 
@@ -385,12 +370,6 @@ MessageBrowser >> methodRemoved: anAnnouncement [
 	"this method forces the announcement to be handled in the UI process"
 	UIManager default defer:  [ 
 		self handleMethodRemoved: anAnnouncement ]
-]
-
-{ #category : #'messageList interface' }
-MessageBrowser >> open [
-
-	^self open
 ]
 
 { #category : #private }
@@ -457,8 +436,8 @@ MessageBrowser >> selectIndex: anIndex [
 MessageBrowser >> selectItem: item [
 
 	toolbarPresenter method: item.
-	textModel beForMethod: item.
-	textModel text: (self textConverter
+	textPresenter beForMethod: item.
+	textPresenter text: (self textConverter
 		method: item;
 		getText).
 	self installIconStylerFor: item
@@ -477,15 +456,6 @@ MessageBrowser >> selectedMessage: aMessage [
 { #category : #accessing }
 MessageBrowser >> selectedMethod [
 	^ messageList selectedMethod
-]
-
-{ #category : #initialization }
-MessageBrowser >> setFocus [
-
-	self focusOrder
-		add: messageList;
-		add: toolbarPresenter;
-		add: textModel
 ]
 
 { #category : #api }
@@ -525,21 +495,10 @@ MessageBrowser >> sourceIntervalOf: aSelector in: aMethodNode [
 
 { #category : #accessing }
 MessageBrowser >> textConverter: aTextConverter [
+
 	super textConverter: aTextConverter.
-	textModel syntaxHighlight: self textConverter shouldShout .
-	textModel text: self textConverter getText.
-]
-
-{ #category : #accessing }
-MessageBrowser >> textModel [
-	
-	^ textModel
-]
-
-{ #category : #accessing }
-MessageBrowser >> textModel: aModel [
-	
-	textModel := aModel
+	textPresenter syntaxHighlight: self textConverter shouldShout .
+	textPresenter text: self textConverter getText.
 ]
 
 { #category : #private }
@@ -552,7 +511,7 @@ MessageBrowser >> title [
 MessageBrowser >> title: aString [
 
 	title := aString.
-	self buildUpdateTitle
+	self updateTitle
 ]
 
 { #category : #accessing }
@@ -576,7 +535,7 @@ MessageBrowser >> updateTitle [
 	self withWindowDo: [ :window | window title: self title ]
 ]
 
-{ #category : #'api-events' }
+{ #category : #'api - events' }
 MessageBrowser >> whenSelectedItemChanged: aBlock [ 
 	messageList whenSelectedItemChanged: aBlock 
 ]

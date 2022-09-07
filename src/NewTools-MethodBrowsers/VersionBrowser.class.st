@@ -50,12 +50,6 @@ VersionBrowser class >> browseVersionsForMethod: aRingMethod [
 	^ (self on: aRingMethod) open
 ]
 
-{ #category : #layout }
-VersionBrowser class >> defaultLayout [
-	
-	^ nil
-]
-
 { #category : #'tools registry' }
 VersionBrowser class >> registerToolsOn: registry [
 	"Add ourselves to registry. See [Smalltalk tools]"
@@ -147,11 +141,12 @@ VersionBrowser >> connectPresenters [
 	messageList
 		whenSelectedDo: [ :item | self selectItem: item ];
 		messages: self buildChangeList.
-	toolbarPresenter dropListModel selectIndex: 1
+	toolbarPresenter selectFirst
 ]
 
 { #category : #initialization }
 VersionBrowser >> defaultLayout [
+
 	^ SpPanedLayout newTopToBottom
 		add: messageList;
 		add: ((sourceLayout := SpBoxLayout newTopToBottom)
@@ -184,8 +179,8 @@ VersionBrowser >> initializePresenters [
 				methodReference: self textConverter method
 				referencesList: self changeList) ].
 		
-	toolbarPresenter versionModel
-		label: 'Revert';
+	toolbarPresenter 
+		replaceVersionWithLabel: 'Revert'
 		action: [ self revert: self selectedMessage ]
 ]
 

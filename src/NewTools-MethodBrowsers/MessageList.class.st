@@ -39,7 +39,7 @@ MessageList class >> defaultLayout [
 MessageList >> browseClassRefs [
 
 	self currentMethod ifNotNil: [ :aMethod | 
-		model browseClassRefsOf: aMethod methodClass ]
+		self systemNavigation browseAllUsersOfClassOrTrait: aMethod methodClass ]
 ]
 
 { #category : #actions }
@@ -51,21 +51,21 @@ MessageList >> browseMessages [
 { #category : #actions }
 MessageList >> browseMethod [
 
-	self currentMethod ifNotNil: [ :aMethod | aMethod browse ]
+	self currentMethod ifNotNil: [ :aMethod | self systemNavigation browse: aMethod ]
 ]
 
 { #category : #actions }
 MessageList >> browseSendersOfMessage [
 
 	self currentMethod ifNotNil: [ :aMethod |
-		model browseSendersOfMessagesFrom: aMethod selector ]
+		self systemNavigation browseAllSendersOf: aMethod selector ]
 ]
 
 { #category : #actions }
 MessageList >> browseVersions [
 
 	self currentMethod ifNotNil: [ :aMethod |
-		model browseVersionsFrom: aMethod compiledMethod ]
+		self application tools versionBrowser  browseVersionsForMethod: aMethod compiledMethod ]
 ]
 
 { #category : #testing }
@@ -106,7 +106,49 @@ MessageList >> currentMethod [
 	^ method
 ]
 
-{ #category : #'private-focus' }
+{ #category : #'private - actions' }
+MessageList >> doBrowseImplementors [
+		
+	self systemNavigation browseAllImplementorsOf: self selectedMethod selector
+]
+
+{ #category : #'private - actions' }
+MessageList >> doBrowseMethod [
+		
+	self systemNavigation browse: self selectedMethod
+]
+
+{ #category : #'private - actions' }
+MessageList >> doBrowseSenders [
+
+	self systemNavigation browseAllSendersOf: self selectedMethod selector
+]
+
+{ #category : #'private - actions' }
+MessageList >> doBrowseUsers [
+		
+	self systemNavigation browseAllUsersOfClassOrTrait: self selectedMethod methodClass
+]
+
+{ #category : #'private - actions' }
+MessageList >> doBrowseVersions [
+	
+	self systemNavigation browseVersionsOf: self selectedMethod
+]
+
+{ #category : #'private - actions' }
+MessageList >> doInspectMethod [
+	
+	self systemNavigation inspect: self selectedMethod
+]
+
+{ #category : #'private - actions' }
+MessageList >> doRemoveMethod [
+		
+	self selectedMethod removeFromSystem
+]
+
+{ #category : #'private - focus' }
 MessageList >> ensureKeyBindingsFor: aWidget [
 	aWidget bindKeyCombination: PharoShortcuts current browseShortcut toAction: [ self browseMethod ].
 	aWidget bindKeyCombination: PharoShortcuts current inspectItShortcut toAction: [ self inspectMethod ].
@@ -163,49 +205,41 @@ MessageList >> locationOf: anItem [
 			aStream << (self protocolNameForItem: anItem) << ')' ]
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 MessageList >> messageListMenu [
+
 	^ self newMenu
-		addGroup: [ :aGroup | 
-			aGroup
-				addItem: [ :anItem | 
-					anItem
-						name: 'Browse full...';
-						shortcut: $b meta;
-						action: [ self selectedMethod browse ] ];
-				addItem: [ :anItem | 
-					anItem
-						name: 'Inspect method...';
-						shortcut: $i meta;
-						action: [ self selectedMethod inspect ] ] ];
-		addGroup: [ :aGroup | 
-			aGroup
-				addItem: [ :anItem | 
-					anItem
-						name: 'Remove method...';
-						shortcut: $x meta;
-						action: [ self selectedMethod removeFromSystem ] ];
-				addItem: [ :anItem | 
-					anItem
-						name: 'Senders of...';
-						shortcut: $n meta;
-						action: [ model browseSendersOfMessagesFrom: self selectedMethod selector ] ];
-				addItem: [ :anItem | 
-					anItem
-						name: 'Implementors of...';
-						shortcut: $m meta;
-						action: [ model browseMessagesFrom: self selectedMethod selector ] ] ];
-		addItem: [ :anItem | 
-			anItem
-				name: 'Users of...';
-				shortcut: $N meta;
-				action: [ model browseClassRefsOf: self selectedMethod methodClass ] ];
-		addItem:
-			[ :anItem | 
-			anItem
-				name: 'Versions...';
-				shortcut: $v meta;
-				action: [ model browseVersionsFrom: self selectedMethod ] ] yourself
+		addGroup: [ :group | group
+			addItem: [ :item | item 
+				name: 'Browse full'; 
+				shortcut: $b meta; 
+				action: [ self doBrowseMethod ] ];
+			addItem: [ :item | item 
+				name: 'Inspect method'; 
+				shortcut: $i meta; 
+				action: [ self doInspectMethod ] ] ];
+		addGroup: [ :group | group
+			addItem: [ :item | item 
+				name: 'Remove method'; 
+				shortcut: $x meta; 
+				action: [ self doRemoveMethod ] ];
+			addItem: [ :item | item 
+				name: 'Senders'; 
+				shortcut: $n meta; 
+				action: [ self doBrowseSenders ] ];
+			addItem: [ :item | item 
+				name: 'Implementors'; 
+				shortcut: $m meta; 
+				action: [ self doBrowseImplementors ] ] ];
+		addItem: [ :items | items 
+			name: 'Users'; 
+			shortcut: $N meta; 
+			action: [ self doBrowseUsers ] ];
+		addItem: [ :item | item 
+			name: 'Versions'; 
+			shortcut: $v meta; 
+			action: [ self doBrowseVersions ] ];
+		yourself
 ]
 
 { #category : #accessing }

@@ -12,12 +12,6 @@ Class {
 	#category : #'NewTools-MethodBrowsers-Base'
 }
 
-{ #category : #layout }
-AbstractMessageCentricBrowser class >> defaultLayout [
-
-	^ self subclassResponsibility
-]
-
 { #category : #testing }
 AbstractMessageCentricBrowser class >> isAbstract [ 
 	 ^self name = #AbstractMessageCentricBrowser
