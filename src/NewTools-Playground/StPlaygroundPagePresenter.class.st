@@ -173,7 +173,7 @@ StPlaygroundPagePresenter >> doEvaluateAndGo [
 	activationBlock value: value
 ]
 
-{ #category : #private }
+{ #category : #accessing }
 StPlaygroundPagePresenter >> ensureContentsFlushed [
 
 	self page ensureContentsFlushed

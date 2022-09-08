@@ -118,6 +118,29 @@ StPlaygroundPagePresenterTest >> testDoEvaluateDeclareGlobal [
 ]
 
 { #category : #tests }
+StPlaygroundPagePresenterTest >> testPageIsSavedWhenExecutingACommand [
+	| memory fileReference |
+	
+	memory := FileSystem memory.
+	fileReference := memory / 'page.ph'. 
+	fileReference writeStreamDo: [ :stream | ].
+	presenter loadPage: fileReference.
+	presenter page timeToWait: 1 minute.
+	presenter whenActivatedDo: [ :selection | "not needed" ].
+	self openInstance.
+	self assert: presenter page contents equals: ''.
+	presenter contents: '42 factorial'.
+	presenter text selectionInterval: (1 to: 2).
+	self 
+		assert: fileReference contents 
+		equals: ''.
+	presenter doEvaluateAndGo.
+	self 
+		assert: fileReference contents 
+		equals: '42 factorial'
+]
+
+{ #category : #tests }
 StPlaygroundPagePresenterTest >> testToolbarActions [
 	| group commands class |
 
