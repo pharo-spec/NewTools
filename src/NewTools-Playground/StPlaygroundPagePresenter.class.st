@@ -173,9 +173,9 @@ StPlaygroundPagePresenter >> doEvaluateAndGo [
 	activationBlock value: value
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 StPlaygroundPagePresenter >> ensureContentsFlushed [
-	
+
 	self page ensureContentsFlushed
 ]
 
@@ -198,6 +198,11 @@ StPlaygroundPagePresenter >> initializePresenters [
 		contextMenu: [ (self menuActionsFor: text) asMenuPresenter ];
 		contextKeyBindings: (self menuActionsFor: text) asKMCategory;
 		whenTextChangedDo: [ :aString | page contents: aString ].
+
+	text announcer 
+		when: SpCodeWillBeEvaluatedAnnouncement 
+		send: #ensureContentsFlushed
+		to: self.
 		
 	text eventHandler 
 		whenKeyUpDo: [ :event | self updateLineNumber ];
