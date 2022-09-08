@@ -37,7 +37,7 @@ StInspectorBrowseSelectedCommand >> asSpecCommand [
 { #category : #execution }
 StInspectorBrowseSelectedCommand >> execute [ 
 
-	self interestingObject browse
+	self context systemNavigation browse: self interestingObject
 ]
 
 { #category : #execution }
