@@ -111,6 +111,11 @@ StDebuggerActionModel >> copyStackToClipboard [
 				streamContents: [ :s | self interruptedContext shortDebugStackOn: s ])
 ]
 
+{ #category : #'stack - helpers' }
+StDebuggerActionModel >> exception [
+	^ self session exception
+]
+
 { #category : #'debug - stack' }
 StDebuggerActionModel >> fileOutMethod: aMethod [
 	aMethod methodClass fileOutMethod: aMethod selector
@@ -165,6 +170,11 @@ StDebuggerActionModel >> initialize [
 { #category : #accessing }
 StDebuggerActionModel >> interruptedContext [
 	^self session interruptedContext
+]
+
+{ #category : #accessing }
+StDebuggerActionModel >> interruptedProcess [
+	^ self session interruptedProcess
 ]
 
 { #category : #'debug - predicates' }
@@ -265,6 +275,15 @@ StDebuggerActionModel >> proceedDebugSession [
 		clear
 ]
 
+{ #category : #actions }
+StDebuggerActionModel >> recompileMethodTo: aString inContext: aContext notifying: aNotifyer [
+	aContext ifNil: [ ^ self ].
+	self session
+		recompileMethodTo: aString
+		inContext: aContext
+		notifying: aNotifyer
+]
+
 { #category : #context }
 StDebuggerActionModel >> referenceContext [
 	"The reference context is the context that we wish to see in the debugger's stack.
@@ -298,6 +317,11 @@ StDebuggerActionModel >> runToSelection: aSelectionInterval inContext: aContext 
 	self updateTopContext
 ]
 
+{ #category : #actions }
+StDebuggerActionModel >> selectedCodeRangeForContext: aContext [ 
+	^ self session selectedCodeRangeForContext: aContext
+]
+
 { #category : #accessing }
 StDebuggerActionModel >> session [
 	^session
@@ -312,6 +336,16 @@ StDebuggerActionModel >> session: aDebugSession [
 StDebuggerActionModel >> shouldFilterStack [
 
 	^ self filterStack and: [ self class shouldFilterStack ]
+]
+
+{ #category : #'accessing - variables' }
+StDebuggerActionModel >> stack [
+	^ self session stack
+]
+
+{ #category : #'stack - helpers' }
+StDebuggerActionModel >> stackOfSize: anInteger [ 
+	^ self session stackOfSize: anInteger
 ]
 
 { #category : #context }

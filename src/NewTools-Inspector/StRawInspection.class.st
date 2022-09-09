@@ -18,9 +18,7 @@ StRawInspection class >> buildCommandsGroupWith: presenter forRoot: aCmCommandsG
 		beDisplayedAsGroup;
 		register: (StInspectorInspectSelectedCommand forSpecContext: presenter);
 		register: (StInspectorBrowseSelectedCommand forSpecContext: presenter);
-		register:
-			(SpBrowsePointersToCommand
-				forSpecContext: [ presenter selectedItem value ])
+		register: (SpBrowsePointersToCommand forSpecContext: presenter)
 ]
 
 { #category : #layout }
@@ -65,6 +63,11 @@ StRawInspection >> addVariablesColumn [
 StRawInspection >> defaultOutputPort [
 
 	^ self outputSelectionPort
+]
+
+{ #category : #testing }
+StRawInspection >> enableSlotMenuEntries [
+	^ self selectedItem class == StInspectorSlotNode
 ]
 
 { #category : #testing }

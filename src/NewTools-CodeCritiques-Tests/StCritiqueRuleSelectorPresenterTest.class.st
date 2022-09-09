@@ -74,7 +74,7 @@ StCritiqueRuleSelectorPresenterTest >> testInitialize [
 	| window |
 	self assert: rulesSelectorPresenter list roots isEmpty.
 	self assert: rulesSelectorPresenter selectedList roots isEmpty.
-	window := rulesSelectorPresenter openWithSpec.
+	window := rulesSelectorPresenter open.
 	self assert: window isBuilt.
 	window close
 ]

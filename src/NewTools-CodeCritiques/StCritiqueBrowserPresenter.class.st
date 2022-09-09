@@ -85,7 +85,7 @@ StCritiqueBrowserPresenter class >> openOnCurrentWorkingConfiguration [
 
 	<script>
 	CBCritiqueWorkingConfiguration exists
-		ifTrue: [ StResetWindowPresenter new openWithSpec ]
+		ifTrue: [ StResetWindowPresenter new open ]
 		ifFalse: [ StCritiquePackageSelectorPresenter open ]
 ]
 
@@ -98,7 +98,7 @@ StCritiqueBrowserPresenter class >> openOnRule: aRule onEnvironment: aEnv [
 		removeTestCase: false;
 		yourself.
 		
-	cbr openWithSpec.
+	cbr open.
 	cbr applyRules. 
 	cbr rulesModel changed:  #listElementAt:
 ]
@@ -113,7 +113,7 @@ StCritiqueBrowserPresenter class >> openOnWorkingConfiguration: aWorkingConfigur
 		removeTestCase: aWorkingConfiguration removeTestCase;
 		yourself.
 
-	cbr openWithSpec.
+	cbr open.
 	cbr applyRules. 
 	cbr rulesModel  changed:  #listElementAt:
 ]
@@ -121,7 +121,7 @@ StCritiqueBrowserPresenter class >> openOnWorkingConfiguration: aWorkingConfigur
 { #category : #icons }
 StCritiqueBrowserPresenter class >> taskbarIconName [
 
-	^#smallWarningIcon
+	^#smallWarning
 ]
 
 { #category : #window }

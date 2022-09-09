@@ -38,7 +38,7 @@ RPackage >> spotterMonticelloWorkingCopyFor: aStep [
 		allCandidates: [ self mcPackage 
 			ifNotNil: [ :mcPackage | Array with: mcPackage workingCopy ] 
 			ifNil: [ #() ] ];
-		itemIcon: [ Smalltalk ui icons iconNamed: #versionControlIcon ];
+		itemIcon: [ Smalltalk ui icons iconNamed: #versionControl ];
 		filter: StFilterSubstring
 ]
 

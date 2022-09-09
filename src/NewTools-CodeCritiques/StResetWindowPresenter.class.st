@@ -32,7 +32,7 @@ StResetWindowPresenter class >> defaultSpec [
 StResetWindowPresenter class >> open [
 
 	<example>
-	^ self new openWithSpec
+	^ self new open
 ]
 
 { #category : #specs }

@@ -59,11 +59,13 @@ StDebuggerStackCommandTreeBuilderTest >> testGroupName [
 
 { #category : #tests }
 StDebuggerStackCommandTreeBuilderTest >> testNavigationCommandForContext [
+
 	| cmd |
-	
-	cmd := builder buildSpecCommand: StMockDebugCommand forContext: self.
+	cmd := builder
+		       buildSpecCommand: StMockDebugCommand
+		       forContext: debugger.
 	self assert: cmd innerCommand class identicalTo: StMockDebugCommand.
-	self assert: cmd context identicalTo: self
+	self assert: cmd context identicalTo: debugger
 ]
 
 { #category : #tests }
@@ -147,10 +149,10 @@ StDebuggerStackCommandTreeBuilderTest >> testStackContextMenuExplorationCommands
 		assertCommands:
 			{cmdEntries first.
 			cmdEntries second}
-		haveContext: debugger stackTable selection selectedItem receiver class.
+		haveContext: debugger.
 	self
 		assertCommands: {cmdEntries last}
-		haveContext: debugger stackTable selection selectedItem receiver 
+		haveContext: debugger 
 ]
 
 { #category : #tests }
@@ -251,7 +253,7 @@ StDebuggerStackCommandTreeBuilderTest >> testStackMethodNavigationCommands [
 	self
 		assertCommandGroup: builder stackMethodNavigationCommands
 		hasSameCommands: builder stackMethodCommandsClasses
-		withContext: debugger stackTable selection selectedItem method
+		withContext: debugger
 		displayStrategy: CmUIDisplayAsGroup
 ]
 
@@ -277,7 +279,7 @@ StDebuggerStackCommandTreeBuilderTest >> testStackMethodSelectorNavigationComman
 	self
 		assertCommandGroup: builder stackMethodSelectorNavigationCommands
 		hasSameCommands: builder stackMethodSelectorCommandsClasses
-		withContext: debugger stackTable selection selectedItem method selector
+		withContext: debugger
 		displayStrategy: CmUIDisplayAsGroup
 ]
 
@@ -302,7 +304,7 @@ StDebuggerStackCommandTreeBuilderTest >> testStackReceiverClassNavigationCommand
 	self
 		assertCommandGroup: builder stackReceiverClassNavigationCommands
 		hasSameCommands: builder stackReceiverCommandsClasses
-		withContext: debugger stackTable selection selectedItem receiver class
+		withContext: debugger
 		displayStrategy: CmUIDisplayAsGroup
 ]
 

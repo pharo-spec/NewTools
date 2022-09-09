@@ -10,3 +10,11 @@ SettingNode >> spotterForSettingsFor: aStep [
 		itemName: [ :each | each spotterLabel ];
 		filter: StFilterSubstring
 ]
+
+{ #category : #'*NewTools-Spotter-Extensions' }
+SettingNode >> spotterLabel [
+
+	| label |
+	label := self settingDeclaration label.
+	^ self parentNode ifNil: [ label ] ifNotNil: [ self parentNode spotterLabel , '/' , label ]
+]

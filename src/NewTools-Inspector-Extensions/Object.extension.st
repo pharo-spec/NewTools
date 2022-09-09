@@ -37,3 +37,10 @@ Object >> stDisplayString [
 
 	^ StObjectPrinter asTruncatedTextFrom: self
 ]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
+Object >> stDisplayStringFull [
+
+	^ StObjectPrinter asNonTruncatedTextFrom: self
+]
+

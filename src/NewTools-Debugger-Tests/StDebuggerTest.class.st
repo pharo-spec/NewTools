@@ -359,6 +359,15 @@ StDebuggerTest >> testDiscardCodeChangesFor [
 	
 ]
 
+{ #category : #tests }
+StDebuggerTest >> testExceptionProvidesSameExceptionAsTheActionModelOne [
+
+	debugger := self debuggerOn: session.
+	self
+		assert: debugger exception
+		identicalTo: debugger debuggerActionModel exception
+]
+
 { #category : #'tests - initialization' }
 StDebuggerTest >> testFastTDD [
 	self debuggerClass fastTDD: nil.
@@ -385,6 +394,24 @@ StDebuggerTest >> testInitialCodeSelectionAfterStepping [
 		assert:  (highlightSegment firstIndex to: highlightSegment lastIndex)
 		equals: (pcRangeForContext first to: pcRangeForContext last + 1)
 	"The pc range is highlighted with an additionnal index to encompass the full text of the node (why?)"
+]
+
+{ #category : #tests }
+StDebuggerTest >> testInterruptedContextProvidesSameContextAsTheActionModelOne [
+
+	debugger := self debuggerOn: session.
+	self
+		assert: debugger interruptedContext
+		identicalTo: debugger debuggerActionModel interruptedContext
+]
+
+{ #category : #tests }
+StDebuggerTest >> testInterruptedProcessProvidesSameProcessAsTheActionModelOne [
+
+	debugger := self debuggerOn: session.
+	self
+		assert: debugger interruptedProcess
+		identicalTo: debugger debuggerActionModel interruptedProcess
 ]
 
 { #category : #'tests - context inspector' }
@@ -665,6 +692,24 @@ StDebuggerTest >> testSelectLastStackElementWithoutMoreElements [
 	stackTable selectItem: stackTable items last.
 	
 	self assert: stackTable items size equals: startingStackSize
+]
+
+{ #category : #tests }
+StDebuggerTest >> testSessionProvidesSameAsTheActionModelOne [
+
+	debugger := self debuggerOn: session.
+	self
+		assert: debugger session
+		identicalTo: debugger debuggerActionModel session
+]
+
+{ #category : #tests }
+StDebuggerTest >> testSessionStackProvidesSameStackAsTheActionModelOne [
+
+	debugger := self debuggerOn: session.
+	self
+		assertCollection: debugger stack
+		equals: debugger debuggerActionModel stack
 ]
 
 { #category : #'tests - stack table' }

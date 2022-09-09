@@ -6,6 +6,8 @@ The debugger interface itself is tested in the debugger test class.
 Class {
 	#name : #StDummyDebuggerPresenter,
 	#superclass : #SpPresenter,
+	#traits : 'TStDebuggerExtension',
+	#classTraits : 'TStDebuggerExtension classTrait',
 	#instVars : [
 		'tag'
 	],
@@ -36,7 +38,7 @@ tag := thisContext method selector.
 ^true
 ]
 
-{ #category : #'accessing context' }
+{ #category : #'accessing - context' }
 StDummyDebuggerPresenter >> currentContext [
 	^self
 ]
@@ -45,6 +47,12 @@ StDummyDebuggerPresenter >> currentContext [
 StDummyDebuggerPresenter >> debuggerExtensionToolName [
 	^'Test extendedDebuggingToolTitle'
 	
+]
+
+{ #category : #layout }
+StDummyDebuggerPresenter >> defaultLayout [
+
+	^ SpBoxLayout newVertical 
 ]
 
 { #category : #mocks }
