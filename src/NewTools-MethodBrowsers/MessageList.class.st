@@ -106,6 +106,12 @@ MessageList >> currentMethod [
 	^ method
 ]
 
+{ #category : #transmission }
+MessageList >> defaultOutputPort [
+
+	^ self outputSelectionPort
+]
+
 { #category : #'private - actions' }
 MessageList >> doBrowseImplementors [
 		
@@ -176,6 +182,8 @@ MessageList >> initializePresenters [
 		addColumn: (SpStringTableColumn title: 'Selector' evaluated: [ :item | self selectorOf: item ]);
 		addColumn: (SpStringTableColumn title: 'Package' evaluated: [ :item | self packageOf: item ]);
 		beResizable.
+		
+	listPresenter outputActivationPort transmitDo: [ :aMethod | self doBrowseMethod ].
 		
 	self contextMenu: self messageListMenu
 ]
@@ -267,6 +275,22 @@ MessageList >> model [
 { #category : #accessing }
 MessageList >> numberOfElements [
 	^ listPresenter listSize
+]
+
+{ #category : #transmission }
+MessageList >> outputActivationPort [
+
+	^ (SpActivationPort newPresenter: self)
+		delegateTo: [ listPresenter ];
+		yourself
+]
+
+{ #category : #transmission }
+MessageList >> outputSelectionPort [
+
+	^ (SpSelectionPort newPresenter: self)
+		delegateTo: [ listPresenter ];
+		yourself
 ]
 
 { #category : #private }

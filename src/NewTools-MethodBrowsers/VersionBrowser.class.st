@@ -159,6 +159,7 @@ VersionBrowser >> defaultLayout [
 VersionBrowser >> initializePresenters [
 
 	messageList := self instantiate: MessageList on: rgMethod.
+	
 	toolbarPresenter := self instantiate: SpMethodToolbarPresenter on: rgMethod.
 	self layout: self defaultLayout.
 	 
@@ -166,7 +167,7 @@ VersionBrowser >> initializePresenters [
 		topologicSort: false;
 		sortingBlock: [ :a | a annotationNamed: #versionIndex ifAbsent: [ 0 ] ] ascending;
 		contextMenu: self messageListMenu.
-
+	
 	toolbarPresenter
 		addItemLabeled: 'Side By Side' do: [
 			self showDiffMorphWithConverter: (DiffSideBySideChangeRecordConverter 
