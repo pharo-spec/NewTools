@@ -11,6 +11,12 @@ Class {
 	#category : #'NewTools-Inspector-Model'
 }
 
+{ #category : #accessing }
+StInspectorModel class >> maxTitleLength [
+
+	^ 40
+]
+
 { #category : #'instance creation' }
 StInspectorModel class >> new [ 
 
@@ -113,7 +119,7 @@ StInspectorModel >> smallDescriptionStringFor: anObject [
 StInspectorModel >> windowTitle [
 
 	^ 'Inspector on {1}' format:
-		  { ([ self inspectedObject displayString ]
+		  { ([ self inspectedObject displayString truncateWithElipsisTo: self class maxTitleLength ]
 			   on: Exception
 			   do: [ :e | e printString ]) }
 ]
