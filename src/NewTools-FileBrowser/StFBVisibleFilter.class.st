@@ -9,16 +9,18 @@ Class {
 
 { #category : #accessing }
 StFBVisibleFilter class >> priority [
-	^ 100
+	^ 50
 ]
 
 { #category : #accessing }
 StFBVisibleFilter >> name [
-	^ 'Non hidden'
+	^ 'Without hidden'
 ]
 
 { #category : #accessing }
 StFBVisibleFilter >> predicate: aFileReference [
-	OSPlatform current isWindows ifTrue: [ ^ aFileReference isHiddenInWindows not ].
+
+	OSPlatform current isWindows ifTrue: [ 
+		^ aFileReference isHiddenInWindows not ].
 	^ (aFileReference basename matchesRegex: '\.[^.].*') not
 ]

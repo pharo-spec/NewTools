@@ -16,6 +16,7 @@ StFBNameColumn class >> addContraintTo: aTableColumn [
 
 { #category : #templateMethod }
 StFBNameColumn class >> evaluateOn: aFileReference [
+
 	"I'm provide action for fileReference"
 
 	^ aFileReference basename

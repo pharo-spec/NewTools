@@ -10,7 +10,6 @@ Class {
 
 { #category : #testing }
 StFBJPGPreviewer >> matchingMimeType: aZnMimeType [
-	"return a Boolean to indicate if element matches"
 
 	^ aZnMimeType matches: ZnMimeType imageJpeg
 ]

@@ -52,8 +52,8 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'HelpCenter' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-FlagBrowser' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-FlagBrowser-Tests' with: [ spec requires: #('NewTools-FlagBrowser') ];
-			package: 'NewTools-FileDialog' with: [ spec requires: #('NewTools-Core') ];
-			package: 'NewTools-FileDialog-Tests' with: [ spec requires: #('NewTools-FileDialog') ];
+			package: 'NewTools-FileBrowser' with: [ spec requires: #('NewTools-Core') ];
+			package: 'NewTools-FileBrowser-Tests' with: [ spec requires: #('NewTools-FileBrowser') ];
 			package: 'NewTools-FontChooser' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-FontChooser-Tests' with: [ spec requires: #('NewTools-FontChooser') ];
 			package: 'NewTools-SpTextPresenterDecorators';
@@ -118,9 +118,9 @@ BaselineOfNewTools >> baseline: spec [
 			group: #development with: #('default'
 				'NewTools-DebuggerSelector' 
 				'NewTools-DebuggerSelector-Tests');
-			group: #broken with: #(
-				'NewTools-FileDialog' 
-				'NewTools-FileDialog-Tests');
+			group: #FileBrowser with: #(
+				'NewTools-FileBrowser' 
+				'NewTools-FileBrowser-Tests');
 			group: 'default' with: #(
 				'Playground' 
 				'Inspector' 

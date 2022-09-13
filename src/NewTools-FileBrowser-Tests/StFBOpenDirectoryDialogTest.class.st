@@ -18,18 +18,26 @@ StFBOpenDirectoryDialogTest >> testDefaultDirectory [
 
 { #category : #tests }
 StFBOpenDirectoryDialogTest >> testSelectDirectory [
+
 	| selectedDirectory |
 	dialog okAction: [ :dir | selectedDirectory := dir ].
-	window := dialog openDialogWithSpec.
-	self assert: dialog fileNavigationSystem currentDirectory equals: root.
+	window := dialog openDialog.
+	self
+		assert: dialog fileNavigationSystem currentDirectory
+		equals: root.
 	dialog selectFile: root / 'dir'.
-	self assert: dialog selectedEntry equals: root / dialog fileNavigationSystem selectedEntry basename.
+	self
+		assert: dialog selectedEntry
+		equals: root / dialog fileNavigationSystem selectedEntry basename.
 	window triggerOkAction.
 	self assert: selectedDirectory equals: root / 'dir'
 ]
 
 { #category : #tests }
 StFBOpenDirectoryDialogTest >> testSelectNonexistingDirectory [
-	dialog defaultFolder: root / 'idontexist'.
-	self assert: dialog selectedEntry equals: FileLocator imageDirectory asFileReference
+
+	self
+		should: [ dialog defaultFolder: root / 'idontexist' ]
+		raise: DirectoryDoesNotExist.
+	self assert: dialog currentDirectory equals: root
 ]

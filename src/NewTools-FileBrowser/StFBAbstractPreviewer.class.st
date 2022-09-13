@@ -22,11 +22,11 @@ StFBAbstractPreviewer class >> isAbstract [
 
 { #category : #testing }
 StFBAbstractPreviewer >> canBeUsedOn: aFileReference [
+
 	aFileReference ifNil: [ ^ false ].
-	aFileReference mimeTypes
-		ifNil: [ ^ false ]
-		ifNotNil:
-			[ :items | ^ items anySatisfy: [ :aZnMimeType | self matchingMimeType: aZnMimeType ] ]
+	aFileReference mimeTypes ifNil: [ ^ false ] ifNotNil: [ :items | 
+		^ items anySatisfy: [ :aZnMimeType | 
+			  self matchingMimeType: aZnMimeType ] ]
 ]
 
 { #category : #testing }
