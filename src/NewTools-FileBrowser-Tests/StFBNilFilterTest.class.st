@@ -9,7 +9,7 @@ Class {
 
 { #category : #accessing }
 StFBNilFilterTest >> actualClass [
-	^ StFBNilFilter
+	^ StFBAllFilter
 ]
 
 { #category : #tests }
