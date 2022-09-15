@@ -47,6 +47,7 @@ StSpotterCandidatesListProcessor >> candidatesLimit: anInteger [
 
 { #category : #private }
 StSpotterCandidatesListProcessor >> computeAllItemsIn: aContext [
+
 	^ allCandidatesBlock cull: aContext
 ]
 
@@ -116,7 +117,9 @@ StSpotterCandidatesListProcessor >> itemIcon: aBlockWithOneArgument [
 { #category : #private }
 StSpotterCandidatesListProcessor >> itemIconFor: anObject [
 
-	^ itemIconBlock ifNil: [ super itemIconFor: anObject ] ifNotNil: [ itemIconBlock cull: anObject ]
+	^ itemIconBlock 
+		ifNotNil: [ itemIconBlock cull: anObject ]
+		ifNil: [ super itemIconFor: anObject ] 
 ]
 
 { #category : #accessing }
@@ -132,7 +135,9 @@ StSpotterCandidatesListProcessor >> itemName: aBlockWithOneArgument [
 { #category : #private }
 StSpotterCandidatesListProcessor >> itemNameFor: anObject [
 
-	^ itemNameBlock ifNil: [ super itemNameFor: anObject ] ifNotNil: [ itemNameBlock cull: anObject ]
+	^ itemNameBlock 
+		ifNotNil: [ itemNameBlock cull: anObject ]
+		ifNil: [ super itemNameFor: anObject ] 
 ]
 
 { #category : #scripting }

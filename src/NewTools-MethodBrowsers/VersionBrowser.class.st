@@ -50,12 +50,6 @@ VersionBrowser class >> browseVersionsForMethod: aRingMethod [
 	^ (self on: aRingMethod) open
 ]
 
-{ #category : #layout }
-VersionBrowser class >> defaultLayout [
-	
-	^ nil
-]
-
 { #category : #'tools registry' }
 VersionBrowser class >> registerToolsOn: registry [
 	"Add ourselves to registry. See [Smalltalk tools]"
@@ -147,11 +141,12 @@ VersionBrowser >> connectPresenters [
 	messageList
 		whenSelectedDo: [ :item | self selectItem: item ];
 		messages: self buildChangeList.
-	toolbarPresenter dropListModel selectIndex: 1
+	toolbarPresenter selectFirst
 ]
 
 { #category : #initialization }
 VersionBrowser >> defaultLayout [
+
 	^ SpPanedLayout newTopToBottom
 		add: messageList;
 		add: ((sourceLayout := SpBoxLayout newTopToBottom)
@@ -164,6 +159,7 @@ VersionBrowser >> defaultLayout [
 VersionBrowser >> initializePresenters [
 
 	messageList := self instantiate: MessageList on: rgMethod.
+	
 	toolbarPresenter := self instantiate: SpMethodToolbarPresenter on: rgMethod.
 	self layout: self defaultLayout.
 	 
@@ -171,7 +167,7 @@ VersionBrowser >> initializePresenters [
 		topologicSort: false;
 		sortingBlock: [ :a | a annotationNamed: #versionIndex ifAbsent: [ 0 ] ] ascending;
 		contextMenu: self messageListMenu.
-
+	
 	toolbarPresenter
 		addItemLabeled: 'Side By Side' do: [
 			self showDiffMorphWithConverter: (DiffSideBySideChangeRecordConverter 
@@ -184,8 +180,8 @@ VersionBrowser >> initializePresenters [
 				methodReference: self textConverter method
 				referencesList: self changeList) ].
 		
-	toolbarPresenter versionModel
-		label: 'Revert';
+	toolbarPresenter 
+		replaceVersionWithLabel: 'Revert'
 		action: [ self revert: self selectedMessage ]
 ]
 

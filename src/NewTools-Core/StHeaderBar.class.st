@@ -60,6 +60,7 @@ StHeaderBar >> enableCloseDoing: aBlock [
 StHeaderBar >> initializePresenters [
 
 	self layout: (SpBoxLayout newLeftToRight
+		vAlignCenter;
 		beNotHomogeneous;
 		borderWidth: 3;
 		spacing: 3;
