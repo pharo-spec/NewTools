@@ -301,10 +301,11 @@ MessageBrowser >> initializePresenters [
 
 { #category : #initialization }
 MessageBrowser >> initializeWindow: aWindowPresenter [
+
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
 		title: self title;
-		windowIcon: self taskbarIcon;
+		windowIcon: (self application iconNamed: self class taskbarIconName);
 		askOkToClose: true
 ]
 

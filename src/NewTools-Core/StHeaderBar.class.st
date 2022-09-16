@@ -102,10 +102,7 @@ StHeaderBar >> shortcutLabel: aString [
 { #category : #accessing }
 StHeaderBar >> toolbarActions: aCommandGroup [
 
-	toolbar removeAllItems.
-	SpToolbarPresenterBuilder new 
-		toolbarPresenter: toolbar;
-		visit: aCommandGroup
+	toolbar fillWith: aCommandGroup
 ]
 
 { #category : #events }

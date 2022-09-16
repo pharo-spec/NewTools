@@ -13,6 +13,12 @@ StInspectorBrowseSelectedCommand class >> defaultDescription [
 	^ 'Browse this instance class definition'
 ]
 
+{ #category : #initialization }
+StInspectorBrowseSelectedCommand class >> defaultIconName [
+
+	^ #smallSystemBrowser
+]
+
 { #category : #default }
 StInspectorBrowseSelectedCommand class >> defaultName [
 	<toolbarInspectCommand: 30>
@@ -24,14 +30,6 @@ StInspectorBrowseSelectedCommand class >> defaultName [
 StInspectorBrowseSelectedCommand class >> documentContextRequiredSelectors [
 
 	^ super documentContextRequiredSelectors, #(selectedObject)
-]
-
-{ #category : #converting }
-StInspectorBrowseSelectedCommand >> asSpecCommand [
-
-	^ super asSpecCommand 
-		iconName: #smallSystemBrowser;
-		yourself
 ]
 
 { #category : #execution }
