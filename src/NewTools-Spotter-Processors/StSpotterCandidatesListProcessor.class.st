@@ -6,12 +6,12 @@ Class {
 		'candidatesLimit',
 		'title',
 		'itemNameBlock',
-		'itemIconBlock',
 		'actBlock',
 		'wantsToDisplayOnEmptyQuery',
 		'filterBlock',
 		'keyBinding',
-		'sortBlock'
+		'sortBlock',
+		'itemIconNameBlock'
 	],
 	#category : #'NewTools-Spotter-Processors'
 }
@@ -104,22 +104,24 @@ StSpotterCandidatesListProcessor >> hasDynamicItems [
 	^ allCandidatesBlock stHasDynamicItems
 ]
 
-{ #category : #accessing }
-StSpotterCandidatesListProcessor >> itemIcon [
-	^ itemIconBlock
+{ #category : #scripting }
+StSpotterCandidatesListProcessor >> itemIconName [
+
+	^ itemIconNameBlock
 ]
 
 { #category : #scripting }
-StSpotterCandidatesListProcessor >> itemIcon: aBlockWithOneArgument [
-	itemIconBlock := aBlockWithOneArgument
+StSpotterCandidatesListProcessor >> itemIconName: aBlock [
+
+	itemIconNameBlock := aBlock
 ]
 
 { #category : #private }
-StSpotterCandidatesListProcessor >> itemIconFor: anObject [
+StSpotterCandidatesListProcessor >> itemIconNameFor: anObject [
 
-	^ itemIconBlock 
-		ifNotNil: [ itemIconBlock cull: anObject ]
-		ifNil: [ super itemIconFor: anObject ] 
+	^ itemIconNameBlock 
+		ifNotNil: [ itemIconNameBlock cull: anObject ]
+		ifNil: [ super itemIconNameFor: anObject ] 
 ]
 
 { #category : #accessing }

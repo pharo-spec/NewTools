@@ -15,10 +15,11 @@ Behavior >> spotterClassInstanceVariablesFor: aStep [
 { #category : #'*NewTools-Spotter-Extensions' }
 Behavior >> spotterCompositionFor: aStep [
 	<stSpotterOrder: 25>
+
 	aStep listProcessor
 			title: 'Composing traits';
 			allCandidates: [ self allTraits ];
-			itemIcon: #systemIcon;
+			itemIconName: [ :item | item systemIconName ];
 			filter: StFilterSubstring
 ]
 
@@ -40,17 +41,18 @@ Behavior >> spotterSubclassesFor: aStep [
 	aStep listProcessor
 			title: 'All subclasses';
 			allCandidates: [ self allSubclasses ];
-			itemIcon: #systemIcon;
+			itemIconName: [ :item | item systemIconName ];
 			filter: StFilterSubstring
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
 Behavior >> spotterSuperclassesFor: aStep [
 	<stSpotterOrder: 40>
+	
 	aStep listProcessor
 			title: 'All superclasses';
 			allCandidates: [ self allSuperclasses ];
-			itemIcon: #systemIcon;
+			itemIconName: [ :item | item systemIconName ];
 			filter: StFilterSubstring
 ]
 
@@ -61,7 +63,7 @@ Behavior >> spotterTraitUsersFor: aStep [
 	aStep listProcessor
 			title: 'Users';
 			allCandidates: [ self users asArray ];
-			itemIcon: #systemIcon;
+			itemIconName: [ :item | item systemIconName ];
 			filter: StFilterSubstring
 ]
 
@@ -78,9 +80,10 @@ Behavior >> spotterUsedSlotsFor: aStep [
 { #category : #'*NewTools-Spotter-Extensions' }
 Behavior >> spotterUsedTraitsFor: aStep [
 	<stSpotterOrder: 60>
+	
 	aStep listProcessor
 			title: 'Uses Traits';
 			allCandidates: [ self traits asArray ];
-			itemIcon: #systemIcon;
+			itemIconName: [ :item | item systemIconName ];
 			filter: StFilterSubstring
 ]

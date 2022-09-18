@@ -190,10 +190,10 @@ StRawInspection >> variablesColumn [
 		width: 170;
 		addColumn: (SpImageTableColumn new
 			beNotExpandable;
-			evaluated: #icon;
+			evaluated: [ :aNode | self iconNamed: aNode iconName ];
 			yourself);
 		addColumn: (SpStringTableColumn new
-			evaluated: #label;
+			evaluated: [ :aNode | aNode label ];
 			yourself);
 		sortFunction: #label ascending;
 		yourself

@@ -43,4 +43,3 @@ Object >> stDisplayStringFull [
 
 	^ StObjectPrinter asNonTruncatedTextFrom: self
 ]
-
