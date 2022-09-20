@@ -10,7 +10,7 @@ Class {
 { #category : #accessing }
 StRemoveAllBindingsCommand >> application [
 
-	^ StPharoApplication current
+	^ context application
 ]
 
 { #category : #converting }
