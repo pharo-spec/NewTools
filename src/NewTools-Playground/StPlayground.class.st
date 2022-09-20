@@ -62,7 +62,6 @@ StPlayground class >> cacheDirectory [
 { #category : #accessing }
 StPlayground class >> cacheDirectory: aDirectory [
 	
-	self flag: #TODO. "This go to settings"
 	CacheDirectory := aDirectory ensureCreateDirectory
 ]
 
@@ -133,6 +132,20 @@ StPlayground class >> registerToolsOn: registry [
 
 	registry register: self as: #workspace
 
+]
+
+{ #category : #settings }
+StPlayground class >> settingsOn: aBuilder [
+<systemsettings>
+
+(aBuilder setting: #cacheDirectory)
+		parent: #pharoSystem;
+		default: true;
+		type: #Directory;
+		default:  self defaultCacheDirectory;
+		target: StPlayground;
+		description: 'The path to the local Playground cache that stores all Playground scripts in ph files';
+		label: 'Local Playground cache directory'.
 ]
 
 { #category : #accessing }

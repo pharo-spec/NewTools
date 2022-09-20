@@ -128,7 +128,7 @@ StMetaBrowser >> selectedMethod [
 { #category : #accessing }
 StMetaBrowser >> selectedObject [
 
-	^ self selectedMethod
+	^ self selectedMethod ifNil: [ self selectedClass  ]
 ]
 
 { #category : #'private - updating' }
