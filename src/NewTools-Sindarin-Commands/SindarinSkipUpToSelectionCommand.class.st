@@ -11,8 +11,8 @@ SindarinSkipUpToSelectionCommand class >> defaultDescription [
 
 { #category : #'accessing - defaults' }
 SindarinSkipUpToSelectionCommand class >> defaultName [
-	"<toolbarExtensionDebugCommand: 50>
-	<codeExtensionDebugCommand: 50>"
+	<toolbarExtensionDebugCommand: 50>
+	<codeExtensionDebugCommand: 50>
 	^ '[Exp.] Skip up to (stop before)'
 ]
 
@@ -23,7 +23,7 @@ SindarinSkipUpToSelectionCommand >> execute [
 	self flag: 'Context should actually be a debugger or a sindarin debugger'.
 	self flag: 'Suspicious call to internal debugger UI state'.
 	targetNode := self context sindarinDebugger
-		bestNodeFor: self context code nonEmptySelectionInterval.
+		bestNodeFor: self context code selectionInterval.
 	self context sindarinDebugger skipUpToNode: targetNode.
 	self context forceSessionUpdate
 ]
