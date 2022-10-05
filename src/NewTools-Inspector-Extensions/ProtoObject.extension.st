@@ -27,7 +27,7 @@ ProtoObject >> inspectionRaw [
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
-ProtoObject >> inspectorIcon [
+ProtoObject >> inspectorIconName [
 
 	^ nil
 ]

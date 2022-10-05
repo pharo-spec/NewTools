@@ -78,18 +78,18 @@ StInspectorNode >> hostObject: anObject [
 	hostObject := anObject
 ]
 
-{ #category : #accessing }
-StInspectorNode >> icon [
-
-	^ [ self value inspectorIcon ifNil: [ self value class systemIcon ] ]
-		  on: Error
-		  do: [ :error | self iconError: error ]
-]
-
 { #category : #private }
 StInspectorNode >> iconError: error [
 	
-	^ self iconNamed: #smallWarning
+	^ #smallWarning
+]
+
+{ #category : #accessing }
+StInspectorNode >> iconName [
+
+	^ [ self value inspectorIconName ifNil: [ self value class systemIconName ] ]
+		  on: Error
+		  do: [ :error | self iconError: error ]
 ]
 
 { #category : #accessing }

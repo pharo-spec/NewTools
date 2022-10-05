@@ -20,7 +20,7 @@ StHelpEntry >> doEvaluate [
 ]
 
 { #category : #accessing }
-StHelpEntry >> icon [
+StHelpEntry >> iconName [
 	
-	^ content stTopicIcon
+	^ content stTopicIconName
 ]

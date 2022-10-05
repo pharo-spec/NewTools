@@ -72,8 +72,10 @@ StInspectorCommand >> asSpecCommand [
 	
 	command := super asSpecCommand.
 	self shortcutKey ifNotNil: [ :key | command shortcutKey: key ].
-	self defaultIconName
-		ifNotNil: [ :iconName | command iconName: iconName ].
+	self defaultIconName ifNotNil: [ :iconName | 
+		command 
+			iconName: iconName;
+			iconProvider: self context application ].
 	
 	^ command
 ]

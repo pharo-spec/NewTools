@@ -20,6 +20,7 @@ StPackageEntry >> doEvaluate [
 ]
 
 { #category : #accessing }
-StPackageEntry >> icon [
-	^ self iconNamed: #package
+StPackageEntry >> iconName [
+
+	^ #package
 ]

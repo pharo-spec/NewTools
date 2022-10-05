@@ -36,7 +36,7 @@ SpDualChangeSorterPresenter class >> menuCommandOn: aBuilder [
 			(aBuilder item: #'Change Sorter')
 				action: [ self open ];
 				help: 'Examine the different change set of the image.';
-				icon: self taskbarIcon ].
+				icon: (aBuilder iconNamed: self taskbarIconName) ].
 	aBuilder withSeparatorAfter
 ]
 

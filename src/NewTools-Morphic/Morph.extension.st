@@ -41,7 +41,7 @@ Morph >> inspectionMorph [
 ]
 
 { #category : #'*NewTools-Morphic' }
-Morph >> inspectorIcon [
+Morph >> inspectorIconName [
 
-	^ self class systemIcon
+	^ self class systemIconName
 ]

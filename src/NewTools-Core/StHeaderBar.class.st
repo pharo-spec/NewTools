@@ -48,6 +48,7 @@ StHeaderBar >> beNotCloseable [
 StHeaderBar >> enableCloseDoing: aBlock [
 
 	closeButton := self newButton
+		addStyle: 'flat';
 		addStyle: 'small';
 		icon: (self application iconNamed: #glamorousClose);
 		action: aBlock;
@@ -102,10 +103,7 @@ StHeaderBar >> shortcutLabel: aString [
 { #category : #accessing }
 StHeaderBar >> toolbarActions: aCommandGroup [
 
-	toolbar removeAllItems.
-	SpToolbarPresenterBuilder new 
-		toolbarPresenter: toolbar;
-		visit: aCommandGroup
+	toolbar fillWith: aCommandGroup
 ]
 
 { #category : #events }

@@ -20,7 +20,7 @@ StWindowEntry >> doEvaluate [
 ]
 
 { #category : #accessing }
-StWindowEntry >> icon [
+StWindowEntry >> iconName [
 	
-	^ content taskbarIcon
+	^ content systemIconName
 ]
