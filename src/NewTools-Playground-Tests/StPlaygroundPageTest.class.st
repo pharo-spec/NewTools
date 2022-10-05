@@ -15,8 +15,10 @@ StPlaygroundPageTest >> newPage [
 
 { #category : #tests }
 StPlaygroundPageTest >> testContents [
-
 	| page waitMock |
+	
+	self skipOnPharoCITestingEnvironment.
+	
 	page := self newPage.
 	waitMock := StPlaygroundPageTestMockedWaitable new.
 	page timeToWait: waitMock.
