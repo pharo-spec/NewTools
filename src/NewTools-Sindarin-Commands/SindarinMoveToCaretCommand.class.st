@@ -9,10 +9,15 @@ SindarinMoveToCaretCommand class >> defaultDescription [
 	^ 'Move caret so that the next instruction that will be executed is the instruction associated to the node associated to the caret. All necessary arguments are pushed on the stack but everything else is skipped and the program state (e.g : variable bindings) stay the same.'
 ]
 
+{ #category : #initialization }
+SindarinMoveToCaretCommand class >> defaultIconName [
+	^ #smallItalic
+]
+
 { #category : #'accessing - defaults' }
 SindarinMoveToCaretCommand class >> defaultName [
-	<toolbarExtensionDebugCommand: 50>
-	<codeExtensionDebugCommand: 50>
+	"<toolbarExtensionDebugCommand: 50>"
+	<codeExtensionDebugCommand:1>
 	^ '[Exp.] Move to caret, while keeping current program state '
 ]
 
