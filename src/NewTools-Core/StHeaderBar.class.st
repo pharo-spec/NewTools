@@ -65,7 +65,7 @@ StHeaderBar >> initializePresenters [
 		beNotHomogeneous;
 		borderWidth: 3;
 		spacing: 3;
-		add: (titleLabel := self newLabel) expand: false;
+		add: (titleLabel := self newLabel) expand: true;
 		add: (shortcutLabel := self newLabel) expand: false;
 		addLast: (toolbar := self newToolbar) expand: false;
 		yourself).

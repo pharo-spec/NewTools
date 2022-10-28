@@ -85,7 +85,7 @@ StInspectorModel >> inspectedObject: anObject [
 { #category : #accessing }
 StInspectorModel >> labelString [
 	
-	^ self descriptionString truncateWithElipsisTo: 30
+	^ self descriptionString
 ]
 
 { #category : #accessing }
