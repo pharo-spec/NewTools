@@ -210,55 +210,6 @@ StIteratorsTest >> testSubstringFilterReturnsValidResultsWithTheSameFilter [
 ]
 
 { #category : #tests }
-StIteratorsTest >> testWordsAwareIteratorFiltersByASequenceOfCamelCase [
-
-	| inner it |
-	
-	inner := (StCollectionIterator on: { 'aaa'. 'xxxyyybbb'. 'xxxcccbbb' }) asSubstringFilter.
-	it := StWordsAwareFilter new
-		inner: inner;
-		yourself.
-		
-	it filteringText: 'xxxBbb'.
-	
-	self assert: it next equals: 'xxxyyybbb'.
-	self assert: it next equals: 'xxxcccbbb'	
-]
-
-{ #category : #tests }
-StIteratorsTest >> testWordsAwareIteratorFiltersByASequenceOfCamelCaseMixingCase [
-
-	| inner it |
-	
-	inner := (StCollectionIterator on: { 'aaa'. 'xxxyyyBBB'. 'XXXcccbbb'. 'xxxcccbbb' }) asSubstringFilter.
-	it := StWordsAwareFilter new
-		inner: inner;
-		yourself.
-		
-	it filteringText: 'xxxBbb'.
-	
-	self assert: it next equals: 'xxxyyyBBB'.
-	self assert: it next equals: 'XXXcccbbb'.
-	self assert: it next equals: 'xxxcccbbb'	
-]
-
-{ #category : #tests }
-StIteratorsTest >> testWordsAwareIteratorFiltersByASequenceOfCamelCaseWithUppercase [
-
-	| inner it |
-	
-	inner := (StCollectionIterator on: { 'aaa'. 'xxxyyybbb'. 'xxxcccbbb' }) asSubstringFilter.
-	it := StWordsAwareFilter new
-		inner: inner;
-		yourself.
-		
-	it filteringText: 'XxxBbb'.
-	
-	self assert: it next equals: 'xxxyyybbb'.
-	self assert: it next equals: 'xxxcccbbb'	
-]
-
-{ #category : #tests }
 StIteratorsTest >> testWordsAwareIteratorFiltersByASequenceOfWords [
 
 	| inner it |

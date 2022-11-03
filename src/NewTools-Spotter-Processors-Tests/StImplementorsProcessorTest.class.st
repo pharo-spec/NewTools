@@ -27,6 +27,13 @@ StImplementorsProcessorTest >> testFindThisMethodAfterAddingText [
 ]
 
 { #category : #tests }
+StImplementorsProcessorTest >> testFindThisMethodRespectingSearchStringTokensOrder [
+
+	self runForText: 'testFindMethodThis'.
+	self denyResultsIncludes: thisContext method
+]
+
+{ #category : #tests }
 StImplementorsProcessorTest >> testPopularStringDoesReturnOnlyTenResults [
 
 	self runForText: 'test'.

@@ -1,9 +1,9 @@
 "
 I implement a complex filter on top of my inner iterator.
-I will take the filtering text and split it on the spaces, $: and camel case syntax to try to detect all the elements that have those words.
+I will take the filtering text and split it on the spaces, and $: to try to detect all the elements that have those words.
 
 My iterator is query with the first word of the filtering text and the filtering the elements that have all the words in any part. 
-For example, doing the query StoreDisk will answer also DiskStore 
+For example, doing the query 'Store Disk' will answer `DiskStore` 
 "
 Class {
 	#name : #StWordsAwareFilter,
@@ -50,5 +50,5 @@ StWordsAwareFilter >> inner: anIterator [
 StWordsAwareFilter >> splitWords: aString [
 
 	^ (aString substrings: ' :-')
-		flatCollect: [ :each | each splitCamelCase  ]
+		"flatCollect: [ :each | each splitCamelCase  ]"
 ]
