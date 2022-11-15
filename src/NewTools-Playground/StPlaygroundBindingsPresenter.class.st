@@ -55,11 +55,11 @@ StPlaygroundBindingsPresenter >> contextMenu [
 { #category : #private }
 StPlaygroundBindingsPresenter >> contextMenuActions [
 
-	^ CmCommandGroup forSpec
+^ CmCommandGroup forSpec
 		beRoot;
 		register: (StRemoveBindingCommand forSpecContext: self);
 		register: (StToggleBindingCommand forSpecContext: self);
-		register: ((CmCommandGroup forSpecNamed: 'CRITICAL')
+		register: ((CmCommandGroup forSpecWithIconNamed: 'CRITICAL')
 			beDisplayedAsGroup;
 			register: (StRemoveAllBindingsCommand forSpecContext: self);
 			yourself);
