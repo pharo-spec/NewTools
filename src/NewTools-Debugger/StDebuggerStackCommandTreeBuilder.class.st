@@ -55,8 +55,6 @@ StDebuggerStackCommandTreeBuilder >> buildSpecCommand: aCommandClass forContext:
 	| cmd |
 	cmd := super buildSpecCommand: aCommandClass forContext: stDebuggerInstance.
 	cmd name: aCommandClass shortName.
-	cmd innerCommand transform: aBlock.
-	
 	^ cmd
 ]
 
