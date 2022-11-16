@@ -153,7 +153,8 @@ StInspector class >> register [
 { #category : #'tools registry' }
 StInspector class >> registerToolsOn: registry [
 	"self registerToolsOn: Smalltalk tools " 
-	registry register: self as: #inspector
+	registry register: self as: #inspector.
+	registry register: self as: #basicInspector
 ]
 
 { #category : #settings }
