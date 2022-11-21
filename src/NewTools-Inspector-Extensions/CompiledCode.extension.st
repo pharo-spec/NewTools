@@ -7,6 +7,16 @@ CompiledCode >> hasPragmas [
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
+CompiledCode >> inpectionIr [
+	<inspectorPresentationOrder: 35 title: 'IR'>
+
+	^ SpTextPresenter new 
+		text: (self ir longPrintString trimmed);
+		yourself
+
+]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
 CompiledCode >> inspectionAST [
 	<inspectorPresentationOrder: 35 title: 'AST'>
 
