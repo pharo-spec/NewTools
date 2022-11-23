@@ -18,7 +18,7 @@ CompiledMethod >> inspectionPragmasContext: aContext [
 
 { #category : #'*NewTools-Inspector-Extensions' }
 CompiledMethod >> inspectionSource [
-	<inspectorPresentationOrder: 20 title: 'Source'>
+	<inspectorPresentationOrder: 20 title: 'Method Source'>
 	
 	^ SpCodePresenter new 
 		beForMethod: self method;

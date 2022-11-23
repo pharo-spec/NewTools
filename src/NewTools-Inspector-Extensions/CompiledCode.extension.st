@@ -10,29 +10,14 @@ CompiledCode >> hasPragmas [
 CompiledCode >> inpectionIr [
 	<inspectorPresentationOrder: 35 title: 'IR'>
 
-	^ SpTextPresenter new 
-		text: (self ir longPrintString trimmed);
-		yourself
-
+	^ self ir inpectionIr
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
 CompiledCode >> inspectionAST [
 	<inspectorPresentationOrder: 35 title: 'AST'>
 
-	^ SpTreePresenter new 
-		roots: { self ast };
-		children: [ :aNode | aNode children ];
-		display: [ :each | 
-			String
-				streamContents: [ :stream | 
-					stream
-						nextPutAll: each class name;
-						nextPut: $(;
-						nextPutAll: ((each formattedCode truncateTo: 50) copyReplaceAll: String cr with: String space);
-						nextPut: $)
-			 ] ];
-		yourself
+	^ self sourceNode inspectionAST
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
