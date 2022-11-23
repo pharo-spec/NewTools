@@ -63,40 +63,6 @@ CompiledCode >> inspectionItemsContext: aContext [
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
-CompiledCode >> inspectionPragmas [
-	<inspectorPresentationOrder: 50 title: 'Pragmas'> 
-
-	^ SpListPresenter new
-		items: self pragmas;
-		display: [ :aPragma | aPragma printString ];
-		yourself
-]
-
-{ #category : #'*NewTools-Inspector-Extensions' }
-CompiledCode >> inspectionPragmasContext: aContext [ 
-	
-	aContext active: self hasPragmas
-]
-
-{ #category : #'*NewTools-Inspector-Extensions' }
-CompiledCode >> inspectionSource [
-	<inspectorPresentationOrder: 20 title: 'Source'>
-	
-	^ SpCodePresenter new 
-		beForMethod: self method;
-		text: self sourceCode;
-		contextMenu: (SpMenuPresenter new addGroup: [ :group | group 
-			addItem: [ :item | item 
-				name: 'Browse method class'; 
-				action: [ self methodClass browse ] ] ]);
-		whenSubmitDo: [ :text | 
-			self isInstalled 
-				ifFalse: [ self inform: 'can not edit methods that are not installed' ]
-				ifTrue: [ self methodClass compile: text ]];
-		yourself
-]
-
-{ #category : #'*NewTools-Inspector-Extensions' }
 CompiledCode >> inspectorNodes [
 	"Answer a list of attributes as nodes"
 	| nodes |
