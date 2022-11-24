@@ -160,7 +160,7 @@ StDebuggerActionModel >> implement: aMessage classified: messageCategory inClass
 	self updateTopContext
 ]
 
-{ #category : #initialize }
+{ #category : #initialization }
 StDebuggerActionModel >> initialize [
 	super initialize.
 	self computeInitialTopContext.
