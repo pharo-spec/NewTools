@@ -34,6 +34,12 @@ StSindarinDebuggerScriptingPresenter class >> defaultLayout [
 		yourself
 ]
 
+{ #category : #visiting }
+StSindarinDebuggerScriptingPresenter >> accept: aVisitor [
+
+	^ aVisitor visitSindarin: self
+]
+
 { #category : #actions }
 StSindarinDebuggerScriptingPresenter >> createCommandFromScript [
 	self flag: 'todo'
