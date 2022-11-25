@@ -29,8 +29,9 @@ StDebuggerContext >> buildExtensionNodes [
 
 	^ debugger
 		  ifNotNil: [ 
-			  debugger extensionTools flatCollect: [ :debuggerExtension | 
-				  visitor visit: debuggerExtension ] ]
+			  debugger extensionTools do: [ :debuggerExtension | 
+				  visitor visit: debuggerExtension ].
+			  visitor result ]
 		  ifNil: [ #(  ) asOrderedCollection ]
 ]
 

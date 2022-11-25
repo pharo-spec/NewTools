@@ -13,13 +13,35 @@ NewExtension>>#accept: aVisitor
 Class {
 	#name : #StDebuggerExtensionVisitor,
 	#superclass : #Object,
+	#instVars : [
+		'result'
+	],
 	#category : #'NewTools-Debugger-Model'
 }
+
+{ #category : #initialization }
+StDebuggerExtensionVisitor >> initialize [ 
+
+	super initialize.
+	self initializeResult
+]
+
+{ #category : #initialization }
+StDebuggerExtensionVisitor >> initializeResult [
+
+	self subclassResponsibility 
+]
+
+{ #category : #accessing }
+StDebuggerExtensionVisitor >> result [
+
+	^ result
+]
 
 { #category : #visiting }
 StDebuggerExtensionVisitor >> visit: aStDebuggerExtension [
 
-	^ aStDebuggerExtension accept: self
+	aStDebuggerExtension accept: self
 ]
 
 { #category : #visiting }
@@ -28,10 +50,6 @@ StDebuggerExtensionVisitor >> visitBreakpoints: aBreakpointsExtension [
 
 { #category : #visiting }
 StDebuggerExtensionVisitor >> visitBytecode: aBytecodeExtension [
-]
-
-{ #category : #visiting }
-StDebuggerExtensionVisitor >> visitChest: aChestExtension [
 ]
 
 { #category : #visiting }

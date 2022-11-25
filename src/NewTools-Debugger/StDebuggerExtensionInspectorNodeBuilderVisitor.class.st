@@ -7,35 +7,8 @@ Class {
 	#category : #'NewTools-Debugger-Model'
 }
 
-{ #category : #'instance creation' }
-StDebuggerExtensionInspectorNodeBuilderVisitor >> newCollection [
+{ #category : #initialization }
+StDebuggerExtensionInspectorNodeBuilderVisitor >> initializeResult [
 
-	^ #(  ) asOrderedCollection
-]
-
-{ #category : #visiting }
-StDebuggerExtensionInspectorNodeBuilderVisitor >> visit: aStDebuggerExtension [
-
-	| extensionNodes |
-	extensionNodes := super visit: aStDebuggerExtension.
-	"If the visit hook that is used does nothing, then we return an empty collection"
-	^ extensionNodes == self ifTrue: [ self newCollection ] ifFalse: [ extensionNodes ]
-]
-
-{ #category : #visiting }
-StDebuggerExtensionInspectorNodeBuilderVisitor >> visitChest: aChestExtension [
-
-	| debuggerInteractionModel  |
-	debuggerInteractionModel := aChestExtension debugger code
-		                            interactionModel.
-	^ debuggerInteractionModel bindings associations
-		  select: [ :aBinding | 
-			  aBinding propertyAt: #comesFromChest ifAbsent: [ false ] ]
-		  thenCollect: [ :chestVariable | 
-			  (StInspectorDynamicNode
-				   hostObject: chestVariable value
-				   label: chestVariable key
-				   value: chestVariable value)
-				  variableTag: 'Chest';
-				  yourself ]
+	result := OrderedCollection new
 ]
