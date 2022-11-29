@@ -37,8 +37,9 @@ StFuelOutStackCommand >> execute [
 
 	| fileName |
 	UIManager inform: 'Starting fueling out stack'.
+	[ 
 	fileName := FLDebuggerStackSerializer serializeStackFromContext:
 		            self context interruptedContext.
 	UIManager inform:
-		'Stack has been fueled out in file named: ' , fileName
+		'Stack has been fueled out in file named: ' , fileName ] fork
 ]
