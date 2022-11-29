@@ -1158,7 +1158,7 @@ StDebugger >> stackOfSize: anInteger [
 { #category : #'commands - support' }
 StDebugger >> stackSelectionMethodContext [
 
-	^ [ :dbg | stackTable selection selectedItem home method ]
+	^ [ :dbg | stackTable selection selectedItem homeMethod ]
 ]
 
 { #category : #'commands - support' }
