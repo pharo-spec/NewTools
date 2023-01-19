@@ -538,7 +538,7 @@ StDebugger >> doBrowseMethodVersions [
 	| target |
 	target := self stackSelectionMethodContext.
 	target isBlock ifTrue: [ target := target method ].
-	Smalltalk tools versionBrowser
+	self application versionBrowser
 		browseVersionsForClass: target methodClass
 		selector: target selector
 ]
