@@ -151,9 +151,9 @@ BaselineOfNewTools >> baseline: spec [
 BaselineOfNewTools >> chest: spec [
 
 	spec
-		baseline: 'Chest'
-		with: [ spec repository: 'github://adri09070/Chest:master' ];
-		loads: 'common'
+		baseline: 'Chest';
+		repository: 'github://adri09070/Chest';
+		load
 ]
 
 { #category : #'external projects' }
