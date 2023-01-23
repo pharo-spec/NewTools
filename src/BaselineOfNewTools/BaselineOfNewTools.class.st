@@ -150,10 +150,11 @@ BaselineOfNewTools >> baseline: spec [
 { #category : #'external projects' }
 BaselineOfNewTools >> chest: spec [
 
-	spec
-		baseline: 'Chest';
-		repository: 'github://adri09070/Chest';
-		load
+	spec baseline: 'Chest' with: [ 
+		spec
+			repository:
+				(self packageRepositoryURL ifEmpty: [ 'github://adri09070/Chest' ]);
+			loads: 'default' ]
 ]
 
 { #category : #'external projects' }
