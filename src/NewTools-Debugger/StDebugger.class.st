@@ -711,6 +711,9 @@ StDebugger >> initializeShortcuts: aWindowPresenter [
 StDebugger >> initializeStack [
 
 	stackTable := self newTable.
+	stackTable 
+		activateOnDoubleClick;
+		whenActivatedDo: [ :selection | self doBrowseClass ].
 	stackTable
 		addColumn: ((SpImageTableColumn
 				  title: ''
