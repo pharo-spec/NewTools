@@ -131,8 +131,8 @@ StFailingAssertionInspector >> initializePresentersForString [
 	stringDiff showOptions: false.
 	stringDiff leftLabel: 'Actual result (left) versus expected result (right)'.
 	stringDiff rightLabel: ''.
-	stringDiff leftText: actualObject.
-	stringDiff rightText: expectedObject
+	stringDiff leftText: actualObject printString.
+	stringDiff rightText: expectedObject printString
 ]
 
 { #category : #accessing }
