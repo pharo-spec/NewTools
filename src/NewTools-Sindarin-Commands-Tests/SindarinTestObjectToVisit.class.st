@@ -32,8 +32,8 @@ SindarinTestObjectToVisit >> acceptVisitorMultipleObjects: aVisitor [
 
 { #category : #visitors }
 SindarinTestObjectToVisit >> acceptVisitorNeverFinishes: aVisitor [
-
-	self timesRepeat: [ self doStuff ]
+	<compilerOptions: #(- optionInlineTimesRepeat)>
+	10000 timesRepeat: [ self doStuff ]
 ]
 
 { #category : #visitors }
@@ -63,10 +63,4 @@ SindarinTestObjectToVisit >> doNotAcceptVisitor: aVisitor [
 SindarinTestObjectToVisit >> doStuff [
 
 	^ self
-]
-
-{ #category : #enumerating }
-SindarinTestObjectToVisit >> timesRepeat: aBlock [
-	"we implement it here to not use the optimized timesRepeat:"
-	10000 timesRepeat: aBlock
 ]
