@@ -101,23 +101,19 @@ StFailingAssertionInspector >> initializeMillerList: list forObject: object [
 ]
 
 { #category : #initialization }
-StFailingAssertionInspector >> initializePresenters [
-	self flag: 'Not nice but works. This needs improvement.'.
-	(actualObject isString and: [ expectedObject isString ])
-		ifTrue: [ ^ self initializePresentersForString ].
-		
+StFailingAssertionInspector >> initializeObjectDiffPresenters [
+			
 	actualObjectHeader := (self instantiate: StHeaderBar)
 		label: 'Actual object: ' , (actualObject printStringLimitedTo: 40);
 		yourself.
-	"actualObjectHeader applyStyleToLabel: 'label.headerError'."
 	actualObjectMillerList := SpMillerColumnPresenter new.
 	self
 		initializeMillerList: actualObjectMillerList
 		forObject: actualObject.
+		
 	expectedObjectHeader := (self instantiate: StHeaderBar)
 		label: 'Expected object: ' , (expectedObject printStringLimitedTo: 40);
-		yourself.
-	"expectedObjectHeader applyStyleToLabel: 'label.headerSuccess'."
+		yourself.	
 	expectedObjectMillerList := SpMillerColumnPresenter new.
 	self
 		initializeMillerList: expectedObjectMillerList
@@ -125,7 +121,13 @@ StFailingAssertionInspector >> initializePresenters [
 ]
 
 { #category : #initialization }
-StFailingAssertionInspector >> initializePresentersForString [
+StFailingAssertionInspector >> initializePresenters [
+
+	actualObject presentDiffWith: expectedObject in: self
+]
+
+{ #category : #initialization }
+StFailingAssertionInspector >> initializeStringDiffPresenters [
 	
 	stringDiff := self newDiff.
 	stringDiff showOptions: false.
