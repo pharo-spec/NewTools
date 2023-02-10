@@ -139,7 +139,7 @@ BaselineOfNewTools >> chest: spec [
 	spec baseline: 'Chest' with: [ 
 		spec
 			repository: (self packageRepositoryURL ifEmpty: [ 
-						 'github://pharo-spec/Chest:v0.4.0' ]);
+						 'github://pharo-spec/Chest:v0.4.1' ]);
 			loads: 'default' ]
 ]
 
