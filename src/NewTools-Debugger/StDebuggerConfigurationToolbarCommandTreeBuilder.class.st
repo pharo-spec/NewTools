@@ -22,12 +22,9 @@ StDebuggerConfigurationToolbarCommandTreeBuilder class >> groupName [
 { #category : #building }
 StDebuggerConfigurationToolbarCommandTreeBuilder >> buildDebuggerCommandGroup [
 
-	| group |
-	self group.
-	group := self group.
-	self configurationCommands do: [ :specCommand |
-		group register: specCommand ].
-	^ group
+	^ self group
+		  register: self generalConfigurationCommandsGroup;
+		  yourself
 ]
 
 { #category : #'accessing - commands classes' }
@@ -39,8 +36,25 @@ StDebuggerConfigurationToolbarCommandTreeBuilder >> configurationCommandClasses 
 ]
 
 { #category : #commands }
-StDebuggerConfigurationToolbarCommandTreeBuilder >> configurationCommands [
+StDebuggerConfigurationToolbarCommandTreeBuilder >> generalConfigurationCommandsGroup [
 
-	^ self configurationCommandClasses collect: [ :c |
-		  self buildSpecCommand: c forContext: stDebuggerInstance ]
+	| group |
+	group := (CmCommandGroup named: self generalConfigurationGroupName)
+		         asSpecGroup.
+	group beDisplayedAsGroup.
+	group description: self generalConfigurationGroupDescription.
+	self configurationCommandClasses do: [ :c |
+		group register:
+			(self buildSpecCommand: c forContext: stDebuggerInstance) ].
+	^ group
+]
+
+{ #category : #accessing }
+StDebuggerConfigurationToolbarCommandTreeBuilder >> generalConfigurationGroupDescription [
+	^'General configuration options for the StDebugger'
+]
+
+{ #category : #accessing }
+StDebuggerConfigurationToolbarCommandTreeBuilder >> generalConfigurationGroupName [
+	^'General cdebugger onfiguration'
 ]
