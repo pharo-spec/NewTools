@@ -51,10 +51,12 @@ StDebuggerConfigurationCommandTreeBuilder >> generalConfigurationCommandsGroup [
 
 { #category : #accessing }
 StDebuggerConfigurationCommandTreeBuilder >> generalConfigurationGroupDescription [
-	^'General configuration options for the StDebugger'
+
+	^ 'General configuration options for the StDebugger'
 ]
 
 { #category : #accessing }
 StDebuggerConfigurationCommandTreeBuilder >> generalConfigurationGroupName [
-	^'General cdebugger onfiguration'
+
+	^ 'General debugger configuration'
 ]
