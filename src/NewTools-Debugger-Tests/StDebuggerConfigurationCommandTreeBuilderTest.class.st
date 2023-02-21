@@ -7,7 +7,7 @@ Class {
 { #category : #'instance creation' }
 StDebuggerConfigurationCommandTreeBuilderTest >> newBuilder [
 
-	^ StDebuggerConfigurationToolbarCommandTreeBuilder
+	^ StDebuggerConfigurationCommandTreeBuilder
 		  buildCommandsGroupWith: debugger
 		  forRoot: rootGroup
 ]
