@@ -18,7 +18,7 @@ StDebuggerConfigurationCommandTreeBuilderTest >> testConfigurationCommands [
 		assertCommandGroup: builder generalConfigurationCommandsGroup
 		hasSameCommands: builder configurationCommandClasses
 		withContext: debugger
-		displayStrategy: CmUIDisplayAsGroup
+		displayStrategy: CmUIDisplayAsSubMenu
 ]
 
 { #category : #tests }
@@ -33,7 +33,7 @@ StDebuggerConfigurationCommandTreeBuilderTest >> testConfigurationCommandsClasse
 StDebuggerConfigurationCommandTreeBuilderTest >> testDisplayStrategy [
 	self
 		assert: builder class displayStrategy
-		equals: CmUIDisplayAsGroup
+		equals: CmUIDisplayAsSubMenu
 ]
 
 { #category : #tests }

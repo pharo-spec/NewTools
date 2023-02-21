@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 StDebuggerConfigurationCommandTreeBuilder class >> displayStrategy [
-	^CmUIDisplayAsGroup
+	^CmUIDisplayAsSubMenu 
 ]
 
 { #category : #accessing }
@@ -41,7 +41,7 @@ StDebuggerConfigurationCommandTreeBuilder >> generalConfigurationCommandsGroup [
 	| group |
 	group := (CmCommandGroup named: self generalConfigurationGroupName)
 		         asSpecGroup.
-	group beDisplayedAsGroup.
+	group beDisplayedAsSubMenu.
 	group description: self generalConfigurationGroupDescription.
 	self configurationCommandClasses do: [ :c |
 		group register:
