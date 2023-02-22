@@ -3,7 +3,8 @@ I build the default command tree for the debugger stack presenter.
 The command classes I instantiate are specified under the ""accessing - commands classes"" protocol.
 The group names and descriptions are specified under the ""accessing"" protocol.
 
-You can evolve the default groups names and descriptions and the default command classes, but you cannot extend me.
+You can modify the default groups names and descriptions and the default commands by modifying my code, but I am not meant to be extended through subclassing.
+As I provide the default debugger commands, you should only extend me by using the Spec extension mechanism and not by subclassing me.
 Using me to add command in the tree makes them default for the debugger stack presenter.
 "
 Class {
