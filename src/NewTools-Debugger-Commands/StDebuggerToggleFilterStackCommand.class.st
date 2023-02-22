@@ -24,7 +24,7 @@ StDebuggerToggleFilterStackCommand class >> defaultName [
 
 { #category : #initialization }
 StDebuggerToggleFilterStackCommand class >> defaultShortcut [
-	^$c meta + $f
+	^$c meta, $f meta
 ]
 
 { #category : #executing }

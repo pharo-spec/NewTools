@@ -24,7 +24,7 @@ StDebuggerSettingsCommand class >> defaultName [
 
 { #category : #initialization }
 StDebuggerSettingsCommand class >> defaultShortcut [
-	^$f meta + $s 
+	^$f meta, $s meta
 ]
 
 { #category : #executing }
