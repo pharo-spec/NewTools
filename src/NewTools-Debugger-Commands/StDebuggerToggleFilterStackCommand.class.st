@@ -24,8 +24,7 @@ StDebuggerToggleFilterStackCommand class >> defaultName [
 
 { #category : #initialization }
 StDebuggerToggleFilterStackCommand class >> defaultShortcut [
-	self flag: 'Any suggestion for a "configuration" shortcut?'.
-	^ nil
+	^$c meta + $f
 ]
 
 { #category : #executing }

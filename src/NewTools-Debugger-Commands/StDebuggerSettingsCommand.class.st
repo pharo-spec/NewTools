@@ -24,8 +24,7 @@ StDebuggerSettingsCommand class >> defaultName [
 
 { #category : #initialization }
 StDebuggerSettingsCommand class >> defaultShortcut [
-	self flag: 'Any suggestion for a "filter stack" shortcut?'.
-	^ nil
+	^$f meta + $s 
 ]
 
 { #category : #executing }
