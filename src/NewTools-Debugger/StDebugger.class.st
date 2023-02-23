@@ -111,6 +111,7 @@ StDebugger class >> activateDebuggerExtensions: anObject [
 
 { #category : #commands }
 StDebugger class >> buildCommandsGroupWith: stDebuggerInstance forRoot: rootCommandGroup [
+
 	StDebuggerStackCommandTreeBuilder
 		buildCommandsGroupWith: stDebuggerInstance
 		forRoot: rootCommandGroup.
@@ -118,6 +119,9 @@ StDebugger class >> buildCommandsGroupWith: stDebuggerInstance forRoot: rootComm
 		buildCommandsGroupWith: stDebuggerInstance
 		forRoot: rootCommandGroup.
 	StDebuggerCodeCommandTreeBuilder
+		buildCommandsGroupWith: stDebuggerInstance
+		forRoot: rootCommandGroup.
+	StDebuggerConfigurationCommandTreeBuilder
 		buildCommandsGroupWith: stDebuggerInstance
 		forRoot: rootCommandGroup
 ]
@@ -263,7 +267,10 @@ StDebugger >> buildContextMenus [
 
 	"Code"
 	codeCommands := debuggerCommandGroup / StDebuggerCodeCommandTreeBuilder groupName.
-	code contextMenu: codeCommands beRoot asMenuPresenter
+	code contextMenu: codeCommands beRoot asMenuPresenter.
+	
+	"Configuration"
+	stackHeader toolbarActions: (debuggerCommandGroup / StDebuggerConfigurationCommandTreeBuilder groupName).
 ]
 
 { #category : #'commands - support' }
@@ -750,14 +757,7 @@ StDebugger >> initializeStack [
 			self expandStackIfLastItemIsSelected.
 			self updateWindowTitle ] ].
 	stackHeader := self instantiate: StHeaderBar.
-	stackHeader label: 'Stack'.
-	stackHeader toolbarActions: (CmCommandGroup new
-			 register:
-				 ((StDebuggerToggleFilterStackCommand forSpecContext: self) 
-					  iconName: #changeSorter);
-			 register:
-				 (StDebuggerSettingsCommand forSpecWithIconNamed: #configuration);
-			 asSpecGroup)
+	stackHeader label: 'Stack'
 ]
 
 { #category : #initialization }
