@@ -108,7 +108,7 @@ StDebuggerActionModel >> copyStackToClipboard [
 	Clipboard
 		clipboardText:
 			(String
-				streamContents: [ :s | self interruptedContext shortDebugStackOn: s ])
+				streamContents: [ :s | self interruptedContext printDebugStackOn: s ])
 ]
 
 { #category : #'stack - helpers' }
@@ -160,7 +160,7 @@ StDebuggerActionModel >> implement: aMessage classified: messageCategory inClass
 	self updateTopContext
 ]
 
-{ #category : #initialize }
+{ #category : #initialization }
 StDebuggerActionModel >> initialize [
 	super initialize.
 	self computeInitialTopContext.

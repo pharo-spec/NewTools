@@ -25,7 +25,7 @@ StDebuggerInspectorModel >> defaultObjectInspectorClass [
 	^ StDebuggerRawObjectInspector
 ]
 
-{ #category : #initialize }
+{ #category : #initialization }
 StDebuggerInspectorModel >> initialize [
 	super initialize.
 	inspectedObject := self debuggerContextClass new

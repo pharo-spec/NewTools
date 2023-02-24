@@ -9,7 +9,7 @@ SystemNavigation >> browseAllUsersOfClassOrTrait: class [
 ]
 
 { #category : #'*NewTools-MethodBrowsers' }
-SystemNavigation >> browseVersionsOf: aMethod [ 
+SystemNavigation >> browseVersionsOf: aMethod [
 
-	Smalltalk tools versionBrowser browseVersionsForMethod: aMethod
+	self tools versionBrowser browseVersionsForMethod: aMethod
 ]

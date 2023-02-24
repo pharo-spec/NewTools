@@ -391,6 +391,14 @@ VersionBrowser >> updateDiffLine: content [
 	self installIconStylerFor: self textConverter method
 ]
 
+{ #category : #initialization }
+VersionBrowser >> updatePresenter [
+
+	self showDiffMorphWithConverter: (DiffSideBySideChangeRecordConverter 
+				methodReference: self textConverter method 
+				referencesList: self changeList)
+]
+
 { #category : #'private - updating' }
 VersionBrowser >> updateSource: content [ 
 

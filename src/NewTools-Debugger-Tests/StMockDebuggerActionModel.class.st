@@ -19,7 +19,7 @@ StMockDebuggerActionModel >> autoClassifyMessage: aMessage inClass: aClass [
 StMockDebuggerActionModel >> computeInitialTopContext [
 ]
 
-{ #category : #initialize }
+{ #category : #initialization }
 StMockDebuggerActionModel >> initialize [
 	super initialize.
 	self interruptedContext: (Context

@@ -60,7 +60,7 @@ SpChangeSorterPresenter >> browseChangeSet [
 	| messages |
 	self selectedChangeSet ifNil: [ ^ self inform: 'No change set selected' ].
 	messages := self selectedChangeSet changedMessageList select: [ :each | each isValid ].
-	Smalltalk tools messageList browse: messages title: 'Methods in Change Set ' , self selectedChangeSet name
+	self application tools messageList browse: messages title: 'Methods in Change Set ' , self selectedChangeSet name
 ]
 
 { #category : #'menu - message' }
@@ -74,7 +74,7 @@ SpChangeSorterPresenter >> browseMethodFull [
 	"Create and schedule a full Browser and then select the current class and message."
 
 	self selectedClass ifNotNil:
-		[:myClass | Smalltalk tools browser openOnClass: myClass selector: self selectedSelector ]
+		[:myClass | self application tools browser openOnClass: myClass selector: self selectedSelector ]
 ]
 
 { #category : #'menu - message' }
@@ -530,7 +530,7 @@ SpChangeSorterPresenter >> openChangeSetBrowser [
 	| cs |
 	self selectedChangeSet ifNil: [ ^ self inform: 'No change set selected' ].
 	cs := self selectedChangeSet ifNil: [ ^ self ].
-	^ Smalltalk tools messageList browseClasses: (RBBrowserEnvironment new forClasses: cs changedClasses)
+	^ self application tools messageList browseClasses: (RBBrowserEnvironment new forClasses: cs changedClasses)
 ]
 
 { #category : #initialization }

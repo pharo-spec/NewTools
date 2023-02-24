@@ -7,7 +7,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'context',
-		'exception'
+		'exception',
+		'debugger'
 	],
 	#category : #'NewTools-Debugger-Model'
 }
@@ -21,13 +22,29 @@ StDebuggerContext class >> context: aContext [
 ]
 
 { #category : #accessing }
+StDebuggerContext >> buildExtensionNodes [
+
+	| visitor |
+	visitor := StDebuggerExtensionInspectorNodeBuilderVisitor new.
+
+	^ debugger
+		  ifNotNil: [ 
+			  debugger extensionTools do: [ :debuggerExtension | 
+				  visitor visit: debuggerExtension ].
+			  visitor result ]
+		  ifNil: [ #(  ) asOrderedCollection ]
+]
+
+{ #category : #accessing }
 StDebuggerContext >> buildInspectorNodes [
 
 	| nodes argsNodes tempsNodes tempsAndArgs |
 	nodes := OrderedCollection new.
 	tempsAndArgs := self temporaryVariablesNodes.
-	argsNodes := tempsAndArgs select: [ :tempNode | tempNode tempVariable isArgumentVariable ].
-	tempsNodes := tempsAndArgs select: [ :tempNode | tempNode tempVariable isTempVariable ].
+	argsNodes := tempsAndArgs select: [ :tempNode | 
+		             tempNode tempVariable isArgumentVariable ].
+	tempsNodes := tempsAndArgs select: [ :tempNode | 
+		              tempNode tempVariable isTempVariable ].
 	nodes add: self selfNode.
 	nodes addAll: argsNodes.
 	nodes addAll: tempsNodes.
@@ -35,6 +52,7 @@ StDebuggerContext >> buildInspectorNodes [
 	nodes add: self stackTopNode.
 	nodes add: self thisContextNode.
 	nodes addAll: self exceptionNodes.
+	nodes addAll: self buildExtensionNodes.
 	^ nodes
 ]
 
@@ -47,6 +65,12 @@ StDebuggerContext >> context [
 { #category : #accessing }
 StDebuggerContext >> context: anObject [
 	context := anObject
+]
+
+{ #category : #accessing }
+StDebuggerContext >> debugger: aDebugger [
+
+	debugger := aDebugger
 ]
 
 { #category : #building }
