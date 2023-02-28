@@ -30,7 +30,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Inspector-Extensions' with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-Inspector-Tests' with: [ spec requires: #('NewTools-Inspector') ];
 			"debugger"
-			package: 'NewTools-Debugger' with: [ spec requires: #('NewTools-Inspector' 'NewTools-Debugger-Commands' 'NewTools-Debugger-Extensions' 'NewTools-SpTextPresenterDecorators') ];			
+			package: 'NewTools-Debugger' with: [ spec requires: #('NewTools-Inspector' 'NewTools-Debugger-Commands' 'NewTools-Debugger-Extensions' 'NewTools-SpTextPresenterDecorators') ];
 			package: 'NewTools-Debugger-Commands';
 			package: 'NewTools-Debugger-Extensions';
 			package: 'NewTools-Debugger-Tests' with: [ spec requires: #('NewTools-Debugger') ];
@@ -61,7 +61,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-ProjectLoader';
 			package: 'NewTools-ProjectLoader-Microdown';
 			"Object-centric breakpoints"
-			package: 'NewTools-ObjectCentricBreakpoints';			
+			package: 'NewTools-ObjectCentricBreakpoints';
 			"Sindarin"
 			package: 'NewTools-Sindarin-Commands';
 			package: 'NewTools-Sindarin-Commands-Tests' with: [  spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ];
@@ -76,18 +76,23 @@ BaselineOfNewTools >> baseline: spec [
 			"Fuel"
 			package: 'NewTools-Debugger-Fuel';
 			package: 'NewTools-Debugger-Fuel-Tests' with: [ spec requires: #('NewTools-Debugger-Fuel') ];
-			package: 'NewTools-Fuel'.
-			
+			package: 'NewTools-Fuel';
+			"Rewriter Tools"
+			package: 'NewTools-RewriterTools-Backend';
+			package: 'NewTools-RewriterTools' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
+			package: 'NewTools-RewriterTools-Backend-Tests' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
+			package: 'NewTools-RewriterTools-Tests' with: [ spec requires: #('NewTools-RewriterTools') ].
+
 		spec
 			group: 'Core' with: #('NewTools-Core' 'NewTools-Morphic');
 			group: 'Playground' with: #('Core' 'NewTools-Playground' 'NewTools-Playground-Tests');
 			group: 'Inspector' with: #('Core' 'NewTools-Inspector' 'NewTools-Inspector-Tests');
 			group: 'Debugger' with: #(
-				'Core' 
-				'Inspector' 
+				'Core'
+				'Inspector'
 				'NewTools-Debugger-Commands'
 				'NewTools-Debugger-Extensions'
-				'NewTools-Debugger' 
+				'NewTools-Debugger'
 				'NewTools-ObjectCentricBreakpoints'
 				'NewTools-Sindarin-Tools'
 				'NewTools-Sindarin-Commands'
@@ -98,9 +103,9 @@ BaselineOfNewTools >> baseline: spec [
 				'NewTools-Debugger-Fuel-Tests'
 				'NewTools-Fuel');
 			group: 'Spotter' with: #(
-				'NewTools-Morphic-Spotter' 
-				'NewTools-Spotter-Processors' 
-				'NewTools-Spotter' 
+				'NewTools-Morphic-Spotter'
+				'NewTools-Spotter-Processors'
+				'NewTools-Spotter'
 				'NewTools-Spotter-Extensions'
 				'NewTools-Spotter-Tests'
 				'NewTools-Spotter-Processors-Tests');
@@ -112,25 +117,31 @@ BaselineOfNewTools >> baseline: spec [
 			group: 'CritiqueBrowser' with: #('NewTools-CodeCritiques' 'NewTools-CodeCritiques-Tests');
 			group: 'FontChooser' with: #('Core' 'NewTools-FontChooser' 'NewTools-FontChooser-Tests');
 			group: 'FlagBrowser' with: #(
-				'Core' 
-				'NewTools-FlagBrowser' 
+				'Core'
+				'NewTools-FlagBrowser'
 				'NewTools-FlagBrowser-Tests');
 			group: #development with: #('default'
-				'NewTools-DebuggerSelector' 
+				'NewTools-DebuggerSelector'
 				'NewTools-DebuggerSelector-Tests');
 			group: #FileBrowser with: #(
-				'NewTools-FileBrowser' 
+				'NewTools-FileBrowser'
 				'NewTools-FileBrowser-Tests');
+			group: #RewriterTools with: #(
+				'NewTools-RewriterTools-Backend'
+				'NewTools-RewriterTools'
+				'NewTools-RewriterTools-Backend-Tests'
+				'NewTools-RewriterTools-Tests');
 			group: 'default' with: #(
-				'Playground' 
-				'Inspector' 
+				'Playground'
+				'Inspector'
 				'CritiqueBrowser'
-				'Debugger' 
+				'Debugger'
 				'SystemReporter'
 				'ChangeSorter'
 				'FontChooser'
 				'Methods'
-				'Spotter') ]
+				'Spotter'
+				'RewriterTools') ]
 ]
 
 { #category : #'external projects' }
