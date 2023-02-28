@@ -101,6 +101,15 @@ StPharoApplication >> startUp: resuming [
 ]
 
 { #category : #settings }
+StPharoApplication >> styleSheet [
+
+	^ SpStyle defaultStyleSheet , (SpStyleVariableSTONReader fromString:
+		'.application [
+	.bgOpaque [ Draw { #backgroundColor: EnvironmentColor(#base) } ]
+]')
+]
+
+{ #category : #settings }
 StPharoApplication >> toolbarDisplayMode [
 
 	^ StPharoSettings toolbarDisplayMode

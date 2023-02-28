@@ -37,6 +37,7 @@ Class {
 	],
 	#classVars : [
 		'History',
+		'InsertsSelection',
 		'PreviewVisible',
 		'Tips',
 		'TipsVisible'
@@ -106,7 +107,20 @@ StSpotter class >> history [
 StSpotter class >> initialize [
 
 	self showPreview.
-	self showTips
+	self showTips.
+	self insertsSelection: true.
+]
+
+{ #category : #settings }
+StSpotter class >> insertsSelection [
+		
+	^ InsertsSelection ifNil: [ InsertsSelection := true ]
+]
+
+{ #category : #settings }
+StSpotter class >> insertsSelection: aBoolean [
+		
+	InsertsSelection := aBoolean
 ]
 
 { #category : #testing }
@@ -222,6 +236,13 @@ StSpotter class >> settingsOn: aBuilder [
 		target: self;
 		description: 'If Spotter will show the tips at the bottom of spotter';
 		label: 'Show Tips Panel'.
+		
+	(aBuilder setting: #insertsSelection)
+		parent: #spotter;
+		default: self insertsSelection;
+		target: self;
+		description: 'When the Spotter is opened, automatically insert the selected text into the search field';
+		label: 'Inserts Selection'.
 ]
 
 { #category : #accessing }
@@ -539,6 +560,12 @@ StSpotter >> initializeWindow: aWindowPresenter [
 		each 
 			installKeymappingsOn: aWindowPresenter
 			onExecution: [ :aProcessor | self updateSearchFromProcessor: aProcessor ] ]
+]
+
+{ #category : #testing }
+StSpotter >> insertsSelection [
+
+	^ self class insertsSelection
 ]
 
 { #category : #testing }

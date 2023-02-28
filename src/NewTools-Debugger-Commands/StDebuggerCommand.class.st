@@ -108,9 +108,3 @@ StDebuggerCommand >> initialize [
 			<< shortcut asString
 			<< ']' ]])
 ]
-
-{ #category : #'as yet unclassified' }
-StDebuggerCommand >> transform: aBlock [
-
-	^ self
-]

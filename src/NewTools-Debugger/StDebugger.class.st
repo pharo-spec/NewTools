@@ -111,6 +111,7 @@ StDebugger class >> activateDebuggerExtensions: anObject [
 
 { #category : #commands }
 StDebugger class >> buildCommandsGroupWith: stDebuggerInstance forRoot: rootCommandGroup [
+
 	StDebuggerStackCommandTreeBuilder
 		buildCommandsGroupWith: stDebuggerInstance
 		forRoot: rootCommandGroup.
@@ -118,6 +119,9 @@ StDebugger class >> buildCommandsGroupWith: stDebuggerInstance forRoot: rootComm
 		buildCommandsGroupWith: stDebuggerInstance
 		forRoot: rootCommandGroup.
 	StDebuggerCodeCommandTreeBuilder
+		buildCommandsGroupWith: stDebuggerInstance
+		forRoot: rootCommandGroup.
+	StDebuggerConfigurationCommandTreeBuilder
 		buildCommandsGroupWith: stDebuggerInstance
 		forRoot: rootCommandGroup
 ]
@@ -263,7 +267,10 @@ StDebugger >> buildContextMenus [
 
 	"Code"
 	codeCommands := debuggerCommandGroup / StDebuggerCodeCommandTreeBuilder groupName.
-	code contextMenu: codeCommands beRoot asMenuPresenter
+	code contextMenu: codeCommands beRoot asMenuPresenter.
+	
+	"Configuration"
+	stackHeader toolbarActions: (debuggerCommandGroup / StDebuggerConfigurationCommandTreeBuilder groupName).
 ]
 
 { #category : #'commands - support' }
@@ -538,7 +545,7 @@ StDebugger >> doBrowseMethodVersions [
 	| target |
 	target := self stackSelectionMethodContext.
 	target isBlock ifTrue: [ target := target method ].
-	Smalltalk tools versionBrowser
+	self application versionBrowser
 		browseVersionsForClass: target methodClass
 		selector: target selector
 ]
@@ -711,6 +718,9 @@ StDebugger >> initializeShortcuts: aWindowPresenter [
 StDebugger >> initializeStack [
 
 	stackTable := self newTable.
+	stackTable 
+		activateOnDoubleClick;
+		whenActivatedDo: [ :selection | self doBrowseClass ].
 	stackTable
 		addColumn: ((SpImageTableColumn
 				  title: ''
@@ -743,17 +753,11 @@ StDebugger >> initializeStack [
 		stackTable selection isEmpty ifFalse: [ 
 			self updateInspectorFromContext: context.
 			self updateCodeFromContext: context.
+			self updateExtensionsFrom: self session.
 			self expandStackIfLastItemIsSelected.
 			self updateWindowTitle ] ].
 	stackHeader := self instantiate: StHeaderBar.
-	stackHeader label: 'Stack'.
-	stackHeader toolbarActions: (CmCommandGroup new
-			 register:
-				 ((StDebuggerToggleFilterStackCommand forSpecContext: self) 
-					  iconName: #changeSorter);
-			 register:
-				 (StDebuggerSettingsCommand forSpecWithIconNamed: #configuration);
-			 asSpecGroup)
+	stackHeader label: 'Stack'
 ]
 
 { #category : #initialization }
@@ -821,6 +825,7 @@ StDebugger >> newDebuggerContext [
 
 	^ self class debuggerContextClass new
 		  exception: self exception;
+		  debugger: self;
 		  yourself
 ]
 
@@ -829,6 +834,7 @@ StDebugger >> newDebuggerContextFor: aContext [
 
 	^ self newDebuggerContext
 		  context: aContext;
+		  debugger: self;
 		  yourself
 ]
 
@@ -1155,7 +1161,7 @@ StDebugger >> stackOfSize: anInteger [
 { #category : #'commands - support' }
 StDebugger >> stackSelectionMethodContext [
 
-	^ [ :dbg | stackTable selection selectedItem home method ]
+	^ [ :dbg | stackTable selection selectedItem homeMethod ]
 ]
 
 { #category : #'commands - support' }
@@ -1245,14 +1251,19 @@ StDebugger >> updateCodeFromContext [
 { #category : #'presenter - code' }
 StDebugger >> updateCodeFromContext: aContext [
 
-	| selectionInterval |
+	| selectionInterval formerCodeInteractionModel |
 	aContext ifNil: [ ^ self clearCode ].
 
 	self recordUnsavedCodeChanges.
 	selectionInterval := self selectedCodeRangeForContext: aContext.
 	aContext sourceCode = self code text ifFalse: [ 
 		self updateSourceCodeFor: aContext ].
+	formerCodeInteractionModel := self code interactionModel.
 	self code beForContext: aContext.
+	"add bindings of the old interaction model in the new one"
+	formerCodeInteractionModel ifNotNil: [ 
+		formerCodeInteractionModel bindings associations do: [ :assoc | 
+			self code interactionModel addBinding: assoc ] ].
 	self code selectionInterval:
 		(selectionInterval last to: selectionInterval last - 1).
 	self

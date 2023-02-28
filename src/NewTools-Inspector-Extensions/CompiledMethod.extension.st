@@ -1,11 +1,35 @@
 Extension { #name : #CompiledMethod }
 
 { #category : #'*NewTools-Inspector-Extensions' }
-CompiledMethod >> inpectionIr [
-	<inspectorPresentationOrder: 35 title: 'IR'>
+CompiledMethod >> inspectionPragmas [
+	<inspectorPresentationOrder: 50 title: 'Pragmas'> 
 
-	^ SpTextPresenter new 
-		text: (self ir longPrintString trimmed);
+	^ SpListPresenter new
+		items: self pragmas;
+		display: [ :aPragma | aPragma printString ];
 		yourself
+]
 
+{ #category : #'*NewTools-Inspector-Extensions' }
+CompiledMethod >> inspectionPragmasContext: aContext [ 
+	
+	aContext active: self hasPragmas
+]
+
+{ #category : #'*NewTools-Inspector-Extensions' }
+CompiledMethod >> inspectionSource [
+	<inspectorPresentationOrder: 20 title: 'Method Source'>
+	
+	^ SpCodePresenter new 
+		beForMethod: self method;
+		text: self sourceCode;
+		contextMenu: (SpMenuPresenter new addGroup: [ :group | group 
+			addItem: [ :item | item 
+				name: 'Browse method class'; 
+				action: [ self methodClass browse ] ] ]);
+		whenSubmitDo: [ :text | 
+			self isInstalled 
+				ifFalse: [ self inform: 'can not edit methods that are not installed' ]
+				ifTrue: [ self methodClass compile: text ]];
+		yourself
 ]
