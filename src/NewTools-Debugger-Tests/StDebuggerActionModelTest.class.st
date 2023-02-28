@@ -329,16 +329,15 @@ StDebuggerActionModelTest >> testFilterStack [
 ]
 
 { #category : #tests }
-StDebuggerActionModelTest >> testImplementClassifiedInClassForContext [
+StDebuggerActionModelTest >> testImplementInClassForContext [
 	|method|
 	method := (StDebuggerUsingSpecSelectorMock lookupSelector: #method).
 	self assert:	method equals: nil.
 	[ StDebuggerUsingSpecSelectorMock new method ]
 		on: Error
-		do: [ :dnu | 
+		do: [ :dnu |
 			debugActionModel
 				implement: dnu message
-				classified: Protocol unclassified
 				inClass: StDebuggerUsingSpecSelectorMock
 				forContext: dnu signalerContext ].
 	method := (StDebuggerUsingSpecSelectorMock lookupSelector: #method).
@@ -352,37 +351,34 @@ StDebuggerActionModelTest >> testImplementMethodClassification [
 	| method |
 	[ StDebuggerUsingSpecSelectorMock new method ]
 		on: Error
-		do: [ :dnu | 
+		do: [ :dnu |
 			debugActionModel
 				implement: dnu message
-				classified: Protocol unclassified
 				inClass: StDebuggerUsingSpecSelectorMock
 				forContext: dnu signalerContext ].
 
 	[ StDebuggerUsingSpecSelectorMock new testMethod ]
 		on: Error
-		do: [ :dnu | 
+		do: [ :dnu |
 			debugActionModel
 				implement: dnu message
-				classified: Protocol unclassified
 				inClass: StDebuggerUsingSpecSelectorMock
 				forContext: dnu signalerContext ].
 
 	[ StDebuggerUsingSpecSelectorMock new unclassifiedMethod ]
 		on: Error
-		do: [ :dnu | 
+		do: [ :dnu |
 			debugActionModel
 				implement: dnu message
-				classified: Protocol unclassified
 				inClass: StDebuggerUsingSpecSelectorMock
 				forContext: dnu signalerContext ].
 
 	method := StDebuggerUsingSpecSelectorMock lookupSelector: #method.
 	self assert: method protocol equals: 'accessing'.
-	
+
 	method := StDebuggerUsingSpecSelectorMock lookupSelector: #testMethod.
 	self assert: method protocol equals: 'tests'.
-	
+
 	method := StDebuggerUsingSpecSelectorMock lookupSelector: #unclassifiedMethod.
 	self assert: method protocol equals: Protocol unclassified
 ]
@@ -713,31 +709,28 @@ StDebuggerActionModelTest >> testUpdateTopContextAfterSessionOperation [
 	mockDebugActionModel := StMockDebuggerActionModel new.
 	mockDebugActionModel stepInto: context.
 	self assert: mockDebugActionModel tag equals: #updateTopContext.
-	
+
 	mockDebugActionModel := StMockDebuggerActionModel new.
 	mockDebugActionModel stepOver: context.
 	self assert: mockDebugActionModel tag equals: #updateTopContext.
-	
+
 	mockDebugActionModel := StMockDebuggerActionModel new.
 	mockDebugActionModel stepThrough: context.
 	self assert: mockDebugActionModel tag equals: #updateTopContext.
-	
+
 	mockDebugActionModel := StMockDebuggerActionModel new.
 	mockDebugActionModel restartContext: context.
 	self assert: mockDebugActionModel tag equals: #updateTopContext.
-	
+
 	mockDebugActionModel := StMockDebuggerActionModel new.
 	mockDebugActionModel returnValueFromExpression: 'nil' fromContext: [] asContext.
 	self assert: mockDebugActionModel tag equals: #updateTopContext.
-	
+
 	mockDebugActionModel := StMockDebuggerActionModel new.
 	mockDebugActionModel runToSelection: nil inContext: nil.
 	self assert: mockDebugActionModel tag equals: #updateTopContext.
-	
+
 	mockDebugActionModel := StMockDebuggerActionModel new.
-	mockDebugActionModel implement: nil classified: nil inClass: nil forContext: nil.
+	mockDebugActionModel implement: nil inClass: nil forContext: nil.
 	self assert: mockDebugActionModel tag equals: #updateTopContext
-	
-	
-	
 ]

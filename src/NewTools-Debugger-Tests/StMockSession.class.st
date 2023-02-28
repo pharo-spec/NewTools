@@ -9,9 +9,7 @@ Class {
 }
 
 { #category : #'debug - session' }
-StMockSession >> implement: aMessage classified: messageCategory inClass: aClass forContext: aContext [
-
-	
+StMockSession >> implement: aMessage inClass: aClass forContext: aContext [
 ]
 
 { #category : #accessing }
