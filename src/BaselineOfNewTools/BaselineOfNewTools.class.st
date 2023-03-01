@@ -77,6 +77,11 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Debugger-Fuel';
 			package: 'NewTools-Debugger-Fuel-Tests' with: [ spec requires: #( 'NewTools-Debugger-Fuel' ) ];
 			package: 'NewTools-Fuel'.
+      "Rewriter Tools"
+			package: 'NewTools-RewriterTools-Backend';
+			package: 'NewTools-RewriterTools' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
+			package: 'NewTools-RewriterTools-Backend-Tests' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
+			package: 'NewTools-RewriterTools-Tests' with: [ spec requires: #('NewTools-RewriterTools') ].
 
 		spec
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Morphic' );
@@ -117,20 +122,26 @@ BaselineOfNewTools >> baseline: spec [
 						'NewTools-FlagBrowser-Tests' );
 			group: #development with: #( 'default' 
 						'NewTools-DebuggerSelector'
-				   		'NewTools-DebuggerSelector-Tests' );
+				   	'NewTools-DebuggerSelector-Tests' );
 			group: #FileBrowser with: #( 
 						'NewTools-FileBrowser' 
 						'NewTools-FileBrowser-Tests' );
+      group: #RewriterTools with: #(
+				    'NewTools-RewriterTools-Backend'
+				    'NewTools-RewriterTools'
+				    'NewTools-RewriterTools-Backend-Tests'
+				    'NewTools-RewriterTools-Tests');
 			group: 'default' with: #( 
 						'Playground' 
 						'Inspector' 
 						'CritiqueBrowser' 
 						'Debugger'
-				   		'SystemReporter' 
+				   	'SystemReporter' 
 						'ChangeSorter' 
 						'FontChooser' 
 						'Methods'
-				   		'Spotter' ) ]
+				   	'Spotter'
+            'RewriterTools') ]
 ]
 
 { #category : #'external projects' }
