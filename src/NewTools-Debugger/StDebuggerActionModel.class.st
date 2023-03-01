@@ -8,7 +8,8 @@ Class {
 		'session',
 		'contextPredicate',
 		'topContext',
-		'filterStack'
+		'filterStack',
+		'previousASTScope'
 	],
 	#classVars : [
 		'ShouldFilterStack'
@@ -266,6 +267,12 @@ StDebuggerActionModel >> predicateFor: aContext postMortem: isContextPostMortem 
 		  yourself
 ]
 
+{ #category : #accessing }
+StDebuggerActionModel >> previousASTScope [
+
+	^ previousASTScope
+]
+
 { #category : #'debug - execution' }
 StDebuggerActionModel >> proceedDebugSession [
 
@@ -329,7 +336,10 @@ StDebuggerActionModel >> session [
 
 { #category : #accessing }
 StDebuggerActionModel >> session: aDebugSession [
-	session := aDebugSession
+
+	session := aDebugSession.
+	previousASTScope := aDebugSession interruptedContext
+		                    sourceNodeExecuted scope
 ]
 
 { #category : #'debug - stack' }
@@ -355,17 +365,20 @@ StDebuggerActionModel >> statusStringForContext [
 ]
 
 { #category : #'debug - stepping' }
-StDebuggerActionModel >> stepInto: aContext [ 
+StDebuggerActionModel >> stepInto: aContext [
+
+	previousASTScope := aContext sourceNodeExecuted scope.
 	filterStack := false.
 	aContext stepIntoQuickMethod: true.
 	self session stepInto: aContext.
 	aContext stepIntoQuickMethod: false.
-	self updateTopContext.
-
+	self updateTopContext
 ]
 
 { #category : #'debug - stepping' }
 StDebuggerActionModel >> stepOver: aContext [
+
+	previousASTScope := aContext sourceNodeExecuted scope.
 	filterStack := (self topContext method hasPragmaNamed:
 		                #debuggerCompleteToSender)
 		               ifTrue: [ false ]
@@ -376,6 +389,8 @@ StDebuggerActionModel >> stepOver: aContext [
 
 { #category : #'debug - stepping' }
 StDebuggerActionModel >> stepThrough: aContext [
+
+	previousASTScope := aContext sourceNodeExecuted scope.
 	self session stepThrough: aContext.
 	self updateTopContext
 ]

@@ -1362,17 +1362,29 @@ StDebugger >> updateStackFromSession: aSession [
 
 { #category : #'updating - actions' }
 StDebugger >> updateStep [
+
+	| previousASTScope previousContext currentASTScope currentContext |
+	previousContext := self currentContext.
+	previousASTScope := debuggerActionModel previousASTScope. 
+
 	self flag: #DBG_UPDATE_OF_MODEL_SHOULD_BE_AUTOMATED.
 	debuggerActionModel updateTopContext.
-	debuggerActionModel updateContextPredicate.	
+	debuggerActionModel updateContextPredicate.
 	debuggerActionModel updateDebugSession.
-		
+
 	self updateStackFromSession: self session.
 	self updateWindowTitle.
-	self updateExtensionsFrom: self session.	
+	self updateExtensionsFrom: self session.
 	self updateToolbar.
+
+	currentContext := self currentContext.
+	currentASTScope := (currentContext compiledCode sourceNodeForPC:
+		                    currentContext pc) scope.
 	self flag: #DBG_INSPECTOR_UPDATE_BUG.
-	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p | p update ]
+	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p |
+		previousContext == currentContext ifTrue: [ "otherwise, if contexts have changed, updating the stack has already updated all nodes." "Here it is necessary to update temporary nodes if we are still in the same context but in a different scope. This is possible when leaving or entering an optimized block scope."
+			p updateNodesFromScope: previousASTScope to: currentASTScope ].
+		p update ]
 ]
 
 { #category : #'updating - actions' }

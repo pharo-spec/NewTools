@@ -11,6 +11,14 @@ Class {
 	#category : #'NewTools-Debugger-Tests-Utils'
 }
 
+{ #category : #accessing }
+StMockContext >> scope [
+]
+
+{ #category : #accessing }
+StMockContext >> sourceNodeExecuted [
+]
+
 { #category : #'debugger access' }
 StMockContext >> stepIntoQuickMethod: aBoolean [
 	self stepIntoQuickMethodBooleans add: aBoolean

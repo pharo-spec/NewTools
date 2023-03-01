@@ -31,6 +31,14 @@ StMockSession >> returnValue: value from: aContext [
 StMockSession >> runToSelection: aSelectionInterval inContext: aContext [
 ]
 
+{ #category : #accessing }
+StMockSession >> scope [
+]
+
+{ #category : #accessing }
+StMockSession >> sourceNodeExecuted [
+]
+
 { #category : #'debugging actions' }
 StMockSession >> stepInto: aContext [ 
 ]
