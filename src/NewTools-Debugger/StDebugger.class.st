@@ -415,30 +415,30 @@ StDebugger >> createMissingMethod [
 
 { #category : #actions }
 StDebugger >> createMissingMethodFor: aMessage in: aClass [
+	| method |
 	self flag: #DBG_MISSINGTEST.
-	self debuggerActionModel
+	method := self debuggerActionModel
 		implement: aMessage
-		classified: (self requestProtocolIn: aClass)
 		inClass: aClass
 		forContext: self interruptedContext.
+	method protocol = Protocol unclassified
+		ifTrue: [ method protocol: (self requestProtocolIn: aClass) ].
+
 	self selectTopContext
 ]
 
 { #category : #actions }
 StDebugger >> createSubclassResponsibility [
 
-	| senderContext msg msgCategory chosenClass |
+	| senderContext msg chosenClass |
 	senderContext := self interruptedContext sender.
 	msg := Message
 		       selector: senderContext selector
 		       arguments: senderContext arguments.
-	msgCategory := senderContext methodClass organization 
-		               categoryOfElement: msg selector.
 	chosenClass := self requestClassFrom: senderContext receiver class to: senderContext methodClass.
 	chosenClass ifNil: [ ^ self ].
 	self debuggerActionModel
 		implement: msg
-		classified: msgCategory
 		inClass: chosenClass
 		forContext: senderContext
 ]
