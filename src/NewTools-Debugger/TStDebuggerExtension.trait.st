@@ -45,6 +45,10 @@ TStDebuggerExtension classSide >> showInDebugger: aBoolean [
 		StDebuggerExtensionActivationToggle new
 ]
 
+{ #category : #visiting }
+TStDebuggerExtension >> accept: aVisitor [
+]
+
 { #category : #accessing }
 TStDebuggerExtension >> debugger [
 	^debugger
@@ -53,6 +57,12 @@ TStDebuggerExtension >> debugger [
 { #category : #'debugger extension' }
 TStDebuggerExtension >> debuggerExtensionToolName [
 	^self explicitRequirement 
+]
+
+{ #category : #layout }
+TStDebuggerExtension >> debuggerLayout [
+
+	^ self defaultLayout
 ]
 
 { #category : #'debugger extension' }

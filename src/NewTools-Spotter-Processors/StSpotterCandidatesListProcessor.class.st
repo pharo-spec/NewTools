@@ -6,12 +6,12 @@ Class {
 		'candidatesLimit',
 		'title',
 		'itemNameBlock',
-		'itemIconBlock',
 		'actBlock',
 		'wantsToDisplayOnEmptyQuery',
 		'filterBlock',
 		'keyBinding',
-		'sortBlock'
+		'sortBlock',
+		'itemIconNameBlock'
 	],
 	#category : #'NewTools-Spotter-Processors'
 }
@@ -47,6 +47,7 @@ StSpotterCandidatesListProcessor >> candidatesLimit: anInteger [
 
 { #category : #private }
 StSpotterCandidatesListProcessor >> computeAllItemsIn: aContext [
+
 	^ allCandidatesBlock cull: aContext
 ]
 
@@ -103,20 +104,24 @@ StSpotterCandidatesListProcessor >> hasDynamicItems [
 	^ allCandidatesBlock stHasDynamicItems
 ]
 
-{ #category : #accessing }
-StSpotterCandidatesListProcessor >> itemIcon [
-	^ itemIconBlock
+{ #category : #scripting }
+StSpotterCandidatesListProcessor >> itemIconName [
+
+	^ itemIconNameBlock
 ]
 
 { #category : #scripting }
-StSpotterCandidatesListProcessor >> itemIcon: aBlockWithOneArgument [
-	itemIconBlock := aBlockWithOneArgument
+StSpotterCandidatesListProcessor >> itemIconName: aBlock [
+
+	itemIconNameBlock := aBlock
 ]
 
 { #category : #private }
-StSpotterCandidatesListProcessor >> itemIconFor: anObject [
+StSpotterCandidatesListProcessor >> itemIconNameFor: anObject [
 
-	^ itemIconBlock ifNil: [ super itemIconFor: anObject ] ifNotNil: [ itemIconBlock cull: anObject ]
+	^ itemIconNameBlock 
+		ifNotNil: [ itemIconNameBlock cull: anObject ]
+		ifNil: [ super itemIconNameFor: anObject ] 
 ]
 
 { #category : #accessing }
@@ -132,7 +137,9 @@ StSpotterCandidatesListProcessor >> itemName: aBlockWithOneArgument [
 { #category : #private }
 StSpotterCandidatesListProcessor >> itemNameFor: anObject [
 
-	^ itemNameBlock ifNil: [ super itemNameFor: anObject ] ifNotNil: [ itemNameBlock cull: anObject ]
+	^ itemNameBlock 
+		ifNotNil: [ itemNameBlock cull: anObject ]
+		ifNil: [ super itemNameFor: anObject ] 
 ]
 
 { #category : #scripting }

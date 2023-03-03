@@ -18,7 +18,7 @@ toolbar.stToolbar { font-size: 0.7em }
 toolbar.stToolbar toolbutton > button { padding: 2px; margin: 2px }
 
 .dim { color: LightSlateGrey }
-.codePopover,  .codePopover text { 
+.codePopover, .codePopover text { 
 	background-color: transparent;
 }
 .scrollbarPopoverLarge { min-height: 350px }
@@ -28,6 +28,7 @@ toolbar.stToolbar toolbutton > button { padding: 2px; margin: 2px }
 { #category : #configuring }
 StPharoGtkConfiguration >> configureGeneral: anApplication [ 
 
+	super configureGeneral: anApplication.
 	self addCSSProviderFromString: self commonStyle.
 	anApplication 
 		propertyAt: #syntaxHighlightTheme

@@ -30,7 +30,9 @@ FLDebuggerStackSerializerTest >> testSerializeContextToFileNamed [
 	self assert: file exists.
 	self
 		should: [ 
-		FLMaterializer materializeFromFileNamed: 'serialized-stack' ]
+			FLMaterializer new
+				filePath: 'serialized-stack';
+				materializeRoot ]
 		raise: FLDebuggerStackMaterialization
 ]
 
@@ -45,6 +47,8 @@ FLDebuggerStackSerializerTest >> testSerializeStackFromContext [
 	self assert: stackSerializer fileName asFileReference exists.
 	self
 		should: [ 
-		FLMaterializer materializeFromFileNamed: stackSerializer fileName ]
+			FLMaterializer new
+				filePath: stackSerializer fileName;
+				materializeRoot ]
 		raise: FLDebuggerStackMaterialization
 ]

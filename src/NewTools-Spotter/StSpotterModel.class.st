@@ -17,7 +17,8 @@ Class {
 		'noResultsAction',
 		'scheduler',
 		'pendingQuery',
-		'queryRequestTime'
+		'queryRequestTime',
+		'processors'
 	],
 	#category : #'NewTools-Spotter-Model'
 }
@@ -195,6 +196,18 @@ StSpotterModel >> processSearch: aString on: spotter [
 			ifTrue: [ self doProcessSearch: aString on: spotter ] ] fork.	
 ]
 
+{ #category : #accessing }
+StSpotterModel >> processors [
+
+	^ processors ifNil: [ self defaultProcessors ]
+]
+
+{ #category : #accessing }
+StSpotterModel >> processors: aCollection [
+
+	processors := aCollection
+]
+
 { #category : #'accessing - query' }
 StSpotterModel >> pushQuery: aQuery [
 
@@ -242,7 +255,7 @@ StSpotterModel >> scheduler [
 { #category : #accessing }
 StSpotterModel >> stSpotterProcessorsFor: aStep [
 
-	self defaultProcessors 
+	self processors 
 		do: [ :each | aStep addProcessor: each ]
 ]
 

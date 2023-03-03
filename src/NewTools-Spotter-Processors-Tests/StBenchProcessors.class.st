@@ -97,7 +97,7 @@ StBenchProcessors >> oldClassProcessor [
 		allCandidates: [ Smalltalk allClassesAndTraits ];
 		title: 'Classes';
 		filter: StFilterFuzzy;
-		itemIcon: #systemIcon;
+		itemIconName: [ :item | item systemIconName ];
 		keyBinding: $b meta;
 		wantsToDisplayOnEmptyQuery: false;
 		yourself

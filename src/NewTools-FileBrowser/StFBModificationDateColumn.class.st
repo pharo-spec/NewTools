@@ -14,6 +14,7 @@ StFBModificationDateColumn class >> addContraintTo: aTableColumn [
 
 { #category : #templateMethod }
 StFBModificationDateColumn class >> evaluateOn: aFileReference [
+
 	^ aFileReference modificationTime fileDialogFormat
 ]
 

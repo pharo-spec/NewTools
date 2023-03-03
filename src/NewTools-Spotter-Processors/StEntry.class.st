@@ -75,9 +75,15 @@ StEntry >> hash [
 ]
 
 { #category : #accessing }
-StEntry >> icon [
+StEntry >> iconName [
 	
 	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+StEntry >> iconOn: anIconProvider [
+
+	^ anIconProvider iconNamed: self iconName
 ]
 
 { #category : #accessing }

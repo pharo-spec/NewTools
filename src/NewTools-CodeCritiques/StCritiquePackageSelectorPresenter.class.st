@@ -101,7 +101,7 @@ StCritiquePackageSelectorPresenter >> setChooserPackages [
 		   chosenItems:
 		   {  }
 		   displayBlock: #packageName.
-	chooser sourceList displayIcon: [ self iconNamed: #packageIcon ].
-	chooser targetList displayIcon: [ self iconNamed: #packageIcon ].
+	chooser sourceList displayIcon: [ self iconNamed: #package ].
+	chooser targetList displayIcon: [ self iconNamed: #package ].
 	^ chooser 
 ]

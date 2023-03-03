@@ -10,6 +10,7 @@ Class {
 { #category : #private }
 StFilterSubstring >> doApplyFilterWithQuery [
 	| exactMatches prefixMatches otherMatches nonExactMatches |
+
 	"we want to distinguish between exact matches"
 	exactMatches := OrderedCollection new.
 	"... results for which the query matches the prefix"
@@ -29,7 +30,6 @@ StFilterSubstring >> doApplyFilterWithQuery [
 						ifTrue: [ 
 							exactMatches add: each.
 							self addItem: each.
-														
 							exactMatches size = self itemsLimit ifTrue: [ 
 								self filteredItems: exactMatches.
 								StLimitArrived signal	] ]							

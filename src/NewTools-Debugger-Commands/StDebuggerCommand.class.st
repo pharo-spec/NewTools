@@ -70,17 +70,15 @@ StDebuggerCommand >> appliesTo: aDebugger [
 	^ aDebugger canExecuteDebugCommand
 ]
 
-{ #category : #converting }
-StDebuggerCommand >> asSpecCommand [
-	
-	^ super asSpecCommand
-		iconProvider: StPharoApplication current iconProvider;
-		yourself
-]
-
 { #category : #accessing }
 StDebuggerCommand >> canBeExecuted [
 	^ self appliesTo: self debugger
+]
+
+{ #category : #accessing }
+StDebuggerCommand >> context: anObject [
+
+	super context: anObject
 ]
 
 { #category : #accessing }
@@ -99,9 +97,14 @@ StDebuggerCommand >> hash [
 StDebuggerCommand >> initialize [
 
 	super initialize.
-	self description: (String streamContents: [ :stream | 
+	self description: (String streamContents: [ :stream | | shortcut |
 		stream 
 			<< self class defaultName
 			<< ': '
-			<< self class defaultDescription ])
+			<< self class defaultDescription.
+		shortcut := self class defaultShortcut.
+		shortcut ifNotNil: [stream	
+			<< ' ['
+			<< shortcut asString
+			<< ']' ]])
 ]

@@ -229,6 +229,12 @@ StSpotterProcessor >> itemIcon [
 ]
 
 { #category : #accessing }
+StSpotterProcessor >> itemIconName [
+
+	^ [ :item | item systemIconName ]
+]
+
+{ #category : #accessing }
 StSpotterProcessor >> itemName [
 
 	^ [ :anItem | anItem asString ]

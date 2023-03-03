@@ -12,7 +12,7 @@ StRunToSelectionCommand class >> defaultDescription [
 	^ 'Execute methods up to the text cursor position and return debugger control.'
 ]
 
-{ #category : #default }
+{ #category : #initialization }
 StRunToSelectionCommand class >> defaultIconName [
 
 	^ #debuggerRunToSelection
@@ -24,7 +24,7 @@ StRunToSelectionCommand class >> defaultName [
 	^ 'Run to'
 ]
 
-{ #category : #default }
+{ #category : #initialization }
 StRunToSelectionCommand class >> defaultShortcut [
 	^ nil
 ]

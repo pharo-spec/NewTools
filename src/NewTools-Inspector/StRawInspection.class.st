@@ -66,6 +66,11 @@ StRawInspection >> defaultOutputPort [
 ]
 
 { #category : #testing }
+StRawInspection >> enableSlotMenuEntries [
+	^ self selectedItem class == StInspectorSlotNode
+]
+
+{ #category : #testing }
 StRawInspection >> hasOutputActivationPort [
 
 	^ true
@@ -185,10 +190,10 @@ StRawInspection >> variablesColumn [
 		width: 170;
 		addColumn: (SpImageTableColumn new
 			beNotExpandable;
-			evaluated: #icon;
+			evaluated: [ :aNode | self iconNamed: aNode iconName ];
 			yourself);
 		addColumn: (SpStringTableColumn new
-			evaluated: #label;
+			evaluated: [ :aNode | aNode label ];
 			yourself);
 		sortFunction: #label ascending;
 		yourself

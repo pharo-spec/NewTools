@@ -3,7 +3,8 @@ I build the default command tree for the debugger stack presenter.
 The command classes I instantiate are specified under the ""accessing - commands classes"" protocol.
 The group names and descriptions are specified under the ""accessing"" protocol.
 
-You can evolve the default groups names and descriptions and the default command classes, but you cannot extend me.
+You can modify the default groups names and descriptions and the default commands by modifying my code, but I am not meant to be extended through subclassing.
+As I provide the default debugger commands, you should only extend me by using the Spec extension mechanism and not by subclassing me.
 Using me to add command in the tree makes them default for the debugger stack presenter.
 "
 Class {
@@ -50,9 +51,10 @@ StDebuggerStackCommandTreeBuilder >> buildDebuggerCommandGroup [
 ]
 
 { #category : #building }
-StDebuggerStackCommandTreeBuilder >> buildSpecCommand: aCommandClass forContext: anObject [
+StDebuggerStackCommandTreeBuilder >> buildSpecCommand: aCommandClass forContext: aBlock [
+
 	| cmd |
-	cmd := super buildSpecCommand: aCommandClass forContext: anObject.
+	cmd := super buildSpecCommand: aCommandClass forContext: stDebuggerInstance.
 	cmd name: aCommandClass shortName.
 	^ cmd
 ]
@@ -157,7 +159,6 @@ StDebuggerStackCommandTreeBuilder >> stackContextNavigationCommands [
 		beDisplayedAsGroup;
 		register: ((SpBrowseClassCommand forSpecContext: stDebuggerInstance)
 			name: 'method';
-			shortcutKey: nil;
 			yourself);
 		register: (((SpBrowseClassCommand forContext: stDebuggerInstance)
 			selector: #doBrowseReceiverClass;
@@ -211,15 +212,16 @@ StDebuggerStackCommandTreeBuilder >> stackMethodCommandsClasses [
 
 { #category : #commands }
 StDebuggerStackCommandTreeBuilder >> stackMethodNavigationCommands [
-	"Commands to navigate the selected context's method "
-	| group |
 
-	group := (CmCommandGroup named: self stackMethodNavigationGroupName) asSpecGroup.
+	"Commands to navigate the selected context's method "
+
+	| group |
+	group := (CmCommandGroup named: self stackMethodNavigationGroupName)
+		         asSpecGroup.
 	group beDisplayedAsGroup.
 	self stackMethodCommandsClasses do: [ :navCmdClass | 
-		group register: (self
-			buildSpecCommand: navCmdClass
-			forContext: stDebuggerInstance stackSelectionMethodContext) ].
+		group register:
+			(self buildSpecCommand: navCmdClass forContext: stDebuggerInstance) ].
 	^ group
 ]
 
@@ -251,7 +253,7 @@ StDebuggerStackCommandTreeBuilder >> stackMethodSelectorNavigationCommands [
 				register:
 					(self
 						buildSpecCommand: navCmdClass
-						forContext: stDebuggerInstance stackSelectionMethodSelectorContext) ].
+						forContext: stDebuggerInstance "stackSelectionMethodSelectorContext") ].
 	^ group
 ]
 
@@ -282,7 +284,7 @@ StDebuggerStackCommandTreeBuilder >> stackReceiverClassNavigationCommands [
 				register:
 					(self
 						buildSpecCommand: navCmdClass
-						forContext: stDebuggerInstance stackSelectionReceiverClassContext) ].
+						forContext: stDebuggerInstance "stackSelectionReceiverClassContext") ].
 	^ group
 ]
 

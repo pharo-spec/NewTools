@@ -13,12 +13,30 @@ Public API and Key Messages
 Class {
 	#name : #StFBAbstractFilter,
 	#superclass : #Object,
+	#traits : 'TComparable',
+	#classTraits : 'TComparable classTrait',
 	#category : #'NewTools-FileBrowser-Filtering'
 }
 
+{ #category : #testing }
+StFBAbstractFilter class >> canBeDefault [
+	^ self isAbstract not
+]
+
 { #category : #actions }
 StFBAbstractFilter class >> defaultFilters [
-	^ ((self allSubclasses reject: #isAbstract) sorted: #priority descending) collect: #new
+
+	^ ((self allSubclasses select: #canBeDefault) sorted:
+		   #priority descending) collect: #new
+]
+
+{ #category : #actions }
+StFBAbstractFilter class >> defaultFiltersWith: aFilter [
+
+	| defaultFilters |
+	defaultFilters := self defaultFilters.
+	(defaultFilters includes: aFilter) ifTrue: [ ^ defaultFilters ].
+	^ { aFilter } , self defaultFilters
 ]
 
 { #category : #testing }
@@ -31,15 +49,57 @@ StFBAbstractFilter class >> priority [
 	^ 1
 ]
 
+{ #category : #comparing }
+StFBAbstractFilter >> < aComparable [
+
+	"Answer whether the receiver is less than the argument."
+
+	^ self class priority < aComparable class priority
+]
+
+{ #category : #comparing }
+StFBAbstractFilter >> = aComparable [
+
+	"Double dispatch"
+
+	^ aComparable equalsToNonExtensionFilter: self
+]
+
+{ #category : #adding }
+StFBAbstractFilter >> addExtensionTo: aFileReference [
+
+	^ aFileReference
+]
+
 { #category : #applying }
 StFBAbstractFilter >> applyOn: aCollectionOfFileReference [
 	^ aCollectionOfFileReference select: [ :eachFileReference | self predicate: eachFileReference ]
 ]
 
 { #category : #comparing }
-StFBAbstractFilter >> equals: aPredicate [
-	self flag: #todo. "We should have a real #= method..."
-	^ self className = aPredicate className
+StFBAbstractFilter >> equalsToExtensionFilter: aExtensionFilter [
+
+	"Compare the receiver with the argument and answer with true if the 
+	receiver is equal to the argument. Otherwise answer false."
+
+	^ self class = aExtensionFilter class
+]
+
+{ #category : #comparing }
+StFBAbstractFilter >> equalsToNonExtensionFilter: aFilter [
+
+	"Compare the receiver with the argument and answer with true if the 
+	receiver is equal to the argument. Otherwise answer false."
+
+	^ self class = aFilter class
+]
+
+{ #category : #comparing }
+StFBAbstractFilter >> hash [
+
+	"Hash must be redefined whenever = is redefined."
+
+	^ self class priority
 ]
 
 { #category : #accessing }

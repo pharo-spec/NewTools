@@ -7,6 +7,6 @@ ClassDescription >> spotterPackageFor: aStep [
 			title: 'Package';
 			allCandidates: [ {self package} ];
 			itemName: [ :item | item packageName ];
-			itemIcon: #systemIcon;
+			itemIconName: [ :item | item systemIconName ];
 			filter: StFilterSubstring
 ]

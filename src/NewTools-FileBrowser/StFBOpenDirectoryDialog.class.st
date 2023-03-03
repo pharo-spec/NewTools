@@ -7,46 +7,28 @@ see my super for more information about customization
 "
 Class {
 	#name : #StFBOpenDirectoryDialog,
-	#superclass : #StFBFileDialogPresenter,
-	#instVars : [
-		'nameText',
-		'confirmButton'
-	],
+	#superclass : #StFBOpenFileOrDirectoryDialog,
 	#category : #'NewTools-FileBrowser-UI'
 }
 
-{ #category : #specs }
-StFBOpenDirectoryDialog class >> defaultSpec [
-	^ SpecColumnLayout composed
-		newRow: [ :r | 
-			r
-				newColumn: [ :c | c add: #bookmarksList ] width: 150;
-				newColumn: [ :c | 
-					c add: #currentFolderLabel height: self toolbarHeight.
-					c add: #filesList ] ];
-		newRow: [ :r | 
-			r newColumn: [ :c |  ].
-			self dialogButtonsLayout: r ]
-			height: self toolbarHeight;
-		yourself
+{ #category : #examples }
+StFBOpenDirectoryDialog class >> example [
+
+	<example>
+	^ self chooseThenInspect
 ]
 
 { #category : #examples }
-StFBOpenDirectoryDialog class >> example [
+StFBOpenDirectoryDialog class >> exampleModal [
+
 	<example>
-	^ (self new
-		okAction: [ :selectedFileReference | selectedFileReference inspect ])
-		openDialogWithSpec inspect
+	^ self chooseModalAndInspect
 ]
 
-{ #category : #accessing }
-StFBOpenDirectoryDialog >> filesFilteringBlock [
-	^ [ :entries | 
-	| e |
-	e := filter directoriesOnly: entries.
-	showHiddenFiles
-		ifFalse: [ e := filter noHiddenFiles: e ].
-	e ]
+{ #category : #hooks }
+StFBOpenDirectoryDialog >> allowsChooseDirectoryIfNoFilename [
+
+	^ true
 ]
 
 { #category : #'accessing - ui' }
@@ -55,24 +37,18 @@ StFBOpenDirectoryDialog >> initialTitle [
 ]
 
 { #category : #initialization }
-StFBOpenDirectoryDialog >> initializePresenters [
-	super initializePresenters.
-	fileNavigationSystem nameText disable.
-	nameText disable.
-	confirmButton
-		label: 'Open';
-		enable
-]
+StFBOpenDirectoryDialog >> initialize [
 
-{ #category : #actions }
-StFBOpenDirectoryDialog >> nameChanged [
-	"we don't need to do anything for folder"
+	super initialize.
 
-	
+	filter ifNil: [ filter := StFBDirectoryFilter new ]
 ]
 
 { #category : #actions }
 StFBOpenDirectoryDialog >> selectedEntry [
-	fileNavigationSystem selectedEntry ifNotNil: [ :fileReference | fileReference isDirectory ifTrue: [ ^ fileReference ] ].
-	self inform: 'you must select a directory'
+
+	super selectedEntry ifNotNil: [ :fileReference | 
+		fileReference isDirectory ifTrue: [ ^ fileReference ] ].
+	self inform: 'You must select a directory'.
+	^ nil
 ]

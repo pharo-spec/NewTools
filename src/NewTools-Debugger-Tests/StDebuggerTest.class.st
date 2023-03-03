@@ -304,6 +304,45 @@ StDebuggerTest >> testContextTempVarList [
 ]
 
 { #category : #'tests - context inspector' }
+StDebuggerTest >> testContextTempVarListUpdatesTempsWhenEnteringOrLeavingInlinedBlocks [
+
+	| contextItems inspectorTable newContextItems |
+	dbg := self debuggerOn: session.
+	inspectorTable := dbg inspector getRawInspectorPresenterOrNil
+		                  attributeTable.
+
+	"We stop on the node `i = 1` node"
+	3 timesRepeat: [ dbg stepOver ].
+
+	contextItems := inspectorTable roots copy.
+	self assert: contextItems size equals: 8.
+
+	"We enter inlined block"
+	dbg stepOver.
+
+	newContextItems := inspectorTable roots.
+
+	self assert: newContextItems size equals: 9.
+
+	1 to: 8 do: [ :i |
+		self
+			assert: (newContextItems at: i)
+			identicalTo: (contextItems at: i) ].
+
+	self assert: (newContextItems at: 9) tempVariable isTempVariable.
+	self assert: (newContextItems at: 9) tempVariable name equals: 'j'.
+
+	"We leave inlined block"
+	2 timesRepeat: [ dbg stepOver ].
+
+	self assert: newContextItems size equals: 8.
+	1 to: 8 do: [ :i |
+		self
+			assert: (newContextItems at: i)
+			identicalTo: (contextItems at: i) ]
+]
+
+{ #category : #'tests - context inspector' }
 StDebuggerTest >> testContextUnchangedAfterStepOver [
 	| currentContext |
 	
@@ -369,6 +408,15 @@ StDebuggerTest >> testDiscardCodeChangesFor [
 	
 ]
 
+{ #category : #tests }
+StDebuggerTest >> testExceptionProvidesSameExceptionAsTheActionModelOne [
+
+	debugger := self debuggerOn: session.
+	self
+		assert: debugger exception
+		identicalTo: debugger debuggerActionModel exception
+]
+
 { #category : #'tests - initialization' }
 StDebuggerTest >> testFastTDD [
 	self debuggerClass fastTDD: nil.
@@ -395,6 +443,24 @@ StDebuggerTest >> testInitialCodeSelectionAfterStepping [
 		assert:  (highlightSegment firstIndex to: highlightSegment lastIndex)
 		equals: (pcRangeForContext first to: pcRangeForContext last + 1)
 	"The pc range is highlighted with an additionnal index to encompass the full text of the node (why?)"
+]
+
+{ #category : #tests }
+StDebuggerTest >> testInterruptedContextProvidesSameContextAsTheActionModelOne [
+
+	debugger := self debuggerOn: session.
+	self
+		assert: debugger interruptedContext
+		identicalTo: debugger debuggerActionModel interruptedContext
+]
+
+{ #category : #tests }
+StDebuggerTest >> testInterruptedProcessProvidesSameProcessAsTheActionModelOne [
+
+	debugger := self debuggerOn: session.
+	self
+		assert: debugger interruptedProcess
+		identicalTo: debugger debuggerActionModel interruptedProcess
 ]
 
 { #category : #'tests - context inspector' }
@@ -675,6 +741,24 @@ StDebuggerTest >> testSelectLastStackElementWithoutMoreElements [
 	stackTable selectItem: stackTable items last.
 	
 	self assert: stackTable items size equals: startingStackSize
+]
+
+{ #category : #tests }
+StDebuggerTest >> testSessionProvidesSameAsTheActionModelOne [
+
+	debugger := self debuggerOn: session.
+	self
+		assert: debugger session
+		identicalTo: debugger debuggerActionModel session
+]
+
+{ #category : #tests }
+StDebuggerTest >> testSessionStackProvidesSameStackAsTheActionModelOne [
+
+	debugger := self debuggerOn: session.
+	self
+		assertCollection: debugger stack
+		equals: debugger debuggerActionModel stack
 ]
 
 { #category : #'tests - stack table' }

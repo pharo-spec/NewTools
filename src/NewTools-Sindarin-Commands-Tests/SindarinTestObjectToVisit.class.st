@@ -32,7 +32,7 @@ SindarinTestObjectToVisit >> acceptVisitorMultipleObjects: aVisitor [
 
 { #category : #visitors }
 SindarinTestObjectToVisit >> acceptVisitorNeverFinishes: aVisitor [
-
+	<compilerOptions: #(- optionInlineTimesRepeat)>
 	10000 timesRepeat: [ self doStuff ]
 ]
 

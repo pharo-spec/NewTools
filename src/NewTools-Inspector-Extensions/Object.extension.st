@@ -43,10 +43,3 @@ Object >> stDisplayStringFull [
 
 	^ StObjectPrinter asNonTruncatedTextFrom: self
 ]
-
-{ #category : #'*NewTools-Inspector-Extensions' }
-Object >> stInspect [
-	"Temporary to experiment, should be replaced by inspect later"
-
-	^ StInspector inspect: self
-]

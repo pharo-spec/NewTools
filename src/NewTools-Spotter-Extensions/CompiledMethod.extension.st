@@ -47,11 +47,12 @@ CompiledMethod >> spotterForSendersFor: aStep [
 { #category : #'*NewTools-Spotter-Extensions' }
 CompiledMethod >> spotterMethodClassFor: aStep [
 	<stSpotterOrder: 50>
+
 	aStep listProcessor
 			allCandidates: [  {self methodClass }];
 			title: 'Class';
 			filter: StFilterSubstring;
-			itemIcon: #systemIcon
+			itemIconName: [ :item | item systemIconName ]
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }

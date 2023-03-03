@@ -71,7 +71,9 @@ Class {
 		'bookmarksTreeTable',
 		'bookmarks',
 		'fileNavigationSystem',
-		'okAction'
+		'okAction',
+		'title',
+		'filter'
 	],
 	#classVars : [
 		'Bookmarks',
@@ -97,109 +99,76 @@ StFBFileDialogPresenter class >> buildCommandsGroupWith: presenter forRoot: root
 				yourself)
 ]
 
-{ #category : #defaultClassVariable }
-StFBFileDialogPresenter class >> defaultOkActionBlock [
-	^ [ :fileReference | fileReference ]
+{ #category : #examples }
+StFBFileDialogPresenter class >> chooseModal [
+
+	"Return selected item immediately (blocking/modal). Returns nil if no valid item selected"
+
+	^ self new openModal
+]
+
+{ #category : #examples }
+StFBFileDialogPresenter class >> chooseModalAndInspect [
+
+	^ self chooseModal inspect
+]
+
+{ #category : #examples }
+StFBFileDialogPresenter class >> chooseModalIfNone: aBlock [
+
+	"Return selected item immediately (blocking/modal). Returns nil if no valid item selected"
+
+	^ self chooseModal ifNil: aBlock
+]
+
+{ #category : #examples }
+StFBFileDialogPresenter class >> chooseThenDo: aBlock [
+
+	"Return selected item immediately (blocking/modal). Returns nil if no valid item selected"
+
+	<example>
+	^ self new
+		  okAction: aBlock;
+		  open
+]
+
+{ #category : #examples }
+StFBFileDialogPresenter class >> chooseThenInspect [
+
+	^ self chooseThenDo: [ :file | file inspect ]
 ]
 
 { #category : #specs }
-StFBFileDialogPresenter class >> defaultSpec [
+StFBFileDialogPresenter class >> defaultLayout [
 
-	^ SpPanedLayout newHorizontal
+	^ SpPanedLayout newLeftToRight
 		  positionOfSlider: 200;
 		  add: #bookmarksTreeTable;
 		  add: #fileNavigationSystem;
 		  yourself
 ]
 
-{ #category : #examples }
-StFBFileDialogPresenter class >> exampleBookmark [
-	<example>
-	| presenter |
-	presenter := StFBOpenFileDialog new.
-	"this is a flat example"
-	presenter
-		bookmarks:
-			{StFBBookmark home.
-			StFBBookmark root.
-			StFBBookmark tmp.
-			(StFBBookmark
-				name: 'Image location'
-				location: FileLocator imageDirectory
-				icon: nil)}
-			"this is tree example" 	
-			"{(FDGroupBookMark
-				CreatWithname: 'exampleGroup'
-				WithContent:
-					{FDBookmark image.
-					FDBookmark home}
-				withIconName: 'group')}"
+{ #category : #defaultClassVariable }
+StFBFileDialogPresenter class >> defaultOkActionBlock [
+	^ [ :fileReference | fileReference ]
 ]
 
-{ #category : #example }
-StFBFileDialogPresenter class >> examplePreviewer [
-	| presenter |
-	presenter := StFBOpenFileDialog new.
-	presenter previewer: StFBInspectPreviewer new.
-	presenter openDialogWithSpec.
-	^ presenter
+{ #category : #'accessing - Class' }
+StFBFileDialogPresenter class >> extensions: aCollectionOfExtensions [
+
+	^ self new
+		  extensions: aCollectionOfExtensions;
+		  openDialog;
+		  yourself
 ]
 
-{ #category : #example }
-StFBFileDialogPresenter class >> exampleSaveDialog [
-	<example>
+{ #category : #'accessing - Class' }
+StFBFileDialogPresenter class >> extensions: aCollectionOfExtensions named: aString [
 
-	^ StFBSaveFileDialog new openDialogWithSpec 
-]
-
-{ #category : #example }
-StFBFileDialogPresenter class >> exampleSaveFileDialog [
-
-	^ StFBSaveFileDialog new openDialogWithSpec
-]
-
-{ #category : #example }
-StFBFileDialogPresenter class >> fullExample [
-	<example>
-	| presenter |
-	presenter := StFBOpenFileDialog new.
-	
-	presenter previewer: StFBContentPreviewer new.	
-	"with this when you select a png file it will display it"
-	
-	presenter filtersCustomization: {StFBPNGFilter new}.
-	"with you add filter and there always the 'no filter'"
-	
-	presenter defaultFolder: FileLocator home asFileReference.
-	"it's open the FileDialog on this file"
-	
-	presenter okAction: [ :selectedFileReference | selectedFileReference ].
-	"you will define the action of the OK button "
-	
-	presenter
-		bookmarks:
-			{(StFBGroupBookmark
-				name: 'exampleGroup'
-				collection:
-					{StFBBookmark image.
-					StFBBookmark home}
-				iconName: 'group')} .
-	"you define the bookmarks have to be instance of FDAbstractBookMark"
-	
-	presenter columns:  { StFBCreationDateColumn }. 
-	
-	presenter inspect.
-	presenter openModalWithSpec.
-	^ presenter confirm
-]
-
-{ #category : #icons }
-StFBFileDialogPresenter class >> imageIcons [
-	<icons>
-	^ {(#png -> (self iconNamed: #komitter)).
-	(#jpg -> (self iconNamed: #komitter)).
-	(#gif -> (self iconNamed: #komitter)).
-	(#svg -> (self iconNamed: #komitter))}
+	^ self new
+		  extensions: aCollectionOfExtensions named: aString;
+		  openDialog;
+		  yourself
 ]
 
 { #category : #'class initialization' }
@@ -208,18 +177,17 @@ StFBFileDialogPresenter class >> initialize [
 	Bookmarks := StFBBookmark defaultBookmarks
 ]
 
-{ #category : #'instance creation' }
-StFBFileDialogPresenter class >> open [
-	^ self new
-		openDialogWithSpec;
-		yourself
-]
-
 { #category : #icons }
 StFBFileDialogPresenter class >> textIcons [
 	<icons>
 	^ {(#st -> (self iconNamed: #smallLeftFlush)).
 	(#txt -> (self iconNamed: #smallLeftFlush))}
+]
+
+{ #category : #hooks }
+StFBFileDialogPresenter >> allowsChooseDirectoryIfNoFilename [
+
+	^ false
 ]
 
 { #category : #accessing }
@@ -244,17 +212,21 @@ StFBFileDialogPresenter >> cancelLabel [
 	^ 'Cancel'
 ]
 
+{ #category : #testing }
+StFBFileDialogPresenter >> cancelled [
+
+	^ self withWindowDo: [ :w | w cancelled ]
+]
+
 { #category : #'api - customization' }
 StFBFileDialogPresenter >> columns: aCollectionOfColumns [
 	fileNavigationSystem columns: aCollectionOfColumns 
 ]
 
-{ #category : #utilities }
+{ #category : #actions }
 StFBFileDialogPresenter >> confirm [
- 	 ^self selectedEntry
-		ifNotNil: [ :entry | 
-			okAction cull: entry.
-		 ]
+
+	self withWindowDo: #triggerOkAction
 ]
 
 { #category : #'accessing - ui' }
@@ -263,14 +235,19 @@ StFBFileDialogPresenter >> confirmLabel [
 	^ 'Accept'
 ]
 
+{ #category : #actions }
+StFBFileDialogPresenter >> confirmed [
+
+	okAction cull: self selectedEntry
+]
+
 { #category : #initialization }
 StFBFileDialogPresenter >> connectPresenters [
-	bookmarksTreeTable
-		whenSelectionChangedDo: [ :selection | 
-			selection selectedItem
-				ifNotNil: [ :selectedItem | 
-					selectedItem isComposite
-						ifFalse: [ fileNavigationSystem openFolder: selectedItem location ] ] ]
+
+	bookmarksTreeTable whenSelectionChangedDo: [ :selection | 
+		selection selectedItem ifNotNil: [ :selectedItem | 
+			selectedItem isComposite ifFalse: [ 
+				fileNavigationSystem openFolder: selectedItem location ] ] ]
 ]
 
 { #category : #accessing }
@@ -280,12 +257,28 @@ StFBFileDialogPresenter >> currentDirectory [
 
 { #category : #utilities }
 StFBFileDialogPresenter >> defaultFolder [
+
 	^ FileLocator imageDirectory asFileReference
 ]
 
 { #category : #'api - customization' }
 StFBFileDialogPresenter >> defaultFolder: aPath [
 	fileNavigationSystem defaultFolder: aPath
+]
+
+{ #category : #accessing }
+StFBFileDialogPresenter >> extensions: aCollectionOfExtensions [
+
+	self filter:
+		(StFBCustomExtensionsFilter extensions: aCollectionOfExtensions)
+]
+
+{ #category : #accessing }
+StFBFileDialogPresenter >> extensions: aCollectionOfExtensions named: aString [
+
+	self filter: (StFBCustomExtensionsFilter
+			 extensions: aCollectionOfExtensions
+			 basename: aString)
 ]
 
 { #category : #accessing }
@@ -298,32 +291,32 @@ StFBFileDialogPresenter >> fileReferenceTable [
 	^ fileNavigationSystem fileReferenceTable
 ]
 
-{ #category : #'api - customization' }
-StFBFileDialogPresenter >> filtersCustomization: aCollection [ 
-	fileNavigationSystem filtersCustomization: aCollection
+{ #category : #accessing }
+StFBFileDialogPresenter >> filter: aStFBFilter [
+
+	filter := aStFBFilter.
+	fileNavigationSystem ifNotNil: [ fileNavigationSystem filter: filter ]
 ]
 
 { #category : #utilities }
 StFBFileDialogPresenter >> iconFor: anEntry [
+
 	| ext |
-	anEntry isDirectory
-		ifTrue: [ ^ self iconNamed: #open ].
+	anEntry isDirectory ifTrue: [ ^ self iconNamed: #open ].
 	ext := anEntry extension.
 	^ self class allIcons asDictionary
-		at: ext
-		ifPresent: [ :icon | icon ]
-		ifAbsent: [ self iconNamed: #page ]
-]
-
-{ #category : #'accessing - ui' }
-StFBFileDialogPresenter >> initialTitle [
-	^ self subclassResponsibility
+		  at: ext
+		  ifPresent: [ :icon | icon ]
+		  ifAbsent: [ self iconNamed: #page ]
 ]
 
 { #category : #initialization }
 StFBFileDialogPresenter >> initialize [
+
 	bookmarks := Bookmarks.
 	okAction := OkAction.
+
+	filter := StFBVisibleFilter new.
 	super initialize
 ]
 
@@ -333,9 +326,13 @@ StFBFileDialogPresenter >> initializeBookmarksTreeTable [
 	bookmarksTreeTable
 		hideColumnHeaders;
 		addColumn: (SpCompositeTableColumn new
-			addColumn: ((SpImageTableColumn evaluated: [ :each | each icon ]) beNotExpandable);
-			addColumn: (SpStringTableColumn evaluated: [ :fdGroupBookMark | fdGroupBookMark name ]);
-			yourself);
+				 addColumn:
+					 (SpImageTableColumn evaluated: [ :each | each icon ])
+						 beNotExpandable;
+				 addColumn:
+					 (SpStringTableColumn evaluated: [ :groupBookMark | 
+							  groupBookMark name ]);
+				 yourself);
 		roots: bookmarks;
 		children: #children;
 		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'Menu' ];
@@ -343,28 +340,51 @@ StFBFileDialogPresenter >> initializeBookmarksTreeTable [
 ]
 
 { #category : #initialization }
+StFBFileDialogPresenter >> initializeConfirmButton: aButton [
+
+	| buttonEnableBlock |
+	self allowsChooseDirectoryIfNoFilename ifTrue: [ ^ self ].
+	buttonEnableBlock := [ :newText | 
+	                     aButton enabled: newText trimmed isNotEmpty ].
+	fileNavigationSystem nameText whenTextChangedDo: buttonEnableBlock.
+	buttonEnableBlock value: fileNavigationSystem nameText text
+]
+
+{ #category : #initialization }
 StFBFileDialogPresenter >> initializeDialogWindow: aDialogWindowPresenter [
-	
+
+	| confirmButton |
 	aDialogWindowPresenter
-		title: self initialTitle;
-		initialExtent: 900@900;
-		okAction: [ self confirm ];
-		cancelAction: [ self delete ];
-		addButton: self cancelLabel do: [ :presenter | 
-			presenter triggerCancelAction.
-			presenter close ];		
-		addButton: self confirmLabel do: [ :presenter | 
-			presenter triggerOkAction.
-			presenter close ]
+		okAction: [ 
+			self selectedEntry ifNotNil: [ :entry | 
+					aDialogWindowPresenter beOk.
+					aDialogWindowPresenter close.
+					self confirmed ] ];
+		cancelAction: #close;
+		addButton: self cancelLabel do: #triggerCancelAction.
+	confirmButton := aDialogWindowPresenter
+		                 addButton: self confirmLabel
+		                 do: #triggerOkAction.
+	self initializeConfirmButton: confirmButton
 ]
 
 { #category : #initialization }
 StFBFileDialogPresenter >> initializePresenters [
 
 	bookmarksTreeTable := self newTreeTable.
-	fileNavigationSystem := self instantiate: StFBFileNavigationSystemPresenter.
+	fileNavigationSystem := self instantiate:
+		                        StFBFileNavigationSystemPresenter.
+	fileNavigationSystem filter: filter.
 
 	self initializeBookmarksTreeTable
+]
+
+{ #category : #initialization }
+StFBFileDialogPresenter >> initializeWindow: aWindowPresenter [
+
+	aWindowPresenter
+		title: self title;
+		initialExtent: 1050 @ 750
 ]
 
 { #category : #accessing }
@@ -383,6 +403,19 @@ StFBFileDialogPresenter >> okAction: aOneArgBlock [
 	okAction := aOneArgBlock
 ]
 
+{ #category : #opening }
+StFBFileDialogPresenter >> open [
+
+	^ self openDialog
+]
+
+{ #category : #opening }
+StFBFileDialogPresenter >> openModal [
+
+	super openModal cancelled ifTrue: [ ^ nil ].
+	^ self selectedEntry
+]
+
 { #category : #'api - customization' }
 StFBFileDialogPresenter >> previewer: aPreviewer [ 
 	fileNavigationSystem previewer: aPreviewer
@@ -390,9 +423,10 @@ StFBFileDialogPresenter >> previewer: aPreviewer [
 
 { #category : #utilities }
 StFBFileDialogPresenter >> selectFile: aFile [
-	fileNavigationSystem selectedEntry = aFile
-		ifFalse: [ fileNavigationSystem fileReferenceTable
-				selectIndex: (fileNavigationSystem fileReferenceTable items indexOf: aFile) ].
+
+	fileNavigationSystem selectedEntry = aFile ifFalse: [ 
+		fileNavigationSystem fileReferenceTable selectIndex:
+			(fileNavigationSystem fileReferenceTable items indexOf: aFile) ].
 	fileNavigationSystem nameText text: aFile basename
 ]
 
@@ -403,10 +437,30 @@ StFBFileDialogPresenter >> selectedBookMark [
 
 { #category : #accessing }
 StFBFileDialogPresenter >> selectedEntry [
-	^ self subclassResponsibility
+
+	| entry |
+	entry := fileNavigationSystem selectedEntry.
+	(self allowsChooseDirectoryIfNoFilename not and: [ 
+		 entry exists and: [ entry isDirectory ] ]) ifTrue: [ 
+		self inform: 'Only files could be selected (no directories)'.
+		^ nil ].
+	^ entry
 ]
 
-{ #category : #utilities }
-StFBFileDialogPresenter >> selectedFile [
-	^ fileNavigationSystem fileReferenceTable selectedItem
+{ #category : #accessing }
+StFBFileDialogPresenter >> showDirectory: aFileReference [
+
+	fileNavigationSystem currentDirectory: aFileReference
+]
+
+{ #category : #'accessing - ui' }
+StFBFileDialogPresenter >> title [
+
+	^ title ifNil: [ self initialTitle ]
+]
+
+{ #category : #'accessing - ui' }
+StFBFileDialogPresenter >> title: aString [
+
+	title := aString
 ]

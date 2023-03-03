@@ -19,7 +19,7 @@ StClassEntry >> doEvaluate [
 ]
 
 { #category : #accessing }
-StClassEntry >> icon [
+StClassEntry >> iconName [
 
-	^ content systemIcon
+	^ content systemIconName
 ]

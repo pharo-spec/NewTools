@@ -10,6 +10,12 @@ StHaltOnCallCommand class >> defaultDescription [
 	^ 'Halts when this method is called'
 ]
 
+{ #category : #deafult }
+StHaltOnCallCommand class >> defaultIconName [
+
+	^ #smallDebug
+]
+
 { #category : #default }
 StHaltOnCallCommand class >> defaultName [ 
 
