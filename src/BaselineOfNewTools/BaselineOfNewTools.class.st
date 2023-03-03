@@ -76,7 +76,12 @@ BaselineOfNewTools >> baseline: spec [
 			"Fuel"
 			package: 'NewTools-Debugger-Fuel';
 			package: 'NewTools-Debugger-Fuel-Tests' with: [ spec requires: #( 'NewTools-Debugger-Fuel' ) ];
-			package: 'NewTools-Fuel'.
+			package: 'NewTools-Fuel';
+     			"Rewriter Tools"
+			package: 'NewTools-RewriterTools-Backend';
+			package: 'NewTools-RewriterTools' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
+			package: 'NewTools-RewriterTools-Backend-Tests' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
+			package: 'NewTools-RewriterTools-Tests' with: [ spec requires: #('NewTools-RewriterTools') ].
 
 		spec
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Morphic' );
@@ -86,16 +91,16 @@ BaselineOfNewTools >> baseline: spec [
 					 	'Core' 
 					 	'Inspector' 
 					 	'NewTools-Debugger-Commands'
-				    	'NewTools-Debugger-Extensions' 
+				    		'NewTools-Debugger-Extensions' 
 					 	'NewTools-Debugger'
-				    	'NewTools-ObjectCentricBreakpoints'
-				    	'NewTools-Sindarin-Tools' 
+				    		'NewTools-ObjectCentricBreakpoints'
+				    		'NewTools-Sindarin-Tools' 
 					 	'NewTools-Sindarin-Commands'
-				    	'NewTools-Sindarin-Commands-Tests'
-				    	'NewTools-Debugger-Breakpoints-Tools'
-				    	'NewTools-Debugger-Tests' 
+				    		'NewTools-Sindarin-Commands-Tests'
+				    		'NewTools-Debugger-Breakpoints-Tools'
+				    		'NewTools-Debugger-Tests' 
 					 	'NewTools-Debugger-Fuel'
-				    	'NewTools-Debugger-Fuel-Tests' 
+				    		'NewTools-Debugger-Fuel-Tests' 
 					 	'NewTools-Fuel' );
 			group: 'Spotter' with: #( 
 						'NewTools-Morphic-Spotter' 
@@ -121,6 +126,11 @@ BaselineOfNewTools >> baseline: spec [
 			group: #FileBrowser with: #( 
 						'NewTools-FileBrowser' 
 						'NewTools-FileBrowser-Tests' );
+      			group: #RewriterTools with: #(
+				    		'NewTools-RewriterTools-Backend'
+				    		'NewTools-RewriterTools'
+				    		'NewTools-RewriterTools-Backend-Tests'
+				    		'NewTools-RewriterTools-Tests' );
 			group: 'default' with: #( 
 						'Playground' 
 						'Inspector' 
@@ -130,7 +140,8 @@ BaselineOfNewTools >> baseline: spec [
 						'ChangeSorter' 
 						'FontChooser' 
 						'Methods'
-				   		'Spotter' ) ]
+				   		'Spotter'
+            					'RewriterTools') ]
 ]
 
 { #category : #'external projects' }
