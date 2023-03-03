@@ -101,7 +101,8 @@ BaselineOfNewTools >> baseline: spec [
 				    		'NewTools-Debugger-Tests' 
 					 	'NewTools-Debugger-Fuel'
 				    		'NewTools-Debugger-Fuel-Tests' 
-					 	'NewTools-Fuel' );
+					 	'NewTools-Fuel'
+						'Chest' );
 			group: 'Spotter' with: #( 
 						'NewTools-Morphic-Spotter' 
 						'NewTools-Spotter-Processors'
