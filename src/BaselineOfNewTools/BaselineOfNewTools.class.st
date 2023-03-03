@@ -136,11 +136,11 @@ BaselineOfNewTools >> baseline: spec [
 { #category : #'external projects' }
 BaselineOfNewTools >> chest: spec [
 
-	spec baseline: 'Chest' with: [ 
+	spec baseline: 'Chest' with: [
 		spec
-			repository: (self packageRepositoryURL ifEmpty: [ 
+			repository: (self packageRepositoryURL ifEmpty: [
 						 'github://pharo-spec/Chest:v0.4.1' ]);
-			loads: 'default' ]
+			loads: #common ]
 ]
 
 { #category : #'external projects' }
