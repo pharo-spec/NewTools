@@ -150,8 +150,8 @@ BaselineOfNewTools >> chest: spec [
 	spec baseline: 'Chest' with: [
 		spec
 			repository: (self packageRepositoryURL ifEmpty: [
-						 'github://pharo-spec/Chest:v0.4.1' ]);
-			loads: #common ]
+						 'github://pharo-spec/Chest:v0.4.2' ]);
+			loads: 'default' ]
 ]
 
 { #category : #'external projects' }
