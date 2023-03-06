@@ -12,7 +12,7 @@ Class {
 
 { #category : #serializing }
 FLDebuggerStackSerializer class >> serializeStackFromContext: aContext [
-	self newDefault serializeStackFromContext: aContext
+	self new serializeStackFromContext: aContext
 ]
 
 { #category : #serializing }
