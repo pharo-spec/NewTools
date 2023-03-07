@@ -101,8 +101,7 @@ BaselineOfNewTools >> baseline: spec [
 				    		'NewTools-Debugger-Tests' 
 					 	'NewTools-Debugger-Fuel'
 				    		'NewTools-Debugger-Fuel-Tests' 
-					 	'NewTools-Fuel'
-						'Chest' );
+					 	'NewTools-Fuel' );
 			group: 'Spotter' with: #( 
 						'NewTools-Morphic-Spotter' 
 						'NewTools-Spotter-Processors'
@@ -148,10 +147,10 @@ BaselineOfNewTools >> baseline: spec [
 { #category : #'external projects' }
 BaselineOfNewTools >> chest: spec [
 
-	spec baseline: 'Chest' with: [
+	spec baseline: 'Chest' with: [ 
 		spec
-			repository: (self packageRepositoryURL ifEmpty: [
-						 'github://pharo-spec/Chest:v0.4.2' ]);
+			repository: (self packageRepositoryURL ifEmpty: [ 
+						 'github://pharo-spec/Chest:v0.4.1' ]);
 			loads: 'default' ]
 ]
 
