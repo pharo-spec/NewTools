@@ -47,7 +47,6 @@ StRawInspection >> selectedPageName [
 StRawInspection >> updateNodesFromScope: oldASTScope to: newASTScope [
 
 	| nodes newTemps oldTemps tempsToRemove tempsToAdd |
-	1 haltOnce.
 	oldTemps := oldASTScope allTemps.
 	newTemps := newASTScope allTemps.
 	tempsToRemove := oldTemps difference: newTemps.
