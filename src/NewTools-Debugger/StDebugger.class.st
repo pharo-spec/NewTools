@@ -1334,6 +1334,7 @@ StDebugger >> updatePresenter [
 
 { #category : #'updating - actions' }
 StDebugger >> updateRestart [
+
 	self updateStep
 ]
 

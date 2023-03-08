@@ -285,11 +285,14 @@ StDebuggerActionModel >> proceedDebugSession [
 
 { #category : #actions }
 StDebuggerActionModel >> recompileMethodTo: aString inContext: aContext notifying: aNotifyer [
+
 	aContext ifNil: [ ^ self ].
 	self session
 		recompileMethodTo: aString
 		inContext: aContext
-		notifying: aNotifyer
+		notifying: aNotifyer.
+	previousASTScope := (aContext compiledCode sourceNodeForPC:
+		                     aContext pc) scope
 ]
 
 { #category : #context }
@@ -303,7 +306,10 @@ StDebuggerActionModel >> referenceContext [
 
 { #category : #'debug - execution' }
 StDebuggerActionModel >> restartContext: aContext [
+
 	self session restart: aContext.
+	previousASTScope := (aContext compiledCode sourceNodeForPC:
+		                     aContext pc) scope.
 	self updateTopContext
 ]
 
