@@ -307,9 +307,9 @@ StDebuggerActionModel >> referenceContext [
 { #category : #'debug - execution' }
 StDebuggerActionModel >> restartContext: aContext [
 
-	self session restart: aContext.
 	previousASTScope := (aContext compiledCode sourceNodeForPC:
 		                     aContext pc) scope.
+	self session restart: aContext.
 	self updateTopContext
 ]
 
