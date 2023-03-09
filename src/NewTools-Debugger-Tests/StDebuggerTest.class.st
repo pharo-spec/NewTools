@@ -965,7 +965,7 @@ StDebuggerTest >> testUpdateExtensionSubscription [
 		identicalTo: dbg.
 	self
 		assert: announcementSubscriptions last action selector
-		identicalTo: #updateExtensions
+		identicalTo: #updateExtensionsFromAnnouncement:
 ]
 
 { #category : #'tests - receiver inspector' }

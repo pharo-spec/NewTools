@@ -623,14 +623,18 @@ StDebugger >> initialExtent [
 
 { #category : #initialization }
 StDebugger >> initialize [
+
 	super initialize.
-	self debuggerActionModel updateContextPredicate.			
+	self debuggerActionModel updateContextPredicate.
 	self setSessionHolderSubscriptions.
 	self forceSessionUpdate.
 	self subscribeToMethodAddedAnnouncement.
-	SystemAnnouncer uniqueInstance weak when: StDebuggerExtensionActivationToggle send: #updateExtensions to: self.
-	
-	programmaticallyClosed := false.
+	SystemAnnouncer uniqueInstance weak
+		when: StDebuggerExtensionActivationToggle
+		send: #updateExtensionsFromAnnouncement:
+		to: self.
+
+	programmaticallyClosed := false
 ]
 
 { #category : #initialization }
@@ -1303,6 +1307,48 @@ StDebugger >> updateExtensions [
 { #category : #'updating - widgets' }
 StDebugger >> updateExtensionsFrom: newSession [
 	self extensionTools do:[:tool| tool updatePresenter]
+]
+
+{ #category : #initialization }
+StDebugger >> updateExtensionsFromAnnouncement: aStDebuggerToggleAnnouncement [
+
+	| extensionToggled |
+	extensionToggled := aStDebuggerToggleAnnouncement
+		                    debuggerExtensionClass.
+
+	"If no extension was activated, we instantiate the page for the activated extension and we change the stack and code layout"
+	self extensionTools ifEmpty: [
+		extensionToolsNotebook pages:
+			{ (self instantiateExtensionToolsPage: extensionToggled) }
+				asOrderedCollection.
+		extensionToolsNotebook selectPageIndex: 1.
+		stackAndCodeContainer := self stackAndCodeWithExtensionsLayout.
+		self layout: self defaultLayout.
+		^ self ].
+
+	"Else, if the extension was not activated and now is, we instantiate the page for the activated extension, and adds it to the existing pages"
+	
+	extensionToggled showInDebugger ifTrue: [
+		1 haltOnce.
+		extensionToolsNotebook pages: ((extensionToolsNotebook pages
+				  add: (self instantiateExtensionToolsPage: extensionToggled);
+				  yourself) asSortedCollection: [ :s1 :s2 |
+				 s1 presenterProvider value displayOrder
+				 <= s2 presenterProvider value displayOrder ]).
+		^ self ].
+
+	"Else, the extension was activated and now isn't anymore. In this case, we remove the corresponding page. If there isn't any activated extension left, we change the stackAndCode layout"
+	extensionToolsNotebook pages: ((extensionToolsNotebook pages
+			 removeAllSuchThat: [ :page |
+				 page presenterProvider value class = extensionToggled ];
+			 yourself) asSortedCollection: [ :s1 :s2 |
+				  s1 presenterProvider value displayOrder
+				  <= s2 presenterProvider value displayOrder ]).
+	extensionTools removeAllSuchThat: [ :extensionInstance |
+		extensionInstance class = extensionToggled ].
+	extensionTools ifEmpty: [
+		stackAndCodeContainer := self stackAndCodeLayout ].
+	self layout: self defaultLayout
 ]
 
 { #category : #'updating - widgets' }
