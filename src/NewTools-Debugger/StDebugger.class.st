@@ -98,14 +98,10 @@ Class {
 }
 
 { #category : #accessing }
-StDebugger class >> activateDebuggerExtensions [
-	^ ActivateDebuggerExtensions
-		ifNil: [ ActivateDebuggerExtensions := true ]
-]
+StDebugger class >> activatedDebuggerExtensions [
 
-{ #category : #accessing }
-StDebugger class >> activateDebuggerExtensions: anObject [
-	ActivateDebuggerExtensions := anObject
+	^ self extensionToolsClasses select: [ :extension |
+		  extension showInDebugger ]
 ]
 
 { #category : #commands }
@@ -230,8 +226,7 @@ StDebugger class >> taskbarIconName [
 { #category : #'tools registry' }
 StDebugger class >> usesExtensions [
 
-	^ self activateDebuggerExtensions and: [ 
-		  self hasAnyActivatedExtension: self extensionToolsClasses ]
+	^ self hasAnyActivatedExtension: self extensionToolsClasses
 ]
 
 { #category : #'presenter - code' }

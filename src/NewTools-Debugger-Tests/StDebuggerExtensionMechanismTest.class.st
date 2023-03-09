@@ -3,7 +3,7 @@ Class {
 	#superclass : #TestCase,
 	#instVars : [
 		'debugger',
-		'oldExtensionActivation'
+		'oldActivatedExtensions'
 	],
 	#category : #'NewTools-Debugger-Tests-Presenters'
 }
@@ -22,15 +22,21 @@ StDebuggerExtensionMechanismTest >> debuggerClass [
 StDebuggerExtensionMechanismTest >> setUp [
 
 	super setUp.
-	oldExtensionActivation := self debuggerClass activateDebuggerExtensions.
+	oldActivatedExtensions := self debuggerClass activatedDebuggerExtensions.
 	StDebuggerExtensionGeneratorForTests generateTestClass
 ]
 
 { #category : #running }
 StDebuggerExtensionMechanismTest >> tearDown [
 
+	| allDebuggerExtensions |
 	StDebuggerExtensionGeneratorForTests removeTestClass.
-	self debuggerClass activateDebuggerExtensions: oldExtensionActivation.
+	allDebuggerExtensions := StDebugger extensionToolsClasses.
+	allDebuggerExtensions do: [ :extension |
+		| wasActivated |
+		wasActivated := oldActivatedExtensions includes: extension.
+		extension showInDebugger = wasActivated ifFalse: [
+			extension showInDebugger: wasActivated ] ].
 	super tearDown
 ]
 
@@ -77,11 +83,22 @@ StDebuggerExtensionMechanismTest >> testRegisterExtensionTool [
 
 { #category : #'tests - extensions' }
 StDebuggerExtensionMechanismTest >> testUsesExtensions [
+
 	| testClass |
-	testClass := StDebuggerExtensionGeneratorForTests testClass.	
+	testClass := StDebuggerExtensionGeneratorForTests testClass.
 	testClass showInDebugger: true.
-	self debuggerClass activateDebuggerExtensions: false.
-	self deny: self debuggerClass activatedExtensions.
-	self debuggerClass activateDebuggerExtensions: true.
-	self assert: self debuggerClass activatedExtensions
+	self debuggerClass extensionToolsClasses do: [ :extension |
+		extension showInDebugger: false ].
+
+	self assertEmpty: self debuggerClass activatedDebuggerExtensions.
+	self deny: self debuggerClass usesExtensions.
+	self debuggerClass extensionToolsClasses ifNotEmpty: [
+		| activatedExtension |
+		activatedExtension := self debuggerClass extensionToolsClasses
+			                      asOrderedCollection first.
+		activatedExtension showInDebugger: true.
+		self
+			assertCollection: self debuggerClass activatedDebuggerExtensions
+			hasSameElements: { activatedExtension }.
+		self assert: self debuggerClass usesExtensions ]
 ]

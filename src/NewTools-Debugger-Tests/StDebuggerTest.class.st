@@ -951,20 +951,20 @@ StDebuggerTest >> testUnsavedCodeChangesFor [
 { #category : #tests }
 StDebuggerTest >> testUpdateExtensionSubscription [
 
-	| announcementSubscriptions |
-	self assertEmpty:
-		self subscriptionsForStDebuggerExtensionActivationToggle.
+	| announcementSubscriptions oldAnnouncementSubscriptions |
+	oldAnnouncementSubscriptions := self subscriptionsForStDebuggerExtensionActivationToggle.
 
 	self debugger session: session.
 	self initializedDebugger.
 	announcementSubscriptions := self
 		                             subscriptionsForStDebuggerExtensionActivationToggle.
-	self assert: announcementSubscriptions size equals: 1.
+	self assert: announcementSubscriptions size equals: oldAnnouncementSubscriptions size + 1.
+	self assertCollection: announcementSubscriptions  includesAll: oldAnnouncementSubscriptions.
 	self
-		assert: announcementSubscriptions first subscriber
+		assert: announcementSubscriptions last subscriber
 		identicalTo: dbg.
 	self
-		assert: announcementSubscriptions first action selector
+		assert: announcementSubscriptions last action selector
 		identicalTo: #updateExtensions
 ]
 
