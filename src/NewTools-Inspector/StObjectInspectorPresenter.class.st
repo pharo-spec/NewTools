@@ -71,7 +71,7 @@ StObjectInspectorPresenter class >> openOn: anObject [
 StObjectInspectorPresenter >> activate: aSelection [
 
 	activationBlock ifNil: [ ^ self ].
-	activationBlock cull: aSelection
+	activationBlock cull: (SpActivatedSelection newValue: aSelection)
 ]
 
 { #category : #accessing }
