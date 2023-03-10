@@ -7,6 +7,12 @@ StDebugger >> inspector [
 ]
 
 { #category : #'*NewTools-Debugger-Tests' }
+StDebugger >> stackAndCodeContainer [
+
+	^ stackAndCodeContainer
+]
+
+{ #category : #'*NewTools-Debugger-Tests' }
 StDebugger >> toolbarCommandGroup [
 
 	^ toolbarCommandGroup

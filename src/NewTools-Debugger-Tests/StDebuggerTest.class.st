@@ -89,7 +89,7 @@ StDebuggerTest >> setUp [
 	self debuggerClass fastTDD: true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 StDebuggerTest >> subscriptionsForStDebuggerExtensionActivationToggle [
 
 	| subscriptions |

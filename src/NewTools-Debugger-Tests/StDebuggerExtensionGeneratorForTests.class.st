@@ -11,12 +11,16 @@ Class {
 { #category : #running }
 StDebuggerExtensionGeneratorForTests class >> generateTestClass [
 
-	Object
+	SpPresenter
 		subclass: #TStDebuggerExtensionTestClass
 		uses: TStDebuggerExtension
 		instanceVariableNames: ''
 		classVariableNames: ''
-		package: 'NewTools-Debugger-Tests-Model'
+		package: 'NewTools-Debugger-Tests-Model'.
+	Smalltalk compiler
+		class: (Smalltalk at: #TStDebuggerExtensionTestClass) class;
+		source: 'defaultLayout ^ SpBoxLayout newVertical';
+		compile
 ]
 
 { #category : #running }

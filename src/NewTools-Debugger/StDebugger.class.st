@@ -152,7 +152,9 @@ StDebugger class >> defaultDebuggerRank [
 
 { #category : #'tools registry' }
 StDebugger class >> extensionToolsClasses [
-	^TStDebuggerExtension users
+
+	^ TStDebuggerExtension users reject: [ :extensionClass |
+		  extensionClass isOnlyForTests ]
 ]
 
 { #category : #settings }
@@ -579,6 +581,21 @@ StDebugger >> expandStackIfLastItemIsSelected [
 	stackTable selectIndex: selection selectedIndex
 ]
 
+{ #category : #'accessing - widgets' }
+StDebugger >> extensionToolNotebook [
+
+	^ extensionToolsNotebook
+]
+
+{ #category : #extensions }
+StDebugger >> extensionToolUpdateBlock [
+
+	^ [ :newPages |
+	  newPages asSortedCollection: [ :s1 :s2 |
+		  s1 presenterProvider value displayOrder
+		  <= s2 presenterProvider value displayOrder ] ]
+]
+
 { #category : #extensions }
 StDebugger >> extensionTools [
 	^ extensionTools ifNil: [ extensionTools := OrderedCollection new ]
@@ -658,11 +675,17 @@ StDebugger >> initializeExtensionTools [
 
 	| sortedToolClasses pages |
 	extensionToolsNotebook := self newNotebook.
-
+	extensionToolsNotebook whenPagesChangedDo:
+		self extensionToolUpdateBlock.
+	extensionToolsNotebook whenPageAddedDo: [ :newPage |
+		self extensionToolUpdateBlock cull: extensionToolsNotebook pages ].
 	self class usesExtensions ifFalse: [ ^ self ].
-	sortedToolClasses := SortedCollection new sortBlock: [ :s1 :s2 | s1 displayOrder <= s2 displayOrder ].
-	sortedToolClasses addAll: (self class extensionToolsClasses select: [ :s | s showInDebugger ]).
-	pages := sortedToolClasses collect: [ :toolClass | 
+
+	sortedToolClasses := SortedCollection new sortBlock: [ :s1 :s2 |
+		                     s1 displayOrder <= s2 displayOrder ].
+	sortedToolClasses addAll:
+		(self class extensionToolsClasses select: [ :s | s showInDebugger ]).
+	pages := sortedToolClasses collect: [ :toolClass |
 		         self instantiateExtensionToolsPage: toolClass ].
 	extensionToolsNotebook pages: pages
 ]
@@ -1298,12 +1321,6 @@ StDebugger >> updateContextChanged [
 	self updateStep
 ]
 
-{ #category : #initialization }
-StDebugger >> updateExtensions [
-
-	'extension toggled' crTrace 
-]
-
 { #category : #'updating - widgets' }
 StDebugger >> updateExtensionsFrom: newSession [
 	self extensionTools do:[:tool| tool updatePresenter]
@@ -1327,23 +1344,17 @@ StDebugger >> updateExtensionsFromAnnouncement: aStDebuggerToggleAnnouncement [
 		^ self ].
 
 	"Else, if the extension was not activated and now is, we instantiate the page for the activated extension, and adds it to the existing pages"
-	
+
 	extensionToggled showInDebugger ifTrue: [
-		1 haltOnce.
-		extensionToolsNotebook pages: ((extensionToolsNotebook pages
-				  add: (self instantiateExtensionToolsPage: extensionToggled);
-				  yourself) asSortedCollection: [ :s1 :s2 |
-				 s1 presenterProvider value displayOrder
-				 <= s2 presenterProvider value displayOrder ]).
+		extensionToolsNotebook addPage:
+			(self instantiateExtensionToolsPage: extensionToggled).
 		^ self ].
 
 	"Else, the extension was activated and now isn't anymore. In this case, we remove the corresponding page. If there isn't any activated extension left, we change the stackAndCode layout"
-	extensionToolsNotebook pages: ((extensionToolsNotebook pages
+	extensionToolsNotebook pages: (extensionToolsNotebook pages
 			 removeAllSuchThat: [ :page |
 				 page presenterProvider value class = extensionToggled ];
-			 yourself) asSortedCollection: [ :s1 :s2 |
-				  s1 presenterProvider value displayOrder
-				  <= s2 presenterProvider value displayOrder ]).
+			 yourself).
 	extensionTools removeAllSuchThat: [ :extensionInstance |
 		extensionInstance class = extensionToggled ].
 	extensionTools ifEmpty: [

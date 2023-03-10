@@ -32,6 +32,12 @@ TStDebuggerExtension classSide >> displayOrder: anInteger [
 	debuggerExtensionDisplayOrder := anInteger
 ]
 
+{ #category : #testing }
+TStDebuggerExtension classSide >> isOnlyForTests [
+
+	^ false
+]
+
 { #category : #'debugger extension' }
 TStDebuggerExtension classSide >> showInDebugger [
 	^showDebuggerExtension ifNil: [showDebuggerExtension := false]

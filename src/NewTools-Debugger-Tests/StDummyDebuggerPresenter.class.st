@@ -6,12 +6,26 @@ The debugger interface itself is tested in the debugger test class.
 Class {
 	#name : #StDummyDebuggerPresenter,
 	#superclass : #SpPresenter,
+	#traits : 'TStDebuggerExtension',
+	#classTraits : 'TStDebuggerExtension classTrait',
 	#instVars : [
 		'tag',
 		'debugger'
 	],
 	#category : #'NewTools-Debugger-Tests-Utils'
 }
+
+{ #category : #'debugger extension' }
+StDummyDebuggerPresenter class >> displayOrder [
+
+	^ 1
+]
+
+{ #category : #testing }
+StDummyDebuggerPresenter class >> isOnlyForTests [
+
+	^ true
+]
 
 { #category : #mocks }
 StDummyDebuggerPresenter >> copyStackToClipboard [
@@ -62,6 +76,12 @@ StDummyDebuggerPresenter >> debuggerLayout [
 StDummyDebuggerPresenter >> defaultLayout [
 
 	^ SpBoxLayout newVertical 
+]
+
+{ #category : #'debugger extension' }
+StDummyDebuggerPresenter >> displayOrder [
+
+	^ self class displayOrder
 ]
 
 { #category : #mocks }
