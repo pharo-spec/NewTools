@@ -9,17 +9,10 @@ Class {
 	#traits : 'TStDebuggerExtension',
 	#classTraits : 'TStDebuggerExtension classTrait',
 	#instVars : [
-		'tag',
-		'debugger'
+		'tag'
 	],
 	#category : #'NewTools-Debugger-Tests-Utils'
 }
-
-{ #category : #'debugger extension' }
-StDummyDebuggerPresenter class >> displayOrder [
-
-	^ 1
-]
 
 { #category : #testing }
 StDummyDebuggerPresenter class >> isOnlyForTests [
@@ -57,31 +50,15 @@ StDummyDebuggerPresenter >> currentContext [
 ]
 
 { #category : #accessing }
-StDummyDebuggerPresenter >> debugger [
-	^debugger
-]
-
-{ #category : #accessing }
 StDummyDebuggerPresenter >> debuggerExtensionToolName [
 	^'Test extendedDebuggingToolTitle'
 	
 ]
 
 { #category : #layout }
-StDummyDebuggerPresenter >> debuggerLayout [
-	^self defaultLayout 
-]
-
-{ #category : #layout }
 StDummyDebuggerPresenter >> defaultLayout [
 
 	^ SpBoxLayout newVertical 
-]
-
-{ #category : #'debugger extension' }
-StDummyDebuggerPresenter >> displayOrder [
-
-	^ self class displayOrder
 ]
 
 { #category : #mocks }
@@ -125,11 +102,6 @@ tag := thisContext method selector.
 StDummyDebuggerPresenter >> selectNextExecutedExpression [
 tag := thisContext method selector.
 ^true
-]
-
-{ #category : #accessing }
-StDummyDebuggerPresenter >> setModelBeforeInitialization: aDebugger [
-	 debugger := aDebugger
 ]
 
 { #category : #mocks }

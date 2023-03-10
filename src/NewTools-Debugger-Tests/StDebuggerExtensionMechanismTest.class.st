@@ -89,7 +89,8 @@ StDebuggerExtensionMechanismTest >> testExtensionToolsClasses [
 
 	self
 		assertCollection: StDebugger extensionToolsClasses
-		equals: TStDebuggerExtension users
+		equals: (TStDebuggerExtension users reject: [ :extension |
+				 extension isOnlyForTests ])
 ]
 
 { #category : #'tests - extensions' }
