@@ -44,6 +44,29 @@ StRawInspection >> selectedPageName [
 ]
 
 { #category : #'*NewTools-Debugger' }
+StRawInspection >> updateNodesFromScope: oldASTScope to: newASTScope [
+
+	| nodes newTemps oldTemps tempsToRemove tempsToAdd |
+	oldTemps := oldASTScope allTemps.
+	newTemps := newASTScope allTemps.
+	tempsToRemove := oldTemps difference: newTemps.
+	tempsToAdd := newTemps difference: oldTemps.
+	nodes := self attributeTable roots.
+
+	nodes removeAllSuchThat: [ :node |
+		node class = StInspectorTempNode and: [
+			tempsToRemove includes: node tempVariable ] ].
+	tempsToAdd do: [ :temp |
+		nodes add:
+			((StInspectorTempNode hostObject:
+					  self model inspectedObject context)
+				 tempVariable: temp;
+				 yourself) ].
+
+	self attributeTable roots: nodes
+]
+
+{ #category : #'*NewTools-Debugger' }
 StRawInspection >> variableTagColumn [
 
 	^  SpLinkTableColumn new 

@@ -477,7 +477,7 @@ StSpotter >> initializeDialogWindow: aDialogWindowPresenter [
 { #category : #initialization }
 StSpotter >> initializeLayout [
 	| contentsLayout |
-	
+
 	self layout: (SpBoxLayout newTopToBottom
 		borderWidth: 10;
 		spacing: 5;
@@ -488,56 +488,55 @@ StSpotter >> initializeLayout [
 				spacing: 5;
 				add: resultList;
 				yourself);
-			addOverlay: (spinner := self newSpinner) 
+			addOverlay: (spinner := self newSpinner)
 				withConstraints: [ :c | c vAlignCenter; hAlignCenter ];
 			yourself);
 		yourself).
 
 	self isShowingPreview ifTrue: [ self addPreviewPanelTo: contentsLayout ].
-	self isShowingTips ifTrue: [ self addTipsPanel ].
-
-	self addStyle: 'stSpotter'.
-	spinner hide.
+	self isShowingTips ifTrue: [ self addTipsPanel ]
 ]
 
 { #category : #initialization }
 StSpotter >> initializePresenters [
-	
+
 	resultList := self newComponentList.
 	searchText := self newSearchInput.
-	
+
 	self initializeLayout.
-	
+
+	self addStyle: 'stSpotter'.
+	spinner hide.
+
 	resultList
-		addStyle: 'stSpotterList';		
-		bindKeyCombination: Character arrowUp asKeyCombination 
+		addStyle: 'stSpotterList';
+		bindKeyCombination: Character arrowUp asKeyCombination
 			toAction: [ :target :widget :event |
 				self transferFocusToSearchTextArrowUp.
 				event wasHandled: false ];
-		bindKeyCombination: Character arrowDown asKeyCombination 
-			toAction: [ :target :widget :event | 
+		bindKeyCombination: Character arrowDown asKeyCombination
+			toAction: [ :target :widget :event |
 				self transferFocusToSearchTextArrowDown.
 				event wasHandled: false ];
-		bindKeyCombination: Character arrowRight asKeyCombination 
+		bindKeyCombination: Character arrowRight asKeyCombination
 			toAction: [ self tryDiveIn ];
-		bindKeyCombination: Character arrowLeft asKeyCombination 
-			toAction: [ self tryDiveOut ]; 
-		whenActivatedDo: [ :selection | 
+		bindKeyCombination: Character arrowLeft asKeyCombination
+			toAction: [ self tryDiveOut ];
+		whenActivatedDo: [ :selection |
 			self activate: selection selectedItem ].
-	resultList eventHandler 
+	resultList eventHandler
 		whenKeyDownDo: [ :anEvent | self handleKeyEvent: anEvent ].
 
 	searchText
 		placeholder: 'Search...';
 		addStyle: 'stSpotterSearch';
 		whenTextChangedDo: [ :aString | self updateSearch: aString ];
-		bindKeyCombination: Character arrowDown asKeyCombination 
+		bindKeyCombination: Character arrowDown asKeyCombination
 			toAction: [ self transferFocusToResultList ];
-		bindKeyCombination: Character arrowUp asKeyCombination 
+		bindKeyCombination: Character arrowUp asKeyCombination
 			toAction: [ self transferFocusToResultListAtLast ];
-		bindKeyCombination: Character cr asKeyCombination 
-			toAction: [ self maybeActivateFirstElementOfResultList ].
-	
+		bindKeyCombination: Character cr asKeyCombination
+			toAction: [ self maybeActivateFirstElementOfResultList ]
 ]
 
 { #category : #initialization }

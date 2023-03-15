@@ -294,6 +294,45 @@ StDebuggerTest >> testContextTempVarList [
 ]
 
 { #category : #'tests - context inspector' }
+StDebuggerTest >> testContextTempVarListUpdatesTempsWhenEnteringOrLeavingInlinedBlocks [
+
+	| contextItems inspectorTable newContextItems |
+	dbg := self debuggerOn: session.
+	inspectorTable := dbg inspector getRawInspectorPresenterOrNil
+		                  attributeTable.
+
+	"We stop on the node `i = 1` node"
+	3 timesRepeat: [ dbg stepOver ].
+
+	contextItems := inspectorTable roots copy.
+	self assert: contextItems size equals: 8.
+
+	"We enter inlined block"
+	dbg stepOver.
+
+	newContextItems := inspectorTable roots.
+
+	self assert: newContextItems size equals: 9.
+
+	1 to: 8 do: [ :i |
+		self
+			assert: (newContextItems at: i)
+			identicalTo: (contextItems at: i) ].
+
+	self assert: (newContextItems at: 9) tempVariable isTempVariable.
+	self assert: (newContextItems at: 9) tempVariable name equals: 'j'.
+
+	"We leave inlined block"
+	2 timesRepeat: [ dbg stepOver ].
+
+	self assert: newContextItems size equals: 8.
+	1 to: 8 do: [ :i |
+		self
+			assert: (newContextItems at: i)
+			identicalTo: (contextItems at: i) ]
+]
+
+{ #category : #'tests - context inspector' }
 StDebuggerTest >> testContextUnchangedAfterStepOver [
 	| currentContext |
 	
