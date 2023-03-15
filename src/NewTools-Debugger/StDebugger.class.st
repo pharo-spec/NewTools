@@ -646,10 +646,7 @@ StDebugger >> initialize [
 	self setSessionHolderSubscriptions.
 	self forceSessionUpdate.
 	self subscribeToMethodAddedAnnouncement.
-	SystemAnnouncer uniqueInstance weak
-		when: StDebuggerExtensionActivationToggle
-		send: #updateExtensionsFromAnnouncement:
-		to: self.
+	self susbcribeToExtensionToggleAnnouncement.
 
 	programmaticallyClosed := false
 ]
@@ -1231,6 +1228,15 @@ StDebugger >> subscribeToMethodAddedAnnouncement [
 	SystemAnnouncer uniqueInstance weak
 		when: MethodAdded
 		send: #updateAfterMethodAdded
+		to: self
+]
+
+{ #category : #'system subscriptions' }
+StDebugger >> susbcribeToExtensionToggleAnnouncement [
+
+	SystemAnnouncer uniqueInstance weak
+		when: StDebuggerExtensionActivationToggle
+		send: #updateExtensionsFromAnnouncement:
 		to: self
 ]
 

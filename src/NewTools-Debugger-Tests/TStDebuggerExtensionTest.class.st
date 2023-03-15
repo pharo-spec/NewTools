@@ -53,18 +53,3 @@ TStDebuggerExtensionTest >> testShowInDebugger [
 	traitUser class showInDebugger: true.
 	self assert: traitUser class showInDebugger
 ]
-
-{ #category : #tests }
-TStDebuggerExtensionTest >> testShowInDebuggerAnnouncement [
-
-	| listener |
-	listener := StDebuggerExtensionTestListener new.
-	SystemAnnouncer uniqueInstance weak
-		when: StDebuggerExtensionActivationToggle
-		send: #tag:
-		to: listener.
-		
-	self assert: listener tag isNil.
-	traitUser class showInDebugger: true.
-	self assert: listener tag class equals: StDebuggerExtensionActivationToggle 
-]

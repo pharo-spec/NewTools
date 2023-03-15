@@ -29,13 +29,15 @@ StDebuggerExtensionMechanismTest >> setUp [
 { #category : #running }
 StDebuggerExtensionMechanismTest >> tearDown [
 
-	| allDebuggerExtensions |
+	| allDebuggerExtensions testClass |
+	testClass := StDebuggerExtensionGeneratorForTests testClass.
 	allDebuggerExtensions := StDebugger extensionToolsClasses.
 	allDebuggerExtensions do: [ :extension |
 		| wasActivated |
 		wasActivated := oldActivatedExtensions includes: extension.
 		extension showInDebugger = wasActivated ifFalse: [
 			extension showInDebugger: wasActivated ] ].
+	testClass showInDebugger: false.
 	StDummyDebuggerPresenter showInDebugger: false.
 	super tearDown
 ]
@@ -102,8 +104,7 @@ StDebuggerExtensionMechanismTest >> testHasAnyActivatedExtensions [
 		(self debuggerClass hasAnyActivatedExtension: { testClass }).
 	testClass showInDebugger: true.
 	self assert:
-		(self debuggerClass hasAnyActivatedExtension: { testClass }).
-	testClass showInDebugger: false
+		(self debuggerClass hasAnyActivatedExtension: { testClass })
 ]
 
 { #category : #'tests - extensions' }
