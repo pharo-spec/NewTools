@@ -1296,6 +1296,9 @@ StDebugger >> updateCodeTextSegmentDecoratorsIn: aContext forInterval: selection
 
 { #category : #'updating - actions' }
 StDebugger >> updateContextChanged [
+	"A context has changed when a method has been recompiled. If a method has been recompiled with additional instance variables and/or temporary variables, the inspector needs to be updated"
+
+	inspector shouldUpdate.
 	self updateStep
 ]
 
@@ -1331,6 +1334,7 @@ StDebugger >> updatePresenter [
 
 { #category : #'updating - actions' }
 StDebugger >> updateRestart [
+
 	self updateStep
 ]
 
