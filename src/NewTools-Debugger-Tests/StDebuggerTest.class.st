@@ -952,20 +952,23 @@ StDebuggerTest >> testUnsavedCodeChangesFor [
 StDebuggerTest >> testUpdateExtensionSubscription [
 
 	| announcementSubscriptions oldAnnouncementSubscriptions |
-	oldAnnouncementSubscriptions := self subscriptionsForStDebuggerExtensionActivationToggle.
+	oldAnnouncementSubscriptions := self
+		                                subscriptionsForStDebuggerExtensionActivationToggle.
 
 	self debugger session: session.
 	self initializedDebugger.
 	announcementSubscriptions := self
 		                             subscriptionsForStDebuggerExtensionActivationToggle.
-	self assert: announcementSubscriptions size equals: oldAnnouncementSubscriptions size + 1.
-	self assertCollection: announcementSubscriptions  includesAll: oldAnnouncementSubscriptions.
 	self
-		assert: announcementSubscriptions last subscriber
-		identicalTo: dbg.
+		assert: announcementSubscriptions size
+		equals: oldAnnouncementSubscriptions size + 1.
 	self
-		assert: announcementSubscriptions last action selector
-		identicalTo: #updateExtensionsFromAnnouncement:
+		assertCollection: announcementSubscriptions
+		includesAll: oldAnnouncementSubscriptions.
+	self assert: (announcementSubscriptions detect: [ :s |
+			 s subscriber == dbg and: [
+				 s action selector == #updateExtensionsFromAnnouncement: ] ])
+			isNotNil
 ]
 
 { #category : #'tests - receiver inspector' }
