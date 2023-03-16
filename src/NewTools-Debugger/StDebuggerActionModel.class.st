@@ -285,11 +285,19 @@ StDebuggerActionModel >> proceedDebugSession [
 
 { #category : #actions }
 StDebuggerActionModel >> recompileMethodTo: aString inContext: aContext notifying: aNotifyer [
+
+	| methodContext |
 	aContext ifNil: [ ^ self ].
 	self session
 		recompileMethodTo: aString
 		inContext: aContext
-		notifying: aNotifyer
+		notifying: aNotifyer.
+		
+	methodContext := aContext.
+	[ methodContext outerContext ] whileNotNil: [
+		methodContext := methodContext outerContext ].
+	previousASTScope := (methodContext compiledCode sourceNodeForPC:
+		                     methodContext pc) scope
 ]
 
 { #category : #context }
