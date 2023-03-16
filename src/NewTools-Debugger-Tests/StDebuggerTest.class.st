@@ -293,6 +293,34 @@ StDebuggerTest >> testContextTempVarList [
 	self assert: contextItems last rawValue identicalTo: dbg currentContext
 ]
 
+{ #category : #tests }
+StDebuggerTest >> testContextTempVarListUpdatesAfterRestartingContext [
+
+	| contextItems inspectorTable newContextItems |
+	dbg := self debuggerOn: session.
+	inspectorTable := dbg inspector getRawInspectorPresenterOrNil
+		                  attributeTable.
+		
+	contextItems := inspectorTable roots copy.
+	self assert: contextItems size equals: 8.
+
+	"We enter the inlined block (node `i + 1`)"
+	4 timesRepeat: [ dbg stepOver ].
+
+	self assert: inspectorTable roots size equals: 9.
+
+	"We restart the context"
+	dbg restartCurrentContext.
+	
+	newContextItems := inspectorTable roots.
+
+	self assert: newContextItems size equals: 8.
+	1 to: 8 do: [ :i |
+		self
+			assert: (newContextItems at: i)
+			identicalTo: (contextItems at: i) ]
+]
+
 { #category : #'tests - context inspector' }
 StDebuggerTest >> testContextTempVarListUpdatesTempsWhenEnteringOrLeavingInlinedBlocks [
 

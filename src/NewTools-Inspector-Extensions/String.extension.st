@@ -3,8 +3,8 @@ Extension { #name : #String }
 { #category : #'*NewTools-Inspector-Extensions' }
 String >> inspectionFullString [
 	<inspectorPresentationOrder: 100 title: 'Full Content'>
-	
-	^ SpTextPresenter new
+	^ SpCodePresenter new
+		syntaxHighlight: false;
 		text: self;
 		yourself
 ]

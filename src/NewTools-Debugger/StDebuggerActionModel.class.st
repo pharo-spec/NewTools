@@ -285,8 +285,8 @@ StDebuggerActionModel >> proceedDebugSession [
 
 { #category : #actions }
 StDebuggerActionModel >> recompileMethodTo: aString inContext: aContext notifying: aNotifyer [
-
 	| methodContext |
+
 	aContext ifNil: [ ^ self ].
 	self session
 		recompileMethodTo: aString
@@ -311,6 +311,9 @@ StDebuggerActionModel >> referenceContext [
 
 { #category : #'debug - execution' }
 StDebuggerActionModel >> restartContext: aContext [
+
+	previousASTScope := (aContext compiledCode sourceNodeForPC:
+		                     aContext pc) scope.
 	self session restart: aContext.
 	self updateTopContext
 ]
