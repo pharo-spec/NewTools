@@ -1299,6 +1299,8 @@ StDebugger >> updateContextChanged [
 	"A context has changed when a method has been recompiled. If a method has been recompiled with additional instance variables and/or temporary variables, the inspector needs to be updated"
 
 	inspector shouldUpdate.
+	"The top context has been changed so we force the code presenter to change its text. Otherwise, the debugger would consider that there are unsaved code changes, as the source code from the context would not be the same as the source code displayed"
+	self code text: self interruptedContext sourceCode.
 	self updateStep
 ]
 
