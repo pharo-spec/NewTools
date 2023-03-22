@@ -6,7 +6,8 @@ Class {
 		'debugActionModel',
 		'debugger',
 		'result',
-		'shouldFilterStack'
+		'shouldFilterStack',
+		'methodWithBlockContextOriginalSource'
 	],
 	#category : #'NewTools-Debugger-Tests-Model'
 }
@@ -496,7 +497,7 @@ StDebuggerActionModelTest >> testProceedDebugSession [
 	self assert: result equals: 4
 ]
 
-{ #category : #tests }
+{ #category : #'tests - actions' }
 StDebuggerActionModelTest >> testRecompileMethodToInContextNotifyingUpdatesSourceCodeAndContext [
 
 	| oldStack contextChanged expectedNewStack rejectedFromOldStack |
