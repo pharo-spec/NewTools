@@ -41,17 +41,9 @@ StDebuggerExtensionSettings class >> debuggerExtensionSettingsOn: aBuilder [
 		parent: #debugging;
 		description:
 			'Tools that extend the StDebugger and appear in the right column of the debugger';
-		with: [ 
-			| settingsGroup |
-			settingsGroup := aBuilder setting: #activateDebuggerExtensions.
-			settingsGroup label: 'Activate extensions'.
-			settingsGroup target: debuggerClass.
-			settingsGroup default: true.
-			settingsGroup description:
-					'(De)Activate the debugger extensions tools in the debugger right column.'.
-			settingsGroup with: [ 
-					debuggerClass extensionToolsClasses do: [ :toolClass | 
-							self
-								debuggerExtensionSettingsForClass: toolClass
-								builder: aBuilder ] ] ]
+		with: [
+			debuggerClass extensionToolsClasses do: [ :toolClass |
+					self
+						debuggerExtensionSettingsForClass: toolClass
+						builder: aBuilder ] ]
 ]

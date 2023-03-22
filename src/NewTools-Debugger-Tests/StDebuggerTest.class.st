@@ -89,6 +89,16 @@ StDebuggerTest >> setUp [
 	self debuggerClass fastTDD: true
 ]
 
+{ #category : #accessing }
+StDebuggerTest >> subscriptionsForStDebuggerExtensionActivationToggle [
+
+	| subscriptions |
+	subscriptions := SystemAnnouncer uniqueInstance subscriptions
+		                 subscriptions.
+	^ subscriptions asOrderedCollection select: [ :s | 
+		  s announcementClass = StDebuggerExtensionActivationToggle ]
+]
+
 { #category : #running }
 StDebuggerTest >> tearDown [
 
@@ -964,6 +974,29 @@ StDebuggerTest >> testUnsavedCodeChangesFor [
 	self assert: (dbg unsavedCodeChangesFor: ctx) identicalTo: codeChanges
 	
 
+]
+
+{ #category : #tests }
+StDebuggerTest >> testUpdateExtensionSubscription [
+
+	| announcementSubscriptions oldAnnouncementSubscriptions |
+	oldAnnouncementSubscriptions := self
+		                                subscriptionsForStDebuggerExtensionActivationToggle.
+
+	self debugger session: session.
+	self initializedDebugger.
+	announcementSubscriptions := self
+		                             subscriptionsForStDebuggerExtensionActivationToggle.
+	self
+		assert: announcementSubscriptions size
+		equals: oldAnnouncementSubscriptions size + 1.
+	self
+		assertCollection: announcementSubscriptions
+		includesAll: oldAnnouncementSubscriptions.
+	self assert: (announcementSubscriptions detect: [ :s |
+			 s subscriber == dbg and: [
+				 s action selector == #updateExtensionsFromAnnouncement: ] ])
+			isNotNil
 ]
 
 { #category : #'tests - receiver inspector' }
