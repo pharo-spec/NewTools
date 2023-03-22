@@ -18,6 +18,22 @@ StDebuggerExtensionMechanismTest >> debuggerClass [
 	^ StDebugger
 ]
 
+{ #category : #helpers }
+StDebuggerExtensionMechanismTest >> disableTStDebuggerExtensionTestClassAsExtension [
+
+	TStDebuggerExtensionTestClass class compile: 'isOnlyForTests
+
+	^ true'
+]
+
+{ #category : #helpers }
+StDebuggerExtensionMechanismTest >> enableTStDebuggerExtensionTestClassAsExtension [
+
+	TStDebuggerExtensionTestClass class compile: 'isOnlyForTests
+
+	^ false'
+]
+
 { #category : #running }
 StDebuggerExtensionMechanismTest >> setUp [
 
@@ -39,6 +55,7 @@ StDebuggerExtensionMechanismTest >> tearDown [
 			extension showInDebugger: wasActivated ] ].
 	testClass showInDebugger: false.
 	StDummyDebuggerPresenter showInDebugger: false.
+	self disableTStDebuggerExtensionTestClassAsExtension.
 	super tearDown
 ]
 
@@ -133,21 +150,31 @@ StDebuggerExtensionMechanismTest >> testRegisterExtensionTool [
 { #category : #'tests - extensions' }
 StDebuggerExtensionMechanismTest >> testUsesExtensions [
 
-	| testClass |
+	| testClass extensionClasses activatedExtension |
 	testClass := StDebuggerExtensionGeneratorForTests testClass.
-	
+
+	"In case there are no available extensions in the system, we add a test extension to the system.
+	We then assume that there is always one extension in the extension collection of the system."
+	self enableTStDebuggerExtensionTestClassAsExtension.
+	extensionClasses := self debuggerClass extensionToolsClasses.
+	self
+		assertCollection: extensionClasses
+		includesAny: { TStDebuggerExtensionTestClass }.
+
+	"We deactivate all extensions: the debugger should not have any activated extension, 
+	and should not use extensions in its layout."
 	self debuggerClass extensionToolsClasses do: [ :extension |
 		extension showInDebugger: false ].
 
 	self assertEmpty: self debuggerClass activatedDebuggerExtensions.
 	self deny: self debuggerClass usesExtensions.
-	self debuggerClass extensionToolsClasses ifNotEmpty: [
-		| activatedExtension |
-		activatedExtension := self debuggerClass extensionToolsClasses
-			                      asOrderedCollection first.
-		activatedExtension showInDebugger: true.
-		self
-			assertCollection: self debuggerClass activatedDebuggerExtensions
-			hasSameElements: { activatedExtension }.
-		self assert: self debuggerClass usesExtensions ]
+
+	"We activate the first extension in the extension collection:
+	the debugger should have this extension activated, and should use extensions in its layout."
+	activatedExtension := extensionClasses asOrderedCollection first.
+	activatedExtension showInDebugger: true.
+	self
+		assertCollection: self debuggerClass activatedDebuggerExtensions
+		hasSameElements: { activatedExtension }.
+	self assert: self debuggerClass usesExtensions
 ]
