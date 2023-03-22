@@ -110,20 +110,29 @@ StDebuggerActionModelTest >> setResult [
 ]
 
 { #category : #running }
+StDebuggerActionModelTest >> setSessionAndDebuggerModelForMethod: aMethod inContext: aContext [
+
+	session ifNotNil: [ session clear ].
+	session := (StTestDebuggerProvider new debuggerWithContext: aContext)
+		           session.
+	session stepIntoUntil: [ :currentContext |
+		currentContext method == aMethod ].
+	debugActionModel := StDebuggerActionModel on: session.
+	shouldFilterStack := StDebuggerActionModel shouldFilterStack
+]
+
+{ #category : #running }
 StDebuggerActionModelTest >> setUp [
-	| method context process |
+
+	| method process |
 	super setUp.
 	method := self class >> #setResult.
-	process := [ method valueWithReceiver: self arguments: #() ]
-		newProcess.
-	context := process suspendedContext.
-	session ifNotNil: [ session clear ].
-	session := (StTestDebuggerProvider new debuggerWithContext: context)
-		session.
-	session
-		stepIntoUntil: [ :currentContext | currentContext method == method ].
-	debugActionModel := StDebuggerActionModel on: session.
-	shouldFilterStack := StDebuggerActionModel shouldFilterStack.
+	process := [ method valueWithReceiver: self arguments: #(  ) ]
+		           newProcess.
+
+	self
+		setSessionAndDebuggerModelForMethod: method
+		inContext: process suspendedContext
 ]
 
 { #category : #running }
