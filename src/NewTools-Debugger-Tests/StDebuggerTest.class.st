@@ -6,7 +6,8 @@ Class {
 		'debugger',
 		'oldFastTDD',
 		'dbg',
-		'stackSizeBefore'
+		'stackSizeBefore',
+		'shouldFilterStack'
 	],
 	#category : #'NewTools-Debugger-Tests-Presenters'
 }
@@ -86,6 +87,7 @@ StDebuggerTest >> setUp [
 	super setUp.	
 	session := StTestDebuggerProvider new sessionForDebuggerTests.
 	oldFastTDD := self debuggerClass fastTDD.
+	shouldFilterStack := StDebuggerActionModel shouldFilterStack.
 	self debuggerClass fastTDD: true
 ]
 
@@ -94,12 +96,17 @@ StDebuggerTest >> tearDown [
 
 	session clear.
 	self debuggerClass fastTDD: oldFastTDD.
-	debugger ifNotNil: [ 
+	debugger ifNotNil: [
 		debugger unsubscribeFromSystemAnnouncer.
 		debugger close.
 		debugger session ifNotNil: [ :s | s clear ] ].
-	StTestDebuggerProvider removeSelector: #foobar. 
-	StDebuggerObjectForTests compile: 'haltingMethod <haltOrBreakpointForTesting> self halt. ^self' classified: 'util'.
+	StTestDebuggerProvider removeSelector: #foobar.
+	StDebuggerObjectForTests
+		compile:
+		'haltingMethod <haltOrBreakpointForTesting> self halt. ^self'
+		classified: 'util'.
+	StDebuggerActionModel shouldFilterStack: shouldFilterStack.
+	StTestDebuggerProvider removeSelector: #foobar.
 	super tearDown
 ]
 
@@ -381,6 +388,38 @@ StDebuggerTest >> testCopyStackToClipboard [
 		assert: Clipboard clipboardText string
 		equals: (String streamContents: [ :s | 
 				 session interruptedContext shortDebugStackOn: s ])
+]
+
+{ #category : #tests }
+StDebuggerTest >> testCreateMissingMethodWithUnfilteredStackUpdatesCodePane [
+
+	| dnuMessage |
+	StDebuggerActionModel shouldFilterStack: false.
+	dbg := StTestDebuggerProvider new debuggerWithDNUContext.
+	dbg
+		application: dbg class currentApplication;
+		initialize.
+	self assert:
+		dbg debuggerActionModel isInterruptedContextDoesNotUnderstand.
+	self
+		assert: dbg interruptedContext receiver class
+		identicalTo: StTestDebuggerProvider.
+	dnuMessage := dbg debuggerActionModel contextPredicate exception
+		              message.
+
+	self assert: dnuMessage selector identicalTo: #foobar.
+
+	"stack is unfiltered. So the text shown should be the code from the DNU"
+	self assert: (dbg code text beginsWith: 'doesNotUnderstand:').
+
+	"we create the missing method #foobar"
+	dbg createMissingMethodFor: dnuMessage in: StTestDebuggerProvider.
+
+	"code must have been updated with the new method"
+	self
+		assert: dbg interruptedContext compiledCode selector
+		identicalTo: #foobar.
+	self assert: (dbg code text beginsWith: 'foobar')
 ]
 
 { #category : #'tests - initialization' }
