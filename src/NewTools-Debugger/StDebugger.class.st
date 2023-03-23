@@ -403,14 +403,14 @@ StDebugger >> createMissingMethod [
 	| msg chosenClass |
 	self flag: #DBG_MISSINGTEST.
 	msg := self interruptedContext tempAt: 1.
-	[ 
-	chosenClass := self requestClassFrom:
-		               self interruptedContext receiver class.
+	[
+	chosenClass := self requestClassFrom: self interruptedContext receiver class.
 	self createMissingMethodFor: msg in: chosenClass ]
 		on: Abort
 		do: [ ^ self ].
-		
-	code takeKeyboardFocus 
+
+	code triggerResetAction.
+	code takeKeyboardFocus
 ]
 
 { #category : #actions }
