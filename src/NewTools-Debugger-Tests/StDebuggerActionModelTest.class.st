@@ -6,7 +6,8 @@ Class {
 		'debugActionModel',
 		'debugger',
 		'result',
-		'shouldFilterStack'
+		'shouldFilterStack',
+		'methodWithBlockContextOriginalSource'
 	],
 	#category : #'NewTools-Debugger-Tests-Model'
 }
@@ -93,8 +94,39 @@ StDebuggerActionModelTest >> methodClass [
 ]
 
 { #category : #helper }
+StDebuggerActionModelTest >> methodWithBlockContext [
+
+	| block |
+	block := [ (1+1 ) printString ].
+	block value
+]
+
+{ #category : #helper }
 StDebuggerActionModelTest >> methodWithPragma [
 	<debuggerCompleteToSender>
+]
+
+{ #category : #helper }
+StDebuggerActionModelTest >> newSessionWithBlockContext [
+
+	| process method |
+	method := self class >> #methodWithBlockContext.
+	methodWithBlockContextOriginalSource := method sourceCode.
+	process := [ method valueWithReceiver: self arguments: #(  ) ]
+		           newProcess.
+	self
+		setSessionAndDebuggerModelForMethod: method
+		inContext: process suspendedContext.
+
+	4 timesRepeat: [
+		debugActionModel stepInto: debugActionModel topContext ]
+]
+
+{ #category : #helper }
+StDebuggerActionModelTest >> resetModifiedSourceCode [
+
+	methodWithBlockContextOriginalSource ifNotNil: [
+		self class compile: methodWithBlockContextOriginalSource ]
 ]
 
 { #category : #helper }
@@ -109,20 +141,29 @@ StDebuggerActionModelTest >> setResult [
 ]
 
 { #category : #running }
+StDebuggerActionModelTest >> setSessionAndDebuggerModelForMethod: aMethod inContext: aContext [
+
+	session ifNotNil: [ session clear ].
+	session := (StTestDebuggerProvider new debuggerWithContext: aContext)
+		           session.
+	session stepIntoUntil: [ :currentContext |
+		currentContext method == aMethod ].
+	debugActionModel := StDebuggerActionModel on: session.
+	shouldFilterStack := StDebuggerActionModel shouldFilterStack
+]
+
+{ #category : #running }
 StDebuggerActionModelTest >> setUp [
-	| method context process |
+
+	| method process |
 	super setUp.
 	method := self class >> #setResult.
-	process := [ method valueWithReceiver: self arguments: #() ]
-		newProcess.
-	context := process suspendedContext.
-	session ifNotNil: [ session clear ].
-	session := (StTestDebuggerProvider new debuggerWithContext: context)
-		session.
-	session
-		stepIntoUntil: [ :currentContext | currentContext method == method ].
-	debugActionModel := StDebuggerActionModel on: session.
-	shouldFilterStack := StDebuggerActionModel shouldFilterStack.
+	process := [ method valueWithReceiver: self arguments: #(  ) ]
+		           newProcess.
+
+	self
+		setSessionAndDebuggerModelForMethod: method
+		inContext: process suspendedContext
 ]
 
 { #category : #running }
@@ -136,6 +177,8 @@ StDebuggerActionModelTest >> tearDown [
 	StTestDebuggerProvider removeSelector: #buildDebuggerWithMissingClassContext.
 	StTestDebuggerProvider removeSelector: #foobar.
 	StDebuggerActionModel shouldFilterStack: shouldFilterStack.
+	DebugSession contextModelClass: DebugContext.
+	self resetModifiedSourceCode.
 	super tearDown
 ]
 
@@ -496,7 +539,38 @@ StDebuggerActionModelTest >> testProceedDebugSession [
 	self assert: result equals: 4
 ]
 
-{ #category : #tests }
+{ #category : #'tests - actions' }
+StDebuggerActionModelTest >> testRecompileMethodToInBlockContext [
+
+	| contextChanged previousASTScope |
+	self newSessionWithBlockContext.
+
+	DebugSession contextModelClass: StDebugContextForTests.
+	contextChanged := debugActionModel topContext.
+	
+	"We stepped into a block for which the debugActionModel holds an ast scope:"
+	previousASTScope := debugActionModel previousASTScope.
+	self
+		assert: previousASTScope
+		identicalTo: contextChanged astScope.
+
+	debugActionModel
+		recompileMethodTo: contextChanged method sourceCode , '. ^self'
+		inContext: contextChanged
+		notifying: nil.
+	debugActionModel updateTopContext.
+
+	"After recompiling the method, the model holds an updated ast scope that is not the one of the block:"
+	self deny: previousASTScope identicalTo: debugActionModel previousASTScope.
+	
+	"The new ast scope is the one of the AST of the first interesting bytecode of the method,
+	that is the block declaration:"
+	self
+		assert: debugActionModel previousASTScope
+		identicalTo: (self class >> #methodWithBlockContext) ast statements first value scope
+]
+
+{ #category : #'tests - actions' }
 StDebuggerActionModelTest >> testRecompileMethodToInContextNotifyingUpdatesSourceCodeAndContext [
 
 	| oldStack contextChanged expectedNewStack rejectedFromOldStack |
