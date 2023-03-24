@@ -393,12 +393,16 @@ StDebuggerTest >> testCopyStackToClipboard [
 { #category : #tests }
 StDebuggerTest >> testCreateMissingMethodWithUnfilteredStackUpdatesCodePane [
 
-	| dnuMessage |
+	| dnuMessage method pcRangeForContext segments highlightSegment adapter |
 	StDebuggerActionModel shouldFilterStack: false.
 	dbg := StTestDebuggerProvider new debuggerWithDNUContext.
 	dbg
 		application: dbg class currentApplication;
 		initialize.
+	adapter := SpMorphicCodeAdapter new.
+	adapter adapt: dbg code.
+	dbg code adapter: adapter.
+	dbg code adapter buildWidget.
 	self assert:
 		dbg debuggerActionModel isInterruptedContextDoesNotUnderstand.
 	self
@@ -415,11 +419,21 @@ StDebuggerTest >> testCreateMissingMethodWithUnfilteredStackUpdatesCodePane [
 	"we create the missing method #foobar"
 	dbg createMissingMethodFor: dnuMessage in: StTestDebuggerProvider.
 
+	method := StTestDebuggerProvider methodDictionary at: #foobar.
+
 	"code must have been updated with the new method"
+	self assert: dbg interruptedContext compiledCode identicalTo: method.
+	self assert: dbg code text equals: method sourceCode.
+
+	session := dbg session.
+	pcRangeForContext := session pcRangeForContext: dbg currentContext.
+	segments := dbg code adapter widget segments.
+	self assert: segments size equals: 1.
+	highlightSegment := segments first.
+
 	self
-		assert: dbg interruptedContext compiledCode selector
-		identicalTo: #foobar.
-	self assert: (dbg code text beginsWith: 'foobar')
+		assert: (highlightSegment firstIndex to: highlightSegment lastIndex)
+		equals: (pcRangeForContext first to: pcRangeForContext last + 1)
 ]
 
 { #category : #'tests - initialization' }
