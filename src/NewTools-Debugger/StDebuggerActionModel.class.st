@@ -286,13 +286,16 @@ StDebuggerActionModel >> proceedDebugSession [
 { #category : #actions }
 StDebuggerActionModel >> recompileMethodTo: aString inContext: aContext notifying: aNotifyer [
 
+	| methodContext |
 	aContext ifNil: [ ^ self ].
 	self session
 		recompileMethodTo: aString
 		inContext: aContext
 		notifying: aNotifyer.
-	previousASTScope := (aContext compiledCode sourceNodeForPC:
-		                     aContext pc) scope
+
+	methodContext := aContext home.
+	previousASTScope := (methodContext compiledCode sourceNodeForPC:
+		                     methodContext pc) scope
 ]
 
 { #category : #context }

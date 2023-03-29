@@ -34,7 +34,7 @@ StRewriterScopeSelectorPresenterTest >> testInitializePresenters [
 StRewriterScopeSelectorPresenterTest >> testInitializeWithPackages [
 
 	| newPresenter packages |
-	packages := 'Kernel' asPackage asOrderedCollection.
+	packages := OrderedCollection with: 'Kernel' asPackage.
 	newPresenter := StRewriterScopeSelectorPresenter new initializeWithPackages:
 		                packages.
 	self
@@ -87,7 +87,7 @@ StRewriterScopeSelectorPresenterTest >> testSelectedMethods [
 StRewriterScopeSelectorPresenterTest >> testWithPackages [
 
 	| newPresenter packages |
-	packages := 'Kernel' asPackage asOrderedCollection.
+	packages := OrderedCollection with:'Kernel' asPackage.
 	newPresenter := StRewriterScopeSelectorPresenter withPackages: packages.
 	self
 		assertCollection: newPresenter packagesFilteringListPresenter items

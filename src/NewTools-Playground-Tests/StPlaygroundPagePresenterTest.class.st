@@ -100,7 +100,9 @@ StPlaygroundPagePresenterTest >> testDoEvaluateAndGo [
 { #category : #'tests - commands' }
 StPlaygroundPagePresenterTest >> testDoEvaluateDeclareGlobal [
 	| value |
-	
+
+	self skip: 'Because a change in the compiler API, there is no way to hijack OCUndeclaredVariableWarning when the compiler is used a in legacy interactive mode (but such hijack is only performed in this test). So disable the test for now.'.
+
 	self deny: (Smalltalk globals includesKey: #MyGlobalForTest).
 	
 	self openInstance.
