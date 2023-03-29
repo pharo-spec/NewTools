@@ -1,7 +1,7 @@
 Class {
 	#name : #ObjectWithPrintingRaisingHaltTest,
 	#superclass : #TestCase,
-	#category : #'NewTools-Debugger-Tests'
+	#category : #'NewTools-Debugger-Tests-Model'
 }
 
 { #category : #tests }
