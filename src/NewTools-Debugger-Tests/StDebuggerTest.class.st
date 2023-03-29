@@ -96,6 +96,8 @@ StDebuggerTest >> tearDown [
 
 	session clear.
 	self debuggerClass fastTDD: oldFastTDD.
+	
+	"In tests, should we use `debugger` when we need a fully initialized debugger and `dbg` when we just need a debugger created with #basicNew? Still, isn't it weird to clear the session only for a fully initialized debugger but not for a debugger created with #basicNew? Both have a session. Maybe this implies that `dbg`  should only use the instance variable `session` and nothing else. These specifications should be written somewhere, in the doc of the class maybe."
 	debugger ifNotNil: [
 		debugger unsubscribeFromSystemAnnouncer.
 		debugger close.
@@ -395,39 +397,44 @@ StDebuggerTest >> testCreateMissingMethodWithUnfilteredStackUpdatesCodePane [
 
 	| dnuMessage method pcRangeForContext segments highlightSegment adapter |
 	StDebuggerActionModel shouldFilterStack: false.
-	dbg := StTestDebuggerProvider new debuggerWithDNUContext.
-	dbg
-		application: dbg class currentApplication;
+	debugger := StTestDebuggerProvider new debuggerWithDNUContext.
+	debugger
+		application: debugger class currentApplication;
 		initialize.
 	adapter := SpMorphicCodeAdapter new.
-	adapter adapt: dbg code.
-	dbg code adapter: adapter.
-	dbg code adapter buildWidget.
+	adapter adapt: debugger code.
+	debugger code adapter: adapter.
+	debugger code adapter buildWidget.
 	self assert:
-		dbg debuggerActionModel isInterruptedContextDoesNotUnderstand.
+		debugger debuggerActionModel isInterruptedContextDoesNotUnderstand.
 	self
-		assert: dbg interruptedContext receiver class
+		assert: debugger interruptedContext receiver class
 		identicalTo: StTestDebuggerProvider.
-	dnuMessage := dbg debuggerActionModel contextPredicate exception
+	dnuMessage := debugger debuggerActionModel contextPredicate exception
 		              message.
 
 	self assert: dnuMessage selector identicalTo: #foobar.
 
 	"stack is unfiltered. So the text shown should be the code from the DNU"
-	self assert: (dbg code text beginsWith: 'doesNotUnderstand:').
+	self assert: (debugger code text beginsWith: 'doesNotUnderstand:').
 
 	"we create the missing method #foobar"
-	dbg createMissingMethodFor: dnuMessage in: StTestDebuggerProvider.
+	debugger
+		createMissingMethodFor: dnuMessage
+		in: StTestDebuggerProvider.
 
 	method := StTestDebuggerProvider methodDictionary at: #foobar.
 
 	"code must have been updated with the new method"
-	self assert: dbg interruptedContext compiledCode identicalTo: method.
-	self assert: dbg code text equals: method sourceCode.
+	self
+		assert: debugger interruptedContext compiledCode
+		identicalTo: method.
+	self assert: debugger code text equals: method sourceCode.
 
-	session := dbg session.
-	pcRangeForContext := session pcRangeForContext: dbg currentContext.
-	segments := dbg code adapter widget segments.
+	session := debugger session.
+	pcRangeForContext := session pcRangeForContext:
+		                     debugger currentContext.
+	segments := debugger code adapter widget segments.
 	self assert: segments size equals: 1.
 	highlightSegment := segments first.
 
