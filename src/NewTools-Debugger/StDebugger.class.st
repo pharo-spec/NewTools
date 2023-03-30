@@ -1328,7 +1328,7 @@ StDebugger >> updateContextChanged [
 
 	inspector shouldUpdate.
 	"The top context has been changed so we force the code presenter to change its text. Otherwise, the debugger would consider that there are unsaved code changes, as the source code from the context would not be the same as the source code displayed"
-	self code text: self interruptedContext sourceCode.
+	self updateSourceCodeFor: self interruptedContext.
 	self updateStep
 ]
 

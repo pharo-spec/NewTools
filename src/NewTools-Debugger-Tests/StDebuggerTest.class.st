@@ -6,7 +6,8 @@ Class {
 		'debugger',
 		'oldFastTDD',
 		'dbg',
-		'stackSizeBefore'
+		'stackSizeBefore',
+		'shouldFilterStack'
 	],
 	#category : #'NewTools-Debugger-Tests-Presenters'
 }
@@ -86,6 +87,7 @@ StDebuggerTest >> setUp [
 	super setUp.	
 	session := StTestDebuggerProvider new sessionForDebuggerTests.
 	oldFastTDD := self debuggerClass fastTDD.
+	shouldFilterStack := StDebuggerActionModel shouldFilterStack.
 	self debuggerClass fastTDD: true
 ]
 
@@ -104,12 +106,19 @@ StDebuggerTest >> tearDown [
 
 	session clear.
 	self debuggerClass fastTDD: oldFastTDD.
-	debugger ifNotNil: [ 
+	
+	"In tests, should we use `debugger` when we need a fully initialized debugger and `dbg` when we just need a debugger created with #basicNew? Still, isn't it weird to clear the session only for a fully initialized debugger but not for a debugger created with #basicNew? Both have a session. Maybe this implies that `dbg`  should only use the instance variable `session` and nothing else. These specifications should be written somewhere, in the doc of the class maybe."
+	debugger ifNotNil: [
 		debugger unsubscribeFromSystemAnnouncer.
 		debugger close.
 		debugger session ifNotNil: [ :s | s clear ] ].
-	StTestDebuggerProvider removeSelector: #foobar. 
-	StDebuggerObjectForTests compile: 'haltingMethod <haltOrBreakpointForTesting> self halt. ^self' classified: 'util'.
+	StTestDebuggerProvider removeSelector: #foobar.
+	StDebuggerObjectForTests
+		compile:
+		'haltingMethod <haltOrBreakpointForTesting> self halt. ^self'
+		classified: 'util'.
+	StDebuggerActionModel shouldFilterStack: shouldFilterStack.
+	StTestDebuggerProvider removeSelector: #foobar.
 	super tearDown
 ]
 
@@ -391,6 +400,57 @@ StDebuggerTest >> testCopyStackToClipboard [
 		assert: Clipboard clipboardText string
 		equals: (String streamContents: [ :s | 
 				 session interruptedContext shortDebugStackOn: s ])
+]
+
+{ #category : #tests }
+StDebuggerTest >> testCreateMissingMethodWithUnfilteredStackUpdatesCodePane [
+
+	| dnuMessage method pcRangeForContext segments highlightSegment adapter |
+	StDebuggerActionModel shouldFilterStack: false.
+	debugger := StTestDebuggerProvider new debuggerWithDNUContext.
+	debugger
+		application: debugger class currentApplication;
+		initialize.
+	adapter := SpMorphicCodeAdapter new.
+	adapter adapt: debugger code.
+	debugger code adapter: adapter.
+	debugger code adapter buildWidget.
+	self assert:
+		debugger debuggerActionModel isInterruptedContextDoesNotUnderstand.
+	self
+		assert: debugger interruptedContext receiver class
+		identicalTo: StTestDebuggerProvider.
+	dnuMessage := debugger debuggerActionModel contextPredicate exception
+		              message.
+
+	self assert: dnuMessage selector identicalTo: #foobar.
+
+	"stack is unfiltered. So the text shown should be the code from the DNU"
+	self assert: (debugger code text beginsWith: 'doesNotUnderstand:').
+
+	"we create the missing method #foobar"
+	debugger
+		createMissingMethodFor: dnuMessage
+		in: StTestDebuggerProvider.
+
+	method := StTestDebuggerProvider methodDictionary at: #foobar.
+
+	"code must have been updated with the new method"
+	self
+		assert: debugger interruptedContext compiledCode
+		identicalTo: method.
+	self assert: debugger code text equals: method sourceCode.
+
+	session := debugger session.
+	pcRangeForContext := session pcRangeForContext:
+		                     debugger currentContext.
+	segments := debugger code adapter widget segments.
+	self assert: segments size equals: 1.
+	highlightSegment := segments first.
+
+	self
+		assert: (highlightSegment firstIndex to: highlightSegment lastIndex)
+		equals: (pcRangeForContext first to: pcRangeForContext last + 1)
 ]
 
 { #category : #'tests - initialization' }
