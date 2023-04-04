@@ -174,7 +174,7 @@ StSpotter class >> openWithText: aText [
 	spotter := self new.
 	spotter searchText
 		text: aText asString.
-	spotter whenDisplayDo: [ spotter searchText cursorPositionIndex: aText size + 1 ].
+	spotter whenDisplayDo: [ spotter searchText cursorPositionIndex: aText size + 1 ] for: self.
 	^ spotter openModal
 ]
 
