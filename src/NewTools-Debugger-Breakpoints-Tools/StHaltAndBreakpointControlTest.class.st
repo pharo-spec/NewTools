@@ -30,8 +30,8 @@ StHaltAndBreakpointControlTest >> methodWithHaltSources [
 
 { #category : #helpers }
 StHaltAndBreakpointControlTest >> removeMethodsWithHalts [
-	self testClass methods
-		do: [ :method | self testClass removeSelector: method selector]
+
+	(self testClass methods select: [ :m | m selector includesSubstring: 'Halt' ]) do: [ :method | self testClass removeSelector: method selector ]
 ]
 
 { #category : #running }
