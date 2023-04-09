@@ -58,7 +58,7 @@ StHaltCacheTest >> testInitialCacheBuild [
 	self assert: cache methodsWithHalts size equals: 6.
 	(self testClass methods
 		reject: [ :m | 
-			#('StDummyTestClassWithHalts>>#mNoHalt' 'StDummyTestClassWithHalts>>#mRejectHalt')
+			#('StDummyTestClassWithHalts>>#mNoHalt' 'StDummyTestClassWithHalts>>#mRejectHalt' 'StDummyTestClassWithHalts>>#var')
 				includes: m printString ])
 		do: [ :method | 
 			| haltNode nodeCache |
