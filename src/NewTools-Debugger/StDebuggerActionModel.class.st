@@ -150,15 +150,16 @@ StDebuggerActionModel >> filterStack: aStack [
 ]
 
 { #category : #'debug - session' }
-StDebuggerActionModel >> implement: aMessage classified: messageCategory inClass: aClass forContext: aContext [
+StDebuggerActionModel >> implement: aMessage inClass: aClass forContext: aContext [
 
-	self session
+	| method |
+	method := self session
 		implement: aMessage
-		classified: messageCategory
 		inClass: aClass
 		forContext: aContext.
 	self autoClassifyMessage: aMessage inClass: aClass.
-	self updateTopContext
+	self updateTopContext.
+	^ method
 ]
 
 { #category : #initialization }
@@ -284,11 +285,17 @@ StDebuggerActionModel >> proceedDebugSession [
 
 { #category : #actions }
 StDebuggerActionModel >> recompileMethodTo: aString inContext: aContext notifying: aNotifyer [
+
+	| methodContext |
 	aContext ifNil: [ ^ self ].
 	self session
 		recompileMethodTo: aString
 		inContext: aContext
-		notifying: aNotifyer
+		notifying: aNotifyer.
+
+	methodContext := aContext home.
+	previousASTScope := (methodContext compiledCode sourceNodeForPC:
+		                     methodContext pc) scope
 ]
 
 { #category : #context }
@@ -302,6 +309,9 @@ StDebuggerActionModel >> referenceContext [
 
 { #category : #'debug - execution' }
 StDebuggerActionModel >> restartContext: aContext [
+
+	previousASTScope := (aContext compiledCode sourceNodeForPC:
+		                     aContext pc) scope.
 	self session restart: aContext.
 	self updateTopContext
 ]

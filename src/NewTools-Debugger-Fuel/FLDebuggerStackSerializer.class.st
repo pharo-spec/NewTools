@@ -12,14 +12,14 @@ Class {
 
 { #category : #serializing }
 FLDebuggerStackSerializer class >> serializeStackFromContext: aContext [
-	self newDefault serializeStackFromContext: aContext
+
+	^ self new serializeStackFromContext: aContext
 ]
 
 { #category : #serializing }
 FLDebuggerStackSerializer class >> serializeStackFromContext: aContext toFileNamed: aFileName [
-	self new
-		serializeStackFromContext: aContext
-		toFileNamed: aFileName
+
+	^ self new serializeStackFromContext: aContext toFileNamed: aFileName
 ]
 
 { #category : #private }
@@ -67,7 +67,9 @@ FLDebuggerStackSerializer >> serializeStackFromContext: aContext [
 	fileName := self fileNameForContext: aContext.
 	self
 		serializeStackFromContext: aContext
-		toFileNamed: fileName
+		toFileNamed: fileName.
+		
+	^ fileName 
 ]
 
 { #category : #serializing }
@@ -80,7 +82,9 @@ FLDebuggerStackSerializer >> serializeStackFromContext: aContext toFileNamed: aF
 				signal ];
 		filePath: aFileName;
 		object: aContext copyStack;
-		serialize
+		serialize.
+		
+	^ aFileName
 ]
 
 { #category : #private }

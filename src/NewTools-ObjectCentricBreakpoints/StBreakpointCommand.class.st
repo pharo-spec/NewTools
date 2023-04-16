@@ -24,5 +24,6 @@ StBreakpointCommand >> asSpecCommand [
 
 { #category : #testing }
 StBreakpointCommand >> canBeExecuted [
+
 	^ context enableSlotMenuEntries
 ]

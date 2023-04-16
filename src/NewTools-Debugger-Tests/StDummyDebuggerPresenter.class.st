@@ -6,12 +6,19 @@ The debugger interface itself is tested in the debugger test class.
 Class {
 	#name : #StDummyDebuggerPresenter,
 	#superclass : #SpPresenter,
+	#traits : 'TStDebuggerExtension',
+	#classTraits : 'TStDebuggerExtension classTrait',
 	#instVars : [
-		'tag',
-		'debugger'
+		'tag'
 	],
 	#category : #'NewTools-Debugger-Tests-Utils'
 }
+
+{ #category : #testing }
+StDummyDebuggerPresenter class >> isOnlyForTests [
+
+	^ true
+]
 
 { #category : #mocks }
 StDummyDebuggerPresenter >> copyStackToClipboard [
@@ -43,19 +50,9 @@ StDummyDebuggerPresenter >> currentContext [
 ]
 
 { #category : #accessing }
-StDummyDebuggerPresenter >> debugger [
-	^debugger
-]
-
-{ #category : #accessing }
 StDummyDebuggerPresenter >> debuggerExtensionToolName [
 	^'Test extendedDebuggingToolTitle'
 	
-]
-
-{ #category : #layout }
-StDummyDebuggerPresenter >> debuggerLayout [
-	^self defaultLayout 
 ]
 
 { #category : #layout }
@@ -105,11 +102,6 @@ tag := thisContext method selector.
 StDummyDebuggerPresenter >> selectNextExecutedExpression [
 tag := thisContext method selector.
 ^true
-]
-
-{ #category : #accessing }
-StDummyDebuggerPresenter >> setModelBeforeInitialization: aDebugger [
-	 debugger := aDebugger
 ]
 
 { #category : #mocks }
