@@ -13,7 +13,7 @@ Class {
 { #category : #helpers }
 StTestDebuggerProvider class >> compileMissingClassContextBuilder [
 	
-	self compile: 'buildDebuggerWithMissingClassContext
+	self compiler permitUndeclared: true; install: 'buildDebuggerWithMissingClassContext
 	
 	[ MissingClass new ]
 		on: Error
