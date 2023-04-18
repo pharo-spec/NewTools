@@ -55,7 +55,7 @@ StDebuggerErrorContextPredicate >> isContextDoesNotUnderstand [
 { #category : #predicates }
 StDebuggerErrorContextPredicate >> isContextMissingClassException [
 
-	^ exception class == VariableNotDeclared
+	^ #(#VariableNotDeclared #UndeclaredVariableRead #UndeclaredVariableWrite) includes: exception class name
 ]
 
 { #category : #predicates }
