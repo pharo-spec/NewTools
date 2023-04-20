@@ -1,3 +1,6 @@
+"
+I am an inspector node that allows the user to specify a custom transmission. I am made to be used inside the Inspector. The user can specify the `transmissionBlock:`
+"
 Class {
 	#name : #StInspectorTransmissionNode,
 	#superclass : #StInspectorNode,
