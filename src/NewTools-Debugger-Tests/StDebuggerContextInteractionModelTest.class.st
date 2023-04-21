@@ -122,6 +122,36 @@ StDebuggerContextInteractionModelTest >> testBindingOfPrioritizesContextBindings
 ]
 
 { #category : #tests }
+StDebuggerContextInteractionModelTest >> testCompile [
+
+	| result |
+	model context
+		step;
+		step;
+		step;
+		step. "Perform the two first assigments of the method `helperMethodForBindings`"
+
+	result := model compiler evaluate: 'instanceVariableForTest'.
+	self assert: result equals: 42.
+	instanceVariableForTest := 52.
+	result := model compiler evaluate: 'instanceVariableForTest'.
+	self assert: result equals: 52.
+
+	result := model compiler evaluate: 'instanceVariableForTest := 62'.
+	self assert: result equals: 62.
+	result := model compiler evaluate: 'instanceVariableForTest'.
+	self assert: result equals: 62.
+	self assert: instanceVariableForTest equals: 62.
+
+	result := model compiler evaluate: 'tempVariableForTest'.
+	self assert: result equals: 43.
+	result := model compiler evaluate: 'tempVariableForTest := 53'.
+	self assert: result equals: 53.
+	result := model compiler evaluate: 'tempVariableForTest'.
+	self assert: result equals: 53
+]
+
+{ #category : #tests }
 StDebuggerContextInteractionModelTest >> testHasBindingsInContextOf [
 
 	self
