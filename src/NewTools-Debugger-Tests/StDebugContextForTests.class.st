@@ -9,9 +9,21 @@ Class {
 	#category : #'NewTools-Debugger-Tests-Utils'
 }
 
+{ #category : #private }
+StDebugContextForTests >> browseMethod: aMethod [
+
+	"Do not open a browser, we are in a test"
+]
+
 { #category : #'ui requests' }
 StDebugContextForTests >> confirm: aString [
 	"Voluntarily returns true to simulate popup validation"
 
+	^ true
+]
+
+{ #category : #'ui requests' }
+StDebugContextForTests >> confirm: message trueChoice: trueChoice falseChoice: falseChoice [
+	"Yes?"
 	^ true
 ]
