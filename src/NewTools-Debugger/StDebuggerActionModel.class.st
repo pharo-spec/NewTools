@@ -285,7 +285,7 @@ StDebuggerActionModel >> proceedDebugSession [
 { #category : #actions }
 StDebuggerActionModel >> recompileMethodTo: aString inContext: aContext notifying: aNotifyer [
 
-	| methodContext |
+	| methodContext homePC |
 	aContext ifNil: [ ^ self ].
 	self session
 		recompileMethodTo: aString
@@ -293,8 +293,11 @@ StDebuggerActionModel >> recompileMethodTo: aString inContext: aContext notifyin
 		notifying: aNotifyer.
 
 	methodContext := aContext home.
+	homePC := methodContext isDead
+		ifTrue: [ methodContext endPC ]
+		ifFalse: [ methodContext pc ].
 	previousASTScope := (methodContext compiledCode sourceNodeForPC:
-		                     methodContext pc) scope
+		                     homePC) scope
 ]
 
 { #category : #context }
