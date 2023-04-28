@@ -39,7 +39,7 @@ StObjectContextPresenter >> doEvaluateAndGo [
 		onCompileError: [ ^ self ]
 		onError: [ :e | e pass ].
 	
-	activationBlock value: (StEvaluatedSelectionModel newValue: value)
+	activationBlock value: value
 ]
 
 { #category : #private }

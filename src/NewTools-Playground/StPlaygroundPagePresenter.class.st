@@ -177,7 +177,7 @@ StPlaygroundPagePresenter >> doEvaluateAndGo [
 		onCompileError: [ ^ self ]
 		onError: [ :e | e pass ].
 
-	activationBlock value: (SpActivatedSelection newValue: value)
+	activationBlock value: value
 ]
 
 { #category : #accessing }
