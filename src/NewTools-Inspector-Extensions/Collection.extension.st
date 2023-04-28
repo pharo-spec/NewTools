@@ -13,7 +13,7 @@ Collection >> inspectionItems: aBuilder [
 		addColumn: (SpStringTableColumn new  
 			title: 'Value'; 
 			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each ];
-			sortFunction: #printString ascending;
+			beSortable;
 			yourself);
 		items: self asOrderedCollection;
 		yourself
