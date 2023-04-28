@@ -91,6 +91,7 @@ Class {
 		'stackAndCodeContainer'
 	],
 	#classVars : [
+		'ActivateDebuggerExtensions',
 		'ErrorRecursion',
 		'FastTDD'
 	],
@@ -427,11 +428,13 @@ StDebugger >> createMissingMethodFor: aMessage in: aClass [
 StDebugger >> createSubclassResponsibility [
 
 	| senderContext msg chosenClass |
-	senderContext := self interruptedContext sender.
+	senderContext := self signalingSubclassResponsabilityContext.
 	msg := Message
 		       selector: senderContext selector
 		       arguments: senderContext arguments.
-	chosenClass := self requestClassFrom: senderContext receiver class to: senderContext methodClass.
+	chosenClass := self
+		               requestClassFrom: senderContext receiver class
+		               to: senderContext methodClass.
 	chosenClass ifNil: [ ^ self ].
 	self debuggerActionModel
 		implement: msg
@@ -1125,6 +1128,16 @@ StDebugger >> setStackAndCodeContainer [
 StDebugger >> showFullStack [
 	stackTable items: (self filterStack: self stack)
 
+]
+
+{ #category : #accessing }
+StDebugger >> signalingSubclassResponsabilityContext [
+
+	| signalingContext |
+	signalingContext := self interruptedContext.
+	[ signalingContext selector = #subclassResponsibility ] whileFalse: [
+		signalingContext := signalingContext sender ].
+	^ signalingContext sender
 ]
 
 { #category : #'accessing - variables' }
