@@ -114,7 +114,7 @@ StSpotter class >> initialize [
 { #category : #settings }
 StSpotter class >> insertsSelection [
 		
-	^ InsertsSelection ifNil: [ InsertsSelection := true ]
+	^ InsertsSelection ifNil: [ InsertsSelection := false ]
 ]
 
 { #category : #settings }
