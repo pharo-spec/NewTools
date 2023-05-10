@@ -821,6 +821,20 @@ StDebugger >> interruptedProcess [
 	^ self debuggerActionModel  interruptedProcess
 ]
 
+{ #category : #testing }
+StDebugger >> isInSelectedContextClass: context [
+	"Return true if the given context is in the same class than the currently selected context of the stack."
+
+	^ self selectedContext methodClass = context methodClass
+]
+
+{ #category : #testing }
+StDebugger >> isInSelectedContextPackage: context [
+	"Return true if the given context is in the same package than the currently selected context of the stack."
+
+	^ self selectedContext method package = context method package
+]
+
 { #category : #'commands - support' }
 StDebugger >> keybindsForFromContextMenu: aGroupElement [
 	| keybinds keybindsCommands |
@@ -1160,12 +1174,10 @@ StDebugger >> stackColorForContext: context [
 	If they are from the same package (but different class), we return a 'secondary' highlight color.
 	Else, we just keep the normal style."
 
-	| selectedContext |
-	selectedContext := stackTable selectedItem.
-	^ selectedContext methodClass = context methodClass
+	^ (self isInSelectedContextClass: context)
 		  ifTrue: [ self theme highlightTextColor ]
 		  ifFalse: [
-			  selectedContext method package = context method package
+			  (self isInSelectedContextPackage: context)
 				  ifTrue: [ self theme highlightTextColor alpha: 0.5 ]
 				  ifFalse: [ self theme textColor ] ]
 ]
