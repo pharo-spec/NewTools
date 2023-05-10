@@ -737,39 +737,38 @@ StDebugger >> initializeShortcuts: aWindowPresenter [
 StDebugger >> initializeStack [
 
 	stackTable := self newTable.
-	stackTable 
+	stackTable
 		activateOnDoubleClick;
 		whenActivatedDo: [ :selection | self doBrowseClass ].
 	stackTable
-		addColumn: ((SpImageTableColumn
-				  title: ''
-				  evaluated: [ :context | self stackIconForContext: context ])
+		addColumn: ((SpImageTableColumn title: '' evaluated: [ :context | self stackIconForContext: context ])
 				 width: 8;
 				 sortFunction: nil;
 				 yourself);
-		addColumn: ((SpStringTableColumn
-				  title: 'Class'
-				  evaluated: [ :context | self printReceiverClassInContext: context ])
+		addColumn: ((SpStringTableColumn title: 'Class' evaluated: [ :context | self printReceiverClassInContext: context ])
+				 displayColor: [ :context | self stackColorForContext: context ];
 				 sortFunction: nil;
 				 yourself);
-		addColumn:
-			((SpStringTableColumn title: 'Method' evaluated: [ :context | 
+		addColumn: ((SpStringTableColumn title: 'Method' evaluated: [ :context |
 					  | method |
 					  method := context method.
 					  method isCompiledBlock
 						  ifTrue: [ method sourceNode sourceCode ]
 						  ifFalse: [ method selector ] ])
+				 displayColor: [ :context | self stackColorForContext: context ];
 				 sortFunction: nil;
 				 yourself);
-		addColumn:
-			((SpStringTableColumn title: 'Package' evaluated: [ :context | 
+		addColumn: ((SpStringTableColumn title: 'Package' evaluated: [ :context |
 					  | package |
 					  package := context method package.
-					  package ifNil: [ '-' ] ifNotNil: [ package name asString ] ])
+					  package
+						  ifNil: [ '-' ]
+						  ifNotNil: [ package name asString ] ])
+				 displayColor: [ :context | self stackColorForContext: context ];
 				 sortFunction: nil;
 				 yourself).
-	stackTable transmitDo: [ :context | 
-		stackTable selection isEmpty ifFalse: [ 
+	stackTable transmitDo: [ :context |
+		stackTable selection isEmpty ifFalse: [
 			self updateInspectorFromContext: context.
 			self updateCodeFromContext: context.
 			self updateExtensionsFrom: self session.
@@ -1151,6 +1150,24 @@ StDebugger >> stackAndCodeWithExtensionsLayout [
 			add: self stackAndCodeLayout;
 			add: #extensionToolsNotebook;
 			yourself)
+]
+
+{ #category : #accessing }
+StDebugger >> stackColorForContext: context [
+	"I return the color the text should have in the stack by comparing the context in parameter to the selected context.
+	
+	If they are from the same class, we return a certain 'primary' highlight color.
+	If they are from the same package (but different class), we return a 'secondary' highlight color.
+	Else, we just keep the normal style."
+
+	| selectedContext |
+	selectedContext := stackTable selectedItem.
+	^ selectedContext methodClass = context methodClass
+		  ifTrue: [ self theme highlightTextColor ]
+		  ifFalse: [
+			  selectedContext method package = context method package
+				  ifTrue: [ self theme highlightTextColor alpha: 0.5 ]
+				  ifFalse: [ self theme textColor ] ]
 ]
 
 { #category : #stack }
