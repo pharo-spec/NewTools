@@ -749,22 +749,22 @@ StDebugger >> initializeStack [
 				 yourself);
 		addColumn: ((SpStringTableColumn
 				  title: 'Class'
-				  evaluated: [ :item | self printReceiverClassInContext: item ])
+				  evaluated: [ :context | self printReceiverClassInContext: context ])
 				 sortFunction: nil;
 				 yourself);
 		addColumn:
-			((SpStringTableColumn title: 'Method' evaluated: [ :item | 
+			((SpStringTableColumn title: 'Method' evaluated: [ :context | 
 					  | method |
-					  method := item method.
+					  method := context method.
 					  method isCompiledBlock
 						  ifTrue: [ method sourceNode sourceCode ]
 						  ifFalse: [ method selector ] ])
 				 sortFunction: nil;
 				 yourself);
 		addColumn:
-			((SpStringTableColumn title: 'Package' evaluated: [ :item | 
+			((SpStringTableColumn title: 'Package' evaluated: [ :context | 
 					  | package |
-					  package := item method package.
+					  package := context method package.
 					  package ifNil: [ '-' ] ifNotNil: [ package name asString ] ])
 				 sortFunction: nil;
 				 yourself).
