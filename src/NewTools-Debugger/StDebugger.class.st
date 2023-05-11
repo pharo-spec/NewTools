@@ -1178,7 +1178,7 @@ StDebugger >> stackColorForContext: context [
 		  ifTrue: [ self theme highlightTextColor ]
 		  ifFalse: [
 			  (self isInSelectedContextPackage: context)
-				  ifTrue: [ self theme highlightTextColor alpha: 0.5 ]
+				  ifTrue: [ self theme highlightTextColor mixed: 0.5 with: self theme textColor ]
 				  ifFalse: [ self theme textColor ] ]
 ]
 
