@@ -184,7 +184,7 @@ ChangeSorterModel >> forgetSelector: selector inClass: aClass fromChangeSet: aCh
 ChangeSorterModel >> removeChangeSet: aChangeSet prompting: doPrompt [
 	"Completely destroy my change set.  Check if it's OK first, and if doPrompt is true, get the user to confirm his intentions first."
 
-	| message aName changeSetNumber msg |
+	| message aName msg |
 	aName := aChangeSet name.
 	aChangeSet okayToRemove ifFalse: [^ self]. "forms current changes for some project"
 	(aChangeSet isEmpty or: [doPrompt not]) ifFalse:
@@ -215,8 +215,6 @@ lost if you destroy the change set.
 Do you really want to go ahead with this?') ifFalse: [^ self]]].
 
 	"Go ahead and remove the change set"
-	changeSetNumber := aChangeSet name initialIntegerOrNil.
-	changeSetNumber ifNotNil: [SystemVersion current unregisterUpdate: changeSetNumber].
 	ChangeSet removeChangeSet: aChangeSet.
 ]
 
