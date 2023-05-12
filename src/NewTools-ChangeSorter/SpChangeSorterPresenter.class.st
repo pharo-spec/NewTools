@@ -65,8 +65,7 @@ SpChangeSorterPresenter >> browseChangeSet [
 
 { #category : #'menu - message' }
 SpChangeSorterPresenter >> browseImplementorsOfMessages [
-
-	self model browseMessagesFrom: self selectedSelector
+	SystemNavigation new browseAllImplementorsOf: self selectedSelector
 ]
 
 { #category : #'menu - message' }
@@ -80,7 +79,7 @@ SpChangeSorterPresenter >> browseMethodFull [
 { #category : #'menu - message' }
 SpChangeSorterPresenter >> browseSendersOfMessages [
 
-	self model browseSendersOfMessagesFrom: self selectedSelector
+	self systemNavigation browseAllSendersOf: self selectedSelector
 ]
 
 { #category : #'menu - message' }
@@ -616,7 +615,7 @@ SpChangeSorterPresenter >> remove [
 SpChangeSorterPresenter >> removeClass [
 	"Remove the selected class from the system, at interactive user request.  Make certain the user really wants to do this, since it is not reversible.  Answer true if removal actually happened."
 
-	(self model removeClass: self selectedClass)
+	(SystemNavigation new removeClass: self selectedClass)
 		ifTrue: [ self setSelectedChangeSet: self selectedChangeSet ]
 ]
 
@@ -631,7 +630,7 @@ SpChangeSorterPresenter >> removeMessage [
 			class := self selectedClass.
 				(class includesSelector: selector) ifFalse:[^ self].
 				method := class>>selector.
-				(self model removeMethod: method inClass: class)
+				(SystemNavigation new removeMethod: method inClass: class)
 					ifTrue: [ self updateMessagesList ]]
 ]
 

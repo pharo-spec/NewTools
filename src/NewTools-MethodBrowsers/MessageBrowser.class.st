@@ -4,7 +4,7 @@ A MessageBrowser is a UI to browse a list of method, regardless of what they cou
 example: 
 
 MessageBrowser new
-	openWithSpec;
+	open;
 	messages: (SystemNavigation new allSendersOf: #at:)
 	yourself
 "

@@ -3,7 +3,7 @@ A ChangeSorterModel is a model used by Change Sorter UIs for computation
 "
 Class {
 	#name : #ChangeSorterModel,
-	#superclass : #AbstractTool,
+	#superclass : #Model,
 	#classVars : [
 		'ClassDescriptionsMap'
 	],
@@ -48,6 +48,17 @@ ChangeSorterModel >> addPreambleTo: aChangeSet [
 ChangeSorterModel >> allChanges [
 
 	^ ChangeSet allChangeSets reverse
+]
+
+{ #category : #method }
+ChangeSorterModel >> browseVersionsFrom: aMethod [
+	"Create and schedule a Versions Browser, showing all versions of the
+	currently selected message. Answer the browser or nil."
+
+	aMethod selector
+		ifNil: [ self inform: 'Sorry, only actual methods have retrievable versions.'. ^nil ]
+		ifNotNil: [:selector |
+			Smalltalk tools versionBrowser browseVersionsForMethod: aMethod ]
 ]
 
 { #category : #text }
