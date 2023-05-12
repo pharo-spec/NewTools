@@ -254,13 +254,13 @@ ChangeSorterModel >> setContentsOfChangeSet: changeSet forClass: class andSelect
 		ifNil: [
 			"Only the change set is currently selected"
 			^ self buildChangeSetDescriptionFor: changeSet ].
-	selector 
+	^ selector 
 		ifNil: [ 
 			"class is selected but not the selector"
-			^ self buildClassDescriptionFor: changeSet class: class ]
+			self buildClassDescriptionFor: changeSet class: class ]
 		ifNotNil: [
 			"a class and a selector are selected"
-			^ self buildSelectorDescriptionFor: changeSet class: class selector: selector ]
+			self buildSelectorDescriptionFor: changeSet class: class selector: selector ]
 ]
 
 { #category : #'change set' }
