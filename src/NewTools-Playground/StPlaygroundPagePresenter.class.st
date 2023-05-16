@@ -169,14 +169,14 @@ StPlaygroundPagePresenter >> doEvaluateAllAndGo [
 { #category : #commands }
 StPlaygroundPagePresenter >> doEvaluateAndGo [
 	| value |
-	
+
 	activationBlock ifNil: [ ^ self ].
 
-	value := text 
+	value := text
 		evaluate: text selectedTextOrLine
 		onCompileError: [ ^ self ]
 		onError: [ :e | e pass ].
-	
+
 	activationBlock value: value
 ]
 
@@ -207,18 +207,16 @@ StPlaygroundPagePresenter >> initializePresenters [
 		contextKeyBindings: (self menuActionsFor: text) asKMCategory;
 		whenTextChangedDo: [ :aString | page contents: aString ].
 
-	text announcer 
-		when: SpCodeWillBeEvaluatedAnnouncement 
+	text announcer
+		when: SpCodeWillBeEvaluatedAnnouncement
 		send: #ensureContentsFlushed
 		to: self.
-		
-	text eventHandler 
+
+	text eventHandler
 		whenKeyUpDo: [ :event | self updateLineNumber ];
 		whenMouseUpDo: [ :event | self updateLineNumber ];
 		"before taking focus position will be nil, ensure I have the correct one"
-		whenFocusReceivedDo: [ self updateLineNumber ].
-		
-	self updatePresenter
+		whenFocusReceivedDo: [ self updateLineNumber ]
 ]
 
 { #category : #initialization }
@@ -396,6 +394,8 @@ StPlaygroundPagePresenter >> updateLineNumber [
 { #category : #initialization }
 StPlaygroundPagePresenter >> updatePresenter [
 
+	page ifNotNil: [
+		text text: page contents ].
 	self updateLineNumber
 ]
 
