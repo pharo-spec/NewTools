@@ -3,7 +3,7 @@ A ChangeSorterModel is a model used by Change Sorter UIs for computation
 "
 Class {
 	#name : #ChangeSorterModel,
-	#superclass : #AbstractTool,
+	#superclass : #Model,
 	#classVars : [
 		'ClassDescriptionsMap'
 	],
@@ -48,6 +48,17 @@ ChangeSorterModel >> addPreambleTo: aChangeSet [
 ChangeSorterModel >> allChanges [
 
 	^ ChangeSet allChangeSets reverse
+]
+
+{ #category : #method }
+ChangeSorterModel >> browseVersionsFrom: aMethod [
+	"Create and schedule a Versions Browser, showing all versions of the
+	currently selected message. Answer the browser or nil."
+
+	aMethod selector
+		ifNil: [ self inform: 'Sorry, only actual methods have retrievable versions.'. ^nil ]
+		ifNotNil: [:selector |
+			Smalltalk tools versionBrowser browseVersionsForMethod: aMethod ]
 ]
 
 { #category : #text }
@@ -173,7 +184,7 @@ ChangeSorterModel >> forgetSelector: selector inClass: aClass fromChangeSet: aCh
 ChangeSorterModel >> removeChangeSet: aChangeSet prompting: doPrompt [
 	"Completely destroy my change set.  Check if it's OK first, and if doPrompt is true, get the user to confirm his intentions first."
 
-	| message aName changeSetNumber msg |
+	| message aName msg |
 	aName := aChangeSet name.
 	aChangeSet okayToRemove ifFalse: [^ self]. "forms current changes for some project"
 	(aChangeSet isEmpty or: [doPrompt not]) ifFalse:
@@ -204,8 +215,6 @@ lost if you destroy the change set.
 Do you really want to go ahead with this?') ifFalse: [^ self]]].
 
 	"Go ahead and remove the change set"
-	changeSetNumber := aChangeSet name initialIntegerOrNil.
-	changeSetNumber ifNotNil: [SystemVersion current unregisterUpdate: changeSetNumber].
 	ChangeSet removeChangeSet: aChangeSet.
 ]
 
