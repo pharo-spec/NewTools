@@ -4,7 +4,7 @@ A MessageBrowser is a UI to browse a list of method, regardless of what they cou
 example: 
 
 MessageBrowser new
-	openWithSpec;
+	open;
 	messages: (SystemNavigation new allSendersOf: #at:)
 	yourself
 "
@@ -363,10 +363,6 @@ MessageBrowser >> methodModified: anAnnouncement [
 ]
 
 { #category : #announcements }
-MessageBrowser >> methodRecategorized: aMethod [
-]
-
-{ #category : #announcements }
 MessageBrowser >> methodRemoved: anAnnouncement [
 	"this method forces the announcement to be handled in the UI process"
 	UIManager default defer:  [ 
@@ -389,7 +385,6 @@ MessageBrowser >> registerToAnnouncements [
 	SystemAnnouncer uniqueInstance weak		
 		when: MethodAdded send: #methodAdded: to: self;
 		when: MethodModified send: #methodModified: to: self;
-		when: MethodRecategorized send: #methodRecategorized: to: self;
 		when: MethodRemoved send: #methodRemoved: to: self;
 		when: ClassRenamed send: #classRenamed: to: self
 ]

@@ -13,9 +13,9 @@ Class {
 { #category : #helpers }
 StTestDebuggerProvider class >> compileMissingClassContextBuilder [
 	
-	self compile: 'buildDebuggerWithMissingClassContext
+	self compiler permitUndeclared: true; install: 'buildDebuggerWithMissingClassContext
 	
-	[ MissingClass new ]
+	[ ^ MissingClass ]
 		on: Error
 		do: [ :err | 			
 			self sessionFor: err signalerContext copy exception: err.

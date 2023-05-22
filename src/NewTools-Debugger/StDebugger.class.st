@@ -383,7 +383,7 @@ StDebugger >> createMissingClass [
 	[ 
 	| newClassBinding |
 	self flag: 'This method is actually hard to test because it requires user input to complete. How to test that automatically?'.
-	newClassBinding := OCUndeclaredVariableWarning new
+	newClassBinding := OCCodeReparator new
 		                   node: variableNode;
 		                   defineClass: variableNode name ]
 		on: Abort
@@ -919,6 +919,23 @@ StDebugger >> proceedDebugSession [
 	self close
 ]
 
+{ #category : #private }
+StDebugger >> protocolSuggestionsFor: aClass [
+
+	| classProtocols reject allExistingProtocols interestingProtocols |
+	classProtocols := aClass organization protocolNames.
+	reject := Set with: Protocol unclassified.
+	allExistingProtocols := (SystemNavigation default
+		                         allExistingProtocolsFor: aClass isMeta not)
+		                        reject: [ :p | classProtocols includes: p ].
+	interestingProtocols := classProtocols
+	                        ,
+		                        (allExistingProtocols asOrderedCollection
+			                         sort: [ :a :b |
+			                         a asLowercase < b asLowercase ]).
+	^ interestingProtocols reject: [ :e | reject includes: e ]
+]
+
 { #category : #actions }
 StDebugger >> recompileMethodTo: aString inContext: aContext notifying: aNotifyer [
 
@@ -995,7 +1012,7 @@ StDebugger >> requestProtocolIn: aClass [
 
 	| entryCompletion applicants choice |
 	self class fastTDD ifTrue: [ ^ Protocol unclassified ].
-	applicants := AbstractTool protocolSuggestionsFor: aClass.
+	applicants := self protocolSuggestionsFor: aClass.
 	entryCompletion := EntryCompletion new
 		                   dataSourceBlock: [ :currText | applicants ];
 		                   filterBlock: [ :currApplicant :currText | 
