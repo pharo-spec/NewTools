@@ -362,7 +362,6 @@ StDebugger >> connectPresenters [
 	self whenDisplayDo: [ 
 		self updateToolbar.
 		self updateCodeFromContext ]
-	for: self
 ]
 
 { #category : #'accessing - context' }
