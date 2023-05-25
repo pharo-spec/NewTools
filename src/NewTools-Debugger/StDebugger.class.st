@@ -923,16 +923,10 @@ StDebugger >> proceedDebugSession [
 StDebugger >> protocolSuggestionsFor: aClass [
 
 	| classProtocols reject allExistingProtocols interestingProtocols |
-	classProtocols := aClass organization protocolNames.
+	classProtocols := aClass protocolNames.
 	reject := Set with: Protocol unclassified.
-	allExistingProtocols := (SystemNavigation default
-		                         allExistingProtocolsFor: aClass isMeta not)
-		                        reject: [ :p | classProtocols includes: p ].
-	interestingProtocols := classProtocols
-	                        ,
-		                        (allExistingProtocols asOrderedCollection
-			                         sort: [ :a :b |
-			                         a asLowercase < b asLowercase ]).
+	allExistingProtocols := (SystemNavigation default allExistingProtocolsFor: aClass isMeta not) reject: [ :p | classProtocols includes: p ].
+	interestingProtocols := classProtocols , (allExistingProtocols asOrderedCollection sort: [ :a :b | a asLowercase < b asLowercase ]).
 	^ interestingProtocols reject: [ :e | reject includes: e ]
 ]
 
