@@ -91,6 +91,7 @@ Class {
 		'stackAndCodeContainer'
 	],
 	#classVars : [
+		'EnableStackColoring',
 		'ErrorRecursion',
 		'FastTDD'
 	],
@@ -145,9 +146,34 @@ StDebugger class >> debuggerContextClass [
 ]
 
 { #category : #accessing }
+StDebugger class >> debuggerSettingsOn: aBuilder [
+
+	<systemsettings>
+		(aBuilder setting: #enableStackColoring)
+				label: 'Enable stack coloring';
+				target: StDebugger;
+				parent: #debugging;
+				default: true;
+				description:
+					'If enable, the debugger will highlight the elements of the stacks that are from the same class and same package as the selected context.'.
+]
+
+{ #category : #accessing }
 StDebugger class >> defaultDebuggerRank [
 
 	^ 10
+]
+
+{ #category : #accessing }
+StDebugger class >> enableStackColoring [
+
+	^ EnableStackColoring
+]
+
+{ #category : #accessing }
+StDebugger class >> enableStackColoring: anObject [
+
+	EnableStackColoring := anObject
 ]
 
 { #category : #'tools registry' }
@@ -190,7 +216,8 @@ StDebugger class >> hasAnyActivatedExtension: extensionsClasses [
 { #category : #'class initialization' }
 StDebugger class >> initialize [ 
 	self flag: 'Error recursion is used only here?'.
-	ErrorRecursion := false
+	ErrorRecursion := false.
+	EnableStackColoring := true
 ]
 
 { #category : #opening }
@@ -1184,6 +1211,8 @@ StDebugger >> stackColorForContext: context [
 	If they are from the same class, we return a certain 'primary' highlight color.
 	If they are from the same package (but different class), we return a 'secondary' highlight color.
 	Else, we just keep the normal style."
+
+	self class enableStackColoring ifFalse: [ ^ self theme textColor ].
 
 	^ (self isInSelectedContextClass: context)
 		  ifTrue: [ self theme highlightTextColor ]
