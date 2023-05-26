@@ -932,6 +932,17 @@ StDebugger >> proceedDebugSession [
 	self close
 ]
 
+{ #category : #private }
+StDebugger >> protocolSuggestionsFor: aClass [
+
+	| classProtocols reject allExistingProtocols interestingProtocols |
+	classProtocols := aClass protocolNames.
+	reject := Set with: Protocol unclassified.
+	allExistingProtocols := (SystemNavigation default allExistingProtocolsFor: aClass isMeta not) reject: [ :p | classProtocols includes: p ].
+	interestingProtocols := classProtocols , (allExistingProtocols asOrderedCollection sort: [ :a :b | a asLowercase < b asLowercase ]).
+	^ interestingProtocols reject: [ :e | reject includes: e ]
+]
+
 { #category : #actions }
 StDebugger >> recompileMethodTo: aString inContext: aContext notifying: aNotifyer [
 
@@ -1008,7 +1019,7 @@ StDebugger >> requestProtocolIn: aClass [
 
 	| entryCompletion applicants choice |
 	self class fastTDD ifTrue: [ ^ Protocol unclassified ].
-	applicants := AbstractTool protocolSuggestionsFor: aClass.
+	applicants := self protocolSuggestionsFor: aClass.
 	entryCompletion := EntryCompletion new
 		                   dataSourceBlock: [ :currText | applicants ];
 		                   filterBlock: [ :currApplicant :currText | 

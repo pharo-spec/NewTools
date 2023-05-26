@@ -20,7 +20,6 @@ Class {
 	#instVars : [
 		'cachedHierarchy',
 		'topologySort',
-		'model',
 		'method',
 		'listPresenter'
 	],
@@ -44,8 +43,9 @@ MessageList >> browseClassRefs [
 
 { #category : #actions }
 MessageList >> browseMessages [
+
 	self currentMethod ifNotNil: [ :aMethod |
-		 model browseMessagesFrom: aMethod selector ]
+		SystemNavigation new browseImplementorsOf: aMethod selector ]
 ]
 
 { #category : #actions }
@@ -167,9 +167,9 @@ MessageList >> ensureKeyBindingsFor: aWidget [
 
 { #category : #initialization }
 MessageList >> initialize [
-	topologySort := true.
-	model := AbstractTool new.
-	super initialize
+	super initialize.
+	topologySort := true
+
 ]
 
 { #category : #initialization }
@@ -268,11 +268,6 @@ MessageList >> methodClassNameForItem: anItem [
 ]
 
 { #category : #accessing }
-MessageList >> model [ 
-	^model
-]
-
-{ #category : #accessing }
 MessageList >> numberOfElements [
 	^ listPresenter listSize
 ]
@@ -312,7 +307,7 @@ MessageList >> protocolNameForItem: anItem [
 MessageList >> removeMethods [
 
 	self currentMethod ifNotNil: [ :aMethod |
-		model removeMethod: aMethod inClass: aMethod methodClass ]
+		SystemNavigation new removeMethod: aMethod inClass: aMethod methodClass ]
 ]
 
 { #category : #selecting }

@@ -69,8 +69,7 @@ StDebuggerContextInteractionModel >> doItReceiver [
 
 { #category : #testing }
 StDebuggerContextInteractionModel >> hasBindingInContextOf: aString [
-	"we lookup the name without creating a new variable"
-	^ (context lookupVar: aString declare: false) notNil
+	^ (context lookupVar: aString) notNil
 ]
 
 { #category : #testing }
