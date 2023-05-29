@@ -146,19 +146,6 @@ StDebugger class >> debuggerContextClass [
 ]
 
 { #category : #accessing }
-StDebugger class >> debuggerSettingsOn: aBuilder [
-
-	<systemsettings>
-		(aBuilder setting: #enableStackColoring)
-				label: 'Enable stack coloring';
-				target: StDebugger;
-				parent: #debugging;
-				default: true;
-				description:
-					'If enable, the debugger will highlight the elements of the stacks that are from the same class and same package as the selected context.'.
-]
-
-{ #category : #accessing }
 StDebugger class >> defaultDebuggerRank [
 
 	^ 10
@@ -244,6 +231,19 @@ StDebugger class >> sessionClass [
 StDebugger class >> spanNewSessionFrom: anotherSession [
 	self flag: 'Where is that used? 2019-06-28'.
 	^ anotherSession spanNewSession
+]
+
+{ #category : #settings }
+StDebugger class >> stackColoringSettingOn: aBuilder [
+
+	<systemsettings>
+		(aBuilder setting: #enableStackColoring)
+				label: 'Enable stack coloring';
+				target: self;
+				parent: #debugging;
+				default: true;
+				description:
+					'If enable, the debugger will highlight the elements of the stacks that are from the same class and same package as the selected context.'.
 ]
 
 { #category : #accessing }
