@@ -551,6 +551,46 @@ StDebuggerTest >> testInterruptedProcessProvidesSameProcessAsTheActionModelOne [
 		identicalTo: debugger debuggerActionModel interruptedProcess
 ]
 
+{ #category : #tests }
+StDebuggerTest >> testIsInSelectedContextClass [
+
+	| stackTable context process |
+	context := thisContext.
+	process := Process forContext: context priority: Processor userInterruptPriority.
+	session := DebugSession named: 'test session' on: process startedAt: context.
+	session exception: OupsNullException new.
+
+	debugger := self debuggerOn: session.
+	stackTable := debugger stackTable.
+
+	stackTable selectItem: (stackTable items at: 2).
+	"Let's make sure we select the method we want in case SUnit changes in the future and that our tests will be on the right methods."
+	self assert: stackTable selectedItem method selector equals: #performTest.
+	self assert: (stackTable items at: 7) method selector equals: #runCase.
+
+	self assert: (debugger isInSelectedContextClass: (stackTable items at: 7))
+]
+
+{ #category : #tests }
+StDebuggerTest >> testIsInSelectedContextPackage [
+
+	| stackTable context process |
+	context := thisContext.
+	process := Process forContext: context priority: Processor userInterruptPriority.
+	session := DebugSession named: 'test session' on: process startedAt: context.
+	session exception: OupsNullException new.
+
+	debugger := self debuggerOn: session.
+	stackTable := debugger stackTable.
+
+	stackTable selectItem: (stackTable items at: 2).
+	"Let's make sure we select the method we want in case SUnit changes in the future and that our tests will be on the right methods."
+	self assert: stackTable selectedItem method selector equals: #performTest.
+	self assert: (stackTable items at: 12) method selector equals: #runTestCaseUnderWatchdog:.
+
+	self assert: (debugger isInSelectedContextPackage: (stackTable items at: 12))
+]
+
 { #category : #'tests - context inspector' }
 StDebuggerTest >> testNewDebuggerContext [
 	| debuggerContext |

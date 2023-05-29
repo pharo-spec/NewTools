@@ -91,6 +91,7 @@ Class {
 		'stackAndCodeContainer'
 	],
 	#classVars : [
+		'EnableStackColoring',
 		'ErrorRecursion',
 		'FastTDD'
 	],
@@ -150,6 +151,18 @@ StDebugger class >> defaultDebuggerRank [
 	^ 10
 ]
 
+{ #category : #accessing }
+StDebugger class >> enableStackColoring [
+
+	^ EnableStackColoring
+]
+
+{ #category : #accessing }
+StDebugger class >> enableStackColoring: anObject [
+
+	EnableStackColoring := anObject
+]
+
 { #category : #'tools registry' }
 StDebugger class >> extensionToolsClasses [
 
@@ -190,7 +203,8 @@ StDebugger class >> hasAnyActivatedExtension: extensionsClasses [
 { #category : #'class initialization' }
 StDebugger class >> initialize [ 
 	self flag: 'Error recursion is used only here?'.
-	ErrorRecursion := false
+	ErrorRecursion := false.
+	EnableStackColoring := true
 ]
 
 { #category : #opening }
@@ -217,6 +231,19 @@ StDebugger class >> sessionClass [
 StDebugger class >> spanNewSessionFrom: anotherSession [
 	self flag: 'Where is that used? 2019-06-28'.
 	^ anotherSession spanNewSession
+]
+
+{ #category : #settings }
+StDebugger class >> stackColoringSettingOn: aBuilder [
+
+	<systemsettings>
+		(aBuilder setting: #enableStackColoring)
+				label: 'Enable stack coloring';
+				target: self;
+				parent: #debugging;
+				default: true;
+				description:
+					'If enable, the debugger will highlight the elements of the stacks that are from the same class and same package as the selected context.'.
 ]
 
 { #category : #accessing }
@@ -737,39 +764,38 @@ StDebugger >> initializeShortcuts: aWindowPresenter [
 StDebugger >> initializeStack [
 
 	stackTable := self newTable.
-	stackTable 
+	stackTable
 		activateOnDoubleClick;
 		whenActivatedDo: [ :selection | self doBrowseClass ].
 	stackTable
-		addColumn: ((SpImageTableColumn
-				  title: ''
-				  evaluated: [ :context | self stackIconForContext: context ])
+		addColumn: ((SpImageTableColumn title: '' evaluated: [ :context | self stackIconForContext: context ])
 				 width: 8;
 				 sortFunction: nil;
 				 yourself);
-		addColumn: ((SpStringTableColumn
-				  title: 'Class'
-				  evaluated: [ :item | self printReceiverClassInContext: item ])
+		addColumn: ((SpStringTableColumn title: 'Class' evaluated: [ :context | self printReceiverClassInContext: context ])
+				 displayColor: [ :context | self stackColorForContext: context ];
 				 sortFunction: nil;
 				 yourself);
-		addColumn:
-			((SpStringTableColumn title: 'Method' evaluated: [ :item | 
+		addColumn: ((SpStringTableColumn title: 'Method' evaluated: [ :context |
 					  | method |
-					  method := item method.
+					  method := context method.
 					  method isCompiledBlock
 						  ifTrue: [ method sourceNode sourceCode ]
 						  ifFalse: [ method selector ] ])
+				 displayColor: [ :context | self stackColorForContext: context ];
 				 sortFunction: nil;
 				 yourself);
-		addColumn:
-			((SpStringTableColumn title: 'Package' evaluated: [ :item | 
+		addColumn: ((SpStringTableColumn title: 'Package' evaluated: [ :context |
 					  | package |
-					  package := item method package.
-					  package ifNil: [ '-' ] ifNotNil: [ package name asString ] ])
+					  package := context method package.
+					  package
+						  ifNil: [ '-' ]
+						  ifNotNil: [ package name asString ] ])
+				 displayColor: [ :context | self stackColorForContext: context ];
 				 sortFunction: nil;
 				 yourself).
-	stackTable transmitDo: [ :context | 
-		stackTable selection isEmpty ifFalse: [ 
+	stackTable transmitDo: [ :context |
+		stackTable selection isEmpty ifFalse: [
 			self updateInspectorFromContext: context.
 			self updateCodeFromContext: context.
 			self updateExtensionsFrom: self session.
@@ -820,6 +846,20 @@ StDebugger >> interruptedContext [
 StDebugger >> interruptedProcess [
 
 	^ self debuggerActionModel  interruptedProcess
+]
+
+{ #category : #testing }
+StDebugger >> isInSelectedContextClass: context [
+	"Return true if the given context is in the same class than the currently selected context of the stack."
+
+	^ self selectedContext methodClass = context methodClass
+]
+
+{ #category : #testing }
+StDebugger >> isInSelectedContextPackage: context [
+	"Return true if the given context is in the same package than the currently selected context of the stack."
+
+	^ self selectedContext method package = context method package
 ]
 
 { #category : #'commands - support' }
@@ -1162,6 +1202,24 @@ StDebugger >> stackAndCodeWithExtensionsLayout [
 			add: self stackAndCodeLayout;
 			add: #extensionToolsNotebook;
 			yourself)
+]
+
+{ #category : #accessing }
+StDebugger >> stackColorForContext: context [
+	"I return the color the text should have in the stack by comparing the context in parameter to the selected context.
+	
+	If they are from the same class, we return a certain 'primary' highlight color.
+	If they are from the same package (but different class), we return a 'secondary' highlight color.
+	Else, we just keep the normal style."
+
+	self class enableStackColoring ifFalse: [ ^ self theme textColor ].
+
+	^ (self isInSelectedContextClass: context)
+		  ifTrue: [ self theme highlightTextColor ]
+		  ifFalse: [
+			  (self isInSelectedContextPackage: context)
+				  ifTrue: [ self theme highlightTextColor mixed: 0.5 with: self theme textColor ]
+				  ifFalse: [ self theme textColor ] ]
 ]
 
 { #category : #stack }
