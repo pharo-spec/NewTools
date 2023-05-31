@@ -27,11 +27,6 @@ StInspectorTempNode >> children [
 	^ #()
 ]
 
-{ #category : #accessing }
-StInspectorTempNode >> debuggerColor [
-	^ tempVariable debuggerColors
-]
-
 { #category : #comparing }
 StInspectorTempNode >> hash [
 
