@@ -322,7 +322,6 @@ StDebuggerActionModel >> returnValueFromExpression: aString fromContext: aContex
 	value := session class compiler
 		source: aString;
 		context: aContext;
-		receiver: aContext receiver;
 		evaluate.
 	self session returnValue: value from: aContext.
 	self updateTopContext
