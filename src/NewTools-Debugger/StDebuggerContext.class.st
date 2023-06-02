@@ -132,7 +132,7 @@ StDebuggerContext >> receiverNodes [
 { #category : #nodes }
 StDebuggerContext >> selfNode [
 
-	^ StInspectorSelfNode hostObject: self context receiver
+	^ StInspectorSelfNode hostObject: (self context home ifNotNil: [:home | home receiver])
 ]
 
 { #category : #nodes }
