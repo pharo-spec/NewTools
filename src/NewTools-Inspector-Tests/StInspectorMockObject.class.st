@@ -26,14 +26,14 @@ StInspectorMockObject >> methodWithDnuingContext [
 StInspectorMockObject >> methodWithDnuingContextContext: aContext [
 	
 	"This selector is automatically called by concatenating Context: to an inspector presentation"
-	
+	<ignoreNotImplementedSelectors: #(iShouldNotUnderstandThis)>
 	self iShouldNotUnderstandThis
 ]
 
 { #category : #'inspector extensions' }
 StInspectorMockObject >> methodWithDnuingPresentation [
 	<inspectorPresentationOrder: 0 title: 'PresentationWithDNUingContext'>
-
+	<ignoreNotImplementedSelectors: #(iShouldNotUnderstandThis)>
 	self iShouldNotUnderstandThis
 ]
 
