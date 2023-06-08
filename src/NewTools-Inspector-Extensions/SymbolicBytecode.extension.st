@@ -1,12 +1,14 @@
 Extension { #name : #SymbolicBytecode }
 
 { #category : #'*NewTools-Inspector-Extensions' }
-SymbolicBytecode >> inspectionSourceCode [
-	<inspectorPresentationOrder: 30 title: 'Source'>
+SymbolicBytecode >> inspectionSource [
+	<inspectorPresentationOrder: 30 title: 'Method Source'>
 
 	^ SpCodePresenter new 
 		beForBehavior: self method methodClass;
 		text: self method sourceCode;
-		selectionInterval: self sourceInterval;
+		addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
+			interval: (self sourceInterval first to: self sourceInterval last + 1);
+			yourself);
 		yourself
 ]

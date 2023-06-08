@@ -27,7 +27,14 @@ StWorldMenuEntry >> doEvaluate [
 ]
 
 { #category : #accessing }
-StWorldMenuEntry >> icon [
+StWorldMenuEntry >> iconName [
+	"content is already a morph with an icon"
+	^ nil
+]
 
+{ #category : #accessing }
+StWorldMenuEntry >> iconOn: anApplication [
+
+	"world menu intries are morphic elements that already contain an icon"
 	^ content icon
 ]

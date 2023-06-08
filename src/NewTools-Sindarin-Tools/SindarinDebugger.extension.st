@@ -1,13 +1,13 @@
 Extension { #name : #SindarinDebugger }
 
 { #category : #'*NewTools-Sindarin-Tools' }
-SindarinDebugger >> debuggerExtensionKey [
-	^self class debuggerExtensionKey
+SindarinDebugger class >> debuggerExtensionKey [
+	^ #sindarin
 ]
 
 { #category : #'*NewTools-Sindarin-Tools' }
-SindarinDebugger class >> debuggerExtensionKey [
-	^ #sindarin
+SindarinDebugger >> debuggerExtensionKey [
+	^self class debuggerExtensionKey
 ]
 
 { #category : #'*NewTools-Sindarin-Tools' }
@@ -23,6 +23,6 @@ SindarinDebugger >> open [
 	"<inspectorPresentationOrder: -10 title: 'Sindarin'>"
 
 	| a |
-	a := (StSindarinDebuggerPresenter on: self) openWithSpec.
+	a := (StSindarinDebuggerPresenter on: self) open.
 	a window extent: 550@350.
 ]

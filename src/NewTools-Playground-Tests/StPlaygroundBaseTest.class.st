@@ -48,7 +48,7 @@ StPlaygroundBaseTest >> newPage [
 { #category : #'private - utilities' }
 StPlaygroundBaseTest >> openInstance [
 
-	presenter openWithSpec
+	presenter open
 ]
 
 { #category : #running }

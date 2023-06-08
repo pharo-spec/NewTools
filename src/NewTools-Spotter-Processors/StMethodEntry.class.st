@@ -20,9 +20,9 @@ StMethodEntry >> doEvaluate [
 ]
 
 { #category : #accessing }
-StMethodEntry >> icon [
+StMethodEntry >> iconName [
 
-	^ content systemIcon
+	^ content systemIconName
 ]
 
 { #category : #accessing }

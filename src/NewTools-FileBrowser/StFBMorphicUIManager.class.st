@@ -22,6 +22,14 @@ StFBMorphicUIManager class >> isActiveManager [
 	^ false
 ]
 
+{ #category : #testing }
+StFBMorphicUIManager class >> isValidForCurrentSystemConfiguration [
+
+	"Has to return false, otherwise UIManager will select this one as default automatically when the image is opened"
+
+	^ false
+]
+
 { #category : #'ui requests' }
 StFBMorphicUIManager >> chooseDirectory: label from: dir [
 	self flag: #ToDoWhenIntegration.
@@ -29,24 +37,28 @@ StFBMorphicUIManager >> chooseDirectory: label from: dir [
 	^ StFBOpenDirectoryDialog new
 		defaultFolder: dir;
 		title: (label ifNil: [ 'Choose Directory' translated ]);
-		openDialogWithSpec
+		open
 ]
 
 { #category : #'ui requests' }
 StFBMorphicUIManager >> chooseDirectory: label path: path [
+
 	^ StFBOpenDirectoryDialog new
-		defaultFolder: path;
-		title: (label ifNil: [ 'Choose Directory' translated ]);
-		openDialogWithSpec
+		  defaultFolder:
+			  (path ifNil: [ 
+					   StFBFileNavigationSystemPresenter defaultDirectory ]);
+		  title: (label ifNil: [ 'Choose Directory' translated ]);
+		  openModal;
+		  selectedEntry
 ]
 
 { #category : #'ui requests' }
 StFBMorphicUIManager >> chooseFileMatching: patterns label: label [
-	self deprecated: 'now you have to give a filter see FileDialog-filterStrategie'.
+	self deprecated: 'now you have to give a filter see NewTools-FileBrowser-Filtering'.
 	^ StFBOpenFileDialog new
 		title: (label ifNil: [ 'Choose File' translated ]);
 		"fileFilters: pattern  ;"
-		openWithSpec
+		open
 ]
 
 { #category : #'ui requests' }
@@ -58,7 +70,7 @@ StFBMorphicUIManager >> chooseFileName: title extensions: exts path: path previe
 		"fileFilters: (exts ifNil: [ #() ] ifNotNil: [ :e | e collect: [ :each | '*.' , each ] ]);"
 			defaultFolder: path;
 			previewer: preview;
-		openDialogWithSpec) ifNotNil: #basename
+		open) ifNotNil: #basename
 ]
 
 { #category : #'ui requests' }
@@ -70,7 +82,7 @@ StFBMorphicUIManager >> chooseFullFileName: title extensions: exts path: path pr
 		"fileFilters: (exts ifNil: [ #() ] ifNotNil: [ :e | e collect: [ :each | '*.' , each ] ]);"
 			defaultFolder: path;
 			previewer: preview;
-		openDialogWithSpec) ifNotNil: #fullName
+		open) ifNotNil: #fullName
 ]
 
 { #category : #'ui requests' }
@@ -81,7 +93,7 @@ StFBMorphicUIManager >> chooseFullFileNameMatching: patterns label: title [
 		title: (title ifNil: [ 'Choose File' translated ]);
 		"fileFilters: (patterns ifNil: [ #() ] ifNotNil: [ :e | e collect: [ :each | '*.' , each ] ]);
 		"
-			openDialogWithSpec
+			open
 ]
 
 { #category : #'ui requests' }
@@ -105,5 +117,5 @@ StFBMorphicUIManager >> fileSave: title extensions: exts path: path [
 		"fileFilters: (exts ifNil: [ #() ] ifNotNil: [ :e | e collect: [ :each | '*.' , each ] ]);
 		"
 			defaultFolder: path;
-		openDialogWithSpec
+		open
 ]

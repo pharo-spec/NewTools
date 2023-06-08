@@ -37,5 +37,7 @@ StPlaygroundVersionsCommand >> execute [
 	(StPlaygroundPageVersionsPresenter 
 		newApplication: context application
 		model: context) 
-		openDialogWithSpec
+		asModalWindow 
+			centeredRelativeTo: context window;
+			open
 ]

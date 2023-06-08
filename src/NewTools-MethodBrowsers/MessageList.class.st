@@ -20,15 +20,14 @@ Class {
 	#instVars : [
 		'cachedHierarchy',
 		'topologySort',
-		'model',
 		'method',
 		'listPresenter'
 	],
 	#category : #'NewTools-MethodBrowsers-Base'
 }
 
-{ #category : #specs }
-MessageList class >> defaultSpec [
+{ #category : #layout }
+MessageList class >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		add: #listPresenter;
@@ -39,33 +38,34 @@ MessageList class >> defaultSpec [
 MessageList >> browseClassRefs [
 
 	self currentMethod ifNotNil: [ :aMethod | 
-		model browseClassRefsOf: aMethod methodClass ]
+		self systemNavigation browseAllUsersOfClassOrTrait: aMethod methodClass ]
 ]
 
 { #category : #actions }
 MessageList >> browseMessages [
+
 	self currentMethod ifNotNil: [ :aMethod |
-		 model browseMessagesFrom: aMethod selector ]
+		SystemNavigation new browseImplementorsOf: aMethod selector ]
 ]
 
 { #category : #actions }
 MessageList >> browseMethod [
 
-	self currentMethod ifNotNil: [ :aMethod | aMethod browse ]
+	self currentMethod ifNotNil: [ :aMethod | self systemNavigation browse: aMethod ]
 ]
 
 { #category : #actions }
 MessageList >> browseSendersOfMessage [
 
 	self currentMethod ifNotNil: [ :aMethod |
-		model browseSendersOfMessagesFrom: aMethod selector ]
+		self systemNavigation browseAllSendersOf: aMethod selector ]
 ]
 
 { #category : #actions }
 MessageList >> browseVersions [
 
 	self currentMethod ifNotNil: [ :aMethod |
-		model browseVersionsFrom: aMethod compiledMethod ]
+		self application tools versionBrowser  browseVersionsForMethod: aMethod compiledMethod ]
 ]
 
 { #category : #testing }
@@ -106,7 +106,55 @@ MessageList >> currentMethod [
 	^ method
 ]
 
-{ #category : #'private-focus' }
+{ #category : #transmission }
+MessageList >> defaultOutputPort [
+
+	^ self outputSelectionPort
+]
+
+{ #category : #'private - actions' }
+MessageList >> doBrowseImplementors [
+		
+	self systemNavigation browseAllImplementorsOf: self selectedMethod selector
+]
+
+{ #category : #'private - actions' }
+MessageList >> doBrowseMethod [
+		
+	self systemNavigation browse: self selectedMethod
+]
+
+{ #category : #'private - actions' }
+MessageList >> doBrowseSenders [
+
+	self systemNavigation browseAllSendersOf: self selectedMethod selector
+]
+
+{ #category : #'private - actions' }
+MessageList >> doBrowseUsers [
+		
+	self systemNavigation browseAllUsersOfClassOrTrait: self selectedMethod methodClass
+]
+
+{ #category : #'private - actions' }
+MessageList >> doBrowseVersions [
+	
+	self systemNavigation browseVersionsOf: self selectedMethod
+]
+
+{ #category : #'private - actions' }
+MessageList >> doInspectMethod [
+	
+	self systemNavigation inspect: self selectedMethod
+]
+
+{ #category : #'private - actions' }
+MessageList >> doRemoveMethod [
+		
+	self selectedMethod removeFromSystem
+]
+
+{ #category : #'private - focus' }
 MessageList >> ensureKeyBindingsFor: aWidget [
 	aWidget bindKeyCombination: PharoShortcuts current browseShortcut toAction: [ self browseMethod ].
 	aWidget bindKeyCombination: PharoShortcuts current inspectItShortcut toAction: [ self inspectMethod ].
@@ -119,9 +167,9 @@ MessageList >> ensureKeyBindingsFor: aWidget [
 
 { #category : #initialization }
 MessageList >> initialize [
-	topologySort := true.
-	model := AbstractTool new.
-	super initialize
+	super initialize.
+	topologySort := true
+
 ]
 
 { #category : #initialization }
@@ -134,6 +182,8 @@ MessageList >> initializePresenters [
 		addColumn: (SpStringTableColumn title: 'Selector' evaluated: [ :item | self selectorOf: item ]);
 		addColumn: (SpStringTableColumn title: 'Package' evaluated: [ :item | self packageOf: item ]);
 		beResizable.
+		
+	listPresenter outputActivationPort transmitDo: [ :aMethod | self doBrowseMethod ].
 		
 	self contextMenu: self messageListMenu
 ]
@@ -163,49 +213,41 @@ MessageList >> locationOf: anItem [
 			aStream << (self protocolNameForItem: anItem) << ')' ]
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 MessageList >> messageListMenu [
+
 	^ self newMenu
-		addGroup: [ :aGroup | 
-			aGroup
-				addItem: [ :anItem | 
-					anItem
-						name: 'Browse full...';
-						shortcut: $b meta;
-						action: [ self selectedMethod browse ] ];
-				addItem: [ :anItem | 
-					anItem
-						name: 'Inspect method...';
-						shortcut: $i meta;
-						action: [ self selectedMethod inspect ] ] ];
-		addGroup: [ :aGroup | 
-			aGroup
-				addItem: [ :anItem | 
-					anItem
-						name: 'Remove method...';
-						shortcut: $x meta;
-						action: [ self selectedMethod removeFromSystem ] ];
-				addItem: [ :anItem | 
-					anItem
-						name: 'Senders of...';
-						shortcut: $n meta;
-						action: [ model browseSendersOfMessagesFrom: self selectedMethod selector ] ];
-				addItem: [ :anItem | 
-					anItem
-						name: 'Implementors of...';
-						shortcut: $m meta;
-						action: [ model browseMessagesFrom: self selectedMethod selector ] ] ];
-		addItem: [ :anItem | 
-			anItem
-				name: 'Users of...';
-				shortcut: $N meta;
-				action: [ model browseClassRefsOf: self selectedMethod methodClass ] ];
-		addItem:
-			[ :anItem | 
-			anItem
-				name: 'Versions...';
-				shortcut: $v meta;
-				action: [ model browseVersionsFrom: self selectedMethod ] ] yourself
+		addGroup: [ :group | group
+			addItem: [ :item | item 
+				name: 'Browse full'; 
+				shortcut: $b meta; 
+				action: [ self doBrowseMethod ] ];
+			addItem: [ :item | item 
+				name: 'Inspect method'; 
+				shortcut: $i meta; 
+				action: [ self doInspectMethod ] ] ];
+		addGroup: [ :group | group
+			addItem: [ :item | item 
+				name: 'Remove method'; 
+				shortcut: $x meta; 
+				action: [ self doRemoveMethod ] ];
+			addItem: [ :item | item 
+				name: 'Senders'; 
+				shortcut: $n meta; 
+				action: [ self doBrowseSenders ] ];
+			addItem: [ :item | item 
+				name: 'Implementors'; 
+				shortcut: $m meta; 
+				action: [ self doBrowseImplementors ] ] ];
+		addItem: [ :items | items 
+			name: 'Users'; 
+			shortcut: $N meta; 
+			action: [ self doBrowseUsers ] ];
+		addItem: [ :item | item 
+			name: 'Versions'; 
+			shortcut: $v meta; 
+			action: [ self doBrowseVersions ] ];
+		yourself
 ]
 
 { #category : #accessing }
@@ -226,13 +268,24 @@ MessageList >> methodClassNameForItem: anItem [
 ]
 
 { #category : #accessing }
-MessageList >> model [ 
-	^model
-]
-
-{ #category : #accessing }
 MessageList >> numberOfElements [
 	^ listPresenter listSize
+]
+
+{ #category : #transmission }
+MessageList >> outputActivationPort [
+
+	^ (SpActivationPort newPresenter: self)
+		delegateTo: [ listPresenter ];
+		yourself
+]
+
+{ #category : #transmission }
+MessageList >> outputSelectionPort [
+
+	^ (SpSelectionPort newPresenter: self)
+		delegateTo: [ listPresenter ];
+		yourself
 ]
 
 { #category : #private }
@@ -254,7 +307,7 @@ MessageList >> protocolNameForItem: anItem [
 MessageList >> removeMethods [
 
 	self currentMethod ifNotNil: [ :aMethod |
-		model removeMethod: aMethod inClass: aMethod methodClass ]
+		SystemNavigation new removeMethod: aMethod inClass: aMethod methodClass ]
 ]
 
 { #category : #selecting }

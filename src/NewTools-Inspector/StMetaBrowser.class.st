@@ -30,8 +30,8 @@ StMetaBrowser class >> buildCommandsGroupWith: presenter forRoot: aCmCommandsGro
 			yourself)
 ]
 
-{ #category : #specs }
-StMetaBrowser class >> defaultSpec [
+{ #category : #layout }
+StMetaBrowser class >> defaultLayout [
 	
 	^ SpPanedLayout newTopToBottom
 		add: (SpPanedLayout newLeftToRight
@@ -128,7 +128,7 @@ StMetaBrowser >> selectedMethod [
 { #category : #accessing }
 StMetaBrowser >> selectedObject [
 
-	^ self selectedMethod
+	^ self selectedMethod ifNil: [ self selectedClass  ]
 ]
 
 { #category : #'private - updating' }

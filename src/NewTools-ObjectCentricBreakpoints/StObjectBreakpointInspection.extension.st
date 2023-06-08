@@ -24,7 +24,5 @@ StObjectBreakpointInspection class >> removeBreakpointCommandFor: presenter [
 	| cmd |
 	cmd := StRemoveBreakpointCommand forSpecContext: presenter.
 	cmd iconName: #smallDelete.
-	cmd innerCommand
-		transform: [ :ctx | ctx methodsWithBreakpoints selection selectedItem ].
 	^ cmd
 ]

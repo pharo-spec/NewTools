@@ -51,8 +51,8 @@ StPlaygroundPagePresenter class >> defaultCacheDirectory [
 	^ (FileLocator localDirectory / 'play-cache') ensureCreateDirectory
 ]
 
-{ #category : #specs }
-StPlaygroundPagePresenter class >> defaultSpec [
+{ #category : #layout }
+StPlaygroundPagePresenter class >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		spacing: 3;
@@ -84,7 +84,7 @@ StPlaygroundPagePresenter class >> extendedToolbarCommands [
 StPlaygroundPagePresenter class >> open [ 
 	<script>
 	
-	^ (self on: StPlaygroundPage new) openWithSpec
+	^ (self on: StPlaygroundPage new) open
 ]
 
 { #category : #'instance creation' }
@@ -93,7 +93,7 @@ StPlaygroundPagePresenter class >> openContents: aString [
 
 	^ self new
 		contents: aString;
-		openWithSpec
+		open
 ]
 
 { #category : #'tools registry' }
@@ -125,6 +125,13 @@ StPlaygroundPagePresenter >> addMenuCommandsTo: aGroup [
 
 	self class extendedMenuCommands 
 		do: [ :each | aGroup register: (each forSpecContext: self) ]	
+]
+
+{ #category : #private }
+StPlaygroundPagePresenter >> addMenuEditionCommandsTo: aCommandGroup presenter: aCodePresenter [
+
+	aCodePresenter backendIncludesEditionMenu ifTrue: [ ^ self ].
+	aCommandGroup register: (aCodePresenter editionCommandsGroup name: 'Edition')
 ]
 
 { #category : #private }
@@ -162,20 +169,20 @@ StPlaygroundPagePresenter >> doEvaluateAllAndGo [
 { #category : #commands }
 StPlaygroundPagePresenter >> doEvaluateAndGo [
 	| value |
-	
+
 	activationBlock ifNil: [ ^ self ].
 
-	value := text 
+	value := text
 		evaluate: text selectedTextOrLine
 		onCompileError: [ ^ self ]
 		onError: [ :e | e pass ].
-	
-	activationBlock value: (StEvaluatedSelectionModel newValue: value)
+
+	activationBlock value: value
 ]
 
 { #category : #accessing }
 StPlaygroundPagePresenter >> ensureContentsFlushed [
-	
+
 	self page ensureContentsFlushed
 ]
 
@@ -195,17 +202,21 @@ StPlaygroundPagePresenter >> initializePresenters [
 		interactionModel: StPlaygroundInteractionModel new;
 		lineNumbers: self showLineNumbers;
 		overridingContextMenu;
+		withEditionContextMenu;
 		contextMenu: [ (self menuActionsFor: text) asMenuPresenter ];
 		contextKeyBindings: (self menuActionsFor: text) asKMCategory;
 		whenTextChangedDo: [ :aString | page contents: aString ].
-		
-	text eventHandler 
+
+	text announcer
+		when: SpCodeWillBeEvaluatedAnnouncement
+		send: #ensureContentsFlushed
+		to: self.
+
+	text eventHandler
 		whenKeyUpDo: [ :event | self updateLineNumber ];
 		whenMouseUpDo: [ :event | self updateLineNumber ];
 		"before taking focus position will be nil, ensure I have the correct one"
-		whenFocusReceivedDo: [ self updateLineNumber ].
-		
-	self updatePresenter
+		whenFocusReceivedDo: [ self updateLineNumber ]
 ]
 
 { #category : #initialization }
@@ -272,7 +283,7 @@ StPlaygroundPagePresenter >> menuActionsFor: aCodePresenter [
 			register: (StEvaluateCommand forSpecContext: self);
 			yourself);
 		register: (aCodePresenter rootCommandsGroup name: 'Code');
-		register: (aCodePresenter editionCommandsGroup name: 'Edition');
+		in: [ :this | self addMenuEditionCommandsTo: this presenter: aCodePresenter ];
 		in: [ :this | self addMenuCommandsTo: this ];
 		register: ((CmCommandGroup named: 'Playground') asSpecGroup
 			register: ((CmCommandGroup named: 'Base options') asSpecGroup
@@ -383,6 +394,8 @@ StPlaygroundPagePresenter >> updateLineNumber [
 { #category : #initialization }
 StPlaygroundPagePresenter >> updatePresenter [
 
+	page ifNotNil: [
+		text text: page contents ].
 	self updateLineNumber
 ]
 

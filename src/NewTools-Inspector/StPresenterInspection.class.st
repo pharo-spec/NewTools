@@ -11,8 +11,8 @@ Class {
 	#category : #'NewTools-Inspector-View'
 }
 
-{ #category : #specs }
-StPresenterInspection class >> defaultSpec [
+{ #category : #layout }
+StPresenterInspection class >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		add: #presenter;

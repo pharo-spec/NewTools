@@ -9,9 +9,7 @@ Class {
 }
 
 { #category : #'debug - session' }
-StMockSession >> implement: aMessage classified: messageCategory inClass: aClass forContext: aContext [
-
-	
+StMockSession >> implement: aMessage inClass: aClass forContext: aContext [
 ]
 
 { #category : #accessing }
@@ -29,6 +27,14 @@ StMockSession >> returnValue: value from: aContext [
 
 { #category : #'debugging actions' }
 StMockSession >> runToSelection: aSelectionInterval inContext: aContext [
+]
+
+{ #category : #accessing }
+StMockSession >> scope [
+]
+
+{ #category : #accessing }
+StMockSession >> sourceNodeExecuted [
 ]
 
 { #category : #'debugging actions' }

@@ -14,5 +14,5 @@ StFBBitmapFilter >> basename [
 
 { #category : #accessing }
 StFBBitmapFilter >> extensions [
-	^ #('.bmp' '.dib')
+	^ #('bmp' 'dib')
 ]

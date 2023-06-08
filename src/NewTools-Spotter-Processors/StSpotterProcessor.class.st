@@ -133,8 +133,11 @@ StSpotterProcessor >> actLogic [
 { #category : #'spotter-api' }
 StSpotterProcessor >> allFilteredCandidates [
 
-	self configureFilter.		
-	^ self filter upToEnd
+	| result |
+	self configureFilter  .
+	result := OrderedCollection new.
+	[ self filter atEnd or: [ result size > StSpotterPragmaBasedProcessor defaultNestedItemsLimit ]] whileFalse: [ result add: self filter next ].
+	^ result
 ]
 
 { #category : #filtering }
@@ -223,6 +226,12 @@ StSpotterProcessor >> isRunning [
 StSpotterProcessor >> itemIcon [
 
 	^ [ :anItem | anItem icon ]
+]
+
+{ #category : #accessing }
+StSpotterProcessor >> itemIconName [
+
+	^ [ :item | item systemIconName ]
 ]
 
 { #category : #accessing }

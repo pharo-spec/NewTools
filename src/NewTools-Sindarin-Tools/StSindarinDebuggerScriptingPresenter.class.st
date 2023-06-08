@@ -16,14 +16,13 @@ Class {
 		'code',
 		'resultInspection',
 		'toolbar',
-		'sindarinDebugger',
-		'stDebugger'
+		'sindarinDebugger'
 	],
 	#category : #'NewTools-Sindarin-Tools'
 }
 
-{ #category : #specs }
-StSindarinDebuggerScriptingPresenter class >> defaultSpec [
+{ #category : #layout }
+StSindarinDebuggerScriptingPresenter class >> defaultLayout [
 	^ SpBoxLayout newTopToBottom
 		add: #toolbar expand: false;
 		add: #code;
@@ -35,14 +34,15 @@ StSindarinDebuggerScriptingPresenter class >> defaultSpec [
 		yourself
 ]
 
+{ #category : #visiting }
+StSindarinDebuggerScriptingPresenter >> accept: aVisitor [
+
+	^ aVisitor visitSindarin: self
+]
+
 { #category : #actions }
 StSindarinDebuggerScriptingPresenter >> createCommandFromScript [
 	self flag: 'todo'
-]
-
-{ #category : #accessing }
-StSindarinDebuggerScriptingPresenter >> debugger [ 
-	^stDebugger
 ]
 
 { #category : #'debugger extension' }
@@ -89,12 +89,11 @@ StSindarinDebuggerScriptingPresenter >> initializePresenters [
 
 { #category : #initialization }
 StSindarinDebuggerScriptingPresenter >> initializeToolbar [
-	toolbar := self newToolbar.
-	toolbar addStyle: 'stToolbar'.
-	toolbar beIcons.
-	SpToolbarPresenterBuilder new
-		toolbarPresenter: toolbar;
-		visit: self toolbarActions
+
+	toolbar := self newToolbar
+		addStyle: 'stToolbar';
+		beIcons;
+		fillWith: self toolbarActions
 ]
 
 { #category : #actions }
@@ -115,7 +114,7 @@ StSindarinDebuggerScriptingPresenter >> saveScript [
 { #category : #accessing }
 StSindarinDebuggerScriptingPresenter >> setModelBeforeInitialization: aStDebugger [
 	"My original model is the debugger presenter that I extend"
-	stDebugger := aStDebugger.
+	debugger := aStDebugger.
 	sindarinDebugger := aStDebugger sindarinDebugger
 ]
 

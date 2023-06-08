@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'oldCode'
 	],
-	#category : #'NewTools-Debugger-Tests'
+	#category : #'NewTools-Debugger-Tests-Model'
 }
 
 { #category : #running }

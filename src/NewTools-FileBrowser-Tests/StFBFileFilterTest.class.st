@@ -43,14 +43,17 @@ StFBFileFilterTest >> testFoldersOnly [
 
 { #category : #tests }
 StFBFileFilterTest >> testHiddenFiles [
+
 	self
-		assert: ((filter noHiddenFiles: root children) collect: #basename) asSet
-		equals:
-			(Set
-				with: 'dir'
-				with: 'dir.ext'
-				with: 'sth.ext'
-				with: 'sth.aaa')
+		assert:
+		((filter noHiddenFiles: root children) collect: #basename) asSet
+		equals: (Set
+				 with: 'dir'
+				 with: 'dir.ext'
+				 with: 'sth.ext'
+				 with: 'sth.aaa'
+				 with: 'banana.jpg'
+				 with: 'patate.png')
 ]
 
 { #category : #tests }

@@ -22,16 +22,6 @@ StPlaygroundBindingsPresenter class >> defaultExtent [
 	^ 600@400
 ]
 
-{ #category : #specs }
-StPlaygroundBindingsPresenter class >> defaultSpec [
-
-	^ SpPanedLayout newLeftToRight
-		positionOfSlider: 30 percent;
-		add: #bindingPanel;
-		add: #inspectorPanel;
-		yourself
-]
-
 { #category : #accessing }
 StPlaygroundBindingsPresenter class >> defaultTitle [
 
@@ -69,6 +59,10 @@ StPlaygroundBindingsPresenter >> contextMenuActions [
 		beRoot;
 		register: (StRemoveBindingCommand forSpecContext: self);
 		register: (StToggleBindingCommand forSpecContext: self);
+		register: ((CmCommandGroup forSpecNamed: 'CRITICAL')
+			beDisplayedAsGroup;
+			register: (StRemoveAllBindingsCommand forSpecContext: self);
+			yourself);
 		yourself
 ]
 
@@ -76,6 +70,16 @@ StPlaygroundBindingsPresenter >> contextMenuActions [
 StPlaygroundBindingsPresenter >> contextMenuKeyBindings [
 
 	^ self contextMenuActions asKMCategory
+]
+
+{ #category : #layout }
+StPlaygroundBindingsPresenter >> defaultLayout [
+
+	^ SpPanedLayout newLeftToRight
+		positionOfSlider: 30 percent;
+		add: bindingPanel;
+		add: inspectorPanel;
+		yourself
 ]
 
 { #category : #testing }
@@ -123,14 +127,20 @@ StPlaygroundBindingsPresenter >> initializeListPanel [
 
 	bindingPanel := (self instantiate: StHeaderPanel)
 		number: 1;
-		label: 'Bindings'.
+		label: 'Bindings';
+		toolbarActions: self toolbarActions.
 		
 	bindingList := self newTable
-		addColumn: (SpStringTableColumn title: 'Name' evaluated: [ :each | each key ]);
-		addColumn: (SpStringTableColumn 
-			title: 'Scope' 
-			evaluated: [ :each | self scopeNameFor: each ]) 
-			beNotExpandable;
+		addColumn: (SpStringTableColumn new 
+			title: 'Name';
+			evaluated: [ :each | each key ]; 
+			beSortable;
+			yourself);
+		addColumn: (SpStringTableColumn new  
+			title: 'Scope';
+			evaluated: [ :each | self scopeNameFor: each ];
+			beSortable;
+			yourself);
 		contextMenu: [ self contextMenu ];
 		contextKeyBindings: self contextMenuKeyBindings;
 		yourself.
@@ -199,6 +209,13 @@ StPlaygroundBindingsPresenter >> newInspectorWithTransmission: aClass on: aBindi
 ]
 
 { #category : #actions }
+StPlaygroundBindingsPresenter >> removeAllBindings [
+	
+	parent interactionModel removeAllBindings.
+	self updatePresenterKeepingSelection
+]
+
+{ #category : #actions }
 StPlaygroundBindingsPresenter >> removeSelectedBinding [
 
 	self selectedBindingIsLocal 
@@ -259,6 +276,15 @@ StPlaygroundBindingsPresenter >> toggleSelectedBindingScope [
 		ifTrue: [ self moveSelectedBindingToSharedScope ]
 		ifFalse: [ self moveSelectedBindingToLocalScope ].
 	self updatePresenterKeepingSelection
+]
+
+{ #category : #private }
+StPlaygroundBindingsPresenter >> toolbarActions [
+
+	^ CmCommandGroup forSpec
+		beRoot;
+		register: (StRemoveAllBindingsCommand forSpecContext: self);
+		yourself
 ]
 
 { #category : #initialization }

@@ -36,10 +36,7 @@ StSpotterCandidateLinkPresenter >> initializePresenters [
 		add: (labelPresenter := self newLabel);
 		yourself).
 		
-	self addStyle: 'stSpotterLink'.
-	self entry ifNotNil: [ 
-		iconPresenter image: self entry icon.
-		labelPresenter label: self entry label ]
+	self addStyle: 'stSpotterLink'
 ]
 
 { #category : #testing }
@@ -60,4 +57,13 @@ StSpotterCandidateLinkPresenter >> model [
 StSpotterCandidateLinkPresenter >> setModelBeforeInitialization: aCandidateLink [
 
 	model := aCandidateLink
+]
+
+{ #category : #initialization }
+StSpotterCandidateLinkPresenter >> updatePresenter [
+
+	self entry ifNil: [ ^ self ]. 
+	
+	iconPresenter image: (self entry iconOn: self application).
+	labelPresenter label: self entry label
 ]

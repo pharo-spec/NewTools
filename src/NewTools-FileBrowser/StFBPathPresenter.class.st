@@ -20,8 +20,6 @@ Internal Representation and Key Implementation Points.
 Class {
 	#name : #StFBPathPresenter,
 	#superclass : #SpPresenter,
-	#traits : 'SpTDynamicPresenter',
-	#classTraits : 'SpTDynamicPresenter classTrait',
 	#instVars : [
 		'action',
 		'count'
@@ -30,46 +28,54 @@ Class {
 }
 
 { #category : #accessing }
-StFBPathPresenter >> action: anObject [
-	action := anObject
+StFBPathPresenter >> action: aValuable [
+	action := aValuable
 ]
 
 { #category : #accessing }
 StFBPathPresenter >> addLinkTo: aPath [
-	^ self
-		addPresenter:
-			(SpLinkPresenter new
-				action: [ action value: aPath asFileReference ];
-				label: aPath basename;
-				yourself)
+
+	^ self addPresenter: (self newLink
+			   action: [ action value: aPath asFileReference ];
+			   label: aPath basename;
+			   yourself)
 ]
 
 { #category : #accessing }
 StFBPathPresenter >> addPresenter: aPresenter [
-	self presenterAt: count asString put: aPresenter.
-	count := count + 1
+
+	self layout
+		add: aPresenter
+		expand: false
+		fill: false
+		padding: 0
 ]
 
 { #category : #accessing }
 StFBPathPresenter >> addSeparator [
-	^ self
-		addPresenter:
-			(SpLabelPresenter new
-				label: '/';
-				yourself)
+
+	^ self addPresenter: (self newLabel
+			   label: '/';
+			   yourself)
 ]
 
 { #category : #accessing }
 StFBPathPresenter >> file: aFile [
-	count := 0.
-	self basicPresenters removeAll.
-	aFile asAbsolute fullPath withParents do: [ :path | self addLinkTo: path ] separatedBy: [ self addSeparator ]
+
+	self initializeLayout.
+	aFile asAbsolute fullPath withParents
+		do: [ :path | self addLinkTo: path ]
+		separatedBy: [ self addSeparator ]
+]
+
+{ #category : #initialization }
+StFBPathPresenter >> initializeLayout [
+
+	^ layout := SpBoxLayout newLeftToRight
 ]
 
 { #category : #accessing }
 StFBPathPresenter >> layout [
-	| l |
-	l := SpBoxLayout newHorizontal.
-	self presentersDo: [ :p | l add: p expand: false fill: false padding: 0 ].
-	^ l
+
+	^ super layout ifNil: [ self initializeLayout ]
 ]

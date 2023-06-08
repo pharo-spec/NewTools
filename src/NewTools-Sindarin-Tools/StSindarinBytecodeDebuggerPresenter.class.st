@@ -8,7 +8,6 @@ Class {
 		'bcContextInspection',
 		'toolbar',
 		'sindarinDebugger',
-		'stDebugger',
 		'bytecodeList',
 		'currentPC'
 	],
@@ -21,8 +20,8 @@ StSindarinBytecodeDebuggerPresenter class >> defaultDisplayOrder [
 	^ 2
 ]
 
-{ #category : #specs }
-StSindarinBytecodeDebuggerPresenter class >> defaultSpec [
+{ #category : #layout }
+StSindarinBytecodeDebuggerPresenter class >> defaultLayout [
 	^ SpBoxLayout newTopToBottom
 		add: #toolbar expand: false fill: false padding: 0;
 		add: #bytecode;		
@@ -30,9 +29,10 @@ StSindarinBytecodeDebuggerPresenter class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #accessing }
-StSindarinBytecodeDebuggerPresenter >> debugger [ 
-	^stDebugger
+{ #category : #visiting }
+StSindarinBytecodeDebuggerPresenter >> accept: aVisitor [
+
+	^ aVisitor visitBytecode: self
 ]
 
 { #category : #'debugger extension' }
@@ -50,18 +50,17 @@ StSindarinBytecodeDebuggerPresenter >> initializePresenters [
 
 { #category : #initialization }
 StSindarinBytecodeDebuggerPresenter >> initializeToolbar [
-	toolbar := self newToolbar.
-	toolbar addStyle: 'stToolbar'.
-	toolbar beIcons.
-	SpToolbarPresenterBuilder new
-		toolbarPresenter: toolbar;
-		visit: self toolbarActions
+	
+	toolbar := self newToolbar
+		addStyle: 'stToolbar';
+		beIcons;
+		fillWith: self toolbarActions
 ]
 
 { #category : #accessing }
 StSindarinBytecodeDebuggerPresenter >> setModelBeforeInitialization: aStDebugger [
 	"My original model is the debugger presenter that I extend"
-	stDebugger := aStDebugger.
+	debugger := aStDebugger.
 	sindarinDebugger := aStDebugger sindarinDebugger
 ]
 
@@ -91,8 +90,8 @@ StSindarinBytecodeDebuggerPresenter >> toolbarActions [
 StSindarinBytecodeDebuggerPresenter >> updateBytecode [
 
 	| selectionIndex |
-	bytecodeList := self sindarin currentBytecode.
-	currentPC := self sindarin pc.
+	bytecodeList := debugger currentContext method symbolicBytecodes.
+	currentPC := debugger currentContext pc .
 	bytecode
 		items: bytecodeList;
 		displayIcon: [ :elem | 
@@ -100,7 +99,7 @@ StSindarinBytecodeDebuggerPresenter >> updateBytecode [
 				ifTrue: [ Smalltalk iconNamed: #glamorousRight ]
 				ifFalse: [ Smalltalk iconNamed: #blank ] ].
 	bcContextInspection model:
-		(StSindarinBytecodeContextInspectorModel on: self sindarin context).
+		(StSindarinBytecodeContextInspectorModel on: debugger currentContext).
 	selectionIndex := currentPC - bytecodeList first offset + 1.
 	selectionIndex <= bytecodeList size ifTrue: [ 
 		bytecode selectIndex: selectionIndex ]

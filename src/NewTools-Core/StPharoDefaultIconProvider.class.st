@@ -15,7 +15,7 @@ StPharoDefaultIconProvider >> iconNamed: aSymbol [
 		ifAbsent: [ aSymbol ])
 ]
 
-{ #category : #'class initialization' }
+{ #category : #initialization }
 StPharoDefaultIconProvider >> initialize [
 
 	super initialize. 
@@ -23,7 +23,7 @@ StPharoDefaultIconProvider >> initialize [
 	self initializeSynonyms
 ]
 
-{ #category : #'class initialization' }
+{ #category : #initialization }
 StPharoDefaultIconProvider >> initializeSynonyms [
 
 	synonyms 

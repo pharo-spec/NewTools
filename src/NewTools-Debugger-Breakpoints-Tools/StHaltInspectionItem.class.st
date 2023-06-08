@@ -86,7 +86,8 @@ StHaltInspectionItem >> printContents [
 
 { #category : #printing }
 StHaltInspectionItem >> printEntity [
-	^displayEntity method printString
+
+	^ displayEntity compiledMethod printString
 ]
 
 { #category : #printing }

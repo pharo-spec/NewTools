@@ -1,5 +1,12 @@
+"
+All Spec presenters using me will be recognised as debugger extensions when opening a debugger.
+
+"
 Trait {
 	#name : #TStDebuggerExtension,
+	#instVars : [
+		'debugger'
+	],
 	#classInstVars : [
 		'showDebuggerExtension',
 		'debuggerExtensionDisplayOrder'
@@ -25,6 +32,12 @@ TStDebuggerExtension classSide >> displayOrder: anInteger [
 	debuggerExtensionDisplayOrder := anInteger
 ]
 
+{ #category : #testing }
+TStDebuggerExtension classSide >> isOnlyForTests [
+
+	^ false
+]
+
 { #category : #'debugger extension' }
 TStDebuggerExtension classSide >> showInDebugger [
 	^showDebuggerExtension ifNil: [showDebuggerExtension := false]
@@ -32,7 +45,21 @@ TStDebuggerExtension classSide >> showInDebugger [
 
 { #category : #'debugger extension' }
 TStDebuggerExtension classSide >> showInDebugger: aBoolean [
-	showDebuggerExtension := aBoolean
+
+	self showInDebugger = aBoolean ifTrue: [ "The activated state hasn't changed. So we don't announce an extension toggle"
+		^ self ].
+	showDebuggerExtension := aBoolean.
+	SystemAnnouncer uniqueInstance announce:
+		(StDebuggerExtensionActivationToggle debuggerExtensionClass: self)
+]
+
+{ #category : #visiting }
+TStDebuggerExtension >> accept: aVisitor [
+]
+
+{ #category : #accessing }
+TStDebuggerExtension >> debugger [
+	^debugger
 ]
 
 { #category : #'debugger extension' }
@@ -40,7 +67,18 @@ TStDebuggerExtension >> debuggerExtensionToolName [
 	^self explicitRequirement 
 ]
 
+{ #category : #layout }
+TStDebuggerExtension >> debuggerLayout [
+
+	^ self defaultLayout
+]
+
 { #category : #'debugger extension' }
 TStDebuggerExtension >> displayOrder [
 	^self class displayOrder
+]
+
+{ #category : #initialization }
+TStDebuggerExtension >> setModelBeforeInitialization: aDebugger [
+	 debugger := aDebugger
 ]

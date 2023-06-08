@@ -10,8 +10,8 @@ Class {
 	#category : #'NewTools-Sindarin-Tools'
 }
 
-{ #category : #specs }
-StSindarinDebuggerPresenter class >> defaultSpec [
+{ #category : #layout }
+StSindarinDebuggerPresenter class >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		add: #toolbar expand: false;
@@ -38,10 +38,10 @@ StSindarinDebuggerPresenter >> buildToolbar [
 	group := CmCommandGroup forSpec.
 	SindarinCommand allSubclasses
 		do: [ :cmd | group register: (cmd forSpecContext: self) ].
-	^ group asToolbarPresenterWith: [ :presenter |
-		presenter 
-			displayMode: self application toolbarDisplayMode;
-			addStyle: 'stToolbar' ]
+	^ self newToolbar 
+		displayMode: self application toolbarDisplayMode;
+		addStyle: 'stToolbar';		
+		fillWith: group
 ]
 
 { #category : #initialization }

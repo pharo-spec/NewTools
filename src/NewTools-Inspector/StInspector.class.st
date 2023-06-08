@@ -36,6 +36,14 @@ StInspector class >> defaultInspectorDiveOnSingleClick [
 	^ true
 ]
 
+{ #category : #layout }
+StInspector class >> defaultLayout [
+
+	^ SpBoxLayout newTopToBottom
+		add: #millerList;
+		yourself
+]
+
 { #category : #accessing }
 StInspector class >> defaultPreferredExtent [
 
@@ -46,14 +54,6 @@ StInspector class >> defaultPreferredExtent [
 StInspector class >> defaultSpacing [
 
 	^ 3
-]
-
-{ #category : #specs }
-StInspector class >> defaultSpec [
-
-	^ SpBoxLayout newTopToBottom
-		add: #millerList;
-		yourself
 ]
 
 { #category : #'instance creation' }
@@ -128,7 +128,7 @@ StInspector class >> onObject: anObject [
 { #category : #'instance creation' }
 StInspector class >> openOn: anObject [
 
-	^ (self onObject: anObject) openWithSpec
+	^ (self onObject: anObject) open
 ]
 
 { #category : #accessing }
@@ -153,7 +153,8 @@ StInspector class >> register [
 { #category : #'tools registry' }
 StInspector class >> registerToolsOn: registry [
 	"self registerToolsOn: Smalltalk tools " 
-	registry register: self as: #inspector
+	registry register: self as: #inspector.
+	registry register: self as: #basicInspector
 ]
 
 { #category : #settings }

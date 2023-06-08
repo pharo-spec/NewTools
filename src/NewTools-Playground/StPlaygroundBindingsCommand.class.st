@@ -37,5 +37,5 @@ StPlaygroundBindingsCommand >> execute [
 	(StPlaygroundBindingsPresenter 
 		newApplication: context application 
 		model: context) 
-		openDialogWithSpec
+		openDialog
 ]

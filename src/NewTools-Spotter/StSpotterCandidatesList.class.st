@@ -139,17 +139,14 @@ StSpotterCandidatesList >> initialize [
 { #category : #testing }
 StSpotterCandidatesList >> isEmpty [
 	"Return true if there are no candidates in the list, false otherwise"
-	<return: #Boolean>
-
 	^ self candidates isEmpty
 ]
 
 { #category : #testing }
 StSpotterCandidatesList >> isNotEmpty [
 	"Return true if there is at least one candidate in the list, false otherwise"
-	<return: #Boolean>
 
-	^ self isEmpty not
+	^ self candidates isNotEmpty
 ]
 
 { #category : #processors }

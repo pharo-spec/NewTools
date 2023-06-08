@@ -21,12 +21,13 @@ RPackage >> spotterExtensionMethodsFor: aStep [
 { #category : #'*NewTools-Spotter-Extensions' }
 RPackage >> spotterMonticelloPackageFor: aStep [
 	<stSpotterOrder: 41>
+	
 	aStep listProcessor
 		title: 'Monticello Package';
 		allCandidates: [ self mcPackage 
 			ifNotNil: [ :mcPackage | Array with: mcPackage ] 
 			ifNil: [ #() ] ];
-		itemIcon: [ Smalltalk ui icons iconNamed: #monticelloPackageIcon ];
+		itemIconName: [ :item | #monticelloPackageIcon ];
 		filter: StFilterSubstring
 ]
 
@@ -38,7 +39,7 @@ RPackage >> spotterMonticelloWorkingCopyFor: aStep [
 		allCandidates: [ self mcPackage 
 			ifNotNil: [ :mcPackage | Array with: mcPackage workingCopy ] 
 			ifNil: [ #() ] ];
-		itemIcon: [ Smalltalk ui icons iconNamed: #versionControlIcon ];
+		itemIconName: [ :item | #versionControl ];
 		filter: StFilterSubstring
 ]
 

@@ -10,22 +10,39 @@ StFBOpenFileDialogTest >> dialogClass [
 ]
 
 { #category : #tests }
-StFBOpenFileDialogTest >> testArrayFilters [
-	dialog fileFilters: #('*.ston' '*.image').
-	self assert: dialog fileFilters equals: {'*.ston, *.image' -> #('*.ston' '*.image')}
+StFBOpenFileDialogTest >> testExtensions [
+
+	dialog extensions: #( ext ) named: 'Ext files'.
+	self
+		assertCollection:
+		dialog fileNavigationSystem filtersDropList selectedItem extensions
+		equals: #( ext ).
+	self
+		assert:
+		dialog fileNavigationSystem filtersDropList selectedItem basename
+		equals: 'Ext files'
 ]
 
 { #category : #tests }
-StFBOpenFileDialogTest >> testExtensions [
-	dialog extensionFilters: {'Ext files' -> #(ext)}.
-	self assert: dialog fileFilters equals: {'Ext files (*.ext)' -> #('*.ext')}
+StFBOpenFileDialogTest >> testMultipleExtensions [
+
+	dialog extensions: #( image changes sources ) named: 'Src files'.
+	self
+		assertCollection:
+		dialog fileNavigationSystem filtersDropList selectedItem extensions
+		equals: #( image changes sources ).
+	self
+		assert:
+		dialog fileNavigationSystem filtersDropList selectedItem basename
+		equals: 'Src files'
 ]
 
 { #category : #tests }
 StFBOpenFileDialogTest >> testSelectFile [
+
 	| selectedFile |
 	dialog okAction: [ :file | selectedFile := file ].
-	window := dialog openDialogWithSpec.
+	window := dialog openDialog.
 	self assert: dialog currentDirectory equals: root.
 	dialog selectFile: root / 'sth.ext'.
 	self assert: dialog selectedEntry equals: root / 'sth.ext'.

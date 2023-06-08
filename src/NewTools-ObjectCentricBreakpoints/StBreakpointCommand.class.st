@@ -4,20 +4,26 @@ Class {
 	#category : #'NewTools-ObjectCentricBreakpoints'
 }
 
-{ #category : #deafult }
-StBreakpointCommand class >> defaultIconName [
-
-	^#smallDebug	
-]
-
-{ #category : #'instance creation' }
-StBreakpointCommand class >> forSpec [ 
-	^self forSpecWithIconNamed: self defaultIconName
-]
-
 { #category : #testing }
 StBreakpointCommand >> appliesTo: aTool [
 	^ [ aTool owner class ~= StDebuggerRawObjectInspector ]
 		on: Error
 		do: [ false ]
+]
+
+{ #category : #converting }
+StBreakpointCommand >> asSpecCommand [
+	| command |
+
+	command := super asSpecCommand.
+	self class defaultIconName ifNotNil: [ :iconName |
+		command iconName: iconName ].
+	
+	^ command
+]
+
+{ #category : #testing }
+StBreakpointCommand >> canBeExecuted [
+
+	^ context enableSlotMenuEntries
 ]

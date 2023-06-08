@@ -16,9 +16,9 @@ Class {
 	#category : #'NewTools-ChangeSorter'
 }
 
-{ #category : #specs }
-SpDualChangeSorterPresenter class >> defaultSpec [
-	<spec>
+{ #category : #layout }
+SpDualChangeSorterPresenter class >> defaultLayout [
+
 	^ SpPanedLayout newLeftToRight
 		add: #changeSorterLeft;
 		add: #changeSorterRight;
@@ -36,7 +36,7 @@ SpDualChangeSorterPresenter class >> menuCommandOn: aBuilder [
 			(aBuilder item: #'Change Sorter')
 				action: [ self open ];
 				help: 'Examine the different change set of the image.';
-				icon: self taskbarIcon ].
+				icon: (aBuilder iconNamed: self taskbarIconName) ].
 	aBuilder withSeparatorAfter
 ]
 
@@ -44,7 +44,7 @@ SpDualChangeSorterPresenter class >> menuCommandOn: aBuilder [
 SpDualChangeSorterPresenter class >> open [
 	<script>
 	
-	self new openWithSpec
+	self new open
 ]
 
 { #category : #'tools-registry' }
@@ -56,7 +56,7 @@ SpDualChangeSorterPresenter class >> registerToolsOn: registry [
 
 { #category : #icons }
 SpDualChangeSorterPresenter class >> taskbarIconName [
-	^ #changeSorterIcon
+	^ #changeSorter
 ]
 
 { #category : #accessing }
@@ -79,7 +79,7 @@ SpDualChangeSorterPresenter >> changeSetMenuFrom: sourcePanel to: destinationPan
 				addItem: [ :anItem | 
 					anItem
 						name: 'Submerge into the other change set';
-						action: [ self submerge: sourcePanel into: destinationPanel ] ];
+						action: [ self submergeFrom: sourcePanel into: destinationPanel ] ];
 				addItem: [ :anItem | 
 					anItem
 						name: 'Subtract the other change set';

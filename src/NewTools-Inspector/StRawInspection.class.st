@@ -18,13 +18,11 @@ StRawInspection class >> buildCommandsGroupWith: presenter forRoot: aCmCommandsG
 		beDisplayedAsGroup;
 		register: (StInspectorInspectSelectedCommand forSpecContext: presenter);
 		register: (StInspectorBrowseSelectedCommand forSpecContext: presenter);
-		register:
-			(SpBrowsePointersToCommand
-				forSpecContext: [ presenter selectedItem value ])
+		register: (SpBrowsePointersToCommand forSpecContext: presenter)
 ]
 
-{ #category : #specs }
-StRawInspection class >> defaultSpec [
+{ #category : #layout }
+StRawInspection class >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom 
 		add: #attributeTable;
@@ -65,6 +63,11 @@ StRawInspection >> addVariablesColumn [
 StRawInspection >> defaultOutputPort [
 
 	^ self outputSelectionPort
+]
+
+{ #category : #testing }
+StRawInspection >> enableSlotMenuEntries [
+	^ self selectedItem class == StInspectorSlotNode
 ]
 
 { #category : #testing }
@@ -187,10 +190,10 @@ StRawInspection >> variablesColumn [
 		width: 170;
 		addColumn: (SpImageTableColumn new
 			beNotExpandable;
-			evaluated: #icon;
+			evaluated: [ :aNode | self iconNamed: aNode iconName ];
 			yourself);
 		addColumn: (SpStringTableColumn new
-			evaluated: #label;
+			evaluated: [ :aNode | aNode label ];
 			yourself);
 		sortFunction: #label ascending;
 		yourself

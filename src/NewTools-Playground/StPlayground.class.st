@@ -62,7 +62,6 @@ StPlayground class >> cacheDirectory [
 { #category : #accessing }
 StPlayground class >> cacheDirectory: aDirectory [
 	
-	self flag: #TODO. "This go to settings"
 	CacheDirectory := aDirectory ensureCreateDirectory
 ]
 
@@ -100,14 +99,14 @@ StPlayground class >> menuCommandOn: aBuilder [
 		order: 1;
 		keyText: 'o, w';
 		help: 'A window used as a scratchpad area where fragments of Pharo code can be entered, stored, edited, and evaluated.';
-		icon: (self iconNamed: #workspaceIcon)
+		icon: (self iconNamed: #workspace)
 ]
 
 { #category : #'instance creation' }
-StPlayground class >> open [ 
+StPlayground class >> open [
+
 	<script>
-	
-	^ self new openWithSpec
+	^ self new open
 ]
 
 { #category : #'instance creation' }
@@ -116,7 +115,7 @@ StPlayground class >> openContents: aString [
 
 	^ self new
 		contents: aString;
-		openWithSpec
+		open
 ]
 
 { #category : #'tools registry' }
@@ -133,6 +132,20 @@ StPlayground class >> registerToolsOn: registry [
 
 	registry register: self as: #workspace
 
+]
+
+{ #category : #settings }
+StPlayground class >> settingsOn: aBuilder [
+<systemsettings>
+
+(aBuilder setting: #cacheDirectory)
+		parent: #pharoSystem;
+		default: true;
+		type: #Directory;
+		default:  self defaultCacheDirectory;
+		target: StPlayground;
+		description: 'The path to the local Playground cache that stores all Playground scripts in ph files';
+		label: 'Local Playground cache directory'.
 ]
 
 { #category : #accessing }

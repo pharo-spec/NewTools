@@ -87,35 +87,27 @@ Class {
 		'toolbarCommandGroup',
 		'debuggerActionModel',
 		'unsavedCodeChanges',
-		'programmaticallyClosed'
+		'programmaticallyClosed',
+		'stackAndCodeContainer'
 	],
 	#classVars : [
-		'ActivateDebuggerExtensions',
+		'EnableStackColoring',
 		'ErrorRecursion',
-		'FastTDD',
-		'UsingSpecSelector'
+		'FastTDD'
 	],
 	#category : #'NewTools-Debugger-View'
 }
 
 { #category : #accessing }
-StDebugger class >> activateDebuggerExtensions [
-	^ ActivateDebuggerExtensions
-		ifNil: [ ActivateDebuggerExtensions := true ]
-]
+StDebugger class >> activatedDebuggerExtensions [
 
-{ #category : #accessing }
-StDebugger class >> activateDebuggerExtensions: anObject [
-	ActivateDebuggerExtensions := anObject
-]
-
-{ #category : #specs }
-StDebugger class >> availableSpecSelectors [
-	^ self class allSelectorsInProtocol: 'specs - selectors'
+	^ self extensionToolsClasses select: [ :extension |
+		  extension showInDebugger ]
 ]
 
 { #category : #commands }
 StDebugger class >> buildCommandsGroupWith: stDebuggerInstance forRoot: rootCommandGroup [
+
 	StDebuggerStackCommandTreeBuilder
 		buildCommandsGroupWith: stDebuggerInstance
 		forRoot: rootCommandGroup.
@@ -124,6 +116,9 @@ StDebugger class >> buildCommandsGroupWith: stDebuggerInstance forRoot: rootComm
 		forRoot: rootCommandGroup.
 	StDebuggerCodeCommandTreeBuilder
 		buildCommandsGroupWith: stDebuggerInstance
+		forRoot: rootCommandGroup.
+	StDebuggerConfigurationCommandTreeBuilder
+		buildCommandsGroupWith: stDebuggerInstance
 		forRoot: rootCommandGroup
 ]
 
@@ -131,15 +126,6 @@ StDebugger class >> buildCommandsGroupWith: stDebuggerInstance forRoot: rootComm
 StDebugger class >> closeAllDebuggers [
 	<script>
 	StDebugger allInstancesDo: [ :dbg | dbg close ]
-]
-
-{ #category : #specs }
-StDebugger class >> codeLayout [
-
-	^ SpBoxLayout newTopToBottom
-		  add: #toolbar expand: false;
-		  add: #code;
-		  yourself
 ]
 
 { #category : #'instance creation' }
@@ -159,56 +145,29 @@ StDebugger class >> debuggerContextClass [
 	^ StDebuggerContext
 ]
 
-{ #category : #settings }
-StDebugger class >> debuggerLayoutSettingsOn: aBuilder [
-	<systemsettings>
-	(aBuilder pickOne: #usingSpecSelector)
-		label: 'Default debugger spec layout';
-		target: self;
-		default: #debuggerWithoutExtensionsSpec;
-		parent: #debugging;
-		domainValues: self availableSpecSelectors;
-		description: 'Sets the default spec layout of the debugger.'
-]
-
-{ #category : #'specs - selectors' }
-StDebugger class >> debuggerWithExtensionsSpec [
-
-	^ SpPanedLayout newTopToBottom
-		positionOfSlider: 65 percent;
-		add: (SpPanedLayout newLeftToRight
-			positionOfSlider: 65 percent;
-			add: self stackAndCodeLayout;
-			add: #extensionToolsNotebook;
-			yourself);
-		add: #inspector;
-		yourself
-]
-
-{ #category : #'specs - selectors' }
-StDebugger class >> debuggerWithoutExtensionsSpec [
-
-	^ SpPanedLayout newTopToBottom
-		positionOfSlider: 65 percent;
-		add: self stackAndCodeLayout;
-		add: #inspector;
-		yourself
-]
-
 { #category : #accessing }
 StDebugger class >> defaultDebuggerRank [
 
 	^ 10
 ]
 
-{ #category : #specs }
-StDebugger class >> defaultSpec [
-	^ self perform: self usingSpecSelector
+{ #category : #accessing }
+StDebugger class >> enableStackColoring [
+
+	^ EnableStackColoring
+]
+
+{ #category : #accessing }
+StDebugger class >> enableStackColoring: anObject [
+
+	EnableStackColoring := anObject
 ]
 
 { #category : #'tools registry' }
 StDebugger class >> extensionToolsClasses [
-	^TStDebuggerExtension users
+
+	^ TStDebuggerExtension users reject: [ :extensionClass |
+		  extensionClass isOnlyForTests ]
 ]
 
 { #category : #settings }
@@ -244,7 +203,8 @@ StDebugger class >> hasAnyActivatedExtension: extensionsClasses [
 { #category : #'class initialization' }
 StDebugger class >> initialize [ 
 	self flag: 'Error recursion is used only here?'.
-	ErrorRecursion := false
+	ErrorRecursion := false.
+	EnableStackColoring := true
 ]
 
 { #category : #opening }
@@ -273,51 +233,29 @@ StDebugger class >> spanNewSessionFrom: anotherSession [
 	^ anotherSession spanNewSession
 ]
 
-{ #category : #specs }
-StDebugger class >> stackAndCodeLayout [
+{ #category : #settings }
+StDebugger class >> stackColoringSettingOn: aBuilder [
 
-	^ SpPanedLayout newTopToBottom
-		positionOfSlider: 30 percent;
-		add: self stackLayout;
-		add: self codeLayout;
-		yourself
-]
-
-{ #category : #specs }
-StDebugger class >> stackLayout [
-	^ SpBoxLayout newTopToBottom
-		add: #stackHeader
-			expand: false
-			fill: false
-			padding: 5;
-		add: #stackTable;
-		yourself
+	<systemsettings>
+		(aBuilder setting: #enableStackColoring)
+				label: 'Enable stack coloring';
+				target: self;
+				parent: #debugging;
+				default: true;
+				description:
+					'If enable, the debugger will highlight the elements of the stacks that are from the same class and same package as the selected context.'.
 ]
 
 { #category : #accessing }
 StDebugger class >> taskbarIconName [
 
-	^#smallDebugIcon
+	^#smallDebug
 ]
 
 { #category : #'tools registry' }
 StDebugger class >> usesExtensions [
 
-	^ self activateDebuggerExtensions and: [ 
-		  self hasAnyActivatedExtension: self extensionToolsClasses ]
-]
-
-{ #category : #specs }
-StDebugger class >> usingSpecSelector [
-	^ (UsingSpecSelector
-		ifNil: [ UsingSpecSelector := StDebuggerSpecSelector defaultSelector ])
-		selectSpecSelector
-]
-
-{ #category : #specs }
-StDebugger class >> usingSpecSelector: aSelector [
-
-	UsingSpecSelector := StDebuggerSpecSelector on: aSelector
+	^ self hasAnyActivatedExtension: self extensionToolsClasses
 ]
 
 { #category : #'presenter - code' }
@@ -340,19 +278,22 @@ StDebugger >> buildContextMenus [
 	
 	debuggerCommandGroup := self rootCommandsGroup.
 	"Stack"
-	stackGroup := debuggerCommandGroup / StDebuggerStackCommandTreeBuilder groupName.
+	stackGroup := debuggerCommandGroup / StDebuggerStackCommandTreeBuilder groupName. 
 	stackTable contextMenu: stackGroup beRoot asMenuPresenter.
-
+	stackTable contextKeyBindings: (self keybindsForFromContextMenu: stackGroup).
+	 
 	"Toolbar"
 	toolbarCommandGroup := debuggerCommandGroup / StDebuggerToolbarCommandTreeBuilder groupName.
 	SpToolbarPresenterBuilder new
 		toolbarPresenter: toolbar;
 		visit: toolbarCommandGroup.
-	self updateToolbar.
 
 	"Code"
 	codeCommands := debuggerCommandGroup / StDebuggerCodeCommandTreeBuilder groupName.
-	code contextMenu: codeCommands beRoot asMenuPresenter
+	code contextMenu: codeCommands beRoot asMenuPresenter.
+	
+	"Configuration"
+	stackHeader toolbarActions: (debuggerCommandGroup / StDebuggerConfigurationCommandTreeBuilder groupName).
 ]
 
 { #category : #'commands - support' }
@@ -432,6 +373,15 @@ StDebugger >> code [
 	^ code
 ]
 
+{ #category : #specs }
+StDebugger >> codeLayout [
+
+	^ SpBoxLayout newTopToBottom
+		  add: #toolbar expand: false;
+		  add: #code;
+		  yourself
+]
+
 { #category : #initialization }
 StDebugger >> connectPresenters [
 
@@ -456,11 +406,11 @@ StDebugger >> copyStackToClipboard [
 StDebugger >> createMissingClass [
 
 	| variableNode |
-	variableNode := self session exception variableNode.
+	variableNode := self exception variableNode.
 	[ 
 	| newClassBinding |
 	self flag: 'This method is actually hard to test because it requires user input to complete. How to test that automatically?'.
-	newClassBinding := OCUndeclaredVariableWarning new
+	newClassBinding := OCCodeReparator new
 		                   node: variableNode;
 		                   defineClass: variableNode name ]
 		on: Abort
@@ -488,30 +438,30 @@ StDebugger >> createMissingMethod [
 
 { #category : #actions }
 StDebugger >> createMissingMethodFor: aMessage in: aClass [
+	| method |
 	self flag: #DBG_MISSINGTEST.
-	self debuggerActionModel
+	method := self debuggerActionModel
 		implement: aMessage
-		classified: (self requestProtocolIn: aClass)
 		inClass: aClass
 		forContext: self interruptedContext.
+	method protocol = Protocol unclassified
+		ifTrue: [ method protocol: (self requestProtocolIn: aClass) ].
+
 	self selectTopContext
 ]
 
 { #category : #actions }
 StDebugger >> createSubclassResponsibility [
 
-	| senderContext msg msgCategory chosenClass |
+	| senderContext msg chosenClass |
 	senderContext := self interruptedContext sender.
 	msg := Message
 		       selector: senderContext selector
 		       arguments: senderContext arguments.
-	msgCategory := senderContext methodClass organization 
-		               categoryOfElement: msg selector.
-	chosenClass := self requestClassFrom: senderContext receiver class.
+	chosenClass := self requestClassFrom: senderContext receiver class to: senderContext methodClass.
 	chosenClass ifNil: [ ^ self ].
 	self debuggerActionModel
 		implement: msg
-		classified: msgCategory
 		inClass: chosenClass
 		forContext: senderContext
 ]
@@ -542,6 +492,15 @@ StDebugger >> debuggerInspectorModelClass [
 	^ StDebuggerInspectorModel
 ]
 
+{ #category : #layout }
+StDebugger >> defaultLayout [
+	^ SpPanedLayout newTopToBottom
+		positionOfSlider: 65 percent;
+		add: stackAndCodeContainer;
+		add: #inspector;
+		yourself
+]
+
 { #category : #'presenter - code' }
 StDebugger >> discardCodeChangesFor: aContext [
 
@@ -553,13 +512,90 @@ StDebugger >> discardCodeChangesFor: aContext [
 { #category : #commands }
 StDebugger >> doBrowseClass [
 
-	self systemNavigation browse: self stackSelectionMethodContext value
+	self systemNavigation browse:
+		(self stackSelectionMethodContext value: self)
+]
+
+{ #category : #'presenter - code' }
+StDebugger >> doBrowseClassReferences [
+
+	| cls |
+	cls := self stackSelectionReceiverClassContext value: self.
+	cls isTrait
+		ifTrue: [ self systemNavigation browseAllUsersOfTrait: cls ]
+		ifFalse: [ self systemNavigation browseAllCallsOnClass: cls ]
+]
+
+{ #category : #commands }
+StDebugger >> doBrowseHierarchy [
+
+	self systemNavigation browseHierarchy:
+		(self stackSelectionReceiverClassContext value: self)
+]
+
+{ #category : #commands }
+StDebugger >> doBrowseImplementors [
+
+	self systemNavigation browseAllImplementorsOf:
+		(self stackSelectionMethodSelectorContext value: self)
+]
+
+{ #category : #commands }
+StDebugger >> doBrowseMethodInheritance [
+
+	| cls |
+	(self stackSelectionMethodContext value: self) method isDoIt ifTrue: [ 
+		^ self ].
+	cls := self stackSelectionReceiverClassContext value: self.
+	cls isBlock ifTrue: [ 
+		cls := (self stackSelectionMethodContext value: self) methodClass ].
+	self systemNavigation
+		methodHierarchyBrowserForClass:
+		(self stackSelectionReceiverClassContext value: self)
+		selector: (self stackSelectionMethodSelectorContext value: self)
+]
+
+{ #category : #commands }
+StDebugger >> doBrowseMethodReferences [
+
+	self systemNavigation browseAllSendersOrUsersOf:
+		(self stackSelectionMethodSelectorContext value: self)
+]
+
+{ #category : #commands }
+StDebugger >> doBrowseMethodVersions [
+
+	| target |
+	target := self stackSelectionMethodContext.
+	target isBlock ifTrue: [ target := target method ].
+	self application versionBrowser
+		browseVersionsForClass: target methodClass
+		selector: target selector
 ]
 
 { #category : #commands }
 StDebugger >> doBrowseReceiverClass [
 
-	self systemNavigation browse: self stackSelectionReceiverClassContext value
+	self systemNavigation browse:
+		(self stackSelectionReceiverClassContext value: self)
+]
+
+{ #category : #commands }
+StDebugger >> doBrowseSenders [
+
+	self systemNavigation browseAllSendersOf:
+		(self stackSelectionMethodSelectorContext value: self)
+]
+
+{ #category : #accessing }
+StDebugger >> environment [
+
+^ self class environment
+]
+
+{ #category : #'stack - helpers' }
+StDebugger >> exception [
+	^ self debuggerActionModel exception
 ]
 
 { #category : #stack }
@@ -568,8 +604,23 @@ StDebugger >> expandStackIfLastItemIsSelected [
 	selection := stackTable selection.
 	selection selectedItem == stackTable items last ifFalse: [ ^ self ].
 	stackTable items: (self filterStack:
-			 (self session stackOfSize: 2 * stackTable items size)).
+			 (self stackOfSize: 2 * stackTable items size)).
 	stackTable selectIndex: selection selectedIndex
+]
+
+{ #category : #'accessing - widgets' }
+StDebugger >> extensionToolNotebook [
+
+	^ extensionToolsNotebook
+]
+
+{ #category : #extensions }
+StDebugger >> extensionToolUpdateBlock [
+
+	^ [ :newPages |
+	  newPages asSortedCollection: [ :s1 :s2 |
+		  s1 presenterProvider value displayOrder
+		  <= s2 presenterProvider value displayOrder ] ]
 ]
 
 { #category : #extensions }
@@ -605,10 +656,6 @@ StDebugger >> forceSessionUpdate [
 
 { #category : #api }
 StDebugger >> initialExtent [ 
-	"This code was taken from the old debugger to get the same behavior. Fell free to refactor"
-	self flag: 'Do it better'.
-	"RealEstateAgent standardWindowExtent y < 400"true "a tiny screen" 
-		ifTrue: [ ^ 1000@800 ].
 	
 	^ [ | w h |
 		w := Display width.
@@ -620,13 +667,15 @@ StDebugger >> initialExtent [
 
 { #category : #initialization }
 StDebugger >> initialize [
+
 	super initialize.
-	self debuggerActionModel updateContextPredicate.			
+	self debuggerActionModel updateContextPredicate.
 	self setSessionHolderSubscriptions.
 	self forceSessionUpdate.
 	self subscribeToMethodAddedAnnouncement.
-	
-	programmaticallyClosed := false.
+	self susbcribeToExtensionToggleAnnouncement.
+
+	programmaticallyClosed := false
 ]
 
 { #category : #initialization }
@@ -650,11 +699,17 @@ StDebugger >> initializeExtensionTools [
 
 	| sortedToolClasses pages |
 	extensionToolsNotebook := self newNotebook.
-
+	extensionToolsNotebook whenPagesChangedDo:
+		self extensionToolUpdateBlock.
+	extensionToolsNotebook whenPageAddedDo: [ :newPage |
+		self extensionToolUpdateBlock cull: extensionToolsNotebook pages ].
 	self class usesExtensions ifFalse: [ ^ self ].
-	sortedToolClasses := SortedCollection new sortBlock: [ :s1 :s2 | s1 displayOrder <= s2 displayOrder ].
-	sortedToolClasses addAll: (self class extensionToolsClasses select: [ :s | s showInDebugger ]).
-	pages := sortedToolClasses collect: [ :toolClass | 
+
+	sortedToolClasses := SortedCollection new sortBlock: [ :s1 :s2 |
+		                     s1 displayOrder <= s2 displayOrder ].
+	sortedToolClasses addAll:
+		(self class extensionToolsClasses select: [ :s | s showInDebugger ]).
+	pages := sortedToolClasses collect: [ :toolClass |
 		         self instantiateExtensionToolsPage: toolClass ].
 	extensionToolsNotebook pages: pages
 ]
@@ -675,7 +730,10 @@ StDebugger >> initializePresenters [
 	self initializeToolbar.
 	self initializeCode.
 	self initializeInspector.
-	self initializeExtensionTools
+	self initializeExtensionTools.
+	self setStackAndCodeContainer.
+
+	self layout: self defaultLayout
 ]
 
 { #category : #initialization }
@@ -707,48 +765,44 @@ StDebugger >> initializeStack [
 
 	stackTable := self newTable.
 	stackTable
-		addColumn: ((SpImageTableColumn
-				  title: ''
-				  evaluated: [ :context | self stackIconForContext: context ])
+		activateOnDoubleClick;
+		whenActivatedDo: [ :selection | self doBrowseClass ].
+	stackTable
+		addColumn: ((SpImageTableColumn title: '' evaluated: [ :context | self stackIconForContext: context ])
 				 width: 8;
 				 sortFunction: nil;
 				 yourself);
-		addColumn: ((SpStringTableColumn
-				  title: 'Class'
-				  evaluated: [ :item | self printReceiverClassInContext: item ])
+		addColumn: ((SpStringTableColumn title: 'Class' evaluated: [ :context | self printReceiverClassInContext: context ])
+				 displayColor: [ :context | self stackColorForContext: context ];
 				 sortFunction: nil;
 				 yourself);
-		addColumn:
-			((SpStringTableColumn title: 'Method' evaluated: [ :item | 
+		addColumn: ((SpStringTableColumn title: 'Method' evaluated: [ :context |
 					  | method |
-					  method := item method.
+					  method := context method.
 					  method isCompiledBlock
 						  ifTrue: [ method sourceNode sourceCode ]
 						  ifFalse: [ method selector ] ])
+				 displayColor: [ :context | self stackColorForContext: context ];
 				 sortFunction: nil;
 				 yourself);
-		addColumn:
-			((SpStringTableColumn title: 'Package' evaluated: [ :item | 
+		addColumn: ((SpStringTableColumn title: 'Package' evaluated: [ :context |
 					  | package |
-					  package := item method package.
-					  package ifNil: [ '-' ] ifNotNil: [ package name asString ] ])
+					  package := context method package.
+					  package
+						  ifNil: [ '-' ]
+						  ifNotNil: [ package name asString ] ])
+				 displayColor: [ :context | self stackColorForContext: context ];
 				 sortFunction: nil;
 				 yourself).
-	stackTable transmitDo: [ :context | 
-		stackTable selection isEmpty ifFalse: [ 
+	stackTable transmitDo: [ :context |
+		stackTable selection isEmpty ifFalse: [
 			self updateInspectorFromContext: context.
 			self updateCodeFromContext: context.
+			self updateExtensionsFrom: self session.
 			self expandStackIfLastItemIsSelected.
 			self updateWindowTitle ] ].
 	stackHeader := self instantiate: StHeaderBar.
-	stackHeader label: 'Stack'.
-	stackHeader toolbarActions: (CmCommandGroup new
-			 register:
-				 ((StDebuggerToggleFilterStackCommand forSpecContext: self) 
-					  iconName: #changeSorter);
-			 register:
-				 (StDebuggerSettingsCommand forSpecWithIconNamed: #configuration);
-			 asSpecGroup)
+	stackHeader label: 'Stack'
 ]
 
 { #category : #initialization }
@@ -775,6 +829,7 @@ StDebugger >> initializeWindow: aWindowPresenter [
 StDebugger >> instantiateExtensionToolsPage: aToolClass [
 	| toolInstance |
 	toolInstance := self instantiate: aToolClass on: self.
+	toolInstance layout: toolInstance debuggerLayout.
 	self registerExtensionTool: toolInstance.
 	^ SpNotebookPage
 		title: toolInstance debuggerExtensionToolName
@@ -784,20 +839,52 @@ StDebugger >> instantiateExtensionToolsPage: aToolClass [
 { #category : #'accessing - context' }
 StDebugger >> interruptedContext [
 
-	^ self session interruptedContext
+	^ self debuggerActionModel interruptedContext
 ]
 
 { #category : #accessing }
 StDebugger >> interruptedProcess [
 
-	^ self session interruptedProcess
+	^ self debuggerActionModel  interruptedProcess
+]
+
+{ #category : #testing }
+StDebugger >> isInSelectedContextClass: context [
+	"Return true if the given context is in the same class than the currently selected context of the stack."
+
+	^ self selectedContext methodClass = context methodClass
+]
+
+{ #category : #testing }
+StDebugger >> isInSelectedContextPackage: context [
+	"Return true if the given context is in the same package than the currently selected context of the stack."
+
+	^ self selectedContext method package = context method package
+]
+
+{ #category : #'commands - support' }
+StDebugger >> keybindsForFromContextMenu: aGroupElement [
+	| keybinds keybindsCommands |
+	keybinds := KMCategory new.
+	
+	keybindsCommands := aGroupElement allCommands select: [ :aCommand | aCommand hasShortcutKey ].
+	
+	keybindsCommands do: [ :aCommand | | action |
+		action := [ :aSelectedElement | aCommand execute ]. 
+		keybinds addKeymapEntry: (KMKeymap
+			shortcut: aCommand shortcutKey
+			action: action).
+		].
+	
+	^ keybinds
 ]
 
 { #category : #'instance creation' }
 StDebugger >> newDebuggerContext [
 
 	^ self class debuggerContextClass new
-		  exception: self session exception;
+		  exception: self exception;
+		  debugger: self;
 		  yourself
 ]
 
@@ -806,6 +893,7 @@ StDebugger >> newDebuggerContextFor: aContext [
 
 	^ self newDebuggerContext
 		  context: aContext;
+		  debugger: self;
 		  yourself
 ]
 
@@ -826,10 +914,11 @@ StDebugger >> okToChange [
 
 { #category : #opening }
 StDebugger >> openWithFullView [
+
 	"Create and schedule a full debugger with the given label. Do not
 	terminate the current active process."
 
-	self openWithSpec
+	self open
 ]
 
 { #category : #opening }
@@ -870,14 +959,21 @@ StDebugger >> proceedDebugSession [
 	self close
 ]
 
+{ #category : #private }
+StDebugger >> protocolSuggestionsFor: aClass [
+
+	| classProtocols reject allExistingProtocols interestingProtocols |
+	classProtocols := aClass protocolNames.
+	reject := Set with: Protocol unclassified.
+	allExistingProtocols := (SystemNavigation default allExistingProtocolsFor: aClass isMeta not) reject: [ :p | classProtocols includes: p ].
+	interestingProtocols := classProtocols , (allExistingProtocols asOrderedCollection sort: [ :a :b | a asLowercase < b asLowercase ]).
+	^ interestingProtocols reject: [ :e | reject includes: e ]
+]
+
 { #category : #actions }
 StDebugger >> recompileMethodTo: aString inContext: aContext notifying: aNotifyer [
 
-	aContext ifNil: [ ^ self ].
-	self session
-		recompileMethodTo: aString
-		inContext: aContext
-		notifying: aNotifyer
+	^ self debuggerActionModel recompileMethodTo: aString inContext: aContext notifying: aNotifyer.
 ]
 
 { #category : #'presenter - code' }
@@ -931,8 +1027,18 @@ StDebugger >> removeSessionHolderSubscriptions [
 { #category : #'ui requests' }
 StDebugger >> requestClassFrom: aClass [
 
+	^ self requestClassFrom: aClass to: ProtoObject
+
+	
+]
+
+{ #category : #'ui requests' }
+StDebugger >> requestClassFrom: aClass to: aSuperclass [
+
 	self class fastTDD ifTrue: [ ^ aClass ].
-	^ self requestSuperclassOf: aClass to: ProtoObject
+	^ self requestSuperclassOf: aClass to: aSuperclass 
+
+	
 ]
 
 { #category : #'ui requests' }
@@ -940,7 +1046,7 @@ StDebugger >> requestProtocolIn: aClass [
 
 	| entryCompletion applicants choice |
 	self class fastTDD ifTrue: [ ^ Protocol unclassified ].
-	applicants := AbstractTool protocolSuggestionsFor: aClass.
+	applicants := self protocolSuggestionsFor: aClass.
 	entryCompletion := EntryCompletion new
 		                   dataSourceBlock: [ :currText | applicants ];
 		                   filterBlock: [ :currApplicant :currText | 
@@ -1014,6 +1120,12 @@ StDebugger >> selectTopContext [
 	stackTable selectIndex: 1
 ]
 
+{ #category : #'updating - actions' }
+StDebugger >> selectedCodeRangeForContext: aContext [
+
+	^ self debuggerActionModel selectedCodeRangeForContext: aContext
+]
+
 { #category : #'accessing - context' }
 StDebugger >> selectedContext [
 
@@ -1051,10 +1163,63 @@ StDebugger >> setSessionHolderSubscriptions [
 			self updateExtensionsFrom: newSession ]
 ]
 
+{ #category : #initialization }
+StDebugger >> setStackAndCodeContainer [
+
+	stackAndCodeContainer := self class usesExtensions
+		                         ifTrue: [ 
+		                         self stackAndCodeWithExtensionsLayout ]
+		                         ifFalse: [ self stackAndCodeLayout ]
+]
+
 { #category : #actions }
 StDebugger >> showFullStack [
-	stackTable items: (self filterStack: self session stack)
+	stackTable items: (self filterStack: self stack)
 
+]
+
+{ #category : #'accessing - variables' }
+StDebugger >> stack [
+	^ self debuggerActionModel stack 
+
+]
+
+{ #category : #specs }
+StDebugger >> stackAndCodeLayout [
+
+	^ SpPanedLayout newTopToBottom
+		positionOfSlider: 30 percent;
+		add: self stackLayout;
+		add: self codeLayout;
+		yourself
+]
+
+{ #category : #specs }
+StDebugger >> stackAndCodeWithExtensionsLayout [
+
+	^ (SpPanedLayout newLeftToRight
+			positionOfSlider: 65 percent;
+			add: self stackAndCodeLayout;
+			add: #extensionToolsNotebook;
+			yourself)
+]
+
+{ #category : #accessing }
+StDebugger >> stackColorForContext: context [
+	"I return the color the text should have in the stack by comparing the context in parameter to the selected context.
+	
+	If they are from the same class, we return a certain 'primary' highlight color.
+	If they are from the same package (but different class), we return a 'secondary' highlight color.
+	Else, we just keep the normal style."
+
+	self class enableStackColoring ifFalse: [ ^ self theme textColor ].
+
+	^ (self isInSelectedContextClass: context)
+		  ifTrue: [ self theme highlightTextColor ]
+		  ifFalse: [
+			  (self isInSelectedContextPackage: context)
+				  ifTrue: [ self theme highlightTextColor mixed: 0.5 with: self theme textColor ]
+				  ifFalse: [ self theme textColor ] ]
 ]
 
 { #category : #stack }
@@ -1064,31 +1229,51 @@ StDebugger >> stackIconForContext: context [
 	^ self iconNamed: #overlayDirty
 ]
 
+{ #category : #specs }
+StDebugger >> stackLayout [
+	^ SpBoxLayout newTopToBottom
+		add: #stackHeader
+			expand: false
+			fill: false
+			padding: 5;
+		add: #stackTable;
+		yourself
+]
+
+{ #category : #'stack - helpers' }
+StDebugger >> stackOfSize: anInteger [
+
+	^ self debuggerActionModel stackOfSize: anInteger
+]
+
 { #category : #'commands - support' }
 StDebugger >> stackSelectionMethodContext [
 
-	^ [ stackTable selection selectedItem method ]
+	^ [ :dbg | stackTable selection selectedItem homeMethod ]
 ]
 
 { #category : #'commands - support' }
 StDebugger >> stackSelectionMethodSelectorContext [
 
-	^ [ stackTable selection selectedItem method selector ]
+	^ [ :dbg | stackTable selection selectedItem method selector ]
 ]
 
 { #category : #'commands - support' }
 StDebugger >> stackSelectionReceiverClassContext [
-	^ [ stackTable selection selectedItem receiver class ]
+
+	^ [ :dbg | stackTable selection selectedItem receiver class ]
 ]
 
 { #category : #'commands - support' }
 StDebugger >> stackSelectionReceiverContext [
-	^ [ stackTable selection selectedItem receiver ]
+
+	^ [ :dbg | stackTable selection selectedItem receiver ]
 ]
 
 { #category : #'accessing - widgets' }
 StDebugger >> stackTable [
-	^stackTable
+
+	^ stackTable
 ]
 
 { #category : #actions }
@@ -1112,6 +1297,15 @@ StDebugger >> subscribeToMethodAddedAnnouncement [
 	SystemAnnouncer uniqueInstance weak
 		when: MethodAdded
 		send: #updateAfterMethodAdded
+		to: self
+]
+
+{ #category : #'system subscriptions' }
+StDebugger >> susbcribeToExtensionToggleAnnouncement [
+
+	SystemAnnouncer uniqueInstance weak
+		when: StDebuggerExtensionActivationToggle
+		send: #updateExtensionsFromAnnouncement:
 		to: self
 ]
 
@@ -1153,20 +1347,25 @@ StDebugger >> updateCodeFromContext [
 
 { #category : #'presenter - code' }
 StDebugger >> updateCodeFromContext: aContext [
-	| selectionInterval |
 
+	| selectionInterval formerCodeInteractionModel |
 	aContext ifNil: [ ^ self clearCode ].
-	
+
 	self recordUnsavedCodeChanges.
-	selectionInterval := self session selectedCodeRangeForContext: aContext.
-	aContext sourceCode = self code text 
-		ifFalse: [ self updateSourceCodeFor: aContext ].
+	selectionInterval := self selectedCodeRangeForContext: aContext.
+	aContext sourceCode = self code text ifFalse: [ 
+		self updateSourceCodeFor: aContext ].
+	formerCodeInteractionModel := self code interactionModel.
 	self code beForContext: aContext.
-	self code selectionInterval: (selectionInterval last to: selectionInterval last - 1).
+	"add bindings of the old interaction model in the new one"
+	formerCodeInteractionModel ifNotNil: [ 
+		formerCodeInteractionModel bindings associations do: [ :assoc | 
+			self code interactionModel addBinding: assoc ] ].
+	self code selectionInterval:
+		(selectionInterval last to: selectionInterval last - 1).
 	self
 		updateCodeTextSegmentDecoratorsIn: aContext
-		forInterval: selectionInterval.
-	
+		forInterval: selectionInterval
 ]
 
 { #category : #'updating - widgets' }
@@ -1194,6 +1393,11 @@ StDebugger >> updateCodeTextSegmentDecoratorsIn: aContext forInterval: selection
 
 { #category : #'updating - actions' }
 StDebugger >> updateContextChanged [
+	"A context has changed when a method has been recompiled. If a method has been recompiled with additional instance variables and/or temporary variables, the inspector needs to be updated"
+
+	inspector shouldUpdate.
+	"The top context has been changed so we force the code presenter to change its text. Otherwise, the debugger would consider that there are unsaved code changes, as the source code from the context would not be the same as the source code displayed"
+	self updateSourceCodeFor: self interruptedContext.
 	self updateStep
 ]
 
@@ -1202,11 +1406,47 @@ StDebugger >> updateExtensionsFrom: newSession [
 	self extensionTools do:[:tool| tool updatePresenter]
 ]
 
+{ #category : #initialization }
+StDebugger >> updateExtensionsFromAnnouncement: aStDebuggerToggleAnnouncement [
+
+	| extensionToggled |
+	extensionToggled := aStDebuggerToggleAnnouncement
+		                    debuggerExtensionClass.
+
+	"If no extension was activated, we instantiate the page for the activated extension and we change the stack and code layout"
+	self extensionTools ifEmpty: [
+		extensionToolsNotebook pages:
+			{ (self instantiateExtensionToolsPage: extensionToggled) }
+				asOrderedCollection.
+		extensionToolsNotebook selectPageIndex: 1.
+		stackAndCodeContainer := self stackAndCodeWithExtensionsLayout.
+		self layout: self defaultLayout.
+		^ self ].
+
+	"Else, if the extension was not activated and now is, we instantiate the page for the activated extension, and adds it to the existing pages"
+
+	extensionToggled showInDebugger ifTrue: [
+		extensionToolsNotebook addPage:
+			(self instantiateExtensionToolsPage: extensionToggled).
+		^ self ].
+
+	"Else, the extension was activated and now isn't anymore. In this case, we remove the corresponding page. If there isn't any activated extension left, we change the stackAndCode layout"
+	extensionToolsNotebook pages: (extensionToolsNotebook pages
+			 removeAllSuchThat: [ :page |
+				 page presenterProvider value class = extensionToggled ];
+			 yourself).
+	extensionTools removeAllSuchThat: [ :extensionInstance |
+		extensionInstance class = extensionToggled ].
+	extensionTools ifEmpty: [
+		stackAndCodeContainer := self stackAndCodeLayout ].
+	self layout: self defaultLayout
+]
+
 { #category : #'updating - widgets' }
 StDebugger >> updateInspectorFromContext: aContext [
 
 	inspector
-		updateLayoutForContexts: self session interruptedContext
+		updateLayoutForContexts: self interruptedContext
 		isAssertionFailure:
 		self debuggerActionModel isInterruptedContextAnAssertEqualsFailure.
 	inspector updateWith: (self newDebuggerContextFor: aContext).
@@ -1229,6 +1469,7 @@ StDebugger >> updatePresenter [
 
 { #category : #'updating - actions' }
 StDebugger >> updateRestart [
+
 	self updateStep
 ]
 
@@ -1250,25 +1491,39 @@ StDebugger >> updateSourceCodeFor: aContext [
 
 { #category : #stack }
 StDebugger >> updateStackFromSession: aSession [
-	|stack|
-	stack := (self filterStack: aSession stack).
+	| stack |
+	stack := self filterStack: aSession stack.
 	stackTable items: stack.
-	stackTable selectIndex: (self findFirstRelevantStackIndexIn: stack)
+	stackTable
+		selectIndex: (self findFirstRelevantStackIndexIn: stack)
+		scrollToSelection: true
 ]
 
 { #category : #'updating - actions' }
 StDebugger >> updateStep [
+
+	| previousASTScope previousContext currentASTScope currentContext |
+	previousContext := self currentContext.
+	previousASTScope := debuggerActionModel previousASTScope. 
+
 	self flag: #DBG_UPDATE_OF_MODEL_SHOULD_BE_AUTOMATED.
 	debuggerActionModel updateTopContext.
-	debuggerActionModel updateContextPredicate.	
+	debuggerActionModel updateContextPredicate.
 	debuggerActionModel updateDebugSession.
-		
+
 	self updateStackFromSession: self session.
 	self updateWindowTitle.
-	self updateExtensionsFrom: self session.	
+	self updateExtensionsFrom: self session.
 	self updateToolbar.
+
+	currentContext := self currentContext.
+	currentASTScope := (currentContext compiledCode sourceNodeForPC:
+		                    currentContext pc) scope.
 	self flag: #DBG_INSPECTOR_UPDATE_BUG.
-	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p | p update ]
+	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p |
+		previousContext == currentContext ifTrue: [ "otherwise, if contexts have changed, updating the stack has already updated all nodes." "Here it is necessary to update temporary nodes if we are still in the same context but in a different scope. This is possible when leaving or entering an optimized block scope."
+			p updateNodesFromScope: previousASTScope to: currentASTScope ].
+		p update ]
 ]
 
 { #category : #'updating - actions' }

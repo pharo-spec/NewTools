@@ -64,7 +64,7 @@ StObjectInspectorPresenter class >> onObject: anObject [
 { #category : #opening }
 StObjectInspectorPresenter class >> openOn: anObject [
 
-	^ (self onObject: anObject) openWithSpec
+	^ (self onObject: anObject) open
 ]
 
 { #category : #private }
@@ -112,10 +112,10 @@ StObjectInspectorPresenter >> allPages [
 { #category : #'private - builder' }
 StObjectInspectorPresenter >> buildToolbar [
 
-	^ self rootCommandsGroup asToolbarPresenterWith: [ :presenter | 
-			presenter 
-				displayMode: self application toolbarDisplayMode;
-				addStyle: 'stToolbar' ]
+	^ self newToolbar 
+		displayMode: self application toolbarDisplayMode;
+		addStyle: 'stToolbar';	
+		fillWith: self rootCommandsGroup
 ]
 
 { #category : #transmission }
@@ -134,6 +134,15 @@ StObjectInspectorPresenter >> defaultKeyboardFocus [
 	^ self
 ]
 
+{ #category : #initialization }
+StObjectInspectorPresenter >> defaultLayout [
+	
+	^ SpBoxLayout newTopToBottom 
+		add: header expand: false fill: false padding: 5;
+		add: views;
+		yourself
+]
+
 { #category : #accessing }
 StObjectInspectorPresenter >> evaluator [ 
 	^evaluator
@@ -150,22 +159,10 @@ StObjectInspectorPresenter >> initialize [
 ]
 
 { #category : #initialization }
-StObjectInspectorPresenter >> initializeLayout [
-	
-	self layout: (SpBoxLayout newTopToBottom 
-		add: header expand: false fill: false padding: 5;
-		add: views;
-		yourself)
-]
-
-{ #category : #initialization }
 StObjectInspectorPresenter >> initializePresenters [
 
 	views := self newNotebook.
-	header := self instantiate: StHeaderBar.
-	self initializeLayout.
-
-	self refresh
+	header := self instantiate: StHeaderBar
 ]
 
 { #category : #initialization }
@@ -339,6 +336,12 @@ StObjectInspectorPresenter >> updatePages [
 	views 
 		pages: self allPages;
 		selectPageIndex: 1
+]
+
+{ #category : #initialization }
+StObjectInspectorPresenter >> updatePresenter [
+
+	self refresh
 ]
 
 { #category : #'private - updating' }

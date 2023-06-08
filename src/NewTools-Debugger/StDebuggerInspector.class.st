@@ -14,42 +14,15 @@ Class {
 		'label',
 		'rawInspectionSelectionCache',
 		'assertionFailure',
-		'currentLayoutSpec',
-		'lateralToolbar'
+		'lateralToolbar',
+		'currentLayoutSelector',
+		'shouldBeUpdated'
 	],
 	#classInstVars : [
 		'maximizeAssertionSpec'
 	],
 	#category : #'NewTools-Debugger-View'
 }
-
-{ #category : #specs }
-StDebuggerInspector class >> assertionFailureSpec [
-	| assertionFailureLayout |
-	
-	assertionFailureLayout := SpPanedLayout newTopToBottom.
-	assertionFailureLayout positionOfSlider: (self maximizeAssertionSpec
-			 ifTrue: [ 95 percent ]
-			 ifFalse: [ 40 percent ]).
-	assertionFailureLayout add: (SpBoxLayout newLeftToRight
-			 add: (SpBoxLayout newTopToBottom
-				add: #lateralToolbar expand: false;
-				yourself)
-			 expand: false;
-			 add: #assertionFailure;
-			 yourself).
-
-	self maximizeAssertionSpec ifFalse: [ 
-		assertionFailureLayout add: #inspector ].
-	^ assertionFailureLayout
-]
-
-{ #category : #specs }
-StDebuggerInspector class >> defaultSpec [
-	^ SpBoxLayout newTopToBottom
-		  add: #inspector;
-		  yourself
-]
 
 { #category : #specs }
 StDebuggerInspector class >> maximizeAssertionSpec [
@@ -64,7 +37,7 @@ StDebuggerInspector class >> maximizeAssertionSpec: aboolean [
 { #category : #'instance creation' }
 StDebuggerInspector class >> openOn: anObject [
 
-	^ (self on: (StInspectorModel on: anObject)) openWithSpec
+	^ (self on: (StInspectorModel on: anObject)) open
 ]
 
 { #category : #specs }
@@ -83,13 +56,34 @@ StDebuggerInspector >> assertionFailure [
 ]
 
 { #category : #layout }
-StDebuggerInspector >> assertionLayoutSpec [
-	^#assertionFailureSpec
+StDebuggerInspector >> assertionFailureLayout [
+	| assertionFailureLayout |
+	
+	assertionFailureLayout := SpPanedLayout newTopToBottom.
+	assertionFailureLayout positionOfSlider: (self class maximizeAssertionSpec
+			 ifTrue: [ 95 percent ]
+			 ifFalse: [ 40 percent ]).
+	assertionFailureLayout add: (SpBoxLayout newLeftToRight
+			 add: (SpBoxLayout newTopToBottom
+				add: #lateralToolbar expand: false;
+				yourself)
+			 expand: false;
+			 add: #assertionFailure;
+			 yourself).
+
+	self class maximizeAssertionSpec ifFalse: [ 
+		assertionFailureLayout add: #inspector ].
+	^ assertionFailureLayout
 ]
 
 { #category : #layout }
-StDebuggerInspector >> currentLayoutSpec [
-	^currentLayoutSpec
+StDebuggerInspector >> assertionLayoutSelector [
+	^#assertionFailureLayout
+]
+
+{ #category : #layout }
+StDebuggerInspector >> currentLayoutSelector [
+	^currentLayoutSelector
 ]
 
 { #category : #accessing }
@@ -98,8 +92,16 @@ StDebuggerInspector >> debuggerInspectorModelClass [
 ]
 
 { #category : #layout }
-StDebuggerInspector >> defaultLayoutSpec [
-	^#defaultSpec
+StDebuggerInspector >> defaultLayout [
+
+	^ SpBoxLayout newTopToBottom
+		  add: #inspector;
+		  yourself
+]
+
+{ #category : #layout }
+StDebuggerInspector >> defaultLayoutSelector [
+	^#defaultLayout
 ]
 
 { #category : #updating }
@@ -119,6 +121,13 @@ StDebuggerInspector >> getRawInspectorSelectedPath [
 	^ self getRawInspectorPresenterOrNil
 		  ifNil: [ #(  ) ]
 		  ifNotNil: [ :raw | raw selectedPath ]
+]
+
+{ #category : #initialization }
+StDebuggerInspector >> initialize [
+
+	super initialize.
+	shouldBeUpdated := false
 ]
 
 { #category : #initialization }
@@ -147,7 +156,7 @@ StDebuggerInspector >> initializePresenters [
 
 	label := self newLabel.
 	inspector := self instantiate: StInspector on: self model.
-	currentLayoutSpec := self defaultLayoutSpec.
+	currentLayoutSelector := self defaultLayoutSelector.
 	self initializeLateralToolbar
 ]
 
@@ -218,15 +227,15 @@ StDebuggerInspector >> saveRawInspectionSelectionForContext: aContext [
 
 { #category : #layout }
 StDebuggerInspector >> setAssertionLayout [
-	currentLayoutSpec := self assertionLayoutSpec.
-	self layout: self class assertionFailureSpec
+	currentLayoutSelector := self assertionLayoutSelector.
+	self layout: self assertionFailureLayout
 ]
 
 { #category : #layout }
 StDebuggerInspector >> setDefaultLayout [
 	
-	currentLayoutSpec := self defaultLayoutSpec.
-	self layout: self class defaultSpec
+	currentLayoutSelector := self defaultLayoutSelector.
+	self layout: self defaultLayout
 ]
 
 { #category : #'accessing - model' }
@@ -235,10 +244,16 @@ StDebuggerInspector >> setModelBeforeInitialization: aModel [
 	model := aModel
 ]
 
+{ #category : #asserting }
+StDebuggerInspector >> shouldUpdate [
+
+	shouldBeUpdated := true
+]
+
 { #category : #updating }
 StDebuggerInspector >> shouldUpdateContext: oldContext with: newContext [
 
-	^ oldContext ~~ newContext
+	^ oldContext ~~ newContext or: [ shouldBeUpdated ]
 ]
 
 { #category : #stepping }
@@ -260,10 +275,10 @@ StDebuggerInspector >> updateLayoutForContexts: aContext isAssertionFailure: isT
 
 	| assertionResult |
 	isTopContextFailingAssertion ifFalse: [ 
-		currentLayoutSpec = self defaultLayoutSpec ifTrue: [ ^ self ].
+		currentLayoutSelector = self defaultLayoutSelector ifTrue: [ ^ self ].
 		self setDefaultLayout.
 		^self ].
-	currentLayoutSpec = self assertionLayoutSpec ifTrue: [ ^ self ].
+	currentLayoutSelector = self assertionLayoutSelector ifTrue: [ ^ self ].
 
 	[ assertionResult := aContext findFailedAssertionResultsInSenderChain ]
 		on: StDebuggeAssertionFailureContextNotFound
@@ -286,6 +301,7 @@ StDebuggerInspector >> updateWith: inspectedObject [
 	newContext := inspectedObject ifNotNil: [ :dbgCtx | dbgCtx context ].
 	(self shouldUpdateContext: oldContext with: newContext) ifFalse: [ ^ self ].
 
+	shouldBeUpdated := false.
 	self saveRawInspectionSelectionForContext: oldContext.
 	self model: (self debuggerInspectorModelClass on: inspectedObject).
 	self updateEvaluationPaneReceiver.

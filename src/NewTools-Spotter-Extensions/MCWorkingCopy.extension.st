@@ -38,10 +38,11 @@ MCWorkingCopy >> spotterCommit: workingCopy in: aRepository [
 { #category : #'*NewTools-Spotter-Extensions' }
 MCWorkingCopy >> spotterMonticelloPackageFor: aStep [
 	<stSpotterOrder: 21>
+	
 	aStep listProcessor
 		title: 'Monticello Package';
 		allCandidates: [ Array with: self package ];
-		itemIcon: [ Smalltalk ui icons iconNamed: #monticelloPackageIcon ];
+		itemIconName: [ :item | #monticelloPackageIcon ];
 		filter: StFilterSubstring
 ]
 
@@ -49,13 +50,14 @@ MCWorkingCopy >> spotterMonticelloPackageFor: aStep [
 MCWorkingCopy >> spotterPackageFor: aStep [
 	<stSpotterOrder: 21>
 	self flag: #maybeRewriteForDirectStreaming.
+
 	aStep listProcessor
 		title: 'Packages';
 		allCandidates: [ self package correspondingRPackage 
 			ifNotNil: [ :rpackage | { rpackage } ] 
 			ifNil: [ { } ] ];
 		itemName: [ :item | item name ];
-		itemIcon: [ Smalltalk ui icons iconNamed: #packageIcon ];
+		itemIconName: [ :item | #package ];
 		filter: StFilterSubstring
 ]
 

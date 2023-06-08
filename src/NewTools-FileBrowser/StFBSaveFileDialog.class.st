@@ -5,45 +5,30 @@ Class {
 	#name : #StFBSaveFileDialog,
 	#superclass : #StFBFileDialogPresenter,
 	#instVars : [
-		'extensionMather',
-		'currentDirectory',
-		'nameText',
-		'confirmButton'
-	],
-	#classVars : [
-		'Matcher'
+		'confirmedOverwrite'
 	],
 	#category : #'NewTools-FileBrowser-UI'
 }
 
 { #category : #examples }
-StFBSaveFileDialog class >> example [ 	
+StFBSaveFileDialog class >> example [
+
 	<example>
-		^ self new openDialogWithSpec
+	^ self chooseThenInspect
 ]
 
-{ #category : #'as yet unclassified' }
-StFBSaveFileDialog class >> exampleExtension [
+{ #category : #examples }
+StFBSaveFileDialog class >> exampleExtensions [
+
 	<example>
-	^ self extension: '*.jpg'
+	^ self extensions: #( 'image' )
 ]
 
-{ #category : #accessing }
-StFBSaveFileDialog class >> extension: aExtensionMatcher [
-	"example 
-		you want to save png File 
-			FDSaveFileDialog extension: 'jpg'
-	"
+{ #category : #examples }
+StFBSaveFileDialog class >> exampleModal [
 
-	^ self new
-		extension: aExtensionMatcher;
-		openDialogWithSpec;
-		yourself
-]
-
-{ #category : #'class initialization' }
-StFBSaveFileDialog class >> initialize [ 
-	Matcher := '*'
+	<example>
+	^ self chooseModalAndInspect
 ]
 
 { #category : #'accessing - ui' }
@@ -54,18 +39,13 @@ StFBSaveFileDialog >> confirmLabel [
 
 { #category : #initialization }
 StFBSaveFileDialog >> connectPresenters [
-	| ec |
 
+	| ec |
 	super connectPresenters.
 	(ec := EntryCompletion new)
-		dataSourceBlock: [ :text | fileNavigationSystem currentDirectory children collect: #basename ];
-		filterBlock: [ :opt :text |opt beginsWith: text ].
-	fileNavigationSystem nameText entryCompletion: ec
-]
-
-{ #category : #'api-customization' }
-StFBSaveFileDialog >> extension: anExtensionMatcher [
-	extensionMather := anExtensionMatcher
+		dataSourceBlock: [ :text | 
+			fileNavigationSystem currentDirectory children collect: #basename ];
+		filterBlock: [ :opt :text | opt beginsWith: text ]
 ]
 
 { #category : #'accessing - ui' }
@@ -73,26 +53,17 @@ StFBSaveFileDialog >> initialTitle [
 	^ 'Save As'
 ]
 
-{ #category : #initialization }
-StFBSaveFileDialog >> initialize [
-	super initialize.
-	extensionMather := Matcher
-]
-
 { #category : #accessing }
 StFBSaveFileDialog >> selectedEntry [
-	| entry proceed |
-	entry := fileNavigationSystem currentDirectory /fileNavigationSystem nameText text.
-	(fileNavigationSystem nameText text includes: extensionMather)
-		ifFalse: [ entry := entry
-				, ((extensionMather copyReplaceAll: '*' with: '') ) ].
-	proceed := false.
-	entry exists
-		ifTrue: [ proceed := UIManager default
-				proceed:
-					('File named "{1}" already exists. Do you want to overwrite it?'
-						format: {entry printString}) ].
-	^ proceed
-		ifTrue: [ entry ]
-		ifFalse: [ nil ]
+
+	| entry |
+	entry := super selectedEntry ifNil: [ ^ nil ].
+	entry := filter addExtensionTo: entry.
+	entry exists ifFalse: [ ^ entry ].
+	entry = confirmedOverwrite ifTrue: [ ^ entry ].
+	(UIManager default proceed:
+		 ('File named "{1}" already exists. Do you want to overwrite it?' 
+			  format: { entry basename })) ifTrue: [ 
+		^ confirmedOverwrite := entry ].
+	^ nil
 ]

@@ -6,7 +6,7 @@ I will list of the history of the method available in the sources of the image.
 Examples
 --------------------
 
-	self browseVersionsForClass: self selector: #initializeWidgets
+	self browseVersionsForClass: self selector: #initializePresenters
 	
  
 Internal Representation and Key Implementation Points.
@@ -46,13 +46,8 @@ VersionBrowser class >> browseVersionsForClass: aClass selector: aSelector [
 
 { #category : #api }
 VersionBrowser class >> browseVersionsForMethod: aRingMethod [
-	^ (self on: aRingMethod) openWithSpec
-]
 
-{ #category : #specs }
-VersionBrowser class >> defaultSpec [
-	
-	^ nil
+	^ (self on: aRingMethod) open
 ]
 
 { #category : #'tools registry' }
@@ -121,7 +116,7 @@ VersionBrowser >> compareTo: anOtherVersion withLabel: aLabel [
 		title: ('Comparison from {1} to {2}' format: { versions second stamp. aLabel });
 		leftText: texts first;
 		rightText: texts second;
-		openWithSpec
+		open
 ]
 
 { #category : #actions }
@@ -146,25 +141,33 @@ VersionBrowser >> connectPresenters [
 	messageList
 		whenSelectedDo: [ :item | self selectItem: item ];
 		messages: self buildChangeList.
-	toolbarPresenter dropListModel selectIndex: 1
+	toolbarPresenter selectFirst
+]
+
+{ #category : #initialization }
+VersionBrowser >> defaultLayout [
+
+	^ SpPanedLayout newTopToBottom
+		add: messageList;
+		add: ((sourceLayout := SpBoxLayout newTopToBottom)
+			add: toolbarPresenter expand: false;
+			yourself);
+		yourself
 ]
 
 { #category : #initialization }
 VersionBrowser >> initializePresenters [
 
-	self layout: (SpPanedLayout newTopToBottom
-		add: (messageList := self instantiate: MessageList on: rgMethod);
-		add: ((sourceLayout := SpBoxLayout newTopToBottom)
-			add: (toolbarPresenter := self instantiate: SpMethodToolbarPresenter on: rgMethod) 
-				expand: false;
-			yourself);
-		yourself).
-
+	messageList := self instantiate: MessageList on: rgMethod.
+	
+	toolbarPresenter := self instantiate: SpMethodToolbarPresenter on: rgMethod.
+	self layout: self defaultLayout.
+	 
 	messageList
 		topologicSort: false;
 		sortingBlock: [ :a | a annotationNamed: #versionIndex ifAbsent: [ 0 ] ] ascending;
 		contextMenu: self messageListMenu.
-
+	
 	toolbarPresenter
 		addItemLabeled: 'Side By Side' do: [
 			self showDiffMorphWithConverter: (DiffSideBySideChangeRecordConverter 
@@ -177,8 +180,8 @@ VersionBrowser >> initializePresenters [
 				methodReference: self textConverter method
 				referencesList: self changeList) ].
 		
-	toolbarPresenter versionModel
-		label: 'Revert';
+	toolbarPresenter 
+		replaceVersionWithLabel: 'Revert'
 		action: [ self revert: self selectedMessage ]
 ]
 
@@ -338,7 +341,7 @@ VersionBrowser >> showDiffMorphWithConverter: aConverter [
 	self textConverter: aConverter.
 
 	newSource := self newDiff.
-	newSource contextClass: self selectedMessage methodClass.
+	newSource contextClass: (self selectedMessage ifNotNil: [ :message | message methodClass ]).
 	self replaceSourceWith: newSource
 ]
 
@@ -386,6 +389,14 @@ VersionBrowser >> updateDiffLine: content [
 				to: content second asString ].
 			
 	self installIconStylerFor: self textConverter method
+]
+
+{ #category : #initialization }
+VersionBrowser >> updatePresenter [
+
+	self showDiffMorphWithConverter: (DiffSideBySideChangeRecordConverter 
+				methodReference: self textConverter method 
+				referencesList: self changeList)
 ]
 
 { #category : #'private - updating' }

@@ -1,20 +1,17 @@
 Extension { #name : #Integer }
 
 { #category : #'*NewTools-Inspector-Extensions' }
-Integer >> inspectIntegerIn: aBuilder [
+Integer >> inspectIntegerIn: specBuilder [
 	<inspectorPresentationOrder: 30 title: 'Integer'> 
-	| keysColumn valuesColumn items |
-	items := { 'decimal' -> self printString.
-					'hex' -> self printStringHex.
-					'octal' -> (self printStringBase: 8).
-					'binary' -> (self printStringBase: 2)} asOrderedCollection.
-					
-	keysColumn := SpStringTableColumn title: #key evaluated: [ :anAssociation | anAssociation key ].
-	valuesColumn := SpStringTableColumn title: #value evaluated: [ :anAssociation | anAssociation value ].
 	
-	^ aBuilder newTable
-		addColumn: keysColumn;
-		addColumn: valuesColumn;
-		items: items;
-		yourself
+	| inspectorBuilder |
+	(inspectorBuilder := StSimpleInspectorBuilder on: specBuilder) 
+		key: #self value: self;
+		key: #decimal value: self printString;
+		key: 	#hex value: self printStringHex;
+		key: #octal value: (self printStringBase: 8);
+		key: 	#binary value: (self printStringBase: 2).
+	(self between: 0 and: ZnCharacterEncoder default maximumUTFCode)	
+		ifTrue: [ inspectorBuilder key: #character value: self asCharacter ].
+	^ inspectorBuilder table
 ]

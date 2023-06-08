@@ -25,11 +25,6 @@ StInspectorIndexedNode >> = anObject [
 	^ super = anObject and: [ index = anObject index ]
 ]
 
-{ #category : #'as yet unclassified' }
-StInspectorIndexedNode >> debuggerColor [
-	^(SHRBTextStyler new attributesFor: #instVar) first color
-]
-
 { #category : #accessing }
 StInspectorIndexedNode >> errorMessage [
 	^ 'error obtaining indexed variable value'

@@ -24,8 +24,8 @@ Class {
 	#category : #'NewTools-Debugger-View'
 }
 
-{ #category : #specs }
-StFailingAssertionInspector class >> defaultSpec [
+{ #category : #layout }
+StFailingAssertionInspector class >> defaultLayout [
 
 	^ SpPanedLayout newLeftToRight
 		  positionOfSlider: 50 percent;
@@ -42,16 +42,17 @@ StFailingAssertionInspector class >> defaultSpec [
 
 { #category : #'instance creation' }
 StFailingAssertionInspector class >> diffInspectorsFromActual: actualObject expected: expectedObject application: aStApplication [
+
 	| diffPresenter |
 	diffPresenter := self basicNew
-		application: aStApplication;
-		actualObject: actualObject;
-		expectedObject: expectedObject;
-		initialize.
-		
+		                 application: aStApplication;
+		                 actualObject: actualObject;
+		                 expectedObject: expectedObject;
+		                 initialize.
+
 	self flag: 'Not nice but works. This needs improvement.'.
-	(actualObject isString and: [ expectedObject isString ])
-		ifTrue: [ diffPresenter buildWithSpec: #stringSpec ].
+	(actualObject isString and: [ expectedObject isString ]) ifTrue: [ 
+		diffPresenter buildWithSelector: #stringSpec ].
 	^ diffPresenter
 ]
 
@@ -100,23 +101,19 @@ StFailingAssertionInspector >> initializeMillerList: list forObject: object [
 ]
 
 { #category : #initialization }
-StFailingAssertionInspector >> initializePresenters [
-	self flag: 'Not nice but works. This needs improvement.'.
-	(actualObject isString and: [ expectedObject isString ])
-		ifTrue: [ ^ self initializePresentersForString ].
-		
+StFailingAssertionInspector >> initializeObjectDiffPresenters [
+			
 	actualObjectHeader := (self instantiate: StHeaderBar)
 		label: 'Actual object: ' , (actualObject printStringLimitedTo: 40);
 		yourself.
-	"actualObjectHeader applyStyleToLabel: 'label.headerError'."
 	actualObjectMillerList := SpMillerColumnPresenter new.
 	self
 		initializeMillerList: actualObjectMillerList
 		forObject: actualObject.
+		
 	expectedObjectHeader := (self instantiate: StHeaderBar)
 		label: 'Expected object: ' , (expectedObject printStringLimitedTo: 40);
-		yourself.
-	"expectedObjectHeader applyStyleToLabel: 'label.headerSuccess'."
+		yourself.	
 	expectedObjectMillerList := SpMillerColumnPresenter new.
 	self
 		initializeMillerList: expectedObjectMillerList
@@ -124,14 +121,20 @@ StFailingAssertionInspector >> initializePresenters [
 ]
 
 { #category : #initialization }
-StFailingAssertionInspector >> initializePresentersForString [
+StFailingAssertionInspector >> initializePresenters [
+
+	actualObject presentDiffWith: expectedObject in: self
+]
+
+{ #category : #initialization }
+StFailingAssertionInspector >> initializeStringDiffPresenters [
 	
 	stringDiff := self newDiff.
 	stringDiff showOptions: false.
 	stringDiff leftLabel: 'Actual result (left) versus expected result (right)'.
 	stringDiff rightLabel: ''.
-	stringDiff leftText: actualObject.
-	stringDiff rightText: expectedObject
+	stringDiff leftText: actualObject printString.
+	stringDiff rightText: expectedObject printString
 ]
 
 { #category : #accessing }

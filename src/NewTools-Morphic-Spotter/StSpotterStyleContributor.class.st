@@ -20,7 +20,7 @@ StSpotterStyleContributor >> styleSheetContribution [
 				addPropertyDrawWith: [ :draw | draw color: Color transparent ] ] ];
 		addClass: 'searchInputField' with: [ :class | class 
 			addClass: 'stSpotterSearch' with: [ :spotterClass | spotterClass
-				addPropertyDrawWith: [ :draw | draw color: Color transparent ];
+				addPropertyDrawWith: [ :draw | draw backgroundColor: Smalltalk ui theme lightBackgroundColor ];
 				addPropertyTextWith: [ :text | text drawKeyboardFocus: false ];
 				addPropertyGeometryWith: [ :geometry | geometry minHeight: 35; vResizing: false ];
 				addPropertyFontWith: [ :font | font size: (StandardFonts defaultFont pointSize * 1.2) asInteger ] ] ];
