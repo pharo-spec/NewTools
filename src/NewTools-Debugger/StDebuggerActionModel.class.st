@@ -51,8 +51,7 @@ StDebuggerActionModel >> autoClassifyMessage: aMessage inClass: aClass [
 
 	| method |
 	method := aClass lookupSelector: aMessage selector.
-	method protocol = Protocol unclassified ifTrue: [ 
-		MethodClassifier classify: method ]
+	method isClassified ifFalse: [ MethodClassifier classify: method ]
 ]
 
 { #category : #'debug - execution' }

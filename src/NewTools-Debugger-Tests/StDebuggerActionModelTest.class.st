@@ -417,13 +417,13 @@ StDebuggerActionModelTest >> testImplementMethodClassification [
 				forContext: dnu signalerContext ].
 
 	method := StDebuggerUsingSpecSelectorMock lookupSelector: #method.
-	self assert: method protocol equals: 'accessing'.
+	self assert: method protocolName equals: 'accessing'.
 
 	method := StDebuggerUsingSpecSelectorMock lookupSelector: #testMethod.
-	self assert: method protocol equals: 'tests'.
+	self assert: method protocolName equals: 'tests'.
 
 	method := StDebuggerUsingSpecSelectorMock lookupSelector: #unclassifiedMethod.
-	self assert: method protocol equals: Protocol unclassified
+	self deny: method isClassified
 ]
 
 { #category : #tests }

@@ -438,14 +438,11 @@ StDebugger >> createMissingMethod [
 
 { #category : #actions }
 StDebugger >> createMissingMethodFor: aMessage in: aClass [
+
 	| method |
 	self flag: #DBG_MISSINGTEST.
-	method := self debuggerActionModel
-		implement: aMessage
-		inClass: aClass
-		forContext: self interruptedContext.
-	method protocol = Protocol unclassified
-		ifTrue: [ method protocol: (self requestProtocolIn: aClass) ].
+	method := self debuggerActionModel implement: aMessage inClass: aClass forContext: self interruptedContext.
+	method isClassified ifFalse: [ method protocol: (self requestProtocolIn: aClass) ].
 
 	self selectTopContext
 ]
