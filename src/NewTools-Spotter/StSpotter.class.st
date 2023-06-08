@@ -454,8 +454,8 @@ StSpotter >> initialExtent [
 
 	self flag: #TODO. "Maybe calculate coordinates?"
 	^ self isShowingPreview 
-		ifTrue: [ 750@450 ]
-		ifFalse: [ 500@450 ]
+		ifTrue: [ (750@450) scaledByDisplayScaleFactor ]
+		ifFalse: [ (500@450) scaledByDisplayScaleFactor ]
 ]
 
 { #category : #initialization }
