@@ -122,6 +122,7 @@ StDebuggerContextTest >> testBuildInspectorNodes [
 { #category : #tests }
 StDebuggerContextTest >> testBuildInspectorNodesForException [
 	| nodes object exception |
+	<ignoreNotImplementedSelectors: #(toto)>
 	object := Object new.
 	[ object toto ]
 		on: Error
@@ -154,6 +155,7 @@ StDebuggerContextTest >> testContext [
 StDebuggerContextTest >> testExceptionNodes [
 
 	| nodes object exception |
+	<ignoreNotImplementedSelectors: #(toto)>
 	object := Object new.
 	[ object toto ]
 		on: Error

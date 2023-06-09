@@ -392,6 +392,7 @@ StDebuggerActionModelTest >> testImplementInClassForContext [
 StDebuggerActionModelTest >> testImplementMethodClassification [
 
 	| method |
+	<ignoreNotImplementedSelectors: #(unclassifiedMethod)>
 	[ StDebuggerUsingSpecSelectorMock new method ]
 		on: Error
 		do: [ :dnu |

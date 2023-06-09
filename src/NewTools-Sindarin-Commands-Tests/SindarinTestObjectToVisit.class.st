@@ -38,7 +38,7 @@ SindarinTestObjectToVisit >> acceptVisitorNeverFinishes: aVisitor [
 
 { #category : #visitors }
 SindarinTestObjectToVisit >> acceptVisitorWithError: visitor [
-
+	<ignoreNotImplementedSelectors: #(dnu)>
 	visitor dnu
   
 ]
