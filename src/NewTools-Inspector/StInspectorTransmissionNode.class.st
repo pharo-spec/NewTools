@@ -32,7 +32,7 @@ StInspectorTransmissionNode >> rawValue [
 ]
 
 { #category : #accessing }
-StInspectorTransmissionNode >> transmissionBlock: aBlock [
+StInspectorTransmissionNode >> transmits: aBlock [
 
 	transmissionBlock := aBlock
 ]
