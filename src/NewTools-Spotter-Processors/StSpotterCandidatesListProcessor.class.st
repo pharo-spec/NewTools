@@ -27,14 +27,6 @@ StSpotterCandidatesListProcessor >> actLogic: aBlockWithTwoArguments [
 	actBlock := aBlockWithTwoArguments
 ]
 
-{ #category : #private }
-StSpotterCandidatesListProcessor >> actOn: anObject for: aStep [
-	
-	actBlock
-		ifNil: [ super actOn: anObject for: aStep ]
-		ifNotNil: [ actBlock cull: anObject cull: aStep ]
-]
-
 { #category : #compatibility }
 StSpotterCandidatesListProcessor >> allCandidates: aBlockWithOneArgument [
 	self items: aBlockWithOneArgument
