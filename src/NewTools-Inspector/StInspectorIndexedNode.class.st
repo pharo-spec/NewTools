@@ -26,11 +26,6 @@ StInspectorIndexedNode >> = anObject [
 ]
 
 { #category : #accessing }
-StInspectorIndexedNode >> debuggerColor [
-	^(SHRBTextStyler new attributesFor: #instVar) first color
-]
-
-{ #category : #accessing }
 StInspectorIndexedNode >> errorMessage [
 	^ 'error obtaining indexed variable value'
 ]

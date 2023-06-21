@@ -11,6 +11,7 @@ Class {
 		'filterStack',
 		'updateEventListeners',
 		'preventUpdate'
+		'previousASTScope'
 	],
 	#classVars : [
 		'ShouldFilterStack'
@@ -58,8 +59,7 @@ StDebuggerActionModel >> autoClassifyMessage: aMessage inClass: aClass [
 
 	| method |
 	method := aClass lookupSelector: aMessage selector.
-	method protocol = Protocol unclassified ifTrue: [ 
-		MethodClassifier classify: method ]
+	method isClassified ifFalse: [ MethodClassifier classify: method ]
 ]
 
 { #category : #accessing }
@@ -124,7 +124,7 @@ StDebuggerActionModel >> copyStackToClipboard [
 	Clipboard
 		clipboardText:
 			(String
-				streamContents: [ :s | self interruptedContext shortDebugStackOn: s ])
+				streamContents: [ :s | self interruptedContext printDebugStackOn: s ])
 ]
 
 { #category : #'stack - helpers' }
@@ -165,18 +165,19 @@ StDebuggerActionModel >> filterStack: aStack [
 ]
 
 { #category : #'debug - session' }
-StDebuggerActionModel >> implement: aMessage classified: messageCategory inClass: aClass forContext: aContext [
+StDebuggerActionModel >> implement: aMessage inClass: aClass forContext: aContext [
 
-	self session
+	| method |
+	method := self session
 		implement: aMessage
-		classified: messageCategory
 		inClass: aClass
 		forContext: aContext.
 	self autoClassifyMessage: aMessage inClass: aClass.
-	self updateTopContext
+	self updateTopContext.
+	^ method
 ]
 
-{ #category : #initialize }
+{ #category : #initialization }
 StDebuggerActionModel >> initialize [
 	super initialize.
 	self computeInitialTopContext.
@@ -299,6 +300,12 @@ StDebuggerActionModel >> preventUpdatesDuring: aBlock [
 	self update ] ensure: [ preventUpdate := oldEventFlag ]
 ]
 
+{ #category : #accessing }
+StDebuggerActionModel >> previousASTScope [
+
+	^ previousASTScope
+]
+
 { #category : #'debug - execution' }
 StDebuggerActionModel >> proceedDebugSession [
 
@@ -316,11 +323,20 @@ StDebuggerActionModel >> raiseUpdateEvents [
 
 { #category : #actions }
 StDebuggerActionModel >> recompileMethodTo: aString inContext: aContext notifying: aNotifyer [
+
+	| methodContext homePC |
 	aContext ifNil: [ ^ self ].
 	self session
 		recompileMethodTo: aString
 		inContext: aContext
-		notifying: aNotifyer
+		notifying: aNotifyer.
+
+	methodContext := aContext home.
+	homePC := methodContext isDead
+		ifTrue: [ methodContext endPC ]
+		ifFalse: [ methodContext pc ].
+	previousASTScope := (methodContext compiledCode sourceNodeForPC:
+		                     homePC) scope
 ]
 
 { #category : #context }
@@ -368,6 +384,9 @@ StDebuggerActionModel >> removeUpdateEventListener: anEventListener [
 
 { #category : #'debug - execution' }
 StDebuggerActionModel >> restartContext: aContext [
+
+	previousASTScope := (aContext compiledCode sourceNodeForPC:
+		                     aContext pc) scope.
 	self session restart: aContext.
 	self updateTopContext
 ]
@@ -378,7 +397,6 @@ StDebuggerActionModel >> returnValueFromExpression: aString fromContext: aContex
 	value := session class compiler
 		source: aString;
 		context: aContext;
-		receiver: aContext receiver;
 		evaluate.
 	self session returnValue: value from: aContext.
 	self updateTopContext
@@ -404,6 +422,8 @@ StDebuggerActionModel >> session [
 StDebuggerActionModel >> session: aDebugSession [
 	session ifNotNil: [ self removeActionsForSession: session ].
 	session := aDebugSession.
+  previousASTScope := aDebugSession interruptedContext
+		                    sourceNodeExecuted scope.
 	self registerActionsForSession: self session.
 
 	self updateIfAble
@@ -432,17 +452,20 @@ StDebuggerActionModel >> statusStringForContext [
 ]
 
 { #category : #'debug - stepping' }
-StDebuggerActionModel >> stepInto: aContext [ 
+StDebuggerActionModel >> stepInto: aContext [
+
+	previousASTScope := aContext sourceNodeExecuted scope.
 	filterStack := false.
 	aContext stepIntoQuickMethod: true.
 	self session stepInto: aContext.
 	aContext stepIntoQuickMethod: false.
-	self updateTopContext.
-
+	self updateTopContext
 ]
 
 { #category : #'debug - stepping' }
 StDebuggerActionModel >> stepOver: aContext [
+
+	previousASTScope := aContext sourceNodeExecuted scope.
 	filterStack := (self topContext method hasPragmaNamed:
 		                #debuggerCompleteToSender)
 		               ifTrue: [ false ]
@@ -453,6 +476,8 @@ StDebuggerActionModel >> stepOver: aContext [
 
 { #category : #'debug - stepping' }
 StDebuggerActionModel >> stepThrough: aContext [
+
+	previousASTScope := aContext sourceNodeExecuted scope.
 	self session stepThrough: aContext.
 	self updateTopContext
 ]

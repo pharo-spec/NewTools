@@ -4,10 +4,12 @@ Extension { #name : #Text }
 Text >> inspectionText [
 	<inspectorPresentationOrder: 0 title: 'Text'>
 
-	^ SpMorphPresenter new 
-		morph: (RubScrolledTextMorph new 
+	^ SpMorphPresenter new
+		morph: (RubScrolledTextMorph new
 			setText: self;
-			in: [ :this | this textArea readOnly: true ];
+			in: [ :this | this textArea
+				readOnly: true;
+				font: StandardFonts codeFont ];
 			yourself);
 		yourself
 ]

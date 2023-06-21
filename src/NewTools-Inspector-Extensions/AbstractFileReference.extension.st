@@ -81,19 +81,6 @@ AbstractFileReference >> inspectionContentsContext: aContext [
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }
-AbstractFileReference >> inspectionFuel [
-	<inspectorPresentationOrder: 40 title: 'Fuel Header'>
-	
-	^ SpTablePresenter new
-		items: (FLMaterializer new
-			filePath: self fullName;
-			materializeHeader) stFuelMetaData;
-		addColumn: (SpStringTableColumn title: 'Property' evaluated: [ :assoc | assoc key ]);
-		addColumn: (SpStringTableColumn title: 'Value' evaluated: [ :assoc | assoc value ]);	
-		yourself
-]
-
-{ #category : #'*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionFuelContext: aContext [ 
 	
 	aContext active: self isFuel

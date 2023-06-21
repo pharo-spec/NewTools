@@ -21,7 +21,8 @@ StFBWindowPathPresenterTest >> tearDown [
 
 { #category : #tests }
 StFBWindowPathPresenterTest >> testRoot [
+
 	windowPathUI currentDirectory: FileLocator root.
-	windowPathUI openWithSpec.
+	windowPathUI open.
 	self assert: windowPathUI path presenters size equals: 1
 ]

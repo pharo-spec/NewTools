@@ -34,6 +34,12 @@ StSindarinDebuggerScriptingPresenter class >> defaultLayout [
 		yourself
 ]
 
+{ #category : #visiting }
+StSindarinDebuggerScriptingPresenter >> accept: aVisitor [
+
+	^ aVisitor visitSindarin: self
+]
+
 { #category : #actions }
 StSindarinDebuggerScriptingPresenter >> createCommandFromScript [
 	self flag: 'todo'
@@ -82,12 +88,11 @@ StSindarinDebuggerScriptingPresenter >> initializePresenters [
 
 { #category : #initialization }
 StSindarinDebuggerScriptingPresenter >> initializeToolbar [
-	toolbar := self newToolbar.
-	toolbar addStyle: 'stToolbar'.
-	toolbar beIcons.
-	SpToolbarPresenterBuilder new
-		toolbarPresenter: toolbar;
-		visit: self toolbarActions
+
+	toolbar := self newToolbar
+		addStyle: 'stToolbar';
+		beIcons;
+		fillWith: self toolbarActions
 ]
 
 { #category : #actions }

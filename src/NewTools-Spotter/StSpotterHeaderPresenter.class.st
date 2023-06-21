@@ -144,7 +144,7 @@ StSpotterHeaderPresenter >> order [
 { #category : #accessing }
 StSpotterHeaderPresenter >> prepareAsClasses [
 
-	labelPresenter label: '#Classes'.
+	labelPresenter label: self model labelForClasses.
 	helpLabelPresenter label: (self model keyBindingForClasses acceptVisitor: OSPlatform current shortcutPrinter).
 ]
 
@@ -152,7 +152,7 @@ StSpotterHeaderPresenter >> prepareAsClasses [
 StSpotterHeaderPresenter >> prepareAsImplementors [
 
 	order := self model order + 1.
-	labelPresenter label: '#Implementors'.
+	labelPresenter label: self model labelForImplementors.
 	helpLabelPresenter label: (self model keyBindingForImplementors acceptVisitor: OSPlatform current shortcutPrinter).
 ]
 
@@ -160,7 +160,7 @@ StSpotterHeaderPresenter >> prepareAsImplementors [
 StSpotterHeaderPresenter >> prepareAsPackages [
 
 	order := self model order + 2.
-	labelPresenter label: '#Packages'.
+	labelPresenter label: self model labelForPackages.
 	helpLabelPresenter label: (self model keyBindingForPackages acceptVisitor: OSPlatform current shortcutPrinter).
 ]
 

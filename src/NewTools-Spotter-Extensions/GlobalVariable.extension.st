@@ -3,10 +3,11 @@ Extension { #name : #GlobalVariable }
 { #category : #'*NewTools-Spotter-Extensions' }
 GlobalVariable >> spotterClassFor: aStep [
 	<stSpotterOrder: 50>
+	
 	aStep listProcessor
 			title: 'Class';
 			allCandidates: [ { self value class }];
-			itemIcon: #systemIcon;
+			itemIconName: [ :item | item systemIconName ];
 			filter: StFilterSubstring
 ]
 

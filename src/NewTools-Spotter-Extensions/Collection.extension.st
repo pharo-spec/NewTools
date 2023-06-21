@@ -12,7 +12,7 @@ Collection >> spotterItemsFor: aStep [
 		candidatesLimit: StSpotterPragmaBasedProcessor defaultNestedItemsLimit;
 		items: [ self collect: [ :each | each asStSpotterCandidateLink value ] as: OrderedCollection ];
 		itemName: processor itemName;
-		itemIcon: processor itemIcon;
+		itemIconName: processor itemIconName;
 		actLogic: processor actLogic; 
 		filter: processor filter stListFilter;
 		wantsToDisplayOnEmptyQuery: true

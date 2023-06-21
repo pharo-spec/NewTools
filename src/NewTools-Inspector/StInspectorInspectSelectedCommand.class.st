@@ -35,7 +35,8 @@ StInspectorInspectSelectedCommand class >> documentContextRequiredSelectors [
 { #category : #execution }
 StInspectorInspectSelectedCommand >> execute [ 
 
-	self interestingObject stInspect
+	self context systemNavigation inspect: self interestingObject
+	
 ]
 
 { #category : #execution }

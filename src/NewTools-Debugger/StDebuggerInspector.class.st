@@ -15,7 +15,8 @@ Class {
 		'rawInspectionSelectionCache',
 		'assertionFailure',
 		'lateralToolbar',
-		'currentLayoutSelector'
+		'currentLayoutSelector',
+		'shouldBeUpdated'
 	],
 	#classInstVars : [
 		'maximizeAssertionSpec'
@@ -120,6 +121,13 @@ StDebuggerInspector >> getRawInspectorSelectedPath [
 	^ self getRawInspectorPresenterOrNil
 		  ifNil: [ #(  ) ]
 		  ifNotNil: [ :raw | raw selectedPath ]
+]
+
+{ #category : #initialization }
+StDebuggerInspector >> initialize [
+
+	super initialize.
+	shouldBeUpdated := false
 ]
 
 { #category : #initialization }
@@ -236,10 +244,16 @@ StDebuggerInspector >> setModelBeforeInitialization: aModel [
 	model := aModel
 ]
 
+{ #category : #asserting }
+StDebuggerInspector >> shouldUpdate [
+
+	shouldBeUpdated := true
+]
+
 { #category : #updating }
 StDebuggerInspector >> shouldUpdateContext: oldContext with: newContext [
 
-	^ oldContext ~~ newContext
+	^ oldContext ~~ newContext or: [ shouldBeUpdated ]
 ]
 
 { #category : #stepping }
@@ -287,6 +301,7 @@ StDebuggerInspector >> updateWith: inspectedObject [
 	newContext := inspectedObject ifNotNil: [ :dbgCtx | dbgCtx context ].
 	(self shouldUpdateContext: oldContext with: newContext) ifFalse: [ ^ self ].
 
+	shouldBeUpdated := false.
 	self saveRawInspectionSelectionForContext: oldContext.
 	self model: (self debuggerInspectorModelClass on: inspectedObject).
 	self updateEvaluationPaneReceiver.

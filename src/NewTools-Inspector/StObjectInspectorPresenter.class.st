@@ -112,10 +112,10 @@ StObjectInspectorPresenter >> allPages [
 { #category : #'private - builder' }
 StObjectInspectorPresenter >> buildToolbar [
 
-	^ self rootCommandsGroup asToolbarPresenterWith: [ :presenter | 
-			presenter 
-				displayMode: self application toolbarDisplayMode;
-				addStyle: 'stToolbar' ]
+	^ self newToolbar 
+		displayMode: self application toolbarDisplayMode;
+		addStyle: 'stToolbar';	
+		fillWith: self rootCommandsGroup
 ]
 
 { #category : #transmission }
@@ -162,10 +162,7 @@ StObjectInspectorPresenter >> initialize [
 StObjectInspectorPresenter >> initializePresenters [
 
 	views := self newNotebook.
-	header := self instantiate: StHeaderBar.
-
-	self layout: self defaultLayout.
-	self refresh
+	header := self instantiate: StHeaderBar
 ]
 
 { #category : #initialization }
@@ -339,6 +336,12 @@ StObjectInspectorPresenter >> updatePages [
 	views 
 		pages: self allPages;
 		selectPageIndex: 1
+]
+
+{ #category : #initialization }
+StObjectInspectorPresenter >> updatePresenter [
+
+	self refresh
 ]
 
 { #category : #'private - updating' }

@@ -191,11 +191,11 @@ StDebuggerCommandTest >> testCommandsInMissingClassContext [
 	self assert: (StReturnValueCommand forContext: debugger) canBeExecuted. 
 	
 	"Non-executable commands relative to context"
-	self deny: (StStepIntoCommand forContext: debugger) canBeExecuted. 
-	self deny: (StStepOverCommand forContext: debugger) canBeExecuted. 
-	self deny: (StStepThroughCommand forContext: debugger) canBeExecuted. 
-	self deny: (StRunToSelectionCommand forContext: debugger) canBeExecuted.
-	self deny: (StProceedCommand forContext: debugger) canBeExecuted. 
+	self assert: (StStepIntoCommand forContext: debugger) canBeExecuted. 
+	self assert: (StStepOverCommand forContext: debugger) canBeExecuted. 
+	self assert: (StStepThroughCommand forContext: debugger) canBeExecuted. 
+	self assert: (StRunToSelectionCommand forContext: debugger) canBeExecuted.
+	self assert: (StProceedCommand forContext: debugger) canBeExecuted. 
 	self deny: (StDefineSubclassResponsabilityCommand forContext: debugger) canBeExecuted.  
 	
 	

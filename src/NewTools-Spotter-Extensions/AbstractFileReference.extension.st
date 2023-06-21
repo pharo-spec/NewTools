@@ -16,20 +16,21 @@ AbstractFileReference >> spotterForDirectoriesFor: aStep [
 			title: 'Directories';
 			candidatesLimit: Float infinity;
 			itemName: #basename;
-			itemIcon: [ self iconNamed: #glamorousFolder ];
+			itemIconName: [ :item | #glamorousFolder ];
 			filter: StFilterSubstring ]
 ]
 
 { #category : #'*NewTools-Spotter-Extensions' }
 AbstractFileReference >> spotterForFilesFor: aStep [
 	<stSpotterOrder: 20>
+	
 	^ self isDirectory ifTrue: [
 		aStep listProcessor
 			allCandidates: [ self files ];
 			title: 'Files';
 			candidatesLimit: Float infinity;
 			itemName: #basename;
-			itemIcon: [ self iconNamed: #glamorousBrowse ];
+			itemIconName: [ :item | #glamorousBrowse ];
 			filter: StFilterSubstring ]
 ]
 
@@ -37,6 +38,7 @@ AbstractFileReference >> spotterForFilesFor: aStep [
 AbstractFileReference >> spotterForZipDirectoriesFor: aStep [
 	<stSpotterOrder: 10>
 	| zipFileSystem |
+
 	self isZipFile ifFalse: [ ^ self ].
 	aStep listProcessor
 			allCandidates: [ 
@@ -45,7 +47,7 @@ AbstractFileReference >> spotterForZipDirectoriesFor: aStep [
 			title: 'Directories';
 			candidatesLimit: Float infinity;
 			itemName: #basename;
-			itemIcon: [ self iconNamed: #glamorousFolder ];
+			itemIconName: [ :item | #glamorousFolder ];
 			filter: StFilterSubstring
 ]
 
@@ -62,7 +64,7 @@ AbstractFileReference >> spotterForZipFilesFor: aStep [
 			title: 'Files';
 			candidatesLimit: Float infinity;
 			itemName: #basename;
-			itemIcon: [ self iconNamed: #glamorousBrowse ];
+			itemIconName: [ :item | #glamorousBrowse ];
 			filter: StFilterSubstring
 	
 ]

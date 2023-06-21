@@ -35,7 +35,7 @@ StMockCandidatesList >> addObjects: aCollection inProcessor: aProcessor [
 	results addAll: aCollection
 ]
 
-{ #category : #adding }
+{ #category : #initialization }
 StMockCandidatesList >> initialize [ 
 	
 	super initialize.

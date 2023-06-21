@@ -9,7 +9,7 @@ Class {
 
 { #category : #initialization }
 StCopyStackToClipboardCommand class >> defaultDescription [
-	^ 'Copy a short debugging stack to the clipboard.'
+	^ 'Copy the debugging stack to the clipboard.'
 ]
 
 { #category : #initialization }

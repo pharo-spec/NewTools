@@ -12,7 +12,8 @@ Breakpoint >> printContentsForBreakpointInspection [
 
 { #category : #'*NewTools-Debugger-Breakpoints-Tools' }
 Breakpoint >> printTargetForBreakpointInspection [
-	^node methodNode method printString
+
+	^ node methodNode compiledMethod printString
 ]
 
 { #category : #'*NewTools-Debugger-Breakpoints-Tools' }

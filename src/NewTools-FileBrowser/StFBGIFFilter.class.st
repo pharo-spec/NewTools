@@ -14,5 +14,5 @@ StFBGIFFilter >> basename [
 
 { #category : #accessing }
 StFBGIFFilter >> extensions [
-	^ #('.gif')
+	^ #('gif')
 ]

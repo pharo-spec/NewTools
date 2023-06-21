@@ -14,5 +14,5 @@ StFBPNGFilter >> basename [
 
 { #category : #accessing }
 StFBPNGFilter >> extensions [
-	^ #('.png')
+	^ #('png')
 ]

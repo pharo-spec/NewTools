@@ -60,13 +60,12 @@ SpChangeSorterPresenter >> browseChangeSet [
 	| messages |
 	self selectedChangeSet ifNil: [ ^ self inform: 'No change set selected' ].
 	messages := self selectedChangeSet changedMessageList select: [ :each | each isValid ].
-	Smalltalk tools messageList browse: messages title: 'Methods in Change Set ' , self selectedChangeSet name
+	self application tools messageList browse: messages title: 'Methods in Change Set ' , self selectedChangeSet name
 ]
 
 { #category : #'menu - message' }
 SpChangeSorterPresenter >> browseImplementorsOfMessages [
-
-	self model browseMessagesFrom: self selectedSelector
+	SystemNavigation new browseAllImplementorsOf: self selectedSelector
 ]
 
 { #category : #'menu - message' }
@@ -74,13 +73,13 @@ SpChangeSorterPresenter >> browseMethodFull [
 	"Create and schedule a full Browser and then select the current class and message."
 
 	self selectedClass ifNotNil:
-		[:myClass | Smalltalk tools browser openOnClass: myClass selector: self selectedSelector ]
+		[:myClass | self application tools browser openOnClass: myClass selector: self selectedSelector ]
 ]
 
 { #category : #'menu - message' }
 SpChangeSorterPresenter >> browseSendersOfMessages [
 
-	self model browseSendersOfMessagesFrom: self selectedSelector
+	self systemNavigation browseAllSendersOf: self selectedSelector
 ]
 
 { #category : #'menu - message' }
@@ -530,7 +529,7 @@ SpChangeSorterPresenter >> openChangeSetBrowser [
 	| cs |
 	self selectedChangeSet ifNil: [ ^ self inform: 'No change set selected' ].
 	cs := self selectedChangeSet ifNil: [ ^ self ].
-	^ Smalltalk tools messageList browseClasses: (RBBrowserEnvironment new forClasses: cs changedClasses)
+	^ self application tools messageList browseClasses: (RBBrowserEnvironment new forClasses: cs changedClasses)
 ]
 
 { #category : #initialization }
@@ -616,7 +615,7 @@ SpChangeSorterPresenter >> remove [
 SpChangeSorterPresenter >> removeClass [
 	"Remove the selected class from the system, at interactive user request.  Make certain the user really wants to do this, since it is not reversible.  Answer true if removal actually happened."
 
-	(self model removeClass: self selectedClass)
+	(SystemNavigation new removeClass: self selectedClass)
 		ifTrue: [ self setSelectedChangeSet: self selectedChangeSet ]
 ]
 
@@ -631,7 +630,7 @@ SpChangeSorterPresenter >> removeMessage [
 			class := self selectedClass.
 				(class includesSelector: selector) ifFalse:[^ self].
 				method := class>>selector.
-				(self model removeMethod: method inClass: class)
+				(SystemNavigation new removeMethod: method inClass: class)
 					ifTrue: [ self updateMessagesList ]]
 ]
 

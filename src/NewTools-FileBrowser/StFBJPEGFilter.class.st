@@ -14,5 +14,5 @@ StFBJPEGFilter >> basename [
 
 { #category : #accessing }
 StFBJPEGFilter >> extensions [
-	^ #('.jpg' '.jpeg' '.jpe' '.jfif')
+	^ #('jpg' 'jpeg' 'jpe' 'jfif')
 ]

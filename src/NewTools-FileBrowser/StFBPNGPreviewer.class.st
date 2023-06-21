@@ -1,7 +1,6 @@
 "
-i'm creating 
-
-a SpImagePresenter of PNG file
+I'm a previewer for PNG file 
+	I provide a SpImagePresenter to show the picture
 "
 Class {
 	#name : #StFBPNGPreviewer,
@@ -11,7 +10,8 @@ Class {
 
 { #category : #testing }
 StFBPNGPreviewer >> matchingMimeType: element [
-	^ element matches:  ZnMimeType imagePng
+
+	^ element matches: ZnMimeType imagePng
 ]
 
 { #category : #utils }

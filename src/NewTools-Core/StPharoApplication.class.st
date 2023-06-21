@@ -109,5 +109,5 @@ StPharoApplication >> toolbarDisplayMode [
 { #category : #'accessing - resources' }
 StPharoApplication >> tools [
 
-	^ Smalltalk os tools
+	^ Smalltalk tools
 ]

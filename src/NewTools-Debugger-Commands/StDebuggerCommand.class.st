@@ -70,17 +70,15 @@ StDebuggerCommand >> appliesTo: aDebugger [
 	^ aDebugger canExecuteDebugCommand
 ]
 
-{ #category : #converting }
-StDebuggerCommand >> asSpecCommand [
-	
-	^ super asSpecCommand
-		iconProvider: StPharoApplication current iconProvider;
-		yourself
-]
-
 { #category : #accessing }
 StDebuggerCommand >> canBeExecuted [
 	^ self appliesTo: self debugger
+]
+
+{ #category : #accessing }
+StDebuggerCommand >> context: anObject [
+
+	super context: anObject
 ]
 
 { #category : #accessing }
@@ -109,10 +107,4 @@ StDebuggerCommand >> initialize [
 			<< ' ['
 			<< shortcut asString
 			<< ']' ]])
-]
-
-{ #category : #'as yet unclassified' }
-StDebuggerCommand >> transform: aBlock [
-
-	^ self
 ]

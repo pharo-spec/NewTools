@@ -13,9 +13,9 @@ Class {
 { #category : #helpers }
 StTestDebuggerProvider class >> compileMissingClassContextBuilder [
 	
-	self compile: 'buildDebuggerWithMissingClassContext
+	self compiler permitUndeclared: true; install: 'buildDebuggerWithMissingClassContext
 	
-	[ MissingClass new ]
+	[ ^ MissingClass ]
 		on: Error
 		do: [ :err | 			
 			self sessionFor: err signalerContext copy exception: err.
@@ -79,6 +79,7 @@ StTestDebuggerProvider >> debuggerWithMissingClassContext [
 	"The called method must contain a undeclared variable (the missing class).
 	It makes the CI test fail, so it has to be generated and removed after usage.
 	buildDebuggerWithMissingClassContext has to be generated when starting a test (see class side for generation) and removed in the test's tearDown."
+	<ignoreNotImplementedSelectors: #(buildDebuggerWithMissingClassContext)>
 	^ self buildDebuggerWithMissingClassContext
 ]
 

@@ -37,6 +37,7 @@ Class {
 	],
 	#classVars : [
 		'History',
+		'InsertsSelection',
 		'PreviewVisible',
 		'Tips',
 		'TipsVisible'
@@ -106,7 +107,20 @@ StSpotter class >> history [
 StSpotter class >> initialize [
 
 	self showPreview.
-	self showTips
+	self showTips.
+	self insertsSelection: true.
+]
+
+{ #category : #settings }
+StSpotter class >> insertsSelection [
+		
+	^ InsertsSelection ifNil: [ InsertsSelection := false ]
+]
+
+{ #category : #settings }
+StSpotter class >> insertsSelection: aBoolean [
+		
+	InsertsSelection := aBoolean
 ]
 
 { #category : #testing }
@@ -161,7 +175,7 @@ StSpotter class >> openWithText: aText [
 	spotter searchText
 		text: aText asString.
 	spotter whenDisplayDo: [ spotter searchText cursorPositionIndex: aText size + 1 ].
-	^ spotter open
+	^ spotter openModal
 ]
 
 { #category : #settings }
@@ -222,6 +236,13 @@ StSpotter class >> settingsOn: aBuilder [
 		target: self;
 		description: 'If Spotter will show the tips at the bottom of spotter';
 		label: 'Show Tips Panel'.
+		
+	(aBuilder setting: #insertsSelection)
+		parent: #spotter;
+		default: self insertsSelection;
+		target: self;
+		description: 'When the Spotter is opened, automatically insert the selected text into the search field';
+		label: 'Inserts Selection'.
 ]
 
 { #category : #accessing }
@@ -338,7 +359,7 @@ StSpotter >> configureModel: aModel [
 { #category : #private }
 StSpotter >> defaultModel [
 
-	^ StSpotterModel new
+	^ self newModel
 		in: [ :this | self configureModel: this ];
 		yourself
 ]
@@ -383,7 +404,8 @@ StSpotter >> flushPendingUpdates [
 				self queuedUpdateResultList.
 				lastUpdateTime := Time millisecondClockValue ]
 					on: Exception
-					fork: [ :e | "Allow halts and that, but eat errors (since otherwise, ugly things can happen)"
+					fork: [ :e | 
+						"Allow halts and that, but eat errors (since otherwise, ugly things can happen)"
 						(e isKindOf: Error)
 							ifTrue: [ ('Spotter error: ' , e printString) crTrace ]
 							ifFalse: [ e pass ] ] ] ] ]
@@ -432,8 +454,8 @@ StSpotter >> initialExtent [
 
 	self flag: #TODO. "Maybe calculate coordinates?"
 	^ self isShowingPreview 
-		ifTrue: [ 750@450 ]
-		ifFalse: [ 500@450 ]
+		ifTrue: [ (750@450) scaledByDisplayScaleFactor ]
+		ifFalse: [ (500@450) scaledByDisplayScaleFactor ]
 ]
 
 { #category : #initialization }
@@ -455,7 +477,7 @@ StSpotter >> initializeDialogWindow: aDialogWindowPresenter [
 { #category : #initialization }
 StSpotter >> initializeLayout [
 	| contentsLayout |
-	
+
 	self layout: (SpBoxLayout newTopToBottom
 		borderWidth: 10;
 		spacing: 5;
@@ -466,56 +488,55 @@ StSpotter >> initializeLayout [
 				spacing: 5;
 				add: resultList;
 				yourself);
-			addOverlay: (spinner := self newSpinner) 
+			addOverlay: (spinner := self newSpinner)
 				withConstraints: [ :c | c vAlignCenter; hAlignCenter ];
 			yourself);
 		yourself).
 
 	self isShowingPreview ifTrue: [ self addPreviewPanelTo: contentsLayout ].
-	self isShowingTips ifTrue: [ self addTipsPanel ].
-
-	self addStyle: 'stSpotter'.
-	spinner hide.
+	self isShowingTips ifTrue: [ self addTipsPanel ]
 ]
 
 { #category : #initialization }
 StSpotter >> initializePresenters [
-	
+
 	resultList := self newComponentList.
 	searchText := self newSearchInput.
-	
+
 	self initializeLayout.
-	
+
+	self addStyle: 'stSpotter'.
+	spinner hide.
+
 	resultList
-		addStyle: 'stSpotterList';		
-		bindKeyCombination: Character arrowUp asKeyCombination 
+		addStyle: 'stSpotterList';
+		bindKeyCombination: Character arrowUp asKeyCombination
 			toAction: [ :target :widget :event |
 				self transferFocusToSearchTextArrowUp.
 				event wasHandled: false ];
-		bindKeyCombination: Character arrowDown asKeyCombination 
-			toAction: [ :target :widget :event | 
+		bindKeyCombination: Character arrowDown asKeyCombination
+			toAction: [ :target :widget :event |
 				self transferFocusToSearchTextArrowDown.
 				event wasHandled: false ];
-		bindKeyCombination: Character arrowRight asKeyCombination 
+		bindKeyCombination: Character arrowRight asKeyCombination
 			toAction: [ self tryDiveIn ];
-		bindKeyCombination: Character arrowLeft asKeyCombination 
-			toAction: [ self tryDiveOut ]; 
-		whenActivatedDo: [ :selection | 
+		bindKeyCombination: Character arrowLeft asKeyCombination
+			toAction: [ self tryDiveOut ];
+		whenActivatedDo: [ :selection |
 			self activate: selection selectedItem ].
-	resultList eventHandler 
+	resultList eventHandler
 		whenKeyDownDo: [ :anEvent | self handleKeyEvent: anEvent ].
 
 	searchText
 		placeholder: 'Search...';
 		addStyle: 'stSpotterSearch';
 		whenTextChangedDo: [ :aString | self updateSearch: aString ];
-		bindKeyCombination: Character arrowDown asKeyCombination 
+		bindKeyCombination: Character arrowDown asKeyCombination
 			toAction: [ self transferFocusToResultList ];
-		bindKeyCombination: Character arrowUp asKeyCombination 
+		bindKeyCombination: Character arrowUp asKeyCombination
 			toAction: [ self transferFocusToResultListAtLast ];
-		bindKeyCombination: Character cr asKeyCombination 
-			toAction: [ self maybeActivateFirstElementOfResultList ].
-	
+		bindKeyCombination: Character cr asKeyCombination
+			toAction: [ self maybeActivateFirstElementOfResultList ]
 ]
 
 { #category : #initialization }
@@ -538,6 +559,12 @@ StSpotter >> initializeWindow: aWindowPresenter [
 		each 
 			installKeymappingsOn: aWindowPresenter
 			onExecution: [ :aProcessor | self updateSearchFromProcessor: aProcessor ] ]
+]
+
+{ #category : #testing }
+StSpotter >> insertsSelection [
+
+	^ self class insertsSelection
 ]
 
 { #category : #testing }
@@ -582,6 +609,12 @@ StSpotter >> maybeActivateFirstElementOfResultList [
 StSpotter >> model [
 
 	^ model ifNil: [ model := self defaultModel ]
+]
+
+{ #category : #private }
+StSpotter >> newModel [
+		
+	^ StSpotterModel new
 ]
 
 { #category : #'private - factory' }

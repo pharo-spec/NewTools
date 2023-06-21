@@ -14,6 +14,12 @@ Class {
 	#category : #'NewTools-Debugger-Tests-Utils'
 }
 
+{ #category : #testing }
+StDummyDebuggerPresenter class >> isOnlyForTests [
+
+	^ true
+]
+
 { #category : #mocks }
 StDummyDebuggerPresenter >> copyStackToClipboard [
 tag := thisContext method selector.

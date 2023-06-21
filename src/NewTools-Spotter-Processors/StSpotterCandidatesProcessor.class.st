@@ -62,7 +62,8 @@ StSpotterCandidatesProcessor >> itemFilterNameFor: anObject [
 ]
 
 { #category : #private }
-StSpotterCandidatesProcessor >> itemIconFor: anObject [
+StSpotterCandidatesProcessor >> itemIconNameFor: anObject [
+	
 	^ nil
 ]
 

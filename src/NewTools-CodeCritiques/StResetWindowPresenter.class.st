@@ -18,17 +18,6 @@ Class {
 }
 
 { #category : #specs }
-StResetWindowPresenter class >> defaultSpec [
-
-	^ SpBoxLayout newTopToBottom
-		  add: (SpBoxLayout newLeftToRight
-				   add: #resetModel;
-				   add: #currentConfigurationModel;
-				   yourself)
-		  height: 25
-]
-
-{ #category : #specs }
 StResetWindowPresenter class >> open [
 
 	<example>
@@ -43,6 +32,17 @@ StResetWindowPresenter class >> title [
 { #category : #accessing }
 StResetWindowPresenter >> currentConfigurationModel [
 	^ currentConfigurationModel
+]
+
+{ #category : #layout }
+StResetWindowPresenter >> defaultLayout [
+
+	^ SpBoxLayout newTopToBottom
+		  add: (SpBoxLayout newLeftToRight
+				add: resetModel;
+				add: currentConfigurationModel;
+				yourself)
+		  expand: false
 ]
 
 { #category : #initialization }
