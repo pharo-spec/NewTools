@@ -342,6 +342,7 @@ StDebugger >> clear [
 		page activePresenter windowIsClosing ].
 	extensionTools := nil.
 	self unsubscribeFromActionModel.
+	self unsubscribeFromSystemAnnouncer.
 	self debuggerActionModel clear.
 	
 	"When we programmatically close the window, we do not need to terminate the session as it was already cleared"
@@ -1290,6 +1291,12 @@ StDebugger >> unsavedCodeChangesFor: aContext [
 StDebugger >> unsubscribeFromActionModel [
 
 	self debuggerActionModel removeUpdateEventListener: self
+]
+
+{ #category : #'system subscription' }
+StDebugger >> unsubscribeFromSystemAnnouncer [
+
+	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
 { #category : #'updating - widgets' }
