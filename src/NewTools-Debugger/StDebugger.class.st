@@ -675,10 +675,9 @@ StDebugger >> initialExtent [
 StDebugger >> initialize [
 
 	super initialize.
-	self debuggerActionModel updateContextPredicate.			
-	self subscribeToActionModel.
+	self debuggerActionModel updateContextPredicate.
 	self forceSessionUpdate.
-  self susbcribeToExtensionToggleAnnouncement.
+  	self susbcribeToExtensionToggleAnnouncement.
 	
 	programmaticallyClosed := false.
 ]
