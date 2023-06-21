@@ -146,6 +146,23 @@ StDebuggerTest >> testAcceptCodeChangesForContext [
 	self assert: dbg code text equals: newSource
 ]
 
+{ #category : #tests }
+StDebuggerTest >> testActionModelSubscription [
+
+	self assert: self debugger debuggerActionModel isNil.
+
+	debugger session: session.
+
+	self assert: debugger debuggerActionModel isNotNil.
+	self assert:
+		(debugger debuggerActionModel hasUpdateEventListener: debugger).
+
+	debugger unsubscribeFromActionModel.
+
+	self deny:
+		(debugger debuggerActionModel hasUpdateEventListener: debugger)
+]
+
 { #category : #'tests - code pane' }
 StDebuggerTest >> testCancelCodeChangesFor [
 	| firstContext lastContext |
