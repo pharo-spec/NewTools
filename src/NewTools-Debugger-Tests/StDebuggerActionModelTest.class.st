@@ -173,9 +173,10 @@ StDebuggerActionModelTest >> setResult [
 { #category : #running }
 StDebuggerActionModelTest >> setSessionAndDebuggerModelForMethod: aMethod inContext: aContext [
 
+	| dummyActionModel |
 	session ifNotNil: [ session clear ].
 	dummyActionModel := (StTestDebuggerProvider new debuggerWithContext:
-		                    context) debuggerActionModel.
+		                     aContext) debuggerActionModel.
 	session := dummyActionModel session.
 	dummyActionModel clear.
 	session stepIntoUntil: [ :currentContext |
