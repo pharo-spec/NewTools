@@ -10,7 +10,7 @@ Class {
 		'topContext',
 		'filterStack',
 		'updateEventListeners',
-		'preventUpdate'
+		'preventUpdate',
 		'previousASTScope'
 	],
 	#classVars : [
