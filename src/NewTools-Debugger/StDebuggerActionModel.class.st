@@ -536,8 +536,8 @@ StDebuggerActionModel >> updateAfterMethodAdded [
 StDebuggerActionModel >> updateContextChanged [
 
 	self updateIfAble:
-		  (StDebuggerActionModelContextChangedAnnouncement
-			   debuggerActionModel: self)
+		(StDebuggerActionModelContextChangedAnnouncement
+			 debuggerActionModel: self)
 ]
 
 { #category : #context }

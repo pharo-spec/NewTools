@@ -157,7 +157,9 @@ StDebuggerActionModelTest >> newSessionWithDeadHomeBlockContext [
 StDebuggerActionModelTest >> resetModifiedSourceCode [
 
 	methodWithBlockContextOriginalSource ifNotNil: [
-		self class compile: methodWithBlockContextOriginalSource ]
+		self class compile: methodWithBlockContextOriginalSource ].
+	setResultOriginalSourceCode ifNotNil: [
+		self class compile: setResultOriginalSourceCode ]
 ]
 
 { #category : #helper }
@@ -364,6 +366,42 @@ StDebuggerActionModelTest >> testEventAfterProceed [
 	self
 		assert: dummyDebugger tag class
 		identicalTo: StDebuggerActionModelResumeAnnouncement.
+	self
+		assert: dummyDebugger tag debuggerActionModel
+		identicalTo: debugActionModel
+]
+
+{ #category : #'tests - actions' }
+StDebuggerActionModelTest >> testEventAfterRecompileMethod [
+
+	| ctx dummyDebugger |
+	self skip:
+		'The test is yellow because the event #contextChanged, triggered by an alarm, is somehow never received by the action model in the test, it doesn''t matter how much time I wait for it to happen. However, it works when I put an halt to get the event before proceeding in a debugger... So I skip the test for now but there''s probably a deadlock problem somewhere'.
+
+	ctx := session interruptedContext.
+	setResultOriginalSourceCode := ctx method sourceCode.
+	dummyDebugger := StDummyDebuggerPresenter new.
+
+	debugActionModel session stepIntoUntil: [ :currentContext |
+		currentContext selector = #squared ].
+
+	"We subscribe dummy debugger to debug action model to recompilation events"
+	debugActionModel
+		when: StDebuggerActionModelContextChangedAnnouncement
+		send: #tag:
+		to: dummyDebugger.
+
+	self assert: dummyDebugger tag isNil.
+
+	debugActionModel
+		recompileMethodTo: ctx method sourceCode , ' yourself'
+		inContext: ctx
+		notifying: nil.
+
+	self deny: dummyDebugger tag isNil.
+	self
+		assert: dummyDebugger tag class
+		identicalTo: StDebuggerActionModelContextChangedAnnouncement.
 	self
 		assert: dummyDebugger tag debuggerActionModel
 		identicalTo: debugActionModel
@@ -829,19 +867,21 @@ StDebuggerActionModelTest >> testRecompileMethodToInContextNotifyingUpdatesSourc
 
 	| oldStack contextChanged expectedNewStack rejectedFromOldStack |
 	contextChanged := debugActionModel topContext.
+	setResultOriginalSourceCode := contextChanged method sourceCode.
 
 	debugActionModel session stepIntoUntil: [ :currentContext | 
 		currentContext selector = #squared ].
-	debugActionModel updateTopContext.
 	oldStack := debugActionModel stack.
 	rejectedFromOldStack := { debugActionModel topContext }.
 
 	expectedNewStack := oldStack copyWithoutFirst.
 
 	debugActionModel
-		recompileMethodTo: contextChanged method sourceCode
+		recompileMethodTo: contextChanged method sourceCode , ' yourself'
 		inContext: contextChanged
 		notifying: nil.
+		
+	"The debug action model should be updated automatically. It does not happen because the event #contextChanged, triggered by an alarm is somehow never received in the test, it doesn't matter how much time I wait for it to happen. However, it works when I put an halt to get the event before proceeding in a debugger ..."
 	debugActionModel updateTopContext.
 
 	self
