@@ -72,6 +72,12 @@ StDebuggerActionModelTest >> emptyContextForMethod: aCompiledMethod [
 ]
 
 { #category : #helper }
+StDebuggerActionModelTest >> evaluateMethodWithDeadHomeBlockContext [
+
+	self methodWithDeadBlockContext value
+]
+
+{ #category : #helper }
 StDebuggerActionModelTest >> fileOutMethod: anObject [
 	result := anObject
 ]
@@ -102,6 +108,12 @@ StDebuggerActionModelTest >> methodWithBlockContext [
 ]
 
 { #category : #helper }
+StDebuggerActionModelTest >> methodWithDeadBlockContext [
+
+	^ [ (1+1 ) printString ]
+]
+
+{ #category : #helper }
 StDebuggerActionModelTest >> methodWithPragma [
 	<debuggerCompleteToSender>
 ]
@@ -120,6 +132,24 @@ StDebuggerActionModelTest >> newSessionWithBlockContext [
 
 	4 timesRepeat: [
 		debugActionModel stepInto: debugActionModel topContext ]
+]
+
+{ #category : #helper }
+StDebuggerActionModelTest >> newSessionWithDeadHomeBlockContext [
+
+	| process method |
+	method := self class >> #evaluateMethodWithDeadHomeBlockContext.
+	methodWithBlockContextOriginalSource := method sourceCode.
+	process := [ method valueWithReceiver: self arguments: #(  ) ]
+		           newProcess.
+	self
+		setSessionAndDebuggerModelForMethod: method
+		inContext: process suspendedContext.
+
+	"Step until we are inside the closure"
+	[ debugActionModel topContext isBlockContext ] whileFalse: [
+		debugActionModel stepInto: debugActionModel topContext.
+	]
 ]
 
 { #category : #helper }
@@ -568,6 +598,51 @@ StDebuggerActionModelTest >> testRecompileMethodToInBlockContext [
 	self
 		assert: debugActionModel previousASTScope
 		identicalTo: (self class >> #methodWithBlockContext) ast statements first value scope
+]
+
+{ #category : #'tests - actions' }
+StDebuggerActionModelTest >> testRecompileMethodToInBlockContextWithDeadHome [
+
+	| contextChanged |
+
+	DebugSession contextModelClass: StDebugContextForTests.
+	self newSessionWithDeadHomeBlockContext.
+	methodWithBlockContextOriginalSource := (self class >> #methodWithDeadBlockContext) sourceCode.
+	
+	contextChanged := debugActionModel topContext.
+	
+	debugActionModel
+		recompileMethodTo: contextChanged method sourceCode , ' yourself'
+		inContext: contextChanged
+		notifying: nil.
+	debugActionModel updateTopContext.
+
+	"The new ast scope is the one of the AST of the first interesting bytecode of the method,
+	that is the block declaration:"
+	self assert: (self class >> #methodWithDeadBlockContext) ast formattedCode equals: 'methodWithDeadBlockContext
+
+	^ [ (1 + 1) printString ] yourself'
+]
+
+{ #category : #'tests - actions' }
+StDebuggerActionModelTest >> testRecompileMethodToInBlockContextWithDeadHomeRemainsInOldBlock [
+
+	| contextChanged |
+
+	DebugSession contextModelClass: StDebugContextForTests.
+	self newSessionWithDeadHomeBlockContext.
+	methodWithBlockContextOriginalSource := (self class >> #methodWithDeadBlockContext) sourceCode.
+	
+	contextChanged := debugActionModel topContext.
+	
+	debugActionModel
+		recompileMethodTo: contextChanged method sourceCode , ' yourself'
+		inContext: contextChanged
+		notifying: nil.
+	debugActionModel updateTopContext.
+
+	"We should be in the same context as before if the home was dead"
+	self assert: debugActionModel topContext equals: contextChanged
 ]
 
 { #category : #'tests - actions' }
