@@ -9,7 +9,6 @@ Class {
 		'contextPredicate',
 		'topContext',
 		'filterStack',
-		'updateEventListeners',
 		'preventUpdate',
 		'previousASTScope',
 		'announcer'
@@ -49,12 +48,6 @@ StDebuggerActionModel class >> shouldFilterStackSettingsOn: aBuilder [
 		description: 'Defines if methods with pragma #debuggerCompleteToSender are filtered (hidden) in the debugger stack'
 ]
 
-{ #category : #adding }
-StDebuggerActionModel >> addUpdateEventListener: aDebugger whenUpdatedDo: aBlock [
-
-	updateEventListeners at: aDebugger put: aBlock
-]
-
 { #category : #accessing }
 StDebuggerActionModel >> announcer [
 
@@ -74,7 +67,7 @@ StDebuggerActionModel >> clear [
 
 	self unsubscribeFromSystemAnnouncer.
 	self removeActionsForSession: self session.
-	updateEventListeners keysDo: [ :key | self removeUpdateEventListener: key ]
+	announcer := nil
 ]
 
 { #category : #'debug - execution' }
@@ -190,7 +183,6 @@ StDebuggerActionModel >> initialize [
 	self computeInitialTopContext.
 	self subscribeToMethodAddedAnnouncement.
 	filterStack := true.
-	updateEventListeners := WeakKeyDictionary new.
 	"flag that will prevent any update as long as it is set"
 	preventUpdate := false
 ]
@@ -329,15 +321,9 @@ StDebuggerActionModel >> proceedDebugSession [
 ]
 
 { #category : #'events-triggering' }
-StDebuggerActionModel >> raiseUpdateEvents [
-
-	updateEventListeners valuesDo: [ :each | each value ]
-]
-
-{ #category : #'events-triggering' }
 StDebuggerActionModel >> raiseUpdateEvents: anAnnouncement [
-	
-	updateEventListeners valuesDo: [ :each | each value ]
+
+	self announcer announce: anAnnouncement
 ]
 
 { #category : #actions }
@@ -392,14 +378,6 @@ StDebuggerActionModel >> removeActionsForSession: aSession [
 				removeActionsForEvent: #stepOver;
 				removeActionsForEvent: #stepThrough;
 				removeActionsForEvent: #contextChanged ]
-]
-
-{ #category : #removing }
-StDebuggerActionModel >> removeUpdateEventListener: anEventListener [
-
-	[ updateEventListeners removeKey: anEventListener ]
-	on: KeyNotFound 
-	do: [ ^ self ]
 ]
 
 { #category : #'debug - execution' }
@@ -516,6 +494,12 @@ StDebuggerActionModel >> topContext [
 	^ topContext
 ]
 
+{ #category : #removing }
+StDebuggerActionModel >> unsubscribe: anEventListener [
+
+	self announcer unsubscribe: anEventListener
+]
+
 { #category : #'system subscription' }
 StDebuggerActionModel >> unsubscribeFromSystemAnnouncer [
 
@@ -543,7 +527,9 @@ StDebuggerActionModel >> update: anAnnouncement [
 StDebuggerActionModel >> updateAfterMethodAdded [
 
 	self updateContextPredicate.
-	self raiseUpdateEvents 
+	self raiseUpdateEvents:
+		(StDebuggerActionModelMethodAddedAnnouncement debuggerActionModel:
+			 self)
 ]
 
 { #category : #'instance creation' }
@@ -622,5 +608,8 @@ StDebuggerActionModel >> updateTopContext [
 { #category : #announcer }
 StDebuggerActionModel >> when: anAnnouncementClass send: aSelector to: anObject [
 
-	announcer weak when: anAnnouncementClass send: aSelector to: anObject
+	self announcer weak
+		when: anAnnouncementClass
+		send: aSelector
+		to: anObject
 ]

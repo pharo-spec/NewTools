@@ -1256,7 +1256,22 @@ StDebugger >> stepThrough [
 { #category : #subscription }
 StDebugger >> subscribeToActionModel [
 
-	self debuggerActionModel addUpdateEventListener: self whenUpdatedDo: (self class updateBlockFor: self)
+	self debuggerActionModel
+		when: StDebuggerActionModelStepAnnouncement
+		send: #updateStep
+		to: self;
+		when: StDebuggerActionModelRestartAnnouncement
+		send: #updateRestart
+		to: self;
+		when: StDebuggerActionModelResumeAnnouncement
+		send: #updateResume
+		to: self;
+		when: StDebuggerActionModelContextChangedAnnouncement
+		send: #updateContextChanged
+		to: self;
+		when: StDebuggerActionModelMethodAddedAnnouncement
+		send: #updateAfterMethodAdded
+		to: self
 ]
 
 { #category : #'system subscriptions' }
@@ -1289,13 +1304,19 @@ StDebugger >> unsavedCodeChangesFor: aContext [
 { #category : #'events - removing' }
 StDebugger >> unsubscribeFromActionModel [
 
-	self debuggerActionModel removeUpdateEventListener: self
+	self debuggerActionModel unsubscribe: self
 ]
 
 { #category : #'system subscription' }
 StDebugger >> unsubscribeFromSystemAnnouncer [
 
 	SystemAnnouncer uniqueInstance unsubscribe: self
+]
+
+{ #category : #'updating - widgets' }
+StDebugger >> updateAfterMethodAdded [
+
+	self updateToolbar
 ]
 
 { #category : #'updating - widgets' }

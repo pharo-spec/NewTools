@@ -155,12 +155,12 @@ StDebuggerTest >> testActionModelSubscription [
 
 	self assert: debugger debuggerActionModel isNotNil.
 	self assert:
-		(debugger debuggerActionModel hasUpdateEventListener: debugger).
+		(debugger debuggerActionModel hasSubscriber: debugger).
 
 	debugger unsubscribeFromActionModel.
 
 	self deny:
-		(debugger debuggerActionModel hasUpdateEventListener: debugger)
+		(debugger debuggerActionModel hasSubscriber: debugger)
 ]
 
 { #category : #'tests - code pane' }
@@ -208,7 +208,7 @@ StDebuggerTest >> testClose [
 	windowPresenter windowClosed.
 	self deny: (SystemAnnouncer uniqueInstance hasSubscriber: debugger).
 	self deny:
-		(debugger debuggerActionModel hasUpdateEventListener: debugger)
+		(debugger debuggerActionModel hasSubscriber: debugger)
 ]
 
 { #category : #'tests - code pane' }

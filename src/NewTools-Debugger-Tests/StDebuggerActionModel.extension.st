@@ -1,7 +1,7 @@
 Extension { #name : #StDebuggerActionModel }
 
 { #category : #'*NewTools-Debugger-Tests' }
-StDebuggerActionModel >> hasUpdateEventListener: aDebugger [
+StDebuggerActionModel >> hasSubscriber: aDebugger [
 
-	^ updateEventListeners includesKey: aDebugger
+	^ self announcer hasSubscriber: aDebugger
 ]
