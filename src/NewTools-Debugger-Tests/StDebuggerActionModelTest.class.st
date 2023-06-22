@@ -7,7 +7,8 @@ Class {
 		'debugger',
 		'result',
 		'shouldFilterStack',
-		'methodWithBlockContextOriginalSource'
+		'methodWithBlockContextOriginalSource',
+		'setResultOriginalSourceCode'
 	],
 	#category : #'NewTools-Debugger-Tests-Model'
 }
@@ -341,6 +342,135 @@ StDebuggerActionModelTest >> testDynamicShouldFilterStackUpdate [
 	
 	
 	
+]
+
+{ #category : #'tests - actions' }
+StDebuggerActionModelTest >> testEventAfterProceed [
+
+	| ctx dummyDebugger |
+	ctx := session interruptedContext.
+	dummyDebugger := StDummyDebuggerPresenter new.
+
+	"We subscribe dummy debugger to debug action model to restart events"
+	debugActionModel
+		when: StDebuggerActionModelResumeAnnouncement
+		send: #tag:
+		to: dummyDebugger.
+	self assert: dummyDebugger tag isNil.
+
+	debugActionModel proceedDebugSession.
+
+	self deny: dummyDebugger tag isNil.
+	self
+		assert: dummyDebugger tag class
+		identicalTo: StDebuggerActionModelResumeAnnouncement.
+	self
+		assert: dummyDebugger tag debuggerActionModel
+		identicalTo: debugActionModel
+]
+
+{ #category : #'tests - actions' }
+StDebuggerActionModelTest >> testEventAfterRestart [
+
+	| ctx dummyDebugger |
+	ctx := session interruptedContext.
+	dummyDebugger := StDummyDebuggerPresenter new.
+
+	debugActionModel
+		stepOver: ctx;
+		stepOver: ctx.
+
+	"We subscribe dummy debugger to debug action model to restart events"
+	debugActionModel
+		when: StDebuggerActionModelRestartAnnouncement
+		send: #tag:
+		to: dummyDebugger.
+	self assert: dummyDebugger tag isNil.
+
+	debugActionModel restartContext: ctx.
+
+	self deny: dummyDebugger tag isNil.
+	self
+		assert: dummyDebugger tag class
+		identicalTo: StDebuggerActionModelRestartAnnouncement.
+	self
+		assert: dummyDebugger tag debuggerActionModel
+		identicalTo: debugActionModel
+]
+
+{ #category : #'tests - actions' }
+StDebuggerActionModelTest >> testEventAfterStepInto [
+
+	| ctx dummyDebugger |
+	ctx := session interruptedContext.
+	dummyDebugger := StDummyDebuggerPresenter new.
+
+	"We subscribe dummy debugger to debug action model to step events"
+	debugActionModel
+		when: StDebuggerActionModelStepAnnouncement
+		send: #tag:
+		to: dummyDebugger.
+	self assert: dummyDebugger tag isNil.
+
+	debugActionModel stepInto: ctx.
+
+	self deny: dummyDebugger tag isNil.
+	self
+		assert: dummyDebugger tag class
+		identicalTo: StDebuggerActionModelStepAnnouncement.
+	self
+		assert: dummyDebugger tag debuggerActionModel
+		identicalTo: debugActionModel
+]
+
+{ #category : #'tests - actions' }
+StDebuggerActionModelTest >> testEventAfterStepOver [
+
+	| ctx dummyDebugger |
+	ctx := session interruptedContext.
+	dummyDebugger := StDummyDebuggerPresenter new.
+
+	"We subscribe dummy debugger to debug action model to step events"
+	debugActionModel
+		when: StDebuggerActionModelStepAnnouncement
+		send: #tag:
+		to: dummyDebugger.
+	self assert: dummyDebugger tag isNil.
+
+	debugActionModel stepOver: ctx.
+
+	self deny: dummyDebugger tag isNil.
+	self
+		assert: dummyDebugger tag class
+		identicalTo: StDebuggerActionModelStepAnnouncement.
+	self
+		assert: dummyDebugger tag debuggerActionModel
+		identicalTo: debugActionModel
+]
+
+{ #category : #'tests - actions' }
+StDebuggerActionModelTest >> testEventAfterStepThrough [
+
+	| ctx dummyDebugger |
+	ctx := session interruptedContext.
+	dummyDebugger := StDummyDebuggerPresenter new.
+
+	"We subscribe dummy debugger to debug action model to step events"
+	debugActionModel
+		when: StDebuggerActionModelStepAnnouncement
+		send: #tag:
+		to: dummyDebugger.
+	self assert: dummyDebugger tag isNil.
+
+	debugActionModel stepThrough: ctx.
+
+	self deny: dummyDebugger tag isNil.
+	self
+		assert: dummyDebugger tag class
+		identicalTo: StDebuggerActionModelStepAnnouncement.
+	self
+		assert: dummyDebugger tag debuggerActionModel
+		identicalTo: debugActionModel
 ]
 
 { #category : #tests }
