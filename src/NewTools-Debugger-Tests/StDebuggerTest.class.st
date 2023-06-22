@@ -195,18 +195,20 @@ StDebuggerTest >> testClearUnsavedChanges [
 
 { #category : #'tests - actions' }
 StDebuggerTest >> testClose [
+
 	| windowPresenter |
-	
 	windowPresenter := SpWindowPresenter new.
 	windowPresenter windowIsOpened.
-	debugger := (self debuggerOn: session).	
-	windowPresenter presenter: debugger.	
+	debugger := self debuggerOn: session.
+	windowPresenter presenter: debugger.
 	debugger initializeWindow: windowPresenter.
-	
+
 	"We trigger the closing from the presenter instead of the debugger itself,
 	because the window is not really open so the debugger will not close through debugger close."
-	windowPresenter windowClosed.	
-	self deny: (SystemAnnouncer uniqueInstance hasSubscriber: debugger)
+	windowPresenter windowClosed.
+	self deny: (SystemAnnouncer uniqueInstance hasSubscriber: debugger).
+	self deny:
+		(debugger debuggerActionModel hasUpdateEventListener: debugger)
 ]
 
 { #category : #'tests - code pane' }
