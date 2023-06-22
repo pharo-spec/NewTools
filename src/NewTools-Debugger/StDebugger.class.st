@@ -1461,7 +1461,7 @@ StDebugger >> updateStackFromSession: aSession [
 StDebugger >> updateStep [
   | previousASTScope previousContext currentASTScope currentContext |
 	
-  previousContext := self currentContext.
+  	previousContext := self currentContext.
 	previousASTScope := debuggerActionModel previousASTScope. 
 
 	self updateStackFromSession: self session.

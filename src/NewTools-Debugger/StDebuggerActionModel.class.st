@@ -11,7 +11,8 @@ Class {
 		'filterStack',
 		'updateEventListeners',
 		'preventUpdate',
-		'previousASTScope'
+		'previousASTScope',
+		'announcer'
 	],
 	#classVars : [
 		'ShouldFilterStack'
@@ -52,6 +53,12 @@ StDebuggerActionModel class >> shouldFilterStackSettingsOn: aBuilder [
 StDebuggerActionModel >> addUpdateEventListener: aDebugger whenUpdatedDo: aBlock [
 
 	updateEventListeners at: aDebugger put: aBlock
+]
+
+{ #category : #accessing }
+StDebuggerActionModel >> announcer [
+
+	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
 { #category : #'debug - session' }
@@ -255,6 +262,12 @@ StDebuggerActionModel >> isInterruptedContextSubclassResponsibilityException [
 	^ self contextPredicate isContextSubclassResponsibilityException
 ]
 
+{ #category : #'instance creation' }
+StDebuggerActionModel >> newStepAnnouncement [
+
+	^ (StDebuggerActionModelStepAnnouncement debuggerActionModel: self)
+]
+
 { #category : #'debug - execution' }
 StDebuggerActionModel >> peelToFirstLike: aContext [
 	self session peelToFirstLike: aContext.
@@ -321,6 +334,12 @@ StDebuggerActionModel >> raiseUpdateEvents [
 	updateEventListeners valuesDo: [ :each | each value ]
 ]
 
+{ #category : #'events-triggering' }
+StDebuggerActionModel >> raiseUpdateEvents: anAnnouncement [
+	
+	updateEventListeners valuesDo: [ :each | each value ]
+]
+
 { #category : #actions }
 StDebuggerActionModel >> recompileMethodTo: aString inContext: aContext notifying: aNotifyer [
 
@@ -350,15 +369,16 @@ StDebuggerActionModel >> referenceContext [
 
 { #category : #'events - handling' }
 StDebuggerActionModel >> registerActionsForSession: aSession [
+
 	self flag: 'Rewrite it'.
-	aSession
-		ifNotNil: [ aSession
-				when: #restart send: #updateIfAble to: self;
-				when: #resume send: #updateIfAble to: self;
-				when: #stepInto send: #updateIfAble to: self;
-				when: #stepOver send: #updateIfAble to: self;
-				when: #stepThrough send: #updateIfAble to: self;
-				when: #contextChanged send: #updateIfAble to: self ]
+	aSession ifNotNil: [
+		aSession
+			when: #restart send: #updateRestart to: self;
+			when: #resume send: #updateResume to: self;
+			when: #stepInto send: #updateStep to: self;
+			when: #stepOver send: #updateStep to: self;
+			when: #stepThrough send: #updateStep to: self;
+			when: #contextChanged send: #updateContextChanged to: self ]
 ]
 
 { #category : #'events - removing' }
@@ -502,14 +522,21 @@ StDebuggerActionModel >> unsubscribeFromSystemAnnouncer [
 	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
-{ #category : #accessing }
+{ #category : #updating }
 StDebuggerActionModel >> update [
+
+	self update:
+		(StDebuggerActionModelStepAnnouncement debuggerActionModel: self)
+]
+
+{ #category : #accessing }
+StDebuggerActionModel >> update: anAnnouncement [
 
 	self updateTopContext.
 	self updateContextPredicate.
 	self updateDebugSession.
 
-	self raiseUpdateEvents
+	self raiseUpdateEvents: anAnnouncement
 ]
 
 { #category : #'updating - widgets' }
@@ -517,6 +544,14 @@ StDebuggerActionModel >> updateAfterMethodAdded [
 
 	self updateContextPredicate.
 	self raiseUpdateEvents 
+]
+
+{ #category : #'instance creation' }
+StDebuggerActionModel >> updateContextChanged [
+
+	self updateIfAble:
+		  (StDebuggerActionModelContextChangedAnnouncement
+			   debuggerActionModel: self)
 ]
 
 { #category : #context }
@@ -545,12 +580,47 @@ StDebuggerActionModel >> updateDebugSessionException: e [
 { #category : #accessing }
 StDebuggerActionModel >> updateIfAble [
 
+	self updateIfAble:
+		(StDebuggerActionModelStepAnnouncement debuggerActionModel: self)
+]
+
+{ #category : #accessing }
+StDebuggerActionModel >> updateIfAble: anAnnouncement [
+
 	preventUpdate ifNil: [ ^ self ].
-	preventUpdate ifFalse: [ self update ]
+	preventUpdate ifFalse: [ self update: anAnnouncement ]
+]
+
+{ #category : #announcement }
+StDebuggerActionModel >> updateRestart [
+
+	self updateIfAble:
+		  (StDebuggerActionModelRestartAnnouncement debuggerActionModel:
+			   self)
+]
+
+{ #category : #'instance creation' }
+StDebuggerActionModel >> updateResume [
+
+	self updateIfAble:
+		(StDebuggerActionModelResumeAnnouncement debuggerActionModel: self)
+]
+
+{ #category : #'instance creation' }
+StDebuggerActionModel >> updateStep [
+
+	self updateIfAble:
+		(StDebuggerActionModelStepAnnouncement debuggerActionModel: self)
 ]
 
 { #category : #context }
 StDebuggerActionModel >> updateTopContext [
 
 	topContext := self interruptedContext
+]
+
+{ #category : #announcer }
+StDebuggerActionModel >> when: anAnnouncementClass send: aSelector to: anObject [
+
+	announcer weak when: anAnnouncementClass send: aSelector to: anObject
 ]
