@@ -375,9 +375,6 @@ StDebuggerActionModelTest >> testEventAfterProceed [
 StDebuggerActionModelTest >> testEventAfterRecompileMethod [
 
 	| ctx dummyDebugger |
-	self skip:
-		'The test is yellow because the event #contextChanged, triggered by an alarm, is somehow never received by the action model in the test, it doesn''t matter how much time I wait for it to happen. However, it works when I put an halt to get the event before proceeding in a debugger... So I skip the test for now but there''s probably a deadlock problem somewhere'.
-
 	ctx := session interruptedContext.
 	setResultOriginalSourceCode := ctx method sourceCode.
 	dummyDebugger := StDummyDebuggerPresenter new.
@@ -397,6 +394,9 @@ StDebuggerActionModelTest >> testEventAfterRecompileMethod [
 		recompileMethodTo: ctx method sourceCode , ' yourself'
 		inContext: ctx
 		notifying: nil.
+	self flag:
+		'We force the world to do cycles because the tests run in the UI thread, preventing the world to propagate the event #contextChanged, which is triggered by a Morphic alarm.'.
+	[ dummyDebugger tag ] whileNil: [ WorldMorph currentWorld doOneCycle ].
 
 	self deny: dummyDebugger tag isNil.
 	self
@@ -869,7 +869,7 @@ StDebuggerActionModelTest >> testRecompileMethodToInContextNotifyingUpdatesSourc
 	contextChanged := debugActionModel topContext.
 	setResultOriginalSourceCode := contextChanged method sourceCode.
 
-	debugActionModel session stepIntoUntil: [ :currentContext | 
+	debugActionModel session stepIntoUntil: [ :currentContext |
 		currentContext selector = #squared ].
 	oldStack := debugActionModel stack.
 	rejectedFromOldStack := { debugActionModel topContext }.
@@ -880,9 +880,11 @@ StDebuggerActionModelTest >> testRecompileMethodToInContextNotifyingUpdatesSourc
 		recompileMethodTo: contextChanged method sourceCode , ' yourself'
 		inContext: contextChanged
 		notifying: nil.
-		
-	"The debug action model should be updated automatically. It does not happen because the event #contextChanged, triggered by an alarm is somehow never received in the test, it doesn't matter how much time I wait for it to happen. However, it works when I put an halt to get the event before proceeding in a debugger ..."
-	debugActionModel updateTopContext.
+
+	self flag:
+		'We force the world to do cycles because the tests run in the UI thread, preventing the world to propagate the event #contextChanged, which is triggered by a Morphic alarm.'.
+	[ debugActionModel topContext == contextChanged ] whileFalse: [
+		WorldMorph currentWorld doOneCycle ].
 
 	self
 		denyCollection: debugActionModel stack
