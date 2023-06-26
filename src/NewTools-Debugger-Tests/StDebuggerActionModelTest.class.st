@@ -347,6 +347,35 @@ StDebuggerActionModelTest >> testDynamicShouldFilterStackUpdate [
 ]
 
 { #category : #'tests - actions' }
+StDebuggerActionModelTest >> testEventAfterMethodAdded [
+
+	| dummyActionModel dummyDebugger |
+	dummyDebugger := StDummyDebuggerPresenter new.
+
+	dummyActionModel := StTestDebuggerProvider new debuggerWithDNUContext
+		                    debuggerActionModel.
+	self changeSession: dummyActionModel session.
+	dummyActionModel clear.
+
+	debugActionModel
+		when: StDebuggerActionModelMethodAddedAnnouncement
+		send: #tag:
+		to: dummyDebugger.
+
+	self assert: dummyDebugger tag isNil.
+
+	StTestDebuggerProvider compile: 'foobar ^self'.
+
+	self deny: dummyDebugger tag isNil.
+	self
+		assert: dummyDebugger tag class
+		identicalTo: StDebuggerActionModelMethodAddedAnnouncement.
+	self
+		assert: dummyDebugger tag debuggerActionModel
+		identicalTo: debugActionModel
+]
+
+{ #category : #'tests - actions' }
 StDebuggerActionModelTest >> testEventAfterProceed [
 
 	| ctx dummyDebugger |
