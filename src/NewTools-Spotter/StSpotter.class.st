@@ -665,7 +665,7 @@ StSpotter >> openFinder [
 
 	self window close.
 	self flag: #TODO. "Move finder to spec (right now is a morph)"
-	Finder open
+	FinderUI open
 ]
 
 { #category : #private }
