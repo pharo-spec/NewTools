@@ -756,15 +756,14 @@ StSpotter >> setModelBeforeInitialization: aSpotterModel [
 { #category : #'private - actions' }
 StSpotter >> showPreview: aPresenter [
 
-	previewContainer removeAll.	
-	(aPresenter isNil or: [ aPresenter isHeader ]) 
-		ifTrue: [ ^ self ].
+	previewContainer removeAll.
+	(aPresenter isNil or: [ aPresenter isHeader ]) ifTrue: [ ^ self ].
 
-	aPresenter model value spotterPreview 
-		ifNotNil: [ :previewPresenter | 
-			previewContainer add: (previewPresenter 
-				owner: self; 
-				yourself) ]
+	aPresenter model value ifNotNil: [ :value |
+		value spotterPreview ifNotNil: [ :previewPresenter |
+			previewContainer add: (previewPresenter
+					 owner: self;
+					 yourself) ] ]
 ]
 
 { #category : #'private - actions' }
