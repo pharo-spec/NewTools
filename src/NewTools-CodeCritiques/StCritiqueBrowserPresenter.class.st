@@ -422,10 +422,17 @@ StCritiqueBrowserPresenter >> onWindowClosed [
 
 	self unregisterFromAnnouncements.
 
-	cache cacheChange ifTrue: [ 
-		(UIManager default confirm:
-			 'Do you want log all wrong violations in the Manifests
-before closing the Critiques Browser ?') ifTrue: [ cache logInManifest ] ]
+	cache cacheChange ifTrue: [
+		| logging |
+		logging := self application newConfirm
+			           title: 'Question';
+			           label:
+				           'Do you want log all wrong violations in the Manifests
+before closing the Critiques Browser ?';
+			           acceptLabel: 'Sure!';
+			           cancelLabel: 'No';
+			           openModal.
+		logging ifTrue: [ cache logInManifest ] ]
 ]
 
 { #category : #private }
@@ -509,20 +516,34 @@ StCritiqueBrowserPresenter >> rulesModel [
 
 { #category : #initialization }
 StCritiqueBrowserPresenter >> setActionLogButton [
-	^ [ (UIManager default
-		confirm:
-			'Do you want to save all false positive and toDo in the Manifests ?
-(this action may generate new manifest classes and make dirty your package)')
-		ifTrue: [ cache logInManifest ] ]
+
+	^ [
+		| logging |
+		logging := self application newConfirm
+			           title: 'Question';
+			           label:
+				          'Do you want to save all false positive and toDo in the Manifests ?
+(this action may generate new manifest classes and make dirty your package)';
+			           acceptLabel: 'Sure!';
+			           cancelLabel: 'No';
+			           openModal.
+		logging ifTrue: [ cache logInManifest ] ]
 ]
 
 { #category : #initialization }
 StCritiqueBrowserPresenter >> setActionResetButton [
 
-	^ [ 
-	  (UIManager default confirm:
-		   'Do you want to delete the current configuration
- and create a new configuration ?') ifTrue: [ 
+	^ [
+	| logging |
+		logging := self application newConfirm
+			           title: 'Question';
+			           label:
+				           'Do you want to delete the current configuration
+ and create a new configuration ?';
+			           acceptLabel: 'Sure!';
+			           cancelLabel: 'No';
+			           openModal.
+		logging ifTrue: [
 		  self delete.
 		  StCritiquePackageSelectorPresenter open ] ]
 ]
