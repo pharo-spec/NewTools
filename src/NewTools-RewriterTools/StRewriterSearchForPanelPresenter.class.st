@@ -1,8 +1,8 @@
 "
-I am the panel for the replace with (rhs) part of the rule
+I am the panel for the search for (lhs) part of the rule
 "
 Class {
-	#name : #StRewriterReplaceWithPanel,
+	#name : #StRewriterSearchForPanelPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
 		'label',
@@ -12,35 +12,35 @@ Class {
 }
 
 { #category : #layout }
-StRewriterReplaceWithPanel >> defaultLayout [
+StRewriterSearchForPanelPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
-		  add: label expand: false;
-		  add: codePresenter;
-		  yourself
+		add: label expand: false;
+		add: codePresenter;
+		yourself
 ]
 
 { #category : #initialization }
-StRewriterReplaceWithPanel >> initializePresenters [
+StRewriterSearchForPanelPresenter >> initializePresenters [
 
 	label := self newLabel.
-	label label: 'Replace with:'.
+	label label: 'Search for:'.
 
 	codePresenter := self newCode.
 	codePresenter
-		text: StRewriterDemoRules defaultRule rhs;
+		text: StRewriterDemoRules defaultRule lhs;
 		withoutSyntaxHighlight;
 		withoutLineNumbers
 ]
 
 { #category : #accessing }
-StRewriterReplaceWithPanel >> rhs [
+StRewriterSearchForPanelPresenter >> lhs [
 
 	^ codePresenter text
 ]
 
 { #category : #accessing }
-StRewriterReplaceWithPanel >> rhs: aString [
+StRewriterSearchForPanelPresenter >> lhs: aString [
 
 	codePresenter text: aString
 ]

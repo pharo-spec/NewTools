@@ -35,7 +35,7 @@ StNodeCollector >> indexedNodes [
 	
 	nodes := OrderedCollection new.
 	
-	indexableDisplayLimit := StInspector indexableDisplayLimit.        
+	indexableDisplayLimit := StInspectorPresenter indexableDisplayLimit.        
 	top := 1.
 	bottom := self object basicSize.
 	topLimit    := indexableDisplayLimit min: bottom.

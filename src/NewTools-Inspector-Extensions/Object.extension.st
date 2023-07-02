@@ -16,7 +16,7 @@ Object >> defaultObjectInspectorClass [
 Object >> inspectionMeta [
 	<inspectorPresentationOrder: 999 title: 'Meta'>
 
-	^ StMetaBrowser on: self
+	^ StMetaBrowserPresenter on: self
 ]
 
 { #category : #'*NewTools-Inspector-Extensions' }

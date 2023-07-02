@@ -145,7 +145,7 @@ StFailingAssertionInspector >> stringDiff [
 { #category : #views }
 StFailingAssertionInspector >> treeTableInspectionFor: aModel [
 	| rawInspection |
-	rawInspection := StRawInspection new.
+	rawInspection := StRawInspectionPresenter new.
 	^ self newTreeTable
 		  roots: aModel value allInspectorNodes;
 		  children: [ :node | node children ];

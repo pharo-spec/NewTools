@@ -51,7 +51,7 @@ StPlaygroundPageVersionsPresenter >> doAdoptVersion [
 StPlaygroundPageVersionsPresenter >> doAdoptVersionOnNewPlayground [
 	| playground |
 	
-	(playground := StPlayground new) 
+	(playground := StPlaygroundPresenter new) 
 		contents: versionList selectedItem content;
 		open.
 	self window close.

@@ -11,7 +11,7 @@ Class {
 StPlaygroundInteractionModelTest >> newInteractionModel [
 
 	^ StPlaygroundInteractionModel new
-		owner: (StPlayground new
+		owner: (StPlaygroundPresenter new
 			application: application;
 			yourself);
 		yourself
