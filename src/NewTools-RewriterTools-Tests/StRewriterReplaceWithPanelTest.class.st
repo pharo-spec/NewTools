@@ -14,7 +14,7 @@ Class {
 StRewriterReplaceWithPanelTest >> setUp [
 
 	super setUp.
-	replacePanel := StRewriterReplaceWithPanel new
+	replacePanel := StRewriterReplaceWithPanelPresenter new
 ]
 
 { #category : #tests }

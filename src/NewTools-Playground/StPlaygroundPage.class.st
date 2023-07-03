@@ -53,7 +53,7 @@ StPlaygroundPage >> asInspectorModel [
 { #category : #accessing }
 StPlaygroundPage >> baseDirectory [
 	
-	^ baseDirectory ifNil:[ StPlayground cacheDirectory ]
+	^ baseDirectory ifNil:[ StPlaygroundPresenter cacheDirectory ]
 ]
 
 { #category : #accessing }

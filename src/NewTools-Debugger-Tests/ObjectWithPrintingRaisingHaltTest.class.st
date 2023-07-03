@@ -10,7 +10,7 @@ ObjectWithPrintingRaisingHaltTest >> testInspectingObjectWithPrintOnWithHaltOpen
 	"
 	
 	| openInspectors inspectedObject |
-	StInspector allInstances select: [ :e | e window isOpen ] 
+	StInspectorPresenter allInstances select: [ :e | e window isOpen ] 
 					thenDo: [ :each | each window close ].
 
 	inspectedObject := ObjectWithPrintingRaisingHalt new.
@@ -21,7 +21,7 @@ ObjectWithPrintingRaisingHaltTest >> testInspectingObjectWithPrintOnWithHaltOpen
 	
 	inspectedObject inspect.
 
-	openInspectors := StInspector allInstances select: [ :e | 
+	openInspectors := StInspectorPresenter allInstances select: [ :e | 
 		                  e window isOpen ].
 
 	self assert: openInspectors size equals: 1.
@@ -30,5 +30,5 @@ ObjectWithPrintingRaisingHaltTest >> testInspectingObjectWithPrintOnWithHaltOpen
 		assert: openInspectors first model inspectedObject
 		equals: inspectedObject.
 
-	StInspector allInstances do: [ :each | each delete ].
+	StInspectorPresenter allInstances do: [ :each | each delete ].
 ]

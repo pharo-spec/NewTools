@@ -1,6 +1,6 @@
 Class {
 	#name : #StSindarinDebuggerPresenter,
-	#superclass : #StInspection,
+	#superclass : #StInspectionPresenter,
 	#instVars : [
 		'currentNodeSource',
 		'stack',
@@ -64,7 +64,7 @@ StSindarinDebuggerPresenter >> initializePresenters [
 						doItContext: selection selectedItem ].
 			currentNodeSource accept ].
 	stack items: self model stack.
-	inspector := StRawInspection on: self model stack first.
+	inspector := StRawInspectionPresenter on: self model stack first.
 	currentNodeSource := self newCode.
 	currentNodeSource
 		whenBuiltDo: [ :ann | ann widget font: StandardFonts codeFont ].

@@ -150,7 +150,7 @@ StRewriterMatchToolPresenter >> initializeEditors [
 		beForScripting;
 		text: StRewriterDemoRules defaultRule pharoCode.
 
-	ruleEditor := self instantiate: StRewriterSearchForPanel
+	ruleEditor := self instantiate: StRewriterSearchForPanelPresenter
 ]
 
 { #category : #initialization }

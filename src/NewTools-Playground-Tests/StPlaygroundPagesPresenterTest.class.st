@@ -13,7 +13,7 @@ StPlaygroundPagesPresenterTest >> classToTest [
 { #category : #initialization }
 StPlaygroundPagesPresenterTest >> initializeInstanceBeforeInitialization: aPresenter [
 
-	aPresenter setModelBeforeInitialization: (StPlayground newApplication: application)
+	aPresenter setModelBeforeInitialization: (StPlaygroundPresenter newApplication: application)
 ]
 
 { #category : #initialization }

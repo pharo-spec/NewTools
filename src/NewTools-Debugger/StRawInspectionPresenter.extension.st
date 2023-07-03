@@ -1,31 +1,31 @@
-Extension { #name : #StRawInspection }
+Extension { #name : #StRawInspectionPresenter }
 
 { #category : #'*NewTools-Debugger' }
-StRawInspection >> activePresenter [
+StRawInspectionPresenter >> activePresenter [
 	^self
 ]
 
 { #category : #'*NewTools-Debugger' }
-StRawInspection >> addVariableTagColumn [
+StRawInspectionPresenter >> addVariableTagColumn [
 
 	attributeTable addColumn: self variableTagColumn
 ]
 
 { #category : #'*NewTools-Debugger' }
-StRawInspection >> attributeTable [
+StRawInspectionPresenter >> attributeTable [
 
 	^attributeTable
 ]
 
 { #category : #'*NewTools-Debugger' }
-StRawInspection >> beForDebugger [
+StRawInspectionPresenter >> beForDebugger [
 
 	attributeTable := (self instantiate: StDebuggerTreeTablePresenter)
 		beResizable;
 		contextMenu: [ self rootCommandsGroup asMenuPresenter ];
 		yourself.
 		
-	StInspector inspectorDiveOnSingleClick
+	StInspectorPresenter inspectorDiveOnSingleClick
 		ifTrue: [ attributeTable activateOnSingleClick ].
 	
 	self addVariableTagColumn.
@@ -38,13 +38,13 @@ StRawInspection >> beForDebugger [
 ]
 
 { #category : #'*NewTools-Debugger' }
-StRawInspection >> selectedPageName [
+StRawInspectionPresenter >> selectedPageName [
 
 	^'Context'
 ]
 
 { #category : #'*NewTools-Debugger' }
-StRawInspection >> updateNodesFromScope: oldASTScope to: newASTScope [
+StRawInspectionPresenter >> updateNodesFromScope: oldASTScope to: newASTScope [
 
 	| nodes newTemps oldTemps tempsToRemove tempsToAdd |
 	oldTemps := oldASTScope allTemps.
@@ -67,7 +67,7 @@ StRawInspection >> updateNodesFromScope: oldASTScope to: newASTScope [
 ]
 
 { #category : #'*NewTools-Debugger' }
-StRawInspection >> variableTagColumn [
+StRawInspectionPresenter >> variableTagColumn [
 
 	^  SpLinkTableColumn new 
 		title: 'Type';

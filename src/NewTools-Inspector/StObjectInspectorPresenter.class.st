@@ -305,7 +305,7 @@ StObjectInspectorPresenter >> trySelectAnyPageWithName: aCollection [
 
 	pagesToSearch := ((aCollection asOrderedCollection 
 		reject: [ :each | each isNil ])
-		reject: [ :each | each = StRawInspection label ])
+		reject: [ :each | each = StRawInspectionPresenter label ])
 		removeDuplicates.
 	pagesToSearch ifEmpty: [ ^ self ].
 

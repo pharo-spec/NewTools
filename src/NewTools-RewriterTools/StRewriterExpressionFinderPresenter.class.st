@@ -74,7 +74,7 @@ StRewriterExpressionFinderPresenter >> defaultLayout [
 { #category : #initialization }
 StRewriterExpressionFinderPresenter >> initializePresenters [
 
-	patternCodePresenter := self instantiate: StRewriterSearchForPanel.
+	patternCodePresenter := self instantiate: StRewriterSearchForPanelPresenter.
 	cheatSheet := self instantiate: StRewriterCheatSheetPresenter.
 	scopeSelectorPresenter := self instantiate: StRewriterScopeSelectorPresenter.
 	searchButton := self newButton

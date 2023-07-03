@@ -155,7 +155,7 @@ StDebuggerInspector >> initializeLateralToolbar [
 StDebuggerInspector >> initializePresenters [
 
 	label := self newLabel.
-	inspector := self instantiate: StInspector on: self model.
+	inspector := self instantiate: StInspectorPresenter on: self model.
 	currentLayoutSelector := self defaultLayoutSelector.
 	self initializeLateralToolbar
 ]
