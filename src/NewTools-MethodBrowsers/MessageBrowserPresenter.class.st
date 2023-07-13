@@ -240,7 +240,7 @@ MessageBrowserPresenter >> handleMethodModified: anAnnouncement [
 		"to ensure it's still a RGMethod"
 			yourself.
 	self messages: list.
-	self setSelectedIndex: index.
+	self selectIndex: index.
 	edits
 		ifFalse: [ ^ self ].
 	textPresenter pendingText: text.
@@ -271,7 +271,7 @@ MessageBrowserPresenter >> handleMethodRemoved: anAnnouncement [
 			(self messages
 				remove: item asFullRingDefinition ifAbsent: [ nil ];
 				yourself).
-	self setSelectedIndex: selection
+	self selectIndex: selection
 ]
 
 { #category : #initialization }
