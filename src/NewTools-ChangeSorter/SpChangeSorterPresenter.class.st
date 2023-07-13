@@ -50,7 +50,7 @@ SpChangeSorterPresenter class >> title [
 SpChangeSorterPresenter >> addPreamble [
 	self selectedChangeSet ifNil: [ ^ self inform: 'No change set selected' ].
 	self model addPreambleTo: self selectedChangeSet.
-	changesListPresenter setSelectedItem: self selectedChangeSet
+	changesListPresenter selectItem: self selectedChangeSet
 ]
 
 { #category : #'menu - change set' }
