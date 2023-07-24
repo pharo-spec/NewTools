@@ -17,7 +17,7 @@ StSindarinBytecodeContextInspectorModel >> allInspectorNodes [
 		yourself
 ]
 
-{ #category : #'*NewTools-Sindarin-Tools' }
+{ #category : #accessing }
 StSindarinBytecodeContextInspectorModel >> contextReceiverSlotNodes [
 	^ self inspectedObject receiver class allSlots
 		collect: [ :each | 
@@ -26,7 +26,7 @@ StSindarinBytecodeContextInspectorModel >> contextReceiverSlotNodes [
 				slot: each ]
 ]
 
-{ #category : #'*NewTools-Sindarin-Tools' }
+{ #category : #accessing }
 StSindarinBytecodeContextInspectorModel >> contextTempNodes [
 	^ self inspectedObject astScope allTemps collect: [ :temp | 
 		  (StInspectorTempNode hostObject: self inspectedObject) tempVariable: temp ]
