@@ -1,6 +1,6 @@
 Class {
 	#name : #MessageBrowser,
-	#superclass : #MessageBrowserPresenter,
+	#superclass : #StMessageBrowserPresenter,
 	#category : #'NewTools-MethodBrowsers-Deprecated'
 }
 

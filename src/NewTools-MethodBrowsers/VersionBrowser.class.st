@@ -1,6 +1,6 @@
 Class {
 	#name : #VersionBrowser,
-	#superclass : #VersionBrowserPresenter,
+	#superclass : #StVersionBrowserPresenter,
 	#category : #'NewTools-MethodBrowsers-Deprecated'
 }
 
