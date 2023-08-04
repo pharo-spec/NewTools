@@ -6,8 +6,7 @@ Class {
 		'debugActionModel',
 		'debugger',
 		'result',
-		'shouldFilterStack',
-		'methodWithBlockContextOriginalSource'
+		'shouldFilterStack'
 	],
 	#category : #'NewTools-Debugger-Tests-Model'
 }
@@ -498,6 +497,12 @@ StDebuggerActionModelTest >> testIsInterruptedContextPostMortem [
 { #category : #'tests - predicates' }
 StDebuggerActionModelTest >> testIsInterruptedContextSubclassResponsibilityException [
 	self changeSession: StTestDebuggerProvider new debuggerWithMissingSubclassResponsibilityContext session.
+	self assert: debugActionModel isInterruptedContextSubclassResponsibilityException
+]
+
+{ #category : #'tests - predicates' }
+StDebuggerActionModelTest >> testIsInterruptedContextSubclassResponsibilityExceptionWithSteps [
+	self changeSession: StTestDebuggerProvider new debuggerWithMissingSubclassResponsibilityContextWithSteps session.
 	self assert: debugActionModel isInterruptedContextSubclassResponsibilityException
 ]
 
