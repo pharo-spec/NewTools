@@ -20,7 +20,7 @@ Class {
 { #category : #accessing }
 StPlaygroundPagesPresenter class >> defaultExtent [
 
-	^ 700@400
+	^ (700@400) scaledByDisplayScaleFactor
 ]
 
 { #category : #layout }
