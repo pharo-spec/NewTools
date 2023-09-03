@@ -58,7 +58,7 @@ SpChangeSorterPresenter >> browseChangeSet [
 	"Open a message list browser on methods in the current change set"
 
 	| messages |
-	self selectedChangeSet ifNil: [ ^ self inform: 'No change set selected' ].
+	self selectedChangeSet ifNil: [ ^ self application newInform title: 'Alert' ; label: 'No change set selected'; openModal ].
 	messages := self selectedChangeSet changedMessageList select: [ :each | each isValid ].
 	self application tools messageList browse: messages title: 'Methods in Change Set ' , self selectedChangeSet name
 ]
@@ -371,6 +371,15 @@ SpChangeSorterPresenter >> forgetMessage [
 			fromChangeSet: self selectedChangeSet.
 		self updateClassesList.
 		self setSelectedClassIndex: self selectedClassIndex ]
+]
+
+{ #category : #'menu - change set' }
+SpChangeSorterPresenter >> inform: aString [
+
+	^ self application newInform 
+			title: 'Alert';
+			label: aString;
+			openModal
 ]
 
 { #category : #initialization }
