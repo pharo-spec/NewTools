@@ -36,12 +36,12 @@ StVersionBrowserPresenter class >> browseVersionsForClass: aClass selector: aSel
 	^ aClass
 		compiledMethodAt: aSelector
 		ifPresent: [ :method | self browseVersionsForMethod: method ]
-		ifAbsent: [ self
-				inform:
-					('No method {1} in class {2}'
-						format:
-							{aSelector.
-							aClass printString}) ]
+		ifAbsent: [ SpInformDialog new
+							title: 'Alert';
+							label:
+								('No method {1} in class {2}'
+									format: {aSelector . aClass printString}); 
+									openModal ]
 ]
 
 { #category : #api }
@@ -273,9 +273,9 @@ StVersionBrowserPresenter >> replaceSourceWith: aPresenter [
 { #category : #'private - factory' }
 StVersionBrowserPresenter >> revert: aChangeRecord [
 
-	aChangeRecord ifNil: [ 
+	aChangeRecord ifNil: [
 		^ self inform: 'nothing selected, so nothing done' ].
-	
+
 	rgMethod realClass
 		compile: aChangeRecord sourceCode
 		classified: aChangeRecord category
