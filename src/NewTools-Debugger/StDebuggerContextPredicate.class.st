@@ -73,6 +73,12 @@ StDebuggerContextPredicate >> isContextSubclassResponsibilityException [
 	^false
 ]
 
+{ #category : #testing }
+StDebuggerContextPredicate >> isGeneratingCode [
+
+	^ false
+]
+
 { #category : #predicates }
 StDebuggerContextPredicate >> isSteppable [
 

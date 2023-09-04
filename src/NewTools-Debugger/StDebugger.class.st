@@ -329,6 +329,12 @@ StDebugger >> canExecuteReturnCommand [
 	^ self debuggerActionModel isInterruptedContextDead not
 ]
 
+{ #category : #testing }
+StDebugger >> canGenerateAndProceed [
+
+	^ self debuggerActionModel isInterruptedContextGeneratingCode and: [ self canExecuteDebugCommand ]
+]
+
 { #category : #actions }
 StDebugger >> clear [
 
@@ -496,6 +502,12 @@ StDebugger >> defaultLayout [
 		add: stackAndCodeContainer;
 		add: #inspector;
 		yourself
+]
+
+{ #category : #testing }
+StDebugger >> defaultSelectedCodeRangeForContext: aContext [
+
+	^ self debuggerActionModel selectedCodeRangeForContext: aContext
 ]
 
 { #category : #'presenter - code' }
@@ -1104,6 +1116,16 @@ StDebugger >> runToSelection [
 ]
 
 { #category : #actions }
+StDebugger >> saveGeneratedCodeAndProceed [
+
+	self
+		acceptCodeChanges: self code text
+		forContext: self selectedContext.
+
+	self proceedDebugSession
+]
+
+{ #category : #actions }
 StDebugger >> selectNextExecutedExpression [
 
 	| sourceNodeExecuted |
@@ -1117,10 +1139,13 @@ StDebugger >> selectTopContext [
 	stackTable selectIndex: 1
 ]
 
-{ #category : #'updating - actions' }
+{ #category : #testing }
 StDebugger >> selectedCodeRangeForContext: aContext [
+	"^ self debuggerActionModel selectedCodeRangeForContext: aContext"
 
-	^ self debuggerActionModel selectedCodeRangeForContext: aContext
+	^ self debuggerActionModel exception
+		  selectedCodeRangeForContext: aContext
+		  forDebugger: self
 ]
 
 { #category : #'accessing - context' }
