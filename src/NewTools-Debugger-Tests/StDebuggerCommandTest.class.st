@@ -43,7 +43,8 @@ StDebuggerCommandTest >> testCommandsInDNUContext [
 	self deny: (StRunToSelectionCommand forContext: debugger) canBeExecuted.
 	self deny: (StProceedCommand forContext: debugger) canBeExecuted.
 	self deny: (StDefineClassCommand forContext: debugger) canBeExecuted.  
-	self deny: (StDefineSubclassResponsabilityCommand forContext: debugger) canBeExecuted.  
+	self deny: (StDefineSubclassResponsabilityCommand forContext: debugger) canBeExecuted.
+	self deny: (StGenerateAndProceedCommand forContext: debugger) canBeExecuted.
 	
 	"Executable commands, whatever the context"
 	self assert: (StCopyStackToClipboardCommand forContext: debugger) canBeExecuted. 
@@ -73,6 +74,7 @@ StDebuggerCommandTest >> testCommandsInDeadContext [
 	self deny: (StDefineSubclassResponsabilityCommand forContext: debugger) canBeExecuted.  
 	self deny: (StDefineMethodCommand forContext: debugger) canBeExecuted.
 	self deny: (StDefineMissingEntityCommand forContext: debugger) canBeExecuted.  
+	self deny: (StGenerateAndProceedCommand forContext: debugger) canBeExecuted.
 	
 	"Executable commands, whatever the context"
 	self assert: (StCopyStackToClipboardCommand forContext: debugger) canBeExecuted. 
@@ -102,7 +104,8 @@ StDebuggerCommandTest >> testCommandsInErrorContext [
 	self deny: (StDefineClassCommand forContext: debugger) canBeExecuted.  
 	self deny: (StDefineSubclassResponsabilityCommand forContext: debugger) canBeExecuted.  
 	self deny: (StDefineMethodCommand forContext: debugger) canBeExecuted.
-	self deny: (StDefineMissingEntityCommand forContext: debugger) canBeExecuted.  
+	self deny: (StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
+	self deny: (StGenerateAndProceedCommand forContext: debugger) canBeExecuted.
 	
 	"Executable commands, whatever the context"
 	self assert: (StCopyStackToClipboardCommand forContext: debugger) canBeExecuted. 
@@ -132,7 +135,8 @@ StDebuggerCommandTest >> testCommandsInFailingTestContext [
 	self deny: (StDefineClassCommand forContext: debugger) canBeExecuted.  
 	self deny: (StDefineSubclassResponsabilityCommand forContext: debugger) canBeExecuted.  
 	self deny: (StDefineMethodCommand forContext: debugger) canBeExecuted.
-	self deny: (StDefineMissingEntityCommand forContext: debugger) canBeExecuted.  
+	self deny: (StDefineMissingEntityCommand forContext: debugger) canBeExecuted. 
+	self deny: (StGenerateAndProceedCommand forContext: debugger) canBeExecuted.
 	
 	"Executable commands, whatever the context"
 	self assert: (StCopyStackToClipboardCommand forContext: debugger) canBeExecuted. 
@@ -140,6 +144,47 @@ StDebuggerCommandTest >> testCommandsInFailingTestContext [
 	self assert: (StPeelToFirstCommand forContext: debugger) canBeExecuted. 
 	self assert: (StShowFullStackCommand forContext: debugger) canBeExecuted.	
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted. 
+]
+
+{ #category : #tests }
+StDebuggerCommandTest >> testCommandsInGeneratingCodeContext [
+
+	| debugger |
+	debugger := debuggerProvider debuggerWithGeneratingCodeContext.
+
+	"Executable commands relative to context"
+	self assert: (StRestartCommand forContext: debugger) canBeExecuted.
+	self assert:
+		(StReturnValueCommand forContext: debugger) canBeExecuted.
+	self assert:
+		(StGenerateAndProceedCommand forContext: debugger) canBeExecuted.
+
+	"Non-executable commands relative to context"
+	self deny: (StProceedCommand forContext: debugger) canBeExecuted.
+	self deny: (StStepIntoCommand forContext: debugger) canBeExecuted.
+	self deny: (StStepOverCommand forContext: debugger) canBeExecuted.
+	self deny: (StStepThroughCommand forContext: debugger) canBeExecuted.
+	self deny:
+		(StRunToSelectionCommand forContext: debugger) canBeExecuted.
+	self deny: (StProceedCommand forContext: debugger) canBeExecuted.
+	self deny:
+		(StDefineSubclassResponsabilityCommand forContext: debugger)
+			canBeExecuted.
+	self deny: (StDefineMethodCommand forContext: debugger) canBeExecuted.
+	self deny: (StDefineClassCommand forContext: debugger) canBeExecuted.
+	self deny:
+		(StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
+
+	"Executable commands, whatever the context"
+	self assert:
+		(StCopyStackToClipboardCommand forContext: debugger) canBeExecuted.
+	self assert:
+		(StFileOutMethodCommand forContext: debugger) canBeExecuted.
+	self assert:
+		(StPeelToFirstCommand forContext: debugger) canBeExecuted.
+	self assert:
+		(StShowFullStackCommand forContext: debugger) canBeExecuted.
+	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted
 ]
 
 { #category : #tests }
@@ -164,7 +209,8 @@ StDebuggerCommandTest >> testCommandsInMissingClassContext [
 	self assert: (StStepThroughCommand forContext: debugger) canBeExecuted. 
 	self assert: (StRunToSelectionCommand forContext: debugger) canBeExecuted.
 	self assert: (StProceedCommand forContext: debugger) canBeExecuted. 
-	self deny: (StDefineSubclassResponsabilityCommand forContext: debugger) canBeExecuted.  
+	self deny: (StDefineSubclassResponsabilityCommand forContext: debugger) canBeExecuted.
+	self deny: (StGenerateAndProceedCommand forContext: debugger) canBeExecuted. 
 	
 	
 	"Executable commands, whatever the context"
@@ -194,7 +240,8 @@ StDebuggerCommandTest >> testCommandsInMissingSubclassResponsibilityContext [
 	self deny: (StRunToSelectionCommand forContext: debugger) canBeExecuted.
 	self deny: (StProceedCommand forContext: debugger) canBeExecuted.
 	self deny: (StDefineClassCommand forContext: debugger) canBeExecuted.  
-	self deny: (StDefineMethodCommand forContext: debugger) canBeExecuted.  
+	self deny: (StDefineMethodCommand forContext: debugger) canBeExecuted. 
+	self deny: (StGenerateAndProceedCommand forContext: debugger) canBeExecuted.
 	
 	"Executable commands, whatever the context"
 	self assert: (StCopyStackToClipboardCommand forContext: debugger) canBeExecuted. 
@@ -223,7 +270,8 @@ StDebuggerCommandTest >> testCommandsInRunnableContext [
 	self deny: (StDefineSubclassResponsabilityCommand forContext: debugger) canBeExecuted.  
 	self deny: (StDefineMethodCommand forContext: debugger) canBeExecuted.	
 	self deny: (StDefineClassCommand forContext: debugger) canBeExecuted.  
-	self deny: (StDefineMissingEntityCommand forContext: debugger) canBeExecuted.  
+	self deny: (StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
+	self deny: (StGenerateAndProceedCommand forContext: debugger) canBeExecuted. 
 	
 	"Executable commands, whatever the context"
 	self assert: (StCopyStackToClipboardCommand forContext: debugger) canBeExecuted. 
@@ -315,6 +363,17 @@ StDebuggerCommandTest >> testStFileOutMethodCommandExecution [
 	"StFileOutMethodCommand command calls the #fileOutSelectedContext action interface of the debugger object"
 	command execute.
 	self assert: debugger tag equals: #fileOutSelectedContext
+]
+
+{ #category : #'tests - execution' }
+StDebuggerCommandTest >> testStGenerateAndProceedCommandExecution [
+
+	| debugger command |
+	debugger := StDummyDebuggerPresenter new.
+	command := StGenerateAndProceedCommand forContext: debugger.
+	"StGenerateAndProceedCommand command calls the #saveGeneratedCodeAndProceed action interface of the debugger object"
+	command execute.
+	self assert: debugger tag equals: #saveGeneratedCodeAndProceed
 ]
 
 { #category : #'tests - execution' }
