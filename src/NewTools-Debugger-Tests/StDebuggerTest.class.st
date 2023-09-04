@@ -7,7 +7,8 @@ Class {
 		'oldFastTDD',
 		'dbg',
 		'stackSizeBefore',
-		'shouldFilterStack'
+		'shouldFilterStack',
+		'oldMethodToSourceDictionary'
 	],
 	#category : #'NewTools-Debugger-Tests-Presenters'
 }
@@ -83,11 +84,13 @@ StDebuggerTest >> replaceMethodWithQuickMethodStepping [
 ]
 
 { #category : #running }
-StDebuggerTest >> setUp [	
-	super setUp.	
+StDebuggerTest >> setUp [
+
+	super setUp.
 	session := StTestDebuggerProvider new sessionForDebuggerTests.
 	oldFastTDD := self debuggerClass fastTDD.
 	shouldFilterStack := StDebuggerActionModel shouldFilterStack.
+	oldMethodToSourceDictionary := Dictionary new.
 	self debuggerClass fastTDD: true
 ]
 
@@ -106,7 +109,7 @@ StDebuggerTest >> tearDown [
 
 	session clear.
 	self debuggerClass fastTDD: oldFastTDD.
-	
+
 	"In tests, should we use `debugger` when we need a fully initialized debugger and `dbg` when we just need a debugger created with #basicNew? Still, isn't it weird to clear the session only for a fully initialized debugger but not for a debugger created with #basicNew? Both have a session. Maybe this implies that `dbg`  should only use the instance variable `session` and nothing else. These specifications should be written somewhere, in the doc of the class maybe."
 	debugger ifNotNil: [
 		debugger unsubscribeFromSystemAnnouncer.
@@ -119,6 +122,10 @@ StDebuggerTest >> tearDown [
 		classified: 'util'.
 	StDebuggerActionModel shouldFilterStack: shouldFilterStack.
 	StTestDebuggerProvider removeSelector: #foobar.
+	oldMethodToSourceDictionary associationsSelect: [ :assoc |
+		assoc key class
+			compile: assoc value
+			classified: assoc key protocolName ].
 	super tearDown
 ]
 
@@ -509,6 +516,66 @@ StDebuggerTest >> testExceptionProvidesSameExceptionAsTheActionModelOne [
 StDebuggerTest >> testFastTDD [
 	self debuggerClass fastTDD: nil.
 	self deny: self debuggerClass fastTDD
+]
+
+{ #category : #tests }
+StDebuggerTest >> testGenerateAndProceed [
+
+	| baseSourceCode expectedSourceCode adapter |
+	baseSourceCode := 'methodThatGeneratesCode
+
+	| asserter |
+	asserter := TestAsserter new.
+
+	asserter see: 42 + 66 + 3.
+
+	asserter assert: 3 equals: 2.
+
+	asserter see: Object new'.
+
+	expectedSourceCode := 'methodThatGeneratesCode
+
+	| asserter |
+	asserter := TestAsserter new.
+
+	asserter assert: 42 + 66 + 3 equals: 111.
+
+	asserter assert: 3 equals: 2.
+
+	asserter see: Object new'.
+
+	debugger := StTestDebuggerProvider new
+		            debuggerWithGeneratingCodeContext
+		            application: self debuggerClass currentApplication;
+		            initialize;
+		            yourself.
+	"just things necessary to use debugger's code presenter, which we need in this test"
+	adapter := SpMorphicCodeAdapter new.
+	adapter adapt: debugger code.
+	debugger code adapter: adapter.
+	debugger code adapter buildWidget.
+
+	self assert: debugger canGenerateAndProceed.
+	self
+		assert: debugger interruptedContext sender sourceCode
+		equals: baseSourceCode.
+
+	oldMethodToSourceDictionary
+		at: debugger interruptedContext sender method
+		put: baseSourceCode.
+
+	[ debugger saveGeneratedCodeAndProceed ]
+		on: TestFailure
+		do: [ "We do nothing, we want to catch the assertion failure" ].
+
+	self deny: debugger canGenerateAndProceed.
+	self
+		assert: debugger interruptedContext sender sourceCode
+		equals: expectedSourceCode.
+	self assert: debugger debuggerActionModel isContextAnAssertionFailure.
+	self
+		assert: debugger exception messageText
+		equals: 'Got 3 instead of 2.'
 ]
 
 { #category : #'tests - code pane' }
