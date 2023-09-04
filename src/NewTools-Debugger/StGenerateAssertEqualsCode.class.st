@@ -12,9 +12,9 @@ StGenerateAssertEqualsCode >> generatedCodeFromDebugger: aDebugger [
 
 	| rewritedInterval rewritedText |
 	rewritedInterval := self rewritedCodeIntervalInDebugger: aDebugger.
-	rewritedText := aDebugger code text copyFrom:
-		                (rewritedInterval first + 4 to:
-		                 rewritedInterval last).
+	rewritedText := aDebugger code text
+		                copyFrom: rewritedInterval first + 4
+		                to: rewritedInterval last.
 	^ String streamContents: [ :s |
 		  s
 			  nextPutAll: 'assert:';
@@ -44,5 +44,6 @@ StGenerateAssertEqualsCode >> resultString [
 { #category : #rewriting }
 StGenerateAssertEqualsCode >> rewritedCodeIntervalInDebugger: aDebugger [
 
-	^ aDebugger code selectionInterval
+	^ aDebugger defaultSelectedCodeRangeForContext:
+		  aDebugger currentContext
 ]

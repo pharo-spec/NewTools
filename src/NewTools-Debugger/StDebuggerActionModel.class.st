@@ -222,7 +222,7 @@ StDebuggerActionModel >> isInterruptedContextDoesNotUnderstand [
 { #category : #testing }
 StDebuggerActionModel >> isInterruptedContextGeneratingCode [
 
-	^ false
+	^ self contextPredicate isGeneratingCode
 ]
 
 { #category : #'debug - predicates' }
