@@ -129,7 +129,7 @@ StVersionBrowserPresenter >> compareToOtherVersion [
 	| labels versions index selected |
 	versions := self changeList.
 	labels := versions collect: [ :each | each stamp ].
-	index := UIManager default chooseFrom: labels.
+	index := self application newSelect title: 'Select a version'; item: labels; openModal.
 	index > 0 ifFalse: [ ^ self ].
 	selected := versions at: index.
 	self compareTo: selected withLabel: selected stamp

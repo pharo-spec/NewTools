@@ -397,7 +397,7 @@ StSpotter >> feedTip [
 { #category : #'private - updating' }
 StSpotter >> flushPendingUpdates [
 
-	self application defer: [ 
+	self defer: [ 
 		self model schedule: [ 
 			mutex critical: [ 
 				[ 
@@ -440,7 +440,7 @@ StSpotter >> headerCategoryUnifiedFor: aLink [
 { #category : #'private - actions' }
 StSpotter >> hideSpinner [
 
-	self application defer: [ spinner hide ]
+	self defer: [ spinner hide ]
 ]
 
 { #category : #'private - actions' }
@@ -771,7 +771,7 @@ StSpotter >> showSpinner [
 
 	spinner isVisible ifTrue: [ ^ self ].
 	self model schedule: [
-		self application defer: [ spinner show ]]
+		self defer: [ spinner show ]]
 ]
 
 { #category : #processing }
@@ -882,7 +882,7 @@ StSpotter >> updateResultList: aCandidateLink [
 { #category : #'private - updating' }
 StSpotter >> updateResultProcessor: processor amount: amount [
 
-	self application defer: [ 
+	self defer: [ 
 		categories 
 			at: processor 
 			ifPresent: [ :aPresenter | aPresenter finalAmount: amount ] ]

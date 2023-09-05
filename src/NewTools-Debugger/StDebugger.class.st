@@ -1070,10 +1070,11 @@ StDebugger >> requestSuperclassOf: aClass to: aSuperclass [
 	classes addAll:
 		(aClass traits sort: [ :t1 :t2 | t1 asString < t2 asString ]).
 	classes size = 1 ifTrue: [ ^ classes first ].
-	^ (UIManager default
-		   chooseFrom: (classes collect: [ :c | c name ])
-		   values: classes
-		   title: 'Define selector in:') ifNil: [ Abort signal ]
+	^ (self application newSelect
+		   display: [ :each | each name ];
+		   item: classes;
+		   title: 'Define selector in:'; 
+		   openModal) ifNil: [ Abort signal ]
 ]
 
 { #category : #actions }
@@ -1089,8 +1090,10 @@ StDebugger >> restartCurrentContext [
 StDebugger >> returnEnteredValue [
 	| expression |
 	self flag: #DBG_HowToTestNilIfUserCancels.
-	expression := (UIManager default
-		request: 'Enter expression for return value:') ifNil: [^self].
+	expression := (self application newRequest
+		title: 'Enter expression for return value:';
+		openModal
+		) ifNil: [^self].
 	self debuggerActionModel
 		returnValueFromExpression: expression
 		fromContext: self currentContext
