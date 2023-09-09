@@ -1072,7 +1072,7 @@ StDebugger >> requestSuperclassOf: aClass to: aSuperclass [
 	classes size = 1 ifTrue: [ ^ classes first ].
 	^ (self application newSelect
 		   display: [ :each | each name ];
-		   item: classes;
+		   items: classes;
 		   title: 'Define selector in:'; 
 		   openModal) ifNil: [ Abort signal ]
 ]
