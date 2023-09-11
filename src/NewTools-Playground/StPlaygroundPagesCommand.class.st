@@ -31,12 +31,15 @@ StPlaygroundPagesCommand class >> order [
 	^ 30
 ]
 
-{ #category : #execution }
+{ #category : #executing }
 StPlaygroundPagesCommand >> execute [ 
 
 	(StPlaygroundPagesPresenter 
 		newApplication: context application
 		model: context) 
+		onLoadPage: [ :page |
+			self loadPage: page.
+			context takeKeyboardFocus ];
 		openDialog
 ]
 
