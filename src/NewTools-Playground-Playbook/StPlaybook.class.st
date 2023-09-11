@@ -55,12 +55,19 @@ StPlaybook class >> toolbarCommands [
 ]
 
 { #category : #actions }
+StPlaybook >> activateExistingPage: aPage [
+	
+	pageList selectItem: (pageList items detect: [ :each | each model = aPage ]).
+	self loadPage: aPage.
+	millerList takeKeyboardFocus
+]
+
+{ #category : #actions }
 StPlaybook >> activatePage: aPage [
 
 	"if page is already in list, select it"
 	(pages includes: aPage) ifTrue: [ 
-		pageList selectItem: (pageList items detect: [ :each | each model = aPage ]).
-		self loadPage: aPage.
+		self activateExistingPage: aPage.
 		^ self ].
 
 	self activatingDo: [

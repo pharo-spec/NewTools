@@ -29,7 +29,8 @@ StPlaybookPageEntry >> asString [
 { #category : #evaluating }
 StPlaybookPageEntry >> doEvaluate [ 
 
-	playbook activatePage: page.
+	playbook window activate.
+	playbook activatePage: page
 ]
 
 { #category : #accessing }
