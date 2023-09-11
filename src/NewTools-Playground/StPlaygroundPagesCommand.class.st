@@ -39,3 +39,9 @@ StPlaygroundPagesCommand >> execute [
 		model: context) 
 		openDialog
 ]
+
+{ #category : #actions }
+StPlaygroundPagesCommand >> loadPage: page [
+
+	context loadPage: page
+]

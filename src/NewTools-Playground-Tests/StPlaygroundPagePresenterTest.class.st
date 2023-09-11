@@ -126,7 +126,7 @@ StPlaygroundPagePresenterTest >> testPageIsSavedWhenExecutingACommand [
 	memory := FileSystem memory.
 	fileReference := memory / 'page.ph'. 
 	fileReference writeStreamDo: [ :stream | ].
-	presenter loadPage: fileReference.
+	presenter loadPage: (StPlaygroundPage fromReference: fileReference).
 	"ensure we do not save in the inner process by mistake"
 	presenter page timeToWait: 1 minute.
 	"we need the activation otherwise the command we are using will not work :("

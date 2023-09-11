@@ -5,6 +5,7 @@ Since `StPlayground` is in fact a miller list that allows users to navigate, the
 Class {
 	#name : #StPlaygroundPagePresenter,
 	#superclass : #StPresenter,
+	#classTraits : 'SpTModel classTrait',
 	#instVars : [
 		'text',
 		'toolbar',
@@ -12,7 +13,8 @@ Class {
 		'lineLabel',
 		'toggleLineNumberButton',
 		'page',
-		'activationBlock'
+		'activationBlock',
+		'loading'
 	],
 	#classVars : [
 		'CacheDirectory'
@@ -20,7 +22,7 @@ Class {
 	#category : #'NewTools-Playground-View'
 }
 
-{ #category : #'private commands' }
+{ #category : #'private - commands' }
 StPlaygroundPagePresenter class >> baseToolbarCommands [
 
 	^ { 
@@ -68,13 +70,13 @@ StPlaygroundPagePresenter class >> defaultTitle [
 	^ 'Playground'
 ]
 
-{ #category : #'private commands' }
+{ #category : #'private - commands' }
 StPlaygroundPagePresenter class >> extendedMenuCommands [
 
 	^ StPlaygroundMenuExtensionCommand allCommands
 ]
 
-{ #category : #'private commands' }
+{ #category : #'private - commands' }
 StPlaygroundPagePresenter class >> extendedToolbarCommands [
 
 	^ StPlaygroundToolbarExtensionCommand allCommands
@@ -104,7 +106,7 @@ StPlaygroundPagePresenter class >> registerToolsOn: registry [
 
 ]
 
-{ #category : #'private commands' }
+{ #category : #'private - commands' }
 StPlaygroundPagePresenter class >> toolbarCommands [
 
 	^ (self baseToolbarCommands, self extendedToolbarCommands) sorted: #order ascending
@@ -193,6 +195,13 @@ StPlaygroundPagePresenter >> hasOutputActivationPort [
 ]
 
 { #category : #initialization }
+StPlaygroundPagePresenter >> initialize [
+
+	loading := false.
+	super initialize
+]
+
+{ #category : #initialization }
 StPlaygroundPagePresenter >> initializePresenters [
 
 	self initializeToolbar.
@@ -205,7 +214,7 @@ StPlaygroundPagePresenter >> initializePresenters [
 		withEditionContextMenu;
 		contextMenu: [ (self menuActionsFor: text) asMenuPresenter ];
 		contextKeyBindings: (self menuActionsFor: text) asKMCategory;
-		whenTextChangedDo: [ :aString | page contents: aString ].
+		whenTextChangedDo: [ :aString | self updateContents: aString ].
 
 	text announcer
 		when: SpCodeWillBeEvaluatedAnnouncement
@@ -266,10 +275,19 @@ StPlaygroundPagePresenter >> interactionModel [
 ]
 
 { #category : #actions }
-StPlaygroundPagePresenter >> loadPage: aFileReference [
+StPlaygroundPagePresenter >> loadPage: aPage [
 
-	self basicPage: (StPlaygroundPage fromReference: aFileReference).
-	text text: page contents.
+	loading := true.
+	
+	[
+		self basicPage: aPage.
+		aPage onFlush: [
+			self announce: (StPlaygroundPageFlushed newPage: aPage) ].
+		self announce: (StPlaygroundPageLoaded newPage: aPage).
+		self updatePresenter ]
+	ensure: [ 
+		loading := false ].
+	
 	^ page
 ]
 
@@ -378,6 +396,13 @@ StPlaygroundPagePresenter >> toolbarActions [
 	^ CmCommandGroup forSpec
 		in: [ :this | self addToolbarCommandsTo: this ];
 		yourself
+]
+
+{ #category : #'private - updating' }
+StPlaygroundPagePresenter >> updateContents: aString [
+
+	loading ifTrue: [ ^ self ].
+	self page contents: aString
 ]
 
 { #category : #'private - updating' }

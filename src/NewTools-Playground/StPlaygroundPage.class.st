@@ -18,7 +18,9 @@ Class {
 		'contentReceived',
 		'timeToWait',
 		'baseDirectory',
-		'versionLog'
+		'versionLog',
+		'flushAction',
+		'modificationTime'
 	],
 	#category : #'NewTools-Playground-Model'
 }
@@ -27,6 +29,12 @@ Class {
 StPlaygroundPage class >> defaultTimeToWait [
 
 	^ 10 seconds
+]
+
+{ #category : #accessing }
+StPlaygroundPage class >> emptyTitle [
+
+	^ 'Empty'
 ]
 
 { #category : #'instance creation' }
@@ -128,6 +136,16 @@ StPlaygroundPage >> fileReference [
 	^ (self baseDirectory / self fileName) withExtension: self class pageExtension
 ]
 
+{ #category : #accessing }
+StPlaygroundPage >> firstLine [
+
+	self readStreamDo: [ :stream | | line |
+		[ stream atEnd not and: [ (line := stream nextLine trimmed) isEmpty ] ] whileTrue.
+		line isEmptyOrNil ifFalse: [ ^ line ] ].
+
+	^ nil
+]
+
 { #category : #private }
 StPlaygroundPage >> flush [
 
@@ -139,7 +157,10 @@ StPlaygroundPage >> flush [
 			writeStreamDo: [ :stream |
 				stream << flushContents ].
 		flushContents := nil.
-		self storeVersion ]
+		self storeVersion.
+		self touch.
+		flushAction ifNotNil: [ 
+			flushAction value ] ]
 ]
 
 { #category : #initialization }
@@ -158,6 +179,32 @@ StPlaygroundPage >> initialize [
 	contentReceived := false.
 	creationTime := DateAndTime now.
 	mutex := Mutex new
+]
+
+{ #category : #testing }
+StPlaygroundPage >> isEmpty [
+
+	^ self firstLine isNil
+]
+
+{ #category : #accessing }
+StPlaygroundPage >> modificationTime [
+
+	^ modificationTime ifNil: [ modificationTime := self creationTime ]
+]
+
+{ #category : #events }
+StPlaygroundPage >> onFlush: aBlock [
+
+	flushAction := aBlock
+]
+
+{ #category : #streaming }
+StPlaygroundPage >> readStreamDo: aBlock [
+
+	^ self fileReference 
+		ifExists: [ :ref | ref readStreamDo: aBlock ]
+		ifAbsent: [ nil ]
 ]
 
 { #category : #private }
@@ -202,6 +249,18 @@ StPlaygroundPage >> timeToWait [
 StPlaygroundPage >> timeToWait: aDuration [
 
 	timeToWait := aDuration
+]
+
+{ #category : #accessing }
+StPlaygroundPage >> title [
+
+	^ self firstLine ifNil: [ self class emptyTitle ]
+]
+
+{ #category : #accessing }
+StPlaygroundPage >> touch [
+
+	modificationTime := DateAndTime now
 ]
 
 { #category : #'accessing - versions' }

@@ -37,7 +37,7 @@ Test 2'
 { #category : #tests }
 StPlaygroundPageSummaryPresenterTest >> testPageFirstLine [
 	
-	self assert: presenter pageFirstLine equals: 'Empty'.	
+	self assert: presenter pageTitle equals: 'Empty'.	
 	presenter setModelBeforeInitialization: memoryFileSystem / 'test2.ph'.
-	self assert: presenter pageFirstLine equals: 'Test'
+	self assert: presenter pageTitle equals: 'Test'
 ]

@@ -169,7 +169,6 @@ StSpotterStep >> processors: aCollection [
 StSpotterStep >> pushQuery: aQuery [
 
 	self deactivate.
-	
 	aQuery processors: (self processors sort: #order ascending).
 	self activateQuery: aQuery.
 	aQuery process

@@ -161,9 +161,9 @@ StPlayground >> defaultKeyboardFocus [
 ]
 
 { #category : #actions }
-StPlayground >> loadPage: aFileReference [
+StPlayground >> loadPage: aPlaygroundPage [
 
-	self firstPage loadPage: aFileReference
+	self firstPage loadPage: aPlaygroundPage
 ]
 
 { #category : #'private - factory' }
@@ -174,19 +174,28 @@ StPlayground >> newDefaultPlaygroundPage [
 
 { #category : #'private - factory' }
 StPlayground >> newInspectorFor: aModel [
-	| modelToInspectOrPlayground |
-	
-	modelToInspectOrPlayground := (millerList pages isEmpty and: [ aModel isNil ]) 
-		ifTrue: [ self newDefaultPlaygroundPage ]
-		ifFalse: [ aModel ].
+	| isPlayground  inspector |
 
-	^ super newInspectorFor: modelToInspectOrPlayground
+	isPlayground := millerList pages isEmpty and: [ aModel isNil ].
+
+	inspector := super newInspectorFor: (isPlayground 
+		ifTrue: [ self newDefaultPlaygroundPage ]
+		ifFalse: [ aModel ]).
+		
+	isPlayground ifTrue: [ self prepareInspectorAsPlayground: inspector ].
+		
+	^ inspector
 ]
 
 { #category : #accessing }
 StPlayground >> page [
 
 	^ self firstPage page
+]
+
+{ #category : #private }
+StPlayground >> prepareInspectorAsPlayground: inspector [
+
 ]
 
 { #category : #'private - stepping' }
