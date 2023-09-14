@@ -19,7 +19,7 @@ Class {
 { #category : #accessing }
 StPlaygroundBindingsPresenter class >> defaultExtent [
 
-	^ 600@400
+	^ (600@400) scaledByDisplayScaleFactor
 ]
 
 { #category : #accessing }
@@ -110,7 +110,7 @@ StPlaygroundBindingsPresenter >> initializeInspectorPanel [
 			self flag: #TODO. "Temporal? This is to avoid a dependency (while making 
 			inspector work properly)"
 			self class environment 
-				at: #StInspector
+				at: #StInspectorPresenter
 				ifPresent: [ :aClass | self newInspectorWithTransmission: aClass on: aBinding ]
 				ifAbsent: [ self newCodeWithTransmissionOn: aBinding ] ];
 		when: [ :aBinding | aBinding isNil ] show: [ 

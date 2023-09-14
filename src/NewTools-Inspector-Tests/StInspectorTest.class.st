@@ -11,7 +11,7 @@ Class {
 StInspectorTest >> setUp [
 	
 	super setUp.
-	inspector := StInspector onObject: 42
+	inspector := StInspectorPresenter onObject: 42
 	
 ]
 

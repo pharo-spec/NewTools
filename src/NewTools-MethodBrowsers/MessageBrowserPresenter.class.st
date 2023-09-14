@@ -1,11 +1,11 @@
 Class {
-	#name : #MessageBrowser,
+	#name : #MessageBrowserPresenter,
 	#superclass : #StMessageBrowserPresenter,
 	#category : #'NewTools-MethodBrowsers-Deprecated'
 }
 
 { #category : #testing }
-MessageBrowser class >> isDeprecated [ 
+MessageBrowserPresenter class >> isDeprecated [ 
 
 	^ true
 ]

@@ -50,7 +50,7 @@ SpChangeSorterPresenter class >> title [
 SpChangeSorterPresenter >> addPreamble [
 	self selectedChangeSet ifNil: [ ^ self inform: 'No change set selected' ].
 	self model addPreambleTo: self selectedChangeSet.
-	changesListPresenter setSelectedItem: self selectedChangeSet
+	changesListPresenter selectItem: self selectedChangeSet
 ]
 
 { #category : #'menu - change set' }
@@ -58,9 +58,13 @@ SpChangeSorterPresenter >> browseChangeSet [
 	"Open a message list browser on methods in the current change set"
 
 	| messages |
-	self selectedChangeSet ifNil: [ ^ self inform: 'No change set selected' ].
-	messages := self selectedChangeSet changedMessageList select: [ :each | each isValid ].
-	self application tools messageList browse: messages title: 'Methods in Change Set ' , self selectedChangeSet name
+	self selectedChangeSet ifNil: [
+		^ self inform: 'No change set selected' ].
+	messages := self selectedChangeSet changedMessageList select: [ :each |
+		            each isValid ].
+	self application tools messageList
+		browse: messages
+		title: 'Methods in Change Set ' , self selectedChangeSet name
 ]
 
 { #category : #'menu - message' }
@@ -337,7 +341,7 @@ SpChangeSorterPresenter >> findChangeSet [
 
 	| set |
 	set := self model findChangeSetIn: self changeSets.
-	changesListPresenter setSelectedItem: set
+	changesListPresenter selectItem: set
 ]
 
 { #category : #private }
@@ -346,7 +350,7 @@ SpChangeSorterPresenter >> forceChangesListRefresh [
 	| sel |	
 	sel := self selectedChangeSet.
 	changesListPresenter items: self model allChanges.
-	changesListPresenter setSelectedItem: sel
+	changesListPresenter selectItem: sel
 ]
 
 { #category : #'menu - class' }
@@ -388,11 +392,9 @@ SpChangeSorterPresenter >> initialize [
 { #category : #initialization }
 SpChangeSorterPresenter >> initializeAnnouncements [
 
-	SystemAnnouncer uniqueInstance weak 
-		when:
-			ClassAdded , ClassCommented , ClassRecategorized , ClassModifiedClassDefinition , ClassRemoved , ClassRenamed
-				, ClassReorganized , MethodAdded , MethodModified , MethodRecategorized , MethodRemoved , ProtocolAdded
-				, ProtocolRemoved
+	SystemAnnouncer uniqueInstance weak
+		when: ClassAdded , ClassCommented , ClassRecategorized , ClassModifiedClassDefinition , ClassRemoved , ClassRenamed , MethodAdded , MethodModified
+			, MethodRecategorized , MethodRemoved , ProtocolAnnouncement
 		send: #updateClassesList
 		to: self
 ]
@@ -519,7 +521,7 @@ SpChangeSorterPresenter >> newSet [
 	aSet := self model createNewSet.
 	aSet
 		ifNotNil: [ self updateChangesList.
-			changesListPresenter setSelectedItem: aSet.
+			changesListPresenter selectItem: aSet.
 			self updateWindowTitle ]
 ]
 
@@ -639,7 +641,7 @@ SpChangeSorterPresenter >> removePostscript [
 
 	self selectedChangeSet ifNil: [ ^ self inform: 'No change set selected' ].
 	self model removePostscriptFrom: self selectedChangeSet.
-	changesListPresenter setSelectedItem: self selectedChangeSet
+	changesListPresenter selectItem: self selectedChangeSet
 ]
 
 { #category : #'menu - change set' }
@@ -648,7 +650,7 @@ SpChangeSorterPresenter >> removePreamble [
 	self selectedChangeSet ifNil: [ ^ self inform: 'No change set selected' ].
 	self selectedChangeSet hasPreamble ifFalse: [ ^ self inform: 'Change set has no preamble' ].
 	self selectedChangeSet removePreamble.
-	changesListPresenter setSelectedItem: self selectedChangeSet
+	changesListPresenter selectItem: self selectedChangeSet
 ]
 
 { #category : #'menu - change set' }
@@ -659,7 +661,7 @@ SpChangeSorterPresenter >> rename [
 
 	changesListPresenter
 		updateList;
-		setSelectedItem: set.
+		selectItem: set.
 	self updateWindowTitle
 ]
 
@@ -725,19 +727,19 @@ SpChangeSorterPresenter >> setSelectedChangeSet: aChangeSet [
 { #category : #api }
 SpChangeSorterPresenter >> setSelectedChangeSetIndex: anIndex [
 
-	 ^ changesListPresenter setSelectedIndex: anIndex
+	 ^ changesListPresenter selectIndex: anIndex
 ]
 
 { #category : #api }
 SpChangeSorterPresenter >> setSelectedClass: aClass [
 
-	 ^ classesListPresenter setSelectedItem: aClass
+	 ^ classesListPresenter selectItem: aClass
 ]
 
 { #category : #api }
 SpChangeSorterPresenter >> setSelectedClassIndex: anIndex [
 
-	 ^ classesListPresenter setSelectedIndex: anIndex
+	 ^ classesListPresenter selectIndex: anIndex
 ]
 
 { #category : #accessing }
@@ -779,7 +781,7 @@ SpChangeSorterPresenter >> updateClassesListAndMessagesList [
 	| sel |
 	sel := methodsListPresenter selectedItem.
 	self updateClassesList.
-	methodsListPresenter setSelectedItem: sel.
+	methodsListPresenter selectItem: sel.
 	self updateMessagesList
 ]
 
@@ -793,7 +795,7 @@ SpChangeSorterPresenter >> updateMessagesList [
 			ifNil: [ methodsListPresenter items: {} ]
 			ifNotNil: [:class | methodsListPresenter items: (self selectedChangeSet selectorsInClass: class name) sort].
 				
-	methodsListPresenter setSelectedItem: sel
+	methodsListPresenter selectItem: sel
 ]
 
 { #category : #private }
@@ -806,6 +808,11 @@ SpChangeSorterPresenter >> updateTextContents [
 			self model classDescriptionsMap values , {'Method was added, but cannot be found!' . 'Added then removed (see versions)' . 'Method has been removed (see versions)' . 'Class organization was changed.'}
 				includes: line ]) ifTrue: [ textPresenter withoutSyntaxHighlight ] ifFalse: [ textPresenter withSyntaxHighlight ].
 	textPresenter text: text
+]
+
+{ #category : #'private - updating' }
+SpChangeSorterPresenter >> updateTitle [
+	self withWindowDo: [ :window | window title: self title ]
 ]
 
 { #category : #api }

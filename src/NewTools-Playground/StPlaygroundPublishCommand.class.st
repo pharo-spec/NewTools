@@ -38,19 +38,22 @@ StPlaygroundPublishCommand class >> urlProvider [
 ]
 
 { #category : #execution }
-StPlaygroundPublishCommand >> execute [ 
+StPlaygroundPublishCommand >> execute [
+
 	| contents publishedUrl |
-
-	(self application confirm: 'Publish playground content to the cloud?') 
+	(self application confirm: 'Publish playground content to the cloud?')
 		ifFalse: [ ^ self ].
-	
-	contents := self page contents.
-	contents ifEmpty: [ 
-        self application inform: 'Nothing was published because the playground is empty'.
-        ^ self ].
 
-    Clipboard clipboardText: (publishedUrl := (self post: contents) asString).
-    self inform: publishedUrl , ' was published and the url was copied to clipboard'
+	contents := self page contents.
+	contents ifEmpty: [
+		self application inform:
+			'Nothing was published because the playground is empty'.
+		^ self ].
+
+	Clipboard clipboardText:
+		(publishedUrl := (self post: contents) asString).
+	self application inform:
+		publishedUrl , ' was published and the url was copied to clipboard'
 ]
 
 { #category : #accessing }

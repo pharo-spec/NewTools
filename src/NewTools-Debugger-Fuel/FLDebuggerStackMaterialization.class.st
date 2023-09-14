@@ -13,7 +13,7 @@ Class {
 { #category : #handling }
 FLDebuggerStackMaterialization >> defaultAction [ 
 	(OupsDebugRequest newForContext: interruptedContext)
-		process: Processor activeProcess;
+		process: thisProcess;
 		label: 'External stack';
 		submit
 ]

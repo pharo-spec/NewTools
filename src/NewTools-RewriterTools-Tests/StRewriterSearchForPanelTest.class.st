@@ -14,7 +14,7 @@ Class {
 StRewriterSearchForPanelTest >> setUp [
 
 	super setUp.
-	searchPanel := StRewriterSearchForPanel new
+	searchPanel := StRewriterSearchForPanelPresenter new
 ]
 
 { #category : #tests }

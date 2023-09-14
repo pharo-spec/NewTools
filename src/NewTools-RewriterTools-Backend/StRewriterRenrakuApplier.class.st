@@ -13,7 +13,7 @@ Class {
 StRewriterRenrakuApplier class >> calculateAllChangesForRules: aRulesCollection [
 
 	| allSystemMethods |
-	allSystemMethods := (RPackage organizer packages flatCollect: [:each | each classes])
+	allSystemMethods := (self packageOrganizer packages flatCollect: [:each | each classes])
 		flatCollect: [ :each | each methods] as: Set.
 
 	^ self calculateChangesForClasses: allSystemMethods asSet transformationRules: aRulesCollection
@@ -66,6 +66,6 @@ Take a look on ReCriticEngine for some automation ideas. Also take a look at Com
 StRewriterRenrakuApplier class >> obtainCritiquesOfAllMethodsForRules: ruleHolderCollection [
 
 	| methods |
-	methods := (RPackage organizer packages flatCollect: #classes) flatCollect: #methods.
+	methods := (self packageOrganizer packages flatCollect: #classes) flatCollect: #methods.
 	^ self obtainCritiquesOf: methods forRules: ruleHolderCollection
 ]

@@ -1,10 +1,10 @@
 Class {
-	#name : #VersionBrowser,
+	#name : #VersionBrowserPresenter,
 	#superclass : #StVersionBrowserPresenter,
 	#category : #'NewTools-MethodBrowsers-Deprecated'
 }
 
 { #category : #testing }
-VersionBrowser class >> isDeprecated [ 
+VersionBrowserPresenter class >> isDeprecated [ 
 	^ true
 ]

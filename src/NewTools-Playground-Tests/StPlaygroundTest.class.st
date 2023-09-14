@@ -7,7 +7,7 @@ Class {
 { #category : #running }
 StPlaygroundTest >> classToTest [
 
-	^ StPlayground
+	^ StPlaygroundPresenter
 ]
 
 { #category : #running }
@@ -19,7 +19,7 @@ StPlaygroundTest >> initializeInstanceBeforeInitialization: aPresenter [
 { #category : #'instance creation' }
 StPlaygroundTest >> newPlayground [
 
-	^ StPlayground 
+	^ StPlaygroundPresenter 
 		newApplication: application
 		model: self newPage
 		
