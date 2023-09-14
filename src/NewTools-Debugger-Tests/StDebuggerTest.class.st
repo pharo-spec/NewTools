@@ -112,8 +112,8 @@ StDebuggerTest >> tearDown [
 		debugger close.
 		debugger unsubscribeFromSystemAnnouncer.
 		debugger debuggerActionModel ifNotNil: [ :actionModel |
-			actionModel session ifNotNil: [ :s | s clear ].
-			actionModel unsubscribeFromSystemAnnouncer ] ].
+			actionModel clear.
+			actionModel session ifNotNil: [ :s | s clear ] ] ].
 
 	StTestDebuggerProvider removeSelector: #foobar.
 	StDebuggerObjectForTests
