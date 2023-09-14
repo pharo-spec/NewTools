@@ -196,10 +196,11 @@ StDebuggerTest >> testClearUnsavedChanges [
 { #category : #'tests - actions' }
 StDebuggerTest >> testClose [
 
-	| windowPresenter |
+	| windowPresenter actionModel |
 	windowPresenter := SpWindowPresenter new.
 	windowPresenter windowIsOpened.
 	debugger := self debuggerOn: session.
+	actionModel := debugger debuggerActionModel.
 	windowPresenter presenter: debugger.
 	debugger initializeWindow: windowPresenter.
 
@@ -208,7 +209,7 @@ StDebuggerTest >> testClose [
 	windowPresenter windowClosed.
 	self deny: (SystemAnnouncer uniqueInstance hasSubscriber: debugger).
 	self deny:
-		(debugger debuggerActionModel hasSubscriber: debugger)
+		(actionModel hasSubscriber: debugger)
 ]
 
 { #category : #'tests - code pane' }

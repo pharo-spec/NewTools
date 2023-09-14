@@ -338,16 +338,18 @@ StDebugger >> canExecuteReturnCommand [
 { #category : #actions }
 StDebugger >> clear [
 
-	extensionToolsNotebook pages do: [ :page | 
+	extensionToolsNotebook pages do: [ :page |
 		page activePresenter windowIsClosing ].
 	extensionTools := nil.
 	self unsubscribeFromActionModel.
 	self unsubscribeFromSystemAnnouncer.
-	self debuggerActionModel clear.
-	
+
+	self clearDebuggerActionModel.
+
 	"When we programmatically close the window, we do not need to terminate the session as it was already cleared"
 	programmaticallyClosed ifTrue: [ ^ self ].
-	debuggerActionModel clearDebugSession
+	self clearDebugSession.
+	debuggerActionModel := nil
 ]
 
 { #category : #'updating - widgets' }
@@ -357,6 +359,19 @@ StDebugger >> clearCode [
 		clearInteractionModel;
 		clearSelection;
 		clearContent
+]
+
+{ #category : #action }
+StDebugger >> clearDebugSession [
+
+	self debuggerActionModel ifNotNil: [ :debugActionModel |
+		debugActionModel clearDebugSession ]
+]
+
+{ #category : #action }
+StDebugger >> clearDebuggerActionModel [
+	
+	self debuggerActionModel ifNotNil: [ :debugActionModel | debugActionModel clear ]
 ]
 
 { #category : #'presenter - code' }
@@ -1307,7 +1322,8 @@ StDebugger >> unsavedCodeChangesFor: aContext [
 { #category : #'events - removing' }
 StDebugger >> unsubscribeFromActionModel [
 
-	self debuggerActionModel unsubscribe: self
+	self debuggerActionModel ifNotNil: [ :actionModel |
+		actionModel unsubscribe: self ]
 ]
 
 { #category : #'system subscription' }
