@@ -79,7 +79,7 @@ StDebuggerToolCommandTreeBuilderTest >> setUp [
 		forContext: context
 		priority: Processor userInterruptPriority.
 	session := DebugSession
-		named: 'test session'
+		named: 'test session stDebuggerToolCommandTreeBuilderTestSetUp'
 		on: process
 		startedAt: context.
 	session exception: OupsNullException new.
