@@ -386,7 +386,7 @@ StDebugger >> close [
 	programmaticallyClosed := true.
 	[ self withWindowDo: #close ] ensure: [ 
 		debuggerActionModel ifNotNil: [ :actionModel | 
-			actionModel clearDebugSession ] ]
+			actionModel clear ] ]
 ]
 
 { #category : #'accessing - widgets' }
