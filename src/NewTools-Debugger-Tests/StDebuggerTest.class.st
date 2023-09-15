@@ -12,6 +12,38 @@ Class {
 	#category : #'NewTools-Debugger-Tests-Presenters'
 }
 
+{ #category : #'tests - accepting faulty code' }
+StDebuggerTest >> compileMethodWithUndeclaredChoosing: choice [
+
+	| context newSource |
+	
+	dbg := StTestDebuggerProvider new debuggerWithObjectHalting.
+	dbg
+		application: dbg class currentApplication;
+		initialize;
+		buildContextMenus.
+	context := dbg stackTable items first.
+
+	newSource := 'haltingMethod ^NONExistingClassXXX'.
+	dbg code type: newSource.
+	dbg code update.
+
+	[ dbg acceptCodeChanges: newSource forContext: context ]
+		on: ProvideAnswerNotification
+		do: [ :n | | expected |
+			"If the expected answer is a class or a trait definition, use the default one.
+			Otherwise assume it's an unknown variable"
+			(n messageText includesSubstring: 'Edit class definition:') ifTrue: [ 
+				n resume: #default ].
+			(n messageText includesSubstring: 'Edit trait definition:') ifTrue: [ 
+				n resume: #default ].
+			expected := 'Unknown variable: NONExistingClassXXX please correct, or cancel:'.
+			self
+				assert: (n messageText includesSubstring: expected)
+				description: [self comparingStringBetween: n messageText and: expected].
+			n resume: choice ]
+]
+
 { #category : #accessing }
 StDebuggerTest >> debugger [
 	^ debugger ifNil: [ debugger := self debuggerClass basicNew ]
@@ -112,13 +144,23 @@ StDebuggerTest >> tearDown [
 		debugger unsubscribeFromSystemAnnouncer.
 		debugger close.
 		debugger session ifNotNil: [ :s | s clear ] ].
-	StTestDebuggerProvider removeSelector: #foobar.
+	
+  "We may create this class during testing. If so, remove it"
+	self class environment at: #NONExistingClassXXX ifPresent: [ :class | 
+		class
+			ifNil: [ self class environment removeKey: #NONExistingClassXXX ]
+			ifNotNil: [ class removeFromSystem ] ].
+	
+	Undeclared removeKey: #NONExistingClassXXX ifAbsent: [  ].
+	StDebuggerObjectForTests classPool removeKey: #NONExistingClassXXX ifAbsent: [  ].
+  
 	StDebuggerObjectForTests
 		compile:
 		'haltingMethod <haltOrBreakpointForTesting> self halt. ^self'
 		classified: 'util'.
 	StDebuggerActionModel shouldFilterStack: shouldFilterStack.
 	StTestDebuggerProvider removeSelector: #foobar.
+
 	super tearDown
 ]
 
@@ -140,6 +182,109 @@ StDebuggerTest >> testAcceptCodeChangesForContext [
 	dbg acceptCodeChanges: newSource forContext: context.
 	self assertEmpty: dbg unsavedCodeChanges.
 	self assert: dbg code text equals: newSource
+]
+
+{ #category : #'tests - accepting faulty code' }
+StDebuggerTest >> testAcceptCodeChangesWithUndefinedClassDetectsUndefinedClasses [
+
+	| context newSource |
+	dbg := StTestDebuggerProvider new debuggerWithObjectHalting.
+	dbg
+		application: dbg class currentApplication;
+		initialize;
+		buildContextMenus.
+	context := dbg stackTable items first.
+	
+	newSource := 'haltingMethod ^NONExistingClassXXX'.	
+	dbg code type: newSource.
+	dbg code update.
+	
+	[dbg acceptCodeChanges: newSource forContext: context.
+	
+	"Fail if it the debugger does not detect missing variables"
+	self fail]
+		on: ProvideAnswerNotification
+		do: [ :n | | expected |
+			expected := 'Unknown variable: NONExistingClassXXX please correct, or cancel:'.
+			self
+				assert: (n messageText includesSubstring: expected)
+				description: [self comparingStringBetween: n messageText and: expected]. ]
+]
+
+{ #category : #'tests - accepting faulty code' }
+StDebuggerTest >> testAcceptCodeChangesWithUndefinedClassShouldCancel [
+
+	"Return index out of range: Cancels compilation""The compilation should have cancelled, the old method should still be there"
+	self compileMethodWithUndeclaredChoosing: SmallInteger maxVal.
+	self assert:
+		((StDebuggerObjectForTests >> #haltingMethod) literals includes:
+			 #halt)
+]
+
+{ #category : #'tests - accepting faulty code' }
+StDebuggerTest >> testAcceptCodeChangesWithUndefinedClassShouldDeclareClassVariable [
+
+	| classVariable |
+	"Return index 4 meaning: Declare Class Variable"		
+	self compileMethodWithUndeclaredChoosing: 4.
+	
+	classVariable := (StDebuggerObjectForTests >> #haltingMethod) literalsAt: 1.
+	self assert: classVariable isClassVariable.
+	self assert: classVariable name equals: #NONExistingClassXXX.
+	self assert: classVariable value isNil
+]
+
+{ #category : #'tests - accepting faulty code' }
+StDebuggerTest >> testAcceptCodeChangesWithUndefinedClassShouldDeclareGlobal [
+
+	| global |
+	"Return index 3 meaning: Declare Global"
+	self compileMethodWithUndeclaredChoosing: 3.
+	
+	global := (StDebuggerObjectForTests >> #haltingMethod) literalsAt: 1.
+	self assert: global isGlobalVariable.
+	self assert: global name equals: #NONExistingClassXXX.
+	self assert: global value isNil
+]
+
+{ #category : #'tests - accepting faulty code' }
+StDebuggerTest >> testAcceptCodeChangesWithUndefinedClassShouldDefineClass [
+
+	| result |
+	"Return index 2 meaning: define new class"
+	self compileMethodWithUndeclaredChoosing: 2.
+	
+	result := StDebuggerObjectForTests new haltingMethod.
+	self
+		assert: result
+		equals: (self class environment at: #NONExistingClassXXX).
+	self assert: result isClass
+]
+
+{ #category : #'tests - accepting faulty code' }
+StDebuggerTest >> testAcceptCodeChangesWithUndefinedClassShouldDefineTrait [
+
+	| result |
+	"Return index 5 meaning: define new trait"
+	self compileMethodWithUndeclaredChoosing: 5.
+
+	result := StDebuggerObjectForTests new haltingMethod.
+	self
+		assert: result
+		equals: (self class environment at: #NONExistingClassXXX).
+	self assert: result isTrait
+]
+
+{ #category : #'tests - accepting faulty code' }
+StDebuggerTest >> testAcceptCodeChangesWithUndefinedClassShouldLeaveVariableUndeclared [
+
+	| undeclared |
+	"Return index 1 meaning: Leave variable undeclared"
+	self compileMethodWithUndeclaredChoosing: 1.
+	
+	undeclared := (StDebuggerObjectForTests >> #haltingMethod) literalsAt: 1.
+	self assert: undeclared isUndeclaredVariable.
+	self assert: undeclared name equals: #NONExistingClassXXX
 ]
 
 { #category : #'tests - code pane' }
