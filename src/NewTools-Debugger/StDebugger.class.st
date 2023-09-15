@@ -348,8 +348,7 @@ StDebugger >> clear [
 
 	"When we programmatically close the window, we do not need to terminate the session as it was already cleared"
 	programmaticallyClosed ifTrue: [ ^ self ].
-	self clearDebugSession.
-	debuggerActionModel := nil
+	self clearDebugSession
 ]
 
 { #category : #'updating - widgets' }
@@ -384,9 +383,9 @@ StDebugger >> clearUnsavedCodeChanges [
 StDebugger >> close [
 
 	programmaticallyClosed := true.
-	[ self withWindowDo: #close ] ensure: [ 
-		debuggerActionModel ifNotNil: [ :actionModel | 
-			actionModel clear ] ]
+	[ self withWindowDo: #close ] ensure: [
+		debuggerActionModel ifNotNil: [ :actionModel |
+			actionModel clearDebugSession ] ]
 ]
 
 { #category : #'accessing - widgets' }
@@ -498,6 +497,13 @@ StDebugger >> currentContext [
 { #category : #accessing }
 StDebugger >> debuggerActionModel [
 	^ debuggerActionModel
+]
+
+{ #category : #subscription }
+StDebugger >> debuggerActionModelCleared [
+
+	self unsubscribeFromActionModel.
+	self unsubscribeFromSystemAnnouncer
 ]
 
 { #category : #accessing }
@@ -1289,6 +1295,9 @@ StDebugger >> subscribeToActionModel [
 		to: self;
 		when: StDebuggerActionModelMethodAddedAnnouncement
 		send: #updateAfterMethodAdded
+		to: self;
+		when: StDebuggerActionModelClearAnnouncement
+		send: #debuggerActionModelCleared
 		to: self
 ]
 
