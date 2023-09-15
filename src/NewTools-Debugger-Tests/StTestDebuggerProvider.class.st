@@ -197,6 +197,7 @@ StTestDebuggerProvider >> sessionFor: aContext exception: e [
 
 	e freezeUpTo: nil.
 	self sessionFor: e signalerContext.
+	session name: session name , ' ' , e printString.
 	session exception: e
 ]
 
