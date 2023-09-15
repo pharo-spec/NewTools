@@ -101,7 +101,6 @@ StDebuggerInspectorTest >> testSetDefaultLayoutSpec [
 { #category : #tests }
 StDebuggerInspectorTest >> testShouldUpdateContext [
 
-	| debugger |
 	debugger := StTestDebuggerProvider new
 		            debuggerWithFailingAssertionContext.
 	session := debugger session.
@@ -149,7 +148,7 @@ StDebuggerInspectorTest >> testUpdateLayoutForContextsWithAssertionFailure [
 
 { #category : #tests }
 StDebuggerInspectorTest >> testUpdateLayoutForContextsWithShouldntRaiseFailure [
-	| debugger assertionFailure |
+	| assertionFailure |
 	debugger := StTestDebuggerProvider new debuggerWithFailingShouldntRaiseContext.
 	session := debugger session.
 	inspector
