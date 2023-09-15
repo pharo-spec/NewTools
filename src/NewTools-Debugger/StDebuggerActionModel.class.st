@@ -78,8 +78,7 @@ StDebuggerActionModel >> clearDebugSession [
 	contextPredicate := nil.
 	self session
 		terminate;
-		clear.
-	session := nil
+		clear
 ]
 
 { #category : #context }
@@ -370,7 +369,8 @@ StDebuggerActionModel >> registerActionsForSession: aSession [
 			when: #stepInto send: #updateStep to: self;
 			when: #stepOver send: #updateStep to: self;
 			when: #stepThrough send: #updateStep to: self;
-			when: #contextChanged send: #updateContextChanged to: self ]
+			when: #contextChanged send: #updateContextChanged to: self;
+			when: #clear send: #clear to: self ]
 ]
 
 { #category : #'events - removing' }

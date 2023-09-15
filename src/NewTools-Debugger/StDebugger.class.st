@@ -348,8 +348,7 @@ StDebugger >> clear [
 
 	"When we programmatically close the window, we do not need to terminate the session as it was already cleared"
 	programmaticallyClosed ifTrue: [ ^ self ].
-	self clearDebugSession.
-	debuggerActionModel := nil
+	self clearDebugSession
 ]
 
 { #category : #'updating - widgets' }
@@ -504,8 +503,7 @@ StDebugger >> debuggerActionModel [
 StDebugger >> debuggerActionModelCleared [
 
 	self unsubscribeFromActionModel.
-	self unsubscribeFromSystemAnnouncer.
-	debuggerActionModel := nil
+	self unsubscribeFromSystemAnnouncer
 ]
 
 { #category : #accessing }
