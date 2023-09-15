@@ -581,7 +581,7 @@ StDebuggerTest >> testIsInSelectedContextClass [
 	| stackTable context process |
 	context := thisContext.
 	process := Process forContext: context priority: Processor userInterruptPriority.
-	session := DebugSession named: 'test session' on: process startedAt: context.
+	session := DebugSession named: 'test session stDebuggerTestTestIsInSelectedContextClass' on: process startedAt: context.
 	session exception: OupsNullException new.
 
 	debugger := self debuggerOn: session.
@@ -601,7 +601,7 @@ StDebuggerTest >> testIsInSelectedContextPackage [
 	| stackTable context process |
 	context := thisContext.
 	process := Process forContext: context priority: Processor userInterruptPriority.
-	session := DebugSession named: 'test session' on: process startedAt: context.
+	session := DebugSession named: 'test session stDebuggerTesttestIsInSelectedContextPackage' on: process startedAt: context.
 	session exception: OupsNullException new.
 
 	debugger := self debuggerOn: session.
