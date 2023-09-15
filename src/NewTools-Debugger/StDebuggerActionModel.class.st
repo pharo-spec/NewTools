@@ -62,18 +62,24 @@ StDebuggerActionModel >> autoClassifyMessage: aMessage inClass: aClass [
 	method isClassified ifFalse: [ MethodClassifier classify: method ]
 ]
 
-{ #category : #accessing }
+{ #category : #actions }
 StDebuggerActionModel >> clear [
 
 	self unsubscribeFromSystemAnnouncer.
 	self removeActionsForSession: self session.
+	self raiseUpdateEvents:
+		(StDebuggerActionModelClearAnnouncement debuggerActionModel: self).
 	announcer := nil
 ]
 
 { #category : #'debug - execution' }
 StDebuggerActionModel >> clearDebugSession [
+
 	contextPredicate := nil.
-	self session terminate; clear
+	self session
+		terminate;
+		clear.
+	session := nil
 ]
 
 { #category : #context }

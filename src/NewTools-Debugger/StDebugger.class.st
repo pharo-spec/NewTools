@@ -384,9 +384,9 @@ StDebugger >> clearUnsavedCodeChanges [
 StDebugger >> close [
 
 	programmaticallyClosed := true.
-	[ self withWindowDo: #close ] ensure: [ 
-		debuggerActionModel ifNotNil: [ :actionModel | 
-			actionModel clear ] ]
+	[ self withWindowDo: #close ] ensure: [
+		debuggerActionModel ifNotNil: [ :actionModel |
+			actionModel clearDebugSession ] ]
 ]
 
 { #category : #'accessing - widgets' }
@@ -498,6 +498,14 @@ StDebugger >> currentContext [
 { #category : #accessing }
 StDebugger >> debuggerActionModel [
 	^ debuggerActionModel
+]
+
+{ #category : #subscription }
+StDebugger >> debuggerActionModelCleared [
+
+	self unsubscribeFromActionModel.
+	self unsubscribeFromSystemAnnouncer.
+	debuggerActionModel := nil
 ]
 
 { #category : #accessing }
@@ -1289,6 +1297,9 @@ StDebugger >> subscribeToActionModel [
 		to: self;
 		when: StDebuggerActionModelMethodAddedAnnouncement
 		send: #updateAfterMethodAdded
+		to: self;
+		when: StDebuggerActionModelClearAnnouncement
+		send: #debuggerActionModelCleared
 		to: self
 ]
 
