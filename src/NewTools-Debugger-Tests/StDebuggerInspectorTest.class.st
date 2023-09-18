@@ -3,7 +3,8 @@ Class {
 	#superclass : #TestCase,
 	#instVars : [
 		'inspector',
-		'session'
+		'session',
+		'debugger'
 	],
 	#category : #'NewTools-Debugger-Tests-Presenters'
 }
@@ -17,8 +18,15 @@ StDebuggerInspectorTest >> setUp [
 
 { #category : #running }
 StDebuggerInspectorTest >> tearDown [
-	session ifNotNil:[session clear].
+
+	session ifNotNil: [ session clear ].
 	StDebuggerInspector maximizeAssertionSpec: nil.
+	debugger ifNotNil: [
+		debugger close.
+		debugger unsubscribeFromSystemAnnouncer.
+		debugger debuggerActionModel ifNotNil: [ :actionModel |
+			actionModel clear.
+			actionModel session ifNotNil: [ :s | s clear ] ] ].
 	super tearDown
 ]
 
@@ -93,7 +101,6 @@ StDebuggerInspectorTest >> testSetDefaultLayoutSpec [
 { #category : #tests }
 StDebuggerInspectorTest >> testShouldUpdateContext [
 
-	| debugger |
 	debugger := StTestDebuggerProvider new
 		            debuggerWithFailingAssertionContext.
 	session := debugger session.
@@ -116,10 +123,12 @@ StDebuggerInspectorTest >> testToggleMaximizeAssertionSpec [
 
 { #category : #tests }
 StDebuggerInspectorTest >> testUpdateLayoutForContextsWithAssertionFailure [
-	| debugger assertionFailure |
+
+	| assertionFailure |
 	debugger := StTestDebuggerProvider new
-		debuggerWithFailingAssertionContext.
+		            debuggerWithFailingAssertionContext.
 	session := debugger session.
+	
 	inspector
 		updateLayoutForContexts: session interruptedContext
 		isAssertionFailure: true.
@@ -129,15 +138,17 @@ StDebuggerInspectorTest >> testUpdateLayoutForContextsWithAssertionFailure [
 		equals: inspector assertionLayoutSelector.
 	self
 		assert: assertionFailure actualObject
-		equals: ((session interruptedContext tempNamed: #aStringOrBlock) at: 2).
+		equals:
+		((session interruptedContext tempNamed: #aStringOrBlock) at: 2).
 	self
 		assert: assertionFailure expectedObject
-		equals: ((session interruptedContext tempNamed: #aStringOrBlock) at: 1)
+		equals:
+		((session interruptedContext tempNamed: #aStringOrBlock) at: 1)
 ]
 
 { #category : #tests }
 StDebuggerInspectorTest >> testUpdateLayoutForContextsWithShouldntRaiseFailure [
-	| debugger assertionFailure |
+	| assertionFailure |
 	debugger := StTestDebuggerProvider new debuggerWithFailingShouldntRaiseContext.
 	session := debugger session.
 	inspector
@@ -152,7 +163,7 @@ StDebuggerInspectorTest >> testUpdateLayoutForContextsWithShouldntRaiseFailure [
 
 { #category : #tests }
 StDebuggerInspectorTest >> testUpdateLayoutForContextsWithoutAssertionFailure [
-	| debugger |
+
 	debugger := StTestDebuggerProvider new
 		debuggerWithFailingAssertionContext.
 	session := debugger session.
