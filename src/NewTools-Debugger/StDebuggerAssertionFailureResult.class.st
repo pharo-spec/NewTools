@@ -5,34 +5,36 @@ I am just a convenience place holder for the results of an assertion failure:
 I am meant to be used when expected and actual results do not satisfy the assertion.
 "
 Class {
-	#name : #StDebuggerAssertionFailureResult,
-	#superclass : #Object,
+	#name : 'StDebuggerAssertionFailureResult',
+	#superclass : 'Object',
 	#instVars : [
 		'actual',
 		'expected'
 	],
-	#category : #'NewTools-Debugger-Model'
+	#category : 'NewTools-Debugger-Model',
+	#package : 'NewTools-Debugger',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerAssertionFailureResult >> actual [
 
 	^ actual
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerAssertionFailureResult >> actual: anObject [
 
 	actual := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerAssertionFailureResult >> expected [
 
 	^ expected
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerAssertionFailureResult >> expected: anObject [
 
 	expected := anObject

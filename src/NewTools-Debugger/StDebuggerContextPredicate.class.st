@@ -7,84 +7,86 @@ I reference the context I describe.
 I become obsolete as soon as an action is performed on the context.
 "
 Class {
-	#name : #StDebuggerContextPredicate,
-	#superclass : #Object,
+	#name : 'StDebuggerContextPredicate',
+	#superclass : 'Object',
 	#instVars : [
 		'context',
 		'postMortem'
 	],
-	#category : #'NewTools-Debugger-Model'
+	#category : 'NewTools-Debugger-Model',
+	#package : 'NewTools-Debugger',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StDebuggerContextPredicate class >> context: anObject [
 
 	^ self new context: anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerContextPredicate >> context [
 	^ context
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerContextPredicate >> context: aContext [
 	context := aContext
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StDebuggerContextPredicate >> contextSignalsException [
 	^false
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebuggerContextPredicate >> initialize [ 
 	super initialize.
 	postMortem := false
 ]
 
-{ #category : #predicates }
+{ #category : 'predicates' }
 StDebuggerContextPredicate >> isContextAnAssertionFailure [
 	^false
 ]
 
-{ #category : #predicates }
+{ #category : 'predicates' }
 StDebuggerContextPredicate >> isContextDead [
 	^context isDead
 ]
 
-{ #category : #predicates }
+{ #category : 'predicates' }
 StDebuggerContextPredicate >> isContextDoesNotUnderstand [
 	^false
 ]
 
-{ #category : #predicates }
+{ #category : 'predicates' }
 StDebuggerContextPredicate >> isContextMissingClassException [
 	^false
 ]
 
-{ #category : #predicates }
+{ #category : 'predicates' }
 StDebuggerContextPredicate >> isContextPostMortem [
 	^postMortem
 ]
 
-{ #category : #predicates }
+{ #category : 'predicates' }
 StDebuggerContextPredicate >> isContextSubclassResponsibilityException [
 	^false
 ]
 
-{ #category : #predicates }
+{ #category : 'predicates' }
 StDebuggerContextPredicate >> isSteppable [
 
 	^ self isContextPostMortem not and: [ self isContextDead not ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerContextPredicate >> postMortem: aBoolean [
 	postMortem := aBoolean
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 StDebuggerContextPredicate >> printDescription [
 	|str|
 	str := WriteStream on: String new.
@@ -93,14 +95,14 @@ StDebuggerContextPredicate >> printDescription [
 	^str contents
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 StDebuggerContextPredicate >> printDescriptionPrefixOn: str [
 
 	self printPostMortemDescriptionOn: str.
 	self printHaltDescriptionOn: str
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 StDebuggerContextPredicate >> printHaltDescriptionOn: str [
 
 	context sourceNodeExecuted isHaltNode ifFalse: [ ^ self ].
@@ -108,7 +110,7 @@ StDebuggerContextPredicate >> printHaltDescriptionOn: str [
 	str space
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 StDebuggerContextPredicate >> printPostMortemDescriptionOn: str [
 
 	postMortem ifFalse: [ ^ self ].
@@ -116,7 +118,7 @@ StDebuggerContextPredicate >> printPostMortemDescriptionOn: str [
 	str space
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 StDebuggerContextPredicate >> updateSessionForModel: aStDebuggerActionModel [
 	aStDebuggerActionModel updateDebugSessionException: OupsNullException new
 	
