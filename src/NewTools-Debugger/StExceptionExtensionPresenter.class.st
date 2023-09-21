@@ -12,9 +12,14 @@ Class {
 }
 
 { #category : 'debugger extension' }
-StExceptionExtensionPresenter >> activateForException: anException [
-	exception := anException.
-	anException activateDebuggerExtension: self
+StExceptionExtensionPresenter class >> showInDebugger [
+	^false
+]
+
+{ #category : 'debugger extension' }
+StExceptionExtensionPresenter class >> showInDebugger: aBoolean [
+
+	self flag: 'ugly but this extension should not be globally activated'
 ]
 
 { #category : 'debugger extension' }
@@ -28,18 +33,16 @@ StExceptionExtensionPresenter >> defaultLayout [
 	^SpBoxLayout newTopToBottom 
 ]
 
-{ #category : 'initialization' }
-StExceptionExtensionPresenter >> initialize [
-	super initialize.
-	self class showInDebugger: false
+{ #category : 'debugger extension' }
+StExceptionExtensionPresenter >> showInDebugger [
+
+	^ self debugger exception showInDebuggerExtension
 ]
 
 { #category : 'updating' }
-StExceptionExtensionPresenter >> updateLayoutWith: anExceptionDebuggerLayout [
-]
+StExceptionExtensionPresenter >> updateLayout [
 
-{ #category : 'updating' }
-StExceptionExtensionPresenter >> updatePresenter [ 
-	self activateForException: self debugger exception
-
+	self layout: (SpBoxLayout newTopToBottom
+			 add: debugger exception debuggerExtensionLayout;
+			 yourself)
 ]
