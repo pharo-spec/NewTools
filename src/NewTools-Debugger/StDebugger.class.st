@@ -725,19 +725,18 @@ StDebugger >> initializeCode [
 StDebugger >> initializeExtensionTools [
 
 	| sortedToolClasses pages |
+	self assert: self exception notNil.
 	extensionToolsNotebook := self newNotebook.
-	extensionToolsNotebook whenPagesChangedDo:
-		self extensionToolUpdateBlock.
+	extensionToolsNotebook whenPagesChangedDo: self extensionToolUpdateBlock.
 	extensionToolsNotebook whenPageAddedDo: [ :newPage |
 		self extensionToolUpdateBlock cull: extensionToolsNotebook pages ].
-	self class usesExtensions ifFalse: [ ^ self ].
 
 	sortedToolClasses := SortedCollection new sortBlock: [ :s1 :s2 |
 		                     s1 displayOrder <= s2 displayOrder ].
-	sortedToolClasses addAll:
-		(self class extensionToolsClasses select: [ :s | s showInDebugger ]).
-	pages := sortedToolClasses collect: [ :toolClass |
-		         self instantiateExtensionToolsPage: toolClass ].
+	sortedToolClasses addAll: (self class extensionToolsClasses select: [ :s | s showInDebugger ]).	
+		
+	pages := sortedToolClasses collect: [ :toolClass | self instantiateExtensionToolsPage: toolClass ].
+	
 	extensionToolsNotebook pages: pages
 ]
 
@@ -1154,10 +1153,10 @@ StDebugger >> setModelBeforeInitialization: aSession [
 { #category : 'initialization' }
 StDebugger >> setStackAndCodeContainer [
 
-	stackAndCodeContainer := self class usesExtensions
-		                         ifTrue: [ 
+	stackAndCodeContainer := extensionTools
+		                         ifEmpty: [ self stackAndCodeLayout ]
+		                         ifNotEmpty: [
 		                         self stackAndCodeWithExtensionsLayout ]
-		                         ifFalse: [ self stackAndCodeLayout ]
 ]
 
 { #category : 'actions' }
