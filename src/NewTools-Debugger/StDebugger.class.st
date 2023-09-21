@@ -853,13 +853,11 @@ StDebugger >> initializeWindow: aWindowPresenter [
 
 { #category : 'extensions' }
 StDebugger >> instantiateExtensionToolsPage: aToolClass [
+
 	| toolInstance |
 	toolInstance := self instantiate: aToolClass on: self.
 	toolInstance layout: toolInstance debuggerLayout.
-	self registerExtensionTool: toolInstance.
-	^ SpNotebookPage
-		title: toolInstance debuggerExtensionToolName
-		provider: [ toolInstance ]
+	^ self notebookPageForExtension: toolInstance
 ]
 
 { #category : 'accessing - context' }
@@ -927,6 +925,15 @@ StDebugger >> newDebuggerContextFor: aContext [
 StDebugger >> newTitle [
 
 	^ self debuggerActionModel statusStringForContext
+]
+
+{ #category : 'extensions' }
+StDebugger >> notebookPageForExtension: anExtensionPresenter [
+
+	self registerExtensionTool: anExtensionPresenter.
+	^ SpNotebookPage
+		  title: anExtensionPresenter debuggerExtensionToolName
+		  provider: [ anExtensionPresenter ]
 ]
 
 { #category : 'api' }
