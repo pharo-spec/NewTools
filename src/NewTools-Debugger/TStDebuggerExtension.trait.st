@@ -84,3 +84,13 @@ TStDebuggerExtension >> displayOrder [
 TStDebuggerExtension >> setModelBeforeInitialization: aDebugger [
 	 debugger := aDebugger
 ]
+
+{ #category : 'debugger extension' }
+TStDebuggerExtension >> showInDebugger [
+	^self class showInDebugger 
+]
+
+{ #category : 'debugger extension' }
+TStDebuggerExtension >> showInDebugger: aBoolean [
+	self class showInDebugger: aBoolean 
+]
