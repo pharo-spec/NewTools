@@ -7,5 +7,5 @@ RPackage >> scopesIconName [
 
 { #category : '*NewTools-ScopesBrowser' }
 RPackage >> subelements [
-	^ self classes asOrderedCollection
+	^ self definedClasses asOrderedCollection
 ]

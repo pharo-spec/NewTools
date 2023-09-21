@@ -82,16 +82,20 @@ ScopeNodesPresenter >> initializePresenters [
 
 { #category : 'initialization' }
 ScopeNodesPresenter >> initializeScopeNodesTree [
+
 	^ scopeNodesTree
-		hideColumnHeaders;
-		addColumn: self nodesListColumn;
-		children: [ :each | each subelements ];
-		beMultipleSelection;
-		roots: Smalltalk packages sorted;
-		beResizable;
-		activateOnDoubleClick;
-		whenActivatedDo: [ :selection | scopeNodesTree toggleSelectedItems ]
-		"contextMenu: self menu"
+		  hideColumnHeaders;
+		  addColumn: self nodesListColumn;
+		  children: [ :each |
+			  each subelements select: [ :node |
+					  (node name beginsWith: nodeNameText text) or: [
+							  node package name beginsWith: nodeNameText text ] ] ];
+		  beMultipleSelection;
+		  roots: Smalltalk packages sorted;
+		  beResizable;
+		  activateOnDoubleClick;
+		  whenActivatedDo: [ :selection | "contextMenu: self menu"
+			  scopeNodesTree toggleSelectedItems ]
 ]
 
 { #category : 'private' }
@@ -124,8 +128,10 @@ ScopeNodesPresenter >> nodesListColumn [
 { #category : 'initialization' }
 ScopeNodesPresenter >> refresh [
 
-	 
-
+	scopeNodesTree roots: (Smalltalk packages sorted select: [ :each |
+			 (each name beginsWith: nodeNameText text) or: [
+				 each definedClasses anySatisfy: [ :class |
+					 class name beginsWith: nodeNameText text ] ] ])
 ]
 
 { #category : 'accessing' }
