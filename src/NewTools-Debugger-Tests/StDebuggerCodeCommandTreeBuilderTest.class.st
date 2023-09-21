@@ -1,17 +1,19 @@
 Class {
-	#name : #StDebuggerCodeCommandTreeBuilderTest,
-	#superclass : #StDebuggerToolCommandTreeBuilderTest,
-	#category : #'NewTools-Debugger-Tests-Model'
+	#name : 'StDebuggerCodeCommandTreeBuilderTest',
+	#superclass : 'StDebuggerToolCommandTreeBuilderTest',
+	#category : 'NewTools-Debugger-Tests-Model',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StDebuggerCodeCommandTreeBuilderTest >> newBuilder [
 	^ StDebuggerCodeCommandTreeBuilder
 		buildCommandsGroupWith: debugger
 		forRoot: rootGroup
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerCodeCommandTreeBuilderTest >> testCodeDebugCommands [
 	|codeCommandClasses|
 	codeCommandClasses := OrderedCollection new.
@@ -23,34 +25,34 @@ StDebuggerCodeCommandTreeBuilderTest >> testCodeDebugCommands [
 		displayStrategy: CmUIDisplayAsGroup
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerCodeCommandTreeBuilderTest >> testCodeDebugCommandsDescription [
 	self assert: builder  codeDebugCommandsDescription equals: 'Execution control'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerCodeCommandTreeBuilderTest >> testCodeDebugCommandsGroupName [
 	self assert: builder  codeDebugCommandsGroupName equals: 'Execution'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerCodeCommandTreeBuilderTest >> testCodeExecutionControlCommandsClasses [
 	self
 		assertCollection: builder codeExecutionControlCommandsClasses
 		equals: {StRunToSelectionCommand}
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerCodeCommandTreeBuilderTest >> testDisplayStrategy [
 	self assert: builder class displayStrategy equals: CmUIDisplayAsSubMenu
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerCodeCommandTreeBuilderTest >> testGroupDescription [
 	self assert: builder class groupDescription equals: 'Debug actions from code'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerCodeCommandTreeBuilderTest >> testGroupName [
 	self assert: builder class groupName equals: 'Code'
 ]

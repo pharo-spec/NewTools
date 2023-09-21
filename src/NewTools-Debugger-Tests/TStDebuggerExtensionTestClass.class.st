@@ -1,24 +1,26 @@
 Class {
-	#name : #TStDebuggerExtensionTestClass,
-	#superclass : #SpPresenter,
+	#name : 'TStDebuggerExtensionTestClass',
+	#superclass : 'SpPresenter',
 	#traits : 'TStDebuggerExtension',
 	#classTraits : 'TStDebuggerExtension classTrait',
-	#category : #'NewTools-Debugger-Tests-Model'
+	#category : 'NewTools-Debugger-Tests-Model',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Model'
 }
 
-{ #category : #layout }
+{ #category : 'layout' }
 TStDebuggerExtensionTestClass class >> defaultLayout [
 
 	^ SpBoxLayout newVertical
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 TStDebuggerExtensionTestClass class >> isOnlyForTests [
 
 	^ true
 ]
 
-{ #category : #'debugger extension' }
+{ #category : 'debugger extension' }
 TStDebuggerExtensionTestClass >> debuggerExtensionToolName [
 	
 	^ 'TStDebuggerExtensionTestClass'

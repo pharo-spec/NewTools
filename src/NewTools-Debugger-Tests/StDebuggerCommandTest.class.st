@@ -1,13 +1,15 @@
 Class {
-	#name : #StDebuggerCommandTest,
-	#superclass : #TestCase,
+	#name : 'StDebuggerCommandTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'debuggerProvider'
 	],
-	#category : #'NewTools-Debugger-Tests-Model'
+	#category : 'NewTools-Debugger-Tests-Model',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Model'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerCommandTest >> setUp [
 	"Hooks that subclasses may override to define the fixture of test."
 
@@ -15,7 +17,7 @@ StDebuggerCommandTest >> setUp [
 	debuggerProvider := StTestDebuggerProvider new
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerCommandTest >> tearDown [
 	debuggerProvider terminate.
 	(StTestDebuggerProvider lookupSelector:
@@ -24,7 +26,7 @@ StDebuggerCommandTest >> tearDown [
 	super tearDown
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerCommandTest >> testCommandsInDNUContext [
 
 	|debugger|
@@ -54,7 +56,7 @@ StDebuggerCommandTest >> testCommandsInDNUContext [
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted. 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerCommandTest >> testCommandsInDeadContext [
 
 	|debugger|
@@ -84,7 +86,7 @@ StDebuggerCommandTest >> testCommandsInDeadContext [
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted. 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerCommandTest >> testCommandsInErrorContext [
 
 	|debugger|
@@ -115,7 +117,7 @@ StDebuggerCommandTest >> testCommandsInErrorContext [
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted. 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerCommandTest >> testCommandsInFailingTestContext [
 
 	|debugger|
@@ -146,7 +148,7 @@ StDebuggerCommandTest >> testCommandsInFailingTestContext [
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted. 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerCommandTest >> testCommandsInGeneratingCodeContext [
 
 	| debugger |
@@ -187,7 +189,7 @@ StDebuggerCommandTest >> testCommandsInGeneratingCodeContext [
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerCommandTest >> testCommandsInMissingClassContext [
 	"When a class is missing, it is possible we are trying to send it a message.
 	Define new class and define new method must be possible. "	
@@ -221,7 +223,7 @@ StDebuggerCommandTest >> testCommandsInMissingClassContext [
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted. 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerCommandTest >> testCommandsInMissingSubclassResponsibilityContext [
 
 	|debugger|
@@ -251,7 +253,7 @@ StDebuggerCommandTest >> testCommandsInMissingSubclassResponsibilityContext [
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted. 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerCommandTest >> testCommandsInRunnableContext [
 
 	|debugger|
@@ -282,7 +284,7 @@ StDebuggerCommandTest >> testCommandsInRunnableContext [
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted. 
 ]
 
-{ #category : #'tests - execution' }
+{ #category : 'tests - execution' }
 StDebuggerCommandTest >> testStCopyStackToClipboardCommandExecution [
 	"Generated 5 June 2020"
 	|debugger command|
@@ -293,7 +295,7 @@ StDebuggerCommandTest >> testStCopyStackToClipboardCommandExecution [
 	self assert: debugger tag equals: #copyStackToClipboard
 ]
 
-{ #category : #'tests - execution' }
+{ #category : 'tests - execution' }
 StDebuggerCommandTest >> testStDefineClassCommandExecution [
 	"Generated 5 June 2020"
 	|debugger command|
@@ -304,7 +306,7 @@ StDebuggerCommandTest >> testStDefineClassCommandExecution [
 	self assert: debugger tag equals: #createMissingClass
 ]
 
-{ #category : #'tests - execution' }
+{ #category : 'tests - execution' }
 StDebuggerCommandTest >> testStDefineMethodCommandExecution [
 	"Generated 5 June 2020"
 	|debugger command|
@@ -315,7 +317,7 @@ StDebuggerCommandTest >> testStDefineMethodCommandExecution [
 	self assert: debugger tag equals: #createMissingMethod
 ]
 
-{ #category : #'tests - execution' }
+{ #category : 'tests - execution' }
 StDebuggerCommandTest >> testStDefineMissingEntityCommandExecution [
 	| debugger command |
 	
@@ -343,7 +345,7 @@ StDebuggerCommandTest >> testStDefineMissingEntityCommandExecution [
 	
 ]
 
-{ #category : #'tests - execution' }
+{ #category : 'tests - execution' }
 StDebuggerCommandTest >> testStDefineSubclassResponsabilityCommandExecution [
 	"Generated 5 June 2020"
 	|debugger command|
@@ -354,7 +356,7 @@ StDebuggerCommandTest >> testStDefineSubclassResponsabilityCommandExecution [
 	self assert: debugger tag equals: #createSubclassResponsibility
 ]
 
-{ #category : #'tests - execution' }
+{ #category : 'tests - execution' }
 StDebuggerCommandTest >> testStFileOutMethodCommandExecution [
 	"Generated 5 June 2020"
 	|debugger command|
@@ -365,7 +367,7 @@ StDebuggerCommandTest >> testStFileOutMethodCommandExecution [
 	self assert: debugger tag equals: #fileOutSelectedContext
 ]
 
-{ #category : #'tests - execution' }
+{ #category : 'tests - execution' }
 StDebuggerCommandTest >> testStGenerateAndProceedCommandExecution [
 
 	| debugger command |
@@ -376,7 +378,7 @@ StDebuggerCommandTest >> testStGenerateAndProceedCommandExecution [
 	self assert: debugger tag equals: #saveGeneratedCodeAndProceed
 ]
 
-{ #category : #'tests - execution' }
+{ #category : 'tests - execution' }
 StDebuggerCommandTest >> testStPeelToFirstCommandExecution [
 	
 	|debugger command|
@@ -387,7 +389,7 @@ StDebuggerCommandTest >> testStPeelToFirstCommandExecution [
 	self assert: debugger tag equals: #peelToFirstLike:
 ]
 
-{ #category : #'tests - execution' }
+{ #category : 'tests - execution' }
 StDebuggerCommandTest >> testStProceedCommandExecution [
 	"Generated 5 June 2020"
 	|debugger command|
@@ -398,7 +400,7 @@ StDebuggerCommandTest >> testStProceedCommandExecution [
 	self assert: debugger tag equals: #proceedDebugSession
 ]
 
-{ #category : #'tests - execution' }
+{ #category : 'tests - execution' }
 StDebuggerCommandTest >> testStRestartCommandExecution [
 	"Generated 5 June 2020"
 	|debugger command|
@@ -409,7 +411,7 @@ StDebuggerCommandTest >> testStRestartCommandExecution [
 	self assert: debugger tag equals: #restartCurrentContext
 ]
 
-{ #category : #'tests - execution' }
+{ #category : 'tests - execution' }
 StDebuggerCommandTest >> testStReturnValueCommandExecution [
 	"Generated 5 June 2020"
 	|debugger command|
@@ -420,7 +422,7 @@ StDebuggerCommandTest >> testStReturnValueCommandExecution [
 	self assert: debugger tag equals: #returnEnteredValue
 ]
 
-{ #category : #'tests - execution' }
+{ #category : 'tests - execution' }
 StDebuggerCommandTest >> testStRunToSelectionCommandExecution [
 	"Generated 5 June 2020"
 	|debugger command|
@@ -431,7 +433,7 @@ StDebuggerCommandTest >> testStRunToSelectionCommandExecution [
 	self assert: debugger tag equals: #runToSelection
 ]
 
-{ #category : #'tests - execution' }
+{ #category : 'tests - execution' }
 StDebuggerCommandTest >> testStShowFullStackCommandExecution [
 	"Generated 5 June 2020"
 	|debugger command|
@@ -442,7 +444,7 @@ StDebuggerCommandTest >> testStShowFullStackCommandExecution [
 	self assert: debugger tag equals: #showFullStack
 ]
 
-{ #category : #'tests - execution' }
+{ #category : 'tests - execution' }
 StDebuggerCommandTest >> testStStepIntoCommandExecution [
 	"Generated 5 June 2020"
 	|debugger command|
@@ -453,7 +455,7 @@ StDebuggerCommandTest >> testStStepIntoCommandExecution [
 	self assert: debugger tag equals: #stepInto
 ]
 
-{ #category : #'tests - execution' }
+{ #category : 'tests - execution' }
 StDebuggerCommandTest >> testStStepOverCommandExecution [
 	"Generated 5 June 2020"
 	|debugger command|
@@ -464,7 +466,7 @@ StDebuggerCommandTest >> testStStepOverCommandExecution [
 	self assert: debugger tag equals: #stepOver
 ]
 
-{ #category : #'tests - execution' }
+{ #category : 'tests - execution' }
 StDebuggerCommandTest >> testStStepThroughCommandExecution [
 	"Generated 5 June 2020"
 	|debugger command|
@@ -475,7 +477,7 @@ StDebuggerCommandTest >> testStStepThroughCommandExecution [
 	self assert: debugger tag equals: #stepThrough
 ]
 
-{ #category : #'tests - execution' }
+{ #category : 'tests - execution' }
 StDebuggerCommandTest >> testStWhereIsCommandExecution [
 	"Generated 5 June 2020"
 	|debugger command|

@@ -1,26 +1,28 @@
 Class {
-	#name : #StDebuggerContextPredicateTest,
-	#superclass : #TestCase,
+	#name : 'StDebuggerContextPredicateTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'predicate',
 		'context'
 	],
-	#category : #'NewTools-Debugger-Tests-Model'
+	#category : 'NewTools-Debugger-Tests-Model',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Model'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerContextPredicateTest >> setUp [
 	super setUp.
 	context := [  ] asContext.
 	predicate := (StDebuggerContextPredicate context: context)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextPredicateTest >> testContext [
 	self assert: predicate context identicalTo: context
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextPredicateTest >> testIsContextDead [
 	
 	self deny: predicate isContextDead.
@@ -28,7 +30,7 @@ StDebuggerContextPredicateTest >> testIsContextDead [
 	self assert: predicate isContextDead
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextPredicateTest >> testIsSteppable [
 
 	self assert: predicate isSteppable.
@@ -42,13 +44,13 @@ StDebuggerContextPredicateTest >> testIsSteppable [
 	self deny: predicate isSteppable
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextPredicateTest >> testPrintDescription [
 	self skip.
 	self assert: predicate printDescription equals: '0'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextPredicateTest >> testPrintHaltDescription [
 	|haltContext|
 	haltContext := (StTestDebuggerProvider new debuggerWithRunnableContext) interruptedContext.
@@ -56,7 +58,7 @@ StDebuggerContextPredicateTest >> testPrintHaltDescription [
 	self assert: predicate printDescription equals: 'Halt in ', haltContext printString
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextPredicateTest >> testPrintPostMortemDescription [
 	self skip.
 	predicate postMortem: true.

@@ -1,39 +1,41 @@
 Class {
-	#name : #StDebuggerInspectorTest,
-	#superclass : #TestCase,
+	#name : 'StDebuggerInspectorTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'inspector',
 		'session'
 	],
-	#category : #'NewTools-Debugger-Tests-Presenters'
+	#category : 'NewTools-Debugger-Tests-Presenters',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Presenters'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerInspectorTest >> setUp [
 	"Hooks that subclasses may override to define the fixture of test."
 	super setUp.
 	inspector := StDebuggerInspector new
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerInspectorTest >> tearDown [
 	session ifNotNil:[session clear].
 	StDebuggerInspector maximizeAssertionSpec: nil.
 	super tearDown
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerInspectorTest >> testDefaultLayoutSpec [
 	
 	self assert: inspector currentLayoutSelector equals: inspector defaultLayoutSelector
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerInspectorTest >> testMaximizeAssertionSpec [
 	self deny: StDebuggerInspector maximizeAssertionSpec
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerInspectorTest >> testMaximizedAssertionLayoutSpec [
 	|inspectorLayout|
 	
@@ -44,7 +46,7 @@ StDebuggerInspectorTest >> testMaximizedAssertionLayoutSpec [
 	self assert: inspectorLayout children first class identicalTo: SpBoxLayout 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerInspectorTest >> testMinimizedAssertionLayoutSpec [
 	|inspectorLayout|
 	
@@ -56,7 +58,7 @@ StDebuggerInspectorTest >> testMinimizedAssertionLayoutSpec [
 	self assert: inspectorLayout children second equals: #inspector
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerInspectorTest >> testSetAssertionLayoutSpec [
 	|inspectorLayout expectedLayout|
 	inspector setAssertionLayout. 
@@ -71,7 +73,7 @@ StDebuggerInspectorTest >> testSetAssertionLayoutSpec [
 	self assert: inspectorLayout class identicalTo: expectedLayout class
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerInspectorTest >> testSetDefaultLayoutSpec [
 
 	| inspectorLayout expectedLayout |
@@ -90,7 +92,7 @@ StDebuggerInspectorTest >> testSetDefaultLayoutSpec [
 	self assert: inspectorLayout class identicalTo: expectedLayout class
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerInspectorTest >> testShouldUpdateContext [
 
 	| debugger |
@@ -105,7 +107,7 @@ StDebuggerInspectorTest >> testShouldUpdateContext [
 			 with: session interruptedContext)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerInspectorTest >> testToggleMaximizeAssertionSpec [
 
 	|oldFlag|
@@ -114,7 +116,7 @@ StDebuggerInspectorTest >> testToggleMaximizeAssertionSpec [
 	self assert: StDebuggerInspector maximizeAssertionSpec equals: oldFlag not
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerInspectorTest >> testUpdateLayoutForContextsWithAssertionFailure [
 	| debugger assertionFailure |
 	debugger := StTestDebuggerProvider new
@@ -135,7 +137,7 @@ StDebuggerInspectorTest >> testUpdateLayoutForContextsWithAssertionFailure [
 		equals: ((session interruptedContext tempNamed: #aStringOrBlock) at: 1)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerInspectorTest >> testUpdateLayoutForContextsWithShouldntRaiseFailure [
 	| debugger assertionFailure |
 	debugger := StTestDebuggerProvider new debuggerWithFailingShouldntRaiseContext.
@@ -150,7 +152,7 @@ StDebuggerInspectorTest >> testUpdateLayoutForContextsWithShouldntRaiseFailure [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerInspectorTest >> testUpdateLayoutForContextsWithoutAssertionFailure [
 	| debugger |
 	debugger := StTestDebuggerProvider new

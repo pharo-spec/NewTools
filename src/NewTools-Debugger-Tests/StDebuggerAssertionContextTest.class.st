@@ -1,19 +1,21 @@
 Class {
-	#name : #StDebuggerAssertionContextTest,
-	#superclass : #TestCase,
+	#name : 'StDebuggerAssertionContextTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'session'
 	],
-	#category : #'NewTools-Debugger-Tests-Model'
+	#category : 'NewTools-Debugger-Tests-Model',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Model'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerAssertionContextTest >> tearDown [
 	session ifNotNil:[session clear].
 	super tearDown 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerAssertionContextTest >> testFindFailedAssertionContextInSenderChain [
 	| debugger |
 	debugger := StTestDebuggerProvider new debuggerWithFailingAssertionContext.
@@ -26,7 +28,7 @@ StDebuggerAssertionContextTest >> testFindFailedAssertionContextInSenderChain [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerAssertionContextTest >> testFindFailedAssertionResultsInSenderChain [
 	| debugger assertionResult|
 	debugger := StTestDebuggerProvider new debuggerWithFailingAssertionContext.

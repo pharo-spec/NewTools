@@ -1,19 +1,21 @@
 Class {
-	#name : #TStDebuggerExtensionTest,
-	#superclass : #TestCase,
+	#name : 'TStDebuggerExtensionTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'traitUser'
 	],
-	#category : #'NewTools-Debugger-Tests-Model'
+	#category : 'NewTools-Debugger-Tests-Model',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Model'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 TStDebuggerExtensionTest >> setUp [
 	super setUp.
 	traitUser := StDebuggerExtensionGeneratorForTests testClass new
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 TStDebuggerExtensionTest >> tearDown [
 
 	traitUser class displayOrder: 1.
@@ -22,12 +24,12 @@ TStDebuggerExtensionTest >> tearDown [
 	super tearDown
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 TStDebuggerExtensionTest >> testDefaultDisplayOrder [
 	self assert: TStDebuggerExtension defaultDisplayOrder equals: 1
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 TStDebuggerExtensionTest >> testDisplayOrder [
 
 	self
@@ -40,13 +42,13 @@ TStDebuggerExtensionTest >> testDisplayOrder [
 	self assert: traitUser displayOrder equals: 10
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 TStDebuggerExtensionTest >> testExtensionToolNameIsExplicitRequirement [
 
 	self assert: (TStDebuggerExtension>>#debuggerExtensionToolName) isExplicitlyRequired 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 TStDebuggerExtensionTest >> testShowInDebugger [
 
 	self deny: TStDebuggerExtension showInDebugger.
