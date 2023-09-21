@@ -1,6 +1,8 @@
 Extension { #name : 'Exception' }
 
 { #category : '*NewTools-Debugger' }
-Exception >> activateDebuggerExtension: aStDebuggerExtensionPresenter [
+Exception >> showInDebuggerExtension [
 	"By default, exceptions do not activate debugger extensions"
+
+	^ false
 ]

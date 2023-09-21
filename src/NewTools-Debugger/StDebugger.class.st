@@ -280,6 +280,19 @@ StDebugger >> acceptCodeChanges: newSource forContext: aContext [
 	self clearUnsavedCodeChanges
 ]
 
+{ #category : 'extensions' }
+StDebugger >> addExceptionExtensionIn: pages [
+
+	| extensionPresenter |
+	extensionPresenter := self
+		                      instantiate: StExceptionExtensionPresenter
+		                      on: self.	
+	extensionPresenter showInDebugger ifFalse: [ ^ self ].
+	
+	extensionPresenter updateLayout.
+	pages add: (self notebookPageForExtension: extensionPresenter)
+]
+
 { #category : 'commands - support' }
 StDebugger >> buildContextMenus [
 	| stackGroup codeCommands debuggerCommandGroup |
@@ -736,7 +749,7 @@ StDebugger >> initializeExtensionTools [
 	sortedToolClasses addAll: (self class extensionToolsClasses select: [ :s | s showInDebugger ]).	
 		
 	pages := sortedToolClasses collect: [ :toolClass | self instantiateExtensionToolsPage: toolClass ].
-	
+	self addExceptionExtensionIn: pages.		
 	extensionToolsNotebook pages: pages
 ]
 
