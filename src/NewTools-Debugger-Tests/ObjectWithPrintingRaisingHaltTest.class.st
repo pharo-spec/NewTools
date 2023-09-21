@@ -1,10 +1,12 @@
 Class {
-	#name : #ObjectWithPrintingRaisingHaltTest,
-	#superclass : #TestCase,
-	#category : #'NewTools-Debugger-Tests-Model'
+	#name : 'ObjectWithPrintingRaisingHaltTest',
+	#superclass : 'TestCase',
+	#category : 'NewTools-Debugger-Tests-Model',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Model'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 ObjectWithPrintingRaisingHaltTest >> testInspectingObjectWithPrintOnWithHaltOpenInspector [
 	"Make sure that inspecting an object with a broken printOn: does not produce an endless loop.
 	"

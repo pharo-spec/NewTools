@@ -169,7 +169,8 @@ StDebugger class >> enableStackColoring: anObject [
 StDebugger class >> extensionToolsClasses [
 
 	^ TStDebuggerExtension users reject: [ :extensionClass |
-		  extensionClass isOnlyForTests ]
+		  extensionClass isOnlyForTests or: [
+			  extensionClass isDynamicExtension ] ]
 ]
 
 { #category : 'settings' }

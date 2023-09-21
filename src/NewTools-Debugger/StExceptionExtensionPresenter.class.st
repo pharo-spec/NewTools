@@ -11,6 +11,12 @@ Class {
 	#tag : 'View'
 }
 
+{ #category : 'testing' }
+StExceptionExtensionPresenter class >> isDynamicExtension [
+
+	^ true
+]
+
 { #category : 'debugger extension' }
 StExceptionExtensionPresenter class >> showInDebugger [
 	^false

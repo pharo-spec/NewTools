@@ -2,28 +2,30 @@
 A mock command for dezbugger command tree builder tests
 "
 Class {
-	#name : #StMockDebugCommand,
-	#superclass : #StDebuggerCommand,
-	#category : #'NewTools-Debugger-Tests-Utils'
+	#name : 'StMockDebugCommand',
+	#superclass : 'StDebuggerCommand',
+	#category : 'NewTools-Debugger-Tests-Utils',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Utils'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StMockDebugCommand class >> defaultIconName [
 	^ #defaultIconName
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StMockDebugCommand class >> defaultName [
 
 	^ UUID new printString
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StMockDebugCommand class >> defaultShortcut [
 	^ #defaultShortcut
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 StMockDebugCommand >> execute [
 	^self context
 ]

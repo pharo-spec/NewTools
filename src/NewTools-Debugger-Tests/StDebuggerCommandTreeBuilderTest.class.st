@@ -1,13 +1,15 @@
 Class {
-	#name : #StDebuggerCommandTreeBuilderTest,
-	#superclass : #TestCase,
+	#name : 'StDebuggerCommandTreeBuilderTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'builder'
 	],
-	#category : #'NewTools-Debugger-Tests-Model'
+	#category : 'NewTools-Debugger-Tests-Model',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Model'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerCommandTreeBuilderTest >> setUp [
 	"Hooks that subclasses may override to define the fixture of test."
 	
@@ -15,12 +17,12 @@ StDebuggerCommandTreeBuilderTest >> setUp [
 	builder := StDebuggerMockCommandTreeBuilder new
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerCommandTreeBuilderTest >> testDisplayStrategy [
 	self assert: builder displayStrategy class equals: builder class displayStrategy
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerCommandTreeBuilderTest >> testGroup [
 	|rootGroup|
 	rootGroup := (CmCommandGroup named: 'root') asSpecGroup.
@@ -30,7 +32,7 @@ StDebuggerCommandTreeBuilderTest >> testGroup [
 	self assert: builder group description equals: builder class groupDescription
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerCommandTreeBuilderTest >> testGroupBuilding [
 	|rootGroup|
 	rootGroup := (CmCommandGroup named: 'root') asSpecGroup.
@@ -44,12 +46,12 @@ StDebuggerCommandTreeBuilderTest >> testGroupBuilding [
 	self deny: rootGroup groups first isRoot
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerCommandTreeBuilderTest >> testGroupDescription [
 	self assert: builder groupDescription equals: builder class groupDescription
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerCommandTreeBuilderTest >> testGroupName [
 	self assert: builder groupName equals: builder class groupName
 ]

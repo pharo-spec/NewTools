@@ -3,28 +3,30 @@ I'm an object answering to part of the API of Context, but doing nothing.
 You can use me in your tests where messages are sent to a context but you do not actually want to act on a real one, or when you want to record what was done on the context.
 "
 Class {
-	#name : #StMockContext,
-	#superclass : #Object,
+	#name : 'StMockContext',
+	#superclass : 'Object',
 	#instVars : [
 		'stepIntoQuickMethodBooleans'
 	],
-	#category : #'NewTools-Debugger-Tests-Utils'
+	#category : 'NewTools-Debugger-Tests-Utils',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Utils'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StMockContext >> scope [
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StMockContext >> sourceNodeExecuted [
 ]
 
-{ #category : #'debugger access' }
+{ #category : 'debugger access' }
 StMockContext >> stepIntoQuickMethod: aBoolean [
 	self stepIntoQuickMethodBooleans add: aBoolean
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StMockContext >> stepIntoQuickMethodBooleans [
 
 	^ stepIntoQuickMethodBooleans ifNil: [ 
