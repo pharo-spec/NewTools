@@ -52,7 +52,7 @@ ScopesPresenter >> initializePresenters [
 
 { #category : 'initialization' }
 ScopesPresenter >> showScopeEditor [
-	ScopeEditorPresenter new open
+	ScopeNodesPresenter new open
 ]
 
 { #category : 'accessing' }
