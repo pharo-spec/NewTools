@@ -4,71 +4,73 @@ Inspections are ways to see/inspect an object.
 They are the pages seen in the basic inspector.
 "
 Class {
-	#name : #StInspectionPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StInspectionPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'model',
 		'context'
 	],
-	#category : #'NewTools-Inspector-View'
+	#category : 'NewTools-Inspector-View',
+	#package : 'NewTools-Inspector',
+	#tag : 'View'
 }
 
-{ #category : #api }
+{ #category : 'api' }
 StInspectionPresenter >> activateOnDoubleClick [
 
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StInspectionPresenter >> activateOnSingleClick [
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 StInspectionPresenter >> asInspection [
 
 	^ self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectionPresenter >> context [
 
 	^ context
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectionPresenter >> context: aContext [
 
 	context := aContext
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StInspectionPresenter >> enableSlotMenuEntries [
 	^false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StInspectionPresenter >> hasOutputActivationPort [
 
 	^ false
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StInspectionPresenter >> model [
 	^ model
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StInspectionPresenter >> model: anInspectionModel [
 
 	model := anInspectionModel
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StInspectionPresenter >> setModelBeforeInitialization: anInspectionModel [ 
 
 	model := anInspectionModel
 ]
 
-{ #category : #stepping }
+{ #category : 'stepping' }
 StInspectionPresenter >> step [
 	"do nothing, it depends on my children"
 ]

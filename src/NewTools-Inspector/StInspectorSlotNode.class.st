@@ -2,57 +2,59 @@
 I am a variable node for representing the slots of an object. I used the name of a slot as a key. I extract the value from the host object every time #rawValue is called.
 "
 Class {
-	#name : #StInspectorSlotNode,
-	#superclass : #StInspectorNode,
+	#name : 'StInspectorSlotNode',
+	#superclass : 'StInspectorNode',
 	#instVars : [
 		'slot'
 	],
-	#category : #'NewTools-Inspector-Model'
+	#category : 'NewTools-Inspector-Model',
+	#package : 'NewTools-Inspector',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StInspectorSlotNode class >> hostObject: anObject slot: aSlot [
 	^ (self hostObject: anObject)
 		slot: aSlot;
 		yourself
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StInspectorSlotNode >> = anObject [
 
 	^ super = anObject and: [ slot = anObject slot ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorSlotNode >> errorMessage [
 	^ 'error obtaining variable value'
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StInspectorSlotNode >> hash [
 
 	^ super hash bitXor: slot hash
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorSlotNode >> key [
 	^ self slot name
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 StInspectorSlotNode >> printOn: stream [ 
 
 	super printOn: stream.
 	stream << '(' << self slot name << ')'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorSlotNode >> rawValue [
 
 	^  slot read: self hostObject
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StInspectorSlotNode >> save: anObject [
 
 	self hostObject 
@@ -60,12 +62,12 @@ StInspectorSlotNode >> save: anObject [
 		value: anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorSlotNode >> slot [
 	^ slot
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorSlotNode >> slot: aSlot [
 
 	self
@@ -75,7 +77,7 @@ StInspectorSlotNode >> slot: aSlot [
 	slot := aSlot.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorSlotNode >> variableTag [
 	^ 'inst. var'
 ]

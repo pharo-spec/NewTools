@@ -5,17 +5,19 @@ This inspection allow the user to operate with the class of the instance.
 Also, this inspection allows the user to place instance breakpoints (breakpoints that will act when the method where the breakpoint is) is called for the instance being inspected.
 "
 Class {
-	#name : #StMetaBrowserPresenter,
-	#superclass : #StInspectionPresenter,
+	#name : 'StMetaBrowserPresenter',
+	#superclass : 'StInspectionPresenter',
 	#instVars : [
 		'classes',
 		'methods',
 		'source'
 	],
-	#category : #'NewTools-Inspector-View'
+	#category : 'NewTools-Inspector-View',
+	#package : 'NewTools-Inspector',
+	#tag : 'View'
 }
 
-{ #category : #commands }
+{ #category : 'commands' }
 StMetaBrowserPresenter class >> buildCommandsGroupWith: presenter forRoot: aCmCommandsGroup [
 
 	aCmCommandsGroup
@@ -30,7 +32,7 @@ StMetaBrowserPresenter class >> buildCommandsGroupWith: presenter forRoot: aCmCo
 			yourself)
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StMetaBrowserPresenter class >> defaultLayout [
 	
 	^ SpPanedLayout newTopToBottom
@@ -42,13 +44,13 @@ StMetaBrowserPresenter class >> defaultLayout [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StMetaBrowserPresenter >> classListMenu [
 	
 	^ (self rootCommandsGroup / 'classes') asMenuPresenter 
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 StMetaBrowserPresenter >> compile: aString [
 	| compiledSelector cursorPosition |
 
@@ -66,7 +68,7 @@ StMetaBrowserPresenter >> compile: aString [
 			source cursorPositionIndex: cursorPosition ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StMetaBrowserPresenter >> initializePresenters [
 	| classHierarchy |
 	
@@ -99,13 +101,13 @@ StMetaBrowserPresenter >> initializePresenters [
 	classes selectPath: (Array new: classHierarchy size withAll: 1)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StMetaBrowserPresenter >> methodListMenu [
 
 	^ (self rootCommandsGroup / 'methods') asMenuPresenter
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StMetaBrowserPresenter >> methodsOf: aClass [
 
 	aClass ifNil: [ ^ #() ].
@@ -113,25 +115,25 @@ StMetaBrowserPresenter >> methodsOf: aClass [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StMetaBrowserPresenter >> selectedClass [
 
 	^ classes selection selectedItem
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StMetaBrowserPresenter >> selectedMethod [
 
 	^ methods selectedItem
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StMetaBrowserPresenter >> selectedObject [
 
 	^ self selectedMethod ifNil: [ self selectedClass  ]
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StMetaBrowserPresenter >> updateMethods: aClass [
 	
 	methods items: (aClass
@@ -140,7 +142,7 @@ StMetaBrowserPresenter >> updateMethods: aClass [
 	
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StMetaBrowserPresenter >> updateSourceWith: method [
 
 	source userActionDuring: [

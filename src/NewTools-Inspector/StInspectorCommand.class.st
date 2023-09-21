@@ -2,12 +2,14 @@
 A base for inspector toolbar commands.
 "
 Class {
-	#name : #StInspectorCommand,
-	#superclass : #CmCommand,
-	#category : #'NewTools-Inspector-Command'
+	#name : 'StInspectorCommand',
+	#superclass : 'CmCommand',
+	#category : 'NewTools-Inspector-Command',
+	#package : 'NewTools-Inspector',
+	#tag : 'Command'
 }
 
-{ #category : #documentation }
+{ #category : 'documentation' }
 StInspectorCommand class >> addDocumentContextRequiredSelectors: aBuilder [
 	| requiredSelectors |
 
@@ -27,32 +29,32 @@ StInspectorCommand class >> addDocumentContextRequiredSelectors: aBuilder [
 			aBuilder text: '(No required API is defined)' ]
 ]
 
-{ #category : #documentation }
+{ #category : 'documentation' }
 StInspectorCommand class >> buildMicroDownUsing: aBuilder withComment: aString [
 	
 	super buildMicroDownUsing: aBuilder withComment: aString.
 	self addDocumentContextRequiredSelectors: aBuilder
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StInspectorCommand class >> defaultIconName [
 
 	^ nil
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 StInspectorCommand class >> defaultShortcutKey [
 
 	^ nil
 ]
 
-{ #category : #documentation }
+{ #category : 'documentation' }
 StInspectorCommand class >> documentContextRequiredSelectors [
 		
 	^ #()
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StInspectorCommand class >> toolbarCommandsFor: inspector [
 
 	^ self
@@ -60,13 +62,13 @@ StInspectorCommand class >> toolbarCommandsFor: inspector [
 		for: inspector
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StInspectorCommand >> appliesTo: anInspector [
 
 	^ true
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 StInspectorCommand >> asSpecCommand [
 	| command |
 	
@@ -80,13 +82,13 @@ StInspectorCommand >> asSpecCommand [
 	^ command
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 StInspectorCommand >> defaultIconName [
 
 	^ self class defaultIconName
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StInspectorCommand >> initialize [
 
 	super initialize.
@@ -97,25 +99,25 @@ StInspectorCommand >> initialize [
 			<< self class defaultDescription ])	
 ]
 
-{ #category : #execution }
+{ #category : 'execution' }
 StInspectorCommand >> interestingObject [
 
 	^ self model inspectedObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorCommand >> model [
 
 	^ self context model
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorCommand >> owner [ 
 	
 	^ self context owner
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 StInspectorCommand >> shortcutKey [
 
 	^ self class defaultShortcutKey

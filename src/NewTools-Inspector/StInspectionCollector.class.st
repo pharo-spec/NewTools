@@ -15,21 +15,23 @@ The arguments of the pragmas are required because the tabs are calculated lazily
 is required before.
 "
 Class {
-	#name : #StInspectionCollector,
-	#superclass : #Object,
+	#name : 'StInspectionCollector',
+	#superclass : 'Object',
 	#instVars : [
 		'inspectedObject'
 	],
-	#category : #'NewTools-Inspector-Model'
+	#category : 'NewTools-Inspector-Model',
+	#package : 'NewTools-Inspector',
+	#tag : 'Model'
 }
 
-{ #category : #defaults }
+{ #category : 'defaults' }
 StInspectionCollector class >> defaultExtensionPragmas [
 
 	^ #(inspectorPresentationOrder:title:)
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StInspectionCollector class >> on: anObject [
 
 	^ self new 
@@ -37,7 +39,7 @@ StInspectionCollector class >> on: anObject [
 		yourself
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StInspectionCollector >> basicContextFromPragma: aPragma [
 	"Get the context for a pragma or fail if an error happens"
 	| context |
@@ -53,7 +55,7 @@ StInspectionCollector >> basicContextFromPragma: aPragma [
 	^ context
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectionCollector >> collectInspectionContexts [
 	| pragmas |
 	
@@ -67,7 +69,7 @@ StInspectionCollector >> collectInspectionContexts [
 		sorted: #order ascending
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StInspectionCollector >> collectPragmas: aPragmaName [
 
 	^ Pragma
@@ -76,7 +78,7 @@ StInspectionCollector >> collectPragmas: aPragmaName [
 		to: ProtoObject
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StInspectionCollector >> contextFromPragma: aPragma [
 	"Return the inspection context for a pragma.
 	Safe version: Return an error context if the context cannot be obtained"
@@ -89,23 +91,23 @@ StInspectionCollector >> contextFromPragma: aPragma [
 				  yourself ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StInspectionCollector >> extensionPragmas [
 
 	^ self class defaultExtensionPragmas
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectionCollector >> inspectedObject [
 	^ inspectedObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectionCollector >> inspectedObject: anObject [
 	inspectedObject := anObject
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StInspectionCollector >> uniquePragmas: aCollection [
 	| unique |
 	

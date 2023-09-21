@@ -1,10 +1,12 @@
 Class {
-	#name : #StInspection,
-	#superclass : #StInspectionPresenter,
-	#category : #'NewTools-Inspector-Deprecated'
+	#name : 'StInspection',
+	#superclass : 'StInspectionPresenter',
+	#category : 'NewTools-Inspector-Deprecated',
+	#package : 'NewTools-Inspector',
+	#tag : 'Deprecated'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StInspection class >> isDeprecated [ 
 	^ true
 ]
