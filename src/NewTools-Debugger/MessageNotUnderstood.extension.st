@@ -2,7 +2,7 @@ Extension { #name : 'MessageNotUnderstood' }
 
 { #category : '*NewTools-Debugger' }
 MessageNotUnderstood >> debuggerExtensionLayout [ 
-	^self inspectionRaw
+	^StDebuggerMNUExtension on: self
 ]
 
 { #category : '*NewTools-Debugger' }
