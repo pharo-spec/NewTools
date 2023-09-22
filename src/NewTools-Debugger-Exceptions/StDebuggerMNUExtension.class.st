@@ -16,7 +16,14 @@ Class {
 
 { #category : 'actions' }
 StDebuggerMNUExtension >> addMethod [
-	self halt
+
+	| classOrTrait protocol |
+	classOrTrait := classesAndTraits selectedItem.
+	protocol := selectedProtocol selectedItem.
+	self owner debugger
+		createMissingMethodFor: exception message
+		inClass: classOrTrait
+		underProtocol: protocol
 ]
 
 { #category : 'presenters' }
