@@ -80,7 +80,7 @@ StTestDebuggerProvider >> debuggerWithFailingTestContext [
 StTestDebuggerProvider >> debuggerWithGeneratingCodeContext [
 
 	[ self methodThatGeneratesCode ]
-		on: Error
+		on: StGenerateCode
 		do: [ :err |
 			self sessionFor: err signalerContext exception: err.
 			^ self newDebugger ]
