@@ -466,7 +466,7 @@ StDebugger >> createMissingMethod [
 	[ 
 	chosenClass := self requestClassFrom:
 		               self interruptedContext receiver class.
-	self createMissingMethodFor: msg in: chosenClass ]
+	self createMissingMethodFor: msg inClass: chosenClass ]
 		on: Abort
 		do: [ ^ self ].
 		
@@ -474,12 +474,25 @@ StDebugger >> createMissingMethod [
 ]
 
 { #category : 'actions' }
-StDebugger >> createMissingMethodFor: aMessage in: aClass [
+StDebugger >> createMissingMethodFor: aMessage inClass: aClass [
+
+	self debuggerActionModel
+		implement: aMessage
+		inClass: aClass
+		forContext: self interruptedContext.
+		
+	self selectTopContext
+]
+
+{ #category : 'actions' }
+StDebugger >> createMissingMethodFor: aMessage inClass: aClass underProtocol: aProtocol [
 
 	| method |
-	self flag: #DBG_MISSINGTEST.
-	method := self debuggerActionModel implement: aMessage inClass: aClass forContext: self interruptedContext.
-	method isClassified ifFalse: [ method protocol: (self requestProtocolIn: aClass) ].
+	method := self debuggerActionModel
+		          implement: aMessage
+		          inClass: aClass
+		          forContext: self interruptedContext.
+	method protocol: aProtocol.
 
 	self selectTopContext
 ]
