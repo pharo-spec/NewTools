@@ -1,6 +1,6 @@
-Extension { #name : #Variable }
+Extension { #name : 'Variable' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 Variable >> inspectionUsingMethods [
 	<inspectorPresentationOrder: 920 title: 'Using Methods'>
 	

@@ -1,6 +1,6 @@
-Extension { #name : #SymbolicBytecode }
+Extension { #name : 'SymbolicBytecode' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 SymbolicBytecode >> inspectionSource [
 	<inspectorPresentationOrder: 30 title: 'Method Source'>
 

@@ -1,6 +1,6 @@
-Extension { #name : #CompiledBlock }
+Extension { #name : 'CompiledBlock' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 CompiledBlock >> inspectionSource [
 	<inspectorPresentationOrder: 20 title: 'Method Source'>
 	

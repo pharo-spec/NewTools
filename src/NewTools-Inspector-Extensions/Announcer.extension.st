@@ -1,12 +1,12 @@
-Extension { #name : #Announcer }
+Extension { #name : 'Announcer' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 Announcer >> hasSubscriptions [
 	
 	^ self numberOfSubscriptions isZero not
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 Announcer >> inspectionSubscriptions [
 	<inspectorPresentationOrder: 0 title: 'Subscriptions'>
 	| table |
@@ -38,7 +38,7 @@ Announcer >> inspectionSubscriptions [
 		yourself
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 Announcer >> inspectionSubscriptionsContext: aContext [ 
 	
 	aContext active: self hasSubscriptions
