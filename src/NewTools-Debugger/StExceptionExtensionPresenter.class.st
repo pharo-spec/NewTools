@@ -30,7 +30,7 @@ StExceptionExtensionPresenter class >> showInDebugger: aBoolean [
 
 { #category : 'debugger extension' }
 StExceptionExtensionPresenter >> debuggerExtensionToolName [
-	^'Exception'
+	^debugger exception debuggerExtensionName
 ]
 
 { #category : 'layout' }

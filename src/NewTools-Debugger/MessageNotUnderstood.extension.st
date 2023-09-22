@@ -6,6 +6,12 @@ MessageNotUnderstood >> debuggerExtensionLayout [
 ]
 
 { #category : '*NewTools-Debugger' }
+MessageNotUnderstood >> debuggerExtensionName [
+
+	^ 'Create method'
+]
+
+{ #category : '*NewTools-Debugger' }
 MessageNotUnderstood >> showInDebuggerExtension [
 
 	^ true
