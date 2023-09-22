@@ -14,6 +14,11 @@ Class {
 	#package : 'NewTools-Debugger-Exceptions'
 }
 
+{ #category : 'actions' }
+StDebuggerMNUExtension >> addMethod [
+	self halt
+]
+
 { #category : 'presenters' }
 StDebuggerMNUExtension >> addProtocols: protocols [
 	|sortedProtocols|
@@ -102,7 +107,7 @@ StDebuggerMNUExtension >> initializePresenters [
 	createMethodButton := self newButton
 		icon: (self iconNamed: #add);
 		label: 'Add method';
-		action: [ self halt ]
+		action: [ self addMethod ]
 
 	
 
