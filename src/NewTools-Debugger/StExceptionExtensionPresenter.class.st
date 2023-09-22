@@ -52,3 +52,8 @@ StExceptionExtensionPresenter >> updateLayout [
 			 add: debugger exception debuggerExtensionLayout;
 			 yourself)
 ]
+
+{ #category : 'initialization' }
+StExceptionExtensionPresenter >> updatePresenter [
+	
+]

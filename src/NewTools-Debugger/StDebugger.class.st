@@ -1486,7 +1486,7 @@ StDebugger >> updateInspectorFromContext: aContext [
 
 { #category : 'updating - widgets' }
 StDebugger >> updatePredicatesForContext: aContext [
-
+	self flag: 'Seems never called: clean.'.
 	self debuggerActionModel updateContextPredicate
 ]
 
