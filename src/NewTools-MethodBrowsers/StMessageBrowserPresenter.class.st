@@ -139,7 +139,7 @@ StMessageBrowserPresenter >> autoSelect: aSelector [
 { #category : #announcements }
 StMessageBrowserPresenter >> classRenamed: anAnnouncement [ 
 	"this method forces the announcement to be handled in the UI process"
-	UIManager default defer: [ 
+	self defer: [ 
 		self handleClassRenamed: anAnnouncement ]
 ]
 
@@ -346,7 +346,7 @@ StMessageBrowserPresenter >> messages: aCollection [
 { #category : #announcements }
 StMessageBrowserPresenter >> methodAdded: anAnnouncement [
 	"this method forces the announcement to be handled in the UI process"
-	UIManager default defer: [ 
+	self defer: [ 
 		self handleMethodAdded: anAnnouncement ]
 ]
 
@@ -358,14 +358,14 @@ StMessageBrowserPresenter >> methodClassNameForItem: anItem [
 { #category : #announcements }
 StMessageBrowserPresenter >> methodModified: anAnnouncement [
 	"this method forces the announcement to be handled in the UI process"
-	UIManager default defer:  [	
+	self defer:  [	
 		self handleMethodModified: anAnnouncement ]
 ]
 
 { #category : #announcements }
 StMessageBrowserPresenter >> methodRemoved: anAnnouncement [
 	"this method forces the announcement to be handled in the UI process"
-	UIManager default defer:  [ 
+	self defer:  [ 
 		self handleMethodRemoved: anAnnouncement ]
 ]
 

@@ -465,7 +465,7 @@ StSingleCritiqueResultListPresenter >> updateList [
 
 	| delay |
 	self critiquesOf: rule.
-	delay := [ UIManager default defer: [ critiquesModel updateList ] ]
+	delay := [ self defer: [ critiquesModel updateList ] ]
 		          schedule
 ]
 

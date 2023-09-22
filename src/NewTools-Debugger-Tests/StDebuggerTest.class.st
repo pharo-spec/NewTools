@@ -82,7 +82,7 @@ StDebuggerTest >> replaceMethodWithQuickMethodStepping [
 	dbg code type: newSource.
 	dbg code update.
 	dbg acceptCodeChanges: newSource forContext: context.
-	dbg updateStep
+	dbg debuggerActionModel updateIfAble 
 ]
 
 { #category : 'running' }
@@ -114,14 +114,18 @@ StDebuggerTest >> tearDown [
 
 	"In tests, should we use `debugger` when we need a fully initialized debugger and `dbg` when we just need a debugger created with #basicNew? Still, isn't it weird to clear the session only for a fully initialized debugger but not for a debugger created with #basicNew? Both have a session. Maybe this implies that `dbg`  should only use the instance variable `session` and nothing else. These specifications should be written somewhere, in the doc of the class maybe."
 	debugger ifNotNil: [
-		debugger unsubscribeFromSystemAnnouncer.
 		debugger close.
-		debugger session ifNotNil: [ :s | s clear ] ].
+		debugger unsubscribeFromSystemAnnouncer.
+		debugger debuggerActionModel ifNotNil: [ :actionModel |
+			actionModel clear.
+			actionModel session ifNotNil: [ :s | s clear ] ] ].
+
 	StTestDebuggerProvider removeSelector: #foobar.
 	StDebuggerObjectForTests
 		compile:
 		'haltingMethod <haltOrBreakpointForTesting> self halt. ^self'
 		classified: 'util'.
+
 	StDebuggerActionModel shouldFilterStack: shouldFilterStack.
 	StTestDebuggerProvider removeSelector: #foobar.
 	oldMethodToSourceDictionary associationsSelect: [ :assoc |
@@ -154,7 +158,24 @@ StDebuggerTest >> testAcceptCodeChangesForContext [
 	self assert: dbg code text equals: newSource
 ]
 
-{ #category : 'tests - code pane' }
+{ #category : #tests }
+StDebuggerTest >> testActionModelSubscription [
+
+	self assert: self debugger debuggerActionModel isNil.
+
+	debugger session: session.
+
+	self assert: debugger debuggerActionModel isNotNil.
+	self assert:
+		(debugger debuggerActionModel hasSubscriber: debugger).
+
+	debugger unsubscribeFromActionModel.
+
+	self deny:
+		(debugger debuggerActionModel hasSubscriber: debugger)
+]
+
+{ #category : #'tests - code pane' }
 StDebuggerTest >> testCancelCodeChangesFor [
 	| firstContext lastContext |
 	dbg := self debuggerOn: session.
@@ -186,18 +207,21 @@ StDebuggerTest >> testClearUnsavedChanges [
 
 { #category : 'tests - actions' }
 StDebuggerTest >> testClose [
-	| windowPresenter |
-	
+
+	| windowPresenter actionModel |
 	windowPresenter := SpWindowPresenter new.
 	windowPresenter windowIsOpened.
-	debugger := (self debuggerOn: session).	
-	windowPresenter presenter: debugger.	
+	debugger := self debuggerOn: session.
+	actionModel := debugger debuggerActionModel.
+	windowPresenter presenter: debugger.
 	debugger initializeWindow: windowPresenter.
-	
+
 	"We trigger the closing from the presenter instead of the debugger itself,
 	because the window is not really open so the debugger will not close through debugger close."
-	windowPresenter windowClosed.	
-	self deny: (SystemAnnouncer uniqueInstance hasSubscriber: debugger)
+	windowPresenter windowClosed.
+	self deny: (SystemAnnouncer uniqueInstance hasSubscriber: debugger).
+	self deny:
+		(actionModel hasSubscriber: debugger)
 ]
 
 { #category : 'tests - code pane' }
@@ -614,7 +638,7 @@ StDebuggerTest >> testIsInSelectedContextClass [
 	| stackTable context process |
 	context := thisContext.
 	process := Process forContext: context priority: Processor userInterruptPriority.
-	session := DebugSession named: 'test session' on: process startedAt: context.
+	session := DebugSession named: 'test session stDebuggerTestTestIsInSelectedContextClass' on: process startedAt: context.
 	session exception: OupsNullException new.
 
 	debugger := self debuggerOn: session.
@@ -634,7 +658,7 @@ StDebuggerTest >> testIsInSelectedContextPackage [
 	| stackTable context process |
 	context := thisContext.
 	process := Process forContext: context priority: Processor userInterruptPriority.
-	session := DebugSession named: 'test session' on: process startedAt: context.
+	session := DebugSession named: 'test session stDebuggerTesttestIsInSelectedContextPackage' on: process startedAt: context.
 	session exception: OupsNullException new.
 
 	debugger := self debuggerOn: session.
