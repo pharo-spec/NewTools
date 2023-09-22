@@ -457,7 +457,7 @@ StDebuggerTest >> testCreateMissingMethodWithUnfilteredStackUpdatesCodePane [
 	"we create the missing method #foobar"
 	debugger
 		createMissingMethodFor: dnuMessage
-		in: StTestDebuggerProvider.
+		inClass: StTestDebuggerProvider.
 
 	method := StTestDebuggerProvider methodDictionary at: #foobar.
 
