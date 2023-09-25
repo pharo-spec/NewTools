@@ -6,37 +6,39 @@ I help in creating simple key/value inspector panels.
 Check my usage (class references) for examples.
 "
 Class {
-	#name : #StSimpleInspectorBuilder,
-	#superclass : #Object,
+	#name : 'StSimpleInspectorBuilder',
+	#superclass : 'Object',
 	#instVars : [
 		'specBuilder',
 		'info'
 	],
-	#category : #'NewTools-Inspector-Model'
+	#category : 'NewTools-Inspector-Model',
+	#package : 'NewTools-Inspector',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StSimpleInspectorBuilder class >> on: aSpecBuilder [
 	^ self new on: aSpecBuilder; yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSimpleInspectorBuilder >> initialize [ 
 	super initialize.
 	info := OrderedCollection new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleInspectorBuilder >> key: key value: value [
 	info add: key -> value
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSimpleInspectorBuilder >> on: aSpecBuilder [
 	specBuilder := aSpecBuilder 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleInspectorBuilder >> table [
 	| keysColumn valuesColumn |
 	keysColumn := SpStringTableColumn title: #key evaluated: [ :anAssociation | anAssociation key ].

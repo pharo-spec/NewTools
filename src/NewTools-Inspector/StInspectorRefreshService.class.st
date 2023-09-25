@@ -3,8 +3,8 @@ I'm a service to process refresh of inspectors.
 I keep a registry of all opened inspectors and execute the required stepping (by default every 500ms), but I'm only active if I have inspectors registered (otherwise, I will stop until a new inspector is registered) 
 "
 Class {
-	#name : #StInspectorRefreshService,
-	#superclass : #TKTService,
+	#name : 'StInspectorRefreshService',
+	#superclass : 'TKTService',
 	#instVars : [
 		'inspectors',
 		'mutex'
@@ -12,22 +12,24 @@ Class {
 	#classInstVars : [
 		'uniqueInstance'
 	],
-	#category : #'NewTools-Inspector-View'
+	#category : 'NewTools-Inspector-View',
+	#package : 'NewTools-Inspector',
+	#tag : 'View'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StInspectorRefreshService class >> new [
 
 	self error: 'Use #uniqueInstance'
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StInspectorRefreshService class >> uniqueInstance [
 
 	^ uniqueInstance ifNil: [ uniqueInstance := self basicNew initialize ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StInspectorRefreshService >> initialize [
 
 	super initialize.
@@ -36,13 +38,13 @@ StInspectorRefreshService >> initialize [
 	inspectors := Set new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorRefreshService >> name [
 	
 	^ 'StInspector Refresh Service'
 ]
 
-{ #category : #registry }
+{ #category : 'registry' }
 StInspectorRefreshService >> register: anInspector [
 
 	mutex critical: [ 
@@ -51,13 +53,13 @@ StInspectorRefreshService >> register: anInspector [
 			self start ] ].
 ]
 
-{ #category : #stepping }
+{ #category : 'stepping' }
 StInspectorRefreshService >> stepService [
 
 	inspectors do: [ :each | each step ]
 ]
 
-{ #category : #registry }
+{ #category : 'registry' }
 StInspectorRefreshService >> unregister: anInspector [
 
 	mutex critical: [ 

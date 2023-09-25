@@ -1,10 +1,12 @@
 Class {
-	#name : #StMetaBrowser,
-	#superclass : #StMetaBrowserPresenter,
-	#category : #'NewTools-Inspector-Deprecated'
+	#name : 'StMetaBrowser',
+	#superclass : 'StMetaBrowserPresenter',
+	#category : 'NewTools-Inspector-Deprecated',
+	#package : 'NewTools-Inspector',
+	#tag : 'Deprecated'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StMetaBrowser class >> isDeprecated [ 
 	^ true
 ]

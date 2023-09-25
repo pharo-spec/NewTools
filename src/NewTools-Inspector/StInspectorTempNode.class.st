@@ -3,15 +3,17 @@ I am a variable node for representing a temporary variable stored in a Context o
 This includes  local variables and method parameters.
 "
 Class {
-	#name : #StInspectorTempNode,
-	#superclass : #StInspectorNode,
+	#name : 'StInspectorTempNode',
+	#superclass : 'StInspectorNode',
 	#instVars : [
 		'tempVariable'
 	],
-	#category : #'NewTools-Inspector-Model'
+	#category : 'NewTools-Inspector-Model',
+	#package : 'NewTools-Inspector',
+	#tag : 'Model'
 }
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StInspectorTempNode >> = anObject [
 
 	"Answer whether the receiver and anObject represent the same object."
@@ -22,12 +24,12 @@ StInspectorTempNode >> = anObject [
 		  hostObject = anObject hostObject ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorTempNode >> children [
 	^ #()
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StInspectorTempNode >> hash [
 
 	"Answer an integer value that is related to the identity of the receiver."
@@ -35,12 +37,12 @@ StInspectorTempNode >> hash [
 	^ tempVariable hash bitXor: (hostObject hash)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorTempNode >> key [
 	^ tempVariable name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorTempNode >> rawValue [
 	"Answer the object value of this object variable (slot, indexed attribute, computed value)."
 
@@ -51,17 +53,17 @@ StInspectorTempNode >> rawValue [
 		  do: [ :err | 'cannot read ' , tempVariable name ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorTempNode >> tempVariable [
 	^ tempVariable
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorTempNode >> tempVariable: anObject [
 	tempVariable := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorTempNode >> variableTag [
 
 	^ tempVariable variableTag

@@ -3,15 +3,17 @@ This is a utility class for printing objects to Text or String.
 
 "
 Class {
-	#name : #StObjectPrinter,
-	#superclass : #Object,
+	#name : 'StObjectPrinter',
+	#superclass : 'Object',
 	#classVars : [
 		'DisplayStringLength'
 	],
-	#category : #'NewTools-Inspector-Model'
+	#category : 'NewTools-Inspector-Model',
+	#package : 'NewTools-Inspector',
+	#tag : 'Model'
 }
 
-{ #category : #converting }
+{ #category : 'converting' }
 StObjectPrinter class >> asNonTruncatedTextFrom: anObject [
 	"I return a representation of the receiver in which all lines breaks 
 	are replaced by spaces. I return a String unless there is an error 
@@ -21,7 +23,7 @@ StObjectPrinter class >> asNonTruncatedTextFrom: anObject [
 		do: [ Text string: 'error printing' attribute: TextColor red ]
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 StObjectPrinter class >> asTruncatedTextFrom: anObject [
 	"I return a truncated representation of the receiver in which all lines breaks 
 	are replaced by spaces. I return a String unless there is an error printing the
@@ -31,18 +33,18 @@ StObjectPrinter class >> asTruncatedTextFrom: anObject [
 		do: [ :error | self textFromError: error ]
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StObjectPrinter class >> displayStringLength [
 	^ DisplayStringLength ifNil: [ DisplayStringLength := 100 ]
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StObjectPrinter class >> displayStringLength: anInteger [ 
 	
 	DisplayStringLength := anInteger
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StObjectPrinter class >> settingsOn: aBuilder [
 	<systemsettings>
 		
@@ -54,7 +56,7 @@ StObjectPrinter class >> settingsOn: aBuilder [
 		label: 'Display String length in Collection'
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 StObjectPrinter class >> textFromError: anError [
 
 	| message |
@@ -62,12 +64,12 @@ StObjectPrinter class >> textFromError: anError [
 	^ 'Error printing: ', message
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 StObjectPrinter >> asNonTruncatedTextFrom: anObject [
 	^ self class asNonTruncatedTextFrom: anObject
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 StObjectPrinter >> asTruncatedTextFrom: anObject [
 	^ self class asTruncatedTextFrom: anObject
 ]
