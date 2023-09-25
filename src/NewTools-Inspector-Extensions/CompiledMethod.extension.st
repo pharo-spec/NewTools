@@ -1,6 +1,6 @@
-Extension { #name : #CompiledMethod }
+Extension { #name : 'CompiledMethod' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 CompiledMethod >> inspectionPragmas [
 	<inspectorPresentationOrder: 50 title: 'Pragmas'> 
 
@@ -10,13 +10,13 @@ CompiledMethod >> inspectionPragmas [
 		yourself
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 CompiledMethod >> inspectionPragmasContext: aContext [ 
 	
 	aContext active: self hasPragmas
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 CompiledMethod >> inspectionSource [
 	<inspectorPresentationOrder: 20 title: 'Method Source'>
 	

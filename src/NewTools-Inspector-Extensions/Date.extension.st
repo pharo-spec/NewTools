@@ -1,6 +1,6 @@
-Extension { #name : #Date }
+Extension { #name : 'Date' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 Date >> inspectDateIn: specBuilder [
 	<inspectorPresentationOrder: 30 title: 'Details'>
 	

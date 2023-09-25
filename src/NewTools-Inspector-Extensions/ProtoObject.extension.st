@@ -1,6 +1,6 @@
-Extension { #name : #ProtoObject }
+Extension { #name : 'ProtoObject' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 ProtoObject >> allInspectorNodes [
 	"Answer a list of attributes as nodes"
 
@@ -8,7 +8,7 @@ ProtoObject >> allInspectorNodes [
 		self inspectorNodes
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 ProtoObject >> inspectionContexts [
 	"This is a utility method that collects all presentations for the current object.
 	By default, it simply looks for the #inspectorPresentationOrder:title: pragma.
@@ -18,7 +18,7 @@ ProtoObject >> inspectionContexts [
 	^ (StInspectionCollector on: self) collectInspectionContexts
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 ProtoObject >> inspectionRaw [
 	"This is the most basic presentation showing the state of the object"
 	<inspectorPresentationOrder: 900 title: 'Raw'>
@@ -26,20 +26,20 @@ ProtoObject >> inspectionRaw [
 	^ StRawInspectionPresenter on: self
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 ProtoObject >> inspectorIconName [
 
 	^ nil
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 ProtoObject >> inspectorNodes [ 
 	"Answer a list of attributes as nodes"
 
 	^ (StNodeCollector for: self) slotNodes
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 ProtoObject >> inspectorPerform: aSymbol [
 	"This method is required by the inspector infrastructure (in order to inspect properly 
 	 ProtoObject and its direct decendants). 
@@ -49,7 +49,7 @@ ProtoObject >> inspectorPerform: aSymbol [
 	^ self primitiveFailed
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 ProtoObject >> inspectorPerform: aSymbol with: anObject [
 	"This method is required by the inspector infrastructure (in order to inspect properly 
 	 ProtoObject and its direct decendants). 

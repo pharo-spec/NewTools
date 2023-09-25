@@ -1,6 +1,6 @@
-Extension { #name : #Pragma }
+Extension { #name : 'Pragma' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 Pragma >> inspectionSourceCodeMethod [
 	<inspectorPresentationOrder: 30 title: 'Method'>
 

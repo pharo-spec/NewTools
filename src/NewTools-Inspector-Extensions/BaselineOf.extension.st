@@ -1,6 +1,6 @@
-Extension { #name : #BaselineOf }
+Extension { #name : 'BaselineOf' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 BaselineOf >> inspectionProject [
 	<inspectorPresentationOrder: 10 title: 'Project'>
 	| specs |
@@ -18,7 +18,7 @@ BaselineOf >> inspectionProject [
 		yourself
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 BaselineOf >> inspectionRecord [
 	<inspectorPresentationOrder: 20 title: 'Record'>
 	| specs |

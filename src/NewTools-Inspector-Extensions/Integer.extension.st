@@ -1,6 +1,6 @@
-Extension { #name : #Integer }
+Extension { #name : 'Integer' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 Integer >> inspectIntegerIn: specBuilder [
 	<inspectorPresentationOrder: 30 title: 'Integer'> 
 	
