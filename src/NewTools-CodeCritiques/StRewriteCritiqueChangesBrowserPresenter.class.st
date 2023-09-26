@@ -11,16 +11,18 @@ You can open me whit:
 
 "
 Class {
-	#name : #StRewriteCritiqueChangesBrowserPresenter,
-	#superclass : #RewriteRuleChangesBrowser,
+	#name : 'StRewriteCritiqueChangesBrowserPresenter',
+	#superclass : 'RewriteRuleChangesBrowser',
 	#instVars : [
 		'changeUnifiedOption',
 		'changeSplitOption'
 	],
-	#category : #'NewTools-CodeCritiques-Transform '
+	#category : 'NewTools-CodeCritiques-Transform ',
+	#package : 'NewTools-CodeCritiques',
+	#tag : 'Transform '
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 StRewriteCritiqueChangesBrowserPresenter class >> defaultSpec [
 
 	^ SpBoxLayout newTopToBottom
@@ -51,14 +53,14 @@ StRewriteCritiqueChangesBrowserPresenter class >> defaultSpec [
 		  yourself
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StRewriteCritiqueChangesBrowserPresenter class >> open [
 
 	<example>
 	^ self new open
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriteCritiqueChangesBrowserPresenter >> applyChangesInSplit [
    changeTree selectedItem ifNotNil: [ 
 	diffView := self newDiff.
@@ -66,7 +68,7 @@ StRewriteCritiqueChangesBrowserPresenter >> applyChangesInSplit [
 	self update.].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriteCritiqueChangesBrowserPresenter >> applyChangesInUnified [
 changeTree selectedItem ifNotNil: [ 
 	diffView := SpMorphPresenter new morph: (StUnifiedDiffChangesMorph
@@ -75,14 +77,14 @@ changeTree selectedItem ifNotNil: [
 	self update].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriteCritiqueChangesBrowserPresenter >> changes: anObject [
 	changes := anObject.
 	selectedChanges := OrderedCollection with: changes first.
 	self updateChanges
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriteCritiqueChangesBrowserPresenter >> connectPresenters [
 
 	super connectPresenters.
@@ -93,7 +95,7 @@ StRewriteCritiqueChangesBrowserPresenter >> connectPresenters [
 		
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriteCritiqueChangesBrowserPresenter >> initializePresenters [
 
 	super initializePresenters.
@@ -104,21 +106,21 @@ StRewriteCritiqueChangesBrowserPresenter >> initializePresenters [
 		self buildDiffFor: selection selectedItem ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriteCritiqueChangesBrowserPresenter >> newSplitRadioButton [
 	^ self newRadioButton
 	label: 'Split Diff';
 	state: false.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriteCritiqueChangesBrowserPresenter >> newUnifiedRadioButton [
 	^ self newRadioButton
 	label: 'Unified Diff';
 		state: false.
 ]
 
-{ #category : #update }
+{ #category : 'update' }
 StRewriteCritiqueChangesBrowserPresenter >> updateChanges [ 
 	super updateChanges.
 	changeTree roots

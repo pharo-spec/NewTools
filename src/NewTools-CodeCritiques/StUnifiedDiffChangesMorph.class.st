@@ -6,16 +6,18 @@ I interact with StRewriteCritiqueChangesBrowserPresenter.
 
 "
 Class {
-	#name : #StUnifiedDiffChangesMorph,
-	#superclass : #DiffMorph,
+	#name : 'StUnifiedDiffChangesMorph',
+	#superclass : 'DiffMorph',
 	#instVars : [
 		'unifiedText',
 		'copyDstMorph'
 	],
-	#category : #'NewTools-CodeCritiques-Transform '
+	#category : 'NewTools-CodeCritiques-Transform ',
+	#package : 'NewTools-CodeCritiques',
+	#tag : 'Transform '
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StUnifiedDiffChangesMorph class >> from: old to: new [
 	"Answer a new instance of the receiver with the given
 	old and new text."
@@ -25,7 +27,7 @@ StUnifiedDiffChangesMorph class >> from: old to: new [
 		to: new
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StUnifiedDiffChangesMorph >> calculatedJoinMappings [
 	"Calculate the join parameters between src and dst and answer"
 
@@ -152,7 +154,7 @@ StUnifiedDiffChangesMorph >> calculatedJoinMappings [
 	^ joins
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StUnifiedDiffChangesMorph >> from: old to: new [
 	"Set the old (src) and new (dst) text."
 	self sourceTextModel setText: old.
@@ -169,7 +171,7 @@ StUnifiedDiffChangesMorph >> from: old to: new [
 		applyMap
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StUnifiedDiffChangesMorph >> from: old to: new contextClass: aClass [
 
 	"Set the old (src) and new (dst) text."
@@ -188,7 +190,7 @@ StUnifiedDiffChangesMorph >> from: old to: new contextClass: aClass [
 		applyMap
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StUnifiedDiffChangesMorph >> initialize [
 	"Initialize the receiver."
 
@@ -196,14 +198,14 @@ StUnifiedDiffChangesMorph >> initialize [
 	copyDstMorph := self newDstMorph .
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StUnifiedDiffChangesMorph >> joinSectionClass [
 	"Answer the class to use for a new join section."
 
 	^CBUnifiedDiffJoinSection
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StUnifiedDiffChangesMorph >> newCopyMorph [
 	"Answer a new dst text morph."
 	|copy|
@@ -216,7 +218,7 @@ StUnifiedDiffChangesMorph >> newCopyMorph [
 		yourself
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StUnifiedDiffChangesMorph >> newDstMorph [
 	"Answer a new dst text morph."
 
@@ -228,7 +230,7 @@ StUnifiedDiffChangesMorph >> newDstMorph [
 		yourself
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StUnifiedDiffChangesMorph >> newJoinSectionFrom: srcRange to: dstRange copyRange: copyRange withType: aType flagRemove: aNumber [ 
 	"Answer a new join section."
 	
@@ -284,7 +286,7 @@ StUnifiedDiffChangesMorph >> newJoinSectionFrom: srcRange to: dstRange copyRange
 		flagRemove: aNumber
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StUnifiedDiffChangesMorph >> newStringOfDifference [
 	unifiedText := String streamContents: [:s | (self difference  collect: #value) asStringOn: s delimiter: String cr].
 	copyDstMorph :=  self newCopyMorph.

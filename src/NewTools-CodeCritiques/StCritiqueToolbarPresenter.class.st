@@ -12,8 +12,8 @@ You can open me whit:
 
 "
 Class {
-	#name : #StCritiqueToolbarPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StCritiqueToolbarPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'critiqueHolder',
 		'browseButton',
@@ -23,10 +23,12 @@ Class {
 		'cache',
 		'ruleHolder'
 	],
-	#category : #'NewTools-CodeCritiques-Parts'
+	#category : 'NewTools-CodeCritiques-Parts',
+	#package : 'NewTools-CodeCritiques',
+	#tag : 'Parts'
 }
 
-{ #category : #layout }
+{ #category : 'layout' }
 StCritiqueToolbarPresenter class >> defaultLayout [
 
 	<spec>
@@ -37,40 +39,40 @@ StCritiqueToolbarPresenter class >> defaultLayout [
 		  yourself
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StCritiqueToolbarPresenter class >> open [
 
 	<example>
 	^ self new open
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StCritiqueToolbarPresenter class >> title [
 
 	^ 'Critique Toolbar'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueToolbarPresenter >> addCritiqueToFalsePositive [
 
 	critiqueHolder value ifNotNil: [ :item | 
 		cache addFalsePositive: item forRule: ruleHolder value ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueToolbarPresenter >> browseCritique [
 
 	critiqueHolder value ifNotNil: [ :elem | 
 		^ elem sourceAnchor entity browse ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueToolbarPresenter >> cache: aCache [
 
 	cache := aCache
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueToolbarPresenter >> critique: aCritique [
 
 	critiqueHolder value: aCritique.
@@ -78,25 +80,25 @@ StCritiqueToolbarPresenter >> critique: aCritique [
 		(aCritique isNotNil and: [ aCritique providesChange ])
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueToolbarPresenter >> critiqueHolder [
 
 	^ critiqueHolder
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueToolbarPresenter >> critiqueHolder: anObject [
 
 	critiqueHolder := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueToolbarPresenter >> falsePositiveButton [
 
 	^ falsePositiveButton
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiqueToolbarPresenter >> initialize [
 
 	super initialize.
@@ -108,7 +110,7 @@ StCritiqueToolbarPresenter >> initialize [
 	self setFocusOrder
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueToolbarPresenter >> newBrowseButton [
 
 	^ self newButton
@@ -119,7 +121,7 @@ StCritiqueToolbarPresenter >> newBrowseButton [
 		  yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueToolbarPresenter >> newFalsePositiveButton [
 
 	^ self newButton
@@ -129,7 +131,7 @@ StCritiqueToolbarPresenter >> newFalsePositiveButton [
 		  yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueToolbarPresenter >> newTransformButton [
 
 	^ self newButton
@@ -140,25 +142,25 @@ StCritiqueToolbarPresenter >> newTransformButton [
 		  yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueToolbarPresenter >> rule: aRule [
 
 	ruleHolder value: aRule
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueToolbarPresenter >> ruleHolder [
 
 	^ ruleHolder
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueToolbarPresenter >> ruleHolder: anObject [
 
 	ruleHolder := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueToolbarPresenter >> setFocusOrder [
 
 	self focusOrder
@@ -168,13 +170,13 @@ StCritiqueToolbarPresenter >> setFocusOrder [
 		add: selectDiffButton
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueToolbarPresenter >> transformButton [
 
 	^ transformButton
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueToolbarPresenter >> transformCritique [
 
 	critiqueHolder value ifNotNil: [ :critique | 
