@@ -3,27 +3,29 @@ A join section usable for unified diff
 
 "
 Class {
-	#name : #CBUnifiedDiffJoinSection,
-	#superclass : #JoinSection,
+	#name : 'CBUnifiedDiffJoinSection',
+	#superclass : 'JoinSection',
 	#instVars : [
 		'copyJoin'
 	],
-	#category : #'NewTools-CodeCritiques-Transform '
+	#category : 'NewTools-CodeCritiques-Transform ',
+	#package : 'NewTools-CodeCritiques',
+	#tag : 'Transform '
 }
 
-{ #category : #copying }
+{ #category : 'copying' }
 CBUnifiedDiffJoinSection >> copy: anObject [
 
 	copyJoin := anObject
 ]
 
-{ #category : #copying }
+{ #category : 'copying' }
 CBUnifiedDiffJoinSection >> copyJoin [
 
 	^ copyJoin
 ]
 
-{ #category : #copying }
+{ #category : 'copying' }
 CBUnifiedDiffJoinSection >> copyLineRange: anInterval [
 
 	"Set the src lneRange."
@@ -31,7 +33,7 @@ CBUnifiedDiffJoinSection >> copyLineRange: anInterval [
 	self copyJoin lineRange: anInterval
 ]
 
-{ #category : #copying }
+{ #category : 'copying' }
 CBUnifiedDiffJoinSection >> copyRange: anInterval [
 
 	"Set the  copy range"
@@ -40,7 +42,7 @@ CBUnifiedDiffJoinSection >> copyRange: anInterval [
 	self updateShape
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 CBUnifiedDiffJoinSection >> createHighlights [
 
 	"Create and store the src and dst highlights."
@@ -73,7 +75,7 @@ CBUnifiedDiffJoinSection >> createHighlights [
 	self copyJoin highlights: c
 ]
 
-{ #category : #copying }
+{ #category : 'copying' }
 CBUnifiedDiffJoinSection >> createHighlightsFrom: srcPara to: dstPara withCopy: copyPara flagRemove: aNumber [
 
 	"Create and store the src and dst highlights.
@@ -141,7 +143,7 @@ CBUnifiedDiffJoinSection >> createHighlightsFrom: srcPara to: dstPara withCopy: 
 				color: self removalHighlightColor ] ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 CBUnifiedDiffJoinSection >> initialize [
 
 	super initialize.
