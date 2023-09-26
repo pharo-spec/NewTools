@@ -2,44 +2,45 @@
 I will step the execution until a class is instantiated
 "
 Class {
-	#name : #SindarinStepToNextInstanceCreation,
-	#superclass : #SindarinCommand,
+	#name : 'SindarinStepToNextInstanceCreation',
+	#superclass : 'SindarinCommand',
 	#instVars : [
 		'errorString',
 		'maxDepth'
 	],
-	#category : #'NewTools-Sindarin-Commands'
+	#category : 'NewTools-Sindarin-Commands',
+	#package : 'NewTools-Sindarin-Commands'
 }
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinStepToNextInstanceCreation class >> defaultIconName [
 	^ #smallNew
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinStepToNextInstanceCreation class >> defaultMaxDepth [
 	^1000
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinStepToNextInstanceCreation class >> defaultName [
 	<toolbarExtensionDebugCommand: 50>
 	<codeExtensionDebugCommand: 50>
 	^ 'Next instance creation'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SindarinStepToNextInstanceCreation >> errorDuringSearchString [
 
 	^ 'Search interrupted due to exception.'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SindarinStepToNextInstanceCreation >> errorString [
 	^errorString
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 SindarinStepToNextInstanceCreation >> execute [
 
 	| debugger sender depth |
@@ -67,25 +68,25 @@ SindarinStepToNextInstanceCreation >> execute [
 			for: self debuggerPresenter toolbar ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SindarinStepToNextInstanceCreation >> maxDepth [
 
 	^ maxDepth ifNil: [ maxDepth := self class defaultMaxDepth ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SindarinStepToNextInstanceCreation >> maxDepth: anObject [
 
 	maxDepth := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SindarinStepToNextInstanceCreation >> notFoundErrorString [
 
 	^ 'No instance creation found in 1000 debugger steps: try again to continue your search.'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SindarinStepToNextInstanceCreation >> notFoundInCurrentContextString [
 
 	^ 'No instance creation found in this context.'

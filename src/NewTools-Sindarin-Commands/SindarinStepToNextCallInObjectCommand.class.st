@@ -2,30 +2,31 @@
 I will step the execution from a context until the next call to the same object as that context's receiver.
 "
 Class {
-	#name : #SindarinStepToNextCallInObjectCommand,
-	#superclass : #SindarinStepToNextCallCommand,
-	#category : #'NewTools-Sindarin-Commands'
+	#name : 'SindarinStepToNextCallInObjectCommand',
+	#superclass : 'SindarinStepToNextCallCommand',
+	#category : 'NewTools-Sindarin-Commands',
+	#package : 'NewTools-Sindarin-Commands'
 }
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinStepToNextCallInObjectCommand class >> defaultDescription [
 	^ 'Steps execution until the next call in the current receiver, then returns debugger control.'
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinStepToNextCallInObjectCommand class >> defaultName [
 	<toolbarExtensionDebugCommand: 50>
 	<codeExtensionDebugCommand: 50>
 	^ 'Next call in receiver'
 ]
 
-{ #category : #predicates }
+{ #category : 'predicates' }
 SindarinStepToNextCallInObjectCommand >> setConditionValue [
 
 	conditionValue := debugger receiver
 ]
 
-{ #category : #predicates }
+{ #category : 'predicates' }
 SindarinStepToNextCallInObjectCommand >> targetCondition [ 
 	^debugger receiver ~= conditionValue
 ]

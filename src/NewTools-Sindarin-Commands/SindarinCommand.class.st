@@ -1,15 +1,16 @@
 Class {
-	#name : #SindarinCommand,
-	#superclass : #CmCommand,
-	#category : #'NewTools-Sindarin-Commands'
+	#name : 'SindarinCommand',
+	#superclass : 'CmCommand',
+	#category : 'NewTools-Sindarin-Commands',
+	#package : 'NewTools-Sindarin-Commands'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SindarinCommand class >> defaultIconName [
 	^self subclassResponsibility 
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 SindarinCommand class >> forSpecContext: anObject [
 	self flag: 'Why is this class needed besides this helper?'.
 	^ (self forSpecWithIconNamed: self defaultIconName)
@@ -17,13 +18,13 @@ SindarinCommand class >> forSpecContext: anObject [
 		yourself
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 SindarinCommand class >> isAbstract [
 
 	^ self == SindarinCommand
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SindarinCommand >> debuggerPresenter [
 	^self context
 ]

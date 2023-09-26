@@ -9,24 +9,25 @@ Known issue:
 - It is not possible yet to skip a return node, which could be problematic if we want to skip a return node in an ifTrue: block for instance, to see what happens when an ifFalse: block is executed
 "
 Class {
-	#name : #SindarinSkipUpToSelectionCommand,
-	#superclass : #SindarinSkipAllToSelectionCommand,
-	#category : #'NewTools-Sindarin-Commands'
+	#name : 'SindarinSkipUpToSelectionCommand',
+	#superclass : 'SindarinSkipAllToSelectionCommand',
+	#category : 'NewTools-Sindarin-Commands',
+	#package : 'NewTools-Sindarin-Commands'
 }
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinSkipUpToSelectionCommand class >> defaultDescription [
 	^ 'Skips execution and stops before the selected instruction (or the instruction preceding the cursor), then returns debugger control.'
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinSkipUpToSelectionCommand class >> defaultName [
 	<toolbarExtensionDebugCommand: 50>
 	<codeExtensionDebugCommand: 50>
 	^ '[Exp.] Skip up to (stop before)'
 ]
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 SindarinSkipUpToSelectionCommand >> execute [
 	| targetNode |
 	
