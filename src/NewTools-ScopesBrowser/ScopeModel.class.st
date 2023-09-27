@@ -6,7 +6,7 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'environment',
-		'packages'
+		'allPackages'
 	],
 	#category : 'NewTools-ScopesBrowser-Models',
 	#package : 'NewTools-ScopesBrowser',
@@ -20,6 +20,11 @@ ScopeModel class >> default [
 		yourself
 ]
 
+{ #category : 'as yet unclassified' }
+ScopeModel >> allPackages [
+	^ allPackages ifNil: [ allPackages := self environment packages collect: [ :p | ScopePackageModel on: p ] ]
+]
+
 { #category : 'accessing' }
 ScopeModel >> environment [
 	^ environment
@@ -30,16 +35,11 @@ ScopeModel >> environment: aSmalltalkImage [
 	environment := aSmalltalkImage
 ]
 
-{ #category : 'accessing' }
-ScopeModel >> packages [
-	^ packages ifNil: [packages := self environment packages collect: [ :p | ScopePackageModel on: p ] ]
-]
-
 { #category : 'as yet unclassified' }
 ScopeModel >> updateWithNodes: aSetOfScopeNodes [
 
-	| packages packageEnvironment |
-	"I select all packages that have all their classes selected"
+	| packageEnvironment packages |
+	"Select all packages that have all their classes selected"
 	packages := aSetOfScopeNodes select: [ :each |
 		            each containsPackage and: [
 			self halt.

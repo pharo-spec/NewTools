@@ -27,8 +27,8 @@ ScopeNodeModel >> <= aNode [
 { #category : 'accessing' }
 ScopeNodeModel >> = anotherNode [
 
-	^ (self basicEqualsTo: anotherNode)
-		and: [ self subelements asSet = anotherNode subelements asSet ]
+	^ (self class = anotherNode class)
+		and: [ self name = anotherNode name ]
 ]
 
 { #category : 'accessing' }

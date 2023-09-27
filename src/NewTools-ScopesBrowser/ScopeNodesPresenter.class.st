@@ -53,14 +53,17 @@ ScopeNodesPresenter class >> title [
 
 { #category : 'private' }
 ScopeNodesPresenter >> activateItem: scopeNode [ 
-self halt.
+
 	checkedScopeNodes add: scopeNode.
 	scopeNode subelements isEmptyOrNil ifTrue: [ ^ self ].
-
+	self refreshCheckbox.
+	
 	scopeNode subelements do: [ :child |
-		checkedScopeNodes add: child ].
+		checkedScopeNodes add: child.
+		self refreshCheckbox ].
 
-	self refreshCheckbox
+	
+	checkedScopeNodes do: [:n | Transcript show: n name;cr ] 
 ]
 
 { #category : 'private' }
@@ -70,7 +73,7 @@ ScopeNodesPresenter >> close [
 
 { #category : 'private' }
 ScopeNodesPresenter >> deactivateItem: scopeNode [
-self halt.
+
 	checkedScopeNodes remove: scopeNode.
 	scopeNode subelements isEmptyOrNil ifTrue: [ ^ self ].
 
@@ -78,6 +81,7 @@ self halt.
 		checkedScopeNodes remove: child ifAbsent: [  ] ].
 
 	self refreshCheckbox.
+	checkedScopeNodes do: [:n | Transcript show: n name;cr ] 
 ]
 
 { #category : 'initialization' }
@@ -131,7 +135,7 @@ ScopeNodesPresenter >> initializeScopeNodesTree [
 					  (node name asLowercase beginsWith: nodeNameText text asLowercase) or: [
 							  node package name asLowercase beginsWith: nodeNameText text asLowercase ] ] ];
 		  beMultipleSelection;
-		  roots: self model packages sorted;
+		  roots: self model allPackages sorted;
 		  beResizable;
 		  activateOnDoubleClick;
 		  whenActivatedDo: [ :selection | "contextMenu: self menu"
@@ -158,7 +162,7 @@ ScopeNodesPresenter >> nodesListColumn [
 	^ SpCompositeTableColumn new
 		addColumn: (SpCheckBoxTableColumn new
 			beNotExpandable;
-			evaluated: [ :scopeNode | checkedScopeNodes includes: scopeNode ];
+			evaluated: [ :scopeNode |  checkedScopeNodes includes: scopeNode ];
 			onActivation: [ :scopeNode | self activateItem: scopeNode ];
 			onDeactivation: [ :scopeNode | self deactivateItem: scopeNode ];
 			yourself);
@@ -173,8 +177,8 @@ ScopeNodesPresenter >> nodesListColumn [
 { #category : 'initialization' }
 ScopeNodesPresenter >> refresh [
 
-	scopeNodesTree roots: (self model packages sorted select: [ :each |
-			 (each name beginsWith: nodeNameText text) or: [
+	scopeNodesTree roots: (self model allPackages sorted select: [ :each |
+			 (each name asLowercase beginsWith: nodeNameText text asLowercase) or: [
 				 each definedClasses anySatisfy: [ :class |
 					 class name asLowercase beginsWith: nodeNameText text asLowercase ] ] ])
 ]
