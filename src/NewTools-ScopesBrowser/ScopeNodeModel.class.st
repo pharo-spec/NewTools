@@ -20,8 +20,18 @@ ScopeNodeModel class >> on: aPackageOrClass [
 ]
 
 { #category : 'accessing' }
+ScopeNodeModel >> name [
+	^ node name
+]
+
+{ #category : 'accessing' }
 ScopeNodeModel >> node: aNode [
 	node := aNode
+]
+
+{ #category : 'accessing' }
+ScopeNodeModel >> package [
+	self subclassResponsibility 
 ]
 
 { #category : 'accessing' }

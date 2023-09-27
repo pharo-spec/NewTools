@@ -17,8 +17,7 @@ ScopeModel class >> default [
 	^ Smalltalk packages sorted collect: [ :package | ScopePackageModel on: package ]
 ]
 
-{ #category : 'accessing' }
-ScopeModel >> environment: aRNBrowserEnvironment [
-
-	environment := aRNBrowserEnvironment
+{ #category : 'as yet unclassified' }
+ScopeModel >> updateWithNodes: aSetOfScopeNodes [
+	self halt.
 ]

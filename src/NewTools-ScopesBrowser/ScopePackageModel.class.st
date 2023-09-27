@@ -7,6 +7,11 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+ScopePackageModel >> package [
+	^ self
+]
+
+{ #category : 'as yet unclassified' }
 ScopePackageModel >> scopesIconName [
 	^ #package
 ]
@@ -15,7 +20,7 @@ ScopePackageModel >> scopesIconName [
 ScopePackageModel >> subelements [
 
 	^ node definedClasses asOrderedCollection collect: [ :classOrTrait |
-		  classOrTrait isTrait ifTrue: [
-			  (ScopeClassModel on: classOrTrait) else:
-				  (ScopeTraitModel on: classOrTrait) ] ]
+		  classOrTrait isTrait
+			  ifTrue: [ ScopeTraitModel on: classOrTrait ]
+			  ifFalse: [ ScopeClassModel on: classOrTrait ] ]
 ]

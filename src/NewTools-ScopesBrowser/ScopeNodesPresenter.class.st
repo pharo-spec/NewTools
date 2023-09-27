@@ -179,8 +179,8 @@ ScopeNodesPresenter >> refreshCheckbox [
 
 { #category : 'initialization' }
 ScopeNodesPresenter >> saveScope [
-	self halt.
-	self scope
+	
+	self scope updateWithNodes: checkedScopeNodes 
 		
 ]
 
