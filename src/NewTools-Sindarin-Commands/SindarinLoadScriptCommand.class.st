@@ -2,27 +2,28 @@
 Loads a debugging script that has been saved in a Sindarin script class.
 "
 Class {
-	#name : #SindarinLoadScriptCommand,
-	#superclass : #SindarinCommand,
-	#category : #'NewTools-Sindarin-Commands'
+	#name : 'SindarinLoadScriptCommand',
+	#superclass : 'SindarinCommand',
+	#category : 'NewTools-Sindarin-Commands',
+	#package : 'NewTools-Sindarin-Commands'
 }
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinLoadScriptCommand class >> defaultDescription [
 	^'Load a debugging script'
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinLoadScriptCommand class >> defaultIconName [
 	^#smallLoadProject
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinLoadScriptCommand class >> defaultName [
 	^'Load script'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 SindarinLoadScriptCommand >> execute [
 	self context loadScript
 ]
