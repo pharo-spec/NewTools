@@ -4,7 +4,10 @@ Class {
 	#instVars : [
 		'checkedScopeNodes',
 		'scopeNodesTree',
-		'nodeNameText'
+		'nodeNameText',
+		'cancelButton',
+		'saveButton',
+		'scopeModel'
 	],
 	#category : 'NewTools-ScopesBrowser-GUI',
 	#package : 'NewTools-ScopesBrowser',
@@ -20,6 +23,11 @@ ScopeNodesPresenter class >> defaultLayout [
 		  fill: true
 		  padding: 0;
 		  add: #nodeNameText expand: false;
+		  add: (SpBoxLayout newLeftToRight 
+					add: #saveButton;
+					add: #cancelButton;
+					yourself)
+					withConstraints: [ :constraints | constraints height: self toolbarHeight ];
 		  yourself
 ]
 
@@ -46,6 +54,11 @@ ScopeNodesPresenter >> activateItem: scopeNode [
 ]
 
 { #category : 'private' }
+ScopeNodesPresenter >> close [
+	self window close
+]
+
+{ #category : 'private' }
 ScopeNodesPresenter >> deactivateItem: scopeNode [
 		
 	checkedScopeNodes remove: scopeNode.
@@ -64,6 +77,20 @@ ScopeNodesPresenter >> initialize [
 ]
 
 { #category : 'initialization' }
+ScopeNodesPresenter >> initializeButtons [
+
+	saveButton := self newButton
+		                label: 'Cancel';
+		                action: [ self close ];
+		                yourself.
+	cancelButton := self newButton
+		                label: 'Save';
+		                icon: (self iconNamed: #smallSave);
+		                action: [ self saveScope ];
+		                yourself
+]
+
+{ #category : 'initialization' }
 ScopeNodesPresenter >> initializeNodeNameText [
 	nodeNameText 
 		placeholder: 'Enter a package or class name';
@@ -73,11 +100,13 @@ ScopeNodesPresenter >> initializeNodeNameText [
 
 { #category : 'initialization' }
 ScopeNodesPresenter >> initializePresenters [
+
 	scopeNodesTree := self newScopeTree.
 	nodeNameText := self newTextInput.
-	
+
 	self initializeScopeNodesTree.
-	self initializeNodeNameText
+	self initializeNodeNameText.
+	self initializeButtons
 ]
 
 { #category : 'initialization' }
@@ -87,9 +116,9 @@ ScopeNodesPresenter >> initializeScopeNodesTree [
 		  hideColumnHeaders;
 		  addColumn: self nodesListColumn;
 		  children: [ :each |
-			  each subelements select: [ :node |
+			  (each subelements sort: [ :n1 :n2 | n1 name < n2 name ]) select: [ :node |
 					  (node name beginsWith: nodeNameText text) or: [
-							  node package name beginsWith: nodeNameText text ] ] ];
+							  node package name asLowercase beginsWith: nodeNameText text asLowercase ] ] ];
 		  beMultipleSelection;
 		  roots: Smalltalk packages sorted;
 		  beResizable;
@@ -131,10 +160,23 @@ ScopeNodesPresenter >> refresh [
 	scopeNodesTree roots: (Smalltalk packages sorted select: [ :each |
 			 (each name beginsWith: nodeNameText text) or: [
 				 each definedClasses anySatisfy: [ :class |
-					 class name beginsWith: nodeNameText text ] ] ])
+					 class name asLowercase beginsWith: nodeNameText text asLowercase ] ] ])
+]
+
+{ #category : 'private' }
+ScopeNodesPresenter >> refreshCheckbox [
+	scopeNodesTree refresh
+]
+
+{ #category : 'initialization' }
+ScopeNodesPresenter >> saveScope [
+	self halt.
+	self scope
+		
 ]
 
 { #category : 'accessing' }
-ScopeNodesPresenter >> refreshCheckbox [
-	scopeNodesTree refresh
+ScopeNodesPresenter >> scope [
+
+	^ scopeModel ifNil: [ scopeModel := ScopeModel new ]
 ]
