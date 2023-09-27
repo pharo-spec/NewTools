@@ -7,7 +7,8 @@ Class {
 		'nodeNameText',
 		'cancelButton',
 		'saveButton',
-		'scopeModel'
+		'scopeModel',
+		'model'
 	],
 	#category : 'NewTools-ScopesBrowser-GUI',
 	#package : 'NewTools-ScopesBrowser',
@@ -52,6 +53,7 @@ ScopeNodesPresenter class >> title [
 
 { #category : 'private' }
 ScopeNodesPresenter >> activateItem: scopeNode [ 
+self halt.
 	checkedScopeNodes add: scopeNode.
 	scopeNode subelements isEmptyOrNil ifTrue: [ ^ self ].
 
@@ -68,7 +70,7 @@ ScopeNodesPresenter >> close [
 
 { #category : 'private' }
 ScopeNodesPresenter >> deactivateItem: scopeNode [
-		
+self halt.
 	checkedScopeNodes remove: scopeNode.
 	scopeNode subelements isEmptyOrNil ifTrue: [ ^ self ].
 
@@ -125,15 +127,20 @@ ScopeNodesPresenter >> initializeScopeNodesTree [
 		  hideColumnHeaders;
 		  addColumn: self nodesListColumn;
 		  children: [ :each |
-			  (each subelements sort: [ :n1 :n2 | n1 name < n2 name ]) select: [ :node |
-					  (node name beginsWith: nodeNameText text) or: [
+			  each subelements sorted select: [ :node |
+					  (node name asLowercase beginsWith: nodeNameText text asLowercase) or: [
 							  node package name asLowercase beginsWith: nodeNameText text asLowercase ] ] ];
 		  beMultipleSelection;
-		  roots: ScopeModel default;
+		  roots: self model packages sorted;
 		  beResizable;
 		  activateOnDoubleClick;
 		  whenActivatedDo: [ :selection | "contextMenu: self menu"
 			  scopeNodesTree toggleSelectedItems ]
+]
+
+{ #category : 'accessing' }
+ScopeNodesPresenter >> model [
+	^ model ifNil: [ ScopeModel default ]
 ]
 
 { #category : 'private' }
@@ -166,7 +173,7 @@ ScopeNodesPresenter >> nodesListColumn [
 { #category : 'initialization' }
 ScopeNodesPresenter >> refresh [
 
-	scopeNodesTree roots: (Smalltalk packages sorted select: [ :each |
+	scopeNodesTree roots: (self model packages sorted select: [ :each |
 			 (each name beginsWith: nodeNameText text) or: [
 				 each definedClasses anySatisfy: [ :class |
 					 class name asLowercase beginsWith: nodeNameText text asLowercase ] ] ])
@@ -180,18 +187,6 @@ ScopeNodesPresenter >> refreshCheckbox [
 { #category : 'initialization' }
 ScopeNodesPresenter >> saveScope [
 	
-	self scope updateWithNodes: checkedScopeNodes 
+	self model updateWithNodes: checkedScopeNodes 
 		
-]
-
-{ #category : 'accessing' }
-ScopeNodesPresenter >> scope [
-
-	^ scopeModel ifNil: [ scopeModel := ScopeModel new ]
-]
-
-{ #category : 'accessing' }
-ScopeNodesPresenter >> scope: aScopeModel [
-
-	scopeModel := aScopeModel
 ]

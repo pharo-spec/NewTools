@@ -7,11 +7,6 @@ Class {
 }
 
 { #category : 'accessing' }
-ScopeClassModel >> package [
-	^ node package
-]
-
-{ #category : 'accessing' }
 ScopeClassModel >> scopesIconName [
 	^ #class
 ]

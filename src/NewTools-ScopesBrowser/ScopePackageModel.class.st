@@ -7,8 +7,13 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-ScopePackageModel >> package [
-	^ self
+ScopePackageModel >> containsPackage [
+	^ true
+]
+
+{ #category : 'accessing' }
+ScopePackageModel >> definedClasses [
+	^ node definedClasses
 ]
 
 { #category : 'as yet unclassified' }

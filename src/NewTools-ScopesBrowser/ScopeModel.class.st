@@ -5,7 +5,8 @@ Class {
 	#name : 'ScopeModel',
 	#superclass : 'Object',
 	#instVars : [
-		'environment'
+		'environment',
+		'packages'
 	],
 	#category : 'NewTools-ScopesBrowser-Models',
 	#package : 'NewTools-ScopesBrowser',
@@ -14,10 +15,38 @@ Class {
 
 { #category : 'accessing' }
 ScopeModel class >> default [
-	^ Smalltalk packages sorted collect: [ :package | ScopePackageModel on: package ]
+	^ self new
+		environment: Smalltalk;
+		yourself
+]
+
+{ #category : 'accessing' }
+ScopeModel >> environment [
+	^ environment
+]
+
+{ #category : 'accessing' }
+ScopeModel >> environment: aSmalltalkImage [ 
+	environment := aSmalltalkImage
+]
+
+{ #category : 'accessing' }
+ScopeModel >> packages [
+	^ packages ifNil: [packages := self environment packages collect: [ :p | ScopePackageModel on: p ] ]
 ]
 
 { #category : 'as yet unclassified' }
 ScopeModel >> updateWithNodes: aSetOfScopeNodes [
+
+	| packages packageEnvironment |
+	"I select all packages that have all their classes selected"
+	packages := aSetOfScopeNodes select: [ :each |
+		            each containsPackage and: [
+			self halt.
+			            each subelements allSatisfy: [ :class |
+				            aSetOfScopeNodes asOrderedCollection includes: class ] ] ].
+	packages ifNotEmpty: [
+		packageEnvironment := RBPackageEnvironment packages:
+			                      (packages collect: [ :p | p node ]) ].
 	self halt.
 ]
