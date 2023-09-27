@@ -31,6 +31,14 @@ ScopeNodesPresenter class >> defaultLayout [
 		  yourself
 ]
 
+{ #category : 'layout' }
+ScopeNodesPresenter class >> on: aScopeModel [
+	^ self basicNew
+		scope: aScopeModel;
+		initialize;
+		yourself
+]
+
 { #category : 'instance creation' }
 ScopeNodesPresenter class >> open [
 	<script>
@@ -72,6 +80,7 @@ ScopeNodesPresenter >> deactivateItem: scopeNode [
 
 { #category : 'initialization' }
 ScopeNodesPresenter >> initialize [
+
 	super initialize.
 	checkedScopeNodes := Set new
 ]
@@ -120,7 +129,7 @@ ScopeNodesPresenter >> initializeScopeNodesTree [
 					  (node name beginsWith: nodeNameText text) or: [
 							  node package name asLowercase beginsWith: nodeNameText text asLowercase ] ] ];
 		  beMultipleSelection;
-		  roots: Smalltalk packages sorted;
+		  roots: ScopeModel default;
 		  beResizable;
 		  activateOnDoubleClick;
 		  whenActivatedDo: [ :selection | "contextMenu: self menu"
@@ -179,4 +188,10 @@ ScopeNodesPresenter >> saveScope [
 ScopeNodesPresenter >> scope [
 
 	^ scopeModel ifNil: [ scopeModel := ScopeModel new ]
+]
+
+{ #category : 'accessing' }
+ScopeNodesPresenter >> scope: aScopeModel [
+
+	scopeModel := aScopeModel
 ]
