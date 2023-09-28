@@ -114,9 +114,11 @@ StDebuggerTest >> tearDown [
 
 	"In tests, should we use `debugger` when we need a fully initialized debugger and `dbg` when we just need a debugger created with #basicNew? Still, isn't it weird to clear the session only for a fully initialized debugger but not for a debugger created with #basicNew? Both have a session. Maybe this implies that `dbg`  should only use the instance variable `session` and nothing else. These specifications should be written somewhere, in the doc of the class maybe."
 	debugger ifNotNil: [
-		debugger unsubscribeFromSystemAnnouncer.
 		debugger close.
-		debugger session ifNotNil: [ :s | s clear ] ].
+		debugger unsubscribeFromSystemAnnouncer.
+		debugger debuggerActionModel ifNotNil: [ :actionModel |
+			actionModel clear.
+			actionModel session ifNotNil: [ :s | s clear ] ] ].
 	StTestDebuggerProvider removeSelector: #foobar.
 	StDebuggerObjectForTests
 		compile:
