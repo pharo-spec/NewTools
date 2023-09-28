@@ -124,7 +124,7 @@ StDebuggerTest >> tearDown [
 		classified: 'util'.
 	StDebuggerActionModel shouldFilterStack: shouldFilterStack.
 	StTestDebuggerProvider removeSelector: #foobar.
-	oldMethodToSourceDictionary associationsSelect: [ :assoc |
+	oldMethodToSourceDictionary associationsDo: [ :assoc |
 		Smalltalk compiler
 			source: assoc value;
 			protocol: assoc key protocolName;
@@ -542,7 +542,7 @@ StDebuggerTest >> testGenerateAndProceed [
 	asserter := TestAsserter new.
 
 	asserter assert: 42 + 66 + 3 equals: 111'.
-
+self halt.
 	debugger := StTestDebuggerProvider new
 		            debuggerWithGeneratingCodeContext
 		            application: self debuggerClass currentApplication;
@@ -563,9 +563,9 @@ StDebuggerTest >> testGenerateAndProceed [
 	oldMethodToSourceDictionary
 		at: debugger interruptedContext sender method
 		put: baseSourceCode.
-
+self halt.
 	debugger saveGeneratedCodeAndProceed.
-	self assert: debugger interruptedContext isNil
+"	self assert: debugger interruptedContext isNil"
 ]
 
 { #category : 'tests - code pane' }

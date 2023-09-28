@@ -155,11 +155,7 @@ StTestDebuggerProvider >> methodThatGeneratesCode [
 	| asserter |
 	asserter := TestAsserter new.
 
-	asserter see: 42 + 66 + 3.
-
-	1 / 0.
-
-	asserter see: Object new
+	asserter see: 42 + 66 + 3
 ]
 
 { #category : 'helpers' }
