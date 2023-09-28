@@ -44,15 +44,29 @@ ScopesPresenter class >> title [
 ]
 
 { #category : 'initialization' }
+ScopesPresenter >> initialize [
+	super initialize.
+	announcer := Announcer new.
+	self registerEvents
+]
+
+{ #category : 'initialization' }
 ScopesPresenter >> initializePresenters [
-	scopesTree := self newTreeTable.
+	scopesTree := self newTable.
 	toolbar := self newToolbar.
 	self toolbarButtons do: [ :button | toolbar addItem: button ]
 ]
 
 { #category : 'initialization' }
+ScopesPresenter >> registerEvents [
+	announcer when: NewScopeAnnouncement do: [ :ann | scopesTree items:  { ann scope } ] for: self
+]
+
+{ #category : 'initialization' }
 ScopesPresenter >> showScopeEditor [
-	ScopeNodesPresenter new open
+	| p |
+	p := ScopeNodesPresenter new announcer: announcer; yourself.
+	p open
 ]
 
 { #category : 'accessing' }

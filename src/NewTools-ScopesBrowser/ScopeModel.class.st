@@ -6,7 +6,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'environment',
-		'allPackages'
+		'allPackages',
+		'announcer'
 	],
 	#category : 'NewTools-ScopesBrowser-Models',
 	#package : 'NewTools-ScopesBrowser',
@@ -25,9 +26,14 @@ ScopeModel >> allPackages [
 	^ allPackages ifNil: [ allPackages := self environment packages collect: [ :p | ScopePackageModel on: p ] ]
 ]
 
+{ #category : 'accessing' }
+ScopeModel >> announcer: anAnnouncer [
+	announcer := anAnnouncer
+]
+
 { #category : 'as yet unclassified' }
 ScopeModel >> classEnvironmentFrom: aSetOfNodes [
-	| classEnvironment compositeEnvironment classNodes selectedClassNodes selectedPackageNodes |
+	| classEnvironment compositeEnvironment classNodes selectedClassNodes |
 	
 	classEnvironment := RBClassEnvironment new.
 	compositeEnvironment := RBCompositeEnvironment new.
@@ -78,8 +84,8 @@ ScopeModel >> updateWithNodes: aSetOfNodes [
 	
 	packageEnvironment := self packageEnvironmentFrom: aSetOfNodes.
 	classEnvironment := self classEnvironmentFrom: aSetOfNodes.
-	
-	(classEnvironment isEmpty or: [ packageEnvironment isEmpty ]) ifTrue: [ 
-		 ]
+	announcer announce: (NewScopeAnnouncement on: classEnvironment )
+	"(classEnvironment isEmpty or: [ packageEnvironment isEmpty ]) ifTrue: [ 
+		 ]"
 	
 ]

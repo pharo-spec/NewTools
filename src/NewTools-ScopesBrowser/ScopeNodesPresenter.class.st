@@ -66,6 +66,11 @@ ScopeNodesPresenter >> activateItem: scopeNode [
 	checkedScopeNodes do: [:n | Transcript show: n name;cr ] 
 ]
 
+{ #category : 'accessing' }
+ScopeNodesPresenter >> announcer: anAnnouncer [
+	announcer := anAnnouncer
+]
+
 { #category : 'private' }
 ScopeNodesPresenter >> close [
 	self window close
@@ -88,7 +93,8 @@ ScopeNodesPresenter >> deactivateItem: scopeNode [
 ScopeNodesPresenter >> initialize [
 
 	super initialize.
-	checkedScopeNodes := Set new
+	checkedScopeNodes := Set new.
+	
 ]
 
 { #category : 'initialization' }
@@ -144,7 +150,7 @@ ScopeNodesPresenter >> initializeScopeNodesTree [
 
 { #category : 'accessing' }
 ScopeNodesPresenter >> model [
-	^ model ifNil: [ ScopeModel default ]
+	^ model ifNil: [ ScopeModel default announcer: announcer ]
 ]
 
 { #category : 'private' }
