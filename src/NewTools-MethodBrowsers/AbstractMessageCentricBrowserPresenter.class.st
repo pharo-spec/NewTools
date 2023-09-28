@@ -2,22 +2,24 @@
 I am an abstract class for browsers centered around messages such as class `MessageBrowser` or class `VersionBrowser`.
 "
 Class {
-	#name : #AbstractMessageCentricBrowserPresenter,
-	#superclass : #StPresenter,
+	#name : 'AbstractMessageCentricBrowserPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'messageList',
 		'textConverter',
 		'toolbarPresenter'
 	],
-	#category : #'NewTools-MethodBrowsers-Base'
+	#category : 'NewTools-MethodBrowsers-Base',
+	#package : 'NewTools-MethodBrowsers',
+	#tag : 'Base'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 AbstractMessageCentricBrowserPresenter class >> isAbstract [ 
 	 ^self name = #AbstractMessageCentricBrowserPresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 AbstractMessageCentricBrowserPresenter >> initialize [
 
 	textConverter := self newTextConverter.
@@ -25,14 +27,14 @@ AbstractMessageCentricBrowserPresenter >> initialize [
 	
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 AbstractMessageCentricBrowserPresenter >> initializePresenters [
 
 	messageList := self instantiate: MessageListPresenter.
 	toolbarPresenter := self instantiate: SpMethodToolbarPresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 AbstractMessageCentricBrowserPresenter >> initializeWindow: aWindowPresenter [
 	| winExtent |
 	
@@ -40,7 +42,7 @@ AbstractMessageCentricBrowserPresenter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter initialExtent: (900 min: winExtent x) @ (550 min: winExtent y)
 ]
 
-{ #category : #'private - testing' }
+{ #category : 'private - testing' }
 AbstractMessageCentricBrowserPresenter >> isMethodDefinition: anItem [
 	"an item can be nil, a compiled method, or a ring object. Whereas a ring object can be a ring method or comment definition.
 	 Some operations are only valid for compiled methods or ring object that are a method definitions"
@@ -52,23 +54,23 @@ AbstractMessageCentricBrowserPresenter >> isMethodDefinition: anItem [
 		or: [  anItem isCompiledMethod ]
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'private - factory' }
 AbstractMessageCentricBrowserPresenter >> newTextConverter [
 
 	^ DiffSourceMethodConverter new
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 AbstractMessageCentricBrowserPresenter >> selectedMessage [
 	^ messageList selectedMessage
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AbstractMessageCentricBrowserPresenter >> textConverter [
 	^ textConverter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AbstractMessageCentricBrowserPresenter >> textConverter: aTextConverter [
 	textConverter := aTextConverter method: self textConverter method
 ]

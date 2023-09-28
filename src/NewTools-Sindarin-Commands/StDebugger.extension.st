@@ -1,6 +1,6 @@
-Extension { #name : #StDebugger }
+Extension { #name : 'StDebugger' }
 
-{ #category : #'*NewTools-Sindarin-Commands' }
+{ #category : '*NewTools-Sindarin-Commands' }
 StDebugger class >> buildSindarinExtentionCommandsGroupWith: stDebuggerInstance forRoot: rootCommandGroup [
 
 	<extensionCommands>

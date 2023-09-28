@@ -1,6 +1,6 @@
-Extension { #name : #ToolShortcutsCategory }
+Extension { #name : 'ToolShortcutsCategory' }
 
-{ #category : #'*NewTools-Spotter' }
+{ #category : '*NewTools-Spotter' }
 ToolShortcutsCategory >> openSpotter [
 
 	<shortcut>

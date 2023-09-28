@@ -2,18 +2,20 @@
 A place to store the results of a `StSpotterQuery` and to send notifications about it.
 "
 Class {
-	#name : #StSpotterStream,
-	#superclass : #Object,
+	#name : 'StSpotterStream',
+	#superclass : 'Object',
 	#instVars : [
 		'onAddedSelector',
 		'onRemoveSelector',
 		'receiver',
 		'timestamp'
 	],
-	#category : #'NewTools-Spotter-Model'
+	#category : 'NewTools-Spotter-Model',
+	#package : 'NewTools-Spotter',
+	#tag : 'Model'
 }
 
-{ #category : #'adding/removing' }
+{ #category : 'adding/removing' }
 StSpotterStream >> addObject: firstObject inProcessor: secondObject [
 
 	self 
@@ -22,7 +24,7 @@ StSpotterStream >> addObject: firstObject inProcessor: secondObject [
 	Processor yield
 ]
 
-{ #category : #'adding/removing' }
+{ #category : 'adding/removing' }
 StSpotterStream >> addObjects: aCollection inProcessor: aProcessor [
 
 	self 
@@ -31,31 +33,31 @@ StSpotterStream >> addObjects: aCollection inProcessor: aProcessor [
 	Processor yield
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStream >> onAddedSelector [
 
 	^ onAddedSelector
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStream >> onAddedSelector: anObject [
 
 	onAddedSelector := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStream >> onRemoveSelector [
 
 	^ onRemoveSelector
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStream >> onRemoveSelector: anObject [
 
 	onRemoveSelector := anObject
 ]
 
-{ #category : #performing }
+{ #category : 'performing' }
 StSpotterStream >> performSymbol: aSymbol withArguments: aCollection [
 	| time |
 
@@ -68,17 +70,17 @@ StSpotterStream >> performSymbol: aSymbol withArguments: aCollection [
 		self receiver perform: aSymbol withEnoughArguments: aCollection ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStream >> receiver [
 	^ receiver
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStream >> receiver: anObject [
 	receiver := anObject
 ]
 
-{ #category : #'adding/removing' }
+{ #category : 'adding/removing' }
 StSpotterStream >> removeAllCandidates [
 
 	self 
@@ -87,17 +89,17 @@ StSpotterStream >> removeAllCandidates [
 	Processor yield
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStream >> timestamp [
 	^ timestamp
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStream >> timestamp: anObject [
 	timestamp := anObject
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 StSpotterStream >> updateTimestamp [
 
 	self timestamp: Time microsecondClockValue

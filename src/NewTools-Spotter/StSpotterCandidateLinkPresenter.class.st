@@ -3,29 +3,31 @@ A presenter to show a candidate (an option that can be choosen).
 
 "
 Class {
-	#name : #StSpotterCandidateLinkPresenter,
-	#superclass : #StSpotterBasePresenter,
+	#name : 'StSpotterCandidateLinkPresenter',
+	#superclass : 'StSpotterBasePresenter',
 	#instVars : [
 		'iconPresenter',
 		'labelPresenter',
 		'model'
 	],
-	#category : #'NewTools-Spotter-View'
+	#category : 'NewTools-Spotter-View',
+	#package : 'NewTools-Spotter',
+	#tag : 'View'
 }
 
-{ #category : #actions }
+{ #category : 'actions' }
 StSpotterCandidateLinkPresenter >> activateOn: spotterPresenter [
 
 	spotterPresenter activateLink: self model
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidateLinkPresenter >> entry [
 
 	^ self model value
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSpotterCandidateLinkPresenter >> initializePresenters [
 
 	self layout: (SpBoxLayout newLeftToRight
@@ -39,7 +41,7 @@ StSpotterCandidateLinkPresenter >> initializePresenters [
 	self addStyle: 'stSpotterLink'
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterCandidateLinkPresenter >> matchesText: aString [
 
 	^ self model 
@@ -47,19 +49,19 @@ StSpotterCandidateLinkPresenter >> matchesText: aString [
 		ifNil: [ false ]
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StSpotterCandidateLinkPresenter >> model [
 
 	^ model
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StSpotterCandidateLinkPresenter >> setModelBeforeInitialization: aCandidateLink [
 
 	model := aCandidateLink
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSpotterCandidateLinkPresenter >> updatePresenter [
 
 	self entry ifNil: [ ^ self ]. 

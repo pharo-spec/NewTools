@@ -9,17 +9,19 @@ MessageBrowser new
 	yourself
 "
 Class {
-	#name : #StMessageBrowserPresenter,
-	#superclass : #AbstractMessageCentricBrowserPresenter,
+	#name : 'StMessageBrowserPresenter',
+	#superclass : 'AbstractMessageCentricBrowserPresenter',
 	#instVars : [
 		'title',
 		'refreshingBlock',
 		'textPresenter'
 	],
-	#category : #'NewTools-MethodBrowsers-Senders'
+	#category : 'NewTools-MethodBrowsers-Senders',
+	#package : 'NewTools-MethodBrowsers',
+	#tag : 'Senders'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StMessageBrowserPresenter class >> browse: aCollection [
 	"Special Version that sets the correct refreshing Block for Implentors Browser"
 	^ self new
@@ -27,7 +29,7 @@ StMessageBrowserPresenter class >> browse: aCollection [
 		open
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StMessageBrowserPresenter class >> browse: aCollection asImplementorsOf: aSymbol [ 
 	"Special Version that sets the correct refreshing Block for Implentors Browser"
 	^ self new
@@ -37,7 +39,7 @@ StMessageBrowserPresenter class >> browse: aCollection asImplementorsOf: aSymbol
 		open
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StMessageBrowserPresenter class >> browse: aCollection asSendersOf: aSymbol [ 
 	"Special Version that sets the correct refreshing Block for Senders Browser"
 	^ self new
@@ -48,7 +50,7 @@ StMessageBrowserPresenter class >> browse: aCollection asSendersOf: aSymbol [
 		open
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StMessageBrowserPresenter class >> browse: aCollection title: aString [
 	"Special Version that sets the correct refreshing Block for Implentors Browser"
 	^ self new
@@ -57,7 +59,7 @@ StMessageBrowserPresenter class >> browse: aCollection title: aString [
 		open
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StMessageBrowserPresenter class >> browse: aCollection title: aString autoSelect: aSelectString [
 	"Special Version that sets the correct refreshing Block for Implentors Browser"
 	^ self new
@@ -67,19 +69,19 @@ StMessageBrowserPresenter class >> browse: aCollection title: aString autoSelect
 		open
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StMessageBrowserPresenter class >> browseImplementorsOf: aSymbol [ 
 	"Special Version that sets the correct refreshing Block for Implentors Browser"
 	^ self browse: aSymbol implementors asImplementorsOf: aSymbol
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StMessageBrowserPresenter class >> browseSendersOf: aSymbol [ 
 	"Special Version that sets the correct refreshing Block for Implentors Browser"
 	^ self browse: aSymbol senders asSendersOf: aSymbol
 ]
 
-{ #category : #'instance creation - old' }
+{ #category : 'instance creation - old' }
 StMessageBrowserPresenter class >> openMessageList: messageList name: aString autoSelect: aSelector refreshingBlockSelector: aRefreshingBlockSelector [
 	
 	| browser |
@@ -96,26 +98,26 @@ StMessageBrowserPresenter class >> openMessageList: messageList name: aString au
 
 ]
 
-{ #category : #'tool registration' }
+{ #category : 'tool registration' }
 StMessageBrowserPresenter class >> registerToolsOn: registry [
 
 	"Add ourselves to registry. See [Smalltalk tools]" 
 	registry register: self as: #messageList
 ]
 
-{ #category : #icons }
+{ #category : 'icons' }
 StMessageBrowserPresenter class >> taskbarIconName [
 	"Answer the icon for an instance of the receiver in a task bar"
 
 	^#referencesIcon
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StMessageBrowserPresenter class >> title [
 	^ 'Message Browser'
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StMessageBrowserPresenter >> accept: text notifying: notifyer [
 
 	^ self selectedMessage ifNotNil: [ :message | 
@@ -125,7 +127,7 @@ StMessageBrowserPresenter >> accept: text notifying: notifyer [
 			notifying: notifyer ]
 ]
 
-{ #category : #'text selection' }
+{ #category : 'text selection' }
 StMessageBrowserPresenter >> autoSelect: aSelector [
 	textPresenter
 		readSelectionBlock:
@@ -136,14 +138,14 @@ StMessageBrowserPresenter >> autoSelect: aSelector [
 						ifTrue: [ self intervalOf: aSelector inCode: text of: msg ] ] ]
 ]
 
-{ #category : #announcements }
+{ #category : 'announcements' }
 StMessageBrowserPresenter >> classRenamed: anAnnouncement [ 
 	"this method forces the announcement to be handled in the UI process"
-	UIManager default defer: [ 
+	self defer: [ 
 		self handleClassRenamed: anAnnouncement ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StMessageBrowserPresenter >> connectPresenters [
 	messageList
 		whenSelectionChangedDo: [ :selection | self selectItem: selection selectedItem ];
@@ -151,7 +153,7 @@ StMessageBrowserPresenter >> connectPresenters [
 	textPresenter whenSubmitDo: [ :text | (self accept: text notifying: nil) notNil ]
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StMessageBrowserPresenter >> defaultLayout [
 
 	^ SpPanedLayout newTopToBottom
@@ -163,7 +165,7 @@ StMessageBrowserPresenter >> defaultLayout [
 		yourself
 ]
 
-{ #category : #'text selection' }
+{ #category : 'text selection' }
 StMessageBrowserPresenter >> findFirstOccurrenceOf: searchedString in: textToSearchIn [
 	"Return the first index of aString in textToSearchIn "
 	| firstIndex |
@@ -175,7 +177,7 @@ StMessageBrowserPresenter >> findFirstOccurrenceOf: searchedString in: textToSea
 	^ firstIndex
 ]
 
-{ #category : #announcements }
+{ #category : 'announcements' }
 StMessageBrowserPresenter >> handleClassRenamed: anAnnouncement [
 	| items selectedIndex |
 	items := self messages
@@ -193,7 +195,7 @@ StMessageBrowserPresenter >> handleClassRenamed: anAnnouncement [
 	self messages: items
 ]
 
-{ #category : #announcements }
+{ #category : 'announcements' }
 StMessageBrowserPresenter >> handleMethodAdded: anAnnouncement [
 	| item sel text boolean |
 
@@ -215,7 +217,7 @@ StMessageBrowserPresenter >> handleMethodAdded: anAnnouncement [
 	boolean ifTrue: [ textPresenter pendingText: text ]
 ]
 
-{ #category : #announcements }
+{ #category : 'announcements' }
 StMessageBrowserPresenter >> handleMethodModified: anAnnouncement [
 	| item oldItem sel index text list edits |
 	self isDisplayed
@@ -247,7 +249,7 @@ StMessageBrowserPresenter >> handleMethodModified: anAnnouncement [
 	textPresenter hasEditingConflicts: true
 ]
 
-{ #category : #announcements }
+{ #category : 'announcements' }
 StMessageBrowserPresenter >> handleMethodRemoved: anAnnouncement [
 	| item selection removeItem |
 	self isDisplayed
@@ -274,14 +276,14 @@ StMessageBrowserPresenter >> handleMethodRemoved: anAnnouncement [
 	self selectIndex: selection
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StMessageBrowserPresenter >> initialize [
 
 	super initialize.
 	self registerToAnnouncements
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StMessageBrowserPresenter >> initializeDropList [
 
 	toolbarPresenter 
@@ -289,7 +291,7 @@ StMessageBrowserPresenter >> initializeDropList [
 		addItemLabeled: 'Time stamp' do: [ self textConverter: TimeStampMethodConverter new ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StMessageBrowserPresenter >> initializePresenters [
 	super initializePresenters.
 
@@ -299,7 +301,7 @@ StMessageBrowserPresenter >> initializePresenters [
 	self initializeDropList
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StMessageBrowserPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
@@ -309,7 +311,7 @@ StMessageBrowserPresenter >> initializeWindow: aWindowPresenter [
 		askOkToClose: true
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StMessageBrowserPresenter >> installIconStylerFor: anItem [
 	"icons styler are only supported for method definitions (not nil / not for comment definitions    
 	 (those may occure for comment or general string searches))"
@@ -322,64 +324,64 @@ StMessageBrowserPresenter >> installIconStylerFor: anItem [
 		withAst: anItem ast.
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StMessageBrowserPresenter >> intervalOf: aSelector inCode: aText of: aMethod [
 	aMethod compiledMethod ifNil: [  ^ 0 to: 0 ].
 	^ (self sourceIntervalOf: aSelector in: aMethod ast) ifEmpty: [ self searchedString: aSelector asString in: aText ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StMessageBrowserPresenter >> intervalOf: aSelector inCommentText: aText [
 	^ self searchedString: aSelector asString in: aText
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StMessageBrowserPresenter >> messages [
 	^ messageList messages
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StMessageBrowserPresenter >> messages: aCollection [
 	messageList messages: aCollection
 ]
 
-{ #category : #announcements }
+{ #category : 'announcements' }
 StMessageBrowserPresenter >> methodAdded: anAnnouncement [
 	"this method forces the announcement to be handled in the UI process"
-	UIManager default defer: [ 
+	self defer: [ 
 		self handleMethodAdded: anAnnouncement ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StMessageBrowserPresenter >> methodClassNameForItem: anItem [
 	^ anItem methodClass ifNotNil: [ :class | class name ] ifNil: [ '' ]
 ]
 
-{ #category : #announcements }
+{ #category : 'announcements' }
 StMessageBrowserPresenter >> methodModified: anAnnouncement [
 	"this method forces the announcement to be handled in the UI process"
-	UIManager default defer:  [	
+	self defer:  [	
 		self handleMethodModified: anAnnouncement ]
 ]
 
-{ #category : #announcements }
+{ #category : 'announcements' }
 StMessageBrowserPresenter >> methodRemoved: anAnnouncement [
 	"this method forces the announcement to be handled in the UI process"
-	UIManager default defer:  [ 
+	self defer:  [ 
 		self handleMethodRemoved: anAnnouncement ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StMessageBrowserPresenter >> packageNameForItem: anItem [
 	^ anItem package ifNil: [ '' ] ifNotNil: [ :package | package name ]
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StMessageBrowserPresenter >> refreshingBlock: aBlock [
 	refreshingBlock := aBlock
 ]
 
-{ #category : #'announcements - registration' }
+{ #category : 'announcements - registration' }
 StMessageBrowserPresenter >> registerToAnnouncements [
 
 	SystemAnnouncer uniqueInstance weak		
@@ -389,7 +391,7 @@ StMessageBrowserPresenter >> registerToAnnouncements [
 		when: ClassRenamed send: #classRenamed: to: self
 ]
 
-{ #category : #'text selection' }
+{ #category : 'text selection' }
 StMessageBrowserPresenter >> searchedString: searchedString in: aString [
 	"Return the interval that corresponds to the portion of aString "
 	"This method takes care of finding complete match to searchedString. "
@@ -423,12 +425,12 @@ StMessageBrowserPresenter >> searchedString: searchedString in: aString [
 	^ interval
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StMessageBrowserPresenter >> selectIndex: anIndex [
 	messageList selectIndex: anIndex
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StMessageBrowserPresenter >> selectItem: item [
 
 	toolbarPresenter method: item.
@@ -439,27 +441,27 @@ StMessageBrowserPresenter >> selectItem: item [
 	self installIconStylerFor: item
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StMessageBrowserPresenter >> selectedClass [
 	^ self selectedMethod origin
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StMessageBrowserPresenter >> selectedMessage: aMessage [
 	messageList selectMessage: aMessage
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StMessageBrowserPresenter >> selectedMethod [
 	^ messageList selectedMethod
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StMessageBrowserPresenter >> setRefreshingBlockForImplementorsOf: aSelector [
 	self refreshingBlock: [ :message | message selector = aSelector ]
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StMessageBrowserPresenter >> setRefreshingBlockForSendersOf: aSelector [
 	| specialIndex |
 	specialIndex := Smalltalk specialSelectorIndexOrNil: aSelector.
@@ -467,7 +469,7 @@ StMessageBrowserPresenter >> setRefreshingBlockForSendersOf: aSelector [
 		method hasSelector: aSelector specialSelectorIndex: specialIndex ]
 ]
 
-{ #category : #announcements }
+{ #category : 'announcements' }
 StMessageBrowserPresenter >> shouldRefreshItem: item fromAnnouncement: anAnnouncement [
 	"The refreshing block contains a block that accepts an item of the list, the received announcement and the message browser.
 	It will anwer a boolean indicating if the modified item should be refreshed.
@@ -477,19 +479,19 @@ StMessageBrowserPresenter >> shouldRefreshItem: item fromAnnouncement: anAnnounc
 	^ refreshingBlock cull: item cull: anAnnouncement cull: self
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StMessageBrowserPresenter >> sortingBlock: aBlock [
 	messageList sortingBlock: aBlock
 ]
 
-{ #category : #'text selection' }
+{ #category : 'text selection' }
 StMessageBrowserPresenter >> sourceIntervalOf: aSelector in: aMethodNode [
     | senderNode |
     senderNode := aMethodNode allChildren detect: [ :x | x isMessage and: [ x selector = aSelector ] ] ifNone: [ ^ #() ].
     ^ senderNode keywordsPositions first to: senderNode keywordsPositions last + senderNode keywords last size - 1 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StMessageBrowserPresenter >> textConverter: aTextConverter [
 
 	super textConverter: aTextConverter.
@@ -497,46 +499,46 @@ StMessageBrowserPresenter >> textConverter: aTextConverter [
 	textPresenter text: self textConverter getText.
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StMessageBrowserPresenter >> title [
 
 	^ (title ifNil: [ self class title ]), ' [' , messageList numberOfElements printString , ']'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StMessageBrowserPresenter >> title: aString [
 
 	title := aString.
 	self updateTitle
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StMessageBrowserPresenter >> toolbarPresenter [
 	
 	^ toolbarPresenter
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StMessageBrowserPresenter >> topologicSort [
 	^ messageList topologicSort
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StMessageBrowserPresenter >> topologicSort: aBoolean [
 	^ messageList topologicSort: aBoolean
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StMessageBrowserPresenter >> updateTitle [
 	self withWindowDo: [ :window | window title: self title ]
 ]
 
-{ #category : #'api - events' }
+{ #category : 'api - events' }
 StMessageBrowserPresenter >> whenSelectedItemChanged: aBlock [ 
 	messageList whenSelectedItemChanged: aBlock 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StMessageBrowserPresenter >> windowIsClosing [
 	
 	SystemAnnouncer uniqueInstance unsubscribe: self

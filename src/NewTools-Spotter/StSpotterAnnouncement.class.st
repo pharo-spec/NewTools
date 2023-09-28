@@ -2,21 +2,23 @@
 A base announcement for spotter events.
 "
 Class {
-	#name : #StSpotterAnnouncement,
-	#superclass : #Announcement,
+	#name : 'StSpotterAnnouncement',
+	#superclass : 'Announcement',
 	#instVars : [
 		'category'
 	],
-	#category : #'NewTools-Spotter-Announcements'
+	#category : 'NewTools-Spotter-Announcements',
+	#package : 'NewTools-Spotter',
+	#tag : 'Announcements'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterAnnouncement >> category [
 	"Return the category (ie the kind of group of elements). This has nothing to do with class category."
 	^ category
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterAnnouncement >> category: anObject [
 	"Set the category (ie the kind of group of elements). This has nothing to do with class category."
 	category := anObject

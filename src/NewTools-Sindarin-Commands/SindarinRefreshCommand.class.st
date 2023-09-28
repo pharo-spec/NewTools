@@ -1,25 +1,26 @@
 Class {
-	#name : #SindarinRefreshCommand,
-	#superclass : #SindarinCommand,
-	#category : #'NewTools-Sindarin-Commands'
+	#name : 'SindarinRefreshCommand',
+	#superclass : 'SindarinCommand',
+	#category : 'NewTools-Sindarin-Commands',
+	#package : 'NewTools-Sindarin-Commands'
 }
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinRefreshCommand class >> defaultDescription [
 	^ 'Refresh the UI. Necessary after manual control of Sindarin.'
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinRefreshCommand class >> defaultIconName [
 	^#refresh 
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinRefreshCommand class >> defaultName [
 	^ 'Refresh'
 ]
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 SindarinRefreshCommand >> execute [
 	self context refresh
 ]

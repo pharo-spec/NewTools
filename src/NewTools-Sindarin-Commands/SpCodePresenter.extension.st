@@ -1,6 +1,6 @@
-Extension { #name : #SpCodePresenter }
+Extension { #name : 'SpCodePresenter' }
 
-{ #category : #'*NewTools-Sindarin-Commands' }
+{ #category : '*NewTools-Sindarin-Commands' }
 SpCodePresenter >> nonEmptySelectionInterval [
 	| selectionInterval |
 	selectionInterval := self selectionInterval.

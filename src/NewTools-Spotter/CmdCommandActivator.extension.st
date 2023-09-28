@@ -1,6 +1,6 @@
-Extension { #name : #CmdCommandActivator }
+Extension { #name : 'CmdCommandActivator' }
 
-{ #category : #'*NewTools-Spotter' }
+{ #category : '*NewTools-Spotter' }
 CmdCommandActivator >> evaluateFor: aStSpotter [ 
 	
 	self doEvaluate

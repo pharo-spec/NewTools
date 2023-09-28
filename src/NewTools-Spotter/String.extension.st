@@ -1,6 +1,6 @@
-Extension { #name : #String }
+Extension { #name : 'String' }
 
-{ #category : #'*NewTools-Spotter' }
+{ #category : '*NewTools-Spotter' }
 String >> spotterPreview: aBuilder [
 
 	^ aBuilder newText

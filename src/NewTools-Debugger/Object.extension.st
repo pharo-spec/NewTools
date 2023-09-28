@@ -1,12 +1,12 @@
-Extension { #name : #Object }
+Extension { #name : 'Object' }
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 Object >> presentDiffIn: aStFailingAssertionPresenter [
 
 	aStFailingAssertionPresenter initializeObjectDiffPresenters
 ]
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 Object >> presentDiffWith: anObject in: aStFailingAssertionPresenter [
 
 	aStFailingAssertionPresenter initializeObjectDiffPresenters

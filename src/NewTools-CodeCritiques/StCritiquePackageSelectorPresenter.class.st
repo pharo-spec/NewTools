@@ -10,35 +10,37 @@ You can open me whit:
 
 "
 Class {
-	#name : #StCritiquePackageSelectorPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StCritiquePackageSelectorPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'nextButton',
 		'chooserPackages'
 	],
-	#category : #'NewTools-CodeCritiques-Applier'
+	#category : 'NewTools-CodeCritiques-Applier',
+	#package : 'NewTools-CodeCritiques',
+	#tag : 'Applier'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StCritiquePackageSelectorPresenter class >> open [
 
 	<example>
 	^ self new open
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiquePackageSelectorPresenter >> chooserPackages [
 
 	^chooserPackages 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiquePackageSelectorPresenter >> defaultTitle [
 
 	^ 'Select packages'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiquePackageSelectorPresenter >> initializeLayout [
 
 	self layout: (SpBoxLayout newTopToBottom
@@ -50,7 +52,7 @@ StCritiquePackageSelectorPresenter >> initializeLayout [
 			 yourself)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiquePackageSelectorPresenter >> initializeNextButton [
 
 	nextButton := self newButton.
@@ -60,7 +62,7 @@ StCritiquePackageSelectorPresenter >> initializeNextButton [
 		action: [ self nextAction ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiquePackageSelectorPresenter >> initializePresenters [
 
 	chooserPackages := self setChooserPackages.
@@ -68,7 +70,7 @@ StCritiquePackageSelectorPresenter >> initializePresenters [
 	self initializeLayout
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiquePackageSelectorPresenter >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
@@ -76,7 +78,7 @@ StCritiquePackageSelectorPresenter >> initializeWindow: aWindowPresenter [
 		initialExtent: 450 @ 360
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 StCritiquePackageSelectorPresenter >> nextAction [
 
 	| packages env |
@@ -86,13 +88,13 @@ StCritiquePackageSelectorPresenter >> nextAction [
 	self delete
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiquePackageSelectorPresenter >> nextButton [
 
 	^nextButton
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiquePackageSelectorPresenter >> setChooserPackages [
 	
 	| chooser |

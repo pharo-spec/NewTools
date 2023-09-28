@@ -1,13 +1,15 @@
 Class {
-	#name : #StGenerateAssertEqualsCode,
-	#superclass : #StGenerateCode,
+	#name : 'StGenerateAssertEqualsCode',
+	#superclass : 'StGenerateCode',
 	#instVars : [
 		'result'
 	],
-	#category : #'NewTools-Debugger-Model'
+	#category : 'NewTools-Debugger-Model',
+	#package : 'NewTools-Debugger',
+	#tag : 'Model'
 }
 
-{ #category : #'code generation' }
+{ #category : 'code generation' }
 StGenerateAssertEqualsCode >> generatedCodeFromDebugger: aDebugger [
 
 	| rewritedInterval rewritedText |
@@ -23,25 +25,25 @@ StGenerateAssertEqualsCode >> generatedCodeFromDebugger: aDebugger [
 			  nextPutAll: self resultString ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StGenerateAssertEqualsCode >> result [
 
 	^ result
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StGenerateAssertEqualsCode >> result: anObject [
 
 	result := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StGenerateAssertEqualsCode >> resultString [
 
 	^ self result printString
 ]
 
-{ #category : #rewriting }
+{ #category : 'rewriting' }
 StGenerateAssertEqualsCode >> rewritedCodeIntervalInDebugger: aDebugger [
 
 	^ aDebugger defaultSelectedCodeRangeForContext:

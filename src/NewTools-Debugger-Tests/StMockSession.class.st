@@ -10,6 +10,12 @@ Class {
 	#tag : 'Utils'
 }
 
+{ #category : 'reflective operations' }
+StMockSession >> doesNotUnderstand: aMessage [
+
+	^ self
+]
+
 { #category : 'debug - session' }
 StMockSession >> implement: aMessage inClass: aClass forContext: aContext [
 ]

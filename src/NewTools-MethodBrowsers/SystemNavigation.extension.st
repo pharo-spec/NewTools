@@ -1,6 +1,6 @@
-Extension { #name : #SystemNavigation }
+Extension { #name : 'SystemNavigation' }
 
-{ #category : #'*NewTools-MethodBrowsers' }
+{ #category : '*NewTools-MethodBrowsers' }
 SystemNavigation >> browseAllUsersOfClassOrTrait: class [
 
 	class isTrait 
@@ -8,7 +8,7 @@ SystemNavigation >> browseAllUsersOfClassOrTrait: class [
 		ifFalse: [ self browseAllCallsOnClass: class ]
 ]
 
-{ #category : #'*NewTools-MethodBrowsers' }
+{ #category : '*NewTools-MethodBrowsers' }
 SystemNavigation >> browseVersionsOf: aMethod [
 
 	self tools versionBrowser browseVersionsForMethod: aMethod

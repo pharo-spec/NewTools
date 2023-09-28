@@ -207,7 +207,7 @@ StTestDebuggerProvider >> sessionFor: aContext [
 		           forContext: aContext
 		           priority: Processor userInterruptPriority.
 	session := DebugSession
-		           named: 'test session'
+		           named: 'test session providerSessionFor:'
 		           on: process
 		           startedAt: aContext.
 	session exception ifNil: [ session exception: OupsNullException new ]
@@ -218,6 +218,7 @@ StTestDebuggerProvider >> sessionFor: aContext exception: e [
 
 	e freezeUpTo: nil.
 	self sessionFor: e signalerContext.
+	session name: session name , ' ' , e printString.
 	session exception: e
 ]
 
@@ -236,7 +237,7 @@ StTestDebuggerProvider >> sessionForDebuggerTests [
 		           forContext: context
 		           priority: Processor userInterruptPriority.
 	sessionForTests := DebugSession
-		                   named: 'test session'
+		                   named: 'test sessionProviderForDebuggerTests'
 		                   on: process
 		                   startedAt: context.
 	sessionForTests exception: (OupsNullException fromSignallerContext: context).
@@ -252,7 +253,7 @@ StTestDebuggerProvider >> sessionWithDNUAfterStep [
 		           forContext: context
 		           priority: Processor userInterruptPriority.
 	sessionForTests := DebugSession
-		                   named: 'test session'
+		                   named: 'test sessionProviderWithDNUAfterStep'
 		                   on: process
 		                   startedAt: context.
 	sessionForTests exception: (OupsNullException fromSignallerContext: context).

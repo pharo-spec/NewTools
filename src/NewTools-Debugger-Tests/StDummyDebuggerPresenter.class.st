@@ -142,6 +142,12 @@ StDummyDebuggerPresenter >> tag [
 	^ tag
 ]
 
+{ #category : 'accessing' }
+StDummyDebuggerPresenter >> tag: anObject [
+
+	tag := anObject
+]
+
 { #category : 'mocks' }
 StDummyDebuggerPresenter >> unimplementedSubclassResponsibility [
 	self subclassResponsibility 

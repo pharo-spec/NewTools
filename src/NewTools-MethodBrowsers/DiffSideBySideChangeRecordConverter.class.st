@@ -4,12 +4,14 @@ It can update the code panel through a double dispatch (see `DiffSideBySideChang
 
 "
 Class {
-	#name : #DiffSideBySideChangeRecordConverter,
-	#superclass : #DiffVersionChangeRecordConverter,
-	#category : #'NewTools-MethodBrowsers-Base'
+	#name : 'DiffSideBySideChangeRecordConverter',
+	#superclass : 'DiffVersionChangeRecordConverter',
+	#category : 'NewTools-MethodBrowsers-Base',
+	#package : 'NewTools-MethodBrowsers',
+	#tag : 'Base'
 }
 
-{ #category : #updating }
+{ #category : 'updating' }
 DiffSideBySideChangeRecordConverter >> updateContent: content on: aVersionBrowser [ 
 	
 	aVersionBrowser updateDiff: content

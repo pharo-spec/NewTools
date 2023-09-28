@@ -1,12 +1,12 @@
-Extension { #name : #Exception }
+Extension { #name : 'Exception' }
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 Exception >> isGeneratingCode [
 
 	^ false
 ]
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 Exception >> selectedCodeRangeForContext: aContext forDebugger: aDebugger [
 
 	^ aDebugger defaultSelectedCodeRangeForContext: aContext

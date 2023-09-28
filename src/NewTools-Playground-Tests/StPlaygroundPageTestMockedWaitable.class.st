@@ -5,17 +5,18 @@ When wait is called on this object from a secondary thread (<=IMPORTANT), it wil
 This is essentially a Semaphore, with a built-in timeout and specific for these kind of tests.
 "
 Class {
-	#name : #StPlaygroundPageTestMockedWaitable,
-	#superclass : #Object,
+	#name : 'StPlaygroundPageTestMockedWaitable',
+	#superclass : 'Object',
 	#instVars : [
 		'sem',
 		'sem2',
 		'timeout'
 	],
-	#category : #'NewTools-Playground-Tests'
+	#category : 'NewTools-Playground-Tests',
+	#package : 'NewTools-Playground-Tests'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPageTestMockedWaitable >> initialize [
 
 	sem := Semaphore new.
@@ -23,20 +24,20 @@ StPlaygroundPageTestMockedWaitable >> initialize [
 	timeout := 500
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPageTestMockedWaitable >> resume [
 
 	sem signal.
 	^ sem2 wait: (Duration milliSeconds: timeout)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPageTestMockedWaitable >> timeout: aNumberMiliseconds [
 
 	timeout := aNumberMiliseconds
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPageTestMockedWaitable >> wait [
 
 	| semRes |

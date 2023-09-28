@@ -2,16 +2,18 @@
 I represent a group of rules in StCritiqueBrowserPresenter tree view.
 "
 Class {
-	#name : #CBCritiquesRuleGroup,
-	#superclass : #Object,
+	#name : 'CBCritiquesRuleGroup',
+	#superclass : 'Object',
 	#instVars : [
 		'name',
 		'rules'
 	],
-	#category : #'NewTools-CodeCritiques-Utilities'
+	#category : 'NewTools-CodeCritiques-Utilities',
+	#package : 'NewTools-CodeCritiques',
+	#tag : 'Utilities'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 CBCritiquesRuleGroup class >> named: aString rules: aCollection [
 	^ self new
 		  name: aString;
@@ -19,34 +21,34 @@ CBCritiquesRuleGroup class >> named: aString rules: aCollection [
 		  yourself
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 CBCritiquesRuleGroup >> do: aBlock [
 
 	rules do: aBlock
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 CBCritiquesRuleGroup >> isComposite [
 
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CBCritiquesRuleGroup >> name [
 	^ name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CBCritiquesRuleGroup >> name: anObject [
 	name := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CBCritiquesRuleGroup >> rules [
 	^ rules
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CBCritiquesRuleGroup >> rules: anObject [
 	rules := anObject
 ]

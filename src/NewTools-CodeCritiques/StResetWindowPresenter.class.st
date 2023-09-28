@@ -8,33 +8,35 @@ You can open me whit:
 `StResetWindowPresenter open`.
 "
 Class {
-	#name : #StResetWindowPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StResetWindowPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'resetModel',
 		'currentConfigurationModel'
 	],
-	#category : #'NewTools-CodeCritiques-Parts'
+	#category : 'NewTools-CodeCritiques-Parts',
+	#package : 'NewTools-CodeCritiques',
+	#tag : 'Parts'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 StResetWindowPresenter class >> open [
 
 	<example>
 	^ self new open
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StResetWindowPresenter class >> title [
 	^ 'Critique Browser' 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StResetWindowPresenter >> currentConfigurationModel [
 	^ currentConfigurationModel
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StResetWindowPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -45,7 +47,7 @@ StResetWindowPresenter >> defaultLayout [
 		  expand: false
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StResetWindowPresenter >> initializePresenters [
 
 	resetModel := self newButton.
@@ -56,7 +58,7 @@ StResetWindowPresenter >> initializePresenters [
 	self setCurrentConfigurationModel
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StResetWindowPresenter >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
@@ -64,25 +66,25 @@ StResetWindowPresenter >> initializeWindow: aWindowPresenter [
 		initialExtent: 450@30
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StResetWindowPresenter >> openCurrentConfiguration [
 
 	StCritiqueBrowserPresenter openOnWorkingConfiguration:
 		  CBCritiqueWorkingConfiguration current
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StResetWindowPresenter >> openPackagesChooser [
 
 	^ StCritiquePackageSelectorPresenter open
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StResetWindowPresenter >> resetModel [
 	^ resetModel
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StResetWindowPresenter >> setCurrentConfigurationModel [
 
 	currentConfigurationModel
@@ -91,7 +93,7 @@ StResetWindowPresenter >> setCurrentConfigurationModel [
 		action: [ self openCurrentConfiguration. self delete ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StResetWindowPresenter >> setFocusOrder [
 
 	self focusOrder
@@ -99,7 +101,7 @@ StResetWindowPresenter >> setFocusOrder [
 		add: currentConfigurationModel
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StResetWindowPresenter >> setResetModel [
 
 	resetModel

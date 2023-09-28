@@ -1,33 +1,35 @@
 Class {
-	#name : #StDebuggerContextInteractionModel,
-	#superclass : #SpCodeInteractionModel,
+	#name : 'StDebuggerContextInteractionModel',
+	#superclass : 'SpCodeInteractionModel',
 	#instVars : [
 		'context',
 		'bindings'
 	],
-	#category : #'NewTools-Debugger-Model'
+	#category : 'NewTools-Debugger-Model',
+	#package : 'NewTools-Debugger',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StDebuggerContextInteractionModel class >> on: aContext [
 
 	^ self new context: aContext
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 StDebuggerContextInteractionModel >> addBinding: aBinding [
 
 	self flag: 'This is experimental code to add a binding without writing code'.
 	self bindings add: aBinding 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerContextInteractionModel >> behavior [
 
 	^ self context receiver class
 ]
 
-{ #category : #binding }
+{ #category : 'binding' }
 StDebuggerContextInteractionModel >> bindingOf: aString [
 
 	"we can not call #lookupVar: without checking first as it would create the variable"
@@ -38,47 +40,47 @@ StDebuggerContextInteractionModel >> bindingOf: aString [
 		  ifFalse: [ self bindings associationAt: aString ifAbsent: [ nil ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerContextInteractionModel >> bindings [
 
 	^ bindings ifNil: [ bindings := Dictionary new ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerContextInteractionModel >> context [
 
 	^context
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerContextInteractionModel >> context: aContext [
 	context := aContext
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerContextInteractionModel >> doItContext [
 
 	^ self context
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerContextInteractionModel >> doItReceiver [
 
 	^ self context receiver
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StDebuggerContextInteractionModel >> hasBindingInContextOf: aString [
 	^ (context lookupVar: aString) notNil
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StDebuggerContextInteractionModel >> hasBindingInInteractionModelOf: aString [
 	"we search the name in the interaction model as we would do in a playground"
 	^ self bindings includesKey: aString
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StDebuggerContextInteractionModel >> hasBindingOf: aString [
 
 	"we lookup the name without creating a new variable then we search in the interaction model"
@@ -87,18 +89,18 @@ StDebuggerContextInteractionModel >> hasBindingOf: aString [
 		  self hasBindingInInteractionModelOf: aString ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StDebuggerContextInteractionModel >> hasUnsavedCodeChanges [
 
 	^ context notNil and: [ context sourceCode ~= owner text asString ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StDebuggerContextInteractionModel >> isScripting [
 	^context belongsToDoIt
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerContextInteractionModel >> object [
 
 	^ self doItReceiver
