@@ -59,7 +59,11 @@ ScopesPresenter >> initializePresenters [
 
 { #category : 'initialization' }
 ScopesPresenter >> registerEvents [
-	announcer when: NewScopeAnnouncement do: [ :ann | scopesTree items:  { ann scope } ] for: self
+
+	announcer
+		when: NewScopeAnnouncement
+		do: [ :ann | scopesTree items: (scopesTree items asOrderedCollection add: ann scope; yourself) ]
+		for: self
 ]
 
 { #category : 'initialization' }
