@@ -38,13 +38,18 @@ ScopeNodeModel >> basicEqualsTo: aNode [
 ]
 
 { #category : 'accessing' }
-ScopeNodeModel >> containsPackage [
+ScopeNodeModel >> definedClasses [
+	^#()
+]
+
+{ #category : 'accessing' }
+ScopeNodeModel >> isClassNode [
 	^ false
 ]
 
 { #category : 'accessing' }
-ScopeNodeModel >> definedClasses [
-	^#()
+ScopeNodeModel >> isPackageNode [
+	^ false
 ]
 
 { #category : 'accessing' }
@@ -65,6 +70,12 @@ ScopeNodeModel >> node: aNode [
 { #category : 'accessing' }
 ScopeNodeModel >> package [
 	^ node package
+]
+
+{ #category : 'accessing' }
+ScopeNodeModel >> printOn: aStream [
+	aStream
+		nextPutAll: self class name , '(', self node name ,')'
 ]
 
 { #category : 'accessing' }

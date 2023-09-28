@@ -190,7 +190,6 @@ ScopeNodesPresenter >> refreshCheckbox [
 
 { #category : 'initialization' }
 ScopeNodesPresenter >> saveScope [
-	
 	self model updateWithNodes: checkedScopeNodes 
 		
 ]

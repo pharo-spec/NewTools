@@ -7,6 +7,11 @@ Class {
 }
 
 { #category : 'accessing' }
+ScopeTraitModel >> isClassNode [
+	^ true
+]
+
+{ #category : 'accessing' }
 ScopeTraitModel >> scopesIconName [
 	^ #trait
 ]

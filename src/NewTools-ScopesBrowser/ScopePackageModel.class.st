@@ -6,14 +6,14 @@ Class {
 	#tag : 'Models'
 }
 
-{ #category : 'as yet unclassified' }
-ScopePackageModel >> containsPackage [
-	^ true
-]
-
 { #category : 'accessing' }
 ScopePackageModel >> definedClasses [
 	^ node definedClasses
+]
+
+{ #category : 'as yet unclassified' }
+ScopePackageModel >> isPackageNode [
+	^ true
 ]
 
 { #category : 'as yet unclassified' }

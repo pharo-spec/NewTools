@@ -25,6 +25,26 @@ ScopeModel >> allPackages [
 	^ allPackages ifNil: [ allPackages := self environment packages collect: [ :p | ScopePackageModel on: p ] ]
 ]
 
+{ #category : 'as yet unclassified' }
+ScopeModel >> classEnvironmentFrom: aSetOfNodes [
+	| classEnvironment compositeEnvironment classNodes selectedClassNodes selectedPackageNodes |
+	
+	classEnvironment := RBClassEnvironment new.
+	compositeEnvironment := RBCompositeEnvironment new.
+	
+	
+	"include all classes belonging to a package whose classes weren't all selected"
+	classNodes := aSetOfNodes select: [ :each | each isClassNode ].
+	selectedClassNodes := classNodes copy.
+	classNodes do: [ :classNode |
+		#() do: [ :packageNode |
+			(packageNode subelements includes: classNode) ifTrue: [
+				selectedClassNodes remove: classNode ] ] ].
+	classEnvironment classes:
+		                    (selectedClassNodes collect: [ :c | c node ]).	
+	^ classEnvironment
+]
+
 { #category : 'accessing' }
 ScopeModel >> environment [
 	^ environment
@@ -36,17 +56,30 @@ ScopeModel >> environment: aSmalltalkImage [
 ]
 
 { #category : 'as yet unclassified' }
-ScopeModel >> updateWithNodes: aSetOfScopeNodes [
-
-	| packageEnvironment packages |
+ScopeModel >> packageEnvironmentFrom: nodes [
+	| packageNodes selectedPackageNodes packageEnvironment |
 	"Select all packages that have all their classes selected"
-	packages := aSetOfScopeNodes select: [ :each |
-		            each containsPackage and: [
-			self halt.
-			            each subelements allSatisfy: [ :class |
-				            aSetOfScopeNodes asOrderedCollection includes: class ] ] ].
-	packages ifNotEmpty: [
-		packageEnvironment := RBPackageEnvironment packages:
-			                      (packages collect: [ :p | p node ]) ].
-	self halt.
+	packageEnvironment := RBPackageEnvironment new.
+	"select packages whose classes were all selected"
+	packageNodes := nodes select: [ :each | each isPackageNode ].
+	selectedPackageNodes := packageNodes select: [ :each |
+		                        each subelements allSatisfy: [ :classOrTrait |
+			                        nodes includes: classOrTrait ] ].
+	selectedPackageNodes ifNotEmpty: [
+		packageEnvironment packages:
+			                      (selectedPackageNodes collect: [ :p | p node ]) ].
+	^ packageEnvironment 
+]
+
+{ #category : 'as yet unclassified' }
+ScopeModel >> updateWithNodes: aSetOfNodes [
+
+	| packageEnvironment  classEnvironment compositeEnvironment |
+	
+	packageEnvironment := self packageEnvironmentFrom: aSetOfNodes.
+	classEnvironment := self classEnvironmentFrom: aSetOfNodes.
+	
+	(classEnvironment isEmpty or: [ packageEnvironment isEmpty ]) ifTrue: [ 
+		 ]
+	
 ]
