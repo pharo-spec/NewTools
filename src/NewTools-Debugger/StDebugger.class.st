@@ -240,7 +240,7 @@ StDebugger class >> usesExtensions [
 	^ self hasAnyActivatedExtension: self extensionToolsClasses
 ]
 
-{ #category : 'presenter - code' }
+{ #category : 'code pane' }
 StDebugger >> acceptCodeChanges: newSource forContext: aContext [
 
 	"It is wrong here that I have to use code adapter widget.
@@ -327,7 +327,7 @@ StDebugger >> clear [
 	self clearDebugSession
 ]
 
-{ #category : 'updating - widgets' }
+{ #category : 'code pane' }
 StDebugger >> clearCode [
 	
 	self code
@@ -336,20 +336,20 @@ StDebugger >> clearCode [
 		clearContent
 ]
 
-{ #category : 'action' }
+{ #category : 'actions' }
 StDebugger >> clearDebugSession [
 
 	self debuggerActionModel ifNotNil: [ :debugActionModel |
 		debugActionModel clearDebugSession ]
 ]
 
-{ #category : 'action' }
+{ #category : 'actions' }
 StDebugger >> clearDebuggerActionModel [
 	
 	self debuggerActionModel ifNotNil: [ :debugActionModel | debugActionModel clear ]
 ]
 
-{ #category : 'presenter - code' }
+{ #category : 'code pane' }
 StDebugger >> clearUnsavedCodeChanges [
 
 	unsavedCodeChanges := IdentityDictionary new
@@ -364,7 +364,7 @@ StDebugger >> close [
 			actionModel clearDebugSession ] ]
 ]
 
-{ #category : 'accessing - widgets' }
+{ #category : 'accessing - presenters' }
 StDebugger >> code [
 
 	^ code
@@ -388,7 +388,7 @@ StDebugger >> connectPresenters [
 		self updateCodeFromContext ]
 ]
 
-{ #category : 'accessing - context' }
+{ #category : 'accessing - model' }
 StDebugger >> context [
  
 	^ self interruptedContext
@@ -441,7 +441,7 @@ StDebugger >> createMissingMethodFor: aMessage in: aClass [
 	method := self debuggerActionModel implement: aMessage inClass: aClass forContext: self interruptedContext.
 	method isClassified ifFalse: [ method protocol: (self requestProtocolIn: aClass) ].
 
-	self selectTopContext
+	stackTable selectIndex: 1
 ]
 
 { #category : 'actions' }
@@ -460,7 +460,7 @@ StDebugger >> createSubclassResponsibility [
 		forContext: senderContext
 ]
 
-{ #category : 'accessing - context' }
+{ #category : 'accessing - model' }
 StDebugger >> currentContext [
 	"I answer the context on which an action should be executed.
 	This is either the selected context or if nothing is selected the interrupted context."
@@ -470,7 +470,7 @@ StDebugger >> currentContext [
 		  ifNotNil: [ self selectedContext ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - model' }
 StDebugger >> debuggerActionModel [
 	^ debuggerActionModel
 ]
@@ -482,12 +482,12 @@ StDebugger >> debuggerActionModelCleared [
 	self unsubscribeFromSystemAnnouncer
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - model' }
 StDebugger >> debuggerInspectorClass [
 	^ StDebuggerInspector
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - model' }
 StDebugger >> debuggerInspectorModelClass [
 	^ StDebuggerInspectorModel
 ]
@@ -501,7 +501,7 @@ StDebugger >> defaultLayout [
 		yourself
 ]
 
-{ #category : 'presenter - code' }
+{ #category : 'code pane' }
 StDebugger >> discardCodeChangesFor: aContext [
 
 	self unsavedCodeChanges removeKey: aContext ifAbsent: [  ].
@@ -516,7 +516,7 @@ StDebugger >> doBrowseClass [
 		(self stackSelectionMethodContext value: self)
 ]
 
-{ #category : 'presenter - code' }
+{ #category : 'code pane' }
 StDebugger >> doBrowseClassReferences [
 
 	| cls |
@@ -587,13 +587,7 @@ StDebugger >> doBrowseSenders [
 		(self stackSelectionMethodSelectorContext value: self)
 ]
 
-{ #category : 'accessing' }
-StDebugger >> environment [
-
-^ self class environment
-]
-
-{ #category : 'stack - helpers' }
+{ #category : 'accessing - model' }
 StDebugger >> exception [
 	^ self debuggerActionModel exception
 ]
@@ -608,7 +602,7 @@ StDebugger >> expandStackIfLastItemIsSelected [
 	stackTable selectIndex: selection selectedIndex
 ]
 
-{ #category : 'accessing - widgets' }
+{ #category : 'accessing - presenters' }
 StDebugger >> extensionToolNotebook [
 
 	^ extensionToolsNotebook
@@ -649,7 +643,7 @@ StDebugger >> findFirstRelevantStackIndexIn: aStack [
 	^ 1
 ]
 
-{ #category : 'updating - session' }
+{ #category : 'updating' }
 StDebugger >> forceSessionUpdate [
 
 	self
@@ -686,7 +680,7 @@ StDebugger >> initializeBreakpointInspector [
 		on: (StInspectorModel on: nil).
 ]
 
-{ #category : 'presenter - code' }
+{ #category : 'code pane' }
 StDebugger >> initializeCode [
 
 	code := self newCode.
@@ -761,7 +755,7 @@ StDebugger >> initializeShortcuts: aWindowPresenter [
 		toAction: [ self restartCurrentContext ]
 ]
 
-{ #category : 'initialization' }
+{ #category : 'stack' }
 StDebugger >> initializeStack [
 
 	stackTable := self newTable.
@@ -837,13 +831,13 @@ StDebugger >> instantiateExtensionToolsPage: aToolClass [
 		provider: [ toolInstance ]
 ]
 
-{ #category : 'accessing - context' }
+{ #category : 'accessing - model' }
 StDebugger >> interruptedContext [
 
 	^ self debuggerActionModel interruptedContext
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - model' }
 StDebugger >> interruptedProcess [
 
 	^ self debuggerActionModel  interruptedProcess
@@ -853,7 +847,10 @@ StDebugger >> interruptedProcess [
 StDebugger >> isInSelectedContextClass: context [
 	"Return true if the given context is in the same class than the currently selected context of the stack."
 
-	^ self selectedContext methodClass = context methodClass
+	| selectedContext |
+	selectedContext := self selectedContext.
+	^ selectedContext notNil and: [
+		  selectedContext methodClass = context methodClass ]
 ]
 
 { #category : 'testing' }
@@ -898,7 +895,7 @@ StDebugger >> newDebuggerContextFor: aContext [
 		  yourself
 ]
 
-{ #category : 'accessing - context' }
+{ #category : 'accessing - model' }
 StDebugger >> newTitle [
 
 	^ self debuggerActionModel statusStringForContext
@@ -907,8 +904,8 @@ StDebugger >> newTitle [
 { #category : 'api' }
 StDebugger >> okToChange [
 
-	self code canDiscardEdits
-		ifTrue: [ ^ true ].
+	self flag: 'Seems to be used to control if we can close the debugger when we edited code. This should be investigated'.
+	self code canDiscardEdits ifTrue: [ ^ true ].
 	self code changed: #wantToChange.
 	^ self code canDiscardEdits
 ]
@@ -977,7 +974,7 @@ StDebugger >> recompileMethodTo: aString inContext: aContext notifying: aNotifye
 	^ self debuggerActionModel recompileMethodTo: aString inContext: aContext notifying: aNotifyer.
 ]
 
-{ #category : 'presenter - code' }
+{ #category : 'code pane' }
 StDebugger >> recordUnsavedCodeChanges [
 
 	|codeInteractionModel codeText|
@@ -1087,29 +1084,24 @@ StDebugger >> selectNextExecutedExpression [
 		(sourceNodeExecuted start to: sourceNodeExecuted stop)
 ]
 
-{ #category : 'stack' }
-StDebugger >> selectTopContext [
-	stackTable selectIndex: 1
-]
-
-{ #category : 'updating - actions' }
+{ #category : 'code pane' }
 StDebugger >> selectedCodeRangeForContext: aContext [
 
 	^ self debuggerActionModel selectedCodeRangeForContext: aContext
 ]
 
-{ #category : 'accessing - context' }
+{ #category : 'accessing - model' }
 StDebugger >> selectedContext [
 
 	^ self stackTable selection selectedItem
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - model' }
 StDebugger >> session [
 	^ self debuggerActionModel session
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - model' }
 StDebugger >> session: aSession [
 
 	debuggerActionModel
@@ -1140,7 +1132,7 @@ StDebugger >> showFullStack [
 
 ]
 
-{ #category : 'accessing - variables' }
+{ #category : 'stack' }
 StDebugger >> stack [
 	^ self debuggerActionModel stack 
 
@@ -1166,7 +1158,7 @@ StDebugger >> stackAndCodeWithExtensionsLayout [
 			yourself)
 ]
 
-{ #category : 'accessing' }
+{ #category : 'stack' }
 StDebugger >> stackColorForContext: context [
 	"I return the color the text should have in the stack by comparing the context in parameter to the selected context.
 	
@@ -1175,12 +1167,16 @@ StDebugger >> stackColorForContext: context [
 	Else, we just keep the normal style."
 
 	self class enableStackColoring ifFalse: [ ^ self theme textColor ].
+	self selectedContext ifNil: [ ^ self theme textColor ].
 
 	^ (self isInSelectedContextClass: context)
 		  ifTrue: [ self theme highlightTextColor ]
 		  ifFalse: [
 			  (self isInSelectedContextPackage: context)
-				  ifTrue: [ self theme highlightTextColor mixed: 0.5 with: self theme textColor ]
+				  ifTrue: [
+				  self theme highlightTextColor
+					  mixed: 0.5
+					  with: self theme textColor ]
 				  ifFalse: [ self theme textColor ] ]
 ]
 
@@ -1202,7 +1198,7 @@ StDebugger >> stackLayout [
 		yourself
 ]
 
-{ #category : 'stack - helpers' }
+{ #category : 'stack' }
 StDebugger >> stackOfSize: anInteger [
 
 	^ self debuggerActionModel stackOfSize: anInteger
@@ -1232,7 +1228,7 @@ StDebugger >> stackSelectionReceiverContext [
 	^ [ :dbg | stackTable selection selectedItem receiver ]
 ]
 
-{ #category : 'accessing - widgets' }
+{ #category : 'accessing - presenters' }
 StDebugger >> stackTable [
 
 	^ stackTable
@@ -1263,9 +1259,6 @@ StDebugger >> subscribeToActionModel [
 		when: StDebuggerActionModelRestartAnnouncement
 		send: #updateRestart
 		to: self;
-		when: StDebuggerActionModelResumeAnnouncement
-		send: #updateResume
-		to: self;
 		when: StDebuggerActionModelContextChangedAnnouncement
 		send: #updateContextChanged
 		to: self;
@@ -1277,7 +1270,7 @@ StDebugger >> subscribeToActionModel [
 		to: self
 ]
 
-{ #category : 'system subscriptions' }
+{ #category : 'subscription' }
 StDebugger >> susbcribeToExtensionToggleAnnouncement [
 
 	SystemAnnouncer uniqueInstance weak
@@ -1286,20 +1279,20 @@ StDebugger >> susbcribeToExtensionToggleAnnouncement [
 		to: self
 ]
 
-{ #category : 'accessing - widgets' }
+{ #category : 'accessing - presenters' }
 StDebugger >> toolbar [
 
 	^ toolbar
 ]
 
-{ #category : 'presenter - code' }
+{ #category : 'code pane' }
 StDebugger >> unsavedCodeChanges [
 
 	^ unsavedCodeChanges ifNil: [ 
 		  unsavedCodeChanges := IdentityDictionary new ]
 ]
 
-{ #category : 'presenter - code' }
+{ #category : 'code pane' }
 StDebugger >> unsavedCodeChangesFor: aContext [ 
 	^self unsavedCodeChanges at: aContext
 ]
@@ -1311,25 +1304,25 @@ StDebugger >> unsubscribeFromActionModel [
 		actionModel unsubscribe: self ]
 ]
 
-{ #category : 'system subscription' }
+{ #category : 'subscription' }
 StDebugger >> unsubscribeFromSystemAnnouncer [
 
 	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
-{ #category : 'updating - widgets' }
+{ #category : 'updating' }
 StDebugger >> updateAfterMethodAdded [
 
 	self updateToolbar
 ]
 
-{ #category : 'updating - widgets' }
+{ #category : 'updating - presenters' }
 StDebugger >> updateCodeFromContext [
 
 	self updateCodeFromContext: self currentContext
 ]
 
-{ #category : 'presenter - code' }
+{ #category : 'code pane' }
 StDebugger >> updateCodeFromContext: aContext [
 
 	| selectionInterval formerCodeInteractionModel |
@@ -1352,7 +1345,7 @@ StDebugger >> updateCodeFromContext: aContext [
 		forInterval: selectionInterval
 ]
 
-{ #category : 'updating - widgets' }
+{ #category : 'updating - presenters' }
 StDebugger >> updateCodeTextSegmentDecoratorsIn: aContext forInterval: selectionInterval [
 	
 	self code removeAllTextSegmentDecorations.
@@ -1375,7 +1368,7 @@ StDebugger >> updateCodeTextSegmentDecoratorsIn: aContext forInterval: selection
 		title: 'Click me!';"
 ]
 
-{ #category : 'updating - actions' }
+{ #category : 'updating' }
 StDebugger >> updateContextChanged [
 	"A context has changed when a method has been recompiled. If a method has been recompiled with additional instance variables and/or temporary variables, the inspector needs to be updated"
 
@@ -1385,7 +1378,7 @@ StDebugger >> updateContextChanged [
 	self updateStep
 ]
 
-{ #category : 'updating - widgets' }
+{ #category : 'updating - presenters' }
 StDebugger >> updateExtensionsFrom: newSession [
 	self extensionTools do:[:tool| tool updatePresenter]
 ]
@@ -1426,7 +1419,7 @@ StDebugger >> updateExtensionsFromAnnouncement: aStDebuggerToggleAnnouncement [
 	self layout: self defaultLayout
 ]
 
-{ #category : 'updating - widgets' }
+{ #category : 'updating - presenters' }
 StDebugger >> updateInspectorFromContext: aContext [
 
 	inspector
@@ -1438,12 +1431,6 @@ StDebugger >> updateInspectorFromContext: aContext [
 	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p | p update ]
 ]
 
-{ #category : 'updating - widgets' }
-StDebugger >> updatePredicatesForContext: aContext [
-
-	self debuggerActionModel updateContextPredicate
-]
-
 { #category : 'initialization' }
 StDebugger >> updatePresenter [
 
@@ -1451,18 +1438,13 @@ StDebugger >> updatePresenter [
 	self buildContextMenus
 ]
 
-{ #category : 'updating - actions' }
+{ #category : 'updating' }
 StDebugger >> updateRestart [
 
 	self updateStep
 ]
 
-{ #category : 'updating - actions' }
-StDebugger >> updateResume [
-
-]
-
-{ #category : 'presenter - code' }
+{ #category : 'code pane' }
 StDebugger >> updateSourceCodeFor: aContext [
 
 	| codeText |
@@ -1482,7 +1464,7 @@ StDebugger >> updateStackFromSession: aSession [
 		scrollToSelection: true
 ]
 
-{ #category : 'updating - actions' }
+{ #category : 'updating' }
 StDebugger >> updateStep [
   | previousASTScope previousContext currentASTScope currentContext |
 	
@@ -1504,7 +1486,7 @@ StDebugger >> updateStep [
 		p update ]
 ]
 
-{ #category : 'updating - widgets' }
+{ #category : 'updating - presenters' }
 StDebugger >> updateToolbar [
 	
 	toolbarCommandGroup ifNil: [ ^ self ].
@@ -1512,7 +1494,7 @@ StDebugger >> updateToolbar [
 		spCommand updateEnableStatus ]
 ]
 
-{ #category : 'updating - widgets' }
+{ #category : 'updating - presenters' }
 StDebugger >> updateWindowTitle [
 
 	self withWindowDo: [ :window | window title: self newTitle ].
