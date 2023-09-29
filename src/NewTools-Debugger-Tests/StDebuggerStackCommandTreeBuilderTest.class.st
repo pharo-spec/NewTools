@@ -215,7 +215,6 @@ StDebuggerStackCommandTreeBuilderTest >> testStackEditionCommandsClasses [
 		assertCollection: builder stackEditionCommandsClasses
 		equals:
 			{StCopyStackToClipboardCommand.
-			StShowFullStackCommand.
 			StPeelToFirstCommand.
 			StFileOutMethodCommand}
 ]

@@ -60,8 +60,6 @@ StDebuggerCommandTest >> testCommandsInDNUContext [
 		(StFileOutMethodCommand forContext: debugger) canBeExecuted.
 	self assert:
 		(StPeelToFirstCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StShowFullStackCommand forContext: debugger) canBeExecuted.
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted.
 
 	debugger debuggerActionModel clear
@@ -98,8 +96,6 @@ StDebuggerCommandTest >> testCommandsInDeadContext [
 		(StFileOutMethodCommand forContext: debugger) canBeExecuted.
 	self assert:
 		(StPeelToFirstCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StShowFullStackCommand forContext: debugger) canBeExecuted.
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted.
 
 	debugger debuggerActionModel clear
@@ -138,8 +134,6 @@ StDebuggerCommandTest >> testCommandsInErrorContext [
 		(StFileOutMethodCommand forContext: debugger) canBeExecuted.
 	self assert:
 		(StPeelToFirstCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StShowFullStackCommand forContext: debugger) canBeExecuted.
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted.
 
 	debugger debuggerActionModel clear
@@ -171,7 +165,6 @@ StDebuggerCommandTest >> testCommandsInFailingTestContext [
 	self assert: (StCopyStackToClipboardCommand forContext: debugger) canBeExecuted. 
 	self assert: (StFileOutMethodCommand forContext: debugger) canBeExecuted. 
 	self assert: (StPeelToFirstCommand forContext: debugger) canBeExecuted. 
-	self assert: (StShowFullStackCommand forContext: debugger) canBeExecuted.	
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted.
 	debugger debuggerActionModel clear
 ]
@@ -205,7 +198,6 @@ StDebuggerCommandTest >> testCommandsInMissingClassContext [
 	self assert: (StCopyStackToClipboardCommand forContext: debugger) canBeExecuted. 
 	self assert: (StFileOutMethodCommand forContext: debugger) canBeExecuted. 
 	self assert: (StPeelToFirstCommand forContext: debugger) canBeExecuted. 
-	self assert: (StShowFullStackCommand forContext: debugger) canBeExecuted.	
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted.
 	debugger debuggerActionModel clear
 ]
@@ -244,8 +236,6 @@ StDebuggerCommandTest >> testCommandsInMissingSubclassResponsibilityContext [
 		(StFileOutMethodCommand forContext: debugger) canBeExecuted.
 	self assert:
 		(StPeelToFirstCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StShowFullStackCommand forContext: debugger) canBeExecuted.
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted.
 
 	debugger debuggerActionModel clear
@@ -276,7 +266,6 @@ StDebuggerCommandTest >> testCommandsInRunnableContext [
 	self assert: (StCopyStackToClipboardCommand forContext: debugger) canBeExecuted. 
 	self assert: (StFileOutMethodCommand forContext: debugger) canBeExecuted. 
 	self assert: (StPeelToFirstCommand forContext: debugger) canBeExecuted. 
-	self assert: (StShowFullStackCommand forContext: debugger) canBeExecuted.
 	self assert: (StProceedCommand forContext: debugger) canBeExecuted.  	 
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted.
 	debugger debuggerActionModel clear
