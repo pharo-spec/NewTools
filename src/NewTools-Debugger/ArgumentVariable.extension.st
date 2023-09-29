@@ -1,6 +1,6 @@
-Extension { #name : #ArgumentVariable }
+Extension { #name : 'ArgumentVariable' }
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 ArgumentVariable >> variableTag [
 	^ 'arg'
 ]

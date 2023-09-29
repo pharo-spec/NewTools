@@ -1,10 +1,12 @@
 Class {
-	#name : #StDebuggerConfigurationCommandTreeBuilderTest,
-	#superclass : #StDebuggerToolCommandTreeBuilderTest,
-	#category : #'NewTools-Debugger-Tests-Model'
+	#name : 'StDebuggerConfigurationCommandTreeBuilderTest',
+	#superclass : 'StDebuggerToolCommandTreeBuilderTest',
+	#category : 'NewTools-Debugger-Tests-Model',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StDebuggerConfigurationCommandTreeBuilderTest >> newBuilder [
 
 	^ StDebuggerConfigurationCommandTreeBuilder
@@ -12,7 +14,7 @@ StDebuggerConfigurationCommandTreeBuilderTest >> newBuilder [
 		  forRoot: rootGroup
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerConfigurationCommandTreeBuilderTest >> testConfigurationCommands [
 	self
 		assertCommandGroup: builder generalConfigurationCommandsGroup
@@ -21,7 +23,7 @@ StDebuggerConfigurationCommandTreeBuilderTest >> testConfigurationCommands [
 		displayStrategy: CmUIDisplayAsSubMenu
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerConfigurationCommandTreeBuilderTest >> testConfigurationCommandsClasses [
 
 	self assertCollection: builder configurationCommandClasses equals: {
@@ -29,19 +31,19 @@ StDebuggerConfigurationCommandTreeBuilderTest >> testConfigurationCommandsClasse
 			StDebuggerSettingsCommand }
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerConfigurationCommandTreeBuilderTest >> testDisplayStrategy [
 	self
 		assert: builder class displayStrategy
 		equals: CmUIDisplayAsSubMenu
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerConfigurationCommandTreeBuilderTest >> testGroupDescription [
 	self assert: builder class groupDescription equals: 'Debugger configuration actions'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerConfigurationCommandTreeBuilderTest >> testGroupName [
 	self assert: builder class groupName equals: 'Debugger configuration'
 ]

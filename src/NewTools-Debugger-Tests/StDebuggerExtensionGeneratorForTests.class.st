@@ -3,12 +3,14 @@ I just provide helper methods to generate and remove classes that use the `TStDe
 These classes are used exclusively in tests, and should be part of the system (remove them in your `tearDown`).
 "
 Class {
-	#name : #StDebuggerExtensionGeneratorForTests,
-	#superclass : #Object,
-	#category : #'NewTools-Debugger-Tests-Utils'
+	#name : 'StDebuggerExtensionGeneratorForTests',
+	#superclass : 'Object',
+	#category : 'NewTools-Debugger-Tests-Utils',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Utils'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerExtensionGeneratorForTests class >> generateTestClass [
 
 	self classInstaller make: [ :builder |
@@ -23,7 +25,7 @@ StDebuggerExtensionGeneratorForTests class >> generateTestClass [
 	self testClass compile: 'debuggerExtensionToolName ^ ''TStDebuggerExtensionTestClass'''.
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerExtensionGeneratorForTests class >> removeTestClass [
 
 	Smalltalk
@@ -31,7 +33,7 @@ StDebuggerExtensionGeneratorForTests class >> removeTestClass [
 		ifPresent: [ :class | class removeFromSystem ]
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerExtensionGeneratorForTests class >> testClass [
 
 	^ Smalltalk at: #TStDebuggerExtensionTestClass

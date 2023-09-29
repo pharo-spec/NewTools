@@ -2,27 +2,29 @@
 Debugger command tree builder mock to test general behavior outside of a debugger
 "
 Class {
-	#name : #StDebuggerMockCommandTreeBuilder,
-	#superclass : #StDebuggerCommandTreeBuilder,
-	#category : #'NewTools-Debugger-Tests-Utils'
+	#name : 'StDebuggerMockCommandTreeBuilder',
+	#superclass : 'StDebuggerCommandTreeBuilder',
+	#category : 'NewTools-Debugger-Tests-Utils',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Utils'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerMockCommandTreeBuilder class >> displayStrategy [
 	^CmUIDisplayAsSubMenu
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerMockCommandTreeBuilder class >> groupDescription [
 	^'mock group'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerMockCommandTreeBuilder class >> groupName [
 	^'mock'
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 StDebuggerMockCommandTreeBuilder >> buildDebuggerCommandGroup [
 	
 ]

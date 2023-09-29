@@ -1,14 +1,16 @@
 Class {
-	#name : #StDebuggerTreeTablePresenterTest,
-	#superclass : #TestCase,
+	#name : 'StDebuggerTreeTablePresenterTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'presenter',
 		'inspectorNodes'
 	],
-	#category : #'NewTools-Debugger-Tests-Presenters'
+	#category : 'NewTools-Debugger-Tests-Presenters',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Presenters'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerTreeTablePresenterTest >> setUp [
 
 	| node |
@@ -28,7 +30,7 @@ StDebuggerTreeTablePresenterTest >> setUp [
 	presenter roots: inspectorNodes.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerTreeTablePresenterTest >> testApplyFilterDoesFilterWhenHasActiveFilterIsTrueAndFilterIsNotNil [
 
 	| rejectedItems filteredItems |
@@ -45,7 +47,7 @@ StDebuggerTreeTablePresenterTest >> testApplyFilterDoesFilterWhenHasActiveFilter
 		assertCollection: inspectorNodes hasSameElements: filteredItems , rejectedItems
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerTreeTablePresenterTest >> testApplyFilterDoesntFilterAndRemovesFilterWhenHasActiveFilterIsFalse [
 
 	presenter filter: 'toto'.
@@ -54,7 +56,7 @@ StDebuggerTreeTablePresenterTest >> testApplyFilterDoesntFilterAndRemovesFilterW
 			assert: presenter filter isNil
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerTreeTablePresenterTest >> testApplyFilterDoesntFilterWhenFilterIsNil [
 
 	presenter isFiltered: true.
@@ -62,7 +64,7 @@ StDebuggerTreeTablePresenterTest >> testApplyFilterDoesntFilterWhenFilterIsNil [
 	self assert: presenter roots equals: inspectorNodes
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerTreeTablePresenterTest >> testInitialization [
 
 	self deny: presenter hasActiveFilter.
@@ -70,7 +72,7 @@ StDebuggerTreeTablePresenterTest >> testInitialization [
 	self assert: presenter roots equals: inspectorNodes
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerTreeTablePresenterTest >> testRootsActualisesRootsByApplyingFilter [
 
 	| filteredItems |
@@ -83,7 +85,7 @@ StDebuggerTreeTablePresenterTest >> testRootsActualisesRootsByApplyingFilter [
 	self assert: presenter roots equals: filteredItems
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerTreeTablePresenterTest >> testToggleDoesNotFilterWhenFilteredButFilterIsNil [
 
 	presenter toggleFilter: nil.
@@ -91,7 +93,7 @@ StDebuggerTreeTablePresenterTest >> testToggleDoesNotFilterWhenFilteredButFilter
 		assert: presenter hasActiveFilter
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerTreeTablePresenterTest >> testToggleFiltersWhenFilteredAndFilterIsNotNil [
 
 	| rejectedItems |
@@ -106,7 +108,7 @@ StDebuggerTreeTablePresenterTest >> testToggleFiltersWhenFilteredAndFilterIsNotN
 		assert: presenter hasActiveFilter
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerTreeTablePresenterTest >> testToggleUnFiltersWhenToggledTwice [
 
 	presenter toggleFilter: 'toto'.

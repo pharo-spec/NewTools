@@ -1,11 +1,11 @@
-Extension { #name : #String }
+Extension { #name : 'String' }
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 String >> presentDiffIn: aStFailingAssertionPresenter [
 	aStFailingAssertionPresenter initializeStringDiffPresenters
 ]
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 String >> presentDiffWith: anObject in: aStFailingAssertionPresenter [
 	anObject presentDiffIn: aStFailingAssertionPresenter
 ]

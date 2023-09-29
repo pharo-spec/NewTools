@@ -1,13 +1,15 @@
 Class {
-	#name : #StDebuggerExtensionActivationToggle,
-	#superclass : #Announcement,
+	#name : 'StDebuggerExtensionActivationToggle',
+	#superclass : 'Announcement',
 	#instVars : [
 		'debuggerExtensionClass'
 	],
-	#category : #'NewTools-Debugger-Model'
+	#category : 'NewTools-Debugger-Model',
+	#package : 'NewTools-Debugger',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerExtensionActivationToggle class >> debuggerExtensionClass: aDebuggerExtensionClass [
 
 	^ self new
@@ -15,13 +17,13 @@ StDebuggerExtensionActivationToggle class >> debuggerExtensionClass: aDebuggerEx
 		  yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerExtensionActivationToggle >> debuggerExtensionClass [
 
 	^ debuggerExtensionClass
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerExtensionActivationToggle >> debuggerExtensionClass: anObject [
 
 	debuggerExtensionClass := anObject
