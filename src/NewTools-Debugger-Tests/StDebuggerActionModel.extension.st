@@ -1,6 +1,6 @@
-Extension { #name : #StDebuggerActionModel }
+Extension { #name : 'StDebuggerActionModel' }
 
-{ #category : #'*NewTools-Debugger-Tests' }
+{ #category : '*NewTools-Debugger-Tests' }
 StDebuggerActionModel >> hasSubscriber: aDebugger [
 
 	^ self announcer hasSubscriber: aDebugger

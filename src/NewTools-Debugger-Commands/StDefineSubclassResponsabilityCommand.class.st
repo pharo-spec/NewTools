@@ -2,32 +2,33 @@
 I request the debugger to define a subclass responsibility method, in case the current context is interrupted on a subclass responsibility exception
 "
 Class {
-	#name : #StDefineSubclassResponsabilityCommand,
-	#superclass : #StDefineMissingEntityCommand,
-	#category : #'NewTools-Debugger-Commands'
+	#name : 'StDefineSubclassResponsabilityCommand',
+	#superclass : 'StDefineMissingEntityCommand',
+	#category : 'NewTools-Debugger-Commands',
+	#package : 'NewTools-Debugger-Commands'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDefineSubclassResponsabilityCommand class >> defaultDescription [
 	^ 'Create a method in a class having the responsability to implement it.'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDefineSubclassResponsabilityCommand class >> defaultIconName [
 	^ #changeAdd
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDefineSubclassResponsabilityCommand class >> defaultName [
 	^ 'Create subclass responsibility'
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StDefineSubclassResponsabilityCommand >> appliesTo: aDebugger [
 	^ aDebugger canExecuteCreateSubclassResponsibilityCommand
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StDefineSubclassResponsabilityCommand >> execute [
 	self debugger createSubclassResponsibility
 ]

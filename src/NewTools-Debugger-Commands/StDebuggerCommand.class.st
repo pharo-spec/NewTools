@@ -2,12 +2,13 @@
 I command actions that can be requested from a debugger
 "
 Class {
-	#name : #StDebuggerCommand,
-	#superclass : #CmCommand,
-	#category : #'NewTools-Debugger-Commands'
+	#name : 'StDebuggerCommand',
+	#superclass : 'CmCommand',
+	#category : 'NewTools-Debugger-Commands',
+	#package : 'NewTools-Debugger-Commands'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StDebuggerCommand class >> codeContextMenuCommandsForDebugger: debugger [
 
 	^ self
@@ -15,17 +16,17 @@ StDebuggerCommand class >> codeContextMenuCommandsForDebugger: debugger [
 		for: debugger
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebuggerCommand class >> defaultIconName [
 	^ self subclassResponsibility
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebuggerCommand class >> defaultShortcut [
 	^ self subclassResponsibility
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StDebuggerCommand class >> forSpecContext: anObject [
 	^ (self
 		forSpecWithIconNamed: self defaultIconName
@@ -34,18 +35,18 @@ StDebuggerCommand class >> forSpecContext: anObject [
 		yourself
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StDebuggerCommand class >> isAbstract [
 
 	^ self == StDebuggerCommand
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 StDebuggerCommand class >> shortName [
 	^self defaultName
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StDebuggerCommand class >> toolbarCommandsForDebugger: debugger [
 
 	^ self
@@ -53,7 +54,7 @@ StDebuggerCommand class >> toolbarCommandsForDebugger: debugger [
 		for: debugger
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StDebuggerCommand >> = anObject [
 	"Answer whether the receiver and anObject represent the same object."
 
@@ -65,35 +66,35 @@ StDebuggerCommand >> = anObject [
 		and: [ basicName = anObject name ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StDebuggerCommand >> appliesTo: aDebugger [
 	^ aDebugger canExecuteDebugCommand
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerCommand >> canBeExecuted [
 	^ self appliesTo: self debugger
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerCommand >> context: anObject [
 
 	super context: anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerCommand >> debugger [
 	^self context
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StDebuggerCommand >> hash [
 	"Answer an integer value that is related to the identity of the receiver."
 
 	^ context hash bitXor: basicName hash
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebuggerCommand >> initialize [
 
 	super initialize.

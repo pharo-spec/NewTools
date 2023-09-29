@@ -2,91 +2,93 @@
 I mock the state of StDebuggerUsingSpecSelector to test variations in its state.
 "
 Class {
-	#name : #StDebuggerUsingSpecSelectorMock,
-	#superclass : #StDebuggerSpecSelector,
+	#name : 'StDebuggerUsingSpecSelectorMock',
+	#superclass : 'StDebuggerSpecSelector',
 	#instVars : [
 		'withDebuggerExtensions',
 		'withActivatedExtensions'
 	],
-	#category : #'NewTools-Debugger-Tests-Utils'
+	#category : 'NewTools-Debugger-Tests-Utils',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Utils'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebuggerUsingSpecSelectorMock class >> initializeWithExtensionsAllActivated [
 	^self new initializeWithExtensionsAllActivated
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebuggerUsingSpecSelectorMock class >> initializeWithExtensionsNoneActivated [
 	^self new initializeWithExtensionsNoneActivated
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebuggerUsingSpecSelectorMock class >> initializeWithoutExtensionsAllActivated [
 	^self new initializeWithoutExtensionsAllActivated
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebuggerUsingSpecSelectorMock class >> initializeWithoutExtensionsNoneActivated [
 	^self new initializeWithoutExtensionsNoneActivated
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerUsingSpecSelectorMock >> activateDebuggerExtensions [
 	^withDebuggerExtensions 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerUsingSpecSelectorMock >> availableSpecSelectors [
 	^ StDebugger availableSpecSelectors
 		add: self nonDefaultSelector;
 		yourself
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StDebuggerUsingSpecSelectorMock >> columnInspectorsSpec [
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerUsingSpecSelectorMock >> debuggerClass [ 	
 	^self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerUsingSpecSelectorMock >> extensionToolsClasses [
 	^{}
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerUsingSpecSelectorMock >> hasAnyActivatedExtension: anObject [
 	^ withActivatedExtensions
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebuggerUsingSpecSelectorMock >> initializeWithExtensionsAllActivated [
 	withDebuggerExtensions := true.
 	withActivatedExtensions := true
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebuggerUsingSpecSelectorMock >> initializeWithExtensionsNoneActivated [
 	withDebuggerExtensions := true.
 	withActivatedExtensions := false
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebuggerUsingSpecSelectorMock >> initializeWithoutExtensionsAllActivated [
 	withDebuggerExtensions := false.
 	withActivatedExtensions := true
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebuggerUsingSpecSelectorMock >> initializeWithoutExtensionsNoneActivated [
 	withDebuggerExtensions := false.
 	withActivatedExtensions := false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerUsingSpecSelectorMock >> nonDefaultSelector [
 	^#nonDefaultSelector
 ]
