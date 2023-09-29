@@ -8,27 +8,29 @@ As I provide the **default** debugger commands, you should only extend me by usi
 Using me to add command in the tree makes them default for the debugger configuration.
 "
 Class {
-	#name : #StDebuggerConfigurationCommandTreeBuilder,
-	#superclass : #StDebuggerCommandTreeBuilder,
-	#category : #'NewTools-Debugger-Model'
+	#name : 'StDebuggerConfigurationCommandTreeBuilder',
+	#superclass : 'StDebuggerCommandTreeBuilder',
+	#category : 'NewTools-Debugger-Model',
+	#package : 'NewTools-Debugger',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerConfigurationCommandTreeBuilder class >> displayStrategy [
 	^CmUIDisplayAsSubMenu 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerConfigurationCommandTreeBuilder class >> groupDescription [
 	^ 'Debugger configuration actions'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerConfigurationCommandTreeBuilder class >> groupName [ 	
 	^'Debugger configuration'
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 StDebuggerConfigurationCommandTreeBuilder >> buildDebuggerCommandGroup [
 
 	^ self group
@@ -36,7 +38,7 @@ StDebuggerConfigurationCommandTreeBuilder >> buildDebuggerCommandGroup [
 		  yourself
 ]
 
-{ #category : #'accessing - commands classes' }
+{ #category : 'accessing - commands classes' }
 StDebuggerConfigurationCommandTreeBuilder >> configurationCommandClasses [
 
 	^ {
@@ -44,7 +46,7 @@ StDebuggerConfigurationCommandTreeBuilder >> configurationCommandClasses [
 		  StDebuggerSettingsCommand }
 ]
 
-{ #category : #commands }
+{ #category : 'commands' }
 StDebuggerConfigurationCommandTreeBuilder >> generalConfigurationCommandsGroup [
 
 	| group |
@@ -58,13 +60,13 @@ StDebuggerConfigurationCommandTreeBuilder >> generalConfigurationCommandsGroup [
 	^ group
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerConfigurationCommandTreeBuilder >> generalConfigurationGroupDescription [
 
 	^ 'General configuration options for the StDebugger'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerConfigurationCommandTreeBuilder >> generalConfigurationGroupName [
 
 	^ 'General debugger configuration'

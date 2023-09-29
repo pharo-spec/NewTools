@@ -1,6 +1,6 @@
-Extension { #name : #TemporaryVariable }
+Extension { #name : 'TemporaryVariable' }
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 TemporaryVariable >> variableTag [
 	^ 'temp. var'
 ]

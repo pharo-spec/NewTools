@@ -11,47 +11,49 @@ NewExtension>>#accept: aVisitor
 ```
 "
 Class {
-	#name : #StDebuggerExtensionVisitor,
-	#superclass : #Object,
+	#name : 'StDebuggerExtensionVisitor',
+	#superclass : 'Object',
 	#instVars : [
 		'result'
 	],
-	#category : #'NewTools-Debugger-Model'
+	#category : 'NewTools-Debugger-Model',
+	#package : 'NewTools-Debugger',
+	#tag : 'Model'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebuggerExtensionVisitor >> initialize [ 
 
 	super initialize.
 	self initializeResult
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebuggerExtensionVisitor >> initializeResult [
 
 	self subclassResponsibility 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerExtensionVisitor >> result [
 
 	^ result
 ]
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 StDebuggerExtensionVisitor >> visit: aStDebuggerExtension [
 
 	aStDebuggerExtension accept: self
 ]
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 StDebuggerExtensionVisitor >> visitBreakpoints: aBreakpointsExtension [
 ]
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 StDebuggerExtensionVisitor >> visitBytecode: aBytecodeExtension [
 ]
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 StDebuggerExtensionVisitor >> visitSindarin: aSindarinExtension [
 ]
