@@ -1,6 +1,6 @@
-Extension { #name : #ContextTest }
+Extension { #name : 'ContextTest' }
 
-{ #category : #'*NewTools-Debugger-Tests' }
+{ #category : '*NewTools-Debugger-Tests' }
 ContextTest >> testFailedAssertionContextInSenderChain [
 
 	

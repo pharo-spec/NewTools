@@ -98,13 +98,6 @@ Class {
 	#tag : 'View'
 }
 
-{ #category : 'accessing' }
-StDebugger class >> activatedDebuggerExtensions [
-
-	^ self extensionToolsClasses select: [ :extension |
-		  extension showInDebugger ]
-]
-
 { #category : 'commands' }
 StDebugger class >> buildCommandsGroupWith: stDebuggerInstance forRoot: rootCommandGroup [
 
@@ -124,8 +117,9 @@ StDebugger class >> buildCommandsGroupWith: stDebuggerInstance forRoot: rootComm
 
 { #category : 'utilities' }
 StDebugger class >> closeAllDebuggers [
+
 	<script>
-	StDebugger allInstancesDo: [ :dbg | dbg close ]
+	self allInstancesDo: [ :dbg | dbg close ]
 ]
 
 { #category : 'instance creation' }
@@ -171,12 +165,12 @@ StDebugger class >> extensionToolsClasses [
 		  extensionClass isOnlyForTests ]
 ]
 
-{ #category : 'settings' }
+{ #category : 'accessing' }
 StDebugger class >> fastTDD [
 	^FastTDD ifNil:[FastTDD := false]
 ]
 
-{ #category : 'settings' }
+{ #category : 'accessing' }
 StDebugger class >> fastTDD: aBoolean [
 
 	FastTDD := aBoolean
@@ -221,18 +215,6 @@ StDebugger class >> openOn: aDebugSession withFullView: aBool andNotification: a
 	^ debugger
 ]
 
-{ #category : 'accessing' }
-StDebugger class >> sessionClass [
-	self flag: 'Should be replaced by Sindarin - should even be removed in that case!'.
-	^ DebugSession
-]
-
-{ #category : 'accessing' }
-StDebugger class >> spanNewSessionFrom: anotherSession [
-	self flag: 'Where is that used? 2019-06-28'.
-	^ anotherSession spanNewSession
-]
-
 { #category : 'settings' }
 StDebugger class >> stackColoringSettingOn: aBuilder [
 
@@ -250,12 +232,6 @@ StDebugger class >> stackColoringSettingOn: aBuilder [
 StDebugger class >> taskbarIconName [
 
 	^#smallDebug
-]
-
-{ #category : 'updating - widgets' }
-StDebugger class >> updateBlockFor: aDebugger [
-
-	^ [ aDebugger updateStep ]
 ]
 
 { #category : 'tools registry' }

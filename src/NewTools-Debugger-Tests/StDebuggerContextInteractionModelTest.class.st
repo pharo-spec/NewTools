@@ -1,14 +1,16 @@
 Class {
-	#name : #StDebuggerContextInteractionModelTest,
-	#superclass : #TestCase,
+	#name : 'StDebuggerContextInteractionModelTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'instanceVariableForTest',
 		'model'
 	],
-	#category : #'NewTools-Debugger-Tests-Model'
+	#category : 'NewTools-Debugger-Tests-Model',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Model'
 }
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 StDebuggerContextInteractionModelTest >> helperMethodForBindings [
 
 	| tempVariableForTest |
@@ -17,7 +19,7 @@ StDebuggerContextInteractionModelTest >> helperMethodForBindings [
 	^ 44
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerContextInteractionModelTest >> setUp [
 
 	| context |
@@ -31,7 +33,7 @@ StDebuggerContextInteractionModelTest >> setUp [
 	"Put here a common initialization logic for tests"
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextInteractionModelTest >> testAddBinding [
 
 	self assert: (model bindingOf: 'tata') equals: nil.
@@ -43,7 +45,7 @@ StDebuggerContextInteractionModelTest >> testAddBinding [
 		equals: 'titi'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextInteractionModelTest >> testAddBindingDeletesOldBindingIfSameKey [
 
 	self
@@ -57,7 +59,7 @@ StDebuggerContextInteractionModelTest >> testAddBindingDeletesOldBindingIfSameKe
 		equals: 42
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextInteractionModelTest >> testBindingOf [
 
 	"These are values given in the setUp method and in the helper method"
@@ -93,7 +95,7 @@ StDebuggerContextInteractionModelTest >> testBindingOf [
 		equals: 41
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextInteractionModelTest >> testBindingOfPrioritizesContextBindingsToInteractionModelBindings [
 
 	"These are values given in the setUp method and in the helper method"
@@ -121,7 +123,7 @@ StDebuggerContextInteractionModelTest >> testBindingOfPrioritizesContextBindings
 		equals: 42.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextInteractionModelTest >> testCompile [
 
 	| result |
@@ -151,7 +153,7 @@ StDebuggerContextInteractionModelTest >> testCompile [
 	self assert: result equals: 53
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextInteractionModelTest >> testHasBindingsInContextOf [
 
 	self
@@ -161,7 +163,7 @@ StDebuggerContextInteractionModelTest >> testHasBindingsInContextOf [
 		assert: (model hasBindingInContextOf: 'tata') not
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextInteractionModelTest >> testHasBindingsInInteractionModelOf [
 
 	self
@@ -174,7 +176,7 @@ StDebuggerContextInteractionModelTest >> testHasBindingsInInteractionModelOf [
 		assert: (model hasBindingInInteractionModelOf: 'tata') not
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextInteractionModelTest >> testHasBindingsReturnsTrueWhenVariableIsInContextOrInInteractionModel [
 
 	self
@@ -184,7 +186,7 @@ StDebuggerContextInteractionModelTest >> testHasBindingsReturnsTrueWhenVariableI
 		assert: (model hasBindingOf: 'tata') not
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextInteractionModelTest >> testHasUnsavedCodeChanges [
 
 	| code |
@@ -198,7 +200,7 @@ StDebuggerContextInteractionModelTest >> testHasUnsavedCodeChanges [
 	self assert: model hasUnsavedCodeChanges
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextInteractionModelTest >> testInteractionModelArePreservedAfterChangingContext [
 
 	self
@@ -214,7 +216,7 @@ StDebuggerContextInteractionModelTest >> testInteractionModelArePreservedAfterCh
 	self assert: (model hasBindingOf: 'tempVariableForTest') not
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextInteractionModelTest >> testNilContextModel [
 
 	self deny:
