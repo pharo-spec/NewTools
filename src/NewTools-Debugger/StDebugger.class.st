@@ -390,7 +390,7 @@ StDebugger >> close [
 			actionModel clearDebugSession ] ]
 ]
 
-{ #category : 'accessing - widgets' }
+{ #category : 'accessing - presenters' }
 StDebugger >> code [
 
 	^ code
@@ -414,7 +414,7 @@ StDebugger >> connectPresenters [
 		self updateCodeFromContext ]
 ]
 
-{ #category : 'accessing - context' }
+{ #category : 'accessing - model' }
 StDebugger >> context [
  
 	^ self interruptedContext
@@ -486,7 +486,7 @@ StDebugger >> createSubclassResponsibility [
 		forContext: senderContext
 ]
 
-{ #category : 'accessing - context' }
+{ #category : 'accessing - model' }
 StDebugger >> currentContext [
 	"I answer the context on which an action should be executed.
 	This is either the selected context or if nothing is selected the interrupted context."
@@ -496,7 +496,7 @@ StDebugger >> currentContext [
 		  ifNotNil: [ self selectedContext ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - model' }
 StDebugger >> debuggerActionModel [
 	^ debuggerActionModel
 ]
@@ -508,12 +508,12 @@ StDebugger >> debuggerActionModelCleared [
 	self unsubscribeFromSystemAnnouncer
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - model' }
 StDebugger >> debuggerInspectorClass [
 	^ StDebuggerInspector
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - model' }
 StDebugger >> debuggerInspectorModelClass [
 	^ StDebuggerInspectorModel
 ]
@@ -613,7 +613,7 @@ StDebugger >> doBrowseSenders [
 		(self stackSelectionMethodSelectorContext value: self)
 ]
 
-{ #category : 'accessing - context' }
+{ #category : 'accessing - model' }
 StDebugger >> exception [
 	^ self debuggerActionModel exception
 ]
@@ -628,7 +628,7 @@ StDebugger >> expandStackIfLastItemIsSelected [
 	stackTable selectIndex: selection selectedIndex
 ]
 
-{ #category : 'accessing - widgets' }
+{ #category : 'accessing - presenters' }
 StDebugger >> extensionToolNotebook [
 
 	^ extensionToolsNotebook
@@ -857,13 +857,13 @@ StDebugger >> instantiateExtensionToolsPage: aToolClass [
 		provider: [ toolInstance ]
 ]
 
-{ #category : 'accessing - context' }
+{ #category : 'accessing - model' }
 StDebugger >> interruptedContext [
 
 	^ self debuggerActionModel interruptedContext
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - model' }
 StDebugger >> interruptedProcess [
 
 	^ self debuggerActionModel  interruptedProcess
@@ -873,7 +873,10 @@ StDebugger >> interruptedProcess [
 StDebugger >> isInSelectedContextClass: context [
 	"Return true if the given context is in the same class than the currently selected context of the stack."
 
-	^ self selectedContext methodClass = context methodClass
+	| selectedContext |
+	selectedContext := self selectedContext.
+	^ selectedContext notNil and: [
+		  selectedContext methodClass = context methodClass ]
 ]
 
 { #category : 'testing' }
@@ -918,7 +921,7 @@ StDebugger >> newDebuggerContextFor: aContext [
 		  yourself
 ]
 
-{ #category : 'accessing - context' }
+{ #category : 'accessing - model' }
 StDebugger >> newTitle [
 
 	^ self debuggerActionModel statusStringForContext
@@ -1113,18 +1116,18 @@ StDebugger >> selectedCodeRangeForContext: aContext [
 	^ self debuggerActionModel selectedCodeRangeForContext: aContext
 ]
 
-{ #category : 'accessing - context' }
+{ #category : 'accessing - model' }
 StDebugger >> selectedContext [
 
 	^ self stackTable selection selectedItem
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - model' }
 StDebugger >> session [
 	^ self debuggerActionModel session
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - model' }
 StDebugger >> session: aSession [
 
 	debuggerActionModel
@@ -1190,12 +1193,16 @@ StDebugger >> stackColorForContext: context [
 	Else, we just keep the normal style."
 
 	self class enableStackColoring ifFalse: [ ^ self theme textColor ].
+	self selectedContext ifNil: [ ^ self theme textColor ].
 
 	^ (self isInSelectedContextClass: context)
 		  ifTrue: [ self theme highlightTextColor ]
 		  ifFalse: [
 			  (self isInSelectedContextPackage: context)
-				  ifTrue: [ self theme highlightTextColor mixed: 0.5 with: self theme textColor ]
+				  ifTrue: [
+				  self theme highlightTextColor
+					  mixed: 0.5
+					  with: self theme textColor ]
 				  ifFalse: [ self theme textColor ] ]
 ]
 
@@ -1247,7 +1254,7 @@ StDebugger >> stackSelectionReceiverContext [
 	^ [ :dbg | stackTable selection selectedItem receiver ]
 ]
 
-{ #category : 'stack' }
+{ #category : 'accessing - presenters' }
 StDebugger >> stackTable [
 
 	^ stackTable
@@ -1292,7 +1299,7 @@ StDebugger >> subscribeToActionModel [
 		to: self
 ]
 
-{ #category : 'system subscriptions' }
+{ #category : 'subscription' }
 StDebugger >> susbcribeToExtensionToggleAnnouncement [
 
 	SystemAnnouncer uniqueInstance weak
@@ -1301,7 +1308,7 @@ StDebugger >> susbcribeToExtensionToggleAnnouncement [
 		to: self
 ]
 
-{ #category : 'accessing - widgets' }
+{ #category : 'accessing - presenters' }
 StDebugger >> toolbar [
 
 	^ toolbar
@@ -1326,7 +1333,7 @@ StDebugger >> unsubscribeFromActionModel [
 		actionModel unsubscribe: self ]
 ]
 
-{ #category : 'system subscription' }
+{ #category : 'subscription' }
 StDebugger >> unsubscribeFromSystemAnnouncer [
 
 	SystemAnnouncer uniqueInstance unsubscribe: self
