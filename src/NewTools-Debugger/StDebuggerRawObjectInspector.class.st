@@ -4,15 +4,17 @@ I show only a compacted raw view instead of a notebook page, in particular I rem
 Activating one of my items (by clicking or double-clicking on it) shows a miller list with a standard object inspector.
 "
 Class {
-	#name : #StDebuggerRawObjectInspector,
-	#superclass : #StObjectInspectorPresenter,
+	#name : 'StDebuggerRawObjectInspector',
+	#superclass : 'StObjectInspectorPresenter',
 	#instVars : [
 		'raw'
 	],
-	#category : #'NewTools-Debugger-View'
+	#category : 'NewTools-Debugger-View',
+	#package : 'NewTools-Debugger',
+	#tag : 'View'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 StDebuggerRawObjectInspector class >> noHeaderSpec [
 	<spec: #default>
 	^ SpBoxLayout newTopToBottom
@@ -20,7 +22,7 @@ StDebuggerRawObjectInspector class >> noHeaderSpec [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebuggerRawObjectInspector >> defaultLayout [
 	
 	^ SpBoxLayout newTopToBottom 
@@ -30,7 +32,7 @@ StDebuggerRawObjectInspector >> defaultLayout [
 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebuggerRawObjectInspector >> initializePresenters [
 
 
@@ -42,24 +44,24 @@ StDebuggerRawObjectInspector >> initializePresenters [
 	super initializePresenters
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebuggerRawObjectInspector >> rawInspectorPageOrNil [
 	^raw
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerRawObjectInspector >> selectedObject [
 	"The debugger raw object inspector is opened on a StDebuggerContext object that holds context information. Here the view expected by users is on the receiver and not on the StDebuggerContext."
 	^super selectedObject context receiver
 ]
 
-{ #category : #stepping }
+{ #category : 'stepping' }
 StDebuggerRawObjectInspector >> step [
 	super step.
 	raw step
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StDebuggerRawObjectInspector >> updateHeaderBar [
 	| filter |
 

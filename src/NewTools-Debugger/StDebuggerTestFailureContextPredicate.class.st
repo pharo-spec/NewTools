@@ -5,35 +5,37 @@ I reference that test  failure.
 
 "
 Class {
-	#name : #StDebuggerTestFailureContextPredicate,
-	#superclass : #StDebuggerContextPredicate,
+	#name : 'StDebuggerTestFailureContextPredicate',
+	#superclass : 'StDebuggerContextPredicate',
 	#instVars : [
 		'failure'
 	],
-	#category : #'NewTools-Debugger-Model'
+	#category : 'NewTools-Debugger-Model',
+	#package : 'NewTools-Debugger',
+	#tag : 'Model'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StDebuggerTestFailureContextPredicate >> contextSignalsException [
 	^true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerTestFailureContextPredicate >> failure: anObject [
 	failure := anObject
 ]
 
-{ #category : #predicates }
+{ #category : 'predicates' }
 StDebuggerTestFailureContextPredicate >> isContextAnAssertionFailure [
 	^true
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 StDebuggerTestFailureContextPredicate >> isSteppable [ 
 	^false
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 StDebuggerTestFailureContextPredicate >> printDescription [
 
 	| str |

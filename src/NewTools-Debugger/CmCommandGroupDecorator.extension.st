@@ -1,6 +1,6 @@
-Extension { #name : #CmCommandGroupDecorator }
+Extension { #name : 'CmCommandGroupDecorator' }
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 CmCommandGroupDecorator >> commandOrGroupNamed: aString ifNone: aBlock [
 	^ self decoratedGroup commandOrGroupNamed: aString ifNone: aBlock
 ]
