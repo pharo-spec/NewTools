@@ -240,6 +240,7 @@ StDebugger class >> usesExtensions [
 	^ self hasAnyActivatedExtension: self extensionToolsClasses
 ]
 
+
 { #category : 'code pane' }
 StDebugger >> acceptCodeChanges: newSource forContext: aContext [
 
@@ -327,6 +328,7 @@ StDebugger >> clear [
 	self clearDebugSession
 ]
 
+
 { #category : 'code pane' }
 StDebugger >> clearCode [
 	
@@ -336,6 +338,7 @@ StDebugger >> clearCode [
 		clearContent
 ]
 
+
 { #category : 'actions' }
 StDebugger >> clearDebugSession [
 
@@ -343,11 +346,13 @@ StDebugger >> clearDebugSession [
 		debugActionModel clearDebugSession ]
 ]
 
+
 { #category : 'actions' }
 StDebugger >> clearDebuggerActionModel [
 	
 	self debuggerActionModel ifNotNil: [ :debugActionModel | debugActionModel clear ]
 ]
+
 
 { #category : 'code pane' }
 StDebugger >> clearUnsavedCodeChanges [
@@ -363,6 +368,7 @@ StDebugger >> close [
 		debuggerActionModel ifNotNil: [ :actionModel |
 			actionModel clearDebugSession ] ]
 ]
+
 
 { #category : 'accessing - presenters' }
 StDebugger >> code [
@@ -1124,12 +1130,6 @@ StDebugger >> setStackAndCodeContainer [
 		                         ifTrue: [ 
 		                         self stackAndCodeWithExtensionsLayout ]
 		                         ifFalse: [ self stackAndCodeLayout ]
-]
-
-{ #category : 'actions' }
-StDebugger >> showFullStack [
-	stackTable items: (self filterStack: self stack)
-
 ]
 
 { #category : 'stack' }

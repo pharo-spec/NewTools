@@ -180,7 +180,6 @@ StDebuggerStackCommandTreeBuilder >> stackContextNavigationGroupName [
 StDebuggerStackCommandTreeBuilder >> stackEditionCommandsClasses [
 	^ {
 	StCopyStackToClipboardCommand.
-	StShowFullStackCommand.
 	StPeelToFirstCommand.
 	StFileOutMethodCommand
 	}

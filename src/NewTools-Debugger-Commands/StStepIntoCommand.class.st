@@ -2,35 +2,36 @@
 Requests the debugger to step into the next expression evaluation
 "
 Class {
-	#name : #StStepIntoCommand,
-	#superclass : #StDebuggerCommand,
-	#category : #'NewTools-Debugger-Commands'
+	#name : 'StStepIntoCommand',
+	#superclass : 'StDebuggerCommand',
+	#category : 'NewTools-Debugger-Commands',
+	#package : 'NewTools-Debugger-Commands'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 StStepIntoCommand class >> defaultDescription [
 	^ 'Step in the highlighted message, i.e. follow the sent message, taking debugger control in the method invoked.'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StStepIntoCommand class >> defaultIconName [
 
 	^ #debuggerStepInto
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 StStepIntoCommand class >> defaultName [
 	<toolbarDebugCommand: 20>
 	
 	^ 'Into'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StStepIntoCommand class >> defaultShortcut [
 	^ PharoShortcuts current stepIntoShortcut
 ]
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 StStepIntoCommand >> execute [
 	self debugger stepInto
 ]
