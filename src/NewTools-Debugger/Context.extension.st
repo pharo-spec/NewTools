@@ -1,6 +1,6 @@
-Extension { #name : #Context }
+Extension { #name : 'Context' }
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 Context >> findFailedAssertionContextInSenderChain [
 
 	^ (self findContextSuchThat: [ :ctx | 
@@ -9,7 +9,7 @@ Context >> findFailedAssertionContextInSenderChain [
 		  StDebuggeAssertionFailureContextNotFound new signal ]
 ]
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 Context >> findFailedAssertionResultsInSenderChain [
 	|assertionContext assertionResult|
 	assertionContext := self findFailedAssertionContextInSenderChain.
