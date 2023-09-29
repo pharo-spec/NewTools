@@ -613,12 +613,6 @@ StDebugger >> doBrowseSenders [
 		(self stackSelectionMethodSelectorContext value: self)
 ]
 
-{ #category : 'accessing' }
-StDebugger >> environment [
-
-^ self class environment
-]
-
 { #category : 'accessing - context' }
 StDebugger >> exception [
 	^ self debuggerActionModel exception
