@@ -266,7 +266,7 @@ StDebugger class >> usesExtensions [
 	^ self hasAnyActivatedExtension: self extensionToolsClasses
 ]
 
-{ #category : 'presenter - code' }
+{ #category : 'code pane' }
 StDebugger >> acceptCodeChanges: newSource forContext: aContext [
 
 	"It is wrong here that I have to use code adapter widget.
@@ -353,7 +353,7 @@ StDebugger >> clear [
 	self clearDebugSession
 ]
 
-{ #category : 'updating - widgets' }
+{ #category : 'code pane' }
 StDebugger >> clearCode [
 	
 	self code
@@ -375,7 +375,7 @@ StDebugger >> clearDebuggerActionModel [
 	self debuggerActionModel ifNotNil: [ :debugActionModel | debugActionModel clear ]
 ]
 
-{ #category : 'presenter - code' }
+{ #category : 'code pane' }
 StDebugger >> clearUnsavedCodeChanges [
 
 	unsavedCodeChanges := IdentityDictionary new
@@ -527,7 +527,7 @@ StDebugger >> defaultLayout [
 		yourself
 ]
 
-{ #category : 'presenter - code' }
+{ #category : 'code pane' }
 StDebugger >> discardCodeChangesFor: aContext [
 
 	self unsavedCodeChanges removeKey: aContext ifAbsent: [  ].
@@ -542,7 +542,7 @@ StDebugger >> doBrowseClass [
 		(self stackSelectionMethodContext value: self)
 ]
 
-{ #category : 'presenter - code' }
+{ #category : 'code pane' }
 StDebugger >> doBrowseClassReferences [
 
 	| cls |
@@ -669,7 +669,7 @@ StDebugger >> findFirstRelevantStackIndexIn: aStack [
 	^ 1
 ]
 
-{ #category : 'updating - session' }
+{ #category : 'updating' }
 StDebugger >> forceSessionUpdate [
 
 	self
@@ -706,7 +706,7 @@ StDebugger >> initializeBreakpointInspector [
 		on: (StInspectorModel on: nil).
 ]
 
-{ #category : 'presenter - code' }
+{ #category : 'code pane' }
 StDebugger >> initializeCode [
 
 	code := self newCode.
@@ -1000,7 +1000,7 @@ StDebugger >> recompileMethodTo: aString inContext: aContext notifying: aNotifye
 	^ self debuggerActionModel recompileMethodTo: aString inContext: aContext notifying: aNotifyer.
 ]
 
-{ #category : 'presenter - code' }
+{ #category : 'code pane' }
 StDebugger >> recordUnsavedCodeChanges [
 
 	|codeInteractionModel codeText|
@@ -1110,7 +1110,7 @@ StDebugger >> selectNextExecutedExpression [
 		(sourceNodeExecuted start to: sourceNodeExecuted stop)
 ]
 
-{ #category : 'updating - actions' }
+{ #category : 'code pane' }
 StDebugger >> selectedCodeRangeForContext: aContext [
 
 	^ self debuggerActionModel selectedCodeRangeForContext: aContext
@@ -1285,9 +1285,6 @@ StDebugger >> subscribeToActionModel [
 		when: StDebuggerActionModelRestartAnnouncement
 		send: #updateRestart
 		to: self;
-		when: StDebuggerActionModelResumeAnnouncement
-		send: #updateResume
-		to: self;
 		when: StDebuggerActionModelContextChangedAnnouncement
 		send: #updateContextChanged
 		to: self;
@@ -1314,14 +1311,14 @@ StDebugger >> toolbar [
 	^ toolbar
 ]
 
-{ #category : 'presenter - code' }
+{ #category : 'code pane' }
 StDebugger >> unsavedCodeChanges [
 
 	^ unsavedCodeChanges ifNil: [ 
 		  unsavedCodeChanges := IdentityDictionary new ]
 ]
 
-{ #category : 'presenter - code' }
+{ #category : 'code pane' }
 StDebugger >> unsavedCodeChangesFor: aContext [ 
 	^self unsavedCodeChanges at: aContext
 ]
@@ -1339,19 +1336,19 @@ StDebugger >> unsubscribeFromSystemAnnouncer [
 	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
-{ #category : 'updating - widgets' }
+{ #category : 'updating' }
 StDebugger >> updateAfterMethodAdded [
 
 	self updateToolbar
 ]
 
-{ #category : 'updating - widgets' }
+{ #category : 'updating - presenters' }
 StDebugger >> updateCodeFromContext [
 
 	self updateCodeFromContext: self currentContext
 ]
 
-{ #category : 'presenter - code' }
+{ #category : 'code pane' }
 StDebugger >> updateCodeFromContext: aContext [
 
 	| selectionInterval formerCodeInteractionModel |
@@ -1374,7 +1371,7 @@ StDebugger >> updateCodeFromContext: aContext [
 		forInterval: selectionInterval
 ]
 
-{ #category : 'updating - widgets' }
+{ #category : 'updating - presenters' }
 StDebugger >> updateCodeTextSegmentDecoratorsIn: aContext forInterval: selectionInterval [
 	
 	self code removeAllTextSegmentDecorations.
@@ -1397,7 +1394,7 @@ StDebugger >> updateCodeTextSegmentDecoratorsIn: aContext forInterval: selection
 		title: 'Click me!';"
 ]
 
-{ #category : 'updating - actions' }
+{ #category : 'updating' }
 StDebugger >> updateContextChanged [
 	"A context has changed when a method has been recompiled. If a method has been recompiled with additional instance variables and/or temporary variables, the inspector needs to be updated"
 
@@ -1407,7 +1404,7 @@ StDebugger >> updateContextChanged [
 	self updateStep
 ]
 
-{ #category : 'updating - widgets' }
+{ #category : 'updating - presenters' }
 StDebugger >> updateExtensionsFrom: newSession [
 	self extensionTools do:[:tool| tool updatePresenter]
 ]
@@ -1448,7 +1445,7 @@ StDebugger >> updateExtensionsFromAnnouncement: aStDebuggerToggleAnnouncement [
 	self layout: self defaultLayout
 ]
 
-{ #category : 'updating - widgets' }
+{ #category : 'updating - presenters' }
 StDebugger >> updateInspectorFromContext: aContext [
 
 	inspector
@@ -1460,12 +1457,6 @@ StDebugger >> updateInspectorFromContext: aContext [
 	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p | p update ]
 ]
 
-{ #category : 'updating - widgets' }
-StDebugger >> updatePredicatesForContext: aContext [
-
-	self debuggerActionModel updateContextPredicate
-]
-
 { #category : 'initialization' }
 StDebugger >> updatePresenter [
 
@@ -1473,18 +1464,13 @@ StDebugger >> updatePresenter [
 	self buildContextMenus
 ]
 
-{ #category : 'updating - actions' }
+{ #category : 'updating' }
 StDebugger >> updateRestart [
 
 	self updateStep
 ]
 
-{ #category : 'updating - actions' }
-StDebugger >> updateResume [
-
-]
-
-{ #category : 'presenter - code' }
+{ #category : 'code pane' }
 StDebugger >> updateSourceCodeFor: aContext [
 
 	| codeText |
@@ -1504,7 +1490,7 @@ StDebugger >> updateStackFromSession: aSession [
 		scrollToSelection: true
 ]
 
-{ #category : 'updating - actions' }
+{ #category : 'updating' }
 StDebugger >> updateStep [
   | previousASTScope previousContext currentASTScope currentContext |
 	
@@ -1526,7 +1512,7 @@ StDebugger >> updateStep [
 		p update ]
 ]
 
-{ #category : 'updating - widgets' }
+{ #category : 'updating - presenters' }
 StDebugger >> updateToolbar [
 	
 	toolbarCommandGroup ifNil: [ ^ self ].
@@ -1534,7 +1520,7 @@ StDebugger >> updateToolbar [
 		spCommand updateEnableStatus ]
 ]
 
-{ #category : 'updating - widgets' }
+{ #category : 'updating - presenters' }
 StDebugger >> updateWindowTitle [
 
 	self withWindowDo: [ :window | window title: self newTitle ].
