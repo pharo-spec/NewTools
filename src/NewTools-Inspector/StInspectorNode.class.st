@@ -45,7 +45,7 @@ StInspectorNode >> asInspectorModel [
 { #category : 'accessing' }
 StInspectorNode >> children [ 
 	
-	^ self value allInspectorNodes
+	^ self value inspectorNodes
 ]
 
 { #category : 'accessing' }
