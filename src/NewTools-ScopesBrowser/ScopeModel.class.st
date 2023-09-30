@@ -21,7 +21,7 @@ ScopeModel class >> default [
 		yourself
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 ScopeModel >> allPackages [
 
 	^ allPackages ifNil: [
@@ -29,29 +29,9 @@ ScopeModel >> allPackages [
 			                 ScopePackageModel on: p ]) sorted ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'announcements' }
 ScopeModel >> announcer: anAnnouncer [
 	announcer := anAnnouncer
-]
-
-{ #category : 'as yet unclassified' }
-ScopeModel >> classEnvironmentFrom: aSetOfNodes [
-	| classEnvironment compositeEnvironment classNodes selectedClassNodes |
-	
-	classEnvironment := RBClassEnvironment new.
-	compositeEnvironment := RBCompositeEnvironment new.
-	
-	
-	"include all classes belonging to a package whose classes weren't all selected"
-	classNodes := aSetOfNodes select: [ :each | each isClassNode ].
-	selectedClassNodes := classNodes copy.
-	classNodes do: [ :classNode |
-		#() do: [ :packageNode |
-			(packageNode children includes: classNode) ifTrue: [
-				selectedClassNodes remove: classNode ] ] ].
-	classEnvironment classes:
-		                    (selectedClassNodes collect: [ :c | c value ]).	
-	^ classEnvironment
 ]
 
 { #category : 'accessing' }
@@ -64,31 +44,38 @@ ScopeModel >> environment: aSmalltalkImage [
 	environment := aSmalltalkImage
 ]
 
-{ #category : 'as yet unclassified' }
-ScopeModel >> packageEnvironmentFrom: nodes [
-	| packageNodes selectedPackageNodes packageEnvironment |
-	"Select all packages that have all their classes selected"
-	packageEnvironment := RBPackageEnvironment new.
-	"select packages whose classes were all selected"
-	packageNodes := nodes select: [ :each | each isPackageNode ].
-	selectedPackageNodes := packageNodes select: [ :each |
-		                        each children allSatisfy: [ :classOrTrait |
-			                        nodes includes: classOrTrait ] ].
-	selectedPackageNodes ifNotEmpty: [
-		packageEnvironment packages:
-			                      (selectedPackageNodes collect: [ :p | p value ]) ].
-	^ packageEnvironment 
-]
+{ #category : 'private' }
+ScopeModel >> newScopeFrom: aSetOfNodes [
 
-{ #category : 'as yet unclassified' }
-ScopeModel >> updateWithNodes: aSetOfNodes [
+	| packageScope classScope packages classes packageNodes classNodes orphanClasses fullPackages compositeScope |
+	
+	packages := aSetOfNodes select: [ :node | node isPackageNode ] thenCollect: [:node | node value].
+	classes := aSetOfNodes select: [ :node | node isClassOrTraitNode ] thenCollect: [:node | node value].
 
-	| packageEnvironment  classEnvironment compositeEnvironment |
+	"classes whose package hasn't all of its classes selected"
+	orphanClasses := classes select: [ :class |
+		                 | siblings |
+		                 siblings := class package definedClasses.
+		                 siblings anySatisfy: [ :sibling |
+			                 classes noneSatisfy: [ :selectedClass |
+				                 selectedClass = sibling ] ] ].
 	
-	packageEnvironment := self packageEnvironmentFrom: aSetOfNodes.
-	classEnvironment := self classEnvironmentFrom: aSetOfNodes.
-	announcer announce: (NewScopeAnnouncement on: classEnvironment )
-	"(classEnvironment isEmpty or: [ packageEnvironment isEmpty ]) ifTrue: [ 
-		 ]"
+	"packages whose classes were all selected"
+	fullPackages := packages select: [ :each |
+		                each definedClasses noneSatisfy: [ :class |
+			                orphanClasses anySatisfy: [ :orphan |
+				                orphan = class ] ] ].
 	
+	classScope := RBClassEnvironment classes: orphanClasses.
+	packageScope := RBPackageEnvironment packages: fullPackages.
+	
+	(classScope isEmpty not and: [ packageScope isEmpty not ]) ifTrue: [ 
+		compositeScope := RBCompositeEnvironment onEnvironment: classScope and: packageScope ].
+	
+	compositeScope ifNotNil: [ ^ compositeScope ].
+	packageScope isEmpty ifFalse: [ ^ packageScope ].
+	classScope isEmpty ifFalse: [ ^ classScope ].
+	self error: 'Impossible to create scope from nodes'.
+	
+
 ]

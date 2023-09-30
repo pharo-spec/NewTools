@@ -13,7 +13,7 @@ ScopeClassModel >> children [
 ]
 
 { #category : 'accessing' }
-ScopeClassModel >> isClassNode [
+ScopeClassModel >> isClassOrTraitNode [
 	^ true
 ]
 

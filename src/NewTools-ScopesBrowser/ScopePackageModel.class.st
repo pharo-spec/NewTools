@@ -6,7 +6,7 @@ Class {
 	#tag : 'Models'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 ScopePackageModel >> children [
 
 	^ value definedClasses asOrderedCollection collect: [ :classOrTrait |
@@ -22,12 +22,12 @@ ScopePackageModel >> definedClasses [
 	^ value definedClasses
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'testing' }
 ScopePackageModel >> isPackageNode [
 	^ true
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 ScopePackageModel >> scopesIconName [
 	^ #package
 ]

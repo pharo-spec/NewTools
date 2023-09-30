@@ -203,6 +203,10 @@ ScopeNodesPresenter >> removeNode: aNode [
 
 { #category : 'initialization' }
 ScopeNodesPresenter >> saveScope [
-	self model updateWithNodes: checkedScopeNodes 
+	| newScope |
+	self assert: checkedScopeNodes isNotEmpty.
+	newScope := self model newScopeFrom: checkedScopeNodes.
+	announcer announce: (NewScopeAnnouncement on: newScope).
+	self close
 		
 ]

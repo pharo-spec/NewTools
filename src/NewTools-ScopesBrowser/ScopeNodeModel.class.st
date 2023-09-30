@@ -47,12 +47,12 @@ ScopeNodeModel >> definedClasses [
 	^#()
 ]
 
-{ #category : 'accessing' }
-ScopeNodeModel >> isClassNode [
+{ #category : 'testing' }
+ScopeNodeModel >> isClassOrTraitNode [
 	^ false
 ]
 
-{ #category : 'accessing' }
+{ #category : 'testing' }
 ScopeNodeModel >> isPackageNode [
 	^ false
 ]
