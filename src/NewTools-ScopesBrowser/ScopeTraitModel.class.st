@@ -7,6 +7,12 @@ Class {
 }
 
 { #category : 'accessing' }
+ScopeTraitModel >> children [
+
+	^ #(  )
+]
+
+{ #category : 'accessing' }
 ScopeTraitModel >> isClassNode [
 	^ true
 ]
@@ -14,10 +20,4 @@ ScopeTraitModel >> isClassNode [
 { #category : 'accessing' }
 ScopeTraitModel >> scopesIconName [
 	^ #trait
-]
-
-{ #category : 'accessing' }
-ScopeTraitModel >> subelements [
-
-	^ #(  )
 ]

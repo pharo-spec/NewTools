@@ -5,7 +5,7 @@ Class {
 	#name : 'ScopeNodeModel',
 	#superclass : 'Object',
 	#instVars : [
-		'node'
+		'value'
 	],
 	#category : 'NewTools-ScopesBrowser-Models',
 	#package : 'NewTools-ScopesBrowser',
@@ -15,7 +15,7 @@ Class {
 { #category : 'instance creation' }
 ScopeNodeModel class >> on: aPackageOrClass [
 	^ self new
-		node: aPackageOrClass;
+		value: aPackageOrClass;
 		yourself
 ]
 
@@ -34,7 +34,12 @@ ScopeNodeModel >> = anotherNode [
 { #category : 'accessing' }
 ScopeNodeModel >> basicEqualsTo: aNode [
 
-	^ self node = aNode node
+	^ self value = aNode value
+]
+
+{ #category : 'accessing' }
+ScopeNodeModel >> children [
+	self subclassResponsibility 
 ]
 
 { #category : 'accessing' }
@@ -54,28 +59,18 @@ ScopeNodeModel >> isPackageNode [
 
 { #category : 'accessing' }
 ScopeNodeModel >> name [
-	^ node name
-]
-
-{ #category : 'accessing' }
-ScopeNodeModel >> node [
-	^ node
-]
-
-{ #category : 'accessing' }
-ScopeNodeModel >> node: aNode [
-	node := aNode
+	^ value name
 ]
 
 { #category : 'accessing' }
 ScopeNodeModel >> package [
-	^ node package
+	^ value package
 ]
 
 { #category : 'accessing' }
 ScopeNodeModel >> printOn: aStream [
 	aStream
-		nextPutAll: self class name , '(', self node name ,')'
+		nextPutAll: self class name , '(', self value name ,')'
 ]
 
 { #category : 'accessing' }
@@ -84,6 +79,11 @@ ScopeNodeModel >> scopesIconName [
 ]
 
 { #category : 'accessing' }
-ScopeNodeModel >> subelements [
-	self subclassResponsibility 
+ScopeNodeModel >> value [
+	^ value
+]
+
+{ #category : 'accessing' }
+ScopeNodeModel >> value: aPackageOrClass [
+	value := aPackageOrClass
 ]

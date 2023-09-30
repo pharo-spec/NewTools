@@ -7,6 +7,12 @@ Class {
 }
 
 { #category : 'accessing' }
+ScopeClassModel >> children [
+
+	^ #(  )
+]
+
+{ #category : 'accessing' }
 ScopeClassModel >> isClassNode [
 	^ true
 ]
@@ -14,10 +20,4 @@ ScopeClassModel >> isClassNode [
 { #category : 'accessing' }
 ScopeClassModel >> scopesIconName [
 	^ #class
-]
-
-{ #category : 'accessing' }
-ScopeClassModel >> subelements [
-
-	^ #(  )
 ]

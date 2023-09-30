@@ -52,21 +52,20 @@ ScopeNodesPresenter class >> title [
 ]
 
 { #category : 'private' }
-ScopeNodesPresenter >> activateItem: scopeNode [ 
+ScopeNodesPresenter >> activateItem: scopeNode [
 
 	checkedScopeNodes add: scopeNode.
-	scopeNode subelements isEmptyOrNil ifTrue: [ ^ self ].
+	scopeNode children isEmptyOrNil ifTrue: [ ^ self ].
 	self refreshCheckbox.
-	
-	scopeNode subelements do: [ :child |
-		checkedScopeNodes add: child.
-		self refreshCheckbox ].
 
-	
-	checkedScopeNodes do: [:n | Transcript show: n name;cr ] 
+	scopeNode children do: [ :child |
+		(checkedScopeNodes anySatisfy: [ :node | child value = node value ])
+			ifFalse: [
+				checkedScopeNodes add: child ] ].
+	self refreshCheckbox
 ]
 
-{ #category : 'accessing' }
+{ #category : 'announcements' }
 ScopeNodesPresenter >> announcer: anAnnouncer [
 	announcer := anAnnouncer
 ]
@@ -80,13 +79,12 @@ ScopeNodesPresenter >> close [
 ScopeNodesPresenter >> deactivateItem: scopeNode [
 
 	checkedScopeNodes remove: scopeNode.
-	scopeNode subelements isEmptyOrNil ifTrue: [ ^ self ].
+	scopeNode children isEmptyOrNil ifTrue: [ ^ self ].
 
-	scopeNode subelements do: [ :child |
+	scopeNode children do: [ :child |
 		checkedScopeNodes remove: child ifAbsent: [  ] ].
 
-	self refreshCheckbox.
-	checkedScopeNodes do: [:n | Transcript show: n name;cr ] 
+	self refreshCheckbox
 ]
 
 { #category : 'initialization' }
@@ -137,11 +135,11 @@ ScopeNodesPresenter >> initializeScopeNodesTree [
 		  hideColumnHeaders;
 		  addColumn: self nodesListColumn;
 		  children: [ :each |
-			  each subelements sorted select: [ :node |
+			  each children sorted select: [ :node |
 					  (node name asLowercase beginsWith: nodeNameText text asLowercase) or: [
 							  node package name asLowercase beginsWith: nodeNameText text asLowercase ] ] ];
 		  beMultipleSelection;
-		  roots: self model allPackages sorted;
+		  roots: self model allPackages;
 		  beResizable;
 		  activateOnDoubleClick;
 		  whenActivatedDo: [ :selection | "contextMenu: self menu"
@@ -150,7 +148,8 @@ ScopeNodesPresenter >> initializeScopeNodesTree [
 
 { #category : 'accessing' }
 ScopeNodesPresenter >> model [
-	^ model ifNil: [ ScopeModel default announcer: announcer ]
+
+	^ model ifNil: [ model := ScopeModel default announcer: announcer ]
 ]
 
 { #category : 'private' }
@@ -168,7 +167,7 @@ ScopeNodesPresenter >> nodesListColumn [
 	^ SpCompositeTableColumn new
 		addColumn: (SpCheckBoxTableColumn new
 			beNotExpandable;
-			evaluated: [ :scopeNode |  checkedScopeNodes includes: scopeNode ];
+			evaluated: [ :scopeNode | checkedScopeNodes anySatisfy: [ :n | n value = scopeNode value ] ];
 			onActivation: [ :scopeNode | self activateItem: scopeNode ];
 			onDeactivation: [ :scopeNode | self deactivateItem: scopeNode ];
 			yourself);
@@ -183,7 +182,7 @@ ScopeNodesPresenter >> nodesListColumn [
 { #category : 'initialization' }
 ScopeNodesPresenter >> refresh [
 
-	scopeNodesTree roots: (self model allPackages sorted select: [ :each |
+	scopeNodesTree roots: (self model allPackages select: [ :each |
 			 (each name asLowercase beginsWith: nodeNameText text asLowercase) or: [
 				 each definedClasses anySatisfy: [ :class |
 					 class name asLowercase beginsWith: nodeNameText text asLowercase ] ] ])

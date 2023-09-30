@@ -66,14 +66,14 @@ ScopesPresenter >> registerEvents [
 		for: self
 ]
 
-{ #category : 'initialization' }
+{ #category : 'private' }
 ScopesPresenter >> showScopeEditor [
 	| p |
 	p := ScopeNodesPresenter new announcer: announcer; yourself.
 	p open
 ]
 
-{ #category : 'accessing' }
+{ #category : 'private' }
 ScopesPresenter >> toolbarButtons [
 	| buttons |
 	buttons := OrderedCollection new.

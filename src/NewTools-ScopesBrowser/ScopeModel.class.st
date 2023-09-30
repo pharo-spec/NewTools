@@ -23,7 +23,10 @@ ScopeModel class >> default [
 
 { #category : 'as yet unclassified' }
 ScopeModel >> allPackages [
-	^ allPackages ifNil: [ allPackages := self environment packages collect: [ :p | ScopePackageModel on: p ] ]
+
+	^ allPackages ifNil: [
+		  allPackages := (self environment packages collect: [ :p |
+			                 ScopePackageModel on: p ]) sorted ]
 ]
 
 { #category : 'accessing' }
@@ -44,10 +47,10 @@ ScopeModel >> classEnvironmentFrom: aSetOfNodes [
 	selectedClassNodes := classNodes copy.
 	classNodes do: [ :classNode |
 		#() do: [ :packageNode |
-			(packageNode subelements includes: classNode) ifTrue: [
+			(packageNode children includes: classNode) ifTrue: [
 				selectedClassNodes remove: classNode ] ] ].
 	classEnvironment classes:
-		                    (selectedClassNodes collect: [ :c | c node ]).	
+		                    (selectedClassNodes collect: [ :c | c value ]).	
 	^ classEnvironment
 ]
 
@@ -69,11 +72,11 @@ ScopeModel >> packageEnvironmentFrom: nodes [
 	"select packages whose classes were all selected"
 	packageNodes := nodes select: [ :each | each isPackageNode ].
 	selectedPackageNodes := packageNodes select: [ :each |
-		                        each subelements allSatisfy: [ :classOrTrait |
+		                        each children allSatisfy: [ :classOrTrait |
 			                        nodes includes: classOrTrait ] ].
 	selectedPackageNodes ifNotEmpty: [
 		packageEnvironment packages:
-			                      (selectedPackageNodes collect: [ :p | p node ]) ].
+			                      (selectedPackageNodes collect: [ :p | p value ]) ].
 	^ packageEnvironment 
 ]
 
