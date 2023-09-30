@@ -69,6 +69,11 @@ ScopeNodesPresenter >> addNode: aNode [
 ]
 
 { #category : 'announcements' }
+ScopeNodesPresenter >> announceNewScope: aScope [
+	announcer announce: (NewScopeAnnouncement on: aScope)
+]
+
+{ #category : 'announcements' }
 ScopeNodesPresenter >> announcer: anAnnouncer [
 	announcer := anAnnouncer
 ]
@@ -206,7 +211,7 @@ ScopeNodesPresenter >> saveScope [
 	| newScope |
 	self assert: checkedScopeNodes isNotEmpty.
 	newScope := self model newScopeFrom: checkedScopeNodes.
-	announcer announce: (NewScopeAnnouncement on: newScope).
+	self announceNewScope: newScope.
 	self close
 		
 ]

@@ -47,7 +47,7 @@ ScopeModel >> environment: aSmalltalkImage [
 { #category : 'private' }
 ScopeModel >> newScopeFrom: aSetOfNodes [
 
-	| packageScope classScope packages classes packageNodes classNodes orphanClasses fullPackages compositeScope |
+	| packageScope classScope packages classes orphanClasses fullPackages compositeScope |
 	
 	packages := aSetOfNodes select: [ :node | node isPackageNode ] thenCollect: [:node | node value].
 	classes := aSetOfNodes select: [ :node | node isClassOrTraitNode ] thenCollect: [:node | node value].
@@ -69,10 +69,10 @@ ScopeModel >> newScopeFrom: aSetOfNodes [
 	classScope := RBClassEnvironment classes: orphanClasses.
 	packageScope := RBPackageEnvironment packages: fullPackages.
 	
-	(classScope isEmpty not and: [ packageScope isEmpty not ]) ifTrue: [ 
-		compositeScope := RBCompositeEnvironment onEnvironment: classScope and: packageScope ].
+	(classScope isNotEmpty and: [ packageScope isNotEmpty ]) ifTrue: [ 
+		compositeScope := packageScope | classScope ].
 	
-	compositeScope ifNotNil: [ ^ compositeScope ].
+	compositeScope ifNotNil: [ self halt.^ compositeScope ].
 	packageScope isEmpty ifFalse: [ ^ packageScope ].
 	classScope isEmpty ifFalse: [ ^ classScope ].
 	self error: 'Impossible to create scope from nodes'.
