@@ -54,14 +54,17 @@ ScopeNodesPresenter class >> title [
 { #category : 'private' }
 ScopeNodesPresenter >> activateItem: scopeNode [
 
-	checkedScopeNodes add: scopeNode.
+	self addNode: scopeNode.
 	scopeNode children isEmptyOrNil ifTrue: [ ^ self ].
-	self refreshCheckbox.
+	
+	scopeNode children do: [ :child | self addNode: child ]
+]
 
-	scopeNode children do: [ :child |
-		(checkedScopeNodes anySatisfy: [ :node | child value = node value ])
-			ifFalse: [
-				checkedScopeNodes add: child ] ].
+{ #category : 'private' }
+ScopeNodesPresenter >> addNode: aNode [
+
+	(checkedScopeNodes anySatisfy: [ :node | aNode value = node value ])
+		ifFalse: [ checkedScopeNodes add: aNode ].
 	self refreshCheckbox
 ]
 
@@ -78,13 +81,10 @@ ScopeNodesPresenter >> close [
 { #category : 'private' }
 ScopeNodesPresenter >> deactivateItem: scopeNode [
 
-	checkedScopeNodes remove: scopeNode.
+	self removeNode: scopeNode.
 	scopeNode children isEmptyOrNil ifTrue: [ ^ self ].
-
-	scopeNode children do: [ :child |
-		checkedScopeNodes remove: child ifAbsent: [  ] ].
-
-	self refreshCheckbox
+	
+	scopeNode children do: [ :child | self removeNode: child ]
 ]
 
 { #category : 'initialization' }
@@ -191,6 +191,14 @@ ScopeNodesPresenter >> refresh [
 { #category : 'private' }
 ScopeNodesPresenter >> refreshCheckbox [
 	scopeNodesTree refresh
+]
+
+{ #category : 'private' }
+ScopeNodesPresenter >> removeNode: aNode [
+
+	checkedScopeNodes removeAllSuchThat: [ :each |
+		each value = aNode value ].
+	self refreshCheckbox
 ]
 
 { #category : 'initialization' }
