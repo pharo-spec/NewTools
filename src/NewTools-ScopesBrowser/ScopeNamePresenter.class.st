@@ -1,6 +1,6 @@
 Class {
 	#name : 'ScopeNamePresenter',
-	#superclass : 'SpPresenter',
+	#superclass : 'ScopeAbstractPresenter',
 	#instVars : [
 		'textInput'
 	],
@@ -23,12 +23,12 @@ ScopeNamePresenter class >> defaultLayout [
 { #category : 'announcements' }
 ScopeNamePresenter >> announceScopeNameEntered [
 
-	announcer announce: (ScopeNameEnteredAnnouncement on: self scopeName)
+	self announcer announce: (ScopeNameEnteredAnnouncement on: self scopeName)
 ]
 
-{ #category : 'accessing' }
-ScopeNamePresenter >> announcer: anAnnouncer [ 
-	announcer := anAnnouncer
+{ #category : 'initialize-release' }
+ScopeNamePresenter >> close [
+	self window close
 ]
 
 { #category : 'initialization' }
@@ -61,5 +61,5 @@ ScopeNamePresenter >> scopeName [
 { #category : 'initialization' }
 ScopeNamePresenter >> validate [
 
-	textInput text isEmpty ifTrue: [ self error: 'You must enter a name' ]
+	self assert: textInput text isNotEmpty
 ]

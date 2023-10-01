@@ -1,6 +1,10 @@
+"
+I am the main Scope Browser presenter. 
+I show the list of existing scopes in the system and allow to create, edit and delete scopes.
+"
 Class {
 	#name : 'ScopesPresenter',
-	#superclass : 'SpPresenter',
+	#superclass : 'ScopeAbstractPresenter',
 	#instVars : [
 		'scopesTree',
 		'toolbar'
@@ -35,7 +39,7 @@ ScopesPresenter class >> menuCommandOn: aBuilder [
 { #category : 'examples' }
 ScopesPresenter class >> open [
 	<example>
-	^ self new open
+	^ (self on: ScopeModel default) open
 ]
 
 { #category : 'layout' }
@@ -46,7 +50,6 @@ ScopesPresenter class >> title [
 { #category : 'initialization' }
 ScopesPresenter >> initialize [
 	super initialize.
-	announcer := Announcer new.
 	self registerEvents
 ]
 
@@ -57,24 +60,20 @@ ScopesPresenter >> initializePresenters [
 	self toolbarButtons do: [ :button | toolbar addItem: button ]
 ]
 
-{ #category : 'announcements' }
-ScopesPresenter >> registerEvents [
+{ #category : 'private' }
+ScopesPresenter >> newScopeEditor [
 
-	announcer
-		when: NewScopeAnnouncement
-		do: [ :ann | scopesTree items: (scopesTree items asOrderedCollection add: ann scope; yourself) ]
-		for: self
+	^ ScopeNodesPresenter on: model
 ]
 
-{ #category : 'private' }
-ScopesPresenter >> showScopeEditor [
-
-	| p |
-	p := ScopeNodesPresenter basicNew
-		     announcer: announcer;
-		     initialize;
-		     yourself.
-	p open
+{ #category : 'announcements' }
+ScopesPresenter >> registerEvents [
+	
+	self announcer
+		when: NewScopeAnnouncement
+		do: [ :ann |
+			scopesTree items: (scopesTree items asOrderedCollection add: ann scope; yourself) ]
+		for: self
 ]
 
 { #category : 'private' }
@@ -84,7 +83,7 @@ ScopesPresenter >> toolbarButtons [
 	buttons add: (self newToolbarButton
 			 icon: (self iconNamed: #add);
 			 help: 'Add a new scope';
-			 action: [ self showScopeEditor ];
+			 action: [ self newScopeEditor open ];
 			 yourself).
 	buttons add: (self newToolbarButton
 			 icon: (self iconNamed: #glamorousTrash);

@@ -1,14 +1,12 @@
 Class {
 	#name : 'ScopeNodesPresenter',
-	#superclass : 'SpPresenter',
+	#superclass : 'ScopeAbstractPresenter',
 	#instVars : [
 		'checkedScopeNodes',
 		'scopeNodesTree',
 		'nodeNameText',
 		'cancelButton',
 		'saveButton',
-		'scopeModel',
-		'model',
 		'newScope'
 	],
 	#category : 'NewTools-ScopesBrowser-GUI',
@@ -31,14 +29,6 @@ ScopeNodesPresenter class >> defaultLayout [
 					yourself)
 					withConstraints: [ :constraints | constraints height: self toolbarHeight ];
 		  yourself
-]
-
-{ #category : 'layout' }
-ScopeNodesPresenter class >> on: aScopeModel [
-	^ self basicNew
-		scope: aScopeModel;
-		initialize;
-		yourself
 ]
 
 { #category : 'instance creation' }
@@ -71,13 +61,8 @@ ScopeNodesPresenter >> addNode: aNode [
 
 { #category : 'announcements' }
 ScopeNodesPresenter >> announceNewScope [
-self halt.
-	announcer announce: (NewScopeAnnouncement on: newScope)
-]
 
-{ #category : 'announcements' }
-ScopeNodesPresenter >> announcer: anAnnouncer [
-	announcer := anAnnouncer
+	self announcer announce: (NewScopeAnnouncement on: newScope)
 ]
 
 { #category : 'private' }
@@ -147,25 +132,17 @@ ScopeNodesPresenter >> initializeScopeNodesTree [
 					  (node name asLowercase beginsWith: nodeNameText text asLowercase) or: [
 							  node package name asLowercase beginsWith: nodeNameText text asLowercase ] ] ];
 		  beMultipleSelection;
-		  roots: self model allPackages;
+		  roots: model allPackages;
 		  beResizable;
 		  activateOnDoubleClick;
 		  whenActivatedDo: [ :selection | 
 			  scopeNodesTree toggleSelectedItems ]
 ]
 
-{ #category : 'accessing' }
-ScopeNodesPresenter >> model [
-
-	^ model ifNil: [ model := ScopeModel default announcer: announcer ]
-]
-
 { #category : 'private - presenters' }
 ScopeNodesPresenter >> newScopeNameInput [
 
-	^ ScopeNamePresenter new
-		  announcer: announcer;
-		  yourself
+	^ ScopeNamePresenter on: model
 ]
 
 { #category : 'private - presenters' }
@@ -212,7 +189,7 @@ ScopeNodesPresenter >> refreshCheckbox [
 { #category : 'announcements' }
 ScopeNodesPresenter >> registerEvents [
 
-	announcer
+	self announcer
 		when: ScopeNameEnteredAnnouncement
 		do: [ :ann | self saveScope: ann name ]
 		for: self
@@ -230,7 +207,7 @@ ScopeNodesPresenter >> removeNode: aNode [
 ScopeNodesPresenter >> saveScope [
 	
 	self assert: checkedScopeNodes isNotEmpty.
-	newScope := self model newScopeFrom: checkedScopeNodes.
+	newScope := model newScopeFrom: checkedScopeNodes.
 	self newScopeNameInput open	
 ]
 

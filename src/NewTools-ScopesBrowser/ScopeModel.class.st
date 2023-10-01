@@ -29,9 +29,9 @@ ScopeModel >> allPackages [
 			                 ScopePackageModel on: p ]) sorted ]
 ]
 
-{ #category : 'announcements' }
-ScopeModel >> announcer: anAnnouncer [
-	announcer := anAnnouncer
+{ #category : 'accessing' }
+ScopeModel >> announcer [
+	^ announcer
 ]
 
 { #category : 'accessing' }
@@ -42,6 +42,12 @@ ScopeModel >> environment [
 { #category : 'accessing' }
 ScopeModel >> environment: aSmalltalkImage [ 
 	environment := aSmalltalkImage
+]
+
+{ #category : 'initialization' }
+ScopeModel >> initialize [
+	super initialize.
+	announcer := Announcer new
 ]
 
 { #category : 'private' }
