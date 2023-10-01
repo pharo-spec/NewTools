@@ -8,7 +8,8 @@ Class {
 		'cancelButton',
 		'saveButton',
 		'scopeModel',
-		'model'
+		'model',
+		'newScope'
 	],
 	#category : 'NewTools-ScopesBrowser-GUI',
 	#package : 'NewTools-ScopesBrowser',
@@ -51,7 +52,7 @@ ScopeNodesPresenter class >> title [
 	^ 'Scope Editor'
 ]
 
-{ #category : 'private' }
+{ #category : 'private - actions' }
 ScopeNodesPresenter >> activateItem: scopeNode [
 
 	self addNode: scopeNode.
@@ -60,7 +61,7 @@ ScopeNodesPresenter >> activateItem: scopeNode [
 	scopeNode children do: [ :child | self addNode: child ]
 ]
 
-{ #category : 'private' }
+{ #category : 'private - actions' }
 ScopeNodesPresenter >> addNode: aNode [
 
 	(checkedScopeNodes anySatisfy: [ :node | aNode value = node value ])
@@ -69,8 +70,9 @@ ScopeNodesPresenter >> addNode: aNode [
 ]
 
 { #category : 'announcements' }
-ScopeNodesPresenter >> announceNewScope: aScope [
-	announcer announce: (NewScopeAnnouncement on: aScope)
+ScopeNodesPresenter >> announceNewScope [
+self halt.
+	announcer announce: (NewScopeAnnouncement on: newScope)
 ]
 
 { #category : 'announcements' }
@@ -83,7 +85,7 @@ ScopeNodesPresenter >> close [
 	self window close
 ]
 
-{ #category : 'private' }
+{ #category : 'private - actions' }
 ScopeNodesPresenter >> deactivateItem: scopeNode [
 
 	self removeNode: scopeNode.
@@ -97,6 +99,7 @@ ScopeNodesPresenter >> initialize [
 
 	super initialize.
 	checkedScopeNodes := Set new.
+	self registerEvents
 	
 ]
 
@@ -147,7 +150,7 @@ ScopeNodesPresenter >> initializeScopeNodesTree [
 		  roots: self model allPackages;
 		  beResizable;
 		  activateOnDoubleClick;
-		  whenActivatedDo: [ :selection | "contextMenu: self menu"
+		  whenActivatedDo: [ :selection | 
 			  scopeNodesTree toggleSelectedItems ]
 ]
 
@@ -157,17 +160,25 @@ ScopeNodesPresenter >> model [
 	^ model ifNil: [ model := ScopeModel default announcer: announcer ]
 ]
 
-{ #category : 'private' }
+{ #category : 'private - presenters' }
+ScopeNodesPresenter >> newScopeNameInput [
+
+	^ ScopeNamePresenter new
+		  announcer: announcer;
+		  yourself
+]
+
+{ #category : 'private - presenters' }
 ScopeNodesPresenter >> newScopeTree [
 	^ self instantiate: ScopeTreePresenter
 ]
 
-{ #category : 'private' }
+{ #category : 'private - presenters' }
 ScopeNodesPresenter >> nodeDescriptionColumn [
 	^ SpStringTableColumn evaluated: #name
 ]
 
-{ #category : 'initialization' }
+{ #category : 'private - presenters' }
 ScopeNodesPresenter >> nodesListColumn [
 	^ SpCompositeTableColumn new
 		addColumn: (SpCheckBoxTableColumn new
@@ -184,7 +195,7 @@ ScopeNodesPresenter >> nodesListColumn [
 		yourself
 ]
 
-{ #category : 'initialization' }
+{ #category : 'refreshing' }
 ScopeNodesPresenter >> refresh [
 
 	scopeNodesTree roots: (self model allPackages select: [ :each |
@@ -193,12 +204,21 @@ ScopeNodesPresenter >> refresh [
 					 class name asLowercase beginsWith: nodeNameText text asLowercase ] ] ])
 ]
 
-{ #category : 'private' }
+{ #category : 'refreshing' }
 ScopeNodesPresenter >> refreshCheckbox [
 	scopeNodesTree refresh
 ]
 
-{ #category : 'private' }
+{ #category : 'announcements' }
+ScopeNodesPresenter >> registerEvents [
+
+	announcer
+		when: ScopeNameEnteredAnnouncement
+		do: [ :ann | self saveScope: ann name ]
+		for: self
+]
+
+{ #category : 'private - actions' }
 ScopeNodesPresenter >> removeNode: aNode [
 
 	checkedScopeNodes removeAllSuchThat: [ :each |
@@ -206,12 +226,18 @@ ScopeNodesPresenter >> removeNode: aNode [
 	self refreshCheckbox
 ]
 
-{ #category : 'initialization' }
+{ #category : 'private' }
 ScopeNodesPresenter >> saveScope [
-	| newScope |
+	
 	self assert: checkedScopeNodes isNotEmpty.
 	newScope := self model newScopeFrom: checkedScopeNodes.
-	self announceNewScope: newScope.
+	self newScopeNameInput open	
+]
+
+{ #category : 'private - actions' }
+ScopeNodesPresenter >> saveScope: scopeName [
+
+	newScope label: scopeName.
+	self announceNewScope.
 	self close
-		
 ]

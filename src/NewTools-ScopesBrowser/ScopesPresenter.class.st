@@ -57,7 +57,7 @@ ScopesPresenter >> initializePresenters [
 	self toolbarButtons do: [ :button | toolbar addItem: button ]
 ]
 
-{ #category : 'initialization' }
+{ #category : 'announcements' }
 ScopesPresenter >> registerEvents [
 
 	announcer
@@ -68,8 +68,12 @@ ScopesPresenter >> registerEvents [
 
 { #category : 'private' }
 ScopesPresenter >> showScopeEditor [
+
 	| p |
-	p := ScopeNodesPresenter new announcer: announcer; yourself.
+	p := ScopeNodesPresenter basicNew
+		     announcer: announcer;
+		     initialize;
+		     yourself.
 	p open
 ]
 

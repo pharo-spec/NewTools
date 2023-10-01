@@ -72,7 +72,7 @@ ScopeModel >> newScopeFrom: aSetOfNodes [
 	(classScope isNotEmpty and: [ packageScope isNotEmpty ]) ifTrue: [ 
 		compositeScope := packageScope | classScope ].
 	
-	compositeScope ifNotNil: [ self halt.^ compositeScope ].
+	compositeScope ifNotNil: [ ^ compositeScope ].
 	packageScope isEmpty ifFalse: [ ^ packageScope ].
 	classScope isEmpty ifFalse: [ ^ classScope ].
 	self error: 'Impossible to create scope from nodes'.
