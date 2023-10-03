@@ -6,8 +6,12 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'environment',
-		'allPackages',
-		'announcer'
+		'scopes',
+		'announcer',
+		'packages'
+	],
+	#classVars : [
+		'singleInstance'
 	],
 	#category : 'NewTools-ScopesBrowser-Models',
 	#package : 'NewTools-ScopesBrowser',
@@ -15,18 +19,19 @@ Class {
 }
 
 { #category : 'accessing' }
-ScopeModel class >> default [
-	^ self new
-		environment: Smalltalk;
-		yourself
+ScopeModel class >> singleInstance [
+
+	^ singleInstance ifNil: [
+		  singleInstance := self basicNew
+			                    environment: Smalltalk;
+			                    initialize;
+			                    yourself ]
 ]
 
 { #category : 'accessing' }
-ScopeModel >> allPackages [
+ScopeModel >> addScope: aRBEnvironment [
 
-	^ allPackages ifNil: [
-		  allPackages := (self environment packages collect: [ :p |
-			                 ScopePackageModel on: p ]) sorted ]
+	self scopes add: (ScopeScopeModel on: aRBEnvironment) 
 ]
 
 { #category : 'accessing' }
@@ -84,4 +89,22 @@ ScopeModel >> newScopeFrom: aSetOfNodes [
 	self error: 'Impossible to create scope from nodes'.
 	
 
+]
+
+{ #category : 'accessing' }
+ScopeModel >> packages [
+
+	^ packages ifNil: [
+		  packages := (self environment packages collect: [ :p |
+			                 ScopePackageModel on: p ]) sorted ]
+]
+
+{ #category : 'initialization' }
+ScopeModel >> reset [
+	scopes := nil
+]
+
+{ #category : 'initialization' }
+ScopeModel >> scopes [
+	^ scopes ifNil: [ scopes := Set new ]
 ]

@@ -12,12 +12,20 @@ Class {
 { #category : 'layout' }
 ScopeNamePresenter class >> defaultLayout [
 
-	^ SpBoxLayout newLeftToRight
-		  add: 'Nombre';
-		  add: #textInput
-		  expand: true
-		  fill: true
-		  padding: 0
+	^ SpBoxLayout newTopToBottom
+		  add: (SpBoxLayout newLeftToRight
+				   add: 'Nombre';
+				   add: #textInput
+				   expand: true
+				   fill: true
+				   padding: 0;
+				   yourself)
+		  expand: false
+]
+
+{ #category : 'layout' }
+ScopeNamePresenter class >> title [
+	^ 'Scope name?'
 ]
 
 { #category : 'announcements' }

@@ -14,6 +14,11 @@ ScopeAbstractPresenter >> announcer [
 	^ model announcer
 ]
 
+{ #category : 'private - presenters' }
+ScopeAbstractPresenter >> newScopeTree [
+	^ self instantiate: ScopeTreePresenter
+]
+
 { #category : 'accessing - model' }
 ScopeAbstractPresenter >> setModelBeforeInitialization: aDomainObject [
 

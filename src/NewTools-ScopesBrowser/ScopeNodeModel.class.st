@@ -21,14 +21,14 @@ ScopeNodeModel class >> on: aPackageOrClass [
 
 { #category : 'accessing' }
 ScopeNodeModel >> <= aNode [
-	^ self name <= aNode name
+	^ self label <= aNode label
 ]
 
 { #category : 'accessing' }
 ScopeNodeModel >> = anotherNode [
 
 	^ (self class = anotherNode class)
-		and: [ self name = anotherNode name ]
+		and: [ self label = anotherNode label ]
 ]
 
 { #category : 'accessing' }
@@ -58,6 +58,11 @@ ScopeNodeModel >> isPackageNode [
 ]
 
 { #category : 'accessing' }
+ScopeNodeModel >> label [
+	^ self value name
+]
+
+{ #category : 'accessing' }
 ScopeNodeModel >> name [
 	^ value name
 ]
@@ -69,8 +74,10 @@ ScopeNodeModel >> package [
 
 { #category : 'accessing' }
 ScopeNodeModel >> printOn: aStream [
+
 	aStream
-		nextPutAll: self class name , '(', self value name ,')'
+		nextPutAll: self class name , '(' , self label;
+		nextPutAll: ')'
 ]
 
 { #category : 'accessing' }

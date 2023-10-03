@@ -129,13 +129,15 @@ ScopeNodesPresenter >> initializeScopeNodesTree [
 		  addColumn: self nodesListColumn;
 		  children: [ :each |
 			  each children sorted select: [ :node |
-					  (node name asLowercase beginsWith: nodeNameText text asLowercase) or: [
-							  node package name asLowercase beginsWith: nodeNameText text asLowercase ] ] ];
+					  (node name asLowercase beginsWith:
+							   nodeNameText text asLowercase) or: [
+							  node package name asLowercase beginsWith:
+									  nodeNameText text asLowercase ] ] ];
 		  beMultipleSelection;
-		  roots: model allPackages;
+		  roots: model packages;
 		  beResizable;
 		  activateOnDoubleClick;
-		  whenActivatedDo: [ :selection | 
+		  whenActivatedDo: [ :selection |
 			  scopeNodesTree toggleSelectedItems ]
 ]
 
@@ -146,36 +148,34 @@ ScopeNodesPresenter >> newScopeNameInput [
 ]
 
 { #category : 'private - presenters' }
-ScopeNodesPresenter >> newScopeTree [
-	^ self instantiate: ScopeTreePresenter
-]
-
-{ #category : 'private - presenters' }
 ScopeNodesPresenter >> nodeDescriptionColumn [
 	^ SpStringTableColumn evaluated: #name
 ]
 
 { #category : 'private - presenters' }
 ScopeNodesPresenter >> nodesListColumn [
+
 	^ SpCompositeTableColumn new
-		addColumn: (SpCheckBoxTableColumn new
-			beNotExpandable;
-			evaluated: [ :scopeNode | checkedScopeNodes anySatisfy: [ :n | n value = scopeNode value ] ];
-			onActivation: [ :scopeNode | self activateItem: scopeNode ];
-			onDeactivation: [ :scopeNode | self deactivateItem: scopeNode ];
-			yourself);
-		addColumn: (SpImageTableColumn new
-			beNotExpandable;
-			evaluated: [ :each | self iconNamed: each scopesIconName ];
-			yourself);
-		addColumn: self nodeDescriptionColumn;
-		yourself
+		  addColumn: (SpCheckBoxTableColumn new
+				   beNotExpandable;
+				   evaluated: [ :scopeNode |
+					   checkedScopeNodes anySatisfy: [ :n |
+							   n value = scopeNode value ] ];
+				   onActivation: [ :scopeNode | self activateItem: scopeNode ];
+				   onDeactivation: [ :scopeNode | self deactivateItem: scopeNode ];
+				   yourself);
+		  addColumn: (SpImageTableColumn new
+				   beNotExpandable;
+				   evaluated: [ :each | self iconNamed: each scopesIconName ];
+				   yourself);
+		  addColumn: self nodeDescriptionColumn;
+		  yourself
 ]
 
 { #category : 'refreshing' }
 ScopeNodesPresenter >> refresh [
 
-	scopeNodesTree roots: (self model allPackages select: [ :each |
+	scopeNodesTree roots: (model packages select: [ :each |
 			 (each name asLowercase beginsWith: nodeNameText text asLowercase) or: [
 				 each definedClasses anySatisfy: [ :class |
 					 class name asLowercase beginsWith: nodeNameText text asLowercase ] ] ])

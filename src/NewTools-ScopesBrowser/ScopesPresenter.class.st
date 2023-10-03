@@ -39,12 +39,19 @@ ScopesPresenter class >> menuCommandOn: aBuilder [
 { #category : 'examples' }
 ScopesPresenter class >> open [
 	<example>
-	^ (self on: ScopeModel default) open
+	^ (self on: ScopeModel singleInstance) open
 ]
 
 { #category : 'layout' }
 ScopesPresenter class >> title [
 	^ 'Scope Browser'
+]
+
+{ #category : 'announcements' }
+ScopesPresenter >> addScopeToTree: aRBEnvironment [
+
+	model addScope: aRBEnvironment.
+	scopesTree updateRootsKeepingSelection: model scopes asOrderedCollection
 ]
 
 { #category : 'initialization' }
@@ -55,9 +62,25 @@ ScopesPresenter >> initialize [
 
 { #category : 'initialization' }
 ScopesPresenter >> initializePresenters [
-	scopesTree := self newTable.
+	scopesTree := self newScopeTree.
 	toolbar := self newToolbar.
+	
+	self initializeScopesTree.
 	self toolbarButtons do: [ :button | toolbar addItem: button ]
+]
+
+{ #category : 'initialization' }
+ScopesPresenter >> initializeScopesTree [
+
+	^ scopesTree
+		  hideColumnHeaders;
+		  addColumn: self nodesListColumn;
+		  children: [ :each | each children sorted ];
+		  beMultipleSelection;
+		  roots: model scopes asOrderedCollection;
+		  beResizable;
+		  activateOnDoubleClick;
+		  whenActivatedDo: [ :selection | scopesTree toggleSelectedItems ]
 ]
 
 { #category : 'private' }
@@ -66,14 +89,42 @@ ScopesPresenter >> newScopeEditor [
 	^ ScopeNodesPresenter on: model
 ]
 
+{ #category : 'initialization' }
+ScopesPresenter >> nodeDescriptionColumn [
+	^ SpStringTableColumn evaluated: #label
+]
+
+{ #category : 'initialization' }
+ScopesPresenter >> nodesListColumn [
+
+	^ SpCompositeTableColumn new
+		  addColumn: (SpImageTableColumn new
+				   beNotExpandable;
+				   evaluated: [ :each | self iconNamed: each scopesIconName ];
+				   yourself);
+		  addColumn: self nodeDescriptionColumn;
+		  yourself
+]
+
 { #category : 'announcements' }
 ScopesPresenter >> registerEvents [
-	
+
 	self announcer
 		when: NewScopeAnnouncement
-		do: [ :ann |
-			scopesTree items: (scopesTree items asOrderedCollection add: ann scope; yourself) ]
+		do: [ :ann | self addScopeToTree: ann scope ]
 		for: self
+]
+
+{ #category : 'initialization' }
+ScopesPresenter >> scopeListColumn [
+
+	^ SpCompositeTableColumn new
+		  addColumn: (SpImageTableColumn new
+				   beNotExpandable;
+				   evaluated: [ :each | self iconNamed: each scopesIconName ];
+				   yourself);
+		  addColumn: self nodeDescriptionColumn;
+		  yourself
 ]
 
 { #category : 'private' }
