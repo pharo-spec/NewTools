@@ -2,12 +2,14 @@
 A DiffChangeRecordConverter is a converter used to show the diff between two methodreferences
 "
 Class {
-	#name : #DiffChangeRecordConverter,
-	#superclass : #AbstractMethodReferenceConverter,
-	#category : #'NewTools-MethodBrowsers-Base'
+	#name : 'DiffChangeRecordConverter',
+	#superclass : 'AbstractMethodReferenceConverter',
+	#category : 'NewTools-MethodBrowsers-Base',
+	#package : 'NewTools-MethodBrowsers',
+	#tag : 'Base'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 DiffChangeRecordConverter >> internalGetText [
 
 	^ TextDiffBuilder
@@ -16,7 +18,7 @@ DiffChangeRecordConverter >> internalGetText [
 		  inClass: method className
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 DiffChangeRecordConverter >> priorVersionOfAMethod: aChangeRecord [
 	| index mylist |
 	
@@ -25,7 +27,7 @@ DiffChangeRecordConverter >> priorVersionOfAMethod: aChangeRecord [
 	^ mylist at: index+1 ifAbsent: [ aChangeRecord ]
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 DiffChangeRecordConverter >> updateContent: content on: aVersionBrowser [ 
 	
 	aVersionBrowser updateDiff: content

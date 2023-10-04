@@ -15,18 +15,20 @@ Internal Representation and Key Implementation Points.
 
 "
 Class {
-	#name : #MessageListPresenter,
-	#superclass : #SpPresenter,
+	#name : 'MessageListPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'cachedHierarchy',
 		'topologySort',
 		'method',
 		'listPresenter'
 	],
-	#category : #'NewTools-MethodBrowsers-Base'
+	#category : 'NewTools-MethodBrowsers-Base',
+	#package : 'NewTools-MethodBrowsers',
+	#tag : 'Base'
 }
 
-{ #category : #layout }
+{ #category : 'layout' }
 MessageListPresenter class >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -34,41 +36,41 @@ MessageListPresenter class >> defaultLayout [
 		yourself
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 MessageListPresenter >> browseClassRefs [
 
 	self currentMethod ifNotNil: [ :aMethod | 
 		self systemNavigation browseAllUsersOfClassOrTrait: aMethod methodClass ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 MessageListPresenter >> browseMessages [
 
 	self currentMethod ifNotNil: [ :aMethod |
 		SystemNavigation new browseImplementorsOf: aMethod selector ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 MessageListPresenter >> browseMethod [
 
 	self currentMethod ifNotNil: [ :aMethod | self systemNavigation browse: aMethod ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 MessageListPresenter >> browseSendersOfMessage [
 
 	self currentMethod ifNotNil: [ :aMethod |
 		self systemNavigation browseAllSendersOf: aMethod selector ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 MessageListPresenter >> browseVersions [
 
 	self currentMethod ifNotNil: [ :aMethod |
 		self application tools versionBrowser  browseVersionsForMethod: aMethod compiledMethod ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MessageListPresenter >> buildHierarchyForMessages: messages [
 	| result classes |
 	self topologicSort ifFalse: [ 
@@ -90,71 +92,71 @@ MessageListPresenter >> buildHierarchyForMessages: messages [
 	^ result
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MessageListPresenter >> cacheHierarchyForClasses: aCollection [
 	cachedHierarchy := self buildHierarchyForMessages: aCollection.
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 MessageListPresenter >> contextMenu: aMenuPresenter [
 	listPresenter contextMenu: aMenuPresenter
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MessageListPresenter >> currentMethod [
 
 	^ method
 ]
 
-{ #category : #transmission }
+{ #category : 'transmission' }
 MessageListPresenter >> defaultOutputPort [
 
 	^ self outputSelectionPort
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 MessageListPresenter >> doBrowseImplementors [
 		
 	self systemNavigation browseAllImplementorsOf: self selectedMethod selector
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 MessageListPresenter >> doBrowseMethod [
 		
 	self systemNavigation browse: self selectedMethod
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 MessageListPresenter >> doBrowseSenders [
 
 	self systemNavigation browseAllSendersOf: self selectedMethod selector
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 MessageListPresenter >> doBrowseUsers [
 		
 	self systemNavigation browseAllUsersOfClassOrTrait: self selectedMethod methodClass
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 MessageListPresenter >> doBrowseVersions [
 	
 	self systemNavigation browseVersionsOf: self selectedMethod
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 MessageListPresenter >> doInspectMethod [
 	
 	self systemNavigation inspect: self selectedMethod
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 MessageListPresenter >> doRemoveMethod [
 		
 	self selectedMethod removeFromSystem
 ]
 
-{ #category : #'private - focus' }
+{ #category : 'private - focus' }
 MessageListPresenter >> ensureKeyBindingsFor: aWidget [
 	aWidget bindKeyCombination: PharoShortcuts current browseShortcut toAction: [ self browseMethod ].
 	aWidget bindKeyCombination: PharoShortcuts current inspectItShortcut toAction: [ self inspectMethod ].
@@ -165,14 +167,14 @@ MessageListPresenter >> ensureKeyBindingsFor: aWidget [
 	aWidget bindKeyCombination: PharoShortcuts current removeShortcut toAction: [ self removeMethods ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 MessageListPresenter >> initialize [
 	super initialize.
 	topologySort := true
 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 MessageListPresenter >> initializePresenters [
 	listPresenter := self newTable.
 
@@ -188,19 +190,19 @@ MessageListPresenter >> initializePresenters [
 	self contextMenu: self messageListMenu
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 MessageListPresenter >> inspectMethod [
 
 	self currentMethod ifNotNil: [ :aMethod | aMethod inspect ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MessageListPresenter >> listPresenter [
 
 	^ listPresenter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MessageListPresenter >> locationOf: anItem [
 	^ String
 		streamContents: [ :aStream | 
@@ -213,7 +215,7 @@ MessageListPresenter >> locationOf: anItem [
 			aStream << (self protocolNameForItem: anItem) << ')' ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MessageListPresenter >> messageListMenu [
 
 	^ self newMenu
@@ -250,29 +252,29 @@ MessageListPresenter >> messageListMenu [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MessageListPresenter >> messages [
 	^ listPresenter items
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MessageListPresenter >> messages: aCollection [
 	self cacheHierarchyForClasses: aCollection.
 	listPresenter items: cachedHierarchy keys asOrderedCollection.
 	listPresenter listSize > 0 ifTrue: [ listPresenter selectIndex: 1 ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MessageListPresenter >> methodClassNameForItem: anItem [
 	^ anItem methodClass ifNotNil: [ :class | class name ] ifNil: [ '' ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MessageListPresenter >> numberOfElements [
 	^ listPresenter listSize
 ]
 
-{ #category : #transmission }
+{ #category : 'transmission' }
 MessageListPresenter >> outputActivationPort [
 
 	^ (SpActivationPort newPresenter: self)
@@ -280,7 +282,7 @@ MessageListPresenter >> outputActivationPort [
 		yourself
 ]
 
-{ #category : #transmission }
+{ #category : 'transmission' }
 MessageListPresenter >> outputSelectionPort [
 
 	^ (SpSelectionPort newPresenter: self)
@@ -288,68 +290,68 @@ MessageListPresenter >> outputSelectionPort [
 		yourself
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MessageListPresenter >> packageNameForItem: anItem [
 	^ anItem package ifNil: [ '' ] ifNotNil: [ :package | package name ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MessageListPresenter >> packageOf: anItem [
 	^ '[' , (self packageNameForItem: anItem) , ']'
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MessageListPresenter >> protocolNameForItem: anItem [
 	^ anItem category ifNil: [ '' ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 MessageListPresenter >> removeMethods [
 
 	self currentMethod ifNotNil: [ :aMethod |
 		SystemNavigation new removeMethod: aMethod inClass: aMethod methodClass ]
 ]
 
-{ #category : #selecting }
+{ #category : 'selecting' }
 MessageListPresenter >> selectIndex: anInteger [
 
 	listPresenter selectIndex: anInteger
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MessageListPresenter >> selectMessage: aMessage [
 	listPresenter selectItem: aMessage
 ]
 
-{ #category : #selecting }
+{ #category : 'selecting' }
 MessageListPresenter >> selectedIndex [
 	^ listPresenter selection selectedIndex
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MessageListPresenter >> selectedMessage [
 	^ listPresenter selection selectedItem
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MessageListPresenter >> selectedMethod [
 	self selectedMessage ifNil: [ ^ nil ].
 
 	^ self selectedMessage compiledMethod
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MessageListPresenter >> selectorOf: anItem [
 	^ anItem selector
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 MessageListPresenter >> setModelBeforeInitialization: aMethod [ 
 
 	method := aMethod
 ]
 
-{ #category : #sorting }
+{ #category : 'sorting' }
 MessageListPresenter >> sortClassesInCachedHierarchy: aMethodDefinition b: otherMethodDefinition [
 	"This method checks wether the cached inheritance hierarchy of a method should be before than the one of another method.
 	It compares alphabetically the hierarchy using #compare:
@@ -368,33 +370,33 @@ MessageListPresenter >> sortClassesInCachedHierarchy: aMethodDefinition b: other
 	^  aMethodHierarchy size < otherMethodHierarchy size
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 MessageListPresenter >> sortingBlock: aBlock [
 	listPresenter sortingBlock: aBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MessageListPresenter >> topologicSort [
 	^ topologySort
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MessageListPresenter >> topologicSort: anObject [
 	topologySort := anObject
 ]
 
-{ #category : #'api - events' }
+{ #category : 'api - events' }
 MessageListPresenter >> whenModelChangedDo: aBlock [
 	listPresenter whenModelChangedDo: aBlock
 ]
 
-{ #category : #'api - events' }
+{ #category : 'api - events' }
 MessageListPresenter >> whenSelectedDo: aBlock [
 
 	listPresenter whenSelectedDo: aBlock
 ]
 
-{ #category : #'api - events' }
+{ #category : 'api - events' }
 MessageListPresenter >> whenSelectionChangedDo: aBlock [
 
 	listPresenter whenSelectionChangedDo: aBlock

@@ -1,6 +1,6 @@
-Extension { #name : #RGMethodDefinition }
+Extension { #name : 'RGMethodDefinition' }
 
-{ #category : #'*NewTools-MethodBrowsers' }
+{ #category : '*NewTools-MethodBrowsers' }
 RGMethodDefinition >> displayName [
 
 	^ String streamContents: [ :aStream | 
