@@ -1007,7 +1007,7 @@ StDebuggerTest >> testStackTablePackagesLabels [
 	ctx := Context
 		sender: nil
 		receiver: nil
-		method: (Smalltalk compiler compile: 'doIt 1 + 1')
+		method: (Smalltalk compiler compile: 'DoIt 1 + 1')
 		arguments: #().
 	self assert: (packageColumn readObject: ctx) equals: '-'
 	
