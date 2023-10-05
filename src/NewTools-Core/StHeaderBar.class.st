@@ -3,18 +3,20 @@ I am a generic header bar for tool component panels.
 I am used to add title, a toolbar and shortcut used to get to the panel.
 "
 Class {
-	#name : #StHeaderBar,
-	#superclass : #SpPresenter,
+	#name : 'StHeaderBar',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'titleLabel',
 		'toolbar',
 		'closeButton',
 		'shortcutLabel'
 	],
-	#category : #'NewTools-Core-Presenters'
+	#category : 'NewTools-Core-Presenters',
+	#package : 'NewTools-Core',
+	#tag : 'Presenters'
 }
 
-{ #category : #layout }
+{ #category : 'layout' }
 StHeaderBar class >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
@@ -28,14 +30,14 @@ StHeaderBar class >> defaultLayout [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHeaderBar >> beCloseable [
 
 	self isCloseable ifTrue: [ ^ self ].
 	self enableCloseDoing: [  ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHeaderBar >> beNotCloseable [
 
 	closeButton ifNil: [ ^ self ].
@@ -44,7 +46,7 @@ StHeaderBar >> beNotCloseable [
 	closeButton := nil
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StHeaderBar >> enableCloseDoing: aBlock [
 
 	closeButton := self newButton
@@ -57,7 +59,7 @@ StHeaderBar >> enableCloseDoing: aBlock [
 	layout addLast: closeButton expand: false
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StHeaderBar >> initializePresenters [
 
 	self layout: (SpBoxLayout newLeftToRight
@@ -76,37 +78,43 @@ StHeaderBar >> initializePresenters [
 	toolbar beIcons	"is a mini toolbar, items should be... tiny :)"
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StHeaderBar >> isCloseable [
 
 	^ closeButton notNil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHeaderBar >> label: aString [
 
 	titleLabel label: aString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHeaderBar >> shortcut: aShortcut [ 
 
 	self shortcutLabel: (KMShortcutPrinter toString: aShortcut)
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StHeaderBar >> shortcutLabel: aString [ 
 
 	shortcutLabel label: aString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
+StHeaderBar >> toolbar [
+
+	^ toolbar
+]
+
+{ #category : 'accessing' }
 StHeaderBar >> toolbarActions: aCommandGroup [
 
 	toolbar fillWith: aCommandGroup
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 StHeaderBar >> whenClosedDo: aBlock [
 
 	self isCloseable ifFalse: [ self enableCloseDoing: aBlock ].
