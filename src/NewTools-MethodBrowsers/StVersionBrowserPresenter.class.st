@@ -21,17 +21,19 @@ Internal Representation and Key Implementation Points.
 
 "
 Class {
-	#name : #StVersionBrowserPresenter,
-	#superclass : #AbstractMessageCentricBrowserPresenter,
+	#name : 'StVersionBrowserPresenter',
+	#superclass : 'AbstractMessageCentricBrowserPresenter',
 	#instVars : [
 		'rgMethod',
 		'sourcePresenter',
 		'sourceLayout'
 	],
-	#category : #'NewTools-MethodBrowsers-Versions'
+	#category : 'NewTools-MethodBrowsers-Versions',
+	#package : 'NewTools-MethodBrowsers',
+	#tag : 'Versions'
 }
 
-{ #category : #api }
+{ #category : 'api' }
 StVersionBrowserPresenter class >> browseVersionsForClass: aClass selector: aSelector [
 	^ aClass
 		compiledMethodAt: aSelector
@@ -44,20 +46,20 @@ StVersionBrowserPresenter class >> browseVersionsForClass: aClass selector: aSel
 									openModal ]
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StVersionBrowserPresenter class >> browseVersionsForMethod: aRingMethod [
 
 	^ (self on: aRingMethod) open
 ]
 
-{ #category : #'tools registry' }
+{ #category : 'tools registry' }
 StVersionBrowserPresenter class >> registerToolsOn: registry [
 	"Add ourselves to registry. See [Smalltalk tools]"
 
 	registry register: self as: #versionBrowser
 ]
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 StVersionBrowserPresenter >> accept: text notifying: notifyer [
 	| message |
 
@@ -70,12 +72,12 @@ StVersionBrowserPresenter >> accept: text notifying: notifyer [
 		notifying: notifyer
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StVersionBrowserPresenter >> browseImplementors [
 	SystemNavigation new browseAllImplementorsOf: rgMethod selector
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StVersionBrowserPresenter >> browseSenders [
 
 	self systemNavigation 
@@ -84,25 +86,22 @@ StVersionBrowserPresenter >> browseSenders [
 		autoSelect: rgMethod selector
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'private - factory' }
 StVersionBrowserPresenter >> buildChangeList [
 	rgMethod sourcePointer ifNil:[ ^ #() ].
 
-	^ (SourceFiles
-		changeRecordsFrom: rgMethod sourcePointer
-		className: rgMethod instanceSideParentName
-		isMeta: rgMethod isMetaSide)
+	^ (SourceFiles changeRecordsFor: rgMethod)
 		collectWithIndex: [ :c :i | | rg |
 			rg := c asRingDefinition.
 			rg annotationNamed: #versionIndex put: i ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StVersionBrowserPresenter >> changeList [
 	^ messageList messages
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StVersionBrowserPresenter >> compareTo: anOtherVersion withLabel: aLabel [
 	| versions texts |
 
@@ -119,12 +118,12 @@ StVersionBrowserPresenter >> compareTo: anOtherVersion withLabel: aLabel [
 		open
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StVersionBrowserPresenter >> compareToCurrentVersion [
 	self compareTo: rgMethod withLabel: 'Current version'
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StVersionBrowserPresenter >> compareToOtherVersion [
 	| labels versions index selected |
 	versions := self changeList.
@@ -135,7 +134,7 @@ StVersionBrowserPresenter >> compareToOtherVersion [
 	self compareTo: selected withLabel: selected stamp
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StVersionBrowserPresenter >> connectPresenters [
 
 	messageList
@@ -144,7 +143,7 @@ StVersionBrowserPresenter >> connectPresenters [
 	toolbarPresenter selectFirst
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StVersionBrowserPresenter >> defaultLayout [
 
 	^ SpPanedLayout newTopToBottom
@@ -155,7 +154,7 @@ StVersionBrowserPresenter >> defaultLayout [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StVersionBrowserPresenter >> initializePresenters [
 
 	messageList := self instantiate: MessageListPresenter on: rgMethod.
@@ -185,14 +184,14 @@ StVersionBrowserPresenter >> initializePresenters [
 		action: [ self revert: self selectedMessage ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StVersionBrowserPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter title: 'Recent versions of ' , rgMethod displayName
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StVersionBrowserPresenter >> installIconStylerFor: anItem [
 	"icons styler are only supported for method definitions (not nil / not for comment definitions    
 	 (those may occure for comment or general string searches)) and in the case the source presenter is not a diff"
@@ -204,7 +203,7 @@ StVersionBrowserPresenter >> installIconStylerFor: anItem [
 		withAst: anItem ast
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StVersionBrowserPresenter >> messageListMenu [
 
 	self flag: #TODO. "At least some of this options needs to be a command"
@@ -239,25 +238,25 @@ StVersionBrowserPresenter >> messageListMenu [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StVersionBrowserPresenter >> method [
 
 	^ rgMethod
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'private - factory' }
 StVersionBrowserPresenter >> newSourceDiff [
 
 	^ self newDiff
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'private - factory' }
 StVersionBrowserPresenter >> newTextConverter [
 
 	^ DiffSideBySideChangeRecordConverter new
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StVersionBrowserPresenter >> replaceSourceWith: aPresenter [
 	
 	sourceLayout children size = 1 
@@ -270,7 +269,7 @@ StVersionBrowserPresenter >> replaceSourceWith: aPresenter [
 	messageList selectIndex: messageList selectedIndex
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'private - factory' }
 StVersionBrowserPresenter >> revert: aChangeRecord [
 
 	aChangeRecord ifNil: [
@@ -290,7 +289,7 @@ StVersionBrowserPresenter >> revert: aChangeRecord [
 		selectIndex: 1
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StVersionBrowserPresenter >> selectItem: item [
 
 	sourcePresenter ifNil: [ ^ self ].
@@ -300,20 +299,20 @@ StVersionBrowserPresenter >> selectItem: item [
 		getText)
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StVersionBrowserPresenter >> setModelBeforeInitialization: aMethod [
 
 	self setRGMethodFrom: aMethod
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StVersionBrowserPresenter >> setRGMethodFrom: aMethod [
 "asHistorical, because active RGMethods don't always have the source pointer attached"
 
 	rgMethod := aMethod asRingDefinition asHistorical
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StVersionBrowserPresenter >> setSourceContentWith: content [
 
 	self textConverter 
@@ -321,7 +320,7 @@ StVersionBrowserPresenter >> setSourceContentWith: content [
 		on: self
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StVersionBrowserPresenter >> showDiffLineWithConverter: aConverter [
 	| newSource |
 
@@ -334,7 +333,7 @@ StVersionBrowserPresenter >> showDiffLineWithConverter: aConverter [
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StVersionBrowserPresenter >> showDiffMorphWithConverter: aConverter [
 	| newSource | 
 
@@ -345,7 +344,7 @@ StVersionBrowserPresenter >> showDiffMorphWithConverter: aConverter [
 	self replaceSourceWith: newSource
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StVersionBrowserPresenter >> showSourceWithConverter: aConverter [
 	| newSource |
 
@@ -359,7 +358,7 @@ StVersionBrowserPresenter >> showSourceWithConverter: aConverter [
 
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StVersionBrowserPresenter >> updateDiff: content [
 
 	(content isText or: [ content isString ])
@@ -375,7 +374,7 @@ StVersionBrowserPresenter >> updateDiff: content [
 		self installIconStylerFor: self textConverter method
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StVersionBrowserPresenter >> updateDiffLine: content [
 
 	(content isText or: [ content isString ])
@@ -391,7 +390,7 @@ StVersionBrowserPresenter >> updateDiffLine: content [
 	self installIconStylerFor: self textConverter method
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StVersionBrowserPresenter >> updatePresenter [
 
 	self showDiffMorphWithConverter: (DiffSideBySideChangeRecordConverter 
@@ -399,7 +398,7 @@ StVersionBrowserPresenter >> updatePresenter [
 				referencesList: self changeList)
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StVersionBrowserPresenter >> updateSource: content [ 
 
 	sourcePresenter text: content

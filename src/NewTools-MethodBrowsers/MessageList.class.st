@@ -1,10 +1,12 @@
 Class {
-	#name : #MessageList,
-	#superclass : #MessageListPresenter,
-	#category : #'NewTools-MethodBrowsers-Deprecated'
+	#name : 'MessageList',
+	#superclass : 'MessageListPresenter',
+	#category : 'NewTools-MethodBrowsers-Deprecated',
+	#package : 'NewTools-MethodBrowsers',
+	#tag : 'Deprecated'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 MessageList class >> isDeprecated [ 
 	
 	^ true
