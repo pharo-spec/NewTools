@@ -70,35 +70,41 @@ StMetaBrowserPresenter >> compile: aString [
 
 { #category : 'initialization' }
 StMetaBrowserPresenter >> initializePresenters [
+
 	| classHierarchy |
-	
 	classHierarchy := self model class withAllSuperclasses reversed.
 
 	classes := self newTreeTable
-		addColumn: (SpStringTableColumn title: 'Class hierarchy' evaluated: #name);
-		roots: { classHierarchy first };
-		children: [ :aClass | classHierarchy select: [ :subclass | subclass superclass == aClass ] ];
-		contextMenu: [ self classListMenu ];
-		yourself.
+		           addColumn:
+			           (SpStringTableColumn
+				            title: 'Class hierarchy'
+				            evaluated: #name);
+		           roots: { classHierarchy first };
+		           children: [ :aClass |
+			           classHierarchy select: [ :subclass |
+					           subclass superclass == aClass ] ];
+		           contextMenu: [ self classListMenu ];
+		           yourself.
 	methods := (self instantiate: SpFilteringListPresenter)
-		display: [ :each | each selector ];	
-		contextMenu: [ self methodListMenu ];
-		yourself.
+		           display: [ :each | each selector ];
+		           contextMenu: [ self methodListMenu ];
+		           yourself.
 
 	source := self newCode
-		lineNumbers: StPharoSettings codeShowLineNumbers;
-		beForMethod: self selectedMethod;
-		whenSubmitDo: [ :aString | self compile: aString ];
-		whenResetDo: [ self updateSourceWith: self selectedMethod  ];
-		yourself.
-		
-	classes 
-		transmitTo: methods 
-		transform: [ :aClass | self methodsOf: aClass ].
-	methods 
-		transmitDo: [ :aMethod | self updateSourceWith: aMethod ].
+		          lineNumbers: StPharoSettings codeShowLineNumbers;
+		          beForMethod: self selectedMethod;
+		          whenSubmitDo: [ :aString | self compile: aString ];
+		          whenResetDo: [ self updateSourceWith: self selectedMethod ];
+		          yourself.
 
-	classes selectPath: (Array new: classHierarchy size withAll: 1)
+	classes
+		transmitTo: methods
+		transform: [ :aClass | self methodsOf: aClass ].
+	methods transmitDo: [ :aMethod | self updateSourceWith: aMethod ].
+
+	classes
+		selectPath: (Array new: classHierarchy size withAll: 1)
+		scrollToSelection: true
 ]
 
 { #category : 'initialization' }
