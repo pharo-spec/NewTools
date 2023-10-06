@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'debuggerExtensionClasses',
 		'extensionClassesTable',
-		'toolbar'
+		'activateAllCheckbox'
 	],
 	#category : 'NewTools-Debugger-View',
 	#package : 'NewTools-Debugger',
@@ -34,8 +34,8 @@ StDebuggerExtensionSettingsPresenter >> defaultLayout [
 		  spacing: 5;
 		  add: (self newLabel label: 'Debugger extension settings')
 		  expand: false;
+		  add: #activateAllCheckbox expand: false;
 		  add: #extensionClassesTable;
-		  add: #toolbar expand: false;
 		  yourself
 ]
 
@@ -50,7 +50,6 @@ StDebuggerExtensionSettingsPresenter >> initialize [
 { #category : 'initialization' }
 StDebuggerExtensionSettingsPresenter >> initializePresenters [
 
-	| activateAllButton unactivateAllButton |
 	extensionClassesTable := self newTable
 		                         beResizable;
 		                         addColumn: (SpStringTableColumn
@@ -70,16 +69,16 @@ StDebuggerExtensionSettingsPresenter >> initializePresenters [
 		                         items: debuggerExtensionClasses;
 		                         yourself.
 
-	activateAllButton := self newToolbarButton
-		                     action: [ self showAllInDebugger: true ];
-		                     label: 'Activate all'.
-	unactivateAllButton := self newToolbarButton
-		                       action: [ self showAllInDebugger: false ];
-		                       label: 'Unactivate all'.
-	toolbar := self newToolbar
-		           addItem: activateAllButton;
-		           addItem: unactivateAllButton;
-		           yourself
+	activateAllCheckbox := self newCheckBox
+		                       label: '(Un)Activate all';
+		                       state:
+			                       (debuggerExtensionClasses allSatisfy: [
+					                        :class | class showInDebugger ]);
+		                       whenActivatedDo: [
+			                       self showAllInDebugger: true ];
+		                       whenDeactivatedDo: [
+			                       self showAllInDebugger: false ];
+		                       yourself
 ]
 
 { #category : 'actions' }
