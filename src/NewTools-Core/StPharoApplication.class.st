@@ -2,41 +2,43 @@
 The application for the Pharo IDE.
 "
 Class {
-	#name : #StPharoApplication,
-	#superclass : #SpApplication,
+	#name : 'StPharoApplication',
+	#superclass : 'SpApplication',
 	#classVars : [
 		'Current'
 	],
-	#category : #'NewTools-Core-Application'
+	#category : 'NewTools-Core-Application',
+	#package : 'NewTools-Core',
+	#tag : 'Application'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StPharoApplication class >> current [ 
 	
 	^ Current ifNil: [ Current := self new ]
 ]
 
-{ #category : #'class initialization' }
+{ #category : 'class initialization' }
 StPharoApplication class >> initialize [ 
 
 	SessionManager default registerToolClassNamed: self name
 ]
 
-{ #category : #'system startup' }
+{ #category : 'system startup' }
 StPharoApplication class >> shutDown: quitting [
 
 	Current ifNil: [ ^ self ].
 	Current shutDown: quitting
 ]
 
-{ #category : #'system startup' }
+{ #category : 'system startup' }
 StPharoApplication class >> startUp: resuming [
 
 	Current ifNil: [ ^ self ].
 	Current startUp: resuming
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPharoApplication class >> use: application during: aBlock [ 
 	| oldCurrent |
 	
@@ -45,14 +47,14 @@ StPharoApplication class >> use: application during: aBlock [
 	^ aBlock ensure: [ Current := oldCurrent ]
 ]
 
-{ #category : #'accessing - resources' }
+{ #category : 'accessing - resources' }
 StPharoApplication >> defaultWindowExtent [
 	
 	self flag: #TODO. "Replace this with a real real estate"
 	^ 800@600
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPharoApplication >> initialize [
 
 	super initialize.
@@ -63,20 +65,20 @@ StPharoApplication >> initialize [
 		to: self
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'private - factory' }
 StPharoApplication >> newIconProvider [
 
 	^ StPharoDefaultIconProvider new
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPharoApplication >> resetConfiguration [
 	
 	self flag: #TODO. "Invalidating for a moment because I need to align with Spec"
 	self configuration reset
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StPharoApplication >> run [ 
 
 	Current ifNotNil: [ Current close ].
@@ -84,29 +86,29 @@ StPharoApplication >> run [
 	Current := self
 ]
 
-{ #category : #'system startup' }
+{ #category : 'system startup' }
 StPharoApplication >> shutDown: quitting [
 ]
 
-{ #category : #'private - running' }
+{ #category : 'private - running' }
 StPharoApplication >> start [
 
 	
 ]
 
-{ #category : #'system startup' }
+{ #category : 'system startup' }
 StPharoApplication >> startUp: resuming [
 
 	self resetConfiguration
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StPharoApplication >> toolbarDisplayMode [
 
 	^ StPharoSettings toolbarDisplayMode
 ]
 
-{ #category : #'accessing - resources' }
+{ #category : 'accessing - resources' }
 StPharoApplication >> tools [
 
 	^ Smalltalk tools

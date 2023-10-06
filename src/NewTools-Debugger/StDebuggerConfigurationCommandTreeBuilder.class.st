@@ -42,6 +42,7 @@ StDebuggerConfigurationCommandTreeBuilder >> buildDebuggerCommandGroup [
 StDebuggerConfigurationCommandTreeBuilder >> configurationCommandClasses [
 
 	^ {
+		  StDebuggerExtensionSettingsCommand.
 		  StDebuggerToggleFilterStackCommand.
 		  StDebuggerSettingsCommand }
 ]

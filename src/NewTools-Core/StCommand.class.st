@@ -6,30 +6,32 @@ I define common behavior that all commands can have:
 - maybe a shortcut
 "
 Class {
-	#name : #StCommand,
-	#superclass : #CmCommand,
-	#category : #'NewTools-Core-Command'
+	#name : 'StCommand',
+	#superclass : 'CmCommand',
+	#category : 'NewTools-Core-Command',
+	#package : 'NewTools-Core',
+	#tag : 'Command'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCommand class >> defaultIconName [
 
 	^ nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCommand class >> defaultShortcut [
 
 	^ nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCommand >> application [
 
 	^ context application
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 StCommand >> asSpecCommand [ 
 	| command |
 	
