@@ -27,6 +27,7 @@ StDebuggerConfigurationCommandTreeBuilderTest >> testConfigurationCommands [
 StDebuggerConfigurationCommandTreeBuilderTest >> testConfigurationCommandsClasses [
 
 	self assertCollection: builder configurationCommandClasses equals: {
+			StDebuggerExtensionSettingsCommand.
 			StDebuggerToggleFilterStackCommand.
 			StDebuggerSettingsCommand }
 ]
