@@ -1,1 +1,1 @@
-Package { #name : #'NewTools-Inspector-Extensions' }
+Package { #name : 'NewTools-Inspector-Extensions' }

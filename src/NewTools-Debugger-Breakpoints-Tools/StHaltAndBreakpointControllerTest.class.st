@@ -54,6 +54,7 @@ StHaltAndBreakpointControllerTest >> tearDown [
 
 { #category : #'tests - breakpoints' }
 StHaltAndBreakpointControllerTest >> testDisableBreakpoint [
+	<ignoreNotImplementedSelectors: #(mNoHalt)>
 	self should: [ testObject mNoHalt ] raise: Break.
 	haltController disableBreakpoint: breakpoint.
 	self shouldnt: [ testObject mNoHalt ] raise: Break
@@ -62,7 +63,7 @@ StHaltAndBreakpointControllerTest >> testDisableBreakpoint [
 
 { #category : #'tests - halts' }
 StHaltAndBreakpointControllerTest >> testDisableHalt [
-	
+	<ignoreNotImplementedSelectors: #(mHalt)>
 	self should: [ testObject mHalt ] raise: Halt.	
 	haltController disableHaltNode: self node.
 	self shouldnt: [ testObject mHalt ] raise: Halt
@@ -88,6 +89,7 @@ StHaltAndBreakpointControllerTest >> testDisabledHaltIsDisabled [
 
 { #category : #'tests - breakpoints' }
 StHaltAndBreakpointControllerTest >> testEnableDisabledBreakpoint [
+	<ignoreNotImplementedSelectors: #(mNoHalt)>
 	haltController disableBreakpoint: breakpoint.
 	self shouldnt: [ testObject mNoHalt ] raise: Break.
 	haltController enableBreakpoint: breakpoint.
@@ -95,7 +97,8 @@ StHaltAndBreakpointControllerTest >> testEnableDisabledBreakpoint [
 ]
 
 { #category : #'tests - halts' }
-StHaltAndBreakpointControllerTest >> testEnableDisabledHalt [	
+StHaltAndBreakpointControllerTest >> testEnableDisabledHalt [
+	<ignoreNotImplementedSelectors: #(mHalt)>	
 	haltController disableHaltNode: self node.
 	self shouldnt: [ testObject mHalt ] raise: Halt.
 	haltController enableHaltNode: self node.
@@ -117,6 +120,7 @@ StHaltAndBreakpointControllerTest >> testEnabledHaltIsEnabled [
 
 { #category : #'tests - breakpoints' }
 StHaltAndBreakpointControllerTest >> testNoTraceForEnabledBreakpoint [
+	<ignoreNotImplementedSelectors: #(mNoHalt)>
 	[ testObject mNoHalt ]
 		on: Halt
 		do: [ :e | e resume ].
@@ -125,6 +129,7 @@ StHaltAndBreakpointControllerTest >> testNoTraceForEnabledBreakpoint [
 
 { #category : #'tests - halts' }
 StHaltAndBreakpointControllerTest >> testNoTraceForEnabledHalt [
+	<ignoreNotImplementedSelectors: #(mHalt)>
 	[ testObject mHalt ]
 		on: Halt
 		do: [ :e | e resume ].
@@ -133,6 +138,7 @@ StHaltAndBreakpointControllerTest >> testNoTraceForEnabledHalt [
 
 { #category : #'tests - halts' }
 StHaltAndBreakpointControllerTest >> testTraceForDisabledHalt [
+	<ignoreNotImplementedSelectors: #(mHalt)>
 	haltController disableHaltNode: self node.
 	testObject mHalt.
 	self

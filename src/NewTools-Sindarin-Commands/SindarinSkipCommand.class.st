@@ -11,24 +11,25 @@ Therefore, if you execute again you will write the same values in your stream.
 You can use skip to avoid all writings in your stream until you get back to the correct point of the execution where you can start writing again in the stream.
 "
 Class {
-	#name : #SindarinSkipCommand,
-	#superclass : #SindarinSkipAllToSelectionCommand,
-	#category : #'NewTools-Sindarin-Commands'
+	#name : 'SindarinSkipCommand',
+	#superclass : 'SindarinSkipAllToSelectionCommand',
+	#category : 'NewTools-Sindarin-Commands',
+	#package : 'NewTools-Sindarin-Commands'
 }
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinSkipCommand class >> defaultDescription [
 	^ 'Skips execution of the next step, then returns debugger control.'
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinSkipCommand class >> defaultName [
 	<toolbarExtensionDebugCommand: 1>
 	<codeExtensionDebugCommand: 1>
 	^ 'Skip'
 ]
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 SindarinSkipCommand >> execute [
 
 	self flag:

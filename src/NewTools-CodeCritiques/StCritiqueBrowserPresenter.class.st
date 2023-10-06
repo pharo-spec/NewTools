@@ -10,8 +10,8 @@ You can open me whit:
 
 "
 Class {
-	#name : #StCritiqueBrowserPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StCritiqueBrowserPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'critiqueModel',
 		'rulesModel',
@@ -27,10 +27,12 @@ Class {
 		'sourceCodeModel',
 		'toolbarModel'
 	],
-	#category : #'NewTools-CodeCritiques-Base'
+	#category : 'NewTools-CodeCritiques-Base',
+	#package : 'NewTools-CodeCritiques',
+	#tag : 'Base'
 }
 
-{ #category : #menu }
+{ #category : 'menu' }
 StCritiqueBrowserPresenter class >> critiquesBrowserMenuOn: aBuilder [
 
 	<worldMenu>
@@ -42,7 +44,7 @@ StCritiqueBrowserPresenter class >> critiquesBrowserMenuOn: aBuilder [
 		icon: self icon
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StCritiqueBrowserPresenter class >> defaultLayout [
 
 	^ SpPanedLayout newTopToBottom
@@ -65,7 +67,7 @@ StCritiqueBrowserPresenter class >> defaultLayout [
 		  yourself
 ]
 
-{ #category : #icons }
+{ #category : 'icons' }
 StCritiqueBrowserPresenter class >> icon [
 
 	"Answer an icon for the receiver."
@@ -73,14 +75,14 @@ StCritiqueBrowserPresenter class >> icon [
 	^ self iconNamed: #error
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StCritiqueBrowserPresenter class >> open [
 
 	<example>
 	^ self new open
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 StCritiqueBrowserPresenter class >> openOnCurrentWorkingConfiguration [
 
 	<script>
@@ -89,7 +91,7 @@ StCritiqueBrowserPresenter class >> openOnCurrentWorkingConfiguration [
 		ifFalse: [ StCritiquePackageSelectorPresenter open ]
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StCritiqueBrowserPresenter class >> openOnRule: aRule onEnvironment: aEnv [
 
 	| cbr |
@@ -103,7 +105,7 @@ StCritiqueBrowserPresenter class >> openOnRule: aRule onEnvironment: aEnv [
 	cbr rulesModel changed:  #listElementAt:
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StCritiqueBrowserPresenter class >> openOnWorkingConfiguration: aWorkingConfiguration [
 
 	| cbr |
@@ -118,13 +120,13 @@ StCritiqueBrowserPresenter class >> openOnWorkingConfiguration: aWorkingConfigur
 	cbr rulesModel  changed:  #listElementAt:
 ]
 
-{ #category : #icons }
+{ #category : 'icons' }
 StCritiqueBrowserPresenter class >> taskbarIconName [
 
 	^#smallWarning
 ]
 
-{ #category : #window }
+{ #category : 'window' }
 StCritiqueBrowserPresenter >> addModelItemsToWindowMenu: aMenu [
 	"Add model-related items to the window menu"
 
@@ -134,12 +136,12 @@ StCritiqueBrowserPresenter >> addModelItemsToWindowMenu: aMenu [
 		add: 'Reapply all  rules' target: self selector: #reapplyAllRules
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StCritiqueBrowserPresenter >> allRules [
 	^ rulesModel roots flatCollect: #rules
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StCritiqueBrowserPresenter >> applyRules [
 	| packageCount nbPackage process rules |
 	rules := self allRules.
@@ -171,13 +173,13 @@ StCritiqueBrowserPresenter >> applyRules [
 	process resume
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StCritiqueBrowserPresenter >> browseRule [
 
 	rulesModel selectedItem ifNotNil: [ :item | ^ item browse ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StCritiqueBrowserPresenter >> buildRuleMenu [
 
 	^ SpMenuPresenter new
@@ -193,7 +195,7 @@ StCritiqueBrowserPresenter >> buildRuleMenu [
 		  yourself
 ]
 
-{ #category : #'system annoucements' }
+{ #category : 'system annoucements' }
 StCritiqueBrowserPresenter >> classAdded: aClass [
 
 	| rules |
@@ -215,7 +217,7 @@ StCritiqueBrowserPresenter >> classAdded: aClass [
 	cache updateBrowser
 ]
 
-{ #category : #'system annoucements' }
+{ #category : 'system annoucements' }
 StCritiqueBrowserPresenter >> classRemoved: aClass [
 
 	(rbEnvironment definesClass: aClass)
@@ -224,7 +226,7 @@ StCritiqueBrowserPresenter >> classRemoved: aClass [
 	cache updateBrowser
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StCritiqueBrowserPresenter >> colorForRule: aRule [
 
 	| total |
@@ -236,7 +238,7 @@ StCritiqueBrowserPresenter >> colorForRule: aRule [
 				  ifFalse: [ self class theme textColor ] ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiqueBrowserPresenter >> connectPresenters [
 
 	rulesModel whenSelectedItemChangedDo: [ :rule | 
@@ -249,38 +251,38 @@ StCritiqueBrowserPresenter >> connectPresenters [
 			(rule ifNil: [ self defaultTitle ] ifNotNil: [ rule name ]) ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueBrowserPresenter >> critiquesModel [
 
 	^ critiqueModel critiquesModel
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StCritiqueBrowserPresenter >> defaultTitle [
 
 	^ 'Critique Browser'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueBrowserPresenter >> environment [
 	^ rbEnvironment
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueBrowserPresenter >> environment: aEnv [
 	rbEnvironment := aEnv
 
 ]
 
-{ #category : #'system annoucements' }
+{ #category : 'system annoucements' }
 StCritiqueBrowserPresenter >> handleClassAdded: anAnnouncement [
 
 	self classAdded: anAnnouncement classAdded
 
 ]
 
-{ #category : #'system annoucements' }
+{ #category : 'system annoucements' }
 StCritiqueBrowserPresenter >> handleClassModified: anAnnouncement [
 
 	self
@@ -289,21 +291,21 @@ StCritiqueBrowserPresenter >> handleClassModified: anAnnouncement [
 	
 ]
 
-{ #category : #'system annoucements' }
+{ #category : 'system annoucements' }
 StCritiqueBrowserPresenter >> handleClassRemoved: anAnnouncement [
 
 	self classRemoved: anAnnouncement classRemoved
 
 ]
 
-{ #category : #'system annoucements' }
+{ #category : 'system annoucements' }
 StCritiqueBrowserPresenter >> handleMethodAdded: anAnnouncement [
 
 	self methodAdded: anAnnouncement methodAdded
 
 ]
 
-{ #category : #'system annoucements' }
+{ #category : 'system annoucements' }
 StCritiqueBrowserPresenter >> handleMethodModified: anAnnouncement [
 
 	self
@@ -313,14 +315,14 @@ StCritiqueBrowserPresenter >> handleMethodModified: anAnnouncement [
 
 ]
 
-{ #category : #'system annoucements' }
+{ #category : 'system annoucements' }
 StCritiqueBrowserPresenter >> handleMethodRemoved: anAnnouncement [
 
 	self methodRemoved: anAnnouncement methodRemoved
 
 ]
 
-{ #category : #'system annoucements' }
+{ #category : 'system annoucements' }
 StCritiqueBrowserPresenter >> hasBrokenRules: rule [
     | unclassified falsePositives toDos total |
     falsePositives := (cache falsePositiveOf: rule) size.
@@ -330,7 +332,7 @@ StCritiqueBrowserPresenter >> hasBrokenRules: rule [
     ^ unclassified > 0
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiqueBrowserPresenter >> initialize [
 
 	super initialize.
@@ -342,7 +344,7 @@ StCritiqueBrowserPresenter >> initialize [
 	toolbarModel cache: cache
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiqueBrowserPresenter >> initializePresenters [
 
 	title := self defaultTitle.
@@ -367,7 +369,7 @@ StCritiqueBrowserPresenter >> initializePresenters [
 		add: critiqueModel
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiqueBrowserPresenter >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
@@ -375,17 +377,17 @@ StCritiqueBrowserPresenter >> initializeWindow: aWindowPresenter [
 		initialExtent: 760 @ 370
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueBrowserPresenter >> logButton [
 	^ logButton 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StCritiqueBrowserPresenter >> logInManifest [
 	cache logInManifest
 ]
 
-{ #category : #'system annoucements' }
+{ #category : 'system annoucements' }
 StCritiqueBrowserPresenter >> methodAdded: aMethod [
 
 	| rules |
@@ -408,7 +410,7 @@ StCritiqueBrowserPresenter >> methodAdded: aMethod [
 	cache updateBrowser
 ]
 
-{ #category : #'system annoucements' }
+{ #category : 'system annoucements' }
 StCritiqueBrowserPresenter >> methodRemoved: aMethod [
 
 	(rbEnvironment includesMethod: aMethod)
@@ -417,18 +419,25 @@ StCritiqueBrowserPresenter >> methodRemoved: aMethod [
 	cache updateBrowser
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StCritiqueBrowserPresenter >> onWindowClosed [
 
 	self unregisterFromAnnouncements.
 
-	cache cacheChange ifTrue: [ 
-		(UIManager default confirm:
-			 'Do you want log all wrong violations in the Manifests
-before closing the Critiques Browser ?') ifTrue: [ cache logInManifest ] ]
+	cache cacheChange ifTrue: [
+		| logging |
+		logging := self application newConfirm
+			           title: 'Question';
+			           label:
+				           'Do you want log all wrong violations in the Manifests
+before closing the Critiques Browser ?';
+			           acceptLabel: 'Sure!';
+			           cancelLabel: 'No';
+			           openModal.
+		logging ifTrue: [ cache logInManifest ] ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StCritiqueBrowserPresenter >> reapplyAllRules [
 
 	cache initialize.
@@ -436,7 +445,7 @@ StCritiqueBrowserPresenter >> reapplyAllRules [
 	self applyRules
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StCritiqueBrowserPresenter >> reapplyRule: aRule [
 
 	cache removeRule: aRule.
@@ -453,7 +462,7 @@ StCritiqueBrowserPresenter >> reapplyRule: aRule [
 	cache updateBrowser
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StCritiqueBrowserPresenter >> reapplyThisRule [
 
 	| rule |
@@ -466,7 +475,7 @@ StCritiqueBrowserPresenter >> reapplyThisRule [
 
 ]
 
-{ #category : #'system annoucements' }
+{ #category : 'system annoucements' }
 StCritiqueBrowserPresenter >> registerToAnnouncements [
 	
 	self unregisterFromAnnouncements.
@@ -481,17 +490,17 @@ StCritiqueBrowserPresenter >> registerToAnnouncements [
 	self window window announcer when: WindowClosed send: #onWindowClosed to: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueBrowserPresenter >> removeTestCase: aBoolean [
 	removeTestCase :=  aBoolean
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueBrowserPresenter >> resetButton [
 	^ resetButton 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueBrowserPresenter >> rules: rulesCollection [
 
 	self rulesModel roots:
@@ -501,38 +510,52 @@ StCritiqueBrowserPresenter >> rules: rulesCollection [
 			 :b | a name < b name ])
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueBrowserPresenter >> rulesModel [
 
 	^ rulesModel
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiqueBrowserPresenter >> setActionLogButton [
-	^ [ (UIManager default
-		confirm:
-			'Do you want to save all false positive and toDo in the Manifests ?
-(this action may generate new manifest classes and make dirty your package)')
-		ifTrue: [ cache logInManifest ] ]
+
+	^ [
+		| logging |
+		logging := self application newConfirm
+			           title: 'Question';
+			           label:
+				          'Do you want to save all false positive and toDo in the Manifests ?
+(this action may generate new manifest classes and make dirty your package)';
+			           acceptLabel: 'Sure!';
+			           cancelLabel: 'No';
+			           openModal.
+		logging ifTrue: [ cache logInManifest ] ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiqueBrowserPresenter >> setActionResetButton [
 
-	^ [ 
-	  (UIManager default confirm:
-		   'Do you want to delete the current configuration
- and create a new configuration ?') ifTrue: [ 
+	^ [
+	| logging |
+		logging := self application newConfirm
+			           title: 'Question';
+			           label:
+				           'Do you want to delete the current configuration
+ and create a new configuration ?';
+			           acceptLabel: 'Sure!';
+			           cancelLabel: 'No';
+			           openModal.
+		logging ifTrue: [
 		  self delete.
 		  StCritiquePackageSelectorPresenter open ] ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiqueBrowserPresenter >> setActionUpdateButton [
 	^ [ self reapplyAllRules ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiqueBrowserPresenter >> setLogButton [
 
 	logButton 
@@ -542,7 +565,7 @@ StCritiqueBrowserPresenter >> setLogButton [
 		action: self setActionLogButton 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiqueBrowserPresenter >> setResetButton [
 
 	resetButton 
@@ -552,7 +575,7 @@ StCritiqueBrowserPresenter >> setResetButton [
 		action: self setActionResetButton
 ]
 
-{ #category : #'system annoucements' }
+{ #category : 'system annoucements' }
 StCritiqueBrowserPresenter >> setRulesModel [ 
 rulesModel children: [ :rule | 
 		rule isComposite
@@ -564,14 +587,14 @@ rulesModel children: [ :rule |
 	rulesModel contextMenu: self buildRuleMenu.
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StCritiqueBrowserPresenter >> setTitle: aTitle [
 
 	title := aTitle.
 	self withWindowDo: [ :w | w title: aTitle ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiqueBrowserPresenter >> setUpdateButton [
 
 	updateButton 
@@ -581,13 +604,13 @@ StCritiqueBrowserPresenter >> setUpdateButton [
 		action: self setActionUpdateButton.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueBrowserPresenter >> sourceCodeModel [
 
 	^ critiqueModel sourceCodeModel
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StCritiqueBrowserPresenter >> stringMorphForRule: rule [
 	
 	"set the amount of critiques per rule"
@@ -611,24 +634,24 @@ StCritiqueBrowserPresenter >> stringMorphForRule: rule [
 		  yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueBrowserPresenter >> toolbarModel [
 
 	^ critiqueModel toolbarModel
 ]
 
-{ #category : #'system annoucements' }
+{ #category : 'system annoucements' }
 StCritiqueBrowserPresenter >> unregisterFromAnnouncements [
 
 	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCritiqueBrowserPresenter >> updateButton [
 	^ updateButton 
 ]
 
-{ #category : #thread }
+{ #category : 'thread' }
 StCritiqueBrowserPresenter >> updateTree [
 
 	critiqueModel updateList.

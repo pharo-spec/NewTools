@@ -20,7 +20,7 @@ Class {
 { #category : #accessing }
 StPlaygroundPagesPresenter class >> defaultExtent [
 
-	^ 700@400
+	^ (700@400) scaledByDisplayScaleFactor
 ]
 
 { #category : #layout }
@@ -67,7 +67,7 @@ StPlaygroundPagesPresenter >> doLoadPage [
 StPlaygroundPagesPresenter >> doLoadPageOnNewPlayground [
 	| playground |
 	
-	(playground := StPlayground new) 
+	(playground := StPlaygroundPresenter new) 
 		loadPage: self selectedPage;
 		open.
 	self window close.
@@ -148,7 +148,7 @@ StPlaygroundPagesPresenter >> loadSelectedPage [
 { #category : #accessing }
 StPlaygroundPagesPresenter >> pages [
 	
-	^ (StPlayground cacheDirectory allChildrenMatching: '*.ph')
+	^ (StPlaygroundPresenter cacheDirectory allChildrenMatching: '*.ph')
 		sorted: [ :a :b | a creationTime > b creationTime ]
 ]
 

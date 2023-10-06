@@ -1,6 +1,6 @@
-Extension { #name : #UITheme }
+Extension { #name : 'UITheme' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 UITheme >> inspectionColors [
 	<inspectorPresentationOrder: 10 title: 'Colors'>
 	
@@ -12,6 +12,6 @@ UITheme >> inspectionColors [
 		displayIcon: [ :each | 
 			Morph new 
 				color: (self perform: each);
-				asFormOfSize: 20@20 ];
+				asFormOfSize: (20@20) scaledByDisplayScaleFactor ];
 		yourself
 ]

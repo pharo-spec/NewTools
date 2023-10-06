@@ -1,19 +1,21 @@
 Class {
-	#name : #StDebuggerExtensionTestListener,
-	#superclass : #Object,
+	#name : 'StDebuggerExtensionTestListener',
+	#superclass : 'Object',
 	#instVars : [
 		'tag'
 	],
-	#category : #'NewTools-Debugger-Tests-Utils'
+	#category : 'NewTools-Debugger-Tests-Utils',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Utils'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerExtensionTestListener >> tag [
 
 	^ tag
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerExtensionTestListener >> tag: anObject [
 
 	tag := anObject

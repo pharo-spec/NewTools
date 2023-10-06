@@ -84,7 +84,7 @@ StRewriterMatchToolPresenterTest >> testGetBindingsItemsForMatch [
 StRewriterMatchToolPresenterTest >> testInitializePresenters [
 
 	self assert: matchToolPresenter methodCheckbox class equals: SpCheckBoxPresenter.
-	self assert: matchToolPresenter ruleEditor class equals: StRewriterSearchForPanel.
+	self assert: matchToolPresenter ruleEditor class equals: StRewriterSearchForPanelPresenter.
 	self assert: matchToolPresenter codeEditor class equals: SpCodePresenter.
 	self assert: matchToolPresenter matchesList class equals: SpListPresenter.
 	self assert: matchToolPresenter bindingsTable class equals: SpTablePresenter.

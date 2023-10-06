@@ -36,28 +36,26 @@ StPlaygroundPagePresenterTest >> tearDown [
 
 { #category : #tests }
 StPlaygroundPagePresenterTest >> testAddMenuCommandsTo [
-	| group commands class |
 
-	class := self classFactory newSubclassOf: StPlaygroundMenuExtensionCommand.
-	
+	| group commands class |
+	class := self classFactory make: [ :aBuilder | aBuilder superclass: StPlaygroundMenuExtensionCommand ].
+
 	group := CmCommandGroup forSpec.
 	presenter addMenuCommandsTo: group.
-	commands := group allCommands collect: [ :each | each innerCommand class ] as: Array.	
-	self assert: (commands includes: class).
-
+	commands := group allCommands collect: [ :each | each innerCommand class ] as: Array.
+	self assert: (commands includes: class)
 ]
 
 { #category : #tests }
 StPlaygroundPagePresenterTest >> testAddToolbarCommandsTo [
-	| group commands class |
 
-	class := self classFactory newSubclassOf: StPlaygroundToolbarExtensionCommand.
-	
+	| group commands class |
+	class := self classFactory make: [ :aBuilder | aBuilder superclass: StPlaygroundToolbarExtensionCommand ].
+
 	group := CmCommandGroup forSpec.
 	presenter addToolbarCommandsTo: group.
-	commands := group allCommands collect: [ :each | each innerCommand class ] as: Array.	
-	self assert: (commands includes: class).
-
+	commands := group allCommands collect: [ :each | each innerCommand class ] as: Array.
+	self assert: (commands includes: class)
 ]
 
 { #category : #'tests - commands' }
@@ -148,12 +146,11 @@ StPlaygroundPagePresenterTest >> testPageIsSavedWhenExecutingACommand [
 
 { #category : #tests }
 StPlaygroundPagePresenterTest >> testToolbarActions [
+
 	| group commands class |
+	class := self classFactory make: [ :aBuilder | aBuilder superclass: StPlaygroundToolbarExtensionCommand ].
 
-	class := self classFactory newSubclassOf: StPlaygroundToolbarExtensionCommand.
-	
 	group := presenter toolbarActions.
-	commands := group allCommands collect: [ :each | each innerCommand class ] as: Array.	
-	self assert: (commands includes: class).
-
+	commands := group allCommands collect: [ :each | each innerCommand class ] as: Array.
+	self assert: (commands includes: class)
 ]

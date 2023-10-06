@@ -1,6 +1,6 @@
-Extension { #name : #Array2D }
+Extension { #name : 'Array2D' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 Array2D >> inspectorExtension [
 
 	<inspectorPresentationOrder: 0 title: 'Matrix'>

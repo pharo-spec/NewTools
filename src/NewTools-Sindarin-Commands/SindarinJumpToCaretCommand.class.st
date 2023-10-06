@@ -16,29 +16,30 @@ When we enter a block, it creates a context for this block that becomes the susp
 When you exit a block via MoveToCaret, then the caret should be somewhere in the lexical context and all contexts that are above the context that contains the aimed node are discarded.
 "
 Class {
-	#name : #SindarinJumpToCaretCommand,
-	#superclass : #SindarinCommand,
-	#category : #'NewTools-Sindarin-Commands'
+	#name : 'SindarinJumpToCaretCommand',
+	#superclass : 'SindarinCommand',
+	#category : 'NewTools-Sindarin-Commands',
+	#package : 'NewTools-Sindarin-Commands'
 }
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinJumpToCaretCommand class >> defaultDescription [
 	^ 'Jump to caret so that the next instruction that will be executed is the instruction associated to the node associated to the caret. All necessary arguments are pushed on the stack but everything else is skipped and the program state (e.g : variable bindings) stay the same.'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SindarinJumpToCaretCommand class >> defaultIconName [
 	^ #smallItalic
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinJumpToCaretCommand class >> defaultName [
 	<toolbarExtensionDebugCommand: 50>
 	<codeExtensionDebugCommand:1>
 	^ '[Exp.] Jump to caret'
 ]
 
-{ #category : #execution }
+{ #category : 'execution' }
 SindarinJumpToCaretCommand >> execute [
 
 	| targetNode |

@@ -1,6 +1,6 @@
-Extension { #name : #Object }
+Extension { #name : 'Object' }
 
-{ #category : #'*NewTools-Inspector' }
+{ #category : '*NewTools-Inspector' }
 Object >> evaluatorInitialText: aStObjectContextPresenter [ 
 	^ '{1}' format: { aStObjectContextPresenter model codeSnippet } 
 ]

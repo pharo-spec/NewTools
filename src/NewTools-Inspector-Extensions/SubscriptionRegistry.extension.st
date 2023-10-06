@@ -1,6 +1,6 @@
-Extension { #name : #SubscriptionRegistry }
+Extension { #name : 'SubscriptionRegistry' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 SubscriptionRegistry >> inspectionSubscriptions [
 	<inspectorPresentationOrder: 0 title: 'Subscriptions'>
 

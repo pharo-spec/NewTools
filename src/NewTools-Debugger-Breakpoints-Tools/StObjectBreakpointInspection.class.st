@@ -3,7 +3,7 @@ I am an inspection for halts and breakpoints, my scope is the inspected object.
 "
 Class {
 	#name : #StObjectBreakpointInspection,
-	#superclass : #StInspection,
+	#superclass : #StInspectionPresenter,
 	#instVars : [
 		'methodsWithBreakpoints',
 		'breakpointsInSourceCode',

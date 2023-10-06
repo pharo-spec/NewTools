@@ -2,44 +2,46 @@
 Open an inspector on current selected object. 
 "
 Class {
-	#name : #StInspectorInspectSelectedCommand,
-	#superclass : #StInspectorCommand,
-	#category : #'NewTools-Inspector-Command'
+	#name : 'StInspectorInspectSelectedCommand',
+	#superclass : 'StInspectorCommand',
+	#category : 'NewTools-Inspector-Command',
+	#package : 'NewTools-Inspector',
+	#tag : 'Command'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 StInspectorInspectSelectedCommand class >> defaultDescription [
 
 	^ 'Inspect this instance'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StInspectorInspectSelectedCommand class >> defaultIconName [
 
 	^ #smallInspectIt
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 StInspectorInspectSelectedCommand class >> defaultName [
 	<toolbarInspectCommand: 20>
 
 	^ 'Inspect'
 ]
 
-{ #category : #documentation }
+{ #category : 'documentation' }
 StInspectorInspectSelectedCommand class >> documentContextRequiredSelectors [
 
 	^ super documentContextRequiredSelectors, #(selectedObject)
 ]
 
-{ #category : #execution }
+{ #category : 'execution' }
 StInspectorInspectSelectedCommand >> execute [ 
 
 	self context systemNavigation inspect: self interestingObject
 	
 ]
 
-{ #category : #execution }
+{ #category : 'execution' }
 StInspectorInspectSelectedCommand >> interestingObject [
 
 	^ self context selectedObject

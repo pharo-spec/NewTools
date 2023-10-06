@@ -59,11 +59,6 @@ StSpotterPragmaBasedProcessor class >> settingsOn: aBuilder [
 ]
 
 { #category : #public }
-StSpotterPragmaBasedProcessor >> actOn: anObject for: aStep [
-	anObject spotterActDefault: aStep
-]
-
-{ #category : #public }
 StSpotterPragmaBasedProcessor >> allFilteredCandidates [
 	^ allFilteredCandidates ifNil: [ allFilteredCandidates := OrderedCollection new ]
 ]

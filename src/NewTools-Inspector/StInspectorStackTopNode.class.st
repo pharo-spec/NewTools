@@ -3,23 +3,25 @@ A model for the `top` stack node.
 This is to be used when debugging.
 "
 Class {
-	#name : #StInspectorStackTopNode,
-	#superclass : #StInspectorNode,
-	#category : #'NewTools-Inspector-Model'
+	#name : 'StInspectorStackTopNode',
+	#superclass : 'StInspectorNode',
+	#category : 'NewTools-Inspector-Model',
+	#package : 'NewTools-Inspector',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorStackTopNode >> children [
  
 	^ #()
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorStackTopNode >> key [
 	^ 'stackTop'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorStackTopNode >> rawValue [
 
 	^ self hostObject stackPtr > 0

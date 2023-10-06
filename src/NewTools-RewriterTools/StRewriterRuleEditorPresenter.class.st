@@ -120,8 +120,8 @@ StRewriterRuleEditorPresenter >> initializePresenters [
 { #category : #initialization }
 StRewriterRuleEditorPresenter >> initializeRuleEditors [
 
-	searchForEditor := self instantiate: StRewriterSearchForPanel.
-	replaceWithEditor := self instantiate: StRewriterReplaceWithPanel
+	searchForEditor := self instantiate: StRewriterSearchForPanelPresenter.
+	replaceWithEditor := self instantiate: StRewriterReplaceWithPanelPresenter
 ]
 
 { #category : #initialization }

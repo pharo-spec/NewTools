@@ -1,31 +1,31 @@
-Extension { #name : #StRawInspection }
+Extension { #name : 'StRawInspectionPresenter' }
 
-{ #category : #'*NewTools-Debugger' }
-StRawInspection >> activePresenter [
+{ #category : '*NewTools-Debugger' }
+StRawInspectionPresenter >> activePresenter [
 	^self
 ]
 
-{ #category : #'*NewTools-Debugger' }
-StRawInspection >> addVariableTagColumn [
+{ #category : '*NewTools-Debugger' }
+StRawInspectionPresenter >> addVariableTagColumn [
 
 	attributeTable addColumn: self variableTagColumn
 ]
 
-{ #category : #'*NewTools-Debugger' }
-StRawInspection >> attributeTable [
+{ #category : '*NewTools-Debugger' }
+StRawInspectionPresenter >> attributeTable [
 
 	^attributeTable
 ]
 
-{ #category : #'*NewTools-Debugger' }
-StRawInspection >> beForDebugger [
+{ #category : '*NewTools-Debugger' }
+StRawInspectionPresenter >> beForDebugger [
 
 	attributeTable := (self instantiate: StDebuggerTreeTablePresenter)
 		beResizable;
 		contextMenu: [ self rootCommandsGroup asMenuPresenter ];
 		yourself.
 		
-	StInspector inspectorDiveOnSingleClick
+	StInspectorPresenter inspectorDiveOnSingleClick
 		ifTrue: [ attributeTable activateOnSingleClick ].
 	
 	self addVariableTagColumn.
@@ -37,14 +37,14 @@ StRawInspection >> beForDebugger [
 		children: [ :node | #() ]
 ]
 
-{ #category : #'*NewTools-Debugger' }
-StRawInspection >> selectedPageName [
+{ #category : '*NewTools-Debugger' }
+StRawInspectionPresenter >> selectedPageName [
 
 	^'Context'
 ]
 
-{ #category : #'*NewTools-Debugger' }
-StRawInspection >> updateNodesFromScope: oldASTScope to: newASTScope [
+{ #category : '*NewTools-Debugger' }
+StRawInspectionPresenter >> updateNodesFromScope: oldASTScope to: newASTScope [
 
 	| nodes newTemps oldTemps tempsToRemove tempsToAdd |
 	oldTemps := oldASTScope allTemps.
@@ -66,8 +66,8 @@ StRawInspection >> updateNodesFromScope: oldASTScope to: newASTScope [
 	self attributeTable roots: nodes
 ]
 
-{ #category : #'*NewTools-Debugger' }
-StRawInspection >> variableTagColumn [
+{ #category : '*NewTools-Debugger' }
+StRawInspectionPresenter >> variableTagColumn [
 
 	^  SpLinkTableColumn new 
 		title: 'Type';

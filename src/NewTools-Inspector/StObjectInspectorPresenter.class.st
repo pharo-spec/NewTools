@@ -5,8 +5,8 @@ I present a notebook with the possible inspection of the object.
 I am usually embedded into an StInspector, but I can be used standalone.
 "
 Class {
-	#name : #StObjectInspectorPresenter,
-	#superclass : #StPresenter,
+	#name : 'StObjectInspectorPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'views',
 		'evaluator',
@@ -16,10 +16,12 @@ Class {
 		'alivePresentersByPage',
 		'activateOnSingleClick'
 	],
-	#category : #'NewTools-Inspector-View'
+	#category : 'NewTools-Inspector-View',
+	#package : 'NewTools-Inspector',
+	#tag : 'View'
 }
 
-{ #category : #commands }
+{ #category : 'commands' }
 StObjectInspectorPresenter class >> buildCommandsGroupWith: presenter forRoot: aCmCommandsGroup [
 	| group |
 	
@@ -30,7 +32,7 @@ StObjectInspectorPresenter class >> buildCommandsGroupWith: presenter forRoot: a
 	aCmCommandsGroup register: group
 ]
 
-{ #category : #commands }
+{ #category : 'commands' }
 StObjectInspectorPresenter class >> buildRootCommandsGroupFor: aPresenter [
 	| rootCommandGroup |
 	
@@ -43,50 +45,50 @@ StObjectInspectorPresenter class >> buildRootCommandsGroupFor: aPresenter [
 	^ rootCommandGroup
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectInspectorPresenter class >> defaultTitle [
 
 	^ 'Inspector'
 ]
 
-{ #category : #'tools registry' }
+{ #category : 'tools registry' }
 StObjectInspectorPresenter class >> inspect: anObject [
 
 	^ self openOn: anObject
 ]
 
-{ #category : #opening }
+{ #category : 'opening' }
 StObjectInspectorPresenter class >> onObject: anObject [
 
 	^ self on: (StInspectorModel on: anObject)
 ]
 
-{ #category : #opening }
+{ #category : 'opening' }
 StObjectInspectorPresenter class >> openOn: anObject [
 
 	^ (self onObject: anObject) open
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StObjectInspectorPresenter >> activate: aSelection [
 
 	activationBlock ifNil: [ ^ self ].
 	activationBlock cull: aSelection
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectInspectorPresenter >> activateOnDoubleClick [
 
 	activateOnSingleClick := true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectInspectorPresenter >> activateOnSingleClick [
 
 	activateOnSingleClick := true
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StObjectInspectorPresenter >> addActivationTo: aPresenter [
 	
 	aPresenter hasOutputActivationPort ifFalse: [ ^ self ]. 
@@ -95,13 +97,13 @@ StObjectInspectorPresenter >> addActivationTo: aPresenter [
 		transmitDo: [ :selection | self activate: selection ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StObjectInspectorPresenter >> allContexts [
 
 	^ self model objectInspectionContexts
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StObjectInspectorPresenter >> allPages [
 
 	^ self allContexts 
@@ -109,7 +111,7 @@ StObjectInspectorPresenter >> allPages [
 	
 ]
 
-{ #category : #'private - builder' }
+{ #category : 'private - builder' }
 StObjectInspectorPresenter >> buildToolbar [
 
 	^ self newToolbar 
@@ -118,13 +120,13 @@ StObjectInspectorPresenter >> buildToolbar [
 		fillWith: self rootCommandsGroup
 ]
 
-{ #category : #transmission }
+{ #category : 'transmission' }
 StObjectInspectorPresenter >> defaultInputPort [
 
 	^ self inputModelPort
 ]
 
-{ #category : #'api - focus' }
+{ #category : 'api - focus' }
 StObjectInspectorPresenter >> defaultKeyboardFocus [
 
 	views pages ifNotEmpty: [ :pages | 
@@ -134,7 +136,7 @@ StObjectInspectorPresenter >> defaultKeyboardFocus [
 	^ self
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StObjectInspectorPresenter >> defaultLayout [
 	
 	^ SpBoxLayout newTopToBottom 
@@ -143,12 +145,12 @@ StObjectInspectorPresenter >> defaultLayout [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectInspectorPresenter >> evaluator [ 
 	^evaluator
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StObjectInspectorPresenter >> initialize [
 
 	activateOnSingleClick := false.
@@ -158,14 +160,14 @@ StObjectInspectorPresenter >> initialize [
 	alivePresentersByPage := WeakSet new
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StObjectInspectorPresenter >> initializePresenters [
 
 	views := self newNotebook.
 	header := self instantiate: StHeaderBar
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StObjectInspectorPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
@@ -174,31 +176,31 @@ StObjectInspectorPresenter >> initializeWindow: aWindowPresenter [
 		toolbar: self buildToolbar
 ]
 
-{ #category : #transmission }
+{ #category : 'transmission' }
 StObjectInspectorPresenter >> inputModelPort [
 
 	^ SpModelPort newPresenter: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectInspectorPresenter >> inspectedObject [
  	
 	^ self model inspectedObject
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StObjectInspectorPresenter >> keepPresenter: aPresenter [
 
 	alivePresentersByPage add: aPresenter
 ]
 
-{ #category : #'model access' }
+{ #category : 'model access' }
 StObjectInspectorPresenter >> model [ 
 
 	^ model
 ]
 
-{ #category : #'model access' }
+{ #category : 'model access' }
 StObjectInspectorPresenter >> model: anInspectorModel [
 
 	"if same object, I do not want to update to not trigger infinite updates"
@@ -208,7 +210,7 @@ StObjectInspectorPresenter >> model: anInspectorModel [
 	self refresh
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'private - factory' }
 StObjectInspectorPresenter >> newInspectionForContext: aContext [
 	
 	^ StObjectContextPresenter on: (StObjectContextModel new 
@@ -218,7 +220,7 @@ StObjectInspectorPresenter >> newInspectionForContext: aContext [
 		yourself)
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'private - factory' }
 StObjectInspectorPresenter >> newPageForContext: aContext [
 
 	^ SpNotebookPage new
@@ -230,7 +232,7 @@ StObjectInspectorPresenter >> newPageForContext: aContext [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectInspectorPresenter >> rawInspectorPageOrNil [
 
 	^ views pages 
@@ -238,7 +240,7 @@ StObjectInspectorPresenter >> rawInspectorPageOrNil [
 		ifNone: [ nil ]
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StObjectInspectorPresenter >> refresh [
 	"model changed?  
 	 update inspector values."
@@ -249,63 +251,63 @@ StObjectInspectorPresenter >> refresh [
 	self updatePages
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectInspectorPresenter >> refreshContent [
 	"I force a refresh of current page contents. "
 
 	views selectedPage resetContent
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectInspectorPresenter >> selectedObject [
 	^ self inspectedObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectInspectorPresenter >> selectedPage [
 
 	^ views selectedPage
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectInspectorPresenter >> selectedPageName [
 
 	^ self selectedPage title
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StObjectInspectorPresenter >> setModel: aModel [
 
 	self model: aModel
 ]
 
-{ #category : #'model access' }
+{ #category : 'model access' }
 StObjectInspectorPresenter >> setModelBeforeInitialization: anInspectorModel [
 
 	model := anInspectorModel
 ]
 
-{ #category : #stepping }
+{ #category : 'stepping' }
 StObjectInspectorPresenter >> step [
 
 	alivePresentersByPage 
 		do: [ :each | each step ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectInspectorPresenter >> title [
 
 	^ self model windowTitle
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectInspectorPresenter >> trySelectAnyPageWithName: aCollection [
 	"Tries to select a the first page of aCollection that exists in the pages list."
 	| pagesToSearch |
 
 	pagesToSearch := ((aCollection asOrderedCollection 
 		reject: [ :each | each isNil ])
-		reject: [ :each | each = StRawInspection label ])
+		reject: [ :each | each = StRawInspectionPresenter label ])
 		removeDuplicates.
 	pagesToSearch ifEmpty: [ ^ self ].
 
@@ -317,20 +319,20 @@ StObjectInspectorPresenter >> trySelectAnyPageWithName: aCollection [
 				^ self ] ]
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StObjectInspectorPresenter >> updateEvaluator [
 
 	"evaluator beForObject: self model inspectedObject"
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StObjectInspectorPresenter >> updateHeaderBar [
 		
 	header label: self model labelString.
 	header toolbarActions: self rootCommandsGroup 
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StObjectInspectorPresenter >> updatePages [
 
 	views 
@@ -338,13 +340,13 @@ StObjectInspectorPresenter >> updatePages [
 		selectPageIndex: 1
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StObjectInspectorPresenter >> updatePresenter [
 
 	self refresh
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StObjectInspectorPresenter >> updateTitle [
 		
 	self isRoot ifFalse: [ ^ self ].
@@ -352,13 +354,13 @@ StObjectInspectorPresenter >> updateTitle [
 		window title: self title ].
 ]
 
-{ #category : #'api - events' }
+{ #category : 'api - events' }
 StObjectInspectorPresenter >> whenActivatedDo: aBlock [
 
 	activationBlock := aBlock
 ]
 
-{ #category : #'api - events' }
+{ #category : 'api - events' }
 StObjectInspectorPresenter >> whenClosedDo: aBlock [
 
 	header whenClosedDo: aBlock

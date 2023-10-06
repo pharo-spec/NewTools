@@ -1,6 +1,6 @@
-Extension { #name : #String }
+Extension { #name : 'String' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 String >> inspectionEncoding: specBuilder [
 	<inspectorPresentationOrder: 200 title: 'Encoding'>
 	
@@ -12,7 +12,7 @@ String >> inspectionEncoding: specBuilder [
 			table
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 String >> inspectionFullString [
 	<inspectorPresentationOrder: 100 title: 'Full Content'>
 	^ SpCodePresenter new
@@ -21,7 +21,7 @@ String >> inspectionFullString [
 		yourself
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 String >> inspectionString [
 	<inspectorPresentationOrder: -10 title: 'Preview'>
 	

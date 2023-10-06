@@ -1,27 +1,30 @@
 Class {
-	#name : #StDebuggerTest,
-	#superclass : #TestCase,
+	#name : 'StDebuggerTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'session',
 		'debugger',
 		'oldFastTDD',
 		'dbg',
-		'stackSizeBefore'
+		'stackSizeBefore',
+		'shouldFilterStack'
 	],
-	#category : #'NewTools-Debugger-Tests-Presenters'
+	#category : 'NewTools-Debugger-Tests-Presenters',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Presenters'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerTest >> debugger [
 	^ debugger ifNil: [ debugger := self debuggerClass basicNew ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerTest >> debuggerClass [
 	^ StDebugger
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerTest >> debuggerOn: aDebugSession [
 
 	^ self debugger
@@ -31,14 +34,14 @@ StDebuggerTest >> debuggerOn: aDebugSession [
 		  yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerTest >> executionControlCommandFrom: aDebugger [
 
 	^ debugger toolbar leftItems select: [ :p | 
 		  #( 'Proceed' 'Into' 'Over' 'Through' ) includes: p label ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerTest >> initializedDebugger [
 
 	dbg := self debugger.
@@ -48,14 +51,14 @@ StDebuggerTest >> initializedDebugger [
 	^ dbg
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerTest >> inspectorTableFor: inspector [
 	|contextInspector|
 	contextInspector := (inspector class slotNamed: #contextInspector) read: inspector.
 	^(contextInspector class slotNamed: #attributeTable) read: contextInspector
 ]
 
-{ #category : #'tests - accepting faulty code' }
+{ #category : 'tests - accepting faulty code' }
 StDebuggerTest >> replaceMethodWithQuickMethodStepping [
 
 	"True is a good default value. We step into always by default"
@@ -78,18 +81,19 @@ StDebuggerTest >> replaceMethodWithQuickMethodStepping [
 	dbg code type: newSource.
 	dbg code update.
 	dbg acceptCodeChanges: newSource forContext: context.
-	dbg updateStep
+	dbg debuggerActionModel updateIfAble 
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerTest >> setUp [	
 	super setUp.	
 	session := StTestDebuggerProvider new sessionForDebuggerTests.
 	oldFastTDD := self debuggerClass fastTDD.
+	shouldFilterStack := StDebuggerActionModel shouldFilterStack.
 	self debuggerClass fastTDD: true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerTest >> subscriptionsForStDebuggerExtensionActivationToggle [
 
 	| subscriptions |
@@ -99,21 +103,32 @@ StDebuggerTest >> subscriptionsForStDebuggerExtensionActivationToggle [
 		  s announcementClass = StDebuggerExtensionActivationToggle ]
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerTest >> tearDown [
 
 	session clear.
 	self debuggerClass fastTDD: oldFastTDD.
-	debugger ifNotNil: [ 
-		debugger unsubscribeFromSystemAnnouncer.
+
+	"In tests, should we use `debugger` when we need a fully initialized debugger and `dbg` when we just need a debugger created with #basicNew? Still, isn't it weird to clear the session only for a fully initialized debugger but not for a debugger created with #basicNew? Both have a session. Maybe this implies that `dbg`  should only use the instance variable `session` and nothing else. These specifications should be written somewhere, in the doc of the class maybe."
+	debugger ifNotNil: [
 		debugger close.
-		debugger session ifNotNil: [ :s | s clear ] ].
-	StTestDebuggerProvider removeSelector: #foobar. 
-	StDebuggerObjectForTests compile: 'haltingMethod <haltOrBreakpointForTesting> self halt. ^self' classified: 'util'.
+		debugger unsubscribeFromSystemAnnouncer.
+		debugger debuggerActionModel ifNotNil: [ :actionModel |
+			actionModel clear.
+			actionModel session ifNotNil: [ :s | s clear ] ] ].
+
+	StTestDebuggerProvider removeSelector: #foobar.
+	StDebuggerObjectForTests
+		compile:
+		'haltingMethod <haltOrBreakpointForTesting> self halt. ^self'
+		classified: 'util'.
+
+	StDebuggerActionModel shouldFilterStack: shouldFilterStack.
+	StTestDebuggerProvider removeSelector: #foobar.
 	super tearDown
 ]
 
-{ #category : #'tests - code pane' }
+{ #category : 'tests - code pane' }
 StDebuggerTest >> testAcceptCodeChangesForContext [
 	| context newSource |
 	
@@ -133,7 +148,24 @@ StDebuggerTest >> testAcceptCodeChangesForContext [
 	self assert: dbg code text equals: newSource
 ]
 
-{ #category : #'tests - code pane' }
+{ #category : 'tests' }
+StDebuggerTest >> testActionModelSubscription [
+
+	self assert: self debugger debuggerActionModel isNil.
+
+	debugger session: session.
+
+	self assert: debugger debuggerActionModel isNotNil.
+	self assert:
+		(debugger debuggerActionModel hasSubscriber: debugger).
+
+	debugger unsubscribeFromActionModel.
+
+	self deny:
+		(debugger debuggerActionModel hasSubscriber: debugger)
+]
+
+{ #category : 'tests - code pane' }
 StDebuggerTest >> testCancelCodeChangesFor [
 	| firstContext lastContext |
 	dbg := self debuggerOn: session.
@@ -154,7 +186,7 @@ StDebuggerTest >> testCancelCodeChangesFor [
 	
 ]
 
-{ #category : #'tests - code pane' }
+{ #category : 'tests - code pane' }
 StDebuggerTest >> testClearUnsavedChanges [
 
 	dbg := self debuggerOn: session.
@@ -163,23 +195,26 @@ StDebuggerTest >> testClearUnsavedChanges [
 	self assertEmpty: dbg unsavedCodeChanges
 ]
 
-{ #category : #'tests - actions' }
+{ #category : 'tests - actions' }
 StDebuggerTest >> testClose [
-	| windowPresenter |
-	
+
+	| windowPresenter actionModel |
 	windowPresenter := SpWindowPresenter new.
 	windowPresenter windowIsOpened.
-	debugger := (self debuggerOn: session).	
-	windowPresenter presenter: debugger.	
+	debugger := self debuggerOn: session.
+	actionModel := debugger debuggerActionModel.
+	windowPresenter presenter: debugger.
 	debugger initializeWindow: windowPresenter.
-	
+
 	"We trigger the closing from the presenter instead of the debugger itself,
 	because the window is not really open so the debugger will not close through debugger close."
-	windowPresenter windowClosed.	
-	self deny: (SystemAnnouncer uniqueInstance hasSubscriber: debugger)
+	windowPresenter windowClosed.
+	self deny: (SystemAnnouncer uniqueInstance hasSubscriber: debugger).
+	self deny:
+		(actionModel hasSubscriber: debugger)
 ]
 
-{ #category : #'tests - code pane' }
+{ #category : 'tests - code pane' }
 StDebuggerTest >> testCodeChangeAfterContextChange [
 	| firstContext lastContext |
 	dbg := self debuggerOn: session.
@@ -197,7 +232,7 @@ StDebuggerTest >> testCodeChangeAfterContextChange [
 	self should: [ dbg unsavedCodeChangesFor:  lastContext] raise: KeyNotFound
 ]
 
-{ #category : #'tests - code pane' }
+{ #category : 'tests - code pane' }
 StDebuggerTest >> testCodeSelectionAfterRestart [
 	| adapter segments highlightSegment pcRangeForContext |
 	
@@ -222,7 +257,7 @@ StDebuggerTest >> testCodeSelectionAfterRestart [
 	"The pc range is highlighted with an additionnal index to encompass the full text of the node (why?)"
 ]
 
-{ #category : #'tests - code pane' }
+{ #category : 'tests - code pane' }
 StDebuggerTest >> testCodeSelectionAfterStepping [
 	| adapter segments highlightSegment pcRangeForContext |
 	
@@ -246,7 +281,7 @@ StDebuggerTest >> testCodeSelectionAfterStepping [
 	"The pc range is highlighted with an additionnal index to encompass the full text of the node (why?)"
 ]
 
-{ #category : #'tests - context inspector' }
+{ #category : 'tests - context inspector' }
 StDebuggerTest >> testContextChangedAfterStepIn [ 
 
 	dbg := self debuggerOn: session.
@@ -260,7 +295,7 @@ StDebuggerTest >> testContextChangedAfterStepIn [
 
 ]
 
-{ #category : #'tests - context inspector' }
+{ #category : 'tests - context inspector' }
 StDebuggerTest >> testContextChangedAfterStepOverAndReturn [
 	| currentContext |
 	dbg := self debuggerOn: session.	
@@ -273,7 +308,7 @@ StDebuggerTest >> testContextChangedAfterStepOverAndReturn [
 		equals: currentContext
 ]
 
-{ #category : #'tests - context inspector' }
+{ #category : 'tests - context inspector' }
 StDebuggerTest >> testContextTempVarList [
 	| contextItems inspectorTable |
 	
@@ -303,7 +338,7 @@ StDebuggerTest >> testContextTempVarList [
 	self assert: contextItems last rawValue identicalTo: dbg currentContext
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerTest >> testContextTempVarListUpdatesAfterRestartingContext [
 
 	| contextItems inspectorTable newContextItems |
@@ -331,7 +366,7 @@ StDebuggerTest >> testContextTempVarListUpdatesAfterRestartingContext [
 			identicalTo: (contextItems at: i) ]
 ]
 
-{ #category : #'tests - context inspector' }
+{ #category : 'tests - context inspector' }
 StDebuggerTest >> testContextTempVarListUpdatesTempsWhenEnteringOrLeavingInlinedBlocks [
 
 	| contextItems inspectorTable newContextItems |
@@ -370,7 +405,7 @@ StDebuggerTest >> testContextTempVarListUpdatesTempsWhenEnteringOrLeavingInlined
 			identicalTo: (contextItems at: i) ]
 ]
 
-{ #category : #'tests - context inspector' }
+{ #category : 'tests - context inspector' }
 StDebuggerTest >> testContextUnchangedAfterStepOver [
 	| currentContext |
 	
@@ -383,7 +418,7 @@ StDebuggerTest >> testContextUnchangedAfterStepOver [
 	self assert: dbg inspector inspectedObject identicalTo:  currentContext
 ]
 
-{ #category : #'tests - actions' }
+{ #category : 'tests - actions' }
 StDebuggerTest >> testCopyStackToClipboard [
 	debugger := self debuggerOn: session.
 	debugger copyStackToClipboard.
@@ -393,7 +428,58 @@ StDebuggerTest >> testCopyStackToClipboard [
 				 session interruptedContext shortDebugStackOn: s ])
 ]
 
-{ #category : #'tests - initialization' }
+{ #category : 'tests' }
+StDebuggerTest >> testCreateMissingMethodWithUnfilteredStackUpdatesCodePane [
+
+	| dnuMessage method pcRangeForContext segments highlightSegment adapter |
+	StDebuggerActionModel shouldFilterStack: false.
+	debugger := StTestDebuggerProvider new debuggerWithDNUContext.
+	debugger
+		application: debugger class currentApplication;
+		initialize.
+	adapter := SpMorphicCodeAdapter new.
+	adapter adapt: debugger code.
+	debugger code adapter: adapter.
+	debugger code adapter buildWidget.
+	self assert:
+		debugger debuggerActionModel isInterruptedContextDoesNotUnderstand.
+	self
+		assert: debugger interruptedContext receiver class
+		identicalTo: StTestDebuggerProvider.
+	dnuMessage := debugger debuggerActionModel contextPredicate exception
+		              message.
+
+	self assert: dnuMessage selector identicalTo: #foobar.
+
+	"stack is unfiltered. So the text shown should be the code from the DNU"
+	self assert: (debugger code text beginsWith: 'doesNotUnderstand:').
+
+	"we create the missing method #foobar"
+	debugger
+		createMissingMethodFor: dnuMessage
+		in: StTestDebuggerProvider.
+
+	method := StTestDebuggerProvider methodDictionary at: #foobar.
+
+	"code must have been updated with the new method"
+	self
+		assert: debugger interruptedContext compiledCode
+		identicalTo: method.
+	self assert: debugger code text equals: method sourceCode.
+
+	session := debugger session.
+	pcRangeForContext := session pcRangeForContext:
+		                     debugger currentContext.
+	segments := debugger code adapter widget segments.
+	self assert: segments size equals: 1.
+	highlightSegment := segments first.
+
+	self
+		assert: (highlightSegment firstIndex to: highlightSegment lastIndex)
+		equals: (pcRangeForContext first to: pcRangeForContext last + 1)
+]
+
+{ #category : 'tests - initialization' }
 StDebuggerTest >> testDebuggerActionModel [
 	"Checking that when initializing a debugger its action model is correctly set up.
 	We cannot check that by calling the accessor because it is a lazy accessor. 
@@ -407,14 +493,14 @@ StDebuggerTest >> testDebuggerActionModel [
 	self assert: debuggerActionModel notNil
 ]
 
-{ #category : #'tests - initialization' }
+{ #category : 'tests - initialization' }
 StDebuggerTest >> testDebuggerApplication [
 	self
 		assert: (self debuggerOn: session) application
 		identicalTo: StDebugger currentApplication
 ]
 
-{ #category : #'tests - code pane' }
+{ #category : 'tests - code pane' }
 StDebuggerTest >> testDiscardCodeChangesFor [
 	| firstContext lastContext |
 	
@@ -436,7 +522,7 @@ StDebuggerTest >> testDiscardCodeChangesFor [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerTest >> testExceptionProvidesSameExceptionAsTheActionModelOne [
 
 	debugger := self debuggerOn: session.
@@ -445,13 +531,13 @@ StDebuggerTest >> testExceptionProvidesSameExceptionAsTheActionModelOne [
 		identicalTo: debugger debuggerActionModel exception
 ]
 
-{ #category : #'tests - initialization' }
+{ #category : 'tests - initialization' }
 StDebuggerTest >> testFastTDD [
 	self debuggerClass fastTDD: nil.
 	self deny: self debuggerClass fastTDD
 ]
 
-{ #category : #'tests - code pane' }
+{ #category : 'tests - code pane' }
 StDebuggerTest >> testInitialCodeSelectionAfterStepping [
 	| adapter segments highlightSegment pcRangeForContext |
 	
@@ -473,7 +559,7 @@ StDebuggerTest >> testInitialCodeSelectionAfterStepping [
 	"The pc range is highlighted with an additionnal index to encompass the full text of the node (why?)"
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerTest >> testInterruptedContextProvidesSameContextAsTheActionModelOne [
 
 	debugger := self debuggerOn: session.
@@ -482,7 +568,7 @@ StDebuggerTest >> testInterruptedContextProvidesSameContextAsTheActionModelOne [
 		identicalTo: debugger debuggerActionModel interruptedContext
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerTest >> testInterruptedProcessProvidesSameProcessAsTheActionModelOne [
 
 	debugger := self debuggerOn: session.
@@ -491,7 +577,47 @@ StDebuggerTest >> testInterruptedProcessProvidesSameProcessAsTheActionModelOne [
 		identicalTo: debugger debuggerActionModel interruptedProcess
 ]
 
-{ #category : #'tests - context inspector' }
+{ #category : 'tests' }
+StDebuggerTest >> testIsInSelectedContextClass [
+
+	| stackTable context process |
+	context := thisContext.
+	process := Process forContext: context priority: Processor userInterruptPriority.
+	session := DebugSession named: 'test session stDebuggerTestTestIsInSelectedContextClass' on: process startedAt: context.
+	session exception: OupsNullException new.
+
+	debugger := self debuggerOn: session.
+	stackTable := debugger stackTable.
+
+	stackTable selectItem: (stackTable items at: 2).
+	"Let's make sure we select the method we want in case SUnit changes in the future and that our tests will be on the right methods."
+	self assert: stackTable selectedItem method selector equals: #performTest.
+	self assert: (stackTable items at: 7) method selector equals: #runCase.
+
+	self assert: (debugger isInSelectedContextClass: (stackTable items at: 7))
+]
+
+{ #category : 'tests' }
+StDebuggerTest >> testIsInSelectedContextPackage [
+
+	| stackTable context process |
+	context := thisContext.
+	process := Process forContext: context priority: Processor userInterruptPriority.
+	session := DebugSession named: 'test session stDebuggerTesttestIsInSelectedContextPackage' on: process startedAt: context.
+	session exception: OupsNullException new.
+
+	debugger := self debuggerOn: session.
+	stackTable := debugger stackTable.
+
+	stackTable selectItem: (stackTable items at: 2).
+	"Let's make sure we select the method we want in case SUnit changes in the future and that our tests will be on the right methods."
+	self assert: stackTable selectedItem method selector equals: #performTest.
+	self assert: (stackTable items at: 12) method selector equals: #runTestCaseUnderWatchdog:.
+
+	self assert: (debugger isInSelectedContextPackage: (stackTable items at: 12))
+]
+
+{ #category : 'tests - context inspector' }
 StDebuggerTest >> testNewDebuggerContext [
 	| debuggerContext |
 	
@@ -501,7 +627,7 @@ StDebuggerTest >> testNewDebuggerContext [
 	self assert: debuggerContext exception equals: session exception
 ]
 
-{ #category : #'tests - context inspector' }
+{ #category : 'tests - context inspector' }
 StDebuggerTest >> testNewDebuggerContextFor [
 	| debuggerContext ctx |
 	
@@ -513,7 +639,7 @@ StDebuggerTest >> testNewDebuggerContextFor [
 	self assert: debuggerContext context identicalTo: ctx
 ]
 
-{ #category : #'tests - stack table' }
+{ #category : 'tests - stack table' }
 StDebuggerTest >> testPrintReceiverClassInContext [
 	|ctx result|
 	ctx := Context sender: nil receiver: Set new method: (Collection>>#add:) arguments: Array new. 
@@ -525,7 +651,7 @@ StDebuggerTest >> testPrintReceiverClassInContext [
 	self assert: result equals: 'Set'.
 ]
 
-{ #category : #'tests - receiver inspector' }
+{ #category : 'tests - receiver inspector' }
 StDebuggerTest >> testReceiverChangedAfterStepIn [ 
 
 	dbg := self debuggerOn: session.
@@ -537,7 +663,7 @@ StDebuggerTest >> testReceiverChangedAfterStepIn [
 	self assert: dbg inspector inspectedObject context receiver identicalTo: session shortStack first receiver
 ]
 
-{ #category : #'tests - receiver inspector' }
+{ #category : 'tests - receiver inspector' }
 StDebuggerTest >> testReceiverChangedAfterStepOverAndReturn [
 	| currentReceiver |
 	
@@ -551,7 +677,7 @@ StDebuggerTest >> testReceiverChangedAfterStepOverAndReturn [
 		equals: currentReceiver
 ]
 
-{ #category : #'tests - receiver inspector' }
+{ #category : 'tests - receiver inspector' }
 StDebuggerTest >> testReceiverList [
 	| currentReceiver |
 	dbg := self debuggerOn: session.	
@@ -562,7 +688,7 @@ StDebuggerTest >> testReceiverList [
 
 ]
 
-{ #category : #'tests - receiver inspector' }
+{ #category : 'tests - receiver inspector' }
 StDebuggerTest >> testReceiverUnchangedAfterStepOver [ 
 	| currentReceiver |
 	
@@ -576,7 +702,7 @@ StDebuggerTest >> testReceiverUnchangedAfterStepOver [
 
 ]
 
-{ #category : #'tests - code pane' }
+{ #category : 'tests - code pane' }
 StDebuggerTest >> testRecordUnsavedCodeChanges [
 	| lastContext |
 	
@@ -594,7 +720,7 @@ StDebuggerTest >> testRecordUnsavedCodeChanges [
 	self assert: (dbg unsavedCodeChangesFor: dbg stackTable items first) equals: 'a'
 ]
 
-{ #category : #'tests - actions' }
+{ #category : 'tests - actions' }
 StDebuggerTest >> testRequestClassFrom [
 
 	self
@@ -602,7 +728,7 @@ StDebuggerTest >> testRequestClassFrom [
 		identicalTo: self class
 ]
 
-{ #category : #'tests - actions' }
+{ #category : 'tests - actions' }
 StDebuggerTest >> testRequestProtocolIn [
 
 	self
@@ -610,7 +736,7 @@ StDebuggerTest >> testRequestProtocolIn [
 		equals: Protocol unclassified
 ]
 
-{ #category : #'tests - session' }
+{ #category : 'tests - session' }
 StDebuggerTest >> testRestartContext [
 	| firstContext lastContext |
 	
@@ -641,20 +767,20 @@ StDebuggerTest >> testRestartContext [
 
 ]
 
-{ #category : #'tests - raw inspection' }
+{ #category : 'tests - raw inspection' }
 StDebuggerTest >> testRestoreReceiverRawInspectionSelection [
 	self skip.
 	self flag: #DBG_TEST
 ]
 
-{ #category : #'tests - raw inspection' }
+{ #category : 'tests - raw inspection' }
 StDebuggerTest >> testRestoreReceiverRawInspectionSelectionAfterContextChange [
 
 	self skip.
 	self flag: #DBG_TEST
 ]
 
-{ #category : #'tests - code pane' }
+{ #category : 'tests - code pane' }
 StDebuggerTest >> testRestoreUnsavedCodeChanges [
 	| firstContext lastContext |
 	
@@ -674,13 +800,13 @@ StDebuggerTest >> testRestoreUnsavedCodeChanges [
 	self assert: dbg code text equals: 'a'
 ]
 
-{ #category : #'tests - session' }
+{ #category : 'tests - session' }
 StDebuggerTest >> testReturnEnteredValue [
 	self skip.
 	self flag: #DBG_TEST
 ]
 
-{ #category : #'tests - code pane' }
+{ #category : 'tests - code pane' }
 StDebuggerTest >> testSaveCodeModification [
 	| context newSource |
 	
@@ -704,21 +830,21 @@ StDebuggerTest >> testSaveCodeModification [
 
 ]
 
-{ #category : #'tests - raw inspection' }
+{ #category : 'tests - raw inspection' }
 StDebuggerTest >> testSaveReceiverRawInspectionSelection [
 
 	self skip.
 	self flag: #DBG_TEST
 ]
 
-{ #category : #'tests - raw inspection' }
+{ #category : 'tests - raw inspection' }
 StDebuggerTest >> testSaveReceiverRawInspectionSelectionAfterContextChange [
 
 	self skip.
 	self flag: #DBG_TEST
 ]
 
-{ #category : #'tests - accepting faulty code' }
+{ #category : 'tests - accepting faulty code' }
 StDebuggerTest >> testSavingQuickMethodWhenSteppingIntoStackSizeBeforeIsTheSameAfter [
 
 	self replaceMethodWithQuickMethodStepping.
@@ -726,7 +852,7 @@ StDebuggerTest >> testSavingQuickMethodWhenSteppingIntoStackSizeBeforeIsTheSameA
 	self assert: dbg session stack size equals: stackSizeBefore
 ]
 
-{ #category : #'tests - accepting faulty code' }
+{ #category : 'tests - accepting faulty code' }
 StDebuggerTest >> testSavingQuickMethodWhenSteppingIntoStaysInQuickMethod [
 	
 	"We tell the parent that we wanted to step into"
@@ -735,7 +861,7 @@ StDebuggerTest >> testSavingQuickMethodWhenSteppingIntoStaysInQuickMethod [
 	self assert: dbg stackTable items first sourceCode equals: 'haltingMethod ^ 1'
 ]
 
-{ #category : #'tests - stack table' }
+{ #category : 'tests - stack table' }
 StDebuggerTest >> testSelectLastStackElementWithMoreElements [
 	| stackTable selectedItem |
 	
@@ -759,7 +885,7 @@ StDebuggerTest >> testSelectLastStackElementWithMoreElements [
 	
 ]
 
-{ #category : #'tests - stack table' }
+{ #category : 'tests - stack table' }
 StDebuggerTest >> testSelectLastStackElementWithoutMoreElements [
 	| stackTable startingStackSize |
 	
@@ -771,7 +897,7 @@ StDebuggerTest >> testSelectLastStackElementWithoutMoreElements [
 	self assert: stackTable items size equals: startingStackSize
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerTest >> testSessionProvidesSameAsTheActionModelOne [
 
 	debugger := self debuggerOn: session.
@@ -780,7 +906,7 @@ StDebuggerTest >> testSessionProvidesSameAsTheActionModelOne [
 		identicalTo: debugger debuggerActionModel session
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerTest >> testSessionStackProvidesSameStackAsTheActionModelOne [
 
 	debugger := self debuggerOn: session.
@@ -789,7 +915,7 @@ StDebuggerTest >> testSessionStackProvidesSameStackAsTheActionModelOne [
 		equals: debugger debuggerActionModel stack
 ]
 
-{ #category : #'tests - stack table' }
+{ #category : 'tests - stack table' }
 StDebuggerTest >> testStackTableAfterReturn [
 	| stackTableItems stackSizeAfterStepIn |
 	
@@ -808,7 +934,7 @@ StDebuggerTest >> testStackTableAfterReturn [
 	self assert: stackTableItems equals: session shortStack
 ]
 
-{ #category : #'tests - stack table' }
+{ #category : 'tests - stack table' }
 StDebuggerTest >> testStackTableAfterStepIn [
 	| stackTableItems startingStackSize |
 	
@@ -823,7 +949,7 @@ StDebuggerTest >> testStackTableAfterStepIn [
 	self assert: stackTableItems equals: session shortStack
 ]
 
-{ #category : #'tests - stack table' }
+{ #category : 'tests - stack table' }
 StDebuggerTest >> testStackTableElementsPrinting [
 	| columns classColumn methodColumn method block context |
 
@@ -849,12 +975,12 @@ StDebuggerTest >> testStackTableElementsPrinting [
 	"self assert: (senderColumn evaluation value: context) equals: self stDisplayString."
 ]
 
-{ #category : #'tests - stack table' }
+{ #category : 'tests - stack table' }
 StDebuggerTest >> testStackTableInitialization [
 	self assert: self debugger stackTable isNil
 ]
 
-{ #category : #'tests - stack table' }
+{ #category : 'tests - stack table' }
 StDebuggerTest >> testStackTablePackagesLabels [
 	|stackTable packageColumn ctx|
 	self debugger session: session.
@@ -881,14 +1007,14 @@ StDebuggerTest >> testStackTablePackagesLabels [
 	ctx := Context
 		sender: nil
 		receiver: nil
-		method: (Smalltalk compiler compile: 'doIt 1 + 1')
+		method: (Smalltalk compiler compile: 'DoIt 1 + 1')
 		arguments: #().
 	self assert: (packageColumn readObject: ctx) equals: '-'
 	
 
 ]
 
-{ #category : #'tests - stack table' }
+{ #category : 'tests - stack table' }
 StDebuggerTest >> testStackTableSelectionChanged [
 
 	dbg := self debuggerOn: session.
@@ -907,7 +1033,7 @@ StDebuggerTest >> testStackTableSelectionChanged [
 		equals: dbg stackTable items second sourceCode
 ]
 
-{ #category : #'tests - stack table' }
+{ #category : 'tests - stack table' }
 StDebuggerTest >> testStackTableWithNewSession [
 	self debugger session: session.
 	self
@@ -922,7 +1048,7 @@ StDebuggerTest >> testStackTableWithNewSession [
 				identicalTo: session shortStack first
 ]
 
-{ #category : #'tests - toolbar' }
+{ #category : 'tests - toolbar' }
 StDebuggerTest >> testToolbarDisplayMode [
 	debugger := self debuggerOn: session.
 	self
@@ -930,7 +1056,7 @@ StDebuggerTest >> testToolbarDisplayMode [
 		equals: debugger application toolbarDisplayMode
 ]
 
-{ #category : #'tests - toolbar' }
+{ #category : 'tests - toolbar' }
 StDebuggerTest >> testToolbarInDNUContext [
 	|commands|
 	session clear.
@@ -956,7 +1082,7 @@ StDebuggerTest >> testToolbarInDNUContext [
 	
 ]
 
-{ #category : #'tests - code pane' }
+{ #category : 'tests - code pane' }
 StDebuggerTest >> testUnsavedCodeChanges [
 
 	dbg := self debuggerOn: session.
@@ -964,7 +1090,7 @@ StDebuggerTest >> testUnsavedCodeChanges [
 	self assertEmpty: dbg unsavedCodeChanges 
 ]
 
-{ #category : #'tests - code pane' }
+{ #category : 'tests - code pane' }
 StDebuggerTest >> testUnsavedCodeChangesFor [
 	| ctx codeChanges |
 	
@@ -976,7 +1102,7 @@ StDebuggerTest >> testUnsavedCodeChangesFor [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerTest >> testUpdateExtensionSubscription [
 
 	| announcementSubscriptions oldAnnouncementSubscriptions |
@@ -999,7 +1125,7 @@ StDebuggerTest >> testUpdateExtensionSubscription [
 			isNotNil
 ]
 
-{ #category : #'tests - receiver inspector' }
+{ #category : 'tests - receiver inspector' }
 StDebuggerTest >> testUpdateLayoutForContextsIfAssertionFailure [
 
 	| assertionFailure currentLayout expectedLayout |
@@ -1039,7 +1165,7 @@ StDebuggerTest >> testUpdateLayoutForContextsIfAssertionFailure [
 		((session interruptedContext tempNamed: #aStringOrBlock) at: 1)
 ]
 
-{ #category : #'tests - code pane' }
+{ #category : 'tests - code pane' }
 StDebuggerTest >> testUpdateSourceCodeFor [
 
 	dbg := self debuggerOn: session.

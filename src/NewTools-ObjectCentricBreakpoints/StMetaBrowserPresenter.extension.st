@@ -1,14 +1,14 @@
-Extension { #name : #StMetaBrowser }
+Extension { #name : #StMetaBrowserPresenter }
 
 { #category : #'*NewTools-ObjectCentricBreakpoints' }
-StMetaBrowser >> haltInspectedObjectOnCallToSelectedMethod [
+StMetaBrowserPresenter >> haltInspectedObjectOnCallToSelectedMethod [
 	|method|
 	method := self selectedMethod ifNil:[^self].
 	self model haltOnCallTo: method selector
 ]
 
 { #category : #'*NewTools-ObjectCentricBreakpoints' }
-StMetaBrowser class >> objectCentricBreakpointCommandsWith: presenter forRootGroup: aRootCmCommandsGroup [
+StMetaBrowserPresenter class >> objectCentricBreakpointCommandsWith: presenter forRootGroup: aRootCmCommandsGroup [
 	<extensionCommands>
 	
 	(aRootCmCommandsGroup / 'methods')

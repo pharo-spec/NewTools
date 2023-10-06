@@ -4,8 +4,8 @@ A CritiqueWorkspace holds the current worspace for the StCritiqueBrowserPresente
 It's composed of the set of rules to check (as a composite rule) and the environment to work in.
 "
 Class {
-	#name : #CBCritiqueWorkingConfiguration,
-	#superclass : #Object,
+	#name : 'CBCritiqueWorkingConfiguration',
+	#superclass : 'Object',
 	#instVars : [
 		'rule',
 		'environment',
@@ -15,69 +15,71 @@ Class {
 	#classVars : [
 		'Current'
 	],
-	#category : #'NewTools-CodeCritiques-Utilities'
+	#category : 'NewTools-CodeCritiques-Utilities',
+	#package : 'NewTools-CodeCritiques',
+	#tag : 'Utilities'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 CBCritiqueWorkingConfiguration class >> current [
 
 	^ Current ifNil: [ Current  := self basicNew initialize ].
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 CBCritiqueWorkingConfiguration class >> exists [
 
 	^ Current notNil
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 CBCritiqueWorkingConfiguration class >> new [
 
 	^ self shouldNotImplement
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 CBCritiqueWorkingConfiguration class >> reset [
 
 	Current := nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CBCritiqueWorkingConfiguration >> environment [
 	^ environment
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CBCritiqueWorkingConfiguration >> environment: anObject [
 	environment := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CBCritiqueWorkingConfiguration >> logInManifest [
 	^ logInManifest
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CBCritiqueWorkingConfiguration >> logInManifest: anObject [
 	logInManifest := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CBCritiqueWorkingConfiguration >> removeTestCase [
 	^ removeTestCase
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CBCritiqueWorkingConfiguration >> removeTestCase: aBoolean [
 	removeTestCase := aBoolean
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CBCritiqueWorkingConfiguration >> rule [
 	^ rule
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CBCritiqueWorkingConfiguration >> rule: anObject [
 	rule := anObject
 ]

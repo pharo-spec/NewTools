@@ -1,15 +1,16 @@
 Class {
-	#name : #SindarinSkipThroughSelectionCommand,
-	#superclass : #SindarinSkipAllToSelectionCommand,
-	#category : #'NewTools-Sindarin-Commands'
+	#name : 'SindarinSkipThroughSelectionCommand',
+	#superclass : 'SindarinSkipAllToSelectionCommand',
+	#category : 'NewTools-Sindarin-Commands',
+	#package : 'NewTools-Sindarin-Commands'
 }
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinSkipThroughSelectionCommand class >> defaultDescription [
 	^ 'Skips execution and stops after the selected instruction (or the instruction preceding the cursor), then returns debugger control.'
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinSkipThroughSelectionCommand class >> defaultName [
 	"<toolbarExtensionDebugCommand: 50>
 	<codeExtensionDebugCommand: 50>"
@@ -17,7 +18,7 @@ SindarinSkipThroughSelectionCommand class >> defaultName [
 	^ '[Exp.] Skip through (stop after)'
 ]
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 SindarinSkipThroughSelectionCommand >> execute [
 	| targetNode |
 	self

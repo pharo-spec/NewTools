@@ -1,6 +1,6 @@
-Extension { #name : #RBProgramNode }
+Extension { #name : 'RBProgramNode' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 RBProgramNode >> inspectionAST [
 	<inspectorPresentationOrder: 35 title: 'AST'>
 
@@ -19,7 +19,7 @@ RBProgramNode >> inspectionAST [
 		yourself
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 RBProgramNode >> inspectionASTDump [
 	<inspectorPresentationOrder: 50 title: 'AST Dump'>
 
@@ -29,7 +29,7 @@ RBProgramNode >> inspectionASTDump [
 		yourself
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 RBProgramNode >> inspectionSource [
 	<inspectorPresentationOrder: 30 title: 'Method Source'>
 

@@ -2,40 +2,41 @@
 Request the debugger to restart its current context
 "
 Class {
-	#name : #StRestartCommand,
-	#superclass : #StDebuggerCommand,
-	#category : #'NewTools-Debugger-Commands'
+	#name : 'StRestartCommand',
+	#superclass : 'StDebuggerCommand',
+	#category : 'NewTools-Debugger-Commands',
+	#package : 'NewTools-Debugger-Commands'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 StRestartCommand class >> defaultDescription [
 	^ 'Go back to the start of the current execution context, resetting all local variables and take debugger control.'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRestartCommand class >> defaultIconName [
 
 	^ #debuggerRestart
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 StRestartCommand class >> defaultName [
 	<toolbarDebugCommand: 900>
 
 	^ 'Restart'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRestartCommand class >> defaultShortcut [
 	^ PharoShortcuts current restartExecutionShortcut
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StRestartCommand >> appliesTo: aDebugger [
 	^ aDebugger canExecuteRestartCommand
 ]
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 StRestartCommand >> execute [
 	self debugger restartCurrentContext
 ]

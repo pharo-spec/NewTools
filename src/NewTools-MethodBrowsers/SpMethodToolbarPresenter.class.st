@@ -4,8 +4,8 @@ A MethodToolbar is xxxxxxxxx.
 self example
 "
 Class {
-	#name : #SpMethodToolbarPresenter,
-	#superclass : #SpPresenter,
+	#name : 'SpMethodToolbarPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'method',
 		'browseButton',
@@ -15,10 +15,12 @@ Class {
 		'versionButton',
 		'dropList'
 	],
-	#category : #'NewTools-MethodBrowsers-Base'
+	#category : 'NewTools-MethodBrowsers-Base',
+	#package : 'NewTools-MethodBrowsers',
+	#tag : 'Base'
 }
 
-{ #category : #examples }
+{ #category : 'examples' }
 SpMethodToolbarPresenter class >> example [
 
 	<sampleInstance>
@@ -33,13 +35,13 @@ SpMethodToolbarPresenter class >> example [
 	^ example
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 SpMethodToolbarPresenter class >> title [
 
 	^ 'Toolbar'
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 SpMethodToolbarPresenter >> addItemLabeled: aString do: aBlock [
 
 	dropList 
@@ -47,7 +49,7 @@ SpMethodToolbarPresenter >> addItemLabeled: aString do: aBlock [
 		do: aBlock
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 SpMethodToolbarPresenter >> browseMethod [
 
 	self method ifNil: [ ^ self ].
@@ -55,7 +57,7 @@ SpMethodToolbarPresenter >> browseMethod [
 	self systemNavigation browse: self method
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 SpMethodToolbarPresenter >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
@@ -70,13 +72,13 @@ SpMethodToolbarPresenter >> defaultLayout [
 		yourself
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 SpMethodToolbarPresenter >> emptyDropList [
 	
 	dropList emptyList
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 SpMethodToolbarPresenter >> implementorsMethod [
 
 	self method ifNil: [ ^ self ].
@@ -84,7 +86,7 @@ SpMethodToolbarPresenter >> implementorsMethod [
 	self systemNavigation browseAllImplementorsOf: self method selector
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SpMethodToolbarPresenter >> initializePresenters [
 
 	(browseButton := self newButton) 
@@ -105,18 +107,18 @@ SpMethodToolbarPresenter >> initializePresenters [
 	dropList := self newDropList
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpMethodToolbarPresenter >> method [
 	^ method
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpMethodToolbarPresenter >> method: aMethod [
 
 	method := aMethod
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpMethodToolbarPresenter >> replaceVersionWithLabel: aString action: aBlock [
 
 	versionButton 
@@ -124,13 +126,13 @@ SpMethodToolbarPresenter >> replaceVersionWithLabel: aString action: aBlock [
 		action: aBlock
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 SpMethodToolbarPresenter >> selectFirst [
 
 	dropList selectIndex: 1
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 SpMethodToolbarPresenter >> sendersMethod [
 
 	self method ifNil: [ ^ self ].
@@ -138,13 +140,13 @@ SpMethodToolbarPresenter >> sendersMethod [
 	self systemNavigation browseAllSendersOf:  self method selector
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SpMethodToolbarPresenter >> setModelBeforeInitialization: aMethod [
 
 	self method: aMethod
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 SpMethodToolbarPresenter >> usersMethod [
 
 	self method ifNil: [ ^ self ].
@@ -153,7 +155,7 @@ SpMethodToolbarPresenter >> usersMethod [
 	self systemNavigation browseAllUsersOfClassOrTrait: self method methodClass
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 SpMethodToolbarPresenter >> versionMethod [
 
 	self method ifNil: [ ^ self ].

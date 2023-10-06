@@ -10,8 +10,8 @@ Only opens for following assertions failures:
 #assertCollection:hasSameElements:
 "
 Class {
-	#name : #StFailingAssertionInspector,
-	#superclass : #SpPresenter,
+	#name : 'StFailingAssertionInspector',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'actualObjectHeader',
 		'expectedObjectHeader',
@@ -21,10 +21,12 @@ Class {
 		'expectedObjectMillerList',
 		'stringDiff'
 	],
-	#category : #'NewTools-Debugger-View'
+	#category : 'NewTools-Debugger-View',
+	#package : 'NewTools-Debugger',
+	#tag : 'View'
 }
 
-{ #category : #layout }
+{ #category : 'layout' }
 StFailingAssertionInspector class >> defaultLayout [
 
 	^ SpPanedLayout newLeftToRight
@@ -40,7 +42,7 @@ StFailingAssertionInspector class >> defaultLayout [
 		  yourself
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StFailingAssertionInspector class >> diffInspectorsFromActual: actualObject expected: expectedObject application: aStApplication [
 
 	| diffPresenter |
@@ -56,51 +58,51 @@ StFailingAssertionInspector class >> diffInspectorsFromActual: actualObject expe
 	^ diffPresenter
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StFailingAssertionInspector class >> stringSpec [
 	^ SpBoxLayout newTopToBottom
 		add: #stringDiff;
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFailingAssertionInspector >> actualObject [
 	^ actualObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFailingAssertionInspector >> actualObject: anObject [
 	actualObject := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFailingAssertionInspector >> actualObjectMillerList [
 	^ actualObjectMillerList
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFailingAssertionInspector >> expectedObject [
 	^ expectedObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFailingAssertionInspector >> expectedObject: anObject [
 	expectedObject := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFailingAssertionInspector >> expectedObjectMillerList [
 	^ expectedObjectMillerList
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFailingAssertionInspector >> initializeMillerList: list forObject: object [
 	list
 		presenterBlock: [ :aModel | self treeTableInspectionFor: aModel ];
 		setRootModel: object 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFailingAssertionInspector >> initializeObjectDiffPresenters [
 			
 	actualObjectHeader := (self instantiate: StHeaderBar)
@@ -120,13 +122,13 @@ StFailingAssertionInspector >> initializeObjectDiffPresenters [
 		forObject: expectedObject
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFailingAssertionInspector >> initializePresenters [
 
 	actualObject presentDiffWith: expectedObject in: self
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFailingAssertionInspector >> initializeStringDiffPresenters [
 	
 	stringDiff := self newDiff.
@@ -137,15 +139,15 @@ StFailingAssertionInspector >> initializeStringDiffPresenters [
 	stringDiff rightText: expectedObject printString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFailingAssertionInspector >> stringDiff [
 	^stringDiff
 ]
 
-{ #category : #views }
+{ #category : 'views' }
 StFailingAssertionInspector >> treeTableInspectionFor: aModel [
 	| rawInspection |
-	rawInspection := StRawInspection new.
+	rawInspection := StRawInspectionPresenter new.
 	^ self newTreeTable
 		  roots: aModel value allInspectorNodes;
 		  children: [ :node | node children ];

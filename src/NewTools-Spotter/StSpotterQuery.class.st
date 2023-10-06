@@ -32,14 +32,6 @@ StSpotterQuery class >> newSearch: aString on: spotter [
 		yourself
 ]
 
-{ #category : #'instance creation' }
-StSpotterQuery class >> on: aString [
-
-	^ self basicNew 
-		initializeText: aString; 
-		yourself
-]
-
 { #category : #private }
 StSpotterQuery >> allCandidatesAdded: ann [
 	

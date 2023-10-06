@@ -93,9 +93,3 @@ StRewriterRuleLoaderPresenter >> rhs [
 
 	^ rulesTableSelector rhs
 ]
-
-{ #category : #actions }
-StRewriterRuleLoaderPresenter >> setAllRulesAsTableItems [
-
-	rulesTableSelector refreshRules
-]

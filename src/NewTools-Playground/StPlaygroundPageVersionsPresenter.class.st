@@ -17,7 +17,7 @@ Class {
 { #category : #accessing }
 StPlaygroundPageVersionsPresenter class >> preferredExtent [
 
-	^ 700@400
+	^ (700@400) scaledByDisplayScaleFactor
 ]
 
 { #category : #actions }
@@ -51,7 +51,7 @@ StPlaygroundPageVersionsPresenter >> doAdoptVersion [
 StPlaygroundPageVersionsPresenter >> doAdoptVersionOnNewPlayground [
 	| playground |
 	
-	(playground := StPlayground new) 
+	(playground := StPlaygroundPresenter new) 
 		contents: versionList selectedItem content;
 		open.
 	self window close.

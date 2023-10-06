@@ -1,6 +1,6 @@
-Extension { #name : #Class }
+Extension { #name : 'Class' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 Class >> inspectionAllReferences [
 	<inspectorPresentationOrder: 920 title: 'All References'>
 	| allReferences allClassesReferencing sortBlock treeTable childrenBlock |
@@ -26,7 +26,7 @@ Class >> inspectionAllReferences [
 	^ treeTable
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 Class >> inspectionClassComment [
 	"This provides an editable comment of the current class"
 	<inspectorPresentationOrder: 920 title: 'Comment'>
@@ -39,7 +39,7 @@ Class >> inspectionClassComment [
 				stamp: Author changeStamp ]
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 Class >> inspectionClassDefinition [
 
 	"This provides an editable comment of the current class"

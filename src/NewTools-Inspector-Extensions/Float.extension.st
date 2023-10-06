@@ -1,6 +1,6 @@
-Extension { #name : #Float }
+Extension { #name : 'Float' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 Float >> inspectFloatIn: specBuilder [
 	<inspectorPresentationOrder: 30 title: 'Float'>
 	

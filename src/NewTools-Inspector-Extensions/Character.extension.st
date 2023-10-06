@@ -1,6 +1,6 @@
-Extension { #name : #Character }
+Extension { #name : 'Character' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 Character >> inspectCharacterIn: specBuilder [
 	<inspectorPresentationOrder: 30 title: 'Character'>
 	

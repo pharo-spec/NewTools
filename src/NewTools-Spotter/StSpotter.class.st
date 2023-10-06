@@ -114,7 +114,7 @@ StSpotter class >> initialize [
 { #category : #settings }
 StSpotter class >> insertsSelection [
 		
-	^ InsertsSelection ifNil: [ InsertsSelection := true ]
+	^ InsertsSelection ifNil: [ InsertsSelection := false ]
 ]
 
 { #category : #settings }
@@ -397,7 +397,7 @@ StSpotter >> feedTip [
 { #category : #'private - updating' }
 StSpotter >> flushPendingUpdates [
 
-	self application defer: [ 
+	self defer: [ 
 		self model schedule: [ 
 			mutex critical: [ 
 				[ 
@@ -440,7 +440,7 @@ StSpotter >> headerCategoryUnifiedFor: aLink [
 { #category : #'private - actions' }
 StSpotter >> hideSpinner [
 
-	self application defer: [ spinner hide ]
+	self defer: [ spinner hide ]
 ]
 
 { #category : #'private - actions' }
@@ -454,8 +454,8 @@ StSpotter >> initialExtent [
 
 	self flag: #TODO. "Maybe calculate coordinates?"
 	^ self isShowingPreview 
-		ifTrue: [ 750@450 ]
-		ifFalse: [ 500@450 ]
+		ifTrue: [ (750@450) scaledByDisplayScaleFactor ]
+		ifFalse: [ (500@450) scaledByDisplayScaleFactor ]
 ]
 
 { #category : #initialization }
@@ -665,7 +665,7 @@ StSpotter >> openFinder [
 
 	self window close.
 	self flag: #TODO. "Move finder to spec (right now is a morph)"
-	Finder open
+	FinderUI open
 ]
 
 { #category : #private }
@@ -756,15 +756,14 @@ StSpotter >> setModelBeforeInitialization: aSpotterModel [
 { #category : #'private - actions' }
 StSpotter >> showPreview: aPresenter [
 
-	previewContainer removeAll.	
-	(aPresenter isNil or: [ aPresenter isHeader ]) 
-		ifTrue: [ ^ self ].
+	previewContainer removeAll.
+	(aPresenter isNil or: [ aPresenter isHeader ]) ifTrue: [ ^ self ].
 
-	aPresenter model value spotterPreview 
-		ifNotNil: [ :previewPresenter | 
-			previewContainer add: (previewPresenter 
-				owner: self; 
-				yourself) ]
+	aPresenter model value ifNotNil: [ :value |
+		value spotterPreview ifNotNil: [ :previewPresenter |
+			previewContainer add: (previewPresenter
+					 owner: self;
+					 yourself) ] ]
 ]
 
 { #category : #'private - actions' }
@@ -772,7 +771,7 @@ StSpotter >> showSpinner [
 
 	spinner isVisible ifTrue: [ ^ self ].
 	self model schedule: [
-		self application defer: [ spinner show ]]
+		self defer: [ spinner show ]]
 ]
 
 { #category : #processing }
@@ -883,7 +882,7 @@ StSpotter >> updateResultList: aCandidateLink [
 { #category : #'private - updating' }
 StSpotter >> updateResultProcessor: processor amount: amount [
 
-	self application defer: [ 
+	self defer: [ 
 		categories 
 			at: processor 
 			ifPresent: [ :aPresenter | aPresenter finalAmount: amount ] ]

@@ -1,26 +1,26 @@
-Extension { #name : #CompiledCode }
+Extension { #name : 'CompiledCode' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 CompiledCode >> hasPragmas [
 
 	^ self pragmas notEmpty
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 CompiledCode >> inpectionIr [
 	<inspectorPresentationOrder: 35 title: 'IR'>
 
 	^ self ir inpectionIr
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 CompiledCode >> inspectionAST [
 	<inspectorPresentationOrder: 35 title: 'AST'>
 
 	^ self sourceNode inspectionAST
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 CompiledCode >> inspectionBytecode [
 	<inspectorPresentationOrder: 30 title: 'Bytecode'>
 
@@ -31,7 +31,7 @@ CompiledCode >> inspectionBytecode [
 
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 CompiledCode >> inspectionHeader [
 	<inspectorPresentationOrder: 40 title: 'Header'> 
 	
@@ -40,14 +40,14 @@ CompiledCode >> inspectionHeader [
 		yourself
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 CompiledCode >> inspectionItemsContext: aContext [
 
 	"Disable items view on compiled code"
 	aContext active: false
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 CompiledCode >> inspectorNodes [
 	"Answer a list of attributes as nodes"
 	| nodes |

@@ -1,5 +1,5 @@
 "
-I wrap a generator to provide the same API than the iterators.
+I wrap a generator to provide the same API as the iterators.
 My subclasses should implement #elementsDo: to iterate the collection or implement the values.
 In this method, each of the generated values should be used with the valuable pased.
 
@@ -11,7 +11,7 @@ elementsDo: aValuable
 This example generates an infinite iterator always returning 42.
 Using the generator will produce that the method is only executed on demand.
 
-This Iterator can also wrap collections, iterating one element at the time.
+This Iterator can also wrap collections, iterating one element at a time.
 
 Ex:
 elementsDo: aValuable
