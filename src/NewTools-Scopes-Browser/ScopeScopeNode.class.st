@@ -12,8 +12,21 @@ Class {
 { #category : 'accessing' }
 ScopeScopeNode >> children [
 
-	^ self value basisObjects collect: [ :package |
-		  ScopePackageNode on: package ]
+	| className class package |
+	^ self value basisObjects collect: [ :stringOrPackage |
+		  stringOrPackage isString
+			  ifTrue: [
+				  className := stringOrPackage.
+				  class := self systemDictionary at: className ifAbsent: [ nil ].
+				  ScopeClassNode on: class ]
+			  ifFalse: [
+				  package := stringOrPackage.
+				  ScopePackageNode on: package ] ]
+]
+
+{ #category : 'testing' }
+ScopeScopeNode >> isScopeNode [
+	^ true
 ]
 
 { #category : 'accessing' }
@@ -24,4 +37,9 @@ ScopeScopeNode >> label [
 { #category : 'accessing' }
 ScopeScopeNode >> scopesIconName [
 	^ #references
+]
+
+{ #category : 'accessing' }
+ScopeScopeNode >> systemDictionary [
+	^ Smalltalk globals
 ]

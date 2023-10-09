@@ -105,12 +105,20 @@ ScopesManager >> newScopeFrom: aSetOfNodes [
 
 ]
 
+{ #category : 'removing' }
+ScopesManager >> removeScope: aRBEnvironment [
+	| removed |
+	removed := scopes select: [ :scope | scope label = aRBEnvironment label ].
+	removed do: [ :scope | scopes remove: scope ]
+]
+
 { #category : 'initialization' }
 ScopesManager >> reset [
 
 	environment := nil.
 	scopes := nil.
-	self announcer subscriptions reset
+	self announcer subscriptions reset.
+	self resetNewScope
 ]
 
 { #category : 'accessing' }

@@ -27,6 +27,11 @@ ScopePackageNode >> isPackageNode [
 	^ true
 ]
 
+{ #category : 'testing' }
+ScopePackageNode >> isScopeNode [
+	^ false
+]
+
 { #category : 'accessing' }
 ScopePackageNode >> scopesIconName [
 	^ #package

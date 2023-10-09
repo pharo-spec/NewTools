@@ -14,13 +14,13 @@ Class {
 }
 
 { #category : 'instance creation' }
-ScopeNode class >> on: aPackageOrClass [
+ScopeNode class >> on: aRBEnvironment [
 
 	self class == ScopeNode ifTrue: [
-		self error: 'I am ab abstract class' ].
+		self error: 'I am an abstract class' ].
 	
 	^ self new
-		  value: aPackageOrClass;
+		  value: aRBEnvironment;
 		  yourself
 ]
 
@@ -34,6 +34,12 @@ ScopeNode >> = anotherNode [
 
 	^ (self class = anotherNode class)
 		and: [ self label = anotherNode label ]
+]
+
+{ #category : 'accessing' }
+ScopeNode >> == anotherNode [
+
+	^ self = anotherNode
 ]
 
 { #category : 'accessing' }
@@ -59,6 +65,11 @@ ScopeNode >> isClassOrTraitNode [
 
 { #category : 'testing' }
 ScopeNode >> isPackageNode [
+	^ false
+]
+
+{ #category : 'testing' }
+ScopeNode >> isScopeNode [
 	^ false
 ]
 

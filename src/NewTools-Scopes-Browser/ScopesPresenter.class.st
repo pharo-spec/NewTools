@@ -54,6 +54,17 @@ ScopesPresenter >> addScopeToTree: aRBEnvironment [
 
 	model addScope: aRBEnvironment.
 	scopesTree updateRootsKeepingSelection:
+		(model scopes collect: [ :scope |self halt. ScopeScopeNode on: scope ])
+			asOrderedCollection
+]
+
+{ #category : 'deletion' }
+ScopesPresenter >> deleteSelectedScope [
+
+	scopesTree selectedItems
+		select: [ :item | item isScopeNode ]
+		thenDo: [ :item | model removeScope: item ].
+	scopesTree updateRootsKeepingSelection:
 		(model scopes collect: [ :scope | ScopeScopeNode on: scope ])
 			asOrderedCollection
 ]
@@ -83,6 +94,7 @@ ScopesPresenter >> initializeScopesTree [
 		  beMultipleSelection;
 		  roots:
 			  (model scopes collect: [ :package |
+				self halt.
 					   ScopeScopeNode on: package ]) asOrderedCollection sorted;
 		  beResizable;
 		  activateOnDoubleClick;
