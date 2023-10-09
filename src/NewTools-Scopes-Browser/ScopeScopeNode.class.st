@@ -12,8 +12,34 @@ Class {
 { #category : 'accessing' }
 ScopeScopeNode >> children [
 
-	| className class package |
+	| className class package orphanClasses fullPackages envPackages envClasses children packageEnvironments classesEnvironments|
+	self value isCompositeEnvironment ifTrue: [
+		children := Set new.
+		envPackages := self value packages.
+		envClasses := self value classes.
+		"classes whose package hasn't all of its classes selected"
+		orphanClasses := envClasses select: [ :class |
+			                 | siblings |
+			                 siblings := class package definedClasses.
+			                 siblings anySatisfy: [ :sibling |
+				                 envClasses noneSatisfy: [ :selectedClass |
+					                 selectedClass = sibling ] ] ].
+
+		"packages whose classes were all selected"
+		fullPackages := envPackages select: [ :each |
+			                each definedClasses noneSatisfy: [ :class |
+				                orphanClasses anySatisfy: [ :orphan |
+					                orphan = class ] ] ].
+		
+		packageEnvironments := fullPackages collect: [ :package | ScopePackageNode on: package ].
+		classesEnvironments := orphanClasses collect: [ :class | ScopeClassNode on: class ].
+		packageEnvironments do: [ :env | children add: env ].
+		classesEnvironments do: [ :env | children add: env ].
+		^ children
+		].
+	
 	^ self value basisObjects collect: [ :stringOrPackage |
+		  self halt.
 		  stringOrPackage isString
 			  ifTrue: [
 				  className := stringOrPackage.

@@ -37,12 +37,6 @@ ScopeNode >> = anotherNode [
 ]
 
 { #category : 'accessing' }
-ScopeNode >> == anotherNode [
-
-	^ self = anotherNode
-]
-
-{ #category : 'accessing' }
 ScopeNode >> basicEqualsTo: aNode [
 
 	^ self value = aNode value

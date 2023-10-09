@@ -94,9 +94,10 @@ ScopesManager >> newScopeFrom: aSetOfNodes [
 	classScope := RBClassEnvironment classes: orphanClasses.
 	packageScope := RBPackageEnvironment packages: fullPackages.
 	
+	self flag: 'hacer recursiva la construccion del composite scope'.
 	(classScope isNotEmpty and: [ packageScope isNotEmpty ]) ifTrue: [ 
 		compositeScope := packageScope | classScope ].
-	
+
 	compositeScope ifNotNil: [ ^ compositeScope ].
 	packageScope isEmpty ifFalse: [ ^ packageScope ].
 	classScope isEmpty ifFalse: [ ^ classScope ].

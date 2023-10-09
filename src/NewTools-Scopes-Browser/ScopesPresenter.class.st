@@ -54,7 +54,7 @@ ScopesPresenter >> addScopeToTree: aRBEnvironment [
 
 	model addScope: aRBEnvironment.
 	scopesTree updateRootsKeepingSelection:
-		(model scopes collect: [ :scope |self halt. ScopeScopeNode on: scope ])
+		(model scopes collect: [ :scope | ScopeScopeNode on: scope ])
 			asOrderedCollection
 ]
 
@@ -86,7 +86,6 @@ ScopesPresenter >> initializePresenters [
 
 { #category : 'initialization' }
 ScopesPresenter >> initializeScopesTree [
-
 	^ scopesTree
 		  hideColumnHeaders;
 		  addColumn: self nodesListColumn;
@@ -94,7 +93,6 @@ ScopesPresenter >> initializeScopesTree [
 		  beMultipleSelection;
 		  roots:
 			  (model scopes collect: [ :package |
-				self halt.
 					   ScopeScopeNode on: package ]) asOrderedCollection sorted;
 		  beResizable;
 		  activateOnDoubleClick;
@@ -127,6 +125,11 @@ ScopesPresenter >> nodesListColumn [
 				   yourself);
 		  addColumn: self nodeDescriptionColumn;
 		  yourself
+]
+
+{ #category : 'private' }
+ScopesPresenter >> openScopeEditor [
+	self newScopeEditor openModal
 ]
 
 { #category : 'announcements' }
@@ -164,7 +167,7 @@ ScopesPresenter >> toolbarButtons [
 	buttons add: (self newToolbarButton
 			 icon: (self iconNamed: #add);
 			 help: 'Add a new scope';
-			 action: [ self newScopeEditor open ];
+			 action: [ self openScopeEditor ];
 			 yourself).
 	buttons add: (self newToolbarButton
 			 icon: (self iconNamed: #glamorousTrash);

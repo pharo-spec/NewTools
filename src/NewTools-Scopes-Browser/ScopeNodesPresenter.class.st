@@ -64,13 +64,6 @@ ScopeNodesPresenter >> close [
 	self window close
 ]
 
-{ #category : 'private' }
-ScopeNodesPresenter >> createScope [
-	self assert: checkedScopeNodes isNotEmpty.
-	model newScope: (model newScopeFrom: checkedScopeNodes).
-	(ScopeNamePresenter on: model) open	
-]
-
 { #category : 'private - actions' }
 ScopeNodesPresenter >> deactivateItem: scopeNode [
 
@@ -93,13 +86,15 @@ ScopeNodesPresenter >> initialize [
 ScopeNodesPresenter >> initializeButtons [
 
 	saveButton := self newButton
-		                label: 'Cancel';
-		                action: [ self close ];
-		                yourself.
+		              label: 'Cancel';
+		              action: [ self close ];
+		              yourself.
 	cancelButton := self newButton
 		                label: 'Save';
 		                icon: (self iconNamed: #smallSave);
-		                action: [ self createScope ];
+		                action: [
+			                self initializeScope.
+			                self openScopeNameDialog ];
 		                yourself
 ]
 
@@ -120,6 +115,12 @@ ScopeNodesPresenter >> initializePresenters [
 	self initializeScopeNodesTree.
 	self initializeNodeNameText.
 	self initializeButtons
+]
+
+{ #category : 'private' }
+ScopeNodesPresenter >> initializeScope [
+	self assert: checkedScopeNodes isNotEmpty.
+	model newScope: (model newScopeFrom: checkedScopeNodes)
 ]
 
 { #category : 'initialization' }
@@ -167,6 +168,12 @@ ScopeNodesPresenter >> nodesListColumn [
 				   yourself);
 		  addColumn: self nodeDescriptionColumn;
 		  yourself
+]
+
+{ #category : 'private - presenters' }
+ScopeNodesPresenter >> openScopeNameDialog [
+	
+	(ScopeNamePresenter on: model) openDialog
 ]
 
 { #category : 'refreshing' }
