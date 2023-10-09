@@ -129,7 +129,7 @@ ScopesPresenter >> nodesListColumn [
 
 { #category : 'private' }
 ScopesPresenter >> openScopeEditor [
-	self newScopeEditor openModal
+	self newScopeEditor open
 ]
 
 { #category : 'announcements' }

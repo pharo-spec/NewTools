@@ -12,7 +12,7 @@ Class {
 { #category : 'accessing' }
 ScopeScopeNode >> children [
 
-	| className class package orphanClasses fullPackages envPackages envClasses children packageEnvironments classesEnvironments|
+	| className class package orphanClasses fullPackages envPackages envClasses children packageEnvironments classesEnvironments |
 	self value isCompositeEnvironment ifTrue: [
 		children := Set new.
 		envPackages := self value packages.
@@ -30,21 +30,25 @@ ScopeScopeNode >> children [
 			                each definedClasses noneSatisfy: [ :class |
 				                orphanClasses anySatisfy: [ :orphan |
 					                orphan = class ] ] ].
-		
-		packageEnvironments := fullPackages collect: [ :package | ScopePackageNode on: package ].
-		classesEnvironments := orphanClasses collect: [ :class | ScopeClassNode on: class ].
+
+		packageEnvironments := fullPackages collect: [ :thePackage |
+			                       ScopePackageNode on: thePackage ].
+		classesEnvironments := orphanClasses collect: [ :theClass |
+			                       theClass isTrait
+				                       ifTrue: [ ScopeTraitNode on: theClass ]
+				                       ifFalse: [ ScopeClassNode on: theClass ] ].
 		packageEnvironments do: [ :env | children add: env ].
 		classesEnvironments do: [ :env | children add: env ].
-		^ children
-		].
-	
+		^ children ].
+
 	^ self value basisObjects collect: [ :stringOrPackage |
-		  self halt.
 		  stringOrPackage isString
 			  ifTrue: [
 				  className := stringOrPackage.
 				  class := self systemDictionary at: className ifAbsent: [ nil ].
-				  ScopeClassNode on: class ]
+				  class isTrait
+					  ifTrue: [ ScopeTraitNode on: class ]
+					  ifFalse: [ ScopeClassNode on: class ] ]
 			  ifFalse: [
 				  package := stringOrPackage.
 				  ScopePackageNode on: package ] ]

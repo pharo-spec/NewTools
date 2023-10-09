@@ -32,12 +32,6 @@ ScopeNodesPresenter class >> defaultLayout [
 ]
 
 { #category : 'instance creation' }
-ScopeNodesPresenter class >> open [
-	<script>
-	self new open
-]
-
-{ #category : 'instance creation' }
 ScopeNodesPresenter class >> title [
 	^ 'Scope Editor'
 ]
@@ -164,7 +158,8 @@ ScopeNodesPresenter >> nodesListColumn [
 				   yourself);
 		  addColumn: (SpImageTableColumn new
 				   beNotExpandable;
-				   evaluated: [ :each | self iconNamed: each scopesIconName ];
+				   evaluated: [ :each |
+						self iconNamed: each scopesIconName ];
 				   yourself);
 		  addColumn: self nodeDescriptionColumn;
 		  yourself
