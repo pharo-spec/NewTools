@@ -12,7 +12,7 @@ Class {
 { #category : 'running' }
 TStDebuggerExtensionTest >> setUp [
 	super setUp.
-	traitUser := StDebuggerExtensionGeneratorForTests testClass new
+	traitUser := TStDebuggerExtensionTestClass new
 ]
 
 { #category : 'running' }
@@ -20,7 +20,7 @@ TStDebuggerExtensionTest >> tearDown [
 
 	traitUser class displayOrder: 1.
 	traitUser := nil.
-	StDebuggerExtensionGeneratorForTests testClass showInDebugger: false.
+	TStDebuggerExtensionTestClass showInDebugger: false.
 	super tearDown
 ]
 
