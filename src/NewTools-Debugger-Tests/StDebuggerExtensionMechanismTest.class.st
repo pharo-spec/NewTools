@@ -47,15 +47,14 @@ StDebuggerExtensionMechanismTest >> setUp [
 { #category : 'running' }
 StDebuggerExtensionMechanismTest >> tearDown [
 
-	| allDebuggerExtensions testClass |
-	testClass := StDebuggerExtensionGeneratorForTests testClass.
+	| allDebuggerExtensions |
 	allDebuggerExtensions := StDebugger extensionToolsClasses.
 	allDebuggerExtensions do: [ :extension |
 		| wasActivated |
 		wasActivated := oldActivatedExtensions includes: extension.
 		extension showInDebugger = wasActivated ifFalse: [
 			extension showInDebugger: wasActivated ] ].
-	testClass showInDebugger: false.
+	TStDebuggerExtensionTestClass showInDebugger: false.
 	StDummyDebuggerPresenter showInDebugger: false.
 	self disableTStDebuggerExtensionTestClassAsExtension.
 	super tearDown
@@ -117,13 +116,9 @@ StDebuggerExtensionMechanismTest >> testExtensionToolsClasses [
 { #category : 'tests - extensions' }
 StDebuggerExtensionMechanismTest >> testHasAnyActivatedExtensions [
 
-	| testClass |
-	testClass := StDebuggerExtensionGeneratorForTests testClass.
-	self deny:
-		(self debuggerClass hasAnyActivatedExtension: { testClass }).
-	testClass showInDebugger: true.
-	self assert:
-		(self debuggerClass hasAnyActivatedExtension: { testClass })
+	self deny: (self debuggerClass hasAnyActivatedExtension: { TStDebuggerExtensionTestClass }).
+	TStDebuggerExtensionTestClass showInDebugger: true.
+	self assert: (self debuggerClass hasAnyActivatedExtension: { TStDebuggerExtensionTestClass })
 ]
 
 { #category : 'tests - extensions' }
@@ -152,8 +147,7 @@ StDebuggerExtensionMechanismTest >> testRegisterExtensionTool [
 { #category : 'tests - extensions' }
 StDebuggerExtensionMechanismTest >> testUsesExtensions [
 
-	| testClass extensionClasses activatedExtension |
-	testClass := StDebuggerExtensionGeneratorForTests testClass.
+	| extensionClasses activatedExtension |
 
 	"In case there are no available extensions in the system, we add a test extension to the system.
 	We then assume that there is always one extension in the extension collection of the system."
