@@ -1,6 +1,6 @@
-Extension { #name : #StUnifiedProcessor }
+Extension { #name : 'StUnifiedProcessor' }
 
-{ #category : #'*NewTools-Spotter' }
+{ #category : '*NewTools-Spotter' }
 StUnifiedProcessor >> headerCategoryFor: aLink on: aSpotterPresenter [
 
 	^ aLink value 
@@ -8,19 +8,19 @@ StUnifiedProcessor >> headerCategoryFor: aLink on: aSpotterPresenter [
 		on: aSpotterPresenter
 ]
 
-{ #category : #'*NewTools-Spotter' }
+{ #category : '*NewTools-Spotter' }
 StUnifiedProcessor >> keyBindingForClasses [
 
 	^ $b meta
 ]
 
-{ #category : #'*NewTools-Spotter' }
+{ #category : '*NewTools-Spotter' }
 StUnifiedProcessor >> keyBindingForImplementors [
 
 	^ $m meta
 ]
 
-{ #category : #'*NewTools-Spotter' }
+{ #category : '*NewTools-Spotter' }
 StUnifiedProcessor >> keyBindingForPackages [
 
 	^ $p meta

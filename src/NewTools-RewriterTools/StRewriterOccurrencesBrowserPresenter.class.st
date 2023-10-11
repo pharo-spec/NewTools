@@ -2,16 +2,18 @@
 I am a presenter for displaying the ocurrences found by `ExpressionFinderPresenter`
 "
 Class {
-	#name : #StRewriterOccurrencesBrowserPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StRewriterOccurrencesBrowserPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'codePresenter',
 		'listPresenter'
 	],
-	#category : #'NewTools-RewriterTools-ChangesBrowser'
+	#category : 'NewTools-RewriterTools-ChangesBrowser',
+	#package : 'NewTools-RewriterTools',
+	#tag : 'ChangesBrowser'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterOccurrencesBrowserPresenter class >> critiques: critiques [
 
 	^ self new
@@ -19,13 +21,13 @@ StRewriterOccurrencesBrowserPresenter class >> critiques: critiques [
 		yourself
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StRewriterOccurrencesBrowserPresenter class >> title [
 
 	^ 'Occurrences matches'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterOccurrencesBrowserPresenter >> connectPresenters [
 
 	listPresenter whenSelectedDo: [ :selectedItem |
@@ -33,13 +35,13 @@ StRewriterOccurrencesBrowserPresenter >> connectPresenters [
 		codePresenter selectionInterval: selectedItem sourceAnchor interval ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterOccurrencesBrowserPresenter >> critiques: critiques [
 
 	listPresenter items: critiques
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StRewriterOccurrencesBrowserPresenter >> defaultLayout [
 
 	^ SpPanedLayout newLeftToRight
@@ -49,7 +51,7 @@ StRewriterOccurrencesBrowserPresenter >> defaultLayout [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterOccurrencesBrowserPresenter >> initializePresenters [
 
 	codePresenter := self newCode.
@@ -61,7 +63,7 @@ StRewriterOccurrencesBrowserPresenter >> initializePresenters [
 		display: [ :item | item sourceAnchor entity printString ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterOccurrencesBrowserPresenter >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter

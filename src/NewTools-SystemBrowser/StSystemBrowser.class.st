@@ -1,6 +1,6 @@
 Class {
-	#name : #StSystemBrowser,
-	#superclass : #StPresenter,
+	#name : 'StSystemBrowser',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'model',
 		'inspectionPanel',
@@ -18,16 +18,18 @@ Class {
 		'selectedClass',
 		'selectedMethod'
 	],
-	#category : #'NewTools-SystemBrowser-View'
+	#category : 'NewTools-SystemBrowser-View',
+	#package : 'NewTools-SystemBrowser',
+	#tag : 'View'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 StSystemBrowser class >> defaultEnvironment [
 	
 	^ ClyNavigationEnvironment currentImage
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StSystemBrowser class >> defaultSpec [
 
 	^ SpPanedLayout newVertical
@@ -42,32 +44,32 @@ StSystemBrowser class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StSystemBrowser class >> onDefaultEnvironment [
 
 	^ self on: (StSBEnvironmentModel newEnvironment: self defaultEnvironment)
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StSystemBrowser class >> onEnvironment: anEnvironment [
 
 	^ self on: (StSBEnvironmentModel newEnvironment: anEnvironment)
 ]
 
-{ #category : #opening }
+{ #category : 'opening' }
 StSystemBrowser class >> open [
 	<script>
 
 	^ self openOn: self defaultEnvironment
 ]
 
-{ #category : #opening }
+{ #category : 'opening' }
 StSystemBrowser class >> openOn: anEnvironment [
 
 	^ (self onEnvironment: (StSBEnvironmentModel newEnvironment: anEnvironment)) openWithSpec
 ]
 
-{ #category : #opening }
+{ #category : 'opening' }
 StSystemBrowser class >> openOnClass: aClass [
 	| browser |
 
@@ -76,7 +78,7 @@ StSystemBrowser class >> openOnClass: aClass [
 	^ browser openWithSpec
 ]
 
-{ #category : #opening }
+{ #category : 'opening' }
 StSystemBrowser class >> openOnPackage: aPackage [
 	| browser |
 
@@ -85,37 +87,37 @@ StSystemBrowser class >> openOnPackage: aPackage [
 	^ browser openWithSpec
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSystemBrowser class >> preferredExtent [
 
 	^ 880@650
 ]
 
-{ #category : #'private selecting' }
+{ #category : 'private selecting' }
 StSystemBrowser >> basicSelectClass:  aClassModel [
 		
 	selectedClass := aClassModel
 ]
 
-{ #category : #'private selecting' }
+{ #category : 'private selecting' }
 StSystemBrowser >> basicSelectMethod:  aMethodModel [
 		
 	selectedMethod := aMethodModel
 ]
 
-{ #category : #'private selecting' }
+{ #category : 'private selecting' }
 StSystemBrowser >> basicSelectPackage: aPackageModel [
 		
 	selectedPackage := aPackageModel
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSystemBrowser >> buildStatusBar [
 
 	^ SpStatusBarPresenter new
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSystemBrowser >> buildToolbar [
 
 	^ CmCommandGroup forSpec
@@ -127,7 +129,7 @@ StSystemBrowser >> buildToolbar [
 				addStyle: 'stToolbar' ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSystemBrowser >> connectPresenters [
 
 	packagesPanel transmitTo: classesPanel transform: #classes.
@@ -143,20 +145,20 @@ StSystemBrowser >> connectPresenters [
 	variablesPanel transmitDo: [ :selection | self selectMethod: selection ].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSystemBrowser >> gotoClass: aClass [
 
 	self gotoPackage: aClass package.
 	classesPanel gotoClass: aClass
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSystemBrowser >> gotoPackage: aPackage [
 
 	packagesPanel gotoPackage: aPackage 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSystemBrowser >> initialTitle [
 		
 	self selectedClass ifNotNil: [ :aClass | ^ self titleFor: aClass ].
@@ -165,7 +167,7 @@ StSystemBrowser >> initialTitle [
 	^ 'System Browser'	
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSystemBrowser >> initializePresenters [
 	
 	packagesPanel := self instantiate: StSBPackagesPanel on: self model.
@@ -183,7 +185,7 @@ StSystemBrowser >> initializePresenters [
 	codePanel := self newNotebook
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSystemBrowser >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
@@ -194,13 +196,13 @@ StSystemBrowser >> initializeWindow: aWindowPresenter [
 		statusBar: (statusBar := self buildStatusBar)
 ]
 
-{ #category : #'accessing model' }
+{ #category : 'accessing model' }
 StSystemBrowser >> model [ 
 
 	^ model
 ]
 
-{ #category : #'private factory' }
+{ #category : 'private factory' }
 StSystemBrowser >> newClassTemplateForPackage: aPackageModel [
 
 	^ self newCode
@@ -208,7 +210,7 @@ StSystemBrowser >> newClassTemplateForPackage: aPackageModel [
 		yourself
 ]
 
-{ #category : #'private factory' }
+{ #category : 'private factory' }
 StSystemBrowser >> newCommentFor: aModel [
 
 	^ self newCode
@@ -218,7 +220,7 @@ StSystemBrowser >> newCommentFor: aModel [
 		
 ]
 
-{ #category : #'private factory' }
+{ #category : 'private factory' }
 StSystemBrowser >> newDefinitionFor: aModel [
 
 	^ self newCode
@@ -227,7 +229,7 @@ StSystemBrowser >> newDefinitionFor: aModel [
 		yourself
 ]
 
-{ #category : #'private factory' }
+{ #category : 'private factory' }
 StSystemBrowser >> newMethodTemplateForClass: aClassModel [
 
 	^ self newCode
@@ -235,7 +237,7 @@ StSystemBrowser >> newMethodTemplateForClass: aClassModel [
 		yourself
 ]
 
-{ #category : #'private factory' }
+{ #category : 'private factory' }
 StSystemBrowser >> newPage: aString provider: aBlock [
 	
 	^ self newNotebookPage
@@ -244,7 +246,7 @@ StSystemBrowser >> newPage: aString provider: aBlock [
 		yourself
 ]
 
-{ #category : #'private selecting' }
+{ #category : 'private selecting' }
 StSystemBrowser >> selectClass: aClassModel [
 
 	self basicSelectClass: aClassModel.
@@ -263,7 +265,7 @@ StSystemBrowser >> selectClass: aClassModel [
 		selectPageIndex: 2
 ]
 
-{ #category : #'private selecting' }
+{ #category : 'private selecting' }
 StSystemBrowser >> selectMethod: aMethodModel [
 
 	self basicSelectMethod: aMethodModel.
@@ -282,7 +284,7 @@ StSystemBrowser >> selectMethod: aMethodModel [
 		selectPageIndex: 3
 ]
 
-{ #category : #'private selecting' }
+{ #category : 'private selecting' }
 StSystemBrowser >> selectPackage: aPackage [
 
 	self basicSelectPackage: aPackage.
@@ -297,31 +299,31 @@ StSystemBrowser >> selectPackage: aPackage [
 			provider: [ self newClassTemplateForPackage: self selectedPackage ])
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSystemBrowser >> selectedClass [
 
 	^ selectedClass
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSystemBrowser >> selectedMethod [
 		
 	^ selectedMethod
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSystemBrowser >> selectedPackage [
 
 	^ selectedPackage
 ]
 
-{ #category : #'accessing model' }
+{ #category : 'accessing model' }
 StSystemBrowser >> setModelBeforeInitialization: anEnvironment [
 
 	model := anEnvironment
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSystemBrowser >> titleFor: aModel [
 
 	^ aModel windowTitle

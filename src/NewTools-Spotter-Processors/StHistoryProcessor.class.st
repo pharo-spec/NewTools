@@ -2,42 +2,44 @@
 I am a processor that shows all the entries in the spotter history.
 "
 Class {
-	#name : #StHistoryProcessor,
-	#superclass : #StCollectionBasedProcessor,
-	#category : #'NewTools-Spotter-Processors-Processors'
+	#name : 'StHistoryProcessor',
+	#superclass : 'StCollectionBasedProcessor',
+	#category : 'NewTools-Spotter-Processors-Processors',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Processors'
 }
 
-{ #category : #'default-settings' }
+{ #category : 'default-settings' }
 StHistoryProcessor class >> defaultEnabled [
 
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHistoryProcessor class >> order [
 	
 	^ 80
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHistoryProcessor class >> title [
 
 	^ 'History'
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StHistoryProcessor >> collection [
 
 	^ StSpotter history reject: [ :each | each isNil ]
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StHistoryProcessor >> newEntryOn: anElement [
 
 	^ anElement
 ]
 
-{ #category : #configuration }
+{ #category : 'configuration' }
 StHistoryProcessor >> showForEmptyQuery [
 
 	^ true

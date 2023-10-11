@@ -7,12 +7,14 @@ examples see class side method example
 
 "
 Class {
-	#name : #StFBOpenFileDialog,
-	#superclass : #StFBOpenFileOrDirectoryDialog,
-	#category : #'NewTools-FileBrowser-UI'
+	#name : 'StFBOpenFileDialog',
+	#superclass : 'StFBOpenFileOrDirectoryDialog',
+	#category : 'NewTools-FileBrowser-UI',
+	#package : 'NewTools-FileBrowser',
+	#tag : 'UI'
 }
 
-{ #category : #example }
+{ #category : 'example' }
 StFBOpenFileDialog class >> complexExample [
 
 	<example>
@@ -47,28 +49,28 @@ StFBOpenFileDialog class >> complexExample [
 	^ presenter confirm
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 StFBOpenFileDialog class >> example [
 
 	<example>
 	^ self chooseThenInspect
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 StFBOpenFileDialog class >> exampleExtensions [
 
 	<example>
 	^ self extensions: #( 'image' )
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 StFBOpenFileDialog class >> exampleModal [
 
 	<example>
 	^ self chooseModalAndInspect
 ]
 
-{ #category : #example }
+{ #category : 'example' }
 StFBOpenFileDialog class >> examplePreviewer [
 
 	self new
@@ -76,7 +78,7 @@ StFBOpenFileDialog class >> examplePreviewer [
 		open
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 StFBOpenFileDialog >> initialTitle [
 	^ 'Select File To Open'
 ]

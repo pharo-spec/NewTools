@@ -1,23 +1,24 @@
 Class {
-	#name : #StImplementorsProcessorTest,
-	#superclass : #StAbstractProcessorTest,
-	#category : #'NewTools-Spotter-Processors-Tests'
+	#name : 'StImplementorsProcessorTest',
+	#superclass : 'StAbstractProcessorTest',
+	#category : 'NewTools-Spotter-Processors-Tests',
+	#package : 'NewTools-Spotter-Processors-Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 StImplementorsProcessorTest >> processor [
 
 	^ StImplementorsProcessor new
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StImplementorsProcessorTest >> testFindThisMethod [
 
 	self runForText: 'testFindThisMethod'.
 	self assertResultsIncludes: thisContext method
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StImplementorsProcessorTest >> testFindThisMethodAfterAddingText [
 
 	self runForText: 'test'.
@@ -26,14 +27,14 @@ StImplementorsProcessorTest >> testFindThisMethodAfterAddingText [
 	self assertResultsIncludes: thisContext method
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StImplementorsProcessorTest >> testPopularStringDoesReturnOnlyTenResults [
 
 	self runForText: 'test'.
 	self assertQuantityOfResults: 25.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StImplementorsProcessorTest >> testPopularStringDoesReturnOnlyTenResultsWithUppercase [
 
 	self runForText: 'Test'.

@@ -1,28 +1,30 @@
 Class {
-	#name : #FBMockFlagsListItems,
-	#superclass : #Object,
+	#name : 'FBMockFlagsListItems',
+	#superclass : 'Object',
 	#instVars : [
 		'title'
 	],
-	#category : #'NewTools-FlagBrowser-Tests-Presenters'
+	#category : 'NewTools-FlagBrowser-Tests-Presenters',
+	#package : 'NewTools-FlagBrowser-Tests',
+	#tag : 'Presenters'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBMockFlagsListItems class >> title: aString [ 
 	^ self new title: aString 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBMockFlagsListItems >> locations [ 
 	^ title
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 FBMockFlagsListItems >> parameter [
 	^ title
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBMockFlagsListItems >> title: aString [
 	title := aString
 ]

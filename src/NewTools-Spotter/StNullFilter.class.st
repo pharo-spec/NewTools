@@ -2,18 +2,20 @@
 A filter that answers all elements (not a filter at all)
 "
 Class {
-	#name : #StNullFilter,
-	#superclass : #StStringFilter,
-	#category : #'NewTools-Spotter-Filters'
+	#name : 'StNullFilter',
+	#superclass : 'StStringFilter',
+	#category : 'NewTools-Spotter-Filters',
+	#package : 'NewTools-Spotter',
+	#tag : 'Filters'
 }
 
-{ #category : #public }
+{ #category : 'public' }
 StNullFilter class >> stListFilter [
 
 	^ StFilterSubstring new
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StNullFilter >> doApplyFilterWithQuery [
 
 	self streamed 
@@ -31,7 +33,7 @@ StNullFilter >> doApplyFilterWithQuery [
 			self addItems: (self allItems first: (self itemsLimit min: self allItems size)) ]
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 StNullFilter >> stListFilter [
 
 	^ StFilterSubstring new

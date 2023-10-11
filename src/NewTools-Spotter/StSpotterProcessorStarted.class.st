@@ -2,15 +2,17 @@
 Announce a processor execution started.
 "
 Class {
-	#name : #StSpotterProcessorStarted,
-	#superclass : #Announcement,
+	#name : 'StSpotterProcessorStarted',
+	#superclass : 'Announcement',
 	#instVars : [
 		'processor'
 	],
-	#category : #'NewTools-Spotter-Announcements'
+	#category : 'NewTools-Spotter-Announcements',
+	#package : 'NewTools-Spotter',
+	#tag : 'Announcements'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StSpotterProcessorStarted class >> newProcessor: aProcessor [
 
 	^ self new 
@@ -18,13 +20,13 @@ StSpotterProcessorStarted class >> newProcessor: aProcessor [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessorStarted >> processor [
 
 	^ processor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessorStarted >> processor: anObject [
 
 	processor := anObject

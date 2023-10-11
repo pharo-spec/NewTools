@@ -2,16 +2,17 @@
 A wrapper for selectors to be used in spotter (so they are something more than just symbols). 
 "
 Class {
-	#name : #StSelector,
-	#superclass : #Object,
+	#name : 'StSelector',
+	#superclass : 'Object',
 	#instVars : [
 		'name',
 		'methods'
 	],
-	#category : #'NewTools-Spotter-Extensions'
+	#category : 'NewTools-Spotter-Extensions',
+	#package : 'NewTools-Spotter-Extensions'
 }
 
-{ #category : #adding }
+{ #category : 'adding' }
 StSelector >> addMethod: aCompiledMethod [
 	"this is a private method that can be used by the constructor on the class side
 	exclusively within the context of Spotter"
@@ -19,35 +20,35 @@ StSelector >> addMethod: aCompiledMethod [
 	methods add: aCompiledMethod
 ]
 
-{ #category : #displaying }
+{ #category : 'displaying' }
 StSelector >> displayStringOn: stream [
 
 	stream nextPutAll: self name
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSelector >> implementors [
 	^ methods ifNil: [ 
 		methods := (SystemNavigation default allImplementorsOf: self name) 
 			collect: [ :each | each compiledMethod ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSelector >> name [
 	^ name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSelector >> name: anObject [
 	name := anObject
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSelector >> senders [
 	^ SystemNavigation default allSendersOf: self name
 ]
 
-{ #category : #spotter }
+{ #category : 'spotter' }
 StSelector >> spotterUsersFor: aStep [
 	<stSpotterOrder: 50>
 

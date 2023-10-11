@@ -10,12 +10,14 @@ My subclasses will each represent a concrete column and define:
 - Optionally, how to customize the column
 "
 Class {
-	#name : #StFBAbstractColumn,
-	#superclass : #Object,
-	#category : #'NewTools-FileBrowser-Columns'
+	#name : 'StFBAbstractColumn',
+	#superclass : 'Object',
+	#category : 'NewTools-FileBrowser-Columns',
+	#package : 'NewTools-FileBrowser',
+	#tag : 'Columns'
 }
 
-{ #category : #adding }
+{ #category : 'adding' }
 StFBAbstractColumn class >> addContraintTo: aTableColumn [
 	"I'm use to add option to column like width ... 
 	look at class 
@@ -23,7 +25,7 @@ StFBAbstractColumn class >> addContraintTo: aTableColumn [
 	self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBAbstractColumn class >> column [
 	"I'm returning a SpTreeTableColumn"
 
@@ -33,37 +35,37 @@ StFBAbstractColumn class >> column [
 	^ column
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBAbstractColumn class >> columns [
 	^ ((self allSubclasses reject: #isAbstract) sort: #priority ascending) collect: #column
 ]
 
-{ #category : #templateMethod }
+{ #category : 'templateMethod' }
 StFBAbstractColumn class >> contentValuable [
 	^ [ :selectedFileReference | self evaluateOn: selectedFileReference ]
 ]
 
-{ #category : #templateMethod }
+{ #category : 'templateMethod' }
 StFBAbstractColumn class >> evaluateOn: aFileReference [ 
 	^ self subclassResponsibility
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StFBAbstractColumn class >> isAbstract [ 
 	^ self = StFBAbstractColumn
 ]
 
-{ #category : #sorting }
+{ #category : 'sorting' }
 StFBAbstractColumn class >> priority [
 	^ self subclassResponsibility
 ]
 
-{ #category : #class }
+{ #category : 'class' }
 StFBAbstractColumn class >> tableColumnClass [
 	^ SpStringTableColumn
 ]
 
-{ #category : #templateMethod }
+{ #category : 'templateMethod' }
 StFBAbstractColumn class >> title [
 	"I'm returning a String"
 	^ self subclassResponsibility

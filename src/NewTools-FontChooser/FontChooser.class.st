@@ -5,18 +5,19 @@ Check the constructors in the class side to see how to use me.
 I can be used in modal and non-modal way.
 "
 Class {
-	#name : #FontChooser,
-	#superclass : #Model,
+	#name : 'FontChooser',
+	#superclass : 'Model',
 	#instVars : [
 		'fontList',
 		'title',
 		'font',
 		'onAcceptDo'
 	],
-	#category : #'NewTools-FontChooser'
+	#category : 'NewTools-FontChooser',
+	#package : 'NewTools-FontChooser'
 }
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 FontChooser class >> example [
 
 	<script>
@@ -27,32 +28,32 @@ FontChooser class >> example [
 		onAcceptDo: [ :aFont | aFont inspect ]
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 FontChooser class >> newWithAllFamilies [
 
    ^ self new fontList: LogicalFontManager current allFamilies; yourself
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 FontChooser class >> newWithDefaultFamilies [
 
    ^ self new fontList: LogicalFontManager current defaultFamilies; yourself
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 FontChooser class >> openModalWithTitle: aTitle initialFont: aFont onAcceptDo: aBlock [
 
 	^ self openWithTitle: aTitle initialFont: aFont onAcceptDo: aBlock modal: true.
 	
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 FontChooser class >> openWithTitle: aTitle initialFont: aFont onAcceptDo: aBlock [
 
 	^ self openWithTitle: aTitle initialFont: aFont onAcceptDo: aBlock modal: false
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 FontChooser class >> openWithTitle: aTitle initialFont: aFont onAcceptDo: aBlock modal: isModal [
 
 	| instance presenter |
@@ -72,44 +73,44 @@ FontChooser class >> openWithTitle: aTitle initialFont: aFont onAcceptDo: aBlock
 	^ instance
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FontChooser >> font [
 	^ font
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FontChooser >> font: aLogicalFont [ 
 	
 	font := aLogicalFont
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FontChooser >> fontList [
 	^ fontList
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FontChooser >> fontList: aCollection [ 
 	fontList := aCollection
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FontChooser >> onAcceptDo [
 	^ onAcceptDo
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FontChooser >> onAcceptDo: aFullBlockClosure [ 
 	
 	onAcceptDo := aFullBlockClosure 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FontChooser >> title [
 	^ title
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FontChooser >> title: aString [ 
 	
 	title := aString

@@ -4,38 +4,40 @@ I have an iterator in the inner instance variable and all the messages are redir
 My subclasses can override the required behaviour.
 "
 Class {
-	#name : #StIteratorDecorator,
-	#superclass : #StIterator,
+	#name : 'StIteratorDecorator',
+	#superclass : 'StIterator',
 	#instVars : [
 		'inner'
 	],
-	#category : #'NewTools-Spotter-Processors-Iterators'
+	#category : 'NewTools-Spotter-Processors-Iterators',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Iterators'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StIteratorDecorator class >> isAbstract [
 
 	^ self == StIteratorDecorator
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StIteratorDecorator >> atEnd [ 
 
 	^ inner atEnd
 ]
 
-{ #category : #protected }
+{ #category : 'protected' }
 StIteratorDecorator >> doReset [ 
 	
 	inner reset
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StIteratorDecorator >> inner: anObject [
 	inner := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StIteratorDecorator >> next [
 
 	^ inner next

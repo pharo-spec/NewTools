@@ -12,8 +12,8 @@ Also, there is #configureFilter to extend the configuration of the source when t
 I also handled the notifications when the query finish, so Spotter UI can show it correctly.
 "
 Class {
-	#name : #StSpotterProcessor,
-	#superclass : #Object,
+	#name : 'StSpotterProcessor',
+	#superclass : 'Object',
 	#instVars : [
 		'order',
 		'filter',
@@ -25,52 +25,54 @@ Class {
 	#classInstVars : [
 		'enabled'
 	],
-	#category : #'NewTools-Spotter-Processors-Processors'
+	#category : 'NewTools-Spotter-Processors-Processors',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Processors'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessor class >> allConcreteSubclasses [
 	
 	^ self allSubclasses reject: [ :e | e isAbstract ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessor class >> allEnabledSubclasses [
 	
 	^ self allConcreteSubclasses select: [ :e | e isEnabled ]
 ]
 
-{ #category : #'default-settings' }
+{ #category : 'default-settings' }
 StSpotterProcessor class >> defaultEnabled [
 
 	^ self subclassResponsibility 
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StSpotterProcessor class >> enabled [ 
 
 	^ enabled ifNil: [ self defaultEnabled ]
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StSpotterProcessor class >> enabled: aValue [
 
 	enabled := aValue
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StSpotterProcessor class >> hideInSettings [
 
 	^ false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterProcessor class >> isAbstract [ 
 
 	^ self == StSpotterProcessor 
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterProcessor class >> isEnabled [
 
 	self isAbstract
@@ -78,19 +80,19 @@ StSpotterProcessor class >> isEnabled [
 	^ enabled ifNil: [ self defaultEnabled ] ifNotNil: [ enabled ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessor class >> order [
 	
 	^ self subclassResponsibility 
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StSpotterProcessor class >> settingsDescription [
 
 	^ self title
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StSpotterProcessor class >> settingsOn: aBuilder [
 	<systemsettings>
 
@@ -112,25 +114,25 @@ StSpotterProcessor class >> settingsOn: aBuilder [
 				label: aProcessorClass settingsTitle ]
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StSpotterProcessor class >> settingsTitle [
 
 	^ self title
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessor class >> title [
 	
 	^ self subclassResponsibility 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessor >> actLogic [
 
 	^ [ :anItem :aStep | anItem evaluateFor: aStep ]
 ]
 
-{ #category : #'spotter-api' }
+{ #category : 'spotter-api' }
 StSpotterProcessor >> allFilteredCandidates [
 
 	| result |
@@ -140,7 +142,7 @@ StSpotterProcessor >> allFilteredCandidates [
 	^ result
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StSpotterProcessor >> configureFilter [
 
 	self ensureFilter.
@@ -148,14 +150,14 @@ StSpotterProcessor >> configureFilter [
 		each filteringText: self query searchingText ]
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StSpotterProcessor >> ensureFilter [
 
 	^ filter ifNil: [
 		filter := self newSource ]
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StSpotterProcessor >> executeQuery [
 
 	(self query isSearchEmpty and: [ self showForEmptyQuery not ]) 
@@ -176,13 +178,13 @@ StSpotterProcessor >> executeQuery [
 	self query informAllResultAmount: results size
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StSpotterProcessor >> filter [ 
 	
 	^ filter ifNil: [ self ensureFilter ]
 ]
 
-{ #category : #'spotter-api' }
+{ #category : 'spotter-api' }
 StSpotterProcessor >> filterInContext: aSpotterContext [ 
 
 	self notifyStarted: aSpotterContext.
@@ -191,67 +193,67 @@ StSpotterProcessor >> filterInContext: aSpotterContext [
 	self notifyEnded: aSpotterContext.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSpotterProcessor >> initialize [
 
 	super initialize.
 	running := false.
 ]
 
-{ #category : #'key-bindings' }
+{ #category : 'key-bindings' }
 StSpotterProcessor >> installKeymappingsOn: aPresenter [ 
 	"Nothing to do"
 ]
 
-{ #category : #'key-bindings' }
+{ #category : 'key-bindings' }
 StSpotterProcessor >> installKeymappingsOn: aPresenter onExecution: aBlock [
 
 	self installKeymappingsOn: aPresenter
 ]
 
-{ #category : #'spotter-api' }
+{ #category : 'spotter-api' }
 StSpotterProcessor >> isRelevantForQuery: categoryQueryPrefix [
 
 	^ (self title asLowercase copyReplaceAll: String space with: '')
 			beginsWith: categoryQueryPrefix
 ]
 
-{ #category : #'spotter-api' }
+{ #category : 'spotter-api' }
 StSpotterProcessor >> isRunning [ 
 
 	^ running
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessor >> itemIcon [
 
 	^ [ :anItem | anItem icon ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessor >> itemIconName [
 
 	^ [ :item | item systemIconName ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessor >> itemName [
 
 	^ [ :anItem | anItem asString ]
 ]
 
-{ #category : #'key-bindings' }
+{ #category : 'key-bindings' }
 StSpotterProcessor >> keyBinding [ 
 	^ nil
 ]
 
-{ #category : #configuration }
+{ #category : 'configuration' }
 StSpotterProcessor >> maxResults [
 
 	^ StSpotterPragmaBasedProcessor defaultItemsLimit
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StSpotterProcessor >> newSource [
 
 	| source |
@@ -264,13 +266,13 @@ StSpotterProcessor >> newSource [
 	
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StSpotterProcessor >> newTextFilteringSource [
 
 	self subclassResponsibility 
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 StSpotterProcessor >> notifyEnded: aSpotterContext [
 
 	running := false.
@@ -280,7 +282,7 @@ StSpotterProcessor >> notifyEnded: aSpotterContext [
 
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 StSpotterProcessor >> notifyStarted: aSpotterContext [
 
 	running := true.
@@ -290,19 +292,19 @@ StSpotterProcessor >> notifyStarted: aSpotterContext [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessor >> order [
 
 	^ order ifNil: [ self class order ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessor >> order: aNumber [
 
 	^ order
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessor >> query [
 
 	^ query ifNil: [ 
@@ -311,31 +313,31 @@ StSpotterProcessor >> query [
 			yourself ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessor >> query: aQuery [
 
 	query := aQuery
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StSpotterProcessor >> render: anEntry [
 		
 	^ anEntry render
 ]
 
-{ #category : #configuration }
+{ #category : 'configuration' }
 StSpotterProcessor >> showForEmptyQuery [
 
 	^ false
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StSpotterProcessor >> stop [
 
 	running := false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessor >> title [
 
 	^ self class title

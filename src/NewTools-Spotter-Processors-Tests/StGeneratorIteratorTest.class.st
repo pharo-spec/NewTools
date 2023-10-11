@@ -1,10 +1,11 @@
 Class {
-	#name : #StGeneratorIteratorTest,
-	#superclass : #TestCase,
-	#category : #'NewTools-Spotter-Processors-Tests'
+	#name : 'StGeneratorIteratorTest',
+	#superclass : 'TestCase',
+	#category : 'NewTools-Spotter-Processors-Tests',
+	#package : 'NewTools-Spotter-Processors-Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 StGeneratorIteratorTest >> testCollectionWithSingleElementReturnsIt [
 	| gen |
 	
@@ -12,7 +13,7 @@ StGeneratorIteratorTest >> testCollectionWithSingleElementReturnsIt [
 	self assert: gen next equals: 1
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StGeneratorIteratorTest >> testCollectionWithSingleManyElementsReturnsTheRequested [
 	| gen |
 	
@@ -23,7 +24,7 @@ StGeneratorIteratorTest >> testCollectionWithSingleManyElementsReturnsTheRequest
 	self assert: gen next equals: 3.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StGeneratorIteratorTest >> testCollectionWithSingleManyElementsReturnsTheRequestedInCollection [
 	| gen |
 	
@@ -32,7 +33,7 @@ StGeneratorIteratorTest >> testCollectionWithSingleManyElementsReturnsTheRequest
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StGeneratorIteratorTest >> testCollectionWithSingleWithALotOfElementsReturnsTheRequestedInCollection [
 	| gen |
 	
@@ -41,7 +42,7 @@ StGeneratorIteratorTest >> testCollectionWithSingleWithALotOfElementsReturnsTheR
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StGeneratorIteratorTest >> testEmptyCollectionIsAtEnd [
 	| gen |
 	
@@ -49,7 +50,7 @@ StGeneratorIteratorTest >> testEmptyCollectionIsAtEnd [
 	self assert: gen atEnd
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StGeneratorIteratorTest >> testResetRestartsIterationOnTheCollection [
 	| gen |
 	

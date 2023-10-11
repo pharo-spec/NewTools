@@ -2,16 +2,18 @@
 A string based filter.
 "
 Class {
-	#name : #StStringFilter,
-	#superclass : #StBaseFilter,
+	#name : 'StStringFilter',
+	#superclass : 'StBaseFilter',
 	#instVars : [
 		'caseSensitive',
 		'query'
 	],
-	#category : #'NewTools-Spotter-Filters'
+	#category : 'NewTools-Spotter-Filters',
+	#package : 'NewTools-Spotter',
+	#tag : 'Filters'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 StStringFilter >> applyFilter [
 	self hasQuery ifFalse: [ 
 		self applyFilterWithoutQuery.
@@ -20,14 +22,14 @@ StStringFilter >> applyFilter [
 	^ self filteredItems " return the filtered items only "
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StStringFilter >> applyFilterWithQuery [
 
 	[ self doApplyFilterWithQuery ]
 		on: StLimitArrived do: [ ^ self ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StStringFilter >> applyFilterWithoutQuery [
 	" WARNING: this is not a copy of GTNullFilter>>#applyFilterWithoutQuery !!! "
 
@@ -46,33 +48,33 @@ StStringFilter >> applyFilterWithoutQuery [
 			self addItems: self filteredItems ]] on: StLimitArrived do: [ ^ self ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StStringFilter >> caseSensitive [
 	^ caseSensitive
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StStringFilter >> caseSensitive: anObject [
 	caseSensitive := anObject
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 StStringFilter >> defaultCaseSensitive [
 	^ false
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StStringFilter >> doApplyFilterWithQuery [
 
 	self subclassResponsibility 
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StStringFilter >> hasQuery [
 	^ self query isEmptyOrNil not
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StStringFilter >> prepareFilterInContext: aSpotterContext [
 	super prepareFilterInContext: aSpotterContext.
 	
@@ -82,12 +84,12 @@ StStringFilter >> prepareFilterInContext: aSpotterContext [
 		ifFalse: [ self context textLowercase ])
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StStringFilter >> query [
 	^ query
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StStringFilter >> query: anObject [
 	query := anObject
 ]

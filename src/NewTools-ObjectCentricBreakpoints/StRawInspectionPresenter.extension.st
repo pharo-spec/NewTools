@@ -1,6 +1,6 @@
-Extension { #name : #StRawInspectionPresenter }
+Extension { #name : 'StRawInspectionPresenter' }
 
-{ #category : #'*NewTools-ObjectCentricBreakpoints' }
+{ #category : '*NewTools-ObjectCentricBreakpoints' }
 StRawInspectionPresenter >> haltInspectedObjectOnAccess: access [
 	| selectedItem |
 	selectedItem := self selectedItem.
@@ -14,22 +14,22 @@ StRawInspectionPresenter >> haltInspectedObjectOnAccess: access [
 	^ self model haltOnAccess: access to: selectedItem key
 ]
 
-{ #category : #'*NewTools-ObjectCentricBreakpoints' }
+{ #category : '*NewTools-ObjectCentricBreakpoints' }
 StRawInspectionPresenter >> haltInspectedObjectOnReadAccess [
 	^self haltInspectedObjectOnAccess: #read
 ]
 
-{ #category : #'*NewTools-ObjectCentricBreakpoints' }
+{ #category : '*NewTools-ObjectCentricBreakpoints' }
 StRawInspectionPresenter >> haltInspectedObjectOnStateAccess [
 	^ self haltInspectedObjectOnAccess: #all
 ]
 
-{ #category : #'*NewTools-ObjectCentricBreakpoints' }
+{ #category : '*NewTools-ObjectCentricBreakpoints' }
 StRawInspectionPresenter >> haltInspectedObjectOnWriteAccess [
 	^ self haltInspectedObjectOnAccess: #write
 ]
 
-{ #category : #'*NewTools-ObjectCentricBreakpoints' }
+{ #category : '*NewTools-ObjectCentricBreakpoints' }
 StRawInspectionPresenter class >> objectCentricBreakpointCommandsWith: presenter forRootGroup: aRootCmCommandsGroup [
 	<extensionCommands>
 	({StHaltOnReadCommand forSpec.

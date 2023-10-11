@@ -2,30 +2,31 @@
 Simple process inspector as a demo extension to show how extension work.
 "
 Class {
-	#name : #StSindarinProcessInspectorPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StSindarinProcessInspectorPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'attributesTable',
 		'sindarinDebugger',
 		'processData'
 	],
-	#category : #'NewTools-Sindarin-ProcessInspector'
+	#category : 'NewTools-Sindarin-ProcessInspector',
+	#package : 'NewTools-Sindarin-ProcessInspector'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 StSindarinProcessInspectorPresenter class >> debuggingExtensionToolName [
 	<debuggerExtensionOrder: 1 showByDefault: false>
 	^ 'Process'
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StSindarinProcessInspectorPresenter class >> defaultSpec [
 	^ SpBoxLayout newVertical
 		add: #attributesTable;
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSindarinProcessInspectorPresenter >> initializePresenters [
 	super initializePresenters.
 	attributesTable := self newTable.
@@ -41,18 +42,18 @@ StSindarinProcessInspectorPresenter >> initializePresenters [
 			'terminated'}
 ]
 
-{ #category : #'accessing model' }
+{ #category : 'accessing model' }
 StSindarinProcessInspectorPresenter >> setModelBeforeInitialization: aStDebugger [
 	"My original model is the debugger presenter that I extend"	
 	sindarinDebugger := aStDebugger sindarinDebugger
 ]
 
-{ #category : #'accessing model' }
+{ #category : 'accessing model' }
 StSindarinProcessInspectorPresenter >> updatePresenter [
 	self updateProcessData
 ]
 
-{ #category : #'accessing model' }
+{ #category : 'accessing model' }
 StSindarinProcessInspectorPresenter >> updateProcessData [
 	|process|
 	processData := Dictionary new.

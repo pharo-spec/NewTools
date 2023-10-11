@@ -2,12 +2,13 @@
 A StCritiquePackageSelectorPresenterTest is a test class for testing the behaivor of StCritiquePackageSelectorPresenter
 "
 Class {
-	#name : #StCritiquePackageSelectorPresenterTest,
-	#superclass : #TestCase,
-	#category : #'NewTools-CodeCritiques-Tests'
+	#name : 'StCritiquePackageSelectorPresenterTest',
+	#superclass : 'TestCase',
+	#category : 'NewTools-CodeCritiques-Tests',
+	#package : 'NewTools-CodeCritiques-Tests'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiquePackageSelectorPresenterTest >> testInitializePresenters [
 
 	| packagesSelectorPresenter |
@@ -21,7 +22,7 @@ StCritiquePackageSelectorPresenterTest >> testInitializePresenters [
 		equals: SpButtonPresenter.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiquePackageSelectorPresenterTest >> testOpen [
 
 	| window |

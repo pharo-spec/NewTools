@@ -2,12 +2,14 @@
 A filter that uses the `FuzzyMatcher` to obtain matching items.
 "
 Class {
-	#name : #StFilterFuzzy,
-	#superclass : #StOrderedFilter,
-	#category : #'NewTools-Spotter-Filters'
+	#name : 'StFilterFuzzy',
+	#superclass : 'StOrderedFilter',
+	#category : 'NewTools-Spotter-Filters',
+	#package : 'NewTools-Spotter',
+	#tag : 'Filters'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 StFilterFuzzy >> applyFilterWithQuery [
 	
 	| result |

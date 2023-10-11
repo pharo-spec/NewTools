@@ -1,6 +1,6 @@
-Extension { #name : #RPackageTag }
+Extension { #name : 'RPackageTag' }
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 RPackageTag >> spotterClassesFor: aStep [
 	<stSpotterOrder: 20>
 	aStep listProcessor

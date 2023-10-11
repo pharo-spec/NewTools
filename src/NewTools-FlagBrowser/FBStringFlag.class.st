@@ -5,27 +5,29 @@ Description
 I represent a flag which parameter is a String.
 "
 Class {
-	#name : #FBStringFlag,
-	#superclass : #FBFlag,
-	#category : #'NewTools-FlagBrowser-Model'
+	#name : 'FBStringFlag',
+	#superclass : 'FBFlag',
+	#category : 'NewTools-FlagBrowser-Model',
+	#package : 'NewTools-FlagBrowser',
+	#tag : 'Model'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 FBStringFlag class >> matchesArgument: aFlagArgument [
 	^ aFlagArgument isString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBStringFlag class >> priority [
 	^ 10
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 FBStringFlag class >> title [
 	^ 'String flags'
 ]
 
-{ #category : #update }
+{ #category : 'update' }
 FBStringFlag >> insensitiveParameter [
 	self parameter: self parameter asLowercase capitalized
 ]

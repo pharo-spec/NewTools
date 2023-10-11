@@ -1,16 +1,17 @@
 Class {
-	#name : #StDependencyAnalyser,
-	#superclass : #StPresenter,
+	#name : 'StDependencyAnalyser',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'toolbarPresenter',
 		'treePresenter',
 		'filterTextPresenter',
 		'browserPresenter'
 	],
-	#category : #'NewTools-DependencyAnalyser'
+	#category : 'NewTools-DependencyAnalyser',
+	#package : 'NewTools-DependencyAnalyser'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDependencyAnalyser >> initializePresenters [
 	<script: 'self new openWithSpec'>
 	
@@ -40,7 +41,7 @@ StDependencyAnalyser >> initializePresenters [
 		yourself)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDependencyAnalyser >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter 
@@ -48,7 +49,7 @@ StDependencyAnalyser >> initializeWindow: aWindowPresenter [
 		initialExtent: 1200@800
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDependencyAnalyser >> retrieveChildren: aNode [
 
  	^ aNode children 
@@ -61,7 +62,7 @@ StDependencyAnalyser >> retrieveChildren: aNode [
 				yourself ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDependencyAnalyser >> rootsForTest [
 
 	^ (DAPackageAnalyzerTreeModel onPackagesNamed: #('Spec2-Core')) tree roots

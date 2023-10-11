@@ -4,17 +4,18 @@ It shows a filterable list of keymap shortcuts,  name and categories.
 Use the context menu to browse the method that defines the shortcut.
 "
 Class {
-	#name : #SpKeymapPresenter,
-	#superclass : #StPresenter,
+	#name : 'SpKeymapPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'clearFilterButton',
 		'filterField',
 		'keymapTable'
 	],
-	#category : #'NewTools-KeymapBrowser'
+	#category : 'NewTools-KeymapBrowser',
+	#package : 'NewTools-KeymapBrowser'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 SpKeymapPresenter class >> defaultSpec [
 	<spec>
 
@@ -28,7 +29,7 @@ SpKeymapPresenter class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #'system menu' }
+{ #category : 'system menu' }
 SpKeymapPresenter class >> keymapBrowserMenuOn: aBuilder [ 
 	"Build an entry in system world menu"
 	<worldMenu>
@@ -41,20 +42,20 @@ SpKeymapPresenter class >> keymapBrowserMenuOn: aBuilder [
 		help: 'List all know shortcuts and Keymapping categories.'
 ]
 
-{ #category : #opening }
+{ #category : 'opening' }
 SpKeymapPresenter class >> open [
 	<script>
 	
 	self new openWithSpec
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpKeymapPresenter class >> taskbarIconName [
 
 	^ #keymapBrowserIcon
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 SpKeymapPresenter >> browseDefinitionOfSelectedShortcut [
 	| selection action class selector |
 	selection := self keymapTable selection selectedItem ifNil: [ ^ self ].
@@ -67,25 +68,25 @@ SpKeymapPresenter >> browseDefinitionOfSelectedShortcut [
 		highlight: selection shortcutName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpKeymapPresenter >> clearFilterButton [
 
 	^ clearFilterButton
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpKeymapPresenter >> clearFilterButton: anObject [
 
 	clearFilterButton := anObject
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 SpKeymapPresenter >> collectAllShortcuts [
 
 	self keymapTable items: self shortcuts
 ]
 
-{ #category : #'private - initialization' }
+{ #category : 'private - initialization' }
 SpKeymapPresenter >> connectPresenters [
 
 	filterField
@@ -95,7 +96,7 @@ SpKeymapPresenter >> connectPresenters [
 	clearFilterButton action: [ filterField text: '' ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 SpKeymapPresenter >> contextMenu [
 	| hasSelection |
 	
@@ -120,19 +121,19 @@ SpKeymapPresenter >> contextMenu [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpKeymapPresenter >> filterField [
 
 	^ filterField
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpKeymapPresenter >> filterField: anObject [
 
 	filterField := anObject
 ]
 
-{ #category : #'private - initialization' }
+{ #category : 'private - initialization' }
 SpKeymapPresenter >> initFilter [
 
 	filterField := self newTextInput.
@@ -148,7 +149,7 @@ SpKeymapPresenter >> initFilter [
 		enabled: false
 ]
 
-{ #category : #'private - initialization' }
+{ #category : 'private - initialization' }
 SpKeymapPresenter >> initKeyMapTable [
 
 	keymapTable := self newTable.
@@ -160,13 +161,13 @@ SpKeymapPresenter >> initKeyMapTable [
 		contextMenu: [ self contextMenu ]
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 SpKeymapPresenter >> initialExtent [
 
 	^ 600 @ 300
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SpKeymapPresenter >> initializePresenters [
 
 	self 
@@ -176,7 +177,7 @@ SpKeymapPresenter >> initializePresenters [
 	self collectAllShortcuts
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 SpKeymapPresenter >> inspectActionOfSelectedShortcut [
 	| selection action |
 	selection := self keymapTable selection selectedItem ifNil: [ ^ self ].
@@ -184,19 +185,19 @@ SpKeymapPresenter >> inspectActionOfSelectedShortcut [
 	action inspect
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpKeymapPresenter >> keymapTable [
 
 	^ keymapTable
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpKeymapPresenter >> keymapTable: anObject [
 
 	keymapTable := anObject
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 SpKeymapPresenter >> menu: aMenu shifted: aBoolean [
 	(aMenu add: 'Refresh' target: self selector: #collectAllShortcuts)
 		icon: (self iconNamed: #smallUpdateIcon).
@@ -214,7 +215,7 @@ SpKeymapPresenter >> menu: aMenu shifted: aBoolean [
 	^ aMenu
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 SpKeymapPresenter >> setFilter: aFilterText [
 	aFilterText
 		ifEmpty: [ self collectAllShortcuts ]
@@ -223,7 +224,7 @@ SpKeymapPresenter >> setFilter: aFilterText [
 				items: (self shortcuts select: [ :shortcut | {shortcut realValue shortcut asString . shortcut shortcutName . shortcut categoryName} anySatisfy: [ :s | s includesSubstring: filter caseSensitive: false ] ]) ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 SpKeymapPresenter >> shortcuts [
 	| collection |
 	collection := OrderedCollection new.
@@ -240,7 +241,7 @@ SpKeymapPresenter >> shortcuts [
 	^ collection sorted: #categoryName ascending
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpKeymapPresenter >> title [
 	^ 'Keymap Browser'
 ]

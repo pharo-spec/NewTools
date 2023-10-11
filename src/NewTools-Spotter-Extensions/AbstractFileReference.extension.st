@@ -1,12 +1,12 @@
-Extension { #name : #AbstractFileReference }
+Extension { #name : 'AbstractFileReference' }
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 AbstractFileReference >> isZipFile [
 
 	^ self isFile and: [ #('zip' 'jar' 'ear' 'war') includes: self extension ]
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 AbstractFileReference >> spotterForDirectoriesFor: aStep [
 	<stSpotterOrder: 10>
 	
@@ -20,7 +20,7 @@ AbstractFileReference >> spotterForDirectoriesFor: aStep [
 			filter: StFilterSubstring ]
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 AbstractFileReference >> spotterForFilesFor: aStep [
 	<stSpotterOrder: 20>
 	
@@ -34,7 +34,7 @@ AbstractFileReference >> spotterForFilesFor: aStep [
 			filter: StFilterSubstring ]
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 AbstractFileReference >> spotterForZipDirectoriesFor: aStep [
 	<stSpotterOrder: 10>
 	| zipFileSystem |
@@ -51,7 +51,7 @@ AbstractFileReference >> spotterForZipDirectoriesFor: aStep [
 			filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 AbstractFileReference >> spotterForZipFilesFor: aStep [
 	<stSpotterOrder: 10>
 	| zipFileSystem |

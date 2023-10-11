@@ -1,6 +1,6 @@
-Extension { #name : #Class }
+Extension { #name : 'Class' }
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 Class >> spotterClassMethodsFor: aStep [
 	<stSpotterOrder: 15>
 	
@@ -11,7 +11,7 @@ Class >> spotterClassMethodsFor: aStep [
 			filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 Class >> spotterMethodsFor: aStep [
 	<stSpotterOrder: 10>
 	
@@ -22,7 +22,7 @@ Class >> spotterMethodsFor: aStep [
 			filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 Class >> spotterReferenceFor: aStep [
 	<stSpotterOrder: 30>
 	
@@ -33,7 +33,7 @@ Class >> spotterReferenceFor: aStep [
 			filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 Class >> spotterSuperClassMethodsFor: aStep [
 	<stSpotterOrder: 16>
 	|superclasses|
@@ -44,7 +44,7 @@ Class >> spotterSuperClassMethodsFor: aStep [
 			filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 Class >> spotterSuperMethodsFor: aStep [
 	<stSpotterOrder: 11>
 	

@@ -17,17 +17,19 @@ Internal Representation and Key Implementation Points.
 
 "
 Class {
-	#name : #FBByFlagsPagePresenter,
-	#superclass : #FBFlagPresentationPresenter,
+	#name : 'FBByFlagsPagePresenter',
+	#superclass : 'FBFlagPresentationPresenter',
 	#instVars : [
 		'modeDropbox',
 		'flagsList',
 		'caseCheckbox'
 	],
-	#category : #'NewTools-FlagBrowser-Presenters'
+	#category : 'NewTools-FlagBrowser-Presenters',
+	#package : 'NewTools-FlagBrowser',
+	#tag : 'Presenters'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 FBByFlagsPagePresenter class >> defaultSpec [
 	^ SpBoxLayout newVertical
 		add: #modeDropbox withConstraints: [ :constraints | constraints height: 30 ];
@@ -45,37 +47,37 @@ FBByFlagsPagePresenter class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 FBByFlagsPagePresenter class >> icon [
 	^ #breakpoint
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBByFlagsPagePresenter class >> priority [
 	^ 1
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 FBByFlagsPagePresenter class >> title [
 	^ 'By flag'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBByFlagsPagePresenter >> caseCheckbox [
 	^ caseCheckbox
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBByFlagsPagePresenter >> flagsList [
 	^ flagsList
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBByFlagsPagePresenter >> flagsList: anObject [
 	flagsList := anObject
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 FBByFlagsPagePresenter >> initializePresenter [
 	super initializePresenter.
 	flagsList
@@ -93,7 +95,7 @@ FBByFlagsPagePresenter >> initializePresenter [
 			modeDropbox selectedItem: modeDropbox selectedItem	"Used to refresh the list" ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 FBByFlagsPagePresenter >> initializeWidgets [
 	super initializeWidgets.
 	modeDropbox := self newDropList.
@@ -115,12 +117,12 @@ FBByFlagsPagePresenter >> initializeWidgets [
 		state: FBFlag caseSensitive
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBByFlagsPagePresenter >> modeDropbox [
 	^ modeDropbox
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBByFlagsPagePresenter >> modeDropbox: anObject [
 	modeDropbox := anObject
 ]

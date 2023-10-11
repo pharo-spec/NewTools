@@ -1,6 +1,6 @@
 Class {
-	#name : #StCriticWizardPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StCriticWizardPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'contentPresenter',
 		'nextButtonPresenter',
@@ -8,34 +8,35 @@ Class {
 		'wizardPresenters',
 		'finishButtonPresenter'
 	],
-	#category : #'NewTools-CriticsBrowser'
+	#category : 'NewTools-CriticsBrowser',
+	#package : 'NewTools-CriticsBrowser'
 }
 
-{ #category : #actions }
+{ #category : 'actions' }
 StCriticWizardPresenter >> doBack [
 
 	self replaceContentWith: (self wizardPresenters before: contentPresenter)
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StCriticWizardPresenter >> doFinish [
 
 	
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StCriticWizardPresenter >> doNext [
 
 	self replaceContentWith: (self wizardPresenters after: contentPresenter)
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StCriticWizardPresenter >> firstPresenter [
 	
 	^ self wizardPresenters first
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCriticWizardPresenter >> initializePresenters [
 	<script: 'self new openWithSpec'>
 
@@ -60,13 +61,13 @@ StCriticWizardPresenter >> initializePresenters [
 			action: [ self doFinish ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StCriticWizardPresenter >> lastPresenter [
 	
 	^ self wizardPresenters last
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StCriticWizardPresenter >> newWizardPresenters [
 
 	^ {  
@@ -75,7 +76,7 @@ StCriticWizardPresenter >> newWizardPresenters [
 	}
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StCriticWizardPresenter >> replaceContentWith: aPresenter [
 
 	self layout 
@@ -85,7 +86,7 @@ StCriticWizardPresenter >> replaceContentWith: aPresenter [
 	self updatePresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCriticWizardPresenter >> updatePresenter [
 
 	contentPresenter = self firstPresenter 
@@ -100,7 +101,7 @@ StCriticWizardPresenter >> updatePresenter [
 			finishButtonPresenter hide ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StCriticWizardPresenter >> wizardPresenters [
 
 	^ wizardPresenters ifNil: [

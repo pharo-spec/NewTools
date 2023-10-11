@@ -1,20 +1,21 @@
 Class {
-	#name : #RTPatternMatcherTest,
-	#superclass : #TestCase,
+	#name : 'RTPatternMatcherTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'patternMatcher'
 	],
-	#category : #'NewTools-RewriterTools-Backend-Tests'
+	#category : 'NewTools-RewriterTools-Backend-Tests',
+	#package : 'NewTools-RewriterTools-Backend-Tests'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 RTPatternMatcherTest >> setUp [
 	super setUp.
 
 	patternMatcher := StRewriterPatternMatcher
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 RTPatternMatcherTest >> testParseCodeASTIsForMethod [
 
 	| code methodCode codeAST |
@@ -37,7 +38,7 @@ aNumber := 5.'.
 		equals: methodCode
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 RTPatternMatcherTest >> testParsePatternASTIsForMethod [
 
 	| rule methodRule ast |
@@ -60,7 +61,7 @@ RTPatternMatcherTest >> testParsePatternASTIsForMethod [
 		equals: methodRule
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 RTPatternMatcherTest >> testPerformMatchingPatternIsForMethod [
 
 	| pharoCode patternCode matches |

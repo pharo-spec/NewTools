@@ -1,6 +1,6 @@
-Extension { #name : #MenuItemMorph }
+Extension { #name : 'MenuItemMorph' }
 
-{ #category : #'*NewTools-Spotter-Processors' }
+{ #category : '*NewTools-Spotter-Processors' }
 MenuItemMorph >> withAllLeafItemsDo: aBlockClosure [
 
 	self subMenu ifNil: [ ^ aBlockClosure cull: self ].

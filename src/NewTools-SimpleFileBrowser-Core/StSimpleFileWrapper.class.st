@@ -2,23 +2,24 @@
 A file wrapper
 "
 Class {
-	#name : #StSimpleFileWrapper,
-	#superclass : #StSimpleFileSystemItemWrapper,
-	#category : #'NewTools-SimpleFileBrowser-Core'
+	#name : 'StSimpleFileWrapper',
+	#superclass : 'StSimpleFileSystemItemWrapper',
+	#category : 'NewTools-SimpleFileBrowser-Core',
+	#package : 'NewTools-SimpleFileBrowser-Core'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFileWrapper class >> icon [ 
 	^self iconProvider fileIcon 
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSimpleFileWrapper >> isFile [
 
 	^true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFileWrapper >> size [
 	"See https://github.com/pharo-project/pharo/issues/3571"
 	

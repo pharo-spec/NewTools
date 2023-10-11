@@ -1,20 +1,22 @@
 Class {
-	#name : #StRewriterMatchToolPresenterTest,
-	#superclass : #StRewriterAbstractToolTest,
+	#name : 'StRewriterMatchToolPresenterTest',
+	#superclass : 'StRewriterAbstractToolTest',
 	#instVars : [
 		'matchToolPresenter'
 	],
-	#category : #'NewTools-RewriterTools-Tests-MatchTool'
+	#category : 'NewTools-RewriterTools-Tests-MatchTool',
+	#package : 'NewTools-RewriterTools-Tests',
+	#tag : 'MatchTool'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StRewriterMatchToolPresenterTest >> setUp [
 
 	super setUp.
 	matchToolPresenter := StRewriterMatchToolPresenter new
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterMatchToolPresenterTest >> testAddIconToTheme [
 
 	| icon |
@@ -22,7 +24,7 @@ StRewriterMatchToolPresenterTest >> testAddIconToTheme [
 	self deny: icon equals: (self iconNamed: #blackIcon)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterMatchToolPresenterTest >> testBindingsTableContainsMatchings [
 
 	"This test tests is the bindings table was populated with the correct matchings.
@@ -53,7 +55,7 @@ StRewriterMatchToolPresenterTest >> testBindingsTableContainsMatchings [
 		equals: 'x = y ifTrue: [ aBlock ]'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterMatchToolPresenterTest >> testEmptyLists [
 
 	matchToolPresenter emptyLists.
@@ -61,7 +63,7 @@ StRewriterMatchToolPresenterTest >> testEmptyLists [
 	self assertEmpty: matchToolPresenter matchesList items
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterMatchToolPresenterTest >> testGetBindingsItemsForMatch [
 
 	| match |
@@ -80,7 +82,7 @@ StRewriterMatchToolPresenterTest >> testGetBindingsItemsForMatch [
 		(matchToolPresenter getBindingsItemsForMatch: match)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterMatchToolPresenterTest >> testInitializePresenters [
 
 	self assert: matchToolPresenter methodCheckbox class equals: SpCheckBoxPresenter.
@@ -92,7 +94,7 @@ StRewriterMatchToolPresenterTest >> testInitializePresenters [
 	self assert: matchToolPresenter ruleEditor lhs isNotEmpty
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterMatchToolPresenterTest >> testMatchMethod [
 
 	matchToolPresenter
@@ -120,14 +122,14 @@ StRewriterMatchToolPresenterTest >> testMatchMethod [
 		equals: 'var'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterMatchToolPresenterTest >> testMatchesChanged [
 
 	matchToolPresenter matchesChanged.
 	self assertEmpty: matchToolPresenter bindingsTable items
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterMatchToolPresenterTest >> testMatchingTableContainsMatchings [
 
 	"This test tests is the matching table was populated with the correct matchings.
@@ -147,14 +149,14 @@ StRewriterMatchToolPresenterTest >> testMatchingTableContainsMatchings [
 		equals: 'x = y ifTrue: [ aBlock ]'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterMatchToolPresenterTest >> testPatternCode [
 
 	matchToolPresenter patternCode: '`var'.
 	self assert: matchToolPresenter patternCode equals: '`var'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterMatchToolPresenterTest >> testPerformMatching [
 
 	"This test tests if the match lists contain the adequate number of matching. The other tests see if the tables are populated correctly."
@@ -168,7 +170,7 @@ StRewriterMatchToolPresenterTest >> testPerformMatching [
 	self assert: matchToolPresenter bindingsTable items size equals: 2
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterMatchToolPresenterTest >> testPharoCode [
 
 	matchToolPresenter pharoCode: 'OrderedCollection new'.
@@ -177,7 +179,7 @@ StRewriterMatchToolPresenterTest >> testPharoCode [
 		equals: 'OrderedCollection new'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterMatchToolPresenterTest >> toolClass [
 
 	^ StRewriterMatchToolPresenter

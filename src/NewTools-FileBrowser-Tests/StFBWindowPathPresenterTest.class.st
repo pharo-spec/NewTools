@@ -1,25 +1,27 @@
 Class {
-	#name : #StFBWindowPathPresenterTest,
-	#superclass : #StFBTestCase,
+	#name : 'StFBWindowPathPresenterTest',
+	#superclass : 'StFBTestCase',
 	#instVars : [
 		'windowPathUI'
 	],
-	#category : #'NewTools-FileBrowser-Tests-UI'
+	#category : 'NewTools-FileBrowser-Tests-UI',
+	#package : 'NewTools-FileBrowser-Tests',
+	#tag : 'UI'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StFBWindowPathPresenterTest >> setUp [
 	super setUp.
 	windowPathUI := StFBWindowPathPresenter new
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StFBWindowPathPresenterTest >> tearDown [
 	windowPathUI withWindowDo: [ :window | window close ].
 	super tearDown
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBWindowPathPresenterTest >> testRoot [
 
 	windowPathUI currentDirectory: FileLocator root.

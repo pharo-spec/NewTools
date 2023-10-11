@@ -15,17 +15,19 @@ StSizeReporter new open
 
 "
 Class {
-	#name : #StReporterPresenter,
-	#superclass : #StPresenter,
+	#name : 'StReporterPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'topicList',
 		'reportText',
 		'topics'
 	],
-	#category : #'NewTools-SystemReporter-Base'
+	#category : 'NewTools-SystemReporter-Base',
+	#package : 'NewTools-SystemReporter',
+	#tag : 'Base'
 }
 
-{ #category : #layout }
+{ #category : 'layout' }
 StReporterPresenter class >> defaultLayout [
 	"self open"
 	^ (SpBoxLayout newLeftToRight 
@@ -34,20 +36,20 @@ StReporterPresenter class >> defaultLayout [
 			yourself)
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StReporterPresenter class >> open [
 
 	<script>
 	self new open
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 StReporterPresenter >> addTopicSpec: aPair [
 
 	topics add: aPair
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StReporterPresenter >> connectPresenters [  
 	
 	topicList whenSelectionChangedDo: [ :selection | 
@@ -58,7 +60,7 @@ StReporterPresenter >> connectPresenters [
 	topicList items: topics
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StReporterPresenter >> createTextForReport: items [
 
 	^ (Text streamContents: [:stream | 
@@ -67,7 +69,7 @@ StReporterPresenter >> createTextForReport: items [
 								stream cr]])
 ]
 
-{ #category : #utils }
+{ #category : 'utils' }
 StReporterPresenter >> enumerate: aBlock on: aStream [
 
 	self 
@@ -76,7 +78,7 @@ StReporterPresenter >> enumerate: aBlock on: aStream [
 		on: aStream
 ]
 
-{ #category : #utils }
+{ #category : 'utils' }
 StReporterPresenter >> enumerate: aBlock startAt: first on: aStream [
 	"Utility method to enumerate Options or Parameters from first to 1000"
 
@@ -100,13 +102,13 @@ StReporterPresenter >> enumerate: aBlock startAt: first on: aStream [
 				cr ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StReporterPresenter >> fillTopics [
 
 	^ self
 ]
 
-{ #category : #utils }
+{ #category : 'utils' }
 StReporterPresenter >> header: aString on: aStream [
 	aStream
 		withAttribute: TextEmphasis bold
@@ -117,7 +119,7 @@ StReporterPresenter >> header: aString on: aStream [
 			aStream cr ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StReporterPresenter >> initialize [
 	topics := OrderedCollection new.
 	self fillTopics.
@@ -125,7 +127,7 @@ StReporterPresenter >> initialize [
 	
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StReporterPresenter >> initializePresenters [ 
 
 	topicList := self newList.
@@ -134,14 +136,14 @@ StReporterPresenter >> initializePresenters [
 	reportText := self newText beNotEditable.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StReporterPresenter >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter title: self title.
 	aWindowPresenter initialExtent: self extent
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StReporterPresenter >> topicSpec [
 
 	^ topics

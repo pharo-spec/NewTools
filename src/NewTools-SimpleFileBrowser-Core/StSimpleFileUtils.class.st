@@ -2,30 +2,31 @@
 File utilities
 "
 Class {
-	#name : #StSimpleFileUtils,
-	#superclass : #Object,
+	#name : 'StSimpleFileUtils',
+	#superclass : 'Object',
 	#classVars : [
 		'IconCache'
 	],
-	#category : #'NewTools-SimpleFileBrowser-Core'
+	#category : 'NewTools-SimpleFileBrowser-Core',
+	#package : 'NewTools-SimpleFileBrowser-Core'
 }
 
-{ #category : #'private - testing' }
+{ #category : 'private - testing' }
 StSimpleFileUtils class >> isLinux [
 	^Smalltalk os version beginsWith: 'linux'
 ]
 
-{ #category : #'private - testing' }
+{ #category : 'private - testing' }
 StSimpleFileUtils class >> isMac [ 
 	^Smalltalk os isMacOS
 ]
 
-{ #category : #'private - testing' }
+{ #category : 'private - testing' }
 StSimpleFileUtils class >> isWindows [ 
 	^Smalltalk os isWindows
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 StSimpleFileUtils class >> openLinuxTerminalOn: aPath [
 
 	(Delay forMilliseconds: 1000) wait.  	
@@ -34,7 +35,7 @@ StSimpleFileUtils class >> openLinuxTerminalOn: aPath [
  
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 StSimpleFileUtils class >> openMacTerminalOn: aPath [
 
 	| escaped |
@@ -42,7 +43,7 @@ StSimpleFileUtils class >> openMacTerminalOn: aPath [
 	LibC system: 'open -a Terminal ', escaped
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StSimpleFileUtils class >> openTerminalOn: aPath [
 
 	self isWindows 
@@ -56,13 +57,13 @@ StSimpleFileUtils class >> openTerminalOn: aPath [
 
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 StSimpleFileUtils class >> openWindowsTerminalOn: aPath [
 
 	^LibC system: 'start cmd.exe /K "cd /d ', aPath, '"'
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSimpleFileUtils class >> representsShortWindowsDrive: aString [
 	"Solve later with a regexp
 	

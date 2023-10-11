@@ -3,8 +3,8 @@ Defines the context execution of a `StSpotterQuery`.
 It has the `StSpotterContext>>#text` that is being searched and the `StSpotterContext>>#stream` for it. 
 "
 Class {
-	#name : #StSpotterContext,
-	#superclass : #Object,
+	#name : 'StSpotterContext',
+	#superclass : 'Object',
 	#instVars : [
 		'step',
 		'stream',
@@ -18,10 +18,12 @@ Class {
 		'cache',
 		'continuing'
 	],
-	#category : #'NewTools-Spotter-Model'
+	#category : 'NewTools-Spotter-Model',
+	#package : 'NewTools-Spotter',
+	#tag : 'Model'
 }
 
-{ #category : #public }
+{ #category : 'public' }
 StSpotterContext >> addItem: anObject [
 
 	self stream 
@@ -29,7 +31,7 @@ StSpotterContext >> addItem: anObject [
 		inProcessor: self processor
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 StSpotterContext >> addItems: aCollection [
 
 	self stream 
@@ -37,37 +39,37 @@ StSpotterContext >> addItems: aCollection [
 		inProcessor: self processor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterContext >> cache [
 	^ cache
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterContext >> cache: anObject [
 	cache := anObject
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 StSpotterContext >> cacheAt: aSymbol [
 	^ self cacheAt: aSymbol ifAbsent: [ nil ]
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 StSpotterContext >> cacheAt: aSymbol ifAbsent: aBlock [
 	^ self cache at: aSymbol ifAbsent: aBlock
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 StSpotterContext >> cacheAt: aSymbol ifAbsentPut: aBlock [
 	^ self cache at: aSymbol ifAbsentPut: aBlock
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 StSpotterContext >> cacheAt: aSymbol put: anObject [
 	^ self cache at: aSymbol put: anObject
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterContext >> canContinue [
 	 " divein / really ugly, spotter-step does not really know why it was created or where it comes from :( "
 	" another hack: diveIncategory must never continue because it just streams all items from the previous step. continuing in diveInCategory would duplicate all items! " 
@@ -75,7 +77,7 @@ StSpotterContext >> canContinue [
 		or: [ self step event isNil ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterContext >> continueFilter [
 	| processors nonEmptyProcessors |
 	processors := self cache at: #processorsAndFilters ifAbsent: [ ^ self ].
@@ -88,17 +90,17 @@ StSpotterContext >> continueFilter [
 			assoc key continueFilterInContext: self ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterContext >> continuing [
 	^ continuing
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterContext >> continuing: anObject [
 	continuing := anObject
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 StSpotterContext >> defaultCache [
 	^ IdentityDictionary new 
 		at: #processorsAndFilters put: (IdentityDictionary new: 100); " not a limitation, just a reasonable start size "
@@ -106,27 +108,27 @@ StSpotterContext >> defaultCache [
 		yourself
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 StSpotterContext >> defaultContinuing [
 	^ false
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 StSpotterContext >> defaultText [
 	^ ''
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 StSpotterContext >> defaultTextLowercase [
 	^ self textTrimmed asLowercase
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 StSpotterContext >> defaultTextTrimmed [
 	^ self text trimBoth
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterContext >> doContinueFilterForProcessor: aGTProcessor [
 	self processor: aGTProcessor.
 	self filter: ((self cache at: #processorsAndFilters) at: aGTProcessor).
@@ -135,7 +137,7 @@ StSpotterContext >> doContinueFilterForProcessor: aGTProcessor [
 	^ aGTProcessor withItemsLimit: aGTProcessor continueItemsLimit do: [ filter value: self ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterContext >> doFilter: aFilter forProcessor: aProcessor [
 
 	self processor: aProcessor.
@@ -147,23 +149,23 @@ StSpotterContext >> doFilter: aFilter forProcessor: aProcessor [
 	^ aFilter value: self
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StSpotterContext >> equals: aContext [
 	aContext ifNil: [ ^ false ].
    ^ self matches: aContext search
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterContext >> filter [
 	^ filter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterContext >> filter: anObject [
 	filter := anObject
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSpotterContext >> initialize [
 	super initialize.
 	
@@ -172,117 +174,117 @@ StSpotterContext >> initialize [
 	continuing := self defaultContinuing.
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterContext >> isContinuing [
 	^ self continuing 
 		and: [ self streamed isEmptyOrNil not 
 			and: [ self canContinue ] ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterContext >> isEmpty [
 	^ self text isNil
 		or: [ self textTrimmed isEmpty ]
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 StSpotterContext >> itemsLimit [
 	^ self processor itemsLimit
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterContext >> matches: aString [
 	^ self isEmpty not
 		and: [ self search = aString ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterContext >> notEmpty [
 	^ self isEmpty not
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterContext >> processor [
 	^ processor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterContext >> processor: anObject [
 	processor := anObject
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 StSpotterContext >> removeCacheAt: aSymbol [
 	^ self cache removeKey: aSymbol ifAbsent: [ nil ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterContext >> search [
 	^ search
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterContext >> search: anObject [
 	" search stores the fully entered text (including categories) "
 	search := anObject
 ]
 
-{ #category : #'accessing - dynamic' }
+{ #category : 'accessing - dynamic' }
 StSpotterContext >> spotter [
 	^ self step spotter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterContext >> step [
 	^ step
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterContext >> step: anObject [
 	step := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterContext >> stream [
 	^ stream
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterContext >> stream: anObject [
 	stream := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterContext >> streamed [
 	^ streamed
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterContext >> streamed: anObject [
 	streamed := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterContext >> text [
 	^ text
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterContext >> text: anObject [
 	text := anObject ifNil: [ self defaultText ]
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 StSpotterContext >> textLowercase [
 	^ textLowercase ifNil: [ textLowercase := self defaultTextLowercase ]
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 StSpotterContext >> textTrimmed [
 	^ textTrimmed ifNil: [ textTrimmed := self defaultTextTrimmed ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterContext >> withContinue: aBoolean do: aBlock [
 	| previousContinuing |
 	previousContinuing := continuing.

@@ -4,17 +4,19 @@ I'm use to give you the name of a fileReference.
 For example for the file 'my/path/something.exe' I'll display something.exe.
 "
 Class {
-	#name : #StFBNameColumn,
-	#superclass : #StFBAbstractColumn,
-	#category : #'NewTools-FileBrowser-Columns'
+	#name : 'StFBNameColumn',
+	#superclass : 'StFBAbstractColumn',
+	#category : 'NewTools-FileBrowser-Columns',
+	#package : 'NewTools-FileBrowser',
+	#tag : 'Columns'
 }
 
-{ #category : #adding }
+{ #category : 'adding' }
 StFBNameColumn class >> addContraintTo: aTableColumn [
 	"do nothing"
 ]
 
-{ #category : #templateMethod }
+{ #category : 'templateMethod' }
 StFBNameColumn class >> evaluateOn: aFileReference [
 
 	"I'm provide action for fileReference"
@@ -22,12 +24,12 @@ StFBNameColumn class >> evaluateOn: aFileReference [
 	^ aFileReference basename
 ]
 
-{ #category : #sorting }
+{ #category : 'sorting' }
 StFBNameColumn class >> priority [
 	^ 1
 ]
 
-{ #category : #templateMethod }
+{ #category : 'templateMethod' }
 StFBNameColumn class >> title [
 	^ 'Name'
 ]

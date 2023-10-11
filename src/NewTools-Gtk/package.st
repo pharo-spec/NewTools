@@ -1,1 +1,1 @@
-Package { #name : #'NewTools-Gtk' }
+Package { #name : 'NewTools-Gtk' }

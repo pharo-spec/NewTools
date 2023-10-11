@@ -4,30 +4,32 @@ I am a command that open the expression finder presenter from another presenter 
 I can be converted into a sepc button to be used in a presenter
 "
 Class {
-	#name : #StRewriterOpenExpressionFinderCommand,
-	#superclass : #StCommand,
-	#category : #'NewTools-RewriterTools-Commands'
+	#name : 'StRewriterOpenExpressionFinderCommand',
+	#superclass : 'StCommand',
+	#category : 'NewTools-RewriterTools-Commands',
+	#package : 'NewTools-RewriterTools',
+	#tag : 'Commands'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 StRewriterOpenExpressionFinderCommand class >> defaultDescription [
 
 	^ 'Find ocurrences of an expression in all Pharo''s code'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterOpenExpressionFinderCommand class >> defaultIconName [
 
 	^ StRewriterExpressionFinderPresenter iconName
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 StRewriterOpenExpressionFinderCommand class >> defaultName [
 
 	^ 'Find occurrences'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 StRewriterOpenExpressionFinderCommand >> execute [
 
 	| window |

@@ -1,15 +1,16 @@
 Class {
-	#name : #HCCentralPlace,
-	#superclass : #ComposablePresenter,
+	#name : 'HCCentralPlace',
+	#superclass : 'ComposablePresenter',
 	#instVars : [
 		'menuComponent',
 		'hcbrowserComponent',
 		'hcPharoWebSiteComponent'
 	],
-	#category : #HelpCenter
+	#category : 'HelpCenter',
+	#package : 'HelpCenter'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 HCCentralPlace class >> defaultSpec [ 
 	"menuComponent hcbrowserComponent"
 	^SpecColumnLayout composed
@@ -21,7 +22,7 @@ HCCentralPlace class >> defaultSpec [
 	
 ]
 
-{ #category : #'world menu' }
+{ #category : 'world menu' }
 HCCentralPlace class >> menuCommandOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #'Help Center')
@@ -33,62 +34,62 @@ HCCentralPlace class >> menuCommandOn: aBuilder [
 		withSeparatorAfter 
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 HCCentralPlace class >> open [
 	<script>
 	
 	self new openWithSpec
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 HCCentralPlace >> hcPharoWebSiteComponent [
 	^ hcPharoWebSiteComponent
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 HCCentralPlace >> hcPharoWebSiteComponent: anObject [
 	hcPharoWebSiteComponent := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 HCCentralPlace >> hcbrowserComponent [
 	^ hcbrowserComponent
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 HCCentralPlace >> hcbrowserComponent: anObject [
 	hcbrowserComponent := anObject
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 HCCentralPlace >> initialExtent [
 	^ 800@600
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 HCCentralPlace >> initializePresenter [
 
 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 HCCentralPlace >> initializeWidgets [
 	menuComponent := self instantiate: HCMenu. 
 	hcbrowserComponent := self instantiate: HCBrowser.
 	hcPharoWebSiteComponent := self instantiate: HCPharoWebSite.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 HCCentralPlace >> menuComponent [
 	^ menuComponent
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 HCCentralPlace >> menuComponent: anObject [
 	menuComponent := anObject
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 HCCentralPlace >> title [ 
 	^'Help Center'
 ]

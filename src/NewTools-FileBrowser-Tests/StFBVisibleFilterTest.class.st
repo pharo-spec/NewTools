@@ -2,17 +2,19 @@
 A FDHidenFilterTest is a test class for testing the behavior of FDHidenFilter
 "
 Class {
-	#name : #StFBVisibleFilterTest,
-	#superclass : #StFBAbstractFilterTest,
-	#category : #'NewTools-FileBrowser-Tests-Filtering'
+	#name : 'StFBVisibleFilterTest',
+	#superclass : 'StFBAbstractFilterTest',
+	#category : 'NewTools-FileBrowser-Tests-Filtering',
+	#package : 'NewTools-FileBrowser-Tests',
+	#tag : 'Filtering'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBVisibleFilterTest >> actualClass [
 	^ StFBVisibleFilter
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBVisibleFilterTest >> testPredicate [
 
 	Smalltalk os isWindows ifTrue: [ 

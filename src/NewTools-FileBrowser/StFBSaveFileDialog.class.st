@@ -2,42 +2,44 @@
 My responsibility is to provide dialog for SAVING files.
 "
 Class {
-	#name : #StFBSaveFileDialog,
-	#superclass : #StFBFileDialogPresenter,
+	#name : 'StFBSaveFileDialog',
+	#superclass : 'StFBFileDialogPresenter',
 	#instVars : [
 		'confirmedOverwrite'
 	],
-	#category : #'NewTools-FileBrowser-UI'
+	#category : 'NewTools-FileBrowser-UI',
+	#package : 'NewTools-FileBrowser',
+	#tag : 'UI'
 }
 
-{ #category : #examples }
+{ #category : 'examples' }
 StFBSaveFileDialog class >> example [
 
 	<example>
 	^ self chooseThenInspect
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 StFBSaveFileDialog class >> exampleExtensions [
 
 	<example>
 	^ self extensions: #( 'image' )
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 StFBSaveFileDialog class >> exampleModal [
 
 	<example>
 	^ self chooseModalAndInspect
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 StFBSaveFileDialog >> confirmLabel [
 
 	^ 'Save'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFBSaveFileDialog >> connectPresenters [
 
 	| ec |
@@ -48,12 +50,12 @@ StFBSaveFileDialog >> connectPresenters [
 		filterBlock: [ :opt :text | opt beginsWith: text ]
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 StFBSaveFileDialog >> initialTitle [
 	^ 'Save As'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBSaveFileDialog >> selectedEntry [
 
 	| entry |

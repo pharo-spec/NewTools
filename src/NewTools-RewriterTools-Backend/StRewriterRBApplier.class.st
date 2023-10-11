@@ -2,12 +2,14 @@
 I use the RB rules to apply transformation rules to a set of methods
 "
 Class {
-	#name : #StRewriterRBApplier,
-	#superclass : #StRewriterAbstractApplier,
-	#category : #'NewTools-RewriterTools-Backend-Core'
+	#name : 'StRewriterRBApplier',
+	#superclass : 'StRewriterAbstractApplier',
+	#category : 'NewTools-RewriterTools-Backend-Core',
+	#package : 'NewTools-RewriterTools-Backend',
+	#tag : 'Core'
 }
 
-{ #category : #api }
+{ #category : 'api' }
 StRewriterRBApplier class >> calculateAllChangesForRules: ruleHolderCollection [
 
 	| env rewriter |
@@ -17,7 +19,7 @@ StRewriterRBApplier class >> calculateAllChangesForRules: ruleHolderCollection [
 	^ self obtainChanges: env rewriter: rewriter
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StRewriterRBApplier class >> calculateChangesForClasses: classes transformationRules: ruleHolderCollection [
 
 	| env rewriter |
@@ -27,7 +29,7 @@ StRewriterRBApplier class >> calculateChangesForClasses: classes transformationR
 	^ self obtainChanges: env rewriter: rewriter
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StRewriterRBApplier class >> obtainChanges: env rewriter: rewriter [
 
 	| checker transformationRule |
@@ -42,7 +44,7 @@ StRewriterRBApplier class >> obtainChanges: env rewriter: rewriter [
 	^ transformationRule changes
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StRewriterRBApplier class >> rewriter: ruleHolderCollection [
 
 	| rewriter |

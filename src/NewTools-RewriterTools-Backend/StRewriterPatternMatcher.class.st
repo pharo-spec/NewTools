@@ -2,12 +2,14 @@
 I am a class that is used to perform matches between pharo code and rewrite rules code.
 "
 Class {
-	#name : #StRewriterPatternMatcher,
-	#superclass : #Object,
-	#category : #'NewTools-RewriterTools-Backend-Core'
+	#name : 'StRewriterPatternMatcher',
+	#superclass : 'Object',
+	#category : 'NewTools-RewriterTools-Backend-Core',
+	#package : 'NewTools-RewriterTools-Backend',
+	#tag : 'Core'
 }
 
-{ #category : #parsing }
+{ #category : 'parsing' }
 StRewriterPatternMatcher class >> parseCodeAST: code isForMethod: isForMethod [
 
 	^ isForMethod
@@ -15,7 +17,7 @@ StRewriterPatternMatcher class >> parseCodeAST: code isForMethod: isForMethod [
 		ifFalse: [ RBParser parseExpression: code ]
 ]
 
-{ #category : #parsing }
+{ #category : 'parsing' }
 StRewriterPatternMatcher class >> parsePatternAST: lhs isForMethod: isForMethod [
 
 	^ isForMethod
@@ -23,7 +25,7 @@ StRewriterPatternMatcher class >> parsePatternAST: lhs isForMethod: isForMethod 
 		ifFalse: [ RBPatternParser parseExpression: lhs ]
 ]
 
-{ #category : #parsing }
+{ #category : 'parsing' }
 StRewriterPatternMatcher class >> performMatching: pharoCode pattern: lhs isForMethod: isForMethod [
 
 	| matches astCode astPattern |

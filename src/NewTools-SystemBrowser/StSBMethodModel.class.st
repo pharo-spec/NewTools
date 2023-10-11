@@ -1,13 +1,15 @@
 Class {
-	#name : #StSBMethodModel,
-	#superclass : #StSBModel,
+	#name : 'StSBMethodModel',
+	#superclass : 'StSBModel',
 	#instVars : [
 		'method'
 	],
-	#category : #'NewTools-SystemBrowser-Model'
+	#category : 'NewTools-SystemBrowser-Model',
+	#package : 'NewTools-SystemBrowser',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StSBMethodModel class >> newEnvironment: anEnvironment method: aMethod [
 
 	^ self new 
@@ -16,41 +18,41 @@ StSBMethodModel class >> newEnvironment: anEnvironment method: aMethod [
 		yourself
 ]
 
-{ #category : #'api-shout' }
+{ #category : 'api-shout' }
 StSBMethodModel >> behavior [
 
 	^ self method methodClass
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBMethodModel >> definition [
 	
 	^ self method sourceCode
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBMethodModel >> installInteractionModelTo: aCodePresenter [
 
 	aCodePresenter beForMethod: self method
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBMethodModel >> method [
 	^ method
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBMethodModel >> method: anObject [
 	method := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBMethodModel >> name [
 
 	^ self method selector
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBMethodModel >> windowTitle [
 
 	^ self method printString

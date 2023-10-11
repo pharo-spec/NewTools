@@ -1,14 +1,15 @@
 Class {
-	#name : #DebugSessionDecoratorForTest,
-	#superclass : #Object,
+	#name : 'DebugSessionDecoratorForTest',
+	#superclass : 'Object',
 	#instVars : [
 		'nbOfTimesTerminateWasCalled',
 		'decoratedDebugSession'
 	],
-	#category : #'NewTools-DebuggerSelector-Tests'
+	#category : 'NewTools-DebuggerSelector-Tests',
+	#package : 'NewTools-DebuggerSelector-Tests'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 DebugSessionDecoratorForTest class >> newOn: aDebugSession [
 	| newInstance |
 	newInstance := self new.
@@ -16,29 +17,29 @@ DebugSessionDecoratorForTest class >> newOn: aDebugSession [
 	^ newInstance
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebugSessionDecoratorForTest >> decoratedDebugSession: aDebugSession [
 	decoratedDebugSession := aDebugSession
 ]
 
-{ #category : #decorator }
+{ #category : 'decorator' }
 DebugSessionDecoratorForTest >> doesNotUnderstand: aMessage [
 	aMessage lookupClass: decoratedDebugSession class.
 	^ aMessage sentTo: decoratedDebugSession
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 DebugSessionDecoratorForTest >> initialize [
 	super initialize.
 	nbOfTimesTerminateWasCalled := 0
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebugSessionDecoratorForTest >> nbOfTimesTerminateWasCalled [
 	^ nbOfTimesTerminateWasCalled
 ]
 
-{ #category : #decorator }
+{ #category : 'decorator' }
 DebugSessionDecoratorForTest >> terminate [
 	nbOfTimesTerminateWasCalled := nbOfTimesTerminateWasCalled + 1.
 	^ decoratedDebugSession terminate

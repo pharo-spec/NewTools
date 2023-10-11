@@ -4,19 +4,21 @@ I'm a command use to remove bookmark
 
 "
 Class {
-	#name : #StFBRemoveBookmarkCommand,
-	#superclass : #CmCommand,
-	#category : #'NewTools-FileBrowser-Commands'
+	#name : 'StFBRemoveBookmarkCommand',
+	#superclass : 'CmCommand',
+	#category : 'NewTools-FileBrowser-Commands',
+	#package : 'NewTools-FileBrowser',
+	#tag : 'Commands'
 }
 
-{ #category : #converting }
+{ #category : 'converting' }
 StFBRemoveBookmarkCommand >> asSpecCommand [
 	^ super asSpecCommand
 		iconName: #remotesManagerRemoveRemote;
 		yourself
 ]
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 StFBRemoveBookmarkCommand >> execute [
 	| collection tmpBookmark collectionSize |
 	collection := self context bookmarksTreeTable selection selectedPath.
@@ -27,7 +29,7 @@ StFBRemoveBookmarkCommand >> execute [
 	self context bookmarksTreeTable roots: self context bookmarks 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFBRemoveBookmarkCommand >> initialize [
 	super initialize.
 	self

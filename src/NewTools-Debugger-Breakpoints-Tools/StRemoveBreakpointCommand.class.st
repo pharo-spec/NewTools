@@ -2,17 +2,19 @@
 Removes a breakpoint from a selected breakpoint item in a StObjectBreakpointInspection. 
 "
 Class {
-	#name : #StRemoveBreakpointCommand,
-	#superclass : #SpToolCommand,
-	#category : #'NewTools-Debugger-Breakpoints-Tools-Model'
+	#name : 'StRemoveBreakpointCommand',
+	#superclass : 'SpToolCommand',
+	#category : 'NewTools-Debugger-Breakpoints-Tools-Model',
+	#package : 'NewTools-Debugger-Breakpoints-Tools',
+	#tag : 'Model'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 StRemoveBreakpointCommand class >> defaultName [
 	^'Remove'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 StRemoveBreakpointCommand >> execute [
 
 	(self transform value: self context) removeInPresenterContext:

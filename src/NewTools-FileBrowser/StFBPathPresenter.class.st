@@ -18,21 +18,23 @@ Internal Representation and Key Implementation Points.
 
 "
 Class {
-	#name : #StFBPathPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StFBPathPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'action',
 		'count'
 	],
-	#category : #'NewTools-FileBrowser-UI'
+	#category : 'NewTools-FileBrowser-UI',
+	#package : 'NewTools-FileBrowser',
+	#tag : 'UI'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBPathPresenter >> action: aValuable [
 	action := aValuable
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBPathPresenter >> addLinkTo: aPath [
 
 	^ self addPresenter: (self newLink
@@ -41,7 +43,7 @@ StFBPathPresenter >> addLinkTo: aPath [
 			   yourself)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBPathPresenter >> addPresenter: aPresenter [
 
 	self layout
@@ -51,7 +53,7 @@ StFBPathPresenter >> addPresenter: aPresenter [
 		padding: 0
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBPathPresenter >> addSeparator [
 
 	^ self addPresenter: (self newLabel
@@ -59,7 +61,7 @@ StFBPathPresenter >> addSeparator [
 			   yourself)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBPathPresenter >> file: aFile [
 
 	self initializeLayout.
@@ -68,13 +70,13 @@ StFBPathPresenter >> file: aFile [
 		separatedBy: [ self addSeparator ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFBPathPresenter >> initializeLayout [
 
 	^ layout := SpBoxLayout newLeftToRight
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBPathPresenter >> layout [
 
 	^ super layout ifNil: [ self initializeLayout ]

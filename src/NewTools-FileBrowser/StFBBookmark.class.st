@@ -2,15 +2,17 @@
 I represent a bookmark having location, icon, and a name.
 "
 Class {
-	#name : #StFBBookmark,
-	#superclass : #StFBAbstractBookMark,
+	#name : 'StFBBookmark',
+	#superclass : 'StFBAbstractBookMark',
 	#instVars : [
 		'location'
 	],
-	#category : #'NewTools-FileBrowser-Bookmark'
+	#category : 'NewTools-FileBrowser-Bookmark',
+	#package : 'NewTools-FileBrowser',
+	#tag : 'Bookmark'
 }
 
-{ #category : #defaultClassVariable }
+{ #category : 'defaultClassVariable' }
 StFBBookmark class >> defaultBookmarks [
 
 	| presets |
@@ -33,7 +35,7 @@ StFBBookmark class >> defaultBookmarks [
 			   iconName: '')
 ]
 
-{ #category : #'default bookmarks' }
+{ #category : 'default bookmarks' }
 StFBBookmark class >> desktop [
 	^ self
 		name: 'Desktop'
@@ -41,7 +43,7 @@ StFBBookmark class >> desktop [
 		icon: (self iconNamed: #morph)
 ]
 
-{ #category : #'default bookmarks' }
+{ #category : 'default bookmarks' }
 StFBBookmark class >> documents [
 	^ self
 		name: 'Documents'
@@ -49,7 +51,7 @@ StFBBookmark class >> documents [
 		icon: (self iconNamed: #book)
 ]
 
-{ #category : #'default bookmarks' }
+{ #category : 'default bookmarks' }
 StFBBookmark class >> downloads [
 	^ self
 		name: 'Downloads'
@@ -57,7 +59,7 @@ StFBBookmark class >> downloads [
 		icon: (self iconNamed: #down)
 ]
 
-{ #category : #'default bookmarks' }
+{ #category : 'default bookmarks' }
 StFBBookmark class >> home [
 	^ self
 		name: 'Home'
@@ -65,7 +67,7 @@ StFBBookmark class >> home [
 		icon: (self iconNamed: #home)
 ]
 
-{ #category : #'default bookmarks' }
+{ #category : 'default bookmarks' }
 StFBBookmark class >> image [
 	^ self
 		name: 'Image directory'
@@ -73,7 +75,7 @@ StFBBookmark class >> image [
 		icon: (self iconNamed: #komitterNewSlice)
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StFBBookmark class >> name: aName location: aLocation icon: anIcon [
 	^ self new
 		name: aName;
@@ -82,7 +84,7 @@ StFBBookmark class >> name: aName location: aLocation icon: anIcon [
 		yourself
 ]
 
-{ #category : #'default bookmarks' }
+{ #category : 'default bookmarks' }
 StFBBookmark class >> root [
 
 	^ self
@@ -91,7 +93,7 @@ StFBBookmark class >> root [
 		  icon: (self iconNamed: #smallWindow)
 ]
 
-{ #category : #'default bookmarks' }
+{ #category : 'default bookmarks' }
 StFBBookmark class >> tmp [
 	^ StFBBookmark
 		name: 'tmp'
@@ -99,7 +101,7 @@ StFBBookmark class >> tmp [
 		icon: Smalltalk ui icons open
 ]
 
-{ #category : #'default bookmarks' }
+{ #category : 'default bookmarks' }
 StFBBookmark class >> windowsDrives [
 
 	^ FileLocator root asFileReference directories collect: [ :each | 
@@ -109,7 +111,7 @@ StFBBookmark class >> windowsDrives [
 			  icon: Smalltalk ui icons smallWindow ]
 ]
 
-{ #category : #'default bookmarks' }
+{ #category : 'default bookmarks' }
 StFBBookmark class >> workingDirectory [
 	^ self
 		name: 'Working directory'
@@ -117,7 +119,7 @@ StFBBookmark class >> workingDirectory [
 		icon: (self iconNamed: #komitterNewSlice) 
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StFBBookmark >> = aBookmark [
 	self species = aBookmark species
 		ifFalse: [ ^ false ].
@@ -125,52 +127,52 @@ StFBBookmark >> = aBookmark [
 		& (self name = aBookmark name)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBBookmark >> children [ 
 	^ {  }
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StFBBookmark >> hash [
 	^ (self icon hash bitXor: self location hash) bitXor: self name hash
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBBookmark >> icon [
 	^ icon
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBBookmark >> icon: anIcon [
 	icon := anIcon
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StFBBookmark >> isComposite [
 	^ false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBBookmark >> location [
 	^ location
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBBookmark >> location: aFileReference [
 	location := aFileReference
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBBookmark >> name [
 	^ name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBBookmark >> name: aString [
 	name := aString
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 StFBBookmark >> printOn: aStream [
 	super printOn: aStream.
 	aStream

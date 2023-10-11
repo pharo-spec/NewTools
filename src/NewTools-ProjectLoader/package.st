@@ -1,1 +1,1 @@
-Package { #name : #'NewTools-ProjectLoader' }
+Package { #name : 'NewTools-ProjectLoader' }

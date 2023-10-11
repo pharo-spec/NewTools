@@ -1,6 +1,6 @@
-Extension { #name : #Dictionary }
+Extension { #name : 'Dictionary' }
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 Dictionary >> spotterForKeysFor: aStep [
 	<stSpotterOrder: 15>
 	aStep listProcessor

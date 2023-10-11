@@ -1,6 +1,6 @@
-Extension { #name : #GTDebuggerSmokeTest }
+Extension { #name : 'GTDebuggerSmokeTest' }
 
-{ #category : #'*NewTools-DebuggerSelector' }
+{ #category : '*NewTools-DebuggerSelector' }
 GTDebuggerSmokeTest >> assertDebuggerClosing [
 	
  	debugger close.

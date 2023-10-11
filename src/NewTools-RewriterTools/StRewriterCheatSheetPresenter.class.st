@@ -2,16 +2,18 @@
 I am a cheat sheet for showing help for the rewriting rules
 "
 Class {
-	#name : #StRewriterCheatSheetPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StRewriterCheatSheetPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'textPresenter',
 		'helpButton'
 	],
-	#category : #'NewTools-RewriterTools-Help'
+	#category : 'NewTools-RewriterTools-Help',
+	#package : 'NewTools-RewriterTools',
+	#tag : 'Help'
 }
 
-{ #category : #layout }
+{ #category : 'layout' }
 StRewriterCheatSheetPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -20,7 +22,7 @@ StRewriterCheatSheetPresenter >> defaultLayout [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterCheatSheetPresenter >> helpText [
 
 	^ '` = meta var
@@ -34,7 +36,7 @@ StRewriterCheatSheetPresenter >> helpText [
 # = literal'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterCheatSheetPresenter >> initializePresenters [
 
 	textPresenter := self newText.
@@ -47,7 +49,7 @@ StRewriterCheatSheetPresenter >> initializePresenters [
 	self initializeStyles
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterCheatSheetPresenter >> initializeStyles [
 
 	textPresenter addStyle: 'bgOpaque'

@@ -12,15 +12,17 @@ Internal Representation and Key Implementation Points.
 
 "
 Class {
-	#name : #FBByScopePagePresenter,
-	#superclass : #FBFlagPresentationPresenter,
+	#name : 'FBByScopePagePresenter',
+	#superclass : 'FBFlagPresentationPresenter',
 	#instVars : [
 		'scopesList'
 	],
-	#category : #'NewTools-FlagBrowser-Presenters'
+	#category : 'NewTools-FlagBrowser-Presenters',
+	#package : 'NewTools-FlagBrowser',
+	#tag : 'Presenters'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 FBByScopePagePresenter class >> defaultSpec [
 	^ SpPanedLayout newHorizontal
 		position: 250;
@@ -33,12 +35,12 @@ FBByScopePagePresenter class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 FBByScopePagePresenter class >> isAbstract [
 	^ self = FBByScopePagePresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 FBByScopePagePresenter >> initializePresenter [
 	| locationsByScope |
 	super initializePresenter.
@@ -51,7 +53,7 @@ FBByScopePagePresenter >> initializePresenter [
 		selectIndex: 1
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 FBByScopePagePresenter >> initializeWidgets [
 	super initializeWidgets.
 	scopesList := self newList.
@@ -60,12 +62,12 @@ FBByScopePagePresenter >> initializeWidgets [
 		sortingBlock: #name ascending
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 FBByScopePagePresenter >> scopeSelector [
 	^ self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBByScopePagePresenter >> scopesList [
 	^ scopesList
 ]

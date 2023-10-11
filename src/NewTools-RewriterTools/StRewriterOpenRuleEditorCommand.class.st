@@ -4,30 +4,32 @@ I am a command that opens the rt basic editor presenter from another presenter k
 I can be converted into a sepc button to be used in a presenter
 "
 Class {
-	#name : #StRewriterOpenRuleEditorCommand,
-	#superclass : #StCommand,
-	#category : #'NewTools-RewriterTools-Commands'
+	#name : 'StRewriterOpenRuleEditorCommand',
+	#superclass : 'StCommand',
+	#category : 'NewTools-RewriterTools-Commands',
+	#package : 'NewTools-RewriterTools',
+	#tag : 'Commands'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 StRewriterOpenRuleEditorCommand class >> defaultDescription [
 
 	^ 'Open Rewrite Rule Editor'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterOpenRuleEditorCommand class >> defaultIconName [
 
 	^StRewriterRuleEditorPresenter iconName
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 StRewriterOpenRuleEditorCommand class >> defaultName [
 
 	^ 'Open Rule Editor'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 StRewriterOpenRuleEditorCommand >> execute [
 
 	| window |

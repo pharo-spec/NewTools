@@ -2,21 +2,23 @@
 I implement a simple block decorator, I am a abstract class that have a block.
 "
 Class {
-	#name : #StIteratorBlockDecorator,
-	#superclass : #StIteratorDecorator,
+	#name : 'StIteratorBlockDecorator',
+	#superclass : 'StIteratorDecorator',
 	#instVars : [
 		'aBlock'
 	],
-	#category : #'NewTools-Spotter-Processors-Iterators'
+	#category : 'NewTools-Spotter-Processors-Iterators',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Iterators'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StIteratorBlockDecorator class >> isAbstract [
 
 	^ self == StIteratorBlockDecorator
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StIteratorBlockDecorator class >> on: aStGeneratorIterator with: aBlockClosure [ 
 	
 	^ self new
@@ -25,7 +27,7 @@ StIteratorBlockDecorator class >> on: aStGeneratorIterator with: aBlockClosure [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StIteratorBlockDecorator >> block: aBlockClosure [
 
 	aBlock := aBlockClosure

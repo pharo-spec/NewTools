@@ -1,6 +1,6 @@
-Extension { #name : #StringMorph }
+Extension { #name : 'StringMorph' }
 
-{ #category : #'*NewTools-FontChooser' }
+{ #category : '*NewTools-FontChooser' }
 StringMorph >> changeFont [
 
 	FontChooser 

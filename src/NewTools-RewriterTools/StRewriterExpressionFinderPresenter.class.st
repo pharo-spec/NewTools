@@ -2,8 +2,8 @@
 I am a presenter that finds all the ocurrenses of a pattern code in all the methods that are in the Pharo image.
 "
 Class {
-	#name : #StRewriterExpressionFinderPresenter,
-	#superclass : #StPresenter,
+	#name : 'StRewriterExpressionFinderPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'patternCodePresenter',
 		'searchButton',
@@ -11,28 +11,30 @@ Class {
 		'searchOnAllClassesButton',
 		'scopeSelectorPresenter'
 	],
-	#category : #'NewTools-RewriterTools-ExpressionFinder'
+	#category : 'NewTools-RewriterTools-ExpressionFinder',
+	#package : 'NewTools-RewriterTools',
+	#tag : 'ExpressionFinder'
 }
 
-{ #category : #'world menu' }
+{ #category : 'world menu' }
 StRewriterExpressionFinderPresenter class >> descriptionText [
 
 	^ 'A tool to search the ocurrences of a rewrite rule within the Pharo image'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterExpressionFinderPresenter class >> icon [
 
 	^ self iconNamed: self iconName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterExpressionFinderPresenter class >> iconName [
 
 	^ #smallFind
 ]
 
-{ #category : #'world menu' }
+{ #category : 'world menu' }
 StRewriterExpressionFinderPresenter class >> menuCommandOn: aBuilder [
 
 	<worldMenu>
@@ -44,20 +46,20 @@ StRewriterExpressionFinderPresenter class >> menuCommandOn: aBuilder [
 		help: self descriptionText
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StRewriterExpressionFinderPresenter class >> title [
 
 	^ 'Expression Finder'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterExpressionFinderPresenter >> connectPresenters [
 
 	searchButton action: [ self searchExpression ].
 	searchOnAllClassesButton action: [ self searchExpressionOnAllClasses ]
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StRewriterExpressionFinderPresenter >> defaultLayout [
 
 	^ SpPanedLayout newLeftToRight
@@ -71,7 +73,7 @@ StRewriterExpressionFinderPresenter >> defaultLayout [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterExpressionFinderPresenter >> initializePresenters [
 
 	patternCodePresenter := self instantiate: StRewriterSearchForPanelPresenter.
@@ -87,7 +89,7 @@ StRewriterExpressionFinderPresenter >> initializePresenters [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterExpressionFinderPresenter >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
@@ -97,18 +99,18 @@ StRewriterExpressionFinderPresenter >> initializeWindow: aWindowPresenter [
 		askOkToClose: false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterExpressionFinderPresenter >> patternCode [
 	^ patternCodePresenter lhs
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterExpressionFinderPresenter >> patternCode: aString [
 
 	patternCodePresenter lhs: aString
 ]
 
-{ #category : #action }
+{ #category : 'action' }
 StRewriterExpressionFinderPresenter >> searchExpression [
 
 	| ruleHolder critiques |
@@ -117,7 +119,7 @@ StRewriterExpressionFinderPresenter >> searchExpression [
 	^ (StRewriterOccurrencesBrowserPresenter critiques: critiques) open
 ]
 
-{ #category : #action }
+{ #category : 'action' }
 StRewriterExpressionFinderPresenter >> searchExpressionOnAllClasses [
 
 	| dialogWindow methods ruleHolder critiques |

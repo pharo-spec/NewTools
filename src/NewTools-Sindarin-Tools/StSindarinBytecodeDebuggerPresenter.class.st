@@ -1,6 +1,6 @@
 Class {
-	#name : #StSindarinBytecodeDebuggerPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StSindarinBytecodeDebuggerPresenter',
+	#superclass : 'SpPresenter',
 	#traits : 'TStDebuggerExtension',
 	#classTraits : 'TStDebuggerExtension classTrait',
 	#instVars : [
@@ -11,16 +11,17 @@ Class {
 		'bytecodeList',
 		'currentPC'
 	],
-	#category : #'NewTools-Sindarin-Tools'
+	#category : 'NewTools-Sindarin-Tools',
+	#package : 'NewTools-Sindarin-Tools'
 }
 
-{ #category : #'debugger extension' }
+{ #category : 'debugger extension' }
 StSindarinBytecodeDebuggerPresenter class >> defaultDisplayOrder [
 
 	^ 2
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StSindarinBytecodeDebuggerPresenter class >> defaultLayout [
 	^ SpBoxLayout newTopToBottom
 		add: #toolbar expand: false fill: false padding: 0;
@@ -29,18 +30,18 @@ StSindarinBytecodeDebuggerPresenter class >> defaultLayout [
 		yourself
 ]
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 StSindarinBytecodeDebuggerPresenter >> accept: aVisitor [
 
 	^ aVisitor visitBytecode: self
 ]
 
-{ #category : #'debugger extension' }
+{ #category : 'debugger extension' }
 StSindarinBytecodeDebuggerPresenter >> debuggerExtensionToolName [
 	^ 'Bytecode' 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSindarinBytecodeDebuggerPresenter >> initializePresenters [
 	bytecode := self newList.
 	bcContextInspection := nil inspectionRaw.
@@ -48,7 +49,7 @@ StSindarinBytecodeDebuggerPresenter >> initializePresenters [
 	self initializeToolbar
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSindarinBytecodeDebuggerPresenter >> initializeToolbar [
 	
 	toolbar := self newToolbar
@@ -57,25 +58,25 @@ StSindarinBytecodeDebuggerPresenter >> initializeToolbar [
 		fillWith: self toolbarActions
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSindarinBytecodeDebuggerPresenter >> setModelBeforeInitialization: aStDebugger [
 	"My original model is the debugger presenter that I extend"
 	debugger := aStDebugger.
 	sindarinDebugger := aStDebugger sindarinDebugger
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSindarinBytecodeDebuggerPresenter >> sindarin [
 	^sindarinDebugger 
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StSindarinBytecodeDebuggerPresenter >> stepBytecode [
 	self sindarin stepBytecode.
 	self debugger forceSessionUpdate 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSindarinBytecodeDebuggerPresenter >> toolbarActions [
 	| group |
 	group := (CmCommandGroup named: 'Bytecode Toolbar') asSpecGroup.
@@ -86,7 +87,7 @@ StSindarinBytecodeDebuggerPresenter >> toolbarActions [
 	^ group
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 StSindarinBytecodeDebuggerPresenter >> updateBytecode [
 
 	| selectionIndex |
@@ -105,7 +106,7 @@ StSindarinBytecodeDebuggerPresenter >> updateBytecode [
 		bytecode selectIndex: selectionIndex ]
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 StSindarinBytecodeDebuggerPresenter >> updatePresenter [
 	super updatePresenter.
 	self debugger interruptedContext isDead ifTrue:[ ^self ].

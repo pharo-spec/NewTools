@@ -1,21 +1,22 @@
 Class {
-	#name : #StPackageChooserPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StPackageChooserPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'packageList',
 		'selectedPackagesList',
 		'buttonBar'
 	],
-	#category : #'NewTools-CriticsBrowser'
+	#category : 'NewTools-CriticsBrowser',
+	#package : 'NewTools-CriticsBrowser'
 }
 
-{ #category : #example }
+{ #category : 'example' }
 StPackageChooserPresenter class >> example [
 
 	self new openWithSpec
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StPackageChooserPresenter >> addAll [
 
 	selectedPackagesList items: 
@@ -26,7 +27,7 @@ StPackageChooserPresenter >> addAll [
 	
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StPackageChooserPresenter >> addSelected [
 
 	selectedPackagesList items: 
@@ -36,13 +37,13 @@ StPackageChooserPresenter >> addSelected [
 	packageList selectItems: #()
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StPackageChooserPresenter >> doAccept [
 
 	self window close
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPackageChooserPresenter >> initalizeSelectedPackageList [
 	
 	selectedPackagesList 
@@ -50,7 +51,7 @@ StPackageChooserPresenter >> initalizeSelectedPackageList [
 		display: [ :each | each packageName ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPackageChooserPresenter >> initializeButtonBar [
 			
 	buttonBar 
@@ -85,14 +86,14 @@ StPackageChooserPresenter >> initializeButtonBar [
 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPackageChooserPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
 	aDialogWindowPresenter
 		addButton: 'Accept' do: [ self doAccept ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPackageChooserPresenter >> initializeLayout [
 	
 	self layout: (SpBoxLayout newTopToBottom
@@ -108,7 +109,7 @@ StPackageChooserPresenter >> initializeLayout [
 		yourself)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPackageChooserPresenter >> initializePackageList [
 	
 	packageList 
@@ -116,7 +117,7 @@ StPackageChooserPresenter >> initializePackageList [
 		display: [ :each | each packageName ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPackageChooserPresenter >> initializePresenters [
 	<script: 'self new openWithSpec'>
 
@@ -126,7 +127,7 @@ StPackageChooserPresenter >> initializePresenters [
 	self initializeButtonBar
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPackageChooserPresenter >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter 
@@ -135,7 +136,7 @@ StPackageChooserPresenter >> initializeWindow: aWindowPresenter [
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPackageChooserPresenter >> packageListMenu [
 		
 	^ self newMenu
@@ -144,20 +145,20 @@ StPackageChooserPresenter >> packageListMenu [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPackageChooserPresenter >> packages [
 
 	^ RPackageOrganizer default packages sorted: #packageName ascending
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StPackageChooserPresenter >> removeAll [
 
 	selectedPackagesList items: #().
 	packageList items: self packages
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StPackageChooserPresenter >> removeSelected [
 
 	packageList items: ((packageList items, selectedPackagesList selectedItems) sorted: #packageName ascending).
@@ -165,7 +166,7 @@ StPackageChooserPresenter >> removeSelected [
 	selectedPackagesList selectItems: #()
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPackageChooserPresenter >> selectedPackageListMenu [
 		
 	^ self newMenu
@@ -174,7 +175,7 @@ StPackageChooserPresenter >> selectedPackageListMenu [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPackageChooserPresenter >> updatePresenter [
 
 	packageList items: self packages

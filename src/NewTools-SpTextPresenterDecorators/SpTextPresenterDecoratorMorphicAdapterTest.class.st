@@ -1,15 +1,16 @@
 Class {
-	#name : #SpTextPresenterDecoratorMorphicAdapterTest,
-	#superclass : #TestCase,
+	#name : 'SpTextPresenterDecoratorMorphicAdapterTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'decorator',
 		'adapter',
 		'widget'
 	],
-	#category : #'NewTools-SpTextPresenterDecorators'
+	#category : 'NewTools-SpTextPresenterDecorators',
+	#package : 'NewTools-SpTextPresenterDecorators'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 SpTextPresenterDecoratorMorphicAdapterTest >> setUp [
 	super setUp.
 	decorator := SpTextPresenterDecorator new.
@@ -23,7 +24,7 @@ SpTextPresenterDecoratorMorphicAdapterTest >> setUp [
 	widget := adapter widget
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SpTextPresenterDecoratorMorphicAdapterTest >> testAddTextPresenterDecorator [
 	self assertEmpty: widget segments.
 	adapter addTextSegmentDecoration: decorator.
@@ -31,7 +32,7 @@ SpTextPresenterDecoratorMorphicAdapterTest >> testAddTextPresenterDecorator [
 	self assert: widget segments first class identicalTo: RubUnderlinedSegmentMorph 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SpTextPresenterDecoratorMorphicAdapterTest >> testRemoveAllTextPresenterDecorators [
 	self assertEmpty: widget segments.
 	adapter addTextSegmentDecoration: decorator.
@@ -39,6 +40,6 @@ SpTextPresenterDecoratorMorphicAdapterTest >> testRemoveAllTextPresenterDecorato
 	self assertEmpty: widget segments
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SpTextPresenterDecoratorMorphicAdapterTest >> testTransformTextPresenterDecoratorToSegment [
 ]

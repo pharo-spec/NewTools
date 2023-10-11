@@ -1,6 +1,6 @@
-Extension { #name : #DoubleLinkedList }
+Extension { #name : 'DoubleLinkedList' }
 
-{ #category : #'*NewTools-Spotter' }
+{ #category : '*NewTools-Spotter' }
 DoubleLinkedList >> stNoneSatisfy: aBlock [
 	"Evaluate aBlock with the elements of the receiver. If aBlock returns false for all elements return true. Otherwise return false"
 
@@ -8,7 +8,7 @@ DoubleLinkedList >> stNoneSatisfy: aBlock [
 	^ true
 ]
 
-{ #category : #'*NewTools-Spotter' }
+{ #category : '*NewTools-Spotter' }
 DoubleLinkedList >> stRemoveCycledLink: link [
 	| predecessor successor |
 	predecessor := link previousLink.
@@ -30,7 +30,7 @@ DoubleLinkedList >> stRemoveCycledLink: link [
 	^ link
 ]
 
-{ #category : #'*NewTools-Spotter' }
+{ #category : '*NewTools-Spotter' }
 DoubleLinkedList >> stTail [
 
 	^ tail

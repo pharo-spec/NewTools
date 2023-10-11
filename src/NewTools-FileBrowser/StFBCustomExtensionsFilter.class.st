@@ -1,20 +1,22 @@
 Class {
-	#name : #StFBCustomExtensionsFilter,
-	#superclass : #StFBExtensionsFilter,
+	#name : 'StFBCustomExtensionsFilter',
+	#superclass : 'StFBExtensionsFilter',
 	#instVars : [
 		'extensions',
 		'basename'
 	],
-	#category : #'NewTools-FileBrowser-Filtering'
+	#category : 'NewTools-FileBrowser-Filtering',
+	#package : 'NewTools-FileBrowser',
+	#tag : 'Filtering'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StFBCustomExtensionsFilter class >> canBeDefault [
 
 	^ false
 ]
 
-{ #category : #'accessing - Class' }
+{ #category : 'accessing - Class' }
 StFBCustomExtensionsFilter class >> extensions: aCollection [
 
 	^ self new
@@ -22,7 +24,7 @@ StFBCustomExtensionsFilter class >> extensions: aCollection [
 		  yourself
 ]
 
-{ #category : #'accessing - Class' }
+{ #category : 'accessing - Class' }
 StFBCustomExtensionsFilter class >> extensions: aCollection basename: aString [
 
 	^ self new
@@ -31,37 +33,37 @@ StFBCustomExtensionsFilter class >> extensions: aCollection basename: aString [
 		  yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBCustomExtensionsFilter class >> priority [
 	^ 20
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBCustomExtensionsFilter >> basename [
 
 	^ basename ifNil: [ '-' ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBCustomExtensionsFilter >> basename: aString [
 
 	basename := aString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBCustomExtensionsFilter >> extensions [
 
 	^ extensions
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBCustomExtensionsFilter >> extensions: aCollection [
 
 	extensions := aCollection.
 	basename ifNil: [ basename := extensions asCommaString ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFBCustomExtensionsFilter >> initialize [
 
 	super initialize.

@@ -3,49 +3,51 @@ I implement the lookup of #Senders and the Meta + n binding.
 
 "
 Class {
-	#name : #StSendersProcessor,
-	#superclass : #StSpotterProcessor,
-	#category : #'NewTools-Spotter-Processors-Processors'
+	#name : 'StSendersProcessor',
+	#superclass : 'StSpotterProcessor',
+	#category : 'NewTools-Spotter-Processors-Processors',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Processors'
 }
 
-{ #category : #'default-settings' }
+{ #category : 'default-settings' }
 StSendersProcessor class >> defaultEnabled [
 
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSendersProcessor class >> order [
 	
 	^ 150
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSendersProcessor class >> title [
 	
 	^ 'Senders'
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSendersProcessor >> askingForSenders [
 
 	^ query hasCategoryMatching: #s
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSendersProcessor >> categoriesIncludes: aCategory [
 
 	^ aCategory asLowercase beginsWith: #s
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StSendersProcessor >> executeQuery [
 
 	self askingForSenders ifFalse: [ ^ self ].
 	^ super executeQuery 
 ]
 
-{ #category : #'key-bindings' }
+{ #category : 'key-bindings' }
 StSendersProcessor >> installKeymappingsOn: aPresenter onExecution: aBlock [
 
 	aPresenter
@@ -55,25 +57,25 @@ StSendersProcessor >> installKeymappingsOn: aPresenter onExecution: aBlock [
 			aBlock cull: self ]
 ]
 
-{ #category : #'spotter-api' }
+{ #category : 'spotter-api' }
 StSendersProcessor >> isRelevantForQuery: aString [ 
 	
 	^ true
 ]
 
-{ #category : #'key-bindings' }
+{ #category : 'key-bindings' }
 StSendersProcessor >> keyBinding [
 
 	^ $n meta
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StSendersProcessor >> newTextFilteringSource [
 
 	^ StSendersIterator new 
 ]
 
-{ #category : #'key-bindings' }
+{ #category : 'key-bindings' }
 StSendersProcessor >> sendersTag [
 		
 	^ #Senders

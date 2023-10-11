@@ -7,30 +7,32 @@ Toggles the show line number state (to hide or show line numbers column).
 ]]]
 "
 Class {
-	#name : #StShowLineNumbersCommand,
-	#superclass : #StCommand,
-	#category : #'NewTools-Playground-Command'
+	#name : 'StShowLineNumbersCommand',
+	#superclass : 'StCommand',
+	#category : 'NewTools-Playground-Command',
+	#package : 'NewTools-Playground',
+	#tag : 'Command'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 StShowLineNumbersCommand class >> defaultDescription [
 
 	^ 'Show/hide line numbers'
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 StShowLineNumbersCommand class >> defaultName [
 
 	^ 'Show line numbers'
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StShowLineNumbersCommand class >> hideLineNumbersLabel [
 
 	^ 'Hide line numbers'
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 StShowLineNumbersCommand class >> iconLabelFor: aBoolean [
 	
 	^ aBoolean 
@@ -38,19 +40,19 @@ StShowLineNumbersCommand class >> iconLabelFor: aBoolean [
 		ifFalse: [ 'L' ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StShowLineNumbersCommand class >> showLineNumbersLabel [
 
 	^ 'Show line numbers'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 StShowLineNumbersCommand >> execute [
 
 	context toggleShowLineNumbers
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StShowLineNumbersCommand >> name [
 
 	^ context showLineNumbers

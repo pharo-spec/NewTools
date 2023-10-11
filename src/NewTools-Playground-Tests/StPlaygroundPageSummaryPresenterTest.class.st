@@ -1,22 +1,23 @@
 Class {
-	#name : #StPlaygroundPageSummaryPresenterTest,
-	#superclass : #StPlaygroundBaseTest,
-	#category : #'NewTools-Playground-Tests'
+	#name : 'StPlaygroundPageSummaryPresenterTest',
+	#superclass : 'StPlaygroundBaseTest',
+	#category : 'NewTools-Playground-Tests',
+	#package : 'NewTools-Playground-Tests'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPageSummaryPresenterTest >> classToTest [
 
 	^ StPlaygroundPageSummaryPresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPageSummaryPresenterTest >> initializeInstanceBeforeInitialization: aPresenter [
 
 	aPresenter setModelBeforeInitialization: memoryFileSystem / 'test1.ph'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPageSummaryPresenterTest >> initializeMemoryFileSystem: aFileSystem [
 
 	aFileSystem / 'test1.ph' writeStreamDo: [ :stream | stream << '' ].
@@ -25,7 +26,7 @@ StPlaygroundPageSummaryPresenterTest >> initializeMemoryFileSystem: aFileSystem 
 		stream << 'Test 2' ].
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundPageSummaryPresenterTest >> testContents [
 
 	self assert: presenter contents equals: ''.
@@ -34,7 +35,7 @@ StPlaygroundPageSummaryPresenterTest >> testContents [
 Test 2'	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundPageSummaryPresenterTest >> testPageFirstLine [
 	
 	self assert: presenter pageFirstLine equals: 'Empty'.	

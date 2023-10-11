@@ -2,16 +2,18 @@
 I am a presenter that provides a table for showing the rules that are stored in the file system. Also, I provide a text input field for filtering the rules according to their name
 "
 Class {
-	#name : #StRewriterRulesTableSelectorPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StRewriterRulesTableSelectorPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'rulesTable',
 		'filterTextInput'
 	],
-	#category : #'NewTools-RewriterTools-Widgets'
+	#category : 'NewTools-RewriterTools-Widgets',
+	#package : 'NewTools-RewriterTools',
+	#tag : 'Widgets'
 }
 
-{ #category : #layout }
+{ #category : 'layout' }
 StRewriterRulesTableSelectorPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -20,7 +22,7 @@ StRewriterRulesTableSelectorPresenter >> defaultLayout [
 		  yourself
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StRewriterRulesTableSelectorPresenter >> filterRules: aText [
 
 	| filteredRules |
@@ -34,13 +36,13 @@ StRewriterRulesTableSelectorPresenter >> filterRules: aText [
 	rulesTable items: filteredRules
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRulesTableSelectorPresenter >> getRules [
 
 	^ StRewriterDemoRules demoRules
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterRulesTableSelectorPresenter >> initializeFiltering [
 
 	filterTextInput := self newTextInput.
@@ -49,14 +51,14 @@ StRewriterRulesTableSelectorPresenter >> initializeFiltering [
 		whenTextChangedDo: [ :aText | self filterRules: aText ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterRulesTableSelectorPresenter >> initializePresenters [
 
 	self initializeTable.
 	self initializeFiltering
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterRulesTableSelectorPresenter >> initializeTable [
 
 	| lhsTableColumn ruleNameTableColumn hashtagTableColumn rhsTableColumn |
@@ -84,7 +86,7 @@ StRewriterRulesTableSelectorPresenter >> initializeTable [
 		beMultipleSelection
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StRewriterRulesTableSelectorPresenter >> lhs [
 
 	^ self selectedRules
@@ -92,7 +94,7 @@ StRewriterRulesTableSelectorPresenter >> lhs [
 		ifNotEmpty: [ :f |self selectedRules first lhs ]
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StRewriterRulesTableSelectorPresenter >> rhs [
 
 	^ self selectedRules
@@ -100,7 +102,7 @@ StRewriterRulesTableSelectorPresenter >> rhs [
 		ifNotEmpty: [ :f |self selectedRules first rhs ]
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StRewriterRulesTableSelectorPresenter >> selectedRules [
 
 	^ rulesTable selectedItems
