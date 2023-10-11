@@ -2,18 +2,20 @@
 Presenter for path name
 "
 Class {
-	#name : #StSimplePathNamePresenter,
-	#superclass : #SpPresenter,
+	#name : 'StSimplePathNamePresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'tree',
 		'text',
 		'label',
 		'button'
 	],
-	#category : #'NewTools-SimpleFileBrowser-UI-Components'
+	#category : 'NewTools-SimpleFileBrowser-UI-Components',
+	#package : 'NewTools-SimpleFileBrowser-UI',
+	#tag : 'Components'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 StSimplePathNamePresenter class >> defaultSpec [ 
 	^ SpBoxLayout newLeftToRight 	
 		add: #label expand: false;
@@ -21,14 +23,14 @@ StSimplePathNamePresenter class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSimplePathNamePresenter >> initializePresenters [
 
 	label := self newLabel label: 'Path:'.
 	text := self newTextInput 
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StSimplePathNamePresenter >> openNativeFileBrowser [
 	| path |
 	
@@ -39,13 +41,13 @@ StSimplePathNamePresenter >> openNativeFileBrowser [
 	path asFileReference openInOSFileBrowser
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSimplePathNamePresenter >> pathName [
 
 	^ text text
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSimplePathNamePresenter >> pathName: aString [
 
 	text text: aString

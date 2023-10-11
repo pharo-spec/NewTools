@@ -1,6 +1,6 @@
 Class {
-	#name : #DebugSessionStorageForTest,
-	#superclass : #TestCase,
+	#name : 'DebugSessionStorageForTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'debugSessionStorage',
 		'eventListener',
@@ -8,10 +8,11 @@ Class {
 		'debugSession2',
 		'debugSession3'
 	],
-	#category : #'NewTools-DebuggerSelector-Tests'
+	#category : 'NewTools-DebuggerSelector-Tests',
+	#package : 'NewTools-DebuggerSelector-Tests'
 }
 
-{ #category : #helper }
+{ #category : 'helper' }
 DebugSessionStorageForTest >> createDebugSessionForTesting [
 	| dbSession process |
 	process := [ 'hello' ] fork.
@@ -22,7 +23,7 @@ DebugSessionStorageForTest >> createDebugSessionForTesting [
 	^ dbSession
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 DebugSessionStorageForTest >> setUp [
 	"Hooks that subclasses may override to define the fixture of test."
 	super setUp.
@@ -35,7 +36,7 @@ DebugSessionStorageForTest >> setUp [
 	debugSessionStorage addSubscriberOnStorageUpdate: eventListener
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DebugSessionStorageForTest >> testEnforceStorageLimit [
 	"Setting the storage limit to 1, and adding 3 debug sessions: 1, 2 and 3. 2 is being kept alive to simulate a debugger being open on it."
 
@@ -54,7 +55,7 @@ DebugSessionStorageForTest >> testEnforceStorageLimit [
 	self assert: (debugSessionStorage storage includes: storageUnit3)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DebugSessionStorageForTest >> testStorageLimitForDebugSessionsNotKeptAlive [
 	"Check that the storage limit is enforced after being lowered, and that listeners do get the event that the storage limit was changed"
 
@@ -72,7 +73,7 @@ DebugSessionStorageForTest >> testStorageLimitForDebugSessionsNotKeptAlive [
 		equals: 2
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DebugSessionStorageForTest >> testStoreDebugSession [
 	| classSetDebugSessionStorageUnitAndSubclasses |
 	self assert: debugSessionStorage storage size equals: 0.
@@ -89,7 +90,7 @@ DebugSessionStorageForTest >> testStoreDebugSession [
 		eventListener nbOfDebugSessionStorageUpdateEventReceived >= 1 "Asserts that listeners of the storageUpdate event were notified by the debugSessionStorage when a debug session was added"
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DebugSessionStorageForTest >> testTerminate [
 	| storageUnit |
 	storageUnit := debugSessionStorage storeDebugSession: debugSession.

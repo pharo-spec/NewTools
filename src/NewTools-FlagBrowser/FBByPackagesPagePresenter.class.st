@@ -5,27 +5,29 @@ Description
 I am a presenter showing the flags in packages.
 "
 Class {
-	#name : #FBByPackagesPagePresenter,
-	#superclass : #FBByScopePagePresenter,
-	#category : #'NewTools-FlagBrowser-Presenters'
+	#name : 'FBByPackagesPagePresenter',
+	#superclass : 'FBByScopePagePresenter',
+	#category : 'NewTools-FlagBrowser-Presenters',
+	#package : 'NewTools-FlagBrowser',
+	#tag : 'Presenters'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 FBByPackagesPagePresenter class >> icon [
 	^ #package
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBByPackagesPagePresenter class >> priority [
 	^ 5
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 FBByPackagesPagePresenter class >> title [
 	^ 'By package'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 FBByPackagesPagePresenter >> initializeWidgets [
 	super initializeWidgets.
 
@@ -35,7 +37,7 @@ FBByPackagesPagePresenter >> initializeWidgets [
 		addColumn: (SpStringTableColumn title: 'Flag parameter' evaluated: [ :location | location owner parameter ])
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 FBByPackagesPagePresenter >> scopeSelector [
 	^ #package
 ]

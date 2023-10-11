@@ -1,1 +1,1 @@
-Package { #name : #'NewTools-FileBrowser-Tests' }
+Package { #name : 'NewTools-FileBrowser-Tests' }

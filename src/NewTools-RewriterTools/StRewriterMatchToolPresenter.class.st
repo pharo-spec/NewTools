@@ -7,8 +7,8 @@ Write the pattern's code and the Pharo's code in the code editors and then press
 - The right column shows all the bindings of the selected matched of the middle column.
 "
 Class {
-	#name : #StRewriterMatchToolPresenter,
-	#superclass : #StPresenter,
+	#name : 'StRewriterMatchToolPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'executeButton',
 		'ruleEditor',
@@ -20,21 +20,23 @@ Class {
 		'astPattern',
 		'astCode'
 	],
-	#category : #'NewTools-RewriterTools-MatchTool'
+	#category : 'NewTools-RewriterTools-MatchTool',
+	#package : 'NewTools-RewriterTools',
+	#tag : 'MatchTool'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterMatchToolPresenter class >> descriptionText [
 	^ 'MatchTool is a simple UI for experimenting with the matching functionality of a rewrite rule'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterMatchToolPresenter class >> icon [
 
 	^ self iconNamed: self iconName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterMatchToolPresenter class >> iconName [
 
 	| iconContent |
@@ -47,7 +49,7 @@ StRewriterMatchToolPresenter class >> iconName [
 	^ #jigsawIcon
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 StRewriterMatchToolPresenter class >> menuCommandOn: aBuilder [
 
 	<worldMenu>
@@ -59,13 +61,13 @@ StRewriterMatchToolPresenter class >> menuCommandOn: aBuilder [
 		icon: self icon
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StRewriterMatchToolPresenter class >> title [
 
 	^ 'Match Tool'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterMatchToolPresenter >> connectPresenters [
 
 	matchesList
@@ -75,7 +77,7 @@ StRewriterMatchToolPresenter >> connectPresenters [
 	executeButton action: [ self performMatching ]
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StRewriterMatchToolPresenter >> defaultLayout [
 
 	| rulePanel codePanel matchesWithLabelPanel |
@@ -108,14 +110,14 @@ StRewriterMatchToolPresenter >> defaultLayout [
 		yourself
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StRewriterMatchToolPresenter >> emptyLists [
 
 	bindingsTable items: #(  ).
 	matchesList items: #(  )
 ]
 
-{ #category : #defaults }
+{ #category : 'defaults' }
 StRewriterMatchToolPresenter >> getBindingsItemsForMatch: bindingsAssociation [
 
 	| newItems |
@@ -127,7 +129,7 @@ StRewriterMatchToolPresenter >> getBindingsItemsForMatch: bindingsAssociation [
 	^ newItems flattened
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterMatchToolPresenter >> initializeButtons [
 
 	executeButton := self newButton.
@@ -137,7 +139,7 @@ StRewriterMatchToolPresenter >> initializeButtons [
 		shortcut: Character cr meta
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterMatchToolPresenter >> initializeEditors [
 
 	methodCheckbox := self newCheckBox label: 'The rule is for a method?'.
@@ -153,7 +155,7 @@ StRewriterMatchToolPresenter >> initializeEditors [
 	ruleEditor := self instantiate: StRewriterSearchForPanelPresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterMatchToolPresenter >> initializeMatchesPresenters [
 
 	matchesList := self newList.
@@ -170,7 +172,7 @@ StRewriterMatchToolPresenter >> initializeMatchesPresenters [
 		beResizable
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterMatchToolPresenter >> initializePresenters [
 
 	self initializeEditors.
@@ -178,7 +180,7 @@ StRewriterMatchToolPresenter >> initializePresenters [
 	self initializeMatchesPresenters
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterMatchToolPresenter >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
@@ -189,26 +191,26 @@ StRewriterMatchToolPresenter >> initializeWindow: aWindowPresenter [
 		aboutText: self class descriptionText
 ]
 
-{ #category : #'event handling' }
+{ #category : 'event handling' }
 StRewriterMatchToolPresenter >> matchesChanged [
 
 	bindingsTable items: #(  ).
 	matchesList unselectAll
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterMatchToolPresenter >> patternCode [
 
 	^ ruleEditor lhs
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterMatchToolPresenter >> patternCode: aPatternCode [
 
 	ruleEditor lhs: aPatternCode
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StRewriterMatchToolPresenter >> performMatching [
 
 	| matches |
@@ -222,19 +224,19 @@ StRewriterMatchToolPresenter >> performMatching [
 	matchesList items: matches
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterMatchToolPresenter >> pharoCode [
 
 	^ codeEditor text
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterMatchToolPresenter >> pharoCode: aPharoCode [
 
 	codeEditor text: aPharoCode
 ]
 
-{ #category : #'event handling' }
+{ #category : 'event handling' }
 StRewriterMatchToolPresenter >> selectedMatchChanged: selection [
 
 	| selectedMatch |

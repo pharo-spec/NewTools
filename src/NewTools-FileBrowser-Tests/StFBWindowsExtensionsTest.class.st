@@ -2,12 +2,14 @@
 A test specific to extensions for Windows OS platform
 "
 Class {
-	#name : #StFBWindowsExtensionsTest,
-	#superclass : #TestCase,
-	#category : #'NewTools-FileBrowser-Tests-OS-Specific'
+	#name : 'StFBWindowsExtensionsTest',
+	#superclass : 'TestCase',
+	#category : 'NewTools-FileBrowser-Tests-OS-Specific',
+	#package : 'NewTools-FileBrowser-Tests',
+	#tag : 'OS-Specific'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBWindowsExtensionsTest >> testWindowsAttributes [
 	"Calling the native API should not give an error on windows"
 	
@@ -16,7 +18,7 @@ StFBWindowsExtensionsTest >> testWindowsAttributes [
 	self assert: FileSystem workingDirectory windowsAttributes ~= -1
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBWindowsExtensionsTest >> testWindowsAttributesForMemoryFileSystem [
 	"Calling the native API should not give an error on windows"
 	

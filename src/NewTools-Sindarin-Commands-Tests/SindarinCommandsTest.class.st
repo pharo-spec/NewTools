@@ -1,15 +1,16 @@
 Class {
-	#name : #SindarinCommandsTest,
-	#superclass : #TestCase,
+	#name : 'SindarinCommandsTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'visitor',
 		'object',
 		'debugger'
 	],
-	#category : #'NewTools-Sindarin-Commands-Tests'
+	#category : 'NewTools-Sindarin-Commands-Tests',
+	#package : 'NewTools-Sindarin-Commands-Tests'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 SindarinCommandsTest >> setUp [
 	super setUp.
 	
@@ -17,7 +18,7 @@ SindarinCommandsTest >> setUp [
 	object := SindarinTestObjectToVisit new
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 SindarinCommandsTest >> tearDown [
 
 	debugger ifNotNil: [ 
@@ -28,7 +29,7 @@ SindarinCommandsTest >> tearDown [
 	super tearDown
 ]
 
-{ #category : #'tests - step to instance creation' }
+{ #category : 'tests - step to instance creation' }
 SindarinCommandsTest >> testDebuggerOnNextInstanceCreation [
 
 	| command dummyActionModel |
@@ -46,7 +47,7 @@ SindarinCommandsTest >> testDebuggerOnNextInstanceCreation [
 	self assert: debugger session context receiver identicalTo: Object
 ]
 
-{ #category : #'tests - step to instance creation' }
+{ #category : 'tests - step to instance creation' }
 SindarinCommandsTest >> testNoNextInstanceCreationAfterMaxSearchDepth [
 
 	| command dummyActionModel |
@@ -67,7 +68,7 @@ SindarinCommandsTest >> testNoNextInstanceCreationAfterMaxSearchDepth [
 		equals: command notFoundInCurrentContextString
 ]
 
-{ #category : #'tests - step to instance creation' }
+{ #category : 'tests - step to instance creation' }
 SindarinCommandsTest >> testNoNextInstanceCreationBeforeContextReturn [
 
 	| command dummyActionModel |
@@ -84,7 +85,7 @@ SindarinCommandsTest >> testNoNextInstanceCreationBeforeContextReturn [
 	self assert: command errorString equals: command notFoundErrorString
 ]
 
-{ #category : #'tests - step to next call' }
+{ #category : 'tests - step to next call' }
 SindarinCommandsTest >> testStepToNextCallInClass [
 
 	| command dummyActionModel |
@@ -107,7 +108,7 @@ SindarinCommandsTest >> testStepToNextCallInClass [
 		identicalTo: visitor class >> #visitTestObject:
 ]
 
-{ #category : #'tests - step to next call' }
+{ #category : 'tests - step to next call' }
 SindarinCommandsTest >> testStepToNextCallInClassFailure [
 
 	| command dummyActionModel |
@@ -130,7 +131,7 @@ SindarinCommandsTest >> testStepToNextCallInClassFailure [
 		identicalTo: visitor class >> #doNotVisit:
 ]
 
-{ #category : #'tests - step to next call' }
+{ #category : 'tests - step to next call' }
 SindarinCommandsTest >> testStepToNextCallInClassNeverFinishes [
 
 	| command dummyActionModel |
@@ -155,7 +156,7 @@ SindarinCommandsTest >> testStepToNextCallInClassNeverFinishes [
 	self assert: debugger session context receiver equals: 10000
 ]
 
-{ #category : #'tests - step to next call' }
+{ #category : 'tests - step to next call' }
 SindarinCommandsTest >> testStepToNextCallInClassWithError [
 
 	| command dummyActionModel |
@@ -177,7 +178,7 @@ SindarinCommandsTest >> testStepToNextCallInClassWithError [
 		equals: #doesNotUnderstand:
 ]
 
-{ #category : #'tests - step to next call' }
+{ #category : 'tests - step to next call' }
 SindarinCommandsTest >> testStepToNextCallInObject [
 
 	| command originalReceiver dummyActionModel |
@@ -204,7 +205,7 @@ SindarinCommandsTest >> testStepToNextCallInObject [
 		identicalTo: originalReceiver
 ]
 
-{ #category : #'tests - step to instance creation' }
+{ #category : 'tests - step to instance creation' }
 SindarinCommandsTest >> testStepToNextInstanceCreation [
 
 	| command dummyActionModel |

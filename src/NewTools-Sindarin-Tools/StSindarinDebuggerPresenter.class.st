@@ -1,16 +1,17 @@
 Class {
-	#name : #StSindarinDebuggerPresenter,
-	#superclass : #StInspectionPresenter,
+	#name : 'StSindarinDebuggerPresenter',
+	#superclass : 'StInspectionPresenter',
 	#instVars : [
 		'currentNodeSource',
 		'stack',
 		'inspector',
 		'toolbar'
 	],
-	#category : #'NewTools-Sindarin-Tools'
+	#category : 'NewTools-Sindarin-Tools',
+	#package : 'NewTools-Sindarin-Tools'
 }
 
-{ #category : #layout }
+{ #category : 'layout' }
 StSindarinDebuggerPresenter class >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -27,12 +28,12 @@ StSindarinDebuggerPresenter class >> defaultLayout [
 		yourself
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StSindarinDebuggerPresenter class >> title [
 	^'Sindarin Debugger'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSindarinDebuggerPresenter >> buildToolbar [
 	| group |
 	group := CmCommandGroup forSpec.
@@ -44,7 +45,7 @@ StSindarinDebuggerPresenter >> buildToolbar [
 		fillWith: group
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSindarinDebuggerPresenter >> initializePresenters [
 	stack := self newList.
 	stack
@@ -75,19 +76,19 @@ StSindarinDebuggerPresenter >> initializePresenters [
 	toolbar := self buildToolbar
 ]
 
-{ #category : #stepping }
+{ #category : 'stepping' }
 StSindarinDebuggerPresenter >> refresh [ 
 	stack items: self model stack.
 	stack selectIndex: 1
 ]
 
-{ #category : #stepping }
+{ #category : 'stepping' }
 StSindarinDebuggerPresenter >> stepIn [ 
 	self model step.
 	self refresh
 ]
 
-{ #category : #stepping }
+{ #category : 'stepping' }
 StSindarinDebuggerPresenter >> stepOver [ 
 	self model stepOver.
 	self refresh

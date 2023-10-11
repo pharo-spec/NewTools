@@ -1,6 +1,6 @@
 Class {
-	#name : #StAbstractProcessorTest,
-	#superclass : #TestCase,
+	#name : 'StAbstractProcessorTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'text',
 		'candidates',
@@ -8,40 +8,41 @@ Class {
 		'processor',
 		'stream'
 	],
-	#category : #'NewTools-Spotter-Processors-Tests'
+	#category : 'NewTools-Spotter-Processors-Tests',
+	#package : 'NewTools-Spotter-Processors-Tests'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StAbstractProcessorTest class >> isAbstract [ 
 
 	^ self == StAbstractProcessorTest
 ]
 
-{ #category : #asserting }
+{ #category : 'asserting' }
 StAbstractProcessorTest >> assertQuantityOfResults: anInteger [ 
 	
 	self assert: candidates results size equals: anInteger
 ]
 
-{ #category : #asserting }
+{ #category : 'asserting' }
 StAbstractProcessorTest >> assertResultsIncludes: anElement [ 
 	
 	self assert: ((candidates results collect: [:each | each content]) includes: anElement)
 ]
 
-{ #category : #asserting }
+{ #category : 'asserting' }
 StAbstractProcessorTest >> denyResultsIncludes: anElement [ 
 
 	self deny: ((candidates results collect: [:each | each content]) includes: anElement )
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StAbstractProcessorTest >> processor [
 
 	^ self subclassResponsibility 
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StAbstractProcessorTest >> rerunWithText: aText [ 
 	
 	text := aText.
@@ -51,7 +52,7 @@ StAbstractProcessorTest >> rerunWithText: aText [
 	processor filterInContext: context
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StAbstractProcessorTest >> runForText: aText [
 
 	candidates := StMockCandidatesList new.
@@ -72,21 +73,21 @@ StAbstractProcessorTest >> runForText: aText [
 	processor filterInContext: context.
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StAbstractProcessorTest >> setUp [ 
 	
 	super setUp.
 	StDefaultSourceFactory forTest.
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StAbstractProcessorTest >> tearDown [ 
 
 	StSourceFactory reset.
 	super tearDown.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StAbstractProcessorTest >> testSearchingInvalidTextDoesNotReturnResult [
 
 	self runForText: 'assdsadasdsada'.

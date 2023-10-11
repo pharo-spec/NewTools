@@ -2,17 +2,19 @@
 Present file details
 "
 Class {
-	#name : #StSimpleFileDetailPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StSimpleFileDetailPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'notebook',
 		'selectedFile',
 		'page'
 	],
-	#category : #'NewTools-SimpleFileBrowser-UI-Components'
+	#category : 'NewTools-SimpleFileBrowser-UI-Components',
+	#package : 'NewTools-SimpleFileBrowser-UI',
+	#tag : 'Components'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 StSimpleFileDetailPresenter class >> defaultSpec [
 
 	^ SpBoxLayout newLeftToRight	 
@@ -20,14 +22,14 @@ StSimpleFileDetailPresenter class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StSimpleFileDetailPresenter class >> open [ 
 	<script>
 	(self new)
 		openWithSpec 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSimpleFileDetailPresenter >> detailText [
 
 	^self newText
@@ -35,14 +37,14 @@ StSimpleFileDetailPresenter >> detailText [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSimpleFileDetailPresenter >> fileContents [ 
 
 	^ selectedFile asFileReference binaryReadStreamDo: [ :stream |
 		(ZnCharacterReadStream on: stream encoding: #null) next: 5000 ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSimpleFileDetailPresenter >> fileContentsPage [
 
 	^ SpNotebookPage
@@ -52,7 +54,7 @@ StSimpleFileDetailPresenter >> fileContentsPage [
 		 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFileDetailPresenter >> hidePage [
 
 	page ifNotNil: [ 
@@ -60,26 +62,26 @@ StSimpleFileDetailPresenter >> hidePage [
 			page := nil ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSimpleFileDetailPresenter >> initializePresenters [
 	
 	notebook := self newNotebook
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFileDetailPresenter >> selectedFile [
 
 	^ selectedFile
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFileDetailPresenter >> selectedFile: anObject [
 
 	selectedFile := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFileDetailPresenter >> showFile: anObject [
 
 	self hidePage.

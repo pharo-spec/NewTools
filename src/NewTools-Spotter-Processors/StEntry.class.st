@@ -5,21 +5,23 @@ As the processor returns different elements I add the behaviour required to show
 Also, I redirect the messages that should be answer by my content
 "
 Class {
-	#name : #StEntry,
-	#superclass : #Object,
+	#name : 'StEntry',
+	#superclass : 'Object',
 	#instVars : [
 		'content'
 	],
-	#category : #'NewTools-Spotter-Processors-Entries'
+	#category : 'NewTools-Spotter-Processors-Entries',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Entries'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StEntry class >> isAbstract [ 
 
 	^ self == StEntry
 ]
 
-{ #category : #wrapping }
+{ #category : 'wrapping' }
 StEntry class >> on: aValue [
 	
 	^ self new
@@ -27,78 +29,78 @@ StEntry class >> on: aValue [
 		yourself
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StEntry >> = anEntry [
 
 	^ self species = anEntry species
 		and: [ anEntry content = self content ]
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 StEntry >> asString [ 
 
 	^ self subclassResponsibility 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StEntry >> content [
 	^ content
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StEntry >> content: anObject [
 	content := anObject
 ]
 
-{ #category : #'spotter-extensions' }
+{ #category : 'spotter-extensions' }
 StEntry >> displayString [
 
 	^ self asString
 ]
 
-{ #category : #evaluating }
+{ #category : 'evaluating' }
 StEntry >> doEvaluate [ 
 
 	self subclassResponsibility 
 ]
 
-{ #category : #evaluating }
+{ #category : 'evaluating' }
 StEntry >> evaluateFor: aSpotter [ 
 
 	self doEvaluate
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StEntry >> hash [
 
 	^ content hash
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StEntry >> iconName [
 	
 	^ self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StEntry >> iconOn: anIconProvider [
 
 	^ anIconProvider iconNamed: self iconName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StEntry >> label [
 
 	^ self asString
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StEntry >> matchesText: aString [
 
 	^ self asString = aString
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 StEntry >> printOn: aStream [
 
 	super printOn: aStream.	
@@ -108,7 +110,7 @@ StEntry >> printOn: aStream [
 		<< ' )'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StEntry >> spotterPreview [
 
 	^ (content spotterPreview: SpPresenterBuilder new)
@@ -116,7 +118,7 @@ StEntry >> spotterPreview [
 		yourself
 ]
 
-{ #category : #'spotter-extensions' }
+{ #category : 'spotter-extensions' }
 StEntry >> stSpotterProcessorsFor: aSpotterStep [
 
 	^ content stSpotterProcessorsFor: aSpotterStep

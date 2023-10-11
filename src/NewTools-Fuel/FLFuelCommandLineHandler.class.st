@@ -23,30 +23,32 @@ Example:
 
 "
 Class {
-	#name : #FLFuelCommandLineHandler,
-	#superclass : #CommandLineHandler,
+	#name : 'FLFuelCommandLineHandler',
+	#superclass : 'CommandLineHandler',
 	#instVars : [
 		'files'
 	],
-	#category : #'NewTools-Fuel-CommandLineHandler'
+	#category : 'NewTools-Fuel-CommandLineHandler',
+	#package : 'NewTools-Fuel',
+	#tag : 'CommandLineHandler'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FLFuelCommandLineHandler class >> commandName [
 	^ 'Fuel'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FLFuelCommandLineHandler class >> description [
 	^ 'Loads fuel files'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FLFuelCommandLineHandler class >> fileExtension [
 	^ '.fuel'
 ]
 
-{ #category : #'handler selection' }
+{ #category : 'handler selection' }
 FLFuelCommandLineHandler class >> isResponsibleFor: aCommandLine [
 	"This handler is reponsible only for .fuel files"
 	(aCommandLine hasFileWithExtension: self fileExtension)
@@ -55,7 +57,7 @@ FLFuelCommandLineHandler class >> isResponsibleFor: aCommandLine [
 	
 ]
 
-{ #category : #activation }
+{ #category : 'activation' }
 FLFuelCommandLineHandler >> activate [
 	self manageFiles.
 	(self commandLine hasOption: 'save') ifTrue: [
@@ -67,12 +69,12 @@ FLFuelCommandLineHandler >> activate [
 		self exitSuccess ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FLFuelCommandLineHandler >> fileExtension [
 	^ self class fileExtension
 ]
 
-{ #category : #manage }
+{ #category : 'manage' }
 FLFuelCommandLineHandler >> manageFile: aFileReference [
 	Stdio stdout
 		nextPutAll: 'Materializing from file: ';
@@ -86,7 +88,7 @@ FLFuelCommandLineHandler >> manageFile: aFileReference [
 		lf
 ]
 
-{ #category : #manage }
+{ #category : 'manage' }
 FLFuelCommandLineHandler >> manageFiles [
 	"Load all the source files in the given array."
 	files := (self commandLine allFilesWithExtension: self fileExtension)

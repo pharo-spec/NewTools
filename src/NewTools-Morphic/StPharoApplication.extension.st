@@ -1,12 +1,12 @@
-Extension { #name : #StPharoApplication }
+Extension { #name : 'StPharoApplication' }
 
-{ #category : #'*NewTools-Morphic' }
+{ #category : '*NewTools-Morphic' }
 StPharoApplication >> defaultConfigurationForMorphic [
 
 	^ StPharoMorphicConfiguration new
 ]
 
-{ #category : #'*NewTools-Morphic' }
+{ #category : '*NewTools-Morphic' }
 StPharoApplication >> useMorphic [
 
 	self

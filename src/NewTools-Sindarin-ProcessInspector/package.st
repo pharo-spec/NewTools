@@ -1,1 +1,1 @@
-Package { #name : #'NewTools-Sindarin-ProcessInspector' }
+Package { #name : 'NewTools-Sindarin-ProcessInspector' }

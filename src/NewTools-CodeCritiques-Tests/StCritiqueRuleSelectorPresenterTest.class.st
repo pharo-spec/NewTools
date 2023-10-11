@@ -2,17 +2,18 @@
 A CStCritiqueRuleSelectorPresenterTest is a test class for testing the behaivor of StCritiqueRuleSelectorPresenter
 "
 Class {
-	#name : #StCritiqueRuleSelectorPresenterTest,
-	#superclass : #TestCase,
+	#name : 'StCritiqueRuleSelectorPresenterTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'rulesSelectorPresenter',
 		'rules',
 		'rulesByGroup'
 	],
-	#category : #'NewTools-CodeCritiques-Tests'
+	#category : 'NewTools-CodeCritiques-Tests',
+	#package : 'NewTools-CodeCritiques-Tests'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StCritiqueRuleSelectorPresenterTest >> setUp [
 
 	super setUp.
@@ -25,13 +26,13 @@ StCritiqueRuleSelectorPresenterTest >> setUp [
 			                rules: as value ]
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StCritiqueRuleSelectorPresenterTest >> tearDown [ 
 
 	super tearDown.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StCritiqueRuleSelectorPresenterTest >> testAddAll [
 
 	rulesSelectorPresenter items: rulesByGroup.
@@ -39,7 +40,7 @@ StCritiqueRuleSelectorPresenterTest >> testAddAll [
 	self assert: rulesSelectorPresenter selectedRules equals: rules asSet
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StCritiqueRuleSelectorPresenterTest >> testAddSelectedComposite [
 
 	| bugsGroup bugsRules |
@@ -54,7 +55,7 @@ StCritiqueRuleSelectorPresenterTest >> testAddSelectedComposite [
 		equals: bugsRules asSet
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StCritiqueRuleSelectorPresenterTest >> testAddSelectedSingleRule [
 
 	| bugsGroup bugsRule |
@@ -68,7 +69,7 @@ StCritiqueRuleSelectorPresenterTest >> testAddSelectedSingleRule [
 		equals: { bugsRule } asSet
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StCritiqueRuleSelectorPresenterTest >> testInitialize [
 
 	| window |
@@ -79,7 +80,7 @@ StCritiqueRuleSelectorPresenterTest >> testInitialize [
 	window close
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StCritiqueRuleSelectorPresenterTest >> testOpen [
 
 	| window |
@@ -88,7 +89,7 @@ StCritiqueRuleSelectorPresenterTest >> testOpen [
 	window close
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StCritiqueRuleSelectorPresenterTest >> testRemoveAll [
 
 	rulesSelectorPresenter items: rulesByGroup.
@@ -97,7 +98,7 @@ StCritiqueRuleSelectorPresenterTest >> testRemoveAll [
 	self assert: rulesSelectorPresenter selectedRules isEmpty
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StCritiqueRuleSelectorPresenterTest >> testRemoveSelectedComposite [
 
 	| styleGroup styleRules |
@@ -112,7 +113,7 @@ StCritiqueRuleSelectorPresenterTest >> testRemoveSelectedComposite [
 	self assert: rulesSelectorPresenter selectedRules isEmpty
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StCritiqueRuleSelectorPresenterTest >> testRemoveSelectedRule [
 
 	| apiGroup apiRule |

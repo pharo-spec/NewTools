@@ -1,24 +1,26 @@
 Class {
-	#name : #StFBFileDialogTest,
-	#superclass : #StFBTestCase,
+	#name : 'StFBFileDialogTest',
+	#superclass : 'StFBTestCase',
 	#instVars : [
 		'dialog',
 		'window'
 	],
-	#category : #'NewTools-FileBrowser-Tests-UI'
+	#category : 'NewTools-FileBrowser-Tests-UI',
+	#package : 'NewTools-FileBrowser-Tests',
+	#tag : 'UI'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StFBFileDialogTest class >> isAbstract [
 	^ self = StFBFileDialogTest
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBFileDialogTest >> dialogClass [
 	^ self subclassResponsibility
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBFileDialogTest >> fileListAllMustBeFilterByPNGFIlter [
 	self
 		assert:
@@ -28,32 +30,32 @@ StFBFileDialogTest >> fileListAllMustBeFilterByPNGFIlter [
 						or: [ fileReference basename endsWith: '.png' ] ])
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StFBFileDialogTest >> setUp [
 	super setUp.
 	(dialog := self dialogClass new) defaultFolder: root
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StFBFileDialogTest >> tearDown [
 	dialog class initialize.
 	window ifNotNil: #delete.
 	super tearDown
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBFileDialogTest >> testIsRootDirectory [
 	self assert: (dialog isRootDirectory: FileLocator root)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBFileDialogTest >> testIsRootDirectoryWindowsDrive [
 	OSPlatform current isWindows
 		ifFalse: [ ^ self ].
 	self assert: (dialog isRootDirectory: FileLocator C)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBFileDialogTest >> testOpen [
 
 	"will it even open?"
@@ -61,7 +63,7 @@ StFBFileDialogTest >> testOpen [
 	window := dialog openDialog
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBFileDialogTest >> testOpenFolder [
 	window := dialog open.
 	self assert: dialog currentDirectory equals: root.
@@ -69,7 +71,7 @@ StFBFileDialogTest >> testOpenFolder [
 	self assert: dialog currentDirectory equals: root / 'dir'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBFileDialogTest >> testWhenAddACollectionOfBookmarkToCustomBookmarkShouldBeAddedToBookmarkTreeTable [
 	| aCollectionOfBookmark |
 	aCollectionOfBookmark := {(root / 'dir') asFileReference.
@@ -88,7 +90,7 @@ StFBFileDialogTest >> testWhenAddACollectionOfBookmarkToCustomBookmarkShouldBeAd
 	self assert: dialog bookmarksTreeTable roots size equals: 1
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBFileDialogTest >> testWhenAddingBookmarkOnDefaultBookmarksShouldBeAddToAllInstance [
 	| anOtherInstance addCommand |
 	anOtherInstance := StFBOpenDirectoryDialog new.
@@ -108,7 +110,7 @@ StFBFileDialogTest >> testWhenAddingBookmarkOnDefaultBookmarksShouldBeAddToAllIn
 		hasSameElements: anOtherInstance bookmarksTreeTable roots
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBFileDialogTest >> testWhenAddingBookmarkOnIsolateBookmarksShouldBeAddToAllInstance [
 	| anOtherInstance addCommand |
 	dialog isolate.
@@ -125,7 +127,7 @@ StFBFileDialogTest >> testWhenAddingBookmarkOnIsolateBookmarksShouldBeAddToAllIn
 		equals: anOtherInstance bookmarksTreeTable roots
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBFileDialogTest >> testWhenChangeDirectoryShouldFilesListContainsHisChildren [
 	| newDirectory |
 	newDirectory := (root / 'dir') asFileReference.

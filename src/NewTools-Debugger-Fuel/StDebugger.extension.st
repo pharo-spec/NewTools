@@ -1,6 +1,6 @@
-Extension { #name : #StDebugger }
+Extension { #name : 'StDebugger' }
 
-{ #category : #'*NewTools-Debugger-Fuel' }
+{ #category : '*NewTools-Debugger-Fuel' }
 StDebugger class >> fuelOutStackCommandWith: aPresenter forRootGroup: aCmCommandsGroup [
 	<extensionCommands>
 	| command stackGroupName stackGroup |

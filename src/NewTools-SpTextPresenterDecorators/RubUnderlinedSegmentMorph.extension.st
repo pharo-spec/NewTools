@@ -1,6 +1,6 @@
-Extension { #name : #RubUnderlinedSegmentMorph }
+Extension { #name : 'RubUnderlinedSegmentMorph' }
 
-{ #category : #'*NewTools-SpTextPresenterDecorators' }
+{ #category : '*NewTools-SpTextPresenterDecorators' }
 RubUnderlinedSegmentMorph class >> on: aTextPresenterDecorator [
 	^ (self
 		   from: aTextPresenterDecorator start

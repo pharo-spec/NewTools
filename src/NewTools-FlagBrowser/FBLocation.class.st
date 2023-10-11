@@ -17,18 +17,20 @@ Internal Representation and Key Implementation Points.
 
 "
 Class {
-	#name : #FBLocation,
-	#superclass : #Object,
+	#name : 'FBLocation',
+	#superclass : 'Object',
 	#instVars : [
 		'classLocation',
 		'selector',
 		'interval',
 		'owner'
 	],
-	#category : #'NewTools-FlagBrowser-Model'
+	#category : 'NewTools-FlagBrowser-Model',
+	#package : 'NewTools-FlagBrowser',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 FBLocation class >> class: aClass selector: aMethodSelector interval: anInterval [
 	^ self new
 		classLocation: aClass;
@@ -37,7 +39,7 @@ FBLocation class >> class: aClass selector: aMethodSelector interval: anInterval
 		yourself
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 FBLocation >> = anObject [
 	"Answer whether the receiver and anObject represent the same object."
 
@@ -46,69 +48,69 @@ FBLocation >> = anObject [
 	^ selector = anObject selector and: [ classLocation = anObject classLocation and: [ interval = anObject interval ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBLocation >> classLocation [
 	^ classLocation
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBLocation >> classLocation: anObject [
 	classLocation := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBLocation >> compiledMethod [
 	^ self classLocation >> self selector
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 FBLocation >> hash [
 	"Answer an integer value that is related to the identity of the receiver."
 
 	^ selector hash bitXor: (classLocation hash bitXor: interval hash)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBLocation >> interval [
 	^ interval
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBLocation >> interval: anObject [
 	interval := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 FBLocation >> openInBrowser [
 	Smalltalk tools browser openOnMethod: self compiledMethod
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBLocation >> owner [
 	^ owner
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBLocation >> owner: aFlag [
 	owner := aFlag
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBLocation >> package [
 	^ self classLocation package
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBLocation >> selector [
 	^ selector
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBLocation >> selector: anObject [
 	selector := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBLocation >> sourceCode [
 	^ self compiledMethod sourceCode
 ]

@@ -9,21 +9,23 @@ reference := 'script.st' asFileReference.
 ```
 "
 Class {
-	#name : #StPlaygroundScriptPage,
-	#superclass : #StPlaygroundPage,
+	#name : 'StPlaygroundScriptPage',
+	#superclass : 'StPlaygroundPage',
 	#instVars : [
 		'fileReference'
 	],
-	#category : #'NewTools-Playground-Model'
+	#category : 'NewTools-Playground-Model',
+	#package : 'NewTools-Playground',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundScriptPage >> fileReference [
 
 	^ fileReference
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundScriptPage >> fromReference: aFileReference [
 
 	super fromReference: aFileReference.

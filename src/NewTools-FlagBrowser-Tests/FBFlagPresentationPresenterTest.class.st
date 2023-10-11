@@ -2,35 +2,37 @@
 A FBFlagPresentationPresenterTest is a test class for testing the behavior of FBFlagPresentationPresenter
 "
 Class {
-	#name : #FBFlagPresentationPresenterTest,
-	#superclass : #TestCase,
+	#name : 'FBFlagPresentationPresenterTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'flagPage'
 	],
-	#category : #'NewTools-FlagBrowser-Tests-Presenters'
+	#category : 'NewTools-FlagBrowser-Tests-Presenters',
+	#package : 'NewTools-FlagBrowser-Tests',
+	#tag : 'Presenters'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 FBFlagPresentationPresenterTest class >> isAbstract [
 	^ self = FBFlagPresentationPresenterTest
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 FBFlagPresentationPresenterTest >> getLocationFlagMethod [
 	^ FBLocation class: FBMock selector: #flagMethod interval: (1 to: 5)
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 FBFlagPresentationPresenterTest >> getLocationFlagMethod2 [
 	^ FBLocation class: FBMock selector: #flagMethod2 interval: (5 to: 7)
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 FBFlagPresentationPresenterTest >> instanciateFlagPage [
 	^ self subclassResponsibility
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 FBFlagPresentationPresenterTest >> setUp [
 	"Hooks that subclasses may override to define the fixture of test."
 
@@ -41,7 +43,7 @@ FBFlagPresentationPresenterTest >> setUp [
 			self getLocationFlagMethod2}
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FBFlagPresentationPresenterTest >> testWhenDoubleClickOnLocationsTableShouldCallOpenInBrowserMethod [
 	| mock |
 	mock := FBMockUseToTestDoubleClickAction new.
@@ -50,7 +52,7 @@ FBFlagPresentationPresenterTest >> testWhenDoubleClickOnLocationsTableShouldCall
 	self assert: mock isOpenInBrowserCall
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FBFlagPresentationPresenterTest >> testWhenSelectedItemChangedShouldCodeContainsSourceCode [
 	flagPage locationsTable selectIndex: 2.
 	self
@@ -61,7 +63,7 @@ FBFlagPresentationPresenterTest >> testWhenSelectedItemChangedShouldCodeContains
 		equals: flagPage locationsTable selection selectedItem classLocation
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FBFlagPresentationPresenterTest >> testWhenTextIsAcceptedShouldCompileIt [
 	| mock |
 	mock := FBClassMock new.

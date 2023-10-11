@@ -2,16 +2,18 @@
 I am the panel for the replace with (rhs) part of the rule
 "
 Class {
-	#name : #StRewriterReplaceWithPanelPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StRewriterReplaceWithPanelPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'label',
 		'codePresenter'
 	],
-	#category : #'NewTools-RewriterTools-Widgets'
+	#category : 'NewTools-RewriterTools-Widgets',
+	#package : 'NewTools-RewriterTools',
+	#tag : 'Widgets'
 }
 
-{ #category : #layout }
+{ #category : 'layout' }
 StRewriterReplaceWithPanelPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -20,7 +22,7 @@ StRewriterReplaceWithPanelPresenter >> defaultLayout [
 		  yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterReplaceWithPanelPresenter >> initializePresenters [
 
 	label := self newLabel.
@@ -33,13 +35,13 @@ StRewriterReplaceWithPanelPresenter >> initializePresenters [
 		withoutLineNumbers
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterReplaceWithPanelPresenter >> rhs [
 
 	^ codePresenter text
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterReplaceWithPanelPresenter >> rhs: aString [
 
 	codePresenter text: aString

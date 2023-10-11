@@ -6,8 +6,8 @@ For now, I can be composed of two styles, #highlight and #underlined.
 
 "
 Class {
-	#name : #SpTextPresenterDecorator,
-	#superclass : #Object,
+	#name : 'SpTextPresenterDecorator',
+	#superclass : 'Object',
 	#instVars : [
 		'highlightColor',
 		'underlineColor',
@@ -17,22 +17,23 @@ Class {
 		'title',
 		'interval'
 	],
-	#category : #'NewTools-SpTextPresenterDecorators'
+	#category : 'NewTools-SpTextPresenterDecorators',
+	#package : 'NewTools-SpTextPresenterDecorators'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpTextPresenterDecorator class >> defaultHighlightColor [
 		
 	^ Color orange alpha: 0.5
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpTextPresenterDecorator class >> defaultUnderlineColor [
 		
 	^ Color white alpha: 0
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 SpTextPresenterDecorator class >> forHighlight [
 
 	^ self new
@@ -41,95 +42,95 @@ SpTextPresenterDecorator class >> forHighlight [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpTextPresenterDecorator class >> highlightStyleName [
 
 	^ #highlight
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpTextPresenterDecorator class >> underlineStyleName [
 
 	^ #underline
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpTextPresenterDecorator >> borderColor [
 	^ borderColor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpTextPresenterDecorator >> borderColor: anObject [
 	borderColor := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpTextPresenterDecorator >> highlightColor [
 	^ highlightColor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpTextPresenterDecorator >> highlightColor: anObject [
 	highlightColor := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpTextPresenterDecorator >> icon [
 	^ icon
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpTextPresenterDecorator >> icon: anObject [
 	icon := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpTextPresenterDecorator >> iconBlock [
 	^ iconBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpTextPresenterDecorator >> iconBlock: anObject [
 	iconBlock := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpTextPresenterDecorator >> interval [
 	^ interval
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpTextPresenterDecorator >> interval: anInterval [
 
 	interval := anInterval
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpTextPresenterDecorator >> start [ 
 	^interval first
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpTextPresenterDecorator >> stop [ 
 	^interval last
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpTextPresenterDecorator >> title [
 	^ title
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpTextPresenterDecorator >> title: anObject [
 	title := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpTextPresenterDecorator >> underlineColor [
 	^ underlineColor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpTextPresenterDecorator >> underlineColor: anObject [
 	underlineColor := anObject
 ]

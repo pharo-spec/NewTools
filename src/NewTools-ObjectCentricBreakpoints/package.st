@@ -1,1 +1,1 @@
-Package { #name : #'NewTools-ObjectCentricBreakpoints' }
+Package { #name : 'NewTools-ObjectCentricBreakpoints' }

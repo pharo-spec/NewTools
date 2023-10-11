@@ -2,16 +2,17 @@
 Instances of this class are used to store debug sessions by DebugSessionStorage. Their main feature is that they also store the time at which they were created.
 "
 Class {
-	#name : #DebugSessionStorageUnit,
-	#superclass : #Object,
+	#name : 'DebugSessionStorageUnit',
+	#superclass : 'Object',
 	#instVars : [
 		'debugSession',
 		'timeOfCreation'
 	],
-	#category : #'NewTools-DebuggerSelector'
+	#category : 'NewTools-DebuggerSelector',
+	#package : 'NewTools-DebuggerSelector'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 DebugSessionStorageUnit class >> newFrom: aDebugSession [
 	^ self new
 		  debugSession: aDebugSession;
@@ -19,22 +20,22 @@ DebugSessionStorageUnit class >> newFrom: aDebugSession [
 		  yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebugSessionStorageUnit >> debugSession [
 	^ debugSession
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebugSessionStorageUnit >> debugSession: anObject [
 	debugSession := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebugSessionStorageUnit >> timeOfCreation [
 	^ timeOfCreation
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebugSessionStorageUnit >> timeOfCreation: anObject [
 	timeOfCreation := anObject
 ]

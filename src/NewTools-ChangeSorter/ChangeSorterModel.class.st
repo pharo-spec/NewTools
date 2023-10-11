@@ -2,25 +2,26 @@
 A ChangeSorterModel is a model used by Change Sorter UIs for computation
 "
 Class {
-	#name : #ChangeSorterModel,
-	#superclass : #Model,
+	#name : 'ChangeSorterModel',
+	#superclass : 'Model',
 	#classVars : [
 		'ClassDescriptionsMap'
 	],
-	#category : #'NewTools-ChangeSorter'
+	#category : 'NewTools-ChangeSorter',
+	#package : 'NewTools-ChangeSorter'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ChangeSorterModel class >> classDescriptionsMap [
 	^ ClassDescriptionsMap
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ChangeSorterModel class >> classDescriptionsMap: anObject [
 	ClassDescriptionsMap := anObject
 ]
 
-{ #category : #defaults }
+{ #category : 'defaults' }
 ChangeSorterModel class >> defaultClassDescriptionsMap [
 	^ Dictionary new
 		at: #remove put: 'Entire class was removed.';
@@ -33,24 +34,24 @@ ChangeSorterModel class >> defaultClassDescriptionsMap [
 		yourself
 ]
 
-{ #category : #'class initialization' }
+{ #category : 'class initialization' }
 ChangeSorterModel class >> initialize [
 	self classDescriptionsMap: self defaultClassDescriptionsMap
 ]
 
-{ #category : #'change set' }
+{ #category : 'change set' }
 ChangeSorterModel >> addPreambleTo: aChangeSet [
 
 	aChangeSet assurePreambleExists
 ]
 
-{ #category : #environment }
+{ #category : 'environment' }
 ChangeSorterModel >> allChanges [
 
 	^ ChangeSet allChangeSets reverse
 ]
 
-{ #category : #method }
+{ #category : 'method' }
 ChangeSorterModel >> browseVersionsFrom: aMethod [
 	"Create and schedule a Versions Browser, showing all versions of the
 	currently selected message. Answer the browser or nil."
@@ -61,7 +62,7 @@ ChangeSorterModel >> browseVersionsFrom: aMethod [
 			Smalltalk tools versionBrowser browseVersionsForMethod: aMethod ]
 ]
 
-{ #category : #text }
+{ #category : 'text' }
 ChangeSorterModel >> buildChangeSetDescriptionFor: changeSet [
 		
 	^ changeSet
@@ -69,7 +70,7 @@ ChangeSorterModel >> buildChangeSetDescriptionFor: changeSet [
 		ifNotNil: [ changeSet preambleString ifNil: ['']]
 ]
 
-{ #category : #text }
+{ #category : 'text' }
 ChangeSorterModel >> buildClassDescriptionFor: changeSet class: class [
 	^ String streamContents: [ :stream |
 			(changeSet classChangeAt: class name)
@@ -77,7 +78,7 @@ ChangeSorterModel >> buildClassDescriptionFor: changeSet class: class [
 				separatedBy: [ stream cr ] ]
 ]
 
-{ #category : #text }
+{ #category : 'text' }
 ChangeSorterModel >> buildSelectorDescriptionFor: changeSet class: class selector: selector [
 
 	| changeType code |
@@ -96,25 +97,25 @@ ChangeSorterModel >> buildSelectorDescriptionFor: changeSet class: class selecto
 	^ code asText
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ChangeSorterModel >> classDescriptionsMap [
 
 	^ self class classDescriptionsMap
 ]
 
-{ #category : #'change set' }
+{ #category : 'change set' }
 ChangeSorterModel >> copyAllChangesFrom: source to: destination [
 
 	destination assimilateAllChangesFoundIn: source
 ]
 
-{ #category : #class }
+{ #category : 'class' }
 ChangeSorterModel >> copyClass: aClass from: source to: destination [
 
 	destination absorbClass: aClass name from: source.
 ]
 
-{ #category : #message }
+{ #category : 'message' }
 ChangeSorterModel >> copySelector: selector inClass: class from: source to: destination [
 
 	destination
@@ -123,19 +124,19 @@ ChangeSorterModel >> copySelector: selector inClass: class from: source to: dest
 		from:source
 ]
 
-{ #category : #'change set' }
+{ #category : 'change set' }
 ChangeSorterModel >> createNewSet [
 
 	^ ChangeSet newChangeSet
 ]
 
-{ #category : #'change set' }
+{ #category : 'change set' }
 ChangeSorterModel >> currentChangeSet [
 
 	^ ChangeSet current 
 ]
 
-{ #category : #class }
+{ #category : 'class' }
 ChangeSorterModel >> fileOutClass: aClass from: aChangeSet [
 	"this is a hack!! makes a new change set, called the class name, adds author initials to try to make a unique change set name, files it out and removes it. kfr 16 june 2000"
 	"Method copied from ChangeSorter"
@@ -148,13 +149,13 @@ ChangeSorterModel >> fileOutClass: aClass from: aChangeSet [
 	ChangeSet removeChangeSet: aSet.
 ]
 
-{ #category : #message }
+{ #category : 'message' }
 ChangeSorterModel >> fileOutSelector: selector from: aClass [
 	
 	aClass fileOutMethod: selector
 ]
 
-{ #category : #'change set' }
+{ #category : 'change set' }
 ChangeSorterModel >> findChangeSetIn: aCollectionOfChangeSets [
 	"Search for a changeSet by name.  Pop up a menu of all changeSets whose name contains the string entered by the user.  If only one matches, then the pop-up menu is bypassed"
 	| index pattern candidates nameList |
@@ -172,7 +173,7 @@ ChangeSorterModel >> findChangeSetIn: aCollectionOfChangeSets [
 	index = 0 ifFalse: [ ^ (candidates at: index) ].
 ]
 
-{ #category : #message }
+{ #category : 'message' }
 ChangeSorterModel >> forgetSelector: selector inClass: aClass fromChangeSet: aChangeSet [
 
 	aChangeSet
@@ -180,7 +181,7 @@ ChangeSorterModel >> forgetSelector: selector inClass: aClass fromChangeSet: aCh
 			class: aClass
 ]
 
-{ #category : #'change set' }
+{ #category : 'change set' }
 ChangeSorterModel >> removeChangeSet: aChangeSet prompting: doPrompt [
 	"Completely destroy my change set.  Check if it's OK first, and if doPrompt is true, get the user to confirm his intentions first."
 
@@ -218,13 +219,13 @@ Do you really want to go ahead with this?') ifFalse: [^ self]]].
 	ChangeSet removeChangeSet: aChangeSet.
 ]
 
-{ #category : #class }
+{ #category : 'class' }
 ChangeSorterModel >> removeClass: class from: changeSet [
 
 	changeSet removeClassChanges: class.
 ]
 
-{ #category : #'change set' }
+{ #category : 'change set' }
 ChangeSorterModel >> removePostscriptFrom: aChange [
 
 	(aChange hasPostscript and: [ aChange postscriptHasDependents ]) ifTrue:
@@ -237,7 +238,7 @@ Close that window and try again.'].
 	aChange removePostscript
 ]
 
-{ #category : #'change set' }
+{ #category : 'change set' }
 ChangeSorterModel >> rename: aChangeSet [
 	"Store a new name string into the selected ChangeSet.  reject duplicate name; allow user to back out"
 
@@ -255,7 +256,7 @@ ChangeSorterModel >> rename: aChangeSet [
 	^ aChangeSet
 ]
 
-{ #category : #text }
+{ #category : 'text' }
 ChangeSorterModel >> setContentsOfChangeSet: changeSet forClass: class andSelector: selector [
 	"return the source code that shows in the bottom pane"
 
@@ -272,14 +273,14 @@ ChangeSorterModel >> setContentsOfChangeSet: changeSet forClass: class andSelect
 			self buildSelectorDescriptionFor: changeSet class: class selector: selector ]
 ]
 
-{ #category : #'change set' }
+{ #category : 'change set' }
 ChangeSorterModel >> setCurrentChangeSet: aChangeSet [
 
 	ChangeSet newChanges: aChangeSet
 	
 ]
 
-{ #category : #'change set' }
+{ #category : 'change set' }
 ChangeSorterModel >> submerge: source into: destination [
 	"Copy the contents of the receiver to the other side, then remove the receiver -- all after checking that all is well."
 	|   message |
@@ -311,7 +312,7 @@ Do you really want to go ahead with this?') ifFalse: [^ false]].
 	^ true
 ]
 
-{ #category : #'change set' }
+{ #category : 'change set' }
 ChangeSorterModel >> subtractFrom: source to: destination [
 
 	source forgetAllChangesFoundIn: destination

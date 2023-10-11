@@ -1,10 +1,11 @@
 Class {
-	#name : #StSpotterModelTest,
-	#superclass : #StSpotterBaseTest,
-	#category : #'NewTools-Spotter-Tests'
+	#name : 'StSpotterModelTest',
+	#superclass : 'StSpotterBaseTest',
+	#category : 'NewTools-Spotter-Tests',
+	#package : 'NewTools-Spotter-Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 StSpotterModelTest >> testAnnounceQueryEndedIsSentOnce [
 	| model count |
 
@@ -23,7 +24,7 @@ StSpotterModelTest >> testAnnounceQueryEndedIsSentOnce [
 	self assert: count equals: 1.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StSpotterModelTest >> testSpotterModelShouldWaitToPerformActualSearch [
 
 	| model started |

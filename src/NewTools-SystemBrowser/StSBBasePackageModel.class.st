@@ -1,16 +1,18 @@
 Class {
-	#name : #StSBBasePackageModel,
-	#superclass : #StSBModel,
-	#category : #'NewTools-SystemBrowser-Model'
+	#name : 'StSBBasePackageModel',
+	#superclass : 'StSBModel',
+	#category : 'NewTools-SystemBrowser-Model',
+	#package : 'NewTools-SystemBrowser',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBBasePackageModel >> children [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBBasePackageModel >> classTemplate [
 
 	self flag: #TODO. "Maybe extract this into its own creation tool, as Calypso 1?"
@@ -20,31 +22,31 @@ StSBBasePackageModel >> classTemplate [
 	package: ''', self fullName, ''''
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBBasePackageModel >> classes [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBBasePackageModel >> comment [
 
 	^ self package packageComment
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBBasePackageModel >> fullName [
 
 	^ self name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBBasePackageModel >> package [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBBasePackageModel >> windowTitle [
 	
 	^ 'Package: ', self name

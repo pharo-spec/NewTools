@@ -3,30 +3,32 @@ A presenter to show all stored versions of a page.
 A version is taken each time we will flush a new version of the page to the disk, making changes in the playground recoverable..
 "
 Class {
-	#name : #StPlaygroundPageVersionsPresenter,
-	#superclass : #StPresenter,
+	#name : 'StPlaygroundPageVersionsPresenter',
+	#superclass : 'StPresenter',
 	#traits : 'SpTModel',
 	#classTraits : 'SpTModel classTrait',
 	#instVars : [
 		'versionList',
 		'sourceCode'
 	],
-	#category : #'NewTools-Playground-View'
+	#category : 'NewTools-Playground-View',
+	#package : 'NewTools-Playground',
+	#tag : 'View'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPageVersionsPresenter class >> preferredExtent [
 
 	^ (700@400) scaledByDisplayScaleFactor
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StPlaygroundPageVersionsPresenter >> adoptSelectedVersion [
 
 	self adoptVersion: versionList selectedItem
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StPlaygroundPageVersionsPresenter >> adoptVersion: anEntry [
 
 	self parent contents: anEntry content.
@@ -34,20 +36,20 @@ StPlaygroundPageVersionsPresenter >> adoptVersion: anEntry [
 	self parent takeKeyboardFocus
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundPageVersionsPresenter >> displayValueFor: aDateAndTime [
 
 	"^ ((DateAndTime now - aDateAndTime) truncateTo: 2 minutes) humanReadablePrintString"
 	^ aDateAndTime epiceaBrowsersAsString
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StPlaygroundPageVersionsPresenter >> doAdoptVersion [
 
 	self adoptSelectedVersion
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StPlaygroundPageVersionsPresenter >> doAdoptVersionOnNewPlayground [
 	| playground |
 	
@@ -58,7 +60,7 @@ StPlaygroundPageVersionsPresenter >> doAdoptVersionOnNewPlayground [
 	playground takeKeyboardFocus
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPageVersionsPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
 	aDialogWindowPresenter
@@ -70,7 +72,7 @@ StPlaygroundPageVersionsPresenter >> initializeDialogWindow: aDialogWindowPresen
 			presenter close ]	
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPageVersionsPresenter >> initializePresenters [
 
 	self layout: (SpPanedLayout newLeftToRight
@@ -94,7 +96,7 @@ StPlaygroundPageVersionsPresenter >> initializePresenters [
 				ifNil: [ 'no source' ] ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPageVersionsPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
@@ -103,20 +105,20 @@ StPlaygroundPageVersionsPresenter >> initializeWindow: aWindowPresenter [
 		initialExtent: self class preferredExtent
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundPageVersionsPresenter >> parent [
 	"a synonym to be clearer"
 
 	^ self model
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPageVersionsPresenter >> updatePresenter [
 
 	versionList items: self model page versions reversed
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPageVersionsPresenter >> versionsActions [
 
 	^ CmCommandGroup forSpec

@@ -1,11 +1,11 @@
-Extension { #name : #VariableBreakpoint }
+Extension { #name : 'VariableBreakpoint' }
 
-{ #category : #'*NewTools-Debugger-Breakpoints-Tools' }
+{ #category : '*NewTools-Debugger-Breakpoints-Tools' }
 VariableBreakpoint >> asBreakpointInspectionItemIn: aStBreakpointInspectionItem [ 
 	^aStBreakpointInspectionItem buildVariableBreakpointItemFor: self
 ]
 
-{ #category : #'*NewTools-Debugger-Breakpoints-Tools' }
+{ #category : '*NewTools-Debugger-Breakpoints-Tools' }
 VariableBreakpoint >> printContentsForBreakpointInspection [
 
 	| str |
@@ -32,7 +32,7 @@ VariableBreakpoint >> printContentsForBreakpointInspection [
 	^ str contents
 ]
 
-{ #category : #'*NewTools-Debugger-Breakpoints-Tools' }
+{ #category : '*NewTools-Debugger-Breakpoints-Tools' }
 VariableBreakpoint >> printTargetForBreakpointInspection [
 
 	| str |
@@ -53,7 +53,7 @@ VariableBreakpoint >> printTargetForBreakpointInspection [
 	^ str contents
 ]
 
-{ #category : #'*NewTools-Debugger-Breakpoints-Tools' }
+{ #category : '*NewTools-Debugger-Breakpoints-Tools' }
 VariableBreakpoint >> scopeIncludes: anObject [
 
 	| classScope |

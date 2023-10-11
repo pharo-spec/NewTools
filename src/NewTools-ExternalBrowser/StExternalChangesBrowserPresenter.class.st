@@ -1,6 +1,6 @@
 Class {
-	#name : #StExternalChangesBrowserPresenter,
-	#superclass : #StPresenter,
+	#name : 'StExternalChangesBrowserPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'changes',
 		'codePane',
@@ -9,17 +9,18 @@ Class {
 		'deselectAllButton',
 		'fileInSelectedButton'
 	],
-	#category : #'NewTools-ExternalBrowser'
+	#category : 'NewTools-ExternalBrowser',
+	#package : 'NewTools-ExternalBrowser'
 }
 
-{ #category : #examples }
+{ #category : 'examples' }
 StExternalChangesBrowserPresenter class >> browseRecentLog [
 	<example>
 	
 	^ self openOnStream: SourceFiles changesFileStream
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StExternalChangesBrowserPresenter class >> defaultSpec [
 	<spec: #default>
 
@@ -38,7 +39,7 @@ StExternalChangesBrowserPresenter class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 StExternalChangesBrowserPresenter class >> example1 [
 	<example>
 	
@@ -46,14 +47,14 @@ StExternalChangesBrowserPresenter class >> example1 [
 
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 StExternalChangesBrowserPresenter class >> example2 [
 	<example>
 	
 	self openOn: Smalltalk changesFile fullName
 ]
 
-{ #category : #'file service' }
+{ #category : 'file service' }
 StExternalChangesBrowserPresenter class >> fileReaderServicesForFile: fullName suffix: suffix [
 	<fileService>
 	| services |
@@ -66,7 +67,7 @@ StExternalChangesBrowserPresenter class >> fileReaderServicesForFile: fullName s
 	^ services
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StExternalChangesBrowserPresenter class >> openOn: changeSetName [
 
 	self new
@@ -74,7 +75,7 @@ StExternalChangesBrowserPresenter class >> openOn: changeSetName [
 		openWithSpec
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StExternalChangesBrowserPresenter class >> openOnFileName: aFileName [
 
 	self new
@@ -82,7 +83,7 @@ StExternalChangesBrowserPresenter class >> openOnFileName: aFileName [
 		openWithSpec
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StExternalChangesBrowserPresenter class >> openOnStream: aStream [
 
 	| widget |
@@ -91,13 +92,13 @@ StExternalChangesBrowserPresenter class >> openOnStream: aStream [
 	widget openWithSpec	
 ]
 
-{ #category : #'tool registry' }
+{ #category : 'tool registry' }
 StExternalChangesBrowserPresenter class >> registerToolsOn: registry [
 
 	registry register: self as: #changeList 
 ]
 
-{ #category : #'file service' }
+{ #category : 'file service' }
 StExternalChangesBrowserPresenter class >> serviceBrowseCSOrSTFile [
 	"Answer a service for opening a changelist browser on a file"
 
@@ -110,21 +111,21 @@ StExternalChangesBrowserPresenter class >> serviceBrowseCSOrSTFile [
 		argumentGetter: [ :stream | stream readStream ]
 ]
 
-{ #category : #'file service' }
+{ #category : 'file service' }
 StExternalChangesBrowserPresenter class >> services [
 	"Answer potential file services associated with this class"
 
 	^ { self serviceBrowseCSOrSTFile }
 ]
 
-{ #category : #icons }
+{ #category : 'icons' }
 StExternalChangesBrowserPresenter class >> taskbarIconName [
 	"Answer the icon for the receiver in a task bar."
 
 	^#smallSaveIcon
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StExternalChangesBrowserPresenter >> buildMenu [
 
 	^ self newMenu 
@@ -136,7 +137,7 @@ StExternalChangesBrowserPresenter >> buildMenu [
 			action: [ self compareToCurrent: changes selectedItem ] ]
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 StExternalChangesBrowserPresenter >> canCompareToCurrent [
 
 	| aMethodDeclaration |
@@ -148,13 +149,13 @@ StExternalChangesBrowserPresenter >> canCompareToCurrent [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StExternalChangesBrowserPresenter >> changeDescription: change [
 
 	^ change description
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StExternalChangesBrowserPresenter >> changeSetName: aFileName [
 
 	changeSet := CodeImporter fileNamed: aFileName.
@@ -162,19 +163,19 @@ StExternalChangesBrowserPresenter >> changeSetName: aFileName [
 	changes items: changeSet codeDeclarations.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StExternalChangesBrowserPresenter >> changes [
 
 	^ changes
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StExternalChangesBrowserPresenter >> codePane [
 
 	^ codePane
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 StExternalChangesBrowserPresenter >> compareToCurrent: aMethodDeclaration [
 
 	| class sourceString |
@@ -189,7 +190,7 @@ StExternalChangesBrowserPresenter >> compareToCurrent: aMethodDeclaration [
 		inWindowLabeled: 'Comparison to Current Version'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StExternalChangesBrowserPresenter >> connectPresenters [
 
 	super connectPresenters.
@@ -203,31 +204,31 @@ StExternalChangesBrowserPresenter >> connectPresenters [
 	fileInSelectedButton action: [ self fileIn: changes selectedItemsSorted ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StExternalChangesBrowserPresenter >> deselectAllButton [
 
 	^ deselectAllButton
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 StExternalChangesBrowserPresenter >> fileIn: aCodeDeclaration [
 
 	aCodeDeclaration do: [:each | each import]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StExternalChangesBrowserPresenter >> fileInSelectedButton [
 
 	^ fileInSelectedButton
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StExternalChangesBrowserPresenter >> initialExtent [
 
 	^ 500@900
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StExternalChangesBrowserPresenter >> initializePresenters [
 
 	
@@ -248,7 +249,7 @@ StExternalChangesBrowserPresenter >> initializePresenters [
 	codePane := self newCode
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StExternalChangesBrowserPresenter >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter 
@@ -256,7 +257,7 @@ StExternalChangesBrowserPresenter >> initializeWindow: aWindowPresenter [
 		title: 'Change Browser'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StExternalChangesBrowserPresenter >> selectAllButton [
 
 	^ selectAllButton

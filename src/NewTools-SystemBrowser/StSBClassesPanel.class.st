@@ -1,13 +1,15 @@
 Class {
-	#name : #StSBClassesPanel,
-	#superclass : #StSBPanel,
+	#name : 'StSBClassesPanel',
+	#superclass : 'StSBPanel',
 	#instVars : [
 		'classList'
 	],
-	#category : #'NewTools-SystemBrowser-View'
+	#category : 'NewTools-SystemBrowser-View',
+	#package : 'NewTools-SystemBrowser',
+	#tag : 'View'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 StSBClassesPanel class >> defaultSpec [
 
 	^ SpBoxLayout newVertical 
@@ -15,24 +17,24 @@ StSBClassesPanel class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBClassesPanel >> classList [
 	^ classList
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBClassesPanel >> defaultInputPort [
 
 	^ self inputItemsPort
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBClassesPanel >> defaultOutputPort [
 
 	^ self outputSelectionPort
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBClassesPanel >> gotoClass: aClass [
 	| items classModel |
 
@@ -44,7 +46,7 @@ StSBClassesPanel >> gotoClass: aClass [
 	self classList selectItem: classModel
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBClassesPanel >> initializePresenters [
 	
 	classList := self newTable
@@ -55,7 +57,7 @@ StSBClassesPanel >> initializePresenters [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBClassesPanel >> inputItemsPort [
 
 	^ (SpListItemsPort newPresenter: self)
@@ -63,7 +65,7 @@ StSBClassesPanel >> inputItemsPort [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBClassesPanel >> outputSelectionPort [
 	
 	^ (SpSelectionPort newPresenter: self)

@@ -1,43 +1,45 @@
 Class {
-	#name : #StSBModel,
-	#superclass : #Object,
+	#name : 'StSBModel',
+	#superclass : 'Object',
 	#instVars : [
 		'environment'
 	],
-	#category : #'NewTools-SystemBrowser-Model'
+	#category : 'NewTools-SystemBrowser-Model',
+	#package : 'NewTools-SystemBrowser',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBModel >> application [ 
 
 	^ StPharoApplication current
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBModel >> environment [
 
 	^ environment
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBModel >> environment: anEnvironment [
 
 	environment := anEnvironment
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBModel >> icon [
 
 	^ nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBModel >> name [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBModel >> windowTitle [
 	
 	^ 'TODO'

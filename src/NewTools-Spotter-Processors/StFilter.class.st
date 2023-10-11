@@ -4,18 +4,20 @@ I apply the block and filter the elements returned by myself.
 
 "
 Class {
-	#name : #StFilter,
-	#superclass : #StIteratorBlockDecorator,
-	#category : #'NewTools-Spotter-Processors-Iterators'
+	#name : 'StFilter',
+	#superclass : 'StIteratorBlockDecorator',
+	#category : 'NewTools-Spotter-Processors-Iterators',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Iterators'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFilter >> filter: aValue [
 
 	^ aBlock value: aValue
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFilter >> next [
 
 	| value |

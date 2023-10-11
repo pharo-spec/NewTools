@@ -1,13 +1,15 @@
 Class {
-	#name : #StFBNavigationSystemTest,
-	#superclass : #StFBTestCase,
+	#name : 'StFBNavigationSystemTest',
+	#superclass : 'StFBTestCase',
 	#instVars : [
 		'dialog'
 	],
-	#category : #'NewTools-FileBrowser-Tests-UI'
+	#category : 'NewTools-FileBrowser-Tests-UI',
+	#package : 'NewTools-FileBrowser-Tests',
+	#tag : 'UI'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBNavigationSystemTest >> fileListAllMustBeFilterByPNGFIlter [
 	self
 		assert:
@@ -17,14 +19,14 @@ StFBNavigationSystemTest >> fileListAllMustBeFilterByPNGFIlter [
 						or: [ fileReference basename endsWith: '.png' ] ])
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StFBNavigationSystemTest >> setUp [
 	super setUp.
 	dialog := StFBFileNavigationSystemPresenter new.
 	dialog defaultFolder: root
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBNavigationSystemTest >> testCustomizationWhenChangeCollectionOfPreviewerShouldBeSet [
 	| previewerUtil |
 	previewerUtil := StFBPNGPreviewer new.
@@ -32,17 +34,17 @@ StFBNavigationSystemTest >> testCustomizationWhenChangeCollectionOfPreviewerShou
 	self assert: dialog previewer equals: previewerUtil
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBNavigationSystemTest >> testInitializeCurrentPathTextInputShouldSet [
 	self assert: dialog currentDirectory fullName equals: dialog currentPathTextInputPresenter entityText text 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBNavigationSystemTest >> testInitializeFilterDropListSelectedItemShouldBeDefaultFilter [
 	self assert: dialog filtersDropList selectedItem name equals: StFBVisibleFilter new name
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBNavigationSystemTest >> testInitializeShouldOnlySeeNotHiddenFile [
 
 	Smalltalk os isWindows ifTrue: [ 
@@ -56,14 +58,14 @@ StFBNavigationSystemTest >> testInitializeShouldOnlySeeNotHiddenFile [
 				asOrderedCollection
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBNavigationSystemTest >> testOpenFolder [
 	self assert: dialog currentDirectory equals: root.
 	dialog openFolder: root / 'dir'.
 	self assert: dialog currentDirectory equals: root / 'dir'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBNavigationSystemTest >> testWhenClickAnAfterHistoryButtonIfThereAreHistoryShouldComeBackTheGoodDirectory [
 	| itemsBefore |
 	itemsBefore := dialog fileReferenceTable items.
@@ -76,7 +78,7 @@ StFBNavigationSystemTest >> testWhenClickAnAfterHistoryButtonIfThereAreHistorySh
 	self assertCollection: (dialog fileReferenceTable items collect: #basename) hasSameElements: {'klm.jpg' . 'klm.png'}
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBNavigationSystemTest >> testWhenClickAnBeforeHistoryButtonIfThereAreHistoryShouldComeBackToTheLastDirectoryVisited [
 	| itemsBefore |
 	itemsBefore := dialog fileReferenceTable items.
@@ -87,7 +89,7 @@ StFBNavigationSystemTest >> testWhenClickAnBeforeHistoryButtonIfThereAreHistoryS
 	self assertCollection: dialog fileReferenceTable items hasSameElements: itemsBefore
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBNavigationSystemTest >> testWhenCurrentDirectoryChangeshouldNewFileDialogOpenOnTheNewDirectory [
 	| dirIndex newFileDialog |
 	dirIndex := (dialog fileReferenceTable items collect: #basename) indexOf: 'dir'.
@@ -97,7 +99,7 @@ StFBNavigationSystemTest >> testWhenCurrentDirectoryChangeshouldNewFileDialogOpe
 	self assert: newFileDialog currentDirectory equals: (root / 'dir') asFileReference
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBNavigationSystemTest >> testWhenCustomizeFilterShouldFilterDropListPresenterIncludeIt [
 	| aCollectionOfFilter |
 	aCollectionOfFilter := {StFBAllFilter new . StFBJPEGFilter new}.
@@ -106,7 +108,7 @@ StFBNavigationSystemTest >> testWhenCustomizeFilterShouldFilterDropListPresenter
 	self assert: (dialog filtersDropList listItems includesAll: aCollectionOfFilter)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBNavigationSystemTest >> testWhenCustomizeFilterWithoutDefaultFilterShouldFilterDropListPresenterIncludeDefaultFilterAndSelectIt [
 	| aCollectionOfFilter |
 	aCollectionOfFilter := {StFBJPEGFilter new}.
@@ -115,7 +117,7 @@ StFBNavigationSystemTest >> testWhenCustomizeFilterWithoutDefaultFilterShouldFil
 	self assert: (dialog filtersDropList listItems includesAll: aCollectionOfFilter)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBNavigationSystemTest >> testWhenFilesListSelectionChangedAndIsAJPGShouldpreviewContentPresenterIsNotNil [
 
 	| previewerUtil |
@@ -128,7 +130,7 @@ StFBNavigationSystemTest >> testWhenFilesListSelectionChangedAndIsAJPGShouldprev
 	self assert: dialog selectedEntry basename equals: 'banana.jpg'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBNavigationSystemTest >> testWhenOpenADirectoryShouldDisplayHisChildrenFilterByCurrentFilter [
 	dialog filtersDropList selectIndex: ((dialog filtersDropList listItems collect: #name) indexOf: StFBPNGFilter new name).
 	self fileListAllMustBeFilterByPNGFIlter.
@@ -138,7 +140,7 @@ StFBNavigationSystemTest >> testWhenOpenADirectoryShouldDisplayHisChildrenFilter
 	self fileListAllMustBeFilterByPNGFIlter
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBNavigationSystemTest >> testWhenPathTextInputPresenterAcceptShouldChangeFileListWithTheGoodContent [
 
 	dialog currentPathTextInputPresenter pathTextChangedTo:

@@ -1,1 +1,1 @@
-Package { #name : #'NewTools-Debugger-Breakpoints-Tools' }
+Package { #name : 'NewTools-Debugger-Breakpoints-Tools' }

@@ -1,19 +1,21 @@
 Class {
-	#name : #StHaltAndBreakpointControlTest,
-	#superclass : #TestCase,
+	#name : 'StHaltAndBreakpointControlTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'cache'
 	],
-	#category : #'NewTools-Debugger-Breakpoints-Tools-Tests'
+	#category : 'NewTools-Debugger-Breakpoints-Tools-Tests',
+	#package : 'NewTools-Debugger-Breakpoints-Tools',
+	#tag : 'Tests'
 }
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 StHaltAndBreakpointControlTest >> compileMethodsWithHalts [
 	self methodWithHaltSources
 		do: [ :source | self testClass compile: source ]
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 StHaltAndBreakpointControlTest >> methodWithHaltSources [
 	| sources |
 	sources := OrderedCollection new.
@@ -28,13 +30,13 @@ StHaltAndBreakpointControlTest >> methodWithHaltSources [
 	^sources
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 StHaltAndBreakpointControlTest >> removeMethodsWithHalts [
 
 	(self testClass methods select: [ :m | m selector includesSubstring: 'Halt' ]) do: [ :method | self testClass removeSelector: method selector ]
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StHaltAndBreakpointControlTest >> setUp [
 	super setUp.
 	StHaltCache defaultCache removeSubscriptions.	
@@ -43,7 +45,7 @@ StHaltAndBreakpointControlTest >> setUp [
 	self compileMethodsWithHalts.
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StHaltAndBreakpointControlTest >> tearDown [
 	StHaltCache defaultCache updateSubscriptions.
 	cache removeSubscriptions.
@@ -52,7 +54,7 @@ StHaltAndBreakpointControlTest >> tearDown [
 	super tearDown
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHaltAndBreakpointControlTest >> testClass [
 	^ StDummyTestClassWithHalts
 ]

@@ -1,6 +1,6 @@
 Class {
-	#name : #StHaltAndBreakpointControllerTest,
-	#superclass : #StHaltAndBreakpointControlTest,
+	#name : 'StHaltAndBreakpointControllerTest',
+	#superclass : 'StHaltAndBreakpointControlTest',
 	#instVars : [
 		'haltController',
 		'testObject',
@@ -8,15 +8,17 @@ Class {
 		'oldTracer',
 		'breakpoint'
 	],
-	#category : #'NewTools-Debugger-Breakpoints-Tools-Tests'
+	#category : 'NewTools-Debugger-Breakpoints-Tools-Tests',
+	#package : 'NewTools-Debugger-Breakpoints-Tools',
+	#tag : 'Tests'
 }
 
-{ #category : #helper }
+{ #category : 'helper' }
 StHaltAndBreakpointControllerTest >> crTrace: aTextOrString [
 	trace := aTextOrString 
 ]
 
-{ #category : #helper }
+{ #category : 'helper' }
 StHaltAndBreakpointControllerTest >> installBreakpointOn: aNode [
 	^ Breakpoint new
 		node: aNode;
@@ -24,17 +26,17 @@ StHaltAndBreakpointControllerTest >> installBreakpointOn: aNode [
 		yourself
 ]
 
-{ #category : #helper }
+{ #category : 'helper' }
 StHaltAndBreakpointControllerTest >> node [
 	^ (cache nodeCacheForSelector: 'StDummyTestClassWithHalts>>#mHalt') first 
 ]
 
-{ #category : #helper }
+{ #category : 'helper' }
 StHaltAndBreakpointControllerTest >> nodeForBreakpoint [
 	^ (StDummyTestClassWithHalts >> #mNoHalt) ast statements first
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StHaltAndBreakpointControllerTest >> setUp [
 	super setUp.
 	testObject := StDummyTestClassWithHalts new.
@@ -44,7 +46,7 @@ StHaltAndBreakpointControllerTest >> setUp [
 	breakpoint := self installBreakpointOn: self nodeForBreakpoint
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StHaltAndBreakpointControllerTest >> tearDown [
 	trace := nil.
 	StHaltAndBreakpointController tracer: oldTracer.
@@ -52,7 +54,7 @@ StHaltAndBreakpointControllerTest >> tearDown [
 	super tearDown
 ]
 
-{ #category : #'tests - breakpoints' }
+{ #category : 'tests - breakpoints' }
 StHaltAndBreakpointControllerTest >> testDisableBreakpoint [
 	<ignoreNotImplementedSelectors: #(mNoHalt)>
 	self should: [ testObject mNoHalt ] raise: Break.
@@ -61,7 +63,7 @@ StHaltAndBreakpointControllerTest >> testDisableBreakpoint [
 	
 ]
 
-{ #category : #'tests - halts' }
+{ #category : 'tests - halts' }
 StHaltAndBreakpointControllerTest >> testDisableHalt [
 	<ignoreNotImplementedSelectors: #(mHalt)>
 	self should: [ testObject mHalt ] raise: Halt.	
@@ -69,7 +71,7 @@ StHaltAndBreakpointControllerTest >> testDisableHalt [
 	self shouldnt: [ testObject mHalt ] raise: Halt
 ]
 
-{ #category : #'tests - breakpoints' }
+{ #category : 'tests - breakpoints' }
 StHaltAndBreakpointControllerTest >> testDisabledBreakpointisDisabled [
 
 	haltController disableBreakpoint: breakpoint.
@@ -78,7 +80,7 @@ StHaltAndBreakpointControllerTest >> testDisabledBreakpointisDisabled [
 			 (StBreakpointInspectionItem forBreakpoint: breakpoint))
 ]
 
-{ #category : #'tests - halts' }
+{ #category : 'tests - halts' }
 StHaltAndBreakpointControllerTest >> testDisabledHaltIsDisabled [
 
 	haltController disableHaltNode: self node.
@@ -87,7 +89,7 @@ StHaltAndBreakpointControllerTest >> testDisabledHaltIsDisabled [
 			 (StHaltInspectionItem forHalt: self node))
 ]
 
-{ #category : #'tests - breakpoints' }
+{ #category : 'tests - breakpoints' }
 StHaltAndBreakpointControllerTest >> testEnableDisabledBreakpoint [
 	<ignoreNotImplementedSelectors: #(mNoHalt)>
 	haltController disableBreakpoint: breakpoint.
@@ -96,7 +98,7 @@ StHaltAndBreakpointControllerTest >> testEnableDisabledBreakpoint [
 	self should: [ testObject mNoHalt ] raise: Break
 ]
 
-{ #category : #'tests - halts' }
+{ #category : 'tests - halts' }
 StHaltAndBreakpointControllerTest >> testEnableDisabledHalt [
 	<ignoreNotImplementedSelectors: #(mHalt)>	
 	haltController disableHaltNode: self node.
@@ -105,7 +107,7 @@ StHaltAndBreakpointControllerTest >> testEnableDisabledHalt [
 	self should: [ testObject mHalt ] raise: Halt
 ]
 
-{ #category : #'tests - breakpoints' }
+{ #category : 'tests - breakpoints' }
 StHaltAndBreakpointControllerTest >> testEnabledBreakpointIsEnabled [
 
 	self assert: (haltController isBreakpointEnabled: breakpoint).
@@ -113,12 +115,12 @@ StHaltAndBreakpointControllerTest >> testEnabledBreakpointIsEnabled [
 			 (StBreakpointInspectionItem forBreakpoint: breakpoint))
 ]
 
-{ #category : #'tests - halts' }
+{ #category : 'tests - halts' }
 StHaltAndBreakpointControllerTest >> testEnabledHaltIsEnabled [
 	self assert: (haltController isHaltEnabledFor: self node)
 ]
 
-{ #category : #'tests - breakpoints' }
+{ #category : 'tests - breakpoints' }
 StHaltAndBreakpointControllerTest >> testNoTraceForEnabledBreakpoint [
 	<ignoreNotImplementedSelectors: #(mNoHalt)>
 	[ testObject mNoHalt ]
@@ -127,7 +129,7 @@ StHaltAndBreakpointControllerTest >> testNoTraceForEnabledBreakpoint [
 	self assert: trace isNil
 ]
 
-{ #category : #'tests - halts' }
+{ #category : 'tests - halts' }
 StHaltAndBreakpointControllerTest >> testNoTraceForEnabledHalt [
 	<ignoreNotImplementedSelectors: #(mHalt)>
 	[ testObject mHalt ]
@@ -136,7 +138,7 @@ StHaltAndBreakpointControllerTest >> testNoTraceForEnabledHalt [
 	self assert: trace isNil
 ]
 
-{ #category : #'tests - halts' }
+{ #category : 'tests - halts' }
 StHaltAndBreakpointControllerTest >> testTraceForDisabledHalt [
 	<ignoreNotImplementedSelectors: #(mHalt)>
 	haltController disableHaltNode: self node.

@@ -1,28 +1,29 @@
 Class {
-	#name : #StHaltOnStateAccessCommand,
-	#superclass : #StBreakpointCommand,
-	#category : #'NewTools-ObjectCentricBreakpoints'
+	#name : 'StHaltOnStateAccessCommand',
+	#superclass : 'StBreakpointCommand',
+	#category : 'NewTools-ObjectCentricBreakpoints',
+	#package : 'NewTools-ObjectCentricBreakpoints'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 StHaltOnStateAccessCommand class >> defaultDescription [
 
 	^ 'Halts when the selected or any variable is read or written'
 ]
 
-{ #category : #deafult }
+{ #category : 'deafult' }
 StHaltOnStateAccessCommand class >> defaultIconName [
 
 	^ #smallObjects
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 StHaltOnStateAccessCommand class >> defaultName [ 
 
 	^ 'Halt on state access'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 StHaltOnStateAccessCommand >> execute [
 	^context haltInspectedObjectOnStateAccess
 ]

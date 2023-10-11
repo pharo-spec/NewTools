@@ -2,12 +2,13 @@
 A root directory as found on Unix or Mac (/)
 "
 Class {
-	#name : #StSimpleRootDirectoryWrapper,
-	#superclass : #StSimpleDirectoryWrapper,
-	#category : #'NewTools-SimpleFileBrowser-Core'
+	#name : 'StSimpleRootDirectoryWrapper',
+	#superclass : 'StSimpleDirectoryWrapper',
+	#category : 'NewTools-SimpleFileBrowser-Core',
+	#package : 'NewTools-SimpleFileBrowser-Core'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSimpleRootDirectoryWrapper >> isRoot [ 
 	^true
 ]

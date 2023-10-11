@@ -1,6 +1,6 @@
-Extension { #name : #DateAndTime }
+Extension { #name : 'DateAndTime' }
 
-{ #category : #'*NewTools-FileBrowser' }
+{ #category : '*NewTools-FileBrowser' }
 DateAndTime >> fileDialogFormat [
 	^ '{1} {2} {3} {4}' format:
 		{self dayOfMonth asString.

@@ -1,6 +1,6 @@
-Extension { #name : #UITheme }
+Extension { #name : 'UITheme' }
 
-{ #category : #'*NewTools-FontChooser' }
+{ #category : '*NewTools-FontChooser' }
 UITheme >> chooseFontIn: aThemedMorph title: aString font: aFont [
 	"Answer the result of a font selector dialog with the given title and initial font."
 

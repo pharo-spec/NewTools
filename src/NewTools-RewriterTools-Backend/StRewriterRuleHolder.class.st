@@ -2,8 +2,8 @@
 I am a class that is used only to store the information of a rule
 "
 Class {
-	#name : #StRewriterRuleHolder,
-	#superclass : #Object,
+	#name : 'StRewriterRuleHolder',
+	#superclass : 'Object',
 	#instVars : [
 		'lhs',
 		'rhs',
@@ -11,10 +11,12 @@ Class {
 		'name',
 		'pharoCode'
 	],
-	#category : #'NewTools-RewriterTools-Backend-DataStructure'
+	#category : 'NewTools-RewriterTools-Backend-DataStructure',
+	#package : 'NewTools-RewriterTools-Backend',
+	#tag : 'DataStructure'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StRewriterRuleHolder class >> lhs: lhs rhs: rhs [
 
 	^ self new
@@ -23,7 +25,7 @@ StRewriterRuleHolder class >> lhs: lhs rhs: rhs [
 		yourself
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StRewriterRuleHolder class >> lhs: lhs rhs: rhs isForMethod: isForMethod [
 
 	^ self new
@@ -33,7 +35,7 @@ StRewriterRuleHolder class >> lhs: lhs rhs: rhs isForMethod: isForMethod [
 		yourself
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StRewriterRuleHolder class >> lhs: lhs rhs: rhs isForMethod: isForMethod pharoCode: inputCode [
 
 	^ self new
@@ -44,7 +46,7 @@ StRewriterRuleHolder class >> lhs: lhs rhs: rhs isForMethod: isForMethod pharoCo
 		yourself
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StRewriterRuleHolder class >> lhs: lhs rhs: rhs name: aName [
 
 	^ self new
@@ -54,7 +56,7 @@ StRewriterRuleHolder class >> lhs: lhs rhs: rhs name: aName [
 		yourself
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StRewriterRuleHolder class >> lhs: lhs rhs: rhs pharoCode: aString [
 
 	^ self new
@@ -64,7 +66,7 @@ StRewriterRuleHolder class >> lhs: lhs rhs: rhs pharoCode: aString [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterRuleHolder >> initialize [
 
 	super initialize.
@@ -72,61 +74,61 @@ StRewriterRuleHolder >> initialize [
 	pharoCode := ''
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleHolder >> isRuleForMethod [
 
 	^ isForMethod
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleHolder >> isRuleForMethod: anObject [
 
 	isForMethod := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleHolder >> lhs [
 
 	^ lhs
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleHolder >> lhs: anObject [
 
 	lhs := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleHolder >> name [
 
 	^ name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleHolder >> name: aString [
 
 	name := aString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleHolder >> pharoCode [
 
 	^ pharoCode
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleHolder >> pharoCode: anObject [
 
 	pharoCode := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleHolder >> rhs [
 
 	^ rhs
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleHolder >> rhs: anObject [
 
 	rhs := anObject

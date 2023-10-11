@@ -1,6 +1,6 @@
 Class {
-	#name : #StExternalBrowserPresenter,
-	#superclass : #StPresenter,
+	#name : 'StExternalBrowserPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'classes',
 		'packages',
@@ -11,16 +11,17 @@ Class {
 		'model',
 		'protocol'
 	],
-	#category : #'NewTools-ExternalBrowser'
+	#category : 'NewTools-ExternalBrowser',
+	#package : 'NewTools-ExternalBrowser'
 }
 
-{ #category : #'public access' }
+{ #category : 'public access' }
 StExternalBrowserPresenter class >> browseStream: aStream [
 
 	self openOn: (RingChunkImporter fromStream: aStream)
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StExternalBrowserPresenter class >> defaultSpec [
 	<spec: #default>
 	
@@ -42,14 +43,14 @@ StExternalBrowserPresenter class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 StExternalBrowserPresenter class >> example [
 	<example>
 
 	self openOn: Smalltalk image
 ]
 
-{ #category : #'System-FileRegistry' }
+{ #category : 'System-FileRegistry' }
 StExternalBrowserPresenter class >> fileReaderServicesForFile: fullName suffix: suffix [
 	<fileService>
 
@@ -58,13 +59,13 @@ StExternalBrowserPresenter class >> fileReaderServicesForFile: fullName suffix: 
 		ifFalse: [ #() ]
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StExternalBrowserPresenter class >> openOn: model [
 
 	^ (self on: model) openWithSpec
 ]
 
-{ #category : #'System-FileRegistry' }
+{ #category : 'System-FileRegistry' }
 StExternalBrowserPresenter class >> serviceBrowseCode [
 	"Answer the service of opening a file-contents browser"
 
@@ -77,14 +78,14 @@ StExternalBrowserPresenter class >> serviceBrowseCode [
 		argumentGetter: [ :file| file readStream]
 ]
 
-{ #category : #'System-FileRegistry' }
+{ #category : 'System-FileRegistry' }
 StExternalBrowserPresenter class >> services [
 	"Answer potential file services associated with this class"
 
 	^ {self serviceBrowseCode}.
 ]
 
-{ #category : #'System-FileRegistry' }
+{ #category : 'System-FileRegistry' }
 StExternalBrowserPresenter class >> sourceFileSuffixes [
 
 	^#('st' 'cs')
@@ -92,13 +93,13 @@ StExternalBrowserPresenter class >> sourceFileSuffixes [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StExternalBrowserPresenter >> classes [
 
 	^ classes
 ]
 
-{ #category : #'structure accessing' }
+{ #category : 'structure accessing' }
 StExternalBrowserPresenter >> classesOfPackage: aPackage [
 	| theClasses |
 
@@ -109,7 +110,7 @@ StExternalBrowserPresenter >> classesOfPackage: aPackage [
 		sorted: #name ascending
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StExternalBrowserPresenter >> connectPresenters [
 	
 	self wirePackages.
@@ -121,25 +122,25 @@ StExternalBrowserPresenter >> connectPresenters [
 		self refreshClasses: self packages selectedItem ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StExternalBrowserPresenter >> initializeClassList [
 	classes := self newList
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StExternalBrowserPresenter >> initializeMethodBodyPane [
 
 	method := self newCode
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StExternalBrowserPresenter >> initializePackageList [
 	packages := self newList.
 	self populatePackages.
 	packages display: [ :m | m name ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StExternalBrowserPresenter >> initializePresenters [
 
 	self initializePackageList.
@@ -153,20 +154,20 @@ StExternalBrowserPresenter >> initializePresenters [
 	showClassSide state: false
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StExternalBrowserPresenter >> initializeProtocolList [
 
 	protocols := self newList
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StExternalBrowserPresenter >> initializeSelectorList [
 
 	selectors := self newList
 	
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StExternalBrowserPresenter >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter 
@@ -174,54 +175,54 @@ StExternalBrowserPresenter >> initializeWindow: aWindowPresenter [
 		title: self title
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StExternalBrowserPresenter >> method [
 	^ method
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StExternalBrowserPresenter >> method: anObject [
 	method := anObject
 ]
 
-{ #category : #'structure accessing' }
+{ #category : 'structure accessing' }
 StExternalBrowserPresenter >> methodFor: aSelector [
 
 	^ (self classes selectedItem methodNamed: aSelector) sourceCode
 			
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StExternalBrowserPresenter >> model: aModel [
 
 	model := aModel
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StExternalBrowserPresenter >> packages [
 
 	^ packages
 ]
 
-{ #category : #'selection operation' }
+{ #category : 'selection operation' }
 StExternalBrowserPresenter >> populatePackages [
 
 	packages items: model packages.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StExternalBrowserPresenter >> protocols [
 
 	^ protocols
 ]
 
-{ #category : #'structure accessing' }
+{ #category : 'structure accessing' }
 StExternalBrowserPresenter >> protocolsOfClass: aClass [
 
 	^ aClass protocols sorted
 ]
 
-{ #category : #refresh }
+{ #category : 'refresh' }
 StExternalBrowserPresenter >> refreshClasses: pack [
 	self resetClassSelection.
 	pack 
@@ -230,40 +231,40 @@ StExternalBrowserPresenter >> refreshClasses: pack [
 
 ]
 
-{ #category : #refresh }
+{ #category : 'refresh' }
 StExternalBrowserPresenter >> resetClassSelection [
 	
 	self classes unselectAll
 ]
 
-{ #category : #refresh }
+{ #category : 'refresh' }
 StExternalBrowserPresenter >> resetMethodBodyPane [
 	self method text: ''
 	
 ]
 
-{ #category : #refresh }
+{ #category : 'refresh' }
 StExternalBrowserPresenter >> resetProtocolSelection [
 
 	self protocols unselectAll
 ]
 
-{ #category : #refresh }
+{ #category : 'refresh' }
 StExternalBrowserPresenter >> resetSelectorSelection [
 	self selectors unselectAll
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StExternalBrowserPresenter >> selectors [
 	^ selectors
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StExternalBrowserPresenter >> selectors: anObject [
 	selectors := anObject
 ]
 
-{ #category : #'structure accessing' }
+{ #category : 'structure accessing' }
 StExternalBrowserPresenter >> selectorsOfProtocol: aProtocol [ 
 	| theSelectedClass |
 
@@ -275,31 +276,31 @@ StExternalBrowserPresenter >> selectorsOfProtocol: aProtocol [
 		sorted
 ]
 
-{ #category : #'accessing model' }
+{ #category : 'accessing model' }
 StExternalBrowserPresenter >> setModelBeforeInitialization: aModel [
 
 	model := aModel
 ]
 
-{ #category : #'structure accessing' }
+{ #category : 'structure accessing' }
 StExternalBrowserPresenter >> showClassDefinition [
 
 	method text:
 		(self classes selectedItem definitionString ifNil: [ '' ])
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StExternalBrowserPresenter >> showClassSide [
 
 	^ showClassSide
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StExternalBrowserPresenter >> title [ 
 	^ 'External Package Browser'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StExternalBrowserPresenter >> wireClasses [
 	classes
 		whenSelectionChangedDo: [ :selection |
@@ -312,7 +313,7 @@ StExternalBrowserPresenter >> wireClasses [
 					         self showClassDefinition ] ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StExternalBrowserPresenter >> wirePackages [
 
 	packages whenSelectionChangedDo: [ :selection | 
@@ -322,7 +323,7 @@ StExternalBrowserPresenter >> wirePackages [
 	
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StExternalBrowserPresenter >> wireProtocols [
 	protocols
 		whenSelectionChangedDo: [ :selection | 
@@ -333,7 +334,7 @@ StExternalBrowserPresenter >> wireProtocols [
 				ifNotNil: [ selectors items: (self selectorsOfProtocol: protocol) ] ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StExternalBrowserPresenter >> wireSelectors [
 	selectors
 		whenSelectionChangedDo: [ :selection |

@@ -1,6 +1,6 @@
-Extension { #name : #StEntry }
+Extension { #name : 'StEntry' }
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 StEntry >> stActDefault [
 	^ content stActDefault 
 ]

@@ -2,37 +2,38 @@
 Serializes a portion of the current stack trace using fuel.
 "
 Class {
-	#name : #StFuelOutStackCommand,
-	#superclass : #StDebuggerCommand,
-	#category : #'NewTools-Debugger-Fuel'
+	#name : 'StFuelOutStackCommand',
+	#superclass : 'StDebuggerCommand',
+	#category : 'NewTools-Debugger-Fuel',
+	#package : 'NewTools-Debugger-Fuel'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFuelOutStackCommand class >> defaultDescription [
 	^ 'Serialize a portion of the current stack trace using fuel.'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFuelOutStackCommand class >> defaultIconName [
 	^ #smallExport
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFuelOutStackCommand class >> defaultName [	
 	^ 'Fuel out stack'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFuelOutStackCommand class >> defaultShortcut [
 	^ nil
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StFuelOutStackCommand >> appliesTo: aDebugger [
 	^ true
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 StFuelOutStackCommand >> execute [
 
 	| fileName |

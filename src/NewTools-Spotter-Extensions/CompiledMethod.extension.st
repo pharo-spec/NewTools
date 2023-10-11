@@ -1,6 +1,6 @@
-Extension { #name : #CompiledMethod }
+Extension { #name : 'CompiledMethod' }
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 CompiledMethod >> spotterForBytecodesFor: aStep [
 	<stSpotterOrder: 15>
 	
@@ -11,7 +11,7 @@ CompiledMethod >> spotterForBytecodesFor: aStep [
 		filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 CompiledMethod >> spotterForImplementorsFor: aStep [
 	<stSpotterOrder: 10>
 	
@@ -22,7 +22,7 @@ CompiledMethod >> spotterForImplementorsFor: aStep [
 			keyBinding: $m command
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 CompiledMethod >> spotterForMessagesFor: aStep [
 	<stSpotterOrder: 12>
 
@@ -34,7 +34,7 @@ CompiledMethod >> spotterForMessagesFor: aStep [
 			filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 CompiledMethod >> spotterForSendersFor: aStep [
 	<stSpotterOrder: 11>
 	aStep listProcessor
@@ -44,7 +44,7 @@ CompiledMethod >> spotterForSendersFor: aStep [
 			keyBinding: $n command
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 CompiledMethod >> spotterMethodClassFor: aStep [
 	<stSpotterOrder: 50>
 
@@ -55,7 +55,7 @@ CompiledMethod >> spotterMethodClassFor: aStep [
 			itemIconName: [ :item | item systemIconName ]
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 CompiledMethod >> spotterPreview: aBuilder [
 
 	^ aBuilder newCode
@@ -65,7 +65,7 @@ CompiledMethod >> spotterPreview: aBuilder [
 		yourself
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 CompiledMethod >> stActDefault [
 	^ self browse
 ]

@@ -7,8 +7,8 @@ Pages are stored (by default) at ==StPlayground cacheDirectory== and have a time
 @@TODO complete
 "
 Class {
-	#name : #StPlaygroundPage,
-	#superclass : #Object,
+	#name : 'StPlaygroundPage',
+	#superclass : 'Object',
 	#instVars : [
 		'creationTime',
 		'fileName',
@@ -20,28 +20,30 @@ Class {
 		'baseDirectory',
 		'versionLog'
 	],
-	#category : #'NewTools-Playground-Model'
+	#category : 'NewTools-Playground-Model',
+	#package : 'NewTools-Playground',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPage class >> defaultTimeToWait [
 
 	^ 10 seconds
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StPlaygroundPage class >> fromReference: aFileReference [
 
 	^ self new fromReference: aFileReference
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPage class >> pageExtension [
 
 	^ 'ph'
 ]
 
-{ #category : #'inspector compatibility' }
+{ #category : 'inspector compatibility' }
 StPlaygroundPage >> asInspectorModel [
 	"Since the playground can be the starting point of an inspection (using <meta+g>), the 
 	 playground page (which is the model of a playground) needs to behave as a valid starting point. 
@@ -50,25 +52,25 @@ StPlaygroundPage >> asInspectorModel [
 	^ self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPage >> baseDirectory [
 	
 	^ baseDirectory ifNil:[ StPlaygroundPresenter cacheDirectory ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPage >> baseDirectory: aDirectory [
 	
 	baseDirectory := aDirectory
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundPage >> basicContents: aString [ 
 	
 	flushContents := aString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPage >> contents [
 
 	^ self fileReference 
@@ -76,7 +78,7 @@ StPlaygroundPage >> contents [
 		ifAbsent: [ '' ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPage >> contents: aString [
 
 	aString asString trimmed ifEmpty: [ ^ self ].
@@ -86,13 +88,13 @@ StPlaygroundPage >> contents: aString [
 		self spawnFlushProcess ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPage >> creationTime [
 
 	^ creationTime
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundPage >> creationTimeForFileName [
 
 	^ (self creationTime asString 
@@ -100,7 +102,7 @@ StPlaygroundPage >> creationTimeForFileName [
 		copyReplaceAll: '.' with: '-'
 ]
 
-{ #category : #'inspector compatibility' }
+{ #category : 'inspector compatibility' }
 StPlaygroundPage >> defaultObjectInspectorClass [
 	"Since the playground can be the starting point of an inspection (using <meta+g>), the 
 	 playground page (which is the model of a playground) needs to behave as a valid starting point. 
@@ -109,26 +111,26 @@ StPlaygroundPage >> defaultObjectInspectorClass [
 	^ StPlaygroundPagePresenter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPage >> ensureContentsFlushed [
 
 	flushContents isEmptyOrNil ifTrue: [ ^ self ].
 	self flush
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPage >> fileName [
 
 	^ fileName ifNil: [ fileName := self creationTimeForFileName ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPage >> fileReference [
 
 	^ (self baseDirectory / self fileName) withExtension: self class pageExtension
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundPage >> flush [
 
 	mutex critical: [ 
@@ -142,7 +144,7 @@ StPlaygroundPage >> flush [
 		self storeVersion ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPage >> fromReference: aFileReference [
 
 	aFileReference parent = self baseDirectory 
@@ -151,7 +153,7 @@ StPlaygroundPage >> fromReference: aFileReference [
 	creationTime := aFileReference creationTime
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPage >> initialize [
 
 	super initialize.
@@ -160,7 +162,7 @@ StPlaygroundPage >> initialize [
 	mutex := Mutex new
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundPage >> spawnFlushProcess [
 
 	(flushProcess notNil 
@@ -178,7 +180,7 @@ StPlaygroundPage >> spawnFlushProcess [
 	] fork
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundPage >> storeVersion [
 	| entry |
 
@@ -192,26 +194,26 @@ StPlaygroundPage >> storeVersion [
 	self versionLog newEntry: entry
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPage >> timeToWait [
 
 	^ timeToWait ifNil: [ self class defaultTimeToWait ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPage >> timeToWait: aDuration [
 
 	timeToWait := aDuration
 ]
 
-{ #category : #'accessing - versions' }
+{ #category : 'accessing - versions' }
 StPlaygroundPage >> versionLog [
 	
 	^ versionLog ifNil: [ 
 		versionLog := OmFileStore fromFile: (self fileReference withExtension: 'ombu') ]
 ]
 
-{ #category : #'accessing - versions' }
+{ #category : 'accessing - versions' }
 StPlaygroundPage >> versions [
 	
 	^ Array streamContents: [ :stream | 

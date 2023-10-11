@@ -12,8 +12,8 @@ However, it might be interesting if I evolve later, or if I need safe concurrent
 By default, the cache does not lookup halts in all the system's methods. This can be enabled in a settings under tools>debugging>halt cache. The cache must be refreshed to effectively perform the lookup (StHaltCache refresh).
 "
 Class {
-	#name : #StHaltCache,
-	#superclass : #Object,
+	#name : 'StHaltCache',
+	#superclass : 'Object',
 	#traits : 'TObservable',
 	#classTraits : 'TObservable classTrait',
 	#instVars : [
@@ -24,15 +24,17 @@ Class {
 	#classVars : [
 		'#DefaultCache'
 	],
-	#category : #'NewTools-Debugger-Breakpoints-Tools-Model'
+	#category : 'NewTools-Debugger-Breakpoints-Tools-Model',
+	#package : 'NewTools-Debugger-Breakpoints-Tools',
+	#tag : 'Model'
 }
 
-{ #category : #'accessing - cache' }
+{ #category : 'accessing - cache' }
 StHaltCache class >> defaultCache [
 	^ DefaultCache ifNil: [ DefaultCache := self new ]
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StHaltCache class >> haltCacheSettingsOn: aBuilder [
 	<systemsettings>
 	(aBuilder group: #haltcache)
@@ -58,13 +60,13 @@ This can be slow for large systems (with lots of methods).' ];
 If deactivated, the list of halts will not be updated in the debugging tools browsers.' ]
 ]
 
-{ #category : #'accessing - cache' }
+{ #category : 'accessing - cache' }
 StHaltCache class >> refresh [
 	<script>
 	self defaultCache refreshCache
 ]
 
-{ #category : #'class initialization' }
+{ #category : 'class initialization' }
 StHaltCache class >> reset [
 	<script>
 	DefaultCache
@@ -72,14 +74,14 @@ StHaltCache class >> reset [
 			DefaultCache := nil ]
 ]
 
-{ #category : #cache }
+{ #category : 'cache' }
 StHaltCache >> buildCache [
 	self scanAllSystem ifFalse:[^self].
 	SystemNavigation new allHalts
 		do: [ :compiledMethod | self buildCacheForMethod: compiledMethod ]
 ]
 
-{ #category : #cache }
+{ #category : 'cache' }
 StHaltCache >> buildCacheForMethod: aCompiledMethod [
 	"- extract all halt nodes from the method's ast
 	- extract all nodes with installed breakpoints from the method's ast
@@ -98,18 +100,18 @@ StHaltCache >> buildCacheForMethod: aCompiledMethod [
 	self cacheChanged
 ]
 
-{ #category : #notifying }
+{ #category : 'notifying' }
 StHaltCache >> cacheChanged [
 	SystemAnnouncer uniqueInstance announce: StHaltCacheChanged
 ]
 
-{ #category : #cache }
+{ #category : 'cache' }
 StHaltCache >> cacheNode: aNode forSelector: aMethodSelector [
 	(methodsWithHalts at: aMethodSelector ifAbsentPut: IdentitySet new)
 		add: aNode
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StHaltCache >> initialize [
 	methodsWithHalts := Dictionary new.
 	self buildCache.
@@ -117,74 +119,74 @@ StHaltCache >> initialize [
 	self property: #isActive whenChangedDo: [ self updateSubscriptions ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHaltCache >> isActive [
 	^ isActive ifNil: [ isActive := false ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHaltCache >> isActive: aBoolean [
 	isActive := aBoolean
 ]
 
-{ #category : #notifying }
+{ #category : 'notifying' }
 StHaltCache >> methodAdded: methodAddedAnnouncement [
 	self buildCacheForMethod: methodAddedAnnouncement methodAdded
 ]
 
-{ #category : #notifying }
+{ #category : 'notifying' }
 StHaltCache >> methodChanged: methodCModifiedAnnouncement [
 	self buildCacheForMethod: methodCModifiedAnnouncement newMethod
 ]
 
-{ #category : #notifying }
+{ #category : 'notifying' }
 StHaltCache >> methodRemoved: methodRemovedAnnouncement [
 	self uncacheMethod: methodRemovedAnnouncement methodRemoved printString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHaltCache >> methodsWithHalts [
 	^ methodsWithHalts
 ]
 
-{ #category : #cache }
+{ #category : 'cache' }
 StHaltCache >> nodeCacheForSelector: aMethodSelector [
 	^ methodsWithHalts at: aMethodSelector ifAbsent: #()
 ]
 
-{ #category : #cache }
+{ #category : 'cache' }
 StHaltCache >> refreshCache [
 	self buildCache
 ]
 
-{ #category : #'system subscription' }
+{ #category : 'system subscription' }
 StHaltCache >> registerSubscriptions [
 	SystemAnnouncer uniqueInstance weak when: MethodModified send: #methodChanged: to: self.
 	SystemAnnouncer uniqueInstance weak when: MethodRemoved send: #methodRemoved: to: self.
 	SystemAnnouncer uniqueInstance weak when: MethodAdded send: #methodAdded: to: self
 ]
 
-{ #category : #'system subscription' }
+{ #category : 'system subscription' }
 StHaltCache >> removeSubscriptions [
 	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHaltCache >> scanAllSystem [
 	^scanAllSystem ifNil:[scanAllSystem := false] 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHaltCache >> scanAllSystem: aBoolean [
 	scanAllSystem := aBoolean
 ]
 
-{ #category : #cache }
+{ #category : 'cache' }
 StHaltCache >> setNodeCache: haltAndBreakpointNodes forSelector: aSelector [
 	methodsWithHalts at: aSelector put: haltAndBreakpointNodes
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StHaltCache >> shouldConsiderHaltNode: aNode [
 	| selector shouldRejectNode |
 	selector := aNode selector.
@@ -194,7 +196,7 @@ StHaltCache >> shouldConsiderHaltNode: aNode [
 	^ shouldRejectNode not and: [ 'halt*' match: selector ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StHaltCache >> shouldConsiderMethod: aCompiledMethod [
 
 	"We do not consider test or debugging methods"
@@ -204,7 +206,7 @@ StHaltCache >> shouldConsiderMethod: aCompiledMethod [
 		  aCompiledMethod hasPragmaNamed: pragmaName ]
 ]
 
-{ #category : #cache }
+{ #category : 'cache' }
 StHaltCache >> uncacheMethod: aMethodSelector [
 	"Methods not in the cache are irrelevant, so we don't care if they are absent from the dictionary"
 
@@ -214,7 +216,7 @@ StHaltCache >> uncacheMethod: aMethodSelector [
 	self cacheChanged
 ]
 
-{ #category : #'system subscription' }
+{ #category : 'system subscription' }
 StHaltCache >> updateSubscriptions [
 	self isActive ifTrue: [ ^ self registerSubscriptions ].
 	^ self removeSubscriptions

@@ -1,42 +1,43 @@
 Class {
-	#name : #StPlaygroundBaseTest,
-	#superclass : #TestCase,
+	#name : 'StPlaygroundBaseTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'backendForTest',
 		'application',
 		'presenter',
 		'memoryFileSystem'
 	],
-	#category : #'NewTools-Playground-Tests'
+	#category : 'NewTools-Playground-Tests',
+	#package : 'NewTools-Playground-Tests'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StPlaygroundBaseTest class >> isAbstract [
 
 	^ super isAbstract or: [ self = StPlaygroundBaseTest ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundBaseTest >> classToTest [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StPlaygroundBaseTest >> initializeInstance: aPresenter [
 	
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StPlaygroundBaseTest >> initializeInstanceBeforeInitialization: aPresenter [
 	
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StPlaygroundBaseTest >> initializeMemoryFileSystem: aFileSystem [
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StPlaygroundBaseTest >> newPage [ 
 
 	^ StPlaygroundPage new 
@@ -45,13 +46,13 @@ StPlaygroundBaseTest >> newPage [
 		yourself
 ]
 
-{ #category : #'private - utilities' }
+{ #category : 'private - utilities' }
 StPlaygroundBaseTest >> openInstance [
 
 	presenter open
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StPlaygroundBaseTest >> setUp [
 	super setUp.
 	
@@ -68,21 +69,21 @@ StPlaygroundBaseTest >> setUp [
 	self initializeInstance: presenter
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StPlaygroundBaseTest >> tearDown [
 
 	presenter withWindowDo: [ :window | window close ].
 	super tearDown
 ]
 
-{ #category : #'private - utilities' }
+{ #category : 'private - utilities' }
 StPlaygroundBaseTest >> waitUntilContentsAreFlush [
 		
 	20 milliSeconds wait
 	
 ]
 
-{ #category : #'private - utilities' }
+{ #category : 'private - utilities' }
 StPlaygroundBaseTest >> waitUntilUIRedrawed [
 
 	backendForTest waitUntilUIRedrawed

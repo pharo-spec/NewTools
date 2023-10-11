@@ -7,15 +7,17 @@ I am a browser allowing one to browse the flags in the system.
 I can organize them in different ways such as flags by flags parameters, flags by class or flags by packages.
 "
 Class {
-	#name : #FlagBrowser,
-	#superclass : #StPresenter,
+	#name : 'FlagBrowser',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'tabs'
 	],
-	#category : #'NewTools-FlagBrowser-Presenters'
+	#category : 'NewTools-FlagBrowser-Presenters',
+	#package : 'NewTools-FlagBrowser',
+	#tag : 'Presenters'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 FlagBrowser class >> defaultSpec [
 
 	^ SpBoxLayout newVertical
@@ -23,7 +25,7 @@ FlagBrowser class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #'world menu' }
+{ #category : 'world menu' }
 FlagBrowser class >> menuCommandOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #'Flags Browser')
@@ -35,13 +37,13 @@ FlagBrowser class >> menuCommandOn: aBuilder [
 		withSeparatorAfter 
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 FlagBrowser class >> open [
 	<script>
 	self new openWithSpec
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 FlagBrowser >> initializeWidgets [
 	tabs := self newNotebook.
 
@@ -52,7 +54,7 @@ FlagBrowser >> initializeWidgets [
 			provider: [ self instantiate: aPage ]) ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 FlagBrowser >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.

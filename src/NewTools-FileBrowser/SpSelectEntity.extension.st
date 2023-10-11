@@ -1,6 +1,6 @@
-Extension { #name : #SpSelectEntity }
+Extension { #name : 'SpSelectEntity' }
 
-{ #category : #'*NewTools-FileBrowser' }
+{ #category : '*NewTools-FileBrowser' }
 SpSelectEntity class >> fDLayoutFileDialog [
 	^ SpBoxLayout newVertical
 		add: #entityText;

@@ -4,23 +4,25 @@ It will include the first line of the page and the creation date.
 I am meant to be used in StPlaygroundPagesPresenter, as element of a list.
 "
 Class {
-	#name : #StPlaygroundPageSummaryPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StPlaygroundPageSummaryPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'page',
 		'firstLineLabel',
 		'timeLabel'
 	],
-	#category : #'NewTools-Playground-View'
+	#category : 'NewTools-Playground-View',
+	#package : 'NewTools-Playground',
+	#tag : 'View'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPageSummaryPresenter >> contents [
 
 	^ page contents
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPageSummaryPresenter >> initializePresenters [
 
 	layout := SpBoxLayout newTopToBottom
@@ -36,13 +38,13 @@ StPlaygroundPageSummaryPresenter >> initializePresenters [
 		label: page creationTime epiceaBrowsersAsString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPageSummaryPresenter >> page [
 
 	^ page
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPageSummaryPresenter >> pageFirstLine [
 		
 	page readStreamDo: [ :stream | | line |
@@ -52,7 +54,7 @@ StPlaygroundPageSummaryPresenter >> pageFirstLine [
 	^ 'Empty'
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StPlaygroundPageSummaryPresenter >> setModelBeforeInitialization: aPage [
 
 	page := aPage

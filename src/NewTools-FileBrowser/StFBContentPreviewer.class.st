@@ -2,23 +2,25 @@
 I'm a previewer use to display the text content of a file 
 "
 Class {
-	#name : #StFBContentPreviewer,
-	#superclass : #StFBAbstractPreviewer,
-	#category : #'NewTools-FileBrowser-Previewers'
+	#name : 'StFBContentPreviewer',
+	#superclass : 'StFBAbstractPreviewer',
+	#category : 'NewTools-FileBrowser-Previewers',
+	#package : 'NewTools-FileBrowser',
+	#tag : 'Previewers'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StFBContentPreviewer >> canBeUsedOn: aFileReference [
 	^ aFileReference isFile
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StFBContentPreviewer >> matchingMimeType: aZnMimeType [
 	"return a Boolean to indicate if element matches"
 	^ true
 ]
 
-{ #category : #templateMethod }
+{ #category : 'templateMethod' }
 StFBContentPreviewer >> previewActionOn: aFileReference [
 
 	^ SpTextPresenter new text: ([ 

@@ -2,8 +2,8 @@
 Lists all the debuggers available in the image, along with their rank (provided they always return the same rank regardless of the debug session). Also list all the debug sessions stored in DebugSessionStorage.
 "
 Class {
-	#name : #DebuggerListAndDebugSessionListPresenter,
-	#superclass : #SpPresenter,
+	#name : 'DebuggerListAndDebugSessionListPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'debuggerList',
 		'debuggerListToolBar',
@@ -13,10 +13,11 @@ Class {
 		'storageLimitInputField',
 		'shouldUpdateStorageLimitInputField'
 	],
-	#category : #'NewTools-DebuggerSelector'
+	#category : 'NewTools-DebuggerSelector',
+	#package : 'NewTools-DebuggerSelector'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 DebuggerListAndDebugSessionListPresenter class >> defaultSpec [
 	| toolBarHeight titleHeight |
 	titleHeight := 20.
@@ -48,12 +49,12 @@ DebuggerListAndDebugSessionListPresenter class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 DebuggerListAndDebugSessionListPresenter class >> initialExtent [
 	^ 750@300
 ]
 
-{ #category : #'world menu' }
+{ #category : 'world menu' }
 DebuggerListAndDebugSessionListPresenter class >> menuCommandOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #'List Debuggers and Debug Sessions')
@@ -65,7 +66,7 @@ DebuggerListAndDebugSessionListPresenter class >> menuCommandOn: aBuilder [
 		action: [ self open ]
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 DebuggerListAndDebugSessionListPresenter class >> open [
 	<example>
 	| windowPresenter presenter |
@@ -76,12 +77,12 @@ DebuggerListAndDebugSessionListPresenter class >> open [
 	^ windowPresenter
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 DebuggerListAndDebugSessionListPresenter class >> title [
 	^ 'Debuggers and Debug Sessions'
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 DebuggerListAndDebugSessionListPresenter >> addCorrectMainDebuggerButtonToToolBar: aToolBar [
 	debuggerList selectedItems
 		ifNotEmpty: [ :debuggerList_ | 
@@ -114,7 +115,7 @@ DebuggerListAndDebugSessionListPresenter >> addCorrectMainDebuggerButtonToToolBa
 				help: 'Set this debugger to be the main debugger')
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 DebuggerListAndDebugSessionListPresenter >> compareRank: rank1 to: rank2 [
 	rank1 isInteger
 		ifFalse: [ ^ false ].	"If rank1 is not an integer, (typically a string), then it is smaller than rank2"
@@ -123,7 +124,7 @@ DebuggerListAndDebugSessionListPresenter >> compareRank: rank1 to: rank2 [
 	^ rank1 >= rank2	"Otherwise, both ranks are int, we return the result of their comparison"
 ]
 
-{ #category : #'button action' }
+{ #category : 'button action' }
 DebuggerListAndDebugSessionListPresenter >> debugDebugSessionAction [
 	"Describe the action performed by the 'Debug' button under the Debug Session List.
 	Requires a debug session to be selected in the list of debug sessions. If this condition is not met, inform the user and stop.
@@ -140,7 +141,7 @@ DebuggerListAndDebugSessionListPresenter >> debugDebugSessionAction [
 		andNotification: nil
 ]
 
-{ #category : #'button action' }
+{ #category : 'button action' }
 DebuggerListAndDebugSessionListPresenter >> debugDebugSessionWithSpecificDebuggerAction [
 	"Describe the action performed by the 'Debug With' button under the Debug Session List.
 	Requires a debug session to be selected in the list of debug sessions, and a debugger to be selected in the list of debuggers. If these conditions are not met, inform the user and stop.
@@ -162,7 +163,7 @@ DebuggerListAndDebugSessionListPresenter >> debugDebugSessionWithSpecificDebugge
 		andNotification: nil
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 DebuggerListAndDebugSessionListPresenter >> debuggerClassToNameOfDebugger: aDebuggerClass [
 	"Returns the name of @aDebuggerClass, to be displayed in the list of debuggers. If @aDebuggerClass is the main debugger defined in DebuggerSelector, return the name as a Text styled in bold"
 
@@ -173,7 +174,7 @@ DebuggerListAndDebugSessionListPresenter >> debuggerClassToNameOfDebugger: aDebu
 		ifFalse: [ ^ aDebuggerClass asString ]
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 DebuggerListAndDebugSessionListPresenter >> debuggerClassToRankToDisplay: aDebuggerClass [
 	"Returns what should be displayed as the rank of @aDebuggerClass.
 	Since we do not have a debug session to give this debugger, we try with nil. If it answers a rank, we display it, if it raises an exception, we assume it really needed a debug session to give a rank, so we display a string explaining that.
@@ -188,7 +189,7 @@ DebuggerListAndDebugSessionListPresenter >> debuggerClassToRankToDisplay: aDebug
 		ifFalse: [ ^ result ]
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 DebuggerListAndDebugSessionListPresenter >> getBlockTryingToGetRankOfDebugger [
 	"Returns a block taking a debugger as argument and returning the rank it would give to a nil debug session. If an exception is raised, the debugger really needs the debug session object to give a rank, so the block returns a string saying that. If no exception is raised, it means the debugger did not need an actual debug session object to answer, the block directly return the returned value"
 
@@ -198,7 +199,7 @@ DebuggerListAndDebugSessionListPresenter >> getBlockTryingToGetRankOfDebugger [
 		do: [ 'Depends on the debug session' ] ]
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 DebuggerListAndDebugSessionListPresenter >> getSortingBlock [
 	| rankBlock |
 	rankBlock := self getBlockTryingToGetRankOfDebugger.
@@ -209,14 +210,14 @@ DebuggerListAndDebugSessionListPresenter >> getSortingBlock [
 	self compareRank: rank1 to: rank2 ]
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 DebuggerListAndDebugSessionListPresenter >> getWhenClosedBlock [
 	"Returns the block to be executed when the windows containing this presenter is closed by the user"
 
 	^ [ self setInitialSubscriptions: false ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 DebuggerListAndDebugSessionListPresenter >> initializePresenters [
 	| timeOfStorageColumnWidth refsColumnWidth |
 	debuggerList := self newTable
@@ -280,7 +281,7 @@ DebuggerListAndDebugSessionListPresenter >> initializePresenters [
 	self setInitialSubscriptions: true
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 DebuggerListAndDebugSessionListPresenter >> makeDebugSessionListToolbar [
 	| toolBar |
 	toolBar := self newToolbar.
@@ -329,7 +330,7 @@ DebuggerListAndDebugSessionListPresenter >> makeDebugSessionListToolbar [
 	^ toolBar
 ]
 
-{ #category : #'react to events' }
+{ #category : 'react to events' }
 DebuggerListAndDebugSessionListPresenter >> onDebugSessionStorageLimitUpdate [
 	self shouldUpdateStorageLimitInputField
 		ifTrue:
@@ -339,18 +340,18 @@ DebuggerListAndDebugSessionListPresenter >> onDebugSessionStorageLimitUpdate [
 			self shouldUpdateStorageLimitInputField: true ]
 ]
 
-{ #category : #'react to events' }
+{ #category : 'react to events' }
 DebuggerListAndDebugSessionListPresenter >> onDebugSessionStorageUpdate [
 	self refreshDebugSessionList
 ]
 
-{ #category : #'react to events' }
+{ #category : 'react to events' }
 DebuggerListAndDebugSessionListPresenter >> onMainDebuggerClassUpdate [
 	self refreshDebuggerList.
 	self refreshDebuggerListToolBar
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 DebuggerListAndDebugSessionListPresenter >> printDateAndTime: aDateAndTime [
 	| d |
 	d := aDateAndTime.
@@ -359,12 +360,12 @@ DebuggerListAndDebugSessionListPresenter >> printDateAndTime: aDateAndTime [
 		, d dayOfMonth asString
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 DebuggerListAndDebugSessionListPresenter >> refreshDebugSessionList [
 	debugSessionList items: DebugSessionStorage singleton storage
 ]
 
-{ #category : #refresh }
+{ #category : 'refresh' }
 DebuggerListAndDebugSessionListPresenter >> refreshDebuggerList [
 	debuggerList
 		items:
@@ -372,7 +373,7 @@ DebuggerListAndDebugSessionListPresenter >> refreshDebuggerList [
 				sort: self getSortingBlock)
 ]
 
-{ #category : #refresh }
+{ #category : 'refresh' }
 DebuggerListAndDebugSessionListPresenter >> refreshDebuggerListToolBar [
 	debuggerListToolBar removeAllItems.
 	debuggerListToolBar
@@ -388,7 +389,7 @@ DebuggerListAndDebugSessionListPresenter >> refreshDebuggerListToolBar [
 	self addCorrectMainDebuggerButtonToToolBar: debuggerListToolBar
 ]
 
-{ #category : #announcement }
+{ #category : 'announcement' }
 DebuggerListAndDebugSessionListPresenter >> setInitialSubscriptions: aBoolean [
 	"If @aBoolean is true, perform the initial subscriptions needed to keep the UI up to date. If it is false, unsubscribe. The point of having both the subscriptions and unsubscriptions in the same method is not to forget to add unsubscription statement in the future when new subscription are added"
 
@@ -405,19 +406,19 @@ DebuggerListAndDebugSessionListPresenter >> setInitialSubscriptions: aBoolean [
 				removeSubscriberOnMainDebuggerClassUpdate: self ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebuggerListAndDebugSessionListPresenter >> shouldUpdateStorageLimitInputField [
 	shouldUpdateStorageLimitInputField
 		ifNil: [ shouldUpdateStorageLimitInputField := true ].
 	^ shouldUpdateStorageLimitInputField
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebuggerListAndDebugSessionListPresenter >> shouldUpdateStorageLimitInputField: aBoolean [
 	shouldUpdateStorageLimitInputField := aBoolean
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 DebuggerListAndDebugSessionListPresenter >> sortDebugSessionUnitStorage: aDebugSessionUnitStorage and: aDebugSessionUnitStorage2 [
 	"Return true if @aDebugSessionUnitStorage has been stored more recently than @aDebugSessionUnitStorage2"
 
@@ -425,7 +426,7 @@ DebuggerListAndDebugSessionListPresenter >> sortDebugSessionUnitStorage: aDebugS
 		>= aDebugSessionUnitStorage2 timeOfCreation
 ]
 
-{ #category : #help }
+{ #category : 'help' }
 DebuggerListAndDebugSessionListPresenter >> storageLimitHelp [
 	^ 'Determines the maximum number of debug sessions to be stored. Oldest debug sessions are terminated first. Debug sessions currently opened in any debugger are never terminated and do not count towards this limit'
 ]

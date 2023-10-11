@@ -45,52 +45,54 @@ See *class:StPlaygroundPagesPresenter*
 
 "
 Class {
-	#name : #StPlaygroundPresenter,
-	#superclass : #StInspectorPresenter,
+	#name : 'StPlaygroundPresenter',
+	#superclass : 'StInspectorPresenter',
 	#classVars : [
 		'CacheDirectory'
 	],
-	#category : #'NewTools-Playground-View'
+	#category : 'NewTools-Playground-View',
+	#package : 'NewTools-Playground',
+	#tag : 'View'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPresenter class >> cacheDirectory [
 	
 	^ CacheDirectory ifNil: [ self defaultCacheDirectory ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPresenter class >> cacheDirectory: aDirectory [
 	
 	CacheDirectory := aDirectory ensureCreateDirectory
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundPresenter class >> defaultCacheDirectory [
 	
 	^ (FileLocator localDirectory / 'play-cache') ensureCreateDirectory
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPresenter class >> defaultExtent [
 
 	^ (600@400) scaledByDisplayScaleFactor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPresenter class >> defaultTitle [ 
 
 	^ 'Playground'
 ]
 
-{ #category : #'class initialization' }
+{ #category : 'class initialization' }
 StPlaygroundPresenter class >> initialize [
 
 	"Make playground active by default"
 	self register
 ]
 
-{ #category : #'world menu' }
+{ #category : 'world menu' }
 StPlaygroundPresenter class >> menuCommandOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #Playground)
@@ -102,14 +104,14 @@ StPlaygroundPresenter class >> menuCommandOn: aBuilder [
 		icon: (self iconNamed: #workspace)
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StPlaygroundPresenter class >> open [
 
 	<script>
 	^ self new open
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StPlaygroundPresenter class >> openContents: aString [
 	"Open a new workspace with the given contents. It looks better when aString is code since the style is applied"
 
@@ -118,7 +120,7 @@ StPlaygroundPresenter class >> openContents: aString [
 		open
 ]
 
-{ #category : #'tools registry' }
+{ #category : 'tools registry' }
 StPlaygroundPresenter class >> register [
 	"Add ourselves to registry. See [Smalltalk tools]" 
 	<script>
@@ -126,7 +128,7 @@ StPlaygroundPresenter class >> register [
 	self registerToolsOn: Smalltalk tools
 ]
 
-{ #category : #'tools registry' }
+{ #category : 'tools registry' }
 StPlaygroundPresenter class >> registerToolsOn: registry [
 	"Add ourselves to registry. See [Smalltalk tools]" 
 
@@ -134,7 +136,7 @@ StPlaygroundPresenter class >> registerToolsOn: registry [
 
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StPlaygroundPresenter class >> settingsOn: aBuilder [
 <systemsettings>
 
@@ -148,31 +150,31 @@ StPlaygroundPresenter class >> settingsOn: aBuilder [
 		label: 'Local Playground cache directory'.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPresenter >> contents: aString [ 
 
 	self firstPage contents: aString
 ]
 
-{ #category : #'api - focus' }
+{ #category : 'api - focus' }
 StPlaygroundPresenter >> defaultKeyboardFocus [
 
 	^ self firstPage
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StPlaygroundPresenter >> loadPage: aFileReference [
 
 	self firstPage loadPage: aFileReference
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'private - factory' }
 StPlaygroundPresenter >> newDefaultPlaygroundPage [
 
 	^ StPlaygroundPage new
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'private - factory' }
 StPlaygroundPresenter >> newInspectorFor: aModel [
 	| modelToInspectOrPlayground |
 	
@@ -183,32 +185,32 @@ StPlaygroundPresenter >> newInspectorFor: aModel [
 	^ super newInspectorFor: modelToInspectOrPlayground
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPresenter >> page [
 
 	^ self firstPage page
 ]
 
-{ #category : #'private - stepping' }
+{ #category : 'private - stepping' }
 StPlaygroundPresenter >> startProcessing [
 	
 	"A playground does not steps, do nothing"
 ]
 
-{ #category : #'private - stepping' }
+{ #category : 'private - stepping' }
 StPlaygroundPresenter >> stopProcessing [
 	
 	"A playground does not steps, but it needs to force a flush of last changes"
 	self firstPage ensureContentsFlushed
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPresenter >> windowIcon [
 	
 	^ self application iconNamed: #workspace
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPresenter >> windowTitle [
 
 	^ self class defaultTitle

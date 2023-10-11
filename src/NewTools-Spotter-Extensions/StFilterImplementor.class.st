@@ -2,32 +2,33 @@
 A filter for implementors. 
 "
 Class {
-	#name : #StFilterImplementor,
-	#superclass : #StFilterSubstring,
-	#category : #'NewTools-Spotter-Extensions'
+	#name : 'StFilterImplementor',
+	#superclass : 'StFilterSubstring',
+	#category : 'NewTools-Spotter-Extensions',
+	#package : 'NewTools-Spotter-Extensions'
 }
 
-{ #category : #public }
+{ #category : 'public' }
 StFilterImplementor class >> stListFilter [
 
 	^ StFilterSubstring new
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StFilterImplementor >> applyFilterWithQuery [
 
 	super applyFilterWithQuery.
 	self filteredItems: (self filteredItems reject: [ :each | each isFromTrait ])
 ]
 
-{ #category : #'private - model' }
+{ #category : 'private - model' }
 StFilterImplementor >> itemFilterNameFor: each [
 
 	self flag: 'this filter wants to filter items by #selector (speed 10x), but dive-in-category wants to filter by #printString. Most filters in dive-in-category wants to filter by #printString, but not all. Others: files, topics, help, ... ?'.
 	^ each selector
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 StFilterImplementor >> stListFilter [
 
 	^ StFilterSubstring new

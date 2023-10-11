@@ -1,6 +1,6 @@
-Extension { #name : #SequenceableCollection }
+Extension { #name : 'SequenceableCollection' }
 
-{ #category : #'*NewTools-Spotter' }
+{ #category : '*NewTools-Spotter' }
 SequenceableCollection >> stFasterDifferencePreservingOrder: aCollection [
 	" this implementation does not preserve the original species of self ! it serves ONE specific use case only "
 	| newCollection |

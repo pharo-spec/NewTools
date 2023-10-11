@@ -1,10 +1,12 @@
 Class {
-	#name : #StReporter,
-	#superclass : #StReporterPresenter,
-	#category : #'NewTools-SystemReporter-Deprecated'
+	#name : 'StReporter',
+	#superclass : 'StReporterPresenter',
+	#category : 'NewTools-SystemReporter-Deprecated',
+	#package : 'NewTools-SystemReporter',
+	#tag : 'Deprecated'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StReporter class >> isDeprecated [ 
 
 	^ true

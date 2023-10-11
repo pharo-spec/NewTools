@@ -11,26 +11,28 @@ Public API and Key Messages
 
 "
 Class {
-	#name : #StFBAbstractFilter,
-	#superclass : #Object,
+	#name : 'StFBAbstractFilter',
+	#superclass : 'Object',
 	#traits : 'TComparable',
 	#classTraits : 'TComparable classTrait',
-	#category : #'NewTools-FileBrowser-Filtering'
+	#category : 'NewTools-FileBrowser-Filtering',
+	#package : 'NewTools-FileBrowser',
+	#tag : 'Filtering'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StFBAbstractFilter class >> canBeDefault [
 	^ self isAbstract not
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StFBAbstractFilter class >> defaultFilters [
 
 	^ ((self allSubclasses select: #canBeDefault) sorted:
 		   #priority descending) collect: #new
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StFBAbstractFilter class >> defaultFiltersWith: aFilter [
 
 	| defaultFilters |
@@ -39,17 +41,17 @@ StFBAbstractFilter class >> defaultFiltersWith: aFilter [
 	^ { aFilter } , self defaultFilters
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StFBAbstractFilter class >> isAbstract [
 	^ self = StFBAbstractFilter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBAbstractFilter class >> priority [
 	^ 1
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StFBAbstractFilter >> < aComparable [
 
 	"Answer whether the receiver is less than the argument."
@@ -57,7 +59,7 @@ StFBAbstractFilter >> < aComparable [
 	^ self class priority < aComparable class priority
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StFBAbstractFilter >> = aComparable [
 
 	"Double dispatch"
@@ -65,18 +67,18 @@ StFBAbstractFilter >> = aComparable [
 	^ aComparable equalsToNonExtensionFilter: self
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 StFBAbstractFilter >> addExtensionTo: aFileReference [
 
 	^ aFileReference
 ]
 
-{ #category : #applying }
+{ #category : 'applying' }
 StFBAbstractFilter >> applyOn: aCollectionOfFileReference [
 	^ aCollectionOfFileReference select: [ :eachFileReference | self predicate: eachFileReference ]
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StFBAbstractFilter >> equalsToExtensionFilter: aExtensionFilter [
 
 	"Compare the receiver with the argument and answer with true if the 
@@ -85,7 +87,7 @@ StFBAbstractFilter >> equalsToExtensionFilter: aExtensionFilter [
 	^ self class = aExtensionFilter class
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StFBAbstractFilter >> equalsToNonExtensionFilter: aFilter [
 
 	"Compare the receiver with the argument and answer with true if the 
@@ -94,7 +96,7 @@ StFBAbstractFilter >> equalsToNonExtensionFilter: aFilter [
 	^ self class = aFilter class
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StFBAbstractFilter >> hash [
 
 	"Hash must be redefined whenever = is redefined."
@@ -102,14 +104,14 @@ StFBAbstractFilter >> hash [
 	^ self class priority
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBAbstractFilter >> name [
 	"Name of the filter to display in the UI."
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBAbstractFilter >> predicate: aFileReference [
 	"I should answer true if the filter should display the file reference as parameter and false if it should filter it."
 

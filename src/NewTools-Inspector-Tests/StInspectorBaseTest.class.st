@@ -1,43 +1,44 @@
 Class {
-	#name : #StInspectorBaseTest,
-	#superclass : #TestCase,
+	#name : 'StInspectorBaseTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'backendForTest',
 		'application',
 		'presenter'
 	],
-	#category : #'NewTools-Inspector-Tests'
+	#category : 'NewTools-Inspector-Tests',
+	#package : 'NewTools-Inspector-Tests'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StInspectorBaseTest class >> isAbstract [
 
 	^ super isAbstract or: [ self = StInspectorBaseTest ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorBaseTest >> classToTest [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StInspectorBaseTest >> initializeInstance: aPresenter [
 	
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StInspectorBaseTest >> initializeInstanceBeforeInitialization: aPresenter [
 	
 ]
 
-{ #category : #'private - utilities' }
+{ #category : 'private - utilities' }
 StInspectorBaseTest >> openInstance [
 
 	presenter open
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StInspectorBaseTest >> setUp [
 	super setUp.
 	
@@ -51,21 +52,21 @@ StInspectorBaseTest >> setUp [
 	self initializeInstance: presenter
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StInspectorBaseTest >> tearDown [
 
 	presenter withWindowDo: [ :window | window close ].
 	super tearDown
 ]
 
-{ #category : #'private - utilities' }
+{ #category : 'private - utilities' }
 StInspectorBaseTest >> waitUntilContentsAreFlush [
 		
 	20 milliSeconds wait
 	
 ]
 
-{ #category : #'private - utilities' }
+{ #category : 'private - utilities' }
 StInspectorBaseTest >> waitUntilUIRedrawed [
 
 	backendForTest waitUntilUIRedrawed

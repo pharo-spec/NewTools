@@ -1,1 +1,1 @@
-Package { #name : #'NewTools-DebuggerSelector-Tests' }
+Package { #name : 'NewTools-DebuggerSelector-Tests' }

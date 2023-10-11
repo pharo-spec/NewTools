@@ -3,16 +3,18 @@ Filter ""alike"" items.
 It usues the `String>>#alike:` method to obtain the matching elements. 
 "
 Class {
-	#name : #StFilterAlike,
-	#superclass : #StOrderedFilter,
+	#name : 'StFilterAlike',
+	#superclass : 'StOrderedFilter',
 	#instVars : [
 		'lowerThreshold',
 		'upperThreshold'
 	],
-	#category : #'NewTools-Spotter-Filters'
+	#category : 'NewTools-Spotter-Filters',
+	#package : 'NewTools-Spotter',
+	#tag : 'Filters'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 StFilterAlike >> applyFilterWithQuery [
 	| allItemsPrepocessed allItemsPrepocessedAndSorted alikeMatches otherMatches upper lower |
 	alikeMatches := OrderedCollection  new.
@@ -45,29 +47,29 @@ StFilterAlike >> applyFilterWithQuery [
 	self filteredItems: alikeMatches , otherMatches 
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 StFilterAlike >> defaultLowerThreshold [
 	" lower threshold: to cut off the large irrelevent chunk before sorting/filtering is appplied "
 	^ 0.33
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 StFilterAlike >> defaultUpperThreshold [
 	" upper threshold: to keep a reasonably sized set of interesting matches "
 	^ 0.45
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFilterAlike >> lowerThreshold [
 	^ lowerThreshold
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFilterAlike >> lowerThreshold: anObject [
 	lowerThreshold := anObject
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StFilterAlike >> prepareFilterInContext: aSpotterContext [
 	super prepareFilterInContext: aSpotterContext.
 	
@@ -75,12 +77,12 @@ StFilterAlike >> prepareFilterInContext: aSpotterContext [
 	upperThreshold ifNil: [ upperThreshold := self defaultUpperThreshold ]. " performance optimization "
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFilterAlike >> upperThreshold [
 	^ upperThreshold
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFilterAlike >> upperThreshold: anObject [
 	upperThreshold := anObject
 ]

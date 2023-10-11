@@ -1,10 +1,11 @@
 Class {
-	#name : #StCamelCaseSplitTest,
-	#superclass : #TestCase,
-	#category : #'NewTools-Spotter-Processors-Tests'
+	#name : 'StCamelCaseSplitTest',
+	#superclass : 'TestCase',
+	#category : 'NewTools-Spotter-Processors-Tests',
+	#package : 'NewTools-Spotter-Processors-Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 StCamelCaseSplitTest >> testSingleLowercaseLetter [
 
 	self 
@@ -12,7 +13,7 @@ StCamelCaseSplitTest >> testSingleLowercaseLetter [
 		hasSameElements: {'a'}
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StCamelCaseSplitTest >> testSingleUppercaseLetter [
 
 	self 
@@ -20,7 +21,7 @@ StCamelCaseSplitTest >> testSingleUppercaseLetter [
 		hasSameElements: { 'A' }
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StCamelCaseSplitTest >> testSplittingShouldNotLosePrefix [
 
 	self 
@@ -28,7 +29,7 @@ StCamelCaseSplitTest >> testSplittingShouldNotLosePrefix [
 		hasSameElements: {'GTSpotter'}
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StCamelCaseSplitTest >> testTwoDifferentWordsStartingWithLowerCase [
 
 	self 
@@ -36,7 +37,7 @@ StCamelCaseSplitTest >> testTwoDifferentWordsStartingWithLowerCase [
 		hasSameElements: {'an'. 'Object'}
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StCamelCaseSplitTest >> testTwoDifferentWordsStartingWithUpperCase [
 
 	self 

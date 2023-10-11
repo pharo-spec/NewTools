@@ -1,6 +1,6 @@
 Class {
-	#name : #StObjectBreakpointInspectionTest,
-	#superclass : #TestCase,
+	#name : 'StObjectBreakpointInspectionTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'breakpoint1',
 		'breakpoint2',
@@ -9,24 +9,26 @@ Class {
 		'breakpoint3',
 		'breakpoint4'
 	],
-	#category : #'NewTools-Debugger-Breakpoints-Tools-Tests'
+	#category : 'NewTools-Debugger-Breakpoints-Tools-Tests',
+	#package : 'NewTools-Debugger-Breakpoints-Tools',
+	#tag : 'Tests'
 }
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 StObjectBreakpointInspectionTest >> compileHelperMethods [
 
 	StDummyTestClassWithHalts compile: 'varRead ^var'.
 	StDummyTestClassWithHalts compile: 'varWrite var := 0'
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 StObjectBreakpointInspectionTest >> removeHelperMethods [
 
 	StDummyTestClassWithHalts removeSelector: #varRead.
 	StDummyTestClassWithHalts removeSelector: #varWrite
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StObjectBreakpointInspectionTest >> setUp [
 	super setUp.
 	self removeHelperMethods.
@@ -44,7 +46,7 @@ StObjectBreakpointInspectionTest >> setUp [
 	
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StObjectBreakpointInspectionTest >> tearDown [
 	breakpoint1 ifNotNil: [ breakpoint1 remove ].
 	breakpoint2 ifNotNil: [ breakpoint2 remove ].
@@ -54,7 +56,7 @@ StObjectBreakpointInspectionTest >> tearDown [
 	super tearDown
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StObjectBreakpointInspectionTest >> testAllBreakpointsForModel [
 
 	inspection := StObjectBreakpointInspection basicNew model: instance.
@@ -65,7 +67,7 @@ StObjectBreakpointInspectionTest >> testAllBreakpointsForModel [
 			breakpoint4 } asOrderedCollection
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StObjectBreakpointInspectionTest >> testBreakpointsForModel [
 
 	inspection := StObjectBreakpointInspection basicNew model:
@@ -75,7 +77,7 @@ StObjectBreakpointInspectionTest >> testBreakpointsForModel [
 			breakpoint2 } asOrderedCollection
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StObjectBreakpointInspectionTest >> testObjectCentricBreakpointsForModel [
 
 	breakpoint1 remove.

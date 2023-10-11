@@ -3,15 +3,17 @@ I am sequence iterator, I will take all the iterators I have in myself and then 
 I iterate first all elements from the first one, and then the elements of the second one, and so on.
 "
 Class {
-	#name : #StSequenceIterator,
-	#superclass : #StIterator,
+	#name : 'StSequenceIterator',
+	#superclass : 'StIterator',
 	#instVars : [
 		'iterators'
 	],
-	#category : #'NewTools-Spotter-Processors-Iterators'
+	#category : 'NewTools-Spotter-Processors-Iterators',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Iterators'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StSequenceIterator class >> with: aCollection [ 
 	
 	^ self new
@@ -19,25 +21,25 @@ StSequenceIterator class >> with: aCollection [
 		yourself
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSequenceIterator >> atEnd [ 
 
 	^ iterators allSatisfy: [ :e | e atEnd ]
 ]
 
-{ #category : #protected }
+{ #category : 'protected' }
 StSequenceIterator >> doReset [
 
 	^ iterators do: [ :e | e reset ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSequenceIterator >> iterators: aCollection [ 
 
 	iterators := aCollection 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSequenceIterator >> next [
 
 	iterators do: [ :e | e next ifNotNil: [ :aValue | ^ aValue ] ].

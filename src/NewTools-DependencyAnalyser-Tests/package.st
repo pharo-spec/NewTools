@@ -1,1 +1,1 @@
-Package { #name : #'NewTools-DependencyAnalyser-Tests' }
+Package { #name : 'NewTools-DependencyAnalyser-Tests' }

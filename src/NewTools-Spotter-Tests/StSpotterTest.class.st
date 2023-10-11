@@ -1,20 +1,21 @@
 Class {
-	#name : #StSpotterTest,
-	#superclass : #StSpotterBaseTest,
+	#name : 'StSpotterTest',
+	#superclass : 'StSpotterBaseTest',
 	#instVars : [
 		'spotter'
 	],
-	#category : #'NewTools-Spotter-Tests'
+	#category : 'NewTools-Spotter-Tests',
+	#package : 'NewTools-Spotter-Tests'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StSpotterTest >> setUp [
 	
 	super setUp.
 	spotter := StSpotter new
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StSpotterTest >> testOpenSpotterRefreshesPreviewOnce [
 
 	| count |
@@ -34,7 +35,7 @@ StSpotterTest >> testOpenSpotterRefreshesPreviewOnce [
 	self assert: count equals: 1
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StSpotterTest >> testSearchingString [
 
 	spotter searchText text: 'Test'.

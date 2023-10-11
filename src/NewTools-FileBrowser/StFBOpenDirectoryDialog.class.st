@@ -6,37 +6,39 @@ So no files will be shown in the file/folder listings.
 see my super for more information about customization
 "
 Class {
-	#name : #StFBOpenDirectoryDialog,
-	#superclass : #StFBOpenFileOrDirectoryDialog,
-	#category : #'NewTools-FileBrowser-UI'
+	#name : 'StFBOpenDirectoryDialog',
+	#superclass : 'StFBOpenFileOrDirectoryDialog',
+	#category : 'NewTools-FileBrowser-UI',
+	#package : 'NewTools-FileBrowser',
+	#tag : 'UI'
 }
 
-{ #category : #examples }
+{ #category : 'examples' }
 StFBOpenDirectoryDialog class >> example [
 
 	<example>
 	^ self chooseThenInspect
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 StFBOpenDirectoryDialog class >> exampleModal [
 
 	<example>
 	^ self chooseModalAndInspect
 ]
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 StFBOpenDirectoryDialog >> allowsChooseDirectoryIfNoFilename [
 
 	^ true
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 StFBOpenDirectoryDialog >> initialTitle [
 	^ 'Select Directory To Open'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFBOpenDirectoryDialog >> initialize [
 
 	super initialize.
@@ -44,7 +46,7 @@ StFBOpenDirectoryDialog >> initialize [
 	filter ifNil: [ filter := StFBDirectoryFilter new ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StFBOpenDirectoryDialog >> selectedEntry [
 
 	super selectedEntry ifNotNil: [ :fileReference | 

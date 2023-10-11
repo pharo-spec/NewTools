@@ -19,18 +19,20 @@ UI using this widget have to define openOn: aFileReference
 	
 "
 Class {
-	#name : #StFBWindowPathPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StFBWindowPathPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'textInput',
 		'editButton',
 		'path',
 		'isInEditMode'
 	],
-	#category : #'NewTools-FileBrowser-UI'
+	#category : 'NewTools-FileBrowser-UI',
+	#package : 'NewTools-FileBrowser',
+	#tag : 'UI'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 StFBWindowPathPresenter class >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
@@ -43,7 +45,7 @@ StFBWindowPathPresenter class >> defaultLayout [
 		  yourself
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StFBWindowPathPresenter class >> editablelayout [
 
 	^ SpBoxLayout newLeftToRight
@@ -55,7 +57,7 @@ StFBWindowPathPresenter class >> editablelayout [
 		  yourself
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 StFBWindowPathPresenter class >> example [
 	<example>
 	^ self new
@@ -63,12 +65,12 @@ StFBWindowPathPresenter class >> example [
 		openWithSpec
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBWindowPathPresenter >> currentDirectory [
 	^ self owner ifNotNil: #currentDirectory
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StFBWindowPathPresenter >> currentDirectory: aFileReference [
 
 	textInput text: aFileReference fullName.
@@ -79,12 +81,12 @@ StFBWindowPathPresenter >> currentDirectory: aFileReference [
 	self build
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBWindowPathPresenter >> entityText [
 	^ textInput
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFBWindowPathPresenter >> initializePresenters [
 
 	textInput := self newTextInput.
@@ -111,12 +113,12 @@ StFBWindowPathPresenter >> initializePresenters [
 			isInEditMode := isInEditMode not ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBWindowPathPresenter >> path [
 	^ path
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 StFBWindowPathPresenter >> pathTextChangedTo: aStringOrText [
 
 	| fileReference |

@@ -1,41 +1,43 @@
 Class {
-	#name : #StRewriterAbstractToolTest,
-	#superclass : #TestCase,
-	#category : #'NewTools-RewriterTools-Tests-AbstractTestClass'
+	#name : 'StRewriterAbstractToolTest',
+	#superclass : 'TestCase',
+	#category : 'NewTools-RewriterTools-Tests-AbstractTestClass',
+	#package : 'NewTools-RewriterTools-Tests',
+	#tag : 'AbstractTestClass'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StRewriterAbstractToolTest class >> isAbstract [
 
 	^ self = StRewriterAbstractToolTest
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterAbstractToolTest >> testDescriptionText [
 
 	self assert: self toolClass descriptionText isString.
 	self assert: self toolClass descriptionText isNotEmpty
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterAbstractToolTest >> testIcon [
 
 	self assert: self toolClass icon isForm
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterAbstractToolTest >> testIconName [
 
 	self assert: self toolClass iconName isSymbol
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterAbstractToolTest >> testTitle [
 
 	self deny: self toolClass title equals: 'Untitled window'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterAbstractToolTest >> toolClass [
 
 	^ self subclassResponsibility

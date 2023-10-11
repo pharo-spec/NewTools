@@ -1,6 +1,6 @@
-Extension { #name : #String }
+Extension { #name : 'String' }
 
-{ #category : #'*NewTools-RewriterTools' }
+{ #category : '*NewTools-RewriterTools' }
 String >> formattedCode [
 
 	^ self

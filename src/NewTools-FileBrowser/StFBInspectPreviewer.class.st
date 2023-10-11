@@ -2,23 +2,25 @@
 I'm a inspector previewer 
 "
 Class {
-	#name : #StFBInspectPreviewer,
-	#superclass : #StFBAbstractPreviewer,
-	#category : #'NewTools-FileBrowser-Previewers'
+	#name : 'StFBInspectPreviewer',
+	#superclass : 'StFBAbstractPreviewer',
+	#category : 'NewTools-FileBrowser-Previewers',
+	#package : 'NewTools-FileBrowser',
+	#tag : 'Previewers'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StFBInspectPreviewer >> canBeUsedOn: aFileReference [
 	^ true
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StFBInspectPreviewer >> matchingMimeType: aZnMimeType [
 	"return a Boolean to indicate if element matches"
 	^ true
 ]
 
-{ #category : #templateMethod }
+{ #category : 'templateMethod' }
 StFBInspectPreviewer >> previewActionOn: aFileReference [
 	^ StInspector instanciateOn: aFileReference
 ]
