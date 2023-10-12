@@ -53,6 +53,11 @@ ScopeNode >> definedClasses [
 ]
 
 { #category : 'testing' }
+ScopeNode >> isClassNode [
+	^ false
+]
+
+{ #category : 'testing' }
 ScopeNode >> isClassOrTraitNode [
 	^ false
 ]

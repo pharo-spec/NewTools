@@ -48,12 +48,42 @@ ScopeNodesPresenter >> activateItem: scopeNode [
 	scopeNode children do: [ :child | self addNode: child ]
 ]
 
+{ #category : 'private - presenters' }
+ScopeNodesPresenter >> addClassHierarchyForClass: aScopeNode [
+
+	| class supers suprclass |
+	self activateItem: aScopeNode.
+	class := aScopeNode value.
+	class = Object ifTrue: [ ^ self ].
+	
+	suprclass := class superclass.
+	supers := class allSuperclasses.
+	[ suprclass = Object ] whileFalse: [
+		scopeNodesTree roots do: [ :root |
+			root children do: [ :child |
+				(supers includes: child value) ifTrue: [
+					self activateItem: child ] ] ].
+		suprclass := suprclass superclass ]
+]
+
 { #category : 'private - actions' }
 ScopeNodesPresenter >> addNode: aNode [
 
 	(checkedScopeNodes anySatisfy: [ :node | aNode value = node value ])
 		ifFalse: [ checkedScopeNodes add: aNode ].
 	self refreshCheckbox
+]
+
+{ #category : 'private - presenters' }
+ScopeNodesPresenter >> argumentsListMenu [
+	^ self newMenu
+		addGroup: [ :aGroup |
+			aGroup
+				addItem: [ :anItem |
+					anItem
+						name: 'Add class hierarchy';
+						visibleIf: [ scopeNodesTree selectedItem isClassNode  ];
+						action: [ self addClassHierarchyForClass: scopeNodesTree selectedItem ] ] ]
 ]
 
 { #category : 'private' }
@@ -139,7 +169,8 @@ ScopeNodesPresenter >> initializeScopeNodesTree [
 		  beResizable;
 		  activateOnDoubleClick;
 		  whenActivatedDo: [ :selection |
-			  scopeNodesTree toggleSelectedItems ]
+			  scopeNodesTree toggleSelectedItems ];
+		contextMenu: self argumentsListMenu
 ]
 
 { #category : 'private - presenters' }

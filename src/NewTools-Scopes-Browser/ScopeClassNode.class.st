@@ -12,6 +12,11 @@ ScopeClassNode >> children [
 	^ #(  )
 ]
 
+{ #category : 'testing' }
+ScopeClassNode >> isClassNode [
+	^ true
+]
+
 { #category : 'accessing' }
 ScopeClassNode >> isClassOrTraitNode [
 	^ true
