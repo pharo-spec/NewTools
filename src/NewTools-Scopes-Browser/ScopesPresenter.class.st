@@ -57,6 +57,18 @@ ScopesPresenter >> addScopeToTree: aRBEnvironment [
 			asOrderedCollection
 ]
 
+{ #category : 'accessing' }
+ScopesPresenter >> argumentsListMenu [
+	^ self newMenu
+		addGroup: [ :aGroup |
+			aGroup
+				addItem: [ :anItem |
+					anItem
+						name: 'Open on calypso';
+						visibleIf: [ scopesTree selectedItem isScopeNode ];
+						action: [ self openOnCalypso: scopesTree selectedItem value ] ] ]
+]
+
 { #category : 'deletion' }
 ScopesPresenter >> deleteSelectedScope [
 
@@ -95,7 +107,8 @@ ScopesPresenter >> initializeScopesTree [
 					   ScopeScopeNode on: package ]) asOrderedCollection sorted;
 		  beResizable;
 		  activateOnDoubleClick;
-		  whenActivatedDo: [ :selection | scopesTree toggleSelectedItems ]
+		  whenActivatedDo: [ :selection | scopesTree toggleSelectedItems ];
+		  contextMenu: self argumentsListMenu
 ]
 
 { #category : 'accessing' }
@@ -124,6 +137,11 @@ ScopesPresenter >> nodesListColumn [
 				   yourself);
 		  addColumn: self nodeDescriptionColumn;
 		  yourself
+]
+
+{ #category : 'private' }
+ScopesPresenter >> openOnCalypso: aScope [
+	ClyFullBrowserMorph openOn: aScope
 ]
 
 { #category : 'private' }
