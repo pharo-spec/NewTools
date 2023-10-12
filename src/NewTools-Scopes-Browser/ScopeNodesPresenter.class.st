@@ -10,8 +10,8 @@ Class {
 		'nodeNameText',
 		'cancelButton',
 		'saveButton',
-		'newScope',
-		'allScopeNodeTreeRoots'
+		'allScopeNodeTreeRoots',
+		'scope'
 	],
 	#category : 'NewTools-Scopes-Browser-GUI',
 	#package : 'NewTools-Scopes-Browser',
@@ -156,7 +156,7 @@ ScopeNodesPresenter >> initializePresenters [
 { #category : 'private' }
 ScopeNodesPresenter >> initializeScope [
 	self assert: checkedScopeNodes isNotEmpty.
-	newScope := (model newScopeFrom: checkedScopeNodes)
+	scope := (model newScopeFrom: checkedScopeNodes)
 ]
 
 { #category : 'initialization' }
@@ -212,7 +212,7 @@ ScopeNodesPresenter >> openScopeNameDialog [
 
 	| nameDialog |
 	nameDialog := (ScopeNamePresenter on: model)
-		              newScope: newScope;
+		              newScope: scope;
 		              yourself.
 	nameDialog openDialog
 		okAction: [ nameDialog submit ];
