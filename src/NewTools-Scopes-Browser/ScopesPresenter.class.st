@@ -38,9 +38,19 @@ ScopesPresenter class >> menuCommandOn: aBuilder [
 ]
 
 { #category : 'examples' }
+ScopesPresenter class >> new [
+	^ self on: ScopesManager singleInstance
+]
+
+{ #category : 'examples' }
 ScopesPresenter class >> open [
 	<example>
-	^ (self on: ScopesManager singleInstance) open
+	^ self new open
+]
+
+{ #category : 'as yet unclassified' }
+ScopesPresenter class >> refreshAllInstances [
+	self allInstances do: [ :each | each refresh ]
 ]
 
 { #category : 'specs' }
@@ -54,7 +64,7 @@ ScopesPresenter >> addScopeToTree: aRBEnvironment [
 	model addScope: aRBEnvironment.
 	scopesTree updateRootsKeepingSelection:
 		(model scopes collect: [ :scope | ScopeScopeNode on: scope ])
-			asOrderedCollection
+			asOrderedCollection sorted
 ]
 
 { #category : 'accessing' }
@@ -77,7 +87,7 @@ ScopesPresenter >> deleteSelectedScope [
 		thenDo: [ :item | model removeScope: item ].
 	scopesTree updateRootsKeepingSelection:
 		(model scopes collect: [ :scope | ScopeScopeNode on: scope ])
-			asOrderedCollection
+			asOrderedCollection sorted.
 ]
 
 { #category : 'initialization' }
@@ -147,6 +157,14 @@ ScopesPresenter >> openOnCalypso: aScope [
 { #category : 'private' }
 ScopesPresenter >> openScopeEditor [
 	self newScopeEditor open
+]
+
+{ #category : 'accessing' }
+ScopesPresenter >> refresh [
+	scopesTree roots ifEmpty: [ ^ self ].
+	scopesTree updateRootsKeepingSelection:
+		(model scopes collect: [ :scope | ScopeScopeNode on: scope ])
+			asOrderedCollection sorted
 ]
 
 { #category : 'announcements' }
