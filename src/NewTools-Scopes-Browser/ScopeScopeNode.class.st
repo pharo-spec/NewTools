@@ -66,7 +66,7 @@ ScopeScopeNode >> label [
 
 { #category : 'accessing' }
 ScopeScopeNode >> scopesIconName [
-	^ #references
+	^ #smallPaint
 ]
 
 { #category : 'accessing' }

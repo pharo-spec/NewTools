@@ -32,7 +32,7 @@ ScopesManager class >> reset [
 
 { #category : 'accessing' }
 ScopesManager class >> scopes [
-	^ self singleInstance scopes
+	^ self singleInstance scopes asArray
 ]
 
 { #category : 'accessing' }
