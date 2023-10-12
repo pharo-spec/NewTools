@@ -1,3 +1,6 @@
+"
+I display a textfield to enter a the name of a new scope
+"
 Class {
 	#name : 'ScopeNamePresenter',
 	#superclass : 'ScopeAbstractPresenter',
@@ -57,16 +60,9 @@ ScopeNamePresenter >> initializePresenters [
 ScopeNamePresenter >> initializeTextInput [
 
 	textInput
-		placeholder: 'Enter the name of the scope';
+		placeholder: 'Enter the name of the new scope';
 		autoAccept: false;
-		whenSubmitDo: [ :text |
-			[
-			self validate.
-			newScope label: text.
-			self announceNewScope: newScope ]
-				on: Error
-				do: [ :e | self inform: e asString ].
-			self close ]
+		whenSubmitDo: [ :text | self submit ]
 ]
 
 { #category : 'initialization' }
@@ -79,18 +75,28 @@ ScopeNamePresenter >> scopesManagerClass [
 	^ ScopesManager
 ]
 
-{ #category : 'initialization' }
-ScopeNamePresenter >> validate [
+{ #category : 'private' }
+ScopeNamePresenter >> submit [
 
-	textInput text isEmpty ifTrue: [
-		self error: 'Scope name cannot be empty' ].
-	(self scopesManagerClass invalidNames includes: textInput text)
-		ifTrue: [
-		self error: 'Invalid name: existing scope is named the same' ]
+	| text |
+	[
+	text := textInput text.
+	self validate: text.
+	newScope label: text.
+	self announceNewScope: newScope.
+	self close ]
+		on: Error
+		do: [ :e |
+			self inform: e asString.
+			textInput selectAll ]
 ]
 
-{ #category : 'enumerating' }
-ScopeNamePresenter >> whenSubmitDo: aBlock [
+{ #category : 'initialization' }
+ScopeNamePresenter >> validate: text [
 
-	textInput whenSubmitDo: aBlock
+	text isEmpty ifTrue: [
+		self error: 'Scope name cannot be empty' ].
+	(self scopesManagerClass invalidNames includes: text)
+		ifTrue: [
+		self error: 'Invalid name: existing scope is named the same' ]
 ]

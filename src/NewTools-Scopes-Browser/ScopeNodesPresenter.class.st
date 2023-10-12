@@ -1,3 +1,6 @@
+"
+I display a tree with all the available packages and classes to create a scope
+"
 Class {
 	#name : 'ScopeNodesPresenter',
 	#superclass : 'ScopeAbstractPresenter',
@@ -168,9 +171,13 @@ ScopeNodesPresenter >> nodesListColumn [
 { #category : 'private - presenters' }
 ScopeNodesPresenter >> openScopeNameDialog [
 
-	(ScopeNamePresenter on: model)
-		newScope: newScope;
-		openDialog
+	| nameDialog |
+	nameDialog := (ScopeNamePresenter on: model)
+		              newScope: newScope;
+		              yourself.
+	nameDialog openDialog
+		okAction: [ nameDialog submit ];
+		cancelAction: [ nameDialog close ]
 ]
 
 { #category : 'refreshing' }

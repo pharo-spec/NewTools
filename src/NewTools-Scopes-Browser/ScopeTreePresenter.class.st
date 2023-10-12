@@ -1,3 +1,6 @@
+"
+I am a tree visualization who toggles on double click
+"
 Class {
 	#name : 'ScopeTreePresenter',
 	#superclass : 'SpTreeTablePresenter',

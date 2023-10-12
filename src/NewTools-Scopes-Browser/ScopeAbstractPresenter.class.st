@@ -1,3 +1,6 @@
+"
+I allow to easily create trees (instances of ScopeTreePresenter) to display scopes (as roots) and scopes (as roots)
+"
 Class {
 	#name : 'ScopeAbstractPresenter',
 	#superclass : 'SpPresenter',
