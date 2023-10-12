@@ -22,6 +22,11 @@ ScopesManager class >> reset [
 ]
 
 { #category : 'accessing' }
+ScopesManager class >> scopes [
+	^ self singleInstance scopes
+]
+
+{ #category : 'accessing' }
 ScopesManager class >> singleInstance [
 
 	^ singleInstance ifNil: [

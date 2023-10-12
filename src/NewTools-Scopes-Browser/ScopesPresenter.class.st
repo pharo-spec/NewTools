@@ -40,13 +40,12 @@ ScopesPresenter class >> menuCommandOn: aBuilder [
 { #category : 'examples' }
 ScopesPresenter class >> open [
 	<example>
-	ScopesManager reset.
 	^ (self on: ScopesManager singleInstance) open
 ]
 
-{ #category : 'layout' }
+{ #category : 'specs' }
 ScopesPresenter class >> title [
-	^ 'Scope Browser'
+	^ 'Custom Scopes Browser'
 ]
 
 { #category : 'announcements' }
