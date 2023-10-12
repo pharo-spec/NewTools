@@ -69,14 +69,24 @@ ScopesPresenter >> addScopeToTree: aRBEnvironment [
 
 { #category : 'accessing' }
 ScopesPresenter >> argumentsListMenu [
-	^ self newMenu
-		addGroup: [ :aGroup |
-			aGroup
-				addItem: [ :anItem |
-					anItem
-						name: 'Open on calypso';
-						visibleIf: [ scopesTree selectedItem isScopeNode ];
-						action: [ self openOnCalypso: scopesTree selectedItem value ] ] ]
+
+	^ self newMenu addGroup: [ :aGroup |
+		  aGroup
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'Delete';
+					  visibleIf: [ scopesTree selectedItem isScopeNode ];
+					  action: [ self deleteSelectedScope ] ];
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'Rename';
+					  visibleIf: [ scopesTree selectedItem isScopeNode ];
+					  action: [ self openScopeNameDialog ] ];
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'Open on calypso';
+					  visibleIf: [ scopesTree selectedItem isScopeNode ];
+					  action: [ self openOnCalypso: scopesTree selectedItem value ] ] ]
 ]
 
 { #category : 'deletion' }
@@ -159,6 +169,17 @@ ScopesPresenter >> openScopeEditor [
 	self newScopeEditor open
 ]
 
+{ #category : 'private' }
+ScopesPresenter >> openScopeNameDialog [
+	| nameDialog |
+	nameDialog := (ScopeNamePresenter on: model)
+		              newScope: scopesTree selectedItem value;
+		              yourself.
+	nameDialog openDialog
+		okAction: [ nameDialog submit ];
+		cancelAction: [ nameDialog close ]
+]
+
 { #category : 'accessing' }
 ScopesPresenter >> refresh [
 	scopesTree roots ifEmpty: [ ^ self ].
@@ -176,6 +197,11 @@ ScopesPresenter >> registerEvents [
 			model addScope: ann scope.
 			self addScopeToTree: ann scope ]
 		for: self
+]
+
+{ #category : 'private' }
+ScopesPresenter >> renameSelectedScope [
+	self halt.
 ]
 
 { #category : 'initialization' }

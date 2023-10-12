@@ -47,6 +47,7 @@ ScopesManager class >> singleInstance [
 
 { #category : 'api' }
 ScopesManager >> addScope: aScope [
+	(scopes includes: aScope) ifTrue: [ ^ self ].
 	scopes add: aScope
 ]
 
