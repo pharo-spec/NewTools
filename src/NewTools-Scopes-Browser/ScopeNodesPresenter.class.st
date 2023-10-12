@@ -10,7 +10,8 @@ Class {
 		'nodeNameText',
 		'cancelButton',
 		'saveButton',
-		'newScope'
+		'newScope',
+		'allScopeNodeTreeRoots'
 	],
 	#category : 'NewTools-Scopes-Browser-GUI',
 	#package : 'NewTools-Scopes-Browser',
@@ -59,7 +60,7 @@ ScopeNodesPresenter >> addClassHierarchyForClass: aScopeNode [
 	suprclass := class superclass.
 	supers := class allSuperclasses.
 	[ suprclass = Object ] whileFalse: [
-		scopeNodesTree roots do: [ :root |
+		self allScopeNodeTreeRoots do: [ :root |
 			root children do: [ :child |
 				(supers includes: child value) ifTrue: [
 					self activateItem: child ] ] ].
@@ -72,6 +73,14 @@ ScopeNodesPresenter >> addNode: aNode [
 	(checkedScopeNodes anySatisfy: [ :node | aNode value = node value ])
 		ifFalse: [ checkedScopeNodes add: aNode ].
 	self refreshCheckbox
+]
+
+{ #category : 'private' }
+ScopeNodesPresenter >> allScopeNodeTreeRoots [
+
+	^ allScopeNodeTreeRoots ifNil: [
+		  allScopeNodeTreeRoots := model allPackagesInEnvironment collect: [
+			                           :package | ScopePackageNode on: package ] ]
 ]
 
 { #category : 'private - presenters' }
@@ -158,19 +167,18 @@ ScopeNodesPresenter >> initializeScopeNodesTree [
 		  addColumn: self nodesListColumn;
 		  children: [ :each |
 			  (each children select: [ :node |
-					  (node name asLowercase beginsWith:
-							   nodeNameText text asLowercase) or: [
-							  node package name asLowercase beginsWith:
-									  nodeNameText text asLowercase ] ]) asOrderedCollection sorted ];
+					   (node name asLowercase beginsWith:
+							    nodeNameText text asLowercase) or: [
+							   node package name asLowercase beginsWith:
+									   nodeNameText text asLowercase ] ]) asOrderedCollection
+				  sorted ];
 		  beMultipleSelection;
-		  roots:
-			  (model allPackagesInEnvironment collect: [ :package |
-					   ScopePackageNode on: package ]) asOrderedCollection sorted;
+		  roots: self allScopeNodeTreeRoots asOrderedCollection sorted;
 		  beResizable;
 		  activateOnDoubleClick;
 		  whenActivatedDo: [ :selection |
 			  scopeNodesTree toggleSelectedItems ];
-		contextMenu: self argumentsListMenu
+		  contextMenu: self argumentsListMenu
 ]
 
 { #category : 'private - presenters' }

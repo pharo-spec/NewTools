@@ -1,3 +1,6 @@
+"
+I store and manage user created scopes
+"
 Class {
 	#name : 'ScopesManager',
 	#superclass : 'Object',
