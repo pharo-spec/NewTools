@@ -59,12 +59,12 @@ ScopeNodesPresenter >> addClassHierarchyForClass: aScopeNode [
 	
 	suprclass := class superclass.
 	supers := class allSuperclasses.
-	[ suprclass = Object ] whileFalse: [
-		self allScopeNodeTreeRoots do: [ :root |
-			root children do: [ :child |
-				(supers includes: child value) ifTrue: [
-					self activateItem: child ] ] ].
-		suprclass := suprclass superclass ]
+	supers := supers select: [ :each | each value ~= Object and: each value ~= ProtoObject ].
+
+	self allScopeNodeTreeRoots do: [ :root |
+		root children do: [ :child |
+			(supers includes: child value) ifTrue: [
+				self activateItem: child ] ] ]
 ]
 
 { #category : 'private - actions' }

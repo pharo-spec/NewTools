@@ -18,18 +18,18 @@ ScopeScopeNode >> children [
 		envPackages := self value packages.
 		envClasses := self value classes.
 		"classes whose package hasn't all of its classes selected"
-		orphanClasses := envClasses select: [ :class |
+		orphanClasses := envClasses select: [ :each |
 			                 | siblings |
-			                 siblings := class package definedClasses.
+			                 siblings := each package definedClasses.
 			                 siblings anySatisfy: [ :sibling |
 				                 envClasses noneSatisfy: [ :selectedClass |
 					                 selectedClass = sibling ] ] ].
 
 		"packages whose classes were all selected"
 		fullPackages := envPackages select: [ :each |
-			                each definedClasses noneSatisfy: [ :class |
+			                each definedClasses noneSatisfy: [ :each1 |
 				                orphanClasses anySatisfy: [ :orphan |
-					                orphan = class ] ] ].
+					                orphan = each1 ] ] ].
 
 		packageEnvironments := fullPackages collect: [ :thePackage |
 			                       ScopePackageNode on: thePackage ].

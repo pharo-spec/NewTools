@@ -24,6 +24,12 @@ ScopeNode class >> on: aRBEnvironment [
 		  yourself
 ]
 
+{ #category : 'operations' }
+ScopeNode >> & anotherNode [
+
+	self value & anotherNode value
+]
+
 { #category : 'accessing' }
 ScopeNode >> <= aNode [
 	^ self label <= aNode label
@@ -82,6 +88,12 @@ ScopeNode >> name [
 	^ value name
 ]
 
+{ #category : 'operations' }
+ScopeNode >> not [
+
+	self value not
+]
+
 { #category : 'accessing' }
 ScopeNode >> package [
 	^ value package
@@ -108,4 +120,10 @@ ScopeNode >> value [
 { #category : 'accessing' }
 ScopeNode >> value: aPackageOrClass [
 	value := aPackageOrClass
+]
+
+{ #category : 'operations' }
+ScopeNode >> | anotherNode [
+
+	self value | anotherNode value
 ]

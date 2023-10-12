@@ -7,8 +7,7 @@ Class {
 	#superclass : 'ScopeAbstractPresenter',
 	#instVars : [
 		'scopesTree',
-		'toolbar',
-		'manager'
+		'toolbar'
 	],
 	#category : 'NewTools-Scopes-Browser-GUI',
 	#package : 'NewTools-Scopes-Browser',
@@ -58,7 +57,7 @@ ScopesPresenter class >> title [
 	^ 'Custom Scopes Browser'
 ]
 
-{ #category : 'announcements' }
+{ #category : 'api' }
 ScopesPresenter >> addScopeToTree: aRBEnvironment [
 
 	model addScope: aRBEnvironment.
@@ -67,11 +66,31 @@ ScopesPresenter >> addScopeToTree: aRBEnvironment [
 			asOrderedCollection sorted
 ]
 
-{ #category : 'accessing' }
+{ #category : 'operations' }
+ScopesPresenter >> andWithScope: anItem [
+	self performOperation: #& with: anItem
+]
+
+{ #category : 'menu commands' }
 ScopesPresenter >> argumentsListMenu [
 
 	^ self newMenu addGroup: [ :aGroup |
 		  aGroup
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'AND';
+					  visibleIf: [ scopesTree selectedItem isScopeNode ];
+					  action: [ self andWithScope: scopesTree selectedItem ] ];
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'OR';
+					  visibleIf: [ scopesTree selectedItem isScopeNode ];
+					  action: [ self orWithScope: scopesTree selectedItem ] ];
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'NOT';
+					  visibleIf: [ scopesTree selectedItem isScopeNode ];
+					  action: [ self notWithScope: scopesTree selectedItem ] ];
 			  addItem: [ :anItem |
 				  anItem
 					  name: 'Delete';
@@ -84,12 +103,22 @@ ScopesPresenter >> argumentsListMenu [
 					  action: [ self openScopeNameDialog ] ];
 			  addItem: [ :anItem |
 				  anItem
-					  name: 'Open on calypso';
+					  name: 'Open on Calypso';
 					  visibleIf: [ scopesTree selectedItem isScopeNode ];
-					  action: [ self openOnCalypso: scopesTree selectedItem value ] ] ]
+					  action: [ self openOnCalypso: scopesTree selectedItem value ] ];
+				addItem: [ :anItem |
+				  anItem
+					  name: 'Browse';
+					  visibleIf: [ scopesTree selectedItem isScopeNode not ];
+					  action: [ self browseSelectedItem ] ]]
 ]
 
-{ #category : 'deletion' }
+{ #category : 'menu commands' }
+ScopesPresenter >> browseSelectedItem [
+	scopesTree selectedItem value browse
+]
+
+{ #category : 'menu commands' }
 ScopesPresenter >> deleteSelectedScope [
 
 	scopesTree selectedItems
@@ -131,11 +160,6 @@ ScopesPresenter >> initializeScopesTree [
 		  contextMenu: self argumentsListMenu
 ]
 
-{ #category : 'accessing' }
-ScopesPresenter >> manager [
-	^ manager ifNil: [ manager := self scopesManagerClass singleInstance ]
-]
-
 { #category : 'private' }
 ScopesPresenter >> newScopeEditor [
 
@@ -159,17 +183,29 @@ ScopesPresenter >> nodesListColumn [
 		  yourself
 ]
 
-{ #category : 'private' }
+{ #category : 'operations' }
+ScopesPresenter >> notWithScope: anItem [
+
+	| newScope newName |
+	newScope := anItem not.
+	newName := '~' , anItem label.
+	newScope label: newName.
+
+	self scopesManagerClass singleInstance addScope: newScope.
+	self refresh
+]
+
+{ #category : 'menu commands' }
 ScopesPresenter >> openOnCalypso: aScope [
 	ClyFullBrowserMorph openOn: aScope
 ]
 
-{ #category : 'private' }
+{ #category : 'menu commands' }
 ScopesPresenter >> openScopeEditor [
 	self newScopeEditor open
 ]
 
-{ #category : 'private' }
+{ #category : 'menu commands' }
 ScopesPresenter >> openScopeNameDialog [
 	| nameDialog |
 	nameDialog := (ScopeNamePresenter on: model)
@@ -180,7 +216,26 @@ ScopesPresenter >> openScopeNameDialog [
 		cancelAction: [ nameDialog close ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'operations' }
+ScopesPresenter >> orWithScope: anItem [
+	self performOperation: #| with: anItem
+]
+
+{ #category : 'operations' }
+ScopesPresenter >> performOperation: aSymbol with: anItem [
+
+	| anEnvironment newScope newName |
+	anEnvironment := self selectAnotherScopeWhitout: anItem.
+	
+	newScope := anItem value perform: aSymbol with: anEnvironment.
+	newName := anItem label , aSymbol , anEnvironment label.
+	newScope label: newName.
+
+	self scopesManagerClass singleInstance addScope: newScope asScopeNode.
+	self refresh
+]
+
+{ #category : 'refresh' }
 ScopesPresenter >> refresh [
 	scopesTree roots ifEmpty: [ ^ self ].
 	scopesTree updateRootsKeepingSelection:
@@ -188,7 +243,7 @@ ScopesPresenter >> refresh [
 			asOrderedCollection sorted
 ]
 
-{ #category : 'announcements' }
+{ #category : 'initialization' }
 ScopesPresenter >> registerEvents [
 
 	self announcer
@@ -197,11 +252,6 @@ ScopesPresenter >> registerEvents [
 			model addScope: ann scope.
 			self addScopeToTree: ann scope ]
 		for: self
-]
-
-{ #category : 'private' }
-ScopesPresenter >> renameSelectedScope [
-	self halt.
 ]
 
 { #category : 'initialization' }
@@ -221,7 +271,22 @@ ScopesPresenter >> scopesManagerClass [
 	^ ScopesManager
 ]
 
-{ #category : 'private' }
+{ #category : 'operations' }
+ScopesPresenter >> selectAnotherScopeWhitout: anItem [
+
+	| anotherScope list |
+	list := model scopes select: [ :each | each value ~= anItem value ].
+
+	anotherScope := self application newSelect
+		                display: [ :each | each label ];
+		                items: list asArray;
+		                title: 'Select another scope';
+		                openModal.
+
+	^ anotherScope
+]
+
+{ #category : 'initialization' }
 ScopesPresenter >> toolbarButtons [
 	| buttons |
 	buttons := OrderedCollection new.
