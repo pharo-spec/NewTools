@@ -84,7 +84,7 @@ ScopeNodesPresenter >> initializeButtons [
 		              action: [ self close ];
 		              yourself.
 	cancelButton := self newButton
-		                label: 'Save';
+		                label: 'Save as...';
 		                icon: (self iconNamed: #smallSave);
 		                action: [
 			                self initializeScope.
@@ -114,7 +114,7 @@ ScopeNodesPresenter >> initializePresenters [
 { #category : 'private' }
 ScopeNodesPresenter >> initializeScope [
 	self assert: checkedScopeNodes isNotEmpty.
-	model newScope: (model newScopeFrom: checkedScopeNodes)
+	newScope := (model newScopeFrom: checkedScopeNodes)
 ]
 
 { #category : 'initialization' }
@@ -167,8 +167,10 @@ ScopeNodesPresenter >> nodesListColumn [
 
 { #category : 'private - presenters' }
 ScopeNodesPresenter >> openScopeNameDialog [
-	
-	(ScopeNamePresenter on: model) openDialog
+
+	(ScopeNamePresenter on: model)
+		newScope: newScope;
+		openDialog
 ]
 
 { #category : 'refreshing' }

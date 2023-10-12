@@ -136,9 +136,9 @@ ScopesPresenter >> registerEvents [
 
 	self announcer
 		when: NewScopeAnnouncement
-		do: [ :ann |
-			self addScopeToTree: model newScope.
-			model resetNewScope ]
+		do: [ :ann | 
+			model addScope: ann scope.
+			self addScopeToTree: ann scope ]
 		for: self
 ]
 

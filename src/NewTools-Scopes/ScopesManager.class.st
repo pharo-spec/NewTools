@@ -16,7 +16,13 @@ Class {
 }
 
 { #category : 'accessing' }
+ScopesManager class >> invalidNames [
+	^ self scopes collect: [ :e | e label ]
+]
+
+{ #category : 'accessing' }
 ScopesManager class >> reset [
+	<script>
 	singleInstance ifNotNil: [ singleInstance reset ].
 	singleInstance := nil
 ]
@@ -61,17 +67,6 @@ ScopesManager >> environment: aSmalltalkImage [
 { #category : 'initialization' }
 ScopesManager >> initialize [
 	environment := SmalltalkImage
-]
-
-{ #category : 'accessing' }
-ScopesManager >> newScope [
-	^ newScope
-]
-
-{ #category : 'accessing' }
-ScopesManager >> newScope: anObject [
-
-	newScope := anObject
 ]
 
 { #category : 'private' }

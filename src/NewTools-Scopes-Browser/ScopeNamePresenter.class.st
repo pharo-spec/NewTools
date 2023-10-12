@@ -2,7 +2,8 @@ Class {
 	#name : 'ScopeNamePresenter',
 	#superclass : 'ScopeAbstractPresenter',
 	#instVars : [
-		'textInput'
+		'textInput',
+		'newScope'
 	],
 	#category : 'NewTools-Scopes-Browser-GUI',
 	#package : 'NewTools-Scopes-Browser',
@@ -34,6 +35,12 @@ ScopeNamePresenter >> announceNewScope [
 	self announcer announce: (NewScopeAnnouncement new)
 ]
 
+{ #category : 'announcements' }
+ScopeNamePresenter >> announceNewScope: aScope [
+
+	self announcer announce: (NewScopeAnnouncement onScope: aScope)
+]
+
 { #category : 'initialize-release' }
 ScopeNamePresenter >> close [
 	self window close
@@ -48,20 +55,38 @@ ScopeNamePresenter >> initializePresenters [
 
 { #category : 'initialization' }
 ScopeNamePresenter >> initializeTextInput [
-	textInput 
+
+	textInput
 		placeholder: 'Enter the name of the scope';
 		autoAccept: false;
-		whenSubmitDo: [ :text | 
+		whenSubmitDo: [ :text |
+			[
 			self validate.
-			model newScope label: text.
-			self announceNewScope.
+			newScope label: text.
+			self announceNewScope: newScope ]
+				on: Error
+				do: [ :e | self inform: e asString ].
 			self close ]
+]
+
+{ #category : 'initialization' }
+ScopeNamePresenter >> newScope: aScope [
+	newScope := aScope
+]
+
+{ #category : 'private' }
+ScopeNamePresenter >> scopesManagerClass [
+	^ ScopesManager
 ]
 
 { #category : 'initialization' }
 ScopeNamePresenter >> validate [
 
-	self assert: textInput text isNotEmpty
+	textInput text isEmpty ifTrue: [
+		self error: 'Scope name cannot be empty' ].
+	(self scopesManagerClass invalidNames includes: textInput text)
+		ifTrue: [
+		self error: 'Invalid name: existing scope is named the same' ]
 ]
 
 { #category : 'enumerating' }
