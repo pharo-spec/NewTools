@@ -394,8 +394,7 @@ SpChangeSorterPresenter >> initialize [
 SpChangeSorterPresenter >> initializeAnnouncements [
 
 	SystemAnnouncer uniqueInstance weak
-		when: ClassAdded , ClassCommented , ClassRecategorized , ClassModifiedClassDefinition , ClassRemoved , ClassRenamed , MethodAdded , MethodModified
-			, MethodRecategorized , MethodRemoved , ProtocolAnnouncement
+		when: ClassAdded , ClassCommented , ClassRepackaged , ClassModifiedClassDefinition , ClassRemoved , ClassRenamed , MethodAdded , MethodModified , MethodRecategorized , MethodRemoved , ProtocolAnnouncement
 		send: #updateClassesList
 		to: self
 ]
