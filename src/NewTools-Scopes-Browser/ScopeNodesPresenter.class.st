@@ -12,8 +12,7 @@ Class {
 		'saveButton',
 		'saveAsButton',
 		'allScopeNodeTreeRoots',
-		'scope',
-		'refresh'
+		'scope'
 	],
 	#category : 'NewTools-Scopes-Browser-GUI',
 	#package : 'NewTools-Scopes-Browser',
@@ -50,9 +49,9 @@ ScopeNodesPresenter >> activateItem: scopeNode [
 	self addNode: scopeNode.
 	
 	scopeNode children isEmptyOrNil ifTrue: [ ^ self ].
-	refresh := false.
+	
 	scopeNode children do: [ :child | self addNode: child ].
-	refresh := true
+	
 ]
 
 { #category : 'private - presenters' }
@@ -75,10 +74,10 @@ ScopeNodesPresenter >> addClassHierarchyForClass: aScopeNode [
 
 { #category : 'private - actions' }
 ScopeNodesPresenter >> addNode: aNode [
-	
-	self refreshCheckbox: aNode.
+
 	(checkedScopeNodes anySatisfy: [ :node | aNode value = node value ])
 		ifFalse: [ checkedScopeNodes add: aNode ].
+	self refreshCheckbox
 ]
 
 { #category : 'announcements' }
@@ -109,12 +108,10 @@ ScopeNodesPresenter >> close [
 { #category : 'private - actions' }
 ScopeNodesPresenter >> deactivateItem: scopeNode [
 
+	self removeNode: scopeNode.
 	scopeNode children isEmptyOrNil ifTrue: [ ^ self ].
 	
-	refresh := false.
 	scopeNode children do: [ :child | self removeNode: child ].
-	refresh := true.
-	self removeNode: scopeNode.
 	
 ]
 
@@ -123,7 +120,6 @@ ScopeNodesPresenter >> initialize [
 
 	super initialize.
 	checkedScopeNodes := Set new.
-	refresh := true.
 	self registerEvents
 	
 	
@@ -226,6 +222,7 @@ ScopeNodesPresenter >> nodesListColumn [
 ScopeNodesPresenter >> openScopeNameDialog [
 
 	| nameDialog |
+	self halt.
 	nameDialog := (ScopeNamePresenter on: model)
 		              newScope: scope;
 		              yourself.
@@ -250,13 +247,9 @@ ScopeNodesPresenter >> refresh [
 ]
 
 { #category : 'refreshing' }
-ScopeNodesPresenter >> refreshCheckbox: aPackageNode [
+ScopeNodesPresenter >> refreshCheckbox [
 	"select package nodes which have all of their classes selected"
 
-	"self halt."
-
-	refresh ifFalse: [ ^ self ].
-	refresh := false.
 	"scopeNodesTree roots do: [ :packageNode |
 		packageNode = packageNode ifTrue: [
 			aPackageNode children size
@@ -270,15 +263,14 @@ ScopeNodesPresenter >> refreshCheckbox: aPackageNode [
 				 checkedClassNode = classNode ] ])
 			ifTrue: [ checkedScopeNodes add: packageNode ]
 			ifFalse: [ checkedScopeNodes remove: packageNode ifAbsent: [ ] ] ].
-	scopeNodesTree refresh.
-	refresh := true
+	scopeNodesTree refresh
 ]
 
 { #category : 'announcements' }
 ScopeNodesPresenter >> registerEvents [
 
 	self announcer
-		when: CreatedScopeAnnouncement
+		when: ScopeCreatedAnnouncement
 		do: [ :ann |
 			self announcer unsubscribe: self.
 			self close ]
@@ -290,12 +282,12 @@ ScopeNodesPresenter >> removeNode: aNode [
 	
 	checkedScopeNodes removeAllSuchThat: [ :each |
 		each value = aNode value ].
-	self refreshCheckbox: aNode 
+	self refreshCheckbox.
 ]
 
 { #category : 'initialization' }
 ScopeNodesPresenter >> saveScope [
-
+	self halt.
 	self initializeScope.
 	self openScopeNameDialog
 ]

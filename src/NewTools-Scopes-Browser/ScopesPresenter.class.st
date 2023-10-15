@@ -226,6 +226,7 @@ ScopesPresenter >> openOnCalypso: aScope [
 { #category : 'menu commands' }
 ScopesPresenter >> openScopeNameDialog [
 	| nameDialog |
+	self halt.
 	nameDialog := (ScopeNamePresenter on: model)
 		              newScope: scopesTree selectedItem value;
 		              yourself.
@@ -265,7 +266,7 @@ ScopesPresenter >> refresh [
 ScopesPresenter >> registerEvents [
 
 	self announcer
-		when: CreatedScopeAnnouncement
+		when: ScopeCreatedAnnouncement
 		do: [ :ann | 
 			model addScope: ann scope.
 			self addScopeToTree: ann scope ]

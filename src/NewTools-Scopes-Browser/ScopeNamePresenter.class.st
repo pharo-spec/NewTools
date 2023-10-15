@@ -33,15 +33,15 @@ ScopeNamePresenter class >> title [
 ]
 
 { #category : 'announcements' }
-ScopeNamePresenter >> announceNewScope [
+ScopeNamePresenter >> announceScopeCreated [
 
-	self announcer announce: (CreatedScopeAnnouncement new)
+	self announcer announce: (ScopeCreatedAnnouncement new)
 ]
 
 { #category : 'announcements' }
-ScopeNamePresenter >> announceNewScope: aScope [
+ScopeNamePresenter >> announceScopeCreated: aScope [
 
-	self announcer announce: (CreatedScopeAnnouncement onScope: aScope)
+	self announcer announce: (ScopeCreatedAnnouncement onScope: aScope)
 ]
 
 { #category : 'initialize-release' }
@@ -83,7 +83,7 @@ ScopeNamePresenter >> submit [
 	text := textInput text.
 	self validate: text.
 	newScope label: text.
-	self announceNewScope: newScope.
+	self announceScopeCreated: newScope.
 	self close ]
 		on: Error
 		do: [ :e |

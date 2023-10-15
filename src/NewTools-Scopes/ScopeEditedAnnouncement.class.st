@@ -1,5 +1,5 @@
 Class {
-	#name : 'CreatedScopeAnnouncement',
+	#name : 'ScopeEditedAnnouncement',
 	#superclass : 'AbstractScopeAnnouncement',
 	#category : 'NewTools-Scopes-Announcements',
 	#package : 'NewTools-Scopes',
