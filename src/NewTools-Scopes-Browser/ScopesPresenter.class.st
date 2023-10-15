@@ -74,43 +74,54 @@ ScopesPresenter >> andWithScope: anItem [
 { #category : 'menu commands' }
 ScopesPresenter >> argumentsListMenu [
 
-	^ self newMenu addGroup: [ :aGroup |
-		  aGroup
-			  addItem: [ :anItem |
-				  anItem
-					  name: 'AND';
-					  visibleIf: [ scopesTree selectedItem isScopeNode ];
-					  action: [ self andWithScope: scopesTree selectedItem ] ];
-			  addItem: [ :anItem |
-				  anItem
-					  name: 'OR';
-					  visibleIf: [ scopesTree selectedItem isScopeNode ];
-					  action: [ self orWithScope: scopesTree selectedItem ] ];
-			  addItem: [ :anItem |
-				  anItem
-					  name: 'NOT';
-					  visibleIf: [ scopesTree selectedItem isScopeNode ];
-					  action: [ self notWithScope: scopesTree selectedItem ] ];
-			  addItem: [ :anItem |
-				  anItem
-					  name: 'Delete';
-					  visibleIf: [ scopesTree selectedItem isScopeNode ];
-					  action: [ self deleteSelectedScope ] ];
-			  addItem: [ :anItem |
-				  anItem
-					  name: 'Rename';
-					  visibleIf: [ scopesTree selectedItem isScopeNode ];
-					  action: [ self openScopeNameDialog ] ];
-			  addItem: [ :anItem |
-				  anItem
-					  name: 'Open on Calypso';
-					  visibleIf: [ scopesTree selectedItem isScopeNode ];
-					  action: [ self openOnCalypso: scopesTree selectedItem value ] ];
-				addItem: [ :anItem |
-				  anItem
-					  name: 'Browse';
-					  visibleIf: [ scopesTree selectedItem isScopeNode not ];
-					  action: [ self browseSelectedItem ] ]]
+	^ self newMenu
+		  addGroup: [ :aGroup |
+			  aGroup
+				  addItem: [ :anItem |
+					  anItem
+						  name: 'Delete';
+						  visibleIf: [ scopesTree selectedItem isScopeNode ];
+						  iconName: #glamorousTrash;
+						  action: [ self deleteSelectedScope ] ];
+				  addItem: [ :anItem |
+					  anItem
+						  name: 'Edit';
+						  visibleIf: [ scopesTree selectedItem isScopeNode ];
+						  iconName: #glamorousEdit;
+						action: [
+							  self newScopeSelector open ] ];
+				  addItem: [ :anItem |
+					  anItem
+						  name: 'Rename';
+						  visibleIf: [ scopesTree selectedItem isScopeNode ];
+						  action: [ self openScopeNameDialog ] ];
+				  addItem: [ :anItem |
+					  anItem
+						  name: 'Open on Calypso';
+						  visibleIf: [ scopesTree selectedItem isScopeNode ];
+						  action: [ self openOnCalypso: scopesTree selectedItem value ] ];
+				  addItem: [ :anItem |
+					  anItem
+						  name: 'Browse';
+						  visibleIf: [ scopesTree selectedItem isScopeNode not ];
+						  action: [ self browseSelectedItem ] ] ];
+		  addGroup: [ :aGroup |
+			  aGroup
+				  addItem: [ :anItem |
+					  anItem
+						  name: 'AND';
+						  visibleIf: [ scopesTree selectedItem isScopeNode ];
+						  action: [ self andWithScope: scopesTree selectedItem ] ];
+				  addItem: [ :anItem |
+					  anItem
+						  name: 'OR';
+						  visibleIf: [ scopesTree selectedItem isScopeNode ];
+						  action: [ self orWithScope: scopesTree selectedItem ] ];
+				  addItem: [ :anItem |
+					  anItem
+						  name: 'NOT';
+						  visibleIf: [ scopesTree selectedItem isScopeNode ];
+						  action: [ self notWithScope: scopesTree selectedItem ] ] ]
 ]
 
 { #category : 'menu commands' }
@@ -160,14 +171,26 @@ ScopesPresenter >> initializeScopesTree [
 		  contextMenu: self argumentsListMenu
 ]
 
-{ #category : 'private' }
-ScopesPresenter >> newScopeEditor [
+{ #category : 'menu commands' }
+ScopesPresenter >> newScopeCreator [
 
 	^ ScopeNodesPresenter owner: self on: model
 ]
 
+{ #category : 'private' }
+ScopesPresenter >> newScopeEditor [
+
+	| item |
+	item := scopesTree selectedItem.
+	[ item isScopeNode ] whileFalse: [ item := item parent ].
+	^ self newScopeCreator
+		  scope: item value;
+		  yourself
+]
+
 { #category : 'initialization' }
 ScopesPresenter >> nodeDescriptionColumn [
+
 	^ SpStringTableColumn evaluated: #label
 ]
 
@@ -198,11 +221,6 @@ ScopesPresenter >> notWithScope: anItem [
 { #category : 'menu commands' }
 ScopesPresenter >> openOnCalypso: aScope [
 	ClyFullBrowserMorph openOn: aScope
-]
-
-{ #category : 'menu commands' }
-ScopesPresenter >> openScopeEditor [
-	self newScopeEditor open
 ]
 
 { #category : 'menu commands' }
@@ -288,18 +306,27 @@ ScopesPresenter >> selectAnotherScopeWhitout: anItem [
 
 { #category : 'initialization' }
 ScopesPresenter >> toolbarButtons [
+
 	| buttons |
 	buttons := OrderedCollection new.
 	buttons add: (self newToolbarButton
 			 icon: (self iconNamed: #add);
 			 help: 'Add a new scope';
-			 action: [ self openScopeEditor ];
+			 action: [ self newScopeCreator open ];
 			 yourself).
+
+	buttons add: (self newToolbarButton
+			 icon: (self iconNamed: #glamorousEdit);
+			 help: 'Edit selected scope';
+			 action: [
+				scopesTree selectedItem ifNil: [ ^ self ].
+				 self newScopeEditor open ];
+			 yourself).
+
 	buttons add: (self newToolbarButton
 			 icon: (self iconNamed: #glamorousTrash);
 			 help: 'Delete selected scope';
 			 action: [ self deleteSelectedScope ];
-			 disable;
 			 yourself).
 
 	^ buttons

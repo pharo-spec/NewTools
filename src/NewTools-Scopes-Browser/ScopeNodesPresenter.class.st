@@ -10,6 +10,7 @@ Class {
 		'nodeNameText',
 		'cancelButton',
 		'saveButton',
+		'saveAsButton',
 		'allScopeNodeTreeRoots',
 		'scope'
 	],
@@ -27,11 +28,13 @@ ScopeNodesPresenter class >> defaultLayout [
 		  fill: true
 		  padding: 0;
 		  add: #nodeNameText expand: false;
-		  add: (SpBoxLayout newLeftToRight 
-					add: #saveButton;
-					add: #cancelButton;
-					yourself)
-					withConstraints: [ :constraints | constraints height: self toolbarHeight ];
+		  add: (SpBoxLayout newLeftToRight
+				   add: #cancelButton;
+				   add: #saveButton;
+				   add: #saveAsButton;
+				   yourself)
+		  withConstraints: [ :constraints |
+		  constraints height: self toolbarHeight ];
 		  yourself
 ]
 
@@ -75,7 +78,7 @@ ScopeNodesPresenter >> addNode: aNode [
 	self refreshCheckbox
 ]
 
-{ #category : 'private' }
+{ #category : 'announcements' }
 ScopeNodesPresenter >> allScopeNodeTreeRoots [
 
 	^ allScopeNodeTreeRoots ifNil: [
@@ -95,7 +98,7 @@ ScopeNodesPresenter >> argumentsListMenu [
 						action: [ self addClassHierarchyForClass: scopeNodesTree selectedItem ] ] ]
 ]
 
-{ #category : 'private' }
+{ #category : 'private - actions' }
 ScopeNodesPresenter >> close [
 	self window close
 ]
@@ -116,22 +119,28 @@ ScopeNodesPresenter >> initialize [
 	checkedScopeNodes := Set new.
 	self registerEvents
 	
+	
 ]
 
 { #category : 'initialization' }
 ScopeNodesPresenter >> initializeButtons [
 
-	saveButton := self newButton
-		              label: 'Cancel';
-		              action: [ self close ];
-		              yourself.
 	cancelButton := self newButton
+		                label: 'Cancel';
+		                action: [ self close ];
+		                yourself.
+
+	saveAsButton := self newButton
 		                label: 'Save as...';
-		                icon: (self iconNamed: #smallSave);
-		                action: [
-			                self initializeScope.
-			                self openScopeNameDialog ];
-		                yourself
+		                icon: (self iconNamed: #smallSaveAs);
+		                action: [ self saveScope ];
+		                yourself.
+
+	saveButton := self newButton
+		              label: 'Save';
+		              icon: (self iconNamed: #smallSave);
+		              action: [ self saveScope ];
+		              yourself
 ]
 
 { #category : 'initialization' }
@@ -153,7 +162,7 @@ ScopeNodesPresenter >> initializePresenters [
 	self initializeButtons
 ]
 
-{ #category : 'private' }
+{ #category : 'announcements' }
 ScopeNodesPresenter >> initializeScope [
 	self assert: checkedScopeNodes isNotEmpty.
 	scope := (model newScopeFrom: checkedScopeNodes)
@@ -161,7 +170,6 @@ ScopeNodesPresenter >> initializeScope [
 
 { #category : 'initialization' }
 ScopeNodesPresenter >> initializeScopeNodesTree [
-
 	^ scopeNodesTree
 		  hideColumnHeaders;
 		  addColumn: self nodesListColumn;
@@ -229,11 +237,22 @@ ScopeNodesPresenter >> refresh [
 					 or: [
 						 each definedClasses anySatisfy: [ :class |
 							 class name asLowercase beginsWith:
-								 nodeNameText text asLowercase ] ] ])
+								 nodeNameText text asLowercase ] ] ]).
+					
+	
 ]
 
 { #category : 'refreshing' }
 ScopeNodesPresenter >> refreshCheckbox [
+	"select package nodes which have all of their classes selected"
+
+	scopeNodesTree roots do: [ :packageNode |
+		(packageNode children allSatisfy: [ :classNode |
+			 checkedScopeNodes anySatisfy: [ :checkedClassNode |
+				 checkedClassNode = classNode ] ])
+			ifTrue: [ checkedScopeNodes add: packageNode ]
+			ifFalse: [ checkedScopeNodes remove: packageNode ifAbsent: [ ] ] ].
+
 	scopeNodesTree refresh
 ]
 
@@ -254,4 +273,39 @@ ScopeNodesPresenter >> removeNode: aNode [
 	checkedScopeNodes removeAllSuchThat: [ :each |
 		each value = aNode value ].
 	self refreshCheckbox
+]
+
+{ #category : 'initialization' }
+ScopeNodesPresenter >> saveScope [
+
+	self initializeScope.
+	self openScopeNameDialog
+]
+
+{ #category : 'accessing' }
+ScopeNodesPresenter >> scope: aRBEnvironment [
+
+	| packages |
+	scope := aRBEnvironment.
+	packages := scope packages.
+
+	scopeNodesTree roots do: [ :packageNode |
+		(packages anySatisfy: [ :package | packageNode value = package ])
+			ifTrue: [
+				| classNodes classes |
+				
+				classNodes := packageNode children.
+				classes := scope classes.
+				"all packageNode children should be checked and including the packageNode"
+				(classNodes allSatisfy: [ :classNode |
+					 classes anySatisfy: [ :cls | cls = classNode value ] ])
+					ifTrue: [
+						checkedScopeNodes add: classNodes.
+						checkedScopeNodes add: packageNode ]
+					ifFalse: [ "only some packageNode children should be checked, and as result, the packageNode is not selected"
+						classNodes do: [ :classNode |
+							(classes anySatisfy: [ :cls | cls = classNode value ]) ifTrue: [
+								checkedScopeNodes add: classNode ] ] ] ] ].
+			
+		self refresh
 ]
