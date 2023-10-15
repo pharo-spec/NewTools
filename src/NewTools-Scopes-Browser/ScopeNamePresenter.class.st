@@ -35,13 +35,13 @@ ScopeNamePresenter class >> title [
 { #category : 'announcements' }
 ScopeNamePresenter >> announceNewScope [
 
-	self announcer announce: (NewScopeAnnouncement new)
+	self announcer announce: (CreatedScopeAnnouncement new)
 ]
 
 { #category : 'announcements' }
 ScopeNamePresenter >> announceNewScope: aScope [
 
-	self announcer announce: (NewScopeAnnouncement onScope: aScope)
+	self announcer announce: (CreatedScopeAnnouncement onScope: aScope)
 ]
 
 { #category : 'initialize-release' }

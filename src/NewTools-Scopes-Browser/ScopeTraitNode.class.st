@@ -17,6 +17,12 @@ ScopeTraitNode >> isClassOrTraitNode [
 	^ true
 ]
 
+{ #category : 'as yet unclassified' }
+ScopeTraitNode >> packageNode [
+	
+	^ ScopePackageNode on: self package
+]
+
 { #category : 'accessing' }
 ScopeTraitNode >> scopesIconName [
 	^ #trait

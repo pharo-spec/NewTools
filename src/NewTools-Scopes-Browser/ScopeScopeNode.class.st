@@ -64,6 +64,11 @@ ScopeScopeNode >> label [
 	^ self value label
 ]
 
+{ #category : 'as yet unclassified' }
+ScopeScopeNode >> packageNode [
+	self shouldNotImplement 
+]
+
 { #category : 'accessing' }
 ScopeScopeNode >> scopesIconName [
 	^ #smallPushpin

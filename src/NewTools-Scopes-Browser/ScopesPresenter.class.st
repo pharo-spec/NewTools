@@ -182,7 +182,7 @@ ScopesPresenter >> newScopeEditor [
 
 	| item |
 	item := scopesTree selectedItem.
-	[ item isScopeNode ] whileFalse: [ item := item parent ].
+	self assert: item isScopeNode.
 	^ self newScopeCreator
 		  scope: item value;
 		  yourself
@@ -265,7 +265,7 @@ ScopesPresenter >> refresh [
 ScopesPresenter >> registerEvents [
 
 	self announcer
-		when: NewScopeAnnouncement
+		when: CreatedScopeAnnouncement
 		do: [ :ann | 
 			model addScope: ann scope.
 			self addScopeToTree: ann scope ]

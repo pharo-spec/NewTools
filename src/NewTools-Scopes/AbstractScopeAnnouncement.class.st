@@ -1,5 +1,5 @@
 Class {
-	#name : 'NewScopeAnnouncement',
+	#name : 'AbstractScopeAnnouncement',
 	#superclass : 'Announcement',
 	#instVars : [
 		'scope'
@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-NewScopeAnnouncement class >> onScope: aScope [
+AbstractScopeAnnouncement class >> onScope: aScope [
 
 	^ self new
 		  scope: aScope;
@@ -18,13 +18,13 @@ NewScopeAnnouncement class >> onScope: aScope [
 ]
 
 { #category : 'accessing' }
-NewScopeAnnouncement >> scope [
+AbstractScopeAnnouncement >> scope [
 
 	^ scope
 ]
 
 { #category : 'accessing' }
-NewScopeAnnouncement >> scope: anObject [
+AbstractScopeAnnouncement >> scope: anObject [
 
 	scope := anObject
 ]

@@ -12,7 +12,8 @@ Class {
 		'saveButton',
 		'saveAsButton',
 		'allScopeNodeTreeRoots',
-		'scope'
+		'scope',
+		'refresh'
 	],
 	#category : 'NewTools-Scopes-Browser-GUI',
 	#package : 'NewTools-Scopes-Browser',
@@ -47,9 +48,11 @@ ScopeNodesPresenter class >> title [
 ScopeNodesPresenter >> activateItem: scopeNode [
 
 	self addNode: scopeNode.
-	scopeNode children isEmptyOrNil ifTrue: [ ^ self ].
 	
-	scopeNode children do: [ :child | self addNode: child ]
+	scopeNode children isEmptyOrNil ifTrue: [ ^ self ].
+	refresh := false.
+	scopeNode children do: [ :child | self addNode: child ].
+	refresh := true
 ]
 
 { #category : 'private - presenters' }
@@ -72,10 +75,10 @@ ScopeNodesPresenter >> addClassHierarchyForClass: aScopeNode [
 
 { #category : 'private - actions' }
 ScopeNodesPresenter >> addNode: aNode [
-
+	
+	self refreshCheckbox: aNode.
 	(checkedScopeNodes anySatisfy: [ :node | aNode value = node value ])
 		ifFalse: [ checkedScopeNodes add: aNode ].
-	self refreshCheckbox
 ]
 
 { #category : 'announcements' }
@@ -106,10 +109,13 @@ ScopeNodesPresenter >> close [
 { #category : 'private - actions' }
 ScopeNodesPresenter >> deactivateItem: scopeNode [
 
-	self removeNode: scopeNode.
 	scopeNode children isEmptyOrNil ifTrue: [ ^ self ].
 	
-	scopeNode children do: [ :child | self removeNode: child ]
+	refresh := false.
+	scopeNode children do: [ :child | self removeNode: child ].
+	refresh := true.
+	self removeNode: scopeNode.
+	
 ]
 
 { #category : 'initialization' }
@@ -117,6 +123,7 @@ ScopeNodesPresenter >> initialize [
 
 	super initialize.
 	checkedScopeNodes := Set new.
+	refresh := true.
 	self registerEvents
 	
 	
@@ -243,8 +250,19 @@ ScopeNodesPresenter >> refresh [
 ]
 
 { #category : 'refreshing' }
-ScopeNodesPresenter >> refreshCheckbox [
+ScopeNodesPresenter >> refreshCheckbox: aPackageNode [
 	"select package nodes which have all of their classes selected"
+
+	"self halt."
+
+	refresh ifFalse: [ ^ self ].
+	refresh := false.
+	"scopeNodesTree roots do: [ :packageNode |
+		packageNode = packageNode ifTrue: [
+			aPackageNode children size
+			== aPackageNode value definedClasses size
+				ifTrue: [ self addNode: aPackageNode ]
+				ifFalse: [ self removeNode: aPackageNode ] ] ]."
 
 	scopeNodesTree roots do: [ :packageNode |
 		(packageNode children allSatisfy: [ :classNode |
@@ -252,15 +270,15 @@ ScopeNodesPresenter >> refreshCheckbox [
 				 checkedClassNode = classNode ] ])
 			ifTrue: [ checkedScopeNodes add: packageNode ]
 			ifFalse: [ checkedScopeNodes remove: packageNode ifAbsent: [ ] ] ].
-
-	scopeNodesTree refresh
+	scopeNodesTree refresh.
+	refresh := true
 ]
 
 { #category : 'announcements' }
 ScopeNodesPresenter >> registerEvents [
 
 	self announcer
-		when: NewScopeAnnouncement
+		when: CreatedScopeAnnouncement
 		do: [ :ann |
 			self announcer unsubscribe: self.
 			self close ]
@@ -269,10 +287,10 @@ ScopeNodesPresenter >> registerEvents [
 
 { #category : 'private - actions' }
 ScopeNodesPresenter >> removeNode: aNode [
-
+	
 	checkedScopeNodes removeAllSuchThat: [ :each |
 		each value = aNode value ].
-	self refreshCheckbox
+	self refreshCheckbox: aNode 
 ]
 
 { #category : 'initialization' }
@@ -304,7 +322,7 @@ ScopeNodesPresenter >> scope: aRBEnvironment [
 						checkedScopeNodes add: packageNode ]
 					ifFalse: [ "only some packageNode children should be checked, and as result, the packageNode is not selected"
 						classNodes do: [ :classNode |
-							(classes anySatisfy: [ :cls | cls = classNode value ]) ifTrue: [
+							(classes includes: classNode value) ifTrue: [
 								checkedScopeNodes add: classNode ] ] ] ] ].
 			
 		self refresh

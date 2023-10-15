@@ -99,6 +99,11 @@ ScopeNode >> package [
 	^ value package
 ]
 
+{ #category : 'as yet unclassified' }
+ScopeNode >> packageNode [
+	self subclassResponsibility 
+]
+
 { #category : 'accessing' }
 ScopeNode >> printOn: aStream [
 

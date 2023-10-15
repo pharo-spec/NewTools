@@ -32,6 +32,11 @@ ScopePackageNode >> isScopeNode [
 	^ false
 ]
 
+{ #category : 'as yet unclassified' }
+ScopePackageNode >> packageNode [
+	^ self
+]
+
 { #category : 'accessing' }
 ScopePackageNode >> scopesIconName [
 	^ #package
