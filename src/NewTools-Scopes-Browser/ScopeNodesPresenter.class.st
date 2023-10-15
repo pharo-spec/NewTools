@@ -80,12 +80,18 @@ ScopeNodesPresenter >> addNode: aNode [
 	self refreshCheckbox
 ]
 
-{ #category : 'announcements' }
+{ #category : 'as yet unclassified' }
 ScopeNodesPresenter >> allScopeNodeTreeRoots [
 
 	^ allScopeNodeTreeRoots ifNil: [
 		  allScopeNodeTreeRoots := model allPackagesInEnvironment collect: [
 			                           :package | ScopePackageNode on: package ] ]
+]
+
+{ #category : 'announcements' }
+ScopeNodesPresenter >> announceScopeEdited [
+	
+	self announcer announce: (ScopeEditedAnnouncement new)
 ]
 
 { #category : 'private - presenters' }
@@ -222,7 +228,6 @@ ScopeNodesPresenter >> nodesListColumn [
 ScopeNodesPresenter >> openScopeNameDialog [
 
 	| nameDialog |
-	self halt.
 	nameDialog := (ScopeNamePresenter on: model)
 		              newScope: scope;
 		              yourself.
@@ -287,9 +292,19 @@ ScopeNodesPresenter >> removeNode: aNode [
 
 { #category : 'initialization' }
 ScopeNodesPresenter >> saveScope [
-	self halt.
-	self initializeScope.
-	self openScopeNameDialog
+
+	scope
+		ifNil: [
+			self initializeScope.
+			self openScopeNameDialog ]
+		ifNotNil: [
+			| editedScope |
+			editedScope := model newScopeFrom: checkedScopeNodes.
+			editedScope label: scope label.
+			model removeScope: scope.
+			model addScope: editedScope.
+			self announceScopeEdited.
+			self close ]
 ]
 
 { #category : 'accessing' }

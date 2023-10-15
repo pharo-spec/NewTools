@@ -61,9 +61,7 @@ ScopesPresenter class >> title [
 ScopesPresenter >> addScopeToTree: aRBEnvironment [
 
 	model addScope: aRBEnvironment.
-	scopesTree updateRootsKeepingSelection:
-		(model scopes collect: [ :scope | ScopeScopeNode on: scope ])
-			asOrderedCollection sorted
+	self updateScopesTree
 ]
 
 { #category : 'operations' }
@@ -89,7 +87,7 @@ ScopesPresenter >> argumentsListMenu [
 						  visibleIf: [ scopesTree selectedItem isScopeNode ];
 						  iconName: #glamorousEdit;
 						action: [
-							  self newScopeSelector open ] ];
+							  self editSelectedScope ] ];
 				  addItem: [ :anItem |
 					  anItem
 						  name: 'Rename';
@@ -135,9 +133,16 @@ ScopesPresenter >> deleteSelectedScope [
 	scopesTree selectedItems
 		select: [ :item | item isScopeNode ]
 		thenDo: [ :item | model removeScope: item ].
-	scopesTree updateRootsKeepingSelection:
-		(model scopes collect: [ :scope | ScopeScopeNode on: scope ])
-			asOrderedCollection sorted.
+	self updateScopesTree 
+]
+
+{ #category : 'menu commands' }
+ScopesPresenter >> editSelectedScope [
+
+	(scopesTree selectedItem isNil or: [
+		 scopesTree selectedItem isScopeNode not ])
+		ifTrue: [ self inform: 'select a scope' ]
+		ifFalse: [ self newScopeEditor open ]
 ]
 
 { #category : 'initialization' }
@@ -157,14 +162,16 @@ ScopesPresenter >> initializePresenters [
 
 { #category : 'initialization' }
 ScopesPresenter >> initializeScopesTree [
+
 	^ scopesTree
 		  hideColumnHeaders;
 		  addColumn: self nodesListColumn;
 		  children: [ :each | each children sorted ];
 		  beMultipleSelection;
 		  roots:
-			  (model scopes collect: [ :package |
-					   ScopeScopeNode on: package ]) asOrderedCollection sorted;
+			  (model scopes collect: [ :package | ScopeScopeNode on: package ])
+				  asOrderedCollection sorted;
+		  expandRoots;
 		  beResizable;
 		  activateOnDoubleClick;
 		  whenActivatedDo: [ :selection | scopesTree toggleSelectedItems ];
@@ -180,11 +187,8 @@ ScopesPresenter >> newScopeCreator [
 { #category : 'private' }
 ScopesPresenter >> newScopeEditor [
 
-	| item |
-	item := scopesTree selectedItem.
-	self assert: item isScopeNode.
 	^ self newScopeCreator
-		  scope: item value;
+		  scope: scopesTree selectedItem value;
 		  yourself
 ]
 
@@ -226,7 +230,6 @@ ScopesPresenter >> openOnCalypso: aScope [
 { #category : 'menu commands' }
 ScopesPresenter >> openScopeNameDialog [
 	| nameDialog |
-	self halt.
 	nameDialog := (ScopeNamePresenter on: model)
 		              newScope: scopesTree selectedItem value;
 		              yourself.
@@ -257,9 +260,7 @@ ScopesPresenter >> performOperation: aSymbol with: anItem [
 { #category : 'refresh' }
 ScopesPresenter >> refresh [
 	scopesTree roots ifEmpty: [ ^ self ].
-	scopesTree updateRootsKeepingSelection:
-		(model scopes collect: [ :scope | ScopeScopeNode on: scope ])
-			asOrderedCollection sorted
+	self updateScopesTree
 ]
 
 { #category : 'initialization' }
@@ -267,9 +268,13 @@ ScopesPresenter >> registerEvents [
 
 	self announcer
 		when: ScopeCreatedAnnouncement
-		do: [ :ann | 
+		do: [ :ann |
 			model addScope: ann scope.
 			self addScopeToTree: ann scope ]
+		for: self.
+	self announcer
+		when: ScopeEditedAnnouncement
+		do: [ self updateScopesTree ]
 		for: self
 ]
 
@@ -320,8 +325,7 @@ ScopesPresenter >> toolbarButtons [
 			 icon: (self iconNamed: #glamorousEdit);
 			 help: 'Edit selected scope';
 			 action: [
-				scopesTree selectedItem ifNil: [ ^ self ].
-				 self newScopeEditor open ];
+				 self editSelectedScope ];
 			 yourself).
 
 	buttons add: (self newToolbarButton
@@ -331,4 +335,12 @@ ScopesPresenter >> toolbarButtons [
 			 yourself).
 
 	^ buttons
+]
+
+{ #category : 'initialization' }
+ScopesPresenter >> updateScopesTree [
+
+	scopesTree updateRootsKeepingSelection:
+		(model scopes collect: [ :scope | ScopeScopeNode on: scope ])
+			asOrderedCollection sorted
 ]
