@@ -84,8 +84,9 @@ ScopeNodesPresenter >> addNode: aNode [
 ScopeNodesPresenter >> allScopeNodeTreeRoots [
 
 	^ allScopeNodeTreeRoots ifNil: [
-		  allScopeNodeTreeRoots := model allPackagesInEnvironment collect: [
-			                           :package | ScopePackageNode on: package ] ]
+		  allScopeNodeTreeRoots := model allPackagesInEnvironment
+			                           reject: [ :package | package definedClasses isEmpty ]
+			                           thenCollect: [ :package | ScopePackageNode on: package ] ]
 ]
 
 { #category : 'announcements' }
@@ -253,14 +254,6 @@ ScopeNodesPresenter >> refresh [
 
 { #category : 'refreshing' }
 ScopeNodesPresenter >> refreshCheckbox [
-	"select package nodes which have all of their classes selected"
-
-	"scopeNodesTree roots do: [ :packageNode |
-		packageNode = packageNode ifTrue: [
-			aPackageNode children size
-			== aPackageNode value definedClasses size
-				ifTrue: [ self addNode: aPackageNode ]
-				ifFalse: [ self removeNode: aPackageNode ] ] ]."
 
 	scopeNodesTree roots do: [ :packageNode |
 		(packageNode children allSatisfy: [ :classNode |
@@ -268,6 +261,7 @@ ScopeNodesPresenter >> refreshCheckbox [
 				 checkedClassNode = classNode ] ])
 			ifTrue: [ checkedScopeNodes add: packageNode ]
 			ifFalse: [ checkedScopeNodes remove: packageNode ifAbsent: [ ] ] ].
+	
 	scopeNodesTree refresh
 ]
 
@@ -313,24 +307,23 @@ ScopeNodesPresenter >> scope: aRBEnvironment [
 	| packages |
 	scope := aRBEnvironment.
 	packages := scope packages.
-
-	scopeNodesTree roots do: [ :packageNode |
+	scopeNodesTree roots withIndexDo: [ :packageNode :index |
 		(packages anySatisfy: [ :package | packageNode value = package ])
 			ifTrue: [
 				| classNodes classes |
-				
 				classNodes := packageNode children.
 				classes := scope classes.
-				"all packageNode children should be checked and including the packageNode"
+				"all packageNode children should be checked, including the packageNode"
 				(classNodes allSatisfy: [ :classNode |
-					 classes anySatisfy: [ :cls | cls = classNode value ] ])
+					 classes anySatisfy: [ :cls | cls name = classNode value name ] ])
 					ifTrue: [
-						checkedScopeNodes add: classNodes.
+						classNodes do: [ :clsNode | checkedScopeNodes add: clsNode ].
 						checkedScopeNodes add: packageNode ]
 					ifFalse: [ "only some packageNode children should be checked, and as result, the packageNode is not selected"
 						classNodes do: [ :classNode |
 							(classes includes: classNode value) ifTrue: [
-								checkedScopeNodes add: classNode ] ] ] ] ].
-			
-		self refresh
+								checkedScopeNodes add: classNode ].
+							scopeNodesTree expandPath: { index } ] ] ] ].
+
+	self refreshCheckbox
 ]
