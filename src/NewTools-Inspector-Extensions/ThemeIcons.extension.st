@@ -1,6 +1,6 @@
-Extension { #name : #ThemeIcons }
+Extension { #name : 'ThemeIcons' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 ThemeIcons >> inspectionIcons [
 	<inspectorPresentationOrder: 0 title: 'Icons'>
 	

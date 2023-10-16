@@ -2,7 +2,9 @@
 Simple announcement to signal any update in the halt cache
 "
 Class {
-	#name : #StHaltCacheChanged,
-	#superclass : #Announcement,
-	#category : #'NewTools-Debugger-Breakpoints-Tools-Model'
+	#name : 'StHaltCacheChanged',
+	#superclass : 'Announcement',
+	#category : 'NewTools-Debugger-Breakpoints-Tools-Model',
+	#package : 'NewTools-Debugger-Breakpoints-Tools',
+	#tag : 'Model'
 }

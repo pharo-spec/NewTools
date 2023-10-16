@@ -1,27 +1,28 @@
 Class {
-	#name : #HCPharoWebSite,
-	#superclass : #ComposablePresenter,
+	#name : 'HCPharoWebSite',
+	#superclass : 'ComposablePresenter',
 	#instVars : [
 		'link'
 	],
-	#category : #HelpCenter
+	#category : 'HelpCenter',
+	#package : 'HelpCenter'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 HCPharoWebSite class >> defaultSpec [
 	^SpecRowLayout composed
 		newRow: [ :row | row add: #link ]; 
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 HCPharoWebSite >> initializePresenter [
 
 	"link action: [ WebBrowser openOn: 'https://pharo.org/documentation' ]."
 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 HCPharoWebSite >> initializeWidgets [
 	link := self newLabel.
 	
@@ -31,12 +32,12 @@ HCPharoWebSite >> initializeWidgets [
 		color: self theme selectionTextColor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 HCPharoWebSite >> link [
 	^ link
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 HCPharoWebSite >> link: anObject [
 	link := anObject
 ]

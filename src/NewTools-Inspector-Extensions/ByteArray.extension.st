@@ -1,6 +1,6 @@
-Extension { #name : #ByteArray }
+Extension { #name : 'ByteArray' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 ByteArray >> inspectBytes: specBuilder [
 	<inspectorPresentationOrder: 30 title: 'Bytes'>
 

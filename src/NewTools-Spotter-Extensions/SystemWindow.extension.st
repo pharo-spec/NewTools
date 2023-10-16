@@ -1,6 +1,6 @@
-Extension { #name : #SystemWindow }
+Extension { #name : 'SystemWindow' }
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 SystemWindow >> stActDefault [
 
 	^ self isTopWindow
@@ -8,7 +8,7 @@ SystemWindow >> stActDefault [
 		ifFalse:[ self activate ]
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 SystemWindow >> stWindowsFor: aStep [
 	<stSpotterOrder: 100>
 

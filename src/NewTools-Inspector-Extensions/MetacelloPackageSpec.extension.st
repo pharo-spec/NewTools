@@ -1,6 +1,6 @@
-Extension { #name : #MetacelloPackageSpec }
+Extension { #name : 'MetacelloPackageSpec' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 MetacelloPackageSpec >> inspectionRequires [
 	<inspectorPresentationOrder: 10 title: 'Require'>
 	| specs |
@@ -12,13 +12,13 @@ MetacelloPackageSpec >> inspectionRequires [
 		yourself
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 MetacelloPackageSpec >> inspectionRequiresContext: aContext [
 		
 	aContext active: self requires isNotEmpty
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 MetacelloPackageSpec >> type [
 
 	^ 'package'

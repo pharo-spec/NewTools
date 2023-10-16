@@ -1,23 +1,24 @@
 Class {
-	#name : #StPackageProcessorTest,
-	#superclass : #StAbstractProcessorTest,
-	#category : #'NewTools-Spotter-Processors-Tests'
+	#name : 'StPackageProcessorTest',
+	#superclass : 'StAbstractProcessorTest',
+	#category : 'NewTools-Spotter-Processors-Tests',
+	#package : 'NewTools-Spotter-Processors-Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPackageProcessorTest >> processor [
 
 	^ StPackageProcessor new
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPackageProcessorTest >> testFindThisPackage [
 
 	self runForText: 'newtools-spotter-processors-tests'.
 	self assertResultsIncludes: self class package
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPackageProcessorTest >> testFindThisPackageAfterAddingText [
 
 	self runForText: 'newtools-spo'.
@@ -28,7 +29,7 @@ StPackageProcessorTest >> testFindThisPackageAfterAddingText [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPackageProcessorTest >> testGTSpotterNewIsRemovedAfterAddingText [
 
 	self runForText: 'gt-spotter'.
@@ -37,7 +38,7 @@ StPackageProcessorTest >> testGTSpotterNewIsRemovedAfterAddingText [
 	self denyResultsIncludes: StClassProcessor package
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPackageProcessorTest >> testPopularStringDoesReturnOnlyTenResults [
 
 	self runForText: 'test'.

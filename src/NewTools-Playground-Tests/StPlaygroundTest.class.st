@@ -1,22 +1,23 @@
 Class {
-	#name : #StPlaygroundTest,
-	#superclass : #StPlaygroundBaseTest,
-	#category : #'NewTools-Playground-Tests'
+	#name : 'StPlaygroundTest',
+	#superclass : 'StPlaygroundBaseTest',
+	#category : 'NewTools-Playground-Tests',
+	#package : 'NewTools-Playground-Tests'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StPlaygroundTest >> classToTest [
 
 	^ StPlaygroundPresenter
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StPlaygroundTest >> initializeInstanceBeforeInitialization: aPresenter [
 
 	aPresenter setModelBeforeInitialization: self newPage
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StPlaygroundTest >> newPlayground [
 
 	^ StPlaygroundPresenter 
@@ -25,7 +26,7 @@ StPlaygroundTest >> newPlayground [
 		
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundTest >> testContents [
 
 	presenter open.
@@ -35,7 +36,7 @@ StPlaygroundTest >> testContents [
 	self assert: presenter model contents equals: 'Test'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundTest >> testLoadPage [
 
 	| page |
@@ -53,7 +54,7 @@ StPlaygroundTest >> testLoadPage [
 	self assert: presenter page contents equals: page contents
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundTest >> testNewInspectorForWorksWhenModelIsNil [
 	| inspectorPanel |
 
@@ -62,7 +63,7 @@ StPlaygroundTest >> testNewInspectorForWorksWhenModelIsNil [
 	self assert: (inspectorPanel isKindOf: StObjectInspectorPresenter)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundTest >> testStopProcessing [
 
 	| page |

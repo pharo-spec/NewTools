@@ -1,13 +1,15 @@
 Class {
-	#name : #StSBProtocolModel,
-	#superclass : #StSBModel,
+	#name : 'StSBProtocolModel',
+	#superclass : 'StSBModel',
 	#instVars : [
 		'protocol'
 	],
-	#category : #'NewTools-SystemBrowser-Model'
+	#category : 'NewTools-SystemBrowser-Model',
+	#package : 'NewTools-SystemBrowser',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StSBProtocolModel class >> newEnvironment: anEnvironment protocol: aProtocol [
 
 	^ self new 
@@ -16,7 +18,7 @@ StSBProtocolModel class >> newEnvironment: anEnvironment protocol: aProtocol [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBProtocolModel >> methods [
 
 	^ (self protocol methods 
@@ -27,18 +29,18 @@ StSBProtocolModel >> methods [
 		sorted: #name ascending
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBProtocolModel >> name [
 
 	^ self protocol name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBProtocolModel >> protocol [
 	^ protocol
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBProtocolModel >> protocol: anObject [
 	protocol := anObject
 ]

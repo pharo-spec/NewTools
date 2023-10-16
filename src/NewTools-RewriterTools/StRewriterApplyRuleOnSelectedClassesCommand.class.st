@@ -4,30 +4,32 @@ I am a command that applies the rule that is already present on the presenter to
 I can be converted into a sepc button to be used in a presenter
 "
 Class {
-	#name : #StRewriterApplyRuleOnSelectedClassesCommand,
-	#superclass : #StCommand,
-	#category : #'NewTools-RewriterTools-Commands'
+	#name : 'StRewriterApplyRuleOnSelectedClassesCommand',
+	#superclass : 'StCommand',
+	#category : 'NewTools-RewriterTools-Commands',
+	#package : 'NewTools-RewriterTools',
+	#tag : 'Commands'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 StRewriterApplyRuleOnSelectedClassesCommand class >> defaultDescription [
 
 	^ 'Apply the current rewrite rule that is on this tool a selected scope.'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterApplyRuleOnSelectedClassesCommand class >> defaultIconName [
 
 	^ StRewriterScopeSelectorPresenter iconName
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 StRewriterApplyRuleOnSelectedClassesCommand class >> defaultName [
 
 	^ 'Transform selected classes'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 StRewriterApplyRuleOnSelectedClassesCommand >> execute [
 
 	| dialogWindow changes |

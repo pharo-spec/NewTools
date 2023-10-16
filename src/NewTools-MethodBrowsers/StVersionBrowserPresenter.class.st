@@ -90,10 +90,7 @@ StVersionBrowserPresenter >> browseSenders [
 StVersionBrowserPresenter >> buildChangeList [
 	rgMethod sourcePointer ifNil:[ ^ #() ].
 
-	^ (SourceFiles
-		changeRecordsFrom: rgMethod sourcePointer
-		className: rgMethod instanceSideParentName
-		isMeta: rgMethod isMetaSide)
+	^ (SourceFiles changeRecordsFor: rgMethod)
 		collectWithIndex: [ :c :i | | rg |
 			rg := c asRingDefinition.
 			rg annotationNamed: #versionIndex put: i ]

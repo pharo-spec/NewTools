@@ -1,6 +1,6 @@
-Extension { #name : #Array }
+Extension { #name : 'Array' }
 
-{ #category : #'*NewTools-RewriterTools' }
+{ #category : '*NewTools-RewriterTools' }
 Array >> formattedCode [
 
 	^ self

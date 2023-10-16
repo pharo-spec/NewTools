@@ -1,6 +1,6 @@
-Extension { #name : #UITheme }
+Extension { #name : 'UITheme' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 UITheme >> inspectionColors [
 	<inspectorPresentationOrder: 10 title: 'Colors'>
 	

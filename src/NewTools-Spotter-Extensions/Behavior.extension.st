@@ -1,6 +1,6 @@
-Extension { #name : #Behavior }
+Extension { #name : 'Behavior' }
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 Behavior >> spotterClassInstanceVariablesFor: aStep [
 	<stSpotterOrder: 25>
 	self isTrait
@@ -12,7 +12,7 @@ Behavior >> spotterClassInstanceVariablesFor: aStep [
 		filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 Behavior >> spotterCompositionFor: aStep [
 	<stSpotterOrder: 25>
 
@@ -23,7 +23,7 @@ Behavior >> spotterCompositionFor: aStep [
 			filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 Behavior >> spotterInstanceVariablesFor: aStep [
 	<stSpotterOrder: 20>
 	self isTrait
@@ -35,7 +35,7 @@ Behavior >> spotterInstanceVariablesFor: aStep [
 		filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 Behavior >> spotterSubclassesFor: aStep [
 	<stSpotterOrder: 50>
 	aStep listProcessor
@@ -45,7 +45,7 @@ Behavior >> spotterSubclassesFor: aStep [
 			filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 Behavior >> spotterSuperclassesFor: aStep [
 	<stSpotterOrder: 40>
 	
@@ -56,7 +56,7 @@ Behavior >> spotterSuperclassesFor: aStep [
 			filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 Behavior >> spotterTraitUsersFor: aStep [
 	<stSpotterOrder: 20>
 	self isTrait ifFalse: [ ^ self ].
@@ -67,7 +67,7 @@ Behavior >> spotterTraitUsersFor: aStep [
 			filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 Behavior >> spotterUsedSlotsFor: aStep [
 	<stSpotterOrder: 70>
 	aStep listProcessor
@@ -77,7 +77,7 @@ Behavior >> spotterUsedSlotsFor: aStep [
 			filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 Behavior >> spotterUsedTraitsFor: aStep [
 	<stSpotterOrder: 60>
 	

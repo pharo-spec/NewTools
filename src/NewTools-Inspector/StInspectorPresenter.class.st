@@ -12,8 +12,8 @@ Register it as a replacement for inspector:
 self registerToolsOn: Smalltalk tools.
 "
 Class {
-	#name : #StInspectorPresenter,
-	#superclass : #StPresenter,
+	#name : 'StInspectorPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'millerList',
 		'model',
@@ -27,16 +27,18 @@ Class {
 	#classInstVars : [
 		'preferredExtent'
 	],
-	#category : #'NewTools-Inspector-View'
+	#category : 'NewTools-Inspector-View',
+	#package : 'NewTools-Inspector',
+	#tag : 'View'
 }
 
-{ #category : #settings }
+{ #category : 'settings' }
 StInspectorPresenter class >> defaultInspectorDiveOnSingleClick [
 
 	^ true
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StInspectorPresenter class >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -44,50 +46,50 @@ StInspectorPresenter class >> defaultLayout [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorPresenter class >> defaultPreferredExtent [
 
 	^ (700@500) scaledByDisplayScaleFactor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorPresenter class >> defaultSpacing [
 
 	^ 3
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StInspectorPresenter class >> explore: anObject [
  
 	self openOn: anObject.
 	^ anObject
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StInspectorPresenter class >> indexableDisplayLimit [
 
 	^ IndexableDisplayLimit ifNil: [ 5000 ]
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StInspectorPresenter class >> indexableDisplayLimit: aNumber [
 
 	IndexableDisplayLimit := aNumber
 ]
 
-{ #category : #'class initialization' }
+{ #category : 'class initialization' }
 StInspectorPresenter class >> initialize [
 
 	self register
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StInspectorPresenter class >> inspect: anObject [
 
 	^ self openOn: anObject
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StInspectorPresenter class >> inspect: anObject label: aString [
 
 	(self openOn: anObject) title: aString.
@@ -95,7 +97,7 @@ StInspectorPresenter class >> inspect: anObject label: aString [
 
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StInspectorPresenter class >> inspector: anObject [
 	
 	self 
@@ -106,58 +108,58 @@ StInspectorPresenter class >> inspector: anObject [
 	^ self openOn: anObject
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StInspectorPresenter class >> inspectorDiveOnSingleClick [
 
 	^ InspectorDiveOnSingleClick ifNil: [
 		InspectorDiveOnSingleClick := self defaultInspectorDiveOnSingleClick ]
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StInspectorPresenter class >> inspectorDiveOnSingleClick: aBoolean [
 
 	InspectorDiveOnSingleClick := aBoolean
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StInspectorPresenter class >> onObject: anObject [
 
 	^ self on: (StInspectorModel on: anObject)
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StInspectorPresenter class >> openOn: anObject [
 
 	^ (self onObject: anObject) open
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorPresenter class >> preferredExtent [
 	
 	^ preferredExtent ifNil: [ preferredExtent := self defaultPreferredExtent ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorPresenter class >> preferredExtent: aPoint [
 	
 	preferredExtent := aPoint
 ]
 
-{ #category : #'tools registry' }
+{ #category : 'tools registry' }
 StInspectorPresenter class >> register [
 	<script>
 
 	self registerToolsOn: Smalltalk tools
 ]
 
-{ #category : #'tools registry' }
+{ #category : 'tools registry' }
 StInspectorPresenter class >> registerToolsOn: registry [
 	"self registerToolsOn: Smalltalk tools " 
 	registry register: self as: #inspector.
 	registry register: self as: #basicInspector
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StInspectorPresenter class >> settingsOn: aBuilder [
 	<systemsettings>
 
@@ -174,13 +176,13 @@ StInspectorPresenter class >> settingsOn: aBuilder [
 		label: 'Dive on single click'
 ]
 
-{ #category : #transmission }
+{ #category : 'transmission' }
 StInspectorPresenter >> defaultInputPort [
 
 	^ self inputModelPort
 ]
 
-{ #category : #'api - focus' }
+{ #category : 'api - focus' }
 StInspectorPresenter >> defaultKeyboardFocus [
 
 	^ millerList presenters 
@@ -188,13 +190,13 @@ StInspectorPresenter >> defaultKeyboardFocus [
 		ifEmpty: [ self ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorPresenter >> firstPage [
 
 	^ millerList pages first
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StInspectorPresenter >> initializePresenters [
 
 	millerList := self instantiate: SpMillerPaginatorPresenter.
@@ -205,7 +207,7 @@ StInspectorPresenter >> initializePresenters [
 		whenColumnsWillChangeDo: [ self keepLastPageSelectedTabName ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StInspectorPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
@@ -220,13 +222,13 @@ StInspectorPresenter >> initializeWindow: aWindowPresenter [
 		whenResizingDo: [ :ann | self preferredExtent: ann newSize ]
 ]
 
-{ #category : #transmission }
+{ #category : 'transmission' }
 StInspectorPresenter >> inputModelPort [
 
 	^ SpModelPort newPresenter: self
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StInspectorPresenter >> keepLastPageSelectedTabName [
 	
 	lastPageSelectedTabName := millerList pages 
@@ -234,19 +236,19 @@ StInspectorPresenter >> keepLastPageSelectedTabName [
 		ifEmpty: [ nil ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorPresenter >> millerList [
 
 	^ millerList
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorPresenter >> model [
 
 	^ model
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StInspectorPresenter >> model: anInspectorModel [
 
 	model := anInspectorModel.
@@ -254,7 +256,7 @@ StInspectorPresenter >> model: anInspectorModel [
 	self updateList
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'private - factory' }
 StInspectorPresenter >> newInspectorFor: aModel [
 	| newInspector |
 
@@ -276,7 +278,7 @@ StInspectorPresenter >> newInspectorFor: aModel [
 	^ newInspector
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StInspectorPresenter >> preferredExtent: aSize [
 
 	(self window isMaximized 
@@ -285,44 +287,44 @@ StInspectorPresenter >> preferredExtent: aSize [
 	self class preferredExtent: aSize
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StInspectorPresenter >> setModel: aModel [
 
 	self model: aModel
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StInspectorPresenter >> setModelBeforeInitialization: anInspectorModel [
 
 	model := anInspectorModel
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorPresenter >> spacing [
 	
 	^ self class defaultSpacing
 ]
 
-{ #category : #'private - stepping' }
+{ #category : 'private - stepping' }
 StInspectorPresenter >> startProcessing [
 
 	StInspectorRefreshService uniqueInstance register: self
 ]
 
-{ #category : #'private - stepping' }
+{ #category : 'private - stepping' }
 StInspectorPresenter >> step [ 
 
 	millerList pages
 		do: [ :each | each step ]
 ]
 
-{ #category : #'private - stepping' }
+{ #category : 'private - stepping' }
 StInspectorPresenter >> stopProcessing [
 
 	StInspectorRefreshService uniqueInstance unregister: self
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StInspectorPresenter >> updateList [
 
 	millerList millerListPresenter
@@ -330,7 +332,7 @@ StInspectorPresenter >> updateList [
 		setRootModel: self model
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StInspectorPresenter >> updateTitle [
 		
 	self isRoot ifFalse: [ ^ self ].
@@ -338,24 +340,24 @@ StInspectorPresenter >> updateTitle [
 		window title: self title ].
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StInspectorPresenter >> windowIcon [
 	
 	^ self application iconNamed: #smallInspectIt
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StInspectorPresenter >> windowTitle [
 
 	^ self model windowTitle
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorPresenter >> withHeaderBar [
 	 ^withHeaderBar ifNil: [ withHeaderBar := true ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorPresenter >> withHeaderBar: bool [
 	withHeaderBar := bool
 ]

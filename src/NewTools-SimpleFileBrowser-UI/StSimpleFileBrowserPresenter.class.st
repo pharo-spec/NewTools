@@ -9,8 +9,8 @@ A simple file browser experiment for Pharo written by T. Bergmann (Astares) in 2
 Clases got renamed to avoid name clashes. 
 "
 Class {
-	#name : #StSimpleFileBrowserPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StSimpleFileBrowserPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'menu',
 		'statusBar',
@@ -19,10 +19,12 @@ Class {
 		'folderContentPresenter',
 		'folderStructurePresenter'
 	],
-	#category : #'NewTools-SimpleFileBrowser-UI-Windows'
+	#category : 'NewTools-SimpleFileBrowser-UI-Windows',
+	#package : 'NewTools-SimpleFileBrowser-UI',
+	#tag : 'Windows'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 StSimpleFileBrowserPresenter class >> defaultSpec [
 
 	^ SpBoxLayout newTopToBottom 		 
@@ -35,12 +37,12 @@ StSimpleFileBrowserPresenter class >> defaultSpec [
 		yourself		
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFileBrowserPresenter class >> icon [ 
 	^StSimpleIconCache driveIcon
 ]
 
-{ #category : #'world menu' }
+{ #category : 'world menu' }
 StSimpleFileBrowserPresenter class >> menuCommandOn: aBuilder [ 
 	<worldMenu> 
 	(aBuilder item: #'File Manager')
@@ -52,24 +54,24 @@ StSimpleFileBrowserPresenter class >> menuCommandOn: aBuilder [
 	
 ]
 
-{ #category : #showing }
+{ #category : 'showing' }
 StSimpleFileBrowserPresenter class >> open [
 	<script>
 
 	self new openWithSpec
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFileBrowserPresenter class >> systemIcon [ 
 	^self icon
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFileBrowserPresenter class >> taskbarIcon [ 
 	^self icon
 ]
 
-{ #category : #'private - building' }
+{ #category : 'private - building' }
 StSimpleFileBrowserPresenter >> buildExtrasMenu [
 
 	^ self newMenu
@@ -77,7 +79,7 @@ StSimpleFileBrowserPresenter >> buildExtrasMenu [
 		yourself
 ]
 
-{ #category : #'private - building' }
+{ #category : 'private - building' }
 StSimpleFileBrowserPresenter >> buildFileMenu [
 
 	^ self newMenu
@@ -85,7 +87,7 @@ StSimpleFileBrowserPresenter >> buildFileMenu [
 		yourself
 ]
 
-{ #category : #'private - building' }
+{ #category : 'private - building' }
 StSimpleFileBrowserPresenter >> buildMenuBar [
 	^ self newMenuBar
 		addGroup: [ :group | 
@@ -99,7 +101,7 @@ StSimpleFileBrowserPresenter >> buildMenuBar [
 						subMenu: self buildExtrasMenu ] ]
 ]
 
-{ #category : #'private - building' }
+{ #category : 'private - building' }
 StSimpleFileBrowserPresenter >> buildNavigateBackToolBarItem [
 		
 	^ SpToolbarButtonPresenter new
@@ -110,7 +112,7 @@ StSimpleFileBrowserPresenter >> buildNavigateBackToolBarItem [
 		yourself
 ]
 
-{ #category : #'private - building' }
+{ #category : 'private - building' }
 StSimpleFileBrowserPresenter >> buildNavigateForwardToolBarItem [
 		
 	^ SpToolbarButtonPresenter new
@@ -121,7 +123,7 @@ StSimpleFileBrowserPresenter >> buildNavigateForwardToolBarItem [
 		yourself
 ]
 
-{ #category : #'private - building' }
+{ #category : 'private - building' }
 StSimpleFileBrowserPresenter >> buildOpenNativeFileBrowserToolBarItem [
 		
 	^ SpToolbarButtonPresenter new
@@ -132,7 +134,7 @@ StSimpleFileBrowserPresenter >> buildOpenNativeFileBrowserToolBarItem [
 		yourself
 ]
 
-{ #category : #'private - building' }
+{ #category : 'private - building' }
 StSimpleFileBrowserPresenter >> buildOpenTerminalToolBarItem [
 		
 	^ SpToolbarButtonPresenter new
@@ -143,13 +145,13 @@ StSimpleFileBrowserPresenter >> buildOpenTerminalToolBarItem [
 		yourself
 ]
 
-{ #category : #'private - building' }
+{ #category : 'private - building' }
 StSimpleFileBrowserPresenter >> buildStatusBar [
 
 	^ SpStatusBarPresenter new
 ]
 
-{ #category : #'private - building' }
+{ #category : 'private - building' }
 StSimpleFileBrowserPresenter >> buildToolBar [
 	
 	^ self newToolbar 
@@ -160,12 +162,12 @@ StSimpleFileBrowserPresenter >> buildToolBar [
 		yourself
 ]
 
-{ #category : #defaults }
+{ #category : 'defaults' }
 StSimpleFileBrowserPresenter >> initialExtent [ 
 	^ 700 @ 500
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSimpleFileBrowserPresenter >> initializePresenters [
 
 	pathNamePresenter := self instantiate: StSimplePathNamePresenter.
@@ -180,7 +182,7 @@ StSimpleFileBrowserPresenter >> initializePresenters [
 		self statusBar pushMessage: (self statusTextFor: items) ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSimpleFileBrowserPresenter >> initializeWindow: aWindowPresenter [
 	"I'm called whenever the component will be displayed in a window (or dialog). 
 	 This is usually attained sending #openWithSpec or #openDialogWithSpec."
@@ -195,70 +197,70 @@ StSimpleFileBrowserPresenter >> initializeWindow: aWindowPresenter [
 	self statusBar pushMessage: 'Ready'	
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 StSimpleFileBrowserPresenter >> lastPath [
 
 	^ FileLocator home
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 StSimpleFileBrowserPresenter >> menu [
 	^ menu
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 StSimpleFileBrowserPresenter >> menu: anObject [
 	^ menu := anObject
 ]
 
-{ #category : #showing }
+{ #category : 'showing' }
 StSimpleFileBrowserPresenter >> open [ 
 	<script: 'self open'>
 	self class open
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StSimpleFileBrowserPresenter >> openNativeFileBrowser [
 
 	pathNamePresenter openNativeFileBrowser
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StSimpleFileBrowserPresenter >> openTerminal [
 
 	StSimpleFileUtils openTerminalOn: pathNamePresenter pathName
 	
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StSimpleFileBrowserPresenter >> pushMessage [
 	
 	statusBar pushMessage: 'HelloWorld'
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 StSimpleFileBrowserPresenter >> selectLastPath [
 
 	self selectPath: self lastPath fullPath withParents
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 StSimpleFileBrowserPresenter >> selectPath: path [
 
 	folderStructurePresenter selectPathByItems: path
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 StSimpleFileBrowserPresenter >> statusBar [
 	^ statusBar
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 StSimpleFileBrowserPresenter >> statusBar: anObject [
 	^ statusBar := anObject
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 StSimpleFileBrowserPresenter >> statusTextFor: aCollection [ 
 	 
 	| onlyFiles text |
@@ -272,23 +274,23 @@ StSimpleFileBrowserPresenter >> statusTextFor: aCollection [
 	^text
 ]
 
-{ #category : #defaults }
+{ #category : 'defaults' }
 StSimpleFileBrowserPresenter >> title [ 
 
    ^'File browser'
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 StSimpleFileBrowserPresenter >> toolBar [
 	^ toolBar
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 StSimpleFileBrowserPresenter >> toolBar: anObject [
 	^ toolBar := anObject
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSimpleFileBrowserPresenter >> updatePresenter [
 
 ]

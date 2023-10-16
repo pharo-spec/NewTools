@@ -7,24 +7,26 @@ If the filter requires a full reset, I reset myself and the inner one.
 My subclasses implements #criterium: to change how the strings are compared.
 "
 Class {
-	#name : #StAbstractStringFilter,
-	#superclass : #StIteratorDecorator,
+	#name : 'StAbstractStringFilter',
+	#superclass : 'StIteratorDecorator',
 	#instVars : [
 		'returnedIndex',
 		'originalUnwrapped',
 		'results',
 		'filteringText'
 	],
-	#category : #'NewTools-Spotter-Processors-Iterators'
+	#category : 'NewTools-Spotter-Processors-Iterators',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Iterators'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StAbstractStringFilter class >> isAbstract [
 
 	^ self == StAbstractStringFilter
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StAbstractStringFilter class >> on: aStCombinator with: aString [
 
 	^ self new
@@ -32,20 +34,20 @@ StAbstractStringFilter class >> on: aStCombinator with: aString [
 		filteringText: aString
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StAbstractStringFilter >> atEnd [
 
 	^ (returnedIndex = results size) and: [ inner atEnd ]
 ]
 
-{ #category : #protected }
+{ #category : 'protected' }
 StAbstractStringFilter >> criterium: aString [
 
 	self subclassResponsibility 
 
 ]
 
-{ #category : #protected }
+{ #category : 'protected' }
 StAbstractStringFilter >> doReset [
 
 	originalUnwrapped reset.
@@ -53,7 +55,7 @@ StAbstractStringFilter >> doReset [
 	results := OrderedCollection new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StAbstractStringFilter >> filteringText: aString [
 
 	inner := originalUnwrapped select: [ :e | self criterium: e].
@@ -69,7 +71,7 @@ StAbstractStringFilter >> filteringText: aString [
 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StAbstractStringFilter >> initialize [
 
 	filteringText := ''.
@@ -77,7 +79,7 @@ StAbstractStringFilter >> initialize [
 	returnedIndex := ''.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StAbstractStringFilter >> next [
 
 	| nextOne |
@@ -98,12 +100,12 @@ StAbstractStringFilter >> next [
 	^ nextOne
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StAbstractStringFilter >> originalUnwrapped [
 	^ originalUnwrapped
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StAbstractStringFilter >> originalUnwrapped: anObject [
 	originalUnwrapped := anObject
 ]

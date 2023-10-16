@@ -10,8 +10,8 @@ For example to work on a subset of fonts, provide a specific font chooser qs fol
 ```
 "
 Class {
-	#name : #StFontChooserPresenter,
-	#superclass : #SpPresenterWithModel,
+	#name : 'StFontChooserPresenter',
+	#superclass : 'SpPresenterWithModel',
 	#instVars : [
 		'fontFamilyList',
 		'fontStyleList',
@@ -19,10 +19,11 @@ Class {
 		'languageList',
 		'previewText'
 	],
-	#category : #'NewTools-FontChooser'
+	#category : 'NewTools-FontChooser',
+	#package : 'NewTools-FontChooser'
 }
 
-{ #category : #layout }
+{ #category : 'layout' }
 StFontChooserPresenter class >> defaultLayout [ 
 
 	^ SpPanedLayout newTopToBottom
@@ -41,7 +42,7 @@ StFontChooserPresenter class >> defaultLayout [
 			
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StFontChooserPresenter class >> defaultSpec [ 
 
 	^ SpPanedLayout newTopToBottom
@@ -60,7 +61,7 @@ StFontChooserPresenter class >> defaultSpec [
 			
 ]
 
-{ #category : #'interface building' }
+{ #category : 'interface building' }
 StFontChooserPresenter class >> pangrams [
 
 	^ OrderedCollection new
@@ -112,14 +113,14 @@ StFontChooserPresenter class >> pangrams [
 		yourself
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 StFontChooserPresenter >> applyChanges [
 
 	self model font: self selectedFont.
 	self model onAcceptDo value: self model font
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFontChooserPresenter >> connectPresenters [ 
 	
 	fontFamilyList 
@@ -141,26 +142,26 @@ StFontChooserPresenter >> connectPresenters [
 			selection selectedItem ifNotNil: [ self updatePreview ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFontChooserPresenter >> fontFamilyList [ 
 	
 	^ fontFamilyList 
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFontChooserPresenter >> fontSizeList [ 
 	
 	^ fontSizeList 
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFontChooserPresenter >> fontStyleList [
 	^ fontStyleList
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFontChooserPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 	
 	super initializeDialogWindow: aDialogWindowPresenter.
@@ -172,7 +173,7 @@ StFontChooserPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFontChooserPresenter >> initializePresenters [ 
 	
 	fontFamilyList := self newList.
@@ -197,20 +198,20 @@ StFontChooserPresenter >> initializePresenters [
 	previewText := self newMorph
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFontChooserPresenter >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter initialExtent: 800@580.
 	aWindowPresenter title: self model title
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFontChooserPresenter >> modelChanged [  
 	
 	self updateWithFont: self model font
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFontChooserPresenter >> previewText [
 
 	"Answer the preview text based on current font."
@@ -247,7 +248,7 @@ StFontChooserPresenter >> previewText [
 	^ sample contents
 ]
 
-{ #category : #refreshing }
+{ #category : 'refreshing' }
 StFontChooserPresenter >> refreshFontSizeList [
 	
 	| sizes currentFontSizeValue |
@@ -267,7 +268,7 @@ StFontChooserPresenter >> refreshFontSizeList [
 			ifFalse: [fontSizeList selectIndex: 1]].
 ]
 
-{ #category : #'font style list' }
+{ #category : 'font style list' }
 StFontChooserPresenter >> refreshFontStyleList [
 								
 	| fontStyle toFindName currentFontStyleValue |
@@ -289,7 +290,7 @@ StFontChooserPresenter >> refreshFontStyleList [
 				ifNotNil: [ fontStyleList selectItem: fontStyle  ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFontChooserPresenter >> selectedFont [
 	
 	^LogicalFont 
@@ -300,31 +301,31 @@ StFontChooserPresenter >> selectedFont [
 		slantValue: self selectedFontStyle slantValue
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFontChooserPresenter >> selectedFontFamily [
 	
 	^ fontFamilyList selectedItem 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFontChooserPresenter >> selectedFontSize [
 	
 	^ fontSizeList selectedItem
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFontChooserPresenter >> selectedFontStyle [
 	
 	^ fontStyleList selectedItem
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFontChooserPresenter >> title [ 
 
 	^ 'Font Chooser'
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 StFontChooserPresenter >> updateFonts [
 	
 	FreeTypeFontProvider current updateFromSystem.
@@ -332,7 +333,7 @@ StFontChooserPresenter >> updateFonts [
 
 ]
 
-{ #category : #refreshing }
+{ #category : 'refreshing' }
 StFontChooserPresenter >> updatePreview [
 	
 	previewText morph: (RubEditingArea new
@@ -344,7 +345,7 @@ StFontChooserPresenter >> updatePreview [
 		yourself)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFontChooserPresenter >> updateWithFont: aFont [
 
 	| initialFamily initialStyle |

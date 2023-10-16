@@ -10,22 +10,24 @@ Public API and Key Messages
 - #extensions 	Return the collection of extensions we should keep with this filter.
 "
 Class {
-	#name : #StFBExtensionsFilter,
-	#superclass : #StFBAbstractFilter,
-	#category : #'NewTools-FileBrowser-Filtering'
+	#name : 'StFBExtensionsFilter',
+	#superclass : 'StFBAbstractFilter',
+	#category : 'NewTools-FileBrowser-Filtering',
+	#package : 'NewTools-FileBrowser',
+	#tag : 'Filtering'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StFBExtensionsFilter class >> isAbstract [
 	^ self = StFBExtensionsFilter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBExtensionsFilter class >> priority [
 	^ 50
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StFBExtensionsFilter >> = aComparable [
 
 	"Double dispatch"
@@ -33,7 +35,7 @@ StFBExtensionsFilter >> = aComparable [
 	^ aComparable equalsToExtensionFilter: self
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 StFBExtensionsFilter >> addExtensionTo: aFileReference [
 
 	(self predicate: aFileReference) ifTrue: [ ^ aFileReference ].
@@ -41,12 +43,12 @@ StFBExtensionsFilter >> addExtensionTo: aFileReference [
 	^ aFileReference , (self extensions first copyWithout: $.)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBExtensionsFilter >> basename [
 	^ self subclassResponsibility
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StFBExtensionsFilter >> equalsToExtensionFilter: aExtensionFilter [
 
 	"Compare the receiver with the argument and answer with true if the 
@@ -55,14 +57,14 @@ StFBExtensionsFilter >> equalsToExtensionFilter: aExtensionFilter [
 	^ self extensions asSet = aExtensionFilter extensions asSet
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBExtensionsFilter >> extensions [
 	"Should return sequenceable collection of extensions"
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 StFBExtensionsFilter >> extensionsWithDots [
 
 	^ self extensions collect: [ :each | 
@@ -71,7 +73,7 @@ StFBExtensionsFilter >> extensionsWithDots [
 			  ifFalse: [ '.' , each ] ]
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StFBExtensionsFilter >> hash [
 
 	"Hash must be redefined whenever = is redefined."
@@ -79,7 +81,7 @@ StFBExtensionsFilter >> hash [
 	^ self extensionsWithDots hash
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBExtensionsFilter >> name [
 	^ String
 		streamContents: [ :s | 
@@ -96,7 +98,7 @@ StFBExtensionsFilter >> name [
 			s nextPut: $) ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBExtensionsFilter >> predicate: aFileReference [
 
 	aFileReference isDirectory ifTrue: [ ^ true ].

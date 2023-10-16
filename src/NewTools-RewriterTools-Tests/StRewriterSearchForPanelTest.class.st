@@ -2,22 +2,24 @@
 A RTSearchForPanelTest is a test class for testing the behavior of RTSearchForPanel
 "
 Class {
-	#name : #StRewriterSearchForPanelTest,
-	#superclass : #TestCase,
+	#name : 'StRewriterSearchForPanelTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'searchPanel'
 	],
-	#category : #'NewTools-RewriterTools-Tests-Panels'
+	#category : 'NewTools-RewriterTools-Tests-Panels',
+	#package : 'NewTools-RewriterTools-Tests',
+	#tag : 'Panels'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StRewriterSearchForPanelTest >> setUp [
 
 	super setUp.
 	searchPanel := StRewriterSearchForPanelPresenter new
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterSearchForPanelTest >> testLhs [
 
 	searchPanel lhs: 'Some code'.

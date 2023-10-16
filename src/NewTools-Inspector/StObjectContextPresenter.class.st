@@ -3,32 +3,34 @@ A presenter object inspection that is aware of the inspection context.
 It is used to build enhance inspection view (e.g. show or not the evaluator).
 "
 Class {
-	#name : #StObjectContextPresenter,
-	#superclass : #StPresenter,
+	#name : 'StObjectContextPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'view',
 		'evaluator',
 		'model',
 		'activationBlock'
 	],
-	#category : #'NewTools-Inspector-View'
+	#category : 'NewTools-Inspector-View',
+	#package : 'NewTools-Inspector',
+	#tag : 'View'
 }
 
-{ #category : #api }
+{ #category : 'api' }
 StObjectContextPresenter >> activateOnDoubleClick [
 	
 	view hasOutputActivationPort ifFalse: [ ^ self ].
 	view activateOnDoubleClick
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StObjectContextPresenter >> activateOnSingleClick [
 	
 	view hasOutputActivationPort ifFalse: [ ^ self ].
 	view activateOnSingleClick
 ]
 
-{ #category : #commands }
+{ #category : 'commands' }
 StObjectContextPresenter >> doEvaluateAndGo [
 	| value |
 	
@@ -42,13 +44,13 @@ StObjectContextPresenter >> doEvaluateAndGo [
 	activationBlock value: (StEvaluatedSelectionModel newValue: value)
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StObjectContextPresenter >> evaluator [
 
 	^ evaluator
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StObjectContextPresenter >> evaluatorActions [
 	
 	^ CmCommandGroup forSpec
@@ -57,26 +59,26 @@ StObjectContextPresenter >> evaluatorActions [
 		yourself
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StObjectContextPresenter >> evaluatorInitialText [
 
 	^ self model inspectedObject evaluatorInitialText: self 
 	
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StObjectContextPresenter >> hasEvaluator [
 
 	^ self model hasEvaluator
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StObjectContextPresenter >> hasOutputActivationPort [
 	
 	^ self hasEvaluator or: [ view hasOutputActivationPort ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StObjectContextPresenter >> initializePresenters [
 
 	view := self model newInspectionView.
@@ -85,7 +87,7 @@ StObjectContextPresenter >> initializePresenters [
 		ifFalse: [ self intializePresentersWithoutEvaluator ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StObjectContextPresenter >> intializePresentersWithEvaluator [
 	
 	(evaluator := self newCode)
@@ -103,7 +105,7 @@ StObjectContextPresenter >> intializePresentersWithEvaluator [
 		yourself)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StObjectContextPresenter >> intializePresentersWithoutEvaluator [
 	
 	self layout: (SpBoxLayout newTopToBottom
@@ -111,7 +113,7 @@ StObjectContextPresenter >> intializePresentersWithoutEvaluator [
 		yourself)
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StObjectContextPresenter >> menuActionsFor: aCodePresenter [
 	
 	^ CmCommandGroup forSpec
@@ -125,13 +127,13 @@ StObjectContextPresenter >> menuActionsFor: aCodePresenter [
 		yourself
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StObjectContextPresenter >> model [
 
 	^ model
 ]
 
-{ #category : #transmission }
+{ #category : 'transmission' }
 StObjectContextPresenter >> outputActivationPort [
 
 	^ view hasOutputActivationPort 
@@ -139,19 +141,19 @@ StObjectContextPresenter >> outputActivationPort [
 		ifFalse: [ SpActivationPort newPresenter: self ]
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StObjectContextPresenter >> setModelBeforeInitialization: aModel [
 	
 	model := aModel
 ]
 
-{ #category : #stepping }
+{ #category : 'stepping' }
 StObjectContextPresenter >> step [
 
 	view step
 ]
 
-{ #category : #'api - events' }
+{ #category : 'api - events' }
 StObjectContextPresenter >> whenActivatedDo: aBlock [
 
 	activationBlock := aBlock

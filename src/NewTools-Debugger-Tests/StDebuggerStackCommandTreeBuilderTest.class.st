@@ -1,29 +1,31 @@
 Class {
-	#name : #StDebuggerStackCommandTreeBuilderTest,
-	#superclass : #StDebuggerToolCommandTreeBuilderTest,
-	#category : #'NewTools-Debugger-Tests-Model'
+	#name : 'StDebuggerStackCommandTreeBuilderTest',
+	#superclass : 'StDebuggerToolCommandTreeBuilderTest',
+	#category : 'NewTools-Debugger-Tests-Model',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Model'
 }
 
-{ #category : #helper }
+{ #category : 'helper' }
 StDebuggerStackCommandTreeBuilderTest >> newBuilder [
 	^ StDebuggerStackCommandTreeBuilder
 		buildCommandsGroupWith: debugger
 		forRoot: rootGroup
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testBrowseGroupDescription [
 	self
 		assert: builder browseGroupDescription
 		equals: 'Navigate the system from the stack'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testBrowseGroupName [
 	self assert: builder browseGroupName equals: 'Browse'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testCommandGroupStructure [
 	|stackGroup|
 	stackGroup := rootGroup groups first.	
@@ -38,26 +40,26 @@ StDebuggerStackCommandTreeBuilderTest >> testCommandGroupStructure [
 	self assert: stackGroup groups fourth description equals: builder stackContextMenuActionsDescription.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testDisplayStrategy [
 	self
 		assert: builder class displayStrategy
 		equals: CmUIDisplayAsSubMenu
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testGroupDescription [
 	self
 		assert: builder class groupDescription
 		equals: 'Actions on the debugger stack.'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testGroupName [
 	self assert: builder class groupName equals: 'Stack'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testNavigationCommandForContext [
 
 	| cmd |
@@ -68,14 +70,14 @@ StDebuggerStackCommandTreeBuilderTest >> testNavigationCommandForContext [
 	self assert: cmd context identicalTo: debugger
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackActionsCommandsClasses [
 	self
 		assertCollection: builder stackActionsCommandsClasses
 		equals: {StReturnValueCommand}
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackContextMenuActionsCommands [
 	self
 		assertCommandGroup: builder stackContextMenuActionsCommands
@@ -84,21 +86,21 @@ StDebuggerStackCommandTreeBuilderTest >> testStackContextMenuActionsCommands [
 		displayStrategy: CmUIDisplayAsGroup
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackContextMenuActionsDescription [
 	self
 		assert: builder stackContextMenuActionsDescription
 		equals: 'Actions on the selected context'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackContextMenuActionsGroupName [
 	self
 		assert: builder stackContextMenuActionsGroupName
 		equals: 'Context Actions'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackContextMenuBrowseCommands [
 	|cmdGroup cmdEntries expectedEntries|	
 
@@ -128,7 +130,7 @@ StDebuggerStackCommandTreeBuilderTest >> testStackContextMenuBrowseCommands [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackContextMenuExplorationCommands [
 	|  cmdGroup cmdEntries |
 	
@@ -155,21 +157,21 @@ StDebuggerStackCommandTreeBuilderTest >> testStackContextMenuExplorationCommands
 		haveContext: debugger 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackContextMenuExplorationDescription [
 	self
 		assert: builder stackContextMenuExplorationDescription
 		equals: 'Explore the receiver object''s graph'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackContextMenuExplorationGroupName [
 	self
 		assert: builder stackContextMenuExplorationGroupName
 		equals: 'Explore'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackContextMenuStackEditionsCommands [
 	self
 		assertCommandGroup: builder stackContextMenuStackEditionsCommands
@@ -178,7 +180,7 @@ StDebuggerStackCommandTreeBuilderTest >> testStackContextMenuStackEditionsComman
 		displayStrategy: CmUIDisplayAsSubMenu
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackContextNavigationCommands [
 	| cmdGroup commands |
 
@@ -200,25 +202,24 @@ StDebuggerStackCommandTreeBuilderTest >> testStackContextNavigationCommands [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackContextNavigationGroupName [
 	self
 		assert: builder stackContextNavigationGroupName
 		equals: 'Receiver class code navigation commands'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackEditionCommandsClasses [
 	self
 		assertCollection: builder stackEditionCommandsClasses
 		equals:
 			{StCopyStackToClipboardCommand.
-			StShowFullStackCommand.
 			StPeelToFirstCommand.
 			StFileOutMethodCommand}
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackExplorationCommandsClasses [
 	self
 		assertCollection: builder stackExplorationCommandsClasses
@@ -229,17 +230,17 @@ StDebuggerStackCommandTreeBuilderTest >> testStackExplorationCommandsClasses [
 				yourself)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackGroupDescription [
 	self assert: builder stackGroupDescription equals: 'Stack edition'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackGroupName [
 	self assert: builder stackGroupName equals: 'Stack'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackMethodCommandsClasses [
 	self
 		assertCollection: builder stackMethodCommandsClasses
@@ -248,7 +249,7 @@ StDebuggerStackCommandTreeBuilderTest >> testStackMethodCommandsClasses [
 			SpBrowseMethodVersionsCommand}
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackMethodNavigationCommands [
 	self
 		assertCommandGroup: builder stackMethodNavigationCommands
@@ -257,14 +258,14 @@ StDebuggerStackCommandTreeBuilderTest >> testStackMethodNavigationCommands [
 		displayStrategy: CmUIDisplayAsGroup
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackMethodNavigationGroupName [
 	self
 		assertCollection: builder stackMethodNavigationGroupName
 		equals: 'Selected method navigation commands'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackMethodSelectorCommandsClasses [
 	self
 		assertCollection: builder stackMethodSelectorCommandsClasses
@@ -274,7 +275,7 @@ StDebuggerStackCommandTreeBuilderTest >> testStackMethodSelectorCommandsClasses 
 			SpBrowseMethodReferencesCommand}
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackMethodSelectorNavigationCommands [
 	self
 		assertCommandGroup: builder stackMethodSelectorNavigationCommands
@@ -283,14 +284,14 @@ StDebuggerStackCommandTreeBuilderTest >> testStackMethodSelectorNavigationComman
 		displayStrategy: CmUIDisplayAsGroup
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackMethodSelectorNavigationGroupName [
 	self
 		assert: builder stackMethodSelectorNavigationGroupName
 		equals: 'Selected method''s selector navigation commands'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackReceiverClassExplorationCommandsClasses [
 	self
 		assertCollection: builder stackReceiverClassExplorationCommandsClasses
@@ -299,7 +300,7 @@ StDebuggerStackCommandTreeBuilderTest >> testStackReceiverClassExplorationComman
 			SpBrowseSubInstancesCommand}
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackReceiverClassNavigationCommands [
 	self
 		assertCommandGroup: builder stackReceiverClassNavigationCommands
@@ -308,14 +309,14 @@ StDebuggerStackCommandTreeBuilderTest >> testStackReceiverClassNavigationCommand
 		displayStrategy: CmUIDisplayAsGroup
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackReceiverClassNavigationGroupName [
 	self
 		assert: builder stackReceiverClassNavigationGroupName
 		equals: 'Receiver class navigation commands'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackReceiverCommandsClasses [
 	self
 		assertCollection: builder stackReceiverCommandsClasses
@@ -327,7 +328,7 @@ StDebuggerStackCommandTreeBuilderTest >> testStackReceiverCommandsClasses [
 			SpBrowseInstVarRefsCommand}
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerStackCommandTreeBuilderTest >> testStackReceiverExplorationCommandsClasses [
 	self
 		assertCollection: builder stackReceiverExplorationCommandsClasses

@@ -2,17 +2,19 @@
 A FBByFlagsPagePresenterTest is a test class for testing the behavior of FBByFlagsPagePresenter
 "
 Class {
-	#name : #FBByFlagsPagePresenterTest,
-	#superclass : #FBFlagPresentationPresenterTest,
-	#category : #'NewTools-FlagBrowser-Tests-Presenters'
+	#name : 'FBByFlagsPagePresenterTest',
+	#superclass : 'FBFlagPresentationPresenterTest',
+	#category : 'NewTools-FlagBrowser-Tests-Presenters',
+	#package : 'NewTools-FlagBrowser-Tests',
+	#tag : 'Presenters'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 FBByFlagsPagePresenterTest >> instanciateFlagPage [
 	^ FBByFlagsPagePresenter new
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FBByFlagsPagePresenterTest >> selectFlagaRandomFalgForTest [
 	flagPage flagsList
 		selectIndex:
@@ -20,7 +22,7 @@ FBByFlagsPagePresenterTest >> selectFlagaRandomFalgForTest [
 				indexOf: #aRandomFlagForTest)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FBByFlagsPagePresenterTest >> testWhenCaseSensitiveChangeShouldDisplayTODOAndtodo [
 	"caseSensitive when use to merge capitalized and not capitalized charracter"
 
@@ -42,7 +44,7 @@ FBByFlagsPagePresenterTest >> testWhenCaseSensitiveChangeShouldDisplayTODOAndtod
 						and: [ (flagListItem includes: #Test) not ] ])
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FBByFlagsPagePresenterTest >> testWhenFlagsListSelectedItemChangeShouldSendToLocationsTableLocationsOfSelectedItemAndSelectedIndexEquals1 [
 	self selectFlagaRandomFalgForTest.
 	self
@@ -53,7 +55,7 @@ FBByFlagsPagePresenterTest >> testWhenFlagsListSelectedItemChangeShouldSendToLoc
 		equals: 1
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FBByFlagsPagePresenterTest >> testWhenModeDropboxSelectedItemChangeShouldSendToFlagsListAllFlagsOfSelectedItem [
 	flagPage modeDropbox
 		selectedIndex:

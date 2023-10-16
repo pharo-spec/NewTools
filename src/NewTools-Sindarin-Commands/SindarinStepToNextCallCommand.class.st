@@ -1,19 +1,20 @@
 Class {
-	#name : #SindarinStepToNextCallCommand,
-	#superclass : #SindarinCommand,
+	#name : 'SindarinStepToNextCallCommand',
+	#superclass : 'SindarinCommand',
 	#instVars : [
 		'debugger',
 		'conditionValue'
 	],
-	#category : #'NewTools-Sindarin-Commands'
+	#category : 'NewTools-Sindarin-Commands',
+	#package : 'NewTools-Sindarin-Commands'
 }
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinStepToNextCallCommand class >> defaultIconName [
 	^ #glamorousInto
 ]
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 SindarinStepToNextCallCommand >> execute [
 
 	| callingMethod maxDepth depth |
@@ -33,13 +34,13 @@ SindarinStepToNextCallCommand >> execute [
 			debugger hasSignalledUnhandledException ifTrue: [ depth := 1000 ] ] ].
 ]
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 SindarinStepToNextCallCommand >> setConditionValue [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 SindarinStepToNextCallCommand >> targetCondition [
 
 	^ self subclassResponsibility

@@ -1,1 +1,1 @@
-Package { #name : #'NewTools-KeymapBrowser' }
+Package { #name : 'NewTools-KeymapBrowser' }

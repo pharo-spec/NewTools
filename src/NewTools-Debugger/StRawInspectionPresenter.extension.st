@@ -1,23 +1,23 @@
-Extension { #name : #StRawInspectionPresenter }
+Extension { #name : 'StRawInspectionPresenter' }
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 StRawInspectionPresenter >> activePresenter [
 	^self
 ]
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 StRawInspectionPresenter >> addVariableTagColumn [
 
 	attributeTable addColumn: self variableTagColumn
 ]
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 StRawInspectionPresenter >> attributeTable [
 
 	^attributeTable
 ]
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 StRawInspectionPresenter >> beForDebugger [
 
 	attributeTable := (self instantiate: StDebuggerTreeTablePresenter)
@@ -37,13 +37,13 @@ StRawInspectionPresenter >> beForDebugger [
 		children: [ :node | #() ]
 ]
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 StRawInspectionPresenter >> selectedPageName [
 
 	^'Context'
 ]
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 StRawInspectionPresenter >> updateNodesFromScope: oldASTScope to: newASTScope [
 
 	| nodes newTemps oldTemps tempsToRemove tempsToAdd |
@@ -66,7 +66,7 @@ StRawInspectionPresenter >> updateNodesFromScope: oldASTScope to: newASTScope [
 	self attributeTable roots: nodes
 ]
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 StRawInspectionPresenter >> variableTagColumn [
 
 	^  SpLinkTableColumn new 

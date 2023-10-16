@@ -2,22 +2,24 @@
 An OccurrencesBrowserPresenterTest is a test class for testing the behavior of OccurrencesBrowserPresenter
 "
 Class {
-	#name : #StRewriterOccurrencesBrowserPresenterTest,
-	#superclass : #TestCase,
+	#name : 'StRewriterOccurrencesBrowserPresenterTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'occurrencesBrowserPresenter'
 	],
-	#category : #'NewTools-RewriterTools-Tests-OcurrencesBrowser'
+	#category : 'NewTools-RewriterTools-Tests-OcurrencesBrowser',
+	#package : 'NewTools-RewriterTools-Tests',
+	#tag : 'OcurrencesBrowser'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StRewriterOccurrencesBrowserPresenterTest >> setUp [
 
 	super setUp.
 	occurrencesBrowserPresenter := StRewriterOccurrencesBrowserPresenter new
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterOccurrencesBrowserPresenterTest >> testCritiques [
 
 	| presenter |
@@ -25,7 +27,7 @@ StRewriterOccurrencesBrowserPresenterTest >> testCritiques [
 	self assert: (presenter isKindOf: SpPresenter)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterOccurrencesBrowserPresenterTest >> testTitle [
 
 	self deny: StRewriterOccurrencesBrowserPresenter title equals: 'Untitled window'

@@ -1,6 +1,6 @@
-Extension { #name : #Color }
+Extension { #name : 'Color' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 Color >> inspectionColor [
 	<inspectorPresentationOrder: 10 title: 'Color'>
 	
@@ -11,7 +11,7 @@ Color >> inspectionColor [
 		yourself
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 Color class >> inspectionColors [
 	<inspectorPresentationOrder: 10 title: 'Registered'>
 	

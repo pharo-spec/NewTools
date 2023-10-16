@@ -1,28 +1,29 @@
 Class {
-	#name : #StHaltOnWriteCommand,
-	#superclass : #StBreakpointCommand,
-	#category : #'NewTools-ObjectCentricBreakpoints'
+	#name : 'StHaltOnWriteCommand',
+	#superclass : 'StBreakpointCommand',
+	#category : 'NewTools-ObjectCentricBreakpoints',
+	#package : 'NewTools-ObjectCentricBreakpoints'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 StHaltOnWriteCommand class >> defaultDescription [
 
 	^ 'Halts when the selected or any variable is written'
 ]
 
-{ #category : #deafult }
+{ #category : 'deafult' }
 StHaltOnWriteCommand class >> defaultIconName [
 
 	^ #smallObjects
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 StHaltOnWriteCommand class >> defaultName [ 
 
 	^ 'Halt on write'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 StHaltOnWriteCommand >> execute [
 	^context haltInspectedObjectOnWriteAccess
 ]

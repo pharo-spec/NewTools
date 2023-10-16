@@ -2,12 +2,14 @@
 I am a class that creates some demo rules to be used as rule examples
 "
 Class {
-	#name : #StRewriterDemoRules,
-	#superclass : #Object,
-	#category : #'NewTools-RewriterTools-Backend-DefaultRule'
+	#name : 'StRewriterDemoRules',
+	#superclass : 'Object',
+	#category : 'NewTools-RewriterTools-Backend-DefaultRule',
+	#package : 'NewTools-RewriterTools-Backend',
+	#tag : 'DefaultRule'
 }
 
-{ #category : #api }
+{ #category : 'api' }
 StRewriterDemoRules class >> defaultRule [
 
 	| lhs rhs inputCode |
@@ -17,7 +19,7 @@ StRewriterDemoRules class >> defaultRule [
 	^ StRewriterRuleHolder lhs: lhs rhs: rhs pharoCode: inputCode
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StRewriterDemoRules class >> demoRules [
 
 	^ {
@@ -34,7 +36,7 @@ StRewriterDemoRules class >> demoRules [
 		  self replaceCollectFlattenToFlatCollectRule }
 ]
 
-{ #category : #rules }
+{ #category : 'rules' }
 StRewriterDemoRules class >> removeAssignmentWithoutEffectRule [
 
 	| lhs rhs ruleName |
@@ -44,7 +46,7 @@ StRewriterDemoRules class >> removeAssignmentWithoutEffectRule [
 	^ StRewriterRuleHolder lhs: lhs rhs: rhs name: ruleName
 ]
 
-{ #category : #rules }
+{ #category : 'rules' }
 StRewriterDemoRules class >> removeEqualsInAssertRule [
 
 	| lhs rhs ruleName |
@@ -54,7 +56,7 @@ StRewriterDemoRules class >> removeEqualsInAssertRule [
 	^ StRewriterRuleHolder lhs: lhs rhs: rhs name: ruleName
 ]
 
-{ #category : #rules }
+{ #category : 'rules' }
 StRewriterDemoRules class >> removeIfNilRule [
 
 	| lhs rhs ruleName |
@@ -64,7 +66,7 @@ StRewriterDemoRules class >> removeIfNilRule [
 	^ StRewriterRuleHolder lhs: lhs rhs: rhs name: ruleName
 ]
 
-{ #category : #rules }
+{ #category : 'rules' }
 StRewriterDemoRules class >> replaceAssertToAssertEmptyRule [
 
 	| lhs rhs ruleName |
@@ -74,7 +76,7 @@ StRewriterDemoRules class >> replaceAssertToAssertEmptyRule [
 	^ StRewriterRuleHolder lhs: lhs rhs: rhs name: ruleName
 ]
 
-{ #category : #rules }
+{ #category : 'rules' }
 StRewriterDemoRules class >> replaceCharacterTabAsStringToStringTabRule [
 
 	| lhs rhs ruleName |
@@ -84,7 +86,7 @@ StRewriterDemoRules class >> replaceCharacterTabAsStringToStringTabRule [
 	^ StRewriterRuleHolder lhs: lhs rhs: rhs name: ruleName
 ]
 
-{ #category : #rules }
+{ #category : 'rules' }
 StRewriterDemoRules class >> replaceCollectFlattenToFlatCollectRule [
 
 	| lhs rhs ruleName |
@@ -94,7 +96,7 @@ StRewriterDemoRules class >> replaceCollectFlattenToFlatCollectRule [
 	^ StRewriterRuleHolder lhs: lhs rhs: rhs name: ruleName
 ]
 
-{ #category : #rules }
+{ #category : 'rules' }
 StRewriterDemoRules class >> replaceDenyDenyEmptyRule [
 
 	| lhs rhs ruleName |
@@ -107,7 +109,7 @@ StRewriterDemoRules class >> replaceDenyDenyEmptyRule [
 	^ StRewriterRuleHolder lhs: lhs rhs: rhs name: ruleName
 ]
 
-{ #category : #rules }
+{ #category : 'rules' }
 StRewriterDemoRules class >> replaceSelectToRejectRule [
 
 	| lhs rhs ruleName |
@@ -123,7 +125,7 @@ StRewriterDemoRules class >> replaceSelectToRejectRule [
 	^ StRewriterRuleHolder lhs: lhs rhs: rhs name: ruleName
 ]
 
-{ #category : #rules }
+{ #category : 'rules' }
 StRewriterDemoRules class >> simpliflyConditionalToIsEmptyRule [
 
 	| lhs rhs ruleName |
@@ -133,7 +135,7 @@ StRewriterDemoRules class >> simpliflyConditionalToIsEmptyRule [
 	^ StRewriterRuleHolder lhs: lhs rhs: rhs name: ruleName
 ]
 
-{ #category : #rules }
+{ #category : 'rules' }
 StRewriterDemoRules class >> simpliflyToIfEmptyIfNotEmptyRule [
 
 	| lhs rhs ruleName |
@@ -143,7 +145,7 @@ StRewriterDemoRules class >> simpliflyToIfEmptyIfNotEmptyRule [
 	^ StRewriterRuleHolder lhs: lhs rhs: rhs name: ruleName
 ]
 
-{ #category : #rules }
+{ #category : 'rules' }
 StRewriterDemoRules class >> simplifyToIfNilIfNotNilRule [
 
 	| lhs rhs ruleName |

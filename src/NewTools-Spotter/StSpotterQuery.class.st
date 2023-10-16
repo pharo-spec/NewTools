@@ -4,8 +4,8 @@ A query iterates all defined `relevantProcessors` to retrieve the `results`.
 To produce a result, it takes the `searchText` and `process` it.
 "
 Class {
-	#name : #StSpotterQuery,
-	#superclass : #Object,
+	#name : 'StSpotterQuery',
+	#superclass : 'Object',
 	#instVars : [
 		'candidatesList',
 		'processors',
@@ -14,16 +14,18 @@ Class {
 		'finished',
 		'spotterPresenter'
 	],
-	#category : #'NewTools-Spotter-Model'
+	#category : 'NewTools-Spotter-Model',
+	#package : 'NewTools-Spotter',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StSpotterQuery class >> new [
 
 	self error: 'Use #newSearch:on:'
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StSpotterQuery class >> newSearch: aString on: spotter [
 
 	^ super new 
@@ -32,20 +34,20 @@ StSpotterQuery class >> newSearch: aString on: spotter [
 		yourself
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterQuery >> allCandidatesAdded: ann [
 	
 	ann candidateLinks ifEmpty: [ ^ self ].
 	candidateLinks addAll: ann candidateLinks
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterQuery >> announcer [
 
 	^ self candidatesList announcer
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterQuery >> candidateAdded: ann [
 
 	candidateLinks add: ann candidateLink.
@@ -53,13 +55,13 @@ StSpotterQuery >> candidateAdded: ann [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterQuery >> candidatesList [
 
 	^ candidatesList
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterQuery >> filteringText [
 		
 	^ self searchText substrings 
@@ -68,7 +70,7 @@ StSpotterQuery >> filteringText [
 		ifNone: [ nil ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSpotterQuery >> initialize [
 
 	super initialize.
@@ -77,7 +79,7 @@ StSpotterQuery >> initialize [
 	candidateLinks := Set new
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSpotterQuery >> initializeCandidatesList [
 
 	candidatesList := StSpotterCandidatesList new.
@@ -89,19 +91,19 @@ StSpotterQuery >> initializeCandidatesList [
 		when: StSpotterQueryEnded send: #queryEnded: to: self.
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterQuery >> isFinished [
 
 	^ finished
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterQuery >> links [
 
 	^ candidateLinks
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'private - factory' }
 StSpotterQuery >> newContextFor: aStream text: aString [
 
 	^ StSpotterContext new 
@@ -112,7 +114,7 @@ StSpotterQuery >> newContextFor: aStream text: aString [
 		yourself
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'private - factory' }
 StSpotterQuery >> newStreamFor: candidates [
 
 	^ StSpotterStream new
@@ -122,19 +124,19 @@ StSpotterQuery >> newStreamFor: candidates [
 		yourself
 ]
 
-{ #category : #processing }
+{ #category : 'processing' }
 StSpotterQuery >> notifyEnded: aContext [
 
 	self announcer announce: StSpotterQueryEnded new
 ]
 
-{ #category : #processing }
+{ #category : 'processing' }
 StSpotterQuery >> notifyStarted: aContext [
 	
 	self announcer announce: StSpotterQueryStarted new
 ]
 
-{ #category : #processing }
+{ #category : 'processing' }
 StSpotterQuery >> process [
 	| stream context |
 
@@ -153,25 +155,25 @@ StSpotterQuery >> process [
 		ifTrue: [ spotterPresenter removeAllResults ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterQuery >> processors [
 
 	^ processors
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterQuery >> processors: aCollection [
 
 	processors := aCollection
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 StSpotterQuery >> queryEnded: aStSpotterQueryEnded [ 
 
 	spotterPresenter flushPendingUpdates
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterQuery >> relevantProcessors [
 
 	^ self filteringText
@@ -179,37 +181,37 @@ StSpotterQuery >> relevantProcessors [
 		ifNil: [ self processors ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterQuery >> relevantProcessorsFor: aString [
 		
 	^ (self processors select: [ :each | each isRelevantForQuery: aString ])
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterQuery >> results [
 
 	^ self links collect: [ :each | each value ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterQuery >> searchText [
 
 	^ searchText
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterQuery >> searchText: aString [
 
 	searchText := aString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterQuery >> spotter: aSpotterPresenter [
 
  spotterPresenter := aSpotterPresenter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterQuery >> terminate [
 
 	self processors do: [ :each | each stop ]

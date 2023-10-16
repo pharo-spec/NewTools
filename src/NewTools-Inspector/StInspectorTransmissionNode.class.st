@@ -2,15 +2,17 @@
 I am an inspector node that allows the user to specify a custom transmission. I am made to be used inside the Inspector. The user can specify the `transmissionBlock:`
 "
 Class {
-	#name : #StInspectorTransmissionNode,
-	#superclass : #StInspectorNode,
+	#name : 'StInspectorTransmissionNode',
+	#superclass : 'StInspectorNode',
 	#instVars : [
 		'transmissionBlock'
 	],
-	#category : #'NewTools-Inspector-Model'
+	#category : 'NewTools-Inspector-Model',
+	#package : 'NewTools-Inspector',
+	#tag : 'Model'
 }
 
-{ #category : #'instance initialization' }
+{ #category : 'instance initialization' }
 StInspectorTransmissionNode class >> hostObject: anObject transmissionBlock: aFullBlockClosure [
 
 	^ self new
@@ -19,19 +21,19 @@ StInspectorTransmissionNode class >> hostObject: anObject transmissionBlock: aFu
 		  yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorTransmissionNode >> key [
 
 	^ self hostObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorTransmissionNode >> rawValue [
 
 	^ transmissionBlock value: hostObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorTransmissionNode >> transmissionBlock: aBlock [
 
 	self
@@ -40,7 +42,7 @@ StInspectorTransmissionNode >> transmissionBlock: aBlock [
 	self transmits: aBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorTransmissionNode >> transmits: aBlock [
 
 	transmissionBlock := aBlock

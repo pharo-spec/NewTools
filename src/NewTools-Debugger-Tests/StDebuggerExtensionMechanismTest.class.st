@@ -1,24 +1,26 @@
 Class {
-	#name : #StDebuggerExtensionMechanismTest,
-	#superclass : #TestCase,
+	#name : 'StDebuggerExtensionMechanismTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'debugger',
 		'oldActivatedExtensions'
 	],
-	#category : #'NewTools-Debugger-Tests-Presenters'
+	#category : 'NewTools-Debugger-Tests-Presenters',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Presenters'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerExtensionMechanismTest >> debugger [
 	^ debugger ifNil: [ debugger := self debuggerClass basicNew ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerExtensionMechanismTest >> debuggerClass [
 	^ StDebugger
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 StDebuggerExtensionMechanismTest >> disableTStDebuggerExtensionTestClassAsExtension [
 
 	TStDebuggerExtensionTestClass class compile: 'isOnlyForTests
@@ -26,7 +28,7 @@ StDebuggerExtensionMechanismTest >> disableTStDebuggerExtensionTestClassAsExtens
 	^ true'
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 StDebuggerExtensionMechanismTest >> enableTStDebuggerExtensionTestClassAsExtension [
 
 	TStDebuggerExtensionTestClass class compile: 'isOnlyForTests
@@ -34,7 +36,7 @@ StDebuggerExtensionMechanismTest >> enableTStDebuggerExtensionTestClassAsExtensi
 	^ false'
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerExtensionMechanismTest >> setUp [
 
 	super setUp.
@@ -42,24 +44,23 @@ StDebuggerExtensionMechanismTest >> setUp [
 	StDummyDebuggerPresenter showInDebugger: false
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerExtensionMechanismTest >> tearDown [
 
-	| allDebuggerExtensions testClass |
-	testClass := StDebuggerExtensionGeneratorForTests testClass.
+	| allDebuggerExtensions |
 	allDebuggerExtensions := StDebugger extensionToolsClasses.
 	allDebuggerExtensions do: [ :extension |
 		| wasActivated |
 		wasActivated := oldActivatedExtensions includes: extension.
 		extension showInDebugger = wasActivated ifFalse: [
 			extension showInDebugger: wasActivated ] ].
-	testClass showInDebugger: false.
+	TStDebuggerExtensionTestClass showInDebugger: false.
 	StDummyDebuggerPresenter showInDebugger: false.
 	self disableTStDebuggerExtensionTestClassAsExtension.
 	super tearDown
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerExtensionMechanismTest >> testDynamicLayoutWithAndWithoutExtension [
 
 	| dbg toolPage session |
@@ -103,7 +104,7 @@ StDebuggerExtensionMechanismTest >> testDynamicLayoutWithAndWithoutExtension [
 	self denyCollection: dbg stackAndCodeContainer children includesAny: {#extensionToolsNotebook }
 ]
 
-{ #category : #'tests - extensions' }
+{ #category : 'tests - extensions' }
 StDebuggerExtensionMechanismTest >> testExtensionToolsClasses [
 
 	self
@@ -112,19 +113,15 @@ StDebuggerExtensionMechanismTest >> testExtensionToolsClasses [
 				 extension isOnlyForTests ])
 ]
 
-{ #category : #'tests - extensions' }
+{ #category : 'tests - extensions' }
 StDebuggerExtensionMechanismTest >> testHasAnyActivatedExtensions [
 
-	| testClass |
-	testClass := StDebuggerExtensionGeneratorForTests testClass.
-	self deny:
-		(self debuggerClass hasAnyActivatedExtension: { testClass }).
-	testClass showInDebugger: true.
-	self assert:
-		(self debuggerClass hasAnyActivatedExtension: { testClass })
+	self deny: (self debuggerClass hasAnyActivatedExtension: { TStDebuggerExtensionTestClass }).
+	TStDebuggerExtensionTestClass showInDebugger: true.
+	self assert: (self debuggerClass hasAnyActivatedExtension: { TStDebuggerExtensionTestClass })
 ]
 
-{ #category : #'tests - extensions' }
+{ #category : 'tests - extensions' }
 StDebuggerExtensionMechanismTest >> testInstantiateExtensionToolsPage [
 	|dbg toolPage|
 	dbg := self debugger.
@@ -137,7 +134,7 @@ StDebuggerExtensionMechanismTest >> testInstantiateExtensionToolsPage [
 	 
 ]
 
-{ #category : #'tests - extensions' }
+{ #category : 'tests - extensions' }
 StDebuggerExtensionMechanismTest >> testRegisterExtensionTool [
 	|dbg object|
 	dbg := self debugger.
@@ -147,11 +144,10 @@ StDebuggerExtensionMechanismTest >> testRegisterExtensionTool [
 	self assertCollection: dbg extensionTools equals: { object } asOrderedCollection 
 ]
 
-{ #category : #'tests - extensions' }
+{ #category : 'tests - extensions' }
 StDebuggerExtensionMechanismTest >> testUsesExtensions [
 
-	| testClass extensionClasses activatedExtension |
-	testClass := StDebuggerExtensionGeneratorForTests testClass.
+	| extensionClasses activatedExtension |
 
 	"In case there are no available extensions in the system, we add a test extension to the system.
 	We then assume that there is always one extension in the extension collection of the system."

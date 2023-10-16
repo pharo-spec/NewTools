@@ -1,13 +1,15 @@
 Class {
-	#name : #StPharoDefaultIconProvider,
-	#superclass : #SpPharoThemeIconProvider,
+	#name : 'StPharoDefaultIconProvider',
+	#superclass : 'SpPharoThemeIconProvider',
 	#instVars : [
 		'synonyms'
 	],
-	#category : #'NewTools-Core-Application'
+	#category : 'NewTools-Core-Application',
+	#package : 'NewTools-Core',
+	#tag : 'Application'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPharoDefaultIconProvider >> iconNamed: aSymbol [
 
 	^ super iconNamed: (synonyms 
@@ -15,7 +17,7 @@ StPharoDefaultIconProvider >> iconNamed: aSymbol [
 		ifAbsent: [ aSymbol ])
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPharoDefaultIconProvider >> initialize [
 
 	super initialize. 
@@ -23,7 +25,7 @@ StPharoDefaultIconProvider >> initialize [
 	self initializeSynonyms
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPharoDefaultIconProvider >> initializeSynonyms [
 
 	synonyms 

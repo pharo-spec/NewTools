@@ -8,17 +8,19 @@ Through its property ==headerBar== (see *class:StHeaderBar*), it provides: a lab
 This presenter is used to homogenize the panels in tools.
 "
 Class {
-	#name : #StHeaderPanel,
-	#superclass : #SpPresenter,
+	#name : 'StHeaderPanel',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'headerBar',
 		'presenter',
 		'shortcut'
 	],
-	#category : #'NewTools-Core-Presenters'
+	#category : 'NewTools-Core-Presenters',
+	#package : 'NewTools-Core',
+	#tag : 'Presenters'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StHeaderPanel >> addWindowShortcutsTo: aWindowPresenter [
 
 	shortcut ifNil: [ ^ self ].
@@ -27,7 +29,7 @@ StHeaderPanel >> addWindowShortcutsTo: aWindowPresenter [
 		toAction: [ presenter takeKeyboardFocus ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StHeaderPanel >> initializePresenters [
 
 	headerBar := self instantiate: StHeaderBar.
@@ -37,19 +39,19 @@ StHeaderPanel >> initializePresenters [
 		yourself
 ]
 
-{ #category : #'accessing - header' }
+{ #category : 'accessing - header' }
 StHeaderPanel >> label: aString [
 
 	headerBar label: aString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHeaderPanel >> number: aNumber [
 
 	self shortcut: (self shortcutForPanel: aNumber)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHeaderPanel >> presenter: aPresenter [
 
 	presenter ifNotNil: [ layout remove: presenter ].
@@ -57,14 +59,14 @@ StHeaderPanel >> presenter: aPresenter [
 	layout add: presenter
 ]
 
-{ #category : #'accessing - header' }
+{ #category : 'accessing - header' }
 StHeaderPanel >> shortcut: aShortcut [
 
 	shortcut := aShortcut.
 	headerBar shortcut: aShortcut
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StHeaderPanel >> shortcutForPanel: aNumber [
 	"This is a convenience method to assign shortcuts to panels. 
 	 panels will be different areas of a tool: a package panel in a browser, an inspector in 
@@ -77,7 +79,7 @@ StHeaderPanel >> shortcutForPanel: aNumber [
 		| char control unix
 ]
 
-{ #category : #'accessing - header' }
+{ #category : 'accessing - header' }
 StHeaderPanel >> toolbarActions: aCommandGroup [
 
 	headerBar toolbarActions: aCommandGroup

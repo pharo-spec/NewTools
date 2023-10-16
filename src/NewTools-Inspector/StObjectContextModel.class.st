@@ -7,8 +7,8 @@ It keeps references to:
 - the inspection object
 "
 Class {
-	#name : #StObjectContextModel,
-	#superclass : #Object,
+	#name : 'StObjectContextModel',
+	#superclass : 'Object',
 	#instVars : [
 		'inspection',
 		'context',
@@ -17,10 +17,12 @@ Class {
 	#classVars : [
 		'CodeSnippets'
 	],
-	#category : #'NewTools-Inspector-View'
+	#category : 'NewTools-Inspector-View',
+	#package : 'NewTools-Inspector',
+	#tag : 'View'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 StObjectContextModel class >> codeSnippetFor: aClass ifAbsent: aBlock [
 
 	^ self codeSnippets 
@@ -28,7 +30,7 @@ StObjectContextModel class >> codeSnippetFor: aClass ifAbsent: aBlock [
 		ifAbsent: aBlock
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StObjectContextModel class >> codeSnippetFor: aClass value: aString [
 
 	self codeSnippets 	
@@ -36,13 +38,13 @@ StObjectContextModel class >> codeSnippetFor: aClass value: aString [
 		put: aString
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StObjectContextModel class >> codeSnippets [
 
 	^ CodeSnippets ifNil: [ CodeSnippets := WeakIdentityKeyDictionary new ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectContextModel >> codeSnippet [
 
 	^ self class 
@@ -50,7 +52,7 @@ StObjectContextModel >> codeSnippet [
 		ifAbsent: [ 'self' ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectContextModel >> codeSnippet: aString [
 
 	(self stringWithoutInitialCommentFrom: aString asString) 
@@ -60,55 +62,55 @@ StObjectContextModel >> codeSnippet: aString [
 				value: snippet ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectContextModel >> context [
 	^ context
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectContextModel >> context: anObject [
 	context := anObject
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StObjectContextModel >> hasEvaluator [
 	
 	^ self context hasEvaluator
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectContextModel >> inspectedObject [
 	^ inspectedObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectContextModel >> inspectedObject: anObject [
 	inspectedObject := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectContextModel >> inspection [
 	^ inspection
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectContextModel >> inspection: anObject [
 	inspection := anObject
 ]
 
-{ #category : #factory }
+{ #category : 'factory' }
 StObjectContextModel >> newInspectionView [
 
 	^ self context newInspectionView
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectContextModel >> smallDescriptionString [
 
 	^ self inspection smallDescriptionStringFor: self inspectedObject
 ]
 
-{ #category : #'private building' }
+{ #category : 'private building' }
 StObjectContextModel >> stringWithoutInitialCommentFrom: aString [
 
 	^ (aString trimLeft notEmpty and: [ aString trimLeft first = $" ])

@@ -1,28 +1,29 @@
 Class {
-	#name : #StWorldMenuProcessorTest,
-	#superclass : #StAbstractProcessorTest,
-	#category : #'NewTools-Spotter-Processors-Tests'
+	#name : 'StWorldMenuProcessorTest',
+	#superclass : 'StAbstractProcessorTest',
+	#category : 'NewTools-Spotter-Processors-Tests',
+	#package : 'NewTools-Spotter-Processors-Tests'
 }
 
-{ #category : #asserting }
+{ #category : 'asserting' }
 StWorldMenuProcessorTest >> assertResultsIncludesMenuEntry: aString [ 
 	
 	self assert: (candidates results anySatisfy: [:each | each content contents = aString ])
 ]
 
-{ #category : #asserting }
+{ #category : 'asserting' }
 StWorldMenuProcessorTest >> denyResultsIncludesMenuEntry: aString [ 
 	
 	self assert: (candidates results noneSatisfy: [:each | each content contents = aString ])
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StWorldMenuProcessorTest >> processor [
 
 	^ StWorldMenuProcessor new
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StWorldMenuProcessorTest >> testEmptyQueryShowsResults [
 
 	self runForText: ''.
@@ -30,7 +31,7 @@ StWorldMenuProcessorTest >> testEmptyQueryShowsResults [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StWorldMenuProcessorTest >> testSearchingSaDoesNotIncludeIceberg [
 
 	self runForText: 'sa'.
@@ -38,7 +39,7 @@ StWorldMenuProcessorTest >> testSearchingSaDoesNotIncludeIceberg [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StWorldMenuProcessorTest >> testSearchingSaIncludesSaveAndSaveAs [
 
 	self runForText: 'sa'.
@@ -46,14 +47,14 @@ StWorldMenuProcessorTest >> testSearchingSaIncludesSaveAndSaveAs [
 	self assertResultsIncludesMenuEntry: 'Save as...'	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StWorldMenuProcessorTest >> testSearchingSettingsFindsTheCorrectEntry [
 
 	self runForText: 'settings'.
 	self assertResultsIncludesMenuEntry: 'Settings'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StWorldMenuProcessorTest >> testSearchingVeDoesNotIncludeIceberg [
 
 	self runForText: 've'.
@@ -61,7 +62,7 @@ StWorldMenuProcessorTest >> testSearchingVeDoesNotIncludeIceberg [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StWorldMenuProcessorTest >> testSearchingVeIncludesSaveAndSaveAs [
 
 	self runForText: 'Ve'.

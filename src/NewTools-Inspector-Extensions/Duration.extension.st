@@ -1,6 +1,6 @@
-Extension { #name : #Duration }
+Extension { #name : 'Duration' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 Duration >> inspectDurationIn: specBuilder [
 	<inspectorPresentationOrder: 30 title: 'Details'>
 	

@@ -1,13 +1,15 @@
 Class {
-	#name : #StSBPackageModel,
-	#superclass : #StSBBasePackageModel,
+	#name : 'StSBPackageModel',
+	#superclass : 'StSBBasePackageModel',
 	#instVars : [
 		'package'
 	],
-	#category : #'NewTools-SystemBrowser-Model'
+	#category : 'NewTools-SystemBrowser-Model',
+	#package : 'NewTools-SystemBrowser',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StSBPackageModel class >> newEnvironment: anEnvironment package: aPackage [
 
 	^ self new 
@@ -16,7 +18,7 @@ StSBPackageModel class >> newEnvironment: anEnvironment package: aPackage [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBPackageModel >> allClassesQueries [
 
 	^ {
@@ -25,7 +27,7 @@ StSBPackageModel >> allClassesQueries [
 	}
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBPackageModel >> children [
 
 	^ (self tagsQuery execute items 
@@ -33,7 +35,7 @@ StSBPackageModel >> children [
 		sorted: #name ascending 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBPackageModel >> classes [
 
 	^ self allClassesQueries 
@@ -43,29 +45,29 @@ StSBPackageModel >> classes [
 				collect: [ :each | StSBClassModel newEnvironment: self environment class: each ]) ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBPackageModel >> icon [
 
 	^ self application iconNamed: #package
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBPackageModel >> name [
 
 	^ self package name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBPackageModel >> package [
 	^ package
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBPackageModel >> package: anObject [
 	package := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBPackageModel >> tagsQuery [
 		
 	^ ClyAllClassGroupsQuery sortedFrom: (ClyPackageScope of: self package in: self environment)

@@ -1,6 +1,6 @@
 Class {
-	#name : #HCMenu,
-	#superclass : #ComposablePresenter,
+	#name : 'HCMenu',
+	#superclass : 'ComposablePresenter',
 	#instVars : [
 		'buttonManuals',
 		'buttonTutorials',
@@ -8,10 +8,11 @@ Class {
 		'linkBooks',
 		'hcbrowserComponent'
 	],
-	#category : #HelpCenter
+	#category : 'HelpCenter',
+	#package : 'HelpCenter'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 HCMenu class >> defaultSpec [
 	^SpecLayout composed
 		newRow: [ :row | 
@@ -24,52 +25,52 @@ HCMenu class >> defaultSpec [
 		
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 HCMenu >> buttonManuals [
 	^ buttonManuals
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 HCMenu >> buttonManuals: anObject [
 	buttonManuals := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 HCMenu >> buttonProfStef [
 	^ buttonProfStef
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 HCMenu >> buttonProfStef: anObject [
 	buttonProfStef := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 HCMenu >> buttonTutorials [
 	^ buttonTutorials
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 HCMenu >> buttonTutorials: anObject [
 	buttonTutorials := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 HCMenu >> hcbrowserComponent [
 	^ hcbrowserComponent
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 HCMenu >> hcbrowserComponent: anObject [
 	hcbrowserComponent := anObject
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 HCMenu >> initializePresenter [ 
 	buttonProfStef action: [ ProfStef go ].
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 HCMenu >> initializeWidgets [ 
 	buttonManuals := self newButton 
 		label: 'Manuals';
@@ -88,17 +89,17 @@ HCMenu >> initializeWidgets [
 		yourself.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 HCMenu >> linkBooks [
 	^ linkBooks
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 HCMenu >> linkBooks: anObject [
 	linkBooks := anObject
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 HCMenu >> title [ 
 	^'Menu'
 ]

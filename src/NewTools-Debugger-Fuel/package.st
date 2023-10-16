@@ -1,1 +1,1 @@
-Package { #name : #'NewTools-Debugger-Fuel' }
+Package { #name : 'NewTools-Debugger-Fuel' }

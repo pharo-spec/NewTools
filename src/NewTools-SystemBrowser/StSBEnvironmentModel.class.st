@@ -1,13 +1,15 @@
 Class {
-	#name : #StSBEnvironmentModel,
-	#superclass : #StSBModel,
+	#name : 'StSBEnvironmentModel',
+	#superclass : 'StSBModel',
 	#instVars : [
 		'allPackagesQuery'
 	],
-	#category : #'NewTools-SystemBrowser-Model'
+	#category : 'NewTools-SystemBrowser-Model',
+	#package : 'NewTools-SystemBrowser',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StSBEnvironmentModel class >> newEnvironment: aNavigationEnvironment [
 
 	^ self new 
@@ -15,7 +17,7 @@ StSBEnvironmentModel class >> newEnvironment: aNavigationEnvironment [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBEnvironmentModel >> allPackages [ 
 
 	^ ((self allPackagesQuery execute) items 
@@ -23,25 +25,25 @@ StSBEnvironmentModel >> allPackages [
 		sorted: #name ascending
 ]
 
-{ #category : #'private queries' }
+{ #category : 'private queries' }
 StSBEnvironmentModel >> allPackagesQuery [
 
 	^ allPackagesQuery ifNil: [ allPackagesQuery := self newAllPackagesQuery ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBEnvironmentModel >> name [
 
 	^ nil
 ]
 
-{ #category : #'private queries factory' }
+{ #category : 'private queries factory' }
 StSBEnvironmentModel >> newAllPackagesQuery [
 
 	^ ClyAllPackagesQuery sortedFrom: self systemScope
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBEnvironmentModel >> systemScope [
 
 	^ self environment systemScope

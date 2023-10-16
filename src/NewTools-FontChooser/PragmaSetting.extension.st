@@ -1,6 +1,6 @@
-Extension { #name : #PragmaSetting }
+Extension { #name : 'PragmaSetting' }
 
-{ #category : #'*NewTools-FontChooser' }
+{ #category : '*NewTools-FontChooser' }
 PragmaSetting >> getFont [
 
 	| chooser |

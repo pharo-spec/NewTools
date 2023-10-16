@@ -1,6 +1,6 @@
-Extension { #name : #DAPackageDependency }
+Extension { #name : 'DAPackageDependency' }
 
-{ #category : #'*NewTools-DependencyAnalyser' }
+{ #category : '*NewTools-DependencyAnalyser' }
 DAPackageDependency >> children [
 
 	^ #()

@@ -12,8 +12,8 @@ If you want to edit an already saved rewrite rule, just click on 'Open Loader' a
 Click on MatchTool to open a tool that allows you to match your rule with a block of Pharo's code.
 "
 Class {
-	#name : #StRewriterRuleEditorPresenter,
-	#superclass : #StPresenter,
+	#name : 'StRewriterRuleEditorPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'cheatSheet',
 		'loadButton',
@@ -26,27 +26,29 @@ Class {
 		'isForMethodCheckbox',
 		'openMatcherButton'
 	],
-	#category : #'NewTools-RewriterTools-RuleEditor'
+	#category : 'NewTools-RewriterTools-RuleEditor',
+	#package : 'NewTools-RewriterTools',
+	#tag : 'RuleEditor'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleEditorPresenter class >> descriptionText [
 
 	^ 'A tool to build and apply custom Rewrite Rules.'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleEditorPresenter class >> icon [
 
 	^ self iconNamed: self iconName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleEditorPresenter class >> iconName [
 	^ #workspaceIcon
 ]
 
-{ #category : #'world menu' }
+{ #category : 'world menu' }
 StRewriterRuleEditorPresenter class >> menuCommandOn: aBuilder [
 
 	<worldMenu>
@@ -58,13 +60,13 @@ StRewriterRuleEditorPresenter class >> menuCommandOn: aBuilder [
 		icon: self icon
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StRewriterRuleEditorPresenter class >> title [
 
 	^ 'Rewrite Basic Editor'
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StRewriterRuleEditorPresenter >> defaultLayout [
 
 	^ SpPanedLayout newLeftToRight
@@ -85,7 +87,7 @@ StRewriterRuleEditorPresenter >> defaultLayout [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterRuleEditorPresenter >> initializeButtons [
 
 	loadButton := self instantiate:
@@ -100,14 +102,14 @@ StRewriterRuleEditorPresenter >> initializeButtons [
 		(StRewriterApplyRuleOnSelectedClassesCommand forSpecContext: self) asButtonPresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterRuleEditorPresenter >> initializeMethodCheckbox [
 
 	isForMethodCheckbox := self newCheckBox.
 	isForMethodCheckbox label: 'The rule is for a method?'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterRuleEditorPresenter >> initializePresenters [
 
 	self initializeMethodCheckbox.
@@ -117,26 +119,26 @@ StRewriterRuleEditorPresenter >> initializePresenters [
 	self initializeScopeSelectorPresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterRuleEditorPresenter >> initializeRuleEditors [
 
 	searchForEditor := self instantiate: StRewriterSearchForPanelPresenter.
 	replaceWithEditor := self instantiate: StRewriterReplaceWithPanelPresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterRuleEditorPresenter >> initializeScopeSelectorPresenter [
 
 	scopeSelectorPresenter := self instantiate: StRewriterScopeSelectorPresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterRuleEditorPresenter >> initializeTextCheatSheet [
 
 	cheatSheet := self instantiate: StRewriterCheatSheetPresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterRuleEditorPresenter >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
@@ -146,33 +148,33 @@ StRewriterRuleEditorPresenter >> initializeWindow: aWindowPresenter [
 		aboutText: self class descriptionText
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleEditorPresenter >> isRuleForMethod [
 
 	^ isForMethodCheckbox state
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleEditorPresenter >> lhs [
 	^ searchForEditor lhs
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleEditorPresenter >> lhs: aCode [
 	searchForEditor lhs: aCode
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleEditorPresenter >> rhs [
 	^ replaceWithEditor rhs
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleEditorPresenter >> rhs: aCode [
 	replaceWithEditor rhs: aCode
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleEditorPresenter >> scopeSelectorPresenter [
 
 	^ scopeSelectorPresenter

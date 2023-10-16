@@ -1,10 +1,11 @@
 Class {
-	#name : #StGeneratorBlockIteratorTest,
-	#superclass : #TestCase,
-	#category : #'NewTools-Spotter-Processors-Tests'
+	#name : 'StGeneratorBlockIteratorTest',
+	#superclass : 'TestCase',
+	#category : 'NewTools-Spotter-Processors-Tests',
+	#package : 'NewTools-Spotter-Processors-Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 StGeneratorBlockIteratorTest >> testIteratorOnACalculatedCollectionReturnsOnlyFirst [
 
 	| it m |
@@ -18,7 +19,7 @@ StGeneratorBlockIteratorTest >> testIteratorOnACalculatedCollectionReturnsOnlyFi
 	self assert: m isCompiledMethod.	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StGeneratorBlockIteratorTest >> testIteratorWithEmptyBlockIsAtEnd [
 	| it |
 	
@@ -26,7 +27,7 @@ StGeneratorBlockIteratorTest >> testIteratorWithEmptyBlockIsAtEnd [
 	self assert: it atEnd.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StGeneratorBlockIteratorTest >> testIteratorWithInfiniteBlockNotCallIfNotUsed [
 	| it count |
 	
@@ -35,7 +36,7 @@ StGeneratorBlockIteratorTest >> testIteratorWithInfiniteBlockNotCallIfNotUsed [
 	self assert: count equals: 0.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StGeneratorBlockIteratorTest >> testIteratorWithInfiniteBlockOnlyCallFirstTimes [
 	| it count |
 	
@@ -45,7 +46,7 @@ StGeneratorBlockIteratorTest >> testIteratorWithInfiniteBlockOnlyCallFirstTimes 
 	self assert: count equals: 5.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StGeneratorBlockIteratorTest >> testIteratorWithSingleElementIsAtEndAfterNext [
 	| it |
 	 

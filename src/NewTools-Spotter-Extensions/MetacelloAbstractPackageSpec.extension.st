@@ -1,6 +1,6 @@
-Extension { #name : #MetacelloAbstractPackageSpec }
+Extension { #name : 'MetacelloAbstractPackageSpec' }
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 MetacelloAbstractPackageSpec >> spotterForIncludesFor: aStep [
 	<stSpotterOrder: 1>
 	aStep listProcessor
@@ -11,7 +11,7 @@ MetacelloAbstractPackageSpec >> spotterForIncludesFor: aStep [
 		wantsToDisplayOnEmptyQuery: true
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 MetacelloAbstractPackageSpec >> spotterForRequiresFor: aStep [
 	<stSpotterOrder: 2>
 	aStep listProcessor

@@ -2,36 +2,38 @@
 Open the page versions browsers.
 "
 Class {
-	#name : #StPlaygroundVersionsCommand,
-	#superclass : #StPlaygroundCommand,
-	#category : #'NewTools-Playground-Command'
+	#name : 'StPlaygroundVersionsCommand',
+	#superclass : 'StPlaygroundCommand',
+	#category : 'NewTools-Playground-Command',
+	#package : 'NewTools-Playground',
+	#tag : 'Command'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 StPlaygroundVersionsCommand class >> defaultDescription [
 
 	^ 'Browse page versions'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundVersionsCommand class >> defaultIconName [
 
 	^ #history
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 StPlaygroundVersionsCommand class >> defaultName [
 
 	^ 'Versions'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundVersionsCommand class >> order [
 
 	^ 20
 ]
 
-{ #category : #execution }
+{ #category : 'execution' }
 StPlaygroundVersionsCommand >> execute [ 
 
 	(StPlaygroundPageVersionsPresenter 

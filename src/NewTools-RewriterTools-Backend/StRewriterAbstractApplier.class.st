@@ -2,12 +2,14 @@
 I am the abstract class for applying a code transformation
 "
 Class {
-	#name : #StRewriterAbstractApplier,
-	#superclass : #Object,
-	#category : #'NewTools-RewriterTools-Backend-Core'
+	#name : 'StRewriterAbstractApplier',
+	#superclass : 'Object',
+	#category : 'NewTools-RewriterTools-Backend-Core',
+	#package : 'NewTools-RewriterTools-Backend',
+	#tag : 'Core'
 }
 
-{ #category : #api }
+{ #category : 'api' }
 StRewriterAbstractApplier class >> applyTransformationChanges: changes [
 
 	| refactoringJob |
@@ -18,19 +20,19 @@ StRewriterAbstractApplier class >> applyTransformationChanges: changes [
 		run
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StRewriterAbstractApplier class >> calculateAllChangesForRules: ruleHolderCollection [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StRewriterAbstractApplier class >> calculateChangesForClasses: classes transformationRules: ruleHolderCollection [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StRewriterAbstractApplier class >> defaultEngineApplier [
 
 	^ StRewriterRBApplier

@@ -1,22 +1,24 @@
 Class {
-	#name : #StFBOpenDirectoryDialogTest,
-	#superclass : #StFBFileDialogTest,
-	#category : #'NewTools-FileBrowser-Tests-UI'
+	#name : 'StFBOpenDirectoryDialogTest',
+	#superclass : 'StFBFileDialogTest',
+	#category : 'NewTools-FileBrowser-Tests-UI',
+	#package : 'NewTools-FileBrowser-Tests',
+	#tag : 'UI'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBOpenDirectoryDialogTest >> dialogClass [
 	^ StFBOpenDirectoryDialog
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBOpenDirectoryDialogTest >> testDefaultDirectory [
 	self assert: dialog selectedEntry equals: root.
 	dialog defaultFolder: root / 'dir'.
 	self assert: dialog selectedEntry equals: root / 'dir'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBOpenDirectoryDialogTest >> testSelectDirectory [
 
 	| selectedDirectory |
@@ -33,7 +35,7 @@ StFBOpenDirectoryDialogTest >> testSelectDirectory [
 	self assert: selectedDirectory equals: root / 'dir'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBOpenDirectoryDialogTest >> testSelectNonexistingDirectory [
 
 	self

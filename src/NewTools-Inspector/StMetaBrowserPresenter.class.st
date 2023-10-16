@@ -5,17 +5,19 @@ This inspection allow the user to operate with the class of the instance.
 Also, this inspection allows the user to place instance breakpoints (breakpoints that will act when the method where the breakpoint is) is called for the instance being inspected.
 "
 Class {
-	#name : #StMetaBrowserPresenter,
-	#superclass : #StInspectionPresenter,
+	#name : 'StMetaBrowserPresenter',
+	#superclass : 'StInspectionPresenter',
 	#instVars : [
 		'classes',
 		'methods',
 		'source'
 	],
-	#category : #'NewTools-Inspector-View'
+	#category : 'NewTools-Inspector-View',
+	#package : 'NewTools-Inspector',
+	#tag : 'View'
 }
 
-{ #category : #commands }
+{ #category : 'commands' }
 StMetaBrowserPresenter class >> buildCommandsGroupWith: presenter forRoot: aCmCommandsGroup [
 
 	aCmCommandsGroup
@@ -30,7 +32,7 @@ StMetaBrowserPresenter class >> buildCommandsGroupWith: presenter forRoot: aCmCo
 			yourself)
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StMetaBrowserPresenter class >> defaultLayout [
 	
 	^ SpPanedLayout newTopToBottom
@@ -42,13 +44,13 @@ StMetaBrowserPresenter class >> defaultLayout [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StMetaBrowserPresenter >> classListMenu [
 	
 	^ (self rootCommandsGroup / 'classes') asMenuPresenter 
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 StMetaBrowserPresenter >> compile: aString [
 	| compiledSelector cursorPosition |
 
@@ -66,46 +68,52 @@ StMetaBrowserPresenter >> compile: aString [
 			source cursorPositionIndex: cursorPosition ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StMetaBrowserPresenter >> initializePresenters [
+
 	| classHierarchy |
-	
 	classHierarchy := self model class withAllSuperclasses reversed.
 
 	classes := self newTreeTable
-		addColumn: (SpStringTableColumn title: 'Class hierarchy' evaluated: #name);
-		roots: { classHierarchy first };
-		children: [ :aClass | classHierarchy select: [ :subclass | subclass superclass == aClass ] ];
-		contextMenu: [ self classListMenu ];
-		yourself.
+		           addColumn:
+			           (SpStringTableColumn
+				            title: 'Class hierarchy'
+				            evaluated: #name);
+		           roots: { classHierarchy first };
+		           children: [ :aClass |
+			           classHierarchy select: [ :subclass |
+					           subclass superclass == aClass ] ];
+		           contextMenu: [ self classListMenu ];
+		           yourself.
 	methods := (self instantiate: SpFilteringListPresenter)
-		display: [ :each | each selector ];	
-		contextMenu: [ self methodListMenu ];
-		yourself.
+		           display: [ :each | each selector ];
+		           contextMenu: [ self methodListMenu ];
+		           yourself.
 
 	source := self newCode
-		lineNumbers: StPharoSettings codeShowLineNumbers;
-		beForMethod: self selectedMethod;
-		whenSubmitDo: [ :aString | self compile: aString ];
-		whenResetDo: [ self updateSourceWith: self selectedMethod  ];
-		yourself.
-		
-	classes 
-		transmitTo: methods 
-		transform: [ :aClass | self methodsOf: aClass ].
-	methods 
-		transmitDo: [ :aMethod | self updateSourceWith: aMethod ].
+		          lineNumbers: StPharoSettings codeShowLineNumbers;
+		          beForMethod: self selectedMethod;
+		          whenSubmitDo: [ :aString | self compile: aString ];
+		          whenResetDo: [ self updateSourceWith: self selectedMethod ];
+		          yourself.
 
-	classes selectPath: (Array new: classHierarchy size withAll: 1)
+	classes
+		transmitTo: methods
+		transform: [ :aClass | self methodsOf: aClass ].
+	methods transmitDo: [ :aMethod | self updateSourceWith: aMethod ].
+
+	classes
+		selectPath: (Array new: classHierarchy size withAll: 1)
+		scrollToSelection: true
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StMetaBrowserPresenter >> methodListMenu [
 
 	^ (self rootCommandsGroup / 'methods') asMenuPresenter
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StMetaBrowserPresenter >> methodsOf: aClass [
 
 	aClass ifNil: [ ^ #() ].
@@ -113,25 +121,25 @@ StMetaBrowserPresenter >> methodsOf: aClass [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StMetaBrowserPresenter >> selectedClass [
 
 	^ classes selection selectedItem
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StMetaBrowserPresenter >> selectedMethod [
 
 	^ methods selectedItem
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StMetaBrowserPresenter >> selectedObject [
 
 	^ self selectedMethod ifNil: [ self selectedClass  ]
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StMetaBrowserPresenter >> updateMethods: aClass [
 	
 	methods items: (aClass
@@ -140,7 +148,7 @@ StMetaBrowserPresenter >> updateMethods: aClass [
 	
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StMetaBrowserPresenter >> updateSourceWith: method [
 
 	source userActionDuring: [

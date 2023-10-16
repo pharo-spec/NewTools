@@ -1,17 +1,18 @@
 Class {
-	#name : #StBreakpointCommand,
-	#superclass : #CmCommand,
-	#category : #'NewTools-ObjectCentricBreakpoints'
+	#name : 'StBreakpointCommand',
+	#superclass : 'CmCommand',
+	#category : 'NewTools-ObjectCentricBreakpoints',
+	#package : 'NewTools-ObjectCentricBreakpoints'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StBreakpointCommand >> appliesTo: aTool [
 	^ [ aTool owner class ~= StDebuggerRawObjectInspector ]
 		on: Error
 		do: [ false ]
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 StBreakpointCommand >> asSpecCommand [
 	| command |
 
@@ -22,7 +23,7 @@ StBreakpointCommand >> asSpecCommand [
 	^ command
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StBreakpointCommand >> canBeExecuted [
 
 	^ context enableSlotMenuEntries

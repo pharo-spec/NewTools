@@ -1,6 +1,6 @@
-Extension { #name : #SpOutputPortProxy }
+Extension { #name : 'SpOutputPortProxy' }
 
-{ #category : #'*NewTools-Inspector' }
+{ #category : '*NewTools-Inspector' }
 SpOutputPortProxy >> asInspection [
 
 	^ StPresenterInspectionPresenter for: self

@@ -2,43 +2,45 @@
 Browse current selected object.
 "
 Class {
-	#name : #StInspectorBrowseSelectedCommand,
-	#superclass : #StInspectorCommand,
-	#category : #'NewTools-Inspector-Command'
+	#name : 'StInspectorBrowseSelectedCommand',
+	#superclass : 'StInspectorCommand',
+	#category : 'NewTools-Inspector-Command',
+	#package : 'NewTools-Inspector',
+	#tag : 'Command'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 StInspectorBrowseSelectedCommand class >> defaultDescription [
 
 	^ 'Browse this instance class definition'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StInspectorBrowseSelectedCommand class >> defaultIconName [
 
 	^ #smallSystemBrowser
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 StInspectorBrowseSelectedCommand class >> defaultName [
 	<toolbarInspectCommand: 30>
 
 	^ 'Browse'
 ]
 
-{ #category : #documentation }
+{ #category : 'documentation' }
 StInspectorBrowseSelectedCommand class >> documentContextRequiredSelectors [
 
 	^ super documentContextRequiredSelectors, #(selectedObject)
 ]
 
-{ #category : #execution }
+{ #category : 'execution' }
 StInspectorBrowseSelectedCommand >> execute [ 
 
 	self context systemNavigation browse: self interestingObject
 ]
 
-{ #category : #execution }
+{ #category : 'execution' }
 StInspectorBrowseSelectedCommand >> interestingObject [
 
 	^ self context selectedObject

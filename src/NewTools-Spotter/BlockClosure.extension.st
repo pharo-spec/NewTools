@@ -1,12 +1,12 @@
-Extension { #name : #BlockClosure }
+Extension { #name : 'BlockClosure' }
 
-{ #category : #'*NewTools-Spotter' }
+{ #category : '*NewTools-Spotter' }
 BlockClosure >> stHasDynamicItems [
 
 	^ self numArgs ~= 0
 ]
 
-{ #category : #'*NewTools-Spotter' }
+{ #category : '*NewTools-Spotter' }
 BlockClosure >> stIterator [
 	
 	^ StSpotterBlockIterator new 

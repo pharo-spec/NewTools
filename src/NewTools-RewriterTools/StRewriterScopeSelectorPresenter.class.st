@@ -8,64 +8,66 @@ I can be initialized with a collection of packages `MethodsSelectorPresenter cla
 To obtain the selected methods: `MethodsSelectorPresenter>>#selectedMethods`
 "
 Class {
-	#name : #StRewriterScopeSelectorPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StRewriterScopeSelectorPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'methodsSelection',
 		'classesListWithFilterPresenter',
 		'packagesListWithFilterPresenter',
 		'methodsListWithFilterPresenter'
 	],
-	#category : #'NewTools-RewriterTools-Transformer'
+	#category : 'NewTools-RewriterTools-Transformer',
+	#package : 'NewTools-RewriterTools',
+	#tag : 'Transformer'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterScopeSelectorPresenter class >> descriptionText [
 
 	^ 'Apply your custom rewrite rules to any packages or classes'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterScopeSelectorPresenter class >> icon [
 	^ self iconNamed: self iconName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterScopeSelectorPresenter class >> iconName [
 	^ #objects
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StRewriterScopeSelectorPresenter class >> title [
 
 	^ 'Select the classes'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterScopeSelectorPresenter class >> windowExtent [
 
 	^ 530 @ 330
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StRewriterScopeSelectorPresenter class >> withPackages: aPackagesCollection [
 
 	^ self new initializeWithPackages: aPackagesCollection
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StRewriterScopeSelectorPresenter >> allowMethodSelection [
 
 	methodsSelection := true
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StRewriterScopeSelectorPresenter >> classesChanged [
 
 	self updateSelectionForMethodsPresenter
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StRewriterScopeSelectorPresenter >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
@@ -76,13 +78,13 @@ StRewriterScopeSelectorPresenter >> defaultLayout [
 		  yourself
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StRewriterScopeSelectorPresenter >> doNotAllowMethodSelection [
 
 	methodsSelection := false
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterScopeSelectorPresenter >> initializeClassesList [
 
 	classesListWithFilterPresenter := self newFilteringList.
@@ -95,7 +97,7 @@ StRewriterScopeSelectorPresenter >> initializeClassesList [
 		beMultipleSelection
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterScopeSelectorPresenter >> initializeMethodsList [
 
 	methodsListWithFilterPresenter := self newFilteringList.
@@ -105,7 +107,7 @@ StRewriterScopeSelectorPresenter >> initializeMethodsList [
 		sortingBlock: [ :a :b | a selector < b selector ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterScopeSelectorPresenter >> initializePackagesList [
 
 	packagesListWithFilterPresenter := self newFilteringList.
@@ -119,7 +121,7 @@ StRewriterScopeSelectorPresenter >> initializePackagesList [
 		beMultipleSelection
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterScopeSelectorPresenter >> initializePresenters [
 
 	self initializePackagesList.
@@ -129,7 +131,7 @@ StRewriterScopeSelectorPresenter >> initializePresenters [
 	self doNotAllowMethodSelection
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterScopeSelectorPresenter >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
@@ -137,13 +139,13 @@ StRewriterScopeSelectorPresenter >> initializeWindow: aWindowPresenter [
 		extent: self class windowExtent
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StRewriterScopeSelectorPresenter >> initializeWithPackages: aPackagesCollection [
 
 	packagesListWithFilterPresenter items: aPackagesCollection
 ]
 
-{ #category : #showing }
+{ #category : 'showing' }
 StRewriterScopeSelectorPresenter >> openDialog [
 
 	| window |
@@ -152,20 +154,20 @@ StRewriterScopeSelectorPresenter >> openDialog [
 	^ window
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StRewriterScopeSelectorPresenter >> packagesChanged [
 
 	self updateSelectionForClassesPresenter.
 	self updateSelectionForMethodsPresenter
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 StRewriterScopeSelectorPresenter >> selectedClasses [
 
 	^ classesListWithFilterPresenter listPresenter selectedItems
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 StRewriterScopeSelectorPresenter >> selectedMethods [
 
 	^ methodsListWithFilterPresenter listPresenter selectedItems
@@ -173,7 +175,7 @@ StRewriterScopeSelectorPresenter >> selectedMethods [
 		  ifNotEmpty: [ methodsListWithFilterPresenter listPresenter selectedItems ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StRewriterScopeSelectorPresenter >> updateSelectionForClassesPresenter [
 
 	| selectedClasses |
@@ -184,7 +186,7 @@ StRewriterScopeSelectorPresenter >> updateSelectionForClassesPresenter [
 	classesListWithFilterPresenter listPresenter selectItems: selectedClasses asOrderedCollection
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StRewriterScopeSelectorPresenter >> updateSelectionForMethodsPresenter [
 
 	| methodsInTheSelectedClasses |

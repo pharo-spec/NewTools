@@ -18,51 +18,53 @@ elementsDo: aValuable
 	SystemNavigation default allBehaviorsDo: aValuable
 "
 Class {
-	#name : #StGenericGenerator,
-	#superclass : #StIterator,
+	#name : 'StGenericGenerator',
+	#superclass : 'StIterator',
 	#instVars : [
 		'generator'
 	],
-	#category : #'NewTools-Spotter-Processors-Iterators'
+	#category : 'NewTools-Spotter-Processors-Iterators',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Iterators'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StGenericGenerator class >> isAbstract [
 
 	^ self == StGenericGenerator
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StGenericGenerator >> atEnd [ 
 
 	^ generator atEnd
 ]
 
-{ #category : #protected }
+{ #category : 'protected' }
 StGenericGenerator >> doReset [
 	generator := Generator on: [ :aGenerator | 
 		self elementsDo: [ :each | aGenerator yield: each ] ]
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 StGenericGenerator >> elementsDo: aValuable [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StGenericGenerator >> initialize [
 	super initialize.
 	self reset
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StGenericGenerator >> next [
 
 	^ generator next
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StGenericGenerator >> next: aQuantity [
 
 	^ generator next: aQuantity

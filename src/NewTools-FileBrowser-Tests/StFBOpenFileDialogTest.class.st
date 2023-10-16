@@ -1,15 +1,17 @@
 Class {
-	#name : #StFBOpenFileDialogTest,
-	#superclass : #StFBFileDialogTest,
-	#category : #'NewTools-FileBrowser-Tests-UI'
+	#name : 'StFBOpenFileDialogTest',
+	#superclass : 'StFBFileDialogTest',
+	#category : 'NewTools-FileBrowser-Tests-UI',
+	#package : 'NewTools-FileBrowser-Tests',
+	#tag : 'UI'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBOpenFileDialogTest >> dialogClass [
 	^ StFBOpenFileDialog
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBOpenFileDialogTest >> testExtensions [
 
 	dialog extensions: #( ext ) named: 'Ext files'.
@@ -23,7 +25,7 @@ StFBOpenFileDialogTest >> testExtensions [
 		equals: 'Ext files'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBOpenFileDialogTest >> testMultipleExtensions [
 
 	dialog extensions: #( image changes sources ) named: 'Src files'.
@@ -37,7 +39,7 @@ StFBOpenFileDialogTest >> testMultipleExtensions [
 		equals: 'Src files'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFBOpenFileDialogTest >> testSelectFile [
 
 	| selectedFile |

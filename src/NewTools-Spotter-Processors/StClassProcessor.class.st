@@ -2,37 +2,39 @@
 I am simple processor that iterates on the classes
 "
 Class {
-	#name : #StClassProcessor,
-	#superclass : #StSpotterProcessor,
-	#category : #'NewTools-Spotter-Processors-Processors'
+	#name : 'StClassProcessor',
+	#superclass : 'StSpotterProcessor',
+	#category : 'NewTools-Spotter-Processors-Processors',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Processors'
 }
 
-{ #category : #'default-settings' }
+{ #category : 'default-settings' }
 StClassProcessor class >> defaultEnabled [
 
 	^ false
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StClassProcessor class >> hideInSettings [
 
 	"I am hidden because the implementation in the unified processor is richer"
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StClassProcessor class >> order [
 	
 	^ 100
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StClassProcessor class >> title [
 
 	^ 'Classes'
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StClassProcessor >> newTextFilteringSource [
 
 	^ StSourceFactory current classesSubstringSource

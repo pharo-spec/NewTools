@@ -1,31 +1,32 @@
 Class {
-	#name : #StPlaygroundPagePresenterTest,
-	#superclass : #StPlaygroundBaseTest,
+	#name : 'StPlaygroundPagePresenterTest',
+	#superclass : 'StPlaygroundBaseTest',
 	#instVars : [
 		'classFactory'
 	],
-	#category : #'NewTools-Playground-Tests'
+	#category : 'NewTools-Playground-Tests',
+	#package : 'NewTools-Playground-Tests'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundPagePresenterTest >> classFactory [
 
 	^ classFactory ifNil: [ classFactory := ClassFactoryForTestCase new ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPagePresenterTest >> classToTest [
 
 	^ StPlaygroundPagePresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPagePresenterTest >> initializeInstanceBeforeInitialization: aPresenter [
 
 	aPresenter setModelBeforeInitialization: self newPage
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StPlaygroundPagePresenterTest >> tearDown [
 
 	classFactory ifNotNil: [ 
@@ -34,7 +35,7 @@ StPlaygroundPagePresenterTest >> tearDown [
 	super tearDown
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundPagePresenterTest >> testAddMenuCommandsTo [
 
 	| group commands class |
@@ -46,7 +47,7 @@ StPlaygroundPagePresenterTest >> testAddMenuCommandsTo [
 	self assert: (commands includes: class)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundPagePresenterTest >> testAddToolbarCommandsTo [
 
 	| group commands class |
@@ -58,7 +59,7 @@ StPlaygroundPagePresenterTest >> testAddToolbarCommandsTo [
 	self assert: (commands includes: class)
 ]
 
-{ #category : #'tests - commands' }
+{ #category : 'tests - commands' }
 StPlaygroundPagePresenterTest >> testDoEvaluateAllAndGo [
 	| value |
 	
@@ -73,7 +74,7 @@ StPlaygroundPagePresenterTest >> testDoEvaluateAllAndGo [
 		equals:  1405006117752879898543142606244511569936384000000000
 ]
 
-{ #category : #'tests - commands' }
+{ #category : 'tests - commands' }
 StPlaygroundPagePresenterTest >> testDoEvaluateAndGo [
 	| value |
 	
@@ -95,7 +96,7 @@ StPlaygroundPagePresenterTest >> testDoEvaluateAndGo [
 		equals:  1405006117752879898543142606244511569936384000000000
 ]
 
-{ #category : #'tests - commands' }
+{ #category : 'tests - commands' }
 StPlaygroundPagePresenterTest >> testDoEvaluateDeclareGlobal [
 	| value |
 
@@ -117,7 +118,7 @@ StPlaygroundPagePresenterTest >> testDoEvaluateDeclareGlobal [
 	Smalltalk globals removeKey: #MyGlobalForTest
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundPagePresenterTest >> testPageIsSavedWhenExecutingACommand [
 	| memory fileReference |
 	
@@ -144,7 +145,7 @@ StPlaygroundPagePresenterTest >> testPageIsSavedWhenExecutingACommand [
 		equals: '42 factorial'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundPagePresenterTest >> testToolbarActions [
 
 	| group commands class |

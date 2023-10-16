@@ -2,33 +2,34 @@
 A root drive as found on Windows
 "
 Class {
-	#name : #StSimpleRootDriveWrapper,
-	#superclass : #StSimpleFileSystemItemWrapper,
-	#category : #'NewTools-SimpleFileBrowser-Core'
+	#name : 'StSimpleRootDriveWrapper',
+	#superclass : 'StSimpleFileSystemItemWrapper',
+	#category : 'NewTools-SimpleFileBrowser-Core',
+	#package : 'NewTools-SimpleFileBrowser-Core'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleRootDriveWrapper class >> icon [ 
 	^self iconProvider driveIcon
 ]
 
-{ #category : #'private accessing' }
+{ #category : 'private accessing' }
 StSimpleRootDriveWrapper >> directories [ 
 	^(fileReference basename, '\') asFileReference directories
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSimpleRootDriveWrapper >> isRoot [ 
 	^true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleRootDriveWrapper >> label [
 
 	^self volumeName, ' (' ,super label, ')'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleRootDriveWrapper >> volumeName [
 
 	^StSimpleWin32Info getVolumeInfo: self fileReference basename

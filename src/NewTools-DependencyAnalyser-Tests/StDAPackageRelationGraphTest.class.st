@@ -1,10 +1,11 @@
 Class {
-	#name : #StDAPackageRelationGraphTest,
-	#superclass : #TestCase,
-	#category : #'NewTools-DependencyAnalyser-Tests'
+	#name : 'StDAPackageRelationGraphTest',
+	#superclass : 'TestCase',
+	#category : 'NewTools-DependencyAnalyser-Tests',
+	#package : 'NewTools-DependencyAnalyser-Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDAPackageRelationGraphTest >> testBuild [
 	| graph |
 	
@@ -13,7 +14,7 @@ StDAPackageRelationGraphTest >> testBuild [
 	self denyEmpty: (graph packages select: [ :each | each packageName beginsWith: 'Spec2' ])
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDAPackageRelationGraphTest >> testPackageAsDependentPackageWrapperOn [
 	| graph wrapped |
 

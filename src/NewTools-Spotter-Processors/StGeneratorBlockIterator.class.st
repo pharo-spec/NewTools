@@ -2,15 +2,17 @@
 I wrap a block and expose it as an iterator
 "
 Class {
-	#name : #StGeneratorBlockIterator,
-	#superclass : #StGenericGenerator,
+	#name : 'StGeneratorBlockIterator',
+	#superclass : 'StGenericGenerator',
 	#instVars : [
 		'block'
 	],
-	#category : #'NewTools-Spotter-Processors-Iterators'
+	#category : 'NewTools-Spotter-Processors-Iterators',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Iterators'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StGeneratorBlockIterator class >> on: aBlock [
 
 	^ self basicNew
@@ -19,17 +21,17 @@ StGeneratorBlockIterator class >> on: aBlock [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StGeneratorBlockIterator >> block [
 	^ block
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StGeneratorBlockIterator >> block: anObject [
 	block := anObject
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 StGeneratorBlockIterator >> elementsDo: aValuable [
 
 	block value: aValuable

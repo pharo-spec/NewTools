@@ -1,1 +1,1 @@
-Package { #name : #'NewTools-Spotter-Processors' }
+Package { #name : 'NewTools-Spotter-Processors' }

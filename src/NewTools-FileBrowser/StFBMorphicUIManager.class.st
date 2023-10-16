@@ -4,25 +4,27 @@ I override methods related to opening a file dialog to use my own file dialog in
 To use me by default, see class-side.
 "
 Class {
-	#name : #StFBMorphicUIManager,
-	#superclass : #MorphicUIManager,
-	#category : #'NewTools-FileBrowser-UI'
+	#name : 'StFBMorphicUIManager',
+	#superclass : 'MorphicUIManager',
+	#category : 'NewTools-FileBrowser-UI',
+	#package : 'NewTools-FileBrowser',
+	#tag : 'UI'
 }
 
-{ #category : #public }
+{ #category : 'public' }
 StFBMorphicUIManager class >> beDefault [
 	<script>
 	self new beDefault
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StFBMorphicUIManager class >> isActiveManager [
 	"This is just a temporary UI manager and it should not be enabled by the system by default."
 
 	^ false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StFBMorphicUIManager class >> isValidForCurrentSystemConfiguration [
 
 	"Has to return false, otherwise UIManager will select this one as default automatically when the image is opened"
@@ -30,7 +32,7 @@ StFBMorphicUIManager class >> isValidForCurrentSystemConfiguration [
 	^ false
 ]
 
-{ #category : #'ui requests' }
+{ #category : 'ui requests' }
 StFBMorphicUIManager >> chooseDirectory: label from: dir [
 	self flag: #ToDoWhenIntegration.
 	self flag: 'use chooseDirectory:path: instead of this'.
@@ -40,7 +42,7 @@ StFBMorphicUIManager >> chooseDirectory: label from: dir [
 		open
 ]
 
-{ #category : #'ui requests' }
+{ #category : 'ui requests' }
 StFBMorphicUIManager >> chooseDirectory: label path: path [
 
 	^ StFBOpenDirectoryDialog new
@@ -52,7 +54,7 @@ StFBMorphicUIManager >> chooseDirectory: label path: path [
 		  selectedEntry
 ]
 
-{ #category : #'ui requests' }
+{ #category : 'ui requests' }
 StFBMorphicUIManager >> chooseFileMatching: patterns label: label [
 	self deprecated: 'now you have to give a filter see NewTools-FileBrowser-Filtering'.
 	^ StFBOpenFileDialog new
@@ -61,7 +63,7 @@ StFBMorphicUIManager >> chooseFileMatching: patterns label: label [
 		open
 ]
 
-{ #category : #'ui requests' }
+{ #category : 'ui requests' }
 StFBMorphicUIManager >> chooseFileName: title extensions: exts path: path preview: preview [
 	self
 		deprecated: 'now you have to give a filter see FileDialog-filterStrategie'.
@@ -73,7 +75,7 @@ StFBMorphicUIManager >> chooseFileName: title extensions: exts path: path previe
 		open) ifNotNil: #basename
 ]
 
-{ #category : #'ui requests' }
+{ #category : 'ui requests' }
 StFBMorphicUIManager >> chooseFullFileName: title extensions: exts path: path preview: preview [
 	self
 		deprecated: 'now you have to give a filter see FileDialog-filterStrategie'.
@@ -85,7 +87,7 @@ StFBMorphicUIManager >> chooseFullFileName: title extensions: exts path: path pr
 		open) ifNotNil: #fullName
 ]
 
-{ #category : #'ui requests' }
+{ #category : 'ui requests' }
 StFBMorphicUIManager >> chooseFullFileNameMatching: patterns label: title [
 	self
 		deprecated: 'now you have to give a filter see FileDialog-filterStrategie'.
@@ -96,7 +98,7 @@ StFBMorphicUIManager >> chooseFullFileNameMatching: patterns label: title [
 			open
 ]
 
-{ #category : #'ui requests' }
+{ #category : 'ui requests' }
 StFBMorphicUIManager >> fileOpen: title extensions: exts path: path preview: preview [
 	self
 		deprecated: 'now you have to give a filter see FileDialog-filterStrategie'.
@@ -108,7 +110,7 @@ StFBMorphicUIManager >> fileOpen: title extensions: exts path: path preview: pre
 		openModal) ifNotNil: #readStream
 ]
 
-{ #category : #'ui requests' }
+{ #category : 'ui requests' }
 StFBMorphicUIManager >> fileSave: title extensions: exts path: path [
 	self
 		deprecated: 'now you have to give a filter see FileDialog-filterStrategie'.

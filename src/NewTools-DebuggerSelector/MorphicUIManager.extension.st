@@ -1,6 +1,6 @@
-Extension { #name : #MorphicUIManager }
+Extension { #name : 'MorphicUIManager' }
 
-{ #category : #'*NewTools-DebuggerSelector' }
+{ #category : '*NewTools-DebuggerSelector' }
 MorphicUIManager >> debugProcess: process context: context label: title fullView: bool notification: notificationString [
 	"Open a notifier in response to an error, halt, or notify. A notifier view
 	just shows a short view of the sender stack and provides a menu that

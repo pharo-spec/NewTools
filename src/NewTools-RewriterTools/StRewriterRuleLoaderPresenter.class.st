@@ -4,41 +4,43 @@ I am a simple tool that allows you to load or delete any of the custom rewrite r
 To open me: `RewriteRuleLoaderPresenter open`
 "
 Class {
-	#name : #StRewriterRuleLoaderPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StRewriterRuleLoaderPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'openInBasicEditorButton',
 		'matchToolButton',
 		'rulesTableSelector'
 	],
-	#category : #'NewTools-RewriterTools-Loader'
+	#category : 'NewTools-RewriterTools-Loader',
+	#package : 'NewTools-RewriterTools',
+	#tag : 'Loader'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleLoaderPresenter class >> descriptionText [
 
 	^ 'Loads and deletes custom rewrite rules'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleLoaderPresenter class >> icon [
 
 	^ self iconNamed: self iconName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleLoaderPresenter class >> iconName [
 
 	^ #smallLoadProject
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StRewriterRuleLoaderPresenter class >> title [
 
 	^ 'Rewrite rule loader'
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StRewriterRuleLoaderPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -51,27 +53,27 @@ StRewriterRuleLoaderPresenter >> defaultLayout [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterRuleLoaderPresenter >> initializeButtons [
 
 	openInBasicEditorButton := self instantiate: (StRewriterOpenRuleEditorCommand forSpecContext: self) asButtonPresenter.
 	matchToolButton := self instantiate: (StRewriterOpenMatchToolCommand forSpecContext: self) asButtonPresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterRuleLoaderPresenter >> initializePresenters [
 
 	self initializeTableSelector.
 	self initializeButtons
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterRuleLoaderPresenter >> initializeTableSelector [
 
 	rulesTableSelector := self instantiate: StRewriterRulesTableSelectorPresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterRuleLoaderPresenter >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
@@ -82,13 +84,13 @@ StRewriterRuleLoaderPresenter >> initializeWindow: aWindowPresenter [
 		aboutText: self class descriptionText
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleLoaderPresenter >> lhs [
 
 	^ rulesTableSelector lhs
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleLoaderPresenter >> rhs [
 
 	^ rulesTableSelector rhs

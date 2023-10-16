@@ -2,15 +2,17 @@
 I am a helper browser that contains an explanation of what the rewrite rule are and how their syntax works.
 "
 Class {
-	#name : #StRewriterHelpBrowserPresenter,
-	#superclass : #StPresenter,
+	#name : 'StRewriterHelpBrowserPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'morphPresenter'
 	],
-	#category : #'NewTools-RewriterTools-Help'
+	#category : 'NewTools-RewriterTools-Help',
+	#package : 'NewTools-RewriterTools',
+	#tag : 'Help'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterHelpBrowserPresenter class >> basicPatterns [
 
 	^ '(\`) BASIC PATTERN NODES
@@ -35,7 +37,7 @@ that will match any method which returns nil.
 '
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterHelpBrowserPresenter class >> blockPatterns [
 
 	^ '(`{ }) BLOCK PATTERN NODES
@@ -61,7 +63,7 @@ In this case first `#(1 2 3)` will be matched by the literal node and then teste
 '
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StRewriterHelpBrowserPresenter class >> getParsedText [
 
 	^ String streamContents: [ :stream |
@@ -77,7 +79,7 @@ StRewriterHelpBrowserPresenter class >> getParsedText [
 			<< self thanks]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterHelpBrowserPresenter class >> issues [
 
 	^ 'ISSUES?
@@ -88,7 +90,7 @@ StRewriterHelpBrowserPresenter class >> issues [
 '
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterHelpBrowserPresenter class >> listPatterns [
 
 	^ '(\`@) LIST PATTERN NODES
@@ -145,7 +147,7 @@ name looks nicer this way.
 '
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterHelpBrowserPresenter class >> literalPatterns [
 
 	^ '(\`\#) LITERAL PATTERN NODES
@@ -156,7 +158,7 @@ For variables backtick can be followed by hash to enforce that matched receiver 
 '
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterHelpBrowserPresenter class >> namingImportant [
 
 	^ 'NAMING IS IMPORTANT
@@ -171,7 +173,7 @@ arguments. It is like that because we used the same pattern variable name.
 '
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterHelpBrowserPresenter class >> patternCodeIntro [
 
 	^ 'PATTERN CODE INTRODUCTION
@@ -196,7 +198,7 @@ The following sections will go over different kinds of wildcards (pattern nodes)
 '
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterHelpBrowserPresenter class >> statementPatterns [
 
 	^ '(\`.) STATEMENT PATTERN NODES
@@ -212,7 +214,7 @@ only one statement each.
 '
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterHelpBrowserPresenter class >> thanks [
 
 	^ '
@@ -222,7 +224,7 @@ Also thanks to him for writing this help description.
 	'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterHelpBrowserPresenter class >> whatNext [
 
 	^ 'WHAT IS NEXT?
@@ -234,7 +236,7 @@ Especially read: `Rules > Creating Rules > Special Rules > ReNodeMatchRule`
 '
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterHelpBrowserPresenter >> createTextMorph [
 
 	^ RubScrolledTextMorph new
@@ -243,7 +245,7 @@ StRewriterHelpBrowserPresenter >> createTextMorph [
 		  yourself
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StRewriterHelpBrowserPresenter >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
@@ -251,7 +253,7 @@ StRewriterHelpBrowserPresenter >> defaultLayout [
 		  yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterHelpBrowserPresenter >> initializePresenters [
 
 	morphPresenter := self newMorph
@@ -260,7 +262,7 @@ StRewriterHelpBrowserPresenter >> initializePresenters [
 	morphPresenter addStyle: 'bgOpaque'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRewriterHelpBrowserPresenter >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter

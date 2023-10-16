@@ -1,21 +1,22 @@
 Class {
-	#name : #StMockCandidatesList,
-	#superclass : #Object,
+	#name : 'StMockCandidatesList',
+	#superclass : 'Object',
 	#instVars : [
 		'results',
 		'totalResults'
 	],
-	#category : #'NewTools-Spotter-Processors-Tests'
+	#category : 'NewTools-Spotter-Processors-Tests',
+	#package : 'NewTools-Spotter-Processors-Tests'
 }
 
-{ #category : #adding }
+{ #category : 'adding' }
 StMockCandidatesList >> addAllCandidates: aCollection in: aProcessor [
 
 	results removeAll.
 	results addAll: aCollection
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 StMockCandidatesList >> addCandidate: anEntry in: aProcessor [
 
 	results add: anEntry 
@@ -23,51 +24,51 @@ StMockCandidatesList >> addCandidate: anEntry in: aProcessor [
 	
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 StMockCandidatesList >> addObject: anObject inProcessor: aProcessor [
 
 	results add: anObject
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 StMockCandidatesList >> addObjects: aCollection inProcessor: aProcessor [
 
 	results addAll: aCollection
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StMockCandidatesList >> initialize [ 
 	
 	super initialize.
 	results := OrderedCollection new
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 StMockCandidatesList >> onAmountChanged: aQuantity in: processor [
 
 	totalResults := aQuantity
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 StMockCandidatesList >> processorEnded: aSptClassProcessor [ 
 
 	
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 StMockCandidatesList >> processorStarted: aSptClassProcessor [ 
 	
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StMockCandidatesList >> reset [
 	
 	results removeAll.
 	totalResults := 0.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StMockCandidatesList >> results [
 	^ results
 ]

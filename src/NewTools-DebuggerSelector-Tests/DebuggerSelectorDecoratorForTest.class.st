@@ -1,14 +1,15 @@
 Class {
-	#name : #DebuggerSelectorDecoratorForTest,
-	#superclass : #Object,
+	#name : 'DebuggerSelectorDecoratorForTest',
+	#superclass : 'Object',
 	#instVars : [
 		'decoratedDebuggerSelector',
 		'debuggerSelectionAttempts'
 	],
-	#category : #'NewTools-DebuggerSelector-Tests'
+	#category : 'NewTools-DebuggerSelector-Tests',
+	#package : 'NewTools-DebuggerSelector-Tests'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 DebuggerSelectorDecoratorForTest class >> newOn: aDebuggerSelector [
 	| instance |
 	instance := self new.
@@ -16,34 +17,34 @@ DebuggerSelectorDecoratorForTest class >> newOn: aDebuggerSelector [
 	^ instance
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebuggerSelectorDecoratorForTest >> debuggerSelectionAttempts [
 	^ debuggerSelectionAttempts
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebuggerSelectorDecoratorForTest >> decoratedDebuggerSelector: aDebuggerSelector [
 	decoratedDebuggerSelector := aDebuggerSelector
 ]
 
-{ #category : #'reflective operations' }
+{ #category : 'reflective operations' }
 DebuggerSelectorDecoratorForTest >> doesNotUnderstand: aMessage [
 	aMessage lookupClass: decoratedDebuggerSelector class.
 	^ aMessage sentTo: decoratedDebuggerSelector
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 DebuggerSelectorDecoratorForTest >> ignoreDummyDebuggerForTests [
 	^ false
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 DebuggerSelectorDecoratorForTest >> initialize [
 	super initialize.
 	debuggerSelectionAttempts := OrderedCollection new
 ]
 
-{ #category : #helper }
+{ #category : 'helper' }
 DebuggerSelectorDecoratorForTest >> tryToOpenDebugSession: aDebugSession withDebuggerClass: aDebuggerClass withFullView: aBool andNotification: aString [
 	"Tries to open @aDebugSession with debugger @aDebuggerClass. Record this attempt in debuggerSelectionAttempts, with success = true if it succeeded, or success = false if it signaled an exception"
 

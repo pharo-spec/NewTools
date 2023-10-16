@@ -1,6 +1,6 @@
-Extension { #name : #RPackage }
+Extension { #name : 'RPackage' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 RPackage >> baselineInspector [
 
 	<inspectorPresentationOrder: 2 title: 'Belongs to Baselines'>
@@ -11,7 +11,7 @@ RPackage >> baselineInspector [
 		yourself
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 RPackage >> overwiew [
 
 	<inspectorPresentationOrder: 1 title: 'Overwiew'>

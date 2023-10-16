@@ -1,6 +1,6 @@
-Extension { #name : #SettingNode }
+Extension { #name : 'SettingNode' }
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 SettingNode >> spotterForSettingsFor: aStep [
 	<stSpotterOrder: 0>
 	self allChildren isEmpty ifTrue: [ ^ self ].
@@ -11,7 +11,7 @@ SettingNode >> spotterForSettingsFor: aStep [
 		filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 SettingNode >> spotterLabel [
 
 	| label |

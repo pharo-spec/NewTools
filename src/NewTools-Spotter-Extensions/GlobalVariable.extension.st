@@ -1,6 +1,6 @@
-Extension { #name : #GlobalVariable }
+Extension { #name : 'GlobalVariable' }
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 GlobalVariable >> spotterClassFor: aStep [
 	<stSpotterOrder: 50>
 	
@@ -11,7 +11,7 @@ GlobalVariable >> spotterClassFor: aStep [
 			filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 GlobalVariable >> spotterForReferencesFor: aStep [
 	<stSpotterOrder: 130>
 	aStep listProcessor
@@ -21,7 +21,7 @@ GlobalVariable >> spotterForReferencesFor: aStep [
 			filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 GlobalVariable >> stActDefault [
 	self value inspect
 ]

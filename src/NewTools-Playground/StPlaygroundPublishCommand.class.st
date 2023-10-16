@@ -2,42 +2,44 @@
 Publish the content of a page in [http://ws.stfx.eu](http://ws.stfx.eu)
 "
 Class {
-	#name : #StPlaygroundPublishCommand,
-	#superclass : #StPlaygroundCommand,
-	#category : #'NewTools-Playground-Command'
+	#name : 'StPlaygroundPublishCommand',
+	#superclass : 'StPlaygroundCommand',
+	#category : 'NewTools-Playground-Command',
+	#package : 'NewTools-Playground',
+	#tag : 'Command'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 StPlaygroundPublishCommand class >> defaultDescription [
 
 	^  'Publish contents to the cloud.'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPublishCommand class >> defaultIconName [
 
 	^ #glamorousSaveToUrl
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 StPlaygroundPublishCommand class >> defaultName [
 
 	^ 'Publish'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPublishCommand class >> order [
 
 	^ 5
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPublishCommand class >> urlProvider [
 
 	^ 'http://ws.stfx.eu' asZnUrl
 ]
 
-{ #category : #execution }
+{ #category : 'execution' }
 StPlaygroundPublishCommand >> execute [
 
 	| contents publishedUrl |
@@ -56,13 +58,13 @@ StPlaygroundPublishCommand >> execute [
 		publishedUrl , ' was published and the url was copied to clipboard'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPublishCommand >> page [
 
 	^ context page
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 StPlaygroundPublishCommand >> post: aString [
 	| response url |
 

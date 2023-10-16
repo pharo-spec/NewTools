@@ -1,16 +1,17 @@
 Class {
-	#name : #StUnifiedProcessorTest,
-	#superclass : #StAbstractProcessorTest,
-	#category : #'NewTools-Spotter-Processors-Tests'
+	#name : 'StUnifiedProcessorTest',
+	#superclass : 'StAbstractProcessorTest',
+	#category : 'NewTools-Spotter-Processors-Tests',
+	#package : 'NewTools-Spotter-Processors-Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> processor [
 
 	^ StUnifiedProcessor new
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testFindCloseEnoughMethod [
 
 	self runForText: 'yourself'.
@@ -18,14 +19,14 @@ StUnifiedProcessorTest >> testFindCloseEnoughMethod [
 	self assertResultsIncludes: Object >> #yourself
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testFindStClassProcessorTest [
 
 	self runForText: 'stunifiedprocessortest'.
 	self assertResultsIncludes: StUnifiedProcessorTest
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testFindStClassProcessorTestAfterAddingTest [
 
 	self runForText: 'stun'.
@@ -34,21 +35,21 @@ StUnifiedProcessorTest >> testFindStClassProcessorTestAfterAddingTest [
 	self assertResultsIncludes: self class
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testFindStClassProcessorTestWithPartialText [
 
 	self runForText: 'stunifi'.
 	self assertResultsIncludes: self class
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testFindThisMethod [
 
 	self runForText: 'testFindThisMethod'.
 	self assertResultsIncludes: thisContext method
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testFindThisMethodAfterAddingText [
 
 	self runForText: 'test'.
@@ -57,21 +58,21 @@ StUnifiedProcessorTest >> testFindThisMethodAfterAddingText [
 	self assertResultsIncludes: thisContext method
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testFindThisMethodWithFullClass [
 
 	self runForText: 'StUnifiedProcessorTest >> #testFindThisMethod'.
 	self assertResultsIncludes: thisContext method
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testFindThisMethodWithFullClassDoesNotIncludeOtherClassMethod [
 
 	self runForText: 'StUnifiedProcessorTest >> #testFindThisMethod'.
 	self denyResultsIncludes: StImplementorsProcessorTest >> #testFindThisMethod
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testFindThisMethodWithFullClassIsTheCorrectclass [
 
 	self runForText: 'StUnifiedProcessorTest >> #testFindThisMethod'.
@@ -81,14 +82,14 @@ StUnifiedProcessorTest >> testFindThisMethodWithFullClassIsTheCorrectclass [
 				allSatisfy: [ :aMethod | aMethod methodClass = self class ])
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testFindThisPackage [
 
 	self runForText: 'newtools-spotter-processors'.
 	self assertResultsIncludes: StUnifiedProcessorTest package
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testFindThisPackageAfterAddingText [
 
 	self runForText: 'newtools-spo'.
@@ -99,21 +100,21 @@ StUnifiedProcessorTest >> testFindThisPackageAfterAddingText [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testFindThisPackageWithCategory [
 
 	self runForText: '#Packages newtools-spotter-processors'.
 	self assertResultsIncludes: StUnifiedProcessorTest package
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testFindThisPackageWithOtherCategory [
 
 	self runForText: '#Classes newtools-spotter-processors'.
 	self denyResultsIncludes: self class package
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testGTClassProcessorIsRemovedAfterUpdatingText [
 
 	self runForText: 'stclass'.
@@ -122,7 +123,7 @@ StUnifiedProcessorTest >> testGTClassProcessorIsRemovedAfterUpdatingText [
 	self denyResultsIncludes: StClassProcessor
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testGTSpotterNewIsRemovedAfterAddingText [
 
 	self runForText: 'newtools-spotter'.
@@ -131,56 +132,56 @@ StUnifiedProcessorTest >> testGTSpotterNewIsRemovedAfterAddingText [
 	self denyResultsIncludes: StClassProcessor package
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testLookingForDiskStoreWithSpaceReturnsDiskStore [
 
 	self runForText: 'Disk Store'.
 	self assertResultsIncludes: DiskStore
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testLookingForStoreDiskLowercaseReturnsThisMethod [
 
 	self runForText: 'store disk'.
 	self assertResultsIncludes: StUnifiedProcessorTest >> #testLookingForStoreDiskLowercaseReturnsThisMethod
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testLookingForStoreDiskReturnsDiskStore [
 
 	self runForText: 'StoreDisk'.
 	self assertResultsIncludes: DiskStore
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testLookingForStoreDiskWithSpaceReturnsDiskStore [
 
 	self runForText: 'Store Disk'.
 	self assertResultsIncludes: DiskStore
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testLookingForStoreLowercaseReturnsDiskStore [
 
 	self runForText: 'store disk'.
 	self assertResultsIncludes: DiskStore
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testPopularStringDoesReturnOnlyTwentyResults [
 
 	self runForText: 'test'.
 	self assertQuantityOfResults: 25.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testPopularStringDoesReturnOnlyTwentyResultsForPackage [
 
 	self runForText: '-Test'.
 	self assertQuantityOfResults: 25.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StUnifiedProcessorTest >> testPopularStringDoesReturnOnlyTwentyResultsWithCapital [
 
 	self runForText: 'Test'.

@@ -1,20 +1,21 @@
 Class {
-	#name : #SpTextPresenterDecoratorTest,
-	#superclass : #TestCase,
+	#name : 'SpTextPresenterDecoratorTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'decorator'
 	],
-	#category : #'NewTools-SpTextPresenterDecorators'
+	#category : 'NewTools-SpTextPresenterDecorators',
+	#package : 'NewTools-SpTextPresenterDecorators'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 SpTextPresenterDecoratorTest >> setUp [
 	super setUp.
 	decorator := SpTextPresenterDecorator new
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SpTextPresenterDecoratorTest >> testForHighlight [
 
 	decorator := SpTextPresenterDecorator forHighlight.
@@ -27,7 +28,7 @@ SpTextPresenterDecoratorTest >> testForHighlight [
 		equals: SpTextPresenterDecorator defaultUnderlineColor
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SpTextPresenterDecoratorTest >> testStartStop [
 	decorator interval: (0 to: 10).
 	self assert: decorator start equals: 0.

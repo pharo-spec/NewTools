@@ -1,6 +1,6 @@
-Extension { #name : #Morph }
+Extension { #name : 'Morph' }
 
-{ #category : #'*NewTools-Morphic' }
+{ #category : '*NewTools-Morphic' }
 Morph >> inspectionLayout [
 	<inspectorPresentationOrder: 800 title: 'Layout'>
 	
@@ -31,7 +31,7 @@ Morph >> inspectionLayout [
 		yourself
 ]
 
-{ #category : #'*NewTools-Morphic' }
+{ #category : '*NewTools-Morphic' }
 Morph >> inspectionMorph [
 	<inspectorPresentationOrder: 90 title: 'Morph'>
 
@@ -40,7 +40,7 @@ Morph >> inspectionMorph [
 		yourself
 ]
 
-{ #category : #'*NewTools-Morphic' }
+{ #category : '*NewTools-Morphic' }
 Morph >> inspectorIconName [
 
 	^ self class systemIconName

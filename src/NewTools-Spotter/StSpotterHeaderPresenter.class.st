@@ -5,8 +5,8 @@ Each group has a list of children (instances of *StSpotterCandidateListPresenter
 
 "
 Class {
-	#name : #StSpotterHeaderPresenter,
-	#superclass : #StSpotterBasePresenter,
+	#name : 'StSpotterHeaderPresenter',
+	#superclass : 'StSpotterBasePresenter',
 	#instVars : [
 		'model',
 		'candidatePresentersList',
@@ -20,37 +20,39 @@ Class {
 		'diveOutAction',
 		'nested'
 	],
-	#category : #'NewTools-Spotter-View'
+	#category : 'NewTools-Spotter-View',
+	#package : 'NewTools-Spotter',
+	#tag : 'View'
 }
 
-{ #category : #actions }
+{ #category : 'actions' }
 StSpotterHeaderPresenter >> activateOn: spotterPresenter [
 
 	self doDive
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterHeaderPresenter >> addCandidate: aCandidateLink inSpotter: spotterPresenter [
 
 	candidatePresentersList add: (spotterPresenter newSpotterCandidateLinkPresenter: aCandidateLink).
 	self updateAmount
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 StSpotterHeaderPresenter >> diveIn [
 
 	diveInAction ifNil: [ ^ self ].
 	diveInAction cull: self model
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 StSpotterHeaderPresenter >> diveOut [
 
 	diveOutAction ifNil: [ ^ self ].
 	diveOutAction cull: self model
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StSpotterHeaderPresenter >> doDive [
 
 	nested 
@@ -58,25 +60,25 @@ StSpotterHeaderPresenter >> doDive [
 		ifFalse: [ self diveIn ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterHeaderPresenter >> finalAmount [
 
 	^ finalAmount
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterHeaderPresenter >> finalAmount: aNumber [
 
 	finalAmount := aNumber
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterHeaderPresenter >> includesLink: aLink [
 
 	^ candidatePresentersList anySatisfy: [ :each | each entry = aLink value ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSpotterHeaderPresenter >> initialize [
 
 	candidatePresentersList := OrderedCollection new.
@@ -84,7 +86,7 @@ StSpotterHeaderPresenter >> initialize [
 	super initialize
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSpotterHeaderPresenter >> initializePresenters [
 
 	self layout: (SpBoxLayout newLeftToRight
@@ -106,25 +108,25 @@ StSpotterHeaderPresenter >> initializePresenters [
 			event isPrimaryButton ifTrue: [ self doDive ] ].
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterHeaderPresenter >> isHeader [
 
 	^ true
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterHeaderPresenter >> matchesText: aString [
 
 	^ false
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StSpotterHeaderPresenter >> model [
 
 	^ model
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterHeaderPresenter >> nested: aBoolean [
 
 	nested = aBoolean ifTrue: [ ^ self ].
@@ -135,20 +137,20 @@ StSpotterHeaderPresenter >> nested: aBoolean [
 		ifFalse: [ #smallForward ]))
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterHeaderPresenter >> order [
 
 	^ order ifNil: [ self model order ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterHeaderPresenter >> prepareAsClasses [
 
 	labelPresenter label: self model labelForClasses.
 	helpLabelPresenter label: (self model keyBindingForClasses acceptVisitor: OSPlatform current shortcutPrinter).
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterHeaderPresenter >> prepareAsImplementors [
 
 	order := self model order + 1.
@@ -156,7 +158,7 @@ StSpotterHeaderPresenter >> prepareAsImplementors [
 	helpLabelPresenter label: (self model keyBindingForImplementors acceptVisitor: OSPlatform current shortcutPrinter).
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterHeaderPresenter >> prepareAsPackages [
 
 	order := self model order + 2.
@@ -164,19 +166,19 @@ StSpotterHeaderPresenter >> prepareAsPackages [
 	helpLabelPresenter label: (self model keyBindingForPackages acceptVisitor: OSPlatform current shortcutPrinter).
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StSpotterHeaderPresenter >> setModelBeforeInitialization: aProcessor [
 
 	model := aProcessor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterHeaderPresenter >> type: aClass [
 
 	 aClass prepareUnifiedHeaderDescriptionFor: self
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StSpotterHeaderPresenter >> updateAmount [
 
 	amountLabelPresenter label: ('{1}/{2}' format: { 
@@ -184,7 +186,7 @@ StSpotterHeaderPresenter >> updateAmount [
 		self finalAmount ifNil: [ '...' ] })
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSpotterHeaderPresenter >> updatePresenter [
 
 	labelPresenter label: '#', self model title.
@@ -193,19 +195,19 @@ StSpotterHeaderPresenter >> updatePresenter [
 		ifNil: [ '' ])
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 StSpotterHeaderPresenter >> whenDiveInDo: aBlock [
 
 	diveInAction := aBlock
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 StSpotterHeaderPresenter >> whenDiveOutDo: aBlock [
 
 	diveOutAction := aBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterHeaderPresenter >> withCandidates [
 
 	^ { self }, (candidatePresentersList sort: [ :each | each model weight ] ascending)

@@ -10,18 +10,20 @@ The processors talk with me to add results to the query, and later show them (#a
 I am also configurable to filter classes, implementors or add another modified.
 "
 Class {
-	#name : #StQuery,
-	#superclass : #Object,
+	#name : 'StQuery',
+	#superclass : 'Object',
 	#instVars : [
 		'query',
 		'spotterContext',
 		'processor',
 		'modifiers'
 	],
-	#category : #'NewTools-Spotter-Processors-Query'
+	#category : 'NewTools-Spotter-Processors-Query',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Query'
 }
 
-{ #category : #results }
+{ #category : 'results' }
 StQuery >> addResult: anEntry [
 
 	spotterContext stream
@@ -29,25 +31,25 @@ StQuery >> addResult: anEntry [
 		withArguments: { anEntry. processor }
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StQuery >> categoriesSelected [
 
 	^ modifiers copy
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StQuery >> hasAnyCategory [
 
 	^ self categoriesSelected notEmpty
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StQuery >> hasCategoryMatching: aSymbol [
 
 	^ self categoriesSelected anySatisfy: [ :each | each asLowercase beginsWith: aSymbol ]
 ]
 
-{ #category : #results }
+{ #category : 'results' }
 StQuery >> informAllResultAmount: anInteger [ 
 
 	spotterContext stream
@@ -56,7 +58,7 @@ StQuery >> informAllResultAmount: anInteger [
 	
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StQuery >> initialize [
 
 	super initialize.
@@ -64,31 +66,31 @@ StQuery >> initialize [
 	query:= ''.
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StQuery >> isSearchEmpty [
 
 	^ query isEmpty
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StQuery >> processor [
 
 	^ processor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StQuery >> processor: aProcessor [
 
 	processor := aProcessor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StQuery >> searchingText [
 	
 	^ query
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StQuery >> textInSearchBar [
 
 	^ String streamContents: [ :stream | 
@@ -96,7 +98,7 @@ StQuery >> textInSearchBar [
 		stream nextPutAll: query ]
 ]
 
-{ #category : #configuring }
+{ #category : 'configuring' }
 StQuery >> toggleFilter: filterTag [
 
 	(modifiers includes: filterTag) 
@@ -104,7 +106,7 @@ StQuery >> toggleFilter: filterTag [
 		ifFalse: [ modifiers add: filterTag ]
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 StQuery >> updateFromContext: aSpotterContext [
 	| textParts texts |
 

@@ -1,22 +1,23 @@
 Class {
-	#name : #StPlaygroundPagesPresenterTest,
-	#superclass : #StPlaygroundBaseTest,
-	#category : #'NewTools-Playground-Tests'
+	#name : 'StPlaygroundPagesPresenterTest',
+	#superclass : 'StPlaygroundBaseTest',
+	#category : 'NewTools-Playground-Tests',
+	#package : 'NewTools-Playground-Tests'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPagesPresenterTest >> classToTest [
 
 	^ StPlaygroundPagesPresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPagesPresenterTest >> initializeInstanceBeforeInitialization: aPresenter [
 
 	aPresenter setModelBeforeInitialization: (StPlaygroundPresenter newApplication: application)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPagesPresenterTest >> initializeMemoryFileSystem: aFileSystem [
 
 	aFileSystem / 'test1.ph' writeStreamDo: [ :stream | stream << '42 factorial' ].
@@ -25,7 +26,7 @@ StPlaygroundPagesPresenterTest >> initializeMemoryFileSystem: aFileSystem [
 		stream << 'Test 2"' ].
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundPagesPresenterTest >> testLoadPage [
 
 	self deny: presenter window notNil.

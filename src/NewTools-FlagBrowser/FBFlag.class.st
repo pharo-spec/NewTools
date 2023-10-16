@@ -17,8 +17,8 @@ Internal Representation and Key Implementation Points.
 
 "
 Class {
-	#name : #FBFlag,
-	#superclass : #Object,
+	#name : 'FBFlag',
+	#superclass : 'Object',
 	#instVars : [
 		'parameter',
 		'locations'
@@ -26,10 +26,12 @@ Class {
 	#classVars : [
 		'CaseSensitive'
 	],
-	#category : #'NewTools-FlagBrowser-Model'
+	#category : 'NewTools-FlagBrowser-Model',
+	#package : 'NewTools-FlagBrowser',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBFlag class >> addNew: aClass for: argument with: rbNodes in: flags [
 	self caseSensitive
 		ifFalse: [ | insensitiveArgument |
@@ -44,12 +46,12 @@ FBFlag class >> addNew: aClass for: argument with: rbNodes in: flags [
 	flags add: (aClass parameter: argument locations: (self toLocations: rbNodes))
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBFlag class >> allFlags [
 	^ self isAbstract ifTrue: [ self allFlagsInSystem ] ifFalse: [ self allInSystem ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBFlag class >> allFlagsInSystem [
 	| flagNodes flags |
 	flags := OrderedCollection new.
@@ -64,7 +66,7 @@ FBFlag class >> allFlagsInSystem [
 	^ flags
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBFlag class >> allInSystem [
 	| flagNodes flags |
 	self isAbstract ifTrue: [ ^ self error: 'This method can be called only on concrete classes.' ].
@@ -82,32 +84,32 @@ FBFlag class >> allInSystem [
 	^ flags
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBFlag class >> caseSensitive [
 	^ CaseSensitive ifNil: [ CaseSensitive := true ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBFlag class >> caseSensitive: anObject [
 	CaseSensitive := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBFlag class >> flagClassFor: aFlagArgument [
 	^ (self allSubclasses sorted: #priority descending) detect: [ :subclass | subclass matchesArgument: aFlagArgument ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 FBFlag class >> isAbstract [
 	^ self = FBFlag
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 FBFlag class >> matchesArgument: aFlagArgument [
 	^ self subclassResponsibility
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 FBFlag class >> parameter: anArgument locations: aCollectionOfNodes [
 	^ self new
 		parameter: anArgument;
@@ -115,17 +117,17 @@ FBFlag class >> parameter: anArgument locations: aCollectionOfNodes [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBFlag class >> priority [
 	^ self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 FBFlag class >> title [
 	^ 'All flags'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBFlag class >> toLocations: aCollectionOfRBNodes [
 	^ aCollectionOfRBNodes
 		collect: [ :node | 
@@ -134,38 +136,38 @@ FBFlag class >> toLocations: aCollectionOfRBNodes [
 			FBLocation class: methodNode methodClass selector: methodNode selector interval: node sourceInterval ]
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 FBFlag >> addLocations: aCollection [
 	self locations addAll: aCollection
 ]
 
-{ #category : #update }
+{ #category : 'update' }
 FBFlag >> insensitiveParameter [
 	self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBFlag >> locations [
 	^ locations
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBFlag >> locations: anObject [
 	locations := anObject.
 	locations do: [ :location | location owner: self ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBFlag >> parameter [
 	^ parameter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBFlag >> parameter: anObject [
 	parameter := anObject
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 FBFlag >> printOn: aStream [
 	super printOn: aStream.
 

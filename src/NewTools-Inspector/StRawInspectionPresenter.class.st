@@ -3,16 +3,18 @@ A raw inspection is the basic inspection over any object of the system.
 It will show the variables the object is composed of and it will allow dive into and editing of them.
 "
 Class {
-	#name : #StRawInspectionPresenter,
-	#superclass : #StInspectionPresenter,
+	#name : 'StRawInspectionPresenter',
+	#superclass : 'StInspectionPresenter',
 	#instVars : [
 		'attributeTable',
 		'mementoNodes'
 	],
-	#category : #'NewTools-Inspector-View'
+	#category : 'NewTools-Inspector-View',
+	#package : 'NewTools-Inspector',
+	#tag : 'View'
 }
 
-{ #category : #commands }
+{ #category : 'commands' }
 StRawInspectionPresenter class >> buildCommandsGroupWith: presenter forRoot: aCmCommandsGroup [
 	aCmCommandsGroup
 		beDisplayedAsGroup;
@@ -21,7 +23,7 @@ StRawInspectionPresenter class >> buildCommandsGroupWith: presenter forRoot: aCm
 		register: (SpBrowsePointersToCommand forSpecContext: presenter)
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StRawInspectionPresenter class >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom 
@@ -29,54 +31,54 @@ StRawInspectionPresenter class >> defaultLayout [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRawInspectionPresenter class >> label [
 
 	^ 'Raw'
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StRawInspectionPresenter >> activateOnDoubleClick [
 
 	attributeTable activateOnDoubleClick
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StRawInspectionPresenter >> activateOnSingleClick [
 
 	attributeTable activateOnSingleClick
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 StRawInspectionPresenter >> addValuesColumn [
 
 	attributeTable addColumn: self valuesColumn
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 StRawInspectionPresenter >> addVariablesColumn [
 
 	attributeTable addColumn: self variablesColumn
 ]
 
-{ #category : #ports }
+{ #category : 'ports' }
 StRawInspectionPresenter >> defaultOutputPort [
 
 	^ self outputSelectionPort
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StRawInspectionPresenter >> enableSlotMenuEntries [
 	^ self selectedItem class == StInspectorSlotNode
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StRawInspectionPresenter >> hasOutputActivationPort [
 
 	^ true
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRawInspectionPresenter >> initializePresenters [
 
 	attributeTable := self newTreeTable
@@ -88,20 +90,20 @@ StRawInspectionPresenter >> initializePresenters [
 	self setAttributeTable
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRawInspectionPresenter >> inspectorNodes [
 
 	^ self model allInspectorNodes
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StRawInspectionPresenter >> model: aModel [
 
 	super model: aModel.
 	self setAttributeTable
 ]
 
-{ #category : #ports }
+{ #category : 'ports' }
 StRawInspectionPresenter >> outputActivationPort [
 	
 	^ (SpActivationPort newPresenter: self) 
@@ -109,7 +111,7 @@ StRawInspectionPresenter >> outputActivationPort [
 		yourself
 ]
 
-{ #category : #ports }
+{ #category : 'ports' }
 StRawInspectionPresenter >> outputSelectionPort [
 	
 	^ (SpSelectionPort newPresenter: self)
@@ -117,37 +119,37 @@ StRawInspectionPresenter >> outputSelectionPort [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRawInspectionPresenter >> selectFirst [
 
 	self selectPath: #(1)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRawInspectionPresenter >> selectPath: aPath [
 
 	attributeTable selectPath: aPath
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRawInspectionPresenter >> selectedItem [
 
 	^ attributeTable selectedItem
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRawInspectionPresenter >> selectedObject [
 
 	^ attributeTable selectedItem value
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRawInspectionPresenter >> selectedPath [
 
 	^ attributeTable selection selectedPath
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 StRawInspectionPresenter >> setAttributeTable [
 
 	attributeTable
@@ -155,7 +157,7 @@ StRawInspectionPresenter >> setAttributeTable [
 		children: [ :node | node children ]
 ]
 
-{ #category : #stepping }
+{ #category : 'stepping' }
 StRawInspectionPresenter >> step [
 	| rootNodes |
 
@@ -169,7 +171,7 @@ StRawInspectionPresenter >> step [
 	attributeTable updateRootsKeepingSelection: rootNodes
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 StRawInspectionPresenter >> valuesColumn [
 
 	^ SpStringTableColumn new
@@ -182,7 +184,7 @@ StRawInspectionPresenter >> valuesColumn [
 		yourself
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 StRawInspectionPresenter >> variablesColumn [
 
 	^ SpCompositeTableColumn new

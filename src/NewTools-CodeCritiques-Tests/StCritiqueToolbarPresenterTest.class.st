@@ -2,29 +2,30 @@
 A StCritiqueToolbarPresenterTest is a test class for testing the behaivor of StCritiqueToolbarPresenter
 "
 Class {
-	#name : #StCritiqueToolbarPresenterTest,
-	#superclass : #TestCase,
+	#name : 'StCritiqueToolbarPresenterTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'critiqueToolbar'
 	],
-	#category : #'NewTools-CodeCritiques-Tests'
+	#category : 'NewTools-CodeCritiques-Tests',
+	#package : 'NewTools-CodeCritiques-Tests'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StCritiqueToolbarPresenterTest >> setUp [
 
 	super setUp.
 	critiqueToolbar := StCritiqueToolbarPresenter new.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiqueToolbarPresenterTest >> testInitialize [
 
 	self assert: critiqueToolbar critiqueHolder value isNil.
 	self assert: critiqueToolbar ruleHolder value isNil
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiqueToolbarPresenterTest >> testOpen [
 
 	| window |

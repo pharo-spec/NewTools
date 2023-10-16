@@ -1,43 +1,43 @@
-Extension { #name : #Object }
+Extension { #name : 'Object' }
 
-{ #category : #'*NewTools-Spotter' }
+{ #category : '*NewTools-Spotter' }
 Object >> asStSpotterCandidateLink [
 
 	^ StSpotterCandidateLink value: self
 ]
 
-{ #category : #'*NewTools-Spotter' }
+{ #category : '*NewTools-Spotter' }
 Object >> asStSpotterProcessorLink [
 
 	^ StSpotterProcessorLink value: self
 ]
 
-{ #category : #'*NewTools-Spotter' }
+{ #category : '*NewTools-Spotter' }
 Object >> spotterPreview: aBuilder [
 
 	^ self asString spotterPreview: aBuilder
 ]
 
-{ #category : #'*NewTools-Spotter' }
+{ #category : '*NewTools-Spotter' }
 Object >> stActDefault [
 
 	^ self inspect
 ]
 
-{ #category : #'*NewTools-Spotter' }
+{ #category : '*NewTools-Spotter' }
 Object >> stFilter [
 
 	^ StFilterBlock stFilter
 		
 ]
 
-{ #category : #'*NewTools-Spotter' }
+{ #category : '*NewTools-Spotter' }
 Object >> stListFilter [
 
 	^ StFilterSubstring new
 ]
 
-{ #category : #'*NewTools-Spotter' }
+{ #category : '*NewTools-Spotter' }
 Object >> stSpotterProcessorsFor: aSpotterStep [
 	"This is a utility method that collects all extensions (processors) for the current object.
 	By default, it simply looks for the #spotterOrder: pragma.
