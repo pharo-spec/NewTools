@@ -214,8 +214,8 @@ ScopesPresenter >> nodesListColumn [
 ScopesPresenter >> notWithScope: anItem [
 
 	| newScope newName |
-	newScope := anItem not.
-	newName := '~' , anItem label.
+	newScope := anItem value not.
+	newName := '~' , anItem value label.
 	newScope label: newName.
 
 	self scopesManagerClass singleInstance addScope: newScope.
