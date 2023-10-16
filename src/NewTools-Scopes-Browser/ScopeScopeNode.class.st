@@ -41,7 +41,7 @@ ScopeScopeNode >> children [
 		classesEnvironments do: [ :env | children add: env ].
 		^ children ].
 
-	^ self value basisObjects collect: [ :stringOrPackage |
+	^ self value classes collect: [ :stringOrPackage |
 		  stringOrPackage isString
 			  ifTrue: [
 				  className := stringOrPackage.
@@ -50,8 +50,12 @@ ScopeScopeNode >> children [
 					  ifTrue: [ ScopeTraitNode on: class ]
 					  ifFalse: [ ScopeClassNode on: class ] ]
 			  ifFalse: [
-				  package := stringOrPackage.
-				  ScopePackageNode on: package ] ]
+				  stringOrPackage isClassOrTrait
+					  ifTrue: [ ScopeClassNode on: stringOrPackage ]
+					  ifFalse: [
+						  self assert: stringOrPackage isPackageDefinition.
+						  package := stringOrPackage.
+						  ScopePackageNode on: package ] ] ]
 ]
 
 { #category : 'testing' }

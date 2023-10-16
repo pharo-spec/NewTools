@@ -109,17 +109,17 @@ ScopesPresenter >> argumentsListMenu [
 					  anItem
 						  name: 'AND';
 						  visibleIf: [ scopesTree selectedItem isScopeNode ];
-						  action: [ self andWithScope: scopesTree selectedItem ] ];
+						  action: [ self andWithScope: scopesTree selectedItem value ] ];
 				  addItem: [ :anItem |
 					  anItem
 						  name: 'OR';
 						  visibleIf: [ scopesTree selectedItem isScopeNode ];
-						  action: [ self orWithScope: scopesTree selectedItem ] ];
+						  action: [ self orWithScope: scopesTree selectedItem value ] ];
 				  addItem: [ :anItem |
 					  anItem
 						  name: 'NOT';
 						  visibleIf: [ scopesTree selectedItem isScopeNode ];
-						  action: [ self notWithScope: scopesTree selectedItem ] ] ]
+						  action: [ self notWithScope: scopesTree selectedItem value ] ] ]
 ]
 
 { #category : 'menu commands' }
@@ -214,8 +214,8 @@ ScopesPresenter >> nodesListColumn [
 ScopesPresenter >> notWithScope: anItem [
 
 	| newScope newName |
-	newScope := anItem not.
-	newName := '~' , anItem label.
+	newScope := anItem value not.
+	newName := '~' , anItem value label.
 	newScope label: newName.
 
 	self scopesManagerClass singleInstance addScope: newScope.
@@ -248,8 +248,8 @@ ScopesPresenter >> performOperation: aSymbol with: anItem [
 
 	| anEnvironment newScope newName |
 	anEnvironment := self selectAnotherScopeWhitout: anItem.
-	
-	newScope := anItem value perform: aSymbol with: anEnvironment.
+	anEnvironment ifNil: [ ^ self ].
+	newScope := anItem perform: aSymbol with: anEnvironment.
 	newName := anItem label , aSymbol , anEnvironment label.
 	newScope label: newName.
 
