@@ -19,6 +19,17 @@ Class {
 }
 
 { #category : 'accessing' }
+ScopesManager class >> addScope: aScope [
+	self singleInstance addScope: aScope
+]
+
+{ #category : 'accessing' }
+ScopesManager class >> availableScopes [
+
+	^ self scopes
+]
+
+{ #category : 'accessing' }
 ScopesManager class >> invalidNames [
 	^ self scopes collect: [ :e | e label ]
 ]

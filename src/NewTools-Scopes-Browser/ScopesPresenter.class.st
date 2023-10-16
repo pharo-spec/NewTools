@@ -132,7 +132,9 @@ ScopesPresenter >> deleteSelectedScope [
 
 	| item |
 	item := scopesTree selectedItem.
-	self assert: item isScopeNode.
+	(item isNil or: [item isScopeNode not]) ifTrue: [
+		self inform: 'select a scope'.
+		^ self ].
 
 	model removeScope: item value.
 	self updateScopesTree
