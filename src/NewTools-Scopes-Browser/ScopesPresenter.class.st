@@ -253,7 +253,7 @@ ScopesPresenter >> performOperation: aSymbol with: anItem [
 	newName := anItem label , aSymbol , anEnvironment label.
 	newScope label: newName.
 
-	self scopesManagerClass singleInstance addScope: newScope asScopeNode.
+	self scopesManagerClass singleInstance addScope: newScope.
 	self refresh
 ]
 
