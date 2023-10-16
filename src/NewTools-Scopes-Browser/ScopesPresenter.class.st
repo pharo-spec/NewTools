@@ -130,10 +130,12 @@ ScopesPresenter >> browseSelectedItem [
 { #category : 'menu commands' }
 ScopesPresenter >> deleteSelectedScope [
 
-	scopesTree selectedItems
-		select: [ :item | item isScopeNode ]
-		thenDo: [ :item | model removeScope: item ].
-	self updateScopesTree 
+	| item |
+	item := scopesTree selectedItem.
+	self assert: item isScopeNode.
+
+	model removeScope: item value.
+	self updateScopesTree
 ]
 
 { #category : 'menu commands' }
@@ -167,7 +169,6 @@ ScopesPresenter >> initializeScopesTree [
 		  hideColumnHeaders;
 		  addColumn: self nodesListColumn;
 		  children: [ :each | each children sorted ];
-		  beMultipleSelection;
 		  roots:
 			  (model scopes collect: [ :package | ScopeScopeNode on: package ])
 				  asOrderedCollection sorted;
@@ -340,7 +341,11 @@ ScopesPresenter >> toolbarButtons [
 { #category : 'initialization' }
 ScopesPresenter >> updateScopesTree [
 
+	[
 	scopesTree updateRootsKeepingSelection:
 		(model scopes collect: [ :scope | ScopeScopeNode on: scope ])
-			asOrderedCollection sorted
+			asOrderedCollection sorted ]
+		on: SubscriptOutOfBounds
+		do: [ :e |
+			self flag: 'I think this is a ScopeTreePresenter error... debug me' ]
 ]

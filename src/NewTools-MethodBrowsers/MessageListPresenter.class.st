@@ -302,8 +302,7 @@ MessageListPresenter >> packageOf: anItem [
 
 { #category : 'private' }
 MessageListPresenter >> protocolNameForItem: anItem [
-
-	^ anItem protocolName ifNil: [ '' ]
+	^ anItem category ifNil: [ '' ]
 ]
 
 { #category : 'actions' }
