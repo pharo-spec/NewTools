@@ -2,15 +2,17 @@
 Announces when a page has been loaded.
 "
 Class {
-	#name : #StPlaygroundPageLoaded,
-	#superclass : #Announcement,
+	#name : 'StPlaygroundPageLoaded',
+	#superclass : 'Announcement',
 	#instVars : [
 		'page'
 	],
-	#category : #'NewTools-Playground-Model'
+	#category : 'NewTools-Playground-Model',
+	#package : 'NewTools-Playground',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StPlaygroundPageLoaded class >> newPage: aPage [
 
 	^ self new 
@@ -18,13 +20,13 @@ StPlaygroundPageLoaded class >> newPage: aPage [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPageLoaded >> page [
 
 	^ page
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPageLoaded >> page: anObject [
 
 	page := anObject

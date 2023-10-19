@@ -2,15 +2,17 @@
 Announces when a page is just flushed (saved to disk, generated a new version)
 "
 Class {
-	#name : #StPlaygroundPageFlushed,
-	#superclass : #Announcement,
+	#name : 'StPlaygroundPageFlushed',
+	#superclass : 'Announcement',
 	#instVars : [
 		'page'
 	],
-	#category : #'NewTools-Playground-Model'
+	#category : 'NewTools-Playground-Model',
+	#package : 'NewTools-Playground',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StPlaygroundPageFlushed class >> newPage: aPage [
 
 	^ self new 
@@ -18,13 +20,13 @@ StPlaygroundPageFlushed class >> newPage: aPage [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPageFlushed >> page [
 
 	^ page
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPageFlushed >> page: anObject [
 
 	page := anObject

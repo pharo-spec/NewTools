@@ -55,4 +55,5 @@ Class {
 { #category : 'testing' }
 StPlayground class >> isDeprecated [ 
 	
+	^ false
 ]

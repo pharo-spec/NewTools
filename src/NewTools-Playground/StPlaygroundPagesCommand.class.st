@@ -45,7 +45,7 @@ StPlaygroundPagesCommand >> execute [
 		openDialog
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StPlaygroundPagesCommand >> loadPage: page [
 
 	context loadPage: page

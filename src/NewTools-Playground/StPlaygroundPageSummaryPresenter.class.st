@@ -40,7 +40,7 @@ StPlaygroundPageSummaryPresenter >> page [
 	^ self model
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPageSummaryPresenter >> pageTitle [
 
 	^ 'Empty'
