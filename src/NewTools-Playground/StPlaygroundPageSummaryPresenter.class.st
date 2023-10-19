@@ -6,6 +6,8 @@ I am meant to be used in StPlaygroundPagesPresenter, as element of a list.
 Class {
 	#name : 'StPlaygroundPageSummaryPresenter',
 	#superclass : 'SpPresenter',
+	#traits : 'SpTModel',
+	#classTraits : 'SpTModel classTrait',
 	#instVars : [
 		'firstLineLabel',
 		'timeLabel'

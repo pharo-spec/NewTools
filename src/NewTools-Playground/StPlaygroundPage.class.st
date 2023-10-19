@@ -33,6 +33,12 @@ StPlaygroundPage class >> defaultTimeToWait [
 	^ 10 seconds
 ]
 
+{ #category : 'accessing' }
+StPlaygroundPage class >> emptyTitle [
+
+	^ 'Empty'
+]
+
 { #category : 'instance creation' }
 StPlaygroundPage class >> fromReference: aFileReference [
 
