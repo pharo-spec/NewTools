@@ -28,13 +28,14 @@ StPlaygroundPagesPresenterTest >> initializeMemoryFileSystem: aFileSystem [
 
 { #category : 'tests' }
 StPlaygroundPagesPresenterTest >> testLoadPage [
+	| loaded |
 
+	loaded := false.
 	self deny: presenter window notNil.
 	self openInstance.
 	self assert: presenter window isOpen.
-	presenter loadPage: (memoryFileSystem / 'test1.ph').
+	presenter onLoadPage: [ :aPage | loaded := true ].
+	presenter loadPage: (StPlaygroundPage fromReference: (memoryFileSystem / 'test1.ph')).
 	self deny: presenter window isOpen .
-	self 
-		assert: presenter parent page contents
-		equals: (memoryFileSystem / 'test1.ph') contents
+	self assert: loaded
 ]

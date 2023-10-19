@@ -46,10 +46,10 @@ StPlaygroundTest >> testLoadPage [
 	presenter page flush.
 
 	page := self newPage
-		        contents: 'Test 2';
-		        flush;
-		        yourself.
-	presenter loadPage: page fileReference.
+		contents: 'Test 2';
+		flush;
+		yourself.
+	presenter loadPage: page.
 	self waitUntilUIRedrawed.
 	self assert: presenter page contents equals: page contents
 ]

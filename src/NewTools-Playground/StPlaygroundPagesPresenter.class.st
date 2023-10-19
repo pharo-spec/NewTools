@@ -12,7 +12,8 @@ Class {
 		'pageList',
 		'pagePreview',
 		'pageListPanel',
-		'pagePreviewPanel'
+		'pagePreviewPanel',
+		'loadPageAction'
 	],
 	#category : 'NewTools-Playground-View',
 	#package : 'NewTools-Playground',
@@ -136,9 +137,9 @@ StPlaygroundPagesPresenter >> initializeWindow: aWindowPresenter [
 { #category : 'actions' }
 StPlaygroundPagesPresenter >> loadPage: aPage [
 
-	self parent loadPage: aPage.
 	self window close.
-	self parent takeKeyboardFocus 
+	loadPageAction ifNotNil: [ 
+		loadPageAction value: aPage ]
 ]
 
 { #category : 'actions' }
@@ -150,8 +151,9 @@ StPlaygroundPagesPresenter >> loadSelectedPage [
 { #category : 'accessing' }
 StPlaygroundPagesPresenter >> pages [
 	
-	^ (StPlaygroundPresenter cacheDirectory allChildrenMatching: '*.ph')
-		sorted: [ :a :b | a creationTime > b creationTime ]
+	^ ((StPlaygroundPresenter cacheDirectory allChildrenMatching: '*.ph')
+		sorted: [ :a :b | a creationTime > b creationTime ])
+		collect: [ :each | StPlaygroundPage fromReference: each ]
 ]
 
 { #category : 'private' }

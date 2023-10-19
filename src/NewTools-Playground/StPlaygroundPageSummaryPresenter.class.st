@@ -7,7 +7,6 @@ Class {
 	#name : 'StPlaygroundPageSummaryPresenter',
 	#superclass : 'SpPresenter',
 	#instVars : [
-		'page',
 		'firstLineLabel',
 		'timeLabel'
 	],
@@ -19,7 +18,7 @@ Class {
 { #category : 'accessing' }
 StPlaygroundPageSummaryPresenter >> contents [
 
-	^ page contents
+	^ self model contents
 ]
 
 { #category : 'initialization' }
@@ -32,30 +31,25 @@ StPlaygroundPageSummaryPresenter >> initializePresenters [
 		add: (timeLabel := self newLabel) expand: false;
 		yourself.
 
-	firstLineLabel label: self pageFirstLine.
-	timeLabel 
-		addStyle: 'dim';
-		label: page creationTime epiceaBrowsersAsString
+	timeLabel addStyle: 'dim'
 ]
 
 { #category : 'accessing' }
 StPlaygroundPageSummaryPresenter >> page [
 
-	^ page
+	^ self model
 ]
 
-{ #category : 'initialization' }
-StPlaygroundPageSummaryPresenter >> pageFirstLine [
-		
-	page readStreamDo: [ :stream | | line |
-		[ stream atEnd not and: [ (line := stream nextLine trimmed) isEmpty ] ] whileTrue.
-		line isEmptyOrNil ifFalse: [ ^ line ] ].
+{ #category : #initialization }
+StPlaygroundPageSummaryPresenter >> pageTitle [
 
 	^ 'Empty'
 ]
 
-{ #category : 'accessing - model' }
-StPlaygroundPageSummaryPresenter >> setModelBeforeInitialization: aPage [
+{ #category : 'initialization' }
+StPlaygroundPageSummaryPresenter >> updatePresenter [
 
-	page := aPage
+	self model ifNil: [ ^ self ].
+	firstLineLabel label: self pageTitle.
+	timeLabel label: self model modificationTime epiceaBrowsersAsString
 ]
