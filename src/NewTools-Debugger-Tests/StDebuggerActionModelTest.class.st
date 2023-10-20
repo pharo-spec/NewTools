@@ -807,6 +807,19 @@ StDebuggerActionModelTest >> testIsInterruptedContextSubclassResponsibilityExcep
 	self assert: debugActionModel isInterruptedContextSubclassResponsibilityException
 ]
 
+{ #category : 'tests - predicates' }
+StDebuggerActionModelTest >> testIsInterruptedContextSubclassResponsibilityExceptionWithSteps [
+
+	| dummyActionModel |
+	dummyActionModel := StTestDebuggerProvider new
+		                    debuggerWithMissingSubclassResponsibilityContextWithSteps
+		                    debuggerActionModel.
+	self changeSession: dummyActionModel session.
+	dummyActionModel clear.
+	self assert:
+		debugActionModel isInterruptedContextSubclassResponsibilityException
+]
+
 { #category : 'tests - actions' }
 StDebuggerActionModelTest >> testPeelToFirstLike [
 
