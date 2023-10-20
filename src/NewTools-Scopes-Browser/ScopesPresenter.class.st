@@ -7,7 +7,9 @@ Class {
 	#superclass : 'ScopeAbstractPresenter',
 	#instVars : [
 		'scopesTree',
-		'toolbar'
+		'toolbar',
+		'buttonEdit',
+		'buttonDelete'
 	],
 	#category : 'NewTools-Scopes-Browser-GUI',
 	#package : 'NewTools-Scopes-Browser',
@@ -25,6 +27,12 @@ ScopesPresenter class >> defaultLayout [
 		  yourself
 ]
 
+{ #category : 'examples' }
+ScopesPresenter class >> example [
+	<example>
+	self open
+]
+
 { #category : 'world menu' }
 ScopesPresenter class >> menuCommandOn: aBuilder [
 	<worldMenu>
@@ -33,28 +41,24 @@ ScopesPresenter class >> menuCommandOn: aBuilder [
                 parent: #Refactoring;
                 help: 'Editor for custom Scopes (refactoring environments)';
                 order: 10;
-					iconName: #smallPaint
-]
-
-{ #category : 'examples' }
-ScopesPresenter class >> new [
-	^ self on: ScopesManager singleInstance
+					iconName: #smallPushpin
 ]
 
 { #category : 'examples' }
 ScopesPresenter class >> open [
-	<example>
-	^ self new open
+	ScopeNodesPresenter reset.
+	(self on: ScopesManager singleInstance) open
 ]
 
 { #category : 'as yet unclassified' }
 ScopesPresenter class >> refreshAllInstances [
+	<script>
 	self allInstances do: [ :each | each refresh ]
 ]
 
 { #category : 'specs' }
 ScopesPresenter class >> title [
-	^ 'Custom Scopes Browser'
+	^ 'Scopes Editor'
 ]
 
 { #category : 'api' }
@@ -86,8 +90,7 @@ ScopesPresenter >> argumentsListMenu [
 						  name: 'Edit';
 						  visibleIf: [ scopesTree selectedItem isScopeNode ];
 						  iconName: #glamorousEdit;
-						action: [
-							  self editSelectedScope ] ];
+						  action: [ self editSelectedScope ] ];
 				  addItem: [ :anItem |
 					  anItem
 						  name: 'Rename';
@@ -102,7 +105,13 @@ ScopesPresenter >> argumentsListMenu [
 					  anItem
 						  name: 'Browse';
 						  visibleIf: [ scopesTree selectedItem isScopeNode not ];
-						  action: [ self browseSelectedItem ] ] ];
+						  iconName: #glamorousBrowse;
+						  action: [ self browseSelectedItem ] ];
+				  addItem: [ :anItem |
+					  anItem
+						  name: 'Class references';
+						  visibleIf: [ scopesTree selectedItem isClassNode ];
+						  action: [ self referencesToSelectedClass ] ] ];
 		  addGroup: [ :aGroup |
 			  aGroup
 				  addItem: [ :anItem |
@@ -151,6 +160,7 @@ ScopesPresenter >> editSelectedScope [
 
 { #category : 'initialization' }
 ScopesPresenter >> initialize [
+
 	super initialize.
 	self registerEvents
 ]
@@ -160,8 +170,9 @@ ScopesPresenter >> initializePresenters [
 	scopesTree := self newScopeTree.
 	toolbar := self newToolbar.
 	
-	self initializeScopesTree.
-	self toolbarButtons do: [ :button | toolbar addItem: button ]
+	self toolbarButtons do: [ :button | toolbar addItem: button ].
+	self initializeScopesTree
+	
 ]
 
 { #category : 'initialization' }
@@ -171,12 +182,12 @@ ScopesPresenter >> initializeScopesTree [
 		  hideColumnHeaders;
 		  addColumn: self nodesListColumn;
 		  children: [ :each | each children sorted ];
-		  roots:
-			  (model scopes collect: [ :package | ScopeScopeNode on: package ])
-				  asOrderedCollection sorted;
+		  roots: self scopeNodes;
 		  expandRoots;
+		  collapsePath: #( 1 );
 		  beResizable;
 		  activateOnDoubleClick;
+		  "whenSelectedItemChangedDo: [ :item | self updateEnabled ];"
 		  whenActivatedDo: [ :selection | scopesTree toggleSelectedItems ];
 		  contextMenu: self argumentsListMenu
 ]
@@ -226,8 +237,17 @@ ScopesPresenter >> notWithScope: anItem [
 ]
 
 { #category : 'menu commands' }
-ScopesPresenter >> openOnCalypso: aScope [
-	ClyFullBrowserMorph openOn: aScope
+ScopesPresenter >> openOnCalypso: aClassOrPackage [
+
+	| browser |
+	self halt.
+	browser := ClyFullBrowserMorph 
+		openOnClass: self class 
+		selector: self class selectors anyOne.
+		
+	"aClassOrPackage isClassOrTrait
+		ifTrue: [ browser selectClass: aClassOrPackage ]
+		ifFalse: [ browser selectPackage: aClassOrPackage ]"
 ]
 
 { #category : 'menu commands' }
@@ -260,6 +280,26 @@ ScopesPresenter >> performOperation: aSymbol with: anItem [
 	self refresh
 ]
 
+{ #category : 'menu commands' }
+ScopesPresenter >> referencesToSelectedClass [
+
+	| scope browser query class |
+	class := scopesTree selectedItem value.
+	scope := ClySystemEnvironmentScope
+		         of: ClySystemEnvironment currentImage
+		         in: ClyNavigationEnvironment currentImage.
+
+	browser := (ClyFullBrowserMorph on:
+		            ClyNavigationEnvironment currentImage)
+		           ensureInitialState.
+
+	query := (ClyClassReferencesQuery of: class)
+		         scope: scope;
+		         yourself.
+
+	browser spawnQueryBrowserOn: query
+]
+
 { #category : 'refresh' }
 ScopesPresenter >> refresh [
 	scopesTree roots ifEmpty: [ ^ self ].
@@ -269,13 +309,13 @@ ScopesPresenter >> refresh [
 { #category : 'initialization' }
 ScopesPresenter >> registerEvents [
 
-	self announcer
+	self announcer weak
 		when: ScopeCreatedAnnouncement
 		do: [ :ann |
 			model addScope: ann scope.
 			self addScopeToTree: ann scope ]
 		for: self.
-	self announcer
+	self announcer weak
 		when: ScopeEditedAnnouncement
 		do: [ self updateScopesTree ]
 		for: self
@@ -290,6 +330,15 @@ ScopesPresenter >> scopeListColumn [
 				   evaluated: [ :each | self iconNamed: each scopesIconName ];
 				   yourself);
 		  addColumn: self nodeDescriptionColumn;
+		  yourself
+]
+
+{ #category : 'initialization' }
+ScopesPresenter >> scopeNodes [
+
+	^ { (ScopeScopeNode on: model defaultScope) } asOrderedCollection
+		  addAll: (model scopes collect: [ :s | ScopeScopeNode on: s ])
+				  asOrderedCollection sorted;
 		  yourself
 ]
 
@@ -324,30 +373,36 @@ ScopesPresenter >> toolbarButtons [
 			 action: [ self newScopeCreator open ];
 			 yourself).
 
-	buttons add: (self newToolbarButton
-			 icon: (self iconNamed: #glamorousEdit);
-			 help: 'Edit selected scope';
-			 action: [
-				 self editSelectedScope ];
-			 yourself).
+	buttons add: (buttonEdit := self newToolbarButton
+			               icon: (self iconNamed: #glamorousEdit);
+			               help: 'Edit selected scope';
+			               enabled: false;
+			               action: [ self editSelectedScope ];
+			               yourself).
 
-	buttons add: (self newToolbarButton
-			 icon: (self iconNamed: #glamorousTrash);
-			 help: 'Delete selected scope';
-			 action: [ self deleteSelectedScope ];
-			 yourself).
+	buttons add: (buttonDelete := self newToolbarButton
+			                 icon: (self iconNamed: #glamorousTrash);
+			                 help: 'Delete selected scope';
+			                 enabled: false;
+			                 yourself).
 
 	^ buttons
+]
+
+{ #category : 'updating' }
+ScopesPresenter >> updateEnabled [
+
+	| enabled |
+	"The first scope cannot be edited nor deleted because it is the full image environment"
+	enabled := scopesTree selectedItem isNotNil and: [
+		           scopesTree selection selectedPath ~= #( 1 ) ].
+	
+	buttonEdit ifNotNil: [:btn | btn enabled: enabled].
+	buttonDelete ifNotNil: [:btn | btn enabled: enabled]
 ]
 
 { #category : 'initialization' }
 ScopesPresenter >> updateScopesTree [
 
-	[
-	scopesTree updateRootsKeepingSelection:
-		(model scopes collect: [ :scope | ScopeScopeNode on: scope ])
-			asOrderedCollection sorted ]
-		on: SubscriptOutOfBounds
-		do: [ :e |
-			self flag: 'I think this is a ScopeTreePresenter error... debug me' ]
+	scopesTree updateRootsKeepingSelection: self scopeNodes
 ]

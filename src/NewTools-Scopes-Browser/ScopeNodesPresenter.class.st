@@ -14,6 +14,9 @@ Class {
 		'allScopeNodeTreeRoots',
 		'scope'
 	],
+	#classVars : [
+		'LastSearch'
+	],
 	#category : 'NewTools-Scopes-Browser-GUI',
 	#package : 'NewTools-Scopes-Browser',
 	#tag : 'GUI'
@@ -38,6 +41,16 @@ ScopeNodesPresenter class >> defaultLayout [
 		  yourself
 ]
 
+{ #category : 'layout' }
+ScopeNodesPresenter class >> lastSearchText [
+	^ LastSearch 
+]
+
+{ #category : 'layout' }
+ScopeNodesPresenter class >> reset [
+	LastSearch := nil
+]
+
 { #category : 'instance creation' }
 ScopeNodesPresenter class >> title [
 	^ 'Scope Editor'
@@ -54,12 +67,20 @@ ScopeNodesPresenter >> activateItem: scopeNode [
 	
 ]
 
-{ #category : 'private - presenters' }
-ScopeNodesPresenter >> addClassHierarchyForClass: aScopeNode [
+{ #category : 'private - actions' }
+ScopeNodesPresenter >> addNode: aNode [
 
-	| class supers suprclass |
-	self activateItem: aScopeNode.
-	class := aScopeNode value.
+	(checkedScopeNodes anySatisfy: [ :node | aNode value = node value ])
+		ifFalse: [ checkedScopeNodes add: aNode ].
+	self refreshNodeCheckbox: aNode
+]
+
+{ #category : 'private - presenters' }
+ScopeNodesPresenter >> addSelectedItemClassHierarchy [	
+	| class supers suprclass node |
+	node := scopeNodesTree selectedItem.
+	self activateItem: node.
+	class := node value.
 	class = Object ifTrue: [ ^ self ].
 	
 	suprclass := class superclass.
@@ -72,21 +93,12 @@ ScopeNodesPresenter >> addClassHierarchyForClass: aScopeNode [
 				self activateItem: child ] ] ]
 ]
 
-{ #category : 'private - actions' }
-ScopeNodesPresenter >> addNode: aNode [
-
-	(checkedScopeNodes anySatisfy: [ :node | aNode value = node value ])
-		ifFalse: [ checkedScopeNodes add: aNode ].
-	self refreshCheckbox
-]
-
 { #category : 'as yet unclassified' }
 ScopeNodesPresenter >> allScopeNodeTreeRoots [
 
 	^ allScopeNodeTreeRoots ifNil: [
-		  allScopeNodeTreeRoots := model allPackagesInEnvironment
-			                           reject: [ :package | package definedClasses isEmpty ]
-			                           thenCollect: [ :package | ScopePackageNode on: package ] ]
+		  allScopeNodeTreeRoots := model allPackagesInEnvironment collect: [
+			                           :package | ScopePackageNode on: package ] ]
 ]
 
 { #category : 'announcements' }
@@ -97,14 +109,31 @@ ScopeNodesPresenter >> announceScopeEdited [
 
 { #category : 'private - presenters' }
 ScopeNodesPresenter >> argumentsListMenu [
-	^ self newMenu
-		addGroup: [ :aGroup |
-			aGroup
-				addItem: [ :anItem |
-					anItem
-						name: 'Add class hierarchy';
-						visibleIf: [ scopeNodesTree selectedItem isClassNode  ];
-						action: [ self addClassHierarchyForClass: scopeNodesTree selectedItem ] ] ]
+
+	^ self newMenu addGroup: [ :aGroup |
+		  aGroup
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'Add class hierarchy';
+					  visibleIf: [ scopeNodesTree selectedItem isClassNode ];
+					  iconName: #hierarchy;
+					  action: [ self addSelectedItemClassHierarchy ] ];
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'Browse';
+					  visibleIf: [ scopeNodesTree selectedItem isNotNil ];
+					  iconName: #glamorousBrowse;
+					  action: [ self browseSelectedItem ] ] ]
+]
+
+{ #category : 'private - presenters' }
+ScopeNodesPresenter >> browseSelectedItem [
+	scopeNodesTree selectedItem value browse
+]
+
+{ #category : 'announcements' }
+ScopeNodesPresenter >> checkedItems [
+	^ checkedScopeNodes collect: [ :node | node value ]
 ]
 
 { #category : 'private - actions' }
@@ -143,22 +172,26 @@ ScopeNodesPresenter >> initializeButtons [
 	saveAsButton := self newButton
 		                label: 'Save as...';
 		                icon: (self iconNamed: #smallSaveAs);
-		                action: [ self saveScope ];
+		                action: [ self validate ifTrue: [ self saveScope ] ];
 		                yourself.
 
 	saveButton := self newButton
 		              label: 'Save';
 		              icon: (self iconNamed: #smallSave);
-		              action: [ self saveScope ];
+		              action: [ self validate ifTrue: [ self saveScope ] ];
 		              yourself
 ]
 
 { #category : 'initialization' }
 ScopeNodesPresenter >> initializeNodeNameText [
-	nodeNameText 
+
+	nodeNameText
 		placeholder: 'Enter a package or class name';
 		autoAccept: true;
-		whenTextChangedDo: [ :text | self refresh ]
+		whenTextChangedDo: [ :text |
+			LastSearch := nodeNameText text.
+			self refresh ].
+	LastSearch ifNotNil: [ nodeNameText text: LastSearch ]
 ]
 
 { #category : 'initialization' }
@@ -174,22 +207,20 @@ ScopeNodesPresenter >> initializePresenters [
 
 { #category : 'announcements' }
 ScopeNodesPresenter >> initializeScope [
-	self assert: checkedScopeNodes isNotEmpty.
-	scope := (model newScopeFrom: checkedScopeNodes)
+
+	scope := model newScopeFrom: self checkedItems
 ]
 
 { #category : 'initialization' }
 ScopeNodesPresenter >> initializeScopeNodesTree [
+
 	^ scopeNodesTree
 		  hideColumnHeaders;
 		  addColumn: self nodesListColumn;
 		  children: [ :each |
 			  (each children select: [ :node |
-					   (node name asLowercase beginsWith:
-							    nodeNameText text asLowercase) or: [
-							   node package name asLowercase beginsWith:
-									   nodeNameText text asLowercase ] ]) asOrderedCollection
-				  sorted ];
+					   self node: node matches: nodeNameText text ])
+				  asOrderedCollection sorted ];
 		  beMultipleSelection;
 		  roots: self allScopeNodeTreeRoots asOrderedCollection sorted;
 		  beResizable;
@@ -197,6 +228,17 @@ ScopeNodesPresenter >> initializeScopeNodesTree [
 		  whenActivatedDo: [ :selection |
 			  scopeNodesTree toggleSelectedItems ];
 		  contextMenu: self argumentsListMenu
+]
+
+{ #category : 'initialization' }
+ScopeNodesPresenter >> node: aNode matches: aString [
+
+	^ (aNode name asLowercase beginsWith: aString asLowercase) or:
+		  ((aNode package name asLowercase beginsWith: aString asLowercase)
+			   or: [
+				   aNode definedClasses anySatisfy: [ :class |
+					   class name asLowercase beginsWith:
+						   nodeNameText text asLowercase ] ])
 ]
 
 { #category : 'private - presenters' }
@@ -242,33 +284,30 @@ ScopeNodesPresenter >> refresh [
 
 	scopeNodesTree roots: (model allPackagesInEnvironment
 			 collect: [ :package | ScopePackageNode on: package ]
-			 thenSelect: [ :each |
-				 (each name asLowercase beginsWith: nodeNameText text asLowercase)
-					 or: [
-						 each definedClasses anySatisfy: [ :class |
-							 class name asLowercase beginsWith:
-								 nodeNameText text asLowercase ] ] ]).
+			 thenSelect: [ :each | self node: each matches: nodeNameText text ]).
 					
 	
 ]
 
 { #category : 'refreshing' }
-ScopeNodesPresenter >> refreshCheckbox [
+ScopeNodesPresenter >> refreshNodeCheckbox: aNode [
+	scopeNodesTree roots
+		select: [ :root |
+		aNode = root or: [ root children includes: aNode ] ]
+		thenDo: [ :packageNode |
+			(packageNode children allSatisfy: [ :classNode |
+				 checkedScopeNodes anySatisfy: [ :checkedClassNode |
+					 checkedClassNode = classNode ] ])
+				ifTrue: [ checkedScopeNodes add: packageNode ]
+				ifFalse: [ checkedScopeNodes remove: packageNode ifAbsent: [  ] ] ].
 
-	scopeNodesTree roots do: [ :packageNode |
-		(packageNode children allSatisfy: [ :classNode |
-			 checkedScopeNodes anySatisfy: [ :checkedClassNode |
-				 checkedClassNode = classNode ] ])
-			ifTrue: [ checkedScopeNodes add: packageNode ]
-			ifFalse: [ checkedScopeNodes remove: packageNode ifAbsent: [ ] ] ].
-	
 	scopeNodesTree refresh
 ]
 
 { #category : 'announcements' }
 ScopeNodesPresenter >> registerEvents [
 
-	self announcer
+	self announcer weak
 		when: ScopeCreatedAnnouncement
 		do: [ :ann |
 			self announcer unsubscribe: self.
@@ -281,7 +320,7 @@ ScopeNodesPresenter >> removeNode: aNode [
 	
 	checkedScopeNodes removeAllSuchThat: [ :each |
 		each value = aNode value ].
-	self refreshCheckbox.
+	self refreshNodeCheckbox: aNode.
 ]
 
 { #category : 'initialization' }
@@ -289,11 +328,12 @@ ScopeNodesPresenter >> saveScope [
 
 	scope
 		ifNil: [
-			self initializeScope.
-			self openScopeNameDialog ]
+			self validate ifTrue: [
+				self initializeScope.
+				self openScopeNameDialog ] ]
 		ifNotNil: [
 			| editedScope |
-			editedScope := model newScopeFrom: checkedScopeNodes.
+			editedScope := model newScopeFrom: self checkedItems.
 			editedScope label: scope label.
 			model removeScope: scope.
 			model addScope: editedScope.
@@ -325,5 +365,14 @@ ScopeNodesPresenter >> scope: aRBEnvironment [
 								checkedScopeNodes add: classNode ].
 							scopeNodesTree expandPath: { index } ] ] ] ].
 
-	self refreshCheckbox
+	self refresh
+]
+
+{ #category : 'validation' }
+ScopeNodesPresenter >> validate [
+
+	checkedScopeNodes ifEmpty: [
+		self inform: 'You must select at least one item'.
+		^ false ].
+	^ true
 ]

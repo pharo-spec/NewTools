@@ -6,7 +6,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'value',
-		'packages'
+		'packages',
+		'children'
 	],
 	#category : 'NewTools-Scopes-Browser-Nodes',
 	#package : 'NewTools-Scopes-Browser',

@@ -6,9 +6,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'scopes',
-		'announcer',
 		'environment',
-		'newScope'
+		'announcer'
 	],
 	#classVars : [
 		'singleInstance'
@@ -32,6 +31,11 @@ ScopesManager class >> availableScopes [
 { #category : 'accessing' }
 ScopesManager class >> invalidNames [
 	^ self scopes collect: [ :e | e label ]
+]
+
+{ #category : 'accessing' }
+ScopesManager class >> removeScope: aScope [
+	self singleInstance removeScope: aScope
 ]
 
 { #category : 'accessing' }
@@ -65,12 +69,31 @@ ScopesManager >> addScope: aScope [
 { #category : 'accessing' }
 ScopesManager >> allPackagesInEnvironment [
 
-	^ environment current packages
+	^ environment current packages select: [ :package | package definedClasses isNotEmpty ]
 ]
 
 { #category : 'accessing' }
 ScopesManager >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
+]
+
+{ #category : 'api' }
+ScopesManager >> defaultScope [
+
+	^ (self scopeClass packages: self allPackagesInEnvironment) label:
+		  self defaultScopeLabel
+]
+
+{ #category : 'accessing' }
+ScopesManager >> defaultScopeLabel [
+
+	^ 'Full environment'
+]
+
+{ #category : 'api' }
+ScopesManager >> environment [
+
+	^ environment
 ]
 
 { #category : 'api' }
@@ -81,16 +104,18 @@ ScopesManager >> environment: aSmalltalkImage [
 
 { #category : 'initialization' }
 ScopesManager >> initialize [
-	environment := SmalltalkImage
+
+	environment ifNil: [ environment := SmalltalkImage ].
+	scopes := Set new
 ]
 
 { #category : 'private' }
-ScopesManager >> newScopeFrom: aSetOfNodes [
+ScopesManager >> newScopeFrom: aSet [
 
 	| packageScope classScope classes packages orphanClasses fullPackages compositeScope |
 	
-	packages := aSetOfNodes select: [ :node | node isPackageNode ] thenCollect: [:node | node value].
-	classes := aSetOfNodes select: [ :node | node isClassOrTraitNode ] thenCollect: [:node | node value].
+	classes := aSet select: [ :each | each isClassOrTrait ].
+	packages := aSet select: [ :each | each isKindOf: RPackage ].
 
 	"classes whose package hasn't all of its classes selected"
 	orphanClasses := classes select: [ :class |
@@ -132,19 +157,17 @@ ScopesManager >> removeScope: aRBEnvironment [
 ScopesManager >> reset [
 
 	environment := nil.
-	scopes := nil.
 	self announcer subscriptions reset.
-	self resetNewScope
+	scopes := #(  )
 ]
 
-{ #category : 'accessing' }
-ScopesManager >> resetNewScope [
-
-	newScope := nil
+{ #category : 'running' }
+ScopesManager >> scopeClass [
+	^ RBPackageEnvironment 
 ]
 
 { #category : 'accessing' }
 ScopesManager >> scopes [
 
-	^ scopes ifNil: [ scopes := Set new ]
+	^ scopes
 ]

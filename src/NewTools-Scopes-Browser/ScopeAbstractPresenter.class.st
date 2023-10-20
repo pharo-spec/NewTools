@@ -13,17 +13,18 @@ Class {
 }
 
 { #category : 'accessing' }
-ScopeAbstractPresenter >> announcer [
+ScopeAbstractPresenter >> announcer [ 
 	^ model announcer
 ]
 
 { #category : 'private - presenters' }
 ScopeAbstractPresenter >> newScopeTree [
+
 	^ self instantiate: ScopeTreePresenter
 ]
 
-{ #category : 'accessing - model' }
-ScopeAbstractPresenter >> setModelBeforeInitialization: aDomainObject [
+{ #category : 'private - presenters' }
+ScopeAbstractPresenter >> setModelBeforeInitialization: aScopesManager [
 
-	model := aDomainObject
+	model := aScopesManager 
 ]

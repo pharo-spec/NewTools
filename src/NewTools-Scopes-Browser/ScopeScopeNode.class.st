@@ -12,9 +12,10 @@ Class {
 { #category : 'accessing' }
 ScopeScopeNode >> children [
 
-	| className class package orphanClasses fullPackages envPackages envClasses children packageEnvironments classesEnvironments |
+	| className class package orphanClasses fullPackages envPackages envClasses chldrn packageEnvironments classesEnvironments |
+	
 	self value isCompositeEnvironment ifTrue: [
-		children := Set new.
+		chldrn := Set new.
 		envPackages := self value packages.
 		envClasses := self value classes.
 		"classes whose package hasn't all of its classes selected"
@@ -37,9 +38,9 @@ ScopeScopeNode >> children [
 			                       theClass isTrait
 				                       ifTrue: [ ScopeTraitNode on: theClass ]
 				                       ifFalse: [ ScopeClassNode on: theClass ] ].
-		packageEnvironments do: [ :env | children add: env ].
-		classesEnvironments do: [ :env | children add: env ].
-		^ children ].
+		packageEnvironments do: [ :env | chldrn add: env ].
+		classesEnvironments do: [ :env | chldrn add: env ].
+		^ chldrn ].
 
 	^ self value basisObjects collect: [ :stringOrPackage |
 		  stringOrPackage isString
