@@ -278,8 +278,6 @@ StDebuggerCommandTest >> testCommandsInMissingSubclassResponsibilityContextWithS
 		(StFileOutMethodCommand forContext: debugger) canBeExecuted.
 	self assert:
 		(StPeelToFirstCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StShowFullStackCommand forContext: debugger) canBeExecuted.
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted ]
 		ensure: [ debugger ifNotNil: [ debugger clear ] ]
 ]

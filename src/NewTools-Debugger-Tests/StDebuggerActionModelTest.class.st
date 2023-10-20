@@ -809,10 +809,15 @@ StDebuggerActionModelTest >> testIsInterruptedContextSubclassResponsibilityExcep
 
 { #category : 'tests - predicates' }
 StDebuggerActionModelTest >> testIsInterruptedContextSubclassResponsibilityExceptionWithSteps [
-	self changeSession: StTestDebuggerProvider new debuggerWithMissingSubclassResponsibilityContextWithSteps session.
-  self changeSession: dummyActionModel session.
+
+	| dummyActionModel |
+	dummyActionModel := StTestDebuggerProvider new
+		                    debuggerWithMissingSubclassResponsibilityContextWithSteps
+		                    debuggerActionModel.
+	self changeSession: dummyActionModel session.
 	dummyActionModel clear.
-	self assert: debugActionModel isInterruptedContextSubclassResponsibilityException
+	self assert:
+		debugActionModel isInterruptedContextSubclassResponsibilityException
 ]
 
 { #category : 'tests - actions' }
