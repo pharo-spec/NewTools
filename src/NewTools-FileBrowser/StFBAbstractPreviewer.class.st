@@ -10,17 +10,19 @@ my subclasses have to define :
 	return a Presenter (son of SpPresenter)  
 "
 Class {
-	#name : #StFBAbstractPreviewer,
-	#superclass : #Object,
-	#category : #'NewTools-FileBrowser-Previewers'
+	#name : 'StFBAbstractPreviewer',
+	#superclass : 'Object',
+	#category : 'NewTools-FileBrowser-Previewers',
+	#package : 'NewTools-FileBrowser',
+	#tag : 'Previewers'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StFBAbstractPreviewer class >> isAbstract [
 	^ self = StFBAbstractPreviewer
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StFBAbstractPreviewer >> canBeUsedOn: aFileReference [
 
 	aFileReference ifNil: [ ^ false ].
@@ -29,18 +31,18 @@ StFBAbstractPreviewer >> canBeUsedOn: aFileReference [
 			  self matchingMimeType: aZnMimeType ] ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StFBAbstractPreviewer >> matchingMimeType: aZnMimeType [
 	"return a Boolean to indicate if element matches"
 	^ self subclassResponsibility 
 ]
 
-{ #category : #templateMethod }
+{ #category : 'templateMethod' }
 StFBAbstractPreviewer >> previewActionOn: aFileReference [
 	^ self subclassResponsibility
 ]
 
-{ #category : #utils }
+{ #category : 'utils' }
 StFBAbstractPreviewer >> previewOn: aFileReference [
 	(self canBeUsedOn: aFileReference)
 		ifTrue: [ ^ self previewActionOn: aFileReference ].

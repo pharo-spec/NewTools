@@ -1,10 +1,11 @@
 Class {
-	#name : #StIteratorsTest,
-	#superclass : #TestCase,
-	#category : #'NewTools-Spotter-Processors-Tests'
+	#name : 'StIteratorsTest',
+	#superclass : 'TestCase',
+	#category : 'NewTools-Spotter-Processors-Tests',
+	#package : 'NewTools-Spotter-Processors-Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testBeginsWithFilterDoesNotFetchTwiceIfTheFilterIsARefinementOfPreviousText [
 
 	| it |
@@ -15,7 +16,7 @@ StIteratorsTest >> testBeginsWithFilterDoesNotFetchTwiceIfTheFilterIsARefinement
 	self assert: it next equals: 'bbb'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testBeginsWithFilterReturnsValidResults [
 
 	| it |
@@ -23,7 +24,7 @@ StIteratorsTest >> testBeginsWithFilterReturnsValidResults [
 	self assert: it next equals: 'bbb'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testBeginsWithFilterReturnsValidResultsWithTheSameFilter [
 
 	| it |
@@ -33,7 +34,7 @@ StIteratorsTest >> testBeginsWithFilterReturnsValidResultsWithTheSameFilter [
 	self assert: it next equals: 'bbb'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testIteratorOnACollectedCollectionIsFiltered [
 
 	| it |
@@ -44,7 +45,7 @@ StIteratorsTest >> testIteratorOnACollectedCollectionIsFiltered [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testIteratorOnACollectionIsFiltered [
 
 	| it |
@@ -55,7 +56,7 @@ StIteratorsTest >> testIteratorOnACollectionIsFiltered [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testIteratorOnACollectionReturnsTheCollection [
 
 	| it |
@@ -63,7 +64,7 @@ StIteratorsTest >> testIteratorOnACollectionReturnsTheCollection [
 	self assertCollection: (it next:3) hasSameElements: #(1 2 3)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testIteratorOnACollectionReturnsTheFirstValue [
 
 	| it |
@@ -72,7 +73,7 @@ StIteratorsTest >> testIteratorOnACollectionReturnsTheFirstValue [
 	self assert: (it next) equals: 1
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testIteratorOnACollectionReturnsTheFirstValueAndSecondValue [
 
 	| it |
@@ -82,7 +83,7 @@ StIteratorsTest >> testIteratorOnACollectionReturnsTheFirstValueAndSecondValue [
 	self assert: (it next) equals: 2	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testIteratorOnACollectionWithCollectReturnsCorrectFirstValue [
 
 	| it |
@@ -91,7 +92,7 @@ StIteratorsTest >> testIteratorOnACollectionWithCollectReturnsCorrectFirstValue 
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testIteratorOnACollectionWithCollectReturnsCorrectValues [
 
 	| it |
@@ -100,7 +101,7 @@ StIteratorsTest >> testIteratorOnACollectionWithCollectReturnsCorrectValues [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testIteratorOnACollectionWithTwoCollectReturnsCorrectFirstValue [
 
 	| it |
@@ -109,7 +110,7 @@ StIteratorsTest >> testIteratorOnACollectionWithTwoCollectReturnsCorrectFirstVal
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testIteratorOnACollectionWithTwoCollectReturnsCorrectValues [
 	| it |
 	
@@ -118,7 +119,7 @@ StIteratorsTest >> testIteratorOnACollectionWithTwoCollectReturnsCorrectValues [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testNonDuplicatesRemoveDuplicates [
 
 	| it |
@@ -127,7 +128,7 @@ StIteratorsTest >> testNonDuplicatesRemoveDuplicates [
 	self assert: (it next:1) equals: #(1) asOrderedCollection
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testNonDuplicatesRemoveDuplicatesResetReturnsWithoutDuplicates [
 
 	| it |
@@ -140,7 +141,7 @@ StIteratorsTest >> testNonDuplicatesRemoveDuplicatesResetReturnsWithoutDuplicate
 	self assert: (it next:3) equals: #(1 2 3) asOrderedCollection 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testNonDuplicatesRemoveDuplicatesWithThree [
 	| it |
 	
@@ -148,7 +149,7 @@ StIteratorsTest >> testNonDuplicatesRemoveDuplicatesWithThree [
 	self assert: (it next:3) equals: #(1 2 3) asOrderedCollection 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testSequenceDetectsAtEnd [
 
 	| it |
@@ -162,7 +163,7 @@ StIteratorsTest >> testSequenceDetectsAtEnd [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testSequenceReturnsTheSequenceOfAllResults [
 	| it |
 	
@@ -170,7 +171,7 @@ StIteratorsTest >> testSequenceReturnsTheSequenceOfAllResults [
 	self assertCollection: (it next: 6) hasSameElements: #(1 2 3 4 5 6)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testSequenceReturnsTheSequenceOfAllResultsInParts [
 	| it |
 	
@@ -180,7 +181,7 @@ StIteratorsTest >> testSequenceReturnsTheSequenceOfAllResultsInParts [
 	self assertCollection: (it next: 3) hasSameElements: #(4 5 6)	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testSubstringFilterDoesNotFetchTwiceIfTheFilterIsARefinementOfPreviousText [
 
 	| it |
@@ -191,7 +192,7 @@ StIteratorsTest >> testSubstringFilterDoesNotFetchTwiceIfTheFilterIsARefinementO
 	self assert: it next equals: '1bbb'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testSubstringFilterReturnsValidResults [
 
 	| it |
@@ -199,7 +200,7 @@ StIteratorsTest >> testSubstringFilterReturnsValidResults [
 	self assert: it next equals: 'xxxbbb'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testSubstringFilterReturnsValidResultsWithTheSameFilter [
 	| it |
 
@@ -209,7 +210,7 @@ StIteratorsTest >> testSubstringFilterReturnsValidResultsWithTheSameFilter [
 	self assert: it next equals: 'xxxbbb'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testWordsAwareIteratorFiltersByASequenceOfCamelCase [
 
 	| inner it |
@@ -225,7 +226,7 @@ StIteratorsTest >> testWordsAwareIteratorFiltersByASequenceOfCamelCase [
 	self assert: it next equals: 'xxxcccbbb'	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testWordsAwareIteratorFiltersByASequenceOfCamelCaseMixingCase [
 
 	| inner it |
@@ -242,7 +243,7 @@ StIteratorsTest >> testWordsAwareIteratorFiltersByASequenceOfCamelCaseMixingCase
 	self assert: it next equals: 'xxxcccbbb'	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testWordsAwareIteratorFiltersByASequenceOfCamelCaseWithUppercase [
 
 	| inner it |
@@ -258,7 +259,7 @@ StIteratorsTest >> testWordsAwareIteratorFiltersByASequenceOfCamelCaseWithUpperc
 	self assert: it next equals: 'xxxcccbbb'	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testWordsAwareIteratorFiltersByASequenceOfWords [
 
 	| inner it |
@@ -274,7 +275,7 @@ StIteratorsTest >> testWordsAwareIteratorFiltersByASequenceOfWords [
 	self assert: it next equals: 'xxxcccbbb'	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testWordsAwareIteratorFiltersByASingleWord [
 
 	| inner it |
@@ -290,7 +291,7 @@ StIteratorsTest >> testWordsAwareIteratorFiltersByASingleWord [
 	self assert: it next equals: 'xxxcccbbb'	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testWordsAwareIteratorFiltersByASingleWordFindingNothing [
 
 	| inner it |
@@ -305,7 +306,7 @@ StIteratorsTest >> testWordsAwareIteratorFiltersByASingleWordFindingNothing [
 	self assert: it next equals: nil
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StIteratorsTest >> testWordsAwareIteratorFiltersLeftOutBecauseSecondWord [
 
 	| inner it |

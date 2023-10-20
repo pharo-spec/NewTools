@@ -1,13 +1,14 @@
 Class {
-	#name : #BaselineOfNewTools,
-	#superclass : #BaselineOf,
+	#name : 'BaselineOfNewTools',
+	#superclass : 'BaselineOf',
 	#instVars : [
 		'initializersEnabled'
 	],
-	#category : #BaselineOfNewTools
+	#category : 'BaselineOfNewTools',
+	#package : 'BaselineOfNewTools'
 }
 
-{ #category : #baselines }
+{ #category : 'baselines' }
 BaselineOfNewTools >> baseline: spec [
 
 	<baseline>
@@ -144,7 +145,7 @@ BaselineOfNewTools >> baseline: spec [
             					'RewriterTools') ]
 ]
 
-{ #category : #'external projects' }
+{ #category : 'external projects' }
 BaselineOfNewTools >> chest: spec [
 
 	spec baseline: 'Chest' with: [ 
@@ -154,7 +155,7 @@ BaselineOfNewTools >> chest: spec [
 			loads: 'default' ]
 ]
 
-{ #category : #'external projects' }
+{ #category : 'external projects' }
 BaselineOfNewTools >> packageRepositoryURL [
 	| url |
 	
@@ -168,20 +169,20 @@ BaselineOfNewTools >> packageRepositoryURL [
 	^ url
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 BaselineOfNewTools >> postload: loader package: packageSpec [
 
 	MCMethodDefinition initializersEnabled: initializersEnabled
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 BaselineOfNewTools >> preload: loader package: packageSpec [
 
 	initializersEnabled := MCMethodDefinition initializersEnabled.
 	MCMethodDefinition initializersEnabled: true
 ]
 
-{ #category : #'external projects' }
+{ #category : 'external projects' }
 BaselineOfNewTools >> sindarin: spec [
 
 	spec baseline: 'Sindarin' with: [ 

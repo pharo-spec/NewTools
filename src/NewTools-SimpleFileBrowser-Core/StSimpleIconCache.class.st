@@ -2,22 +2,23 @@
 An icon cache
 "
 Class {
-	#name : #StSimpleIconCache,
-	#superclass : #Object,
+	#name : 'StSimpleIconCache',
+	#superclass : 'Object',
 	#classVars : [
 		'IconCache'
 	],
-	#category : #'NewTools-SimpleFileBrowser-Core'
+	#category : 'NewTools-SimpleFileBrowser-Core',
+	#package : 'NewTools-SimpleFileBrowser-Core'
 }
 
-{ #category : #icons }
+{ #category : 'icons' }
 StSimpleIconCache class >> driveIcon [
 	<script: 'self driveIcon inspect'>
 
 	^self iconNamed: #driveIcon
 ]
 
-{ #category : #'private - icons' }
+{ #category : 'private - icons' }
 StSimpleIconCache class >> driveIconContents [
 
 	^'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA/0lEQVQ4je2RPUoDcRDFf7tI
@@ -28,14 +29,14 @@ DucceZ4Tr8VUTitIorO3H8zf4Af4LZ/wICQO43m97AC7MHq7Papn1TndA7h/fh9GTw9B8TZZ
 kd007kzugEASi/XGaH2lWStr4Ft8AlWZooQwDP14AAAAAElFTkSuQmCC'
 ]
 
-{ #category : #icons }
+{ #category : 'icons' }
 StSimpleIconCache class >> fileIcon [
 	<script: 'self fileIcon inspect'>
 
 	^self iconNamed: #fileIcon
 ]
 
-{ #category : #'private - icons' }
+{ #category : 'private - icons' }
 StSimpleIconCache class >> fileIconContents [
 
 	^'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACjElEQVR42o2SW0hUURSG/32O
@@ -54,14 +55,14 @@ Mk89yCyvFwfvBy1SbF6VLWF7TIRPUdV/FRNNh6qowsDHyaG5l9d2fwfyXD4gAGnljAAAAABJ
 RU5ErkJggg=='
 ]
 
-{ #category : #icons }
+{ #category : 'icons' }
 StSimpleIconCache class >> folderIcon [
 	<script: 'self folderIcon inspect'>
 
 	^self iconNamed: #folderIcon
 ]
 
-{ #category : #'private - icons' }
+{ #category : 'private - icons' }
 StSimpleIconCache class >> folderIconContents [
 
 	^'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABdElEQVR42mNkoBAwwhhdbT7Z
@@ -74,13 +75,13 @@ cdrkgprMGI1m0myHxEJ4fcNkxikTc2qyY3TJ8AIDQ1h97WRGaysdM011qeh///8w/v8HSmV/
 GP7/+8sA5DOg8EH0fxD/L1z87OW3W+GZieLcSC4AAOV6G9lUA/2gAAAAAElFTkSuQmCC'
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 StSimpleIconCache class >> iconCache [
 
 	^ IconCache ifNil: [ IconCache := Dictionary new ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleIconCache class >> iconNamed: aSymbol [
 	"Returns the icon with the given name"
 	
@@ -94,7 +95,7 @@ StSimpleIconCache class >> iconNamed: aSymbol [
 				fromBinaryStream: (self perform: selector) base64Decoded readStream ]
 ]
 
-{ #category : #'initialization-release' }
+{ #category : 'initialization-release' }
 StSimpleIconCache class >> reset [
 	"Reset the icon cache"	
 	<script>
@@ -102,14 +103,14 @@ StSimpleIconCache class >> reset [
 	IconCache := nil
 ]
 
-{ #category : #icons }
+{ #category : 'icons' }
 StSimpleIconCache class >> terminalIcon [
 	<script: 'self terminalIcon inspect'>
 
 	^self iconNamed: #terminalIcon
 ]
 
-{ #category : #'private - icons' }
+{ #category : 'private - icons' }
 StSimpleIconCache class >> terminalIconContents [
 
 	^'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVR4XmOgGIiKimlo6+iF

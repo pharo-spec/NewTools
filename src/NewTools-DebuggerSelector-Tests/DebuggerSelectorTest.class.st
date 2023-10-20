@@ -1,16 +1,17 @@
 Class {
-	#name : #DebuggerSelectorTest,
-	#superclass : #TestCase,
+	#name : 'DebuggerSelectorTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'debuggerSelector',
 		'eventListener',
 		'debugSession',
 		'testDebuggerClass'
 	],
-	#category : #'NewTools-DebuggerSelector-Tests'
+	#category : 'NewTools-DebuggerSelector-Tests',
+	#package : 'NewTools-DebuggerSelector-Tests'
 }
 
-{ #category : #helper }
+{ #category : 'helper' }
 DebuggerSelectorTest >> createDebugSessionForTesting [
 	| dbSession process |
 	process := [ 'hello' ] fork.
@@ -20,7 +21,7 @@ DebuggerSelectorTest >> createDebugSessionForTesting [
 	^ dbSession
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 DebuggerSelectorTest >> setUp [
 	"Hooks that subclasses may override to define the fixture of test."
 
@@ -40,7 +41,7 @@ DebuggerSelectorTest >> setUp [
 	testDebuggerClass := DummyDebuggerForTests
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DebuggerSelectorTest >> testGetDebuggerClasses [
 	"Test that #getDebuggerClasses returns at least the dummy test classes"
 
@@ -56,7 +57,7 @@ DebuggerSelectorTest >> testGetDebuggerClasses [
 	self assert: (debuggerClasses includes: Object) not
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DebuggerSelectorTest >> testIsThisClassADebugger [
 	self assert:
 		(debuggerSelector isThisClassADebugger: DummyDebuggerForTests).
@@ -65,7 +66,7 @@ DebuggerSelectorTest >> testIsThisClassADebugger [
 	self assert: (debuggerSelector isThisClassADebugger: self class) not
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DebuggerSelectorTest >> testMainDebuggerAlgorithm [
 	"Tests that the first debugger that DebuggerSelector will try to open is the one that has been set as main debugger, even if another debugger has a higher rank"
 
@@ -83,7 +84,7 @@ DebuggerSelectorTest >> testMainDebuggerAlgorithm [
 		equals: DummyDebuggerForTests_RankZero
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DebuggerSelectorTest >> testMainDebuggerAlgorithm_MainDebuggerCannotOpen [
 	"Tests that the first debugger that DebuggerSelector will try to open is the one that has been set as main debugger, even if another debugger has a higher rank"
 
@@ -117,7 +118,7 @@ DebuggerSelectorTest >> testMainDebuggerAlgorithm_MainDebuggerCannotOpen [
 		(debuggerSelector debuggerSelectionAttempts at: 3) success
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DebuggerSelectorTest >> testMainDebuggerSetGet [
 	"Test that setter methods #mainDebuggerClass: and #setNoMainDebuggerClass correctly set the main debugger class. Also test that listeners to main debugger updates do get notified"
 
@@ -135,7 +136,7 @@ DebuggerSelectorTest >> testMainDebuggerSetGet [
 		equals: 2
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DebuggerSelectorTest >> testSelectDebuggerIgnoresDebuggersSayingTheyCannotOpenTheDebugSession [
 	"Test that the debugger selection algorithm ignores debuggers that reject the debug session, and choose the next debugger that can open it instead"
 
@@ -156,7 +157,7 @@ DebuggerSelectorTest >> testSelectDebuggerIgnoresDebuggersSayingTheyCannotOpenTh
 		equals: DummyDebuggerForTests_RankZero
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DebuggerSelectorTest >> testSettingNonDebuggerAsMainDebuggerSignalsException [
 	"Setting as main debugger a class that is not a debugger should signal a CannotSetAsMainDebuggerAClassThatIsNotADebuggerClass exception"
 
@@ -165,7 +166,7 @@ DebuggerSelectorTest >> testSettingNonDebuggerAsMainDebuggerSignalsException [
 		raise: CannotSetAsMainDebuggerAClassThatIsNotADebuggerClass
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DebuggerSelectorTest >> testTryToOpenDebugSession [
 	"The purpose of this test is to check that the instrumentation of #tryToOpenDebugSession:withDebuggerClass:withFullView:andNotification: on DebuggerSelectorDecoratorForTest works properly"
 

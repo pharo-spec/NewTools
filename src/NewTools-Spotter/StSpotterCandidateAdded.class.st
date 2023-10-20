@@ -2,26 +2,28 @@
 Announce a new canditate has been found.
 "
 Class {
-	#name : #StSpotterCandidateAdded,
-	#superclass : #StSpotterAnnouncement,
+	#name : 'StSpotterCandidateAdded',
+	#superclass : 'StSpotterAnnouncement',
 	#instVars : [
 		'candidateLink'
 	],
-	#category : #'NewTools-Spotter-Announcements'
+	#category : 'NewTools-Spotter-Announcements',
+	#package : 'NewTools-Spotter',
+	#tag : 'Announcements'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidateAdded >> candidate [
 	^ candidateLink value
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidateAdded >> candidateLink [
 
 	^ candidateLink
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidateAdded >> candidateLink: anObject [
 	candidateLink := anObject
 ]

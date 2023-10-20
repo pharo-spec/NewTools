@@ -2,27 +2,28 @@
 Serializes a debugger stack using fuel.
 "
 Class {
-	#name : #FLDebuggerStackSerializer,
-	#superclass : #FLSerializer,
+	#name : 'FLDebuggerStackSerializer',
+	#superclass : 'FLSerializer',
 	#instVars : [
 		'fileName'
 	],
-	#category : #'NewTools-Debugger-Fuel'
+	#category : 'NewTools-Debugger-Fuel',
+	#package : 'NewTools-Debugger-Fuel'
 }
 
-{ #category : #serializing }
+{ #category : 'serializing' }
 FLDebuggerStackSerializer class >> serializeStackFromContext: aContext [
 
 	^ self new serializeStackFromContext: aContext
 ]
 
-{ #category : #serializing }
+{ #category : 'serializing' }
 FLDebuggerStackSerializer class >> serializeStackFromContext: aContext toFileNamed: aFileName [
 
 	^ self new serializeStackFromContext: aContext toFileNamed: aFileName
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 FLDebuggerStackSerializer >> encodeDebugInformation [
 	self
 		at: #Timestamp putAdditionalObject: self timestampString;
@@ -30,12 +31,12 @@ FLDebuggerStackSerializer >> encodeDebugInformation [
 		at: #Image putAdditionalObject: self imageInformationString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FLDebuggerStackSerializer >> fileName [
 	^ fileName
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 FLDebuggerStackSerializer >> fileNameForContext: aContext [
 	| date |
 	date := DateAndTime now.
@@ -51,7 +52,7 @@ FLDebuggerStackSerializer >> fileNameForContext: aContext [
 		s << '.fuel' ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 FLDebuggerStackSerializer >> imageInformationString [
 	^ String streamContents: [ :stringStream |
 		stringStream	
@@ -62,7 +63,7 @@ FLDebuggerStackSerializer >> imageInformationString [
 			nextPutAll: ']' ]
 ]
 
-{ #category : #serializing }
+{ #category : 'serializing' }
 FLDebuggerStackSerializer >> serializeStackFromContext: aContext [
 	fileName := self fileNameForContext: aContext.
 	self
@@ -72,7 +73,7 @@ FLDebuggerStackSerializer >> serializeStackFromContext: aContext [
 	^ fileName 
 ]
 
-{ #category : #serializing }
+{ #category : 'serializing' }
 FLDebuggerStackSerializer >> serializeStackFromContext: aContext toFileNamed: aFileName [
 	self
 		encodeDebugInformation;
@@ -87,7 +88,7 @@ FLDebuggerStackSerializer >> serializeStackFromContext: aContext toFileNamed: aF
 	^ aFileName
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 FLDebuggerStackSerializer >> timestampString [
 	^ String streamContents: [ :stringStream |
 		stringStream
@@ -96,7 +97,7 @@ FLDebuggerStackSerializer >> timestampString [
 			print: Time now ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 FLDebuggerStackSerializer >> vmInformationString [
 	^ String streamContents: [ :stringStream |
 		stringStream

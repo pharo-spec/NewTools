@@ -1,6 +1,6 @@
-Extension { #name : #SpCodeInteractionModel }
+Extension { #name : 'SpCodeInteractionModel' }
 
-{ #category : #'*NewTools-Debugger-Extensions' }
+{ #category : '*NewTools-Debugger-Extensions' }
 SpCodeInteractionModel >> hasUnsavedCodeChanges [
 	^false
 ]

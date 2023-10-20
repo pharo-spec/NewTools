@@ -2,32 +2,33 @@
 Abstract superclass to wrap items found in file system
 "
 Class {
-	#name : #StSimpleFileSystemItemWrapper,
-	#superclass : #Object,
+	#name : 'StSimpleFileSystemItemWrapper',
+	#superclass : 'Object',
 	#instVars : [
 		'fileReference'
 	],
-	#category : #'NewTools-SimpleFileBrowser-Core'
+	#category : 'NewTools-SimpleFileBrowser-Core',
+	#package : 'NewTools-SimpleFileBrowser-Core'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFileSystemItemWrapper class >> icon [ 
 	^self iconProvider folderIcon 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFileSystemItemWrapper class >> iconProvider [ 
 
 	^StSimpleIconCache 
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSimpleFileSystemItemWrapper class >> isAbstract [ 
 
 	^self name = #StSimpleFileSystemItemWrapper
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StSimpleFileSystemItemWrapper class >> on: aFileReference [
 
 	^(self new)
@@ -35,7 +36,7 @@ StSimpleFileSystemItemWrapper class >> on: aFileReference [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFileSystemItemWrapper class >> roots [
 
 	^ Smalltalk os isWindows
@@ -43,20 +44,20 @@ StSimpleFileSystemItemWrapper class >> roots [
 		ifFalse: [ Array with: (StSimpleRootDirectoryWrapper on: FileSystem root) ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFileSystemItemWrapper class >> systemIcon [
 
 	^self isAbstract ifTrue: [ super systemIcon ] ifFalse: [ self icon ]
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StSimpleFileSystemItemWrapper >> = other [
 
 	^ self species = other species 
 		and: [ self fileReference = other fileReference ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFileSystemItemWrapper >> allElements [  
 	
 	^(OrderedCollection withAll: self subdirectories) 
@@ -64,34 +65,34 @@ StSimpleFileSystemItemWrapper >> allElements [
 		yourself
 ]
 
-{ #category : #conversion }
+{ #category : 'conversion' }
 StSimpleFileSystemItemWrapper >> asFileReference [ 
 
 	^self fileReference
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StSimpleFileSystemItemWrapper >> browseFolder [
 	fileReference openInOSFileBrowser 
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 StSimpleFileSystemItemWrapper >> directories [ 
 	[ self fileReference directories ] on: Exception do: [ ^#()].
 	^self fileReference directories
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 StSimpleFileSystemItemWrapper >> fileReference [
 	^ fileReference
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 StSimpleFileSystemItemWrapper >> fileReference: anObject [
 	fileReference := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFileSystemItemWrapper >> files [ 
 	
 	^[fileReference files collect: [:each | StSimpleFileWrapper on: each ] ]
@@ -99,42 +100,42 @@ StSimpleFileSystemItemWrapper >> files [
 		do: [ #() ]
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StSimpleFileSystemItemWrapper >> hash [
 
 	^ self species hash 
 		bitXor: self fileReference hash
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFileSystemItemWrapper >> icon [
 
 	^self class icon
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSimpleFileSystemItemWrapper >> isDirectory [
 
 	^false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSimpleFileSystemItemWrapper >> isFile [
 
 	^false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSimpleFileSystemItemWrapper >> isRoot [ 
 	^false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFileSystemItemWrapper >> label [ 
 	^self fileReference basename
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFileSystemItemWrapper >> pathString [
  
 	| path |
@@ -143,12 +144,12 @@ StSimpleFileSystemItemWrapper >> pathString [
 		ifFalse: [ path ]
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 StSimpleFileSystemItemWrapper >> size [ 
 	^''
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFileSystemItemWrapper >> subdirectories [ 
 	
 	^self directories collect: [:each | StSimpleDirectoryWrapper on: each ] 

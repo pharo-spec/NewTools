@@ -2,20 +2,22 @@
 A filter that searches for substring to each item to obtain matching items.
 "
 Class {
-	#name : #StFilterSubstrings,
-	#superclass : #StUnorderedFilter,
+	#name : 'StFilterSubstrings',
+	#superclass : 'StUnorderedFilter',
 	#instVars : [
 		'separators'
 	],
-	#category : #'NewTools-Spotter-Filters'
+	#category : 'NewTools-Spotter-Filters',
+	#package : 'NewTools-Spotter',
+	#tag : 'Filters'
 }
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 StFilterSubstrings >> defaultSeparators [
 	^ ' '
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StFilterSubstrings >> isMatchedItem: anItem [
 	| itemName |
 	itemName := self itemFilterNameFor: anItem.
@@ -23,7 +25,7 @@ StFilterSubstrings >> isMatchedItem: anItem [
 		itemName includesSubstring: fragment caseSensitive: self caseSensitive ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StFilterSubstrings >> prepareFilterInContext: aSpotterContext [
 	super prepareFilterInContext: aSpotterContext.
 	
@@ -31,12 +33,12 @@ StFilterSubstrings >> prepareFilterInContext: aSpotterContext [
 	self query: (self query substrings: self separators) asSet asArray
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFilterSubstrings >> separators [
 	^ separators
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFilterSubstrings >> separators: anObject [
 	separators := anObject
 ]

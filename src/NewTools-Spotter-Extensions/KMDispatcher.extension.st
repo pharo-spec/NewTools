@@ -1,6 +1,6 @@
-Extension { #name : #KMDispatcher }
+Extension { #name : 'KMDispatcher' }
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 KMDispatcher >> spotterForKeysFor: aStep [
 	<stSpotterOrder: 15>
 		

@@ -11,41 +11,43 @@ icon <Form>
 name <Form> 
 "
 Class {
-	#name : #StFBAbstractBookMark,
-	#superclass : #Object,
+	#name : 'StFBAbstractBookMark',
+	#superclass : 'Object',
 	#instVars : [
 		'name',
 		'icon'
 	],
-	#category : #'NewTools-FileBrowser-Bookmark'
+	#category : 'NewTools-FileBrowser-Bookmark',
+	#package : 'NewTools-FileBrowser',
+	#tag : 'Bookmark'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBAbstractBookMark >> children [ 
 	^ self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBAbstractBookMark >> icon [
 	^ icon
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBAbstractBookMark >> icon: anObject [
 	icon := anObject
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StFBAbstractBookMark >> isComposite [
 	^ self subclassResponsibility.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBAbstractBookMark >> name [
 	^ name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBAbstractBookMark >> name: anObject [
 	name := anObject
 ]

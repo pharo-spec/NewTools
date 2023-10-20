@@ -1,20 +1,22 @@
 Class {
-	#name : #StRewriterRuleLoaderPresenterTest,
-	#superclass : #StRewriterAbstractToolTest,
+	#name : 'StRewriterRuleLoaderPresenterTest',
+	#superclass : 'StRewriterAbstractToolTest',
 	#instVars : [
 		'ruleLoader'
 	],
-	#category : #'NewTools-RewriterTools-Tests-RuleLoader'
+	#category : 'NewTools-RewriterTools-Tests-RuleLoader',
+	#package : 'NewTools-RewriterTools-Tests',
+	#tag : 'RuleLoader'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StRewriterRuleLoaderPresenterTest >> setUp [
 
 	super setUp.
 	ruleLoader := StRewriterRuleLoaderPresenter new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleLoaderPresenterTest >> toolClass [
 
 	^ StRewriterRuleLoaderPresenter

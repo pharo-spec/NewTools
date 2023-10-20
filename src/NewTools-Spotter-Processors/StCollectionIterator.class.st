@@ -2,15 +2,17 @@
 I wrap an existing collection and expose it as a iterator
 "
 Class {
-	#name : #StCollectionIterator,
-	#superclass : #StGenericGenerator,
+	#name : 'StCollectionIterator',
+	#superclass : 'StGenericGenerator',
 	#instVars : [
 		'collection'
 	],
-	#category : #'NewTools-Spotter-Processors-Iterators'
+	#category : 'NewTools-Spotter-Processors-Iterators',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Iterators'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StCollectionIterator class >> on: aSequenceableCollection [
 
 	^ self basicNew
@@ -19,17 +21,17 @@ StCollectionIterator class >> on: aSequenceableCollection [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCollectionIterator >> collection [
 	^ collection
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCollectionIterator >> collection: anObject [
 	collection := anObject
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 StCollectionIterator >> elementsDo: aValuable [
 
 	collection do: aValuable 

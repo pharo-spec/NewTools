@@ -1,20 +1,22 @@
 Class {
-	#name : #StRewriterRuleEditorPresenterTest,
-	#superclass : #StRewriterAbstractToolTest,
+	#name : 'StRewriterRuleEditorPresenterTest',
+	#superclass : 'StRewriterAbstractToolTest',
 	#instVars : [
 		'rewriteBasicEditor'
 	],
-	#category : #'NewTools-RewriterTools-Tests-BasicEditor'
+	#category : 'NewTools-RewriterTools-Tests-BasicEditor',
+	#package : 'NewTools-RewriterTools-Tests',
+	#tag : 'BasicEditor'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StRewriterRuleEditorPresenterTest >> setUp [
 
 	super setUp.
 	rewriteBasicEditor := StRewriterRuleEditorPresenter new
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterRuleEditorPresenterTest >> testReplaceWithPatternCode [
 
 	rewriteBasicEditor rhs: 'patternCode'.
@@ -23,7 +25,7 @@ StRewriterRuleEditorPresenterTest >> testReplaceWithPatternCode [
 		equals: 'patternCode'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterRuleEditorPresenterTest >> testRuleLoadsCorrectly [
 
 	| ruleHolder |
@@ -37,7 +39,7 @@ StRewriterRuleEditorPresenterTest >> testRuleLoadsCorrectly [
 	self	assert: rewriteBasicEditor rhs equals: ruleHolder rhs
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterRuleEditorPresenterTest >> testSearchForPatternCode [
 
 	rewriteBasicEditor lhs: 'patternCode'.
@@ -46,7 +48,7 @@ StRewriterRuleEditorPresenterTest >> testSearchForPatternCode [
 		equals: 'patternCode'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRuleEditorPresenterTest >> toolClass [
 
 	^ StRewriterRuleEditorPresenter

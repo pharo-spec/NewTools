@@ -2,15 +2,17 @@
 A filter that executes regex to each item to obtain matching items.
 "
 Class {
-	#name : #StFilterRegex,
-	#superclass : #StUnorderedFilter,
+	#name : 'StFilterRegex',
+	#superclass : 'StUnorderedFilter',
 	#instVars : [
 		'regex'
 	],
-	#category : #'NewTools-Spotter-Filters'
+	#category : 'NewTools-Spotter-Filters',
+	#package : 'NewTools-Spotter',
+	#tag : 'Filters'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 StFilterRegex >> applyFilterInContext: aSpotterContext error: exception [
 	
 	super applyFilterInContext: aSpotterContext error: exception.
@@ -19,12 +21,12 @@ StFilterRegex >> applyFilterInContext: aSpotterContext error: exception [
 		yourself) value: aSpotterContext
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StFilterRegex >> isMatchedItem: anItem [
 	^ self regex matches: (self itemFilterNameFor: anItem)
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StFilterRegex >> prepareFilterInContext: aSpotterContext [
 	super prepareFilterInContext: aSpotterContext.
 	
@@ -33,12 +35,12 @@ StFilterRegex >> prepareFilterInContext: aSpotterContext [
 		ifFalse: [ self query asRegexIgnoringCase ])
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFilterRegex >> regex [
 	^ regex
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFilterRegex >> regex: anObject [
 	regex := anObject
 ]

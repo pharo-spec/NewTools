@@ -1,10 +1,11 @@
 Class {
-	#name : #StPlaygroundPageTest,
-	#superclass : #TestCase,
-	#category : #'NewTools-Playground-Tests'
+	#name : 'StPlaygroundPageTest',
+	#superclass : 'TestCase',
+	#category : 'NewTools-Playground-Tests',
+	#package : 'NewTools-Playground-Tests'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StPlaygroundPageTest >> newPage [ 
 
 	^ StPlaygroundPage new 
@@ -13,7 +14,7 @@ StPlaygroundPageTest >> newPage [
 		yourself
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundPageTest >> testContents [
 	| page waitMock |
 	
@@ -30,7 +31,7 @@ StPlaygroundPageTest >> testContents [
 	self assert: page contents equals: 'test 2'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundPageTest >> testDoNotStoreVersionIfEqual [
 	| v1 page |
 	
@@ -45,7 +46,7 @@ StPlaygroundPageTest >> testDoNotStoreVersionIfEqual [
 	self assert: page versions size equals: 1
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundPageTest >> testFlush [
 	| page |
 	
@@ -62,7 +63,7 @@ StPlaygroundPageTest >> testFlush [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundPageTest >> testFromReference [
 	| memory file page |
 	
@@ -75,7 +76,7 @@ StPlaygroundPageTest >> testFromReference [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundPageTest >> testStoreVersion [
 	| v1 page |
 	
@@ -87,7 +88,7 @@ StPlaygroundPageTest >> testStoreVersion [
 	self assert: page versions first content equals: v1
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundPageTest >> testVersions [
 	| v1 v2 v3 page |
 	

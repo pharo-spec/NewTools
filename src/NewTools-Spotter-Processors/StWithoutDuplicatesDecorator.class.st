@@ -3,15 +3,17 @@ I implement a decorator for the iterators.
 I don't allow duplicates to be returned. For doing so, I have a collection of the already returned values, so I can filter duplicates.
 "
 Class {
-	#name : #StWithoutDuplicatesDecorator,
-	#superclass : #StIteratorDecorator,
+	#name : 'StWithoutDuplicatesDecorator',
+	#superclass : 'StIteratorDecorator',
 	#instVars : [
 		'uniqueResults'
 	],
-	#category : #'NewTools-Spotter-Processors-Iterators'
+	#category : 'NewTools-Spotter-Processors-Iterators',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Iterators'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StWithoutDuplicatesDecorator class >> on: anInner [
 
 	^ self new 
@@ -19,27 +21,27 @@ StWithoutDuplicatesDecorator class >> on: anInner [
 		yourself
 ]
 
-{ #category : #resetting }
+{ #category : 'resetting' }
 StWithoutDuplicatesDecorator >> clearDuplicates [
 	
 	uniqueResults removeAll
 ]
 
-{ #category : #protected }
+{ #category : 'protected' }
 StWithoutDuplicatesDecorator >> doReset [ 
 
 	inner reset.
 	self clearDuplicates
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StWithoutDuplicatesDecorator >> initialize [ 
 
 	super initialize.
 	uniqueResults := Set new.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StWithoutDuplicatesDecorator >> next [
 
 	| aValue |

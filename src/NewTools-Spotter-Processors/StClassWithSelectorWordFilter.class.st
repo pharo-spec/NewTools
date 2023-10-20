@@ -1,13 +1,15 @@
 Class {
-	#name : #StClassWithSelectorWordFilter,
-	#superclass : #StWordsAwareFilter,
+	#name : 'StClassWithSelectorWordFilter',
+	#superclass : 'StWordsAwareFilter',
 	#instVars : [
 		'className'
 	],
-	#category : #'NewTools-Spotter-Processors-Iterators'
+	#category : 'NewTools-Spotter-Processors-Iterators',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Iterators'
 }
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StClassWithSelectorWordFilter >> additionalFilter: aString firstWord: firstWord otherWords: otherWords on: anEntry [
 
 	^ anEntry content methodClass name = className
@@ -15,7 +17,7 @@ StClassWithSelectorWordFilter >> additionalFilter: aString firstWord: firstWord 
 				allSatisfy: [ :otherW | anEntry asString asLowercase includesSubstring: otherW ] ]
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StClassWithSelectorWordFilter >> splitWords: aString [
 
 	| splitted message |

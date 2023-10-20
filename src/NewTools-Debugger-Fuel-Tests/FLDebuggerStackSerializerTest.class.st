@@ -1,10 +1,11 @@
 Class {
-	#name : #FLDebuggerStackSerializerTest,
-	#superclass : #TestCase,
-	#category : #'NewTools-Debugger-Fuel-Tests'
+	#name : 'FLDebuggerStackSerializerTest',
+	#superclass : 'TestCase',
+	#category : 'NewTools-Debugger-Fuel-Tests',
+	#package : 'NewTools-Debugger-Fuel-Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 FLDebuggerStackSerializerTest >> testFileNameForContext [
 	| stackSerializer context fileName |
 	stackSerializer := FLDebuggerStackSerializer new.
@@ -18,7 +19,7 @@ FLDebuggerStackSerializerTest >> testFileNameForContext [
 		 , '-*.fuel' match: fileName)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FLDebuggerStackSerializerTest >> testSerializeContextToFileNamed [
 	| context file |
 	context := [  ] asContext.
@@ -36,7 +37,7 @@ FLDebuggerStackSerializerTest >> testSerializeContextToFileNamed [
 		raise: FLDebuggerStackMaterialization
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FLDebuggerStackSerializerTest >> testSerializeStackFromContext [
 	| stackSerializer context |
 	stackSerializer := FLDebuggerStackSerializer new.

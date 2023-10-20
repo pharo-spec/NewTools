@@ -2,22 +2,24 @@
 I am a filter that will select anything (does not reject any item).
 "
 Class {
-	#name : #StFBAllFilter,
-	#superclass : #StFBAbstractFilter,
-	#category : #'NewTools-FileBrowser-Filtering'
+	#name : 'StFBAllFilter',
+	#superclass : 'StFBAbstractFilter',
+	#category : 'NewTools-FileBrowser-Filtering',
+	#package : 'NewTools-FileBrowser',
+	#tag : 'Filtering'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBAllFilter class >> priority [
 	^ 150
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBAllFilter >> name [
 	^ 'All'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBAllFilter >> predicate: aFileReference [
 	^ true
 ]

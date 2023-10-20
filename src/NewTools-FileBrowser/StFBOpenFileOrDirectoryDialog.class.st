@@ -1,21 +1,23 @@
 Class {
-	#name : #StFBOpenFileOrDirectoryDialog,
-	#superclass : #StFBFileDialogPresenter,
-	#category : #'NewTools-FileBrowser-UI'
+	#name : 'StFBOpenFileOrDirectoryDialog',
+	#superclass : 'StFBFileDialogPresenter',
+	#category : 'NewTools-FileBrowser-UI',
+	#package : 'NewTools-FileBrowser',
+	#tag : 'UI'
 }
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 StFBOpenFileOrDirectoryDialog >> confirmLabel [
 
 	^ 'Open'
 ]
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 StFBOpenFileOrDirectoryDialog >> initialTitle [
 	^ self subclassResponsibility
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFBOpenFileOrDirectoryDialog >> initializePresenters [
 
 	super initializePresenters.

@@ -5,8 +5,8 @@ A playground saves (or tries to save) everything you will put in a playground an
 I show a list and a preview of a page content, to allow users to chose a page to load.
 "
 Class {
-	#name : #StPlaygroundPagesPresenter,
-	#superclass : #StPresenter,
+	#name : 'StPlaygroundPagesPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'parent',
 		'pageList',
@@ -14,16 +14,18 @@ Class {
 		'pageListPanel',
 		'pagePreviewPanel'
 	],
-	#category : #'NewTools-Playground-View'
+	#category : 'NewTools-Playground-View',
+	#package : 'NewTools-Playground',
+	#tag : 'View'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPagesPresenter class >> defaultExtent [
 
 	^ (700@400) scaledByDisplayScaleFactor
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StPlaygroundPagesPresenter class >> defaultLayout [
 
 	^ SpPanedLayout newLeftToRight
@@ -33,37 +35,37 @@ StPlaygroundPagesPresenter class >> defaultLayout [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPagesPresenter class >> defaultTitle [
 
 	^ 'Pages'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPagesPresenter class >> emptyMessage [
 
 	^ 'There are no pages to list.'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPagesPresenter class >> pages [
 
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPagesPresenter class >> unselectedMessage [
 
 	^ 'Select a page to preview it.'
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StPlaygroundPagesPresenter >> doLoadPage [
 	
 	self loadSelectedPage
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StPlaygroundPagesPresenter >> doLoadPageOnNewPlayground [
 	| playground |
 	
@@ -74,7 +76,7 @@ StPlaygroundPagesPresenter >> doLoadPageOnNewPlayground [
 	playground takeKeyboardFocus 		
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPagesPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
 	aDialogWindowPresenter 
@@ -87,7 +89,7 @@ StPlaygroundPagesPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 			presenter close ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPagesPresenter >> initializePresenters [
 
 	(pageListPanel := self instantiate: StHeaderPanel)		
@@ -121,7 +123,7 @@ StPlaygroundPagesPresenter >> initializePresenters [
 		ifEmpty: [ pagePreview updatePresenter ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPagesPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
@@ -131,7 +133,7 @@ StPlaygroundPagesPresenter >> initializeWindow: aWindowPresenter [
 		whenOpenedDo: [ pageList takeKeyboardFocus ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StPlaygroundPagesPresenter >> loadPage: aPage [
 
 	self parent loadPage: aPage.
@@ -139,20 +141,20 @@ StPlaygroundPagesPresenter >> loadPage: aPage [
 	self parent takeKeyboardFocus 
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StPlaygroundPagesPresenter >> loadSelectedPage [
 
 	self loadPage: self selectedPage
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPagesPresenter >> pages [
 	
 	^ (StPlaygroundPresenter cacheDirectory allChildrenMatching: '*.ph')
 		sorted: [ :a :b | a creationTime > b creationTime ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundPagesPresenter >> pagesActions [
 
 	^ CmCommandGroup forSpec
@@ -162,7 +164,7 @@ StPlaygroundPagesPresenter >> pagesActions [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPagesPresenter >> pagesAsPresenters [
 
 	^ self pages collect: [ :each | 
@@ -171,19 +173,19 @@ StPlaygroundPagesPresenter >> pagesAsPresenters [
 			on: each  ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundPagesPresenter >> parent [
 
 	^ parent
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPagesPresenter >> selectedPage [
 
 	^ pageList selection selectedItem page
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StPlaygroundPagesPresenter >> setModelBeforeInitialization: aPlayground [
 
 	parent := aPlayground

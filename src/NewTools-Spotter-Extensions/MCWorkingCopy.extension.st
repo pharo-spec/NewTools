@@ -1,6 +1,6 @@
-Extension { #name : #MCWorkingCopy }
+Extension { #name : 'MCWorkingCopy' }
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 MCWorkingCopy >> spotterAllRepositoriesFor: aStep [
 	<stSpotterOrder: 20>
 	aStep listProcessor
@@ -13,7 +13,7 @@ MCWorkingCopy >> spotterAllRepositoriesFor: aStep [
 		filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 MCWorkingCopy >> spotterAncestorsFor: aStep [
 	<stSpotterOrder: 2>
 	self flag: #maybeRewriteForDirectStreaming.
@@ -23,7 +23,7 @@ MCWorkingCopy >> spotterAncestorsFor: aStep [
 		filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 MCWorkingCopy >> spotterCommit: workingCopy in: aRepository [
 	| newVersion |
 
@@ -35,7 +35,7 @@ MCWorkingCopy >> spotterCommit: workingCopy in: aRepository [
 		ensure: [ (MCVersionInspector new version: newVersion) show ]]
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 MCWorkingCopy >> spotterMonticelloPackageFor: aStep [
 	<stSpotterOrder: 21>
 	
@@ -46,7 +46,7 @@ MCWorkingCopy >> spotterMonticelloPackageFor: aStep [
 		filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 MCWorkingCopy >> spotterPackageFor: aStep [
 	<stSpotterOrder: 21>
 	self flag: #maybeRewriteForDirectStreaming.
@@ -61,7 +61,7 @@ MCWorkingCopy >> spotterPackageFor: aStep [
 		filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 MCWorkingCopy >> spotterPackageRepositoriesFor: aStep [
 	<stSpotterOrder: 10>
 	aStep listProcessor

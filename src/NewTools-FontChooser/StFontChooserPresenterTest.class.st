@@ -1,13 +1,14 @@
 Class {
-	#name : #StFontChooserPresenterTest,
-	#superclass : #TestCase,
+	#name : 'StFontChooserPresenterTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'presenter'
 	],
-	#category : #'NewTools-FontChooser'
+	#category : 'NewTools-FontChooser',
+	#package : 'NewTools-FontChooser'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StFontChooserPresenterTest >> setUp [
 
 	| fontChooser |
@@ -22,7 +23,7 @@ StFontChooserPresenterTest >> setUp [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFontChooserPresenterTest >> testFamilyListCorrectAtInitialization [
 
 	self deny: presenter fontFamilyList items isEmpty.
@@ -31,13 +32,13 @@ StFontChooserPresenterTest >> testFamilyListCorrectAtInitialization [
 	self assert: (presenter fontFamilyList displayValueAt: 1) equals: 'Bitmap DejaVu Sans'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFontChooserPresenterTest >> testFirstStyleIsSelected [
 	
 	self assert: (presenter fontStyleList selectedItems collect: [:each | each styleName ]) equals: #('Regular')
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFontChooserPresenterTest >> testPresenterOpenAndClose [
 	
 	self shouldnt: [ 
@@ -46,7 +47,7 @@ StFontChooserPresenterTest >> testPresenterOpenAndClose [
 			window close ] raise: Error
 ]
 
-{ #category : #'tests - keep selection' }
+{ #category : 'tests - keep selection' }
 StFontChooserPresenterTest >> testSelectionInFontStyleListIsKept [
 
 
@@ -56,7 +57,7 @@ StFontChooserPresenterTest >> testSelectionInFontStyleListIsKept [
 	self assert: presenter fontStyleList selection selectedIndex equals: 3
 ]
 
-{ #category : #'tests - keep selection' }
+{ #category : 'tests - keep selection' }
 StFontChooserPresenterTest >> testSelectionInFontStyleListIsKept2 [
 
 	| string |
@@ -67,7 +68,7 @@ StFontChooserPresenterTest >> testSelectionInFontStyleListIsKept2 [
 	self assert: presenter fontStyleList selection selectedItem styleName equals: string
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFontChooserPresenterTest >> testStyleIsDisplayed [
 	
 	self assert: presenter fontStyleList items size equals: #('Regular' 'Italic' 'Bold' 'Bold Italic') size

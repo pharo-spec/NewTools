@@ -1,14 +1,16 @@
 Class {
-	#name : #StSBVariableInspectionPanel,
-	#superclass : #StSBPanel,
+	#name : 'StSBVariableInspectionPanel',
+	#superclass : 'StSBPanel',
 	#instVars : [
 		'methodList',
 		'variableList'
 	],
-	#category : #'NewTools-SystemBrowser-View'
+	#category : 'NewTools-SystemBrowser-View',
+	#package : 'NewTools-SystemBrowser',
+	#tag : 'View'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 StSBVariableInspectionPanel class >> defaultSpec [
 
 	^ SpPanedLayout newHorizontal
@@ -17,19 +19,19 @@ StSBVariableInspectionPanel class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBVariableInspectionPanel >> defaultInputPort [
 
 	^ self inputItemsPort
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBVariableInspectionPanel >> defaultOutputPort [
 
 	^ self outputSelectionPort
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBVariableInspectionPanel >> initializePresenters [
 	
 	variableList := self newTable 
@@ -46,7 +48,7 @@ StSBVariableInspectionPanel >> initializePresenters [
 	variableList whenModelChangedDo: [ methodList items: #() ].	
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBVariableInspectionPanel >> inputItemsPort [
 
 	^ (SpListItemsPort newPresenter: self) 
@@ -54,7 +56,7 @@ StSBVariableInspectionPanel >> inputItemsPort [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBVariableInspectionPanel >> inputMethodItemsPort [
 
 	^ (SpListItemsPort newPresenter: self) 
@@ -62,12 +64,12 @@ StSBVariableInspectionPanel >> inputMethodItemsPort [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBVariableInspectionPanel >> methodList [
 	^ methodList
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBVariableInspectionPanel >> outputSelectionPort [
 	
 	^ (SpSelectionPort newPresenter: self)
@@ -75,7 +77,7 @@ StSBVariableInspectionPanel >> outputSelectionPort [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBVariableInspectionPanel >> outputVariableSelectionPort [
 	
 	^ (SpSelectionPort newPresenter: self)
@@ -83,7 +85,7 @@ StSBVariableInspectionPanel >> outputVariableSelectionPort [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBVariableInspectionPanel >> variableList [
 	^ variableList
 ]

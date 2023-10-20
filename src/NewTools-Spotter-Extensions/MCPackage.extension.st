@@ -1,6 +1,6 @@
-Extension { #name : #MCPackage }
+Extension { #name : 'MCPackage' }
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 MCPackage >> spotterForPackageFor: aStep [
 	<stSpotterOrder: 2>
 
@@ -12,7 +12,7 @@ MCPackage >> spotterForPackageFor: aStep [
 		filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 MCPackage >> spotterMonticelloWorkingCopyFor: aStep [
 	<stSpotterOrder: 1>
 

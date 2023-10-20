@@ -1,6 +1,6 @@
-Extension { #name : #StRewriterRulesTableSelectorPresenter }
+Extension { #name : 'StRewriterRulesTableSelectorPresenter' }
 
-{ #category : #'*NewTools-RewriterTools-Tests' }
+{ #category : '*NewTools-RewriterTools-Tests' }
 StRewriterRulesTableSelectorPresenter >> rulesTable [
 
 	^ rulesTable

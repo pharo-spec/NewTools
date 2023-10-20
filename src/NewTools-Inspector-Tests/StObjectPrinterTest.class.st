@@ -1,16 +1,17 @@
 Class {
-	#name : #StObjectPrinterTest,
-	#superclass : #TestCase,
-	#category : #'NewTools-Inspector-Tests'
+	#name : 'StObjectPrinterTest',
+	#superclass : 'TestCase',
+	#category : 'NewTools-Inspector-Tests',
+	#package : 'NewTools-Inspector-Tests'
 }
 
-{ #category : #assertions }
+{ #category : 'assertions' }
 StObjectPrinterTest >> assertIsError: aCollection expectedMessage: aMessage [
 	
 	self assert: aCollection asString equals: 'Error printing: ', aMessage.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StObjectPrinterTest >> testPrintDoesNotUnderstand [
 
 	| printedValue selector error |
@@ -22,7 +23,7 @@ StObjectPrinterTest >> testPrintDoesNotUnderstand [
 	self assertIsError: printedValue expectedMessage: error messageText
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StObjectPrinterTest >> testPrintError [
 
 	| printedValue |
@@ -31,7 +32,7 @@ StObjectPrinterTest >> testPrintError [
 	self assertIsError: printedValue expectedMessage: 'Some error message'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StObjectPrinterTest >> testPrintHalt [
 
 	| printedValue |

@@ -65,8 +65,8 @@ icons
 
 "
 Class {
-	#name : #StFBFileDialogPresenter,
-	#superclass : #StPresenter,
+	#name : 'StFBFileDialogPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'bookmarksTreeTable',
 		'bookmarks',
@@ -79,10 +79,12 @@ Class {
 		'Bookmarks',
 		'OkAction'
 	],
-	#category : #'NewTools-FileBrowser-UI'
+	#category : 'NewTools-FileBrowser-UI',
+	#package : 'NewTools-FileBrowser',
+	#tag : 'UI'
 }
 
-{ #category : #icons }
+{ #category : 'icons' }
 StFBFileDialogPresenter class >> allIcons [
 	<script: 'self allIcons inspect'>
 	^ (Pragma allNamed: 'icons' in: StFBFileDialogPresenter class)
@@ -90,7 +92,7 @@ StFBFileDialogPresenter class >> allIcons [
 			[ :pragma | pragma methodClass instanceSide perform: pragma methodSelector ]
 ]
 
-{ #category : #commander2 }
+{ #category : 'commander2' }
 StFBFileDialogPresenter class >> buildCommandsGroupWith: presenter forRoot: rootCommandGroup [
 	rootCommandGroup
 		register:
@@ -99,7 +101,7 @@ StFBFileDialogPresenter class >> buildCommandsGroupWith: presenter forRoot: root
 				yourself)
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 StFBFileDialogPresenter class >> chooseModal [
 
 	"Return selected item immediately (blocking/modal). Returns nil if no valid item selected"
@@ -107,13 +109,13 @@ StFBFileDialogPresenter class >> chooseModal [
 	^ self new openModal
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 StFBFileDialogPresenter class >> chooseModalAndInspect [
 
 	^ self chooseModal inspect
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 StFBFileDialogPresenter class >> chooseModalIfNone: aBlock [
 
 	"Return selected item immediately (blocking/modal). Returns nil if no valid item selected"
@@ -121,7 +123,7 @@ StFBFileDialogPresenter class >> chooseModalIfNone: aBlock [
 	^ self chooseModal ifNil: aBlock
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 StFBFileDialogPresenter class >> chooseThenDo: aBlock [
 
 	"Return selected item immediately (blocking/modal). Returns nil if no valid item selected"
@@ -132,13 +134,13 @@ StFBFileDialogPresenter class >> chooseThenDo: aBlock [
 		  open
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 StFBFileDialogPresenter class >> chooseThenInspect [
 
 	^ self chooseThenDo: [ :file | file inspect ]
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StFBFileDialogPresenter class >> defaultLayout [
 
 	^ SpPanedLayout newLeftToRight
@@ -148,12 +150,12 @@ StFBFileDialogPresenter class >> defaultLayout [
 		  yourself
 ]
 
-{ #category : #defaultClassVariable }
+{ #category : 'defaultClassVariable' }
 StFBFileDialogPresenter class >> defaultOkActionBlock [
 	^ [ :fileReference | fileReference ]
 ]
 
-{ #category : #'accessing - Class' }
+{ #category : 'accessing - Class' }
 StFBFileDialogPresenter class >> extensions: aCollectionOfExtensions [
 
 	^ self new
@@ -162,7 +164,7 @@ StFBFileDialogPresenter class >> extensions: aCollectionOfExtensions [
 		  yourself
 ]
 
-{ #category : #'accessing - Class' }
+{ #category : 'accessing - Class' }
 StFBFileDialogPresenter class >> extensions: aCollectionOfExtensions named: aString [
 
 	^ self new
@@ -171,77 +173,77 @@ StFBFileDialogPresenter class >> extensions: aCollectionOfExtensions named: aStr
 		  yourself
 ]
 
-{ #category : #'class initialization' }
+{ #category : 'class initialization' }
 StFBFileDialogPresenter class >> initialize [
 	OkAction := self defaultOkActionBlock.
 	Bookmarks := StFBBookmark defaultBookmarks
 ]
 
-{ #category : #icons }
+{ #category : 'icons' }
 StFBFileDialogPresenter class >> textIcons [
 	<icons>
 	^ {(#st -> (self iconNamed: #smallLeftFlush)).
 	(#txt -> (self iconNamed: #smallLeftFlush))}
 ]
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 StFBFileDialogPresenter >> allowsChooseDirectoryIfNoFilename [
 
 	^ false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBFileDialogPresenter >> bookmarks [
 	^ bookmarks
 ]
 
-{ #category : #'api - customization' }
+{ #category : 'api - customization' }
 StFBFileDialogPresenter >> bookmarks: aCollectionOfFDGroupBookMark [
 	bookmarks := aCollectionOfFDGroupBookMark asOrderedCollection.
 	bookmarksTreeTable roots: bookmarks 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBFileDialogPresenter >> bookmarksTreeTable [
 	^ bookmarksTreeTable
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 StFBFileDialogPresenter >> cancelLabel [
 
 	^ 'Cancel'
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StFBFileDialogPresenter >> cancelled [
 
 	^ self withWindowDo: [ :w | w cancelled ]
 ]
 
-{ #category : #'api - customization' }
+{ #category : 'api - customization' }
 StFBFileDialogPresenter >> columns: aCollectionOfColumns [
 	fileNavigationSystem columns: aCollectionOfColumns 
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StFBFileDialogPresenter >> confirm [
 
 	self withWindowDo: #triggerOkAction
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 StFBFileDialogPresenter >> confirmLabel [
 
 	^ 'Accept'
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StFBFileDialogPresenter >> confirmed [
 
 	okAction cull: self selectedEntry
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFBFileDialogPresenter >> connectPresenters [
 
 	bookmarksTreeTable whenSelectionChangedDo: [ :selection | 
@@ -250,30 +252,30 @@ StFBFileDialogPresenter >> connectPresenters [
 				fileNavigationSystem openFolder: selectedItem location ] ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBFileDialogPresenter >> currentDirectory [
 	^ fileNavigationSystem currentDirectory 
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 StFBFileDialogPresenter >> defaultFolder [
 
 	^ FileLocator imageDirectory asFileReference
 ]
 
-{ #category : #'api - customization' }
+{ #category : 'api - customization' }
 StFBFileDialogPresenter >> defaultFolder: aPath [
 	fileNavigationSystem defaultFolder: aPath
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBFileDialogPresenter >> extensions: aCollectionOfExtensions [
 
 	self filter:
 		(StFBCustomExtensionsFilter extensions: aCollectionOfExtensions)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBFileDialogPresenter >> extensions: aCollectionOfExtensions named: aString [
 
 	self filter: (StFBCustomExtensionsFilter
@@ -281,24 +283,24 @@ StFBFileDialogPresenter >> extensions: aCollectionOfExtensions named: aString [
 			 basename: aString)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBFileDialogPresenter >> fileNavigationSystem [
 	^ fileNavigationSystem
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBFileDialogPresenter >> fileReferenceTable [
 	^ fileNavigationSystem fileReferenceTable
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBFileDialogPresenter >> filter: aStFBFilter [
 
 	filter := aStFBFilter.
 	fileNavigationSystem ifNotNil: [ fileNavigationSystem filter: filter ]
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 StFBFileDialogPresenter >> iconFor: anEntry [
 
 	| ext |
@@ -310,7 +312,7 @@ StFBFileDialogPresenter >> iconFor: anEntry [
 		  ifAbsent: [ self iconNamed: #page ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFBFileDialogPresenter >> initialize [
 
 	bookmarks := Bookmarks.
@@ -320,7 +322,7 @@ StFBFileDialogPresenter >> initialize [
 	super initialize
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFBFileDialogPresenter >> initializeBookmarksTreeTable [
 
 	bookmarksTreeTable
@@ -339,7 +341,7 @@ StFBFileDialogPresenter >> initializeBookmarksTreeTable [
 		expandRoots
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFBFileDialogPresenter >> initializeConfirmButton: aButton [
 
 	| buttonEnableBlock |
@@ -350,7 +352,7 @@ StFBFileDialogPresenter >> initializeConfirmButton: aButton [
 	buttonEnableBlock value: fileNavigationSystem nameText text
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFBFileDialogPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
 	| confirmButton |
@@ -368,7 +370,7 @@ StFBFileDialogPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 	self initializeConfirmButton: confirmButton
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFBFileDialogPresenter >> initializePresenters [
 
 	bookmarksTreeTable := self newTreeTable.
@@ -379,7 +381,7 @@ StFBFileDialogPresenter >> initializePresenters [
 	self initializeBookmarksTreeTable
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFBFileDialogPresenter >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
@@ -387,41 +389,41 @@ StFBFileDialogPresenter >> initializeWindow: aWindowPresenter [
 		initialExtent: 1050 @ 750
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBFileDialogPresenter >> isRootDirectory: aDirectory [
 	^ aDirectory isRoot or: [ OSPlatform current isWindows and: [ aDirectory parent isRoot ] ]
 ]
 
-{ #category : #'api - customization' }
+{ #category : 'api - customization' }
 StFBFileDialogPresenter >> isolate [
 	bookmarks := bookmarks copy.
 	
 ]
 
-{ #category : #'api - customization' }
+{ #category : 'api - customization' }
 StFBFileDialogPresenter >> okAction: aOneArgBlock [
 	okAction := aOneArgBlock
 ]
 
-{ #category : #opening }
+{ #category : 'opening' }
 StFBFileDialogPresenter >> open [
 
 	^ self openDialog
 ]
 
-{ #category : #opening }
+{ #category : 'opening' }
 StFBFileDialogPresenter >> openModal [
 
 	super openModal cancelled ifTrue: [ ^ nil ].
 	^ self selectedEntry
 ]
 
-{ #category : #'api - customization' }
+{ #category : 'api - customization' }
 StFBFileDialogPresenter >> previewer: aPreviewer [ 
 	fileNavigationSystem previewer: aPreviewer
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 StFBFileDialogPresenter >> selectFile: aFile [
 
 	fileNavigationSystem selectedEntry = aFile ifFalse: [ 
@@ -430,12 +432,12 @@ StFBFileDialogPresenter >> selectFile: aFile [
 	fileNavigationSystem nameText text: aFile basename
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBFileDialogPresenter >> selectedBookMark [
 	^ bookmarksTreeTable selection selectedItem
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBFileDialogPresenter >> selectedEntry [
 
 	| entry |
@@ -447,19 +449,19 @@ StFBFileDialogPresenter >> selectedEntry [
 	^ entry
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBFileDialogPresenter >> showDirectory: aFileReference [
 
 	fileNavigationSystem currentDirectory: aFileReference
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 StFBFileDialogPresenter >> title [
 
 	^ title ifNil: [ self initialTitle ]
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 StFBFileDialogPresenter >> title: aString [
 
 	title := aString

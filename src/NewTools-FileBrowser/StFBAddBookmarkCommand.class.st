@@ -2,24 +2,26 @@
 I'm a command use to add bookmark
 "
 Class {
-	#name : #StFBAddBookmarkCommand,
-	#superclass : #CmCommand,
-	#category : #'NewTools-FileBrowser-Commands'
+	#name : 'StFBAddBookmarkCommand',
+	#superclass : 'CmCommand',
+	#category : 'NewTools-FileBrowser-Commands',
+	#package : 'NewTools-FileBrowser',
+	#tag : 'Commands'
 }
 
-{ #category : #converting }
+{ #category : 'converting' }
 StFBAddBookmarkCommand >> asSpecCommand [
 	^ super asSpecCommand
 		iconName: #add;
 		yourself
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StFBAddBookmarkCommand >> canBeExecuted [
 	^ self context selectedEntry isDirectory
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 StFBAddBookmarkCommand >> execute [
 	| fileReference |
 	fileReference := self context selectedEntry.
@@ -28,7 +30,7 @@ StFBAddBookmarkCommand >> execute [
 	self context owner bookmarksTreeTable roots: self context owner bookmarks
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StFBAddBookmarkCommand >> initialize [
 	super initialize.
 	self

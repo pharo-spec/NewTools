@@ -4,8 +4,8 @@ I manage doc that are expressed as methods of certain classes but contrary to th
 help browser I managed documentation written using Microdown.
 "
 Class {
-	#name : #SpHelpBrowserPresenter,
-	#superclass : #SpPresenter,
+	#name : 'SpHelpBrowserPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'loadedTopicList',
 		'helpText',
@@ -15,10 +15,11 @@ Class {
 		'helpTopicCache',
 		'rootTopic'
 	],
-	#category : #'NewTools-HelpBrowser'
+	#category : 'NewTools-HelpBrowser',
+	#package : 'NewTools-HelpBrowser'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 SpHelpBrowserPresenter class >> defaultSpec [
 
 	 ^ SpBoxLayout newTopToBottom
@@ -29,13 +30,13 @@ SpHelpBrowserPresenter class >> defaultSpec [
 			yourself
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 SpHelpBrowserPresenter class >> open [
 	<example>
 	^ self new openWithSpec
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 SpHelpBrowserPresenter class >> openOn: aHelpTopic [
 	"Open the receiver on the given help topic or any other object that can be transformed into
 	 a help topic by sending #asHelpTopic."
@@ -47,7 +48,7 @@ SpHelpBrowserPresenter class >> openOn: aHelpTopic [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SpHelpBrowserPresenter >> connectPresenters [
  
 	loadedTopicList
@@ -57,25 +58,25 @@ SpHelpBrowserPresenter >> connectPresenters [
 					text ifNotNil: [ self render: text ]].
 ]
 
-{ #category : #utils }
+{ #category : 'utils' }
 SpHelpBrowserPresenter >> dummyHelp [
 
 	^  '# Empty Help
 	This a dummy help.'
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 SpHelpBrowserPresenter >> helpTopic [
 	
 	^ helpTopicCache ifNil: [ helpTopicCache := SystemHelp asHelpTopic ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SpHelpBrowserPresenter >> initialExtent [
 	^ 800@600
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SpHelpBrowserPresenter >> initializePresenters [
 
 	super initializePresenters.
@@ -97,18 +98,18 @@ SpHelpBrowserPresenter >> initializePresenters [
 		yourself.
 ]
 
-{ #category : #utils }
+{ #category : 'utils' }
 SpHelpBrowserPresenter >> morphWriter [ 
 		
 	^ PRRichTextComposer new
 ]
 
-{ #category : #utils }
+{ #category : 'utils' }
 SpHelpBrowserPresenter >> parser [ 
 	^ MicroDownParser
 ]
 
-{ #category : #utils }
+{ #category : 'utils' }
 SpHelpBrowserPresenter >> render: aString [
 
 	| document text |
@@ -121,19 +122,19 @@ SpHelpBrowserPresenter >> render: aString [
 	textOutput morph setText: (self morphWriter start: document asPillar) 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpHelpBrowserPresenter >> rootTopic [
 
 	^ rootTopic
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpHelpBrowserPresenter >> rootTopic: anObject [
 
 	rootTopic := anObject
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SpHelpBrowserPresenter >> title [
 	^ 'Help Topic Browser'
 ]

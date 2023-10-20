@@ -1,13 +1,15 @@
 Class {
-	#name : #StSBPackagesPanel,
-	#superclass : #StSBPanel,
+	#name : 'StSBPackagesPanel',
+	#superclass : 'StSBPanel',
 	#instVars : [
 		'packageTree'
 	],
-	#category : #'NewTools-SystemBrowser-View'
+	#category : 'NewTools-SystemBrowser-View',
+	#package : 'NewTools-SystemBrowser',
+	#tag : 'View'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 StSBPackagesPanel class >> defaultSpec [
 
 	^ SpBoxLayout newVertical 
@@ -15,19 +17,19 @@ StSBPackagesPanel class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBPackagesPanel >> defaultInputPort [
 
 	^ self inputItemsPort
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBPackagesPanel >> defaultOutputPort [
 
 	^ self outputSelectionPort
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBPackagesPanel >> gotoPackage: aPackage [
 	| roots packageModel |
 
@@ -39,7 +41,7 @@ StSBPackagesPanel >> gotoPackage: aPackage [
 	self packageTree selectPath: { roots indexOf: packageModel }
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBPackagesPanel >> initializePresenters [
 	
 	packageTree := self newTreeTable
@@ -52,7 +54,7 @@ StSBPackagesPanel >> initializePresenters [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBPackagesPanel >> inputItemsPort [
 
 	^ (SpListItemsPort newPresenter: self) 
@@ -60,7 +62,7 @@ StSBPackagesPanel >> inputItemsPort [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBPackagesPanel >> outputSelectionPort [
 	
 	^ (SpSelectionPort newPresenter: self)
@@ -68,7 +70,7 @@ StSBPackagesPanel >> outputSelectionPort [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBPackagesPanel >> packageTree [
 	^ packageTree
 ]

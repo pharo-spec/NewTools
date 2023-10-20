@@ -2,18 +2,20 @@
 I am a class that creates an environment in which a set of rewrite rules can be applied.
 "
 Class {
-	#name : #StRewriterEnvironmentCreator,
-	#superclass : #Object,
-	#category : #'NewTools-RewriterTools-Backend-Core'
+	#name : 'StRewriterEnvironmentCreator',
+	#superclass : 'Object',
+	#category : 'NewTools-RewriterTools-Backend-Core',
+	#package : 'NewTools-RewriterTools-Backend',
+	#tag : 'Core'
 }
 
-{ #category : #api }
+{ #category : 'api' }
 StRewriterEnvironmentCreator class >> scopeEnvironmentForAllPackages [
 
 	^ RBPackageEnvironment packages: RPackageOrganizer default packages
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StRewriterEnvironmentCreator class >> scopeEnvironmentForClasses: classes [
 
 	^ RBClassEnvironment classes: classes

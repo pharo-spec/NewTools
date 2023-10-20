@@ -1,6 +1,6 @@
-Extension { #name : #LogicalFontManager }
+Extension { #name : 'LogicalFontManager' }
 
-{ #category : #'*NewTools-FontChooser' }
+{ #category : '*NewTools-FontChooser' }
 LogicalFontManager >> defaultFamilies [
 	"answer an Array containing the default TextStyle font families, sorted by family name"
 

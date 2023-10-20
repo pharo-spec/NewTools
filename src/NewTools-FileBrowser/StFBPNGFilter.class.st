@@ -2,17 +2,19 @@
 I am a filter selecting files with a png extension.
 "
 Class {
-	#name : #StFBPNGFilter,
-	#superclass : #StFBExtensionsFilter,
-	#category : #'NewTools-FileBrowser-Filtering'
+	#name : 'StFBPNGFilter',
+	#superclass : 'StFBExtensionsFilter',
+	#category : 'NewTools-FileBrowser-Filtering',
+	#package : 'NewTools-FileBrowser',
+	#tag : 'Filtering'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBPNGFilter >> basename [
 	^ 'PNG'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFBPNGFilter >> extensions [
 	^ #('png')
 ]

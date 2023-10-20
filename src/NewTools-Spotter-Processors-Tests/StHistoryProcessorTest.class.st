@@ -1,20 +1,21 @@
 Class {
-	#name : #StHistoryProcessorTest,
-	#superclass : #StAbstractProcessorTest,
+	#name : 'StHistoryProcessorTest',
+	#superclass : 'StAbstractProcessorTest',
 	#instVars : [
 		'firstValue',
 		'secondValue'
 	],
-	#category : #'NewTools-Spotter-Processors-Tests'
+	#category : 'NewTools-Spotter-Processors-Tests',
+	#package : 'NewTools-Spotter-Processors-Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 StHistoryProcessorTest >> processor [
 
 	^ StHistoryProcessor new
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StHistoryProcessorTest >> setUp [
 	super setUp. 
 	
@@ -25,14 +26,14 @@ StHistoryProcessorTest >> setUp [
 	StSpotter new historize: secondValue.
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StHistoryProcessorTest >> tearDown [
 
 	StSpotter resetHistory.
 	super tearDown
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StHistoryProcessorTest >> testEmptyQueryShowsResults [
 
 	self runForText: ''.
@@ -40,7 +41,7 @@ StHistoryProcessorTest >> testEmptyQueryShowsResults [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StHistoryProcessorTest >> testLookingHistoryQueryShowsResults [
 
 	self runForText: 'sthistory'.
@@ -48,7 +49,7 @@ StHistoryProcessorTest >> testLookingHistoryQueryShowsResults [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StHistoryProcessorTest >> testLookingSubstringShowsResults [
 
 	self runForText: 'unifi'.

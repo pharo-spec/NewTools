@@ -5,8 +5,8 @@ The main method is `StSpotterModel>>processSearch:on:` (is the entry point to an
 To process searches the spotter model will use a worker pool to schedule a `StSpotterQuery`, which is the actual responsible of processing it.
 "
 Class {
-	#name : #StSpotterModel,
-	#superclass : #Object,
+	#name : 'StSpotterModel',
+	#superclass : 'Object',
 	#instVars : [
 		'steps',
 		'searchUpdatedAction',
@@ -20,16 +20,18 @@ Class {
 		'queryRequestTime',
 		'processors'
 	],
-	#category : #'NewTools-Spotter-Model'
+	#category : 'NewTools-Spotter-Model',
+	#package : 'NewTools-Spotter',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StSpotterModel class >> delayBeforeQuery [
 
 	^ 500 milliSeconds 
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StSpotterModel class >> newOrigin: anObject [ 
 
 	^ self basicNew 
@@ -37,26 +39,26 @@ StSpotterModel class >> newOrigin: anObject [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterModel >> activeProcessors [
 
 	^ self activeStep processors
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterModel >> activeStep [
 
 	^ self steps last
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterModel >> addStep: aStep [
 
 	steps ifNil: [ steps := OrderedCollection new ].
 	steps addLast: aStep
 ]
 
-{ #category : #'private - announcing' }
+{ #category : 'private - announcing' }
 StSpotterModel >> announceAllCandidatesAdded: ann [
 
 	searchUpdatedAction ifNil: [ ^ self ].
@@ -65,7 +67,7 @@ StSpotterModel >> announceAllCandidatesAdded: ann [
 		do: [ :each | searchUpdatedAction value: each ]
 ]
 
-{ #category : #'private - announcing' }
+{ #category : 'private - announcing' }
 StSpotterModel >> announceAmountChanged: ann [
 
 	amountChangedAction ifNil: [ ^ self ].
@@ -74,35 +76,35 @@ StSpotterModel >> announceAmountChanged: ann [
 		value: ann amount
 ]
 
-{ #category : #'private - announcing' }
+{ #category : 'private - announcing' }
 StSpotterModel >> announceCandidateAdded: ann [
 
 	searchUpdatedAction ifNil: [ ^ self ].
 	searchUpdatedAction value: ann candidateLink
 ]
 
-{ #category : #'private - announcing' }
+{ #category : 'private - announcing' }
 StSpotterModel >> announceNoResults [
 
 	noResultsAction ifNil: [ ^ self ].
 	noResultsAction value
 ]
 
-{ #category : #'private - announcing' }
+{ #category : 'private - announcing' }
 StSpotterModel >> announceQueryEnded: ann [
 
 	queryEndedAction ifNil: [ ^ self ].
 	queryEndedAction value
 ]
 
-{ #category : #'private - announcing' }
+{ #category : 'private - announcing' }
 StSpotterModel >> announceQueryStarted: ann [
 
 	queryStartedAction ifNil: [ ^ self ].
 	queryStartedAction value
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterModel >> defaultProcessors [
 
 	^ (StSpotterProcessor allEnabledSubclasses 
@@ -110,7 +112,7 @@ StSpotterModel >> defaultProcessors [
 		sort: #order ascending
 ]
 
-{ #category : #'private - queries' }
+{ #category : 'private - queries' }
 StSpotterModel >> doProcessSearch: aString on: spotter [
 
 	pendingQuery := StSpotterQuery 
@@ -120,7 +122,7 @@ StSpotterModel >> doProcessSearch: aString on: spotter [
 	self pushQuery: pendingQuery
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSpotterModel >> initialize [
 
 	super initialize.
@@ -132,7 +134,7 @@ StSpotterModel >> initialize [
 	mutex := Mutex new
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSpotterModel >> initializeOrigin: anObject [
 	
 	self initialize.
@@ -141,25 +143,25 @@ StSpotterModel >> initializeOrigin: anObject [
 		yourself)
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterModel >> isNested [
 
 	^ self steps size > 1
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterModel >> lastSearchText [
 
 	^ self activeStep lastSearchText
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterModel >> links [
 
 	^ self activeStep links
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'private - factory' }
 StSpotterModel >> newDefaultStep [
 
 	^ self newStep
@@ -167,13 +169,13 @@ StSpotterModel >> newDefaultStep [
 		yourself
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'private - factory' }
 StSpotterModel >> newStep [
 
 	^ StSpotterStep on: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterModel >> popStep [
 	| lastQuery |
 
@@ -186,7 +188,7 @@ StSpotterModel >> popStep [
 	self activeStep activate
 ]
 
-{ #category : #'private - queries' }
+{ #category : 'private - queries' }
 StSpotterModel >> processSearch: aString on: spotter [
 
 	queryRequestTime := Time now.
@@ -196,19 +198,19 @@ StSpotterModel >> processSearch: aString on: spotter [
 			ifTrue: [ self doProcessSearch: aString on: spotter ] ] fork.	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterModel >> processors [
 
 	^ processors ifNil: [ self defaultProcessors ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterModel >> processors: aCollection [
 
 	processors := aCollection
 ]
 
-{ #category : #'accessing - query' }
+{ #category : 'accessing - query' }
 StSpotterModel >> pushQuery: aQuery [
 
 	self schedule: [ 
@@ -216,7 +218,7 @@ StSpotterModel >> pushQuery: aQuery [
 			self activeStep pushQuery: aQuery ] ]
 ]
 
-{ #category : #'private - queries' }
+{ #category : 'private - queries' }
 StSpotterModel >> pushStepForProcessor: aProcessor [
 	| step allCandidates processorLink |
 
@@ -230,13 +232,13 @@ StSpotterModel >> pushStepForProcessor: aProcessor [
 	self addStep: step
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterModel >> results [
 
 	^ self activeStep results
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterModel >> schedule: aBlock [
 
 	scheduler purge.
@@ -246,27 +248,27 @@ StSpotterModel >> schedule: aBlock [
 			fork: [ :e | e pass ] ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterModel >> scheduler [
 
 	^ scheduler
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterModel >> stSpotterProcessorsFor: aStep [
 
 	self processors 
 		do: [ :each | aStep addProcessor: each ]
 ]
 
-{ #category : #'accessing - query' }
+{ #category : 'accessing - query' }
 StSpotterModel >> startProcessingOn: spotter [
 
 	self doProcessSearch: '' on: spotter. 
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterModel >> steps [
 
 	^ steps ifNil: [ 
@@ -274,7 +276,7 @@ StSpotterModel >> steps [
 		steps ]
 ]
 
-{ #category : #'accessing - query' }
+{ #category : 'accessing - query' }
 StSpotterModel >> stopProcessing [
 
 	self activeStep deactivate.
@@ -282,31 +284,31 @@ StSpotterModel >> stopProcessing [
 	
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 StSpotterModel >> whenAmountChangedDo: aBlock [
 
 	amountChangedAction := aBlock
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 StSpotterModel >> whenNoResultsDo: aBlock [
 
 	noResultsAction := aBlock
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 StSpotterModel >> whenQueryEndedDo: aBlock [
 
 	queryEndedAction := aBlock
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 StSpotterModel >> whenQueryStartedDo: aBlock [
 
 	queryStartedAction := aBlock
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 StSpotterModel >> whenSearchUpdatedDo: aBlock [
 
 	searchUpdatedAction := aBlock

@@ -2,22 +2,23 @@
 A StResetWindowPresenterTest is a test class for testing the behaivor of StResetWindowPresenter
 "
 Class {
-	#name : #StResetWindowPresenterTest,
-	#superclass : #TestCase,
+	#name : 'StResetWindowPresenterTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'resetWindow'
 	],
-	#category : #'NewTools-CodeCritiques-Tests'
+	#category : 'NewTools-CodeCritiques-Tests',
+	#package : 'NewTools-CodeCritiques-Tests'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StResetWindowPresenterTest >> setUp [
 
 	super setUp.
 	resetWindow := StResetWindowPresenter new
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StResetWindowPresenterTest >> testInitializePresenters [
 self
 		assert: resetWindow resetModel class
@@ -28,7 +29,7 @@ self
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StResetWindowPresenterTest >> testOpen [
 
 	| resetPresenter |
@@ -37,7 +38,7 @@ StResetWindowPresenterTest >> testOpen [
  	resetPresenter close
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StResetWindowPresenterTest >> testOpenPackagesChooser [
 
 	| applier |

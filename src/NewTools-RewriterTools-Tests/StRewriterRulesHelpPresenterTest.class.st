@@ -2,15 +2,17 @@
 A RewriteRulesHelpPresenterTest is a test class for testing the behavior of RewriteRulesHelpPresenter
 "
 Class {
-	#name : #StRewriterRulesHelpPresenterTest,
-	#superclass : #StRewriterAbstractToolTest,
+	#name : 'StRewriterRulesHelpPresenterTest',
+	#superclass : 'StRewriterAbstractToolTest',
 	#instVars : [
 		'rulesHelper'
 	],
-	#category : #'NewTools-RewriterTools-Tests-HelpBrowser'
+	#category : 'NewTools-RewriterTools-Tests-HelpBrowser',
+	#package : 'NewTools-RewriterTools-Tests',
+	#tag : 'HelpBrowser'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StRewriterRulesHelpPresenterTest >> setUp [
 
 	super setUp.
@@ -18,7 +20,7 @@ StRewriterRulesHelpPresenterTest >> setUp [
 	rulesHelper := StRewriterHelpBrowserPresenter new
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterRulesHelpPresenterTest >> testCreateTextMorph [
 
 	| morph |
@@ -26,7 +28,7 @@ StRewriterRulesHelpPresenterTest >> testCreateTextMorph [
 	self assert: (morph isMemberOf: RubScrolledTextMorph)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterRulesHelpPresenterTest >> testGetMicrodownParsedText [
 
 	| aText |
@@ -34,7 +36,7 @@ StRewriterRulesHelpPresenterTest >> testGetMicrodownParsedText [
 	self assert: aText isNotEmpty
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterRulesHelpPresenterTest >> toolClass [
 
 	^ StRewriterRuleLoaderPresenter

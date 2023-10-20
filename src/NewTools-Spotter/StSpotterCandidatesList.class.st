@@ -2,8 +2,8 @@
 Maintains a list of candidates (results of a `StSpotterQuery`).
 "
 Class {
-	#name : #StSpotterCandidatesList,
-	#superclass : #Object,
+	#name : 'StSpotterCandidatesList',
+	#superclass : 'Object',
 	#instVars : [
 		'categories',
 		'candidates',
@@ -11,10 +11,12 @@ Class {
 		'processorLinksMap',
 		'count'
 	],
-	#category : #'NewTools-Spotter-Model'
+	#category : 'NewTools-Spotter-Model',
+	#package : 'NewTools-Spotter',
+	#tag : 'Model'
 }
 
-{ #category : #'adding/removing' }
+{ #category : 'adding/removing' }
 StSpotterCandidatesList >> addAllCandidates: aCollection in: aProcessor [
 	| allLinks |
 	
@@ -33,7 +35,7 @@ StSpotterCandidatesList >> addAllCandidates: aCollection in: aProcessor [
 		yourself)
 ]
 
-{ #category : #'adding/removing' }
+{ #category : 'adding/removing' }
 StSpotterCandidatesList >> addCandidate: anObjectOrLink in: aProcessor [
 	"before adding candidates we need to define all categories, because their order is important"
 	| processorLink candidateLink |
@@ -55,7 +57,7 @@ StSpotterCandidatesList >> addCandidate: anObjectOrLink in: aProcessor [
 	^ candidateLink
 ]
 
-{ #category : #'adding/removing' }
+{ #category : 'adding/removing' }
 StSpotterCandidatesList >> addProcessor: aProcessor [
 	| processorLink |
 	
@@ -67,18 +69,18 @@ StSpotterCandidatesList >> addProcessor: aProcessor [
 	^ processorLink
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidatesList >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidatesList >> candidates [
 
 	^ candidates ifNil: [ candidates := DoubleLinkedList new ]
 ]
 
-{ #category : #candidates }
+{ #category : 'candidates' }
 StSpotterCandidatesList >> getCandidateLink: aCandiate in: aProcessor [
 	"returns a corresponding candidateLink, that belongs to a processor"
 	(self getCandidateLinks: (self getProcessorLink: aProcessor))
@@ -88,7 +90,7 @@ StSpotterCandidatesList >> getCandidateLink: aCandiate in: aProcessor [
 	
 ]
 
-{ #category : #candidates }
+{ #category : 'candidates' }
 StSpotterCandidatesList >> getCandidateLinks: aProcessorLink [
 	"returns all candidate links that belongs to a processor link"
 	| list head tail current |
@@ -111,45 +113,45 @@ StSpotterCandidatesList >> getCandidateLinks: aProcessorLink [
 	^ list
 ]
 
-{ #category : #processors }
+{ #category : 'processors' }
 StSpotterCandidatesList >> getProcessorLink: aProcessor [
 
 	^ self processorLinksMap at: aProcessor ifAbsentPut: [ self addProcessor: aProcessor ]
 ]
 
-{ #category : #processors }
+{ #category : 'processors' }
 StSpotterCandidatesList >> getProcessorLinkByCandidateLink: aCandidateLink [
 
 	^ aCandidateLink processorLink
 ]
 
-{ #category : #candidates }
+{ #category : 'candidates' }
 StSpotterCandidatesList >> head [
 
 	^ self candidates head
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSpotterCandidatesList >> initialize [
 
 	super initialize.
 	count := 0
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterCandidatesList >> isEmpty [
 	"Return true if there are no candidates in the list, false otherwise"
 	^ self candidates isEmpty
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterCandidatesList >> isNotEmpty [
 	"Return true if there is at least one candidate in the list, false otherwise"
 
 	^ self candidates isNotEmpty
 ]
 
-{ #category : #processors }
+{ #category : 'processors' }
 StSpotterCandidatesList >> nextProcessorLinkOf: aProcessorLink [
 	"returns next processor link, that has more than zero candidates.
 	if passed processor is the last one, will continue searching from the beginning"
@@ -168,13 +170,13 @@ StSpotterCandidatesList >> nextProcessorLinkOf: aProcessorLink [
 	^ aProcessorLink
 ]
 
-{ #category : #notifying }
+{ #category : 'notifying' }
 StSpotterCandidatesList >> notifyAllCandidatesRemoved [
 
 	"self announcer announce: (GTSpotterAllCandidatesRemoved new)"
 ]
 
-{ #category : #notifying }
+{ #category : 'notifying' }
 StSpotterCandidatesList >> notifyCandidateAdded: aCandidateLink in: aProcessor [
 
 	self announcer announce: (StSpotterCandidateAdded new 
@@ -183,7 +185,7 @@ StSpotterCandidatesList >> notifyCandidateAdded: aCandidateLink in: aProcessor [
 		yourself).
 ]
 
-{ #category : #'stream handling' }
+{ #category : 'stream handling' }
 StSpotterCandidatesList >> onAmountChanged: anInteger in: aProcessor [
 	"Amount must be non-negative"
 	"If amount is not positive there is no need to do anything"
@@ -195,7 +197,7 @@ StSpotterCandidatesList >> onAmountChanged: anInteger in: aProcessor [
 		yourself)
 ]
 
-{ #category : #processors }
+{ #category : 'processors' }
 StSpotterCandidatesList >> previousProcessorLinkOf: aProcessorLink [
 	"returns previous processor link, that has more than zero candidates.
 	if passed processor is the first one, will continue searching from the end"
@@ -215,7 +217,7 @@ StSpotterCandidatesList >> previousProcessorLinkOf: aProcessorLink [
 	
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterCandidatesList >> privateAddCandidate: aCandidateLink inEmpty: aProcessorLink [
 	| head current |
 	current := aProcessorLink.	"not nil"
@@ -238,7 +240,7 @@ StSpotterCandidatesList >> privateAddCandidate: aCandidateLink inEmpty: aProcess
 	^ aCandidateLink
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterCandidatesList >> privateAddCandidate: aCandidateLink inNotEmpty: aProcessorLink [
 	
 	"aCandidateLink weight
@@ -251,7 +253,7 @@ StSpotterCandidatesList >> privateAddCandidate: aCandidateLink inNotEmpty: aProc
 	^ aCandidateLink
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterCandidatesList >> privateAddCandidate: aCandidateLink weightedIn: aProcessorLink [
 
 	^ aProcessorLink isFull
@@ -259,13 +261,13 @@ StSpotterCandidatesList >> privateAddCandidate: aCandidateLink weightedIn: aProc
 		ifFalse: [ self privateAddCandidate: aCandidateLink weightedInNotFull: aProcessorLink ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterCandidatesList >> privateAddCandidate: aCandidateLink weightedInFull: aProcessorLink [
 
 	
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterCandidatesList >> privateAddCandidate: aCandidateLink weightedInNotFull: aProcessorLink [
 	| head tail |
 	
@@ -282,32 +284,32 @@ StSpotterCandidatesList >> privateAddCandidate: aCandidateLink weightedInNotFull
 				ifTrue: [  ] ]
 ]
 
-{ #category : #notifying }
+{ #category : 'notifying' }
 StSpotterCandidatesList >> processorEnded: aProcessor [
 
 	self announcer announce: (StSpotterProcessorEnded newProcessor: self)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidatesList >> processorLinksMap [
 
 	^ processorLinksMap ifNil: [ processorLinksMap := Dictionary new ]
 	
 ]
 
-{ #category : #notifying }
+{ #category : 'notifying' }
 StSpotterCandidatesList >> processorStarted: aProcessor [
 
 	self announcer announce: (StSpotterProcessorStarted newProcessor: self)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidatesList >> processors [
 
 	^ categories ifNil: [ categories := DoubleLinkedList new ].
 ]
 
-{ #category : #'adding/removing' }
+{ #category : 'adding/removing' }
 StSpotterCandidatesList >> removeAllCandidates [
 
 	self processors linksDo: [ :each | each clear ].
@@ -315,7 +317,7 @@ StSpotterCandidatesList >> removeAllCandidates [
 	self notifyAllCandidatesRemoved
 ]
 
-{ #category : #'adding/removing' }
+{ #category : 'adding/removing' }
 StSpotterCandidatesList >> removeAllCandidatesOf: aProcessor [
 	| processorLink head tail current |
 	
@@ -346,7 +348,7 @@ StSpotterCandidatesList >> removeAllCandidatesOf: aProcessor [
 	
 ]
 
-{ #category : #candidates }
+{ #category : 'candidates' }
 StSpotterCandidatesList >> stTail [
 
 	^ self candidates stTail

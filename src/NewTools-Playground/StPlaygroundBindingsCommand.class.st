@@ -2,36 +2,38 @@
 Show the page bindings browser.
 "
 Class {
-	#name : #StPlaygroundBindingsCommand,
-	#superclass : #StPlaygroundCommand,
-	#category : #'NewTools-Playground-Command'
+	#name : 'StPlaygroundBindingsCommand',
+	#superclass : 'StPlaygroundCommand',
+	#category : 'NewTools-Playground-Command',
+	#package : 'NewTools-Playground',
+	#tag : 'Command'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 StPlaygroundBindingsCommand class >> defaultDescription [
 
 	^ 'Edit bindings list.'
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 StPlaygroundBindingsCommand class >> defaultIconName [
 
 	^ #glamorousTable
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 StPlaygroundBindingsCommand class >> defaultName [
 
 	^ 'Bindings'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundBindingsCommand class >> order [
 
 	^ 10
 ]
 
-{ #category : #execution }
+{ #category : 'execution' }
 StPlaygroundBindingsCommand >> execute [ 
 
 	(StPlaygroundBindingsPresenter 

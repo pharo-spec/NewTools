@@ -1,10 +1,12 @@
 Class {
-	#name : #StSizeReporter,
-	#superclass : #StSizeReporterPresenter,
-	#category : #'NewTools-SystemReporter-Deprecated'
+	#name : 'StSizeReporter',
+	#superclass : 'StSizeReporterPresenter',
+	#category : 'NewTools-SystemReporter-Deprecated',
+	#package : 'NewTools-SystemReporter',
+	#tag : 'Deprecated'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSizeReporter class >> isDeprecated [
 
 	^ true

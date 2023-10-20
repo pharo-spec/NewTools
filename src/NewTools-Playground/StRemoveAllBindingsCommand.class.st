@@ -2,18 +2,20 @@
 Remove all local bindings (notice that shared bindings will remain)
 "
 Class {
-	#name : #StRemoveAllBindingsCommand,
-	#superclass : #CmCommand,
-	#category : #'NewTools-Playground-Command'
+	#name : 'StRemoveAllBindingsCommand',
+	#superclass : 'CmCommand',
+	#category : 'NewTools-Playground-Command',
+	#package : 'NewTools-Playground',
+	#tag : 'Command'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRemoveAllBindingsCommand >> application [
 
 	^ context application
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 StRemoveAllBindingsCommand >> asSpecCommand [ 
 	
 	^ super asSpecCommand 
@@ -22,13 +24,13 @@ StRemoveAllBindingsCommand >> asSpecCommand [
 		yourself
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 StRemoveAllBindingsCommand >> execute [
 	
 	context removeAllBindings
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRemoveAllBindingsCommand >> initialize [
 	super initialize.
 	self

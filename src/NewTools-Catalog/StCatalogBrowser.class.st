@@ -1,14 +1,15 @@
 Class {
-	#name : #StCatalogBrowser,
-	#superclass : #StPresenter,
+	#name : 'StCatalogBrowser',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'list',
 		'description'
 	],
-	#category : #'NewTools-Catalog'
+	#category : 'NewTools-Catalog',
+	#package : 'NewTools-Catalog'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 StCatalogBrowser class >> defaultSpec [
 
 	^ SpPanedLayout newHorizontal 
@@ -17,7 +18,7 @@ StCatalogBrowser class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCatalogBrowser >> initializeWidgets [
 	
 	list := self newList.

@@ -11,45 +11,47 @@ My source is a complex one:
  - I first search for matches starting with the query and then for matches with the query in any place of the entry.
 "
 Class {
-	#name : #StUnifiedProcessor,
-	#superclass : #StSpotterProcessor,
+	#name : 'StUnifiedProcessor',
+	#superclass : 'StSpotterProcessor',
 	#instVars : [
 		'categories'
 	],
-	#category : #'NewTools-Spotter-Processors-Processors'
+	#category : 'NewTools-Spotter-Processors-Processors',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Processors'
 }
 
-{ #category : #'default-settings' }
+{ #category : 'default-settings' }
 StUnifiedProcessor class >> defaultEnabled [
 
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StUnifiedProcessor class >> order [
 	
 	^ 100
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StUnifiedProcessor class >> settingsDescription [
 
 	^ 'I am the main processor: I show classes, packages and implementors'
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StUnifiedProcessor class >> settingsTitle [
 
 	^ 'Classes, Implementors & Packages'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StUnifiedProcessor class >> title [
 
 	^ 'Results'
 ]
 
-{ #category : #sources }
+{ #category : 'sources' }
 StUnifiedProcessor >> calculateLowercaseSourcesOn: anStream [
 
 	| implementorsBeginsWith implementorsSubstring wordsAwareImplementors |
@@ -73,7 +75,7 @@ StUnifiedProcessor >> calculateLowercaseSourcesOn: anStream [
 
 ]
 
-{ #category : #sources }
+{ #category : 'sources' }
 StUnifiedProcessor >> calculateUppercaseSourcesOn: anStream [
 	| classesBeginsWith classesIncludesString packagesBeginsWith packagesIncludesString wordsAwareClassesSource wordsAwarePackageSource classAndSelectorImplementors |
 	
@@ -132,7 +134,7 @@ StUnifiedProcessor >> calculateUppercaseSourcesOn: anStream [
 			anStream nextPut: wordsAwarePackageSource ]
 ]
 
-{ #category : #sources }
+{ #category : 'sources' }
 StUnifiedProcessor >> categoriesIncludes: aCategory [
 
 	^ categories isNil 
@@ -141,13 +143,13 @@ StUnifiedProcessor >> categoriesIncludes: aCategory [
 		or: [ categories anySatisfy: [ :each | aCategory asLowercase beginsWith: each asLowercase ] ] ] ]
 ]
 
-{ #category : #'spotter-api' }
+{ #category : 'spotter-api' }
 StUnifiedProcessor >> classesTag [
 
 	^ #Classes
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StUnifiedProcessor >> configureFilter [
 
 	(categories ~= self query categoriesSelected)
@@ -161,13 +163,13 @@ StUnifiedProcessor >> configureFilter [
 	filter clearDuplicates
 ]
 
-{ #category : #'spotter-api' }
+{ #category : 'spotter-api' }
 StUnifiedProcessor >> implementorsTag [
 
 	^ #Implementors
 ]
 
-{ #category : #'key-bindings' }
+{ #category : 'key-bindings' }
 StUnifiedProcessor >> installKeymappingsOn: aPresenter onExecution: aBlock [
 
 	aPresenter
@@ -189,13 +191,13 @@ StUnifiedProcessor >> installKeymappingsOn: aPresenter onExecution: aBlock [
 			aBlock cull: self ]	
 ]
 
-{ #category : #'spotter-api' }
+{ #category : 'spotter-api' }
 StUnifiedProcessor >> isRelevantForQuery: aString [ 
 	
 	^ true
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StUnifiedProcessor >> newSource [
 	| uppercaseIterators lowercaseIterators caseSelectorIterator root |
 	
@@ -216,13 +218,13 @@ StUnifiedProcessor >> newSource [
 	^ root
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StUnifiedProcessor >> newTextFilteringSource [
 	"It should not arrive here"
 	^ nil
 ]
 
-{ #category : #'spotter-api' }
+{ #category : 'spotter-api' }
 StUnifiedProcessor >> packagesTag [
 
 	^ #Packages

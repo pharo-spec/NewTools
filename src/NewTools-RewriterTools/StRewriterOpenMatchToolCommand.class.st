@@ -4,30 +4,32 @@ I am a command that opens match tool presenter from another presenter keeping th
 I can be converted into a sepc button to be used in a presenter
 "
 Class {
-	#name : #StRewriterOpenMatchToolCommand,
-	#superclass : #StCommand,
-	#category : #'NewTools-RewriterTools-Commands'
+	#name : 'StRewriterOpenMatchToolCommand',
+	#superclass : 'StCommand',
+	#category : 'NewTools-RewriterTools-Commands',
+	#package : 'NewTools-RewriterTools',
+	#tag : 'Commands'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 StRewriterOpenMatchToolCommand class >> defaultDescription [
 
 	^ 'Open MatchTool'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRewriterOpenMatchToolCommand class >> defaultIconName [
 
 	^ StRewriterMatchToolPresenter iconName
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 StRewriterOpenMatchToolCommand class >> defaultName [
 
 	^ 'Open Match Tool'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 StRewriterOpenMatchToolCommand >> execute [
 
 	^ StRewriterMatchToolPresenter new

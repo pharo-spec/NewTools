@@ -19,8 +19,8 @@ This allows to reopen previously closed DebugSessions, and to do so with a diffe
 To maintain a DebugSession alive, a debugger has to call `#keepAlive:` on it (with itself as argument). To release the DebugSession, it has to call `#stopKeepingAlive:` (again, with itself as argument).
 "
 Class {
-	#name : #DebugSessionStorage,
-	#superclass : #Object,
+	#name : 'DebugSessionStorage',
+	#superclass : 'Object',
 	#instVars : [
 		'storage',
 		'storageLimitForDebugSessionsNotKeptAlive',
@@ -30,26 +30,27 @@ Class {
 	#classVars : [
 		'singleton'
 	],
-	#category : #'NewTools-DebuggerSelector'
+	#category : 'NewTools-DebuggerSelector',
+	#package : 'NewTools-DebuggerSelector'
 }
 
-{ #category : #singleton }
+{ #category : 'singleton' }
 DebugSessionStorage class >> singleton [
 	singleton ifNil: [ singleton := self new ].
 	^ singleton
 ]
 
-{ #category : #'publish events' }
+{ #category : 'publish events' }
 DebugSessionStorage >> addSubscriberOnStorageLimitUpdate: anObject [
 	self subscribersOnStorageLimitUpdate add: anObject
 ]
 
-{ #category : #'publish events' }
+{ #category : 'publish events' }
 DebugSessionStorage >> addSubscriberOnStorageUpdate: anObject [
 	self subscribersOnStorageUpdate add: anObject
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 DebugSessionStorage >> clear [
 	"This method should only be used for development purposes. It does not call #terminate on the stored debug sessions, and therefore does not let the debugged process be removed from the system (they will linger on)"
 
@@ -58,7 +59,7 @@ DebugSessionStorage >> clear [
 	self notifySubscribersOfAStorageUpdate
 ]
 
-{ #category : #storage }
+{ #category : 'storage' }
 DebugSessionStorage >> enforceStorageLimit [
 	"Terminate stored debug sessions until the limit (defined in the storageLimitForDebugSessionNotKeptAlive variable) is satisfied.
 	Oldest debug sessions are terminated first.
@@ -81,33 +82,33 @@ DebugSessionStorage >> enforceStorageLimit [
 	self notifySubscribersOfAStorageUpdate
 ]
 
-{ #category : #'publish events' }
+{ #category : 'publish events' }
 DebugSessionStorage >> notifySubscribersOfAStorageLimitUpdate [
 	self subscribersOnStorageLimitUpdate do: [ :subscriber_ | 
 		subscriber_ ifNotNil: [ :subscriber | 
 			subscriber onDebugSessionStorageLimitUpdate ] ]
 ]
 
-{ #category : #'publish events' }
+{ #category : 'publish events' }
 DebugSessionStorage >> notifySubscribersOfAStorageUpdate [
 	self subscribersOnStorageUpdate do: [ :subscriber_ | 
 		subscriber_ ifNotNil: [ :subscriber | 
 			subscriber onDebugSessionStorageUpdate ] ]
 ]
 
-{ #category : #'react to events' }
+{ #category : 'react to events' }
 DebugSessionStorage >> onDebugSession: aDebugSession gettingKeptAliveBy: anObject [
 	self notifySubscribersOfAStorageUpdate
 ]
 
-{ #category : #'react to events' }
+{ #category : 'react to events' }
 DebugSessionStorage >> onDebugSession: aDebugSession stoppingGettingKeptAliveBy: anObject [
 	self notifySubscribersOfAStorageUpdate.
 	aDebugSession shouldBeKeptAlive ifFalse: [ "If @aDebugSession is no longer kept alive as a result, maybe we are now breaking the storage limit rule and need to enforce it again" 
 		self enforceStorageLimit ]
 ]
 
-{ #category : #'publish events' }
+{ #category : 'publish events' }
 DebugSessionStorage >> removeSubscriberOnStorageLimitUpdate: anObject [
 	self subscribersOnStorageLimitUpdate
 		remove: anObject
@@ -115,7 +116,7 @@ DebugSessionStorage >> removeSubscriberOnStorageLimitUpdate: anObject [
 			 ]
 ]
 
-{ #category : #'publish events' }
+{ #category : 'publish events' }
 DebugSessionStorage >> removeSubscriberOnStorageUpdate: anObject [
 	self subscribersOnStorageUpdate
 		remove: anObject
@@ -123,20 +124,20 @@ DebugSessionStorage >> removeSubscriberOnStorageUpdate: anObject [
 			 ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebugSessionStorage >> storage [
 	storage ifNil: [ storage := OrderedCollection new ].
 	^ storage
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebugSessionStorage >> storageLimitForDebugSessionsNotKeptAlive [
 	storageLimitForDebugSessionsNotKeptAlive ifNil: [ 
 		storageLimitForDebugSessionsNotKeptAlive := 5 ].
 	^ storageLimitForDebugSessionsNotKeptAlive
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebugSessionStorage >> storageLimitForDebugSessionsNotKeptAlive: anInteger [
 	anInteger isInteger not | anInteger <= 0 ifTrue: [ 
 		InvalidValueForStorageLimit signal ].
@@ -145,7 +146,7 @@ DebugSessionStorage >> storageLimitForDebugSessionsNotKeptAlive: anInteger [
 	self enforceStorageLimit
 ]
 
-{ #category : #storage }
+{ #category : 'storage' }
 DebugSessionStorage >> storeDebugSession: aDebugSession [
 	| storageUnit |
 	storageUnit := DebugSessionStorageUnit newFrom: aDebugSession.
@@ -156,21 +157,21 @@ DebugSessionStorage >> storeDebugSession: aDebugSession [
 	^ storageUnit
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebugSessionStorage >> subscribersOnStorageLimitUpdate [
 	subscribersOnStorageLimitUpdate ifNil: [ 
 		subscribersOnStorageLimitUpdate := WeakOrderedCollection new ].
 	^ subscribersOnStorageLimitUpdate
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebugSessionStorage >> subscribersOnStorageUpdate [
 	subscribersOnStorageUpdate ifNil: [ 
 		subscribersOnStorageUpdate := WeakOrderedCollection new ].
 	^ subscribersOnStorageUpdate
 ]
 
-{ #category : #termination }
+{ #category : 'termination' }
 DebugSessionStorage >> terminate: aDebugSessionStorageUnit [
 	"See comment of method #_NoNotification:"
 
@@ -178,14 +179,14 @@ DebugSessionStorage >> terminate: aDebugSessionStorageUnit [
 	self notifySubscribersOfAStorageUpdate
 ]
 
-{ #category : #termination }
+{ #category : 'termination' }
 DebugSessionStorage >> terminateAll [
 	<script>
 	self storage copy do: [ :aDebugSessionStorageUnit | 
 		self terminate: aDebugSessionStorageUnit ]
 ]
 
-{ #category : #termination }
+{ #category : 'termination' }
 DebugSessionStorage >> terminate_NoNotification: aDebugSessionStorageUnit [
 	"Terminating the debug session in addition to removing it from the storage is necessary to ensure the debugged process is destroyed and does not linger in the image"
 

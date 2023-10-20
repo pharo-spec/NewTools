@@ -9,12 +9,14 @@ StSystemReporter open
 
 "
 Class {
-	#name : #StSystemReporterPresenter,
-	#superclass : #StReporterPresenter,
-	#category : #'NewTools-SystemReporter-Base'
+	#name : 'StSystemReporterPresenter',
+	#superclass : 'StReporterPresenter',
+	#category : 'NewTools-SystemReporter-Base',
+	#package : 'NewTools-SystemReporter',
+	#tag : 'Base'
 }
 
-{ #category : #'system menu' }
+{ #category : 'system menu' }
 StSystemReporterPresenter class >> systemReporterMenuOn: aBuilder [ 
 	<worldMenu>
 	
@@ -25,20 +27,20 @@ StSystemReporterPresenter class >> systemReporterMenuOn: aBuilder [
 		help: 'If you have a bug, use this tool to provide information about your system.'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSystemReporterPresenter >> connectPresenters [ 
 
 	super connectPresenters.
 	topicList  selectIndex: 1.
 ]
 
-{ #category : #utils }
+{ #category : 'utils' }
 StSystemReporterPresenter >> extent [
 
 	^ 500@ 600
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSystemReporterPresenter >> fillTopics [ 
 	
 	 {
@@ -68,25 +70,25 @@ StSystemReporterPresenter >> fillTopics [
 	^ topics
 ]
 
-{ #category : #utils }
+{ #category : 'utils' }
 StSystemReporterPresenter >> isLinux [
 	
 	^Smalltalk os isLinux
 ]
 
-{ #category : #utils }
+{ #category : 'utils' }
 StSystemReporterPresenter >> isWindows [
 
 	^Smalltalk os isWindows
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StSystemReporterPresenter >> readContentsSafelyFromFile: osPath andWriteTo: aStream [
 	 [ osPath asFileReference readStreamDo: [:s | aStream nextPutAll: s contents ]
     ] on: Error do: [:ex| ex return: ex printString]
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StSystemReporterPresenter >> reportImage: aStream [
 	self header: 'Image' on: aStream.
 	aStream 
@@ -97,13 +99,13 @@ StSystemReporterPresenter >> reportImage: aStream [
 
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StSystemReporterPresenter >> reportImageParameters: aStream [
 	self header: 'Image Commandline Parameters' on: aStream.
 	self enumerate: [:idx | Smalltalk image argumentAt: idx] on: aStream
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StSystemReporterPresenter >> reportLinuxOSDetails: aStream [
 	self header: 'Operating System Details' on: aStream.
 	#(
@@ -114,7 +116,7 @@ StSystemReporterPresenter >> reportLinuxOSDetails: aStream [
 		self readContentsSafelyFromFile: path andWriteTo: aStream]
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StSystemReporterPresenter >> reportModules: aStream [
 
 	self header: 'Loaded VM Modules' on: aStream.
@@ -126,7 +128,7 @@ StSystemReporterPresenter >> reportModules: aStream [
 
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StSystemReporterPresenter >> reportOS: aStream [
 	self header: 'Operating System/Hardware' on: aStream.
 	aStream
@@ -136,7 +138,7 @@ StSystemReporterPresenter >> reportOS: aStream [
 
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StSystemReporterPresenter >> reportOSEnvironment: aStream [
 	| env |
 	self header: 'Operating System Environment' on: aStream.
@@ -145,14 +147,14 @@ StSystemReporterPresenter >> reportOSEnvironment: aStream [
 		aStream nextPutAll: name; nextPut: $=; nextPutAll: (env at: name); cr ]
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StSystemReporterPresenter >> reportSources: aStream [
 	self header: 'Image Sources' on: aStream.
 	aStream nextPutAll: SourceFiles class printString; cr.
 	aStream nextPutAll: SourceFiles reportString.
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StSystemReporterPresenter >> reportVM: aStream [
 	self header: 'Virtual Machine' on: aStream.
 	aStream
@@ -204,13 +206,13 @@ StSystemReporterPresenter >> reportVM: aStream [
 			 ]
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StSystemReporterPresenter >> reportVMOptions: aStream [
 	self header: 'Virtual Machine Commandline Options' on: aStream.
 	self enumerate: [:idx | Smalltalk vm optionAt: idx] startAt: 1 on: aStream
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StSystemReporterPresenter >> reportVMParameters: aStream [
 	| vmParameters |
 	self header: 'Virtual Machine Parameters' on: aStream.
@@ -227,32 +229,32 @@ StSystemReporterPresenter >> reportVMParameters: aStream [
 			cr]
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StSystemReporterPresenter >> reportVMStats: aStream [
 	self header: 'Virtual Machine Statistics' on: aStream.
 	aStream
 		nextPutAll: Smalltalk vm statisticsReport
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StSystemReporterPresenter >> reportWin32GFXDetails: aStream [
 	self header: 'Graphics Hardware Details' on: aStream.
 	aStream nextPutAll: (Smalltalk vm getSystemAttribute: 10003)
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StSystemReporterPresenter >> reportWin32HardwareDetails: aStream [
 	self header: 'Hardware Details' on: aStream.
 	aStream nextPutAll: (Smalltalk vm getSystemAttribute: 10001)
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StSystemReporterPresenter >> reportWin32OSDetails: aStream [
 	self header: 'Operating System Details' on: aStream.
 	aStream nextPutAll: (Smalltalk vm getSystemAttribute: 10002)
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StSystemReporterPresenter >> reportWin32VMConfig: aStream [
 	| exePath iniPath |
 	self header: 'VM Configuration' on: aStream.
@@ -263,12 +265,12 @@ StSystemReporterPresenter >> reportWin32VMConfig: aStream [
 
 ]
 
-{ #category : #utils }
+{ #category : 'utils' }
 StSystemReporterPresenter >> title [ 
 	^ 'System Reporter'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSystemReporterPresenter >> topicSpec [
 	
 	topics addAll:  {

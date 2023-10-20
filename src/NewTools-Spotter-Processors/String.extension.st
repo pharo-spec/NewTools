@@ -1,6 +1,6 @@
-Extension { #name : #String }
+Extension { #name : 'String' }
 
-{ #category : #'*NewTools-Spotter-Processors' }
+{ #category : '*NewTools-Spotter-Processors' }
 String >> splitCamelCase [
 	
 	| results accum previousIsLower |

@@ -1,6 +1,6 @@
-Extension { #name : #RubTextEditor }
+Extension { #name : 'RubTextEditor' }
 
-{ #category : #'*NewTools-FontChooser' }
+{ #category : '*NewTools-FontChooser' }
 RubTextEditor >> changeTextFont [
 	"Present a menu of available fonts, and if one is chosen, apply it to the current selection."
 

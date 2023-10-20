@@ -3,48 +3,50 @@ I provide control over halts messages and breakpoints for activating and deactiv
 I also tell if a program node has active breakpoints or halts on it.
 "
 Class {
-	#name : #StHaltAndBreakpointController,
-	#superclass : #Object,
+	#name : 'StHaltAndBreakpointController',
+	#superclass : 'Object',
 	#classInstVars : [
 		'tracer'
 	],
-	#category : #'NewTools-Debugger-Breakpoints-Tools-Model'
+	#category : 'NewTools-Debugger-Breakpoints-Tools-Model',
+	#package : 'NewTools-Debugger-Breakpoints-Tools',
+	#tag : 'Model'
 }
 
-{ #category : #Helpers }
+{ #category : 'Helpers' }
 StHaltAndBreakpointController class >> printSkipTextFor: aProgramNode [
 	^ aProgramNode methodNode source asText
 		makeBoldFrom: aProgramNode start to: aProgramNode stop;
 		yourself
 ]
 
-{ #category : #API }
+{ #category : 'API' }
 StHaltAndBreakpointController class >> skipHaltNode: aProgramNode [
 	self trace: (self printSkipTextFor: aProgramNode)
 ]
 
-{ #category : #Helpers }
+{ #category : 'Helpers' }
 StHaltAndBreakpointController class >> trace: aTextOrString [
 	self tracer crTrace: aTextOrString
 ]
 
-{ #category : #Helpers }
+{ #category : 'Helpers' }
 StHaltAndBreakpointController class >> tracer [
 	^ tracer ifNil: [ tracer := Transcript ]
 ]
 
-{ #category : #Helpers }
+{ #category : 'Helpers' }
 StHaltAndBreakpointController class >> tracer: aTracer [
 	tracer := aTracer
 ]
 
-{ #category : #API }
+{ #category : 'API' }
 StHaltAndBreakpointController >> disableBreakpoint: aBreakpoint [
 
 	aBreakpoint disable
 ]
 
-{ #category : #links }
+{ #category : 'links' }
 StHaltAndBreakpointController >> disableHaltLink: control [
 	^ MetaLink new
 		metaObject: self class;
@@ -54,37 +56,37 @@ StHaltAndBreakpointController >> disableHaltLink: control [
 		yourself
 ]
 
-{ #category : #API }
+{ #category : 'API' }
 StHaltAndBreakpointController >> disableHaltNode: aMessageNode [
 	self skipNode: aMessageNode.
 	aMessageNode enableHalts: false
 ]
 
-{ #category : #API }
+{ #category : 'API' }
 StHaltAndBreakpointController >> disableHaltOrBreakpointFor: haltOrBreakpointItem [
 
 	haltOrBreakpointItem disableInContext: self
 ]
 
-{ #category : #API }
+{ #category : 'API' }
 StHaltAndBreakpointController >> enableBreakpoint: aBreakpoint [
 
 	aBreakpoint enable
 ]
 
-{ #category : #API }
+{ #category : 'API' }
 StHaltAndBreakpointController >> enableHaltNode: aMessageNode [
 	self removeSkipLinksFor: aMessageNode.
 	aMessageNode enableHalts: true
 ]
 
-{ #category : #API }
+{ #category : 'API' }
 StHaltAndBreakpointController >> enableHaltOrBreakpointFor: haltOrBreakpointItem [
 
 	haltOrBreakpointItem enableInContext: self
 ]
 
-{ #category : #links }
+{ #category : 'links' }
 StHaltAndBreakpointController >> installSkipLinkOn: aMessageNode [
 	| control |
 	control := aMessageNode isReturn
@@ -93,27 +95,27 @@ StHaltAndBreakpointController >> installSkipLinkOn: aMessageNode [
 	aMessageNode link: (self disableHaltLink: control)
 ]
 
-{ #category : #API }
+{ #category : 'API' }
 StHaltAndBreakpointController >> isBreakpointEnabled: aBreakpoint [ 
 	^aBreakpoint isEnabled
 ]
 
-{ #category : #API }
+{ #category : 'API' }
 StHaltAndBreakpointController >> isHaltEnabledFor: aProgramNode [
 	^ aProgramNode enabledForHaltOrBreakpoint
 ]
 
-{ #category : #API }
+{ #category : 'API' }
 StHaltAndBreakpointController >> isHaltNodeEnabled: aRBMessageNode [ 
 	^aRBMessageNode enabledForHaltOrBreakpoint
 ]
 
-{ #category : #API }
+{ #category : 'API' }
 StHaltAndBreakpointController >> isHaltOrBreakpointEnabled: aStBreakpointInspectionItem [ 
 	^aStBreakpointInspectionItem isEnabledInContext: self
 ]
 
-{ #category : #links }
+{ #category : 'links' }
 StHaltAndBreakpointController >> removeSkipLinksFor: aNode [
 	(aNode links
 		select:
@@ -121,7 +123,7 @@ StHaltAndBreakpointController >> removeSkipLinksFor: aNode [
 		do: [ :link | link uninstall ]
 ]
 
-{ #category : #control }
+{ #category : 'control' }
 StHaltAndBreakpointController >> skipNode: aNode [
 	(self isHaltEnabledFor: aNode)
 		ifFalse: [ ^ self ].

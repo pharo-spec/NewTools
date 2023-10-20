@@ -1,6 +1,6 @@
-Extension { #name : #StDebugger }
+Extension { #name : 'StDebugger' }
 
-{ #category : #'*NewTools-Sindarin-Tools' }
+{ #category : '*NewTools-Sindarin-Tools' }
 StDebugger >> sindarinDebugger [
 	^ SindarinDebugger attachTo: self session
 ]

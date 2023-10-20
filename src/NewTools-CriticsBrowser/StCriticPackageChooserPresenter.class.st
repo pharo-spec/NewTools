@@ -1,21 +1,22 @@
 Class {
-	#name : #StCriticPackageChooserPresenter,
-	#superclass : #StPackageChooserPresenter,
+	#name : 'StCriticPackageChooserPresenter',
+	#superclass : 'StPackageChooserPresenter',
 	#instVars : [
 		'packageActionBar',
 		'testPackages'
 	],
-	#category : #'NewTools-CriticsBrowser'
+	#category : 'NewTools-CriticsBrowser',
+	#package : 'NewTools-CriticsBrowser'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCriticPackageChooserPresenter >> initialize [
 
 	testPackages := false.
 	super initialize
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCriticPackageChooserPresenter >> initializeLayout [
 	
 	self layout: (SpBoxLayout newTopToBottom
@@ -34,7 +35,7 @@ StCriticPackageChooserPresenter >> initializeLayout [
 		yourself)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCriticPackageChooserPresenter >> initializePackageList [
 
 	super initializePackageList.
@@ -46,7 +47,7 @@ StCriticPackageChooserPresenter >> initializePackageList [
 		yourself)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCriticPackageChooserPresenter >> packages [
 	| packages |
 
@@ -56,7 +57,7 @@ StCriticPackageChooserPresenter >> packages [
 			ifFalse: [ self removeTestPackagesFrom: packages ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StCriticPackageChooserPresenter >> removeTestPackagesFrom: aCollectionOfPackages [
 	| regex |
 
@@ -66,7 +67,7 @@ StCriticPackageChooserPresenter >> removeTestPackagesFrom: aCollectionOfPackages
 	
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StCriticPackageChooserPresenter >> testPackages: aBoolean [ 
 
 	testPackages := aBoolean.
@@ -75,7 +76,7 @@ StCriticPackageChooserPresenter >> testPackages: aBoolean [
 	self updatePresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCriticPackageChooserPresenter >> withTestPackages [
 
 	^ testPackages

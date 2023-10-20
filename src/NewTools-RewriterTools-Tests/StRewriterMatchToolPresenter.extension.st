@@ -1,6 +1,6 @@
-Extension { #name : #StRewriterMatchToolPresenter }
+Extension { #name : 'StRewriterMatchToolPresenter' }
 
-{ #category : #'*NewTools-RewriterTools-Tests' }
+{ #category : '*NewTools-RewriterTools-Tests' }
 StRewriterMatchToolPresenter >> astCode [
 
 	"This accessor should ONLY be called in the tests."
@@ -8,7 +8,7 @@ StRewriterMatchToolPresenter >> astCode [
 	^ astCode
 ]
 
-{ #category : #'*NewTools-RewriterTools-Tests' }
+{ #category : '*NewTools-RewriterTools-Tests' }
 StRewriterMatchToolPresenter >> astPattern [
 
 	"This accessor should ONLY be called in the tests."
@@ -16,7 +16,7 @@ StRewriterMatchToolPresenter >> astPattern [
 	^ astPattern
 ]
 
-{ #category : #'*NewTools-RewriterTools-Tests' }
+{ #category : '*NewTools-RewriterTools-Tests' }
 StRewriterMatchToolPresenter >> bindingsTable [
 
 	"This accessor should ONLY be called in the tests."
@@ -24,7 +24,7 @@ StRewriterMatchToolPresenter >> bindingsTable [
 	^ bindingsTable
 ]
 
-{ #category : #'*NewTools-RewriterTools-Tests' }
+{ #category : '*NewTools-RewriterTools-Tests' }
 StRewriterMatchToolPresenter >> codeEditor [
 
 	"This accessor should ONLY be called in the tests."
@@ -32,7 +32,7 @@ StRewriterMatchToolPresenter >> codeEditor [
 	^ codeEditor
 ]
 
-{ #category : #'*NewTools-RewriterTools-Tests' }
+{ #category : '*NewTools-RewriterTools-Tests' }
 StRewriterMatchToolPresenter >> matchesList [
 
 	"This accessor should ONLY be called in the tests. This is for not break encapsulation."
@@ -40,7 +40,7 @@ StRewriterMatchToolPresenter >> matchesList [
 	^ matchesList
 ]
 
-{ #category : #'*NewTools-RewriterTools-Tests' }
+{ #category : '*NewTools-RewriterTools-Tests' }
 StRewriterMatchToolPresenter >> methodCheckbox [
 
 	"This accessor should ONLY be called in the tests. This is for not break encapsulation."
@@ -48,7 +48,7 @@ StRewriterMatchToolPresenter >> methodCheckbox [
 	^ methodCheckbox
 ]
 
-{ #category : #'*NewTools-RewriterTools-Tests' }
+{ #category : '*NewTools-RewriterTools-Tests' }
 StRewriterMatchToolPresenter >> ruleEditor [
 
 	"This accessor should ONLY be called in the tests."

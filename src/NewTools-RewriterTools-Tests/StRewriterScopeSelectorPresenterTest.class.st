@@ -2,22 +2,24 @@
 A MethodsSelectorPresenterTest is a test class for testing the behavior of MethodsSelectorPresenter
 "
 Class {
-	#name : #StRewriterScopeSelectorPresenterTest,
-	#superclass : #TestCase,
+	#name : 'StRewriterScopeSelectorPresenterTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'scopeSelectorPresenter'
 	],
-	#category : #'NewTools-RewriterTools-Tests-ScopeSelector'
+	#category : 'NewTools-RewriterTools-Tests-ScopeSelector',
+	#package : 'NewTools-RewriterTools-Tests',
+	#tag : 'ScopeSelector'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StRewriterScopeSelectorPresenterTest >> setUp [
 
 	super setUp.
 	scopeSelectorPresenter := StRewriterScopeSelectorPresenter new
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterScopeSelectorPresenterTest >> testInitializePresenters [
 
 	| window |
@@ -30,7 +32,7 @@ StRewriterScopeSelectorPresenterTest >> testInitializePresenters [
 	window close
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterScopeSelectorPresenterTest >> testInitializeWithPackages [
 
 	| newPresenter packages |
@@ -42,7 +44,7 @@ StRewriterScopeSelectorPresenterTest >> testInitializeWithPackages [
 		hasSameElements: packages
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterScopeSelectorPresenterTest >> testPackagesChanged [
 
 	| selectedPackages |
@@ -74,7 +76,7 @@ StRewriterScopeSelectorPresenterTest >> testPackagesChanged [
 	self assert: scopeSelectorPresenter selectedMethods size equals: 5"
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterScopeSelectorPresenterTest >> testSelectedMethods [
 
 	self assertEmpty: scopeSelectorPresenter selectedMethods.
@@ -83,7 +85,7 @@ StRewriterScopeSelectorPresenterTest >> testSelectedMethods [
 	self assert: scopeSelectorPresenter selectedMethods isNotEmpty
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StRewriterScopeSelectorPresenterTest >> testWithPackages [
 
 	| newPresenter packages |

@@ -23,8 +23,8 @@ The algorithm outlined above gives the main idea. In addition to that:
 - `DebuggerSelector` has a `mainDebuggerClass` variable. If a debugger class is in this variable, `DebuggerSelector` will always attempt to open the DebugSession with it first, and only if that signals an Error will it fall back on the default algorithm. A use for this is to manually set a specific debugger for images in production mode, for example one that only logs the exception in a file but does not open a graphical debugger allowing the user to modify code.
 "
 Class {
-	#name : #DebuggerSelector,
-	#superclass : #Object,
+	#name : 'DebuggerSelector',
+	#superclass : 'Object',
 	#instVars : [
 		'mainDebuggerClass',
 		'subscribersOnMainDebuggerClassUpdate'
@@ -32,26 +32,27 @@ Class {
 	#classVars : [
 		'singleton'
 	],
-	#category : #'NewTools-DebuggerSelector'
+	#category : 'NewTools-DebuggerSelector',
+	#package : 'NewTools-DebuggerSelector'
 }
 
-{ #category : #singleton }
+{ #category : 'singleton' }
 DebuggerSelector class >> initialize [
 	Smalltalk tools debuggerTool: self singleton
 ]
 
-{ #category : #singleton }
+{ #category : 'singleton' }
 DebuggerSelector class >> singleton [
 	singleton ifNil: [ singleton := self new ].
 	^ singleton
 ]
 
-{ #category : #'publish events' }
+{ #category : 'publish events' }
 DebuggerSelector >> addSubscriberOnMainDebuggerClassUpdate: anObject [
 	self subscribersOnMainDebuggerClassUpdate add: anObject
 ]
 
-{ #category : #'open debugger' }
+{ #category : 'open debugger' }
 DebuggerSelector >> closeAllDebuggers [
 	self flag: 'Ugly temporary hack: Thomas can you fix this?'.
 	self flag: 'GTGenericStackDebugger is ultra slow to close its windows...'.
@@ -63,7 +64,7 @@ DebuggerSelector >> closeAllDebuggers [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 DebuggerSelector >> getDebuggerClasses [
 	| result classesWithDummyDebuggerPragma |
 	result := ((PragmaCollector
@@ -81,21 +82,21 @@ DebuggerSelector >> getDebuggerClasses [
 	^ result
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebuggerSelector >> ignoreDummyDebuggerForTests [
 	"If true, this class will ignore the DummyDebuggerForTests class when selecting a debugger. This is intended to be overriden for testing purposes"
 
 	^ true
 ]
 
-{ #category : #'open debugger' }
+{ #category : 'open debugger' }
 DebuggerSelector >> isObsolete [
 	"Method required for DebuggerSelector to be set as the debugger tool in 'Smalltalk tools'
 	I do not really know what it means"
 	^ false
 ]
 
-{ #category : #'open debugger' }
+{ #category : 'open debugger' }
 DebuggerSelector >> isThisClassADebugger: aClass [
 	"Returns whether @aClass implements the required methods to be considered a debugger class. It must:
 	- have a #iAmADebugger method, with the #iAmADebugger pragma
@@ -130,12 +131,12 @@ DebuggerSelector >> isThisClassADebugger: aClass [
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebuggerSelector >> mainDebuggerClass [
 	^ mainDebuggerClass
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebuggerSelector >> mainDebuggerClass: aClass [
 	(aClass isNil or: [ self isThisClassADebugger: aClass ])
 		ifFalse: [ CannotSetAsMainDebuggerAClassThatIsNotADebuggerClass signal ].
@@ -143,7 +144,7 @@ DebuggerSelector >> mainDebuggerClass: aClass [
 	self notifySubscribersOfAMainDebuggerClassUpdate
 ]
 
-{ #category : #'publish events' }
+{ #category : 'publish events' }
 DebuggerSelector >> notifySubscribersOfAMainDebuggerClassUpdate [
 	self subscribersOnMainDebuggerClassUpdate
 		do: [ :subscriber_ | 
@@ -151,7 +152,7 @@ DebuggerSelector >> notifySubscribersOfAMainDebuggerClassUpdate [
 				ifNotNil: [ :subscriber | subscriber onMainDebuggerClassUpdate ] ]
 ]
 
-{ #category : #'open debugger' }
+{ #category : 'open debugger' }
 DebuggerSelector >> openOn: aDebugSession withFullView: aBoolean [
 	"This method makes DebuggerSelector compatible with the rubric text editor. More specifically, the 'Debug it' option of Rubric's right-click menu will send #openOn:withFullView: to 'Smalltalk tools debugger' (see RubSmalltalkEditor>>#debug:receiver:in:. So to be able to set DebuggerSelector as the main debugger tool of 'Smalltalk tools', it needs to understand this message"
 
@@ -161,7 +162,7 @@ DebuggerSelector >> openOn: aDebugSession withFullView: aBoolean [
 		andNotification: nil
 ]
 
-{ #category : #'publish events' }
+{ #category : 'publish events' }
 DebuggerSelector >> removeSubscriberOnMainDebuggerClassUpdate: anObject [
 	self subscribersOnMainDebuggerClassUpdate
 		remove: anObject
@@ -169,7 +170,7 @@ DebuggerSelector >> removeSubscriberOnMainDebuggerClassUpdate: anObject [
 			[ "It's a weak collection, its elements can be nilled by the garbage collector at any time if they are not referenced elsewhere, so it can happen not to find the object to remove because it has already been nilled" ]
 ]
 
-{ #category : #'open debugger' }
+{ #category : 'open debugger' }
 DebuggerSelector >> selectDebuggerAndOpen: aDebugSession withFullView: aBool andNotification: aString [
 	"Open @aDebugSession with the most suitable debugger class in the system. Look at the comments below for the detailed algorithm selecting the most suitable debugger"
 
@@ -215,21 +216,21 @@ DebuggerSelector >> selectDebuggerAndOpen: aDebugSession withFullView: aBool and
 	self inform: 'No debugger could open this debug session'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebuggerSelector >> setNoMainDebuggerClass [
 	"Removes the main debugger class if there was any"
 
 	self mainDebuggerClass: nil
 ]
 
-{ #category : #'publish events' }
+{ #category : 'publish events' }
 DebuggerSelector >> subscribersOnMainDebuggerClassUpdate [
 	subscribersOnMainDebuggerClassUpdate
 		ifNil: [ subscribersOnMainDebuggerClassUpdate := WeakOrderedCollection new ].
 	^ subscribersOnMainDebuggerClassUpdate
 ]
 
-{ #category : #helper }
+{ #category : 'helper' }
 DebuggerSelector >> tryToOpenDebugSession: aDebugSession withDebuggerClass: aDebuggerClass withFullView: aBool andNotification: aString [
 	"Tries to open @aDebugSession with debugger @aDebuggerClass. If an Error is raised doing so, returns false, otherwise return true"
 

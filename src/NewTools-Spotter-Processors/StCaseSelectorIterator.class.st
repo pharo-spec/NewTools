@@ -8,23 +8,25 @@ If the text starts with an uppercase letter, I will iterate the values first fro
 
 "
 Class {
-	#name : #StCaseSelectorIterator,
-	#superclass : #StIteratorDecorator,
+	#name : 'StCaseSelectorIterator',
+	#superclass : 'StIteratorDecorator',
 	#instVars : [
 		'lowercaseIterator',
 		'uppercaseIterator'
 	],
-	#category : #'NewTools-Spotter-Processors-Iterators'
+	#category : 'NewTools-Spotter-Processors-Iterators',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Iterators'
 }
 
-{ #category : #protected }
+{ #category : 'protected' }
 StCaseSelectorIterator >> doReset [
 
 	lowercaseIterator reset.
 	uppercaseIterator reset.
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StCaseSelectorIterator >> filteringText: aString [
 	aString
 		ifEmpty: [ inner := lowercaseIterator.
@@ -35,22 +37,22 @@ StCaseSelectorIterator >> filteringText: aString [
 		ifFalse: [ uppercaseIterator , lowercaseIterator ].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCaseSelectorIterator >> lowercaseIterator [
 	^ lowercaseIterator
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCaseSelectorIterator >> lowercaseIterator: anObject [
 	lowercaseIterator := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCaseSelectorIterator >> uppercaseIterator [
 	^ uppercaseIterator
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCaseSelectorIterator >> uppercaseIterator: anObject [
 	uppercaseIterator := anObject
 ]

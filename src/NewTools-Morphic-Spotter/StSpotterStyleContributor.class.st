@@ -1,10 +1,11 @@
 Class {
-	#name : #StSpotterStyleContributor,
-	#superclass : #StPharoStyleContributor,
-	#category : #'NewTools-Morphic-Spotter'
+	#name : 'StSpotterStyleContributor',
+	#superclass : 'StPharoStyleContributor',
+	#category : 'NewTools-Morphic-Spotter',
+	#package : 'NewTools-Morphic-Spotter'
 }
 
-{ #category : #styles }
+{ #category : 'styles' }
 StSpotterStyleContributor >> styleSheetContribution [
 	
 	^ SpStyle newApplication 

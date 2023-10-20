@@ -1,10 +1,11 @@
 Class {
-	#name : #StGtkMorphicUIManager,
-	#superclass : #GtkMorphicUIManager,
-	#category : #'NewTools-Gtk'
+	#name : 'StGtkMorphicUIManager',
+	#superclass : 'GtkMorphicUIManager',
+	#category : 'NewTools-Gtk',
+	#package : 'NewTools-Gtk'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StGtkMorphicUIManager >> debugSessionClass [
 
 	^ StGtkDebugSession

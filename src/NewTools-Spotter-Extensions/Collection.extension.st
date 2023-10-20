@@ -1,6 +1,6 @@
-Extension { #name : #Collection }
+Extension { #name : 'Collection' }
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 Collection >> spotterItemsFor: aStep [
 	<stSpotterOrder: 10>
 	| processor |

@@ -1,6 +1,6 @@
-Extension { #name : #StSpotterPragmaBasedProcessor }
+Extension { #name : 'StSpotterPragmaBasedProcessor' }
 
-{ #category : #'*NewTools-Spotter' }
+{ #category : '*NewTools-Spotter' }
 StSpotterPragmaBasedProcessor >> headerCategoryFor: aLink on: aSpotterPresenter [
 
 	^ aSpotterPresenter headerCategoryFor: aLink

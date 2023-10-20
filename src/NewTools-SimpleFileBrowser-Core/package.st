@@ -1,1 +1,1 @@
-Package { #name : #'NewTools-SimpleFileBrowser-Core' }
+Package { #name : 'NewTools-SimpleFileBrowser-Core' }

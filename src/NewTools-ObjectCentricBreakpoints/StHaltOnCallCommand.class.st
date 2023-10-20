@@ -1,34 +1,35 @@
 Class {
-	#name : #StHaltOnCallCommand,
-	#superclass : #StBreakpointCommand,
-	#category : #'NewTools-ObjectCentricBreakpoints'
+	#name : 'StHaltOnCallCommand',
+	#superclass : 'StBreakpointCommand',
+	#category : 'NewTools-ObjectCentricBreakpoints',
+	#package : 'NewTools-ObjectCentricBreakpoints'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 StHaltOnCallCommand class >> defaultDescription [
 
 	^ 'Halts when this method is called'
 ]
 
-{ #category : #deafult }
+{ #category : 'deafult' }
 StHaltOnCallCommand class >> defaultIconName [
 
 	^ #smallDebug
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 StHaltOnCallCommand class >> defaultName [ 
 
 	^ 'Halt on call'
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StHaltOnCallCommand >> canBeExecuted [
 
 	^ self appliesTo: context
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 StHaltOnCallCommand >> execute [
 
 	^ context haltInspectedObjectOnCallToSelectedMethod

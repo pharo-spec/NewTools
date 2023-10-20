@@ -1,1 +1,1 @@
-Package { #name : #'NewTools-RewriterTools-Backend' }
+Package { #name : 'NewTools-RewriterTools-Backend' }

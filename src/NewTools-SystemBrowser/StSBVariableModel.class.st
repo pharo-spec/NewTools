@@ -1,13 +1,15 @@
 Class {
-	#name : #StSBVariableModel,
-	#superclass : #StSBModel,
+	#name : 'StSBVariableModel',
+	#superclass : 'StSBModel',
 	#instVars : [
 		'slot'
 	],
-	#category : #'NewTools-SystemBrowser-Model'
+	#category : 'NewTools-SystemBrowser-Model',
+	#package : 'NewTools-SystemBrowser',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBVariableModel >> name [
 
 	^ slot name

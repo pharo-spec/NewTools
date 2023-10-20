@@ -2,30 +2,32 @@
 I am a simple processor that returns all the world menu entries. 
 "
 Class {
-	#name : #StWorldMenuProcessor,
-	#superclass : #StSpotterProcessor,
-	#category : #'NewTools-Spotter-Processors-Processors'
+	#name : 'StWorldMenuProcessor',
+	#superclass : 'StSpotterProcessor',
+	#category : 'NewTools-Spotter-Processors-Processors',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Processors'
 }
 
-{ #category : #'default-settings' }
+{ #category : 'default-settings' }
 StWorldMenuProcessor class >> defaultEnabled [
 
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StWorldMenuProcessor class >> order [
 	
 	^ 90
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StWorldMenuProcessor class >> title [
 
 	^ 'Menu'
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StWorldMenuProcessor >> askingForMenu [
 
 	^ (query hasCategoryMatching: #menu) 
@@ -33,20 +35,20 @@ StWorldMenuProcessor >> askingForMenu [
 		or: [ query hasAnyCategory not and: [ query isSearchEmpty ] ] ]
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StWorldMenuProcessor >> executeQuery [
 
 	self askingForMenu ifFalse: [ ^ self ].
 	^ super executeQuery
 ]
 
-{ #category : #'spotter-api' }
+{ #category : 'spotter-api' }
 StWorldMenuProcessor >> isRelevantForQuery: aString [ 
 	
 	^ true
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StWorldMenuProcessor >> newTextFilteringSource [
 
 	^ ((StGeneratorBlockIterator
@@ -54,7 +56,7 @@ StWorldMenuProcessor >> newTextFilteringSource [
 		collect: [ :e | StWorldMenuEntry on: e ]) asSubstringFilter
 ]
 
-{ #category : #configuration }
+{ #category : 'configuration' }
 StWorldMenuProcessor >> showForEmptyQuery [
 
 	^ true

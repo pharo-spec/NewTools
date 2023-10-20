@@ -7,26 +7,28 @@ StSizeReporter new open
 
 "
 Class {
-	#name : #StSizeReporterPresenter,
-	#superclass : #StReporterPresenter,
+	#name : 'StSizeReporterPresenter',
+	#superclass : 'StReporterPresenter',
 	#instVars : [
 		'data'
 	],
-	#category : #'NewTools-SystemReporter-Base'
+	#category : 'NewTools-SystemReporter-Base',
+	#package : 'NewTools-SystemReporter',
+	#tag : 'Base'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSizeReporterPresenter >> baselineClassLoc [
 	^ data at: #baselineClassLoc ifAbsent: [ self computeLocs. data at: #baselineClassLoc ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSizeReporterPresenter >> baselineClasses [
 
 	^ data at: #baselineClasses
 ]
 
-{ #category : #compute }
+{ #category : 'compute' }
 StSizeReporterPresenter >> computeLocs [ 
 
 	data at: #manifestClassLoc put:  (self manifestClasses inject: 0 into: [ :sum :each | sum + each linesOfCode]).
@@ -36,7 +38,7 @@ StSizeReporterPresenter >> computeLocs [
 	data at: #effectiveClassLoc put: self imageClassLoc - self baselineClassLoc - self manifestClassLoc - self testClassLoc
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSizeReporterPresenter >> effectiveClassLoc [
 
 	^ data at: #effectiveClassLoc ifAbsentPut: [ self computeLocs. 
@@ -44,25 +46,25 @@ StSizeReporterPresenter >> effectiveClassLoc [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSizeReporterPresenter >> effectiveClassPackages [
 
 	^ data at: #effectiveClassPackages
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSizeReporterPresenter >> effectiveClasses [
 
 	^ data at: #effectiveClasses
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StSizeReporterPresenter >> extent [
 
 	^ 600@ 400
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSizeReporterPresenter >> fillTopics [
 
   {	#'# smart report' -> #reportSmartInfo: .
@@ -74,24 +76,24 @@ StSizeReporterPresenter >> fillTopics [
 		 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSizeReporterPresenter >> imageClassLoc [ 
 	^ data at: #imageClassLoc  ifAbsent: [ self computeLocs. data at: #imageClassLoc ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSizeReporterPresenter >> imageClassPackages [
 
 	^ data at: #imageClassPackages
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSizeReporterPresenter >> imageClasses [
 
 	^ data at: #imageClasses
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSizeReporterPresenter >> initialize [ 
 	super initialize.
 	data := Dictionary new. 
@@ -113,20 +115,20 @@ StSizeReporterPresenter >> initialize [
 	topicList selectIndex: 1.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSizeReporterPresenter >> manifestClassLoc [
 
 	^ data at: #manifestClassLoc ifAbsent: [ self computeLocs. data at: #manifestClassLoc ]
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSizeReporterPresenter >> manifestClasses [
 
 	^ data at: #manifestClasses
 ]
 
-{ #category : #utils }
+{ #category : 'utils' }
 StSizeReporterPresenter >> printNumber: aNumber on: aStream [
 
 	aNumber
@@ -136,7 +138,7 @@ StSizeReporterPresenter >> printNumber: aNumber on: aStream [
 		on: aStream
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StSizeReporterPresenter >> reportLOC: aStream [
 	
 	self header: 'Number of LinesOfCode' on: aStream.
@@ -159,7 +161,7 @@ StSizeReporterPresenter >> reportLOC: aStream [
 	aStream print: (self effectiveClassLoc / self effectiveClasses size) asFloat rounded
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StSizeReporterPresenter >> reportNbClasses: aStream [
 
 	self header: 'Number of classes' on: aStream.
@@ -177,7 +179,7 @@ StSizeReporterPresenter >> reportNbClasses: aStream [
 		
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StSizeReporterPresenter >> reportNbTraits: aStream [
 	| imageTraits |
 	imageTraits := self class environment allTraits.
@@ -189,7 +191,7 @@ StSizeReporterPresenter >> reportNbTraits: aStream [
 
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StSizeReporterPresenter >> reportSmartInfo: aStream [
 
 	self header: 'Smarter data' on: aStream.
@@ -216,26 +218,26 @@ StSizeReporterPresenter >> reportSmartInfo: aStream [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSizeReporterPresenter >> testClassLoc [
 
 	^ data at: #testClassLoc ifAbsent: [ self computeLocs. data at: #testClassLoc ]
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSizeReporterPresenter >> testClasses [
 
 	^ data at: #testClasses
 ]
 
-{ #category : #ui }
+{ #category : 'ui' }
 StSizeReporterPresenter >> title [ 
 
 	^ 'Size reporter'
 ]
 
-{ #category : #'building report' }
+{ #category : 'building report' }
 StSizeReporterPresenter >> topicSpec [
   {	#'# smart report' -> #reportSmartInfo: .
 	#'# raw classes' -> #reportNbClasses:  .

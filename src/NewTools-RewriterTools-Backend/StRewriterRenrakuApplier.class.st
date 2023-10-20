@@ -4,12 +4,14 @@ I am a class that is in charge to apply a rule, that is represented in an object
 I use the Renraku engine for applying the transformation rules.
 "
 Class {
-	#name : #StRewriterRenrakuApplier,
-	#superclass : #StRewriterAbstractApplier,
-	#category : #'NewTools-RewriterTools-Backend-Core'
+	#name : 'StRewriterRenrakuApplier',
+	#superclass : 'StRewriterAbstractApplier',
+	#category : 'NewTools-RewriterTools-Backend-Core',
+	#package : 'NewTools-RewriterTools-Backend',
+	#tag : 'Core'
 }
 
-{ #category : #api }
+{ #category : 'api' }
 StRewriterRenrakuApplier class >> calculateAllChangesForRules: aRulesCollection [
 
 	| allSystemMethods |
@@ -19,7 +21,7 @@ StRewriterRenrakuApplier class >> calculateAllChangesForRules: aRulesCollection 
 	^ self calculateChangesForClasses: allSystemMethods asSet transformationRules: aRulesCollection
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StRewriterRenrakuApplier class >> calculateChangesForClasses: methods transformationRules: rules [
 
 	| critiques changes |
@@ -30,7 +32,7 @@ StRewriterRenrakuApplier class >> calculateChangesForClasses: methods transforma
 	^ changes
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StRewriterRenrakuApplier class >> obtainCritiquesOf: methods forRules: ruleHolderCollection [
 
 	"This is a way to obtain the same changes array as obtainChanges:forRule: method. But, here this is done without an RBClassEnvironment and ReSmalllintChecker. Because those two classes inherits from RB rules and will be eventually will be deprecated."
@@ -62,7 +64,7 @@ Take a look on ReCriticEngine for some automation ideas. Also take a look at Com
 	^ critiques
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StRewriterRenrakuApplier class >> obtainCritiquesOfAllMethodsForRules: ruleHolderCollection [
 
 	| methods |

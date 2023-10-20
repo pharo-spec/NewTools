@@ -1,22 +1,22 @@
-Extension { #name : #Breakpoint }
+Extension { #name : 'Breakpoint' }
 
-{ #category : #'*NewTools-Debugger-Breakpoints-Tools' }
+{ #category : '*NewTools-Debugger-Breakpoints-Tools' }
 Breakpoint >> asBreakpointInspectionItemIn: aStBreakpointInspectionItem [ 
 	^aStBreakpointInspectionItem buildBreakpointItemFor: self
 ]
 
-{ #category : #'*NewTools-Debugger-Breakpoints-Tools' }
+{ #category : '*NewTools-Debugger-Breakpoints-Tools' }
 Breakpoint >> printContentsForBreakpointInspection [
 	^node methodNode sourceCode
 ]
 
-{ #category : #'*NewTools-Debugger-Breakpoints-Tools' }
+{ #category : '*NewTools-Debugger-Breakpoints-Tools' }
 Breakpoint >> printTargetForBreakpointInspection [
 
 	^ node methodNode compiledMethod printString
 ]
 
-{ #category : #'*NewTools-Debugger-Breakpoints-Tools' }
+{ #category : '*NewTools-Debugger-Breakpoints-Tools' }
 Breakpoint >> scopeIncludes: anObject [
 
 	self isObjectCentric ifTrue: [ ^ targetInstance == anObject ].

@@ -13,31 +13,33 @@ Internal Representation and Key Implementation Points.
 
 "
 Class {
-	#name : #FBFlagPresentationPresenter,
-	#superclass : #FBPagePresenter,
+	#name : 'FBFlagPresentationPresenter',
+	#superclass : 'FBPagePresenter',
 	#instVars : [
 		'code',
 		'locationsTable'
 	],
-	#category : #'NewTools-FlagBrowser-Presenters'
+	#category : 'NewTools-FlagBrowser-Presenters',
+	#package : 'NewTools-FlagBrowser',
+	#tag : 'Presenters'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 FBFlagPresentationPresenter class >> isAbstract [
 	^ self = FBFlagPresentationPresenter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBFlagPresentationPresenter >> code [
 	^ code
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBFlagPresentationPresenter >> code: anObject [
 	code := anObject
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 FBFlagPresentationPresenter >> initializePresenter [
 
 	code whenSubmitDo: [ :text | code behavior compile: text ].
@@ -50,7 +52,7 @@ FBFlagPresentationPresenter >> initializePresenter [
 				selectionInterval: location interval ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 FBFlagPresentationPresenter >> initializeWidgets [
 	locationsTable := self newTable.
 	code := self newCode.
@@ -62,17 +64,17 @@ FBFlagPresentationPresenter >> initializeWidgets [
 	code syntaxHighlight: true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBFlagPresentationPresenter >> locationsTable [
 	^ locationsTable
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBFlagPresentationPresenter >> locationsTable: anObject [
 	locationsTable := anObject
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 FBFlagPresentationPresenter >> tableMenu [
 	| aMenu |
 	
