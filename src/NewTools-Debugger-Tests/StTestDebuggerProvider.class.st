@@ -93,6 +93,7 @@ StTestDebuggerProvider >> debuggerWithMissingSubclassResponsibilityContext [
 			self sessionFor: err signalerContext exception: err.
 			^ self newDebugger ]
 ]
+
 { #category : 'helpers' }
 StTestDebuggerProvider >> debuggerWithMissingSubclassResponsibilityContextWithSteps [
 

@@ -1,22 +1,24 @@
 Class {
-	#name : #StPresenter,
-	#superclass : #SpPresenter,
-	#category : #'NewTools-Core-Presenters'
+	#name : 'StPresenter',
+	#superclass : 'SpPresenter',
+	#category : 'NewTools-Core-Presenters',
+	#package : 'NewTools-Core',
+	#tag : 'Presenters'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 StPresenter class >> currentApplication [
 
 	^ SpToolCurrentApplication value ifNil: [ StPharoApplication current ]
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StPresenter class >> new [
 
 	^ self newApplication: self currentApplication
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StPresenter class >> owner: anOwningPresenter [
 
 	^ self 
@@ -24,7 +26,7 @@ StPresenter class >> owner: anOwningPresenter [
 		owner: anOwningPresenter
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StPresenter class >> owner: anOwningPresenter on: aDomainObject [
 
 	^ self 
@@ -33,13 +35,13 @@ StPresenter class >> owner: anOwningPresenter on: aDomainObject [
 		model: aDomainObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPresenter class >> preferredExtent [
 
 	^ 600@400
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPresenter >> initializeWindow: aWindowPresenter [
 	"All tools should call its parent"
 
@@ -47,13 +49,13 @@ StPresenter >> initializeWindow: aWindowPresenter [
 		each addWindowShortcutsTo: aWindowPresenter ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPresenter >> preferredExtent [
 
 	^ self class preferredExtent
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPresenter >> shortcutForPanel: aNumber [
 	"This is a convenience method to assign shortcuts to panels. 
 	 panels will be different areas of a tool: a package panel in a browser, an inspector in 
