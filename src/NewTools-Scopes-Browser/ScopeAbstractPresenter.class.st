@@ -28,3 +28,23 @@ ScopeAbstractPresenter >> setModelBeforeInitialization: aScopesManager [
 
 	model := aScopesManager 
 ]
+
+{ #category : 'menu commands' }
+ScopeAbstractPresenter >> showReferencesToClass: aClass [
+
+	| scope browser query class |
+	class := aClass.
+	scope := ClySystemEnvironmentScope
+		         of: ClySystemEnvironment currentImage
+		         in: ClyNavigationEnvironment currentImage.
+
+	browser := (ClyFullBrowserMorph on:
+		            ClyNavigationEnvironment currentImage)
+		           ensureInitialState.
+
+	query := (ClyClassReferencesQuery of: class)
+		         scope: scope;
+		         yourself.
+
+	browser spawnQueryBrowserOn: query
+]

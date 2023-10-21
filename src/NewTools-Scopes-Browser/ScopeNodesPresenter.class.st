@@ -110,20 +110,28 @@ ScopeNodesPresenter >> announceScopeEdited [
 { #category : 'private - presenters' }
 ScopeNodesPresenter >> argumentsListMenu [
 
-	^ self newMenu addGroup: [ :aGroup |
-		  aGroup
-			  addItem: [ :anItem |
-				  anItem
-					  name: 'Add class hierarchy';
-					  visibleIf: [ scopeNodesTree selectedItem isClassNode ];
-					  iconName: #hierarchy;
-					  action: [ self addSelectedItemClassHierarchy ] ];
-			  addItem: [ :anItem |
-				  anItem
-					  name: 'Browse';
-					  visibleIf: [ scopeNodesTree selectedItem isNotNil ];
-					  iconName: #glamorousBrowse;
-					  action: [ self browseSelectedItem ] ] ]
+	^ self newMenu
+		  addGroup: [ :aGroup |
+			  aGroup
+				  addItem: [ :anItem |
+					  anItem
+						  name: 'Add class hierarchy';
+						  visibleIf: [ scopeNodesTree selectedItem isClassNode ];
+						  iconName: #hierarchy;
+						  action: [ self addSelectedItemClassHierarchy ] ];
+				  addItem: [ :anItem |
+					  anItem
+						  name: 'Browse';
+						  visibleIf: [ scopeNodesTree selectedItem isNotNil ];
+						  iconName: #glamorousBrowse;
+						  action: [ self browseSelectedItem ] ] ];
+		  addItem: [ :anItem |
+			  anItem
+				  name: 'Class references';
+				  visibleIf: [ scopeNodesTree selectedItem isClassNode ];
+				  iconName: #glamorousBrowse;
+				  action: [
+					  self showReferencesToClass: scopeNodesTree selectedItem value ] ]
 ]
 
 { #category : 'private - presenters' }

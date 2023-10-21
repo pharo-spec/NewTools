@@ -111,7 +111,7 @@ ScopesPresenter >> argumentsListMenu [
 					  anItem
 						  name: 'Class references';
 						  visibleIf: [ scopesTree selectedItem isClassNode ];
-						  action: [ self referencesToSelectedClass ] ] ];
+						  action: [ self showReferencesToClass: scopesTree selectedItem value] ] ];
 		  addGroup: [ :aGroup |
 			  aGroup
 				  addItem: [ :anItem |
@@ -376,14 +376,12 @@ ScopesPresenter >> toolbarButtons [
 	buttons add: (buttonEdit := self newToolbarButton
 			               icon: (self iconNamed: #glamorousEdit);
 			               help: 'Edit selected scope';
-			               enabled: false;
 			               action: [ self editSelectedScope ];
 			               yourself).
 
 	buttons add: (buttonDelete := self newToolbarButton
 			                 icon: (self iconNamed: #glamorousTrash);
 			                 help: 'Delete selected scope';
-			                 enabled: false;
 			                 yourself).
 
 	^ buttons
@@ -393,6 +391,7 @@ ScopesPresenter >> toolbarButtons [
 ScopesPresenter >> updateEnabled [
 
 	| enabled |
+	self flag: 'I should implement this well'.
 	"The first scope cannot be edited nor deleted because it is the full image environment"
 	enabled := scopesTree selectedItem isNotNil and: [
 		           scopesTree selection selectedPath ~= #( 1 ) ].
