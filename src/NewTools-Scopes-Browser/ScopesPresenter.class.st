@@ -139,14 +139,21 @@ ScopesPresenter >> browseSelectedItem [
 { #category : 'menu commands' }
 ScopesPresenter >> deleteSelectedScope [
 
-	| item |
+	| item selectedPath |
+	selectedPath := scopesTree selection selectedPath at: 1.
+	selectedPath == 1 ifTrue: [
+		self inform: 'You can''t delete this scope'.
+		^ self ].
 	item := scopesTree selectedItem.
-	(item isNil or: [item isScopeNode not]) ifTrue: [
+	(item isNil or: [ item isScopeNode not ]) ifTrue: [
 		self inform: 'select a scope'.
 		^ self ].
 
 	model removeScope: item value.
-	self updateScopesTree
+
+	self updateScopesTree.
+
+	scopesTree selectPath: { (selectedPath - 1) } asArray
 ]
 
 { #category : 'menu commands' }
@@ -382,6 +389,7 @@ ScopesPresenter >> toolbarButtons [
 	buttons add: (buttonDelete := self newToolbarButton
 			                 icon: (self iconNamed: #glamorousTrash);
 			                 help: 'Delete selected scope';
+			                 action: [ self deleteSelectedScope ];
 			                 yourself).
 
 	^ buttons

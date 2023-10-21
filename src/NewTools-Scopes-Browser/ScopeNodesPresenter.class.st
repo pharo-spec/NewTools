@@ -380,7 +380,7 @@ ScopeNodesPresenter >> scope: aRBEnvironment [
 ScopeNodesPresenter >> validate [
 
 	checkedScopeNodes ifEmpty: [
-		self inform: 'You must select at least one item'.
+		self inform: 'You must check at least one item'.
 		^ false ].
 	^ true
 ]
