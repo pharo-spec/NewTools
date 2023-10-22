@@ -148,6 +148,12 @@ StPlaygroundPagesPresenter >> loadSelectedPage [
 	self loadPage: self selectedPage
 ]
 
+{ #category : 'events' }
+StPlaygroundPagesPresenter >> onLoadPage: aBlock [
+
+	loadPageAction := aBlock
+]
+
 { #category : 'accessing' }
 StPlaygroundPagesPresenter >> pages [
 	
