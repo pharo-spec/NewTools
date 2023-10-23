@@ -7,7 +7,8 @@ Class {
 	#instVars : [
 		'scopes',
 		'environment',
-		'announcer'
+		'announcer',
+		'defaultScope'
 	],
 	#classVars : [
 		'singleInstance'
@@ -28,9 +29,29 @@ ScopesManager class >> availableScopes [
 	^ self scopes
 ]
 
+{ #category : 'private' }
+ScopesManager class >> fullPackagesIn: packages having: classes [
+	"packages whose classes were all selected"
+
+	^ packages select: [ :package |
+		  | packCheckedClasses |
+		  packCheckedClasses := classes select: [ :class |
+			                        class package == package ].
+		  package definedClasses size == packCheckedClasses size ]
+]
+
 { #category : 'accessing' }
 ScopesManager class >> invalidNames [
 	^ self scopes collect: [ :e | e label ]
+]
+
+{ #category : 'private' }
+ScopesManager class >> orphanClassesIn: classes havingPackages: packages fullPackages: fullPackages [
+
+	| classesInFullPackages |
+	classesInFullPackages := fullPackages flatCollect: [ :package |
+		                         package definedClasses ].
+	^ classes reject: [ :class | classesInFullPackages includes: class ]
 ]
 
 { #category : 'accessing' }
@@ -80,8 +101,10 @@ ScopesManager >> announcer [
 { #category : 'api' }
 ScopesManager >> defaultScope [
 
-	^ (self scopeClass packages: self allPackagesInEnvironment) label:
-		  self defaultScopeLabel
+	^ defaultScope ifNil: [
+		  defaultScope := (self scopeClass packages:
+			                   self allPackagesInEnvironment) label:
+			                  self defaultScopeLabel ]
 ]
 
 { #category : 'accessing' }
@@ -102,6 +125,11 @@ ScopesManager >> environment: aSmalltalkImage [
 	environment := aSmalltalkImage
 ]
 
+{ #category : 'private' }
+ScopesManager >> fullPackagesIn: packages having: classes [ 
+	^ self class fullPackagesIn: packages having: classes 
+]
+
 { #category : 'initialization' }
 ScopesManager >> initialize [
 
@@ -113,37 +141,32 @@ ScopesManager >> initialize [
 ScopesManager >> newScopeFrom: aSet [
 
 	| packageScope classScope classes packages orphanClasses fullPackages compositeScope |
-	
 	classes := aSet select: [ :each | each isClassOrTrait ].
 	packages := aSet select: [ :each | each isKindOf: RPackage ].
 
-	"classes whose package hasn't all of its classes selected"
-	orphanClasses := classes select: [ :class |
-		                 | siblings |
-		                 siblings := class package definedClasses.
-		                 siblings anySatisfy: [ :sibling |
-			                 classes noneSatisfy: [ :selectedClass |
-				                 selectedClass = sibling ] ] ].
-	
 	"packages whose classes were all selected"
-	fullPackages := packages select: [ :each |
-		                each definedClasses noneSatisfy: [ :class |
-			                orphanClasses anySatisfy: [ :orphan |
-				                orphan = class ] ] ].
-	
+	fullPackages := self class fullPackagesIn: packages having: classes.
+	"classes whose package hasn't all of its classes selected"
+	orphanClasses := self class
+		                 orphanClassesIn: classes
+		                 havingPackages: packages
+		                 fullPackages: fullPackages.
+
 	classScope := RBClassEnvironment classes: orphanClasses.
 	packageScope := RBPackageEnvironment packages: fullPackages.
-	
-	self flag: 'hacer recursiva la construccion del composite scope'.
-	(classScope isNotEmpty and: [ packageScope isNotEmpty ]) ifTrue: [ 
+
+	(classScope isNotEmpty and: [ packageScope isNotEmpty ]) ifTrue: [
 		compositeScope := packageScope | classScope ].
 
 	compositeScope ifNotNil: [ ^ compositeScope ].
 	packageScope isEmpty ifFalse: [ ^ packageScope ].
 	classScope isEmpty ifFalse: [ ^ classScope ].
-	self error: 'Impossible to create scope from nodes'.
-	
+	self error: 'Impossible to create scope from nodes'
+]
 
+{ #category : 'private' }
+ScopesManager >> orphanClassesIn: classes havingPackages: packages fullPackages: fullPackages [ 
+	^ self class orphanClassesIn: classes havingPackages: packages fullPackages: fullPackages 
 ]
 
 { #category : 'removing' }
@@ -158,6 +181,7 @@ ScopesManager >> reset [
 
 	environment := nil.
 	self announcer subscriptions reset.
+	defaultScope := nil.
 	scopes := #(  )
 ]
 

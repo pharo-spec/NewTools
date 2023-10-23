@@ -140,13 +140,16 @@ ScopesPresenter >> browseSelectedItem [
 ScopesPresenter >> deleteSelectedScope [
 
 	| item selectedPath |
-	selectedPath := scopesTree selection selectedPath at: 1.
-	selectedPath == 1 ifTrue: [
-		self inform: 'You can''t delete this scope'.
-		^ self ].
 	item := scopesTree selectedItem.
-	(item isNil or: [ item isScopeNode not ]) ifTrue: [
-		self inform: 'select a scope'.
+	(item isNil or: [
+		 item isScopeNode not or: [
+			 (selectedPath := scopesTree selection selectedPath) isEmpty ] ])
+		ifTrue: [
+			self inform: 'select a scope'.
+			^ self ].
+
+	(selectedPath at: 1) == 1 ifTrue: [
+		self inform: 'You can''t delete this scope'.
 		^ self ].
 
 	model removeScope: item value.
@@ -159,10 +162,19 @@ ScopesPresenter >> deleteSelectedScope [
 { #category : 'menu commands' }
 ScopesPresenter >> editSelectedScope [
 
+	| selectedPath |
 	(scopesTree selectedItem isNil or: [
-		 scopesTree selectedItem isScopeNode not ])
-		ifTrue: [ self inform: 'select a scope' ]
-		ifFalse: [ self newScopeEditor open ]
+		 scopesTree selectedItem isScopeNode not or: [
+			 (selectedPath := scopesTree selection selectedPath) isEmpty ] ])
+		ifTrue: [
+			self inform: 'select a scope'.
+			^ self ].
+
+	(selectedPath at: 1) == 1 ifTrue: [
+		self inform: 'You can''t edit this scope'.
+		^ self ].
+	
+	self newScopeEditor open
 ]
 
 { #category : 'initialization' }
@@ -188,7 +200,7 @@ ScopesPresenter >> initializeScopesTree [
 	^ scopesTree
 		  hideColumnHeaders;
 		  addColumn: self nodesListColumn;
-		  children: [ :each | each children sorted ];
+		  children: [ :each | each children asOrderedCollection ];
 		  roots: self scopeNodes;
 		  expandRoots;
 		  collapsePath: #( 1 );
@@ -342,7 +354,6 @@ ScopesPresenter >> scopeListColumn [
 
 { #category : 'initialization' }
 ScopesPresenter >> scopeNodes [
-
 	^ { (ScopeScopeNode on: model defaultScope) } asOrderedCollection
 		  addAll: (model scopes collect: [ :s | ScopeScopeNode on: s ])
 				  asOrderedCollection sorted;
