@@ -6,7 +6,6 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'value',
-		'packages',
 		'children'
 	],
 	#category : 'NewTools-Scopes-Browser-Nodes',
@@ -28,7 +27,7 @@ ScopeNode class >> on: aRBEnvironment [
 { #category : 'operations' }
 ScopeNode >> & anotherNode [
 
-	^ self value & anotherNode value
+	^ ScopesManager newScopeFrom: self value and: anotherNode value
 ]
 
 { #category : 'accessing' }
@@ -92,7 +91,7 @@ ScopeNode >> name [
 { #category : 'operations' }
 ScopeNode >> not [
 
-	self value not
+	^ ScopesManager newScopeFromNot: self value
 ]
 
 { #category : 'accessing' }
@@ -131,5 +130,5 @@ ScopeNode >> value: aPackageOrClass [
 { #category : 'operations' }
 ScopeNode >> | anotherNode [
 
-	^ self value | anotherNode value
+	^ ScopesManager newScopeFrom: self value or: anotherNode value
 ]

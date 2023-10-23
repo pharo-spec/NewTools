@@ -45,6 +45,60 @@ ScopesManager class >> invalidNames [
 	^ self scopes collect: [ :e | e label ]
 ]
 
+{ #category : 'operations' }
+ScopesManager class >> newScopeFrom: aSet [
+
+	| packageScope classScope classes packages orphanClasses fullPackages compositeScope |
+	classes := (aSet select: [ :each | each isClassOrTrait ]) reject: [ :each | each isMeta ] .
+	packages := aSet select: [ :each | each isKindOf: RPackage ].
+
+	"packages whose classes were all selected"
+	fullPackages := self fullPackagesIn: packages having: classes.
+	"classes whose package hasn't all of its classes selected"
+	orphanClasses := self
+		                 orphanClassesIn: classes
+		                 havingPackages: packages
+		                 fullPackages: fullPackages.
+
+	classScope := RBClassEnvironment classes: orphanClasses.
+	packageScope := RBPackageEnvironment packages: fullPackages.
+
+	(classScope isNotEmpty and: [ packageScope isNotEmpty ]) ifTrue: [
+		compositeScope := packageScope | classScope ].
+
+	compositeScope ifNotNil: [ ^ compositeScope ].
+	packageScope isEmpty ifFalse: [ ^ packageScope ].
+	classScope isEmpty ifFalse: [ ^ classScope ].
+	self error: 'Impossible to create scope from nodes'
+]
+
+{ #category : 'operations' }
+ScopesManager class >> newScopeFrom: scopeA and: scopeB [
+
+	| classesA classesB classesInterAB packages fullPackages |
+	
+	classesA := scopeA classes asSet.
+	classesB := scopeB classes.
+	
+	classesInterAB := (classesA, classesB) select: [ :each |
+		                   (classesA includes: each) and: [
+			                   classesB includes: each ] ].
+	packages := classesInterAB collect: [ :each  | each package ].
+	fullPackages := self fullPackagesIn: packages having: classesInterAB.
+	 
+	^ self newScopeFrom: fullPackages , classesInterAB
+]
+
+{ #category : 'operations' }
+ScopesManager class >> newScopeFrom: scopeA or: scopeB [
+	^ self newScopeFrom: scopeA classes, scopeB classes, scopeA packages, scopeB packages
+]
+
+{ #category : 'operations' }
+ScopesManager class >> newScopeFromNot: scope [
+	self halt.
+]
+
 { #category : 'private' }
 ScopesManager class >> orphanClassesIn: classes havingPackages: packages fullPackages: fullPackages [
 
@@ -138,30 +192,9 @@ ScopesManager >> initialize [
 ]
 
 { #category : 'private' }
-ScopesManager >> newScopeFrom: aSet [
+ScopesManager >> newScopeFrom: aSetOfClassesAndPackages [
 
-	| packageScope classScope classes packages orphanClasses fullPackages compositeScope |
-	classes := aSet select: [ :each | each isClassOrTrait ].
-	packages := aSet select: [ :each | each isKindOf: RPackage ].
-
-	"packages whose classes were all selected"
-	fullPackages := self class fullPackagesIn: packages having: classes.
-	"classes whose package hasn't all of its classes selected"
-	orphanClasses := self class
-		                 orphanClassesIn: classes
-		                 havingPackages: packages
-		                 fullPackages: fullPackages.
-
-	classScope := RBClassEnvironment classes: orphanClasses.
-	packageScope := RBPackageEnvironment packages: fullPackages.
-
-	(classScope isNotEmpty and: [ packageScope isNotEmpty ]) ifTrue: [
-		compositeScope := packageScope | classScope ].
-
-	compositeScope ifNotNil: [ ^ compositeScope ].
-	packageScope isEmpty ifFalse: [ ^ packageScope ].
-	classScope isEmpty ifFalse: [ ^ classScope ].
-	self error: 'Impossible to create scope from nodes'
+	^ self class newScopeFrom: aSetOfClassesAndPackages
 ]
 
 { #category : 'private' }

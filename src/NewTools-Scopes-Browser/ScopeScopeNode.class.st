@@ -4,6 +4,10 @@ I am a model for having scopes in the ScopeTreePresenter
 Class {
 	#name : 'ScopeScopeNode',
 	#superclass : 'ScopeNode',
+	#instVars : [
+		'classes',
+		'packages'
+	],
 	#category : 'NewTools-Scopes-Browser-Nodes',
 	#package : 'NewTools-Scopes-Browser',
 	#tag : 'Nodes'
@@ -18,8 +22,8 @@ ScopeScopeNode >> children [
 
 	self value isCompositeEnvironment ifTrue: [
 		chldrn := Set new.
-		envPackages := self value packages.
-		envClasses := self value classes reject: [:c | c isMeta ].
+		envPackages := self packages.
+		envClasses := self classes reject: [:c | c isMeta ].
 
 		"packages whose classes were all selected"
 		fullPackages := ScopesManager
@@ -62,6 +66,12 @@ ScopeScopeNode >> children [
 
 ]
 
+{ #category : 'accessing' }
+ScopeScopeNode >> classes [
+
+	^ classes ifNil: [ classes := value classes ]
+]
+
 { #category : 'testing' }
 ScopeScopeNode >> isScopeNode [
 	^ true
@@ -75,6 +85,12 @@ ScopeScopeNode >> label [
 { #category : 'as yet unclassified' }
 ScopeScopeNode >> packageNode [
 	self shouldNotImplement 
+]
+
+{ #category : 'accessing' }
+ScopeScopeNode >> packages [
+
+	^ packages ifNil: [ packages := value packages ]
 ]
 
 { #category : 'accessing' }

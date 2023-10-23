@@ -118,17 +118,17 @@ ScopesPresenter >> argumentsListMenu [
 					  anItem
 						  name: 'AND';
 						  visibleIf: [ scopesTree selectedItem isScopeNode ];
-						  action: [ self andWithScope: scopesTree selectedItem value ] ];
+						  action: [ self andWithScope: scopesTree selectedItem ] ];
 				  addItem: [ :anItem |
 					  anItem
 						  name: 'OR';
 						  visibleIf: [ scopesTree selectedItem isScopeNode ];
-						  action: [ self orWithScope: scopesTree selectedItem value ] ];
+						  action: [ self orWithScope: scopesTree selectedItem ] ];
 				  addItem: [ :anItem |
 					  anItem
 						  name: 'NOT';
 						  visibleIf: [ scopesTree selectedItem isScopeNode ];
-						  action: [ self notWithScope: scopesTree selectedItem value ] ] ]
+						  action: [ self notWithScope: scopesTree selectedItem ] ] ]
 ]
 
 { #category : 'menu commands' }
@@ -291,12 +291,26 @@ ScopesPresenter >> orWithScope: anItem [
 { #category : 'operations' }
 ScopesPresenter >> performOperation: aSymbol with: anItem [
 
-	| anEnvironment newScope newName |
+	| anEnvironment newScope newName existingNames index indexes |
 	anEnvironment := self selectAnotherScopeWhitout: anItem.
 	anEnvironment ifNil: [ ^ self ].
 	newScope := anItem perform: aSymbol with: anEnvironment.
 	newName := anItem label , aSymbol , anEnvironment label.
-	newScope label: newName.
+	existingNames := model scopes collect: #label.
+
+	index := ''.
+
+	(existingNames includes: newName) ifTrue: [
+		indexes := existingNames
+			           collect: [ :each |
+				           index := (each reverse copyUpToSubstring: '-') reverse
+					                    asInteger ]
+			           thenReject: [ :each | each isNil ].
+		index := indexes
+			         ifEmpty: [ '-1' ]
+			         ifNotEmpty: [ '-' , (indexes max + 1)  asString ] ].
+
+	newScope label: newName , index.
 
 	self scopesManagerClass singleInstance addScope: newScope.
 	self refresh
