@@ -9,7 +9,8 @@ Class {
 		'scopesTree',
 		'toolbar',
 		'buttonEdit',
-		'buttonDelete'
+		'buttonDelete',
+		'toolbarInfo'
 	],
 	#category : 'NewTools-Scopes-Browser-GUI',
 	#package : 'NewTools-Scopes-Browser',
@@ -193,7 +194,7 @@ ScopesPresenter >> initializePresenters [
 	toolbar := self newToolbar.
 	
 	self toolbarButtons do: [ :button | toolbar addItem: button ].
-	self initializeScopesTree
+	self initializeScopesTree.
 	
 ]
 
@@ -206,7 +207,6 @@ ScopesPresenter >> initializeScopesTree [
 		  children: [ :each | each children asOrderedCollection ];
 		  roots: self scopeNodes;
 		  lazilyComputeChildren;
-		  "expandRoots;"collapsePath: #( 1 );
 		  beResizable;
 		  activateOnDoubleClick;
 		  "whenSelectedItemChangedDo: [ :item | self updateEnabled ];"

@@ -33,14 +33,17 @@ ScopesManager class >> availableScopes [
 ScopesManager class >> fullPackagesFrom: classes [
 	"packages whose classes were all selected"
 
-	| theClasses packagesCache |
+	| theClasses packagesCache packages classesCache |
 	theClasses := classes reject: [ :each | each isMeta ].
 	
+	packages := theClasses collect:[:class | class package].
 	packagesCache := Dictionary new.
-	theClasses do: [ :class | packagesCache at: class put: class package  ].
-	^ theClasses collect: [ :each | packagesCache at: each ] thenSelect: [ :package |
+	packages do: [ :package | packagesCache at: package put: package definedClasses  ].
+	classesCache := Dictionary new.
+	theClasses do: [ :class | classesCache at: class put: class package ].
+	^ packages select: [ :package |
 		  package definedClasses size
-		  = (theClasses select: [ :class | (packagesCache at: class) = package ]) size ]
+		  = (theClasses select: [ :class | (classesCache at: class) = package ]) size ]
 ]
 
 { #category : 'accessing' }
@@ -101,8 +104,8 @@ ScopesManager class >> newScopeFrom: scopeA or: scopeB [
 ScopesManager class >> newScopeFromNot: scope [
 
 	| classes rejectedFullPackages rejectedOrphanClasses rejectedClassesInFullPackages rejectedClasses acceptedPackages acceptedClasses |
-	classes := scope classes reject: [:each | each isMeta ].
-self halt.
+	classes := scope classes.
+
 	rejectedFullPackages := self fullPackagesFrom: classes.
 	rejectedOrphanClasses := self
 		                         orphanClassesIn: classes
@@ -176,7 +179,8 @@ ScopesManager >> addScope: aScope [
 { #category : 'accessing' }
 ScopesManager >> allPackagesInEnvironment [
 
-	^ environment current packages select: [ :package | package definedClasses isNotEmpty ]
+	^ (environment current packages select: [ :package |
+		   package definedClasses isNotEmpty ]) sorted
 ]
 
 { #category : 'accessing' }

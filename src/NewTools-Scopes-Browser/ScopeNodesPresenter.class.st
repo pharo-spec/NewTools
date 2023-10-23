@@ -113,7 +113,16 @@ ScopeNodesPresenter >> argumentsListMenu [
 	^ self newMenu
 		  addGroup: [ :aGroup |
 			  aGroup
-				  addItem: [ :anItem |
+				addItem: [ :anItem |
+						
+					  anItem
+						  name: 'Check selected';
+						  visibleIf: [ scopeNodesTree selectedItem isNotNil ];
+						  iconName: #glamorousAccept;
+						  action: [ self checkSelectedNodes ] ];
+				    
+				addItem: [ :anItem |
+						
 					  anItem
 						  name: 'Add class hierarchy';
 						  visibleIf: [ scopeNodesTree selectedItem isClassNode ];
@@ -137,6 +146,15 @@ ScopeNodesPresenter >> argumentsListMenu [
 { #category : 'private - presenters' }
 ScopeNodesPresenter >> browseSelectedItem [
 	scopeNodesTree selectedItem value browse
+]
+
+{ #category : 'private - presenters' }
+ScopeNodesPresenter >> checkSelectedNodes [
+
+	scopeNodesTree selection selectedItems do: [ :item |
+		self activateItem: item ].
+
+	self refresh
 ]
 
 { #category : 'announcements' }
