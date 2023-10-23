@@ -352,17 +352,17 @@ ScopeNodesPresenter >> saveScope [
 { #category : 'accessing' }
 ScopeNodesPresenter >> scope: aRBEnvironment [
 
-	| packages packageNodes |
+	| packageNodes theClasses thePackages |
 	scope := aRBEnvironment.
-
-	packages := scope packages.
+	theClasses := scope classes.
+	thePackages := theClasses collect: [ :each | each package ].
 	
 	packageNodes := allScopeNodeTreeRoots select: [ :packageNode |
-		                packages includes: packageNode value ].
+		                thePackages includes: packageNode value ].
 	packageNodes do: [ :packageNode |
 		| classNodes classes |
 		classNodes := packageNode children.
-		classes := scope classes select: [:each | each package = packageNode value ].
+		classes := theClasses select: [:each | each package = packageNode value ].
 		"all packageNode children should be checked, including the packageNode"
 		classes := classes reject: [ :each | each isMeta ].
 		classNodes size = classes size

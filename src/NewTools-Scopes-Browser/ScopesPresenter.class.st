@@ -205,8 +205,8 @@ ScopesPresenter >> initializeScopesTree [
 		  addColumn: self nodesListColumn;
 		  children: [ :each | each children asOrderedCollection ];
 		  roots: self scopeNodes;
-		  expandRoots;
-		  collapsePath: #( 1 );
+		  lazilyComputeChildren;
+		  "expandRoots;"collapsePath: #( 1 );
 		  beResizable;
 		  activateOnDoubleClick;
 		  "whenSelectedItemChangedDo: [ :item | self updateEnabled ];"
@@ -222,7 +222,6 @@ ScopesPresenter >> newScopeCreator [
 
 { #category : 'private' }
 ScopesPresenter >> newScopeEditor [
-
 	^ self newScopeCreator
 		  scope: scopesTree selectedItem value;
 		  yourself

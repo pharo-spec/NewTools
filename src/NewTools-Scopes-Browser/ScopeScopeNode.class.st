@@ -16,25 +16,21 @@ Class {
 { #category : 'accessing' }
 ScopeScopeNode >> children [
 
-	| className class package orphanClasses fullPackages envPackages envClasses chldrn packageEnvironments classesEnvironments |
+	| className class package orphanClasses fullPackages envClasses chldrn packageEnvironments classesEnvironments |
 
 	children ifNotNil: [ ^ children ].
 
 	self value isCompositeEnvironment ifTrue: [
 		chldrn := Set new.
-		envPackages := self packages.
 		envClasses := self classes reject: [:c | c isMeta ].
 
 		"packages whose classes were all selected"
-		fullPackages := ScopesManager
-			                fullPackagesIn: envPackages
-			                having: envClasses.
+		fullPackages := ScopesManager fullPackagesFrom: envClasses.
 		"classes whose package hasn't all of its classes selected"
 
 		orphanClasses := ScopesManager
 			                 orphanClassesIn: envClasses
-			                 havingPackages: envPackages
-			                 fullPackages: fullPackages.
+			                 havingFullPackages: fullPackages.
 
 		packageEnvironments := fullPackages collect: [ :thePackage |
 			                       ScopePackageNode on: thePackage ].

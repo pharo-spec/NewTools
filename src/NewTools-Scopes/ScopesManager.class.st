@@ -30,15 +30,14 @@ ScopesManager class >> availableScopes [
 ]
 
 { #category : 'private' }
-ScopesManager class >> fullPackagesIn: packages having: classes [
+ScopesManager class >> fullPackagesFrom: classes [
 	"packages whose classes were all selected"
+
 	| theClasses |
 	theClasses := classes reject: [ :each | each isMeta ].
-	^ packages select: [ :package |
-		  | packCheckedClasses |
-		  packCheckedClasses := theClasses select: [ :class |
-			                        class package == package ].
-		  package definedClasses size == packCheckedClasses size ]
+	^ classes collect: [ :each | each package ] thenSelect: [ :package |
+		  package definedClasses size
+		  = (theClasses select: [ :class | class package = package ]) size ]
 ]
 
 { #category : 'accessing' }
@@ -50,16 +49,16 @@ ScopesManager class >> invalidNames [
 ScopesManager class >> newScopeFrom: aSet [
 
 	| packageScope classScope classes packages orphanClasses fullPackages compositeScope |
-	classes := (aSet select: [ :each | each isClassOrTrait ]) reject: [ :each | each isMeta ] .
+	classes := (aSet select: [ :each | each isClassOrTrait ]) reject: [
+		           :each | each isMeta ].
 	packages := aSet select: [ :each | each isKindOf: RPackage ].
 
 	"packages whose classes were all selected"
-	fullPackages := self fullPackagesIn: packages having: classes.
+	fullPackages := self fullPackagesFrom: classes.
 	"classes whose package hasn't all of its classes selected"
 	orphanClasses := self
 		                 orphanClassesIn: classes
-		                 havingPackages: packages
-		                 fullPackages: fullPackages.
+		                 havingFullPackages: fullPackages.
 
 	classScope := RBClassEnvironment classes: orphanClasses.
 	packageScope := RBPackageEnvironment packages: fullPackages.
@@ -85,7 +84,7 @@ ScopesManager class >> newScopeFrom: scopeA and: scopeB [
 		                   (classesA includes: each) and: [
 			                   classesB includes: each ] ].
 	packages := classesInterAB collect: [ :each  | each package ].
-	fullPackages := self fullPackagesIn: packages having: classesInterAB.
+	fullPackages := self fullPackagesFrom: classesInterAB.
 	 
 	^ self newScopeFrom: fullPackages , classesInterAB
 ]
@@ -97,28 +96,42 @@ ScopesManager class >> newScopeFrom: scopeA or: scopeB [
 
 { #category : 'operations' }
 ScopesManager class >> newScopeFromNot: scope [
-	| classes packages rejectedFullPackages rejectedOrphanClasses rejectedClassesInFullPackages rejectedClasses acceptedPackages acceptedClasses |
+
+	| classes rejectedFullPackages rejectedOrphanClasses rejectedClassesInFullPackages rejectedClasses acceptedPackages acceptedClasses |
 	classes := scope classes.
-	packages := scope packages.
-	
-	rejectedFullPackages := self fullPackagesIn: packages having: classes.
-	rejectedOrphanClasses := self orphanClassesIn: classes havingPackages: packages fullPackages: rejectedFullPackages.
-	rejectedClassesInFullPackages := rejectedFullPackages collect: [ :each | each definedClasses ].
-	rejectedClasses := rejectedOrphanClasses, rejectedClassesInFullPackages.
-	
-	acceptedPackages := self singleInstance allPackagesInEnvironment reject: [ :each | rejectedFullPackages includes: each name ].
-	acceptedClasses := (self singleInstance allPackagesInEnvironment flatCollect: [ :each | each definedClasses ]) reject: [ :each | rejectedClasses includes: each ].
-	^ self newScopeFrom: acceptedPackages, acceptedClasses
+
+	rejectedFullPackages := self fullPackagesFrom: classes.
+	rejectedOrphanClasses := self
+		                         orphanClassesIn: classes
+		                         havingFullPackages: rejectedFullPackages.
+	rejectedClassesInFullPackages := rejectedFullPackages collect: [
+		                                 :each | each definedClasses ].
+	rejectedClasses := rejectedOrphanClasses
+	                   , rejectedClassesInFullPackages.
+
+	acceptedPackages := self singleInstance allPackagesInEnvironment
+		                    reject: [ :each |
+		                    rejectedFullPackages includes: each name ].
+	acceptedClasses := (self singleInstance allPackagesInEnvironment
+		                    flatCollect: [ :each | each definedClasses ])
+		                   reject: [ :each | rejectedClasses includes: each ].
+	^ self newScopeFrom: acceptedPackages , acceptedClasses
+]
+
+{ #category : 'private' }
+ScopesManager class >> orphanClassesIn: classes havingFullPackages: fullPackages [
+
+	| theClasses |
+	theClasses := classes reject: [ :each | each isMeta ].
+	^ theClasses reject: [ :class | fullPackages includes: class package ]
 ]
 
 { #category : 'private' }
 ScopesManager class >> orphanClassesIn: classes havingPackages: packages fullPackages: fullPackages [
 
-	| classesInFullPackages theClasses |
+	| theClasses |
 	theClasses := classes reject: [ :each | each isMeta ].
-	classesInFullPackages := fullPackages flatCollect: [ :package |
-		                         package definedClasses ].
-	^ theClasses reject: [ :class | classesInFullPackages includes: class ]
+	^ theClasses reject: [ :class | fullPackages includes: class package ]
 ]
 
 { #category : 'accessing' }
@@ -193,8 +206,8 @@ ScopesManager >> environment: aSmalltalkImage [
 ]
 
 { #category : 'private' }
-ScopesManager >> fullPackagesIn: packages having: classes [ 
-	^ self class fullPackagesIn: packages having: classes 
+ScopesManager >> fullPackagesFrom: classes [ 
+	^ self class fullPackagesFrom: classes
 ]
 
 { #category : 'initialization' }
@@ -232,8 +245,11 @@ ScopesManager >> newScopeFrom: aSetOfClassesAndPackages [
 ]
 
 { #category : 'private' }
-ScopesManager >> orphanClassesIn: classes havingPackages: packages fullPackages: fullPackages [ 
-	^ self class orphanClassesIn: classes havingPackages: packages fullPackages: fullPackages 
+ScopesManager >> orphanClassesIn: classes havingFullPackages: fullPackages [
+
+	^ self class
+		  orphanClassesIn: classes
+		  havingFullPackages: fullPackages
 ]
 
 { #category : 'removing' }
