@@ -33,11 +33,14 @@ ScopesManager class >> availableScopes [
 ScopesManager class >> fullPackagesFrom: classes [
 	"packages whose classes were all selected"
 
-	| theClasses |
+	| theClasses packagesCache |
 	theClasses := classes reject: [ :each | each isMeta ].
-	^ classes collect: [ :each | each package ] thenSelect: [ :package |
+	
+	packagesCache := Dictionary new.
+	theClasses do: [ :class | packagesCache at: class put: class package  ].
+	^ theClasses collect: [ :each | packagesCache at: each ] thenSelect: [ :package |
 		  package definedClasses size
-		  = (theClasses select: [ :class | class package = package ]) size ]
+		  = (theClasses select: [ :class | (packagesCache at: class) = package ]) size ]
 ]
 
 { #category : 'accessing' }
@@ -98,8 +101,8 @@ ScopesManager class >> newScopeFrom: scopeA or: scopeB [
 ScopesManager class >> newScopeFromNot: scope [
 
 	| classes rejectedFullPackages rejectedOrphanClasses rejectedClassesInFullPackages rejectedClasses acceptedPackages acceptedClasses |
-	classes := scope classes.
-
+	classes := scope classes reject: [:each | each isMeta ].
+self halt.
 	rejectedFullPackages := self fullPackagesFrom: classes.
 	rejectedOrphanClasses := self
 		                         orphanClassesIn: classes
@@ -121,9 +124,12 @@ ScopesManager class >> newScopeFromNot: scope [
 { #category : 'private' }
 ScopesManager class >> orphanClassesIn: classes havingFullPackages: fullPackages [
 
-	| theClasses |
+	| theClasses packagesCache |
 	theClasses := classes reject: [ :each | each isMeta ].
-	^ theClasses reject: [ :class | fullPackages includes: class package ]
+	packagesCache := Dictionary new.
+	theClasses do: [ :each | packagesCache at: each put: each package ].
+	^ theClasses reject: [ :class |
+		  fullPackages includes: (packagesCache at: class) ]
 ]
 
 { #category : 'private' }
