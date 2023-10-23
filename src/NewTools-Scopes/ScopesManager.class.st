@@ -32,10 +32,11 @@ ScopesManager class >> availableScopes [
 { #category : 'private' }
 ScopesManager class >> fullPackagesIn: packages having: classes [
 	"packages whose classes were all selected"
-
+	| theClasses |
+	theClasses := classes reject: [ :each | each isMeta ].
 	^ packages select: [ :package |
 		  | packCheckedClasses |
-		  packCheckedClasses := classes select: [ :class |
+		  packCheckedClasses := theClasses select: [ :class |
 			                        class package == package ].
 		  package definedClasses size == packCheckedClasses size ]
 ]
@@ -96,16 +97,28 @@ ScopesManager class >> newScopeFrom: scopeA or: scopeB [
 
 { #category : 'operations' }
 ScopesManager class >> newScopeFromNot: scope [
-	self halt.
+	| classes packages rejectedFullPackages rejectedOrphanClasses rejectedClassesInFullPackages rejectedClasses acceptedPackages acceptedClasses |
+	classes := scope classes.
+	packages := scope packages.
+	
+	rejectedFullPackages := self fullPackagesIn: packages having: classes.
+	rejectedOrphanClasses := self orphanClassesIn: classes havingPackages: packages fullPackages: rejectedFullPackages.
+	rejectedClassesInFullPackages := rejectedFullPackages collect: [ :each | each definedClasses ].
+	rejectedClasses := rejectedOrphanClasses, rejectedClassesInFullPackages.
+	
+	acceptedPackages := self singleInstance allPackagesInEnvironment reject: [ :each | rejectedFullPackages includes: each name ].
+	acceptedClasses := (self singleInstance allPackagesInEnvironment flatCollect: [ :each | each definedClasses ]) reject: [ :each | rejectedClasses includes: each ].
+	^ self newScopeFrom: acceptedPackages, acceptedClasses
 ]
 
 { #category : 'private' }
 ScopesManager class >> orphanClassesIn: classes havingPackages: packages fullPackages: fullPackages [
 
-	| classesInFullPackages |
+	| classesInFullPackages theClasses |
+	theClasses := classes reject: [ :each | each isMeta ].
 	classesInFullPackages := fullPackages flatCollect: [ :package |
 		                         package definedClasses ].
-	^ classes reject: [ :class | classesInFullPackages includes: class ]
+	^ theClasses reject: [ :class | classesInFullPackages includes: class ]
 ]
 
 { #category : 'accessing' }
@@ -189,6 +202,27 @@ ScopesManager >> initialize [
 
 	environment ifNil: [ environment := SmalltalkImage ].
 	scopes := Set new
+]
+
+{ #category : 'as yet unclassified' }
+ScopesManager >> nameWithIndex: name [
+
+	| existingNames index indexes |
+	existingNames := self scopes collect: #label.
+
+	index := ''.
+	
+	(existingNames includes: name) ifTrue: [
+		indexes := existingNames
+			           collect: [ :each |
+				           index := (each reverse copyUpToSubstring: '-') reverse
+					                    asInteger ]
+			           thenReject: [ :each | each isNil ].
+		index := indexes
+			         ifEmpty: [ '-1' ]
+			         ifNotEmpty: [ '-' , (indexes max + 1)  asString ] ].
+
+	^ name, index asString
 ]
 
 { #category : 'private' }

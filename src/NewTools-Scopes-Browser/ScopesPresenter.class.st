@@ -250,9 +250,10 @@ ScopesPresenter >> nodesListColumn [
 ScopesPresenter >> notWithScope: anItem [
 
 	| newScope newName |
-	newScope := anItem value not.
+	
+	newScope := anItem not.
 	newName := '~' , anItem value label.
-	newScope label: newName.
+	newScope label: (model nameWithIndex: newName).
 
 	self scopesManagerClass singleInstance addScope: newScope.
 	self refresh
@@ -291,26 +292,12 @@ ScopesPresenter >> orWithScope: anItem [
 { #category : 'operations' }
 ScopesPresenter >> performOperation: aSymbol with: anItem [
 
-	| anEnvironment newScope newName existingNames index indexes |
+	| anEnvironment newScope newName |
 	anEnvironment := self selectAnotherScopeWhitout: anItem.
 	anEnvironment ifNil: [ ^ self ].
 	newScope := anItem perform: aSymbol with: anEnvironment.
 	newName := anItem label , aSymbol , anEnvironment label.
-	existingNames := model scopes collect: #label.
-
-	index := ''.
-
-	(existingNames includes: newName) ifTrue: [
-		indexes := existingNames
-			           collect: [ :each |
-				           index := (each reverse copyUpToSubstring: '-') reverse
-					                    asInteger ]
-			           thenReject: [ :each | each isNil ].
-		index := indexes
-			         ifEmpty: [ '-1' ]
-			         ifNotEmpty: [ '-' , (indexes max + 1)  asString ] ].
-
-	newScope label: newName , index.
+	newScope label: (model nameWithIndex: newName).
 
 	self scopesManagerClass singleInstance addScope: newScope.
 	self refresh

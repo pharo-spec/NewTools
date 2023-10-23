@@ -352,26 +352,28 @@ ScopeNodesPresenter >> saveScope [
 { #category : 'accessing' }
 ScopeNodesPresenter >> scope: aRBEnvironment [
 
-	| packages |
+	| packages packageNodes |
 	scope := aRBEnvironment.
+
 	packages := scope packages.
-	scopeNodesTree roots withIndexDo: [ :packageNode :index |
-		(packages anySatisfy: [ :package | packageNode value = package ])
+	
+	packageNodes := allScopeNodeTreeRoots select: [ :packageNode |
+		                packages includes: packageNode value ].
+	packageNodes do: [ :packageNode |
+		| classNodes classes |
+		classNodes := packageNode children.
+		classes := scope classes select: [:each | each package = packageNode value ].
+		"all packageNode children should be checked, including the packageNode"
+		classes := classes reject: [ :each | each isMeta ].
+		classNodes size = classes size
 			ifTrue: [
-				| classNodes classes |
-				classNodes := packageNode children.
-				classes := scope classes.
-				"all packageNode children should be checked, including the packageNode"
-				(classNodes allSatisfy: [ :classNode |
-					 classes anySatisfy: [ :cls | cls name = classNode value name ] ])
-					ifTrue: [
-						classNodes do: [ :clsNode | checkedScopeNodes add: clsNode ].
-						checkedScopeNodes add: packageNode ]
-					ifFalse: [ "only some packageNode children should be checked, and as result, the packageNode is not selected"
-						classNodes do: [ :classNode |
-							(classes includes: classNode value) ifTrue: [
-								checkedScopeNodes add: classNode ].
-							scopeNodesTree expandPath: { index } ] ] ] ].
+				classNodes do: [ :clsNode | checkedScopeNodes add: clsNode ].
+				checkedScopeNodes add: packageNode ]
+			ifFalse: [ "only some packageNode children should be checked, and as result, the packageNode is not selected"
+				classNodes do: [ :classNode |
+					(classes includes: classNode value) ifTrue: [
+						checkedScopeNodes add: classNode ]
+					"scopeNodesTree expandPath: { index }" ] ] ].
 
 	self refresh
 ]
