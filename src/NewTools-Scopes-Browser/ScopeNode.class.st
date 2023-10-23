@@ -28,7 +28,7 @@ ScopeNode class >> on: aRBEnvironment [
 { #category : 'operations' }
 ScopeNode >> & anotherNode [
 
-	self value & anotherNode value
+	^ self value & anotherNode value
 ]
 
 { #category : 'accessing' }
@@ -131,5 +131,5 @@ ScopeNode >> value: aPackageOrClass [
 { #category : 'operations' }
 ScopeNode >> | anotherNode [
 
-	self value | anotherNode value
+	^ self value | anotherNode value
 ]

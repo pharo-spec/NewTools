@@ -139,20 +139,22 @@ ScopesPresenter >> browseSelectedItem [
 { #category : 'menu commands' }
 ScopesPresenter >> deleteSelectedScope [
 
-	| item selectedPath |
+	| item selectedPath originallySelectedPath |
+	originallySelectedPath := scopesTree selection selectedPath.
+
 	item := scopesTree selectedItem.
 	(item isNil or: [
-		 item isScopeNode not or: [
-			 (selectedPath := scopesTree selection selectedPath) isEmpty ] ])
+		 item isScopeNode not or: [ originallySelectedPath isEmpty ] ])
 		ifTrue: [
 			self inform: 'select a scope'.
 			^ self ].
 
-	(selectedPath at: 1) == 1 ifTrue: [
+	(originallySelectedPath at: 1) == 1 ifTrue: [
 		self inform: 'You can''t delete this scope'.
 		^ self ].
 
 	model removeScope: item value.
+	selectedPath := scopesTree selection selectedPath at: 1.
 
 	self updateScopesTree.
 
@@ -163,9 +165,10 @@ ScopesPresenter >> deleteSelectedScope [
 ScopesPresenter >> editSelectedScope [
 
 	| selectedPath |
+	selectedPath := scopesTree selection selectedPath.
+
 	(scopesTree selectedItem isNil or: [
-		 scopesTree selectedItem isScopeNode not or: [
-			 (selectedPath := scopesTree selection selectedPath) isEmpty ] ])
+		 scopesTree selectedItem isScopeNode not or: [ selectedPath isEmpty ] ])
 		ifTrue: [
 			self inform: 'select a scope'.
 			^ self ].
@@ -173,7 +176,7 @@ ScopesPresenter >> editSelectedScope [
 	(selectedPath at: 1) == 1 ifTrue: [
 		self inform: 'You can''t edit this scope'.
 		^ self ].
-	
+
 	self newScopeEditor open
 ]
 
