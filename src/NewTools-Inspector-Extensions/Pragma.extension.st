@@ -5,7 +5,10 @@ Pragma >> inspectionSourceCodeMethod [
 	<inspectorPresentationOrder: 30 title: 'Method'>
 
 	^ SpCodePresenter new 
-		beForMethod: self method;
-		text: self method sourceCode;
+		beForMethod: method ast;
+		text: (method sourceCode);
+		addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
+			interval: (self sourceNode sourceInterval first to: self sourceNode sourceInterval last + 1);
+			yourself);
 		yourself
 ]
