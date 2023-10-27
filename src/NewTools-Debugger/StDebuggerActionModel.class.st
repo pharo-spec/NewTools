@@ -338,15 +338,18 @@ StDebuggerActionModel >> recompileMethodTo: aString inContext: aContext notifyin
 
 	| methodContext homePC |
 	aContext ifNil: [ ^ self ].
+	"Get the home before to recompile the method, we can lost it (for clean blocks)"
+	methodContext := aContext home.
+
 	self session
 		recompileMethodTo: aString
 		inContext: aContext
 		notifying: aNotifyer.
 
-	methodContext := aContext home.
 	homePC := methodContext isDead
 		ifTrue: [ methodContext endPC ]
 		ifFalse: [ methodContext pc ].
+		
 	previousASTScope := (methodContext compiledCode sourceNodeForPC:
 		                     homePC) scope
 ]
