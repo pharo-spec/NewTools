@@ -113,7 +113,7 @@ StDebuggerActionModelTest >> methodWithBlockContext [
 { #category : 'helper' }
 StDebuggerActionModelTest >> methodWithDeadBlockContext [
 
-	^ [ (1+1 ) printString ]
+	^ [ (1 + 1) printString ]
 ]
 
 { #category : 'helper' }
@@ -127,14 +127,13 @@ StDebuggerActionModelTest >> newSessionWithBlockContext [
 	| process method |
 	method := self class >> #methodWithBlockContext.
 	methodWithBlockContextOriginalSource := method sourceCode.
-	process := [ method valueWithReceiver: self arguments: #(  ) ]
-		           newProcess.
-	self
-		setSessionAndDebuggerModelForMethod: method
-		inContext: process suspendedContext.
+	process := [ method valueWithReceiver: self arguments: #(  ) ] newProcess.
+	self setSessionAndDebuggerModelForMethod: method inContext: process suspendedContext.
 
-	4 timesRepeat: [
-		debugActionModel stepInto: debugActionModel topContext ]
+	[ debugActionModel topContext closure isNil ] whileTrue: [
+		debugActionModel stepInto: debugActionModel topContext ].
+	"Step on (1 + 1) message"
+	debugActionModel stepInto: debugActionModel topContext
 ]
 
 { #category : 'helper' }
