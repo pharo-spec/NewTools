@@ -9,14 +9,12 @@ Class {
 { #category : 'accessing' }
 ScopePackageNode >> children [
 
-	^ children ifNil: [
-		  children := value definedClasses asOrderedCollection collect: [
-			              :classOrTrait |
-			              classOrTrait isClassOrTrait ifFalse: [
-				              self error: 'child must be a or a trait' ].
-			              classOrTrait isTrait
-				              ifTrue: [ ScopeTraitNode on: classOrTrait ]
-				              ifFalse: [ ScopeClassNode on: classOrTrait ] ] ]
+	^ value definedClasses asOrderedCollection collect: [ :classOrTrait |
+		  classOrTrait isClassOrTrait ifFalse: [
+			  self error: 'child must be a class or a trait' ].
+		  classOrTrait isTrait
+			  ifTrue: [ ScopeTraitNode on: classOrTrait ]
+			  ifFalse: [ ScopeClassNode on: classOrTrait ] ]
 ]
 
 { #category : 'accessing' }

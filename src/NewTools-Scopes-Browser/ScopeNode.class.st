@@ -5,8 +5,7 @@ Class {
 	#name : 'ScopeNode',
 	#superclass : 'Object',
 	#instVars : [
-		'value',
-		'children'
+		'value'
 	],
 	#category : 'NewTools-Scopes-Browser-Nodes',
 	#package : 'NewTools-Scopes-Browser',

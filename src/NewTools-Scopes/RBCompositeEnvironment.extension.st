@@ -7,6 +7,12 @@ RBCompositeEnvironment >> addClass: aClass [
 ]
 
 { #category : '*NewTools-Scopes' }
+RBCompositeEnvironment >> addPackage: aPackageName [
+	self environment addPackage: aPackageName.
+	self otherEnvironment addPackage: aPackageName
+]
+
+{ #category : '*NewTools-Scopes' }
 RBCompositeEnvironment >> removeClass: aClass [
 	self environment removeClass: aClass.
 	self otherEnvironment removeClass: aClass

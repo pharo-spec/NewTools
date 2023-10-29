@@ -9,7 +9,7 @@ Class {
 { #category : 'accessing' }
 ScopeClassNode >> children [
 
-	^ children ifNil: [children := #(  )]
+	^  #(  )
 ]
 
 { #category : 'testing' }

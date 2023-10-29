@@ -4,10 +4,6 @@ I am a model for having scopes in the ScopeTreePresenter
 Class {
 	#name : 'ScopeScopeNode',
 	#superclass : 'ScopeNode',
-	#instVars : [
-		'classes',
-		'packages'
-	],
 	#category : 'NewTools-Scopes-Browser-Nodes',
 	#package : 'NewTools-Scopes-Browser',
 	#tag : 'Nodes'
@@ -16,56 +12,30 @@ Class {
 { #category : 'accessing' }
 ScopeScopeNode >> children [
 
-	| className class package orphanClasses fullPackages envClasses chldrn packageEnvironments classesEnvironments |
+	| fullPackages orphanClasses packageChildren classChildren clss |
+	clss := self value classes.
+self halt.
+	fullPackages := ScopesManager fullPackagesFrom: clss.
+	orphanClasses := ScopesManager
+		                 orphanClassesIn: clss
+		                 havingFullPackages: fullPackages.
 
-	children ifNotNil: [ ^ children ].
+	packageChildren := fullPackages collect: [ :package |
+		                   ScopePackageNode on: package ].
+	classChildren := orphanClasses collect: [ :class |
+		                 class isTrait
+			                 ifTrue: [ ScopeTraitNode on: class ]
+			                 ifFalse: [ ScopeClassNode on: class ] ].
 
-	self value isCompositeEnvironment ifTrue: [
-		chldrn := Set new.
-		envClasses := self classes reject: [:c | c isMeta ].
-
-		"packages whose classes were all selected"
-		fullPackages := ScopesManager fullPackagesFrom: envClasses.
-		"classes whose package hasn't all of its classes selected"
-
-		orphanClasses := ScopesManager
-			                 orphanClassesIn: envClasses
-			                 havingFullPackages: fullPackages.
-
-		packageEnvironments := fullPackages collect: [ :thePackage |
-			                       ScopePackageNode on: thePackage ].
-		classesEnvironments := orphanClasses collect: [ :theClass |
-			                       theClass isTrait
-				                       ifTrue: [ ScopeTraitNode on: theClass ]
-				                       ifFalse: [ ScopeClassNode on: theClass ] ].
-		packageEnvironments do: [ :env | chldrn add: env ].
-		classesEnvironments do: [ :env | chldrn add: env ].
-		^ children := chldrn ].
-
-	^ children := self value basisObjects collect: [ :stringOrPackage |
-		            stringOrPackage isString
-			            ifTrue: [
-				            className := stringOrPackage.
-				            class := self systemDictionary
-					                     at: className
-					                     ifAbsent: [ nil ].
-				            class isTrait
-					            ifTrue: [ ScopeTraitNode on: class ]
-					            ifFalse: [ ScopeClassNode on: class ] ]
-			            ifFalse: [
-				            stringOrPackage isClassOrTrait
-					            ifTrue: [ ScopeClassNode on: stringOrPackage ]
-					            ifFalse: [
-						            self assert: (stringOrPackage isKindOf: RPackage).
-						            package := stringOrPackage.
-						            ScopePackageNode on: package ] ] ].
-
+	^ packageChildren
+		  addAll: classChildren;
+		  yourself
 ]
 
 { #category : 'accessing' }
 ScopeScopeNode >> classes [
 
-	^ classes ifNil: [ classes := value classes ]
+	^ value classes
 ]
 
 { #category : 'testing' }
@@ -85,8 +55,8 @@ ScopeScopeNode >> packageNode [
 
 { #category : 'accessing' }
 ScopeScopeNode >> packages [
-
-	^ packages ifNil: [ packages := value packages ]
+self halt.
+	^ value packages
 ]
 
 { #category : 'accessing' }
