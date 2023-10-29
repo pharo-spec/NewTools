@@ -29,6 +29,12 @@ ScopesManager class >> availableScopes [
 	^ self scopes
 ]
 
+{ #category : 'accessing' }
+ScopesManager class >> defaultScopeLabel [
+
+	^ 'Full environment'
+]
+
 { #category : 'private' }
 ScopesManager class >> fullPackagesFrom: classes [
 	"packages whose classes were all selected"
@@ -48,7 +54,9 @@ ScopesManager class >> fullPackagesFrom: classes [
 
 { #category : 'accessing' }
 ScopesManager class >> invalidNames [
-	^ self scopes collect: [ :e | e label ]
+
+	^ { self defaultScopeLabel }
+	  , (self scopes collect: [ :e | e label ])
 ]
 
 { #category : 'operations' }
@@ -200,7 +208,7 @@ ScopesManager >> defaultScope [
 { #category : 'accessing' }
 ScopesManager >> defaultScopeLabel [
 
-	^ 'Full environment'
+	^ self class defaultScopeLabel
 ]
 
 { #category : 'api' }
@@ -231,7 +239,8 @@ ScopesManager >> initialize [
 ScopesManager >> nameWithIndex: name [
 
 	| existingNames index indexes |
-	existingNames := self scopes collect: #label.
+	
+	existingNames := self class invalidNames.
 
 	index := ''.
 	

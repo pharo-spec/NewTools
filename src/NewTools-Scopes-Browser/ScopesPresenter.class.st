@@ -339,9 +339,16 @@ ScopesPresenter >> refresh [
 { #category : 'initialization' }
 ScopesPresenter >> registerEvents [
 
+	self flag:
+		'reseting subscriptions here is horrible, find a better way'.
+
+	self announcer subscriptions reset.
+
 	self announcer weak
 		when: ScopeCreatedAnnouncement
-		do: [ :ann | self addScopeToTree: ann scope ]
+		do: [ :ann |
+			self addScopeToTree: ann scope.
+			self selectScope: ann scope ]
 		for: self.
 	self announcer weak
 		when: ScopeEditedAnnouncement
@@ -398,6 +405,15 @@ ScopesPresenter >> selectAnotherScopeWhitout: anItem [
 		                openModal.
 
 	^ anotherScope
+]
+
+{ #category : 'initialization' }
+ScopesPresenter >> selectScope: aScope [
+
+	| item |
+	item := (scopesTree roots select: [ :root | root value = aScope ])
+		        at: 1.
+	scopesTree selectItem: item
 ]
 
 { #category : 'initialization' }

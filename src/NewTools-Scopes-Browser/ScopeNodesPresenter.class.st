@@ -190,6 +190,11 @@ ScopeNodesPresenter >> editScope: aScope [
 	model editScope: aScope withNodes: checkedScopeNodes 
 ]
 
+{ #category : 'accessing - im text input' }
+ScopeNodesPresenter >> editing [
+	^ scope isNotNil
+]
+
 { #category : 'menu commands' }
 ScopeNodesPresenter >> getScopeName [
 
@@ -197,7 +202,7 @@ ScopeNodesPresenter >> getScopeName [
 	validate := self validateNameBlock.
 
 	label := nodeNameText text trim.
-	(validate value: label) ifTrue: [ ^ label ].
+	(validate value: label) ifTrue: [ ^ model nameWithIndex: label ].
 
 	label := self getNameFromUser.
 	(validate value: label) 
