@@ -187,7 +187,8 @@ ScopeNodesPresenter >> deactivateItem: scopeNode [
 
 { #category : 'initialization' }
 ScopeNodesPresenter >> editScope: aScope [
-	model editScope: aScope withNodes: checkedScopeNodes 
+	model editScope: aScope withNodes: (checkedScopeNodes collect: [:each | each value]).
+	self announceScopeEdited
 ]
 
 { #category : 'accessing - im text input' }

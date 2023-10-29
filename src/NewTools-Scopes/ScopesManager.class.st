@@ -62,7 +62,7 @@ ScopesManager class >> invalidNames [
 { #category : 'operations' }
 ScopesManager class >> newScopeFrom: aSet [
 
-	| packageScope classScope classes packages orphanClasses fullPackages compositeScope |
+	| packageScope classScope classes packages orphanClasses fullPackages |
 	classes := (aSet select: [ :each | each isClassOrTrait ]) reject: [
 		           :each | each isMeta ].
 	packages := aSet select: [ :each | each isKindOf: RPackage ].
@@ -77,13 +77,7 @@ ScopesManager class >> newScopeFrom: aSet [
 	classScope := RBClassEnvironment classes: orphanClasses.
 	packageScope := RBPackageEnvironment packages: fullPackages.
 
-	(classScope isNotEmpty and: [ packageScope isNotEmpty ]) ifTrue: [
-		compositeScope := packageScope | classScope ].
-
-	compositeScope ifNotNil: [ ^ compositeScope ].
-	packageScope isEmpty ifFalse: [ ^ packageScope ].
-	classScope isEmpty ifFalse: [ ^ classScope ].
-	self error: 'Impossible to create scope from nodes'
+	^ classScope | packageScope
 ]
 
 { #category : 'operations' }
@@ -105,7 +99,7 @@ ScopesManager class >> newScopeFrom: scopeA and: scopeB [
 
 { #category : 'operations' }
 ScopesManager class >> newScopeFrom: scopeA or: scopeB [
-	^ self newScopeFrom: scopeA classes, scopeB classes, scopeA packages, scopeB packages
+	^ scopeA | scopeB
 ]
 
 { #category : 'operations' }
@@ -141,14 +135,6 @@ ScopesManager class >> orphanClassesIn: classes havingFullPackages: fullPackages
 	theClasses do: [ :each | packagesCache at: each put: each package ].
 	^ theClasses reject: [ :class |
 		  fullPackages includes: (packagesCache at: class) ]
-]
-
-{ #category : 'private' }
-ScopesManager class >> orphanClassesIn: classes havingPackages: packages fullPackages: fullPackages [
-
-	| theClasses |
-	theClasses := classes reject: [ :each | each isMeta ].
-	^ theClasses reject: [ :class | fullPackages includes: class package ]
 ]
 
 { #category : 'accessing' }
@@ -209,6 +195,38 @@ ScopesManager >> defaultScope [
 ScopesManager >> defaultScopeLabel [
 
 	^ self class defaultScopeLabel
+]
+
+{ #category : 'editing' }
+ScopesManager >> editScope: aScope withNodes: aCollection [ 
+	| classesInScope packagesInScope classes packages fullPackages orphanClasses addedClasses removedClasses addedPackages removedPackages |
+	
+	classesInScope := aScope classes.
+	packagesInScope := aScope packages.
+	
+	classes := (aCollection select: [ :each | each isClassOrTrait ]) reject: [
+		           :each | each isMeta ].
+	classes := aScope classes asSet addAll: classes; yourself.
+	
+	packages := aCollection select: [ :each | each isKindOf: RPackage ].
+	packages := aScope packages asSet addAll: packages; yourself.
+	
+	fullPackages := self fullPackagesFrom: classes.
+	orphanClasses := self orphanClassesIn: classes havingFullPackages: fullPackages.
+	
+	addedClasses := orphanClasses reject: [ :aClass | classesInScope includes: aClass ].
+	removedClasses := classesInScope reject: [ :aClass | orphanClasses includes: aClass ].
+	
+	addedPackages := fullPackages reject: [ :aPackage | packagesInScope includes: aPackage ].
+	removedPackages := packagesInScope reject: [ :aPackage | fullPackages includes: aPackage ].
+	
+	addedClasses do: [ :aClass | aScope addClass: aClass ].
+	removedClasses do: [ :aClass | aScope removeClass: aClass ].
+	
+	addedPackages do: [ :aPackage | aScope addPackage: aPackage name ].
+	removedPackages do: [ :aPackage | aScope removePackage: aPackage name ].
+	
+	^ aScope
 ]
 
 { #category : 'api' }

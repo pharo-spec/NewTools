@@ -130,5 +130,5 @@ ScopeNode >> value: aPackageOrClass [
 { #category : 'operations' }
 ScopeNode >> | anotherNode [
 
-	^ ScopesManager newScopeFrom: self value or: anotherNode value
+	^ self value | anotherNode value
 ]

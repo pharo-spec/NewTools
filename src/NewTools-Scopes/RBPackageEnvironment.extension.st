@@ -1,0 +1,11 @@
+Extension { #name : 'RBPackageEnvironment' }
+
+{ #category : '*NewTools-Scopes' }
+RBPackageEnvironment >> addClass: aClass [
+	^ self
+]
+
+{ #category : '*NewTools-Scopes' }
+RBPackageEnvironment >> removeClass: aClass [
+	^ self
+]
