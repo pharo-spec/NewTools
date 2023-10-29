@@ -51,9 +51,9 @@ ScopeNodesPresenter class >> reset [
 	LastSearch := nil
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'layout' }
 ScopeNodesPresenter class >> title [
-	^ 'Scope Editor'
+	^ 'Scope creator'
 ]
 
 { #category : 'private - actions' }
@@ -99,6 +99,14 @@ ScopeNodesPresenter >> allScopeNodeTreeRoots [
 	^ allScopeNodeTreeRoots ifNil: [
 		  allScopeNodeTreeRoots := model allPackagesInEnvironment collect: [
 			                           :package | ScopePackageNode on: package ] ]
+]
+
+{ #category : 'announcements' }
+ScopeNodesPresenter >> announceScopeCreated: aScope [
+
+	self announcer announce: (ScopeCreatedAnnouncement new
+			 scope: aScope;
+			 yourself)
 ]
 
 { #category : 'announcements' }
@@ -178,6 +186,27 @@ ScopeNodesPresenter >> deactivateItem: scopeNode [
 ]
 
 { #category : 'initialization' }
+ScopeNodesPresenter >> editScope: aScope [
+	model editScope: aScope withNodes: checkedScopeNodes 
+]
+
+{ #category : 'menu commands' }
+ScopeNodesPresenter >> getScopeName [
+
+	| label validate |
+	validate := self validateNameBlock.
+
+	label := nodeNameText text trim.
+	(validate value: label) ifTrue: [ ^ label ].
+
+	label := self getNameFromUser.
+	(validate value: label) 
+		ifTrue: [ ^ model nameWithIndex: label ].
+	
+	^ nil
+]
+
+{ #category : 'initialization' }
 ScopeNodesPresenter >> initialize [
 
 	super initialize.
@@ -198,13 +227,13 @@ ScopeNodesPresenter >> initializeButtons [
 	saveAsButton := self newButton
 		                label: 'Save as...';
 		                icon: (self iconNamed: #smallSaveAs);
-		                action: [ self validate ifTrue: [ self saveScope ] ];
+		                action: [ self saveScopeAs ];
 		                yourself.
 
 	saveButton := self newButton
 		              label: 'Save';
 		              icon: (self iconNamed: #smallSave);
-		              action: [ self validate ifTrue: [ self saveScope ] ];
+		              action: [ self saveScope ];
 		              yourself
 ]
 
@@ -234,7 +263,7 @@ ScopeNodesPresenter >> initializePresenters [
 { #category : 'announcements' }
 ScopeNodesPresenter >> initializeScope [
 
-	scope := model newScopeFrom: self checkedItems
+	^ model newScopeFrom: self checkedItems
 ]
 
 { #category : 'initialization' }
@@ -254,6 +283,12 @@ ScopeNodesPresenter >> initializeScopeNodesTree [
 		  whenActivatedDo: [ :selection |
 			  scopeNodesTree toggleSelectedItems ];
 		  contextMenu: self argumentsListMenu
+]
+
+{ #category : 'announcements' }
+ScopeNodesPresenter >> newScopeFrom: items [
+	"an item is either a class or a package"
+	^ model newScopeFrom: items
 ]
 
 { #category : 'initialization' }
@@ -291,18 +326,6 @@ ScopeNodesPresenter >> nodesListColumn [
 				   yourself);
 		  addColumn: self nodeDescriptionColumn;
 		  yourself
-]
-
-{ #category : 'private - presenters' }
-ScopeNodesPresenter >> openScopeNameDialog [
-
-	| nameDialog |
-	nameDialog := (ScopeNamePresenter on: model)
-		              newScope: scope;
-		              yourself.
-	nameDialog openDialog
-		okAction: [ nameDialog submit ];
-		cancelAction: [ nameDialog close ]
 ]
 
 { #category : 'refreshing' }
@@ -350,21 +373,55 @@ ScopeNodesPresenter >> removeNode: aNode [
 ]
 
 { #category : 'initialization' }
+ScopeNodesPresenter >> saveNewScope [
+	
+	| label newScope |
+	
+	label := self getScopeName.
+	label ifNil: [ ^ self ].
+	
+	newScope := self newScopeFrom: self checkedItems.
+	newScope label: label.
+	
+	model addScope: newScope.
+	self announceScopeCreated: newScope
+	
+]
+
+{ #category : 'initialization' }
 ScopeNodesPresenter >> saveScope [
 
-	scope
-		ifNil: [
-			self validate ifTrue: [
-				self initializeScope.
-				self openScopeNameDialog ] ]
-		ifNotNil: [
-			| editedScope |
-			editedScope := model newScopeFrom: self checkedItems.
-			editedScope label: scope label.
-			model removeScope: scope.
-			model addScope: editedScope.
-			self announceScopeEdited.
-			self close ]
+	self validate ifFalse: [
+		self inform: 'You must check at least one item'.
+		^ self ].
+
+	self editing
+		ifFalse: [ self saveNewScope ]
+		ifTrue: [ self editScope: scope ]
+		
+	
+	
+]
+
+{ #category : 'saving' }
+ScopeNodesPresenter >> saveScopeAs [
+
+	| label newScope |
+	self validate ifFalse: [
+		self inform: 'You must check at least one item'.
+		^ self ].
+
+	label := self getNameFromUser.
+	(self validateNameBlock value: label)
+		ifTrue: [ label := model nameWithIndex: label ]
+		ifFalse: [^ self ].
+
+	newScope := self newScopeFrom: self checkedItems.
+	newScope label: label.
+	
+	model addScope: newScope.
+	self announceScopeCreated: newScope
+	
 ]
 
 { #category : 'accessing' }
@@ -372,18 +429,18 @@ ScopeNodesPresenter >> scope: aRBEnvironment [
 
 	| packageNodes theClasses thePackages packagesCache |
 	scope := aRBEnvironment.
-	theClasses := scope classes reject: [:each | each isMeta ].
+	theClasses := scope classes reject: [ :each | each isMeta ].
 	thePackages := theClasses collect: [ :each | each package ].
 	packagesCache := Dictionary new.
 	theClasses do: [ :class | packagesCache at: class put: class package ].
-	self halt.
+
 	packageNodes := allScopeNodeTreeRoots select: [ :packageNode |
 		                thePackages includes: packageNode value ].
 	packageNodes do: [ :packageNode |
 		| classNodes classes |
-		
 		classNodes := packageNode children.
-		classes := theClasses select: [:each | (packagesCache at: each) = packageNode value ].
+		classes := theClasses select: [ :each |
+			           (packagesCache at: each) = packageNode value ].
 		"all packageNode children should be checked, including the packageNode"
 		classes := classes reject: [ :each | each isMeta ].
 		classNodes size = classes size
@@ -392,9 +449,8 @@ ScopeNodesPresenter >> scope: aRBEnvironment [
 				checkedScopeNodes add: packageNode ]
 			ifFalse: [ "only some packageNode children should be checked, and as result, the packageNode is not selected"
 				classNodes do: [ :classNode |
-					(classes includes: classNode value) ifTrue: [
-						checkedScopeNodes add: classNode ]
-					"scopeNodesTree expandPath: { index }" ] ] ].
+					(classes includes: classNode value) ifTrue: [ "scopeNodesTree expandPath: { index }"
+						checkedScopeNodes add: classNode ] ] ] ].
 
 	self refresh
 ]
@@ -402,8 +458,6 @@ ScopeNodesPresenter >> scope: aRBEnvironment [
 { #category : 'validation' }
 ScopeNodesPresenter >> validate [
 
-	checkedScopeNodes ifEmpty: [
-		self inform: 'You must check at least one item'.
-		^ false ].
+	checkedScopeNodes ifEmpty: [ ^ false ].
 	^ true
 ]

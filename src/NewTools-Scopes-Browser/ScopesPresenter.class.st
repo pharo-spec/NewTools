@@ -96,7 +96,7 @@ ScopesPresenter >> argumentsListMenu [
 					  anItem
 						  name: 'Rename';
 						  visibleIf: [ scopesTree selectedItem isScopeNode ];
-						  action: [ self openScopeNameDialog ] ];
+						  action: [ self renameSelectedScope ] ];
 				  addItem: [ :anItem |
 					  anItem
 						  name: 'Open on Calypso';
@@ -135,6 +135,12 @@ ScopesPresenter >> argumentsListMenu [
 { #category : 'menu commands' }
 ScopesPresenter >> browseSelectedItem [
 	scopesTree selectedItem value browse
+]
+
+{ #category : 'menu commands' }
+ScopesPresenter >> createNewScope [
+
+	self newScopeCreator open
 ]
 
 { #category : 'menu commands' }
@@ -181,6 +187,18 @@ ScopesPresenter >> editSelectedScope [
 	self newScopeEditor open
 ]
 
+{ #category : 'menu commands' }
+ScopesPresenter >> getScopeName [
+
+	| label |
+	label := self getNameFromUser.
+	(self validateNameBlock value: label)
+		ifTrue: [ ^ model nameWithIndex: label ]
+		ifFalse: [
+			self inform: 'Name can''t be empty or contain spaces'.
+			^ nil ]
+]
+
 { #category : 'initialization' }
 ScopesPresenter >> initialize [
 
@@ -214,7 +232,7 @@ ScopesPresenter >> initializeScopesTree [
 		  contextMenu: self argumentsListMenu
 ]
 
-{ #category : 'menu commands' }
+{ #category : 'private' }
 ScopesPresenter >> newScopeCreator [
 
 	^ ScopeNodesPresenter owner: self on: model
@@ -222,6 +240,7 @@ ScopesPresenter >> newScopeCreator [
 
 { #category : 'private' }
 ScopesPresenter >> newScopeEditor [
+
 	^ self newScopeCreator
 		  scope: scopesTree selectedItem value;
 		  yourself
@@ -270,17 +289,6 @@ ScopesPresenter >> openOnCalypso: aClassOrPackage [
 	"aClassOrPackage isClassOrTrait
 		ifTrue: [ browser selectClass: aClassOrPackage ]
 		ifFalse: [ browser selectPackage: aClassOrPackage ]"
-]
-
-{ #category : 'menu commands' }
-ScopesPresenter >> openScopeNameDialog [
-	| nameDialog |
-	nameDialog := (ScopeNamePresenter on: model)
-		              newScope: scopesTree selectedItem value;
-		              yourself.
-	nameDialog openDialog
-		okAction: [ nameDialog submit ];
-		cancelAction: [ nameDialog close ]
 ]
 
 { #category : 'operations' }
@@ -333,14 +341,23 @@ ScopesPresenter >> registerEvents [
 
 	self announcer weak
 		when: ScopeCreatedAnnouncement
-		do: [ :ann |
-			model addScope: ann scope.
-			self addScopeToTree: ann scope ]
+		do: [ :ann | self addScopeToTree: ann scope ]
 		for: self.
 	self announcer weak
 		when: ScopeEditedAnnouncement
 		do: [ self updateScopesTree ]
 		for: self
+]
+
+{ #category : 'menu commands' }
+ScopesPresenter >> renameSelectedScope [
+
+	| scope label |
+	scope := scopesTree selectedItem value.
+	label := self getScopeName.
+	label ifNotNil: [
+		scope label: label.
+		self refresh ]
 ]
 
 { #category : 'initialization' }
@@ -391,7 +408,7 @@ ScopesPresenter >> toolbarButtons [
 	buttons add: (self newToolbarButton
 			 icon: (self iconNamed: #add);
 			 help: 'Add a new scope';
-			 action: [ self newScopeCreator open ];
+			 action: [ self createNewScope ];
 			 yourself).
 
 	buttons add: (buttonEdit := self newToolbarButton

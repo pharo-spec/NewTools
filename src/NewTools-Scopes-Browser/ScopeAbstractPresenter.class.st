@@ -17,6 +17,23 @@ ScopeAbstractPresenter >> announcer [
 	^ model announcer
 ]
 
+{ #category : 'as yet unclassified' }
+ScopeAbstractPresenter >> getNameFromUser [
+
+	^ (ScopeRequestLabel newApplication: self application)
+		  title: 'Scope name...';
+		  validateAnswer: [ :txt |
+			  | isValid |
+			  isValid := self validateNameBlock value: txt.
+			  isValid ifFalse: [
+					  isValid ifFalse: [
+							  self inform: 'Name can''t be empty or contain spaces' ] ].
+			  isValid ];
+		  onAccept: [ :dialog | dialog close ];
+		  extent: 250 @ 150;
+		  openModal
+]
+
 { #category : 'private - presenters' }
 ScopeAbstractPresenter >> newScopeTree [
 
@@ -47,4 +64,14 @@ ScopeAbstractPresenter >> showReferencesToClass: aClass [
 		         yourself.
 
 	browser spawnQueryBrowserOn: query
+]
+
+{ #category : 'as yet unclassified' }
+ScopeAbstractPresenter >> validateNameBlock [
+
+	^ [ :txt |
+	  | isValid |
+	  isValid := txt isNotNil and: [
+		             txt isNotEmpty and: [ (txt includesSubstring: ' ') not ] ].
+	  isValid ]
 ]
