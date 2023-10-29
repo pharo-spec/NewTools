@@ -79,7 +79,8 @@ ScopeNode >> isScopeNode [
 
 { #category : 'accessing' }
 ScopeNode >> label [
-	^ self value name
+
+	^ self value name , ' [package: ' , self value package name , ']'
 ]
 
 { #category : 'accessing' }

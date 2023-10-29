@@ -98,11 +98,6 @@ ScopesManager class >> newScopeFrom: scopeA and: scopeB [
 ]
 
 { #category : 'operations' }
-ScopesManager class >> newScopeFrom: scopeA or: scopeB [
-	^ scopeA | scopeB
-]
-
-{ #category : 'operations' }
 ScopesManager class >> newScopeFromNot: scope [
 
 	| classes rejectedFullPackages rejectedOrphanClasses rejectedClassesInFullPackages rejectedClasses acceptedPackages acceptedClasses |

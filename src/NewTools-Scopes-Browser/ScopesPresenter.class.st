@@ -99,6 +99,10 @@ ScopesPresenter >> argumentsListMenu [
 						  action: [ self renameSelectedScope ] ];
 				  addItem: [ :anItem |
 					  anItem
+						  name: 'Inspect';
+						  action: [ scopesTree selectedItem inspect ] ];
+				  addItem: [ :anItem |
+					  anItem
 						  name: 'Open on Calypso';
 						  visibleIf: [ scopesTree selectedItem isScopeNode ];
 						  action: [ self openOnCalypso: scopesTree selectedItem value ] ];
@@ -112,7 +116,8 @@ ScopesPresenter >> argumentsListMenu [
 					  anItem
 						  name: 'Class references';
 						  visibleIf: [ scopesTree selectedItem isClassNode ];
-						  action: [ self showReferencesToClass: scopesTree selectedItem value] ] ];
+						  action: [
+							  self showReferencesToClass: scopesTree selectedItem value ] ] ];
 		  addGroup: [ :aGroup |
 			  aGroup
 				  addItem: [ :anItem |

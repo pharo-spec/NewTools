@@ -14,7 +14,7 @@ ScopeScopeNode >> children [
 
 	| fullPackages orphanClasses packageChildren classChildren clss |
 	clss := self value classes.
-self halt.
+
 	fullPackages := ScopesManager fullPackagesFrom: clss.
 	orphanClasses := ScopesManager
 		                 orphanClassesIn: clss
