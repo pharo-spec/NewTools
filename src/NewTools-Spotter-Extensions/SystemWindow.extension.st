@@ -5,7 +5,7 @@ SystemWindow >> stActDefault [
 
 	^ self isTopWindow
 		ifTrue: [ self comeToFront ] "rise above non-window morphs"
-		ifFalse:[ self activate ]
+		ifFalse:[ self restoreAndActivate ]
 ]
 
 { #category : '*NewTools-Spotter-Extensions' }
