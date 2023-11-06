@@ -59,19 +59,13 @@ ScopeNodesPresenter class >> title [
 { #category : 'private - actions' }
 ScopeNodesPresenter >> activateItem: scopeNode [
 
-	self addNode: scopeNode.
-	
-	scopeNode children isEmptyOrNil ifTrue: [ ^ self ].
-	
-	scopeNode children do: [ :child | self addNode: child ].
-	
+	self addNode: scopeNode
 ]
 
 { #category : 'private - actions' }
 ScopeNodesPresenter >> addNode: aNode [
 
-	(checkedScopeNodes anySatisfy: [ :node | aNode value = node value ])
-		ifFalse: [ checkedScopeNodes add: aNode ].
+	checkedScopeNodes add: aNode.
 	self refreshNodeCheckbox: aNode
 ]
 
@@ -118,42 +112,51 @@ ScopeNodesPresenter >> announceScopeEdited [
 { #category : 'private - presenters' }
 ScopeNodesPresenter >> argumentsListMenu [
 
-	^ self newMenu
-		  addGroup: [ :aGroup |
-			  aGroup
-				addItem: [ :anItem |
-						
-					  anItem
-						  name: 'Check selected';
-						  visibleIf: [ scopeNodesTree selectedItem isNotNil ];
-						  iconName: #glamorousAccept;
-						  action: [ self checkSelectedNodes ] ];
-				    
-				addItem: [ :anItem |
-						
-					  anItem
-						  name: 'Add class hierarchy';
-						  visibleIf: [ scopeNodesTree selectedItem isClassNode ];
-						  iconName: #hierarchy;
-						  action: [ self addSelectedItemClassHierarchy ] ];
-				  addItem: [ :anItem |
-					  anItem
-						  name: 'Browse';
-						  visibleIf: [ scopeNodesTree selectedItem isNotNil ];
-						  iconName: #glamorousBrowse;
-						  action: [ self browseSelectedItem ] ] ];
-		  addItem: [ :anItem |
-			  anItem
-				  name: 'Class references';
-				  visibleIf: [ scopeNodesTree selectedItem isClassNode ];
-				  iconName: #glamorousBrowse;
-				  action: [
-					  self showReferencesToClass: scopeNodesTree selectedItem value ] ]
+	^ self newMenu addGroup: [ :aGroup |
+		  aGroup
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'Check all Cmd-a';
+					  iconName: #glamorousAccept;
+					  action: [ self checkAll ] ];
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'Unheck all Cmd-u';
+					  iconName: #glamorousAccept;
+					  action: [ self uncheckAll ] ];
+			  
+			addItem: [ :anItem |
+				  anItem
+					  name: 'Add class hierarchy';
+					  visibleIf: [ scopeNodesTree selectedItem isClassNode ];
+					  iconName: #hierarchy;
+					  action: [ self addSelectedItemClassHierarchy ] ];
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'Browse';
+					  visibleIf: [ scopeNodesTree selectedItem isNotNil ];
+					  iconName: #glamorousBrowse;
+					  action: [ self browseSelectedItem ] ];
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'Class references';
+					  visibleIf: [ scopeNodesTree selectedItem isClassNode ];
+					  iconName: #glamorousBrowse;
+					  action: [
+						  self showReferencesToClass: scopeNodesTree selectedItem value ] ] ]
 ]
 
 { #category : 'private - presenters' }
 ScopeNodesPresenter >> browseSelectedItem [
 	scopeNodesTree selectedItem value browse
+]
+
+{ #category : 'initialization' }
+ScopeNodesPresenter >> checkAll [
+
+	scopeNodesTree roots do: [ :root |
+		(checkedScopeNodes includes: root) ifTrue: [
+			self deactivateItem: root ] ]
 ]
 
 { #category : 'private - presenters' }
@@ -178,11 +181,7 @@ ScopeNodesPresenter >> close [
 { #category : 'private - actions' }
 ScopeNodesPresenter >> deactivateItem: scopeNode [
 
-	self removeNode: scopeNode.
-	scopeNode children isEmptyOrNil ifTrue: [ ^ self ].
-	
-	scopeNode children do: [ :child | self removeNode: child ].
-	
+	self removeNode: scopeNode
 ]
 
 { #category : 'initialization' }
@@ -216,8 +215,7 @@ ScopeNodesPresenter >> getScopeName [
 ScopeNodesPresenter >> initialize [
 
 	super initialize.
-	checkedScopeNodes := Set new.
-	self registerEvents
+	checkedScopeNodes := Set new
 	
 	
 ]
@@ -275,20 +273,27 @@ ScopeNodesPresenter >> initializeScope [
 { #category : 'initialization' }
 ScopeNodesPresenter >> initializeScopeNodesTree [
 
+	scopeNodesTree
+		hideColumnHeaders;
+		addColumn: self nodesListColumn;
+		children: [ :each |
+			(each children select: [ :node |
+					 self node: node matches: nodeNameText text ])
+				asOrderedCollection sorted ];
+		beMultipleSelection;
+		roots: self allScopeNodeTreeRoots asOrderedCollection sorted;
+		beResizable;
+		activateOnDoubleClick;
+		whenActivatedDo: [ :selection | scopeNodesTree toggleSelectedItems ];
+		contextMenu: self argumentsListMenu.
+
+	scopeNodesTree bindKeyCombination: $a command toAction: [
+		self uncheckAll ].
+	
+	scopeNodesTree bindKeyCombination: $u command toAction: [
+		self checkAll].
+
 	^ scopeNodesTree
-		  hideColumnHeaders;
-		  addColumn: self nodesListColumn;
-		  children: [ :each |
-			  (each children select: [ :node |
-					   self node: node matches: nodeNameText text ])
-				  asOrderedCollection sorted ];
-		  beMultipleSelection;
-		  roots: self allScopeNodeTreeRoots asOrderedCollection sorted;
-		  beResizable;
-		  activateOnDoubleClick;
-		  whenActivatedDo: [ :selection |
-			  scopeNodesTree toggleSelectedItems ];
-		  contextMenu: self argumentsListMenu
 ]
 
 { #category : 'announcements' }
@@ -346,35 +351,35 @@ ScopeNodesPresenter >> refresh [
 
 { #category : 'refreshing' }
 ScopeNodesPresenter >> refreshNodeCheckbox: aNode [
-	scopeNodesTree roots
-		select: [ :root |
-		aNode = root or: [ root children includes: aNode ] ]
-		thenDo: [ :packageNode |
-			(packageNode children allSatisfy: [ :classNode |
-				 checkedScopeNodes anySatisfy: [ :checkedClassNode |
-					 checkedClassNode = classNode ] ])
-				ifTrue: [ checkedScopeNodes add: packageNode ]
-				ifFalse: [ checkedScopeNodes remove: packageNode ifAbsent: [  ] ] ].
+
+	| checkedClasses root package |
+	aNode isPackageNode ifTrue: [
+		(checkedScopeNodes includes: aNode)
+			ifTrue: [
+			aNode children do: [ :child | checkedScopeNodes add: child ] ]
+			ifFalse: [
+			aNode children do: [ :child | checkedScopeNodes remove: child ifAbsent: [  ] ] ].
+		scopeNodesTree refresh.
+		^ self ].
+
+	checkedClasses := checkedScopeNodes
+		                  select: [ :n | n isClassNode ]
+		                  thenCollect: [ :n | n value ].
+	root := (scopeNodesTree roots select: [ :r |
+		         r children includes: aNode ]) anyOne.
+	package := root package.
+	root children size
+	= (checkedClasses select: [ :c | c package = package ]) size
+		ifTrue: [ checkedScopeNodes add: root ]
+		ifFalse: [ checkedScopeNodes remove: root ifAbsent: [  ] ].
 
 	scopeNodesTree refresh
-]
-
-{ #category : 'announcements' }
-ScopeNodesPresenter >> registerEvents [
-
-	self announcer weak
-		when: ScopeCreatedAnnouncement
-		do: [ :ann |
-			self announcer unsubscribe: self.
-			self close ]
-		for: self
 ]
 
 { #category : 'private - actions' }
 ScopeNodesPresenter >> removeNode: aNode [
 	
-	checkedScopeNodes removeAllSuchThat: [ :each |
-		each value = aNode value ].
+	checkedScopeNodes remove: aNode.
 	self refreshNodeCheckbox: aNode.
 ]
 
@@ -403,7 +408,8 @@ ScopeNodesPresenter >> saveScope [
 
 	self editing
 		ifFalse: [ self saveNewScope ]
-		ifTrue: [ self editScope: scope ]
+		ifTrue: [ self editScope: scope ].
+	self close
 		
 	
 	
@@ -426,7 +432,8 @@ ScopeNodesPresenter >> saveScopeAs [
 	newScope label: label.
 	
 	model addScope: newScope.
-	self announceScopeCreated: newScope
+	self announceScopeCreated: newScope.
+	self close
 	
 ]
 
@@ -459,6 +466,14 @@ ScopeNodesPresenter >> scope: aRBEnvironment [
 						checkedScopeNodes add: classNode ] ] ] ].
 
 	self refresh
+]
+
+{ #category : 'initialization' }
+ScopeNodesPresenter >> uncheckAll [
+
+	scopeNodesTree roots do: [ :root |
+		(checkedScopeNodes includes: root) ifFalse: [
+			self activateItem: root ] ]
 ]
 
 { #category : 'validation' }

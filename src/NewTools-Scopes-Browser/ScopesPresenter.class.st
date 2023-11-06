@@ -77,64 +77,63 @@ ScopesPresenter >> andWithScope: anItem [
 { #category : 'menu commands' }
 ScopesPresenter >> argumentsListMenu [
 
-	^ self newMenu
-		  addGroup: [ :aGroup |
-			  aGroup
-				  addItem: [ :anItem |
-					  anItem
-						  name: 'Delete';
-						  visibleIf: [ scopesTree selectedItem isScopeNode ];
-						  iconName: #glamorousTrash;
-						  action: [ self deleteSelectedScope ] ];
-				  addItem: [ :anItem |
-					  anItem
-						  name: 'Edit';
-						  visibleIf: [ scopesTree selectedItem isScopeNode ];
-						  iconName: #glamorousEdit;
-						  action: [ self editSelectedScope ] ];
-				  addItem: [ :anItem |
-					  anItem
-						  name: 'Rename';
-						  visibleIf: [ scopesTree selectedItem isScopeNode ];
-						  action: [ self renameSelectedScope ] ];
-				  addItem: [ :anItem |
-					  anItem
-						  name: 'Inspect';
-						  action: [ scopesTree selectedItem inspect ] ];
-				  addItem: [ :anItem |
-					  anItem
-						  name: 'Open on Calypso';
-						  visibleIf: [ scopesTree selectedItem isScopeNode ];
-						  action: [ self openOnCalypso: scopesTree selectedItem value ] ];
-				  addItem: [ :anItem |
-					  anItem
-						  name: 'Browse';
-						  visibleIf: [ scopesTree selectedItem isScopeNode not ];
-						  iconName: #glamorousBrowse;
-						  action: [ self browseSelectedItem ] ];
-				  addItem: [ :anItem |
-					  anItem
-						  name: 'Class references';
-						  visibleIf: [ scopesTree selectedItem isClassNode ];
-						  action: [
-							  self showReferencesToClass: scopesTree selectedItem value ] ] ];
-		  addGroup: [ :aGroup |
-			  aGroup
-				  addItem: [ :anItem |
-					  anItem
-						  name: 'AND';
-						  visibleIf: [ scopesTree selectedItem isScopeNode ];
-						  action: [ self andWithScope: scopesTree selectedItem ] ];
-				  addItem: [ :anItem |
-					  anItem
-						  name: 'OR';
-						  visibleIf: [ scopesTree selectedItem isScopeNode ];
-						  action: [ self orWithScope: scopesTree selectedItem ] ];
-				  addItem: [ :anItem |
-					  anItem
-						  name: 'NOT';
-						  visibleIf: [ scopesTree selectedItem isScopeNode ];
-						  action: [ self notWithScope: scopesTree selectedItem ] ] ]
+	^ self newMenu addGroup: [ :aGroup |
+		  aGroup
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'Delete';
+					  visibleIf: [ scopesTree selectedItem isScopeNode ];
+					  iconName: #glamorousTrash;
+					  action: [ self deleteSelectedScope ] ];
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'Edit';
+					  visibleIf: [ scopesTree selectedItem isScopeNode ];
+					  iconName: #glamorousEdit;
+					  action: [ self editSelectedScope ] ];
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'Rename';
+					  visibleIf: [ scopesTree selectedItem isScopeNode ];
+					  action: [ self renameSelectedScope ] ];
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'Inspect';
+					  iconName: #glamorousSearch;
+					  action: [ scopesTree selectedItem inspect ] ];
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'Open on Calypso';
+					  visibleIf: [ scopesTree selectedItem isScopeNode ];
+					  action: [ self openOnCalypso: scopesTree selectedItem value ] ];
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'Browse';
+					  visibleIf: [ scopesTree selectedItem isScopeNode not ];
+					  iconName: #glamorousBrowse;
+					  action: [ self browseSelectedItem ] ];
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'Class references';
+					  visibleIf: [ scopesTree selectedItem isClassNode ];
+					  action: [
+						  self showReferencesToClass: scopesTree selectedItem value ] ];
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'OR';
+					  visibleIf: [ scopesTree selectedItem isScopeNode ];
+					  action: [ self orWithScope: scopesTree selectedItem ] ];
+			addItem: [ :anItem |
+				  anItem
+					  name: 'AND';
+					  visibleIf: [ scopesTree selectedItem isScopeNode ];
+					  action: [ self andWithScope: scopesTree selectedItem ] ];
+			    
+			addItem: [ :anItem |
+				  anItem
+					  name: 'NOT';
+					  visibleIf: [ scopesTree selectedItem isScopeNode ];
+					  action: [ self notWithScope: scopesTree selectedItem ] ] ]
 ]
 
 { #category : 'menu commands' }

@@ -251,23 +251,23 @@ ScopesManager >> initialize [
 { #category : 'as yet unclassified' }
 ScopesManager >> nameWithIndex: name [
 
-	| existingNames index indexes |
-	
-	existingNames := self class invalidNames.
+	| existingNames hypen_index number indexes |
+	existingNames := self class invalidNames select: [ :existing |
+		                 existing includesSubstring: name ].
+	existingNames isEmpty ifTrue: [ ^ name ].
 
-	index := ''.
-	
-	(existingNames includes: name) ifTrue: [
-		indexes := existingNames
-			           collect: [ :each |
-				           index := (each reverse copyUpToSubstring: '-') reverse
-					                    asInteger ]
-			           thenReject: [ :each | each isNil ].
-		index := indexes
-			         ifEmpty: [ '-1' ]
-			         ifNotEmpty: [ '-' , (indexes max + 1)  asString ] ].
+	indexes := Set new.
+	existingNames do: [ :existing |
+		hypen_index := existing size - (existing reverse findString: '-').
+		hypen_index = existing size
+			ifTrue: [ indexes add: 0 ]
+			ifFalse: [
+				number := (existing copyFrom: hypen_index + 2 to: existing size)
+					          asInteger.
+				indexes add: number asInteger ] ].
 
-	^ name, index asString
+	^ name , '-' , (indexes max + 1) asString.
+	Error signal: 'Error computing name with index'
 ]
 
 { #category : 'private' }
