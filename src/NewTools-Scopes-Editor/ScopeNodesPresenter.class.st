@@ -1,0 +1,484 @@
+"
+I display a tree with all the available packages and classes to create a scope
+"
+Class {
+	#name : 'ScopeNodesPresenter',
+	#superclass : 'ScopeAbstractPresenter',
+	#instVars : [
+		'checkedScopeNodes',
+		'scopeNodesTree',
+		'nodeNameText',
+		'cancelButton',
+		'saveButton',
+		'saveAsButton',
+		'allScopeNodeTreeRoots',
+		'scope'
+	],
+	#classVars : [
+		'LastSearch'
+	],
+	#category : 'NewTools-Scopes-Editor-GUI',
+	#package : 'NewTools-Scopes-Editor',
+	#tag : 'GUI'
+}
+
+{ #category : 'layout' }
+ScopeNodesPresenter class >> defaultLayout [
+
+	^ SpBoxLayout newTopToBottom
+		  add: #scopeNodesTree
+		  expand: true
+		  fill: true
+		  padding: 0;
+		  add: #nodeNameText expand: false;
+		  add: (SpBoxLayout newLeftToRight
+				   add: #cancelButton;
+				   add: #saveButton;
+				   add: #saveAsButton;
+				   yourself)
+		  withConstraints: [ :constraints |
+		  constraints height: self toolbarHeight ];
+		  yourself
+]
+
+{ #category : 'layout' }
+ScopeNodesPresenter class >> lastSearchText [
+	^ LastSearch 
+]
+
+{ #category : 'layout' }
+ScopeNodesPresenter class >> reset [
+	LastSearch := nil
+]
+
+{ #category : 'layout' }
+ScopeNodesPresenter class >> title [
+	^ 'Scope creator'
+]
+
+{ #category : 'private - actions' }
+ScopeNodesPresenter >> activateItem: scopeNode [
+
+	self addNode: scopeNode
+]
+
+{ #category : 'private - actions' }
+ScopeNodesPresenter >> addNode: aNode [
+
+	checkedScopeNodes add: aNode.
+	self refreshNodeCheckbox: aNode
+]
+
+{ #category : 'private - presenters' }
+ScopeNodesPresenter >> addSelectedItemClassHierarchy [	
+	| class supers suprclass node |
+	node := scopeNodesTree selectedItem.
+	self activateItem: node.
+	class := node value.
+	class = Object ifTrue: [ ^ self ].
+	
+	suprclass := class superclass.
+	supers := class allSuperclasses.
+	supers := supers select: [ :each | each value ~= Object and: each value ~= ProtoObject ].
+
+	self allScopeNodeTreeRoots do: [ :root |
+		root children do: [ :child |
+			(supers includes: child value) ifTrue: [
+				self activateItem: child ] ] ]
+]
+
+{ #category : 'as yet unclassified' }
+ScopeNodesPresenter >> allScopeNodeTreeRoots [
+
+	^ allScopeNodeTreeRoots ifNil: [
+		  allScopeNodeTreeRoots := model allPackagesInEnvironment collect: [
+			                           :package | ScopePackageNode on: package ] ]
+]
+
+{ #category : 'announcements' }
+ScopeNodesPresenter >> announceScopeCreated: aScope [
+
+	self announcer announce: (ScopeCreatedAnnouncement new
+			 scope: aScope;
+			 yourself)
+]
+
+{ #category : 'announcements' }
+ScopeNodesPresenter >> announceScopeEdited [
+	
+	self announcer announce: (ScopeEditedAnnouncement new)
+]
+
+{ #category : 'private - presenters' }
+ScopeNodesPresenter >> argumentsListMenu [
+
+	^ self newMenu addGroup: [ :aGroup |
+		  aGroup
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'Check all Cmd-a';
+					  iconName: #glamorousAccept;
+					  action: [ self checkAll ] ];
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'Unheck all Cmd-u';
+					  iconName: #glamorousAccept;
+					  action: [ self uncheckAll ] ];
+			  
+			addItem: [ :anItem |
+				  anItem
+					  name: 'Add class hierarchy';
+					  visibleIf: [ scopeNodesTree selectedItem isClassNode ];
+					  iconName: #hierarchy;
+					  action: [ self addSelectedItemClassHierarchy ] ];
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'Browse';
+					  visibleIf: [ scopeNodesTree selectedItem isNotNil ];
+					  iconName: #glamorousBrowse;
+					  action: [ self browseSelectedItem ] ];
+			  addItem: [ :anItem |
+				  anItem
+					  name: 'Class references';
+					  visibleIf: [ scopeNodesTree selectedItem isClassNode ];
+					  iconName: #glamorousBrowse;
+					  action: [
+						  self showReferencesToClass: scopeNodesTree selectedItem value ] ] ]
+]
+
+{ #category : 'private - presenters' }
+ScopeNodesPresenter >> browseSelectedItem [
+	scopeNodesTree selectedItem value browse
+]
+
+{ #category : 'initialization' }
+ScopeNodesPresenter >> checkAll [
+
+	scopeNodesTree roots do: [ :root |
+		(checkedScopeNodes includes: root) ifTrue: [
+			self deactivateItem: root ] ]
+]
+
+{ #category : 'private - presenters' }
+ScopeNodesPresenter >> checkSelectedNodes [
+
+	scopeNodesTree selection selectedItems do: [ :item |
+		self activateItem: item ].
+
+	self refresh
+]
+
+{ #category : 'announcements' }
+ScopeNodesPresenter >> checkedItems [
+	^ checkedScopeNodes collect: [ :node | node value ]
+]
+
+{ #category : 'private - actions' }
+ScopeNodesPresenter >> close [
+	self window close
+]
+
+{ #category : 'private - actions' }
+ScopeNodesPresenter >> deactivateItem: scopeNode [
+
+	self removeNode: scopeNode
+]
+
+{ #category : 'initialization' }
+ScopeNodesPresenter >> editScope: aScope [
+	model editScope: aScope withNodes: (checkedScopeNodes collect: [:each | each value]).
+	self announceScopeEdited
+]
+
+{ #category : 'accessing - im text input' }
+ScopeNodesPresenter >> editing [
+	^ scope isNotNil
+]
+
+{ #category : 'menu commands' }
+ScopeNodesPresenter >> getScopeName [
+
+	| label validate |
+	validate := self validateNameBlock.
+
+	label := nodeNameText text trim.
+	(validate value: label) ifTrue: [ ^ model nameWithIndex: label ].
+
+	label := self getNameFromUser.
+	(validate value: label) 
+		ifTrue: [ ^ model nameWithIndex: label ].
+	
+	^ nil
+]
+
+{ #category : 'initialization' }
+ScopeNodesPresenter >> initialize [
+
+	super initialize.
+	checkedScopeNodes := Set new
+	
+	
+]
+
+{ #category : 'initialization' }
+ScopeNodesPresenter >> initializeButtons [
+
+	cancelButton := self newButton
+		                label: 'Cancel';
+		                action: [ self close ];
+		                yourself.
+
+	saveAsButton := self newButton
+		                label: 'Save as...';
+		                icon: (self iconNamed: #smallSaveAs);
+		                action: [ self saveScopeAs ];
+		                yourself.
+
+	saveButton := self newButton
+		              label: 'Save';
+		              icon: (self iconNamed: #smallSave);
+		              action: [ self saveScope ];
+		              yourself
+]
+
+{ #category : 'initialization' }
+ScopeNodesPresenter >> initializeNodeNameText [
+
+	nodeNameText
+		placeholder: 'Enter a package or class name';
+		autoAccept: true;
+		whenTextChangedDo: [ :text |
+			LastSearch := nodeNameText text.
+			self refresh ].
+	LastSearch ifNotNil: [ nodeNameText text: LastSearch ]
+]
+
+{ #category : 'initialization' }
+ScopeNodesPresenter >> initializePresenters [
+
+	scopeNodesTree := self newScopeTree.
+	nodeNameText := self newTextInput.
+
+	self initializeScopeNodesTree.
+	self initializeNodeNameText.
+	self initializeButtons
+]
+
+{ #category : 'announcements' }
+ScopeNodesPresenter >> initializeScope [
+
+	^ model newScopeFrom: self checkedItems
+]
+
+{ #category : 'initialization' }
+ScopeNodesPresenter >> initializeScopeNodesTree [
+
+	scopeNodesTree
+		hideColumnHeaders;
+		addColumn: self nodesListColumn;
+		children: [ :each |
+			(each children select: [ :node |
+					 self node: node matches: nodeNameText text ])
+				asOrderedCollection sorted ];
+		beMultipleSelection;
+		roots: self allScopeNodeTreeRoots asOrderedCollection sorted;
+		beResizable;
+		activateOnDoubleClick;
+		whenActivatedDo: [ :selection | scopeNodesTree toggleSelectedItems ];
+		contextMenu: self argumentsListMenu.
+
+	scopeNodesTree bindKeyCombination: $a command toAction: [
+		self uncheckAll ].
+	
+	scopeNodesTree bindKeyCombination: $u command toAction: [
+		self checkAll].
+
+	^ scopeNodesTree
+]
+
+{ #category : 'announcements' }
+ScopeNodesPresenter >> newScopeFrom: items [
+	"an item is either a class or a package"
+	^ model newScopeFrom: items
+]
+
+{ #category : 'initialization' }
+ScopeNodesPresenter >> node: aNode matches: aString [
+
+	^ (aNode name asLowercase beginsWith: aString asLowercase) or:
+		  ((aNode package name asLowercase beginsWith: aString asLowercase)
+			   or: [
+				   aNode definedClasses anySatisfy: [ :class |
+					   class name asLowercase beginsWith:
+						   nodeNameText text asLowercase ] ])
+]
+
+{ #category : 'private - presenters' }
+ScopeNodesPresenter >> nodeDescriptionColumn [
+	^ SpStringTableColumn evaluated: #name
+]
+
+{ #category : 'private - presenters' }
+ScopeNodesPresenter >> nodesListColumn [
+
+	^ SpCompositeTableColumn new
+		  addColumn: (SpCheckBoxTableColumn new
+				   beNotExpandable;
+				   evaluated: [ :scopeNode |
+					   checkedScopeNodes anySatisfy: [ :n |
+							   n value = scopeNode value ] ];
+				   onActivation: [ :scopeNode | self activateItem: scopeNode ];
+				   onDeactivation: [ :scopeNode | self deactivateItem: scopeNode ];
+				   yourself);
+		  addColumn: (SpImageTableColumn new
+				   beNotExpandable;
+				   evaluated: [ :each |
+						self iconNamed: each scopesIconName ];
+				   yourself);
+		  addColumn: self nodeDescriptionColumn;
+		  yourself
+]
+
+{ #category : 'refreshing' }
+ScopeNodesPresenter >> refresh [
+
+	scopeNodesTree roots: (model allPackagesInEnvironment
+			 collect: [ :package | ScopePackageNode on: package ]
+			 thenSelect: [ :each | self node: each matches: nodeNameText text ]).
+					
+	
+]
+
+{ #category : 'refreshing' }
+ScopeNodesPresenter >> refreshNodeCheckbox: aNode [
+
+	| checkedClasses root package |
+	aNode isPackageNode ifTrue: [
+		(checkedScopeNodes includes: aNode)
+			ifTrue: [
+			aNode children do: [ :child | checkedScopeNodes add: child ] ]
+			ifFalse: [
+			aNode children do: [ :child | checkedScopeNodes remove: child ifAbsent: [  ] ] ].
+		scopeNodesTree refresh.
+		^ self ].
+
+	checkedClasses := checkedScopeNodes
+		                  select: [ :n | n isClassNode ]
+		                  thenCollect: [ :n | n value ].
+	root := (scopeNodesTree roots select: [ :r |
+		         r children includes: aNode ]) anyOne.
+	package := root package.
+	root children size
+	= (checkedClasses select: [ :c | c package = package ]) size
+		ifTrue: [ checkedScopeNodes add: root ]
+		ifFalse: [ checkedScopeNodes remove: root ifAbsent: [  ] ].
+
+	scopeNodesTree refresh
+]
+
+{ #category : 'private - actions' }
+ScopeNodesPresenter >> removeNode: aNode [
+	
+	checkedScopeNodes remove: aNode.
+	self refreshNodeCheckbox: aNode.
+]
+
+{ #category : 'initialization' }
+ScopeNodesPresenter >> saveNewScope [
+	
+	| label newScope |
+	
+	label := self getScopeName.
+	label ifNil: [ ^ self ].
+	
+	newScope := self newScopeFrom: self checkedItems.
+	newScope label: label.
+	
+	model addScope: newScope.
+	self announceScopeCreated: newScope
+	
+]
+
+{ #category : 'initialization' }
+ScopeNodesPresenter >> saveScope [
+
+	self validate ifFalse: [
+		self inform: 'You must check at least one item'.
+		^ self ].
+
+	self editing
+		ifFalse: [ self saveNewScope ]
+		ifTrue: [ self editScope: scope ].
+	self close
+		
+	
+	
+]
+
+{ #category : 'saving' }
+ScopeNodesPresenter >> saveScopeAs [
+
+	| label newScope |
+	self validate ifFalse: [
+		self inform: 'You must check at least one item'.
+		^ self ].
+
+	label := self getNameFromUser.
+	(self validateNameBlock value: label)
+		ifTrue: [ label := model nameWithIndex: label ]
+		ifFalse: [^ self ].
+
+	newScope := self newScopeFrom: self checkedItems.
+	newScope label: label.
+	
+	model addScope: newScope.
+	self announceScopeCreated: newScope.
+	self close
+	
+]
+
+{ #category : 'accessing' }
+ScopeNodesPresenter >> scope: aRBEnvironment [
+
+	| packageNodes theClasses thePackages packagesCache |
+	scope := aRBEnvironment.
+	theClasses := scope classes reject: [ :each | each isMeta ].
+	thePackages := theClasses collect: [ :each | each package ].
+	packagesCache := Dictionary new.
+	theClasses do: [ :class | packagesCache at: class put: class package ].
+
+	packageNodes := allScopeNodeTreeRoots select: [ :packageNode |
+		                thePackages includes: packageNode value ].
+	packageNodes do: [ :packageNode |
+		| classNodes classes |
+		classNodes := packageNode children.
+		classes := theClasses select: [ :each |
+			           (packagesCache at: each) = packageNode value ].
+		"all packageNode children should be checked, including the packageNode"
+		classes := classes reject: [ :each | each isMeta ].
+		classNodes size = classes size
+			ifTrue: [
+				classNodes do: [ :clsNode | checkedScopeNodes add: clsNode ].
+				checkedScopeNodes add: packageNode ]
+			ifFalse: [ "only some packageNode children should be checked, and as result, the packageNode is not selected"
+				classNodes do: [ :classNode |
+					(classes includes: classNode value) ifTrue: [ "scopeNodesTree expandPath: { index }"
+						checkedScopeNodes add: classNode ] ] ] ].
+
+	self refresh
+]
+
+{ #category : 'initialization' }
+ScopeNodesPresenter >> uncheckAll [
+
+	scopeNodesTree roots do: [ :root |
+		(checkedScopeNodes includes: root) ifFalse: [
+			self activateItem: root ] ]
+]
+
+{ #category : 'validation' }
+ScopeNodesPresenter >> validate [
+
+	checkedScopeNodes ifEmpty: [ ^ false ].
+	^ true
+]
