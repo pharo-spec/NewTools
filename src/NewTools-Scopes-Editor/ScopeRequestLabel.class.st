@@ -1,3 +1,6 @@
+"
+I am a presenter where users enter the name of a new scope
+"
 Class {
 	#name : 'ScopeRequestLabel',
 	#superclass : 'SpRequestTextDialog',

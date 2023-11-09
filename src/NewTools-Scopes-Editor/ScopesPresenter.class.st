@@ -1,6 +1,6 @@
 "
-I am the main Scope Browser presenter. 
-I show the list of existing scopes in the system and allow to create, edit and delete scopes.
+I am the main Scopes Editor presenter. 
+I show the list of existing scopes in the system and allow users to create, edit and delete scopes.
 "
 Class {
 	#name : 'ScopesPresenter',

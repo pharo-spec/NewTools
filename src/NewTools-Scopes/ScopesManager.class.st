@@ -193,34 +193,36 @@ ScopesManager >> defaultScopeLabel [
 ]
 
 { #category : 'editing' }
-ScopesManager >> editScope: aScope withNodes: aCollection [ 
-	| classesInScope packagesInScope classes packages fullPackages orphanClasses addedClasses removedClasses addedPackages removedPackages |
-	
-	classesInScope := aScope classes.
+ScopesManager >> editScope: aScope withNodes: aCollection [
+
+	| classesInScope packagesInScope classes packages fullPackages orphanClasses addedClasses removedClasses addedPackages removedPackages fullPackagesInScope orphanClassesInScope |
+
+	classesInScope := aScope classes reject: [ :each | each isMeta ].
 	packagesInScope := aScope packages.
 	
-	classes := (aCollection select: [ :each | each isClassOrTrait ]) reject: [
-		           :each | each isMeta ].
-	classes := aScope classes asSet addAll: classes; yourself.
+	fullPackagesInScope := self fullPackagesFrom: classesInScope.
+	orphanClassesInScope := self orphanClassesIn: classesInScope havingFullPackages: fullPackagesInScope. 
 	
+	classes := (aCollection select: [ :each | each isClassOrTrait ])
+		           reject: [ :each | each isMeta ].
 	packages := aCollection select: [ :each | each isKindOf: RPackage ].
-	packages := aScope packages asSet addAll: packages; yourself.
-	
+
 	fullPackages := self fullPackagesFrom: classes.
 	orphanClasses := self orphanClassesIn: classes havingFullPackages: fullPackages.
-	
+
 	addedClasses := orphanClasses reject: [ :aClass | classesInScope includes: aClass ].
 	removedClasses := classesInScope reject: [ :aClass | orphanClasses includes: aClass ].
-	
-	addedPackages := fullPackages reject: [ :aPackage | packagesInScope includes: aPackage ].
-	removedPackages := packagesInScope reject: [ :aPackage | fullPackages includes: aPackage ].
-	
+
+	addedPackages := fullPackages reject: [ :aPackage | fullPackagesInScope includes: aPackage ].
+	removedPackages := fullPackagesInScope reject: [ :aPackage | fullPackages includes: aPackage ].
+
 	addedClasses do: [ :aClass | aScope addClass: aClass ].
 	removedClasses do: [ :aClass | aScope removeClass: aClass ].
-	
+
 	addedPackages do: [ :aPackage | aScope addPackage: aPackage name ].
-	removedPackages do: [ :aPackage | aScope removePackage: aPackage name ].
-	
+	removedPackages do: [ :aPackage |
+		aScope removePackage: aPackage name ].
+
 	^ aScope
 ]
 

@@ -1,5 +1,5 @@
 "
-I display a tree with all the available packages and classes to create a scope
+I display a tree with all the available packages and classes to create or edit a scope
 "
 Class {
 	#name : 'ScopeNodesPresenter',

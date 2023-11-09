@@ -2,8 +2,31 @@ Extension { #name : 'RBCompositeEnvironment' }
 
 { #category : '*NewTools-Scopes' }
 RBCompositeEnvironment >> addClass: aClass [
-	self environment addClass: aClass.
-	self otherEnvironment addClass: aClass
+
+	| envs classEnv packaEnv siblings |
+	self isTerminal ifFalse: [
+		self environment addClass: aClass.
+		self otherEnvironment addClass: aClass.
+		^ self ].
+
+	"I am terminal. This method assumes that I have one classEnv and one packageEnv"
+	envs := {
+		        self environment.
+		        self otherEnvironment }.
+
+	classEnv := (envs select: [ :env | env isClassEnvironment ]) anyOne.
+	packaEnv := (envs select: [ :env | env isPackageEnvironment ]) anyOne.
+
+	"Get the classes in the same package as aClass (siblings)"
+	siblings := classEnv allClasses select: [ :class |
+		            class package = aClass package ].
+	"If the package is now full, then add the package and remove the siblings"
+	(siblings asSet add: aClass; yourself) size = aClass package definedClasses size ifTrue: [
+		siblings do: [ :each | classEnv removeClass: each ].
+		packaEnv addPackage: aClass package.
+		^ self ].
+
+	classEnv addClass: aClass
 ]
 
 { #category : '*NewTools-Scopes' }
@@ -14,8 +37,29 @@ RBCompositeEnvironment >> addPackage: aPackageName [
 
 { #category : '*NewTools-Scopes' }
 RBCompositeEnvironment >> removeClass: aClass [
-	self environment removeClass: aClass.
-	self otherEnvironment removeClass: aClass
+
+	| envs  classEnv packaEnv packagesToRemove classesToAdd |
+	self isTerminal ifFalse: [
+		self environment removeClass: aClass.
+		self otherEnvironment removeClass: aClass.
+		^ self ].
+	
+	"I am terminal. This method assumes that I have one classEnv and one packageEnv"
+	envs := { self environment . self otherEnvironment }.
+	
+	"Remove aClass from my classEnvironment"
+	classEnv := (envs select: [ :env | env isClassEnvironment ]) anyOne.
+	classEnv removeClass: aClass.
+	
+	packaEnv := (envs select: [ :env | env isPackageEnvironment ]) anyOne.
+	
+	"Packages containing aClass must be removed from the package environment"
+	packagesToRemove := packaEnv packages select: [ :package | package definedClasses includes: aClass ].
+	packagesToRemove do: [ :p | 
+		packaEnv removePackage: p.
+		classesToAdd := p definedClasses reject: [ :class | class = aClass ].
+		classesToAdd do: [ :class | classEnv addClass: class ] ]
+	
 ]
 
 { #category : '*NewTools-Scopes' }
