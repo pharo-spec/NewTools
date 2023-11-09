@@ -18,10 +18,10 @@ RBCompositeEnvironment >> addClass: aClass [
 	packaEnv := (envs select: [ :env | env isPackageEnvironment ]) anyOne.
 
 	"Get the classes in the same package as aClass (siblings)"
-	siblings := classEnv allClasses select: [ :class |
+	siblings := classEnv classes select: [ :class |
 		            class package = aClass package ].
 	"If the package is now full, then add the package and remove the siblings"
-	(siblings asSet add: aClass; yourself) size = aClass package definedClasses size ifTrue: [
+	(siblings asSet add: aClass; yourself) size = (aClass package definedClasses size * 2) ifTrue: [
 		siblings do: [ :each | classEnv removeClass: each ].
 		packaEnv addPackage: aClass package.
 		^ self ].
@@ -30,9 +30,10 @@ RBCompositeEnvironment >> addClass: aClass [
 ]
 
 { #category : '*NewTools-Scopes' }
-RBCompositeEnvironment >> addPackage: aPackageName [
-	self environment addPackage: aPackageName.
-	self otherEnvironment addPackage: aPackageName
+RBCompositeEnvironment >> addPackage: aPackage [
+
+	self environment addPackage: aPackage.
+	self otherEnvironment addPackage: aPackage
 ]
 
 { #category : '*NewTools-Scopes' }

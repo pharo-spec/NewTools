@@ -6,7 +6,26 @@ Class {
 }
 
 { #category : 'tests' }
-ScopesManagesOperationsTest >> testAddClassAndFillPackageInOrEnvironment [
+ScopesManagesOperationsTest >> testAddClassToOrEnvironment [
+
+	| packageEnvB classEnv orEnv |
+	
+	"empty class environment"
+	
+	classEnv := RBBrowserEnvironment new forClasses: { }.
+	packageEnvB := RBBrowserEnvironment new forPackages: { ScClassB1 package }.
+	
+	orEnv := RBOrEnvironment onEnvironment: classEnv or: packageEnvB.
+	
+	orEnv addClass: ScClassA1.
+	orEnv addClass: ScClassA1 class.
+	
+	self assert: orEnv allClasses equals: { ScClassA1 . ScClassB1 }.
+	self assert: orEnv packages equals: { ScClassA1 package . ScClassB1 package }
+]
+
+{ #category : 'tests' }
+ScopesManagesOperationsTest >> testAddClassToOrEnvironmentMakingAPackageFull [
 
 	| packageEnv classEnvA1 orEnv |
 	
@@ -26,7 +45,7 @@ ScopesManagesOperationsTest >> testAddClassAndFillPackageInOrEnvironment [
 ]
 
 { #category : 'tests' }
-ScopesManagesOperationsTest >> testRemoveClassInClassEnvironmentFromOrEnvironment [
+ScopesManagesOperationsTest >> testRemoveClassFromOrEnvironment [
 
 	| classEnvA1 packageEnvB orEnv |
 	
@@ -41,7 +60,7 @@ ScopesManagesOperationsTest >> testRemoveClassInClassEnvironmentFromOrEnvironmen
 ]
 
 { #category : 'tests' }
-ScopesManagesOperationsTest >> testRemoveClassInPackageEnvironmentFromOrEnvironment [
+ScopesManagesOperationsTest >> testRemoveClassFromOrEnvironmentBreakingFullPackage [
 
 	| packageEnvA classEnv orEnv |
 	

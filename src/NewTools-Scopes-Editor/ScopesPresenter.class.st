@@ -127,13 +127,13 @@ ScopesPresenter >> argumentsListMenu [
 				  anItem
 					  name: 'AND';
 					  visibleIf: [ scopesTree selectedItem isScopeNode ];
-					  action: [ self andWithScope: scopesTree selectedItem ] ];
+					  action: [ self andWithScope: scopesTree selectedItem ] ]";
 			    
 			addItem: [ :anItem |
 				  anItem
 					  name: 'NOT';
 					  visibleIf: [ scopesTree selectedItem isScopeNode ];
-					  action: [ self notWithScope: scopesTree selectedItem ] ] ]
+					  action: [ self notWithScope: scopesTree selectedItem ] ] "]
 ]
 
 { #category : 'menu commands' }

@@ -8,7 +8,8 @@ Class {
 		'scopes',
 		'environment',
 		'announcer',
-		'defaultScope'
+		'defaultScope',
+		'currentQueryScope'
 	],
 	#classVars : [
 		'singleInstance'
@@ -27,6 +28,16 @@ ScopesManager class >> addScope: aScope [
 ScopesManager class >> availableScopes [
 
 	^ self scopes
+]
+
+{ #category : 'as yet unclassified' }
+ScopesManager class >> currentQueryScope [
+	^ self singleInstance currentQueryScope
+]
+
+{ #category : 'accessing' }
+ScopesManager class >> currentQueryScope: aScope [ 
+	self singleInstance currentQueryScope: aScope
 ]
 
 { #category : 'accessing' }
@@ -177,6 +188,19 @@ ScopesManager >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
+{ #category : 'accessing' }
+ScopesManager >> currentQueryScope [
+	^ currentQueryScope
+]
+
+{ #category : 'accessing' }
+ScopesManager >> currentQueryScope: aScope [
+
+	(scopes includes: aScope)
+		ifTrue: [ currentQueryScope := aScope ]
+		ifFalse: [ currentQueryScope := nil ]
+]
+
 { #category : 'api' }
 ScopesManager >> defaultScope [
 
@@ -219,7 +243,7 @@ ScopesManager >> editScope: aScope withNodes: aCollection [
 	addedClasses do: [ :aClass | aScope addClass: aClass ].
 	removedClasses do: [ :aClass | aScope removeClass: aClass ].
 
-	addedPackages do: [ :aPackage | aScope addPackage: aPackage name ].
+	addedPackages do: [ :aPackage | aScope addPackage: aPackage ].
 	removedPackages do: [ :aPackage |
 		aScope removePackage: aPackage name ].
 
