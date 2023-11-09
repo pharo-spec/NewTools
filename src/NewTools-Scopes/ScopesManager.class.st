@@ -74,6 +74,7 @@ ScopesManager class >> invalidNames [
 ScopesManager class >> newScopeFrom: aSet [
 
 	| packageScope classScope classes packages orphanClasses fullPackages |
+	
 	classes := (aSet select: [ :each | each isClassOrTrait ]) reject: [
 		           :each | each isMeta ].
 	packages := aSet select: [ :each | each isKindOf: RPackage ].
@@ -220,7 +221,7 @@ ScopesManager >> defaultScopeLabel [
 ScopesManager >> editScope: aScope withNodes: aCollection [
 
 	| classesInScope packagesInScope classes packages fullPackages orphanClasses addedClasses removedClasses addedPackages removedPackages fullPackagesInScope orphanClassesInScope |
-
+self halt.
 	classesInScope := aScope classes reject: [ :each | each isMeta ].
 	packagesInScope := aScope packages.
 	
@@ -235,7 +236,7 @@ ScopesManager >> editScope: aScope withNodes: aCollection [
 	orphanClasses := self orphanClassesIn: classes havingFullPackages: fullPackages.
 
 	addedClasses := orphanClasses reject: [ :aClass | classesInScope includes: aClass ].
-	removedClasses := classesInScope reject: [ :aClass | orphanClasses includes: aClass ].
+	removedClasses := orphanClassesInScope reject: [ :aClass | orphanClasses includes: aClass ].
 
 	addedPackages := fullPackages reject: [ :aPackage | fullPackagesInScope includes: aPackage ].
 	removedPackages := fullPackagesInScope reject: [ :aPackage | fullPackages includes: aPackage ].
@@ -245,7 +246,7 @@ ScopesManager >> editScope: aScope withNodes: aCollection [
 
 	addedPackages do: [ :aPackage | aScope addPackage: aPackage ].
 	removedPackages do: [ :aPackage |
-		aScope removePackage: aPackage name ].
+		aScope removePackage: aPackage ].
 
 	^ aScope
 ]
