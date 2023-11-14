@@ -95,7 +95,7 @@ StPlaygroundBindingsPresenter >> initializeDialogWindow: aDialogWindowPresenter 
 
 	aDialogWindowPresenter 
 		centeredRelativeTo: parent window;
-		addButton: 'Close' do: [ :presenter | 
+		addDefaultButton: 'Close' do: [ :presenter | 
 			presenter triggerOkAction.
 			presenter close ]
 ]

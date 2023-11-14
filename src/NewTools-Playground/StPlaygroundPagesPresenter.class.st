@@ -82,12 +82,12 @@ StPlaygroundPagesPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
 	aDialogWindowPresenter 
 		centeredRelativeToTopWindow;
-		addButton: 'Load' do: [ :presenter |
-			presenter triggerOkAction.
-			self loadSelectedPage ];		
 		addButton: 'Close' do: [ :presenter |
 			presenter triggerCancelAction.
-			presenter close ]
+			presenter close ];
+		addDefaultButton: 'Load' do: [ :presenter |
+			presenter triggerOkAction.
+			self loadSelectedPage ]
 ]
 
 { #category : 'initialization' }
