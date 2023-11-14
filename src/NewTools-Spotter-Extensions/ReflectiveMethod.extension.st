@@ -13,12 +13,6 @@ ReflectiveMethod >> spotterForImplementorsFor: aStep [
 ]
 
 { #category : '*NewTools-Spotter-Extensions' }
-ReflectiveMethod >> spotterForMessagesFor: aStep [
-	<stSpotterOrder: 12>
-	self compiledMethod spotterForMessagesFor: aStep
-]
-
-{ #category : '*NewTools-Spotter-Extensions' }
 ReflectiveMethod >> spotterForSendersFor: aStep [
 	<stSpotterOrder: 11>
 	self compiledMethod spotterForSendersFor: aStep
