@@ -143,32 +143,28 @@ StCritiqueBrowserPresenter >> allRules [
 
 { #category : 'private' }
 StCritiqueBrowserPresenter >> applyRules [
+
 	| packageCount nbPackage process rules |
 	rules := self allRules.
 	nbPackage := rbEnvironment packages size.
 	packageCount := 0.
 	self updateTree.
-	process := [ rbEnvironment packages
-		do: [ :package | 
-			| windowTitle |
-			packageCount := packageCount + 1.
-			windowTitle := String
-				streamContents: [ :s | 
-					s << 'run rules on ' << package packageName << ' ('
-						<< packageCount asString << '/' << nbPackage asString << ')' ].
-			self setTitle: windowTitle.
-			checker
-				runRules: rules
-				onPackage: package
-				withoutTestCase: removeTestCase ].
-	checker rule: rules.
-	self setTitle: self defaultTitle.
-	cache packages: rbEnvironment.
-	cache initCache.
-	self rules: (self allRules select: [ :r | self hasBrokenRules: r]).
-    self rulesModel refresh.
-    self rebuildLayout.
-	self updateTree. ] newProcess.
+	process := [
+	           rbEnvironment packages do: [ :package |
+		           | windowTitle |
+		           packageCount := packageCount + 1.
+		           windowTitle := String streamContents: [ :s |
+			                          s << 'run rules on ' << package name << ' (' << packageCount asString << '/' << nbPackage asString << ')' ].
+		           self setTitle: windowTitle.
+		           checker runRules: rules onPackage: package withoutTestCase: removeTestCase ].
+	           checker rule: rules.
+	           self setTitle: self defaultTitle.
+	           cache packages: rbEnvironment.
+	           cache initCache.
+	           self rules: (self allRules select: [ :r | self hasBrokenRules: r ]).
+	           self rulesModel refresh.
+	           self rebuildLayout.
+	           self updateTree ] newProcess.
 	process name: 'SmallLint'.
 	process resume
 ]

@@ -45,7 +45,7 @@ StRewriterRuleEditorPresenter class >> icon [
 
 { #category : 'accessing' }
 StRewriterRuleEditorPresenter class >> iconName [
-	^ #workspaceIcon
+	^ #workspace
 ]
 
 { #category : 'world menu' }

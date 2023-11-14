@@ -95,6 +95,31 @@ StTestDebuggerProvider >> debuggerWithMissingSubclassResponsibilityContext [
 ]
 
 { #category : 'helpers' }
+StTestDebuggerProvider >> debuggerWithMissingSubclassResponsibilityContextWithSteps [
+
+	| ctx dbg |
+	ctx := [
+	       StDummyDebuggerPresenter new
+		       unimplementedSubclassResponsibility ] asContext.
+
+	self
+		sessionFor: ctx
+		exception: (OupsNullException fromSignallerContext: ctx).
+	dbg := self newDebugger.
+	dbg
+		application: dbg class currentApplication;
+		initialize.
+	"We reach the subclass responsability"
+	dbg
+		stepOver;
+		stepOver;
+		stepInto;
+		stepOver.
+
+	^ dbg
+]
+
+{ #category : 'helpers' }
 StTestDebuggerProvider >> debuggerWithObjectHalting [
 	[ StDebuggerObjectForTests new haltingMethod ]
 		on: Halt
