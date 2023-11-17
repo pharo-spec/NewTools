@@ -20,7 +20,7 @@ StRewriterOpenHelpBrowserCommand class >> defaultDescription [
 { #category : 'accessing' }
 StRewriterOpenHelpBrowserCommand class >> defaultIconName [
 
-	^ #smallQuestionIcon
+	^ #smallQuestion
 ]
 
 { #category : 'default' }
