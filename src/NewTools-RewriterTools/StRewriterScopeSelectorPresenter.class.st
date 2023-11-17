@@ -115,7 +115,7 @@ StRewriterScopeSelectorPresenter >> initializePackagesList [
 	packagesListWithFilterPresenter listPresenter
 		headerTitle: 'Packages';
 		display: [ :item | item name ];
-		displayIcon: [ self iconNamed: #packageIcon ];
+		displayIcon: [ self iconNamed: #package];
 		sortingBlock: [ :a :b | a name < b name ];
 		whenSelectionChangedDo: [ self packagesChanged ];
 		beMultipleSelection
