@@ -68,6 +68,7 @@ Take a look on ReCriticEngine for some automation ideas. Also take a look at Com
 StRewriterRenrakuApplier class >> obtainCritiquesOfAllMethodsForRules: ruleHolderCollection [
 
 	| methods |
-	methods := (self packageOrganizer packages flatCollect: #classes) flatCollect: #methods.
+	methods := (self packageOrganizer packages flatCollect: #classes)
+		           flatCollect: [ :each | each methods , each class methods ].
 	^ self obtainCritiquesOf: methods forRules: ruleHolderCollection
 ]
