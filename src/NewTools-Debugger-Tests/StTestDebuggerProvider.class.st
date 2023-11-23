@@ -77,6 +77,16 @@ StTestDebuggerProvider >> debuggerWithFailingTestContext [
 ]
 
 { #category : 'helpers' }
+StTestDebuggerProvider >> debuggerWithGeneratingCodeContext [
+
+	[ self methodThatGeneratesCode ]
+		on: Error
+		do: [ :err |
+			self sessionFor: err signalerContext exception: err.
+			^ self newDebugger ]
+]
+
+{ #category : 'helpers' }
 StTestDebuggerProvider >> debuggerWithMissingClassContext [
 	"The called method must contain a undeclared variable (the missing class).
 	It makes the CI test fail, so it has to be generated and removed after usage.
@@ -162,6 +172,19 @@ StTestDebuggerProvider >> intermediateRecursiveMethodCall [
 StTestDebuggerProvider >> methodProducingDNU [
 
 	^ self foobar
+]
+
+{ #category : 'helpers' }
+StTestDebuggerProvider >> methodThatGeneratesCode [
+
+	| asserter |
+	asserter := TestAsserter new.
+
+	asserter see: 42 + 66 + 3.
+
+	asserter assert: 3 equals: 2.
+
+	asserter see: Object new
 ]
 
 { #category : 'helpers' }
