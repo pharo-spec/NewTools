@@ -46,5 +46,6 @@ StGenerateAssertEqualsCode >> resultString [
 { #category : 'rewriting' }
 StGenerateAssertEqualsCode >> rewritedCodeIntervalInDebugger: aDebugger [
 
-	^ aDebugger code selectionInterval
+	^ aDebugger defaultSelectedCodeRangeForContext:
+		  aDebugger currentContext
 ]
