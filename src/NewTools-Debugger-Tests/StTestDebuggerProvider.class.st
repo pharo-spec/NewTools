@@ -182,7 +182,7 @@ StTestDebuggerProvider >> methodThatGeneratesCode [
 	
 	asserter see: 42 + 66 + 3.
 	
-	asserter assert: 3 equals: 2.
+	1 / 0.
 	
 	asserter see: Object new
 ]

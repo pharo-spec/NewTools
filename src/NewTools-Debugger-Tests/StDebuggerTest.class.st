@@ -554,7 +554,7 @@ StDebuggerTest >> testGenerateAndProceed [
 	
 	asserter see: 42 + 66 + 3.
 	
-	asserter assert: 3 equals: 2.
+	1 / 0.
 	
 	asserter see: Object new'.
 
@@ -565,7 +565,7 @@ StDebuggerTest >> testGenerateAndProceed [
 	
 	asserter see: 42 + 66 + 3 equals: 111.
 	
-	asserter assert: 3 equals: 2.
+	1 / 0.
 	
 	asserter see: Object new'.
 
@@ -590,7 +590,7 @@ StDebuggerTest >> testGenerateAndProceed [
 		put: baseSourceCode.
 
 	[ debugger saveGeneratedCodeAndProceed ]
-		on: TestFailure
+		on: ZeroDivide
 		do: [ "We do nothing, we want to catch the assertion failure" ].
 
 	self deny: debugger canGenerateAndProceed.
