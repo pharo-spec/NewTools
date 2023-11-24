@@ -80,7 +80,7 @@ StTestDebuggerProvider >> debuggerWithFailingTestContext [
 StTestDebuggerProvider >> debuggerWithGeneratingCodeContext [
 
 	[ self methodThatGeneratesCode ]
-		on: Error
+		on: StGenerateCode 
 		do: [ :err |
 			self sessionFor: err signalerContext exception: err.
 			^ self newDebugger ]
@@ -180,11 +180,7 @@ StTestDebuggerProvider >> methodThatGeneratesCode [
 	| asserter |
 	asserter := TestAsserter new.
 	
-	asserter see: 42 + 66 + 3.
-	
-	1 / 0.
-	
-	asserter see: Object new
+	asserter see: 42 + 66 + 3
 ]
 
 { #category : 'helpers' }
