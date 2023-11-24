@@ -179,11 +179,11 @@ StTestDebuggerProvider >> methodThatGeneratesCode [
 
 	| asserter |
 	asserter := TestAsserter new.
-
+	
 	asserter see: 42 + 66 + 3.
-
+	
 	asserter assert: 3 equals: 2.
-
+	
 	asserter see: Object new
 ]
 
