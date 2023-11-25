@@ -13,7 +13,8 @@ Class {
 		'sendersButton',
 		'implementorsButton',
 		'versionButton',
-		'dropList'
+		'dropList',
+		'toolbarPresenter'
 	],
 	#category : 'NewTools-MethodBrowsers-Base',
 	#package : 'NewTools-MethodBrowsers',
@@ -63,12 +64,12 @@ SpMethodToolbarPresenter >> defaultLayout [
 	^ SpBoxLayout newLeftToRight
 		spacing: 3;
 		borderWidth: 3;
-		add: browseButton;
-		add: usersButton;
-		add: sendersButton;
-		add: implementorsButton;
-		add: versionButton;
-		add: dropList;
+		add: toolbarPresenter;
+		add: (SpBoxLayout newTopToBottom
+				vAlignCenter;
+				add: dropList;
+				yourself)
+			expand: false;
 		yourself
 ]
 
@@ -89,21 +90,40 @@ SpMethodToolbarPresenter >> implementorsMethod [
 { #category : 'initialization' }
 SpMethodToolbarPresenter >> initializePresenters [
 
-	(browseButton := self newButton) 
+	(browseButton := self newToolbarButton)
 		label: 'Browse'; 
+		icon: (self iconNamed: #smallSystemBrowser);
+		help: 'Browse current selected method';
 		action: [ self browseMethod ].
-	(usersButton := self newButton) 
-		label: 'Users'; 
+	(usersButton := self newToolbarButton) 
+		label: 'References'; 
+		icon: (self iconNamed: #smallFind);
+		help: 'Browse references of current selected class';
 		action: [ self usersMethod ].
-	(sendersButton := self newButton) 
+	(sendersButton := self newToolbarButton) 
 		label: 'Senders'; 
+		icon: (self iconNamed: #smallFind);
+		help: 'Browse senders of current selected method';
 		action: [ self sendersMethod ].
-	(implementorsButton := self newButton) 
+	(implementorsButton := self newToolbarButton) 
 		label: 'Implementors'; 
+		icon: (self iconNamed: #smallFind);
+		help: 'Browse implementors of current selected method';
 		action: [ self implementorsMethod ].
-	(versionButton := self newButton) 
+	(versionButton := self newToolbarButton) 
 		label: 'Version'; 
+		icon: (self iconNamed: #history);
+		help: 'Browse versions of current selected method';
 		action: [ self versionMethod ].
+		
+ 	toolbarPresenter := self newToolbar
+			add: browseButton;
+			add: usersButton;
+			add: sendersButton;
+			add: implementorsButton;
+			add: versionButton;
+			yourself.
+		
 	dropList := self newDropList
 ]
 

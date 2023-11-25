@@ -14,7 +14,11 @@ Class {
 	#instVars : [
 		'title',
 		'refreshingBlock',
-		'textPresenter'
+		'textPresenter',
+		'usingLayout'
+	],
+	#classVars : [
+		'UsingLayout'
 	],
 	#category : 'NewTools-MethodBrowsers-Senders',
 	#package : 'NewTools-MethodBrowsers',
@@ -125,6 +129,18 @@ StMessageBrowser class >> title [
 ]
 
 { #category : 'private' }
+StMessageBrowser class >> usingLayout [
+
+	^ UsingLayout ifNil: [ UsingLayout := #horizontalLayout ]
+]
+
+{ #category : 'private' }
+StMessageBrowser class >> usingLayout: aSymbol [
+
+	UsingLayout := aSymbol
+]
+
+{ #category : 'private' }
 StMessageBrowser >> accept: text notifying: notifyer [
 
 	^ self selectedMessage ifNotNil: [ :message | 
@@ -160,16 +176,16 @@ StMessageBrowser >> connectPresenters [
 	textPresenter whenSubmitDo: [ :text | (self accept: text notifying: nil) notNil ]
 ]
 
+{ #category : 'api - focus' }
+StMessageBrowser >> defaultKeyboardFocus [
+
+	^ messageList
+]
+
 { #category : 'layout' }
 StMessageBrowser >> defaultLayout [
 
-	^ SpPanedLayout newTopToBottom
-		add: messageList;
-		add: (SpBoxLayout newTopToBottom
-			add: toolbarPresenter expand: false;
-			add: textPresenter;
-			yourself);
-		yourself
+	^ self perform: self class usingLayout
 ]
 
 { #category : 'text selection' }
@@ -182,6 +198,17 @@ StMessageBrowser >> findFirstOccurrenceOf: searchedString in: textToSearchIn [
 			firstIndex := textToSearchIn findString: searchedString startingAt: firstIndex +1 ].
 		
 	^ firstIndex
+]
+
+{ #category : 'private' }
+StMessageBrowser >> flipLayout [
+
+	self class usingLayout: ((self class usingLayout = #horizontalLayout)
+		ifTrue: [ #verticalLayout ]
+		ifFalse: [ #horizontalLayout ]).
+		
+	self layout: self defaultLayout
+	
 ]
 
 { #category : 'announcements' }
@@ -272,9 +299,23 @@ StMessageBrowser >> handleMethodRemoved: anAnnouncement [
 	removeItem := self selectedMessage.
 
 	self messages: (self messages
-		remove: item asFullRingDefinition ifAbsent: [ nil ];
+		remove: item asRingDefinition ifAbsent: [ nil ];
 		yourself).
 	self selectIndex: selection
+]
+
+{ #category : 'layout' }
+StMessageBrowser >> horizontalLayout [
+
+	^ SpBoxLayout newTopToBottom
+		add: toolbarPresenter expand: false;
+		add: (SpPanedLayout newLeftToRight
+			add: messageList;
+			add: (SpBoxLayout newTopToBottom
+				add: textPresenter;
+				yourself);
+			yourself);
+		yourself
 ]
 
 { #category : 'initialization' }
@@ -294,6 +335,7 @@ StMessageBrowser >> initializeDropList [
 
 { #category : 'initialization' }
 StMessageBrowser >> initializePresenters [
+
 	super initializePresenters.
 
 	textPresenter := self newCode.
@@ -370,6 +412,14 @@ StMessageBrowser >> methodRemoved: anAnnouncement [
 	"this method forces the announcement to be handled in the UI process"
 	self defer:  [ 
 		self handleMethodRemoved: anAnnouncement ]
+]
+
+{ #category : 'initialization' }
+StMessageBrowser >> newMessageToolbar [
+
+	^ (self instantiate: SpMessageToolbarPresenter)
+		whenFlipLayoutDo: [ self flipLayout ];
+		yourself
 ]
 
 { #category : 'private' }
@@ -532,6 +582,20 @@ StMessageBrowser >> topologicSort: aBoolean [
 { #category : 'api' }
 StMessageBrowser >> updateTitle [
 	self withWindowDo: [ :window | window title: self title ]
+]
+
+{ #category : 'layout' }
+StMessageBrowser >> verticalLayout [
+
+	^ SpBoxLayout newTopToBottom
+		add: toolbarPresenter expand: false;
+		add: (SpPanedLayout newTopToBottom
+			add: messageList;
+			add: (SpBoxLayout newTopToBottom
+				add: textPresenter;
+				yourself);
+			yourself);
+		yourself
 ]
 
 { #category : 'api - events' }

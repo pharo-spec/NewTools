@@ -1,0 +1,35 @@
+Class {
+	#name : 'SpMethodHistoryToolbarPresenter',
+	#superclass : 'SpMethodToolbarPresenter',
+	#instVars : [
+		'revertAction'
+	],
+	#category : 'NewTools-MethodBrowsers-Versions',
+	#package : 'NewTools-MethodBrowsers',
+	#tag : 'Versions'
+}
+
+{ #category : 'actions' }
+SpMethodHistoryToolbarPresenter >> doRevert [
+
+	revertAction ifNil: [ ^ self ].
+	revertAction value
+]
+
+{ #category : 'initialization' }
+SpMethodHistoryToolbarPresenter >> initializePresenters [
+
+	super initializePresenters.
+	Smalltalk ui icons.
+	versionButton 
+		label: 'Revert';
+		icon: (self iconNamed: #smallUndo);
+		help: 'Revert method to selected version.';
+		action: [ self doRevert ]
+]
+
+{ #category : 'events' }
+SpMethodHistoryToolbarPresenter >> whenRevertDo: aBlock [
+
+	revertAction := aBlock
+]

@@ -30,8 +30,8 @@ AbstractMessageCentricBrowserPresenter >> initialize [
 { #category : 'initialization' }
 AbstractMessageCentricBrowserPresenter >> initializePresenters [
 
-	messageList := self instantiate: MessageListPresenter.
-	toolbarPresenter := self instantiate: SpMethodToolbarPresenter
+	messageList := self newMessageList.
+	toolbarPresenter := self newMessageToolbar
 ]
 
 { #category : 'initialization' }
@@ -52,6 +52,18 @@ AbstractMessageCentricBrowserPresenter >> isMethodDefinition: anItem [
 	"assume it is a compiled method or ring method definition"
 	^ (anItem isRingObject and: [ anItem isMethod and: [ anItem compiledMethod isNotNil ] ])
 		or: [  anItem isCompiledMethod ]
+]
+
+{ #category : 'initialization' }
+AbstractMessageCentricBrowserPresenter >> newMessageList [
+	
+	^ self instantiate: MessageListPresenter
+]
+
+{ #category : 'initialization' }
+AbstractMessageCentricBrowserPresenter >> newMessageToolbar [
+
+	^ self instantiate: SpMethodToolbarPresenter
 ]
 
 { #category : 'private - factory' }

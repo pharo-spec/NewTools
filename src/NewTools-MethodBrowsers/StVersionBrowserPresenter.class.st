@@ -146,10 +146,11 @@ StVersionBrowserPresenter >> connectPresenters [
 { #category : 'initialization' }
 StVersionBrowserPresenter >> defaultLayout [
 
-	^ SpPanedLayout newTopToBottom
-		add: messageList;
-		add: ((sourceLayout := SpBoxLayout newTopToBottom)
-			add: toolbarPresenter expand: false;
+	^ SpBoxLayout newTopToBottom
+		add: toolbarPresenter expand: false; 
+		add: (SpPanedLayout newTopToBottom
+			add: messageList;
+			add: (sourceLayout := SpBoxLayout newTopToBottom);
 			yourself);
 		yourself
 ]
@@ -157,15 +158,16 @@ StVersionBrowserPresenter >> defaultLayout [
 { #category : 'initialization' }
 StVersionBrowserPresenter >> initializePresenters [
 
-	messageList := self instantiate: MessageListPresenter on: rgMethod.
-	
-	toolbarPresenter := self instantiate: SpMethodToolbarPresenter on: rgMethod.
-	self layout: self defaultLayout.
+	messageList := self newMessageList.
+	toolbarPresenter := self newMessageToolbar.
 	 
 	messageList
 		topologicSort: false;
 		sortingBlock: [ :a | a annotationNamed: #versionIndex ifAbsent: [ 0 ] ] ascending;
 		contextMenu: self messageListMenu.
+
+	self flag: #TODO. "I need this for now, but this is because toolbar is wrong :P"
+	self layout: self defaultLayout.
 	
 	toolbarPresenter
 		addItemLabeled: 'Side By Side' do: [
@@ -177,11 +179,7 @@ StVersionBrowserPresenter >> initializePresenters [
 		addItemLabeled: 'Diff' do: [ 
 			self showDiffLineWithConverter: (DiffLineChangeRecordConverter 
 				methodReference: self textConverter method
-				referencesList: self changeList) ].
-		
-	toolbarPresenter 
-		replaceVersionWithLabel: 'Revert'
-		action: [ self revert: self selectedMessage ]
+				referencesList: self changeList) ]
 ]
 
 { #category : 'initialization' }
@@ -244,6 +242,14 @@ StVersionBrowserPresenter >> method [
 	^ rgMethod
 ]
 
+{ #category : 'initialization' }
+StVersionBrowserPresenter >> newMessageToolbar [
+		
+	^ (self instantiate: SpMethodHistoryToolbarPresenter on: rgMethod)
+		whenRevertDo: [ self revert: self selectedMessage ];
+		yourself
+]
+
 { #category : 'private - factory' }
 StVersionBrowserPresenter >> newSourceDiff [
 
@@ -259,11 +265,11 @@ StVersionBrowserPresenter >> newTextConverter [
 { #category : 'private' }
 StVersionBrowserPresenter >> replaceSourceWith: aPresenter [
 	
-	sourceLayout children size = 1 
-		ifTrue: [ 
-			sourceLayout add: aPresenter ]
-		ifFalse: [ 
-			sourceLayout replace: sourcePresenter with: aPresenter ].
+	sourceLayout children  
+		ifNotEmpty: [ 
+			sourceLayout replace: sourcePresenter with: aPresenter ]
+		ifEmpty: [ 
+			sourceLayout add: aPresenter ].
 		
 	sourcePresenter := aPresenter.
 	messageList selectIndex: messageList selectedIndex
@@ -394,8 +400,8 @@ StVersionBrowserPresenter >> updateDiffLine: content [
 StVersionBrowserPresenter >> updatePresenter [
 
 	self showDiffMorphWithConverter: (DiffSideBySideChangeRecordConverter 
-				methodReference: self textConverter method 
-				referencesList: self changeList)
+		methodReference: self textConverter method 
+		referencesList: self changeList)
 ]
 
 { #category : 'private - updating' }
