@@ -765,31 +765,22 @@ StDebugger >> initializeStack [
 		activateOnDoubleClick;
 		whenActivatedDo: [ :selection | self doBrowseClass ].
 	stackTable
-		addColumn: ((SpImageTableColumn title: '' evaluated: [ :context | self stackIconForContext: context ])
+		addColumn: ((SpImageTableColumn
+				  title: ''
+				  evaluated: [ :context | self stackIconForContext: context ])
 				 width: 8;
 				 sortFunction: nil;
 				 yourself);
-		addColumn: ((SpStringTableColumn title: 'Class' evaluated: [ :context | self printReceiverClassInContext: context ])
-				 displayColor: [ :context | self stackColorForContext: context ];
-				 sortFunction: nil;
-				 yourself);
-		addColumn: ((SpStringTableColumn title: 'Method' evaluated: [ :context |
+		addColumn:
+			((SpStringTableColumn title: 'Method' evaluated: [ :context |
 					  | method |
 					  method := context method.
-					  method isCompiledBlock
-						  ifTrue: [ method sourceNode sourceCode ]
-						  ifFalse: [ method selector ] ])
-				 displayColor: [ :context | self stackColorForContext: context ];
+					  (self printReceiverClassInContext: context) , '>>'
+					  , (method isCompiledBlock
+							   ifTrue: [ method sourceNode sourceCode ]
+							   ifFalse: [ method selector ]) ])
 				 sortFunction: nil;
-				 yourself);
-		addColumn: ((SpStringTableColumn title: 'Package' evaluated: [ :context |
-					  | package |
-					  package := context method package.
-					  package
-						  ifNil: [ '-' ]
-						  ifNotNil: [ package name asString ] ])
 				 displayColor: [ :context | self stackColorForContext: context ];
-				 sortFunction: nil;
 				 yourself).
 	stackTable transmitDo: [ :context |
 		stackTable selection isEmpty ifFalse: [
@@ -1147,7 +1138,7 @@ StDebugger >> stack [
 { #category : 'specs' }
 StDebugger >> stackAndCodeLayout [
 
-	^ SpPanedLayout newTopToBottom
+	^ SpPanedLayout newLeftToRight
 		positionOfSlider: 30 percent;
 		add: self stackLayout;
 		add: self codeLayout;
