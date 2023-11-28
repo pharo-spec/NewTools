@@ -36,11 +36,6 @@ MessageListPresenter class >> defaultLayout [
 		yourself
 ]
 
-{ #category : 'private' }
-MessageListPresenter >> authorOf: anItem [
-	^ anItem author
-]
-
 { #category : 'actions' }
 MessageListPresenter >> browseClassRefs [
 
@@ -177,8 +172,8 @@ MessageListPresenter >> initialize [
 
 { #category : 'initialization' }
 MessageListPresenter >> initializePresenters [
-	listPresenter := self newTable.
 
+	listPresenter := self newTable.
 	listPresenter
 		sortingBlock: [ :a :b | self sortClassesInCachedHierarchy: a b: b ];
 		addColumn: (SpStringTableColumn 
@@ -370,11 +365,6 @@ MessageListPresenter >> sortClassesInCachedHierarchy: aMethodDefinition b: other
 { #category : 'api' }
 MessageListPresenter >> sortingBlock: aBlock [
 	listPresenter sortingBlock: aBlock
-]
-
-{ #category : 'private' }
-MessageListPresenter >> timeStampOf: anItem [
-	^ anItem timeStamp
 ]
 
 { #category : 'accessing' }

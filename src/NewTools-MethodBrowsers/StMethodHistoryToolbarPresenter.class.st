@@ -1,5 +1,5 @@
 Class {
-	#name : 'SpMethodHistoryToolbarPresenter',
+	#name : 'StMethodHistoryToolbarPresenter',
 	#superclass : 'SpMethodToolbarPresenter',
 	#instVars : [
 		'revertAction'
@@ -10,14 +10,14 @@ Class {
 }
 
 { #category : 'actions' }
-SpMethodHistoryToolbarPresenter >> doRevert [
+StMethodHistoryToolbarPresenter >> doRevert [
 
 	revertAction ifNil: [ ^ self ].
 	revertAction value
 ]
 
 { #category : 'initialization' }
-SpMethodHistoryToolbarPresenter >> initializePresenters [
+StMethodHistoryToolbarPresenter >> initializePresenters [
 
 	super initializePresenters.
 	Smalltalk ui icons.
@@ -29,7 +29,7 @@ SpMethodHistoryToolbarPresenter >> initializePresenters [
 ]
 
 { #category : 'events' }
-SpMethodHistoryToolbarPresenter >> whenRevertDo: aBlock [
+StMethodHistoryToolbarPresenter >> whenRevertDo: aBlock [
 
 	revertAction := aBlock
 ]

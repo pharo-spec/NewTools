@@ -101,7 +101,7 @@ StVersionBrowserPresenter >> changeList [
 	^ messageList messages
 ]
 
-{ #category : 'actions' }
+{ #category : 'private - actions' }
 StVersionBrowserPresenter >> compareTo: anOtherVersion withLabel: aLabel [
 	| versions texts |
 
@@ -111,11 +111,13 @@ StVersionBrowserPresenter >> compareTo: anOtherVersion withLabel: aLabel [
 		referencesList: versions) 
 		getText.
 
-	(SpDiffPresenter newApplication: self application)
-		title: ('Comparison from {1} to {2}' format: { versions second stamp. aLabel });
+	((SpDiffPresenter newApplication: self application)
 		leftText: texts first;
 		rightText: texts second;
-		open
+		asWindow) 
+			title: ('Comparison from {1} to {2}' format: { versions second stamp. aLabel });
+			initialExtent: 900@600;
+			open
 ]
 
 { #category : 'actions' }
@@ -153,6 +155,49 @@ StVersionBrowserPresenter >> defaultLayout [
 			add: (sourceLayout := SpBoxLayout newTopToBottom);
 			yourself);
 		yourself
+]
+
+{ #category : 'actions' }
+StVersionBrowserPresenter >> doBrowseImplementors [
+
+	SystemNavigation new browseAllImplementorsOf: rgMethod selector
+]
+
+{ #category : 'actions' }
+StVersionBrowserPresenter >> doBrowseSenders [
+
+	self systemNavigation 
+		browseSendersOf: rgMethod selector 
+		name: 'Senders of ', rgMethod selector 
+		autoSelect: rgMethod selector
+]
+
+{ #category : 'actions' }
+StVersionBrowserPresenter >> doCompareToCurrentVersion [
+
+	self compareTo: rgMethod withLabel: 'Current version'
+]
+
+{ #category : 'actions' }
+StVersionBrowserPresenter >> doCompareToOtherVersion [
+	| labels versions selected |
+	
+	versions := self changeList.
+	labels := versions collect: [ :each | each stamp ].
+	
+	selected := self application newSelect 
+		title: 'Select a version'; 
+		items: versions;
+		display: [ :aVersion | aVersion stamp ];
+		openModal.
+	selected ifNil: [ ^ self ].
+
+	self compareTo: selected withLabel: selected stamp
+]
+
+{ #category : 'actions' }
+StVersionBrowserPresenter >> doRevert [
+
 ]
 
 { #category : 'initialization' }
@@ -242,9 +287,15 @@ StVersionBrowserPresenter >> method [
 ]
 
 { #category : 'initialization' }
+StVersionBrowserPresenter >> newMessageList [
+
+	^ self instantiate: StMessageVersionListPresenter
+]
+
+{ #category : 'initialization' }
 StVersionBrowserPresenter >> newMessageToolbar [
 		
-	^ (self instantiate: SpMethodHistoryToolbarPresenter on: rgMethod)
+	^ (self instantiate: StMethodHistoryToolbarPresenter on: rgMethod)
 		whenRevertDo: [ self revert: self selectedMessage ];
 		yourself
 ]
