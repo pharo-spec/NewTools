@@ -206,7 +206,7 @@ StDebugger class >> initialize [
 
 { #category : 'accessing' }
 StDebugger class >> layoutConfigurator [
-	'here' crTrace.
+
 	^ layoutConfigurator ifNil: [
 		  layoutConfigurator := StDebuggerLayoutConfiguration new ]
 ]
