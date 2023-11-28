@@ -370,7 +370,7 @@ StDebugger >> code [
 	^ code
 ]
 
-{ #category : 'specs' }
+{ #category : 'layout' }
 StDebugger >> codeLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -1144,7 +1144,7 @@ StDebugger >> stack [
 
 ]
 
-{ #category : 'specs' }
+{ #category : 'layout' }
 StDebugger >> stackAndCodeLayout [
 
 	^ SpPanedLayout newTopToBottom
@@ -1154,7 +1154,7 @@ StDebugger >> stackAndCodeLayout [
 		yourself
 ]
 
-{ #category : 'specs' }
+{ #category : 'layout' }
 StDebugger >> stackAndCodeWithExtensionsLayout [
 
 	^ (SpPanedLayout newLeftToRight
@@ -1199,7 +1199,7 @@ StDebugger >> stackIconForContext: context [
 	^ self iconNamed: #overlayDirty
 ]
 
-{ #category : 'specs' }
+{ #category : 'layout' }
 StDebugger >> stackLayout [
 	^ SpBoxLayout newTopToBottom
 		add: #stackHeader
