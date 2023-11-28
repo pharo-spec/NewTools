@@ -69,3 +69,15 @@ StDebuggerLayoutConfiguration >> initialize [
 	order := #( #stack #code ).
 	selectedLayout := #beVerticalStackThenCode
 ]
+
+{ #category : 'accessing' }
+StDebuggerLayoutConfiguration >> selectedLayout [
+
+	^ selectedLayout
+]
+
+{ #category : 'accessing' }
+StDebuggerLayoutConfiguration >> selectedLayout: anObject [
+
+	selectedLayout := anObject
+]

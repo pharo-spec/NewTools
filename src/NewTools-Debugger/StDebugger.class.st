@@ -125,6 +125,17 @@ StDebugger class >> closeAllDebuggers [
 	self allInstancesDo: [ :dbg | dbg close ]
 ]
 
+{ #category : 'accessing' }
+StDebugger class >> configureLayout [
+	 ^self layoutConfigurator selectedLayout
+]
+
+{ #category : 'accessing' }
+StDebugger class >> configureLayout: aSymbol [
+	aSymbol crTrace.
+	self layoutConfigurator selectedLayout: aSymbol 
+]
+
 { #category : 'instance creation' }
 StDebugger class >> debugSession: aDebugSession [
 
@@ -141,6 +152,21 @@ StDebugger class >> debugSession: aDebugSession [
 { #category : 'accessing' }
 StDebugger class >> debuggerContextClass [
 	^ StDebuggerContext
+]
+
+{ #category : 'accessing' }
+StDebugger class >> debuggerLayoutSettingsOn: aBuilder [
+
+	<systemsettings>
+	(aBuilder pickOne: #configureLayout)
+		parent: #debugging;
+		label: 'Debugger Layout';
+		target: StDebugger;
+		default: #beVerticalStackThenCode;
+		domainValues:
+			#( #beHorizontalCodeThenStack #beHorizontalStackThenCode
+			   #beVerticalCodeThenStack #beVerticalStackThenCode );
+		description: ''
 ]
 
 { #category : 'accessing' }
