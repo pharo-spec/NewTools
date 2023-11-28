@@ -97,11 +97,6 @@ MessageListPresenter >> cacheHierarchyForClasses: aCollection [
 	cachedHierarchy := self buildHierarchyForMessages: aCollection.
 ]
 
-{ #category : 'api' }
-MessageListPresenter >> contextMenu: aMenuPresenter [
-	listPresenter contextMenu: aMenuPresenter
-]
-
 { #category : 'private' }
 MessageListPresenter >> currentMethod [
 
@@ -169,6 +164,7 @@ MessageListPresenter >> ensureKeyBindingsFor: aWidget [
 
 { #category : 'initialization' }
 MessageListPresenter >> initialize [
+
 	super initialize.
 	topologySort := true
 
@@ -180,14 +176,22 @@ MessageListPresenter >> initializePresenters [
 
 	listPresenter
 		sortingBlock: [ :a :b | self sortClassesInCachedHierarchy: a b: b ];
-		addColumn: (SpStringTableColumn title: 'Location' evaluated: [ :item | self locationOf: item ]);
-		addColumn: (SpStringTableColumn title: 'Selector' evaluated: [ :item | self selectorOf: item ]);
-		addColumn: (SpStringTableColumn title: 'Package' evaluated: [ :item | self packageOf: item ]);
+		addColumn: (SpStringTableColumn 
+			title: 'Location' 
+			evaluated: [ :item | self locationOf: item ]);
+		addColumn: (SpStringTableColumn 
+			title: 'Selector' 
+			evaluated: [ :item | self selectorOf: item ]);
+		addColumn: (SpStringTableColumn 
+			title: 'Package' 
+			evaluated: [ :item | self packageOf: item ]);
 		beResizable.
 		
 	listPresenter outputActivationPort transmitDo: [ :aMethod | self doBrowseMethod ].
 		
-	self contextMenu: self messageListMenu
+	listPresenter 
+		contextMenu: self messageListActions asMenuPresenter;
+		contextKeyBindings: self messageListActions asKMCategory
 ]
 
 { #category : 'actions' }
@@ -216,39 +220,26 @@ MessageListPresenter >> locationOf: anItem [
 ]
 
 { #category : 'private' }
-MessageListPresenter >> messageListMenu [
-
-	^ self newMenu
-		addGroup: [ :group | group
-			addItem: [ :item | item 
-				name: 'Browse full'; 
-				shortcut: $b meta; 
-				action: [ self doBrowseMethod ] ];
-			addItem: [ :item | item 
-				name: 'Inspect method'; 
-				shortcut: $i meta; 
-				action: [ self doInspectMethod ] ] ];
-		addGroup: [ :group | group
-			addItem: [ :item | item 
-				name: 'Remove method'; 
-				shortcut: $x meta; 
-				action: [ self doRemoveMethod ] ];
-			addItem: [ :item | item 
-				name: 'Senders'; 
-				shortcut: $n meta; 
-				action: [ self doBrowseSenders ] ];
-			addItem: [ :item | item 
-				name: 'Implementors'; 
-				shortcut: $m meta; 
-				action: [ self doBrowseImplementors ] ] ];
-		addItem: [ :items | items 
-			name: 'Users'; 
-			shortcut: $N meta; 
-			action: [ self doBrowseUsers ] ];
-		addItem: [ :item | item 
-			name: 'Versions'; 
-			shortcut: $v meta; 
-			action: [ self doBrowseVersions ] ];
+MessageListPresenter >> messageListActions [
+	
+	^ CmCommandGroup forSpec
+		beRoot;
+		register: ((CmCommandGroup forSpecNamed: 'View')
+			beDisplayedAsGroup;
+			register: (StMessageBrowseFullCommand forSpecContext: self);
+			register: (StMessageInspectMethodCommand forSpecContext: self);
+			yourself);
+		register: ((CmCommandGroup forSpecNamed: 'Navigation')
+			beDisplayedAsGroup;
+			register: (StMessageSendersCommand forSpecContext: self);
+			register: (StMessageImplementorsCommand forSpecContext: self);
+			register: (StMessageUsersCommand forSpecContext: self);
+			register: (StMessageVersionsCommand forSpecContext: self);
+			yourself);
+		register: ((CmCommandGroup forSpecNamed: 'CRITICAL')
+			beDisplayedAsGroup;
+			register: (StMessageRemoveMethodCommand forSpecContext: self);
+			yourself);
 		yourself
 ]
 

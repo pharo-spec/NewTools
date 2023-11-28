@@ -163,8 +163,7 @@ StVersionBrowserPresenter >> initializePresenters [
 	 
 	messageList
 		topologicSort: false;
-		sortingBlock: [ :a | a annotationNamed: #versionIndex ifAbsent: [ 0 ] ] ascending;
-		contextMenu: self messageListMenu.
+		sortingBlock: [ :a | a annotationNamed: #versionIndex ifAbsent: [ 0 ] ] ascending.
 
 	self flag: #TODO. "I need this for now, but this is because toolbar is wrong :P"
 	self layout: self defaultLayout.

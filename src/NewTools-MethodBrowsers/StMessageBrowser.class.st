@@ -170,10 +170,13 @@ StMessageBrowser >> classRenamed: anAnnouncement [
 
 { #category : 'initialization' }
 StMessageBrowser >> connectPresenters [
+	
 	messageList
 		whenSelectionChangedDo: [ :selection | self selectItem: selection selectedItem ];
 		whenModelChangedDo: [ self updateTitle ].
-	textPresenter whenSubmitDo: [ :text | (self accept: text notifying: nil) notNil ]
+		
+	textPresenter whenSubmitDo: [ :text | 
+		self accept: text notifying: nil ]
 ]
 
 { #category : 'api - focus' }
@@ -214,6 +217,7 @@ StMessageBrowser >> flipLayout [
 { #category : 'announcements' }
 StMessageBrowser >> handleClassRenamed: anAnnouncement [
 	| items selectedIndex |
+
 	items := self messages
 		collect: [ :method | 
 			| interestedClassName interestedClass |
@@ -254,8 +258,9 @@ StMessageBrowser >> handleMethodAdded: anAnnouncement [
 { #category : 'announcements' }
 StMessageBrowser >> handleMethodModified: anAnnouncement [
 	| item oldItem sel index text list edits |
-	self isDisplayed
-		ifFalse: [ ^ self ].
+	
+	self isDisplayed ifFalse: [ ^ self ].
+	
 	refreshingBlock ifNil: [ ^ self ].
 	item := anAnnouncement newMethod.
 	oldItem := anAnnouncement oldMethod.
@@ -266,9 +271,10 @@ StMessageBrowser >> handleMethodModified: anAnnouncement [
 		ifFalse: [ ^ self ].
 	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement)
 		ifFalse: [ ^ self ].
+	
 	edits := textPresenter hasUnacceptedEdits.
-	edits
-		ifTrue: [ text := textPresenter pendingText ].
+	edits ifTrue: [ 
+		text := textPresenter pendingText ].
 	index := messageList selectedIndex.
 	list := self messages
 		remove: sel ifAbsent: [  ];
@@ -277,8 +283,8 @@ StMessageBrowser >> handleMethodModified: anAnnouncement [
 			yourself.
 	self messages: list.
 	self selectIndex: index.
-	edits
-		ifFalse: [ ^ self ].
+	edits ifFalse: [ ^ self ].
+	
 	textPresenter pendingText: text.
 	textPresenter hasEditingConflicts: true
 ]
@@ -350,8 +356,7 @@ StMessageBrowser >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
 		title: self title;
-		windowIcon: (self application iconNamed: self class taskbarIconName);
-		askOkToClose: true
+		windowIcon: (self iconNamed: self class taskbarIconName)
 ]
 
 { #category : 'private' }
