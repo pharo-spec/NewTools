@@ -22,5 +22,5 @@ StFBInspectPreviewer >> matchingMimeType: aZnMimeType [
 
 { #category : 'templateMethod' }
 StFBInspectPreviewer >> previewActionOn: aFileReference [
-	^ StInspector instanciateOn: aFileReference
+	^ StObjectInspectorPresenter onObject: aFileReference
 ]

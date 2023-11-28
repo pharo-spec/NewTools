@@ -21,8 +21,6 @@ StFBVisibleFilter >> name [
 
 { #category : 'accessing' }
 StFBVisibleFilter >> predicate: aFileReference [
-
-	OSPlatform current isWindows ifTrue: [ 
-		^ aFileReference isHiddenInWindows not ].
-	^ (aFileReference basename matchesRegex: '\.[^.].*') not
+	 
+	^ aFileReference isHidden not
 ]

@@ -22,6 +22,5 @@ StFBDirectoryFilter >> name [
 { #category : 'accessing' }
 StFBDirectoryFilter >> predicate: aFileReference [
 
-	^ aFileReference isDirectory and: [ 
-		  StFBVisibleFilter new predicate: aFileReference ]
+	^ aFileReference isDirectory
 ]

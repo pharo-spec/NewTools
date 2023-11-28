@@ -1,17 +1,6 @@
 Extension { #name : 'CompiledMethod' }
 
 { #category : '*NewTools-Spotter-Extensions' }
-CompiledMethod >> spotterForBytecodesFor: aStep [
-	<stSpotterOrder: 15>
-	
-	aStep listProcessor
-		title: 'Bytecode';
-		allCandidates: [ self symbolicBytecodes ];
-		itemName: #printString;
-		filter: StFilterSubstring
-]
-
-{ #category : '*NewTools-Spotter-Extensions' }
 CompiledMethod >> spotterForImplementorsFor: aStep [
 	<stSpotterOrder: 10>
 	
@@ -20,18 +9,6 @@ CompiledMethod >> spotterForImplementorsFor: aStep [
 			allCandidates: [ self implementors collect: [:each | each compiledMethod] ];
 			filter: StFilterSubstring;
 			keyBinding: $m command
-]
-
-{ #category : '*NewTools-Spotter-Extensions' }
-CompiledMethod >> spotterForMessagesFor: aStep [
-	<stSpotterOrder: 12>
-
-	aStep listProcessor
-			title: 'Messages';
-			allCandidates: [ 
-				self messages asSortedCollection 
-					collect: [:each | StSelector new name: each ] ];
-			filter: StFilterSubstring
 ]
 
 { #category : '*NewTools-Spotter-Extensions' }
