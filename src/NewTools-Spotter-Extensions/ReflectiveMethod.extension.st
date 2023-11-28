@@ -1,12 +1,6 @@
 Extension { #name : 'ReflectiveMethod' }
 
 { #category : '*NewTools-Spotter-Extensions' }
-ReflectiveMethod >> spotterForBytecodesFor: aStep [
-	<stSpotterOrder: 15>
-	compiledMethod spotterForBytecodesFor: aStep
-]
-
-{ #category : '*NewTools-Spotter-Extensions' }
 ReflectiveMethod >> spotterForImplementorsFor: aStep [
 	<stSpotterOrder: 10>
 	self compiledMethod spotterForImplementorsFor: aStep

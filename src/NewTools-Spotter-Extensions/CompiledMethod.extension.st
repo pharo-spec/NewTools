@@ -1,17 +1,6 @@
 Extension { #name : 'CompiledMethod' }
 
 { #category : '*NewTools-Spotter-Extensions' }
-CompiledMethod >> spotterForBytecodesFor: aStep [
-	<stSpotterOrder: 15>
-	
-	aStep listProcessor
-		title: 'Bytecode';
-		allCandidates: [ self symbolicBytecodes ];
-		itemName: #printString;
-		filter: StFilterSubstring
-]
-
-{ #category : '*NewTools-Spotter-Extensions' }
 CompiledMethod >> spotterForImplementorsFor: aStep [
 	<stSpotterOrder: 10>
 	
