@@ -93,6 +93,9 @@ Class {
 		'EnableStackColoring',
 		'FastTDD'
 	],
+	#classInstVars : [
+		'layoutConfigurator'
+	],
 	#category : 'NewTools-Debugger-View',
 	#package : 'NewTools-Debugger',
 	#tag : 'View'
@@ -199,6 +202,13 @@ StDebugger class >> hasAnyActivatedExtension: extensionsClasses [
 StDebugger class >> initialize [ 
 
 	EnableStackColoring := true
+]
+
+{ #category : 'accessing' }
+StDebugger class >> layoutConfigurator [
+
+	^ layoutConfigurator ifNil: [
+		  layoutConfigurator := StDebuggerLayoutConfiguration new ]
 ]
 
 { #category : 'opening' }
@@ -1147,11 +1157,9 @@ StDebugger >> stack [
 { #category : 'layout' }
 StDebugger >> stackAndCodeLayout [
 
-	^ SpPanedLayout newTopToBottom
-		positionOfSlider: 30 percent;
-		add: self stackLayout;
-		add: self codeLayout;
-		yourself
+	^ self class layoutConfigurator configureForLayouts: {
+			  (#stack -> self stackLayout).
+			  (#code -> self codeLayout) } asDictionary
 ]
 
 { #category : 'layout' }
