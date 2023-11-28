@@ -132,8 +132,10 @@ StDebugger class >> configureLayout [
 
 { #category : 'accessing' }
 StDebugger class >> configureLayout: aSymbol [
-	aSymbol crTrace.
-	self layoutConfigurator selectedLayout: aSymbol 
+
+	self layoutConfigurator selectedLayout: aSymbol.
+	SystemAnnouncer uniqueInstance announce:
+		StDebuggerLayoutChangedAnnouncement new
 ]
 
 { #category : 'instance creation' }
@@ -707,6 +709,7 @@ StDebugger >> initialize [
 	self debuggerActionModel updateContextPredicate.
 	self forceSessionUpdate.
   	self susbcribeToExtensionToggleAnnouncement.
+	self susbcribeToLayoutChangesAnnouncement.
 	
 	programmaticallyClosed := false.
 ]
@@ -1325,6 +1328,15 @@ StDebugger >> susbcribeToExtensionToggleAnnouncement [
 		to: self
 ]
 
+{ #category : 'subscription' }
+StDebugger >> susbcribeToLayoutChangesAnnouncement [
+
+	SystemAnnouncer uniqueInstance weak
+		when: StDebuggerLayoutChangedAnnouncement
+		send: #updateLayout
+		to: self
+]
+
 { #category : 'accessing - presenters' }
 StDebugger >> toolbar [
 
@@ -1475,6 +1487,13 @@ StDebugger >> updateInspectorFromContext: aContext [
 	inspector updateWith: (self newDebuggerContextFor: aContext).
 	self flag: #DBG_INSPECTOR_UPDATE_BUG.
 	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p | p update ]
+]
+
+{ #category : 'updating' }
+StDebugger >> updateLayout [
+
+	self setStackAndCodeContainer.
+	self layout: self defaultLayout
 ]
 
 { #category : 'initialization' }
