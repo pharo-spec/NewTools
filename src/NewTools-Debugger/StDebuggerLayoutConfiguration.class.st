@@ -7,8 +7,8 @@ Class {
 	#name : 'StDebuggerLayoutConfiguration',
 	#superclass : 'Object',
 	#instVars : [
-		'layout',
-		'order'
+		'order',
+		'selectedLayout'
 	],
 	#category : 'NewTools-Debugger-Model',
 	#package : 'NewTools-Debugger',
@@ -18,41 +18,44 @@ Class {
 { #category : 'configuration' }
 StDebuggerLayoutConfiguration >> beHorizontalCodeThenStack [
 
-	layout := SpPanedLayout newLeftToRight
-		          positionOfSlider: 30 percent;
-		          yourself.
-	order := #( #code #stack )
+	order := #( #code #stack ).
+	^ SpPanedLayout newLeftToRight
+		  positionOfSlider: 30 percent;
+		  yourself
 ]
 
 { #category : 'configuration' }
 StDebuggerLayoutConfiguration >> beHorizontalStackThenCode [
 
-	layout := SpPanedLayout newLeftToRight
-		          positionOfSlider: 30 percent;
-		          yourself.
-	order := #( #stack #code )
+	order := #( #stack #code ).
+	^ SpPanedLayout newLeftToRight
+		  positionOfSlider: 30 percent;
+		  yourself
 ]
 
 { #category : 'configuration' }
 StDebuggerLayoutConfiguration >> beVerticalCodeThenStack [
 
-	layout := SpPanedLayout newTopToBottom
-		          positionOfSlider: 30 percent;
-		          yourself.
-	order := #( #code #stack )
+	order := #( #code #stack ).
+	^ SpPanedLayout newTopToBottom
+		  positionOfSlider: 30 percent;
+		  yourself
 ]
 
 { #category : 'configuration' }
 StDebuggerLayoutConfiguration >> beVerticalStackThenCode [
 
-	layout := SpPanedLayout newTopToBottom 
-		          positionOfSlider: 30 percent;
-		          yourself.
-	order := #( #stack #code )
+	order := #( #stack #code ).
+	^ SpPanedLayout newTopToBottom
+		  positionOfSlider: 30 percent;
+		  yourself
 ]
 
 { #category : 'configuration' }
 StDebuggerLayoutConfiguration >> configureForLayouts: layoutsDictionary [
+
+	| layout |
+	layout := self perform: selectedLayout.
 
 	order do: [ :layoutSymbol |
 		layoutsDictionary at: layoutSymbol ifPresent: [ :l | layout add: l ] ].
@@ -63,8 +66,6 @@ StDebuggerLayoutConfiguration >> configureForLayouts: layoutsDictionary [
 { #category : 'initialization' }
 StDebuggerLayoutConfiguration >> initialize [
 
-	layout := SpPanedLayout newTopToBottom
-		          positionOfSlider: 30 percent;
-		          yourself.
-	order := #( #stack #code )
+	order := #( #stack #code ).
+	selectedLayout := #beVerticalStackThenCode
 ]
