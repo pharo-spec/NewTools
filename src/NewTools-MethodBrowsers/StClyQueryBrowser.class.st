@@ -113,6 +113,12 @@ StClyQueryBrowser >> navigationEnvironment: aNavigationEnvironment [
 	navigationEnvironment := aNavigationEnvironment
 ]
 
+{ #category : 'initialization' }
+StClyQueryBrowser >> newMessageList [
+
+	^ self instantiate: StClyMessageListPresenter
+]
+
 { #category : 'accessing' }
 StClyQueryBrowser >> prepareInitialStateBy: aBlock [
 	
@@ -125,7 +131,9 @@ StClyQueryBrowser >> queryScopes: aCollection [
 
 	queryScopes := (aCollection
 		reject: [ :each | each isBasedOnEmptyBasis ])
-		as: OrderedCollection
+		as: OrderedCollection.
+		
+	messageList scopes: queryScopes
 ]
 
 { #category : 'navigation' }

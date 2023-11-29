@@ -1,6 +1,6 @@
 Class {
 	#name : 'StMessageVersionListPresenter',
-	#superclass : 'MessageListPresenter',
+	#superclass : 'StMessageListPresenter',
 	#category : 'NewTools-MethodBrowsers-Versions',
 	#package : 'NewTools-MethodBrowsers',
 	#tag : 'Versions'

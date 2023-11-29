@@ -1,6 +1,6 @@
 Class {
-	#name : 'SpMessageToolbarPresenter',
-	#superclass : 'SpMethodToolbarPresenter',
+	#name : 'StMessageToolbarPresenter',
+	#superclass : 'StMethodToolbarPresenter',
 	#instVars : [
 		'flipAction'
 	],
@@ -10,14 +10,14 @@ Class {
 }
 
 { #category : 'actions' }
-SpMessageToolbarPresenter >> doFlipLayout [
+StMessageToolbarPresenter >> doFlipLayout [
 
 	flipAction ifNil: [ ^ self ].
 	flipAction value
 ]
 
 { #category : 'initialization' }
-SpMessageToolbarPresenter >> initializePresenters [
+StMessageToolbarPresenter >> initializePresenters [
 
 	super initializePresenters.
 	
@@ -27,7 +27,7 @@ SpMessageToolbarPresenter >> initializePresenters [
 ]
 
 { #category : 'events' }
-SpMessageToolbarPresenter >> whenFlipLayoutDo: aBlock [
+StMessageToolbarPresenter >> whenFlipLayoutDo: aBlock [
 
 	flipAction := aBlock
 ]

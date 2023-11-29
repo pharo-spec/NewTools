@@ -10,7 +10,7 @@ MessageBrowser new
 "
 Class {
 	#name : 'StMessageBrowser',
-	#superclass : 'AbstractMessageCentricBrowserPresenter',
+	#superclass : 'StAbstractMessageCentricBrowserPresenter',
 	#instVars : [
 		'title',
 		'refreshingBlock',
@@ -53,6 +53,7 @@ StMessageBrowser class >> browse: aCollection asImplementorsOf: aSymbol [
 { #category : 'instance creation' }
 StMessageBrowser class >> browse: aCollection asSendersOf: aSymbol [ 
 	"Special Version that sets the correct refreshing Block for Senders Browser"
+
 	^ self new
 		setRefreshingBlockForSendersOf: aSymbol;
 		autoSelect: aSymbol;
@@ -422,7 +423,7 @@ StMessageBrowser >> methodRemoved: anAnnouncement [
 { #category : 'initialization' }
 StMessageBrowser >> newMessageToolbar [
 
-	^ (self instantiate: SpMessageToolbarPresenter)
+	^ (self instantiate: StMessageToolbarPresenter)
 		whenFlipLayoutDo: [ self flipLayout ];
 		yourself
 ]

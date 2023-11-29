@@ -1,6 +1,6 @@
 Class {
 	#name : 'StMethodHistoryToolbarPresenter',
-	#superclass : 'SpMethodToolbarPresenter',
+	#superclass : 'StMethodToolbarPresenter',
 	#instVars : [
 		'revertAction'
 	],

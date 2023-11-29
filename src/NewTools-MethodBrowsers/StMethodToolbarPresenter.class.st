@@ -4,7 +4,7 @@ A MethodToolbar is xxxxxxxxx.
 self example
 "
 Class {
-	#name : 'SpMethodToolbarPresenter',
+	#name : 'StMethodToolbarPresenter',
 	#superclass : 'SpPresenter',
 	#instVars : [
 		'method',
@@ -22,7 +22,7 @@ Class {
 }
 
 { #category : 'examples' }
-SpMethodToolbarPresenter class >> example [
+StMethodToolbarPresenter class >> example [
 
 	<sampleInstance>
 	| example |
@@ -37,13 +37,13 @@ SpMethodToolbarPresenter class >> example [
 ]
 
 { #category : 'specs' }
-SpMethodToolbarPresenter class >> title [
+StMethodToolbarPresenter class >> title [
 
 	^ 'Toolbar'
 ]
 
 { #category : 'api' }
-SpMethodToolbarPresenter >> addItemLabeled: aString do: aBlock [
+StMethodToolbarPresenter >> addItemLabeled: aString do: aBlock [
 
 	dropList 
 		addItemLabeled: aString 
@@ -51,7 +51,7 @@ SpMethodToolbarPresenter >> addItemLabeled: aString do: aBlock [
 ]
 
 { #category : 'private' }
-SpMethodToolbarPresenter >> browseMethod [
+StMethodToolbarPresenter >> browseMethod [
 
 	self method ifNil: [ ^ self ].
 
@@ -59,7 +59,7 @@ SpMethodToolbarPresenter >> browseMethod [
 ]
 
 { #category : 'layout' }
-SpMethodToolbarPresenter >> defaultLayout [
+StMethodToolbarPresenter >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
 		spacing: 3;
@@ -74,13 +74,13 @@ SpMethodToolbarPresenter >> defaultLayout [
 ]
 
 { #category : 'api' }
-SpMethodToolbarPresenter >> emptyDropList [
+StMethodToolbarPresenter >> emptyDropList [
 	
 	dropList emptyList
 ]
 
 { #category : 'private' }
-SpMethodToolbarPresenter >> implementorsMethod [
+StMethodToolbarPresenter >> implementorsMethod [
 
 	self method ifNil: [ ^ self ].
 	
@@ -88,33 +88,33 @@ SpMethodToolbarPresenter >> implementorsMethod [
 ]
 
 { #category : 'initialization' }
-SpMethodToolbarPresenter >> initializePresenters [
+StMethodToolbarPresenter >> initializePresenters [
 
 	(browseButton := self newToolbarButton)
 		label: 'Browse'; 
 		icon: (self iconNamed: #smallSystemBrowser);
 		help: 'Browse current selected method';
-		action: [ self browseMethod ].
+		action: [ self doBrowseMethod ].
 	(usersButton := self newToolbarButton) 
 		label: 'References'; 
 		icon: (self iconNamed: #smallFind);
 		help: 'Browse references of current selected class';
-		action: [ self usersMethod ].
+		action: [ self doBrowseUsers ].
 	(sendersButton := self newToolbarButton) 
 		label: 'Senders'; 
 		icon: (self iconNamed: #smallFind);
 		help: 'Browse senders of current selected method';
-		action: [ self sendersMethod ].
+		action: [ self doBrowseSenders ].
 	(implementorsButton := self newToolbarButton) 
 		label: 'Implementors'; 
 		icon: (self iconNamed: #smallFind);
 		help: 'Browse implementors of current selected method';
-		action: [ self implementorsMethod ].
+		action: [ self doBrowseImplementors ].
 	(versionButton := self newToolbarButton) 
 		label: 'Version'; 
 		icon: (self iconNamed: #history);
 		help: 'Browse versions of current selected method';
-		action: [ self versionMethod ].
+		action: [ self doBrowseVersions ].
 		
  	toolbarPresenter := self newToolbar
 			add: browseButton;
@@ -128,18 +128,18 @@ SpMethodToolbarPresenter >> initializePresenters [
 ]
 
 { #category : 'accessing' }
-SpMethodToolbarPresenter >> method [
+StMethodToolbarPresenter >> method [
 	^ method
 ]
 
 { #category : 'accessing' }
-SpMethodToolbarPresenter >> method: aMethod [
+StMethodToolbarPresenter >> method: aMethod [
 
 	method := aMethod
 ]
 
 { #category : 'accessing' }
-SpMethodToolbarPresenter >> replaceVersionWithLabel: aString action: aBlock [
+StMethodToolbarPresenter >> replaceVersionWithLabel: aString action: aBlock [
 
 	versionButton 
 		label: aString;
@@ -147,13 +147,13 @@ SpMethodToolbarPresenter >> replaceVersionWithLabel: aString action: aBlock [
 ]
 
 { #category : 'api' }
-SpMethodToolbarPresenter >> selectFirst [
+StMethodToolbarPresenter >> selectFirst [
 
 	dropList selectIndex: 1
 ]
 
 { #category : 'private' }
-SpMethodToolbarPresenter >> sendersMethod [
+StMethodToolbarPresenter >> sendersMethod [
 
 	self method ifNil: [ ^ self ].
 	
@@ -161,13 +161,13 @@ SpMethodToolbarPresenter >> sendersMethod [
 ]
 
 { #category : 'initialization' }
-SpMethodToolbarPresenter >> setModelBeforeInitialization: aMethod [
+StMethodToolbarPresenter >> setModelBeforeInitialization: aMethod [
 
 	self method: aMethod
 ]
 
 { #category : 'private' }
-SpMethodToolbarPresenter >> usersMethod [
+StMethodToolbarPresenter >> usersMethod [
 
 	self method ifNil: [ ^ self ].
 	self method methodClass ifNil: [ ^ self ].
@@ -176,7 +176,7 @@ SpMethodToolbarPresenter >> usersMethod [
 ]
 
 { #category : 'private' }
-SpMethodToolbarPresenter >> versionMethod [
+StMethodToolbarPresenter >> versionMethod [
 
 	self method ifNil: [ ^ self ].
 	  

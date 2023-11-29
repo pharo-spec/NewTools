@@ -1,9 +1,9 @@
 Class {
 	#name : 'StVersionRevertCommand',
 	#superclass : 'StCommand',
-	#category : 'NewTools-MethodBrowsers-Versions',
+	#category : 'NewTools-MethodBrowsers-Commands',
 	#package : 'NewTools-MethodBrowsers',
-	#tag : 'Versions'
+	#tag : 'Commands'
 }
 
 { #category : 'accessing' }

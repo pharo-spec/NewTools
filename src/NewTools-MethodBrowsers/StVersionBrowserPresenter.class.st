@@ -22,7 +22,7 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : 'StVersionBrowserPresenter',
-	#superclass : 'AbstractMessageCentricBrowserPresenter',
+	#superclass : 'StAbstractMessageCentricBrowserPresenter',
 	#instVars : [
 		'rgMethod',
 		'sourcePresenter',
