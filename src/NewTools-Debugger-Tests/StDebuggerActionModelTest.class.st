@@ -127,7 +127,7 @@ StDebuggerActionModelTest >> newSessionWithBlockContext [
 	| process method |
 	method := self class >> #methodWithBlockContext.
 	methodWithBlockContextOriginalSource := method sourceCode.
-	process := [ method valueWithReceiver: self arguments: #(  ) ] newProcess.
+	process := [ method valueWithReceiver: self ] newProcess.
 	self setSessionAndDebuggerModelForMethod: method inContext: process suspendedContext.
 
 	[ debugActionModel topContext closure isNil ] whileTrue: [
@@ -142,7 +142,7 @@ StDebuggerActionModelTest >> newSessionWithDeadHomeBlockContext [
 	| process method |
 	method := self class >> #evaluateMethodWithDeadHomeBlockContext.
 	methodWithBlockContextOriginalSource := method sourceCode.
-	process := [ method valueWithReceiver: self arguments: #(  ) ]
+	process := [ method valueWithReceiver: self ]
 		           newProcess.
 	self
 		setSessionAndDebuggerModelForMethod: method
@@ -195,7 +195,7 @@ StDebuggerActionModelTest >> setUp [
 	| method process |
 	super setUp.
 	method := self class >> #setResult.
-	process := [ method valueWithReceiver: self arguments: #(  ) ]
+	process := [ method valueWithReceiver: self ]
 		           newProcess.
 
 	self
