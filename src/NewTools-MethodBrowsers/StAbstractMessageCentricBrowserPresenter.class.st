@@ -32,6 +32,8 @@ StAbstractMessageCentricBrowserPresenter >> initializePresenters [
 
 	messageList := self newMessageList.
 	toolbarPresenter := self newMessageToolbar
+		executor: messageList;
+		yourself
 ]
 
 { #category : 'initialization' }

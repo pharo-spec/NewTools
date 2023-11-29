@@ -306,9 +306,9 @@ StMessageBrowser >> handleMethodRemoved: anAnnouncement [
 	removeItem := self selectedMessage.
 
 	self messages: (self messages
-		remove: item asRingDefinition ifAbsent: [ nil ];
+		remove: item ifAbsent: [ nil ];
 		yourself).
-	self selectIndex: selection
+	self selectIndex: (selection min: self messages size)
 ]
 
 { #category : 'layout' }

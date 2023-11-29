@@ -48,6 +48,7 @@ StClyQueryBrowser class >> browseMethods: methods [
 StClyQueryBrowser class >> on: navigationEnvironment [
 
 	^ self basicNew
+		application: self currentApplication;
 		navigationEnvironment: navigationEnvironment;
 		initialize;
 		yourself
@@ -62,8 +63,7 @@ StClyQueryBrowser class >> on: aNavigationEnvironment scopes: scopes [
 { #category : 'instance creation' }
 StClyQueryBrowser class >> on: navigationEnvironment systemScope: systemScope [
 
-	^ self basicNew
-		navigationEnvironment: navigationEnvironment;
+	^ (self on: navigationEnvironment)
 		systemScope: systemScope;
 		initialize;
 		yourself
@@ -74,9 +74,7 @@ StClyQueryBrowser class >> openOn: aQuery [
 	| browser |
 	
 	browser := self on: ClyNavigationEnvironment currentImage.
-	
 	browser showResultOf: aQuery.
-	
 	^ browser open	
 	
 ]

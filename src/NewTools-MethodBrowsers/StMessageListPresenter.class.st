@@ -106,7 +106,7 @@ StMessageListPresenter >> doInspectMethod [
 
 { #category : 'private - actions' }
 StMessageListPresenter >> doRemoveMethod [
-self halt.
+
 	self selectedMessage ifNotNil: [ :aMethod |
 		SystemNavigation new 
 			removeMethod: aMethod 

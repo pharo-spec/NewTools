@@ -14,7 +14,8 @@ Class {
 		'implementorsButton',
 		'versionButton',
 		'dropList',
-		'toolbarPresenter'
+		'toolbarPresenter',
+		'executor'
 	],
 	#category : 'NewTools-MethodBrowsers-Base',
 	#package : 'NewTools-MethodBrowsers',
@@ -73,10 +74,46 @@ StMethodToolbarPresenter >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'private - actions' }
+StMethodToolbarPresenter >> doBrowseImplementors [
+
+	executor doBrowseImplementors
+]
+
+{ #category : 'private - actions' }
+StMethodToolbarPresenter >> doBrowseMethod [
+
+	executor doBrowseMethod
+]
+
+{ #category : 'private - actions' }
+StMethodToolbarPresenter >> doBrowseSenders [
+
+	executor doBrowseSenders
+]
+
+{ #category : 'private - actions' }
+StMethodToolbarPresenter >> doBrowseUsers [
+
+	executor doBrowseUsers
+]
+
+{ #category : 'private - actions' }
+StMethodToolbarPresenter >> doBrowseVersions [
+
+	executor doBrowseVersions
+]
+
 { #category : 'api' }
 StMethodToolbarPresenter >> emptyDropList [
 	
 	dropList emptyList
+]
+
+{ #category : 'accessing' }
+StMethodToolbarPresenter >> executor: aPresenter [
+
+	executor := aPresenter
 ]
 
 { #category : 'private' }
@@ -117,12 +154,13 @@ StMethodToolbarPresenter >> initializePresenters [
 		action: [ self doBrowseVersions ].
 		
  	toolbarPresenter := self newToolbar
-			add: browseButton;
-			add: usersButton;
-			add: sendersButton;
-			add: implementorsButton;
-			add: versionButton;
-			yourself.
+		displayMode: self application toolbarDisplayMode;
+		add: browseButton;
+		add: usersButton;
+		add: sendersButton;
+		add: implementorsButton;
+		add: versionButton;
+		yourself.
 		
 	dropList := self newDropList
 ]
