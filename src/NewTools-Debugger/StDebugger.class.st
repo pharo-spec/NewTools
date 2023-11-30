@@ -93,9 +93,6 @@ Class {
 		'EnableStackColoring',
 		'FastTDD'
 	],
-	#classInstVars : [
-		'layoutConfigurator'
-	],
 	#category : 'NewTools-Debugger-View',
 	#package : 'NewTools-Debugger',
 	#tag : 'View'
