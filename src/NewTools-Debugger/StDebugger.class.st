@@ -799,37 +799,13 @@ StDebugger >> initializeShortcuts: aWindowPresenter [
 { #category : 'stack' }
 StDebugger >> initializeStack [
 
-	stackTable := self newTable.
+	stackTable := self newList.
 	stackTable
 		activateOnDoubleClick;
 		whenActivatedDo: [ :selection | self doBrowseClass ].
-	stackTable
-		addColumn: ((SpImageTableColumn title: '' evaluated: [ :context | self stackIconForContext: context ])
-				 width: 8;
-				 sortFunction: nil;
-				 yourself);
-		addColumn: ((SpStringTableColumn title: 'Class' evaluated: [ :context | self printReceiverClassInContext: context ])
-				 displayColor: [ :context | self stackColorForContext: context ];
-				 sortFunction: nil;
-				 yourself);
-		addColumn: ((SpStringTableColumn title: 'Method' evaluated: [ :context |
-					  | method |
-					  method := context method.
-					  method isCompiledBlock
-						  ifTrue: [ method sourceNode sourceCode ]
-						  ifFalse: [ method selector ] ])
-				 displayColor: [ :context | self stackColorForContext: context ];
-				 sortFunction: nil;
-				 yourself);
-		addColumn: ((SpStringTableColumn title: 'Package' evaluated: [ :context |
-					  | package |
-					  package := context method package.
-					  package
-						  ifNil: [ '-' ]
-						  ifNotNil: [ package name asString ] ])
-				 displayColor: [ :context | self stackColorForContext: context ];
-				 sortFunction: nil;
-				 yourself).
+	stackTable display:[:selection| StContextPrinter printContext: selection].
+	stackTable displayColor:[ :context | self stackColorForContext: context ].
+	stackTable displayIcon: [ :context| self stackIconForContext: context ].	
 	stackTable transmitDo: [ :context |
 		stackTable selection isEmpty ifFalse: [
 			self updateInspectorFromContext: context.
@@ -972,22 +948,6 @@ StDebugger >> peelToFirstLike: aContext [
 	self debuggerActionModel peelToFirstLike: aContext.
 	self clearUnsavedCodeChanges.
 	self code text: self currentContext sourceCode
-]
-
-{ #category : 'printing' }
-StDebugger >> printReceiverClassInContext: aContext [
-
-	| receiverClass methodClass |
-	receiverClass := aContext receiver class.
-	methodClass := aContext method methodClass.
-	receiverClass == methodClass ifTrue: [ ^ receiverClass name ].
-	^ (WriteStream on: String new)
-		  nextPutAll: receiverClass name;
-		  space;
-		  nextPut: $(;
-		  nextPutAll: methodClass name;
-		  nextPut: $);
-		  contents
 ]
 
 { #category : 'actions' }
@@ -1233,7 +1193,7 @@ StDebugger >> stackHeader [
 StDebugger >> stackIconForContext: context [
 
 	self unsavedCodeChanges at: context ifAbsent: [ ^ nil ].
-	^ self iconNamed: #overlayDirty
+	^ self iconNamed: #repair
 ]
 
 { #category : 'layout' }
