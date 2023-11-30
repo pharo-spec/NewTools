@@ -1159,7 +1159,7 @@ StDebugger >> stackHeader [
 StDebugger >> stackIconForContext: context [
 
 	self unsavedCodeChanges at: context ifAbsent: [ ^ nil ].
-	^ self iconNamed: #overlayDirty
+	^ self iconNamed: #repair
 ]
 
 { #category : 'specs' }
