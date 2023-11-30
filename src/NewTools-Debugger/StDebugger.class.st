@@ -93,6 +93,9 @@ Class {
 		'EnableStackColoring',
 		'FastTDD'
 	],
+	#classInstVars : [
+		'layoutConfigurator'
+	],
 	#category : 'NewTools-Debugger-View',
 	#package : 'NewTools-Debugger',
 	#tag : 'View'
@@ -122,6 +125,19 @@ StDebugger class >> closeAllDebuggers [
 	self allInstancesDo: [ :dbg | dbg close ]
 ]
 
+{ #category : 'accessing' }
+StDebugger class >> configureLayout [
+	 ^self layoutConfigurator selectedLayout
+]
+
+{ #category : 'accessing' }
+StDebugger class >> configureLayout: aSymbol [
+
+	self layoutConfigurator selectedLayout: aSymbol.
+	SystemAnnouncer uniqueInstance announce:
+		StDebuggerLayoutChangedAnnouncement new
+]
+
 { #category : 'instance creation' }
 StDebugger class >> debugSession: aDebugSession [
 
@@ -138,6 +154,21 @@ StDebugger class >> debugSession: aDebugSession [
 { #category : 'accessing' }
 StDebugger class >> debuggerContextClass [
 	^ StDebuggerContext
+]
+
+{ #category : 'accessing' }
+StDebugger class >> debuggerLayoutSettingsOn: aBuilder [
+
+	<systemsettings>
+	(aBuilder pickOne: #configureLayout)
+		parent: #debugging;
+		label: 'Debugger Layout';
+		target: StDebugger;
+		default: #beVerticalStackThenCode;
+		domainValues:
+			#( #beHorizontalCodeThenStack #beHorizontalStackThenCode
+			   #beVerticalCodeThenStack #beVerticalStackThenCode );
+		description: ''
 ]
 
 { #category : 'accessing' }
@@ -199,6 +230,13 @@ StDebugger class >> hasAnyActivatedExtension: extensionsClasses [
 StDebugger class >> initialize [ 
 
 	EnableStackColoring := true
+]
+
+{ #category : 'accessing' }
+StDebugger class >> layoutConfigurator [
+
+	^ layoutConfigurator ifNil: [
+		  layoutConfigurator := StDebuggerLayoutConfiguration new ]
 ]
 
 { #category : 'opening' }
@@ -370,7 +408,7 @@ StDebugger >> code [
 	^ code
 ]
 
-{ #category : 'specs' }
+{ #category : 'layout' }
 StDebugger >> codeLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -671,6 +709,7 @@ StDebugger >> initialize [
 	self debuggerActionModel updateContextPredicate.
 	self forceSessionUpdate.
   	self susbcribeToExtensionToggleAnnouncement.
+	self susbcribeToLayoutChangesAnnouncement.
 	
 	programmaticallyClosed := false.
 ]
@@ -1144,17 +1183,15 @@ StDebugger >> stack [
 
 ]
 
-{ #category : 'specs' }
+{ #category : 'layout' }
 StDebugger >> stackAndCodeLayout [
 
-	^ SpPanedLayout newTopToBottom
-		positionOfSlider: 30 percent;
-		add: self stackLayout;
-		add: self codeLayout;
-		yourself
+	^ self class layoutConfigurator configureForLayouts: {
+			  (#stack -> self stackLayout).
+			  (#code -> self codeLayout) } asDictionary
 ]
 
-{ #category : 'specs' }
+{ #category : 'layout' }
 StDebugger >> stackAndCodeWithExtensionsLayout [
 
 	^ (SpPanedLayout newLeftToRight
@@ -1199,7 +1236,7 @@ StDebugger >> stackIconForContext: context [
 	^ self iconNamed: #overlayDirty
 ]
 
-{ #category : 'specs' }
+{ #category : 'layout' }
 StDebugger >> stackLayout [
 	^ SpBoxLayout newTopToBottom
 		add: #stackHeader
@@ -1288,6 +1325,15 @@ StDebugger >> susbcribeToExtensionToggleAnnouncement [
 	SystemAnnouncer uniqueInstance weak
 		when: StDebuggerExtensionActivationToggle
 		send: #updateExtensionsFromAnnouncement:
+		to: self
+]
+
+{ #category : 'subscription' }
+StDebugger >> susbcribeToLayoutChangesAnnouncement [
+
+	SystemAnnouncer uniqueInstance weak
+		when: StDebuggerLayoutChangedAnnouncement
+		send: #updateLayout
 		to: self
 ]
 
@@ -1441,6 +1487,13 @@ StDebugger >> updateInspectorFromContext: aContext [
 	inspector updateWith: (self newDebuggerContextFor: aContext).
 	self flag: #DBG_INSPECTOR_UPDATE_BUG.
 	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p | p update ]
+]
+
+{ #category : 'updating' }
+StDebugger >> updateLayout [
+
+	self setStackAndCodeContainer.
+	self layout: self defaultLayout
 ]
 
 { #category : 'initialization' }
