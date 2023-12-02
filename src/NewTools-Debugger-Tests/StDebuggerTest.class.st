@@ -641,14 +641,16 @@ StDebuggerTest >> testNewDebuggerContextFor [
 
 { #category : 'tests - stack table' }
 StDebuggerTest >> testPrintReceiverClassInContext [
-	|ctx result|
+	|ctx stream |
 	ctx := Context sender: nil receiver: Set new method: (Collection>>#add:) arguments: Array new. 
-	result := self debugger printReceiverClassInContext: ctx.
-	self assert: result equals: 'Set (Collection)'.
+	stream := WriteStream on: String new.
+	StContextPrinter printReceiverClassInContext: ctx on: stream.
+	self assert: stream contents equals: 'Set (Collection)'.
 	
 	ctx := Context sender: nil receiver: Set new method: (Set>>#add:) arguments: Array new. 
-	result := self debugger printReceiverClassInContext: ctx.
-	self assert: result equals: 'Set'.
+	stream := WriteStream on: String new.
+	StContextPrinter printReceiverClassInContext: ctx on: stream.
+	self assert: stream contents equals: 'Set'.
 ]
 
 { #category : 'tests - receiver inspector' }
@@ -950,68 +952,8 @@ StDebuggerTest >> testStackTableAfterStepIn [
 ]
 
 { #category : 'tests - stack table' }
-StDebuggerTest >> testStackTableElementsPrinting [
-	| columns classColumn methodColumn method block context |
-
-	self debugger session: session.
-	columns := self initializedDebugger stackTable columns.
-	classColumn := columns second.
-	methodColumn := columns third.
-	"The following column was removed to experiment a new layout, just keeping the test in case of roolback."
-	"senderColumn := columns third."
-	method := self class >> #testStackTableElementsPrinting.
-	block := [ :a | a ].
-	
-	context := (Context newForMethod: method) setSender: self receiver: self method: method arguments: #(  ).
-	self assert: (classColumn evaluation value: context) equals: self class name.
-	self assert: (methodColumn evaluation value: context) equals: method selector.
-	"The following column was removed to experiment a new layout, just keeping the test in case of roolback."
-	"self assert: (senderColumn evaluation value: context) equals: self stDisplayString."
-	
-	context := (Context newForMethod: method) setSender: self receiver: self method: block method arguments: #(  ).
-	self assert: (classColumn evaluation value: context) equals: self class name.
-	self assert: (methodColumn evaluation value: context) equals: block sourceNode sourceCode.
-	"The following column was removed to experiment a new layout, just keeping the test in case of roolback."
-	"self assert: (senderColumn evaluation value: context) equals: self stDisplayString."
-]
-
-{ #category : 'tests - stack table' }
 StDebuggerTest >> testStackTableInitialization [
 	self assert: self debugger stackTable isNil
-]
-
-{ #category : 'tests - stack table' }
-StDebuggerTest >> testStackTablePackagesLabels [
-	|stackTable packageColumn ctx|
-	self debugger session: session.
-	stackTable := self initializedDebugger stackTable.
-	packageColumn := stackTable columns last.
-	
-	"The method is defined in the same package as its class"
-	ctx := Context
-		sender: nil
-		receiver: nil
-		method: (StTestDebuggerProvider >> #debuggerWithDNUContext)
-		arguments: #().
-	self assert: (packageColumn readObject: ctx) equals: StTestDebuggerProvider package name.
-	
-	"The extension method is defined in another package than its class"
-	ctx := Context
-		sender: nil
-		receiver: nil
-		method: (StDebugger >> #inspector)
-		arguments: #().
-	self assert: (packageColumn readObject: ctx) equals: StTestDebuggerProvider package name.
-	
-	"Doit methods have no package."
-	ctx := Context
-		sender: nil
-		receiver: nil
-		method: (Smalltalk compiler compile: 'DoIt 1 + 1')
-		arguments: #().
-	self assert: (packageColumn readObject: ctx) equals: '-'
-	
-
 ]
 
 { #category : 'tests - stack table' }

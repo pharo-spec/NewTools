@@ -36,6 +36,11 @@ MessageListPresenter class >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'private' }
+MessageListPresenter >> authorOf: anItem [
+	^ anItem author
+]
+
 { #category : 'actions' }
 MessageListPresenter >> browseClassRefs [
 
@@ -183,6 +188,8 @@ MessageListPresenter >> initializePresenters [
 		addColumn: (SpStringTableColumn title: 'Location' evaluated: [ :item | self locationOf: item ]);
 		addColumn: (SpStringTableColumn title: 'Selector' evaluated: [ :item | self selectorOf: item ]);
 		addColumn: (SpStringTableColumn title: 'Package' evaluated: [ :item | self packageOf: item ]);
+		addColumn: (SpStringTableColumn title: 'Time' evaluated: [ :item | self timeStampOf: item ]);
+		addColumn: (SpStringTableColumn title: 'Author' evaluated: [ :item | self authorOf: item ]);
 		beResizable.
 		
 	listPresenter outputActivationPort transmitDo: [ :aMethod | self doBrowseMethod ].
@@ -302,7 +309,8 @@ MessageListPresenter >> packageOf: anItem [
 
 { #category : 'private' }
 MessageListPresenter >> protocolNameForItem: anItem [
-	^ anItem category ifNil: [ '' ]
+
+	^ anItem protocolName ifNil: [ '' ]
 ]
 
 { #category : 'actions' }
@@ -373,6 +381,11 @@ MessageListPresenter >> sortClassesInCachedHierarchy: aMethodDefinition b: other
 { #category : 'api' }
 MessageListPresenter >> sortingBlock: aBlock [
 	listPresenter sortingBlock: aBlock
+]
+
+{ #category : 'private' }
+MessageListPresenter >> timeStampOf: anItem [
+	^ anItem timeStamp
 ]
 
 { #category : 'accessing' }

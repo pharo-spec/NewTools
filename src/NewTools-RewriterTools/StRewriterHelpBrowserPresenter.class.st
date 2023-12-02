@@ -86,7 +86,7 @@ StRewriterHelpBrowserPresenter class >> issues [
 
  If you found any issues you can submit them here:
 
-[https://github.com/jordanmontt/RewriteTool-Spec2/issues](https://github.com/jordanmontt/RewriteTool-Spec2/issues)
+[https://github.com/pharo-spec/NewTools/issues](https://github.com/pharo-spec/NewTools/issues)
 '
 ]
 
