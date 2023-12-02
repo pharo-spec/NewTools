@@ -68,3 +68,9 @@ RBCompositeEnvironment >> removePackage: aPackage [
 	self environment removePackage: aPackage.
 	self otherEnvironment removePackage: aPackage
 ]
+
+{ #category : '*NewTools-Scopes' }
+RBCompositeEnvironment >> asScopeNode [
+
+	^ ScopeScopeNode on: self
+]
