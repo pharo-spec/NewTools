@@ -131,7 +131,8 @@ StClyQueryBrowser >> queryScopes: aCollection [
 		reject: [ :each | each isBasedOnEmptyBasis ])
 		as: OrderedCollection.
 		
-	messageList scopes: queryScopes
+	messageList scopes: queryScopes.
+	self updatePresenter
 ]
 
 { #category : 'navigation' }
@@ -148,10 +149,11 @@ StClyQueryBrowser >> selectLastItem [
 
 { #category : 'accessing' }
 StClyQueryBrowser >> setUpActiveScope [
-	systemQuery isBoundToEnvironment ifFalse: [
-		systemQuery := systemQuery withScope: self systemScope].
-	(queryScopes includes: systemQuery scope) ifFalse: [
-		queryScopes add: systemQuery scope ].
+
+	systemQuery isBoundToEnvironment 
+		ifFalse: [ systemQuery := systemQuery withScope: self systemScope ].
+	(queryScopes includes: systemQuery scope) 
+		ifFalse: [ queryScopes add: systemQuery scope ].
 	activeScope := systemQuery scope
 ]
 
@@ -162,8 +164,10 @@ StClyQueryBrowser >> showQueryResult [
 		to be able switch back to it later from hierarchy mode""
 		expectedFlatQueryResult := systemQuery requiredResult ]."
 
-	"self setUpActiveScope."	
-	 self messages: (systemQuery execute items collect: [ :each | each actualObject ])
+	self setUpActiveScope.
+	messageList 
+		query: systemQuery;
+		updateMessages
 ]
 
 { #category : 'accessing' }
@@ -179,9 +183,23 @@ StClyQueryBrowser >> showResultOf: aQuery [
 ]
 
 { #category : 'accessing' }
+StClyQueryBrowser >> systemScope [
+	
+	^ systemScope
+]
+
+{ #category : 'accessing' }
 StClyQueryBrowser >> systemScope: aSystemScope [
 
 	systemScope := aSystemScope
+]
+
+{ #category : 'initialization' }
+StClyQueryBrowser >> updatePresenter [
+
+	super updatePresenter.
+	messageList updatePresenter.
+	toolbarPresenter updatePresenter
 ]
 
 { #category : 'activation' }

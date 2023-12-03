@@ -15,7 +15,7 @@ Class {
 		'versionButton',
 		'dropList',
 		'toolbarPresenter',
-		'executor'
+		'messageList'
 	],
 	#category : 'NewTools-MethodBrowsers-Base',
 	#package : 'NewTools-MethodBrowsers',
@@ -43,20 +43,12 @@ StMethodToolbarPresenter class >> title [
 	^ 'Toolbar'
 ]
 
-{ #category : 'api' }
+{ #category : 'accessing' }
 StMethodToolbarPresenter >> addItemLabeled: aString do: aBlock [
 
 	dropList 
 		addItemLabeled: aString 
 		do: aBlock
-]
-
-{ #category : 'private' }
-StMethodToolbarPresenter >> browseMethod [
-
-	self method ifNil: [ ^ self ].
-
-	self systemNavigation browse: self method
 ]
 
 { #category : 'layout' }
@@ -77,51 +69,37 @@ StMethodToolbarPresenter >> defaultLayout [
 { #category : 'private - actions' }
 StMethodToolbarPresenter >> doBrowseImplementors [
 
-	executor doBrowseImplementors
+	messageList doBrowseImplementors
 ]
 
 { #category : 'private - actions' }
 StMethodToolbarPresenter >> doBrowseMethod [
 
-	executor doBrowseMethod
+	messageList doBrowseMethod
 ]
 
 { #category : 'private - actions' }
 StMethodToolbarPresenter >> doBrowseSenders [
 
-	executor doBrowseSenders
+	messageList doBrowseSenders
 ]
 
 { #category : 'private - actions' }
 StMethodToolbarPresenter >> doBrowseUsers [
 
-	executor doBrowseUsers
+	messageList doBrowseUsers
 ]
 
 { #category : 'private - actions' }
 StMethodToolbarPresenter >> doBrowseVersions [
 
-	executor doBrowseVersions
-]
-
-{ #category : 'api' }
-StMethodToolbarPresenter >> emptyDropList [
-	
-	dropList emptyList
+	messageList doBrowseVersions
 ]
 
 { #category : 'accessing' }
-StMethodToolbarPresenter >> executor: aPresenter [
-
-	executor := aPresenter
-]
-
-{ #category : 'private' }
-StMethodToolbarPresenter >> implementorsMethod [
-
-	self method ifNil: [ ^ self ].
+StMethodToolbarPresenter >> emptyDropList [
 	
-	self systemNavigation browseAllImplementorsOf: self method selector
+	dropList emptyList
 ]
 
 { #category : 'initialization' }
@@ -148,7 +126,7 @@ StMethodToolbarPresenter >> initializePresenters [
 		help: 'Browse implementors of current selected method';
 		action: [ self doBrowseImplementors ].
 	(versionButton := self newToolbarButton) 
-		label: 'Version'; 
+		label: 'Versions'; 
 		icon: (self iconNamed: #history);
 		help: 'Browse versions of current selected method';
 		action: [ self doBrowseVersions ].
@@ -163,6 +141,12 @@ StMethodToolbarPresenter >> initializePresenters [
 		yourself.
 		
 	dropList := self newDropList
+]
+
+{ #category : 'accessing' }
+StMethodToolbarPresenter >> messageList: aPresenter [
+
+	messageList := aPresenter
 ]
 
 { #category : 'accessing' }
@@ -184,39 +168,14 @@ StMethodToolbarPresenter >> replaceVersionWithLabel: aString action: aBlock [
 		action: aBlock
 ]
 
-{ #category : 'api' }
+{ #category : 'accessing' }
 StMethodToolbarPresenter >> selectFirst [
 
 	dropList selectIndex: 1
-]
-
-{ #category : 'private' }
-StMethodToolbarPresenter >> sendersMethod [
-
-	self method ifNil: [ ^ self ].
-	
-	self systemNavigation browseAllSendersOf:  self method selector
 ]
 
 { #category : 'initialization' }
 StMethodToolbarPresenter >> setModelBeforeInitialization: aMethod [
 
 	self method: aMethod
-]
-
-{ #category : 'private' }
-StMethodToolbarPresenter >> usersMethod [
-
-	self method ifNil: [ ^ self ].
-	self method methodClass ifNil: [ ^ self ].
-	
-	self systemNavigation browseAllUsersOfClassOrTrait: self method methodClass
-]
-
-{ #category : 'private' }
-StMethodToolbarPresenter >> versionMethod [
-
-	self method ifNil: [ ^ self ].
-	  
-	self systemNavigation browseVersionsOf: self method
 ]

@@ -391,6 +391,7 @@ StMessageBrowser >> messages [
 
 { #category : 'api' }
 StMessageBrowser >> messages: aCollection [
+
 	messageList messages: aCollection
 ]
 
