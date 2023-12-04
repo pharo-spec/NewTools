@@ -245,6 +245,12 @@ StDebuggerActionModel >> isInterruptedContextDoesNotUnderstand [
 
 ]
 
+{ #category : 'testing' }
+StDebuggerActionModel >> isInterruptedContextGeneratingCode [
+
+	^ self contextPredicate isGeneratingCode
+]
+
 { #category : 'debug - predicates' }
 StDebuggerActionModel >> isInterruptedContextMissingClassException [
 

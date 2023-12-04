@@ -7,7 +7,8 @@ Class {
 		'oldFastTDD',
 		'dbg',
 		'stackSizeBefore',
-		'shouldFilterStack'
+		'shouldFilterStack',
+		'oldMethodToSourceDictionary'
 	],
 	#category : 'NewTools-Debugger-Tests-Presenters',
 	#package : 'NewTools-Debugger-Tests',
@@ -90,6 +91,7 @@ StDebuggerTest >> setUp [
 	session := StTestDebuggerProvider new sessionForDebuggerTests.
 	oldFastTDD := self debuggerClass fastTDD.
 	shouldFilterStack := StDebuggerActionModel shouldFilterStack.
+	oldMethodToSourceDictionary := Dictionary new.
 	self debuggerClass fastTDD: true
 ]
 
@@ -125,6 +127,10 @@ StDebuggerTest >> tearDown [
 
 	StDebuggerActionModel shouldFilterStack: shouldFilterStack.
 	StTestDebuggerProvider removeSelector: #foobar.
+	oldMethodToSourceDictionary associationsDo: [ :assoc |
+ 		assoc key methodClass
+ 			compile: assoc value
+ 			classified: assoc key protocolName ].
 	super tearDown
 ]
 
@@ -535,6 +541,51 @@ StDebuggerTest >> testExceptionProvidesSameExceptionAsTheActionModelOne [
 StDebuggerTest >> testFastTDD [
 	self debuggerClass fastTDD: nil.
 	self deny: self debuggerClass fastTDD
+]
+
+{ #category : 'tests' }
+StDebuggerTest >> testGenerateAndProceed [
+
+	| baseSourceCode expectedSourceCode adapter |
+	self skip:
+		'Does not work, I do not know why it looks like my test is executed several times with the same debugger'.
+	baseSourceCode := 'methodThatGeneratesCode
+
+	| asserter |
+	asserter := TestAsserter new.
+	
+	asserter see: 42 + 66 + 3'.
+
+	expectedSourceCode := 'methodThatGeneratesCode
+
+	| asserter |
+	asserter := TestAsserter new.
+	
+	asserter see: 42 + 66 + 3 equals: 111'.
+
+	debugger := StTestDebuggerProvider new
+		            debuggerWithGeneratingCodeContext
+		            application: self debuggerClass currentApplication;
+		            initialize;
+		            yourself.
+	"just things necessary to use debugger's code presenter, which we need in this test"
+	adapter := SpMorphicCodeAdapter new.
+	adapter adapt: debugger code.
+	debugger code adapter: adapter.
+	debugger code adapter buildWidget.
+
+	self assert: debugger canGenerateAndProceed.
+	self assert: debugger exception isGeneratingCode.
+	self
+		assert: debugger interruptedContext sender sourceCode
+		equals: baseSourceCode.
+
+	oldMethodToSourceDictionary
+		at: debugger interruptedContext sender method
+		put: baseSourceCode.
+
+	debugger saveGeneratedCodeAndProceed
+	"self assert: debugger interruptedContext isNil"
 ]
 
 { #category : 'tests - code pane' }

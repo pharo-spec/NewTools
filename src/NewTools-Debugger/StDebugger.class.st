@@ -349,6 +349,12 @@ StDebugger >> canExecuteReturnCommand [
 	^ self debuggerActionModel isInterruptedContextDead not
 ]
 
+{ #category : 'testing' }
+StDebugger >> canGenerateAndProceed [
+
+	^ self debuggerActionModel isInterruptedContextGeneratingCode
+]
+
 { #category : 'actions' }
 StDebugger >> clear [
 
@@ -539,6 +545,12 @@ StDebugger >> defaultLayout [
 		add: stackAndCodeContainer;
 		add: #inspector;
 		yourself
+]
+
+{ #category : 'testing' }
+StDebugger >> defaultSelectedCodeRangeForContext: aContext [
+
+	^ self debuggerActionModel selectedCodeRangeForContext: aContext
 ]
 
 { #category : 'code pane' }
@@ -1077,6 +1089,16 @@ StDebugger >> runToSelection [
 ]
 
 { #category : 'actions' }
+StDebugger >> saveGeneratedCodeAndProceed [
+
+	self
+		acceptCodeChanges: self code text
+		forContext: self selectedContext.
+
+	self proceedDebugSession
+]
+
+{ #category : 'actions' }
 StDebugger >> selectNextExecutedExpression [
 
 	| sourceNodeExecuted |
@@ -1085,10 +1107,12 @@ StDebugger >> selectNextExecutedExpression [
 		(sourceNodeExecuted start to: sourceNodeExecuted stop)
 ]
 
-{ #category : 'code pane' }
+{ #category : 'highlighting' }
 StDebugger >> selectedCodeRangeForContext: aContext [
 
-	^ self debuggerActionModel selectedCodeRangeForContext: aContext
+	^ self debuggerActionModel exception
+		  selectedCodeRangeForContext: aContext
+		  forDebugger: self
 ]
 
 { #category : 'accessing - model' }
@@ -1347,14 +1371,14 @@ StDebugger >> updateCodeFromContext: aContext [
 	aContext ifNil: [ ^ self clearCode ].
 
 	self recordUnsavedCodeChanges.
-	selectionInterval := self selectedCodeRangeForContext: aContext.
-	aContext sourceCode = self code text ifFalse: [ 
+	aContext sourceCode = self code text ifFalse: [
 		self updateSourceCodeFor: aContext ].
+	selectionInterval := self selectedCodeRangeForContext: aContext.
 	formerCodeInteractionModel := self code interactionModel.
 	self code beForContext: aContext.
 	"add bindings of the old interaction model in the new one"
-	formerCodeInteractionModel ifNotNil: [ 
-		formerCodeInteractionModel bindings associations do: [ :assoc | 
+	formerCodeInteractionModel ifNotNil: [
+		formerCodeInteractionModel bindings associations do: [ :assoc |
 			self code interactionModel addBinding: assoc ] ].
 	self code selectionInterval:
 		(selectionInterval last to: selectionInterval last - 1).

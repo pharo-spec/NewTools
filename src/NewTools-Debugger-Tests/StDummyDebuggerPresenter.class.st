@@ -100,6 +100,13 @@ tag := thisContext method selector.
 ^true
 ]
 
+{ #category : 'actions' }
+StDummyDebuggerPresenter >> saveGeneratedCodeAndProceed [
+
+	tag := thisContext method selector.
+	^ true
+]
+
 { #category : 'mocks' }
 StDummyDebuggerPresenter >> selectNextExecutedExpression [
 tag := thisContext method selector.
