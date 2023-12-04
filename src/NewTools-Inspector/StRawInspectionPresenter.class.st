@@ -178,7 +178,9 @@ StRawInspectionPresenter >> valuesColumn [
 		title: 'Value';
 		evaluated: #stringValue;
 		beEditable;
-		onAcceptEdition: [ :node :value | self write: node value: value ];
+		onAcceptEdition: [ :node :value | 
+			self write: node value: value.
+			self window title: self window presenter windowTitle ];
 		sortFunction: #stringValue ascending;
 		yourself
 ]
