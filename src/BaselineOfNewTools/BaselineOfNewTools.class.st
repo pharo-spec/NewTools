@@ -25,7 +25,6 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Gtk';
 			"Basic tools (inherited from Spec)"
 			package: 'NewTools-MethodBrowsers';
-			package: 'NewTools-ChangeSorter';
 			package: 'NewTools-KeymapBrowser';
 			"inspector"
 			package: 'NewTools-Inspector' with: [ spec requires: #( 'NewTools-Inspector-Extensions' ) ];
@@ -113,7 +112,6 @@ BaselineOfNewTools >> baseline: spec [
 			group: 'SystemReporter' with: #( 'Core' 'NewTools-SystemReporter' );
 			group: 'Methods' with: #( 'Core' 'NewTools-MethodBrowsers' );
 			"Not in the image for the moment, we need a pass on them"
-			group: 'ChangeSorter' with: #( 'Core' 'NewTools-ChangeSorter' );
 			group: 'KeymapBrowser' with: #( 'Core' 'NewTools-KeymapBrowser' );
 			group: 'CritiqueBrowser' with: #( 'NewTools-CodeCritiques' 'NewTools-CodeCritiques-Tests' );
 			group: 'FontChooser' with: #( 'Core' 'NewTools-FontChooser' 'NewTools-FontChooser-Tests' );
@@ -138,7 +136,6 @@ BaselineOfNewTools >> baseline: spec [
 						'CritiqueBrowser' 
 						'Debugger'
 				   		'SystemReporter' 
-						'ChangeSorter' 
 						'FontChooser' 
 						'Methods'
 				   		'Spotter'
