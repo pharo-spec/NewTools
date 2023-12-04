@@ -11,5 +11,5 @@ StMessageBrowserContributor >> styleSheetContribution [
 	
 	^ SpStyle newApplication 
 		addClass: 'stMessageBrowserScopeList' with: [ :class | class 
-			addPropertyGeometryWith: [ :geo | geo minWidth: 220 ] ]
+			addPropertyGeometryWith: [ :geo | geo width: 220 ] ]
 ]

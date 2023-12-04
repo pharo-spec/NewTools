@@ -15,7 +15,8 @@ Class {
 		'title',
 		'refreshingBlock',
 		'textPresenter',
-		'usingLayout'
+		'usingLayout',
+		'highlight'
 	],
 	#classVars : [
 		'UsingLayout'
@@ -43,6 +44,7 @@ StMessageBrowser class >> browse: aCollection [
 { #category : 'instance creation' }
 StMessageBrowser class >> browse: aCollection asImplementorsOf: aSymbol [ 
 	"Special Version that sets the correct refreshing Block for Implentors Browser"
+
 	^ self new
 		setRefreshingBlockForImplementorsOf: aSymbol;
 		messages: aCollection;
@@ -56,7 +58,7 @@ StMessageBrowser class >> browse: aCollection asSendersOf: aSymbol [
 
 	^ self new
 		setRefreshingBlockForSendersOf: aSymbol;
-		autoSelect: aSymbol;
+		highlight: aSymbol;
 		messages: aCollection;
 		title: 'Senders of ', aSymbol printString;
 		open
@@ -65,6 +67,7 @@ StMessageBrowser class >> browse: aCollection asSendersOf: aSymbol [
 { #category : 'instance creation' }
 StMessageBrowser class >> browse: aCollection title: aString [
 	"Special Version that sets the correct refreshing Block for Implentors Browser"
+
 	^ self new
 		messages: aCollection;
 		title: aString;
@@ -73,23 +76,35 @@ StMessageBrowser class >> browse: aCollection title: aString [
 
 { #category : 'instance creation' }
 StMessageBrowser class >> browse: aCollection title: aString autoSelect: aSelectString [
+	
+	self 
+		deprecated: 'Use browse:title:highlight:' 
+		transformWith: '`@receiver browse: `@arg1 title: `@arg2 autoSelect: `@arg3' 
+			-> '`@receiver browse: `@arg1 title: `@arg2 highlight: `@arg3'
+]
+
+{ #category : 'instance creation' }
+StMessageBrowser class >> browse: aCollection title: aString highlight: aSelectString [
 	"Special Version that sets the correct refreshing Block for Implentors Browser"
+	
 	^ self new
 		messages: aCollection;
 		title: aString;
-		autoSelect: aSelectString;
+		highlight: aSelectString;
 		open
 ]
 
 { #category : 'instance creation' }
 StMessageBrowser class >> browseImplementorsOf: aSymbol [ 
 	"Special Version that sets the correct refreshing Block for Implentors Browser"
+	
 	^ self browse: aSymbol implementors asImplementorsOf: aSymbol
 ]
 
 { #category : 'instance creation' }
-StMessageBrowser class >> browseSendersOf: aSymbol [ 
+StMessageBrowser class >> browseSendersOf: aSymbol [
 	"Special Version that sets the correct refreshing Block for Implentors Browser"
+
 	^ self browse: aSymbol senders asSendersOf: aSymbol
 ]
 
@@ -151,15 +166,20 @@ StMessageBrowser >> accept: text notifying: notifyer [
 			notifying: notifyer ]
 ]
 
-{ #category : 'text selection' }
-StMessageBrowser >> autoSelect: aSelector [
-	textPresenter
-		readSelectionBlock:
-			[ :text | 
-			self selectedMessage ifNotNil:
-					[ :msg | (self isMethodDefinition: msg)
-						ifFalse: [ self intervalOf: aSelector inCommentText: text ] 
-						ifTrue: [ self intervalOf: aSelector inCode: text of: msg ] ] ]
+{ #category : 'private' }
+StMessageBrowser >> addHighlightedSegments [
+	| message highlightInterval |
+
+	message := self selectedMessage.
+	message ifNil: [ ^ self ].
+	
+	highlightInterval := (self isMethodDefinition: message)
+		ifFalse: [ self intervalOf: highlight inCommentText: textPresenter text ] 
+		ifTrue: [ self intervalOf: highlight inCode: textPresenter text of: message ].
+		
+	textPresenter addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight 
+		interval: (highlightInterval first to: highlightInterval last + 1);
+		yourself)
 ]
 
 { #category : 'announcements' }
@@ -311,6 +331,14 @@ StMessageBrowser >> handleMethodRemoved: anAnnouncement [
 	self selectIndex: (selection min: self messages size)
 ]
 
+{ #category : 'text selection' }
+StMessageBrowser >> highlight: aSelector [
+
+	highlight := aSelector.
+	self addHighlightedSegments
+
+]
+
 { #category : 'layout' }
 StMessageBrowser >> horizontalLayout [
 
@@ -375,8 +403,10 @@ StMessageBrowser >> installIconStylerFor: anItem [
 
 { #category : 'private' }
 StMessageBrowser >> intervalOf: aSelector inCode: aText of: aMethod [
+
 	aMethod compiledMethod ifNil: [  ^ 0 to: 0 ].
-	^ (self sourceIntervalOf: aSelector in: aMethod ast) ifEmpty: [ self searchedString: aSelector asString in: aText ]
+	^ (self sourceIntervalOf: aSelector in: aMethod ast) 
+		ifEmpty: [ self searchedString: aSelector asString in: aText ]
 ]
 
 { #category : 'private' }
@@ -490,12 +520,17 @@ StMessageBrowser >> selectIndex: anIndex [
 
 { #category : 'private' }
 StMessageBrowser >> selectItem: item [
+	| text |
 
 	toolbarPresenter method: item.
 	textPresenter beForMethod: item.
-	textPresenter text: (self textConverter
+	text := (self textConverter
 		method: item;
 		getText).
+	textPresenter text: text.
+
+	highlight ifNotNil: [ self addHighlightedSegments ].
+		
 	self installIconStylerFor: item
 ]
 

@@ -141,7 +141,7 @@ StClyQueryBrowser >> recordNavigationState: aBrowserNavigationState [
 	navigationHistory recordState: aBrowserNavigationState
 ]
 
-{ #category : 'event handling' }
+{ #category : 'selection' }
 StClyQueryBrowser >> selectLastItem [
 	
 	messageList listPresenter selectIndex: messageList listPresenter items size
@@ -165,6 +165,7 @@ StClyQueryBrowser >> showQueryResult [
 		expectedFlatQueryResult := systemQuery requiredResult ]."
 
 	self setUpActiveScope.
+	highlight := systemQuery queryElement.
 	messageList 
 		query: systemQuery;
 		updateMessages
