@@ -172,14 +172,25 @@ StRawInspectionPresenter >> step [
 ]
 
 { #category : 'building' }
+StRawInspectionPresenter >> updatePresenterTitle [
+	"Callback after changing a receiver's value (in a column for an instance variable). Update the window title and its header to display the new value"
+	| wp |
+
+	wp := self window presenter.
+	wp firstPage updateHeaderBar.
+	self window title: wp windowTitle
+]
+
+{ #category : 'building' }
 StRawInspectionPresenter >> valuesColumn [
 
 	^ SpStringTableColumn new
 		title: 'Value';
 		evaluated: #stringValue;
-		"beEditable;"
+		beEditable;
 		onAcceptEdition: [ :node :value | 
-			self inform: node label , '=' , value asString	"node value: value" ];
+			self write: node value: value.
+			self updatePresenterTitle ];
 		sortFunction: #stringValue ascending;
 		yourself
 ]
@@ -199,4 +210,14 @@ StRawInspectionPresenter >> variablesColumn [
 			yourself);
 		sortFunction: #label ascending;
 		yourself
+]
+
+{ #category : 'writing' }
+StRawInspectionPresenter >> write: aStInspectorSlotNode value: aString [ 
+	"Update the value of aStInspectorSlotNode with new value aString.
+	Convert aString to the 'native' object parsing it as number or using parseLiterals (for booleans or strings)"
+	
+	aStInspectorSlotNode slot 
+		write: (NumberParser parse: aString onError: [ aString parseLiterals first ]) 
+		to: aStInspectorSlotNode hostObject
 ]
