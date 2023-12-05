@@ -1,7 +1,7 @@
-Extension { #name : 'RPackage' }
+Extension { #name : 'Package' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-RPackage >> baselineInspector [
+Package >> baselineInspector [
 
 	<inspectorPresentationOrder: 2 title: 'Belongs to Baselines'>
 	| items |

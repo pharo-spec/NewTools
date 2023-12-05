@@ -46,7 +46,7 @@ Class >> inspectionClassDefinition [
 
 	<inspectorPresentationOrder: 915 title: 'Definition'>
 	^ SpCodePresenter new
-		  beForScripting;
+		  beForObject: self;
 		  text: self definitionString;
-		  beNotEditable
+		  whenSubmitDo: [ :code | (Smalltalk compiler evaluate: code) fluidInstall ]
 ]
