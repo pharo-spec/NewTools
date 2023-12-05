@@ -172,6 +172,16 @@ StRawInspectionPresenter >> step [
 ]
 
 { #category : 'building' }
+StRawInspectionPresenter >> updatePresenterTitle [
+	"Callback after changing a receiver's value (in a column for an instance variable). Update the window title and its header to display the new value"
+	| wp |
+
+	wp := self window presenter.
+	wp firstPage updateHeaderBar.
+	self window title: wp windowTitle
+]
+
+{ #category : 'building' }
 StRawInspectionPresenter >> valuesColumn [
 
 	^ SpStringTableColumn new
@@ -180,7 +190,7 @@ StRawInspectionPresenter >> valuesColumn [
 		beEditable;
 		onAcceptEdition: [ :node :value | 
 			self write: node value: value.
-			self window title: self window presenter windowTitle ];
+			self updatePresenterTitle ];
 		sortFunction: #stringValue ascending;
 		yourself
 ]
