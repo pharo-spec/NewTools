@@ -10,3 +10,22 @@ Package >> baselineInspector [
 		items: items;
 		yourself
 ]
+
+{ #category : '*NewTools-Inspector-Extensions' }
+Package >> overwiew [
+
+	<inspectorPresentationOrder: 1 title: 'Overwiew'>
+	| items |
+	items :={ 'Classes' -> self classes . 'Defined classes' -> self definedClasses . 'Methods' -> self methods }.
+	items := items collect: [ :e | StInspectorAssociationNode hostObject: e ].
+	^ SpTablePresenter new
+		alternateRowsColor;
+		items: items;
+		addColumn: (SpStringTableColumn
+			title: 'Title'
+			evaluated: [ :e | e key ] );
+		addColumn: (SpStringTableColumn
+			title: 'Value'
+			evaluated: [ :e | e value size ] );
+		yourself
+]
