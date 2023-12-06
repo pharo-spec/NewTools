@@ -38,6 +38,15 @@ StFontChooserPresenterTest >> newDefaultFamilyFontChooserFont: aLogicalFont [
 		yourself.	
 ]
 
+{ #category : 'tests' }
+StFontChooserPresenterTest >> openPresenterShouldntRaiseError [
+
+	self shouldnt: [ 
+			| window | 
+			window := presenter open.
+			window close ] raise: Error
+]
+
 { #category : 'running' }
 StFontChooserPresenterTest >> setUp [
 
@@ -74,10 +83,7 @@ StFontChooserPresenterTest >> testOpenAllOnNonExistantFontFamily [
 	fontChooser := self newAllFamilyFontChooser: 'dd08sadna80nsazczxcz'.
 	presenter := StFontChooserPresenter on: fontChooser.
 
-	self shouldnt: [ 
-			| window | 
-			window := presenter open.
-			window close ] raise: Error
+	self openPresenterShouldntRaiseError.
 ]
 
 { #category : 'tests' }
@@ -88,10 +94,7 @@ StFontChooserPresenterTest >> testOpenAllOnUnloadedFontFamily [
 	fontChooser := self newAllFamilyFontChooser: 'Arial'.
 	presenter := StFontChooserPresenter on: fontChooser.
 
-	self shouldnt: [ 
-			| window | 
-			window := presenter open.
-			window close ] raise: Error
+	self openPresenterShouldntRaiseError.
 ]
 
 { #category : 'tests' }
@@ -102,10 +105,7 @@ StFontChooserPresenterTest >> testOpenDefaultOnNonExistantFontFamily [
 	fontChooser := self newDefaultFamilyFontChooser: 'dd08sadna80nsazczxcz'.
 	presenter := StFontChooserPresenter on: fontChooser.
 
-	self shouldnt: [ 
-			| window | 
-			window := presenter open.
-			window close ] raise: Error
+	self openPresenterShouldntRaiseError.
 ]
 
 { #category : 'tests' }
@@ -116,10 +116,7 @@ StFontChooserPresenterTest >> testOpenDefaultOnUnloadedFontFamily [
 	fontChooser := self newDefaultFamilyFontChooser: 'Arial'.
 	presenter := StFontChooserPresenter on: fontChooser.
 
-	self shouldnt: [ 
-			| window | 
-			window := presenter open.
-			window close ] raise: Error
+	self openPresenterShouldntRaiseError.
 ]
 
 { #category : 'tests' }
