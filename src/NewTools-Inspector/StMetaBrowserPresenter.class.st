@@ -69,6 +69,17 @@ StMetaBrowserPresenter >> compile: aString [
 ]
 
 { #category : 'initialization' }
+StMetaBrowserPresenter >> connectPresenters [ 
+
+	classes
+		transmitTo: methods
+		transform: [ :aClass | self methodsOf: aClass ]
+		postTransmission: [ :destination | destination selectIndex: 1 ].
+
+	methods transmitDo: [ :aMethod | self updateSourceWith: aMethod ]
+]
+
+{ #category : 'initialization' }
 StMetaBrowserPresenter >> initializePresenters [
 
 	| classHierarchy |
@@ -96,11 +107,6 @@ StMetaBrowserPresenter >> initializePresenters [
 		          whenSubmitDo: [ :aString | self compile: aString ];
 		          whenResetDo: [ self updateSourceWith: self selectedMethod ];
 		          yourself.
-
-	classes
-		transmitTo: methods
-		transform: [ :aClass | self methodsOf: aClass ].
-	methods transmitDo: [ :aMethod | self updateSourceWith: aMethod ].
 
 	classes
 		selectPath: (Array new: classHierarchy size withAll: 1)
