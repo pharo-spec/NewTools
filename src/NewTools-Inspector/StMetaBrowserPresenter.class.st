@@ -79,7 +79,10 @@ StMetaBrowserPresenter >> connectPresenters [
 	methods transmitDo: [ :aMethod |
 		self selectedMethod
 			ifNotNil: [ : s | 	self updateSourceWith: aMethod ]
-			ifNil: [ source beForObject: self model ] ]
+			ifNil: [ 
+				source 
+					beForObject: self model;
+					text: String empty ] ]
 ]
 
 { #category : 'initialization' }
