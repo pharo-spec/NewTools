@@ -76,7 +76,10 @@ StMetaBrowserPresenter >> connectPresenters [
 		transform: [ :aClass | self methodsOf: aClass ]
 		postTransmission: [ :destination | destination selectIndex: 1 ].
 
-	methods transmitDo: [ :aMethod | self updateSourceWith: aMethod ]
+	methods transmitDo: [ :aMethod |
+		self selectedMethod
+			ifNotNil: [ : s | 	self updateSourceWith: aMethod ]
+			ifNil: [ source beForObject: self model ] ]
 ]
 
 { #category : 'initialization' }
@@ -102,11 +105,11 @@ StMetaBrowserPresenter >> initializePresenters [
 		           yourself.
 
 	source := self newCode
-		          lineNumbers: StPharoSettings codeShowLineNumbers;
-		          beForMethod: self selectedMethod;
-		          whenSubmitDo: [ :aString | self compile: aString ];
-		          whenResetDo: [ self updateSourceWith: self selectedMethod ];
-		          yourself.
+					lineNumbers: StPharoSettings codeShowLineNumbers;
+			 		beForScripting;
+					whenSubmitDo: [ :aString | self compile: aString ];
+					whenResetDo: [ self updateSourceWith: self selectedMethod ];
+					yourself.
 
 	classes
 		selectPath: (Array new: classHierarchy size withAll: 1)
@@ -127,7 +130,7 @@ StMetaBrowserPresenter >> methodsOf: aClass [
 
 ]
 
-{ #category : 'accessing' }
+{ #category : 'backstops' }
 StMetaBrowserPresenter >> selectedClass [
 
 	^ classes selection selectedItem
