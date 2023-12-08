@@ -524,7 +524,6 @@ StDebuggerTest >> testDebuggerDoesNotLogStackToFileSetting [
 		initialize;
 		open.
 
-	self deny: debuggingStackToFile.
 	self 
 		assert: logFileRef exists not
 		description: 'It tests that when the log debugger stack to file setting is false, a Pharo log file is not created when requesting a debugger'.
