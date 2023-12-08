@@ -286,6 +286,35 @@ StTestDebuggerProvider >> sessionWithDNUAfterStep [
 ]
 
 { #category : 'helpers' }
+StTestDebuggerProvider >> sessionWithInlinedLoop [
+
+	| context process sessionForTests |
+	context := [
+	           | a b nbMonth |
+	           a := 20.
+	           b := 0.
+	           nbMonth := 0.
+	           [ a > b ] whileTrue: [
+		           | list |
+		           nbMonth := nbMonth + 1.
+		           list := #( 1 2 3 ) asOrderedCollection collect: [ :e |
+			                   e + nbMonth ].
+		           b := b + 1 ].
+	           a := b * 42.
+	           ^ a ] asContext.
+	process := Process
+		           forContext: context
+		           priority: Processor userInterruptPriority.
+	sessionForTests := DebugSession
+		                   named: 'test sessionProviderForDebuggerTestsWithInlinedLoop'
+		                   on: process
+		                   startedAt: context.
+	sessionForTests exception:
+		(OupsNullException fromSignallerContext: context).
+	^ sessionForTests
+]
+
+{ #category : 'helpers' }
 StTestDebuggerProvider >> terminate [ 
 	session ifNotNil:[session clear].
 	session := nil
