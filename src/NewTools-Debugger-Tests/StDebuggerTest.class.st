@@ -406,6 +406,59 @@ StDebuggerTest >> testContextTempVarListUpdatesTempsWhenEnteringOrLeavingInlined
 ]
 
 { #category : 'tests - context inspector' }
+StDebuggerTest >> testContextTempVarListUpdatesTempsWhenEnteringOrLeavingInlinedBlocksWithRunTo [
+
+	| contextItems inspectorTable newContextItems sourceCode targetCode beginIndex |
+	dbg := self debuggerOn:
+		       StTestDebuggerProvider new sessionWithInlinedLoop.
+	inspectorTable := dbg inspector getRawInspectorPresenterOrNil
+		                  attributeTable.
+
+	"We stop on the node `b := 0` node"
+	4 timesRepeat: [ dbg stepOver ].
+
+	contextItems := inspectorTable roots copy.
+	sourceCode := dbg context compiledCode sourceCode.
+
+	"We enter inlined block"
+	targetCode := 'nbMonth := nbMonth + 1'.
+	beginIndex := sourceCode indexOfSubCollection: targetCode.
+	dbg code selectionInterval:
+		(Interval from: beginIndex to: beginIndex + targetCode size).
+	dbg runToSelection.
+
+	newContextItems := inspectorTable roots.
+
+	self assert: newContextItems size equals: contextItems size + 1.
+
+	1 to: contextItems size do: [ :i |
+		self
+			assert: (newContextItems at: i)
+			identicalTo: (contextItems at: i) ].
+
+	self assert:
+		(newContextItems at: contextItems size + 1) tempVariable
+			isTempVariable.
+	self
+		assert:
+		(newContextItems at: contextItems size + 1) tempVariable name
+		equals: 'list'.
+
+	"We leave inlined block"
+	targetCode := 'a := b * 42'.
+	beginIndex := sourceCode indexOfSubCollection: targetCode.
+	dbg code selectionInterval:
+		(Interval from: beginIndex to: beginIndex + targetCode size).
+	dbg runToSelection.
+
+	self assert: newContextItems size equals: contextItems size.
+	1 to: contextItems size do: [ :i |
+		self
+			assert: (newContextItems at: i)
+			identicalTo: (contextItems at: i) ]
+]
+
+{ #category : 'tests - context inspector' }
 StDebuggerTest >> testContextUnchangedAfterStepOver [
 	| currentContext |
 	
