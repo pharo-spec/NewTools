@@ -153,15 +153,15 @@ StMessageListPresenter >> listPresenter [
 
 { #category : 'accessing' }
 StMessageListPresenter >> locationOf: anItem [
-	^ String
-		streamContents: [ :aStream | 
-			3 to: (cachedHierarchy at: anItem) size do: [ :i | aStream << '    ' ].
-			aStream << (self methodClassNameForItem: anItem) << ' ('.
-			anItem isFromTrait
-				ifTrue: [ aStream
-						<< anItem compiledMethod origin name;
-						space ].
-			aStream << (self protocolNameForItem: anItem) << ')' ]
+
+	^ String streamContents: [ :aStream | 
+		3 to: (cachedHierarchy at: anItem) size do: [ :i | aStream << '    ' ].
+		aStream << (self methodClassNameForItem: anItem) << ' ('.
+		anItem isFromTrait
+			ifTrue: [ aStream
+					<< anItem compiledMethod origin name;
+					space ].
+		aStream << (self protocolNameForItem: anItem) << ')' ]
 ]
 
 { #category : 'private' }
@@ -190,14 +190,17 @@ StMessageListPresenter >> messageListActions [
 
 { #category : 'accessing' }
 StMessageListPresenter >> messages [
+
 	^ listPresenter items
 ]
 
 { #category : 'accessing' }
 StMessageListPresenter >> messages: aCollection [
+
 	self cacheHierarchyForClasses: aCollection.
 	listPresenter items: cachedHierarchy keys asOrderedCollection.
-	listPresenter listSize > 0 ifTrue: [ listPresenter selectIndex: 1 ]
+	listPresenter listSize > 0 ifTrue: [ 
+		listPresenter selectIndex: 1 ]
 ]
 
 { #category : 'private' }
@@ -207,6 +210,7 @@ StMessageListPresenter >> methodClassNameForItem: anItem [
 
 { #category : 'accessing' }
 StMessageListPresenter >> numberOfElements [
+
 	^ listPresenter listSize
 ]
 
@@ -250,11 +254,13 @@ StMessageListPresenter >> selectIndex: anInteger [
 
 { #category : 'accessing' }
 StMessageListPresenter >> selectMessage: aMessage [
+
 	listPresenter selectItem: aMessage
 ]
 
 { #category : 'selecting' }
 StMessageListPresenter >> selectedIndex [
+
 	^ listPresenter selection selectedIndex
 ]
 
@@ -266,13 +272,14 @@ StMessageListPresenter >> selectedMessage [
 
 { #category : 'accessing' }
 StMessageListPresenter >> selectedMethod [
-	self selectedMessage ifNil: [ ^ nil ].
 
+	self selectedMessage ifNil: [ ^ nil ].
 	^ self selectedMessage compiledMethod
 ]
 
 { #category : 'accessing' }
 StMessageListPresenter >> selectorOf: anItem [
+
 	^ anItem selector
 ]
 
@@ -301,16 +308,19 @@ StMessageListPresenter >> sortClassesInCachedHierarchy: aMethodDefinition b: oth
 
 { #category : 'api' }
 StMessageListPresenter >> sortingBlock: aBlock [
+
 	listPresenter sortingBlock: aBlock
 ]
 
 { #category : 'accessing' }
 StMessageListPresenter >> topologicSort [
+
 	^ topologySort
 ]
 
 { #category : 'accessing' }
 StMessageListPresenter >> topologicSort: anObject [
+
 	topologySort := anObject
 ]
 

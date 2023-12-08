@@ -196,8 +196,9 @@ StMessageBrowser >> connectPresenters [
 		whenSelectionChangedDo: [ :selection | self selectItem: selection selectedItem ];
 		whenModelChangedDo: [ self updateTitle ].
 		
-	textPresenter whenSubmitDo: [ :text | 
-		self accept: text notifying: nil ]
+	textPresenter 
+		whenSubmitDo: [ :text | self accept: text notifying: nil ];
+		whenResetDo: [ self selectItem: messageList selectedMessage ]	
 ]
 
 { #category : 'api - focus' }

@@ -38,6 +38,13 @@ Class {
 	#tag : 'Senders'
 }
 
+{ #category : 'tools registration' }
+StClyQueryBrowser class >> beDefaultBrowser [
+	<script>
+
+	^ StClyOldMessageBrowserAdapter beDefaultBrowser
+]
+
 { #category : 'opening' }
 StClyQueryBrowser class >> browseMethods: methods [
 
@@ -75,8 +82,7 @@ StClyQueryBrowser class >> openOn: aQuery [
 	
 	browser := self on: ClyNavigationEnvironment currentImage.
 	browser showResultOf: aQuery.
-	^ browser open	
-	
+	^ browser open
 ]
 
 { #category : 'icons' }
@@ -101,11 +107,18 @@ StClyQueryBrowser >> disablePluginsWhichAreNotIn: aClyFullBrowser [
 { #category : 'initialization' }
 StClyQueryBrowser >> initialize [
 
+	queryScopes := OrderedCollection new.
 	navigationHistory := ClyNavigationHistory new.
 	super initialize
 ]
 
 { #category : 'accessing' }
+StClyQueryBrowser >> navigationEnvironment [
+
+	^ navigationEnvironment
+]
+
+{ #category : 'initialization' }
 StClyQueryBrowser >> navigationEnvironment: aNavigationEnvironment [
 
 	navigationEnvironment := aNavigationEnvironment
@@ -114,7 +127,9 @@ StClyQueryBrowser >> navigationEnvironment: aNavigationEnvironment [
 { #category : 'initialization' }
 StClyQueryBrowser >> newMessageList [
 
-	^ self instantiate: StClyMessageListPresenter
+	^ (self instantiate: StClyMessageListPresenter)
+		navigationEnvironment: self navigationEnvironment;
+		yourself
 ]
 
 { #category : 'accessing' }
@@ -132,6 +147,7 @@ StClyQueryBrowser >> queryScopes: aCollection [
 		as: OrderedCollection.
 		
 	messageList scopes: queryScopes.
+	
 	self updatePresenter
 ]
 
@@ -168,7 +184,8 @@ StClyQueryBrowser >> showQueryResult [
 	highlight := systemQuery queryElement.
 	messageList 
 		query: systemQuery;
-		updateMessages
+		updateMessages.
+	toolbarPresenter updatePresenter
 ]
 
 { #category : 'accessing' }
@@ -176,6 +193,7 @@ StClyQueryBrowser >> showResultOf: aQuery [
 	"If given query has specific result then browser will show it as requested.
 	Otherwise it will force query to build currently configured required result
 	(when given query has no explicitly specified result which means it has only default value)"
+
 	self changeStateBy: [
 		systemQuery := aQuery buildsDefaultResult
 			ifTrue: [ aQuery withResult: ClyHierarchicalSystemItemsResult new ]
@@ -186,7 +204,7 @@ StClyQueryBrowser >> showResultOf: aQuery [
 { #category : 'accessing' }
 StClyQueryBrowser >> systemScope [
 	
-	^ systemScope
+	^ systemScope ifNil: [ systemScope := navigationEnvironment systemScope ]
 ]
 
 { #category : 'accessing' }
