@@ -33,6 +33,9 @@ Class {
 		'systemQuery',
 		'activeScope'
 	],
+	#classVars : [
+		'DefaultQueryResult'
+	],
 	#category : 'NewTools-MethodBrowsers-Senders',
 	#package : 'NewTools-MethodBrowsers',
 	#tag : 'Senders'
@@ -45,10 +48,29 @@ StClyQueryBrowser class >> beDefaultBrowser [
 	^ StClyOldMessageBrowserAdapter beDefaultBrowser
 ]
 
-{ #category : 'opening' }
+{ #category : 'instance creation' }
+StClyQueryBrowser class >> browseImplementorsOf: aSymbol inNameResolver: methodContext [
+
+	^ self openOn: (ClyMessageImplementorsQuery of: aSymbol)
+]
+
+{ #category : 'instance creation' }
 StClyQueryBrowser class >> browseMethods: methods [
 
 	^ self openOn: (ClyConstantMethodQuery with: methods)
+]
+
+{ #category : 'instance creation' }
+StClyQueryBrowser class >> browseSendersOf: aSymbol [
+
+	^ self openOn: (ClyMessageSendersQuery of: aSymbol)
+]
+
+{ #category : 'default' }
+StClyQueryBrowser class >> defaultQueryResult [
+
+	^ DefaultQueryResult ifNil: [
+		DefaultQueryResult := ClyHierarchicalSystemItemsResult new ]
 ]
 
 { #category : 'instance creation' }
@@ -157,6 +179,14 @@ StClyQueryBrowser >> recordNavigationState: aBrowserNavigationState [
 	navigationHistory recordState: aBrowserNavigationState
 ]
 
+{ #category : 'execution' }
+StClyQueryBrowser >> requiredQueryResult [
+
+	^systemQuery
+		ifNil: [ self class defaultQueryResult ]
+		ifNotNil: [ systemQuery requiredResult ]
+]
+
 { #category : 'selection' }
 StClyQueryBrowser >> selectLastItem [
 	
@@ -184,6 +214,7 @@ StClyQueryBrowser >> showQueryResult [
 	highlight := systemQuery queryElement.
 	messageList 
 		query: systemQuery;
+		scopes: { systemScope };
 		updateMessages.
 	toolbarPresenter updatePresenter
 ]
@@ -196,7 +227,7 @@ StClyQueryBrowser >> showResultOf: aQuery [
 
 	self changeStateBy: [
 		systemQuery := aQuery buildsDefaultResult
-			ifTrue: [ aQuery withResult: ClyHierarchicalSystemItemsResult new ]
+			ifTrue: [ aQuery withResult: self requiredQueryResult ]
 			ifFalse: [ aQuery ].
 		self showQueryResult ]
 ]

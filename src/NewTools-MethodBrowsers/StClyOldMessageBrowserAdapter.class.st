@@ -130,7 +130,7 @@ StClyOldMessageBrowserAdapter >> messages: anObject [
 { #category : 'opening' }
 StClyOldMessageBrowserAdapter >> open [
 	| query methods comments |
-	
+
 	methods := messages
 		select: [:each | (each isRingObject and: [ each isMethod ]) or: [ each isCompiledMethod  ] ]
 		thenCollect: [ :each | each compiledMethod ].
@@ -141,7 +141,7 @@ StClyOldMessageBrowserAdapter >> open [
 	query
 		criteriaString: autoSelect;
 		criteriaBlock: refreshingBlock.
-	self halt.	
+
 	openedBrowser := StClyQueryBrowser openOn: query.
 	
 	^ openedBrowser
