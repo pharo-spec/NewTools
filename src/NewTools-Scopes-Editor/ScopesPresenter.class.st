@@ -101,11 +101,11 @@ ScopesPresenter >> argumentsListMenu [
 					  name: 'Inspect';
 					  iconName: #glamorousSearch;
 					  action: [ scopesTree selectedItem inspect ] ];
-			  addItem: [ :anItem |
+			  "addItem: [ :anItem |
 				  anItem
 					  name: 'Open on Calypso';
 					  visibleIf: [ scopesTree selectedItem isScopeNode ];
-					  action: [ self openOnCalypso: scopesTree selectedItem value ] ];
+					  action: [ self openOnCalypso: scopesTree selectedItem value ] ];"
 			  addItem: [ :anItem |
 				  anItem
 					  name: 'Browse';
@@ -283,16 +283,15 @@ ScopesPresenter >> notWithScope: anItem [
 
 { #category : 'menu commands' }
 ScopesPresenter >> openOnCalypso: aClassOrPackage [
-
+	
+	self inform: 'Implementation is pending'.
+	"
 	| browser |
-	self halt.
 	browser := ClyFullBrowserMorph 
 		openOnClass: self class 
 		selector: self class selectors anyOne.
+	"
 		
-	"aClassOrPackage isClassOrTrait
-		ifTrue: [ browser selectClass: aClassOrPackage ]
-		ifFalse: [ browser selectPackage: aClassOrPackage ]"
 ]
 
 { #category : 'operations' }
@@ -342,9 +341,6 @@ ScopesPresenter >> refresh [
 
 { #category : 'initialization' }
 ScopesPresenter >> registerEvents [
-
-	self flag:
-		'reseting subscriptions here is horrible, find a better way'.
 
 	self announcer subscriptions reset.
 
@@ -450,7 +446,7 @@ ScopesPresenter >> toolbarButtons [
 ScopesPresenter >> updateEnabled [
 
 	| enabled |
-	self flag: 'I should implement this well'.
+	
 	"The first scope cannot be edited nor deleted because it is the full image environment"
 	enabled := scopesTree selectedItem isNotNil and: [
 		           scopesTree selection selectedPath ~= #( 1 ) ].

@@ -130,6 +130,13 @@ BaselineOfNewTools >> baseline: spec [
 				    		'NewTools-RewriterTools'
 				    		'NewTools-RewriterTools-Backend-Tests'
 				    		'NewTools-RewriterTools-Tests' );
+			"ScopesEditor"
+			group: #ScopesEditor with: #(
+						'NewTools-Scopes' 
+						'NewTools-Scopes-Editor' 
+						'NewTools-Scopes-Resources-A-Tests' 
+						'NewTools-Scopes-Resources-B-Tests' 
+						'NewTools-Scopes-Tests');
 			group: 'default' with: #( 
 						'Playground' 
 						'Inspector' 
@@ -139,7 +146,8 @@ BaselineOfNewTools >> baseline: spec [
 						'FontChooser' 
 						'Methods'
 				   		'Spotter'
-            					'RewriterTools') ]
+            					'RewriterTools'
+						'ScopesEditor') ]
 ]
 
 { #category : 'external projects' }
