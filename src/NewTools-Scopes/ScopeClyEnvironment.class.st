@@ -1,3 +1,6 @@
+"
+I an environment to be used when browsing scopes on Calypso
+"
 Class {
 	#name : 'ScopeClyEnvironment',
 	#superclass : 'Object',
@@ -27,11 +30,23 @@ ScopeClyEnvironment >> changesAnnouncer: anObject [
 
 { #category : 'class management' }
 ScopeClyEnvironment >> definedClassesInPackage: aRPackage [ 
-	self flag: 'Consider orphan classes'.
+	"ToDo: Consider orphan classes"
 	^ aRPackage definedClasses
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
+ScopeClyEnvironment >> environment [
+
+	^ environment
+]
+
+{ #category : 'accessing' }
+ScopeClyEnvironment >> environment: anObject [
+
+	environment := anObject
+]
+
+{ #category : 'method management' }
 ScopeClyEnvironment >> extensionMethodsInPackage: aRBPackage [
 
  	^ aRBPackage extensionMethods
@@ -43,8 +58,32 @@ ScopeClyEnvironment >> name [
 ]
 
 { #category : 'accessing' }
+ScopeClyEnvironment >> packageOrganizer1 [
+
+	^ packageOrganizer
+]
+
+{ #category : 'accessing' }
+ScopeClyEnvironment >> packageOrganizer: anObject [
+
+	packageOrganizer := anObject
+]
+
+{ #category : 'accessing' }
 ScopeClyEnvironment >> packages [
 	^ scope packages
+]
+
+{ #category : 'accessing' }
+ScopeClyEnvironment >> projectManager [
+
+	^ projectManager
+]
+
+{ #category : 'accessing' }
+ScopeClyEnvironment >> projectManager: anObject [
+
+	projectManager := anObject
 ]
 
 { #category : 'accessing' }
@@ -60,9 +99,8 @@ ScopeClyEnvironment >> subscribe: aClyNavigationEnvironment [
 
 { #category : 'initialization' }
 ScopeClyEnvironment >> subscribe: anObject for: anAnnouncementClass [
-	"SystemAnnouncer uniqueInstance weak when: anAnnouncementClass send: #systemChanged: to: anObject"
+	
 	self when: anAnnouncementClass send: #systemChanged: to: anObject.
-	self flag: 'Caro, implement me later, skip for now'
 	
 ]
 

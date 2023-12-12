@@ -221,7 +221,7 @@ ScopesManager >> defaultScopeLabel [
 ScopesManager >> editScope: aScope withNodes: aCollection [
 
 	| classesInScope packagesInScope classes packages fullPackages orphanClasses addedClasses removedClasses addedPackages removedPackages fullPackagesInScope orphanClassesInScope |
-self halt.
+
 	classesInScope := aScope classes reject: [ :each | each isMeta ].
 	packagesInScope := aScope packages.
 	

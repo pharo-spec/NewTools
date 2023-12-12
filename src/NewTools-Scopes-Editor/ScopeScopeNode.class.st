@@ -48,14 +48,14 @@ ScopeScopeNode >> label [
 	^ self value label
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 ScopeScopeNode >> packageNode [
-	self shouldNotImplement 
+	^ self shouldNotImplement 
 ]
 
 { #category : 'accessing' }
 ScopeScopeNode >> packages [
-self halt.
+
 	^ value packages
 ]
 

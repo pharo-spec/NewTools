@@ -1,3 +1,6 @@
+"
+I am wrapper for classes to be used in the ScopeNodesTree
+"
 Class {
 	#name : 'ScopeClassNode',
 	#superclass : 'ScopeNode',
@@ -22,7 +25,7 @@ ScopeClassNode >> isClassOrTraitNode [
 	^ true
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 ScopeClassNode >> packageNode [
 
 	^ ScopePackageNode on: self package

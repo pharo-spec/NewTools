@@ -1,5 +1,5 @@
 "
-I am wrapper for classes, packages and class hierarchies to be used in the ScopeNodesTree
+I am an abstract wrapper for classes, packages and traits to be used in the ScopeNodesTree
 "
 Class {
 	#name : 'ScopeNode',
@@ -29,19 +29,19 @@ ScopeNode >> & anotherNode [
 	^ ScopesManager newScopeFrom: self value and: anotherNode value
 ]
 
-{ #category : 'accessing' }
+{ #category : 'comparing' }
 ScopeNode >> <= aNode [
 	^ self label <= aNode label
 ]
 
-{ #category : 'accessing' }
+{ #category : 'comparing' }
 ScopeNode >> = anotherNode [
 
 	^ (self class = anotherNode class)
 		and: [ self label = anotherNode label ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'comparing' }
 ScopeNode >> == anotherNode [
 
 	^ self = anotherNode
@@ -63,7 +63,7 @@ ScopeNode >> definedClasses [
 	^#()
 ]
 
-{ #category : 'operations' }
+{ #category : 'comparing' }
 ScopeNode >> hash [
 	^ value hash
 ]
@@ -110,7 +110,7 @@ ScopeNode >> package [
 	^ value package
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 ScopeNode >> packageNode [
 	self subclassResponsibility 
 ]

@@ -6,12 +6,12 @@ RBPackageEnvironment >> addClass: aClass [
 ]
 
 { #category : '*NewTools-Scopes' }
-RBPackageEnvironment >> removeClass: aClass [
-	^ self
-]
-
-{ #category : '*NewTools-Scopes' }
 RBPackageEnvironment >> asScopeNode [
 
 	^ ScopePackageNode on: self
+]
+
+{ #category : '*NewTools-Scopes' }
+RBPackageEnvironment >> removeClass: aClass [
+	^ self
 ]

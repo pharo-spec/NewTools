@@ -1,3 +1,6 @@
+"
+I am a dialog to select a second scope when performing operations between scopes
+"
 Class {
 	#name : 'ScopeSelectAnotherScopeDialog',
 	#superclass : 'SpSelectDialog',

@@ -1,3 +1,6 @@
+"
+I announce a new scope was created
+"
 Class {
 	#name : 'ScopeCreatedAnnouncement',
 	#superclass : 'AbstractScopeAnnouncement',

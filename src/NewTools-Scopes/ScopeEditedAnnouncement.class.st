@@ -1,3 +1,6 @@
+"
+I announce an existing scope was edited
+"
 Class {
 	#name : 'ScopeEditedAnnouncement',
 	#superclass : 'AbstractScopeAnnouncement',

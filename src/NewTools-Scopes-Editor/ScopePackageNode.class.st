@@ -1,3 +1,6 @@
+"
+I am wrapper for packages to be used in the ScopeNodesTree
+"
 Class {
 	#name : 'ScopePackageNode',
 	#superclass : 'ScopeNode',
@@ -32,7 +35,7 @@ ScopePackageNode >> isScopeNode [
 	^ false
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 ScopePackageNode >> packageNode [
 	^ self
 ]

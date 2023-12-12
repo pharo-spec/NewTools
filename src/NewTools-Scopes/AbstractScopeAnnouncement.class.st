@@ -1,3 +1,6 @@
+"
+I announce scope related events to be used by the scopes editor
+"
 Class {
 	#name : 'AbstractScopeAnnouncement',
 	#superclass : 'Announcement',
