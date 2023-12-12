@@ -30,7 +30,7 @@ ScopesManager class >> availableScopes [
 	^ self scopes
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 ScopesManager class >> currentQueryScope [
 	^ self singleInstance currentQueryScope
 ]
@@ -275,7 +275,7 @@ ScopesManager >> initialize [
 	scopes := Set new
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'api' }
 ScopesManager >> nameWithIndex: name [
 
 	| existingNames hypen_index number indexes |
@@ -293,8 +293,7 @@ ScopesManager >> nameWithIndex: name [
 					          asInteger.
 				indexes add: number asInteger ] ].
 
-	^ name , '-' , (indexes max + 1) asString.
-	Error signal: 'Error computing name with index'
+	^ name , '-' , (indexes max + 1) asString
 ]
 
 { #category : 'private' }

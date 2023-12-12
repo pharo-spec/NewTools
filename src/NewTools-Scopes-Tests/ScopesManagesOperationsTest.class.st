@@ -20,8 +20,8 @@ ScopesManagesOperationsTest >> testAddClassToOrEnvironment [
 	orEnv addClass: ScClassA1.
 	orEnv addClass: ScClassA1 class.
 	
-	self assert: orEnv allClasses equals: { ScClassA1 . ScClassB1 }.
-	self assert: orEnv packages equals: { ScClassA1 package . ScClassB1 package }
+	self assert: orEnv allClasses asSet equals: { ScClassA1 . ScClassB1 } asSet.
+	self assert: orEnv packages asSet equals: { ScClassA1 package . ScClassB1 package } asSet
 ]
 
 { #category : 'tests' }
@@ -40,8 +40,8 @@ ScopesManagesOperationsTest >> testAddClassToOrEnvironmentMakingAPackageFull [
 	orEnv addClass: ScClassA2.
 	orEnv addClass: ScClassA2 class.
 	
-	self assert: orEnv allClasses equals: { ScClassA1 . ScClassA2 }.
-	self assert: orEnv packages equals: { ScClassA1 package }
+	self assert: orEnv allClasses asSet equals: { ScClassA1 . ScClassA2 } asSet.
+	self assert: orEnv packages asSet equals: { ScClassA1 package } asSet
 ]
 
 { #category : 'tests' }

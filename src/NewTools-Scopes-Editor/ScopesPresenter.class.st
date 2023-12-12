@@ -9,8 +9,7 @@ Class {
 		'scopesTree',
 		'toolbar',
 		'buttonEdit',
-		'buttonDelete',
-		'toolbarInfo'
+		'buttonDelete'
 	],
 	#category : 'NewTools-Scopes-Editor-GUI',
 	#package : 'NewTools-Scopes-Editor',
@@ -51,7 +50,7 @@ ScopesPresenter class >> open [
 	(self on: ScopesManager singleInstance) open
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'actions' }
 ScopesPresenter class >> refreshAllInstances [
 	<script>
 	self allInstances do: [ :each | each refresh ]

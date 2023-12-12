@@ -17,7 +17,7 @@ ScopeAbstractPresenter >> announcer [
 	^ model announcer
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'actions' }
 ScopeAbstractPresenter >> getNameFromUser [
 
 	^ (ScopeRequestLabel newApplication: self application)
@@ -66,7 +66,7 @@ ScopeAbstractPresenter >> showReferencesToClass: aClass [
 	browser spawnQueryBrowserOn: query
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private' }
 ScopeAbstractPresenter >> validateNameBlock [
 
 	^ [ :txt |

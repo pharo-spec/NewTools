@@ -87,7 +87,7 @@ ScopeNodesPresenter >> addSelectedItemClassHierarchy [
 				self activateItem: child ] ] ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 ScopeNodesPresenter >> allScopeNodeTreeRoots [
 
 	^ allScopeNodeTreeRoots ifNil: [
@@ -190,7 +190,7 @@ ScopeNodesPresenter >> editScope: aScope [
 	self announceScopeEdited
 ]
 
-{ #category : 'accessing - im text input' }
+{ #category : 'testing' }
 ScopeNodesPresenter >> editing [
 	^ scope isNotNil
 ]
