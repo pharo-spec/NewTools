@@ -1,7 +1,7 @@
-Extension { #name : 'RPackageTag' }
+Extension { #name : 'PackageTag' }
 
 { #category : '*NewTools-Spotter-Extensions' }
-RPackageTag >> spotterClassesFor: aStep [
+PackageTag >> spotterClassesFor: aStep [
 	<stSpotterOrder: 20>
 	aStep listProcessor
 			allCandidates: [ self classes sorted: [ :a :b | a name < b name ] ];
