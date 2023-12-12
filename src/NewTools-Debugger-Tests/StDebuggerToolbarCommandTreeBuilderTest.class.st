@@ -48,9 +48,12 @@ StDebuggerToolbarCommandTreeBuilderTest >> testCommandGroupStructure [
 
 { #category : 'tests' }
 StDebuggerToolbarCommandTreeBuilderTest >> testContextControlCommandClasses [
+
 	self
 		assertCollection: builder contextControlCommandClasses
-		equals: {StDefineMissingEntityCommand}
+		equals: {
+				StDefineMissingEntityCommand.
+				StGenerateAndProceedCommand }
 ]
 
 { #category : 'tests' }

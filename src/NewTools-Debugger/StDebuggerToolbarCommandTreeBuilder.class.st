@@ -57,7 +57,10 @@ StDebuggerToolbarCommandTreeBuilder >> buildDebuggerCommandGroup [
 
 { #category : 'accessing - commands classes' }
 StDebuggerToolbarCommandTreeBuilder >> contextControlCommandClasses [
-	^ {StDefineMissingEntityCommand}
+
+	^ {
+		  StDefineMissingEntityCommand.
+		  StGenerateAndProceedCommand }
 ]
 
 { #category : 'commands' }

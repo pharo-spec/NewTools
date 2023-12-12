@@ -245,6 +245,12 @@ StDebuggerActionModel >> isInterruptedContextDoesNotUnderstand [
 
 ]
 
+{ #category : 'testing' }
+StDebuggerActionModel >> isInterruptedContextGeneratingCode [
+
+	^ self contextPredicate isGeneratingCode
+]
+
 { #category : 'debug - predicates' }
 StDebuggerActionModel >> isInterruptedContextMissingClassException [
 
@@ -413,7 +419,10 @@ StDebuggerActionModel >> returnValueFromExpression: aString fromContext: aContex
 
 { #category : 'debug - execution' }
 StDebuggerActionModel >> runToSelection: aSelectionInterval inContext: aContext [
-	self session runToSelection: aSelectionInterval inContext: aContext.
+
+	previousASTScope := aContext sourceNodeExecuted scope.
+	self preventUpdatesDuring: [
+		self session runToSelection: aSelectionInterval inContext: aContext ].
 	self updateTopContext
 ]
 
