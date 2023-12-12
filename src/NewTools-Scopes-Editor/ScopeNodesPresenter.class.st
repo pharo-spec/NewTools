@@ -155,8 +155,8 @@ ScopeNodesPresenter >> browseSelectedItem [
 ScopeNodesPresenter >> checkAll [
 
 	scopeNodesTree roots do: [ :root |
-		(checkedScopeNodes includes: root) ifTrue: [
-			self deactivateItem: root ] ]
+		(checkedScopeNodes includes: root) ifFalse: [
+			self activateItem: root ] ]
 ]
 
 { #category : 'private - presenters' }
@@ -288,10 +288,10 @@ ScopeNodesPresenter >> initializeScopeNodesTree [
 		contextMenu: self argumentsListMenu.
 
 	scopeNodesTree bindKeyCombination: $a command toAction: [
-		self uncheckAll ].
+		self checkAll ].
 	
 	scopeNodesTree bindKeyCombination: $u command toAction: [
-		self checkAll].
+		self uncheckAll].
 
 	^ scopeNodesTree
 ]
@@ -472,8 +472,8 @@ ScopeNodesPresenter >> scope: aRBEnvironment [
 ScopeNodesPresenter >> uncheckAll [
 
 	scopeNodesTree roots do: [ :root |
-		(checkedScopeNodes includes: root) ifFalse: [
-			self activateItem: root ] ]
+		(checkedScopeNodes includes: root) ifTrue: [
+			self deactivateItem: root ] ]
 ]
 
 { #category : 'validation' }
