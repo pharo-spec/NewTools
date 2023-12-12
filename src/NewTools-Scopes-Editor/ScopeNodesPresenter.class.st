@@ -472,8 +472,9 @@ ScopeNodesPresenter >> scope: aRBEnvironment [
 ScopeNodesPresenter >> uncheckAll [
 
 	scopeNodesTree roots do: [ :root |
-		(checkedScopeNodes includes: root) ifTrue: [
-			self deactivateItem: root ] ]
+		root children do: [ :child |
+			(checkedScopeNodes includes: child) ifTrue: [
+				self deactivateItem: child ] ] ]
 ]
 
 { #category : 'validation' }
