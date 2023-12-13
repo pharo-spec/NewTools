@@ -12,13 +12,10 @@ Class {
 { #category : 'accessing' }
 ScopeScopeNode >> children [
 
-	| fullPackages orphanClasses packageChildren classChildren clss |
-	clss := self value classes.
-
-	fullPackages := ScopesManager fullPackagesFrom: clss.
-	orphanClasses := ScopesManager
-		                 orphanClassesIn: clss
-		                 havingFullPackages: fullPackages.
+	| fullPackages orphanClasses packageChildren classChildren |
+	
+	fullPackages := self value fullPackages.
+	orphanClasses := self value orphanClasses.
 
 	packageChildren := fullPackages collect: [ :package |
 		                   ScopePackageNode on: package ].

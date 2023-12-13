@@ -12,6 +12,11 @@ RBClassEnvironment >> asScopeNode [
 ]
 
 { #category : '*NewTools-Scopes' }
+RBClassEnvironment >> definedClassesDo: aBlock [ 
+	^ self classesDo: aBlock
+]
+
+{ #category : '*NewTools-Scopes' }
 RBClassEnvironment >> removePackage: aSymbol [
 	^ self
 ]

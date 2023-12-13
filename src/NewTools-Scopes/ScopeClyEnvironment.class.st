@@ -29,9 +29,9 @@ ScopeClyEnvironment >> changesAnnouncer: anObject [
 ]
 
 { #category : 'class management' }
-ScopeClyEnvironment >> definedClassesInPackage: aRPackage [ 
+ScopeClyEnvironment >> definedClassesInPackage: aPackage [ 
 	"ToDo: Consider orphan classes"
-	^ aRPackage definedClasses
+	^ aPackage definedClasses
 ]
 
 { #category : 'accessing' }

@@ -46,6 +46,27 @@ ScopesManager class >> defaultScopeLabel [
 	^ 'Full environment'
 ]
 
+{ #category : 'operations' }
+ScopesManager class >> editScope: aScope withNodes: aCollection [
+
+	| classesInScope addedClasses removedClasses auxScope classesInCollection |
+	
+	classesInScope := aScope definedClasses.
+	
+	auxScope := self newScopeFrom: aCollection.
+	classesInCollection := auxScope definedClasses.
+
+	addedClasses := classesInCollection reject: [ :aClass |
+		                classesInScope includes: aClass ].
+	removedClasses := classesInScope reject: [ :aClass |
+		                  classesInCollection includes: aClass ].
+
+	addedClasses do: [ :aClass | aScope addClass: aClass ].
+	removedClasses do: [ :aClass | aScope removeClass: aClass ].
+
+	^ aScope
+]
+
 { #category : 'private' }
 ScopesManager class >> fullPackagesFrom: classes [
 	"packages whose classes were all selected"
@@ -77,10 +98,10 @@ ScopesManager class >> newScopeFrom: aSet [
 	
 	classes := (aSet select: [ :each | each isClassOrTrait ]) reject: [
 		           :each | each isMeta ].
-	packages := aSet select: [ :each | each isKindOf: RPackage ].
+	packages := aSet select: [ :each | each isKindOf: Package ].
 
 	"packages whose classes were all selected"
-	fullPackages := self fullPackagesFrom: classes.
+	fullPackages := packages addAll: (self fullPackagesFrom: classes); yourself.
 	"classes whose package hasn't all of its classes selected"
 	orphanClasses := self
 		                 orphanClassesIn: classes
@@ -220,35 +241,7 @@ ScopesManager >> defaultScopeLabel [
 { #category : 'editing' }
 ScopesManager >> editScope: aScope withNodes: aCollection [
 
-	| classesInScope packagesInScope classes packages fullPackages orphanClasses addedClasses removedClasses addedPackages removedPackages fullPackagesInScope orphanClassesInScope |
-
-	classesInScope := aScope classes reject: [ :each | each isMeta ].
-	packagesInScope := aScope packages.
-	
-	fullPackagesInScope := self fullPackagesFrom: classesInScope.
-	orphanClassesInScope := self orphanClassesIn: classesInScope havingFullPackages: fullPackagesInScope. 
-	
-	classes := (aCollection select: [ :each | each isClassOrTrait ])
-		           reject: [ :each | each isMeta ].
-	packages := aCollection select: [ :each | each isKindOf: RPackage ].
-
-	fullPackages := self fullPackagesFrom: classes.
-	orphanClasses := self orphanClassesIn: classes havingFullPackages: fullPackages.
-
-	addedClasses := orphanClasses reject: [ :aClass | classesInScope includes: aClass ].
-	removedClasses := orphanClassesInScope reject: [ :aClass | orphanClasses includes: aClass ].
-
-	addedPackages := fullPackages reject: [ :aPackage | fullPackagesInScope includes: aPackage ].
-	removedPackages := fullPackagesInScope reject: [ :aPackage | fullPackages includes: aPackage ].
-
-	addedClasses do: [ :aClass | aScope addClass: aClass ].
-	removedClasses do: [ :aClass | aScope removeClass: aClass ].
-
-	addedPackages do: [ :aPackage | aScope addPackage: aPackage ].
-	removedPackages do: [ :aPackage |
-		aScope removePackage: aPackage ].
-
-	^ aScope
+	self class editScope: aScope withNodes: aCollection
 ]
 
 { #category : 'api' }

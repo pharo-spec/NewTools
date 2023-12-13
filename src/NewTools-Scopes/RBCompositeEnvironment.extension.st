@@ -43,6 +43,27 @@ RBCompositeEnvironment >> asScopeNode [
 ]
 
 { #category : '*NewTools-Scopes' }
+RBCompositeEnvironment >> definedClasses [
+	| definedClasses |
+	definedClasses := IdentitySet new: 4096.
+	self definedClassesDo: [ :each | each isMeta ifFalse: [definedClasses add: each] ].
+	^ definedClasses
+]
+
+{ #category : '*NewTools-Scopes' }
+RBCompositeEnvironment >> definedPackages [
+	"Defined packages ignores packages got from extended classes"
+	^ self definedClasses collect: [ :class | class package ]
+]
+
+{ #category : '*NewTools-Scopes' }
+RBCompositeEnvironment >> fullPackages [
+	
+	"full packages are those where all classes belong to the scope"
+	^ ScopesManager fullPackagesFrom: self definedClasses
+]
+
+{ #category : '*NewTools-Scopes' }
 RBCompositeEnvironment >> removeClass: aClass [
 
 	| envs  classEnv packaEnv packagesToRemove classesToAdd |

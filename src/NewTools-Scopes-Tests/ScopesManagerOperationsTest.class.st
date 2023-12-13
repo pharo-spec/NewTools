@@ -1,12 +1,12 @@
 Class {
-	#name : 'ScopesManagesOperationsTest',
+	#name : 'ScopesManagerOperationsTest',
 	#superclass : 'TestCase',
 	#category : 'NewTools-Scopes-Tests',
 	#package : 'NewTools-Scopes-Tests'
 }
 
 { #category : 'tests' }
-ScopesManagesOperationsTest >> testAddClassToOrEnvironment [
+ScopesManagerOperationsTest >> testAddClassToOrEnvironment [
 
 	| packageEnvB classEnv orEnv |
 	
@@ -20,12 +20,12 @@ ScopesManagesOperationsTest >> testAddClassToOrEnvironment [
 	orEnv addClass: ScClassA1.
 	orEnv addClass: ScClassA1 class.
 	
-	self assert: orEnv allClasses asSet equals: { ScClassA1 . ScClassB1 } asSet.
+	self assert: orEnv definedClasses asSet equals: { ScClassA1 . ScClassB1 . ScClassB1Sub . ScClassB1SubSub } asSet.
 	self assert: orEnv packages asSet equals: { ScClassA1 package . ScClassB1 package } asSet
 ]
 
 { #category : 'tests' }
-ScopesManagesOperationsTest >> testAddClassToOrEnvironmentMakingAPackageFull [
+ScopesManagerOperationsTest >> testAddClassToOrEnvironmentMakingAPackageFull [
 
 	| packageEnv classEnvA1 orEnv |
 	
@@ -45,7 +45,7 @@ ScopesManagesOperationsTest >> testAddClassToOrEnvironmentMakingAPackageFull [
 ]
 
 { #category : 'tests' }
-ScopesManagesOperationsTest >> testRemoveClassFromOrEnvironment [
+ScopesManagerOperationsTest >> testRemoveClassFromOrEnvironment [
 
 	| classEnvA1 packageEnvB orEnv |
 	
@@ -60,7 +60,7 @@ ScopesManagesOperationsTest >> testRemoveClassFromOrEnvironment [
 ]
 
 { #category : 'tests' }
-ScopesManagesOperationsTest >> testRemoveClassFromOrEnvironmentBreakingFullPackage [
+ScopesManagerOperationsTest >> testRemoveClassFromOrEnvironmentBreakingFullPackage [
 
 	| packageEnvA classEnv orEnv |
 	
@@ -74,5 +74,5 @@ ScopesManagesOperationsTest >> testRemoveClassFromOrEnvironmentBreakingFullPacka
 	orEnv removeClass: ScClassA1.
 	orEnv removeClass: ScClassA1 class.
 	
-	self assert: orEnv allClasses equals: { ScClassA2 } 
+	self assert: orEnv definedClasses equals: { ScClassA2 . ScClassA3 } asSet
 ]
