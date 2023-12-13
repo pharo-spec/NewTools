@@ -64,6 +64,15 @@ RBCompositeEnvironment >> fullPackages [
 ]
 
 { #category : '*NewTools-Scopes' }
+RBCompositeEnvironment >> orphanClasses [
+
+	"orphan classes are those whose packages are not full packages"
+	^ ScopesManager
+		  orphanClassesIn: self definedClasses
+		  havingFullPackages: self fullPackages
+]
+
+{ #category : '*NewTools-Scopes' }
 RBCompositeEnvironment >> removeClass: aClass [
 
 	| envs  classEnv packaEnv packagesToRemove classesToAdd |

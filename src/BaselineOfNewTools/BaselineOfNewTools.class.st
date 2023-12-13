@@ -142,6 +142,7 @@ BaselineOfNewTools >> baseline: spec [
 						'NewTools-Scopes-Editor' 
 						'NewTools-Scopes-Resources-A-Tests' 
 						'NewTools-Scopes-Resources-B-Tests' 
+						'NewTools-Scopes-Resources-C-Tests' 
 						'NewTools-Scopes-Tests');
 			group: 'default' with: #( 
 						'Playground' 
