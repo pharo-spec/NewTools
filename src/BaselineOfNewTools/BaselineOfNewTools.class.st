@@ -87,7 +87,8 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Scopes-Editor' with: [ spec requires: #('NewTools-Scopes') ];
 			package: 'NewTools-Scopes-Tests';
 			package: 'NewTools-Scopes-Resources-A-Tests';
-			package: 'NewTools-Scopes-Resources-B-Tests'.
+			package: 'NewTools-Scopes-Resources-B-Tests';
+			package: 'NewTools-Scopes-Resources-C-Tests'.
 
 		spec
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Morphic' );
