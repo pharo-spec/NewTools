@@ -82,6 +82,13 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-RewriterTools' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
 			package: 'NewTools-RewriterTools-Backend-Tests' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
 			package: 'NewTools-RewriterTools-Tests' with: [ spec requires: #('NewTools-RewriterTools') ];
+			"Scopes Editor"
+			package: 'NewTools-Scopes';
+			package: 'NewTools-Scopes-Editor' with: [ spec requires: #('NewTools-Scopes') ];
+			package: 'NewTools-Scopes-Tests';
+			package: 'NewTools-Scopes-Resources-A-Tests';
+			package: 'NewTools-Scopes-Resources-B-Tests';
+			package: 'NewTools-Scopes-Resources-C-Tests';
 			"ProfilerUI"
 			package: 'NewTools-ProfilerUI'.
 
@@ -127,24 +134,32 @@ BaselineOfNewTools >> baseline: spec [
 			group: #FileBrowser with: #( 
 						'NewTools-FileBrowser' 
 						'NewTools-FileBrowser-Tests' );
-      		group: #RewriterTools with: #(
-				   		'NewTools-RewriterTools-Backend'
-				   		'NewTools-RewriterTools'
-				   		'NewTools-RewriterTools-Backend-Tests'
-				   		'NewTools-RewriterTools-Tests' );
+   		group: #RewriterTools with: #(
+			   		'NewTools-RewriterTools-Backend'
+			   		'NewTools-RewriterTools'
+			   		'NewTools-RewriterTools-Backend-Tests'
+			   		'NewTools-RewriterTools-Tests' );
 			group: #ProfilerUI with: #( 'NewTools-ProfilerUI' );
+			"ScopesEditor"
+			group: #ScopesEditor with: #(
+						'NewTools-Scopes' 
+						'NewTools-Scopes-Editor' 
+						'NewTools-Scopes-Resources-A-Tests' 
+						'NewTools-Scopes-Resources-B-Tests' 
+						'NewTools-Scopes-Resources-C-Tests' 
+						'NewTools-Scopes-Tests');
 			group: 'default' with: #( 
 						'Playground' 
 						'Inspector' 
 						'CritiqueBrowser' 
 						'Debugger'
-				   		'SystemReporter' 
+						'SystemReporter' 
 						'FontChooser' 
 						'Methods'
-				   		'Spotter'
-            			'RewriterTools'
-						'ProfilerUI'
-						) ]
+						'Spotter'
+						'RewriterTools'
+						'ScopesEditor'
+						'ProfilerUI') ]
 ]
 
 { #category : 'external projects' }
