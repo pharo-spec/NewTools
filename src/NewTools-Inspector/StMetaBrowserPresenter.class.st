@@ -69,6 +69,23 @@ StMetaBrowserPresenter >> compile: aString [
 ]
 
 { #category : 'initialization' }
+StMetaBrowserPresenter >> connectPresenters [ 
+
+	classes
+		transmitTo: methods
+		transform: [ :aClass | self methodsOf: aClass ]
+		postTransmission: [ :destination | destination selectIndex: 1 ].
+
+	methods transmitDo: [ :aMethod |
+		self selectedMethod
+			ifNotNil: [ : s | 	self updateSourceWith: aMethod ]
+			ifNil: [ 
+				source 
+					beForObject: self model;
+					text: String empty ] ]
+]
+
+{ #category : 'initialization' }
 StMetaBrowserPresenter >> initializePresenters [
 
 	| classHierarchy |
@@ -91,16 +108,11 @@ StMetaBrowserPresenter >> initializePresenters [
 		           yourself.
 
 	source := self newCode
-		          lineNumbers: StPharoSettings codeShowLineNumbers;
-		          beForMethod: self selectedMethod;
-		          whenSubmitDo: [ :aString | self compile: aString ];
-		          whenResetDo: [ self updateSourceWith: self selectedMethod ];
-		          yourself.
-
-	classes
-		transmitTo: methods
-		transform: [ :aClass | self methodsOf: aClass ].
-	methods transmitDo: [ :aMethod | self updateSourceWith: aMethod ].
+					lineNumbers: StPharoSettings codeShowLineNumbers;
+			 		beForScripting;
+					whenSubmitDo: [ :aString | self compile: aString ];
+					whenResetDo: [ self updateSourceWith: self selectedMethod ];
+					yourself.
 
 	classes
 		selectPath: (Array new: classHierarchy size withAll: 1)
@@ -121,7 +133,7 @@ StMetaBrowserPresenter >> methodsOf: aClass [
 
 ]
 
-{ #category : 'accessing' }
+{ #category : 'backstops' }
 StMetaBrowserPresenter >> selectedClass [
 
 	^ classes selection selectedItem
