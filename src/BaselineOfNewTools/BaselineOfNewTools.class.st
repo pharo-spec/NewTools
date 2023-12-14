@@ -59,6 +59,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-FontChooser-Tests' with: [ spec requires: #( 'NewTools-FontChooser' ) ];
 			package: 'NewTools-SpTextPresenterDecorators';
 			package: 'NewTools-Debugger-Breakpoints-Tools' with: [ spec requires: #( 'NewTools-Inspector' ) ];
+			package: 'NewTools-ProfilerUI' with: [ spec requires: #('NewTools-SpTextPresenterDecorators') ];
 			package: 'NewTools-ProjectLoader';
 			package: 'NewTools-ProjectLoader-Microdown';
 			"Object-centric breakpoints"
