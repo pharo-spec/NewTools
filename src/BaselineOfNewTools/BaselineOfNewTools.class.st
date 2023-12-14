@@ -81,7 +81,14 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-RewriterTools-Backend';
 			package: 'NewTools-RewriterTools' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
 			package: 'NewTools-RewriterTools-Backend-Tests' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
-			package: 'NewTools-RewriterTools-Tests' with: [ spec requires: #('NewTools-RewriterTools') ].
+			package: 'NewTools-RewriterTools-Tests' with: [ spec requires: #('NewTools-RewriterTools') ];
+			"Scopes Editor"
+			package: 'NewTools-Scopes';
+			package: 'NewTools-Scopes-Editor' with: [ spec requires: #('NewTools-Scopes') ];
+			package: 'NewTools-Scopes-Tests';
+			package: 'NewTools-Scopes-Resources-A-Tests';
+			package: 'NewTools-Scopes-Resources-B-Tests';
+			package: 'NewTools-Scopes-Resources-C-Tests'.
 
 		spec
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Morphic' );
@@ -130,6 +137,14 @@ BaselineOfNewTools >> baseline: spec [
 				    		'NewTools-RewriterTools'
 				    		'NewTools-RewriterTools-Backend-Tests'
 				    		'NewTools-RewriterTools-Tests' );
+			"ScopesEditor"
+			group: #ScopesEditor with: #(
+						'NewTools-Scopes' 
+						'NewTools-Scopes-Editor' 
+						'NewTools-Scopes-Resources-A-Tests' 
+						'NewTools-Scopes-Resources-B-Tests' 
+						'NewTools-Scopes-Resources-C-Tests' 
+						'NewTools-Scopes-Tests');
 			group: 'default' with: #( 
 						'Playground' 
 						'Inspector' 
@@ -139,7 +154,8 @@ BaselineOfNewTools >> baseline: spec [
 						'FontChooser' 
 						'Methods'
 				   		'Spotter'
-            					'RewriterTools') ]
+            					'RewriterTools'
+						'ScopesEditor') ]
 ]
 
 { #category : 'external projects' }
