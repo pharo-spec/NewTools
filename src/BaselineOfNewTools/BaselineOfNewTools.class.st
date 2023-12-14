@@ -77,11 +77,13 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Debugger-Fuel';
 			package: 'NewTools-Debugger-Fuel-Tests' with: [ spec requires: #( 'NewTools-Debugger-Fuel' ) ];
 			package: 'NewTools-Fuel';
-     			"Rewriter Tools"
+     		"Rewriter Tools"
 			package: 'NewTools-RewriterTools-Backend';
 			package: 'NewTools-RewriterTools' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
 			package: 'NewTools-RewriterTools-Backend-Tests' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
-			package: 'NewTools-RewriterTools-Tests' with: [ spec requires: #('NewTools-RewriterTools') ].
+			package: 'NewTools-RewriterTools-Tests' with: [ spec requires: #('NewTools-RewriterTools') ];
+			"ProfilerUI"
+			package: 'NewTools-ProfilerUI'.
 
 		spec
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Morphic' );
@@ -125,11 +127,12 @@ BaselineOfNewTools >> baseline: spec [
 			group: #FileBrowser with: #( 
 						'NewTools-FileBrowser' 
 						'NewTools-FileBrowser-Tests' );
-      			group: #RewriterTools with: #(
-				    		'NewTools-RewriterTools-Backend'
-				    		'NewTools-RewriterTools'
-				    		'NewTools-RewriterTools-Backend-Tests'
-				    		'NewTools-RewriterTools-Tests' );
+      		group: #RewriterTools with: #(
+				   		'NewTools-RewriterTools-Backend'
+				   		'NewTools-RewriterTools'
+				   		'NewTools-RewriterTools-Backend-Tests'
+				   		'NewTools-RewriterTools-Tests' );
+			group: #ProfilerUI with: #( 'NewTools-ProfilerUI' );
 			group: 'default' with: #( 
 						'Playground' 
 						'Inspector' 
@@ -139,7 +142,9 @@ BaselineOfNewTools >> baseline: spec [
 						'FontChooser' 
 						'Methods'
 				   		'Spotter'
-            					'RewriterTools') ]
+            			'RewriterTools'
+						'ProfilerUI'
+						) ]
 ]
 
 { #category : 'external projects' }
