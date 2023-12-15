@@ -127,7 +127,7 @@ StDebuggerActionModelTest >> newSessionWithBlockContext [
 	| process method |
 	method := self class >> #methodWithBlockContext.
 	methodWithBlockContextOriginalSource := method sourceCode.
-	process := [ method valueWithReceiver: self arguments: #(  ) ] newProcess.
+	process := [ method valueWithReceiver: self ] newProcess.
 	self setSessionAndDebuggerModelForMethod: method inContext: process suspendedContext.
 
 	[ debugActionModel topContext closure isNil ] whileTrue: [
@@ -142,7 +142,7 @@ StDebuggerActionModelTest >> newSessionWithDeadHomeBlockContext [
 	| process method |
 	method := self class >> #evaluateMethodWithDeadHomeBlockContext.
 	methodWithBlockContextOriginalSource := method sourceCode.
-	process := [ method valueWithReceiver: self arguments: #(  ) ]
+	process := [ method valueWithReceiver: self ]
 		           newProcess.
 	self
 		setSessionAndDebuggerModelForMethod: method
@@ -195,7 +195,7 @@ StDebuggerActionModelTest >> setUp [
 	| method process |
 	super setUp.
 	method := self class >> #setResult.
-	process := [ method valueWithReceiver: self arguments: #(  ) ]
+	process := [ method valueWithReceiver: self ]
 		           newProcess.
 
 	self
@@ -1151,40 +1151,60 @@ StDebuggerActionModelTest >> testUpdateTopContext [
 
 { #category : 'tests - contexts' }
 StDebuggerActionModelTest >> testUpdateTopContextAfterSessionOperation [
-	|mockDebugActionModel context|
+
+	| mockDebugActionModel context |
 	context := [  ] asContext.
 	mockDebugActionModel := StMockDebuggerActionModel new.
 	mockDebugActionModel stepInto: context.
-	self assert: mockDebugActionModel tag equals: #updateTopContext.	
-	mockDebugActionModel clear; clearDebugSession.
-	
+	self assert: mockDebugActionModel tag equals: #updateTopContext.
+	mockDebugActionModel
+		clear;
+		clearDebugSession.
+
 	mockDebugActionModel := StMockDebuggerActionModel new.
 	mockDebugActionModel stepOver: context.
 	self assert: mockDebugActionModel tag equals: #updateTopContext.
-	mockDebugActionModel clear; clearDebugSession.
-	
+	mockDebugActionModel
+		clear;
+		clearDebugSession.
+
 	mockDebugActionModel := StMockDebuggerActionModel new.
 	mockDebugActionModel stepThrough: context.
 	self assert: mockDebugActionModel tag equals: #updateTopContext.
-	mockDebugActionModel clear; clearDebugSession.
-	
+	mockDebugActionModel
+		clear;
+		clearDebugSession.
+
 	mockDebugActionModel := StMockDebuggerActionModel new.
 	mockDebugActionModel restartContext: context.
 	self assert: mockDebugActionModel tag equals: #updateTopContext.
-	mockDebugActionModel clear; clearDebugSession.
-	
+	mockDebugActionModel
+		clear;
+		clearDebugSession.
+
 	mockDebugActionModel := StMockDebuggerActionModel new.
-	mockDebugActionModel returnValueFromExpression: 'nil' fromContext: [] asContext.
+	mockDebugActionModel
+		returnValueFromExpression: 'nil'
+		fromContext: [  ] asContext.
 	self assert: mockDebugActionModel tag equals: #updateTopContext.
-	mockDebugActionModel clear; clearDebugSession.
-	
+	mockDebugActionModel
+		clear;
+		clearDebugSession.
+
 	mockDebugActionModel := StMockDebuggerActionModel new.
-	mockDebugActionModel runToSelection: nil inContext: nil.
+	mockDebugActionModel runToSelection: nil inContext: StMockContext new.
 	self assert: mockDebugActionModel tag equals: #updateTopContext.
-	mockDebugActionModel clear; clearDebugSession.
-	
+	mockDebugActionModel
+		clear;
+		clearDebugSession.
+
 	mockDebugActionModel := StMockDebuggerActionModel new.
-	mockDebugActionModel implement: nil inClass: nil forContext: nil.
+	mockDebugActionModel
+		implement: nil
+		inClass: nil
+		forContext: StMockContext new.
 	self assert: mockDebugActionModel tag equals: #updateTopContext.
-	mockDebugActionModel clear; clearDebugSession
+	mockDebugActionModel
+		clear;
+		clearDebugSession
 ]

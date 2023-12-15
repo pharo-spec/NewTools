@@ -77,6 +77,16 @@ StTestDebuggerProvider >> debuggerWithFailingTestContext [
 ]
 
 { #category : 'helpers' }
+StTestDebuggerProvider >> debuggerWithGeneratingCodeContext [
+
+	[ self methodThatGeneratesCode ]
+		on: StGenerateCode 
+		do: [ :err |
+			self sessionFor: err signalerContext exception: err.
+			^ self newDebugger ]
+]
+
+{ #category : 'helpers' }
 StTestDebuggerProvider >> debuggerWithMissingClassContext [
 	"The called method must contain a undeclared variable (the missing class).
 	It makes the CI test fail, so it has to be generated and removed after usage.
@@ -162,6 +172,15 @@ StTestDebuggerProvider >> intermediateRecursiveMethodCall [
 StTestDebuggerProvider >> methodProducingDNU [
 
 	^ self foobar
+]
+
+{ #category : 'helpers' }
+StTestDebuggerProvider >> methodThatGeneratesCode [
+
+	| asserter |
+	asserter := TestAsserter new.
+	
+	asserter see: 42 + 66 + 3
 ]
 
 { #category : 'helpers' }
@@ -263,6 +282,35 @@ StTestDebuggerProvider >> sessionWithDNUAfterStep [
 		                   on: process
 		                   startedAt: context.
 	sessionForTests exception: (OupsNullException fromSignallerContext: context).
+	^ sessionForTests
+]
+
+{ #category : 'helpers' }
+StTestDebuggerProvider >> sessionWithInlinedLoop [
+
+	| context process sessionForTests |
+	context := [
+	           | a b nbMonth |
+	           a := 20.
+	           b := 0.
+	           nbMonth := 0.
+	           [ a > b ] whileTrue: [
+		           | list |
+		           nbMonth := nbMonth + 1.
+		           list := #( 1 2 3 ) asOrderedCollection collect: [ :e |
+			                   e + nbMonth ].
+		           b := b + 1 ].
+	           a := b * 42.
+	           ^ a ] asContext.
+	process := Process
+		           forContext: context
+		           priority: Processor userInterruptPriority.
+	sessionForTests := DebugSession
+		                   named: 'test sessionProviderForDebuggerTestsWithInlinedLoop'
+		                   on: process
+		                   startedAt: context.
+	sessionForTests exception:
+		(OupsNullException fromSignallerContext: context).
 	^ sessionForTests
 ]
 

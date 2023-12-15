@@ -93,6 +93,9 @@ Class {
 		'EnableStackColoring',
 		'FastTDD'
 	],
+	#classInstVars : [
+		'layoutConfigurator'
+	],
 	#category : 'NewTools-Debugger-View',
 	#package : 'NewTools-Debugger',
 	#tag : 'View'
@@ -122,6 +125,19 @@ StDebugger class >> closeAllDebuggers [
 	self allInstancesDo: [ :dbg | dbg close ]
 ]
 
+{ #category : 'accessing' }
+StDebugger class >> configureLayout [
+	 ^self layoutConfigurator selectedLayout
+]
+
+{ #category : 'accessing' }
+StDebugger class >> configureLayout: aSymbol [
+
+	self layoutConfigurator selectedLayout: aSymbol.
+	SystemAnnouncer uniqueInstance announce:
+		StDebuggerLayoutChangedAnnouncement new
+]
+
 { #category : 'instance creation' }
 StDebugger class >> debugSession: aDebugSession [
 
@@ -138,6 +154,21 @@ StDebugger class >> debugSession: aDebugSession [
 { #category : 'accessing' }
 StDebugger class >> debuggerContextClass [
 	^ StDebuggerContext
+]
+
+{ #category : 'accessing' }
+StDebugger class >> debuggerLayoutSettingsOn: aBuilder [
+
+	<systemsettings>
+	(aBuilder pickOne: #configureLayout)
+		parent: #debugging;
+		label: 'Debugger Layout';
+		target: StDebugger;
+		default: #beVerticalStackThenCode;
+		domainValues:
+			#( #beHorizontalCodeThenStack #beHorizontalStackThenCode
+			   #beVerticalCodeThenStack #beVerticalStackThenCode );
+		description: ''
 ]
 
 { #category : 'accessing' }
@@ -199,6 +230,13 @@ StDebugger class >> hasAnyActivatedExtension: extensionsClasses [
 StDebugger class >> initialize [ 
 
 	EnableStackColoring := true
+]
+
+{ #category : 'accessing' }
+StDebugger class >> layoutConfigurator [
+
+	^ layoutConfigurator ifNil: [
+		  layoutConfigurator := StDebuggerLayoutConfiguration new ]
 ]
 
 { #category : 'opening' }
@@ -311,6 +349,12 @@ StDebugger >> canExecuteReturnCommand [
 	^ self debuggerActionModel isInterruptedContextDead not
 ]
 
+{ #category : 'testing' }
+StDebugger >> canGenerateAndProceed [
+
+	^ self debuggerActionModel isInterruptedContextGeneratingCode
+]
+
 { #category : 'actions' }
 StDebugger >> clear [
 
@@ -370,7 +414,7 @@ StDebugger >> code [
 	^ code
 ]
 
-{ #category : 'specs' }
+{ #category : 'layout' }
 StDebugger >> codeLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -501,6 +545,12 @@ StDebugger >> defaultLayout [
 		add: stackAndCodeContainer;
 		add: #inspector;
 		yourself
+]
+
+{ #category : 'testing' }
+StDebugger >> defaultSelectedCodeRangeForContext: aContext [
+
+	^ self debuggerActionModel selectedCodeRangeForContext: aContext
 ]
 
 { #category : 'code pane' }
@@ -671,6 +721,7 @@ StDebugger >> initialize [
 	self debuggerActionModel updateContextPredicate.
 	self forceSessionUpdate.
   	self susbcribeToExtensionToggleAnnouncement.
+	self susbcribeToLayoutChangesAnnouncement.
 	
 	programmaticallyClosed := false.
 ]
@@ -760,37 +811,13 @@ StDebugger >> initializeShortcuts: aWindowPresenter [
 { #category : 'stack' }
 StDebugger >> initializeStack [
 
-	stackTable := self newTable.
+	stackTable := self newList.
 	stackTable
 		activateOnDoubleClick;
 		whenActivatedDo: [ :selection | self doBrowseClass ].
-	stackTable
-		addColumn: ((SpImageTableColumn title: '' evaluated: [ :context | self stackIconForContext: context ])
-				 width: 8;
-				 sortFunction: nil;
-				 yourself);
-		addColumn: ((SpStringTableColumn title: 'Class' evaluated: [ :context | self printReceiverClassInContext: context ])
-				 displayColor: [ :context | self stackColorForContext: context ];
-				 sortFunction: nil;
-				 yourself);
-		addColumn: ((SpStringTableColumn title: 'Method' evaluated: [ :context |
-					  | method |
-					  method := context method.
-					  method isCompiledBlock
-						  ifTrue: [ method sourceNode sourceCode ]
-						  ifFalse: [ method selector ] ])
-				 displayColor: [ :context | self stackColorForContext: context ];
-				 sortFunction: nil;
-				 yourself);
-		addColumn: ((SpStringTableColumn title: 'Package' evaluated: [ :context |
-					  | package |
-					  package := context method package.
-					  package
-						  ifNil: [ '-' ]
-						  ifNotNil: [ package name asString ] ])
-				 displayColor: [ :context | self stackColorForContext: context ];
-				 sortFunction: nil;
-				 yourself).
+	stackTable display:[:selection| StContextPrinter printContext: selection].
+	stackTable displayColor:[ :context | self stackColorForContext: context ].
+	stackTable displayIcon: [ :context| self stackIconForContext: context ].	
 	stackTable transmitDo: [ :context |
 		stackTable selection isEmpty ifFalse: [
 			self updateInspectorFromContext: context.
@@ -935,22 +962,6 @@ StDebugger >> peelToFirstLike: aContext [
 	self code text: self currentContext sourceCode
 ]
 
-{ #category : 'printing' }
-StDebugger >> printReceiverClassInContext: aContext [
-
-	| receiverClass methodClass |
-	receiverClass := aContext receiver class.
-	methodClass := aContext method methodClass.
-	receiverClass == methodClass ifTrue: [ ^ receiverClass name ].
-	^ (WriteStream on: String new)
-		  nextPutAll: receiverClass name;
-		  space;
-		  nextPut: $(;
-		  nextPutAll: methodClass name;
-		  nextPut: $);
-		  contents
-]
-
 { #category : 'actions' }
 StDebugger >> proceedDebugSession [
 
@@ -1078,6 +1089,16 @@ StDebugger >> runToSelection [
 ]
 
 { #category : 'actions' }
+StDebugger >> saveGeneratedCodeAndProceed [
+
+	self
+		acceptCodeChanges: self code text
+		forContext: self selectedContext.
+
+	self proceedDebugSession
+]
+
+{ #category : 'actions' }
 StDebugger >> selectNextExecutedExpression [
 
 	| sourceNodeExecuted |
@@ -1086,10 +1107,12 @@ StDebugger >> selectNextExecutedExpression [
 		(sourceNodeExecuted start to: sourceNodeExecuted stop)
 ]
 
-{ #category : 'code pane' }
+{ #category : 'highlighting' }
 StDebugger >> selectedCodeRangeForContext: aContext [
 
-	^ self debuggerActionModel selectedCodeRangeForContext: aContext
+	^ self debuggerActionModel exception
+		  selectedCodeRangeForContext: aContext
+		  forDebugger: self
 ]
 
 { #category : 'accessing - model' }
@@ -1144,17 +1167,15 @@ StDebugger >> stack [
 
 ]
 
-{ #category : 'specs' }
+{ #category : 'layout' }
 StDebugger >> stackAndCodeLayout [
 
-	^ SpPanedLayout newTopToBottom
-		positionOfSlider: 30 percent;
-		add: self stackLayout;
-		add: self codeLayout;
-		yourself
+	^ self class layoutConfigurator configureForLayouts: {
+			  (#stack -> self stackLayout).
+			  (#code -> self codeLayout) } asDictionary
 ]
 
-{ #category : 'specs' }
+{ #category : 'layout' }
 StDebugger >> stackAndCodeWithExtensionsLayout [
 
 	^ (SpPanedLayout newLeftToRight
@@ -1196,10 +1217,10 @@ StDebugger >> stackHeader [
 StDebugger >> stackIconForContext: context [
 
 	self unsavedCodeChanges at: context ifAbsent: [ ^ nil ].
-	^ self iconNamed: #overlayDirty
+	^ self iconNamed: #repair
 ]
 
-{ #category : 'specs' }
+{ #category : 'layout' }
 StDebugger >> stackLayout [
 	^ SpBoxLayout newTopToBottom
 		add: #stackHeader
@@ -1291,6 +1312,15 @@ StDebugger >> susbcribeToExtensionToggleAnnouncement [
 		to: self
 ]
 
+{ #category : 'subscription' }
+StDebugger >> susbcribeToLayoutChangesAnnouncement [
+
+	SystemAnnouncer uniqueInstance weak
+		when: StDebuggerLayoutChangedAnnouncement
+		send: #updateLayout
+		to: self
+]
+
 { #category : 'accessing - presenters' }
 StDebugger >> toolbar [
 
@@ -1341,14 +1371,14 @@ StDebugger >> updateCodeFromContext: aContext [
 	aContext ifNil: [ ^ self clearCode ].
 
 	self recordUnsavedCodeChanges.
-	selectionInterval := self selectedCodeRangeForContext: aContext.
-	aContext sourceCode = self code text ifFalse: [ 
+	aContext sourceCode = self code text ifFalse: [
 		self updateSourceCodeFor: aContext ].
+	selectionInterval := self selectedCodeRangeForContext: aContext.
 	formerCodeInteractionModel := self code interactionModel.
 	self code beForContext: aContext.
 	"add bindings of the old interaction model in the new one"
-	formerCodeInteractionModel ifNotNil: [ 
-		formerCodeInteractionModel bindings associations do: [ :assoc | 
+	formerCodeInteractionModel ifNotNil: [
+		formerCodeInteractionModel bindings associations do: [ :assoc |
 			self code interactionModel addBinding: assoc ] ].
 	self code selectionInterval:
 		(selectionInterval last to: selectionInterval last - 1).
@@ -1441,6 +1471,13 @@ StDebugger >> updateInspectorFromContext: aContext [
 	inspector updateWith: (self newDebuggerContextFor: aContext).
 	self flag: #DBG_INSPECTOR_UPDATE_BUG.
 	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p | p update ]
+]
+
+{ #category : 'updating' }
+StDebugger >> updateLayout [
+
+	self setStackAndCodeContainer.
+	self layout: self defaultLayout
 ]
 
 { #category : 'initialization' }

@@ -9,15 +9,52 @@ Class {
 }
 
 { #category : 'running' }
+StFontChooserPresenterTest >> newAllFamilyFontChooser: aFamilyName [
+
+	^ FontChooser newWithAllFamilies
+		font: (LogicalFont familyName: aFamilyName pointSize: 12);
+		yourself.	
+]
+
+{ #category : 'running' }
+StFontChooserPresenterTest >> newAllFamilyFontChooserFont: aLogicalFont [
+
+	^ FontChooser newWithAllFamilies
+		font: aLogicalFont;
+		yourself.	
+]
+
+{ #category : 'running' }
+StFontChooserPresenterTest >> newDefaultFamilyFontChooser: aFamilyName [
+
+	^ self newDefaultFamilyFontChooserFont: (LogicalFont familyName: aFamilyName pointSize: 12)
+]
+
+{ #category : 'running' }
+StFontChooserPresenterTest >> newDefaultFamilyFontChooserFont: aLogicalFont [
+
+	^ FontChooser newWithDefaultFamilies
+		font: aLogicalFont;
+		yourself.	
+]
+
+{ #category : 'tests' }
+StFontChooserPresenterTest >> openPresenterShouldntRaiseError [
+
+	self shouldnt: [ 
+			| window | 
+			window := presenter open.
+			window close ] raise: Error
+]
+
+{ #category : 'running' }
 StFontChooserPresenterTest >> setUp [
 
 	| fontChooser |
 	
 	super setUp.
 	
-	fontChooser := FontChooser newWithDefaultFamilies
-		font: (LogicalFont familyName: 'Bitmap DejaVu Sans' pointSize: 12);
-		yourself.
+	fontChooser := self newDefaultFamilyFontChooser: 'Bitmap DejaVu Sans'.
 	
 	presenter := StFontChooserPresenter on: fontChooser.
 	
@@ -36,6 +73,50 @@ StFontChooserPresenterTest >> testFamilyListCorrectAtInitialization [
 StFontChooserPresenterTest >> testFirstStyleIsSelected [
 	
 	self assert: (presenter fontStyleList selectedItems collect: [:each | each styleName ]) equals: #('Regular')
+]
+
+{ #category : 'tests' }
+StFontChooserPresenterTest >> testOpenAllOnNonExistantFontFamily [
+
+	| fontChooser |
+
+	fontChooser := self newAllFamilyFontChooser: 'dd08sadna80nsazczxcz'.
+	presenter := StFontChooserPresenter on: fontChooser.
+
+	self openPresenterShouldntRaiseError.
+]
+
+{ #category : 'tests' }
+StFontChooserPresenterTest >> testOpenAllOnUnloadedFontFamily [
+
+	| fontChooser |
+
+	fontChooser := self newAllFamilyFontChooser: 'Arial'.
+	presenter := StFontChooserPresenter on: fontChooser.
+
+	self openPresenterShouldntRaiseError.
+]
+
+{ #category : 'tests' }
+StFontChooserPresenterTest >> testOpenDefaultOnNonExistantFontFamily [
+
+	| fontChooser |
+
+	fontChooser := self newDefaultFamilyFontChooser: 'dd08sadna80nsazczxcz'.
+	presenter := StFontChooserPresenter on: fontChooser.
+
+	self openPresenterShouldntRaiseError.
+]
+
+{ #category : 'tests' }
+StFontChooserPresenterTest >> testOpenDefaultOnUnloadedFontFamily [
+
+	| fontChooser |
+
+	fontChooser := self newDefaultFamilyFontChooser: 'Arial'.
+	presenter := StFontChooserPresenter on: fontChooser.
+
+	self openPresenterShouldntRaiseError.
 ]
 
 { #category : 'tests' }

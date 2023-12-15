@@ -1,7 +1,7 @@
-Extension { #name : 'RPackage' }
+Extension { #name : 'Package' }
 
 { #category : '*NewTools-Spotter-Extensions' }
-RPackage >> spotterClassesFor: aStep [
+Package >> spotterClassesFor: aStep [
 	<stSpotterOrder: 20>
 	aStep listProcessor
 			allCandidates: [ self definedClasses sorted: [ :a :b | a name < b name ] ];
@@ -10,7 +10,7 @@ RPackage >> spotterClassesFor: aStep [
 ]
 
 { #category : '*NewTools-Spotter-Extensions' }
-RPackage >> spotterExtensionMethodsFor: aStep [
+Package >> spotterExtensionMethodsFor: aStep [
 	<stSpotterOrder: 30>
 	aStep listProcessor
 			allCandidates: [ self extensionMethods ];
@@ -19,7 +19,7 @@ RPackage >> spotterExtensionMethodsFor: aStep [
 ]
 
 { #category : '*NewTools-Spotter-Extensions' }
-RPackage >> spotterMonticelloPackageFor: aStep [
+Package >> spotterMonticelloPackageFor: aStep [
 	<stSpotterOrder: 41>
 	
 	aStep listProcessor
@@ -32,7 +32,7 @@ RPackage >> spotterMonticelloPackageFor: aStep [
 ]
 
 { #category : '*NewTools-Spotter-Extensions' }
-RPackage >> spotterMonticelloWorkingCopyFor: aStep [
+Package >> spotterMonticelloWorkingCopyFor: aStep [
 	<stSpotterOrder: 42>
 	aStep listProcessor
 		title: 'Monticello Working Copy';
@@ -44,7 +44,7 @@ RPackage >> spotterMonticelloWorkingCopyFor: aStep [
 ]
 
 { #category : '*NewTools-Spotter-Extensions' }
-RPackage >> spotterTagsFor: aStep [
+Package >> spotterTagsFor: aStep [
 	<stSpotterOrder: 20>
 	self classTags size <= 1 ifTrue: [ ^ self ].
 	aStep listProcessor
@@ -55,7 +55,7 @@ RPackage >> spotterTagsFor: aStep [
 ]
 
 { #category : '*NewTools-Spotter-Extensions' }
-RPackage >> stActDefault [
+Package >> stActDefault [
 
 	^ Smalltalk tools browser openOnPackage: self
 ]

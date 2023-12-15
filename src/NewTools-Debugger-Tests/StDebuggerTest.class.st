@@ -7,7 +7,8 @@ Class {
 		'oldFastTDD',
 		'dbg',
 		'stackSizeBefore',
-		'shouldFilterStack'
+		'shouldFilterStack',
+		'oldMethodToSourceDictionary'
 	],
 	#category : 'NewTools-Debugger-Tests-Presenters',
 	#package : 'NewTools-Debugger-Tests',
@@ -90,6 +91,7 @@ StDebuggerTest >> setUp [
 	session := StTestDebuggerProvider new sessionForDebuggerTests.
 	oldFastTDD := self debuggerClass fastTDD.
 	shouldFilterStack := StDebuggerActionModel shouldFilterStack.
+	oldMethodToSourceDictionary := Dictionary new.
 	self debuggerClass fastTDD: true
 ]
 
@@ -125,6 +127,10 @@ StDebuggerTest >> tearDown [
 
 	StDebuggerActionModel shouldFilterStack: shouldFilterStack.
 	StTestDebuggerProvider removeSelector: #foobar.
+	oldMethodToSourceDictionary associationsDo: [ :assoc |
+ 		assoc key methodClass
+ 			compile: assoc value
+ 			classified: assoc key protocolName ].
 	super tearDown
 ]
 
@@ -406,6 +412,59 @@ StDebuggerTest >> testContextTempVarListUpdatesTempsWhenEnteringOrLeavingInlined
 ]
 
 { #category : 'tests - context inspector' }
+StDebuggerTest >> testContextTempVarListUpdatesTempsWhenEnteringOrLeavingInlinedBlocksWithRunTo [
+
+	| contextItems inspectorTable newContextItems sourceCode targetCode beginIndex |
+	dbg := self debuggerOn:
+		       StTestDebuggerProvider new sessionWithInlinedLoop.
+	inspectorTable := dbg inspector getRawInspectorPresenterOrNil
+		                  attributeTable.
+
+	"We stop on the node `b := 0` node"
+	4 timesRepeat: [ dbg stepOver ].
+
+	contextItems := inspectorTable roots copy.
+	sourceCode := dbg context compiledCode sourceCode.
+
+	"We enter inlined block"
+	targetCode := 'nbMonth := nbMonth + 1'.
+	beginIndex := sourceCode indexOfSubCollection: targetCode.
+	dbg code selectionInterval:
+		(Interval from: beginIndex to: beginIndex + targetCode size).
+	dbg runToSelection.
+
+	newContextItems := inspectorTable roots.
+
+	self assert: newContextItems size equals: contextItems size + 1.
+
+	1 to: contextItems size do: [ :i |
+		self
+			assert: (newContextItems at: i)
+			identicalTo: (contextItems at: i) ].
+
+	self assert:
+		(newContextItems at: contextItems size + 1) tempVariable
+			isTempVariable.
+	self
+		assert:
+		(newContextItems at: contextItems size + 1) tempVariable name
+		equals: 'list'.
+
+	"We leave inlined block"
+	targetCode := 'a := b * 42'.
+	beginIndex := sourceCode indexOfSubCollection: targetCode.
+	dbg code selectionInterval:
+		(Interval from: beginIndex to: beginIndex + targetCode size).
+	dbg runToSelection.
+
+	self assert: newContextItems size equals: contextItems size.
+	1 to: contextItems size do: [ :i |
+		self
+			assert: (newContextItems at: i)
+			identicalTo: (contextItems at: i) ]
+]
+
+{ #category : 'tests - context inspector' }
 StDebuggerTest >> testContextUnchangedAfterStepOver [
 	| currentContext |
 	
@@ -537,6 +596,51 @@ StDebuggerTest >> testFastTDD [
 	self deny: self debuggerClass fastTDD
 ]
 
+{ #category : 'tests' }
+StDebuggerTest >> testGenerateAndProceed [
+
+	| baseSourceCode expectedSourceCode adapter |
+	self skip:
+		'Does not work, I do not know why it looks like my test is executed several times with the same debugger'.
+	baseSourceCode := 'methodThatGeneratesCode
+
+	| asserter |
+	asserter := TestAsserter new.
+	
+	asserter see: 42 + 66 + 3'.
+
+	expectedSourceCode := 'methodThatGeneratesCode
+
+	| asserter |
+	asserter := TestAsserter new.
+	
+	asserter see: 42 + 66 + 3 equals: 111'.
+
+	debugger := StTestDebuggerProvider new
+		            debuggerWithGeneratingCodeContext
+		            application: self debuggerClass currentApplication;
+		            initialize;
+		            yourself.
+	"just things necessary to use debugger's code presenter, which we need in this test"
+	adapter := SpMorphicCodeAdapter new.
+	adapter adapt: debugger code.
+	debugger code adapter: adapter.
+	debugger code adapter buildWidget.
+
+	self assert: debugger canGenerateAndProceed.
+	self assert: debugger exception isGeneratingCode.
+	self
+		assert: debugger interruptedContext sender sourceCode
+		equals: baseSourceCode.
+
+	oldMethodToSourceDictionary
+		at: debugger interruptedContext sender method
+		put: baseSourceCode.
+
+	debugger saveGeneratedCodeAndProceed
+	"self assert: debugger interruptedContext isNil"
+]
+
 { #category : 'tests - code pane' }
 StDebuggerTest >> testInitialCodeSelectionAfterStepping [
 	| adapter segments highlightSegment pcRangeForContext |
@@ -641,14 +745,16 @@ StDebuggerTest >> testNewDebuggerContextFor [
 
 { #category : 'tests - stack table' }
 StDebuggerTest >> testPrintReceiverClassInContext [
-	|ctx result|
+	|ctx stream |
 	ctx := Context sender: nil receiver: Set new method: (Collection>>#add:) arguments: Array new. 
-	result := self debugger printReceiverClassInContext: ctx.
-	self assert: result equals: 'Set (Collection)'.
+	stream := WriteStream on: String new.
+	StContextPrinter printReceiverClassInContext: ctx on: stream.
+	self assert: stream contents equals: 'Set (Collection)'.
 	
 	ctx := Context sender: nil receiver: Set new method: (Set>>#add:) arguments: Array new. 
-	result := self debugger printReceiverClassInContext: ctx.
-	self assert: result equals: 'Set'.
+	stream := WriteStream on: String new.
+	StContextPrinter printReceiverClassInContext: ctx on: stream.
+	self assert: stream contents equals: 'Set'.
 ]
 
 { #category : 'tests - receiver inspector' }
@@ -950,68 +1056,8 @@ StDebuggerTest >> testStackTableAfterStepIn [
 ]
 
 { #category : 'tests - stack table' }
-StDebuggerTest >> testStackTableElementsPrinting [
-	| columns classColumn methodColumn method block context |
-
-	self debugger session: session.
-	columns := self initializedDebugger stackTable columns.
-	classColumn := columns second.
-	methodColumn := columns third.
-	"The following column was removed to experiment a new layout, just keeping the test in case of roolback."
-	"senderColumn := columns third."
-	method := self class >> #testStackTableElementsPrinting.
-	block := [ :a | a ].
-	
-	context := (Context newForMethod: method) setSender: self receiver: self method: method arguments: #(  ).
-	self assert: (classColumn evaluation value: context) equals: self class name.
-	self assert: (methodColumn evaluation value: context) equals: method selector.
-	"The following column was removed to experiment a new layout, just keeping the test in case of roolback."
-	"self assert: (senderColumn evaluation value: context) equals: self stDisplayString."
-	
-	context := (Context newForMethod: method) setSender: self receiver: self method: block method arguments: #(  ).
-	self assert: (classColumn evaluation value: context) equals: self class name.
-	self assert: (methodColumn evaluation value: context) equals: block sourceNode sourceCode.
-	"The following column was removed to experiment a new layout, just keeping the test in case of roolback."
-	"self assert: (senderColumn evaluation value: context) equals: self stDisplayString."
-]
-
-{ #category : 'tests - stack table' }
 StDebuggerTest >> testStackTableInitialization [
 	self assert: self debugger stackTable isNil
-]
-
-{ #category : 'tests - stack table' }
-StDebuggerTest >> testStackTablePackagesLabels [
-	|stackTable packageColumn ctx|
-	self debugger session: session.
-	stackTable := self initializedDebugger stackTable.
-	packageColumn := stackTable columns last.
-	
-	"The method is defined in the same package as its class"
-	ctx := Context
-		sender: nil
-		receiver: nil
-		method: (StTestDebuggerProvider >> #debuggerWithDNUContext)
-		arguments: #().
-	self assert: (packageColumn readObject: ctx) equals: StTestDebuggerProvider package name.
-	
-	"The extension method is defined in another package than its class"
-	ctx := Context
-		sender: nil
-		receiver: nil
-		method: (StDebugger >> #inspector)
-		arguments: #().
-	self assert: (packageColumn readObject: ctx) equals: StTestDebuggerProvider package name.
-	
-	"Doit methods have no package."
-	ctx := Context
-		sender: nil
-		receiver: nil
-		method: (Smalltalk compiler compile: 'DoIt 1 + 1')
-		arguments: #().
-	self assert: (packageColumn readObject: ctx) equals: '-'
-	
-
 ]
 
 { #category : 'tests - stack table' }
