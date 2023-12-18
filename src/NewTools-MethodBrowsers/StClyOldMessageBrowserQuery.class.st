@@ -55,7 +55,7 @@ StClyOldMessageBrowserQuery >> installedMethods [
 	^actualMethods, (methods reject: [ :each | each isCompiledMethod ])
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 StClyOldMessageBrowserQuery >> queryElement [
 	
 	^ self criteriaString
