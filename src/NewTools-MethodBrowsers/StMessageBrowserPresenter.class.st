@@ -8,3 +8,9 @@ Class {
 	#package : 'NewTools-MethodBrowsers',
 	#tag : 'Senders'
 }
+
+{ #category : 'testing' }
+StMessageBrowserPresenter class >> isDeprecated [
+
+	^ true
+]
