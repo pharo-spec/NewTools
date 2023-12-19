@@ -73,7 +73,7 @@ StPlaygroundTest >> testStopProcessing [
 		        contents: 'Test 1';
 		        flush;
 		        yourself.
-	presenter loadPage: page fileReference.
+	presenter loadPage: page.
 	self waitUntilUIRedrawed.
 	"a lot of time"
 	presenter page timeToWait: 1 minute.

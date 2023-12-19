@@ -30,7 +30,7 @@ StPlaygroundPageSummaryPresenterTest >> initializeMemoryFileSystem: aFileSystem 
 StPlaygroundPageSummaryPresenterTest >> testContents [
 
 	self assert: presenter contents equals: ''.
-	presenter setModelBeforeInitialization: memoryFileSystem / 'test2.ph'.
+	presenter setModelBeforeInitialization: (StPlaygroundPage fromReference: (memoryFileSystem / 'test2.ph')).
 	self assert: presenter contents equals: 'Test
 Test 2'	
 ]
@@ -39,6 +39,6 @@ Test 2'
 StPlaygroundPageSummaryPresenterTest >> testPageFirstLine [
 	
 	self assert: presenter pageTitle equals: 'Empty'.	
-	presenter setModelBeforeInitialization: memoryFileSystem / 'test2.ph'.
+	presenter setModelBeforeInitialization: (StPlaygroundPage fromReference: memoryFileSystem / 'test2.ph').
 	self assert: presenter pageTitle equals: 'Test'
 ]
