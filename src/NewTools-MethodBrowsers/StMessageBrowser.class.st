@@ -15,7 +15,6 @@ Class {
 		'title',
 		'refreshingBlock',
 		'textPresenter',
-		'usingLayout',
 		'highlight'
 	],
 	#classVars : [
