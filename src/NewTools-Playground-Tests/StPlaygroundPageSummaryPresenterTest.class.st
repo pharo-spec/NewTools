@@ -11,13 +11,13 @@ StPlaygroundPageSummaryPresenterTest >> classToTest [
 	^ StPlaygroundPageSummaryPresenter
 ]
 
-{ #category : 'initialization' }
+{ #category : 'running' }
 StPlaygroundPageSummaryPresenterTest >> initializeInstanceBeforeInitialization: aPresenter [
 
-	aPresenter setModelBeforeInitialization: memoryFileSystem / 'test1.ph'
+	aPresenter setModelBeforeInitialization: (StPlaygroundPage fromReference: memoryFileSystem / 'test1.ph')
 ]
 
-{ #category : 'initialization' }
+{ #category : 'running' }
 StPlaygroundPageSummaryPresenterTest >> initializeMemoryFileSystem: aFileSystem [
 
 	aFileSystem / 'test1.ph' writeStreamDo: [ :stream | stream << '' ].
