@@ -168,8 +168,7 @@ StFontChooserPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
 	aDialogWindowPresenter
 		addButton: 'Update' do: [ :presenter | self updateFonts ];
-		addDefaultButton: 'Apply' do: [ :presenter | self applyChanges ];
-		okAction: [ self applyChanges ].
+		addDefaultButton: 'Apply' do: [ :presenter | self applyChanges ]
 
 ]
 
