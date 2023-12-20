@@ -77,7 +77,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Debugger-Fuel';
 			package: 'NewTools-Debugger-Fuel-Tests' with: [ spec requires: #( 'NewTools-Debugger-Fuel' ) ];
 			package: 'NewTools-Fuel';
-     			"Rewriter Tools"
+     		"Rewriter Tools"
 			package: 'NewTools-RewriterTools-Backend';
 			package: 'NewTools-RewriterTools' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
 			package: 'NewTools-RewriterTools-Backend-Tests' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
@@ -88,7 +88,9 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Scopes-Tests';
 			package: 'NewTools-Scopes-Resources-A-Tests';
 			package: 'NewTools-Scopes-Resources-B-Tests';
-			package: 'NewTools-Scopes-Resources-C-Tests'.
+			package: 'NewTools-Scopes-Resources-C-Tests';
+			"ProfilerUI"
+			package: 'NewTools-ProfilerUI'.
 
 		spec
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Morphic' );
@@ -132,11 +134,12 @@ BaselineOfNewTools >> baseline: spec [
 			group: #FileBrowser with: #( 
 						'NewTools-FileBrowser' 
 						'NewTools-FileBrowser-Tests' );
-      			group: #RewriterTools with: #(
-				    		'NewTools-RewriterTools-Backend'
-				    		'NewTools-RewriterTools'
-				    		'NewTools-RewriterTools-Backend-Tests'
-				    		'NewTools-RewriterTools-Tests' );
+   		group: #RewriterTools with: #(
+			   		'NewTools-RewriterTools-Backend'
+			   		'NewTools-RewriterTools'
+			   		'NewTools-RewriterTools-Backend-Tests'
+			   		'NewTools-RewriterTools-Tests' );
+			group: #ProfilerUI with: #( 'NewTools-ProfilerUI' );
 			"ScopesEditor"
 			group: #ScopesEditor with: #(
 						'NewTools-Scopes' 
@@ -150,12 +153,13 @@ BaselineOfNewTools >> baseline: spec [
 						'Inspector' 
 						'CritiqueBrowser' 
 						'Debugger'
-				   		'SystemReporter' 
+						'SystemReporter' 
 						'FontChooser' 
 						'Methods'
-				   		'Spotter'
-            					'RewriterTools'
-						'ScopesEditor') ]
+						'Spotter'
+						'RewriterTools'
+						'ScopesEditor'
+						'ProfilerUI') ]
 ]
 
 { #category : 'external projects' }
