@@ -163,18 +163,18 @@ BaselineOfNewTools >> baseline: spec [
 { #category : 'external projects' }
 BaselineOfNewTools >> chest: spec [
 
-	spec baseline: 'Chest' with: [ 
+	spec baseline: 'Chest' with: [
 		spec
-			repository: (self packageRepositoryURL ifEmpty: [ 
+			repository: ((self packageRepositoryURLForSpec: spec) ifEmpty: [
 						 'github://pharo-spec/Chest:v0.4.1' ]);
 			loads: 'default' ]
 ]
 
-{ #category : 'external projects' }
-BaselineOfNewTools >> packageRepositoryURL [
+{ #category : 'accessing' }
+BaselineOfNewTools >> packageRepositoryURLForSpec: spec [
 	| url |
 	
-	url := super packageRepositoryURL.
+	url := super packageRepositoryURLForSpec: spec.
 	url ifEmpty: [ ^ url ].
 	"Verify if I am running in CI"
 	"travis or github actions"
@@ -200,9 +200,9 @@ BaselineOfNewTools >> preload: loader package: packageSpec [
 { #category : 'external projects' }
 BaselineOfNewTools >> sindarin: spec [
 
-	spec baseline: 'Sindarin' with: [ 
+	spec baseline: 'Sindarin' with: [
 		spec
-			repository: (self packageRepositoryURL 
-				ifEmpty: [ 'github://pharo-spec/ScriptableDebugger:Pharo12/src' ]);
+			repository: ((self packageRepositoryURLForSpec: spec) ifEmpty: [
+						 'github://pharo-spec/ScriptableDebugger:Pharo12/src' ]);
 			loads: 'default' ]
 ]
