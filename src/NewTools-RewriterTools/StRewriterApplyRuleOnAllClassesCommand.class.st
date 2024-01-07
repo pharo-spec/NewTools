@@ -33,9 +33,10 @@ StRewriterApplyRuleOnAllClassesCommand class >> defaultName [
 StRewriterApplyRuleOnAllClassesCommand >> execute [
 
 	| changes ruleHolder |
-	(UIManager default
-		confirm: 'This process can take between 1 and 2 minutes.'
-		label: 'Proceed?') ifFalse: [ ^ self ].
+	self application
+		confirm: 'This process can take between 1 and 2 minutes.';
+		label: 'Proceed?'; 
+		onCancel: [ ^ self ].
 
 	ruleHolder := StRewriterRuleHolder
 		lhs: self context lhs
@@ -43,6 +44,6 @@ StRewriterApplyRuleOnAllClassesCommand >> execute [
 		isForMethod: self context isRuleForMethod.
 
 	changes := StRewriterAbstractApplier defaultEngineApplier
-		calculateAllChangesForRules: ruleHolder asOrderedCollection.
-	^ (ChangesBrowser changes: changes) open
+		calculateAllChangesForRules: (OrderedCollection with: ruleHolder).
+	^ (StChangesBrowserPresenter changes: changes) open
 ]
