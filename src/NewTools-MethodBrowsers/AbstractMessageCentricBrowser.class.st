@@ -1,6 +1,6 @@
 Class {
 	#name : 'AbstractMessageCentricBrowser',
-	#superclass : 'AbstractMessageCentricBrowserPresenter',
+	#superclass : 'StAbstractMessageCentricBrowserPresenter',
 	#category : 'NewTools-MethodBrowsers-Deprecated',
 	#package : 'NewTools-MethodBrowsers',
 	#tag : 'Deprecated'

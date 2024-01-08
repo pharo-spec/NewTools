@@ -2,7 +2,7 @@
 I am an abstract class for browsers centered around messages such as class `MessageBrowser` or class `VersionBrowser`.
 "
 Class {
-	#name : 'AbstractMessageCentricBrowserPresenter',
+	#name : 'StAbstractMessageCentricBrowserPresenter',
 	#superclass : 'StPresenter',
 	#instVars : [
 		'messageList',
@@ -15,12 +15,12 @@ Class {
 }
 
 { #category : 'testing' }
-AbstractMessageCentricBrowserPresenter class >> isAbstract [ 
-	 ^self name = #AbstractMessageCentricBrowserPresenter
+StAbstractMessageCentricBrowserPresenter class >> isAbstract [ 
+	 ^self name = #StAbstractMessageCentricBrowserPresenter
 ]
 
 { #category : 'initialization' }
-AbstractMessageCentricBrowserPresenter >> initialize [
+StAbstractMessageCentricBrowserPresenter >> initialize [
 
 	textConverter := self newTextConverter.
 	super initialize
@@ -28,22 +28,22 @@ AbstractMessageCentricBrowserPresenter >> initialize [
 ]
 
 { #category : 'initialization' }
-AbstractMessageCentricBrowserPresenter >> initializePresenters [
+StAbstractMessageCentricBrowserPresenter >> initializePresenters [
 
-	messageList := self instantiate: MessageListPresenter.
-	toolbarPresenter := self instantiate: SpMethodToolbarPresenter
+	messageList := self newMessageList.
+	toolbarPresenter := self newMessageToolbar
+		messageList: messageList;
+		yourself
 ]
 
 { #category : 'initialization' }
-AbstractMessageCentricBrowserPresenter >> initializeWindow: aWindowPresenter [
-	| winExtent |
-	
-	winExtent := RealEstateAgent standardWindowExtent.
-	aWindowPresenter initialExtent: (900 min: winExtent x) @ (550 min: winExtent y)
+StAbstractMessageCentricBrowserPresenter >> initializeWindow: aWindowPresenter [
+
+	aWindowPresenter initialExtent: 900@600
 ]
 
 { #category : 'private - testing' }
-AbstractMessageCentricBrowserPresenter >> isMethodDefinition: anItem [
+StAbstractMessageCentricBrowserPresenter >> isMethodDefinition: anItem [
 	"an item can be nil, a compiled method, or a ring object. Whereas a ring object can be a ring method or comment definition.
 	 Some operations are only valid for compiled methods or ring object that are a method definitions"
 
@@ -54,23 +54,35 @@ AbstractMessageCentricBrowserPresenter >> isMethodDefinition: anItem [
 		or: [  anItem isCompiledMethod ]
 ]
 
+{ #category : 'initialization' }
+StAbstractMessageCentricBrowserPresenter >> newMessageList [
+	
+	^ self instantiate: StMessageListPresenter
+]
+
+{ #category : 'initialization' }
+StAbstractMessageCentricBrowserPresenter >> newMessageToolbar [
+
+	^ self instantiate: StMethodToolbarPresenter
+]
+
 { #category : 'private - factory' }
-AbstractMessageCentricBrowserPresenter >> newTextConverter [
+StAbstractMessageCentricBrowserPresenter >> newTextConverter [
 
 	^ DiffSourceMethodConverter new
 ]
 
 { #category : 'api' }
-AbstractMessageCentricBrowserPresenter >> selectedMessage [
+StAbstractMessageCentricBrowserPresenter >> selectedMessage [
 	^ messageList selectedMessage
 ]
 
 { #category : 'accessing' }
-AbstractMessageCentricBrowserPresenter >> textConverter [
+StAbstractMessageCentricBrowserPresenter >> textConverter [
 	^ textConverter
 ]
 
 { #category : 'accessing' }
-AbstractMessageCentricBrowserPresenter >> textConverter: aTextConverter [
+StAbstractMessageCentricBrowserPresenter >> textConverter: aTextConverter [
 	textConverter := aTextConverter method: self textConverter method
 ]

@@ -82,15 +82,15 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-RewriterTools' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
 			package: 'NewTools-RewriterTools-Backend-Tests' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
 			package: 'NewTools-RewriterTools-Tests' with: [ spec requires: #('NewTools-RewriterTools') ];
+			"Profiler"
+			package: 'NewTools-ProfilerUI';
 			"Scopes Editor"
 			package: 'NewTools-Scopes';
 			package: 'NewTools-Scopes-Editor' with: [ spec requires: #('NewTools-Scopes') ];
 			package: 'NewTools-Scopes-Tests';
 			package: 'NewTools-Scopes-Resources-A-Tests';
 			package: 'NewTools-Scopes-Resources-B-Tests';
-			package: 'NewTools-Scopes-Resources-C-Tests';
-			"ProfilerUI"
-			package: 'NewTools-ProfilerUI'.
+			package: 'NewTools-Scopes-Resources-C-Tests'.
 
 		spec
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Morphic' );
@@ -134,12 +134,11 @@ BaselineOfNewTools >> baseline: spec [
 			group: #FileBrowser with: #( 
 						'NewTools-FileBrowser' 
 						'NewTools-FileBrowser-Tests' );
-   		group: #RewriterTools with: #(
-			   		'NewTools-RewriterTools-Backend'
-			   		'NewTools-RewriterTools'
-			   		'NewTools-RewriterTools-Backend-Tests'
-			   		'NewTools-RewriterTools-Tests' );
-			group: #ProfilerUI with: #( 'NewTools-ProfilerUI' );
+      			group: #RewriterTools with: #(
+				    		'NewTools-RewriterTools-Backend'
+				    		'NewTools-RewriterTools'
+				    		'NewTools-RewriterTools-Backend-Tests'
+				    		'NewTools-RewriterTools-Tests' );
 			"ScopesEditor"
 			group: #ScopesEditor with: #(
 						'NewTools-Scopes' 
@@ -153,13 +152,12 @@ BaselineOfNewTools >> baseline: spec [
 						'Inspector' 
 						'CritiqueBrowser' 
 						'Debugger'
-						'SystemReporter' 
+				   		'SystemReporter' 
 						'FontChooser' 
 						'Methods'
-						'Spotter'
-						'RewriterTools'
-						'ScopesEditor'
-						'ProfilerUI') ]
+				   		'Spotter'
+            					'RewriterTools'
+						'ScopesEditor') ]
 ]
 
 { #category : 'external projects' }

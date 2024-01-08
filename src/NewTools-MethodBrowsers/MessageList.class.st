@@ -1,6 +1,6 @@
 Class {
 	#name : 'MessageList',
-	#superclass : 'MessageListPresenter',
+	#superclass : 'StMessageListPresenter',
 	#category : 'NewTools-MethodBrowsers-Deprecated',
 	#package : 'NewTools-MethodBrowsers',
 	#tag : 'Deprecated'

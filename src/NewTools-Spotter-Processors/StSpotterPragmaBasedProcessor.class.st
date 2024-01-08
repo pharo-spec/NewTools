@@ -131,15 +131,16 @@ StSpotterPragmaBasedProcessor >> initialize [
 ]
 
 { #category : 'key-bindings' }
-StSpotterPragmaBasedProcessor >> installKeymappingsOn: aGTSpotterMorph [
+StSpotterPragmaBasedProcessor >> installKeymappingsOn: aSpotterMorph [
 
-	self keyBinding
+	self flag: #TODO. "This should be used?"
+	"self keyBinding
 		ifNotNil: [ | keyCombination |
 			keyCombination := self keyBinding asKeyCombination.
 			aGTSpotterMorph 
 				bindKeyCombination: keyCombination 
 				ofProcessor: self 
-				toAction: [ aGTSpotterMorph onKeyProcessor: self ] ]
+				toAction: [ aGTSpotterMorph onKeyProcessor: self ] ]"
 ]
 
 { #category : 'key-bindings' }
