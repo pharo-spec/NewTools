@@ -108,7 +108,7 @@ StFBBookmark class >> windowsDrives [
 		  self
 			  name: each basename
 			  location: each
-			  icon: Smalltalk ui icons smallWindow ]
+			  icon: (self iconNamed: #smallWindow) ]
 ]
 
 { #category : 'default bookmarks' }

@@ -1,32 +1,26 @@
 "
-I'm a notebook Presenter use by the previewer system 
+An icon cache
 "
 Class {
-	#name : 'StFBNoteBookPreviewerPresenter',
-	#superclass : 'SpPresenter',
-	#instVars : [
-		'notebook',
-		'pageContent',
-		'page'
-	],
+	#name : 'StFBIconCache',
+	#superclass : 'Object',
 	#classVars : [
 		'IconCache'
 	],
-	#category : 'NewTools-FileBrowser-UI',
+	#category : 'NewTools-FileBrowser-Wrappers',
 	#package : 'NewTools-FileBrowser',
-	#tag : 'UI'
+	#tag : 'Wrappers'
 }
 
-{ #category : 'layout' }
-StFBNoteBookPreviewerPresenter class >> defaultLayout [
+{ #category : 'icons' }
+StFBIconCache class >> driveIcon [
+	<script: 'self driveIcon inspect'>
 
-	^ SpBoxLayout newLeftToRight	 
-		add: #notebook;
-		yourself
+	^self iconNamed: #driveIcon
 ]
 
 { #category : 'private - icons' }
-StFBNoteBookPreviewerPresenter class >> driveIconContents [
+StFBIconCache class >> driveIconContents [
 
 	^'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA/0lEQVQ4je2RPUoDcRDFf7tI
 mjSbE5gUYhoFjSvYSI5i4QFSWHgYIQewELyFX4mF4BfqqmhlSJotdve/8yySbEwhrq34YJjH
@@ -36,8 +30,15 @@ DucceZ4Tr8VUTitIorO3H8zf4Af4LZ/wICQO43m97AC7MHq7Papn1TndA7h/fh9GTw9B8TZZ
 kd007kzugEASi/XGaH2lWStr4Ft8AlWZooQwDP14AAAAAElFTkSuQmCC'
 ]
 
+{ #category : 'icons' }
+StFBIconCache class >> fileIcon [
+	<script: 'self fileIcon inspect'>
+
+	^self iconNamed: #fileIcon
+]
+
 { #category : 'private - icons' }
-StFBNoteBookPreviewerPresenter class >> fileIconContents [
+StFBIconCache class >> fileIconContents [
 
 	^'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACjElEQVR42o2SW0hUURSG/32O
 hnhAqJDCzF6kN0lLGtJCtLQyKIMotRjBy1sqVEZS9mKZBdKFHBJpJEKD0urBvAchhqY5kp6M
@@ -55,8 +56,15 @@ Mk89yCyvFwfvBy1SbF6VLWF7TIRPUdV/FRNNh6qowsDHyaG5l9d2fwfyXD4gAGnljAAAAABJ
 RU5ErkJggg=='
 ]
 
+{ #category : 'icons' }
+StFBIconCache class >> folderIcon [
+	<script: 'self folderIcon inspect'>
+
+	^self iconNamed: #folderIcon
+]
+
 { #category : 'private - icons' }
-StFBNoteBookPreviewerPresenter class >> folderIconContents [
+StFBIconCache class >> folderIconContents [
 
 	^'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABdElEQVR42mNkoBAwwhhdbT7Z
 xvqa4b9/fmT+++sT45vXz3+XNB3qfP36/3ag9H+8BvT1xCdkJljN5WD4z8TwGyjwC6gDiDfs
@@ -68,14 +76,14 @@ cdrkgprMGI1m0myHxEJ4fcNkxikTc2qyY3TJ8AIDQ1h97WRGaysdM011qeh///8w/v8HSmV/
 GP7/+8sA5DOg8EH0fxD/L1z87OW3W+GZieLcSC4AAOV6G9lUA/2gAAAAAElFTkSuQmCC'
 ]
 
-{ #category : 'accessing' }
-StFBNoteBookPreviewerPresenter class >> iconCache [
+{ #category : 'private - accessing' }
+StFBIconCache class >> iconCache [
 
-	^ IconCache 
+	^ IconCache ifNil: [ IconCache := Dictionary new ]
 ]
 
 { #category : 'accessing' }
-StFBNoteBookPreviewerPresenter class >> iconNamed: aSymbol [
+StFBIconCache class >> iconNamed: aSymbol [
 	"Returns the icon with the given name"
 	
 	| selector |
@@ -88,14 +96,23 @@ StFBNoteBookPreviewerPresenter class >> iconNamed: aSymbol [
 				fromBinaryStream: (self perform: selector) base64Decoded readStream ]
 ]
 
-{ #category : 'specs' }
-StFBNoteBookPreviewerPresenter class >> open [
+{ #category : 'initialization-release' }
+StFBIconCache class >> reset [
+	"Reset the icon cache"	
 	<script>
-	^ self new open; yourself 
+	
+	IconCache := nil
+]
+
+{ #category : 'icons' }
+StFBIconCache class >> terminalIcon [
+	<script: 'self terminalIcon inspect'>
+
+	^self iconNamed: #terminalIcon
 ]
 
 { #category : 'private - icons' }
-StFBNoteBookPreviewerPresenter class >> terminalIconContents [
+StFBIconCache class >> terminalIconContents [
 
 	^'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVR4XmOgGIiKimlo6+iF
 koqVlVVcgdoZGYpKKladv3z9PxxfAuFr/8+h44vX/m/bc+T/1t2H/x84evr/yvXb/gMN4Gco
@@ -104,43 +121,4 @@ jIz/C0sqQAYIww2YM2fO//j4+P+xsbH/16xZQ7wBxVgMiIqK+j9t2rT/WVlZ/2tra8HiSkpK
 /yUlJf/z8/OjGpBTUAr3gpeX139TU9P/MjIy/7m4uEAKcOKsvGKYASVgA0xMTP5zc3Pj1YTT
 AAUFBaI1YhgAZKwiVfNwM0BFVS3B1z94OxDvIAWbWVgtBBrAywDOEAwMLEDMSiJmYaAGAABP
 FCjDKXmnHQAAAABJRU5ErkJggg=='
-]
-
-{ #category : 'initialization' }
-StFBNoteBookPreviewerPresenter >> initializePage [
-
-	^ SpNotebookPage
-		  title: 'Previewer '
-		  icon: (self iconNamed: #page)
-		  provider: [ pageContent ]
-]
-
-{ #category : 'initialization' }
-StFBNoteBookPreviewerPresenter >> initializePresenters [
-
-	notebook := self newNotebook.
-	pageContent := self newText.
-	page := self initializePage.
-	notebook addPage: page
-]
-
-{ #category : 'accessing' }
-StFBNoteBookPreviewerPresenter >> pageContent [
-	^ pageContent
-]
-
-{ #category : 'adding' }
-StFBNoteBookPreviewerPresenter >> pageContent: aPresenter [
-
-	pageContent := aPresenter.
-	page
-		icon: (self iconNamed: #glamorousRefresh);
-		presenterProvider: [ 
-			self newText
-				text: 'Loading...';
-				yourself ];
-		resetContent;
-		presenterProvider: [ pageContent ];
-		resetContent;
-		icon: (self iconNamed: #page)
 ]

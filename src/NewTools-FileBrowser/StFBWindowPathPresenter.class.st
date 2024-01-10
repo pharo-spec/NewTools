@@ -62,7 +62,7 @@ StFBWindowPathPresenter class >> example [
 	<example>
 	^ self new
 		currentDirectory: FileLocator imageDirectory;
-		openWithSpec
+		open
 ]
 
 { #category : 'accessing' }

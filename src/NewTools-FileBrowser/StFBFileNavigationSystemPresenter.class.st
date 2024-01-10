@@ -131,7 +131,7 @@ StFBFileNavigationSystemPresenter class >> example [
 	presenter := self new.
 	
 	presenter previewer: StFBPNGPreviewer new.
-	presenter openWithSpec.
+	presenter open.
 	presenter inspect.
 	^ presenter
 ]
@@ -237,6 +237,7 @@ StFBFileNavigationSystemPresenter >> fileReferenceTable [
 StFBFileNavigationSystemPresenter >> filesListAction [
 
 	| previewProcess |
+
 	fileReferenceTable
 		transmitTo: nameText
 		transform: [ :selectedItem | 
@@ -339,8 +340,7 @@ StFBFileNavigationSystemPresenter >> initializePresenters [
 
 	notebookPreviewer := self instantiate: StFBNoteBookPreviewerPresenter.
 	fileReferenceTable := self newTable.
-	currentPathTextInputPresenter := self instantiate:
-		                                 StFBWindowPathPresenter.
+	currentPathTextInputPresenter := self instantiate: StFBWindowPathPresenter.
 	nameText := self newTextInput.
 	filtersDropList := self newDropList.
 	previousButton := self newButton.
@@ -445,11 +445,12 @@ StFBFileNavigationSystemPresenter >> updateTableContent [
 
 	fileReferenceTable items:
 		((filtersDropList selectedItem ifNil: [ filter ]) applyOn:
-			 (currentDirectory children select: #exists))
+			 (currentDirectory children select: #exists)).
 ]
 
 { #category : 'utilities' }
 StFBFileNavigationSystemPresenter >> updateWidgetWithFileReference: aFileReference [
+
 	self currentDirectory: aFileReference.
 	self updateTableContent.
 	currentPathTextInputPresenter currentDirectory: currentDirectory
