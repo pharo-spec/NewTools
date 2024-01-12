@@ -704,14 +704,9 @@ StDebugger >> forceSessionUpdate [
 ]
 
 { #category : 'api' }
-StDebugger >> initialExtent [ 
-	
-	^ [ | w h |
-		w := Display width.
-		h := Display height.
-		(w - (w // 3)) @ (h - (h // 5)) ]
-		on: Error
-		do: [ 850@650 ]
+StDebugger >> initialExtent [
+
+	^ 850 @ 650
 ]
 
 { #category : 'initialization' }
