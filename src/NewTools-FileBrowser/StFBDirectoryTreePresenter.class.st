@@ -60,6 +60,29 @@ StFBDirectoryTreePresenter >> defaultOutputPort [
 	^ directoryTreePresenter defaultOutputPort
 ]
 
+{ #category : 'accessing' }
+StFBDirectoryTreePresenter >> expandPath: aFileLocator [ 
+	"Expand the receiver's tree to aFileLocator reference"
+	
+	| path aPathForSpec currentNode |
+	
+	path := aFileLocator asPath segments asOrderedCollection.
+	aPathForSpec := OrderedCollection new.
+	aPathForSpec add: 1.
+	
+	currentNode := directoryTreePresenter roots anyOne.
+	
+	path do: [ :aPart | | found |
+		found := currentNode directories detect: [ :e | e basename = aPart ] ifNone: [ ^self ].
+		aPathForSpec add: (currentNode directories indexOf: found).
+		currentNode := found ].
+
+	(directoryTreePresenter isExpanded: aPathForSpec)
+		ifFalse: [ directoryTreePresenter 
+			expandPath: aPathForSpec;
+			selectPath: aPathForSpec scrollToSelection: true ]
+]
+
 { #category : 'initialization' }
 StFBDirectoryTreePresenter >> initializePresenters [
 

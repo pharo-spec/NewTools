@@ -54,6 +54,7 @@ fileReferenceTable <SpTablePresenter> it's display children of the current direc
 Class {
 	#name : 'StFBFileNavigationSystemPresenter',
 	#superclass : 'SpPresenter',
+	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'currentPathTextInputPresenter',
 		'nameText',
@@ -65,7 +66,8 @@ Class {
 		'previousButton',
 		'notebookPreviewer',
 		'fileReferenceTable',
-		'history'
+		'history',
+		'configButton'
 	],
 	#classVars : [
 		'LastVisitedDirectory',
@@ -93,30 +95,6 @@ StFBFileNavigationSystemPresenter class >> buildCommandsGroupWith: presenter for
 { #category : 'defaults' }
 StFBFileNavigationSystemPresenter class >> defaultDirectory [
 	^ FileLocator imageDirectory
-]
-
-{ #category : 'specs' }
-StFBFileNavigationSystemPresenter class >> defaultLayout [
-
-	^ SpBoxLayout newTopToBottom
-		add: (SpBoxLayout newLeftToRight
-				vAlignCenter;
-				add: #previousButton expand: false;
-				add: #nextButton expand: false;
-				add: #currentPathTextInputPresenter;
-				yourself)
-			 expand: false;
-		add: (SpPanedLayout newTopToBottom
-				add: #fileReferenceTable;
-				add: #notebookPreviewer;
-				yourself);
-		add: (SpBoxLayout newLeftToRight
-				vAlignCenter;
-				add: #nameText;
-				add: #filtersDropList expand: false;
-				yourself)
-			 expand: false;
-		yourself
 ]
 
 { #category : 'defaults' }
@@ -165,13 +143,23 @@ StFBFileNavigationSystemPresenter >> columns: aCollectionOfColumns [
 ]
 
 { #category : 'initialization' }
+StFBFileNavigationSystemPresenter >> configButtonAction [
+
+	configButton action: [
+		SettingBrowser new
+			rootNodes: (SettingBrowser currentTree nodeNamed: #fileBrowser) allChildren;
+			open ].
+]
+
+{ #category : 'initialization' }
 StFBFileNavigationSystemPresenter >> connectPresenters [
 
 	self filesListAction.
 	self nameTextAction.
 	self filtersDropListAction.
 	self previousBeforeButtonAction.
-	self nextButtonAction
+	self nextButtonAction.
+	self configButtonAction.
 ]
 
 { #category : 'utilities' }
@@ -226,6 +214,31 @@ StFBFileNavigationSystemPresenter >> defaultDirectory [
 StFBFileNavigationSystemPresenter >> defaultFolder: aFileReference [
 	self updateWidgetWithFileReference: aFileReference.
 	self initializeHistoryIteratorWith: aFileReference
+]
+
+{ #category : 'layout' }
+StFBFileNavigationSystemPresenter >> defaultLayout [
+
+	^ SpBoxLayout newTopToBottom
+		add: (SpBoxLayout newLeftToRight
+				vAlignCenter;
+				add: previousButton expand: false;
+				add: nextButton expand: false;
+				add: currentPathTextInputPresenter;
+			   addLast: configButton;				
+				yourself)
+			 expand: false;
+		add: (SpPanedLayout newTopToBottom
+				add: fileReferenceTable;
+				add: notebookPreviewer;
+				yourself);
+		add: (SpBoxLayout newLeftToRight
+				vAlignCenter;
+				add: nameText;
+				add: filtersDropList expand: false;
+				yourself)
+			 expand: false;
+		yourself
 ]
 
 { #category : 'accessing' }
@@ -336,13 +349,8 @@ StFBFileNavigationSystemPresenter >> initializeHistoryIteratorWith: aFolder [
 ]
 
 { #category : 'initialization' }
-StFBFileNavigationSystemPresenter >> initializePresenters [
+StFBFileNavigationSystemPresenter >> initializeNavigationPresenters [
 
-	notebookPreviewer := self instantiate: StFBNoteBookPreviewerPresenter.
-	fileReferenceTable := self newTable.
-	currentPathTextInputPresenter := self instantiate: StFBWindowPathPresenter.
-	nameText := self newTextInput.
-	filtersDropList := self newDropList.
 	previousButton := self newButton.
 	nextButton := self newButton.
 
@@ -353,9 +361,27 @@ StFBFileNavigationSystemPresenter >> initializePresenters [
 		icon: (self application iconNamed: #back);
 		addStyle: 'small'.
 
+]
+
+{ #category : 'initialization' }
+StFBFileNavigationSystemPresenter >> initializePresenters [
+
+	notebookPreviewer := self instantiate: StFBNoteBookPreviewerPresenter.
+	fileReferenceTable := self newTable.
+	currentPathTextInputPresenter := self instantiate: StFBPathBreadcrumbPresenter.
+	nameText := self newTextInput.
+	filtersDropList := self newDropList.
+	configButton := self newButton
+			addStyle: 'small';
+			icon: (self iconNamed: #config);
+			yourself.
+	
+	self initializeNavigationPresenters.
 	self initializeFilesTable.
 	self initializeFiltersDropList.
-	self updateWidgetWithFileReference: self lastVisitedDirectory.
+	StFBSettings openOnLastDirectory 
+		ifTrue: [ self updateWidgetWithFileReference: self lastVisitedDirectory ]
+		ifFalse: [ self updateWidgetWithFileReference: self defaultDirectory ].
 	self initializeHistoryIteratorWith: currentDirectory
 ]
 
@@ -408,7 +434,15 @@ StFBFileNavigationSystemPresenter >> notebookPreviewer [
 StFBFileNavigationSystemPresenter >> openFolder: aFileReference [
 
 	self updateWidgetWithFileReference: aFileReference.
-	history register: currentDirectory
+	history register: currentDirectory.
+	self announcer announce: (StFBCurrentDirectoryChanged with: aFileReference) 
+]
+
+{ #category : 'initialization' }
+StFBFileNavigationSystemPresenter >> openOnLastDirectory [ 
+	"Answer <true> if receiver should open in the last used directory"
+	
+	^ StFBSettings openOnLastDirectory
 ]
 
 { #category : 'accessing' }

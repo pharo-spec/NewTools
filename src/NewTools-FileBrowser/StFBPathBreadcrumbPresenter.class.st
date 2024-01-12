@@ -3,23 +3,22 @@ I provide a windowPathEditor
 
 API
 
-* currentDirectory:  aFileReference
-	see example class side 
-	
-* presenterUI: theUIUsingThisPresenter
-	you have to send this message see 
-	example (  )
-		 MyUi >> initializeWidget
+- `currentDirectory:  aFileReference` see example class side 
+- `presenterUI: theUIUsingThisPresenter` you have to send this message see the following example:
+
+```smalltalk
+		 MyUi >> initializePresenters
 			...
-			maVar := self instantiate: FDWindowPathPresenter.
+			maVar := self instantiate: StFBWindowPathPresenter.
 			maVar presenterUI: self.
 			...
+```
 			
 UI using this widget have to define openOn: aFileReference
-	
+
 "
 Class {
-	#name : 'StFBWindowPathPresenter',
+	#name : 'StFBPathBreadcrumbPresenter',
 	#superclass : 'SpPresenter',
 	#instVars : [
 		'textInput',
@@ -33,7 +32,7 @@ Class {
 }
 
 { #category : 'specs' }
-StFBWindowPathPresenter class >> defaultLayout [
+StFBPathBreadcrumbPresenter class >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
 		  vAlignCenter;
@@ -46,7 +45,7 @@ StFBWindowPathPresenter class >> defaultLayout [
 ]
 
 { #category : 'specs' }
-StFBWindowPathPresenter class >> editablelayout [
+StFBPathBreadcrumbPresenter class >> editablelayout [
 
 	^ SpBoxLayout newLeftToRight
 		  add: #textInput;
@@ -58,7 +57,7 @@ StFBWindowPathPresenter class >> editablelayout [
 ]
 
 { #category : 'examples' }
-StFBWindowPathPresenter class >> example [
+StFBPathBreadcrumbPresenter class >> example [
 	<example>
 	^ self new
 		currentDirectory: FileLocator imageDirectory;
@@ -66,12 +65,12 @@ StFBWindowPathPresenter class >> example [
 ]
 
 { #category : 'accessing' }
-StFBWindowPathPresenter >> currentDirectory [
+StFBPathBreadcrumbPresenter >> currentDirectory [
 	^ self owner ifNotNil: #currentDirectory
 ]
 
 { #category : 'api' }
-StFBWindowPathPresenter >> currentDirectory: aFileReference [
+StFBPathBreadcrumbPresenter >> currentDirectory: aFileReference [
 
 	textInput text: aFileReference fullName.
 	path file: aFileReference.
@@ -82,12 +81,12 @@ StFBWindowPathPresenter >> currentDirectory: aFileReference [
 ]
 
 { #category : 'accessing' }
-StFBWindowPathPresenter >> entityText [
+StFBPathBreadcrumbPresenter >> entityText [
 	^ textInput
 ]
 
 { #category : 'initialization' }
-StFBWindowPathPresenter >> initializePresenters [
+StFBPathBreadcrumbPresenter >> initializePresenters [
 
 	textInput := self newTextInput.
 	path := self instantiate: StFBPathPresenter.
@@ -114,19 +113,19 @@ StFBWindowPathPresenter >> initializePresenters [
 ]
 
 { #category : 'accessing' }
-StFBWindowPathPresenter >> path [
+StFBPathBreadcrumbPresenter >> path [
 	^ path
 ]
 
-{ #category : 'as yet unclassified' }
-StFBWindowPathPresenter >> pathTextChangedTo: aStringOrText [
+{ #category : 'api' }
+StFBPathBreadcrumbPresenter >> pathTextChangedTo: aStringOrText [
 
 	| fileReference |
+	
 	fileReference := aStringOrText asString asFileReference.
 	(fileReference exists and: [ fileReference isDirectory ])
 		ifTrue: [ self owner openFolder: fileReference ]
-		ifFalse: [ 
-		self inform: 'You have to input an existing path to a directory' ].
+		ifFalse: [ self inform: 'You have to input an existing path to a directory' ].
 	isInEditMode := false.
 	self layout: self class defaultLayout
 ]

@@ -1,5 +1,6 @@
 "
-Abstract superclass to wrap items found in file system
+Abstract superclass to wrap items found in file system.
+
 "
 Class {
 	#name : 'StFBFileSystemItemWrapper',
@@ -51,6 +52,15 @@ StFBFileSystemItemWrapper class >> systemIcon [
 	^self isAbstract ifTrue: [ super systemIcon ] ifFalse: [ self icon ]
 ]
 
+{ #category : 'comparing' }
+StFBFileSystemItemWrapper >> = aStFBFileSystemItemWrapper [
+
+	self == aStFBFileSystemItemWrapper
+		ifTrue: [ ^ true ].
+	^ self class = aStFBFileSystemItemWrapper class and: [
+			fileReference = aStFBFileSystemItemWrapper fileReference ]
+]
+
 { #category : 'accessing' }
 StFBFileSystemItemWrapper >> allElements [  
 	
@@ -94,6 +104,12 @@ StFBFileSystemItemWrapper >> files [
 		do: [ #() ]
 ]
 
+{ #category : 'comparing' }
+StFBFileSystemItemWrapper >> hash [
+
+	^ fileReference hash
+]
+
 { #category : 'accessing' }
 StFBFileSystemItemWrapper >> icon [
 
@@ -129,6 +145,16 @@ StFBFileSystemItemWrapper >> pathString [
 	path := self fileReference fullPath pathString.
 	^Smalltalk os isWindows ifTrue: [ path allButFirst copyReplaceAll: '/' with: '\' ]
 		ifFalse: [ path ]
+]
+
+{ #category : 'printing' }
+StFBFileSystemItemWrapper >> printOn: aStream [
+	
+	super printOn: aStream.
+	aStream << ' ['.
+	fileReference printOn: aStream.
+	aStream << ']'.
+
 ]
 
 { #category : 'private - accessing' }

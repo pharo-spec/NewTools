@@ -91,12 +91,14 @@ StFBNavigationSystemTest >> testWhenClickAnBeforeHistoryButtonIfThereAreHistoryS
 
 { #category : 'tests' }
 StFBNavigationSystemTest >> testWhenCurrentDirectoryChangeshouldNewFileDialogOpenOnTheNewDirectory [
+
 	| dirIndex newFileDialog |
 	dirIndex := (dialog fileReferenceTable items collect: #basename) indexOf: 'dir'.
 	dialog fileReferenceTable selectIndex: dirIndex.
 	dialog fileReferenceTable doubleClickAtIndex: dirIndex.
 	newFileDialog := StFBFileNavigationSystemPresenter new.
-	self assert: newFileDialog currentDirectory equals: (root / 'dir') asFileReference
+	newFileDialog openOnLastDirectory
+		ifTrue: [ self assert: newFileDialog currentDirectory equals: (root / 'dir') asFileReference ]
 ]
 
 { #category : 'tests' }

@@ -1,5 +1,5 @@
 Class {
-	#name : 'StFBWindowPathPresenterTest',
+	#name : 'StFBBreadcrumbPresenterTest',
 	#superclass : 'StFBTestCase',
 	#instVars : [
 		'windowPathUI'
@@ -10,19 +10,19 @@ Class {
 }
 
 { #category : 'running' }
-StFBWindowPathPresenterTest >> setUp [
+StFBBreadcrumbPresenterTest >> setUp [
 	super setUp.
-	windowPathUI := StFBWindowPathPresenter new
+	windowPathUI := StFBPathBreadcrumbPresenter new
 ]
 
 { #category : 'running' }
-StFBWindowPathPresenterTest >> tearDown [
+StFBBreadcrumbPresenterTest >> tearDown [
 	windowPathUI withWindowDo: [ :window | window close ].
 	super tearDown
 ]
 
 { #category : 'tests' }
-StFBWindowPathPresenterTest >> testRoot [
+StFBBreadcrumbPresenterTest >> testRoot [
 
 	windowPathUI currentDirectory: FileLocator root.
 	windowPathUI open.

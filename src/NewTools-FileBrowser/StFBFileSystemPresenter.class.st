@@ -22,6 +22,12 @@ StFBFileSystemPresenter class >> open [
 ]
 
 { #category : 'initialization' }
+StFBFileSystemPresenter >> announcer [
+
+	^ self application announcer
+]
+
+{ #category : 'initialization' }
 StFBFileSystemPresenter >> connectPresenters [ 
 
 	treeNavigationSystem
@@ -60,7 +66,9 @@ StFBFileSystemPresenter >> initializePresenters [
 		columns: { 
 			StFBModificationDateColumn .
 			StFBSizeColumn .
-			StFBRightsColumn }
+			StFBRightsColumn }.
+	treeNavigationSystem expandPath: fileNavigationSystem currentDirectory.
+	self registerEvents.
 ]
 
 { #category : 'initialization' }
@@ -71,6 +79,17 @@ StFBFileSystemPresenter >> initializeWindow: aSpWindowPresenter [
 	self setTitleTo: aSpWindowPresenter.
 	self setWindowIconTo: aSpWindowPresenter.
 	self setInitialExtentTo: aSpWindowPresenter
+]
+
+{ #category : 'initialization' }
+StFBFileSystemPresenter >> registerEvents [
+
+	self announcer subscriptions reset.
+
+	self announcer weak
+		when: StFBCurrentDirectoryChanged 
+		send: #expandPath: 
+		to: treeNavigationSystem.
 ]
 
 { #category : 'initialization' }
