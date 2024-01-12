@@ -33,6 +33,6 @@ StFBRemoveBookmarkCommand >> execute [
 StFBRemoveBookmarkCommand >> initialize [
 	super initialize.
 	self
-		name: 'Remove';
+		name: 'Remove bookmark';
 		description: 'Remove the selected bookmark'
 ]

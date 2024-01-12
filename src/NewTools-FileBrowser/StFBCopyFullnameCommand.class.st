@@ -1,8 +1,5 @@
-"
-Implements an action to file in the selected file (representing a Pharo source code) into the current system
-"
 Class {
-	#name : 'StFBFileInCommand',
+	#name : 'StFBCopyFullnameCommand',
 	#superclass : 'StFBSelectionCommand',
 	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-FileBrowser-Commands',
@@ -11,33 +8,27 @@ Class {
 }
 
 { #category : 'converting' }
-StFBFileInCommand >> asSpecCommand [
+StFBCopyFullnameCommand >> asSpecCommand [
 
 	^ super asSpecCommand
-		iconName: #up;
+		iconName: #smallCopy;
 		shortcutKey: $f meta;		
 		yourself
 ]
 
-{ #category : 'testing' }
-StFBFileInCommand >> canBeExecuted [
-
-	^ self selectedEntry isFile and: [ self selectedEntryBasename endsWith: '.st' ]
-]
-
 { #category : 'executing' }
-StFBFileInCommand >> execute [
+StFBCopyFullnameCommand >> execute [
 	"Execute the actions that should be done by the command.
 	 This method expect that the context has been put in #context inst. var. if any context is relevant."
 
-	self selectedEntry fileIn
+	Clipboard clipboardText: self selectedEntry fullName
 ]
 
 { #category : 'initialization' }
-StFBFileInCommand >> initialize [
+StFBCopyFullnameCommand >> initialize [
 
 	super initialize.
 	self
-		name: 'File in';
-		description: 'File in the selected source file'
+		name: 'Copy full path';
+		description: 'Copy the selected file full path name'
 ]

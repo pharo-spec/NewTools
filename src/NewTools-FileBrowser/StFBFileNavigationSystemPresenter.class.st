@@ -82,10 +82,17 @@ Class {
 StFBFileNavigationSystemPresenter class >> buildCommandsGroupWith: presenter forRoot: rootCommandGroup [
 	rootCommandGroup
 		register:
-			((CmCommandGroup named: 'Menu') asSpecGroup
+			((CmCommandGroup named: 'StFBNavigationMenu') asSpecGroup
 				register: StFBNewFolderCommand forSpec;
+				register: StFBCopyBasenameCommand forSpec;
+				register: StFBCopyFullnameCommand forSpec;				
+				
+				register: StFBRenameCommand forSpec;
+				register: StFBRemoveCommand forSpec;
 				register: StFBInspectCommand forSpec;
+				register: StFBCompressCommand forSpec;
 				register: StFBFileInCommand forSpec;
+				register: StFBChangeListCommand forSpec;
 				register:
 					((CmCommandGroup named: 'Bookmarks') asSpecGroup
 						register: StFBAddBookmarkCommand forSpec;
@@ -95,7 +102,8 @@ StFBFileNavigationSystemPresenter class >> buildCommandsGroupWith: presenter for
 
 { #category : 'defaults' }
 StFBFileNavigationSystemPresenter class >> defaultDirectory [
-	^ FileLocator imageDirectory
+
+	^ StFBSettings defaultDirectory
 ]
 
 { #category : 'defaults' }
@@ -326,7 +334,7 @@ StFBFileNavigationSystemPresenter >> initializeFilesTable [
 			a isDirectory & b isDirectory not or: [ 
 					a isDirectory = b isDirectory and: [ 
 							a basename asLowercase < b basename asLowercase ] ] ];
-		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'Menu' ]
+		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'StFBNavigationMenu' ]
 ]
 
 { #category : 'initialization' }

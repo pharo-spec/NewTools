@@ -8,12 +8,41 @@ Class {
 	#classTraits : '{} + TraitedClass',
 	#classVars : [
 		'AutoCollapsePaths',
+		'DefaultDirectory',
 		'OpenOnLastDirectory'
 	],
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'UI'
 }
+
+{ #category : 'settings' }
+StFBSettings class >> defaultDirectory [
+	"Modified by settings File Browser self classSide >> #openOnDefaultDirectoryOn: "
+
+	^ DefaultDirectory
+		ifNil: [ DefaultDirectory := FileLocator imageDirectory ]
+]
+
+{ #category : 'settings' }
+StFBSettings class >> defaultDirectory: aFileReference [
+	"Modified by settings File Browser self classSide >> #openOnDefaultDirectoryOn: "
+
+	DefaultDirectory := aFileReference
+]
+
+{ #category : 'settings' }
+StFBSettings class >> defaultDirectoryOn: aBuilder [
+	<systemsettings>
+
+	(aBuilder setting: #defaultDirectory)
+		parent: #fileBrowser;
+		default: self defaultDirectory;
+		label: 'Default directory';
+		description: 'Set the default directory for opening the file browser and dialogs';
+		target: self
+
+]
 
 { #category : 'settings' }
 StFBSettings class >> groupSettingsOn: aBuilder [

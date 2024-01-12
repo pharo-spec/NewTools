@@ -1,8 +1,5 @@
-"
-I'm a inspect command use to inspect the selectedFile
-"
 Class {
-	#name : 'StFBInspectCommand',
+	#name : 'StFBCopyBasenameCommand',
 	#superclass : 'StFBSelectionCommand',
 	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-FileBrowser-Commands',
@@ -11,26 +8,27 @@ Class {
 }
 
 { #category : 'converting' }
-StFBInspectCommand >> asSpecCommand [
+StFBCopyBasenameCommand >> asSpecCommand [
 
 	^ super asSpecCommand
-		iconName: #smallInspectIt;
-		shortcutKey: $i meta;		
+		iconName: #smallCopy;
+		shortcutKey: $c meta;		
 		yourself
 ]
 
 { #category : 'executing' }
-StFBInspectCommand >> execute [
+StFBCopyBasenameCommand >> execute [
 	"Execute the actions that should be done by the command.
 	 This method expect that the context has been put in #context inst. var. if any context is relevant."
 
-	self selectedEntry inspect
+	Clipboard clipboardText: self selectedEntry basename
 ]
 
 { #category : 'initialization' }
-StFBInspectCommand >> initialize [
+StFBCopyBasenameCommand >> initialize [
+
 	super initialize.
 	self
-		name: 'Inspect file';
-		description: 'Inspect the selected file'
+		name: 'Copy name';
+		description: 'Copy the selected file name'
 ]

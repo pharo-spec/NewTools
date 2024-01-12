@@ -11,8 +11,10 @@ Class {
 
 { #category : 'converting' }
 StFBNewFolderCommand >> asSpecCommand [
+
 	^ super asSpecCommand
 		iconName: #add;
+		shortcutKey: $n meta;		
 		yourself
 ]
 

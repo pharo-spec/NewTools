@@ -1,3 +1,7 @@
+"
+Abstract class to group behavior related with selections in the File Browser tool.
+
+"
 Class {
 	#name : 'StFBSelectionCommand',
 	#superclass : 'CmCommand',
@@ -5,6 +9,12 @@ Class {
 	#package : 'NewTools-FileBrowser',
 	#tag : 'Commands'
 }
+
+{ #category : 'executing' }
+StFBSelectionCommand >> application [
+
+	^ self context application
+]
 
 { #category : 'accessing' }
 StFBSelectionCommand >> selectedEntry [
@@ -23,4 +33,11 @@ StFBSelectionCommand >> selectedEntryBasename [
 StFBSelectionCommand >> selectedEntryName [
 
 	^ self selectedEntry name
+]
+
+{ #category : 'utils' }
+StFBSelectionCommand >> updateTableContent [
+	"Update the receiver's file navigation table"
+
+	self context updateTableContent
 ]

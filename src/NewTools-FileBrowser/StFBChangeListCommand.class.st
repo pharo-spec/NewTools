@@ -2,7 +2,7 @@
 Implements an action to file in the selected file (representing a Pharo source code) into the current system
 "
 Class {
-	#name : 'StFBFileInCommand',
+	#name : 'StFBChangeListCommand',
 	#superclass : 'StFBSelectionCommand',
 	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-FileBrowser-Commands',
@@ -11,33 +11,33 @@ Class {
 }
 
 { #category : 'converting' }
-StFBFileInCommand >> asSpecCommand [
+StFBChangeListCommand >> asSpecCommand [
 
 	^ super asSpecCommand
-		iconName: #up;
-		shortcutKey: $f meta;		
+		iconName: #changeSorter;
+		shortcutKey: $b meta;
 		yourself
 ]
 
 { #category : 'testing' }
-StFBFileInCommand >> canBeExecuted [
+StFBChangeListCommand >> canBeExecuted [
 
 	^ self selectedEntry isFile and: [ self selectedEntryBasename endsWith: '.st' ]
 ]
 
 { #category : 'executing' }
-StFBFileInCommand >> execute [
+StFBChangeListCommand >> execute [
 	"Execute the actions that should be done by the command.
 	 This method expect that the context has been put in #context inst. var. if any context is relevant."
 
-	self selectedEntry fileIn
+	self application tools changeList openOnStream: self selectedEntry asFileReference readStream
 ]
 
-{ #category : 'initialization' }
-StFBFileInCommand >> initialize [
+{ #category : 'as yet unclassified' }
+StFBChangeListCommand >> initialize [
 
 	super initialize.
 	self
-		name: 'File in';
-		description: 'File in the selected source file'
+		name: 'Changes Browser';
+		description: 'Open a Changes Browser on the selected entry'
 ]

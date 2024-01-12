@@ -14,36 +14,15 @@ Class {
 }
 
 { #category : 'commander2' }
-StFBDirectoryTreePresenter class >> buildBrowsingOperationsGroupWith: presenterInstance [
-
-]
-
-{ #category : 'commander2' }
 StFBDirectoryTreePresenter class >> buildCommandsGroupWith: presenterInstance forRoot: rootCommandGroup [
 
 	rootCommandGroup
-		register: (self buildStFBDirectoryContextualGroupWith: presenterInstance)
-]
-
-{ #category : 'commander2' }
-StFBDirectoryTreePresenter class >> buildListingOperationsGroupWith: presenterInstance [
-
-
-]
-
-{ #category : 'commander2' }
-StFBDirectoryTreePresenter class >> buildSelectionOperationsGroupWith: presenterInstance [
-
-]
-
-{ #category : 'commander2' }
-StFBDirectoryTreePresenter class >> buildStFBDirectoryContextualGroupWith: presenterInstance [
-
-	^ (CmCommandGroup named: 'StFBDirectoryContextualMenu') asSpecGroup
-		register: (self buildBrowsingOperationsGroupWith: presenterInstance);
-		register: (self buildListingOperationsGroupWith: presenterInstance);
-		register: (self buildSelectionOperationsGroupWith: presenterInstance);
-		yourself
+		register: (
+			(CmCommandGroup named: 'StFBDirectoryContextualMenu') asSpecGroup
+				register: StFBNewFolderCommand forSpec;			
+				register: StFBRenameCommand forSpec;
+				register: StFBRemoveCommand forSpec;				
+				yourself)
 ]
 
 { #category : 'layout' }
@@ -103,4 +82,11 @@ StFBDirectoryTreePresenter >> initializePresenters [
 		children: [ :aClass | aClass subdirectories ];
 		beResizable;
 		contextMenu: [ (self rootCommandsGroup / 'StFBDirectoryContextualMenu') beRoot asMenuPresenter ].
+]
+
+{ #category : 'accessing' }
+StFBDirectoryTreePresenter >> selectedEntry [
+	"Answer a <FileReference> representing the currently selected directory item" 
+
+	^ directoryTreePresenter selectedItem fileReference
 ]
