@@ -1,6 +1,7 @@
 Class {
 	#name : 'StFBOpenFileOrDirectoryDialog',
 	#superclass : 'StFBFileDialogPresenter',
+	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'UI'

@@ -53,7 +53,7 @@ fileReferenceTable <SpTablePresenter> it's display children of the current direc
 "
 Class {
 	#name : 'StFBFileNavigationSystemPresenter',
-	#superclass : 'SpPresenter',
+	#superclass : 'StPresenter',
 	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'currentPathTextInputPresenter',
@@ -85,6 +85,7 @@ StFBFileNavigationSystemPresenter class >> buildCommandsGroupWith: presenter for
 			((CmCommandGroup named: 'Menu') asSpecGroup
 				register: StFBNewFolderCommand forSpec;
 				register: StFBInspectCommand forSpec;
+				register: StFBFileInCommand forSpec;
 				register:
 					((CmCommandGroup named: 'Bookmarks') asSpecGroup
 						register: StFBAddBookmarkCommand forSpec;
@@ -435,7 +436,8 @@ StFBFileNavigationSystemPresenter >> openFolder: aFileReference [
 
 	self updateWidgetWithFileReference: aFileReference.
 	history register: currentDirectory.
-	self announcer announce: (StFBCurrentDirectoryChanged with: aFileReference) 
+	self owner expandPath: aFileReference
+
 ]
 
 { #category : 'initialization' }

@@ -67,6 +67,7 @@ icons
 Class {
 	#name : 'StFBFileDialogPresenter',
 	#superclass : 'StPresenter',
+	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'bookmarksTreeTable',
 		'bookmarks',

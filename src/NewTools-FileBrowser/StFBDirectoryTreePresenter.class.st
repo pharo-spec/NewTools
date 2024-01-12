@@ -3,7 +3,7 @@ Implements a basic Spec presenter to display a directory tree.
 "
 Class {
 	#name : 'StFBDirectoryTreePresenter',
-	#superclass : 'SpPresenter',
+	#superclass : 'StPresenter',
 	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'directoryTreePresenter'
@@ -77,10 +77,8 @@ StFBDirectoryTreePresenter >> expandPath: aFileLocator [
 		aPathForSpec add: (currentNode directories indexOf: found).
 		currentNode := found ].
 
-	(directoryTreePresenter isExpanded: aPathForSpec)
-		ifFalse: [ directoryTreePresenter 
-			expandPath: aPathForSpec;
-			selectPath: aPathForSpec scrollToSelection: true ]
+	directoryTreePresenter 
+		selectPath: aPathForSpec scrollToSelection: false
 ]
 
 { #category : 'initialization' }

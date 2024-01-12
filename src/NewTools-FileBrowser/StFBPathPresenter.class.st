@@ -20,7 +20,7 @@ I'll display a link with each part of the path and the user will be able to clic
 "
 Class {
 	#name : 'StFBPathPresenter',
-	#superclass : 'SpPresenter',
+	#superclass : 'StPresenter',
 	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'action'

@@ -4,7 +4,8 @@ General file system presenter, which replaces the older FileList tool.
 "
 Class {
 	#name : 'StFBFileSystemPresenter',
-	#superclass : 'SpPresenter',
+	#superclass : 'StPresenter',
+	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'treeNavigationSystem',
 		'fileNavigationSystem'
@@ -22,16 +23,11 @@ StFBFileSystemPresenter class >> open [
 ]
 
 { #category : 'initialization' }
-StFBFileSystemPresenter >> announcer [
-
-	^ self application announcer
-]
-
-{ #category : 'initialization' }
 StFBFileSystemPresenter >> connectPresenters [ 
 
 	treeNavigationSystem
-		transmitDo: [ : sel | fileNavigationSystem openFolder: sel fileReference ].
+		transmitDo: [ : selection | 
+			selection ifNotNil: [ fileNavigationSystem openFolder: selection fileReference ] ].
 
 	fileNavigationSystem := self instantiate: StFBFileNavigationSystemPresenter.
 	fileNavigationSystem 
@@ -51,6 +47,13 @@ StFBFileSystemPresenter >> defaultLayout [
 			yourself
 ]
 
+{ #category : 'accessing' }
+StFBFileSystemPresenter >> expandPath: aFileReference [ 
+	"Expand the directory's navigation tree to aFileReference"
+
+	treeNavigationSystem expandPath: aFileReference
+]
+
 { #category : 'initialization' }
 StFBFileSystemPresenter >> initialExtentForWindow [
 
@@ -68,7 +71,7 @@ StFBFileSystemPresenter >> initializePresenters [
 			StFBSizeColumn .
 			StFBRightsColumn }.
 	treeNavigationSystem expandPath: fileNavigationSystem currentDirectory.
-	self registerEvents.
+
 ]
 
 { #category : 'initialization' }
@@ -79,17 +82,6 @@ StFBFileSystemPresenter >> initializeWindow: aSpWindowPresenter [
 	self setTitleTo: aSpWindowPresenter.
 	self setWindowIconTo: aSpWindowPresenter.
 	self setInitialExtentTo: aSpWindowPresenter
-]
-
-{ #category : 'initialization' }
-StFBFileSystemPresenter >> registerEvents [
-
-	self announcer subscriptions reset.
-
-	self announcer weak
-		when: StFBCurrentDirectoryChanged 
-		send: #expandPath: 
-		to: treeNavigationSystem.
 ]
 
 { #category : 'initialization' }

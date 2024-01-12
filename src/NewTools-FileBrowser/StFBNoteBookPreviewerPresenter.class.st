@@ -3,7 +3,8 @@ I'm a notebook Presenter use by the previewer system
 "
 Class {
 	#name : 'StFBNoteBookPreviewerPresenter',
-	#superclass : 'SpPresenter',
+	#superclass : 'StPresenter',
+	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'notebook',
 		'pageContent',

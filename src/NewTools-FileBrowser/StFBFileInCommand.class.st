@@ -1,8 +1,8 @@
 "
-I'm a inspect command use to inspect the selectedFile
+Implements an action to file in the selected file (representing a Pharo source code) into the current system
 "
 Class {
-	#name : 'StFBInspectCommand',
+	#name : 'StFBFileInCommand',
 	#superclass : 'StFBSelectionCommand',
 	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-FileBrowser-Commands',
@@ -11,24 +11,32 @@ Class {
 }
 
 { #category : 'converting' }
-StFBInspectCommand >> asSpecCommand [
+StFBFileInCommand >> asSpecCommand [
+
 	^ super asSpecCommand
-		iconName: #smallInspectIt;
+		iconName: #up;
 		yourself
 ]
 
+{ #category : 'testing' }
+StFBFileInCommand >> canBeExecuted [
+
+	^ self selectedEntry isFile and: [ self selectedEntryBasename endsWith: '.st' ]
+]
+
 { #category : 'executing' }
-StFBInspectCommand >> execute [
+StFBFileInCommand >> execute [
 	"Execute the actions that should be done by the command.
 	 This method expect that the context has been put in #context inst. var. if any context is relevant."
 
-	self selectedEntry inspect
+	self selectedEntry fileIn
 ]
 
 { #category : 'initialization' }
-StFBInspectCommand >> initialize [
+StFBFileInCommand >> initialize [
+
 	super initialize.
 	self
-		name: 'Inspect file';
-		description: 'Inspect the selected file'
+		name: 'File in';
+		description: 'File in the selected source file'
 ]

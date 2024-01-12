@@ -7,6 +7,7 @@ Class {
 	#superclass : 'Object',
 	#classTraits : '{} + TraitedClass',
 	#classVars : [
+		'AutoCollapsePaths',
 		'OpenOnLastDirectory'
 	],
 	#category : 'NewTools-FileBrowser-UI',

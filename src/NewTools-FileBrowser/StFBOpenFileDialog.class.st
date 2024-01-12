@@ -9,6 +9,7 @@ examples see class side method example
 Class {
 	#name : 'StFBOpenFileDialog',
 	#superclass : 'StFBOpenFileOrDirectoryDialog',
+	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'UI'
