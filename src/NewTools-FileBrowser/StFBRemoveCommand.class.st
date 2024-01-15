@@ -19,9 +19,28 @@ StFBRemoveCommand >> asSpecCommand [
 		yourself
 ]
 
+{ #category : 'private' }
+StFBRemoveCommand >> confirmNotEmpty [
+
+	^ self application newConfirm
+		 title: 'Confirmation';
+		 label: 'The selected directory has contents. Please confirm removal of ' , self selectedEntryBasename;
+		 acceptLabel: 'Continue';
+		 cancelLabel: 'Cancel';
+		 openModal
+]
+
+{ #category : 'testing' }
+StFBRemoveCommand >> contextShouldReparent [
+	"Answer <true> if the receiver should move to the parent of the current directory, for example in directory tree when the selected directory is deleted"
+
+	^ self context shouldReparent.
+]
+
 { #category : 'executing' }
 StFBRemoveCommand >> execute [
 
+	| entryToDelete |
 	(self application newConfirm
 		 title: 'Confirmation';
 		 label: 'Please confirm removal of ' , self selectedEntryBasename;
@@ -29,7 +48,15 @@ StFBRemoveCommand >> execute [
 		 cancelLabel: 'Cancel';
 		 openModal) ifFalse: [ ^ self ].
 
-	self selectedEntry ensureDelete.
+	entryToDelete := self selectedEntry.
+	self contextShouldReparent
+		ifTrue: [ self context openFolder: self currentDirectory parent ].
+	[ entryToDelete ensureDelete ]
+	on: DirectoryIsNotEmpty
+	do: [ : ex | 
+		self confirmNotEmpty 
+			ifTrue: [ entryToDelete ensureDeleteAll ]
+			ifFalse: [ ^ self inform: 'Remove directory cancelled' ] ].
 	self context updateTableContent
 ]
 

@@ -32,7 +32,7 @@ StFBCompressCommand >> execute [
 
 	| zip newZipName |
 	
-	(newZipName := self selectedEntryBasename withoutExtension , self compressorExtension) asFileReference exists
+	(newZipName := self selectedEntry withoutExtension basename , self compressorExtension) asFileReference exists
 		ifTrue: [ self error: 'Compressed file already exists' ].
 	zip := ZipArchive new.
 	zip addFile: self selectedEntry.

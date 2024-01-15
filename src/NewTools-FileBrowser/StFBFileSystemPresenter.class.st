@@ -4,7 +4,7 @@ General file system presenter, which replaces the older FileList tool.
 "
 Class {
 	#name : 'StFBFileSystemPresenter',
-	#superclass : 'StPresenter',
+	#superclass : 'StFBAbstractPresenter',
 	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'treeNavigationSystem',
@@ -15,21 +15,24 @@ Class {
 	#tag : 'UI'
 }
 
-{ #category : 'examples' }
-StFBFileSystemPresenter class >> open [
-	<example>
+{ #category : 'defaults' }
+StFBFileSystemPresenter class >> lastVisitedDirectory [
 
-	self new open.
+	(LastVisitedDirectory isNotNil and: [ 
+		 [ LastVisitedDirectory exists ]
+			 on: ResolutionRequest
+			 do: [ false ] ]) ifFalse: [ 
+		LastVisitedDirectory := self defaultDirectory ].
+	^ LastVisitedDirectory 
 ]
 
 { #category : 'initialization' }
 StFBFileSystemPresenter >> connectPresenters [ 
 
 	treeNavigationSystem
-		transmitDo: [ : selection | 
-			selection ifNotNil: [ fileNavigationSystem openFolder: selection fileReference ] ].
+		transmitDo: [ : selection | self updateWidgetWithFileReference: selection fileReference ].
 
-	fileNavigationSystem := self instantiate: StFBFileNavigationSystemPresenter.
+	fileNavigationSystem := self instantiate: StFBFileNavigationSystemPresenter on: self model.
 	fileNavigationSystem 
 		columns: { 
 			StFBModificationDateColumn .
@@ -63,8 +66,8 @@ StFBFileSystemPresenter >> initialExtentForWindow [
 { #category : 'initialization' }
 StFBFileSystemPresenter >> initializePresenters [
 
-	treeNavigationSystem := self instantiate: StFBDirectoryTreePresenter.
-	fileNavigationSystem := self instantiate: StFBFileNavigationSystemPresenter.
+	treeNavigationSystem := self instantiate: StFBDirectoryTreePresenter on: self model.
+	fileNavigationSystem := self instantiate: StFBFileNavigationSystemPresenter on: self model.
 	fileNavigationSystem 
 		columns: { 
 			StFBModificationDateColumn .
@@ -82,6 +85,15 @@ StFBFileSystemPresenter >> initializeWindow: aSpWindowPresenter [
 	self setTitleTo: aSpWindowPresenter.
 	self setWindowIconTo: aSpWindowPresenter.
 	self setInitialExtentTo: aSpWindowPresenter
+]
+
+{ #category : 'utilities' }
+StFBFileSystemPresenter >> openFolder: aFileReference [
+
+	fileNavigationSystem updateWidgetWithFileReference: aFileReference.
+	model openFolder: aFileReference.
+	self expandPath: aFileReference
+
 ]
 
 { #category : 'initialization' }
@@ -102,4 +114,19 @@ StFBFileSystemPresenter >> setWindowIconTo: aSpWindowPresenter [
 	
 	aSpWindowPresenter	windowIcon: (self iconNamed: #open).
 
+]
+
+{ #category : 'utilities' }
+StFBFileSystemPresenter >> updateTableContent [
+
+	fileNavigationSystem updateTableContent.
+
+
+]
+
+{ #category : 'utilities' }
+StFBFileSystemPresenter >> updateWidgetWithFileReference: aFileReference [ 
+
+	(aFileReference notNil and: [ aFileReference exists ] )
+		ifTrue: [ fileNavigationSystem updateWidgetWithFileReference: aFileReference ]
 ]

@@ -39,14 +39,6 @@ StFBOpenDirectoryDialog >> initialTitle [
 	^ 'Select Directory To Open'
 ]
 
-{ #category : 'initialization' }
-StFBOpenDirectoryDialog >> initialize [
-
-	super initialize.
-
-	filter ifNil: [ filter := StFBDirectoryFilter new ]
-]
-
 { #category : 'actions' }
 StFBOpenDirectoryDialog >> selectedEntry [
 

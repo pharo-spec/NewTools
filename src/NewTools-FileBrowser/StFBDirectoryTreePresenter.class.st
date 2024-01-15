@@ -3,7 +3,7 @@ Implements a basic Spec presenter to display a directory tree.
 "
 Class {
 	#name : 'StFBDirectoryTreePresenter',
-	#superclass : 'StPresenter',
+	#superclass : 'StFBAbstractPresenter',
 	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'directoryTreePresenter'
@@ -89,4 +89,11 @@ StFBDirectoryTreePresenter >> selectedEntry [
 	"Answer a <FileReference> representing the currently selected directory item" 
 
 	^ directoryTreePresenter selectedItem fileReference
+]
+
+{ #category : 'asserting' }
+StFBDirectoryTreePresenter >> shouldReparent [
+	"A removal was requested from the directory tree, which has the item to be removed as current selection, so we should move to the parent"
+	
+	^ true
 ]

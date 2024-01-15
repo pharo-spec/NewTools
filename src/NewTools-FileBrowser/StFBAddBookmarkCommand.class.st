@@ -24,10 +24,11 @@ StFBAddBookmarkCommand >> canBeExecuted [
 { #category : 'executing' }
 StFBAddBookmarkCommand >> execute [
 	| fileReference |
+
 	fileReference := self context selectedEntry.
-	self context owner bookmarks add: (StFBBookmark name: fileReference basename location: fileReference icon: nil).
+	self context addBookmark: fileReference.
 	self flag: #todo.	"We can do better here."
-	self context owner bookmarksTreeTable roots: self context owner bookmarks
+	self context bookmarksTreeTable roots: self context bookmarks
 ]
 
 { #category : 'initialization' }

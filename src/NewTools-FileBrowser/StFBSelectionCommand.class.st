@@ -17,6 +17,13 @@ StFBSelectionCommand >> application [
 ]
 
 { #category : 'accessing' }
+StFBSelectionCommand >> currentDirectory [ 
+	"Answer a <FileReference> with the receiver's current directory"
+
+	^ self context currentDirectory 
+]
+
+{ #category : 'accessing' }
 StFBSelectionCommand >> selectedEntry [
 
 	^ self context selectedEntry 

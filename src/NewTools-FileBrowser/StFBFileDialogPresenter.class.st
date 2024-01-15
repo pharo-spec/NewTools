@@ -1,83 +1,62 @@
 "
-I am an abstract base class for different styles of opening/saving.
+Abstract base class for different styles of opening/saving.
+Do not use this class directly, instead check subclasses to see specific uses.
 
+## Author 
 
-
-
-## author 
-
-main Author : peteruhnak
-Migrator Spec 1 to Spec 2 : CafeKrem (github pseudo)
-if you have question please send me a mail : dutriezcle@gmail.com
+- Main Author : peteruhnak
+- Migrator Spec 1 to Spec 2 : CafeKrem (github pseudo)
+- Authors: Esteban Lorenzano, Hernán Morales Durand.
 
 ## Examples
 
-|------------------------------------------|
-				look at this method 
-|---> FDFileDialogPresenter fullExample <--|
-|------------------------------------------|
+```smalltalk
+StFBFileDialogPresenter fullExample
+```
 
-see class-side
-
-## Website
-
-https://github.com/peteruhnak/file-dialog
-
-## HOW TO RUN 
-
+```smalltalk
 FDOpenFileDialog open
-open is define in FDFileDialogPresenter class side 
-Don't use me directly -- instead use one of my children.
+```
 
-## CUSTOMIZATION 
+## Customization
 
-I define some method to customize your son of FileDialogPresenter
+This class defines methods to customize your File Dialog Presenters
 
-whenSelected: aBlock 
-	this method is use to define the action of the accept button
-		
-filtersCustomization: aCollection 
-	this method is use to define a set of Filter (choose one or more among FDAbstractPredicate son or creat a new  predicate)
-	THERE IS ALWAYS THE DEFAULT FILTER (this filter filterNothing)
-	example: 
-		
-		(FDOpenFileDialog new filtersCustomization: { FDJPGAndPNGPredicate new }) openDialogWithSpec
-		
-bookmarks: aCollection Of FDAbstractBookMark
-	this method will set bookmarks use the class FDAbstractBookMark
-		you can create group with FDGroupBookMark or use FDBookMark to create bookmark
-		example : 
-		
-			class side method defaultBookmarks
-	  
-defaultFolder: aPath
-	this method will open tou fileDialog on a aPath , this path must exist and be a directory
-	example
-		
-		(FDOpenFileDialog new defaultFolder: '/home/cdutriez/' asFileReference) openDialogWithSpec 
+- `whenSelected: aBlock` : Used to define the action of the accept button
+- `bookmarks: aCollection Of FDAbstractBookMark` Used to set bookmarks use the class `StFBAbstractBookMark`. You can create group with `StFBGroupBookmark` or use `StFBBookmark` to create bookmark.	  
+- `defaultFolder: aPath` Used to open a fileDialog on a aPath, this path must exist and be a directory
+
+```smalltalk
+(StFBOpenFileDialog new defaultFolder: '/home/cdutriez/' asFileReference) open 
+```
+
+- `filtersCustomization: aCollection` Used to define a set of Filter (choose one or more among `StFBAbstractPredicate` or create a new  predicate)
+
+There is always a default filter (`filterNothing`)
+
+```smalltalk		
+(StFBOpenFileDialog new filtersCustomization: { StFBJPGAndPNGPredicate new }) open
+```
+
 	
-icons
------
-	if you want to add icons you just have to create a method with pragma <icons> and this method have to return an array of association 
-	example:
-		
-		see FDFileDialogPresenter textIcons method 
+## Icons
+
+If you want to add icons you just have to create a method with pragma <icons> and this method have to return an array of association 
+
+FDFileDialogPresenter textIcons method 
 
 "
 Class {
 	#name : 'StFBFileDialogPresenter',
-	#superclass : 'StPresenter',
+	#superclass : 'StFBAbstractPresenter',
 	#classTraits : '{} + TraitedClass',
 	#instVars : [
-		'bookmarksTreeTable',
-		'bookmarks',
 		'fileNavigationSystem',
 		'okAction',
 		'title',
 		'filter'
 	],
 	#classVars : [
-		'Bookmarks',
 		'OkAction'
 	],
 	#category : 'NewTools-FileBrowser-UI',
@@ -130,7 +109,7 @@ StFBFileDialogPresenter class >> chooseThenDo: aBlock [
 	"Return selected item immediately (blocking/modal). Returns nil if no valid item selected"
 
 	<example>
-	^ self new
+	^ (self on: StFBFileSystemModel new)
 		  okAction: aBlock;
 		  open
 ]
@@ -176,8 +155,9 @@ StFBFileDialogPresenter class >> extensions: aCollectionOfExtensions named: aStr
 
 { #category : 'class initialization' }
 StFBFileDialogPresenter class >> initialize [
+
 	OkAction := self defaultOkActionBlock.
-	Bookmarks := StFBBookmark defaultBookmarks
+
 ]
 
 { #category : 'icons' }
@@ -191,22 +171,6 @@ StFBFileDialogPresenter class >> textIcons [
 StFBFileDialogPresenter >> allowsChooseDirectoryIfNoFilename [
 
 	^ false
-]
-
-{ #category : 'accessing' }
-StFBFileDialogPresenter >> bookmarks [
-	^ bookmarks
-]
-
-{ #category : 'api - customization' }
-StFBFileDialogPresenter >> bookmarks: aCollectionOfFDGroupBookMark [
-	bookmarks := aCollectionOfFDGroupBookMark asOrderedCollection.
-	bookmarksTreeTable roots: bookmarks 
-]
-
-{ #category : 'accessing' }
-StFBFileDialogPresenter >> bookmarksTreeTable [
-	^ bookmarksTreeTable
 ]
 
 { #category : 'accessing - ui' }
@@ -253,17 +217,6 @@ StFBFileDialogPresenter >> connectPresenters [
 				fileNavigationSystem openFolder: selectedItem location ] ] ]
 ]
 
-{ #category : 'accessing' }
-StFBFileDialogPresenter >> currentDirectory [
-	^ fileNavigationSystem currentDirectory 
-]
-
-{ #category : 'utilities' }
-StFBFileDialogPresenter >> defaultFolder [
-
-	^ FileLocator imageDirectory asFileReference
-]
-
 { #category : 'api - customization' }
 StFBFileDialogPresenter >> defaultFolder: aPath [
 	fileNavigationSystem defaultFolder: aPath
@@ -295,6 +248,12 @@ StFBFileDialogPresenter >> fileReferenceTable [
 ]
 
 { #category : 'accessing' }
+StFBFileDialogPresenter >> filter [
+	^ filter
+		ifNil: [ filter := StFBVisibleFilter new ]
+]
+
+{ #category : 'accessing' }
 StFBFileDialogPresenter >> filter: aStFBFilter [
 
 	filter := aStFBFilter.
@@ -316,11 +275,8 @@ StFBFileDialogPresenter >> iconFor: anEntry [
 { #category : 'initialization' }
 StFBFileDialogPresenter >> initialize [
 
-	bookmarks := Bookmarks.
+	super initialize.
 	okAction := OkAction.
-
-	filter := StFBVisibleFilter new.
-	super initialize
 ]
 
 { #category : 'initialization' }
@@ -336,7 +292,7 @@ StFBFileDialogPresenter >> initializeBookmarksTreeTable [
 					 (SpStringTableColumn evaluated: [ :groupBookMark | 
 							  groupBookMark name ]);
 				 yourself);
-		roots: bookmarks;
+		roots: self bookmarks;
 		children: #children;
 		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'Menu' ];
 		expandRoots
@@ -375,8 +331,8 @@ StFBFileDialogPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 StFBFileDialogPresenter >> initializePresenters [
 
 	bookmarksTreeTable := self newTreeTable.
-	fileNavigationSystem := self instantiate: StFBFileNavigationSystemPresenter.
-	fileNavigationSystem filter: filter.
+	fileNavigationSystem := self instantiate: StFBFileNavigationSystemPresenter on: self model.
+	fileNavigationSystem filter: self filter.
 
 	self initializeBookmarksTreeTable
 ]
@@ -396,7 +352,7 @@ StFBFileDialogPresenter >> isRootDirectory: aDirectory [
 
 { #category : 'api - customization' }
 StFBFileDialogPresenter >> isolate [
-	bookmarks := bookmarks copy.
+	self bookmarks: self bookmarks copy.
 	
 ]
 
@@ -433,11 +389,6 @@ StFBFileDialogPresenter >> selectFile: aFile [
 ]
 
 { #category : 'accessing' }
-StFBFileDialogPresenter >> selectedBookMark [
-	^ bookmarksTreeTable selection selectedItem
-]
-
-{ #category : 'accessing' }
 StFBFileDialogPresenter >> selectedEntry [
 
 	| entry |
@@ -453,16 +404,4 @@ StFBFileDialogPresenter >> selectedEntry [
 StFBFileDialogPresenter >> showDirectory: aFileReference [
 
 	fileNavigationSystem currentDirectory: aFileReference
-]
-
-{ #category : 'accessing - ui' }
-StFBFileDialogPresenter >> title [
-
-	^ title ifNil: [ self initialTitle ]
-]
-
-{ #category : 'accessing - ui' }
-StFBFileDialogPresenter >> title: aString [
-
-	title := aString
 ]

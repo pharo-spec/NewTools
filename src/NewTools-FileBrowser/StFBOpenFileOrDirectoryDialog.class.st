@@ -1,3 +1,7 @@
+"
+This is an abstract class to group open dialog presenter behavior.
+See subclasses for specific users.
+"
 Class {
 	#name : 'StFBOpenFileOrDirectoryDialog',
 	#superclass : 'StFBFileDialogPresenter',

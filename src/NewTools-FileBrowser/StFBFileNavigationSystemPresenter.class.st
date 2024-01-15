@@ -53,24 +53,21 @@ fileReferenceTable <SpTablePresenter> it's display children of the current direc
 "
 Class {
 	#name : 'StFBFileNavigationSystemPresenter',
-	#superclass : 'StPresenter',
+	#superclass : 'StFBAbstractPresenter',
 	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'currentPathTextInputPresenter',
 		'nameText',
 		'filtersDropList',
-		'currentDirectory',
 		'filter',
 		'previewer',
 		'nextButton',
 		'previousButton',
 		'notebookPreviewer',
 		'fileReferenceTable',
-		'history',
 		'configButton'
 	],
 	#classVars : [
-		'LastVisitedDirectory',
 		'Previewer'
 	],
 	#category : 'NewTools-FileBrowser-UI',
@@ -101,12 +98,6 @@ StFBFileNavigationSystemPresenter class >> buildCommandsGroupWith: presenter for
 ]
 
 { #category : 'defaults' }
-StFBFileNavigationSystemPresenter class >> defaultDirectory [
-
-	^ StFBSettings defaultDirectory
-]
-
-{ #category : 'defaults' }
 StFBFileNavigationSystemPresenter class >> defaultPreviewer [
 	^ StFBContentPreviewer new
 ]
@@ -125,18 +116,9 @@ StFBFileNavigationSystemPresenter class >> example [
 
 { #category : 'class initialization' }
 StFBFileNavigationSystemPresenter class >> initialize [
+
+	super initialize.
 	Previewer := self defaultPreviewer
-]
-
-{ #category : 'defaults' }
-StFBFileNavigationSystemPresenter class >> lastVisitedDirectory [
-
-	(LastVisitedDirectory isNotNil and: [ 
-		 [ LastVisitedDirectory exists ]
-			 on: ResolutionRequest
-			 do: [ false ] ]) ifFalse: [ 
-		LastVisitedDirectory := self defaultDirectory ].
-	^ LastVisitedDirectory
 ]
 
 { #category : 'api - customization' }
@@ -171,52 +153,9 @@ StFBFileNavigationSystemPresenter >> connectPresenters [
 	self configButtonAction.
 ]
 
-{ #category : 'utilities' }
-StFBFileNavigationSystemPresenter >> createDirectory [
-	^ self createDirectory: 'new-folder'
-]
-
-{ #category : 'utilities' }
-StFBFileNavigationSystemPresenter >> createDirectory: initialName [
-	| name path |
-	name := (UIManager default
-		request: 'Folder name'
-		initialAnswer: initialName
-		title: 'Create New Folder') ifNil: [ ^ self ].
-	path := currentDirectory / name.
-	path exists
-		ifFalse: [ (currentDirectory / name) ensureCreateDirectory.
-			self openFolder: currentDirectory.
-			^ self ].
-	path isDirectory
-		ifTrue: [ UIManager default alert: 'A folder with that name already exists.' ].
-	path isFile
-		ifTrue: [ UIManager default alert: 'A file with that name already exists.' ].
-	self createDirectory: name
-]
-
-{ #category : 'accessing' }
-StFBFileNavigationSystemPresenter >> currentDirectory [ 
-	^ currentDirectory
-]
-
-{ #category : 'accessing' }
-StFBFileNavigationSystemPresenter >> currentDirectory: aFileReference [
-
-	(aFileReference exists and: [ aFileReference isDirectory ]) ifFalse: [ 
-		DirectoryDoesNotExist signalWith: aFileReference ].
-	currentDirectory := aFileReference.
-	LastVisitedDirectory := currentDirectory
-]
-
 { #category : 'accessing' }
 StFBFileNavigationSystemPresenter >> currentPathTextInputPresenter [
 	^ currentPathTextInputPresenter
-]
-
-{ #category : 'initialization' }
-StFBFileNavigationSystemPresenter >> defaultDirectory [
-	^ self class defaultDirectory
 ]
 
 { #category : 'api - customization' }
@@ -269,7 +208,7 @@ StFBFileNavigationSystemPresenter >> filesListAction [
 		previewProcess ifNotNil: [ 
 			previewProcess isTerminated ifFalse: [ previewProcess terminate ] ].
 		selectedItem selectedItem isDirectory
-			ifTrue: [ self openFolder: selectedItem selectedItem ]
+			ifTrue: [ self owner openFolder: selectedItem selectedItem ]
 			ifFalse: [ self owner confirm ] ].
 
 	fileReferenceTable whenSelectedDo: [ :aFileReference | 
@@ -347,17 +286,6 @@ StFBFileNavigationSystemPresenter >> initializeFiltersDropList [
 ]
 
 { #category : 'initialization' }
-StFBFileNavigationSystemPresenter >> initializeHistoryIteratorWith: aFolder [
-
-	history := ConfigurableHistoryIterator
-		undo: [ :folder | history hasPrevious
-			ifTrue: [ self updateWidgetWithFileReference: history current ]
-			ifFalse: [ self inform: 'Nothing to undo' ] ]
-		redo: [ :folder | self updateWidgetWithFileReference: folder ].
-	history register: aFolder
-]
-
-{ #category : 'initialization' }
 StFBFileNavigationSystemPresenter >> initializeNavigationPresenters [
 
 	previousButton := self newButton.
@@ -388,15 +316,10 @@ StFBFileNavigationSystemPresenter >> initializePresenters [
 	self initializeNavigationPresenters.
 	self initializeFilesTable.
 	self initializeFiltersDropList.
-	StFBSettings openOnLastDirectory 
+	self openOnLastDirectory 
 		ifTrue: [ self updateWidgetWithFileReference: self lastVisitedDirectory ]
 		ifFalse: [ self updateWidgetWithFileReference: self defaultDirectory ].
-	self initializeHistoryIteratorWith: currentDirectory
-]
-
-{ #category : 'accessing' }
-StFBFileNavigationSystemPresenter >> lastVisitedDirectory [
-	^ self class lastVisitedDirectory
+	self initializeHistoryIteratorWith: self currentDirectory
 ]
 
 { #category : 'accessing' }
@@ -431,28 +354,12 @@ StFBFileNavigationSystemPresenter >> nextButton [
 
 { #category : 'accessing' }
 StFBFileNavigationSystemPresenter >> nextButtonAction [
-	nextButton action: [ history redoIfEmpty: [ self inform: 'Nothing to redo.' ] ]
+	nextButton action: [ self history redoIfEmpty: [ self inform: 'Nothing to redo.' ] ]
 ]
 
 { #category : 'accessing' }
 StFBFileNavigationSystemPresenter >> notebookPreviewer [
 	^ notebookPreviewer
-]
-
-{ #category : 'utilities' }
-StFBFileNavigationSystemPresenter >> openFolder: aFileReference [
-
-	self updateWidgetWithFileReference: aFileReference.
-	history register: currentDirectory.
-	self owner expandPath: aFileReference
-
-]
-
-{ #category : 'initialization' }
-StFBFileNavigationSystemPresenter >> openOnLastDirectory [ 
-	"Answer <true> if receiver should open in the last used directory"
-	
-	^ StFBSettings openOnLastDirectory
 ]
 
 { #category : 'accessing' }
@@ -467,7 +374,7 @@ StFBFileNavigationSystemPresenter >> previewer: aPreviewer [
 
 { #category : 'actions' }
 StFBFileNavigationSystemPresenter >> previousBeforeButtonAction [
-	previousButton action: [ history undoIfEmpty: [ self inform: 'Nothing to undo' ] ]
+	previousButton action: [ self history undoIfEmpty: [ self inform: 'Nothing to undo' ] ]
 ]
 
 { #category : 'accessing' }
@@ -484,12 +391,19 @@ StFBFileNavigationSystemPresenter >> selectedEntry [
 			  ifNotEmpty: [ :text | self currentDirectory / text ] ]
 ]
 
+{ #category : 'asserting' }
+StFBFileNavigationSystemPresenter >> shouldReparent [
+	"Since a removal was requested from the navigation table, is not necessary to move to the parent directory"
+
+	^ false
+]
+
 { #category : 'utilities' }
 StFBFileNavigationSystemPresenter >> updateTableContent [
 
 	fileReferenceTable items:
 		((filtersDropList selectedItem ifNil: [ filter ]) applyOn:
-			 (currentDirectory children select: #exists)).
+			 (self currentDirectory children select: #exists)).
 ]
 
 { #category : 'utilities' }
@@ -497,5 +411,5 @@ StFBFileNavigationSystemPresenter >> updateWidgetWithFileReference: aFileReferen
 
 	self currentDirectory: aFileReference.
 	self updateTableContent.
-	currentPathTextInputPresenter currentDirectory: currentDirectory
+	currentPathTextInputPresenter currentDirectory: self currentDirectory
 ]
