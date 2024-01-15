@@ -12,7 +12,9 @@ Class {
 { #category : 'running' }
 StFBBreadcrumbPresenterTest >> setUp [
 	super setUp.
-	windowPathUI := StFBPathBreadcrumbPresenter new
+	windowPathUI := StFBPathBreadcrumbPresenter 
+		owner: fileSystemPresenter 
+		on: fileSystemModel
 ]
 
 { #category : 'running' }

@@ -21,9 +21,13 @@ StFBNavigationSystemTest >> fileListAllMustBeFilterByPNGFIlter [
 
 { #category : 'running' }
 StFBNavigationSystemTest >> setUp [
+
 	super setUp.
-	dialog := StFBFileNavigationSystemPresenter new.
+	dialog := StFBFileNavigationSystemPresenter 
+		owner: fileSystemPresenter 
+		on: fileSystemModel.
 	dialog defaultFolder: root
+
 ]
 
 { #category : 'tests' }
@@ -96,9 +100,9 @@ StFBNavigationSystemTest >> testWhenCurrentDirectoryChangeshouldNewFileDialogOpe
 	dirIndex := (dialog fileReferenceTable items collect: #basename) indexOf: 'dir'.
 	dialog fileReferenceTable selectIndex: dirIndex.
 	dialog fileReferenceTable doubleClickAtIndex: dirIndex.
-	newFileDialog := StFBFileNavigationSystemPresenter new.
+	newFileDialog := StFBFileNavigationSystemPresenter on: fileSystemModel.
 	newFileDialog openOnLastDirectory
-		ifTrue: [ self assert: newFileDialog currentDirectory equals: (root / 'dir') asFileReference ]
+		ifFalse: [ self assert: newFileDialog currentDirectory equals: (root / 'dir') asFileReference ]
 ]
 
 { #category : 'tests' }

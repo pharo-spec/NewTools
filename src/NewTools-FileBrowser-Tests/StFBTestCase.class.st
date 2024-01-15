@@ -2,7 +2,9 @@ Class {
 	#name : 'StFBTestCase',
 	#superclass : 'TestCase',
 	#instVars : [
-		'root'
+		'root',
+		'fileSystemModel',
+		'fileSystemPresenter'
 	],
 	#category : 'NewTools-FileBrowser-Tests-UI',
 	#package : 'NewTools-FileBrowser-Tests',
@@ -32,6 +34,9 @@ StFBTestCase >> inspectRoot [
 
 { #category : 'running' }
 StFBTestCase >> setUp [
+
 	super setUp.
+	fileSystemModel := StFBFileSystemModel new.
+	fileSystemPresenter := StFBFileSystemPresenter on: fileSystemModel.
 	root := StFBFileSystemResource current root
 ]

@@ -208,7 +208,7 @@ StFBFileNavigationSystemPresenter >> filesListAction [
 		previewProcess ifNotNil: [ 
 			previewProcess isTerminated ifFalse: [ previewProcess terminate ] ].
 		selectedItem selectedItem isDirectory
-			ifTrue: [ self owner openFolder: selectedItem selectedItem ]
+			ifTrue: [ self openFolder: selectedItem selectedItem ]
 			ifFalse: [ self owner confirm ] ].
 
 	fileReferenceTable whenSelectedDo: [ :aFileReference | 
@@ -305,7 +305,7 @@ StFBFileNavigationSystemPresenter >> initializePresenters [
 
 	notebookPreviewer := self instantiate: StFBNoteBookPreviewerPresenter.
 	fileReferenceTable := self newTable.
-	currentPathTextInputPresenter := self instantiate: StFBPathBreadcrumbPresenter.
+	currentPathTextInputPresenter := self instantiate: StFBPathBreadcrumbPresenter on: self model.
 	nameText := self newTextInput.
 	filtersDropList := self newDropList.
 	configButton := self newButton
@@ -360,6 +360,14 @@ StFBFileNavigationSystemPresenter >> nextButtonAction [
 { #category : 'accessing' }
 StFBFileNavigationSystemPresenter >> notebookPreviewer [
 	^ notebookPreviewer
+]
+
+{ #category : 'utilities' }
+StFBFileNavigationSystemPresenter >> openFolder: aFileReference [ 
+
+	self updateWidgetWithFileReference: aFileReference.
+	model openFolder: aFileReference.
+
 ]
 
 { #category : 'accessing' }

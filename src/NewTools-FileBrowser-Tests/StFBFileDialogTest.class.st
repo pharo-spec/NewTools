@@ -33,7 +33,7 @@ StFBFileDialogTest >> fileListAllMustBeFilterByPNGFIlter [
 { #category : 'running' }
 StFBFileDialogTest >> setUp [
 	super setUp.
-	(dialog := self dialogClass new) defaultFolder: root
+	(dialog := self dialogClass owner: fileSystemPresenter on: fileSystemModel) defaultFolder: root
 ]
 
 { #category : 'running' }

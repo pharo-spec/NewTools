@@ -92,7 +92,7 @@ StFBFileSystemPresenter >> openFolder: aFileReference [
 
 	fileNavigationSystem updateWidgetWithFileReference: aFileReference.
 	model openFolder: aFileReference.
-	self expandPath: aFileReference
+	self expandPath: aFileReference.
 
 ]
 

@@ -331,7 +331,7 @@ StFBFileDialogPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 StFBFileDialogPresenter >> initializePresenters [
 
 	bookmarksTreeTable := self newTreeTable.
-	fileNavigationSystem := self instantiate: StFBFileNavigationSystemPresenter on: self model.
+	fileNavigationSystem := self instantiate: StFBFileNavigationSystemPresenter on: model.
 	fileNavigationSystem filter: self filter.
 
 	self initializeBookmarksTreeTable
