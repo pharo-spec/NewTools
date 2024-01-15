@@ -1,7 +1,7 @@
 Class {
 	#name : 'StFBAbstractPresenter',
 	#superclass : 'StPresenter',
-	#classTraits : '{} + TraitedClass',
+	#classTraits : 'TraitedClass',
 	#instVars : [
 		'bookmarksTreeTable',
 		'model'
