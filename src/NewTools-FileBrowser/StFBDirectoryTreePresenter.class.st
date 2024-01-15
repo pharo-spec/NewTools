@@ -89,7 +89,7 @@ StFBDirectoryTreePresenter >> openFolder: aFileReference [
 
 	model openFolder: aFileReference.
 	self owner updateWidgetWithFileReference: aFileReference.
-	directoryTreePresenter selectItem: aFileReference
+	self expandPath: aFileReference.
 ]
 
 { #category : 'accessing' }
