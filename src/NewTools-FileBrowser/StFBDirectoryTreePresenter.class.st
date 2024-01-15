@@ -84,6 +84,14 @@ StFBDirectoryTreePresenter >> initializePresenters [
 		contextMenu: [ (self rootCommandsGroup / 'StFBDirectoryContextualMenu') beRoot asMenuPresenter ].
 ]
 
+{ #category : 'utilities' }
+StFBDirectoryTreePresenter >> openFolder: aFileReference [ 
+
+	model openFolder: aFileReference.
+	self owner updateWidgetWithFileReference: aFileReference.
+	directoryTreePresenter selectItem: aFileReference
+]
+
 { #category : 'accessing' }
 StFBDirectoryTreePresenter >> selectedEntry [
 	"Answer a <FileReference> representing the currently selected directory item" 
@@ -96,4 +104,12 @@ StFBDirectoryTreePresenter >> shouldReparent [
 	"A removal was requested from the directory tree, which has the item to be removed as current selection, so we should move to the parent"
 	
 	^ true
+]
+
+{ #category : 'utilities' }
+StFBDirectoryTreePresenter >> updateFileSystemContents [
+
+	super updateFileSystemContents.
+	directoryTreePresenter roots: StFBFileSystemItemWrapper roots.
+	self expandPath: self currentDirectory.
 ]

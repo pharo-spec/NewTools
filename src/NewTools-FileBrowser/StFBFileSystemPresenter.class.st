@@ -30,7 +30,7 @@ StFBFileSystemPresenter class >> lastVisitedDirectory [
 StFBFileSystemPresenter >> connectPresenters [ 
 
 	treeNavigationSystem
-		transmitDo: [ : selection | self updateWidgetWithFileReference: selection fileReference ].
+		transmitDo: [ : selection | selection ifNotNil: [ self updateWidgetWithFileReference: selection fileReference ] ].
 
 	fileNavigationSystem := self instantiate: StFBFileNavigationSystemPresenter on: self model.
 	fileNavigationSystem 
@@ -117,9 +117,9 @@ StFBFileSystemPresenter >> setWindowIconTo: aSpWindowPresenter [
 ]
 
 { #category : 'utilities' }
-StFBFileSystemPresenter >> updateTableContent [
+StFBFileSystemPresenter >> updateFileSystemContents [
 
-	fileNavigationSystem updateTableContent.
+	fileNavigationSystem updateFileSystemContents.
 
 
 ]
@@ -127,6 +127,6 @@ StFBFileSystemPresenter >> updateTableContent [
 { #category : 'utilities' }
 StFBFileSystemPresenter >> updateWidgetWithFileReference: aFileReference [ 
 
-	(aFileReference notNil and: [ aFileReference exists ] )
+	aFileReference exists
 		ifTrue: [ fileNavigationSystem updateWidgetWithFileReference: aFileReference ]
 ]

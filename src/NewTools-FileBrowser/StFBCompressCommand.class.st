@@ -38,7 +38,7 @@ StFBCompressCommand >> execute [
 	zip addFile: self selectedEntry.
 	zip writeToFile: self selectedEntry parent / newZipName.
 	zip close.
-	self updateTableContent
+	self updateFileSystemContents
 ]
 
 { #category : 'initialization' }

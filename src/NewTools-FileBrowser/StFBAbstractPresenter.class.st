@@ -77,7 +77,7 @@ StFBAbstractPresenter >> bookmarksTreeTable [
 StFBAbstractPresenter >> createDirectory [
 
 	self model createDirectory.
-	self updateTableContent.
+	self updateFileSystemContents.
 ]
 
 { #category : 'accessing' }
@@ -127,12 +127,6 @@ StFBAbstractPresenter >> model [
 	^ model
 ]
 
-{ #category : 'utilities' }
-StFBAbstractPresenter >> openFolder: aFileReference [
-
-	self owner openFolder: aFileReference
-]
-
 { #category : 'initialization' }
 StFBAbstractPresenter >> openOnLastDirectory [ 
 	"Answer <true> if receiver should open in the last used directory"
@@ -152,7 +146,7 @@ StFBAbstractPresenter >> setModelBeforeInitialization: aStFBFileSystemModel [
 ]
 
 { #category : 'utilities' }
-StFBAbstractPresenter >> updateTableContent [
+StFBAbstractPresenter >> updateFileSystemContents [
 
-	self owner updateTableContent
+	self owner updateFileSystemContents
 ]

@@ -43,8 +43,8 @@ StFBSelectionCommand >> selectedEntryName [
 ]
 
 { #category : 'utils' }
-StFBSelectionCommand >> updateTableContent [
+StFBSelectionCommand >> updateFileSystemContents [
 	"Update the receiver's file navigation table"
 
-	self context updateTableContent
+	self context updateFileSystemContents
 ]

@@ -48,7 +48,7 @@ StFBRenameCommand >> execute [
 	self requestNewName
 		ifNotNil: [ : newName | 
 			self selectedEntry renameTo: newName.
-			self updateTableContent ]
+			self updateFileSystemContents ]
 ]
 
 { #category : 'as yet unclassified' }

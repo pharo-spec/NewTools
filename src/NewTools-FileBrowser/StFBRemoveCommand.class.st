@@ -57,7 +57,7 @@ StFBRemoveCommand >> execute [
 		self confirmNotEmpty 
 			ifTrue: [ entryToDelete ensureDeleteAll ]
 			ifFalse: [ ^ self inform: 'Remove directory cancelled' ] ].
-	self context updateTableContent
+	self context updateFileSystemContents
 ]
 
 { #category : 'as yet unclassified' }

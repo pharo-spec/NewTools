@@ -252,7 +252,7 @@ StFBFileNavigationSystemPresenter >> filtersDropList [
 
 { #category : 'actions' }
 StFBFileNavigationSystemPresenter >> filtersDropListAction [
-	filtersDropList whenSelectionChangedDo: [ self updateTableContent ]
+	filtersDropList whenSelectionChangedDo: [ self updateFileSystemContents ]
 ]
 
 { #category : 'initialization' }
@@ -399,7 +399,7 @@ StFBFileNavigationSystemPresenter >> shouldReparent [
 ]
 
 { #category : 'utilities' }
-StFBFileNavigationSystemPresenter >> updateTableContent [
+StFBFileNavigationSystemPresenter >> updateFileSystemContents [
 
 	fileReferenceTable items:
 		((filtersDropList selectedItem ifNil: [ filter ]) applyOn:
@@ -410,6 +410,6 @@ StFBFileNavigationSystemPresenter >> updateTableContent [
 StFBFileNavigationSystemPresenter >> updateWidgetWithFileReference: aFileReference [
 
 	self currentDirectory: aFileReference.
-	self updateTableContent.
+	self updateFileSystemContents.
 	currentPathTextInputPresenter currentDirectory: self currentDirectory
 ]
