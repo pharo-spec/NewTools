@@ -7,7 +7,8 @@ Class {
 	#superclass : 'Object',
 	#classVars : [
 		'DefaultDirectory',
-		'OpenOnLastDirectory'
+		'OpenOnLastDirectory',
+		'ShowAlwaysDefaultBookmarks'
 	],
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
@@ -76,6 +77,34 @@ StFileBrowserSettings class >> openOnLastDirectoryOn: aBuilder [
 		default: true;
 		label: 'Open on last visited directory';
 		description: 'Open a new instance on the last visited directory';
+		target: self
+
+]
+
+{ #category : 'settings' }
+StFileBrowserSettings class >> showAlwaysDefaultBookmarks [
+	"Modified by settings File Browser self classSide >> #showAlwaysDefaultBookmarksOn: "
+
+	^ ShowAlwaysDefaultBookmarks
+		ifNil: [ ShowAlwaysDefaultBookmarks := true ]
+]
+
+{ #category : 'settings' }
+StFileBrowserSettings class >> showAlwaysDefaultBookmarks: aBoolean [
+	"Modified by settings File Browser self classSide >> #showAlwaysDefaultBookmarksOn: "
+
+	ShowAlwaysDefaultBookmarks := aBoolean
+]
+
+{ #category : 'settings' }
+StFileBrowserSettings class >> showAlwaysDefaultBookmarksOn: aBuilder [
+	<systemsettings>
+
+	(aBuilder setting: #showAlwaysDefaultBookmarks)
+		parent: #fileBrowser;
+		default: true;
+		label: 'Show always default bookmarks';
+		description: 'If the global bookmarks are deleted, this setting ensures that dialogs will always preserve default bookmarks';
 		target: self
 
 ]

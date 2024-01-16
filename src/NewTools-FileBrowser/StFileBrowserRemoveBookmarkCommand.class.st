@@ -5,7 +5,8 @@ I'm a command use to remove bookmark
 "
 Class {
 	#name : 'StFileBrowserRemoveBookmarkCommand',
-	#superclass : 'CmCommand',
+	#superclass : 'StFileBrowserBookmarkCommand',
+	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-FileBrowser-Commands',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'Commands'
@@ -18,15 +19,25 @@ StFileBrowserRemoveBookmarkCommand >> asSpecCommand [
 		yourself
 ]
 
+{ #category : 'testing' }
+StFileBrowserRemoveBookmarkCommand >> canBeExecuted [
+
+	^ self selectedBookmarks notEmpty
+]
+
 { #category : 'executing' }
 StFileBrowserRemoveBookmarkCommand >> execute [
+
 	| collection tmpBookmark collectionSize |
-	collection := self context bookmarksTreeTable selection selectedPath.
-	collectionSize := collection size."teta(N)"
+
+	collection := self selectedBookmarks selectedPath.
+	collectionSize := collection size. "teta(N)"
 	tmpBookmark := self context bookmarks.
- 	[collectionSize = 1  ] whileFalse: [ tmpBookmark := tmpBookmark at: (collection at: 1).collectionSize := collectionSize  -1  ].
-	tmpBookmark removeAt: (collection at:  1).
-	self context bookmarksTreeTable roots: self context bookmarks 
+	[ collectionSize = 1 ] whileFalse: [
+		tmpBookmark := tmpBookmark at: (collection at: 1).
+		collectionSize := collectionSize - 1 ].
+	tmpBookmark removeAt: (collection at: 1).
+	self bookmarksTreeTable roots: self context bookmarks
 ]
 
 { #category : 'initialization' }
@@ -35,4 +46,10 @@ StFileBrowserRemoveBookmarkCommand >> initialize [
 	self
 		name: 'Remove bookmark';
 		description: 'Remove the selected bookmark'
+]
+
+{ #category : 'executing' }
+StFileBrowserRemoveBookmarkCommand >> selectedBookmarks [
+
+	self bookmarksTreeTable selection
 ]

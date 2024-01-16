@@ -16,15 +16,14 @@ Class {
 StFileBrowserBookmark class >> defaultBookmarks [
 
 	| presets |
+	
 	presets := (Smalltalk os isWindows
 		           ifTrue: [ self windowsDrives ]
 		           ifFalse: [ { self root } ]) asOrderedCollection.
-	self flag:
-		'desktop disabled until https://github.com/pharo-project/pharo/issues/9682 is fixed'.
 	presets addAll: { 
 			self home.
 			self workingDirectory.
-			"self desktop."
+			self desktop.
 			self documents.
 			self downloads }.
 

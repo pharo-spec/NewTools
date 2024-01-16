@@ -46,6 +46,7 @@ StOpenFileDialog class >> complexExample [
 
 	presenter inspect.
 	presenter openModal.
+	presenter resetBookmarks.
 	^ presenter confirm
 ]
 

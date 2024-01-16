@@ -127,6 +127,14 @@ StFileBrowserAbstractPresenter >> history: aConfigurableHistoryIterator [
 ]
 
 { #category : 'initialization' }
+StFileBrowserAbstractPresenter >> initialize [
+
+	super initialize.
+	(StFileBrowserSettings showAlwaysDefaultBookmarks and: [ self bookmarks isEmpty ])
+		ifTrue: [ self class initializeBookmarks ]
+]
+
+{ #category : 'initialization' }
 StFileBrowserAbstractPresenter >> initializeBookmarksTreeTable [
 
 	bookmarksTreeTable := self newTreeTable.
@@ -181,6 +189,13 @@ StFileBrowserAbstractPresenter >> openOnLastDirectory [
 	"Answer <true> if receiver should open in the last used directory"
 	
 	^ StFileBrowserSettings openOnLastDirectory
+]
+
+{ #category : 'initialization' }
+StFileBrowserAbstractPresenter >> resetBookmarks [
+	"Reset bookmarks to their defaults"
+
+	self class initializeBookmarks
 ]
 
 { #category : 'accessing - bookmarks' }
