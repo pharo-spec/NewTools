@@ -32,7 +32,7 @@ StFileBrowserChangeListCommand >> execute [
 	self application tools changeList openOnStream: self selectedEntry asFileReference readStream
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'initialization' }
 StFileBrowserChangeListCommand >> initialize [
 
 	super initialize.

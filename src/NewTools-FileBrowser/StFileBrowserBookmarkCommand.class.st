@@ -11,7 +11,7 @@ Class {
 	#tag : 'Commands'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 StFileBrowserBookmarkCommand >> bookmarksTreeTable [
 
 	^ self context bookmarksTreeTable

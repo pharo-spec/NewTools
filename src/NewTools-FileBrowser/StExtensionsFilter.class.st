@@ -64,7 +64,7 @@ StExtensionsFilter >> extensions [
 	^ self subclassResponsibility
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 StExtensionsFilter >> extensionsWithDots [
 
 	^ self extensions collect: [ :each | 
