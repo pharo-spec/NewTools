@@ -32,7 +32,6 @@ StRewriterOpenHelpBrowserCommand class >> defaultName [
 { #category : 'executing' }
 StRewriterOpenHelpBrowserCommand >> execute [
 
-	| window |
-	window := StRewriterHelpBrowserPresenter new open.
-	^ window
+	^ StRewriterHelpBrowserPresenter new open
+	
 ]

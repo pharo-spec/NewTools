@@ -43,6 +43,6 @@ StRewriterApplyRuleOnSelectedClassesCommand >> execute [
 
 		changes := StRewriterAbstractApplier defaultEngineApplier
 			calculateChangesForClasses: self context scopeSelectorPresenter selectedClasses
-			transformationRules: ruleHolder asOrderedCollection.
-		(ChangesBrowser changes: changes) open ]
+			transformationRules: (OrderedCollection with: ruleHolder).
+		(StChangesBrowserPresenter changes: changes) open ]
 ]
