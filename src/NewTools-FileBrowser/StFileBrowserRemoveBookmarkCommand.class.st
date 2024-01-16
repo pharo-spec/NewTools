@@ -22,7 +22,7 @@ StFileBrowserRemoveBookmarkCommand >> asSpecCommand [
 { #category : 'testing' }
 StFileBrowserRemoveBookmarkCommand >> canBeExecuted [
 
-	^ self selectedBookmarks notEmpty
+	^ self selectedBookmarks selectedPaths notEmpty
 ]
 
 { #category : 'executing' }
@@ -51,5 +51,5 @@ StFileBrowserRemoveBookmarkCommand >> initialize [
 { #category : 'executing' }
 StFileBrowserRemoveBookmarkCommand >> selectedBookmarks [
 
-	self bookmarksTreeTable selection
+	^ self bookmarksTreeTable selection
 ]
