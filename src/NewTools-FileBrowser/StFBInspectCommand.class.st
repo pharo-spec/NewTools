@@ -4,7 +4,6 @@ I'm a inspect command use to inspect the selectedFile
 Class {
 	#name : 'StFBInspectCommand',
 	#superclass : 'StFBSelectionCommand',
-	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-FileBrowser-Commands',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'Commands'

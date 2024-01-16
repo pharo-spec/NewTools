@@ -54,7 +54,6 @@ fileReferenceTable <SpTablePresenter> it's display children of the current direc
 Class {
 	#name : 'StFBFileNavigationSystemPresenter',
 	#superclass : 'StFBAbstractPresenter',
-	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'currentPathTextInputPresenter',
 		'nameText',

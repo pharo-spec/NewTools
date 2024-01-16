@@ -5,7 +5,6 @@ General file system presenter, which replaces the older FileList tool.
 Class {
 	#name : 'StFBFileSystemPresenter',
 	#superclass : 'StFBAbstractPresenter',
-	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'treeNavigationSystem',
 		'fileNavigationSystem'

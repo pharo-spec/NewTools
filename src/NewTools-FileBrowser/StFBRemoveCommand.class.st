@@ -4,7 +4,6 @@ Implements an action to file in the selected file (representing a Pharo source c
 Class {
 	#name : 'StFBRemoveCommand',
 	#superclass : 'StFBSelectionCommand',
-	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-FileBrowser-Commands',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'Commands'

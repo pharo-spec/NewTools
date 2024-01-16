@@ -5,9 +5,7 @@ Provides global settings to the File Browser. See class side for details.
 Class {
 	#name : 'StFBSettings',
 	#superclass : 'Object',
-	#classTraits : '{} + TraitedClass',
 	#classVars : [
-		'AutoCollapsePaths',
 		'DefaultDirectory',
 		'OpenOnLastDirectory'
 	],

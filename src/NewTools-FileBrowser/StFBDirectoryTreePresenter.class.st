@@ -4,7 +4,6 @@ Implements a basic Spec presenter to display a directory tree.
 Class {
 	#name : 'StFBDirectoryTreePresenter',
 	#superclass : 'StFBAbstractPresenter',
-	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'directoryTreePresenter'
 	],

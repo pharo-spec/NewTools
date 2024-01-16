@@ -20,7 +20,6 @@ UI using this widget have to define openOn: aFileReference
 Class {
 	#name : 'StFBPathBreadcrumbPresenter',
 	#superclass : 'StPresenter',
-	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'textInput',
 		'editButton',

@@ -1,7 +1,6 @@
 Class {
 	#name : 'StFBCopyFullnameCommand',
 	#superclass : 'StFBSelectionCommand',
-	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-FileBrowser-Commands',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'Commands'

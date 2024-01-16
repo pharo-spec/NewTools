@@ -49,7 +49,6 @@ FDFileDialogPresenter textIcons method
 Class {
 	#name : 'StFBFileDialogPresenter',
 	#superclass : 'StFBAbstractPresenter',
-	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'fileNavigationSystem',
 		'okAction',
