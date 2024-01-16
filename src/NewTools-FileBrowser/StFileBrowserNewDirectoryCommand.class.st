@@ -4,7 +4,6 @@ i'm manage ContextMenu to creat Directory
 Class {
 	#name : 'StFileBrowserNewDirectoryCommand',
 	#superclass : 'CmCommand',
-	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-FileBrowser-Commands',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'Commands'

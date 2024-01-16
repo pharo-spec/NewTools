@@ -4,7 +4,6 @@ I'm a command use to add bookmark
 Class {
 	#name : 'StFileBrowserAddBookmarkCommand',
 	#superclass : 'StFileBrowserBookmarkCommand',
-	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-FileBrowser-Commands',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'Commands'

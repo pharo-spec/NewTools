@@ -5,7 +5,6 @@ See subclasses for specific users.
 Class {
 	#name : 'StOpenFileOrDirectoryDialog',
 	#superclass : 'StFileDialogPresenter',
-	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'UI'

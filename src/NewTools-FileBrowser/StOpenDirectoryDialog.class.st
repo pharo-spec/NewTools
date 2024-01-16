@@ -8,7 +8,6 @@ see my super for more information about customization
 Class {
 	#name : 'StOpenDirectoryDialog',
 	#superclass : 'StOpenFileOrDirectoryDialog',
-	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'UI'

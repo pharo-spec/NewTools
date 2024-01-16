@@ -6,7 +6,6 @@ I'm a command use to remove bookmark
 Class {
 	#name : 'StFileBrowserRemoveBookmarkCommand',
 	#superclass : 'StFileBrowserBookmarkCommand',
-	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-FileBrowser-Commands',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'Commands'
