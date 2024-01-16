@@ -15,7 +15,7 @@ StWindowsExtensionsTest >> testWindowsAttributes [
 	
 	Smalltalk os isWindows ifFalse: [ ^self ].
 	
-	self assert: FileSystem workingDirectory windowsAttributes ~= -1
+	self assert: (FileSystem workingDirectory perform: #windowsAttributes) ~= -1
 ]
 
 { #category : 'tests' }
@@ -24,5 +24,5 @@ StWindowsExtensionsTest >> testWindowsAttributesForMemoryFileSystem [
 	
 	Smalltalk os isWindows ifFalse: [ ^self ].
 	
-	self assert: FileSystem memory root windowsAttributes equals: 22
+	self assert: (FileSystem memory root perform: #windowsAttributes) equals: 22
 ]

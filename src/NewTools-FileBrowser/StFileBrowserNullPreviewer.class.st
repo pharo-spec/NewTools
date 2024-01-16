@@ -20,7 +20,7 @@ StFileBrowserNullPreviewer >> matchingMimeType: aZnMimeType [
 	^ true
 ]
 
-{ #category : 'utils' }
+{ #category : 'utilities' }
 StFileBrowserNullPreviewer >> previewActionOn: aFileReference [
 
 	^ SpNullPresenter new

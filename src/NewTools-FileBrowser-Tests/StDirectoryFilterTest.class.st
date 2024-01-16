@@ -11,7 +11,8 @@ Class {
 
 { #category : 'accessing' }
 StDirectoryFilterTest >> actualClass [
-	^ StFBDirectoryFilter
+
+	^ StDirectoryFilter
 ]
 
 { #category : 'tests' }

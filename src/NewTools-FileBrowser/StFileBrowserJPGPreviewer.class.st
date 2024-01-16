@@ -16,7 +16,7 @@ StFileBrowserJPGPreviewer >> matchingMimeType: aZnMimeType [
 	^ aZnMimeType matches: ZnMimeType imageJpeg
 ]
 
-{ #category : 'utils' }
+{ #category : 'utilities' }
 StFileBrowserJPGPreviewer >> previewActionOn: aFileReference [
 	^ SpImagePresenter new
 		image:

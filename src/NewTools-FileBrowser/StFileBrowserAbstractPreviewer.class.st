@@ -42,7 +42,7 @@ StFileBrowserAbstractPreviewer >> previewActionOn: aFileReference [
 	^ self subclassResponsibility
 ]
 
-{ #category : 'utils' }
+{ #category : 'utilities' }
 StFileBrowserAbstractPreviewer >> previewOn: aFileReference [
 	(self canBeUsedOn: aFileReference)
 		ifTrue: [ ^ self previewActionOn: aFileReference ].

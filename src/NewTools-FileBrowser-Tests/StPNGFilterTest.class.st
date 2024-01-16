@@ -11,7 +11,7 @@ Class {
 
 { #category : 'accessing' }
 StPNGFilterTest >> actualClass [
-	^ StFBPNGFilter
+	^ StPNGFilter
 ]
 
 { #category : 'tests' }

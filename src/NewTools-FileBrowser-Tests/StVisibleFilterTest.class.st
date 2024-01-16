@@ -11,7 +11,7 @@ Class {
 
 { #category : 'accessing' }
 StVisibleFilterTest >> actualClass [
-	^ StFBVisibleFilter
+	^ StVisibleFilter
 ]
 
 { #category : 'tests' }

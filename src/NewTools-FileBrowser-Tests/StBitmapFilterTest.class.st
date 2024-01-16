@@ -11,7 +11,7 @@ Class {
 
 { #category : 'accessing' }
 StBitmapFilterTest >> actualClass [
-	^ StFBBitmapFilter
+	^ StBitmapFilter
 ]
 
 { #category : 'tests' }

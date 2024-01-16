@@ -16,7 +16,7 @@ StFileBrowserPNGPreviewer >> matchingMimeType: element [
 	^ element matches: ZnMimeType imagePng
 ]
 
-{ #category : 'utils' }
+{ #category : 'utilities' }
 StFileBrowserPNGPreviewer >> previewActionOn: aFileReference [
 	^ SpImagePresenter new
 		image:

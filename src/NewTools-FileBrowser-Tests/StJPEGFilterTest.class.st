@@ -11,7 +11,7 @@ Class {
 
 { #category : 'accessing' }
 StJPEGFilterTest >> actualClass [
-	^ StFBJPEGFilter
+	^ StJPEGFilter
 ]
 
 { #category : 'tests' }

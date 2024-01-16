@@ -11,7 +11,8 @@ Class {
 
 { #category : 'accessing' }
 StNilFilterTest >> actualClass [
-	^ StFBAllFilter
+
+	^ StAllFilter
 ]
 
 { #category : 'tests' }

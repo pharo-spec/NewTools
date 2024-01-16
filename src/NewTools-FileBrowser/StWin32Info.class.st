@@ -4,9 +4,6 @@ Utility to access Win32 functions
 Class {
 	#name : 'StWin32Info',
 	#superclass : 'Object',
-	#classVars : [
-		'IconCache'
-	],
 	#category : 'NewTools-FileBrowser-Wrappers',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'Wrappers'
