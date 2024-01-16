@@ -36,6 +36,7 @@ StFileBrowserSettings class >> defaultDirectoryOn: aBuilder [
 
 	(aBuilder setting: #defaultDirectory)
 		parent: #fileBrowser;
+		type: #FilePathEncoder;
 		default: self defaultDirectory;
 		label: 'Default directory';
 		description: 'Set the default directory for opening the file browser and dialogs';

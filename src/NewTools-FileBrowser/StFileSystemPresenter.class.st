@@ -104,7 +104,7 @@ StFileSystemPresenter >> setInitialExtentTo: aSpWindowPresenter [
 { #category : 'initialization' }
 StFileSystemPresenter >> setTitleTo: aSpWindowPresenter [
 
-	aSpWindowPresenter title: 'File List'
+	aSpWindowPresenter title: 'File Browser'
 
 ]
 
