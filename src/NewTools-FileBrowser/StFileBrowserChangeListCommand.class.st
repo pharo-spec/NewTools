@@ -15,6 +15,7 @@ StFileBrowserChangeListCommand >> asSpecCommand [
 	^ super asSpecCommand
 		iconName: #changeSorter;
 		shortcutKey: $b meta;
+		beHiddenWhenCantBeRun;		
 		yourself
 ]
 

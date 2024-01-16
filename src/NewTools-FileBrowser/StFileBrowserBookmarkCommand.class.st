@@ -4,7 +4,7 @@ Abstract class to group behavior related with the file browser bookmarks.
 "
 Class {
 	#name : 'StFileBrowserBookmarkCommand',
-	#superclass : 'CmCommand',
+	#superclass : 'StFileBrowserCommand',
 	#category : 'NewTools-FileBrowser-Commands',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'Commands'

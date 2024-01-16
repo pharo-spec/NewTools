@@ -7,8 +7,11 @@ Class {
 	#superclass : 'Object',
 	#classVars : [
 		'DefaultDirectory',
+		'LinuxTerminalProgram',
+		'MacTerminalProgram',
 		'OpenOnLastDirectory',
-		'ShowAlwaysDefaultBookmarks'
+		'ShowAlwaysDefaultBookmarks',
+		'WindowsTerminalProgram'
 	],
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
@@ -52,6 +55,45 @@ StFileBrowserSettings class >> groupSettingsOn: aBuilder [
 		label: 'File Browser';
 		description: 'Settings for the File Browser';
 		parent: #tools
+]
+
+{ #category : 'settings' }
+StFileBrowserSettings class >> linuxTerminalProgram [
+
+	^ LinuxTerminalProgram
+		ifNil: [ LinuxTerminalProgram := '' ]
+]
+
+{ #category : 'settings' }
+StFileBrowserSettings class >> linuxTerminalProgram: aString [
+
+	LinuxTerminalProgram := aString
+]
+
+{ #category : 'settings' }
+StFileBrowserSettings class >> macTerminalProgram [
+
+	^ MacTerminalProgram
+		ifNil: [ MacTerminalProgram := 'Terminal' ]
+]
+
+{ #category : 'settings' }
+StFileBrowserSettings class >> macTerminalProgram: aString [
+
+	MacTerminalProgram := aString
+]
+
+{ #category : 'settings' }
+StFileBrowserSettings class >> macTerminalProgramOn: aBuilder [
+	<systemsettings>
+
+	(aBuilder setting: #macTerminalProgram)
+		parent: #fileBrowser;
+		default: String empty;
+		label: 'Name of the MacOS terminal';
+		description: 'Set the name of the MacOS terminal program to run when a shell terminal is requested. It is not necessary to specify the full path';
+		target: self
+
 ]
 
 { #category : 'settings' }
@@ -108,4 +150,17 @@ StFileBrowserSettings class >> showAlwaysDefaultBookmarksOn: aBuilder [
 		description: 'If the global bookmarks are deleted, this setting ensures that dialogs will always preserve default bookmarks';
 		target: self
 
+]
+
+{ #category : 'settings' }
+StFileBrowserSettings class >> windowsTerminalProgram [
+
+	^ WindowsTerminalProgram
+		ifNil: [ WindowsTerminalProgram := 'cmd.exe' ]
+]
+
+{ #category : 'settings' }
+StFileBrowserSettings class >> windowsTerminalProgram: aString [
+
+	WindowsTerminalProgram := aString
 ]

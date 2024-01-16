@@ -30,6 +30,6 @@ StFileBrowserInspectCommand >> execute [
 StFileBrowserInspectCommand >> initialize [
 	super initialize.
 	self
-		name: 'Inspect file';
+		name: 'Inspect';
 		description: 'Inspect the selected file'
 ]

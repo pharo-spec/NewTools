@@ -21,7 +21,7 @@ StFileSystemItemWrapper class >> icon [
 { #category : 'accessing' }
 StFileSystemItemWrapper class >> iconProvider [ 
 
-	^ StIconCache 
+	^ StFileBrowserIconCache 
 ]
 
 { #category : 'testing' }

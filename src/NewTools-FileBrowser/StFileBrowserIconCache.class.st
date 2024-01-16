@@ -2,7 +2,7 @@
 An icon cache
 "
 Class {
-	#name : 'StIconCache',
+	#name : 'StFileBrowserIconCache',
 	#superclass : 'Object',
 	#classVars : [
 		'IconCache'
@@ -13,14 +13,14 @@ Class {
 }
 
 { #category : 'icons' }
-StIconCache class >> driveIcon [
+StFileBrowserIconCache class >> driveIcon [
 	<script: 'self driveIcon inspect'>
 
 	^self iconNamed: #driveIcon
 ]
 
 { #category : 'private - icons' }
-StIconCache class >> driveIconContents [
+StFileBrowserIconCache class >> driveIconContents [
 
 	^'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA/0lEQVQ4je2RPUoDcRDFf7tI
 mjSbE5gUYhoFjSvYSI5i4QFSWHgYIQewELyFX4mF4BfqqmhlSJotdve/8yySbEwhrq34YJjH
@@ -31,14 +31,14 @@ kd007kzugEASi/XGaH2lWStr4Ft8AlWZooQwDP14AAAAAElFTkSuQmCC'
 ]
 
 { #category : 'icons' }
-StIconCache class >> fileIcon [
+StFileBrowserIconCache class >> fileIcon [
 	<script: 'self fileIcon inspect'>
 
 	^self iconNamed: #fileIcon
 ]
 
 { #category : 'private - icons' }
-StIconCache class >> fileIconContents [
+StFileBrowserIconCache class >> fileIconContents [
 
 	^'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACjElEQVR42o2SW0hUURSG/32O
 hnhAqJDCzF6kN0lLGtJCtLQyKIMotRjBy1sqVEZS9mKZBdKFHBJpJEKD0urBvAchhqY5kp6M
@@ -57,14 +57,14 @@ RU5ErkJggg=='
 ]
 
 { #category : 'icons' }
-StIconCache class >> folderIcon [
+StFileBrowserIconCache class >> folderIcon [
 	<script: 'self folderIcon inspect'>
 
 	^self iconNamed: #folderIcon
 ]
 
 { #category : 'private - icons' }
-StIconCache class >> folderIconContents [
+StFileBrowserIconCache class >> folderIconContents [
 
 	^'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABdElEQVR42mNkoBAwwhhdbT7Z
 xvqa4b9/fmT+++sT45vXz3+XNB3qfP36/3ag9H+8BvT1xCdkJljN5WD4z8TwGyjwC6gDiDfs
@@ -77,13 +77,13 @@ GP7/+8sA5DOg8EH0fxD/L1z87OW3W+GZieLcSC4AAOV6G9lUA/2gAAAAAElFTkSuQmCC'
 ]
 
 { #category : 'private - accessing' }
-StIconCache class >> iconCache [
+StFileBrowserIconCache class >> iconCache [
 
 	^ IconCache ifNil: [ IconCache := Dictionary new ]
 ]
 
 { #category : 'accessing' }
-StIconCache class >> iconNamed: aSymbol [
+StFileBrowserIconCache class >> iconNamed: aSymbol [
 	"Returns the icon with the given name"
 	
 	| selector |
@@ -97,7 +97,7 @@ StIconCache class >> iconNamed: aSymbol [
 ]
 
 { #category : 'initialization-release' }
-StIconCache class >> reset [
+StFileBrowserIconCache class >> reset [
 	"Reset the icon cache"	
 	<script>
 	
@@ -105,14 +105,14 @@ StIconCache class >> reset [
 ]
 
 { #category : 'icons' }
-StIconCache class >> terminalIcon [
+StFileBrowserIconCache class >> terminalIcon [
 	<script: 'self terminalIcon inspect'>
 
 	^self iconNamed: #terminalIcon
 ]
 
 { #category : 'private - icons' }
-StIconCache class >> terminalIconContents [
+StFileBrowserIconCache class >> terminalIconContents [
 
 	^'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVR4XmOgGIiKimlo6+iF
 koqVlVVcgdoZGYpKKladv3z9PxxfAuFr/8+h44vX/m/bc+T/1t2H/x84evr/yvXb/gMN4Gco

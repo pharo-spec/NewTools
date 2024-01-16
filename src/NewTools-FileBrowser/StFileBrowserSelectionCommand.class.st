@@ -4,7 +4,7 @@ Abstract class to group behavior related with selections in the File Browser too
 "
 Class {
 	#name : 'StFileBrowserSelectionCommand',
-	#superclass : 'CmCommand',
+	#superclass : 'StFileBrowserCommand',
 	#category : 'NewTools-FileBrowser-Commands',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'Commands'

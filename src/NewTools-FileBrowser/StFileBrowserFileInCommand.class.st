@@ -14,7 +14,8 @@ StFileBrowserFileInCommand >> asSpecCommand [
 
 	^ super asSpecCommand
 		iconName: #up;
-		shortcutKey: $f meta;		
+		shortcutKey: $f meta;
+		beHiddenWhenCantBeRun;
 		yourself
 ]
 

@@ -8,7 +8,7 @@ Class {
 
 { #category : 'accessing' }
 StFileFilterTest >> actualClass [
-	^ StFBFileFilter
+	^ StFileFilter
 ]
 
 { #category : 'tests' }

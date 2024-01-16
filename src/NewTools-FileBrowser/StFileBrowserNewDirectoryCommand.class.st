@@ -3,7 +3,7 @@ i'm manage ContextMenu to creat Directory
 "
 Class {
 	#name : 'StFileBrowserNewDirectoryCommand',
-	#superclass : 'CmCommand',
+	#superclass : 'StFileBrowserCommand',
 	#category : 'NewTools-FileBrowser-Commands',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'Commands'

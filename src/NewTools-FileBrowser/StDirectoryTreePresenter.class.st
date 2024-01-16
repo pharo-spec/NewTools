@@ -20,7 +20,8 @@ StDirectoryTreePresenter class >> buildCommandsGroupWith: presenterInstance forR
 			(CmCommandGroup named: 'StFBDirectoryContextualMenu') asSpecGroup
 				register: StFileBrowserNewDirectoryCommand forSpec;			
 				register: StFileBrowserRenameCommand forSpec;
-				register: StFileBrowserRemoveCommand forSpec;				
+				register: StFileBrowserRemoveCommand forSpec;
+				register: StFileBrowserOpenTerminalCommand forSpec;
 				yourself)
 ]
 

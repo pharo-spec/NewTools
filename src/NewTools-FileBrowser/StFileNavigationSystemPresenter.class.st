@@ -89,6 +89,8 @@ StFileNavigationSystemPresenter class >> buildCommandsGroupWith: presenter forRo
 				register: StFileBrowserCompressCommand forSpec;
 				register: StFileBrowserFileInCommand forSpec;
 				register: StFileBrowserChangeListCommand forSpec;
+				register: StFileBrowserOpenTerminalCommand forSpec;
+
 				register:
 					((CmCommandGroup named: 'Bookmarks') asSpecGroup
 						register: StFileBrowserAddBookmarkCommand forSpec;
