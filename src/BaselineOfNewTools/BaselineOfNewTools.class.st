@@ -90,7 +90,10 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Scopes-Tests';
 			package: 'NewTools-Scopes-Resources-A-Tests';
 			package: 'NewTools-Scopes-Resources-B-Tests';
-			package: 'NewTools-Scopes-Resources-C-Tests'.
+			package: 'NewTools-Scopes-Resources-C-Tests';
+			"Finder"			
+			package: 'NewTools-Finder';
+			package: 'NewTools-Scopes-Tests' with: [ spec requires: #('NewTools-Finder') ].
 
 		spec
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Morphic' );
@@ -147,6 +150,11 @@ BaselineOfNewTools >> baseline: spec [
 						'NewTools-Scopes-Resources-B-Tests' 
 						'NewTools-Scopes-Resources-C-Tests' 
 						'NewTools-Scopes-Tests');
+			"Finder"
+			group: #Finder with: #(
+						'NewTools-Finder'
+						'NewTools-Finder-Tests');
+
 			group: 'default' with: #( 
 						'Playground' 
 						'Inspector' 
@@ -158,7 +166,8 @@ BaselineOfNewTools >> baseline: spec [
 				   		'Spotter'
             			'RewriterTools'
 						'ScopesEditor'
-						'FileBrowser') ]
+						'FileBrowser'
+						'Finder') ]
 ]
 
 { #category : 'external projects' }
