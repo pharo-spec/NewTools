@@ -32,12 +32,12 @@ StFinderClassTest >> testSearchForExactCaseInsensitiveStringSucess [
 	
 	self openInstance.
 	self setExactAndCaseInsensitive.
-	self doSearch: 'stfindermocka'.
+	self doSearch: 'stfindermockc'.
 
 	results := presenter resultTree roots.
 	self 
 		assertCollection: (results collect: [ : r | r content name ])
-		hasSameElements: #(#StFinderMockA #StFinderMocka).
+		hasSameElements: #(#StFinderMockC).
 ]
 
 { #category : 'tests' }
@@ -58,7 +58,7 @@ StFinderClassTest >> testSearchForExactCaseSensitiveStringSucess [
 	
 	self openInstance.
 	self setExactAndCaseSensitive.
-	self doSearch: 'StFinderMockA'.
+	self doSearch: 'StFinderMockC'.
 
 	results := presenter resultTree roots.
 	self 
@@ -73,12 +73,12 @@ StFinderClassTest >> testSearchForRegexpStartWithCaseInsensitive [
 	
 	self openInstance.
 	self setRegexAndCaseInsensitive.
-	self doSearch: '^StFinderMockA'.	
+	self doSearch: '^StFinderMock'.	
 	results := presenter resultTree roots.
 
 	self 
 		assertCollection: (results collect: [ : r | r content name ])
-		hasSameElements: #(#StFinderMockA #StFinderMocka).
+		hasSameElements: #(#StFinderMockC #StFinderMocka #StFinderMockB).
 ]
 
 { #category : 'tests' }
@@ -88,7 +88,7 @@ StFinderClassTest >> testSearchForRegexpStartWithCaseSensitive [
 	
 	self openInstance.
 	self setRegexAndCaseSensitive.
-	self doSearch: '^StFinderMockA'.
+	self doSearch: '^StFinderMockC'.
 	results := presenter resultTree roots.
 	self 
 		assert: results size
