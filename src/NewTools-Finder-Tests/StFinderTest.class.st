@@ -2,7 +2,6 @@ Class {
 	#name : 'StFinderTest',
 	#superclass : 'TestCase',
 	#instVars : [
-		'application',
 		'presenter',
 		'presenterModel'
 	],

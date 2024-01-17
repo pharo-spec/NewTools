@@ -87,13 +87,19 @@ StFinderClassResult >> getCompiledMethodFrom: aStFinderSelectorResult [
 	^ self content >> aStFinderSelectorResult content
 ]
 
+{ #category : 'copying' }
+StFinderClassResult >> hasSelectorParent [
+
+	^ self parent notNil and: [ self parent isSelectorResult ]
+]
+
 { #category : 'action' }
 StFinderClassResult >> referencesAction [
 
 	self navigation browseAllUsersOfClassOrTrait: self content
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 StFinderClassResult >> selectItemIn: aSpTreePresenter [ 
 
 	| pathIndexCollection |
