@@ -156,8 +156,9 @@ BaselineOfNewTools >> baseline: spec [
 						'FontChooser' 
 						'Methods'
 				   		'Spotter'
-            					'RewriterTools'
-						'ScopesEditor') ]
+            			'RewriterTools'
+						'ScopesEditor'
+						'FileBrowser') ]
 ]
 
 { #category : 'external projects' }
