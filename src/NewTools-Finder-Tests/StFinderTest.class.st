@@ -77,6 +77,7 @@ StFinderTest >> setRegexAndCaseSensitive [
 StFinderTest >> setUp [
 	super setUp.
 
+	StFinderMockA new.
 	presenter := self classToTest basicNew. 
 	presenter setModelBeforeInitialization: StFinderModel new.
 	presenter 
