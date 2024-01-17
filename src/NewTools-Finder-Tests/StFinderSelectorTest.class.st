@@ -1,8 +1,9 @@
 Class {
 	#name : 'StFinderSelectorTest',
 	#superclass : 'StFinderTest',
-	#category : 'NewTools-Finder-Tests',
-	#package : 'NewTools-Finder-Tests'
+	#category : 'NewTools-Finder-Tests-Core',
+	#package : 'NewTools-Finder-Tests',
+	#tag : 'Core'
 }
 
 { #category : 'running' }
