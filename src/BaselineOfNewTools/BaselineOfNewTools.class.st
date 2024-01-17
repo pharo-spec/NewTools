@@ -91,9 +91,10 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Scopes-Resources-A-Tests';
 			package: 'NewTools-Scopes-Resources-B-Tests';
 			package: 'NewTools-Scopes-Resources-C-Tests';
+			package: 'NewTools-Scopes-Tests';
 			"Finder"			
 			package: 'NewTools-Finder';
-			package: 'NewTools-Scopes-Tests' with: [ spec requires: #('NewTools-Finder') ].
+			package: 'NewTools-Finder-Tests' with: [ spec requires: #('NewTools-Finder') ].
 
 		spec
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Morphic' );
