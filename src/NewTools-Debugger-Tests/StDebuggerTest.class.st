@@ -567,21 +567,20 @@ StDebuggerTest >> testDebuggerDoesNotLogStackToFileSetting [
 	logFileRef := Smalltalk logFileName asFileReference.
 	logFileRef ensureDelete.
 	self deny: logFileRef exists.
-	debuggingStackToFile := session class logDebuggerStackToFile.
+	debuggingStackToFile := session class logDebuggerStackToFile.	
+	[ 
+		debugger := StTestDebuggerProvider new debuggerWithDNUContext. 
+		session := debugger session.
+		session class logDebuggerStackToFile: false.
+		debugger
+			application: debugger class currentApplication;
+			initialize;
+			open.
 
-	debugger := StTestDebuggerProvider new debuggerWithDNUContext. 
-	session := debugger session.
-	session class logDebuggerStackToFile: false.
-	debugger
-		application: debugger class currentApplication;
-		initialize;
-		open.
-
-	self 
-		assert: logFileRef exists not
-		description: 'It tests that when the log debugger stack to file setting is false, a Pharo log file is not created when requesting a debugger'.
-
-	session class logDebuggerStackToFile: debuggingStackToFile
+		self 
+			assert: logFileRef exists not
+			description: 'It tests that when the log debugger stack to file setting is false, a Pharo log file is not created when requesting a debugger' ]
+	ensure: [ session class logDebuggerStackToFile: debuggingStackToFile ]
 ]
 
 { #category : 'tests - code pane' }
