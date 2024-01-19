@@ -77,11 +77,24 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Debugger-Fuel';
 			package: 'NewTools-Debugger-Fuel-Tests' with: [ spec requires: #( 'NewTools-Debugger-Fuel' ) ];
 			package: 'NewTools-Fuel';
-     			"Rewriter Tools"
+     		"Rewriter Tools"
 			package: 'NewTools-RewriterTools-Backend';
 			package: 'NewTools-RewriterTools' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
 			package: 'NewTools-RewriterTools-Backend-Tests' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
-			package: 'NewTools-RewriterTools-Tests' with: [ spec requires: #('NewTools-RewriterTools') ].
+			package: 'NewTools-RewriterTools-Tests' with: [ spec requires: #('NewTools-RewriterTools') ];
+			"Profiler"
+			package: 'NewTools-ProfilerUI';
+			"Scopes Editor"
+			package: 'NewTools-Scopes';
+			package: 'NewTools-Scopes-Editor' with: [ spec requires: #('NewTools-Scopes') ];
+			package: 'NewTools-Scopes-Tests';
+			package: 'NewTools-Scopes-Resources-A-Tests';
+			package: 'NewTools-Scopes-Resources-B-Tests';
+			package: 'NewTools-Scopes-Resources-C-Tests';
+			package: 'NewTools-Scopes-Tests';
+			"Finder"			
+			package: 'NewTools-Finder';
+			package: 'NewTools-Finder-Tests' with: [ spec requires: #('NewTools-Finder') ].
 
 		spec
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Morphic' );
@@ -130,6 +143,19 @@ BaselineOfNewTools >> baseline: spec [
 				    		'NewTools-RewriterTools'
 				    		'NewTools-RewriterTools-Backend-Tests'
 				    		'NewTools-RewriterTools-Tests' );
+			"ScopesEditor"
+			group: #ScopesEditor with: #(
+						'NewTools-Scopes' 
+						'NewTools-Scopes-Editor' 
+						'NewTools-Scopes-Resources-A-Tests' 
+						'NewTools-Scopes-Resources-B-Tests' 
+						'NewTools-Scopes-Resources-C-Tests' 
+						'NewTools-Scopes-Tests');
+			"Finder"
+			group: #Finder with: #(
+						'NewTools-Finder'
+						'NewTools-Finder-Tests');
+
 			group: 'default' with: #( 
 						'Playground' 
 						'Inspector' 
@@ -139,24 +165,27 @@ BaselineOfNewTools >> baseline: spec [
 						'FontChooser' 
 						'Methods'
 				   		'Spotter'
-            					'RewriterTools') ]
+            			'RewriterTools'
+						'ScopesEditor'
+						'FileBrowser'
+						'Finder') ]
 ]
 
 { #category : 'external projects' }
 BaselineOfNewTools >> chest: spec [
 
-	spec baseline: 'Chest' with: [ 
+	spec baseline: 'Chest' with: [
 		spec
-			repository: (self packageRepositoryURL ifEmpty: [ 
+			repository: ((self packageRepositoryURLForSpec: spec) ifEmpty: [
 						 'github://pharo-spec/Chest:v0.4.1' ]);
 			loads: 'default' ]
 ]
 
-{ #category : 'external projects' }
-BaselineOfNewTools >> packageRepositoryURL [
+{ #category : 'accessing' }
+BaselineOfNewTools >> packageRepositoryURLForSpec: spec [
 	| url |
 	
-	url := super packageRepositoryURL.
+	url := super packageRepositoryURLForSpec: spec.
 	url ifEmpty: [ ^ url ].
 	"Verify if I am running in CI"
 	"travis or github actions"
@@ -182,9 +211,9 @@ BaselineOfNewTools >> preload: loader package: packageSpec [
 { #category : 'external projects' }
 BaselineOfNewTools >> sindarin: spec [
 
-	spec baseline: 'Sindarin' with: [ 
+	spec baseline: 'Sindarin' with: [
 		spec
-			repository: (self packageRepositoryURL 
-				ifEmpty: [ 'github://pharo-spec/ScriptableDebugger:Pharo12/src' ]);
+			repository: ((self packageRepositoryURLForSpec: spec) ifEmpty: [
+						 'github://pharo-spec/ScriptableDebugger:Pharo12/src' ]);
 			loads: 'default' ]
 ]

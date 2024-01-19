@@ -12,7 +12,8 @@ Class {
 		'pageList',
 		'pagePreview',
 		'pageListPanel',
-		'pagePreviewPanel'
+		'pagePreviewPanel',
+		'loadPageAction'
 	],
 	#category : 'NewTools-Playground-View',
 	#package : 'NewTools-Playground',
@@ -81,12 +82,12 @@ StPlaygroundPagesPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
 	aDialogWindowPresenter 
 		centeredRelativeToTopWindow;
-		addButton: 'Load' do: [ :presenter |
-			presenter triggerOkAction.
-			self loadSelectedPage ];		
 		addButton: 'Close' do: [ :presenter |
 			presenter triggerCancelAction.
-			presenter close ]
+			presenter close ];
+		addDefaultButton: 'Load' do: [ :presenter |
+			presenter triggerOkAction.
+			self loadSelectedPage ]
 ]
 
 { #category : 'initialization' }
@@ -136,9 +137,9 @@ StPlaygroundPagesPresenter >> initializeWindow: aWindowPresenter [
 { #category : 'actions' }
 StPlaygroundPagesPresenter >> loadPage: aPage [
 
-	self parent loadPage: aPage.
 	self window close.
-	self parent takeKeyboardFocus 
+	loadPageAction ifNotNil: [ 
+		loadPageAction value: aPage ]
 ]
 
 { #category : 'actions' }
@@ -147,11 +148,18 @@ StPlaygroundPagesPresenter >> loadSelectedPage [
 	self loadPage: self selectedPage
 ]
 
+{ #category : 'events' }
+StPlaygroundPagesPresenter >> onLoadPage: aBlock [
+
+	loadPageAction := aBlock
+]
+
 { #category : 'accessing' }
 StPlaygroundPagesPresenter >> pages [
 	
-	^ (StPlaygroundPresenter cacheDirectory allChildrenMatching: '*.ph')
-		sorted: [ :a :b | a creationTime > b creationTime ]
+	^ ((StPlaygroundPresenter cacheDirectory allChildrenMatching: '*.ph')
+		sorted: [ :a :b | a creationTime > b creationTime ])
+		collect: [ :each | StPlaygroundPage fromReference: each ]
 ]
 
 { #category : 'private' }

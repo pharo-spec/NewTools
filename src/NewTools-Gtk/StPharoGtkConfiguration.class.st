@@ -15,14 +15,14 @@ StPharoGtkConfiguration >> commonStyle [
 
 	^ '
 /* compact toolbar */
-toolbar.stToolbar { font-size: 0.7em }
-toolbar.stToolbar toolbutton > button { padding: 2px; margin: 2px }
+toolbar.stToolbar { font-size: 0.7em; }
+toolbar.stToolbar toolbutton > button { padding: 2px; margin: 2px; }
 
-.dim { color: LightSlateGrey }
+.dim { color: LightSlateGrey; }
 .codePopover, .codePopover text { 
 	background-color: transparent;
 }
-.scrollbarPopoverLarge { min-height: 350px }
+.scrollbarPopoverLarge { min-height: 350px; }
 '
 ]
 
@@ -41,7 +41,7 @@ StPharoGtkConfiguration >> configureOSX: anApplication [
 
 	self installTheme: self macThemeName.
 	self addCSSProviderFromString: '
-.code { font: 12pt "Monaco" }
+.code { font: 12pt "Monaco"; }
 '
 ]
 
@@ -50,7 +50,7 @@ StPharoGtkConfiguration >> configureUnix: anApplication [
 
 	self unixThemeName ifNotNil: [ :aName | self installTheme: aName ].
 	self addCSSProviderFromString: '
-.code { /* font: 10pt "Source Code Pro" */ }
+/* .code { font: 10pt "Source Code Pro" } */
 '
 ]
 
@@ -59,7 +59,7 @@ StPharoGtkConfiguration >> configureWindows: anApplication [
 
 	self installTheme: self windowsThemeName.
 	self addCSSProviderFromString: '
-.code { font: 10pt "Microsoft Sans Serif" }
+.code { font: 10pt "Microsoft Sans Serif"; }
 '
 ]
 

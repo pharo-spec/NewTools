@@ -167,9 +167,8 @@ StFontChooserPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 	super initializeDialogWindow: aDialogWindowPresenter.
 
 	aDialogWindowPresenter
-		addButton: 'Apply' do: [ :presenter | self applyChanges ];
 		addButton: 'Update' do: [ :presenter | self updateFonts ];
-		okAction: [ self applyChanges ].
+		addDefaultButton: 'Apply' do: [ :presenter | self applyChanges ]
 
 ]
 
@@ -347,13 +346,18 @@ StFontChooserPresenter >> updatePreview [
 
 { #category : 'initialization' }
 StFontChooserPresenter >> updateWithFont: aFont [
+	"Try to update the receiver's listing with the selected aFont. 
+	If we do not find a font family matching aFont (for example not yet loaded fonts), inform and then select the first family in the system.
+	If we do not find a font style, select the first one available as initial style"
 
 	| initialFamily initialStyle |
 	fontFamilyList items: self model fontList.
 
 	initialFamily := fontFamilyList items
 		                 detect: [ :e | e familyName = aFont familyName ]
-		                 ifNone: [ nil ].
+		                 ifNone: [ 
+									('Requested font {1} not found' format: { aFont familyName }) traceCr.
+									fontFamilyList items anyOne ].
 
 	fontFamilyList selectItem: initialFamily.
 
@@ -362,7 +366,7 @@ StFontChooserPresenter >> updateWithFont: aFont [
 			                style weightValue = aFont weightValue and: [ 
 				                style stretchValue = aFont stretchValue and: [ 
 					                style slantValue = aFont slantValue ] ] ]
-		                ifNone: [ nil ].
+		                ifNone: [ self selectedFontFamily members anyOne ].
 
 	fontStyleList selectItem: initialStyle.
 
