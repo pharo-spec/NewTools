@@ -1,5 +1,13 @@
 "
-General file system presenter, which replaces the older FileList tool.
+It provides a File System Spec-based presenter, which replaces the old FileList tool.
+
+## Example
+
+To open a default File System Browser, evaluate:
+
+```smalltalk
+StFileSystemPresenter open.
+```
 
 "
 Class {
@@ -23,6 +31,13 @@ StFileSystemPresenter class >> lastVisitedDirectory [
 			 do: [ false ] ]) ifFalse: [ 
 		LastVisitedDirectory := self defaultDirectory ].
 	^ LastVisitedDirectory 
+]
+
+{ #category : 'instance creation' }
+StFileSystemPresenter class >> open [ 
+	<script>
+
+	^ self new open
 ]
 
 { #category : 'initialization' }
@@ -65,14 +80,12 @@ StFileSystemPresenter >> initialExtentForWindow [
 { #category : 'initialization' }
 StFileSystemPresenter >> initializePresenters [
 
-	treeNavigationSystem := self instantiate: StDirectoryTreePresenter on: self model.
 	fileNavigationSystem := self instantiate: StFileNavigationSystemPresenter on: self model.
-	fileNavigationSystem 
-		columns: { 
-			StFileBrowserModificationDateColumn .
-			StFileBrowserSizeColumn .
-			StFileBrowserRightsColumn }.
-	treeNavigationSystem expandPath: fileNavigationSystem currentDirectory.
+	fileNavigationSystem columns: self defaultColumns.
+	fileNavigationSystem fileReferenceTable beMultipleSelection.
+
+	treeNavigationSystem := self instantiate: StDirectoryTreePresenter on: self model.
+	treeNavigationSystem expandPath: fileNavigationSystem currentDirectory.	
 
 ]
 

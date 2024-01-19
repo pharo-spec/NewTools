@@ -9,6 +9,7 @@ examples see class side method example
 Class {
 	#name : 'StOpenFileDialog',
 	#superclass : 'StOpenFileOrDirectoryDialog',
+	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'UI'
@@ -78,7 +79,7 @@ StOpenFileDialog class >> examplePreviewer [
 		open
 ]
 
-{ #category : 'accessing - ui' }
+{ #category : 'hooks' }
 StOpenFileDialog >> initialTitle [
 	^ 'Select File To Open'
 ]

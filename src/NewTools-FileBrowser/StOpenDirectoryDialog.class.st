@@ -3,11 +3,12 @@ My responsibility is to provide dialog for selecting Directories.
 
 So no files will be shown in the file/folder listings.
 
-see my super for more information about customization
+See superclass for more information about customization.
 "
 Class {
 	#name : 'StOpenDirectoryDialog',
 	#superclass : 'StOpenFileOrDirectoryDialog',
+	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'UI'
@@ -33,7 +34,7 @@ StOpenDirectoryDialog >> allowsChooseDirectoryIfNoFilename [
 	^ true
 ]
 
-{ #category : 'accessing - ui' }
+{ #category : 'hooks' }
 StOpenDirectoryDialog >> initialTitle [
 	^ 'Select Directory To Open'
 ]

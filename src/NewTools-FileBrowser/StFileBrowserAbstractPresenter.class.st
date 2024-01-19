@@ -46,6 +46,12 @@ StFileBrowserAbstractPresenter class >> lastVisitedDirectory [
 ]
 
 { #category : 'instance creation' }
+StFileBrowserAbstractPresenter class >> new [
+
+	^ self on: StFileSystemModel new
+]
+
+{ #category : 'instance creation' }
 StFileBrowserAbstractPresenter class >> open [
 
 	^ (self on: StFileSystemModel new) open
@@ -105,6 +111,16 @@ StFileBrowserAbstractPresenter >> currentDirectory [
 StFileBrowserAbstractPresenter >> currentDirectory: aFileReference [
 
 	self model currentDirectory: aFileReference.
+]
+
+{ #category : 'initialization' }
+StFileBrowserAbstractPresenter >> defaultColumns [
+
+	^ { 
+		StFileBrowserModificationDateColumn .
+		StFileBrowserSizeColumn .
+		StFileBrowserRightsColumn 
+		}
 ]
 
 { #category : 'defaults' }

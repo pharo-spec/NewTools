@@ -52,7 +52,8 @@ Class {
 	#instVars : [
 		'fileNavigationSystem',
 		'okAction',
-		'filter'
+		'filter',
+		'treeNavigationSystem'
 	],
 	#classVars : [
 		'OkAction'
@@ -206,6 +207,9 @@ StFileDialogPresenter >> confirmed [
 { #category : 'initialization' }
 StFileDialogPresenter >> connectPresenters [
 
+	treeNavigationSystem
+		transmitDo: [ : selection | selection ifNotNil: [ self updateWidgetWithFileReference: selection fileReference ] ].
+
 	bookmarksTreeTable whenSelectionChangedDo: [ :selection | 
 		selection selectedItem ifNotNil: [ :selectedItem | 
 			selectedItem isComposite ifFalse: [ 
@@ -222,7 +226,11 @@ StFileDialogPresenter >> defaultLayout [
 
 	^ SpPanedLayout newLeftToRight
 		  positionOfSlider: 200;
-		  add: bookmarksTreeTable;
+		  add: (SpPanedLayout newTopToBottom
+				positionOfSlider: 450;		
+				add: treeNavigationSystem;
+				add: bookmarksTreeTable;
+				yourself);
 		  add: fileNavigationSystem;
 		  yourself
 ]
@@ -278,6 +286,17 @@ StFileDialogPresenter >> iconFor: anEntry [
 ]
 
 { #category : 'initialization' }
+StFileDialogPresenter >> initialExtentForWindow [
+
+	^ 1050 @ 750
+]
+
+{ #category : 'hooks' }
+StFileDialogPresenter >> initialTitle [
+	^ self subclassResponsibility
+]
+
+{ #category : 'initialization' }
 StFileDialogPresenter >> initialize [
 
 	super initialize.
@@ -318,15 +337,20 @@ StFileDialogPresenter >> initializePresenters [
 
 	super initializePresenters.
 	fileNavigationSystem := self instantiate: StFileNavigationSystemPresenter on: model.
-	fileNavigationSystem filter: self filter.
+	fileNavigationSystem 
+		filter: self filter;
+		columns: self defaultColumns.
+		
+	treeNavigationSystem := self instantiate: StDirectoryTreePresenter on: model.
+	treeNavigationSystem expandPath: fileNavigationSystem currentDirectory.
 ]
 
 { #category : 'initialization' }
-StFileDialogPresenter >> initializeWindow: aWindowPresenter [
+StFileDialogPresenter >> initializeWindow: aSpWindowPresenter [
 
-	aWindowPresenter
-		title: self title;
-		initialExtent: 1050 @ 750
+	self setTitleTo: aSpWindowPresenter.
+	self setInitialExtentTo: aSpWindowPresenter
+
 ]
 
 { #category : 'accessing' }
@@ -384,8 +408,29 @@ StFileDialogPresenter >> selectedEntry [
 	^ entry
 ]
 
+{ #category : 'initialization' }
+StFileDialogPresenter >> setInitialExtentTo: aSpWindowPresenter [
+	
+	aSpWindowPresenter initialExtent: self initialExtentForWindow
+]
+
+{ #category : 'initialization' }
+StFileDialogPresenter >> setTitleTo: aSpWindowPresenter [
+
+	aSpWindowPresenter title: self initialTitle
+
+]
+
 { #category : 'accessing' }
 StFileDialogPresenter >> showDirectory: aFileReference [
 
 	fileNavigationSystem currentDirectory: aFileReference
+]
+
+{ #category : 'initialization' }
+StFileDialogPresenter >> updateWidgetWithFileReference: aFileReference [
+
+	self currentDirectory: aFileReference.
+	aFileReference exists
+		ifTrue: [ fileNavigationSystem updateWidgetWithFileReference: aFileReference ]
 ]
