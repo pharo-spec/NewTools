@@ -118,7 +118,7 @@ StFileNavigationSystemPresenter class >> example [
 { #category : 'class initialization' }
 StFileNavigationSystemPresenter class >> initialize [
 
-	super initialize.
+	self initializeBookmarks.
 	Previewer := self defaultPreviewer
 ]
 
