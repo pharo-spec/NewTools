@@ -46,12 +46,6 @@ StFileSystemPresenter >> connectPresenters [
 	treeNavigationSystem
 		transmitDo: [ : selection | selection ifNotNil: [ self updateWidgetWithFileReference: selection fileReference ] ].
 
-	fileNavigationSystem := self instantiate: StFileNavigationSystemPresenter on: self model.
-	fileNavigationSystem 
-		columns: { 
-			StFileBrowserModificationDateColumn .
-			StFileBrowserSizeColumn .
-			StFileBrowserRightsColumn }
 ]
 
 { #category : 'layout' }
