@@ -30,10 +30,12 @@ StFileBrowserAbstractPresenter class >> open [
 { #category : 'adding' }
 StFileBrowserAbstractPresenter >> addBookmark: aFileReference [ 
 
-	self bookmarks add: (StFileBrowserBookmark 
-		name: aFileReference basename 
-		location: aFileReference 
-		icon: (self iconNamed: #book)).
+	self model addBookmark: aFileReference.
+	bookmarksTreeTable 
+		roots: self bookmarks;
+		expandRoots;
+		refresh.
+
 ]
 
 { #category : 'accessing - bookmarks' }
@@ -52,13 +54,6 @@ StFileBrowserAbstractPresenter >> bookmarks: aCollectionOfFDGroupBookMark [
 { #category : 'accessing - bookmarks' }
 StFileBrowserAbstractPresenter >> bookmarksTreeTable [
 	^ bookmarksTreeTable
-]
-
-{ #category : 'accessing - bookmarks' }
-StFileBrowserAbstractPresenter >> bookmarksTreeTableItems: aCollection [
-	"Convenience method to set the receiver's bookmarks table items to aCollection"
-	
-	bookmarksTreeTable roots: aCollection
 ]
 
 { #category : 'utilities' }
@@ -185,4 +180,10 @@ StFileBrowserAbstractPresenter >> selectedBookMark [
 StFileBrowserAbstractPresenter >> setModelBeforeInitialization: aStFileSystemModel [
 
 	model := aStFileSystemModel
+]
+
+{ #category : 'utilities' }
+StFileBrowserAbstractPresenter >> updateFileSystemPresenters [
+
+	self owner updateFileSystemPresenters
 ]

@@ -47,6 +47,15 @@ StFileSystemModel class >> lastVisitedDirectory [
 	^ LastVisitedDirectory
 ]
 
+{ #category : 'adding' }
+StFileSystemModel >> addBookmark: aFileReference [ 
+
+	self bookmarks add: (StFileBrowserBookmark 
+		name: aFileReference basename 
+		location: aFileReference 
+		icon: (self iconNamed: #book)).
+]
+
 { #category : 'accessing' }
 StFileSystemModel >> bookmarks [
 
