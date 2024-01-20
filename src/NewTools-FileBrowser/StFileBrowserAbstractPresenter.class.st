@@ -15,36 +15,6 @@ Class {
 	#tag : 'UI'
 }
 
-{ #category : 'accessing' }
-StFileBrowserAbstractPresenter class >> defaultDirectory [
-	"Answer a <FileReference> with the default directory for opening the file browser and dialogs"
-
-	^ StFileBrowserSettings defaultDirectory
-]
-
-{ #category : 'class initialization' }
-StFileBrowserAbstractPresenter class >> initialize [
-
-	self initializeBookmarks.
-]
-
-{ #category : 'class initialization' }
-StFileBrowserAbstractPresenter class >> initializeBookmarks [
-
-	Bookmarks := StFileBrowserBookmark defaultBookmarks
-]
-
-{ #category : 'accessing' }
-StFileBrowserAbstractPresenter class >> lastVisitedDirectory [
-
-	(LastVisitedDirectory isNotNil and: [ 
-		 [ LastVisitedDirectory exists ]
-			 on: ResolutionRequest
-			 do: [ false ] ]) ifFalse: [ 
-		LastVisitedDirectory := self defaultDirectory ].
-	^ LastVisitedDirectory
-]
-
 { #category : 'instance creation' }
 StFileBrowserAbstractPresenter class >> new [
 
@@ -54,7 +24,7 @@ StFileBrowserAbstractPresenter class >> new [
 { #category : 'instance creation' }
 StFileBrowserAbstractPresenter class >> open [
 
-	^ (self on: StFileSystemModel new) open
+	^ self new open
 ]
 
 { #category : 'adding' }
@@ -69,15 +39,13 @@ StFileBrowserAbstractPresenter >> addBookmark: aFileReference [
 { #category : 'accessing - bookmarks' }
 StFileBrowserAbstractPresenter >> bookmarks [
 
-	Bookmarks 
-		ifNil: [ self class initialize ].
-	^ Bookmarks
+	^ self model bookmarks 
 ]
 
 { #category : 'accessing - bookmarks' }
 StFileBrowserAbstractPresenter >> bookmarks: aCollectionOfFDGroupBookMark [
 
-	Bookmarks := aCollectionOfFDGroupBookMark asOrderedCollection.
+	self model bookmarks: aCollectionOfFDGroupBookMark.
 	bookmarksTreeTable roots: Bookmarks 
 ]
 
@@ -97,7 +65,7 @@ StFileBrowserAbstractPresenter >> bookmarksTreeTableItems: aCollection [
 StFileBrowserAbstractPresenter >> createDirectory [
 
 	self model createDirectory.
-	self updateFileSystemContents.
+	self updateFileSystemPresenters.
 ]
 
 { #category : 'accessing' }
@@ -127,7 +95,7 @@ StFileBrowserAbstractPresenter >> defaultColumns [
 StFileBrowserAbstractPresenter >> defaultDirectory [
 	"See class side comment"
 
-	^ self class defaultDirectory.
+	^ self model defaultDirectory.
 ]
 
 { #category : 'accessing - history' }
@@ -140,14 +108,6 @@ StFileBrowserAbstractPresenter >> history [
 StFileBrowserAbstractPresenter >> history: aConfigurableHistoryIterator [ 
 
 	self model history: aConfigurableHistoryIterator.
-]
-
-{ #category : 'initialization' }
-StFileBrowserAbstractPresenter >> initialize [
-
-	super initialize.
-	(StFileBrowserSettings showAlwaysDefaultBookmarks and: [ self bookmarks isEmpty ])
-		ifTrue: [ self class initializeBookmarks ]
 ]
 
 { #category : 'initialization' }
@@ -190,7 +150,9 @@ StFileBrowserAbstractPresenter >> initializePresenters [
 
 { #category : 'accessing - history' }
 StFileBrowserAbstractPresenter >> lastVisitedDirectory [
-	^ self class lastVisitedDirectory.
+	"Answer the <FileReference> of the last visited directory"
+
+	^ self model lastVisitedDirectory
 ]
 
 { #category : 'accessing' }
@@ -211,7 +173,7 @@ StFileBrowserAbstractPresenter >> openOnLastDirectory [
 StFileBrowserAbstractPresenter >> resetBookmarks [
 	"Reset bookmarks to their defaults"
 
-	self class initializeBookmarks
+	self model resetBookmarks
 ]
 
 { #category : 'accessing - bookmarks' }
@@ -220,13 +182,7 @@ StFileBrowserAbstractPresenter >> selectedBookMark [
 ]
 
 { #category : 'accessing - model' }
-StFileBrowserAbstractPresenter >> setModelBeforeInitialization: aStFBFileSystemModel [
+StFileBrowserAbstractPresenter >> setModelBeforeInitialization: aStFileSystemModel [
 
-	model := aStFBFileSystemModel
-]
-
-{ #category : 'utilities' }
-StFileBrowserAbstractPresenter >> updateFileSystemContents [
-
-	self owner updateFileSystemContents
+	model := aStFileSystemModel
 ]

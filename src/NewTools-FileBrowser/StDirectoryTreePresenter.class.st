@@ -4,6 +4,7 @@ Implements a basic Spec presenter to display a directory tree.
 Class {
 	#name : 'StDirectoryTreePresenter',
 	#superclass : 'StFileBrowserAbstractPresenter',
+	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'directoryTreePresenter'
 	],
@@ -87,9 +88,8 @@ StDirectoryTreePresenter >> initializePresenters [
 { #category : 'utilities' }
 StDirectoryTreePresenter >> openFolder: aFileReference [ 
 
-	model openFolder: aFileReference.
 	self owner updateWidgetWithFileReference: aFileReference.
-	self expandPath: aFileReference.
+
 ]
 
 { #category : 'accessing' }
@@ -107,9 +107,14 @@ StDirectoryTreePresenter >> shouldReparent [
 ]
 
 { #category : 'utilities' }
-StDirectoryTreePresenter >> updateFileSystemContents [
+StDirectoryTreePresenter >> updateFileDirectoryTree [
 
-	super updateFileSystemContents.
 	directoryTreePresenter roots: StFileSystemItemWrapper roots.
 	self expandPath: self currentDirectory.
+]
+
+{ #category : 'utilities' }
+StDirectoryTreePresenter >> updateWidgetWithFileReference: aFileReference [
+
+	self expandPath: aFileReference.
 ]

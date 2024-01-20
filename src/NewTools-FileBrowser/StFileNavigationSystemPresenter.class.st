@@ -42,8 +42,8 @@ You can customize how this presenter is displayed, with methods listed at the pr
 Class {
 	#name : 'StFileNavigationSystemPresenter',
 	#superclass : 'StFileBrowserAbstractPresenter',
+	#classTraits : '{} + TraitedClass',
 	#instVars : [
-		'currentPathTextInputPresenter',
 		'nameText',
 		'filtersDropList',
 		'filter',
@@ -52,7 +52,8 @@ Class {
 		'previousButton',
 		'notebookPreviewer',
 		'fileReferenceTable',
-		'configButton'
+		'configButton',
+		'pathBreadcrumbPresenter'
 	],
 	#classVars : [
 		'Previewer'
@@ -106,7 +107,6 @@ StFileNavigationSystemPresenter class >> example [
 { #category : 'class initialization' }
 StFileNavigationSystemPresenter class >> initialize [
 
-	self initializeBookmarks.
 	Previewer := self defaultPreviewer
 ]
 
@@ -142,11 +142,6 @@ StFileNavigationSystemPresenter >> connectPresenters [
 	self configButtonAction.
 ]
 
-{ #category : 'accessing' }
-StFileNavigationSystemPresenter >> currentPathTextInputPresenter [
-	^ currentPathTextInputPresenter
-]
-
 { #category : 'api - customization' }
 StFileNavigationSystemPresenter >> defaultFolder: aFileReference [
 	self updateWidgetWithFileReference: aFileReference.
@@ -161,7 +156,7 @@ StFileNavigationSystemPresenter >> defaultLayout [
 				vAlignCenter;
 				add: previousButton expand: false;
 				add: nextButton expand: false;
-				add: currentPathTextInputPresenter;
+				add: pathBreadcrumbPresenter;
 			   addLast: configButton;				
 				yourself)
 			 expand: false;
@@ -241,7 +236,7 @@ StFileNavigationSystemPresenter >> filtersDropList [
 
 { #category : 'actions' }
 StFileNavigationSystemPresenter >> filtersDropListAction [
-	filtersDropList whenSelectionChangedDo: [ self updateFileSystemContents ]
+	filtersDropList whenSelectionChangedDo: [ self updateFileReferenceTable ]
 ]
 
 { #category : 'initialization' }
@@ -295,7 +290,7 @@ StFileNavigationSystemPresenter >> initializePresenters [
 
 	super initializePresenters.
 	notebookPreviewer := self instantiate: StNoteBookPreviewerPresenter.
-	currentPathTextInputPresenter := self instantiate: StPathBreadcrumbPresenter on: self model.
+	pathBreadcrumbPresenter := self instantiate: StPathBreadcrumbPresenter on: self model.
 	nameText := self newTextInput.
 	filtersDropList := self newDropList.
 	configButton := self newButton
@@ -357,7 +352,13 @@ StFileNavigationSystemPresenter >> openFolder: aFileReference [
 
 	self updateWidgetWithFileReference: aFileReference.
 	model openFolder: aFileReference.
+	self owner updateTreeNavigationWithFileReference: aFileReference.
 
+]
+
+{ #category : 'accessing' }
+StFileNavigationSystemPresenter >> pathBreadcrumbPresenter [
+	^ pathBreadcrumbPresenter
 ]
 
 { #category : 'accessing' }
@@ -397,8 +398,9 @@ StFileNavigationSystemPresenter >> shouldReparent [
 ]
 
 { #category : 'utilities' }
-StFileNavigationSystemPresenter >> updateFileSystemContents [
-
+StFileNavigationSystemPresenter >> updateFileReferenceTable [
+	"Update the receiver's contents according to the current directory and apply configured filters"
+	
 	fileReferenceTable items:
 		((filtersDropList selectedItem ifNil: [ filter ]) applyOn:
 			 (self currentDirectory children select: #exists)).
@@ -406,8 +408,9 @@ StFileNavigationSystemPresenter >> updateFileSystemContents [
 
 { #category : 'utilities' }
 StFileNavigationSystemPresenter >> updateWidgetWithFileReference: aFileReference [
+	"A file reference was selected in the receiver or one of its subpresenters, update the file reference table and current directory"
 
 	self currentDirectory: aFileReference.
-	self updateFileSystemContents.
-	currentPathTextInputPresenter currentDirectory: self currentDirectory
+	self updateFileReferenceTable.
+	pathBreadcrumbPresenter currentDirectory: self currentDirectory
 ]

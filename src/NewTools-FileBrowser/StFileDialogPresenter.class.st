@@ -336,7 +336,7 @@ StFileDialogPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 StFileDialogPresenter >> initializePresenters [
 
 	super initializePresenters.
-	fileNavigationSystem := self instantiate: StFileNavigationSystemPresenter on: model.
+	fileNavigationSystem := self instantiate: self navigationSystemClass on: model.
 	fileNavigationSystem 
 		filter: self filter;
 		columns: self defaultColumns.
@@ -362,6 +362,12 @@ StFileDialogPresenter >> isRootDirectory: aDirectory [
 StFileDialogPresenter >> isolate [
 	self bookmarks: self bookmarks copy.
 	
+]
+
+{ #category : 'hooks' }
+StFileDialogPresenter >> navigationSystemClass [
+
+	^ StFileNavigationSystemPresenter
 ]
 
 { #category : 'api - customization' }
@@ -425,6 +431,13 @@ StFileDialogPresenter >> setTitleTo: aSpWindowPresenter [
 StFileDialogPresenter >> showDirectory: aFileReference [
 
 	fileNavigationSystem currentDirectory: aFileReference
+]
+
+{ #category : 'utilities' }
+StFileDialogPresenter >> updateTreeNavigationWithFileReference: aFileReference [ 
+
+	aFileReference exists
+		ifTrue: [ treeNavigationSystem updateWidgetWithFileReference: aFileReference ]
 ]
 
 { #category : 'initialization' }

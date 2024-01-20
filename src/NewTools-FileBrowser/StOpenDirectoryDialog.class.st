@@ -3,7 +3,7 @@ My responsibility is to provide dialog for selecting Directories.
 
 So no files will be shown in the file/folder listings.
 
-See superclass for more information about customization.
+see my super for more information about customization
 "
 Class {
 	#name : 'StOpenDirectoryDialog',
@@ -37,6 +37,12 @@ StOpenDirectoryDialog >> allowsChooseDirectoryIfNoFilename [
 { #category : 'hooks' }
 StOpenDirectoryDialog >> initialTitle [
 	^ 'Select Directory To Open'
+]
+
+{ #category : 'hooks' }
+StOpenDirectoryDialog >> navigationSystemClass [
+	
+	^ StDirectoryNavigationSystemPresenter 
 ]
 
 { #category : 'actions' }

@@ -129,11 +129,19 @@ StFileSystemPresenter >> setWindowIconTo: aSpWindowPresenter [
 ]
 
 { #category : 'utilities' }
-StFileSystemPresenter >> updateFileSystemContents [
+StFileSystemPresenter >> updateFileSystemPresenters [
 
-	fileNavigationSystem updateFileSystemContents.
+	fileNavigationSystem updateFileReferenceTable.
+	treeNavigationSystem updateFileDirectoryTree.
 
 
+]
+
+{ #category : 'utilities' }
+StFileSystemPresenter >> updateTreeNavigationWithFileReference: aFileReference [ 
+
+	aFileReference exists
+		ifTrue: [ treeNavigationSystem updateWidgetWithFileReference: aFileReference ]
 ]
 
 { #category : 'utilities' }

@@ -7,6 +7,12 @@ Class {
 }
 
 { #category : 'accessing' }
+StFileBrowserCommand >> contextModel [
+
+	^ self context model
+]
+
+{ #category : 'accessing' }
 StFileBrowserCommand >> iconProvider [ 
 
 	^ StFileBrowserIconCache 
