@@ -73,7 +73,7 @@ StFileSystemPresenter >> addBookmark: aFileReference [
 { #category : 'accessing - bookmarks' }
 StFileSystemPresenter >> bookmarks: aCollectionOfFDGroupBookMark [
 
-	bookmarksTreeTable roots: Bookmarks 
+	bookmarksTreeTable roots: aCollectionOfFDGroupBookMark 
 ]
 
 { #category : 'accessing - bookmarks' }
