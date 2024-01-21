@@ -47,7 +47,7 @@ StSaveFileDialog >> connectPresenters [
 	super connectPresenters.
 	(ec := EntryCompletion new)
 		dataSourceBlock: [ :text | 
-			fileNavigationSystem currentDirectory children collect: #basename ];
+			self fileNavigationSystem currentDirectory children collect: #basename ];
 		filterBlock: [ :opt :text | opt beginsWith: text ]
 ]
 

@@ -13,14 +13,27 @@ StFileSystemPresenter open.
 Class {
 	#name : 'StFileSystemPresenter',
 	#superclass : 'StFileBrowserAbstractPresenter',
+	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'treeNavigationSystem',
-		'fileNavigationSystem'
+		'fileNavigationSystem',
+		'bookmarksTreeTable',
+		'navigationSystemClass'
 	],
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'UI'
 }
+
+{ #category : 'commands' }
+StFileSystemPresenter class >> buildCommandsGroupWith: presenter forRoot: rootCommandGroup [
+
+	rootCommandGroup
+		register:
+			((CmCommandGroup named: 'StFileBrowserBookmarksMenu') asSpecGroup
+				register: StFileBrowserRemoveBookmarkCommand forSpec;
+				yourself)
+]
 
 { #category : 'defaults' }
 StFileSystemPresenter class >> lastVisitedDirectory [
@@ -29,8 +42,14 @@ StFileSystemPresenter class >> lastVisitedDirectory [
 		 [ LastVisitedDirectory exists ]
 			 on: ResolutionRequest
 			 do: [ false ] ]) ifFalse: [ 
-		LastVisitedDirectory := self defaultDirectory ].
+		LastVisitedDirectory := StFileBrowserSettings defaultDirectory ].
 	^ LastVisitedDirectory 
+]
+
+{ #category : 'hooks' }
+StFileSystemPresenter class >> navigationSystemClass [
+
+	^ StFileNavigationSystemPresenter
 ]
 
 { #category : 'instance creation' }
@@ -40,11 +59,44 @@ StFileSystemPresenter class >> open [
 	^ self new open
 ]
 
+{ #category : 'accessing - bookmarks' }
+StFileSystemPresenter >> addBookmark: aFileReference [ 
+
+	self model addBookmark: aFileReference.
+	bookmarksTreeTable 
+		roots: self bookmarks;
+		expandRoots;
+		refresh.
+
+]
+
+{ #category : 'accessing - bookmarks' }
+StFileSystemPresenter >> bookmarks: aCollectionOfFDGroupBookMark [
+
+	bookmarksTreeTable roots: Bookmarks 
+]
+
+{ #category : 'accessing - bookmarks' }
+StFileSystemPresenter >> bookmarksTreeTable [
+	"Answer a <SpTreeTablePresenter> used to display the receiver's bookmarks"
+
+	^ bookmarksTreeTable
+]
+
 { #category : 'initialization' }
 StFileSystemPresenter >> connectPresenters [ 
+	"Here we check that the window is displayed. 
+	If it's not, that means this is a first opening so it should preserve the path selected by the user (through openOnLastDirectory preference, or defaultRoot: message send) and not to transmit the directory selection"
 
 	treeNavigationSystem
-		transmitDo: [ : selection | selection ifNotNil: [ self updateWidgetWithFileReference: selection fileReference ] ].
+		transmitDo: [ : selection | 
+			(self isDisplayed and: [ selection notNil ])
+				ifTrue: [ self updateWidgetWithFileReference: selection fileReference ] ].
+			
+	bookmarksTreeTable whenSelectionChangedDo: [ :selection | 
+		selection selectedItem ifNotNil: [ :selectedItem | 
+			selectedItem isComposite ifFalse: [ 
+				self fileNavigationSystem openFolder: selectedItem location ] ] ]
 
 ]
 
@@ -53,7 +105,11 @@ StFileSystemPresenter >> defaultLayout [
 
 	^ SpPanedLayout newLeftToRight
 			positionOfSlider: 0.2;
-			add: treeNavigationSystem;
+			add: (SpPanedLayout newTopToBottom
+				positionOfSlider: 300;		
+				add: treeNavigationSystem;
+				add: bookmarksTreeTable;
+				yourself);			
 			add: fileNavigationSystem;
 			yourself
 ]
@@ -65,6 +121,11 @@ StFileSystemPresenter >> expandPath: aFileReference [
 	treeNavigationSystem expandPath: aFileReference
 ]
 
+{ #category : 'accessing' }
+StFileSystemPresenter >> fileNavigationSystem [
+	^ fileNavigationSystem
+]
+
 { #category : 'initialization' }
 StFileSystemPresenter >> initialExtentForWindow [
 
@@ -72,15 +133,43 @@ StFileSystemPresenter >> initialExtentForWindow [
 ]
 
 { #category : 'initialization' }
+StFileSystemPresenter >> initialTitle [
+
+	^ 'File Browser'
+
+]
+
+{ #category : 'initialization' }
+StFileSystemPresenter >> initializeBookmarksTreeTable [
+
+	bookmarksTreeTable := self newTreeTable.
+	bookmarksTreeTable
+		hideColumnHeaders;
+		addColumn: (SpCompositeTableColumn new
+				 addColumn:
+					 (SpImageTableColumn evaluated: [ :each | each icon ])
+						 beNotExpandable;
+				 addColumn:
+					 (SpStringTableColumn evaluated: [ :groupBookMark | 
+							  groupBookMark name ]);
+				 yourself);
+		roots: self bookmarks;
+		children: #children;
+		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'StFileBrowserBookmarksMenu' ];
+		expandRoots
+]
+
+{ #category : 'initialization' }
 StFileSystemPresenter >> initializePresenters [
 
-	fileNavigationSystem := self instantiate: StFileNavigationSystemPresenter on: self model.
+	fileNavigationSystem := self instantiate: self navigationSystemClass on: self model.
 	fileNavigationSystem columns: self defaultColumns.
-	fileNavigationSystem fileReferenceTable beMultipleSelection.
+	fileNavigationSystem nameText disable.
 
 	treeNavigationSystem := self instantiate: StDirectoryTreePresenter on: self model.
 	treeNavigationSystem expandPath: fileNavigationSystem currentDirectory.	
 
+	self initializeBookmarksTreeTable.
 ]
 
 { #category : 'initialization' }
@@ -111,7 +200,7 @@ StFileSystemPresenter >> setInitialExtentTo: aSpWindowPresenter [
 { #category : 'initialization' }
 StFileSystemPresenter >> setTitleTo: aSpWindowPresenter [
 
-	aSpWindowPresenter title: 'File Browser'
+	aSpWindowPresenter title: self initialTitle
 
 ]
 
@@ -120,6 +209,11 @@ StFileSystemPresenter >> setWindowIconTo: aSpWindowPresenter [
 	
 	aSpWindowPresenter	windowIcon: (self iconNamed: #open).
 
+]
+
+{ #category : 'accessing' }
+StFileSystemPresenter >> treeNavigationSystem [
+	^ treeNavigationSystem
 ]
 
 { #category : 'utilities' }
@@ -134,13 +228,11 @@ StFileSystemPresenter >> updateFileSystemPresenters [
 { #category : 'utilities' }
 StFileSystemPresenter >> updateTreeNavigationWithFileReference: aFileReference [ 
 
-	aFileReference exists
-		ifTrue: [ treeNavigationSystem updateWidgetWithFileReference: aFileReference ]
+	treeNavigationSystem updateWidgetWithFileReference: aFileReference
 ]
 
 { #category : 'utilities' }
 StFileSystemPresenter >> updateWidgetWithFileReference: aFileReference [ 
 
-	aFileReference exists
-		ifTrue: [ fileNavigationSystem updateWidgetWithFileReference: aFileReference ]
+	fileNavigationSystem updateWidgetWithFileReference: aFileReference
 ]

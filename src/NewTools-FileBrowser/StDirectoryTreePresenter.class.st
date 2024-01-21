@@ -18,7 +18,7 @@ StDirectoryTreePresenter class >> buildCommandsGroupWith: presenterInstance forR
 
 	rootCommandGroup
 		register: (
-			(CmCommandGroup named: 'StFBDirectoryContextualMenu') asSpecGroup
+			(CmCommandGroup named: 'StFileBrowserDirectoryContextualMenu') asSpecGroup
 				register: StFileBrowserNewDirectoryCommand forSpec;			
 				register: StFileBrowserRenameCommand forSpec;
 				register: StFileBrowserRemoveCommand forSpec;
@@ -82,7 +82,7 @@ StDirectoryTreePresenter >> initializePresenters [
 		roots: StFileSystemItemWrapper roots;
 		children: [ :aClass | aClass subdirectories ];
 		beResizable;
-		contextMenu: [ (self rootCommandsGroup / 'StFBDirectoryContextualMenu') beRoot asMenuPresenter ].
+		contextMenu: [ (self rootCommandsGroup / 'StFileBrowserDirectoryContextualMenu') beRoot asMenuPresenter ].
 ]
 
 { #category : 'utilities' }

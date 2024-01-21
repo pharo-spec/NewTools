@@ -2,20 +2,17 @@
 Abstract base class for different styles of opening/saving.
 Do not use this class directly, instead check subclasses to see specific uses.
 
-## Author 
+## Authors
 
-- Main Author : peteruhnak
-- Migrator Spec 1 to Spec 2 : CafeKrem (github pseudo)
-- Authors: Esteban Lorenzano, Hernán Morales Durand.
+- Initial release : peteruhnak
+- Migration Spec 1 to Spec 2 : CafeKrem (github pseudo)
+- Enhacements and fixes: Esteban Lorenzano, Hernán Morales Durand.
 
 ## Examples
 
 ```smalltalk
-StFBFileDialogPresenter fullExample
-```
-
-```smalltalk
-FDOpenFileDialog open
+""To open an 'Open File' dialog:""
+StOpenFileDialog open.
 ```
 
 ## Customization
@@ -27,7 +24,7 @@ This class defines methods to customize your File Dialog Presenters
 - `defaultFolder: aPath` Used to open a fileDialog on a aPath, this path must exist and be a directory
 
 ```smalltalk
-(StFBOpenFileDialog new defaultFolder: '/home/cdutriez/' asFileReference) open 
+(StOpenFileDialog new defaultFolder: '/usr/bin/' asFileReference) open 
 ```
 
 - `filtersCustomization: aCollection` Used to define a set of Filter (choose one or more among `StFBAbstractPredicate` or create a new  predicate)
@@ -35,25 +32,23 @@ This class defines methods to customize your File Dialog Presenters
 There is always a default filter (`filterNothing`)
 
 ```smalltalk		
-(StFBOpenFileDialog new filtersCustomization: { StFBJPGAndPNGPredicate new }) open
+(StOpenFileDialog new filtersCustomization: { StJPGAndPNGPredicate new }) open
 ```
-
 	
 ## Icons
 
 If you want to add icons you just have to create a method with pragma <icons> and this method have to return an array of association 
 
-FDFileDialogPresenter textIcons method 
+StFileDialogPresenter textIcons method 
 
 "
 Class {
 	#name : 'StFileDialogPresenter',
-	#superclass : 'StFileBrowserAbstractPresenter',
+	#superclass : 'StFileSystemPresenter',
+	#classTraits : '{} + TraitedClass',
 	#instVars : [
-		'fileNavigationSystem',
 		'okAction',
-		'filter',
-		'treeNavigationSystem'
+		'filter'
 	],
 	#classVars : [
 		'OkAction'
@@ -69,15 +64,6 @@ StFileDialogPresenter class >> allIcons [
 	^ (Pragma allNamed: 'icons' in: StFileDialogPresenter class)
 		flatCollect:
 			[ :pragma | pragma methodClass instanceSide perform: pragma methodSelector ]
-]
-
-{ #category : 'commander2' }
-StFileDialogPresenter class >> buildCommandsGroupWith: presenter forRoot: rootCommandGroup [
-	rootCommandGroup
-		register:
-			((CmCommandGroup named: 'Menu') asSpecGroup
-				register: StFileBrowserRemoveBookmarkCommand forSpec;
-				yourself)
 ]
 
 { #category : 'examples' }
@@ -150,12 +136,6 @@ StFileDialogPresenter class >> initialize [
 
 ]
 
-{ #category : 'instance creation' }
-StFileDialogPresenter class >> new [
-
-	^ self on: StFileSystemModel new
-]
-
 { #category : 'icons' }
 StFileDialogPresenter class >> textIcons [
 	<icons>
@@ -183,7 +163,8 @@ StFileDialogPresenter >> cancelled [
 
 { #category : 'api - customization' }
 StFileDialogPresenter >> columns: aCollectionOfColumns [
-	fileNavigationSystem columns: aCollectionOfColumns 
+
+	self fileNavigationSystem columns: aCollectionOfColumns 
 ]
 
 { #category : 'actions' }
@@ -204,35 +185,9 @@ StFileDialogPresenter >> confirmed [
 	okAction cull: self selectedEntry
 ]
 
-{ #category : 'initialization' }
-StFileDialogPresenter >> connectPresenters [
-
-	treeNavigationSystem
-		transmitDo: [ : selection | selection ifNotNil: [ self updateWidgetWithFileReference: selection fileReference ] ].
-
-	bookmarksTreeTable whenSelectionChangedDo: [ :selection | 
-		selection selectedItem ifNotNil: [ :selectedItem | 
-			selectedItem isComposite ifFalse: [ 
-				fileNavigationSystem openFolder: selectedItem location ] ] ]
-]
-
 { #category : 'api - customization' }
 StFileDialogPresenter >> defaultFolder: aPath [
-	fileNavigationSystem defaultFolder: aPath
-]
-
-{ #category : 'layout' }
-StFileDialogPresenter >> defaultLayout [
-
-	^ SpPanedLayout newLeftToRight
-		  positionOfSlider: 200;
-		  add: (SpPanedLayout newTopToBottom
-				positionOfSlider: 450;		
-				add: treeNavigationSystem;
-				add: bookmarksTreeTable;
-				yourself);
-		  add: fileNavigationSystem;
-		  yourself
+	self fileNavigationSystem defaultFolder: aPath
 ]
 
 { #category : 'accessing' }
@@ -251,13 +206,8 @@ StFileDialogPresenter >> extensions: aCollectionOfExtensions named: aString [
 ]
 
 { #category : 'accessing' }
-StFileDialogPresenter >> fileNavigationSystem [
-	^ fileNavigationSystem
-]
-
-{ #category : 'accessing' }
 StFileDialogPresenter >> fileReferenceTable [
-	^ fileNavigationSystem fileReferenceTable
+	^ self fileNavigationSystem fileReferenceTable
 ]
 
 { #category : 'accessing' }
@@ -270,7 +220,7 @@ StFileDialogPresenter >> filter [
 StFileDialogPresenter >> filter: aStFBFilter [
 
 	filter := aStFBFilter.
-	fileNavigationSystem ifNotNil: [ fileNavigationSystem filter: filter ]
+	self fileNavigationSystem ifNotNil: [ self fileNavigationSystem filter: filter ]
 ]
 
 { #category : 'utilities' }
@@ -288,10 +238,10 @@ StFileDialogPresenter >> iconFor: anEntry [
 { #category : 'initialization' }
 StFileDialogPresenter >> initialExtentForWindow [
 
-	^ 1050 @ 750
+	^ (1050 @ 750) scaledByDisplayScaleFactor
 ]
 
-{ #category : 'hooks' }
+{ #category : 'initialization' }
 StFileDialogPresenter >> initialTitle [
 	^ self subclassResponsibility
 ]
@@ -310,8 +260,8 @@ StFileDialogPresenter >> initializeConfirmButton: aButton [
 	self allowsChooseDirectoryIfNoFilename ifTrue: [ ^ self ].
 	buttonEnableBlock := [ :newText | 
 	                     aButton enabled: newText trimmed isNotEmpty ].
-	fileNavigationSystem nameText whenTextChangedDo: buttonEnableBlock.
-	buttonEnableBlock value: fileNavigationSystem nameText text
+	self fileNavigationSystem nameText whenTextChangedDo: buttonEnableBlock.
+	buttonEnableBlock value: self fileNavigationSystem nameText text
 ]
 
 { #category : 'initialization' }
@@ -332,27 +282,6 @@ StFileDialogPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 	self initializeConfirmButton: confirmButton
 ]
 
-{ #category : 'initialization' }
-StFileDialogPresenter >> initializePresenters [
-
-	super initializePresenters.
-	fileNavigationSystem := self instantiate: self navigationSystemClass on: model.
-	fileNavigationSystem 
-		filter: self filter;
-		columns: self defaultColumns.
-		
-	treeNavigationSystem := self instantiate: StDirectoryTreePresenter on: model.
-	treeNavigationSystem expandPath: fileNavigationSystem currentDirectory.
-]
-
-{ #category : 'initialization' }
-StFileDialogPresenter >> initializeWindow: aSpWindowPresenter [
-
-	self setTitleTo: aSpWindowPresenter.
-	self setInitialExtentTo: aSpWindowPresenter
-
-]
-
 { #category : 'accessing' }
 StFileDialogPresenter >> isRootDirectory: aDirectory [
 	^ aDirectory isRoot or: [ OSPlatform current isWindows and: [ aDirectory parent isRoot ] ]
@@ -362,12 +291,6 @@ StFileDialogPresenter >> isRootDirectory: aDirectory [
 StFileDialogPresenter >> isolate [
 	self bookmarks: self bookmarks copy.
 	
-]
-
-{ #category : 'hooks' }
-StFileDialogPresenter >> navigationSystemClass [
-
-	^ StFileNavigationSystemPresenter
 ]
 
 { #category : 'api - customization' }
@@ -390,23 +313,23 @@ StFileDialogPresenter >> openModal [
 
 { #category : 'api - customization' }
 StFileDialogPresenter >> previewer: aPreviewer [ 
-	fileNavigationSystem previewer: aPreviewer
+	self fileNavigationSystem previewer: aPreviewer
 ]
 
 { #category : 'utilities' }
 StFileDialogPresenter >> selectFile: aFile [
 
-	fileNavigationSystem selectedEntry = aFile ifFalse: [ 
-		fileNavigationSystem fileReferenceTable selectIndex:
-			(fileNavigationSystem fileReferenceTable items indexOf: aFile) ].
-	fileNavigationSystem nameText text: aFile basename
+	self fileNavigationSystem selectedEntry = aFile ifFalse: [ 
+		self fileNavigationSystem fileReferenceTable selectIndex:
+			(self fileNavigationSystem fileReferenceTable items indexOf: aFile) ].
+	self fileNavigationSystem nameText text: aFile basename
 ]
 
 { #category : 'accessing' }
 StFileDialogPresenter >> selectedEntry [
 
 	| entry |
-	entry := fileNavigationSystem selectedEntry.
+	entry := self fileNavigationSystem selectedEntry.
 	(self allowsChooseDirectoryIfNoFilename not and: [ 
 		 entry exists and: [ entry isDirectory ] ]) ifTrue: [ 
 		self inform: 'Only files could be selected (no directories)'.
@@ -414,30 +337,10 @@ StFileDialogPresenter >> selectedEntry [
 	^ entry
 ]
 
-{ #category : 'initialization' }
-StFileDialogPresenter >> setInitialExtentTo: aSpWindowPresenter [
-	
-	aSpWindowPresenter initialExtent: self initialExtentForWindow
-]
-
-{ #category : 'initialization' }
-StFileDialogPresenter >> setTitleTo: aSpWindowPresenter [
-
-	aSpWindowPresenter title: self initialTitle
-
-]
-
 { #category : 'accessing' }
 StFileDialogPresenter >> showDirectory: aFileReference [
 
-	fileNavigationSystem currentDirectory: aFileReference
-]
-
-{ #category : 'utilities' }
-StFileDialogPresenter >> updateTreeNavigationWithFileReference: aFileReference [ 
-
-	aFileReference exists
-		ifTrue: [ treeNavigationSystem updateWidgetWithFileReference: aFileReference ]
+	self fileNavigationSystem currentDirectory: aFileReference
 ]
 
 { #category : 'initialization' }
@@ -445,5 +348,5 @@ StFileDialogPresenter >> updateWidgetWithFileReference: aFileReference [
 
 	self currentDirectory: aFileReference.
 	aFileReference exists
-		ifTrue: [ fileNavigationSystem updateWidgetWithFileReference: aFileReference ]
+		ifTrue: [ self fileNavigationSystem updateWidgetWithFileReference: aFileReference ]
 ]

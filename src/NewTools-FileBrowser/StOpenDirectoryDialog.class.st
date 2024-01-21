@@ -29,6 +29,12 @@ StOpenDirectoryDialog class >> exampleModal [
 ]
 
 { #category : 'hooks' }
+StOpenDirectoryDialog class >> navigationSystemClass [
+	
+	^ StDirectoryNavigationSystemPresenter 
+]
+
+{ #category : 'hooks' }
 StOpenDirectoryDialog >> allowsChooseDirectoryIfNoFilename [
 
 	^ true
@@ -37,12 +43,6 @@ StOpenDirectoryDialog >> allowsChooseDirectoryIfNoFilename [
 { #category : 'hooks' }
 StOpenDirectoryDialog >> initialTitle [
 	^ 'Select Directory To Open'
-]
-
-{ #category : 'hooks' }
-StOpenDirectoryDialog >> navigationSystemClass [
-	
-	^ StDirectoryNavigationSystemPresenter 
 ]
 
 { #category : 'actions' }

@@ -41,3 +41,10 @@ StFileBrowserSelectionCommand >> selectedEntryName [
 
 	^ self selectedEntry name
 ]
+
+{ #category : 'utilities' }
+StFileBrowserSelectionCommand >> updateFileSystemPresenters [
+	"Update the receiver's file navigation table"
+
+	self context updateFileSystemPresenters
+]

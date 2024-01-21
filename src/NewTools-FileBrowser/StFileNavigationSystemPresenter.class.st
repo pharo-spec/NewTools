@@ -67,7 +67,7 @@ Class {
 StFileNavigationSystemPresenter class >> buildCommandsGroupWith: presenter forRoot: rootCommandGroup [
 	rootCommandGroup
 		register:
-			((CmCommandGroup named: 'StFBNavigationMenu') asSpecGroup
+			((CmCommandGroup named: 'StFileBrowserNavigationMenu') asSpecGroup
 				register: StFileBrowserNewDirectoryCommand forSpec;
 				register: StFileBrowserCopyBasenameCommand forSpec;
 				register: StFileBrowserCopyFullnameCommand forSpec;				
@@ -258,7 +258,7 @@ StFileNavigationSystemPresenter >> initializeFilesTable [
 			a isDirectory & b isDirectory not or: [ 
 					a isDirectory = b isDirectory and: [ 
 							a basename asLowercase < b basename asLowercase ] ] ];
-		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'StFBNavigationMenu' ]
+		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'StFileBrowserNavigationMenu' ]
 ]
 
 { #category : 'initialization' }

@@ -5,6 +5,7 @@ See subclasses for specific users.
 Class {
 	#name : 'StOpenFileOrDirectoryDialog',
 	#superclass : 'StFileDialogPresenter',
+	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'UI'
@@ -19,11 +20,4 @@ StOpenFileOrDirectoryDialog >> confirmLabel [
 { #category : 'hooks' }
 StOpenFileOrDirectoryDialog >> initialTitle [
 	^ self subclassResponsibility
-]
-
-{ #category : 'initialization' }
-StOpenFileOrDirectoryDialog >> initializePresenters [
-
-	super initializePresenters.
-	fileNavigationSystem nameText disable
 ]
