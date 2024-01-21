@@ -144,7 +144,7 @@ StFinderSettings class >> logErrorsToTranscript [
 	"Modified by settings Finder: self classSide >> #logErrorsToTranscriptOn:"
 
 	^ LogErrorsToTranscript
-		ifNil: [ LogErrorsToTranscript := true ]
+		ifNil: [ LogErrorsToTranscript := false ]
 ]
 
 { #category : 'system settings' }
@@ -158,7 +158,7 @@ StFinderSettings class >> logErrorsToTranscriptOn: aBuilder [
 	<systemsettings>
 	(aBuilder setting: #logErrorsToTranscript)
 		parent: #finder;
-		default: true;
+		default: false;
 		label: 'Log errors to Transcript';
 		description: 'Log evaluation errors in the examples search to the Transcript';
 		target: self
