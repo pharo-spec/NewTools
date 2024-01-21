@@ -37,7 +37,7 @@ StClyMessageListPresenter >> connectPresenters [
 { #category : 'private - actions' }
 StClyMessageListPresenter >> doRemoveMethod [
 
-	(RBRemoveMethodDriver new
+	(ReRemoveMethodDriver new
 		scopes: self scopes
 		methods: { self selectedMethod }) 
 		runRefactoring	
