@@ -13,7 +13,6 @@ StFileSystemPresenter open.
 Class {
 	#name : 'StFileSystemPresenter',
 	#superclass : 'StFileBrowserAbstractPresenter',
-	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'treeNavigationSystem',
 		'fileNavigationSystem',

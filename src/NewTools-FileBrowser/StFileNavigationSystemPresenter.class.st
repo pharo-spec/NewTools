@@ -42,7 +42,6 @@ You can customize how this presenter is displayed, with methods listed at the pr
 Class {
 	#name : 'StFileNavigationSystemPresenter',
 	#superclass : 'StFileBrowserAbstractPresenter',
-	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'nameText',
 		'filtersDropList',

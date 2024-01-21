@@ -4,7 +4,6 @@ My responsibility is to provide dialog for SAVING files.
 Class {
 	#name : 'StSaveFileDialog',
 	#superclass : 'StFileDialogPresenter',
-	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'confirmedOverwrite'
 	],

@@ -45,7 +45,6 @@ StFileDialogPresenter textIcons method
 Class {
 	#name : 'StFileDialogPresenter',
 	#superclass : 'StFileSystemPresenter',
-	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'okAction',
 		'filter'

@@ -4,7 +4,6 @@ Implements a basic Spec presenter to display a directory tree.
 Class {
 	#name : 'StDirectoryTreePresenter',
 	#superclass : 'StFileBrowserAbstractPresenter',
-	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'directoryTreePresenter'
 	],

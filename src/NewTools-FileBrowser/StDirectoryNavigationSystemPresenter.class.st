@@ -1,7 +1,6 @@
 Class {
 	#name : 'StDirectoryNavigationSystemPresenter',
 	#superclass : 'StFileNavigationSystemPresenter',
-	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'UI'
