@@ -13,11 +13,11 @@ StFileSystemPresenter open.
 Class {
 	#name : 'StFileSystemPresenter',
 	#superclass : 'StFileBrowserAbstractPresenter',
+	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'treeNavigationSystem',
 		'fileNavigationSystem',
-		'bookmarksTreeTable',
-		'navigationSystemClass'
+		'bookmarksTreeTable'
 	],
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
