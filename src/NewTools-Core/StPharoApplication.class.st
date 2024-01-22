@@ -58,11 +58,27 @@ StPharoApplication >> defaultWindowExtent [
 StPharoApplication >> initialize [
 
 	super initialize.
+	self initializeConfiguration.
+	self initializeJobListener
+]
+
+{ #category : 'initialization' }
+StPharoApplication >> initializeConfiguration [
+
 	self resetConfiguration.
 	SystemAnnouncer uniqueInstance weak 
 		when: UIThemeChanged 
 		send: #resetConfiguration
 		to: self
+]
+
+{ #category : 'initialization' }
+StPharoApplication >> initializeJobListener [
+
+	Job jobAnnouncer weak
+		when: JobStart send: #jobStart: to: self jobList;
+		when: JobChange send: #jobChanged: to: self jobList;
+		when: JobEnd send: #jobEnd: to: self jobList
 ]
 
 { #category : 'private - factory' }
@@ -71,10 +87,15 @@ StPharoApplication >> newIconProvider [
 	^ StPharoDefaultIconProvider new
 ]
 
+{ #category : 'accessing' }
+StPharoApplication >> pushJobWith: aBlock [
+
+	self jobList pushJobWith: aBlock
+]
+
 { #category : 'initialization' }
 StPharoApplication >> resetConfiguration [
 	
-	self flag: #TODO. "Invalidating for a moment because I need to align with Spec"
 	self configuration reset
 ]
 
