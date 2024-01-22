@@ -195,13 +195,21 @@ BaselineOfNewTools >> postload: loader package: packageSpec [
 		| size firstMorphIndex |
 		size := innerWidget submorphs size.
 		(''size := {1}'' format: { size }) traceCr.
+		(''widget class := {1} '' format: { innerWidget class }) traceCr.
 		(''widget := {1} '' format: { innerWidget }) traceCr.
+		''widget submorphs classes := {1}'' format:
+			{ (innerWidget submorphs collect: [ :s | s class ]) }.
 		(''widget submorphs := {1}'' format: { innerWidget submorphs })
 			traceCr.
 
 		firstMorphIndex := size - self presenter visiblePages + 1.
+		(''self presenter := {1}'' format: { self presenter }) traceCr.
+		(''self presenter class := {1}'' format: { self presenter class })
+			traceCr.
 		(''self presenter visiblePages := {1}'' format:
 			 { self presenter visiblePages }) traceCr.
+		(''firstMorphIndex class := {1}'' format: { firstMorphIndex class })
+			traceCr.
 		(''firstMorphIndex := {1}'' format: { firstMorphIndex }) traceCr.
 		(''((firstMorphIndex max: 1) min: size) := {1}'' format:
 			 { ((firstMorphIndex max: 1) min: size) }) traceCr.
