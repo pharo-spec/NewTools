@@ -187,7 +187,26 @@ BaselineOfNewTools >> packageRepositoryURLForSpec: spec [
 { #category : 'actions' }
 BaselineOfNewTools >> postload: loader package: packageSpec [
 
-	MCMethodDefinition initializersEnabled: initializersEnabled
+	MCMethodDefinition initializersEnabled: initializersEnabled.
+	SpMorphicMillerAdapter compiler
+		source: 'scrollToShowLastPage
+
+	self widget defer: [
+		| size firstMorphIndex |
+		size := innerWidget submorphs size.
+		(''size := {1}'' format: { size }) traceCr.
+		(''widget := {1}, { 2 } '' format: {
+				 innerWidget.
+				 innerWidget submorphs }) traceCr.
+		firstMorphIndex := size - self presenter visiblePages + 1.
+		(''self presenter visiblePages := {1}'' format:
+			 { self presenter visiblePages }) traceCr.
+		(''firstMorphIndex := {1}'' format: { firstMorphIndex }) traceCr.
+		(''((firstMorphIndex max: 1) min: size) := {1}'' format:
+			 { ((firstMorphIndex max: 1) min: size) }) traceCr.
+		self widget showMorph:
+			(innerWidget submorphs at: ((firstMorphIndex max: 1) min: size)) ]';
+		install
 ]
 
 { #category : 'actions' }
