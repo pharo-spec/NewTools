@@ -170,6 +170,8 @@ important as the code gets mapped to them by name. For example:
 
 will match only those “value:value:” messages that have exactly the same expressions as both
 arguments. It is like that because we used the same pattern variable name.
+
+You can find more information at [ https://thepharo.dev/2021/12/09/what-is-rbparsetreesearcher/ ](https://thepharo.dev/2021/12/09/what-is-rbparsetreesearcher/)
 '
 ]
 
