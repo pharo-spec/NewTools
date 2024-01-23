@@ -213,8 +213,9 @@ BaselineOfNewTools >> postload: loader package: packageSpec [
 		(''firstMorphIndex := {1}'' format: { firstMorphIndex }) traceCr.
 		(''((firstMorphIndex max: 1) min: size) := {1}'' format:
 			 { ((firstMorphIndex max: 1) min: size) }) traceCr.
-		self widget showMorph:
-			(innerWidget submorphs at: ((firstMorphIndex max: 1) min: size)) ]';
+		size > 0 ifTrue: [
+			self widget showMorph:
+				(innerWidget submorphs at: ((firstMorphIndex max: 1) min: size)) ] ]';
 		install
 ]
 
