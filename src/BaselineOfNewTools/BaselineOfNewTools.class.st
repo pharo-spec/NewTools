@@ -170,6 +170,59 @@ BaselineOfNewTools >> chest: spec [
 			loads: 'default' ]
 ]
 
+{ #category : 'actions' }
+BaselineOfNewTools >> compileRubTextSegmentMorph [
+
+	RubTextSegmentMorph compiler
+		source: 'computeStraightVertices
+
+	| firstCB lastCB firstLineIndex lastLineIndex firstLine lastLine verts lines textarea margins segmentGap textAreaLeft |
+	(''firstIndex := {1}'' format: { firstIndex }) traceCr.
+	(''lastIndex := {1}'' format: { lastIndex }) traceCr.
+	(''self lines := {1} '' format: { self lines }) traceCr.
+	self lines ifEmpty: [ ^ self ].
+	firstCB := self characterBlockForIndex: firstIndex.
+	(''firstCB := {1}'' format: { firstCB }) traceCr.
+	lastCB := self characterBlockForIndex: lastIndex.
+	(''lastCB := {1}'' format: { lastCB }) traceCr.
+	lines := self lines.
+	textarea := self textArea.
+	margins := self margins.
+	firstLineIndex := self lineIndexOfCharacterIndex: firstIndex.
+	lastLineIndex := self lineIndexOfCharacterIndex: lastIndex.
+	firstLine := lines at: firstLineIndex.
+	lastLine := lines at: lastLineIndex.
+	verts := OrderedCollection new.
+	segmentGap := 1 @ 0.
+	firstLine = lastLine
+		ifTrue: [
+			verts add: firstCB bottomLeft.
+			verts add: firstCB topLeft.
+			firstIndex ~= lastIndex ifTrue: [
+				verts add: lastCB topLeft.
+				verts add: lastCB bottomLeft.
+				verts add: firstCB bottomLeft ] ]
+		ifFalse: [
+			textAreaLeft := textArea left + margins left.
+			verts
+				add: firstCB bottomLeft - segmentGap;
+				add: firstCB topLeft - segmentGap.
+			firstLineIndex to: lastLineIndex - 1 do: [ :index |
+				| line |
+				line := lines at: index.
+				verts
+					add: line actualWidth + margins left @ line top + segmentGap;
+					add: line actualWidth + margins left @ line bottom + segmentGap ].
+
+			verts
+				add: lastCB topLeft + segmentGap;
+				add: lastCB bottomLeft + segmentGap;
+				add: textAreaLeft @ lastLine bottom - segmentGap;
+				add: textAreaLeft @ firstLine bottom - segmentGap ].
+	self setVertices: verts';
+		install
+]
+
 { #category : 'accessing' }
 BaselineOfNewTools >> packageRepositoryURLForSpec: spec [
 	| url |
@@ -216,7 +269,9 @@ BaselineOfNewTools >> postload: loader package: packageSpec [
 		size > 0 ifTrue: [
 			self widget showMorph:
 				(innerWidget submorphs at: ((firstMorphIndex max: 1) min: size)) ] ]';
-		install
+		install.
+
+	self compileRubTextSegmentMorph
 ]
 
 { #category : 'actions' }
