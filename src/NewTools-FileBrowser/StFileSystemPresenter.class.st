@@ -1,19 +1,10 @@
 "
-It provides a File System Spec-based presenter, which replaces the old FileList tool.
-
-## Example
-
-To open a default File System Browser, evaluate:
-
-```smalltalk
-StFileSystemPresenter open.
-```
+General file system presenter, which replaces the older FileList tool.
 
 "
 Class {
 	#name : 'StFileSystemPresenter',
 	#superclass : 'StFileBrowserAbstractPresenter',
-	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'treeNavigationSystem',
 		'fileNavigationSystem',

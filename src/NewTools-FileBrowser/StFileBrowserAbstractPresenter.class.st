@@ -1,7 +1,6 @@
 Class {
 	#name : 'StFileBrowserAbstractPresenter',
 	#superclass : 'StPresenter',
-	#classTraits : 'TraitedClass',
 	#instVars : [
 		'model'
 	],
