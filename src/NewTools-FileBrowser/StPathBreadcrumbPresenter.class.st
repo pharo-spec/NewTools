@@ -74,8 +74,6 @@ StPathBreadcrumbPresenter >> currentDirectory: aFileReference [
 
 	textInput text: aFileReference fullName.
 	path file: aFileReference.
-	self owner ifNotNil: [ :fileNavigation | 
-		fileNavigation currentDirectory: aFileReference asAbsolute ].
 	self needRebuild: false.
 	self build
 ]

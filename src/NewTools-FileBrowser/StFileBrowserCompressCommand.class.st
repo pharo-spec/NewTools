@@ -38,7 +38,7 @@ StFileBrowserCompressCommand >> execute [
 	zip addFile: self selectedEntry.
 	zip writeToFile: self selectedEntry parent / newZipName.
 	zip close.
-	self updateFileSystemContents
+	self updateFileSystemPresenters
 ]
 
 { #category : 'initialization' }

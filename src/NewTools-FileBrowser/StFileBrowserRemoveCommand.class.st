@@ -56,7 +56,7 @@ StFileBrowserRemoveCommand >> execute [
 		self confirmNotEmpty 
 			ifTrue: [ entryToDelete ensureDeleteAll ]
 			ifFalse: [ ^ self inform: 'Remove directory cancelled' ] ].
-	self context updateFileSystemContents
+	self context updateFileSystemPresenters
 ]
 
 { #category : 'initialization' }

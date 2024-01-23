@@ -32,6 +32,7 @@ StFileDialogTest >> fileListAllMustBeFilterByPNGFIlter [
 
 { #category : 'running' }
 StFileDialogTest >> setUp [
+
 	super setUp.
 	(dialog := self dialogClass owner: fileSystemPresenter on: fileSystemModel) defaultFolder: root
 ]
@@ -75,9 +76,12 @@ StFileDialogTest >> testOpenFolder [
 { #category : 'tests' }
 StFileDialogTest >> testWhenAddACollectionOfBookmarkToCustomBookmarkShouldBeAddedToBookmarkTreeTable [
 	| aCollectionOfBookmark |
-	aCollectionOfBookmark := {(root / 'dir') asFileReference.
-	(root / 'dir.ext') asFileReference}
-		collect: [ :eachItem | StFileBrowserBookmark name: eachItem basename location: eachItem path icon: nil ].
+
+	aCollectionOfBookmark := {
+		(root / 'dir') asFileReference.
+		(root / 'dir.ext') asFileReference }
+			collect: [ :eachItem | StFileBrowserBookmark name: eachItem basename location: eachItem path icon: nil ].
+
 	dialog bookmarks: { (StFileBrowserGroupBookmark
 				name: 'aTestBookmark'
 				collection: aCollectionOfBookmark
@@ -123,13 +127,4 @@ StFileDialogTest >> testWhenAddingBookmarkOnIsolateBookmarksShouldBeAddToAllInst
 	self
 		assert: dialog bookmarksTreeTable roots
 		equals: anOtherInstance bookmarksTreeTable roots
-]
-
-{ #category : 'tests' }
-StFileDialogTest >> testWhenChangeDirectoryShouldFilesListContainsHisChildren [
-	| newDirectory |
-	newDirectory := (root / 'dir') asFileReference.
-	dialog defaultFolder: newDirectory.
-	self
-		assert: (dialog fileReferenceTable items includesAll: newDirectory children)
 ]

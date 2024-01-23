@@ -20,10 +20,3 @@ StOpenFileOrDirectoryDialog >> confirmLabel [
 StOpenFileOrDirectoryDialog >> initialTitle [
 	^ self subclassResponsibility
 ]
-
-{ #category : 'initialization' }
-StOpenFileOrDirectoryDialog >> initializePresenters [
-
-	super initializePresenters.
-	fileNavigationSystem nameText disable
-]

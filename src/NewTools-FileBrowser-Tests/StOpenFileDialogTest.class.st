@@ -52,3 +52,12 @@ StOpenFileDialogTest >> testSelectFile [
 	dialog confirm.
 	self assert: selectedFile equals: root / 'sth.ext'
 ]
+
+{ #category : 'tests' }
+StOpenFileDialogTest >> testWhenChangeDirectoryShouldFilesListContainsHisChildren [
+	| newDirectory |
+	newDirectory := (root / 'dir') asFileReference.
+	dialog defaultFolder: newDirectory.
+	self
+		assert: (dialog fileReferenceTable items includesAll: newDirectory children)
+]

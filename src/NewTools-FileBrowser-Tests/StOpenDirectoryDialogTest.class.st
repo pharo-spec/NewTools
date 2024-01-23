@@ -44,3 +44,13 @@ StOpenDirectoryDialogTest >> testSelectNonexistingDirectory [
 		raise: DirectoryDoesNotExist.
 	self assert: dialog currentDirectory equals: root
 ]
+
+{ #category : 'tests' }
+StOpenDirectoryDialogTest >> testWhenChangeDirectoryShouldFilesListContainsHisChildren [
+	| newDirectory |
+	newDirectory := (root / 'dir') asFileReference.
+	dialog defaultFolder: newDirectory.
+
+	"Since we're only displaying directories, no files should appear in the reference table"
+	self assertEmpty: dialog fileReferenceTable items
+]

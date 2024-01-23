@@ -46,11 +46,17 @@ StSaveFileDialog >> connectPresenters [
 	super connectPresenters.
 	(ec := EntryCompletion new)
 		dataSourceBlock: [ :text | 
-			fileNavigationSystem currentDirectory children collect: #basename ];
+			self fileNavigationSystem currentDirectory children collect: #basename ];
 		filterBlock: [ :opt :text | opt beginsWith: text ]
 ]
 
-{ #category : 'accessing - ui' }
+{ #category : 'accessing' }
+StSaveFileDialog >> existingFileMessage: entry [
+
+	^ 'File named "{1}" already exists. Do you want to overwrite it?' format: { entry basename }
+]
+
+{ #category : 'hooks' }
 StSaveFileDialog >> initialTitle [
 	^ 'Save As'
 ]
@@ -63,9 +69,7 @@ StSaveFileDialog >> selectedEntry [
 	entry := filter addExtensionTo: entry.
 	entry exists ifFalse: [ ^ entry ].
 	entry = confirmedOverwrite ifTrue: [ ^ entry ].
-	(UIManager default proceed:
-		 ('File named "{1}" already exists. Do you want to overwrite it?' 
-			  format: { entry basename })) ifTrue: [ 
-		^ confirmedOverwrite := entry ].
+	(self application confirm: (self existingFileMessage: entry))
+		ifTrue: [ ^ confirmedOverwrite := entry ].
 	^ nil
 ]

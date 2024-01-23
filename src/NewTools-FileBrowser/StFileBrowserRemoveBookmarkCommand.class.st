@@ -36,7 +36,9 @@ StFileBrowserRemoveBookmarkCommand >> execute [
 		tmpBookmark := tmpBookmark at: (collection at: 1).
 		collectionSize := collectionSize - 1 ].
 	tmpBookmark removeAt: (collection at: 1).
-	self bookmarksTreeTable roots: self context bookmarks
+	self bookmarksTreeTable 
+		roots: self context bookmarks;
+		expandRoots
 ]
 
 { #category : 'initialization' }
