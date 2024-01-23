@@ -1,6 +1,9 @@
 Class {
 	#name : 'StFinderExampleTest',
 	#superclass : 'StFinderTest',
+	#instVars : [
+		'previousLogSetting'
+	],
 	#category : 'NewTools-Finder-Tests-Core',
 	#package : 'NewTools-Finder-Tests',
 	#tag : 'Core'
@@ -10,9 +13,21 @@ Class {
 StFinderExampleTest >> setUp [
 
 	super setUp.
+
+	"Avoid polluting the CI output during tests"
+	previousLogSetting := StFinderSettings logErrorsToTranscript.
+	StFinderSettings logErrorsToTranscript: false.
+
 	presenterModel currentSearch: StFinderExampleSearch new.
 	self openInstance.
 	
+]
+
+{ #category : 'running' }
+StFinderExampleTest >> tearDown [
+
+	StFinderSettings logErrorsToTranscript: previousLogSetting.
+	super tearDown.
 ]
 
 { #category : 'running' }
