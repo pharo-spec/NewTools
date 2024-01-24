@@ -22,6 +22,7 @@ StMorphicDebugSession class >> newFromSession: aDebugSession [
 		   startedAt: aDebugSession interruptedContext)
 		  exception: aDebugSession exception;
 		  detectUIProcess;
+		  spawnNewUIProcessIfNecessary;
 		  yourself
 ]
 
@@ -41,8 +42,7 @@ StMorphicDebugSession >> deferDebuggerOpeningToBackend: aStDebugger [
 StMorphicDebugSession >> detectUIProcess [
 
 	errorWasInUIProcess := MorphicUIManager uiProcess
-	                       == interruptedProcess.
-	errorWasInUIProcess ifTrue: [ self spawnNewUIProcess ]
+	                       == interruptedProcess
 ]
 
 { #category : 'accessing' }
