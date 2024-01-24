@@ -76,21 +76,36 @@ StPharoApplication >> initializeConfiguration [
 StPharoApplication >> initializeJobListener [
 
 	Job jobAnnouncer weak
-		when: JobStart send: #jobStart: to: self jobList;
-		when: JobChange send: #jobChanged: to: self jobList;
-		when: JobEnd send: #jobEnd: to: self jobList
+		when: JobStart send: #jobStart: to: self;
+		when: JobChange send: #jobChanged: to: self;
+		when: JobEnd send: #jobEnd: to: self
+]
+
+{ #category : 'private - job' }
+StPharoApplication >> jobChanged: ann [
+
+	self jobList jobChanged: ann
+]
+
+{ #category : 'private - job' }
+StPharoApplication >> jobEnd: ann [
+
+	self jobList jobEnd: ann.
+	"this is just a cleanup... because jobs may leak!"
+	self jobList isEmpty
+		ifTrue: [ self removeProperty: #jobList ]
+]
+
+{ #category : 'private - job' }
+StPharoApplication >> jobStart: ann [
+
+	self jobList jobStart: ann
 ]
 
 { #category : 'private - factory' }
 StPharoApplication >> newIconProvider [
 
 	^ StPharoDefaultIconProvider new
-]
-
-{ #category : 'accessing' }
-StPharoApplication >> pushJobWith: aBlock [
-
-	self jobList pushJobWith: aBlock
 ]
 
 { #category : 'initialization' }
@@ -102,7 +117,7 @@ StPharoApplication >> resetConfiguration [
 { #category : 'running' }
 StPharoApplication >> run [ 
 
-	Current ifNotNil: [ Current close ].
+	Current ifNotNil: [ Current closeAllWindows ].
 	super run. 
 	Current := self
 ]
