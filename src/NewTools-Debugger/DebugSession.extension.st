@@ -8,4 +8,5 @@ DebugSession >> application [
 
 { #category : '*NewTools-Debugger' }
 DebugSession >> application: anApplication [
+
 ]

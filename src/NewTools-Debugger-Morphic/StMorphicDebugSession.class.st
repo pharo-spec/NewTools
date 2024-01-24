@@ -9,9 +9,8 @@ Class {
 		'errorWasInUIProcess',
 		'backend'
 	],
-	#category : 'NewTools-Debugger-Model',
-	#package : 'NewTools-Debugger',
-	#tag : 'Model'
+	#category : 'NewTools-Debugger-Morphic',
+	#package : 'NewTools-Debugger-Morphic'
 }
 
 { #category : 'instance creation' }
