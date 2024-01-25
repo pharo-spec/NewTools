@@ -58,8 +58,7 @@ StPharoApplication >> defaultWindowExtent [
 StPharoApplication >> initialize [
 
 	super initialize.
-	self initializeConfiguration.
-	self initializeJobListener
+	self initializeConfiguration
 ]
 
 { #category : 'initialization' }
@@ -70,36 +69,6 @@ StPharoApplication >> initializeConfiguration [
 		when: UIThemeChanged 
 		send: #resetConfiguration
 		to: self
-]
-
-{ #category : 'initialization' }
-StPharoApplication >> initializeJobListener [
-
-	Job jobAnnouncer weak
-		when: JobStart send: #jobStart: to: self;
-		when: JobChange send: #jobChanged: to: self;
-		when: JobEnd send: #jobEnd: to: self
-]
-
-{ #category : 'private - job' }
-StPharoApplication >> jobChanged: ann [
-
-	self jobList jobChanged: ann
-]
-
-{ #category : 'private - job' }
-StPharoApplication >> jobEnd: ann [
-
-	self jobList jobEnd: ann.
-	"this is just a cleanup... because jobs may leak!"
-	self jobList isEmpty
-		ifTrue: [ self removeProperty: #jobList ]
-]
-
-{ #category : 'private - job' }
-StPharoApplication >> jobStart: ann [
-
-	self jobList jobStart: ann
 ]
 
 { #category : 'private - factory' }
