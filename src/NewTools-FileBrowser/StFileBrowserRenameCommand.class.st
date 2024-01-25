@@ -47,7 +47,7 @@ StFileBrowserRenameCommand >> execute [
 	self requestNewName
 		ifNotNil: [ : newName | 
 			self selectedEntry renameTo: newName.
-			self updateFileSystemContents ]
+			self updateFileSystemPresenters ]
 ]
 
 { #category : 'initialization' }

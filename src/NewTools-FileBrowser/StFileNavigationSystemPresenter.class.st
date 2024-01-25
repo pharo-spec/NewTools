@@ -1,61 +1,48 @@
 "
-I'm use by thez fileDialog
+This Spec presenter provides:
 
-my job is to navigate across file 
+* An history of visited folder.
+* A text input use to jump to the write path.
+* A drop list use to filter the content of the fileReferenceTable
+* A text presenter to show a preview of the currently selected file.
 
-I provide:
-* an history of visited folder
-* a textInput use to jump to the write path
-* a dropList use to filter the content of the fileReferenceTable
-* a TextPresenter to show the selectedFile 
+## Example
 
-CUSTOMIZATION
--------------
+To open a navigation presenter for PNG files, evaluate:
 
-look at the protocol 'api-customization'
+```smalltalk
+StFileNavigationSystemPresenter example.
+```
 
-column: aCollectionOfColumn
-===========================
+## Customization
 
-	to use it you have to give a collection of son of FDAbstractFileReferenceColumn for more information on how to create see documentation of FDAbstractFileReferenceColumn
+You can customize how this presenter is displayed, with methods listed at the protocol 'api-customization'. These are some examples:
 
-defaultFoler: aFileReference
-============================
-
-	nothing to say 
-
-filtersCustomization: aCollectionOfFilter
-=========================================
-
-	more documentation see FDAbstractPredicate documentation
-
-previewer: aPreviewer
-=====================
-
-	more documentation see FDAbstractPreviewer documentation
+* `column: aCollectionOfColumn` : Give a `Collection` of any subclass of `StFileBrowserAbstractColumn`.
+* `defaultFoler: aFileReference`
+* `filtersCustomization: aCollectionOfFilter` : See `StFileBrowserAbstractFilter` on tge avaiable filters and how to instantiate them.
+* `previewer: aPreviewer` : See `StFileBrowserAbstractPreviewer` to check the available previewers.
 	
-IV
---
+## Instance variables
 
-currentPathTextInputPresenter : <SpTextInputFieldPresenter> It's use to display the current path and there are same feature like in window 
-nameLabel : <SpLabelPresenter>
-nameText: <SpTextInputFieldPresenter> , use to show the name of the selected item of fileReferenceTable
-filtersDropList <SpDropList> , use to display all the filter
-readPointerHistoryParcour <DoubleLink> , use for the navigationSystem
-currentDirectory , <FileReference> into there is the currentDirectory 
-hiddenFilter <FDAbstractPredicate> there is a NullFilter or an hiddenFilter
-columns <FDAbstractFileReferenceColumn> it's a collection of Column use by FileReferenceTable
-previewer <FDAbstractPreviewer> 
-nextButton <SpButton> use for the navigationSystem 
-previousButton <SpButton> use for the navigationSystem
-notebookPreviewer <SpNoteBook> use by the preview system
-fileReferenceTable <SpTablePresenter> it's display children of the current directory
+* currentPathTextInputPresenter : <SpTextInputFieldPresenter> It's use to display the current path and there are same feature like in window 
+* nameLabel : <SpLabelPresenter>
+* nameText: <SpTextInputFieldPresenter> , use to show the name of the selected item of fileReferenceTable
+* filtersDropList <SpDropList> , use to display all the filter
+* readPointerHistoryParcour <DoubleLink> , use for the navigationSystem
+* currentDirectory , <FileReference> into there is the currentDirectory 
+* hiddenFilter <FDAbstractPredicate> there is a NullFilter or an hiddenFilter
+* columns <FDAbstractFileReferenceColumn> it's a collection of Column use by FileReferenceTable
+* previewer <FDAbstractPreviewer> 
+* nextButton <SpButton> use for the navigationSystem 
+* previousButton <SpButton> use for the navigationSystem
+* notebookPreviewer <SpNoteBook> use by the preview system
+* fileReferenceTable <SpTablePresenter> it's display children of the current directory
 "
 Class {
 	#name : 'StFileNavigationSystemPresenter',
 	#superclass : 'StFileBrowserAbstractPresenter',
 	#instVars : [
-		'currentPathTextInputPresenter',
 		'nameText',
 		'filtersDropList',
 		'filter',
@@ -64,7 +51,8 @@ Class {
 		'previousButton',
 		'notebookPreviewer',
 		'fileReferenceTable',
-		'configButton'
+		'configButton',
+		'pathBreadcrumbPresenter'
 	],
 	#classVars : [
 		'Previewer'
@@ -78,7 +66,7 @@ Class {
 StFileNavigationSystemPresenter class >> buildCommandsGroupWith: presenter forRoot: rootCommandGroup [
 	rootCommandGroup
 		register:
-			((CmCommandGroup named: 'StFBNavigationMenu') asSpecGroup
+			((CmCommandGroup named: 'StFileBrowserNavigationMenu') asSpecGroup
 				register: StFileBrowserNewDirectoryCommand forSpec;
 				register: StFileBrowserCopyBasenameCommand forSpec;
 				register: StFileBrowserCopyFullnameCommand forSpec;				
@@ -118,7 +106,6 @@ StFileNavigationSystemPresenter class >> example [
 { #category : 'class initialization' }
 StFileNavigationSystemPresenter class >> initialize [
 
-	self initializeBookmarks.
 	Previewer := self defaultPreviewer
 ]
 
@@ -154,11 +141,6 @@ StFileNavigationSystemPresenter >> connectPresenters [
 	self configButtonAction.
 ]
 
-{ #category : 'accessing' }
-StFileNavigationSystemPresenter >> currentPathTextInputPresenter [
-	^ currentPathTextInputPresenter
-]
-
 { #category : 'api - customization' }
 StFileNavigationSystemPresenter >> defaultFolder: aFileReference [
 	self updateWidgetWithFileReference: aFileReference.
@@ -173,7 +155,7 @@ StFileNavigationSystemPresenter >> defaultLayout [
 				vAlignCenter;
 				add: previousButton expand: false;
 				add: nextButton expand: false;
-				add: currentPathTextInputPresenter;
+				add: pathBreadcrumbPresenter;
 			   addLast: configButton;				
 				yourself)
 			 expand: false;
@@ -253,7 +235,7 @@ StFileNavigationSystemPresenter >> filtersDropList [
 
 { #category : 'actions' }
 StFileNavigationSystemPresenter >> filtersDropListAction [
-	filtersDropList whenSelectionChangedDo: [ self updateFileSystemContents ]
+	filtersDropList whenSelectionChangedDo: [ self updateFileReferenceTable ]
 ]
 
 { #category : 'initialization' }
@@ -267,6 +249,7 @@ StFileNavigationSystemPresenter >> initialize [
 { #category : 'initialization' }
 StFileNavigationSystemPresenter >> initializeFilesTable [
 
+	fileReferenceTable := self newTable.
 	fileReferenceTable
 		beResizable;
 		columns: StFileBrowserAbstractColumn columns;
@@ -274,7 +257,7 @@ StFileNavigationSystemPresenter >> initializeFilesTable [
 			a isDirectory & b isDirectory not or: [ 
 					a isDirectory = b isDirectory and: [ 
 							a basename asLowercase < b basename asLowercase ] ] ];
-		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'StFBNavigationMenu' ]
+		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'StFileBrowserNavigationMenu' ]
 ]
 
 { #category : 'initialization' }
@@ -306,8 +289,7 @@ StFileNavigationSystemPresenter >> initializePresenters [
 
 	super initializePresenters.
 	notebookPreviewer := self instantiate: StNoteBookPreviewerPresenter.
-	fileReferenceTable := self newTable.
-	currentPathTextInputPresenter := self instantiate: StPathBreadcrumbPresenter on: self model.
+	pathBreadcrumbPresenter := self instantiate: StPathBreadcrumbPresenter on: self model.
 	nameText := self newTextInput.
 	filtersDropList := self newDropList.
 	configButton := self newButton
@@ -369,7 +351,13 @@ StFileNavigationSystemPresenter >> openFolder: aFileReference [
 
 	self updateWidgetWithFileReference: aFileReference.
 	model openFolder: aFileReference.
+	self owner updateTreeNavigationWithFileReference: aFileReference.
 
+]
+
+{ #category : 'accessing' }
+StFileNavigationSystemPresenter >> pathBreadcrumbPresenter [
+	^ pathBreadcrumbPresenter
 ]
 
 { #category : 'accessing' }
@@ -409,8 +397,9 @@ StFileNavigationSystemPresenter >> shouldReparent [
 ]
 
 { #category : 'utilities' }
-StFileNavigationSystemPresenter >> updateFileSystemContents [
-
+StFileNavigationSystemPresenter >> updateFileReferenceTable [
+	"Update the receiver's contents according to the current directory and apply configured filters"
+	
 	fileReferenceTable items:
 		((filtersDropList selectedItem ifNil: [ filter ]) applyOn:
 			 (self currentDirectory children select: #exists)).
@@ -418,8 +407,9 @@ StFileNavigationSystemPresenter >> updateFileSystemContents [
 
 { #category : 'utilities' }
 StFileNavigationSystemPresenter >> updateWidgetWithFileReference: aFileReference [
+	"A file reference was selected in the receiver or one of its subpresenters, update the file reference table and current directory"
 
 	self currentDirectory: aFileReference.
-	self updateFileSystemContents.
-	currentPathTextInputPresenter currentDirectory: self currentDirectory
+	self updateFileReferenceTable.
+	pathBreadcrumbPresenter currentDirectory: self currentDirectory
 ]

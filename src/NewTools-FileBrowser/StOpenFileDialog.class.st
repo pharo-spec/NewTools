@@ -78,7 +78,7 @@ StOpenFileDialog class >> examplePreviewer [
 		open
 ]
 
-{ #category : 'accessing - ui' }
+{ #category : 'hooks' }
 StOpenFileDialog >> initialTitle [
 	^ 'Select File To Open'
 ]

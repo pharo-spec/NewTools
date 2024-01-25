@@ -27,7 +27,10 @@ StFileBrowserAddBookmarkCommand >> execute [
 
 	fileReference := self context selectedEntry.
 	self context addBookmark: fileReference.
-	self context bookmarksTreeTableItems: self context bookmarks
+	self bookmarksTreeTable
+		roots: self context bookmarks;
+		expandRoots
+
 ]
 
 { #category : 'initialization' }
