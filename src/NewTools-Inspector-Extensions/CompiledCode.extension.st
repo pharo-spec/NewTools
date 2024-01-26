@@ -14,6 +14,19 @@ CompiledCode >> inpectionIr [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
+CompiledCode >> inspectBytesBody: specBuilder [
+	^ (StSimpleInspectorBuilder on: specBuilder)
+				key: 'hex string' value: (String streamContents: [ :out | 
+					self bytecodes do: [ :each | each printOn: out base: 16 nDigits: 2 ] ]);
+				key: 'hex lines' value: (String streamContents: [ :out |
+					self bytecodes withIndexDo: [ :each :index |
+						index = 1 ifFalse: [ 
+							index - 1 \\ 8 = 0 ifTrue: [ out cr ] ifFalse: [ out space ] ].
+						each printOn: out base: 16 nDigits: 2 ] ]);
+				table
+]
+
+{ #category : '*NewTools-Inspector-Extensions' }
 CompiledCode >> inspectionAST [
 	<inspectorPresentationOrder: 35 title: 'AST'>
 

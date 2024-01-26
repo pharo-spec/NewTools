@@ -9,8 +9,12 @@ ByteArray >> inspectBytes: specBuilder [
 			(StSimpleInspectorBuilder on: specBuilder)
 				key: 'error' value: 'too many bytes, size is ' , self size asString;
 				table ]
-		ifFalse: [
-			(StSimpleInspectorBuilder on: specBuilder)
+		ifFalse: [ self inspectBytesBody: specBuilder ]
+]
+
+{ #category : '*NewTools-Inspector-Extensions' }
+ByteArray >> inspectBytesBody: specBuilder [
+		^ (StSimpleInspectorBuilder on: specBuilder)
 				key: 'hex string' value: (String streamContents: [ :out | 
 					self do: [ :each | each printOn: out base: 16 nDigits: 2 ] ]);
 				key: 'hex lines' value: (String streamContents: [ :out |
@@ -22,5 +26,5 @@ ByteArray >> inspectBytes: specBuilder [
 				key: #Latin1 value: ([ self decodeWith: #Latin1 ] on: ZnCharacterEncodingError do: [ :exception | exception ]);
 				key: 'integer' value: self asInteger;
 				key: 'integer reversed' value: self reversed asInteger;
-				table ]
+				table
 ]
