@@ -1,6 +1,6 @@
 Class {
 	#name : 'StFinderTest',
-	#superclass : 'TestCase',
+	#superclass : 'SpBaseTest',
 	#instVars : [
 		'presenter',
 		'presenterModel'
