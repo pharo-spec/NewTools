@@ -31,7 +31,7 @@ CompiledCode >> inspectBytes: specBuilder [
 						index = 1 ifFalse: [ 
 							index - 1 \\ 8 = 0 ifTrue: [ out cr ] ifFalse: [ out space ] ].
 						each printOn: out base: 16 nDigits: 2 ] ]);
-				table]
+				table ]
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
