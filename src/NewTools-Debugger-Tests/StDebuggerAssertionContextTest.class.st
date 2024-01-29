@@ -27,7 +27,7 @@ StDebuggerAssertionContextTest >> testFindFailedAssertionContextInSenderChain [
 
 	debugger := StTestDebuggerProvider new debuggerWithFailingAssertionContext.
 	session := debugger session.
-	self assert: session interruptedContext findFailedAssertionContextInSenderChain notNil.
+	self assert: session interruptedContext findFailedAssertionContextInSenderChain isNotNil.
 	session clear.
 	debugger close.
 	

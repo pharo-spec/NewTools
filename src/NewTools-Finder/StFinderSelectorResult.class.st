@@ -67,7 +67,7 @@ StFinderSelectorResult >> hasBrowseAction [
 { #category : 'testing' }
 StFinderSelectorResult >> hasClassParent [
 
-	^ self parent notNil and: [ self parent isClassResult ]
+	^ self parent isNotNil and: [ self parent isClassResult ]
 ]
 
 { #category : 'testing' }
@@ -97,7 +97,7 @@ StFinderSelectorResult >> hasSendersAction [
 { #category : 'testing' }
 StFinderSelectorResult >> hasVersionsAction [
 
-	^ self parent notNil and: [ self parent isClassResult ]
+	^ self parent isNotNil and: [ self parent isClassResult ]
 ]
 
 { #category : 'action' }

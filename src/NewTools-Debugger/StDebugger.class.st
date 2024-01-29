@@ -873,7 +873,7 @@ StDebugger >> isInSelectedContextClass: context [
 
 	| selectedContext |
 	selectedContext := self selectedContext.
-	^ selectedContext notNil and: [
+	^ selectedContext isNotNil and: [
 		  selectedContext methodClass = context methodClass ]
 ]
 

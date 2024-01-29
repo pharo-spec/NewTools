@@ -59,7 +59,7 @@ StPlaygroundTest >> testNewInspectorForWorksWhenModelIsNil [
 	| inspectorPanel |
 
 	inspectorPanel := presenter newInspectorFor: nil.
-	self assert: inspectorPanel notNil.
+	self assert: inspectorPanel isNotNil.
 	self assert: (inspectorPanel isKindOf: StObjectInspectorPresenter)
 ]
 

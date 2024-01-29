@@ -51,7 +51,7 @@ SindarinStepToNextInstanceCreation >> execute [
 		depth := 0.
 		errorString := nil.
 		debugger step.
-		[ debugger isAboutToInstantiateClass or: [ errorString notNil ] ] 
+		[ debugger isAboutToInstantiateClass or: [ errorString isNotNil ] ] 
 			whileFalse: [ 
 				debugger step.
 				depth := depth + 1.
