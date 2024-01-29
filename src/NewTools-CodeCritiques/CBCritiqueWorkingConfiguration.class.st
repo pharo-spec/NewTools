@@ -29,7 +29,7 @@ CBCritiqueWorkingConfiguration class >> current [
 { #category : 'testing' }
 CBCritiqueWorkingConfiguration class >> exists [
 
-	^ Current notNil
+	^ Current isNotNil
 ]
 
 { #category : 'instance creation' }

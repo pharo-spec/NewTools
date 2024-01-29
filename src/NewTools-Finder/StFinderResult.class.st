@@ -166,7 +166,7 @@ StFinderResult >> isClassResult [
 { #category : 'testing' }
 StFinderResult >> isExampleResult [
 
-	^ self parent notNil and: [ self parent isExampleResult ]
+	^ self parent isNotNil and: [ self parent isExampleResult ]
 ]
 
 { #category : 'testing' }

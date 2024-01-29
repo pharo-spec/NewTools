@@ -549,7 +549,7 @@ StDebuggerTest >> testDebuggerActionModel [
 	debugger := self debuggerOn: session.
 	debuggerActionModel := slot read: debugger.
 
-	self assert: debuggerActionModel notNil
+	self assert: debuggerActionModel isNotNil
 ]
 
 { #category : 'tests - initialization' }
