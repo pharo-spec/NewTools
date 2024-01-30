@@ -37,7 +37,7 @@ StPharoJobManager class >> enable [
 		when: JobEnd send: #jobEnd: to: self
 ]
 
-{ #category : 'initialization' }
+{ #category : 'class initialization' }
 StPharoJobManager class >> initialize [
 
 	self enable
