@@ -44,15 +44,26 @@ StPharoJobManager class >> initialize [
 	self enable
 ]
 
+{ #category : 'private' }
+StPharoJobManager class >> isHeadless [
+
+	"this is a huge hack to know if we are running with an UI or not. 
+	 I need it because this Jobs are created all around the world, and I need 
+	 a control point."
+	^ Smalltalk isInteractiveGraphic not
+]
+
 { #category : 'private - events' }
 StPharoJobManager class >> jobChanged: ann [
 
+	self isHeadless ifTrue: [ ^ self ].
 	self jobList jobChanged: ann
 ]
 
 { #category : 'private - events' }
 StPharoJobManager class >> jobEnd: ann [
 
+	self isHeadless ifTrue: [ ^ self ].
 	self jobList jobEnd: ann.
 	"this is just a cleanup... because jobs may leak!"
 	self jobList isEmpty
@@ -68,5 +79,6 @@ StPharoJobManager class >> jobList [
 { #category : 'private - events' }
 StPharoJobManager class >> jobStart: ann [
 
+	self isHeadless ifTrue: [ ^ self ].
 	self jobList jobStart: ann
 ]
