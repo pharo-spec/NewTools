@@ -7,7 +7,6 @@ This manager will listen to the announcer and fire the events as it corresponds,
 Class {
 	#name : 'StPharoJobManager',
 	#superclass : 'Object',
-	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-Core-Application',
 	#package : 'NewTools-Core',
 	#tag : 'Application'
