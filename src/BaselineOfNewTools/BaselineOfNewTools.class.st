@@ -24,7 +24,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Morphic';
 			package: 'NewTools-Gtk';
 			"Basic tools (inherited from Spec)"
-			package: 'NewTools-MethodBrowsers';
+			package: 'NewTools-MethodBrowsers' with: [ spec requires: #( 'NewTools-SpTextPresenterDecorators' ) ];
 			package: 'NewTools-KeymapBrowser';
 			"inspector"
 			package: 'NewTools-Inspector' with: [ spec requires: #( 'NewTools-Inspector-Extensions' ) ];
@@ -123,7 +123,7 @@ BaselineOfNewTools >> baseline: spec [
 				   		'NewTools-Spotter-Tests' 
 						'NewTools-Spotter-Processors-Tests' );
 			group: 'SystemReporter' with: #( 'Core' 'NewTools-SystemReporter' );
-			group: 'Methods' with: #( 'Core' 'NewTools-MethodBrowsers' );
+			group: 'Methods' with: #( 'Core' 'NewTools-SpTextPresenterDecorators' 'NewTools-MethodBrowsers' );
 			"Not in the image for the moment, we need a pass on them"
 			group: 'KeymapBrowser' with: #( 'Core' 'NewTools-KeymapBrowser' );
 			group: 'CritiqueBrowser' with: #( 'NewTools-CodeCritiques' 'NewTools-CodeCritiques-Tests' );
