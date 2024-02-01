@@ -8,8 +8,7 @@ Class {
 		'navigationEnvironment'
 	],
 	#category : 'NewTools-MethodBrowsers-Calypso',
-	#package : 'NewTools-MethodBrowsers',
-	#tag : 'Calypso'
+	#package : 'NewTools-MethodBrowsers-Calypso'
 }
 
 { #category : 'private' }

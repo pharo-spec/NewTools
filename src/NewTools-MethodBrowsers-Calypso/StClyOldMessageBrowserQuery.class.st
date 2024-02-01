@@ -6,9 +6,8 @@ Class {
 		'criteriaString',
 		'criteriaBlock'
 	],
-	#category : 'NewTools-MethodBrowsers-Senders',
-	#package : 'NewTools-MethodBrowsers',
-	#tag : 'Senders'
+	#category : 'NewTools-MethodBrowsers-Calypso',
+	#package : 'NewTools-MethodBrowsers-Calypso'
 }
 
 { #category : 'accessing' }
@@ -39,6 +38,12 @@ StClyOldMessageBrowserQuery >> decorateResultMethodEditor: aMethodEditor [
 	aMethodEditor selectStringAsInMessageBrowser: criteriaString
 ]
 
+{ #category : 'accessing' }
+StClyOldMessageBrowserQuery >> highlightElement [
+	
+	^ self criteriaString
+]
+
 { #category : 'initialization' }
 StClyOldMessageBrowserQuery >> initialize [
 	super initialize.
@@ -53,12 +58,6 @@ StClyOldMessageBrowserQuery >> installedMethods [
 
 	actualMethods := self filterInstalledMethods: onlyMethods, extraMethods.
 	^actualMethods, (methods reject: [ :each | each isCompiledMethod ])
-]
-
-{ #category : 'accessing' }
-StClyOldMessageBrowserQuery >> queryElement [
-	
-	^ self criteriaString
 ]
 
 { #category : 'testing' }

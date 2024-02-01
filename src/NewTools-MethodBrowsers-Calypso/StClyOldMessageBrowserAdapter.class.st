@@ -8,9 +8,8 @@ Class {
 		'refreshingBlock',
 		'openedBrowser'
 	],
-	#category : 'NewTools-MethodBrowsers-Senders',
-	#package : 'NewTools-MethodBrowsers',
-	#tag : 'Senders'
+	#category : 'NewTools-MethodBrowsers-Calypso',
+	#package : 'NewTools-MethodBrowsers-Calypso'
 }
 
 { #category : 'tools registration' }
