@@ -143,6 +143,7 @@ BaselineOfNewTools >> baseline: spec [
 				    		'NewTools-RewriterTools'
 				    		'NewTools-RewriterTools-Backend-Tests'
 				    		'NewTools-RewriterTools-Tests' );
+			group: 'Profiler' with: #( 'NewTools-ProfilerUI' );
 			"ScopesEditor"
 			group: #ScopesEditor with: #(
 						'NewTools-Scopes' 
@@ -168,7 +169,8 @@ BaselineOfNewTools >> baseline: spec [
             			'RewriterTools'
 						'ScopesEditor'
 						'FileBrowser'
-						'Finder') ]
+						'Finder'
+						'Profiler') ]
 ]
 
 { #category : 'external projects' }
