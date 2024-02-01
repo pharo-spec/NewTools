@@ -1,7 +1,6 @@
 Class {
 	#name : 'StClyMessageListPresenter',
 	#superclass : 'StMessageListPresenter',
-	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'scopes',
 		'query',
