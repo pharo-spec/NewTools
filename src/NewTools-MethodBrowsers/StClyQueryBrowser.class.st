@@ -211,7 +211,7 @@ StClyQueryBrowser >> showQueryResult [
 		expectedFlatQueryResult := systemQuery requiredResult ]."
 
 	self setUpActiveScope.
-	highlight := systemQuery queryElement.
+	highlight := systemQuery highlightElement.
 	messageList 
 		query: systemQuery;
 		scopes: { systemScope };
