@@ -6,9 +6,9 @@ Class {
 		'criteriaString',
 		'criteriaBlock'
 	],
-	#category : 'NewTools-MethodBrowsers-Senders',
+	#category : 'NewTools-MethodBrowsers-Calypso',
 	#package : 'NewTools-MethodBrowsers',
-	#tag : 'Senders'
+	#tag : 'Calypso'
 }
 
 { #category : 'accessing' }
