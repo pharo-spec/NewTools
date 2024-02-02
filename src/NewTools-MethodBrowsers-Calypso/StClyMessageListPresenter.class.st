@@ -6,9 +6,8 @@ Class {
 		'query',
 		'navigationEnvironment'
 	],
-	#category : 'NewTools-MethodBrowsers-Senders',
-	#package : 'NewTools-MethodBrowsers',
-	#tag : 'Senders'
+	#category : 'NewTools-MethodBrowsers-Calypso',
+	#package : 'NewTools-MethodBrowsers-Calypso'
 }
 
 { #category : 'private' }

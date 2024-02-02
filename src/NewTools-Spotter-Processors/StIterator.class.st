@@ -100,7 +100,7 @@ StIterator >> next: aQuantity [
 				last ifNotNil: [  
 					stream nextPut: last.
 					total := total + 1 ] ]
-				doWhileTrue: [ total < aQuantity and: [ last notNil ] ] ]
+				doWhileTrue: [ total < aQuantity and: [ last isNotNil ] ] ]
 ]
 
 { #category : 'events' }

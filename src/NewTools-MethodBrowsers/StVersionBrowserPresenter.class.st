@@ -407,7 +407,7 @@ StVersionBrowserPresenter >> showSourceWithConverter: aConverter [
 	self textConverter: aConverter.
 	
 	newSource := self newCode.
-	newSource whenSubmitDo: [ :text | (self accept: text notifying: nil) notNil ].
+	newSource whenSubmitDo: [ :text | (self accept: text notifying: nil) isNotNil ].
 	newSource beForMethod: self selectedMessage.
 
 	self replaceSourceWith: newSource

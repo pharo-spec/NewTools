@@ -36,9 +36,8 @@ Class {
 	#classVars : [
 		'DefaultQueryResult'
 	],
-	#category : 'NewTools-MethodBrowsers-Senders',
-	#package : 'NewTools-MethodBrowsers',
-	#tag : 'Senders'
+	#category : 'NewTools-MethodBrowsers-Calypso',
+	#package : 'NewTools-MethodBrowsers-Calypso'
 }
 
 { #category : 'tools registration' }
@@ -211,7 +210,7 @@ StClyQueryBrowser >> showQueryResult [
 		expectedFlatQueryResult := systemQuery requiredResult ]."
 
 	self setUpActiveScope.
-	highlight := systemQuery queryElement.
+	highlight := systemQuery highlightElement.
 	messageList 
 		query: systemQuery;
 		scopes: { systemScope };

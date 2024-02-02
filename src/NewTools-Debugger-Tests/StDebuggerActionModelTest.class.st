@@ -1130,7 +1130,7 @@ StDebuggerActionModelTest >> testUpdateDebugSession [
 	exception := session exception.
 	session exception: nil.
 	debugActionModel updateDebugSession.
-	self assert: session exception notNil.
+	self assert: session exception isNotNil.
 	self assert: session exception identicalTo: exception
 ]
 

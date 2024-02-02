@@ -212,7 +212,7 @@ StPlaygroundPage >> readStreamDo: aBlock [
 { #category : 'private' }
 StPlaygroundPage >> spawnFlushProcess [
 
-	(flushProcess notNil 
+	(flushProcess isNotNil 
 		and: [ flushProcess isTerminated not ])
 		ifTrue: [ ^ self ].
 		

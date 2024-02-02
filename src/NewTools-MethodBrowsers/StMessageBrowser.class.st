@@ -264,7 +264,7 @@ StMessageBrowser >> handleMethodAdded: anAnnouncement [
 	item := anAnnouncement method.
 	
 	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [ ^ self ].
-	((item methodClass notNil) and:[item methodClass isObsolete not]) ifFalse: [ ^ self ].
+	((item methodClass isNotNil) and:[item methodClass isObsolete not]) ifFalse: [ ^ self ].
 	
 	boolean := textPresenter hasUnacceptedEdits.
 	boolean ifTrue: [ text := textPresenter pendingText ].
@@ -320,7 +320,7 @@ StMessageBrowser >> handleMethodRemoved: anAnnouncement [
 
 	"Item is a compiled methed, where the list is populated with RGMethod"
 	item := anAnnouncement method.
-	(item methodClass notNil and: [ item methodClass isObsolete not ])
+	(item methodClass isNotNil and: [ item methodClass isObsolete not ])
 		ifFalse: [ ^ self ].
 	selection := messageList selectedIndex.
 	removeItem := self selectedMessage.
