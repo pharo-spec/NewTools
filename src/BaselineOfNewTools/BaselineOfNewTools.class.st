@@ -160,6 +160,10 @@ BaselineOfNewTools >> baseline: spec [
 			group: #Finder with: #(
 						'NewTools-Finder'
 						'NewTools-Finder-Tests');
+			"Settings Browser"
+			group: #SettingsBrowser with: #(
+						'NewTools-SettingsBrowser'
+						'NewTools-SettingsBrowser-Tests');
 
 			group: 'default' with: #( 
 						'Playground' 
