@@ -20,7 +20,6 @@ Class {
 { #category : 'instance creation' }
 StSettingNodePresenter class >> with: aPragmaSetting [ 
 
-	self halt.
 	^ self new setItem: aPragmaSetting
 ]
 

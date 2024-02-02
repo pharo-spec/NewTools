@@ -1,9 +1,6 @@
 Class {
 	#name : 'StSettingsTree',
 	#superclass : 'SettingTree',
-	#instVars : [
-		'treeHolder'
-	],
 	#category : 'NewTools-SettingsBrowser-Model',
 	#package : 'NewTools-SettingsBrowser',
 	#tag : 'Model'
@@ -12,7 +9,6 @@ Class {
 { #category : 'opening' }
 StSettingsTree class >> settingsKeywords [
 
-	self halt.
 	^ (Pragma allNamed: #systemsettings) collect: [: p | p method selector ]
 ]
 

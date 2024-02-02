@@ -15,7 +15,6 @@ StSettingSHStyleButtonColorPresenterItem >> buttonColor: aColor [
 { #category : 'initialization' }
 StSettingSHStyleButtonColorPresenterItem >> updateColor: aColor [
 
-	self haltOnce.
 ]
 
 { #category : 'enumerating' }
