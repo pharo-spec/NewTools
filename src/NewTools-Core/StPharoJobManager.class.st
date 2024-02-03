@@ -63,10 +63,7 @@ StPharoJobManager class >> jobChanged: ann [
 StPharoJobManager class >> jobEnd: ann [
 
 	self isHeadless ifTrue: [ ^ self ].
-	self jobList jobEnd: ann.
-	"this is just a cleanup... because jobs may leak!"
-	self jobList isEmpty
-		ifTrue: [ self application removeProperty: #jobList ]
+	self jobList jobEnd: ann
 ]
 
 { #category : 'private' }
