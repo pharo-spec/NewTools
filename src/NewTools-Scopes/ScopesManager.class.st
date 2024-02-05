@@ -12,6 +12,7 @@ Class {
 		'currentQueryScope'
 	],
 	#classVars : [
+		'ScopeRefactoring',
 		'singleInstance'
 	],
 	#category : 'NewTools-Scopes-Core',
@@ -38,6 +39,34 @@ ScopesManager class >> currentQueryScope [
 { #category : 'accessing' }
 ScopesManager class >> currentQueryScope: aScope [ 
 	self singleInstance currentQueryScope: aScope
+]
+
+{ #category : 'operations' }
+ScopesManager class >> defaultNameForScope: aScope [
+	| packageScope classScope label |
+	
+	classScope := aScope environment.
+	packageScope := aScope otherEnvironment.
+	(packageScope isNotEmpty and: [ classScope isEmpty ]) 
+		ifTrue: [ 
+			label := 'Pck: ' , packageScope packages anyOne name ].
+	(packageScope isEmpty and: [ classScope isNotEmpty ]) 
+		ifTrue: [ 
+			label := 'Cls: ' , classScope classes anyOne name ].
+	(packageScope isNotEmpty and: [ classScope isNotEmpty ]) 
+		ifTrue: [
+			label := 'Pck,Cls: ' , packageScope packages anyOne name ].
+	
+	(classScope classes size + packageScope packages size) > 1 ifTrue: [ label := label , ', ...' ].
+	
+	^ self singleInstance nameWithIndex: label
+	
+]
+
+{ #category : 'accessing' }
+ScopesManager class >> defaultScope [
+
+	^ self singleInstance defaultScope 
 ]
 
 { #category : 'accessing' }
@@ -92,10 +121,10 @@ ScopesManager class >> invalidNames [
 ]
 
 { #category : 'operations' }
-ScopesManager class >> newScopeFrom: aSet [
+ScopesManager class >> newScopeFrom: aCollection [
 
-	| packageScope classScope classes packages orphanClasses fullPackages |
-	
+	| aSet packageScope classScope classes packages orphanClasses fullPackages label newScope |
+	aSet := aCollection asSet.
 	classes := (aSet select: [ :each | each isClassOrTrait ]) reject: [
 		           :each | each isMeta ].
 	packages := aSet select: [ :each | each isKindOf: Package ].
@@ -109,8 +138,10 @@ ScopesManager class >> newScopeFrom: aSet [
 
 	classScope := RBClassEnvironment classes: orphanClasses.
 	packageScope := RBPackageEnvironment packages: fullPackages.
-
-	^ classScope | packageScope
+	newScope := classScope | packageScope.
+	
+	label := self defaultNameForScope: newScope.
+	^ newScope label: label; yourself
 ]
 
 { #category : 'operations' }
@@ -128,6 +159,30 @@ ScopesManager class >> newScopeFrom: scopeA and: scopeB [
 	fullPackages := self fullPackagesFrom: classesInterAB.
 	 
 	^ self newScopeFrom: fullPackages , classesInterAB
+]
+
+{ #category : 'operations' }
+ScopesManager class >> newScopeFrom: classesAndPackages andHierarchies: hierarchies [
+
+	| label newScope classesInHierarchies filteredClassesAndPackages otherEnvironment hierarchyEnvironment |
+	"hierarchies contain classes defining hierarchy environments"
+	classesInHierarchies := ((hierarchies flatCollect: [ :each |
+			                          each allSuperclassesIncluding: Object ])
+		                         addAll: hierarchies;
+		                         yourself) asSet.
+
+	filteredClassesAndPackages := classesAndPackages reject: [:each | each isClassOrTrait and: [ each isMeta or: [ classesInHierarchies includes: each ] ] ].
+
+	otherEnvironment := self newScopeFrom: filteredClassesAndPackages.
+	"The hierarchy environment is an OR environment containing all the class hierarchy environments"
+	hierarchyEnvironment := RBOrEnvironment onEnvironments: (hierarchies collect: [:class | (RBClassHierarchyEnvironment class: class) label: 'Hier:',class name ; yourself  ]).
+	
+	newScope := otherEnvironment | hierarchyEnvironment.
+
+	label := self defaultNameForScope: newScope.
+	^ newScope
+		  label: label;
+		  yourself
 ]
 
 { #category : 'operations' }
@@ -278,7 +333,7 @@ ScopesManager >> nameWithIndex: name [
 
 	indexes := Set new.
 	existingNames do: [ :existing |
-		hypen_index := existing size - (existing reverse findString: '-').
+		hypen_index := existing size - (existing reverse findString: '(').
 		hypen_index = existing size
 			ifTrue: [ indexes add: 0 ]
 			ifFalse: [
@@ -286,7 +341,7 @@ ScopesManager >> nameWithIndex: name [
 					          asInteger.
 				indexes add: number asInteger ] ].
 
-	^ name , '-' , (indexes max + 1) asString
+	^ name , '(' , (indexes max + 1) asString, ')'
 ]
 
 { #category : 'private' }

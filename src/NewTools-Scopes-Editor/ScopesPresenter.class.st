@@ -39,15 +39,29 @@ ScopesPresenter class >> menuCommandOn: aBuilder [
     (aBuilder item: #'Scopes Editor')
                 action: [self open];
                 parent: #Refactoring;
-                help: 'Editor for custom Scopes (refactoring environments)';
+                help: 'Editor for user defined Scopes (Scopes are used as environments when performing refactorings)';
                 order: 10;
 					iconName: #smallPushpin
 ]
 
-{ #category : 'examples' }
-ScopesPresenter class >> open [
+{ #category : 'specs' }
+ScopesPresenter class >> newInstance [
 	ScopeNodesPresenter reset.
-	(self on: ScopesManager singleInstance) open
+	^ self on: ScopesManager singleInstance
+]
+
+{ #category : 'opening' }
+ScopesPresenter class >> open [
+
+	self newInstance open
+]
+
+{ #category : 'opening' }
+ScopesPresenter class >> openSelecting: aScope [
+
+	(self newInstance
+		 selectScope: aScope;
+		 yourself) open
 ]
 
 { #category : 'actions' }
@@ -420,10 +434,25 @@ ScopesPresenter >> toolbarButtons [
 
 	| buttons |
 	buttons := OrderedCollection new.
-	buttons add: (self newToolbarButton
+
+
+
+	buttons add: (self newToolbarPopoverButton
 			 icon: (self iconNamed: #add);
 			 help: 'Add a new scope';
-			 action: [ self createNewScope ];
+			 content: [
+				 self newToolbar
+					 addItem: (self newToolbarButton
+							  help: 'Add a new scope from classes and packages';
+							  label: 'Classes and packages';
+							  action: [ self createNewScope ];
+							  yourself);
+					 addItem: (self newToolbarButton
+							  help: 'Add a new scope from class hierarchies';
+							  label: 'Class hierarchy';
+							  action: [ self createNewScope ];
+							  yourself);
+					 yourself ];
 			 yourself).
 
 	buttons add: (buttonEdit := self newToolbarButton

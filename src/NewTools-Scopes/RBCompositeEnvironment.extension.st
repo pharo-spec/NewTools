@@ -43,6 +43,11 @@ RBCompositeEnvironment >> asScopeNode [
 ]
 
 { #category : '*NewTools-Scopes' }
+RBCompositeEnvironment >> classesInHierarchies [
+	self shouldBeImplemented.
+]
+
+{ #category : '*NewTools-Scopes' }
 RBCompositeEnvironment >> definedClasses [
 	| definedClasses |
 	definedClasses := IdentitySet new: 4096.
@@ -59,7 +64,11 @@ RBCompositeEnvironment >> definedPackages [
 { #category : '*NewTools-Scopes' }
 RBCompositeEnvironment >> fullPackages [
 	
-	"full packages are those where all classes belong to the scope"
+	"full packages are those where all classes belong to the scope (ignoring classes related to class hierarchy environments)"
+	| classes classesInHierarchies |
+	
+	"classesInHierarchies := self classesInHierarchies.
+	classes := self definedClasses reject: [ :class | classesInHierarchies includes: class ]."
 	^ ScopesManager fullPackagesFrom: self definedClasses
 ]
 
