@@ -121,7 +121,7 @@ StDebuggerActionModel >> contextPredicateFor: aContext [
 { #category : 'debug - predicates' }
 StDebuggerActionModel >> contextSignalsAnException: aContext [
 
-	^ aContext notNil 
+	^ aContext isNotNil 
 		and: [ (aContext receiver isKindOf: Exception) 
 		and: [  aContext selector = #signal ] ]
 ]
@@ -157,12 +157,12 @@ StDebuggerActionModel >> filterStack: aStack [
 	contextsToReject := 0.
 
 	[ 
-	context notNil and: [ context ~~ self referenceContext  ] ] 
+	context isNotNil and: [ context ~~ self referenceContext  ] ] 
 		whileTrue: [ 
 			contextsToReject := contextsToReject + 1.
 			context := context sender ].
 	[ 
-	context notNil and: [ 
+	context isNotNil and: [ 
 		context method hasPragmaNamed: #debuggerCompleteToSender ] ] 
 		whileTrue: [ 
 			contextsToReject := contextsToReject + 1.

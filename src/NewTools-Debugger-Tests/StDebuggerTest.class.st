@@ -549,7 +549,7 @@ StDebuggerTest >> testDebuggerActionModel [
 	debugger := self debuggerOn: session.
 	debuggerActionModel := slot read: debugger.
 
-	self assert: debuggerActionModel notNil
+	self assert: debuggerActionModel isNotNil
 ]
 
 { #category : 'tests - initialization' }
@@ -557,6 +557,30 @@ StDebuggerTest >> testDebuggerApplication [
 	self
 		assert: (self debuggerOn: session) application
 		identicalTo: StDebugger currentApplication
+]
+
+{ #category : 'tests - session' }
+StDebuggerTest >> testDebuggerDoesNotLogStackToFileSetting [
+
+	| logFileRef debuggingStackToFile |
+	
+	logFileRef := Smalltalk logFileName asFileReference.
+	logFileRef ensureDelete.
+	self deny: logFileRef exists.
+	debuggingStackToFile := session class logDebuggerStackToFile.	
+	[ 
+		debugger := StTestDebuggerProvider new debuggerWithDNUContext. 
+		session := debugger session.
+		session class logDebuggerStackToFile: false.
+		debugger
+			application: debugger class currentApplication;
+			initialize;
+			open.
+
+		self 
+			assert: logFileRef exists not
+			description: 'It tests that when the log debugger stack to file setting is false, a Pharo log file is not created when requesting a debugger' ]
+	ensure: [ session class logDebuggerStackToFile: debuggingStackToFile ]
 ]
 
 { #category : 'tests - code pane' }

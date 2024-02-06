@@ -28,7 +28,7 @@ StPlaygroundPageTestMockedWaitable >> initialize [
 StPlaygroundPageTestMockedWaitable >> resume [
 
 	sem signal.
-	^ sem2 wait: (Duration milliSeconds: timeout)
+	^ sem2 waitTimeoutMilliseconds: timeout
 ]
 
 { #category : 'accessing' }
@@ -41,7 +41,7 @@ StPlaygroundPageTestMockedWaitable >> timeout: aNumberMiliseconds [
 StPlaygroundPageTestMockedWaitable >> wait [
 
 	| semRes |
-	semRes := sem wait: (Duration milliSeconds: timeout).
+	semRes := sem waitTimeoutMilliseconds: timeout.
 	sem2 signal.
 	^ semRes
 ]

@@ -26,10 +26,10 @@ StSindarinContextInteractionModel >> context: anObject [
 	context := anObject
 ]
 
-{ #category : 'binding' }
+{ #category : 'testing' }
 StSindarinContextInteractionModel >> hasBindingOf: aString [
 	self bindings at: aString ifAbsent: [ 
 		^ (context receiver class hasSlotNamed: aString) or: [ 
-			  (context temporaryVariableNamed: aString) notNil ] ].
+			  (context temporaryVariableNamed: aString) isNotNil ] ].
 	^ true
 ]

@@ -9,6 +9,12 @@ Class {
 	#package : 'NewTools-Gtk'
 }
 
+{ #category : 'testing' }
+StPharoGtkDarkConfiguration >> isDarkTheme [
+
+	^ true
+]
+
 { #category : 'accessing' }
 StPharoGtkDarkConfiguration >> macThemeName [
 		

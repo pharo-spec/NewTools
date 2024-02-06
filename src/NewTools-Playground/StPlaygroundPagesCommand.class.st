@@ -39,5 +39,14 @@ StPlaygroundPagesCommand >> execute [
 	(StPlaygroundPagesPresenter 
 		newApplication: context application
 		model: context) 
+		onLoadPage: [ :page |
+			self loadPage: page.
+			context takeKeyboardFocus ];
 		openDialog
+]
+
+{ #category : 'actions' }
+StPlaygroundPagesCommand >> loadPage: page [
+
+	context loadPage: page
 ]

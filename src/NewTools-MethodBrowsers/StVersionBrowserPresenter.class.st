@@ -22,7 +22,7 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : 'StVersionBrowserPresenter',
-	#superclass : 'AbstractMessageCentricBrowserPresenter',
+	#superclass : 'StAbstractMessageCentricBrowserPresenter',
 	#instVars : [
 		'rgMethod',
 		'sourcePresenter',
@@ -101,7 +101,7 @@ StVersionBrowserPresenter >> changeList [
 	^ messageList messages
 ]
 
-{ #category : 'actions' }
+{ #category : 'private - actions' }
 StVersionBrowserPresenter >> compareTo: anOtherVersion withLabel: aLabel [
 	| versions texts |
 
@@ -111,11 +111,13 @@ StVersionBrowserPresenter >> compareTo: anOtherVersion withLabel: aLabel [
 		referencesList: versions) 
 		getText.
 
-	(SpDiffPresenter newApplication: self application)
-		title: ('Comparison from {1} to {2}' format: { versions second stamp. aLabel });
+	((SpDiffPresenter newApplication: self application)
 		leftText: texts first;
 		rightText: texts second;
-		open
+		asWindow) 
+			title: ('Comparison from {1} to {2}' format: { versions second stamp. aLabel });
+			initialExtent: 900@600;
+			open
 ]
 
 { #category : 'actions' }
@@ -146,26 +148,70 @@ StVersionBrowserPresenter >> connectPresenters [
 { #category : 'initialization' }
 StVersionBrowserPresenter >> defaultLayout [
 
-	^ SpPanedLayout newTopToBottom
-		add: messageList;
-		add: ((sourceLayout := SpBoxLayout newTopToBottom)
-			add: toolbarPresenter expand: false;
+	^ SpBoxLayout newTopToBottom
+		add: toolbarPresenter expand: false; 
+		add: (SpPanedLayout newTopToBottom
+			add: messageList;
+			add: (sourceLayout := SpBoxLayout newTopToBottom);
 			yourself);
 		yourself
+]
+
+{ #category : 'actions' }
+StVersionBrowserPresenter >> doBrowseImplementors [
+
+	SystemNavigation new browseAllImplementorsOf: rgMethod selector
+]
+
+{ #category : 'actions' }
+StVersionBrowserPresenter >> doBrowseSenders [
+
+	self systemNavigation 
+		browseSendersOf: rgMethod selector 
+		name: 'Senders of ', rgMethod selector 
+		autoSelect: rgMethod selector
+]
+
+{ #category : 'actions' }
+StVersionBrowserPresenter >> doCompareToCurrentVersion [
+
+	self compareTo: rgMethod withLabel: 'Current version'
+]
+
+{ #category : 'actions' }
+StVersionBrowserPresenter >> doCompareToOtherVersion [
+	| labels versions selected |
+	
+	versions := self changeList.
+	labels := versions collect: [ :each | each stamp ].
+	
+	selected := self application newSelect 
+		title: 'Select a version'; 
+		items: versions;
+		display: [ :aVersion | aVersion stamp ];
+		openModal.
+	selected ifNil: [ ^ self ].
+
+	self compareTo: selected withLabel: selected stamp
+]
+
+{ #category : 'actions' }
+StVersionBrowserPresenter >> doRevert [
+
 ]
 
 { #category : 'initialization' }
 StVersionBrowserPresenter >> initializePresenters [
 
-	messageList := self instantiate: MessageListPresenter on: rgMethod.
-	
-	toolbarPresenter := self instantiate: SpMethodToolbarPresenter on: rgMethod.
-	self layout: self defaultLayout.
+	messageList := self newMessageList.
+	toolbarPresenter := self newMessageToolbar.
 	 
 	messageList
 		topologicSort: false;
-		sortingBlock: [ :a | a annotationNamed: #versionIndex ifAbsent: [ 0 ] ] ascending;
-		contextMenu: self messageListMenu.
+		sortingBlock: [ :a | a annotationNamed: #versionIndex ifAbsent: [ 0 ] ] ascending.
+
+	self flag: #TODO. "I need this for now, but this is because toolbar is wrong :P"
+	self layout: self defaultLayout.
 	
 	toolbarPresenter
 		addItemLabeled: 'Side By Side' do: [
@@ -177,11 +223,7 @@ StVersionBrowserPresenter >> initializePresenters [
 		addItemLabeled: 'Diff' do: [ 
 			self showDiffLineWithConverter: (DiffLineChangeRecordConverter 
 				methodReference: self textConverter method
-				referencesList: self changeList) ].
-		
-	toolbarPresenter 
-		replaceVersionWithLabel: 'Revert'
-		action: [ self revert: self selectedMessage ]
+				referencesList: self changeList) ]
 ]
 
 { #category : 'initialization' }
@@ -244,6 +286,20 @@ StVersionBrowserPresenter >> method [
 	^ rgMethod
 ]
 
+{ #category : 'initialization' }
+StVersionBrowserPresenter >> newMessageList [
+
+	^ self instantiate: StMessageVersionListPresenter
+]
+
+{ #category : 'initialization' }
+StVersionBrowserPresenter >> newMessageToolbar [
+		
+	^ (self instantiate: StMethodHistoryToolbarPresenter on: rgMethod)
+		whenRevertDo: [ self revert: self selectedMessage ];
+		yourself
+]
+
 { #category : 'private - factory' }
 StVersionBrowserPresenter >> newSourceDiff [
 
@@ -259,11 +315,11 @@ StVersionBrowserPresenter >> newTextConverter [
 { #category : 'private' }
 StVersionBrowserPresenter >> replaceSourceWith: aPresenter [
 	
-	sourceLayout children size = 1 
-		ifTrue: [ 
-			sourceLayout add: aPresenter ]
-		ifFalse: [ 
-			sourceLayout replace: sourcePresenter with: aPresenter ].
+	sourceLayout children  
+		ifNotEmpty: [ 
+			sourceLayout replace: sourcePresenter with: aPresenter ]
+		ifEmpty: [ 
+			sourceLayout add: aPresenter ].
 		
 	sourcePresenter := aPresenter.
 	messageList selectIndex: messageList selectedIndex
@@ -351,7 +407,7 @@ StVersionBrowserPresenter >> showSourceWithConverter: aConverter [
 	self textConverter: aConverter.
 	
 	newSource := self newCode.
-	newSource whenSubmitDo: [ :text | (self accept: text notifying: nil) notNil ].
+	newSource whenSubmitDo: [ :text | (self accept: text notifying: nil) isNotNil ].
 	newSource beForMethod: self selectedMessage.
 
 	self replaceSourceWith: newSource
@@ -394,8 +450,8 @@ StVersionBrowserPresenter >> updateDiffLine: content [
 StVersionBrowserPresenter >> updatePresenter [
 
 	self showDiffMorphWithConverter: (DiffSideBySideChangeRecordConverter 
-				methodReference: self textConverter method 
-				referencesList: self changeList)
+		methodReference: self textConverter method 
+		referencesList: self changeList)
 ]
 
 { #category : 'private - updating' }

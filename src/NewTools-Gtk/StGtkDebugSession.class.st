@@ -20,7 +20,7 @@ StGtkDebugSession >> application: anApplication [
 	application := anApplication
 ]
 
-{ #category : 'private' }
+{ #category : 'initialization' }
 StGtkDebugSession >> initialize [
 
 	super initialize. 

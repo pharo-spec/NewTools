@@ -46,10 +46,10 @@ StPlaygroundTest >> testLoadPage [
 	presenter page flush.
 
 	page := self newPage
-		        contents: 'Test 2';
-		        flush;
-		        yourself.
-	presenter loadPage: page fileReference.
+		contents: 'Test 2';
+		flush;
+		yourself.
+	presenter loadPage: page.
 	self waitUntilUIRedrawed.
 	self assert: presenter page contents equals: page contents
 ]
@@ -59,7 +59,7 @@ StPlaygroundTest >> testNewInspectorForWorksWhenModelIsNil [
 	| inspectorPanel |
 
 	inspectorPanel := presenter newInspectorFor: nil.
-	self assert: inspectorPanel notNil.
+	self assert: inspectorPanel isNotNil.
 	self assert: (inspectorPanel isKindOf: StObjectInspectorPresenter)
 ]
 
@@ -73,7 +73,7 @@ StPlaygroundTest >> testStopProcessing [
 		        contents: 'Test 1';
 		        flush;
 		        yourself.
-	presenter loadPage: page fileReference.
+	presenter loadPage: page.
 	self waitUntilUIRedrawed.
 	"a lot of time"
 	presenter page timeToWait: 1 minute.
