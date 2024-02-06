@@ -31,7 +31,7 @@ StPlaygroundPagesPresenterTest >> testLoadPage [
 	| loaded |
 
 	loaded := false.
-	self deny: presenter window notNil.
+	self deny: presenter window isNotNil.
 	self openInstance.
 	self assert: presenter window isOpen.
 	presenter onLoadPage: [ :aPage | loaded := true ].

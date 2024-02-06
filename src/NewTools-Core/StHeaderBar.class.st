@@ -81,7 +81,7 @@ StHeaderBar >> initializePresenters [
 { #category : 'testing' }
 StHeaderBar >> isCloseable [
 
-	^ closeButton notNil
+	^ closeButton isNotNil
 ]
 
 { #category : 'accessing' }

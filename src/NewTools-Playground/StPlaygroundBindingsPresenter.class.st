@@ -87,7 +87,7 @@ StPlaygroundBindingsPresenter >> defaultLayout [
 { #category : 'testing' }
 StPlaygroundBindingsPresenter >> hasSelectedBinding [
 
-	^ self selectedBinding notNil
+	^ self selectedBinding isNotNil
 ]
 
 { #category : 'initialization' }
@@ -108,7 +108,7 @@ StPlaygroundBindingsPresenter >> initializeInspectorPanel [
 		label: 'Inspector'.
 
 	inspector := self newPresenterSelector
-		when: [ :aBinding | aBinding notNil ] show: [ :aBinding | 
+		when: [ :aBinding | aBinding isNotNil ] show: [ :aBinding | 
 			self flag: #TODO. "Temporal? This is to avoid a dependency (while making 
 			inspector work properly)"
 			self class environment 

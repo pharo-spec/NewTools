@@ -107,7 +107,7 @@ StPlaygroundPagesPresenter >> initializePresenters [
 		number: 2;
 		label: 'Preview';
 		presenter: (pagePreview := self newPresenterSelector
-			when: [ :aPage | aPage notNil ] show: [ :aPage | 
+			when: [ :aPage | aPage isNotNil ] show: [ :aPage | 
 				self newCode 
 					editable: false;
 					text: aPage contents ];

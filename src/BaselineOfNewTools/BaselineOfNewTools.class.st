@@ -18,13 +18,14 @@ BaselineOfNewTools >> baseline: spec [
 
 		self sindarin: spec.
 		self chest: spec.
+		self colorPicker: spec.
 
 		spec
 			package: 'NewTools-Core';
 			package: 'NewTools-Morphic';
 			package: 'NewTools-Gtk';
 			"Basic tools (inherited from Spec)"
-			package: 'NewTools-MethodBrowsers';
+			package: 'NewTools-MethodBrowsers' with: [ spec requires: #( 'NewTools-SpTextPresenterDecorators' ) ];
 			package: 'NewTools-KeymapBrowser';
 			"inspector"
 			package: 'NewTools-Inspector' with: [ spec requires: #( 'NewTools-Inspector-Extensions' ) ];
@@ -94,7 +95,10 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Scopes-Tests';
 			"Finder"			
 			package: 'NewTools-Finder';
-			package: 'NewTools-Finder-Tests' with: [ spec requires: #('NewTools-Finder') ].
+			package: 'NewTools-Finder-Tests' with: [ spec requires: #('NewTools-Finder') ];
+			
+			package: 'NewTools-SettingsBrowser' with: [ spec requires: #('ColorPicker') ];
+			package: 'NewTools-SettingsBrowser-Tests' with: [ spec requires: #('NewTools-SettingsBrowser') ].			
 
 		spec
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Morphic' );
@@ -123,7 +127,7 @@ BaselineOfNewTools >> baseline: spec [
 				   		'NewTools-Spotter-Tests' 
 						'NewTools-Spotter-Processors-Tests' );
 			group: 'SystemReporter' with: #( 'Core' 'NewTools-SystemReporter' );
-			group: 'Methods' with: #( 'Core' 'NewTools-MethodBrowsers' );
+			group: 'Methods' with: #( 'Core' 'NewTools-SpTextPresenterDecorators' 'NewTools-MethodBrowsers' );
 			"Not in the image for the moment, we need a pass on them"
 			group: 'KeymapBrowser' with: #( 'Core' 'NewTools-KeymapBrowser' );
 			group: 'CritiqueBrowser' with: #( 'NewTools-CodeCritiques' 'NewTools-CodeCritiques-Tests' );
@@ -143,6 +147,7 @@ BaselineOfNewTools >> baseline: spec [
 				    		'NewTools-RewriterTools'
 				    		'NewTools-RewriterTools-Backend-Tests'
 				    		'NewTools-RewriterTools-Tests' );
+			group: 'Profiler' with: #( 'NewTools-ProfilerUI' );
 			"ScopesEditor"
 			group: #ScopesEditor with: #(
 						'NewTools-Scopes' 
@@ -155,6 +160,10 @@ BaselineOfNewTools >> baseline: spec [
 			group: #Finder with: #(
 						'NewTools-Finder'
 						'NewTools-Finder-Tests');
+			"Settings Browser"
+			group: #SettingsBrowser with: #(
+						'NewTools-SettingsBrowser'
+						'NewTools-SettingsBrowser-Tests');
 
 			group: 'default' with: #( 
 						'Playground' 
@@ -168,7 +177,9 @@ BaselineOfNewTools >> baseline: spec [
             			'RewriterTools'
 						'ScopesEditor'
 						'FileBrowser'
-						'Finder') ]
+						'Finder'
+						'Profiler'
+						'SettingsBrowser') ]
 ]
 
 { #category : 'external projects' }
@@ -179,6 +190,14 @@ BaselineOfNewTools >> chest: spec [
 			repository: ((self packageRepositoryURLForSpec: spec) ifEmpty: [
 						 'github://pharo-spec/Chest:v0.4.1' ]);
 			loads: 'default' ]
+]
+
+{ #category : 'external projects' }
+BaselineOfNewTools >> colorPicker: spec [
+
+	spec
+		baseline: 'ColorPicker' 
+		with: [ spec repository: 'github://pharo-spec/ColorPicker/src' ].
 ]
 
 { #category : 'accessing' }

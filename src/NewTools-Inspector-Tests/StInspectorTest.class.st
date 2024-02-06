@@ -146,7 +146,7 @@ StInspectorTest >> testDefineContextInSubclass [
 StInspectorTest >> testFirstPage [
 
 	inspector open.
-	self assert: inspector firstPage notNil.
+	self assert: inspector firstPage isNotNil.
 	self assert:
 		(inspector firstPage isKindOf: StObjectInspectorPresenter)
 ]
