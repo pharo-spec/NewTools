@@ -338,6 +338,7 @@ StFileDialogPresenter >> selectedEntry [
 
 { #category : 'accessing' }
 StFileDialogPresenter >> showDirectory: aFileReference [
+	"Set the directory to be displayed to aFileReference"
 
 	self fileNavigationSystem currentDirectory: aFileReference
 ]

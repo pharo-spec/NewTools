@@ -80,7 +80,7 @@ StFileSystemPresenter >> connectPresenters [
 
 	treeNavigationSystem
 		transmitDo: [ : selection | 
-			(self isDisplayed and: [ selection notNil ])
+			(self isDisplayed and: [ selection isNotNil ])
 				ifTrue: [ self updateWidgetWithFileReference: selection fileReference ] ].
 			
 	bookmarksTreeTable whenSelectionChangedDo: [ :selection | 
@@ -199,6 +199,12 @@ StFileSystemPresenter >> setWindowIconTo: aSpWindowPresenter [
 	
 	aSpWindowPresenter	windowIcon: (self iconNamed: #open).
 
+]
+
+{ #category : 'accessing' }
+StFileSystemPresenter >> title: aString [ 
+
+	self withWindowDo: [ : w | w title: aString ]
 ]
 
 { #category : 'accessing' }

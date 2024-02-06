@@ -88,7 +88,7 @@ StFileNavigationSystemPresenter class >> buildCommandsGroupWith: presenter forRo
 
 { #category : 'defaults' }
 StFileNavigationSystemPresenter class >> defaultPreviewer [
-	^ StFileBrowserContentPreviewer new
+	^ StFileBrowserAdaptiveContentPreviewer new
 ]
 
 { #category : 'examples' }
@@ -107,6 +107,14 @@ StFileNavigationSystemPresenter class >> example [
 StFileNavigationSystemPresenter class >> initialize [
 
 	Previewer := self defaultPreviewer
+]
+
+{ #category : 'class initialization' }
+StFileNavigationSystemPresenter class >> reset [
+	"Reset the receiver's default settings"
+	<script>
+
+	Previewer := nil.
 ]
 
 { #category : 'api - customization' }
@@ -195,13 +203,11 @@ StFileNavigationSystemPresenter >> filesListAction [
 			ifFalse: [ self owner confirm ] ].
 
 	fileReferenceTable whenSelectedDo: [ :aFileReference | 
-		previewProcess ifNotNil: [ 
-			previewProcess isTerminated ifFalse: [ previewProcess terminate ] ].
-		previewProcess := [ 
-		                  notebookPreviewer pageContent:
-			                  (previewer previewOn: aFileReference) ]
-			                  forkAt: Processor userBackgroundPriority
-			                  named: 'File Browser preview loader' ]
+		previewProcess ifNotNil: [ previewProcess isTerminated ifFalse: [ previewProcess terminate ] ].
+		previewProcess := [ notebookPreviewer pageContent: (self previewer previewOn: aFileReference) ]
+				forkAt: Processor userBackgroundPriority
+				named: 'File Browser preview loader' ]
+
 ]
 
 { #category : 'accessing' }
@@ -242,7 +248,9 @@ StFileNavigationSystemPresenter >> filtersDropListAction [
 StFileNavigationSystemPresenter >> initialize [
 
 	filter := StVisibleFilter new.
-	previewer := Previewer.
+	previewer := Previewer ifNil: [ 
+		self class initialize. 
+		Previewer ].
 	super initialize
 ]
 
@@ -362,7 +370,12 @@ StFileNavigationSystemPresenter >> pathBreadcrumbPresenter [
 
 { #category : 'accessing' }
 StFileNavigationSystemPresenter >> previewer [
+	"Answer the receiver's previewer, a subclass instance of <StFileBrowserAbstractPreviewer>"
+
 	^ previewer
+		ifNil: [ 
+			self initialize.
+			previewer ]
 ]
 
 { #category : 'api - customization' }
