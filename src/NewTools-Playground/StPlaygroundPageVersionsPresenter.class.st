@@ -64,12 +64,12 @@ StPlaygroundPageVersionsPresenter >> doAdoptVersionOnNewPlayground [
 StPlaygroundPageVersionsPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
 	aDialogWindowPresenter
-		addButton: 'Adopt' do: [ :presenter | 
-			presenter triggerOkAction.
-			self adoptSelectedVersion ];
 		addButton: 'Close' do: [ :presenter | 
 			presenter triggerCancelAction.
-			presenter close ]	
+			presenter close ];
+		addDefaultButton: 'Adopt' do: [ :presenter | 
+			presenter triggerOkAction.
+			self adoptSelectedVersion ]
 ]
 
 { #category : 'initialization' }

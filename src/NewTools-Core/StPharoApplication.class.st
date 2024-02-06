@@ -58,6 +58,12 @@ StPharoApplication >> defaultWindowExtent [
 StPharoApplication >> initialize [
 
 	super initialize.
+	self initializeConfiguration
+]
+
+{ #category : 'initialization' }
+StPharoApplication >> initializeConfiguration [
+
 	self resetConfiguration.
 	SystemAnnouncer uniqueInstance weak 
 		when: UIThemeChanged 
@@ -74,14 +80,13 @@ StPharoApplication >> newIconProvider [
 { #category : 'initialization' }
 StPharoApplication >> resetConfiguration [
 	
-	self flag: #TODO. "Invalidating for a moment because I need to align with Spec"
 	self configuration reset
 ]
 
 { #category : 'running' }
 StPharoApplication >> run [ 
 
-	Current ifNotNil: [ Current close ].
+	Current ifNotNil: [ Current closeAllWindows ].
 	super run. 
 	Current := self
 ]

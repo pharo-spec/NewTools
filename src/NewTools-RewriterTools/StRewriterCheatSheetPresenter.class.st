@@ -1,5 +1,6 @@
 "
-I am a cheat sheet for showing help for the rewriting rules
+I am a cheat sheet for showing help for the rewriting rules.
+You can find more information at [https://thepharo.dev/2021/12/09/what-is-rbparsetreesearcher/](https://thepharo.dev/2021/12/09/what-is-rbparsetreesearcher/)
 "
 Class {
 	#name : 'StRewriterCheatSheetPresenter',

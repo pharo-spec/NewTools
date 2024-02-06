@@ -176,19 +176,28 @@ StPlaygroundPresenter >> newDefaultPlaygroundPage [
 
 { #category : 'private - factory' }
 StPlaygroundPresenter >> newInspectorFor: aModel [
-	| modelToInspectOrPlayground |
-	
-	modelToInspectOrPlayground := (millerList pages isEmpty and: [ aModel isNil ]) 
-		ifTrue: [ self newDefaultPlaygroundPage ]
-		ifFalse: [ aModel ].
+	| isPlayground  inspector |
 
-	^ super newInspectorFor: modelToInspectOrPlayground
+	isPlayground := millerList pages isEmpty and: [ aModel isNil ].
+
+	inspector := super newInspectorFor: (isPlayground 
+		ifTrue: [ self newDefaultPlaygroundPage ]
+		ifFalse: [ aModel ]).
+		
+	isPlayground ifTrue: [ self prepareInspectorAsPlayground: inspector ].
+		
+	^ inspector
 ]
 
 { #category : 'accessing' }
 StPlaygroundPresenter >> page [
 
 	^ self firstPage page
+]
+
+{ #category : 'private' }
+StPlaygroundPresenter >> prepareInspectorAsPlayground: inspector [
+
 ]
 
 { #category : 'private - stepping' }

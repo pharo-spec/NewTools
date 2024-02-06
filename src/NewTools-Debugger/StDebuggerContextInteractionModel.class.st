@@ -71,7 +71,7 @@ StDebuggerContextInteractionModel >> doItReceiver [
 
 { #category : 'testing' }
 StDebuggerContextInteractionModel >> hasBindingInContextOf: aString [
-	^ (context lookupVar: aString) notNil
+	^ (context lookupVar: aString) isNotNil
 ]
 
 { #category : 'testing' }
@@ -92,7 +92,7 @@ StDebuggerContextInteractionModel >> hasBindingOf: aString [
 { #category : 'testing' }
 StDebuggerContextInteractionModel >> hasUnsavedCodeChanges [
 
-	^ context notNil and: [ context sourceCode ~= owner text asString ]
+	^ context isNotNil and: [ context sourceCode ~= owner text asString ]
 ]
 
 { #category : 'testing' }

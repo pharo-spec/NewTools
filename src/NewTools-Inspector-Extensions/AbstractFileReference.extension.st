@@ -214,7 +214,7 @@ AbstractFileReference >> isFuel [
 AbstractFileReference >> isImageGif [
 
 	^ self isFile 
-		and: [ self mimeTypes notNil 
+		and: [ self mimeTypes isNotNil 
 		and: [ self mimeTypes first matches: ZnMimeType imageGif ] ]
 ]
 
@@ -222,7 +222,7 @@ AbstractFileReference >> isImageGif [
 AbstractFileReference >> isImageJpeg [
 
 	^ self isFile 
-		and: [ self mimeTypes notNil 
+		and: [ self mimeTypes isNotNil 
 		and: [ self mimeTypes first matches: ZnMimeType imageJpeg ] ]
 ]
 
@@ -230,7 +230,7 @@ AbstractFileReference >> isImageJpeg [
 AbstractFileReference >> isImagePng [
 
 	^ self isFile 
-		and: [ self mimeTypes notNil 
+		and: [ self mimeTypes isNotNil 
 		and: [ self mimeTypes first matches: ZnMimeType imagePng ] ]
 ]
 
