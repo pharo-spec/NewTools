@@ -204,6 +204,7 @@ BaselineOfNewTools >> colorPicker: spec [
 BaselineOfNewTools >> packageRepositoryURLForSpec: spec [
 	| url |
 	
+	self halt.
 	url := super packageRepositoryURLForSpec: spec.
 	url ifEmpty: [ ^ url ].
 	"Verify if I am running in CI"
