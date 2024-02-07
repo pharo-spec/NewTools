@@ -46,7 +46,9 @@ StFileSystemPresenter class >> navigationSystemClass [
 StFileSystemPresenter class >> open [ 
 	<script>
 
-	^ self new open
+	^ self new 
+		open;
+		centered
 ]
 
 { #category : 'accessing - bookmarks' }
@@ -119,7 +121,7 @@ StFileSystemPresenter >> fileNavigationSystem [
 { #category : 'initialization' }
 StFileSystemPresenter >> initialExtentForWindow [
 
-	^ (900 @ 600) scaledByDisplayScaleFactor
+	^ (1100 @ 700) scaledByDisplayScaleFactor
 ]
 
 { #category : 'initialization' }

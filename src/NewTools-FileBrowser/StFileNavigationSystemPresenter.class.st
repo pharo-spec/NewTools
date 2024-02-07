@@ -88,6 +88,7 @@ StFileNavigationSystemPresenter class >> buildCommandsGroupWith: presenter forRo
 
 { #category : 'defaults' }
 StFileNavigationSystemPresenter class >> defaultPreviewer [
+
 	^ StFileBrowserAdaptiveContentPreviewer new
 ]
 
@@ -107,14 +108,6 @@ StFileNavigationSystemPresenter class >> example [
 StFileNavigationSystemPresenter class >> initialize [
 
 	Previewer := self defaultPreviewer
-]
-
-{ #category : 'class initialization' }
-StFileNavigationSystemPresenter class >> reset [
-	"Reset the receiver's default settings"
-	<script>
-
-	Previewer := nil.
 ]
 
 { #category : 'api - customization' }
@@ -248,9 +241,8 @@ StFileNavigationSystemPresenter >> filtersDropListAction [
 StFileNavigationSystemPresenter >> initialize [
 
 	filter := StVisibleFilter new.
-	previewer := Previewer ifNil: [ 
-		self class initialize. 
-		Previewer ].
+	Previewer ifNil: [ self class initialize ].
+	previewer := Previewer.
 	super initialize
 ]
 
