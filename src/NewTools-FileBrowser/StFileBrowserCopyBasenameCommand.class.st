@@ -1,3 +1,6 @@
+"
+Implements copy to clipboard the basename of the selected item in the File Browser.
+"
 Class {
 	#name : 'StFileBrowserCopyBasenameCommand',
 	#superclass : 'StFileBrowserSelectionCommand',

@@ -156,3 +156,9 @@ StFileBrowserAbstractPresenter >> updateFileSystemPresenters [
 
 	self owner updateFileSystemPresenters
 ]
+
+{ #category : 'accessing - history' }
+StFileBrowserAbstractPresenter >> updateWidgetWithFileReference: aFileReference [
+
+	self subclassResponsibility
+]

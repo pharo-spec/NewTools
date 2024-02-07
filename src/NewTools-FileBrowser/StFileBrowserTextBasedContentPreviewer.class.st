@@ -41,7 +41,7 @@ StFileBrowserTextBasedContentPreviewer >> numberOfBytesToCheckForBinaryOrText [
 	^ 100
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private' }
 StFileBrowserTextBasedContentPreviewer >> numberOfBytesToDisplayInTextFile [
 
 	^ 1000

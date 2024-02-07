@@ -12,7 +12,7 @@ Class {
 }
 
 { #category : 'adding' }
-StFileBrowserNameColumn class >> addContraintTo: aTableColumn [
+StFileBrowserNameColumn class >> addConstraintTo: aTableColumn [
 	"do nothing"
 ]
 

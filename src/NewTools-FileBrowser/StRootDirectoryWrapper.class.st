@@ -1,3 +1,7 @@
+"
+Wrapper to the `FileSystem root` object.
+
+"
 Class {
 	#name : 'StRootDirectoryWrapper',
 	#superclass : 'StDirectoryWrapper',

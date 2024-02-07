@@ -355,7 +355,7 @@ StFileNavigationSystemPresenter >> notebookPreviewer [
 ]
 
 { #category : 'utilities' }
-StFileNavigationSystemPresenter >> openFolder: aFileReference [ 
+StFileNavigationSystemPresenter >> openFolder: aFileReference [
 
 	self updateWidgetWithFileReference: aFileReference.
 	model openFolder: aFileReference.

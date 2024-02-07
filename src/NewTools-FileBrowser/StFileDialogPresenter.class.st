@@ -192,8 +192,7 @@ StFileDialogPresenter >> defaultFolder: aPath [
 { #category : 'accessing' }
 StFileDialogPresenter >> extensions: aCollectionOfExtensions [
 
-	self filter:
-		(StCustomExtensionsFilter extensions: aCollectionOfExtensions)
+	self filter: (StCustomExtensionsFilter extensions: aCollectionOfExtensions)
 ]
 
 { #category : 'accessing' }
