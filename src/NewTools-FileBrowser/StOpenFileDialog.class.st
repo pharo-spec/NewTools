@@ -9,7 +9,7 @@ examples see class side method example
 Class {
 	#name : 'StOpenFileDialog',
 	#superclass : 'StOpenFileOrDirectoryDialog',
-	#classTraits : '{} + TraitedClass',
+	#classTraits : '',
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'UI'
