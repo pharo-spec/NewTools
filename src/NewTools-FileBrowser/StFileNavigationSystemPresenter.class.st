@@ -54,9 +54,6 @@ Class {
 		'configButton',
 		'pathBreadcrumbPresenter'
 	],
-	#classVars : [
-		'Previewer'
-	],
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'UI'
@@ -86,11 +83,6 @@ StFileNavigationSystemPresenter class >> buildCommandsGroupWith: presenter forRo
 				yourself)
 ]
 
-{ #category : 'defaults' }
-StFileNavigationSystemPresenter class >> defaultPreviewer [
-	^ StFileBrowserContentPreviewer new
-]
-
 { #category : 'examples' }
 StFileNavigationSystemPresenter class >> example [
 	<example>
@@ -101,12 +93,6 @@ StFileNavigationSystemPresenter class >> example [
 	presenter open.
 	presenter inspect.
 	^ presenter
-]
-
-{ #category : 'class initialization' }
-StFileNavigationSystemPresenter class >> initialize [
-
-	Previewer := self defaultPreviewer
 ]
 
 { #category : 'api - customization' }
@@ -172,6 +158,12 @@ StFileNavigationSystemPresenter >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'defaults' }
+StFileNavigationSystemPresenter >> defaultPreviewer [
+
+	^ StFileBrowserAdaptiveContentPreviewer new
+]
+
 { #category : 'accessing' }
 StFileNavigationSystemPresenter >> fileReferenceTable [
 	^ fileReferenceTable
@@ -195,13 +187,11 @@ StFileNavigationSystemPresenter >> filesListAction [
 			ifFalse: [ self owner confirm ] ].
 
 	fileReferenceTable whenSelectedDo: [ :aFileReference | 
-		previewProcess ifNotNil: [ 
-			previewProcess isTerminated ifFalse: [ previewProcess terminate ] ].
-		previewProcess := [ 
-		                  notebookPreviewer pageContent:
-			                  (previewer previewOn: aFileReference) ]
-			                  forkAt: Processor userBackgroundPriority
-			                  named: 'File Browser preview loader' ]
+		previewProcess ifNotNil: [ previewProcess isTerminated ifFalse: [ previewProcess terminate ] ].
+		previewProcess := [ notebookPreviewer pageContent: (self previewer previewOn: aFileReference) ]
+				forkAt: Processor userBackgroundPriority
+				named: 'File Browser preview loader' ]
+
 ]
 
 { #category : 'accessing' }
@@ -242,7 +232,6 @@ StFileNavigationSystemPresenter >> filtersDropListAction [
 StFileNavigationSystemPresenter >> initialize [
 
 	filter := StVisibleFilter new.
-	previewer := Previewer.
 	super initialize
 ]
 
@@ -347,7 +336,7 @@ StFileNavigationSystemPresenter >> notebookPreviewer [
 ]
 
 { #category : 'utilities' }
-StFileNavigationSystemPresenter >> openFolder: aFileReference [ 
+StFileNavigationSystemPresenter >> openFolder: aFileReference [
 
 	self updateWidgetWithFileReference: aFileReference.
 	model openFolder: aFileReference.
@@ -362,7 +351,10 @@ StFileNavigationSystemPresenter >> pathBreadcrumbPresenter [
 
 { #category : 'accessing' }
 StFileNavigationSystemPresenter >> previewer [
+	"Answer the receiver's previewer, a subclass instance of <StFileBrowserAbstractPreviewer>"
+
 	^ previewer
+		ifNil: [ previewer := self defaultPreviewer ]
 ]
 
 { #category : 'api - customization' }

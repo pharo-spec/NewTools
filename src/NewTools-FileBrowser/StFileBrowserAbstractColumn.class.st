@@ -18,10 +18,10 @@ Class {
 }
 
 { #category : 'adding' }
-StFileBrowserAbstractColumn class >> addContraintTo: aTableColumn [
+StFileBrowserAbstractColumn class >> addConstraintTo: aTableColumn [
 	"I'm use to add option to column like width ... 
-	look at class 
-		SpTableColumn"
+	look at class <SpTableColumn>"
+
 	self subclassResponsibility
 ]
 
@@ -31,7 +31,7 @@ StFileBrowserAbstractColumn class >> column [
 
 	| column |
 	column := self tableColumnClass title: self title evaluated: self contentValuable.
-	self addContraintTo: column.
+	self addConstraintTo: column.
 	^ column
 ]
 
@@ -51,7 +51,8 @@ StFileBrowserAbstractColumn class >> evaluateOn: aFileReference [
 ]
 
 { #category : 'testing' }
-StFileBrowserAbstractColumn class >> isAbstract [ 
+StFileBrowserAbstractColumn class >> isAbstract [
+
 	^ self = StFileBrowserAbstractColumn
 ]
 

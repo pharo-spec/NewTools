@@ -47,6 +47,7 @@ StFileBrowserAbstractPresenter >> bookmarks: aCollectionOfFDGroupBookMark [
 
 { #category : 'accessing - bookmarks' }
 StFileBrowserAbstractPresenter >> bookmarksTreeTable [
+	"Answer a <SpTreeTablePresenter> used to display the receiver's bookmarks"
 
 	^ self owner bookmarksTreeTable
 ]
@@ -155,4 +156,10 @@ StFileBrowserAbstractPresenter >> setModelBeforeInitialization: aStFileSystemMod
 StFileBrowserAbstractPresenter >> updateFileSystemPresenters [
 
 	self owner updateFileSystemPresenters
+]
+
+{ #category : 'accessing - history' }
+StFileBrowserAbstractPresenter >> updateWidgetWithFileReference: aFileReference [
+
+	self subclassResponsibility
 ]

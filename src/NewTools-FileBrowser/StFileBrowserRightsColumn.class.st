@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'adding' }
-StFileBrowserRightsColumn class >> addContraintTo: aTableColumn [
+StFileBrowserRightsColumn class >> addConstraintTo: aTableColumn [
 	aTableColumn width: 110
 ]
 

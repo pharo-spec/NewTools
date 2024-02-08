@@ -134,8 +134,9 @@ StFileSystemItemWrapper >> isRoot [
 ]
 
 { #category : 'accessing' }
-StFileSystemItemWrapper >> label [ 
-	^self fileReference basename
+StFileSystemItemWrapper >> label [
+
+	^ self fileReference basename
 ]
 
 { #category : 'accessing' }

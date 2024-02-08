@@ -46,7 +46,9 @@ StFileSystemPresenter class >> navigationSystemClass [
 StFileSystemPresenter class >> open [ 
 	<script>
 
-	^ self new open
+	^ self new 
+		open;
+		centered
 ]
 
 { #category : 'accessing - bookmarks' }
@@ -68,9 +70,9 @@ StFileSystemPresenter >> bookmarks: aCollectionOfFDGroupBookMark [
 
 { #category : 'accessing - bookmarks' }
 StFileSystemPresenter >> bookmarksTreeTable [
-	"Answer a <SpTreeTablePresenter> used to display the receiver's bookmarks"
+	"See superimplementor's comment"
 
-	^ bookmarksTreeTable
+	^ bookmarksTreeTable.
 ]
 
 { #category : 'initialization' }
@@ -119,7 +121,7 @@ StFileSystemPresenter >> fileNavigationSystem [
 { #category : 'initialization' }
 StFileSystemPresenter >> initialExtentForWindow [
 
-	^ (900 @ 600) scaledByDisplayScaleFactor
+	^ (1100 @ 700) scaledByDisplayScaleFactor
 ]
 
 { #category : 'initialization' }
@@ -199,6 +201,12 @@ StFileSystemPresenter >> setWindowIconTo: aSpWindowPresenter [
 	
 	aSpWindowPresenter	windowIcon: (self iconNamed: #open).
 
+]
+
+{ #category : 'accessing' }
+StFileSystemPresenter >> title: aString [ 
+
+	self withWindowDo: [ : w | w title: aString ]
 ]
 
 { #category : 'accessing' }

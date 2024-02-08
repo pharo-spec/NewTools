@@ -1,3 +1,7 @@
+"
+Abstract Commander class to group File Browser commands behavior.
+
+"
 Class {
 	#name : 'StFileBrowserCommand',
 	#superclass : 'CmCommand',
