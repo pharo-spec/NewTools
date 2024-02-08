@@ -2,7 +2,7 @@
 I'm a previewer use to display the text content of a file 
 "
 Class {
-	#name : 'StFileBrowserTextBasedContentPreviewer',
+	#name : 'StFileBrowserTextBasedPreviewer',
 	#superclass : 'StFileBrowserAbstractPreviewer',
 	#category : 'NewTools-FileBrowser-Previewers',
 	#package : 'NewTools-FileBrowser',
@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'testing' }
-StFileBrowserTextBasedContentPreviewer >> canBeUsedOn: aFileReferenceOrString [
+StFileBrowserTextBasedPreviewer >> canBeUsedOn: aFileReferenceOrString [
 	"Answer <true> if aFileReferenceOrString is a non-empty text file"
 	| fileRef |
 	
@@ -19,7 +19,7 @@ StFileBrowserTextBasedContentPreviewer >> canBeUsedOn: aFileReferenceOrString [
 ]
 
 { #category : 'testing' }
-StFileBrowserTextBasedContentPreviewer >> isTextStream: aZnCharacterReadStream [ 
+StFileBrowserTextBasedPreviewer >> isTextStream: aZnCharacterReadStream [ 
 	"Answer <true> if parameter represents a text stream"
 	
 	aZnCharacterReadStream readStreamDo: [ :s | 
@@ -30,25 +30,25 @@ StFileBrowserTextBasedContentPreviewer >> isTextStream: aZnCharacterReadStream [
 ]
 
 { #category : 'testing' }
-StFileBrowserTextBasedContentPreviewer >> matchingMimeType: aZnMimeType [
+StFileBrowserTextBasedPreviewer >> matchingMimeType: aZnMimeType [
 	"return a Boolean to indicate if element matches"
 	^ true
 ]
 
 { #category : 'private' }
-StFileBrowserTextBasedContentPreviewer >> numberOfBytesToCheckForBinaryOrText [
+StFileBrowserTextBasedPreviewer >> numberOfBytesToCheckForBinaryOrText [
 	
 	^ 100
 ]
 
 { #category : 'private' }
-StFileBrowserTextBasedContentPreviewer >> numberOfBytesToDisplayInTextFile [
+StFileBrowserTextBasedPreviewer >> numberOfBytesToDisplayInTextFile [
 
 	^ 1000
 ]
 
 { #category : 'templateMethod' }
-StFileBrowserTextBasedContentPreviewer >> previewActionOn: aFileReference [
+StFileBrowserTextBasedPreviewer >> previewActionOn: aFileReference [
 
 	^ SpTextPresenter new text: ([ 
 		   aFileReference readStreamDo: [ :s | 

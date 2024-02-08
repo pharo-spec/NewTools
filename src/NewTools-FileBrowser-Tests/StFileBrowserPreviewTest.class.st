@@ -98,7 +98,7 @@ StFileBrowserPreviewTest >> testPNGPreviewerCanBeUsedOnParameterString [
 { #category : 'tests' }
 StFileBrowserPreviewTest >> testTextPreviewerCanBeUsedOnParameterString [
 
-	previewer := StFileBrowserTextBasedContentPreviewer new.
+	previewer := StFileBrowserTextBasedPreviewer new.
 	self 
 		deny: (previewer canBeUsedOn: '.txt')
 		description: 'It test that the provided parameter should be an existing file'.

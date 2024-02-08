@@ -47,6 +47,7 @@ StFileBrowserAbstractPresenter >> bookmarks: aCollectionOfFDGroupBookMark [
 
 { #category : 'accessing - bookmarks' }
 StFileBrowserAbstractPresenter >> bookmarksTreeTable [
+	"Answer a <SpTreeTablePresenter> used to display the receiver's bookmarks"
 
 	^ self owner bookmarksTreeTable
 ]

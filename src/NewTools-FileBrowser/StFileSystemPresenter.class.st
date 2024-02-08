@@ -70,9 +70,9 @@ StFileSystemPresenter >> bookmarks: aCollectionOfFDGroupBookMark [
 
 { #category : 'accessing - bookmarks' }
 StFileSystemPresenter >> bookmarksTreeTable [
-	"Answer a <SpTreeTablePresenter> used to display the receiver's bookmarks"
+	"See superimplementor's comment"
 
-	^ bookmarksTreeTable
+	^ bookmarksTreeTable.
 ]
 
 { #category : 'initialization' }

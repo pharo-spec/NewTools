@@ -9,6 +9,7 @@ examples see class side method example
 Class {
 	#name : 'StOpenFileDialog',
 	#superclass : 'StOpenFileOrDirectoryDialog',
+	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'UI'
@@ -52,7 +53,7 @@ StOpenFileDialog class >> complexExampleTextPreviewer [
 	| presenter |
 	presenter := self new.
 
-	presenter previewer: StFileBrowserTextBasedContentPreviewer new.
+	presenter previewer: StFileBrowserTextBasedPreviewer new.
 	"with this when you select a png file it will display it"
 
 	presenter filter: (StCustomExtensionsFilter extensions: #( '.image' )).

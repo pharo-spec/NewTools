@@ -30,6 +30,6 @@ StFileBrowserAdaptiveContentPreviewer >> previewActionOn: aFileReference [
 	^ self concreteViewerClasses
 		detect: [ : viewerClass | viewerClass new canBeUsedOn: aFileReference ]
 		ifFound: [ : foundPreviewerClass | foundPreviewerClass new previewActionOn: aFileReference ]
-		ifNone: [ StFileBrowserTextBasedContentPreviewer new previewActionOn: aFileReference ].
+		ifNone: [ StFileBrowserTextBasedPreviewer new previewActionOn: aFileReference ].
 
 ]
