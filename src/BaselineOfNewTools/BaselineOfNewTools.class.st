@@ -98,7 +98,9 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Finder-Tests' with: [ spec requires: #('NewTools-Finder') ];
 			
 			package: 'NewTools-SettingsBrowser' with: [ spec requires: #('ColorPicker') ];
-			package: 'NewTools-SettingsBrowser-Tests' with: [ spec requires: #('NewTools-SettingsBrowser') ].			
+			package: 'NewTools-SettingsBrowser-Tests' with: [ spec requires: #('NewTools-SettingsBrowser') ];
+			
+			package: 'NewTools-Compression-Utils' with: [ spec requires: #('NewTools-FileBrowser') ].			
 
 		spec
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Morphic' );
@@ -164,6 +166,9 @@ BaselineOfNewTools >> baseline: spec [
 			group: #SettingsBrowser with: #(
 						'NewTools-SettingsBrowser'
 						'NewTools-SettingsBrowser-Tests');
+			"Compression Utilities"
+			group: #CompressionUtilities with: #(
+						'NewTools-Compression-Utils');
 
 			group: 'default' with: #( 
 						'Playground' 
@@ -179,7 +184,8 @@ BaselineOfNewTools >> baseline: spec [
 						'FileBrowser'
 						'Finder'
 						'Profiler'
-						'SettingsBrowser') ]
+						'SettingsBrowser'
+						'CompressionUtilities') ]
 ]
 
 { #category : 'external projects' }
