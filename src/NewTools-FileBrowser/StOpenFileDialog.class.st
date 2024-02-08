@@ -9,7 +9,6 @@ examples see class side method example
 Class {
 	#name : 'StOpenFileDialog',
 	#superclass : 'StOpenFileOrDirectoryDialog',
-	#classTraits : '',
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'UI'
