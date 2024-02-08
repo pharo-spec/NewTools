@@ -204,7 +204,6 @@ BaselineOfNewTools >> colorPicker: spec [
 BaselineOfNewTools >> packageRepositoryURLForSpec: spec [
 	| url |
 	
-	self halt.
 	url := super packageRepositoryURLForSpec: spec.
 	url ifEmpty: [ ^ url ].
 	"Verify if I am running in CI"
@@ -233,7 +232,6 @@ BaselineOfNewTools >> sindarin: spec [
 
 	spec baseline: 'Sindarin' with: [
 		spec
-			repository: ((self packageRepositoryURLForSpec: spec) ifEmpty: [
-						 'github://pharo-spec/ScriptableDebugger:Pharo12/src' ]);
+			repository: 'github://pharo-spec/ScriptableDebugger:Pharo12/src';
 			loads: 'default' ]
 ]
