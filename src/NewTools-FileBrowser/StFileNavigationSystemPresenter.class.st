@@ -42,6 +42,7 @@ You can customize how this presenter is displayed, with methods listed at the pr
 Class {
 	#name : 'StFileNavigationSystemPresenter',
 	#superclass : 'StFileBrowserAbstractPresenter',
+	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'nameText',
 		'filtersDropList',
@@ -53,9 +54,6 @@ Class {
 		'fileReferenceTable',
 		'configButton',
 		'pathBreadcrumbPresenter'
-	],
-	#classVars : [
-		'Previewer'
 	],
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
@@ -86,12 +84,6 @@ StFileNavigationSystemPresenter class >> buildCommandsGroupWith: presenter forRo
 				yourself)
 ]
 
-{ #category : 'defaults' }
-StFileNavigationSystemPresenter class >> defaultPreviewer [
-
-	^ StFileBrowserAdaptiveContentPreviewer new
-]
-
 { #category : 'examples' }
 StFileNavigationSystemPresenter class >> example [
 	<example>
@@ -102,12 +94,6 @@ StFileNavigationSystemPresenter class >> example [
 	presenter open.
 	presenter inspect.
 	^ presenter
-]
-
-{ #category : 'class initialization' }
-StFileNavigationSystemPresenter class >> initialize [
-
-	Previewer := self defaultPreviewer
 ]
 
 { #category : 'api - customization' }
@@ -171,6 +157,12 @@ StFileNavigationSystemPresenter >> defaultLayout [
 				yourself)
 			 expand: false;
 		yourself
+]
+
+{ #category : 'defaults' }
+StFileNavigationSystemPresenter >> defaultPreviewer [
+
+	^ StFileBrowserAdaptiveContentPreviewer new
 ]
 
 { #category : 'accessing' }
@@ -241,8 +233,6 @@ StFileNavigationSystemPresenter >> filtersDropListAction [
 StFileNavigationSystemPresenter >> initialize [
 
 	filter := StVisibleFilter new.
-	Previewer ifNil: [ self class initialize ].
-	previewer := Previewer.
 	super initialize
 ]
 
@@ -365,9 +355,7 @@ StFileNavigationSystemPresenter >> previewer [
 	"Answer the receiver's previewer, a subclass instance of <StFileBrowserAbstractPreviewer>"
 
 	^ previewer
-		ifNil: [ 
-			self initialize.
-			previewer ]
+		ifNil: [ previewer := self defaultPreviewer ]
 ]
 
 { #category : 'api - customization' }

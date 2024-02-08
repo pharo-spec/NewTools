@@ -230,9 +230,9 @@ BaselineOfNewTools >> preload: loader package: packageSpec [
 { #category : 'external projects' }
 BaselineOfNewTools >> sindarin: spec [
 
-	self halt.
 	spec baseline: 'Sindarin' with: [
 		spec
-			repository: 'github://pharo-spec/ScriptableDebugger:Pharo12/src';
+			repository: ((self packageRepositoryURLForSpec: spec) ifEmpty: [
+						 'github://pharo-spec/ScriptableDebugger:Pharo12/src' ]);
 			loads: 'default' ]
 ]
