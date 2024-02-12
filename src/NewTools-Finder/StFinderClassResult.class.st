@@ -93,6 +93,12 @@ StFinderClassResult >> hasSelectorParent [
 	^ self parent isNotNil and: [ self parent isSelectorResult ]
 ]
 
+{ #category : 'testing' }
+StFinderClassResult >> isClassResult [
+
+	^ true
+]
+
 { #category : 'action' }
 StFinderClassResult >> referencesAction [
 
