@@ -94,20 +94,22 @@ StPathBreadcrumbPresenter >> initializePresenters [
 
 	path action: [ :fileReference | self owner openFolder: fileReference ].
 
-	self entityText whenSubmitDo: [ :newText | 
-		self pathTextChangedTo: newText ].
+	self entityText whenSubmitDo: [ :newText | self pathTextChangedTo: newText ].
 
 	textInput placeholder: 'path/to/file'.
 
 	editButton
 		addStyle: 'small';
 		icon: (self application iconNamed: #edit);
-		action: [ 
+		help: 'Edit the path to the current folder';
+		action: [
 			self needRebuild: false.
+
 			isInEditMode
 				ifTrue: [ self pathTextChangedTo: self entityText text ]
-				ifFalse: [ self layout: self class editablelayout ].
-			isInEditMode := isInEditMode not ]
+				ifFalse: [
+					self layout: self class editablelayout.
+					isInEditMode := isInEditMode not ] ]
 ]
 
 { #category : 'accessing' }
@@ -119,7 +121,6 @@ StPathBreadcrumbPresenter >> path [
 StPathBreadcrumbPresenter >> pathTextChangedTo: aStringOrText [
 
 	| fileReference |
-	
 	fileReference := aStringOrText asString asFileReference.
 	(fileReference exists and: [ fileReference isDirectory ])
 		ifTrue: [ self owner openFolder: fileReference ]
