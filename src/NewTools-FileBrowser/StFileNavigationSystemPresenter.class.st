@@ -266,9 +266,11 @@ StFileNavigationSystemPresenter >> initializeNavigationPresenters [
 
 	nextButton
 		icon: (self application iconNamed: #forward);
+		help: 'See folder you viewed previously.';
 		addStyle: 'small'.
 	previousButton
 		icon: (self application iconNamed: #back);
+		help: 'See folder you viewed previously';
 		addStyle: 'small'.
 
 ]
@@ -283,7 +285,8 @@ StFileNavigationSystemPresenter >> initializePresenters [
 	filtersDropList := self newDropList.
 	configButton := self newButton
 			addStyle: 'small';
-			icon: (self iconNamed: #config);
+			help: 'Settings';
+			icon: (self iconNamed: #configuration);
 			yourself.
 	
 	self initializeNavigationPresenters.
