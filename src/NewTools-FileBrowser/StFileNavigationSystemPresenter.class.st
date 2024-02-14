@@ -138,24 +138,11 @@ StFileNavigationSystemPresenter >> defaultFolder: aFileReference [
 StFileNavigationSystemPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
-		add: (SpBoxLayout newLeftToRight
-				vAlignCenter;
-				add: previousButton expand: false;
-				add: nextButton expand: false;
-				add: pathBreadcrumbPresenter;
-			   addLast: configButton;				
-				yourself)
-			 expand: false;
+		add: self navigationLayout expand: false;
 		add: (SpPanedLayout newTopToBottom
-				add: fileReferenceTable;
+				add: self topPaneLayout;
 				add: notebookPreviewer;
 				yourself);
-		add: (SpBoxLayout newLeftToRight
-				vAlignCenter;
-				add: nameText;
-				add: filtersDropList expand: false;
-				yourself)
-			 expand: false;
 		yourself
 ]
 
@@ -163,6 +150,16 @@ StFileNavigationSystemPresenter >> defaultLayout [
 StFileNavigationSystemPresenter >> defaultPreviewer [
 
 	^ StFileBrowserAdaptiveContentPreviewer new
+]
+
+{ #category : 'layout' }
+StFileNavigationSystemPresenter >> fileNameLayout [
+
+	^ SpBoxLayout newLeftToRight
+				vAlignCenter;
+				add: nameText;
+				add: filtersDropList expand: false;
+				yourself
 ]
 
 { #category : 'accessing' }
@@ -324,6 +321,18 @@ StFileNavigationSystemPresenter >> nameTextChanged: aText [
 		ifNone: [ fileReferenceTable unselectAll ]
 ]
 
+{ #category : 'layout' }
+StFileNavigationSystemPresenter >> navigationLayout [
+
+	^ SpBoxLayout newLeftToRight
+				vAlignCenter;
+				add: previousButton expand: false;
+				add: nextButton expand: false;
+				add: pathBreadcrumbPresenter;
+			   addLast: configButton;				
+				yourself
+]
+
 { #category : 'accessing' }
 StFileNavigationSystemPresenter >> nextButton [
 	^ nextButton
@@ -390,6 +399,15 @@ StFileNavigationSystemPresenter >> shouldReparent [
 	"Since a removal was requested from the navigation table, is not necessary to move to the parent directory"
 
 	^ false
+]
+
+{ #category : 'layout' }
+StFileNavigationSystemPresenter >> topPaneLayout [
+
+	^ SpBoxLayout newTopToBottom
+		add: fileReferenceTable;
+		add: self fileNameLayout expand: false fill: false padding: 1;
+		yourself
 ]
 
 { #category : 'utilities' }
