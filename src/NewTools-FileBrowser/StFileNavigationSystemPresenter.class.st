@@ -127,6 +127,19 @@ StFileNavigationSystemPresenter >> connectPresenters [
 	self configButtonAction.
 ]
 
+{ #category : 'initialization' }
+StFileNavigationSystemPresenter >> defaultFileSortBlock [
+
+	^ [:entry1 :entry2 |
+		entry1 isDirectory = entry2 isDirectory
+			ifTrue: [entry1 basename caseInsensitiveLessOrEqual: entry2 basename]
+			ifFalse: [entry1 isDirectory
+						ifTrue: [true]
+						ifFalse: [entry2 isDirectory
+									ifTrue: [false]
+									ifFalse: [entry1 basename caseInsensitiveLessOrEqual: entry2 basename]]]]
+]
+
 { #category : 'api - customization' }
 StFileNavigationSystemPresenter >> defaultFolder: aFileReference [
 	self updateWidgetWithFileReference: aFileReference.
@@ -239,10 +252,7 @@ StFileNavigationSystemPresenter >> initializeFilesTable [
 	fileReferenceTable
 		beResizable;
 		columns: StFileBrowserAbstractColumn columns;
-		sortingBlock: [ :a :b | 
-			a isDirectory & b isDirectory not or: [ 
-					a isDirectory = b isDirectory and: [ 
-							a basename asLowercase < b basename asLowercase ] ] ];
+		sortingBlock: self defaultFileSortBlock;
 		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'StFileBrowserNavigationMenu' ]
 ]
 

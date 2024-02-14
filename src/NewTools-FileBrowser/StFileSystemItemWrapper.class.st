@@ -82,8 +82,9 @@ StFileSystemItemWrapper >> browseFolder [
 
 { #category : 'private - accessing' }
 StFileSystemItemWrapper >> directories [ 
-	[ self fileReference directories ] on: Exception do: [ ^#()].
-	^self fileReference directories
+
+	^ [ self fileReference directories sorted: [ :a :b | a basename caseInsensitiveLessOrEqual: b basename ] ]
+		on: Exception do: [ #() ]
 ]
 
 { #category : 'private - accessing' }
@@ -99,7 +100,8 @@ StFileSystemItemWrapper >> fileReference: anObject [
 { #category : 'accessing' }
 StFileSystemItemWrapper >> files [ 
 	
-	^ [ fileReference files collect: [:each | StFileWrapper on: each ] ]
+	^ [ fileReference files
+			collect: [:each | StFileWrapper on: each ] ]
 		on: FileException 
 		do: [ #() ]
 ]
