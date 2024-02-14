@@ -167,7 +167,7 @@ BaselineOfNewTools >> baseline: spec [
 						'NewTools-SettingsBrowser'
 						'NewTools-SettingsBrowser-Tests');
 			"Compression Utilities"
-			group: #CompressionUtilities with: #(
+			group: 'CompressionUtilities' with: #(
 						'NewTools-Compression-Utils');
 
 			group: 'default' with: #( 
