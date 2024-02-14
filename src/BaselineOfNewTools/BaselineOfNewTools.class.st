@@ -138,20 +138,20 @@ BaselineOfNewTools >> baseline: spec [
 						'Core' 
 						'NewTools-FlagBrowser' 
 						'NewTools-FlagBrowser-Tests' );
-			group: #development with: #( 'default' 
+			group: 'development' with: #( 'default' 
 						'NewTools-DebuggerSelector'
 				   		'NewTools-DebuggerSelector-Tests' );
-			group: #FileBrowser with: #( 
+			group: 'FileBrowser' with: #( 
 						'NewTools-FileBrowser' 
 						'NewTools-FileBrowser-Tests' );
-      			group: #RewriterTools with: #(
+      			group: 'RewriterTools' with: #(
 				    		'NewTools-RewriterTools-Backend'
 				    		'NewTools-RewriterTools'
 				    		'NewTools-RewriterTools-Backend-Tests'
 				    		'NewTools-RewriterTools-Tests' );
 			group: 'Profiler' with: #( 'NewTools-ProfilerUI' );
 			"ScopesEditor"
-			group: #ScopesEditor with: #(
+			group: 'ScopesEditor' with: #(
 						'NewTools-Scopes' 
 						'NewTools-Scopes-Editor' 
 						'NewTools-Scopes-Resources-A-Tests' 
@@ -159,11 +159,11 @@ BaselineOfNewTools >> baseline: spec [
 						'NewTools-Scopes-Resources-C-Tests' 
 						'NewTools-Scopes-Tests');
 			"Finder"
-			group: #Finder with: #(
+			group: 'Finder' with: #(
 						'NewTools-Finder'
 						'NewTools-Finder-Tests');
 			"Settings Browser"
-			group: #SettingsBrowser with: #(
+			group: 'SettingsBrowser' with: #(
 						'NewTools-SettingsBrowser'
 						'NewTools-SettingsBrowser-Tests');
 			"Compression Utilities"
