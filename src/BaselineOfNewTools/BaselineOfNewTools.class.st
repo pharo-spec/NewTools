@@ -62,7 +62,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Debugger-Breakpoints-Tools' with: [ spec requires: #( 'NewTools-Inspector' ) ];
 			"Debug points"
 			package: 'NewTools-DebugPointsBrowser' with: [spec requires: #( 'NewTools-SpTextPresenterDecorators' )];
-			package: 'NewTools-ObjectCentricDebugPoints' with: [spec requires: #( 'NewTools-DebugPointsBrowser' 'NewTools-Inspector' )];
+			package: 'NewTools-ObjectCentricDebugPoints' with: [spec requires: #( 'NewTools-DebugPointsBrowser' 'NewTools-Inspector' 'NewTools-Debugger' )];
 			package: 'NewTools-ProjectLoader';
 			package: 'NewTools-ProjectLoader-Microdown';
 			"Object-centric breakpoints"
