@@ -80,6 +80,7 @@ StFileNavigationSystemPresenter class >> buildCommandsGroupWith: presenter forRo
 					((CmCommandGroup named: 'Bookmarks') asSpecGroup
 						register: StFileBrowserAddBookmarkCommand forSpec;
 						yourself);
+				register: StFileBrowserToggleHiddenFilesCommand forSpec;
 				yourself)
 ]
 
@@ -241,7 +242,7 @@ StFileNavigationSystemPresenter >> filtersDropListAction [
 { #category : 'initialization' }
 StFileNavigationSystemPresenter >> initialize [
 
-	filter := StVisibleFilter new.
+	filter := StAllFilter new.
 	super initialize
 ]
 
@@ -273,9 +274,11 @@ StFileNavigationSystemPresenter >> initializeNavigationPresenters [
 
 	nextButton
 		icon: (self application iconNamed: #forward);
+		help: 'See folder you viewed previously.';
 		addStyle: 'small'.
 	previousButton
 		icon: (self application iconNamed: #back);
+		help: 'See folder you viewed previously';
 		addStyle: 'small'.
 
 ]
@@ -290,7 +293,8 @@ StFileNavigationSystemPresenter >> initializePresenters [
 	filtersDropList := self newDropList.
 	configButton := self newButton
 			addStyle: 'small';
-			icon: (self iconNamed: #config);
+			help: 'Settings';
+			icon: (self iconNamed: #configuration);
 			yourself.
 	
 	self initializeNavigationPresenters.
@@ -419,10 +423,11 @@ StFileNavigationSystemPresenter >> topPaneLayout [
 { #category : 'utilities' }
 StFileNavigationSystemPresenter >> updateFileReferenceTable [
 	"Update the receiver's contents according to the current directory and apply configured filters"
-	
-	fileReferenceTable items:
-		((filtersDropList selectedItem ifNil: [ filter ]) applyOn:
-			 (self currentDirectory children select: #exists)).
+
+	| items |
+	items := (filtersDropList selectedItem ifNil: [ filter ]) applyOn: (self currentDirectory children select: #exists).
+	StFileBrowserSettings showHiddenFiles ifFalse: [ items := items reject: [ :file | file isHidden ] ].
+	fileReferenceTable items: items
 ]
 
 { #category : 'utilities' }

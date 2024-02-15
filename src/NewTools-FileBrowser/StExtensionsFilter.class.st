@@ -105,5 +105,5 @@ StExtensionsFilter >> predicate: aFileReference [
 
 	^ (self extensionsWithDots anySatisfy: [ :extension | 
 		   aFileReference basename asLowercase endsWith: extension ]) and: [ 
-		  StVisibleFilter new predicate: aFileReference ]
+		  StAllFilter new predicate: aFileReference ]
 ]
