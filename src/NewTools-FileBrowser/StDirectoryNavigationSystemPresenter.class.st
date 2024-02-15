@@ -6,6 +6,15 @@ Class {
 	#tag : 'UI'
 }
 
+{ #category : 'layout' }
+StDirectoryNavigationSystemPresenter >> defaultLayout [
+
+	^ SpBoxLayout newTopToBottom
+		add: self navigationLayout expand: false;
+		add: self topPaneLayout;
+		yourself
+]
+
 { #category : 'utilities' }
 StDirectoryNavigationSystemPresenter >> updateFileReferenceTable [
 	"Update the receiver's contents according to the current directory and apply configured filters"
