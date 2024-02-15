@@ -2,12 +2,8 @@ Extension { #name : 'Object' }
 
 { #category : '*NewTools-Fuel' }
 Object >> fuelOut [
-	| target validFilename fuelFilename |
+	| target |
 	
-	validFilename := FilePathEncoder encode: (FileSystem disk 
-		checkName: self printString 
-		fixErrors: true).
-	fuelFilename := (FilePathEncoder decode: validFilename) , '.fuel'.
-	target := FileLocator imageDirectory / fuelFilename.
+	target := FileLocator imageDirectory / (self printString , '.fuel').
 	self serializeToFileNamed: target nextVersion fullName
 ]
