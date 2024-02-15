@@ -11,6 +11,7 @@ Class {
 		'MacTerminalProgram',
 		'OpenOnLastDirectory',
 		'ShowAlwaysDefaultBookmarks',
+		'ShowHiddenFiles',
 		'WindowsTerminalProgram'
 	],
 	#category : 'NewTools-FileBrowser-UI',
@@ -150,6 +151,30 @@ StFileBrowserSettings class >> showAlwaysDefaultBookmarksOn: aBuilder [
 		description: 'If the global bookmarks are deleted, this setting ensures that dialogs will always preserve default bookmarks';
 		target: self
 
+]
+
+{ #category : 'accessing' }
+StFileBrowserSettings class >> showHiddenFiles [
+
+	^ ShowHiddenFiles ifNil: [ ShowHiddenFiles := false ]
+]
+
+{ #category : 'accessing' }
+StFileBrowserSettings class >> showHiddenFiles: anObject [
+
+	ShowHiddenFiles := anObject
+]
+
+{ #category : 'settings' }
+StFileBrowserSettings class >> showHiddenFilesOn: aBuilder [
+
+	<systemsettings>
+	(aBuilder setting: #showHiddenFiles)
+		parent: #fileBrowser;
+		default: false;
+		label: 'Show hidden files and folders';
+		description: 'If enabled, shows the hidden files and folders in the file browser.';
+		target: self
 ]
 
 { #category : 'settings' }

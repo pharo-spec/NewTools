@@ -45,9 +45,8 @@ StNavigationSystemTest >> testInitializeCurrentPathTextInputShouldSet [
 
 { #category : 'tests' }
 StNavigationSystemTest >> testInitializeFilterDropListSelectedItemShouldBeDefaultFilter [
-	self 
-		assert: dialog filtersDropList selectedItem name 
-		equals: StVisibleFilter new name
+
+	self assert: dialog filtersDropList selectedItem name equals: StAllFilter new name
 ]
 
 { #category : 'tests' }

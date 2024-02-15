@@ -210,8 +210,8 @@ StFileDialogPresenter >> fileReferenceTable [
 
 { #category : 'accessing' }
 StFileDialogPresenter >> filter [
-	^ filter
-		ifNil: [ filter := StVisibleFilter new ]
+
+	^ filter ifNil: [ filter := StAllFilter new ]
 ]
 
 { #category : 'accessing' }
