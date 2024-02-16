@@ -39,6 +39,12 @@ StOpenDirectoryDialog >> allowsChooseDirectoryIfNoFilename [
 	^ true
 ]
 
+{ #category : 'initialization' }
+StOpenDirectoryDialog >> initialExtentForWindow [
+
+	^ (1050 @ 550) scaledByDisplayScaleFactor
+]
+
 { #category : 'hooks' }
 StOpenDirectoryDialog >> initialTitle [
 	^ 'Select Directory To Open'

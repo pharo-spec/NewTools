@@ -56,9 +56,31 @@ StSaveFileDialog >> existingFileMessage: entry [
 	^ 'File named "{1}" already exists. Do you want to overwrite it?' format: { entry basename }
 ]
 
+{ #category : 'initialization' }
+StSaveFileDialog >> initialExtentForWindow [ 
+
+	^ (1050 @ 550) scaledByDisplayScaleFactor
+]
+
 { #category : 'hooks' }
 StSaveFileDialog >> initialTitle [
 	^ 'Save As'
+]
+
+{ #category : 'initialization' }
+StSaveFileDialog >> initializePresenters [ 
+
+	super initializePresenters.
+	fileNavigationSystem layout: self rightPaneLayout
+]
+
+{ #category : 'layout' }
+StSaveFileDialog >> rightPaneLayout [
+
+	^ SpBoxLayout newTopToBottom
+		add: fileNavigationSystem navigationLayout expand: false;
+		add: fileNavigationSystem topPaneLayout;
+		yourself
 ]
 
 { #category : 'accessing' }
