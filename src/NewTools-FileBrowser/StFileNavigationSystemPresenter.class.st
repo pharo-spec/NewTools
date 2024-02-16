@@ -2,8 +2,8 @@
 This Spec presenter provides:
 
 * An history of visited folder.
-* A text input use to jump to the write path.
-* A drop list use to filter the content of the fileReferenceTable
+* A text input used to jump to the write path.
+* A drop list used to filter the content of the fileReferenceTable
 * A text presenter to show a preview of the currently selected file.
 
 ## Example
