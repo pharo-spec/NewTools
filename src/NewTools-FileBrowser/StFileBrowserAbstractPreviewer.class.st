@@ -41,6 +41,15 @@ StFileBrowserAbstractPreviewer class >> previewerFor: anExtensionString [
 			ifNone: [ StFileBrowserNullPreviewer new ]
 ]
 
+{ #category : 'private' }
+StFileBrowserAbstractPreviewer >> basicPreviewOn: aFileReference [
+	"Answer a <SpPresenter> suitable to preview the contents of aFileReference"
+	
+	^ (self canBeUsedOn: aFileReference)
+		ifTrue: [ self previewActionOn: aFileReference ]
+		ifFalse: [ SpNullPresenter new ]
+]
+
 { #category : 'testing' }
 StFileBrowserAbstractPreviewer >> canBeUsedOn: aFileReferenceOrString [
 
@@ -70,9 +79,8 @@ StFileBrowserAbstractPreviewer >> previewActionOn: aFileReference [
 
 { #category : 'utilities' }
 StFileBrowserAbstractPreviewer >> previewOn: aFileReference [
-	"Answer a <SpPresenter> suitable to preview the contents of aFileReference"
-	
-	(self canBeUsedOn: aFileReference)
-		ifTrue: [ ^ self previewActionOn: aFileReference ].
-	^ SpNullPresenter new
+
+	^ [ self basicPreviewOn: aFileReference ]
+		  on: Exception
+		  do: [ SpNullPresenter new ]
 ]
