@@ -1,3 +1,6 @@
+"
+File Navigation Presenter that will only show directories
+"
 Class {
 	#name : 'StDirectoryNavigationSystemPresenter',
 	#superclass : 'StFileNavigationSystemPresenter',
