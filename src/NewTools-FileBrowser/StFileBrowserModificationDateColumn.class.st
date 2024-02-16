@@ -17,7 +17,9 @@ StFileBrowserModificationDateColumn class >> addConstraintTo: aTableColumn [
 { #category : 'templateMethod' }
 StFileBrowserModificationDateColumn class >> evaluateOn: aFileReference [
 
-	^ aFileReference modificationTime fileDialogFormat
+	^ [ aFileReference modificationTime fileDialogFormat ]
+		  on: Error
+		  do: [ 'N/A' ]
 ]
 
 { #category : 'sorting' }

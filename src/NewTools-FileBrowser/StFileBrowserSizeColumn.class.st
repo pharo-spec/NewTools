@@ -16,9 +16,13 @@ StFileBrowserSizeColumn class >> addConstraintTo: aTableColumn [
 
 { #category : 'templateMethod' }
 StFileBrowserSizeColumn class >> evaluateOn: aFileReference [
+
 	^ aFileReference isDirectory
-		ifTrue: [ '--' ]
-		ifFalse: [ aFileReference humanReadableSize ]
+		  ifTrue: [ '--' ]
+		  ifFalse: [
+			  [ aFileReference humanReadableSize ]
+				  on: Error
+				  do: [ 'N/A' ] ]
 ]
 
 { #category : 'sorting' }
