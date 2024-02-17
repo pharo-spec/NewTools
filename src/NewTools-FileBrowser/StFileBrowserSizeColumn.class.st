@@ -11,7 +11,10 @@ Class {
 
 { #category : 'adding' }
 StFileBrowserSizeColumn class >> addConstraintTo: aTableColumn [
-	aTableColumn width: 70
+
+	aTableColumn
+		width: 70;
+		beSortable
 ]
 
 { #category : 'templateMethod' }
