@@ -128,6 +128,14 @@ StFileNavigationSystemPresenter >> connectPresenters [
 	self configButtonAction.
 ]
 
+{ #category : 'utilities' }
+StFileNavigationSystemPresenter >> currentDirectoryChildren [
+
+	^ [ self currentDirectory children select: #exists ]
+		  on: Error
+		  do: [ #(  ) ]
+]
+
 { #category : 'initialization' }
 StFileNavigationSystemPresenter >> defaultFileSortBlock [
 
@@ -425,7 +433,7 @@ StFileNavigationSystemPresenter >> updateFileReferenceTable [
 	"Update the receiver's contents according to the current directory and apply configured filters"
 
 	| items |
-	items := (filtersDropList selectedItem ifNil: [ filter ]) applyOn: (self currentDirectory children select: #exists).
+	items := (filtersDropList selectedItem ifNil: [ filter ]) applyOn: self currentDirectoryChildren.
 	StFileBrowserSettings showHiddenFiles ifFalse: [ items := items reject: [ :file | file isHidden ] ].
 	fileReferenceTable items: items
 ]
