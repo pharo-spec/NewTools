@@ -346,7 +346,7 @@ StFileNavigationSystemPresenter >> navigationLayout [
 				vAlignCenter;
 				add: previousButton expand: false;
 				add: nextButton expand: false;
-				add: pathBreadcrumbPresenter;
+				add: pathBreadcrumbPresenter expand: false;
 			   addLast: configButton;				
 				yourself
 ]
