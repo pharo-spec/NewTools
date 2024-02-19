@@ -31,31 +31,6 @@ Class {
 	#tag : 'UI'
 }
 
-{ #category : 'specs' }
-StPathBreadcrumbPresenter class >> defaultLayout [
-
-	^ SpBoxLayout newLeftToRight
-		  vAlignCenter;
-		  add: #path;
-		  add: #editButton
-		  expand: false
-		  fill: false
-		  padding: 0;
-		  yourself
-]
-
-{ #category : 'specs' }
-StPathBreadcrumbPresenter class >> editablelayout [
-
-	^ SpBoxLayout newLeftToRight
-		  add: #textInput;
-		  add: #editButton
-		  expand: false
-		  fill: false
-		  padding: 0;
-		  yourself
-]
-
 { #category : 'examples' }
 StPathBreadcrumbPresenter class >> example [
 	<example>
@@ -76,6 +51,31 @@ StPathBreadcrumbPresenter >> currentDirectory: aFileReference [
 	path file: aFileReference.
 	self needRebuild: false.
 	self build
+]
+
+{ #category : 'layouts' }
+StPathBreadcrumbPresenter >> defaultLayout [
+
+	^ SpBoxLayout newLeftToRight
+		  vAlignCenter;
+		  add: path;
+		  add: editButton
+		  expand: false
+		  fill: false
+		  padding: 0;
+		  yourself
+]
+
+{ #category : 'layouts' }
+StPathBreadcrumbPresenter >> editablelayout [
+
+	^ SpBoxLayout newLeftToRight
+		  add: textInput;
+		  add: editButton
+		  expand: false
+		  fill: false
+		  padding: 0;
+		  yourself
 ]
 
 { #category : 'accessing' }
@@ -108,7 +108,7 @@ StPathBreadcrumbPresenter >> initializePresenters [
 			isInEditMode
 				ifTrue: [ self pathTextChangedTo: self entityText text ]
 				ifFalse: [
-					self layout: self class editablelayout.
+					self layout: self editablelayout.
 					isInEditMode := isInEditMode not ] ]
 ]
 
@@ -126,5 +126,5 @@ StPathBreadcrumbPresenter >> pathTextChangedTo: aStringOrText [
 		ifTrue: [ self owner openFolder: fileReference ]
 		ifFalse: [ self inform: 'You have to input an existing path to a directory' ].
 	isInEditMode := false.
-	self layout: self class defaultLayout
+	self layout: self defaultLayout
 ]
