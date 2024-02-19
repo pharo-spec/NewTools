@@ -2,7 +2,7 @@
 My responsibility is to provide dialog for SAVING files.
 "
 Class {
-	#name : 'StSaveFileDialog',
+	#name : 'StSaveFilePresenter',
 	#superclass : 'StFileDialogPresenter',
 	#instVars : [
 		'confirmedOverwrite'
@@ -13,34 +13,34 @@ Class {
 }
 
 { #category : 'examples' }
-StSaveFileDialog class >> example [
+StSaveFilePresenter class >> example [
 
 	<example>
 	^ self chooseThenInspect
 ]
 
 { #category : 'examples' }
-StSaveFileDialog class >> exampleExtensions [
+StSaveFilePresenter class >> exampleExtensions [
 
 	<example>
 	^ self extensions: #( 'image' )
 ]
 
 { #category : 'examples' }
-StSaveFileDialog class >> exampleModal [
+StSaveFilePresenter class >> exampleModal [
 
 	<example>
 	^ self chooseModalAndInspect
 ]
 
 { #category : 'accessing - ui' }
-StSaveFileDialog >> confirmLabel [
+StSaveFilePresenter >> confirmLabel [
 
 	^ 'Save'
 ]
 
 { #category : 'initialization' }
-StSaveFileDialog >> connectPresenters [
+StSaveFilePresenter >> connectPresenters [
 
 	| ec |
 	super connectPresenters.
@@ -51,31 +51,31 @@ StSaveFileDialog >> connectPresenters [
 ]
 
 { #category : 'accessing' }
-StSaveFileDialog >> existingFileMessage: entry [
+StSaveFilePresenter >> existingFileMessage: entry [
 
 	^ 'File named "{1}" already exists. Do you want to overwrite it?' format: { entry basename }
 ]
 
 { #category : 'initialization' }
-StSaveFileDialog >> initialExtentForWindow [ 
+StSaveFilePresenter >> initialExtentForWindow [ 
 
 	^ (1050 @ 550) scaledByDisplayScaleFactor
 ]
 
 { #category : 'hooks' }
-StSaveFileDialog >> initialTitle [
+StSaveFilePresenter >> initialTitle [
 	^ 'Save As'
 ]
 
 { #category : 'initialization' }
-StSaveFileDialog >> initializePresenters [ 
+StSaveFilePresenter >> initializePresenters [ 
 
 	super initializePresenters.
 	fileNavigationSystem layout: self rightPaneLayout
 ]
 
 { #category : 'layout' }
-StSaveFileDialog >> rightPaneLayout [
+StSaveFilePresenter >> rightPaneLayout [
 
 	^ SpBoxLayout newTopToBottom
 		add: fileNavigationSystem navigationLayout expand: false;
@@ -84,7 +84,7 @@ StSaveFileDialog >> rightPaneLayout [
 ]
 
 { #category : 'accessing' }
-StSaveFileDialog >> selectedEntry [
+StSaveFilePresenter >> selectedEntry [
 
 	| entry |
 	entry := super selectedEntry ifNil: [ ^ nil ].

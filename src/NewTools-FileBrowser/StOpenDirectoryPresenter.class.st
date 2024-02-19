@@ -6,52 +6,52 @@ So no files will be shown in the file/folder listings.
 see my super for more information about customization
 "
 Class {
-	#name : 'StOpenDirectoryDialog',
-	#superclass : 'StOpenFileOrDirectoryDialog',
+	#name : 'StOpenDirectoryPresenter',
+	#superclass : 'StOpenFileOrDirectoryPresenter',
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'UI'
 }
 
 { #category : 'examples' }
-StOpenDirectoryDialog class >> example [
+StOpenDirectoryPresenter class >> example [
 
 	<example>
 	^ self chooseThenInspect
 ]
 
 { #category : 'examples' }
-StOpenDirectoryDialog class >> exampleModal [
+StOpenDirectoryPresenter class >> exampleModal [
 
 	<example>
 	^ self chooseModalAndInspect
 ]
 
 { #category : 'hooks' }
-StOpenDirectoryDialog class >> navigationSystemClass [
+StOpenDirectoryPresenter class >> navigationSystemClass [
 	
 	^ StDirectoryNavigationSystemPresenter 
 ]
 
 { #category : 'hooks' }
-StOpenDirectoryDialog >> allowsChooseDirectoryIfNoFilename [
+StOpenDirectoryPresenter >> allowsChooseDirectoryIfNoFilename [
 
 	^ true
 ]
 
 { #category : 'initialization' }
-StOpenDirectoryDialog >> initialExtentForWindow [
+StOpenDirectoryPresenter >> initialExtentForWindow [
 
 	^ (1050 @ 550) scaledByDisplayScaleFactor
 ]
 
 { #category : 'hooks' }
-StOpenDirectoryDialog >> initialTitle [
+StOpenDirectoryPresenter >> initialTitle [
 	^ 'Select Directory To Open'
 ]
 
 { #category : 'actions' }
-StOpenDirectoryDialog >> selectedEntry [
+StOpenDirectoryPresenter >> selectedEntry [
 
 	super selectedEntry ifNotNil: [ :fileReference | 
 		fileReference isDirectory ifTrue: [ ^ fileReference ] ].

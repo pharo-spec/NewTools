@@ -8,7 +8,7 @@ ZipArchive class >> extractAllIn: aFileReferenceOrFileName [
 		"
 	| directory |
 
-	directory := (StOpenDirectoryDialog new
+	directory := (StOpenDirectoryPresenter new
 		currentDirectory: FileSystem workingDirectory;
 		openModal) ifNil: [ ^ self ].
 
