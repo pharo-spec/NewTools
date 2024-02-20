@@ -33,6 +33,17 @@ StRawInspectionPresenter >> breakInspectedObjectOnWrite [
 ]
 
 { #category : '*NewTools-ObjectCentricDebugPoints' }
+StRawInspectionPresenter class >> objectCentricDebugPointCommandsWith: presenter forRootGroup: aRootCmCommandsGroup [
+
+	<extensionCommands>
+	(StDebugPointSlotTargetCommand allSubclasses
+		 collect: [ :aCommandClass | aCommandClass forSpec ]
+		 thenSelect: [ :spCommand |
+		 spCommand decoratedCommand appliesTo: presenter ]) do: [ :spCommand |
+		aRootCmCommandsGroup register: spCommand ]
+]
+
+{ #category : '*NewTools-ObjectCentricDebugPoints' }
 StRawInspectionPresenter >> watchInspectedObjectAccess [
 
 	^ self watchInspectedObjectOnAccess: #all

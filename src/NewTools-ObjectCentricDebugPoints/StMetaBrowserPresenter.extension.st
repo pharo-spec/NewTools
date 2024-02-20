@@ -15,3 +15,13 @@ StMetaBrowserPresenter >> breakOnceOnCallToSelectedMethod [
 	method := self selectedMethod ifNil: [ ^ self ].
 	self model breakOnceOnCallTo: method selector
 ]
+
+{ #category : '*NewTools-ObjectCentricDebugPoints' }
+StMetaBrowserPresenter class >> objectCentricDebugPointCommandsWith: presenter forRootGroup: aRootCmCommandsGroup [
+
+	<extensionCommands>
+	| methodsCommandGroup |
+	methodsCommandGroup := aRootCmCommandsGroup / 'methods'.
+	StDebugPointNodeTargetCommand allSubclassesDo: [ :commandClass |
+		methodsCommandGroup register: commandClass forSpec ]
+]

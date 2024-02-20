@@ -19,6 +19,23 @@ StObjectInspectorPresenter >> breakInspectedObjectOnWrite [
 ]
 
 { #category : '*NewTools-ObjectCentricDebugPoints' }
+StObjectInspectorPresenter class >> objectCentricDebugPointCommandsWith: aPresenter forRootGroup: aRootCommandsGroup [
+
+	<extensionCommands>
+	| objCentricGroup |
+	objCentricGroup := CmCommandGroup forSpec
+		                   beToolbarPopoverButton;
+		                   name: 'Debug';
+		                   icon:
+			                   (aPresenter application iconNamed: #smallObjects);
+		                   yourself.
+	StDebugPointSlotTargetCommand allSubclasses do: [ :aCommandClass |
+		objCentricGroup register: aCommandClass forSpec ].
+
+	aRootCommandsGroup register: objCentricGroup
+]
+
+{ #category : '*NewTools-ObjectCentricDebugPoints' }
 StObjectInspectorPresenter >> watchInspectedObjectAccess [
 
 	^ self inspectedObject watchOnReadWrite
