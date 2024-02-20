@@ -52,7 +52,8 @@ Class {
 		'notebookPreviewer',
 		'fileReferenceTable',
 		'configButton',
-		'pathBreadcrumbPresenter'
+		'pathBreadcrumbPresenter',
+		'newFolderButton'
 	],
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
@@ -126,6 +127,7 @@ StFileNavigationSystemPresenter >> connectPresenters [
 	self previousBeforeButtonAction.
 	self nextButtonAction.
 	self configButtonAction.
+	newFolderButton action: [ self createDirectory ]
 ]
 
 { #category : 'utilities' }
@@ -299,6 +301,11 @@ StFileNavigationSystemPresenter >> initializePresenters [
 	pathBreadcrumbPresenter := self instantiate: StPathBreadcrumbPresenter on: self model.
 	nameText := self newTextInput.
 	filtersDropList := self newDropList.
+	newFolderButton := self newButton
+			addStyle: 'small';
+			help: 'New Folder';
+			icon: (self iconNamed: #add);
+			yourself.
 	configButton := self newButton
 			addStyle: 'small';
 			help: 'Settings';
@@ -343,12 +350,13 @@ StFileNavigationSystemPresenter >> nameTextChanged: aText [
 StFileNavigationSystemPresenter >> navigationLayout [
 
 	^ SpBoxLayout newLeftToRight
-				vAlignCenter;
-				add: previousButton expand: false;
-				add: nextButton expand: false;
-				add: pathBreadcrumbPresenter expand: false;
-			   addLast: configButton;				
-				yourself
+		  vAlignCenter;
+		  add: previousButton expand: false;
+		  add: nextButton expand: false;
+		  add: pathBreadcrumbPresenter expand: false;
+		  addLast: newFolderButton;
+		  addLast: configButton;
+		  yourself
 ]
 
 { #category : 'accessing' }
