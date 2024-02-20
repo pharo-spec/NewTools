@@ -1,19 +1,19 @@
 Class {
-	#name : 'StOpenFileDialogTest',
-	#superclass : 'StFileDialogTest',
+	#name : 'StOpenFilePresenterTest',
+	#superclass : 'StFilePresenterTest',
 	#category : 'NewTools-FileBrowser-Tests-UI',
 	#package : 'NewTools-FileBrowser-Tests',
 	#tag : 'UI'
 }
 
 { #category : 'accessing' }
-StOpenFileDialogTest >> dialogClass [
+StOpenFilePresenterTest >> dialogClass [
 
-	^ StOpenFileDialog
+	^ StOpenFilePresenter
 ]
 
 { #category : 'tests' }
-StOpenFileDialogTest >> testExtensions [
+StOpenFilePresenterTest >> testExtensions [
 
 	dialog extensions: #( ext ) named: 'Ext files'.
 	self
@@ -27,7 +27,7 @@ StOpenFileDialogTest >> testExtensions [
 ]
 
 { #category : 'tests' }
-StOpenFileDialogTest >> testMultipleExtensions [
+StOpenFilePresenterTest >> testMultipleExtensions [
 
 	dialog extensions: #( image changes sources ) named: 'Src files'.
 	self
@@ -41,7 +41,7 @@ StOpenFileDialogTest >> testMultipleExtensions [
 ]
 
 { #category : 'tests' }
-StOpenFileDialogTest >> testSelectFile [
+StOpenFilePresenterTest >> testSelectFile [
 
 	| selectedFile |
 	dialog okAction: [ :file | selectedFile := file ].
@@ -54,7 +54,7 @@ StOpenFileDialogTest >> testSelectFile [
 ]
 
 { #category : 'tests' }
-StOpenFileDialogTest >> testWhenChangeDirectoryShouldFilesListContainsHisChildren [
+StOpenFilePresenterTest >> testWhenChangeDirectoryShouldFilesListContainsHisChildren [
 	| newDirectory |
 	newDirectory := (root / 'dir') asFileReference.
 	dialog defaultFolder: newDirectory.

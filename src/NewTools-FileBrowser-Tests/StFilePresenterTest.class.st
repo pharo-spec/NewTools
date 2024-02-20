@@ -1,5 +1,5 @@
 Class {
-	#name : 'StFileDialogTest',
+	#name : 'StFilePresenterTest',
 	#superclass : 'StFileBrowserTestCase',
 	#instVars : [
 		'dialog',
@@ -11,17 +11,17 @@ Class {
 }
 
 { #category : 'testing' }
-StFileDialogTest class >> isAbstract [
-	^ self = StFileDialogTest
+StFilePresenterTest class >> isAbstract [
+	^ self = StFilePresenterTest
 ]
 
 { #category : 'accessing' }
-StFileDialogTest >> dialogClass [
+StFilePresenterTest >> dialogClass [
 	^ self subclassResponsibility
 ]
 
 { #category : 'tests' }
-StFileDialogTest >> fileListAllMustBeFilterByPNGFIlter [
+StFilePresenterTest >> fileListAllMustBeFilterByPNGFIlter [
 	self
 		assert:
 			(dialog fileReferenceTable items
@@ -31,14 +31,14 @@ StFileDialogTest >> fileListAllMustBeFilterByPNGFIlter [
 ]
 
 { #category : 'running' }
-StFileDialogTest >> setUp [
+StFilePresenterTest >> setUp [
 
 	super setUp.
 	(dialog := self dialogClass owner: fileSystemPresenter on: fileSystemModel) defaultFolder: root
 ]
 
 { #category : 'running' }
-StFileDialogTest >> tearDown [
+StFilePresenterTest >> tearDown [
 
 	dialog class initialize.
 	window ifNotNil: [ : w | w delete ].
@@ -46,19 +46,19 @@ StFileDialogTest >> tearDown [
 ]
 
 { #category : 'tests' }
-StFileDialogTest >> testIsRootDirectory [
+StFilePresenterTest >> testIsRootDirectory [
 	self assert: (dialog isRootDirectory: FileLocator root)
 ]
 
 { #category : 'tests' }
-StFileDialogTest >> testIsRootDirectoryWindowsDrive [
+StFilePresenterTest >> testIsRootDirectoryWindowsDrive [
 	OSPlatform current isWindows
 		ifFalse: [ ^ self ].
 	self assert: (dialog isRootDirectory: FileLocator C)
 ]
 
 { #category : 'tests' }
-StFileDialogTest >> testOpen [
+StFilePresenterTest >> testOpen [
 
 	"will it even open?"
 
@@ -66,7 +66,7 @@ StFileDialogTest >> testOpen [
 ]
 
 { #category : 'tests' }
-StFileDialogTest >> testOpenFolder [
+StFilePresenterTest >> testOpenFolder [
 	window := dialog open.
 	self assert: dialog currentDirectory equals: root.
 	dialog showDirectory: root / 'dir'.
@@ -74,7 +74,7 @@ StFileDialogTest >> testOpenFolder [
 ]
 
 { #category : 'tests' }
-StFileDialogTest >> testWhenAddACollectionOfBookmarkToCustomBookmarkShouldBeAddedToBookmarkTreeTable [
+StFilePresenterTest >> testWhenAddACollectionOfBookmarkToCustomBookmarkShouldBeAddedToBookmarkTreeTable [
 	| aCollectionOfBookmark |
 
 	aCollectionOfBookmark := {
@@ -93,9 +93,9 @@ StFileDialogTest >> testWhenAddACollectionOfBookmarkToCustomBookmarkShouldBeAdde
 ]
 
 { #category : 'tests' }
-StFileDialogTest >> testWhenAddingBookmarkOnDefaultBookmarksShouldBeAddToAllInstance [
+StFilePresenterTest >> testWhenAddingBookmarkOnDefaultBookmarksShouldBeAddToAllInstance [
 	| anOtherInstance addCommand |
-	anOtherInstance := StOpenDirectoryDialog new.
+	anOtherInstance := StOpenDirectoryPresenter new.
 	self
 		assertCollection: anOtherInstance bookmarks
 		hasSameElements: dialog bookmarks.
@@ -113,14 +113,14 @@ StFileDialogTest >> testWhenAddingBookmarkOnDefaultBookmarksShouldBeAddToAllInst
 ]
 
 { #category : 'tests' }
-StFileDialogTest >> testWhenAddingBookmarkOnIsolateBookmarksShouldBeAddToAllInstance [
+StFilePresenterTest >> testWhenAddingBookmarkOnIsolateBookmarksShouldBeAddToAllInstance [
 	| anOtherInstance addCommand |
 	dialog isolate.
 	addCommand := StFileBrowserAddBookmarkCommand new.
 	addCommand context: dialog fileNavigationSystem.
 	dialog fileReferenceTable selectIndex: ((dialog fileReferenceTable items collect: #basename) indexOf: 'dir'). 
 	addCommand execute.
-	anOtherInstance := StOpenDirectoryDialog new.
+	anOtherInstance := StOpenDirectoryPresenter new.
 	self 
 		assert: anOtherInstance bookmarks 
 		equals: dialog bookmarks.
