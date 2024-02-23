@@ -8,11 +8,11 @@ I add specific debugger functionalities:
 Class {
 	#name : 'StDebuggerInspector',
 	#superclass : 'SpPresenter',
+	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'inspector',
 		'model',
 		'label',
-		'rawInspectionSelectionCache',
 		'assertionFailure',
 		'lateralToolbar',
 		'currentLayoutSelector',
@@ -187,46 +187,6 @@ StDebuggerInspector >> model: aModel [
 	inspector model: model
 ]
 
-{ #category : 'accessing' }
-StDebuggerInspector >> rawInspectionSelectionCache [
-	^ rawInspectionSelectionCache ifNil: [ 
-		  rawInspectionSelectionCache := Dictionary new ]
-]
-
-{ #category : 'private' }
-StDebuggerInspector >> restoreRawInspectionSelectionForContext: aContext [
-	aContext ifNil: [ ^ self ].
-	self getRawInspectorPresenterOrNil
-		ifNotNil: [ :raw | 
-			| receiverClass selector path |
-			receiverClass := aContext receiver class.
-			selector := aContext selector.
-			path := self rawInspectionSelectionCache
-				at: receiverClass -> selector
-				ifAbsent: [ #() ].
-			path ifEmpty: [ self rawInspectionSelectionCache at: receiverClass ifAbsent: [ #() ] ].
-			path ifEmpty: [ | roots pathStart |
-					roots := raw attributeTable roots.
-					pathStart := 1.
-					1 to: roots size do: [ :i | 
-						(roots at: i) key = 'Temps' ifTrue: [ pathStart := i ] ].
-					path := {pathStart. 1} ].
-			raw selectPath: path ]
-]
-
-{ #category : 'private' }
-StDebuggerInspector >> saveRawInspectionSelectionForContext: aContext [
-	| selectionPath |
-	aContext ifNil: [ ^ self ].
-	selectionPath := self getRawInspectorSelectedPath.
-	self rawInspectionSelectionCache
-		at: aContext receiver class -> aContext selector
-		put: selectionPath.
-	self rawInspectionSelectionCache
-		at: aContext receiver class
-		put: selectionPath
-]
-
 { #category : 'layout' }
 StDebuggerInspector >> setAssertionLayout [
 	currentLayoutSelector := self assertionLayoutSelector.
@@ -298,14 +258,13 @@ StDebuggerInspector >> updateLayoutForContexts: aContext isAssertionFailure: isT
 StDebuggerInspector >> updateWith: inspectedObject [
 
 	| oldContext newContext |
-	oldContext := self model inspectedObject ifNotNil: [ :dbgCtx | 
+	oldContext := self model inspectedObject ifNotNil: [ :dbgCtx |
 		              dbgCtx context ].
 	newContext := inspectedObject ifNotNil: [ :dbgCtx | dbgCtx context ].
-	(self shouldUpdateContext: oldContext with: newContext) ifFalse: [ ^ self ].
+	(self shouldUpdateContext: oldContext with: newContext) ifFalse: [
+		^ self ].
 
 	shouldBeUpdated := false.
-	self saveRawInspectionSelectionForContext: oldContext.
 	self model: (self debuggerInspectorModelClass on: inspectedObject).
-	self updateEvaluationPaneReceiver.
-	self restoreRawInspectionSelectionForContext: newContext
+	self updateEvaluationPaneReceiver
 ]
