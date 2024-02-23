@@ -197,7 +197,7 @@ StVersionBrowserPresenter >> doCompareToOtherVersion [
 
 { #category : 'actions' }
 StVersionBrowserPresenter >> doRevert [
-
+	self revert: self selectedMessage
 ]
 
 { #category : 'initialization' }
