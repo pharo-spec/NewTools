@@ -282,8 +282,7 @@ ScopesManager >> currentQueryScope: aScope [
 ScopesManager >> defaultScope [
 
 	^ defaultScope ifNil: [
-		  defaultScope := (self scopeClass packages:
-			                   self allPackagesInEnvironment) label:
+		  defaultScope := self scopeClass new label:
 			                  self defaultScopeLabel ]
 ]
 
@@ -376,7 +375,7 @@ ScopesManager >> reset [
 
 { #category : 'running' }
 ScopesManager >> scopeClass [
-	^ RBPackageEnvironment 
+	^ RBBrowserEnvironment 
 ]
 
 { #category : 'accessing' }

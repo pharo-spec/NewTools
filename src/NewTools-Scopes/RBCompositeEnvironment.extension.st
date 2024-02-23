@@ -62,6 +62,13 @@ RBCompositeEnvironment >> definedPackages [
 ]
 
 { #category : '*NewTools-Scopes' }
+RBCompositeEnvironment >> definesPackageNamed: aPackageName [
+
+	^ (self definedPackages collect: [ :p | p name ]) includes:
+		  aPackageName
+]
+
+{ #category : '*NewTools-Scopes' }
 RBCompositeEnvironment >> fullPackages [
 	
 	"full packages are those where all classes belong to the scope (ignoring classes related to class hierarchy environments)"

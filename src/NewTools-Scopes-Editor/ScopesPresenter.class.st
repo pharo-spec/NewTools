@@ -114,11 +114,11 @@ ScopesPresenter >> argumentsListMenu [
 					  name: 'Inspect';
 					  iconName: #glamorousSearch;
 					  action: [ scopesTree selectedItem inspect ] ];
-			  "addItem: [ :anItem |
+			  addItem: [ :anItem |
 				  anItem
 					  name: 'Open on Calypso';
 					  visibleIf: [ scopesTree selectedItem isScopeNode ];
-					  action: [ self openOnCalypso: scopesTree selectedItem value ] ];"
+					  action: [ self openOnCalypso: scopesTree selectedItem value ] ];
 			  addItem: [ :anItem |
 				  anItem
 					  name: 'Browse';
@@ -296,15 +296,16 @@ ScopesPresenter >> notWithScope: anItem [
 
 { #category : 'menu commands' }
 ScopesPresenter >> openOnCalypso: aClassOrPackage [
+
+	| browser scope |
 	
-	self inform: 'Implementation is pending'.
-	"
-	| browser |
-	browser := ClyFullBrowserMorph 
-		openOnClass: self class 
-		selector: self class selectors anyOne.
-	"
-		
+	scope := ClyScopedSystemEnvironment currentImage
+		         scope: aClassOrPackage;
+		         yourself.
+
+	browser := ClyFullBrowserMorph
+		           openOn: (ClyNavigationEnvironment defaultOver: scope)
+		           withState: [  ]
 ]
 
 { #category : 'operations' }
