@@ -26,6 +26,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Gtk';
 			"Basic tools (inherited from Spec)"
 			package: 'NewTools-MethodBrowsers' with: [ spec requires: #( 'NewTools-SpTextPresenterDecorators' ) ];
+			package: 'NewTools-MethodBrowsers-Tests' with: [ spec requires: #( 'NewTools-MethodBrowsers' ) ];
 			package: 'NewTools-KeymapBrowser';
 			"inspector"
 			package: 'NewTools-Inspector' with: [ spec requires: #( 'NewTools-Inspector-Extensions' ) ];
