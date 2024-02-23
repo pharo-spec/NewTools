@@ -24,7 +24,7 @@ StSettingsApplication class >> menuSettingsBrowserCommandOn: aBuilder [
 		parent: #Tools;
 		label: 'New Settings Browser';
 		action: [ self new run ];
-		icon: (self iconNamed: self taskbarIconName);
+		iconName: self taskbarIconName;
 		help: 'New Settings Browser';
 		order: 100		
 ]

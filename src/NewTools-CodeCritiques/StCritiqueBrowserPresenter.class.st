@@ -41,7 +41,7 @@ StCritiqueBrowserPresenter class >> critiquesBrowserMenuOn: aBuilder [
 		order: 2;
 		parent: #Browsing;
 		help: 'To manage rule checks.';
-		icon: self icon
+		iconName: self iconName
 ]
 
 { #category : 'layout' }
@@ -72,7 +72,13 @@ StCritiqueBrowserPresenter class >> icon [
 
 	"Answer an icon for the receiver."
 
-	^ self iconNamed: #error
+	^ self iconNamed: self iconName
+]
+
+{ #category : 'icons' }
+StCritiqueBrowserPresenter class >> iconName [
+
+	^ #error
 ]
 
 { #category : 'instance creation' }
