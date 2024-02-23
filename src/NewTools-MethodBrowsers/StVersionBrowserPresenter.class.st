@@ -345,6 +345,12 @@ StVersionBrowserPresenter >> revert: aChangeRecord [
 		selectIndex: 1
 ]
 
+{ #category : 'test support' }
+StVersionBrowserPresenter >> selectIndex: index [
+
+	messageList selectIndex: index
+]
+
 { #category : 'private' }
 StVersionBrowserPresenter >> selectItem: item [
 
