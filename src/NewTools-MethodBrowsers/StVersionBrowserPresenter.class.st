@@ -296,7 +296,7 @@ StVersionBrowserPresenter >> newMessageList [
 StVersionBrowserPresenter >> newMessageToolbar [
 		
 	^ (self instantiate: StMethodHistoryToolbarPresenter on: rgMethod)
-		whenRevertDo: [ self revert: self selectedMessage ];
+		whenRevertDo: [ self doRevert ];
 		yourself
 ]
 
