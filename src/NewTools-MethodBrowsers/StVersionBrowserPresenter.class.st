@@ -197,7 +197,7 @@ StVersionBrowserPresenter >> doCompareToOtherVersion [
 
 { #category : 'actions' }
 StVersionBrowserPresenter >> doRevert [
-
+	self revert: self selectedMessage
 ]
 
 { #category : 'initialization' }
@@ -296,7 +296,7 @@ StVersionBrowserPresenter >> newMessageList [
 StVersionBrowserPresenter >> newMessageToolbar [
 		
 	^ (self instantiate: StMethodHistoryToolbarPresenter on: rgMethod)
-		whenRevertDo: [ self revert: self selectedMessage ];
+		whenRevertDo: [ self doRevert ];
 		yourself
 ]
 
