@@ -20,9 +20,11 @@ FLFuelOutTest >> testFuelOutWriteArrayFile [
 
 	| targetObject |
 
-	targetObject := #(1 2 3) fuelOut.
+	FileLocator imageDirectory isWritable
+		ifFalse: [ ^ self skip ].
+	targetObject := { 1 . 2 .  3 } fuelOut.
 	fileName := targetObject printString , '.fuel'.
-	self assert: fileName asFileReference exists.
+	self assert: fileName asFileReference exists 
 
 ]
 
@@ -30,6 +32,9 @@ FLFuelOutTest >> testFuelOutWriteArrayFile [
 FLFuelOutTest >> testFuelOutWriteFile [
 
 	| targetObject |
+	
+	FileLocator imageDirectory isWritable
+		ifFalse: [ ^ self skip ].
 	targetObject := Object new fuelOut.
 	fileName := targetObject printString , '.fuel'.
 	self assert: fileName asFileReference exists.
@@ -39,21 +44,28 @@ FLFuelOutTest >> testFuelOutWriteFile [
 { #category : 'tests' }
 FLFuelOutTest >> testFuelOutWriteFileVersioned [
 
-	| firstTargetObject firstTargetObjectFilename secondTargetObject |
-	
+	| firstTargetObject firstTargetObjectFile secondTargetObject |
+
+	FileLocator imageDirectory isWritable
+		ifFalse: [ ^ self skip ].	
+
+	(firstTargetObjectFile := 'an Object.fuel' asFileReference) exists
+		ifTrue: [ firstTargetObjectFile ensureDelete ].
 	firstTargetObject := Object new fuelOut.
-	firstTargetObjectFilename := firstTargetObject printString , '.fuel'.
-	
+	fileName := firstTargetObjectFile nextVersion basename.
+		
 	secondTargetObject := Object new fuelOut.
-	fileName := secondTargetObject printString , '.1.fuel'.
 	
 	self assert: fileName asFileReference exists.
 
-	firstTargetObjectFilename asFileReference ensureDelete.
+	firstTargetObjectFile ensureDelete.
 ]
 
 { #category : 'tests' }
 FLFuelOutTest >> testFuelOutWriteFileWithFileSystemDelimiters [
+
+	FileLocator imageDirectory isWritable
+		ifFalse: [ ^ self skip ].
 
 	self 
 		should: [ '/this/is/a/file/path.txt' fuelOut ] 
