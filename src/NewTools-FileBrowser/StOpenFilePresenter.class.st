@@ -7,15 +7,15 @@ examples see class side method example
 
 "
 Class {
-	#name : 'StOpenFileDialog',
-	#superclass : 'StOpenFileOrDirectoryDialog',
+	#name : 'StOpenFilePresenter',
+	#superclass : 'StOpenFileOrDirectoryPresenter',
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'UI'
 }
 
 { #category : 'example' }
-StOpenFileDialog class >> complexExampleAdaptivePreviewer [
+StOpenFilePresenter class >> complexExampleAdaptivePreviewer [
 
 	<example>
 	| presenter |
@@ -46,7 +46,7 @@ StOpenFileDialog class >> complexExampleAdaptivePreviewer [
 ]
 
 { #category : 'example' }
-StOpenFileDialog class >> complexExampleTextPreviewer [
+StOpenFilePresenter class >> complexExampleTextPreviewer [
 
 	<example>
 	| presenter |
@@ -81,28 +81,28 @@ StOpenFileDialog class >> complexExampleTextPreviewer [
 ]
 
 { #category : 'examples' }
-StOpenFileDialog class >> example [
+StOpenFilePresenter class >> example [
 
 	<example>
 	^ self chooseThenInspect
 ]
 
 { #category : 'examples' }
-StOpenFileDialog class >> exampleExtensions [
+StOpenFilePresenter class >> exampleExtensions [
 
 	<example>
 	^ self extensions: #( 'image' )
 ]
 
 { #category : 'examples' }
-StOpenFileDialog class >> exampleModal [
+StOpenFilePresenter class >> exampleModal [
 
 	<example>
 	^ self chooseModalAndInspect
 ]
 
 { #category : 'example' }
-StOpenFileDialog class >> examplePreviewer [
+StOpenFilePresenter class >> examplePreviewer [
 
 	self new
 		previewer: StFileBrowserInspectPreviewer new;
@@ -110,6 +110,6 @@ StOpenFileDialog class >> examplePreviewer [
 ]
 
 { #category : 'hooks' }
-StOpenFileDialog >> initialTitle [
+StOpenFilePresenter >> initialTitle [
 	^ 'Select File To Open'
 ]

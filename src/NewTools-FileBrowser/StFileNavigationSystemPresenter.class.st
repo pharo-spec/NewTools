@@ -2,8 +2,8 @@
 This Spec presenter provides:
 
 * An history of visited folder.
-* A text input use to jump to the write path.
-* A drop list use to filter the content of the fileReferenceTable
+* A text input used to jump to the write path.
+* A drop list used to filter the content of the fileReferenceTable
 * A text presenter to show a preview of the currently selected file.
 
 ## Example
@@ -52,7 +52,8 @@ Class {
 		'notebookPreviewer',
 		'fileReferenceTable',
 		'configButton',
-		'pathBreadcrumbPresenter'
+		'pathBreadcrumbPresenter',
+		'newFolderButton'
 	],
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
@@ -126,6 +127,15 @@ StFileNavigationSystemPresenter >> connectPresenters [
 	self previousBeforeButtonAction.
 	self nextButtonAction.
 	self configButtonAction.
+	newFolderButton action: [ self createDirectory ]
+]
+
+{ #category : 'utilities' }
+StFileNavigationSystemPresenter >> currentDirectoryChildren [
+
+	^ [ self currentDirectory children select: #exists ]
+		  on: Error
+		  do: [ #(  ) ]
 ]
 
 { #category : 'initialization' }
@@ -291,6 +301,11 @@ StFileNavigationSystemPresenter >> initializePresenters [
 	pathBreadcrumbPresenter := self instantiate: StPathBreadcrumbPresenter on: self model.
 	nameText := self newTextInput.
 	filtersDropList := self newDropList.
+	newFolderButton := self newButton
+			addStyle: 'small';
+			help: 'New Folder';
+			icon: (self iconNamed: #add);
+			yourself.
 	configButton := self newButton
 			addStyle: 'small';
 			help: 'Settings';
@@ -335,12 +350,13 @@ StFileNavigationSystemPresenter >> nameTextChanged: aText [
 StFileNavigationSystemPresenter >> navigationLayout [
 
 	^ SpBoxLayout newLeftToRight
-				vAlignCenter;
-				add: previousButton expand: false;
-				add: nextButton expand: false;
-				add: pathBreadcrumbPresenter;
-			   addLast: configButton;				
-				yourself
+		  vAlignCenter;
+		  add: previousButton expand: false;
+		  add: nextButton expand: false;
+		  add: pathBreadcrumbPresenter expand: false;
+		  addLast: newFolderButton;
+		  addLast: configButton;
+		  yourself
 ]
 
 { #category : 'accessing' }
@@ -425,7 +441,7 @@ StFileNavigationSystemPresenter >> updateFileReferenceTable [
 	"Update the receiver's contents according to the current directory and apply configured filters"
 
 	| items |
-	items := (filtersDropList selectedItem ifNil: [ filter ]) applyOn: (self currentDirectory children select: #exists).
+	items := (filtersDropList selectedItem ifNil: [ filter ]) applyOn: self currentDirectoryChildren.
 	StFileBrowserSettings showHiddenFiles ifFalse: [ items := items reject: [ :file | file isHidden ] ].
 	fileReferenceTable items: items
 ]

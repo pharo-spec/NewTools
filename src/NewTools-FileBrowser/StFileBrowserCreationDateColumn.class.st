@@ -11,7 +11,10 @@ Class {
 
 { #category : 'adding' }
 StFileBrowserCreationDateColumn class >> addConstraintTo: aTableColumn [
-	aTableColumn width: 150
+
+	aTableColumn
+		width: 150;
+		beSortable
 ]
 
 { #category : 'templateMethod' }

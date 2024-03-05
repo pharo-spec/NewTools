@@ -1,26 +1,26 @@
 Class {
-	#name : 'StOpenDirectoryDialogTest',
-	#superclass : 'StFileDialogTest',
+	#name : 'StOpenDirectoryPresenterTest',
+	#superclass : 'StFilePresenterTest',
 	#category : 'NewTools-FileBrowser-Tests-UI',
 	#package : 'NewTools-FileBrowser-Tests',
 	#tag : 'UI'
 }
 
 { #category : 'accessing' }
-StOpenDirectoryDialogTest >> dialogClass [
+StOpenDirectoryPresenterTest >> dialogClass [
 
-	^ StOpenDirectoryDialog
+	^ StOpenDirectoryPresenter
 ]
 
 { #category : 'tests' }
-StOpenDirectoryDialogTest >> testDefaultDirectory [
+StOpenDirectoryPresenterTest >> testDefaultDirectory [
 	self assert: dialog selectedEntry equals: root.
 	dialog defaultFolder: root / 'dir'.
 	self assert: dialog selectedEntry equals: root / 'dir'
 ]
 
 { #category : 'tests' }
-StOpenDirectoryDialogTest >> testSelectDirectory [
+StOpenDirectoryPresenterTest >> testSelectDirectory [
 
 	| selectedDirectory |
 	dialog okAction: [ :dir | selectedDirectory := dir ].
@@ -37,7 +37,7 @@ StOpenDirectoryDialogTest >> testSelectDirectory [
 ]
 
 { #category : 'tests' }
-StOpenDirectoryDialogTest >> testSelectNonexistingDirectory [
+StOpenDirectoryPresenterTest >> testSelectNonexistingDirectory [
 
 	self
 		should: [ dialog defaultFolder: root / 'idontexist' ]
@@ -46,7 +46,7 @@ StOpenDirectoryDialogTest >> testSelectNonexistingDirectory [
 ]
 
 { #category : 'tests' }
-StOpenDirectoryDialogTest >> testWhenChangeDirectoryShouldFilesListContainsHisChildren [
+StOpenDirectoryPresenterTest >> testWhenChangeDirectoryShouldFilesListContainsHisChildren [
 	| newDirectory |
 	newDirectory := (root / 'dir') asFileReference.
 	dialog defaultFolder: newDirectory.

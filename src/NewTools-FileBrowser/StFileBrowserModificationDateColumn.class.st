@@ -11,13 +11,18 @@ Class {
 
 { #category : 'adding' }
 StFileBrowserModificationDateColumn class >> addConstraintTo: aTableColumn [
-	aTableColumn width: 150
+
+	aTableColumn
+		width: 150;
+		beSortable
 ]
 
 { #category : 'templateMethod' }
 StFileBrowserModificationDateColumn class >> evaluateOn: aFileReference [
 
-	^ aFileReference modificationTime fileDialogFormat
+	^ [ aFileReference modificationTime fileDialogFormat ]
+		  on: Error
+		  do: [ 'N/A' ]
 ]
 
 { #category : 'sorting' }

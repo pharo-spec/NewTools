@@ -13,7 +13,8 @@ Class {
 
 { #category : 'adding' }
 StFileBrowserNameColumn class >> addConstraintTo: aTableColumn [
-	"do nothing"
+
+	aTableColumn beSortable
 ]
 
 { #category : 'templateMethod' }
