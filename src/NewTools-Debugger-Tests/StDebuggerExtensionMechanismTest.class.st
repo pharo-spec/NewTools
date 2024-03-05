@@ -48,6 +48,12 @@ StDebuggerExtensionMechanismTest >> setUp [
 StDebuggerExtensionMechanismTest >> tearDown [
 
 	| allDebuggerExtensions |
+	debugger ifNotNil: [
+		debugger close.
+		debugger unsubscribeFromSystemAnnouncer.
+		debugger unsubscribeFromActionModel.
+		debugger clearDebugSession.
+		debugger clearDebuggerActionModel ].
 	allDebuggerExtensions := StDebugger extensionToolsClasses.
 	allDebuggerExtensions do: [ :extension |
 		| wasActivated |
@@ -63,26 +69,30 @@ StDebuggerExtensionMechanismTest >> tearDown [
 { #category : 'tests' }
 StDebuggerExtensionMechanismTest >> testDynamicLayoutWithAndWithoutExtension [
 
-	| dbg toolPage session |
+	| toolPage session |
 	session := StTestDebuggerProvider new sessionForDebuggerTests.
 	self debuggerClass extensionToolsClasses do: [ :extension |
 		extension showInDebugger: false ].
-	dbg := self debugger
-		       session: session;
-		       application: self debuggerClass currentApplication;
-		       initialize;
-		       yourself.
+	debugger := self debugger
+		            session: session;
+		            application: self debuggerClass currentApplication;
+		            initialize;
+		            yourself.
 
-	self assertEmpty: dbg extensionTools.
-	self assertEmpty: dbg extensionToolNotebook pages.
-	self denyCollection: dbg stackAndCodeContainer children includesAny: {#extensionToolsNotebook }.
+	self assertEmpty: debugger extensionTools.
+	self assertEmpty: debugger extensionToolNotebook pages.
+	self
+		denyCollection: debugger stackAndCodeContainer children
+		includesAny: { #extensionToolsNotebook }.
 
 	"We activate an extension"
 	StDummyDebuggerPresenter showInDebugger: true.
-	self assert: dbg extensionToolNotebook pages size equals: 1.
-	self assert: dbg extensionTools size equals: 1.
-	self assertCollection: dbg stackAndCodeContainer children includesAny: {#extensionToolsNotebook }.
-	toolPage := dbg extensionToolNotebook pages first.
+	self assert: debugger extensionToolNotebook pages size equals: 1.
+	self assert: debugger extensionTools size equals: 1.
+	self
+		assertCollection: debugger stackAndCodeContainer children
+		includesAny: { #extensionToolsNotebook }.
+	toolPage := debugger extensionToolNotebook pages first.
 	self assert: toolPage class identicalTo: SpNotebookPage.
 	self
 		assert: toolPage presenterProvider value class
@@ -92,16 +102,18 @@ StDebuggerExtensionMechanismTest >> testDynamicLayoutWithAndWithoutExtension [
 		equals: StDummyDebuggerPresenter new debuggerExtensionToolName.
 	self
 		assert: toolPage presenterProvider value debugger
-		identicalTo: dbg.
+		identicalTo: debugger.
 	self
-		assertCollection: dbg extensionTools
+		assertCollection: debugger extensionTools
 		includesAll: { toolPage presenterProvider value }.
 
 	"We remove the extension"
 	StDummyDebuggerPresenter showInDebugger: false.
-	self assertEmpty: dbg extensionTools.
-	self assertEmpty: dbg extensionToolNotebook pages.
-	self denyCollection: dbg stackAndCodeContainer children includesAny: {#extensionToolsNotebook }
+	self assertEmpty: debugger extensionTools.
+	self assertEmpty: debugger extensionToolNotebook pages.
+	self
+		denyCollection: debugger stackAndCodeContainer children
+		includesAny: { #extensionToolsNotebook }
 ]
 
 { #category : 'tests - extensions' }
@@ -123,15 +135,24 @@ StDebuggerExtensionMechanismTest >> testHasAnyActivatedExtensions [
 
 { #category : 'tests - extensions' }
 StDebuggerExtensionMechanismTest >> testInstantiateExtensionToolsPage [
-	|dbg toolPage|
+
+	| dbg toolPage |
 	dbg := self debugger.
-	toolPage := dbg instantiateExtensionToolsPage: StDummyDebuggerPresenter.
+	toolPage := dbg instantiateExtensionToolsPage:
+		            StDummyDebuggerPresenter.
 	self assert: toolPage class identicalTo: SpNotebookPage.
-	self assert: toolPage presenterProvider value class identicalTo: StDummyDebuggerPresenter.
-	self assert: toolPage title equals: StDummyDebuggerPresenter new debuggerExtensionToolName.
-	self assert: toolPage presenterProvider value debugger identicalTo: dbg.
-	self assertCollection: dbg extensionTools includesAll: { toolPage presenterProvider value}.
-	 
+	self
+		assert: toolPage presenterProvider value class
+		identicalTo: StDummyDebuggerPresenter.
+	self
+		assert: toolPage title
+		equals: StDummyDebuggerPresenter new debuggerExtensionToolName.
+	self
+		assert: toolPage presenterProvider value debugger
+		identicalTo: dbg.
+	self
+		assertCollection: dbg extensionTools
+		includesAll: { toolPage presenterProvider value }
 ]
 
 { #category : 'tests - extensions' }
