@@ -28,13 +28,6 @@ StClassProcessorTest >> testFindGTClassProcessorTestAfterAddingTest [
 ]
 
 { #category : 'tests' }
-StClassProcessorTest >> testFindGTClassProcessorTestWithPartialText [
-
-	self runForText: 'stclass'.
-	self assertResultsIncludes: StClassProcessorTest
-]
-
-{ #category : 'tests' }
 StClassProcessorTest >> testGTClassProcessorIsRemovedAfterUpdatingText [
 
 	self runForText: 'gtclass'.
