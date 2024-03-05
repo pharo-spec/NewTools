@@ -1,5 +1,5 @@
 Class {
-	#name : 'FLFuelOutTests',
+	#name : 'FLFuelOutTest',
 	#superclass : 'TestCase',
 	#instVars : [
 		'fileName'
@@ -9,14 +9,14 @@ Class {
 }
 
 { #category : 'running' }
-FLFuelOutTests >> tearDown [
+FLFuelOutTest >> tearDown [
 
 	fileName ifNotNil: [ : f | f asFileReference ensureDelete ].
 	super tearDown.
 ]
 
 { #category : 'tests' }
-FLFuelOutTests >> testFuelOutWriteArrayFile [
+FLFuelOutTest >> testFuelOutWriteArrayFile [
 
 	| targetObject |
 
@@ -27,7 +27,7 @@ FLFuelOutTests >> testFuelOutWriteArrayFile [
 ]
 
 { #category : 'tests' }
-FLFuelOutTests >> testFuelOutWriteFile [
+FLFuelOutTest >> testFuelOutWriteFile [
 
 	| targetObject |
 	targetObject := Object new fuelOut.
@@ -37,7 +37,7 @@ FLFuelOutTests >> testFuelOutWriteFile [
 ]
 
 { #category : 'tests' }
-FLFuelOutTests >> testFuelOutWriteFileVersioned [
+FLFuelOutTest >> testFuelOutWriteFileVersioned [
 
 	| firstTargetObject firstTargetObjectFilename secondTargetObject |
 	
@@ -53,7 +53,7 @@ FLFuelOutTests >> testFuelOutWriteFileVersioned [
 ]
 
 { #category : 'tests' }
-FLFuelOutTests >> testFuelOutWriteFileWithFileSystemDelimiters [
+FLFuelOutTest >> testFuelOutWriteFileWithFileSystemDelimiters [
 
 	self 
 		should: [ '/this/is/a/file/path.txt' fuelOut ] 
