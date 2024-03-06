@@ -58,7 +58,7 @@ StRewriterMatchToolPresenter class >> menuCommandOn: aBuilder [
 		order: 32;
 		parent: #Tools;
 		help: self descriptionText;
-		icon: self icon
+		iconName: self iconName
 ]
 
 { #category : 'specs' }
