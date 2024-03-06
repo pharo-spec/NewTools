@@ -4,5 +4,5 @@ Extension { #name : 'DebugPointNodeTarget' }
 DebugPointNodeTarget >> updateDebugPointUIManager: aDebugPointUIManager [
 
 	aDebugPointUIManager updateCode: self.
-	aDebugPointUIManager layout: aDebugPointUIManager defaultLayout
+	aDebugPointUIManager switchToNodeTargetView
 ]

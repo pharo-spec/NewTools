@@ -4,13 +4,15 @@ I am the UI for the complete DebugPoint Browser, used to visualize and configure
 Class {
 	#name : 'DebugPointBrowserPresenter',
 	#superclass : 'SpPresenter',
+	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'dpTable',
 		'dpEditor',
 		'dpCode',
 		'inputFilter',
 		'selectAllCheckbox',
-		'variableTargetPresenter'
+		'variableTargetPresenter',
+		'targetContainer'
 	],
 	#category : 'NewTools-DebugPointsBrowser',
 	#package : 'NewTools-DebugPointsBrowser'
@@ -77,6 +79,11 @@ DebugPointBrowserPresenter >> deactivateDebugPoint: debugPoint [
 { #category : 'layout' }
 DebugPointBrowserPresenter >> defaultLayout [
 
+	targetContainer := SpPanedLayout newTopToBottom
+		                   add: dpTable;
+		                   add: dpCode;
+		                   positionOfSlider: 40 percent;
+		                   yourself.
 	^ SpBoxLayout newTopToBottom
 		  add: (SpBoxLayout newLeftToRight
 				   add: selectAllCheckbox expand: false;
@@ -84,11 +91,7 @@ DebugPointBrowserPresenter >> defaultLayout [
 				   yourself)
 		  expand: false;
 		  add: (SpPanedLayout newLeftToRight
-				   add: (SpPanedLayout newTopToBottom
-						    add: dpTable;
-						    add: dpCode;
-						    positionOfSlider: 50 percent;
-						    yourself);
+				   add: targetContainer;
 				   add: dpEditor;
 				   positionOfSlider: 50 percent;
 				   yourself);
@@ -160,6 +163,24 @@ DebugPointBrowserPresenter >> select: aDebugPoint [
 	dpTable selectItem: aDebugPoint 
 ]
 
+{ #category : 'layout' }
+DebugPointBrowserPresenter >> switchToNodeTargetView [
+
+	self switchToTargetView: dpCode
+]
+
+{ #category : 'private - layout' }
+DebugPointBrowserPresenter >> switchToTargetView: aDebugPointTargetPresenter [
+
+	targetContainer replaceSecond: aDebugPointTargetPresenter
+]
+
+{ #category : 'layout' }
+DebugPointBrowserPresenter >> switchToVariableTargetView [
+
+	self switchToTargetView: variableTargetPresenter
+]
+
 { #category : 'updating - presenters' }
 DebugPointBrowserPresenter >> updateCode: aDebugPointTarget [
 
@@ -188,25 +209,4 @@ DebugPointBrowserPresenter >> updateTable [
 DebugPointBrowserPresenter >> updateVariableTargetPresenterFrom: aDebugPointTarget [
 
 	variableTargetPresenter target: aDebugPointTarget
-]
-
-{ #category : 'layout' }
-DebugPointBrowserPresenter >> variableTargetLayout [
-
-	^ SpBoxLayout newTopToBottom
-		  add: (SpBoxLayout newLeftToRight
-				   add: selectAllCheckbox expand: false;
-				   add: inputFilter;
-				   yourself)
-		  expand: false;
-		  add: (SpPanedLayout newLeftToRight
-				   add: (SpPanedLayout newTopToBottom
-						    add: dpTable;
-						    add: variableTargetPresenter;
-						    positionOfSlider: 40 percent;
-						    yourself);
-				   add: dpEditor;
-				   positionOfSlider: 50 percent;
-				   yourself);
-		  yourself
 ]

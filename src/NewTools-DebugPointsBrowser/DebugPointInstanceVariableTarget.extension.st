@@ -4,6 +4,5 @@ Extension { #name : 'DebugPointInstanceVariableTarget' }
 DebugPointInstanceVariableTarget >> updateDebugPointUIManager: aDebugPointUIManager [
 
 	aDebugPointUIManager updateVariableTargetPresenterFrom: self.
-	aDebugPointUIManager layout:
-		aDebugPointUIManager variableTargetLayout
+	aDebugPointUIManager switchToVariableTargetView
 ]
