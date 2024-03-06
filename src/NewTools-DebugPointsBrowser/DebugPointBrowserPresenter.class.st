@@ -28,6 +28,14 @@ DebugPointBrowserPresenter class >> menuCommandOn: aBuilder [
 	aBuilder withSeparatorAfter
 ]
 
+{ #category : 'instance creation' }
+DebugPointBrowserPresenter class >> openOn: aDebugPoint [
+
+	self new
+		select: aDebugPoint;
+		open
+]
+
 { #category : 'action handling' }
 DebugPointBrowserPresenter >> activateAllDebugPoints [
 
