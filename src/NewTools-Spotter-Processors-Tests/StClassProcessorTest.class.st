@@ -12,14 +12,14 @@ StClassProcessorTest >> processor [
 ]
 
 { #category : 'tests' }
-StClassProcessorTest >> testFindGTClassProcessorTest [
+StClassProcessorTest >> testFindStClassProcessorTest [
 
 	self runForText: 'stclassprocessortest'.
 	self assertResultsIncludes: StClassProcessorTest
 ]
 
 { #category : 'tests' }
-StClassProcessorTest >> testFindGTClassProcessorTestAfterAddingTest [
+StClassProcessorTest >> testFindStClassProcessorTestAfterAddingTest [
 
 	self runForText: 'stclass'.
 	self rerunWithText: 'stclassprocess'.
@@ -28,19 +28,10 @@ StClassProcessorTest >> testFindGTClassProcessorTestAfterAddingTest [
 ]
 
 { #category : 'tests' }
-StClassProcessorTest >> testFindGTClassProcessorTestWithPartialText [
+StClassProcessorTest >> testFindStClassProcessorTestWithPartialText [
 
 	self runForText: 'stclass'.
 	self assertResultsIncludes: StClassProcessorTest
-]
-
-{ #category : 'tests' }
-StClassProcessorTest >> testGTClassProcessorIsRemovedAfterUpdatingText [
-
-	self runForText: 'gtclass'.
-	self rerunWithText: 'gtclassprocesst'.
-	
-	self denyResultsIncludes: StClassProcessor
 ]
 
 { #category : 'tests' }
@@ -48,4 +39,13 @@ StClassProcessorTest >> testPopularStringDoesReturnOnlyTenResults [
 
 	self runForText: 'test'.
 	self assertQuantityOfResults: 25.
+]
+
+{ #category : 'tests' }
+StClassProcessorTest >> testStClassProcessorIsRemovedAfterUpdatingText [
+
+	self runForText: 'gtclass'.
+	self rerunWithText: 'gtclassprocesst'.
+	
+	self denyResultsIncludes: StClassProcessor
 ]
