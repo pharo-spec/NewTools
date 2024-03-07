@@ -30,7 +30,7 @@ StClassProcessorTest >> testFindStClassProcessorTestAfterAddingTest [
 { #category : 'tests' }
 StClassProcessorTest >> testFindStClassProcessorTestWithPartialText [
 
-	self runForText: 'stclass'.
+	self runForText: 'stclasspr'.
 	self assertResultsIncludes: StClassProcessorTest
 ]
 
