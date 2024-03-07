@@ -22,18 +22,22 @@ DebugPointEditorPresenter >> changeDebugPointState: newState [
 { #category : 'layout' }
 DebugPointEditorPresenter >> createLayout [
 
-	self debugPoint ifNil: [ ^self layout: self defaultLayout ].
+	self debugPoint ifNil: [ ^ self layout: self defaultLayout ].
 	self layout: SpBoxLayout newTopToBottom.
 	self layout add: actionBar expand: false.
 	self layout add: self newActiveCheckBox expand: false.
-	DebugPointBehavior allSubclassesDo: [ :behavior |
-		| behaviorUI | 
-		behaviorUI := (behavior uiElement new debugPoint: self debugPoint ).
-		 self layout add: behaviorUI expand: ((self debugPoint getBehavior: behavior) ifNotNil: [ behaviorUI expand ] ifNil: [ false ] ) .
-		]. 
-	debugPoint uiElement ifNotNil: [ :ui | self layout add: ui ].
+	DebugPointBehavior allSubclasses
+		reject: [ :behaviorClass | behaviorClass isAbstract ]
+		thenDo: [ :behavior |
+			| behaviorUI |
+			behaviorUI := behavior uiElement new debugPoint: self debugPoint.
+			self layout
+				add: behaviorUI
+				expand: ((self debugPoint getBehavior: behavior)
+						 ifNotNil: [ behaviorUI expand ]
+						 ifNil: [ false ]) ].
+	debugPoint uiElement ifNotNil: [ :ui | self layout add: ui ]
 	"self layout add: debugPoint uiElement."
-
 ]
 
 { #category : 'accessing' }
