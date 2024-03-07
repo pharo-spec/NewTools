@@ -115,15 +115,6 @@ StUnifiedProcessorTest >> testFindThisPackageWithOtherCategory [
 ]
 
 { #category : 'tests' }
-StUnifiedProcessorTest >> testGTClassProcessorIsRemovedAfterUpdatingText [
-
-	self runForText: 'stclass'.
-	self rerunWithText: 'stclassprocesst'.
-	
-	self denyResultsIncludes: StClassProcessor
-]
-
-{ #category : 'tests' }
 StUnifiedProcessorTest >> testGTSpotterNewIsRemovedAfterAddingText [
 
 	self runForText: 'newtools-spotter'.
@@ -186,4 +177,13 @@ StUnifiedProcessorTest >> testPopularStringDoesReturnOnlyTwentyResultsWithCapita
 
 	self runForText: 'Test'.
 	self assertQuantityOfResults: 25.
+]
+
+{ #category : 'tests' }
+StUnifiedProcessorTest >> testStClassProcessorIsRemovedAfterUpdatingText [
+
+	self runForText: 'stclass'.
+	self rerunWithText: 'stclassprocesst'.
+	
+	self denyResultsIncludes: StClassProcessor
 ]
