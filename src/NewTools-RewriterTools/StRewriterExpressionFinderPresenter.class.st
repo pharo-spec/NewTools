@@ -42,7 +42,7 @@ StRewriterExpressionFinderPresenter class >> menuCommandOn: aBuilder [
 		action: [ self new open ];
 		order: 31;
 		parent: #Tools;
-		icon: self icon;
+		iconName: self iconName;
 		help: self descriptionText
 ]
 

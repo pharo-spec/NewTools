@@ -1,3 +1,7 @@
+"
+It mostly redefines file specific behavior for file system items in a File Browser.
+
+"
 Class {
 	#name : 'StFileWrapper',
 	#superclass : 'StFileSystemItemWrapper',

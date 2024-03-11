@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'adding' }
-StFileBrowserRightsColumn class >> addContraintTo: aTableColumn [
+StFileBrowserRightsColumn class >> addConstraintTo: aTableColumn [
 	aTableColumn width: 110
 ]
 
@@ -18,7 +18,9 @@ StFileBrowserRightsColumn class >> addContraintTo: aTableColumn [
 StFileBrowserRightsColumn class >> evaluateOn: aFileReference [
 	"I'm provide action for fileReference"
 
-	^ aFileReference permissions
+	^ [ aFileReference permissions ]
+		  on: Error
+		  do: [ 'N/A' ]
 ]
 
 { #category : 'sorting' }

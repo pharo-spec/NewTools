@@ -192,8 +192,7 @@ StFileDialogPresenter >> defaultFolder: aPath [
 { #category : 'accessing' }
 StFileDialogPresenter >> extensions: aCollectionOfExtensions [
 
-	self filter:
-		(StCustomExtensionsFilter extensions: aCollectionOfExtensions)
+	self filter: (StCustomExtensionsFilter extensions: aCollectionOfExtensions)
 ]
 
 { #category : 'accessing' }
@@ -211,8 +210,8 @@ StFileDialogPresenter >> fileReferenceTable [
 
 { #category : 'accessing' }
 StFileDialogPresenter >> filter [
-	^ filter
-		ifNil: [ filter := StVisibleFilter new ]
+
+	^ filter ifNil: [ filter := StAllFilter new ]
 ]
 
 { #category : 'accessing' }
@@ -338,6 +337,7 @@ StFileDialogPresenter >> selectedEntry [
 
 { #category : 'accessing' }
 StFileDialogPresenter >> showDirectory: aFileReference [
+	"Set the directory to be displayed to aFileReference"
 
 	self fileNavigationSystem currentDirectory: aFileReference
 ]

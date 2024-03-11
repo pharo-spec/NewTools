@@ -26,6 +26,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Gtk';
 			"Basic tools (inherited from Spec)"
 			package: 'NewTools-MethodBrowsers' with: [ spec requires: #( 'NewTools-SpTextPresenterDecorators' ) ];
+			package: 'NewTools-MethodBrowsers-Tests' with: [ spec requires: #( 'NewTools-MethodBrowsers' ) ];
 			package: 'NewTools-KeymapBrowser';
 			"inspector"
 			package: 'NewTools-Inspector' with: [ spec requires: #( 'NewTools-Inspector-Extensions' ) ];
@@ -98,7 +99,9 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Finder-Tests' with: [ spec requires: #('NewTools-Finder') ];
 			
 			package: 'NewTools-SettingsBrowser' with: [ spec requires: #('ColorPicker') ];
-			package: 'NewTools-SettingsBrowser-Tests' with: [ spec requires: #('NewTools-SettingsBrowser') ].			
+			package: 'NewTools-SettingsBrowser-Tests' with: [ spec requires: #('NewTools-SettingsBrowser') ];
+			
+			package: 'NewTools-Compression-Utils' with: [ spec requires: #('NewTools-FileBrowser') ].			
 
 		spec
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Morphic' );
@@ -136,20 +139,20 @@ BaselineOfNewTools >> baseline: spec [
 						'Core' 
 						'NewTools-FlagBrowser' 
 						'NewTools-FlagBrowser-Tests' );
-			group: #development with: #( 'default' 
+			group: 'development' with: #( 'default' 
 						'NewTools-DebuggerSelector'
 				   		'NewTools-DebuggerSelector-Tests' );
-			group: #FileBrowser with: #( 
+			group: 'FileBrowser' with: #( 
 						'NewTools-FileBrowser' 
 						'NewTools-FileBrowser-Tests' );
-      			group: #RewriterTools with: #(
+      			group: 'RewriterTools' with: #(
 				    		'NewTools-RewriterTools-Backend'
 				    		'NewTools-RewriterTools'
 				    		'NewTools-RewriterTools-Backend-Tests'
 				    		'NewTools-RewriterTools-Tests' );
 			group: 'Profiler' with: #( 'NewTools-ProfilerUI' );
 			"ScopesEditor"
-			group: #ScopesEditor with: #(
+			group: 'ScopesEditor' with: #(
 						'NewTools-Scopes' 
 						'NewTools-Scopes-Editor' 
 						'NewTools-Scopes-Resources-A-Tests' 
@@ -157,13 +160,16 @@ BaselineOfNewTools >> baseline: spec [
 						'NewTools-Scopes-Resources-C-Tests' 
 						'NewTools-Scopes-Tests');
 			"Finder"
-			group: #Finder with: #(
+			group: 'Finder' with: #(
 						'NewTools-Finder'
 						'NewTools-Finder-Tests');
 			"Settings Browser"
-			group: #SettingsBrowser with: #(
+			group: 'SettingsBrowser' with: #(
 						'NewTools-SettingsBrowser'
 						'NewTools-SettingsBrowser-Tests');
+			"Compression Utilities"
+			group: 'CompressionUtilities' with: #(
+						'NewTools-Compression-Utils');
 
 			group: 'default' with: #( 
 						'Playground' 
@@ -179,7 +185,8 @@ BaselineOfNewTools >> baseline: spec [
 						'FileBrowser'
 						'Finder'
 						'Profiler'
-						'SettingsBrowser') ]
+						'SettingsBrowser'
+						'CompressionUtilities') ]
 ]
 
 { #category : 'external projects' }

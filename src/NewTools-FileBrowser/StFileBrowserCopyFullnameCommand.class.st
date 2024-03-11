@@ -1,3 +1,6 @@
+"
+Implements copy to clipboard the full path of the selected item in the File Browser.
+"
 Class {
 	#name : 'StFileBrowserCopyFullnameCommand',
 	#superclass : 'StFileBrowserSelectionCommand',

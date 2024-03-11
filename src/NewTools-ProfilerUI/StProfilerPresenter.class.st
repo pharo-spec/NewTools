@@ -29,7 +29,7 @@ StProfilerPresenter class >> menuCommandOn: aBuilder [
 	(aBuilder item: #'Profiler')
 		parent: #Profiling;
 		order: 1;
-		icon: (self iconNamed: #smallProfile);
+		iconName: #smallProfile;
 		help: 'Profile the execution of a piece of code using different profilers, and navigate into the result.';
 		action: [self new open]
 ]

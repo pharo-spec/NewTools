@@ -1,3 +1,6 @@
+"
+File Navigation Presenter that will only show directories
+"
 Class {
 	#name : 'StDirectoryNavigationSystemPresenter',
 	#superclass : 'StFileNavigationSystemPresenter',
@@ -5,6 +8,15 @@ Class {
 	#package : 'NewTools-FileBrowser',
 	#tag : 'UI'
 }
+
+{ #category : 'layout' }
+StDirectoryNavigationSystemPresenter >> defaultLayout [
+
+	^ SpBoxLayout newTopToBottom
+		add: self navigationLayout expand: false;
+		add: self topPaneLayout;
+		yourself
+]
 
 { #category : 'utilities' }
 StDirectoryNavigationSystemPresenter >> updateFileReferenceTable [

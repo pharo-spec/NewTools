@@ -10,8 +10,11 @@ Class {
 }
 
 { #category : 'adding' }
-StFileBrowserLastOpenDateColumn class >> addContraintTo: aTableColumn [
-	aTableColumn width: 150
+StFileBrowserLastOpenDateColumn class >> addConstraintTo: aTableColumn [
+
+	aTableColumn
+		width: 150;
+		beSortable
 ]
 
 { #category : 'templateMethod' }

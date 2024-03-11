@@ -2,7 +2,7 @@
 This is a JobManager to work with the Jobs package. 
 This manager will listen to the announcer and fire the events as it corresponds, allowing the user to interact with the joblist tool.
 
-
+This is a HACK (hopefully temporal) based on the fact that most of the processing in pharo (for the moment) is hidden deep in the model, far from the UI, and even worst, most of it happens inside the UI Thread, blocking regular processing.
 "
 Class {
 	#name : 'StPharoJobManager',
@@ -40,7 +40,7 @@ StPharoJobManager class >> enable [
 { #category : 'class initialization' }
 StPharoJobManager class >> initialize [
 
-	self enable
+	"self enable"
 ]
 
 { #category : 'private' }
@@ -63,10 +63,7 @@ StPharoJobManager class >> jobChanged: ann [
 StPharoJobManager class >> jobEnd: ann [
 
 	self isHeadless ifTrue: [ ^ self ].
-	self jobList jobEnd: ann.
-	"this is just a cleanup... because jobs may leak!"
-	self jobList isEmpty
-		ifTrue: [ self application removeProperty: #jobList ]
+	self jobList jobEnd: ann
 ]
 
 { #category : 'private' }

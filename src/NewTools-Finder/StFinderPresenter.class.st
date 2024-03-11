@@ -346,6 +346,8 @@ StFinderPresenter >> initializeResultTree [
 		beMultipleSelection;
 		display: [ :result | result displayString ];
 		displayIcon: [ :result | result displayIcon ];
+		bindKeyCombination: $b meta toAction: [ self resultTree selectedItem browseAction ];
+		bindKeyCombination: $r meta toAction: [ self resultTree selectedItem referencesAction ];
 		contextMenu: [ (self rootCommandsGroup / 'StFinderSelContextualMenu') beRoot asMenuPresenter ].
 ]
 
@@ -547,7 +549,7 @@ StFinderPresenter >> updateResultsWith: results time: time [
 		roots: results;
 		children: [ :result | result children ].
 	self updateResultsBehavior.
-	resultStatusBar pushMessage: (self updateStatusBarTextFrom: results time: time)
+	resultStatusBar pushMessage: (self updateStatusBarTextFrom: results time: time).
 ]
 
 { #category : 'updating - widgets' }

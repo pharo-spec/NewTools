@@ -10,15 +10,22 @@ Class {
 }
 
 { #category : 'adding' }
-StFileBrowserSizeColumn class >> addContraintTo: aTableColumn [
-	aTableColumn width: 70
+StFileBrowserSizeColumn class >> addConstraintTo: aTableColumn [
+
+	aTableColumn
+		width: 70;
+		beSortable
 ]
 
 { #category : 'templateMethod' }
 StFileBrowserSizeColumn class >> evaluateOn: aFileReference [
+
 	^ aFileReference isDirectory
-		ifTrue: [ '--' ]
-		ifFalse: [ aFileReference humanReadableSize ]
+		  ifTrue: [ '--' ]
+		  ifFalse: [
+			  [ aFileReference humanReadableSize ]
+				  on: Error
+				  do: [ 'N/A' ] ]
 ]
 
 { #category : 'sorting' }

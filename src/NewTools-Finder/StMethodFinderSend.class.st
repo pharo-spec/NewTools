@@ -62,8 +62,7 @@ StMethodFinderSend >> evaluateWithTimeOut: anInteger [
 
 	runner := TKTLocalProcessTaskRunner new.
 	runner 
-		schedule: [ 
-			result := [ self evaluate ] onErrorDo: [ : e | self handleError: e ] ] asTask
+		schedule: [ result := [ self evaluate ] onErrorDo: [ : e | self handleError: e ] ] asTask
 		timeout: anInteger milliSeconds.
 	^ result
 

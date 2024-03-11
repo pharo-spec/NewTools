@@ -3,7 +3,7 @@ This is an abstract class to group open dialog presenter behavior.
 See subclasses for specific users.
 "
 Class {
-	#name : 'StOpenFileOrDirectoryDialog',
+	#name : 'StOpenFileOrDirectoryPresenter',
 	#superclass : 'StFileDialogPresenter',
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
@@ -11,12 +11,12 @@ Class {
 }
 
 { #category : 'accessing - ui' }
-StOpenFileOrDirectoryDialog >> confirmLabel [
+StOpenFileOrDirectoryPresenter >> confirmLabel [
 
 	^ 'Open'
 ]
 
 { #category : 'hooks' }
-StOpenFileOrDirectoryDialog >> initialTitle [
+StOpenFileOrDirectoryPresenter >> initialTitle [
 	^ self subclassResponsibility
 ]

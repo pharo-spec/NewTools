@@ -2,8 +2,8 @@
 This Spec presenter provides:
 
 * An history of visited folder.
-* A text input use to jump to the write path.
-* A drop list use to filter the content of the fileReferenceTable
+* A text input used to jump to the write path.
+* A drop list used to filter the content of the fileReferenceTable
 * A text presenter to show a preview of the currently selected file.
 
 ## Example
@@ -52,10 +52,8 @@ Class {
 		'notebookPreviewer',
 		'fileReferenceTable',
 		'configButton',
-		'pathBreadcrumbPresenter'
-	],
-	#classVars : [
-		'Previewer'
+		'pathBreadcrumbPresenter',
+		'newFolderButton'
 	],
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
@@ -83,12 +81,8 @@ StFileNavigationSystemPresenter class >> buildCommandsGroupWith: presenter forRo
 					((CmCommandGroup named: 'Bookmarks') asSpecGroup
 						register: StFileBrowserAddBookmarkCommand forSpec;
 						yourself);
+				register: StFileBrowserToggleHiddenFilesCommand forSpec;
 				yourself)
-]
-
-{ #category : 'defaults' }
-StFileNavigationSystemPresenter class >> defaultPreviewer [
-	^ StFileBrowserContentPreviewer new
 ]
 
 { #category : 'examples' }
@@ -101,12 +95,6 @@ StFileNavigationSystemPresenter class >> example [
 	presenter open.
 	presenter inspect.
 	^ presenter
-]
-
-{ #category : 'class initialization' }
-StFileNavigationSystemPresenter class >> initialize [
-
-	Previewer := self defaultPreviewer
 ]
 
 { #category : 'api - customization' }
@@ -139,6 +127,28 @@ StFileNavigationSystemPresenter >> connectPresenters [
 	self previousBeforeButtonAction.
 	self nextButtonAction.
 	self configButtonAction.
+	newFolderButton action: [ self createDirectory ]
+]
+
+{ #category : 'utilities' }
+StFileNavigationSystemPresenter >> currentDirectoryChildren [
+
+	^ [ self currentDirectory children select: #exists ]
+		  on: Error
+		  do: [ #(  ) ]
+]
+
+{ #category : 'initialization' }
+StFileNavigationSystemPresenter >> defaultFileSortBlock [
+
+	^ [:entry1 :entry2 |
+		entry1 isDirectory = entry2 isDirectory
+			ifTrue: [entry1 basename caseInsensitiveLessOrEqual: entry2 basename]
+			ifFalse: [entry1 isDirectory
+						ifTrue: [true]
+						ifFalse: [entry2 isDirectory
+									ifTrue: [false]
+									ifFalse: [entry1 basename caseInsensitiveLessOrEqual: entry2 basename]]]]
 ]
 
 { #category : 'api - customization' }
@@ -151,25 +161,28 @@ StFileNavigationSystemPresenter >> defaultFolder: aFileReference [
 StFileNavigationSystemPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
-		add: (SpBoxLayout newLeftToRight
-				vAlignCenter;
-				add: previousButton expand: false;
-				add: nextButton expand: false;
-				add: pathBreadcrumbPresenter;
-			   addLast: configButton;				
-				yourself)
-			 expand: false;
+		add: self navigationLayout expand: false;
 		add: (SpPanedLayout newTopToBottom
-				add: fileReferenceTable;
+				add: self topPaneLayout;
 				add: notebookPreviewer;
 				yourself);
-		add: (SpBoxLayout newLeftToRight
+		yourself
+]
+
+{ #category : 'defaults' }
+StFileNavigationSystemPresenter >> defaultPreviewer [
+
+	^ StFileBrowserAdaptiveContentPreviewer new
+]
+
+{ #category : 'layout' }
+StFileNavigationSystemPresenter >> fileNameLayout [
+
+	^ SpBoxLayout newLeftToRight
 				vAlignCenter;
 				add: nameText;
 				add: filtersDropList expand: false;
-				yourself)
-			 expand: false;
-		yourself
+				yourself
 ]
 
 { #category : 'accessing' }
@@ -195,13 +208,11 @@ StFileNavigationSystemPresenter >> filesListAction [
 			ifFalse: [ self owner confirm ] ].
 
 	fileReferenceTable whenSelectedDo: [ :aFileReference | 
-		previewProcess ifNotNil: [ 
-			previewProcess isTerminated ifFalse: [ previewProcess terminate ] ].
-		previewProcess := [ 
-		                  notebookPreviewer pageContent:
-			                  (previewer previewOn: aFileReference) ]
-			                  forkAt: Processor userBackgroundPriority
-			                  named: 'File Browser preview loader' ]
+		previewProcess ifNotNil: [ previewProcess isTerminated ifFalse: [ previewProcess terminate ] ].
+		previewProcess := [ notebookPreviewer pageContent: (self previewer previewOn: aFileReference) ]
+				forkAt: Processor userBackgroundPriority
+				named: 'File Browser preview loader' ]
+
 ]
 
 { #category : 'accessing' }
@@ -241,8 +252,7 @@ StFileNavigationSystemPresenter >> filtersDropListAction [
 { #category : 'initialization' }
 StFileNavigationSystemPresenter >> initialize [
 
-	filter := StVisibleFilter new.
-	previewer := Previewer.
+	filter := StAllFilter new.
 	super initialize
 ]
 
@@ -253,10 +263,7 @@ StFileNavigationSystemPresenter >> initializeFilesTable [
 	fileReferenceTable
 		beResizable;
 		columns: StFileBrowserAbstractColumn columns;
-		sortingBlock: [ :a :b | 
-			a isDirectory & b isDirectory not or: [ 
-					a isDirectory = b isDirectory and: [ 
-							a basename asLowercase < b basename asLowercase ] ] ];
+		sortingBlock: self defaultFileSortBlock;
 		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'StFileBrowserNavigationMenu' ]
 ]
 
@@ -277,9 +284,11 @@ StFileNavigationSystemPresenter >> initializeNavigationPresenters [
 
 	nextButton
 		icon: (self application iconNamed: #forward);
+		help: 'See folder you viewed previously.';
 		addStyle: 'small'.
 	previousButton
 		icon: (self application iconNamed: #back);
+		help: 'See folder you viewed previously';
 		addStyle: 'small'.
 
 ]
@@ -292,9 +301,15 @@ StFileNavigationSystemPresenter >> initializePresenters [
 	pathBreadcrumbPresenter := self instantiate: StPathBreadcrumbPresenter on: self model.
 	nameText := self newTextInput.
 	filtersDropList := self newDropList.
+	newFolderButton := self newButton
+			addStyle: 'small';
+			help: 'New Folder';
+			icon: (self iconNamed: #add);
+			yourself.
 	configButton := self newButton
 			addStyle: 'small';
-			icon: (self iconNamed: #config);
+			help: 'Settings';
+			icon: (self iconNamed: #configuration);
 			yourself.
 	
 	self initializeNavigationPresenters.
@@ -331,6 +346,19 @@ StFileNavigationSystemPresenter >> nameTextChanged: aText [
 		ifNone: [ fileReferenceTable unselectAll ]
 ]
 
+{ #category : 'layout' }
+StFileNavigationSystemPresenter >> navigationLayout [
+
+	^ SpBoxLayout newLeftToRight
+		  vAlignCenter;
+		  add: previousButton expand: false;
+		  add: nextButton expand: false;
+		  add: pathBreadcrumbPresenter expand: false;
+		  addLast: newFolderButton;
+		  addLast: configButton;
+		  yourself
+]
+
 { #category : 'accessing' }
 StFileNavigationSystemPresenter >> nextButton [
 	^ nextButton
@@ -347,7 +375,7 @@ StFileNavigationSystemPresenter >> notebookPreviewer [
 ]
 
 { #category : 'utilities' }
-StFileNavigationSystemPresenter >> openFolder: aFileReference [ 
+StFileNavigationSystemPresenter >> openFolder: aFileReference [
 
 	self updateWidgetWithFileReference: aFileReference.
 	model openFolder: aFileReference.
@@ -362,7 +390,10 @@ StFileNavigationSystemPresenter >> pathBreadcrumbPresenter [
 
 { #category : 'accessing' }
 StFileNavigationSystemPresenter >> previewer [
+	"Answer the receiver's previewer, a subclass instance of <StFileBrowserAbstractPreviewer>"
+
 	^ previewer
+		ifNil: [ previewer := self defaultPreviewer ]
 ]
 
 { #category : 'api - customization' }
@@ -396,13 +427,23 @@ StFileNavigationSystemPresenter >> shouldReparent [
 	^ false
 ]
 
+{ #category : 'layout' }
+StFileNavigationSystemPresenter >> topPaneLayout [
+
+	^ SpBoxLayout newTopToBottom
+		add: fileReferenceTable;
+		add: self fileNameLayout expand: false fill: false padding: 1;
+		yourself
+]
+
 { #category : 'utilities' }
 StFileNavigationSystemPresenter >> updateFileReferenceTable [
 	"Update the receiver's contents according to the current directory and apply configured filters"
-	
-	fileReferenceTable items:
-		((filtersDropList selectedItem ifNil: [ filter ]) applyOn:
-			 (self currentDirectory children select: #exists)).
+
+	| items |
+	items := (filtersDropList selectedItem ifNil: [ filter ]) applyOn: self currentDirectoryChildren.
+	StFileBrowserSettings showHiddenFiles ifFalse: [ items := items reject: [ :file | file isHidden ] ].
+	fileReferenceTable items: items
 ]
 
 { #category : 'utilities' }

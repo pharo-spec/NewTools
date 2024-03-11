@@ -57,7 +57,7 @@ StRewriterRuleEditorPresenter class >> menuCommandOn: aBuilder [
 		order: 30;
 		parent: #Tools;
 		help: self descriptionText;
-		icon: self icon
+		iconName: self iconName
 ]
 
 { #category : 'specs' }
