@@ -79,6 +79,8 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Debugger-Fuel';
 			package: 'NewTools-Debugger-Fuel-Tests' with: [ spec requires: #( 'NewTools-Debugger-Fuel' ) ];
 			package: 'NewTools-Fuel';
+			package: 'NewTools-Fuel-Tests' with: [ spec requires: #( 'NewTools-Fuel' ) ];
+			
      		"Rewriter Tools"
 			package: 'NewTools-RewriterTools-Backend';
 			package: 'NewTools-RewriterTools' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
@@ -121,7 +123,8 @@ BaselineOfNewTools >> baseline: spec [
 				    		'NewTools-Debugger-Tests' 
 					 	'NewTools-Debugger-Fuel'
 				    		'NewTools-Debugger-Fuel-Tests' 
-					 	'NewTools-Fuel' );
+					 	'NewTools-Fuel'
+						'NewTools-Fuel-Tests');
 			group: 'Spotter' with: #( 
 						'NewTools-Morphic-Spotter' 
 						'NewTools-Spotter-Processors'
