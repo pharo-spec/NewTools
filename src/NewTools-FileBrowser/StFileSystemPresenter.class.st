@@ -5,10 +5,12 @@ General file system presenter, which replaces the older FileList tool.
 Class {
 	#name : 'StFileSystemPresenter',
 	#superclass : 'StFileBrowserAbstractPresenter',
+	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'treeNavigationSystem',
 		'fileNavigationSystem',
-		'bookmarksTreeTable'
+		'bookmarksTreeTable',
+		'title'
 	],
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
@@ -192,7 +194,7 @@ StFileSystemPresenter >> setInitialExtentTo: aSpWindowPresenter [
 { #category : 'initialization' }
 StFileSystemPresenter >> setTitleTo: aSpWindowPresenter [
 
-	aSpWindowPresenter title: self initialTitle
+	aSpWindowPresenter title: self title
 
 ]
 
@@ -204,9 +206,16 @@ StFileSystemPresenter >> setWindowIconTo: aSpWindowPresenter [
 ]
 
 { #category : 'accessing' }
-StFileSystemPresenter >> title: aString [ 
+StFileSystemPresenter >> title [
 
-	self withWindowDo: [ : w | w title: aString ]
+	^ title
+		ifNil: [ title := self initialTitle ]
+]
+
+{ #category : 'accessing' }
+StFileSystemPresenter >> title: aString [
+
+	title := aString.
 ]
 
 { #category : 'accessing' }

@@ -50,7 +50,7 @@ StOpenDirectoryPresenter >> initialTitle [
 	^ 'Select Directory To Open'
 ]
 
-{ #category : 'actions' }
+{ #category : 'accessing' }
 StOpenDirectoryPresenter >> selectedEntry [
 
 	super selectedEntry ifNotNil: [ :fileReference | 
