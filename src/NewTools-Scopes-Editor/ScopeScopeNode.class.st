@@ -14,7 +14,7 @@ ScopeScopeNode >> children [
 
 	| fullPackages orphanClasses packageChildren classChildren |
 	
-	fullPackages := self value fullPackages.
+	fullPackages := self value definedPackages.
 	orphanClasses := self value orphanClasses.
 
 	packageChildren := fullPackages collect: [ :package |

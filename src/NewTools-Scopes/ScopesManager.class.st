@@ -78,21 +78,17 @@ ScopesManager class >> defaultScopeLabel [
 { #category : 'operations' }
 ScopesManager class >> editScope: aScope withNodes: aCollection [
 
-	| classesInScope addedClasses removedClasses auxScope classesInCollection |
-	
-	classesInScope := aScope definedClasses.
+	| auxScope definedPackagesInCollection orphanClassesInCollection |
+	aScope removeAllDefinedPackages.
+	aScope removeAllDefinedClasses.
 	
 	auxScope := self newScopeFrom: aCollection.
-	classesInCollection := auxScope definedClasses.
-
-	addedClasses := classesInCollection reject: [ :aClass |
-		                classesInScope includes: aClass ].
-	removedClasses := classesInScope reject: [ :aClass |
-		                  classesInCollection includes: aClass ].
-
-	addedClasses do: [ :aClass | aScope addClass: aClass ].
-	removedClasses do: [ :aClass | aScope removeClass: aClass ].
-
+	definedPackagesInCollection := auxScope definedPackages.
+	orphanClassesInCollection := auxScope orphanClasses.
+	
+	definedPackagesInCollection do: [ :aPackage | aScope addPackage: aPackage ].
+	orphanClassesInCollection do: [ :aClass | aScope addClass: aClass ].
+	
 	^ aScope
 ]
 
@@ -123,21 +119,14 @@ ScopesManager class >> invalidNames [
 { #category : 'operations' }
 ScopesManager class >> newScopeFrom: aCollection [
 
-	| aSet packageScope classScope classes packages orphanClasses fullPackages label newScope |
+	| aSet packageScope classScope classes packages label newScope |
 	aSet := aCollection asSet.
 	classes := (aSet select: [ :each | each isClassOrTrait ]) reject: [
 		           :each | each isMeta ].
 	packages := aSet select: [ :each | each isKindOf: Package ].
 
-	"packages whose classes were all selected"
-	fullPackages := packages addAll: (self fullPackagesFrom: classes); yourself.
-	"classes whose package hasn't all of its classes selected"
-	orphanClasses := self
-		                 orphanClassesIn: classes
-		                 havingFullPackages: fullPackages.
-
-	classScope := RBClassEnvironment classes: orphanClasses.
-	packageScope := RBPackageEnvironment packages: fullPackages.
+	classScope := RBClassEnvironment classes: classes.
+	packageScope := RBPackageEnvironment packages: packages.
 	newScope := classScope | packageScope.
 	
 	label := self defaultNameForScope: newScope.

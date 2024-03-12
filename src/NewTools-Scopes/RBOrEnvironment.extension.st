@@ -4,10 +4,10 @@ Extension { #name : 'RBOrEnvironment' }
 RBOrEnvironment >> definedClassesDo: aBlock [
 	| enumerated |
 	enumerated := IdentitySet new.
-	environment definedClassesDo: [ :each |
+	self classEnvironment definedClassesDo: [ :each |
 		aBlock value: each.
 		enumerated add: each].
-	self orEnvironment definedClassesDo: [ :each |
+	self packageEnvironment definedClassesDo: [ :each |
 		(enumerated includes: each)
 			ifFalse: [ aBlock value: each ] ]
 ]
