@@ -190,8 +190,9 @@ DebugPointVariableTargetPresenter >> updateImpactedNodesCache [
 DebugPointVariableTargetPresenter >> updateMethodList [
 
 	self updateImpactedNodesCache.
-	impactedMethodList items: (impactedNodesCache collect: [ :node |
-			 node methodOrBlockNode compiledMethod ]) asIdentitySet
+	impactedMethodList items:
+		(impactedNodesCache collect: [ :node |
+			 node methodNode compiledMethod ]) asIdentitySet
 ]
 
 { #category : 'initialization' }
