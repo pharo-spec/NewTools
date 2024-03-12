@@ -79,11 +79,6 @@ DebugPointBrowserPresenter >> deactivateDebugPoint: debugPoint [
 { #category : 'layout' }
 DebugPointBrowserPresenter >> defaultLayout [
 
-	targetContainer := SpPanedLayout newTopToBottom
-		                   add: dpTable;
-		                   add: dpCode;
-		                   positionOfSlider: 40 percent;
-		                   yourself.
 	^ SpBoxLayout newTopToBottom
 		  add: (SpBoxLayout newLeftToRight
 				   add: selectAllCheckbox expand: false;
@@ -122,7 +117,13 @@ DebugPointBrowserPresenter >> initializePresenters [
 	selectAllCheckbox := self newCheckBox
 		                     label: '(De)activate all';
 		                     yourself.
-	self initializeVariableTargetPresenter
+	self initializeVariableTargetPresenter.
+
+	targetContainer := SpPanedLayout newTopToBottom
+		                   add: dpTable;
+		                   add: dpCode;
+		                   positionOfSlider: 40 percent;
+		                   yourself
 ]
 
 { #category : 'presenter building' }
