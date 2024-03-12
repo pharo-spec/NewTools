@@ -179,10 +179,11 @@ StFileNavigationSystemPresenter >> defaultPreviewer [
 StFileNavigationSystemPresenter >> fileNameLayout [
 
 	^ SpBoxLayout newLeftToRight
-				vAlignCenter;
-				add: nameText;
-				add: filtersDropList expand: false;
-				yourself
+		spacing: 2;	
+		vAlignCenter;
+		add: nameText;
+		add: filtersDropList expand: false;
+		yourself
 ]
 
 { #category : 'accessing' }
@@ -194,11 +195,6 @@ StFileNavigationSystemPresenter >> fileReferenceTable [
 StFileNavigationSystemPresenter >> filesListAction [
 
 	| previewProcess |
-
-	fileReferenceTable
-		transmitTo: nameText
-		transform: [ :selectedItem | 
-			selectedItem ifNotNil: [ selectedItem basename ] ifNil: [ '' ] ].
 
 	fileReferenceTable whenActivatedDo: [ :selectedItem | 
 		previewProcess ifNotNil: [ 
@@ -264,6 +260,8 @@ StFileNavigationSystemPresenter >> initializeFilesTable [
 		beResizable;
 		columns: StFileBrowserAbstractColumn columns;
 		sortingBlock: self defaultFileSortBlock;
+		whenSelectedItemChangedDo: [ : selectedItem | 
+			selectedItem ifNotNil: [ self nameText: selectedItem basename ] ];		
 		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'StFileBrowserNavigationMenu' ]
 ]
 
@@ -324,6 +322,13 @@ StFileNavigationSystemPresenter >> initializePresenters [
 { #category : 'accessing' }
 StFileNavigationSystemPresenter >> nameText [
 	^ nameText
+]
+
+{ #category : 'accessing' }
+StFileNavigationSystemPresenter >> nameText: aString [
+	"Set the receive's name text to aString. This is displayed in a text presenter to display the currently selected file, or the name of a new file to be saved"
+	
+	nameText text: aString.
 ]
 
 { #category : 'actions' }
