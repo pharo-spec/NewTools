@@ -198,9 +198,9 @@ ScopesPresenter >> editSelectedScope [
 			^ self ].
 
 	(selectedPath at: 1) == 1 ifTrue: [
-		self inform: 'You can''t edit this scope'.
+		self inform: 'You can''t edit the full environment scope'.
 		^ self ].
-
+	
 	self newScopeEditor open
 ]
 
@@ -435,9 +435,7 @@ ScopesPresenter >> toolbarButtons [
 
 	| buttons |
 	buttons := OrderedCollection new.
-
-
-
+	
 	buttons add: (self newToolbarPopoverButton
 			 icon: (self iconNamed: #add);
 			 help: 'Add a new scope';

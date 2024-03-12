@@ -34,7 +34,19 @@ RBCompositeEnvironment >> definedClasses [
 	| definedClasses |
 	definedClasses := IdentitySet new: 4096.
 	self definedClassesDo: [ :each | each isMeta ifFalse: [definedClasses add: each] ].
-	^ definedClasses
+	^ definedClasses reject: [ :each | each isMeta ]
+]
+
+{ #category : '*NewTools-Scopes' }
+RBCompositeEnvironment >> definedClassesDo: aBlock [
+	| enumerated |
+	enumerated := IdentitySet new.
+	self classEnvironment definedClassesDo: [ :each |
+		aBlock value: each.
+		enumerated add: each].
+	self packageEnvironment definedClassesDo: [ :each |
+		(enumerated includes: each)
+			ifFalse: [ aBlock value: each ] ]
 ]
 
 { #category : '*NewTools-Scopes' }

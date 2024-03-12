@@ -59,6 +59,11 @@ ScopeNode >> children [
 ]
 
 { #category : 'accessing' }
+ScopeNode >> data [
+	^ value
+]
+
+{ #category : 'accessing' }
 ScopeNode >> definedClasses [
 	^#()
 ]

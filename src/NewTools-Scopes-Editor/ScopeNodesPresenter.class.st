@@ -426,31 +426,27 @@ ScopeNodesPresenter >> saveScopeAs [
 { #category : 'accessing' }
 ScopeNodesPresenter >> scope: aRBEnvironment [
 
-	| packageNodes theClasses thePackages packagesCache |
+	| orphanClasses incompletePackages fullPackages |
 	scope := aRBEnvironment.
-	theClasses := scope classes reject: [ :each | each isMeta ].
-	thePackages := theClasses collect: [ :each | each package ].
-	packagesCache := Dictionary new.
-	theClasses do: [ :class | packagesCache at: class put: class package ].
-
-	packageNodes := allScopeNodeTreeRoots select: [ :packageNode |
-		                thePackages includes: packageNode value ].
-	packageNodes do: [ :packageNode |
-		| classNodes classes |
-		classNodes := packageNode children.
-		classes := theClasses select: [ :each |
-			           (packagesCache at: each) = packageNode value ].
-		"all packageNode children should be checked, including the packageNode"
-		classes := classes reject: [ :each | each isMeta ].
-		classNodes size = classes size
-			ifTrue: [
-				classNodes do: [ :clsNode | checkedScopeNodes add: clsNode ].
-				checkedScopeNodes add: packageNode ]
-			ifFalse: [ "only some packageNode children should be checked, and as result, the packageNode is not selected"
-				classNodes do: [ :classNode |
-					(classes includes: classNode value) ifTrue: [ "scopeNodesTree expandPath: { index }"
-						checkedScopeNodes add: classNode ] ] ] ].
-
+	nodeNameText text: ''.
+	orphanClasses := scope orphanClasses.
+	incompletePackages := (orphanClasses collect: [ :class |
+		                       class package ]) asSet.
+	fullPackages := scope definedPackages.
+	
+	allScopeNodeTreeRoots doWithIndex: [ :packageNode :index |
+		(fullPackages includes: packageNode value)
+			ifTrue: [ "Check the package and all of its classes"
+				checkedScopeNodes add: packageNode.
+				packageNode children do: [ :classNode |
+					checkedScopeNodes add: classNode ] ]
+			ifFalse: [
+				(incompletePackages includes: packageNode value) ifTrue: [ "This package contains orphan classes, check them, but do not check the package"
+					scopeNodesTree selectItem: packageNode.
+					packageNode children do: [ :classNode |
+						(orphanClasses includes: classNode value) ifTrue: [
+							checkedScopeNodes add: classNode ] ] ] ] ].
+	scopeNodesTree expandSelectedItems.
 	self refresh
 ]
 

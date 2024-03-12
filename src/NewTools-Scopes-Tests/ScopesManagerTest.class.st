@@ -17,13 +17,13 @@ ScopesManagerTest >> testEditClassOrPackageScopeAddingClass [
 	oldElements := { ScClassA1 . ScClassB1 package } asSet.
 	
 	scope := self scopesManagerClass newScopeFrom: oldElements.
-	self assert: scope fullPackages equals: {ScClassB1 package} asSet.
-	self assert: scope definedClasses equals: {ScClassA1} asSet.
+	self assert: scope definedPackages equals: {ScClassB1 package} asSet.
+	self assert: scope orphanClasses equals: {ScClassA1} asSet.
 	
 	newElements := { ScClassA1 . ScClassA2 . ScClassB1 package } asSet.
 	self scopesManagerClass editScope: scope withNodes: newElements.
-	self assert: scope fullPackages equals: {ScClassB1 package} asSet.
-	self assert: scope definedClasses equals: {ScClassA1 . ScClassA2} asSet
+	self assert: scope definedPackages equals: {ScClassB1 package} asSet.
+	self assert: scope orphanClasses equals: {ScClassA1 . ScClassA2} asSet
 	
 ]
 
