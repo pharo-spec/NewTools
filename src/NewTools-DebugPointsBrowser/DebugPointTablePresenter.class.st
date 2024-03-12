@@ -92,10 +92,9 @@ DebugPointTablePresenter >> initializeDebugPointTable [
 				  evaluated: [ :item | item name ])
 				 beEditable;
 				 onAcceptEdition: [ :item :newName | item name: newName asSymbol ]);
-		addColumn:
-		(SpStringTableColumn
-			 title: 'Scope'
-			 evaluated: [ :item | item scope ]);
+		addColumn: (SpStringTableColumn
+				 title: 'Scope'
+				 evaluated: [ :item | item scopeString ]);
 		contextMenu: self debugPointContextMenu.
 	self items: DebugPoint all asOrderedCollection.
 
