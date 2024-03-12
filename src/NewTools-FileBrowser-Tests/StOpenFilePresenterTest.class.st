@@ -54,6 +54,15 @@ StOpenFilePresenterTest >> testSelectFile [
 ]
 
 { #category : 'tests' }
+StOpenFilePresenterTest >> testSetTitle [
+
+	dialog title: 'test set title'.
+	self
+		assertCollection: dialog title
+		equals: 'test set title'.
+]
+
+{ #category : 'tests' }
 StOpenFilePresenterTest >> testWhenChangeDirectoryShouldFilesListContainsHisChildren [
 	| newDirectory |
 	newDirectory := (root / 'dir') asFileReference.
