@@ -78,6 +78,18 @@ DebugPointSelectDialogPresenter >> scope: anObject [
 	scope := anObject class
 ]
 
+{ #category : 'layout' }
+DebugPointSelectDialogPresenter >> switchToNodeTargetView [
+
+	self layout: self defaultLayout
+]
+
+{ #category : 'layout' }
+DebugPointSelectDialogPresenter >> switchToVariableTargetView [
+
+	self layout: self variableTargetLayout
+]
+
 { #category : 'updating - presenters' }
 DebugPointSelectDialogPresenter >> updateCode: aDebugPointTarget [
 
