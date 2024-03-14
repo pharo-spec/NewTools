@@ -127,7 +127,7 @@ ScopeNodesPresenter >> argumentsListMenu [
 			  
 			addItem: [ :anItem |
 				  anItem
-					  name: 'Add class hierarchy';
+					  name: 'Add class hierarchy (flattened)';
 					  visibleIf: [ scopeNodesTree selectedItem isClassNode ];
 					  iconName: #hierarchy;
 					  action: [ self addSelectedItemClassHierarchy ] ];

@@ -448,12 +448,12 @@ ScopesPresenter >> toolbarButtons [
 							  help: 'Add a new scope from classes and packages';
 							  label: 'Classes and packages';
 							  action: [ self createNewScope ];
-							  yourself);
+							  yourself)";
 					 addItem: (self newToolbarButton
 							  help: 'Add a new scope from class hierarchies';
 							  label: 'Class hierarchy';
 							  action: [ self createNewScope ];
-							  yourself);
+							  yourself)";
 					 yourself ];
 			 yourself).
 
