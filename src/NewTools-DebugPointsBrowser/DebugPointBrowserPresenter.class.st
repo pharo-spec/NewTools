@@ -4,7 +4,7 @@ I am the UI for the complete DebugPoint Browser, used to visualize and configure
 Class {
 	#name : 'DebugPointBrowserPresenter',
 	#superclass : 'SpPresenter',
-	#classTraits : '{} + TraitedClass',
+	#classTraits : '',
 	#instVars : [
 		'dpTable',
 		'dpEditor',
