@@ -298,13 +298,13 @@ ScopesPresenter >> notWithScope: anItem [
 { #category : 'menu commands' }
 ScopesPresenter >> openOnCalypso: aClassOrPackage [
 
-	| browser scope |
+	| scope |
 	
 	scope := ClyScopedSystemEnvironment currentImage
 		         scope: aClassOrPackage;
 		         yourself.
 
-	browser := ClyFullBrowserMorph
+	ClyFullBrowserMorph
 		           openOn: (ClyNavigationEnvironment defaultOver: scope)
 		           withState: [  ]
 ]
