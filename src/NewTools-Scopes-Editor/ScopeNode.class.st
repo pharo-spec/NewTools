@@ -26,7 +26,7 @@ ScopeNode class >> on: aRBEnvironment [
 { #category : 'operations' }
 ScopeNode >> & anotherNode [
 
-	^ ScopesManager newScopeFrom: self value and: anotherNode value
+	^ self value & anotherNode value
 ]
 
 { #category : 'comparing' }
@@ -107,7 +107,7 @@ ScopeNode >> name [
 { #category : 'operations' }
 ScopeNode >> not [
 
-	^ ScopesManager newScopeFromNot: self value
+	^ self value not
 ]
 
 { #category : 'accessing' }

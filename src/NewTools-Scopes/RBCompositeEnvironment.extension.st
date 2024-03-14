@@ -50,12 +50,6 @@ RBCompositeEnvironment >> definedClassesDo: aBlock [
 ]
 
 { #category : '*NewTools-Scopes' }
-RBCompositeEnvironment >> definedPackages [
-
-	^ self packageEnvironment packages
-]
-
-{ #category : '*NewTools-Scopes' }
 RBCompositeEnvironment >> definesPackageNamed: aPackageName [
 
 	^ (self definedPackages collect: [ :p | p name ]) includes:
@@ -63,17 +57,43 @@ RBCompositeEnvironment >> definesPackageNamed: aPackageName [
 ]
 
 { #category : '*NewTools-Scopes' }
-RBCompositeEnvironment >> orphanClasses [
+RBCompositeEnvironment >> fullPackages [
+	" full packages are packages explicitely defined in the scope. i.e. there is a RBPackageEnvironment defining them "
+	self subclassResponsibility 
+]
 
-	"orphan classes are those whose packages are not in the scope"
-	^ ScopesManager
-		  orphanClassesIn: self definedClasses
-		  havingFullPackages: self definedPackages
+{ #category : '*NewTools-Scopes' }
+RBCompositeEnvironment >> isTerminal [
+
+	^ (environment isClassEnvironment or: [
+		   environment isPackageEnvironment ]) and: [
+		  otherEnvironment isClassEnvironment or: [
+			  otherEnvironment isPackageEnvironment ] ]
+]
+
+{ #category : '*NewTools-Scopes' }
+RBCompositeEnvironment >> orphanClasses [
+	"orphan classes are those whose package is not among the scope full packages"
+	
+	| theClasses packagesCache fullPackages |
+	
+	fullPackages := self fullPackages.
+	"orphan classes do not include extended classes from the package"
+	theClasses := self rawOrphanClasses reject: [ :each | each isMeta ].
+	packagesCache := Dictionary new.
+	theClasses do: [ :each | packagesCache at: each put: each package ].
+	^ theClasses reject: [ :class |
+		  fullPackages includes: (packagesCache at: class) ]
 ]
 
 { #category : '*NewTools-Scopes' }
 RBCompositeEnvironment >> packageEnvironment [
 	^ otherEnvironment
+]
+
+{ #category : '*NewTools-Scopes' }
+RBCompositeEnvironment >> rawOrphanClasses [
+	self subclassResponsibility 
 ]
 
 { #category : '*NewTools-Scopes' }

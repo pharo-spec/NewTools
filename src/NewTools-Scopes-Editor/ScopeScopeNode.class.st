@@ -14,7 +14,7 @@ ScopeScopeNode >> children [
 
 	| fullPackages orphanClasses packageChildren classChildren |
 	
-	fullPackages := self value definedPackages.
+	fullPackages := self value fullPackages.
 	orphanClasses := self value orphanClasses.
 
 	packageChildren := fullPackages collect: [ :package |
@@ -24,7 +24,7 @@ ScopeScopeNode >> children [
 			                 ifTrue: [ ScopeTraitNode on: class ]
 			                 ifFalse: [ ScopeClassNode on: class ] ].
 
-	^ packageChildren
+	^ packageChildren asOrderedCollection 
 		  addAll: classChildren;
 		  yourself
 ]

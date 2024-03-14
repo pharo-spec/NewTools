@@ -51,7 +51,7 @@ ScopeNodesPresenter class >> reset [
 	LastSearch := nil
 ]
 
-{ #category : 'layout' }
+{ #category : 'specs' }
 ScopeNodesPresenter class >> title [
 	^ 'Scope creator'
 ]
@@ -428,11 +428,12 @@ ScopeNodesPresenter >> scope: aRBEnvironment [
 
 	| orphanClasses incompletePackages fullPackages |
 	scope := aRBEnvironment.
+	
 	nodeNameText text: ''.
 	orphanClasses := scope orphanClasses.
 	incompletePackages := (orphanClasses collect: [ :class |
 		                       class package ]) asSet.
-	fullPackages := scope definedPackages.
+	fullPackages := scope fullPackages.
 	
 	allScopeNodeTreeRoots doWithIndex: [ :packageNode :index |
 		(fullPackages includes: packageNode value)

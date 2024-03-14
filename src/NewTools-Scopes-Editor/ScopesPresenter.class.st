@@ -188,11 +188,11 @@ ScopesPresenter >> deleteSelectedScope [
 { #category : 'menu commands' }
 ScopesPresenter >> editSelectedScope [
 
-	| selectedPath |
+	| selectedPath selectedItem presenter |
 	selectedPath := scopesTree selection selectedPath.
-
-	(scopesTree selectedItem isNil or: [
-		 scopesTree selectedItem isScopeNode not or: [ selectedPath isEmpty ] ])
+	selectedItem := scopesTree selectedItem.
+	(selectedItem isNil or: [
+		 selectedItem isScopeNode not or: [ selectedPath isEmpty ] ])
 		ifTrue: [
 			self inform: 'select a scope'.
 			^ self ].
@@ -201,7 +201,8 @@ ScopesPresenter >> editSelectedScope [
 		self inform: 'You can''t edit the full environment scope'.
 		^ self ].
 	
-	self newScopeEditor open
+	presenter := self newScopeEditor open.
+	presenter withWindowDo: [ :w | w title: 'Editing scope "', selectedItem value label,'"' ]
 ]
 
 { #category : 'menu commands' }
@@ -319,6 +320,7 @@ ScopesPresenter >> performOperation: aSymbol with: anItem [
 	| anEnvironment newScope newName |
 	anEnvironment := self selectAnotherScopeWhitout: anItem.
 	anEnvironment ifNil: [ ^ self ].
+
 	newScope := anItem perform: aSymbol with: anEnvironment.
 	newName := anItem label , aSymbol , anEnvironment label.
 	newScope label: (model nameWithIndex: newName).
@@ -410,7 +412,8 @@ ScopesPresenter >> scopesManagerClass [
 ScopesPresenter >> selectAnotherScopeWhitout: anItem [
 
 	| anotherScope list |
-	list := model scopes select: [ :each | each value ~= anItem value ].
+	list := {model defaultScope} asOrderedCollection.
+	list addAll: (model scopes select: [ :each | each value ~= anItem value ]).
 
 	anotherScope := self application newSelect
 		                display: [ :each | each label ];

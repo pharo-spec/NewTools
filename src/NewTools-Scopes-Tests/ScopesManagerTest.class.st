@@ -17,12 +17,12 @@ ScopesManagerTest >> testEditClassOrPackageScopeAddingClass [
 	oldElements := { ScClassA1 . ScClassB1 package } asSet.
 	
 	scope := self scopesManagerClass newScopeFrom: oldElements.
-	self assert: scope definedPackages equals: {ScClassB1 package} asSet.
+	self assert: scope fullPackages equals: {ScClassB1 package} asSet.
 	self assert: scope orphanClasses equals: {ScClassA1} asSet.
 	
 	newElements := { ScClassA1 . ScClassA2 . ScClassB1 package } asSet.
 	self scopesManagerClass editScope: scope withNodes: newElements.
-	self assert: scope definedPackages equals: {ScClassB1 package} asSet.
+	self assert: scope fullPackages equals: {ScClassB1 package} asSet.
 	self assert: scope orphanClasses equals: {ScClassA1 . ScClassA2} asSet
 	
 ]
@@ -33,12 +33,12 @@ ScopesManagerTest >> testEditClassOrPackageScopeAddingClassAndCompletingFullPack
 	oldElements := { ScClassA1 . ScClassA2 . ScClassB1 package } asSet.
 	
 	scope := self scopesManagerClass newScopeFrom: oldElements.
-	self assert: scope definedPackages equals: {ScClassB1 package} asSet.
+	self assert: scope fullPackages equals: {ScClassB1 package} asSet.
 	self assert: scope orphanClasses equals: {ScClassA1 . ScClassA2} asSet.
 	
 	newElements := { ScClassA1 . ScClassA2 . ScClassA3 . ScClassB1 package } asSet.
 	self scopesManagerClass editScope: scope withNodes: newElements.
-	self assert: scope definedPackages equals: {ScClassB1 package} asSet.
+	self assert: scope fullPackages equals: {ScClassB1 package} asSet.
 	self assert: scope orphanClasses equals: { ScClassA1 . ScClassA2 . ScClassA3 } asSet
 	
 ]
@@ -49,12 +49,12 @@ ScopesManagerTest >> testEditClassOrPackageScopeRemovingClass [
 	oldElements := { ScClassA1 . ScClassA2 . ScClassB1 package } asSet.
 	
 	scope := self scopesManagerClass newScopeFrom: oldElements.
-	self assert: scope definedPackages equals: {ScClassB1 package} asSet.
+	self assert: scope fullPackages equals: {ScClassB1 package} asSet.
 	self assert: scope orphanClasses equals: {ScClassA1 . ScClassA2} asSet.
 	
 	newElements := { ScClassA1 . ScClassB1 package } asSet.
 	self scopesManagerClass editScope: scope withNodes: newElements.
-	self assert: scope definedPackages equals: {ScClassB1 package} asSet.
+	self assert: scope fullPackages equals: {ScClassB1 package} asSet.
 	self assert: scope orphanClasses equals: { ScClassA1 } asSet
 	
 ]
@@ -65,12 +65,12 @@ ScopesManagerTest >> testEditClassOrPackageScopeRemovingClassAndBreakingFullPack
 	oldElements := { ScClassA1 package . ScClassB1 package } asSet.
 	
 	scope := self scopesManagerClass newScopeFrom: oldElements.
-	self assert: scope definedPackages equals: {ScClassA1 package . ScClassB1 package} asSet.
+	self assert: scope fullPackages equals: {ScClassA1 package . ScClassB1 package} asSet.
 	self assert: scope orphanClasses equals: Set new.
 	
 	newElements := { ScClassA1 . ScClassA2 . ScClassB1 package } asSet.
 	self scopesManagerClass editScope: scope withNodes: newElements.
-	self assert: scope definedPackages equals: { ScClassB1 package } asSet.
+	self assert: scope fullPackages equals: { ScClassB1 package } asSet.
 	self assert: scope orphanClasses equals: { ScClassA1 . ScClassA2 } asSet
 	
 ]
@@ -80,12 +80,12 @@ ScopesManagerTest >> testEditClassScopeAddingClass [
 	| scope oldClasses newClasses |
 	oldClasses := { ScClassA1 } asSet.
 	scope := self scopesManagerClass newScopeFrom: oldClasses.
-	self assert: scope definedPackages equals: Set new.
+	self assert: scope fullPackages equals: Set new.
 	self assert: scope orphanClasses equals: oldClasses.
 		
 	newClasses := { ScClassA1 . ScClassA2 } asSet.
 	self scopesManagerClass editScope: scope withNodes: newClasses.
-	self assert: scope definedPackages equals: Set new.
+	self assert: scope fullPackages equals: Set new.
 	self assert: scope orphanClasses equals: newClasses
 ]
 
@@ -94,12 +94,12 @@ ScopesManagerTest >> testEditClassScopeAddingClassAndCompletingFullPackage [
 	| scope oldClasses newClasses |
 	oldClasses := { ScClassA1 . ScClassA2 } asSet.
 	scope := self scopesManagerClass newScopeFrom: oldClasses.
-	self assert: scope definedPackages isEmpty.
+	self assert: scope fullPackages isEmpty.
 	self assert: scope orphanClasses equals: oldClasses.
 		
 	newClasses := { ScClassA1 . ScClassA2 . ScClassA3 } asSet.
 	self scopesManagerClass editScope: scope withNodes: newClasses.
-	self assert: scope definedPackages isEmpty.
+	self assert: scope fullPackages isEmpty.
 	self assert: scope orphanClasses equals: newClasses
 	
 ]
@@ -109,12 +109,12 @@ ScopesManagerTest >> testEditClassScopeRemovingClass [
 	| scope oldClasses newClasses |
 	oldClasses := { ScClassA1 . ScClassA2 } asSet.
 	scope := self scopesManagerClass newScopeFrom: oldClasses.
-	self assert: scope definedPackages equals: Set new.
+	self assert: scope fullPackages equals: Set new.
 	self assert: scope orphanClasses equals: oldClasses.
 		
 	newClasses := { ScClassA1 } asSet.
 	self scopesManagerClass editScope: scope withNodes: newClasses.
-	self assert: scope definedPackages equals: Set new.
+	self assert: scope fullPackages equals: Set new.
 	self assert: scope orphanClasses equals: newClasses.
 	
 ]
@@ -124,12 +124,12 @@ ScopesManagerTest >> testEditClassScopeRemovingClassAndBreakingFullPackage [
 	| scope oldClasses newClasses |
 	oldClasses := { ScClassA1 . ScClassA2 . ScClassA3 } asSet.
 	scope := self scopesManagerClass newScopeFrom: oldClasses.
-	self assert: scope definedPackages isEmpty.
+	self assert: scope fullPackages isEmpty.
 	self assert: scope orphanClasses equals: oldClasses.
 		
 	newClasses := { ScClassA1 . ScClassA2 } asSet.
 	self scopesManagerClass editScope: scope withNodes: newClasses.
-	self assert: scope definedPackages isEmpty.
+	self assert: scope fullPackages isEmpty.
 	self assert: scope orphanClasses equals: newClasses.
 	
 ]
@@ -141,7 +141,7 @@ ScopesManagerTest >> testNewScopeFromAPackageWithExtendedClasses [
 	scope := self scopesManagerClass newScopeFrom: packages.
 	"new scopes are always RBOrEnvironments"
 	self assert: scope isCompositeEnvironment.
-	self assert: scope definedPackages asSet equals: packages.
+	self assert: scope fullPackages asSet equals: packages.
 	self assert: scope definedClasses equals: (packages flatCollect: [ :p | p definedClasses ]).
 	self assert: scope orphanClasses isEmpty
 ]
@@ -153,9 +153,8 @@ ScopesManagerTest >> testNewScopeFromASetOfClasses [
 	scope := self scopesManagerClass newScopeFrom: classes.
 	"new scopes are always RBOrEnvironments"
 	self assert: scope isCompositeEnvironment.
-	self assert: scope definedPackages isEmpty.
-	self assert: scope definedClasses equals: classes.
-	self assert: scope orphanClasses asSet equals: classes
+	self assert: scope fullPackages isEmpty.
+	self assert: scope orphanClasses equals: classes
 ]
 
 { #category : 'tests' }
@@ -166,53 +165,8 @@ ScopesManagerTest >> testNewScopeFromASetOfPackages [
 	"new scopes are always RBOrEnvironments"
 	self assert: scope isCompositeEnvironment.
 	self assert: scope definedClasses equals: (packages flatCollect: [ :p | p definedClasses ]).
-	self assert: scope definedPackages equals: packages.
+	self assert: scope fullPackages equals: packages.
 	self assert: scope orphanClasses equals: Set new
-]
-
-{ #category : 'tests' }
-ScopesManagerTest >> testNewScopeFromASingleClassHierarchyAndItsClasses [
-	| classes hierarchies scope |
-	self skip.
-	classes := ScClassB1SubSub allSuperclasses asSet.
-	hierarchies := { ScClassB1SubSub } asSet.
-	
-	scope := self scopesManagerClass newScopeFrom: classes andHierarchies: hierarchies.
-	
-	self assert: scope isCompositeEnvironment.
-	
-	"Even when all classes from package B are defined in the scope, these classes do not comprise a fullPackage because the reason they belong to the scope is that they belong to a class hierarchy, and class hierarchies have priority over full packages when creating scopes"
-	self assert: scope fullPackages equals: Set new.
-	self assert: scope definedClasses equals: ScClassB1SubSub allSuperclasses.
-	self assert: scope definedPackages asSet equals: (Set newFrom: (ScClassB1 allSuperclasses collect: [:c | c package ])).
-	"All classes in the scope belong to the hierarchy, therefore there are no orphan classes"
-	self assert: scope orphanClasses asSet equals: Set new
-]
-
-{ #category : 'tests' }
-ScopesManagerTest >> testNewScopeFromASingleClassHierarchyAndNoneOfItsClasses [
-	| classes scope hierarchies |
-	self skip.
-	classes := { } asSet.
-	hierarchies := { ScClassB1Sub } asSet.
-	
-	scope := self scopesManagerClass newScopeFrom: classes andHierarchies: hierarchies.
-	
-	self assert: scope isCompositeEnvironment.
-	self assert: scope definedClasses equals: classes
-]
-
-{ #category : 'tests' }
-ScopesManagerTest >> testNewScopeFromASingleClassHierarchySomeOfItsClasses [
-	| classes scope hierarchies |
-	self skip.
-	classes := { ScClassB1 } asSet.
-	hierarchies := { ScClassB1Sub } asSet.
-	
-	scope := self scopesManagerClass newScopeFrom: classes andHierarchies: hierarchies.
-	"new scopes are always RBOrEnvironments"
-	self assert: scope isCompositeEnvironment.
-	self assert: scope definedClasses equals: classes
 ]
 
 { #category : 'tests' }
@@ -227,7 +181,7 @@ ScopesManagerTest >> testNewScopeFromASinglePackageAndItsClasses [
 	"new scopes are always RBOrEnvironments"
 	self assert: scope isCompositeEnvironment.
 	self assert: scope definedClasses equals: classes.
-	self assert: scope definedPackages equals: packages.
+	self assert: scope fullPackages equals: packages.
 	self assert: scope orphanClasses asSet equals: Set new
 ]
 
