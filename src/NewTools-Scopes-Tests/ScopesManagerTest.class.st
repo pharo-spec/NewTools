@@ -196,7 +196,7 @@ ScopesManagerTest >> testNewScopeFromASinglePackageAndSomeOfItsClasses [
 	scope := self scopesManagerClass newScopeFrom: packageAndItsClasses.
 	"new scopes are always RBOrEnvironments"
 	self assert: scope isCompositeEnvironment.
-	self assert: scope definedPackages asSet equals: packages.
+	self assert: scope packages asSet equals: packages.
 	self assert: scope definedClasses equals: ScClassA1 package definedClasses.
 	self assert: scope orphanClasses asSet equals: Set new
 ]

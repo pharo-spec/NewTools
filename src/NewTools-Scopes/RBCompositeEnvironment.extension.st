@@ -52,7 +52,7 @@ RBCompositeEnvironment >> definedClassesDo: aBlock [
 { #category : '*NewTools-Scopes' }
 RBCompositeEnvironment >> definesPackageNamed: aPackageName [
 
-	^ (self definedPackages collect: [ :p | p name ]) includes:
+	^ (self packages collect: [ :p | p name ]) includes:
 		  aPackageName
 ]
 
@@ -94,26 +94,4 @@ RBCompositeEnvironment >> packageEnvironment [
 { #category : '*NewTools-Scopes' }
 RBCompositeEnvironment >> rawOrphanClasses [
 	self subclassResponsibility 
-]
-
-{ #category : '*NewTools-Scopes' }
-RBCompositeEnvironment >> removeAllDefinedClasses [
-	self definedClasses do: [ :class | self removeClass: class ]
-]
-
-{ #category : '*NewTools-Scopes' }
-RBCompositeEnvironment >> removeAllDefinedPackages [
-	self definedPackages do: [ :package | self removePackage: package ]
-]
-
-{ #category : '*NewTools-Scopes' }
-RBCompositeEnvironment >> removeClass: aClass [
-
-	self classEnvironment removeClass: aClass
-]
-
-{ #category : '*NewTools-Scopes' }
-RBCompositeEnvironment >> removePackage: aPackage [
-	self environment removePackage: aPackage.
-	self otherEnvironment removePackage: aPackage
 ]

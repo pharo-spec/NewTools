@@ -12,13 +12,26 @@ Class {
 		'currentQueryScope'
 	],
 	#classVars : [
-		'ScopeRefactoring',
-		'singleInstance'
+		'ActiveScope',
+		'SingleInstance'
 	],
 	#category : 'NewTools-Scopes-Core',
 	#package : 'NewTools-Scopes',
 	#tag : 'Core'
 }
+
+{ #category : 'accessing' }
+ScopesManager class >> activeScope [
+	^ ActiveScope
+]
+
+{ #category : 'accessing' }
+ScopesManager class >> activeScope: aScope [
+
+	ActiveScope := (self availableScopes includes: aScope)
+		               ifTrue: [ aScope ]
+		               ifFalse: [ nil ]
+]
 
 { #category : 'accessing' }
 ScopesManager class >> addScope: aScope [
@@ -79,9 +92,8 @@ ScopesManager class >> defaultScopeLabel [
 ScopesManager class >> editScope: aScope withNodes: aCollection [
 
 	| auxScope fullPackagesInCollection orphanClassesInCollection |
-	aScope removeAllDefinedPackages.
-	aScope removeAllDefinedClasses.
-	
+
+	aScope removeAll.
 	auxScope := self newScopeFrom: aCollection.
 	fullPackagesInCollection := auxScope fullPackages.
 	orphanClassesInCollection := auxScope orphanClasses.
@@ -141,11 +153,11 @@ ScopesManager class >> removeScope: aScope [
 	self singleInstance removeScope: aScope
 ]
 
-{ #category : 'accessing' }
+{ #category : 'class initialization' }
 ScopesManager class >> reset [
 	<script>
-	singleInstance ifNotNil: [ singleInstance reset ].
-	singleInstance := nil
+	SingleInstance ifNotNil: [ SingleInstance reset ].
+	SingleInstance := nil
 ]
 
 { #category : 'accessing' }
@@ -156,8 +168,8 @@ ScopesManager class >> scopes [
 { #category : 'accessing' }
 ScopesManager class >> singleInstance [
 
-	^ singleInstance ifNil: [
-		  singleInstance := self basicNew
+	^ SingleInstance ifNil: [
+		  SingleInstance := self basicNew
 			                    environment: SmalltalkImage;
 			                    initialize;
 			                    yourself ]

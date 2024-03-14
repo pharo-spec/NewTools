@@ -352,12 +352,25 @@ ScopeNodesPresenter >> refresh [
 { #category : 'refreshing' }
 ScopeNodesPresenter >> refreshNodeCheckbox: aNode [
 
+	| checkedClasses root package |
 	aNode isPackageNode ifTrue: [
 		(checkedScopeNodes includes: aNode)
 			ifTrue: [
 			aNode children do: [ :child | checkedScopeNodes add: child ] ]
 			ifFalse: [
-			aNode children do: [ :child | checkedScopeNodes remove: child ifAbsent: [  ] ] ] ].
+			aNode children do: [ :child | checkedScopeNodes remove: child ifAbsent: [  ] ] ].
+		scopeNodesTree refresh.
+		^ self ].
+
+	checkedClasses := checkedScopeNodes
+		                  select: [ :n | n isClassNode ]
+		                  thenCollect: [ :n | n value ].
+	root := (scopeNodesTree roots select: [ :r |
+		         r children includes: aNode ]) anyOne.
+	package := root package.
+	root children size
+	= (checkedClasses select: [ :c | c package = package ]) size
+		ifFalse: [ checkedScopeNodes remove: root ifAbsent: [  ] ].
 
 	scopeNodesTree refresh
 ]
