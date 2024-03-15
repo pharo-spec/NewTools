@@ -141,13 +141,18 @@ StDebugger class >> configureLayout: aSymbol [
 { #category : 'instance creation' }
 StDebugger class >> debugSession: aDebugSession [
 
-	| debugger debugActionModel |
-	debugActionModel := StDebuggerActionModel on: aDebugSession.
-	debugger := self on: aDebugSession.
-	aDebugSession application ifNotNil: [ :app | 
-		debugger application: app ].
-	debugger openWithFullView.
+	| applicationDebugSession debugger debugActionModel |
 
+	applicationDebugSession := self currentApplication backend
+		                           spawnNewDebugSessionForSpecBackend: aDebugSession.	
+
+	debugActionModel := StDebuggerActionModel on: applicationDebugSession.
+	debugger := self on: applicationDebugSession.
+	aDebugSession application ifNotNil: [ :app |
+		debugger application: app ].
+
+	applicationDebugSession deferDebuggerOpeningToBackend: debugger.
+	
 	^ debugger
 ]
 
