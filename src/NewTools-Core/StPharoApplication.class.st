@@ -77,6 +77,15 @@ StPharoApplication >> newIconProvider [
 	^ StPharoDefaultIconProvider new
 ]
 
+{ #category : 'private - running' }
+StPharoApplication >> resetBackend [
+
+	| backendName |
+	
+	backendName := backend ifNil: [ self class defaultBackendName ] ifNotNil: [ backend name ].
+	self useBackend: backendName.
+]
+
 { #category : 'initialization' }
 StPharoApplication >> resetConfiguration [
 	
@@ -104,7 +113,8 @@ StPharoApplication >> start [
 { #category : 'system startup' }
 StPharoApplication >> startUp: resuming [
 
-	self resetConfiguration
+	self resetConfiguration.
+	self resetBackend.
 ]
 
 { #category : 'settings' }
