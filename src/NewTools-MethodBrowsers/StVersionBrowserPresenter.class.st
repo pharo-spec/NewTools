@@ -204,8 +204,10 @@ StVersionBrowserPresenter >> doRevert [
 StVersionBrowserPresenter >> initializePresenters [
 
 	messageList := self newMessageList.
-	toolbarPresenter := self newMessageToolbar.
-	 
+	toolbarPresenter := self newMessageToolbar
+		messageList: messageList;
+		yourself.
+			 
 	messageList
 		topologicSort: false;
 		sortingBlock: [ :a | a annotationNamed: #versionIndex ifAbsent: [ 0 ] ] ascending.
