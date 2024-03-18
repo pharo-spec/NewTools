@@ -79,10 +79,11 @@ StPharoApplication >> newIconProvider [
 
 { #category : 'private - running' }
 StPharoApplication >> resetBackend [
-
 	| backendName |
 	
-	backendName := backend ifNil: [ self class defaultBackendName ] ifNotNil: [ backend name ].
+	backendName := backend 
+		ifNil: [ self class defaultBackendName ] 
+		ifNotNil: [ backend name ].
 	self useBackend: backendName.
 ]
 
