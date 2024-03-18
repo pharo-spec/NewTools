@@ -6,10 +6,10 @@ Class {
 	#tag : 'Commands'
 }
 
-{ #category : 'accessing' }
+{ #category : 'default' }
 StVersionRevertCommand class >> defaultDescription [
 
-	^ 'Compare selected version to the current version'
+	^ 'Revert the current method to the selected version'
 ]
 
 { #category : 'accessing' }
