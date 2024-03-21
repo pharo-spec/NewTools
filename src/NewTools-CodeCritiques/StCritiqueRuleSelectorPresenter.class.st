@@ -402,7 +402,6 @@ StCritiqueRuleSelectorPresenter >> updateButtonsState: aSelection [
 				ifFalse: [ true ] ].
 	
 	removeButton enabled: shouldBeEnabled.
-	removeAllButton enabled: shouldBeEnabled
 	
 
 ]

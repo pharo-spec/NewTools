@@ -108,7 +108,6 @@ StCritiqueRuleSelectorPresenterTest >> testRemoveSelectedComposite [
 	rulesSelectorPresenter items: rulesByGroup.
 	rulesSelectorPresenter selectedList selectPath:
 		(rulesSelectorPresenter selectedList pathIndexOf: styleGroup).
-	rulesSelectorPresenter selectedRules: styleRules.
 	rulesSelectorPresenter removeButton click.
 	self assert: rulesSelectorPresenter selectedRules isEmpty
 ]
