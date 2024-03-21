@@ -3,30 +3,7 @@ Extension { #name : 'RBCompositeEnvironment' }
 { #category : '*NewTools-Scopes' }
 RBCompositeEnvironment >> addClass: aClass [
 
-	| envs classEnv packaEnv siblings |
-	self isTerminal ifFalse: [
-		self environment addClass: aClass.
-		self otherEnvironment addClass: aClass.
-		^ self ].
-
-	"I am terminal. This method assumes that I have one classEnv and one packageEnv"
-	envs := {
-		        self environment.
-		        self otherEnvironment }.
-
-	classEnv := (envs select: [ :env | env isClassEnvironment ]) anyOne.
-	packaEnv := (envs select: [ :env | env isPackageEnvironment ]) anyOne.
-
-	"Get the classes in the same package as aClass (siblings)"
-	siblings := classEnv classes select: [ :class |
-		            class package = aClass package ].
-	"If the package is now full, then add the package and remove the siblings"
-	(siblings asSet add: aClass; yourself) size = (aClass package definedClasses size * 2) ifTrue: [
-		siblings do: [ :each | classEnv removeClass: each ].
-		packaEnv addPackage: aClass package.
-		^ self ].
-
-	classEnv addClass: aClass
+	self classEnvironment addClass: aClass
 ]
 
 { #category : '*NewTools-Scopes' }
@@ -43,64 +20,78 @@ RBCompositeEnvironment >> asScopeNode [
 ]
 
 { #category : '*NewTools-Scopes' }
+RBCompositeEnvironment >> classEnvironment [
+	^ environment
+]
+
+{ #category : '*NewTools-Scopes' }
+RBCompositeEnvironment >> classesInHierarchies [
+	self shouldBeImplemented.
+]
+
+{ #category : '*NewTools-Scopes' }
 RBCompositeEnvironment >> definedClasses [
 	| definedClasses |
 	definedClasses := IdentitySet new: 4096.
 	self definedClassesDo: [ :each | each isMeta ifFalse: [definedClasses add: each] ].
-	^ definedClasses
+	^ definedClasses reject: [ :each | each isMeta ]
 ]
 
 { #category : '*NewTools-Scopes' }
-RBCompositeEnvironment >> definedPackages [
-	"Defined packages ignores packages got from extended classes"
-	^ self definedClasses collect: [ :class | class package ]
+RBCompositeEnvironment >> definedClassesDo: aBlock [
+	| enumerated |
+	enumerated := IdentitySet new.
+	self classEnvironment definedClassesDo: [ :each |
+		aBlock value: each.
+		enumerated add: each].
+	self packageEnvironment definedClassesDo: [ :each |
+		(enumerated includes: each)
+			ifFalse: [ aBlock value: each ] ]
+]
+
+{ #category : '*NewTools-Scopes' }
+RBCompositeEnvironment >> definesPackageNamed: aPackageName [
+
+	^ (self packages collect: [ :p | p name ]) includes:
+		  aPackageName
 ]
 
 { #category : '*NewTools-Scopes' }
 RBCompositeEnvironment >> fullPackages [
-	
-	"full packages are those where all classes belong to the scope"
-	^ ScopesManager fullPackagesFrom: self definedClasses
+	" full packages are packages explicitely defined in the scope. i.e. there is a RBPackageEnvironment defining them "
+	self subclassResponsibility 
+]
+
+{ #category : '*NewTools-Scopes' }
+RBCompositeEnvironment >> isTerminal [
+
+	^ (environment isClassEnvironment or: [
+		   environment isPackageEnvironment ]) and: [
+		  otherEnvironment isClassEnvironment or: [
+			  otherEnvironment isPackageEnvironment ] ]
 ]
 
 { #category : '*NewTools-Scopes' }
 RBCompositeEnvironment >> orphanClasses [
-
-	"orphan classes are those whose packages are not full packages"
-	^ ScopesManager
-		  orphanClassesIn: self definedClasses
-		  havingFullPackages: self fullPackages
+	"orphan classes are those whose package is not among the scope full packages"
+	
+	| theClasses packagesCache fullPackages |
+	
+	fullPackages := self fullPackages.
+	"orphan classes do not include extended classes from the package"
+	theClasses := self rawOrphanClasses reject: [ :each | each isMeta ].
+	packagesCache := Dictionary new.
+	theClasses do: [ :each | packagesCache at: each put: each package ].
+	^ theClasses reject: [ :class |
+		  fullPackages includes: (packagesCache at: class) ]
 ]
 
 { #category : '*NewTools-Scopes' }
-RBCompositeEnvironment >> removeClass: aClass [
-
-	| envs  classEnv packaEnv packagesToRemove classesToAdd |
-	self isTerminal ifFalse: [
-		self environment removeClass: aClass.
-		self otherEnvironment removeClass: aClass.
-		^ self ].
-	
-	"I am terminal. This method assumes that I have one classEnv and one packageEnv"
-	envs := { self environment . self otherEnvironment }.
-	
-	"Remove aClass from my classEnvironment"
-	classEnv := (envs select: [ :env | env isClassEnvironment ]) anyOne.
-	classEnv removeClass: aClass.
-	
-	packaEnv := (envs select: [ :env | env isPackageEnvironment ]) anyOne.
-	
-	"Packages containing aClass must be removed from the package environment"
-	packagesToRemove := packaEnv packages select: [ :package | package definedClasses includes: aClass ].
-	packagesToRemove do: [ :p | 
-		packaEnv removePackage: p.
-		classesToAdd := p definedClasses reject: [ :class | class = aClass ].
-		classesToAdd do: [ :class | classEnv addClass: class ] ]
-	
+RBCompositeEnvironment >> packageEnvironment [
+	^ otherEnvironment
 ]
 
 { #category : '*NewTools-Scopes' }
-RBCompositeEnvironment >> removePackage: aPackage [
-	self environment removePackage: aPackage.
-	self otherEnvironment removePackage: aPackage
+RBCompositeEnvironment >> rawOrphanClasses [
+	self subclassResponsibility 
 ]
