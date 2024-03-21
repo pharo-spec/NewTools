@@ -61,6 +61,9 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-FontChooser-Tests' with: [ spec requires: #( 'NewTools-FontChooser' ) ];
 			package: 'NewTools-SpTextPresenterDecorators';
 			package: 'NewTools-Debugger-Breakpoints-Tools' with: [ spec requires: #( 'NewTools-Inspector' ) ];
+			"Debug points"
+			package: 'NewTools-DebugPointsBrowser' with: [spec requires: #( 'NewTools-SpTextPresenterDecorators' )];
+			package: 'NewTools-ObjectCentricDebugPoints' with: [spec requires: #( 'NewTools-DebugPointsBrowser' 'NewTools-Inspector' 'NewTools-Debugger' )];
 			package: 'NewTools-ProjectLoader';
 			package: 'NewTools-ProjectLoader-Microdown';
 			"Object-centric breakpoints"
@@ -111,17 +114,19 @@ BaselineOfNewTools >> baseline: spec [
 					 	'Core' 
 					 	'Inspector' 
 					 	'NewTools-Debugger-Commands'
-				    		'NewTools-Debugger-Extensions' 
+				    	'NewTools-Debugger-Extensions' 
 					 	'NewTools-Debugger'
-				    		'NewTools-ObjectCentricBreakpoints'
-				    		'NewTools-Sindarin-Tools' 
+				    	'NewTools-ObjectCentricBreakpoints'
+				    	'NewTools-Sindarin-Tools' 
 					 	'NewTools-Sindarin-Commands'
-				    		'NewTools-Sindarin-Commands-Tests'
-				    		'NewTools-Debugger-Breakpoints-Tools'
-				    		'NewTools-Debugger-Tests' 
+				    	'NewTools-Sindarin-Commands-Tests'
+				    	'NewTools-Debugger-Breakpoints-Tools'
+				    	'NewTools-Debugger-Tests' 
 					 	'NewTools-Debugger-Fuel'
-				    		'NewTools-Debugger-Fuel-Tests' 
-					 	'NewTools-Fuel' );
+				    	'NewTools-Debugger-Fuel-Tests' 
+					 	'NewTools-Fuel'
+						'NewTools-DebugPointsBrowser'
+						'NewTools-ObjectCentricDebugPoints' );
 			group: 'Spotter' with: #( 
 						'NewTools-Morphic-Spotter' 
 						'NewTools-Spotter-Processors'

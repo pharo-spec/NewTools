@@ -9,6 +9,12 @@ Class {
 	#tag : 'Commands'
 }
 
+{ #category : 'default' }
+StMessageSendersCommand class >> defaultDescription [
+
+	^ 'Browse all methods sending messages with the selector of the current method'
+]
+
 { #category : 'accessing' }
 StMessageSendersCommand class >> defaultName [
 

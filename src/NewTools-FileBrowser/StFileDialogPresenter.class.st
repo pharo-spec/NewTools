@@ -291,6 +291,19 @@ StFileDialogPresenter >> isolate [
 	
 ]
 
+{ #category : 'accessing - ui' }
+StFileDialogPresenter >> nameText [
+	"Answer a <String> with the text in the name presenter used to display the currently selected file/directory or a manually entered name"
+	
+	^ fileNavigationSystem nameText text.
+]
+
+{ #category : 'accessing' }
+StFileDialogPresenter >> nameText: aString [ 
+
+	fileNavigationSystem nameText: aString
+]
+
 { #category : 'api - customization' }
 StFileDialogPresenter >> okAction: aOneArgBlock [
 	okAction := aOneArgBlock

@@ -9,6 +9,12 @@ Class {
 	#tag : 'Commands'
 }
 
+{ #category : 'default' }
+StMessageImplementorsCommand class >> defaultDescription [
+
+	^ 'Browse all methods implementing the selector of the current method'
+]
+
 { #category : 'accessing' }
 StMessageImplementorsCommand class >> defaultName [
 
