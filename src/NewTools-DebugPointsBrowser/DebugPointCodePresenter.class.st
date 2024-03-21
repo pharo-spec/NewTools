@@ -8,14 +8,24 @@ Class {
 	#package : 'NewTools-DebugPointsBrowser'
 }
 
+{ #category : 'adding' }
+DebugPointCodePresenter >> addHighlightForNode: aDebugPointNodeTarget [
+
+	self addTextSegmentDecoration:
+		(SpTextPresenterDecorator forHighlight
+			 interval: (aDebugPointNodeTarget node start to: aDebugPointNodeTarget node stop + 1);
+			 yourself)
+]
+
 { #category : 'updating - presenters' }
 DebugPointCodePresenter >> updateCode: aDebugPointNodeTarget [
 	"updates the code window with the code of the selected debug point"
-	aDebugPointNodeTarget ifNil:[self text: ''.^self].
-	self text: aDebugPointNodeTarget sourceCode;
+
+	aDebugPointNodeTarget ifNil: [
+		self text: ''.
+		^ self ].
+	self
+		text: aDebugPointNodeTarget sourceCode;
 		beForMethod: aDebugPointNodeTarget method;
-		addTextSegmentDecoration: 
-			(SpTextPresenterDecorator forHighlight
-         		interval: (aDebugPointNodeTarget node start to: ((aDebugPointNodeTarget node stop) +1));
-            yourself) .
+		addHighlightForNode: aDebugPointNodeTarget
 ]
