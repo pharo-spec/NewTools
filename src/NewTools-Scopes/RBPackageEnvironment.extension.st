@@ -27,11 +27,6 @@ RBPackageEnvironment >> definedClassesDo: aBlock [
 ]
 
 { #category : '*NewTools-Scopes' }
-RBPackageEnvironment >> fullPackages [
-	^ self packages
-]
-
-{ #category : '*NewTools-Scopes' }
 RBPackageEnvironment >> isPackageEnvironment [
 	^ true
 ]

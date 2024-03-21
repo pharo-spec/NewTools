@@ -24,7 +24,7 @@ ScopeScopeNode >> children [
 			                 ifTrue: [ ScopeTraitNode on: class ]
 			                 ifFalse: [ ScopeClassNode on: class ] ].
 
-	^ packageChildren
+	^ packageChildren asOrderedCollection 
 		  addAll: classChildren;
 		  yourself
 ]

@@ -1,22 +1,21 @@
-Extension { #name : 'RBOrEnvironment' }
+Extension { #name : 'RBAndEnvironment' }
 
 { #category : '*NewTools-Scopes' }
-RBOrEnvironment >> fullPackages [
+RBAndEnvironment >> fullPackages [
 	" full packages are packages explicitely defined in the scope. i.e. there is a RBPackageEnvironment defining them "
 
 	| fullPackages |
 	fullPackages := Set new.
 	fullPackages addAll: environment fullPackages.
-	fullPackages addAll: otherEnvironment fullPackages.
+	fullPackages intersection: otherEnvironment fullPackages.
 	^ fullPackages
 ]
 
 { #category : '*NewTools-Scopes' }
-RBOrEnvironment >> rawOrphanClasses [
-
+RBAndEnvironment >> rawOrphanClasses [
 	| orphanClasses |
 	orphanClasses := Set new.
 	orphanClasses addAll: environment orphanClasses.
-	orphanClasses addAll: otherEnvironment orphanClasses.
+	orphanClasses intersection: otherEnvironment orphanClasses.
 	^ orphanClasses
 ]
