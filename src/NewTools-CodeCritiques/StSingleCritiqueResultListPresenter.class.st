@@ -415,8 +415,6 @@ StSingleCritiqueResultListPresenter >> setTextModelForClassOrMethod: aCritique [
 
 	| entity |
 	entity := aCritique sourceAnchor entity.
-	self flag:
-		'Another hack. We need a better way to display entities (because now we may get not only classes and methods. Maybe something like GTInspector presentations could work)'.
 	sourceCodeModel beForBehavior: (entity isCompiledMethod
 			 ifTrue: [ entity methodClass ]
 			 ifFalse: [ nil ]).
