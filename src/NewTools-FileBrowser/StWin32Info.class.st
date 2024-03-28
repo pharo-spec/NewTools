@@ -29,5 +29,5 @@ StWin32Info class >> getVolumeInfo: driveLetter [
 { #category : 'private-ffi' }
 StWin32Info class >> getVolumeInfo: volumeName into: lpBuffer size: nSize [
 	"Primitive to obtain an environment variable using windows Wide Strings"
-	^ self ffiCall: #(uint GetVolumeInformationW (Win32WideString volumeName, Win32WideString lpBuffer, ulong nSize, ulong* nil, ulong* nil, ulong* nil, Win32WideString nil, ulong 0)) module: #kernel32
+	^ self ffiCall: #(uint GetVolumeInformationW (Win32WideString volumeName, Win32WideString lpBuffer, ulong nSize, void* 0, void* 0, void* 0, Win32WideString 0, ulong 0)) module: #kernel32
 ]
