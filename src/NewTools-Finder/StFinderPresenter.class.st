@@ -134,6 +134,20 @@ The ''Select classes'' button opened a dialog window  to select which classes wi
 The ''All classes'' button is used to reset the classes selection.'
 ]
 
+{ #category : 'world menu' }
+StFinderPresenter class >> menuFinderCommandOn: aBuilder [
+	<worldMenu>
+
+	(aBuilder item: #NewFinder)
+		parent: #NewToolsMenu;
+		action: [ StFinderPresenter open ];
+		label: 'New Finder';
+		order: 2; 
+		help: 'Open the new Finder tool.';
+		iconName: #smallFind.
+
+]
+
 { #category : 'default values' }
 StFinderPresenter class >> methodFinderExplanation [
 	"MethodFinder new findMethodsByExampleInput: #( 1 2 ) andExpectedResult: 3."
