@@ -75,7 +75,7 @@ StFileBrowserOpenTerminalCommand >> openWindowsTerminalOn: aPath [
 	^ String streamContents: [ : stream |
 		stream
 			<< 'start cmd.exe /K "cd /d ';
-			<< aPath;
+			<< aPath fullName;
 			<< '"' ]
 ]
 
