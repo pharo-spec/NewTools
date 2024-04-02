@@ -21,12 +21,12 @@ StSettingsApplication class >> menuSettingsBrowserCommandOn: aBuilder [
 	<worldMenu>
 
 	(aBuilder item: #'New Settings Browser')
-		parent: #Tools;
+		parent: #NewToolsMenu;
 		label: 'New Settings Browser';
 		action: [ self new run ];
 		iconName: self taskbarIconName;
 		help: 'New Settings Browser';
-		order: 100		
+		order: 3
 ]
 
 { #category : 'instance creation' }
