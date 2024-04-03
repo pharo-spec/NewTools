@@ -18,8 +18,3 @@ StRawInspectionPresenter >> haltInspectedObjectOnAccess: access [
 StRawInspectionPresenter >> haltInspectedObjectOnStateAccess [
 	^ self haltInspectedObjectOnAccess: #all
 ]
-
-{ #category : '*NewTools-ObjectCentricBreakpoints' }
-StRawInspectionPresenter >> haltInspectedObjectOnWriteAccess [
-	^ self haltInspectedObjectOnAccess: #write
-]

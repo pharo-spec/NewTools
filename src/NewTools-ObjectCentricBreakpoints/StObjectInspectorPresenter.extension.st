@@ -4,8 +4,3 @@ Extension { #name : 'StObjectInspectorPresenter' }
 StObjectInspectorPresenter >> haltInspectedObjectOnStateAccess [
 	^ self inspectedObject haltOnAccess 
 ]
-
-{ #category : '*NewTools-ObjectCentricBreakpoints' }
-StObjectInspectorPresenter >> haltInspectedObjectOnWriteAccess [
-	^ self inspectedObject haltOnWrite
-]
