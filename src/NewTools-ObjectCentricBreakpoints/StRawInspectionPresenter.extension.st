@@ -15,11 +15,6 @@ StRawInspectionPresenter >> haltInspectedObjectOnAccess: access [
 ]
 
 { #category : '*NewTools-ObjectCentricBreakpoints' }
-StRawInspectionPresenter >> haltInspectedObjectOnReadAccess [
-	^self haltInspectedObjectOnAccess: #read
-]
-
-{ #category : '*NewTools-ObjectCentricBreakpoints' }
 StRawInspectionPresenter >> haltInspectedObjectOnStateAccess [
 	^ self haltInspectedObjectOnAccess: #all
 ]

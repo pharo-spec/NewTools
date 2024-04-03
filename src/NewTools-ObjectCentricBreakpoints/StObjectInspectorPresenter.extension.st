@@ -1,11 +1,6 @@
 Extension { #name : 'StObjectInspectorPresenter' }
 
 { #category : '*NewTools-ObjectCentricBreakpoints' }
-StObjectInspectorPresenter >> haltInspectedObjectOnReadAccess [
-	^self inspectedObject haltOnRead
-]
-
-{ #category : '*NewTools-ObjectCentricBreakpoints' }
 StObjectInspectorPresenter >> haltInspectedObjectOnStateAccess [
 	^ self inspectedObject haltOnAccess 
 ]
