@@ -14,18 +14,3 @@ StObjectInspectorPresenter >> haltInspectedObjectOnStateAccess [
 StObjectInspectorPresenter >> haltInspectedObjectOnWriteAccess [
 	^ self inspectedObject haltOnWrite
 ]
-
-{ #category : '*NewTools-ObjectCentricBreakpoints' }
-StObjectInspectorPresenter class >> objectCentricBreakpointCommandsWith: aPresenter forRootGroup: aRootCommandsGroup [
-	<extensionCommands>
-	
-	aRootCommandsGroup 
-		register: (CmCommandGroup forSpec
-			beToolbarPopoverButton;
-			name: 'Halt';
-			icon: (aPresenter application iconNamed: #smallObjects);
-			register: (StHaltOnReadCommand forSpec);
-			register: (StHaltOnWriteCommand forSpec);
-			register: (StHaltOnStateAccessCommand forSpec);
-			yourself)
-]
