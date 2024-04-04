@@ -292,6 +292,25 @@ StDebugger >> acceptCodeChanges: newSource forContext: aContext [
 	self clearUnsavedCodeChanges
 ]
 
+{ #category : 'extensions' }
+StDebugger >> addExtension: aDebuggerExtensionClass [
+	"If no extension was activated, we instantiate the page for the activated extension and we change the stack and code layout"
+
+	self extensionTools ifEmpty: [
+		extensionToolsNotebook pages:
+			{ (self instantiateExtensionToolsPage: aDebuggerExtensionClass) }
+				asOrderedCollection.
+		extensionToolsNotebook selectPageIndex: 1.
+		stackAndCodeContainer := self stackAndCodeWithExtensionsLayout.
+		self layout: self defaultLayout.
+		^ self ].
+
+	"Else, if the extension was not activated and now is, we instantiate the page for the activated extension, and adds it to the existing pages"
+
+	extensionToolsNotebook addPage:
+		(self instantiateExtensionToolsPage: aDebuggerExtensionClass)
+]
+
 { #category : 'commands - support' }
 StDebugger >> buildContextMenus [
 	| stackGroup codeCommands debuggerCommandGroup |
@@ -1010,6 +1029,21 @@ StDebugger >> registerExtensionTool: anExtension [
 	self extensionTools add: anExtension
 ]
 
+{ #category : 'extensions' }
+StDebugger >> removeExtension: aDebuggerExtension [
+	"Else, the extension was activated and now isn't anymore. In this case, we remove the corresponding page. If there isn't any activated extension left, we change the stackAndCode layout"
+
+	extensionToolsNotebook pages: (extensionToolsNotebook pages
+			 removeAllSuchThat: [ :page |
+				 page presenterProvider value class = aDebuggerExtension ];
+			 yourself).
+	extensionTools removeAllSuchThat: [ :extensionInstance |
+		extensionInstance class = aDebuggerExtension ].
+	extensionTools ifEmpty: [
+		stackAndCodeContainer := self stackAndCodeLayout ].
+	self layout: self defaultLayout
+]
+
 { #category : 'ui requests' }
 StDebugger >> requestClassFrom: aClass [
 
@@ -1439,33 +1473,13 @@ StDebugger >> updateExtensionsFromAnnouncement: aStDebuggerToggleAnnouncement [
 	extensionToggled := aStDebuggerToggleAnnouncement
 		                    debuggerExtensionClass.
 
-	"If no extension was activated, we instantiate the page for the activated extension and we change the stack and code layout"
-	self extensionTools ifEmpty: [
-		extensionToolsNotebook pages:
-			{ (self instantiateExtensionToolsPage: extensionToggled) }
-				asOrderedCollection.
-		extensionToolsNotebook selectPageIndex: 1.
-		stackAndCodeContainer := self stackAndCodeWithExtensionsLayout.
-		self layout: self defaultLayout.
+	"If the extension was (de)activated but does not accept the corresponding context predicate, nothing changes"
+	(extensionToggled acceptsPredicate: self contextPredicate) ifFalse: [
 		^ self ].
 
-	"Else, if the extension was not activated and now is, we instantiate the page for the activated extension, and adds it to the existing pages"
-
-	extensionToggled showInDebugger ifTrue: [
-		extensionToolsNotebook addPage:
-			(self instantiateExtensionToolsPage: extensionToggled).
-		^ self ].
-
-	"Else, the extension was activated and now isn't anymore. In this case, we remove the corresponding page. If there isn't any activated extension left, we change the stackAndCode layout"
-	extensionToolsNotebook pages: (extensionToolsNotebook pages
-			 removeAllSuchThat: [ :page |
-				 page presenterProvider value class = extensionToggled ];
-			 yourself).
-	extensionTools removeAllSuchThat: [ :extensionInstance |
-		extensionInstance class = extensionToggled ].
-	extensionTools ifEmpty: [
-		stackAndCodeContainer := self stackAndCodeLayout ].
-	self layout: self defaultLayout
+	extensionToggled showInDebugger
+		ifTrue: [ self addExtension: extensionToggled ]
+		ifFalse: [ self removeExtension: extensionToggled ]
 ]
 
 { #category : 'updating - presenters' }
