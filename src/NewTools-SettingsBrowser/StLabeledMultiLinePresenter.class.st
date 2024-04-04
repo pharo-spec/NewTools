@@ -1,7 +1,6 @@
 Class {
 	#name : 'StLabeledMultiLinePresenter',
 	#superclass : 'SpLabeledPresenter',
-	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-SettingsBrowser-Widgets',
 	#package : 'NewTools-SettingsBrowser',
 	#tag : 'Widgets'

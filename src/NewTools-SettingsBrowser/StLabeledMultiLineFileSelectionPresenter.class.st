@@ -9,7 +9,6 @@ Provides a Spec presenter with:
 Class {
 	#name : 'StLabeledMultiLineFileSelectionPresenter',
 	#superclass : 'StLabeledMultiLineDirectorySelectionPresenter',
-	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-SettingsBrowser-Widgets',
 	#package : 'NewTools-SettingsBrowser',
 	#tag : 'Widgets'

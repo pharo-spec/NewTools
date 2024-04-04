@@ -8,7 +8,6 @@ The wrapped presenter is hold in `setterPresenter` instance variable.
 Class {
 	#name : 'StSettingPresenterItem',
 	#superclass : 'SpPresenter',
-	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'setterPresenter',
 		'model',

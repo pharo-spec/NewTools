@@ -9,7 +9,6 @@ Provides a Spec presenter with:
 Class {
 	#name : 'StLabeledMultiLineDirectorySelectionPresenter',
 	#superclass : 'StLabeledMultiLinePresenter',
-	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'selectButtonPresenter'
 	],
@@ -69,13 +68,13 @@ StLabeledMultiLineDirectorySelectionPresenter >> initializePresenters [
 		yourself
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private' }
 StLabeledMultiLineDirectorySelectionPresenter >> selectButtonPresenter [
 
 	^ selectButtonPresenter
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private' }
 StLabeledMultiLineDirectorySelectionPresenter >> selectButtonPresenter: anObject [
 
 	selectButtonPresenter := anObject

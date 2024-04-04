@@ -4,13 +4,12 @@ Wrapper for settings containing a directory `FileReference` type.
 Class {
 	#name : 'StSettingDirectoryPresenterItem',
 	#superclass : 'StSettingPresenterItem',
-	#classTraits : '{} + TraitedClass',
 	#category : 'NewTools-SettingsBrowser-Widgets',
 	#package : 'NewTools-SettingsBrowser',
 	#tag : 'Widgets'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'initialization' }
 StSettingDirectoryPresenterItem >> initializePresenters [
 
 	setterPresenter := self newTextInput 
@@ -31,7 +30,7 @@ StSettingDirectoryPresenterItem >> labeledPresenterClass [
 
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 StSettingDirectoryPresenterItem >> value: aFileReference [ 
 	"Set the receiver's value to aString"
 
