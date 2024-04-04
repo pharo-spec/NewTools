@@ -6,7 +6,6 @@ This presenter wraps those setting items which should present two drop lists. Fo
 Class {
 	#name : 'StSettingMultipleDropListPresenterItem',
 	#superclass : 'StSettingPresenterItem',
-	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'colorSettingItemPresenter'
 	],
