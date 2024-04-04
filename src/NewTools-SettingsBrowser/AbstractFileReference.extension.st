@@ -12,3 +12,9 @@ AbstractFileReference >> asSettingPresenter: aSettingDeclaration [
 		value: self;
 		yourself
 ]
+
+{ #category : '*NewTools-SettingsBrowser' }
+AbstractFileReference >> asText [
+
+	^ self fullName
+]

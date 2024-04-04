@@ -138,11 +138,10 @@ StPlaygroundPresenter class >> registerToolsOn: registry [
 
 { #category : 'settings' }
 StPlaygroundPresenter class >> settingsOn: aBuilder [
-<systemsettings>
+	<systemsettings>
 
-(aBuilder setting: #cacheDirectory)
+	(aBuilder setting: #cacheDirectory)
 		parent: #pharoSystem;
-		default: true;
 		type: #Directory;
 		default:  self defaultCacheDirectory;
 		target: StPlaygroundPresenter;
