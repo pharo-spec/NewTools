@@ -36,6 +36,12 @@ StSettingsApplication class >> open [
 	self new start.
 ]
 
+{ #category : 'adding' }
+StSettingsApplication >> descriptionBackgroundColor [
+
+	^ UITheme current lightBackgroundColor asHexString
+]
+
 { #category : 'accessing' }
 StSettingsApplication >> iconMap [
 
@@ -133,6 +139,6 @@ StSettingsApplication >> styleSheetString [
 	.settingItemStyle [ 
 		Container { #borderWidth: 5 } ],
 	.descriptionStyle [ 
-		Draw { #backgroundColor: #' , Smalltalk ui theme windowColor asHexString , ' } ]
+		Draw { #backgroundColor: #' , self descriptionBackgroundColor , ' } ]
 ]'.
 ]

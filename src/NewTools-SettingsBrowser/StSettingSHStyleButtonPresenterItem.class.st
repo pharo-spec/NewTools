@@ -27,6 +27,6 @@ StSettingSHStyleButtonPresenterItem >> buttonLabel: aString [
 { #category : 'initialization' }
 StSettingSHStyleButtonPresenterItem >> initializePresenters [ 
 
+	setterPresenter := self newButton.
 	super initializePresenters.
-	setterPresenter := self newButton
 ]

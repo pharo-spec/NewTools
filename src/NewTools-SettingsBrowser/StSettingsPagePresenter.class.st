@@ -53,7 +53,7 @@ StSettingsPagePresenter >> setModel: aNode [
 { #category : 'accessing' }
 StSettingsPagePresenter >> updatePresenterTree: aStSettingNode level: anInteger [ 
 	"Private - Recursively iterate aStSettingNode children using anInteger as 'level' indicator for title styling purposes"
-	
+
 	aStSettingNode allChildren do: [ : aSettingNode | 
 		| nodePresenter |
 
