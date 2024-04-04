@@ -45,8 +45,11 @@ StSettingsApplication >> iconMap [
 
 { #category : 'accessing' }
 StSettingsApplication >> iconMapAt: aString [ 
+	"Answer a <Symbol> specifying an icon name. Defaults to a generic icon if the application does not provide one"
 
-	^ self iconMap at: aString
+	^ self iconMap 
+		at: aString
+		ifAbsent: [ #info ]
 ]
 
 { #category : 'initialization' }
