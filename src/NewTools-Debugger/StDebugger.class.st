@@ -732,7 +732,7 @@ StDebugger >> forceSessionUpdate [
 
 	self
 		updateStackFromSession: self session;
-		updateExtensionsFrom: self session
+		updateExtensionsFromSession: self session
 ]
 
 { #category : 'api' }
@@ -848,7 +848,7 @@ StDebugger >> initializeStack [
 		stackTable selection isEmpty ifFalse: [
 			self updateInspectorFromContext: context.
 			self updateCodeFromContext: context.
-			self updateExtensionsFrom: self session.
+			self updateExtensionsFromSession: self session.
 			self expandStackIfLastItemIsSelected.
 			self updateWindowTitle ] ].
 	stackHeader := self instantiate: StHeaderBar.
@@ -1461,11 +1461,6 @@ StDebugger >> updateContextChanged [
 	self updateStep
 ]
 
-{ #category : 'updating - presenters' }
-StDebugger >> updateExtensionsFrom: newSession [
-	self extensionTools do:[:tool| tool updatePresenter]
-]
-
 { #category : 'initialization' }
 StDebugger >> updateExtensionsFromAnnouncement: aStDebuggerToggleAnnouncement [
 
@@ -1480,6 +1475,25 @@ StDebugger >> updateExtensionsFromAnnouncement: aStDebuggerToggleAnnouncement [
 	extensionToggled showInDebugger
 		ifTrue: [ self addExtension: extensionToggled ]
 		ifFalse: [ self removeExtension: extensionToggled ]
+]
+
+{ #category : 'updating - presenters' }
+StDebugger >> updateExtensionsFromSession: newSession [
+
+	| newExtensions |
+	newExtensions := self extensionsToDisplay.
+
+	"All extensions that were displayed but shouldn't be anymore are removed"
+	(extensionTools
+		 collect: [ :each | each class ]
+		 thenReject: [ :each | newExtensions includes: each ]) do: [
+		:extension | self removeExtension: extension ].
+
+	"All extensions that weren't displayed but should be now, are displayed"
+	(newExtensions copyWithoutAll:
+		 (extensionTools collect: [ :each | each class ])) do: [ :extension |
+		self addExtension: extension ].
+	self extensionTools do: [ :tool | tool updatePresenter ]
 ]
 
 { #category : 'updating - presenters' }
@@ -1543,7 +1557,7 @@ StDebugger >> updateStep [
 
 	self updateStackFromSession: self session.
 	self updateWindowTitle.
-	self updateExtensionsFrom: self session.
+	self updateExtensionsFromSession: self session.
 	self updateToolbar.
 
 	currentContext := self currentContext.
