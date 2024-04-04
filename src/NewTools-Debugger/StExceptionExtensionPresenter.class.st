@@ -39,21 +39,30 @@ StExceptionExtensionPresenter >> defaultLayout [
 	^SpBoxLayout newTopToBottom 
 ]
 
+{ #category : 'accessing' }
+StExceptionExtensionPresenter >> exception [
+	^exception
+]
+
 { #category : 'debugger extension' }
 StExceptionExtensionPresenter >> showInDebugger [
 
 	^ self debugger exception showInDebuggerExtension
 ]
 
-{ #category : 'updating' }
-StExceptionExtensionPresenter >> updateLayout [
+{ #category : 'debugger extension' }
+StExceptionExtensionPresenter >> showInDebugger: aBoolean [
 
-	self layout: (SpBoxLayout newTopToBottom
-			 add: debugger exception debuggerExtensionLayout;
-			 yourself)
+	"does nothing: show in debugger depends on the exception state of the debugger"
 ]
 
-{ #category : 'initialization' }
-StExceptionExtensionPresenter >> updatePresenter [
+{ #category : 'updating' }
+StExceptionExtensionPresenter >> updateLayout [
 	
+	self exception == self debugger exception ifTrue:[^self].
+	exception := self debugger exception.
+
+	self layout: (SpBoxLayout newTopToBottom
+			 add: exception debuggerExtensionLayout;
+			 yourself)
 ]

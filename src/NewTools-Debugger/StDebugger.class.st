@@ -730,6 +730,14 @@ StDebugger >> initialize [
   	self susbcribeToExtensionToggleAnnouncement.
 	
 	programmaticallyClosed := false.
+	
+stackTable transmitDo: [ :context |
+		stackTable selection isEmpty ifFalse: [
+			self updateInspectorFromContext: context.
+			self updateCodeFromContext: context.
+			self updateExtensionsFrom: self session.
+			self expandStackIfLastItemIsSelected.
+			self updateWindowTitle ] ].
 ]
 
 { #category : 'initialization' }
@@ -847,13 +855,7 @@ StDebugger >> initializeStack [
 				 displayColor: [ :context | self stackColorForContext: context ];
 				 sortFunction: nil;
 				 yourself).
-	stackTable transmitDo: [ :context |
-		stackTable selection isEmpty ifFalse: [
-			self updateInspectorFromContext: context.
-			self updateCodeFromContext: context.
-			self updateExtensionsFrom: self session.
-			self expandStackIfLastItemIsSelected.
-			self updateWindowTitle ] ].
+	
 	stackHeader := self instantiate: StHeaderBar.
 	stackHeader label: 'Stack'
 ]
@@ -1444,9 +1446,40 @@ StDebugger >> updateContextChanged [
 	self updateStep
 ]
 
-{ #category : 'updating - widgets' }
+{ #category : 'extensions' }
+StDebugger >> updateExceptionExtensionWith: newSession [
+
+	| extensionExtensionPresenterPage |
+"	thisContext stack copy inspect."
+	extensionExtensionPresenterPage := extensionToolsNotebook pages
+		                                   detect: [ :page |
+			                                   page presenterProvider value
+				                                   class
+			                                   = StExceptionExtensionPresenter ]
+		                                   ifNone: [ nil ].
+
+	newSession exception showInDebuggerExtension ifFalse: [
+		extensionExtensionPresenterPage ifNotNil: [ :page |
+			extensionToolsNotebook pages remove: page.
+			stackAndCodeContainer := self stackAndCodeLayout.
+			self layout: self defaultLayout ].
+
+		^ self ].
+
+	extensionExtensionPresenterPage
+		ifNil: [ self addExceptionExtensionIn: extensionToolsNotebook pages ]
+		ifNotNil: [
+			extensionExtensionPresenterPage presenterProvider value
+				updateLayout ].
+	stackAndCodeContainer := self stackAndCodeWithExtensionsLayout.
+	self layout: self defaultLayout
+]
+
+{ #category : 'extensions' }
 StDebugger >> updateExtensionsFrom: newSession [
-	self extensionTools do:[:tool| tool updatePresenter]
+	self updateExceptionExtensionWith: newSession.
+	self extensionTools do:[:tool| tool updatePresenter].
+	
 ]
 
 { #category : 'initialization' }
@@ -1550,7 +1583,7 @@ StDebugger >> updateStep [
 
 	self updateStackFromSession: self session.
 	self updateWindowTitle.
-	self updateExtensionsFrom: self session.
+"	self updateExtensionsFrom: self session."
 	self updateToolbar.
 
 	currentContext := self currentContext.
