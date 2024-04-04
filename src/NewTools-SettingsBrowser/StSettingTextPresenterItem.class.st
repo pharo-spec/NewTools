@@ -12,11 +12,11 @@ Class {
 { #category : 'initialization' }
 StSettingTextPresenterItem >> initializePresenters [ 
 
-	super initializePresenters.
 	setterPresenter := self newTextInput
 		beEditable;
 		placeholder: self model label;		
-		yourself 
+		yourself.
+	super initializePresenters.
 ]
 
 { #category : 'accessing' }

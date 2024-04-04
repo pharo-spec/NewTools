@@ -85,6 +85,6 @@ StSettingsMainPresenter >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
 		title: self browserTitle;
-		initialExtent: 1000 @ 700;
+		initialExtent: 1200 @ 700;
 		centered
 ]

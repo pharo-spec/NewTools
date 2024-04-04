@@ -19,17 +19,17 @@ Class {
 StSettingMultipleDropListPresenterItem >> initializePresenters [ 
 
 	| modelDefault |
-	super initializePresenters.
-	
+
 	modelDefault := self model default.
 	modelDefault color
 		ifNil: [ modelDefault color: Color transparent ].
 	colorSettingItemPresenter := modelDefault color asSettingPresenter: model.
 
-	fontStylePresenter := self newDropList 
+	setterPresenter := self newDropList 
 		items: #(#bold #italic #normal 'bold italic' );
 		selectItem: modelDefault emphasis;		
 		yourself.
+	super initializePresenters.
 ]
 
 { #category : 'accessing' }
@@ -38,6 +38,6 @@ StSettingMultipleDropListPresenterItem >> value: aSHStyleElement [
 	self flag: #delete.
 	colorSettingItemPresenter 
 		buttonColor: aSHStyleElement color.
-	fontStylePresenter selectItem: aSHStyleElement emphasis.
+	setterPresenter selectItem: aSHStyleElement emphasis.
 
 ]

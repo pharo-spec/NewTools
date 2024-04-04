@@ -3,7 +3,12 @@ Extension { #name : 'AbstractFileReference' }
 { #category : '*NewTools-SettingsBrowser' }
 AbstractFileReference >> asSettingPresenter: aSettingDeclaration [ 
 
-	^ (StSettingTextPresenterItem on: aSettingDeclaration)
+	| settingPresenterClass |
+	
+	settingPresenterClass := self isDirectory 
+		ifTrue: [ StSettingDirectoryPresenterItem ]
+		ifFalse: [ StSettingFilePresenterItem ].
+	^ (settingPresenterClass on: aSettingDeclaration)
 		value: self;
 		yourself
 ]

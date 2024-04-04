@@ -4,6 +4,7 @@ It represents a setting node Spec presenter with children (a section).
 Class {
 	#name : 'StSettingSectionPresenter',
 	#superclass : 'StSettingPresenter',
+	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'detailBox'
 	],

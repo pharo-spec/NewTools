@@ -8,11 +8,11 @@ The wrapped presenter is hold in `setterPresenter` instance variable.
 Class {
 	#name : 'StSettingPresenterItem',
 	#superclass : 'SpPresenter',
+	#classTraits : '{} + TraitedClass',
 	#instVars : [
-		'labelPresenter',
 		'setterPresenter',
-		'descriptionPresenter',
-		'model'
+		'model',
+		'labeledPresenter'
 	],
 	#category : 'NewTools-SettingsBrowser-Widgets',
 	#package : 'NewTools-SettingsBrowser',
@@ -22,54 +22,28 @@ Class {
 { #category : 'layout' }
 StSettingPresenterItem >> defaultLayout [
 
-	^ SpBoxLayout newLeftToRight
-		vAlignCenter;
-		add: labelPresenter width: 300;
-		add: setterPresenter width: 200;
-		add: descriptionPresenter;
+	^ SpBoxLayout newTopToBottom
+		add: labeledPresenter;
 		yourself
-]
-
-{ #category : 'accessing' }
-StSettingPresenterItem >> descriptionPresenter [
-
-	^ descriptionPresenter
-]
-
-{ #category : 'accessing' }
-StSettingPresenterItem >> descriptionPresenter: anObject [
-
-	descriptionPresenter := anObject
 ]
 
 { #category : 'initialization' }
 StSettingPresenterItem >> initializePresenters [
 	"Set a label and description presenters as baseline for every setting"
 
-	labelPresenter := self newText 
-		withoutScrollBars;
-		propagateNaturalHeight: false;	
-		addStyle: 'descriptionStyle';
-		text: self model label.
-	descriptionPresenter := self newText 
-		withoutScrollBars;
-		propagateNaturalHeight: false;
-		text: self model description;
-		addStyle: 'descriptionStyle';
+	labeledPresenter := (self instantiate: self labeledPresenterClass on: self) 
+		label: self model label;
+		description: self model description;
+		input: self setterPresenter;
 		yourself.
 
 ]
 
-{ #category : 'accessing' }
-StSettingPresenterItem >> labelPresenter [
+{ #category : 'initialization' }
+StSettingPresenterItem >> labeledPresenterClass [
 
-	^ labelPresenter
-]
+	^ StLabeledMultiLinePresenter
 
-{ #category : 'accessing' }
-StSettingPresenterItem >> labelPresenter: anObject [
-
-	labelPresenter := anObject
 ]
 
 { #category : 'accessing' }

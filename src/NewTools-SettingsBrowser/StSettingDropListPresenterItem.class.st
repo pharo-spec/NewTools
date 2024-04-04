@@ -9,12 +9,12 @@ Class {
 { #category : 'initialization' }
 StSettingDropListPresenterItem >> initializePresenters [ 
 
-	super initializePresenters.
 	setterPresenter := self newDropList
 		items: self model domainValues;
 		display: [ : item | item asString ];
 		selectIndex: self model index;
-		yourself
+		yourself.
+	super initializePresenters.
 ]
 
 { #category : 'accessing' }
