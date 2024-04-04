@@ -680,6 +680,13 @@ StDebugger >> extensionTools [
 	^ extensionTools ifNil: [ extensionTools := OrderedCollection new ]
 ]
 
+{ #category : 'extensions' }
+StDebugger >> extensionsToDisplay [
+
+	^ self class extensionToolsClasses select: [ :s |
+		  s showInDebugger and: [ s acceptsPredicate: self contextPredicate ] ]
+]
+
 { #category : 'actions' }
 StDebugger >> fileOutSelectedContext [
 	self debuggerActionModel
@@ -756,8 +763,7 @@ StDebugger >> initializeExtensionTools [
 
 	sortedToolClasses := SortedCollection new sortBlock: [ :s1 :s2 |
 		                     s1 displayOrder <= s2 displayOrder ].
-	sortedToolClasses addAll:
-		(self class extensionToolsClasses select: [ :s | s showInDebugger ]).
+	sortedToolClasses addAll: self extensionsToDisplay.
 	pages := sortedToolClasses collect: [ :toolClass |
 		         self instantiateExtensionToolsPage: toolClass ].
 	extensionToolsNotebook pages: pages
