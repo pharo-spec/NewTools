@@ -39,7 +39,7 @@ StSettingsApplication class >> open [
 { #category : 'adding' }
 StSettingsApplication >> descriptionBackgroundColor [
 
-	^ Smalltalk ui theme lightBackgroundColor asHexString
+	^ UITheme current lightBackgroundColor asHexString
 ]
 
 { #category : 'accessing' }
