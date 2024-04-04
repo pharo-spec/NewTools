@@ -16,6 +16,12 @@ Trait {
 	#tag : 'Model'
 }
 
+{ #category : 'testing' }
+TStDebuggerExtension classSide >> acceptsPredicate: aStDebuggerContextPredicate [
+
+	^ true
+]
+
 { #category : 'debugger extension' }
 TStDebuggerExtension classSide >> defaultDisplayOrder [
 
