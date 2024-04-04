@@ -438,6 +438,12 @@ StDebugger >> context [
 	^ self interruptedContext
 ]
 
+{ #category : 'accessing' }
+StDebugger >> contextPredicate [
+
+	^ self debuggerActionModel contextPredicate
+]
+
 { #category : 'actions' }
 StDebugger >> copyStackToClipboard [
 	self debuggerActionModel copyStackToClipboard
