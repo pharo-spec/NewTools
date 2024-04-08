@@ -41,6 +41,11 @@ TStDebuggerExtension classSide >> displayOrder: anInteger [
 ]
 
 { #category : 'testing' }
+TStDebuggerExtension classSide >> isDynamicExtension [
+	^ false
+]
+
+{ #category : 'testing' }
 TStDebuggerExtension classSide >> isOnlyForTests [
 
 	^ false
@@ -89,4 +94,14 @@ TStDebuggerExtension >> displayOrder [
 { #category : 'initialization' }
 TStDebuggerExtension >> setModelBeforeInitialization: aDebugger [
 	 debugger := aDebugger
+]
+
+{ #category : 'debugger extension' }
+TStDebuggerExtension >> showInDebugger [
+	^self class showInDebugger 
+]
+
+{ #category : 'debugger extension' }
+TStDebuggerExtension >> showInDebugger: aBoolean [
+	self class showInDebugger: aBoolean 
 ]

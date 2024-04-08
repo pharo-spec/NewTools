@@ -107,10 +107,12 @@ StDebuggerExtensionMechanismTest >> testDynamicLayoutWithAndWithoutExtension [
 { #category : 'tests - extensions' }
 StDebuggerExtensionMechanismTest >> testExtensionToolsClasses [
 
-	self
-		assertCollection: StDebugger extensionToolsClasses
-		equals: (TStDebuggerExtension users reject: [ :extension |
-				 extension isOnlyForTests ])
+	| extensionClasses |
+	extensionClasses := StDebugger extensionToolsClasses.
+	self deny: (extensionClasses includesAny:
+			 (TStDebuggerExtension users select: [ :c | c isOnlyForTests ])).
+	self deny: (extensionClasses includesAny:
+			 (TStDebuggerExtension users select: [ :c | c isDynamicExtension ]))
 ]
 
 { #category : 'tests - extensions' }

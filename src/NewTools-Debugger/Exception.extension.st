@@ -11,3 +11,10 @@ Exception >> selectedCodeRangeForContext: aContext forDebugger: aDebugger [
 
 	^ aDebugger defaultSelectedCodeRangeForContext: aContext
 ]
+
+{ #category : '*NewTools-Debugger' }
+Exception >> showInDebuggerExtension [
+	"By default, exceptions do not activate debugger extensions"
+
+	^ false
+]

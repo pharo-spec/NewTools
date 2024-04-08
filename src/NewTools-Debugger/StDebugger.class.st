@@ -193,7 +193,8 @@ StDebugger class >> enableStackColoring: anObject [
 StDebugger class >> extensionToolsClasses [
 
 	^ TStDebuggerExtension users reject: [ :extensionClass |
-		  extensionClass isOnlyForTests ]
+		  extensionClass isOnlyForTests or: [
+			  extensionClass isDynamicExtension ] ]
 ]
 
 { #category : 'accessing' }
@@ -290,6 +291,19 @@ StDebugger >> acceptCodeChanges: newSource forContext: aContext [
 		inContext: aContext
 		notifying: code adapter widget.
 	self clearUnsavedCodeChanges
+]
+
+{ #category : 'extensions' }
+StDebugger >> addExceptionExtensionIn: pages [
+
+	| extensionPresenter |
+	extensionPresenter := self
+		                      instantiate: StExceptionExtensionPresenter
+		                      on: self.	
+	extensionPresenter showInDebugger ifFalse: [ ^ self ].
+	
+	extensionPresenter updateLayout.
+	pages add: (self notebookPageForExtension: extensionPresenter)
 ]
 
 { #category : 'extensions' }
@@ -495,7 +509,7 @@ StDebugger >> createMissingMethod [
 	[ 
 	chosenClass := self requestClassFrom:
 		               self interruptedContext receiver class.
-	self createMissingMethodFor: msg in: chosenClass ]
+	self createMissingMethodFor: msg inClass: chosenClass ]
 		on: Abort
 		do: [ ^ self ].
 		
@@ -511,6 +525,30 @@ StDebugger >> createMissingMethodFor: aMessage in: aClass [
 	method isClassified ifFalse: [ method protocol: (self requestProtocolIn: aClass) ].
 
 	stackTable selectIndex: 1
+]
+
+{ #category : 'actions' }
+StDebugger >> createMissingMethodFor: aMessage inClass: aClass [
+
+	self debuggerActionModel
+		implement: aMessage
+		inClass: aClass
+		forContext: self interruptedContext.
+		
+	self selectTopContext
+]
+
+{ #category : 'actions' }
+StDebugger >> createMissingMethodFor: aMessage inClass: aClass underProtocol: aProtocol [
+
+	| method |
+	method := self debuggerActionModel
+		          implement: aMessage
+		          inClass: aClass
+		          forContext: self interruptedContext.
+	method protocol: aProtocol.
+
+	self selectTopContext
 ]
 
 { #category : 'actions' }
@@ -877,13 +915,11 @@ StDebugger >> initializeWindow: aWindowPresenter [
 
 { #category : 'extensions' }
 StDebugger >> instantiateExtensionToolsPage: aToolClass [
+
 	| toolInstance |
 	toolInstance := self instantiate: aToolClass on: self.
 	toolInstance layout: toolInstance debuggerLayout.
-	self registerExtensionTool: toolInstance.
-	^ SpNotebookPage
-		title: toolInstance debuggerExtensionToolName
-		provider: [ toolInstance ]
+	^ self notebookPageForExtension: toolInstance
 ]
 
 { #category : 'accessing - model' }
@@ -954,6 +990,15 @@ StDebugger >> newDebuggerContextFor: aContext [
 StDebugger >> newTitle [
 
 	^ self debuggerActionModel statusStringForContext
+]
+
+{ #category : 'extensions' }
+StDebugger >> notebookPageForExtension: anExtensionPresenter [
+
+	self registerExtensionTool: anExtensionPresenter.
+	^ SpNotebookPage
+		  title: anExtensionPresenter debuggerExtensionToolName
+		  provider: [ anExtensionPresenter ]
 ]
 
 { #category : 'api' }
@@ -1186,10 +1231,10 @@ StDebugger >> setModelBeforeInitialization: aSession [
 { #category : 'initialization' }
 StDebugger >> setStackAndCodeContainer [
 
-	stackAndCodeContainer := self class usesExtensions
-		                         ifTrue: [ 
+	stackAndCodeContainer := extensionTools
+		                         ifEmpty: [ self stackAndCodeLayout ]
+		                         ifNotEmpty: [
 		                         self stackAndCodeWithExtensionsLayout ]
-		                         ifFalse: [ self stackAndCodeLayout ]
 ]
 
 { #category : 'accessing - context' }
@@ -1459,6 +1504,35 @@ StDebugger >> updateContextChanged [
 	"The top context has been changed so we force the code presenter to change its text. Otherwise, the debugger would consider that there are unsaved code changes, as the source code from the context would not be the same as the source code displayed"
 	self updateSourceCodeFor: self interruptedContext.
 	self updateStep
+]
+
+{ #category : 'extensions' }
+StDebugger >> updateExceptionExtensionWith: newSession [
+
+	| extensionExtensionPresenterPage |
+"	thisContext stack copy inspect."
+	extensionExtensionPresenterPage := extensionToolsNotebook pages
+		                                   detect: [ :page |
+			                                   page presenterProvider value
+				                                   class
+			                                   = StExceptionExtensionPresenter ]
+		                                   ifNone: [ nil ].
+
+	newSession exception showInDebuggerExtension ifFalse: [
+		extensionExtensionPresenterPage ifNotNil: [ :page |
+			extensionToolsNotebook pages remove: page.
+			stackAndCodeContainer := self stackAndCodeLayout.
+			self layout: self defaultLayout ].
+
+		^ self ].
+
+	extensionExtensionPresenterPage
+		ifNil: [ self addExceptionExtensionIn: extensionToolsNotebook pages ]
+		ifNotNil: [
+			extensionExtensionPresenterPage presenterProvider value
+				updateLayout ].
+	stackAndCodeContainer := self stackAndCodeWithExtensionsLayout.
+	self layout: self defaultLayout
 ]
 
 { #category : 'initialization' }
