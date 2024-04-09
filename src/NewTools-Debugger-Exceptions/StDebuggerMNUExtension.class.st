@@ -1,5 +1,5 @@
 "
-I am a debugger extension that helps create a method that raised a debugger with a DNU, allowing to choose some parameters such as the class and the protocol of the new method. 
+I am a debugger extension that helps create a method that raised a debugger with a DNU, allowing to choose some parameters such as the class or trait and the protocol of the new method. 
 "
 Class {
 	#name : 'StDebuggerMNUExtension',
@@ -23,6 +23,12 @@ Class {
 StDebuggerMNUExtension class >> acceptsPredicate: aStDebuggerContextPredicate [
 
 	^ aStDebuggerContextPredicate isContextDoesNotUnderstand
+]
+
+{ #category : 'debugger extension' }
+StDebuggerMNUExtension class >> showInDebugger [
+
+	^ showDebuggerExtension ifNil: [ showDebuggerExtension := true ]
 ]
 
 { #category : 'actions' }
