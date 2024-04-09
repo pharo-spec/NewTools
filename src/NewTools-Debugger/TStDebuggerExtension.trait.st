@@ -41,11 +41,6 @@ TStDebuggerExtension classSide >> displayOrder: anInteger [
 ]
 
 { #category : 'testing' }
-TStDebuggerExtension classSide >> isDynamicExtension [
-	^ false
-]
-
-{ #category : 'testing' }
 TStDebuggerExtension classSide >> isOnlyForTests [
 
 	^ false

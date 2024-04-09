@@ -193,8 +193,7 @@ StDebugger class >> enableStackColoring: anObject [
 StDebugger class >> extensionToolsClasses [
 
 	^ TStDebuggerExtension users reject: [ :extensionClass |
-		  extensionClass isOnlyForTests or: [
-			  extensionClass isDynamicExtension ] ]
+		  extensionClass isOnlyForTests ]
 ]
 
 { #category : 'accessing' }
@@ -291,19 +290,6 @@ StDebugger >> acceptCodeChanges: newSource forContext: aContext [
 		inContext: aContext
 		notifying: code adapter widget.
 	self clearUnsavedCodeChanges
-]
-
-{ #category : 'extensions' }
-StDebugger >> addExceptionExtensionIn: pages [
-
-	| extensionPresenter |
-	extensionPresenter := self
-		                      instantiate: StExceptionExtensionPresenter
-		                      on: self.	
-	extensionPresenter showInDebugger ifFalse: [ ^ self ].
-	
-	extensionPresenter updateLayout.
-	pages add: (self notebookPageForExtension: extensionPresenter)
 ]
 
 { #category : 'extensions' }
@@ -517,23 +503,14 @@ StDebugger >> createMissingMethod [
 ]
 
 { #category : 'actions' }
-StDebugger >> createMissingMethodFor: aMessage in: aClass [
-
-	| method |
-	self flag: #DBG_MISSINGTEST.
-	method := self debuggerActionModel implement: aMessage inClass: aClass forContext: self interruptedContext.
-	method isClassified ifFalse: [ method protocol: (self requestProtocolIn: aClass) ].
-
-	stackTable selectIndex: 1
-]
-
-{ #category : 'actions' }
 StDebugger >> createMissingMethodFor: aMessage inClass: aClass [
 
-	self debuggerActionModel
+	| method |
+	method := self debuggerActionModel
 		implement: aMessage
 		inClass: aClass
 		forContext: self interruptedContext.
+	method isClassified ifFalse: [ method protocol: (self requestProtocolIn: aClass) ].
 		
 	self selectTopContext
 ]
@@ -820,8 +797,13 @@ StDebugger >> initializeExtensionTools [
 
 	sortedToolClasses := SortedCollection new sortBlock: [ :s1 :s2 |
 		                     s1 displayOrder <= s2 displayOrder ].
+
+	'Extensions to display:' traceCr.
+	self extensionsToDisplay traceCr.
+
 	sortedToolClasses addAll: self extensionsToDisplay.
 	pages := sortedToolClasses collect: [ :toolClass |
+		         ('Initialize extension: {1}' format: { toolClass }) traceCr.
 		         self instantiateExtensionToolsPage: toolClass ].
 	extensionToolsNotebook pages: pages
 ]
@@ -1193,6 +1175,12 @@ StDebugger >> selectNextExecutedExpression [
 		(sourceNodeExecuted start to: sourceNodeExecuted stop)
 ]
 
+{ #category : 'stack' }
+StDebugger >> selectTopContext [
+
+	stackTable selectIndex: 1
+]
+
 { #category : 'highlighting' }
 StDebugger >> selectedCodeRangeForContext: aContext [
 
@@ -1504,35 +1492,6 @@ StDebugger >> updateContextChanged [
 	"The top context has been changed so we force the code presenter to change its text. Otherwise, the debugger would consider that there are unsaved code changes, as the source code from the context would not be the same as the source code displayed"
 	self updateSourceCodeFor: self interruptedContext.
 	self updateStep
-]
-
-{ #category : 'extensions' }
-StDebugger >> updateExceptionExtensionWith: newSession [
-
-	| extensionExtensionPresenterPage |
-"	thisContext stack copy inspect."
-	extensionExtensionPresenterPage := extensionToolsNotebook pages
-		                                   detect: [ :page |
-			                                   page presenterProvider value
-				                                   class
-			                                   = StExceptionExtensionPresenter ]
-		                                   ifNone: [ nil ].
-
-	newSession exception showInDebuggerExtension ifFalse: [
-		extensionExtensionPresenterPage ifNotNil: [ :page |
-			extensionToolsNotebook pages remove: page.
-			stackAndCodeContainer := self stackAndCodeLayout.
-			self layout: self defaultLayout ].
-
-		^ self ].
-
-	extensionExtensionPresenterPage
-		ifNil: [ self addExceptionExtensionIn: extensionToolsNotebook pages ]
-		ifNotNil: [
-			extensionExtensionPresenterPage presenterProvider value
-				updateLayout ].
-	stackAndCodeContainer := self stackAndCodeWithExtensionsLayout.
-	self layout: self defaultLayout
 ]
 
 { #category : 'initialization' }

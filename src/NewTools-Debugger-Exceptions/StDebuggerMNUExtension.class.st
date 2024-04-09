@@ -1,6 +1,11 @@
+"
+I am a debugger extension that helps create a method that raised a debugger with a DNU, allowing to choose some parameters such as the class and the protocol of the new method. 
+"
 Class {
 	#name : 'StDebuggerMNUExtension',
 	#superclass : 'SpPresenter',
+	#traits : 'TStDebuggerExtension',
+	#classTraits : 'TStDebuggerExtension classTrait',
 	#instVars : [
 		'exception',
 		'description',
@@ -13,6 +18,12 @@ Class {
 	#category : 'NewTools-Debugger-Exceptions',
 	#package : 'NewTools-Debugger-Exceptions'
 }
+
+{ #category : 'testing' }
+StDebuggerMNUExtension class >> acceptsPredicate: aStDebuggerContextPredicate [
+
+	^ aStDebuggerContextPredicate isContextDoesNotUnderstand
+]
 
 { #category : 'actions' }
 StDebuggerMNUExtension >> addMethod [
@@ -41,6 +52,12 @@ StDebuggerMNUExtension >> addProtocols: protocols [
 					 ifFalse: [ self iconNamed: #protocolPublic ]) ].
 				
 	customProtocolCheckBox state ifTrue:[self selectMatchingProtocol]
+]
+
+{ #category : 'debugger extension' }
+StDebuggerMNUExtension >> debuggerExtensionToolName [
+
+	^ 'Create method'
 ]
 
 { #category : 'layout' }
@@ -137,7 +154,8 @@ StDebuggerMNUExtension >> selectMatchingProtocol [
 ]
 
 { #category : 'accessing - model' }
-StDebuggerMNUExtension >> setModelBeforeInitialization: anException [
+StDebuggerMNUExtension >> setModelBeforeInitialization: aStDebugger [
 
-	exception := anException
+	debugger := aStDebugger.
+	exception := debugger exception 
 ]
