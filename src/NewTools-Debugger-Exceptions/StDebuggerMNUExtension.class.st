@@ -37,7 +37,7 @@ StDebuggerMNUExtension >> addMethod [
 	| classOrTrait protocol |
 	classOrTrait := classesAndTraits selectedItem.
 	protocol := selectedProtocol selectedItem.
-	self owner debugger
+	self debugger
 		createMissingMethodFor: exception message
 		inClass: classOrTrait
 		underProtocol: protocol
