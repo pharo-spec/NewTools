@@ -93,6 +93,13 @@ StDebuggerExtensionMechanismTest >> tearDown [
 ]
 
 { #category : 'tests' }
+StDebuggerExtensionMechanismTest >> testAcceptsPredicate [
+
+	"By default, a debugger extension accepts any context predicate, even `nil`"
+	self assert: (TStDebuggerExtension acceptsPredicate: nil)
+]
+
+{ #category : 'tests' }
 StDebuggerExtensionMechanismTest >> testDynamicLayoutWithAndWithoutExtension [
 
 	| dbg toolPage session |
