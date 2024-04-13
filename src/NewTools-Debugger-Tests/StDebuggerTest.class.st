@@ -1,6 +1,6 @@
 Class {
 	#name : 'StDebuggerTest',
-	#superclass : 'TestCase',
+	#superclass : 'SpBaseTest',
 	#instVars : [
 		'session',
 		'debugger',
