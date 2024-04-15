@@ -50,7 +50,7 @@ StSpotterCandidateLink >> copy [
 	^ link
 ]
 
-{ #category : 'printing' }
+{ #category : 'displaying' }
 StSpotterCandidateLink >> displayStringOn: stream [
 
 	stream nextPutAll: 'Candidate link: '.

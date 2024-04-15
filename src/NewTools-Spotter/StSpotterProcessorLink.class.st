@@ -37,7 +37,7 @@ StSpotterProcessorLink >> clear [
 	size := 0.
 ]
 
-{ #category : 'printing' }
+{ #category : 'displaying' }
 StSpotterProcessorLink >> displayStringOn: stream [
 	stream 
 		nextPutAll: 'Processor link: ';
