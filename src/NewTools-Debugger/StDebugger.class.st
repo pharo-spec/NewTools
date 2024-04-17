@@ -798,12 +798,8 @@ StDebugger >> initializeExtensionTools [
 	sortedToolClasses := SortedCollection new sortBlock: [ :s1 :s2 |
 		                     s1 displayOrder <= s2 displayOrder ].
 
-	'Extensions to display:' traceCr.
-	self extensionsToDisplay traceCr.
-
 	sortedToolClasses addAll: self extensionsToDisplay.
 	pages := sortedToolClasses collect: [ :toolClass |
-		         ('Initialize extension: {1}' format: { toolClass }) traceCr.
 		         self instantiateExtensionToolsPage: toolClass ].
 	extensionToolsNotebook pages: pages
 ]
