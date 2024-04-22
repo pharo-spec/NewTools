@@ -503,10 +503,7 @@ StDebuggerActionModel >> stepThrough: aContext [
 { #category : 'system subscription' }
 StDebuggerActionModel >> subscribeToMethodAddedAnnouncement [
 
-	SystemAnnouncer uniqueInstance weak
-		when: MethodAdded
-		send: #updateAfterMethodAdded
-		to: self
+	self class codeChangeAnnouncer weak when: MethodAdded send: #updateAfterMethodAdded to: self
 ]
 
 { #category : 'accessing' }
@@ -523,7 +520,7 @@ StDebuggerActionModel >> unsubscribe: anEventListener [
 { #category : 'system subscription' }
 StDebuggerActionModel >> unsubscribeFromSystemAnnouncer [
 
-	SystemAnnouncer uniqueInstance unsubscribe: self
+	self class codeChangeAnnouncer unsubscribe: self
 ]
 
 { #category : 'updating' }

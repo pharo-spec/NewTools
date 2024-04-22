@@ -472,7 +472,7 @@ StMessageBrowser >> refreshingBlock: aBlock [
 { #category : 'announcements - registration' }
 StMessageBrowser >> registerToAnnouncements [
 
-	SystemAnnouncer uniqueInstance weak		
+	self class codeChangeAnnouncer weak
 		when: MethodAdded send: #methodAdded: to: self;
 		when: MethodModified send: #methodModified: to: self;
 		when: MethodRemoved send: #methodRemoved: to: self;
@@ -647,6 +647,6 @@ StMessageBrowser >> whenSelectedItemChanged: aBlock [
 
 { #category : 'private' }
 StMessageBrowser >> windowIsClosing [
-	
-	SystemAnnouncer uniqueInstance unsubscribe: self
+
+	self class codeChangeAnnouncer unsubscribe: self
 ]

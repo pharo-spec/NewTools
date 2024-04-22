@@ -99,10 +99,8 @@ StDebuggerTest >> setUp [
 StDebuggerTest >> subscriptionsForStDebuggerExtensionActivationToggle [
 
 	| subscriptions |
-	subscriptions := SystemAnnouncer uniqueInstance subscriptions
-		                 subscriptions.
-	^ subscriptions asOrderedCollection select: [ :s | 
-		  s announcementClass = StDebuggerExtensionActivationToggle ]
+	subscriptions := self class codeSupportAnnouncer subscriptions subscriptions.
+	^ subscriptions asOrderedCollection select: [ :s | s announcementClass = StDebuggerExtensionActivationToggle ]
 ]
 
 { #category : 'running' }
@@ -215,9 +213,8 @@ StDebuggerTest >> testClose [
 	"We trigger the closing from the presenter instead of the debugger itself,
 	because the window is not really open so the debugger will not close through debugger close."
 	windowPresenter windowClosed.
-	self deny: (SystemAnnouncer uniqueInstance hasSubscriber: debugger).
-	self deny:
-		(actionModel hasSubscriber: debugger)
+	self deny: (self class codeSupportAnnouncer hasSubscriber: debugger).
+	self deny: (actionModel hasSubscriber: debugger)
 ]
 
 { #category : 'tests - code pane' }
