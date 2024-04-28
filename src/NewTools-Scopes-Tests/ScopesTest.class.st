@@ -28,7 +28,7 @@ ScopesTest >> testClassScopeExcludesClassCreatedAPosteriori [
 		            builder
 			            superclass: Object;
 			            name: #ScClassA4;
-			            package: package ].
+			            package: package name ].
 
 	"Check that the new class does not belong in the scope"
 	self deny: (scope definedClasses includes: newClass) ] ensure: [
@@ -53,7 +53,7 @@ ScopesTest >> testPackageScopeIncludesClassCreatedAPosteriori [
 		            builder
 			            superclass: Object;
 			            name: #ScClassA4;
-			            package: package ].
+			            package: package name ].
 
 	"Check that the new class belongs to the scope"
 	self assert: (scope definedClasses includes: newClass) ] ensure: [
