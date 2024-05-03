@@ -292,6 +292,25 @@ StDebugger >> acceptCodeChanges: newSource forContext: aContext [
 	self clearUnsavedCodeChanges
 ]
 
+{ #category : 'extensions' }
+StDebugger >> addExtension: aDebuggerExtensionClass [
+	"If no extension was activated, we instantiate the page for the activated extension and we change the stack and code layout"
+
+	self extensionTools ifEmpty: [
+		extensionToolsNotebook pages:
+			{ (self instantiateExtensionToolsPage: aDebuggerExtensionClass) }
+				asOrderedCollection.
+		extensionToolsNotebook selectPageIndex: 1.
+		stackAndCodeContainer := self stackAndCodeWithExtensionsLayout.
+		self layout: self defaultLayout.
+		^ self ].
+
+	"Else, if the extension was not activated and now is, we instantiate the page for the activated extension, and adds it to the existing pages"
+
+	extensionToolsNotebook addPage:
+		(self instantiateExtensionToolsPage: aDebuggerExtensionClass)
+]
+
 { #category : 'commands - support' }
 StDebugger >> buildContextMenus [
 	| stackGroup codeCommands debuggerCommandGroup |
@@ -438,6 +457,12 @@ StDebugger >> context [
 	^ self interruptedContext
 ]
 
+{ #category : 'accessing' }
+StDebugger >> contextPredicate [
+
+	^ self debuggerActionModel contextPredicate
+]
+
 { #category : 'actions' }
 StDebugger >> copyStackToClipboard [
 	self debuggerActionModel copyStackToClipboard
@@ -470,7 +495,7 @@ StDebugger >> createMissingMethod [
 	[ 
 	chosenClass := self requestClassFrom:
 		               self interruptedContext receiver class.
-	self createMissingMethodFor: msg in: chosenClass ]
+	self createMissingMethodFor: msg inClass: chosenClass ]
 		on: Abort
 		do: [ ^ self ].
 		
@@ -478,14 +503,29 @@ StDebugger >> createMissingMethod [
 ]
 
 { #category : 'actions' }
-StDebugger >> createMissingMethodFor: aMessage in: aClass [
+StDebugger >> createMissingMethodFor: aMessage inClass: aClass [
 
 	| method |
-	self flag: #DBG_MISSINGTEST.
-	method := self debuggerActionModel implement: aMessage inClass: aClass forContext: self interruptedContext.
+	method := self debuggerActionModel
+		implement: aMessage
+		inClass: aClass
+		forContext: self interruptedContext.
 	method isClassified ifFalse: [ method protocol: (self requestProtocolIn: aClass) ].
+		
+	self selectTopContext
+]
 
-	stackTable selectIndex: 1
+{ #category : 'actions' }
+StDebugger >> createMissingMethodFor: aMessage inClass: aClass underProtocol: aProtocol [
+
+	| method |
+	method := self debuggerActionModel
+		          implement: aMessage
+		          inClass: aClass
+		          forContext: self interruptedContext.
+	method protocol: aProtocol.
+
+	self selectTopContext
 ]
 
 { #category : 'actions' }
@@ -674,6 +714,13 @@ StDebugger >> extensionTools [
 	^ extensionTools ifNil: [ extensionTools := OrderedCollection new ]
 ]
 
+{ #category : 'extensions' }
+StDebugger >> extensionsToDisplay [
+
+	^ self class extensionToolsClasses select: [ :s |
+		  s showInDebugger and: [ s acceptsPredicate: self contextPredicate ] ]
+]
+
 { #category : 'actions' }
 StDebugger >> fileOutSelectedContext [
 	self debuggerActionModel
@@ -700,7 +747,7 @@ StDebugger >> forceSessionUpdate [
 
 	self
 		updateStackFromSession: self session;
-		updateExtensionsFrom: self session
+		updateExtensionsFromSession: self session
 ]
 
 { #category : 'api' }
@@ -750,8 +797,8 @@ StDebugger >> initializeExtensionTools [
 
 	sortedToolClasses := SortedCollection new sortBlock: [ :s1 :s2 |
 		                     s1 displayOrder <= s2 displayOrder ].
-	sortedToolClasses addAll:
-		(self class extensionToolsClasses select: [ :s | s showInDebugger ]).
+
+	sortedToolClasses addAll: self extensionsToDisplay.
 	pages := sortedToolClasses collect: [ :toolClass |
 		         self instantiateExtensionToolsPage: toolClass ].
 	extensionToolsNotebook pages: pages
@@ -817,7 +864,7 @@ StDebugger >> initializeStack [
 		stackTable selection isEmpty ifFalse: [
 			self updateInspectorFromContext: context.
 			self updateCodeFromContext: context.
-			self updateExtensionsFrom: self session.
+			self updateExtensionsFromSession: self session.
 			self expandStackIfLastItemIsSelected.
 			self updateWindowTitle ] ].
 	stackHeader := self instantiate: StHeaderBar.
@@ -846,13 +893,11 @@ StDebugger >> initializeWindow: aWindowPresenter [
 
 { #category : 'extensions' }
 StDebugger >> instantiateExtensionToolsPage: aToolClass [
+
 	| toolInstance |
 	toolInstance := self instantiate: aToolClass on: self.
 	toolInstance layout: toolInstance debuggerLayout.
-	self registerExtensionTool: toolInstance.
-	^ SpNotebookPage
-		title: toolInstance debuggerExtensionToolName
-		provider: [ toolInstance ]
+	^ self notebookPageForExtension: toolInstance
 ]
 
 { #category : 'accessing - model' }
@@ -923,6 +968,15 @@ StDebugger >> newDebuggerContextFor: aContext [
 StDebugger >> newTitle [
 
 	^ self debuggerActionModel statusStringForContext
+]
+
+{ #category : 'extensions' }
+StDebugger >> notebookPageForExtension: anExtensionPresenter [
+
+	self registerExtensionTool: anExtensionPresenter.
+	^ SpNotebookPage
+		  title: anExtensionPresenter debuggerExtensionToolName
+		  provider: [ anExtensionPresenter ]
 ]
 
 { #category : 'api' }
@@ -996,6 +1050,21 @@ StDebugger >> recordUnsavedCodeChanges [
 { #category : 'extensions' }
 StDebugger >> registerExtensionTool: anExtension [
 	self extensionTools add: anExtension
+]
+
+{ #category : 'extensions' }
+StDebugger >> removeExtension: aDebuggerExtension [
+	"Else, the extension was activated and now isn't anymore. In this case, we remove the corresponding page. If there isn't any activated extension left, we change the stackAndCode layout"
+
+	extensionToolsNotebook pages: (extensionToolsNotebook pages
+			 removeAllSuchThat: [ :page |
+				 page presenterProvider value class = aDebuggerExtension ];
+			 yourself).
+	extensionTools removeAllSuchThat: [ :extensionInstance |
+		extensionInstance class = aDebuggerExtension ].
+	extensionTools ifEmpty: [
+		stackAndCodeContainer := self stackAndCodeLayout ].
+	self layout: self defaultLayout
 ]
 
 { #category : 'ui requests' }
@@ -1102,6 +1171,12 @@ StDebugger >> selectNextExecutedExpression [
 		(sourceNodeExecuted start to: sourceNodeExecuted stop)
 ]
 
+{ #category : 'stack' }
+StDebugger >> selectTopContext [
+
+	stackTable selectIndex: 1
+]
+
 { #category : 'highlighting' }
 StDebugger >> selectedCodeRangeForContext: aContext [
 
@@ -1140,10 +1215,10 @@ StDebugger >> setModelBeforeInitialization: aSession [
 { #category : 'initialization' }
 StDebugger >> setStackAndCodeContainer [
 
-	stackAndCodeContainer := self class usesExtensions
-		                         ifTrue: [ 
+	stackAndCodeContainer := extensionTools
+		                         ifEmpty: [ self stackAndCodeLayout ]
+		                         ifNotEmpty: [
 		                         self stackAndCodeWithExtensionsLayout ]
-		                         ifFalse: [ self stackAndCodeLayout ]
 ]
 
 { #category : 'accessing - context' }
@@ -1415,11 +1490,6 @@ StDebugger >> updateContextChanged [
 	self updateStep
 ]
 
-{ #category : 'updating - presenters' }
-StDebugger >> updateExtensionsFrom: newSession [
-	self extensionTools do:[:tool| tool updatePresenter]
-]
-
 { #category : 'initialization' }
 StDebugger >> updateExtensionsFromAnnouncement: aStDebuggerToggleAnnouncement [
 
@@ -1427,33 +1497,32 @@ StDebugger >> updateExtensionsFromAnnouncement: aStDebuggerToggleAnnouncement [
 	extensionToggled := aStDebuggerToggleAnnouncement
 		                    debuggerExtensionClass.
 
-	"If no extension was activated, we instantiate the page for the activated extension and we change the stack and code layout"
-	self extensionTools ifEmpty: [
-		extensionToolsNotebook pages:
-			{ (self instantiateExtensionToolsPage: extensionToggled) }
-				asOrderedCollection.
-		extensionToolsNotebook selectPageIndex: 1.
-		stackAndCodeContainer := self stackAndCodeWithExtensionsLayout.
-		self layout: self defaultLayout.
+	"If the extension was (de)activated but does not accept the corresponding context predicate, nothing changes"
+	(extensionToggled acceptsPredicate: self contextPredicate) ifFalse: [
 		^ self ].
 
-	"Else, if the extension was not activated and now is, we instantiate the page for the activated extension, and adds it to the existing pages"
+	extensionToggled showInDebugger
+		ifTrue: [ self addExtension: extensionToggled ]
+		ifFalse: [ self removeExtension: extensionToggled ]
+]
 
-	extensionToggled showInDebugger ifTrue: [
-		extensionToolsNotebook addPage:
-			(self instantiateExtensionToolsPage: extensionToggled).
-		^ self ].
+{ #category : 'updating - presenters' }
+StDebugger >> updateExtensionsFromSession: newSession [
 
-	"Else, the extension was activated and now isn't anymore. In this case, we remove the corresponding page. If there isn't any activated extension left, we change the stackAndCode layout"
-	extensionToolsNotebook pages: (extensionToolsNotebook pages
-			 removeAllSuchThat: [ :page |
-				 page presenterProvider value class = extensionToggled ];
-			 yourself).
-	extensionTools removeAllSuchThat: [ :extensionInstance |
-		extensionInstance class = extensionToggled ].
-	extensionTools ifEmpty: [
-		stackAndCodeContainer := self stackAndCodeLayout ].
-	self layout: self defaultLayout
+	| newExtensions |
+	newExtensions := self extensionsToDisplay.
+
+	"All extensions that were displayed but shouldn't be anymore are removed"
+	(extensionTools
+		 collect: [ :each | each class ]
+		 thenReject: [ :each | newExtensions includes: each ]) do: [
+		:extension | self removeExtension: extension ].
+
+	"All extensions that weren't displayed but should be now, are displayed"
+	(newExtensions copyWithoutAll:
+		 (extensionTools collect: [ :each | each class ])) do: [ :extension |
+		self addExtension: extension ].
+	self extensionTools do: [ :tool | tool updatePresenter ]
 ]
 
 { #category : 'updating - presenters' }
@@ -1517,7 +1586,7 @@ StDebugger >> updateStep [
 
 	self updateStackFromSession: self session.
 	self updateWindowTitle.
-	self updateExtensionsFrom: self session.
+	self updateExtensionsFromSession: self session.
 	self updateToolbar.
 
 	currentContext := self currentContext.
