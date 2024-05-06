@@ -15,8 +15,9 @@ Class {
 		'customProtocolCheckBox',
 		'customProtocolTextInput'
 	],
-	#category : 'NewTools-Debugger-Exceptions',
-	#package : 'NewTools-Debugger-Exceptions'
+	#category : 'NewTools-Debugger-View',
+	#package : 'NewTools-Debugger',
+	#tag : 'View'
 }
 
 { #category : 'testing' }
