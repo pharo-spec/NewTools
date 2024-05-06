@@ -16,6 +16,12 @@ Trait {
 	#tag : 'Model'
 }
 
+{ #category : 'testing' }
+TStDebuggerExtension classSide >> acceptsPredicate: aStDebuggerContextPredicate [
+
+	^ true
+]
+
 { #category : 'debugger extension' }
 TStDebuggerExtension classSide >> defaultDisplayOrder [
 
@@ -83,4 +89,14 @@ TStDebuggerExtension >> displayOrder [
 { #category : 'initialization' }
 TStDebuggerExtension >> setModelBeforeInitialization: aDebugger [
 	 debugger := aDebugger
+]
+
+{ #category : 'debugger extension' }
+TStDebuggerExtension >> showInDebugger [
+	^self class showInDebugger 
+]
+
+{ #category : 'debugger extension' }
+TStDebuggerExtension >> showInDebugger: aBoolean [
+	self class showInDebugger: aBoolean 
 ]
