@@ -35,13 +35,13 @@ StDebuggerMNUExtension class >> showInDebugger [
 { #category : 'actions' }
 StDebuggerMNUExtension >> addMethod [
 
-	| classOrTrait protocol |
+	| classOrTrait |
 	classOrTrait := classesAndTraits selectedItem.
-	protocol := selectedProtocol selectedItem.
+
 	self debugger
 		createMissingMethodFor: exception message
 		inClass: classOrTrait
-		underProtocol: protocol
+		underProtocol: self protocol
 ]
 
 { #category : 'presenters' }
@@ -145,6 +145,14 @@ StDebuggerMNUExtension >> initializePresenters [
 
 
 
+]
+
+{ #category : 'actions' }
+StDebuggerMNUExtension >> protocol [
+
+	^ customProtocolCheckBox state
+		  ifTrue: [ customProtocolTextInput text ]
+		  ifFalse: [ selectedProtocol selectedItem ]
 ]
 
 { #category : 'presenters' }
