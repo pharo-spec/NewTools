@@ -23,7 +23,9 @@ Class {
 { #category : 'testing' }
 StDebuggerMNUExtension class >> acceptsPredicate: aStDebuggerContextPredicate [
 
-	^ aStDebuggerContextPredicate isContextDoesNotUnderstand
+	^ aStDebuggerContextPredicate isContextDoesNotUnderstand or: [
+		  aStDebuggerContextPredicate
+			  isContextSubclassResponsibilityException ]
 ]
 
 { #category : 'debugger extension' }
