@@ -90,8 +90,7 @@ Class {
 		'stackAndCodeContainer'
 	],
 	#classVars : [
-		'EnableStackColoring',
-		'FastTDD'
+		'EnableStackColoring'
 	],
 	#classInstVars : [
 		'layoutConfigurator'
@@ -194,29 +193,6 @@ StDebugger class >> extensionToolsClasses [
 
 	^ TStDebuggerExtension users reject: [ :extensionClass |
 		  extensionClass isOnlyForTests ]
-]
-
-{ #category : 'accessing' }
-StDebugger class >> fastTDD [
-	^FastTDD ifNil:[FastTDD := false]
-]
-
-{ #category : 'accessing' }
-StDebugger class >> fastTDD: aBoolean [
-
-	FastTDD := aBoolean
-]
-
-{ #category : 'settings' }
-StDebugger class >> fastTDDSettingsOn: aBuilder [
-	<systemsettings>
-	(aBuilder setting: #fastTDD)
-		label: 'Fast TDD';
-		target: self;
-		default: false;
-		parent: #debugging;
-		description: 'Create classes and methods directly in the receiver''s class
-without requesting information from the user'
 ]
 
 { #category : 'tools registry' }
@@ -489,17 +465,17 @@ StDebugger >> createMissingClass [
 { #category : 'actions' }
 StDebugger >> createMissingMethod [
 
-	| msg chosenClass |
+	| msg |
 	self flag: #DBG_MISSINGTEST.
 	msg := self interruptedContext tempAt: 1.
-	[ 
-	chosenClass := self requestClassFrom:
-		               self interruptedContext receiver class.
-	self createMissingMethodFor: msg inClass: chosenClass ]
+	[
+	self
+		createMissingMethodFor: msg
+		inClass: self interruptedContext receiver class ]
 		on: Abort
 		do: [ ^ self ].
-		
-	code takeKeyboardFocus 
+
+	code takeKeyboardFocus
 ]
 
 { #category : 'actions' }
@@ -510,7 +486,7 @@ StDebugger >> createMissingMethodFor: aMessage inClass: aClass [
 		implement: aMessage
 		inClass: aClass
 		forContext: self interruptedContext.
-	method isClassified ifFalse: [ method protocol: (self requestProtocolIn: aClass) ].
+	method isClassified ifFalse: [ method protocol: Protocol unclassified ].
 		
 	self selectTopContext
 ]
@@ -1068,43 +1044,12 @@ StDebugger >> removeExtension: aDebuggerExtension [
 ]
 
 { #category : 'ui requests' }
-StDebugger >> requestClassFrom: aClass [
-
-	^ self requestClassFrom: aClass to: ProtoObject
-
-	
-]
-
-{ #category : 'ui requests' }
 StDebugger >> requestClassFrom: aClass to: aSuperclass [
 
 	self class fastTDD ifTrue: [ ^ aClass ].
 	^ self requestSuperclassOf: aClass to: aSuperclass 
 
 	
-]
-
-{ #category : 'ui requests' }
-StDebugger >> requestProtocolIn: aClass [
-
-	| entryCompletion applicants choice |
-	self class fastTDD ifTrue: [ ^ Protocol unclassified ].
-	applicants := self protocolSuggestionsFor: aClass.
-	entryCompletion := EntryCompletion new
-		                   dataSourceBlock: [ :currText | applicants ];
-		                   filterBlock: [ :currApplicant :currText | 
-			                   currText size > 3 and: [ 
-					                   currApplicant asLowercase includesSubstring:
-							                   currText asString asLowercase ] ].
-
-	choice := (UIManager default
-		           request:
-		           'Start typing for suggestions (3 characters minimum)'
-		           initialAnswer: Protocol unclassified
-		           title: 'Choose a protocol'
-		           entryCompletion: entryCompletion) ifNil: [ Abort signal ].
-
-	^ choice ifEmpty: [ Protocol unclassified ]
 ]
 
 { #category : 'ui requests' }
