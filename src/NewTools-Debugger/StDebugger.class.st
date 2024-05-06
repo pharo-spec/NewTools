@@ -508,6 +508,7 @@ StDebugger >> createMissingMethodFor: aMessage inClass: aClass underProtocol: aP
 StDebugger >> createSubclassResponsibility [
 
 	| senderContext msg chosenClass |
+	self flag: 'Should be removed once there is a dedicated debugger extension'.
 	senderContext := self signalingSubclassResponsabilityContext.
 	msg := Message
 		       selector: senderContext selector
@@ -1045,8 +1046,7 @@ StDebugger >> removeExtension: aDebuggerExtension [
 
 { #category : 'ui requests' }
 StDebugger >> requestClassFrom: aClass to: aSuperclass [
-
-	self class fastTDD ifTrue: [ ^ aClass ].
+	self flag: 'Should be removed once there is a dedicated debugger extension'.
 	^ self requestSuperclassOf: aClass to: aSuperclass 
 
 	
