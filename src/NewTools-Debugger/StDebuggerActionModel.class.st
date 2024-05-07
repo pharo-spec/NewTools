@@ -184,6 +184,13 @@ StDebuggerActionModel >> implement: aMessage inClass: aClass forContext: aContex
 	^ method
 ]
 
+{ #category : 'actions' }
+StDebuggerActionModel >> implementMissingMethod [
+
+	(StDebuggerMethodImplementor forSession: self session) implementMissingMethod.
+	self updateTopContext
+]
+
 { #category : 'initialization' }
 StDebuggerActionModel >> initialize [
 	super initialize.

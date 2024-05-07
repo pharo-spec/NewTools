@@ -727,6 +727,14 @@ StDebugger >> forceSessionUpdate [
 		updateExtensionsFromSession: self session
 ]
 
+{ #category : 'actions' }
+StDebugger >> implementMissingMethod [
+
+	self debuggerActionModel implementMissingMethod.
+	self selectTopContext.
+	code takeKeyboardFocus
+]
+
 { #category : 'api' }
 StDebugger >> initialExtent [
 
