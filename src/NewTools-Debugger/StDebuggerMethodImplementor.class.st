@@ -20,12 +20,6 @@ StDebuggerMethodImplementor class >> forSession: aDebugSession [
 	^self new session: aDebugSession 
 ]
 
-{ #category : 'private - method creation' }
-StDebuggerMethodImplementor >> autoClassifyMethod: aMethod [
-	self deprecated: 'This is normally done when implementing a message in the debug session code.'.
-	aMethod isClassified ifFalse: [ MethodClassifier classify: aMethod ]
-]
-
 { #category : 'accessing - debugger model' }
 StDebuggerMethodImplementor >> contextForSelector: aSelector [
 
@@ -80,7 +74,13 @@ StDebuggerMethodImplementor >> session: anObject [
 
 { #category : 'accessing - debugger model' }
 StDebuggerMethodImplementor >> targetClassOrTrait [
-	^targetClassOrTrait ifNil:[self exception classForMethodCreation] 
+	^targetClassOrTrait
+]
+
+{ #category : 'accessing' }
+StDebuggerMethodImplementor >> targetClassOrTrait: anObject [
+
+	targetClassOrTrait := anObject
 ]
 
 { #category : 'accessing - debugger model' }

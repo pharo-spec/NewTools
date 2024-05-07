@@ -34,18 +34,6 @@ StDebuggerMNUExtension class >> showInDebugger [
 	^ showDebuggerExtension ifNil: [ showDebuggerExtension := true ]
 ]
 
-{ #category : 'actions' }
-StDebuggerMNUExtension >> addMethod [
-
-	| classOrTrait |
-	classOrTrait := classesAndTraits selectedItem.
-
-	self debugger
-		createMissingMethodFor: exception message
-		inClass: classOrTrait
-		underProtocol: self protocol
-]
-
 { #category : 'presenters' }
 StDebuggerMNUExtension >> addProtocols: protocols [
 	|sortedProtocols|
@@ -95,6 +83,20 @@ StDebuggerMNUExtension >> defaultLayout [
 				   add: createMethodButton;
 				   yourself) height: (self class toolbarHeight);					
 		  yourself
+]
+
+{ #category : 'actions' }
+StDebuggerMNUExtension >> implementMethod [
+
+	| classOrTrait methodImplementor |
+	classOrTrait := classesAndTraits selectedItem.
+	
+	methodImplementor := (StDebuggerMethodImplementor forSession: self debugger session).
+	methodImplementor targetClassOrTrait: classOrTrait.
+	methodImplementor protocol: self protocol.
+   methodImplementor implementMissingMethod.
+
+	self debugger selectTopContext
 ]
 
 { #category : 'initialization' }

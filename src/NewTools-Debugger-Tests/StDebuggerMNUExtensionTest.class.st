@@ -117,7 +117,7 @@ StDebuggerMNUExtensionTest >> testExtensionHidesAfterDNUMethodHasBeenCreated [
 	self assert: dnuMessage selector identicalTo: #foobar.
 
 	"We create the missing method"
-	extension addMethod.
+	extension implementMethod.
 
 	"Now, we shouldn't be able to create the method and the extension should be hidden."
 	self deny:

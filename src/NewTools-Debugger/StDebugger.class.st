@@ -671,7 +671,8 @@ StDebugger >> implementMissingMethod [
 
 	self debuggerActionModel implementMissingMethod.
 	self selectTopContext.
-	code takeKeyboardFocus
+	self flag: 'why do we need to give code the keyboard focus?'
+	"code takeKeyboardFocus"
 ]
 
 { #category : 'api' }
