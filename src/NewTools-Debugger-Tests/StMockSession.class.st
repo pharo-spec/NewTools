@@ -25,13 +25,32 @@ StMockSession >> dummyContext: anObject [
 	dummyContext := anObject
 ]
 
-{ #category : 'debug - session' }
-StMockSession >> implement: aMessage inClass: aClass forContext: aContext [
+{ #category : 'accessing' }
+StMockSession >> exception [
+	^self
+]
+
+{ #category : 'accessing' }
+StMockSession >> implement: message inClass: aclass forContext: aContext [
+
+	^ self
 ]
 
 { #category : 'accessing' }
 StMockSession >> interruptedContext [
 	 ^dummyContext ifNil:[self]
+]
+
+{ #category : 'accessing' }
+StMockSession >> messageToImplementInContext: context [
+
+	^ self
+]
+
+{ #category : 'accessing' }
+StMockSession >> receiver [
+
+	^ self
 ]
 
 { #category : 'debugging actions' }

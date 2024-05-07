@@ -510,9 +510,7 @@ StDebuggerTest >> testCreateMissingMethodWithUnfilteredStackUpdatesCodePane [
 	self assert: (debugger code text beginsWith: 'doesNotUnderstand:').
 
 	"we create the missing method #foobar"
-	debugger
-		createMissingMethodFor: dnuMessage
-		inClass: StTestDebuggerProvider.
+	debugger implementMissingMethod.
 
 	method := StTestDebuggerProvider methodDictionary at: #foobar.
 
