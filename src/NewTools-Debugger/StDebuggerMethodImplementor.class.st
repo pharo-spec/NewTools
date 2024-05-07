@@ -51,7 +51,6 @@ StDebuggerMethodImplementor >> implementMissingMethod [
 		          inClass: (targetClassOrTrait ifNil: [context receiver class])
 		          forContext: context.
 	protocol ifNotNil: [ method protocol: protocol ].
-	"	self autoClassifyMethod: method."
 	^ method
 ]
 
