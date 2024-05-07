@@ -56,14 +56,6 @@ StDebuggerActionModel >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
-{ #category : 'debug - session' }
-StDebuggerActionModel >> autoClassifyMessage: aMessage inClass: aClass [
-
-	| method |
-	method := aClass lookupSelector: aMessage selector.
-	method isClassified ifFalse: [ MethodClassifier classify: method ]
-]
-
 { #category : 'actions' }
 StDebuggerActionModel >> clear [
 
@@ -169,19 +161,6 @@ StDebuggerActionModel >> filterStack: aStack [
 			context := context sender ].
 	contextsToReject timesRepeat: [ aStack removeFirst ].
 	^ aStack
-]
-
-{ #category : 'debug - session' }
-StDebuggerActionModel >> implement: aMessage inClass: aClass forContext: aContext [
-
-	| method |
-	method := self session
-		implement: aMessage
-		inClass: aClass
-		forContext: aContext.
-	self autoClassifyMessage: aMessage inClass: aClass.
-	self updateTopContext.
-	^ method
 ]
 
 { #category : 'actions' }

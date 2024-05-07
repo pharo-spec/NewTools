@@ -13,10 +13,6 @@ Class {
 	#tag : 'Utils'
 }
 
-{ #category : 'debug - session' }
-StMockDebuggerActionModel >> autoClassifyMessage: aMessage inClass: aClass [
-]
-
 { #category : 'context' }
 StMockDebuggerActionModel >> computeInitialTopContext [
 ]

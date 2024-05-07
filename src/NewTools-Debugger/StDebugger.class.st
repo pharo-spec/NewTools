@@ -462,67 +462,6 @@ StDebugger >> createMissingClass [
 		self interruptedContext sender
 ]
 
-{ #category : 'actions' }
-StDebugger >> createMissingMethod [
-
-	| msg |
-	self flag: #DBG_MISSINGTEST.
-	msg := self interruptedContext tempAt: 1.
-	[
-	self
-		createMissingMethodFor: msg
-		inClass: self interruptedContext receiver class ]
-		on: Abort
-		do: [ ^ self ].
-
-	code takeKeyboardFocus
-]
-
-{ #category : 'actions' }
-StDebugger >> createMissingMethodFor: aMessage inClass: aClass [
-
-	| method |
-	method := self debuggerActionModel
-		implement: aMessage
-		inClass: aClass
-		forContext: self interruptedContext.
-	method isClassified ifFalse: [ method protocol: Protocol unclassified ].
-		
-	self selectTopContext
-]
-
-{ #category : 'actions' }
-StDebugger >> createMissingMethodFor: aMessage inClass: aClass underProtocol: aProtocol [
-
-	| method |
-	method := self debuggerActionModel
-		          implement: aMessage
-		          inClass: aClass
-		          forContext: self interruptedContext.
-	method protocol: aProtocol.
-
-	self selectTopContext
-]
-
-{ #category : 'actions' }
-StDebugger >> createSubclassResponsibility [
-
-	| senderContext msg chosenClass |
-	self flag: 'Should be removed once there is a dedicated debugger extension'.
-	senderContext := self signalingSubclassResponsabilityContext.
-	msg := Message
-		       selector: senderContext selector
-		       arguments: senderContext arguments.
-	chosenClass := self
-		               requestClassFrom: senderContext receiver class
-		               to: senderContext methodClass.
-	chosenClass ifNil: [ ^ self ].
-	self debuggerActionModel
-		implement: msg
-		inClass: chosenClass
-		forContext: senderContext
-]
-
 { #category : 'accessing - model' }
 StDebugger >> currentContext [
 	"I answer the context on which an action should be executed.
@@ -1052,30 +991,6 @@ StDebugger >> removeExtension: aDebuggerExtension [
 	self layout: self defaultLayout
 ]
 
-{ #category : 'ui requests' }
-StDebugger >> requestClassFrom: aClass to: aSuperclass [
-	self flag: 'Should be removed once there is a dedicated debugger extension'.
-	^ self requestSuperclassOf: aClass to: aSuperclass 
-
-	
-]
-
-{ #category : 'ui requests' }
-StDebugger >> requestSuperclassOf: aClass to: aSuperclass [
-
-	| classes |
-	classes := OrderedCollection with: aClass.
-	classes addAll: (aClass allSuperclassesIncluding: aSuperclass).
-	classes addAll:
-		(aClass traits sort: [ :t1 :t2 | t1 asString < t2 asString ]).
-	classes size = 1 ifTrue: [ ^ classes first ].
-	^ (self application newSelect
-		   display: [ :each | each name ];
-		   items: classes;
-		   title: 'Define selector in:'; 
-		   openModal) ifNil: [ Abort signal ]
-]
-
 { #category : 'actions' }
 StDebugger >> restartCurrentContext [
 
@@ -1172,16 +1087,6 @@ StDebugger >> setStackAndCodeContainer [
 		                         ifEmpty: [ self stackAndCodeLayout ]
 		                         ifNotEmpty: [
 		                         self stackAndCodeWithExtensionsLayout ]
-]
-
-{ #category : 'accessing - context' }
-StDebugger >> signalingSubclassResponsabilityContext [
-
-	| signalingContext |
-	signalingContext := self interruptedContext.
-	[ signalingContext selector = #subclassResponsibility ] whileFalse: [
-		signalingContext := signalingContext sender ].
-	^ signalingContext sender
 ]
 
 { #category : 'stack' }
