@@ -1,7 +1,7 @@
 Extension { #name : 'MessageNotUnderstood' }
 
 { #category : '*NewTools-Debugger' }
-MessageNotUnderstood >> contextForMethodCreationFrom: methodCreator [
+MessageNotUnderstood >> contextForMethodImplementation: methodCreator [
 	^methodCreator interruptedContext 
 ]
 

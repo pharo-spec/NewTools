@@ -86,5 +86,5 @@ StDebuggerMethodImplementor >> targetClassOrTrait: anObject [
 { #category : 'accessing - debugger model' }
 StDebuggerMethodImplementor >> targetContext [
 
-	^ self exception contextForMethodCreationFrom: self
+	^ self exception contextForMethodImplementation: self
 ]

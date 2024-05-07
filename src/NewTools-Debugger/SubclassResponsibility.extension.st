@@ -1,7 +1,7 @@
 Extension { #name : 'SubclassResponsibility' }
 
 { #category : '*NewTools-Debugger' }
-SubclassResponsibility >> contextForMethodCreationFrom: methodCreator [
+SubclassResponsibility >> contextForMethodImplementation: methodCreator [
 	self flag: 'For now this is scoped to that exception, but should be extended to all selector exceptions'.
 	^ methodCreator contextForSelector: #subclassResponsibility
 ]
