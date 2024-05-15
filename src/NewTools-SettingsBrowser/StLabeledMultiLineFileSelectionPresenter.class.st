@@ -32,7 +32,7 @@ StLabeledMultiLineFileSelectionPresenter >> initializePresenters [
 		label: 'Select File';
 		action: [ 
 			| selectedFile |
-			((selectedFile := StOpenFilePresenter new openModal) notNil and: [ selectedFile isFile ])
+			((selectedFile := StOpenFilePresenter new openModal) isNotNil and: [ selectedFile isFile ])
 				ifTrue: [ 
 					self input 
 						text: selectedFile fullName;
