@@ -28,7 +28,7 @@ MCWorkingCopy >> spotterPackageFor: aStep [
 
 	aStep listProcessor
 		title: 'Packages';
-		allCandidates: [ self package correspondingRPackage 
+		allCandidates: [ self package systemPackage 
 			ifNotNil: [ :rpackage | { rpackage } ] 
 			ifNil: [ { } ] ];
 		itemName: [ :item | item name ];
