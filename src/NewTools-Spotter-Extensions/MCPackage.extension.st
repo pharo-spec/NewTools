@@ -6,7 +6,7 @@ MCPackage >> spotterForPackageFor: aStep [
 
 	aStep listProcessor
 		title: 'Packages';
-		allCandidates: [ Array with: self correspondingRPackage ];
+		allCandidates: [ Array with: self systemPackage ];
 		itemName: [ :package | package name ];
 		itemIconName: [ :item | #package ];
 		filter: StFilterSubstring
