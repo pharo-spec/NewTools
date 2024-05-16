@@ -60,7 +60,7 @@ StLabeledMultiLineDirectorySelectionPresenter >> initializePresenters [
 		label: 'Select Directory';
 		action: [ 
 			| selectedDirectory |
-			((selectedDirectory := StOpenDirectoryPresenter new openModal) notNil and: [ selectedDirectory isDirectory ])
+			((selectedDirectory := StOpenDirectoryPresenter new openModal) isNotNil and: [ selectedDirectory isDirectory ])
 				ifTrue: [ 
 					self input 
 						text: selectedDirectory fullName;
