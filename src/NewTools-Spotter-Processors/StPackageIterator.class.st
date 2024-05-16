@@ -11,6 +11,7 @@ Class {
 
 { #category : 'enumerating' }
 StPackageIterator >> elementsDo: aValuable [
+	"Maybe we should check other environments than the global one?"
 
-	RPackageOrganizer default packagesDo: aValuable
+	self class packageOrganizer packagesDo: aValuable
 ]
