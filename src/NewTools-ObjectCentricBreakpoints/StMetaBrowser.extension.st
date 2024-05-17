@@ -12,5 +12,5 @@ StMetaBrowser class >> objectCentricBreakpointCommandsWith: presenter forRootGro
 	<extensionCommands>
 	
 	(aRootCmCommandsGroup / 'methods')
-		register: StHaltOnCallCommand forSpec
+		register: StHaltOnCallToSelectorCommand forSpec
 ]

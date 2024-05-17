@@ -1,35 +1,35 @@
 Class {
-	#name : #StHaltOnCallCommand,
+	#name : #StHaltOnCallToSelectorCommand,
 	#superclass : #StBreakpointCommand,
 	#category : #'NewTools-ObjectCentricBreakpoints'
 }
 
 { #category : #default }
-StHaltOnCallCommand class >> defaultDescription [
+StHaltOnCallToSelectorCommand class >> defaultDescription [
 
 	^ 'Halts when this method is called'
 ]
 
 { #category : #deafult }
-StHaltOnCallCommand class >> defaultIconName [
+StHaltOnCallToSelectorCommand class >> defaultIconName [
 
 	^ #smallDebug
 ]
 
 { #category : #default }
-StHaltOnCallCommand class >> defaultName [ 
+StHaltOnCallToSelectorCommand class >> defaultName [ 
 
 	^ 'Halt on call'
 ]
 
 { #category : #testing }
-StHaltOnCallCommand >> canBeExecuted [
+StHaltOnCallToSelectorCommand >> canBeExecuted [
 
 	^ self appliesTo: context
 ]
 
 { #category : #executing }
-StHaltOnCallCommand >> execute [
+StHaltOnCallToSelectorCommand >> execute [
 
 	^ context haltInspectedObjectOnCallToSelectedMethod
 ]
