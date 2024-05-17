@@ -13,6 +13,12 @@ Class {
 	#package : 'NewTools-DebugPointsBrowser'
 }
 
+{ #category : 'layout' }
+DebugPointEditorPresenter >> addToLayout: aPresenter [
+
+	self layout add: aPresenter
+]
+
 { #category : 'action handling' }
 DebugPointEditorPresenter >> changeDebugPointState: newState [
 	self debugPoint enabled: newState.
@@ -36,8 +42,7 @@ DebugPointEditorPresenter >> createLayout [
 				expand: ((self debugPoint getBehavior: behavior)
 						 ifNotNil: [ behaviorUI expand ]
 						 ifNil: [ false ]) ].
-	debugPoint uiElement ifNotNil: [ :ui | self layout add: ui ]
-	"self layout add: debugPoint uiElement."
+	debugPoint presentIn: self
 ]
 
 { #category : 'accessing' }
