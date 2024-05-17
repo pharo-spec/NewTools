@@ -2,32 +2,32 @@
 I am a command to install from the inspector object-centric breakpoints on a method call, for a specific object. 
 "
 Class {
-	#name : 'StBreakOnCallCommand',
+	#name : 'StBreakOnCallToSelectorCommand',
 	#superclass : 'StDebugPointNodeTargetCommand',
 	#category : 'NewTools-ObjectCentricDebugPoints',
 	#package : 'NewTools-ObjectCentricDebugPoints'
 }
 
 { #category : 'default' }
-StBreakOnCallCommand class >> defaultDescription [
+StBreakOnCallToSelectorCommand class >> defaultDescription [
 
 	^ 'Halts when this method is called'
 ]
 
 { #category : 'default' }
-StBreakOnCallCommand class >> defaultIconName [
+StBreakOnCallToSelectorCommand class >> defaultIconName [
 
 	^ #smallDebug
 ]
 
 { #category : 'default' }
-StBreakOnCallCommand class >> defaultName [ 
+StBreakOnCallToSelectorCommand class >> defaultName [ 
 
 	^ 'Break on call'
 ]
 
 { #category : 'executing' }
-StBreakOnCallCommand >> execute [
+StBreakOnCallToSelectorCommand >> execute [
 
 	^ context breakOnCallToSelectedMethod
 ]
