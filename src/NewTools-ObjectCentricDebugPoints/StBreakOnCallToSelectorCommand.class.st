@@ -23,7 +23,7 @@ StBreakOnCallToSelectorCommand class >> defaultIconName [
 { #category : 'default' }
 StBreakOnCallToSelectorCommand class >> defaultName [ 
 
-	^ 'Break on call'
+	^ 'Break on call to selector'
 ]
 
 { #category : 'executing' }
