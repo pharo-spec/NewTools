@@ -51,14 +51,3 @@ StMorphicUIManager >> chooseDirectory: label path: path [
 		  openModal;
 		  selectedEntry
 ]
-
-{ #category : 'ui requests' }
-StMorphicUIManager >> chooseFullFileNameMatching: patterns label: title [
-	self
-		deprecated: 'now you have to give a filter see FileDialog-filterStrategie'.
-	^ StOpenFilePresenter new
-		title: (title ifNil: [ 'Choose File' translated ]);
-		"fileFilters: (patterns ifNil: [ #() ] ifNotNil: [ :e | e collect: [ :each | '*.' , each ] ]);
-		"
-			open
-]
