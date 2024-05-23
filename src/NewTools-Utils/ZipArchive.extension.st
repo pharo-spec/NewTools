@@ -1,6 +1,6 @@
 Extension { #name : 'ZipArchive' }
 
-{ #category : '*NewTools-Compression-Utils' }
+{ #category : '*NewTools-Utils-Compression' }
 ZipArchive class >> extractAllIn: aFileReferenceOrFileName [
 	"Service method to extract all contents of a zip.
 	Example: 
