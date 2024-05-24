@@ -2,6 +2,14 @@
 I am a little interface to let the user choose the name of a protocol.
 
 This interface will suggest the name of the protocol as the user types the beginning of the name.
+
+I can be configured with a concerned class to refine the UI such as proposing instance or class side protocols in the suggestion list.
+
+See my class side for an example of usage and some helpers.
+
+Idea of improvements for the future:
+- Suggest protocols from super classes first?
+- Add tests
 "
 Class {
 	#name : 'StProtocolNameChooser',
@@ -16,12 +24,15 @@ Class {
 	#tag : 'ProtocolChooser'
 }
 
-{ #category : 'helpers' }
-StProtocolNameChooser class >> forClass: aClass [
+{ #category : 'examples' }
+StProtocolNameChooser class >> exampleConfiguringPresenter [
 
-	^ self new
-		  concernedClass: aClass;
-		  yourself
+	<example>
+	self requestProtocolNameConfiguring: [ :presenter :dialog |
+		presenter
+			concernedClass: self class; "Giving the concerned class can allow some customizations such as knowing if we should suggest instance or class side protocols"
+			protocolName: 'ac'.
+		dialog title: 'Updated title' ]
 ]
 
 { #category : 'instance creation' }
@@ -31,8 +42,39 @@ StProtocolNameChooser class >> open [
 	self new open
 ]
 
+{ #category : 'instance creation' }
+StProtocolNameChooser class >> requestProtocolName [
+	"See comment of StProtocolNameChooser class>>#requestProtocolNameConfiguring:"
+
+	<script>
+	^ self requestProtocolNameConfiguring: [ :presenter :dialog |  ]
+]
+
+{ #category : 'instance creation' }
+StProtocolNameChooser class >> requestProtocolNameConfiguring: aBlock [
+	"I request a protocol name through a dialog and signal a CmdCommandAborted in case the provided protocol is empty or an extension name.
+	I allow the user to configure the presenter or the dialog via a configuration block."
+
+	<script>
+	| protocolName presenter dialog |
+	dialog := (presenter := self new) asBlockedDialogWindow.
+
+	aBlock cull: presenter cull: dialog.
+
+	dialog open.
+
+	protocolName := presenter protocolName.
+
+	protocolName isEmptyOrNil ifTrue: [ CmdCommandAborted signal ].
+	(protocolName beginsWith: '*') ifTrue: [
+		self inform: 'Star is forbidden for protocol name since this is used for method extensions.'.
+		^ CmdCommandAborted signal ].
+	^ protocolName
+]
+
 { #category : 'accessing' }
 StProtocolNameChooser >> concernedClass [
+	"Giving the concerned class can allow some customizations such as knowing if we should suggest instance or class side protocols"
 
 	^ concernedClass
 ]
@@ -75,7 +117,8 @@ StProtocolNameChooser >> initializePresenters [
 
 	suggestionList := self newList.
 
-	protocolNameField := self newTextInput
+	protocolNameField := self newTextInput.
+	protocolNameField placeholder: 'Protocol name (e.g. accessing)'
 ]
 
 { #category : 'initialization' }
