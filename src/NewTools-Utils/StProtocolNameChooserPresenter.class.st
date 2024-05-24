@@ -12,7 +12,7 @@ Idea of improvements for the future:
 - Add tests
 "
 Class {
-	#name : 'StProtocolNameChooser',
+	#name : 'StProtocolNameChooserPresenter',
 	#superclass : 'StPresenter',
 	#instVars : [
 		'suggestionList',
@@ -25,7 +25,7 @@ Class {
 }
 
 { #category : 'examples' }
-StProtocolNameChooser class >> exampleConfiguringPresenter [
+StProtocolNameChooserPresenter class >> exampleConfiguringPresenter [
 
 	<example>
 	self requestProtocolNameConfiguring: [ :presenter :dialog |
@@ -36,14 +36,14 @@ StProtocolNameChooser class >> exampleConfiguringPresenter [
 ]
 
 { #category : 'instance creation' }
-StProtocolNameChooser class >> open [
+StProtocolNameChooserPresenter class >> open [
 
 	<script>
 	self new open
 ]
 
 { #category : 'instance creation' }
-StProtocolNameChooser class >> requestProtocolName [
+StProtocolNameChooserPresenter class >> requestProtocolName [
 	"See comment of StProtocolNameChooser class>>#requestProtocolNameConfiguring:"
 
 	<script>
@@ -51,7 +51,7 @@ StProtocolNameChooser class >> requestProtocolName [
 ]
 
 { #category : 'instance creation' }
-StProtocolNameChooser class >> requestProtocolNameConfiguring: aBlock [
+StProtocolNameChooserPresenter class >> requestProtocolNameConfiguring: aBlock [
 	"I request a protocol name through a dialog and signal a CmdCommandAborted in case the provided protocol is empty or an extension name.
 	I allow the user to configure the presenter or the dialog via a configuration block."
 
@@ -73,20 +73,20 @@ StProtocolNameChooser class >> requestProtocolNameConfiguring: aBlock [
 ]
 
 { #category : 'accessing' }
-StProtocolNameChooser >> concernedClass [
+StProtocolNameChooserPresenter >> concernedClass [
 	"Giving the concerned class can allow some customizations such as knowing if we should suggest instance or class side protocols"
 
 	^ concernedClass
 ]
 
 { #category : 'accessing' }
-StProtocolNameChooser >> concernedClass: anObject [
+StProtocolNameChooserPresenter >> concernedClass: anObject [
 
 	concernedClass := anObject
 ]
 
 { #category : 'initialization' }
-StProtocolNameChooser >> connectPresenters [
+StProtocolNameChooserPresenter >> connectPresenters [
 
 	super connectPresenters.
 
@@ -94,7 +94,7 @@ StProtocolNameChooser >> connectPresenters [
 ]
 
 { #category : 'layout' }
-StProtocolNameChooser >> defaultLayout [
+StProtocolNameChooserPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		  add: suggestionList;
@@ -103,7 +103,7 @@ StProtocolNameChooser >> defaultLayout [
 ]
 
 { #category : 'initialization' }
-StProtocolNameChooser >> initializeDialogWindow: aDialogWindowPresenter [
+StProtocolNameChooserPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
 	super initializeDialogWindow: aDialogWindowPresenter.
 	protocolNameField whenSubmitDo: [ :protocolName | aDialogWindowPresenter triggerOkAction ].
@@ -111,7 +111,7 @@ StProtocolNameChooser >> initializeDialogWindow: aDialogWindowPresenter [
 ]
 
 { #category : 'initialization' }
-StProtocolNameChooser >> initializePresenters [
+StProtocolNameChooserPresenter >> initializePresenters [
 
 	super initializePresenters.
 
@@ -122,7 +122,7 @@ StProtocolNameChooser >> initializePresenters [
 ]
 
 { #category : 'initialization' }
-StProtocolNameChooser >> initializeWindow: aWindowPresenter [
+StProtocolNameChooserPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter title: 'New protocol name'.
@@ -131,12 +131,12 @@ StProtocolNameChooser >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : 'accessing - defaults' }
-StProtocolNameChooser >> protocolName [
+StProtocolNameChooserPresenter >> protocolName [
 	^ protocolNameField text asSymbol
 ]
 
 { #category : 'accessing' }
-StProtocolNameChooser >> protocolName: aString [
+StProtocolNameChooserPresenter >> protocolName: aString [
 	"I allow to set a default protocol name to the list."
 
 	protocolNameField text: aString.
@@ -144,16 +144,22 @@ StProtocolNameChooser >> protocolName: aString [
 ]
 
 { #category : 'initialization' }
-StProtocolNameChooser >> updatePresenter [
+StProtocolNameChooserPresenter >> protocolsToSuggest [
 
-	| existingProtocols |
-	existingProtocols := concernedClass environment allClasses flatCollect: [ :class |
-		                     (concernedClass isNil or: [ concernedClass isInstanceSide ])
-			                     ifTrue: [ class protocols ]
-			                     ifFalse: [ class class protocols ] ].
-	existingProtocols := existingProtocols reject: [ :protocol | protocol isExtensionProtocol ].
-	existingProtocols := existingProtocols collect: [ :protocol | protocol name ] as: Bag.
-	existingProtocols := existingProtocols sortedCounts collect: [ :association | association value ].
+	| suggestedProtocols |
+	suggestedProtocols := concernedClass environment allClasses flatCollect: [ :class |
+		                      (concernedClass isNil or: [ concernedClass isInstanceSide ])
+			                      ifTrue: [ class protocols ]
+			                      ifFalse: [ class class protocols ] ].
+	suggestedProtocols := suggestedProtocols reject: [ :protocol | protocol isExtensionProtocol ].
+	suggestedProtocols := suggestedProtocols collect: [ :protocol | protocol name ] as: Bag.
+	suggestedProtocols := suggestedProtocols sortedCounts collect: [ :association | association value ].
+	suggestedProtocols := suggestedProtocols select: [ :protocolName | protocolName includesSubstring: self protocolName ].
+	^ suggestedProtocols
+]
 
-	suggestionList items: (existingProtocols select: [ :protocolName | protocolName includesSubstring: self protocolName ])
+{ #category : 'initialization' }
+StProtocolNameChooserPresenter >> updatePresenter [
+
+	suggestionList items: self protocolsToSuggest
 ]
