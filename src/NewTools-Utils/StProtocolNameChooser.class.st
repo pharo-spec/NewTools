@@ -43,6 +43,14 @@ StProtocolNameChooser >> concernedClass: anObject [
 	concernedClass := anObject
 ]
 
+{ #category : 'initialization' }
+StProtocolNameChooser >> connectPresenters [
+
+	super connectPresenters.
+
+	protocolNameField whenTextChangedDo: [ self updatePresenter ]
+]
+
 { #category : 'layout' }
 StProtocolNameChooser >> defaultLayout [
 
@@ -56,7 +64,8 @@ StProtocolNameChooser >> defaultLayout [
 StProtocolNameChooser >> initializeDialogWindow: aDialogWindowPresenter [
 
 	super initializeDialogWindow: aDialogWindowPresenter.
-	protocolNameField whenSubmitDo: [ :protocolName | aDialogWindowPresenter triggerOkAction ]
+	protocolNameField whenSubmitDo: [ :protocolName | aDialogWindowPresenter triggerOkAction ].
+	suggestionList whenSelectedDo: [ :protocolName | self protocolName: protocolName ]
 ]
 
 { #category : 'initialization' }
@@ -87,5 +96,21 @@ StProtocolNameChooser >> protocolName [
 StProtocolNameChooser >> protocolName: aString [
 	"I allow to set a default protocol name to the list."
 
-	protocolNameField text: aString
+	protocolNameField text: aString.
+	self updatePresenter
+]
+
+{ #category : 'initialization' }
+StProtocolNameChooser >> updatePresenter [
+
+	| existingProtocols |
+	existingProtocols := concernedClass environment allClasses flatCollect: [ :class |
+		                     (concernedClass isNil or: [ concernedClass isInstanceSide ])
+			                     ifTrue: [ class protocols ]
+			                     ifFalse: [ class class protocols ] ].
+	existingProtocols := existingProtocols reject: [ :protocol | protocol isExtensionProtocol ].
+	existingProtocols := existingProtocols collect: [ :protocol | protocol name ] as: Bag.
+	existingProtocols := existingProtocols sortedCounts collect: [ :association | association value ].
+
+	suggestionList items: (existingProtocols select: [ :protocolName | protocolName includesSubstring: self protocolName ])
 ]
