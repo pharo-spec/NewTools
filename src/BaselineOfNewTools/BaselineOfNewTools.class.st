@@ -103,7 +103,8 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-SettingsBrowser' with: [ spec requires: #('ColorPicker') ];
 			package: 'NewTools-SettingsBrowser-Tests' with: [ spec requires: #('NewTools-SettingsBrowser') ];
 			
-			package: 'NewTools-Utils' with: [ spec requires: #('NewTools-FileBrowser') ].			
+			package: 'NewTools-Utils' with: [ spec requires: #('NewTools-FileBrowser') ];
+			package: 'NewTools-Utils-Tests' with: [  spec requires: #('NewTools-Utils') ].			
 
 		spec
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Morphic' );
@@ -124,6 +125,7 @@ BaselineOfNewTools >> baseline: spec [
 					 	'NewTools-Debugger-Fuel'
 				    	'NewTools-Debugger-Fuel-Tests' 
 					 	'NewTools-Utils'
+						'NewTools-Utils-Tests'
 						'NewTools-DebugPointsBrowser'
 						'NewTools-ObjectCentricDebugPoints' );
 			group: 'Spotter' with: #( 
