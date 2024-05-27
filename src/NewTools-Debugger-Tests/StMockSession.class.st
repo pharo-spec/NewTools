@@ -85,7 +85,7 @@ StMockSession >> stepOver: aContext [
 StMockSession >> stepThrough: aContext [
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'examples' }
 StMockSession >> subclassResponsibilityExample [
 	^self subclassResponsibility 
 ]

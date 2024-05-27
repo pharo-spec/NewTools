@@ -131,7 +131,7 @@ StDebuggerMethodImplementorExtension >> initializePresenters [
 		traits addAll: c allTraits.
 		classesAndTraits
 			addItemLabeled: c
-			do: [ self addProtocols: ((c withAllSuperclasses reject:[:c| {Object. ProtoObject} includes: c]) flatCollect: #protocols) asSet   ]
+			do: [ self addProtocols: ((c withAllSuperclasses reject:[:class| {Object. ProtoObject} includes: class]) flatCollect: #protocols) asSet   ]
 			icon: (self iconNamed: #class) ].
 	traits do: [ :t |
 		classesAndTraits
