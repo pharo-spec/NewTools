@@ -22,6 +22,7 @@ BaselineOfNewTools >> baseline: spec [
 
 		spec
 			package: 'NewTools-Core';
+			package: 'NewTools-Core-Tests' with: [  spec requires: #('NewTools-Core') ];
 			package: 'NewTools-Morphic';
 			package: 'NewTools-Gtk';
 			"Basic tools (inherited from Spec)"
@@ -103,11 +104,10 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-SettingsBrowser' with: [ spec requires: #('ColorPicker') ];
 			package: 'NewTools-SettingsBrowser-Tests' with: [ spec requires: #('NewTools-SettingsBrowser') ];
 			
-			package: 'NewTools-Utils' with: [ spec requires: #('NewTools-FileBrowser') ];
-			package: 'NewTools-Utils-Tests' with: [  spec requires: #('NewTools-Utils') ].			
+			package: 'NewTools-Utils' with: [ spec requires: #('NewTools-FileBrowser') ].			
 
 		spec
-			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Morphic' );
+			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Core-Tests' 'NewTools-Morphic' );
 			group: 'Playground' with: #( 'Core' 'NewTools-Playground' 'NewTools-Playground-Tests' );
 			group: 'Inspector' with: #( 'Core' 'NewTools-Inspector' 'NewTools-Inspector-Tests' );
 			group: 'Debugger' with: #( 
@@ -125,7 +125,6 @@ BaselineOfNewTools >> baseline: spec [
 					 	'NewTools-Debugger-Fuel'
 				    	'NewTools-Debugger-Fuel-Tests' 
 					 	'NewTools-Utils'
-						'NewTools-Utils-Tests'
 						'NewTools-DebugPointsBrowser'
 						'NewTools-ObjectCentricDebugPoints' );
 			group: 'Spotter' with: #( 

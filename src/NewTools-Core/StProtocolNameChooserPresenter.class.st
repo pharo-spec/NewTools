@@ -19,8 +19,8 @@ Class {
 		'protocolNameField',
 		'concernedClass'
 	],
-	#category : 'NewTools-Utils-ProtocolChooser',
-	#package : 'NewTools-Utils',
+	#category : 'NewTools-Core-ProtocolChooser',
+	#package : 'NewTools-Core',
 	#tag : 'ProtocolChooser'
 }
 

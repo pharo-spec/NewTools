@@ -7,8 +7,8 @@ Class {
 	#instVars : [
 		'presenter'
 	],
-	#category : 'NewTools-Utils-Tests-ProtocolChooser',
-	#package : 'NewTools-Utils-Tests',
+	#category : 'NewTools-Core-Tests-ProtocolChooser',
+	#package : 'NewTools-Core-Tests',
 	#tag : 'ProtocolChooser'
 }
 
