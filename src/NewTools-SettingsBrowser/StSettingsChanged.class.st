@@ -16,3 +16,9 @@ StSettingsChanged >> aspect: aThemeSettings value: aColor [
 	setting := aThemeSettings.
 	value := aColor.
 ]
+
+{ #category : 'evaluating' }
+StSettingsChanged >> value [
+
+	^ value
+]
