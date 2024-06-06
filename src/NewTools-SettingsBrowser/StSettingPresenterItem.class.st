@@ -41,7 +41,7 @@ StSettingPresenterItem >> initializePresenters [
 { #category : 'initialization' }
 StSettingPresenterItem >> labeledPresenterClass [
 
-	^ StLabeledMultiLinePresenter
+	^ StLabeledSettingPresenter
 
 ]
 

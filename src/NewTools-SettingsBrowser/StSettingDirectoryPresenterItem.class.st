@@ -26,7 +26,7 @@ StSettingDirectoryPresenterItem >> initializePresenters [
 { #category : 'initialization' }
 StSettingDirectoryPresenterItem >> labeledPresenterClass [
 
-	^ StLabeledMultiLineDirectorySelectionPresenter
+	^ StLabeledSettingDirectorySelectionPresenter
 
 ]
 

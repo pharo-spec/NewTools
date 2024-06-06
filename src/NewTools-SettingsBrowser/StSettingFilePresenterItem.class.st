@@ -12,6 +12,6 @@ Class {
 { #category : 'initialization' }
 StSettingFilePresenterItem >> labeledPresenterClass [
 
-	^ StLabeledMultiLineFileSelectionPresenter
+	^ StLabeledSettingFileSelectionPresenter
 
 ]
