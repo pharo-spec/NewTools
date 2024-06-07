@@ -7,7 +7,7 @@ The Settings Browser it is organized in three main Spec presenters:
 "
 Class {
 	#name : 'StSettingsMainPresenter',
-	#superclass : 'StSettingsAbstracPresenter',
+	#superclass : 'StSettingsAbstractPresenter',
 	#instVars : [
 		'toolbarPresenter',
 		'detailsPresenter',
@@ -49,7 +49,7 @@ StSettingsMainPresenter >> defaultLayout [
 					constraints 
 						height: self class toolbarHeight + 10;
 						padding: 5 ];
-			add:  mainCategoriesPresenter;
+			add: mainCategoriesPresenter;
 			yourself);
 		add: detailsPresenter;
 		yourself

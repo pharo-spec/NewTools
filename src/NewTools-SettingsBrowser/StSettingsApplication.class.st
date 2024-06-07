@@ -136,6 +136,8 @@ StSettingsApplication >> styleSheetString [
 	.sectionStyle [ 
 		Draw { #backgroundColor: #transparent }
 	 ],
+	.settingDocTitle [ 
+		Draw { #backgroundColor: #veryVeryLightGray } ], 
 	.settingItemStyle [ 
 		Container { #borderWidth: 5 } ],
 	.descriptionStyle [ 

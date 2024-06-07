@@ -4,10 +4,12 @@ It represents a setting category page with setting sections and settings. The pa
 "
 Class {
 	#name : 'StSettingsPagePresenter',
-	#superclass : 'StSettingsAbstracPresenter',
+	#superclass : 'StSettingsAbstractPresenter',
 	#instVars : [
 		'pageTitle',
-		'settingsBox'
+		'settingsBox',
+		'settingDocPresenter',
+		'settingDocLabel'
 	],
 	#category : 'NewTools-SettingsBrowser-UI',
 	#package : 'NewTools-SettingsBrowser',
@@ -26,7 +28,15 @@ StSettingsPagePresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom 
 		add: pageTitle expand: false;
-		add: (SpScrollableLayout with: (settingsBox := SpBoxLayout newTopToBottom spacing: 10));
+		add: (SpPanedLayout newVertical 
+			positionOfSlider: 0.85;
+			add: (SpScrollableLayout with: (settingsBox := SpBoxLayout newTopToBottom spacing: 10));
+			add: (SpBoxLayout newTopToBottom
+				spacing: 5;
+				add: settingDocLabel expand: false;
+				add: settingDocPresenter;
+				yourself);
+			yourself);
 		yourself
 ]
 
@@ -34,8 +44,10 @@ StSettingsPagePresenter >> defaultLayout [
 StSettingsPagePresenter >> initializePresenters [ 
 
 	pageTitle := self newLabel.
-	self layout: self defaultLayout.
-
+	settingDocLabel := self newLabel
+		addStyle: 'settingDocTitle';
+		yourself.
+	settingDocPresenter := self newText.
 ]
 
 { #category : 'accessing - model' }
@@ -63,4 +75,11 @@ StSettingsPagePresenter >> updatePresenterTree: aStSettingNode level: anInteger 
 			add: nodePresenter
 			expand: false.
 		self updatePresenterTree: aSettingNode level: anInteger + 1 ]
+]
+
+{ #category : 'accessing' }
+StSettingsPagePresenter >> updateSetting: labelString helpText: settingHelpString [
+
+	settingDocLabel label: labelString.
+	settingDocPresenter text: settingHelpString.
 ]

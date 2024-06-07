@@ -4,7 +4,7 @@ Events triggered by clicking a category are defined in my owner through the tran
 "
 Class {
 	#name : 'StSettingsCategoriesPresenter',
-	#superclass : 'StSettingsAbstracPresenter',
+	#superclass : 'StSettingsAbstractPresenter',
 	#instVars : [
 		'categoryListPresenter',
 		'settingsCategories'

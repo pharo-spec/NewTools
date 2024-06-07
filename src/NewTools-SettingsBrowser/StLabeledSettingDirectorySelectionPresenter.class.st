@@ -41,9 +41,7 @@ StLabeledSettingDirectorySelectionPresenter >> defaultLayout [
 		add: (SpBoxLayout newTopToBottom
 				add: (SpBoxLayout newLeftToRight 
 					add: input withConstraints: [ :constraints | 
-						constraints 
-							width: self inputTextWidth;
-							height: self inputTextHeight ];
+						constraints height: self inputTextHeight ];
 					add: selectButtonPresenter withConstraints: [ :constraints | 
 						constraints width: self buttonWidth ];
 					yourself);

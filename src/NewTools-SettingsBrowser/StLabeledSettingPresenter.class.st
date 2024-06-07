@@ -18,9 +18,7 @@ StLabeledSettingPresenter >> defaultLayout [
 		add: labelPresenter withConstraints: [ :constraints | constraints width: self labelWidth ];
 		add: (SpBoxLayout newTopToBottom
 				add: input withConstraints: [ :constraints | 
-					constraints 
-						width: self inputTextWidth;
-						height: self inputTextHeight ]);
+					constraints height: self inputTextHeight ]);
 		yourself
 ]
 
@@ -28,7 +26,9 @@ StLabeledSettingPresenter >> defaultLayout [
 StLabeledSettingPresenter >> description: aString [
 
 	aString ifNil: [ ^ self ].
-	labelPresenter help: aString
+	labelPresenter help: aString.
+	input eventHandler whenFocusReceivedDo: [ : e | 
+		self updateHelp: labelPresenter help ].
 ]
 
 { #category : 'layout' }
@@ -38,19 +38,13 @@ StLabeledSettingPresenter >> inputTextHeight [
 ]
 
 { #category : 'layout' }
-StLabeledSettingPresenter >> inputTextWidth [
-
-	^ 400
-]
-
-{ #category : 'layout' }
 StLabeledSettingPresenter >> labelWidth [
 
 	^ self class labelWidth + 200
 ]
 
-{ #category : 'layout' }
-StLabeledSettingPresenter >> settingBoxWidth [
+{ #category : 'accessing' }
+StLabeledSettingPresenter >> updateHelp: helpString [
 
-	^ 600
+	self owner updateHelp: helpString 
 ]
