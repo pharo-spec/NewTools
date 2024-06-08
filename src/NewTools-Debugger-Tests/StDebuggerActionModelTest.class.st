@@ -1202,7 +1202,7 @@ StDebuggerActionModelTest >> testUpdateTopContextAfterSessionOperation [
 		clearDebugSession.
 
 	mockDebugActionModel := StMockDebuggerActionModel new.
-	(StMockDebuggerActionModel slotNamed: #session) write: StMockSession new to: mockDebugActionModel.
+	mockDebugActionModel session: StMockSession new.
 	
 	mockDebugActionModel implementMissingMethod.
 	self assert: mockDebugActionModel tag equals: #updateTopContext.

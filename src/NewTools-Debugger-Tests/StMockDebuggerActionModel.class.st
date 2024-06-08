@@ -40,6 +40,11 @@ StMockDebuggerActionModel >> session [
 ]
 
 { #category : 'accessing' }
+StMockDebuggerActionModel >> session: aDebugSession [
+	session := aDebugSession 
+]
+
+{ #category : 'accessing' }
 StMockDebuggerActionModel >> tag [
 	^tag
 	
