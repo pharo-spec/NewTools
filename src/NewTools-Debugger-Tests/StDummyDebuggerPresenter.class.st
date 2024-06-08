@@ -59,8 +59,9 @@ tag := thisContext method selector.
 
 { #category : 'mocks' }
 StDummyDebuggerPresenter >> implementMissingMethod [
-tag := thisContext method selector.
-^true
+
+	tag := thisContext method selector.
+	^ true
 ]
 
 { #category : 'mocks' }
