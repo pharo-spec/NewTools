@@ -53,16 +53,17 @@ StDebuggerExceptionExtensionsTest >> testMessageNotUnderstoodToImplementInContex
 
 { #category : 'testing' }
 StDebuggerExceptionExtensionsTest >> testSubclassResponsibilityToImplementInContext [
-| exception dummySession  message |
+
+	| exception dummySession message |
 	[ 1 a ]
 		on: Error
 		do: [ :e | exception := e freeze ].
 	dummySession := StMockSession new.
-	dummySession dummyContext: exception signalerContext.	
+	dummySession dummyContext: exception signalerContext.
 
-	"We work from a MNU exception, but that is just to get a context, we do not really care that we are testing a subclass resp exception below"
-	message := SubclassResponsibility new
-		           messageToImplementInContext: exception signalerContext.
+	"We use a message not understood exception (from the handler above) to capture a context that we use to test that a  SubclassResponsibility exception correctly builds the message object to be implemented from the context."
+	message := SubclassResponsibility new messageToImplementInContext:
+		           exception signalerContext.
 	self
 		assert: message selector
 		equals: exception signalerContext selector.
