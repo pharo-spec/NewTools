@@ -1,21 +1,22 @@
 Class {
-	#name : #StWindowsProcessorTest,
-	#superclass : #StAbstractProcessorTest,
+	#name : 'StWindowsProcessorTest',
+	#superclass : 'StAbstractProcessorTest',
 	#instVars : [
 		'backWindow1',
 		'backWindow2',
 		'topMostWindow'
 	],
-	#category : #'NewTools-Spotter-Processors-Tests'
+	#category : 'NewTools-Spotter-Processors-Tests',
+	#package : 'NewTools-Spotter-Processors-Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 StWindowsProcessorTest >> processor [
 
 	^ StWindowsProcessor new
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StWindowsProcessorTest >> setUp [
 
 	super setUp.
@@ -25,7 +26,7 @@ StWindowsProcessorTest >> setUp [
 	
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StWindowsProcessorTest >> tearDown [
 
 	{backWindow1. backWindow2. topMostWindow} 
@@ -34,7 +35,7 @@ StWindowsProcessorTest >> tearDown [
 	super tearDown.	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StWindowsProcessorTest >> testBackWindowsAreFind [
 
 	self runForText: 'back'.
@@ -42,7 +43,7 @@ StWindowsProcessorTest >> testBackWindowsAreFind [
 	self assertResultsIncludes: backWindow2.	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StWindowsProcessorTest >> testBackWindowsAreFindWhenUsingSubstring [
 
 	self runForText: 'wind'.
@@ -50,7 +51,7 @@ StWindowsProcessorTest >> testBackWindowsAreFindWhenUsingSubstring [
 	self assertResultsIncludes: backWindow2.	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StWindowsProcessorTest >> testBackWindowsAreShown [
 
 	self runForText: ''.
@@ -58,14 +59,14 @@ StWindowsProcessorTest >> testBackWindowsAreShown [
 	self assertResultsIncludes: backWindow2.	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StWindowsProcessorTest >> testEmptyQueryShowsResults [
 
 	self runForText: ''.
 	self assertResultsIncludes: backWindow1
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StWindowsProcessorTest >> testTopMostWindowIsNotShown [
 
 	self runForText: ''.

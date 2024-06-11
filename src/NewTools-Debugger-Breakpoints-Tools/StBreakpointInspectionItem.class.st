@@ -2,20 +2,22 @@
 I am a data holder for breakpoints to be displayed in StObjectBreakpointInspection tables.
 "
 Class {
-	#name : #StBreakpointInspectionItem,
-	#superclass : #StHaltInspectionItem,
+	#name : 'StBreakpointInspectionItem',
+	#superclass : 'StHaltInspectionItem',
 	#instVars : [
 		'breakpoint'
 	],
-	#category : #'NewTools-Debugger-Breakpoints-Tools-Presenters'
+	#category : 'NewTools-Debugger-Breakpoints-Tools-Presenters',
+	#package : 'NewTools-Debugger-Breakpoints-Tools',
+	#tag : 'Presenters'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StBreakpointInspectionItem >> breakpoint [
 	^ breakpoint
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StBreakpointInspectionItem >> buildBreakpointItemFor: aBreakpoint [
 
 	node := aBreakpoint node.
@@ -27,7 +29,7 @@ StBreakpointInspectionItem >> buildBreakpointItemFor: aBreakpoint [
 	displayEntity := aBreakpoint
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StBreakpointInspectionItem >> buildVariableBreakpointItemFor: aVariableBreakpoint [
 
 	type := Break name asString.
@@ -37,17 +39,17 @@ StBreakpointInspectionItem >> buildVariableBreakpointItemFor: aVariableBreakpoin
 	displayEntity := aVariableBreakpoint
 ]
 
-{ #category : #control }
+{ #category : 'control' }
 StBreakpointInspectionItem >> disableInContext: aStHaltAndBreakpointController [ 
 	aStHaltAndBreakpointController disableBreakpoint: breakpoint
 ]
 
-{ #category : #control }
+{ #category : 'control' }
 StBreakpointInspectionItem >> enableInContext: aStHaltAndBreakpointController [ 
 	aStHaltAndBreakpointController enableBreakpoint: breakpoint
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StBreakpointInspectionItem >> entityToBrowse [
 
 	breakpoint isVariableBreakpoint ifTrue: [ 
@@ -55,40 +57,40 @@ StBreakpointInspectionItem >> entityToBrowse [
 	^ breakpoint node methodNode method
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StBreakpointInspectionItem >> forBreakpoint: aBreakpoint [ 
 	breakpoint := aBreakpoint.
 	^aBreakpoint asBreakpointInspectionItemIn: self
 ]
 
-{ #category : #control }
+{ #category : 'control' }
 StBreakpointInspectionItem >> isEnabledInContext: aStHaltAndBreakpointController [ 
 	^aStHaltAndBreakpointController isBreakpointEnabled: breakpoint
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 StBreakpointInspectionItem >> printContents [
 	^displayEntity printContentsForBreakpointInspection
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 StBreakpointInspectionItem >> printEntity [
 	^displayEntity printTargetForBreakpointInspection
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 StBreakpointInspectionItem >> printScope [
 	breakpoint isObjectCentric ifTrue:[^'self'].
 	^ scope printString
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 StBreakpointInspectionItem >> removeInPresenterContext: aStObjectBreakpointInspection [ 
 	breakpoint remove.
 	aStObjectBreakpointInspection update
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 StBreakpointInspectionItem >> updateSourceCodePaneFor: aStObjectBreakpointInspection [
 
 	breakpoint isVariableBreakpoint ifTrue: [ 

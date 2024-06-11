@@ -7,18 +7,20 @@ So, in the processing search scheme of things:
 a model (`StSpotterModel`) has a step (`StSpotterStep`) which receives a query (`StSpotterQuery`) which is the one performing the actual search.
 "
 Class {
-	#name : #StSpotterStep,
-	#superclass : #Object,
+	#name : 'StSpotterStep',
+	#superclass : 'Object',
 	#instVars : [
 		'model',
 		'origin',
 		'activeQuery',
 		'processors'
 	],
-	#category : #'NewTools-Spotter-Model'
+	#category : 'NewTools-Spotter-Model',
+	#package : 'NewTools-Spotter',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StSpotterStep class >> on: aSpotterModel [
 
 	^ self new 
@@ -26,14 +28,14 @@ StSpotterStep class >> on: aSpotterModel [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStep >> activate [
 
 	activeQuery ifNil: [ ^ self ].
 	self activateQuery: activeQuery
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterStep >> activateQuery: aQuery [
 
 	activeQuery ifNotNil: [ self disconnectQuery: aQuery ].
@@ -42,19 +44,19 @@ StSpotterStep >> activateQuery: aQuery [
 	self refreshQueryStatus: aQuery
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStep >> activeQuery [
 
 	^ activeQuery
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStep >> addProcessor: processor [
 	
 	processors add: processor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStep >> candidatesList [
 
 	^ activeQuery 
@@ -62,7 +64,7 @@ StSpotterStep >> candidatesList [
 		ifNil: [ #() ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterStep >> connectQuery: aQuery [
 
 	aQuery announcer
@@ -73,7 +75,7 @@ StSpotterStep >> connectQuery: aQuery [
 		when: StSpotterQueryEnded send: #announceQueryEnded: to: self model.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStep >> deactivate [
 
 	self activeQuery ifNil: [ ^ self ].
@@ -83,19 +85,19 @@ StSpotterStep >> deactivate [
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterStep >> disconnectQuery: aQuery [
 
 	aQuery announcer unsubscribe: self model
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStep >> lastSearchText [
 
 	^ self activeQuery searchText
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStep >> links [
 
 	^ activeQuery 
@@ -103,7 +105,7 @@ StSpotterStep >> links [
 		ifNil: [ #() ]
 ]
 
-{ #category : #factory }
+{ #category : 'factory' }
 StSpotterStep >> listProcessor [
 	| processor |
 	
@@ -113,31 +115,31 @@ StSpotterStep >> listProcessor [
 	^ processor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStep >> model [
 
 	^ model
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStep >> model: aSpotterModel [
 
 	model := aSpotterModel
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStep >> origin [
 
 	^ origin
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStep >> origin: anObject [
 
 	origin := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStep >> previousProcessorFrom: aCollection [
 
 	aCollection do: [ :each | 
@@ -150,7 +152,7 @@ StSpotterStep >> previousProcessorFrom: aCollection [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStep >> processors [
 
 	^ processors ifNil: [ 
@@ -159,23 +161,22 @@ StSpotterStep >> processors [
 		processors ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStep >> processors: aCollection [
 
 	processors := aCollection
 ]
 
-{ #category : #'accessing - query' }
+{ #category : 'accessing - query' }
 StSpotterStep >> pushQuery: aQuery [
 
 	self deactivate.
-	
 	aQuery processors: (self processors sort: #order ascending).
 	self activateQuery: aQuery.
 	aQuery process
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterStep >> refreshQueryStatus: aQuery [
 
 	aQuery links ifEmpty: [ ^ self ].
@@ -190,7 +191,7 @@ StSpotterStep >> refreshQueryStatus: aQuery [
 			yourself) ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterStep >> results [
 
 	^ activeQuery 

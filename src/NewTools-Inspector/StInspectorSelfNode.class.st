@@ -2,23 +2,25 @@
 I model the `self` variable. This the value of this variable is always the host object. 
 "
 Class {
-	#name : #StInspectorSelfNode,
-	#superclass : #StInspectorNode,
-	#category : #'NewTools-Inspector-Model'
+	#name : 'StInspectorSelfNode',
+	#superclass : 'StInspectorNode',
+	#category : 'NewTools-Inspector-Model',
+	#package : 'NewTools-Inspector',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorSelfNode >> children [
  
 	^ #()
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorSelfNode >> key [
 	^ 'self'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorSelfNode >> rawValue [
 
 	^ self hostObject

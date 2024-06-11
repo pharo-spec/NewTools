@@ -2,14 +2,17 @@
 A filter that seaerchs substrings to obtain matching items.
 "
 Class {
-	#name : #StFilterSubstring,
-	#superclass : #StOrderedFilter,
-	#category : #'NewTools-Spotter-Filters'
+	#name : 'StFilterSubstring',
+	#superclass : 'StOrderedFilter',
+	#category : 'NewTools-Spotter-Filters',
+	#package : 'NewTools-Spotter',
+	#tag : 'Filters'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 StFilterSubstring >> doApplyFilterWithQuery [
 	| exactMatches prefixMatches otherMatches nonExactMatches |
+
 	"we want to distinguish between exact matches"
 	exactMatches := OrderedCollection new.
 	"... results for which the query matches the prefix"
@@ -29,7 +32,6 @@ StFilterSubstring >> doApplyFilterWithQuery [
 						ifTrue: [ 
 							exactMatches add: each.
 							self addItem: each.
-														
 							exactMatches size = self itemsLimit ifTrue: [ 
 								self filteredItems: exactMatches.
 								StLimitArrived signal	] ]							
@@ -43,7 +45,7 @@ StFilterSubstring >> doApplyFilterWithQuery [
 	self filteredItems: exactMatches, nonExactMatches
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StFilterSubstring >> indexForItemName: aString andQuery: aQueryString [
 	^ aString 
 		findString: aQueryString
@@ -51,7 +53,7 @@ StFilterSubstring >> indexForItemName: aString andQuery: aQueryString [
 		caseSensitive: self caseSensitive
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StFilterSubstring >> queryForItem: each [
 	^ query " performance optimization "
 ]

@@ -2,29 +2,31 @@
 I am a dummy object to test StDebuggerContext inspector nodes building.
 "
 Class {
-	#name : #StDebuggerObjectForTests,
-	#superclass : #Object,
+	#name : 'StDebuggerObjectForTests',
+	#superclass : 'Object',
 	#instVars : [
 		'instVar'
 	],
-	#category : #'NewTools-Debugger-Tests-Utils'
+	#category : 'NewTools-Debugger-Tests-Utils',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Utils'
 }
 
-{ #category : #util }
+{ #category : 'util' }
 StDebuggerObjectForTests >> haltingMethod [ <haltOrBreakpointForTesting> self halt. ^self
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebuggerObjectForTests >> initialize [ 
 	instVar := 0
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerObjectForTests >> instVar [
 	^ instVar
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 StDebuggerObjectForTests >> methodWithArg1: i arg2: j [
 	|a b|
 	a := i.
@@ -32,12 +34,12 @@ StDebuggerObjectForTests >> methodWithArg1: i arg2: j [
 	^a + b
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 StDebuggerObjectForTests >> methodWithArgsInBlock [
 	^[ :a :b| a + b ] value: 4 value: 2
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 StDebuggerObjectForTests >> methodWithTemps [
 	|a b|
 	a := 0.

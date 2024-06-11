@@ -1,12 +1,12 @@
-Extension { #name : #CmCommand }
+Extension { #name : 'CmCommand' }
 
-{ #category : #'*NewTools-Core' }
+{ #category : '*NewTools-Core' }
 CmCommand >> appliesTo: aTool [
 
 	^ true
 ]
 
-{ #category : #'*NewTools-Core' }
+{ #category : '*NewTools-Core' }
 CmCommand class >> commandClassesFromPragma: aSymbol [
 	"Collects command classes matching the pragma aSymbol. 
 	 WARNING: The collection will happen takign the caller class and subclasses. If you 
@@ -28,7 +28,7 @@ CmCommand class >> commandClassesFromPragma: aSymbol [
 		collect: [ :pragma | pragma methodClass soleInstance ]
 ]
 
-{ #category : #'*NewTools-Core' }
+{ #category : '*NewTools-Core' }
 CmCommand class >> instantiateCommands: commandClasses for: aTool [
 
 	^ commandClasses
@@ -36,7 +36,7 @@ CmCommand class >> instantiateCommands: commandClasses for: aTool [
 		thenSelect: [ :debugCommand | debugCommand decoratedCommand appliesTo: aTool ]
 ]
 
-{ #category : #'*NewTools-Core' }
+{ #category : '*NewTools-Core' }
 CmCommand class >> instantiateCommandsFromPragma: pragmaName for: aTool [
 
 	^ self 

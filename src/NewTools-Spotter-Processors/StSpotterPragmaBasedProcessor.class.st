@@ -1,6 +1,6 @@
 Class {
-	#name : #StSpotterPragmaBasedProcessor,
-	#superclass : #Object,
+	#name : 'StSpotterPragmaBasedProcessor',
+	#superclass : 'Object',
 	#instVars : [
 		'allFilteredCandidates',
 		'order',
@@ -10,34 +10,35 @@ Class {
 		'DefaultItemsLimit',
 		'DefaultNestedItemsLimit'
 	],
-	#category : #'NewTools-Spotter-Processors'
+	#category : 'NewTools-Spotter-Processors',
+	#package : 'NewTools-Spotter-Processors'
 }
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 StSpotterPragmaBasedProcessor class >> defaultItemsLimit [
 
 	^ DefaultItemsLimit ifNil: [ DefaultItemsLimit := 25 ]
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 StSpotterPragmaBasedProcessor class >> defaultItemsLimit: aValue [
 
 	DefaultItemsLimit := aValue
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 StSpotterPragmaBasedProcessor class >> defaultNestedItemsLimit [
 
 	^ DefaultNestedItemsLimit ifNil: [ DefaultNestedItemsLimit := 2000 ]
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 StSpotterPragmaBasedProcessor class >> defaultNestedItemsLimit: aValue [
 
 	DefaultNestedItemsLimit := aValue
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 StSpotterPragmaBasedProcessor class >> settingsOn: aBuilder [
 	<systemsettings>
 
@@ -58,17 +59,12 @@ StSpotterPragmaBasedProcessor class >> settingsOn: aBuilder [
 		description: 'Number of total results per of category to show in Spotter'
 ]
 
-{ #category : #public }
-StSpotterPragmaBasedProcessor >> actOn: anObject for: aStep [
-	anObject spotterActDefault: aStep
-]
-
-{ #category : #public }
+{ #category : 'public' }
 StSpotterPragmaBasedProcessor >> allFilteredCandidates [
 	^ allFilteredCandidates ifNil: [ allFilteredCandidates := OrderedCollection new ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterPragmaBasedProcessor >> continueFilterInContext: aSpotterContext [
 
 	" We DO NOT prepare the context since we could no longer continue producing filtered candidates. "
@@ -80,19 +76,19 @@ StSpotterPragmaBasedProcessor >> continueFilterInContext: aSpotterContext [
 		withArguments: { self allFilteredCandidates size . self }
 ]
 
-{ #category : #printing }
+{ #category : 'displaying' }
 StSpotterPragmaBasedProcessor >> displayStringOn: stream [
 	stream 
 		nextPutAll: 'Processor: ';
 		nextPutAll: self title asString
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterPragmaBasedProcessor >> doContinueFilterInContext: aSpotterContext [
 	^ aSpotterContext doContinueFilterForProcessor: self
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterPragmaBasedProcessor >> doFilterInContext: aSpotterContext [
 	"override this method to:
 	- add items to the stream
@@ -100,7 +96,7 @@ StSpotterPragmaBasedProcessor >> doFilterInContext: aSpotterContext [
 	self subclassResponsibility
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterPragmaBasedProcessor >> filterInContext: aSpotterContext [
 
 	running := true.
@@ -122,36 +118,37 @@ StSpotterPragmaBasedProcessor >> filterInContext: aSpotterContext [
 
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterPragmaBasedProcessor >> hasFilteredCandidates [
 	^ self allFilteredCandidates notEmpty
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSpotterPragmaBasedProcessor >> initialize [ 
 
 	super initialize.
 	running := false
 ]
 
-{ #category : #'key-bindings' }
-StSpotterPragmaBasedProcessor >> installKeymappingsOn: aGTSpotterMorph [
+{ #category : 'key-bindings' }
+StSpotterPragmaBasedProcessor >> installKeymappingsOn: aSpotterMorph [
 
-	self keyBinding
+	self flag: #TODO. "This should be used?"
+	"self keyBinding
 		ifNotNil: [ | keyCombination |
 			keyCombination := self keyBinding asKeyCombination.
 			aGTSpotterMorph 
 				bindKeyCombination: keyCombination 
 				ofProcessor: self 
-				toAction: [ aGTSpotterMorph onKeyProcessor: self ] ]
+				toAction: [ aGTSpotterMorph onKeyProcessor: self ] ]"
 ]
 
-{ #category : #'key-bindings' }
+{ #category : 'key-bindings' }
 StSpotterPragmaBasedProcessor >> installKeymappingsOn: aPresenter onExecution: aBlock [
 
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterPragmaBasedProcessor >> isRelevantForQuery: categoryQueryPrefix [
 	| trimmedProcessorTitle |
 	trimmedProcessorTitle := self title asLowercase 
@@ -160,61 +157,59 @@ StSpotterPragmaBasedProcessor >> isRelevantForQuery: categoryQueryPrefix [
 	^ trimmedProcessorTitle beginsWith: categoryQueryPrefix
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterPragmaBasedProcessor >> isRunning [ 
 	
 	^ running
 ]
 
-{ #category : #'key-bindings' }
+{ #category : 'key-bindings' }
 StSpotterPragmaBasedProcessor >> keyBinding [
 
 	^ nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterPragmaBasedProcessor >> order [
 	"Return assigned spotter order used to arrange categories in spotter UI"
-	<return: #Number>
-	
 	^ order
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterPragmaBasedProcessor >> order: aNumber [
 	"Assign to processor its spotter order to arrange categories
 	within spotter ui"
 	order := aNumber
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterPragmaBasedProcessor >> prepareProcessorInContext: aContext [
 	allFilteredCandidates := nil
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterPragmaBasedProcessor >> shouldFilterInContext: aSpotterContext [
 	^ aSpotterContext notEmpty 
 		or: [ self wantsToDisplayOnEmptyQuery ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterPragmaBasedProcessor >> stop [
 	
 	running := false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterPragmaBasedProcessor >> title [
 	self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterPragmaBasedProcessor >> wantsToDisplayOnEmptyQuery [
 	^ true
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterPragmaBasedProcessor >> withItemsLimit: aLimit do: aBlock [
 	^ aBlock value
 ]

@@ -4,82 +4,84 @@ I will install the appropriate theme for each platform (macOS or windows, in lin
 I will install additional styles needed for the platform (e.g. font style for code).
 "
 Class {
-	#name : #StPharoGtkConfiguration,
-	#superclass : #SpGtkConfiguration,
-	#category : #'NewTools-Gtk'
+	#name : 'StPharoGtkConfiguration',
+	#superclass : 'SpGtkConfiguration',
+	#category : 'NewTools-Gtk',
+	#package : 'NewTools-Gtk'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPharoGtkConfiguration >> commonStyle [
 
 	^ '
 /* compact toolbar */
-toolbar.stToolbar { font-size: 0.7em }
-toolbar.stToolbar toolbutton > button { padding: 2px; margin: 2px }
+toolbar.stToolbar { font-size: 0.7em; }
+toolbar.stToolbar toolbutton > button { padding: 2px; margin: 2px; }
 
-.dim { color: LightSlateGrey }
-.codePopover,  .codePopover text { 
+.dim { color: LightSlateGrey; }
+.codePopover, .codePopover text { 
 	background-color: transparent;
 }
-.scrollbarPopoverLarge { min-height: 350px }
+.scrollbarPopoverLarge { min-height: 350px; }
 '
 ]
 
-{ #category : #configuring }
+{ #category : 'configuring' }
 StPharoGtkConfiguration >> configureGeneral: anApplication [ 
 
+	super configureGeneral: anApplication.
 	self addCSSProviderFromString: self commonStyle.
 	anApplication 
 		propertyAt: #syntaxHighlightTheme
 		put: self syntaxHighlightThemeName
 ]
 
-{ #category : #configuring }
+{ #category : 'configuring' }
 StPharoGtkConfiguration >> configureOSX: anApplication [
 
 	self installTheme: self macThemeName.
 	self addCSSProviderFromString: '
-.code { font: 12pt "Monaco" }
+.code { font: 12pt "Monaco"; }
 '
 ]
 
-{ #category : #configuring }
+{ #category : 'configuring' }
 StPharoGtkConfiguration >> configureUnix: anApplication [
 
 	self unixThemeName ifNotNil: [ :aName | self installTheme: aName ].
 	self addCSSProviderFromString: '
-.code { /* font: 10pt "Source Code Pro" */ }
+/* .code { font: 10pt "Source Code Pro" } */
 '
 ]
 
-{ #category : #configuring }
+{ #category : 'configuring' }
 StPharoGtkConfiguration >> configureWindows: anApplication [
 
 	self installTheme: self windowsThemeName.
 	self addCSSProviderFromString: '
-.code { font: 10pt "Microsoft Sans Serif" }
+.code { font: 10pt "Microsoft Sans Serif"; }
 '
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPharoGtkConfiguration >> macThemeName [
 		
 	^ 'Sierra-light'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPharoGtkConfiguration >> syntaxHighlightThemeName [
 
 	^ 'Blue'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPharoGtkConfiguration >> unixThemeName [
 
 	^ nil "'Adwaita'"
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPharoGtkConfiguration >> windowsThemeName [
 
 	^ 'Windows-10-master'

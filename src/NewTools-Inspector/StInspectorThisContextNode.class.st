@@ -3,18 +3,20 @@ A model for the `thisContext` variable.
 This is to be used when debugging.
 "
 Class {
-	#name : #StInspectorThisContextNode,
-	#superclass : #StInspectorSelfNode,
-	#category : #'NewTools-Inspector-Model'
+	#name : 'StInspectorThisContextNode',
+	#superclass : 'StInspectorNode',
+	#category : 'NewTools-Inspector-Model',
+	#package : 'NewTools-Inspector',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
-StInspectorThisContextNode >> children [ 
-	
-	^ self value allInspectorNodes
-]
-
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorThisContextNode >> key [
 	^ 'thisContext'
+]
+
+{ #category : 'accessing' }
+StInspectorThisContextNode >> rawValue [
+
+	^ self hostObject
 ]

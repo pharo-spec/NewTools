@@ -1,14 +1,16 @@
 Class {
-	#name : #StSBProtocolInspectionPanel,
-	#superclass : #StSBPanel,
+	#name : 'StSBProtocolInspectionPanel',
+	#superclass : 'StSBPanel',
 	#instVars : [
 		'protocolList',
 		'methodList'
 	],
-	#category : #'NewTools-SystemBrowser-View'
+	#category : 'NewTools-SystemBrowser-View',
+	#package : 'NewTools-SystemBrowser',
+	#tag : 'View'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 StSBProtocolInspectionPanel class >> defaultSpec [
 
 	^ SpPanedLayout newHorizontal
@@ -17,19 +19,19 @@ StSBProtocolInspectionPanel class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBProtocolInspectionPanel >> defaultInputPort [
 
 	^ self inputItemsPort
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBProtocolInspectionPanel >> defaultOutputPort [
 
 	^ self outputSelectionPort
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBProtocolInspectionPanel >> initializePresenters [
 	
 	protocolList := self newTable 
@@ -46,7 +48,7 @@ StSBProtocolInspectionPanel >> initializePresenters [
 	protocolList whenModelChangedDo: [ methodList items: #() ].
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBProtocolInspectionPanel >> inputItemsPort [
 
 	^ (SpListItemsPort newPresenter: self) 
@@ -54,7 +56,7 @@ StSBProtocolInspectionPanel >> inputItemsPort [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBProtocolInspectionPanel >> inputMethodItemsPort [
 
 	^ (SpListItemsPort newPresenter: self) 
@@ -62,12 +64,12 @@ StSBProtocolInspectionPanel >> inputMethodItemsPort [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBProtocolInspectionPanel >> methodList [
 	^ methodList
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBProtocolInspectionPanel >> outputProtocolSelectionPort [
 	
 	^ (SpSelectionPort newPresenter: self)
@@ -75,7 +77,7 @@ StSBProtocolInspectionPanel >> outputProtocolSelectionPort [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSBProtocolInspectionPanel >> outputSelectionPort [
 	
 	^ (SpSelectionPort newPresenter: self)
@@ -83,7 +85,7 @@ StSBProtocolInspectionPanel >> outputSelectionPort [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBProtocolInspectionPanel >> protocolList [
 	^ protocolList
 ]

@@ -2,8 +2,8 @@
 I am a data holder for halts and breakpoints to be displayed in StObjectBreakpointInspection tables.
 "
 Class {
-	#name : #StHaltInspectionItem,
-	#superclass : #Object,
+	#name : 'StHaltInspectionItem',
+	#superclass : 'Object',
 	#instVars : [
 		'node',
 		'type',
@@ -11,41 +11,43 @@ Class {
 		'displayEntity',
 		'scope'
 	],
-	#category : #'NewTools-Debugger-Breakpoints-Tools-Presenters'
+	#category : 'NewTools-Debugger-Breakpoints-Tools-Presenters',
+	#package : 'NewTools-Debugger-Breakpoints-Tools',
+	#tag : 'Presenters'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StHaltInspectionItem class >> forBreakpoint: aBreakpoint [ 
 	^StBreakpointInspectionItem new forBreakpoint: aBreakpoint 
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StHaltInspectionItem class >> forHalt: aRBMessageNode [ 
 	^self new forHalt: aRBMessageNode
 ]
 
-{ #category : #control }
+{ #category : 'control' }
 StHaltInspectionItem >> disableInContext: aStHaltAndBreakpointController [ 
 	aStHaltAndBreakpointController disableHaltNode: node
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHaltInspectionItem >> displayEntity [
 	^ displayEntity
 ]
 
-{ #category : #control }
+{ #category : 'control' }
 StHaltInspectionItem >> enableInContext: aStHaltAndBreakpointController [ 
 	aStHaltAndBreakpointController enableHaltNode: node
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHaltInspectionItem >> entityToBrowse [
 
 	^ node methodNode method
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StHaltInspectionItem >> forHalt: aRBMessageNode [ 
 	node := aRBMessageNode.
 	type := Halt name asString.
@@ -54,73 +56,74 @@ StHaltInspectionItem >> forHalt: aRBMessageNode [
 	displayEntity := aRBMessageNode methodNode
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHaltInspectionItem >> interval [
 	^ interval
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHaltInspectionItem >> interval: anObject [
 	interval := anObject
 ]
 
-{ #category : #control }
+{ #category : 'control' }
 StHaltInspectionItem >> isEnabledInContext: aStHaltAndBreakpointController [ 
 	^aStHaltAndBreakpointController isHaltNodeEnabled: node
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHaltInspectionItem >> node [
 	^ node
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHaltInspectionItem >> node: anObject [
 	node := anObject
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 StHaltInspectionItem >> printContents [
 	^displayEntity sourceCode
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 StHaltInspectionItem >> printEntity [
-	^displayEntity method printString
+
+	^ displayEntity compiledMethod printString
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 StHaltInspectionItem >> printScope [
 
 	^ scope printString
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 StHaltInspectionItem >> removeInPresenterContext: aStObjectBreakpointInspection [ 
 	self inform: 'Edit your code to remove halts'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHaltInspectionItem >> scope [
 	^ scope
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHaltInspectionItem >> scope: anObject [
 	scope := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHaltInspectionItem >> type [
 	^ type
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StHaltInspectionItem >> type: anObject [
 	type := anObject
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 StHaltInspectionItem >> updateSourceCodePaneFor: aStObjectBreakpointInspection [ 
 	aStObjectBreakpointInspection updateSourceCodeForHaltItem: self
 ]

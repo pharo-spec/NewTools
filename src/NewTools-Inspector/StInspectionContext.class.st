@@ -8,8 +8,8 @@ If I fail to create a presentation, I provide a debug presentation instead.
 If you define a method `Object>>#inspectionMeta`, you can define a context method `Object>>#inspectionMetaContext:`.
 "
 Class {
-	#name : #StInspectionContext,
-	#superclass : #Object,
+	#name : 'StInspectionContext',
+	#superclass : 'Object',
 	#instVars : [
 		'inspectedObject',
 		'active',
@@ -18,10 +18,12 @@ Class {
 		'methodSelector',
 		'evaluator'
 	],
-	#category : #'NewTools-Inspector-Model'
+	#category : 'NewTools-Inspector-Model',
+	#package : 'NewTools-Inspector',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StInspectionContext class >> fromPragma: aPragma [
 
 	^ self new 
@@ -29,13 +31,13 @@ StInspectionContext class >> fromPragma: aPragma [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectionContext >> active: aBoolean [
 
 	active := aBoolean
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'private - factory' }
 StInspectionContext >> basicNewInspectionPresenter [
 
 	^ self methodSelectorNeedsBuilder 
@@ -47,19 +49,19 @@ StInspectionContext >> basicNewInspectionPresenter [
 			self inspectedObject inspectorPerform: self methodSelector ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectionContext >> beActive [
 
 	self active: true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectionContext >> beInactive [
 
 	self active: false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectionContext >> contextMethodSelector [
 	| selector |
 
@@ -69,7 +71,7 @@ StInspectionContext >> contextMethodSelector [
 	^ (selector, 'Context:') asSymbol
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StInspectionContext >> debugInspectorPresenter [
 
 	"Create a debug inspector presenter.
@@ -100,13 +102,13 @@ StInspectionContext >> debugInspectorPresenter [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectionContext >> evaluator: aBoolean [
 
 	evaluator := aBoolean
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StInspectionContext >> fromPragma: aPragma [
 
 	self
@@ -115,13 +117,13 @@ StInspectionContext >> fromPragma: aPragma [
 		methodSelector: aPragma methodSelector
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StInspectionContext >> hasEvaluator [
 
 	^ evaluator
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StInspectionContext >> initialize [
 
 	super initialize.
@@ -129,43 +131,43 @@ StInspectionContext >> initialize [
 	evaluator := true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectionContext >> inspectedObject [
 
 	^ inspectedObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectionContext >> inspectedObject: anObject [
 
 	inspectedObject := anObject
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StInspectionContext >> isActive [
 
 	^ active
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectionContext >> methodSelector [
 
 	^ methodSelector
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectionContext >> methodSelector: aSelector [
 
 	methodSelector := aSelector
 ]
 
-{ #category : #'private - testing' }
+{ #category : 'private - testing' }
 StInspectionContext >> methodSelectorNeedsBuilder [
 
 	^ self methodSelector last = $:
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'private - factory' }
 StInspectionContext >> newInspectionPresenter [
 
 	"Create an inspection presenter for the current object and pragma.
@@ -175,7 +177,7 @@ StInspectionContext >> newInspectionPresenter [
 			self debugInspectorPresenter ]
 ]
 
-{ #category : #factory }
+{ #category : 'factory' }
 StInspectionContext >> newInspectionView [
 	| presenter |
 
@@ -185,40 +187,40 @@ StInspectionContext >> newInspectionView [
 		yourself
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'private - factory' }
 StInspectionContext >> newPresenterBuilder [
 
 	^ SpPresenterBuilder new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectionContext >> order [
 	^ order
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectionContext >> order: aNumber [
 
 	order := aNumber
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectionContext >> title [
 	^ title
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectionContext >> title: anObject [
 	title := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectionContext >> withEvaluator [
 
 	self evaluator: true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectionContext >> withoutEvaluator [
 
 	self evaluator: false

@@ -1,31 +1,47 @@
-Extension { #name : #CompiledCode }
+Extension { #name : 'CompiledCode' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 CompiledCode >> hasPragmas [
 
 	^ self pragmas notEmpty
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
+CompiledCode >> inpectionIr [
+	<inspectorPresentationOrder: 35 title: 'IR'>
+
+	^ self ir inpectionIr
+]
+
+{ #category : '*NewTools-Inspector-Extensions' }
+CompiledCode >> inspectBytes: specBuilder [
+	<inspectorPresentationOrder: 30 title: 'Bytes'>
+
+	^ self size > 1000 
+		ifTrue: [
+			(StSimpleInspectorBuilder on: specBuilder)
+				key: 'error' value: 'too many bytes, size is ' , self size asString;
+				table ]
+		ifFalse: [
+			(StSimpleInspectorBuilder on: specBuilder)
+				key: 'hex string bytecode' value: (String streamContents: [ :out | 
+					self bytecodes do: [ :each | each printOn: out base: 16 nDigits: 2 ] ]);
+				key: 'hex lines bytecode' value: (String streamContents: [ :out |
+					self bytecodes withIndexDo: [ :each :index |
+						index = 1 ifFalse: [ 
+							index - 1 \\ 8 = 0 ifTrue: [ out cr ] ifFalse: [ out space ] ].
+						each printOn: out base: 16 nDigits: 2 ] ]);
+				table ]
+]
+
+{ #category : '*NewTools-Inspector-Extensions' }
 CompiledCode >> inspectionAST [
 	<inspectorPresentationOrder: 35 title: 'AST'>
 
-	^ SpTreePresenter new 
-		roots: { self ast };
-		children: [ :aNode | aNode children ];
-		display: [ :each | 
-			String
-				streamContents: [ :stream | 
-					stream
-						nextPutAll: each class name;
-						nextPut: $(;
-						nextPutAll: ((each formattedCode truncateTo: 50) copyReplaceAll: String cr with: String space);
-						nextPut: $)
-			 ] ];
-		yourself
+	^ self sourceNode inspectionAST
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 CompiledCode >> inspectionBytecode [
 	<inspectorPresentationOrder: 30 title: 'Bytecode'>
 
@@ -36,7 +52,7 @@ CompiledCode >> inspectionBytecode [
 
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 CompiledCode >> inspectionHeader [
 	<inspectorPresentationOrder: 40 title: 'Header'> 
 	
@@ -45,48 +61,14 @@ CompiledCode >> inspectionHeader [
 		yourself
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 CompiledCode >> inspectionItemsContext: aContext [
 
 	"Disable items view on compiled code"
 	aContext active: false
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
-CompiledCode >> inspectionPragmas [
-	<inspectorPresentationOrder: 50 title: 'Pragmas'> 
-
-	^ SpListPresenter new
-		items: self pragmas;
-		display: [ :aPragma | aPragma printString ];
-		yourself
-]
-
-{ #category : #'*NewTools-Inspector-Extensions' }
-CompiledCode >> inspectionPragmasContext: aContext [ 
-	
-	aContext active: self hasPragmas
-]
-
-{ #category : #'*NewTools-Inspector-Extensions' }
-CompiledCode >> inspectionSource [
-	<inspectorPresentationOrder: 20 title: 'Source'>
-	
-	^ SpCodePresenter new 
-		beForBehavior: self methodClass;
-		text: self sourceCode;
-		contextMenu: (SpMenuPresenter new addGroup: [ :group | group 
-			addItem: [ :item | item 
-				name: 'Browse method class'; 
-				action: [ self methodClass browse ] ] ]);
-		whenSubmitDo: [ :text | 
-			self isInstalled 
-				ifFalse: [ self inform: 'can not edit methods that are not installed' ]
-				ifTrue: [ self methodClass compile: text ]];
-		yourself
-]
-
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 CompiledCode >> inspectorNodes [
 	"Answer a list of attributes as nodes"
 	| nodes |

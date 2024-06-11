@@ -7,15 +7,17 @@ It acts on an object.
 ```
 "
 Class {
-	#name : #StNodeCollector,
-	#superclass : #Object,
+	#name : 'StNodeCollector',
+	#superclass : 'Object',
 	#instVars : [
 		'object'
 	],
-	#category : #'NewTools-Inspector-Model'
+	#category : 'NewTools-Inspector-Model',
+	#package : 'NewTools-Inspector',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StNodeCollector class >> for: anObject [
 
 	^ self basicNew 
@@ -23,19 +25,19 @@ StNodeCollector class >> for: anObject [
 		yourself
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 StNodeCollector >> collectNodes [
 
 	^ self slotNodes , self indexedNodes
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StNodeCollector >> indexedNodes [
 	| nodes indexableDisplayLimit top bottom topLimit bottomLimit |
 	
 	nodes := OrderedCollection new.
 	
-	indexableDisplayLimit := StInspector indexableDisplayLimit.        
+	indexableDisplayLimit := StInspectorPresenter indexableDisplayLimit.        
 	top := 1.
 	bottom := self object basicSize.
 	topLimit    := indexableDisplayLimit min: bottom.
@@ -54,26 +56,26 @@ StNodeCollector >> indexedNodes [
 	^ nodes
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StNodeCollector >> initializeObject: anObject [
 
 	self initialize.
 	object := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StNodeCollector >> object [ 
 	
 	^ object
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StNodeCollector >> objectClass [ 
 	
 	^ self object class
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StNodeCollector >> slotNodes [
 
 	^ self objectClass allSlots collect: [ :each | 

@@ -4,17 +4,19 @@ I apply the block and transform the elements returned by myself.
 
 "
 Class {
-	#name : #StTransformation,
-	#superclass : #StIteratorBlockDecorator,
-	#category : #'NewTools-Spotter-Processors-Iterators'
+	#name : 'StTransformation',
+	#superclass : 'StIteratorBlockDecorator',
+	#category : 'NewTools-Spotter-Processors-Iterators',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Iterators'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StTransformation >> next [
 	^ inner next ifNotNil: [ :aValue | self transform: aValue ]
 ]
 
-{ #category : #tranforming }
+{ #category : 'tranforming' }
 StTransformation >> transform: anElement [
 
 	^ aBlock value: anElement

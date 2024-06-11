@@ -1,13 +1,6 @@
-Extension { #name : #Morph }
+Extension { #name : 'Morph' }
 
-{ #category : #'*NewTools-Spotter-Extensions' }
-Morph >> spotterForKeysFor: aStep [
-	<stSpotterOrder: 15>
-	(self hasProperty: #kmDispatcher) ifFalse: [^self].
-	self kmDispatcher spotterForKeysFor: aStep
-]
-
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 Morph >> spotterForSubmorphsFor: aStep [
 	<stSpotterOrder: 10>
 	self submorphs ifNil: [ ^ self ].
@@ -19,7 +12,7 @@ Morph >> spotterForSubmorphsFor: aStep [
 			filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 Morph >> spotterPreview: aBuilder [
 
 	^ aBuilder newImage 

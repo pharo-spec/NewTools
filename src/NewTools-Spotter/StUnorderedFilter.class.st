@@ -2,12 +2,14 @@
 a base filter for ""unordered"" elements (not a collection)
 "
 Class {
-	#name : #StUnorderedFilter,
-	#superclass : #StStringFilter,
-	#category : #'NewTools-Spotter-Filters'
+	#name : 'StUnorderedFilter',
+	#superclass : 'StStringFilter',
+	#category : 'NewTools-Spotter-Filters',
+	#package : 'NewTools-Spotter',
+	#tag : 'Filters'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 StUnorderedFilter >> doApplyFilterWithQuery [
 
 	| unorderedMatchedItems |
@@ -22,7 +24,7 @@ StUnorderedFilter >> doApplyFilterWithQuery [
 	self filteredItems: unorderedMatchedItems
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StUnorderedFilter >> isMatchedItem: anItem [
 	^ false
 ]

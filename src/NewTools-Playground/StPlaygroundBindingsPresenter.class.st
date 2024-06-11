@@ -4,8 +4,8 @@ I show a list of active bindings.
 A panel to inspect each of the bindings values is shown too.
 "
 Class {
-	#name : #StPlaygroundBindingsPresenter,
-	#superclass : #StPresenter,
+	#name : 'StPlaygroundBindingsPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'bindingList',
 		'inspector',
@@ -13,88 +13,94 @@ Class {
 		'bindingPanel',
 		'inspectorPanel'
 	],
-	#category : #'NewTools-Playground-View'
+	#category : 'NewTools-Playground-View',
+	#package : 'NewTools-Playground',
+	#tag : 'View'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundBindingsPresenter class >> defaultExtent [
 
-	^ 600@400
+	^ (600@400) scaledByDisplayScaleFactor
 ]
 
-{ #category : #layout }
-StPlaygroundBindingsPresenter class >> defaultLayout [
-
-	^ SpPanedLayout newLeftToRight
-		positionOfSlider: 30 percent;
-		add: #bindingPanel;
-		add: #inspectorPanel;
-		yourself
-]
-
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundBindingsPresenter class >> defaultTitle [
 
 	^ 'Bindings'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundBindingsPresenter class >> emptyMessage [
 
 	^ 'There are no bindings to list.'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundBindingsPresenter class >> unselectedMessage [
 
 	^ 'Select a variable to inspect its value.'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundBindingsPresenter >> bindings [
 
 	^ parent interactionModel bindings
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundBindingsPresenter >> contextMenu [
 
 	^ self contextMenuActions asMenuPresenter
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundBindingsPresenter >> contextMenuActions [
 
 	^ CmCommandGroup forSpec
 		beRoot;
 		register: (StRemoveBindingCommand forSpecContext: self);
 		register: (StToggleBindingCommand forSpecContext: self);
+		register: ((CmCommandGroup forSpecNamed: 'CRITICAL')
+			beDisplayedAsGroup;
+			register: (StRemoveAllBindingsCommand forSpecContext: self);
+			yourself);
 		yourself
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundBindingsPresenter >> contextMenuKeyBindings [
 
 	^ self contextMenuActions asKMCategory
 ]
 
-{ #category : #testing }
-StPlaygroundBindingsPresenter >> hasSelectedBinding [
+{ #category : 'layout' }
+StPlaygroundBindingsPresenter >> defaultLayout [
 
-	^ self selectedBinding notNil
+	^ SpPanedLayout newLeftToRight
+		positionOfSlider: 30 percent;
+		add: bindingPanel;
+		add: inspectorPanel;
+		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'testing' }
+StPlaygroundBindingsPresenter >> hasSelectedBinding [
+
+	^ self selectedBinding isNotNil
+]
+
+{ #category : 'initialization' }
 StPlaygroundBindingsPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
 	aDialogWindowPresenter 
 		centeredRelativeTo: parent window;
-		addButton: 'Close' do: [ :presenter | 
+		addDefaultButton: 'Close' do: [ :presenter | 
 			presenter triggerOkAction.
 			presenter close ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundBindingsPresenter >> initializeInspectorPanel [
 
 	inspectorPanel := (self instantiate: StHeaderPanel)
@@ -102,11 +108,11 @@ StPlaygroundBindingsPresenter >> initializeInspectorPanel [
 		label: 'Inspector'.
 
 	inspector := self newPresenterSelector
-		when: [ :aBinding | aBinding notNil ] show: [ :aBinding | 
+		when: [ :aBinding | aBinding isNotNil ] show: [ :aBinding | 
 			self flag: #TODO. "Temporal? This is to avoid a dependency (while making 
 			inspector work properly)"
 			self class environment 
-				at: #StInspector
+				at: #StInspectorPresenter
 				ifPresent: [ :aClass | self newInspectorWithTransmission: aClass on: aBinding ]
 				ifAbsent: [ self newCodeWithTransmissionOn: aBinding ] ];
 		when: [ :aBinding | aBinding isNil ] show: [ 
@@ -118,19 +124,25 @@ StPlaygroundBindingsPresenter >> initializeInspectorPanel [
 	inspectorPanel presenter: inspector
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundBindingsPresenter >> initializeListPanel [
 
 	bindingPanel := (self instantiate: StHeaderPanel)
 		number: 1;
-		label: 'Bindings'.
+		label: 'Bindings';
+		toolbarActions: self toolbarActions.
 		
 	bindingList := self newTable
-		addColumn: (SpStringTableColumn title: 'Name' evaluated: [ :each | each key ]);
-		addColumn: (SpStringTableColumn 
-			title: 'Scope' 
-			evaluated: [ :each | self scopeNameFor: each ]) 
-			beNotExpandable;
+		addColumn: (SpStringTableColumn new 
+			title: 'Name';
+			evaluated: [ :each | each key ]; 
+			beSortable;
+			yourself);
+		addColumn: (SpStringTableColumn new  
+			title: 'Scope';
+			evaluated: [ :each | self scopeNameFor: each ];
+			beSortable;
+			yourself);
 		contextMenu: [ self contextMenu ];
 		contextKeyBindings: self contextMenuKeyBindings;
 		yourself.
@@ -138,7 +150,7 @@ StPlaygroundBindingsPresenter >> initializeListPanel [
 	bindingPanel presenter: bindingList
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundBindingsPresenter >> initializePresenters [
 
 	self initializeListPanel.
@@ -148,7 +160,7 @@ StPlaygroundBindingsPresenter >> initializePresenters [
 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundBindingsPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
@@ -157,13 +169,13 @@ StPlaygroundBindingsPresenter >> initializeWindow: aWindowPresenter [
 		initialExtent: self class defaultExtent
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StPlaygroundBindingsPresenter >> isLocalBinding: aBinding [
 
 	^ (self application sharedBindings includesKey: aBinding key) not
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundBindingsPresenter >> moveSelectedBindingToLocalScope [
 	| selection |
 		
@@ -171,7 +183,7 @@ StPlaygroundBindingsPresenter >> moveSelectedBindingToLocalScope [
 	parent interactionModel makeBindingLocal: selection
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundBindingsPresenter >> moveSelectedBindingToSharedScope [
 	| selection |
 		
@@ -179,7 +191,7 @@ StPlaygroundBindingsPresenter >> moveSelectedBindingToSharedScope [
 	parent interactionModel makeBindingShared: selection
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundBindingsPresenter >> newCodeWithTransmissionOn: aBinding [
 	
 	^ self newCode 
@@ -190,7 +202,7 @@ StPlaygroundBindingsPresenter >> newCodeWithTransmissionOn: aBinding [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundBindingsPresenter >> newInspectorWithTransmission: aClass on: aBinding [
 	
 	^ self 
@@ -198,7 +210,14 @@ StPlaygroundBindingsPresenter >> newInspectorWithTransmission: aClass on: aBindi
 		on: aBinding value
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
+StPlaygroundBindingsPresenter >> removeAllBindings [
+	
+	parent interactionModel removeAllBindings.
+	self updatePresenterKeepingSelection
+]
+
+{ #category : 'actions' }
 StPlaygroundBindingsPresenter >> removeSelectedBinding [
 
 	self selectedBindingIsLocal 
@@ -207,7 +226,7 @@ StPlaygroundBindingsPresenter >> removeSelectedBinding [
 	self updatePresenterKeepingSelection
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundBindingsPresenter >> scopeNameFor: aBinding [
 
 	^ self application sharedBindings
@@ -216,13 +235,13 @@ StPlaygroundBindingsPresenter >> scopeNameFor: aBinding [
 		ifAbsent: [ 'local' ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundBindingsPresenter >> selectedBinding [
 
 	^ bindingList ifNotNil: [ bindingList selection selectedItem ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StPlaygroundBindingsPresenter >> selectedBindingIsLocal [
 	| selection |
 
@@ -232,19 +251,19 @@ StPlaygroundBindingsPresenter >> selectedBindingIsLocal [
 	^ self isLocalBinding: selection
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StPlaygroundBindingsPresenter >> setModelBeforeInitialization: aPlayground [
 
 	parent := aPlayground
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundBindingsPresenter >> sortedBindingAssociations [
 
 	^ self bindings associations sort: [ :a | self isLocalBinding: a ] ascending
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundBindingsPresenter >> title [
 
 	parent withWindowDo: [ :w | 
@@ -252,7 +271,7 @@ StPlaygroundBindingsPresenter >> title [
 	^ self class defaultTitle
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StPlaygroundBindingsPresenter >> toggleSelectedBindingScope [
 
 	self selectedBindingIsLocal 
@@ -261,14 +280,23 @@ StPlaygroundBindingsPresenter >> toggleSelectedBindingScope [
 	self updatePresenterKeepingSelection
 ]
 
-{ #category : #initialization }
+{ #category : 'private' }
+StPlaygroundBindingsPresenter >> toolbarActions [
+
+	^ CmCommandGroup forSpec
+		beRoot;
+		register: (StRemoveAllBindingsCommand forSpecContext: self);
+		yourself
+]
+
+{ #category : 'initialization' }
 StPlaygroundBindingsPresenter >> updatePresenter [
 	
 	self updatePresenterWithSelection: [
 		bindingList selectIndex: 1 ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundBindingsPresenter >> updatePresenterKeepingSelection [
 	| selection |
 	
@@ -279,7 +307,7 @@ StPlaygroundBindingsPresenter >> updatePresenterKeepingSelection [
 			ifFalse: [ bindingList items first ]) ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundBindingsPresenter >> updatePresenterWithSelection: aBlock [
 	| newBindings oldBindings |
 

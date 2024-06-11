@@ -1,16 +1,17 @@
 Class {
-	#name : #StObjectContextPresenterTest,
-	#superclass : #StInspectorBaseTest,
-	#category : #'NewTools-Inspector-Tests'
+	#name : 'StObjectContextPresenterTest',
+	#superclass : 'StInspectorBaseTest',
+	#category : 'NewTools-Inspector-Tests',
+	#package : 'NewTools-Inspector-Tests'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectContextPresenterTest >> classToTest [
 
 	^ StObjectContextPresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StObjectContextPresenterTest >> initializeInstanceBeforeInitialization: aPresenter [
 	| model context |
 
@@ -24,7 +25,7 @@ StObjectContextPresenterTest >> initializeInstanceBeforeInitialization: aPresent
 		yourself)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StObjectContextPresenterTest >> testDoEvaluateAndGo [
 	| evaluatedValue |
 
@@ -38,10 +39,12 @@ StObjectContextPresenterTest >> testDoEvaluateAndGo [
 	self assert: evaluatedValue equals: 4
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StObjectContextPresenterTest >> testDoEvaluateDeclareGlobal [
 	| value |
 	
+	self skip: 'Because a change in the compiler API, there is no way to hijack OCUndeclaredVariableWarning when the compiler is used a in legacy interactive mode (but such hijack is only performed in this test). So disable the test for now.'.
+
 	self deny: (Smalltalk globals includesKey: #MyGlobalForTest).
 	
 	self openInstance.

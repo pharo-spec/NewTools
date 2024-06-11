@@ -3,12 +3,14 @@ An interaction model to be used in playground contexts.
 It will allow a playground to share variables.
 "
 Class {
-	#name : #StPlaygroundInteractionModel,
-	#superclass : #SpCodeScriptingInteractionModel,
-	#category : #'NewTools-Playground-Model'
+	#name : 'StPlaygroundInteractionModel',
+	#superclass : 'SpCodeScriptingInteractionModel',
+	#category : 'NewTools-Playground-Model',
+	#package : 'NewTools-Playground',
+	#tag : 'Model'
 }
 
-{ #category : #binding }
+{ #category : 'binding' }
 StPlaygroundInteractionModel >> addBinding: aBinding [
 
 	(self isGlobalVariable: aBinding key) ifTrue: [ ^ self ].
@@ -16,19 +18,19 @@ StPlaygroundInteractionModel >> addBinding: aBinding [
 	bindings add: aBinding
 ]
 
-{ #category : #binding }
+{ #category : 'binding' }
 StPlaygroundInteractionModel >> addBindings: aCollection [
 
 	aCollection do: [ :each | self addBinding: each ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundInteractionModel >> application [
 
 	^ self owner application
 ]
 
-{ #category : #binding }
+{ #category : 'binding' }
 StPlaygroundInteractionModel >> bindingOf: aString [
 	| key |
 
@@ -44,7 +46,7 @@ StPlaygroundInteractionModel >> bindingOf: aString [
 	^ self localBindings associationAt: key
 ]
 
-{ #category : #binding }
+{ #category : 'binding' }
 StPlaygroundInteractionModel >> bindings [
 	"Combining shared bindings and local bindings needs to be done like this because the 
 	 #add: method of Dictionary stores the whole association (which in this case is a 
@@ -62,25 +64,25 @@ StPlaygroundInteractionModel >> bindings [
 	^ joinedBindings
 ]
 
-{ #category : #'interactive error protocol' }
+{ #category : 'interactive error protocol' }
 StPlaygroundInteractionModel >> correctFrom: start to: stop with: aString [ 
 	self owner adapter widget correctFrom: start to: stop with: aString 
 ]
 
-{ #category : #binding }
+{ #category : 'binding' }
 StPlaygroundInteractionModel >> hasBindingOf: aString [
 
 	^ (self sharedBindings includesKey: aString asSymbol)
 		or: [ (self localBindings includesKey: aString asSymbol) ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundInteractionModel >> isGlobalVariable: aSymbol [
 
-	^ (self class environment classNamed: aSymbol) notNil
+	^ (self class environment classNamed: aSymbol) isNotNil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundInteractionModel >> localBindings [
 	
 	^ super bindings
@@ -88,21 +90,21 @@ StPlaygroundInteractionModel >> localBindings [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundInteractionModel >> makeBindingLocal: aBinding [	
 
 	self application removeSharedBinding: aBinding.
 	self addBinding: aBinding
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundInteractionModel >> makeBindingShared: aBinding [	
 	
 	self removeBinding: aBinding.
 	self application addSharedBinding: aBinding
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundInteractionModel >> sharedBindings [
 	
 	^ self application sharedBindings 

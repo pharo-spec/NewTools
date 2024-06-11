@@ -1,25 +1,26 @@
 Class {
-	#name : #SindarinStepOverCommand,
-	#superclass : #SindarinCommand,
-	#category : #'NewTools-Sindarin-Commands'
+	#name : 'SindarinStepOverCommand',
+	#superclass : 'SindarinCommand',
+	#category : 'NewTools-Sindarin-Commands',
+	#package : 'NewTools-Sindarin-Commands'
 }
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinStepOverCommand class >> defaultDescription [
 	^ 'Step over'
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinStepOverCommand class >> defaultIconName [
 	^#glamorousOver
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 SindarinStepOverCommand class >> defaultName [
 	^ 'Step Over'
 ]
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 SindarinStepOverCommand >> execute [
 	self context model stepOver.
 	self context refresh.

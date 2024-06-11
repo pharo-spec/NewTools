@@ -3,42 +3,56 @@ I'm an object answering to part of the API of `DebugSession`, but doing nothing.
 You can use me in your tests where messages are sent to a debug session but you do not actually want to act on a real one. 
 "
 Class {
-	#name : #StMockSession,
-	#superclass : #Object,
-	#category : #'NewTools-Debugger-Tests-Utils'
+	#name : 'StMockSession',
+	#superclass : 'Object',
+	#category : 'NewTools-Debugger-Tests-Utils',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Utils'
 }
 
-{ #category : #'debug - session' }
-StMockSession >> implement: aMessage classified: messageCategory inClass: aClass forContext: aContext [
+{ #category : 'reflective operations' }
+StMockSession >> doesNotUnderstand: aMessage [
 
-	
+	^ self
 ]
 
-{ #category : #accessing }
+{ #category : 'debug - session' }
+StMockSession >> implement: aMessage inClass: aClass forContext: aContext [
+]
+
+{ #category : 'accessing' }
 StMockSession >> interruptedContext [
 	 ^self
 ]
 
-{ #category : #'debugging actions' }
+{ #category : 'debugging actions' }
 StMockSession >> restart: aContext [
 ]
 
-{ #category : #'debugging actions' }
+{ #category : 'debugging actions' }
 StMockSession >> returnValue: value from: aContext [
 ]
 
-{ #category : #'debugging actions' }
+{ #category : 'debugging actions' }
 StMockSession >> runToSelection: aSelectionInterval inContext: aContext [
 ]
 
-{ #category : #'debugging actions' }
+{ #category : 'accessing' }
+StMockSession >> scope [
+]
+
+{ #category : 'accessing' }
+StMockSession >> sourceNodeExecuted [
+]
+
+{ #category : 'debugging actions' }
 StMockSession >> stepInto: aContext [ 
 ]
 
-{ #category : #'debugging actions' }
+{ #category : 'debugging actions' }
 StMockSession >> stepOver: aContext [
 ]
 
-{ #category : #'debugging actions' }
+{ #category : 'debugging actions' }
 StMockSession >> stepThrough: aContext [
 ]

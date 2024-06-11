@@ -1,72 +1,66 @@
 Class {
-	#name : #StSpotterCandidatesListProcessor,
-	#superclass : #StSpotterCandidatesProcessor,
+	#name : 'StSpotterCandidatesListProcessor',
+	#superclass : 'StSpotterCandidatesProcessor',
 	#instVars : [
 		'allCandidatesBlock',
 		'candidatesLimit',
 		'title',
 		'itemNameBlock',
-		'itemIconBlock',
 		'actBlock',
 		'wantsToDisplayOnEmptyQuery',
 		'filterBlock',
 		'keyBinding',
-		'sortBlock'
+		'sortBlock',
+		'itemIconNameBlock'
 	],
-	#category : #'NewTools-Spotter-Processors'
+	#category : 'NewTools-Spotter-Processors',
+	#package : 'NewTools-Spotter-Processors'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidatesListProcessor >> actLogic [
 	^ actBlock
 ]
 
-{ #category : #scripting }
+{ #category : 'scripting' }
 StSpotterCandidatesListProcessor >> actLogic: aBlockWithTwoArguments [
 
 	actBlock := aBlockWithTwoArguments
 ]
 
-{ #category : #private }
-StSpotterCandidatesListProcessor >> actOn: anObject for: aStep [
-	
-	actBlock
-		ifNil: [ super actOn: anObject for: aStep ]
-		ifNotNil: [ actBlock cull: anObject cull: aStep ]
-]
-
-{ #category : #compatibility }
+{ #category : 'compatibility' }
 StSpotterCandidatesListProcessor >> allCandidates: aBlockWithOneArgument [
 	self items: aBlockWithOneArgument
 ]
 
-{ #category : #compatibility }
+{ #category : 'compatibility' }
 StSpotterCandidatesListProcessor >> candidatesLimit: anInteger [
 	self itemsLimit: anInteger
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterCandidatesListProcessor >> computeAllItemsIn: aContext [
+
 	^ allCandidatesBlock cull: aContext
 ]
 
-{ #category : #compatibility }
+{ #category : 'compatibility' }
 StSpotterCandidatesListProcessor >> defaultCandidatesLimit [
 	^ self defaultItemsLimit
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 StSpotterCandidatesListProcessor >> defaultContinueItemsLimit [
 	" Spotter becomes extraordenary slow when rendering too many results. So we set the maximum limit to 100. This is only a temporary solution until we have fixed the problem. Until then no spotter processor will ever generate more then 100 results. "
 	^ 100
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 StSpotterCandidatesListProcessor >> defaultItemsLimit [
 	^ self class defaultItemsLimit
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterCandidatesListProcessor >> doFilterInContext: aSpotterContext [
 
 	^ aSpotterContext 
@@ -74,17 +68,17 @@ StSpotterCandidatesListProcessor >> doFilterInContext: aSpotterContext [
 		forProcessor: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidatesListProcessor >> filter [
 	^ filterBlock
 ]
 
-{ #category : #scripting }
+{ #category : 'scripting' }
 StSpotterCandidatesListProcessor >> filter: aGTFilterOrBlockWithOneArgument [
 	filterBlock := aGTFilterOrBlockWithOneArgument 
 ]
 
-{ #category : #scripting }
+{ #category : 'scripting' }
 StSpotterCandidatesListProcessor >> filter: aFilter item: anIterator [ 
 
 	self filter: aFilter.
@@ -92,75 +86,81 @@ StSpotterCandidatesListProcessor >> filter: aFilter item: anIterator [
 	
 ]
 
-{ #category : #compatibility }
+{ #category : 'compatibility' }
 StSpotterCandidatesListProcessor >> filterUsing: aFilter [
 	self filter: aFilter
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterCandidatesListProcessor >> hasDynamicItems [
 
 	^ allCandidatesBlock stHasDynamicItems
 ]
 
-{ #category : #accessing }
-StSpotterCandidatesListProcessor >> itemIcon [
-	^ itemIconBlock
+{ #category : 'scripting' }
+StSpotterCandidatesListProcessor >> itemIconName [
+
+	^ itemIconNameBlock
 ]
 
-{ #category : #scripting }
-StSpotterCandidatesListProcessor >> itemIcon: aBlockWithOneArgument [
-	itemIconBlock := aBlockWithOneArgument
+{ #category : 'scripting' }
+StSpotterCandidatesListProcessor >> itemIconName: aBlock [
+
+	itemIconNameBlock := aBlock
 ]
 
-{ #category : #private }
-StSpotterCandidatesListProcessor >> itemIconFor: anObject [
+{ #category : 'private' }
+StSpotterCandidatesListProcessor >> itemIconNameFor: anObject [
 
-	^ itemIconBlock ifNil: [ super itemIconFor: anObject ] ifNotNil: [ itemIconBlock cull: anObject ]
+	^ itemIconNameBlock 
+		ifNotNil: [ itemIconNameBlock cull: anObject ]
+		ifNil: [ super itemIconNameFor: anObject ] 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidatesListProcessor >> itemName [
 	^ itemNameBlock
 ]
 
-{ #category : #scripting }
+{ #category : 'scripting' }
 StSpotterCandidatesListProcessor >> itemName: aBlockWithOneArgument [
 	itemNameBlock := aBlockWithOneArgument
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterCandidatesListProcessor >> itemNameFor: anObject [
 
-	^ itemNameBlock ifNil: [ super itemNameFor: anObject ] ifNotNil: [ itemNameBlock cull: anObject ]
+	^ itemNameBlock 
+		ifNotNil: [ itemNameBlock cull: anObject ]
+		ifNil: [ super itemNameFor: anObject ] 
 ]
 
-{ #category : #scripting }
+{ #category : 'scripting' }
 StSpotterCandidatesListProcessor >> items: aBlock [
 	allCandidatesBlock := aBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidatesListProcessor >> itemsLimit [
 	^ candidatesLimit ifNil: [ self defaultItemsLimit ]
 ]
 
-{ #category : #scripting }
+{ #category : 'scripting' }
 StSpotterCandidatesListProcessor >> itemsLimit: anInteger [
 	candidatesLimit := anInteger
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidatesListProcessor >> keyBinding [
 	^ keyBinding
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidatesListProcessor >> keyBinding: anObject [
 	keyBinding := anObject
 ]
 
-{ #category : #'scripting - convenience' }
+{ #category : 'scripting - convenience' }
 StSpotterCandidatesListProcessor >> match: aBlockWithTwoArguments [
 
 	self filter: (StFilterBlock new 
@@ -168,62 +168,62 @@ StSpotterCandidatesListProcessor >> match: aBlockWithTwoArguments [
 		yourself)
 ]
 
-{ #category : #'scripting - convenience' }
+{ #category : 'scripting - convenience' }
 StSpotterCandidatesListProcessor >> matchAlike [
 	self filter: StFilterAlike
 ]
 
-{ #category : #'scripting - convenience' }
+{ #category : 'scripting - convenience' }
 StSpotterCandidatesListProcessor >> matchRegex [
 	self filter: StFilterRegex
 ]
 
-{ #category : #'scripting - convenience' }
+{ #category : 'scripting - convenience' }
 StSpotterCandidatesListProcessor >> matchString [
 	self filter: StFilterStringMatch
 ]
 
-{ #category : #'scripting - convenience' }
+{ #category : 'scripting - convenience' }
 StSpotterCandidatesListProcessor >> matchSubstring [
 	self filter: StFilterSubstring
 ]
 
-{ #category : #'scripting - convenience' }
+{ #category : 'scripting - convenience' }
 StSpotterCandidatesListProcessor >> matchSubstrings [
 	self filter: StFilterSubstrings
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidatesListProcessor >> sort [
 	^ sortBlock
 ]
 
-{ #category : #scripting }
+{ #category : 'scripting' }
 StSpotterCandidatesListProcessor >> sort: aBlockWithTwoArguments [
 	sortBlock := aBlockWithTwoArguments
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidatesListProcessor >> title [
 	^ title ifNil: [ super title ]
 ]
 
-{ #category : #scripting }
+{ #category : 'scripting' }
 StSpotterCandidatesListProcessor >> title: aString [
 	title := aString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidatesListProcessor >> wantsToDisplayOnEmptyQuery [
 	^ wantsToDisplayOnEmptyQuery ifNil: [ super wantsToDisplayOnEmptyQuery ]
 ]
 
-{ #category : #scripting }
+{ #category : 'scripting' }
 StSpotterCandidatesListProcessor >> wantsToDisplayOnEmptyQuery: anObject [
 	wantsToDisplayOnEmptyQuery := anObject
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterCandidatesListProcessor >> withItemsLimit: aLimit do: aBlock [
 	| previousCandidatesLimit |
 	previousCandidatesLimit := candidatesLimit.

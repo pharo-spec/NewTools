@@ -1,13 +1,15 @@
 Class {
-	#name : #StSBClassModel,
-	#superclass : #StSBModel,
+	#name : 'StSBClassModel',
+	#superclass : 'StSBModel',
 	#instVars : [
 		'modelClass'
 	],
-	#category : #'NewTools-SystemBrowser-Model'
+	#category : 'NewTools-SystemBrowser-Model',
+	#package : 'NewTools-SystemBrowser',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StSBClassModel class >> newEnvironment: anEnvironment  class: aClass [
 
 	^ self new 
@@ -16,13 +18,13 @@ StSBClassModel class >> newEnvironment: anEnvironment  class: aClass [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBClassModel >> behavior [
 
 	^ nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBClassModel >> classProtocols [
 
 	^ self classQuery execute items collect: [ :each |
@@ -31,7 +33,7 @@ StSBClassModel >> classProtocols [
 			protocol: each  ]
 ]
 
-{ #category : #'private queries' }
+{ #category : 'private queries' }
 StSBClassModel >> classQuery [
 
 	^ ClyAllMethodGroupsQuery 
@@ -40,32 +42,32 @@ StSBClassModel >> classQuery [
 		in: self environment
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBClassModel >> comment [
 
 	^ self modelClass comment
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBClassModel >> definition [
 
 	^ self modelClass definitionWithSlots
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBClassModel >> icon [
 
 	^ self modelClass systemIcon
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBClassModel >> installInteractionModelTo: aCodePresenter [
 
 	aCodePresenter beForBehavior: self behavior
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBClassModel >> instanceProtocols [
 
 	^ self instanceQuery execute items collect: [ :each |
@@ -74,7 +76,7 @@ StSBClassModel >> instanceProtocols [
 			protocol: each  ]
 ]
 
-{ #category : #'private queries' }
+{ #category : 'private queries' }
 StSBClassModel >> instanceQuery [
 
 	^ ClyAllMethodGroupsQuery 
@@ -83,23 +85,23 @@ StSBClassModel >> instanceQuery [
 		in: self environment
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBClassModel >> modelClass [
 	^ modelClass
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBClassModel >> modelClass: anObject [
 	modelClass := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBClassModel >> name [
 
 	^ self modelClass name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBClassModel >> windowTitle [ 
 
 	^ 'Class: ', self name

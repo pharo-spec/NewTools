@@ -2,20 +2,22 @@
 Announce all candidates has been found.
 "
 Class {
-	#name : #StSpotterAllCandidatesAdded,
-	#superclass : #StSpotterAnnouncement,
+	#name : 'StSpotterAllCandidatesAdded',
+	#superclass : 'StSpotterAnnouncement',
 	#instVars : [
 		'candidateLinks'
 	],
-	#category : #'NewTools-Spotter-Announcements'
+	#category : 'NewTools-Spotter-Announcements',
+	#package : 'NewTools-Spotter',
+	#tag : 'Announcements'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterAllCandidatesAdded >> candidateLinks [
 	^ candidateLinks
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterAllCandidatesAdded >> candidateLinks: anObject [
 	candidateLinks := anObject
 ]

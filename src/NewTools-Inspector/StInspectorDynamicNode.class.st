@@ -3,17 +3,19 @@ I am a variable node for representing any dynamically computed attribute that sh
 I should not be used for slots or indexed variables.
 "
 Class {
-	#name : #StInspectorDynamicNode,
-	#superclass : #StInspectorNode,
+	#name : 'StInspectorDynamicNode',
+	#superclass : 'StInspectorNode',
 	#instVars : [
 		'label',
 		'value',
 		'tag'
 	],
-	#category : #'NewTools-Inspector-Model'
+	#category : 'NewTools-Inspector-Model',
+	#package : 'NewTools-Inspector',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StInspectorDynamicNode class >> hostObject: anObject label: aString value: anotherObject [
 	^ (self hostObject: anObject) 
 		label: aString;
@@ -21,38 +23,38 @@ StInspectorDynamicNode class >> hostObject: anObject label: aString value: anoth
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorDynamicNode >> key [
 	^ label
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorDynamicNode >> label [
 	^ label
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorDynamicNode >> label: aString [
 	label := aString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorDynamicNode >> rawValue [
 
 	^ value
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorDynamicNode >> rawValue: anObject [
 	value := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorDynamicNode >> variableTag [
 	^  tag ifNil: [ super variableTag ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorDynamicNode >> variableTag: aTag [
 	tag := aTag
 ]

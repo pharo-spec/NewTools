@@ -21,75 +21,77 @@ Create an iterator that allows to filter by a string, comparing with substring:,
 Creates an itearator that returns no duplicates.
 "
 Class {
-	#name : #StIterator,
-	#superclass : #Object,
+	#name : 'StIterator',
+	#superclass : 'Object',
 	#instVars : [
 		'onReset'
 	],
-	#category : #'NewTools-Spotter-Processors-Iterators'
+	#category : 'NewTools-Spotter-Processors-Iterators',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Iterators'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StIterator class >> isAbstract [
 
 	^ self == StIterator
 ]
 
-{ #category : #sequencing }
+{ #category : 'sequencing' }
 StIterator >> , aStGeneratorIterator [ 
 	
 	^ StSequenceIterator with: { self. aStGeneratorIterator }
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StIterator >> asBeginsWithFilter [
 	
 	^ self beginsWithFilter: ''
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StIterator >> asSubstringFilter [
 	
 	^ self substringFilter: ''
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StIterator >> asWithoutDuplicates [
 	
 	^ StWithoutDuplicatesDecorator on: self
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StIterator >> atEnd [ 
 
 	^ self subclassResponsibility 
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StIterator >> beginsWithFilter: aString [ 
 	
 	^ StBeginsWithFilter on: self with: aString
 ]
 
-{ #category : #transforming }
+{ #category : 'transforming' }
 StIterator >> collect: aBlockClosure [ 
 	
 	^ StTransformation on: self with: aBlockClosure
 ]
 
-{ #category : #protected }
+{ #category : 'protected' }
 StIterator >> doReset [
 	
 	^ self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StIterator >> next [
 
 	self subclassResponsibility 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StIterator >> next: aQuantity [
 
 	^ OrderedCollection streamContents: [ :stream | | total last |
@@ -98,35 +100,35 @@ StIterator >> next: aQuantity [
 				last ifNotNil: [  
 					stream nextPut: last.
 					total := total + 1 ] ]
-				doWhileTrue: [ total < aQuantity and: [ last notNil ] ] ]
+				doWhileTrue: [ total < aQuantity and: [ last isNotNil ] ] ]
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 StIterator >> onReset: aValuable [
 
 	onReset := aValuable
 ]
 
-{ #category : #reseting }
+{ #category : 'reseting' }
 StIterator >> reset [
 
 	self doReset.
 	onReset ifNotNil: [ onReset value ]
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StIterator >> select: aBlockClosure [ 
 	
 	^ StFilter on: self with: aBlockClosure 
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StIterator >> substringFilter: aString [ 
 	
 	^ StSubStringFilter on: self with: aString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StIterator >> upToEnd [
 
 	^ OrderedCollection

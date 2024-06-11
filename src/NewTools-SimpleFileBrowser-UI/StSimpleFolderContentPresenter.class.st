@@ -2,17 +2,19 @@
 Show the content of a folder as list
 "
 Class {
-	#name : #StSimpleFolderContentPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StSimpleFolderContentPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'table',
 		'folder',
 		'detail'
 	],
-	#category : #'NewTools-SimpleFileBrowser-UI-Components'
+	#category : 'NewTools-SimpleFileBrowser-UI-Components',
+	#package : 'NewTools-SimpleFileBrowser-UI',
+	#tag : 'Components'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 StSimpleFolderContentPresenter class >> defaultSpec [
 
 	^ SpPanedLayout newTopToBottom
@@ -22,13 +24,13 @@ StSimpleFolderContentPresenter class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 StSimpleFolderContentPresenter class >> example [
 
 	^self openOn: FileSystem workingDirectory
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StSimpleFolderContentPresenter class >> on: aFileReference [
 
 	^(self new)
@@ -36,24 +38,24 @@ StSimpleFolderContentPresenter class >> on: aFileReference [
 		yourself
 ]
 
-{ #category : #show }
+{ #category : 'show' }
 StSimpleFolderContentPresenter class >> openOn: aFileReference [
 
 	(self on: aFileReference) openWithSpec
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFolderContentPresenter >> detail [
 
 	^detail ifNil: [ detail := (self instantiate: StSimpleFileDetailPresenter) ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFolderContentPresenter >> folder [
 	^ folder
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFolderContentPresenter >> folder: anObject [
 	folder := anObject.
 	detail showFile: nil.
@@ -61,7 +63,7 @@ StSimpleFolderContentPresenter >> folder: anObject [
 	
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSimpleFolderContentPresenter >> initializePresenters [
 
 	self detail.
@@ -84,13 +86,13 @@ StSimpleFolderContentPresenter >> initializePresenters [
 			evaluated: [ :each | each size ])
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFolderContentPresenter >> table [
 
 	^table ifNil: [ table := self newTable ]
 ]
 
-{ #category : #'api-events' }
+{ #category : 'api-events' }
 StSimpleFolderContentPresenter >> whenItemsChangedDo: aBlock [
 	
 	table whenSelectionChangedDo: [ :selection | 

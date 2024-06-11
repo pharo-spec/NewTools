@@ -4,23 +4,26 @@ It will include the first line of the page and the creation date.
 I am meant to be used in StPlaygroundPagesPresenter, as element of a list.
 "
 Class {
-	#name : #StPlaygroundPageSummaryPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StPlaygroundPageSummaryPresenter',
+	#superclass : 'SpPresenter',
+	#traits : 'SpTModel',
+	#classTraits : 'SpTModel classTrait',
 	#instVars : [
-		'page',
 		'firstLineLabel',
 		'timeLabel'
 	],
-	#category : #'NewTools-Playground-View'
+	#category : 'NewTools-Playground-View',
+	#package : 'NewTools-Playground',
+	#tag : 'View'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPageSummaryPresenter >> contents [
 
-	^ page contents
+	^ self model contents
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPageSummaryPresenter >> initializePresenters [
 
 	layout := SpBoxLayout newTopToBottom
@@ -30,30 +33,25 @@ StPlaygroundPageSummaryPresenter >> initializePresenters [
 		add: (timeLabel := self newLabel) expand: false;
 		yourself.
 
-	firstLineLabel label: self pageFirstLine.
-	timeLabel 
-		addStyle: 'dim';
-		label: page creationTime epiceaBrowsersAsString
+	timeLabel addStyle: 'dim'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPageSummaryPresenter >> page [
 
-	^ page
+	^ self model
 ]
 
-{ #category : #initialization }
-StPlaygroundPageSummaryPresenter >> pageFirstLine [
-		
-	page readStreamDo: [ :stream | | line |
-		[ stream atEnd not and: [ (line := stream nextLine trimmed) isEmpty ] ] whileTrue.
-		line isEmptyOrNil ifFalse: [ ^ line ] ].
+{ #category : 'initialization' }
+StPlaygroundPageSummaryPresenter >> pageTitle [
 
-	^ 'Empty'
+	^ self model title
 ]
 
-{ #category : #'accessing - model' }
-StPlaygroundPageSummaryPresenter >> setModelBeforeInitialization: aPage [
+{ #category : 'initialization' }
+StPlaygroundPageSummaryPresenter >> updatePresenter [
 
-	page := aPage
+	self model ifNil: [ ^ self ].
+	firstLineLabel label: self pageTitle.
+	timeLabel label: self model modificationTime epiceaBrowsersAsString
 ]

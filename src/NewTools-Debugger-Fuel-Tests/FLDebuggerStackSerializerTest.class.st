@@ -1,10 +1,11 @@
 Class {
-	#name : #FLDebuggerStackSerializerTest,
-	#superclass : #TestCase,
-	#category : #'NewTools-Debugger-Fuel-Tests'
+	#name : 'FLDebuggerStackSerializerTest',
+	#superclass : 'TestCase',
+	#category : 'NewTools-Debugger-Fuel-Tests',
+	#package : 'NewTools-Debugger-Fuel-Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 FLDebuggerStackSerializerTest >> testFileNameForContext [
 	| stackSerializer context fileName |
 	stackSerializer := FLDebuggerStackSerializer new.
@@ -18,7 +19,7 @@ FLDebuggerStackSerializerTest >> testFileNameForContext [
 		 , '-*.fuel' match: fileName)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FLDebuggerStackSerializerTest >> testSerializeContextToFileNamed [
 	| context file |
 	context := [  ] asContext.
@@ -30,11 +31,13 @@ FLDebuggerStackSerializerTest >> testSerializeContextToFileNamed [
 	self assert: file exists.
 	self
 		should: [ 
-		FLMaterializer materializeFromFileNamed: 'serialized-stack' ]
+			FLMaterializer new
+				filePath: 'serialized-stack';
+				materializeRoot ]
 		raise: FLDebuggerStackMaterialization
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FLDebuggerStackSerializerTest >> testSerializeStackFromContext [
 	| stackSerializer context |
 	stackSerializer := FLDebuggerStackSerializer new.
@@ -45,6 +48,8 @@ FLDebuggerStackSerializerTest >> testSerializeStackFromContext [
 	self assert: stackSerializer fileName asFileReference exists.
 	self
 		should: [ 
-		FLMaterializer materializeFromFileNamed: stackSerializer fileName ]
+			FLMaterializer new
+				filePath: stackSerializer fileName;
+				materializeRoot ]
 		raise: FLDebuggerStackMaterialization
 ]

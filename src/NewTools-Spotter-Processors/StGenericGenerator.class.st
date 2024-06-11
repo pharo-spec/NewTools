@@ -1,5 +1,5 @@
 "
-I wrap a generator to provide the same API than the iterators.
+I wrap a generator to provide the same API as the iterators.
 My subclasses should implement #elementsDo: to iterate the collection or implement the values.
 In this method, each of the generated values should be used with the valuable pased.
 
@@ -11,58 +11,60 @@ elementsDo: aValuable
 This example generates an infinite iterator always returning 42.
 Using the generator will produce that the method is only executed on demand.
 
-This Iterator can also wrap collections, iterating one element at the time.
+This Iterator can also wrap collections, iterating one element at a time.
 
 Ex:
 elementsDo: aValuable
 	SystemNavigation default allBehaviorsDo: aValuable
 "
 Class {
-	#name : #StGenericGenerator,
-	#superclass : #StIterator,
+	#name : 'StGenericGenerator',
+	#superclass : 'StIterator',
 	#instVars : [
 		'generator'
 	],
-	#category : #'NewTools-Spotter-Processors-Iterators'
+	#category : 'NewTools-Spotter-Processors-Iterators',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Iterators'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StGenericGenerator class >> isAbstract [
 
 	^ self == StGenericGenerator
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StGenericGenerator >> atEnd [ 
 
 	^ generator atEnd
 ]
 
-{ #category : #protected }
+{ #category : 'protected' }
 StGenericGenerator >> doReset [
 	generator := Generator on: [ :aGenerator | 
 		self elementsDo: [ :each | aGenerator yield: each ] ]
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 StGenericGenerator >> elementsDo: aValuable [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StGenericGenerator >> initialize [
 	super initialize.
 	self reset
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StGenericGenerator >> next [
 
 	^ generator next
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StGenericGenerator >> next: aQuantity [
 
 	^ generator next: aQuantity

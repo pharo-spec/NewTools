@@ -2,15 +2,17 @@
 Announce a processor execution ended.
 "
 Class {
-	#name : #StSpotterProcessorEnded,
-	#superclass : #Announcement,
+	#name : 'StSpotterProcessorEnded',
+	#superclass : 'Announcement',
 	#instVars : [
 		'processor'
 	],
-	#category : #'NewTools-Spotter-Announcements'
+	#category : 'NewTools-Spotter-Announcements',
+	#package : 'NewTools-Spotter',
+	#tag : 'Announcements'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StSpotterProcessorEnded class >> newProcessor: aProcessor [
 
 	^ self new 
@@ -18,13 +20,13 @@ StSpotterProcessorEnded class >> newProcessor: aProcessor [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessorEnded >> processor [
 
 	^ processor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessorEnded >> processor: anObject [
 
 	processor := anObject

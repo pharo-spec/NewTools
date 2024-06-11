@@ -2,40 +2,51 @@
 I open the page selector persenter and allow the user to chose a page to load.
 "
 Class {
-	#name : #StPlaygroundPagesCommand,
-	#superclass : #StPlaygroundCommand,
-	#category : #'NewTools-Playground-Command'
+	#name : 'StPlaygroundPagesCommand',
+	#superclass : 'StPlaygroundCommand',
+	#category : 'NewTools-Playground-Command',
+	#package : 'NewTools-Playground',
+	#tag : 'Command'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 StPlaygroundPagesCommand class >> defaultDescription [
 
 	^ 'Load a saved page'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPagesCommand class >> defaultIconName [
 
 	^ #glamorousMore
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 StPlaygroundPagesCommand class >> defaultName [
 
 	^ 'Pages'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPagesCommand class >> order [
 
 	^ 30
 ]
 
-{ #category : #execution }
+{ #category : 'execution' }
 StPlaygroundPagesCommand >> execute [ 
 
 	(StPlaygroundPagesPresenter 
 		newApplication: context application
 		model: context) 
+		onLoadPage: [ :page |
+			self loadPage: page.
+			context takeKeyboardFocus ];
 		openDialog
+]
+
+{ #category : 'actions' }
+StPlaygroundPagesCommand >> loadPage: page [
+
+	context loadPage: page
 ]

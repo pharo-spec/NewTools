@@ -1,25 +1,26 @@
 Class {
-	#name : #StGtkDebugSession,
-	#superclass : #GtkDebugSession,
+	#name : 'StGtkDebugSession',
+	#superclass : 'GtkDebugSession',
 	#instVars : [
 		'application'
 	],
-	#category : #'NewTools-Gtk'
+	#category : 'NewTools-Gtk',
+	#package : 'NewTools-Gtk'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StGtkDebugSession >> application [
 
 	^ application
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StGtkDebugSession >> application: anApplication [
 
 	application := anApplication
 ]
 
-{ #category : #private }
+{ #category : 'initialization' }
 StGtkDebugSession >> initialize [
 
 	super initialize. 

@@ -2,15 +2,17 @@
 A filter that evaluates a block to obtain matching items.
 "
 Class {
-	#name : #StFilterBlock,
-	#superclass : #StUnorderedFilter,
+	#name : 'StFilterBlock',
+	#superclass : 'StUnorderedFilter',
 	#instVars : [
 		'matcher'
 	],
-	#category : #'NewTools-Spotter-Filters'
+	#category : 'NewTools-Spotter-Filters',
+	#package : 'NewTools-Spotter',
+	#tag : 'Filters'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 StFilterBlock >> isMatchedItem: anItem [
 
 	^ self matcher 
@@ -19,12 +21,12 @@ StFilterBlock >> isMatchedItem: anItem [
 		
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFilterBlock >> matcher [
 	^ matcher
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StFilterBlock >> matcher: anObject [
 	matcher := anObject
 ]

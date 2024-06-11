@@ -4,12 +4,14 @@ It can update the code panel through a double dispatch (see `DiffLineChangeRecor
 
 "
 Class {
-	#name : #DiffLineChangeRecordConverter,
-	#superclass : #DiffVersionChangeRecordConverter,
-	#category : #'NewTools-MethodBrowsers-Base'
+	#name : 'DiffLineChangeRecordConverter',
+	#superclass : 'DiffVersionChangeRecordConverter',
+	#category : 'NewTools-MethodBrowsers-Base',
+	#package : 'NewTools-MethodBrowsers',
+	#tag : 'Base'
 }
 
-{ #category : #updating }
+{ #category : 'updating' }
 DiffLineChangeRecordConverter >> updateContent: content on: aVersionBrowser [
 	
 	aVersionBrowser updateDiffLine: content

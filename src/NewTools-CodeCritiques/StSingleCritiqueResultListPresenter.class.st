@@ -14,8 +14,8 @@ You can open me whit:
 
 "
 Class {
-	#name : #StSingleCritiqueResultListPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StSingleCritiqueResultListPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'rule',
 		'critiquesModel',
@@ -26,10 +26,12 @@ Class {
 	#classInstVars : [
 		'icons'
 	],
-	#category : #'NewTools-CodeCritiques-Parts'
+	#category : 'NewTools-CodeCritiques-Parts',
+	#package : 'NewTools-CodeCritiques',
+	#tag : 'Parts'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 StSingleCritiqueResultListPresenter class >> defaultSpec [
 
 	^ SpBoxLayout newTopToBottom
@@ -39,7 +41,7 @@ StSingleCritiqueResultListPresenter class >> defaultSpec [
 		  yourself
 ]
 
-{ #category : #icons }
+{ #category : 'icons' }
 StSingleCritiqueResultListPresenter class >> exclamationIcon [ 
 
 	^  icons
@@ -48,7 +50,7 @@ StSingleCritiqueResultListPresenter class >> exclamationIcon [
 
 ]
 
-{ #category : #icons }
+{ #category : 'icons' }
 StSingleCritiqueResultListPresenter class >> exclamationIconContents [
 	"Private - Method generated"
 	^ 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0
@@ -66,26 +68,26 @@ xsBV74Or3od4OISPr0e3SHa3PX0f3HXKofNH/UIG9pZ5PeUth+CyS2EMkEqs4fPEOBJLsysk
 e48/+xD8oxcAYPzs4QaS7RR2kbLTTOTQieczfzfTv8QPldGvTGoF6/8AAAAASUVORK5CYII='
 ]
 
-{ #category : #'class initialization' }
+{ #category : 'class initialization' }
 StSingleCritiqueResultListPresenter class >> initialize [
 	
 	icons := IdentityDictionary new
 ]
 
-{ #category : #icons }
+{ #category : 'icons' }
 StSingleCritiqueResultListPresenter class >> open [
 
 	<example>
 	^ self new open
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StSingleCritiqueResultListPresenter class >> title [
 
 	^ 'Critique Browser'
 ]
 
-{ #category : #icons }
+{ #category : 'icons' }
 StSingleCritiqueResultListPresenter class >> wrenchOrangeIcon [
 
 	^  icons
@@ -94,7 +96,7 @@ StSingleCritiqueResultListPresenter class >> wrenchOrangeIcon [
 
 ]
 
-{ #category : #icons }
+{ #category : 'icons' }
 StSingleCritiqueResultListPresenter class >> wrenchOrangeIconContents [
 	"Private - Method generated"
 	^ 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0
@@ -110,21 +112,21 @@ ZfiyAUWx/OY25O4JHBP4CtyZ16a9EwuRi1CXs+5K1ew6lB9DXERX517P8tEsPDzfNIP6C5Ye
 QewSrJyeCd4P0bnwXYISy3MCn5oZNtsf3pH46e7XBJcAAAAASUVORK5CYII='
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 StSingleCritiqueResultListPresenter >> addCritiqueToDo [
 
 	critiquesModel selectedItems ifNotNil: [ :items | 
 		items do: [ :item | cache addToDo: item forRule: rule ] ]
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 StSingleCritiqueResultListPresenter >> addCritiqueToFalsePositive [
 
 	critiquesModel selectedItems ifNotNil: [ :items | 
 		items do: [ :item | cache addFalsePositive: item forRule: rule ] ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSingleCritiqueResultListPresenter >> applyTransformation [
 
 	critiquesModel selectedItem ifNotNil: [ :critique | 
@@ -132,7 +134,7 @@ StSingleCritiqueResultListPresenter >> applyTransformation [
 			 { critique change }) open ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSingleCritiqueResultListPresenter >> banRule [
 
 	| crit |
@@ -140,7 +142,7 @@ StSingleCritiqueResultListPresenter >> banRule [
 	crit guidedBan
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 StSingleCritiqueResultListPresenter >> browseCritique [
 
 	critiquesModel selectedItem ifNotNil: [ :element | 
@@ -151,7 +153,7 @@ StSingleCritiqueResultListPresenter >> browseCritique [
 			ifFalse: [ entity browse ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSingleCritiqueResultListPresenter >> buildMenuCritique [
 
 	^ SpMenuPresenter new
@@ -198,25 +200,25 @@ StSingleCritiqueResultListPresenter >> buildMenuCritique [
 		  yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSingleCritiqueResultListPresenter >> cache: aCache [
 
 	cache := aCache
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSingleCritiqueResultListPresenter >> connectPresenters [
 
 	self whenSelectedItemChangesOnListModel
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSingleCritiqueResultListPresenter >> critiquesModel [
 
 	^ critiquesModel
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSingleCritiqueResultListPresenter >> critiquesOf: aRule [
 
 	cache ifNil: [ ^ {  } ].
@@ -224,7 +226,7 @@ StSingleCritiqueResultListPresenter >> critiquesOf: aRule [
 			 a printString < b printString ])
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSingleCritiqueResultListPresenter >> diffSeparator [
 
 	^ '——————————————————
@@ -232,7 +234,7 @@ StSingleCritiqueResultListPresenter >> diffSeparator [
 '
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSingleCritiqueResultListPresenter >> diffTextForChange: aRefactoryChange [
 
 	| text builder |
@@ -247,19 +249,19 @@ StSingleCritiqueResultListPresenter >> diffTextForChange: aRefactoryChange [
 	^ text
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSingleCritiqueResultListPresenter >> falsePositiveColor [
 	^ Color darkGray
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSingleCritiqueResultListPresenter >> formatCritique: aCritique [
 
 	^ String streamContents: [ :s | 
 		  aCritique sourceAnchor entity criticNameOn: s ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSingleCritiqueResultListPresenter >> iconFor: anItem [
 
 	^ (cache isFalsePositive: anItem forRule: rule) ifFalse: [ 
@@ -276,14 +278,14 @@ StSingleCritiqueResultListPresenter >> iconFor: anItem [
 							  ifFalse: [ self iconNamed: #smallError ] ] ] ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSingleCritiqueResultListPresenter >> initialize [
 
 	super initialize.
 	self initializeShortcuts
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSingleCritiqueResultListPresenter >> initializeDisplayCritique: aCritique forRule: aRule [
 
 	| critiqueRepresentation |
@@ -297,7 +299,7 @@ StSingleCritiqueResultListPresenter >> initializeDisplayCritique: aCritique forR
 				  critiqueRepresentation color: self class theme textColor ] ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSingleCritiqueResultListPresenter >> initializePresenters [
 
 	critiquesModel := self newList.
@@ -314,7 +316,7 @@ StSingleCritiqueResultListPresenter >> initializePresenters [
 		add: sourceCodeModel
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSingleCritiqueResultListPresenter >> initializeShortcuts [
 
 	critiquesModel
@@ -322,27 +324,30 @@ StSingleCritiqueResultListPresenter >> initializeShortcuts [
 		toAction: [ self browseCritique ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSingleCritiqueResultListPresenter >> isCritiqueFalsePositive [
 
 	^ critiquesModel selectedItems anySatisfy: [ :critique | 
 		  cache isFalsePositive: critique forRule: rule ]
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 StSingleCritiqueResultListPresenter >> isCritiqueToDo [
 
 	^ critiquesModel selectedItems anySatisfy: [ :critique | 
 		  cache isToDo: critique forRule: rule ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSingleCritiqueResultListPresenter >> newSourceCodeCritique [
 	
-	^ SpCodePresenter new beNotEditable.
+	^ SpCodePresenter new 
+		beNotEditable;
+		withoutSyntaxHighlight;
+		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSingleCritiqueResultListPresenter >> rationaleOfRule [
 
 	| crit |
@@ -353,32 +358,32 @@ StSingleCritiqueResultListPresenter >> rationaleOfRule [
 		descriptionViewedFor: crit sourceAnchor entity
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 StSingleCritiqueResultListPresenter >> removeCritiqueToDo [
 
 	critiquesModel selectedItems ifNotNil: [ :items | 
 		items do: [ :item | cache removeToDo: item forRule: rule ] ]
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 StSingleCritiqueResultListPresenter >> removeCritiqueToFalsePositive [
 
 	critiquesModel selectedItems ifNotNil: [ :items | 
 		items do: [ :item | cache removeFalsePositive: item forRule: rule ] ]
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StSingleCritiqueResultListPresenter >> resetSelection [
 
 	self critiquesModel resetListSelection
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSingleCritiqueResultListPresenter >> rule [
 	^ rule
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSingleCritiqueResultListPresenter >> rule: aRule [
 
 	rule := aRule.
@@ -387,17 +392,17 @@ StSingleCritiqueResultListPresenter >> rule: aRule [
 	toolbarModel rule: aRule
 ]
 
-{ #category : #'smartSuggestions - support' }
+{ #category : 'smartSuggestions - support' }
 StSingleCritiqueResultListPresenter >> selectedMessage [
 	^ nil
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSingleCritiqueResultListPresenter >> selectionIntervalFor: aString [
 	^ rule result selectionIntervalFor: aString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSingleCritiqueResultListPresenter >> setFocusOrder [
 
 	self focusOrder
@@ -405,34 +410,37 @@ StSingleCritiqueResultListPresenter >> setFocusOrder [
 		add: sourceCodeModel
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSingleCritiqueResultListPresenter >> setTextModelForClassOrMethod: aCritique [
 
 	| entity |
 	entity := aCritique sourceAnchor entity.
-	self flag:
-		'Another hack. We need a better way to display entities (because now we may get not only classes and methods. Maybe something like GTInspector presentations could work)'.
-	sourceCodeModel text: entity asString.
-	sourceCodeModel behavior: (entity isCompiledMethod
+	sourceCodeModel beForBehavior: (entity isCompiledMethod
 			 ifTrue: [ entity methodClass ]
 			 ifFalse: [ nil ]).
+
+	sourceCodeModel 
+		withSyntaxHighlight;
+		text: entity asString.
 	aCritique sourceAnchor providesInterval ifTrue: [ 
 		sourceCodeModel selectionInterval: aCritique sourceAnchor interval ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSingleCritiqueResultListPresenter >> setTextModelForNil [
 
 	| text |
 	text := rule rationale isEmpty
 		        ifTrue: [ rule name ]
 		        ifFalse: [ rule rationale ].
-	sourceCodeModel text: text.
-	sourceCodeModel behavior: nil.
+	sourceCodeModel 
+		withoutSyntaxHighlight;
+		text: text;
+		behavior: nil.
 	toolbarModel critique: nil
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSingleCritiqueResultListPresenter >> setTextModelForTransformationRule: selection [
 	
 	sourceCodeModel behavior: nil.
@@ -443,33 +451,33 @@ StSingleCritiqueResultListPresenter >> setTextModelForTransformationRule: select
 					
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSingleCritiqueResultListPresenter >> sourceCodeModel [ 
 
 	^ sourceCodeModel
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSingleCritiqueResultListPresenter >> toDoColor [
 	^ Color orange
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSingleCritiqueResultListPresenter >> toolbarModel [
 
 	^ toolbarModel
 ]
 
-{ #category : #thread }
+{ #category : 'thread' }
 StSingleCritiqueResultListPresenter >> updateList [
 
 	| delay |
 	self critiquesOf: rule.
-	delay := [ UIManager default defer: [ critiquesModel updateList ] ]
+	delay := [ self defer: [ critiquesModel updateList ] ]
 		          schedule
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSingleCritiqueResultListPresenter >> whenSelectedItemChangesOnListModel [
 
 	critiquesModel whenSelectionChangedDo: [ :aSelection | 

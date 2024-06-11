@@ -1,6 +1,6 @@
-Extension { #name : #MetacelloGroupSpec }
+Extension { #name : 'MetacelloGroupSpec' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 MetacelloGroupSpec >> inspectionIncludes [
 	<inspectorPresentationOrder: 10 title: 'Include'>
 	| specs |
@@ -21,7 +21,7 @@ MetacelloGroupSpec >> inspectionIncludes [
 
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 MetacelloGroupSpec >> type [
 
 	^ 'group'

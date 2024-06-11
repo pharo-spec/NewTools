@@ -2,18 +2,20 @@
 Remove a binding.
 "
 Class {
-	#name : #StRemoveBindingCommand,
-	#superclass : #CmCommand,
-	#category : #'NewTools-Playground-Command'
+	#name : 'StRemoveBindingCommand',
+	#superclass : 'CmCommand',
+	#category : 'NewTools-Playground-Command',
+	#package : 'NewTools-Playground',
+	#tag : 'Command'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StRemoveBindingCommand >> application [
 
 	^ StPharoApplication current
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 StRemoveBindingCommand >> asSpecCommand [ 
 	
 	^ super asSpecCommand 
@@ -23,13 +25,13 @@ StRemoveBindingCommand >> asSpecCommand [
 		yourself
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 StRemoveBindingCommand >> execute [
 	
 	context removeSelectedBinding
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StRemoveBindingCommand >> initialize [
 	super initialize.
 	self

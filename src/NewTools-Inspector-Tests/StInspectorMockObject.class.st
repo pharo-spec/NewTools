@@ -1,10 +1,11 @@
 Class {
-	#name : #StInspectorMockObject,
-	#superclass : #Object,
-	#category : #'NewTools-Inspector-Tests'
+	#name : 'StInspectorMockObject',
+	#superclass : 'Object',
+	#category : 'NewTools-Inspector-Tests',
+	#package : 'NewTools-Inspector-Tests'
 }
 
-{ #category : #'inspector extensions' }
+{ #category : 'inspector extensions' }
 StInspectorMockObject >> inspectionMock1 [
 	<inspectorPresentationOrder: 0 title: 'Mock 1'>
 
@@ -13,7 +14,7 @@ StInspectorMockObject >> inspectionMock1 [
 		yourself
 ]
 
-{ #category : #'inspector extensions' }
+{ #category : 'inspector extensions' }
 StInspectorMockObject >> methodWithDnuingContext [
 	<inspectorPresentationOrder: 0 title: 'PresentationWithDNUingContext'>
 
@@ -22,22 +23,22 @@ StInspectorMockObject >> methodWithDnuingContext [
 		yourself
 ]
 
-{ #category : #'inspector extensions' }
+{ #category : 'inspector extensions' }
 StInspectorMockObject >> methodWithDnuingContextContext: aContext [
 	
 	"This selector is automatically called by concatenating Context: to an inspector presentation"
-	
+	<ignoreNotImplementedSelectors: #(iShouldNotUnderstandThis)>
 	self iShouldNotUnderstandThis
 ]
 
-{ #category : #'inspector extensions' }
+{ #category : 'inspector extensions' }
 StInspectorMockObject >> methodWithDnuingPresentation [
 	<inspectorPresentationOrder: 0 title: 'PresentationWithDNUingContext'>
-
+	<ignoreNotImplementedSelectors: #(iShouldNotUnderstandThis)>
 	self iShouldNotUnderstandThis
 ]
 
-{ #category : #'inspector extensions' }
+{ #category : 'inspector extensions' }
 StInspectorMockObject >> methodWithFailingContext [
 	<inspectorPresentationOrder: 0 title: 'PresentationWithFailingContext'>
 
@@ -46,7 +47,7 @@ StInspectorMockObject >> methodWithFailingContext [
 		yourself
 ]
 
-{ #category : #'inspector extensions' }
+{ #category : 'inspector extensions' }
 StInspectorMockObject >> methodWithFailingContextContext: aContext [
 	
 	"This selector is automatically called by concatenating Context: to an inspector presentation"
@@ -54,14 +55,14 @@ StInspectorMockObject >> methodWithFailingContextContext: aContext [
 	self error
 ]
 
-{ #category : #'inspector extensions' }
+{ #category : 'inspector extensions' }
 StInspectorMockObject >> methodWithFailingPresentation [
 	<inspectorPresentationOrder: 0 title: 'PresentationWithFailingPresentation'>
 
 	self error
 ]
 
-{ #category : #'inspector extensions' }
+{ #category : 'inspector extensions' }
 StInspectorMockObject >> methodWithHaltingContext [
 	<inspectorPresentationOrder: 0 title: 'PresentationWithHaltingContext'>
 
@@ -70,7 +71,7 @@ StInspectorMockObject >> methodWithHaltingContext [
 		yourself
 ]
 
-{ #category : #'inspector extensions' }
+{ #category : 'inspector extensions' }
 StInspectorMockObject >> methodWithHaltingContextContext: aContext [
 	
 	"This selector is automatically called by concatenating Context: to an inspector presentation"
@@ -79,7 +80,7 @@ StInspectorMockObject >> methodWithHaltingContextContext: aContext [
 	self halt
 ]
 
-{ #category : #'inspector extensions' }
+{ #category : 'inspector extensions' }
 StInspectorMockObject >> methodWithHaltingPresentation [
 	<inspectorPresentationOrder: 0 title: 'PresentationWithHaltingContext'>
 	<haltOrBreakpointForTesting>

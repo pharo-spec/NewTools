@@ -1,6 +1,6 @@
-Extension { #name : #OupsNullException }
+Extension { #name : 'OupsNullException' }
 
-{ #category : #'*NewTools-Debugger-Extensions' }
+{ #category : '*NewTools-Debugger-Extensions' }
 OupsNullException >> stDebuggerInspectorNodesFor: aStDebuggerContext [
 
 	^ aStDebuggerContext nullExceptionNodesFor: self

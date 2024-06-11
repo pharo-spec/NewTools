@@ -1,14 +1,14 @@
-Extension { #name : #SystemWindow }
+Extension { #name : 'SystemWindow' }
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 SystemWindow >> stActDefault [
 
 	^ self isTopWindow
 		ifTrue: [ self comeToFront ] "rise above non-window morphs"
-		ifFalse:[ self activate ]
+		ifFalse:[ self restoreAndActivate ]
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 SystemWindow >> stWindowsFor: aStep [
 	<stSpotterOrder: 100>
 

@@ -3,30 +3,37 @@ I am a configuration for Pharo IDE for Gtk backend.
 I will install a ""dark"" version of the UI theme, according to the platform version.
 "
 Class {
-	#name : #StPharoGtkDarkConfiguration,
-	#superclass : #StPharoGtkConfiguration,
-	#category : #'NewTools-Gtk'
+	#name : 'StPharoGtkDarkConfiguration',
+	#superclass : 'StPharoGtkConfiguration',
+	#category : 'NewTools-Gtk',
+	#package : 'NewTools-Gtk'
 }
 
-{ #category : #accessing }
+{ #category : 'testing' }
+StPharoGtkDarkConfiguration >> isDarkTheme [
+
+	^ true
+]
+
+{ #category : 'accessing' }
 StPharoGtkDarkConfiguration >> macThemeName [
 		
 	^ 'Sierra-dark'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPharoGtkDarkConfiguration >> syntaxHighlightThemeName [
 
 	^ 'Dark'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPharoGtkDarkConfiguration >> unixThemeName [
 
 	^ nil "'Adwaita-dark'"
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPharoGtkDarkConfiguration >> windowsThemeName [
 
 	^ 'Windows-10-Dark-master'

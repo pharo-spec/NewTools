@@ -8,8 +8,8 @@ I provides ways to:
 My owner must be a spec debugger
 "
 Class {
-	#name : #StSindarinDebuggerScriptingPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StSindarinDebuggerScriptingPresenter',
+	#superclass : 'SpPresenter',
 	#traits : 'TStDebuggerExtension',
 	#classTraits : 'TStDebuggerExtension classTrait',
 	#instVars : [
@@ -18,10 +18,11 @@ Class {
 		'toolbar',
 		'sindarinDebugger'
 	],
-	#category : #'NewTools-Sindarin-Tools'
+	#category : 'NewTools-Sindarin-Tools',
+	#package : 'NewTools-Sindarin-Tools'
 }
 
-{ #category : #layout }
+{ #category : 'layout' }
 StSindarinDebuggerScriptingPresenter class >> defaultLayout [
 	^ SpBoxLayout newTopToBottom
 		add: #toolbar expand: false;
@@ -34,39 +35,44 @@ StSindarinDebuggerScriptingPresenter class >> defaultLayout [
 		yourself
 ]
 
-{ #category : #actions }
+{ #category : 'visiting' }
+StSindarinDebuggerScriptingPresenter >> accept: aVisitor [
+
+	^ aVisitor visitSindarin: self
+]
+
+{ #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> createCommandFromScript [
 	self flag: 'todo'
 ]
 
-{ #category : #'debugger extension' }
+{ #category : 'debugger extension' }
 StSindarinDebuggerScriptingPresenter >> debuggerExtensionToolName [
 
 	^ 'Sindarin'
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> executeScript [
+
 	| stream result model receiver evaluationContext |
-	self debugger removeSessionHolderSubscriptions.
-	stream := code text readStream.
-	model := code interactionModel.
-	receiver := model context receiver.
-	evaluationContext := model context.
-	result := receiver class compiler
-		          source: stream;
-		          context: evaluationContext;
-		          receiver: receiver;
-		          requestor: model;
-		          failBlock: [ nil ];
-		          evaluate.
-	resultInspection model: result.
-	resultInspection update.
-	self debugger setSessionHolderSubscriptions.
-	self debugger forceSessionUpdate
+	self debuggerPresenter debuggerActionModel preventUpdatesDuring: [ 
+		stream := code text readStream.
+		model := code interactionModel.
+		receiver := model context receiver.
+		evaluationContext := model context.
+		result := receiver class compiler
+			          source: stream;
+			          context: evaluationContext;
+			          receiver: receiver;
+			          requestor: model;
+			          failBlock: [ nil ];
+			          evaluate.
+		resultInspection model: result.
+		resultInspection update ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSindarinDebuggerScriptingPresenter >> initializePresenters [
 	code := self newCode.
 	code interactionModel: StSindarinContextInteractionModel new.
@@ -81,44 +87,43 @@ StSindarinDebuggerScriptingPresenter >> initializePresenters [
 	self initializeToolbar
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSindarinDebuggerScriptingPresenter >> initializeToolbar [
-	toolbar := self newToolbar.
-	toolbar addStyle: 'stToolbar'.
-	toolbar beIcons.
-	SpToolbarPresenterBuilder new
-		toolbarPresenter: toolbar;
-		visit: self toolbarActions
+
+	toolbar := self newToolbar
+		addStyle: 'stToolbar';
+		beIcons;
+		fillWith: self toolbarActions
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> loadScript [
 	self flag: 'todo'
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> removeScriptCommand [
 	self flag: 'todo'
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> saveScript [
 	self flag: 'todo'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSindarinDebuggerScriptingPresenter >> setModelBeforeInitialization: aStDebugger [
 	"My original model is the debugger presenter that I extend"
 	debugger := aStDebugger.
 	sindarinDebugger := aStDebugger sindarinDebugger
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSindarinDebuggerScriptingPresenter >> sindarin [
 	^sindarinDebugger 
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 StSindarinDebuggerScriptingPresenter >> toolbarActions [
 	| group |
 	group := (CmCommandGroup named: 'Toolbar') asSpecGroup.
@@ -133,7 +138,7 @@ StSindarinDebuggerScriptingPresenter >> toolbarActions [
 	^ group
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSindarinDebuggerScriptingPresenter >> updateCode [
 	code interactionModel context: self debugger currentContext.
 	code interactionModel bindings
@@ -141,7 +146,7 @@ StSindarinDebuggerScriptingPresenter >> updateCode [
 		put: (WorkspaceVariable key: #sindarin value: self sindarin)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSindarinDebuggerScriptingPresenter >> updatePresenter [ 	
 	self updateCode.
 	super updatePresenter 

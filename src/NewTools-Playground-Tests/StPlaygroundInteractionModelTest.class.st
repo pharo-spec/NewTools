@@ -1,30 +1,31 @@
 Class {
-	#name : #StPlaygroundInteractionModelTest,
-	#superclass : #SpCodeScriptingInteractionModelTest,
+	#name : 'StPlaygroundInteractionModelTest',
+	#superclass : 'SpCodeScriptingInteractionModelTest',
 	#instVars : [
 		'application'
 	],
-	#category : #'NewTools-Playground-Tests'
+	#category : 'NewTools-Playground-Tests',
+	#package : 'NewTools-Playground-Tests'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StPlaygroundInteractionModelTest >> newInteractionModel [
 
 	^ StPlaygroundInteractionModel new
-		owner: (StPlayground new
+		owner: (StPlaygroundPresenter new
 			application: application;
 			yourself);
 		yourself
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StPlaygroundInteractionModelTest >> setUp [
 	super setUp.
 	
 	application := StPharoApplication new.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundInteractionModelTest >> testMakeBindingLocal [
 	| im1 im2 binding |
 	
@@ -44,7 +45,7 @@ StPlaygroundInteractionModelTest >> testMakeBindingLocal [
 	self deny: (im2 hasBindingOf: #testBinding)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundInteractionModelTest >> testMakeBindingShared [
 	| im1 im2 binding |
 	

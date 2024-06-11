@@ -6,23 +6,25 @@ My iterator is query with the first word of the filtering text and the filtering
 For example, doing the query StoreDisk will answer also DiskStore 
 "
 Class {
-	#name : #StWordsAwareFilter,
-	#superclass : #StIteratorDecorator,
+	#name : 'StWordsAwareFilter',
+	#superclass : 'StIteratorDecorator',
 	#instVars : [
 		'words',
 		'realFilter'
 	],
-	#category : #'NewTools-Spotter-Processors-Iterators'
+	#category : 'NewTools-Spotter-Processors-Iterators',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Iterators'
 }
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StWordsAwareFilter >> additionalFilter: aString firstWord: firstWord otherWords: otherWords on: anEntry [
 
 	^ otherWords allSatisfy: [ :otherW | anEntry asString asLowercase includesSubstring: otherW ]
 
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StWordsAwareFilter >> filteringText: aString [
 
 	| firstWord otherWords |
@@ -39,14 +41,14 @@ StWordsAwareFilter >> filteringText: aString [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StWordsAwareFilter >> inner: anIterator [
 
 	inner := anIterator.
 	realFilter := anIterator
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StWordsAwareFilter >> splitWords: aString [
 
 	^ (aString substrings: ' :-')

@@ -4,124 +4,151 @@ I'm used in tests to easily ensure that commands or other clients call the corre
 The debugger interface itself is tested in the debugger test class.
 "
 Class {
-	#name : #StDummyDebuggerPresenter,
-	#superclass : #SpPresenter,
+	#name : 'StDummyDebuggerPresenter',
+	#superclass : 'SpPresenter',
 	#traits : 'TStDebuggerExtension',
 	#classTraits : 'TStDebuggerExtension classTrait',
 	#instVars : [
 		'tag'
 	],
-	#category : #'NewTools-Debugger-Tests-Utils'
+	#category : 'NewTools-Debugger-Tests-Utils',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Utils'
 }
 
-{ #category : #mocks }
+{ #category : 'testing' }
+StDummyDebuggerPresenter class >> isOnlyForTests [
+
+	^ true
+]
+
+{ #category : 'mocks' }
 StDummyDebuggerPresenter >> copyStackToClipboard [
 tag := thisContext method selector.
 ^true
 ]
 
-{ #category : #mocks }
+{ #category : 'mocks' }
 StDummyDebuggerPresenter >> createMissingClass [
 tag := thisContext method selector.
 ^true
 ]
 
-{ #category : #mocks }
+{ #category : 'mocks' }
 StDummyDebuggerPresenter >> createMissingMethod [
 tag := thisContext method selector.
 ^true
 ]
 
-{ #category : #mocks }
+{ #category : 'mocks' }
 StDummyDebuggerPresenter >> createSubclassResponsibility [
 tag := thisContext method selector.
 ^true
 ]
 
-{ #category : #'accessing - context' }
+{ #category : 'accessing - context' }
 StDummyDebuggerPresenter >> currentContext [
 	^self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDummyDebuggerPresenter >> debuggerExtensionToolName [
 	^'Test extendedDebuggingToolTitle'
 	
 ]
 
-{ #category : #mocks }
+{ #category : 'layout' }
+StDummyDebuggerPresenter >> defaultLayout [
+
+	^ SpBoxLayout newVertical 
+]
+
+{ #category : 'mocks' }
 StDummyDebuggerPresenter >> fileOutSelectedContext [
 tag := thisContext method selector.
 ^true
 ]
 
-{ #category : #mocks }
+{ #category : 'mocks' }
 StDummyDebuggerPresenter >> peelToFirstLike: aStDummyDebuggerPresenter [
 
 	tag := thisContext method selector.
 	^ true
 ]
 
-{ #category : #mocks }
+{ #category : 'mocks' }
 StDummyDebuggerPresenter >> proceedDebugSession [
 tag := thisContext method selector.
 ^true
 ]
 
-{ #category : #mocks }
+{ #category : 'mocks' }
 StDummyDebuggerPresenter >> restartCurrentContext [
 tag := thisContext method selector.
 ^true
 ]
 
-{ #category : #mocks }
+{ #category : 'mocks' }
 StDummyDebuggerPresenter >> returnEnteredValue [
 tag := thisContext method selector.
 ^true
 ]
 
-{ #category : #mocks }
+{ #category : 'mocks' }
 StDummyDebuggerPresenter >> runToSelection [
 tag := thisContext method selector.
 ^true
 ]
 
-{ #category : #mocks }
+{ #category : 'actions' }
+StDummyDebuggerPresenter >> saveGeneratedCodeAndProceed [
+
+	tag := thisContext method selector.
+	^ true
+]
+
+{ #category : 'mocks' }
 StDummyDebuggerPresenter >> selectNextExecutedExpression [
 tag := thisContext method selector.
 ^true
 ]
 
-{ #category : #mocks }
+{ #category : 'mocks' }
 StDummyDebuggerPresenter >> showFullStack [
 tag := thisContext method selector.
 ^true
 ]
 
-{ #category : #mocks }
+{ #category : 'mocks' }
 StDummyDebuggerPresenter >> stepInto [
 tag := thisContext method selector.
 ^true
 ]
 
-{ #category : #mocks }
+{ #category : 'mocks' }
 StDummyDebuggerPresenter >> stepOver [
 tag := thisContext method selector.
 ^true
 ]
 
-{ #category : #mocks }
+{ #category : 'mocks' }
 StDummyDebuggerPresenter >> stepThrough [
 tag := thisContext method selector.
 ^true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDummyDebuggerPresenter >> tag [
 	^ tag
 ]
 
-{ #category : #mocks }
+{ #category : 'accessing' }
+StDummyDebuggerPresenter >> tag: anObject [
+
+	tag := anObject
+]
+
+{ #category : 'mocks' }
 StDummyDebuggerPresenter >> unimplementedSubclassResponsibility [
 	self subclassResponsibility 
 ]

@@ -1,12 +1,12 @@
-Extension { #name : #ClassDescription }
+Extension { #name : 'ClassDescription' }
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 ClassDescription >> spotterPackageFor: aStep [
 	<stSpotterOrder: 50>
 	aStep listProcessor
 			title: 'Package';
 			allCandidates: [ {self package} ];
 			itemName: [ :item | item packageName ];
-			itemIcon: #systemIcon;
+			itemIconName: [ :item | item systemIconName ];
 			filter: StFilterSubstring
 ]

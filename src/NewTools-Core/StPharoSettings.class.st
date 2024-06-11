@@ -1,39 +1,41 @@
 Class {
-	#name : #StPharoSettings,
-	#superclass : #Object,
+	#name : 'StPharoSettings',
+	#superclass : 'Object',
 	#classVars : [
 		'CodeShowLineNumbers',
 		'ToolbarDisplayMode'
 	],
-	#category : #'NewTools-Core-Application'
+	#category : 'NewTools-Core-Application',
+	#package : 'NewTools-Core',
+	#tag : 'Application'
 }
 
-{ #category : #settings }
+{ #category : 'settings' }
 StPharoSettings class >> codeShowLineNumbers [
 	"Defines if code editors will display line numbers"
 
 	^ CodeShowLineNumbers ifNil: [ CodeShowLineNumbers := self defaultCodeShowLineNumbers ]
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StPharoSettings class >> codeShowLineNumbers: aBoolean [ 
 
 	CodeShowLineNumbers := aBoolean
 ]
 
-{ #category : #defaults }
+{ #category : 'defaults' }
 StPharoSettings class >> defaultCodeShowLineNumbers [
 
 	^ true
 ]
 
-{ #category : #defaults }
+{ #category : 'defaults' }
 StPharoSettings class >> defaultToolbarDisplayMode [
 
 	^ SpToolbarDisplayMode modeIconAndLabel
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StPharoSettings class >> settingsOn: aBuilder [
 	<systemsettings>
 
@@ -55,14 +57,14 @@ StPharoSettings class >> settingsOn: aBuilder [
 		label: 'Toolbar display mode'		
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StPharoSettings class >> toolbarDisplayMode [
 	"Defines how the toolbar will be displayed (icons+text, icons, text)"
 
 	^ ToolbarDisplayMode ifNil: [ ToolbarDisplayMode := self defaultToolbarDisplayMode ]
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StPharoSettings class >> toolbarDisplayMode: aMode [
 	"self toolbarDisplayMode: SpToolbarDisplayMode modeIcon"
 	

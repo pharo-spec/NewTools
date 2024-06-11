@@ -1,16 +1,18 @@
 Class {
-	#name : #ObjectWithPrintingRaisingHaltTest,
-	#superclass : #TestCase,
-	#category : #'NewTools-Debugger-Tests'
+	#name : 'ObjectWithPrintingRaisingHaltTest',
+	#superclass : 'TestCase',
+	#category : 'NewTools-Debugger-Tests-Model',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Model'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 ObjectWithPrintingRaisingHaltTest >> testInspectingObjectWithPrintOnWithHaltOpenInspector [
 	"Make sure that inspecting an object with a broken printOn: does not produce an endless loop.
 	"
 	
 	| openInspectors inspectedObject |
-	StInspector allInstances select: [ :e | e window isOpen ] 
+	StInspectorPresenter allInstances select: [ :e | e window isOpen ] 
 					thenDo: [ :each | each window close ].
 
 	inspectedObject := ObjectWithPrintingRaisingHalt new.
@@ -21,7 +23,7 @@ ObjectWithPrintingRaisingHaltTest >> testInspectingObjectWithPrintOnWithHaltOpen
 	
 	inspectedObject inspect.
 
-	openInspectors := StInspector allInstances select: [ :e | 
+	openInspectors := StInspectorPresenter allInstances select: [ :e | 
 		                  e window isOpen ].
 
 	self assert: openInspectors size equals: 1.
@@ -30,5 +32,5 @@ ObjectWithPrintingRaisingHaltTest >> testInspectingObjectWithPrintOnWithHaltOpen
 		assert: openInspectors first model inspectedObject
 		equals: inspectedObject.
 
-	StInspector allInstances do: [ :each | each delete ].
+	StInspectorPresenter allInstances do: [ :each | each delete ].
 ]

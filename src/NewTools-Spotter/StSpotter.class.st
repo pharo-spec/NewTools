@@ -19,8 +19,8 @@ Some known processors and options are:
 - Press <meta+n>
 "
 Class {
-	#name : #StSpotter,
-	#superclass : #StPresenter,
+	#name : 'StSpotter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'searchText',
 		'resultList',
@@ -37,6 +37,7 @@ Class {
 	],
 	#classVars : [
 		'History',
+		'InsertsSelection',
 		'PreviewVisible',
 		'Tips',
 		'TipsVisible'
@@ -44,16 +45,18 @@ Class {
 	#classInstVars : [
 		'spotter'
 	],
-	#category : #'NewTools-Spotter-View'
+	#category : 'NewTools-Spotter-View',
+	#package : 'NewTools-Spotter',
+	#tag : 'View'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotter class >> basicHistory [
 
 	^ History ifNil: [ History := WeakOrderedCollection new ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotter class >> createTips [
 
 	^ {
@@ -74,21 +77,21 @@ StSpotter class >> createTips [
 	}
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotter class >> hidePreview [
 	<script>
 
 	PreviewVisible := false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotter class >> hideTips [
 	<script>
 
 	TipsVisible := false
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotter class >> historize: aCandidateLink [
 
 	self basicHistory 
@@ -96,32 +99,45 @@ StSpotter class >> historize: aCandidateLink [
 		addFirst: aCandidateLink
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotter class >> history [
 
 	^ self basicHistory reject: [ :each | each isNil ]
 ]
 
-{ #category : #'class initialization' }
+{ #category : 'class initialization' }
 StSpotter class >> initialize [
 
 	self showPreview.
-	self showTips
+	self showTips.
+	self insertsSelection: true.
 ]
 
-{ #category : #testing }
+{ #category : 'settings' }
+StSpotter class >> insertsSelection [
+		
+	^ InsertsSelection ifNil: [ InsertsSelection := false ]
+]
+
+{ #category : 'settings' }
+StSpotter class >> insertsSelection: aBoolean [
+		
+	InsertsSelection := aBoolean
+]
+
+{ #category : 'testing' }
 StSpotter class >> isShowingPreview [
 
 	^ PreviewVisible
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotter class >> isShowingTips [
 
 	^ TipsVisible
 ]
 
-{ #category : #'world menu' }
+{ #category : 'world menu' }
 StSpotter class >> menuCommandOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #Spotter)
@@ -130,18 +146,16 @@ StSpotter class >> menuCommandOn: aBuilder [
 		order: 1;
 		parent: #Searching;
 		help: 'Search tool to explore Pharo system effectively.';
-		iconName: #smallFindIcon
+		iconName: #smallFind
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StSpotter class >> open [
 
-	self reset.
-	spotter := self new.
-	^ spotter openModal
+	self openWithText: ''
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StSpotter class >> openOn: aModel [
 
 	self reset.
@@ -149,32 +163,43 @@ StSpotter class >> openOn: aModel [
 	^ spotter openModal
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StSpotter class >> openOnOrigin: anObject [
 
 	^ self openOn: (StSpotterModel newOrigin: anObject)
 ]
 
-{ #category : #settings }
+{ #category : 'instance creation' }
+StSpotter class >> openWithText: aText [
+
+	self reset.
+	spotter := self new.
+	spotter searchText
+		text: aText asString.
+	spotter whenDisplayDo: [ spotter searchText cursorPositionIndex: aText size + 1 ].
+	^ spotter openModal
+]
+
+{ #category : 'settings' }
 StSpotter class >> previewVisible [
 		
 	^ PreviewVisible
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StSpotter class >> previewVisible: aBoolean [
 	
 	PreviewVisible := aBoolean
 ]
 
-{ #category : #'tools registry' }
+{ #category : 'tools registry' }
 StSpotter class >> registerToolsOn: registry [
 	"self registerToolsOn: Smalltalk tools"
 
 	registry register: self as: #spotter
 ]
 
-{ #category : #'class initialization' }
+{ #category : 'class initialization' }
 StSpotter class >> reset [
 	
 	spotter ifNotNil: [ 
@@ -182,7 +207,7 @@ StSpotter class >> reset [
 		spotter := nil ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotter class >> resetHistory [
 	<script>
 	"
@@ -191,7 +216,7 @@ StSpotter class >> resetHistory [
 	History := nil
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StSpotter class >> settingsOn: aBuilder [
 	<systemsettings>
 
@@ -213,54 +238,61 @@ StSpotter class >> settingsOn: aBuilder [
 		target: self;
 		description: 'If Spotter will show the tips at the bottom of spotter';
 		label: 'Show Tips Panel'.
+		
+	(aBuilder setting: #insertsSelection)
+		parent: #spotter;
+		default: self insertsSelection;
+		target: self;
+		description: 'When the Spotter is opened, automatically insert the selected text into the search field';
+		label: 'Inserts Selection'.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotter class >> showPreview [
 	<script>
 	
 	PreviewVisible := true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotter class >> showTips [
 	<script>
 	
 	TipsVisible := true
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotter class >> tips [ 
 
 	^ Tips ifNil: [ Tips := self createTips ]
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StSpotter class >> tipsVisible [
 		
 	^ TipsVisible
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StSpotter class >> tipsVisible: aBoolean [
 		
 	TipsVisible := aBoolean
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotter class >> windowClosed [
 
 	spotter := nil
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 StSpotter >> activate: aPresenter [
 
 	aPresenter ifNil: [ ^ self ].
 	aPresenter activateOn: self
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 StSpotter >> activateLink: aCandidateLink [
 
 	self window close.
@@ -268,7 +300,7 @@ StSpotter >> activateLink: aCandidateLink [
 	aCandidateLink value evaluateFor: self
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSpotter >> addPreviewPanelTo: contentsLayout [
 
 	contentsLayout 	add: (previewContainer := SpBoxLayout newTopToBottom).
@@ -276,7 +308,7 @@ StSpotter >> addPreviewPanelTo: contentsLayout [
 		self showPreview: selection selectedItem ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSpotter >> addTipsPanel [ 
 
 	self layout: (SpBoxLayout newTopToBottom
@@ -305,7 +337,7 @@ StSpotter >> addTipsPanel [
 		yourself)
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotter >> allowUIToDraw [
 
 	"5 is a magic number we tested is enough to allow the UI to display the spotter"
@@ -313,7 +345,7 @@ StSpotter >> allowUIToDraw [
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotter >> configureModel: aModel [ 
 
 	aModel 
@@ -326,15 +358,15 @@ StSpotter >> configureModel: aModel [
 		whenQueryEndedDo: [ self hideSpinner ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotter >> defaultModel [
 
-	^ StSpotterModel new
+	^ self newModel
 		in: [ :this | self configureModel: this ];
 		yourself
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 StSpotter >> diveInProcessor: aProcessor [
 
 	self model schedule: [
@@ -346,7 +378,7 @@ StSpotter >> diveInProcessor: aProcessor [
 		searchText text: '' ]
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 StSpotter >> diveOut [
 
 	self resetLastSelectedEntry.
@@ -357,37 +389,38 @@ StSpotter >> diveOut [
 		searchText cursorPositionIndex: aString size + 1 ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StSpotter >> feedTip [
 	
 	tip ifNil: [ ^ self ].
 	tip label: self class tips atRandom
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StSpotter >> flushPendingUpdates [
 
-	self application defer: [ 
+	self defer: [ 
 		self model schedule: [ 
 			mutex critical: [ 
 				[ 
 				self queuedUpdateResultList.
 				lastUpdateTime := Time millisecondClockValue ]
 					on: Exception
-					fork: [ :e | "Allow halts and that, but eat errors (since otherwise, ugly things can happen)"
+					fork: [ :e | 
+						"Allow halts and that, but eat errors (since otherwise, ugly things can happen)"
 						(e isKindOf: Error)
 							ifTrue: [ ('Spotter error: ' , e printString) crTrace ]
 							ifFalse: [ e pass ] ] ] ] ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotter >> handleKeyEvent: anEvent [
 	
 	(#( 30 "arrow up" 31 "arrow down" 13 "cr") includes: anEvent keyCharacter asInteger)
 		ifFalse: [ searchText takeKeyboardFocus ]
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StSpotter >> headerCategoryFor: aLink [
 
 	^ categories 
@@ -395,7 +428,7 @@ StSpotter >> headerCategoryFor: aLink [
 		ifAbsentPut: [ self newSpotterHeaderPresenter: aLink processor ]
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StSpotter >> headerCategoryUnifiedFor: aLink [
 
 	^ categories 
@@ -406,28 +439,28 @@ StSpotter >> headerCategoryUnifiedFor: aLink [
 				yourself ]
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 StSpotter >> hideSpinner [
 
-	self application defer: [ spinner hide ]
+	self defer: [ spinner hide ]
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 StSpotter >> historize: aCandidateLink [
 
 	self class historize: aCandidateLink
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSpotter >> initialExtent [
 
 	self flag: #TODO. "Maybe calculate coordinates?"
 	^ self isShowingPreview 
-		ifTrue: [ 750@450 ]
-		ifFalse: [ 500@450 ]
+		ifTrue: [ (750@450) scaledByDisplayScaleFactor ]
+		ifFalse: [ (500@450) scaledByDisplayScaleFactor ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSpotter >> initialize [
 
 	mutex ifNil: [ mutex := Mutex new ].
@@ -437,16 +470,16 @@ StSpotter >> initialize [
 	super initialize
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSpotter >> initializeDialogWindow: aDialogWindowPresenter [
  
 	aDialogWindowPresenter closeOnBackdropClick: true
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSpotter >> initializeLayout [
 	| contentsLayout |
-	
+
 	self layout: (SpBoxLayout newTopToBottom
 		borderWidth: 10;
 		spacing: 5;
@@ -457,59 +490,58 @@ StSpotter >> initializeLayout [
 				spacing: 5;
 				add: resultList;
 				yourself);
-			addOverlay: (spinner := self newSpinner) 
+			addOverlay: (spinner := self newSpinner)
 				withConstraints: [ :c | c vAlignCenter; hAlignCenter ];
 			yourself);
 		yourself).
 
 	self isShowingPreview ifTrue: [ self addPreviewPanelTo: contentsLayout ].
-	self isShowingTips ifTrue: [ self addTipsPanel ].
+	self isShowingTips ifTrue: [ self addTipsPanel ]
+]
+
+{ #category : 'initialization' }
+StSpotter >> initializePresenters [
+
+	resultList := self newComponentList.
+	searchText := self newSearchInput.
+
+	self initializeLayout.
 
 	self addStyle: 'stSpotter'.
 	spinner hide.
-]
 
-{ #category : #initialization }
-StSpotter >> initializePresenters [
-	
-	resultList := self newComponentList.
-	searchText := self newSearchInput.
-	
-	self initializeLayout.
-	
 	resultList
-		addStyle: 'stSpotterList';		
-		bindKeyCombination: Character arrowUp asKeyCombination 
+		addStyle: 'stSpotterList';
+		bindKeyCombination: Character arrowUp asKeyCombination
 			toAction: [ :target :widget :event |
 				self transferFocusToSearchTextArrowUp.
 				event wasHandled: false ];
-		bindKeyCombination: Character arrowDown asKeyCombination 
-			toAction: [ :target :widget :event | 
+		bindKeyCombination: Character arrowDown asKeyCombination
+			toAction: [ :target :widget :event |
 				self transferFocusToSearchTextArrowDown.
 				event wasHandled: false ];
-		bindKeyCombination: Character arrowRight asKeyCombination 
+		bindKeyCombination: Character arrowRight asKeyCombination
 			toAction: [ self tryDiveIn ];
-		bindKeyCombination: Character arrowLeft asKeyCombination 
-			toAction: [ self tryDiveOut ]; 
-		whenActivatedDo: [ :selection | 
+		bindKeyCombination: Character arrowLeft asKeyCombination
+			toAction: [ self tryDiveOut ];
+		whenActivatedDo: [ :selection |
 			self activate: selection selectedItem ].
-	resultList eventHandler 
+	resultList eventHandler
 		whenKeyDownDo: [ :anEvent | self handleKeyEvent: anEvent ].
 
 	searchText
 		placeholder: 'Search...';
 		addStyle: 'stSpotterSearch';
 		whenTextChangedDo: [ :aString | self updateSearch: aString ];
-		bindKeyCombination: Character arrowDown asKeyCombination 
+		bindKeyCombination: Character arrowDown asKeyCombination
 			toAction: [ self transferFocusToResultList ];
-		bindKeyCombination: Character arrowUp asKeyCombination 
+		bindKeyCombination: Character arrowUp asKeyCombination
 			toAction: [ self transferFocusToResultListAtLast ];
-		bindKeyCombination: Character cr asKeyCombination 
-			toAction: [ self maybeActivateFirstElementOfResultList ].
-	
+		bindKeyCombination: Character cr asKeyCombination
+			toAction: [ self maybeActivateFirstElementOfResultList ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSpotter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
@@ -531,19 +563,25 @@ StSpotter >> initializeWindow: aWindowPresenter [
 			onExecution: [ :aProcessor | self updateSearchFromProcessor: aProcessor ] ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
+StSpotter >> insertsSelection [
+
+	^ self class insertsSelection
+]
+
+{ #category : 'testing' }
 StSpotter >> isShowingPreview [
 
 	^ self class isShowingPreview
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotter >> isShowingTips [
 
 	^ self class isShowingTips
 ]
 
-{ #category : #'private - processing' }
+{ #category : 'private - processing' }
 StSpotter >> keepLastSelectedEntry [
 	"When starting a process (a new query), it may happen that I have already a selection on the 
 	 result list. Since my new query may be a refination (or expansion) of an existing search. 
@@ -557,7 +595,7 @@ StSpotter >> keepLastSelectedEntry [
 		ifNotNil: [ :aPresenter | aPresenter model value ]
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 StSpotter >> maybeActivateFirstElementOfResultList [
 	"| text |
 
@@ -569,19 +607,25 @@ StSpotter >> maybeActivateFirstElementOfResultList [
 	self activate: resultList selectedItem 
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StSpotter >> model [
 
 	^ model ifNil: [ model := self defaultModel ]
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'private' }
+StSpotter >> newModel [
+		
+	^ StSpotterModel new
+]
+
+{ #category : 'private - factory' }
 StSpotter >> newSpotterCandidateLinkPresenter: aLink [
 
 	^ self instantiate: StSpotterCandidateLinkPresenter on: aLink
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'private - factory' }
 StSpotter >> newSpotterHeaderPresenter: aProcessor [
 
 	^ (self instantiate: StSpotterHeaderPresenter on: aProcessor)
@@ -591,12 +635,12 @@ StSpotter >> newSpotterHeaderPresenter: aProcessor [
 		yourself
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StSpotter >> nextSelectablePresenter: selectedPresenter oldPresenters: oldPresenters newPresenters: newPresenters [
 
 	"look for current selected presenter"	
 	| text |
-	(selectedPresenter notNil and: [ selectedPresenter model notNil ]) ifTrue: [ 	
+	(selectedPresenter isNotNil and: [ selectedPresenter model isNotNil ]) ifTrue: [ 	
 		newPresenters 
 			detect: [ :each | each model value = selectedPresenter model value ]
 			ifFound: [ :aPresenter | ^ aPresenter ] ].
@@ -618,21 +662,21 @@ StSpotter >> nextSelectablePresenter: selectedPresenter oldPresenters: oldPresen
 	^ nil
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StSpotter >> openFinder [
 
 	self window close.
 	self flag: #TODO. "Move finder to spec (right now is a morph)"
-	Finder open
+	FinderUI open
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotter >> previewContainer [
 
 	^ previewContainer
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StSpotter >> queuedUpdateResultList [
 	| categoryPresenter presenters selectedPresenter |
 
@@ -666,7 +710,7 @@ StSpotter >> queuedUpdateResultList [
 		updating := false ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotter >> removeAll [
 
 	mutex critical: [ queue removeAll ]. 
@@ -674,26 +718,26 @@ StSpotter >> removeAll [
 	self allowUIToDraw
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotter >> removeAllResults [
 
 	resultList presenters: #().
 	self removeAll
 ]
 
-{ #category : #'private - processing' }
+{ #category : 'private - processing' }
 StSpotter >> resetLastSelectedEntry [
 	
 	lastSelectedEntry := nil
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotter >> searchText [
 
 	^ searchText
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 StSpotter >> searchingString [
 	| searchString searchChunks |
 	
@@ -704,43 +748,42 @@ StSpotter >> searchingString [
 		ifFalse: [ searchString ]
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StSpotter >> setModelBeforeInitialization: aSpotterModel [
 
 	model := aSpotterModel.
 	self configureModel: model
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 StSpotter >> showPreview: aPresenter [
 
-	previewContainer removeAll.	
-	(aPresenter isNil or: [ aPresenter isHeader ]) 
-		ifTrue: [ ^ self ].
+	previewContainer removeAll.
+	(aPresenter isNil or: [ aPresenter isHeader ]) ifTrue: [ ^ self ].
 
-	aPresenter model value spotterPreview 
-		ifNotNil: [ :previewPresenter | 
-			previewContainer add: (previewPresenter 
-				owner: self; 
-				yourself) ]
+	aPresenter model value ifNotNil: [ :value |
+		value spotterPreview ifNotNil: [ :previewPresenter |
+			previewContainer add: (previewPresenter
+					 owner: self;
+					 yourself) ] ]
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 StSpotter >> showSpinner [
 
 	spinner isVisible ifTrue: [ ^ self ].
 	self model schedule: [
-		self application defer: [ spinner show ]]
+		self defer: [ spinner show ]]
 ]
 
-{ #category : #processing }
+{ #category : 'processing' }
 StSpotter >> startNewProcess [
 
 	self keepLastSelectedEntry.
 	self removeAll
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotter >> startProcessing [
 	"Start the process."
 
@@ -750,14 +793,14 @@ StSpotter >> startProcessing [
 	]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotter >> stopProcessing [
 	"Start the process."
 
 	self model stopProcessing
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotter >> transferFocusToResultList [
 	| index |
 
@@ -767,7 +810,7 @@ StSpotter >> transferFocusToResultList [
 		ifFalse: [ index ])
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotter >> transferFocusToResultListAt: index [
 
 	resultList items isEmptyOrNil ifTrue: [ ^ self ].
@@ -777,13 +820,13 @@ StSpotter >> transferFocusToResultListAt: index [
 		takeKeyboardFocus
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotter >> transferFocusToResultListAtLast [ 
 
 	self transferFocusToResultListAt: (resultList presenters size)
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotter >> transferFocusToSearchTextArrowDown [
 
 	(resultList items notEmpty 
@@ -791,7 +834,7 @@ StSpotter >> transferFocusToSearchTextArrowDown [
 		ifTrue: [ searchText takeKeyboardFocus ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotter >> transferFocusToSearchTextArrowUp [
 
 	(resultList items notEmpty 
@@ -799,7 +842,7 @@ StSpotter >> transferFocusToSearchTextArrowUp [
 		ifTrue: [ searchText takeKeyboardFocus ]
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 StSpotter >> tryDiveIn [
 	| item |
 	
@@ -810,7 +853,7 @@ StSpotter >> tryDiveIn [
 	item diveIn
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 StSpotter >> tryDiveOut [
 	| item |
 	
@@ -821,13 +864,13 @@ StSpotter >> tryDiveOut [
 	item diveOut
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSpotter >> updatePresenter [
 
 	self feedTip
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StSpotter >> updateResultList: aCandidateLink [
 
 	mutex critical: [ queue add: aCandidateLink ].
@@ -838,16 +881,16 @@ StSpotter >> updateResultList: aCandidateLink [
 	self flushPendingUpdates
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StSpotter >> updateResultProcessor: processor amount: amount [
 
-	self application defer: [ 
+	self defer: [ 
 		categories 
 			at: processor 
 			ifPresent: [ :aPresenter | aPresenter finalAmount: amount ] ]
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StSpotter >> updateSearch: aString [
 	
 	self model schedule: [
@@ -856,7 +899,7 @@ StSpotter >> updateSearch: aString [
 			on: self ]
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
 StSpotter >> updateSearchFromProcessor: aProcessor [
 
 	searchText text: aProcessor query textInSearchBar.

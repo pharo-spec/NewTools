@@ -1,42 +1,44 @@
 Class {
-	#name : #StHaltBreakpointInspectionItemTest,
-	#superclass : #TestCase,
-	#category : #'NewTools-Debugger-Breakpoints-Tools-Tests'
+	#name : 'StHaltBreakpointInspectionItemTest',
+	#superclass : 'TestCase',
+	#category : 'NewTools-Debugger-Breakpoints-Tools-Tests',
+	#package : 'NewTools-Debugger-Breakpoints-Tools',
+	#tag : 'Tests'
 }
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 StHaltBreakpointInspectionItemTest >> breakpoint [
 
 	^ Breakpoint new node:
 		  (StDummyTestClassWithHalts >> #mHalt) ast statements first
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 StHaltBreakpointInspectionItemTest >> compileHaltNode [
 
 	StDummyTestClassWithHalts compile: 'mHalt self halt'.
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 StHaltBreakpointInspectionItemTest >> haltNode [
 
 	^ (StDummyTestClassWithHalts >> #mHalt) ast statements first
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 StHaltBreakpointInspectionItemTest >> removeHaltNode [
 
 	StDummyTestClassWithHalts removeSelector: #mHalt
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StHaltBreakpointInspectionItemTest >> setUp [
 	super setUp.
 	StHaltCache defaultCache removeSubscriptions.	
 	self compileHaltNode.
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StHaltBreakpointInspectionItemTest >> tearDown [
 
 	self removeHaltNode.
@@ -44,31 +46,39 @@ StHaltBreakpointInspectionItemTest >> tearDown [
 	super tearDown
 ]
 
-{ #category : #'tests - initialization' }
+{ #category : 'tests - initialization' }
 StHaltBreakpointInspectionItemTest >> testNewBreakpointItem [
-	|bp item|
+
+	| bp item |
 	bp := self breakpoint.
 	item := StHaltInspectionItem forBreakpoint: bp.
-	self assert: item breakpoint identicalTo: bp. 
+	self assert: item breakpoint identicalTo: bp.
 	self assert: item node identicalTo: bp node.
 	self assert: item interval equals: (bp node start to: bp node stop).
-	self assert: item scope identicalTo: bp node methodNode method methodClass.
+	self
+		assert: item scope
+		identicalTo: bp node methodNode compiledMethod methodClass.
 	self assert: item displayEntity identicalTo: bp.
 	self assert: item type equals: Break printString
 ]
 
-{ #category : #'tests - initialization' }
+{ #category : 'tests - initialization' }
 StHaltBreakpointInspectionItemTest >> testNewHaltItem [
-	|item|
+
+	| item |
 	item := StHaltInspectionItem forHalt: self haltNode.
 	self assert: item node identicalTo: self haltNode.
-	self assert: item interval equals: (self haltNode start to: self haltNode stop).
-	self assert: item scope identicalTo: self haltNode methodNode method methodClass.
+	self
+		assert: item interval
+		equals: (self haltNode start to: self haltNode stop).
+	self
+		assert: item scope
+		identicalTo: self haltNode methodNode compiledMethod methodClass.
 	self assert: item displayEntity identicalTo: self haltNode methodNode.
 	self assert: item type equals: Halt name asString
 ]
 
-{ #category : #'tests - initialization' }
+{ #category : 'tests - initialization' }
 StHaltBreakpointInspectionItemTest >> testNewObjectCentricBreakpointItem [
 	|bp item|
 	bp := self breakpoint.
@@ -77,7 +87,7 @@ StHaltBreakpointInspectionItemTest >> testNewObjectCentricBreakpointItem [
 	self assert: item scope identicalTo: self
 ]
 
-{ #category : #'tests - initialization' }
+{ #category : 'tests - initialization' }
 StHaltBreakpointInspectionItemTest >> testNewObjectCentricVariableBreakpointItem [
 	|bp item|
 	bp := self variableBreakpoint.
@@ -86,7 +96,7 @@ StHaltBreakpointInspectionItemTest >> testNewObjectCentricVariableBreakpointItem
 	self assert: item scope identicalTo: self
 ]
 
-{ #category : #'tests - initialization' }
+{ #category : 'tests - initialization' }
 StHaltBreakpointInspectionItemTest >> testNewVariableBreakpointItem [
 	|bp item|
 	bp := self variableBreakpoint.
@@ -99,7 +109,7 @@ StHaltBreakpointInspectionItemTest >> testNewVariableBreakpointItem [
 	self assert: item type equals: Break printString
 ]
 
-{ #category : #'tests - printing' }
+{ #category : 'tests - printing' }
 StHaltBreakpointInspectionItemTest >> testPrintBreakpointItem [
 
 	|bp item|
@@ -116,17 +126,23 @@ StHaltBreakpointInspectionItemTest >> testPrintBreakpointItem [
 	self assert: item printScope equals: 'self'.
 ]
 
-{ #category : #'tests - printing' }
+{ #category : 'tests - printing' }
 StHaltBreakpointInspectionItemTest >> testPrintHaltItem [
 
-	|item|
+	| item |
 	item := StHaltInspectionItem forHalt: self haltNode.
-	self assert: item printContents equals: self haltNode methodNode sourceCode.
-	self assert: item printEntity equals: self haltNode methodNode method printString.
-	self assert: item printScope equals: self haltNode methodNode methodClass printString
+	self
+		assert: item printContents
+		equals: self haltNode methodNode sourceCode.
+	self
+		assert: item printEntity
+		equals: self haltNode methodNode compiledMethod printString.
+	self
+		assert: item printScope
+		equals: self haltNode methodNode methodClass printString
 ]
 
-{ #category : #'tests - printing' }
+{ #category : 'tests - printing' }
 StHaltBreakpointInspectionItemTest >> testPrintVariableBreakpointItem [
 
 	| bp item |
@@ -143,7 +159,7 @@ StHaltBreakpointInspectionItemTest >> testPrintVariableBreakpointItem [
 	self assert: item printScope equals: 'self'.
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 StHaltBreakpointInspectionItemTest >> variableBreakpoint [
 
 	^ StDummyTestClassWithHalts newBreakpointForVariable: #var

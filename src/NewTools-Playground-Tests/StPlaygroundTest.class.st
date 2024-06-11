@@ -1,31 +1,32 @@
 Class {
-	#name : #StPlaygroundTest,
-	#superclass : #StPlaygroundBaseTest,
-	#category : #'NewTools-Playground-Tests'
+	#name : 'StPlaygroundTest',
+	#superclass : 'StPlaygroundBaseTest',
+	#category : 'NewTools-Playground-Tests',
+	#package : 'NewTools-Playground-Tests'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StPlaygroundTest >> classToTest [
 
-	^ StPlayground
+	^ StPlaygroundPresenter
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StPlaygroundTest >> initializeInstanceBeforeInitialization: aPresenter [
 
 	aPresenter setModelBeforeInitialization: self newPage
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StPlaygroundTest >> newPlayground [
 
-	^ StPlayground 
+	^ StPlaygroundPresenter 
 		newApplication: application
 		model: self newPage
 		
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundTest >> testContents [
 
 	presenter open.
@@ -35,7 +36,7 @@ StPlaygroundTest >> testContents [
 	self assert: presenter model contents equals: 'Test'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundTest >> testLoadPage [
 
 	| page |
@@ -45,24 +46,24 @@ StPlaygroundTest >> testLoadPage [
 	presenter page flush.
 
 	page := self newPage
-		        contents: 'Test 2';
-		        flush;
-		        yourself.
-	presenter loadPage: page fileReference.
+		contents: 'Test 2';
+		flush;
+		yourself.
+	presenter loadPage: page.
 	self waitUntilUIRedrawed.
 	self assert: presenter page contents equals: page contents
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundTest >> testNewInspectorForWorksWhenModelIsNil [
 	| inspectorPanel |
 
 	inspectorPanel := presenter newInspectorFor: nil.
-	self assert: inspectorPanel notNil.
+	self assert: inspectorPanel isNotNil.
 	self assert: (inspectorPanel isKindOf: StObjectInspectorPresenter)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundTest >> testStopProcessing [
 
 	| page |
@@ -72,7 +73,7 @@ StPlaygroundTest >> testStopProcessing [
 		        contents: 'Test 1';
 		        flush;
 		        yourself.
-	presenter loadPage: page fileReference.
+	presenter loadPage: page.
 	self waitUntilUIRedrawed.
 	"a lot of time"
 	presenter page timeToWait: 1 minute.

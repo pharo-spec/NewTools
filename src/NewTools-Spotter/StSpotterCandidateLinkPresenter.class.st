@@ -3,29 +3,31 @@ A presenter to show a candidate (an option that can be choosen).
 
 "
 Class {
-	#name : #StSpotterCandidateLinkPresenter,
-	#superclass : #StSpotterBasePresenter,
+	#name : 'StSpotterCandidateLinkPresenter',
+	#superclass : 'StSpotterBasePresenter',
 	#instVars : [
 		'iconPresenter',
 		'labelPresenter',
 		'model'
 	],
-	#category : #'NewTools-Spotter-View'
+	#category : 'NewTools-Spotter-View',
+	#package : 'NewTools-Spotter',
+	#tag : 'View'
 }
 
-{ #category : #actions }
+{ #category : 'actions' }
 StSpotterCandidateLinkPresenter >> activateOn: spotterPresenter [
 
 	spotterPresenter activateLink: self model
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidateLinkPresenter >> entry [
 
 	^ self model value
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSpotterCandidateLinkPresenter >> initializePresenters [
 
 	self layout: (SpBoxLayout newLeftToRight
@@ -36,13 +38,10 @@ StSpotterCandidateLinkPresenter >> initializePresenters [
 		add: (labelPresenter := self newLabel);
 		yourself).
 		
-	self addStyle: 'stSpotterLink'.
-	self entry ifNotNil: [ 
-		iconPresenter image: self entry icon.
-		labelPresenter label: self entry label ]
+	self addStyle: 'stSpotterLink'
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterCandidateLinkPresenter >> matchesText: aString [
 
 	^ self model 
@@ -50,14 +49,23 @@ StSpotterCandidateLinkPresenter >> matchesText: aString [
 		ifNil: [ false ]
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StSpotterCandidateLinkPresenter >> model [
 
 	^ model
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StSpotterCandidateLinkPresenter >> setModelBeforeInitialization: aCandidateLink [
 
 	model := aCandidateLink
+]
+
+{ #category : 'initialization' }
+StSpotterCandidateLinkPresenter >> updatePresenter [
+
+	self entry ifNil: [ ^ self ]. 
+	
+	iconPresenter image: (self entry iconOn: self application).
+	labelPresenter label: self entry label
 ]

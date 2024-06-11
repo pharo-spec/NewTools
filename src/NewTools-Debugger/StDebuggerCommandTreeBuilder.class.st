@@ -11,41 +11,43 @@ For instance:
 - an ""accessing-command classes"" protocol returning arrays of methods (i.e., groups)
 "
 Class {
-	#name : #StDebuggerCommandTreeBuilder,
-	#superclass : #Object,
+	#name : 'StDebuggerCommandTreeBuilder',
+	#superclass : 'Object',
 	#instVars : [
 		'rootCommandGroup',
 		'stDebuggerInstance'
 	],
-	#category : #'NewTools-Debugger-Model'
+	#category : 'NewTools-Debugger-Model',
+	#package : 'NewTools-Debugger',
+	#tag : 'Model'
 }
 
-{ #category : #commands }
+{ #category : 'commands' }
 StDebuggerCommandTreeBuilder class >> buildCommandsGroupWith: aStDebuggerInstance forRoot: aRootCommandGroup [
 	^self new buildCommandsGroupWith: aStDebuggerInstance forRoot: aRootCommandGroup
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerCommandTreeBuilder class >> displayStrategy [
 	^self subclassResponsibility 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerCommandTreeBuilder class >> groupDescription [
 	^self subclassResponsibility 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerCommandTreeBuilder class >> groupName [
 	^self subclassResponsibility 
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 StDebuggerCommandTreeBuilder >> asMenuPresenter [ 	
 	^rootCommandGroup asMenuPresenter
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 StDebuggerCommandTreeBuilder >> buildAndRegisterGroup [
 	"builds the group that will register under the provided root command group"
 
@@ -57,41 +59,41 @@ StDebuggerCommandTreeBuilder >> buildAndRegisterGroup [
 	^ group
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 StDebuggerCommandTreeBuilder >> buildCommandsGroupWith: aStDebuggerInstance forRoot: aRootCommandGroup [
 	stDebuggerInstance := aStDebuggerInstance.
 	rootCommandGroup := aRootCommandGroup.
 	self buildDebuggerCommandGroup
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 StDebuggerCommandTreeBuilder >> buildDebuggerCommandGroup [
 	self subclassResponsibility 
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 StDebuggerCommandTreeBuilder >> buildSpecCommand: aCommandClass forContext: anObject [
 	^ aCommandClass forSpecContext: anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerCommandTreeBuilder >> displayStrategy [
 	^self class displayStrategy new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerCommandTreeBuilder >> group [
 	^ rootCommandGroup
 		commandOrGroupNamed: self groupName
 		ifNone: [ self buildAndRegisterGroup ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerCommandTreeBuilder >> groupDescription [
 	^self class groupDescription
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerCommandTreeBuilder >> groupName [ 
 	^self class groupName
 ]

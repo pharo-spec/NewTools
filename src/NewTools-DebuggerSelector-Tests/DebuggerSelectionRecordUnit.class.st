@@ -1,14 +1,15 @@
 Class {
-	#name : #DebuggerSelectionRecordUnit,
-	#superclass : #Object,
+	#name : 'DebuggerSelectionRecordUnit',
+	#superclass : 'Object',
 	#instVars : [
 		'debuggerClass',
 		'success'
 	],
-	#category : #'NewTools-DebuggerSelector-Tests'
+	#category : 'NewTools-DebuggerSelector-Tests',
+	#package : 'NewTools-DebuggerSelector-Tests'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 DebuggerSelectionRecordUnit class >> newOnDebuggerClass: aDebuggerClass withSuccess: aBoolean [
 	| instance |
 	instance := self new.
@@ -17,22 +18,22 @@ DebuggerSelectionRecordUnit class >> newOnDebuggerClass: aDebuggerClass withSucc
 	^ instance
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebuggerSelectionRecordUnit >> debuggerClass [
 	^ debuggerClass
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebuggerSelectionRecordUnit >> debuggerClass: anObject [
 	debuggerClass := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebuggerSelectionRecordUnit >> success [
 	^ success
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DebuggerSelectionRecordUnit >> success: anObject [
 	success := anObject
 ]

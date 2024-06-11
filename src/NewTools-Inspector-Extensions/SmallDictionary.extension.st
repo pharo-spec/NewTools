@@ -1,6 +1,6 @@
-Extension { #name : #SmallDictionary }
+Extension { #name : 'SmallDictionary' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 SmallDictionary >> inspectionItems: aBuilder [
 	<inspectorPresentationOrder: 0 title: 'Items'> 
 	

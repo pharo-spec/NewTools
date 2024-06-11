@@ -2,24 +2,26 @@
 I'm used to mock certain aspects of the `StDebuggerActionModel` class for testing.
 "
 Class {
-	#name : #StMockDebuggerActionModel,
-	#superclass : #StDebuggerActionModel,
+	#name : 'StMockDebuggerActionModel',
+	#superclass : 'StDebuggerActionModel',
 	#instVars : [
 		'tag',
 		'interruptedContext'
 	],
-	#category : #'NewTools-Debugger-Tests-Utils'
+	#category : 'NewTools-Debugger-Tests-Utils',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Utils'
 }
 
-{ #category : #'debug - session' }
+{ #category : 'debug - session' }
 StMockDebuggerActionModel >> autoClassifyMessage: aMessage inClass: aClass [
 ]
 
-{ #category : #context }
+{ #category : 'context' }
 StMockDebuggerActionModel >> computeInitialTopContext [
 ]
 
-{ #category : #initialize }
+{ #category : 'initialization' }
 StMockDebuggerActionModel >> initialize [
 	super initialize.
 	self interruptedContext: (Context
@@ -29,25 +31,25 @@ StMockDebuggerActionModel >> initialize [
 			 arguments: #( #message ))
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StMockDebuggerActionModel >> interruptedContext: anObject [
 
 	interruptedContext := anObject.
 	topContext := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StMockDebuggerActionModel >> session [
 	^StMockSession new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StMockDebuggerActionModel >> tag [
 	^tag
 	
 ]
 
-{ #category : #'debug - stepping' }
+{ #category : 'debug - stepping' }
 StMockDebuggerActionModel >> updateTopContext [
 	tag :=  #updateTopContext
 	

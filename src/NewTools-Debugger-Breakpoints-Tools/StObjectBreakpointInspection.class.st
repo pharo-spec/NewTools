@@ -2,17 +2,19 @@
 I am an inspection for halts and breakpoints, my scope is the inspected object.
 "
 Class {
-	#name : #StObjectBreakpointInspection,
-	#superclass : #StInspection,
+	#name : 'StObjectBreakpointInspection',
+	#superclass : 'StInspectionPresenter',
 	#instVars : [
 		'methodsWithBreakpoints',
 		'breakpointsInSourceCode',
 		'breakpointController'
 	],
-	#category : #'NewTools-Debugger-Breakpoints-Tools-Presenters'
+	#category : 'NewTools-Debugger-Breakpoints-Tools-Presenters',
+	#package : 'NewTools-Debugger-Breakpoints-Tools',
+	#tag : 'Presenters'
 }
 
-{ #category : #layout }
+{ #category : 'layout' }
 StObjectBreakpointInspection class >> defaultLayout [
 
 	^ SpPanedLayout newTopToBottom
@@ -21,13 +23,13 @@ StObjectBreakpointInspection class >> defaultLayout [
 		yourself
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StObjectBreakpointInspection >> breakpointsForModel [
 
 	^ Breakpoint all select: [ :bp | bp scopeIncludes: model ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StObjectBreakpointInspection >> buildBreakpointData [
 	^ (self breakpointsForModel
 		collect: [ :b | StBreakpointInspectionItem forBreakpoint: b ])
@@ -40,7 +42,7 @@ StObjectBreakpointInspection >> buildBreakpointData [
 						or: [ breakpoint isVariableBreakpoint ] ] ]"
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StObjectBreakpointInspection >> buildHaltAndBreakpointData [
 	| breakpointData |
 	breakpointData := OrderedCollection new."SortedCollection
@@ -50,7 +52,7 @@ StObjectBreakpointInspection >> buildHaltAndBreakpointData [
 	^ breakpointData
 ]
 
-{ #category : #presenters }
+{ #category : 'presenters' }
 StObjectBreakpointInspection >> buildHaltAndBreakpointTable [
 	"List of methods in which a breakpoint is installed"
 
@@ -84,7 +86,7 @@ StObjectBreakpointInspection >> buildHaltAndBreakpointTable [
 		contextMenu: self rootCommandsGroup asMenuPresenter
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StObjectBreakpointInspection >> buildHaltData [
 
 	^ (model class allMethods flatCollect: [ :m | 
@@ -93,7 +95,7 @@ StObjectBreakpointInspection >> buildHaltData [
 		  StHaltInspectionItem forHalt: node ]
 ]
 
-{ #category : #presenters }
+{ #category : 'presenters' }
 StObjectBreakpointInspection >> buildSourceCode [
 	"Source code of methods in which breakpoint are installed"
 
@@ -101,12 +103,12 @@ StObjectBreakpointInspection >> buildSourceCode [
 	breakpointsInSourceCode beNotEditable
 ]
 
-{ #category : #presenters }
+{ #category : 'presenters' }
 StObjectBreakpointInspection >> buildTableData [
 	methodsWithBreakpoints items: self buildHaltAndBreakpointData
 ]
 
-{ #category : #presenters }
+{ #category : 'presenters' }
 StObjectBreakpointInspection >> configureSourceCodeUpdate [
 
 	methodsWithBreakpoints whenSelectionChangedDo: [ :selection | 
@@ -117,13 +119,13 @@ StObjectBreakpointInspection >> configureSourceCodeUpdate [
 			selectedItem updateSourceCodePaneFor: self ] ]
 ]
 
-{ #category : #breakpoints }
+{ #category : 'breakpoints' }
 StObjectBreakpointInspection >> disableHaltOrBreakpointFor: haltOrBreakpointItem [
 
 	breakpointController disableHaltOrBreakpointFor: haltOrBreakpointItem
 ]
 
-{ #category : #commands }
+{ #category : 'commands' }
 StObjectBreakpointInspection >> doBrowseBreakpointMethod [
 	| entityToBrowse |
 	
@@ -131,26 +133,26 @@ StObjectBreakpointInspection >> doBrowseBreakpointMethod [
 	self systemNavigation browse: entityToBrowse.
 ]
 
-{ #category : #breakpoints }
+{ #category : 'breakpoints' }
 StObjectBreakpointInspection >> enableHaltOrBreakpointFor: haltOrBreakpointItem [
 
 	breakpointController enableHaltOrBreakpointFor: haltOrBreakpointItem
 ]
 
-{ #category : #breakpoints }
+{ #category : 'breakpoints' }
 StObjectBreakpointInspection >> haltOrBreakpoinsEnabledFor: haltOrBreakpointItem [
 
 	^ breakpointController isHaltOrBreakpointEnabled:
 		  haltOrBreakpointItem
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StObjectBreakpointInspection >> initialize [
 	breakpointController := StHaltAndBreakpointController new.
 	super initialize
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StObjectBreakpointInspection >> initializePresenters [
 	self buildSourceCode.
 	self buildHaltAndBreakpointTable.
@@ -160,14 +162,14 @@ StObjectBreakpointInspection >> initializePresenters [
 	SystemAnnouncer uniqueInstance weak when: BreakpointAdded send: #buildTableData to: self
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StObjectBreakpointInspection >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
 		whenClosedDo: [ SystemAnnouncer uniqueInstance unsubscribe: self ]
 ]
 
-{ #category : #breakpoints }
+{ #category : 'breakpoints' }
 StObjectBreakpointInspection >> isBreakpointObjectCentric: breakpointData [
 	| breakpoint |
 	breakpoint := breakpointData at: #breakpoint ifAbsent: [ ^ false ].
@@ -175,7 +177,7 @@ StObjectBreakpointInspection >> isBreakpointObjectCentric: breakpointData [
 		and: [ breakpoint isVariableBreakpoint not ]
 ]
 
-{ #category : #presenters }
+{ #category : 'presenters' }
 StObjectBreakpointInspection >> labelForHaltSelector: aSelector [
 	"This was intended to be used to display more precise information about the kind of halt we display in the presenter."
 	self flag: 'Not used yet. Kept as documentation for further use'.
@@ -188,17 +190,17 @@ StObjectBreakpointInspection >> labelForHaltSelector: aSelector [
 	^ 'always'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StObjectBreakpointInspection >> methodsWithBreakpoints [
 	^ methodsWithBreakpoints
 ]
 
-{ #category : #'system subscription' }
+{ #category : 'system subscription' }
 StObjectBreakpointInspection >> unsubscribeFromCacheChanges [
 	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 StObjectBreakpointInspection >> updateSourceCodeForBreakpointItem: aStBreakpointInspectionItem [
 
 	"Halts and standard breakpoints items both behave the same"
@@ -206,7 +208,7 @@ StObjectBreakpointInspection >> updateSourceCodeForBreakpointItem: aStBreakpoint
 	self updateSourceCodeForHaltItem: aStBreakpointInspectionItem
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 StObjectBreakpointInspection >> updateSourceCodeForHaltItem: aStHaltInspectionItem [
 
 	breakpointsInSourceCode withLineNumbers.
@@ -215,7 +217,7 @@ StObjectBreakpointInspection >> updateSourceCodeForHaltItem: aStHaltInspectionIt
 	breakpointsInSourceCode beForBehavior: model class
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 StObjectBreakpointInspection >> updateSourceCodeForVariableBreakpointItem: aStBreakpointInspectionItem [
 
 	breakpointsInSourceCode
@@ -224,7 +226,7 @@ StObjectBreakpointInspection >> updateSourceCodeForVariableBreakpointItem: aStBr
 	breakpointsInSourceCode beForBehavior: model class
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 StObjectBreakpointInspection >> windowIsClosing [
 	^ self unsubscribeFromCacheChanges
 ]

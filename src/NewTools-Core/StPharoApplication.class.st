@@ -2,41 +2,43 @@
 The application for the Pharo IDE.
 "
 Class {
-	#name : #StPharoApplication,
-	#superclass : #SpApplication,
+	#name : 'StPharoApplication',
+	#superclass : 'SpApplication',
 	#classVars : [
 		'Current'
 	],
-	#category : #'NewTools-Core-Application'
+	#category : 'NewTools-Core-Application',
+	#package : 'NewTools-Core',
+	#tag : 'Application'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StPharoApplication class >> current [ 
 	
 	^ Current ifNil: [ Current := self new ]
 ]
 
-{ #category : #'class initialization' }
+{ #category : 'class initialization' }
 StPharoApplication class >> initialize [ 
 
 	SessionManager default registerToolClassNamed: self name
 ]
 
-{ #category : #'system startup' }
+{ #category : 'system startup' }
 StPharoApplication class >> shutDown: quitting [
 
 	Current ifNil: [ ^ self ].
 	Current shutDown: quitting
 ]
 
-{ #category : #'system startup' }
+{ #category : 'system startup' }
 StPharoApplication class >> startUp: resuming [
 
 	Current ifNil: [ ^ self ].
 	Current startUp: resuming
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPharoApplication class >> use: application during: aBlock [ 
 	| oldCurrent |
 	
@@ -45,17 +47,23 @@ StPharoApplication class >> use: application during: aBlock [
 	^ aBlock ensure: [ Current := oldCurrent ]
 ]
 
-{ #category : #'accessing - resources' }
+{ #category : 'accessing - resources' }
 StPharoApplication >> defaultWindowExtent [
 	
 	self flag: #TODO. "Replace this with a real real estate"
 	^ 800@600
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPharoApplication >> initialize [
 
 	super initialize.
+	self initializeConfiguration
+]
+
+{ #category : 'initialization' }
+StPharoApplication >> initializeConfiguration [
+
 	self resetConfiguration.
 	SystemAnnouncer uniqueInstance weak 
 		when: UIThemeChanged 
@@ -63,51 +71,61 @@ StPharoApplication >> initialize [
 		to: self
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'private - factory' }
 StPharoApplication >> newIconProvider [
 
 	^ StPharoDefaultIconProvider new
 ]
 
-{ #category : #initialization }
-StPharoApplication >> resetConfiguration [
+{ #category : 'private - running' }
+StPharoApplication >> resetBackend [
+	| backendName |
 	
-	self flag: #TODO. "Invalidating for a moment because I need to align with Spec"
-	"self configuration reset"
+	backendName := backend 
+		ifNil: [ self class defaultBackendName ] 
+		ifNotNil: [ backend name ].
+	self useBackend: backendName.
 ]
 
-{ #category : #running }
+{ #category : 'initialization' }
+StPharoApplication >> resetConfiguration [
+	
+	self configuration reset
+]
+
+{ #category : 'running' }
 StPharoApplication >> run [ 
 
-	Current ifNotNil: [ Current close ].
+	Current ifNotNil: [ Current closeAllWindows ].
 	super run. 
 	Current := self
 ]
 
-{ #category : #'system startup' }
+{ #category : 'system startup' }
 StPharoApplication >> shutDown: quitting [
 ]
 
-{ #category : #'private - running' }
+{ #category : 'private - running' }
 StPharoApplication >> start [
 
 	
 ]
 
-{ #category : #'system startup' }
+{ #category : 'system startup' }
 StPharoApplication >> startUp: resuming [
 
-	self resetConfiguration
+	self resetConfiguration.
+	self resetBackend.
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StPharoApplication >> toolbarDisplayMode [
 
 	^ StPharoSettings toolbarDisplayMode
 ]
 
-{ #category : #'accessing - resources' }
+{ #category : 'accessing - resources' }
 StPharoApplication >> tools [
 
-	^ Smalltalk os tools
+	^ Smalltalk tools
 ]

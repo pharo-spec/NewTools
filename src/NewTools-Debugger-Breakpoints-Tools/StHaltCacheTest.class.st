@@ -1,10 +1,12 @@
 Class {
-	#name : #StHaltCacheTest,
-	#superclass : #StHaltAndBreakpointControlTest,
-	#category : #'NewTools-Debugger-Breakpoints-Tools-Tests'
+	#name : 'StHaltCacheTest',
+	#superclass : 'StHaltAndBreakpointControlTest',
+	#category : 'NewTools-Debugger-Breakpoints-Tools-Tests',
+	#package : 'NewTools-Debugger-Breakpoints-Tools',
+	#tag : 'Tests'
 }
 
-{ #category : #'tests - halts cache' }
+{ #category : 'tests - halts cache' }
 StHaltCacheTest >> testAddingHaltToMethod [
 	| nodeCacheForSimpleHalt originalNodeCacheSize |
 	nodeCacheForSimpleHalt := cache
@@ -27,7 +29,7 @@ StHaltCacheTest >> testAddingHaltToMethod [
 		equals: 1
 ]
 
-{ #category : #'tests - cache initialization' }
+{ #category : 'tests - cache initialization' }
 StHaltCacheTest >> testCacheActivation [
 	cache removeSubscriptions.
 	cache := StHaltCache new.
@@ -36,7 +38,7 @@ StHaltCacheTest >> testCacheActivation [
 	self assert: (SystemAnnouncer uniqueInstance hasSubscriber: cache) 
 ]
 
-{ #category : #'tests - cache initialization' }
+{ #category : 'tests - cache initialization' }
 StHaltCacheTest >> testCacheDectivation [
 	cache removeSubscriptions.
 	cache := StHaltCache new.
@@ -46,19 +48,19 @@ StHaltCacheTest >> testCacheDectivation [
 	self deny: (SystemAnnouncer uniqueInstance hasSubscriber: cache) 
 ]
 
-{ #category : #'tests - cache initialization' }
+{ #category : 'tests - cache initialization' }
 StHaltCacheTest >> testInitialActivation [
 	cache := StHaltCache new.
 	self deny: cache isActive.
 	self deny: (SystemAnnouncer uniqueInstance hasSubscriber: cache) 
 ]
 
-{ #category : #'tests - cache building' }
+{ #category : 'tests - cache building' }
 StHaltCacheTest >> testInitialCacheBuild [
 	self assert: cache methodsWithHalts size equals: 6.
 	(self testClass methods
 		reject: [ :m | 
-			#('StDummyTestClassWithHalts>>#mNoHalt' 'StDummyTestClassWithHalts>>#mRejectHalt')
+			#('StDummyTestClassWithHalts>>#mNoHalt' 'StDummyTestClassWithHalts>>#mRejectHalt' 'StDummyTestClassWithHalts>>#var')
 				includes: m printString ])
 		do: [ :method | 
 			| haltNode nodeCache |
@@ -72,7 +74,7 @@ StHaltCacheTest >> testInitialCacheBuild [
 				identicalTo: haltNode ]
 ]
 
-{ #category : #'tests - halts cache' }
+{ #category : 'tests - halts cache' }
 StHaltCacheTest >> testMethodWithHaltRemoval [
 	|methodCacheForSimpleHalt |
 	methodCacheForSimpleHalt := cache methodsWithHalts size.
@@ -83,7 +85,7 @@ StHaltCacheTest >> testMethodWithHaltRemoval [
 		(cache methodsWithHalts keys select:[:methodSelector| methodSelector = 'StDummyTestClassWithHalts>>#mHalt']) isEmpty
 ]
 
-{ #category : #'tests - halts cache' }
+{ #category : 'tests - halts cache' }
 StHaltCacheTest >> testNewMethodWithHalt [
 	|methodCacheForSimpleHalt haltNode|
 	methodCacheForSimpleHalt := cache methodsWithHalts size.
@@ -97,7 +99,7 @@ StHaltCacheTest >> testNewMethodWithHalt [
 
 ]
 
-{ #category : #'tests - cache building' }
+{ #category : 'tests - cache building' }
 StHaltCacheTest >> testRefreshCacheWithScanAllSystem [
 	|newCache|
 	newCache := StHaltCache new.
@@ -106,7 +108,7 @@ StHaltCacheTest >> testRefreshCacheWithScanAllSystem [
 	self assert: cache methodsWithHalts size >= 6
 ]
 
-{ #category : #'tests - cache building' }
+{ #category : 'tests - cache building' }
 StHaltCacheTest >> testRefreshCacheWithoutScanAllSystem [
 	|newCache|
 	newCache := StHaltCache new.
@@ -114,7 +116,7 @@ StHaltCacheTest >> testRefreshCacheWithoutScanAllSystem [
 	self assert: newCache methodsWithHalts isEmpty
 ]
 
-{ #category : #'tests - halts cache' }
+{ #category : 'tests - halts cache' }
 StHaltCacheTest >> testRemoveAllHaltsFromMethod [
 	| methodCacheForSimpleHalt |
 	methodCacheForSimpleHalt := cache methodsWithHalts size.
@@ -130,14 +132,14 @@ StHaltCacheTest >> testRemoveAllHaltsFromMethod [
 				isEmpty
 ]
 
-{ #category : #'tests - cache building' }
+{ #category : 'tests - cache building' }
 StHaltCacheTest >> testScanAllSystemDisabled [
 	|newCache|
 	newCache := StHaltCache new.
 	self assert: newCache methodsWithHalts isEmpty
 ]
 
-{ #category : #'tests - cache building' }
+{ #category : 'tests - cache building' }
 StHaltCacheTest >> testScanAllSystemEnabled [
 	|newCache|
 	newCache := StHaltCache basicNew.
@@ -146,7 +148,7 @@ StHaltCacheTest >> testScanAllSystemEnabled [
 	self assert: cache methodsWithHalts size >= 6
 ]
 
-{ #category : #'tests - halts cache' }
+{ #category : 'tests - halts cache' }
 StHaltCacheTest >> testShouldConsiderHaltNode [
 	| node |
 	node := RBMessageNode receiver: RBVariableNode selfNode selector: #haltOnAccessTo.

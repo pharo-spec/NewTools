@@ -3,8 +3,8 @@ The content of a playground page.
 Since `StPlayground` is in fact a miller list that allows users to navigate, the actual ""playground"" resides here.
 "
 Class {
-	#name : #StPlaygroundPagePresenter,
-	#superclass : #StPresenter,
+	#name : 'StPlaygroundPagePresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'text',
 		'toolbar',
@@ -12,15 +12,18 @@ Class {
 		'lineLabel',
 		'toggleLineNumberButton',
 		'page',
-		'activationBlock'
+		'activationBlock',
+		'loading'
 	],
 	#classVars : [
 		'CacheDirectory'
 	],
-	#category : #'NewTools-Playground-View'
+	#category : 'NewTools-Playground-View',
+	#package : 'NewTools-Playground',
+	#tag : 'View'
 }
 
-{ #category : #'private commands' }
+{ #category : 'private commands' }
 StPlaygroundPagePresenter class >> baseToolbarCommands [
 
 	^ { 
@@ -32,26 +35,26 @@ StPlaygroundPagePresenter class >> baseToolbarCommands [
 	}
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPagePresenter class >> cacheDirectory [
 	
 	^ CacheDirectory ifNil: [ self defaultCacheDirectory ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPagePresenter class >> cacheDirectory: aDirectory [
 	
 	self flag: #TODO. "This go to settings"
 	CacheDirectory := aDirectory ensureCreateDirectory
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundPagePresenter class >> defaultCacheDirectory [
 	
 	^ (FileLocator localDirectory / 'play-cache') ensureCreateDirectory
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StPlaygroundPagePresenter class >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -62,32 +65,32 @@ StPlaygroundPagePresenter class >> defaultLayout [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPagePresenter class >> defaultTitle [ 
 
 	^ 'Playground'
 ]
 
-{ #category : #'private commands' }
+{ #category : 'private commands' }
 StPlaygroundPagePresenter class >> extendedMenuCommands [
 
 	^ StPlaygroundMenuExtensionCommand allCommands
 ]
 
-{ #category : #'private commands' }
+{ #category : 'private commands' }
 StPlaygroundPagePresenter class >> extendedToolbarCommands [
 
 	^ StPlaygroundToolbarExtensionCommand allCommands
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StPlaygroundPagePresenter class >> open [ 
 	<script>
 	
 	^ (self on: StPlaygroundPage new) open
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StPlaygroundPagePresenter class >> openContents: aString [
 	"Open a new workspace with the given contents. It looks better when aString is code since the style is applied"
 
@@ -96,7 +99,7 @@ StPlaygroundPagePresenter class >> openContents: aString [
 		open
 ]
 
-{ #category : #'tools registry' }
+{ #category : 'tools registry' }
 StPlaygroundPagePresenter class >> registerToolsOn: registry [
 	"Add ourselves to registry. See [Smalltalk tools]" 
 
@@ -104,88 +107,102 @@ StPlaygroundPagePresenter class >> registerToolsOn: registry [
 
 ]
 
-{ #category : #'private commands' }
+{ #category : 'private commands' }
 StPlaygroundPagePresenter class >> toolbarCommands [
 
 	^ (self baseToolbarCommands, self extendedToolbarCommands) sorted: #order ascending
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StPlaygroundPagePresenter >> activateOnDoubleClick [
 	"For compatibility, playground will not activate on single or double click (but in <meta+g>)"
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StPlaygroundPagePresenter >> activateOnSingleClick [
 	"For compatibility, playground will not activate on single or double click (but in <meta+g>)"
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundPagePresenter >> addMenuCommandsTo: aGroup [
 
 	self class extendedMenuCommands 
 		do: [ :each | aGroup register: (each forSpecContext: self) ]	
 ]
 
-{ #category : #private }
+{ #category : 'private' }
+StPlaygroundPagePresenter >> addMenuEditionCommandsTo: aCommandGroup presenter: aCodePresenter [
+
+	aCodePresenter backendIncludesEditionMenu ifTrue: [ ^ self ].
+	aCommandGroup register: (aCodePresenter editionCommandsGroup name: 'Edition')
+]
+
+{ #category : 'private' }
 StPlaygroundPagePresenter >> addToolbarCommandsTo: aGroup [
 
 	self class toolbarCommands do: [ :each | 
 		aGroup register: (each forSpecContext: self) ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundPagePresenter >> basicPage: aPage [ 
 
 	page := aPage
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPagePresenter >> contents: aString [
 
 	text text: aString
 ]
 
-{ #category : #'api - focus' }
+{ #category : 'api - focus' }
 StPlaygroundPagePresenter >> defaultKeyboardFocus [
 
 	^ text
 ]
 
-{ #category : #commands }
+{ #category : 'commands' }
 StPlaygroundPagePresenter >> doEvaluateAllAndGo [
 
 	self selectAll.
 	self doEvaluateAndGo
 ]
 
-{ #category : #commands }
+{ #category : 'commands' }
 StPlaygroundPagePresenter >> doEvaluateAndGo [
 	| value |
-	
+
 	activationBlock ifNil: [ ^ self ].
 
-	value := text 
+	value := text
 		evaluate: text selectedTextOrLine
 		onCompileError: [ ^ self ]
 		onError: [ :e | e pass ].
-	
-	activationBlock value: (StEvaluatedSelectionModel newValue: value)
+
+	activationBlock value: value
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPagePresenter >> ensureContentsFlushed [
-	
+
 	self page ensureContentsFlushed
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StPlaygroundPagePresenter >> hasOutputActivationPort [
 	
 	^ true
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
+StPlaygroundPagePresenter >> initialize [
+
+	loading := false.
+	super initialize
+]
+
+{ #category : 'initialization' }
 StPlaygroundPagePresenter >> initializePresenters [
 
 	self initializeToolbar.
@@ -195,20 +212,24 @@ StPlaygroundPagePresenter >> initializePresenters [
 		interactionModel: StPlaygroundInteractionModel new;
 		lineNumbers: self showLineNumbers;
 		overridingContextMenu;
+		withEditionContextMenu;
 		contextMenu: [ (self menuActionsFor: text) asMenuPresenter ];
 		contextKeyBindings: (self menuActionsFor: text) asKMCategory;
-		whenTextChangedDo: [ :aString | page contents: aString ].
-		
-	text eventHandler 
+		whenTextChangedDo: [ :aString | self updateContents: aString ].
+
+	text announcer
+		when: SpCodeWillBeEvaluatedAnnouncement
+		send: #ensureContentsFlushed
+		to: self.
+
+	text eventHandler
 		whenKeyUpDo: [ :event | self updateLineNumber ];
 		whenMouseUpDo: [ :event | self updateLineNumber ];
 		"before taking focus position will be nil, ensure I have the correct one"
-		whenFocusReceivedDo: [ self updateLineNumber ].
-		
-	self updatePresenter
+		whenFocusReceivedDo: [ self updateLineNumber ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPagePresenter >> initializeStatusbar [ 
 
 	(statusbar := self instantiate: SpPresenter)
@@ -228,7 +249,7 @@ StPlaygroundPagePresenter >> initializeStatusbar [
 		whenChangedDo: [ :state | self showLineNumbers: state ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPagePresenter >> initializeToolbar [
 
 	toolbar := self newToolbar
@@ -238,7 +259,7 @@ StPlaygroundPagePresenter >> initializeToolbar [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPagePresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
@@ -248,21 +269,30 @@ StPlaygroundPagePresenter >> initializeWindow: aWindowPresenter [
 		whenOpenedDo: [ text takeKeyboardFocus ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPagePresenter >> interactionModel [
 
 	^ text interactionModel
 ]
 
-{ #category : #actions }
-StPlaygroundPagePresenter >> loadPage: aFileReference [
+{ #category : 'actions' }
+StPlaygroundPagePresenter >> loadPage: aPage [
 
-	self basicPage: (StPlaygroundPage fromReference: aFileReference).
-	text text: page contents.
+	loading := true.
+	
+	[
+		self basicPage: aPage.
+		aPage onFlush: [
+			self announce: (StPlaygroundPageFlushed newPage: aPage) ].
+		self announce: (StPlaygroundPageLoaded newPage: aPage).
+		self updatePresenter ]
+	ensure: [ 
+		loading := false ].
+	
 	^ page
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundPagePresenter >> menuActionsFor: aCodePresenter [
 
 	^ CmCommandGroup forSpec
@@ -272,7 +302,7 @@ StPlaygroundPagePresenter >> menuActionsFor: aCodePresenter [
 			register: (StEvaluateCommand forSpecContext: self);
 			yourself);
 		register: (aCodePresenter rootCommandsGroup name: 'Code');
-		register: (aCodePresenter editionCommandsGroup name: 'Edition');
+		in: [ :this | self addMenuEditionCommandsTo: this presenter: aCodePresenter ];
 		in: [ :this | self addMenuCommandsTo: this ];
 		register: ((CmCommandGroup named: 'Playground') asSpecGroup
 			register: ((CmCommandGroup named: 'Base options') asSpecGroup
@@ -287,19 +317,19 @@ StPlaygroundPagePresenter >> menuActionsFor: aCodePresenter [
 		yourself
 ]
 
-{ #category : #transmission }
+{ #category : 'transmission' }
 StPlaygroundPagePresenter >> outputActivationPort [
 
 	^ SpActivationPort newPresenter: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPagePresenter >> page [
 
 	^ page
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundPagePresenter >> preferredExtent: aSize [
 
 	(self window isMaximized 
@@ -308,13 +338,13 @@ StPlaygroundPagePresenter >> preferredExtent: aSize [
 	self class preferredExtent: aSize
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPagePresenter >> selectAll [
 	
 	^ text selectAll
 ]
 
-{ #category : #'inspector compatibility' }
+{ #category : 'inspector compatibility' }
 StPlaygroundPagePresenter >> selectedPageName [
 	"Since the playground can be the starting point of an inspection (using <meta+g>), the 
 	 page presenter (which is the playground itself) needs to respond to which kind of page 
@@ -323,25 +353,25 @@ StPlaygroundPagePresenter >> selectedPageName [
 	^ self class defaultTitle
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPagePresenter >> selectedTextOrLine [
 	
 	^ text selectedTextOrLine
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StPlaygroundPagePresenter >> setModelBeforeInitialization: aPage [
 
 	page := aPage
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundPagePresenter >> showLineNumbers [
 
 	^ StPharoSettings codeShowLineNumbers
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 StPlaygroundPagePresenter >> showLineNumbers: aBoolean [
 
 	StPharoSettings codeShowLineNumbers: aBoolean.
@@ -349,19 +379,19 @@ StPlaygroundPagePresenter >> showLineNumbers: aBoolean [
 	toggleLineNumberButton label: (StShowLineNumbersCommand iconLabelFor: self showLineNumbers)
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundPagePresenter >> text [
 
 	^ text
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StPlaygroundPagePresenter >> toggleShowLineNumbers [
 
 	self showLineNumbers: self showLineNumbers not
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StPlaygroundPagePresenter >> toolbarActions [
 
 	^ CmCommandGroup forSpec
@@ -369,7 +399,14 @@ StPlaygroundPagePresenter >> toolbarActions [
 		yourself
 ]
 
-{ #category : #'private - updating' }
+{ #category : 'private - updating' }
+StPlaygroundPagePresenter >> updateContents: aString [
+
+	loading ifTrue: [ ^ self ].
+	self page contents: aString
+]
+
+{ #category : 'private - updating' }
 StPlaygroundPagePresenter >> updateLineNumber [
 	| pos |
 	
@@ -380,19 +417,21 @@ StPlaygroundPagePresenter >> updateLineNumber [
 		ifNil: [ '' ])
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPagePresenter >> updatePresenter [
 
+	page ifNotNil: [
+		text text: page contents ].
 	self updateLineNumber
 ]
 
-{ #category : #'api - events' }
+{ #category : 'api - events' }
 StPlaygroundPagePresenter >> whenActivatedDo: aBlock [
 
 	activationBlock := aBlock
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPagePresenter >> windowIcon [
 	
 	^ self application iconNamed: #workspace

@@ -2,12 +2,13 @@
 I am a test class to measure the impact of the new implementation of spotter processors.
 "
 Class {
-	#name : #StBenchProcessors,
-	#superclass : #Object,
-	#category : #'NewTools-Spotter-Processors-Tests'
+	#name : 'StBenchProcessors',
+	#superclass : 'Object',
+	#category : 'NewTools-Spotter-Processors-Tests',
+	#package : 'NewTools-Spotter-Processors-Tests'
 }
 
-{ #category : #benchmarking }
+{ #category : 'benchmarking' }
 StBenchProcessors >> benchClassFinding [
 	<script: 'self new benchClassFinding'>
 
@@ -32,7 +33,7 @@ StBenchProcessors >> benchClassFinding [
 
 ]
 
-{ #category : #benchmarking }
+{ #category : 'benchmarking' }
 StBenchProcessors >> benchImplementors [
 	<script: 'self new benchImplementors'>
 
@@ -57,7 +58,7 @@ StBenchProcessors >> benchImplementors [
 
 ]
 
-{ #category : #benchmarking }
+{ #category : 'benchmarking' }
 StBenchProcessors >> contextForText: aString [
 
 	| candidates stream |
@@ -78,32 +79,32 @@ StBenchProcessors >> contextForText: aString [
 	
 ]
 
-{ #category : #benchmarking }
+{ #category : 'benchmarking' }
 StBenchProcessors >> newClassProcessor [
 
 	^ StClassProcessor new
 ]
 
-{ #category : #benching }
+{ #category : 'benching' }
 StBenchProcessors >> newImplementorsProcessor [
 	
 	^ StImplementorsProcessor new
 ]
 
-{ #category : #benchmarking }
+{ #category : 'benchmarking' }
 StBenchProcessors >> oldClassProcessor [
 
 	^ StSpotterCandidatesListProcessor new
 		allCandidates: [ Smalltalk allClassesAndTraits ];
 		title: 'Classes';
 		filter: StFilterFuzzy;
-		itemIcon: #systemIcon;
+		itemIconName: [ :item | item systemIconName ];
 		keyBinding: $b meta;
 		wantsToDisplayOnEmptyQuery: false;
 		yourself
 ]
 
-{ #category : #benching }
+{ #category : 'benching' }
 StBenchProcessors >> oldImplementorsProcessor [
 
 	^ StSpotterCandidatesListProcessor new
@@ -114,7 +115,7 @@ StBenchProcessors >> oldImplementorsProcessor [
 		wantsToDisplayOnEmptyQuery: false
 ]
 
-{ #category : #benching }
+{ #category : 'benching' }
 StBenchProcessors >> runClassBenchMarksFor: aString resultsInto: aWriteStream for: processorName [
 	| context oldProcessor newProcessor oldBench newBench |
 	

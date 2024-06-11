@@ -1,6 +1,6 @@
-Extension { #name : #IRMethod }
+Extension { #name : 'IRMethod' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 IRMethod >> inpectionIr [
 	<inspectorPresentationOrder: 40 title: 'Symbolic'>
 

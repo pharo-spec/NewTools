@@ -2,64 +2,65 @@
 I am a dumb object that accept visitors, to test Sindarin commands.
 "
 Class {
-	#name : #SindarinTestObjectToVisit,
-	#superclass : #Object,
-	#category : #'NewTools-Sindarin-Commands-Tests'
+	#name : 'SindarinTestObjectToVisit',
+	#superclass : 'Object',
+	#category : 'NewTools-Sindarin-Commands-Tests',
+	#package : 'NewTools-Sindarin-Commands-Tests'
 }
 
-{ #category : #lessons }
+{ #category : 'lessons' }
 SindarinTestObjectToVisit class >> basicNewInstantiation [
 	^self basicNew
 ]
 
-{ #category : #lessons }
+{ #category : 'lessons' }
 SindarinTestObjectToVisit class >> newInstantiation [
 	^self new
 ]
 
-{ #category : #visitors }
+{ #category : 'visitors' }
 SindarinTestObjectToVisit >> acceptVisitor: aVisitor [
 
 	aVisitor visitTestObject: self
 ]
 
-{ #category : #visitors }
+{ #category : 'visitors' }
 SindarinTestObjectToVisit >> acceptVisitorMultipleObjects: aVisitor [
 
 	self class new acceptVisitor: aVisitor.
 	aVisitor visitTestObject: self
 ]
 
-{ #category : #visitors }
+{ #category : 'visitors' }
 SindarinTestObjectToVisit >> acceptVisitorNeverFinishes: aVisitor [
-
+	<compilerOptions: #(- optionInlineTimesRepeat)>
 	10000 timesRepeat: [ self doStuff ]
 ]
 
-{ #category : #visitors }
+{ #category : 'visitors' }
 SindarinTestObjectToVisit >> acceptVisitorWithError: visitor [
-
+	<ignoreNotImplementedSelectors: #(dnu)>
 	visitor dnu
   
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 SindarinTestObjectToVisit >> createInstanceWithBasicNew [
 	^self class basicNewInstantiation 
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 SindarinTestObjectToVisit >> createInstanceWithNew [
 	^self class newInstantiation 
 ]
 
-{ #category : #visitors }
+{ #category : 'visitors' }
 SindarinTestObjectToVisit >> doNotAcceptVisitor: aVisitor [
 
 	10 timesRepeat: [ self doStuff ]
 ]
 
-{ #category : #visitors }
+{ #category : 'visitors' }
 SindarinTestObjectToVisit >> doStuff [
 
 	^ self

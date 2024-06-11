@@ -1,14 +1,15 @@
 Class {
-	#name : #HCBrowser,
-	#superclass : #ComposablePresenter,
+	#name : 'HCBrowser',
+	#superclass : 'ComposablePresenter',
 	#instVars : [
 		'listItems',
 		'docReader'
 	],
-	#category : #HelpCenter
+	#category : 'HelpCenter',
+	#package : 'HelpCenter'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 HCBrowser class >> defaultSpec [
 	^SpecRowLayout composed
 		newColumn: [ :col | col add: #listItems ] origin: 0 @ 0 corner: 0.3 @ 1;
@@ -17,38 +18,38 @@ HCBrowser class >> defaultSpec [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 HCBrowser >> docReader [
 	^ docReader
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 HCBrowser >> docReader: anObject [
 	docReader := anObject
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 HCBrowser >> initializePresenter [
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 HCBrowser >> initializeWidgets [
 	listItems := self newList.
 	docReader := self newText.
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 HCBrowser >> listItems [
 	^ listItems
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 HCBrowser >> listItems: anObject [
 	listItems := anObject
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 HCBrowser >> title [
 	^'HCBrowser'
 ]

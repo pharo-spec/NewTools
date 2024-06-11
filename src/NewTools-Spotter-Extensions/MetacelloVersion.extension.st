@@ -1,6 +1,6 @@
-Extension { #name : #MetacelloVersion }
+Extension { #name : 'MetacelloVersion' }
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 MetacelloVersion >> spotterForGroupsFor: aStep [
 	<stSpotterOrder: 2>
 	aStep listProcessor
@@ -11,7 +11,7 @@ MetacelloVersion >> spotterForGroupsFor: aStep [
 		wantsToDisplayOnEmptyQuery: true
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 MetacelloVersion >> spotterForPackagesFor: aStep [
 	<stSpotterOrder: 3>
 	aStep listProcessor

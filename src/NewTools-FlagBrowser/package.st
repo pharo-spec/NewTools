@@ -1,1 +1,1 @@
-Package { #name : #'NewTools-FlagBrowser' }
+Package { #name : 'NewTools-FlagBrowser' }

@@ -1,21 +1,22 @@
 Class {
-	#name : #StInspectorTest,
-	#superclass : #TestCase,
+	#name : 'StInspectorTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'inspector'
 	],
-	#category : #'NewTools-Inspector-Tests'
+	#category : 'NewTools-Inspector-Tests',
+	#package : 'NewTools-Inspector-Tests'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 StInspectorTest >> setUp [
 	
 	super setUp.
-	inspector := StInspector onObject: 42
+	inspector := StInspectorPresenter onObject: 42
 	
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StInspectorTest >> tearDown [
 
 	inspector window 
@@ -23,7 +24,7 @@ StInspectorTest >> tearDown [
 	super tearDown
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StInspectorTest >> testBuildPresentationWithDoesNotUndertandShouldReturnCodePresenter [
 
 
@@ -37,7 +38,7 @@ StInspectorTest >> testBuildPresentationWithDoesNotUndertandShouldReturnCodePres
 	context newInspectionPresenter
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StInspectorTest >> testBuildPresentationWithFailureShouldReturnCodePresenter [
 
 
@@ -51,7 +52,7 @@ StInspectorTest >> testBuildPresentationWithFailureShouldReturnCodePresenter [
 	context newInspectionPresenter
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StInspectorTest >> testBuildPresentationWithHaltShouldReturnCodePresenter [
 
 
@@ -65,7 +66,7 @@ StInspectorTest >> testBuildPresentationWithHaltShouldReturnCodePresenter [
 	context newInspectionPresenter
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StInspectorTest >> testConfigureContextWithDoesNotUnderstandShouldMarkContextAsError [
 
 
@@ -77,7 +78,7 @@ StInspectorTest >> testConfigureContextWithDoesNotUnderstandShouldMarkContextAsE
 	self assert: context isErrorContext
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StInspectorTest >> testConfigureContextWithErrorShouldMarkContextAsError [
 
 
@@ -89,7 +90,7 @@ StInspectorTest >> testConfigureContextWithErrorShouldMarkContextAsError [
 	self assert: context isErrorContext
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StInspectorTest >> testConfigureContextWithHaltShouldMarkContextAsError [
 
 
@@ -101,7 +102,7 @@ StInspectorTest >> testConfigureContextWithHaltShouldMarkContextAsError [
 	self assert: context isErrorContext
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StInspectorTest >> testContextSelectorForBuilderSelector [
 
 	| c |
@@ -112,7 +113,7 @@ StInspectorTest >> testContextSelectorForBuilderSelector [
 		equals: #selectorWithArgumentContext:
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StInspectorTest >> testContextSelectorForNonBuilderSelector [
 
 	| c |
@@ -123,7 +124,7 @@ StInspectorTest >> testContextSelectorForNonBuilderSelector [
 		equals: #selectorWithoutArgumentContext:
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StInspectorTest >> testDefaultKeyboardFocus [
 
 	inspector open.
@@ -132,7 +133,7 @@ StInspectorTest >> testDefaultKeyboardFocus [
 		equals: inspector millerList presenters first
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StInspectorTest >> testDefineContextInSubclass [
 
 	| c |
@@ -141,16 +142,16 @@ StInspectorTest >> testDefineContextInSubclass [
 	self deny: (c contextFromPragma: (StInspectorMockObject >> #inspectionMock1) pragmas first) isActive
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StInspectorTest >> testFirstPage [
 
 	inspector open.
-	self assert: inspector firstPage notNil.
+	self assert: inspector firstPage isNotNil.
 	self assert:
 		(inspector firstPage isKindOf: StObjectInspectorPresenter)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StInspectorTest >> testModel [
 
 	self assert: inspector model inspectedObject equals: 42.

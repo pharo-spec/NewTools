@@ -1,21 +1,22 @@
 Class {
-	#name : #StCriticRuleChooserPresenter,
-	#superclass : #StPackageChooserPresenter,
+	#name : 'StCriticRuleChooserPresenter',
+	#superclass : 'StPackageChooserPresenter',
 	#instVars : [
 		'packageActionBar',
 		'testPackages'
 	],
-	#category : #'NewTools-CriticsBrowser'
+	#category : 'NewTools-CriticsBrowser',
+	#package : 'NewTools-CriticsBrowser'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCriticRuleChooserPresenter >> initialize [
 
 	testPackages := false.
 	super initialize
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCriticRuleChooserPresenter >> initializeLayout [
 	
 	self layout: (SpBoxLayout newTopToBottom
@@ -34,14 +35,14 @@ StCriticRuleChooserPresenter >> initializeLayout [
 		yourself)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCriticRuleChooserPresenter >> initializePackageList [
 	
 	super initializePackageList.
 	packageList display: [ :each | each name ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StCriticRuleChooserPresenter >> packages [
 	| rules rulesByGroup |
 	

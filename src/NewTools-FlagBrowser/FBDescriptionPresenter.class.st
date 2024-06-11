@@ -12,37 +12,39 @@ Internal Representation and Key Implementation Points.
 
 "
 Class {
-	#name : #FBDescriptionPresenter,
-	#superclass : #FBPagePresenter,
+	#name : 'FBDescriptionPresenter',
+	#superclass : 'FBPagePresenter',
 	#instVars : [
 		'description'
 	],
-	#category : #'NewTools-FlagBrowser-Presenters'
+	#category : 'NewTools-FlagBrowser-Presenters',
+	#package : 'NewTools-FlagBrowser',
+	#tag : 'Presenters'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 FBDescriptionPresenter class >> defaultSpec [
 	^ SpBoxLayout newVertical
 		add: #description;
 		yourself
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 FBDescriptionPresenter class >> icon [
 	^ #help
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FBDescriptionPresenter class >> priority [
 	^ 20
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 FBDescriptionPresenter class >> title [
 	^ 'Description'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 FBDescriptionPresenter >> initializeWidgets [
 	description := self newText.
 

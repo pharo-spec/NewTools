@@ -1,12 +1,12 @@
-Extension { #name : #AbstractFileReference }
+Extension { #name : 'AbstractFileReference' }
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 AbstractFileReference >> isZipFile [
 
 	^ self isFile and: [ #('zip' 'jar' 'ear' 'war') includes: self extension ]
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 AbstractFileReference >> spotterForDirectoriesFor: aStep [
 	<stSpotterOrder: 10>
 	
@@ -16,27 +16,29 @@ AbstractFileReference >> spotterForDirectoriesFor: aStep [
 			title: 'Directories';
 			candidatesLimit: Float infinity;
 			itemName: #basename;
-			itemIcon: [ self iconNamed: #glamorousFolder ];
+			itemIconName: [ :item | #glamorousFolder ];
 			filter: StFilterSubstring ]
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 AbstractFileReference >> spotterForFilesFor: aStep [
 	<stSpotterOrder: 20>
+	
 	^ self isDirectory ifTrue: [
 		aStep listProcessor
 			allCandidates: [ self files ];
 			title: 'Files';
 			candidatesLimit: Float infinity;
 			itemName: #basename;
-			itemIcon: [ self iconNamed: #glamorousBrowse ];
+			itemIconName: [ :item | #glamorousBrowse ];
 			filter: StFilterSubstring ]
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 AbstractFileReference >> spotterForZipDirectoriesFor: aStep [
 	<stSpotterOrder: 10>
 	| zipFileSystem |
+
 	self isZipFile ifFalse: [ ^ self ].
 	aStep listProcessor
 			allCandidates: [ 
@@ -45,11 +47,11 @@ AbstractFileReference >> spotterForZipDirectoriesFor: aStep [
 			title: 'Directories';
 			candidatesLimit: Float infinity;
 			itemName: #basename;
-			itemIcon: [ self iconNamed: #glamorousFolder ];
+			itemIconName: [ :item | #glamorousFolder ];
 			filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 AbstractFileReference >> spotterForZipFilesFor: aStep [
 	<stSpotterOrder: 10>
 	| zipFileSystem |
@@ -62,7 +64,7 @@ AbstractFileReference >> spotterForZipFilesFor: aStep [
 			title: 'Files';
 			candidatesLimit: Float infinity;
 			itemName: #basename;
-			itemIcon: [ self iconNamed: #glamorousBrowse ];
+			itemIconName: [ :item | #glamorousBrowse ];
 			filter: StFilterSubstring
 	
 ]

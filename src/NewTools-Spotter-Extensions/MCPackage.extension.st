@@ -1,22 +1,24 @@
-Extension { #name : #MCPackage }
+Extension { #name : 'MCPackage' }
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 MCPackage >> spotterForPackageFor: aStep [
 	<stSpotterOrder: 2>
+
 	aStep listProcessor
 		title: 'Packages';
-		allCandidates: [ Array with: self correspondingRPackage ];
+		allCandidates: [ Array with: self systemPackage ];
 		itemName: [ :package | package name ];
-		itemIcon: [ Smalltalk ui icons iconNamed: #packageIcon ];
+		itemIconName: [ :item | #package ];
 		filter: StFilterSubstring
 ]
 
-{ #category : #'*NewTools-Spotter-Extensions' }
+{ #category : '*NewTools-Spotter-Extensions' }
 MCPackage >> spotterMonticelloWorkingCopyFor: aStep [
 	<stSpotterOrder: 1>
+
 	aStep listProcessor
 		title: 'Monticello Working Copy';
 		allCandidates: [ Array with: self workingCopy ];
-		itemIcon: [ Smalltalk ui icons iconNamed: #versionControlIcon ];
+		itemIconName: [ :item | #versionControl ];
 		filter: StFilterSubstring
 ]

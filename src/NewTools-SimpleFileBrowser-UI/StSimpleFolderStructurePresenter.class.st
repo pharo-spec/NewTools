@@ -2,15 +2,17 @@
 Presenter for a folder structure
 "
 Class {
-	#name : #StSimpleFolderStructurePresenter,
-	#superclass : #SpPresenter,
+	#name : 'StSimpleFolderStructurePresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'tree'
 	],
-	#category : #'NewTools-SimpleFileBrowser-UI-Components'
+	#category : 'NewTools-SimpleFileBrowser-UI-Components',
+	#package : 'NewTools-SimpleFileBrowser-UI',
+	#tag : 'Components'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 StSimpleFolderStructurePresenter class >> defaultSpec [
 
 	^ SpBoxLayout newTopToBottom
@@ -18,18 +20,18 @@ StSimpleFolderStructurePresenter class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StSimpleFolderStructurePresenter class >> open [ 
 	<script>
 	self new openWithSpec 
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StSimpleFolderStructurePresenter >> browseFolder [
 	 tree selectedItem browseFolder 
 ]
 
-{ #category : #'menu handling' }
+{ #category : 'menu handling' }
 StSimpleFolderStructurePresenter >> folderContextMenu [
 
 	^(SpMenuPresenter new
@@ -38,7 +40,7 @@ StSimpleFolderStructurePresenter >> folderContextMenu [
 		])
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSimpleFolderStructurePresenter >> initializePresenters [
 
 	tree := self newTreeTable.
@@ -62,7 +64,7 @@ StSimpleFolderStructurePresenter >> initializePresenters [
 	tree contextMenu: self folderContextMenu
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFolderStructurePresenter >> pathIndexOf: pathArray in: aCollection [ 
 	| pathElement |
 	
@@ -73,13 +75,13 @@ StSimpleFolderStructurePresenter >> pathIndexOf: pathArray in: aCollection [
 		in: (tree childrenFor: (aCollection at: pathElement)))
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSimpleFolderStructurePresenter >> selectPathByItems: path [ 
 
 	tree selectPath: (self pathIndexOf: path in: tree roots)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StSimpleFolderStructurePresenter >> title [
 
 	^ Smalltalk os isWindows 
@@ -88,7 +90,7 @@ StSimpleFolderStructurePresenter >> title [
 	
 ]
 
-{ #category : #'api-events' }
+{ #category : 'api-events' }
 StSimpleFolderStructurePresenter >> whenFolderChangedDo: aBlock [
 	
 	tree whenSelectionChangedDo: [ :selection | 

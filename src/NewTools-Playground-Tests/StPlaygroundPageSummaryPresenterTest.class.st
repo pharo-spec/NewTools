@@ -1,22 +1,23 @@
 Class {
-	#name : #StPlaygroundPageSummaryPresenterTest,
-	#superclass : #StPlaygroundBaseTest,
-	#category : #'NewTools-Playground-Tests'
+	#name : 'StPlaygroundPageSummaryPresenterTest',
+	#superclass : 'StPlaygroundBaseTest',
+	#category : 'NewTools-Playground-Tests',
+	#package : 'NewTools-Playground-Tests'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPageSummaryPresenterTest >> classToTest [
 
 	^ StPlaygroundPageSummaryPresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'running' }
 StPlaygroundPageSummaryPresenterTest >> initializeInstanceBeforeInitialization: aPresenter [
 
-	aPresenter setModelBeforeInitialization: memoryFileSystem / 'test1.ph'
+	aPresenter setModelBeforeInitialization: (StPlaygroundPage fromReference: memoryFileSystem / 'test1.ph')
 ]
 
-{ #category : #initialization }
+{ #category : 'running' }
 StPlaygroundPageSummaryPresenterTest >> initializeMemoryFileSystem: aFileSystem [
 
 	aFileSystem / 'test1.ph' writeStreamDo: [ :stream | stream << '' ].
@@ -25,19 +26,19 @@ StPlaygroundPageSummaryPresenterTest >> initializeMemoryFileSystem: aFileSystem 
 		stream << 'Test 2' ].
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundPageSummaryPresenterTest >> testContents [
 
 	self assert: presenter contents equals: ''.
-	presenter setModelBeforeInitialization: memoryFileSystem / 'test2.ph'.
+	presenter setModelBeforeInitialization: (StPlaygroundPage fromReference: (memoryFileSystem / 'test2.ph')).
 	self assert: presenter contents equals: 'Test
 Test 2'	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundPageSummaryPresenterTest >> testPageFirstLine [
 	
-	self assert: presenter pageFirstLine equals: 'Empty'.	
-	presenter setModelBeforeInitialization: memoryFileSystem / 'test2.ph'.
-	self assert: presenter pageFirstLine equals: 'Test'
+	self assert: presenter pageTitle equals: 'Empty'.	
+	presenter setModelBeforeInitialization: (StPlaygroundPage fromReference: memoryFileSystem / 'test2.ph').
+	self assert: presenter pageTitle equals: 'Test'
 ]

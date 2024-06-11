@@ -1,41 +1,51 @@
+"
+I represent an attribute table specialized for debuggers.
+
+I'm used to display all variables that are my roots. I can filter these variables by their variable tag. 
+
+In the debugger, I'm used to display all variables in the selected context and you can filter/unfilter them by clicking/double-clicking one of their variable tag.
+"
 Class {
-	#name : #StDebuggerTreeTablePresenter,
-	#superclass : #SpTreeTablePresenter,
+	#name : 'StDebuggerTreeTablePresenter',
+	#superclass : 'SpTreeTablePresenter',
 	#instVars : [
 		'items',
 		'filter',
-		'counter'
+		'isFiltered'
 	],
-	#category : #'NewTools-Debugger-View'
+	#category : 'NewTools-Debugger-View',
+	#package : 'NewTools-Debugger',
+	#tag : 'View'
 }
 
-{ #category : #api }
+{ #category : 'api' }
 StDebuggerTreeTablePresenter >> applyFilter [
 
-	filter ifNil: [ ^items ].
-	self flag: 'Ugly hack because links presenter trigger 2 times their action. But for now it works'.
-	counter > 3 ifTrue:  [ counter := 0. filter := nil. ^items ].
+	filter ifNil: [ ^ items ].
+	isFiltered ifFalse: [ 
+		filter := nil.
+		^ items ].
 
-	^items select: [:item| item variableTag = filter]
+	^ items select: [ :item | item variableTag = filter ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerTreeTablePresenter >> filter [
 	^ filter
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StDebuggerTreeTablePresenter >> hasActiveFilter [
-	^counter > 0
+	^isFiltered 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebuggerTreeTablePresenter >> initialize [
 	super initialize.
-	counter := 0
+	isFiltered := false
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StDebuggerTreeTablePresenter >> roots: aCollection [
 
 	items := aCollection.
@@ -43,14 +53,11 @@ StDebuggerTreeTablePresenter >> roots: aCollection [
 
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StDebuggerTreeTablePresenter >> toggleFilter: aVariableTag [
 
-"	filter := filter = aVariableTag
-		          ifTrue: [ nil ]
-		          ifFalse: [ aVariableTag ]."
 	filter := aVariableTag.
-	counter := counter + 1.
+	isFiltered := isFiltered not.
 
 	self roots: items
 ]

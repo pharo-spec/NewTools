@@ -1,24 +1,25 @@
 Class {
-	#name : #StClassProcessorTest,
-	#superclass : #StAbstractProcessorTest,
-	#category : #'NewTools-Spotter-Processors-Tests'
+	#name : 'StClassProcessorTest',
+	#superclass : 'StAbstractProcessorTest',
+	#category : 'NewTools-Spotter-Processors-Tests',
+	#package : 'NewTools-Spotter-Processors-Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 StClassProcessorTest >> processor [
 
 	^ StClassProcessor new
 ]
 
-{ #category : #tests }
-StClassProcessorTest >> testFindGTClassProcessorTest [
+{ #category : 'tests' }
+StClassProcessorTest >> testFindStClassProcessorTest [
 
 	self runForText: 'stclassprocessortest'.
 	self assertResultsIncludes: StClassProcessorTest
 ]
 
-{ #category : #tests }
-StClassProcessorTest >> testFindGTClassProcessorTestAfterAddingTest [
+{ #category : 'tests' }
+StClassProcessorTest >> testFindStClassProcessorTestAfterAddingTest [
 
 	self runForText: 'stclass'.
 	self rerunWithText: 'stclassprocess'.
@@ -26,25 +27,25 @@ StClassProcessorTest >> testFindGTClassProcessorTestAfterAddingTest [
 	self assertResultsIncludes: StClassProcessorTest 
 ]
 
-{ #category : #tests }
-StClassProcessorTest >> testFindGTClassProcessorTestWithPartialText [
+{ #category : 'tests' }
+StClassProcessorTest >> testFindStClassProcessorTestWithPartialText [
 
-	self runForText: 'stclass'.
+	self runForText: 'stclasspr'.
 	self assertResultsIncludes: StClassProcessorTest
 ]
 
-{ #category : #tests }
-StClassProcessorTest >> testGTClassProcessorIsRemovedAfterUpdatingText [
+{ #category : 'tests' }
+StClassProcessorTest >> testPopularStringDoesReturnOnlyTenResults [
+
+	self runForText: 'test'.
+	self assertQuantityOfResults: 25.
+]
+
+{ #category : 'tests' }
+StClassProcessorTest >> testStClassProcessorIsRemovedAfterUpdatingText [
 
 	self runForText: 'gtclass'.
 	self rerunWithText: 'gtclassprocesst'.
 	
 	self denyResultsIncludes: StClassProcessor
-]
-
-{ #category : #tests }
-StClassProcessorTest >> testPopularStringDoesReturnOnlyTenResults [
-
-	self runForText: 'test'.
-	self assertQuantityOfResults: 25.
 ]

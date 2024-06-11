@@ -3,29 +3,31 @@ a link with a `StSpotterProcessorLink>>#processor`.
 it is intended to work as element of a linked list.
 "
 Class {
-	#name : #StSpotterProcessorLink,
-	#superclass : #DoubleLink,
+	#name : 'StSpotterProcessorLink',
+	#superclass : 'DoubleLink',
 	#instVars : [
 		'headLink',
 		'tailLink',
 		'size'
 	],
-	#category : #'NewTools-Spotter-Model'
+	#category : 'NewTools-Spotter-Model',
+	#package : 'NewTools-Spotter',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessorLink class >> from: aDoubleLink [
 
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessorLink >> asStSpotterProcessorLink [
 
 	^ self
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StSpotterProcessorLink >> clear [
 
 	self
@@ -35,59 +37,59 @@ StSpotterProcessorLink >> clear [
 	size := 0.
 ]
 
-{ #category : #printing }
+{ #category : 'displaying' }
 StSpotterProcessorLink >> displayStringOn: stream [
 	stream 
 		nextPutAll: 'Processor link: ';
 		nextPutAll: self processor title asString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessorLink >> headLink [
 	^ headLink
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessorLink >> headLink: anObject [
 	headLink := anObject
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StSpotterProcessorLink >> incrementSize [
 
 	size := self size + 1
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterProcessorLink >> isEmpty [
 
 	^ self headLink isNil
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterProcessorLink >> isFull [
 
 	^ self size = self processor itemsLimit
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessorLink >> processor [
 
 	^ self value
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessorLink >> size [
 
 	^ size ifNil: [ size := 0 ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessorLink >> tailLink [
 	^ tailLink
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterProcessorLink >> tailLink: anObject [
 	tailLink := anObject
 ]

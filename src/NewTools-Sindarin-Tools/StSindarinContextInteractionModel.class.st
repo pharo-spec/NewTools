@@ -1,13 +1,14 @@
 Class {
-	#name : #StSindarinContextInteractionModel,
-	#superclass : #SpCodeScriptingInteractionModel,
+	#name : 'StSindarinContextInteractionModel',
+	#superclass : 'SpCodeScriptingInteractionModel',
 	#instVars : [
 		'context'
 	],
-	#category : #'NewTools-Sindarin-Tools'
+	#category : 'NewTools-Sindarin-Tools',
+	#package : 'NewTools-Sindarin-Tools'
 }
 
-{ #category : #binding }
+{ #category : 'binding' }
 StSindarinContextInteractionModel >> bindingOf: aString [
 	^ self bindings at: aString ifAbsent: [ 
 		  (context receiver class hasSlotNamed: aString)
@@ -15,20 +16,20 @@ StSindarinContextInteractionModel >> bindingOf: aString [
 			  ifFalse: [ context temporaryVariableNamed: aString ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSindarinContextInteractionModel >> context [
 	^ context
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSindarinContextInteractionModel >> context: anObject [
 	context := anObject
 ]
 
-{ #category : #binding }
+{ #category : 'testing' }
 StSindarinContextInteractionModel >> hasBindingOf: aString [
 	self bindings at: aString ifAbsent: [ 
 		^ (context receiver class hasSlotNamed: aString) or: [ 
-			  (context temporaryVariableNamed: aString) notNil ] ].
+			  (context temporaryVariableNamed: aString) isNotNil ] ].
 	^ true
 ]

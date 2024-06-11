@@ -1,13 +1,15 @@
 Class {
-	#name : #StSBPackageTagModel,
-	#superclass : #StSBBasePackageModel,
+	#name : 'StSBPackageTagModel',
+	#superclass : 'StSBBasePackageModel',
 	#instVars : [
 		'classGroup'
 	],
-	#category : #'NewTools-SystemBrowser-Model'
+	#category : 'NewTools-SystemBrowser-Model',
+	#package : 'NewTools-SystemBrowser',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StSBPackageTagModel class >> newEnvironment: anEnvironment classGroup: aPackageTag [ 
 
 	^ self new
@@ -16,25 +18,25 @@ StSBPackageTagModel class >> newEnvironment: anEnvironment classGroup: aPackageT
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBPackageTagModel >> children [
 
 	^ #()
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBPackageTagModel >> classGroup [
 	
 	^ classGroup
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBPackageTagModel >> classGroup: aClassGroup [
 
 	classGroup := aClassGroup
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBPackageTagModel >> classes [
 
 	^ self classGroup classes collect: [ :each | 
@@ -43,13 +45,13 @@ StSBPackageTagModel >> classes [
 			class: each ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBPackageTagModel >> comment [
 
 	^ self package packageComment
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBPackageTagModel >> fullName [
 
 	^ self package classTags
@@ -58,13 +60,13 @@ StSBPackageTagModel >> fullName [
 		ifNone: [ self package name ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSBPackageTagModel >> name [
 
 	^ self classGroup name
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSBPackageTagModel >> package [
 
 	self flag: #REVIEW. "This is like thois because calypso does not attach the tag query 

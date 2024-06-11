@@ -1,22 +1,23 @@
 Class {
-	#name : #StPlaygroundPagesPresenterTest,
-	#superclass : #StPlaygroundBaseTest,
-	#category : #'NewTools-Playground-Tests'
+	#name : 'StPlaygroundPagesPresenterTest',
+	#superclass : 'StPlaygroundBaseTest',
+	#category : 'NewTools-Playground-Tests',
+	#package : 'NewTools-Playground-Tests'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPagesPresenterTest >> classToTest [
 
 	^ StPlaygroundPagesPresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPagesPresenterTest >> initializeInstanceBeforeInitialization: aPresenter [
 
-	aPresenter setModelBeforeInitialization: (StPlayground newApplication: application)
+	aPresenter setModelBeforeInitialization: (StPlaygroundPresenter newApplication: application)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StPlaygroundPagesPresenterTest >> initializeMemoryFileSystem: aFileSystem [
 
 	aFileSystem / 'test1.ph' writeStreamDo: [ :stream | stream << '42 factorial' ].
@@ -25,15 +26,16 @@ StPlaygroundPagesPresenterTest >> initializeMemoryFileSystem: aFileSystem [
 		stream << 'Test 2"' ].
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StPlaygroundPagesPresenterTest >> testLoadPage [
+	| loaded |
 
-	self deny: presenter window notNil.
+	loaded := false.
+	self deny: presenter window isNotNil.
 	self openInstance.
 	self assert: presenter window isOpen.
-	presenter loadPage: (memoryFileSystem / 'test1.ph').
+	presenter onLoadPage: [ :aPage | loaded := true ].
+	presenter loadPage: (StPlaygroundPage fromReference: (memoryFileSystem / 'test1.ph')).
 	self deny: presenter window isOpen .
-	self 
-		assert: presenter parent page contents
-		equals: (memoryFileSystem / 'test1.ph') contents
+	self assert: loaded
 ]

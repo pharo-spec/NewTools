@@ -1,14 +1,16 @@
 Class {
-	#name : #StDebuggerContextTest,
-	#superclass : #TestCase,
+	#name : 'StDebuggerContextTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'debuggerContext',
 		'hostObject'
 	],
-	#category : #'NewTools-Debugger-Tests-Model'
+	#category : 'NewTools-Debugger-Tests-Model',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Model'
 }
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 StDebuggerContextTest >> contextWithArgs [
 
 	"Creates and returns a context in which we step until we enter a method with temporary variables, then step two times over the assignement of the first temp"
@@ -23,7 +25,7 @@ StDebuggerContextTest >> contextWithArgs [
 	^ context
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 StDebuggerContextTest >> contextWithArgsInBlock [
 
 	"Creates and returns a context in which we step until we enter a method with arguments in a block, then step 4 times until we're in the block"
@@ -38,7 +40,7 @@ StDebuggerContextTest >> contextWithArgsInBlock [
 	^ context
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 StDebuggerContextTest >> contextWithTemps [
 
 	"Creates and returns a context in which we step until we enter a method with temporary variables, then step two times over the assignement of the first temp"
@@ -53,7 +55,7 @@ StDebuggerContextTest >> contextWithTemps [
 	^ context
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerContextTest >> setUp [
 	super setUp.
 	
@@ -61,7 +63,7 @@ StDebuggerContextTest >> setUp [
 	hostObject := StDebuggerObjectForTests new
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextTest >> testArgumentsNodes [
 	|nodes| 
 	debuggerContext context: self contextWithArgs.
@@ -78,7 +80,7 @@ StDebuggerContextTest >> testArgumentsNodes [
 	self deny: (nodes anySatisfy: [:n| n key = 'self'])
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextTest >> testArgumentsNodesInBlock [
 	|nodes|
 	debuggerContext context: self contextWithArgsInBlock.
@@ -93,7 +95,7 @@ StDebuggerContextTest >> testArgumentsNodesInBlock [
 	self deny: (nodes anySatisfy: [:n| n key = 'self'])
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextTest >> testBuildInspectorNodes [
 	|nodes nodesNames|
 	debuggerContext context: self contextWithArgs.
@@ -119,9 +121,10 @@ StDebuggerContextTest >> testBuildInspectorNodes [
 	self assert: nodesNames size equals: 8
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextTest >> testBuildInspectorNodesForException [
 	| nodes object exception |
+	<ignoreNotImplementedSelectors: #(toto)>
 	object := Object new.
 	[ object toto ]
 		on: Error
@@ -136,7 +139,7 @@ StDebuggerContextTest >> testBuildInspectorNodesForException [
 	self assert: (nodes last) rawValue identicalTo: object
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextTest >> testContext [
 
 	| closure contextSource ctx |
@@ -150,10 +153,11 @@ StDebuggerContextTest >> testContext [
 	self assert: debuggerContext context identicalTo: ctx
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextTest >> testExceptionNodes [
 
 	| nodes object exception |
+	<ignoreNotImplementedSelectors: #(toto)>
 	object := Object new.
 	[ object toto ]
 		on: Error
@@ -174,7 +178,7 @@ StDebuggerContextTest >> testExceptionNodes [
 	self assert: nodes first variableTag equals: 'implicit'.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextTest >> testNoDuplicatesBetweenArgsAndTemps [
 	|nodes nodesNamesArray nodesNamesSet|
 	debuggerContext context: self contextWithArgs.
@@ -184,13 +188,13 @@ StDebuggerContextTest >> testNoDuplicatesBetweenArgsAndTemps [
 	self assertCollection: nodesNamesArray equals: nodesNamesSet
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextTest >> testNullExceptionNodes [
 
 	self assertEmpty: debuggerContext exceptionNodes
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextTest >> testReceiverNodes [
 
 	| nodes |
@@ -201,7 +205,7 @@ StDebuggerContextTest >> testReceiverNodes [
 	self assert: nodes first rawValue equals: hostObject instVar
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextTest >> testSelfNodes [
 
 	| node |
@@ -211,7 +215,7 @@ StDebuggerContextTest >> testSelfNodes [
 	self assert: node rawValue identicalTo: hostObject.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextTest >> testStackTopNode [	
 	| node|
 	"We step once on the context to be on the value part of the next assignment"
@@ -221,7 +225,7 @@ StDebuggerContextTest >> testStackTopNode [
 	self assert: node rawValue equals: 0
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextTest >> testTemporaryVariablesNodes [
 	|nodes|	
 	debuggerContext context: self contextWithTemps.
@@ -238,7 +242,7 @@ StDebuggerContextTest >> testTemporaryVariablesNodes [
 	self deny: (nodes anySatisfy: [:n| n key = 'self'])
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextTest >> testThisContextNode [
 	|ctx node|
 	ctx := self contextWithTemps.

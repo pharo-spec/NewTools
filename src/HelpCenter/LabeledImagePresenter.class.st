@@ -1,35 +1,37 @@
 Class {
-	#name : #LabeledImagePresenter,
-	#superclass : #ComposablePresenter,
+	#name : 'LabeledImagePresenter',
+	#superclass : 'ComposablePresenter',
 	#instVars : [
 		'picture',
 		'caption'
 	],
-	#category : #'HelpCenter-widgets'
+	#category : 'HelpCenter-widgets',
+	#package : 'HelpCenter',
+	#tag : 'widgets'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 LabeledImagePresenter class >> defaultSpec [ 
 	^SpecLayout composed
 		newRow: [ :row | row add: #picture; add: #caption ] origin: 0 @ 0 corner: 1 @ 1;
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 LabeledImagePresenter >> caption [
 	^ caption
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 LabeledImagePresenter >> caption: anObject [
 	caption := anObject
 ]
 
-{ #category : #initialize }
+{ #category : 'initialize' }
 LabeledImagePresenter >> initializePresenter [
 ]
 
-{ #category : #initialize }
+{ #category : 'initialize' }
 LabeledImagePresenter >> initializeWidgets [ 
 	picture := self newImage.
 	"linkPresenter ?"
@@ -43,17 +45,17 @@ LabeledImagePresenter >> initializeWidgets [
 	picture extent inspect.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 LabeledImagePresenter >> picture [
 	^ picture
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 LabeledImagePresenter >> picture: anObject [
 	picture := anObject
 ]
 
-{ #category : #initialize }
+{ #category : 'initialize' }
 LabeledImagePresenter >> title [
 	^'LabelImagePresenter'
 ]

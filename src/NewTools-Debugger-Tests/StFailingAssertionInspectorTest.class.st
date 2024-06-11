@@ -1,10 +1,12 @@
 Class {
-	#name : #StFailingAssertionInspectorTest,
-	#superclass : #TestCase,
-	#category : #'NewTools-Debugger-Tests-Presenters'
+	#name : 'StFailingAssertionInspectorTest',
+	#superclass : 'TestCase',
+	#category : 'NewTools-Debugger-Tests-Presenters',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Presenters'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFailingAssertionInspectorTest >> testDiffForNonStringObjects [
 	|a e inspector|
 	a := 'a'.
@@ -27,7 +29,7 @@ StFailingAssertionInspectorTest >> testDiffForNonStringObjects [
 	self assert: inspector stringDiff equals: nil.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFailingAssertionInspectorTest >> testDiffForStrings [
 	|a e inspector|
 	a := 'a'.
@@ -39,4 +41,18 @@ StFailingAssertionInspectorTest >> testDiffForStrings [
 	self deny: inspector stringDiff equals: nil.
 	self assert: inspector actualObjectMillerList equals: nil.
 	self assert: inspector expectedObjectMillerList equals: nil.
+]
+
+{ #category : 'tests' }
+StFailingAssertionInspectorTest >> testDiffForSymbols [
+	|actual expected inspector|
+	actual := #'#east'. 
+	expected := #east.
+	inspector := StFailingAssertionInspector
+		diffInspectorsFromActual: actual
+		expected: expected
+		application: nil.
+
+	self assert: inspector stringDiff leftText equals: '#''#east'''.
+	self assert: inspector stringDiff rightText equals: '#east'.
 ]

@@ -1,6 +1,6 @@
-Extension { #name : #StDebugger }
+Extension { #name : 'StDebugger' }
 
-{ #category : #'*NewTools-Sindarin-Commands' }
+{ #category : '*NewTools-Sindarin-Commands' }
 StDebugger class >> buildSindarinExtentionCommandsGroupWith: stDebuggerInstance forRoot: rootCommandGroup [
 
 	<extensionCommands>
@@ -21,7 +21,7 @@ StDebugger class >> buildSindarinExtentionCommandsGroupWith: stDebuggerInstance 
 	toolbarSindarinGroup := CmCommandGroup forSpec
 			beToolbarPopoverButton;
 			name: 'Advanced Step';
-			icon: (stDebuggerInstance application iconNamed: #smallExpert);
+			icon: (stDebuggerInstance application iconNamed: #glamorousDropDown);
 			yourself.
 	toolbarGroup register: toolbarSindarinGroup.
 	commands do: [ :c | toolbarSindarinGroup register: c ].		 

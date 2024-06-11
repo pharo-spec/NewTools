@@ -1,1 +1,1 @@
-Package { #name : #'NewTools-FontChooser' }
+Package { #name : 'NewTools-FontChooser' }

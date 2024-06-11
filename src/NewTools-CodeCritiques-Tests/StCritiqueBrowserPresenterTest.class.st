@@ -2,22 +2,23 @@
 A StCritiqueBrowserTest is a test class for testing the behaivor of StCritiqueBrowserPresenter
 "
 Class {
-	#name : #StCritiqueBrowserPresenterTest,
-	#superclass : #TestCase,
+	#name : 'StCritiqueBrowserPresenterTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'critiqueBrowser',
 		'rules'
 	],
-	#category : #'NewTools-CodeCritiques-Tests'
+	#category : 'NewTools-CodeCritiques-Tests',
+	#package : 'NewTools-CodeCritiques-Tests'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiqueBrowserPresenterTest >> classToTest [
 
 	^ StCritiqueBrowserPresenter
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StCritiqueBrowserPresenterTest >> setUp [
 
 	super setUp.
@@ -26,7 +27,7 @@ StCritiqueBrowserPresenterTest >> setUp [
 		          aClass new ]) sorted: [ :a :b | a name < b name ].
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiqueBrowserPresenterTest >> testBrowseRule [
 
 	| windowBrowser singleRule |
@@ -39,7 +40,7 @@ StCritiqueBrowserPresenterTest >> testBrowseRule [
 	
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiqueBrowserPresenterTest >> testInitializePresenters [
 
 	self
@@ -56,7 +57,7 @@ StCritiqueBrowserPresenterTest >> testInitializePresenters [
 		equals: SpListPresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StCritiqueBrowserPresenterTest >> testOpen [
 
 	| window |

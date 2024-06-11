@@ -11,22 +11,24 @@ Public API and Key Messages
 
 "
 Class {
-	#name : #StInspectorNode,
-	#superclass : #Object,
+	#name : 'StInspectorNode',
+	#superclass : 'Object',
 	#instVars : [
 		'hostObject'
 	],
-	#category : #'NewTools-Inspector-Model'
+	#category : 'NewTools-Inspector-Model',
+	#package : 'NewTools-Inspector',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StInspectorNode class >> hostObject: anObject [ 
 	^ self new
 		hostObject: anObject;
 		yourself
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StInspectorNode >> = anObject [
 
 	self == anObject ifTrue: [ ^ true ].
@@ -34,35 +36,35 @@ StInspectorNode >> = anObject [
 	^ hostObject == anObject hostObject
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 StInspectorNode >> asInspectorModel [
 
 	^ StInspectorModel on: self rawValue
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorNode >> children [ 
 	
-	^ self value allInspectorNodes
+	^ self value inspectorNodes
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorNode >> errorMessage [
 	^ 'error obtaining value'
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StInspectorNode >> hash [
 
 	^ hostObject hash
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorNode >> hostObject [
 	^ hostObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorNode >> hostObject: anObject [
 
 	"
@@ -78,62 +80,62 @@ StInspectorNode >> hostObject: anObject [
 	hostObject := anObject
 ]
 
-{ #category : #accessing }
-StInspectorNode >> icon [
+{ #category : 'private' }
+StInspectorNode >> iconError: error [
+	
+	^ #smallWarning
+]
 
-	^ [ self value inspectorIcon ifNil: [ self value class systemIcon ] ]
+{ #category : 'accessing' }
+StInspectorNode >> iconName [
+
+	^ [ self value inspectorIconName ifNil: [ self value class systemIconName ] ]
 		  on: Error
 		  do: [ :error | self iconError: error ]
 ]
 
-{ #category : #private }
-StInspectorNode >> iconError: error [
-	
-	^ self iconNamed: #smallWarningIcon
-]
-
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorNode >> key [
 	"Answer the key of this object variable (slot, indexed attribute, computed value)."
 	^ self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorNode >> label [
 	"Answer the label of this object variable (slot, indexed attribute, computed value)."
 	^ self key asString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorNode >> mementoValue [
 
 	^ self value
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorNode >> rawValue [
 	"Answer the object value of this object variable (slot, indexed attribute, computed value)."
 	^ self subclassResponsibility
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StInspectorNode >> save: aValue [
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorNode >> stringValue [
 
 	^ self value stDisplayString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorNode >> value [
 	"Answer the object value of this object variable (slot, indexed attribute, computed value).
 	Return nil in case there is an error obtaining the value"
 	^ [ self rawValue ] on: Exception do: [ nil ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StInspectorNode >> variableTag [
 	^ 'implicit'
 ]

@@ -3,15 +3,17 @@ A selection container to simulate a selection object (the object that is sent wh
 This is used so we can trigger `activation` events outside lists tables and trees (for example, in a playground or an inpector evaluator).   
 "
 Class {
-	#name : #StEvaluatedSelectionModel,
-	#superclass : #Object,
+	#name : 'StEvaluatedSelectionModel',
+	#superclass : 'Object',
 	#instVars : [
 		'value'
 	],
-	#category : #'NewTools-Inspector-View'
+	#category : 'NewTools-Inspector-View',
+	#package : 'NewTools-Inspector',
+	#tag : 'View'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StEvaluatedSelectionModel class >> newValue: anObject [ 
 
 	^ self new
@@ -19,19 +21,25 @@ StEvaluatedSelectionModel class >> newValue: anObject [
 		yourself
 ]
 
-{ #category : #'api - selection' }
+{ #category : 'api - selection' }
 StEvaluatedSelectionModel >> selectedItem [
 
 	^ self value
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
+StEvaluatedSelectionModel >> transmission [
+
+	^ self value
+]
+
+{ #category : 'accessing' }
 StEvaluatedSelectionModel >> value [
 
 	^ value
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StEvaluatedSelectionModel >> value: anObject [
 
 	value := anObject

@@ -1,13 +1,14 @@
 Class {
-	#name : #FontChooserTest,
-	#superclass : #TestCase,
+	#name : 'FontChooserTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'chooser'
 	],
-	#category : #'NewTools-FontChooser-Tests'
+	#category : 'NewTools-FontChooser-Tests',
+	#package : 'NewTools-FontChooser-Tests'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 FontChooserTest >> setUp [
 	
 	super setUp.
@@ -17,7 +18,7 @@ FontChooserTest >> setUp [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FontChooserTest >> testFontList [
 	
 	self deny: chooser fontList isEmpty.

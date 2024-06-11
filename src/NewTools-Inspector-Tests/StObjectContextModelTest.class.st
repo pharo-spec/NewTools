@@ -1,10 +1,11 @@
 Class {
-	#name : #StObjectContextModelTest,
-	#superclass : #TestCase,
-	#category : #'NewTools-Inspector-Tests'
+	#name : 'StObjectContextModelTest',
+	#superclass : 'TestCase',
+	#category : 'NewTools-Inspector-Tests',
+	#package : 'NewTools-Inspector-Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 StObjectContextModelTest >> testStringWithoutInitialCommentFrom [
 	| model string | 
 		

@@ -2,64 +2,69 @@
 Publish the content of a page in [http://ws.stfx.eu](http://ws.stfx.eu)
 "
 Class {
-	#name : #StPlaygroundPublishCommand,
-	#superclass : #StPlaygroundCommand,
-	#category : #'NewTools-Playground-Command'
+	#name : 'StPlaygroundPublishCommand',
+	#superclass : 'StPlaygroundCommand',
+	#category : 'NewTools-Playground-Command',
+	#package : 'NewTools-Playground',
+	#tag : 'Command'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 StPlaygroundPublishCommand class >> defaultDescription [
 
 	^  'Publish contents to the cloud.'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPublishCommand class >> defaultIconName [
 
 	^ #glamorousSaveToUrl
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 StPlaygroundPublishCommand class >> defaultName [
 
 	^ 'Publish'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPublishCommand class >> order [
 
 	^ 5
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPublishCommand class >> urlProvider [
 
 	^ 'http://ws.stfx.eu' asZnUrl
 ]
 
-{ #category : #execution }
-StPlaygroundPublishCommand >> execute [ 
+{ #category : 'execution' }
+StPlaygroundPublishCommand >> execute [
+
 	| contents publishedUrl |
-
-	(self application confirm: 'Publish playground content to the cloud?') 
+	(self application confirm: 'Publish playground content to the cloud?')
 		ifFalse: [ ^ self ].
-	
-	contents := self page contents.
-	contents ifEmpty: [ 
-        self application inform: 'Nothing was published because the playground is empty'.
-        ^ self ].
 
-    Clipboard clipboardText: (publishedUrl := (self post: contents) asString).
-    self inform: publishedUrl , ' was published and the url was copied to clipboard'
+	contents := self page contents.
+	contents ifEmpty: [
+		self application inform:
+			'Nothing was published because the playground is empty'.
+		^ self ].
+
+	Clipboard clipboardText:
+		(publishedUrl := (self post: contents) asString).
+	self application inform:
+		publishedUrl , ' was published and the url was copied to clipboard'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StPlaygroundPublishCommand >> page [
 
 	^ context page
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 StPlaygroundPublishCommand >> post: aString [
 	| response url |
 

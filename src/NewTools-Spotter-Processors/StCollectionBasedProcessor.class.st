@@ -2,30 +2,32 @@
 I am an abstract processor that is used when the results collection already exists or this is really cheap to calculate.
 "
 Class {
-	#name : #StCollectionBasedProcessor,
-	#superclass : #StSpotterProcessor,
-	#category : #'NewTools-Spotter-Processors-Processors'
+	#name : 'StCollectionBasedProcessor',
+	#superclass : 'StSpotterProcessor',
+	#category : 'NewTools-Spotter-Processors-Processors',
+	#package : 'NewTools-Spotter-Processors',
+	#tag : 'Processors'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StCollectionBasedProcessor class >> isAbstract [ 
 
 	^ self = StCollectionBasedProcessor 
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StCollectionBasedProcessor >> collection [
 
 	^ self subclassResponsibility 
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StCollectionBasedProcessor >> newEntryOn: anElement [
 
 	^ self subclassResponsibility 
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 StCollectionBasedProcessor >> newTextFilteringSource [
 
 	^ ((StCollectionIterator on: self collection) 

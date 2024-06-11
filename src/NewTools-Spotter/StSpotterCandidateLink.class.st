@@ -3,40 +3,42 @@ a link with a `StSpotterCandidateLink>>#candidate`.
 it is intended to work as element of a linked list.
 "
 Class {
-	#name : #StSpotterCandidateLink,
-	#superclass : #DoubleLink,
+	#name : 'StSpotterCandidateLink',
+	#superclass : 'DoubleLink',
 	#instVars : [
 		'processorLink',
 		'weight',
 		'renderingProcessorLink'
 	],
-	#category : #'NewTools-Spotter-Model'
+	#category : 'NewTools-Spotter-Model',
+	#package : 'NewTools-Spotter',
+	#tag : 'Model'
 }
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StSpotterCandidateLink >> < anotherCandidateLink [
 
 	^ self weight < anotherCandidateLink weight
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 StSpotterCandidateLink >> > anotherCandidateLink [
 
 	^ self weight > anotherCandidateLink weight
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 StSpotterCandidateLink >> asStSpotterCandidateLink [
 
 	^ self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidateLink >> candidate [
 	^ self value
 ]
 
-{ #category : #copying }
+{ #category : 'copying' }
 StSpotterCandidateLink >> copy [
 	| link |
 	
@@ -48,20 +50,20 @@ StSpotterCandidateLink >> copy [
 	^ link
 ]
 
-{ #category : #printing }
+{ #category : 'displaying' }
 StSpotterCandidateLink >> displayStringOn: stream [
 
 	stream nextPutAll: 'Candidate link: '.
 	self value displayStringOn: stream 
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterCandidateLink >> isFirst [
 
 	^ self previousLink processorLink ~= self processorLink
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSpotterCandidateLink >> matchesText: aString [
 	
 	^ self value 
@@ -69,40 +71,40 @@ StSpotterCandidateLink >> matchesText: aString [
 		ifNil: [ false ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidateLink >> next [
 	^ self nextLink
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidateLink >> previous [
 	^ self previousLink
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterCandidateLink >> privateProcessorLink: aLink [
 
 	processorLink := aLink
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StSpotterCandidateLink >> privateRenderingProcessorLink: aLink [
 
 	renderingProcessorLink := aLink
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidateLink >> processor [
 
 	^ self processorLink value
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidateLink >> processorLink [
 	^ processorLink
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidateLink >> processorLink: anObject [
 
 	"we set rendering processor only if one is not set. it allows to have a collection of items,
@@ -113,14 +115,14 @@ StSpotterCandidateLink >> processorLink: anObject [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidateLink >> renderingProcessor [
 
 	renderingProcessorLink ifNil: [ self renderingProcessor: processorLink ].
 	^ renderingProcessorLink value
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidateLink >> renderingProcessor: aProcessorLink [
 
 	renderingProcessorLink ifNil: [ 
@@ -128,13 +130,13 @@ StSpotterCandidateLink >> renderingProcessor: aProcessorLink [
 	processorLink ifNil: [ processorLink := aProcessorLink ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidateLink >> weight [
 
 	^ weight
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StSpotterCandidateLink >> weight: anObject [ 
 
 	weight := anObject

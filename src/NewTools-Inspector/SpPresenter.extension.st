@@ -1,7 +1,7 @@
-Extension { #name : #SpPresenter }
+Extension { #name : 'SpPresenter' }
 
-{ #category : #'*NewTools-Inspector' }
+{ #category : '*NewTools-Inspector' }
 SpPresenter >> asInspection [
 
-	^ StPresenterInspection for: self
+	^ StPresenterInspectionPresenter for: self
 ]

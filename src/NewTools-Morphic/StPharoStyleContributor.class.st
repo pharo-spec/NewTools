@@ -5,12 +5,13 @@ Subclasses of it should implement #styleSheetContribution returning a StyleSheet
 Also subclasses are able to extend the #isApplicable method in the class side and decide to apply or not in different scenarios (e.g., different Operating Systems)
 "
 Class {
-	#name : #StPharoStyleContributor,
-	#superclass : #Object,
-	#category : #'NewTools-Morphic'
+	#name : 'StPharoStyleContributor',
+	#superclass : 'Object',
+	#category : 'NewTools-Morphic',
+	#package : 'NewTools-Morphic'
 }
 
-{ #category : #api }
+{ #category : 'api' }
 StPharoStyleContributor class >> availableContributors [
 
 	^ self allSubclasses
@@ -18,13 +19,13 @@ StPharoStyleContributor class >> availableContributors [
 		thenCollect: [ :each | each new ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StPharoStyleContributor class >> isApplicable [ 
 
 	^ true
 ]
 
-{ #category : #styles }
+{ #category : 'styles' }
 StPharoStyleContributor >> styleSheetContribution [
 	
 	^ self subclassResponsibility

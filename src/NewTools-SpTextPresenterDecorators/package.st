@@ -1,1 +1,1 @@
-Package { #name : #'NewTools-SpTextPresenterDecorators' }
+Package { #name : 'NewTools-SpTextPresenterDecorators' }

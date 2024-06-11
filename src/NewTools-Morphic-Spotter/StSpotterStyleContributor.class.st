@@ -1,10 +1,11 @@
 Class {
-	#name : #StSpotterStyleContributor,
-	#superclass : #StPharoStyleContributor,
-	#category : #'NewTools-Morphic-Spotter'
+	#name : 'StSpotterStyleContributor',
+	#superclass : 'StPharoStyleContributor',
+	#category : 'NewTools-Morphic-Spotter',
+	#package : 'NewTools-Morphic-Spotter'
 }
 
-{ #category : #styles }
+{ #category : 'styles' }
 StSpotterStyleContributor >> styleSheetContribution [
 	
 	^ SpStyle newApplication 
@@ -20,7 +21,7 @@ StSpotterStyleContributor >> styleSheetContribution [
 				addPropertyDrawWith: [ :draw | draw color: Color transparent ] ] ];
 		addClass: 'searchInputField' with: [ :class | class 
 			addClass: 'stSpotterSearch' with: [ :spotterClass | spotterClass
-				addPropertyDrawWith: [ :draw | draw color: Color transparent ];
+				addPropertyDrawWith: [ :draw | draw backgroundColor: Smalltalk ui theme lightBackgroundColor ];
 				addPropertyTextWith: [ :text | text drawKeyboardFocus: false ];
 				addPropertyGeometryWith: [ :geometry | geometry minHeight: 35; vResizing: false ];
 				addPropertyFontWith: [ :font | font size: (StandardFonts defaultFont pointSize * 1.2) asInteger ] ] ];

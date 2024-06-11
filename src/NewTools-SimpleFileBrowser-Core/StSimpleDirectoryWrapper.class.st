@@ -2,12 +2,13 @@
 A wrapper for a regular directory
 "
 Class {
-	#name : #StSimpleDirectoryWrapper,
-	#superclass : #StSimpleFileSystemItemWrapper,
-	#category : #'NewTools-SimpleFileBrowser-Core'
+	#name : 'StSimpleDirectoryWrapper',
+	#superclass : 'StSimpleFileSystemItemWrapper',
+	#category : 'NewTools-SimpleFileBrowser-Core',
+	#package : 'NewTools-SimpleFileBrowser-Core'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StSimpleDirectoryWrapper >> isDirectory [
 
 	^true

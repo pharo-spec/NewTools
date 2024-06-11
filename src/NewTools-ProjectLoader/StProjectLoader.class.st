@@ -9,8 +9,8 @@ StProjectLoader new openWithSpec
 
 "
 Class {
-	#name : #StProjectLoader,
-	#superclass : #StPresenter,
+	#name : 'StProjectLoader',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'loadableProjects',
 		'menuBarPresenter',
@@ -19,10 +19,11 @@ Class {
 		'tickedProjects',
 		'summaryPanel'
 	],
-	#category : #'NewTools-ProjectLoader'
+	#category : 'NewTools-ProjectLoader',
+	#package : 'NewTools-ProjectLoader'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 StProjectLoader class >> defaultSpec [ 
 
 	^ SpBoxLayout newVertical 
@@ -43,13 +44,13 @@ StProjectLoader class >> defaultSpec [
 			yourself
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StProjectLoader class >> toolbarHeight [
 
 	^ 30
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StProjectLoader class >> worldMenuEntry: aBuilder [
 
 	<worldMenu>
@@ -63,14 +64,14 @@ StProjectLoader class >> worldMenuEntry: aBuilder [
 		action: [ self new openWithSpec ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StProjectLoader >> connectPresenters [  
 
 	projectListPresenter 
 		whenSelectionChangedDo: [ self updateSelection ]
 ]
 
-{ #category : #'ui - operations' }
+{ #category : 'ui - operations' }
 StProjectLoader >> displayDescription [
 
 	| description |
@@ -86,7 +87,7 @@ StProjectLoader >> displayDescription [
 		
 ]
 
-{ #category : #'ui - operations' }
+{ #category : 'ui - operations' }
 StProjectLoader >> displaySummary [
 	
 	| summary |
@@ -99,7 +100,7 @@ StProjectLoader >> displaySummary [
 	summaryPanel text: summary.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StProjectLoader >> initialize [
 	tickedProjects := OrderedCollection new.
 	loadableProjects := LoadableProject allProjects.
@@ -107,7 +108,7 @@ StProjectLoader >> initialize [
 	
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StProjectLoader >> initializePresenters [ 
 
 	projectListPresenter := self newTable.
@@ -136,7 +137,7 @@ StProjectLoader >> initializePresenters [
 	
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StProjectLoader >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter 
@@ -145,44 +146,44 @@ StProjectLoader >> initializeWindow: aWindowPresenter [
 	
 ]
 
-{ #category : #operations }
+{ #category : 'operations' }
 StProjectLoader >> loadTickedProjects [
 
 	self tickedProjects 
 		do: [ :aProject | aProject load ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StProjectLoader >> loadableProjects [
 
 	^ loadableProjects
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StProjectLoader >> loadableProjects: aColl [
 
 	loadableProjects := aColl
 ]
 
-{ #category : #'ui - operations' }
+{ #category : 'ui - operations' }
 StProjectLoader >> parseDescription: description [
 
 	^ StProjectLoaderRenderer newCurrent render: description
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StProjectLoader >> selectedProjects [
 	
 	^ projectListPresenter selection selectedItems
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StProjectLoader >> tickedProjects [
 
 	^ tickedProjects
 ]
 
-{ #category : #'ui - operations' }
+{ #category : 'ui - operations' }
 StProjectLoader >> updateSelection [
 
 	self displayDescription.

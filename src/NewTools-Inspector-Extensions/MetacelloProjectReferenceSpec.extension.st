@@ -1,6 +1,6 @@
-Extension { #name : #MetacelloProjectReferenceSpec }
+Extension { #name : 'MetacelloProjectReferenceSpec' }
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 MetacelloProjectReferenceSpec >> inspectionProject [
 	<inspectorPresentationOrder: 10 title: 'Project'>
 	| specs loadedSpecs |
@@ -23,7 +23,7 @@ MetacelloProjectReferenceSpec >> inspectionProject [
 	
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 MetacelloProjectReferenceSpec >> inspectionRecord [
 	<inspectorPresentationOrder: 20 title: 'Record'>
 	| specs |
@@ -42,7 +42,7 @@ MetacelloProjectReferenceSpec >> inspectionRecord [
 		yourself
 ]
 
-{ #category : #'*NewTools-Inspector-Extensions' }
+{ #category : '*NewTools-Inspector-Extensions' }
 MetacelloProjectReferenceSpec >> type [
 
 	^ 'project'

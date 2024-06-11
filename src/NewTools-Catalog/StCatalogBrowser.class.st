@@ -1,24 +1,35 @@
+"
+A catalog browser
+"
 Class {
-	#name : #StCatalogBrowser,
-	#superclass : #StPresenter,
+	#name : 'StCatalogBrowser',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'list',
 		'description'
 	],
-	#category : #'NewTools-Catalog'
+	#category : 'NewTools-Catalog',
+	#package : 'NewTools-Catalog'
 }
 
-{ #category : #specs }
-StCatalogBrowser class >> defaultSpec [
+{ #category : 'opening' }
+StCatalogBrowser class >> open [
+	<script>
+	self new open
+	
+]
 
-	^ SpPanedLayout newHorizontal 
+{ #category : 'layout' }
+StCatalogBrowser >> defaultLayout [
+
+	 ^ SpPanedLayout newHorizontal 
 		add: #list;
 		add: #description;
 		yourself
 ]
 
-{ #category : #initialization }
-StCatalogBrowser >> initializeWidgets [
+{ #category : 'initialization' }
+StCatalogBrowser >> initializePresenters [
 	
 	list := self newList.
 	description := self newLabel
