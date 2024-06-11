@@ -28,9 +28,9 @@ Class {
 	#instVars : [
 		'files'
 	],
-	#category : 'NewTools-Fuel-CommandLineHandler',
-	#package : 'NewTools-Fuel',
-	#tag : 'CommandLineHandler'
+	#category : 'NewTools-Utils-Fuel',
+	#package : 'NewTools-Utils',
+	#tag : 'Fuel'
 }
 
 { #category : 'accessing' }
