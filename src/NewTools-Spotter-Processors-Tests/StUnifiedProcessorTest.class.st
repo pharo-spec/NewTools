@@ -58,6 +58,13 @@ StUnifiedProcessorTest >> testFindThisMethodAfterAddingText [
 ]
 
 { #category : #tests }
+StUnifiedProcessorTest >> testFindThisMethodRespectingSearchStringTokensOrder [
+
+	self runForText: 'testFindMethodThis'.
+	self denyResultsIncludes: thisContext method
+]
+
+{ #category : #tests }
 StUnifiedProcessorTest >> testFindThisMethodWithFullClass [
 
 	self runForText: 'StUnifiedProcessorTest >> #testFindThisMethod'.
@@ -139,17 +146,17 @@ StUnifiedProcessorTest >> testLookingForDiskStoreWithSpaceReturnsDiskStore [
 ]
 
 { #category : #tests }
+StUnifiedProcessorTest >> testLookingForStoreDiskDoesntReturnDiskStore [
+
+	self runForText: 'StoreDisk'.
+	self denyResultsIncludes: DiskStore
+]
+
+{ #category : #tests }
 StUnifiedProcessorTest >> testLookingForStoreDiskLowercaseReturnsThisMethod [
 
 	self runForText: 'store disk'.
 	self assertResultsIncludes: StUnifiedProcessorTest >> #testLookingForStoreDiskLowercaseReturnsThisMethod
-]
-
-{ #category : #tests }
-StUnifiedProcessorTest >> testLookingForStoreDiskReturnsDiskStore [
-
-	self runForText: 'StoreDisk'.
-	self assertResultsIncludes: DiskStore
 ]
 
 { #category : #tests }
