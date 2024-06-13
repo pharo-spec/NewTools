@@ -90,8 +90,7 @@ Class {
 		'stackAndCodeContainer'
 	],
 	#classVars : [
-		'EnableStackColoring',
-		'FastTDD'
+		'EnableStackColoring'
 	],
 	#classInstVars : [
 		'layoutConfigurator'
@@ -134,8 +133,7 @@ StDebugger class >> configureLayout [
 StDebugger class >> configureLayout: aSymbol [
 
 	self layoutConfigurator selectedLayout: aSymbol.
-	SystemAnnouncer uniqueInstance announce:
-		StDebuggerLayoutChangedAnnouncement new
+	self codeSupportAnnouncer announce: StDebuggerLayoutChangedAnnouncement new
 ]
 
 { #category : 'instance creation' }
@@ -194,29 +192,6 @@ StDebugger class >> extensionToolsClasses [
 
 	^ TStDebuggerExtension users reject: [ :extensionClass |
 		  extensionClass isOnlyForTests ]
-]
-
-{ #category : 'accessing' }
-StDebugger class >> fastTDD [
-	^FastTDD ifNil:[FastTDD := false]
-]
-
-{ #category : 'accessing' }
-StDebugger class >> fastTDD: aBoolean [
-
-	FastTDD := aBoolean
-]
-
-{ #category : 'settings' }
-StDebugger class >> fastTDDSettingsOn: aBuilder [
-	<systemsettings>
-	(aBuilder setting: #fastTDD)
-		label: 'Fast TDD';
-		target: self;
-		default: false;
-		parent: #debugging;
-		description: 'Create classes and methods directly in the receiver''s class
-without requesting information from the user'
 ]
 
 { #category : 'tools registry' }
@@ -290,6 +265,25 @@ StDebugger >> acceptCodeChanges: newSource forContext: aContext [
 		inContext: aContext
 		notifying: code adapter widget.
 	self clearUnsavedCodeChanges
+]
+
+{ #category : 'extensions' }
+StDebugger >> addExtension: aDebuggerExtensionClass [
+	"If no extension was activated, we instantiate the page for the activated extension and we change the stack and code layout"
+
+	self extensionTools ifEmpty: [
+		extensionToolsNotebook pages:
+			{ (self instantiateExtensionToolsPage: aDebuggerExtensionClass) }
+				asOrderedCollection.
+		extensionToolsNotebook selectPageIndex: 1.
+		stackAndCodeContainer := self stackAndCodeWithExtensionsLayout.
+		self layout: self defaultLayout.
+		^ self ].
+
+	"Else, if the extension was not activated and now is, we instantiate the page for the activated extension, and adds it to the existing pages"
+
+	extensionToolsNotebook addPage:
+		(self instantiateExtensionToolsPage: aDebuggerExtensionClass)
 ]
 
 { #category : 'commands - support' }
@@ -438,6 +432,12 @@ StDebugger >> context [
 	^ self interruptedContext
 ]
 
+{ #category : 'accessing' }
+StDebugger >> contextPredicate [
+
+	^ self debuggerActionModel contextPredicate
+]
+
 { #category : 'actions' }
 StDebugger >> copyStackToClipboard [
 	self debuggerActionModel copyStackToClipboard
@@ -459,51 +459,6 @@ StDebugger >> createMissingClass [
 
 	self debuggerActionModel restartContext:
 		self interruptedContext sender
-]
-
-{ #category : 'actions' }
-StDebugger >> createMissingMethod [
-
-	| msg chosenClass |
-	self flag: #DBG_MISSINGTEST.
-	msg := self interruptedContext tempAt: 1.
-	[ 
-	chosenClass := self requestClassFrom:
-		               self interruptedContext receiver class.
-	self createMissingMethodFor: msg in: chosenClass ]
-		on: Abort
-		do: [ ^ self ].
-		
-	code takeKeyboardFocus 
-]
-
-{ #category : 'actions' }
-StDebugger >> createMissingMethodFor: aMessage in: aClass [
-
-	| method |
-	self flag: #DBG_MISSINGTEST.
-	method := self debuggerActionModel implement: aMessage inClass: aClass forContext: self interruptedContext.
-	method isClassified ifFalse: [ method protocol: (self requestProtocolIn: aClass) ].
-
-	stackTable selectIndex: 1
-]
-
-{ #category : 'actions' }
-StDebugger >> createSubclassResponsibility [
-
-	| senderContext msg chosenClass |
-	senderContext := self signalingSubclassResponsabilityContext.
-	msg := Message
-		       selector: senderContext selector
-		       arguments: senderContext arguments.
-	chosenClass := self
-		               requestClassFrom: senderContext receiver class
-		               to: senderContext methodClass.
-	chosenClass ifNil: [ ^ self ].
-	self debuggerActionModel
-		implement: msg
-		inClass: chosenClass
-		forContext: senderContext
 ]
 
 { #category : 'accessing - model' }
@@ -674,6 +629,13 @@ StDebugger >> extensionTools [
 	^ extensionTools ifNil: [ extensionTools := OrderedCollection new ]
 ]
 
+{ #category : 'extensions' }
+StDebugger >> extensionsToDisplay [
+
+	^ self class extensionToolsClasses select: [ :s |
+		  s showInDebugger and: [ s acceptsPredicate: self contextPredicate ] ]
+]
+
 { #category : 'actions' }
 StDebugger >> fileOutSelectedContext [
 	self debuggerActionModel
@@ -700,7 +662,16 @@ StDebugger >> forceSessionUpdate [
 
 	self
 		updateStackFromSession: self session;
-		updateExtensionsFrom: self session
+		updateExtensionsFromSession: self session
+]
+
+{ #category : 'actions' }
+StDebugger >> implementMissingMethod [
+
+	self debuggerActionModel implementMissingMethod.
+	self selectTopContext.
+	self flag: 'why do we need to give code the keyboard focus?'
+	"code takeKeyboardFocus"
 ]
 
 { #category : 'api' }
@@ -750,8 +721,8 @@ StDebugger >> initializeExtensionTools [
 
 	sortedToolClasses := SortedCollection new sortBlock: [ :s1 :s2 |
 		                     s1 displayOrder <= s2 displayOrder ].
-	sortedToolClasses addAll:
-		(self class extensionToolsClasses select: [ :s | s showInDebugger ]).
+
+	sortedToolClasses addAll: self extensionsToDisplay.
 	pages := sortedToolClasses collect: [ :toolClass |
 		         self instantiateExtensionToolsPage: toolClass ].
 	extensionToolsNotebook pages: pages
@@ -817,7 +788,7 @@ StDebugger >> initializeStack [
 		stackTable selection isEmpty ifFalse: [
 			self updateInspectorFromContext: context.
 			self updateCodeFromContext: context.
-			self updateExtensionsFrom: self session.
+			self updateExtensionsFromSession: self session.
 			self expandStackIfLastItemIsSelected.
 			self updateWindowTitle ] ].
 	stackHeader := self instantiate: StHeaderBar.
@@ -846,13 +817,11 @@ StDebugger >> initializeWindow: aWindowPresenter [
 
 { #category : 'extensions' }
 StDebugger >> instantiateExtensionToolsPage: aToolClass [
+
 	| toolInstance |
 	toolInstance := self instantiate: aToolClass on: self.
 	toolInstance layout: toolInstance debuggerLayout.
-	self registerExtensionTool: toolInstance.
-	^ SpNotebookPage
-		title: toolInstance debuggerExtensionToolName
-		provider: [ toolInstance ]
+	^ self notebookPageForExtension: toolInstance
 ]
 
 { #category : 'accessing - model' }
@@ -923,6 +892,15 @@ StDebugger >> newDebuggerContextFor: aContext [
 StDebugger >> newTitle [
 
 	^ self debuggerActionModel statusStringForContext
+]
+
+{ #category : 'extensions' }
+StDebugger >> notebookPageForExtension: anExtensionPresenter [
+
+	self registerExtensionTool: anExtensionPresenter.
+	^ SpNotebookPage
+		  title: anExtensionPresenter debuggerExtensionToolName
+		  provider: [ anExtensionPresenter ]
 ]
 
 { #category : 'api' }
@@ -998,61 +976,19 @@ StDebugger >> registerExtensionTool: anExtension [
 	self extensionTools add: anExtension
 ]
 
-{ #category : 'ui requests' }
-StDebugger >> requestClassFrom: aClass [
+{ #category : 'extensions' }
+StDebugger >> removeExtension: aDebuggerExtension [
+	"Else, the extension was activated and now isn't anymore. In this case, we remove the corresponding page. If there isn't any activated extension left, we change the stackAndCode layout"
 
-	^ self requestClassFrom: aClass to: ProtoObject
-
-	
-]
-
-{ #category : 'ui requests' }
-StDebugger >> requestClassFrom: aClass to: aSuperclass [
-
-	self class fastTDD ifTrue: [ ^ aClass ].
-	^ self requestSuperclassOf: aClass to: aSuperclass 
-
-	
-]
-
-{ #category : 'ui requests' }
-StDebugger >> requestProtocolIn: aClass [
-
-	| entryCompletion applicants choice |
-	self class fastTDD ifTrue: [ ^ Protocol unclassified ].
-	applicants := self protocolSuggestionsFor: aClass.
-	entryCompletion := EntryCompletion new
-		                   dataSourceBlock: [ :currText | applicants ];
-		                   filterBlock: [ :currApplicant :currText |
-			                   currText size > 3 and: [
-					                   currApplicant asLowercase includesSubstring:
-							                   currText asString asLowercase ] ].
-
-	choice := (self application newRequestText
-		           label:
-			           'Start typing for suggestions (3 characters minimum)';
-		           title: 'Choose a protocol';
-		           text: Protocol unclassified;
-		           entryCompletion: entryCompletion;
-		           openModal) ifNil: [ Abort signal ].
-
-	^ choice ifEmpty: [ Protocol unclassified ]
-]
-
-{ #category : 'ui requests' }
-StDebugger >> requestSuperclassOf: aClass to: aSuperclass [
-
-	| classes |
-	classes := OrderedCollection with: aClass.
-	classes addAll: (aClass allSuperclassesIncluding: aSuperclass).
-	classes addAll:
-		(aClass traits sort: [ :t1 :t2 | t1 asString < t2 asString ]).
-	classes size = 1 ifTrue: [ ^ classes first ].
-	^ (self application newSelect
-		   display: [ :each | each name ];
-		   items: classes;
-		   title: 'Define selector in:'; 
-		   openModal) ifNil: [ Abort signal ]
+	extensionToolsNotebook pages: (extensionToolsNotebook pages
+			 removeAllSuchThat: [ :page |
+				 page presenterProvider value class = aDebuggerExtension ];
+			 yourself).
+	extensionTools removeAllSuchThat: [ :extensionInstance |
+		extensionInstance class = aDebuggerExtension ].
+	extensionTools ifEmpty: [
+		stackAndCodeContainer := self stackAndCodeLayout ].
+	self layout: self defaultLayout
 ]
 
 { #category : 'actions' }
@@ -1103,6 +1039,12 @@ StDebugger >> selectNextExecutedExpression [
 		(sourceNodeExecuted start to: sourceNodeExecuted stop)
 ]
 
+{ #category : 'stack' }
+StDebugger >> selectTopContext [
+
+	stackTable selectIndex: 1
+]
+
 { #category : 'highlighting' }
 StDebugger >> selectedCodeRangeForContext: aContext [
 
@@ -1141,20 +1083,10 @@ StDebugger >> setModelBeforeInitialization: aSession [
 { #category : 'initialization' }
 StDebugger >> setStackAndCodeContainer [
 
-	stackAndCodeContainer := self class usesExtensions
-		                         ifTrue: [ 
+	stackAndCodeContainer := extensionTools
+		                         ifEmpty: [ self stackAndCodeLayout ]
+		                         ifNotEmpty: [
 		                         self stackAndCodeWithExtensionsLayout ]
-		                         ifFalse: [ self stackAndCodeLayout ]
-]
-
-{ #category : 'accessing - context' }
-StDebugger >> signalingSubclassResponsabilityContext [
-
-	| signalingContext |
-	signalingContext := self interruptedContext.
-	[ signalingContext selector = #subclassResponsibility ] whileFalse: [
-		signalingContext := signalingContext sender ].
-	^ signalingContext sender
 ]
 
 { #category : 'stack' }
@@ -1302,19 +1234,13 @@ StDebugger >> subscribeToActionModel [
 { #category : 'subscription' }
 StDebugger >> susbcribeToExtensionToggleAnnouncement [
 
-	SystemAnnouncer uniqueInstance weak
-		when: StDebuggerExtensionActivationToggle
-		send: #updateExtensionsFromAnnouncement:
-		to: self
+	self class codeSupportAnnouncer weak when: StDebuggerExtensionActivationToggle send: #updateExtensionsFromAnnouncement: to: self
 ]
 
 { #category : 'subscription' }
 StDebugger >> susbcribeToLayoutChangesAnnouncement [
 
-	SystemAnnouncer uniqueInstance weak
-		when: StDebuggerLayoutChangedAnnouncement
-		send: #updateLayout
-		to: self
+	self class codeSupportAnnouncer weak when: StDebuggerLayoutChangedAnnouncement send: #updateLayout to: self
 ]
 
 { #category : 'accessing - presenters' }
@@ -1345,7 +1271,7 @@ StDebugger >> unsubscribeFromActionModel [
 { #category : 'subscription' }
 StDebugger >> unsubscribeFromSystemAnnouncer [
 
-	SystemAnnouncer uniqueInstance unsubscribe: self
+	self class codeSupportAnnouncer unsubscribe: self
 ]
 
 { #category : 'updating' }
@@ -1416,11 +1342,6 @@ StDebugger >> updateContextChanged [
 	self updateStep
 ]
 
-{ #category : 'updating - presenters' }
-StDebugger >> updateExtensionsFrom: newSession [
-	self extensionTools do:[:tool| tool updatePresenter]
-]
-
 { #category : 'initialization' }
 StDebugger >> updateExtensionsFromAnnouncement: aStDebuggerToggleAnnouncement [
 
@@ -1428,33 +1349,32 @@ StDebugger >> updateExtensionsFromAnnouncement: aStDebuggerToggleAnnouncement [
 	extensionToggled := aStDebuggerToggleAnnouncement
 		                    debuggerExtensionClass.
 
-	"If no extension was activated, we instantiate the page for the activated extension and we change the stack and code layout"
-	self extensionTools ifEmpty: [
-		extensionToolsNotebook pages:
-			{ (self instantiateExtensionToolsPage: extensionToggled) }
-				asOrderedCollection.
-		extensionToolsNotebook selectPageIndex: 1.
-		stackAndCodeContainer := self stackAndCodeWithExtensionsLayout.
-		self layout: self defaultLayout.
+	"If the extension was (de)activated but does not accept the corresponding context predicate, nothing changes"
+	(extensionToggled acceptsPredicate: self contextPredicate) ifFalse: [
 		^ self ].
 
-	"Else, if the extension was not activated and now is, we instantiate the page for the activated extension, and adds it to the existing pages"
+	extensionToggled showInDebugger
+		ifTrue: [ self addExtension: extensionToggled ]
+		ifFalse: [ self removeExtension: extensionToggled ]
+]
 
-	extensionToggled showInDebugger ifTrue: [
-		extensionToolsNotebook addPage:
-			(self instantiateExtensionToolsPage: extensionToggled).
-		^ self ].
+{ #category : 'updating - presenters' }
+StDebugger >> updateExtensionsFromSession: newSession [
 
-	"Else, the extension was activated and now isn't anymore. In this case, we remove the corresponding page. If there isn't any activated extension left, we change the stackAndCode layout"
-	extensionToolsNotebook pages: (extensionToolsNotebook pages
-			 removeAllSuchThat: [ :page |
-				 page presenterProvider value class = extensionToggled ];
-			 yourself).
-	extensionTools removeAllSuchThat: [ :extensionInstance |
-		extensionInstance class = extensionToggled ].
-	extensionTools ifEmpty: [
-		stackAndCodeContainer := self stackAndCodeLayout ].
-	self layout: self defaultLayout
+	| newExtensions |
+	newExtensions := self extensionsToDisplay.
+
+	"All extensions that were displayed but shouldn't be anymore are removed"
+	(extensionTools
+		 collect: [ :each | each class ]
+		 thenReject: [ :each | newExtensions includes: each ]) do: [
+		:extension | self removeExtension: extension ].
+
+	"All extensions that weren't displayed but should be now, are displayed"
+	(newExtensions copyWithoutAll:
+		 (extensionTools collect: [ :each | each class ])) do: [ :extension |
+		self addExtension: extension ].
+	self extensionTools do: [ :tool | tool updatePresenter ]
 ]
 
 { #category : 'updating - presenters' }
@@ -1518,7 +1438,7 @@ StDebugger >> updateStep [
 
 	self updateStackFromSession: self session.
 	self updateWindowTitle.
-	self updateExtensionsFrom: self session.
+	self updateExtensionsFromSession: self session.
 	self updateToolbar.
 
 	currentContext := self currentContext.

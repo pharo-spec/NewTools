@@ -70,7 +70,7 @@ StSettingIcons class >> inspectionIcons [
 		  addColumn: (SpImageTableColumn title: 'Icon' evaluated: #value);
 		  addColumn: (SpStringTableColumn title: 'Name' evaluated: #key);
 		  items:
-			  ((self class selectorsInCategory: 'accessing - icons') sorted
+			  ((self class selectorsInProtocol: 'accessing - icons') sorted
 				   collect: [ :each | each -> (self perform: each) ]);
 		  yourself
 ]

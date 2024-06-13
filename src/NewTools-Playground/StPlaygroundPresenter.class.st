@@ -97,9 +97,9 @@ StPlaygroundPresenter class >> menuCommandOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #Playground)
 		parent: #InputOutput;
-		action: [ Smalltalk tools openWorkspace ];
+		action: [ Smalltalk tools openPlayground ];
 		order: 1;
-		keyText: 'o, w';
+		keyText: 'o, p';
 		help: 'A window used as a scratchpad area where fragments of Pharo code can be entered, stored, edited, and evaluated.';
 		iconName: #workspace
 ]
@@ -213,9 +213,9 @@ StPlaygroundPresenter >> stopProcessing [
 ]
 
 { #category : 'initialization' }
-StPlaygroundPresenter >> windowIcon [
+StPlaygroundPresenter >> taskbarIconName [
 	
-	^ self application iconNamed: #workspace
+	^ #workspace
 ]
 
 { #category : 'initialization' }

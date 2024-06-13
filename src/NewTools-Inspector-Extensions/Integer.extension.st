@@ -11,6 +11,8 @@ Integer >> inspectIntegerIn: specBuilder [
 		key: 	#hex value: self printStringHex;
 		key: #octal value: (self printStringBase: 8);
 		key: 	#binary value: (self printStringBase: 2).
+	self negative ifTrue: [ 
+		 inspectorBuilder key: #'two''s complement' value: self bitString. ].
 	(self between: 0 and: ZnCharacterEncoder default maximumUTFCode)	
 		ifTrue: [ inspectorBuilder key: #character value: self asCharacter ].
 	^ inspectorBuilder table

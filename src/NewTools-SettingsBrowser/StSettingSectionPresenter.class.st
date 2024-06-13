@@ -28,10 +28,3 @@ StSettingSectionPresenter >> defaultLayout [
 			yourself);
 		yourself
 ]
-
-{ #category : 'initialization' }
-StSettingSectionPresenter >> initializePresenters [
-
-	super initializePresenters.
-	self layout: self defaultLayout.	
-]

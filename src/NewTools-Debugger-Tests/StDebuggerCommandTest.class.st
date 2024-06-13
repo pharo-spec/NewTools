@@ -428,7 +428,7 @@ StDebuggerCommandTest >> testStDefineMethodCommandExecution [
 	command := StDefineMethodCommand forContext: debugger.
 	"StDefineMethodCommand command calls the #createMissingMethod action interface of the debugger object"
 	command execute.
-	self assert: debugger tag equals: #createMissingMethod
+	self assert: debugger tag equals: #implementMissingMethod
 ]
 
 { #category : 'tests - execution' }
@@ -476,7 +476,7 @@ StDebuggerCommandTest >> testStDefineSubclassResponsabilityCommandExecution [
 	command := StDefineSubclassResponsabilityCommand forContext: debugger.
 	"StDefineSubclassResponsabilityCommand command calls the #createSubclassResponsibility action interface of the debugger object"
 	command execute.
-	self assert: debugger tag equals: #createSubclassResponsibility
+	self assert: debugger tag equals: #implementMissingMethod
 ]
 
 { #category : 'tests - execution' }

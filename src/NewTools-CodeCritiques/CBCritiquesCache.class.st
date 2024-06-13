@@ -214,7 +214,7 @@ CBCritiquesCache >> logFalsePositiveClassInManifest [
 	| manifestBuilder |
 	packages
 		do: [ :package | 
-			manifestBuilder := self builderManifestClass ofPackageNamed: package packageName.
+			manifestBuilder := self builderManifestClass ofPackage: package.
 			manifestBuilder rejectClasses \ falsePositiveClasses do: [ :cl | manifestBuilder removeRejectClass: cl ].
 			falsePositiveClasses \ manifestBuilder rejectClasses do: [ :cl | manifestBuilder addRejectClass: cl ] ]
 ]
@@ -249,7 +249,7 @@ CBCritiquesCache >> logFalsePositiveRulesInManifest [
 	| manifestBuilder |
 	falsePositiveRules
 		keysAndValuesDo: [:package :rules | 
-			manifestBuilder := self builderManifestClass ofPackageNamed: package packageName.
+			manifestBuilder := self builderManifestClass ofPackage: package.
 			manifestBuilder rejectRules \ rules do: [ :rule | manifestBuilder removeRejectRule: rule ].
 			rules \ manifestBuilder rejectRules do: [ :rule | manifestBuilder addRejectRule: rule ]]
 ]
