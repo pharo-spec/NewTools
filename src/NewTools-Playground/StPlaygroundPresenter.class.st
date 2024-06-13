@@ -99,7 +99,7 @@ StPlaygroundPresenter class >> menuCommandOn: aBuilder [
 		parent: #InputOutput;
 		action: [ Smalltalk tools openWorkspace ];
 		order: 1;
-		keyText: 'o, w';
+		keyText: 'o, p';
 		help: 'A window used as a scratchpad area where fragments of Pharo code can be entered, stored, edited, and evaluated.';
 		iconName: #workspace
 ]
