@@ -30,7 +30,7 @@ StSettingsPagePresenter >> defaultLayout [
 		add: pageTitle expand: false;
 		add: (SpPanedLayout newVertical 
 			positionOfSlider: 0.85;
-			add: (SpScrollableLayout with: (settingsBox := SpBoxLayout newTopToBottom spacing: 10));
+			add: (SpScrollableLayout with: settingsBox);
 			add: (SpBoxLayout newTopToBottom
 				spacing: 5;
 				add: settingDocLabel expand: false;
@@ -48,6 +48,7 @@ StSettingsPagePresenter >> initializePresenters [
 		addStyle: 'settingDocTitle';
 		yourself.
 	settingDocPresenter := self newText.
+	settingsBox := SpBoxLayout newTopToBottom spacing: 10
 ]
 
 { #category : 'accessing - model' }
