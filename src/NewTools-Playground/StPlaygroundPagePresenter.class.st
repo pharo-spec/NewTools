@@ -379,6 +379,12 @@ StPlaygroundPagePresenter >> showLineNumbers: aBoolean [
 	toggleLineNumberButton label: (StShowLineNumbersCommand iconLabelFor: self showLineNumbers)
 ]
 
+{ #category : 'initialization' }
+StPlaygroundPagePresenter >> taskbarIconName [
+	
+	^ #workspace
+]
+
 { #category : 'private' }
 StPlaygroundPagePresenter >> text [
 
@@ -429,10 +435,4 @@ StPlaygroundPagePresenter >> updatePresenter [
 StPlaygroundPagePresenter >> whenActivatedDo: aBlock [
 
 	activationBlock := aBlock
-]
-
-{ #category : 'initialization' }
-StPlaygroundPagePresenter >> windowIcon [
-	
-	^ self application iconNamed: #workspace
 ]

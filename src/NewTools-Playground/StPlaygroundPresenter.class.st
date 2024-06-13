@@ -213,9 +213,9 @@ StPlaygroundPresenter >> stopProcessing [
 ]
 
 { #category : 'initialization' }
-StPlaygroundPresenter >> windowIcon [
+StPlaygroundPresenter >> taskbarIconName [
 	
-	^ self application iconNamed: #workspace
+	^ #workspace
 ]
 
 { #category : 'initialization' }
