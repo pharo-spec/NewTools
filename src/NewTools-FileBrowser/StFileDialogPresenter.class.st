@@ -169,7 +169,8 @@ StFileDialogPresenter >> columns: aCollectionOfColumns [
 { #category : 'actions' }
 StFileDialogPresenter >> confirm [
 
-	self withWindowDo: #triggerOkAction
+	^ self withWindowDo: [ :window |
+		 window triggerOkAction ]
 ]
 
 { #category : 'accessing - ui' }
@@ -181,7 +182,7 @@ StFileDialogPresenter >> confirmLabel [
 { #category : 'actions' }
 StFileDialogPresenter >> confirmed [
 
-	okAction cull: self selectedEntry
+	^ okAction cull: self selectedEntry
 ]
 
 { #category : 'api - customization' }
@@ -331,8 +332,7 @@ StFileDialogPresenter >> previewer: aPreviewer [
 StFileDialogPresenter >> selectFile: aFile [
 
 	self fileNavigationSystem selectedEntry = aFile ifFalse: [ 
-		self fileNavigationSystem fileReferenceTable selectIndex:
-			(self fileNavigationSystem fileReferenceTable items indexOf: aFile) ].
+		self fileNavigationSystem fileReferenceTable selectItem: aFile ].
 	self fileNavigationSystem nameText text: aFile basename
 ]
 
