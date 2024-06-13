@@ -6,6 +6,7 @@ Class {
 	#tag : 'Deprecated'
 }
 
+
 { #category : 'testing' }
 StMetaBrowser class >> isDeprecated [ 
 	^ true
