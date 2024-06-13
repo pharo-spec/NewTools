@@ -90,8 +90,7 @@ Class {
 		'stackAndCodeContainer'
 	],
 	#classVars : [
-		'EnableStackColoring',
-		'FastTDD'
+		'EnableStackColoring'
 	],
 	#classInstVars : [
 		'layoutConfigurator'
@@ -194,29 +193,6 @@ StDebugger class >> extensionToolsClasses [
 
 	^ TStDebuggerExtension users reject: [ :extensionClass |
 		  extensionClass isOnlyForTests ]
-]
-
-{ #category : 'accessing' }
-StDebugger class >> fastTDD [
-	^FastTDD ifNil:[FastTDD := false]
-]
-
-{ #category : 'accessing' }
-StDebugger class >> fastTDD: aBoolean [
-
-	FastTDD := aBoolean
-]
-
-{ #category : 'settings' }
-StDebugger class >> fastTDDSettingsOn: aBuilder [
-	<systemsettings>
-	(aBuilder setting: #fastTDD)
-		label: 'Fast TDD';
-		target: self;
-		default: false;
-		parent: #debugging;
-		description: 'Create classes and methods directly in the receiver''s class
-without requesting information from the user'
 ]
 
 { #category : 'tools registry' }
@@ -486,66 +462,6 @@ StDebugger >> createMissingClass [
 		self interruptedContext sender
 ]
 
-{ #category : 'actions' }
-StDebugger >> createMissingMethod [
-
-	| msg chosenClass |
-	self flag: #DBG_MISSINGTEST.
-	msg := self interruptedContext tempAt: 1.
-	[ 
-	chosenClass := self requestClassFrom:
-		               self interruptedContext receiver class.
-	self createMissingMethodFor: msg inClass: chosenClass ]
-		on: Abort
-		do: [ ^ self ].
-		
-	code takeKeyboardFocus 
-]
-
-{ #category : 'actions' }
-StDebugger >> createMissingMethodFor: aMessage inClass: aClass [
-
-	| method |
-	method := self debuggerActionModel
-		implement: aMessage
-		inClass: aClass
-		forContext: self interruptedContext.
-	method isClassified ifFalse: [ method protocol: (self requestProtocolIn: aClass) ].
-		
-	self selectTopContext
-]
-
-{ #category : 'actions' }
-StDebugger >> createMissingMethodFor: aMessage inClass: aClass underProtocol: aProtocol [
-
-	| method |
-	method := self debuggerActionModel
-		          implement: aMessage
-		          inClass: aClass
-		          forContext: self interruptedContext.
-	method protocol: aProtocol.
-
-	self selectTopContext
-]
-
-{ #category : 'actions' }
-StDebugger >> createSubclassResponsibility [
-
-	| senderContext msg chosenClass |
-	senderContext := self signalingSubclassResponsabilityContext.
-	msg := Message
-		       selector: senderContext selector
-		       arguments: senderContext arguments.
-	chosenClass := self
-		               requestClassFrom: senderContext receiver class
-		               to: senderContext methodClass.
-	chosenClass ifNil: [ ^ self ].
-	self debuggerActionModel
-		implement: msg
-		inClass: chosenClass
-		forContext: senderContext
-]
-
 { #category : 'accessing - model' }
 StDebugger >> currentContext [
 	"I answer the context on which an action should be executed.
@@ -748,6 +664,15 @@ StDebugger >> forceSessionUpdate [
 	self
 		updateStackFromSession: self session;
 		updateExtensionsFromSession: self session
+]
+
+{ #category : 'actions' }
+StDebugger >> implementMissingMethod [
+
+	self debuggerActionModel implementMissingMethod.
+	self selectTopContext.
+	self flag: 'why do we need to give code the keyboard focus?'
+	"code takeKeyboardFocus"
 ]
 
 { #category : 'api' }
@@ -1067,62 +992,6 @@ StDebugger >> removeExtension: aDebuggerExtension [
 	self layout: self defaultLayout
 ]
 
-{ #category : 'ui requests' }
-StDebugger >> requestClassFrom: aClass [
-
-	^ self requestClassFrom: aClass to: ProtoObject
-
-	
-]
-
-{ #category : 'ui requests' }
-StDebugger >> requestClassFrom: aClass to: aSuperclass [
-
-	self class fastTDD ifTrue: [ ^ aClass ].
-	^ self requestSuperclassOf: aClass to: aSuperclass 
-
-	
-]
-
-{ #category : 'ui requests' }
-StDebugger >> requestProtocolIn: aClass [
-
-	| entryCompletion applicants choice |
-	self class fastTDD ifTrue: [ ^ Protocol unclassified ].
-	applicants := self protocolSuggestionsFor: aClass.
-	entryCompletion := EntryCompletion new
-		                   dataSourceBlock: [ :currText | applicants ];
-		                   filterBlock: [ :currApplicant :currText | 
-			                   currText size > 3 and: [ 
-					                   currApplicant asLowercase includesSubstring:
-							                   currText asString asLowercase ] ].
-
-	choice := (UIManager default
-		           request:
-		           'Start typing for suggestions (3 characters minimum)'
-		           initialAnswer: Protocol unclassified
-		           title: 'Choose a protocol'
-		           entryCompletion: entryCompletion) ifNil: [ Abort signal ].
-
-	^ choice ifEmpty: [ Protocol unclassified ]
-]
-
-{ #category : 'ui requests' }
-StDebugger >> requestSuperclassOf: aClass to: aSuperclass [
-
-	| classes |
-	classes := OrderedCollection with: aClass.
-	classes addAll: (aClass allSuperclassesIncluding: aSuperclass).
-	classes addAll:
-		(aClass traits sort: [ :t1 :t2 | t1 asString < t2 asString ]).
-	classes size = 1 ifTrue: [ ^ classes first ].
-	^ (self application newSelect
-		   display: [ :each | each name ];
-		   items: classes;
-		   title: 'Define selector in:'; 
-		   openModal) ifNil: [ Abort signal ]
-]
-
 { #category : 'actions' }
 StDebugger >> restartCurrentContext [
 
@@ -1219,16 +1088,6 @@ StDebugger >> setStackAndCodeContainer [
 		                         ifEmpty: [ self stackAndCodeLayout ]
 		                         ifNotEmpty: [
 		                         self stackAndCodeWithExtensionsLayout ]
-]
-
-{ #category : 'accessing - context' }
-StDebugger >> signalingSubclassResponsabilityContext [
-
-	| signalingContext |
-	signalingContext := self interruptedContext.
-	[ signalingContext selector = #subclassResponsibility ] whileFalse: [
-		signalingContext := signalingContext sender ].
-	^ signalingContext sender
 ]
 
 { #category : 'stack' }

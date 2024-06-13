@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'session',
 		'debugger',
-		'oldFastTDD',
 		'dbg',
 		'stackSizeBefore',
 		'shouldFilterStack',
@@ -89,10 +88,8 @@ StDebuggerTest >> replaceMethodWithQuickMethodStepping [
 StDebuggerTest >> setUp [	
 	super setUp.	
 	session := StTestDebuggerProvider new sessionForDebuggerTests.
-	oldFastTDD := self debuggerClass fastTDD.
 	shouldFilterStack := StDebuggerActionModel shouldFilterStack.
-	oldMethodToSourceDictionary := Dictionary new.
-	self debuggerClass fastTDD: true
+	oldMethodToSourceDictionary := Dictionary new
 ]
 
 { #category : 'accessing' }
@@ -109,7 +106,6 @@ StDebuggerTest >> subscriptionsForStDebuggerExtensionActivationToggle [
 StDebuggerTest >> tearDown [
 
 	session clear.
-	self debuggerClass fastTDD: oldFastTDD.
 
 	"In tests, should we use `debugger` when we need a fully initialized debugger and `dbg` when we just need a debugger created with #basicNew? Still, isn't it weird to clear the session only for a fully initialized debugger but not for a debugger created with #basicNew? Both have a session. Maybe this implies that `dbg`  should only use the instance variable `session` and nothing else. These specifications should be written somewhere, in the doc of the class maybe."
 	debugger ifNotNil: [
@@ -514,9 +510,7 @@ StDebuggerTest >> testCreateMissingMethodWithUnfilteredStackUpdatesCodePane [
 	self assert: (debugger code text beginsWith: 'doesNotUnderstand:').
 
 	"we create the missing method #foobar"
-	debugger
-		createMissingMethodFor: dnuMessage
-		inClass: StTestDebuggerProvider.
+	debugger implementMissingMethod.
 
 	method := StTestDebuggerProvider methodDictionary at: #foobar.
 
@@ -612,12 +606,6 @@ StDebuggerTest >> testExceptionProvidesSameExceptionAsTheActionModelOne [
 	self
 		assert: debugger exception
 		identicalTo: debugger debuggerActionModel exception
-]
-
-{ #category : 'tests - initialization' }
-StDebuggerTest >> testFastTDD [
-	self debuggerClass fastTDD: nil.
-	self deny: self debuggerClass fastTDD
 ]
 
 { #category : 'tests' }
@@ -848,22 +836,6 @@ StDebuggerTest >> testRecordUnsavedCodeChanges [
 	dbg stackTable selectItem: lastContext.
 	self assert: dbg code text equals: lastContext sourceCode.
 	self assert: (dbg unsavedCodeChangesFor: dbg stackTable items first) equals: 'a'
-]
-
-{ #category : 'tests - actions' }
-StDebuggerTest >> testRequestClassFrom [
-
-	self
-		assert: (self debugger requestClassFrom: self class)
-		identicalTo: self class
-]
-
-{ #category : 'tests - actions' }
-StDebuggerTest >> testRequestProtocolIn [
-
-	self
-		assert: (self debugger requestProtocolIn: self class)
-		equals: Protocol unclassified
 ]
 
 { #category : 'tests - session' }
