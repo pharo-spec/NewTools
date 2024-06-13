@@ -8,7 +8,6 @@ I add specific debugger functionalities:
 Class {
 	#name : 'StDebuggerInspector',
 	#superclass : 'SpPresenter',
-	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'inspector',
 		'model',
