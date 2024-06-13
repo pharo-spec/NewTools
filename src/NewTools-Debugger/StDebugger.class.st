@@ -133,8 +133,7 @@ StDebugger class >> configureLayout [
 StDebugger class >> configureLayout: aSymbol [
 
 	self layoutConfigurator selectedLayout: aSymbol.
-	SystemAnnouncer uniqueInstance announce:
-		StDebuggerLayoutChangedAnnouncement new
+	self codeSupportAnnouncer announce: StDebuggerLayoutChangedAnnouncement new
 ]
 
 { #category : 'instance creation' }
@@ -1235,19 +1234,13 @@ StDebugger >> subscribeToActionModel [
 { #category : 'subscription' }
 StDebugger >> susbcribeToExtensionToggleAnnouncement [
 
-	SystemAnnouncer uniqueInstance weak
-		when: StDebuggerExtensionActivationToggle
-		send: #updateExtensionsFromAnnouncement:
-		to: self
+	self class codeSupportAnnouncer weak when: StDebuggerExtensionActivationToggle send: #updateExtensionsFromAnnouncement: to: self
 ]
 
 { #category : 'subscription' }
 StDebugger >> susbcribeToLayoutChangesAnnouncement [
 
-	SystemAnnouncer uniqueInstance weak
-		when: StDebuggerLayoutChangedAnnouncement
-		send: #updateLayout
-		to: self
+	self class codeSupportAnnouncer weak when: StDebuggerLayoutChangedAnnouncement send: #updateLayout to: self
 ]
 
 { #category : 'accessing - presenters' }
@@ -1278,7 +1271,7 @@ StDebugger >> unsubscribeFromActionModel [
 { #category : 'subscription' }
 StDebugger >> unsubscribeFromSystemAnnouncer [
 
-	SystemAnnouncer uniqueInstance unsubscribe: self
+	self class codeSupportAnnouncer unsubscribe: self
 ]
 
 { #category : 'updating' }
