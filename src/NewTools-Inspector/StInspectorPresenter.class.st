@@ -324,12 +324,6 @@ StInspectorPresenter >> stopProcessing [
 	StInspectorRefreshService uniqueInstance unregister: self
 ]
 
-{ #category : 'initialization' }
-StInspectorPresenter >> taskbarIconName [
-	
-	^ #smallInspectIt
-]
-
 { #category : 'private - updating' }
 StInspectorPresenter >> updateList [
 
@@ -344,6 +338,12 @@ StInspectorPresenter >> updateTitle [
 	self isRoot ifFalse: [ ^ self ].
 	self withWindowDo: [ :window | 
 		window title: self title ].
+]
+
+{ #category : 'initialization' }
+StInspectorPresenter >> windowIcon [
+	
+	^ self application iconNamed: #smallInspectIt
 ]
 
 { #category : 'initialization' }
