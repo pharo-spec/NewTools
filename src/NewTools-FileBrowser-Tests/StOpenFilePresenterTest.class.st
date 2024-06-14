@@ -44,12 +44,14 @@ StOpenFilePresenterTest >> testMultipleExtensions [
 StOpenFilePresenterTest >> testSelectFile [
 
 	| selectedFile |
-	dialog okAction: [ :file | selectedFile := file ].
+
 	window := dialog openDialog.
 	self assert: dialog currentDirectory equals: root.
 	dialog selectFile: root / 'sth.ext'.
 	self assert: dialog selectedEntry equals: root / 'sth.ext'.
-	dialog confirm.
+
+	selectedFile := dialog confirm.
+	
 	self assert: selectedFile equals: root / 'sth.ext'
 ]
 
