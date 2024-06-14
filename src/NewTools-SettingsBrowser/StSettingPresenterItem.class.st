@@ -32,8 +32,8 @@ StSettingPresenterItem >> initializePresenters [
 
 	labeledPresenter := (self instantiate: self labeledPresenterClass on: self) 
 		label: self model label;
-		description: self model description;
 		input: self setterPresenter;
+		description: self model description;
 		yourself.
 
 ]
@@ -41,7 +41,7 @@ StSettingPresenterItem >> initializePresenters [
 { #category : 'initialization' }
 StSettingPresenterItem >> labeledPresenterClass [
 
-	^ StLabeledMultiLinePresenter
+	^ StLabeledSettingPresenter
 
 ]
 
@@ -67,6 +67,11 @@ StSettingPresenterItem >> setterPresenter [
 StSettingPresenterItem >> setterPresenter: anObject [
 
 	setterPresenter := anObject
+]
+
+{ #category : 'accessing' }
+StSettingPresenterItem >> updateHelp: aString [ 
+	self owner updateHelp: aString
 ]
 
 { #category : 'accessing' }

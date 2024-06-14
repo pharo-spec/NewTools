@@ -7,8 +7,8 @@ Provides a Spec presenter with:
 
 "
 Class {
-	#name : 'StLabeledMultiLineDirectorySelectionPresenter',
-	#superclass : 'StLabeledMultiLinePresenter',
+	#name : 'StLabeledSettingDirectorySelectionPresenter',
+	#superclass : 'StLabeledSettingPresenter',
 	#instVars : [
 		'selectButtonPresenter'
 	],
@@ -18,7 +18,7 @@ Class {
 }
 
 { #category : 'examples' }
-StLabeledMultiLineDirectorySelectionPresenter class >> example [
+StLabeledSettingDirectorySelectionPresenter class >> example [
 
 	^ (self 
 		label: 'Label Example' 
@@ -28,32 +28,29 @@ StLabeledMultiLineDirectorySelectionPresenter class >> example [
 ]
 
 { #category : 'layout' }
-StLabeledMultiLineDirectorySelectionPresenter >> buttonWidth [
+StLabeledSettingDirectorySelectionPresenter >> buttonWidth [
 
 	^ 100
 ]
 
 { #category : 'layout' }
-StLabeledMultiLineDirectorySelectionPresenter >> defaultLayout [
+StLabeledSettingDirectorySelectionPresenter >> defaultLayout [
+
 	^ SpBoxLayout newLeftToRight
 		add: labelPresenter withConstraints: [ :constraints | constraints width: self labelWidth ];
-		add:
-			(SpBoxLayout newTopToBottom
+		add: (SpBoxLayout newTopToBottom
 				add: (SpBoxLayout newLeftToRight 
 					add: input withConstraints: [ :constraints | 
-						constraints 
-							width: self inputTextWidth;
-							height: self inputTextHeight ];
+						constraints height: self inputTextHeight ];
 					add: selectButtonPresenter withConstraints: [ :constraints | 
-						constraints width: self buttonWidth ]);
-				add: descriptionPresenter withConstraints: [ :constraints | 
-					constraints 
-						height: self inputTextHeight * 2.5 ]) width: self settingBoxWidth;
+						constraints width: self buttonWidth ];
+					yourself);
+				yourself);
 		yourself
 ]
 
 { #category : 'initialization' }
-StLabeledMultiLineDirectorySelectionPresenter >> initializePresenters [ 
+StLabeledSettingDirectorySelectionPresenter >> initializePresenters [ 
 
 	super initializePresenters.
 	selectButtonPresenter := self newButton
@@ -69,13 +66,13 @@ StLabeledMultiLineDirectorySelectionPresenter >> initializePresenters [
 ]
 
 { #category : 'private' }
-StLabeledMultiLineDirectorySelectionPresenter >> selectButtonPresenter [
+StLabeledSettingDirectorySelectionPresenter >> selectButtonPresenter [
 
 	^ selectButtonPresenter
 ]
 
 { #category : 'private' }
-StLabeledMultiLineDirectorySelectionPresenter >> selectButtonPresenter: anObject [
+StLabeledSettingDirectorySelectionPresenter >> selectButtonPresenter: anObject [
 
 	selectButtonPresenter := anObject
 ]
