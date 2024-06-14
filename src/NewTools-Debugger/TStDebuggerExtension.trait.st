@@ -54,11 +54,9 @@ TStDebuggerExtension classSide >> showInDebugger [
 { #category : 'debugger extension' }
 TStDebuggerExtension classSide >> showInDebugger: aBoolean [
 
-	self showInDebugger = aBoolean ifTrue: [ "The activated state hasn't changed. So we don't announce an extension toggle"
-		^ self ].
+	self showInDebugger = aBoolean ifTrue: [ "The activated state hasn't changed. So we don't announce an extension toggle" ^ self ].
 	showDebuggerExtension := aBoolean.
-	SystemAnnouncer uniqueInstance announce:
-		(StDebuggerExtensionActivationToggle debuggerExtensionClass: self)
+	self class codeSupportAnnouncer announce: (StDebuggerExtensionActivationToggle debuggerExtensionClass: self)
 ]
 
 { #category : 'visiting' }

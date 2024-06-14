@@ -1,6 +1,7 @@
 Extension { #name : 'WatchDebugPoint' }
 
 { #category : '*NewTools-DebugPointsBrowser' }
-WatchDebugPoint >> uiElement [ 
-	^WatchPresenter new debugPoint: self.
+WatchDebugPoint >> presentIn: aPresenter [
+
+	aPresenter addToLayout: (WatchPresenter new debugPoint: self)
 ]

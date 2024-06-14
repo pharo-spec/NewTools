@@ -1,6 +1,7 @@
 Extension { #name : 'BreakDebugPoint' }
 
 { #category : '*NewTools-DebugPointsBrowser' }
-BreakDebugPoint >> uiElement [ 
-	^BreakPresenter new debugPoint: self.
+BreakDebugPoint >> presentIn: aPresenter [
+
+	aPresenter addToLayout: (BreakPresenter new debugPoint: self)
 ]

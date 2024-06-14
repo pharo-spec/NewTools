@@ -12,7 +12,7 @@ Class {
 { #category : 'api' }
 StRewriterEnvironmentCreator class >> scopeEnvironmentForAllPackages [
 
-	^ RBPackageEnvironment packages: RPackageOrganizer default packages
+	^ RBPackageEnvironment packages: self packageOrganizer packages
 ]
 
 { #category : 'api' }

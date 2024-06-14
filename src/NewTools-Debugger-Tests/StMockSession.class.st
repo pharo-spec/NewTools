@@ -5,6 +5,9 @@ You can use me in your tests where messages are sent to a debug session but you 
 Class {
 	#name : 'StMockSession',
 	#superclass : 'Object',
+	#instVars : [
+		'dummyContext'
+	],
 	#category : 'NewTools-Debugger-Tests-Utils',
 	#package : 'NewTools-Debugger-Tests',
 	#tag : 'Utils'
@@ -16,13 +19,38 @@ StMockSession >> doesNotUnderstand: aMessage [
 	^ self
 ]
 
-{ #category : 'debug - session' }
-StMockSession >> implement: aMessage inClass: aClass forContext: aContext [
+{ #category : 'accessing' }
+StMockSession >> dummyContext: anObject [
+
+	dummyContext := anObject
+]
+
+{ #category : 'accessing' }
+StMockSession >> exception [
+	^self
+]
+
+{ #category : 'accessing' }
+StMockSession >> implement: message inClass: aclass forContext: aContext [
+
+	^ self
 ]
 
 { #category : 'accessing' }
 StMockSession >> interruptedContext [
-	 ^self
+	 ^dummyContext ifNil:[self]
+]
+
+{ #category : 'accessing' }
+StMockSession >> messageToImplementInContext: context [
+
+	^ self
+]
+
+{ #category : 'accessing' }
+StMockSession >> receiver [
+
+	^ self
 ]
 
 { #category : 'debugging actions' }
@@ -55,4 +83,9 @@ StMockSession >> stepOver: aContext [
 
 { #category : 'debugging actions' }
 StMockSession >> stepThrough: aContext [
+]
+
+{ #category : 'examples' }
+StMockSession >> subclassResponsibilityExample [
+	^self subclassResponsibility 
 ]

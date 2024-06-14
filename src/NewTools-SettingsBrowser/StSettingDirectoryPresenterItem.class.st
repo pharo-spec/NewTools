@@ -18,15 +18,15 @@ StSettingDirectoryPresenterItem >> initializePresenters [
 		yourself.
 	labeledPresenter := (self instantiate: self labeledPresenterClass on: self) 
 		label: self model label;
-		description: self model description;
 		input: self setterPresenter;
+		description: self model description;
 		yourself.
 ]
 
 { #category : 'initialization' }
 StSettingDirectoryPresenterItem >> labeledPresenterClass [
 
-	^ StLabeledMultiLineDirectorySelectionPresenter
+	^ StLabeledSettingDirectorySelectionPresenter
 
 ]
 

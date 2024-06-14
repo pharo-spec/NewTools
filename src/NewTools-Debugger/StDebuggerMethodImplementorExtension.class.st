@@ -2,7 +2,7 @@
 I am a debugger extension that helps create a method that raised a debugger with a DNU, allowing to choose some parameters such as the class or trait and the protocol of the new method. 
 "
 Class {
-	#name : 'StDebuggerMNUExtension',
+	#name : 'StDebuggerMethodImplementorExtension',
 	#superclass : 'SpPresenter',
 	#traits : 'TStDebuggerExtension',
 	#classTraits : 'TStDebuggerExtension classTrait',
@@ -15,36 +15,27 @@ Class {
 		'customProtocolCheckBox',
 		'customProtocolTextInput'
 	],
-	#category : 'NewTools-Debugger-Exceptions',
-	#package : 'NewTools-Debugger-Exceptions'
+	#category : 'NewTools-Debugger-View',
+	#package : 'NewTools-Debugger',
+	#tag : 'View'
 }
 
 { #category : 'testing' }
-StDebuggerMNUExtension class >> acceptsPredicate: aStDebuggerContextPredicate [
+StDebuggerMethodImplementorExtension class >> acceptsPredicate: aStDebuggerContextPredicate [
 
-	^ aStDebuggerContextPredicate isContextDoesNotUnderstand
+	^ aStDebuggerContextPredicate isContextDoesNotUnderstand or: [
+		  aStDebuggerContextPredicate
+			  isContextSubclassResponsibilityException ]
 ]
 
 { #category : 'debugger extension' }
-StDebuggerMNUExtension class >> showInDebugger [
+StDebuggerMethodImplementorExtension class >> showInDebugger [
 
 	^ showDebuggerExtension ifNil: [ showDebuggerExtension := true ]
 ]
 
-{ #category : 'actions' }
-StDebuggerMNUExtension >> addMethod [
-
-	| classOrTrait protocol |
-	classOrTrait := classesAndTraits selectedItem.
-	protocol := selectedProtocol selectedItem.
-	self debugger
-		createMissingMethodFor: exception message
-		inClass: classOrTrait
-		underProtocol: protocol
-]
-
 { #category : 'presenters' }
-StDebuggerMNUExtension >> addProtocols: protocols [
+StDebuggerMethodImplementorExtension >> addProtocols: protocols [
 	|sortedProtocols|
 	sortedProtocols := SortedCollection sortBlock: [ :p1 :p2|p1 name <= p2 name].
 	sortedProtocols addAll: protocols.
@@ -61,13 +52,13 @@ StDebuggerMNUExtension >> addProtocols: protocols [
 ]
 
 { #category : 'debugger extension' }
-StDebuggerMNUExtension >> debuggerExtensionToolName [
+StDebuggerMethodImplementorExtension >> debuggerExtensionToolName [
 
 	^ 'Create method'
 ]
 
 { #category : 'layout' }
-StDebuggerMNUExtension >> defaultLayout [
+StDebuggerMethodImplementorExtension >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		  add: description height: self class toolbarHeight;
@@ -94,8 +85,22 @@ StDebuggerMNUExtension >> defaultLayout [
 		  yourself
 ]
 
+{ #category : 'actions' }
+StDebuggerMethodImplementorExtension >> implementMethod [
+
+	| classOrTrait methodImplementor |
+	classOrTrait := classesAndTraits selectedItem.
+	
+	methodImplementor := (StDebuggerMethodImplementor forSession: self debugger session).
+	methodImplementor targetClassOrTrait: classOrTrait.
+	methodImplementor protocol: self protocol.
+   methodImplementor implementMissingMethod.
+
+	self debugger selectTopContext
+]
+
 { #category : 'initialization' }
-StDebuggerMNUExtension >> initializePresenters [
+StDebuggerMethodImplementorExtension >> initializePresenters [
 
 	| receiverClass traits |
 	description := self newLabel.
@@ -126,7 +131,7 @@ StDebuggerMNUExtension >> initializePresenters [
 		traits addAll: c allTraits.
 		classesAndTraits
 			addItemLabeled: c
-			do: [ self addProtocols: (c protocols)   ]
+			do: [ self addProtocols: (((c withAllSuperclasses copyWithoutAll: {Object. ProtoObject})) flatCollect: #protocols) asSet   ]
 			icon: (self iconNamed: #class) ].
 	traits do: [ :t |
 		classesAndTraits
@@ -137,7 +142,7 @@ StDebuggerMNUExtension >> initializePresenters [
 	createMethodButton := self newButton
 		icon: (self iconNamed: #add);
 		label: 'Add method';
-		action: [ self addMethod ]
+		action: [ self implementMethod ]
 
 	
 
@@ -146,8 +151,16 @@ StDebuggerMNUExtension >> initializePresenters [
 
 ]
 
+{ #category : 'actions' }
+StDebuggerMethodImplementorExtension >> protocol [
+
+	^ customProtocolCheckBox state
+		  ifTrue: [ customProtocolTextInput text ]
+		  ifFalse: [ selectedProtocol selectedItem ]
+]
+
 { #category : 'presenters' }
-StDebuggerMNUExtension >> selectMatchingProtocol [
+StDebuggerMethodImplementorExtension >> selectMatchingProtocol [
 
 	| stringToMatch matchingProtocols |
 	stringToMatch := String streamContents: [ :s |
@@ -160,7 +173,7 @@ StDebuggerMNUExtension >> selectMatchingProtocol [
 ]
 
 { #category : 'accessing - model' }
-StDebuggerMNUExtension >> setModelBeforeInitialization: aStDebugger [
+StDebuggerMethodImplementorExtension >> setModelBeforeInitialization: aStDebugger [
 
 	debugger := aStDebugger.
 	exception := debugger exception 

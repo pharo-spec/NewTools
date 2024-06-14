@@ -56,14 +56,6 @@ StDebuggerActionModel >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
-{ #category : 'debug - session' }
-StDebuggerActionModel >> autoClassifyMessage: aMessage inClass: aClass [
-
-	| method |
-	method := aClass lookupSelector: aMessage selector.
-	method isClassified ifFalse: [ MethodClassifier classify: method ]
-]
-
 { #category : 'actions' }
 StDebuggerActionModel >> clear [
 
@@ -171,17 +163,11 @@ StDebuggerActionModel >> filterStack: aStack [
 	^ aStack
 ]
 
-{ #category : 'debug - session' }
-StDebuggerActionModel >> implement: aMessage inClass: aClass forContext: aContext [
+{ #category : 'actions' }
+StDebuggerActionModel >> implementMissingMethod [
 
-	| method |
-	method := self session
-		implement: aMessage
-		inClass: aClass
-		forContext: aContext.
-	self autoClassifyMessage: aMessage inClass: aClass.
-	self updateTopContext.
-	^ method
+	(StDebuggerMethodImplementor forSession: self session) implementMissingMethod.
+	self updateTopContext
 ]
 
 { #category : 'initialization' }
@@ -503,10 +489,7 @@ StDebuggerActionModel >> stepThrough: aContext [
 { #category : 'system subscription' }
 StDebuggerActionModel >> subscribeToMethodAddedAnnouncement [
 
-	SystemAnnouncer uniqueInstance weak
-		when: MethodAdded
-		send: #updateAfterMethodAdded
-		to: self
+	self class codeChangeAnnouncer weak when: MethodAdded send: #updateAfterMethodAdded to: self
 ]
 
 { #category : 'accessing' }
@@ -523,7 +506,7 @@ StDebuggerActionModel >> unsubscribe: anEventListener [
 { #category : 'system subscription' }
 StDebuggerActionModel >> unsubscribeFromSystemAnnouncer [
 
-	SystemAnnouncer uniqueInstance unsubscribe: self
+	self class codeChangeAnnouncer unsubscribe: self
 ]
 
 { #category : 'updating' }

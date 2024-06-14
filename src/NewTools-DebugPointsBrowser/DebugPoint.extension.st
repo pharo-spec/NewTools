@@ -1,9 +1,8 @@
 Extension { #name : 'DebugPoint' }
 
 { #category : '*NewTools-DebugPointsBrowser' }
-DebugPoint >> uiElement [
-	^nil
-	
+DebugPoint >> presentIn: aPresenter [
+	"Debug point do not need to present anything special"
 ]
 
 { #category : '*NewTools-DebugPointsBrowser' }

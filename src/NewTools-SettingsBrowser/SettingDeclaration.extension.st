@@ -10,21 +10,23 @@ SettingDeclaration >> asSettingPresenter [
 ]
 
 { #category : '*NewTools-SettingsBrowser' }
-SettingDeclaration >> getColor [
+SettingDeclaration >> getColorFor: aPresenter [
 
-	(SpPresenter new instantiate: SpColorPickerWindow on: self)
-		whenColorChangedDo: [ : c | 
+	| colorPickerPresenter |
+
+	colorPickerPresenter := aPresenter instantiate: SpColorPickerWindow on: self.
+	colorPickerPresenter
+		whenChangedDo: [ : c | 
 			| changedAspect |
 			"First we need to get the setter selector, then apply it"
 			"Some settings are built 'customized' configuring its setter in a different way than using #targetSelector (see #customSettingsOn:)"
 			self targetSelector 
 				ifNil: [ 
-					self realTarget perform: self name asMutator with: c.
+					self realTarget perform: self name asMutator with: c value.
 					changedAspect := self realTarget ]
 				ifNotNil: [ 
 					changedAspect := self realTarget perform: self targetSelector.
-					changedAspect perform: self setSelector with: c. ].
-
-			self announcer announce: (StSettingsChanged new aspect: changedAspect value: c) ];
+					changedAspect perform: self setSelector with: c value. ].
+			aPresenter updateColor: c value ];
 		open
 ]

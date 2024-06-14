@@ -15,16 +15,5 @@ StSettingSHStyleButtonColorPresenterItem >> buttonColor: aColor [
 { #category : 'initialization' }
 StSettingSHStyleButtonColorPresenterItem >> updateColor: aColor [
 
-]
-
-{ #category : 'enumerating' }
-StSettingSHStyleButtonColorPresenterItem >> whenColorChangedDo: aBlock [
-	"Inform when presenter has been displayed.
-	 `aBlock` receives one argument 
-	 - an announcement (instance of `SpWidgetDisplayed`)"
-
-	self announcer
-		when: StSettingsChanged
-		do: aBlock
-		for: aBlock receiver
+	self buttonColor: aColor.
 ]

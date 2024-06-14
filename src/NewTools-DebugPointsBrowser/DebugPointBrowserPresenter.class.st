@@ -93,14 +93,13 @@ DebugPointBrowserPresenter >> defaultLayout [
 ]
 
 { #category : 'initialization' }
-DebugPointBrowserPresenter >> initialize [ 
+DebugPointBrowserPresenter >> initialize [
 
 	super initialize.
-	SystemAnnouncer uniqueInstance weak when: DebugPointAdded send: #updateTable to: self.
-	SystemAnnouncer uniqueInstance weak when: DebugPointRemoved send: #updateTable to: self.
-	SystemAnnouncer uniqueInstance weak when: DebugPointChanged send: #updateEditor to: self.
-		
-	
+	self class codeSupportAnnouncer weak
+		when: DebugPointAdded send: #updateTable to: self;
+		when: DebugPointRemoved send: #updateTable to: self;
+		when: DebugPointChanged send: #updateEditor to: self
 ]
 
 { #category : 'initialization' }

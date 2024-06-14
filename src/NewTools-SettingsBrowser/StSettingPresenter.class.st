@@ -8,7 +8,7 @@ Subclasses are presenters ""types"" for specific setting nodes, for instance, no
 "
 Class {
 	#name : 'StSettingPresenter',
-	#superclass : 'StSettingsAbstracPresenter',
+	#superclass : 'StSettingsAbstractPresenter',
 	#instVars : [
 		'title',
 		'settingNode'
@@ -46,4 +46,12 @@ StSettingPresenter >> setModelBeforeInitialization: aModel [
 
 	settingNode := aModel
 
+]
+
+{ #category : 'accessing' }
+StSettingPresenter >> updateHelp: aString [ 
+	
+	self owner 
+		updateSetting: settingNode declaration label 
+		helpText: aString.
 ]

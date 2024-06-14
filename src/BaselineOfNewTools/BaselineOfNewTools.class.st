@@ -22,6 +22,7 @@ BaselineOfNewTools >> baseline: spec [
 
 		spec
 			package: 'NewTools-Core';
+			package: 'NewTools-Core-Tests' with: [  spec requires: #('NewTools-Core') ];
 			package: 'NewTools-Morphic';
 			package: 'NewTools-Gtk';
 			"Basic tools (inherited from Spec)"
@@ -81,7 +82,6 @@ BaselineOfNewTools >> baseline: spec [
 			"Fuel"
 			package: 'NewTools-Debugger-Fuel';
 			package: 'NewTools-Debugger-Fuel-Tests' with: [ spec requires: #( 'NewTools-Debugger-Fuel' ) ];
-			package: 'NewTools-Fuel';
      		"Rewriter Tools"
 			package: 'NewTools-RewriterTools-Backend';
 			package: 'NewTools-RewriterTools' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
@@ -104,10 +104,10 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-SettingsBrowser' with: [ spec requires: #('ColorPicker') ];
 			package: 'NewTools-SettingsBrowser-Tests' with: [ spec requires: #('NewTools-SettingsBrowser') ];
 			
-			package: 'NewTools-Compression-Utils' with: [ spec requires: #('NewTools-FileBrowser') ].			
+			package: 'NewTools-Utils' with: [ spec requires: #('NewTools-FileBrowser') ].			
 
 		spec
-			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Morphic' );
+			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Core-Tests' 'NewTools-Morphic' );
 			group: 'Playground' with: #( 'Core' 'NewTools-Playground' 'NewTools-Playground-Tests' );
 			group: 'Inspector' with: #( 'Core' 'NewTools-Inspector' 'NewTools-Inspector-Tests' );
 			group: 'Debugger' with: #( 
@@ -124,7 +124,7 @@ BaselineOfNewTools >> baseline: spec [
 				    	'NewTools-Debugger-Tests' 
 					 	'NewTools-Debugger-Fuel'
 				    	'NewTools-Debugger-Fuel-Tests' 
-					 	'NewTools-Fuel'
+					 	'NewTools-Utils'
 						'NewTools-DebugPointsBrowser'
 						'NewTools-ObjectCentricDebugPoints' );
 			group: 'Spotter' with: #( 
@@ -172,9 +172,6 @@ BaselineOfNewTools >> baseline: spec [
 			group: 'SettingsBrowser' with: #(
 						'NewTools-SettingsBrowser'
 						'NewTools-SettingsBrowser-Tests');
-			"Compression Utilities"
-			group: 'CompressionUtilities' with: #(
-						'NewTools-Compression-Utils');
 
 			group: 'default' with: #( 
 						'Playground' 
@@ -190,8 +187,7 @@ BaselineOfNewTools >> baseline: spec [
 						'FileBrowser'
 						'Finder'
 						'Profiler'
-						'SettingsBrowser'
-						'CompressionUtilities') ]
+						'SettingsBrowser' ) ]
 ]
 
 { #category : 'external projects' }

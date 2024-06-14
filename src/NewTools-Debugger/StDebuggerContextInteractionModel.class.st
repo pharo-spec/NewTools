@@ -100,6 +100,12 @@ StDebuggerContextInteractionModel >> isScripting [
 	^context belongsToDoIt
 ]
 
+{ #category : 'testing' }
+StDebuggerContextInteractionModel >> needRequestorScope [
+
+	^ true
+]
+
 { #category : 'accessing' }
 StDebuggerContextInteractionModel >> object [
 

@@ -20,5 +20,5 @@ StDefineMethodCommand >> appliesTo: aDebugger [
 
 { #category : 'hooks' }
 StDefineMethodCommand >> execute [
-	self debugger createMissingMethod
+	self debugger implementMissingMethod
 ]
