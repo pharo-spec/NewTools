@@ -938,6 +938,49 @@ StDebuggerActionModelTest >> testRecompileMethodToInBlockContextWithDeadHomeRema
 ]
 
 { #category : 'tests - actions' }
+StDebuggerActionModelTest >> testRecompileMethodToInBlockContextWithDeadHomeTwice [
+
+	| contextChanged |
+	DebugSession contextModelClass: StDebugContextForTests.
+	self newSessionWithDeadHomeBlockContext.
+	methodWithBlockContextOriginalSource := (self class
+	                                         >>
+	                                         #methodWithDeadBlockContext)
+		                                        sourceCode.
+
+	contextChanged := debugActionModel topContext.
+
+	debugActionModel
+		recompileMethodTo: contextChanged method sourceCode , ' yourself'
+		inContext: contextChanged
+		notifying: nil.
+	debugActionModel updateTopContext.
+
+	"The code in the embedding method should have been modified"
+	self
+		assert: (self class >> #methodWithDeadBlockContext) ast sourceCode
+		equals: methodWithBlockContextOriginalSource , ' yourself'.
+
+	contextChanged := debugActionModel topContext.
+
+	"The code in the embedding method should have been modified"
+	self
+		assert: (self class >> #methodWithDeadBlockContext) ast sourceCode
+		equals: methodWithBlockContextOriginalSource , ' yourself'.
+
+	"recompiling the bloc a second time should save the changes"
+	debugActionModel
+		recompileMethodTo: contextChanged method sourceCode , ' yourself yourself'
+		inContext: contextChanged
+		notifying: nil.
+	debugActionModel updateTopContext.
+
+	self
+		assert: (self class >> #methodWithDeadBlockContext) ast sourceCode
+		equals: methodWithBlockContextOriginalSource , ' yourself yourself'
+]
+
+{ #category : 'tests - actions' }
 StDebuggerActionModelTest >> testRecompileMethodToInContextNotifyingUpdatesSourceCodeAndContext [
 
 	| oldStack contextChanged expectedNewStack rejectedFromOldStack |
