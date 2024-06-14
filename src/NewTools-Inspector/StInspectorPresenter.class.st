@@ -97,17 +97,6 @@ StInspectorPresenter class >> inspect: anObject label: aString [
 
 ]
 
-{ #category : 'instance creation' }
-StInspectorPresenter class >> inspector: anObject [
-	
-	self 
-		deprecated: 'Use #inspect: instead.'
-		transformWith: '`@receiver inspector: `@statements1'
-				-> '`@receiver inspect: `@statements1'.
-
-	^ self openOn: anObject
-]
-
 { #category : 'settings' }
 StInspectorPresenter class >> inspectorDiveOnSingleClick [
 

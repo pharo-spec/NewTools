@@ -74,15 +74,6 @@ StMessageBrowser class >> browse: aCollection title: aString [
 ]
 
 { #category : 'instance creation' }
-StMessageBrowser class >> browse: aCollection title: aString autoSelect: aSelectString [
-	
-	self 
-		deprecated: 'Use browse:title:highlight:' 
-		transformWith: '`@receiver browse: `@arg1 title: `@arg2 autoSelect: `@arg3' 
-			-> '`@receiver browse: `@arg1 title: `@arg2 highlight: `@arg3'
-]
-
-{ #category : 'instance creation' }
 StMessageBrowser class >> browse: aCollection title: aString highlight: aSelectString [
 	"Special Version that sets the correct refreshing Block for Implentors Browser"
 	
