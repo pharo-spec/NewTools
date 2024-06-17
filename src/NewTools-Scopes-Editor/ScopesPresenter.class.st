@@ -300,7 +300,7 @@ ScopesPresenter >> openOnCalypso: aClassOrPackage [
 
 	| scope |
 	
-	scope := ClyScopedSystemEnvironment currentImage
+	scope := ClyScopedSystemEnvironment currentImage copy
 		         scope: aClassOrPackage;
 		         yourself.
 
