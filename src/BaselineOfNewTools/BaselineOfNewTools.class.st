@@ -37,6 +37,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Debugger' with: [ spec requires: #( 'NewTools-Inspector' 'NewTools-Debugger-Commands' 'NewTools-Debugger-Extensions' 'NewTools-SpTextPresenterDecorators' ) ];
 			package: 'NewTools-Debugger-Commands';
 			package: 'NewTools-Debugger-Extensions';
+			package: 'NewTools-Debugger-Morphic';
 			package: 'NewTools-Debugger-Tests' with: [ spec requires: #( 'NewTools-Debugger' ) ];
 			"playground"
 			package: 'NewTools-Playground' with: [ spec requires: #( 'NewTools-Inspector' ) ];
@@ -116,8 +117,11 @@ BaselineOfNewTools >> baseline: spec [
 					 	'NewTools-Debugger-Commands'
 				    	'NewTools-Debugger-Extensions' 
 					 	'NewTools-Debugger'
-				    	'NewTools-ObjectCentricBreakpoints'
-				    	'NewTools-Sindarin-Tools' 
+
+						'NewTools-Debugger-Morphic'
+				    		'NewTools-ObjectCentricBreakpoints'
+				    		'NewTools-Sindarin-Tools' 
+
 					 	'NewTools-Sindarin-Commands'
 				    	'NewTools-Sindarin-Commands-Tests'
 				    	'NewTools-Debugger-Breakpoints-Tools'
