@@ -885,6 +885,7 @@ StDebugger >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
 		title: self debuggerActionModel statusStringForContext;
+		windowIcon: (self iconNamed: #smallDebug);
 		initialExtent: self initialExtent;
 		whenClosedDo: [ self clear ].
 
