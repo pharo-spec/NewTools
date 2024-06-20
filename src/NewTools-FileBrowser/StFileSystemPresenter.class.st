@@ -1,6 +1,19 @@
 "
 General file system presenter, which replaces the older FileList tool.
 
+# Examples
+
+The default File Browser (without specifying any options), will open a presenter with Tree Navigation, Bookmarks, Breadcrumb, Navigation Buttons, File List, Filters and Preview:
+```smalltalk
+StFileSystemPresenter new open.
+```
+
+Open a File Browser without the preview presenter:
+```smalltalk
+StFileSystemPresenter new
+	disablePreview;
+	open.
+```
 "
 Class {
 	#name : 'StFileSystemPresenter',
@@ -105,6 +118,12 @@ StFileSystemPresenter >> defaultLayout [
 				yourself);			
 			add: fileNavigationSystem;
 			yourself
+]
+
+{ #category : 'accessing' }
+StFileSystemPresenter >> disablePreview [
+
+	self fileNavigationSystem showPreview: false
 ]
 
 { #category : 'accessing' }
