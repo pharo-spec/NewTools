@@ -5,7 +5,7 @@ Class {
 	#package : 'NewTools-Debugger-Morphic'
 }
 
-{ #category : 'utils' }
+{ #category : 'utilities' }
 StMorphicDebugSessionTest >> createDebugSessionForNotUIProcess [
 
 	| exception nonUIProcess request |
@@ -19,7 +19,7 @@ StMorphicDebugSessionTest >> createDebugSessionForNotUIProcess [
 	^ StMorphicDebugSessionForTests newFromSession: request debugSession 
 ]
 
-{ #category : 'utils' }
+{ #category : 'utilities' }
 StMorphicDebugSessionTest >> createDebugSessionForUIProcess [
 
 	| exception request |
@@ -32,7 +32,7 @@ StMorphicDebugSessionTest >> createDebugSessionForUIProcess [
 	^ StMorphicDebugSessionForTests newFromSession: request debugSession
 ]
 
-{ #category : 'utils' }
+{ #category : 'utilities' }
 StMorphicDebugSessionTest >> testNonUIProcessIsRecognised [
 	"Tests that a DebuggerSystem opening a DebugRequest that is NOT on the ui process does NOT spawn a new UI process"
 
