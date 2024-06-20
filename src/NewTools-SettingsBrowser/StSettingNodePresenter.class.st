@@ -28,7 +28,7 @@ StSettingNodePresenter >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
 		vAlignCenter;
-		add: settingPresenter;
+		add: settingPresenter width: 600;
 		yourself
 ]
 

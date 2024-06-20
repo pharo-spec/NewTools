@@ -1,6 +1,6 @@
 Extension { #name : 'InflateStream' }
 
-{ #category : '*NewTools-Compression-Utils' }
+{ #category : '*NewTools-Utils-Compression' }
 InflateStream class >> openWithContents: contentsString label: titleString [
 	"Open a text viewer on contentsString and window label titleString"
 
@@ -13,7 +13,7 @@ InflateStream class >> openWithContents: contentsString label: titleString [
 				extent: 600 @ 800 ]
 ]
 
-{ #category : '*NewTools-Compression-Utils' }
+{ #category : '*NewTools-Utils-Compression' }
 InflateStream class >> viewContents: fullFileName [
 	"Open the decompressed contents of fullFileName"
 

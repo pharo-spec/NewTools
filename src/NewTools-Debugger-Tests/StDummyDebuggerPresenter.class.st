@@ -34,18 +34,6 @@ tag := thisContext method selector.
 ^true
 ]
 
-{ #category : 'mocks' }
-StDummyDebuggerPresenter >> createMissingMethod [
-tag := thisContext method selector.
-^true
-]
-
-{ #category : 'mocks' }
-StDummyDebuggerPresenter >> createSubclassResponsibility [
-tag := thisContext method selector.
-^true
-]
-
 { #category : 'accessing - context' }
 StDummyDebuggerPresenter >> currentContext [
 	^self
@@ -67,6 +55,13 @@ StDummyDebuggerPresenter >> defaultLayout [
 StDummyDebuggerPresenter >> fileOutSelectedContext [
 tag := thisContext method selector.
 ^true
+]
+
+{ #category : 'mocks' }
+StDummyDebuggerPresenter >> implementMissingMethod [
+
+	tag := thisContext method selector.
+	^ true
 ]
 
 { #category : 'mocks' }

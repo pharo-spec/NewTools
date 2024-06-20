@@ -1,5 +1,5 @@
 Class {
-	#name : 'StSettingsAbstracPresenter',
+	#name : 'StSettingsAbstractPresenter',
 	#superclass : 'SpPresenter',
 	#category : 'NewTools-SettingsBrowser-UI',
 	#package : 'NewTools-SettingsBrowser',
@@ -7,7 +7,7 @@ Class {
 }
 
 { #category : 'accessing' }
-StSettingsAbstracPresenter >> settingsTree [
+StSettingsAbstractPresenter >> settingsTree [
 	"Answer the receiver's <StSettingsTree>, the settings model"
 
 	^ self application settingsTree.

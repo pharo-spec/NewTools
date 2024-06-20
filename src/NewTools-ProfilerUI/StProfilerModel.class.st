@@ -159,15 +159,21 @@ StProfilerModel >> profileBlock: aBlock [
 { #category : 'api' }
 StProfilerModel >> profileCode: someCode notifying: requestor [
 
-	| compiledMethod |
+	| compiledMethod compiler |
 	self resetProfiler.
-
-	compiledMethod := Smalltalk compiler
-		                  source: (self doItSourceCodeFrom: someCode);
-		                  requestor: requestor;
-		                  isScripting: true;
-		                  failBlock: [ ^ self ];
-		                  compile.
+	compiler := Smalltalk compiler
+		            source: (self doItSourceCodeFrom: someCode);
+		            requestor: requestor;
+		            isScripting: true;
+		            permitUndeclared: true;
+		            failBlock: [ ^ self ];
+		            yourself.
+	compiledMethod := [ compiler compile ]
+		                  on: OCUndeclaredVariableWarning
+		                  do: [
+			                  SpPresenter new alert:
+				                  'They are undeclared variables!'.
+			                  ^ self ].
 	compiledMethod valueWithReceiver: self
 ]
 

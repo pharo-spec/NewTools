@@ -74,15 +74,6 @@ StMessageBrowser class >> browse: aCollection title: aString [
 ]
 
 { #category : 'instance creation' }
-StMessageBrowser class >> browse: aCollection title: aString autoSelect: aSelectString [
-	
-	self 
-		deprecated: 'Use browse:title:highlight:' 
-		transformWith: '`@receiver browse: `@arg1 title: `@arg2 autoSelect: `@arg3' 
-			-> '`@receiver browse: `@arg1 title: `@arg2 highlight: `@arg3'
-]
-
-{ #category : 'instance creation' }
 StMessageBrowser class >> browse: aCollection title: aString highlight: aSelectString [
 	"Special Version that sets the correct refreshing Block for Implentors Browser"
 	
@@ -472,7 +463,7 @@ StMessageBrowser >> refreshingBlock: aBlock [
 { #category : 'announcements - registration' }
 StMessageBrowser >> registerToAnnouncements [
 
-	SystemAnnouncer uniqueInstance weak		
+	self class codeChangeAnnouncer weak
 		when: MethodAdded send: #methodAdded: to: self;
 		when: MethodModified send: #methodModified: to: self;
 		when: MethodRemoved send: #methodRemoved: to: self;
@@ -647,6 +638,6 @@ StMessageBrowser >> whenSelectedItemChanged: aBlock [
 
 { #category : 'private' }
 StMessageBrowser >> windowIsClosing [
-	
-	SystemAnnouncer uniqueInstance unsubscribe: self
+
+	self class codeChangeAnnouncer unsubscribe: self
 ]

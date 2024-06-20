@@ -102,7 +102,8 @@ StHaltCache >> buildCacheForMethod: aCompiledMethod [
 
 { #category : 'notifying' }
 StHaltCache >> cacheChanged [
-	SystemAnnouncer uniqueInstance announce: StHaltCacheChanged
+
+	self class codeSupportAnnouncer announce: StHaltCacheChanged
 ]
 
 { #category : 'cache' }
@@ -161,14 +162,17 @@ StHaltCache >> refreshCache [
 
 { #category : 'system subscription' }
 StHaltCache >> registerSubscriptions [
-	SystemAnnouncer uniqueInstance weak when: MethodModified send: #methodChanged: to: self.
-	SystemAnnouncer uniqueInstance weak when: MethodRemoved send: #methodRemoved: to: self.
-	SystemAnnouncer uniqueInstance weak when: MethodAdded send: #methodAdded: to: self
+
+	self class codeChangeAnnouncer weak
+		when: MethodModified send: #methodChanged: to: self;
+		when: MethodRemoved send: #methodRemoved: to: self;
+		when: MethodAdded send: #methodAdded: to: self
 ]
 
 { #category : 'system subscription' }
 StHaltCache >> removeSubscriptions [
-	SystemAnnouncer uniqueInstance unsubscribe: self
+
+	self class codeChangeAnnouncer unsubscribe: self
 ]
 
 { #category : 'accessing' }

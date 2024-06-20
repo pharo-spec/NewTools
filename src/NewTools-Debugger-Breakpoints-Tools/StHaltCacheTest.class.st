@@ -31,28 +31,31 @@ StHaltCacheTest >> testAddingHaltToMethod [
 
 { #category : 'tests - cache initialization' }
 StHaltCacheTest >> testCacheActivation [
+
 	cache removeSubscriptions.
 	cache := StHaltCache new.
 	cache isActive: true.
 	self assert: cache isActive.
-	self assert: (SystemAnnouncer uniqueInstance hasSubscriber: cache) 
+	self assert: (self class codeChangeAnnouncer hasSubscriber: cache)
 ]
 
 { #category : 'tests - cache initialization' }
 StHaltCacheTest >> testCacheDectivation [
+
 	cache removeSubscriptions.
 	cache := StHaltCache new.
 	cache isActive: true.
-	self assert: (SystemAnnouncer uniqueInstance hasSubscriber: cache).
+	self assert: (self class codeChangeAnnouncer hasSubscriber: cache).
 	cache isActive: false.
-	self deny: (SystemAnnouncer uniqueInstance hasSubscriber: cache) 
+	self deny: (self class codeChangeAnnouncer hasSubscriber: cache)
 ]
 
 { #category : 'tests - cache initialization' }
 StHaltCacheTest >> testInitialActivation [
+
 	cache := StHaltCache new.
 	self deny: cache isActive.
-	self deny: (SystemAnnouncer uniqueInstance hasSubscriber: cache) 
+	self deny: (self class codeChangeAnnouncer hasSubscriber: cache)
 ]
 
 { #category : 'tests - cache building' }

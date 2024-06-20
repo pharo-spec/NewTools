@@ -30,5 +30,5 @@ StDefineSubclassResponsabilityCommand >> appliesTo: aDebugger [
 
 { #category : 'actions' }
 StDefineSubclassResponsabilityCommand >> execute [
-	self debugger createSubclassResponsibility
+	self debugger implementMissingMethod 
 ]

@@ -4,7 +4,7 @@ Represents a single setting browser category item.
 "
 Class {
 	#name : 'StSettingsCategoryItemPresenter',
-	#superclass : 'StSettingsAbstracPresenter',
+	#superclass : 'StSettingsAbstractPresenter',
 	#instVars : [
 		'node',
 		'labelPresenter',

@@ -54,7 +54,7 @@ StCritiqueRuleSelectorPresenter class >> open [
 
 	<example>
 	| packages env |
-	packages := RPackageOrganizer default packages.
+	packages := self packageOrganizer packages.
 	env := RBPackageEnvironment new packages: packages.
 	^ (self openWithEnvironment: env removeTestCase: false)
 ]

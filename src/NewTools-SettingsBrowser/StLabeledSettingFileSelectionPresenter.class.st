@@ -7,15 +7,15 @@ Provides a Spec presenter with:
 
 "
 Class {
-	#name : 'StLabeledMultiLineFileSelectionPresenter',
-	#superclass : 'StLabeledMultiLineDirectorySelectionPresenter',
+	#name : 'StLabeledSettingFileSelectionPresenter',
+	#superclass : 'StLabeledSettingDirectorySelectionPresenter',
 	#category : 'NewTools-SettingsBrowser-Widgets',
 	#package : 'NewTools-SettingsBrowser',
 	#tag : 'Widgets'
 }
 
 { #category : 'examples' }
-StLabeledMultiLineFileSelectionPresenter class >> example [
+StLabeledSettingFileSelectionPresenter class >> example [
 
 	^ (self 
 		label: 'Label Example' 
@@ -25,14 +25,14 @@ StLabeledMultiLineFileSelectionPresenter class >> example [
 ]
 
 { #category : 'initialization' }
-StLabeledMultiLineFileSelectionPresenter >> initializePresenters [ 
+StLabeledSettingFileSelectionPresenter >> initializePresenters [ 
 
 	super initializePresenters.
 	selectButtonPresenter := self newButton
 		label: 'Select File';
 		action: [ 
 			| selectedFile |
-			((selectedFile := StOpenFilePresenter new openModal) notNil and: [ selectedFile isFile ])
+			((selectedFile := StOpenFilePresenter new openModal) isNotNil and: [ selectedFile isFile ])
 				ifTrue: [ 
 					self input 
 						text: selectedFile fullName;

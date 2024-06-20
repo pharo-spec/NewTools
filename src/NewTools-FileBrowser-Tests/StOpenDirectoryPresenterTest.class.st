@@ -23,7 +23,7 @@ StOpenDirectoryPresenterTest >> testDefaultDirectory [
 StOpenDirectoryPresenterTest >> testSelectDirectory [
 
 	| selectedDirectory |
-	dialog okAction: [ :dir | selectedDirectory := dir ].
+	
 	window := dialog openDialog.
 	self
 		assert: dialog fileNavigationSystem currentDirectory
@@ -32,7 +32,9 @@ StOpenDirectoryPresenterTest >> testSelectDirectory [
 	self
 		assert: dialog selectedEntry
 		equals: root / dialog fileNavigationSystem selectedEntry basename.
-	window triggerOkAction.
+		
+	selectedDirectory := window triggerOkAction.
+	
 	self assert: selectedDirectory equals: root / 'dir'
 ]
 

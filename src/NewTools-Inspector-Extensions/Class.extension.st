@@ -29,14 +29,11 @@ Class >> inspectionAllReferences [
 { #category : '*NewTools-Inspector-Extensions' }
 Class >> inspectionClassComment [
 	"This provides an editable comment of the current class"
+
 	<inspectorPresentationOrder: 920 title: 'Comment'>
-	
 	^ SpTextPresenter new
-		text: self comment;
-		whenSubmitDo: [ :text | 
-			self 
-				comment: text 
-				stamp: Author changeStamp ]
+		  text: self comment;
+		  whenSubmitDo: [ :text | self comment: text stamp: '' ]
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }

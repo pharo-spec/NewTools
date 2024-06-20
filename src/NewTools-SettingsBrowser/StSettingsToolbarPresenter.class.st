@@ -5,7 +5,7 @@ Currently it holds widget presenters related to the search of settings.
 "
 Class {
 	#name : 'StSettingsToolbarPresenter',
-	#superclass : 'StSettingsAbstracPresenter',
+	#superclass : 'StSettingsAbstractPresenter',
 	#instVars : [
 		'searchInputPresenter',
 		'searchButtonPresenter'
