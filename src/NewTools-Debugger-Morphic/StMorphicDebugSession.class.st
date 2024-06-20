@@ -5,7 +5,6 @@ Class {
 	#name : 'StMorphicDebugSession',
 	#superclass : 'DebugSession',
 	#instVars : [
-		'application',
 		'errorWasInUIProcess',
 		'backend'
 	],
