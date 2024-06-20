@@ -13,10 +13,6 @@ Class {
 	#tag : 'Utils'
 }
 
-{ #category : 'debug - session' }
-StMockDebuggerActionModel >> autoClassifyMessage: aMessage inClass: aClass [
-]
-
 { #category : 'context' }
 StMockDebuggerActionModel >> computeInitialTopContext [
 ]
@@ -41,6 +37,11 @@ StMockDebuggerActionModel >> interruptedContext: anObject [
 { #category : 'accessing' }
 StMockDebuggerActionModel >> session [
 	^StMockSession new
+]
+
+{ #category : 'accessing' }
+StMockDebuggerActionModel >> session: aDebugSession [
+	session := aDebugSession 
 ]
 
 { #category : 'accessing' }

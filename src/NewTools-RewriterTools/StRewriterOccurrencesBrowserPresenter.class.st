@@ -30,9 +30,13 @@ StRewriterOccurrencesBrowserPresenter class >> title [
 { #category : 'initialization' }
 StRewriterOccurrencesBrowserPresenter >> connectPresenters [
 
-	listPresenter whenSelectedDo: [ :selectedItem |
-		codePresenter text: selectedItem sourceAnchor entity sourceCode.
-		codePresenter selectionInterval: selectedItem sourceAnchor interval ]
+	listPresenter whenSelectedDo: [ :aReReplaceNodeCritique |
+		| compiledMethod |
+		compiledMethod := aReReplaceNodeCritique sourceAnchor entity.
+		codePresenter
+			text: compiledMethod sourceCode;
+			selectionInterval: aReReplaceNodeCritique sourceAnchor interval;
+			beForMethod: compiledMethod ]
 ]
 
 { #category : 'accessing' }

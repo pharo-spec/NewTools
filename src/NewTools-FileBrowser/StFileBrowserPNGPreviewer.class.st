@@ -16,11 +16,10 @@ StFileBrowserPNGPreviewer >> matchingMimeType: element [
 	^ element matches: ZnMimeType imagePng
 ]
 
-{ #category : 'utilities' }
+{ #category : 'template method' }
 StFileBrowserPNGPreviewer >> previewActionOn: aFileReference [
 	^ SpImagePresenter new
-		image:
-			(aFileReference
-				binaryReadStreamDo: [ :stream | PNGReadWriter formFromStream: stream ]);
+		autoScale: true;
+		image: (aFileReference binaryReadStreamDo: [ :stream | PNGReadWriter formFromStream: stream ]);
 		yourself
 ]

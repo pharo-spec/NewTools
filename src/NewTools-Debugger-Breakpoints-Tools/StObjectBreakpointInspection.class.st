@@ -154,19 +154,21 @@ StObjectBreakpointInspection >> initialize [
 
 { #category : 'initialization' }
 StObjectBreakpointInspection >> initializePresenters [
+
 	self buildSourceCode.
 	self buildHaltAndBreakpointTable.
 	self configureSourceCodeUpdate.
 	self buildTableData.
-	SystemAnnouncer uniqueInstance weak when: StHaltCacheChanged send: #buildTableData to: self.
-	SystemAnnouncer uniqueInstance weak when: BreakpointAdded send: #buildTableData to: self
+	self class codeSupportAnnouncer weak
+		when: StHaltCacheChanged send: #buildTableData to: self;
+		when: BreakpointAdded send: #buildTableData to: self
 ]
 
 { #category : 'initialization' }
 StObjectBreakpointInspection >> initializeWindow: aWindowPresenter [
+
 	super initializeWindow: aWindowPresenter.
-	aWindowPresenter
-		whenClosedDo: [ SystemAnnouncer uniqueInstance unsubscribe: self ]
+	aWindowPresenter whenClosedDo: [ self unsubscribeFromCacheChanges ]
 ]
 
 { #category : 'breakpoints' }
@@ -197,7 +199,8 @@ StObjectBreakpointInspection >> methodsWithBreakpoints [
 
 { #category : 'system subscription' }
 StObjectBreakpointInspection >> unsubscribeFromCacheChanges [
-	SystemAnnouncer uniqueInstance unsubscribe: self
+
+	self class codeSupportAnnouncer unsubscribe: self
 ]
 
 { #category : 'updating' }

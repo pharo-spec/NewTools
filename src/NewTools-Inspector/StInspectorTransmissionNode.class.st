@@ -34,15 +34,6 @@ StInspectorTransmissionNode >> rawValue [
 ]
 
 { #category : 'accessing' }
-StInspectorTransmissionNode >> transmissionBlock: aBlock [
-
-	self
-		deprecated: 'please use transmits: method insted'
-		transformWith: '`@receiver transmissionBlock: `@arg1' -> '`@receiver transmits: `@arg1'.
-	self transmits: aBlock
-]
-
-{ #category : 'accessing' }
 StInspectorTransmissionNode >> transmits: aBlock [
 
 	transmissionBlock := aBlock

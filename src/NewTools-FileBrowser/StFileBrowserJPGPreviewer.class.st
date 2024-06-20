@@ -19,8 +19,7 @@ StFileBrowserJPGPreviewer >> matchingMimeType: aZnMimeType [
 { #category : 'utilities' }
 StFileBrowserJPGPreviewer >> previewActionOn: aFileReference [
 	^ SpImagePresenter new
-		image:
-			(aFileReference
-				binaryReadStreamDo: [ :stream | JPEGReadWriter formFromStream: stream ]);
+		autoScale: true;
+		image: (aFileReference binaryReadStreamDo: [ :stream | JPEGReadWriter formFromStream: stream ]);
 		yourself
 ]

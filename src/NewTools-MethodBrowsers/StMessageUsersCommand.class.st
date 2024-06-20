@@ -9,6 +9,12 @@ Class {
 	#tag : 'Commands'
 }
 
+{ #category : 'default' }
+StMessageUsersCommand class >> defaultDescription [
+
+	^ 'Browse all methods using the selector of the current method'
+]
+
 { #category : 'accessing' }
 StMessageUsersCommand class >> defaultName [
 

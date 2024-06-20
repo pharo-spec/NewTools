@@ -86,6 +86,23 @@ StDebuggerActionModelTest >> fileOutMethod: anObject [
 ]
 
 { #category : 'helper' }
+StDebuggerActionModelTest >> implementMethodForDNUOrSelectorException: e [
+
+	debugActionModel clear.
+	debugger ifNotNil: [ debugger clear ].
+	session ifNotNil: [ session clear ].
+
+	session := StTestDebuggerProvider new
+		           sessionFor: e signalerContext
+		           exception: e; session.
+	debugActionModel := StDebuggerActionModel basicNew
+		                    session: session;
+		                    yourself.
+
+	debugActionModel implementMissingMethod
+]
+
+{ #category : 'helper' }
 StDebuggerActionModelTest >> method1: i [
 	^self method2: i+1
 ]
@@ -669,10 +686,7 @@ StDebuggerActionModelTest >> testImplementInClassForContext [
 	[ StDebuggerUsingSpecSelectorMock new method ]
 		on: Error
 		do: [ :dnu |
-			debugActionModel
-				implement: dnu message
-				inClass: StDebuggerUsingSpecSelectorMock
-				forContext: dnu signalerContext ].
+			self implementMethodForDNUOrSelectorException: dnu ].
 	method := (StDebuggerUsingSpecSelectorMock lookupSelector: #method).
 	self deny: method	equals: nil.
 	self assert: method methodClass identicalTo: StDebuggerUsingSpecSelectorMock
@@ -681,31 +695,19 @@ StDebuggerActionModelTest >> testImplementInClassForContext [
 { #category : 'tests' }
 StDebuggerActionModelTest >> testImplementMethodClassification [
 
+	<ignoreNotImplementedSelectors: #( unclassifiedMethod )>
 	| method |
-	<ignoreNotImplementedSelectors: #(unclassifiedMethod)>
 	[ StDebuggerUsingSpecSelectorMock new method ]
 		on: Error
-		do: [ :dnu |
-			debugActionModel
-				implement: dnu message
-				inClass: StDebuggerUsingSpecSelectorMock
-				forContext: dnu signalerContext ].
+		do: [ :dnu | self implementMethodForDNUOrSelectorException: dnu ].
 
 	[ StDebuggerUsingSpecSelectorMock new testMethod ]
 		on: Error
-		do: [ :dnu |
-			debugActionModel
-				implement: dnu message
-				inClass: StDebuggerUsingSpecSelectorMock
-				forContext: dnu signalerContext ].
+		do: [ :dnu | self implementMethodForDNUOrSelectorException: dnu ].
 
 	[ StDebuggerUsingSpecSelectorMock new unclassifiedMethod ]
 		on: Error
-		do: [ :dnu |
-			debugActionModel
-				implement: dnu message
-				inClass: StDebuggerUsingSpecSelectorMock
-				forContext: dnu signalerContext ].
+		do: [ :dnu | self implementMethodForDNUOrSelectorException: dnu].
 
 	method := StDebuggerUsingSpecSelectorMock lookupSelector: #method.
 	self assert: method protocolName equals: 'accessing'.
@@ -713,7 +715,8 @@ StDebuggerActionModelTest >> testImplementMethodClassification [
 	method := StDebuggerUsingSpecSelectorMock lookupSelector: #testMethod.
 	self assert: method protocolName equals: 'tests'.
 
-	method := StDebuggerUsingSpecSelectorMock lookupSelector: #unclassifiedMethod.
+	method := StDebuggerUsingSpecSelectorMock lookupSelector:
+		          #unclassifiedMethod.
 	self deny: method isClassified
 ]
 
@@ -935,6 +938,49 @@ StDebuggerActionModelTest >> testRecompileMethodToInBlockContextWithDeadHomeRema
 ]
 
 { #category : 'tests - actions' }
+StDebuggerActionModelTest >> testRecompileMethodToInBlockContextWithDeadHomeTwice [
+
+	| contextChanged |
+	DebugSession contextModelClass: StDebugContextForTests.
+	self newSessionWithDeadHomeBlockContext.
+	methodWithBlockContextOriginalSource := (self class
+	                                         >>
+	                                         #methodWithDeadBlockContext)
+		                                        sourceCode.
+
+	contextChanged := debugActionModel topContext.
+
+	debugActionModel
+		recompileMethodTo: contextChanged method sourceCode , ' yourself'
+		inContext: contextChanged
+		notifying: nil.
+	debugActionModel updateTopContext.
+
+	"The code in the embedding method should have been modified"
+	self
+		assert: (self class >> #methodWithDeadBlockContext) ast sourceCode
+		equals: methodWithBlockContextOriginalSource , ' yourself'.
+
+	contextChanged := debugActionModel topContext.
+
+	"The code in the embedding method should have been modified"
+	self
+		assert: (self class >> #methodWithDeadBlockContext) ast sourceCode
+		equals: methodWithBlockContextOriginalSource , ' yourself'.
+
+	"recompiling the bloc a second time should save the changes"
+	debugActionModel
+		recompileMethodTo: contextChanged method sourceCode , ' yourself yourself'
+		inContext: contextChanged
+		notifying: nil.
+	debugActionModel updateTopContext.
+
+	self
+		assert: (self class >> #methodWithDeadBlockContext) ast sourceCode
+		equals: methodWithBlockContextOriginalSource , ' yourself yourself'
+]
+
+{ #category : 'tests - actions' }
 StDebuggerActionModelTest >> testRecompileMethodToInContextNotifyingUpdatesSourceCodeAndContext [
 
 	| oldStack contextChanged expectedNewStack rejectedFromOldStack |
@@ -1130,7 +1176,7 @@ StDebuggerActionModelTest >> testUpdateDebugSession [
 	exception := session exception.
 	session exception: nil.
 	debugActionModel updateDebugSession.
-	self assert: session exception notNil.
+	self assert: session exception isNotNil.
 	self assert: session exception identicalTo: exception
 ]
 
@@ -1199,10 +1245,9 @@ StDebuggerActionModelTest >> testUpdateTopContextAfterSessionOperation [
 		clearDebugSession.
 
 	mockDebugActionModel := StMockDebuggerActionModel new.
-	mockDebugActionModel
-		implement: nil
-		inClass: nil
-		forContext: StMockContext new.
+	mockDebugActionModel session: StMockSession new.
+	
+	mockDebugActionModel implementMissingMethod.
 	self assert: mockDebugActionModel tag equals: #updateTopContext.
 	mockDebugActionModel
 		clear;

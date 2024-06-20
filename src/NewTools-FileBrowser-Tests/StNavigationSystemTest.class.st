@@ -40,14 +40,13 @@ StNavigationSystemTest >> testCustomizationWhenChangeCollectionOfPreviewerShould
 
 { #category : 'tests' }
 StNavigationSystemTest >> testInitializeCurrentPathTextInputShouldSet [
-	self assert: dialog currentDirectory fullName equals: dialog currentPathTextInputPresenter entityText text 
+	self assert: dialog currentDirectory fullName equals: dialog pathBreadcrumbPresenter entityText text 
 ]
 
 { #category : 'tests' }
 StNavigationSystemTest >> testInitializeFilterDropListSelectedItemShouldBeDefaultFilter [
-	self 
-		assert: dialog filtersDropList selectedItem name 
-		equals: StVisibleFilter new name
+
+	self assert: dialog filtersDropList selectedItem name equals: StAllFilter new name
 ]
 
 { #category : 'tests' }
@@ -150,8 +149,8 @@ StNavigationSystemTest >> testWhenOpenADirectoryShouldDisplayHisChildrenFilterBy
 { #category : 'tests' }
 StNavigationSystemTest >> testWhenPathTextInputPresenterAcceptShouldChangeFileListWithTheGoodContent [
 
-	dialog currentPathTextInputPresenter pathTextChangedTo:
-		(dialog currentPathTextInputPresenter entityText text asPath / 'dir')
+	dialog pathBreadcrumbPresenter pathTextChangedTo:
+		(dialog pathBreadcrumbPresenter entityText text asPath / 'dir')
 			pathString.
 	self
 		assertCollection:

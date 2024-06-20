@@ -12,12 +12,26 @@ Class {
 		'currentQueryScope'
 	],
 	#classVars : [
-		'singleInstance'
+		'ActiveScope',
+		'SingleInstance'
 	],
 	#category : 'NewTools-Scopes-Core',
 	#package : 'NewTools-Scopes',
 	#tag : 'Core'
 }
+
+{ #category : 'accessing' }
+ScopesManager class >> activeScope [
+	^ ActiveScope
+]
+
+{ #category : 'accessing' }
+ScopesManager class >> activeScope: aScope [
+
+	ActiveScope := (self availableScopes includes: aScope)
+		               ifTrue: [ aScope ]
+		               ifFalse: [ nil ]
+]
 
 { #category : 'accessing' }
 ScopesManager class >> addScope: aScope [
@@ -40,6 +54,34 @@ ScopesManager class >> currentQueryScope: aScope [
 	self singleInstance currentQueryScope: aScope
 ]
 
+{ #category : 'operations' }
+ScopesManager class >> defaultNameForScope: aScope [
+	| packageScope classScope label |
+	
+	classScope := aScope environment.
+	packageScope := aScope otherEnvironment.
+	(packageScope isNotEmpty and: [ classScope isEmpty ]) 
+		ifTrue: [ 
+			label := 'Pck: ' , packageScope packages anyOne name ].
+	(packageScope isEmpty and: [ classScope isNotEmpty ]) 
+		ifTrue: [ 
+			label := 'Cls: ' , classScope classes anyOne name ].
+	(packageScope isNotEmpty and: [ classScope isNotEmpty ]) 
+		ifTrue: [
+			label := 'Pck,Cls: ' , packageScope packages anyOne name ].
+	
+	(classScope classes size + packageScope packages size) > 1 ifTrue: [ label := label , ', ...' ].
+	
+	^ self singleInstance nameWithIndex: label
+	
+]
+
+{ #category : 'accessing' }
+ScopesManager class >> defaultScope [
+
+	^ self singleInstance defaultScope 
+]
+
 { #category : 'accessing' }
 ScopesManager class >> defaultScopeLabel [
 
@@ -49,21 +91,16 @@ ScopesManager class >> defaultScopeLabel [
 { #category : 'operations' }
 ScopesManager class >> editScope: aScope withNodes: aCollection [
 
-	| classesInScope addedClasses removedClasses auxScope classesInCollection |
-	
-	classesInScope := aScope definedClasses.
-	
+	| auxScope fullPackagesInCollection orphanClassesInCollection |
+
+	aScope removeAll.
 	auxScope := self newScopeFrom: aCollection.
-	classesInCollection := auxScope definedClasses.
-
-	addedClasses := classesInCollection reject: [ :aClass |
-		                classesInScope includes: aClass ].
-	removedClasses := classesInScope reject: [ :aClass |
-		                  classesInCollection includes: aClass ].
-
-	addedClasses do: [ :aClass | aScope addClass: aClass ].
-	removedClasses do: [ :aClass | aScope removeClass: aClass ].
-
+	fullPackagesInCollection := auxScope fullPackages.
+	orphanClassesInCollection := auxScope orphanClasses.
+	
+	fullPackagesInCollection do: [ :aPackage | aScope addPackage: aPackage ].
+	orphanClassesInCollection do: [ :aClass | aScope addClass: aClass ].
+	
 	^ aScope
 ]
 
@@ -92,77 +129,23 @@ ScopesManager class >> invalidNames [
 ]
 
 { #category : 'operations' }
-ScopesManager class >> newScopeFrom: aSet [
+ScopesManager class >> newScopeFrom: aCollection [
 
-	| packageScope classScope classes packages orphanClasses fullPackages |
-	
-	classes := (aSet select: [ :each | each isClassOrTrait ]) reject: [
-		           :each | each isMeta ].
+	| aSet packageScope classScope classes packages classesInPackages label newScope |
+
+	aSet := aCollection asSet.
 	packages := aSet select: [ :each | each isKindOf: Package ].
-
-	"packages whose classes were all selected"
-	fullPackages := packages addAll: (self fullPackagesFrom: classes); yourself.
-	"classes whose package hasn't all of its classes selected"
-	orphanClasses := self
-		                 orphanClassesIn: classes
-		                 havingFullPackages: fullPackages.
-
-	classScope := RBClassEnvironment classes: orphanClasses.
-	packageScope := RBPackageEnvironment packages: fullPackages.
-
-	^ classScope | packageScope
-]
-
-{ #category : 'operations' }
-ScopesManager class >> newScopeFrom: scopeA and: scopeB [
-
-	| classesA classesB classesInterAB packages fullPackages |
+	classesInPackages := packages flatCollect: [ :each | each definedClasses ].
 	
-	classesA := scopeA classes asSet.
-	classesB := scopeB classes.
+	classes := ((aSet select: [ :each | each isClassOrTrait ]) reject: [
+		           :each | each isMeta or: [classesInPackages includes: each]]).
 	
-	classesInterAB := (classesA, classesB) select: [ :each |
-		                   (classesA includes: each) and: [
-			                   classesB includes: each ] ].
-	packages := classesInterAB collect: [ :each  | each package ].
-	fullPackages := self fullPackagesFrom: classesInterAB.
-	 
-	^ self newScopeFrom: fullPackages , classesInterAB
-]
-
-{ #category : 'operations' }
-ScopesManager class >> newScopeFromNot: scope [
-
-	| classes rejectedFullPackages rejectedOrphanClasses rejectedClassesInFullPackages rejectedClasses acceptedPackages acceptedClasses |
-	classes := scope classes.
-
-	rejectedFullPackages := self fullPackagesFrom: classes.
-	rejectedOrphanClasses := self
-		                         orphanClassesIn: classes
-		                         havingFullPackages: rejectedFullPackages.
-	rejectedClassesInFullPackages := rejectedFullPackages collect: [
-		                                 :each | each definedClasses ].
-	rejectedClasses := rejectedOrphanClasses
-	                   , rejectedClassesInFullPackages.
-
-	acceptedPackages := self singleInstance allPackagesInEnvironment
-		                    reject: [ :each |
-		                    rejectedFullPackages includes: each name ].
-	acceptedClasses := (self singleInstance allPackagesInEnvironment
-		                    flatCollect: [ :each | each definedClasses ])
-		                   reject: [ :each | rejectedClasses includes: each ].
-	^ self newScopeFrom: acceptedPackages , acceptedClasses
-]
-
-{ #category : 'private' }
-ScopesManager class >> orphanClassesIn: classes havingFullPackages: fullPackages [
-
-	| theClasses packagesCache |
-	theClasses := classes reject: [ :each | each isMeta ].
-	packagesCache := Dictionary new.
-	theClasses do: [ :each | packagesCache at: each put: each package ].
-	^ theClasses reject: [ :class |
-		  fullPackages includes: (packagesCache at: class) ]
+	classScope := RBClassEnvironment classes: classes.
+	packageScope := RBPackageEnvironment packages: packages.
+	newScope := classScope | packageScope.
+	
+	label := self defaultNameForScope: newScope.
+	^ newScope label: label; yourself
 ]
 
 { #category : 'accessing' }
@@ -170,11 +153,11 @@ ScopesManager class >> removeScope: aScope [
 	self singleInstance removeScope: aScope
 ]
 
-{ #category : 'accessing' }
+{ #category : 'class initialization' }
 ScopesManager class >> reset [
 	<script>
-	singleInstance ifNotNil: [ singleInstance reset ].
-	singleInstance := nil
+	SingleInstance ifNotNil: [ SingleInstance reset ].
+	SingleInstance := nil
 ]
 
 { #category : 'accessing' }
@@ -185,8 +168,8 @@ ScopesManager class >> scopes [
 { #category : 'accessing' }
 ScopesManager class >> singleInstance [
 
-	^ singleInstance ifNil: [
-		  singleInstance := self basicNew
+	^ SingleInstance ifNil: [
+		  SingleInstance := self basicNew
 			                    environment: SmalltalkImage;
 			                    initialize;
 			                    yourself ]
@@ -227,8 +210,7 @@ ScopesManager >> currentQueryScope: aScope [
 ScopesManager >> defaultScope [
 
 	^ defaultScope ifNil: [
-		  defaultScope := (self scopeClass packages:
-			                   self allPackagesInEnvironment) label:
+		  defaultScope := self scopeClass new label:
 			                  self defaultScopeLabel ]
 ]
 
@@ -278,7 +260,7 @@ ScopesManager >> nameWithIndex: name [
 
 	indexes := Set new.
 	existingNames do: [ :existing |
-		hypen_index := existing size - (existing reverse findString: '-').
+		hypen_index := existing size - (existing reverse findString: '(').
 		hypen_index = existing size
 			ifTrue: [ indexes add: 0 ]
 			ifFalse: [
@@ -286,21 +268,13 @@ ScopesManager >> nameWithIndex: name [
 					          asInteger.
 				indexes add: number asInteger ] ].
 
-	^ name , '-' , (indexes max + 1) asString
+	^ name , '(' , (indexes max + 1) asString, ')'
 ]
 
 { #category : 'private' }
 ScopesManager >> newScopeFrom: aSetOfClassesAndPackages [
 
 	^ self class newScopeFrom: aSetOfClassesAndPackages
-]
-
-{ #category : 'private' }
-ScopesManager >> orphanClassesIn: classes havingFullPackages: fullPackages [
-
-	^ self class
-		  orphanClassesIn: classes
-		  havingFullPackages: fullPackages
 ]
 
 { #category : 'removing' }
@@ -321,7 +295,7 @@ ScopesManager >> reset [
 
 { #category : 'running' }
 ScopesManager >> scopeClass [
-	^ RBPackageEnvironment 
+	^ RBBrowserEnvironment 
 ]
 
 { #category : 'accessing' }

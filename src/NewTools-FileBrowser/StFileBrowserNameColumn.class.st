@@ -12,8 +12,9 @@ Class {
 }
 
 { #category : 'adding' }
-StFileBrowserNameColumn class >> addContraintTo: aTableColumn [
-	"do nothing"
+StFileBrowserNameColumn class >> addConstraintTo: aTableColumn [
+
+	aTableColumn beSortable
 ]
 
 { #category : 'templateMethod' }

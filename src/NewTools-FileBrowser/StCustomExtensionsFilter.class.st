@@ -1,3 +1,13 @@
+"
+Used to instruct the File Browser to display files with custom file extension(s).
+
+## Example
+
+To display Pharo image files:
+```smalltalk
+StCustomExtensionsFilter extensions: #( '.image' )`
+```
+"
 Class {
 	#name : 'StCustomExtensionsFilter',
 	#superclass : 'StExtensionsFilter',

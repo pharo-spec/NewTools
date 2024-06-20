@@ -31,31 +31,6 @@ Class {
 	#tag : 'UI'
 }
 
-{ #category : 'specs' }
-StPathBreadcrumbPresenter class >> defaultLayout [
-
-	^ SpBoxLayout newLeftToRight
-		  vAlignCenter;
-		  add: #path;
-		  add: #editButton
-		  expand: false
-		  fill: false
-		  padding: 0;
-		  yourself
-]
-
-{ #category : 'specs' }
-StPathBreadcrumbPresenter class >> editablelayout [
-
-	^ SpBoxLayout newLeftToRight
-		  add: #textInput;
-		  add: #editButton
-		  expand: false
-		  fill: false
-		  padding: 0;
-		  yourself
-]
-
 { #category : 'examples' }
 StPathBreadcrumbPresenter class >> example [
 	<example>
@@ -74,10 +49,33 @@ StPathBreadcrumbPresenter >> currentDirectory: aFileReference [
 
 	textInput text: aFileReference fullName.
 	path file: aFileReference.
-	self owner ifNotNil: [ :fileNavigation | 
-		fileNavigation currentDirectory: aFileReference asAbsolute ].
 	self needRebuild: false.
 	self build
+]
+
+{ #category : 'layouts' }
+StPathBreadcrumbPresenter >> defaultLayout [
+
+	^ SpBoxLayout newLeftToRight
+		  vAlignCenter;
+		  add: path;
+		  add: editButton
+		  expand: false
+		  fill: false
+		  padding: 0;
+		  yourself
+]
+
+{ #category : 'layouts' }
+StPathBreadcrumbPresenter >> editablelayout [
+
+	^ SpBoxLayout newLeftToRight
+		  add: textInput;
+		  add: editButton
+		  expand: false
+		  fill: false
+		  padding: 0;
+		  yourself
 ]
 
 { #category : 'accessing' }
@@ -96,20 +94,22 @@ StPathBreadcrumbPresenter >> initializePresenters [
 
 	path action: [ :fileReference | self owner openFolder: fileReference ].
 
-	self entityText whenSubmitDo: [ :newText | 
-		self pathTextChangedTo: newText ].
+	self entityText whenSubmitDo: [ :newText | self pathTextChangedTo: newText ].
 
 	textInput placeholder: 'path/to/file'.
 
 	editButton
 		addStyle: 'small';
 		icon: (self application iconNamed: #edit);
-		action: [ 
+		help: 'Edit the path to the current folder';
+		action: [
 			self needRebuild: false.
+
 			isInEditMode
 				ifTrue: [ self pathTextChangedTo: self entityText text ]
-				ifFalse: [ self layout: self class editablelayout ].
-			isInEditMode := isInEditMode not ]
+				ifFalse: [
+					self layout: self editablelayout.
+					isInEditMode := isInEditMode not ] ]
 ]
 
 { #category : 'accessing' }
@@ -121,11 +121,10 @@ StPathBreadcrumbPresenter >> path [
 StPathBreadcrumbPresenter >> pathTextChangedTo: aStringOrText [
 
 	| fileReference |
-	
 	fileReference := aStringOrText asString asFileReference.
 	(fileReference exists and: [ fileReference isDirectory ])
 		ifTrue: [ self owner openFolder: fileReference ]
 		ifFalse: [ self inform: 'You have to input an existing path to a directory' ].
 	isInEditMode := false.
-	self layout: self class defaultLayout
+	self layout: self defaultLayout
 ]

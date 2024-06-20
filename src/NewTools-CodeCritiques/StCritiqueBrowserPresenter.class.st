@@ -41,7 +41,7 @@ StCritiqueBrowserPresenter class >> critiquesBrowserMenuOn: aBuilder [
 		order: 2;
 		parent: #Browsing;
 		help: 'To manage rule checks.';
-		icon: self icon
+		iconName: self iconName
 ]
 
 { #category : 'layout' }
@@ -72,7 +72,13 @@ StCritiqueBrowserPresenter class >> icon [
 
 	"Answer an icon for the receiver."
 
-	^ self iconNamed: #error
+	^ self iconNamed: self iconName
+]
+
+{ #category : 'icons' }
+StCritiqueBrowserPresenter class >> iconName [
+
+	^ #error
 ]
 
 { #category : 'instance creation' }
@@ -473,10 +479,10 @@ StCritiqueBrowserPresenter >> reapplyThisRule [
 
 { #category : 'system annoucements' }
 StCritiqueBrowserPresenter >> registerToAnnouncements [
-	
+
 	self unregisterFromAnnouncements.
-	
-	SystemAnnouncer uniqueInstance weak
+
+	self class codeChangeAnnouncer weak
 		when: ClassAdded send: #handleClassAdded: to: self;
 		when: ClassModifiedClassDefinition send: #handleClassModified: to: self;
 		when: ClassRemoved send: #handleClassRemoved: to: self;
@@ -639,7 +645,7 @@ StCritiqueBrowserPresenter >> toolbarModel [
 { #category : 'system annoucements' }
 StCritiqueBrowserPresenter >> unregisterFromAnnouncements [
 
-	SystemAnnouncer uniqueInstance unsubscribe: self
+	self class codeChangeAnnouncer unsubscribe: self
 ]
 
 { #category : 'accessing' }

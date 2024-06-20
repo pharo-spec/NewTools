@@ -61,7 +61,7 @@ StFinderClassResult >> displayIcon [
 { #category : 'action' }
 StFinderClassResult >> forFinderPreview: aSpCodePresenter [ 
 
-	^ (self content isClass and: [ self parent notNil and: [ self parent isPackageResult not ] ])
+	^ (self content isClass and: [ self parent isNotNil and: [ self parent isPackageResult not ] ])
 		ifTrue: [ 
 			self 
 				displaySource: self getCompiledMethod
@@ -90,7 +90,13 @@ StFinderClassResult >> getCompiledMethodFrom: aStFinderSelectorResult [
 { #category : 'copying' }
 StFinderClassResult >> hasSelectorParent [
 
-	^ self parent notNil and: [ self parent isSelectorResult ]
+	^ self parent isNotNil and: [ self parent isSelectorResult ]
+]
+
+{ #category : 'testing' }
+StFinderClassResult >> isClassResult [
+
+	^ true
 ]
 
 { #category : 'action' }

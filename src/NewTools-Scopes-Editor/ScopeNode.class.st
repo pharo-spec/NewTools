@@ -26,7 +26,7 @@ ScopeNode class >> on: aRBEnvironment [
 { #category : 'operations' }
 ScopeNode >> & anotherNode [
 
-	^ ScopesManager newScopeFrom: self value and: anotherNode value
+	^ self value & anotherNode value
 ]
 
 { #category : 'comparing' }
@@ -56,6 +56,11 @@ ScopeNode >> basicEqualsTo: aNode [
 { #category : 'accessing' }
 ScopeNode >> children [
 	self subclassResponsibility 
+]
+
+{ #category : 'accessing' }
+ScopeNode >> data [
+	^ value
 ]
 
 { #category : 'accessing' }
@@ -102,7 +107,7 @@ ScopeNode >> name [
 { #category : 'operations' }
 ScopeNode >> not [
 
-	^ ScopesManager newScopeFromNot: self value
+	^ self value not
 ]
 
 { #category : 'accessing' }

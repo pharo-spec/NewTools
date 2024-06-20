@@ -54,7 +54,7 @@ StCritiqueRuleSelectorPresenter class >> open [
 
 	<example>
 	| packages env |
-	packages := RPackageOrganizer default packages.
+	packages := self packageOrganizer packages.
 	env := RBPackageEnvironment new packages: packages.
 	^ (self openWithEnvironment: env removeTestCase: false)
 ]
@@ -132,35 +132,6 @@ StCritiqueRuleSelectorPresenter >> groupRules [
 ]
 
 { #category : 'initialization' }
-StCritiqueRuleSelectorPresenter >> initialize [
-
-	| wrappingBlock selectedRulesChildrenBlock rulesToSelectChildrenBlock |
-	super initialize.
-	self initializeList.
-	self initializeSelectedList.
-	selectedRules := Set new.
-	selectedRulesChildrenBlock := [ :rule | 
-	                              rule isComposite
-		                              ifTrue: [ 
-			                              rule rules select: [ :r | 
-				                              (self isSelected: r) or: [ 
-					                              r isComposite ] ] ]
-		                              ifFalse: [ #(  ) ] ].
-	rulesToSelectChildrenBlock := [ :rule | 
-	                              rule isComposite
-		                              ifTrue: [ 
-			                              rule rules select: [ :r | 
-				                              (self isSelected: r) not or: [ 
-					                              r isComposite ] ] ]
-		                              ifFalse: [ #(  ) ] ].
-	list children: rulesToSelectChildrenBlock.
-	selectedList children: selectedRulesChildrenBlock.
-	wrappingBlock := [ :rule | rule name ].
-	list display: wrappingBlock.
-	selectedList display: wrappingBlock
-]
-
-{ #category : 'adding' }
 StCritiqueRuleSelectorPresenter >> initializeButtonBar [
 
 	buttonBar 
@@ -174,7 +145,7 @@ StCritiqueRuleSelectorPresenter >> initializeButtonBar [
 			expand: false
 ]
 
-{ #category : 'adding' }
+{ #category : 'initialization' }
 StCritiqueRuleSelectorPresenter >> initializeButtons [
 
 	addButton := self newButton
@@ -202,7 +173,7 @@ StCritiqueRuleSelectorPresenter >> initializeButtons [
 				yourself
 ]
 
-{ #category : 'adding' }
+{ #category : 'initialization' }
 StCritiqueRuleSelectorPresenter >> initializeLayout [
 
 	self layout: (SpBoxLayout newTopToBottom
@@ -225,24 +196,26 @@ StCritiqueRuleSelectorPresenter >> initializeLayout [
 			 yourself)
 ]
 
-{ #category : 'adding' }
+{ #category : 'initialization' }
 StCritiqueRuleSelectorPresenter >> initializeList [
 
+	| rulesToSelectChildrenBlock |
+	
 	list := self instantiate: SpTreePresenter.
-	removeButton := self newButton
-				addStyle: 'small';
-				label: '<';
-				action: [ self removeSelected ];
-				yourself.
 
-	removeAllButton := self newButton
-				addStyle: 'small';
-				label: '<<';
-				action: [ self removeAll ];
-				yourself
+	rulesToSelectChildrenBlock := [ :rule | 
+	                              rule isComposite
+		                              ifTrue: [ 
+			                              rule rules select: [ :r | 
+				                              (self isSelected: r) not or: [ 
+					                              r isComposite ] ] ]
+		                              ifFalse: [ #(  ) ] ].
+	list children: rulesToSelectChildrenBlock.
+	list display: [ :rule | rule name ].
+
 ]
 
-{ #category : 'adding' }
+{ #category : 'initialization' }
 StCritiqueRuleSelectorPresenter >> initializeNextButton [
 
 	nextButton := self newButton.
@@ -264,10 +237,26 @@ StCritiqueRuleSelectorPresenter >> initializePresenters [
 	self initializeNextButton
 ]
 
-{ #category : 'adding' }
+{ #category : 'initialization' }
 StCritiqueRuleSelectorPresenter >> initializeSelectedList [
 
-	selectedList := self instantiate: SpTreePresenter
+	| selectedRulesChildrenBlock |
+	selectedList := self instantiate: SpTreePresenter.
+	
+	selectedRules := Set new.
+	selectedRulesChildrenBlock := [ :rule | 
+	                              rule isComposite
+		                              ifTrue: [ 
+			                              rule rules select: [ :r | 
+				                              (self isSelected: r) or: [ 
+					                              r isComposite ] ] ]
+		                              ifFalse: [ #(  ) ] ].
+
+	selectedList children: selectedRulesChildrenBlock.
+	selectedList display: [ :rule | rule name ].
+	
+	selectedList whenSelectionChangedDo: [ :aSelection | 
+		self updateButtonsState: aSelection ].
 ]
 
 { #category : 'initialization' }
@@ -350,8 +339,8 @@ StCritiqueRuleSelectorPresenter >> removeButton [
 StCritiqueRuleSelectorPresenter >> removeSelected [
 
 	selectedList selectedItem ifNotNil: [ :item | 
-		(self groupRules includes: item name)
-			ifTrue: [ selectedRules removeAll: item rules ]
+		item isComposite 
+			ifTrue: [ selectedRules removeAllFoundIn: item rules ]
 			ifFalse: [ selectedRules remove: item ] ].
 	self update.
 	nextButton enabled: selectedRules isNotEmpty
@@ -399,6 +388,22 @@ StCritiqueRuleSelectorPresenter >> setModelBeforeInitialization: aCollection [
 	items := aCollection first.
 	selectedItems := aCollection second.
 	methodName := aCollection third
+]
+
+{ #category : 'updating' }
+StCritiqueRuleSelectorPresenter >> updateButtonsState: aSelection [
+
+	| shouldBeEnabled |
+	
+	shouldBeEnabled := aSelection isEmpty 
+		ifTrue: [ false ]
+		ifFalse: [ aSelection selectedItem isComposite 
+				ifTrue: [ aSelection selectedItem rules anySatisfy: [:e | self isSelected: e ] ]
+				ifFalse: [ true ] ].
+	
+	removeButton enabled: shouldBeEnabled.
+	
+
 ]
 
 { #category : 'adding' }

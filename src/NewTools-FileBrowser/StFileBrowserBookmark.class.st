@@ -29,7 +29,7 @@ StFileBrowserBookmark class >> defaultBookmarks [
 
 	^ OrderedCollection with:
 		  (StFileBrowserGroupBookmark
-			   name: 'Favourites'
+			   name: 'Bookmarks'
 			   collection: presets
 			   iconName: #book)
 ]

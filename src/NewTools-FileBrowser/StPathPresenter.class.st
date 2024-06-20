@@ -39,7 +39,7 @@ StPathPresenter >> addLinkTo: aPath [
 
 	^ self addPresenter: (self newLink
 			   action: [ action value: aPath asFileReference ];
-			   label: aPath basename;
+			   label: (self labelFor: aPath);
 			   yourself)
 ]
 
@@ -74,6 +74,14 @@ StPathPresenter >> file: aFile [
 StPathPresenter >> initializeLayout [
 
 	^ layout := SpBoxLayout newLeftToRight
+]
+
+{ #category : 'accessing' }
+StPathPresenter >> labelFor: aPath [
+
+	^ aPath basename = '/'
+		ifFalse: [ aPath basename ]
+		ifTrue: [ 'Root' ]
 ]
 
 { #category : 'accessing' }

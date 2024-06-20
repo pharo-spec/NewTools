@@ -17,7 +17,7 @@ StDirectoryTreePresenter class >> buildCommandsGroupWith: presenterInstance forR
 
 	rootCommandGroup
 		register: (
-			(CmCommandGroup named: 'StFBDirectoryContextualMenu') asSpecGroup
+			(CmCommandGroup named: 'StFileBrowserDirectoryContextualMenu') asSpecGroup
 				register: StFileBrowserNewDirectoryCommand forSpec;			
 				register: StFileBrowserRenameCommand forSpec;
 				register: StFileBrowserRemoveCommand forSpec;
@@ -40,24 +40,30 @@ StDirectoryTreePresenter >> defaultOutputPort [
 ]
 
 { #category : 'accessing' }
-StDirectoryTreePresenter >> expandPath: aFileLocator [ 
+StDirectoryTreePresenter >> expandPath: aFileLocator [
 	"Expand the receiver's tree to aFileLocator reference"
-	
+
 	| path aPathForSpec currentNode |
-	
 	path := aFileLocator asPath segments asOrderedCollection.
 	aPathForSpec := OrderedCollection new.
 	aPathForSpec add: 1.
-	
-	currentNode := directoryTreePresenter roots anyOne.
-	
-	path do: [ :aPart | | found |
-		found := currentNode directories detect: [ :e | e basename = aPart ] ifNone: [ ^self ].
-		aPathForSpec add: (currentNode directories indexOf: found).
-		currentNode := found ].
 
-	directoryTreePresenter 
-		selectPath: aPathForSpec scrollToSelection: false
+	currentNode := directoryTreePresenter roots anyOne.
+
+	path do: [ :aPart |
+		| subdirs |
+		subdirs := currentNode directories sorted: [ :a :b |
+			           a basename caseInsensitiveLessOrEqual: b basename ].
+		currentNode := nil.
+		subdirs doWithIndex: [ :subdir :index |
+			(currentNode isNil and: [ subdir basename = aPart ]) ifTrue: [
+				currentNode := subdir.
+				aPathForSpec add: index ] ].
+		currentNode ifNil: [ ^ self ] ].
+
+	directoryTreePresenter
+		selectPath: aPathForSpec
+		scrollToSelection: false
 ]
 
 { #category : 'initialization' }
@@ -81,15 +87,14 @@ StDirectoryTreePresenter >> initializePresenters [
 		roots: StFileSystemItemWrapper roots;
 		children: [ :aClass | aClass subdirectories ];
 		beResizable;
-		contextMenu: [ (self rootCommandsGroup / 'StFBDirectoryContextualMenu') beRoot asMenuPresenter ].
+		contextMenu: [ (self rootCommandsGroup / 'StFileBrowserDirectoryContextualMenu') beRoot asMenuPresenter ].
 ]
 
 { #category : 'utilities' }
 StDirectoryTreePresenter >> openFolder: aFileReference [ 
 
-	model openFolder: aFileReference.
 	self owner updateWidgetWithFileReference: aFileReference.
-	self expandPath: aFileReference.
+
 ]
 
 { #category : 'accessing' }
@@ -107,9 +112,14 @@ StDirectoryTreePresenter >> shouldReparent [
 ]
 
 { #category : 'utilities' }
-StDirectoryTreePresenter >> updateFileSystemContents [
+StDirectoryTreePresenter >> updateFileDirectoryTree [
 
-	super updateFileSystemContents.
 	directoryTreePresenter roots: StFileSystemItemWrapper roots.
 	self expandPath: self currentDirectory.
+]
+
+{ #category : 'utilities' }
+StDirectoryTreePresenter >> updateWidgetWithFileReference: aFileReference [
+
+	self expandPath: aFileReference.
 ]

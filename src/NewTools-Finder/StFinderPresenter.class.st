@@ -134,6 +134,20 @@ The ''Select classes'' button opened a dialog window  to select which classes wi
 The ''All classes'' button is used to reset the classes selection.'
 ]
 
+{ #category : 'world menu' }
+StFinderPresenter class >> menuFinderCommandOn: aBuilder [
+	<worldMenu>
+
+	(aBuilder item: #NewFinder)
+		parent: #NewToolsMenu;
+		action: [ StFinderPresenter open ];
+		label: 'New Finder';
+		order: 2; 
+		help: 'Open the new Finder tool.';
+		iconName: #smallFind.
+
+]
+
 { #category : 'default values' }
 StFinderPresenter class >> methodFinderExplanation [
 	"MethodFinder new findMethodsByExampleInput: #( 1 2 ) andExpectedResult: 3."
@@ -346,6 +360,8 @@ StFinderPresenter >> initializeResultTree [
 		beMultipleSelection;
 		display: [ :result | result displayString ];
 		displayIcon: [ :result | result displayIcon ];
+		bindKeyCombination: $b meta toAction: [ self resultTree selectedItem browseAction ];
+		bindKeyCombination: $r meta toAction: [ self resultTree selectedItem referencesAction ];
 		contextMenu: [ (self rootCommandsGroup / 'StFinderSelContextualMenu') beRoot asMenuPresenter ].
 ]
 
@@ -547,7 +563,7 @@ StFinderPresenter >> updateResultsWith: results time: time [
 		roots: results;
 		children: [ :result | result children ].
 	self updateResultsBehavior.
-	resultStatusBar pushMessage: (self updateStatusBarTextFrom: results time: time)
+	resultStatusBar pushMessage: (self updateStatusBarTextFrom: results time: time).
 ]
 
 { #category : 'updating - widgets' }

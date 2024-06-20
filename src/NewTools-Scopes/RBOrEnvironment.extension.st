@@ -1,22 +1,22 @@
 Extension { #name : 'RBOrEnvironment' }
 
 { #category : '*NewTools-Scopes' }
-RBOrEnvironment >> definedClassesDo: aBlock [
-	| enumerated |
-	enumerated := IdentitySet new.
-	environment definedClassesDo: [ :each |
-		aBlock value: each.
-		enumerated add: each].
-	self orEnvironment definedClassesDo: [ :each |
-		(enumerated includes: each)
-			ifFalse: [ aBlock value: each ] ]
+RBOrEnvironment >> fullPackages [
+	" full packages are packages explicitely defined in the scope. i.e. there is a RBPackageEnvironment defining them "
+
+	| fullPackages |
+	fullPackages := Set new.
+	fullPackages addAll: environment fullPackages.
+	fullPackages addAll: otherEnvironment fullPackages.
+	^ fullPackages
 ]
 
 { #category : '*NewTools-Scopes' }
-RBOrEnvironment >> isTerminal [
+RBOrEnvironment >> rawOrphanClasses [
 
-	^ (environment isClassEnvironment or: [
-		   environment isPackageEnvironment ]) and: [
-		  otherEnvironment isClassEnvironment or: [
-			  otherEnvironment isPackageEnvironment ] ]
+	| orphanClasses |
+	orphanClasses := Set new.
+	orphanClasses addAll: environment orphanClasses.
+	orphanClasses addAll: otherEnvironment orphanClasses.
+	^ orphanClasses
 ]

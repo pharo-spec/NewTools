@@ -17,6 +17,11 @@ RBClassEnvironment >> definedClassesDo: aBlock [
 ]
 
 { #category : '*NewTools-Scopes' }
+RBClassEnvironment >> fullPackages [
+	^ Set new
+]
+
+{ #category : '*NewTools-Scopes' }
 RBClassEnvironment >> removePackage: aSymbol [
 	^ self
 ]

@@ -58,11 +58,14 @@ StPharoApplication >> defaultWindowExtent [
 StPharoApplication >> initialize [
 
 	super initialize.
+	self initializeConfiguration
+]
+
+{ #category : 'initialization' }
+StPharoApplication >> initializeConfiguration [
+
 	self resetConfiguration.
-	SystemAnnouncer uniqueInstance weak 
-		when: UIThemeChanged 
-		send: #resetConfiguration
-		to: self
+	self class codeSupportAnnouncer weak when: UIThemeChanged send: #resetConfiguration to: self
 ]
 
 { #category : 'private - factory' }
@@ -71,17 +74,26 @@ StPharoApplication >> newIconProvider [
 	^ StPharoDefaultIconProvider new
 ]
 
+{ #category : 'private - running' }
+StPharoApplication >> resetBackend [
+	| backendName |
+	
+	backendName := backend 
+		ifNil: [ self class defaultBackendName ] 
+		ifNotNil: [ backend name ].
+	self useBackend: backendName.
+]
+
 { #category : 'initialization' }
 StPharoApplication >> resetConfiguration [
 	
-	self flag: #TODO. "Invalidating for a moment because I need to align with Spec"
 	self configuration reset
 ]
 
 { #category : 'running' }
 StPharoApplication >> run [ 
 
-	Current ifNotNil: [ Current close ].
+	Current ifNotNil: [ Current closeAllWindows ].
 	super run. 
 	Current := self
 ]
@@ -99,7 +111,8 @@ StPharoApplication >> start [
 { #category : 'system startup' }
 StPharoApplication >> startUp: resuming [
 
-	self resetConfiguration
+	self resetConfiguration.
+	self resetBackend.
 ]
 
 { #category : 'settings' }

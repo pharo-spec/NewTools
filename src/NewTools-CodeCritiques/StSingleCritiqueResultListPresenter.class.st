@@ -341,7 +341,10 @@ StSingleCritiqueResultListPresenter >> isCritiqueToDo [
 { #category : 'initialization' }
 StSingleCritiqueResultListPresenter >> newSourceCodeCritique [
 	
-	^ SpCodePresenter new beNotEditable.
+	^ SpCodePresenter new 
+		beNotEditable;
+		withoutSyntaxHighlight;
+		yourself
 ]
 
 { #category : 'initialization' }
@@ -412,12 +415,13 @@ StSingleCritiqueResultListPresenter >> setTextModelForClassOrMethod: aCritique [
 
 	| entity |
 	entity := aCritique sourceAnchor entity.
-	self flag:
-		'Another hack. We need a better way to display entities (because now we may get not only classes and methods. Maybe something like GTInspector presentations could work)'.
-	sourceCodeModel text: entity asString.
-	sourceCodeModel behavior: (entity isCompiledMethod
+	sourceCodeModel beForBehavior: (entity isCompiledMethod
 			 ifTrue: [ entity methodClass ]
 			 ifFalse: [ nil ]).
+
+	sourceCodeModel 
+		withSyntaxHighlight;
+		text: entity asString.
 	aCritique sourceAnchor providesInterval ifTrue: [ 
 		sourceCodeModel selectionInterval: aCritique sourceAnchor interval ]
 ]
@@ -429,8 +433,10 @@ StSingleCritiqueResultListPresenter >> setTextModelForNil [
 	text := rule rationale isEmpty
 		        ifTrue: [ rule name ]
 		        ifFalse: [ rule rationale ].
-	sourceCodeModel text: text.
-	sourceCodeModel behavior: nil.
+	sourceCodeModel 
+		withoutSyntaxHighlight;
+		text: text;
+		behavior: nil.
 	toolbarModel critique: nil
 ]
 

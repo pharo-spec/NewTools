@@ -640,7 +640,7 @@ StSpotter >> nextSelectablePresenter: selectedPresenter oldPresenters: oldPresen
 
 	"look for current selected presenter"	
 	| text |
-	(selectedPresenter notNil and: [ selectedPresenter model notNil ]) ifTrue: [ 	
+	(selectedPresenter isNotNil and: [ selectedPresenter model isNotNil ]) ifTrue: [ 	
 		newPresenters 
 			detect: [ :each | each model value = selectedPresenter model value ]
 			ifFound: [ :aPresenter | ^ aPresenter ] ].

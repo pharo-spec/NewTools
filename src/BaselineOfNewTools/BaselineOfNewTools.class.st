@@ -18,13 +18,16 @@ BaselineOfNewTools >> baseline: spec [
 
 		self sindarin: spec.
 		self chest: spec.
+		self colorPicker: spec.
 
 		spec
 			package: 'NewTools-Core';
+			package: 'NewTools-Core-Tests' with: [  spec requires: #('NewTools-Core') ];
 			package: 'NewTools-Morphic';
 			package: 'NewTools-Gtk';
 			"Basic tools (inherited from Spec)"
-			package: 'NewTools-MethodBrowsers';
+			package: 'NewTools-MethodBrowsers' with: [ spec requires: #( 'NewTools-SpTextPresenterDecorators' ) ];
+			package: 'NewTools-MethodBrowsers-Tests' with: [ spec requires: #( 'NewTools-MethodBrowsers' ) ];
 			package: 'NewTools-KeymapBrowser';
 			"inspector"
 			package: 'NewTools-Inspector' with: [ spec requires: #( 'NewTools-Inspector-Extensions' ) ];
@@ -60,6 +63,9 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-FontChooser-Tests' with: [ spec requires: #( 'NewTools-FontChooser' ) ];
 			package: 'NewTools-SpTextPresenterDecorators';
 			package: 'NewTools-Debugger-Breakpoints-Tools' with: [ spec requires: #( 'NewTools-Inspector' ) ];
+			"Debug points"
+			package: 'NewTools-DebugPointsBrowser' with: [spec requires: #( 'NewTools-SpTextPresenterDecorators' )];
+			package: 'NewTools-ObjectCentricDebugPoints' with: [spec requires: #( 'NewTools-DebugPointsBrowser' 'NewTools-Inspector' 'NewTools-Debugger' )];
 			package: 'NewTools-ProjectLoader';
 			package: 'NewTools-ProjectLoader-Microdown';
 			"Object-centric breakpoints"
@@ -77,7 +83,6 @@ BaselineOfNewTools >> baseline: spec [
 			"Fuel"
 			package: 'NewTools-Debugger-Fuel';
 			package: 'NewTools-Debugger-Fuel-Tests' with: [ spec requires: #( 'NewTools-Debugger-Fuel' ) ];
-			package: 'NewTools-Fuel';
      		"Rewriter Tools"
 			package: 'NewTools-RewriterTools-Backend';
 			package: 'NewTools-RewriterTools' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
@@ -95,28 +100,37 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Scopes-Tests';
 			"Finder"			
 			package: 'NewTools-Finder';
-			package: 'NewTools-Finder-Tests' with: [ spec requires: #('NewTools-Finder') ].
+			package: 'NewTools-Finder-Tests' with: [ spec requires: #('NewTools-Finder') ];
+			
+			package: 'NewTools-SettingsBrowser' with: [ spec requires: #('ColorPicker') ];
+			package: 'NewTools-SettingsBrowser-Tests' with: [ spec requires: #('NewTools-SettingsBrowser') ];
+			
+			package: 'NewTools-Utils' with: [ spec requires: #('NewTools-FileBrowser') ].			
 
 		spec
-			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Morphic' );
+			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Core-Tests' 'NewTools-Morphic' );
 			group: 'Playground' with: #( 'Core' 'NewTools-Playground' 'NewTools-Playground-Tests' );
 			group: 'Inspector' with: #( 'Core' 'NewTools-Inspector' 'NewTools-Inspector-Tests' );
 			group: 'Debugger' with: #( 
 					 	'Core' 
 					 	'Inspector' 
 					 	'NewTools-Debugger-Commands'
-				    		'NewTools-Debugger-Extensions' 
+				    	'NewTools-Debugger-Extensions' 
 					 	'NewTools-Debugger'
+
 						'NewTools-Debugger-Morphic'
 				    		'NewTools-ObjectCentricBreakpoints'
 				    		'NewTools-Sindarin-Tools' 
+
 					 	'NewTools-Sindarin-Commands'
-				    		'NewTools-Sindarin-Commands-Tests'
-				    		'NewTools-Debugger-Breakpoints-Tools'
-				    		'NewTools-Debugger-Tests' 
+				    	'NewTools-Sindarin-Commands-Tests'
+				    	'NewTools-Debugger-Breakpoints-Tools'
+				    	'NewTools-Debugger-Tests' 
 					 	'NewTools-Debugger-Fuel'
-				    		'NewTools-Debugger-Fuel-Tests' 
-					 	'NewTools-Fuel' );
+				    	'NewTools-Debugger-Fuel-Tests' 
+					 	'NewTools-Utils'
+						'NewTools-DebugPointsBrowser'
+						'NewTools-ObjectCentricDebugPoints' );
 			group: 'Spotter' with: #( 
 						'NewTools-Morphic-Spotter' 
 						'NewTools-Spotter-Processors'
@@ -125,7 +139,7 @@ BaselineOfNewTools >> baseline: spec [
 				   		'NewTools-Spotter-Tests' 
 						'NewTools-Spotter-Processors-Tests' );
 			group: 'SystemReporter' with: #( 'Core' 'NewTools-SystemReporter' );
-			group: 'Methods' with: #( 'Core' 'NewTools-MethodBrowsers' );
+			group: 'Methods' with: #( 'Core' 'NewTools-SpTextPresenterDecorators' 'NewTools-MethodBrowsers' );
 			"Not in the image for the moment, we need a pass on them"
 			group: 'KeymapBrowser' with: #( 'Core' 'NewTools-KeymapBrowser' );
 			group: 'CritiqueBrowser' with: #( 'NewTools-CodeCritiques' 'NewTools-CodeCritiques-Tests' );
@@ -134,19 +148,20 @@ BaselineOfNewTools >> baseline: spec [
 						'Core' 
 						'NewTools-FlagBrowser' 
 						'NewTools-FlagBrowser-Tests' );
-			group: #development with: #( 'default' 
+			group: 'development' with: #( 'default' 
 						'NewTools-DebuggerSelector'
 				   		'NewTools-DebuggerSelector-Tests' );
-			group: #FileBrowser with: #( 
+			group: 'FileBrowser' with: #( 
 						'NewTools-FileBrowser' 
 						'NewTools-FileBrowser-Tests' );
-      			group: #RewriterTools with: #(
+      			group: 'RewriterTools' with: #(
 				    		'NewTools-RewriterTools-Backend'
 				    		'NewTools-RewriterTools'
 				    		'NewTools-RewriterTools-Backend-Tests'
 				    		'NewTools-RewriterTools-Tests' );
+			group: 'Profiler' with: #( 'NewTools-ProfilerUI' );
 			"ScopesEditor"
-			group: #ScopesEditor with: #(
+			group: 'ScopesEditor' with: #(
 						'NewTools-Scopes' 
 						'NewTools-Scopes-Editor' 
 						'NewTools-Scopes-Resources-A-Tests' 
@@ -154,9 +169,13 @@ BaselineOfNewTools >> baseline: spec [
 						'NewTools-Scopes-Resources-C-Tests' 
 						'NewTools-Scopes-Tests');
 			"Finder"
-			group: #Finder with: #(
+			group: 'Finder' with: #(
 						'NewTools-Finder'
 						'NewTools-Finder-Tests');
+			"Settings Browser"
+			group: 'SettingsBrowser' with: #(
+						'NewTools-SettingsBrowser'
+						'NewTools-SettingsBrowser-Tests');
 
 			group: 'default' with: #( 
 						'Playground' 
@@ -170,7 +189,9 @@ BaselineOfNewTools >> baseline: spec [
             			'RewriterTools'
 						'ScopesEditor'
 						'FileBrowser'
-						'Finder') ]
+						'Finder'
+						'Profiler'
+						'SettingsBrowser' ) ]
 ]
 
 { #category : 'external projects' }
@@ -181,6 +202,14 @@ BaselineOfNewTools >> chest: spec [
 			repository: ((self packageRepositoryURLForSpec: spec) ifEmpty: [
 						 'github://pharo-spec/Chest:v0.4.1' ]);
 			loads: 'default' ]
+]
+
+{ #category : 'external projects' }
+BaselineOfNewTools >> colorPicker: spec [
+
+	spec
+		baseline: 'ColorPicker' 
+		with: [ spec repository: 'github://pharo-spec/ColorPicker/src' ].
 ]
 
 { #category : 'accessing' }
@@ -215,7 +244,6 @@ BaselineOfNewTools >> sindarin: spec [
 
 	spec baseline: 'Sindarin' with: [
 		spec
-			repository: ((self packageRepositoryURLForSpec: spec) ifEmpty: [
-						 'github://pharo-spec/ScriptableDebugger:Pharo12/src' ]);
+			repository: (self class environment at: #BaselineOfPharo) scriptableDebuggerRepository;
 			loads: 'default' ]
 ]

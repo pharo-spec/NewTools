@@ -102,6 +102,7 @@ StSpotterHeaderPresenter >> initializePresenters [
 	self addStyle: 'stSpotterHeader'.
 	amountLabelPresenter addStyle: 'dim'.
 	helpLabelPresenter addStyle: 'dim'.
+	helpLabelPresenter addStyle: 'shortcut'.
 	diveButtonPresenter image: (self application iconNamed: #smallForward).
 	diveButtonPresenter eventHandler
 		whenMouseDownDo: [ :event | 

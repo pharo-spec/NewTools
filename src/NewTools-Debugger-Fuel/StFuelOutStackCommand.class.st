@@ -36,10 +36,11 @@ StFuelOutStackCommand >> appliesTo: aDebugger [
 { #category : 'executing' }
 StFuelOutStackCommand >> execute [
 
-	| fileName |
-	UIManager inform: 'Starting fueling out stack'.
+	| fileName application |
+	application := self debugger application.
+	application inform: 'Starting fueling out stack'.
 	fileName := FLDebuggerStackSerializer serializeStackFromContext:
 		            self context interruptedContext.
-	UIManager inform:
+	application inform:
 		'Stack has been fueled out in file named: ' , fileName
 ]

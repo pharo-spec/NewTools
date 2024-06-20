@@ -16,6 +16,12 @@ Trait {
 	#tag : 'Model'
 }
 
+{ #category : 'testing' }
+TStDebuggerExtension classSide >> acceptsPredicate: aStDebuggerContextPredicate [
+
+	^ true
+]
+
 { #category : 'debugger extension' }
 TStDebuggerExtension classSide >> defaultDisplayOrder [
 
@@ -48,11 +54,9 @@ TStDebuggerExtension classSide >> showInDebugger [
 { #category : 'debugger extension' }
 TStDebuggerExtension classSide >> showInDebugger: aBoolean [
 
-	self showInDebugger = aBoolean ifTrue: [ "The activated state hasn't changed. So we don't announce an extension toggle"
-		^ self ].
+	self showInDebugger = aBoolean ifTrue: [ "The activated state hasn't changed. So we don't announce an extension toggle" ^ self ].
 	showDebuggerExtension := aBoolean.
-	SystemAnnouncer uniqueInstance announce:
-		(StDebuggerExtensionActivationToggle debuggerExtensionClass: self)
+	self class codeSupportAnnouncer announce: (StDebuggerExtensionActivationToggle debuggerExtensionClass: self)
 ]
 
 { #category : 'visiting' }
@@ -83,4 +87,14 @@ TStDebuggerExtension >> displayOrder [
 { #category : 'initialization' }
 TStDebuggerExtension >> setModelBeforeInitialization: aDebugger [
 	 debugger := aDebugger
+]
+
+{ #category : 'debugger extension' }
+TStDebuggerExtension >> showInDebugger [
+	^self class showInDebugger 
+]
+
+{ #category : 'debugger extension' }
+TStDebuggerExtension >> showInDebugger: aBoolean [
+	self class showInDebugger: aBoolean 
 ]

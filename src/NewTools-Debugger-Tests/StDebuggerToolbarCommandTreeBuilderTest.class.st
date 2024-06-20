@@ -171,7 +171,7 @@ StDebuggerToolbarCommandTreeBuilderTest >> testExecutionControlShortcuts [
 	| commandsWithShortcuts |
 	commandsWithShortcuts := builder executionControlCommandClasses 
 		                         select: [ :class | 
-		                         class defaultShortcut notNil ].
+		                         class defaultShortcut isNotNil ].
 	self assert: commandsWithShortcuts notEmpty.
 	commandsWithShortcuts do: [ :class | 
 		| command |

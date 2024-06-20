@@ -34,8 +34,8 @@ StPlaygroundDoItCommand class >> order [
 	^ 0
 ]
 
-{ #category : 'execution' }
-StPlaygroundDoItCommand >> execute [ 
+{ #category : 'executing' }
+StPlaygroundDoItCommand >> execute [
 
 	context doEvaluateAllAndGo
 ]

@@ -91,12 +91,10 @@ StFileBrowserIconCache class >> iconNamed: aSymbol [
 	(self class canUnderstand: selector) ifFalse: [ ^super iconNamed: aSymbol ].
 	^ self iconCache
 		at: aSymbol
-		ifAbsentPut: [ 
-			Form
-				fromBinaryStream: (self perform: selector) base64Decoded readStream ]
+		ifAbsentPut: [ Form fromBinaryStream: (self perform: selector) base64Decoded readStream ]
 ]
 
-{ #category : 'initialization-release' }
+{ #category : 'class initialization' }
 StFileBrowserIconCache class >> reset [
 	"Reset the icon cache"	
 	<script>

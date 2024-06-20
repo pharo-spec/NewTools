@@ -79,7 +79,7 @@ StPlaygroundInteractionModel >> hasBindingOf: aString [
 { #category : 'private' }
 StPlaygroundInteractionModel >> isGlobalVariable: aSymbol [
 
-	^ (self class environment classNamed: aSymbol) notNil
+	^ (self class environment classNamed: aSymbol) isNotNil
 ]
 
 { #category : 'accessing' }

@@ -39,15 +39,29 @@ ScopesPresenter class >> menuCommandOn: aBuilder [
     (aBuilder item: #'Scopes Editor')
                 action: [self open];
                 parent: #Refactoring;
-                help: 'Editor for custom Scopes (refactoring environments)';
+                help: 'Editor for user defined Scopes (Scopes are used as environments when performing refactorings)';
                 order: 10;
 					iconName: #smallPushpin
 ]
 
-{ #category : 'examples' }
-ScopesPresenter class >> open [
+{ #category : 'specs' }
+ScopesPresenter class >> newInstance [
 	ScopeNodesPresenter reset.
-	(self on: ScopesManager singleInstance) open
+	^ self on: ScopesManager singleInstance
+]
+
+{ #category : 'opening' }
+ScopesPresenter class >> open [
+
+	self newInstance open
+]
+
+{ #category : 'opening' }
+ScopesPresenter class >> openSelecting: aScope [
+
+	(self newInstance
+		 selectScope: aScope;
+		 yourself) open
 ]
 
 { #category : 'actions' }
@@ -100,11 +114,11 @@ ScopesPresenter >> argumentsListMenu [
 					  name: 'Inspect';
 					  iconName: #glamorousSearch;
 					  action: [ scopesTree selectedItem inspect ] ];
-			  "addItem: [ :anItem |
+			  addItem: [ :anItem |
 				  anItem
 					  name: 'Open on Calypso';
 					  visibleIf: [ scopesTree selectedItem isScopeNode ];
-					  action: [ self openOnCalypso: scopesTree selectedItem value ] ];"
+					  action: [ self openOnCalypso: scopesTree selectedItem value ] ];
 			  addItem: [ :anItem |
 				  anItem
 					  name: 'Browse';
@@ -174,20 +188,21 @@ ScopesPresenter >> deleteSelectedScope [
 { #category : 'menu commands' }
 ScopesPresenter >> editSelectedScope [
 
-	| selectedPath |
+	| selectedPath selectedItem presenter |
 	selectedPath := scopesTree selection selectedPath.
-
-	(scopesTree selectedItem isNil or: [
-		 scopesTree selectedItem isScopeNode not or: [ selectedPath isEmpty ] ])
+	selectedItem := scopesTree selectedItem.
+	(selectedItem isNil or: [
+		 selectedItem isScopeNode not or: [ selectedPath isEmpty ] ])
 		ifTrue: [
 			self inform: 'select a scope'.
 			^ self ].
 
 	(selectedPath at: 1) == 1 ifTrue: [
-		self inform: 'You can''t edit this scope'.
+		self inform: 'You can''t edit the full environment scope'.
 		^ self ].
-
-	self newScopeEditor open
+	
+	presenter := self newScopeEditor open.
+	presenter withWindowDo: [ :w | w title: 'Editing scope "', selectedItem value label,'"' ]
 ]
 
 { #category : 'menu commands' }
@@ -282,15 +297,16 @@ ScopesPresenter >> notWithScope: anItem [
 
 { #category : 'menu commands' }
 ScopesPresenter >> openOnCalypso: aClassOrPackage [
+
+	| scope |
 	
-	self inform: 'Implementation is pending'.
-	"
-	| browser |
-	browser := ClyFullBrowserMorph 
-		openOnClass: self class 
-		selector: self class selectors anyOne.
-	"
-		
+	scope := ClyScopedSystemEnvironment currentImage copy
+		         scope: aClassOrPackage;
+		         yourself.
+
+	ClyFullBrowserMorph
+		           openOn: (ClyNavigationEnvironment defaultOver: scope)
+		           withState: [  ]
 ]
 
 { #category : 'operations' }
@@ -304,6 +320,7 @@ ScopesPresenter >> performOperation: aSymbol with: anItem [
 	| anEnvironment newScope newName |
 	anEnvironment := self selectAnotherScopeWhitout: anItem.
 	anEnvironment ifNil: [ ^ self ].
+
 	newScope := anItem perform: aSymbol with: anEnvironment.
 	newName := anItem label , aSymbol , anEnvironment label.
 	newScope label: (model nameWithIndex: newName).
@@ -395,7 +412,8 @@ ScopesPresenter >> scopesManagerClass [
 ScopesPresenter >> selectAnotherScopeWhitout: anItem [
 
 	| anotherScope list |
-	list := model scopes select: [ :each | each value ~= anItem value ].
+	list := {model defaultScope} asOrderedCollection.
+	list addAll: (model scopes select: [ :each | each value ~= anItem value ]).
 
 	anotherScope := self application newSelect
 		                display: [ :each | each label ];
@@ -420,10 +438,23 @@ ScopesPresenter >> toolbarButtons [
 
 	| buttons |
 	buttons := OrderedCollection new.
-	buttons add: (self newToolbarButton
+	
+	buttons add: (self newToolbarPopoverButton
 			 icon: (self iconNamed: #add);
 			 help: 'Add a new scope';
-			 action: [ self createNewScope ];
+			 content: [
+				 self newToolbar
+					 addItem: (self newToolbarButton
+							  help: 'Add a new scope from classes and packages';
+							  label: 'Classes and packages';
+							  action: [ self createNewScope ];
+							  yourself)";
+					 addItem: (self newToolbarButton
+							  help: 'Add a new scope from class hierarchies';
+							  label: 'Class hierarchy';
+							  action: [ self createNewScope ];
+							  yourself)";
+					 yourself ];
 			 yourself).
 
 	buttons add: (buttonEdit := self newToolbarButton

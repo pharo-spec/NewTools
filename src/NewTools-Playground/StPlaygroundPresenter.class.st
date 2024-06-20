@@ -97,11 +97,11 @@ StPlaygroundPresenter class >> menuCommandOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #Playground)
 		parent: #InputOutput;
-		action: [ Smalltalk tools openWorkspace ];
+		action: [ Smalltalk tools workspace open ];
 		order: 1;
-		keyText: 'o, w';
+		keyText: 'o, p';
 		help: 'A window used as a scratchpad area where fragments of Pharo code can be entered, stored, edited, and evaluated.';
-		icon: (self iconNamed: #workspace)
+		iconName: #workspace
 ]
 
 { #category : 'instance creation' }
@@ -138,11 +138,10 @@ StPlaygroundPresenter class >> registerToolsOn: registry [
 
 { #category : 'settings' }
 StPlaygroundPresenter class >> settingsOn: aBuilder [
-<systemsettings>
+	<systemsettings>
 
-(aBuilder setting: #cacheDirectory)
+	(aBuilder setting: #cacheDirectory)
 		parent: #pharoSystem;
-		default: true;
 		type: #Directory;
 		default:  self defaultCacheDirectory;
 		target: StPlaygroundPresenter;
