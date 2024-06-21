@@ -53,7 +53,8 @@ Class {
 		'fileReferenceTable',
 		'configButton',
 		'pathBreadcrumbPresenter',
-		'newFolderButton'
+		'newFolderButton',
+		'showPreview'
 	],
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
@@ -160,19 +161,34 @@ StFileNavigationSystemPresenter >> defaultFolder: aFileReference [
 { #category : 'layout' }
 StFileNavigationSystemPresenter >> defaultLayout [
 
+	| filesLayout |
+	filesLayout := self showPreview
+		               ifTrue: [
+			               SpPanedLayout newTopToBottom
+				               add: self topPaneLayout;
+				               add: notebookPreviewer;
+				               yourself ]
+		               ifFalse: [
+			               SpBoxLayout newTopToBottom
+				               add: self topPaneLayout;
+				               yourself ].
 	^ SpBoxLayout newTopToBottom
-		add: self navigationLayout expand: false;
-		add: (SpPanedLayout newTopToBottom
-				add: self topPaneLayout;
-				add: notebookPreviewer;
-				yourself);
-		yourself
+		  add: self navigationLayout expand: false;
+		  add: filesLayout;
+		  yourself
 ]
 
 { #category : 'defaults' }
 StFileNavigationSystemPresenter >> defaultPreviewer [
 
 	^ StFileBrowserAdaptiveContentPreviewer new
+]
+
+{ #category : 'layout' }
+StFileNavigationSystemPresenter >> defaultShowPreview [
+	"The default value is managed by the global file browser settings"
+
+	^ StFileBrowserSettings showPreview
 ]
 
 { #category : 'layout' }
@@ -430,6 +446,21 @@ StFileNavigationSystemPresenter >> shouldReparent [
 	"Since a removal was requested from the navigation table, is not necessary to move to the parent directory"
 
 	^ false
+]
+
+{ #category : 'layout' }
+StFileNavigationSystemPresenter >> showPreview [
+	"Answer <true> if receiver should display a preview presenter"
+	
+	^ showPreview
+		ifNil: [ showPreview := self defaultShowPreview ]
+]
+
+{ #category : 'layout' }
+StFileNavigationSystemPresenter >> showPreview: aBoolean [
+	"Set the enabled preview to aBoolean"
+	
+	showPreview := aBoolean
 ]
 
 { #category : 'layout' }
