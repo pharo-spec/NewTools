@@ -21,24 +21,14 @@ StRewriterDemoRules class >> defaultRule [
 
 { #category : 'api' }
 StRewriterDemoRules class >> demoRules [
-
-	^ {
-		  self simplifyToIfNilIfNotNilRule.
-		  self replaceAssertToAssertEmptyRule.
-		  self simpliflyConditionalToIsEmptyRule.
-		  self removeEqualsInAssertRule.
-		  self replaceDenyDenyEmptyRule.
-		  self replaceCharacterTabAsStringToStringTabRule.
-		  self simpliflyToIfEmptyIfNotEmptyRule.
-		  self removeIfNilRule.
-		  self replaceSelectToRejectRule.
-		  self removeAssignmentWithoutEffectRule.
-		  self replaceCollectFlattenToFlatCollectRule }
+ 
+	^ (Pragma allNamed: #rewriterRule) collect: [ :prg | prg method valueWithReceiver: nil]
 ]
 
 { #category : 'rules' }
 StRewriterDemoRules class >> removeAssignmentWithoutEffectRule [
-
+	<rewriterRule>
+	
 	| lhs rhs ruleName |
 	lhs := '`var := `var'.
 	rhs := ''.
@@ -48,7 +38,8 @@ StRewriterDemoRules class >> removeAssignmentWithoutEffectRule [
 
 { #category : 'rules' }
 StRewriterDemoRules class >> removeEqualsInAssertRule [
-
+	<rewriterRule>
+	
 	| lhs rhs ruleName |
 	lhs := '`@receiver assert: `@arg equals: true'.
 	rhs := '`@receiver assert: `@arg'.
@@ -58,7 +49,8 @@ StRewriterDemoRules class >> removeEqualsInAssertRule [
 
 { #category : 'rules' }
 StRewriterDemoRules class >> removeIfNilRule [
-
+	<rewriterRule>
+	
 	| lhs rhs ruleName |
 	lhs := '`@receiver ifNil: [ nil ] ifNotNil: `@arg'.
 	rhs := '`@receiver ifNotNil: `@arg'.
@@ -68,7 +60,8 @@ StRewriterDemoRules class >> removeIfNilRule [
 
 { #category : 'rules' }
 StRewriterDemoRules class >> replaceAssertToAssertEmptyRule [
-
+	<rewriterRule>
+	
 	| lhs rhs ruleName |
 	lhs := '`@receiver assert: `@arg isEmpty'.
 	rhs := '`@receiver assertEmpty: `@arg'.
@@ -78,7 +71,8 @@ StRewriterDemoRules class >> replaceAssertToAssertEmptyRule [
 
 { #category : 'rules' }
 StRewriterDemoRules class >> replaceCharacterTabAsStringToStringTabRule [
-
+	<rewriterRule>
+	
 	| lhs rhs ruleName |
 	lhs := 'Character tab asString'.
 	rhs := 'String tab'.
@@ -88,7 +82,8 @@ StRewriterDemoRules class >> replaceCharacterTabAsStringToStringTabRule [
 
 { #category : 'rules' }
 StRewriterDemoRules class >> replaceCollectFlattenToFlatCollectRule [
-
+	<rewriterRule>
+	
 	| lhs rhs ruleName |
 	lhs := '(`@receiver collect: `@arg) flattened'.
 	rhs := '`@receiver flatCollect: `@arg'.
@@ -98,7 +93,8 @@ StRewriterDemoRules class >> replaceCollectFlattenToFlatCollectRule [
 
 { #category : 'rules' }
 StRewriterDemoRules class >> replaceDenyDenyEmptyRule [
-
+	<rewriterRule>
+	
 	| lhs rhs ruleName |
 	lhs := '`@receiver select: [ :`each |
 	| `@temps |
@@ -111,7 +107,8 @@ StRewriterDemoRules class >> replaceDenyDenyEmptyRule [
 
 { #category : 'rules' }
 StRewriterDemoRules class >> replaceSelectToRejectRule [
-
+	<rewriterRule>
+	
 	| lhs rhs ruleName |
 	lhs := '`@receiver select: [ :`each |
 	| `@temps |
@@ -127,6 +124,7 @@ StRewriterDemoRules class >> replaceSelectToRejectRule [
 
 { #category : 'rules' }
 StRewriterDemoRules class >> simpliflyConditionalToIsEmptyRule [
+	<rewriterRule>
 
 	| lhs rhs ruleName |
 	lhs := '`@receiver ifEmpty: [ true ] ifNotEmpty: [ false ]'.
@@ -137,6 +135,7 @@ StRewriterDemoRules class >> simpliflyConditionalToIsEmptyRule [
 
 { #category : 'rules' }
 StRewriterDemoRules class >> simpliflyToIfEmptyIfNotEmptyRule [
+	<rewriterRule>
 
 	| lhs rhs ruleName |
 	lhs := '`@receiver isEmpty ifTrue: `@arg ifFalse: `@arg2'.
