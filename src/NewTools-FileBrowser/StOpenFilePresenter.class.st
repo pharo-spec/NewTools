@@ -113,3 +113,23 @@ StOpenFilePresenter class >> examplePreviewer [
 StOpenFilePresenter >> initialTitle [
 	^ 'Select File To Open'
 ]
+
+{ #category : 'testing' }
+StOpenFilePresenter >> isMultipleSelection [
+	"Answer <true> if the receiver was set to enable multiple selections"
+	
+	^ self fileNavigationSystem isMultipleSelection 
+]
+
+{ #category : 'menu - accessing' }
+StOpenFilePresenter >> selectedEntries [
+	"Answer a <Collection> of user's selected <FileReference>s "
+
+	| entries |
+	((entries := self fileNavigationSystem selectedEntries) 
+		anySatisfy: [ : entry | (entry exists not and: [ entry isDirectory ]) ])
+			ifTrue: [ 
+				self inform: 'Only files could be selected (no directories)'.
+				^ nil ].
+	^ entries
+]

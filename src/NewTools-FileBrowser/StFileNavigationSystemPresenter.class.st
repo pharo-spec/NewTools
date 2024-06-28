@@ -98,6 +98,12 @@ StFileNavigationSystemPresenter class >> example [
 	^ presenter
 ]
 
+{ #category : 'api' }
+StFileNavigationSystemPresenter >> beMultipleSelection [
+	
+	self fileReferenceTable beMultipleSelection 
+]
+
 { #category : 'api - customization' }
 StFileNavigationSystemPresenter >> columns: aCollectionOfColumns [
 	| tmpColumn |
@@ -335,6 +341,12 @@ StFileNavigationSystemPresenter >> initializePresenters [
 	self initializeHistoryIteratorWith: self currentDirectory
 ]
 
+{ #category : 'testing' }
+StFileNavigationSystemPresenter >> isMultipleSelection [
+
+	^ fileReferenceTable isMultipleSelection
+]
+
 { #category : 'accessing' }
 StFileNavigationSystemPresenter >> nameText [
 	^ nameText
@@ -430,6 +442,13 @@ StFileNavigationSystemPresenter >> previousBeforeButtonAction [
 { #category : 'accessing' }
 StFileNavigationSystemPresenter >> previousButton [
 	^ previousButton
+]
+
+{ #category : 'menu - accessing' }
+StFileNavigationSystemPresenter >> selectedEntries [
+	"Answer a <Collection> of <FileReference> representing user's selections"
+	
+	^ self fileReferenceTable selectedItems
 ]
 
 { #category : 'accessing' }
