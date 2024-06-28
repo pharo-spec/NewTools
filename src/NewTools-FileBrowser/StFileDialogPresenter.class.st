@@ -316,12 +316,10 @@ StFileDialogPresenter >> open [
 	^ self openDialog
 ]
 
-{ #category : 'opening' }
+{ #category : 'showing' }
 StFileDialogPresenter >> openModal [
 
 	super openModal cancelled ifTrue: [ ^ nil ].
-	self isMultipleSelection 
-		ifFalse: [ ^ self selectedEntry ].
 	^ self selectedEntries
 ]
 

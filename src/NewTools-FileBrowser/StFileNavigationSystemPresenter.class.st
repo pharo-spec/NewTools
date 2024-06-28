@@ -194,6 +194,7 @@ StFileNavigationSystemPresenter >> fileNameLayout [
 
 { #category : 'accessing' }
 StFileNavigationSystemPresenter >> fileReferenceTable [
+
 	^ fileReferenceTable
 ]
 
@@ -429,6 +430,13 @@ StFileNavigationSystemPresenter >> previousButton [
 ]
 
 { #category : 'menu - accessing' }
+StFileNavigationSystemPresenter >> selectEntries: aCollection [
+	"Set a <Collection> of <FileReference> representing user's selections"
+	
+	self fileReferenceTable selectItems: aCollection
+]
+
+{ #category : 'menu - accessing' }
 StFileNavigationSystemPresenter >> selectedEntries [
 	"Answer a <Collection> of <FileReference> representing user's selections"
 	
@@ -465,6 +473,7 @@ StFileNavigationSystemPresenter >> updateFileReferenceTable [
 	"Update the receiver's contents according to the current directory and apply configured filters"
 
 	| items |
+	
 	items := (filtersDropList selectedItem ifNil: [ filter ]) applyOn: self currentDirectoryChildren.
 	StFileBrowserSettings showHiddenFiles ifFalse: [ items := items reject: [ :file | file isHidden ] ].
 	fileReferenceTable items: items

@@ -56,6 +56,26 @@ StOpenFilePresenterTest >> testSelectFile [
 ]
 
 { #category : 'tests' }
+StOpenFilePresenterTest >> testSelectedEntriesMultipleSelection [
+
+	window := dialog openDialog.
+	dialog selectFiles: { root / 'sth.ext' . root / 'patate.png' }.
+	self 
+		assertCollection: dialog selectedEntries 
+		hasSameElements: { root / 'sth.ext' . root / 'patate.png' }.
+
+]
+
+{ #category : 'tests' }
+StOpenFilePresenterTest >> testSelectedEntriesSingleSelection [
+
+	window := dialog openDialog.
+	dialog selectFile: root / 'sth.ext'.
+	self assertCollection: dialog selectedEntries hasSameElements: { root / 'sth.ext' }.
+
+]
+
+{ #category : 'tests' }
 StOpenFilePresenterTest >> testSetTitle [
 
 	dialog title: 'test set title'.
