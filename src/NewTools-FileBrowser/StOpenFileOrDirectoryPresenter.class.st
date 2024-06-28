@@ -10,6 +10,13 @@ Class {
 	#tag : 'UI'
 }
 
+{ #category : 'api' }
+StOpenFileOrDirectoryPresenter >> beMultipleSelection [
+	"Allow the user to select multiple files or directories in open dialogs"
+
+	self fileNavigationSystem beMultipleSelection
+]
+
 { #category : 'accessing - ui' }
 StOpenFileOrDirectoryPresenter >> confirmLabel [
 

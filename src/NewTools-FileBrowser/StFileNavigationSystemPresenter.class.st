@@ -53,7 +53,8 @@ Class {
 		'fileReferenceTable',
 		'configButton',
 		'pathBreadcrumbPresenter',
-		'newFolderButton'
+		'newFolderButton',
+		'showPreview'
 	],
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
@@ -95,6 +96,12 @@ StFileNavigationSystemPresenter class >> example [
 	presenter open.
 	presenter inspect.
 	^ presenter
+]
+
+{ #category : 'api' }
+StFileNavigationSystemPresenter >> beMultipleSelection [
+	
+	self fileReferenceTable beMultipleSelection 
 ]
 
 { #category : 'api - customization' }
@@ -160,19 +167,34 @@ StFileNavigationSystemPresenter >> defaultFolder: aFileReference [
 { #category : 'layout' }
 StFileNavigationSystemPresenter >> defaultLayout [
 
+	| filesLayout |
+	filesLayout := self showPreview
+		               ifTrue: [
+			               SpPanedLayout newTopToBottom
+				               add: self topPaneLayout;
+				               add: notebookPreviewer;
+				               yourself ]
+		               ifFalse: [
+			               SpBoxLayout newTopToBottom
+				               add: self topPaneLayout;
+				               yourself ].
 	^ SpBoxLayout newTopToBottom
-		add: self navigationLayout expand: false;
-		add: (SpPanedLayout newTopToBottom
-				add: self topPaneLayout;
-				add: notebookPreviewer;
-				yourself);
-		yourself
+		  add: self navigationLayout expand: false;
+		  add: filesLayout;
+		  yourself
 ]
 
 { #category : 'defaults' }
 StFileNavigationSystemPresenter >> defaultPreviewer [
 
 	^ StFileBrowserAdaptiveContentPreviewer new
+]
+
+{ #category : 'layout' }
+StFileNavigationSystemPresenter >> defaultShowPreview [
+	"The default value is managed by the global file browser settings"
+
+	^ StFileBrowserSettings showPreview
 ]
 
 { #category : 'layout' }
@@ -319,6 +341,12 @@ StFileNavigationSystemPresenter >> initializePresenters [
 	self initializeHistoryIteratorWith: self currentDirectory
 ]
 
+{ #category : 'testing' }
+StFileNavigationSystemPresenter >> isMultipleSelection [
+
+	^ fileReferenceTable isMultipleSelection
+]
+
 { #category : 'accessing' }
 StFileNavigationSystemPresenter >> nameText [
 	^ nameText
@@ -416,6 +444,13 @@ StFileNavigationSystemPresenter >> previousButton [
 	^ previousButton
 ]
 
+{ #category : 'menu - accessing' }
+StFileNavigationSystemPresenter >> selectedEntries [
+	"Answer a <Collection> of <FileReference> representing user's selections"
+	
+	^ self fileReferenceTable selectedItems
+]
+
 { #category : 'accessing' }
 StFileNavigationSystemPresenter >> selectedEntry [
 
@@ -430,6 +465,21 @@ StFileNavigationSystemPresenter >> shouldReparent [
 	"Since a removal was requested from the navigation table, is not necessary to move to the parent directory"
 
 	^ false
+]
+
+{ #category : 'layout' }
+StFileNavigationSystemPresenter >> showPreview [
+	"Answer <true> if receiver should display a preview presenter"
+	
+	^ showPreview
+		ifNil: [ showPreview := self defaultShowPreview ]
+]
+
+{ #category : 'layout' }
+StFileNavigationSystemPresenter >> showPreview: aBoolean [
+	"Set the enabled preview to aBoolean"
+	
+	showPreview := aBoolean
 ]
 
 { #category : 'layout' }

@@ -320,7 +320,9 @@ StFileDialogPresenter >> open [
 StFileDialogPresenter >> openModal [
 
 	super openModal cancelled ifTrue: [ ^ nil ].
-	^ self selectedEntry
+	self isMultipleSelection 
+		ifFalse: [ ^ self selectedEntry ].
+	^ self selectedEntries
 ]
 
 { #category : 'api - customization' }

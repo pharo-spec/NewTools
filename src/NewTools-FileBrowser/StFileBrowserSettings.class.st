@@ -12,6 +12,7 @@ Class {
 		'OpenOnLastDirectory',
 		'ShowAlwaysDefaultBookmarks',
 		'ShowHiddenFiles',
+		'ShowPreview',
 		'WindowsTerminalProgram'
 	],
 	#category : 'NewTools-FileBrowser-UI',
@@ -175,6 +176,33 @@ StFileBrowserSettings class >> showHiddenFilesOn: aBuilder [
 		label: 'Show hidden files and folders';
 		description: 'If enabled, shows the hidden files and folders in the file browser.';
 		target: self
+]
+
+{ #category : 'accessing' }
+StFileBrowserSettings class >> showPreview [
+
+	^ ShowPreview
+		ifNil: [ ShowPreview := true ]
+]
+
+{ #category : 'accessing' }
+StFileBrowserSettings class >> showPreview: aBoolean [
+	"Set if File Browsers should display a preview presenter"
+
+	 ShowPreview := aBoolean 
+]
+
+{ #category : 'settings' }
+StFileBrowserSettings class >> showPreviewOn: aBuilder [
+	<systemsettings>
+
+	(aBuilder setting: #showPreview)
+		parent: #fileBrowser;
+		default: true;
+		label: 'Enable preview';
+		description: 'File Browser will show a preview file presenter by default';
+		target: self
+
 ]
 
 { #category : 'settings' }
