@@ -11,14 +11,16 @@ Class {
 
 { #category : 'running' }
 StBreadcrumbPresenterTest >> setUp [
+
 	super setUp.
-	windowPathUI := StPathBreadcrumbPresenter 
-		owner: fileSystemPresenter 
-		on: fileSystemModel
+	windowPathUI := StPathBreadcrumbPresenter
+		                owner: fileSystemPresenter
+		                on: fileSystemModel
 ]
 
 { #category : 'running' }
 StBreadcrumbPresenterTest >> tearDown [
+
 	windowPathUI withWindowDo: [ :window | window close ].
 	super tearDown
 ]

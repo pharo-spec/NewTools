@@ -120,16 +120,3 @@ StOpenFilePresenter >> isMultipleSelection [
 	
 	^ self fileNavigationSystem isMultipleSelection 
 ]
-
-{ #category : 'menu - accessing' }
-StOpenFilePresenter >> selectedEntries [
-	"Answer a <Collection> of user's selected <FileReference>s "
-
-	| entries |
-	((entries := self fileNavigationSystem selectedEntries) 
-		anySatisfy: [ : entry | (entry exists not and: [ entry isDirectory ]) ])
-			ifTrue: [ 
-				self inform: 'Only files could be selected (no directories)'.
-				^ nil ].
-	^ entries
-]

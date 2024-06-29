@@ -135,6 +135,7 @@ StFileSystemPresenter >> expandPath: aFileReference [
 
 { #category : 'accessing' }
 StFileSystemPresenter >> fileNavigationSystem [
+
 	^ fileNavigationSystem
 ]
 
