@@ -17,7 +17,7 @@ StInspectorTransmissionNode class >> hostObject: anObject transmissionBlock: aFu
 
 	^ self new
 		  hostObject: anObject;
-		  transmissionBlock: aFullBlockClosure;
+		  transmits: aFullBlockClosure;
 		  yourself
 ]
 
