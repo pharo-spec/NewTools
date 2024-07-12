@@ -90,10 +90,7 @@ Class {
 		'stackAndCodeContainer'
 	],
 	#classVars : [
-		'EnableStackColoring',
-		'LastKnownExtent',
-		'LastKnownPosition',
-		'PreserveWindowPosition'
+		'EnableStackColoring'
 	],
 	#classInstVars : [
 		'layoutConfigurator'
@@ -183,20 +180,6 @@ StDebugger class >> defaultDebuggerRank [
 	^ 10
 ]
 
-{ #category : 'defaults' }
-StDebugger class >> defaultExtent [
-
-	^ 850 @ 650
-
-]
-
-{ #category : 'defaults' }
-StDebugger class >> defaultPosition [
-
-	^ 10 @ 10
-
-]
-
 { #category : 'accessing' }
 StDebugger class >> enableStackColoring [
 
@@ -226,39 +209,7 @@ StDebugger class >> hasAnyActivatedExtension: extensionsClasses [
 { #category : 'class initialization' }
 StDebugger class >> initialize [ 
 
-	EnableStackColoring := true.
-	LastKnownPosition := self defaultPosition.
-	LastKnownExtent := self defaultExtent.
-]
-
-{ #category : 'accessing' }
-StDebugger class >> lastKnownExtent [
-	"Answer a <Point> specifying the last window known extent in the screen"
-
-	^ LastKnownExtent
-		ifNil: [ LastKnownExtent := self defaultExtent ]
-]
-
-{ #category : 'accessing' }
-StDebugger class >> lastKnownExtent: aPoint [
-	"Set a <Point> as the last window known extent in the screen"
-
-	LastKnownExtent := aPoint
-]
-
-{ #category : 'accessing' }
-StDebugger class >> lastKnownPosition [
-	"Answer a <Point> specifying the last window known position in the screen"
-
-	^ LastKnownPosition
-		ifNil: [ LastKnownPosition := self defaultPosition ]
-]
-
-{ #category : 'accessing' }
-StDebugger class >> lastKnownPosition: aPoint [
-	"Set a <Point> as the last window known position in the screen"
-
-	LastKnownPosition := aPoint
+	EnableStackColoring := true
 ]
 
 { #category : 'accessing' }
@@ -280,32 +231,6 @@ StDebugger class >> openOn: aDebugSession withFullView: aBool andNotification: a
 	debugger := self on: aDebugSession.
 	debugger openWithFullView.
 	^ debugger
-]
-
-{ #category : 'accessing' }
-StDebugger class >> preserveWindowPosition [
-
-	^ PreserveWindowPosition
-		ifNil: [ PreserveWindowPosition := true ]
-]
-
-{ #category : 'accessing' }
-StDebugger class >> preserveWindowPosition: aBoolean [
-
-	PreserveWindowPosition := aBoolean
-]
-
-{ #category : 'accessing' }
-StDebugger class >> preserveWindowPositionOn: aBuilder [
-
-	<systemsettings>
-	
-	(aBuilder setting: #preserveWindowPosition)
-		label: 'Preserve window position';
-		target: self;
-		parent: #debugging;
-		default: true;
-		description: 'If enabled, the debugger will preserve the last known window position and it will open new debugger windows in that position'.
 ]
 
 { #category : 'settings' }
@@ -831,6 +756,12 @@ StDebugger >> initializePresenters [
 ]
 
 { #category : 'initialization' }
+StDebugger >> initializeSettings: aWindowPresenter [
+
+	StDebuggerSettings initializeSettings: aWindowPresenter
+]
+
+{ #category : 'initialization' }
 StDebugger >> initializeShortcuts: aWindowPresenter [
 
 	self flag: #DBG_TempSolvesSpecBug_RemoveWhenFixed.
@@ -893,13 +824,7 @@ StDebugger >> initializeWindow: aWindowPresenter [
 		initialPosition: self lastKnownPosition;
 		whenClosedDo: [ self clear ].
 		
-	self class preserveWindowPosition 
-		ifTrue: [ 
-			aWindowPresenter whenClosedDo: [ 
-				self class 
-					lastKnownPosition: aWindowPresenter window position;
-					lastKnownExtent: aWindowPresenter window extent ] ].
-
+	self initializeSettings: aWindowPresenter.
 	self initializeShortcuts: aWindowPresenter
 ]
 
