@@ -688,7 +688,7 @@ StDebugger >> implementMissingMethod [
 { #category : 'api' }
 StDebugger >> initialExtent [
 
-	^ self class defaultExtent 
+	^ self debuggerSettings defaultExtent 
 ]
 
 { #category : 'initialization' }
