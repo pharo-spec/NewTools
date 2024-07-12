@@ -63,12 +63,12 @@ StDebuggerSettings class >> initialize [
 { #category : 'initialization' }
 StDebuggerSettings class >> initializeSettings: aWindowPresenter [
 
-	self preserveWindowPosition 
-		ifTrue: [ 
-			aWindowPresenter whenClosedDo: [ 
-				self 
-					lastKnownPosition: aWindowPresenter window position;
-					lastKnownExtent: aWindowPresenter window extent ] ].
+	self preserveWindowPosition ifFalse: [ ^ self ].
+	aWindowPresenter window ifNil: [ ^ self ].
+	aWindowPresenter whenClosedDo: [
+		self
+			lastKnownPosition: aWindowPresenter window position;
+			lastKnownExtent: aWindowPresenter window extent ]
 ]
 
 { #category : 'accessing' }
