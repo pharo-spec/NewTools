@@ -61,7 +61,7 @@ StDebuggerSettings class >> initialize [
 ]
 
 { #category : 'initialization' }
-StDebuggerSettings class >> initializeSettings: aWindowPresenter [
+StDebuggerSettings class >> initializeWindow: aWindowPresenter [
 
 	self preserveWindowPosition ifFalse: [ ^ self ].
 	aWindowPresenter window ifNil: [ ^ self ].

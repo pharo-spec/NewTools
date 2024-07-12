@@ -233,6 +233,12 @@ StDebugger class >> openOn: aDebugSession withFullView: aBool andNotification: a
 	^ debugger
 ]
 
+{ #category : 'initialization' }
+StDebugger class >> settings [
+
+	^ StDebuggerSettings
+]
+
 { #category : 'settings' }
 StDebugger class >> stackColoringSettingOn: aBuilder [
 
@@ -498,12 +504,6 @@ StDebugger >> debuggerInspectorModelClass [
 	^ StDebuggerInspectorModel
 ]
 
-{ #category : 'initialization' }
-StDebugger >> debuggerSettings [
-
-	^ StDebuggerSettings
-]
-
 { #category : 'layout' }
 StDebugger >> defaultLayout [
 	^ SpPanedLayout newTopToBottom
@@ -688,7 +688,7 @@ StDebugger >> implementMissingMethod [
 { #category : 'api' }
 StDebugger >> initialExtent [
 
-	^ self debuggerSettings defaultExtent 
+	^ StDebuggerSettings defaultExtent 
 ]
 
 { #category : 'initialization' }
@@ -762,12 +762,6 @@ StDebugger >> initializePresenters [
 ]
 
 { #category : 'initialization' }
-StDebugger >> initializeSettings: aWindowPresenter [
-
-	self debuggerSettings initializeSettings: aWindowPresenter
-]
-
-{ #category : 'initialization' }
 StDebugger >> initializeShortcuts: aWindowPresenter [
 
 	self flag: #DBG_TempSolvesSpecBug_RemoveWhenFixed.
@@ -823,14 +817,18 @@ StDebugger >> initializeToolbar [
 { #category : 'initialization' }
 StDebugger >> initializeWindow: aWindowPresenter [
 
+	| settings |
+	
+	settings := self class settings.
+
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
 		title: self debuggerActionModel statusStringForContext;
-		initialExtent: self debuggerSettings lastKnownExtent;
-		initialPosition: self debuggerSettings lastKnownPosition;
+		initialExtent: settings lastKnownExtent;
+		initialPosition: settings lastKnownPosition;
 		whenClosedDo: [ self clear ].
-		
-	self initializeSettings: aWindowPresenter.
+
+	settings initializeWindow: aWindowPresenter.
 	self initializeShortcuts: aWindowPresenter
 ]
 
@@ -1093,7 +1091,7 @@ StDebugger >> session: aSession [
 		ifNotNil: [ debuggerActionModel session: aSession ]
 ]
 
-{ #category : 'initialization' }
+{ #category : 'accessing - model' }
 StDebugger >> setModelBeforeInitialization: aSession [
 
 	self session: aSession
