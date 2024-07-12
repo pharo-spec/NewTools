@@ -498,6 +498,12 @@ StDebugger >> debuggerInspectorModelClass [
 	^ StDebuggerInspectorModel
 ]
 
+{ #category : 'initialization' }
+StDebugger >> debuggerSettings [
+
+	^ StDebuggerSettings
+]
+
 { #category : 'layout' }
 StDebugger >> defaultLayout [
 	^ SpPanedLayout newTopToBottom
@@ -758,7 +764,7 @@ StDebugger >> initializePresenters [
 { #category : 'initialization' }
 StDebugger >> initializeSettings: aWindowPresenter [
 
-	StDebuggerSettings initializeSettings: aWindowPresenter
+	self debuggerSettings initializeSettings: aWindowPresenter
 ]
 
 { #category : 'initialization' }
@@ -820,8 +826,8 @@ StDebugger >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
 		title: self debuggerActionModel statusStringForContext;
-		initialExtent: self lastKnownExtent;
-		initialPosition: self lastKnownPosition;
+		initialExtent: self debuggerSettings lastKnownExtent;
+		initialPosition: self debuggerSettings lastKnownPosition;
 		whenClosedDo: [ self clear ].
 		
 	self initializeSettings: aWindowPresenter.
@@ -881,18 +887,6 @@ StDebugger >> keybindsForFromContextMenu: aGroupElement [
 		].
 	
 	^ keybinds
-]
-
-{ #category : 'initialization' }
-StDebugger >> lastKnownExtent [
-
-	^ self class lastKnownExtent
-]
-
-{ #category : 'initialization' }
-StDebugger >> lastKnownPosition [
-
-	^ self class lastKnownPosition 
 ]
 
 { #category : 'instance creation' }
