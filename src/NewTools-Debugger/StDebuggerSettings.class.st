@@ -67,8 +67,8 @@ StDebuggerSettings class >> initializeWindow: aWindowPresenter [
 	self preserveWindowPositionAndExtent ifFalse: [ ^ self ].
 	aWindowPresenter whenClosedDo: [
 		self
-			lastKnownPosition: aWindowPresenter window position;
-			lastKnownExtent: aWindowPresenter window extent ]
+			lastKnownPosition: (aWindowPresenter window ifNotNil: [ : wnd | wnd position ]);
+			lastKnownExtent: (aWindowPresenter window ifNotNil: [ : wnd | wnd extent ]) ]
 ]
 
 { #category : 'accessing' }
