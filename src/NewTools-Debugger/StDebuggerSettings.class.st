@@ -32,7 +32,7 @@ Class {
 	#classVars : [
 		'LastKnownExtent',
 		'LastKnownPosition',
-		'PreserveWindowPosition'
+		'PreserveWindowPositionAndExtent'
 	],
 	#category : 'NewTools-Debugger-View',
 	#package : 'NewTools-Debugger',
@@ -61,15 +61,14 @@ StDebuggerSettings class >> initialize [
 ]
 
 { #category : 'initialization' }
-StDebuggerSettings class >> initializeWindow: aWindowPresenter on: aStDebugger [
+StDebuggerSettings class >> initializeWindow: aWindowPresenter [
 	"Set global window position and extent using window data in aStDebugger"
 
-	self preserveWindowPosition ifFalse: [ ^ self ].
+	self preserveWindowPositionAndExtent ifFalse: [ ^ self ].
 	aWindowPresenter whenClosedDo: [
 		self
 			lastKnownPosition: aWindowPresenter window position;
-			lastKnownExtent: aWindowPresenter window extent.
-		aStDebugger clear ]
+			lastKnownExtent: aWindowPresenter window extent ]
 ]
 
 { #category : 'accessing' }
@@ -103,26 +102,26 @@ StDebuggerSettings class >> lastKnownPosition: aPoint [
 ]
 
 { #category : 'accessing' }
-StDebuggerSettings class >> preserveWindowPosition [
+StDebuggerSettings class >> preserveWindowPositionAndExtent [
 
-	^ PreserveWindowPosition
-		ifNil: [ PreserveWindowPosition := true ]
+	^ PreserveWindowPositionAndExtent
+		ifNil: [ PreserveWindowPositionAndExtent := true ]
 ]
 
 { #category : 'accessing' }
-StDebuggerSettings class >> preserveWindowPosition: aBoolean [
+StDebuggerSettings class >> preserveWindowPositionAndExtent: aBoolean [
 
-	PreserveWindowPosition := aBoolean
+	PreserveWindowPositionAndExtent := aBoolean
 ]
 
 { #category : 'accessing' }
-StDebuggerSettings class >> preserveWindowPositionOn: aBuilder [
+StDebuggerSettings class >> preserveWindowPositionAndExtentOn: aBuilder [
 	<systemsettings>
 	
-	(aBuilder setting: #preserveWindowPosition)
-		label: 'Preserve window position';
+	(aBuilder setting: #preserveWindowPositionAndExtent)
+		label: 'Preserve window position and extent';
 		target: self;
 		parent: #debugging;
 		default: true;
-		description: 'If enabled, the debugger will preserve the last known window position and it will open new debugger windows in that position'.
+		description: 'If enabled, the debugger will preserve the last known window position and extent, and it will open new debugger windows in that configuration'.
 ]

@@ -821,9 +821,10 @@ StDebugger >> initializeWindow: aWindowPresenter [
 	aWindowPresenter
 		title: self debuggerActionModel statusStringForContext;
 		initialExtent: self settings lastKnownExtent;
-		initialPosition: self settings lastKnownPosition.
+		initialPosition: self settings lastKnownPosition;
+		whenClosedDo: [ self clear ].
 
-	self settings initializeWindow: aWindowPresenter on: self.
+	self settings initializeWindow: aWindowPresenter.
 	self initializeShortcuts: aWindowPresenter
 ]
 
