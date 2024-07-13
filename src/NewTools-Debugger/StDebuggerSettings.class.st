@@ -61,14 +61,15 @@ StDebuggerSettings class >> initialize [
 ]
 
 { #category : 'initialization' }
-StDebuggerSettings class >> initializeWindow: aWindowPresenter [
+StDebuggerSettings class >> initializeWindow: aWindowPresenter on: aStDebugger [
+	"Set global window position and extent using window data in aStDebugger"
 
 	self preserveWindowPosition ifFalse: [ ^ self ].
-	aWindowPresenter window ifNil: [ ^ self ].
 	aWindowPresenter whenClosedDo: [
 		self
 			lastKnownPosition: aWindowPresenter window position;
-			lastKnownExtent: aWindowPresenter window extent ]
+			lastKnownExtent: aWindowPresenter window extent.
+		aStDebugger clear ]
 ]
 
 { #category : 'accessing' }
@@ -116,7 +117,6 @@ StDebuggerSettings class >> preserveWindowPosition: aBoolean [
 
 { #category : 'accessing' }
 StDebuggerSettings class >> preserveWindowPositionOn: aBuilder [
-
 	<systemsettings>
 	
 	(aBuilder setting: #preserveWindowPosition)

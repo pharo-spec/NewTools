@@ -233,7 +233,7 @@ StDebugger class >> openOn: aDebugSession withFullView: aBool andNotification: a
 	^ debugger
 ]
 
-{ #category : 'initialization' }
+{ #category : 'accessing' }
 StDebugger class >> settings [
 
 	^ StDebuggerSettings
@@ -688,7 +688,7 @@ StDebugger >> implementMissingMethod [
 { #category : 'api' }
 StDebugger >> initialExtent [
 
-	^ StDebuggerSettings defaultExtent 
+	^ self settings defaultExtent 
 ]
 
 { #category : 'initialization' }
@@ -817,18 +817,13 @@ StDebugger >> initializeToolbar [
 { #category : 'initialization' }
 StDebugger >> initializeWindow: aWindowPresenter [
 
-	| settings |
-	
-	settings := self class settings.
-
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
 		title: self debuggerActionModel statusStringForContext;
-		initialExtent: settings lastKnownExtent;
-		initialPosition: settings lastKnownPosition;
-		whenClosedDo: [ self clear ].
+		initialExtent: self settings lastKnownExtent;
+		initialPosition: self settings lastKnownPosition.
 
-	settings initializeWindow: aWindowPresenter.
+	self settings initializeWindow: aWindowPresenter on: self.
 	self initializeShortcuts: aWindowPresenter
 ]
 
@@ -1091,7 +1086,7 @@ StDebugger >> session: aSession [
 		ifNotNil: [ debuggerActionModel session: aSession ]
 ]
 
-{ #category : 'accessing - model' }
+{ #category : 'initialization' }
 StDebugger >> setModelBeforeInitialization: aSession [
 
 	self session: aSession
@@ -1104,6 +1099,12 @@ StDebugger >> setStackAndCodeContainer [
 		                         ifEmpty: [ self stackAndCodeLayout ]
 		                         ifNotEmpty: [
 		                         self stackAndCodeWithExtensionsLayout ]
+]
+
+{ #category : 'api' }
+StDebugger >> settings [
+
+	^ self class settings 
 ]
 
 { #category : 'stack' }

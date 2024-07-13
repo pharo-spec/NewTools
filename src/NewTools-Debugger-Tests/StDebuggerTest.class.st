@@ -92,6 +92,12 @@ StDebuggerTest >> setUp [
 	oldMethodToSourceDictionary := Dictionary new
 ]
 
+{ #category : 'tests - context inspector' }
+StDebuggerTest >> settings [
+
+	^ StDebugger settings
+]
+
 { #category : 'accessing' }
 StDebuggerTest >> subscriptionsForStDebuggerExtensionActivationToggle [
 
@@ -103,7 +109,7 @@ StDebuggerTest >> subscriptionsForStDebuggerExtensionActivationToggle [
 { #category : 'running' }
 StDebuggerTest >> tearDown [
 
-	session clear.
+	session ifNotNil: [ session clear ].
 
 	"In tests, should we use `debugger` when we need a fully initialized debugger and `dbg` when we just need a debugger created with #basicNew? Still, isn't it weird to clear the session only for a fully initialized debugger but not for a debugger created with #basicNew? Both have a session. Maybe this implies that `dbg`  should only use the instance variable `session` and nothing else. These specifications should be written somewhere, in the doc of the class maybe."
 	debugger ifNotNil: [
@@ -121,10 +127,11 @@ StDebuggerTest >> tearDown [
 
 	StDebuggerActionModel shouldFilterStack: shouldFilterStack.
 	StTestDebuggerProvider removeSelector: #foobar.
-	oldMethodToSourceDictionary associationsDo: [ :assoc |
- 		assoc key methodClass
- 			compile: assoc value
- 			classified: assoc key protocolName ].
+	oldMethodToSourceDictionary ifNotNil: [ 
+		oldMethodToSourceDictionary	associationsDo: [ :assoc |
+ 			assoc key methodClass
+ 				compile: assoc value
+ 				classified: assoc key protocolName ] ].
 	super tearDown
 ]
 
@@ -750,6 +757,31 @@ StDebuggerTest >> testNewDebuggerContextFor [
 	self assert: debuggerContext class identicalTo: debugger class debuggerContextClass.
 	self assert: debuggerContext exception equals: session exception.
 	self assert: debuggerContext context identicalTo: ctx
+]
+
+{ #category : 'tests - context inspector' }
+StDebuggerTest >> testPreserveLastKnownPosition [
+
+	| newDbgPosition lastUserPosition |
+
+	dbg := (self debuggerOn: session) open.
+	"First we save the user position (test running should not modify user changes)"
+	lastUserPosition := dbg window window position.
+	newDbgPosition := 500 @ 100.
+	"Programmatically Change the position of debugger window"
+	self settings lastKnownPosition: newDbgPosition.
+	"New position is saved when the window is closed"
+	dbg close.
+	self tearDown.
+
+	"Now we open the debugger again"
+	self setUp.
+	dbg := (self debuggerOn: session) open.
+	"Check the debugger window is set to the new position"
+	self assert: dbg window window position equals: newDbgPosition.
+	"Set back the last position regardless of this test"
+	self settings lastKnownPosition: lastUserPosition.
+
 ]
 
 { #category : 'tests - stack table' }
