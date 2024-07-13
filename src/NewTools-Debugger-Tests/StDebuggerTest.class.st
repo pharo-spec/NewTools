@@ -760,6 +760,31 @@ StDebuggerTest >> testNewDebuggerContextFor [
 ]
 
 { #category : 'tests - context inspector' }
+StDebuggerTest >> testPreserveLastKnownExtent [
+
+	| newDbgExtent lastUserExtent |
+
+	dbg := (self debuggerOn: session) open.
+	"First we save the user extent (test running should not modify user changes)"
+	lastUserExtent := dbg window window extent.
+	newDbgExtent := 100 @ 500.
+	"Programmatically change the extent of debugger window"
+	self settings lastKnownExtent: newDbgExtent.
+	"New extent is saved when the window is closed"
+	dbg close.
+	self tearDown.
+
+	"Now we open the debugger again"
+	self setUp.
+	dbg := (self debuggerOn: session) open.
+	"Check the debugger window is set to the new extent"
+	self assert: dbg window window extent equals: newDbgExtent.
+	"Set back the last extent regardless of this test"
+	self settings lastKnownExtent: lastUserExtent.
+
+]
+
+{ #category : 'tests - context inspector' }
 StDebuggerTest >> testPreserveLastKnownPosition [
 
 	| newDbgPosition lastUserPosition |
@@ -768,7 +793,7 @@ StDebuggerTest >> testPreserveLastKnownPosition [
 	"First we save the user position (test running should not modify user changes)"
 	lastUserPosition := dbg window window position.
 	newDbgPosition := 500 @ 100.
-	"Programmatically Change the position of debugger window"
+	"Programmatically change the position of debugger window"
 	self settings lastKnownPosition: newDbgPosition.
 	"New position is saved when the window is closed"
 	dbg close.
