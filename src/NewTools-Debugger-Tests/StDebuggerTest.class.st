@@ -760,6 +760,46 @@ StDebuggerTest >> testNewDebuggerContextFor [
 ]
 
 { #category : 'tests - context inspector' }
+StDebuggerTest >> testOpenDebuggerWithLastKnownExtent [
+
+	| lastUserPreservation |
+
+	lastUserPreservation := self settings preserveWindowPositionAndExtent.
+
+	self settings preserveWindowPositionAndExtent: true.
+	dbg := (self debuggerOn: session) open.
+	"Check window is opened with the saved extent"
+	self 
+		assert: self settings lastKnownExtent 
+		equals: dbg window window extent.
+
+	dbg close.
+
+	"Restore the original preservation setting"		
+	self settings preserveWindowPositionAndExtent: lastUserPreservation.
+]
+
+{ #category : 'tests - context inspector' }
+StDebuggerTest >> testOpenDebuggerWithLastKnownPosition [
+
+	| lastUserPreservation |
+
+	lastUserPreservation := self settings preserveWindowPositionAndExtent.
+
+	self settings preserveWindowPositionAndExtent: true.
+	dbg := (self debuggerOn: session) open.
+	"Check window is opened with the saved position"
+	self 
+		assert: self settings lastKnownPosition
+		equals: dbg window window position.
+
+	dbg close.
+
+	"Restore the original preservation setting"		
+	self settings preserveWindowPositionAndExtent: lastUserPreservation.
+]
+
+{ #category : 'tests - context inspector' }
 StDebuggerTest >> testPreserveLastKnownExtentIsFalse [
 
 	| newDbgExtent lastUserPreservation |
