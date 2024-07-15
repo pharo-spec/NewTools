@@ -8,7 +8,7 @@ String >> inspectionEncoding: specBuilder [
 	shorterString := self truncateWithElipsisTo: 1000.
 	^ (StSimpleInspectorBuilder on: specBuilder)
 			key: #UTF8 value: shorterString utf8Encoded printString;
-			key: #Latin1 value: (shorterString encodeWith: #Latin1) printString;
+			key: #Latin1 value: ([shorterString encodeWith: #Latin1] on: Error do: [:ex | nil]) printString;
 			table
 ]
 
