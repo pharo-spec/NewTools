@@ -12,45 +12,46 @@ You can open me whit:
 "
 Class {
 	#name : 'StRewriteCritiqueChangesBrowserPresenter',
-	#superclass : 'RewriteRuleChangesBrowser',
+	#superclass : 'StPresenter',
 	#instVars : [
-		'changeUnifiedOption',
-		'changeSplitOption'
+		'#changes',
+		'#selectedChanges',
+		'#changeUnifiedOption',
+		'#changeTree => ObservableSlot',
+		'#diffView => ObservableSlot',
+		'#changeSplitOption',
+		'#buttonCancel => ObservableSlot',
+		'#buttonOk => ObservableSlot'
 	],
 	#category : 'NewTools-CodeCritiques-Transform ',
 	#package : 'NewTools-CodeCritiques',
 	#tag : 'Transform '
 }
 
-{ #category : 'specs' }
-StRewriteCritiqueChangesBrowserPresenter class >> defaultSpec [
+{ #category : 'accessing' }
+StRewriteCritiqueChangesBrowserPresenter class >> changes: aCollection [
+
+	^ self new
+		changes: aCollection;
+		yourself
+]
+
+{ #category : 'layout' }
+StRewriteCritiqueChangesBrowserPresenter class >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
-		  add: (SpPanedLayout newTopToBottom
-				   add: #changeTree;
-				   add: (SpBoxLayout newTopToBottom
-						    add: (SpBoxLayout newLeftToRight
-								     add: #changeSplitOption width: 90;
-								     add: #changeUnifiedOption width:90;
-								     yourself)
-						    height: 25;
-						    add: #diffView;
-						    yourself);
-				   yourself);
-		  add: (SpBoxLayout newLeftToRight
-				   addLast: #buttonCancel
-				   expand: false
-				   fill: true
-				   padding: 2;
-				   addLast: #buttonOk
-				   expand: false
-				   fill: false
-				   padding: 0;
-				   yourself)
-		  expand: false
-		  fill: false
-		  padding: 2;
-		  yourself
+		add: (SpPanedLayout newTopToBottom
+			add: #changeTree;
+			add: #diffView;
+		yourself);
+		add: (SpBoxLayout newLeftToRight
+			addLast: #buttonCancel expand: false fill: true padding: 2;
+			addLast: #buttonOk expand: false fill: false padding: 0;
+			yourself)
+		expand: false
+		fill: false
+		padding: 2;
+		yourself
 ]
 
 { #category : 'specs' }
@@ -58,6 +59,17 @@ StRewriteCritiqueChangesBrowserPresenter class >> open [
 
 	<example>
 	^ self new open
+]
+
+{ #category : 'visiting' }
+StRewriteCritiqueChangesBrowserPresenter >> accept [
+	self okToChange
+		ifFalse: [ ^ self ].
+	self selectedChanges isEmptyOrNil ifTrue: [ ^self ].
+	[ RBRefactoryChangeManager instance performChanges: self selectedChanges ] asJob
+		title: 'Refactoring';
+		run.
+	self window delete
 ]
 
 { #category : 'accessing' }
@@ -70,11 +82,94 @@ StRewriteCritiqueChangesBrowserPresenter >> applyChangesInSplit [
 
 { #category : 'accessing' }
 StRewriteCritiqueChangesBrowserPresenter >> applyChangesInUnified [
-changeTree selectedItem ifNotNil: [ 
-	diffView := SpMorphPresenter new morph: (StUnifiedDiffChangesMorph
-			             from: changeTree selectedItem oldVersionTextToDisplay
-			             to: changeTree selectedItem textToDisplay).
-	self update].
+
+	changeTree selectedItem ifNotNil: [
+		diffView := self instantiate: SpDiffUnifiedPresenter.
+		self buildDiffFor: changeTree selectedItem.
+		self update ]
+]
+
+{ #category : 'private' }
+StRewriteCritiqueChangesBrowserPresenter >> buildDiffFor: aChange [
+
+	^ aChange
+		ifNil: [ '' ]
+		ifNotNil: [
+			diffView
+				contextClass: aChange changeClass;
+				leftText: aChange oldVersionTextToDisplay;
+				rightText: aChange textToDisplay ]
+]
+
+{ #category : 'accessing' }
+StRewriteCritiqueChangesBrowserPresenter >> buttonCancel [
+
+	^ buttonCancel
+]
+
+{ #category : 'accessing' }
+StRewriteCritiqueChangesBrowserPresenter >> buttonCancel: anObject [
+
+	buttonCancel := anObject
+]
+
+{ #category : 'accessing' }
+StRewriteCritiqueChangesBrowserPresenter >> buttonOk [
+
+	^ buttonOk
+]
+
+{ #category : 'accessing' }
+StRewriteCritiqueChangesBrowserPresenter >> buttonOk: anObject [
+
+	buttonOk := anObject
+]
+
+{ #category : 'actions' }
+StRewriteCritiqueChangesBrowserPresenter >> cancel [
+	self window delete
+]
+
+{ #category : 'accessing' }
+StRewriteCritiqueChangesBrowserPresenter >> changeSplitOption [
+
+	^ changeSplitOption
+]
+
+{ #category : 'accessing' }
+StRewriteCritiqueChangesBrowserPresenter >> changeSplitOption: anObject [
+
+	changeSplitOption := anObject
+]
+
+{ #category : 'accessing' }
+StRewriteCritiqueChangesBrowserPresenter >> changeTree [
+
+	^ changeTree
+]
+
+{ #category : 'accessing' }
+StRewriteCritiqueChangesBrowserPresenter >> changeTree: anObject [
+
+	changeTree := anObject
+]
+
+{ #category : 'accessing' }
+StRewriteCritiqueChangesBrowserPresenter >> changeUnifiedOption [
+
+	^ changeUnifiedOption
+]
+
+{ #category : 'accessing' }
+StRewriteCritiqueChangesBrowserPresenter >> changeUnifiedOption: anObject [
+
+	changeUnifiedOption := anObject
+]
+
+{ #category : 'accessing' }
+StRewriteCritiqueChangesBrowserPresenter >> changes [
+
+	^ changes
 ]
 
 { #category : 'accessing' }
@@ -88,22 +183,72 @@ StRewriteCritiqueChangesBrowserPresenter >> changes: anObject [
 StRewriteCritiqueChangesBrowserPresenter >> connectPresenters [
 
 	super connectPresenters.
-		changeUnifiedOption whenActivatedDo: [ self applyChangesInUnified ].
-		changeSplitOption whenActivatedDo: [ self applyChangesInSplit ].
+	changeTree children: [ :aChange |
+		(aChange isNotNil and: [ aChange changesSize > 1 ])
+			ifTrue: [ aChange changes ]
+			ifFalse: [ #(  ) ] ].
+	buttonCancel action: [ self cancel ].
+	buttonOk action: [ self accept ].
+	changeUnifiedOption whenActivatedDo: [ self applyChangesInUnified ].
+	changeSplitOption whenActivatedDo: [ self applyChangesInSplit ].
 	changeUnifiedOption state: false.
-	changeSplitOption state: true.
-		
+	changeSplitOption state: true
+]
+
+{ #category : 'accessing' }
+StRewriteCritiqueChangesBrowserPresenter >> diffView [
+
+	^ diffView
+]
+
+{ #category : 'accessing' }
+StRewriteCritiqueChangesBrowserPresenter >> diffView: anObject [
+
+	diffView := anObject
+]
+
+{ #category : 'initialization' }
+StRewriteCritiqueChangesBrowserPresenter >> initialize [
+	changes := #().
+	super initialize
 ]
 
 { #category : 'initialization' }
 StRewriteCritiqueChangesBrowserPresenter >> initializePresenters [
 
 	super initializePresenters.
+	changeTree := self newTreeTable.
+	changeTree
+		addColumn: (SpCompositeTableColumn new
+				 title: 'Changes';
+				 addColumn: ((SpCheckBoxTableColumn title: ' ' evaluated: [ :change | selectedChanges includes: change ])
+						  onActivation: [ :change | selectedChanges add: change ];
+						  onDeactivation: [ :change | selectedChanges remove: change ];
+						  width: 20;
+						  yourself);
+				 addColumn: (SpStringTableColumn evaluated: #nameToDisplay));
+		whenActivatedDo: [ :selection | self buildDiffFor: selection selectedItem ].
+	diffView := self newDiff.
+	diffView showOptions: true.
+	buttonCancel := self newButton label: 'Cancel'.
+	buttonOk := self newButton label: 'Ok'.
+	self focusOrder
+		add: buttonCancel;
+		add: buttonOk.
 	changeUnifiedOption := self newUnifiedRadioButton.
 	changeSplitOption := self newSplitRadioButton.
 	changeSplitOption associatedRadioButtons: { changeUnifiedOption }.
-	changeTree whenSelectionChangedDo: [ :selection | 
-		self buildDiffFor: selection selectedItem ]
+	changeTree whenSelectionChangedDo: [ :selection | self buildDiffFor: selection selectedItem ]
+]
+
+{ #category : 'initialization' }
+StRewriteCritiqueChangesBrowserPresenter >> initializeWindow: aWindowPresenter [
+	| fontWidth rowHeight |
+	fontWidth := (StandardFonts defaultFont widthOfString: 'M').
+	rowHeight := self class inputTextHeight.
+	aWindowPresenter
+		title: self windowTitle;
+		initialExtent: (70@20) * (fontWidth @ rowHeight)
 ]
 
 { #category : 'accessing' }
@@ -120,10 +265,33 @@ StRewriteCritiqueChangesBrowserPresenter >> newUnifiedRadioButton [
 		state: false.
 ]
 
+{ #category : 'accessing' }
+StRewriteCritiqueChangesBrowserPresenter >> selectedChanges [
+
+	^ selectedChanges
+]
+
+{ #category : 'accessing' }
+StRewriteCritiqueChangesBrowserPresenter >> selectedChanges: anObject [
+
+	selectedChanges := anObject
+]
+
 { #category : 'update' }
-StRewriteCritiqueChangesBrowserPresenter >> updateChanges [ 
-	super updateChanges.
-	changeTree roots
-        ifNotEmpty: [ changeTree selectItem: changeTree roots first ].
-	
+StRewriteCritiqueChangesBrowserPresenter >> updateChanges [
+
+	| aCompositeChange |
+	aCompositeChange := RBRefactoryChangeManager changeFactory compositeRefactoryChange.
+	changes do: [ :each | aCompositeChange addChange: each ].
+
+	"Later we could filter the shown changes depending on the selected scope"
+
+	changeTree roots: (aCompositeChange whatToDisplayIn: self).
+	changeTree roots ifNotEmpty: [ changeTree selectItem: changeTree roots first ]
+]
+
+{ #category : 'initialization' }
+StRewriteCritiqueChangesBrowserPresenter >> windowTitle [
+
+	^ 'Changes Browser'
 ]
