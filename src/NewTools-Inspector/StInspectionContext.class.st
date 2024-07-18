@@ -191,8 +191,6 @@ StInspectionContext >> newInspectionView [
 StInspectionContext >> newPresenterBuilder [
 
 	^ SpPresenterBuilder new
-		application: StPharoApplication current;
-		yourself
 ]
 
 { #category : 'accessing' }
