@@ -203,7 +203,7 @@ StSpotter class >> registerToolsOn: registry [
 StSpotter class >> reset [
 	
 	spotter ifNotNil: [ 
-		spotter window close.
+		spotter withWindowDo: [ :window | window close ].
 		spotter := nil ]
 ]
 
