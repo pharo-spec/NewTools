@@ -29,6 +29,8 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-MethodBrowsers' with: [ spec requires: #( 'NewTools-SpTextPresenterDecorators' ) ];
 			package: 'NewTools-MethodBrowsers-Tests' with: [ spec requires: #( 'NewTools-MethodBrowsers' ) ];
 			package: 'NewTools-KeymapBrowser';
+			"Calypso - This will contains part of Calypso that we are migrating"
+			package: 'NewTools-Calypso'  with: [  spec requires: #('NewTools-Core') ];
 			"inspector"
 			package: 'NewTools-Inspector' with: [ spec requires: #( 'NewTools-Inspector-Extensions' ) ];
 			package: 'NewTools-Inspector-Extensions' with: [ spec requires: #( 'NewTools-Core' ) ];
@@ -109,6 +111,7 @@ BaselineOfNewTools >> baseline: spec [
 
 		spec
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Core-Tests' 'NewTools-Morphic' );
+			group: 'Calypso' with: #('NewTools-Calypso');
 			group: 'Playground' with: #( 'Core' 'NewTools-Playground' 'NewTools-Playground-Tests' );
 			group: 'Inspector' with: #( 'Core' 'NewTools-Inspector' 'NewTools-Inspector-Tests' );
 			group: 'Debugger' with: #( 
@@ -178,6 +181,7 @@ BaselineOfNewTools >> baseline: spec [
 						'NewTools-SettingsBrowser-Tests');
 
 			group: 'default' with: #( 
+						Calypso
 						'Playground' 
 						'Inspector' 
 						'CritiqueBrowser' 
