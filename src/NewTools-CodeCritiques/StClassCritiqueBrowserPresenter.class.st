@@ -19,15 +19,6 @@ Class {
 	#tag : 'Base'
 }
 
-{ #category : 'menu' }
-StClassCritiqueBrowserPresenter class >> openOnCurrentWorkingConfiguration [
-
-	<script>
-	CBCritiqueWorkingConfiguration exists
-		ifTrue: [ StResetWindowPresenter new open ]
-		ifFalse: [ StClassCritiqueRuleSelectorPresenter open ]
-]
-
 { #category : 'private' }
 StClassCritiqueBrowserPresenter >> applyRules [
 
