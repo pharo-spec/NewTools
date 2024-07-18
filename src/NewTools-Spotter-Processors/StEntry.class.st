@@ -113,7 +113,7 @@ StEntry >> printOn: aStream [
 { #category : 'accessing' }
 StEntry >> spotterPreview [
 
-	^ (content spotterPreview: (SpPresenterBuilder newApplication: StPharoApplication current))
+	^ (content spotterPreview: SpPresenterBuilder new)
 		addStyle: 'stSpotterPreview';
 		yourself
 ]
