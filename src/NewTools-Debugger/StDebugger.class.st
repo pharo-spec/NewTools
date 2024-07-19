@@ -101,6 +101,23 @@ Class {
 }
 
 { #category : 'commands' }
+StDebugger class >> buildBreakpointExtentionCommandsGroupWith: stDebuggerInstance forRoot: rootCommandGroup [
+
+	<extensionCommands>
+	| commands codeGroup |
+	commands := { StBreakOnStackCommand } collect: [ :class |
+		            class forSpecContext: stDebuggerInstance ].
+
+
+	codeGroup := rootCommandGroup
+	             / StDebuggerCodeCommandTreeBuilder groupName
+	             /
+	             StDebuggerCodeCommandTreeBuilder new
+		             codeDebugCommandsGroupName.
+	commands do: [ :c | codeGroup register: c ]
+]
+
+{ #category : 'commands' }
 StDebugger class >> buildCommandsGroupWith: stDebuggerInstance forRoot: rootCommandGroup [
 
 	StDebuggerStackCommandTreeBuilder
@@ -289,6 +306,14 @@ StDebugger >> addExtension: aDebuggerExtensionClass [
 
 	extensionToolsNotebook addPage:
 		(self instantiateExtensionToolsPage: aDebuggerExtensionClass)
+]
+
+{ #category : 'actions' }
+StDebugger >> breakOnStack [
+
+	self debuggerActionModel
+		breakOnStackAtSelection: self code selectionInterval
+		inContext: self currentContext
 ]
 
 { #category : 'commands - support' }
