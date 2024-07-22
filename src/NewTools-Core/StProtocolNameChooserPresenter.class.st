@@ -65,10 +65,10 @@ StProtocolNameChooserPresenter class >> requestProtocolNameConfiguring: aBlock [
 
 	protocolName := presenter protocolName.
 
-	protocolName isEmptyOrNil ifTrue: [ CmdCommandAborted signal ].
+	protocolName isEmptyOrNil ifTrue: [ CmCommandAborted signal ].
 	(protocolName beginsWith: '*') ifTrue: [
 		self inform: 'Star is forbidden for protocol name since this is used for method extensions.'.
-		^ CmdCommandAborted signal ].
+		^ CmCommandAborted signal ].
 	^ protocolName
 ]
 
