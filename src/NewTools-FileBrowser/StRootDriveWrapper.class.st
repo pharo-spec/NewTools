@@ -21,7 +21,9 @@ StRootDriveWrapper >> directories [
 
 	^ [ (fileReference basename , '\') asFileReference directories ]
 		  on: FileSystemError
-		  do: [ #(  ) ]
+		  do: [
+			  self inform: 'Missing permissions on ' , fileReference basename.
+			  #(  ) ]
 ]
 
 { #category : 'testing' }
