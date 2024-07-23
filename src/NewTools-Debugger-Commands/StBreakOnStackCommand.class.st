@@ -17,14 +17,14 @@ StBreakOnStackCommand class >> defaultDescription [
 { #category : 'initialization' }
 StBreakOnStackCommand class >> defaultIconName [
 
-	^ #breakOnStack
+	^ #smallDebug
 ]
 
 { #category : 'default' }
 StBreakOnStackCommand class >> defaultName [
 
 	<toolbarDebugCommand: 50>
-	^ 'Break on stack'
+	^ 'Break'
 ]
 
 { #category : 'initialization' }
