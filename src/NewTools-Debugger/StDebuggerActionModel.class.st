@@ -64,7 +64,6 @@ StDebuggerActionModel >> breakOnStackAtSelection: anInterval inContext: aContext
 	astNode := currentMethod ast bestNodeFor: anInterval.
 	DebugPointManager installNew: BreakDebugPoint on: astNode.
 	newMethod := aContext methodClass >> aContext selector.
-	self assert: currentMethod ~= newMethod.
 	allContextsForCurrentMethod := self interruptedProcess
 		                               findContextsForMethod: currentMethod.
 	allContextsForCurrentMethod do: [ :ctx | ctx method: newMethod ].
