@@ -250,6 +250,12 @@ StDebugger class >> openOn: aDebugSession withFullView: aBool andNotification: a
 	^ debugger
 ]
 
+{ #category : 'accessing' }
+StDebugger class >> settings [
+
+	^ StDebuggerSettings
+]
+
 { #category : 'settings' }
 StDebugger class >> stackColoringSettingOn: aBuilder [
 
@@ -707,7 +713,7 @@ StDebugger >> implementMissingMethod [
 { #category : 'api' }
 StDebugger >> initialExtent [
 
-	^ 850 @ 650
+	^ self settings defaultExtent 
 ]
 
 { #category : 'initialization' }
@@ -839,9 +845,12 @@ StDebugger >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
 		title: self debuggerActionModel statusStringForContext;
-		initialExtent: self initialExtent;
+		initialExtent: self settings lastKnownExtent;
+		initialPosition: self settings lastKnownPosition;
+		windowIcon: (self iconNamed: #smallDebug);
 		whenClosedDo: [ self clear ].
 
+	self settings initializeWindow: aWindowPresenter.
 	self initializeShortcuts: aWindowPresenter
 ]
 
@@ -1117,6 +1126,12 @@ StDebugger >> setStackAndCodeContainer [
 		                         ifEmpty: [ self stackAndCodeLayout ]
 		                         ifNotEmpty: [
 		                         self stackAndCodeWithExtensionsLayout ]
+]
+
+{ #category : 'api' }
+StDebugger >> settings [
+
+	^ self class settings 
 ]
 
 { #category : 'stack' }
