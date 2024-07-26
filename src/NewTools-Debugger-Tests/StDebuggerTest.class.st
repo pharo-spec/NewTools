@@ -118,7 +118,7 @@ StDebuggerTest >> subscriptionsForStDebuggerExtensionActivationToggle [
 { #category : 'running' }
 StDebuggerTest >> tearDown [
 
-	session ifNotNil: [ session clear ].
+	session clear.
 
 	"In tests, should we use `debugger` when we need a fully initialized debugger and `dbg` when we just need a debugger created with #basicNew? Still, isn't it weird to clear the session only for a fully initialized debugger but not for a debugger created with #basicNew? Both have a session. Maybe this implies that `dbg`  should only use the instance variable `session` and nothing else. These specifications should be written somewhere, in the doc of the class maybe."
 	debugger ifNotNil: [
@@ -136,11 +136,10 @@ StDebuggerTest >> tearDown [
 
 	StDebuggerActionModel shouldFilterStack: shouldFilterStack.
 	StTestDebuggerProvider removeSelector: #foobar.
-	oldMethodToSourceDictionary ifNotNil: [ 
-		oldMethodToSourceDictionary	associationsDo: [ :assoc |
- 			assoc key methodClass
- 				compile: assoc value
- 				classified: assoc key protocolName ] ].
+	oldMethodToSourceDictionary	associationsDo: [ :assoc |
+		assoc key methodClass
+			compile: assoc value
+			classified: assoc key protocolName ].
 		
 	"Restore the original preservation setting"		
 	self settings preserveWindowPositionAndExtent: lastUserPreservation.
