@@ -83,6 +83,10 @@ BaselineOfNewTools >> baseline: spec [
 			"Fuel"
 			package: 'NewTools-Debugger-Fuel';
 			package: 'NewTools-Debugger-Fuel-Tests' with: [ spec requires: #( 'NewTools-Debugger-Fuel' ) ];
+			"Utils"
+			package: 'NewTools-Fuel';
+			package: 'NewTools-Fuel-Tests' with: [ spec requires: #( 'NewTools-Fuel' ) ];
+			
      		"Rewriter Tools"
 			package: 'NewTools-RewriterTools-Backend';
 			package: 'NewTools-RewriterTools' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
@@ -127,7 +131,10 @@ BaselineOfNewTools >> baseline: spec [
 				    	'NewTools-Debugger-Breakpoints-Tools'
 				    	'NewTools-Debugger-Tests' 
 					 	'NewTools-Debugger-Fuel'
-				    	'NewTools-Debugger-Fuel-Tests' 
+				    	'NewTools-Debugger-Fuel-Tests'
+					
+						'NewTools-Fuel'
+						'NewTools-Fuel-Test'
 					 	'NewTools-Utils'
 						'NewTools-DebugPointsBrowser'
 						'NewTools-ObjectCentricDebugPoints' );
@@ -176,6 +183,10 @@ BaselineOfNewTools >> baseline: spec [
 			group: 'SettingsBrowser' with: #(
 						'NewTools-SettingsBrowser'
 						'NewTools-SettingsBrowser-Tests');
+			"Utilities"
+			group: 'Utils' with: #(
+				'NewTools-Fuel'
+				'NewTools-Fuel-Tests');
 
 			group: 'default' with: #( 
 						'Playground' 
@@ -191,7 +202,8 @@ BaselineOfNewTools >> baseline: spec [
 						'FileBrowser'
 						'Finder'
 						'Profiler'
-						'SettingsBrowser' ) ]
+						'SettingsBrowser'
+						'Utils' ) ]
 ]
 
 { #category : 'external projects' }
