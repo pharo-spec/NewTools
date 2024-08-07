@@ -160,7 +160,7 @@ StProtocolNameChooserPresenter >> protocolsToSuggest [
 	^ suggestedProtocols
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 StProtocolNameChooserPresenter >> selectProtocolName [
 
 	protocolNameField selectAll
