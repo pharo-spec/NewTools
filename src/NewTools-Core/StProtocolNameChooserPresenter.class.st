@@ -61,6 +61,8 @@ StProtocolNameChooserPresenter class >> requestProtocolNameConfiguring: aBlock [
 
 	aBlock cull: presenter cull: dialog.
 
+	presenter selectProtocolName.
+
 	dialog open.
 
 	protocolName := presenter protocolName.
@@ -156,6 +158,12 @@ StProtocolNameChooserPresenter >> protocolsToSuggest [
 	suggestedProtocols := suggestedProtocols sortedCounts collect: [ :association | association value ].
 	suggestedProtocols := suggestedProtocols select: [ :protocolName | protocolName includesSubstring: self protocolName ].
 	^ suggestedProtocols
+]
+
+{ #category : 'accessing' }
+StProtocolNameChooserPresenter >> selectProtocolName [
+
+	protocolNameField selectAll
 ]
 
 { #category : 'initialization' }
