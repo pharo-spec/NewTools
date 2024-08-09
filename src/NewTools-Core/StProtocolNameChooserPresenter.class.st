@@ -19,9 +19,9 @@ Class {
 		'protocolNameField',
 		'concernedClass'
 	],
-	#category : 'NewTools-Core-ProtocolChooser',
+	#category : 'NewTools-Core-Calypso',
 	#package : 'NewTools-Core',
-	#tag : 'ProtocolChooser'
+	#tag : 'Calypso'
 }
 
 { #category : 'examples' }
