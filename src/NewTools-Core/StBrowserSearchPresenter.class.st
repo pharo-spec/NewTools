@@ -33,7 +33,7 @@ StBrowserSearchPresenter class >> open [
 StBrowserSearchPresenter class >> searchConfiguring: aBlock [
 
 	<script>
-	| presenter dialog item |
+	| presenter dialog |
 	dialog := (presenter := self new) asBlockedDialogWindow.
 
 	aBlock cull: presenter cull: dialog.
@@ -44,11 +44,9 @@ StBrowserSearchPresenter class >> searchConfiguring: aBlock [
 
 	dialog cancelled ifTrue: [ ^ CmCommandAborted signal ].
 
-	item := presenter selectedItem.
-
-	item ifNil: [ CmCommandAborted signal ].
-
-	^ item
+	^ presenter itemsList isMultipleSelection
+		  ifTrue: [ presenter selectedItems ifEmpty: [ CmCommandAborted signal ] ]
+		  ifFalse: [ presenter selectedItem ifNil: [ CmCommandAborted signal ] ]
 ]
 
 { #category : 'initialization' }
@@ -116,6 +114,12 @@ StBrowserSearchPresenter >> itemsList [
 ]
 
 { #category : 'api' }
+StBrowserSearchPresenter >> multipleSelection [
+
+	itemsList beMultipleSelection
+]
+
+{ #category : 'api' }
 StBrowserSearchPresenter >> searchValue: aString [
 
 	searchField text: aString
@@ -127,7 +131,7 @@ StBrowserSearchPresenter >> searchWithItem: anItem [
 	self searchValue: (itemsList display value: anItem)
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 StBrowserSearchPresenter >> selectSearchPattern [
 
 	searchField selectAll
@@ -137,6 +141,12 @@ StBrowserSearchPresenter >> selectSearchPattern [
 StBrowserSearchPresenter >> selectedItem [
 
 	^ itemsList selectedItem
+]
+
+{ #category : 'accessing' }
+StBrowserSearchPresenter >> selectedItems [
+
+	^ itemsList selectedItems
 ]
 
 { #category : 'updating' }
