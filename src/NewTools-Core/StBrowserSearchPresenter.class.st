@@ -1,3 +1,6 @@
+"
+I am a presenter that gets a list of elements and that allows one to select one (or multiple if the #multipleSelection option is enabled).
+"
 Class {
 	#name : 'StBrowserSearchPresenter',
 	#superclass : 'StPresenter',
@@ -20,6 +23,18 @@ StBrowserSearchPresenter class >> exampleConfiguringPresenter [
 		 presenter
 			 items: (self packageOrganizer packages sorted: #name ascending);
 			 searchWithItem: self class package ]) inspect
+]
+
+{ #category : 'examples' }
+StBrowserSearchPresenter class >> exampleConfiguringPresenterForMultipleSelection [
+
+	<example>
+	(self searchConfiguring: [ :presenter :dialog |
+		 dialog title: 'Choose package'.
+		 presenter
+			 items: (self packageOrganizer packages sorted: #name ascending);
+			 searchWithItem: self class package;
+			 multipleSelection ]) inspect
 ]
 
 { #category : 'instance creation' }
