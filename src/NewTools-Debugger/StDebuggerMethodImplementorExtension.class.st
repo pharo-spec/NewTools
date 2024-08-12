@@ -36,19 +36,15 @@ StDebuggerMethodImplementorExtension class >> showInDebugger [
 
 { #category : 'presenters' }
 StDebuggerMethodImplementorExtension >> addProtocols: protocols [
-	|sortedProtocols|
-	sortedProtocols := SortedCollection sortBlock: [ :p1 :p2|p1 name <= p2 name].
+	| sortedProtocols |
+
+	sortedProtocols := SortedCollection sortBlock: [ :p1 :p2 | p1 name <= p2 name ].
 	sortedProtocols addAll: protocols.
-	selectedProtocol emptyList.
-	sortedProtocols do: [ :p |
-		selectedProtocol
-			addItemLabeled: p
-			do: [  ]
-			icon: (p isExtensionProtocol
-					 ifTrue: [ self iconNamed: #protocolExtension ]
-					 ifFalse: [ self iconNamed: #protocolPublic ]) ].
+
+	selectedProtocol items: sortedProtocols.
 				
-	customProtocolCheckBox state ifTrue:[self selectMatchingProtocol]
+	customProtocolCheckBox state 
+		ifTrue:[ self selectMatchingProtocol ]
 ]
 
 { #category : 'debugger extension' }
@@ -87,8 +83,8 @@ StDebuggerMethodImplementorExtension >> defaultLayout [
 
 { #category : 'actions' }
 StDebuggerMethodImplementorExtension >> implementMethod [
-
 	| classOrTrait methodImplementor |
+	
 	classOrTrait := classesAndTraits selectedItem.
 	
 	methodImplementor := (StDebuggerMethodImplementor forSession: self debugger session).
@@ -101,54 +97,42 @@ StDebuggerMethodImplementorExtension >> implementMethod [
 
 { #category : 'initialization' }
 StDebuggerMethodImplementorExtension >> initializePresenters [
-
-	| receiverClass traits |
+	
 	description := self newLabel.
 	description label: exception description.
 
 	selectedProtocol := self newDropList.
-	selectedProtocol display: [ :p| p name ].	
+	selectedProtocol 
+		display: [ :item | item name ];
+		displayIcon: [ :aProtocol | (aProtocol isExtensionProtocol
+			ifTrue: [ self iconNamed: #protocolExtension ]
+			ifFalse: [ self iconNamed: #protocolPublic ]) ].	
 	
 	customProtocolTextInput := self newTextInput.
 	customProtocolTextInput removeEntryCompletion.
 	customProtocolTextInput placeholder: 'Add your protocol here'.
 	customProtocolTextInput beNotEditable.
-	customProtocolTextInput whenTextChangedDo: [self selectMatchingProtocol].
+	customProtocolTextInput whenTextChangedDo: [ self selectMatchingProtocol ].
 	
 	customProtocolCheckBox := self newCheckBox.
 	customProtocolCheckBox label: 'New protocol'.
-	customProtocolCheckBox whenActivatedDo: 
-		[ customProtocolTextInput beEditable. 
-		selectedProtocol enabled: false].
-	customProtocolCheckBox whenDeactivatedDo: 
-		[ customProtocolTextInput beNotEditable.
+	customProtocolCheckBox whenActivatedDo: [ 
+		customProtocolTextInput beEditable. 
+		selectedProtocol enabled: false ].
+	customProtocolCheckBox whenDeactivatedDo: [ 
+		customProtocolTextInput beNotEditable.
 		selectedProtocol enabled: true ].
-	
-	traits := OrderedCollection new.
-	receiverClass := exception receiver class.
+		
 	classesAndTraits := self newDropList.
-	receiverClass withAllSuperclassesDo: [ :c |
-		traits addAll: c allTraits.
-		classesAndTraits
-			addItemLabeled: c
-			do: [ self addProtocols: (((c withAllSuperclasses copyWithoutAll: {Object. ProtoObject})) flatCollect: #protocols) asSet   ]
-			icon: (self iconNamed: #class) ].
-	traits do: [ :t |
-		classesAndTraits
-			addItemLabeled: t
-			do: [ self addProtocols: (t protocols)    ]
-			icon: (self iconNamed: #trait) ].		
+	classesAndTraits 
+		display: [ :item | item label ];
+		displayIcon: [ :item | item icon ];
+		whenSelectedItemChangedDo: [ :item | item value ].
 			
 	createMethodButton := self newButton
 		icon: (self iconNamed: #add);
 		label: 'Add method';
 		action: [ self implementMethod ]
-
-	
-
-
-
-
 ]
 
 { #category : 'actions' }
@@ -177,4 +161,29 @@ StDebuggerMethodImplementorExtension >> setModelBeforeInitialization: aStDebugge
 
 	debugger := aStDebugger.
 	exception := debugger exception 
+]
+
+{ #category : 'initialization' }
+StDebuggerMethodImplementorExtension >> updatePresenter [
+	| traits receiverClass items |
+	
+	items := OrderedCollection new.
+	traits := OrderedCollection new.
+	receiverClass := exception receiver class.
+	
+	receiverClass withAllSuperclassesDo: [ :aClass |
+		traits addAll: aClass allTraits.
+		items add: (SpDropListItem new 
+			label: aClass name;
+			action: [ self addProtocols: (((aClass withAllSuperclasses copyWithoutAll: {Object. ProtoObject})) flatCollect: #protocols) asSet ];
+			icon: (self iconNamed: aClass systemIconName);
+			yourself) ].
+	traits do: [ :aTrait |
+		items add: (SpDropListItem new 
+			label: aTrait name;
+			action: [ self addProtocols: (aTrait protocols) ];
+			icon: (self iconNamed: aTrait systemIconName);
+			yourself) ].
+		
+	classesAndTraits items: items
 ]
