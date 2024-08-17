@@ -475,11 +475,9 @@ StFileNavigationSystemPresenter >> selectedEntries [
 
 { #category : 'accessing' }
 StFileNavigationSystemPresenter >> selectedEntry [
-
-	^ fileReferenceTable selection selectedItem ifNil: [ 
-		  self nameText text trimmed
-			  ifEmpty: [ self currentDirectory ]
-			  ifNotEmpty: [ :text | self currentDirectory / text ] ]
+	"Answer a <FileReference> representing the current selection. If there is no selection, answer the current directory"
+	^ fileReferenceTable selection selectedItem 
+		ifNil: [ 	self currentDirectory ]
 ]
 
 { #category : 'asserting' }
@@ -524,11 +522,15 @@ StFileNavigationSystemPresenter >> updateFileReferenceTable [
 	fileReferenceTable items: items
 ]
 
-{ #category : 'utilities' }
+{ #category : 'accessing - history' }
 StFileNavigationSystemPresenter >> updateWidgetWithFileReference: aFileReference [
 	"A file reference was selected in the receiver or one of its subpresenters, update the file reference table and current directory"
 
 	self currentDirectory: aFileReference.
 	self updateFileReferenceTable.
-	pathBreadcrumbPresenter currentDirectory: self currentDirectory
+	pathBreadcrumbPresenter 
+		currentDirectory: self currentDirectory;
+		updatePathSelection: aFileReference.
+
+
 ]
