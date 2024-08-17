@@ -232,7 +232,7 @@ StFileNavigationSystemPresenter >> filesListAction [
 		previewProcess ifNotNil: [ previewProcess isTerminated ifFalse: [ previewProcess terminate ] ].
 		previewProcess := [ notebookPreviewer pageContent: (self previewer previewOn: aFileReference) ]
 				forkAt: Processor userBackgroundPriority
-				named: 'File Browser preview loader' ]
+				named: self previewProcessName ]
 
 ]
 
@@ -324,6 +324,20 @@ StFileNavigationSystemPresenter >> initializePresenters [
 	pathBreadcrumbPresenter := self instantiate: StPathBreadcrumbPresenter on: self model.
 	nameText := self newTextInput.
 	filtersDropList := self newDropList.
+
+	self initializeToolbarButtons.	
+	self initializeNavigationPresenters.
+	self initializeFilesTable.
+	self initializeFiltersDropList.
+	self openOnLastDirectory 
+		ifTrue: [ self updateWidgetWithFileReference: self lastVisitedDirectory ]
+		ifFalse: [ self updateWidgetWithFileReference: self defaultDirectory ].
+	self initializeHistoryIteratorWith: self currentDirectory
+]
+
+{ #category : 'initialization' }
+StFileNavigationSystemPresenter >> initializeToolbarButtons [
+
 	newFolderButton := self newButton
 			addStyle: 'small';
 			help: 'New Folder';
@@ -334,14 +348,6 @@ StFileNavigationSystemPresenter >> initializePresenters [
 			help: 'Settings';
 			icon: (self iconNamed: #configuration);
 			yourself.
-	
-	self initializeNavigationPresenters.
-	self initializeFilesTable.
-	self initializeFiltersDropList.
-	self openOnLastDirectory 
-		ifTrue: [ self updateWidgetWithFileReference: self lastVisitedDirectory ]
-		ifFalse: [ self updateWidgetWithFileReference: self defaultDirectory ].
-	self initializeHistoryIteratorWith: self currentDirectory
 ]
 
 { #category : 'testing' }
@@ -422,6 +428,12 @@ StFileNavigationSystemPresenter >> openFolder: aFileReference [
 { #category : 'accessing' }
 StFileNavigationSystemPresenter >> pathBreadcrumbPresenter [
 	^ pathBreadcrumbPresenter
+]
+
+{ #category : 'actions' }
+StFileNavigationSystemPresenter >> previewProcessName [
+
+	^ 'File Browser preview loader'
 ]
 
 { #category : 'accessing' }
