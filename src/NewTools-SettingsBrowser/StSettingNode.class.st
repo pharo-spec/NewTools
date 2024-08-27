@@ -26,7 +26,9 @@ StSettingNode class >> with: aPragmaSetting [
 StSettingNode >> allChildren [
 	"Answer a <Collection> of the settings for which the receiver is set as parent"
 
-	^ self model childrenOf: self
+	^ self model 
+		ifNotNil: [ : m | m childrenOf: self ]
+		ifNil: [ OrderedCollection new ]
 ]
 
 { #category : 'converting' }
@@ -200,9 +202,8 @@ StSettingNode >> printOn: aStream [
 		nextPutAll: ' [';
 		nextPutAll: self parentName asString;
 		nextPutAll: '] '.
-	self declaration
-		ifNotNil: [ : i | aStream nextPutAll: i name asString  ].
-	aStream 
+	self declaration ifNotNil: [ : decl | decl printOn: aStream ].
+	aStream
 		nextPutAll: ' (';
 		nextPutAll: self allChildren size asString;
 		nextPutAll: ') '
