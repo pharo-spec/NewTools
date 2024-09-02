@@ -120,10 +120,10 @@ StFinderPragmaSearch >> searchPragmas: aSelectBlock in: anEnvironment [
 	| findings |
 	findings := Dictionary new.
 
-	anEnvironment classesAndTraitsDo: [ :class |
+	anEnvironment classesDo: [ :class |
 		class pragmasDo: [ :pragma |
 			(aSelectBlock value: pragma) ifTrue: [
-				(findings at: pragma selector ifAbsentPut: OrderedCollection new)
+				(findings at: pragma ifAbsentPut: OrderedCollection new)
 					add: pragma method ] ].
 		"Include Metaclasses too, since a lot of pragmas are only found there."
 		class class pragmasDo: [ :pragma |
