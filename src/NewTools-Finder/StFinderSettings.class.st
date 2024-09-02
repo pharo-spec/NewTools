@@ -44,7 +44,9 @@ StFinderSettings class >> evaluationTimeoutOn: aBuilder [
 		parent: #finder;
 		default: 500;
 		label: 'Evaluation timeout';
-		description: 'Maximum timeout delay for individual calls in Examples search. Expects an integer giving the number of miliseconds';
+		description: 'Maximum timeout delay for individual calls in Examples search. Expects an integer giving the number of miliseconds.
+		
+Setting a value of 0 will set the evaluation to run without timeout';
 		target: self
 ]
 

@@ -29,12 +29,11 @@ StFinderPragmaSearch >> buildResult: aDictionary [
 		| pragmaResult |
 		"Sadly Pragmas with the same selector are not unique keys in a Dictionary."
 		pragmaResult := results
-			                detect: [ :result |
-			                result content selector = pragma ]
+			                detect: [ :result | result content selector = pragma ]
 			                ifFound: [ :result |
 				                isNewResult := false.
 				                result ]
-			                ifNone: [ StFinderPragmaResult new content: pragma ].
+			                ifNone: [ StFinderPragmaResult new content: pragma; yourself ].
 
 		methods do: [ :method |
 			| classResult |
