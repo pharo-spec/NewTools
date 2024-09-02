@@ -16,6 +16,16 @@ StSpotterTest >> setUp [
 ]
 
 { #category : 'tests' }
+StSpotterTest >> testDefaultSearchStringIsSelectedWhenInsertsSelectionOptionEnabled [
+
+	| searchText |
+	spotter := StSpotter newWithText: 'Test'.
+	searchText := spotter searchText.
+	
+	self assert: searchText selectedText equals: 'Test'.
+]
+
+{ #category : 'tests' }
 StSpotterTest >> testOpenSpotterRefreshesPreviewOnce [
 
 	| count |
