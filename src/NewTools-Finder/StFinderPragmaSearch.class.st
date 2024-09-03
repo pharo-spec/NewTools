@@ -29,12 +29,11 @@ StFinderPragmaSearch >> buildResult: aDictionary [
 		| pragmaResult |
 		"Sadly Pragmas with the same selector are not unique keys in a Dictionary."
 		pragmaResult := results
-			                detect: [ :result |
-			                result content selector = pragma ]
+			                detect: [ :result | result content selector = pragma ]
 			                ifFound: [ :result |
 				                isNewResult := false.
 				                result ]
-			                ifNone: [ StFinderPragmaResult new content: pragma ].
+			                ifNone: [ StFinderPragmaResult new content: pragma; yourself ].
 
 		methods do: [ :method |
 			| classResult |
@@ -121,10 +120,10 @@ StFinderPragmaSearch >> searchPragmas: aSelectBlock in: anEnvironment [
 	| findings |
 	findings := Dictionary new.
 
-	anEnvironment classesAndTraitsDo: [ :class |
+	anEnvironment classesDo: [ :class |
 		class pragmasDo: [ :pragma |
 			(aSelectBlock value: pragma) ifTrue: [
-				(findings at: pragma selector ifAbsentPut: OrderedCollection new)
+				(findings at: pragma ifAbsentPut: OrderedCollection new)
 					add: pragma method ] ].
 		"Include Metaclasses too, since a lot of pragmas are only found there."
 		class class pragmasDo: [ :pragma |

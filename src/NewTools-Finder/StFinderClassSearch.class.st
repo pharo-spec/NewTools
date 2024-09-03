@@ -94,6 +94,6 @@ StFinderClassSearch >> searchBySubstring: aString in: anEnvironment [
 StFinderClassSearch >> searchClasses: aSelectBlock in: anEnvironment [
 
 	^ OrderedCollection streamContents: [ :stream |
-		  anEnvironment classesAndTraitsDo: [ :class |
+		  anEnvironment classesDo: [ :class |
 			  (aSelectBlock value: class) ifTrue: [ stream nextPut: class ] ] ]
 ]

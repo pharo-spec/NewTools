@@ -78,7 +78,10 @@ StFinderClassTest >> testSearchForRegexpStartWithCaseInsensitive [
 
 	self 
 		assertCollection: (results collect: [ : r | r content name ])
-		hasSameElements: #(#StFinderMockC #StFinderMocka #StFinderMockB).
+		hasSameElements: #(
+			#StFinderMockC #'StFinderMockC class' 
+			#StFinderMocka #'StFinderMocka class'
+			#StFinderMockB #'StFinderMockB class').
 ]
 
 { #category : 'tests' }
@@ -92,7 +95,7 @@ StFinderClassTest >> testSearchForRegexpStartWithCaseSensitive [
 	results := presenter resultTree roots.
 	self 
 		assert: results size
-		equals: 1.
+		equals: 2.
 ]
 
 { #category : 'tests' }
