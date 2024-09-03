@@ -531,6 +531,5 @@ StFileNavigationSystemPresenter >> updateWidgetWithFileReference: aFileReference
 	pathBreadcrumbPresenter 
 		currentDirectory: self currentDirectory;
 		updatePathSelection: aFileReference.
-
-
+	
 ]
