@@ -27,7 +27,7 @@ StRewriterRenrakuApplier class >> calculateChangesForClasses: methods transforma
 	| critiques changes |
 	critiques := self obtainCritiquesOf: methods forRules: rules.
 	"At this point you have a collection of critiques. Each critique can tell you which rule created it, and which target it criticizes.
-	As the critiques are 'smart', the type you have here (node replace critiques) can give you change compatible with the ChangesBrowser or RewriteChangesBrowser."
+	As the critiques are 'smart', the type you have here (node replace critiques) can give you change compatible with the StChangesBrowserPresenter or StRewriteCritiqueChangesBrowserPresenter."
 	changes := critiques collect: [: each | each change].
 	^ changes
 ]
