@@ -356,7 +356,7 @@ StFileDialogPresenter >> showDirectory: aFileReference [
 	self fileNavigationSystem currentDirectory: aFileReference
 ]
 
-{ #category : 'initialization' }
+{ #category : 'accessing - history' }
 StFileDialogPresenter >> updateWidgetWithFileReference: aFileReference [
 
 	self currentDirectory: aFileReference.

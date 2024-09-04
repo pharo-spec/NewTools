@@ -40,6 +40,11 @@ StDirectoryTreePresenter >> defaultOutputPort [
 ]
 
 { #category : 'accessing' }
+StDirectoryTreePresenter >> directoryTreePresenter [
+	^ directoryTreePresenter
+]
+
+{ #category : 'accessing' }
 StDirectoryTreePresenter >> expandPath: aFileLocator [
 	"Expand the receiver's tree to aFileLocator reference"
 
@@ -63,7 +68,11 @@ StDirectoryTreePresenter >> expandPath: aFileLocator [
 
 	directoryTreePresenter
 		selectPath: aPathForSpec
-		scrollToSelection: false
+		scrollToSelection: true.
+		
+	"The Morphic `configureScrolling` is executed **AFTER** the desired scroll was configured from the `StDirectoryTreePresenter`. Furthermore, the `configureScrolling` uses the `desiredVisibleRow` which is always set to 1. This statement updates the desired visible row to the last visible index of whatever the selection is pointing to."
+
+	directoryTreePresenter verticalAlignment desiredVisibleRow: directoryTreePresenter verticalAlignment lastVisibleRowIndex.
 ]
 
 { #category : 'initialization' }
