@@ -1,7 +1,7 @@
-Extension { #name : 'RBProgramNode' }
+Extension { #name : 'ASTProgramNode' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-RBProgramNode >> inspectionAST [
+ASTProgramNode >> inspectionAST [
 	<inspectorPresentationOrder: 35 title: 'AST'>
 
 	^ SpTreePresenter new 
@@ -20,7 +20,7 @@ RBProgramNode >> inspectionAST [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-RBProgramNode >> inspectionASTDump [
+ASTProgramNode >> inspectionASTDump [
 	<inspectorPresentationOrder: 50 title: 'AST Dump'>
 
 	^ SpCodePresenter new 
@@ -30,7 +30,7 @@ RBProgramNode >> inspectionASTDump [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-RBProgramNode >> inspectionSource [
+ASTProgramNode >> inspectionSource [
 	<inspectorPresentationOrder: 30 title: 'Method Source'>
 
 	^ SpCodePresenter new 
