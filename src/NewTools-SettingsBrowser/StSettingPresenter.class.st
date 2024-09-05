@@ -29,6 +29,12 @@ StSettingPresenter >> initializePresenters [
 	title := self newLabel label: settingNode label. 
 ]
 
+{ #category : 'accessing' }
+StSettingPresenter >> pagePresenter [
+
+	^ self owner pagePresenter
+]
+
 { #category : 'printing' }
 StSettingPresenter >> printOn: aStream [
 
@@ -60,8 +66,9 @@ StSettingPresenter >> setModelBeforeInitialization: aModel [
 
 { #category : 'accessing' }
 StSettingPresenter >> updateHelp: aString [ 
+	"Private - Callback to display the selected setting node help text in the receiver's setting browser"
 
-	self owner owner owner
+	self pagePresenter
 		updateSetting: settingNode declaration label 
 		helpText: aString.
 ]

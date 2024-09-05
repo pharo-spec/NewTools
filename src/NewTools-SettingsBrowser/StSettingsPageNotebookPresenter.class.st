@@ -32,6 +32,13 @@ StSettingsPageNotebookPresenter >> initializePresenters [
 ]
 
 { #category : 'accessing' }
+StSettingsPageNotebookPresenter >> pagePresenter [
+	"Answer the receiver's <StSettingsPagePresenter>"
+
+	^ self owner owner
+]
+
+{ #category : 'accessing' }
 StSettingsPageNotebookPresenter >> parentNode [
 
 	^ parentNode
