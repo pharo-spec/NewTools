@@ -29,6 +29,16 @@ StSettingPresenter >> initializePresenters [
 	title := self newLabel label: settingNode label. 
 ]
 
+{ #category : 'printing' }
+StSettingPresenter >> printOn: aStream [
+
+	super printOn: aStream.
+	aStream 
+		<< ' [';
+		<< self title asString;
+		<< ']'
+]
+
 { #category : 'initialization' }
 StSettingPresenter >> sectionTitle [
 
@@ -50,8 +60,8 @@ StSettingPresenter >> setModelBeforeInitialization: aModel [
 
 { #category : 'accessing' }
 StSettingPresenter >> updateHelp: aString [ 
-	
-	self owner 
+
+	self owner owner owner
 		updateSetting: settingNode declaration label 
 		helpText: aString.
 ]
