@@ -16,6 +16,25 @@ Class {
 	#tag : 'UI'
 }
 
+{ #category : 'adding' }
+StSettingsPagePresenter >> addHeaderForSettingsWithoutParent: aSpNotebookPage [
+
+	| generalSettingNode currentParent generalNodePresenter |
+	aSpNotebookPage activePresenter removeAll.
+
+	currentParent := aSpNotebookPage activePresenter parentNode.
+	generalSettingNode := StSettingNode with: PragmaSetting new.
+	generalSettingNode item name: 'General'.
+	generalSettingNode parentName: (currentParent ifNotNil: [ currentParent name ]).
+
+	generalNodePresenter := self
+		                        newSectionNodePresenterFrom: generalSettingNode
+		                        level: 2.
+	notebook selectedPage activePresenter
+		add: generalNodePresenter
+		expand: false
+]
+
 { #category : 'initialization' }
 StSettingsPagePresenter >> defaultInputPort [ 
 
@@ -45,12 +64,7 @@ StSettingsPagePresenter >> initializePresenters [
 
 	pageTitle := self newLabel.
 	notebook := self newNotebook
-		            whenSelectedPageChangedDo: [ :presenter |
-			            presenter ifNotNil: [
-					            presenter activePresenter removeAll.
-					            self
-						            updatePresenterTree: presenter activePresenter parentNode
-						            level: 2 ] ];
+		            whenSelectedPageChangedDo: [ :presenter | self updateSelectedPage: presenter ];
 		            yourself.
 	settingDocLabel := self newLabel
 		                   addStyle: 'settingDocTitle';
@@ -64,6 +78,18 @@ StSettingsPagePresenter >> newNodePresenterFrom: aSettingNode level: anInteger [
 	| nodePresenter |
 	nodePresenter := self
 		                 instantiate: aSettingNode presenterClass
+		                 on: aSettingNode.
+	nodePresenter sectionTitleStyle: 'sectionTitleL' , anInteger asString.
+	^ nodePresenter
+]
+
+{ #category : 'accessing' }
+StSettingsPagePresenter >> newSectionNodePresenterFrom: aSettingNode level: anInteger [
+	"Private - This is a temporary method until finding a proper solution for 'hand-wired' sections, since some settings declarations are not grouped"
+
+	| nodePresenter |
+	nodePresenter := self
+		                 instantiate: StSettingSectionPresenter
 		                 on: aSettingNode.
 	nodePresenter sectionTitleStyle: 'sectionTitleL' , anInteger asString.
 	^ nodePresenter
@@ -107,6 +133,16 @@ StSettingsPagePresenter >> updatePresenterTree: aStSettingNode level: anInteger 
 		nodePresenter := self newNodePresenterFrom: aSettingNode level: anInteger.
 		notebook selectedPage activePresenter add: nodePresenter expand: false.
 		self updatePresenterTree: aSettingNode level: anInteger + 1 ].
+]
+
+{ #category : 'initialization' }
+StSettingsPagePresenter >> updateSelectedPage: presenter [
+	
+	presenter ifNotNil: [ 
+		self addHeaderForSettingsWithoutParent: presenter.
+		self
+			updatePresenterTree: presenter activePresenter parentNode
+			level: 2 ]
 ]
 
 { #category : 'accessing' }
