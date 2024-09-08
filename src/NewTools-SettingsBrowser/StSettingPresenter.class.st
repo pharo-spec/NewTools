@@ -23,6 +23,13 @@ StSettingPresenter class >> with: aPragmaSetting [
 	^ self subclassResponsibility
 ]
 
+{ #category : 'testing' }
+StSettingPresenter >> hasChildren [
+	"Answer <true> if the receiver's node has any children"
+	
+	^ settingNode hasChildren
+]
+
 { #category : 'initialization' }
 StSettingPresenter >> initializePresenters [
 
