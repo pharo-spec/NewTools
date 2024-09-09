@@ -69,6 +69,15 @@ StSettingsCategoryItemPresenter >> node [
 	^ node
 ]
 
+{ #category : 'printing' }
+StSettingsCategoryItemPresenter >> printOn: aStream [
+
+	aStream 
+		<< 'Category {node: ';
+		<< node asString;
+		<< '}'
+]
+
 { #category : 'accessing - model' }
 StSettingsCategoryItemPresenter >> setModelBeforeInitialization: aSettingNode [
 
