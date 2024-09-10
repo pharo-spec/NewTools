@@ -58,6 +58,14 @@ StProfilerInputPresenter >> code: aString [
 	codeInput text: aString
 ]
 
+{ #category : 'accessing' }
+StProfilerInputPresenter >> enabled: aBoolean [
+
+	profilerDropList enabled: aBoolean.
+	profileItButton enabled: aBoolean.
+	codeInput editable: aBoolean
+]
+
 { #category : 'initialization' }
 StProfilerInputPresenter >> initializeActions [
 

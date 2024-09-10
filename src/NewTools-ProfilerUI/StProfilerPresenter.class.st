@@ -14,15 +14,6 @@ Class {
 	#tag : 'Presenters'
 }
 
-{ #category : 'layout' }
-StProfilerPresenter class >> defaultLayout [
-	^ SpPanedLayout newTopToBottom
-		  positionOfSlider: 20 percent;
-		  add: #inputPresenter;
-		  add: #resultsPresenter;
-		  yourself
-]
-
 { #category : 'examples' }
 StProfilerPresenter class >> menuCommandOn: aBuilder [
 	<worldMenu>
@@ -59,18 +50,46 @@ StProfilerPresenter class >> profileCode: aString [
 		  yourself
 ]
 
+{ #category : 'layout' }
+StProfilerPresenter >> defaultLayout [
+
+	^ SpPanedLayout newTopToBottom
+		  positionOfSlider: 20 percent;
+		  add: inputPresenter;
+		  add: resultsPresenter;
+		  yourself
+]
+
+{ #category : 'private - factory' }
+StProfilerPresenter >> disableInputPresenter [
+
+	inputPresenter enabled: false
+]
+
 { #category : 'constants' }
 StProfilerPresenter >> initExtent [
 	^ 800 @ 800
 ]
 
+{ #category : 'private - factory' }
+StProfilerPresenter >> initializeInputPresenter [
+
+	^ inputPresenter ifNil: [
+		  inputPresenter := StProfilerInputPresenter on: self viewModel ]
+]
+
 { #category : 'initialization' }
 StProfilerPresenter >> initializePresenters [
 
-	inputPresenter := self newInputPresenter.
-	resultsPresenter := self newResultsPresenter
-		                    enabled: false;
-		                    yourself
+	self initializeInputPresenter.
+	self initializeResultsPresenter
+]
+
+{ #category : 'private - factory' }
+StProfilerPresenter >> initializeResultsPresenter [
+
+	^ resultsPresenter ifNil: [
+		  resultsPresenter := StProfilerResultsPresenter on: self viewModel ]
 ]
 
 { #category : 'initialization' }
@@ -86,12 +105,6 @@ StProfilerPresenter >> initializeWindow: aWindowPresenter [
 StProfilerPresenter >> newInputPresenter [
 
 	^ StProfilerInputPresenter on: self viewModel
-]
-
-{ #category : 'private - factory' }
-StProfilerPresenter >> newResultsPresenter [
-
-	^ StProfilerResultsPresenter on: self viewModel
 ]
 
 { #category : 'constants' }
@@ -122,6 +135,12 @@ StProfilerPresenter >> profileCode: aString [
 	inputPresenter
 		code: aString;
 		profileIt
+]
+
+{ #category : 'private - factory' }
+StProfilerPresenter >> resultsPresenter: aPresenter [
+
+	resultsPresenter := aPresenter
 ]
 
 { #category : 'subscription' }
