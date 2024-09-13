@@ -100,11 +100,10 @@ StBrowserSearchPresenter >> initializePresenters [
 	itemsList display: [ :entity | entity name ].
 
 	searchField placeholder: 'Filter...'.
-	searchField eventHandler whenKeyDownDo: [ :anEvent | "If we press arrow up, we should get up in the list. If we press arrow down, we should get down in the list."
-		"31 = Arrow down"
-		anEvent keyValue = 31 ifTrue: [ itemsList selectIndex: (itemsList selection selectedIndex + 1 min: itemsList items size) ].
+	searchField eventHandler whenKeyDownDo: [ :anEvent | "If we press arrow up, we should get up in the list. If we press arrow down, we should get down in the list.""31 = Arrow down"
+		anEvent keyValue = 31 ifTrue: [ itemsList selectIndex: (itemsList selection selectedIndex + 1 min: itemsList items size) scrollToSelection: true ].
 		"30 = Arrow up"
-		anEvent keyValue = 30 ifTrue: [ itemsList selectIndex: (itemsList selection selectedIndex - 1 max: 1) ]  ]
+		anEvent keyValue = 30 ifTrue: [ itemsList selectIndex: (itemsList selection selectedIndex - 1 max: 1) scrollToSelection: true ] ]
 ]
 
 { #category : 'initialization' }
