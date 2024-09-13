@@ -110,6 +110,40 @@ ScopeNodesPresenter >> announceScopeEdited [
 ]
 
 { #category : 'private - presenters' }
+ScopeNodesPresenter >> argumentsListActions [
+
+	^ SpActionGroup new
+		addActionWith: [ :anItem | anItem
+			name: 'Check all Cmd-a';
+			iconName: #glamorousAccept;
+			action: [ self checkAll ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'Unheck all';
+			shortcut: $u actionModifier;
+			iconName: #glamorousAccept;
+			action: [ self uncheckAll ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'Add class hierarchy (flattened)';
+			actionEnabled: [ scopeNodesTree selectedItem isClassNode ];
+			iconName: #hierarchy;
+			action: [ self addSelectedItemClassHierarchy ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'Browse';
+			actionEnabled: [ scopeNodesTree selectedItem isNotNil ];
+			iconName: #glamorousBrowse;
+			action: [ self browseSelectedItem ] ];
+		addActionWith: [ :anItem | anItem
+  			name: 'Class references';
+  			actionEnabled: [ scopeNodesTree selectedItem isClassNode ];
+  			iconName: #glamorousBrowse;
+  			action: [ self showReferencesToClass: scopeNodesTree selectedItem value ] ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: $a actionModifier;
+			action: [ self checkAll ] ];
+		yourself
+]
+
+{ #category : 'private - presenters' }
 ScopeNodesPresenter >> browseSelectedItem [
 	scopeNodesTree selectedItem value browse
 ]

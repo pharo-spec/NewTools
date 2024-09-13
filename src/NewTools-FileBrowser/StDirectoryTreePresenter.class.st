@@ -87,7 +87,7 @@ StDirectoryTreePresenter >> initializePresenters [
 		roots: StFileSystemItemWrapper roots;
 		children: [ :aClass | aClass subdirectories ];
 		beResizable;
-		contextMenu: [ (self rootCommandsGroup / 'StFileBrowserDirectoryContextualMenu') beRoot asMenuPresenter ].
+		addActionGroup: (self rootCommandsGroup / 'StFileBrowserDirectoryContextualMenu') beRoot
 ]
 
 { #category : 'utilities' }
