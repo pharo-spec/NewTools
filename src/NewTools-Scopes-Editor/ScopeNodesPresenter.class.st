@@ -110,43 +110,6 @@ ScopeNodesPresenter >> announceScopeEdited [
 ]
 
 { #category : 'private - presenters' }
-ScopeNodesPresenter >> argumentsListMenu [
-
-	^ self newMenu addGroup: [ :aGroup |
-		  aGroup
-			  addItem: [ :anItem |
-				  anItem
-					  name: 'Check all Cmd-a';
-					  iconName: #glamorousAccept;
-					  action: [ self checkAll ] ];
-			  addItem: [ :anItem |
-				  anItem
-					  name: 'Unheck all Cmd-u';
-					  iconName: #glamorousAccept;
-					  action: [ self uncheckAll ] ];
-			  
-			addItem: [ :anItem |
-				  anItem
-					  name: 'Add class hierarchy (flattened)';
-					  visibleIf: [ scopeNodesTree selectedItem isClassNode ];
-					  iconName: #hierarchy;
-					  action: [ self addSelectedItemClassHierarchy ] ];
-			  addItem: [ :anItem |
-				  anItem
-					  name: 'Browse';
-					  visibleIf: [ scopeNodesTree selectedItem isNotNil ];
-					  iconName: #glamorousBrowse;
-					  action: [ self browseSelectedItem ] ];
-			  addItem: [ :anItem |
-				  anItem
-					  name: 'Class references';
-					  visibleIf: [ scopeNodesTree selectedItem isClassNode ];
-					  iconName: #glamorousBrowse;
-					  action: [
-						  self showReferencesToClass: scopeNodesTree selectedItem value ] ] ]
-]
-
-{ #category : 'private - presenters' }
 ScopeNodesPresenter >> browseSelectedItem [
 	scopeNodesTree selectedItem value browse
 ]
@@ -285,13 +248,7 @@ ScopeNodesPresenter >> initializeScopeNodesTree [
 		beResizable;
 		activateOnDoubleClick;
 		whenActivatedDo: [ :selection | scopeNodesTree toggleSelectedItems ];
-		contextMenu: self argumentsListMenu.
-
-	scopeNodesTree bindKeyCombination: $a command toAction: [
-		self checkAll ].
-	
-	scopeNodesTree bindKeyCombination: $u command toAction: [
-		self uncheckAll].
+		addActionGroup: self argumentsListActions.
 
 	^ scopeNodesTree
 ]

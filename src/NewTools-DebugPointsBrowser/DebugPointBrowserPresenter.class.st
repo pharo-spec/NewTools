@@ -127,7 +127,7 @@ DebugPointBrowserPresenter >> initializePresenters [
 { #category : 'presenter building' }
 DebugPointBrowserPresenter >> initializeTable [
 
-	dpTable := DebugPointTablePresenter new.
+	dpTable := self instantiate: DebugPointTablePresenter.
 
 	dpTable whenSelectionChangedDo: [ :sel |
 		dpEditor debugPoint: dpTable selectedItem.

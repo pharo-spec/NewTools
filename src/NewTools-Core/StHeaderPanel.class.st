@@ -25,8 +25,9 @@ StHeaderPanel >> addWindowShortcutsTo: aWindowPresenter [
 
 	shortcut ifNil: [ ^ self ].
 	aWindowPresenter 
-		bindKeyCombination: shortcut
-		toAction: [ presenter takeKeyboardFocus ]
+		addShortcutWith: [ :action | action 
+			shortcutKey: shortcut;
+			action: [ presenter takeKeyboardFocus ] ]
 ]
 
 { #category : 'initialization' }

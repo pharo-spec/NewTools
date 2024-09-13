@@ -17,13 +17,10 @@ SubscriptionRegistry >> inspectionSubscriptions [
 		  addColumn: (SpStringTableColumn
 				   title: 'Kind'
 				   evaluated: [ :each | each className ]);
-		  contextMenu: (SpMenuPresenter new
-				   addItem: [ :item |
-					   item
-						   name: 'Remove selected subscription(s)';
-						   action: [
-							   table selectedItems do: [ :each | self remove: each ].
-							   table items: self subscriptions asOrderedCollection ] ];
-				   yourself);
+		  addActionWith: [ :item | item
+				name: 'Remove selected subscription(s)';
+				action: [
+					table selectedItems do: [ :each | self remove: each ].
+					table items: self subscriptions asOrderedCollection ] ];
 		  yourself
 ]

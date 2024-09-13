@@ -71,15 +71,17 @@ StDebuggerStackCommandTreeBuilder >> stackActionsCommandsClasses [
 { #category : 'commands' }
 StDebuggerStackCommandTreeBuilder >> stackContextMenuActionsCommands [
 	| group |
+	
 	group := (CmCommandGroup named: self stackContextMenuActionsGroupName)
 		asSpecGroup.
 	group beDisplayedAsGroup.
 	group description: self stackContextMenuActionsDescription.
 	group iconName: #smallDoIt.
-	self stackActionsCommandsClasses
-		do: [ :cmdClass | 
-			group
-				register: (self buildSpecCommand: cmdClass forContext: stDebuggerInstance) ].
+	self stackActionsCommandsClasses do: [ :cmdClass | 
+		group register: (self 
+			buildSpecCommand: cmdClass 
+			forContext: stDebuggerInstance) ].
+	
 	^ group
 ]
 

@@ -512,18 +512,18 @@ StSpotter >> initializePresenters [
 
 	resultList
 		addStyle: 'stSpotterList';
-		bindKeyCombination: Character arrowUp asKeyCombination
-			toAction: [ :target :widget :event |
-				self transferFocusToSearchTextArrowUp.
-				event wasHandled: false ];
-		bindKeyCombination: Character arrowDown asKeyCombination
-			toAction: [ :target :widget :event |
-				self transferFocusToSearchTextArrowDown.
-				event wasHandled: false ];
-		bindKeyCombination: Character arrowRight asKeyCombination
-			toAction: [ self tryDiveIn ];
-		bindKeyCombination: Character arrowLeft asKeyCombination
-			toAction: [ self tryDiveOut ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: Character arrowUp asKeyCombination;
+			action: [ self transferFocusToSearchTextArrowUp ] ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: Character arrowDown asKeyCombination;
+			action: [ self transferFocusToSearchTextArrowDown ] ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: Character arrowRight asKeyCombination;
+			action: [ self tryDiveIn ] ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: Character arrowLeft asKeyCombination;
+			action: [ self tryDiveOut ] ];
 		whenActivatedDo: [ :selection |
 			self activate: selection selectedItem ].
 	resultList eventHandler
@@ -533,12 +533,15 @@ StSpotter >> initializePresenters [
 		placeholder: 'Search...';
 		addStyle: 'stSpotterSearch';
 		whenTextChangedDo: [ :aString | self updateSearch: aString ];
-		bindKeyCombination: Character arrowDown asKeyCombination
-			toAction: [ self transferFocusToResultList ];
-		bindKeyCombination: Character arrowUp asKeyCombination
-			toAction: [ self transferFocusToResultListAtLast ];
-		bindKeyCombination: Character cr asKeyCombination
-			toAction: [ self maybeActivateFirstElementOfResultList ]
+		addShortcutWith: [ :action | action 
+			shortcutKey: Character arrowDown asKeyCombination;
+			action: [ self transferFocusToResultList ] ];		
+		addShortcutWith: [ :action | action 
+			shortcutKey: Character arrowUp asKeyCombination;
+			action: [ self transferFocusToResultListAtLast ] ];		
+		addShortcutWith: [ :action | action 
+			shortcutKey: Character cr asKeyCombination;
+			action: [ self maybeActivateFirstElementOfResultList ] ]
 ]
 
 { #category : 'initialization' }
@@ -828,18 +831,26 @@ StSpotter >> transferFocusToResultListAtLast [
 
 { #category : 'private' }
 StSpotter >> transferFocusToSearchTextArrowDown [
+	| index |
 
-	(resultList items notEmpty 
-		and: [ resultList selection selectedIndex = resultList items size ])
+	resultList items ifEmpty: [ ^ self ].
+
+	index := resultList selection selectedIndex.
+	index = resultList items size
 		ifTrue: [ searchText takeKeyboardFocus ]
+		ifFalse: [ resultList selectIndex: index + 1 scrollToSelection: true ]
 ]
 
 { #category : 'private' }
 StSpotter >> transferFocusToSearchTextArrowUp [
+	| index |
 
-	(resultList items notEmpty 
-		and: [ resultList selection selectedIndex = 1 ])
+	resultList items ifEmpty: [ ^ self ].
+
+	index := resultList selection selectedIndex.
+	index  = 1
 		ifTrue: [ searchText takeKeyboardFocus ]
+		ifFalse: [ resultList selectIndex: index - 1 scrollToSelection: true ]
 ]
 
 { #category : 'private - actions' }

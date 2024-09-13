@@ -88,6 +88,52 @@ ScopesPresenter >> andWithScope: anItem [
 ]
 
 { #category : 'menu commands' }
+ScopesPresenter >> argumentsListActions [
+
+	^ SpActionGroup new 
+		addActionWith: [ :anItem | anItem
+			name: 'Delete';
+			actionEnabled: [ scopesTree selectedItem isScopeNode ];
+			iconName: #glamorousTrash;
+			action: [ self deleteSelectedScope ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'Edit';
+			actionEnabled: [ scopesTree selectedItem isScopeNode ];
+			iconName: #glamorousEdit;
+			action: [ self editSelectedScope ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'Rename';
+			actionEnabled: [ scopesTree selectedItem isScopeNode ];
+			action: [ self renameSelectedScope ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'Inspect';
+			iconName: #glamorousSearch;
+			action: [ scopesTree selectedItem inspect ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'Open in browser';
+			actionEnabled: [ scopesTree selectedItem isScopeNode ];
+			action: [ self openOnCalypso: scopesTree selectedItem value ] ];
+		addActionWith: [ :anItem | anItem 
+			name: 'Browse';
+			actionEnabled: [ scopesTree selectedItem isScopeNode not ];
+			iconName: #glamorousBrowse;
+			action: [ self browseSelectedItem ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'Class references';
+			actionEnabled: [ scopesTree selectedItem isClassNode ];
+			action: [ self showReferencesToClass: scopesTree selectedItem value ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'OR';
+			actionEnabled: [ scopesTree selectedItem isScopeNode ];
+			action: [ self orWithScope: scopesTree selectedItem ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'AND';
+			actionEnabled: [ scopesTree selectedItem isScopeNode ];
+			action: [ self andWithScope: scopesTree selectedItem ] ];
+		yourself
+]
+
+{ #category : 'menu commands' }
 ScopesPresenter >> argumentsListMenu [
 
 	^ self newMenu addGroup: [ :aGroup |

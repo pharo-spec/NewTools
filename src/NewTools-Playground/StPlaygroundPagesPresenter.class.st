@@ -98,9 +98,11 @@ StPlaygroundPagesPresenter >> initializePresenters [
 		label: 'Pages';
 		presenter: (pageList := self newComponentList
 			presenters: self pagesAsPresenters;
-			contextMenu: [ self pagesActions asMenuPresenter ];
+			addActionGroup: self pagesActions;
 			whenActivatedDo: [ self loadSelectedPage ];
-			bindKeyCombination: Character cr asKeyCombination toAction: [ self loadSelectedPage ];
+			addShortcutWith: [ :action | action 
+				shortcut: Character cr asKeyCombination; 
+				action: [ self loadSelectedPage ] ];
 			yourself).
 		
 	(pagePreviewPanel := self instantiate: StHeaderPanel)
