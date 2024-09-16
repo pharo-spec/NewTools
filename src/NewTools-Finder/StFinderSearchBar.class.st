@@ -158,6 +158,8 @@ StFinderSearchBar >> updatePreview: aStFinderSelectorSearch [
 { #category : 'updating - widgets' }
 StFinderSearchBar >> updateSearch: aString [
 
+	(StFinderSettings cleanResultsOnEmptyInput and: [ aString isEmpty ])
+		ifTrue: [ self owner cleanResults ].
 	(StFinderSettings searchAsYouType and: [ aString size >= 3 ])
 		ifTrue: [ self searchBy: aString ]
 ]
@@ -165,7 +167,7 @@ StFinderSearchBar >> updateSearch: aString [
 { #category : 'updating - widgets' }
 StFinderSearchBar >> updateSearchModes [
 
-	searchModeDropList items: self owner model availableSearches
+	searchModeDropList items: self owner model availableSearchTargets
 ]
 
 { #category : 'updating - widgets' }

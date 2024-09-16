@@ -7,6 +7,7 @@ Class {
 	#name : 'StFinderSettings',
 	#superclass : 'Object',
 	#classVars : [
+		'CleanResultsOnEmptyInput',
 		'EvaluationTimeout',
 		'ExcludeTests',
 		'ExpandResults',
@@ -21,6 +22,33 @@ Class {
 	#package : 'NewTools-Finder',
 	#tag : 'Core'
 }
+
+{ #category : 'system settings' }
+StFinderSettings class >> cleanResultsOnEmptyInput [
+	"Modified by settings Finder: self classSide >> #cleanResultsOnEmptyInputOn:"
+
+	^ CleanResultsOnEmptyInput
+		ifNil: [ CleanResultsOnEmptyInput := false ]
+]
+
+{ #category : 'system settings' }
+StFinderSettings class >> cleanResultsOnEmptyInput: aBoolean [
+	"Modified by settings Finder: self classSide >> #cleanResultsOnEmptyInputOn:"
+
+	CleanResultsOnEmptyInput := aBoolean
+]
+
+{ #category : 'system settings' }
+StFinderSettings class >> cleanResultsOnEmptyInputOn: aBuilder [
+	<systemsettings>
+	
+	(aBuilder setting: #cleanResultsOnEmptyInput)
+		parent: #finder;
+		default: false;
+		label: 'Clean results on clean text input';
+		description: 'Clean results after text input is cleaned';
+		target: self
+]
 
 { #category : 'system settings' }
 StFinderSettings class >> evaluationTimeout [

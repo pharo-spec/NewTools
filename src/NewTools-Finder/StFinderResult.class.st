@@ -94,6 +94,11 @@ StFinderResult >> displayString [
 	^ content asString
 ]
 
+{ #category : 'private' }
+StFinderResult >> forFinderPreview: aSpCodePresenter [ 
+	^ self subclassResponsibility
+]
+
 { #category : 'testing' }
 StFinderResult >> hasBrowseAction [
 
@@ -220,6 +225,11 @@ StFinderResult >> printOn: aStream [
 	super printOn: aStream.
 	aStream space.
 	self content printOn: aStream.
+]
+
+{ #category : 'private' }
+StFinderResult >> selectItemIn: aSpTreePresenter [ 
+	^ self subclassResponsibility
 ]
 
 { #category : 'action' }
