@@ -29,7 +29,8 @@ Class {
 	#instVars : [
 		'regexpCheckBox',
 		'exactCheckBox',
-		'caseCheckBox'
+		'caseCheckBox',
+		'substringBox'
 	],
 	#category : 'NewTools-Finder-Widgets',
 	#package : 'NewTools-Finder',
@@ -38,11 +39,12 @@ Class {
 
 { #category : 'initialization' }
 StFinderSearchOptions >> activateAll [
-	"Deactivate all the receiver's search options"
+	"Activate all the receiver's search options"
 
 	regexpCheckBox enabled: true.
 	exactCheckBox enabled: true.
 	caseCheckBox enabled: true.
+	substringBox enabled: true
 ]
 
 { #category : 'accessing' }
@@ -58,6 +60,7 @@ StFinderSearchOptions >> deactivateAll [
 	regexpCheckBox enabled: false.
 	exactCheckBox enabled: false.
 	caseCheckBox enabled: false.
+	substringBox enabled: false
 ]
 
 { #category : 'layout' }
@@ -65,6 +68,7 @@ StFinderSearchOptions >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
 		spacing: 2;
+		add: substringBox width: 95;
 		add: regexpCheckBox width: 70;
 		add: exactCheckBox width: 70;
 		add: caseCheckBox width: 70;
@@ -84,6 +88,12 @@ StFinderSearchOptions >> disableRegex [
 ]
 
 { #category : 'accessing' }
+StFinderSearchOptions >> disableSubstring [
+
+	substringBox enabled: false.
+]
+
+{ #category : 'accessing' }
 StFinderSearchOptions >> enableExact [
 
 	exactCheckBox enabled: true.
@@ -93,6 +103,12 @@ StFinderSearchOptions >> enableExact [
 StFinderSearchOptions >> enableRegex [
 
 	regexpCheckBox enabled: true.
+]
+
+{ #category : 'accessing' }
+StFinderSearchOptions >> enableSubstring [
+
+	substringBox enabled: true.
 ]
 
 { #category : 'accessing' }
@@ -117,13 +133,24 @@ StFinderSearchOptions >> initializePresenters [
 	caseCheckBox := self newCheckBox 
 		label: 'Case';
 		help: 'Use match case';
-		yourself
+		yourself.
+		
+	substringBox := self newCheckBox
+		label: 'Substring';
+		help: 'Use substring search';
+		yourself.
 ]
 
 { #category : 'accessing' }
 StFinderSearchOptions >> regexpCheckBox [
 
 	^ regexpCheckBox
+]
+
+{ #category : 'accessing' }
+StFinderSearchOptions >> substringBox [
+
+	^ substringBox
 ]
 
 { #category : 'events' }
@@ -163,4 +190,16 @@ StFinderSearchOptions >> whenRegexActivatedDo: aBlock [
 StFinderSearchOptions >> whenRegexDeactivatedDo: aBlock [
 
 	regexpCheckBox whenDeactivatedDo: aBlock
+]
+
+{ #category : 'events' }
+StFinderSearchOptions >> whenSubstringActivatedDo: aBlock [
+
+	substringBox whenActivatedDo: aBlock
+]
+
+{ #category : 'events' }
+StFinderSearchOptions >> whenSubstringDeactivatedDo: aBlock [
+
+	substringBox whenDeactivatedDo: aBlock
 ]
