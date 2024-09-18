@@ -51,21 +51,23 @@ StMessageToolbarPresenter >> initializePresenters [
 	
 	scopeList := self newDropList
 		addStyle: 'stMessageBrowserScopeList';
-		display: [ :each | each description ];
+		display: [ : item | item description ];
 		yourself.
 	
 	toolbarPresenter add: (self newToolbarButton
 		label: 'Flip';
-		action: [ self doFlipLayout ])
+		action: [ self doFlipLayout ]).
+		
+	messageList whenSelectionChangedDo: [ : item |
+		item selectedItem ifNotNil: [ : realItem | 
+			scopeList items: messageList scopes ] ]
 ]
 
-{ #category : 'initialization' }
-StMessageToolbarPresenter >> updatePresenter [
+{ #category : 'accessing' }
+StMessageToolbarPresenter >> owner: aPresenter [
 
-	super updatePresenter.
-	
-	messageList ifNil: [ ^ self ].
-	scopeList items: (messageList scopes ifNil: [ #() ])
+	super owner: aPresenter.
+	messageList := aPresenter messageList.
 ]
 
 { #category : 'events' }

@@ -20,7 +20,10 @@ Class {
 	#instVars : [
 		'cachedHierarchy',
 		'topologySort',
-		'listPresenter'
+		'listPresenter',
+		'scopes',
+		'selectedPackages',
+		'allMessages'
 	],
 	#category : 'NewTools-MethodBrowsers-Base',
 	#package : 'NewTools-MethodBrowsers',
@@ -33,6 +36,12 @@ StMessageListPresenter class >> defaultLayout [
 	^ SpBoxLayout newTopToBottom
 		add: #listPresenter;
 		yourself
+]
+
+{ #category : 'private - scopes' }
+StMessageListPresenter >> browserEnvironment [
+
+	^ ClyNavigationEnvironment currentImageScope asRBEnvironment label: 'current image'
 ]
 
 { #category : 'testing' }
@@ -66,6 +75,26 @@ StMessageListPresenter >> cacheHierarchyForClasses: aCollection [
 StMessageListPresenter >> defaultOutputPort [
 
 	^ self outputSelectionPort
+]
+
+{ #category : 'private - scopes' }
+StMessageListPresenter >> defaultScopes [
+
+	^ { 
+		self browserEnvironment .
+		self packageEnvironment .
+		"'Hierarchy' .
+		'Classes'"
+	 }
+]
+
+{ #category : 'private - scopes' }
+StMessageListPresenter >> defaultSelectedPackages [
+	"Private - By default we answer the <Package> of the currently selected item"
+
+	^ self selectedMessage
+		ifNil: [ Set empty ]
+		ifNotNil: [ Set with: (self packageOf: self selectedMessage) ]
 ]
 
 { #category : 'private - actions' }
@@ -117,8 +146,8 @@ StMessageListPresenter >> doRemoveMethod [
 StMessageListPresenter >> initialize [
 
 	super initialize.
-	topologySort := true
-
+	topologySort := true.
+	allMessages := Set empty.
 ]
 
 { #category : 'initialization' }
@@ -135,9 +164,10 @@ StMessageListPresenter >> initializePresenters [
 			evaluated: [ :item | self selectorOf: item ]);
 		addColumn: (SpStringTableColumn 
 			title: 'Package' 
-			evaluated: [ :item | self packageOf: item ]);
+			evaluated: [ :item | self packageNameOf: item ]);
 		beResizable.
 		
+	listPresenter whenSelectedDo: [ : method | self selectMessage: method ].
 	listPresenter outputActivationPort transmitDo: [ :aMethod | self doBrowseMethod ].
 		
 	listPresenter 
@@ -199,6 +229,7 @@ StMessageListPresenter >> messages: aCollection [
 
 	self cacheHierarchyForClasses: aCollection.
 	listPresenter items: cachedHierarchy keys asOrderedCollection.
+	allMessages := listPresenter items.
 	listPresenter listSize > 0 ifTrue: [ 
 		listPresenter selectIndex: 1 ]
 ]
@@ -230,20 +261,46 @@ StMessageListPresenter >> outputSelectionPort [
 		yourself
 ]
 
+{ #category : 'private - scopes' }
+StMessageListPresenter >> packageEnvironment [
+	"Answer a <RBPackageEnvironment> for the selected packages"
+
+	^ RBBrowserEnvironment default forPackages: self selectedPackages
+
+
+]
+
 { #category : 'private' }
 StMessageListPresenter >> packageNameForItem: anItem [
 	^ anItem package ifNil: [ '' ] ifNotNil: [ :package | package name ]
 ]
 
 { #category : 'private' }
-StMessageListPresenter >> packageOf: anItem [
+StMessageListPresenter >> packageNameOf: anItem [
+	"Answer a <String> matching anItem"
+
 	^ '[' , (self packageNameForItem: anItem) , ']'
+]
+
+{ #category : 'private' }
+StMessageListPresenter >> packageOf: aCompiledMethod [
+	"Answer the <Package> of aCompiledMethod"
+
+	^ self packageOrganizer packageOf: aCompiledMethod methodClass
 ]
 
 { #category : 'private' }
 StMessageListPresenter >> protocolNameForItem: anItem [
 
 	^ anItem protocolName ifNil: [ '' ]
+]
+
+{ #category : 'private - scopes' }
+StMessageListPresenter >> scopes [
+	"Answer a <Collection> of the receiver's message list scopes"
+	
+	^ scopes
+		ifNil: [ scopes := self defaultScopes ]
 ]
 
 { #category : 'selecting' }
@@ -254,8 +311,10 @@ StMessageListPresenter >> selectIndex: anInteger [
 
 { #category : 'accessing' }
 StMessageListPresenter >> selectMessage: aMessage [
+	"Select aMessage in the receiver and update the list of the visited packages"
 
-	listPresenter selectItem: aMessage
+	listPresenter selectItem: aMessage.
+	selectedPackages ifNotNil: [ selectedPackages add: (self packageOf: aMessage) ]
 ]
 
 { #category : 'selecting' }
@@ -275,6 +334,16 @@ StMessageListPresenter >> selectedMethod [
 
 	self selectedMessage ifNil: [ ^ nil ].
 	^ self selectedMessage compiledMethod
+]
+
+{ #category : 'private - scopes' }
+StMessageListPresenter >> selectedPackages [
+	"Answer a <Collection> of <Package> which has been selected in the receiver"
+	
+	^ selectedPackages
+		ifNil: [ selectedPackages := self defaultSelectedPackages ]
+
+
 ]
 
 { #category : 'accessing' }
@@ -310,6 +379,23 @@ StMessageListPresenter >> sortClassesInCachedHierarchy: aMethodDefinition b: oth
 StMessageListPresenter >> sortingBlock: aBlock [
 
 	listPresenter sortingBlock: aBlock
+]
+
+{ #category : 'private - scopes' }
+StMessageListPresenter >> switchScopeTo: aPackage [ 
+
+	| filteredMessages |
+	
+	aPackage isSystem
+		ifTrue: [ 
+			listPresenter items: allMessages.
+			^ self ].
+	filteredMessages := aPackage packages flatCollect: [ : pck | 
+		(self messages select: [ : mth | 
+			pck
+				includesSelector: mth selector 
+				ofClass: mth methodClass ]) ].
+	listPresenter items: filteredMessages
 ]
 
 { #category : 'accessing' }

@@ -413,7 +413,8 @@ StMessageBrowser >> messages [
 { #category : 'api' }
 StMessageBrowser >> messages: aCollection [
 
-	messageList messages: aCollection
+	messageList messages: aCollection.
+	self toolbarPresenter updatePresenter.
 ]
 
 { #category : 'announcements' }

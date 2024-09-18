@@ -54,6 +54,12 @@ StAbstractMessageCentricBrowserPresenter >> isMethodDefinition: anItem [
 		or: [  anItem isCompiledMethod ]
 ]
 
+{ #category : 'accessing' }
+StAbstractMessageCentricBrowserPresenter >> messageList [
+
+	^ messageList
+]
+
 { #category : 'initialization' }
 StAbstractMessageCentricBrowserPresenter >> newMessageList [
 	
