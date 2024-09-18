@@ -131,7 +131,7 @@ StPlaygroundBindingsPresenter >> initializeListPanel [
 			evaluated: [ :each | self scopeNameFor: each ];
 			beSortable;
 			yourself);
-	   addActionGroup: self contextMenuActions;
+	   actions: self contextMenuActions;
 		yourself.
 	
 	bindingPanel presenter: bindingList

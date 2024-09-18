@@ -83,7 +83,7 @@ StObjectBreakpointInspection >> buildHaltAndBreakpointTable [
 				title: 'Target'
 				evaluated: [ :item | item printEntity ]).
 	methodsWithBreakpoints
-		addActionGroup: self rootCommandsGroup
+		actions: self rootCommandsGroup
 ]
 
 { #category : 'private' }

@@ -139,7 +139,7 @@ StMessageListPresenter >> initializePresenters [
 		beResizable.
 		
 	listPresenter outputActivationPort transmitDo: [ :aMethod | self doBrowseMethod ].
-	listPresenter addActionGroup: self messageListActions
+	listPresenter actions: self messageListActions
 ]
 
 { #category : 'accessing' }

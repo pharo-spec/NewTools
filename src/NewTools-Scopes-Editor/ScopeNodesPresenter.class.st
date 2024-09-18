@@ -282,7 +282,7 @@ ScopeNodesPresenter >> initializeScopeNodesTree [
 		beResizable;
 		activateOnDoubleClick;
 		whenActivatedDo: [ :selection | scopeNodesTree toggleSelectedItems ];
-		addActionGroup: self argumentsListActions.
+		actions: self argumentsListActions.
 
 	^ scopeNodesTree
 ]

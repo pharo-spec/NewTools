@@ -299,7 +299,7 @@ StSingleCritiqueResultListPresenter >> initializePresenters [
 	critiquesModel beMultipleSelection.
 	critiquesModel display: [ :selec | 
 		self initializeDisplayCritique: selec forRule: rule ].
-	critiquesModel addActionGroup: self buildMenuCritique.
+	critiquesModel actions: self buildMenuCritique.
 	critiquesModel displayIcon: [ :item | self iconFor: item ].
 	self focusOrder
 		add: critiquesModel;

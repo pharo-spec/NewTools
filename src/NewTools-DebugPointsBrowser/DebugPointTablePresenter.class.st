@@ -79,7 +79,7 @@ DebugPointTablePresenter >> initializeDebugPointTable [
 		addColumn: (SpStringTableColumn
 				 title: 'Scope'
 				 evaluated: [ :item | item scopeString ]);
-		addActionGroup: self debugPointActions.
+		actions: self debugPointActions.
 	self items: DebugPoint all asOrderedCollection.
 
 	self dropEnabled: true.

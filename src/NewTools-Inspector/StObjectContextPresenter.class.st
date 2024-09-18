@@ -94,7 +94,7 @@ StObjectContextPresenter >> intializePresentersWithEvaluator [
 		beForObject: self model inspectedObject;
 		text: self evaluatorInitialText;
 		overridingContextMenu;
-		addActionGroup: (self menuActionsFor: evaluator);
+		actions: (self menuActionsFor: evaluator);
 		whenTextChangedDo: [ :aString | self model codeSnippet: aString ].
 	
 	self layout: (SpPanedLayout newTopToBottom

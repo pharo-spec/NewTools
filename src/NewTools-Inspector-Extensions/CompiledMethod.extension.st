@@ -23,7 +23,7 @@ CompiledMethod >> inspectionSource [
 	^ SpCodePresenter new 
 		beForMethod: self method;
 		text: self sourceCode;
-		withRootActionGroupDo: [ :group | group 
+		actionsWith: [ :group | group 
 			addActionWith: [ :action | action
 				name: 'Browse method class'; 
 				action: [ self methodClass browse ] ] ];

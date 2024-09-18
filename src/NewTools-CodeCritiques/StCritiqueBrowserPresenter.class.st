@@ -584,7 +584,7 @@ StCritiqueBrowserPresenter >> setRulesModel [
 
 	rulesModel addColumn: ((SpStringTableColumn evaluated: [ :rule | 
 			  self stringMorphForRule: rule ]) title: 'Rules Group').
-	rulesModel addActionGroup: self buildRuleMenuActions
+	rulesModel actions: self buildRuleMenuActions
 ]
 
 { #category : 'api' }

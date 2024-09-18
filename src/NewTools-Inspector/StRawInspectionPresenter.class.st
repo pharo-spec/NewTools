@@ -83,7 +83,7 @@ StRawInspectionPresenter >> initializePresenters [
 
 	attributeTable := self newTreeTable
 		beResizable;
-		addActionGroup: self rootCommandsGroup;
+		actions: self rootCommandsGroup;
 		yourself.
 	self addVariablesColumn.
 	self addValuesColumn.

@@ -298,7 +298,7 @@ StDebugger >> buildContextMenus [
 	debuggerCommandGroup := self rootCommandsGroup.
 	"Stack"
 	stackGroup := debuggerCommandGroup / StDebuggerStackCommandTreeBuilder groupName. 
-	stackTable addActionGroup: stackGroup beRoot.
+	stackTable actions: stackGroup.
 	 
 	"Toolbar"
 	toolbarCommandGroup := debuggerCommandGroup / StDebuggerToolbarCommandTreeBuilder groupName.
@@ -308,7 +308,7 @@ StDebugger >> buildContextMenus [
 
 	"Code"
 	codeCommands := debuggerCommandGroup / StDebuggerCodeCommandTreeBuilder groupName.
-	code addActionGroup: codeCommands beRoot.
+	code actions: codeCommands.
 	
 	"Configuration"
 	stackHeader toolbarActions: (debuggerCommandGroup / StDebuggerConfigurationCommandTreeBuilder groupName)

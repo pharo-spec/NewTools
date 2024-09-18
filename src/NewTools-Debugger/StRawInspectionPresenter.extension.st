@@ -22,7 +22,7 @@ StRawInspectionPresenter >> beForDebugger [
 
 	attributeTable := (self instantiate: StDebuggerTreeTablePresenter)
 		beResizable;
-		addActionGroup: self rootCommandsGroup;
+		actions: self rootCommandsGroup;
 		yourself.
 		
 	StInspectorPresenter inspectorDiveOnSingleClick

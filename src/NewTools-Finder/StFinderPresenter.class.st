@@ -366,7 +366,7 @@ StFinderPresenter >> initializeResultTree [
 		addShortcutWith: [ :action | action 
 			shortcutKey: $r actionModifier;
 			action: [ self resultTree selectedItem referencesAction ] ];
-		addActionGroup: (self rootCommandsGroup / 'StFinderSelContextualMenu') beRoot;
+		actions: self rootCommandsGroup / 'StFinderSelContextualMenu';
 		yourself
 ]
 

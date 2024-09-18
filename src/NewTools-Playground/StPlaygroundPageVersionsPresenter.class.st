@@ -83,7 +83,7 @@ StPlaygroundPageVersionsPresenter >> initializePresenters [
 		
 	versionList
 		 display: [ :anEntry | self displayValueFor: (anEntry tagAt: #timestamp) ];
-		 addActionGroup: self versionsActions.
+		 actions: self versionsActions.
 
 	sourceCode 
 		beForScripting;
