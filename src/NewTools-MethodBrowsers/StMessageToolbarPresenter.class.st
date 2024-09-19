@@ -13,8 +13,17 @@ Class {
 { #category : 'initialization' }
 StMessageToolbarPresenter >> connectPresenters [
 
-	scopeList whenSelectedItemChangedDo: [ :item | 
-		item ifNotNil: [ messageList switchScopeTo: item ] ]
+	scopeList whenSelectedItemChangedDo: [ : scopeEnvironment | 
+		scopeEnvironment ifNotNil: [ messageList switchScopeTo: scopeEnvironment ] ].
+	
+
+	messageList whenSelectedDo: [ : item |
+		item ifNotNil: [
+			messageList updateVisitedScopesFrom: item.
+			scopeList 
+				items: messageList allScopes;
+				selectIndex: 1 ] ]
+
 ]
 
 { #category : 'layout' }
@@ -57,10 +66,7 @@ StMessageToolbarPresenter >> initializePresenters [
 	toolbarPresenter add: (self newToolbarButton
 		label: 'Flip';
 		action: [ self doFlipLayout ]).
-		
-	messageList whenSelectionChangedDo: [ : item |
-		item selectedItem ifNotNil: [ : realItem | 
-			scopeList items: messageList scopes ] ]
+
 ]
 
 { #category : 'accessing' }
