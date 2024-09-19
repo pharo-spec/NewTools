@@ -527,7 +527,7 @@ StMessageBrowser >> selectItem: item [
 	self installIconStylerFor: item
 ]
 
-{ #category : 'accessing' }
+{ #category : 'backstops' }
 StMessageBrowser >> selectedClass [
 	^ self selectedMethod origin
 ]

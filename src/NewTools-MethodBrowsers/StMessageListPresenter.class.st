@@ -45,7 +45,6 @@ StMessageListPresenter >> allScopes [
 		add: self browserEnvironment;
 		addAll: self packageEnvironments;
 		addAll: self classesEnvironments;		
-		addAll: self classHierarchyEnvironments;
 		addAll: self compositeEnvironments;
 		yourself
 ]
@@ -440,6 +439,7 @@ StMessageListPresenter >> sortingBlock: aBlock [
 
 { #category : 'private - scopes' }
 StMessageListPresenter >> switchScopeTo: aRBBrowserEnvironment [ 
+	"Private - Callback to scope selection from the user"
 
 	listPresenter items: (aRBBrowserEnvironment selectMessagesFrom: allMessages)
 
