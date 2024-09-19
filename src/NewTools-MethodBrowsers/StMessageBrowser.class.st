@@ -131,6 +131,7 @@ StMessageBrowser class >> taskbarIconName [
 
 { #category : 'specs' }
 StMessageBrowser class >> title [
+
 	^ 'Message Browser'
 ]
 

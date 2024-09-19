@@ -1,10 +1,10 @@
 Extension { #name : 'RBClassEnvironment' }
 
 { #category : '*NewTools-MethodBrowsers' }
-RBClassEnvironment >> selectMessagesFrom: aCollection [ 
-	"Answer a <Collection> of <CompiledMethod> present in the receiver"
+RBClassEnvironment >> selectMessagesFrom: aCollectionOfCompiledMethod [ 
+	"Filter methods in aCollectionOfCompiledMethod for which their method class is present in the receiver's classes
+	 Answer a <Collection> of <CompiledMethod>"
 
-	self halt.
 	^ self classes flatCollect: [ : cls | 
-		aCollection select: [ : item | cls = item  ] ].
+		aCollectionOfCompiledMethod select: [ : cm | cls = cm methodClass  ] ].
 ]

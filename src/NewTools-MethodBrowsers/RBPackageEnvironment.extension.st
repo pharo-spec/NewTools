@@ -1,12 +1,12 @@
 Extension { #name : 'RBPackageEnvironment' }
 
 { #category : '*NewTools-MethodBrowsers' }
-RBPackageEnvironment >> selectMessagesFrom: aCollection [ 
+RBPackageEnvironment >> selectMessagesFrom: aCollectionOfCompiledMethod [ 
 	"Answer a <Collection> of <CompiledMethod> present in the receiver"
 
-	^ self packages flatCollect: [ : pck | 
-		aCollection select: [ : mth | 
-			pck
-				includesSelector: mth selector 
-				ofClass: mth methodClass ] ].
+	^ self packages flatCollect: [ : aPackage | 
+		aCollectionOfCompiledMethod select: [ : cm | 
+			aPackage
+				includesSelector: cm selector 
+				ofClass: cm methodClass ] ].
 ]

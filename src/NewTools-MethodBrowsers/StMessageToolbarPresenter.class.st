@@ -16,13 +16,10 @@ StMessageToolbarPresenter >> connectPresenters [
 	scopeList whenSelectedItemChangedDo: [ : scopeEnvironment | 
 		scopeEnvironment ifNotNil: [ messageList switchScopeTo: scopeEnvironment ] ].
 	
-
 	messageList whenSelectedDo: [ : item |
 		item ifNotNil: [
 			messageList updateVisitedScopesFrom: item.
-			scopeList 
-				items: messageList allScopes;
-				selectIndex: 1 ] ]
+			scopeList disableSelectionDuring: [ scopeList items: messageList allScopes ] ] ]
 
 ]
 

@@ -45,7 +45,8 @@ StMessageListPresenter >> allScopes [
 		add: self browserEnvironment;
 		addAll: self packageEnvironments;
 		addAll: self classesEnvironments;		
-		"addAll: self hierarchyEnvironments;"
+		addAll: self classHierarchyEnvironments;
+		addAll: self compositeEnvironments;
 		yourself
 ]
 
@@ -84,11 +85,36 @@ StMessageListPresenter >> cacheHierarchyForClasses: aCollection [
 
 { #category : 'private - scopes' }
 StMessageListPresenter >> classEnvironmentFor: aClass [
-	"Answer a <RBClassEnvironment> for the selected packages"
+	"Answer a <RBClassEnvironment> for aClass"
 
 	^ RBBrowserEnvironment default forClasses: { aClass }
 
 
+]
+
+{ #category : 'private - scopes' }
+StMessageListPresenter >> classHierarchyEnvironmentFor: aClass [
+	"Answer a <RBClassEnvironment> for aClass"
+
+	^ RBBrowserEnvironment default forClassHierarchy: aClass
+
+
+]
+
+{ #category : 'private - scopes' }
+StMessageListPresenter >> classHierarchyEnvironments [
+	"Answer a <Collection> of <RBClassEnvironment> for the receiver's selected classes"
+	
+	^ self visitedScopes 
+		select: [ : anObject | anObject isClass ]
+		thenCollect: [ : aClass | self classHierarchyEnvironmentFor: aClass  ]
+]
+
+{ #category : 'private' }
+StMessageListPresenter >> classHierarchyOf: aCompiledMethod [
+	"Answer a <Collection> of superclasses of aCompiledMethod method class"
+
+	^ RBClassHierarchyEnvironment class: aCompiledMethod methodClass
 ]
 
 { #category : 'private' }
@@ -107,6 +133,14 @@ StMessageListPresenter >> classesEnvironments [
 		thenCollect: [ : aClass | self classEnvironmentFor: aClass  ]
 ]
 
+{ #category : 'private - scopes' }
+StMessageListPresenter >> compositeEnvironments [
+
+	^ self visitedScopes reject: [ : anObject | anObject isClass or: [ anObject isPackage ] ]
+
+
+]
+
 { #category : 'transmission' }
 StMessageListPresenter >> defaultOutputPort [
 
@@ -119,9 +153,13 @@ StMessageListPresenter >> defaultScopes [
 
 	^ self selectedMessage
 		ifNil: [ Set empty ]
-		ifNotNil: [ Set 
-				with: (self packageOf: self selectedMessage)
-				with: (self classOf: self selectedMessage) ]
+		ifNotNil: [ 
+			Set new
+				add: (self packageOf: self selectedMessage);
+				add: (self classOf: self selectedMessage);
+				add: (self classHierarchyOf: self selectedMessage);
+				addAll: ScopesManager availableScopes;
+				yourself ]
 ]
 
 { #category : 'private - actions' }
@@ -371,7 +409,7 @@ StMessageListPresenter >> selectorOf: anItem [
 	^ anItem selector
 ]
 
-{ #category : 'initialization' }
+{ #category : 'accessing - model' }
 StMessageListPresenter >> setModelBeforeInitialization: aMethod [
 ]
 
@@ -421,13 +459,14 @@ StMessageListPresenter >> topologicSort: anObject [
 
 { #category : 'private - scopes' }
 StMessageListPresenter >> updateVisitedScopesFrom: aCompiledMethod [
-	"Update the list of the visited packages"
+	"Private - Update the list of the visited scopes"
 
 	visitedScopes 
 		ifNotNil: [ 
 			visitedScopes 
 				add: (self packageOf: aCompiledMethod);
-				add: (self classOf: aCompiledMethod) ]
+				add: (self classOf: aCompiledMethod);
+				add: (self classHierarchyOf: aCompiledMethod) ]
 ]
 
 { #category : 'private - scopes' }
