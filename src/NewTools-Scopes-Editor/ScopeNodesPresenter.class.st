@@ -119,7 +119,7 @@ ScopeNodesPresenter >> argumentsListActions [
 			action: [ self checkAll ] ];
 		addActionWith: [ :anItem | anItem
 			name: 'Unheck all';
-			shortcut: $u actionModifier;
+			shortcutKey: $u actionModifier;
 			iconName: #glamorousAccept;
 			action: [ self uncheckAll ] ];
 		addActionWith: [ :anItem | anItem

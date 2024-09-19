@@ -101,7 +101,7 @@ StPlaygroundPagesPresenter >> initializePresenters [
 			actions: self pagesActions;
 			whenActivatedDo: [ self loadSelectedPage ];
 			addShortcutWith: [ :action | action 
-				shortcut: Character cr asKeyCombination; 
+				shortcutKey: Character cr asKeyCombination; 
 				action: [ self loadSelectedPage ] ];
 			yourself).
 		
