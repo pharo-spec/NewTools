@@ -178,6 +178,12 @@ StProfilerModel >> profileCode: someCode notifying: requestor [
 ]
 
 { #category : 'accessing' }
+StProfilerModel >> profiler: aProfiler [
+
+	profiler := aProfiler
+]
+
+{ #category : 'accessing' }
 StProfilerModel >> profilerClass [
 	^ profilerClass ifNil: [ profilerClass := self allProfilerClasses at: 1 ]
 ]

@@ -150,6 +150,17 @@ StSpotter class >> menuCommandOn: aBuilder [
 ]
 
 { #category : 'instance creation' }
+StSpotter class >> newWithText: aText [
+
+	self reset.
+	spotter := self new.
+	spotter searchText
+		text: aText asString;
+		selectAll.
+	^ spotter 
+]
+
+{ #category : 'instance creation' }
 StSpotter class >> open [
 
 	self openWithText: ''
@@ -172,12 +183,7 @@ StSpotter class >> openOnOrigin: anObject [
 { #category : 'instance creation' }
 StSpotter class >> openWithText: aText [
 
-	self reset.
-	spotter := self new.
-	spotter searchText
-		text: aText asString.
-	spotter whenDisplayDo: [ spotter searchText cursorPositionIndex: aText size + 1 ].
-	^ spotter openModal
+	^ (self newWithText: aText) openModal
 ]
 
 { #category : 'settings' }

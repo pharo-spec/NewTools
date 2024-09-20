@@ -12,9 +12,9 @@ Class {
 	#classVars : [
 		'IconCache'
 	],
-	#category : 'NewTools-FileBrowser-UI',
+	#category : 'NewTools-FileBrowser-Previewers',
 	#package : 'NewTools-FileBrowser',
-	#tag : 'UI'
+	#tag : 'Previewers'
 }
 
 { #category : 'layout' }

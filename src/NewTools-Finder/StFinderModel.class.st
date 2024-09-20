@@ -1,11 +1,7 @@
 "
-I am the model for the `Finder` tool.
+Model for the `Finder` tool, responsible for holding the search environment, executing searches and returning search results.
 
-I am responsible for holding the search environment, executing searches and
-returning search results.
-
-For searching I use the interface defined by ̀FinderSearch̀ and all searches
-should therefor be subclasses of ̀FinderSearch̀.
+For searching, this class use the interface defined by ̀StFinderSearch̀ and all searches should therefor be subclasses of ̀StFinderSearch̀.
 
 "
 Class {
@@ -15,12 +11,13 @@ Class {
 		'searchString',
 		'useRegex',
 		'searchEnvironment',
-		'availableSearches',
 		'currentSearch',
 		'results',
 		'useExact',
 		'useCase',
-		'time'
+		'time',
+		'availableSearchTargets',
+		'useSubstring'
 	],
 	#category : 'NewTools-Finder-Core',
 	#package : 'NewTools-Finder',
@@ -28,8 +25,8 @@ Class {
 }
 
 { #category : 'default values' }
-StFinderModel class >> defaultSearches [
-	"Returns a list of supported searches. Each item in the list is a subclass of `FinderSearch`."
+StFinderModel class >> defaultSearchTargets [
+	"Returns a list of supported searches. Each item in the list is a subclass of `StFinderSearch`."
 
 	"The first element is used as the default search mode."
 
@@ -47,7 +44,7 @@ StFinderModel class >> defaultSearches [
 StFinderModel >> addSearch: aFinderSearch [
 	"Add aFinderSearch to the availableSearches."
 
-	availableSearches add: aFinderSearch.
+	self availableSearchTargets add: aFinderSearch.
 	self searchTypesChanged
 ]
 
@@ -61,10 +58,24 @@ StFinderModel >> availablePackages [
 ]
 
 { #category : 'accessing' }
-StFinderModel >> availableSearches [
+StFinderModel >> availableSearchTargets [
 	"Returns the searches available to the model. The first one is used as the default search mode."
 
-	^ availableSearches
+	^ availableSearchTargets
+]
+
+{ #category : 'accessing' }
+StFinderModel >> availableSearchTargets: aCollection [
+	"Set the receiver's targets to aCollection containing <StFinderSearch> instances"
+
+	availableSearchTargets := aCollection
+]
+
+{ #category : 'accessing' }
+StFinderModel >> availableSearchTargetsFromClasses: aCollection [
+	"Set the receiver's targets to aCollection containing classes"
+
+	^ self availableSearchTargets: (self newSearchTargetsWith: aCollection) 
 ]
 
 { #category : 'accessing' }
@@ -91,18 +102,32 @@ StFinderModel >> initialize [
 	useExact := false.
 	useCase := false.
 
-	availableSearches := self class defaultSearches
-		                     collect: [ :search | search new ]
-		                     as: OrderedCollection.
-	currentSearch := availableSearches first.
+	self initializeSearchTargets.
+	currentSearch := availableSearchTargets first.
 	self selectAllPackages
+]
+
+{ #category : 'initialization' }
+StFinderModel >> initializeSearchTargets [
+	"Private - Set the receiver's default search targets"
+
+	self availableSearchTargets: (self newSearchTargetsWith: self class defaultSearchTargets)
+]
+
+{ #category : 'initialization' }
+StFinderModel >> newSearchTargetsWith: aCollectionOfStFinderSearchClasses [
+	"Answer a <Collection> of <StFinderSearch> subinstances matching aCollectionOfStFinderSearch classes"
+
+	^ aCollectionOfStFinderSearchClasses
+		collect: [ :searchTargetClass | searchTargetClass new ]
+		as: OrderedCollection
 ]
 
 { #category : 'removing' }
 StFinderModel >> removeSearchByName: aString [
 	"Removes a search from availableSearches by its name."
 
-	availableSearches removeAllSuchThat: [ :each | each name = aString ].
+	self availableSearchTargets removeAllSuchThat: [ :each | each name = aString ].
 	self searchTypesChanged
 ]
 
@@ -203,7 +228,7 @@ StFinderModel >> searchTypesChanged [
 	"This method is used internally and called whenever a availableSearches modified."
 
 	self announcer announce:
-		(StFinderSearchTypesChanged newValue: self availableSearches)
+		(StFinderSearchTypesChanged newValue: self availableSearchTargets)
 ]
 
 { #category : 'selection' }
@@ -278,6 +303,18 @@ StFinderModel >> useRegex [
 StFinderModel >> useRegex: aBoolean [
 
 	useRegex := aBoolean
+]
+
+{ #category : 'accessing' }
+StFinderModel >> useSubstring [
+
+	^ useSubstring
+]
+
+{ #category : 'accessing' }
+StFinderModel >> useSubstring: aBoolean [
+
+	useSubstring := aBoolean
 ]
 
 { #category : 'announcing' }

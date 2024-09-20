@@ -19,9 +19,9 @@ Class {
 		'protocolNameField',
 		'concernedClass'
 	],
-	#category : 'NewTools-Core-ProtocolChooser',
+	#category : 'NewTools-Core-Calypso',
 	#package : 'NewTools-Core',
-	#tag : 'ProtocolChooser'
+	#tag : 'Calypso'
 }
 
 { #category : 'examples' }
@@ -61,14 +61,16 @@ StProtocolNameChooserPresenter class >> requestProtocolNameConfiguring: aBlock [
 
 	aBlock cull: presenter cull: dialog.
 
+	presenter selectProtocolName.
+
 	dialog open.
 
 	protocolName := presenter protocolName.
 
-	protocolName isEmptyOrNil ifTrue: [ CmdCommandAborted signal ].
+	protocolName isEmptyOrNil ifTrue: [ CmCommandAborted signal ].
 	(protocolName beginsWith: '*') ifTrue: [
 		self inform: 'Star is forbidden for protocol name since this is used for method extensions.'.
-		^ CmdCommandAborted signal ].
+		^ CmCommandAborted signal ].
 	^ protocolName
 ]
 
@@ -156,6 +158,12 @@ StProtocolNameChooserPresenter >> protocolsToSuggest [
 	suggestedProtocols := suggestedProtocols sortedCounts collect: [ :association | association value ].
 	suggestedProtocols := suggestedProtocols select: [ :protocolName | protocolName includesSubstring: self protocolName ].
 	^ suggestedProtocols
+]
+
+{ #category : 'accessing' }
+StProtocolNameChooserPresenter >> selectProtocolName [
+
+	protocolNameField selectAll
 ]
 
 { #category : 'initialization' }

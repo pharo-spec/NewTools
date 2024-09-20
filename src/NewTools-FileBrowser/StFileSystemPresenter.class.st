@@ -60,9 +60,7 @@ StFileSystemPresenter class >> navigationSystemClass [
 StFileSystemPresenter class >> open [ 
 	<script>
 
-	^ self new 
-		open;
-		centered
+	^ self new open
 ]
 
 { #category : 'accessing - bookmarks' }
@@ -94,6 +92,8 @@ StFileSystemPresenter >> connectPresenters [
 	"Here we check that the window is displayed. 
 	If it's not, that means this is a first opening so it should preserve the path selected by the user (through openOnLastDirectory preference, or defaultRoot: message send) and not to transmit the directory selection"
 
+	super connectPresenters.
+	
 	treeNavigationSystem
 		transmitDo: [ : selection | 
 			(self isDisplayed and: [ selection isNotNil ])
@@ -102,8 +102,11 @@ StFileSystemPresenter >> connectPresenters [
 	bookmarksTreeTable whenSelectionChangedDo: [ :selection | 
 		selection selectedItem ifNotNil: [ :selectedItem | 
 			selectedItem isComposite ifFalse: [ 
-				self fileNavigationSystem openFolder: selectedItem location ] ] ]
+				self fileNavigationSystem openFolder: selectedItem location ] ] ].
 
+	self whenDisplayDo: [ 
+		self centered.
+		treeNavigationSystem expandPath: fileNavigationSystem currentDirectory ].
 ]
 
 { #category : 'layout' }
@@ -135,6 +138,7 @@ StFileSystemPresenter >> expandPath: aFileReference [
 
 { #category : 'accessing' }
 StFileSystemPresenter >> fileNavigationSystem [
+
 	^ fileNavigationSystem
 ]
 
@@ -179,7 +183,6 @@ StFileSystemPresenter >> initializePresenters [
 	fileNavigationSystem nameText disable.
 
 	treeNavigationSystem := self instantiate: StDirectoryTreePresenter on: self model.
-	treeNavigationSystem expandPath: fileNavigationSystem currentDirectory.	
 
 	self initializeBookmarksTreeTable.
 ]
@@ -256,7 +259,7 @@ StFileSystemPresenter >> updateTreeNavigationWithFileReference: aFileReference [
 	treeNavigationSystem updateWidgetWithFileReference: aFileReference
 ]
 
-{ #category : 'utilities' }
+{ #category : 'accessing - history' }
 StFileSystemPresenter >> updateWidgetWithFileReference: aFileReference [ 
 
 	fileNavigationSystem updateWidgetWithFileReference: aFileReference

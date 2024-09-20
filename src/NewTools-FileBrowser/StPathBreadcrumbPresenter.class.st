@@ -44,7 +44,7 @@ StPathBreadcrumbPresenter >> currentDirectory [
 	^ self owner ifNotNil: #currentDirectory
 ]
 
-{ #category : 'api' }
+{ #category : 'accessing' }
 StPathBreadcrumbPresenter >> currentDirectory: aFileReference [
 
 	textInput text: aFileReference fullName.
@@ -53,7 +53,7 @@ StPathBreadcrumbPresenter >> currentDirectory: aFileReference [
 	self build
 ]
 
-{ #category : 'layouts' }
+{ #category : 'layout' }
 StPathBreadcrumbPresenter >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
@@ -66,7 +66,7 @@ StPathBreadcrumbPresenter >> defaultLayout [
 		  yourself
 ]
 
-{ #category : 'layouts' }
+{ #category : 'layout' }
 StPathBreadcrumbPresenter >> editablelayout [
 
 	^ SpBoxLayout newLeftToRight
@@ -92,7 +92,7 @@ StPathBreadcrumbPresenter >> initializePresenters [
 
 	isInEditMode := false.
 
-	path action: [ :fileReference | self owner openFolder: fileReference ].
+	self path action: [ :fileReference | self updatePathSelection: fileReference ].
 
 	self entityText whenSubmitDo: [ :newText | self pathTextChangedTo: newText ].
 
@@ -117,14 +117,25 @@ StPathBreadcrumbPresenter >> path [
 	^ path
 ]
 
-{ #category : 'api' }
+{ #category : 'callbacks' }
 StPathBreadcrumbPresenter >> pathTextChangedTo: aStringOrText [
 
 	| fileReference |
+
 	fileReference := aStringOrText asString asFileReference.
 	(fileReference exists and: [ fileReference isDirectory ])
-		ifTrue: [ self owner openFolder: fileReference ]
+		ifTrue: [ self updatePathSelection: fileReference ]
 		ifFalse: [ self inform: 'You have to input an existing path to a directory' ].
 	isInEditMode := false.
-	self layout: self defaultLayout
+	self layout: self defaultLayout.
+
+]
+
+{ #category : 'callbacks' }
+StPathBreadcrumbPresenter >> updatePathSelection: fileReference [
+	"Private - Receiver's path has changed, update owner's presenters. Prevent recursive updating because path selection could be triggered from file table or file tree presenters"
+	
+	self owner model currentDirectory = fileReference
+		ifFalse: [ self owner openFolder: fileReference ].
+	self owner nameText: fileReference basename.
 ]

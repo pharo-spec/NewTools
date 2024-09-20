@@ -101,6 +101,23 @@ Class {
 }
 
 { #category : 'commands' }
+StDebugger class >> buildBreakpointExtentionCommandsGroupWith: stDebuggerInstance forRoot: rootCommandGroup [
+
+	<extensionCommands>
+	| commands codeGroup |
+	commands := { StBreakOnStackCommand } collect: [ :class |
+		            class forSpecContext: stDebuggerInstance ].
+
+
+	codeGroup := rootCommandGroup
+	             / StDebuggerCodeCommandTreeBuilder groupName
+	             /
+	             StDebuggerCodeCommandTreeBuilder new
+		             codeDebugCommandsGroupName.
+	commands do: [ :c | codeGroup register: c ]
+]
+
+{ #category : 'commands' }
 StDebugger class >> buildCommandsGroupWith: stDebuggerInstance forRoot: rootCommandGroup [
 
 	StDebuggerStackCommandTreeBuilder
@@ -233,6 +250,12 @@ StDebugger class >> openOn: aDebugSession withFullView: aBool andNotification: a
 	^ debugger
 ]
 
+{ #category : 'accessing' }
+StDebugger class >> settings [
+
+	^ StDebuggerSettings
+]
+
 { #category : 'settings' }
 StDebugger class >> stackColoringSettingOn: aBuilder [
 
@@ -289,6 +312,14 @@ StDebugger >> addExtension: aDebuggerExtensionClass [
 
 	extensionToolsNotebook addPage:
 		(self instantiateExtensionToolsPage: aDebuggerExtensionClass)
+]
+
+{ #category : 'actions' }
+StDebugger >> breakOnStack [
+
+	self debuggerActionModel
+		breakOnStackAtSelection: self code selectionInterval
+		inContext: self currentContext
 ]
 
 { #category : 'commands - support' }
@@ -681,7 +712,7 @@ StDebugger >> implementMissingMethod [
 { #category : 'api' }
 StDebugger >> initialExtent [
 
-	^ 850 @ 650
+	^ self settings defaultExtent 
 ]
 
 { #category : 'initialization' }
@@ -815,10 +846,12 @@ StDebugger >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
 		title: self debuggerActionModel statusStringForContext;
+		initialExtent: self settings lastKnownExtent;
+		initialPosition: self settings lastKnownPosition;
 		windowIcon: (self iconNamed: #smallDebug);
-		initialExtent: self initialExtent;
 		whenClosedDo: [ self clear ].
 
+	self settings initializeWindow: aWindowPresenter.
 	self initializeShortcuts: aWindowPresenter
 ]
 
@@ -1094,6 +1127,12 @@ StDebugger >> setStackAndCodeContainer [
 		                         ifEmpty: [ self stackAndCodeLayout ]
 		                         ifNotEmpty: [
 		                         self stackAndCodeWithExtensionsLayout ]
+]
+
+{ #category : 'api' }
+StDebugger >> settings [
+
+	^ self class settings 
 ]
 
 { #category : 'stack' }

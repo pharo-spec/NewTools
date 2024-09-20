@@ -101,7 +101,9 @@ StFileNavigationSystemPresenter class >> example [
 { #category : 'api' }
 StFileNavigationSystemPresenter >> beMultipleSelection [
 	
-	self fileReferenceTable beMultipleSelection 
+	self fileReferenceTable 
+		beMultipleSelection;
+		comparisonStrategy: [ :a :b | a = b ]
 ]
 
 { #category : 'api - customization' }
@@ -210,6 +212,7 @@ StFileNavigationSystemPresenter >> fileNameLayout [
 
 { #category : 'accessing' }
 StFileNavigationSystemPresenter >> fileReferenceTable [
+
 	^ fileReferenceTable
 ]
 
@@ -229,7 +232,7 @@ StFileNavigationSystemPresenter >> filesListAction [
 		previewProcess ifNotNil: [ previewProcess isTerminated ifFalse: [ previewProcess terminate ] ].
 		previewProcess := [ notebookPreviewer pageContent: (self previewer previewOn: aFileReference) ]
 				forkAt: Processor userBackgroundPriority
-				named: 'File Browser preview loader' ]
+				named: self previewProcessName ]
 
 ]
 
@@ -321,6 +324,20 @@ StFileNavigationSystemPresenter >> initializePresenters [
 	pathBreadcrumbPresenter := self instantiate: StPathBreadcrumbPresenter on: self model.
 	nameText := self newTextInput.
 	filtersDropList := self newDropList.
+
+	self initializeToolbarButtons.	
+	self initializeNavigationPresenters.
+	self initializeFilesTable.
+	self initializeFiltersDropList.
+	self openOnLastDirectory 
+		ifTrue: [ self updateWidgetWithFileReference: self lastVisitedDirectory ]
+		ifFalse: [ self updateWidgetWithFileReference: self defaultDirectory ].
+	self initializeHistoryIteratorWith: self currentDirectory
+]
+
+{ #category : 'initialization' }
+StFileNavigationSystemPresenter >> initializeToolbarButtons [
+
 	newFolderButton := self newButton
 			addStyle: 'small';
 			help: 'New Folder';
@@ -331,14 +348,6 @@ StFileNavigationSystemPresenter >> initializePresenters [
 			help: 'Settings';
 			icon: (self iconNamed: #configuration);
 			yourself.
-	
-	self initializeNavigationPresenters.
-	self initializeFilesTable.
-	self initializeFiltersDropList.
-	self openOnLastDirectory 
-		ifTrue: [ self updateWidgetWithFileReference: self lastVisitedDirectory ]
-		ifFalse: [ self updateWidgetWithFileReference: self defaultDirectory ].
-	self initializeHistoryIteratorWith: self currentDirectory
 ]
 
 { #category : 'testing' }
@@ -421,6 +430,12 @@ StFileNavigationSystemPresenter >> pathBreadcrumbPresenter [
 	^ pathBreadcrumbPresenter
 ]
 
+{ #category : 'actions' }
+StFileNavigationSystemPresenter >> previewProcessName [
+
+	^ 'File Browser preview loader'
+]
+
 { #category : 'accessing' }
 StFileNavigationSystemPresenter >> previewer [
 	"Answer the receiver's previewer, a subclass instance of <StFileBrowserAbstractPreviewer>"
@@ -445,6 +460,13 @@ StFileNavigationSystemPresenter >> previousButton [
 ]
 
 { #category : 'menu - accessing' }
+StFileNavigationSystemPresenter >> selectEntries: aCollection [
+	"Set a <Collection> of <FileReference> representing user's selections"
+	
+	self fileReferenceTable selectItems: aCollection
+]
+
+{ #category : 'menu - accessing' }
 StFileNavigationSystemPresenter >> selectedEntries [
 	"Answer a <Collection> of <FileReference> representing user's selections"
 	
@@ -453,11 +475,9 @@ StFileNavigationSystemPresenter >> selectedEntries [
 
 { #category : 'accessing' }
 StFileNavigationSystemPresenter >> selectedEntry [
-
-	^ fileReferenceTable selection selectedItem ifNil: [ 
-		  self nameText text trimmed
-			  ifEmpty: [ self currentDirectory ]
-			  ifNotEmpty: [ :text | self currentDirectory / text ] ]
+	"Answer a <FileReference> representing the current selection. If there is no selection, answer the current directory"
+	^ fileReferenceTable selection selectedItem 
+		ifNil: [ 	self currentDirectory ]
 ]
 
 { #category : 'asserting' }
@@ -496,16 +516,20 @@ StFileNavigationSystemPresenter >> updateFileReferenceTable [
 	"Update the receiver's contents according to the current directory and apply configured filters"
 
 	| items |
+	
 	items := (filtersDropList selectedItem ifNil: [ filter ]) applyOn: self currentDirectoryChildren.
 	StFileBrowserSettings showHiddenFiles ifFalse: [ items := items reject: [ :file | file isHidden ] ].
 	fileReferenceTable items: items
 ]
 
-{ #category : 'utilities' }
+{ #category : 'accessing - history' }
 StFileNavigationSystemPresenter >> updateWidgetWithFileReference: aFileReference [
 	"A file reference was selected in the receiver or one of its subpresenters, update the file reference table and current directory"
 
 	self currentDirectory: aFileReference.
 	self updateFileReferenceTable.
-	pathBreadcrumbPresenter currentDirectory: self currentDirectory
+	pathBreadcrumbPresenter 
+		currentDirectory: self currentDirectory;
+		updatePathSelection: aFileReference.
+	
 ]

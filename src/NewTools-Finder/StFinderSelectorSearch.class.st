@@ -105,7 +105,7 @@ StFinderSelectorSearch >> searchBySubstring: aString in: anEnvironment [
 StFinderSelectorSearch >> searchMethods: aSelectBlock in: anEnvironment [
 
 	^ OrderedCollection streamContents: [ :stream |
-		  anEnvironment classesAndTraitsDo: [ :class |
+		  anEnvironment classesDo: [ :class |
 			  class methodsDo: [ :method |
 				  (aSelectBlock value: method) ifTrue: [ stream nextPut: method ] ].
 			  class classSide methodsDo: [ :method |

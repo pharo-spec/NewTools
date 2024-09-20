@@ -14,6 +14,8 @@ StOpenDirectoryPresenterTest >> dialogClass [
 
 { #category : 'tests' }
 StOpenDirectoryPresenterTest >> testDefaultDirectory [
+
+	self assert: root isDirectory.
 	self assert: dialog selectedEntry equals: root.
 	dialog defaultFolder: root / 'dir'.
 	self assert: dialog selectedEntry equals: root / 'dir'

@@ -23,10 +23,33 @@ StSettingPresenter class >> with: aPragmaSetting [
 	^ self subclassResponsibility
 ]
 
+{ #category : 'testing' }
+StSettingPresenter >> hasChildren [
+	"Answer <true> if the receiver's node has any children"
+	
+	^ settingNode hasChildren
+]
+
 { #category : 'initialization' }
 StSettingPresenter >> initializePresenters [
 
 	title := self newLabel label: settingNode label. 
+]
+
+{ #category : 'accessing' }
+StSettingPresenter >> pagePresenter [
+
+	^ self owner pagePresenter
+]
+
+{ #category : 'printing' }
+StSettingPresenter >> printOn: aStream [
+
+	super printOn: aStream.
+	aStream 
+		<< ' [';
+		<< self title asString;
+		<< ']'
 ]
 
 { #category : 'initialization' }
@@ -50,8 +73,9 @@ StSettingPresenter >> setModelBeforeInitialization: aModel [
 
 { #category : 'accessing' }
 StSettingPresenter >> updateHelp: aString [ 
-	
-	self owner 
+	"Private - Callback to display the selected setting node help text in the receiver's setting browser"
+
+	self pagePresenter
 		updateSetting: settingNode declaration label 
 		helpText: aString.
 ]

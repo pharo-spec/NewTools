@@ -215,11 +215,36 @@ The Method Finder is not trying all methods in the system so if it will find not
 
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'opening' }
 StFinderPresenter class >> open [
 	<script>
 	
 	(self on: StFinderModel new) open
+]
+
+{ #category : 'opening' }
+StFinderPresenter class >> openOnTargets: aCollection [
+	"Open the receiver with only search targets (classes) in aCollection. See `availableSearchTargets:` for details"
+	
+	| finderModel |
+	
+	finderModel := StFinderModel new
+		availableSearchTargetsFromClasses: aCollection;
+		yourself.
+	^ (self on: finderModel) 
+		open;
+		yourself
+]
+
+{ #category : 'searching' }
+StFinderPresenter class >> searchBy: aString [ 
+	self shouldBeImplemented.
+]
+
+{ #category : 'updating - widgets' }
+StFinderPresenter >> cleanResults [
+
+	resultTree roots: Array empty
 ]
 
 { #category : 'initialization' }
@@ -233,6 +258,7 @@ StFinderPresenter >> connectPresenters [
 			open ].
 
 	self connectSearchOptions.
+	searchOptions substringBox click.
 
 	environmentBar
 		whenAllPackagesSelectedDo: [ self searchInAllPackages ];
@@ -273,20 +299,41 @@ StFinderPresenter >> connectSearchBar [
 StFinderPresenter >> connectSearchOptions [
 
 	searchOptions
+		whenSubstringActivatedDo: [ 
+			self model useSubstring: true.
+			searchOptions 
+				disableExact;
+				disableRegex ];
+		whenSubstringDeactivatedDo: [ 
+			self model useSubstring: false.
+			searchOptions
+				enableExact;
+				enableRegex ];
+
 		whenRegexActivatedDo: [ 
 			self model useRegex: true.
-			searchOptions disableExact. ];
+			searchOptions 
+				disableSubstring;
+				disableExact. ];
 		whenRegexDeactivatedDo: [ 
 			self model useRegex: false.
-			searchOptions enableExact ];
+			searchOptions 
+				enableSubstring;
+				enableExact ];
+		
 		whenCaseActivatedDo: [ self model useCase: true ];
 		whenCaseDeactivatedDo: [ self model useCase: false ];
+		
 		whenExactActivatedDo: [
 			self model useExact: true.
-			searchOptions disableRegex ];
+			searchOptions 
+				disableSubstring;
+				disableRegex ];
 		whenExactDeactivatedDo: [ 
 			self model useExact: false.
-			searchOptions enableRegex ].
+			searchOptions 
+				enableSubstring;
+				enableRegex ].
 ]
 
 { #category : 'layout' }
@@ -315,7 +362,7 @@ StFinderPresenter >> defaultLayout [
 { #category : 'initialization' }
 StFinderPresenter >> initialExtentForWindow [
 
-	^ (700 @ 500) scaledByDisplayScaleFactor
+	^ (800 @ 500) scaledByDisplayScaleFactor
 ]
 
 { #category : 'initialization' }
@@ -332,7 +379,7 @@ StFinderPresenter >> initializeFocus [
 StFinderPresenter >> initializePresenters [
 
 	searchBar := self instantiate: StFinderSearchBar.
-	searchBar searchModes: self model availableSearches.
+	searchBar searchModes: self model availableSearchTargets.
 
 	configButton := self newButton
 		              icon: (self iconNamed: #config);
@@ -417,6 +464,12 @@ StFinderPresenter >> resultTree [
 StFinderPresenter >> searchBar [
 
 	^ searchBar
+]
+
+{ #category : 'searching' }
+StFinderPresenter >> searchBy: aString [ 
+
+	^ self announcingObject searchBy: aString
 ]
 
 { #category : 'private' }

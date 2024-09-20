@@ -98,7 +98,7 @@ SindarinCommandsTest >> testStepToNextCallInClass [
 
 	debugger session stepIntoUntil: [ :currentContext | 
 		currentContext method == (visitor class >> #visit:) ].
-	command := SindarinStepToNextCallInClassCommand forContext: debugger.
+	command := SindarinStepToNextExecutionInClassCommand forContext: debugger.
 	self
 		assert: debugger session context method
 		identicalTo: visitor class >> #visit:.
@@ -121,7 +121,7 @@ SindarinCommandsTest >> testStepToNextCallInClassFailure [
 
 	debugger session stepIntoUntil: [ :currentContext | 
 		currentContext method == (visitor class >> #doNotVisit:) ].
-	command := SindarinStepToNextCallInClassCommand forContext: debugger.
+	command := SindarinStepToNextExecutionInClassCommand forContext: debugger.
 	self
 		assert: debugger session context method
 		identicalTo: visitor class >> #doNotVisit:.
@@ -143,7 +143,7 @@ SindarinCommandsTest >> testStepToNextCallInClassNeverFinishes [
 
 	debugger session stepIntoUntil: [ :currentContext | 
 		currentContext method == (visitor class >> #visitNeverFinish:) ].
-	command := SindarinStepToNextCallInClassCommand forContext: debugger.
+	command := SindarinStepToNextExecutionInClassCommand forContext: debugger.
 	self
 		assert: debugger session context method
 		identicalTo: visitor class >> #visitNeverFinish:.
@@ -168,7 +168,7 @@ SindarinCommandsTest >> testStepToNextCallInClassWithError [
 
 	debugger session stepIntoUntil: [ :currentContext | 
 		currentContext method == (visitor class >> #visitWithError:) ].
-	command := SindarinStepToNextCallInClassCommand forContext: debugger.
+	command := SindarinStepToNextExecutionInClassCommand forContext: debugger.
 	self
 		assert: debugger session context method
 		identicalTo: visitor class >> #visitWithError:.
@@ -191,7 +191,7 @@ SindarinCommandsTest >> testStepToNextCallInObject [
 
 	debugger session stepIntoUntil: [ :currentContext | 
 		currentContext method == (visitor class >> #visitMultipleObjects:) ].
-	command := SindarinStepToNextCallInObjectCommand forContext: debugger.
+	command := SindarinStepToNextExecutionInObjectCommand forContext: debugger.
 	self
 		assert: debugger session context method
 		identicalTo: visitor class >> #visitMultipleObjects:.

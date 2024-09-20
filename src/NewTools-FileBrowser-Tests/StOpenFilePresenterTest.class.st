@@ -56,6 +56,59 @@ StOpenFilePresenterTest >> testSelectFile [
 ]
 
 { #category : 'tests' }
+StOpenFilePresenterTest >> testSelectFileWithMultipleSelection [
+
+	| selectedFile |
+	dialog beMultipleSelection.
+	window := dialog openDialog.
+	self assert: dialog currentDirectory equals: root.
+	dialog selectFile: root / 'sth.ext'.
+
+	self assert: dialog selectedEntry equals: root / 'sth.ext'.
+
+	selectedFile := dialog confirm.
+
+	self assert: selectedFile equals: root / 'sth.ext'
+]
+
+{ #category : 'tests' }
+StOpenFilePresenterTest >> testSelectFileWithMultipleSelectionAccessingEntries [
+
+	| selectedFile |
+	dialog beMultipleSelection.
+	window := dialog openDialog.
+	self assert: dialog currentDirectory equals: root.
+	dialog selectFile: root / 'sth.ext'.
+	
+	"Multiple selection mode in tables only set the 'first' item and ignores the remaining items"
+	self assertCollection: dialog selectedEntries hasSameElements: { root / 'sth.ext' }.
+
+	selectedFile := dialog confirm.
+
+	self assert: selectedFile equals: root / 'sth.ext'
+]
+
+{ #category : 'tests' }
+StOpenFilePresenterTest >> testSelectedEntriesMultipleSelection [
+
+	window := dialog openDialog.
+	dialog selectFiles: { root / 'sth.ext' . root / 'patate.png' }.
+	self 
+		assertCollection: dialog selectedEntries 
+		hasSameElements: { root / 'sth.ext' . root / 'patate.png' }.
+
+]
+
+{ #category : 'tests' }
+StOpenFilePresenterTest >> testSelectedEntriesSingleSelection [
+
+	window := dialog openDialog.
+	dialog selectFile: root / 'sth.ext'.
+	self assertCollection: dialog selectedEntries hasSameElements: { root / 'sth.ext' }.
+
+]
+
+{ #category : 'tests' }
 StOpenFilePresenterTest >> testSetTitle [
 
 	dialog title: 'test set title'.

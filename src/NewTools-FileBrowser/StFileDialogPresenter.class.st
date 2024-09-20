@@ -295,8 +295,9 @@ StFileDialogPresenter >> isolate [
 { #category : 'accessing - ui' }
 StFileDialogPresenter >> nameText [
 	"Answer a <String> with the text in the name presenter used to display the currently selected file/directory or a manually entered name"
-	
-	^ fileNavigationSystem nameText text.
+
+	^ fileNavigationSystem nameText text
+
 ]
 
 { #category : 'accessing' }
@@ -316,12 +317,10 @@ StFileDialogPresenter >> open [
 	^ self openDialog
 ]
 
-{ #category : 'opening' }
+{ #category : 'showing' }
 StFileDialogPresenter >> openModal [
 
 	super openModal cancelled ifTrue: [ ^ nil ].
-	self isMultipleSelection 
-		ifFalse: [ ^ self selectedEntry ].
 	^ self selectedEntries
 ]
 
@@ -357,7 +356,7 @@ StFileDialogPresenter >> showDirectory: aFileReference [
 	self fileNavigationSystem currentDirectory: aFileReference
 ]
 
-{ #category : 'initialization' }
+{ #category : 'accessing - history' }
 StFileDialogPresenter >> updateWidgetWithFileReference: aFileReference [
 
 	self currentDirectory: aFileReference.

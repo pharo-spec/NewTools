@@ -1,8 +1,7 @@
 "
 I am an abstract base class for searches in the `Finder` Tool.
 
-I provide a common interface for performing searches and results are expected to be returned in
-form of a `FinderResult` composite object.
+It provides a common interface for performing searches and results are expected to be returned in form of a `StFinderResult` composite object.
 
 # Subclass Responsibilities
 
@@ -24,6 +23,11 @@ Class {
 	#package : 'NewTools-Finder',
 	#tag : 'Search'
 }
+
+{ #category : 'private' }
+StFinderSearch >> buildResult: aListOfClasses [ 
+	^ self subclassResponsibility
+]
 
 { #category : 'testing' }
 StFinderSearch >> isFinderExampleSearch [

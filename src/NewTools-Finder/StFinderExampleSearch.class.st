@@ -10,7 +10,7 @@ Class {
 	#tag : 'Search'
 }
 
-{ #category : 'execution' }
+{ #category : 'private' }
 StFinderExampleSearch >> buildResult: aListOfStMethodFinderSend [
 
 	| results |

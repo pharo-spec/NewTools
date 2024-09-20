@@ -71,7 +71,7 @@ StMessageListPresenter >> defaultOutputPort [
 { #category : 'private - actions' }
 StMessageListPresenter >> doBrowseImplementors [
 		
-	self systemNavigation browseAllImplementorsOf: self selectedMethod selector
+	StMessageBrowser browseImplementorsOf: self selectedMethod selector
 ]
 
 { #category : 'private - actions' }
@@ -83,7 +83,7 @@ StMessageListPresenter >> doBrowseMethod [
 { #category : 'private - actions' }
 StMessageListPresenter >> doBrowseSenders [
 
-	self systemNavigation browseAllSendersOf: self selectedMethod selector
+	StMessageBrowser browseSendersOf: self selectedMethod selector
 ]
 
 { #category : 'private - actions' }
