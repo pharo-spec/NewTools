@@ -28,5 +28,5 @@ SindarinStepToNextExecutionInObjectCommand >> setConditionValue [
 
 { #category : 'predicates' }
 SindarinStepToNextExecutionInObjectCommand >> targetCondition [ 
-	^debugger receiver ~= conditionValue
+	^debugger receiver == conditionValue
 ]

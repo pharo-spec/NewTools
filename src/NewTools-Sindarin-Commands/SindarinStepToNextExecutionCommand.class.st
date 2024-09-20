@@ -28,7 +28,7 @@ SindarinStepToNextExecutionCommand >> execute [
 		depth := 0.
 		[ 
 		debugger method ~= callingMethod and: [ 
-			depth < maxDepth and: [ self targetCondition ] ] ] whileTrue: [ 
+			depth < maxDepth and: [ self targetCondition not] ] ] whileTrue: [ 
 			debugger step.
 			depth := depth + 1.
 			debugger hasSignalledUnhandledException ifTrue: [ depth := 1000 ] ] ].
