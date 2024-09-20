@@ -1,5 +1,5 @@
 "
-I will step the execution from a context until the next call to the same class as that context's receiver's class.
+I step the execution from a starting context until the execution comes back to code that executes in the same class as the starting context's receiver's class.
 "
 Class {
 	#name : 'SindarinStepToNextExecutionInClassCommand',
