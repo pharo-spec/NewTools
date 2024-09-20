@@ -24,7 +24,7 @@ Class {
 
 { #category : 'accessing - defaults' }
 SindarinJumpToCaretCommand class >> defaultDescription [
-	^ 'Jump to caret so that the next instruction that will be executed is the instruction associated to the node associated to the caret. All necessary arguments are pushed on the stack but everything else is skipped and the program state (e.g : variable bindings) stay the same.'
+	^ 'Move the execution to the caret position without executing any code but preserving current state. Execution resumes from this position.'
 ]
 
 { #category : 'initialization' }
@@ -36,7 +36,7 @@ SindarinJumpToCaretCommand class >> defaultIconName [
 SindarinJumpToCaretCommand class >> defaultName [
 	<toolbarExtensionDebugCommand: 50>
 	<codeExtensionDebugCommand:1>
-	^ '[Exp.] Jump to caret'
+	^ 'Jump to caret'
 ]
 
 { #category : 'execution' }
