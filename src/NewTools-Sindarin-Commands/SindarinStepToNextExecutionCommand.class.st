@@ -1,5 +1,5 @@
 Class {
-	#name : 'SindarinStepToNextCallCommand',
+	#name : 'SindarinStepToNextExecutionCommand',
 	#superclass : 'SindarinCommand',
 	#instVars : [
 		'debugger',
@@ -10,12 +10,12 @@ Class {
 }
 
 { #category : 'accessing - defaults' }
-SindarinStepToNextCallCommand class >> defaultIconName [
+SindarinStepToNextExecutionCommand class >> defaultIconName [
 	^ #glamorousInto
 ]
 
 { #category : 'hooks' }
-SindarinStepToNextCallCommand >> execute [
+SindarinStepToNextExecutionCommand >> execute [
 
 	| callingMethod maxDepth depth |
 	self debuggerPresenter debuggerActionModel preventUpdatesDuring: [ 
@@ -35,13 +35,13 @@ SindarinStepToNextCallCommand >> execute [
 ]
 
 { #category : 'hooks' }
-SindarinStepToNextCallCommand >> setConditionValue [
+SindarinStepToNextExecutionCommand >> setConditionValue [
 
 	^ self subclassResponsibility
 ]
 
 { #category : 'hooks' }
-SindarinStepToNextCallCommand >> targetCondition [
+SindarinStepToNextExecutionCommand >> targetCondition [
 
 	^ self subclassResponsibility
 ]
