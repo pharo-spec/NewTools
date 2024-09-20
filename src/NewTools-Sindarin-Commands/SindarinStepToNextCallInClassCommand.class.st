@@ -10,14 +10,14 @@ Class {
 
 { #category : 'accessing - defaults' }
 SindarinStepToNextCallInClassCommand class >> defaultDescription [
-	^ 'Steps execution until the next call in the current class, then returns debugger control.'
+	^ 'Steps until the execution comes back to code executing in the current class.'
 ]
 
 { #category : 'accessing - defaults' }
 SindarinStepToNextCallInClassCommand class >> defaultName [
 	<toolbarExtensionDebugCommand: 50>
 	<codeExtensionDebugCommand: 50>
-	^ 'Next call in class'
+	^ 'To next execution in class'
 ]
 
 { #category : 'predicates' }
