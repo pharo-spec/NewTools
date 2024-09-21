@@ -131,6 +131,7 @@ StMessageBrowser class >> taskbarIconName [
 
 { #category : 'specs' }
 StMessageBrowser class >> title [
+
 	^ 'Message Browser'
 ]
 
@@ -413,7 +414,8 @@ StMessageBrowser >> messages [
 { #category : 'api' }
 StMessageBrowser >> messages: aCollection [
 
-	messageList messages: aCollection
+	messageList messages: aCollection.
+	self toolbarPresenter updatePresenter.
 ]
 
 { #category : 'announcements' }
@@ -525,14 +527,14 @@ StMessageBrowser >> selectItem: item [
 	self installIconStylerFor: item
 ]
 
-{ #category : 'accessing' }
+{ #category : 'backstops' }
 StMessageBrowser >> selectedClass [
 	^ self selectedMethod origin
 ]
 
 { #category : 'api' }
 StMessageBrowser >> selectedMessage: aMessage [
-	messageList selectMessage: aMessage
+	messageList updateVisitedScopesFrom: aMessage
 ]
 
 { #category : 'accessing' }
