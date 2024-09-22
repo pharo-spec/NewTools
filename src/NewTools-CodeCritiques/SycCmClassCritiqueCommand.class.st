@@ -3,7 +3,7 @@ I am a command to make a class abstract by adding a method that returns whether 
 "
 Class {
 	#name : 'SycCmClassCritiqueCommand',
-	#superclass : 'SycClassCmCommand',
+	#superclass : 'SycClassExtraCmCommand',
 	#category : 'NewTools-CodeCritiques-Commands',
 	#package : 'NewTools-CodeCritiques',
 	#tag : 'Commands'
@@ -37,5 +37,5 @@ SycCmClassCritiqueCommand >> name [
 
 { #category : 'accessing' }
 SycCmClassCritiqueCommand >> order [
-	^ 45
+	^ 60
 ]
