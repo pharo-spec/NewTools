@@ -219,13 +219,17 @@ StBrowserSearchPresenter >> selectedItems [
 { #category : 'updating' }
 StBrowserSearchPresenter >> updateList [
 
-	| newItems |
+	| newItems env |
+	
+	env := self class environment.
 	newItems := searchField text
 		            ifEmpty: [ items ]
 		            ifNotEmpty: [ :text | self search: text ].
 
 	itemsList items = newItems ifFalse: [
-		itemsList
-			items: newItems;
-			selectFirst ]
+		itemsList items: newItems ].
+	
+	(env hasClassNamed: searchField text)
+		ifTrue: [ itemsList selectItem: (env at: searchField text asSymbol) scrollToSelection: true ]
+		ifFalse: [ itemsList selectFirst ]
 ]
