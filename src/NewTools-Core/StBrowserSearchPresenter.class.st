@@ -1,5 +1,7 @@
 "
-I am a presenter that gets a list of elements and that allows one to select one (or multiple if the #multipleSelection option is enabled).
+Provides a searchable list of classes, and options to configure the search mode (substring search (default), regular expression, exact). The search mode can be combined with case-sensitiveness.
+
+Multiple classes can be selected if the #multipleSelection option is enabled.
 "
 Class {
 	#name : 'StBrowserSearchPresenter',
@@ -7,7 +9,8 @@ Class {
 	#instVars : [
 		'items',
 		'itemsList',
-		'searchField'
+		'searchField',
+		'searchOptions'
 	],
 	#category : 'NewTools-Core-Calypso',
 	#package : 'NewTools-Core',
@@ -41,7 +44,9 @@ StBrowserSearchPresenter class >> exampleConfiguringPresenterForMultipleSelectio
 StBrowserSearchPresenter class >> open [
 
 	<script>
-	self new open
+	self new 
+		items: self class environment allClasses;
+		open
 ]
 
 { #category : 'instance creation' }
@@ -69,7 +74,9 @@ StBrowserSearchPresenter >> connectPresenters [
 
 	super connectPresenters.
 
-	searchField whenTextChangedDo: [ self updateList ]
+	searchField whenTextChangedDo: [ self updateList ].
+	
+	searchOptions substringBox click.
 ]
 
 { #category : 'layout' }
@@ -79,6 +86,7 @@ StBrowserSearchPresenter >> defaultLayout [
 		  spacing: 5;
 		  add: itemsList;
 		  add: searchField expand: false;
+		  add: searchOptions expand: false;
 		  yourself
 ]
 
@@ -99,11 +107,32 @@ StBrowserSearchPresenter >> initializePresenters [
 
 	itemsList display: [ :entity | entity name ].
 
+	self 
+		initializeSearchField;
+		initializeSearchOptions.
+]
+
+{ #category : 'initialization' }
+StBrowserSearchPresenter >> initializeSearchField [
+
 	searchField placeholder: 'Filter...'.
-	searchField eventHandler whenKeyDownDo: [ :anEvent | "If we press arrow up, we should get up in the list. If we press arrow down, we should get down in the list.""31 = Arrow down"
-		anEvent keyValue = 31 ifTrue: [ itemsList selectIndex: (itemsList selection selectedIndex + 1 min: itemsList items size) scrollToSelection: true ].
-		"30 = Arrow up"
-		anEvent keyValue = 30 ifTrue: [ itemsList selectIndex: (itemsList selection selectedIndex - 1 max: 1) scrollToSelection: true ] ]
+	searchField eventHandler 
+		whenKeyDownDo: [ :anEvent | 
+			"If we press arrow up, we should get up in the list. If we press arrow down, we should get down in the list."
+			
+			"31 = Arrow down"
+			anEvent keyValue = 31 
+				ifTrue: [ itemsList selectIndex: (itemsList selection selectedIndex + 1 min: itemsList items size) scrollToSelection: true ].
+			
+			"30 = Arrow up"
+			anEvent keyValue = 30 
+				ifTrue: [ itemsList selectIndex: (itemsList selection selectedIndex - 1 max: 1) scrollToSelection: true ] ]
+]
+
+{ #category : 'initialization' }
+StBrowserSearchPresenter >> initializeSearchOptions [
+
+	searchOptions := self instantiate: SpSearchInputFieldOptionsPresenter.
 ]
 
 { #category : 'initialization' }
@@ -133,6 +162,23 @@ StBrowserSearchPresenter >> multipleSelection [
 	itemsList beMultipleSelection
 ]
 
+{ #category : 'updating' }
+StBrowserSearchPresenter >> search: text [
+	"Main search callback method. Answer a <Collection> of results"
+
+	^ OrderedCollection streamContents: [ :stream |
+		  items do: [ :class |
+			  (self selectBlock value: class name value: text)  
+					ifTrue: [ stream nextPut: class ] ] ]
+]
+
+{ #category : 'updating' }
+StBrowserSearchPresenter >> searchOptions [
+	"Answer the receiver's search options presenter"
+
+	^ searchOptions
+]
+
 { #category : 'api' }
 StBrowserSearchPresenter >> searchValue: aString [
 
@@ -143,6 +189,13 @@ StBrowserSearchPresenter >> searchValue: aString [
 StBrowserSearchPresenter >> searchWithItem: anItem [
 
 	self searchValue: (itemsList display value: anItem)
+]
+
+{ #category : 'updating' }
+StBrowserSearchPresenter >> selectBlock [
+	"Answer a <Closure> used to search each item in the receiver"
+
+	^ searchOptions selectBlock
 ]
 
 { #category : 'accessing' }
@@ -166,14 +219,17 @@ StBrowserSearchPresenter >> selectedItems [
 { #category : 'updating' }
 StBrowserSearchPresenter >> updateList [
 
-	| newItems |
-	newItems := searchField text ifEmpty: [ items ] ifNotEmpty: [ :text |
-		            | regex |
-		            regex := text asRegexIgnoringCase.
-		            items select: [ :item | regex search: (itemsList display value: item) ] ].
+	| newItems env |
+	
+	env := self class environment.
+	newItems := searchField text
+		            ifEmpty: [ items ]
+		            ifNotEmpty: [ :text | self search: text ].
 
 	itemsList items = newItems ifFalse: [
-		itemsList
-			items: newItems;
-			selectFirst ]
+		itemsList items: newItems ].
+	
+	(env hasClassNamed: searchField text)
+		ifTrue: [ itemsList selectItem: (env at: searchField text asSymbol) scrollToSelection: true ]
+		ifFalse: [ itemsList selectFirst ]
 ]
