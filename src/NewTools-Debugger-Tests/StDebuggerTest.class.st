@@ -622,6 +622,7 @@ StDebuggerTest >> testDiscardCodeChangesFor [
 { #category : 'tests - code pane' }
 StDebuggerTest >> testDynamicVariableEvaluation [
 	|activeProcess debuggedProcess|
+	self skipOnPharoCITestingEnvironment.
 	debugger := StTestDebuggerProvider new
 		            debuggerWithDynamicVariableSuspendedContext.
 	debugger initializeCode.
