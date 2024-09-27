@@ -1,10 +1,12 @@
 Class {
-	#name : #StDebuggerContextInteractionModelTest,
-	#superclass : #TestCase,
-	#category : #'NewTools-Debugger-Tests-Model'
+	#name : 'StDebuggerContextInteractionModelTest',
+	#superclass : 'TestCase',
+	#category : 'NewTools-Debugger-Tests-Model',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Model'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextInteractionModelTest >> testHasUnsavedCodeChanges [
 
 	| model code |
@@ -19,7 +21,7 @@ StDebuggerContextInteractionModelTest >> testHasUnsavedCodeChanges [
 	self assert: model hasUnsavedCodeChanges
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerContextInteractionModelTest >> testNilContextModel [
 
 	self deny:

@@ -1,24 +1,26 @@
 Class {
-	#name : #StDebuggerExtensionMechanismTest,
-	#superclass : #TestCase,
+	#name : 'StDebuggerExtensionMechanismTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'debugger',
 		'oldExtensionActivation'
 	],
-	#category : #'NewTools-Debugger-Tests-Presenters'
+	#category : 'NewTools-Debugger-Tests-Presenters',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Presenters'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerExtensionMechanismTest >> debugger [
 	^ debugger ifNil: [ debugger := self debuggerClass basicNew ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerExtensionMechanismTest >> debuggerClass [
 	^ StDebugger
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerExtensionMechanismTest >> setUp [
 
 	super setUp.
@@ -26,7 +28,7 @@ StDebuggerExtensionMechanismTest >> setUp [
 	StDebuggerExtensionGeneratorForTests generateTestClass
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerExtensionMechanismTest >> tearDown [
 
 	StDebuggerExtensionGeneratorForTests removeTestClass.
@@ -34,7 +36,7 @@ StDebuggerExtensionMechanismTest >> tearDown [
 	super tearDown
 ]
 
-{ #category : #'tests - extensions' }
+{ #category : 'tests - extensions' }
 StDebuggerExtensionMechanismTest >> testExtensionToolsClasses [
 
 	self
@@ -42,7 +44,7 @@ StDebuggerExtensionMechanismTest >> testExtensionToolsClasses [
 		equals: TStDebuggerExtension users
 ]
 
-{ #category : #'tests - extensions' }
+{ #category : 'tests - extensions' }
 StDebuggerExtensionMechanismTest >> testHasAnyActivatedExtensions [
 
 	| testClass |
@@ -52,7 +54,7 @@ StDebuggerExtensionMechanismTest >> testHasAnyActivatedExtensions [
 	self assert: (self debuggerClass hasAnyActivatedExtension: { testClass })
 ]
 
-{ #category : #'tests - extensions' }
+{ #category : 'tests - extensions' }
 StDebuggerExtensionMechanismTest >> testInstantiateExtensionToolsPage [
 	|dbg toolPage|
 	dbg := self debugger.
@@ -65,7 +67,7 @@ StDebuggerExtensionMechanismTest >> testInstantiateExtensionToolsPage [
 	 
 ]
 
-{ #category : #'tests - extensions' }
+{ #category : 'tests - extensions' }
 StDebuggerExtensionMechanismTest >> testRegisterExtensionTool [
 	|dbg object|
 	dbg := self debugger.
@@ -75,7 +77,7 @@ StDebuggerExtensionMechanismTest >> testRegisterExtensionTool [
 	self assertCollection: dbg extensionTools equals: { object } asOrderedCollection 
 ]
 
-{ #category : #'tests - extensions' }
+{ #category : 'tests - extensions' }
 StDebuggerExtensionMechanismTest >> testUsesExtensions [
 	| testClass |
 	testClass := StDebuggerExtensionGeneratorForTests testClass.	

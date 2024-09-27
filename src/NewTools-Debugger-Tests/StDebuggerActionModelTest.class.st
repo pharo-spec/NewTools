@@ -1,6 +1,6 @@
 Class {
-	#name : #StDebuggerActionModelTest,
-	#superclass : #TestCase,
+	#name : 'StDebuggerActionModelTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'session',
 		'debugActionModel',
@@ -8,21 +8,23 @@ Class {
 		'result',
 		'shouldFilterStack'
 	],
-	#category : #'NewTools-Debugger-Tests-Model'
+	#category : 'NewTools-Debugger-Tests-Model',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Model'
 }
 
-{ #category : #benchmarking }
+{ #category : 'benchmarking' }
 StDebuggerActionModelTest class >> benchFilterStack [
 	<script>
 	^self new benchmarkFilterStack inspect
 ]
 
-{ #category : #benchmarks }
+{ #category : 'benchmarks' }
 StDebuggerActionModelTest >> bench: aBlock [
 	^ aBlock timeToRun asNanoSeconds
 ]
 
-{ #category : #benchmarks }
+{ #category : 'benchmarks' }
 StDebuggerActionModelTest >> benchmarkFilterStack [
 	| stack1 stack2 beforeResults afterResults |
 	[ self method1: 0 ]
@@ -51,7 +53,7 @@ StDebuggerActionModelTest >> benchmarkFilterStack [
 	New behavior: ', afterResults printString, ' nanoseconds measured.'
 ]
 
-{ #category : #helper }
+{ #category : 'helper' }
 StDebuggerActionModelTest >> changeSession: aDebugSession [
 
 	session clear.
@@ -59,7 +61,7 @@ StDebuggerActionModelTest >> changeSession: aDebugSession [
 	debugActionModel := StDebuggerActionModel on: session
 ]
 
-{ #category : #helper }
+{ #category : 'helper' }
 StDebuggerActionModelTest >> emptyContextForMethod: aCompiledMethod [
 	^ (Context newForMethod: aCompiledMethod)
 		  initializeWith: nil
@@ -70,45 +72,45 @@ StDebuggerActionModelTest >> emptyContextForMethod: aCompiledMethod [
 		  yourself
 ]
 
-{ #category : #helper }
+{ #category : 'helper' }
 StDebuggerActionModelTest >> fileOutMethod: anObject [
 	result := anObject
 ]
 
-{ #category : #helper }
+{ #category : 'helper' }
 StDebuggerActionModelTest >> method1: i [
 	^self method2: i+1
 ]
 
-{ #category : #helper }
+{ #category : 'helper' }
 StDebuggerActionModelTest >> method2: i [
 	<haltOrBreakpointForTesting>
 	i = 9999 ifTrue: [ self halt. ^i ].
 	^self method1: i+1
 ]
 
-{ #category : #helper }
+{ #category : 'helper' }
 StDebuggerActionModelTest >> methodClass [
 	^self
 ]
 
-{ #category : #helper }
+{ #category : 'helper' }
 StDebuggerActionModelTest >> methodWithPragma [
 	<debuggerCompleteToSender>
 ]
 
-{ #category : #helper }
+{ #category : 'helper' }
 StDebuggerActionModelTest >> session [
 	^debugger session
 ]
 
-{ #category : #helper }
+{ #category : 'helper' }
 StDebuggerActionModelTest >> setResult [
 	result := 2 squared.
 	^result
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerActionModelTest >> setUp [
 	| method context process |
 	super setUp.
@@ -125,7 +127,7 @@ StDebuggerActionModelTest >> setUp [
 	shouldFilterStack := StDebuggerActionModel shouldFilterStack.
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerActionModelTest >> tearDown [
 	debugger ifNotNil: [ debugger close].
 	session ifNotNil: [ session clear ].
@@ -139,7 +141,7 @@ StDebuggerActionModelTest >> tearDown [
 	super tearDown
 ]
 
-{ #category : #'tests - actions' }
+{ #category : 'tests - actions' }
 StDebuggerActionModelTest >> testClearDebugSession [
 	| process |
 	process := session interruptedProcess.
@@ -149,7 +151,7 @@ StDebuggerActionModelTest >> testClearDebugSession [
 	self assert: session interruptedContext isNil
 ]
 
-{ #category : #'tests - contexts' }
+{ #category : 'tests - contexts' }
 StDebuggerActionModelTest >> testComputeInitialTopContext [
 	|newSession|
 	self changeSession: StTestDebuggerProvider new debuggerWithMissingSubclassResponsibilityContext session.
@@ -162,7 +164,7 @@ StDebuggerActionModelTest >> testComputeInitialTopContext [
 	
 ]
 
-{ #category : #'tests - actions' }
+{ #category : 'tests - actions' }
 StDebuggerActionModelTest >> testCopyStackToClipboard [
 	debugActionModel copyStackToClipboard.
 	self
@@ -172,17 +174,17 @@ StDebuggerActionModelTest >> testCopyStackToClipboard [
 				streamContents: [ :s | session interruptedContext shortDebugStackOn: s ])
 ]
 
-{ #category : #'tests - actions' }
+{ #category : 'tests - actions' }
 StDebuggerActionModelTest >> testCreateMissingMethod [
 ]
 
-{ #category : #'tests - stack filtering' }
+{ #category : 'tests - stack filtering' }
 StDebuggerActionModelTest >> testDefaultShouldFilterStack [
 
 	self assert: StDebuggerActionModel shouldFilterStack
 ]
 
-{ #category : #'tests - stack filtering' }
+{ #category : 'tests - stack filtering' }
 StDebuggerActionModelTest >> testDynamicShouldFilterStack [
 
 	|mockDebugActionModel|
@@ -197,7 +199,7 @@ StDebuggerActionModelTest >> testDynamicShouldFilterStack [
 	self deny: mockDebugActionModel shouldFilterStack 
 ]
 
-{ #category : #'tests - stack filtering' }
+{ #category : 'tests - stack filtering' }
 StDebuggerActionModelTest >> testDynamicShouldFilterStackUpdate [
 
 	|mockDebugActionModel context|
@@ -243,13 +245,13 @@ StDebuggerActionModelTest >> testDynamicShouldFilterStackUpdate [
 	
 ]
 
-{ #category : #'tests - actions' }
+{ #category : 'tests - actions' }
 StDebuggerActionModelTest >> testFileOutMethod [
 	debugActionModel fileOutMethod: self.
 	self assert: result equals: self selector
 ]
 
-{ #category : #'tests - stack filtering' }
+{ #category : 'tests - stack filtering' }
 StDebuggerActionModelTest >> testFilterDNUStack [
 
 	|stack filteredStack|
@@ -274,7 +276,7 @@ StDebuggerActionModelTest >> testFilterDNUStack [
 	
 ]
 
-{ #category : #'tests - stack filtering' }
+{ #category : 'tests - stack filtering' }
 StDebuggerActionModelTest >> testFilterMissingSubclassResponsibilityStack [
 
 	|stack filteredStack|	
@@ -294,7 +296,7 @@ StDebuggerActionModelTest >> testFilterMissingSubclassResponsibilityStack [
 	self assert: filteredStack second identicalTo: stack fifth
 ]
 
-{ #category : #'tests - stack filtering' }
+{ #category : 'tests - stack filtering' }
 StDebuggerActionModelTest >> testFilterStack [
 
 	|stack filteredStack|
@@ -320,7 +322,7 @@ StDebuggerActionModelTest >> testFilterStack [
 	self assert: filteredStack second identicalTo: stack third
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerActionModelTest >> testImplementClassifiedInClassForContext [
 	|method|
 	method := (StDebuggerUsingSpecSelectorMock lookupSelector: #method).
@@ -338,7 +340,7 @@ StDebuggerActionModelTest >> testImplementClassifiedInClassForContext [
 	self assert: method methodClass identicalTo: StDebuggerUsingSpecSelectorMock
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerActionModelTest >> testImplementMethodClassification [
 
 	| method |
@@ -379,7 +381,7 @@ StDebuggerActionModelTest >> testImplementMethodClassification [
 	self assert: method protocol equals: Protocol unclassified
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerActionModelTest >> testInitialization [
 	self assert: debugActionModel session identicalTo: session.
 	self
@@ -387,18 +389,18 @@ StDebuggerActionModelTest >> testInitialization [
 		identicalTo: session interruptedContext
 ]
 
-{ #category : #'tests - predicates' }
+{ #category : 'tests - predicates' }
 StDebuggerActionModelTest >> testIsContextAnAssertionFailure [
 	self changeSession: StTestDebuggerProvider new debuggerWithFailingAssertionContext session.
 	self assert: debugActionModel isContextAnAssertionFailure
 ]
 
-{ #category : #'tests - predicates' }
+{ #category : 'tests - predicates' }
 StDebuggerActionModelTest >> testIsContextSteppable [
 	self assert: debugActionModel isContextSteppable
 ]
 
-{ #category : #'tests - predicates' }
+{ #category : 'tests - predicates' }
 StDebuggerActionModelTest >> testIsInterruptedContextAnAssertEqualsFailure [
 
 	self changeSession:
@@ -407,13 +409,13 @@ StDebuggerActionModelTest >> testIsInterruptedContextAnAssertEqualsFailure [
 	self assert: debugActionModel isContextAnAssertionFailure
 ]
 
-{ #category : #'tests - predicates' }
+{ #category : 'tests - predicates' }
 StDebuggerActionModelTest >> testIsInterruptedContextDead [
 	session interruptedContext pc: nil.
 	self assert: debugActionModel isInterruptedContextDead
 ]
 
-{ #category : #'tests - predicates' }
+{ #category : 'tests - predicates' }
 StDebuggerActionModelTest >> testIsInterruptedContextDoesNotUnderstand [
 	self changeSession: StTestDebuggerProvider new debuggerWithDNUContext session.
 	self assert: debugActionModel isInterruptedContextDoesNotUnderstand.
@@ -421,26 +423,26 @@ StDebuggerActionModelTest >> testIsInterruptedContextDoesNotUnderstand [
 	self deny: debugActionModel isInterruptedContextDoesNotUnderstand
 ]
 
-{ #category : #'tests - predicates' }
+{ #category : 'tests - predicates' }
 StDebuggerActionModelTest >> testIsInterruptedContextMissingClassException [	
 	StTestDebuggerProvider compileMissingClassContextBuilder.
 	self changeSession: StTestDebuggerProvider new debuggerWithMissingClassContext session.
 	self assert: debugActionModel isInterruptedContextMissingClassException
 ]
 
-{ #category : #'tests - predicates' }
+{ #category : 'tests - predicates' }
 StDebuggerActionModelTest >> testIsInterruptedContextPostMortem [
 	session resume.
 	self assert: debugActionModel isInterruptedContextPostMortem
 ]
 
-{ #category : #'tests - predicates' }
+{ #category : 'tests - predicates' }
 StDebuggerActionModelTest >> testIsInterruptedContextSubclassResponsibilityException [
 	self changeSession: StTestDebuggerProvider new debuggerWithMissingSubclassResponsibilityContext session.
 	self assert: debugActionModel isInterruptedContextSubclassResponsibilityException
 ]
 
-{ #category : #'tests - actions' }
+{ #category : 'tests - actions' }
 StDebuggerActionModelTest >> testPeelToFirstLike [
 
 	| firstCaller |
@@ -469,7 +471,7 @@ StDebuggerActionModelTest >> testPeelToFirstLike [
 	self assert: debugActionModel topContext identicalTo: firstCaller
 ]
 
-{ #category : #'tests - actions' }
+{ #category : 'tests - actions' }
 StDebuggerActionModelTest >> testProceedDebugSession [
 	self deny: session interruptedContext isNil.
 	self assert: result isNil.
@@ -478,7 +480,7 @@ StDebuggerActionModelTest >> testProceedDebugSession [
 	self assert: result equals: 4
 ]
 
-{ #category : #'tests - actions' }
+{ #category : 'tests - actions' }
 StDebuggerActionModelTest >> testRestartContext [
 	|topContext topPC|
 	topContext := 
@@ -491,7 +493,7 @@ StDebuggerActionModelTest >> testRestartContext [
 	self assert: session interruptedContext pc equals: topPC
 ]
 
-{ #category : #'tests - actions' }
+{ #category : 'tests - actions' }
 StDebuggerActionModelTest >> testReturnValueFromExpressionFromContext [
 	session stepInto.
 	session stepInto.
@@ -501,7 +503,7 @@ StDebuggerActionModelTest >> testReturnValueFromExpressionFromContext [
 	self assert: result equals: 0
 ]
 
-{ #category : #'tests - actions' }
+{ #category : 'tests - actions' }
 StDebuggerActionModelTest >> testRunToSelectionInContext [
 	|method node|
 	method := (self class >> #setResult).
@@ -511,7 +513,7 @@ StDebuggerActionModelTest >> testRunToSelectionInContext [
 	self assert: (method sourceNodeForPC: session interruptedContext pc) identicalTo: node
 ]
 
-{ #category : #'tests - actions' }
+{ #category : 'tests - actions' }
 StDebuggerActionModelTest >> testStepInto [
 	|ctx|
 	ctx := session interruptedContext.
@@ -521,7 +523,7 @@ StDebuggerActionModelTest >> testStepInto [
 	self assert: session stack second identicalTo: ctx
 ]
 
-{ #category : #'tests - actions' }
+{ #category : 'tests - actions' }
 StDebuggerActionModelTest >> testStepIntoQuickMethods [
 	|ctx|
 	ctx := StMockContext new.
@@ -537,7 +539,7 @@ StDebuggerActionModelTest >> testStepIntoQuickMethods [
 	self assert: ctx stepIntoQuickMethodBooleans second equals: false
 ]
 
-{ #category : #'tests - actions' }
+{ #category : 'tests - actions' }
 StDebuggerActionModelTest >> testStepOver [
 	| method ctx |
 	method := self class >> #setResult.
@@ -553,7 +555,7 @@ StDebuggerActionModelTest >> testStepOver [
 		identicalTo: method ast statements second
 ]
 
-{ #category : #'tests - actions' }
+{ #category : 'tests - actions' }
 StDebuggerActionModelTest >> testStepThrough [
 	| method ctx |
 	method := self class >> #setResult.
@@ -569,7 +571,7 @@ StDebuggerActionModelTest >> testStepThrough [
 		identicalTo: method ast statements second
 ]
 
-{ #category : #'tests - predicates' }
+{ #category : 'tests - predicates' }
 StDebuggerActionModelTest >> testUpdateDebugSession [
 
 	| exception |
@@ -582,7 +584,7 @@ StDebuggerActionModelTest >> testUpdateDebugSession [
 	self assert: session exception identicalTo: exception
 ]
 
-{ #category : #'tests - contexts' }
+{ #category : 'tests - contexts' }
 StDebuggerActionModelTest >> testUpdateTopContext [
 	
 	self changeSession: StTestDebuggerProvider new debuggerWithMissingSubclassResponsibilityContext session.
@@ -594,7 +596,7 @@ StDebuggerActionModelTest >> testUpdateTopContext [
 	
 ]
 
-{ #category : #'tests - contexts' }
+{ #category : 'tests - contexts' }
 StDebuggerActionModelTest >> testUpdateTopContextAfterSessionOperation [
 	|mockDebugActionModel context|
 	context := [  ] asContext.

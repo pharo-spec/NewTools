@@ -1,28 +1,30 @@
 Class {
-	#name : #StDebuggerToolCommandTreeBuilderTest,
-	#superclass : #TestCase,
+	#name : 'StDebuggerToolCommandTreeBuilderTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'session',
 		'debugger',
 		'rootGroup',
 		'builder'
 	],
-	#category : #'NewTools-Debugger-Tests-Model'
+	#category : 'NewTools-Debugger-Tests-Model',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Model'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 StDebuggerToolCommandTreeBuilderTest class >> isAbstract [ 
 	^self class = StDebuggerToolCommandTreeBuilderTest 
 ]
 
-{ #category : #assertions }
+{ #category : 'assertions' }
 StDebuggerToolCommandTreeBuilderTest >> assertCommandGroup: cmdGroup hasDisplayStrategy: displayStrategy [
 	self
 		assert: cmdGroup displayStrategy class
 		identicalTo: displayStrategy
 ]
 
-{ #category : #assertions }
+{ #category : 'assertions' }
 StDebuggerToolCommandTreeBuilderTest >> assertCommandGroup: cmdGroup hasSameCommands: expectedCommands withContext: expectedContext displayStrategy: displayStrategy [
 	| commands |
 	self deny: cmdGroup isRoot.
@@ -35,14 +37,14 @@ StDebuggerToolCommandTreeBuilderTest >> assertCommandGroup: cmdGroup hasSameComm
 	self assertCommands: commands haveContext: expectedContext
 ]
 
-{ #category : #assertions }
+{ #category : 'assertions' }
 StDebuggerToolCommandTreeBuilderTest >> assertCommandGroupEntries: commands hasCommands: expectedCommands [
 	self
 		assertCollection: (commands collect: [ :cmd | cmd class ])
 		hasSameElements: expectedCommands
 ]
 
-{ #category : #assertions }
+{ #category : 'assertions' }
 StDebuggerToolCommandTreeBuilderTest >> assertCommands: commands equals: expectedCommands [
 	self assert: commands size equals: expectedCommands size.
 	commands
@@ -53,24 +55,24 @@ StDebuggerToolCommandTreeBuilderTest >> assertCommands: commands equals: expecte
 			self assert: actual class identicalTo: expected class ]
 ]
 
-{ #category : #assertions }
+{ #category : 'assertions' }
 StDebuggerToolCommandTreeBuilderTest >> assertCommands: commands haveContext: expectedContext [
 	commands
 		do: [ :cmd | self assert: cmd context identicalTo: expectedContext ]
 ]
 
-{ #category : #helper }
+{ #category : 'helper' }
 StDebuggerToolCommandTreeBuilderTest >> commandsFromSpecGroup: group [
 
 	^ group decoratedGroup entries collect: [ :cmd | cmd innerCommand ]
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StDebuggerToolCommandTreeBuilderTest >> newBuilder [
 	^self subclassResponsibility 
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerToolCommandTreeBuilderTest >> setUp [
 	| context process |
 	super setUp.
@@ -92,7 +94,7 @@ StDebuggerToolCommandTreeBuilderTest >> setUp [
 	builder := self newBuilder
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerToolCommandTreeBuilderTest >> tearDown [
 	debugger ifNotNil:[debugger clear].
 	super tearDown.

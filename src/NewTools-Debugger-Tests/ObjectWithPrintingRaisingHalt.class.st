@@ -1,10 +1,11 @@
 Class {
-	#name : #ObjectWithPrintingRaisingHalt,
-	#superclass : #Object,
-	#category : #'NewTools-Debugger-Tests'
+	#name : 'ObjectWithPrintingRaisingHalt',
+	#superclass : 'Object',
+	#category : 'NewTools-Debugger-Tests',
+	#package : 'NewTools-Debugger-Tests'
 }
 
-{ #category : #printing }
+{ #category : 'printing' }
 ObjectWithPrintingRaisingHalt >> printOn: aStream [
 
 	<haltOrBreakpointForTesting>

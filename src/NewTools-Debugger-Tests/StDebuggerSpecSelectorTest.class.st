@@ -1,32 +1,34 @@
 Class {
-	#name : #StDebuggerSpecSelectorTest,
-	#superclass : #TestCase,
+	#name : 'StDebuggerSpecSelectorTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'specSelector'
 	],
-	#category : #'NewTools-Debugger-Tests-Model'
+	#category : 'NewTools-Debugger-Tests-Model',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Model'
 }
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 StDebuggerSpecSelectorTest >> defaultSelectorWithExtensions [
 	^ StDebuggerSpecSelector
 		defaultDebuggerWithExtensionSpecSelector
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 StDebuggerSpecSelectorTest >> defaultSelectorWithoutExtensions [
 	^ StDebuggerSpecSelector
 		defaultDebuggerWithoutExtensionSpecSelector
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StDebuggerSpecSelectorTest >> setUp [
 	"Hooks that subclasses may override to define the fixture of test."
 	super setUp.
 	specSelector := StDebuggerSpecSelector new
 ]
 
-{ #category : #'tests - spec' }
+{ #category : 'tests - spec' }
 StDebuggerSpecSelectorTest >> testCustomSelectExtensionActivationSpecFrom [
 	| customSelector mockSelector |
 	customSelector := #anySelector.
@@ -53,7 +55,7 @@ StDebuggerSpecSelectorTest >> testCustomSelectExtensionActivationSpecFrom [
 		equals: self defaultSelectorWithExtensions
 ]
 
-{ #category : #'tests - spec' }
+{ #category : 'tests - spec' }
 StDebuggerSpecSelectorTest >> testCustomSelectSpecSelector [
 	| customSelector mockSelector |
 	mockSelector := StDebuggerUsingSpecSelectorMock new.
@@ -73,19 +75,19 @@ StDebuggerSpecSelectorTest >> testCustomSelectSpecSelector [
 	self assert: mockSelector selectSpecSelector equals: customSelector
 ]
 
-{ #category : #'tests - spec' }
+{ #category : 'tests - spec' }
 StDebuggerSpecSelectorTest >> testDebuggerClass [
 	self assert: specSelector debuggerClass identicalTo: StDebugger
 ]
 
-{ #category : #'tests - spec' }
+{ #category : 'tests - spec' }
 StDebuggerSpecSelectorTest >> testDefaultSelector [
 	self
 		assert: StDebuggerSpecSelector defaultSelector specSelector
 		equals: specSelector class defaultDebuggerWithExtensionSpecSelector
 ]
 
-{ #category : #'tests - spec' }
+{ #category : 'tests - spec' }
 StDebuggerSpecSelectorTest >> testIsDefaultSelector [
 	self deny: (specSelector isDefaultSelector: #anySelector).
 	self
@@ -98,7 +100,7 @@ StDebuggerSpecSelectorTest >> testIsDefaultSelector [
 				isDefaultSelector: specSelector class defaultDebuggerWithoutExtensionSpecSelector)
 ]
 
-{ #category : #'tests - spec' }
+{ #category : 'tests - spec' }
 StDebuggerSpecSelectorTest >> testNilSelectSpecSelector [
 	| withExtensionSelector withoutExtensionSelector  mockSelector |
 	withExtensionSelector := self defaultSelectorWithExtensions.
@@ -119,7 +121,7 @@ StDebuggerSpecSelectorTest >> testNilSelectSpecSelector [
 	self assert: mockSelector selectSpecSelector equals: withExtensionSelector
 ]
 
-{ #category : #'tests - spec' }
+{ #category : 'tests - spec' }
 StDebuggerSpecSelectorTest >> testSelectExtensionActivationSpecFrom [
 	| withExtensionSelector withoutExtensionSelector mockSelector |
 	withExtensionSelector := self defaultSelectorWithExtensions.
@@ -159,7 +161,7 @@ StDebuggerSpecSelectorTest >> testSelectExtensionActivationSpecFrom [
 		equals: withoutExtensionSelector.
 ]
 
-{ #category : #'tests - spec' }
+{ #category : 'tests - spec' }
 StDebuggerSpecSelectorTest >> testSelectNonDefaultSpecSelector [
 	| nonDefaultSelector mockSelector |		
 	mockSelector := StDebuggerUsingSpecSelectorMock new.	
@@ -188,7 +190,7 @@ StDebuggerSpecSelectorTest >> testSelectNonDefaultSpecSelector [
 	
 ]
 
-{ #category : #'tests - spec' }
+{ #category : 'tests - spec' }
 StDebuggerSpecSelectorTest >> testSelectSpecSelectorWithExtensions [
 	| withExtensionSelector withoutExtensionSelector mockSelector |
 	withExtensionSelector := self defaultSelectorWithExtensions.
@@ -217,7 +219,7 @@ StDebuggerSpecSelectorTest >> testSelectSpecSelectorWithExtensions [
 		equals: withExtensionSelector
 ]
 
-{ #category : #'tests - spec' }
+{ #category : 'tests - spec' }
 StDebuggerSpecSelectorTest >> testSelectSpecSelectorWithoutExtensions [
 	| withoutExtensionSelector mockSelector |
 	withoutExtensionSelector := self defaultSelectorWithoutExtensions.			
@@ -245,7 +247,7 @@ StDebuggerSpecSelectorTest >> testSelectSpecSelectorWithoutExtensions [
 		equals: withoutExtensionSelector.
 ]
 
-{ #category : #'tests - spec' }
+{ #category : 'tests - spec' }
 StDebuggerSpecSelectorTest >> testSelectorForDebuggerStatusExtensionsStatus [
 	| selector |
 	selector := specSelector

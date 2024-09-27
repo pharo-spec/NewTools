@@ -1,10 +1,12 @@
 Class {
-	#name : #StFailingAssertionInspectorTest,
-	#superclass : #TestCase,
-	#category : #'NewTools-Debugger-Tests-Presenters'
+	#name : 'StFailingAssertionInspectorTest',
+	#superclass : 'TestCase',
+	#category : 'NewTools-Debugger-Tests-Presenters',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Presenters'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFailingAssertionInspectorTest >> testDiffForNonStringObjects [
 	|a e inspector|
 	a := 'a'.
@@ -27,7 +29,7 @@ StFailingAssertionInspectorTest >> testDiffForNonStringObjects [
 	self assert: inspector stringDiff equals: nil.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StFailingAssertionInspectorTest >> testDiffForStrings [
 	|a e inspector|
 	a := 'a'.

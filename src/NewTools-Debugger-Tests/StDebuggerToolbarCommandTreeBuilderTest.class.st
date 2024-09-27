@@ -1,17 +1,19 @@
 Class {
-	#name : #StDebuggerToolbarCommandTreeBuilderTest,
-	#superclass : #StDebuggerToolCommandTreeBuilderTest,
-	#category : #'NewTools-Debugger-Tests-Model'
+	#name : 'StDebuggerToolbarCommandTreeBuilderTest',
+	#superclass : 'StDebuggerToolCommandTreeBuilderTest',
+	#category : 'NewTools-Debugger-Tests-Model',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StDebuggerToolbarCommandTreeBuilderTest >> newBuilder [
 	^ StDebuggerToolbarCommandTreeBuilder
 		buildCommandsGroupWith: debugger
 		forRoot: rootGroup
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerToolbarCommandTreeBuilderTest >> testBuildCommandGroupFromNamedDescription [
 	| group spCommands |
 	group := builder
@@ -30,7 +32,7 @@ StDebuggerToolbarCommandTreeBuilderTest >> testBuildCommandGroupFromNamedDescrip
 	self assert: spCommands second context identicalTo: debugger
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerToolbarCommandTreeBuilderTest >> testCommandGroupStructure [
 	|stackGroup|
 	stackGroup := rootGroup groups first.	
@@ -44,14 +46,14 @@ StDebuggerToolbarCommandTreeBuilderTest >> testCommandGroupStructure [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerToolbarCommandTreeBuilderTest >> testContextControlCommandClasses [
 	self
 		assertCollection: builder contextControlCommandClasses
 		equals: {StDefineMissingEntityCommand}
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerToolbarCommandTreeBuilderTest >> testContextControlDebuggingCommands [
 	self
 		assertCommandGroup: builder contextControlDebuggingCommands
@@ -60,28 +62,28 @@ StDebuggerToolbarCommandTreeBuilderTest >> testContextControlDebuggingCommands [
 		displayStrategy: CmUIDisplayAsGroup
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerToolbarCommandTreeBuilderTest >> testContextControlGroupDescription [
 	self
 		assert: builder contextControlGroupDescription
 		equals: 'Actions performed on the interrupted context'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerToolbarCommandTreeBuilderTest >> testContextControlGroupName [
 	self
 		assert: builder contextControlGroupName
 		equals: 'Context control'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerToolbarCommandTreeBuilderTest >> testContextRequestCommandClasses [
 	self
 		assertCollection: builder contextRequestCommandClasses
 		equals: {StWhereIsCommand}
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerToolbarCommandTreeBuilderTest >> testContextRequestDebuggingCommands [
 	self
 		assertCommandGroup: builder contextRequestDebuggingCommands
@@ -90,40 +92,40 @@ StDebuggerToolbarCommandTreeBuilderTest >> testContextRequestDebuggingCommands [
 		displayStrategy: CmUIDisplayAsGroup
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerToolbarCommandTreeBuilderTest >> testContextRequestGroupDescription [
 	self
 		assert: builder contextRequestGroupDescription
 		equals: 'Requests on the interrupted context'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerToolbarCommandTreeBuilderTest >> testContextRequestGroupName [
 	self
 		assert: builder contextRequestGroupName
 		equals: 'Context requests'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerToolbarCommandTreeBuilderTest >> testDefaultDebugActionsDescription [
 	self
 		assert: builder defaultDebugActionsDescription
 		equals: 'Defaults debugging actions'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerToolbarCommandTreeBuilderTest >> testDefaultDebugActionsGroupName [
 	self
 		assert: builder defaultDebugActionsGroupName
 		equals: 'Debugging actions'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerToolbarCommandTreeBuilderTest >> testDisplayStrategy [
 	self assert: builder class displayStrategy equals: CmUIDisplayAsGroup
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerToolbarCommandTreeBuilderTest >> testExecutionControlCommandClasses [
 	self
 		assertCollection: builder executionControlCommandClasses
@@ -137,7 +139,7 @@ StDebuggerToolbarCommandTreeBuilderTest >> testExecutionControlCommandClasses [
 			StReturnValueCommand}
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerToolbarCommandTreeBuilderTest >> testExecutionControlDebuggingCommands [
 	self
 		assertCommandGroup: builder executionControlDebuggingCommands
@@ -146,21 +148,21 @@ StDebuggerToolbarCommandTreeBuilderTest >> testExecutionControlDebuggingCommands
 		displayStrategy: CmUIDisplayAsGroup
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerToolbarCommandTreeBuilderTest >> testExecutionControlGroupDescription [
 	self
 		assert: builder executionControlGroupDescription
 		equals: 'Debug actions applied to the executed context'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerToolbarCommandTreeBuilderTest >> testExecutionControlGroupName [
 	self
 		assert: builder executionControlGroupName
 		equals: 'Execution control'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerToolbarCommandTreeBuilderTest >> testExecutionControlShortcuts [
 
 	| commandsWithShortcuts |
@@ -174,12 +176,12 @@ StDebuggerToolbarCommandTreeBuilderTest >> testExecutionControlShortcuts [
 		self assert: command shortcutKey equals: class defaultShortcut ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerToolbarCommandTreeBuilderTest >> testGroupDescription [
 	self assert: builder class groupDescription equals: 'Debug actions'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerToolbarCommandTreeBuilderTest >> testGroupName [
 	self assert: builder class groupName equals: 'Toolbar'
 ]

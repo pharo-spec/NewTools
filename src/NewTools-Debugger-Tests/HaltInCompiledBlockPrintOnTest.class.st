@@ -1,13 +1,14 @@
 Class {
-	#name : #HaltInCompiledBlockPrintOnTest,
-	#superclass : #TestCase,
+	#name : 'HaltInCompiledBlockPrintOnTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'oldCode'
 	],
-	#category : #'NewTools-Debugger-Tests'
+	#category : 'NewTools-Debugger-Tests',
+	#package : 'NewTools-Debugger-Tests'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 HaltInCompiledBlockPrintOnTest >> setUp [
 	super setUp.
 	
@@ -17,13 +18,13 @@ HaltInCompiledBlockPrintOnTest >> setUp [
 	'.
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 HaltInCompiledBlockPrintOnTest >> tearDown [ 
 	oldCode ifNotNil: 	[BlockClosure compileSilently: oldCode].
 	super tearDown
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 HaltInCompiledBlockPrintOnTest >> testExecutingHaltingPrintOnABlockOpensASingleDebugger [
 
 	| ourException dbg debugSession sem myProcess |

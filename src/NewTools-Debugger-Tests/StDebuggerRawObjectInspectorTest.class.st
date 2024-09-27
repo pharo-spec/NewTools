@@ -1,10 +1,12 @@
 Class {
-	#name : #StDebuggerRawObjectInspectorTest,
-	#superclass : #TestCase,
-	#category : #'NewTools-Debugger-Tests-Presenters'
+	#name : 'StDebuggerRawObjectInspectorTest',
+	#superclass : 'TestCase',
+	#category : 'NewTools-Debugger-Tests-Presenters',
+	#package : 'NewTools-Debugger-Tests',
+	#tag : 'Presenters'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 StDebuggerRawObjectInspectorTest >> testSelectedObject [
 
 	| context debuggerContext inspector |
