@@ -1,6 +1,6 @@
-Extension { #name : #SpCodePresenter }
+Extension { #name : 'SpCodePresenter' }
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 SpCodePresenter >> beForContext: aContext [
 	self interactionModel: (StDebuggerContextInteractionModel on: aContext)
 ]

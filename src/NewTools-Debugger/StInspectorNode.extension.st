@@ -1,6 +1,6 @@
-Extension { #name : #StInspectorNode }
+Extension { #name : 'StInspectorNode' }
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 StInspectorNode >> debuggerColor [
 	^(SHRBTextStyler new attributesFor: #comment) first color
 ]

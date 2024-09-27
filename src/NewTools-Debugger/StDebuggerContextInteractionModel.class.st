@@ -1,25 +1,27 @@
 Class {
-	#name : #StDebuggerContextInteractionModel,
-	#superclass : #SpCodeInteractionModel,
+	#name : 'StDebuggerContextInteractionModel',
+	#superclass : 'SpCodeInteractionModel',
 	#instVars : [
 		'context'
 	],
-	#category : #'NewTools-Debugger-Model'
+	#category : 'NewTools-Debugger-Model',
+	#package : 'NewTools-Debugger',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StDebuggerContextInteractionModel class >> on: aContext [
 
 	^ self new context: aContext
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerContextInteractionModel >> behavior [
 
 	^ self context receiver class
 ]
 
-{ #category : #binding }
+{ #category : 'binding' }
 StDebuggerContextInteractionModel >> bindingOf: aString [
 
 	"we can not call #lookupVar: without checking first as it would create the variable"
@@ -29,42 +31,42 @@ StDebuggerContextInteractionModel >> bindingOf: aString [
 		  ifFalse: [ nil ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerContextInteractionModel >> context [
 
 	^context
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerContextInteractionModel >> context: aContext [
 	context := aContext
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerContextInteractionModel >> doItContext [
 
 	^ self context
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerContextInteractionModel >> doItReceiver [
 
 	^ self context receiver
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StDebuggerContextInteractionModel >> hasBindingOf: aString [
 	"we lookup the name without creating a new variable"
 	^ (context lookupVar: aString declare: false) notNil
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 StDebuggerContextInteractionModel >> hasUnsavedCodeChanges [
 
 	^ context notNil and: [ context sourceCode ~= owner text asString ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerContextInteractionModel >> object [
 
 	^ self doItReceiver

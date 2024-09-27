@@ -6,8 +6,8 @@ I add specific debugger functionalities:
 - I dynamically change my layout depending on the context (e.g., I show a diff view in case of an assertion failure)
 "
 Class {
-	#name : #StDebuggerInspector,
-	#superclass : #SpPresenter,
+	#name : 'StDebuggerInspector',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'inspector',
 		'model',
@@ -20,41 +20,43 @@ Class {
 	#classInstVars : [
 		'maximizeAssertionSpec'
 	],
-	#category : #'NewTools-Debugger-View'
+	#category : 'NewTools-Debugger-View',
+	#package : 'NewTools-Debugger',
+	#tag : 'View'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 StDebuggerInspector class >> maximizeAssertionSpec [
 	^maximizeAssertionSpec ifNil:[maximizeAssertionSpec := false]
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StDebuggerInspector class >> maximizeAssertionSpec: aboolean [
 	maximizeAssertionSpec := aboolean
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StDebuggerInspector class >> openOn: anObject [
 
 	^ (self on: (StInspectorModel on: anObject)) open
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StDebuggerInspector class >> title [
 	 ^'Debugger Inspection'
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StDebuggerInspector class >> toggleMaximizeAssertionSpec [
 	self maximizeAssertionSpec: self maximizeAssertionSpec not
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerInspector >> assertionFailure [
 	^assertionFailure 
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StDebuggerInspector >> assertionFailureLayout [
 	| assertionFailureLayout |
 	
@@ -75,22 +77,22 @@ StDebuggerInspector >> assertionFailureLayout [
 	^ assertionFailureLayout
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StDebuggerInspector >> assertionLayoutSelector [
 	^#assertionFailureLayout
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StDebuggerInspector >> currentLayoutSelector [
 	^currentLayoutSelector
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerInspector >> debuggerInspectorModelClass [
 	^ StDebuggerInspectorModel
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StDebuggerInspector >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -98,31 +100,31 @@ StDebuggerInspector >> defaultLayout [
 		  yourself
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StDebuggerInspector >> defaultLayoutSelector [
 	^#defaultLayout
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 StDebuggerInspector >> forceRawInspectionUpdate [
 
 	self getRawInspectorPresenterOrNil ifNotNil: [ :inspection | 
 		inspection update ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StDebuggerInspector >> getRawInspectorPresenterOrNil [
 	^ inspector millerList pages first rawInspectorPageOrNil activePresenter
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StDebuggerInspector >> getRawInspectorSelectedPath [
 	^ self getRawInspectorPresenterOrNil
 		  ifNil: [ #(  ) ]
 		  ifNotNil: [ :raw | raw selectedPath ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebuggerInspector >> initializeLateralToolbar [
 	| button |
 	
@@ -143,7 +145,7 @@ StDebuggerInspector >> initializeLateralToolbar [
 	lateralToolbar add: button
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebuggerInspector >> initializePresenters [
 
 	label := self newLabel.
@@ -152,38 +154,38 @@ StDebuggerInspector >> initializePresenters [
 	self initializeLateralToolbar
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerInspector >> inspectedObject [
 
 	^ self model inspectedObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerInspector >> label: aString [
 
 	label label: aString
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StDebuggerInspector >> model [
 
 	^ model
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StDebuggerInspector >> model: aModel [
 
 	model := aModel.
 	inspector model: model
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerInspector >> rawInspectionSelectionCache [
 	^ rawInspectionSelectionCache ifNil: [ 
 		  rawInspectionSelectionCache := Dictionary new ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StDebuggerInspector >> restoreRawInspectionSelectionForContext: aContext [
 	aContext ifNil: [ ^ self ].
 	self getRawInspectorPresenterOrNil
@@ -204,7 +206,7 @@ StDebuggerInspector >> restoreRawInspectionSelectionForContext: aContext [
 			raw selectPath: path ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 StDebuggerInspector >> saveRawInspectionSelectionForContext: aContext [
 	| selectionPath |
 	aContext ifNil: [ ^ self ].
@@ -217,37 +219,37 @@ StDebuggerInspector >> saveRawInspectionSelectionForContext: aContext [
 		put: selectionPath
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StDebuggerInspector >> setAssertionLayout [
 	currentLayoutSelector := self assertionLayoutSelector.
 	self layout: self assertionFailureLayout
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StDebuggerInspector >> setDefaultLayout [
 	
 	currentLayoutSelector := self defaultLayoutSelector.
 	self layout: self defaultLayout
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 StDebuggerInspector >> setModelBeforeInitialization: aModel [
 
 	model := aModel
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 StDebuggerInspector >> shouldUpdateContext: oldContext with: newContext [
 
 	^ oldContext ~~ newContext
 ]
 
-{ #category : #stepping }
+{ #category : 'stepping' }
 StDebuggerInspector >> step [
 	inspector step
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 StDebuggerInspector >> updateEvaluationPaneReceiver [
 	"| context evaluator |
 	
@@ -256,7 +258,7 @@ StDebuggerInspector >> updateEvaluationPaneReceiver [
 	evaluator beForContextReceiver: context"
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StDebuggerInspector >> updateLayoutForContexts: aContext isAssertionFailure: isTopContextFailingAssertion [
 
 	| assertionResult |
@@ -278,7 +280,7 @@ StDebuggerInspector >> updateLayoutForContexts: aContext isAssertionFailure: isT
 	self setAssertionLayout
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 StDebuggerInspector >> updateWith: inspectedObject [
 
 	| oldContext newContext |

@@ -1,23 +1,23 @@
-Extension { #name : #StRawInspection }
+Extension { #name : 'StRawInspection' }
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 StRawInspection >> activePresenter [
 	^self
 ]
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 StRawInspection >> addVariableTagColumn [
 
 	attributeTable addColumn: self variableTagColumn
 ]
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 StRawInspection >> attributeTable [
 
 	^attributeTable
 ]
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 StRawInspection >> beForDebugger [
 
 	attributeTable := (self instantiate: StDebuggerTreeTablePresenter)
@@ -37,13 +37,13 @@ StRawInspection >> beForDebugger [
 		children: [ :node | #() ]
 ]
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 StRawInspection >> selectedPageName [
 
 	^'Context'
 ]
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 StRawInspection >> variableTagColumn [
 
 	^  SpLinkTableColumn new 

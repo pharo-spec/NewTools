@@ -1,15 +1,17 @@
 Class {
-	#name : #StDebuggerTreeTablePresenter,
-	#superclass : #SpTreeTablePresenter,
+	#name : 'StDebuggerTreeTablePresenter',
+	#superclass : 'SpTreeTablePresenter',
 	#instVars : [
 		'items',
 		'filter',
 		'counter'
 	],
-	#category : #'NewTools-Debugger-View'
+	#category : 'NewTools-Debugger-View',
+	#package : 'NewTools-Debugger',
+	#tag : 'View'
 }
 
-{ #category : #api }
+{ #category : 'api' }
 StDebuggerTreeTablePresenter >> applyFilter [
 
 	filter ifNil: [ ^items ].
@@ -19,23 +21,23 @@ StDebuggerTreeTablePresenter >> applyFilter [
 	^items select: [:item| item variableTag = filter]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerTreeTablePresenter >> filter [
 	^ filter
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StDebuggerTreeTablePresenter >> hasActiveFilter [
 	^counter > 0
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebuggerTreeTablePresenter >> initialize [
 	super initialize.
 	counter := 0
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StDebuggerTreeTablePresenter >> roots: aCollection [
 
 	items := aCollection.
@@ -43,7 +45,7 @@ StDebuggerTreeTablePresenter >> roots: aCollection [
 
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StDebuggerTreeTablePresenter >> toggleFilter: aVariableTag [
 
 "	filter := filter = aVariableTag

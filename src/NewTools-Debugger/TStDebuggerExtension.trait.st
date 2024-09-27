@@ -3,7 +3,7 @@ All Spec presenters using me will be recognised as debugger extensions when open
 
 "
 Trait {
-	#name : #TStDebuggerExtension,
+	#name : 'TStDebuggerExtension',
 	#instVars : [
 		'debugger'
 	],
@@ -11,53 +11,55 @@ Trait {
 		'showDebuggerExtension',
 		'debuggerExtensionDisplayOrder'
 	],
-	#category : #'NewTools-Debugger-Model'
+	#category : 'NewTools-Debugger-Model',
+	#package : 'NewTools-Debugger',
+	#tag : 'Model'
 }
 
-{ #category : #'debugger extension' }
+{ #category : 'debugger extension' }
 TStDebuggerExtension classSide >> defaultDisplayOrder [
 
 	^ 1
 ]
 
-{ #category : #'debugger extension' }
+{ #category : 'debugger extension' }
 TStDebuggerExtension classSide >> displayOrder [
 
 	^ debuggerExtensionDisplayOrder ifNil: [ 
 		  debuggerExtensionDisplayOrder := self defaultDisplayOrder ]
 ]
 
-{ #category : #'debugger extension' }
+{ #category : 'debugger extension' }
 TStDebuggerExtension classSide >> displayOrder: anInteger [
 	debuggerExtensionDisplayOrder := anInteger
 ]
 
-{ #category : #'debugger extension' }
+{ #category : 'debugger extension' }
 TStDebuggerExtension classSide >> showInDebugger [
 	^showDebuggerExtension ifNil: [showDebuggerExtension := false]
 ]
 
-{ #category : #'debugger extension' }
+{ #category : 'debugger extension' }
 TStDebuggerExtension classSide >> showInDebugger: aBoolean [
 	showDebuggerExtension := aBoolean
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TStDebuggerExtension >> debugger [
 	^debugger
 ]
 
-{ #category : #'debugger extension' }
+{ #category : 'debugger extension' }
 TStDebuggerExtension >> debuggerExtensionToolName [
 	^self explicitRequirement 
 ]
 
-{ #category : #'debugger extension' }
+{ #category : 'debugger extension' }
 TStDebuggerExtension >> displayOrder [
 	^self class displayOrder
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 TStDebuggerExtension >> setModelBeforeInitialization: aDebugger [
 	 debugger := aDebugger
 ]

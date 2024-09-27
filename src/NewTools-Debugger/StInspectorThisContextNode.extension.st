@@ -1,6 +1,6 @@
-Extension { #name : #StInspectorThisContextNode }
+Extension { #name : 'StInspectorThisContextNode' }
 
-{ #category : #'*NewTools-Debugger' }
+{ #category : '*NewTools-Debugger' }
 StInspectorThisContextNode >> debuggerColor [
 	^(SHRBTextStyler new attributesFor: #thisContext) first color
 ]

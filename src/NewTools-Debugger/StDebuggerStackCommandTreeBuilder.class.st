@@ -7,37 +7,39 @@ You can evolve the default groups names and descriptions and the default command
 Using me to add command in the tree makes them default for the debugger stack presenter.
 "
 Class {
-	#name : #StDebuggerStackCommandTreeBuilder,
-	#superclass : #StDebuggerCommandTreeBuilder,
-	#category : #'NewTools-Debugger-Model'
+	#name : 'StDebuggerStackCommandTreeBuilder',
+	#superclass : 'StDebuggerCommandTreeBuilder',
+	#category : 'NewTools-Debugger-Model',
+	#package : 'NewTools-Debugger',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder class >> displayStrategy [
 	^CmUIDisplayAsSubMenu
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder class >> groupDescription [
 	^ 'Actions on the debugger stack.'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder class >> groupName [ 	
 	^'Stack'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder >> browseGroupDescription [
 	^ 'Navigate the system from the stack'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder >> browseGroupName [
 	^ 'Browse'
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 StDebuggerStackCommandTreeBuilder >> buildDebuggerCommandGroup [
 	|stackGroup|
 	stackGroup := self group.	
@@ -49,7 +51,7 @@ StDebuggerStackCommandTreeBuilder >> buildDebuggerCommandGroup [
 	
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 StDebuggerStackCommandTreeBuilder >> buildSpecCommand: aCommandClass forContext: anObject [
 	| cmd |
 	cmd := super buildSpecCommand: aCommandClass forContext: anObject.
@@ -57,14 +59,14 @@ StDebuggerStackCommandTreeBuilder >> buildSpecCommand: aCommandClass forContext:
 	^ cmd
 ]
 
-{ #category : #'accessing - commands classes' }
+{ #category : 'accessing - commands classes' }
 StDebuggerStackCommandTreeBuilder >> stackActionsCommandsClasses [
 	^ {
 	StReturnValueCommand
 	}
 ]
 
-{ #category : #commands }
+{ #category : 'commands' }
 StDebuggerStackCommandTreeBuilder >> stackContextMenuActionsCommands [
 	| group |
 	group := (CmCommandGroup named: self stackContextMenuActionsGroupName)
@@ -79,17 +81,17 @@ StDebuggerStackCommandTreeBuilder >> stackContextMenuActionsCommands [
 	^ group
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder >> stackContextMenuActionsDescription [
 	^ 'Actions on the selected context'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder >> stackContextMenuActionsGroupName [
 	^ 'Context Actions'
 ]
 
-{ #category : #commands }
+{ #category : 'commands' }
 StDebuggerStackCommandTreeBuilder >> stackContextMenuBrowseCommands [
 	| group |
 	group := (CmCommandGroup named: self browseGroupName) asSpecGroup.
@@ -102,7 +104,7 @@ StDebuggerStackCommandTreeBuilder >> stackContextMenuBrowseCommands [
 	^ group
 ]
 
-{ #category : #commands }
+{ #category : 'commands' }
 StDebuggerStackCommandTreeBuilder >> stackContextMenuExplorationCommands [
 	| group |
 	group := (CmCommandGroup
@@ -126,17 +128,17 @@ StDebuggerStackCommandTreeBuilder >> stackContextMenuExplorationCommands [
 	^ group
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder >> stackContextMenuExplorationDescription [
 	^ 'Explore the receiver object''s graph'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder >> stackContextMenuExplorationGroupName [
 	^ 'Explore'
 ]
 
-{ #category : #commands }
+{ #category : 'commands' }
 StDebuggerStackCommandTreeBuilder >> stackContextMenuStackEditionsCommands [
 	| group |
 	group := (CmCommandGroup named: self stackGroupName) asSpecGroup.
@@ -149,7 +151,7 @@ StDebuggerStackCommandTreeBuilder >> stackContextMenuStackEditionsCommands [
 	^ group
 ]
 
-{ #category : #commands }
+{ #category : 'commands' }
 StDebuggerStackCommandTreeBuilder >> stackContextNavigationCommands [
 	"Commands to navigate the context"
 
@@ -168,12 +170,12 @@ StDebuggerStackCommandTreeBuilder >> stackContextNavigationCommands [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder >> stackContextNavigationGroupName [
 	^ 'Receiver class code navigation commands'
 ]
 
-{ #category : #'accessing - commands classes' }
+{ #category : 'accessing - commands classes' }
 StDebuggerStackCommandTreeBuilder >> stackEditionCommandsClasses [
 	^ {
 	StCopyStackToClipboardCommand.
@@ -183,7 +185,7 @@ StDebuggerStackCommandTreeBuilder >> stackEditionCommandsClasses [
 	}
 ]
 
-{ #category : #'accessing - commands classes' }
+{ #category : 'accessing - commands classes' }
 StDebuggerStackCommandTreeBuilder >> stackExplorationCommandsClasses [
 	^ OrderedCollection new
 		addAll: self stackReceiverClassExplorationCommandsClasses;
@@ -191,17 +193,17 @@ StDebuggerStackCommandTreeBuilder >> stackExplorationCommandsClasses [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder >> stackGroupDescription [
 	^ 'Stack edition'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder >> stackGroupName [
 	^ 'Stack'
 ]
 
-{ #category : #'accessing - commands classes' }
+{ #category : 'accessing - commands classes' }
 StDebuggerStackCommandTreeBuilder >> stackMethodCommandsClasses [
 	^ {
 	SpBrowseMethodInheritanceCommand.
@@ -209,7 +211,7 @@ StDebuggerStackCommandTreeBuilder >> stackMethodCommandsClasses [
 	}
 ]
 
-{ #category : #commands }
+{ #category : 'commands' }
 StDebuggerStackCommandTreeBuilder >> stackMethodNavigationCommands [
 	"Commands to navigate the selected context's method "
 	| group |
@@ -223,12 +225,12 @@ StDebuggerStackCommandTreeBuilder >> stackMethodNavigationCommands [
 	^ group
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder >> stackMethodNavigationGroupName [
 	^ 'Selected method navigation commands'
 ]
 
-{ #category : #'accessing - commands classes' }
+{ #category : 'accessing - commands classes' }
 StDebuggerStackCommandTreeBuilder >> stackMethodSelectorCommandsClasses [
 	^ {
 	SpBrowseImplementorsCommand.
@@ -237,7 +239,7 @@ StDebuggerStackCommandTreeBuilder >> stackMethodSelectorCommandsClasses [
 	}
 ]
 
-{ #category : #commands }
+{ #category : 'commands' }
 StDebuggerStackCommandTreeBuilder >> stackMethodSelectorNavigationCommands [
 	"Commands to navigate the selected context's method selector as context "
 
@@ -255,12 +257,12 @@ StDebuggerStackCommandTreeBuilder >> stackMethodSelectorNavigationCommands [
 	^ group
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder >> stackMethodSelectorNavigationGroupName [
 	^ 'Selected method''s selector navigation commands'
 ]
 
-{ #category : #'accessing - commands classes' }
+{ #category : 'accessing - commands classes' }
 StDebuggerStackCommandTreeBuilder >> stackReceiverClassExplorationCommandsClasses [
 	^ {
 	SpBrowseInstancesCommand.
@@ -268,7 +270,7 @@ StDebuggerStackCommandTreeBuilder >> stackReceiverClassExplorationCommandsClasse
 	}
 ]
 
-{ #category : #commands }
+{ #category : 'commands' }
 StDebuggerStackCommandTreeBuilder >> stackReceiverClassNavigationCommands [
 	"Commands to navigate the selected context's receiver class as context "
 
@@ -286,12 +288,12 @@ StDebuggerStackCommandTreeBuilder >> stackReceiverClassNavigationCommands [
 	^ group
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder >> stackReceiverClassNavigationGroupName [
 	^ 'Receiver class navigation commands'
 ]
 
-{ #category : #'accessing - commands classes' }
+{ #category : 'accessing - commands classes' }
 StDebuggerStackCommandTreeBuilder >> stackReceiverCommandsClasses [
 	^ {
 	SpBrowseClassReferencesCommand.
@@ -302,7 +304,7 @@ StDebuggerStackCommandTreeBuilder >> stackReceiverCommandsClasses [
 	}
 ]
 
-{ #category : #'accessing - commands classes' }
+{ #category : 'accessing - commands classes' }
 StDebuggerStackCommandTreeBuilder >> stackReceiverExplorationCommandsClasses [
 	^ {SpBrowsePointersToCommand}
 ]

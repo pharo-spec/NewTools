@@ -3,41 +3,43 @@ I am a model representing the first variable lists in the debugger inspector.
 
 "
 Class {
-	#name : #StDebuggerInspectorModel,
-	#superclass : #StInspectorModel,
-	#category : #'NewTools-Debugger-Model'
+	#name : 'StDebuggerInspectorModel',
+	#superclass : 'StInspectorModel',
+	#category : 'NewTools-Debugger-Model',
+	#package : 'NewTools-Debugger',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerInspectorModel >> allInspectorNodes [
 
 	^ self inspectedObject buildInspectorNodes
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerInspectorModel >> debuggerContextClass [
 	^ StDebuggerContext
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerInspectorModel >> defaultObjectInspectorClass [
 
 	^ StDebuggerRawObjectInspector
 ]
 
-{ #category : #initialize }
+{ #category : 'initialize' }
 StDebuggerInspectorModel >> initialize [
 	super initialize.
 	inspectedObject := self debuggerContextClass new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerInspectorModel >> inspectedObject [
 
 	^ inspectedObject ifNil: [ inspectedObject := self debuggerContextClass new ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebuggerInspectorModel >> labelString [
 
 	^ (self descriptionStringFor: self inspectedObject context receiver) 

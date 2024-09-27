@@ -70,12 +70,11 @@ The meta inspection shows methods of the receiver's class hierarchy.
 Methods can be modified and saved in directly in that pane.
 "
 Class {
-	#name : #StDebugger,
-	#superclass : #StPresenter,
+	#name : 'StDebugger',
+	#superclass : 'StPresenter',
 	#traits : 'TDebugger',
 	#classTraits : 'TDebugger classTrait',
 	#instVars : [
-		'sessionHolder',
 		'code',
 		'toolbar',
 		'stackTable',
@@ -87,34 +86,37 @@ Class {
 		'toolbarCommandGroup',
 		'debuggerActionModel',
 		'unsavedCodeChanges',
-		'programmaticallyClosed'
+		'programmaticallyClosed',
+		'stackAndCodeContainer'
 	],
 	#classVars : [
-		'ActivateDebuggerExtensions',
-		'ErrorRecursion',
-		'FastTDD',
-		'UsingSpecSelector'
+		'EnableStackColoring'
 	],
-	#category : #'NewTools-Debugger-View'
+	#classInstVars : [
+		'layoutConfigurator'
+	],
+	#category : 'NewTools-Debugger-View',
+	#package : 'NewTools-Debugger',
+	#tag : 'View'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebugger class >> activateDebuggerExtensions [
 	^ ActivateDebuggerExtensions
 		ifNil: [ ActivateDebuggerExtensions := true ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebugger class >> activateDebuggerExtensions: anObject [
 	ActivateDebuggerExtensions := anObject
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StDebugger class >> availableSpecSelectors [
 	^ self class allSelectorsInProtocol: 'specs - selectors'
 ]
 
-{ #category : #commands }
+{ #category : 'commands' }
 StDebugger class >> buildCommandsGroupWith: stDebuggerInstance forRoot: rootCommandGroup [
 	StDebuggerStackCommandTreeBuilder
 		buildCommandsGroupWith: stDebuggerInstance
@@ -127,13 +129,13 @@ StDebugger class >> buildCommandsGroupWith: stDebuggerInstance forRoot: rootComm
 		forRoot: rootCommandGroup
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 StDebugger class >> closeAllDebuggers [
 	<script>
 	StDebugger allInstancesDo: [ :dbg | dbg close ]
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StDebugger class >> codeLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -142,7 +144,7 @@ StDebugger class >> codeLayout [
 		  yourself
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StDebugger class >> debugSession: aDebugSession [
 	| debugger |
 
@@ -154,12 +156,12 @@ StDebugger class >> debugSession: aDebugSession [
 	^ debugger
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebugger class >> debuggerContextClass [
 	^ StDebuggerContext
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StDebugger class >> debuggerLayoutSettingsOn: aBuilder [
 	<systemsettings>
 	(aBuilder pickOne: #usingSpecSelector)
@@ -171,7 +173,7 @@ StDebugger class >> debuggerLayoutSettingsOn: aBuilder [
 		description: 'Sets the default spec layout of the debugger.'
 ]
 
-{ #category : #'specs - selectors' }
+{ #category : 'specs - selectors' }
 StDebugger class >> debuggerWithExtensionsSpec [
 
 	^ SpPanedLayout newTopToBottom
@@ -185,7 +187,7 @@ StDebugger class >> debuggerWithExtensionsSpec [
 		yourself
 ]
 
-{ #category : #'specs - selectors' }
+{ #category : 'specs - selectors' }
 StDebugger class >> debuggerWithoutExtensionsSpec [
 
 	^ SpPanedLayout newTopToBottom
@@ -195,34 +197,34 @@ StDebugger class >> debuggerWithoutExtensionsSpec [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebugger class >> defaultDebuggerRank [
 
 	^ 10
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 StDebugger class >> defaultLayout [
 	^ self perform: self usingSpecSelector
 ]
 
-{ #category : #'tools registry' }
+{ #category : 'tools registry' }
 StDebugger class >> extensionToolsClasses [
 	^TStDebuggerExtension users
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StDebugger class >> fastTDD [
 	^FastTDD ifNil:[FastTDD := false]
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StDebugger class >> fastTDD: aBoolean [
 
 	FastTDD := aBoolean
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 StDebugger class >> fastTDDSettingsOn: aBuilder [
 	<systemsettings>
 	(aBuilder setting: #fastTDD)
@@ -234,26 +236,26 @@ StDebugger class >> fastTDDSettingsOn: aBuilder [
 without requesting information from the user'
 ]
 
-{ #category : #'tools registry' }
+{ #category : 'tools registry' }
 StDebugger class >> hasAnyActivatedExtension: extensionsClasses [
 
 	^ extensionsClasses anySatisfy: [ :toolClass | 
 		  toolClass showInDebugger ]
 ]
 
-{ #category : #'class initialization' }
+{ #category : 'class initialization' }
 StDebugger class >> initialize [ 
 	self flag: 'Error recursion is used only here?'.
 	ErrorRecursion := false
 ]
 
-{ #category : #opening }
+{ #category : 'opening' }
 StDebugger class >> openOn: aDebugSession withFullView: aBool [
 	
 	^ self openOn: aDebugSession withFullView: aBool andNotification: nil
 ]
 
-{ #category : #opening }
+{ #category : 'opening' }
 StDebugger class >> openOn: aDebugSession withFullView: aBool andNotification: aString [
 	| debugger |
 	debugger := self on: aDebugSession.
@@ -261,19 +263,19 @@ StDebugger class >> openOn: aDebugSession withFullView: aBool andNotification: a
 	^ debugger
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebugger class >> sessionClass [
 	self flag: 'Should be replaced by Sindarin - should even be removed in that case!'.
 	^ DebugSession
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebugger class >> spanNewSessionFrom: anotherSession [
 	self flag: 'Where is that used? 2019-06-28'.
 	^ anotherSession spanNewSession
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StDebugger class >> stackAndCodeLayout [
 
 	^ SpPanedLayout newTopToBottom
@@ -283,7 +285,7 @@ StDebugger class >> stackAndCodeLayout [
 		yourself
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StDebugger class >> stackLayout [
 	^ SpBoxLayout newTopToBottom
 		add: #stackHeader
@@ -294,33 +296,33 @@ StDebugger class >> stackLayout [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebugger class >> taskbarIconName [
 
 	^#smallDebugIcon
 ]
 
-{ #category : #'tools registry' }
+{ #category : 'tools registry' }
 StDebugger class >> usesExtensions [
 
 	^ self activateDebuggerExtensions and: [ 
 		  self hasAnyActivatedExtension: self extensionToolsClasses ]
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StDebugger class >> usingSpecSelector [
 	^ (UsingSpecSelector
 		ifNil: [ UsingSpecSelector := StDebuggerSpecSelector defaultSelector ])
 		selectSpecSelector
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 StDebugger class >> usingSpecSelector: aSelector [
 
 	UsingSpecSelector := StDebuggerSpecSelector on: aSelector
 ]
 
-{ #category : #'presenter - code' }
+{ #category : 'presenter - code' }
 StDebugger >> acceptCodeChanges: newSource forContext: aContext [
 
 	"It is wrong here that I have to use code adapter widget.
@@ -334,7 +336,7 @@ StDebugger >> acceptCodeChanges: newSource forContext: aContext [
 	self clearUnsavedCodeChanges
 ]
 
-{ #category : #'commands - support' }
+{ #category : 'commands - support' }
 StDebugger >> buildContextMenus [
 	| stackGroup codeCommands debuggerCommandGroup |
 	
@@ -355,40 +357,40 @@ StDebugger >> buildContextMenus [
 	code contextMenu: codeCommands beRoot asMenuPresenter
 ]
 
-{ #category : #'commands - support' }
+{ #category : 'commands - support' }
 StDebugger >> canExecuteCreateMissingClassCommand [
 	^ self debuggerActionModel isInterruptedContextMissingClassException
 ]
 
-{ #category : #'commands - support' }
+{ #category : 'commands - support' }
 StDebugger >> canExecuteCreateMissingMethodCommand [
 	^ self debuggerActionModel isInterruptedContextDoesNotUnderstand
 ]
 
-{ #category : #'commands - support' }
+{ #category : 'commands - support' }
 StDebugger >> canExecuteCreateSubclassResponsibilityCommand [
 	^ self debuggerActionModel isInterruptedContextSubclassResponsibilityException
 ]
 
-{ #category : #'commands - support' }
+{ #category : 'commands - support' }
 StDebugger >> canExecuteDebugCommand [
 	^ self debuggerActionModel isContextSteppable
 ]
 
-{ #category : #'commands - support' }
+{ #category : 'commands - support' }
 StDebugger >> canExecuteRestartCommand [
 
 	^ (self debuggerActionModel isInterruptedContextPostMortem or: [ 
 		   self debuggerActionModel isInterruptedContextDead ]) not
 ]
 
-{ #category : #'commands - support' }
+{ #category : 'commands - support' }
 StDebugger >> canExecuteReturnCommand [
 
 	^ self debuggerActionModel isInterruptedContextDead not
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StDebugger >> clear [
 
 	extensionToolsNotebook pages do: [ :page | 
@@ -402,7 +404,7 @@ StDebugger >> clear [
 	debuggerActionModel clearDebugSession
 ]
 
-{ #category : #'updating - widgets' }
+{ #category : 'updating - widgets' }
 StDebugger >> clearCode [
 	
 	self code
@@ -411,13 +413,13 @@ StDebugger >> clearCode [
 		clearContent
 ]
 
-{ #category : #'presenter - code' }
+{ #category : 'presenter - code' }
 StDebugger >> clearUnsavedCodeChanges [
 
 	unsavedCodeChanges := IdentityDictionary new
 ]
 
-{ #category : #opening }
+{ #category : 'opening' }
 StDebugger >> close [
 
 	programmaticallyClosed := true.
@@ -426,13 +428,13 @@ StDebugger >> close [
 			actionModel clearDebugSession ] ]
 ]
 
-{ #category : #'accessing - widgets' }
+{ #category : 'accessing - widgets' }
 StDebugger >> code [
 
 	^ code
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebugger >> connectPresenters [
 
 	super connectPresenters.
@@ -441,18 +443,18 @@ StDebugger >> connectPresenters [
 		self updateCodeFromContext ]
 ]
 
-{ #category : #'accessing - context' }
+{ #category : 'accessing - context' }
 StDebugger >> context [
  
 	^ self interruptedContext
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StDebugger >> copyStackToClipboard [
 	self debuggerActionModel copyStackToClipboard
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StDebugger >> createMissingClass [
 
 	| variableNode |
@@ -470,7 +472,7 @@ StDebugger >> createMissingClass [
 		self interruptedContext sender
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StDebugger >> createMissingMethod [
 
 	| msg chosenClass |
@@ -486,7 +488,7 @@ StDebugger >> createMissingMethod [
 	code takeKeyboardFocus 
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StDebugger >> createMissingMethodFor: aMessage in: aClass [
 	self flag: #DBG_MISSINGTEST.
 	self debuggerActionModel
@@ -497,7 +499,7 @@ StDebugger >> createMissingMethodFor: aMessage in: aClass [
 	self selectTopContext
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StDebugger >> createSubclassResponsibility [
 
 	| senderContext msg msgCategory chosenClass |
@@ -516,7 +518,7 @@ StDebugger >> createSubclassResponsibility [
 		forContext: senderContext
 ]
 
-{ #category : #'accessing - context' }
+{ #category : 'accessing - context' }
 StDebugger >> currentContext [
 	"I answer the context on which an action should be executed.
 	This is either the selected context or if nothing is selected the interrupted context."
@@ -526,23 +528,23 @@ StDebugger >> currentContext [
 		ifFalse: [ self selectedContext ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebugger >> debuggerActionModel [
 	^ debuggerActionModel
 		ifNil: [ debuggerActionModel := StDebuggerActionModel on: self session]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebugger >> debuggerInspectorClass [
 	^ StDebuggerInspector
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebugger >> debuggerInspectorModelClass [
 	^ StDebuggerInspectorModel
 ]
 
-{ #category : #'presenter - code' }
+{ #category : 'presenter - code' }
 StDebugger >> discardCodeChangesFor: aContext [
 
 	self unsavedCodeChanges removeKey: aContext ifAbsent: [  ].
@@ -550,19 +552,19 @@ StDebugger >> discardCodeChangesFor: aContext [
 	self update
 ]
 
-{ #category : #commands }
+{ #category : 'commands' }
 StDebugger >> doBrowseClass [
 
 	self systemNavigation browse: self stackSelectionMethodContext value
 ]
 
-{ #category : #commands }
+{ #category : 'commands' }
 StDebugger >> doBrowseReceiverClass [
 
 	self systemNavigation browse: self stackSelectionReceiverClassContext value
 ]
 
-{ #category : #stack }
+{ #category : 'stack' }
 StDebugger >> expandStackIfLastItemIsSelected [
 	| selection |
 	selection := stackTable selection.
@@ -572,23 +574,23 @@ StDebugger >> expandStackIfLastItemIsSelected [
 	stackTable selectIndex: selection selectedIndex
 ]
 
-{ #category : #extensions }
+{ #category : 'extensions' }
 StDebugger >> extensionTools [
 	^ extensionTools ifNil: [ extensionTools := OrderedCollection new ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StDebugger >> fileOutSelectedContext [
 	self debuggerActionModel
 		fileOutMethod: stackTable selection selectedItem method
 ]
 
-{ #category : #stack }
+{ #category : 'stack' }
 StDebugger >> filterStack: aStack [
 	^self debuggerActionModel filterStack: aStack
 ]
 
-{ #category : #stack }
+{ #category : 'stack' }
 StDebugger >> findFirstRelevantStackIndexIn: aStack [
 	| counter |
 	counter := 1.
@@ -598,12 +600,12 @@ StDebugger >> findFirstRelevantStackIndexIn: aStack [
 	^ 1
 ]
 
-{ #category : #'updating - session' }
+{ #category : 'updating - session' }
 StDebugger >> forceSessionUpdate [
 	self sessionHolder valueChanged
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StDebugger >> initialExtent [ 
 	"This code was taken from the old debugger to get the same behavior. Fell free to refactor"
 	self flag: 'Do it better'.
@@ -618,7 +620,7 @@ StDebugger >> initialExtent [
 		do: [ 850@650 ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebugger >> initialize [
 	super initialize.
 	self debuggerActionModel updateContextPredicate.			
@@ -629,23 +631,25 @@ StDebugger >> initialize [
 	programmaticallyClosed := false.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebugger >> initializeBreakpointInspector [
 	breakpointInspector := self
 		instantiate: StDebuggerBreakpointInspection
 		on: (StInspectorModel on: nil).
 ]
 
-{ #category : #'presenter - code' }
+{ #category : 'code pane' }
 StDebugger >> initializeCode [
 
-	code := self newCode.
+	code := self instantiate: StDebuggerCodePresenter.
+	code debuggerActionModel: self debuggerActionModel.
 	code whenSubmitDo: [ :text | 
 		self acceptCodeChanges: text string forContext: self selectedContext ].
-	code whenResetDo: [ self discardCodeChangesFor: self selectedContext ]
+	code whenResetDo: [ self discardCodeChangesFor: self selectedContext ].
+	
 ]
 
-{ #category : #extensions }
+{ #category : 'extensions' }
 StDebugger >> initializeExtensionTools [
 
 	| sortedToolClasses pages |
@@ -659,7 +663,7 @@ StDebugger >> initializeExtensionTools [
 	extensionToolsNotebook pages: pages
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebugger >> initializeInspector [
 
 	inspector := self
@@ -668,7 +672,7 @@ StDebugger >> initializeInspector [
 	inspector label: 'Receiver'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebugger >> initializePresenters [
 
 	self initializeStack.
@@ -678,7 +682,7 @@ StDebugger >> initializePresenters [
 	self initializeExtensionTools
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebugger >> initializeShortcuts: aWindowPresenter [
 
 	self flag: #DBG_TempSolvesSpecBug_RemoveWhenFixed.
@@ -702,7 +706,7 @@ StDebugger >> initializeShortcuts: aWindowPresenter [
 		toAction: [ self restartCurrentContext ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebugger >> initializeStack [
 
 	stackTable := self newTable.
@@ -751,7 +755,7 @@ StDebugger >> initializeStack [
 			 asSpecGroup)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebugger >> initializeToolbar [
 
 	toolbar := self newToolbar.
@@ -759,7 +763,7 @@ StDebugger >> initializeToolbar [
 	toolbar displayMode: self application toolbarDisplayMode
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebugger >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
@@ -771,7 +775,7 @@ StDebugger >> initializeWindow: aWindowPresenter [
 	self initializeShortcuts: aWindowPresenter
 ]
 
-{ #category : #extensions }
+{ #category : 'extensions' }
 StDebugger >> instantiateExtensionToolsPage: aToolClass [
 	| toolInstance |
 	toolInstance := self instantiate: aToolClass on: self.
@@ -781,19 +785,19 @@ StDebugger >> instantiateExtensionToolsPage: aToolClass [
 		provider: [ toolInstance ]
 ]
 
-{ #category : #'accessing - context' }
+{ #category : 'accessing - context' }
 StDebugger >> interruptedContext [
 
 	^ self session interruptedContext
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebugger >> interruptedProcess [
 
 	^ self session interruptedProcess
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StDebugger >> newDebuggerContext [
 
 	^ self class debuggerContextClass new
@@ -801,7 +805,7 @@ StDebugger >> newDebuggerContext [
 		  yourself
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 StDebugger >> newDebuggerContextFor: aContext [
 
 	^ self newDebuggerContext
@@ -809,13 +813,13 @@ StDebugger >> newDebuggerContextFor: aContext [
 		  yourself
 ]
 
-{ #category : #'accessing - context' }
+{ #category : 'accessing - context' }
 StDebugger >> newTitle [
 
 	^ self debuggerActionModel statusStringForContext
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 StDebugger >> okToChange [
 
 	self code canDiscardEdits
@@ -824,7 +828,7 @@ StDebugger >> okToChange [
 	^ self code canDiscardEdits
 ]
 
-{ #category : #opening }
+{ #category : 'opening' }
 StDebugger >> openWithFullView [
 
 	"Create and schedule a full debugger with the given label. Do not
@@ -833,13 +837,13 @@ StDebugger >> openWithFullView [
 	self open
 ]
 
-{ #category : #opening }
+{ #category : 'opening' }
 StDebugger >> openWithNotification: notificationString [
 
 	self openWithFullView
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StDebugger >> peelToFirstLike: aContext [
 
 	self debuggerActionModel peelToFirstLike: aContext.
@@ -847,7 +851,7 @@ StDebugger >> peelToFirstLike: aContext [
 	self code text: self currentContext sourceCode
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 StDebugger >> printReceiverClassInContext: aContext [
 
 	| receiverClass methodClass |
@@ -863,7 +867,7 @@ StDebugger >> printReceiverClassInContext: aContext [
 		  contents
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StDebugger >> proceedDebugSession [
 
 	self removeActionsForSession: self session.
@@ -871,7 +875,7 @@ StDebugger >> proceedDebugSession [
 	self close
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StDebugger >> recompileMethodTo: aString inContext: aContext notifying: aNotifyer [
 
 	aContext ifNil: [ ^ self ].
@@ -881,7 +885,7 @@ StDebugger >> recompileMethodTo: aString inContext: aContext notifying: aNotifye
 		notifying: aNotifyer
 ]
 
-{ #category : #'presenter - code' }
+{ #category : 'presenter - code' }
 StDebugger >> recordUnsavedCodeChanges [
 
 	|codeInteractionModel codeText|
@@ -892,7 +896,7 @@ StDebugger >> recordUnsavedCodeChanges [
 	self unsavedCodeChanges at: codeInteractionModel context put: codeText
 ]
 
-{ #category : #'updating - session' }
+{ #category : 'updating - session' }
 StDebugger >> registerActionsForSession: aSession [
 	self flag: 'Rewrite it'.
 	aSession
@@ -905,12 +909,12 @@ StDebugger >> registerActionsForSession: aSession [
 				when: #contextChanged send: #updateContextChanged to: self ]
 ]
 
-{ #category : #extensions }
+{ #category : 'extensions' }
 StDebugger >> registerExtensionTool: anExtension [
 	self extensionTools add: anExtension
 ]
 
-{ #category : #'updating - session' }
+{ #category : 'updating - session' }
 StDebugger >> removeActionsForSession: aSession [
 	self flag: 'Rewrite it'.
 	aSession
@@ -923,20 +927,20 @@ StDebugger >> removeActionsForSession: aSession [
 				removeActionsForEvent: #contextChanged ]
 ]
 
-{ #category : #'updating - session' }
+{ #category : 'updating - session' }
 StDebugger >> removeSessionHolderSubscriptions [
 	self sessionHolder announcer unsubscribe: self sessionHolder.
 	self removeActionsForSession: self session
 ]
 
-{ #category : #'ui requests' }
+{ #category : 'ui requests' }
 StDebugger >> requestClassFrom: aClass [
 
 	self class fastTDD ifTrue: [ ^ aClass ].
 	^ self requestSuperclassOf: aClass to: ProtoObject
 ]
 
-{ #category : #'ui requests' }
+{ #category : 'ui requests' }
 StDebugger >> requestProtocolIn: aClass [
 
 	| entryCompletion applicants choice |
@@ -959,7 +963,7 @@ StDebugger >> requestProtocolIn: aClass [
 	^ choice ifEmpty: [ Protocol unclassified ]
 ]
 
-{ #category : #'ui requests' }
+{ #category : 'ui requests' }
 StDebugger >> requestSuperclassOf: aClass to: aSuperclass [
 
 	| classes |
@@ -974,7 +978,7 @@ StDebugger >> requestSuperclassOf: aClass to: aSuperclass [
 		   title: 'Define selector in:') ifNil: [ Abort signal ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StDebugger >> restartCurrentContext [
 
 	self debuggerActionModel restartContext: self currentContext.
@@ -983,7 +987,7 @@ StDebugger >> restartCurrentContext [
 	self updateCodeFromContext
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StDebugger >> returnEnteredValue [
 	| expression |
 	self flag: #DBG_HowToTestNilIfUserCancels.
@@ -994,14 +998,14 @@ StDebugger >> returnEnteredValue [
 		fromContext: self currentContext
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StDebugger >> runToSelection [
 	self debuggerActionModel
 		runToSelection: self code selectionInterval
 		inContext: self currentContext
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StDebugger >> selectNextExecutedExpression [
 
 	| sourceNodeExecuted |
@@ -1010,39 +1014,39 @@ StDebugger >> selectNextExecutedExpression [
 		(sourceNodeExecuted start to: sourceNodeExecuted stop)
 ]
 
-{ #category : #stack }
+{ #category : 'stack' }
 StDebugger >> selectTopContext [
 	stackTable selectIndex: 1
 ]
 
-{ #category : #'accessing - context' }
+{ #category : 'accessing - context' }
 StDebugger >> selectedContext [
 
 	^ self stackTable selection selectedItem
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebugger >> session [
 	^ self sessionHolder value
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebugger >> session: aSession [
 	self sessionHolder value: aSession
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 StDebugger >> sessionHolder [
 	^ sessionHolder ifNil: [ sessionHolder := nil asValueHolder ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebugger >> setModelBeforeInitialization: aSession [
 
 	self session: aSession
 ]
 
-{ #category : #'updating - session' }
+{ #category : 'updating - session' }
 StDebugger >> setSessionHolderSubscriptions [
 	self sessionHolder
 		whenChangedDo: [ :newSession :oldSession | 
@@ -1052,62 +1056,62 @@ StDebugger >> setSessionHolderSubscriptions [
 			self updateExtensionsFrom: newSession ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StDebugger >> showFullStack [
 	stackTable items: (self filterStack: self session stack)
 
 ]
 
-{ #category : #stack }
+{ #category : 'stack' }
 StDebugger >> stackIconForContext: context [
 
 	self unsavedCodeChanges at: context ifAbsent: [ ^ nil ].
 	^ self iconNamed: #overlayDirty
 ]
 
-{ #category : #'commands - support' }
+{ #category : 'commands - support' }
 StDebugger >> stackSelectionMethodContext [
 
 	^ [ stackTable selection selectedItem home method ]
 ]
 
-{ #category : #'commands - support' }
+{ #category : 'commands - support' }
 StDebugger >> stackSelectionMethodSelectorContext [
 
 	^ [ stackTable selection selectedItem method selector ]
 ]
 
-{ #category : #'commands - support' }
+{ #category : 'commands - support' }
 StDebugger >> stackSelectionReceiverClassContext [
 	^ [ stackTable selection selectedItem receiver class ]
 ]
 
-{ #category : #'commands - support' }
+{ #category : 'commands - support' }
 StDebugger >> stackSelectionReceiverContext [
 	^ [ stackTable selection selectedItem receiver ]
 ]
 
-{ #category : #'accessing - widgets' }
+{ #category : 'accessing - widgets' }
 StDebugger >> stackTable [
 	^stackTable
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StDebugger >> stepInto [
 	self debuggerActionModel stepInto: self currentContext
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StDebugger >> stepOver [
 	self debuggerActionModel stepOver: self currentContext
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 StDebugger >> stepThrough [
 	self debuggerActionModel stepThrough: self currentContext
 ]
 
-{ #category : #'system subscriptions' }
+{ #category : 'system subscriptions' }
 StDebugger >> subscribeToMethodAddedAnnouncement [
 
 	SystemAnnouncer uniqueInstance weak
@@ -1116,43 +1120,43 @@ StDebugger >> subscribeToMethodAddedAnnouncement [
 		to: self
 ]
 
-{ #category : #'accessing - widgets' }
+{ #category : 'accessing - widgets' }
 StDebugger >> toolbar [
 
 	^ toolbar
 ]
 
-{ #category : #'presenter - code' }
+{ #category : 'presenter - code' }
 StDebugger >> unsavedCodeChanges [
 
 	^ unsavedCodeChanges ifNil: [ 
 		  unsavedCodeChanges := IdentityDictionary new ]
 ]
 
-{ #category : #'presenter - code' }
+{ #category : 'presenter - code' }
 StDebugger >> unsavedCodeChangesFor: aContext [ 
 	^self unsavedCodeChanges at: aContext
 ]
 
-{ #category : #'system subscriptions' }
+{ #category : 'system subscriptions' }
 StDebugger >> unsubscribeFromSystemAnnouncer [
 
 	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
-{ #category : #'updating - widgets' }
+{ #category : 'updating - widgets' }
 StDebugger >> updateAfterMethodAdded [
 	debuggerActionModel updateContextPredicate.
 	self updateToolbar 
 ]
 
-{ #category : #'updating - widgets' }
+{ #category : 'updating - widgets' }
 StDebugger >> updateCodeFromContext [
 
 	self updateCodeFromContext: self currentContext
 ]
 
-{ #category : #'presenter - code' }
+{ #category : 'presenter - code' }
 StDebugger >> updateCodeFromContext: aContext [
 	| selectionInterval |
 
@@ -1170,7 +1174,7 @@ StDebugger >> updateCodeFromContext: aContext [
 	
 ]
 
-{ #category : #'updating - widgets' }
+{ #category : 'updating - widgets' }
 StDebugger >> updateCodeTextSegmentDecoratorsIn: aContext forInterval: selectionInterval [
 	
 	self code removeAllTextSegmentDecorations.
@@ -1193,17 +1197,17 @@ StDebugger >> updateCodeTextSegmentDecoratorsIn: aContext forInterval: selection
 		title: 'Click me!';"
 ]
 
-{ #category : #'updating - actions' }
+{ #category : 'updating - actions' }
 StDebugger >> updateContextChanged [
 	self updateStep
 ]
 
-{ #category : #'updating - widgets' }
+{ #category : 'updating - widgets' }
 StDebugger >> updateExtensionsFrom: newSession [
 	self extensionTools do:[:tool| tool updatePresenter]
 ]
 
-{ #category : #'updating - widgets' }
+{ #category : 'updating - widgets' }
 StDebugger >> updateInspectorFromContext: aContext [
 
 	inspector
@@ -1215,31 +1219,31 @@ StDebugger >> updateInspectorFromContext: aContext [
 	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p | p update ]
 ]
 
-{ #category : #'updating - widgets' }
+{ #category : 'updating - widgets' }
 StDebugger >> updatePredicatesForContext: aContext [
 
 	self debuggerActionModel updateContextPredicate
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 StDebugger >> updatePresenter [
 
 	self updateStackFromSession: self session.
 	self buildContextMenus
 ]
 
-{ #category : #'updating - actions' }
+{ #category : 'updating - actions' }
 StDebugger >> updateRestart [
 	self updateStep
 ]
 
-{ #category : #'updating - actions' }
+{ #category : 'updating - actions' }
 StDebugger >> updateResume [
 
 	
 ]
 
-{ #category : #'presenter - code' }
+{ #category : 'presenter - code' }
 StDebugger >> updateSourceCodeFor: aContext [
 
 	| codeText |
@@ -1249,7 +1253,7 @@ StDebugger >> updateSourceCodeFor: aContext [
 	self code text: codeText
 ]
 
-{ #category : #stack }
+{ #category : 'stack' }
 StDebugger >> updateStackFromSession: aSession [
 	| stack |
 	stack := self filterStack: aSession stack.
@@ -1259,7 +1263,7 @@ StDebugger >> updateStackFromSession: aSession [
 		scrollToSelection: true
 ]
 
-{ #category : #'updating - actions' }
+{ #category : 'updating - actions' }
 StDebugger >> updateStep [
 	self flag: #DBG_UPDATE_OF_MODEL_SHOULD_BE_AUTOMATED.
 	debuggerActionModel updateTopContext.
@@ -1274,25 +1278,25 @@ StDebugger >> updateStep [
 	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p | p update ]
 ]
 
-{ #category : #'updating - actions' }
+{ #category : 'updating - actions' }
 StDebugger >> updateStepInto [
 	self updateStep
 ]
 
-{ #category : #'updating - actions' }
+{ #category : 'updating - actions' }
 StDebugger >> updateStepOver [
 
 	self updateStep 
 	
 ]
 
-{ #category : #'updating - actions' }
+{ #category : 'updating - actions' }
 StDebugger >> updateStepThrough [
 
 	self updateStep 
 ]
 
-{ #category : #'updating - widgets' }
+{ #category : 'updating - widgets' }
 StDebugger >> updateToolbar [
 	
 	toolbarCommandGroup ifNil: [ ^ self ].
@@ -1300,13 +1304,13 @@ StDebugger >> updateToolbar [
 		spCommand updateEnableStatus ]
 ]
 
-{ #category : #'updating - widgets' }
+{ #category : 'updating - widgets' }
 StDebugger >> updateWindowTitle [
 
 	self withWindowDo: [ :window | window title: self newTitle ].
 ]
 
-{ #category : #'ui requests' }
+{ #category : 'ui requests' }
 StDebugger >> warning: aString for: aPresenter [
 
 	self newPopover
