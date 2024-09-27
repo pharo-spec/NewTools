@@ -1,6 +1,6 @@
 Class {
 	#name : 'StClyMessageListPresenter',
-	#superclass : 'StMessageListPresenter',
+	#superclass : 'StComposedMessageListPresenter',
 	#instVars : [
 		'scopes',
 		'query',
@@ -51,7 +51,7 @@ StClyMessageListPresenter >> extraScopesOfSelectedItems [
 		self packageScopeOfSelectedItems.
 		classScope asFullHierarchyScope.
 		classScope
-	}, RefactoringSettings availableScopes
+	}, ScopesManager availableScopes
 ]
 
 { #category : 'accessing' }
