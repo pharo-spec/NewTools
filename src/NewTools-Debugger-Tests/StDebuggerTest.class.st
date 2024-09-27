@@ -621,14 +621,23 @@ StDebuggerTest >> testDiscardCodeChangesFor [
 
 { #category : 'tests - code pane' }
 StDebuggerTest >> testDynamicVariableEvaluation [
-
+	|activeProcess debuggedProcess|
 	debugger := StTestDebuggerProvider new
 		            debuggerWithDynamicVariableSuspendedContext.
 	debugger initializeCode.
+	activeProcess := Processor activeProcess.
+	debuggedProcess := debugger debuggerActionModel interruptedProcess.
+	
 	"The active process and the debugged process are different"
 	self
-		deny: Processor activeProcess
-		identicalTo: debugger debuggerActionModel interruptedProcess.
+		deny: activeProcess
+		identicalTo: debuggedProcess.
+	self deny: debuggedProcess isActive.
+	self assert: activeProcess isActive.
+		
+	"The debugged process holds the dynamic variable value"
+	self assert: (debuggedProcess psValueAt: TestDynamicVariable soleInstance index) equals: 42.
+		
 	"The standard code presenters evaluates code from the active process"	
 	self
 		assert: (SpCodePresenter basicNew
