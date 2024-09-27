@@ -1,3 +1,9 @@
+"
+I subclass and replace SpCodePresenter in the debugger code pane.
+I intercept code evaluation normally called on instances of SpCodePresenter, and evaluate it on behalf of the debugged process.
+
+Evaluating in the debugged process is necessary for dynamic variables which are defined in the debugged process but not in the active process. 
+"
 Class {
 	#name : 'StDebuggerCodePresenter',
 	#superclass : 'SpCodePresenter',
@@ -12,7 +18,7 @@ Class {
 { #category : 'accessing' }
 StDebuggerCodePresenter >> debuggerActionModel: anObject [
 
-	debuggerActionModel := anObject
+	debuggerActionModel := anObject 
 ]
 
 { #category : 'command support' }
