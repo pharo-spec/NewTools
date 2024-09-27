@@ -39,8 +39,8 @@ DebugPointTablePresenter >> debugPointActions [
 			action: [
 				self selectedItem remove.
 				self refresh ] ];
-		addActionWith: [ :aGroup | aGroup 
-			addItem: [ :anItem | anItem
+		addGroupWith: [ :aGroup | aGroup 
+			addActionWith: [ :anItem | anItem
 				  name: 'Refresh';
 				  description: 'refresh this window';
 				  action: [ self refresh ] ] ]
