@@ -619,6 +619,32 @@ StDebuggerTest >> testDiscardCodeChangesFor [
 	
 ]
 
+{ #category : 'tests - code pane' }
+StDebuggerTest >> testDynamicVariableEvaluation [
+
+	debugger := StTestDebuggerProvider new
+		            debuggerWithDynamicVariableSuspendedContext.
+	debugger initializeCode.
+	"The active process and the debugged process are different"
+	self
+		deny: Processor activeProcess
+		identicalTo: debugger debuggerActionModel interruptedProcess.
+	"The standard code presenters evaluates code from the active process"	
+	self
+		assert: (SpCodePresenter basicNew
+				 evaluate: 'TestDynamicVariable value'
+				 onCompileError: [  ]
+				 onError: [ :e |  ])
+		equals: nil.
+	"The debugger code presenters evaluates code from the debugged process"
+	self
+		assert: (debugger code
+				 evaluate: 'TestDynamicVariable value'
+				 onCompileError: [  ]
+				 onError: [ :e |  ])
+		equals: 42
+]
+
 { #category : 'tests' }
 StDebuggerTest >> testExceptionProvidesSameExceptionAsTheActionModelOne [
 

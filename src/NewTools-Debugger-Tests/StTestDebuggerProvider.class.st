@@ -40,6 +40,22 @@ StTestDebuggerProvider >> debuggerWithDNUContext [
 ]
 
 { #category : 'helpers' }
+StTestDebuggerProvider >> debuggerWithDynamicVariableSuspendedContext [
+
+	| process |
+	process := [
+	           TestDynamicVariable
+		           value: 42
+		           during: [ thisProcess suspend ] ] fork.
+	session := DebugSession
+		           named: 'test session providerSessionFor:'
+		           on: process
+		           startedAt: process suspendedContext.
+	session exception: (OupsNullException fromSignallerContext: process suspendedContext).
+	^ self newDebugger
+]
+
+{ #category : 'helpers' }
 StTestDebuggerProvider >> debuggerWithErrorContext [
 
 	[ #(  ) at: 1 ]
