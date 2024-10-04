@@ -13,8 +13,14 @@ Class {
 { #category : 'initialization' }
 StMessageToolbarPresenter >> connectPresenters [
 
-	scopeList whenSelectedItemChangedDo: [ :item | 
-		item ifNotNil: [ messageList switchScopeTo: item ] ]
+	scopeList whenSelectedItemChangedDo: [ : scopeEnvironment | 
+		scopeEnvironment ifNotNil: [ messageList switchScopeTo: scopeEnvironment ] ].
+	
+	messageList whenSelectedDo: [ : item |
+		item ifNotNil: [
+			messageList updateVisitedScopesFrom: item.
+			scopeList disableSelectionDuring: [ scopeList items: messageList allScopes ] ] ]
+
 ]
 
 { #category : 'layout' }
@@ -51,21 +57,20 @@ StMessageToolbarPresenter >> initializePresenters [
 	
 	scopeList := self newDropList
 		addStyle: 'stMessageBrowserScopeList';
-		display: [ :each | each description ];
+		display: [ : item | item description ];
 		yourself.
 	
 	toolbarPresenter add: (self newToolbarButton
 		label: 'Flip';
-		action: [ self doFlipLayout ])
+		action: [ self doFlipLayout ]).
+
 ]
 
-{ #category : 'initialization' }
-StMessageToolbarPresenter >> updatePresenter [
+{ #category : 'accessing' }
+StMessageToolbarPresenter >> owner: aPresenter [
 
-	super updatePresenter.
-	
-	messageList ifNil: [ ^ self ].
-	scopeList items: (messageList scopes ifNil: [ #() ])
+	super owner: aPresenter.
+	messageList := aPresenter messageList.
 ]
 
 { #category : 'events' }

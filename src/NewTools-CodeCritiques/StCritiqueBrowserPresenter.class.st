@@ -78,7 +78,7 @@ StCritiqueBrowserPresenter class >> icon [
 { #category : 'icons' }
 StCritiqueBrowserPresenter class >> iconName [
 
-	^ #error
+	^ #smallQA
 ]
 
 { #category : 'instance creation' }
