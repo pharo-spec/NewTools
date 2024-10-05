@@ -139,7 +139,7 @@ StProfilerModel >> menu: menu shifted: b [
 				target: self
 				selector: #setTallyRoot:
 				argument: current)
-				icon: (self iconNamed: #glamorousRedo) ].
+				icon: (self iconNamed: #redo) ].
 	^ menu
 ]
 

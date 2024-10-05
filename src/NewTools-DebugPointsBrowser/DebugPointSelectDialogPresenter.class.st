@@ -55,7 +55,7 @@ DebugPointSelectDialogPresenter >> initializeWindow: aWindowPresenter [
 	
 	aWindowPresenter
 		title: 'Debug Points';		
-		windowIcon: (self application iconNamed: #glamorousBug);
+		windowIcon: (self application iconNamed: #bug);
 		initialExtent: 800@400
 
 ]

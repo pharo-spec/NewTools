@@ -18,7 +18,7 @@ StInspectorRefreshCommand class >> defaultDescription [
 { #category : 'initialization' }
 StInspectorRefreshCommand class >> defaultIconName [
 
-	^ #glamorousRefresh
+	^ #refresh
 ]
 
 { #category : 'default' }

@@ -19,7 +19,7 @@ StEvaluateCommand class >> defaultDescription [
 { #category : 'default' }
 StEvaluateCommand class >> defaultIconName [
 
-	^ #glamorousGo
+	^ #go
 ]
 
 { #category : 'default' }

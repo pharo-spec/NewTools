@@ -87,7 +87,7 @@ StProfilerInputPresenter >> initializePresenters [
 		                    display: [ :each | each name ].
 
 	profileItButton := self newButton
-		                   icon: (self iconNamed: #glamorousGo);
+		                   icon: (self iconNamed: #go);
 		                   label: 'Profile it'.
 
 	self focusOrder

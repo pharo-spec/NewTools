@@ -18,7 +18,7 @@ StPlaygroundPagesCommand class >> defaultDescription [
 { #category : 'accessing' }
 StPlaygroundPagesCommand class >> defaultIconName [
 
-	^ #glamorousMore
+	^ #more
 ]
 
 { #category : 'default' }

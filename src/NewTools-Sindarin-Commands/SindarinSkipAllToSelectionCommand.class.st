@@ -7,5 +7,5 @@ Class {
 
 { #category : 'accesing - defaults' }
 SindarinSkipAllToSelectionCommand class >> defaultIconName [
-	^ #glamorousRightSide
+	^ #rightSide
 ]

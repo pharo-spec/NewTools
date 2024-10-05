@@ -32,12 +32,12 @@ StPharoDefaultIconProvider >> initializeSynonyms [
 		at: #debuggerCopyStack 			put: #smallCopy;
 		at: #debuggerDefineEntity 		put: #changeAdd;
 		at: #debuggerPeelToFirst 		put: #down;
-		at: #debuggerProceed 				put: #glamorousGo;
-		at: #debuggerRestart 				put: #glamorousRestart;
+		at: #debuggerProceed 				put: #go;
+		at: #debuggerRestart 				put: #restart;
 		at: #debuggerReturn 				put: #refresh;
-		at: #debuggerStepInto 			put: #glamorousInto;
-		at: #debuggerStepOver 			put: #glamorousOver;
-		at: #debuggerStepThrough 		put: #glamorousThrough;
-		at: #debuggerRunToSelection 	put: #glamorousRightSide; 
-		at: #debuggerWhereIs 				put: #glamorousSearch
+		at: #debuggerStepInto 			put: #into;
+		at: #debuggerStepOver 			put: #over;
+		at: #debuggerStepThrough 		put: #through;
+		at: #debuggerRunToSelection 	put: #rightSide; 
+		at: #debuggerWhereIs 				put: #search
 ]
