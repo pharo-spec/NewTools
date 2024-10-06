@@ -19,7 +19,7 @@ Class {
 { #category : 'accessing' }
 StPlaygroundPageVersionsPresenter class >> preferredExtent [
 
-	^ (700@400) scaledByDisplayScaleFactor
+	^ (700@400)
 ]
 
 { #category : 'actions' }
