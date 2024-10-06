@@ -117,12 +117,12 @@ ScopeNodesPresenter >> argumentsListMenu [
 			  addItem: [ :anItem |
 				  anItem
 					  name: 'Check all Cmd-a';
-					  iconName: #glamorousAccept;
+					  iconName: #accept;
 					  action: [ self checkAll ] ];
 			  addItem: [ :anItem |
 				  anItem
 					  name: 'Unheck all Cmd-u';
-					  iconName: #glamorousAccept;
+					  iconName: #accept;
 					  action: [ self uncheckAll ] ];
 			  
 			addItem: [ :anItem |
@@ -135,13 +135,13 @@ ScopeNodesPresenter >> argumentsListMenu [
 				  anItem
 					  name: 'Browse';
 					  visibleIf: [ scopeNodesTree selectedItem isNotNil ];
-					  iconName: #glamorousBrowse;
+					  iconName: #browse;
 					  action: [ self browseSelectedItem ] ];
 			  addItem: [ :anItem |
 				  anItem
 					  name: 'Class references';
 					  visibleIf: [ scopeNodesTree selectedItem isClassNode ];
-					  iconName: #glamorousBrowse;
+					  iconName: #browse;
 					  action: [
 						  self showReferencesToClass: scopeNodesTree selectedItem value ] ] ]
 ]

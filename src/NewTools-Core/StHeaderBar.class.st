@@ -52,7 +52,7 @@ StHeaderBar >> enableCloseDoing: aBlock [
 	closeButton := self newButton
 		addStyle: 'flat';
 		addStyle: 'small';
-		icon: (self application iconNamed: #glamorousClose);
+		icon: (self application iconNamed: #close);
 		action: aBlock;
 		yourself.
 		

@@ -97,7 +97,7 @@ StSindarinBytecodeDebuggerPresenter >> updateBytecode [
 		items: bytecodeList;
 		displayIcon: [ :elem | 
 			elem offset = currentPC
-				ifTrue: [ Smalltalk iconNamed: #glamorousRight ]
+				ifTrue: [ Smalltalk iconNamed: #right ]
 				ifFalse: [ Smalltalk iconNamed: #blank ] ].
 	bcContextInspection model:
 		(StSindarinBytecodeContextInspectorModel on: debugger currentContext).

@@ -12,7 +12,7 @@ SindarinStepToReturnCommand class >> defaultDescription [
 
 { #category : 'accessing - defaults' }
 SindarinStepToReturnCommand class >> defaultIconName [
-	^ #glamorousRightSide
+	^ #rightSide
 ]
 
 { #category : 'accessing - defaults' }
