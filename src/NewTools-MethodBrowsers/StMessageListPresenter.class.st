@@ -52,7 +52,7 @@ StMessageListPresenter >> allScopes [
 { #category : 'private - scopes' }
 StMessageListPresenter >> browserEnvironment [
 
-	^ ClyNavigationEnvironment currentImageScope asRBEnvironment label: 'current image'
+	^ RBBrowserEnvironment default label: 'current image'
 ]
 
 { #category : 'testing' }
