@@ -601,7 +601,7 @@ StCritiqueBrowserPresenter >> setUpdateButton [
 
 	updateButton 
 		state: false;
-		icon: (self iconNamed: #glamorousRestart);
+		icon: (self iconNamed: #restart);
 		label: 'Update';
 		action: self setActionUpdateButton.
 ]

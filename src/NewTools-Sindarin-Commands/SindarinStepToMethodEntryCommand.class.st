@@ -12,7 +12,7 @@ SindarinStepToMethodEntryCommand class >> defaultDescription [
 
 { #category : 'accessing - defaults' }
 SindarinStepToMethodEntryCommand class >> defaultIconName [
-	^ #glamorousInto 
+	^ #into 
 ]
 
 { #category : 'accessing - defaults' }

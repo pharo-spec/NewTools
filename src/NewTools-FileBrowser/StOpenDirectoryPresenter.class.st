@@ -42,7 +42,7 @@ StOpenDirectoryPresenter >> allowsChooseDirectoryIfNoFilename [
 { #category : 'initialization' }
 StOpenDirectoryPresenter >> initialExtentForWindow [
 
-	^ (1050 @ 550) scaledByDisplayScaleFactor
+	^ (1050 @ 550)
 ]
 
 { #category : 'hooks' }

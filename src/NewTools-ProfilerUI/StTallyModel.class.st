@@ -104,11 +104,11 @@ StTallyModel >> menu: menu shifted: b [
 	(menu
 		add: 'Browse (b)'
 		target: self
-		selector: #browseItem) icon: (self iconNamed: #glamorousBrowse).
+		selector: #browseItem) icon: (self iconNamed: #browse).
 	(menu
 		add: 'Inspect (i)'
 		target: self
-		selector: #inspectItem) icon: (self iconNamed: #glamorousInspect)
+		selector: #inspectItem) icon: (self iconNamed: #inspect)
 ]
 
 { #category : 'accessing' }

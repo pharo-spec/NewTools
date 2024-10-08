@@ -18,7 +18,7 @@ StPlaygroundPublishCommand class >> defaultDescription [
 { #category : 'accessing' }
 StPlaygroundPublishCommand class >> defaultIconName [
 
-	^ #glamorousSaveToUrl
+	^ #saveToUrl
 ]
 
 { #category : 'default' }

@@ -12,6 +12,6 @@ UITheme >> inspectionColors [
 		displayIcon: [ :each | 
 			Morph new 
 				color: (self perform: each);
-				asFormOfSize: (20@20) scaledByDisplayScaleFactor ];
+				asFormOfSize: (20@20) ];
 		yourself
 ]

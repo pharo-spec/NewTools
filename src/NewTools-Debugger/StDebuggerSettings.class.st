@@ -42,7 +42,7 @@ Class {
 { #category : 'accessing' }
 StDebuggerSettings class >> defaultExtent [
 
-	^ (850 @ 650) scaledByDisplayScaleFactor
+	^ (850 @ 650)
 
 ]
 

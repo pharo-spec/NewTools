@@ -188,7 +188,7 @@ StProfilerResultsPresenter >> initializePresenters [
 StProfilerResultsPresenter >> newBrowseButton [
 
 	^ self newButton
-		  icon: (self iconNamed: #glamorousBrowse);
+		  icon: (self iconNamed: #browse);
 		  label: 'Browse';
 		  disable;
 		  action: [ treeTable selectedItem browseItem ];
@@ -262,7 +262,7 @@ StProfilerResultsPresenter >> newReportButton [
 StProfilerResultsPresenter >> newShowAsRootButton [
 
 	^ self newButton
-		  icon: (self iconNamed: #glamorousRedo);
+		  icon: (self iconNamed: #redo);
 		  label: 'Show node as root';
 		  action: [ viewModel setTallyRoot: treeTable selectedItem ];
 		  disable;

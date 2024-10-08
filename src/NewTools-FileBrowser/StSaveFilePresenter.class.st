@@ -59,7 +59,7 @@ StSaveFilePresenter >> existingFileMessage: entry [
 { #category : 'initialization' }
 StSaveFilePresenter >> initialExtentForWindow [ 
 
-	^ (1050 @ 550) scaledByDisplayScaleFactor
+	^ (1050 @ 550)
 ]
 
 { #category : 'hooks' }

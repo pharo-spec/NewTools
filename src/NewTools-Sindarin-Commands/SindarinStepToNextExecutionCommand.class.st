@@ -11,7 +11,7 @@ Class {
 
 { #category : 'accessing - defaults' }
 SindarinStepToNextExecutionCommand class >> defaultIconName [
-	^ #glamorousInto
+	^ #into
 ]
 
 { #category : 'hooks' }

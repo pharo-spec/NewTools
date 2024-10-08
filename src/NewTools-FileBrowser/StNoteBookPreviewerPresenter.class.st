@@ -134,7 +134,7 @@ StNoteBookPreviewerPresenter >> pageContent: aPresenter [
 
 	pageContent := aPresenter.
 	page
-		icon: (self iconNamed: #glamorousRefresh);
+		icon: (self iconNamed: #refresh);
 		presenterProvider: [ 
 			self newText
 				text: 'Loading...';
