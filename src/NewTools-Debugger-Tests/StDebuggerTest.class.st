@@ -1009,7 +1009,9 @@ StDebuggerTest >> testFailingReleaseTest [
 	 
 	output := methods collect: #name.
 	expected := (self DEBUG_okEquivalentSuperCode splitOn: Character cr) removeLast; yourself.
-	self assertCollection: expected hasSameElements: output
+
+	self assertCollection: output hasSameElements: expected.
+	
 ]
 
 { #category : 'tests' }
