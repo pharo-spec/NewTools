@@ -676,8 +676,8 @@ StDebuggerTest >> testFailingReleaseTest [
 			           ifNotNil: [ :overridenMethod | method equivalentTo: overridenMethod ]
 			           ifNil: [ false ] ].
 		
-
-	self assert: methods size equals: 326.
+	methods := methods select:[:m|  'NewTools*' match: m package name asString].
+	self assertCollection: methods equals: OrderedCollection new.
 
 ]
 
