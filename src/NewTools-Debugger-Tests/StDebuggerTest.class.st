@@ -227,7 +227,6 @@ StDebuggerTest >> testClose [
 	debugger := self debuggerOn: session.
 	actionModel := debugger debuggerActionModel.
 	windowPresenter presenter: debugger.
-	debugger initializeWindow: windowPresenter.
 
 	"We trigger the closing from the presenter instead of the debugger itself,
 	because the window is not really open so the debugger will not close through debugger close."
