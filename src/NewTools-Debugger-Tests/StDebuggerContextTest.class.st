@@ -179,6 +179,26 @@ StDebuggerContextTest >> testExceptionNodes [
 ]
 
 { #category : 'tests' }
+StDebuggerContextTest >> testFailingAssertionNodes [
+
+	| nodes  exception |
+	[ TestCase basicNew assert: 4 equals: 2 ]
+		on: TestFailure
+		do: [ :e | 
+			exception := e freeze.
+			debuggerContext context: e signalerContext.
+			debuggerContext exception: e ].
+	nodes := debuggerContext exceptionNodes.
+	self assert: nodes size equals: 2.
+	self assert: nodes first key equals: 'expected'.
+	self assert: nodes first rawValue equals: 2.
+	self assert: nodes first variableTag equals: 'implicit'.
+	self assert: nodes second key equals: 'actual'.
+	self assert: nodes second rawValue equals: 4.
+	self assert: nodes first variableTag equals: 'implicit'.
+]
+
+{ #category : 'tests' }
 StDebuggerContextTest >> testNoDuplicatesBetweenArgsAndTemps [
 	|nodes nodesNamesArray nodesNamesSet|
 	debuggerContext context: self contextWithArgs.
