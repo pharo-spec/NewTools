@@ -5,8 +5,7 @@ Class {
 	#name : 'StTestDebuggerProvider',
 	#superclass : 'Object',
 	#instVars : [
-		'session',
-		'process'
+		'session'
 	],
 	#category : 'NewTools-Debugger-Tests-Utils',
 	#package : 'NewTools-Debugger-Tests',
@@ -42,7 +41,7 @@ StTestDebuggerProvider >> debuggerWithDNUContext [
 
 { #category : 'helpers' }
 StTestDebuggerProvider >> debuggerWithDynamicVariableSuspendedContext [
-
+	|process|
 	process := [
 	           TestDynamicVariable value: 42 during: [
 		           self assert:
@@ -248,8 +247,7 @@ StTestDebuggerProvider >> session [
 
 { #category : 'helpers' }
 StTestDebuggerProvider >> sessionFor: aContext [
-
-	| process |
+	|process|
 	process := Process
 		           forContext: aContext
 		           priority: Processor userInterruptPriority.
