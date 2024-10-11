@@ -23,7 +23,7 @@ StDebuggerContext class >> context: aContext [
 		  yourself
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'nodes' }
 StDebuggerContext >> assertionNodesFor: anAssertionFailureResult [
 
 	| assertionFailure nodes|
