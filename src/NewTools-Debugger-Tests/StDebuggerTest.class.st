@@ -17,7 +17,7 @@ Class {
 	#tag : 'Presenters'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'DEBG' }
 StDebuggerTest >> DEBUG_okEquivalentSuperCode [
 	^'BeautifulCommentsTextStyler>>#postTextTreatment:
 BenchTFFISameThread>>#doCallWith:another:
@@ -993,7 +993,7 @@ StDebuggerTest >> testExceptionProvidesSameExceptionAsTheActionModelOne [
 		identicalTo: debugger debuggerActionModel exception
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'DEBG' }
 StDebuggerTest >> testFailingReleaseTest [
 
 	| methods output expected|
@@ -1008,7 +1008,7 @@ StDebuggerTest >> testFailingReleaseTest [
 
 	 
 	output := methods collect: #name.
-	expected := self DEBUG_okEquivalentSuperCode splitOn: Character cr.
+	expected := (self DEBUG_okEquivalentSuperCode splitOn: Character cr) removeLast; yourself.
 	self assertCollection: expected hasSameElements: output
 ]
 
