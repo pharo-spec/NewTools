@@ -40,6 +40,27 @@ StTestDebuggerProvider >> debuggerWithDNUContext [
 ]
 
 { #category : 'helpers' }
+StTestDebuggerProvider >> debuggerWithDynamicVariableSuspendedContext [
+	|process|
+	process := [
+	           TestDynamicVariable value: 42 during: [
+		           self assert:
+			           (thisProcess psValueAt: TestDynamicVariable soleInstance index) = 42.
+					  100 milliSeconds wait.
+		           thisProcess suspend ] ] fork.
+	session := DebugSession
+		           named: 'test session providerSessionFor:'
+		           on: process
+		           startedAt: process suspendedContext.
+	session exception:
+		(OupsNullException fromSignallerContext: process suspendedContext).
+"	self assert:
+		(process psValueAt: TestDynamicVariable soleInstance index) = 42."
+	
+	^ self newDebugger
+]
+
+{ #category : 'helpers' }
 StTestDebuggerProvider >> debuggerWithErrorContext [
 
 	[ #(  ) at: 1 ]
@@ -226,8 +247,7 @@ StTestDebuggerProvider >> session [
 
 { #category : 'helpers' }
 StTestDebuggerProvider >> sessionFor: aContext [
-
-	| process |
+	|process|
 	process := Process
 		           forContext: aContext
 		           priority: Processor userInterruptPriority.
