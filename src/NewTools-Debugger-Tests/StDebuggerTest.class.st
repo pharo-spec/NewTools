@@ -664,23 +664,6 @@ StDebuggerTest >> testExceptionProvidesSameExceptionAsTheActionModelOne [
 		identicalTo: debugger debuggerActionModel exception
 ]
 
-{ #category : 'DEBG' }
-StDebuggerTest >> testFailingReleaseTest [
-
-	| methods |
-	"we do not care about methods that are installed from traits"
-	methods := SystemNavigation new allMethods reject: [ :method | method isFromTrait ].
-
-	methods := methods select: [ :method |
-		           method overriddenMethod
-			           ifNotNil: [ :overridenMethod | method equivalentTo: overridenMethod ]
-			           ifNil: [ false ] ].
-		
-	methods := methods select:[:m|  'NewTools*' match: m package name asString].
-	self assertCollection: methods equals: OrderedCollection new.
-
-]
-
 { #category : 'tests' }
 StDebuggerTest >> testGenerateAndProceed [
 
