@@ -8,12 +8,6 @@ Class {
 	#tag : 'Model'
 }
 
-{ #category : 'testing' }
-TStDebuggerExtensionTestClass class >> acceptsPredicate: aStDebuggerContextPredicate [
-
-	^ true
-]
-
 { #category : 'layout' }
 TStDebuggerExtensionTestClass class >> defaultLayout [
 
