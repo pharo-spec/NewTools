@@ -34,9 +34,9 @@ Class {
 		'LastKnownPosition',
 		'PreserveWindowPositionAndExtent'
 	],
-	#category : 'NewTools-Debugger-View',
+	#category : 'NewTools-Debugger-Model',
 	#package : 'NewTools-Debugger',
-	#tag : 'View'
+	#tag : 'Model'
 }
 
 { #category : 'accessing' }

@@ -131,12 +131,13 @@ StFailingAssertionInspector >> initializePresenters [
 { #category : 'initialization' }
 StFailingAssertionInspector >> initializeStringDiffPresenters [
 	
-	stringDiff := self newDiff.
+	stringDiff :=  self instantiate: SpDiffUnifiedPresenter .
 	stringDiff showOptions: false.
 	stringDiff leftLabel: 'Actual result (left) versus expected result (right)'.
 	stringDiff rightLabel: ''.
 	stringDiff leftText: actualObject printString.
 	stringDiff rightText: expectedObject printString
+
 ]
 
 { #category : 'accessing' }

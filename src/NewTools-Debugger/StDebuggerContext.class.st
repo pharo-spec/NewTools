@@ -23,6 +23,22 @@ StDebuggerContext class >> context: aContext [
 		  yourself
 ]
 
+{ #category : 'nodes' }
+StDebuggerContext >> assertionNodesFor: anAssertionFailureResult [
+
+	| assertionFailure nodes|
+	nodes := OrderedCollection new.
+	[
+	assertionFailure := self exception signalerContext
+		                    findFailedAssertionResultsInSenderChain ]
+		on: StDebuggeAssertionFailureContextNotFound
+		do: [ ^ nodes ].
+	
+	nodes add: (StInspectorDynamicNode hostObject: assertionFailure expected label: 'expected' value: assertionFailure expected ).
+	nodes add: (StInspectorDynamicNode hostObject: assertionFailure actual label: 'actual' value: assertionFailure actual ).
+	^nodes
+]
+
 { #category : 'accessing' }
 StDebuggerContext >> buildExtensionNodes [
 
