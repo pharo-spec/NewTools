@@ -47,6 +47,18 @@ StDebuggerMethodImplementorExtension >> addProtocols: protocols [
 		ifTrue:[ self selectMatchingProtocol ]
 ]
 
+{ #category : 'private - actions' }
+StDebuggerMethodImplementorExtension >> addProtocolsFrom: aClassOrTrait [ 
+
+	aClassOrTrait ifNil: [ ^ self ].
+
+	self addProtocols: (aClassOrTrait isTrait
+		ifTrue: [ aClassOrTrait protocols ]
+		ifFalse: [ 
+			((aClassOrTrait withAllSuperclasses copyWithoutAll: {Object. ProtoObject}) 
+				flatCollect: #protocols) asSet])
+]
+
 { #category : 'debugger extension' }
 StDebuggerMethodImplementorExtension >> debuggerExtensionToolName [
 
@@ -125,9 +137,9 @@ StDebuggerMethodImplementorExtension >> initializePresenters [
 		
 	classesAndTraits := self newDropList.
 	classesAndTraits 
-		display: [ :item | item label ];
+		display: [ :item | item name ];
 		displayIcon: [ :item | item icon ];
-		whenSelectedItemChangedDo: [ :item | item value ].
+		whenSelectedItemChangedDo: [ :item | self addProtocolsFrom: item ].
 			
 	createMethodButton := self newButton
 		icon: (self iconNamed: #add);
@@ -173,17 +185,7 @@ StDebuggerMethodImplementorExtension >> updatePresenter [
 	
 	receiverClass withAllSuperclassesDo: [ :aClass |
 		traits addAll: aClass allTraits.
-		items add: (SpDropListItem new 
-			label: aClass name;
-			action: [ self addProtocols: (((aClass withAllSuperclasses copyWithoutAll: {Object. ProtoObject})) flatCollect: #protocols) asSet ];
-			icon: (self iconNamed: aClass systemIconName);
-			yourself) ].
-	traits do: [ :aTrait |
-		items add: (SpDropListItem new 
-			label: aTrait name;
-			action: [ self addProtocols: (aTrait protocols) ];
-			icon: (self iconNamed: aTrait systemIconName);
-			yourself) ].
-		
+		items add: aClass ].
+
 	classesAndTraits items: items
 ]
