@@ -138,7 +138,7 @@ StDebuggerMethodImplementorExtension >> initializePresenters [
 	classesAndTraits := self newDropList.
 	classesAndTraits 
 		display: [ :item | item name ];
-		displayIcon: [ :item | item icon ];
+		displayIcon: [ :item | self iconNamed: item systemIconName ];
 		whenSelectedItemChangedDo: [ :item | self addProtocolsFrom: item ].
 			
 	createMethodButton := self newButton
