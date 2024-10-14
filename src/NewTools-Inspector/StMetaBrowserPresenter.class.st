@@ -100,11 +100,11 @@ StMetaBrowserPresenter >> initializePresenters [
 		           children: [ :aClass |
 			           classHierarchy select: [ :subclass |
 					           subclass superclass == aClass ] ];
-		           addGroupWith: self classListActions;
+		           actions: self classListActions;
 		           yourself.
 	methods := (self instantiate: SpFilteringListPresenter)
 		           display: [ :each | each selector ];
-		           addGroupWith: self methodListActions;
+		           actions: self methodListActions;
 		           yourself.
 
 	source := self newCode
