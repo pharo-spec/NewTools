@@ -45,10 +45,11 @@ StMethodToolbarPresenter class >> title [
 
 { #category : 'accessing' }
 StMethodToolbarPresenter >> addItemLabeled: aString do: aBlock [
+	| item |
 
-	dropList 
-		addItemLabeled: aString 
-		do: aBlock
+	item := SpDropListItem on: aString do: aBlock.
+	item display: [ :itemLabel | itemLabel ].
+	dropList items: (dropList items copyWith: item)
 ]
 
 { #category : 'layout' }
@@ -141,6 +142,9 @@ StMethodToolbarPresenter >> initializePresenters [
 		yourself.
 		
 	dropList := self newDropList
+		display: [ :item | item label ];
+		whenSelectedItemChangedDo: [ :item | item value ];
+		yourself
 ]
 
 { #category : 'accessing' }

@@ -45,9 +45,9 @@ StMetaBrowserPresenter class >> defaultLayout [
 ]
 
 { #category : 'initialization' }
-StMetaBrowserPresenter >> classListMenu [
+StMetaBrowserPresenter >> classListActions [
 	
-	^ (self rootCommandsGroup / 'classes') asMenuPresenter 
+	^ self rootCommandsGroup / 'classes'
 ]
 
 { #category : 'private - actions' }
@@ -100,11 +100,11 @@ StMetaBrowserPresenter >> initializePresenters [
 		           children: [ :aClass |
 			           classHierarchy select: [ :subclass |
 					           subclass superclass == aClass ] ];
-		           contextMenu: [ self classListMenu ];
+		           actions: self classListActions;
 		           yourself.
 	methods := (self instantiate: SpFilteringListPresenter)
 		           display: [ :each | each selector ];
-		           contextMenu: [ self methodListMenu ];
+		           actions: self methodListActions;
 		           yourself.
 
 	source := self newCode
@@ -120,9 +120,9 @@ StMetaBrowserPresenter >> initializePresenters [
 ]
 
 { #category : 'initialization' }
-StMetaBrowserPresenter >> methodListMenu [
+StMetaBrowserPresenter >> methodListActions [
 
-	^ (self rootCommandsGroup / 'methods') asMenuPresenter
+	^ self rootCommandsGroup / 'methods'
 ]
 
 { #category : 'private' }

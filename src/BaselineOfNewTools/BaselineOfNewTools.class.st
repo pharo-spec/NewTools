@@ -53,12 +53,14 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Spotter-Processors-Tests' with: [ spec requires: #( 'NewTools-Spotter-Processors' ) ];
 			package: 'NewTools-Spotter-Tests' with: [ spec requires: #( 'NewTools-Spotter' ) ];
 			package: 'NewTools-Morphic-Spotter' with: [ spec requires: #( 'NewTools-Morphic' ) ];
+			"file browser"
+			package: 'NewTools-FileBrowser' with: [ spec requires: #( 'NewTools-Core' ) ];
+			package: 'NewTools-FileBrowser-Morphic' with: [ spec requires: #( 'NewTools-FileBrowser' ) ];
+			package: 'NewTools-FileBrowser-Tests' with: [ spec requires: #( 'NewTools-FileBrowser' ) ];
 			"extras"
 			package: 'HelpCenter' with: [ spec requires: #( 'NewTools-Core' ) ];
 			package: 'NewTools-FlagBrowser' with: [ spec requires: #( 'NewTools-Core' ) ];
-			package: 'NewTools-FlagBrowser-Tests' with: [ spec requires: #( 'NewTools-FlagBrowser' ) ];
-			package: 'NewTools-FileBrowser' with: [ spec requires: #( 'NewTools-Core' ) ];
-			package: 'NewTools-FileBrowser-Tests' with: [ spec requires: #( 'NewTools-FileBrowser' ) ];
+			package: 'NewTools-FlagBrowser-Tests' with: [ spec requires: #( 'NewTools-FlagBrowser' ) ];			
 			package: 'NewTools-FontChooser' with: [ spec requires: #( 'NewTools-Core' ) ];
 			package: 'NewTools-FontChooser-Tests' with: [ spec requires: #( 'NewTools-FontChooser' ) ];
 			package: 'NewTools-SpTextPresenterDecorators';

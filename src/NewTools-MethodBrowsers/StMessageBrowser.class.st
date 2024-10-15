@@ -20,6 +20,9 @@ Class {
 	#classVars : [
 		'UsingLayout'
 	],
+	#classInstVars : [
+		'preferredExtent'
+	],
 	#category : 'NewTools-MethodBrowsers-Senders',
 	#package : 'NewTools-MethodBrowsers',
 	#tag : 'Senders'
@@ -98,6 +101,12 @@ StMessageBrowser class >> browseSendersOf: aSymbol [
 	^ self browse: aSymbol senders asSendersOf: aSymbol
 ]
 
+{ #category : 'accessing' }
+StMessageBrowser class >> defaultPreferredExtent [
+
+	^ 900@600
+]
+
 { #category : 'instance creation - old' }
 StMessageBrowser class >> openMessageList: messageList name: aString autoSelect: aSelector refreshingBlockSelector: aRefreshingBlockSelector [
 	
@@ -113,6 +122,18 @@ StMessageBrowser class >> openMessageList: messageList name: aString autoSelect:
 	
 				
 
+]
+
+{ #category : 'accessing' }
+StMessageBrowser class >> preferredExtent [
+
+	^ preferredExtent ifNil: [ preferredExtent := self defaultPreferredExtent ]
+]
+
+{ #category : 'accessing' }
+StMessageBrowser class >> preferredExtent: aPoint [
+
+	preferredExtent := aPoint
 ]
 
 { #category : 'tool registration' }
@@ -377,7 +398,9 @@ StMessageBrowser >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
 		title: self title;
-		windowIcon: (self iconNamed: self class taskbarIconName)
+		initialExtent: self class preferredExtent;
+		windowIcon: (self iconNamed: self class taskbarIconName);
+		whenResizingDo: [ :ann | self class preferredExtent: ann newSize ]
 ]
 
 { #category : 'private' }

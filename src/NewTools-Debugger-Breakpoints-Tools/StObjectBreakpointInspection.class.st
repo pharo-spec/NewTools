@@ -75,15 +75,15 @@ StObjectBreakpointInspection >> buildHaltAndBreakpointTable [
 		addColumn:
 			((SpStringTableColumn
 				title: 'Scope'
-				evaluated: [ :item | item printScope])
+				evaluated: [ :item | item printScope ])
 				width: 120;
 				yourself);
 		addColumn:
 			(SpStringTableColumn
 				title: 'Target'
-				evaluated: [ :item | item printEntity]).
+				evaluated: [ :item | item printEntity ]).
 	methodsWithBreakpoints
-		contextMenu: self rootCommandsGroup asMenuPresenter
+		actions: self rootCommandsGroup
 ]
 
 { #category : 'private' }

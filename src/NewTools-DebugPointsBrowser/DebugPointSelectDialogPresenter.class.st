@@ -32,10 +32,10 @@ DebugPointSelectDialogPresenter >> initializePresenters [
 
 	label := self newLabel.
 
-	list := DebugPointTablePresenter new.
+	list := self instantiate: DebugPointTablePresenter.
 	code := DebugPointCodePresenter new
-		        beForScripting;
-		        editable: false.
+		beForScripting;
+		editable: false.
 
 	self initializeVariableTargetPresenter.
 

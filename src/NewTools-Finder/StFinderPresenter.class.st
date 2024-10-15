@@ -407,9 +407,14 @@ StFinderPresenter >> initializeResultTree [
 		beMultipleSelection;
 		display: [ :result | result displayString ];
 		displayIcon: [ :result | result displayIcon ];
-		bindKeyCombination: $b meta toAction: [ self resultTree selectedItem browseAction ];
-		bindKeyCombination: $r meta toAction: [ self resultTree selectedItem referencesAction ];
-		contextMenu: [ (self rootCommandsGroup / 'StFinderSelContextualMenu') beRoot asMenuPresenter ].
+		addShortcutWith: [ :action | action 
+			shortcutKey: $b actionModifier;
+			action: [ self resultTree selectedItem browseAction ] ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: $r actionModifier;
+			action: [ self resultTree selectedItem referencesAction ] ];
+		actions: self rootCommandsGroup / 'StFinderSelContextualMenu';
+		yourself
 ]
 
 { #category : 'initialization' }

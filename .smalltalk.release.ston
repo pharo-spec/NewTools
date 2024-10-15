@@ -12,6 +12,7 @@ SmalltalkCISpec {
   #testing : {
   	#packages : [ 
   		'System-Settings-Tests.*',
+  		'System-Dependencies-Tests',
   		'ReleaseTests.*' ] 
   }  
 }

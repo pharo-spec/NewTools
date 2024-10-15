@@ -9,60 +9,44 @@ Class {
 }
 
 { #category : 'context menu' }
-DebugPointTablePresenter >> debugPointContextMenu [
+DebugPointTablePresenter >> debugPointActions [
 
-	^ self newMenu
-		  addGroup: [ :aGroup |
-			  aGroup
-				  addItem: [ :anItem |
-					  anItem
-						  name: 'Inspect';
-						  description: 'inspect this debug point';
-						  enabled: [ self selectedItem isNotNil ];
-						  action: [ self selectedItem inspect ] ];
-				  addItem: [ :anItem |
-					  anItem
-						  name: 'Browse Target';
-						  description: 'browse target of the selected debug point';
-						  enabled: [ self selectedItem isNotNil ];
-						  action: [ self selectedItem browse ] ];
-				  addItem: [ :anItem |
-					  anItem
-						  name: 'Inspect Current Scope';
-						  description:
-							  'inspect the current scope of the selected debug point';
-						  enabled: [ self selectedItem isNotNil ];
-						  action: [ self selectedItem scope inspect ] ];
-				  addItem: [ :anItem |
-					  anItem
-						  name: 'Reset Current Scope';
-						  description:
-							  'resetting the current scope of the selected debug point';
-						  enabled: [ self selectedItem isNotNil ];
-						  action: [ self selectedItem resetObjectScope ] ];
-				  addItem: [ :anItem |
-					  anItem
-						  name: 'Remove';
-						  description: 'removes the selected debug point';
-						  enabled: [ self selectedItem isNotNil ];
-						  action: [
-							  self selectedItem remove.
-							  self refresh ] ] ];
-		  addGroup: [ :aGroup |
-			  aGroup addItem: [ :anItem |
-				  anItem
-					  name: 'Refresh';
-					  description: 'refresh this window';
-					  action: [ self refresh ] ] ]
+	^ SpActionGroup new 
+		addActionWith: [ :anItem | anItem
+			name: 'Inspect';
+			description: 'inspect this debug point';
+			actionEnabled: [ self selectedItem isNotNil ];
+			action: [ self selectedItem inspect ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'Browse Target';
+			description: 'browse target of the selected debug point';
+			actionEnabled: [ self selectedItem isNotNil ];
+			action: [ self selectedItem browse ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'Inspect Current Scope';
+			description: 'inspect the current scope of the selected debug point';
+			actionEnabled: [ self selectedItem isNotNil ];
+			action: [ self selectedItem scope inspect ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'Reset Current Scope';
+			description: 'resetting the current scope of the selected debug point';
+			actionEnabled: [ self selectedItem isNotNil ];
+			action: [ self selectedItem resetObjectScope ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'Remove';
+			description: 'removes the selected debug point';
+			actionEnabled: [ self selectedItem isNotNil ];
+			action: [
+				self selectedItem remove.
+				self refresh ] ];
+		addGroupWith: [ :aGroup | aGroup 
+			addActionWith: [ :anItem | anItem
+				  name: 'Refresh';
+				  description: 'refresh this window';
+				  action: [ self refresh ] ] ]
 ]
 
 { #category : 'initialization' }
-DebugPointTablePresenter >> initialize [ 
-	super initialize.
-	self initializeDebugPointTable 
-]
-
-{ #category : 'presenter building' }
 DebugPointTablePresenter >> initializeDebugPointTable [
 
 	self beResizable.
@@ -95,9 +79,8 @@ DebugPointTablePresenter >> initializeDebugPointTable [
 		addColumn: (SpStringTableColumn
 				 title: 'Scope'
 				 evaluated: [ :item | item scopeString ]);
-		contextMenu: self debugPointContextMenu.
+		actions: self debugPointActions.
 	self items: DebugPoint all asOrderedCollection.
-
 
 	self dropEnabled: true.
 	self dragEnabled: true.
@@ -108,4 +91,10 @@ DebugPointTablePresenter >> initializeDebugPointTable [
 		(self itemAt: item row) addBehavior: ChainBehavior new.
 		((self itemAt: item row) getBehavior: ChainBehavior) putChild:
 			item passenger first ]
+]
+
+{ #category : 'initialization' }
+DebugPointTablePresenter >> initializePresenters [
+
+	self initializeDebugPointTable 
 ]

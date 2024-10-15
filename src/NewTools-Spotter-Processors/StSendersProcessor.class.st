@@ -50,11 +50,11 @@ StSendersProcessor >> executeQuery [
 { #category : 'key-bindings' }
 StSendersProcessor >> installKeymappingsOn: aPresenter onExecution: aBlock [
 
-	aPresenter
-		bindKeyCombination: self keyBinding
-		toAction: [ 
+	aPresenter addShortcutWith: [ :action | action 
+		shortcutKey: self keyBinding;
+		action: [ 
 			self query toggleFilter: self sendersTag.
-			aBlock cull: self ]
+			aBlock cull: self ] ]
 ]
 
 { #category : 'spotter-api' }

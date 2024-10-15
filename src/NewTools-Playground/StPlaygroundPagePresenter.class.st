@@ -213,8 +213,7 @@ StPlaygroundPagePresenter >> initializePresenters [
 		lineNumbers: self showLineNumbers;
 		overridingContextMenu;
 		withEditionContextMenu;
-		contextMenu: [ (self menuActionsFor: text) asMenuPresenter ];
-		contextKeyBindings: (self menuActionsFor: text) asKMCategory;
+		actions: (self menuActionsFor: text);
 		whenTextChangedDo: [ :aString | self updateContents: aString ].
 
 	text announcer

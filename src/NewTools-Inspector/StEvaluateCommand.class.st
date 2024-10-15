@@ -31,9 +31,7 @@ StEvaluateCommand class >> defaultName [
 { #category : 'default' }
 StEvaluateCommand class >> defaultShortcutKey [
 
-	^ $g command mac 
-		| $g control win
-		| $g control unix
+	^ $g actionModifier
 ]
 
 { #category : 'documentation' }

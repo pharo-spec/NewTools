@@ -182,19 +182,16 @@ StCritiqueBrowserPresenter >> browseRule [
 ]
 
 { #category : 'private' }
-StCritiqueBrowserPresenter >> buildRuleMenu [
+StCritiqueBrowserPresenter >> buildRuleMenuActions [
 
-	^ SpMenuPresenter new
-		  addGroup: [ :group | 
-			  group addItem: [ :item | 
-					  item
-						  name: 'Browse rule' translated;
-						  action: [ self browseRule ] ].
-			  group addItem: [ :item | 
-				  item
-					  name: 'Reapply this rule' translated;
-					  action: [ self reapplyThisRule ] ] ];
-		  yourself
+	^ SpActionGroup new
+		addActionWith: [ :item | item
+			name: 'Browse rule' translated;
+			action: [ self browseRule ] ];
+		addActionWith: [ :item | item
+			name: 'Reapply this rule' translated;
+			action: [ self reapplyThisRule ] ];
+		yourself
 ]
 
 { #category : 'system annoucements' }
@@ -579,14 +576,15 @@ StCritiqueBrowserPresenter >> setResetButton [
 
 { #category : 'system annoucements' }
 StCritiqueBrowserPresenter >> setRulesModel [ 
-rulesModel children: [ :rule | 
+	
+	rulesModel children: [ :rule | 
 		rule isComposite
 			ifTrue: [ rule rules asArray ]
-			ifFalse: [ #(  ) ] ].
+			ifFalse: [ #() ] ].
 
 	rulesModel addColumn: ((SpStringTableColumn evaluated: [ :rule | 
 			  self stringMorphForRule: rule ]) title: 'Rules Group').
-	rulesModel contextMenu: self buildRuleMenu.
+	rulesModel actions: self buildRuleMenuActions
 ]
 
 { #category : 'api' }

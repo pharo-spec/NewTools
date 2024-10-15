@@ -102,8 +102,7 @@ StFileNavigationSystemPresenter class >> example [
 StFileNavigationSystemPresenter >> beMultipleSelection [
 	
 	self fileReferenceTable 
-		beMultipleSelection;
-		comparisonStrategy: [ :a :b | a = b ]
+		beMultipleSelection
 ]
 
 { #category : 'api - customization' }

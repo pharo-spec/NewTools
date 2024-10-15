@@ -232,10 +232,7 @@ StMessageListPresenter >> initializePresenters [
 		beResizable.
 
 	listPresenter outputActivationPort transmitDo: [ :aMethod | self doBrowseMethod ].
-		
-	listPresenter 
-		contextMenu: self messageListActions asMenuPresenter;
-		contextKeyBindings: self messageListActions asKMCategory
+	listPresenter actions: self messageListActions
 ]
 
 { #category : 'accessing' }

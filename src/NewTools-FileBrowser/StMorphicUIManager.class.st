@@ -34,6 +34,7 @@ StMorphicUIManager class >> isValidForCurrentSystemConfiguration [
 
 { #category : 'ui requests' }
 StMorphicUIManager >> chooseDirectory: label from: dir [
+
 	self flag: #ToDoWhenIntegration.
 	self flag: 'use chooseDirectory:path: instead of this'.
 	^ StOpenDirectoryPresenter new
