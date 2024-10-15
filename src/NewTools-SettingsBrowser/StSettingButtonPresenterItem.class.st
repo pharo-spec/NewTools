@@ -14,8 +14,15 @@ StSettingButtonPresenterItem >> initializePresenters [
 
 	setterPresenter := self newButton 
 		label: self model actionLabel; 
-		action: self model dialog;
+		action: [ self target perform: self model name ];
 		yourself.
 	super initializePresenters.
 
+]
+
+{ #category : 'accessing' }
+StSettingButtonPresenterItem >> target [
+	"Answer an <Object> that is the receiver of the action"
+
+	^ self model target
 ]
