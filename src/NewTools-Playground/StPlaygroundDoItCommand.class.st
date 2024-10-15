@@ -19,7 +19,7 @@ StPlaygroundDoItCommand class >> defaultDescription [
 { #category : 'default' }
 StPlaygroundDoItCommand class >> defaultIconName [
 
-	^ #glamorousGo
+	^ #go
 ]
 
 { #category : 'default' }

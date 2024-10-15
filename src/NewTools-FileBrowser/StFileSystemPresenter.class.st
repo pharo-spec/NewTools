@@ -145,7 +145,7 @@ StFileSystemPresenter >> fileNavigationSystem [
 { #category : 'initialization' }
 StFileSystemPresenter >> initialExtentForWindow [
 
-	^ (1100 @ 700) scaledByDisplayScaleFactor
+	^ (1100 @ 700)
 ]
 
 { #category : 'initialization' }

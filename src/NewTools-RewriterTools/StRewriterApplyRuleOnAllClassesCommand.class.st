@@ -34,9 +34,7 @@ StRewriterApplyRuleOnAllClassesCommand >> execute [
 
 	| changes ruleHolder |
 	self application
-		confirm: 'This process can take between 1 and 2 minutes.';
-		label: 'Proceed?'; 
-		onCancel: [ ^ self ].
+		confirm: 'This process can take between 1 and 2 minutes.'.
 
 	ruleHolder := StRewriterRuleHolder
 		lhs: self context lhs

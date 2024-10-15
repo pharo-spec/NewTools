@@ -12,7 +12,7 @@ SindarinStepOverCommand class >> defaultDescription [
 
 { #category : 'accessing - defaults' }
 SindarinStepOverCommand class >> defaultIconName [
-	^#glamorousOver
+	^#over
 ]
 
 { #category : 'accessing - defaults' }

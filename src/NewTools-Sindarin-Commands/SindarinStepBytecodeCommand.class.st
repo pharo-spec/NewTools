@@ -12,7 +12,7 @@ SindarinStepBytecodeCommand class >> defaultDescription [
 
 { #category : 'accessing - defaults' }
 SindarinStepBytecodeCommand class >> defaultIconName [
-	^#glamorousInto 
+	^#into 
 ]
 
 { #category : 'accessing - defaults' }

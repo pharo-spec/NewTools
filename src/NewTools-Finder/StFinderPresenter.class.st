@@ -362,7 +362,7 @@ StFinderPresenter >> defaultLayout [
 { #category : 'initialization' }
 StFinderPresenter >> initialExtentForWindow [
 
-	^ (800 @ 500) scaledByDisplayScaleFactor
+	^ (800 @ 500)
 ]
 
 { #category : 'initialization' }

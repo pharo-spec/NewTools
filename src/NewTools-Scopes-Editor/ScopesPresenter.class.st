@@ -142,13 +142,13 @@ ScopesPresenter >> argumentsListMenu [
 				  anItem
 					  name: 'Delete';
 					  visibleIf: [ scopesTree selectedItem isScopeNode ];
-					  iconName: #glamorousTrash;
+					  iconName: #trash;
 					  action: [ self deleteSelectedScope ] ];
 			  addItem: [ :anItem |
 				  anItem
 					  name: 'Edit';
 					  visibleIf: [ scopesTree selectedItem isScopeNode ];
-					  iconName: #glamorousEdit;
+					  iconName: #edit;
 					  action: [ self editSelectedScope ] ];
 			  addItem: [ :anItem |
 				  anItem
@@ -158,7 +158,7 @@ ScopesPresenter >> argumentsListMenu [
 			  addItem: [ :anItem |
 				  anItem
 					  name: 'Inspect';
-					  iconName: #glamorousSearch;
+					  iconName: #search;
 					  action: [ scopesTree selectedItem inspect ] ];
 			  addItem: [ :anItem |
 				  anItem
@@ -169,7 +169,7 @@ ScopesPresenter >> argumentsListMenu [
 				  anItem
 					  name: 'Browse';
 					  visibleIf: [ scopesTree selectedItem isScopeNode not ];
-					  iconName: #glamorousBrowse;
+					  iconName: #browse;
 					  action: [ self browseSelectedItem ] ];
 			  addItem: [ :anItem |
 				  anItem
@@ -504,13 +504,13 @@ ScopesPresenter >> toolbarButtons [
 			 yourself).
 
 	buttons add: (buttonEdit := self newToolbarButton
-			               icon: (self iconNamed: #glamorousEdit);
+			               icon: (self iconNamed: #edit);
 			               help: 'Edit selected scope';
 			               action: [ self editSelectedScope ];
 			               yourself).
 
 	buttons add: (buttonDelete := self newToolbarButton
-			                 icon: (self iconNamed: #glamorousTrash);
+			                 icon: (self iconNamed: #trash);
 			                 help: 'Delete selected scope';
 			                 action: [ self deleteSelectedScope ];
 			                 yourself).

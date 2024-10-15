@@ -16,7 +16,7 @@ AbstractFileReference >> spotterForDirectoriesFor: aStep [
 			title: 'Directories';
 			candidatesLimit: Float infinity;
 			itemName: #basename;
-			itemIconName: [ :item | #glamorousFolder ];
+			itemIconName: [ :item | #folder ];
 			filter: StFilterSubstring ]
 ]
 
@@ -30,7 +30,7 @@ AbstractFileReference >> spotterForFilesFor: aStep [
 			title: 'Files';
 			candidatesLimit: Float infinity;
 			itemName: #basename;
-			itemIconName: [ :item | #glamorousBrowse ];
+			itemIconName: [ :item | #browse ];
 			filter: StFilterSubstring ]
 ]
 
@@ -47,7 +47,7 @@ AbstractFileReference >> spotterForZipDirectoriesFor: aStep [
 			title: 'Directories';
 			candidatesLimit: Float infinity;
 			itemName: #basename;
-			itemIconName: [ :item | #glamorousFolder ];
+			itemIconName: [ :item | #folder ];
 			filter: StFilterSubstring
 ]
 
@@ -64,7 +64,7 @@ AbstractFileReference >> spotterForZipFilesFor: aStep [
 			title: 'Files';
 			candidatesLimit: Float infinity;
 			itemName: #basename;
-			itemIconName: [ :item | #glamorousBrowse ];
+			itemIconName: [ :item | #browse ];
 			filter: StFilterSubstring
 	
 ]

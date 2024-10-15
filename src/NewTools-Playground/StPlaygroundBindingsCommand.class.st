@@ -18,7 +18,7 @@ StPlaygroundBindingsCommand class >> defaultDescription [
 { #category : 'default' }
 StPlaygroundBindingsCommand class >> defaultIconName [
 
-	^ #glamorousTable
+	^ #table
 ]
 
 { #category : 'default' }

@@ -21,7 +21,7 @@ Class {
 { #category : 'accessing' }
 StPlaygroundBindingsPresenter class >> defaultExtent [
 
-	^ (600@400) scaledByDisplayScaleFactor
+	^ (600@400)
 ]
 
 { #category : 'accessing' }

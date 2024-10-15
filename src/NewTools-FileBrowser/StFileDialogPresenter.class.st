@@ -237,7 +237,7 @@ StFileDialogPresenter >> iconFor: anEntry [
 { #category : 'initialization' }
 StFileDialogPresenter >> initialExtentForWindow [
 
-	^ (1050 @ 750) scaledByDisplayScaleFactor
+	^ (1050 @ 750)
 ]
 
 { #category : 'initialization' }

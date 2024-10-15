@@ -34,15 +34,15 @@ Class {
 		'LastKnownPosition',
 		'PreserveWindowPositionAndExtent'
 	],
-	#category : 'NewTools-Debugger-View',
+	#category : 'NewTools-Debugger-Model',
 	#package : 'NewTools-Debugger',
-	#tag : 'View'
+	#tag : 'Model'
 }
 
 { #category : 'accessing' }
 StDebuggerSettings class >> defaultExtent [
 
-	^ (850 @ 650) scaledByDisplayScaleFactor
+	^ (850 @ 650)
 
 ]
 

@@ -20,8 +20,8 @@ AbstractFileReference >> inspectionCompressedItems [
 			title: 'Name';
 			addColumn: (SpImageTableColumn evaluated: [ :each | 
 				self iconNamed: (each isDirectory 
-					ifTrue: [ #glamorousFolder ] 
-					ifFalse: [ #glamorousBrowse ]) ]);
+					ifTrue: [ #folder ] 
+					ifFalse: [ #browse ]) ]);
 			addColumn: (SpStringTableColumn evaluated: [ :each | 
 					self parent = each 
 						ifTrue: [ '..' ] 
@@ -118,8 +118,8 @@ AbstractFileReference >> inspectionItems [
 			width: 300;
 			addColumn: (SpImageTableColumn evaluated: [ :each |
 				each isDirectory 
-					ifTrue: [ self iconNamed: #glamorousFolder ] 
-					ifFalse: [ self iconNamed: #glamorousBrowse ] ]) 
+					ifTrue: [ self iconNamed: #folder ] 
+					ifFalse: [ self iconNamed: #browse ] ]) 
 				beNotExpandable;
 			addColumn: (SpStringTableColumn evaluated: [ :each | 
 				(self isChildOf: each) 

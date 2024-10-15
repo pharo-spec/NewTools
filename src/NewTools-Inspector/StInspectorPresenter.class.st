@@ -49,7 +49,7 @@ StInspectorPresenter class >> defaultLayout [
 { #category : 'accessing' }
 StInspectorPresenter class >> defaultPreferredExtent [
 
-	^ (700@500) scaledByDisplayScaleFactor
+	^ (700@500)
 ]
 
 { #category : 'accessing' }

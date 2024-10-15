@@ -19,7 +19,7 @@ StFinderImplementorsCommand class >> defaultDescription [
 { #category : 'initialization' }
 StFinderImplementorsCommand class >> defaultIconName [
 
-	^ #glamorousBrowse
+	^ #browse
 ]
 
 { #category : 'default' }
