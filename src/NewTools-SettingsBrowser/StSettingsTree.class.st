@@ -19,6 +19,13 @@ StSettingsTree >> defaultCategories [
 	^ self treeRoots.
 ]
 
+{ #category : 'testing' }
+StSettingsTree >> hasSettingsFile [ 
+	"Answer <true> if a system settings file exists"
+
+	^ self persistence hasSettingsFile 
+]
+
 { #category : 'instance creation' }
 StSettingsTree >> newSettingTreeBuilderNodes [
 	"Walk over the receiver's pragmas. Build and answer a <Collection> of <StSettingNode>, each one representing a specific setting"
