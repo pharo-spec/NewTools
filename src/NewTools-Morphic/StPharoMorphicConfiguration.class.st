@@ -23,15 +23,6 @@ StPharoMorphicConfiguration >> configureOSX: anApplication [
 	self addStyleSheet: self styleSheetOSX
 ]
 
-{ #category : 'configuring' }
-StPharoMorphicConfiguration >> configureUnix: anApplication [
-	
-]
-
-{ #category : 'configuring' }
-StPharoMorphicConfiguration >> configureWindows: anApplication [
-]
-
 { #category : 'private - factory' }
 StPharoMorphicConfiguration >> newStyleSheet [
 	

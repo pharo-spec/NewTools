@@ -23,11 +23,6 @@ StOpenFileOrDirectoryPresenter >> confirmLabel [
 	^ 'Open'
 ]
 
-{ #category : 'hooks' }
-StOpenFileOrDirectoryPresenter >> initialTitle [
-	^ self subclassResponsibility
-]
-
 { #category : 'utilities' }
 StOpenFileOrDirectoryPresenter >> selectFiles: aCollectionOfFiles [
 	"Be ware that updating the name text from the file navigation system, would unselect all files"
