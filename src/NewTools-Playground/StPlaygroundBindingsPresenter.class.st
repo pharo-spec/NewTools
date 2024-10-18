@@ -49,12 +49,6 @@ StPlaygroundBindingsPresenter >> bindings [
 ]
 
 { #category : 'private' }
-StPlaygroundBindingsPresenter >> contextMenu [
-
-	^ self contextMenuActions asMenuPresenter
-]
-
-{ #category : 'private' }
 StPlaygroundBindingsPresenter >> contextMenuActions [
 
 	^ CmCommandGroup forSpec
@@ -66,12 +60,6 @@ StPlaygroundBindingsPresenter >> contextMenuActions [
 			register: (StRemoveAllBindingsCommand forSpecContext: self);
 			yourself);
 		yourself
-]
-
-{ #category : 'private' }
-StPlaygroundBindingsPresenter >> contextMenuKeyBindings [
-
-	^ self contextMenuActions asKMCategory
 ]
 
 { #category : 'layout' }
@@ -143,8 +131,7 @@ StPlaygroundBindingsPresenter >> initializeListPanel [
 			evaluated: [ :each | self scopeNameFor: each ];
 			beSortable;
 			yourself);
-		contextMenu: [ self contextMenu ];
-		contextKeyBindings: self contextMenuKeyBindings;
+	   actions: self contextMenuActions;
 		yourself.
 	
 	bindingPanel presenter: bindingList

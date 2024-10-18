@@ -173,22 +173,21 @@ StUnifiedProcessor >> implementorsTag [
 StUnifiedProcessor >> installKeymappingsOn: aPresenter onExecution: aBlock [
 
 	aPresenter
-		bindKeyCombination: $b meta
-		toAction: [
-			self query toggleFilter: self classesTag.
-			aBlock cull: self ].
-
-	aPresenter
-		bindKeyCombination: $m meta
-		toAction: [ 
-			self query toggleFilter: self implementorsTag.
-			aBlock cull: self ].
-		
-	aPresenter
-		bindKeyCombination: $p meta
-		toAction: [ 
-			self query toggleFilter: self packagesTag.
-			aBlock cull: self ]	
+		addShortcutWith: [ :action | action 
+			shortcutKey: $b actionModifier;
+			action: [ 
+				self query toggleFilter: self classesTag.
+				aBlock cull: self ] ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: $m actionModifier;
+			action: [
+				self query toggleFilter: self implementorsTag.
+				aBlock cull: self ] ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: $p actionModifier;
+			action: [ 
+				self query toggleFilter: self packagesTag.
+				aBlock cull: self ] ]
 ]
 
 { #category : 'spotter-api' }

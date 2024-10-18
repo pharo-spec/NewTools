@@ -98,9 +98,11 @@ StPlaygroundPagesPresenter >> initializePresenters [
 		label: 'Pages';
 		presenter: (pageList := self newComponentList
 			presenters: self pagesAsPresenters;
-			contextMenu: [ self pagesActions asMenuPresenter ];
+			actions: self pagesActions;
 			whenActivatedDo: [ self loadSelectedPage ];
-			bindKeyCombination: Character cr asKeyCombination toAction: [ self loadSelectedPage ];
+			addShortcutWith: [ :action | action 
+				shortcutKey: Character cr asKeyCombination; 
+				action: [ self loadSelectedPage ] ];
 			yourself).
 		
 	(pagePreviewPanel := self instantiate: StHeaderPanel)
@@ -165,8 +167,7 @@ StPlaygroundPagesPresenter >> pages [
 { #category : 'private' }
 StPlaygroundPagesPresenter >> pagesActions [
 
-	^ CmCommandGroup forSpec
-		beRoot;
+	^ SpActionGroup new
 		register: (StPlaygroundLoadPageCommand forSpecContext: self);
 		register: (StPlaygroundLoadPageOnNewPlaygroundCommand forSpecContext: self);
 		yourself

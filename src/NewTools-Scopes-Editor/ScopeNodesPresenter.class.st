@@ -110,40 +110,37 @@ ScopeNodesPresenter >> announceScopeEdited [
 ]
 
 { #category : 'private - presenters' }
-ScopeNodesPresenter >> argumentsListMenu [
+ScopeNodesPresenter >> argumentsListActions [
 
-	^ self newMenu addGroup: [ :aGroup |
-		  aGroup
-			  addItem: [ :anItem |
-				  anItem
-					  name: 'Check all Cmd-a';
-					  iconName: #accept;
-					  action: [ self checkAll ] ];
-			  addItem: [ :anItem |
-				  anItem
-					  name: 'Unheck all Cmd-u';
-					  iconName: #accept;
-					  action: [ self uncheckAll ] ];
-			  
-			addItem: [ :anItem |
-				  anItem
-					  name: 'Add class hierarchy (flattened)';
-					  visibleIf: [ scopeNodesTree selectedItem isClassNode ];
-					  iconName: #hierarchy;
-					  action: [ self addSelectedItemClassHierarchy ] ];
-			  addItem: [ :anItem |
-				  anItem
-					  name: 'Browse';
-					  visibleIf: [ scopeNodesTree selectedItem isNotNil ];
-					  iconName: #browse;
-					  action: [ self browseSelectedItem ] ];
-			  addItem: [ :anItem |
-				  anItem
-					  name: 'Class references';
-					  visibleIf: [ scopeNodesTree selectedItem isClassNode ];
-					  iconName: #browse;
-					  action: [
-						  self showReferencesToClass: scopeNodesTree selectedItem value ] ] ]
+	^ SpActionGroup new
+		addActionWith: [ :anItem | anItem
+			name: 'Check all Cmd-a';
+			iconName: #glamorousAccept;
+			action: [ self checkAll ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'Unheck all';
+			shortcutKey: $u actionModifier;
+			iconName: #glamorousAccept;
+			action: [ self uncheckAll ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'Add class hierarchy (flattened)';
+			actionEnabled: [ scopeNodesTree selectedItem isClassNode ];
+			iconName: #hierarchy;
+			action: [ self addSelectedItemClassHierarchy ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'Browse';
+			actionEnabled: [ scopeNodesTree selectedItem isNotNil ];
+			iconName: #glamorousBrowse;
+			action: [ self browseSelectedItem ] ];
+		addActionWith: [ :anItem | anItem
+  			name: 'Class references';
+  			actionEnabled: [ scopeNodesTree selectedItem isClassNode ];
+  			iconName: #glamorousBrowse;
+  			action: [ self showReferencesToClass: scopeNodesTree selectedItem value ] ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: $a actionModifier;
+			action: [ self checkAll ] ];
+		yourself
 ]
 
 { #category : 'private - presenters' }
@@ -285,13 +282,7 @@ ScopeNodesPresenter >> initializeScopeNodesTree [
 		beResizable;
 		activateOnDoubleClick;
 		whenActivatedDo: [ :selection | scopeNodesTree toggleSelectedItems ];
-		contextMenu: self argumentsListMenu.
-
-	scopeNodesTree bindKeyCombination: $a command toAction: [
-		self checkAll ].
-	
-	scopeNodesTree bindKeyCombination: $u command toAction: [
-		self uncheckAll].
+		actions: self argumentsListActions.
 
 	^ scopeNodesTree
 ]

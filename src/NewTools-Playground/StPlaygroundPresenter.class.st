@@ -175,7 +175,7 @@ StPlaygroundPresenter >> newDefaultPlaygroundPage [
 
 { #category : 'private - factory' }
 StPlaygroundPresenter >> newInspectorFor: aModel [
-	| isPlayground  inspector |
+	| isPlayground inspector |
 
 	isPlayground := millerList pages isEmpty and: [ aModel isNil ].
 

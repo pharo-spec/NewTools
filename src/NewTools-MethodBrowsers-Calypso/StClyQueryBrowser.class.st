@@ -24,7 +24,7 @@ For example selected method will bring extra class and package scopes of this me
 "
 Class {
 	#name : 'StClyQueryBrowser',
-	#superclass : 'StMessageBrowser',
+	#superclass : 'StComposedMessageBrowser',
 	#instVars : [
 		'navigationHistory',
 		'navigationEnvironment',

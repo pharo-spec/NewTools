@@ -83,7 +83,8 @@ StPlaygroundPageVersionsPresenter >> initializePresenters [
 		
 	versionList
 		 display: [ :anEntry | self displayValueFor: (anEntry tagAt: #timestamp) ];
-		 contextMenu: [ self versionsActions asMenuPresenter ].
+		 actions: self versionsActions.
+
 	sourceCode 
 		beForScripting;
 		beNotEditable.

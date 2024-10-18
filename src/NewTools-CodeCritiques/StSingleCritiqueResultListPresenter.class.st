@@ -156,47 +156,38 @@ StSingleCritiqueResultListPresenter >> browseCritique [
 { #category : 'accessing' }
 StSingleCritiqueResultListPresenter >> buildMenuCritique [
 
-	^ SpMenuPresenter new
-		  addGroup: [ :group | 
-			  group addItem: [ :item | 
-					  item
-						  name: 'Browse' translated;
-						  action: [ self browseCritique ] ] ];
-		  addGroup: [ :group | 
-			  group addItem: [ :item | 
-				  item
-					  name: 'Mark as wrong' translated;
-					  visibleIf: [ self isCritiqueFalsePositive not ];
-					  action: [ self addCritiqueToFalsePositive ] ].
-			  group addItem: [ :item | 
-				  item
-					  name: 'Unmark as wrong' translated;
-					  visibleIf: [ self isCritiqueFalsePositive ];
-					  action: [ self removeCritiqueToFalsePositive ] ].
-			  group addItem: [ :item | 
-				  item
-					  name: 'Unmark as To Do' translated;
-					  visibleIf: [ self isCritiqueToDo ];
-					  action: [ self removeCritiqueToDo ] ].
-			  group addItem: [ :item | 
-				  item
-					  name: 'Mark as To Do' translated;
-					  visibleIf: [ self isCritiqueToDo not ];
-					  action: [ self addCritiqueToDo ] ] ];
-		  addGroup: [ :group | 
-			  group addItem: [ :item | 
-				  item
-					  name: 'View rationale behind the rule' translated;
-					  action: [ self rationaleOfRule ] ].
-			  group addItem: [ :item | 
-				  item
-					  name: 'Automatically resolve the issue' translated;
-					  visibleIf: [ critiquesModel selectedItem providesChange ];
-					  action: [ self applyTransformation ] ].
-			  group addItem: [ :item | 
-				  item
-					  name: 'Ban this rule' translated;
-					  action: [ self banRule ] ] ];
+	^ SpActionGroup new
+		addActionWith: [ :item | item
+			name: 'Browse' translated;
+			action: [ self browseCritique ] ];
+		addGroupWith: [ :group | group 
+			addActionWith: [ :item | item
+				name: 'Mark as wrong' translated;
+				actionEnabled: [ self isCritiqueFalsePositive not ];
+				action: [ self addCritiqueToFalsePositive ] ];
+			addActionWith: [ :item | item
+				name: 'Unmark as wrong' translated;
+				actionEnabled: [ self isCritiqueFalsePositive ];
+				action: [ self removeCritiqueToFalsePositive ] ];
+			addActionWith: [ :item | item
+				name: 'Unmark as To Do' translated;
+				actionEnabled: [ self isCritiqueToDo ];
+				action: [ self removeCritiqueToDo ] ];
+			addActionWith: [ :item | item
+				name: 'Mark as To Do' translated;
+				actionEnabled: [ self isCritiqueToDo not ];
+				action: [ self addCritiqueToDo ] ] ];
+		addGroupWith: [ :group | group 
+			addActionWith: [ :item | item
+				name: 'View rationale behind the rule' translated;
+				action: [ self rationaleOfRule ] ];
+			addActionWith: [ :item | item
+				name: 'Automatically resolve the issue' translated;
+				actionEnabled: [ critiquesModel selectedItem providesChange ];
+				action: [ self applyTransformation ] ];
+			addActionWith: [ :item | item
+				name: 'Ban this rule' translated;
+				action: [ self banRule ] ] ];
 		  yourself
 ]
 
@@ -308,7 +299,7 @@ StSingleCritiqueResultListPresenter >> initializePresenters [
 	critiquesModel beMultipleSelection.
 	critiquesModel display: [ :selec | 
 		self initializeDisplayCritique: selec forRule: rule ].
-	critiquesModel contextMenu: self buildMenuCritique.
+	critiquesModel actions: self buildMenuCritique.
 	critiquesModel displayIcon: [ :item | self iconFor: item ].
 	self focusOrder
 		add: critiquesModel;
@@ -320,8 +311,9 @@ StSingleCritiqueResultListPresenter >> initializePresenters [
 StSingleCritiqueResultListPresenter >> initializeShortcuts [
 
 	critiquesModel
-		bindKeyCombination: PharoShortcuts current browseShortcut
-		toAction: [ self browseCritique ]
+		addShortcutWith: [ :action | action 
+			shortcutKey: PharoShortcuts current browseShortcut;
+			action: [ self browseCritique ] ]
 ]
 
 { #category : 'private' }

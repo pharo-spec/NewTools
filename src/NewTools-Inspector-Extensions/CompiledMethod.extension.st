@@ -23,13 +23,13 @@ CompiledMethod >> inspectionSource [
 	^ SpCodePresenter new 
 		beForMethod: self method;
 		text: self sourceCode;
-		contextMenu: (SpMenuPresenter new addGroup: [ :group | group 
-			addItem: [ :item | item 
+		actionsWith: [ :group | group 
+			addActionWith: [ :action | action
 				name: 'Browse method class'; 
-				action: [ self methodClass browse ] ] ]);
+				action: [ self methodClass browse ] ] ];
 		whenSubmitDo: [ :text | 
 			self isInstalled 
 				ifFalse: [ self inform: 'can not edit methods that are not installed' ]
-				ifTrue: [ self methodClass compile: text ]];
+				ifTrue: [ self methodClass compile: text ] ];
 		yourself
 ]
