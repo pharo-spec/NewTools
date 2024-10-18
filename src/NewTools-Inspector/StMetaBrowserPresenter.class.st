@@ -74,7 +74,10 @@ StMetaBrowserPresenter >> connectPresenters [
 	classes
 		transmitTo: methods
 		transform: [ :aClass | self methodsOf: aClass ]
-		postTransmission: [ :destination | destination selectIndex: 1 ].
+		postTransmission: [ :destination | 
+			methods unfilteredItems: destination items.
+			methods filterInputPresenter clearContent.
+			destination selectIndex: 1 ].
 
 	methods transmitDo: [ :aMethod |
 		self selectedMethod
