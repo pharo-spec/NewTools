@@ -18,7 +18,7 @@ StInspectorRefreshCommand class >> defaultDescription [
 { #category : 'initialization' }
 StInspectorRefreshCommand class >> defaultIconName [
 
-	^ #refresh
+	^ #refreshCircling
 ]
 
 { #category : 'default' }
