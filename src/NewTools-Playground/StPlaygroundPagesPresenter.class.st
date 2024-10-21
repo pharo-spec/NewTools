@@ -26,16 +26,6 @@ StPlaygroundPagesPresenter class >> defaultExtent [
 	^ (700@400)
 ]
 
-{ #category : 'layout' }
-StPlaygroundPagesPresenter class >> defaultLayout [
-
-	^ SpPanedLayout newLeftToRight
-		positionOfSlider: 30 percent;
-		add: #pageListPanel;
-		add: #pagePreviewPanel;
-		yourself
-]
-
 { #category : 'accessing' }
 StPlaygroundPagesPresenter class >> defaultTitle [
 
@@ -60,6 +50,16 @@ StPlaygroundPagesPresenter class >> unselectedMessage [
 	^ 'Select a page to preview it.'
 ]
 
+{ #category : 'layout' }
+StPlaygroundPagesPresenter >> defaultLayout [
+
+	^ SpPanedLayout newLeftToRight
+		positionOfSlider: self initialExtent x * 0.3;
+		add: pageListPanel;
+		add: pagePreviewPanel;
+		yourself
+]
+
 { #category : 'actions' }
 StPlaygroundPagesPresenter >> doLoadPage [
 	
@@ -75,6 +75,12 @@ StPlaygroundPagesPresenter >> doLoadPageOnNewPlayground [
 		open.
 	self window close.
 	playground takeKeyboardFocus 		
+]
+
+{ #category : 'initialization' }
+StPlaygroundPagesPresenter >> initialExtent [
+		
+	^ self class defaultExtent
 ]
 
 { #category : 'initialization' }
@@ -132,7 +138,7 @@ StPlaygroundPagesPresenter >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
 		title: self class defaultTitle;
-		initialExtent: self class defaultExtent;
+		initialExtent: self initialExtent;
 		whenOpenedDo: [ pageList takeKeyboardFocus ]
 ]
 
@@ -160,7 +166,7 @@ StPlaygroundPagesPresenter >> onLoadPage: aBlock [
 StPlaygroundPagesPresenter >> pages [
 	
 	^ ((StPlaygroundPresenter cacheDirectory allChildrenMatching: '*.ph')
-		sorted: [ :a :b | a creationTime > b creationTime ])
+		sorted: #modificationTime descending)
 		collect: [ :each | StPlaygroundPage fromReference: each ]
 ]
 
