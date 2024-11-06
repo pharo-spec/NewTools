@@ -231,7 +231,8 @@ BaselineOfNewTools >> packageRepositoryURLForSpec: spec [
 { #category : 'actions' }
 BaselineOfNewTools >> postload: loader package: packageSpec [
 
-	MCMethodDefinition initializersEnabled: initializersEnabled
+	MCMethodDefinition initializersEnabled: initializersEnabled.
+	Smalltalk tools fileListTool: StFileSystemPresenter.
 ]
 
 { #category : 'actions' }
