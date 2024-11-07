@@ -5,7 +5,10 @@ SettingDeclaration >> asSettingPresenter [
 	"Answer an appropriate <SpPresenter> container for the receiver's value"
 
 	^ self precondition value 
-		ifTrue: [ self default asSettingPresenter: self ]
+		ifTrue: [ 
+			self hasValue
+				ifTrue: [ self realValue asSettingPresenter: self ]
+				ifFalse: [ self default asSettingPresenter: self ] ]
 		ifFalse: [ SpNullPresenter new ]
 ]
 
