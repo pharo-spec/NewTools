@@ -1,5 +1,8 @@
+"
+This is the **provider** of a `SpNotebookPage` in a category of the Settings Browser. The notebook pages are contained in a `StSettingsDetailsPresenter`.
+"
 Class {
-	#name : 'StSettingsPageNotebookPresenter',
+	#name : 'StSettingsNotebookPageContentPresenter',
 	#superclass : 'SpPresenter',
 	#instVars : [
 		'settingsBox',
@@ -11,20 +14,20 @@ Class {
 }
 
 { #category : 'adding' }
-StSettingsPageNotebookPresenter >> add: aStSettingSectionPresenter expand: aBoolean [ 
-
+StSettingsNotebookPageContentPresenter >> add: aStSettingSectionPresenter expand: aBoolean [ 
+	
 	settingsBox add: aStSettingSectionPresenter expand: aBoolean 
 ]
 
 { #category : 'layout' }
-StSettingsPageNotebookPresenter >> defaultLayout [
+StSettingsNotebookPageContentPresenter >> defaultLayout [
 
 	^ SpScrollableLayout with: settingsBox
 		
 ]
 
 { #category : 'initialization' }
-StSettingsPageNotebookPresenter >> initializePresenters [
+StSettingsNotebookPageContentPresenter >> initializePresenters [
 
 	settingsBox := SpBoxLayout newTopToBottom 
 			spacing: 5;
@@ -32,20 +35,20 @@ StSettingsPageNotebookPresenter >> initializePresenters [
 ]
 
 { #category : 'accessing' }
-StSettingsPageNotebookPresenter >> pagePresenter [
+StSettingsNotebookPageContentPresenter >> pagePresenter [
 	"Answer the receiver's <StSettingsPagePresenter>"
 
 	^ self owner owner
 ]
 
 { #category : 'accessing' }
-StSettingsPageNotebookPresenter >> parentNode [
+StSettingsNotebookPageContentPresenter >> parentNode [
 
 	^ parentNode
 ]
 
 { #category : 'printing' }
-StSettingsPageNotebookPresenter >> printOn: aStream [
+StSettingsNotebookPageContentPresenter >> printOn: aStream [
 
 	settingsBox
 		ifNotNil: [ : sb | 
@@ -58,14 +61,14 @@ StSettingsPageNotebookPresenter >> printOn: aStream [
 ]
 
 { #category : 'removing' }
-StSettingsPageNotebookPresenter >> removeAll [
+StSettingsNotebookPageContentPresenter >> removeAll [
 	"Remove all presenters in the layout"
 
 	settingsBox removeAll
 ]
 
 { #category : 'accessing - model' }
-StSettingsPageNotebookPresenter >> setModelBeforeInitialization: aNode [
+StSettingsNotebookPageContentPresenter >> setModelBeforeInitialization: aNode [
 
 	parentNode := aNode
 ]
