@@ -28,31 +28,31 @@ StSettingsToolbarPresenter >> defaultLayout [
 ]
 
 { #category : 'initialization' }
+StSettingsToolbarPresenter >> doSettingSearch: aString [
+	"Private - Callback to search aString in the receiver's descriptions and label. For performance reasons, start to search from the third character typed "
+
+	| colOfStSettingNode mainPresenter |
+	aString
+		ifNotEmpty: [ searchButtonPresenter enable ]
+		ifEmpty: [ searchButtonPresenter disable ].
+	aString size >= 3
+		ifFalse: [ ^ self ].
+
+	colOfStSettingNode := self settingsTree processSearch: aString.
+	mainPresenter := self owner.
+	mainPresenter pagePresenter addSearchResultTabFrom: colOfStSettingNode.
+]
+
+{ #category : 'initialization' }
 StSettingsToolbarPresenter >> initializePresenters [
 
 	searchInputPresenter := self newSearchInput
 		placeholder: 'Find in settings';
-		whenTextChangedDo: [ : aString | 
-			aString 
-				ifNotEmpty: [ searchButtonPresenter enable ]
-				ifEmpty: [ searchButtonPresenter disable ].
-			self updateSearch: aString ];
+		whenTextChangedDo: [ : aString | self doSettingSearch: aString trimmed ];
 		yourself.
 	searchButtonPresenter := self newButton
 		iconName: #smallFind;	
 		disable;			
-		action: [ self updateSearch: searchInputPresenter text ];
+		action: [ self doSettingSearch: searchInputPresenter text trimmed ];
 		yourself.
-]
-
-{ #category : 'initialization' }
-StSettingsToolbarPresenter >> updateSearch: aString [
-	"Private - Callback to search aString in the receiver's descriptions and label. For performance reasons, start to search from the third character typed "
-
-	aString size >= 2
-		ifFalse: [ ^ self ].
-	self flag: #ToDo.
-	self settingsTree 
-		processSearch: aString 
-		on: self
 ]

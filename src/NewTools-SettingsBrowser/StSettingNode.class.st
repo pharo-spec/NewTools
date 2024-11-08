@@ -9,7 +9,8 @@ Class {
 		'declaration',
 		'pragma',
 		'parentName',
-		'model'
+		'model',
+		'matchBlock'
 	],
 	#category : 'NewTools-SettingsBrowser-Model',
 	#package : 'NewTools-SettingsBrowser',
@@ -103,6 +104,12 @@ StSettingNode >> hasChildren [
 	^ self allChildren notEmpty
 ]
 
+{ #category : 'testing' }
+StSettingNode >> hasParent [
+
+	^ parentName notNil
+]
+
 { #category : 'accessing' }
 StSettingNode >> item [
 
@@ -121,11 +128,30 @@ StSettingNode >> label: aString [
 	declaration label: aString.
 ]
 
-{ #category : 'testing' }
-StSettingNode >> matches: aString [ 
-	"Answer <true> if aString matches any of the receiver's descriptors"
-	
-	^ self label asLowercase beginsWithAnyOf: self descriptors
+{ #category : 'accessing' }
+StSettingNode >> matchBlock [
+
+	^ matchBlock
+		ifNil: [ 
+			matchBlock := [ : node : pattern | 
+				node label substrings anySatisfy: [ : substr |
+					substr asLowercase beginsWith: pattern asLowercase ] ] ]
+]
+
+{ #category : 'enumerating' }
+StSettingNode >> matches: aString [
+	"Recursive search the receiver for aString in its label"
+
+	| result |
+	result := OrderedCollection new.
+	self allChildren do: [ :node |
+		(self matchBlock value: node value: aString) ifTrue: [ 
+			result add: node ].
+
+		node hasChildren ifTrue: [
+			result addAll: (node matches: aString) ] ].
+
+	^ result
 ]
 
 { #category : 'accessing' }

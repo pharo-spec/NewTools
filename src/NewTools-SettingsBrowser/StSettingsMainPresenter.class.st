@@ -11,8 +11,7 @@ Class {
 	#instVars : [
 		'toolbarPresenter',
 		'detailsPresenter',
-		'mainCategoriesPresenter',
-		'buttonBarPresenter'
+		'mainCategoriesPresenter'
 	],
 	#category : 'NewTools-SettingsBrowser-UI',
 	#package : 'NewTools-SettingsBrowser',
@@ -31,6 +30,7 @@ StSettingsMainPresenter >> connectPresenters [
 	mainCategoriesPresenter 
 		transmitTo: detailsPresenter
 		transform: [ : aCategoryItemPresenter | aCategoryItemPresenter node ]
+		postTransmission: [ : selectedPage | selectedPage selectFirstPage  ]
 ]
 
 { #category : 'layout' }
@@ -43,20 +43,17 @@ StSettingsMainPresenter >> defaultInputPort [
 { #category : 'layout' }
 StSettingsMainPresenter >> defaultLayout [
 
-	^ SpBoxLayout newTopToBottom
-		spacing: 5;
-		  add: (SpPanedLayout newHorizontal
-				   positionOfSlider: 0.2;
-				   add: (SpBoxLayout newTopToBottom
-						    add: toolbarPresenter withConstraints: [ :constraints |
-							    constraints
-								    height: self class toolbarHeight + 10;
-								    padding: 5 ];
-						    add: mainCategoriesPresenter;
-						    yourself);
-				   add: detailsPresenter);
-		  add: buttonBarPresenter expand: false;
-		  yourself
+	^ SpPanedLayout newHorizontal 
+		positionOfSlider: 0.2;		
+		add: (SpBoxLayout newTopToBottom
+				add: toolbarPresenter withConstraints: [ : constraints |
+					constraints 
+						height: self class toolbarHeight + 10;
+						padding: 5 ];
+			add: mainCategoriesPresenter;
+			yourself);
+		add: detailsPresenter;
+		yourself
 ]
 
 { #category : 'ports' }
@@ -65,46 +62,13 @@ StSettingsMainPresenter >> defaultOutputPort [
 	^ mainCategoriesPresenter
 ]
 
-{ #category : 'export' }
-StSettingsMainPresenter >> exportSettings [
-	| nodes actions   |
+{ #category : 'searching' }
+StSettingsMainPresenter >> followPath: aStSettingNode in: aCollection [
 
-	nodes := self settingsTree nodeList.
-	actions := nodes 
-		collect: [ : e | e item exportSettingAction ]
-		thenReject: [ : e | e isNil ].
-	self 
-		exportAllSettings: actions 
-		by: 50 
-		withBasename: 'exported_settings'.
-	
-	buttonBarPresenter enable
-]
+	^ aStSettingNode hasParent
+		ifTrue: [ (self followPath: aStSettingNode parentNode in: aCollection) ]
+		ifFalse: [ aCollection add: aStSettingNode ].
 
-{ #category : 'initialization' }
-StSettingsMainPresenter >> initializeButtonBar [
-
-	buttonBarPresenter := self newButtonBar
-		placeAtEnd;
-		add: (self newButton
-			addStyle: 'large';
-			icon: (self iconNamed: #openFromUrl);
-			label: 'Load';
-			help: 'Load settings from a file';
-			action: [ self loadSettings ];
-			enabled: self settingsTree hasSettingsFile;
-			yourself);
-		add: (self newButton
-			icon: (self application iconNamed: #save);
-			label: 'Export';
-			help: 'Save settings into a file';
-			action: [ self exportSettings ];
-			yourself);
-		add: (self newButton
-			icon: (self iconNamed: #cancel);
-			action: [ self delete ];
-			label: 'Cancel';
-			yourself).
 ]
 
 { #category : 'initialization' }
@@ -121,8 +85,7 @@ StSettingsMainPresenter >> initializePresenters [
 
 	toolbarPresenter := self instantiate: StSettingsToolbarPresenter on: self.
 	mainCategoriesPresenter := self instantiate: StSettingsCategoriesPresenter on: self.
-	detailsPresenter := self instantiate: StSettingsPagePresenter on: self.
-	self initializeButtonBar.
+	detailsPresenter := self instantiate: StSettingsDetailsPresenter on: self.
 	
 	self initializeFocus.
 ]
@@ -136,10 +99,8 @@ StSettingsMainPresenter >> initializeWindow: aWindowPresenter [
 		centered
 ]
 
-{ #category : 'menu' }
-StSettingsMainPresenter >> loadSettings [
-	"Load the settings from the system settings file, if exists"
+{ #category : 'initialization' }
+StSettingsMainPresenter >> pagePresenter [ 
 
-	self settingsTree hasSettingsFile
-		ifTrue: [ self settingsTree updateSettingNodes ]
+	^ detailsPresenter
 ]

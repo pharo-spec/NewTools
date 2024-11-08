@@ -51,16 +51,25 @@ StSettingsTree >> newTreeHolder [
 ]
 
 { #category : 'accessing' }
+StSettingsTree >> nodeList [
+
+	^ nodeList
+		ifNil: [ self newSettingTreeBuilderNodes ]
+]
+
+{ #category : 'accessing' }
 StSettingsTree >> nodeList: aCollection [ 
 
 	nodeList := aCollection
 ]
 
 { #category : 'private - queries' }
-StSettingsTree >> processSearch: aString on: aStSettingsToolbarPresenter [ 
+StSettingsTree >> processSearch: aString [
+	"Recursively collect the nodes matching aString in the receiver"
 
-	^ self treeRoots select: [ : settingNode |
-		settingNode matches: aString ]
+	^ self treeRoots 
+		flatCollect: [ : settingNode | settingNode matches: aString ]
+		as: Set
 ]
 
 { #category : 'instance creation' }
