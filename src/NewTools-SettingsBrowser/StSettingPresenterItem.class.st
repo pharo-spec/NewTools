@@ -18,26 +18,12 @@ Class {
 	#tag : 'Widgets'
 }
 
-{ #category : 'accessing' }
-StSettingPresenterItem >> announcer [
-	"Answer a <SystemAnnouncer> to notify receiver changes"
-
-	^ self environment codeSupportAnnouncer
-
-]
-
 { #category : 'layout' }
 StSettingPresenterItem >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		add: labeledPresenter;
 		yourself
-]
-
-{ #category : 'initialization' }
-StSettingPresenterItem >> environment [
-
-	^ SystemEnvironment new
 ]
 
 { #category : 'initialization' }

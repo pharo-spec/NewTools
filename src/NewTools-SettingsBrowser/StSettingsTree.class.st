@@ -1,12 +1,20 @@
 Class {
 	#name : 'StSettingsTree',
 	#superclass : 'SettingTree',
+	#instVars : [
+		'versionLog',
+		'baseDirectory',
+		'fileName'
+	],
+	#classVars : [
+		'SettingCacheDirectory'
+	],
 	#category : 'NewTools-SettingsBrowser-Model',
 	#package : 'NewTools-SettingsBrowser',
 	#tag : 'Model'
 }
 
-{ #category : 'opening' }
+{ #category : 'instance creation' }
 StSettingsTree class >> settingsKeywords [
 
 	^ (Pragma allNamed: #systemsettings) collect: [: p | p method selector ]
