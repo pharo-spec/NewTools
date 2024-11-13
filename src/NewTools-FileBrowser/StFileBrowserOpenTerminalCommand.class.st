@@ -41,7 +41,7 @@ StFileBrowserOpenTerminalCommand >> openLinuxTerminalShellCommand: aPath [
 	^ String streamContents: [ : stream |
 		stream
 			<< 'gnome-terminal --working-directory=';
-			<< aPath;
+			<< aPath fullName;
 			<< ' &' ]
 ]
 
@@ -70,7 +70,7 @@ StFileBrowserOpenTerminalCommand >> openTerminalOn: aPath [
 ]
 
 { #category : 'private' }
-StFileBrowserOpenTerminalCommand >> openWindowsTerminalOn: aPath [
+StFileBrowserOpenTerminalCommand >> openWindowsTerminalCommand: aPath [
 
 	^ String streamContents: [ : stream |
 		stream
@@ -105,7 +105,7 @@ StFileBrowserOpenTerminalCommand >> terminalShellCommand: aPath [
 	"Answer a <String> with the shell command to open a terminal for the receiver's OS"
 
 	Smalltalk os isWindows
-		ifTrue: [ ^ self openWindowsTerminalOn: aPath ].
+		ifTrue: [ ^ self openWindowsTerminalCommand: aPath ].
 	Smalltalk os isMacOS
 		ifTrue: [ ^ self openMacTerminalShellCommand: aPath ].
 	(Smalltalk os version beginsWith: 'linux')

@@ -5,7 +5,7 @@ I define the user interface of the finder tool.
 "
 Class {
 	#name : 'StFinderPresenter',
-	#superclass : 'SpPresenterWithModel',
+	#superclass : 'StPresenterWithModel',
 	#instVars : [
 		'searchBar',
 		'resultTree',
@@ -219,21 +219,27 @@ The Method Finder is not trying all methods in the system so if it will find not
 StFinderPresenter class >> open [
 	<script>
 	
-	(self on: StFinderModel new) open
+	| model presenter |
+	model := StFinderModel new.
+	presenter := self on: model.
+	model application: presenter application. 
+	presenter open.
+	^ presenter
 ]
 
 { #category : 'opening' }
 StFinderPresenter class >> openOnTargets: aCollection [
 	"Open the receiver with only search targets (classes) in aCollection. See `availableSearchTargets:` for details"
 	
-	| finderModel |
+	| finderModel presenter |
 	
 	finderModel := StFinderModel new
 		availableSearchTargetsFromClasses: aCollection;
 		yourself.
-	^ (self on: finderModel) 
-		open;
-		yourself
+	presenter := self on: finderModel.
+	finderModel application: presenter application. 
+	presenter	open.
+	^ presenter
 ]
 
 { #category : 'searching' }

@@ -1,6 +1,6 @@
 Class {
-	#name : 'StPresenter',
-	#superclass : 'SpPresenter',
+	#name : 'StPresenterWithModel',
+	#superclass : 'SpPresenterWithModel',
 	#traits : 'TStPresenter',
 	#classTraits : 'TStPresenter classTrait',
 	#category : 'NewTools-Core-Presenters',

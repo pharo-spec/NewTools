@@ -17,7 +17,8 @@ Class {
 		'useCase',
 		'time',
 		'availableSearchTargets',
-		'useSubstring'
+		'useSubstring',
+		'application'
 	],
 	#category : 'NewTools-Finder-Core',
 	#package : 'NewTools-Finder',
@@ -46,6 +47,16 @@ StFinderModel >> addSearch: aFinderSearch [
 
 	self availableSearchTargets add: aFinderSearch.
 	self searchTypesChanged
+]
+
+{ #category : 'accessing' }
+StFinderModel >> application [
+	^ application
+]
+
+{ #category : 'accessing' }
+StFinderModel >> application: anApplication [ 
+	application := anApplication
 ]
 
 { #category : 'information' }
@@ -119,7 +130,10 @@ StFinderModel >> newSearchTargetsWith: aCollectionOfStFinderSearchClasses [
 	"Answer a <Collection> of <StFinderSearch> subinstances matching aCollectionOfStFinderSearch classes"
 
 	^ aCollectionOfStFinderSearchClasses
-		collect: [ :searchTargetClass | searchTargetClass new ]
+		collect: [ :searchTargetClass | 
+						searchTargetClass new 
+							application: self application; 
+							yourself ]
 		as: OrderedCollection
 ]
 

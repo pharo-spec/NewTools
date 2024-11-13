@@ -17,12 +17,18 @@ Class {
 	#name : 'StFinderSearch',
 	#superclass : 'Object',
 	#instVars : [
-		'searchSelector'
+		'searchSelector',
+		'application'
 	],
 	#category : 'NewTools-Finder-Search',
 	#package : 'NewTools-Finder',
 	#tag : 'Search'
 }
+
+{ #category : 'accessing' }
+StFinderSearch >> application: anApplication [ 
+	application := anApplication
+]
 
 { #category : 'private' }
 StFinderSearch >> buildResult: aListOfClasses [ 
