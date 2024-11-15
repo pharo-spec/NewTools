@@ -10,13 +10,21 @@ Class {
 }
 
 { #category : 'initialization' }
-StSettingBooleanPresenterItem >> initializePresenters [ 
+StSettingBooleanPresenterItem >> initializePresenters [
 
 	setterPresenter := self newCheckBox
-		whenActivatedDo: [ self updateSetting: self model value: true ];
-		whenDeactivatedDo: [ self updateSetting: self model value: false ].
-	super initializePresenters.
-
+		                   state: self model realValue;
+		                   whenActivatedDo: [
+			                   self updateSetting: self model value: true ];
+		                   whenDeactivatedDo: [
+			                   self updateSetting: self model value: false ];
+		                   whenChangedDo: [ :newValue :oldValue |
+			                   newValue = oldValue ifFalse: [
+					                   self announcer announce: (SettingUpdated
+								                    declaration: self model
+								                    oldValue: oldValue
+								                    newValue: newValue) ] ].
+	super initializePresenters
 ]
 
 { #category : 'initialization' }
