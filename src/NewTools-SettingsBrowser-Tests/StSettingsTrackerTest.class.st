@@ -1,6 +1,6 @@
 Class {
 	#name : 'StSettingsTrackerTest',
-	#superclass : 'TestCase',
+	#superclass : 'StSettingsSessionLogAbstractTest',
 	#instVars : [
 		'tracker',
 		'numberOfAnnouncements'
@@ -21,18 +21,29 @@ StSettingsTrackerTest >> setUp [
 	super setUp.
 	numberOfAnnouncements := 0.
 	tracker := self newSettingsTracker.
+	tracker class cacheDirectory: self fileSystemForTesting.
 
+]
+
+{ #category : 'running' }
+StSettingsTrackerTest >> tearDown [ 
+
+	self tracker class reset.
+	super tearDown.
 ]
 
 { #category : 'tests' }
 StSettingsTrackerTest >> testSettingUpdated [
 	"Check if the updated setting was tracked"
 
-	"Simulate a setting change"
-
+	| settingItem |
 
 	self when: SettingUpdated do: [ : ann |
-		self assert: (tracker changedSettings includes: ann) ]
+		self assert: (tracker changedSettings includes: ann) ].
+
+	settingItem := true asSettingPresenter: (self newMockSettingDeclaration: 1).
+	settingItem value: false.
+
 	
 
 ]

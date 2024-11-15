@@ -20,7 +20,7 @@ StSettingBooleanPresenterItem >> initializePresenters [
 			                   self updateSetting: self model value: false ];
 		                   whenChangedDo: [ :newValue :oldValue |
 			                   newValue = oldValue ifFalse: [
-					                   self announcer announce: (SettingUpdated
+					                   	self class codeChangeAnnouncer announce: (SettingUpdated
 								                    declaration: self model
 								                    oldValue: oldValue
 								                    newValue: newValue) ] ].

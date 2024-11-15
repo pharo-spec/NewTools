@@ -1,28 +1,9 @@
 Class {
 	#name : 'StSettingsSessionLogTest',
-	#superclass : 'TestCase',
+	#superclass : 'StSettingsSessionLogAbstractTest',
 	#category : 'NewTools-SettingsBrowser-Tests',
 	#package : 'NewTools-SettingsBrowser-Tests'
 }
-
-{ #category : 'private' }
-StSettingsSessionLogTest >> fileNameForTesting [
-
-	^ 'test.phSetting'
-
-]
-
-{ #category : 'private' }
-StSettingsSessionLogTest >> fileReferenceForTesting [
-
-	^ self fileSystemForTesting / self fileNameForTesting.
-]
-
-{ #category : 'private' }
-StSettingsSessionLogTest >> fileSystemForTesting [
-
-	^ FileSystem memory
-]
 
 { #category : 'private' }
 StSettingsSessionLogTest >> newMockSetting1 [
@@ -71,24 +52,6 @@ StSettingsSessionLogTest >> newMockSettingAsSTONString: aMockSetting [
 
 ]
 
-{ #category : 'private' }
-StSettingsSessionLogTest >> newMockSettingDeclaration: id [
-
-	^ SettingDeclaration new 
-			name: 'MockSettingDeclaration' , id asString;
-			target: self;
-			selector: #mockDefault;
-			default: true
-]
-
-{ #category : 'private' }
-StSettingsSessionLogTest >> newSettingSession [
-
-	^ StSettingSessionLog new
-		baseDirectory: self fileSystemForTesting;
-		yourself
-]
-
 { #category : 'tests' }
 StSettingsSessionLogTest >> testChangedSettings [
 	| v1 v2 v3 settingSession |
@@ -120,13 +83,13 @@ StSettingsSessionLogTest >> testFlush [
 	| session |
 	
 	session := self newSettingSession.
-	session basicContents: 'test'.
+	session basicContents: (self newMockSettingAsSTONString: self newMockSetting1).
 
 	self assert: session contents isEmpty.
 	
 	session flush.
 	
-	self assert: session contents equals: 'test'
+	self assert: session contents equals: (self newMockSettingAsSTONString: self newMockSetting1)
 		
 
 	
