@@ -5,20 +5,83 @@ Class {
 	#package : 'NewTools-SettingsBrowser-Tests'
 }
 
-{ #category : 'tests' }
+{ #category : 'private' }
 StSettingsSessionLogTest >> fileNameForTesting [
 
 	^ 'test.phSetting'
 
 ]
 
-{ #category : 'tests' }
+{ #category : 'private' }
+StSettingsSessionLogTest >> fileReferenceForTesting [
+
+	^ self fileSystemForTesting / self fileNameForTesting.
+]
+
+{ #category : 'private' }
 StSettingsSessionLogTest >> fileSystemForTesting [
 
 	^ FileSystem memory
 ]
 
-{ #category : 'tests' }
+{ #category : 'private' }
+StSettingsSessionLogTest >> newMockSetting1 [
+
+	^ SettingUpdated
+		  declaration: (self newMockSettingDeclaration: 1)
+		  oldValue: false
+		  newValue: true
+]
+
+{ #category : 'private' }
+StSettingsSessionLogTest >> newMockSetting2 [
+
+	^ SettingUpdated
+		  declaration: (self newMockSettingDeclaration: 2)
+		  oldValue: 0
+		  newValue: 100
+]
+
+{ #category : 'private' }
+StSettingsSessionLogTest >> newMockSetting3 [
+
+	^ SettingUpdated
+		  declaration: (self newMockSettingDeclaration: 3)
+		  oldValue: 'Old Value'
+		  newValue: 'New Value'
+]
+
+{ #category : 'private' }
+StSettingsSessionLogTest >> newMockSetting: aMockSetting asSTON: stream [
+
+	^ (STONWriter on: (ZnCharacterWriteStream on: stream)) 
+			prettyPrint: true;
+			newLine: OSPlatform current lineEnding;
+			nextPut: aMockSetting
+
+]
+
+{ #category : 'private' }
+StSettingsSessionLogTest >> newMockSettingAsSTONString: aMockSetting [
+
+	^ (ByteArray streamContents: [ :stream | 
+			self 
+				newMockSetting: aMockSetting
+				asSTON: stream ]) asString
+
+]
+
+{ #category : 'private' }
+StSettingsSessionLogTest >> newMockSettingDeclaration: id [
+
+	^ SettingDeclaration new 
+			name: 'MockSettingDeclaration' , id asString;
+			target: self;
+			selector: #mockDefault;
+			default: true
+]
+
+{ #category : 'private' }
 StSettingsSessionLogTest >> newSettingSession [
 
 	^ StSettingSessionLog new
@@ -30,9 +93,9 @@ StSettingsSessionLogTest >> newSettingSession [
 StSettingsSessionLogTest >> testChangedSettings [
 	| v1 v2 v3 settingSession |
 	
-	v1 := 'v1'.
-	v2 := 'v2'.
-	v3 := 'v3'.
+	v1 := self newMockSettingAsSTONString: self newMockSetting1.
+	v2 := self newMockSettingAsSTONString: self newMockSetting2.
+	v3 := self newMockSettingAsSTONString: self newMockSetting3.
 	
 	settingSession := self newSettingSession.
 	
@@ -71,10 +134,9 @@ StSettingsSessionLogTest >> testFlush [
 
 { #category : 'tests' }
 StSettingsSessionLogTest >> testFromReference [
-	| memory file settingEntry |
+	| file settingEntry |
 	
-	memory := self fileSystemForTesting.
-	file := memory / self fileNameForTesting.
+	file := self fileReferenceForTesting.
 	file writeStreamDo: [ :stream | stream << 'TEST'].
 	
 	settingEntry := StSettingSessionLog fromReference: file. 
@@ -86,10 +148,11 @@ StSettingsSessionLogTest >> testFromReference [
 StSettingsSessionLogTest >> testStoreSettingEntry [
 	| v1 settingSession |
 	
-	v1 := 'v1'.
+	v1 := self newMockSettingAsSTONString: self newMockSetting1.
 	settingSession := self newSettingSession.
 	settingSession basicContents: v1.
 	settingSession flush.
+
 	self deny: settingSession changedSettings isEmpty.
 	self assert: settingSession changedSettings first content equals: v1
 ]
