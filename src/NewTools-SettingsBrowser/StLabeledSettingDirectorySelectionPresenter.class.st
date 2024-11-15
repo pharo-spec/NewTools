@@ -41,7 +41,9 @@ StLabeledSettingDirectorySelectionPresenter >> defaultLayout [
 		add: (SpBoxLayout newTopToBottom
 				add: (SpBoxLayout newLeftToRight 
 					add: input withConstraints: [ :constraints | 
-						constraints height: self inputTextHeight ];
+						constraints 
+							width: 200;
+							height: self inputTextHeight ];
 					add: selectButtonPresenter withConstraints: [ :constraints | 
 						constraints width: self buttonWidth ];
 					yourself);
@@ -54,14 +56,11 @@ StLabeledSettingDirectorySelectionPresenter >> initializePresenters [
 
 	super initializePresenters.
 	selectButtonPresenter := self newButton
-		label: 'Select Directory';
+		label: 'Select';
 		action: [ 
 			| selectedDirectory |
 			((selectedDirectory := StOpenDirectoryPresenter new openModal) isNotNil and: [ selectedDirectory isDirectory ])
-				ifTrue: [ 
-					self input 
-						text: selectedDirectory fullName;
-						help: selectedDirectory fullName ] ];
+				ifTrue: [ self owner value: selectedDirectory fullName ] ];
 		yourself
 ]
 

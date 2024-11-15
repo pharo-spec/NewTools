@@ -26,6 +26,15 @@ StSettingPresenterItem >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'accessing' }
+StSettingPresenterItem >> help: aString [ 
+
+	"To update the pop-up help"
+	self setterPresenter help: aString.
+	"To update the 'documentation' pane"
+	self owner help: aString.
+]
+
 { #category : 'initialization' }
 StSettingPresenterItem >> initializePresenters [
 	"Set a label and description presenters as baseline for every setting"
@@ -67,11 +76,6 @@ StSettingPresenterItem >> setterPresenter [
 StSettingPresenterItem >> setterPresenter: anObject [
 
 	setterPresenter := anObject
-]
-
-{ #category : 'accessing' }
-StSettingPresenterItem >> updateHelp: aString [ 
-	self owner updateHelp: aString
 ]
 
 { #category : 'accessing' }

@@ -2,26 +2,26 @@
 I'm a trait that manages principally the automatic management of the application to new presenters used for the Pharo tools. 
 "
 Trait {
-	#name : 'TStPresenter',
+	#name : 'StTPresenter',
 	#category : 'NewTools-Core-Presenters',
 	#package : 'NewTools-Core',
 	#tag : 'Presenters'
 }
 
 { #category : 'accessing' }
-TStPresenter classSide >> currentApplication [
+StTPresenter classSide >> currentApplication [
 
 	^ SpToolCurrentApplication value ifNil: [ StPharoApplication current ]
 ]
 
 { #category : 'instance creation' }
-TStPresenter classSide >> new [
+StTPresenter classSide >> new [
 
 	^ self newApplication: self currentApplication
 ]
 
 { #category : 'accessing' }
-TStPresenter classSide >> owner: anOwningPresenter [
+StTPresenter classSide >> owner: anOwningPresenter [
 
 	^ self 
 		newApplication: self currentApplication
@@ -29,7 +29,7 @@ TStPresenter classSide >> owner: anOwningPresenter [
 ]
 
 { #category : 'instance creation' }
-TStPresenter classSide >> owner: anOwningPresenter on: aDomainObject [
+StTPresenter classSide >> owner: anOwningPresenter on: aDomainObject [
 
 	^ self 
 		newApplication: self currentApplication
@@ -38,13 +38,13 @@ TStPresenter classSide >> owner: anOwningPresenter on: aDomainObject [
 ]
 
 { #category : 'accessing' }
-TStPresenter classSide >> preferredExtent [
+StTPresenter classSide >> preferredExtent [
 
 	^ 600@400
 ]
 
 { #category : 'initialization' }
-TStPresenter >> initializeWindow: aWindowPresenter [
+StTPresenter >> initializeWindow: aWindowPresenter [
 	"All tools should call its parent"
 
 	self traversePresentersDo: [ :each |
@@ -52,13 +52,13 @@ TStPresenter >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : 'accessing' }
-TStPresenter >> preferredExtent [
+StTPresenter >> preferredExtent [
 
 	^ self class preferredExtent
 ]
 
 { #category : 'private' }
-TStPresenter >> shortcutForPanel: aNumber [
+StTPresenter >> shortcutForPanel: aNumber [
 	"This is a convenience method to assign shortcuts to panels. 
 	 panels will be different areas of a tool: a package panel in a browser, an inspector in 
 	 the debugger."

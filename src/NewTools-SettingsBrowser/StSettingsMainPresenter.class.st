@@ -4,6 +4,9 @@ The Settings Browser it is organized in three main Spec presenters:
 - A toolbar which holds operations to be performed (mainly searching), presented by `StSettingsToolbarPresenter`.
 - A presenter for ""main categories"", presented by `StSettingsCategoriesPresenter`.
 - And a ""details presenter"", presented by `StSettingsPagePresenter`, instantiated when the users selects a main category.
+
+The class side holds application assets (icons and styles) and initializers for the Settings Browser.
+
 "
 Class {
 	#name : 'StSettingsMainPresenter',
@@ -17,6 +20,68 @@ Class {
 	#package : 'NewTools-SettingsBrowser',
 	#tag : 'UI'
 }
+
+{ #category : 'adding' }
+StSettingsMainPresenter class >> descriptionBackgroundColor [
+
+	^ Smalltalk ui theme lightBackgroundColor asHexString
+]
+
+{ #category : 'world menu' }
+StSettingsMainPresenter class >> menuSettingsBrowserCommandOn: aBuilder [
+	<worldMenu>
+
+	(aBuilder item: #'New Settings Browser')
+		parent: #NewToolsMenu;
+		label: 'New Settings Browser';
+		action: [ (self newApplication: self currentApplication) open ];
+		iconName: self taskbarIconName;
+		help: 'New Settings Browser';
+		order: 3
+]
+
+{ #category : 'accessing - styles' }
+StSettingsMainPresenter class >> styleSheet [
+
+	^ SpStyle defaultStyleSheet , 
+	    (SpStyleVariableSTONReader fromString: self styleSheetString)
+
+]
+
+{ #category : 'accessing - styles' }
+StSettingsMainPresenter class >> styleSheetString [
+
+	^ '.application [
+    .superCategoryList [ Geometry { #height: 70 } ],
+	.pageTitle [ 
+		Font { #name : EnvironmentFont(#default), #size : 20 },
+		Geometry { #height: 15 } ],
+	.pageStyle [ 
+		Draw { #backgroundColor: #transparent },
+		Container { #padding: 2 } ],
+	.sectionTitleL1 [ 
+		Draw { #backgroundColor: #gray },
+		Font { #size: 16 } ],
+	.sectionTitleL2 [ 
+		Draw { #backgroundColor: #lightGray },
+		Font { #size: 14 } ],
+	.sectionTitleL3 [ 
+		Draw { #backgroundColor: #veryLightGray },
+		Font { #size: 12 } ],
+	.sectionTitleL4 [ 
+		Draw { #backgroundColor: #veryVeryLightGray },
+		Font { #size: 10 } ],
+	.sectionStyle [ 
+		Draw { #backgroundColor: #transparent }
+	 ],
+	.settingDocTitle [ 
+		Draw { #backgroundColor: #veryVeryLightGray } ], 
+	.settingItemStyle [ 
+		Container { #borderWidth: 5 } ],
+	.descriptionStyle [ 
+		Draw { #backgroundColor: #' , self descriptionBackgroundColor , ' } ]
+]'.
+]
 
 { #category : 'initialization' }
 StSettingsMainPresenter >> browserTitle [ 
@@ -69,6 +134,15 @@ StSettingsMainPresenter >> followPath: aStSettingNode in: aCollection [
 		ifTrue: [ (self followPath: aStSettingNode parentNode in: aCollection) ]
 		ifFalse: [ aCollection add: aStSettingNode ].
 
+]
+
+{ #category : 'initialization' }
+StSettingsMainPresenter >> initialize [
+
+	super initialize.
+	self currentApplication
+		propertyAt: #settingsTree ifAbsentPut: StSettingsTree new;
+		styleSheet: self class styleSheet
 ]
 
 { #category : 'initialization' }

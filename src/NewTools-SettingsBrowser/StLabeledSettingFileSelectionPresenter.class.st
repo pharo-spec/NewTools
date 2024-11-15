@@ -32,10 +32,10 @@ StLabeledSettingFileSelectionPresenter >> initializePresenters [
 		label: 'Select File';
 		action: [ 
 			| selectedFile |
-			((selectedFile := StOpenFilePresenter new openModal) isNotNil and: [ selectedFile isFile ])
-				ifTrue: [ 
-					self input 
-						text: selectedFile fullName;
-						help: selectedFile fullName ] ];
+			(selectedFile := StOpenFilePresenter new openModal)
+				ifNotNil: [ 
+					(selectedFile := selectedFile anyOne) isFile
+						ifTrue: [ self owner value: selectedFile fullName ]
+						ifFalse: [ self inform: 'Please select a single file' ] ] ];
 		yourself
 ]

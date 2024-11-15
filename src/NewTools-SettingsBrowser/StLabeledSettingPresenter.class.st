@@ -27,8 +27,12 @@ StLabeledSettingPresenter >> description: aString [
 
 	aString ifNil: [ ^ self ].
 	labelPresenter help: aString.
-	input eventHandler whenFocusReceivedDo: [ : e | 
-		self updateHelp: labelPresenter help ].
+	labelPresenter eventHandler 
+		whenMouseEnterDo: [ : e | self owner help: labelPresenter help ].
+	input eventHandler 
+		whenMouseEnterDo: [ : e | self owner help: labelPresenter help ];
+		whenFocusReceivedDo: [ : e | self owner help: labelPresenter help ].
+
 ]
 
 { #category : 'layout' }
@@ -41,10 +45,4 @@ StLabeledSettingPresenter >> inputTextHeight [
 StLabeledSettingPresenter >> labelWidth [
 
 	^ self class labelWidth + 200
-]
-
-{ #category : 'accessing' }
-StLabeledSettingPresenter >> updateHelp: helpString [
-
-	self owner updateHelp: helpString 
 ]

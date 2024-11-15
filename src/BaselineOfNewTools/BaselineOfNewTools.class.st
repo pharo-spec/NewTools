@@ -246,6 +246,6 @@ BaselineOfNewTools >> sindarin: spec [
 
 	spec baseline: 'Sindarin' with: [
 		spec
-			repository: (self class environment at: #BaselineOfPharo) scriptableDebuggerRepository;
+			repository: (self classNamed: #BaselineOfPharo) scriptableDebuggerRepository;
 			loads: 'default' ]
 ]

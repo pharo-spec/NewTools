@@ -30,6 +30,15 @@ StSettingPresenter >> hasChildren [
 	^ settingNode hasChildren
 ]
 
+{ #category : 'accessing' }
+StSettingPresenter >> help: aString [ 
+	"Private - Callback to display the selected setting node help text in the receiver's setting browser"
+
+	self pagePresenter
+		updateSetting: settingNode declaration label 
+		helpText: aString.
+]
+
 { #category : 'initialization' }
 StSettingPresenter >> initializePresenters [
 
@@ -69,13 +78,4 @@ StSettingPresenter >> setModelBeforeInitialization: aModel [
 
 	settingNode := aModel
 
-]
-
-{ #category : 'accessing' }
-StSettingPresenter >> updateHelp: aString [ 
-	"Private - Callback to display the selected setting node help text in the receiver's setting browser"
-
-	self pagePresenter
-		updateSetting: settingNode declaration label 
-		helpText: aString.
 ]

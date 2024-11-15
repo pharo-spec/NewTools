@@ -13,9 +13,8 @@ Class {
 { #category : 'running' }
 StSettingsBrowserTest >> application [
 
-	^ StSettingsApplication new
-		  useBackend: #Morphic;
-		  yourself
+	^  self classToTest currentApplication
+
 ]
 
 { #category : 'accessing' }

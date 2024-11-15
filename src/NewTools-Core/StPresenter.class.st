@@ -1,8 +1,8 @@
 Class {
 	#name : 'StPresenter',
 	#superclass : 'SpPresenter',
-	#traits : 'TStPresenter',
-	#classTraits : 'TStPresenter classTrait',
+	#traits : 'StTPresenter',
+	#classTraits : 'StTPresenter classTrait',
 	#category : 'NewTools-Core-Presenters',
 	#package : 'NewTools-Core',
 	#tag : 'Presenters'

@@ -143,7 +143,7 @@ StDebuggerMethodImplementorExtension >> initializePresenters [
 			
 	createMethodButton := self newButton
 		icon: (self iconNamed: #add);
-		label: 'Add method';
+		label: 'Create method';
 		action: [ self implementMethod ]
 ]
 
