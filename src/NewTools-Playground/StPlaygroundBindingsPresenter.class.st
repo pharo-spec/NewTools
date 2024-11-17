@@ -200,7 +200,7 @@ StPlaygroundBindingsPresenter >> newInspectorWithTransmission: aClass on: aBindi
 { #category : 'actions' }
 StPlaygroundBindingsPresenter >> removeAllBindings [
 	
-	parent interactionModel removeAllBindings.
+	parent removeAllBindings.
 	self updatePresenterKeepingSelection
 ]
 

@@ -80,6 +80,19 @@ StSettingsTree >> processSearch: aString [
 		as: Set
 ]
 
+{ #category : 'accessing' }
+StSettingsTree >> settingsFileDirectory [
+
+	^ self persistence fileReference parent
+]
+
+{ #category : 'testing' }
+StSettingsTree >> settingsFileReference [
+	"Answer a <String> with the name of the file where settings are stored"
+
+	^ self persistence fileReference 
+]
+
 { #category : 'instance creation' }
 StSettingsTree >> settingsKeywords [
 

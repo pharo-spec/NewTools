@@ -14,7 +14,9 @@ Class {
 	#instVars : [
 		'toolbarPresenter',
 		'detailsPresenter',
-		'mainCategoriesPresenter'
+		'mainCategoriesPresenter',
+		'buttonBarPresenter',
+		'exporter'
 	],
 	#category : 'NewTools-SettingsBrowser-UI',
 	#package : 'NewTools-SettingsBrowser',
@@ -108,23 +110,46 @@ StSettingsMainPresenter >> defaultInputPort [
 { #category : 'layout' }
 StSettingsMainPresenter >> defaultLayout [
 
-	^ SpPanedLayout newHorizontal 
-		positionOfSlider: 0.2;		
-		add: (SpBoxLayout newTopToBottom
-				add: toolbarPresenter withConstraints: [ : constraints |
-					constraints 
-						height: self class toolbarHeight + 10;
-						padding: 5 ];
-			add: mainCategoriesPresenter;
-			yourself);
-		add: detailsPresenter;
-		yourself
+	^ SpBoxLayout newTopToBottom
+		spacing: 5;
+		  add: (SpPanedLayout newHorizontal
+				   positionOfSlider: 0.2;
+				   add: (SpBoxLayout newTopToBottom
+						    add: toolbarPresenter withConstraints: [ :constraints |
+							    constraints
+								    height: self class toolbarHeight + 10;
+								    padding: 5 ];
+						    add: mainCategoriesPresenter;
+						    yourself);
+				   add: detailsPresenter);
+		  add: buttonBarPresenter expand: false;
+		  yourself
 ]
 
 { #category : 'ports' }
 StSettingsMainPresenter >> defaultOutputPort [ 
 
 	^ mainCategoriesPresenter
+]
+
+{ #category : 'initialization' }
+StSettingsMainPresenter >> exportSettings [
+	| nodes actions |
+
+	nodes := self settingsTree nodeList.
+	actions := nodes 
+		collect: [ : e | e item exportSettingAction ]
+		thenReject: [ : e | e isNil ].
+		
+	self exporter exportAllSettings: actions.
+	self inform: 'Settings were exported to ' , self exporter exportedFileFullName.
+	buttonBarPresenter enable
+]
+
+{ #category : 'accessing' }
+StSettingsMainPresenter >> exporter [
+
+	^ exporter
 ]
 
 { #category : 'searching' }
@@ -140,10 +165,36 @@ StSettingsMainPresenter >> followPath: aStSettingNode in: aCollection [
 StSettingsMainPresenter >> initialize [
 
 	self currentApplication
-		propertyAt: #settingsTree ifAbsentPut: StSettingsTree new;
+		propertyAt: #settingsTree ifAbsentPut: [ StSettingsTree new ];
 		styleSheet: self class styleSheet.
-	super initialize.
+  super initialize.
+	exporter := StSettingsExporter new.
+]
 
+{ #category : 'initialization' }
+StSettingsMainPresenter >> initializeButtonBar [
+
+	buttonBarPresenter := self newButtonBar
+		placeAtEnd;
+		add: (self newButton
+			addStyle: 'large';
+			icon: (self iconNamed: #openFromUrl);
+			label: 'Load';
+			help: 'Load settings from a file';
+			action: [ self loadSettings ];
+			enabled: self settingsTree hasSettingsFile;
+			yourself);
+		add: (self newButton
+			icon: (self application iconNamed: #save);
+			label: 'Export';
+			help: 'Save settings into a file';
+			action: [ self exportSettings ];
+			yourself);
+		add: (self newButton
+			icon: (self iconNamed: #cancel);
+			action: [ self delete ];
+			label: 'Cancel';
+			yourself).
 ]
 
 { #category : 'initialization' }
@@ -161,7 +212,8 @@ StSettingsMainPresenter >> initializePresenters [
 	toolbarPresenter := self instantiate: StSettingsToolbarPresenter on: self.
 	mainCategoriesPresenter := self instantiate: StSettingsCategoriesPresenter on: self.
 	detailsPresenter := self instantiate: StSettingsDetailsPresenter on: self.
-	
+	self initializeButtonBar.
+
 	self initializeFocus.
 ]
 
@@ -174,8 +226,40 @@ StSettingsMainPresenter >> initializeWindow: aWindowPresenter [
 		centered
 ]
 
+{ #category : 'loading' }
+StSettingsMainPresenter >> loadSettings [
+	"Load the settings from the system settings file, if exists"
+
+	self settingsTree settingsFileDirectory
+		ifNotNil: [ : settingsDirectory | 
+			settingsDirectory hasFiles 
+				ifTrue: [ self loadSettingsFrom: (self selectDialog: settingsDirectory files) ]
+				ifFalse: [ self inform: 'No settings files were found in the settings directory' ] ]
+]
+
+{ #category : 'loading' }
+StSettingsMainPresenter >> loadSettingsFrom: aFileReference [ 
+
+	self settingsTree persistence fileReference: aFileReference.
+	self settingsTree updateSettingNodes.
+	self inform: 'Settings were loaded from ' , aFileReference fullName
+]
+
 { #category : 'initialization' }
 StSettingsMainPresenter >> pagePresenter [ 
 
 	^ detailsPresenter
+]
+
+{ #category : 'execution' }
+StSettingsMainPresenter >> selectDialog: fileReferneces [
+
+	^ SpSelectDialog new 
+		title: 'Settings Browser Selector';
+		label: 'Select a Stored Settings File';
+		items: fileReferneces;
+		display: [ :each | each basename ];
+		displayIcon: [ :each | self iconNamed: each systemIconName ];
+		openModal.
+
 ]

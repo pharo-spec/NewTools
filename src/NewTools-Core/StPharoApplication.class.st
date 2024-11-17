@@ -74,6 +74,12 @@ StPharoApplication >> newIconProvider [
 	^ StPharoDefaultIconProvider new
 ]
 
+{ #category : 'registration' }
+StPharoApplication >> register: aTool as: aNameSelector [
+
+	Smalltalk tools register: aTool as: aNameSelector
+]
+
 { #category : 'private - running' }
 StPharoApplication >> resetBackend [
 	| backendName |
@@ -125,4 +131,10 @@ StPharoApplication >> toolbarDisplayMode [
 StPharoApplication >> tools [
 
 	^ Smalltalk tools
+]
+
+{ #category : 'registration' }
+StPharoApplication >> unregisterToolWithRole: aName [
+
+	Smalltalk tools unregisterToolWithRole: aName
 ]

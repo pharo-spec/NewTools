@@ -27,6 +27,12 @@ DebugPointSelectDialogPresenter >> defaultLayout [
 		  yourself
 ]
 
+{ #category : 'private' }
+DebugPointSelectDialogPresenter >> getLabel [
+
+	^ label label
+]
+
 { #category : 'initialization' }
 DebugPointSelectDialogPresenter >> initializePresenters [
 
@@ -76,6 +82,12 @@ DebugPointSelectDialogPresenter >> scope [
 DebugPointSelectDialogPresenter >> scope: anObject [ 
 "see items: method"
 	scope := anObject class
+]
+
+{ #category : 'private' }
+DebugPointSelectDialogPresenter >> setLabel: aString [
+
+	label label: aString
 ]
 
 { #category : 'layout' }

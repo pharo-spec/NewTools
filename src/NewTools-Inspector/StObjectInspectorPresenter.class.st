@@ -145,6 +145,12 @@ StObjectInspectorPresenter >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'testing' }
+StObjectInspectorPresenter >> enableSlotMenuEntries [
+	
+	^ self selectedPage activePresenter enableSlotMenuEntries
+]
+
 { #category : 'accessing' }
 StObjectInspectorPresenter >> evaluator [ 
 	^evaluator

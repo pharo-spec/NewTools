@@ -44,6 +44,12 @@ StObjectContextPresenter >> doEvaluateAndGo [
 	activationBlock value: (StEvaluatedSelectionModel newValue: value)
 ]
 
+{ #category : 'testing' }
+StObjectContextPresenter >> enableSlotMenuEntries [
+
+	^ view enableSlotMenuEntries
+]
+
 { #category : 'private' }
 StObjectContextPresenter >> evaluator [
 
