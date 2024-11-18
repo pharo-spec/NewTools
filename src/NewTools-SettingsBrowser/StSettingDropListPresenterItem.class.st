@@ -14,6 +14,7 @@ StSettingDropListPresenterItem >> initializePresenters [
 		display: [ : item | item asString ];
 		selectIndex: self model index;
 		whenSelectedItemChangedDo: [ :item | self updateSetting: item ];
+		whenSelectionChangedDo: self updateSettingBlock;
 		yourself.
 	super initializePresenters.
 ]

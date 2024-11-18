@@ -26,7 +26,8 @@ StSettingMultipleDropListPresenterItem >> initializePresenters [
 
 	setterPresenter := self newDropList 
 		items: #(#bold #italic #normal 'bold italic' );
-		selectItem: modelDefault emphasis;		
+		selectItem: modelDefault emphasis;	
+		whenSelectedItemChangedDo: self updateSettingBlock;
 		yourself.
 	super initializePresenters.
 ]

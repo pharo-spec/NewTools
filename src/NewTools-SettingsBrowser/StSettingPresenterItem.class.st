@@ -78,6 +78,17 @@ StSettingPresenterItem >> setterPresenter: anObject [
 	setterPresenter := anObject
 ]
 
+{ #category : 'initialization' }
+StSettingPresenterItem >> updateSettingBlock [
+
+	^ [ : newValue : oldValue | 
+			newValue = oldValue ifFalse: [ 
+				self announcer announce: (SettingUpdated 
+					declaration: self model 
+					oldValue: oldValue
+					newValue: newValue) ]	 ].
+]
+
 { #category : 'accessing' }
 StSettingPresenterItem >> value: anObject [ 
 	"Set the receiver's value to anObject"

@@ -24,7 +24,8 @@ StSettingNumberPresenterItem >> beInteger [
 { #category : 'initialization' }
 StSettingNumberPresenterItem >> initializePresenters [ 
 
-	setterPresenter := self newNumberInput.
+	setterPresenter := self newNumberInput
+			whenNumberChangedDo: self updateSettingBlock.
 	super initializePresenters.
 ]
 
