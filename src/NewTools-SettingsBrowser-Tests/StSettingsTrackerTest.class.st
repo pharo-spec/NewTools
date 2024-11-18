@@ -9,33 +9,6 @@ Class {
 }
 
 { #category : 'private' }
-StSettingsTrackerTest >> newMockSetting1 [
-
-	^ SettingUpdated
-		  declaration: (self newMockSettingDeclaration: 1)
-		  oldValue: false
-		  newValue: true
-]
-
-{ #category : 'private' }
-StSettingsTrackerTest >> newMockSetting2 [
-
-	^ SettingUpdated
-		  declaration: (self newMockSettingDeclaration: 2)
-		  oldValue: 0
-		  newValue: 100
-]
-
-{ #category : 'private' }
-StSettingsTrackerTest >> newMockSetting3 [
-
-	^ SettingUpdated
-		  declaration: (self newMockSettingDeclaration: 3)
-		  oldValue: 'Old Value'
-		  newValue: 'New Value'
-]
-
-{ #category : 'private' }
 StSettingsTrackerTest >> newMockSetting: aMockSetting asSTON: stream [
 
 	^ (STONWriter on: (ZnCharacterWriteStream on: stream)) 
@@ -85,19 +58,62 @@ StSettingsTrackerTest >> setUp [
 
 ]
 
+{ #category : 'running' }
+StSettingsTrackerTest >> tearDown [
+
+	self class codeSupportAnnouncer unsubscribe: self.
+	super tearDown
+]
+
 { #category : 'tests' }
 StSettingsTrackerTest >> testBooleanSettingUpdated [
 	"Check if the updated setting was tracked"
 
 	| settingItem |
 
-	self when: SettingUpdated do: [ : ann |
-		self assert: (tracker changedSettings includes: ann) ].
+	self 
+		when: SettingUpdated 
+		do: [ : ann | 
+			self assert: ann oldValue.
+			self deny: ann newValue ].
 
 	settingItem := true asSettingPresenter: (self newMockSettingDeclaration: 1).
 	settingItem value: false.
 
-	
+]
+
+{ #category : 'tests' }
+StSettingsTrackerTest >> testNumberSettingUpdated [
+	"Check if the updated setting was tracked"
+
+	| settingItem |
+
+	self 
+		when: SettingUpdated 
+		do: [ : ann | 
+			self assert: ann oldValue equals: 10.
+			self assert: ann newValue equals: 20 ].
+
+	settingItem := 10 asSettingPresenter: (self newMockSettingDeclaration: 1).
+	settingItem value: 20.
+
+
+]
+
+{ #category : 'tests' }
+StSettingsTrackerTest >> testTextSettingUpdated [
+	"Check if the updated setting was tracked"
+
+	| settingItem |
+
+	self 
+		when: SettingUpdated 
+		do: [ : ann | 
+			self assert: ann oldValue equals: 'Adios'.
+			self assert: ann newValue equals: 'Hola' ].
+
+	settingItem := 'Adios' asSettingPresenter: (self newMockSettingDeclaration: 1).
+	settingItem value: 'Hola'.
 
 ]
 
@@ -116,7 +132,7 @@ StSettingsTrackerTest >> tracker: anObject [
 { #category : 'tests' }
 StSettingsTrackerTest >> when: anAnnouncement do: aBlock [
 
-	self class codeChangeAnnouncer
+	self class codeSupportAnnouncer
 		when: anAnnouncement
 		do: [ :ann | aBlock cull: ann ]
 		for: self

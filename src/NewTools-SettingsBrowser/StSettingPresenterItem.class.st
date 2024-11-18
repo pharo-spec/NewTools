@@ -83,7 +83,7 @@ StSettingPresenterItem >> updateSettingBlock [
 
 	^ [ : newValue : oldValue | 
 			newValue = oldValue ifFalse: [ 
-				self announcer announce: (SettingUpdated 
+				self class codeSupportAnnouncer announce: (SettingUpdated 
 					declaration: self model 
 					oldValue: oldValue
 					newValue: newValue) ]	 ].
