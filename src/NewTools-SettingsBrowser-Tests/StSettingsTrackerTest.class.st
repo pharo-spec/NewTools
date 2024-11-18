@@ -1,13 +1,74 @@
 Class {
 	#name : 'StSettingsTrackerTest',
-	#superclass : 'StSettingsSessionLogAbstractTest',
+	#superclass : 'TestCase',
 	#instVars : [
-		'tracker',
-		'numberOfAnnouncements'
+		'tracker'
 	],
 	#category : 'NewTools-SettingsBrowser-Tests',
 	#package : 'NewTools-SettingsBrowser-Tests'
 }
+
+{ #category : 'private' }
+StSettingsTrackerTest >> newMockSetting1 [
+
+	^ SettingUpdated
+		  declaration: (self newMockSettingDeclaration: 1)
+		  oldValue: false
+		  newValue: true
+]
+
+{ #category : 'private' }
+StSettingsTrackerTest >> newMockSetting2 [
+
+	^ SettingUpdated
+		  declaration: (self newMockSettingDeclaration: 2)
+		  oldValue: 0
+		  newValue: 100
+]
+
+{ #category : 'private' }
+StSettingsTrackerTest >> newMockSetting3 [
+
+	^ SettingUpdated
+		  declaration: (self newMockSettingDeclaration: 3)
+		  oldValue: 'Old Value'
+		  newValue: 'New Value'
+]
+
+{ #category : 'private' }
+StSettingsTrackerTest >> newMockSetting: aMockSetting asSTON: stream [
+
+	^ (STONWriter on: (ZnCharacterWriteStream on: stream)) 
+			prettyPrint: true;
+			newLine: OSPlatform current lineEnding;
+			nextPut: aMockSetting
+
+]
+
+{ #category : 'private' }
+StSettingsTrackerTest >> newMockSettingAsSTONString: aMockSetting [
+
+	^ (ByteArray streamContents: [ :stream | 
+			self 
+				newMockSetting: aMockSetting
+				asSTON: stream ]) asString
+
+]
+
+{ #category : 'private' }
+StSettingsTrackerTest >> newMockSettingDeclaration: id [
+	
+	| declaration |
+	
+	declaration := SettingDeclaration new 
+			name: 'MockSettingDeclaration' , id asString;
+			yourself.
+	declaration 
+		target: MockSettingTarget;
+		selector: #default;
+		default: true.
+	^ declaration.
+]
 
 { #category : 'tests' }
 StSettingsTrackerTest >> newSettingsTracker [
@@ -19,21 +80,13 @@ StSettingsTrackerTest >> newSettingsTracker [
 StSettingsTrackerTest >> setUp [
 
 	super setUp.
-	numberOfAnnouncements := 0.
 	tracker := self newSettingsTracker.
-	tracker class cacheDirectory: self fileSystemForTesting.
 
-]
 
-{ #category : 'running' }
-StSettingsTrackerTest >> tearDown [ 
-
-	self tracker class reset.
-	super tearDown.
 ]
 
 { #category : 'tests' }
-StSettingsTrackerTest >> testSettingUpdated [
+StSettingsTrackerTest >> testBooleanSettingUpdated [
 	"Check if the updated setting was tracked"
 
 	| settingItem |
@@ -65,8 +118,6 @@ StSettingsTrackerTest >> when: anAnnouncement do: aBlock [
 
 	self class codeChangeAnnouncer
 		when: anAnnouncement
-		do: [ :ann |
-			numberOfAnnouncements := numberOfAnnouncements + 1.
-			aBlock cull: ann ]
+		do: [ :ann | aBlock cull: ann ]
 		for: self
 ]
