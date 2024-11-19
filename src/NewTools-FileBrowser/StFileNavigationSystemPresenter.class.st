@@ -224,8 +224,7 @@ StFileNavigationSystemPresenter >> filesListAction [
 		previewProcess ifNotNil: [ 
 			previewProcess isTerminated ifFalse: [ previewProcess terminate ] ].
 		selectedItem selectedItem isDirectory
-			ifTrue: [ self openFolder: selectedItem selectedItem ]
-			ifFalse: [ self owner confirm ] ].
+			ifTrue: [ self openFolder: selectedItem selectedItem ] ].
 
 	fileReferenceTable whenSelectedDo: [ :aFileReference | 
 		previewProcess ifNotNil: [ previewProcess isTerminated ifFalse: [ previewProcess terminate ] ].
