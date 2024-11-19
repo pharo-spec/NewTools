@@ -34,7 +34,8 @@ StFileSystemModel class >> defaultDirectory [
 StFileSystemModel class >> initializeBookmarks [
 	"Set the initial <Collection> of receiver's bookmarks"
 
-	Bookmarks := StFileBrowserBookmark defaultBookmarks.
+	<script>
+	Bookmarks := StFileBrowserBookmark defaultBookmarks
 ]
 
 { #category : 'defaults' }

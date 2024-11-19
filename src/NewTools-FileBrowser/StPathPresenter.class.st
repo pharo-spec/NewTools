@@ -64,8 +64,12 @@ StPathPresenter >> addSeparator [
 { #category : 'accessing' }
 StPathPresenter >> file: aFile [
 
+	| parts |
 	self initializeLayout.
-	aFile asAbsolute fullPath withParents
+	parts := aFile asAbsolute fullPath withParents.
+	Smalltalk os isWindows ifTrue: [
+		parts first isRoot ifTrue: [ parts := parts copyWithoutFirst ] ].
+	parts
 		do: [ :path | self addLinkTo: path ]
 		separatedBy: [ self addSeparator ]
 ]

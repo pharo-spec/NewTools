@@ -49,11 +49,13 @@ StDirectoryTreePresenter >> expandPath: aFileLocator [
 	"Expand the receiver's tree to aFileLocator reference"
 
 	| path aPathForSpec currentNode |
-	path := aFileLocator asPath segments asOrderedCollection.
-	aPathForSpec := OrderedCollection new.
-	aPathForSpec add: 1.
+	path := aFileLocator absolutePath segments asOrderedCollection.
+	aPathForSpec := OrderedCollection with: 1.
 
 	currentNode := directoryTreePresenter roots anyOne.
+	Smalltalk os isWindows ifTrue: [
+		currentNode := currentNode asFileReference parent.
+		aPathForSpec := OrderedCollection new ].
 
 	path do: [ :aPart |
 		| subdirs |
@@ -69,10 +71,11 @@ StDirectoryTreePresenter >> expandPath: aFileLocator [
 	directoryTreePresenter
 		selectPath: aPathForSpec
 		scrollToSelection: true.
-		
+
 	"The Morphic `configureScrolling` is executed **AFTER** the desired scroll was configured from the `StDirectoryTreePresenter`. Furthermore, the `configureScrolling` uses the `desiredVisibleRow` which is always set to 1. This statement updates the desired visible row to the last visible index of whatever the selection is pointing to."
 
-	directoryTreePresenter verticalAlignment desiredVisibleRow: directoryTreePresenter verticalAlignment lastVisibleRowIndex.
+	directoryTreePresenter verticalAlignment desiredVisibleRow:
+		directoryTreePresenter verticalAlignment lastVisibleRowIndex
 ]
 
 { #category : 'initialization' }

@@ -12,23 +12,30 @@ Class {
 	#tag : 'Bookmark'
 }
 
-{ #category : 'defaultClassVariable' }
+{ #category : 'default bookmarks' }
+StFileBrowserBookmark class >> createDriveBookmarks [
+
+	^ StFileSystemItemWrapper roots
+		  collect: [ :each |
+			  self
+				  name: each label
+				  location: each asFileReference
+				  icon: each icon ]
+		  as: OrderedCollection
+]
+
+{ #category : 'default bookmarks' }
 StFileBrowserBookmark class >> defaultBookmarks [
 
 	| presets |
-	
-	presets := (Smalltalk os isWindows
-		           ifTrue: [ self windowsDrives ]
-		           ifFalse: [ { self root } ]) asOrderedCollection.
-	presets addAll: { 
-			self home.
-			self workingDirectory.
-			self desktop.
-			self documents.
-			self downloads }.
+	presets := self createDriveBookmarks , {
+		           self home.
+		           self workingDirectory.
+		           self desktop.
+		           self documents.
+		           self downloads }.
 
-	^ OrderedCollection with:
-		  (StFileBrowserGroupBookmark
+	^ OrderedCollection with: (StFileBrowserGroupBookmark
 			   name: 'Bookmarks'
 			   collection: presets
 			   iconName: #book)
@@ -84,30 +91,11 @@ StFileBrowserBookmark class >> name: aName location: aLocation icon: anIcon [
 ]
 
 { #category : 'default bookmarks' }
-StFileBrowserBookmark class >> root [
-
-	^ self
-		  name: '/'
-		  location: FileLocator root
-		  icon: (self iconNamed: #smallWindow)
-]
-
-{ #category : 'default bookmarks' }
 StFileBrowserBookmark class >> tmp [
 	^ StFileBrowserBookmark
 		name: 'tmp'
 		location: FileLocator temp asFileReference
 		icon: (self iconNamed: #book)
-]
-
-{ #category : 'default bookmarks' }
-StFileBrowserBookmark class >> windowsDrives [
-
-	^ FileLocator root asFileReference directories collect: [ :each | 
-		  self
-			  name: each basename
-			  location: each
-			  icon: (self iconNamed: #smallWindow) ]
 ]
 
 { #category : 'default bookmarks' }
