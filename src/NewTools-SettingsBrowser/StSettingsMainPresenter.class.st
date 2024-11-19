@@ -16,7 +16,8 @@ Class {
 		'detailsPresenter',
 		'mainCategoriesPresenter',
 		'buttonBarPresenter',
-		'exporter'
+		'exporter',
+		'tracker'
 	],
 	#category : 'NewTools-SettingsBrowser-UI',
 	#package : 'NewTools-SettingsBrowser',
@@ -167,8 +168,9 @@ StSettingsMainPresenter >> initialize [
 	self currentApplication
 		propertyAt: #settingsTree ifAbsentPut: [ StSettingsTree new ];
 		styleSheet: self class styleSheet.
-  super initialize.
+	super initialize.
 	exporter := StSettingsExporter new.
+	tracker := StSettingsTracker new.
 ]
 
 { #category : 'initialization' }
@@ -262,4 +264,16 @@ StSettingsMainPresenter >> selectDialog: fileReferneces [
 		displayIcon: [ :each | self iconNamed: each systemIconName ];
 		openModal.
 
+]
+
+{ #category : 'accessing' }
+StSettingsMainPresenter >> tracker [
+
+	^ tracker
+]
+
+{ #category : 'accessing' }
+StSettingsMainPresenter >> tracker: anObject [
+
+	tracker := anObject
 ]

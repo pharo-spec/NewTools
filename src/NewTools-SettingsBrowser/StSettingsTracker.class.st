@@ -12,14 +12,20 @@ Class {
 { #category : 'class initialization' }
 StSettingsTracker class >> initialize [
 
-	SessionLog := OrderedCollection new
+	SessionLog := OrderedCollection new.
 ]
 
-{ #category : 'accessing - versions' }
-StSettingsTracker >> changedSettings [
-	"Answer a <Collection> of <SettingUpdated>"
+{ #category : 'class initialization' }
+StSettingsTracker class >> reset [
+	<script>
+	
+	SessionLog := nil
+]
 
-	^ self sessionLog
+{ #category : 'initialization' }
+StSettingsTracker >> codeSupportAnnouncer [
+
+	^ self class codeSupportAnnouncer
 ]
 
 { #category : 'initialization' }
@@ -27,7 +33,7 @@ StSettingsTracker >> initialize [
 	"Subscribe settings to register their changes"
 
 	super initialize.
-	self class codeSupportAnnouncer weak
+	self codeSupportAnnouncer weak
 		when: SettingUpdated
 		send: #settingUpdated:
 		to: self
@@ -38,6 +44,9 @@ StSettingsTracker >> initialize [
 StSettingsTracker >> sessionLog [
 
 	^ SessionLog
+		ifNil: [ 
+			self class initialize.
+			SessionLog ]
 ]
 
 { #category : 'initialization' }

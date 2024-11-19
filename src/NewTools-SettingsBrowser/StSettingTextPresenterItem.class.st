@@ -15,7 +15,11 @@ StSettingTextPresenterItem >> initializePresenters [
 	setterPresenter := self newTextInput
 		beEditable;
 		placeholder: self model label;
-		whenChangedDo: self updateSettingBlock;
+		whenSubmitDo: [ : newValue  | 
+			self codeSupportAnnouncer announce: (SettingUpdated 
+				declaration: self model 
+				oldValue: nil
+				newValue: newValue) ];
 		yourself.
 	super initializePresenters.
 ]
