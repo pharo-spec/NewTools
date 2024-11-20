@@ -23,6 +23,12 @@ StSettingsTracker class >> reset [
 ]
 
 { #category : 'initialization' }
+StSettingsTracker class >> sessionLog [
+
+	^ SessionLog 
+]
+
+{ #category : 'initialization' }
 StSettingsTracker >> codeSupportAnnouncer [
 
 	^ self class codeSupportAnnouncer

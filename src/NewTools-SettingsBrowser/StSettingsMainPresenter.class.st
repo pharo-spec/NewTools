@@ -137,14 +137,25 @@ StSettingsMainPresenter >> defaultOutputPort [
 StSettingsMainPresenter >> exportSettings [
 	| nodes actions |
 
+	self exportedFileFullName asFileReference exists
+		ifTrue: [ 
+			(self confirm: 'Do you want to overwrite the existing settings?')
+				ifFalse: [ ^ self ]  ].
 	nodes := self settingsTree nodeList.
 	actions := nodes 
 		collect: [ : e | e item exportSettingAction ]
 		thenReject: [ : e | e isNil ].
 		
 	self exporter exportAllSettings: actions.
-	self inform: 'Settings were exported to ' , self exporter exportedFileFullName.
+	self inform: 'Settings were exported to ' , self exportedFileFullName.
 	buttonBarPresenter enable
+]
+
+{ #category : 'initialization' }
+StSettingsMainPresenter >> exportedFileFullName [
+	"Answer a <String> with the receiver's file name used to store the exported settings"
+	
+	^ self exporter exportedFileFullName
 ]
 
 { #category : 'accessing' }
@@ -179,7 +190,12 @@ StSettingsMainPresenter >> initializeButtonBar [
 	buttonBarPresenter := self newButtonBar
 		placeAtEnd;
 		add: (self newButton
-			addStyle: 'large';
+			icon: (self iconNamed: #history);
+			label: 'History';
+			help: 'Changed settings';
+			action: [ StSettingsTracker sessionLog inspect ];
+			yourself);
+		add: (self newButton
 			icon: (self iconNamed: #openFromUrl);
 			label: 'Load';
 			help: 'Load settings from a file';
@@ -195,7 +211,7 @@ StSettingsMainPresenter >> initializeButtonBar [
 		add: (self newButton
 			icon: (self iconNamed: #cancel);
 			action: [ self delete ];
-			label: 'Cancel';
+			label: 'Close';
 			yourself).
 ]
 
