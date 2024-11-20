@@ -89,12 +89,11 @@ StSettingPresenterItem >> setterPresenter: anObject [
 StSettingPresenterItem >> updateSettingBlock [
 	"Answer a <BlockClosure> responsible to announce that a setting has been updated"
 
-	^ [ : newValue : oldValue | 
-			newValue = oldValue ifFalse: [ 
-				self codeSupportAnnouncer announce: (SettingUpdated 
-					declaration: self model 
-					oldValue: oldValue
-					newValue: newValue) ]	 ].
+	^ [ : newValue | 
+			self codeSupportAnnouncer announce: (SettingUpdated 
+				declaration: self model 
+				oldValue: self model realValue
+				newValue: newValue) ]
 ]
 
 { #category : 'accessing' }

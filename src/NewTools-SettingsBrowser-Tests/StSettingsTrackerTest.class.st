@@ -50,19 +50,46 @@ StSettingsTrackerTest >> newSettingsTracker [
 ]
 
 { #category : 'running' }
-StSettingsTrackerTest >> setUp [
+StSettingsTrackerTest >> setUp [ 
 
 	super setUp.
-	tracker := self newSettingsTracker.
+	tracker := StSettingsTracker new.
 
+]
 
+{ #category : 'tests' }
+StSettingsTrackerTest >> submitPresenter: settingItem [
+
+	settingItem open.
+	settingItem setterPresenter adapter
+		keyDown: $s 
+		shift: false
+		meta: true 
+		control: false 
+		option: false.
 ]
 
 { #category : 'running' }
 StSettingsTrackerTest >> tearDown [
 
 	self class codeSupportAnnouncer unsubscribe: self.
+	(self class codeSupportAnnouncer subscriptions subscriptionsHandling: SettingUpdated new)
+		do: [ : s | self class codeSupportAnnouncer removeSubscription: s ].
+	tracker sessionLog ifNotEmpty: [ : collection | collection removeLast ].
 	super tearDown
+]
+
+{ #category : 'tests' }
+StSettingsTrackerTest >> testBooleanSettingTracked [
+	"Check if the updated setting was tracked"
+
+	| settingItem numberOfUpdates |
+
+	numberOfUpdates := tracker sessionLog size.
+	settingItem := true asSettingPresenter: (self newMockSettingDeclaration: 1).
+	settingItem value: false.
+	
+	self assert: tracker sessionLog size equals: numberOfUpdates + 1
 ]
 
 { #category : 'tests' }
@@ -83,6 +110,23 @@ StSettingsTrackerTest >> testBooleanSettingUpdated [
 ]
 
 { #category : 'tests' }
+StSettingsTrackerTest >> testNumberSettingTracked [ 
+	"Check if the updated setting was tracked"
+
+	| settingItem numberOfUpdates |
+
+	numberOfUpdates := tracker sessionLog size.
+
+	settingItem := 10 asSettingPresenter: (self newMockSettingDeclaration: 2).
+	settingItem value: 20.
+	self submitPresenter: settingItem.
+
+	self assert: tracker sessionLog size equals: numberOfUpdates + 1.
+	settingItem delete.
+
+]
+
+{ #category : 'tests' }
 StSettingsTrackerTest >> testNumberSettingUpdated [
 	"Check if the updated setting was tracked"
 
@@ -91,13 +135,29 @@ StSettingsTrackerTest >> testNumberSettingUpdated [
 	self 
 		when: SettingUpdated 
 		do: [ : ann | 
-			self assert: ann oldValue equals: 10.
-			self assert: ann newValue equals: 20 ].
+			self assert: ann oldValue asNumber equals: 10.
+			self assert: ann newValue asNumber equals: 20 ].
 
-	settingItem := 10 asSettingPresenter: (self newMockSettingDeclaration: 1).
+	settingItem := 10 asSettingPresenter: (self newMockSettingDeclaration: 2).
 	settingItem value: 20.
 
 
+]
+
+{ #category : 'tests' }
+StSettingsTrackerTest >> testTextSettingTracked [
+	"Check if the updated setting was tracked"
+
+	| settingItem numberOfUpdates |
+
+	numberOfUpdates := tracker sessionLog size.
+
+	settingItem := 'Adios' asSettingPresenter: (self newMockSettingDeclaration: 3).
+	settingItem value: 'Hola'.
+	self submitPresenter: settingItem.
+
+	self assert: tracker sessionLog size equals: numberOfUpdates + 1.
+	settingItem delete.
 ]
 
 { #category : 'tests' }
@@ -112,7 +172,7 @@ StSettingsTrackerTest >> testTextSettingUpdated [
 			self assert: ann oldValue equals: 'Adios'.
 			self assert: ann newValue equals: 'Hola' ].
 
-	settingItem := 'Adios' asSettingPresenter: (self newMockSettingDeclaration: 1).
+	settingItem := 'Adios' asSettingPresenter: (self newMockSettingDeclaration: 3).
 	settingItem value: 'Hola'.
 
 ]
@@ -132,7 +192,7 @@ StSettingsTrackerTest >> tracker: anObject [
 { #category : 'tests' }
 StSettingsTrackerTest >> when: anAnnouncement do: aBlock [
 
-	self class codeSupportAnnouncer
+	self class codeSupportAnnouncer weak
 		when: anAnnouncement
 		do: [ :ann | aBlock cull: ann ]
 		for: self
