@@ -1,14 +1,6 @@
 Class {
 	#name : 'StSettingsTree',
 	#superclass : 'SettingTree',
-	#instVars : [
-		'versionLog',
-		'baseDirectory',
-		'fileName'
-	],
-	#classVars : [
-		'SettingCacheDirectory'
-	],
 	#category : 'NewTools-SettingsBrowser-Model',
 	#package : 'NewTools-SettingsBrowser',
 	#tag : 'Model'
