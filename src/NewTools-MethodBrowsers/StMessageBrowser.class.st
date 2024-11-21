@@ -32,7 +32,7 @@ Class {
 StMessageBrowser class >> beDefaultBrowser [
 	<script>
 	
-	self registerToolsOn: Smalltalk tools
+	self registerToolsOn: self currentApplication tools
 ]
 
 { #category : 'instance creation' }

@@ -43,7 +43,7 @@ StFileSystemPresenter class >> buildCommandsGroupWith: presenter forRoot: rootCo
 StFileSystemPresenter class >> initialize [
 	"Register myself as the file list tool once I'm loaded."
 
-	Smalltalk tools fileListTool: self
+	self currentApplication tools fileListTool: self
 ]
 
 { #category : 'defaults' }

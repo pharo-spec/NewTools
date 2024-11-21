@@ -97,7 +97,7 @@ StPlaygroundPresenter class >> menuCommandOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #Playground)
 		parent: #InputOutput;
-		action: [ Smalltalk tools workspace open ];
+		action: [ self currentApplication tools workspace open ];
 		order: 1;
 		keyText: 'o, p';
 		help: 'A window used as a scratchpad area where fragments of Pharo code can be entered, stored, edited, and evaluated.';
@@ -125,7 +125,7 @@ StPlaygroundPresenter class >> register [
 	"Add ourselves to registry. See [Smalltalk tools]" 
 	<script>
 
-	self registerToolsOn: Smalltalk tools
+	self registerToolsOn: self currentApplication tools
 ]
 
 { #category : 'tools registry' }

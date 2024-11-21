@@ -138,7 +138,7 @@ StInspectorPresenter class >> preferredExtent: aPoint [
 StInspectorPresenter class >> register [
 	<script>
 
-	self registerToolsOn: Smalltalk tools
+	self registerToolsOn: self currentApplication tools
 ]
 
 { #category : 'tools registry' }

@@ -77,7 +77,7 @@ StPharoApplication >> newIconProvider [
 { #category : 'registration' }
 StPharoApplication >> register: aTool as: aNameSelector [
 
-	Smalltalk tools register: aTool as: aNameSelector
+	self tools register: aTool as: aNameSelector
 ]
 
 { #category : 'private - running' }
@@ -136,5 +136,5 @@ StPharoApplication >> tools [
 { #category : 'registration' }
 StPharoApplication >> unregisterToolWithRole: aName [
 
-	Smalltalk tools unregisterToolWithRole: aName
+	self tools unregisterToolWithRole: aName
 ]
