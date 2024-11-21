@@ -73,6 +73,7 @@ StSettingsTrackerTest >> submitPresenter: settingItem [
 StSettingsTrackerTest >> tearDown [
 
 	self class codeSupportAnnouncer unsubscribe: self.
+	"Clean SettingUpdated subscriptions"
 	(self class codeSupportAnnouncer subscriptions subscriptionsHandling: SettingUpdated new)
 		do: [ : s | self class codeSupportAnnouncer removeSubscription: s ].
 	tracker sessionLog ifNotEmpty: [ : collection | collection removeLast ].

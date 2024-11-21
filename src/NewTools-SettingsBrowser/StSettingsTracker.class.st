@@ -25,7 +25,10 @@ StSettingsTracker class >> reset [
 { #category : 'initialization' }
 StSettingsTracker class >> sessionLog [
 
-	^ SessionLog 
+	^ SessionLog
+		ifNil: [ 
+			self initialize.
+			SessionLog ]
 ]
 
 { #category : 'initialization' }
@@ -49,10 +52,7 @@ StSettingsTracker >> initialize [
 { #category : 'initialization' }
 StSettingsTracker >> sessionLog [
 
-	^ SessionLog
-		ifNil: [ 
-			self class initialize.
-			SessionLog ]
+	^ self class sessionLog
 ]
 
 { #category : 'initialization' }
