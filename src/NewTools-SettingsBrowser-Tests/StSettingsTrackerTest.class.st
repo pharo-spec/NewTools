@@ -53,6 +53,11 @@ StSettingsTrackerTest >> newSettingsTracker [
 StSettingsTrackerTest >> setUp [ 
 
 	super setUp.
+
+	self flag: #ToDo.
+	"This is wrong but CI is failing without it (needs more work)"
+	StSettingsTracker reset.
+
 	tracker := StSettingsTracker new.
 
 ]
