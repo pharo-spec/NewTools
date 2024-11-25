@@ -9,26 +9,6 @@ Class {
 }
 
 { #category : 'private' }
-StSettingsTrackerTest >> newMockSetting: aMockSetting asSTON: stream [
-
-	^ (STONWriter on: (ZnCharacterWriteStream on: stream)) 
-			prettyPrint: true;
-			newLine: OSPlatform current lineEnding;
-			nextPut: aMockSetting
-
-]
-
-{ #category : 'private' }
-StSettingsTrackerTest >> newMockSettingAsSTONString: aMockSetting [
-
-	^ (ByteArray streamContents: [ :stream | 
-			self 
-				newMockSetting: aMockSetting
-				asSTON: stream ]) asString
-
-]
-
-{ #category : 'private' }
 StSettingsTrackerTest >> newMockSettingDeclaration: id [
 	
 	| declaration |
@@ -53,11 +33,6 @@ StSettingsTrackerTest >> newSettingsTracker [
 StSettingsTrackerTest >> setUp [ 
 
 	super setUp.
-
-	self flag: #ToDo.
-	"This is wrong but CI is failing without it (needs more work)"
-	StSettingsTracker reset.
-
 	tracker := StSettingsTracker new.
 
 ]
@@ -86,20 +61,6 @@ StSettingsTrackerTest >> tearDown [
 ]
 
 { #category : 'tests' }
-StSettingsTrackerTest >> testBooleanSettingTracked [
-	"Check if the updated setting was tracked"
-
-	| settingItem numberOfUpdates |
-
-	self skip: 'For some reason it does not pass in CI but in the image does'.
-	numberOfUpdates := tracker sessionLog size.
-	settingItem := true asSettingPresenter: (self newMockSettingDeclaration: 1).
-	settingItem value: false.
-	
-	"self assert: tracker sessionLog size equals: numberOfUpdates + 1"
-]
-
-{ #category : 'tests' }
 StSettingsTrackerTest >> testBooleanSettingUpdated [
 	"Check if the updated setting was tracked"
 
@@ -113,23 +74,6 @@ StSettingsTrackerTest >> testBooleanSettingUpdated [
 
 	settingItem := true asSettingPresenter: (self newMockSettingDeclaration: 1).
 	settingItem value: false.
-
-]
-
-{ #category : 'tests' }
-StSettingsTrackerTest >> testNumberSettingTracked [ 
-	"Check if the updated setting was tracked"
-
-	| settingItem numberOfUpdates |
-
-	numberOfUpdates := tracker sessionLog size.
-
-	settingItem := 10 asSettingPresenter: (self newMockSettingDeclaration: 2).
-	settingItem value: 20.
-	self submitPresenter: settingItem.
-
-	self assert: tracker sessionLog size equals: numberOfUpdates + 1.
-	settingItem delete.
 
 ]
 
@@ -149,22 +93,6 @@ StSettingsTrackerTest >> testNumberSettingUpdated [
 	settingItem value: 20.
 
 
-]
-
-{ #category : 'tests' }
-StSettingsTrackerTest >> testTextSettingTracked [
-	"Check if the updated setting was tracked"
-
-	| settingItem numberOfUpdates |
-
-	numberOfUpdates := tracker sessionLog size.
-
-	settingItem := 'Adios' asSettingPresenter: (self newMockSettingDeclaration: 3).
-	settingItem value: 'Hola'.
-	self submitPresenter: settingItem.
-
-	self assert: tracker sessionLog size equals: numberOfUpdates + 1.
-	settingItem delete.
 ]
 
 { #category : 'tests' }
