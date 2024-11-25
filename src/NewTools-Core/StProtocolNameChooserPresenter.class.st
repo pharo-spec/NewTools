@@ -69,7 +69,7 @@ StProtocolNameChooserPresenter class >> requestProtocolNameConfiguring: aBlock [
 
 	protocolName isEmptyOrNil ifTrue: [ CmCommandAborted signal ].
 	(protocolName beginsWith: '*') ifTrue: [
-		self inform: 'Star is forbidden for protocol name since this is used for method extensions.'.
+		UIManager default inform: 'Star is forbidden for protocol name since this is used for method extensions.'.
 		^ CmCommandAborted signal ].
 	^ protocolName
 ]

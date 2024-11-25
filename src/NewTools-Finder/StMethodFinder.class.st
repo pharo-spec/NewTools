@@ -7,7 +7,7 @@ Extends `MethodFinder` to add support for search examples with:
 "
 Class {
 	#name : 'StMethodFinder',
-	#superclass : 'MethodFinder',
+	#superclass : 'Object',
 	#category : 'NewTools-Finder-Search',
 	#package : 'NewTools-Finder',
 	#tag : 'Search'
@@ -34,4 +34,24 @@ StMethodFinder >> findMethodsByExampleInput: inputCollection andExpectedResult: 
 StMethodFinder >> methodFinderSendClass [
 
 	^ StMethodFinderSend
+]
+
+{ #category : 'public access' }
+StMethodFinder >> possibleSolutionsForInput: inputCollection [
+
+	| sends |
+	
+	sends := OrderedCollection new.
+	inputCollection permutationsDo: [ :permutation |
+		| foundPermutationSends args receiver |
+		args := permutation allButFirst.
+		receiver := permutation first.
+		foundPermutationSends := 
+			(receiver evaluate class allSelectorsToTestInMethodFinderWithArity: inputCollection size - 1) collect: [ : method |
+			                         self methodFinderSendClass
+				                         receiver: receiver evaluate
+				                         selector: method
+				                         withArguments: (args collect: #evaluate) ].
+		sends addAll: foundPermutationSends ].
+	^ sends
 ]

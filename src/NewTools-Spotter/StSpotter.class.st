@@ -675,8 +675,7 @@ StSpotter >> nextSelectablePresenter: selectedPresenter oldPresenters: oldPresen
 StSpotter >> openFinder [
 
 	self window close.
-	self flag: #TODO. "Move finder to spec (right now is a morph)"
-	FinderUI open
+	StFinderPresenter open. 
 ]
 
 { #category : 'private' }

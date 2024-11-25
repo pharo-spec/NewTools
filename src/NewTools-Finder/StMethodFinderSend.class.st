@@ -7,11 +7,24 @@ Extends `MethodFinderSend` to support Finder UI operations for searching example
 "
 Class {
 	#name : 'StMethodFinderSend',
-	#superclass : 'MethodFinderSend',
+	#superclass : 'Message',
+	#instVars : [
+		'receiver'
+	],
 	#category : 'NewTools-Finder-Search',
 	#package : 'NewTools-Finder',
 	#tag : 'Search'
 }
+
+{ #category : 'accessing' }
+StMethodFinderSend class >> receiver: r selector: s1 withArguments: args [
+
+	^ self new
+		receiver: r;
+		selector: s1;
+		arguments: args;
+		yourself
+]
 
 { #category : 'comparing' }
 StMethodFinderSend >> = aStMethodFinderSend [
@@ -53,6 +66,12 @@ StMethodFinderSend >> debug [
 StMethodFinderSend >> displayIcon [
 
 	^ self iconNamed: #page
+]
+
+{ #category : 'accessing' }
+StMethodFinderSend >> evaluate [
+
+	^ receiver perform: selector withArguments: arguments
 ]
 
 { #category : 'accessing' }
@@ -182,10 +201,47 @@ StMethodFinderSend >> previewText [
 	^ StFinderPresenter methodFinderExplanation
 ]
 
+{ #category : 'printing' }
+StMethodFinderSend >> printOn: aStream [
+
+	aStream print: receiver.
+	aStream space.
+	arguments ifEmpty: [^ aStream nextPutAll: selector].
+	arguments
+		with: selector keywords
+		do: [:arg :word |
+				aStream nextPutAll: word asString.
+				aStream space.
+				aStream print: arg.
+				aStream space ].
+	aStream skip: -1
+]
+
 { #category : 'accessing' }
 StMethodFinderSend >> profile [
 
 	self shouldBeImplemented
+]
+
+{ #category : 'accessing' }
+StMethodFinderSend >> receiver [
+
+	^ receiver
+]
+
+{ #category : 'accessing' }
+StMethodFinderSend >> receiver: anObject [
+
+	receiver := anObject
+]
+
+{ #category : 'accessing' }
+StMethodFinderSend >> resultIn: expectedResult [
+
+	[ [ ^ expectedResult = self evaluate ]
+		onErrorDo: [ :anError | ^ false ] ]
+			on: Deprecation
+			do: [ :depr | ^ false ]
 ]
 
 { #category : 'accessing' }

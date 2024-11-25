@@ -26,6 +26,13 @@ Class {
 }
 
 { #category : 'accessing' }
+StFinderSearch >> application [
+
+	^ application 
+		ifNil: [ StPharoApplication current ]
+]
+
+{ #category : 'accessing' }
 StFinderSearch >> application: anApplication [ 
 	application := anApplication
 ]

@@ -29,7 +29,7 @@ CompiledMethod >> inspectionSource [
 				action: [ self methodClass browse ] ] ];
 		whenSubmitDo: [ :text | 
 			self isInstalled 
-				ifFalse: [ self inform: 'can not edit methods that are not installed' ]
+				ifFalse: [ UIManager default inform: 'can not edit methods that are not installed' ]
 				ifTrue: [ self methodClass compile: text ] ];
 		yourself
 ]
