@@ -15,6 +15,11 @@ StSettingDirectoryPresenterItem >> initializePresenters [
 	setterPresenter := self newTextInput 
 		beEditable;
 		placeholder: self model label;
+		whenSubmitDo: [ : newValue  | 
+			self codeSupportAnnouncer announce: (SettingUpdated 
+				declaration: self model 
+				oldValue: nil
+				newValue: newValue) ];
 		yourself.
 	labeledPresenter := (self instantiate: self labeledPresenterClass on: self) 
 		label: self model label;
