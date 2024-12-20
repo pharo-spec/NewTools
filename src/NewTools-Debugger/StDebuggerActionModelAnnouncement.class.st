@@ -13,7 +13,7 @@ Class {
 { #category : 'instance creation' }
 StDebuggerActionModelAnnouncement class >> debuggerActionModel: aDebuggerActionModel [
 
-	^ self new debuggerActionModel: aDebuggerActionModel
+	^ self new on: aDebuggerActionModel
 ]
 
 { #category : 'accessing' }
@@ -29,8 +29,14 @@ StDebuggerActionModelAnnouncement >> debuggerActionModel: aDebuggerActionModel [
 ]
 
 { #category : 'accessing' }
+StDebuggerActionModelAnnouncement >> node [
+
+	^ node
+]
+
+{ #category : 'initialize' }
 StDebuggerActionModelAnnouncement >> on: aDebuggerActionModel [
 
 	self debuggerActionModel: aDebuggerActionModel.
-	node := aDebuggerActionModel sourceNodeExecuted 
+	node := aDebuggerActionModel sourceNodeExecuted
 ]

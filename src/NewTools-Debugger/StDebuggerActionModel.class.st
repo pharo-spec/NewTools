@@ -455,7 +455,8 @@ StDebuggerActionModel >> shouldFilterStack [
 
 { #category : 'actions' }
 StDebuggerActionModel >> sourceNodeExecuted [
-	^self referenceContext sourceNodeExecuted
+
+	^self referenceContext ifNotNil:[:ctx| ctx sourceNodeExecuted]
 ]
 
 { #category : 'accessing - variables' }
