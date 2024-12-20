@@ -268,12 +268,6 @@ StDebuggerActionModel >> isInterruptedContextSubclassResponsibilityException [
 	^ self contextPredicate isContextSubclassResponsibilityException
 ]
 
-{ #category : 'instance creation' }
-StDebuggerActionModel >> newStepAnnouncement [
-
-	^ (StDebuggerActionModelStepAnnouncement debuggerActionModel: self)
-]
-
 { #category : 'debug - execution' }
 StDebuggerActionModel >> peelToFirstLike: aContext [
 	self session peelToFirstLike: aContext.
@@ -556,7 +550,7 @@ StDebuggerActionModel >> updateAfterMethodAdded [
 			 self)
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'updating' }
 StDebuggerActionModel >> updateContextChanged [
 
 	self updateIfAble:
@@ -608,18 +602,32 @@ StDebuggerActionModel >> updateRestart [
 			   self)
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'updating' }
 StDebuggerActionModel >> updateResume [
 
 	self updateIfAble:
 		(StDebuggerActionModelResumeAnnouncement debuggerActionModel: self)
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'updating' }
 StDebuggerActionModel >> updateStep [
 
 	self updateIfAble:
-		(StDebuggerActionModelStepAnnouncement debuggerActionModel: self)
+		(StDebuggerActionModelStepAnnouncement stepInto: self)
+]
+
+{ #category : 'updating' }
+StDebuggerActionModel >> updateStepOver [
+
+	self updateIfAble:
+		(StDebuggerActionModelStepAnnouncement stepOver: self)
+]
+
+{ #category : 'updating' }
+StDebuggerActionModel >> updateStepThrough [
+
+	self updateIfAble:
+		(StDebuggerActionModelStepAnnouncement stepThrough: self)
 ]
 
 { #category : 'context' }
