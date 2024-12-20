@@ -306,6 +306,12 @@ StDebuggerActionModel >> predicateFor: aContext postMortem: isContextPostMortem 
 		  yourself
 ]
 
+{ #category : 'accessing' }
+StDebuggerActionModel >> preventUpdate [
+
+	^ preventUpdate ifNil: [ preventUpdate := false ]
+]
+
 { #category : 'updating' }
 StDebuggerActionModel >> preventUpdatesDuring: aBlock [
 
@@ -591,8 +597,7 @@ StDebuggerActionModel >> updateIfAble [
 { #category : 'accessing' }
 StDebuggerActionModel >> updateIfAble: anAnnouncement [
 
-	preventUpdate ifNil: [ ^ self ].
-	preventUpdate ifFalse: [ self update: anAnnouncement ]
+	self preventUpdate ifFalse: [ self update: anAnnouncement ]
 ]
 
 { #category : 'announcement' }
