@@ -1,7 +1,7 @@
-Extension { #name : 'ASTProgramNode' }
+Extension { #name : 'OCProgramNode' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-ASTProgramNode >> inspectionAST [
+OCProgramNode >> inspectionAST [
 	<inspectorPresentationOrder: 35 title: 'AST'>
 
 	^ SpTreePresenter new 
@@ -20,7 +20,7 @@ ASTProgramNode >> inspectionAST [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-ASTProgramNode >> inspectionASTDump [
+OCProgramNode >> inspectionASTDump [
 	<inspectorPresentationOrder: 50 title: 'AST Dump'>
 
 	^ SpCodePresenter new 
@@ -30,7 +30,7 @@ ASTProgramNode >> inspectionASTDump [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-ASTProgramNode >> inspectionSource [
+OCProgramNode >> inspectionSource [
 	<inspectorPresentationOrder: 30 title: 'Method Source'>
 
 	^ SpCodePresenter new 

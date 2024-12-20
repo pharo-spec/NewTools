@@ -45,7 +45,7 @@ StFinderExampleSearch >> computeDataObjects: aString [
 	[
 		dataObjects := self parseAsNodes: data.
 		dataObjects do: [ : e | e evaluateWithTimeOut: self evaluationTimeout ] ]
-	on: CodeError , RuntimeSyntaxError
+	on: OCCodeError , OCRuntimeSyntaxError
 	do: [ :e |
 		self application inform: 'Error: ' , e messageText.
 		^ #(  ) ] .

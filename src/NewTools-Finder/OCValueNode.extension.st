@@ -1,7 +1,7 @@
-Extension { #name : 'ASTValueNode' }
+Extension { #name : 'OCValueNode' }
 
 { #category : '*NewTools-Finder' }
-ASTValueNode >> evaluateForReceiver: aReceiver withTimeout: anInteger [ 
+OCValueNode >> evaluateForReceiver: aReceiver withTimeout: anInteger [ 
 	"evaluate the AST binding self to the receiver and taking its variables"
 
 	^ aReceiver class compiler
@@ -12,7 +12,7 @@ ASTValueNode >> evaluateForReceiver: aReceiver withTimeout: anInteger [
 ]
 
 { #category : '*NewTools-Finder' }
-ASTValueNode >> evaluateWithTimeOut: anInteger [
+OCValueNode >> evaluateWithTimeOut: anInteger [
 	"evaluate the AST with a nil  receiver"
 	
 	^ self 

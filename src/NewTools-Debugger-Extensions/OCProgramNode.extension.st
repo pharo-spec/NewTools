@@ -1,11 +1,11 @@
-Extension { #name : 'ASTProgramNode' }
+Extension { #name : 'OCProgramNode' }
 
 { #category : '*NewTools-Debugger-Extensions' }
-ASTProgramNode >> enableHalts: aBoolean [
+OCProgramNode >> enableHalts: aBoolean [
 	^self propertyAt: #enabledForHaltOrBreakpoint put: aBoolean
 ]
 
 { #category : '*NewTools-Debugger-Extensions' }
-ASTProgramNode >> enabledForHaltOrBreakpoint [
+OCProgramNode >> enabledForHaltOrBreakpoint [
 	^self propertyAt: #enabledForHaltOrBreakpoint ifAbsent: [ true ]
 ]
