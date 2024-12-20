@@ -40,6 +40,13 @@ StDebuggerActionModelStepAnnouncement >> on: aDebuggerActionModel [
 	node := aDebuggerActionModel sourceNodeExecuted
 ]
 
+{ #category : 'printing' }
+StDebuggerActionModelStepAnnouncement >> printOn: aStream [
+	aStream << 'Step'.
+	aStream space.
+	aStream << step
+]
+
 { #category : 'actions' }
 StDebuggerActionModelStepAnnouncement >> stepInto [
 	step := 'into'
