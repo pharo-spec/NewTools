@@ -2,7 +2,8 @@ Class {
 	#name : 'StDebuggerActionModelAnnouncement',
 	#superclass : 'Announcement',
 	#instVars : [
-		'debuggerActionModel'
+		'debuggerActionModel',
+		'node'
 	],
 	#category : 'NewTools-Debugger-Model',
 	#package : 'NewTools-Debugger',
@@ -25,4 +26,11 @@ StDebuggerActionModelAnnouncement >> debuggerActionModel [
 StDebuggerActionModelAnnouncement >> debuggerActionModel: aDebuggerActionModel [
 
 	debuggerActionModel := aDebuggerActionModel
+]
+
+{ #category : 'accessing' }
+StDebuggerActionModelAnnouncement >> on: aDebuggerActionModel [
+
+	self debuggerActionModel: aDebuggerActionModel.
+	node := aDebuggerActionModel sourceNodeExecuted 
 ]

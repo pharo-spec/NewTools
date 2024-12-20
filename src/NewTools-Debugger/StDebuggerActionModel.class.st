@@ -453,6 +453,11 @@ StDebuggerActionModel >> shouldFilterStack [
 	^ self filterStack and: [ self class shouldFilterStack ]
 ]
 
+{ #category : 'actions' }
+StDebuggerActionModel >> sourceNodeExecuted [
+	^self referenceContext sourceNodeExecuted
+]
+
 { #category : 'accessing - variables' }
 StDebuggerActionModel >> stack [
 	^ self session stack
