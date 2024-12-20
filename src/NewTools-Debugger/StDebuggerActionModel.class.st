@@ -373,14 +373,13 @@ StDebuggerActionModel >> referenceContext [
 { #category : 'events - handling' }
 StDebuggerActionModel >> registerActionsForSession: aSession [
 
-	self flag: 'Rewrite it'.
 	aSession ifNotNil: [
 		aSession
 			when: #restart send: #updateRestart to: self;
 			when: #resume send: #updateResume to: self;
 			when: #stepInto send: #updateStep to: self;
-			when: #stepOver send: #updateStep to: self;
-			when: #stepThrough send: #updateStep to: self;
+			when: #stepOver send: #updateStepOver to: self;
+			when: #stepThrough send: #updateStepThrough to: self;
 			when: #contextChanged send: #updateContextChanged to: self;
 			when: #clear send: #clear to: self ]
 ]
