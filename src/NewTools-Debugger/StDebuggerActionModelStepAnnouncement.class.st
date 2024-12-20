@@ -33,6 +33,13 @@ StDebuggerActionModelStepAnnouncement class >> stepThrough: aDebuggerActionModel
 		  yourself
 ]
 
+{ #category : 'initialize' }
+StDebuggerActionModelStepAnnouncement >> on: aDebuggerActionModel [
+
+	super on: aDebuggerActionModel.
+	node := aDebuggerActionModel sourceNodeExecuted
+]
+
 { #category : 'actions' }
 StDebuggerActionModelStepAnnouncement >> stepInto [
 	step := 'into'

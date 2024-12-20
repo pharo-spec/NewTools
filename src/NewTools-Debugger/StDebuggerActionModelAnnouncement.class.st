@@ -37,6 +37,5 @@ StDebuggerActionModelAnnouncement >> node [
 { #category : 'initialize' }
 StDebuggerActionModelAnnouncement >> on: aDebuggerActionModel [
 
-	self debuggerActionModel: aDebuggerActionModel.
-	node := aDebuggerActionModel sourceNodeExecuted
+	self debuggerActionModel: aDebuggerActionModel
 ]
