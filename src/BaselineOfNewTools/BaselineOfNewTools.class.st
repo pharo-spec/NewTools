@@ -74,9 +74,11 @@ BaselineOfNewTools >> baseline: spec [
 			"Object-centric breakpoints"
 			package: 'NewTools-ObjectCentricBreakpoints';
 			"Sindarin"
-			package: 'NewTools-Sindarin-Commands';
+			
+			"package: 'NewTools-Sindarin-Commands';
 			package: 'NewTools-Sindarin-Commands-Tests' with: [ spec requires: #( 'NewTools-Sindarin-Commands' 'Sindarin' ) ];
 			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #( 'NewTools-Sindarin-Commands' 'Sindarin' ) ];
+			"
 			"package: 'NewTools-Sindarin-ProcessInspector' with: [ spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ];""Debugger Selector"
 			package: 'NewTools-DebuggerSelector' with: [ spec requires: #( 'NewTools-SpTextPresenterDecorators' ) ];
 			package: 'NewTools-DebuggerSelector-Tests' with: [ spec requires: #( 'NewTools-DebuggerSelector' ) ];
@@ -247,8 +249,8 @@ BaselineOfNewTools >> preload: loader package: packageSpec [
 { #category : 'external projects' }
 BaselineOfNewTools >> sindarin: spec [
 
-	spec baseline: 'Sindarin' with: [
+	"spec baseline: 'Sindarin' with: [
 		spec
 			repository: (self classNamed: #BaselineOfPharo) scriptableDebuggerRepository;
-			loads: 'default' ]
+			loads: 'default' ]"
 ]
