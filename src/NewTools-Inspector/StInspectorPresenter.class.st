@@ -171,7 +171,6 @@ StInspectorPresenter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		title: self windowTitle;
 		windowIcon: self windowIcon;
-		initialExtent: self class defaultPreferredExtent;
 		whenOpenedDo: [ self takeKeyboardFocus ];
 		whenFocusReceivedDo: [ self startProcessing ];
 		whenFocusLostDo: [ self stopProcessing ];
