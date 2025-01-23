@@ -6,7 +6,7 @@ Class {
 	#tag : 'Model'
 }
 
-{ #category : 'opening' }
+{ #category : 'instance creation' }
 StSettingsTree class >> settingsKeywords [
 
 	^ (Pragma allNamed: #systemsettings) collect: [: p | p method selector ]

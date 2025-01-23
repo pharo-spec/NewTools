@@ -30,8 +30,12 @@ StSettingDropListPresenterItem >> updateSetting: aSettingDeclaration [
 	ifNotNil: [
 		(self model target perform: self model targetSelector) 
 			perform: self model setSelector
-			with: aSettingDeclaration default ]
-
+			with: aSettingDeclaration default ].
+	"to do: https://github.com/pharo-spec/Spec/issues/1663"
+	self codeSupportAnnouncer announce: (SettingUpdated 
+					declaration: self model 
+					oldValue: nil
+					newValue: aSettingDeclaration)
 ]
 
 { #category : 'accessing' }

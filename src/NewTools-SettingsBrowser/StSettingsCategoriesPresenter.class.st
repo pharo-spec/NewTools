@@ -16,12 +16,13 @@ Class {
 
 { #category : 'initialization' }
 StSettingsCategoriesPresenter >> categoriesAsPresenters [
+	"Answer a <Collection> of <StSettingsCategoryItemPresenter> each one instantiated on a setting node <StSettingNode>
+	representing a category of settings"
 
 	^ self settingsCategories collect: [ : node | 
 		(self 
 			instantiate: StSettingsCategoryItemPresenter
-			on: node) 
-				addStyle: 'superCategoryList'  ]
+			on: node) addStyle: 'superCategoryList'  ]
 ]
 
 { #category : 'accessing' }

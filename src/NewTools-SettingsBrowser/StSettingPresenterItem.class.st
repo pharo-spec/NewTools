@@ -18,6 +18,13 @@ Class {
 	#tag : 'Widgets'
 }
 
+{ #category : 'initialization' }
+StSettingPresenterItem >> codeSupportAnnouncer [
+	"See comment in SystemEnvironment>>#codeSupportAnnouncer"
+
+	^ self class codeSupportAnnouncer
+]
+
 { #category : 'layout' }
 StSettingPresenterItem >> defaultLayout [
 
@@ -76,6 +83,17 @@ StSettingPresenterItem >> setterPresenter [
 StSettingPresenterItem >> setterPresenter: anObject [
 
 	setterPresenter := anObject
+]
+
+{ #category : 'initialization' }
+StSettingPresenterItem >> updateSettingBlock [
+	"Answer a <BlockClosure> responsible to announce that a setting has been updated"
+
+	^ [ : newValue | 
+			self codeSupportAnnouncer announce: (SettingUpdated 
+				declaration: self model 
+				oldValue: self model realValue
+				newValue: newValue) ]
 ]
 
 { #category : 'accessing' }
