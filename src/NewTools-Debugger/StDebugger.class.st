@@ -731,7 +731,8 @@ StDebugger >> initializeBreakpointInspector [
 { #category : 'code pane' }
 StDebugger >> initializeCode [
 
-	code := self newCode.
+	code := self instantiate: StDebuggerCodePresenter.
+	code debuggerActionModel: self debuggerActionModel.
 	code whenSubmitDo: [ :text | 
 		self acceptCodeChanges: text string forContext: self selectedContext ].
 	code whenResetDo: [ self discardCodeChangesFor: self selectedContext ]

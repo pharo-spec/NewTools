@@ -25,9 +25,3 @@ StDebugPointCommand >> asSpecCommand [
 
 	^ command
 ]
-
-{ #category : 'testing' }
-StDebugPointCommand >> canBeExecuted [
-
-	^ true
-]
