@@ -35,25 +35,15 @@ StMessageBrowser class >> browse: aCollection [
 
 { #category : 'instance creation' }
 StMessageBrowser class >> browse: aCollection asImplementorsOf: aSymbol [ 
-	"Special Version that sets the correct refreshing Block for Implentors Browser"
 
 	^ self new
-		setRefreshingBlockForImplementorsOf: aSymbol;
-		messages: aCollection;
-		title: 'Implementors of ', aSymbol printString;
-		open
+		browse: aCollection asImplementorsOf: aSymbol
 ]
 
 { #category : 'instance creation' }
 StMessageBrowser class >> browse: aCollection asSendersOf: aSymbol [ 
-	"Special Version that sets the correct refreshing Block for Senders Browser"
 
-	^ self new
-		setRefreshingBlockForSendersOf: aSymbol;
-		highlight: aSymbol;
-		messages: aCollection;
-		title: 'Senders of ', aSymbol printString;
-		open
+	^ self browse: aCollection asSendersOf: aSymbol 
 ]
 
 { #category : 'instance creation' }
@@ -158,6 +148,29 @@ StMessageBrowser >> addHighlightedSegments [
 	textPresenter addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight 
 		interval: (highlightInterval first to: highlightInterval last + 1);
 		yourself)
+]
+
+{ #category : 'api' }
+StMessageBrowser >> browse: aCollection asImplementorsOf: aSymbol [ 
+	"Special Version that sets the correct refreshing Block for Implementors Browser"
+
+	^ self
+		setRefreshingBlockForImplementorsOf: aSymbol;
+		messages: aCollection;
+		title: 'Implementors of ', aSymbol printString;
+		open
+]
+
+{ #category : 'api' }
+StMessageBrowser >> browse: aCollection asSendersOf: aSymbol [ 
+	"Special Version that sets the correct refreshing Block for Senders Browser"
+
+	^ self
+		setRefreshingBlockForSendersOf: aSymbol;
+		highlight: aSymbol;
+		messages: aCollection;
+		title: 'Senders of ', aSymbol printString;
+		open
 ]
 
 { #category : 'announcements' }
