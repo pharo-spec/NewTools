@@ -284,14 +284,13 @@ SpClosedWindowListPresenter >> initializeRejectedWindows [
 { #category : 'testing' }
 SpClosedWindowListPresenter >> isWindowRejected: aWindow [
 
-	(aWindow model notNil and: [
-		 (rejectedWindows includes: aWindow model class) or:
-			 (aWindow model presenter notNil and: [
-				  rejectedWindows includes: aWindow model presenter class ]) ])
-		ifTrue: [ ^ true ].
-
-
-	^ false
+	^ (aWindow model notNil and: [
+		   (rejectedWindows includes: aWindow model class) or: [
+			   (aWindow model respondsTo: #presenter) and: [
+				   aWindow model presenter notNil and: [
+					   rejectedWindows includes: aWindow model presenter class ] ] ] ])
+		  ifTrue: [ true ]
+		  ifFalse: [ false ]
 ]
 
 { #category : 'accessing' }

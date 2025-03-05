@@ -21,7 +21,7 @@ StFinderSearchBar >> defaultLayout [
 			spacing: 2;
 			add: searchModeDropList expand: false;
 			add: searchInput;
-			add: searchButton;
+			add: searchButton expand: false;
 			yourself
 ]
 

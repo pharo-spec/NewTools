@@ -25,7 +25,7 @@ StPlaygroundDoItCommand class >> defaultIconName [
 { #category : 'default' }
 StPlaygroundDoItCommand class >> defaultName [
 
-	^ 'Do it'
+	^ 'Do it all'
 ]
 
 { #category : 'accessing' }

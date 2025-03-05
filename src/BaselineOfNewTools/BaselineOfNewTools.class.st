@@ -116,15 +116,24 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-ShortcutsBrowser';
 			
 			package: 'NewTools-ObjectTranscript';
-			
+			package: 'NewTools-Transcript';
+			package: 'NewTools-Transcript-Tests' with: [ spec requires: #( 'NewTools-Transcript' ) ];
+		
 			package: 'ColorPicker';
 			package: 'ColorPicker-Tests' with: [ spec requires: #( ColorPicker ) ].
 
 		spec
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Core-Tests' 'NewTools-Morphic' );
+
 			group: 'Playground' with: #( 'Core' 'NewTools-Playground' 'NewTools-Playground-Tests' );
+
 			group: 'Inspector' with: #( 'Core' 'NewTools-Inspector' 'NewTools-Inspector-Tests' );
+
 			group: 'ClosedWindows' with: #( 'Core' 'NewTools-WindowManager' 'NewTools-WindowManager-Tests' );
+			
+			group: 'Transcript' with: #( 'Core' 'NewTools-Transcript-Tests' 'NewTools-ObjectTranscript' );
+			
+			
 			group: 'Debugger' with: #( 
 					 	'Core' 
 					 	'Inspector' 
@@ -133,8 +142,8 @@ BaselineOfNewTools >> baseline: spec [
 					 	'NewTools-Debugger'
 
 						'NewTools-Debugger-Morphic'
-				    		'NewTools-ObjectCentricBreakpoints'
-				    		'NewTools-Sindarin-Tools' 
+				    	'NewTools-ObjectCentricBreakpoints'
+				    	'NewTools-Sindarin-Tools' 
 
 					 	'NewTools-Sindarin-Commands'
 				    	'NewTools-Sindarin-Commands-Tests'
@@ -146,6 +155,7 @@ BaselineOfNewTools >> baseline: spec [
 						'NewTools-DebugPointsBrowser'
 						'NewTools-DebugPointsBrowser-Tests'
 						'NewTools-ObjectCentricDebugPoints' );
+
 			group: 'Spotter' with: #( 
 						'NewTools-Morphic-Spotter' 
 						'NewTools-Spotter-Processors'
@@ -153,28 +163,37 @@ BaselineOfNewTools >> baseline: spec [
 						'NewTools-Spotter-Extensions'
 				   		'NewTools-Spotter-Tests' 
 						'NewTools-Spotter-Processors-Tests' );
+
 			group: 'SystemReporter' with: #( 'Core' 'NewTools-SystemReporter' );
 			group: 'Methods' with: #( 'Core' 'NewTools-SpTextPresenterDecorators' 'NewTools-MethodBrowsers' 'NewTools-MethodBrowsers-Tests');
 			"Not in the image for the moment, we need a pass on them"
+
 			group: 'CritiqueBrowser' with: #( 'NewTools-CodeCritiques' 'NewTools-CodeCritiques-Tests' );
+
 			group: 'FontChooser' with: #( 'Core' 'NewTools-FontChooser' 'NewTools-FontChooser-Tests' );
+
 			group: 'FlagBrowser' with: #( 
 						'Core' 
 						'NewTools-FlagBrowser' 
 						'NewTools-FlagBrowser-Tests' );
+			
 			group: 'development' with: #( 'default' 
 						'NewTools-DebuggerSelector'
 				   		'NewTools-DebuggerSelector-Tests' );
+			
 			group: 'FileBrowser' with: #( 
 						'NewTools-FileBrowser'
 						'NewTools-FileBrowser-Morphic'
 						'NewTools-FileBrowser-Tests' );
-      			group: 'RewriterTools' with: #(
+      		
+			group: 'RewriterTools' with: #(
 				    		'NewTools-RewriterTools-Backend'
 				    		'NewTools-RewriterTools'
 				    		'NewTools-RewriterTools-Backend-Tests'
 				    		'NewTools-RewriterTools-Tests' );
+			
 			group: 'Profiler' with: #( 'NewTools-ProfilerUI' );
+	
 			"ScopesEditor"
 			group: 'ScopesEditor' with: #(
 						'NewTools-Scopes' 
@@ -183,6 +202,7 @@ BaselineOfNewTools >> baseline: spec [
 						'NewTools-Scopes-Resources-B-Tests' 
 						'NewTools-Scopes-Resources-C-Tests' 
 						'NewTools-Scopes-Tests');
+			
 			"Finder"
 			group: 'Finder' with: #(
 						'NewTools-Finder'
@@ -201,7 +221,8 @@ BaselineOfNewTools >> baseline: spec [
 			
 
 			group: 'default' with: #( 
-						'Playground' 
+						'Playground'
+						'Transcript'
 						'Inspector' 
 						'ClosedWindows'
 						'CritiqueBrowser' 
@@ -210,7 +231,7 @@ BaselineOfNewTools >> baseline: spec [
 						'FontChooser' 
 						'Methods'
 				   		'Spotter'
-		            			'RewriterTools'
+		            	'RewriterTools'
 						'ScopesEditor'
 						'FileBrowser'
 						'Finder'

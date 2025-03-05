@@ -18,6 +18,12 @@ Class {
 }
 
 { #category : 'accessing' }
+DebugPointBrowserPresenter class >> currentApplication [
+
+	^ StPharoApplication current
+]
+
+{ #category : 'accessing' }
 DebugPointBrowserPresenter class >> defaultPreferredExtent [
 
 	^ 800 @ 600
@@ -105,7 +111,8 @@ DebugPointBrowserPresenter >> initialize [
 	self class codeSupportAnnouncer weak
 		when: DebugPointAdded send: #updateTable to: self;
 		when: DebugPointRemoved send: #updateTable to: self;
-		when: DebugPointChanged send: #updateEditor to: self
+		when: DebugPointChanged send: #updateEditor to: self.
+	self application: self class currentApplication
 ]
 
 { #category : 'initialization' }
@@ -130,7 +137,7 @@ DebugPointBrowserPresenter >> initializePresenters [
 		                   yourself
 ]
 
-{ #category : 'presenter building' }
+{ #category : 'initialization' }
 DebugPointBrowserPresenter >> initializeTable [
 
 	dpTable := self instantiate: DebugPointTablePresenter.
@@ -141,7 +148,7 @@ DebugPointBrowserPresenter >> initializeTable [
 			dp updateDebugPointUIManager: self ] ]
 ]
 
-{ #category : 'presenter building' }
+{ #category : 'initialization' }
 DebugPointBrowserPresenter >> initializeVariableTargetPresenter [
 
 	variableTargetPresenter := DebugPointVariableTargetPresenter new

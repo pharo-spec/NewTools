@@ -8,6 +8,20 @@ Class {
 	#package : 'NewTools-DebugPointsBrowser'
 }
 
+{ #category : 'browsing' }
+DebugPointTablePresenter >> browseInstanceVariable: anInstVarName fromClass: aClass [
+
+	(self application tools browser openOnClass: aClass)
+		switchToVariables;
+		selectVariableNamed: anInstVarName
+]
+
+{ #category : 'browsing' }
+DebugPointTablePresenter >> browseTarget: aDebugPointTarget [
+
+	aDebugPointTarget browseFrom: self
+]
+
 { #category : 'context menu' }
 DebugPointTablePresenter >> debugPointActions [
 
@@ -21,7 +35,7 @@ DebugPointTablePresenter >> debugPointActions [
 			name: 'Browse Target';
 			description: 'browse target of the selected debug point';
 			actionEnabled: [ self selectedItem isNotNil ];
-			action: [ self selectedItem browse ] ];
+			action: [ self browseTarget: self selectedItem target ] ];
 		addActionWith: [ :anItem | anItem
 			name: 'Inspect Current Scope';
 			description: 'inspect the current scope of the selected debug point';

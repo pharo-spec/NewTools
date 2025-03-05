@@ -3,9 +3,9 @@ I'm a presenter showing StObjectTranscriptLogger log elements.
 
 
 ```
-StObjectTranscriptLogger open
+StObjectTranscriptPresenter open
  
-StObjectTranscriptLogger openWithLogger: StObjectTranscripLogger instance
+StObjectTranscriptPresenter openWithLogger: StObjectTranscripLogger instance
 ```
 
 To open from another presenter use the following expression
@@ -50,18 +50,10 @@ Class {
 { #category : 'accessing' }
 StObjectTranscriptPresenter class >> defaultPreferredExtent [
 	"Answer the desired extent for the receiver when it is first opened on the screen.  "
-	"This does oot work and is a perfect case to make the remembering only be used when 
-	it is coming from a resized
-	
-	The behavior should be 
-		open -> we use these 
-		reopen -> we use these
-		onResize -> we store the resize and continue to use them.
-	
-	"
+
 	^ self showInspector
-		ifTrue: [ 450 @ 650 ]
-		ifFalse: [ 250 @ 450 ]
+		ifTrue: [ 550 @ 850 ]
+		ifFalse: [ 550 @ 650 ]
 ]
 
 { #category : 'accessing' }
@@ -92,6 +84,7 @@ StObjectTranscriptPresenter class >> example2 [
 { #category : 'instance creation' }
 StObjectTranscriptPresenter class >> open [ 
 	"Make sure that the object transcript logger is on and open a presenter on it."
+	<script>
 	
 	StObjectTranscriptLogger start.
 	^ self openWithLogger: StObjectTranscriptLogger instance
@@ -140,15 +133,15 @@ StObjectTranscriptPresenter class >> showInspector: aBoolean [
 
 { #category : 'registration' }
 StObjectTranscriptPresenter class >> worldMenuOn: aBuilder [
+
 	<worldMenu>
-	
-	(aBuilder item: #'Browse') 
+	(aBuilder item: #Browse)
 		parent: #Browse;
 		label: 'Object Transcript';
-		order: 5; 
+		order: 5;
 		iconName: #playground;
-		action: [ StObjectTranscriptPresenter open].	
-
+		help: 'Tool to be able to see logs in this instance of Pharo.';
+		action: [ self open ]
 ]
 
 { #category : 'actions' }

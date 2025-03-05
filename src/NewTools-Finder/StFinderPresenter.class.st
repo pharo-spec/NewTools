@@ -439,6 +439,7 @@ StFinderPresenter >> initializeResultTree [
 		beMultipleSelection;
 		display: [ :result | result displayString ];
 		displayIcon: [ :result | result displayIcon ];
+		children: [ :result | result children ];
 		addShortcutWith: [ :action | action 
 			shortcutKey: $b actionModifier;
 			action: [ self resultTree selectedItem browseAction ] ];
@@ -620,8 +621,7 @@ StFinderPresenter >> updateResultsWith: results time: time [
 	"Call to update resultTree with results."
 
 	resultTree
-		roots: results;
-		children: [ :result | result children ].
+		roots: results.
 	self updateResultsBehavior.
 	resultStatusBar pushMessage: (self updateStatusBarTextFrom: results time: time).
 ]
