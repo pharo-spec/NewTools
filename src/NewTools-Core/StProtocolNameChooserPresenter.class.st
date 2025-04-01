@@ -65,6 +65,8 @@ StProtocolNameChooserPresenter class >> requestProtocolNameConfiguring: aBlock [
 	presenter selectProtocolName.
 
 	dialog open.
+	
+	dialog cancelled ifTrue: [ CmCommandAborted signal ].
 
 	protocolName := presenter selectedItem ifNil: [ CmCommandAborted signal ].
 	
