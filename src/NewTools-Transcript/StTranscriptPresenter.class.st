@@ -11,7 +11,12 @@ Class {
 		'text',
 		'transcript',
 		'leftToolbar',
-		'rightToolBar'
+		'rightToolBar',
+		'worker',
+		'service',
+		'mutex',
+		'waitingEntries',
+		'keepServiceAliveStep'
 	],
 	#category : 'NewTools-Transcript',
 	#package : 'NewTools-Transcript'
@@ -84,6 +89,22 @@ StTranscriptPresenter class >> registerToolsOn: aRegistry [
 StTranscriptPresenter >> clear [
 	
 	text clearContent
+]
+
+{ #category : 'private' }
+StTranscriptPresenter >> ensureTranscriptService [
+		
+	service ifNotNil: [ 
+		service isRunning ifFalse: [ service restart ].
+		^ service ].
+	
+	service := TKTParameterizableService new.
+	service name: 'Transcript service: ', UUID new asString.
+	service stepDelay: 50 milliSeconds.
+	service step: [ self processEntries ].
+	service start.
+	
+	^ service
 ]
 
 { #category : 'actions' }
@@ -176,6 +197,36 @@ StTranscriptPresenter >> layout [
 		yourself
 ]
 
+{ #category : 'private' }
+StTranscriptPresenter >> maybeStopService [
+
+	self waitingEntries isEmpty 
+		ifFalse: [ 
+			keepServiceAliveStep := 0.
+			^ self ].
+		
+	keepServiceAliveStep := keepServiceAliveStep + 1.
+	keepServiceAliveStep = 5 
+		ifTrue: [ service stop ].
+
+]
+
+{ #category : 'private' }
+StTranscriptPresenter >> mutex [
+		
+	^ mutex ifNil: [ mutex := Mutex new ]
+]
+
+{ #category : 'private' }
+StTranscriptPresenter >> processEntries [
+	
+	self mutex critical: [  
+		| entry |
+		self maybeStopService.
+		[ entry := self waitingEntries nextOrNil ]
+			whileNotNil: [ text appendText: entry ] ]
+]
+
 { #category : 'registration' }
 StTranscriptPresenter >> registerToAnnouncer [
 
@@ -188,7 +239,8 @@ StTranscriptPresenter >> registerToAnnouncer [
 { #category : 'actions' }
 StTranscriptPresenter >> reset [
 
-	transcript clear
+	transcript clear.
+	self clear
 ]
 
 { #category : 'accessing' }
@@ -206,17 +258,34 @@ StTranscriptPresenter >> transcript: aTranscript [
 { #category : 'registration' }
 StTranscriptPresenter >> unregister [
 
-	^ SystemAnnouncer uniqueInstance unsubscribe: self
+	self ensureTranscriptService stop.
+	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
-{ #category : 'accessing' }
+{ #category : 'private' }
 StTranscriptPresenter >> updateNewEntry: anAnnouncement [
 
-	text appendText: anAnnouncement entry
+	self mutex critical: [ 
+		self waitingEntries nextPut: anAnnouncement entry.
+		self ensureTranscriptService ]
+]
+
+{ #category : 'private' }
+StTranscriptPresenter >> waitingEntries [
+
+	^ waitingEntries ifNil: [ waitingEntries := WaitfreeQueue new ]
 ]
 
 { #category : 'accessing' }
 StTranscriptPresenter >> windowTitle [
 
 	^ 'Transcript'
+]
+
+{ #category : 'accessing' }
+StTranscriptPresenter >> worker [
+
+	worker ifNil: [ worker := TKTWorker new start ].
+	worker ensureIsWorking.
+	^ worker
 ]
