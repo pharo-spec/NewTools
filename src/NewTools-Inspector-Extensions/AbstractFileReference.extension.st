@@ -1,6 +1,50 @@
 Extension { #name : 'AbstractFileReference' }
 
 { #category : '*NewTools-Inspector-Extensions' }
+AbstractFileReference >> inspectionCompressedItems [
+
+	<inspectorPresentationOrder: 0 title: 'Compressed Items'>
+	| items children root |
+	root := (FileSystem zip: self) open workingDirectory.
+	children := root directories , root files.
+	items := self isRoot
+		         ifTrue: [ children ]
+		         ifFalse: [
+			         children asOrderedCollection
+				         addFirst: self parent;
+				         yourself ].
+
+	^ SpTablePresenter new
+		  items: items;
+		  addColumn: (SpCompositeTableColumn new
+				   title: 'Name';
+				   addColumn: (SpImageTableColumn evaluated: [ :each |
+							    self iconNamed: (each isDirectory
+										     ifTrue: [ #folder ]
+										     ifFalse: [ #browse ]) ]);
+				   addColumn: (SpStringTableColumn evaluated: [ :each |
+							    self parent = each
+								    ifTrue: [ '..' ]
+								    ifFalse: [ each basename ] ]));
+		  addColumn: (SpStringTableColumn new
+				   title: 'Size';
+				   evaluated: [ :each | each size ];
+				   formatted: [ :size | size humanReadableSISizeString ]);
+		  addColumn: (SpStringTableColumn new
+				   title: 'Creation';
+				   evaluated: [ :each | each creationTime ];
+				   formatted: [ :time |
+					   [
+					   String streamContents: [ :s |
+							   time printYMDOn: s.
+							   s nextPut: Character space.
+							   time printHMSOn: s ] ]
+						   on: Error
+						   do: [ 'N/A' translated ] ];
+				   beSortable)
+]
+
+{ #category : '*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionCompressedItemsContext: aContext [ 
 	
 	aContext active: self isCompressedFile
@@ -86,10 +130,10 @@ AbstractFileReference >> inspectionFuelContext: aContext [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-AbstractFileReference >> inspectionGif: aBuilder [
+AbstractFileReference >> inspectionGif [
 	<inspectorPresentationOrder: 0 title: 'Picture'>
 	
-	^ aBuilder newImage
+	^ SpImagePresenter new
 		image: (self binaryReadStreamDo: [ :stream | GIFReadWriter formFromStream: stream ]);
 		yourself
 ]
@@ -101,46 +145,47 @@ AbstractFileReference >> inspectionGifContext: aContext [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-AbstractFileReference >> inspectionItems: aBuilder [
-	| items |
-	
-	items := 	self directories, self files.
-	self isRoot ifFalse: [ 
-		items := items copyWithFirst: self parent ]. 
+AbstractFileReference >> inspectionItems [
 
-	^  aBuilder newTable 
-		beResizable;
-		items: items;
-		addColumn: (SpCompositeTableColumn new 
-			title: 'Name';
-			width: 300;
-			addColumn: (SpImageTableColumn evaluated: [ :each |
-				each isDirectory 
-					ifTrue: [ self iconNamed: #folder ] 
-					ifFalse: [ self iconNamed: #browse ] ]) 
-				beNotExpandable;
-			addColumn: (SpStringTableColumn evaluated: [ :each | 
-				(self isChildOf: each) 
-					ifTrue: [ '..' ] 
-					ifFalse: [ each basename ] ]);
-			yourself);
-		addColumn: (SpStringTableColumn new 
-			title: 'Size';
-			width: 100;
-			evaluated: [ :each | 
-				[ each humanReadableSize ]
-					on: Error 
-					do: [ 'N/A' translated ] ]);
-		addColumn: (SpStringTableColumn 
-			title: 'Creation'
-			evaluated: [ :each | 
-				[ String streamContents: [ :s | 
-					each creationTime printYMDOn: s.
-					s nextPut: Character space.
-					each creationTime printHMSOn: s ] ]
-				on: Error 
-				do: [ 'N/A' translated  ] ]);
-		yourself
+	<inspectorPresentationOrder: 0 title: 'Items'>
+	| items |
+	items := self directories , self files.
+	self isRoot ifFalse: [ items := items copyWithFirst: self parent ].
+
+	^ SpTablePresenter new
+		  beResizable;
+		  items: items;
+		  addColumn: (SpCompositeTableColumn new
+				   title: 'Name';
+				   width: 300;
+				   addColumn: (SpImageTableColumn evaluated: [ :each |
+							    each isDirectory
+								    ifTrue: [ self iconNamed: #folder ]
+								    ifFalse: [ self iconNamed: #browse ] ]) beNotExpandable;
+				   addColumn: (SpStringTableColumn evaluated: [ :each |
+							    (self isChildOf: each)
+								    ifTrue: [ '..' ]
+								    ifFalse: [ each basename ] ]);
+				   yourself);
+		  addColumn: (SpStringTableColumn new
+				   title: 'Size';
+				   width: 100;
+				   evaluated: [ :each | each size ];
+				   formatted: [ :size | size humanReadableSISizeString ];
+				   beSortable);
+		  addColumn: (SpStringTableColumn new
+				   title: 'Creation';
+				   evaluated: [ :each | each creationTime ];
+				   formatted: [ :time |
+					   [
+					   String streamContents: [ :s |
+							   time printYMDOn: s.
+							   s nextPut: Character space.
+							   time printHMSOn: s ] ]
+						   on: Error
+						   do: [ 'N/A' translated ] ];
+				   beSortable);
+		  yourself
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
@@ -150,10 +195,10 @@ AbstractFileReference >> inspectionItemsContext: aContext [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-AbstractFileReference >> inspectionJpeg: aBuilder [
+AbstractFileReference >> inspectionJpeg [
 	<inspectorPresentationOrder: 0 title: 'Picture'>
 	
-	^ aBuilder newImage
+	^ SpImagePresenter new
 		image: (self binaryReadStreamDo: [ :stream | ImageReadWriter formFromStream: stream ]);
 		yourself
 ]
@@ -165,10 +210,10 @@ AbstractFileReference >> inspectionJpegContext: aContext [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-AbstractFileReference >> inspectionPng: aBuilder [
+AbstractFileReference >> inspectionPng [
 	<inspectorPresentationOrder: 0 title: 'Picture'>
 	
-	^ aBuilder newImage
+	^ SpImagePresenter new
 		image: (self binaryReadStreamDo: [ :stream | PNGReadWriter formFromStream: stream ]);
 		yourself
 ]
@@ -180,10 +225,10 @@ AbstractFileReference >> inspectionPngContext: aContext [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-AbstractFileReference >> inspectionStScript: aBuilder [
+AbstractFileReference >> inspectionStScript [
 	<inspectorPresentationOrder: 0 title: 'Script'>
 	
-	^ aBuilder newCode 
+	^ SpCodePresenter new 
 		text: (self readStreamDo: #contents);
 		whenSubmitDo: [ :text | 
 			self writeStreamDo: [ :s | s nextPutAll: text string ] ];

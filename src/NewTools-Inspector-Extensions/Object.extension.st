@@ -13,10 +13,10 @@ Object >> defaultObjectInspectorClass [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-Object >> inspectionMeta: aBuilder [
+Object >> inspectionMeta [
 	<inspectorPresentationOrder: 999 title: 'Meta'>
 
-	^ aBuilder instantiate: StMetaBrowserPresenter on: self
+	^ StMetaBrowserPresenter on: self
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }

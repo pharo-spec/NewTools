@@ -86,9 +86,8 @@ StObjectContextPresenter >> hasOutputActivationPort [
 
 { #category : 'initialization' }
 StObjectContextPresenter >> initializePresenters [
- 
-	view := self model newInspectionViewOnApplication: self application.
-	view ifNil: [ view := self newLabel label: 'Missing presenter!' ].
+
+	view := self model newInspectionView.
 	self hasEvaluator
 		ifTrue: [ self intializePresentersWithEvaluator ]
 		ifFalse: [ self intializePresentersWithoutEvaluator ]

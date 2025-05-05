@@ -157,7 +157,9 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-ObjectTranscript'  with: [ spec requires: #('NewTools-Core' 'NewTools-Inspector') ];
 			package: 'NewTools-Transcript'  with: [ spec requires: #('NewTools-Core') ];
 			package: 'NewTools-Transcript-Tests' with: [ spec requires: #( 'NewTools-Transcript' ) ];
-		
+			
+			"Shout UI"
+			package: 'NewTools-Shout-UI'  with: [ spec requires: #('NewTools-Core') ];
 		
 			"Houston we have a bug, ColorPicker depends on roassal! "
 			package: 'ColorPicker'  with: [ spec requires: #('NewTools-Core' ) ];

@@ -6,19 +6,19 @@ Class {
 }
 
 { #category : 'inspector extensions' }
-StInspectorMockObject >> inspectionMock1: aBuilder [
+StInspectorMockObject >> inspectionMock1 [
 	<inspectorPresentationOrder: 0 title: 'Mock 1'>
 
-	^ aBuilder newLabel
+	^ SpLabelPresenter new
 		label: 'Test';
 		yourself
 ]
 
 { #category : 'inspector extensions' }
-StInspectorMockObject >> methodWithDnuingContext: aBuilder [
+StInspectorMockObject >> methodWithDnuingContext [
 	<inspectorPresentationOrder: 0 title: 'PresentationWithDNUingContext'>
 
-	^ aBuilder newLabel
+	^ SpLabelPresenter new
 		label: 'Test';
 		yourself
 ]
@@ -32,17 +32,17 @@ StInspectorMockObject >> methodWithDnuingContextContext: aContext [
 ]
 
 { #category : 'inspector extensions' }
-StInspectorMockObject >> methodWithDnuingPresentation: aBuilder [
+StInspectorMockObject >> methodWithDnuingPresentation [
 	<inspectorPresentationOrder: 0 title: 'PresentationWithDNUingContext'>
 	<ignoreNotImplementedSelectors: #(iShouldNotUnderstandThis)>
 	self iShouldNotUnderstandThis
 ]
 
 { #category : 'inspector extensions' }
-StInspectorMockObject >> methodWithFailingContext: aBuilder [
+StInspectorMockObject >> methodWithFailingContext [
 	<inspectorPresentationOrder: 0 title: 'PresentationWithFailingContext'>
 
-	^ aBuilder newLabel
+	^ SpLabelPresenter new
 		label: 'Test';
 		yourself
 ]
@@ -56,17 +56,17 @@ StInspectorMockObject >> methodWithFailingContextContext: aContext [
 ]
 
 { #category : 'inspector extensions' }
-StInspectorMockObject >> methodWithFailingPresentation: aBuilder [
+StInspectorMockObject >> methodWithFailingPresentation [
 	<inspectorPresentationOrder: 0 title: 'PresentationWithFailingPresentation'>
 
 	self error
 ]
 
 { #category : 'inspector extensions' }
-StInspectorMockObject >> methodWithHaltingContext: aBuilder [
+StInspectorMockObject >> methodWithHaltingContext [
 	<inspectorPresentationOrder: 0 title: 'PresentationWithHaltingContext'>
 
-	^ aBuilder newLabel
+	^ SpLabelPresenter new
 		label: 'Test';
 		yourself
 ]
@@ -81,7 +81,7 @@ StInspectorMockObject >> methodWithHaltingContextContext: aContext [
 ]
 
 { #category : 'inspector extensions' }
-StInspectorMockObject >> methodWithHaltingPresentation: aBuilder [
+StInspectorMockObject >> methodWithHaltingPresentation [
 	<inspectorPresentationOrder: 0 title: 'PresentationWithHaltingContext'>
 	<haltOrBreakpointForTesting>
 	

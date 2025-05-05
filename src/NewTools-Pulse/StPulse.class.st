@@ -43,6 +43,16 @@ StPulse >> acceptSelection [
 ]
 
 { #category : 'initialization' }
+StPulse >> addKeyboardBehaviour: aPresenter [
+
+	aPresenter eventHandler whenKeyDownDo: [ :anEvent | 
+		"If it is Arrow left | Arrow right | Arrow up | Arrow down do nothing"
+		(#(28 29 30 31) includes: anEvent keyValue )
+			ifFalse:  [ searchPresenter takeKeyboardFocus ] ]
+	
+]
+
+{ #category : 'initialization' }
 StPulse >> connectPresenters [
 
 	searchPresenter 
@@ -59,7 +69,12 @@ StPulse >> connectPresenters [
 			action: [ self giveFocusToPreviousResultList ] ].
 	resultListPresenter whenActivatedDo: [ :aSelection | self acceptSelection ].
 	editorListPresenter whenActivatedDo: [ :aSelection | self acceptSelection ].
-	toolListPresenter whenActivatedDo: [ :aSelection | self acceptSelection ]
+	toolListPresenter whenActivatedDo: [ :aSelection | self acceptSelection ].
+	self addKeyboardBehaviour: resultListPresenter.
+	self addKeyboardBehaviour: editorListPresenter.
+	self addKeyboardBehaviour: toolListPresenter.
+	
+	
 ]
 
 { #category : 'layout' }

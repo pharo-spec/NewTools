@@ -45,7 +45,7 @@ StSindarinBytecodeDebuggerPresenter >> debuggerExtensionToolName [
 { #category : 'initialization' }
 StSindarinBytecodeDebuggerPresenter >> initializePresenters [
 	bytecode := self newList.
-	bcContextInspection := nil inspectionRaw: self.
+	bcContextInspection := nil inspectionRaw.
 	bcContextInspection owner: self.
 	self initializeToolbar
 ]

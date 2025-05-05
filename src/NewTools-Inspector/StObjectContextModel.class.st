@@ -99,9 +99,9 @@ StObjectContextModel >> inspection: anObject [
 ]
 
 { #category : 'factory' }
-StObjectContextModel >> newInspectionViewOnApplication: anApplication [
+StObjectContextModel >> newInspectionView [
 
-	^ self context newInspectionViewOnApplication: anApplication
+	^ self context newInspectionView
 ]
 
 { #category : 'accessing' }

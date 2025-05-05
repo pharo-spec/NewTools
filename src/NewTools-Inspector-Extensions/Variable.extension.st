@@ -1,14 +1,13 @@
 Extension { #name : 'Variable' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-Variable >> inspectionUsingMethods: aBuilder [
+Variable >> inspectionUsingMethods [
 	<inspectorPresentationOrder: 920 title: 'Using Methods'>
-	| usingMethods |
 	
+	| usingMethods |
 	usingMethods := self usingMethods sort: [ :x :y | x name < y name ].
 
-	^ aBuilder newList
-		items: usingMethods;
-		display: #name;
-yourself
+	^ SpTreeTablePresenter new
+		  roots: usingMethods;
+		  addColumn: (SpStringTableColumn title: 'Using Methods' evaluated: #name)
 ]

@@ -1,7 +1,7 @@
 Extension { #name : 'MetacelloProjectReferenceSpec' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-MetacelloProjectReferenceSpec >> inspectionProject: aBuilder [
+MetacelloProjectReferenceSpec >> inspectionProject [
 	<inspectorPresentationOrder: 10 title: 'Project'>
 	| specs loadedSpecs |
 	
@@ -10,7 +10,7 @@ MetacelloProjectReferenceSpec >> inspectionProject: aBuilder [
 		ifNotEmpty: [ :loads | specs select: [ :each | loads includes: each name ] ]
 		ifEmpty: [ specs ].
 	
-	^ aBuilder newTable
+	^ SpTablePresenter new
 		addColumn: (SpStringTableColumn 
 			title: 'Type' 
 			evaluated: [ :aSpec | aSpec type ]) 
@@ -24,13 +24,13 @@ MetacelloProjectReferenceSpec >> inspectionProject: aBuilder [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-MetacelloProjectReferenceSpec >> inspectionRecord: aBuilder [
+MetacelloProjectReferenceSpec >> inspectionRecord [
 	<inspectorPresentationOrder: 20 title: 'Record'>
 	| specs |
 
 	specs := (self projectReference version record: (self projectReference loads ifNil: [ #('default') ])) spec packageSpecsInLoadOrder.
 	specs := specs reject: [ :each | each name = self name ].
-	^ aBuilder newTable
+	^ SpTablePresenter new
 		addColumn: (SpStringTableColumn 
 			title: 'Type' 
 			evaluated: [ :aSpec | aSpec type ]) 

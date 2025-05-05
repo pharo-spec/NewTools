@@ -1,10 +1,10 @@
 Extension { #name : 'ThemeIcons' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-ThemeIcons >> inspectionIcons: aBuilder [
+ThemeIcons >> inspectionIcons [
 	<inspectorPresentationOrder: 0 title: 'Icons'>
 	
-	^ aBuilder newTable
+	^ SpTablePresenter new
 		addColumn: ((SpImageTableColumn 
 			title: 'Icon'
 			evaluated: [ :aSpec | aSpec value ])

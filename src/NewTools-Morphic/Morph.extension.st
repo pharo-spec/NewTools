@@ -1,10 +1,10 @@
 Extension { #name : 'Morph' }
 
 { #category : '*NewTools-Morphic' }
-Morph >> inspectionLayout: aBuilder [
+Morph >> inspectionLayout [
 	<inspectorPresentationOrder: 800 title: 'Layout'>
 	
-	^ aBuilder newTable 
+	^ SpTablePresenter new 
 		addColumn: (SpStringTableColumn title: 'Property' evaluated: [ :assoc | assoc key ]);
 		addColumn: (SpStringTableColumn title: 'Value' evaluated: [ :assoc | assoc value ]);
 		items: { 
@@ -32,10 +32,10 @@ Morph >> inspectionLayout: aBuilder [
 ]
 
 { #category : '*NewTools-Morphic' }
-Morph >> inspectionMorph: aBuilder [
+Morph >> inspectionMorph [
 	<inspectorPresentationOrder: 90 title: 'Morph'>
 
-	^ aBuilder newMorph
+	^ SpMorphPresenter new
 		morph: self imageForm asMorph;
 		yourself
 ]

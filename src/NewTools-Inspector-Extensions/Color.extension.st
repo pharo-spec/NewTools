@@ -1,10 +1,10 @@
 Extension { #name : 'Color' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-Color >> inspectionColor: aBuilder [
+Color >> inspectionColor [
 	<inspectorPresentationOrder: 10 title: 'Color'>
 	
-	^ aBuilder newImage  
+	^ SpImagePresenter new  
 		image: (Morph new 
 			color: self;
 			asFormOfSize: 50@50);
@@ -12,10 +12,10 @@ Color >> inspectionColor: aBuilder [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-Color class >> inspectionColors: aBuilder [
+Color class >> inspectionColors [
 	<inspectorPresentationOrder: 10 title: 'Registered'>
 	
-	^ aBuilder newList 
+	^ SpListPresenter new 
 		items: ColorRegistry associations;
 		display: [ :each | each key ];
 		displayIcon: [ :each | 

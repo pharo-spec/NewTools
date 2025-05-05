@@ -108,6 +108,7 @@ StObjectInspectorPresenter >> allPages [
 
 	^ self allContexts 
 		collect: [ :each | self newPageForContext: each ]
+	
 ]
 
 { #category : 'private - builder' }
@@ -217,13 +218,11 @@ StObjectInspectorPresenter >> model: anInspectorModel [
 { #category : 'private - factory' }
 StObjectInspectorPresenter >> newInspectionForContext: aContext [
 	
-	^ self 
-		instantiate: StObjectContextPresenter 
-		on: (StObjectContextModel new 
-			inspection: self model;
-			inspectedObject: self inspectedObject;
-			context: aContext; 
-			yourself)
+	^ StObjectContextPresenter on: (StObjectContextModel new 
+		inspection: self model;
+		inspectedObject: self inspectedObject;
+		context: aContext; 
+		yourself)
 ]
 
 { #category : 'private - factory' }

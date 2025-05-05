@@ -1,10 +1,9 @@
 Extension { #name : 'MetaLink' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-MetaLink >> inpectionDefiniton: aBuilder [
+MetaLink >> inpectionDefiniton [
 	<inspectorPresentationOrder: 920 title: 'Definition'>
-	
-	^ aBuilder newText 
+	^ SpTextPresenter new 
 		text: (self definitionString);
 		yourself
 ]

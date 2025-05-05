@@ -1,11 +1,11 @@
 Extension { #name : 'SubscriptionRegistry' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-SubscriptionRegistry >> inspectionSubscriptions: aBuilder [
+SubscriptionRegistry >> inspectionSubscriptions [
+
 	<inspectorPresentationOrder: 0 title: 'Subscriptions'>
 	| table |
-
-	^ (table :=  aBuilder newTable)
+	^ (table := SpTablePresenter new)
 		  items: self subscriptions asOrderedCollection;
 		  beMultipleSelection;
 		  addColumn: (SpStringTableColumn

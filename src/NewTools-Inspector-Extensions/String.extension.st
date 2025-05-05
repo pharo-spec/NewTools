@@ -3,8 +3,8 @@ Extension { #name : 'String' }
 { #category : '*NewTools-Inspector-Extensions' }
 String >> inspectionEncoding: specBuilder [
 	<inspectorPresentationOrder: 200 title: 'Encoding'>
+	
 	| shorterString |
-
 	shorterString := self truncateWithElipsisTo: 1000.
 	^ (StSimpleInspectorBuilder on: specBuilder)
 			key: #UTF8 value: shorterString utf8Encoded printString;
@@ -13,20 +13,19 @@ String >> inspectionEncoding: specBuilder [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-String >> inspectionFullString: aBuilder [
+String >> inspectionFullString [
 	<inspectorPresentationOrder: 100 title: 'Full Content'>
-	
-	^ aBuilder newCode
+	^ SpCodePresenter new
 		syntaxHighlight: false;
 		text: self;
 		yourself
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-String >> inspectionString: aBuilder [
+String >> inspectionString [
 	<inspectorPresentationOrder: -10 title: 'Preview'>
 	
-	^ aBuilder newText
+	^ SpTextPresenter new
 		text: (self truncateWithElipsisTo: 1000);
 		yourself
 ]

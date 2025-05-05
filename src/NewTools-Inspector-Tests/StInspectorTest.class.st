@@ -139,7 +139,7 @@ StInspectorTest >> testDefineContextInSubclass [
 	| c |
 	c := StInspectionCollector on: StInspectorMockObjectSubclass new.
 
-	self deny: (c contextFromPragma: (StInspectorMockObject >> #inspectionMock1:) pragmas first) isActive
+	self deny: (c contextFromPragma: (StInspectorMockObject >> #inspectionMock1) pragmas first) isActive
 ]
 
 { #category : 'tests' }

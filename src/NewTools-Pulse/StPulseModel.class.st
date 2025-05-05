@@ -24,7 +24,6 @@ StPulseModel >> candidatesFor: text inContext: aDockSpotterContext [
 
 	(self processorsForContext: aDockSpotterContext) do: [ :each |
 		processor := each new.
-		processor prepareFor: aDockSpotterContext.
 		processor filterInContext: context ].
 	
 	^ candidateList candidates asArray

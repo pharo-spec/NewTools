@@ -1,10 +1,10 @@
 Extension { #name : 'Form' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-Form >> inspectionForm: aBuilder [
+Form >> inspectionForm [
 	<inspectorPresentationOrder: 0 title: 'Form'>
 	
-	^ aBuilder newMorph 
+	^ SpMorphPresenter new 
 		morph: self asMorph;
 		yourself
 ]

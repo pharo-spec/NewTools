@@ -1,10 +1,10 @@
 Extension { #name : 'Object' }
 
 { #category : '*NewTools-Debugger-Breakpoints-Tools' }
-Object >> inspectionBreakpoints: aBuilder [
+Object >> inspectionBreakpoints [
 	<inspectorPresentationOrder: 998 title: 'Breakpoints'>
 
-	^ aBuilder instantiate: StObjectBreakpointInspection on: self
+	^ StObjectBreakpointInspection on: self
 ]
 
 { #category : '*NewTools-Debugger-Breakpoints-Tools' }

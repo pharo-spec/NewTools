@@ -7,10 +7,10 @@ Announcer >> hasSubscriptions [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-Announcer >> inspectionSubscriptions: aBuilder [
-	<inspectorPresentationOrder: 0 title: 'Subscriptions'>
+Announcer >> inspectionSubscriptions [
 
-	^ registry inspectionSubscriptions: aBuilder
+	<inspectorPresentationOrder: 0 title: 'Subscriptions'>
+	^ registry inspectionSubscriptions
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }

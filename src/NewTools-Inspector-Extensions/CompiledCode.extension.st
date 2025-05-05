@@ -7,10 +7,10 @@ CompiledCode >> hasPragmas [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-CompiledCode >> inpectionIr: aBuilder [
+CompiledCode >> inpectionIr [
 	<inspectorPresentationOrder: 35 title: 'IR'>
 
-	^ self ir inpectionIr: aBuilder
+	^ self ir inpectionIr
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
@@ -35,17 +35,17 @@ CompiledCode >> inspectBytes: specBuilder [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-CompiledCode >> inspectionAST: aBuilder [
+CompiledCode >> inspectionAST [
 	<inspectorPresentationOrder: 35 title: 'AST'>
 
-	^ self sourceNode inspectionAST: aBuilder
+	^ self sourceNode inspectionAST
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-CompiledCode >> inspectionBytecode: aBuilder [
+CompiledCode >> inspectionBytecode [
 	<inspectorPresentationOrder: 30 title: 'Bytecode'>
 
-	^ aBuilder newListView 
+	^ SpListPresenter new 
 		items: self symbolicBytecodes;
 		display: [ :aBytecode | aBytecode printString ];
 		yourself
@@ -53,10 +53,10 @@ CompiledCode >> inspectionBytecode: aBuilder [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-CompiledCode >> inspectionHeader: aBuilder [
+CompiledCode >> inspectionHeader [
 	<inspectorPresentationOrder: 40 title: 'Header'> 
 	
-	^ aBuilder newText 
+	^ SpTextPresenter new 
 		text: self headerDescription;
 		yourself
 ]

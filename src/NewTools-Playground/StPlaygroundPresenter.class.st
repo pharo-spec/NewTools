@@ -107,6 +107,12 @@ StPlaygroundPresenter class >> openContents: aString [
 		open
 ]
 
+{ #category : 'instance creation' }
+StPlaygroundPresenter class >> openUrl: anUrl [
+
+	self openContents: (ZnEasy get: anUrl ) contents
+]
+
 { #category : 'tools registry' }
 StPlaygroundPresenter class >> registerToolsOn: registry [
 

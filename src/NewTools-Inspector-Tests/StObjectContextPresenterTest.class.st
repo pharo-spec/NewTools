@@ -16,7 +16,7 @@ StObjectContextPresenterTest >> initializeInstanceBeforeInitialization: aPresent
 	| model context |
 
 	model := StInspectorModel on: StInspectorMockObject new.
-	context := StInspectionContext fromPragma: (StInspectorMockObject>>#inspectionMock1:) pragmas first.
+	context := StInspectionContext fromPragma: (StInspectorMockObject>>#inspectionMock1) pragmas first.
 	context inspectedObject: model inspectedObject.
 	aPresenter setModelBeforeInitialization: (StObjectContextModel new 
 		inspection: model;

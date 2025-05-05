@@ -1,10 +1,10 @@
 Extension { #name : 'UITheme' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-UITheme >> inspectionColors: aBuilder [
+UITheme >> inspectionColors [
 	<inspectorPresentationOrder: 10 title: 'Colors'>
 	
-	^ aBuilder newList 
+	^ SpListPresenter new 
 		items: ((UITheme selectors select: [ :each | 
 			(each endsWith: 'Color') and: [ ((self perform: each) isKindOf: Color) ] ])
 			sort: #yourself ascending);

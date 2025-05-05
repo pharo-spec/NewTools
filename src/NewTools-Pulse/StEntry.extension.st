@@ -3,7 +3,7 @@ Extension { #name : 'StEntry' }
 { #category : '*NewTools-Pulse' }
 StEntry >> accept: aSpotter [
 
-	self subclassResponsibility
+	aSpotter visitWindowEntry: self
 ]
 
 { #category : '*NewTools-Pulse' }
