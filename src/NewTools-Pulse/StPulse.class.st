@@ -46,7 +46,13 @@ StPulse >> acceptSelection [
 StPulse >> addKeyboardBehaviour: aPresenter [
 
 	aPresenter eventHandler whenKeyDownDo: [ :anEvent | 
-		"If it is Arrow left | Arrow right | Arrow up | Arrow down do nothing"
+		"28 = Left Arrow"
+		anEvent keyValue = 28
+			ifTrue: [ self giveFocusToPreviousResultList ].
+		"29 = Right Arrow"
+		anEvent keyValue = 29
+			ifTrue: [ self giveFocusToNextResultList ].
+		"30 = Arrow up | 31 = Arrow down"
 		(#(28 29 30 31) includes: anEvent keyValue )
 			ifFalse:  [ searchPresenter takeKeyboardFocus ] ]
 	
@@ -143,7 +149,8 @@ StPulse >> giveFocusToNextResultList [
 		ifTrue: [ tabLayout children first ]
 		ifFalse: [ tabLayout children after: activePresenter ].
 		
-	tabLayout select: nextPresenter
+	tabLayout select: nextPresenter.
+	activePresenter takeKeyboardFocus
 ]
 
 { #category : 'private' }
@@ -154,7 +161,8 @@ StPulse >> giveFocusToPreviousResultList [
 		ifTrue: [ tabLayout children last ]
 		ifFalse: [ tabLayout children before: activePresenter ].
 		
-	tabLayout select: prevPresenter
+	tabLayout select: prevPresenter.
+	activePresenter takeKeyboardFocus
 ]
 
 { #category : 'private' }
