@@ -43,7 +43,7 @@ StPulse >> acceptSelection [
 ]
 
 { #category : 'initialization' }
-StPulse >> addKeyboardBehaviour: aPresenter [
+StPulse >> addKeyboardBehavior: aPresenter [
 
 	aPresenter eventHandler whenKeyDownDo: [ :anEvent | 
 		"28 = Left Arrow"
@@ -76,9 +76,9 @@ StPulse >> connectPresenters [
 	resultListPresenter whenActivatedDo: [ :aSelection | self acceptSelection ].
 	editorListPresenter whenActivatedDo: [ :aSelection | self acceptSelection ].
 	toolListPresenter whenActivatedDo: [ :aSelection | self acceptSelection ].
-	self addKeyboardBehaviour: resultListPresenter.
-	self addKeyboardBehaviour: editorListPresenter.
-	self addKeyboardBehaviour: toolListPresenter.
+	self addKeyboardBehavior: resultListPresenter.
+	self addKeyboardBehavior: editorListPresenter.
+	self addKeyboardBehavior: toolListPresenter.
 	
 	
 ]
@@ -92,7 +92,7 @@ StPulse >> defaultLayout [
 			"child: resultListPresenter;"
 			child: ((tabLayout := SpTabLayout new) 
 				add: resultListPresenter label: 'Environment';
-				add: editorListPresenter label: 'Editors';
+				add: editorListPresenter label: 'Windows';
 				add: toolListPresenter label: 'Commands';
 				whenTabSelectedDo: [ :ann | self tabActivated: ann presenter ];
 				yourself);
@@ -120,7 +120,7 @@ StPulse >> doSearch: aString [
 		 work slightly better.
 		 In anycase it feels smoother :)"
 		worker isEmpty ifTrue: [
-			self udpdateResultListWith: candidates ] ]
+			self updateResultListWith: candidates ] ]
 ]
 
 { #category : 'private' }
@@ -262,7 +262,13 @@ StPulse >> toolsContext [
 ]
 
 { #category : 'initialization' }
-StPulse >> udpdateResultListWith: aCollection [
+StPulse >> updatePresenter [
+
+	super updatePresenter
+]
+
+{ #category : 'initialization' }
+StPulse >> updateResultListWith: aCollection [
 	
 	"use defer to ensure UI loop"
 	self application defer: [
@@ -271,12 +277,6 @@ StPulse >> udpdateResultListWith: aCollection [
 		(activePresenter selectedItem isNil 
 			and: [ aCollection isNotEmpty ])
 			ifTrue: [ resultListPresenter selectFirst ] ]
-]
-
-{ #category : 'initialization' }
-StPulse >> updatePresenter [
-
-	super updatePresenter
 ]
 
 { #category : 'initialization' }
@@ -299,7 +299,7 @@ StPulse >> visitMenuEntry: anEntry [
 
 { #category : 'visiting' }
 StPulse >> visitMethodEntry: aClassEntry [ 
-	
+
 	self systemNavigation browse: aClassEntry content
 ]
 

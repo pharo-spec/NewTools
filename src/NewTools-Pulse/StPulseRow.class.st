@@ -15,6 +15,8 @@ StPulseRow >> defaultLayout [
 
 	^ SpBoxLayout newHorizontal
 		add: iconPresenter expand: false;
+		spacing: 5;
+		borderWidth: 2;
 		add: namePresenter;
 		add: contextPresenter expand: false;
 		yourself
@@ -41,7 +43,7 @@ StPulseRow >> updatePresenter [
 	self model ifNil: [ ^ self ].
 	
 	
-	iconPresenter image: (self iconNamed: (self model iconName ifNil: [ #blank ])).
+	iconPresenter image: (self model iconOn: self application).
 	namePresenter label: self model label.
 	contextPresenter label: self model categoryLabel
 ]
