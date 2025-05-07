@@ -11,11 +11,13 @@ Class {
 		'toolListPresenter',
 		'activePresenter',
 		'tabLayout',
-		'editorsContext',
+		'windowsContext',
 		'toolsContext',
 		'environmentContext',
-		'notificationCenter',
 		'worker'
+	],
+	#classInstVars : [
+		'pulse'
 	],
 	#category : 'NewTools-Pulse',
 	#package : 'NewTools-Pulse'
@@ -28,10 +30,41 @@ StPulse class >> defaultExtent [
 ]
 
 { #category : 'instance creation' }
+StPulse class >> newWithText: aText [
+
+	self reset.
+	pulse := self new.
+	pulse searchPresenter text: aText.
+	^ pulse 
+]
+
+{ #category : 'instance creation' }
 StPulse class >> open [
 
 	<script>
-	self new open
+	self openWithText: ''
+]
+
+{ #category : 'instance creation' }
+StPulse class >> openWithText: aText [
+"If a Spotter is already open, it closes itself and opens the Finder instead.  
+ Otherwise, it initializes a new Spotter. The purpose of this is so users can 
+ press 'shift+enter' inside the Spotter to open the Finder."
+   | searchText |
+	pulse ifNotNil: [
+		pulse isVisible ifTrue: [
+			searchText := pulse searchPresenter text.
+			self reset.
+			^ StFinderPresenter openWithText: searchText ] ].
+	
+	pulse := self newWithText: aText.
+	^ pulse openModal
+]
+
+{ #category : 'instance creation' }
+StPulse class >> windowClosed [
+
+	pulse := nil
 ]
 
 { #category : 'private - actions' }
@@ -124,15 +157,6 @@ StPulse >> doSearch: aString [
 ]
 
 { #category : 'private' }
-StPulse >> editorsContext [
-
-	^ editorsContext ifNil: [ 
-		editorsContext := StPulseSearchContext searchEditors
-			browser: self owner root;
-			yourself ]
-]
-
-{ #category : 'private' }
 StPulse >> environmentContext [
 
 	^ environmentContext ifNil: [ 
@@ -210,7 +234,9 @@ StPulse >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		initialExtent: self class defaultExtent;
 		withoutDecorations;
-		whenClosedDo: [ self windowClosed ];
+		whenClosedDo: [ 
+			self windowClosed.
+			self class windowClosed ];
 		centered
 ]
 
@@ -233,9 +259,15 @@ StPulse >> newResultList [
 ]
 
 { #category : 'private' }
+StPulse >> searchPresenter [
+
+	^ searchPresenter
+]
+
+{ #category : 'private' }
 StPulse >> selectedContext [
 
-	activePresenter = editorListPresenter ifTrue: [ ^ self editorsContext ].
+	activePresenter = editorListPresenter ifTrue: [ ^ self windowsContext ].
 	activePresenter = toolListPresenter ifTrue: [ ^ self toolsContext ].
 	
 	^  self environmentContext
@@ -313,4 +345,13 @@ StPulse >> visitWindowEntry: aWindowEntry [
 StPulse >> windowClosed [
 
 	worker stop
+]
+
+{ #category : 'private' }
+StPulse >> windowsContext [
+
+	^ windowsContext ifNil: [ 
+		windowsContext := StPulseSearchContext searchEditors
+			browser: self owner root;
+			yourself ]
 ]

@@ -12,7 +12,7 @@ Class {
 { #category : 'accessing' }
 StPulseSearchContext class >> searchEditors [
 
-	^ StPulseSearchEditorsContext new
+	^ StPulseSearchWindowsContext new
 ]
 
 { #category : 'private' }

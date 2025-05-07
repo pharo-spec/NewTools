@@ -5,7 +5,7 @@ Class {
 	#package : 'NewTools-Pulse'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private' }
 StPulseModel >> candidatesFor: text inContext: aDockSpotterContext [
 	"contextSymbol can be #environment, #editors, #tools"
 	| candidateList stream context processor |

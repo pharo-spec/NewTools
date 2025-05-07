@@ -1,18 +1,18 @@
 Class {
-	#name : 'StPulseSearchEditorsContext',
+	#name : 'StPulseSearchWindowsContext',
 	#superclass : 'StPulseSearchContext',
 	#category : 'NewTools-Pulse',
 	#package : 'NewTools-Pulse'
 }
 
 { #category : 'accessing' }
-StPulseSearchEditorsContext >> associatedProcessors [
+StPulseSearchWindowsContext >> associatedProcessors [
 
 	^ { StWindowsProcessor }
 ]
 
 { #category : 'accessing' }
-StPulseSearchEditorsContext >> searchPlaceholder [
+StPulseSearchWindowsContext >> searchPlaceholder [
 
 	^ 'Search for open windows...'
 ]
