@@ -61,6 +61,14 @@ StPulse class >> openWithText: aText [
 	^ pulse openModal
 ]
 
+{ #category : 'class initialization' }
+StPulse class >> reset [
+	
+	pulse ifNotNil: [ 
+		pulse withWindowDo: [ :window | window close ].
+		pulse := nil ]
+]
+
 { #category : 'instance creation' }
 StPulse class >> windowClosed [
 
