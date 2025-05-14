@@ -471,6 +471,29 @@ CavroisWindowManager >> allCurrentWindows [
 				  (w isCollapsed not and: (w isKindOf: SpDialogWindowMorph) not) ]
 ]
 
+{ #category : 'creation' }
+CavroisWindowManager >> createPlaceHolderGrid [
+
+	| world gridSize existingWindows profile |
+	profile := CavWindowProfile new named: 'test'.
+	self currentProfile: profile.
+	existingWindows := self allCurrentWindows.
+	world := self currentWorld bounds.
+	gridSize := world width // 3 @ (world height // 3).
+
+	0 to: 2 do: [ :row |
+			0 to: 2 do: [ :col |
+					| origin randomWindow placeHolder |
+					origin := col * gridSize x @ (row * gridSize y).
+					randomWindow := existingWindows atRandom.
+					placeHolder := self placeHolderFromWindow: randomWindow .
+					placeHolder position: origin.
+					placeHolder extent: gridSize.
+
+					self currentProfile add: placeHolder ] ].
+	"self currentProfile placeHolders do: [ :each | each display ]"
+]
+
 { #category : 'accessing' }
 CavroisWindowManager >> currentProfile [
 
@@ -493,6 +516,25 @@ CavroisWindowManager >> defaultLocation [
 CavroisWindowManager >> defaultLocation: aLocation [
 
 	defaultLocation := aLocation
+]
+
+{ #category : 'as yet unclassified' }
+CavroisWindowManager >> handleWindowDrop: aWindow at: aPoint [
+
+	| closestPlaceHolder closestDistance |
+	((aWindow isKindOf: SystemWindow) or: (aWindow isKindOf: SpWindow))
+		ifFalse: [ ^ self ].
+	closestPlaceHolder := nil.
+	closestDistance := Float infinity.
+	self currentProfile ifNotNil: [
+			self currentProfile placeHolders do: [ :placeHolder |
+					| distance |
+					distance := placeHolder position distanceTo: aPoint.
+					distance < closestDistance ifTrue: [
+							closestPlaceHolder := placeHolder.
+							closestDistance := distance ] ].
+			closestPlaceHolder ifNotNil: [
+				closestPlaceHolder placePresenter: aWindow ] ]
 ]
 
 { #category : 'initialization' }
@@ -538,6 +580,7 @@ CavroisWindowManager >> placeHolderFromWindow: aWindowPresenter [
 CavroisWindowManager >> placePresenter: aPresenter [
 
 	| placeHolders windowType nextPlaceHolderIndex |
+
 	self currentProfile ifNotNil: [
 			placeHolders := self currentProfile placeHoldersFor:
 				                aPresenter class.
