@@ -334,7 +334,7 @@ StMessageBrowser >> horizontalLayout [
 
 { #category : 'initialization' }
 StMessageBrowser >> initialize [
-
+	messageList := self newMessageList.
 	super initialize.
 	self registerToAnnouncements
 ]
