@@ -27,7 +27,7 @@ StAbstractMessageCentricBrowserPresenter class >> isAbstract [
 
 { #category : 'initialization' }
 StAbstractMessageCentricBrowserPresenter >> initialize [
-
+	messageList := self newMessageList.
 	textConverter := self newTextConverter.
 	super initialize
 	
