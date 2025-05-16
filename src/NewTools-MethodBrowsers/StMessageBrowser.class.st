@@ -586,6 +586,12 @@ StMessageBrowser >> topologicSort: aBoolean [
 	^ messageList topologicSort: aBoolean
 ]
 
+{ #category : 'initialization' }
+StMessageBrowser >> updatePresenter [
+	super updatePresenter.
+	messageList messages: messages
+]
+
 { #category : 'api' }
 StMessageBrowser >> updateTitle [
 	self withWindowDo: [ :window | window title: self title ]
@@ -623,8 +629,8 @@ StMessageBrowser >> windowIsClosing [
 	self class codeChangeAnnouncer unsubscribe: self
 ]
 
-{ #category : 'private' }
+{ #category : 'accessing' }
 StMessageBrowser >> windowTitle [
 
-	^ (title ifNil: [ 'Message Browser' ]), ' [' , messageList numberOfElements printString , ']'
+	^ (title ifNil: [ 'Message Browser' ]), ' [' , messages size printString , ']'
 ]
