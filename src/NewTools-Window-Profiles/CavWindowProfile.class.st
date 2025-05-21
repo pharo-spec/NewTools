@@ -6,7 +6,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'profileName',
-		'placeHolderDictionary'
+		'placeHolderDictionary',
+		'cellSize'
 	],
 	#category : 'NewTools-Window-Profiles-Model',
 	#package : 'NewTools-Window-Profiles',
@@ -25,6 +26,18 @@ CavWindowProfile >> add: aCavroisWindowPlaceHolder [
 			 col := OrderedCollection new.
 			 placeHolderDictionary at: aCavroisWindowPlaceHolder kind put: col.
 			 col ]) add: aCavroisWindowPlaceHolder
+]
+
+{ #category : 'accessing' }
+CavWindowProfile >> cellSize [
+
+	^ cellSize
+]
+
+{ #category : 'accessing' }
+CavWindowProfile >> cellSize: aSize [
+
+	cellSize := aSize
 ]
 
 { #category : 'adding' }

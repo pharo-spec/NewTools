@@ -41,6 +41,17 @@ Class {
 }
 
 { #category : 'adding' }
+CavroisWindowManager class >> addGridItem:aBuilder [
+
+	(aBuilder item: #'Grid (Beta)')
+		parent: #Grid;
+		order: 10;
+		action: [ self chooseGridSize ];
+		help: '?';
+		iconName: #box
+]
+
+{ #category : 'adding' }
 CavroisWindowManager class >> addProfileDeletionItem: aBuilder [
 	"Add menu item for deleting a profile"
 	(aBuilder item: #'Delete Profile')
@@ -112,6 +123,26 @@ CavroisWindowManager class >> addProfileVisibilityItem: aBuilder [
 		action: [ self toggleProfilePlaceholders ];
 		help: 'Show the placeholders of the current profile in the World';
 		iconName: #haloView
+]
+
+{ #category : 'action' }
+CavroisWindowManager class >> chooseGridSize [
+
+	| presenter |
+	presenter := SpRequestDialog new
+		             title: 'Grid ';
+		             label: 'What is the size of the grid ?';
+		             text: '';
+		             acceptLabel: 'Confirm';
+		             cancelLabel: 'Cancel';
+		             onAccept: [ :dialog |
+				             self current currentProfile
+					             reset;
+					             cellSize: dialog presenter text asNumber.
+				             self current createPlaceHolderGrid:
+					             dialog presenter text asNumber.
+				             MenubarMorph reset ];
+		             openDialog
 ]
 
 { #category : 'instance creation' }
@@ -227,7 +258,10 @@ CavroisWindowManager class >> profileMenu: aBuilder [
 				withSeparatorAfter.
 			(aBuilder group: #ProfileTutorial)
 				order: 4;
-				help: 'Tutorial about profiles' ]
+				help: 'Tutorial about profiles'.
+					(aBuilder group: #Grid)
+				order: 5;
+				help: 'Grid prototype'  ]
 ]
 
 { #category : 'menu items' }
@@ -243,7 +277,8 @@ CavroisWindowManager class >> profileMenuItems: aBuilder [
 		renameProfileItem: aBuilder;
 		resetWindowsToCurrentProfile: aBuilder;
 		addProfileImportExportItems: aBuilder;
-		addProfileHelpItem: aBuilder
+		addProfileHelpItem: aBuilder;
+		addGridItem:aBuilder 
 ]
 
 { #category : 'removing' }
@@ -472,24 +507,21 @@ CavroisWindowManager >> allCurrentWindows [
 ]
 
 { #category : 'creation' }
-CavroisWindowManager >> createPlaceHolderGrid [
+CavroisWindowManager >> createPlaceHolderGrid: aSize [
 
-	| world gridSize existingWindows profile |
-	profile := CavWindowProfile new named: 'test'.
-	self currentProfile: profile.
+	| world cellSize existingWindows |
+	aSize ifNil: [ ^ self ].
 	existingWindows := self allCurrentWindows.
 	world := self currentWorld bounds.
-
-	gridSize := world width // 3 @ ((world height // 3)-15).
-
-	0 to: 2 do: [ :row | "self currentProfile placeHolders do: [ :each | each display ]"
-			0 to: 2 do: [ :col |
+	cellSize := world width // aSize @ (world height - 45// aSize).
+	0 to: aSize - 1 do: [ :row |
+			0 to: aSize - 1 do: [ :col |
 					| origin randomWindow placeHolder |
-					origin := col * gridSize x @ (row * gridSize + 18) y.
+					origin := col * cellSize x @ (row * cellSize + 18) y.
 					randomWindow := existingWindows atRandom.
 					placeHolder := self placeHolderFromWindow: randomWindow.
 					placeHolder position: origin.
-					placeHolder extent: gridSize.
+					placeHolder extent: cellSize.
 
 					self currentProfile add: placeHolder ] ]
 ]
