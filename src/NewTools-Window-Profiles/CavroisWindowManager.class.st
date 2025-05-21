@@ -479,19 +479,19 @@ CavroisWindowManager >> createPlaceHolderGrid [
 	self currentProfile: profile.
 	existingWindows := self allCurrentWindows.
 	world := self currentWorld bounds.
-	gridSize := world width // 3 @ (world height // 3).
 
-	0 to: 2 do: [ :row |
+	gridSize := world width // 3 @ ((world height // 3)-15).
+
+	0 to: 2 do: [ :row | "self currentProfile placeHolders do: [ :each | each display ]"
 			0 to: 2 do: [ :col |
 					| origin randomWindow placeHolder |
-					origin := col * gridSize x @ (row * gridSize y).
+					origin := col * gridSize x @ (row * gridSize + 18) y.
 					randomWindow := existingWindows atRandom.
-					placeHolder := self placeHolderFromWindow: randomWindow .
+					placeHolder := self placeHolderFromWindow: randomWindow.
 					placeHolder position: origin.
 					placeHolder extent: gridSize.
 
-					self currentProfile add: placeHolder ] ].
-	"self currentProfile placeHolders do: [ :each | each display ]"
+					self currentProfile add: placeHolder ] ]
 ]
 
 { #category : 'accessing' }
@@ -518,7 +518,7 @@ CavroisWindowManager >> defaultLocation: aLocation [
 	defaultLocation := aLocation
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'dropping' }
 CavroisWindowManager >> handleWindowDrop: aWindow at: aPoint [
 
 	| closestPlaceHolder closestDistance |
