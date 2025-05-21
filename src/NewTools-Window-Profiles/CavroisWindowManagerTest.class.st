@@ -59,6 +59,17 @@ CavroisWindowManagerTest >> testDeleteProfile [
 ]
 
 { #category : 'tests' }
+CavroisWindowManagerTest >> testGridCellsInitialization [
+
+	| profile |
+	profile := CavWindowProfile new.
+	manager currentProfile: profile.
+	profile cellSize: 4.
+	manager createPlaceHolderGrid: profile cellSize.
+	self assert: manager currentProfile placeHolders size equals: 16
+]
+
+{ #category : 'tests' }
 CavroisWindowManagerTest >> testRemovingCurrentProfileUpdateCurrentProfile [
 
 	manager addProfileFromWindows: 'Profile1'.

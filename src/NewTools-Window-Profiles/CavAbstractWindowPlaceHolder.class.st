@@ -55,17 +55,15 @@ CavAbstractWindowPlaceHolder >> display [
 
 	visualPlaceHolder := CavVisualPlaceHolderMorph new
 		                     extent: extent;
-		                     position: position;
-		                     addMorph: (TextMorph new
-				                      contents: kind printString;
-				                      position: position x
-					                      +
-						                      (extent x
-						                       -
-							                       (TextMorph new contents:
-									                        kind printString) width / 2)
-					                      @ position y + 3).
-					visualPlaceHolder placeHolder: self.
+		                     position: position.
+	CavroisWindowManager current currentProfile cellSize ifNil: [
+			visualPlaceHolder addMorph: (TextMorph new
+					 contents: kind printString;
+					 position: position x
+						 +
+							 (extent x - (TextMorph new contents: kind printString) width
+							  / 2) @ position y + 3) ].
+	visualPlaceHolder placeHolder: self.
 	visualPlaceHolder openInWorld
 ]
 

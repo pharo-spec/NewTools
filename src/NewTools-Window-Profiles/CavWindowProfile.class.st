@@ -47,11 +47,11 @@ CavWindowProfile >> hasPlaceHolderFor: aString [
 ]
 
 { #category : 'initialization' }
-CavWindowProfile >> initialize [ 
-	
+CavWindowProfile >> initialize [
+
 	super initialize.
 	placeHolderDictionary := Dictionary new.
-	
+
 ]
 
 { #category : 'accessing' }

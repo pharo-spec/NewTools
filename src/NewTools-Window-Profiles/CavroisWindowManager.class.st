@@ -41,14 +41,30 @@ Class {
 }
 
 { #category : 'adding' }
-CavroisWindowManager class >> addGridItem:aBuilder [
+CavroisWindowManager class >> addGridItem: aBuilder [
 
 	(aBuilder item: #'Grid (Beta)')
 		parent: #Grid;
 		order: 10;
-		action: [ self chooseGridSize ];
 		help: '?';
-		iconName: #box
+		iconName: #box;
+		with: [
+				(aBuilder item: #'Edit cell size')
+					parent: #'Grid (Beta)';
+					order: 0;
+					help: '?';
+					iconName: #table;
+					action: [
+						self current currentProfile ifNotNil: [ self chooseGridSize ] ].
+				(aBuilder item: #'Remove Grid')
+					parent: #'Grid (Beta)';
+					order: 1;
+					help: '?';
+					iconName: #delete;
+					action: [
+							self current currentProfile ifNotNil: [
+										self current currentProfile cellSize: nil.
+										self current currentProfile reset ] ] ]
 ]
 
 { #category : 'adding' }
@@ -244,24 +260,25 @@ CavroisWindowManager class >> profileMenu: aBuilder [
 		help:
 			'Profiles lets you define places where your windows will automatically be placed.';
 		with: [
-			(aBuilder group: #UserProfiles)
-				order: 1;
-				help: 'Group the user profiles.';
-				withSeparatorAfter.
-			(aBuilder group: #ProfileAction)
-				order: 2;
-				help: 'Group the actions for the user profiles.';
-				withSeparatorAfter.
-			(aBuilder group: #ImportExport)
-				order: 3;
-				help: 'Actions of import/export of profiles.';
-				withSeparatorAfter.
-			(aBuilder group: #ProfileTutorial)
-				order: 4;
-				help: 'Tutorial about profiles'.
-					(aBuilder group: #Grid)
-				order: 5;
-				help: 'Grid prototype'  ]
+				(aBuilder group: #UserProfiles)
+					order: 1;
+					help: 'Group the user profiles.';
+					withSeparatorAfter.
+				(aBuilder group: #ProfileAction)
+					order: 2;
+					help: 'Group the actions for the user profiles.';
+					withSeparatorAfter.
+				(aBuilder group: #ImportExport)
+					order: 3;
+					help: 'Actions of import/export of profiles.';
+					withSeparatorAfter.
+				(aBuilder group: #ProfileTutorial)
+					order: 4;
+					help: 'Tutorial about profiles';
+					withSeparatorAfter.
+				(aBuilder group: #Grid)
+					order: 5;
+					help: 'Grid prototype' ]
 ]
 
 { #category : 'menu items' }
@@ -513,13 +530,14 @@ CavroisWindowManager >> createPlaceHolderGrid: aSize [
 	aSize ifNil: [ ^ self ].
 	existingWindows := self allCurrentWindows.
 	world := self currentWorld bounds.
-	cellSize := world width // aSize @ (world height - 45// aSize).
+	cellSize := world width // aSize @ (world height - 45 // aSize).
 	0 to: aSize - 1 do: [ :row |
 			0 to: aSize - 1 do: [ :col |
 					| origin randomWindow placeHolder |
 					origin := col * cellSize x @ (row * cellSize + 18) y.
 					randomWindow := existingWindows atRandom.
 					placeHolder := self placeHolderFromWindow: randomWindow.
+					placeHolder strategy: CavNullStrategy new.
 					placeHolder position: origin.
 					placeHolder extent: cellSize.
 
