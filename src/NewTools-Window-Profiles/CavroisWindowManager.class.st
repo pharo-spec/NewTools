@@ -56,14 +56,24 @@ CavroisWindowManager class >> addGridItem: aBuilder [
 					iconName: #table;
 					action: [
 						self current currentProfile ifNotNil: [ self chooseGridSize ] ].
-				(aBuilder item: #'Remove Grid')
+				(aBuilder item: #'Grid Mode')
 					parent: #'Grid (Beta)';
 					order: 1;
 					help: '?';
-					iconName: #delete;
+					iconName: #group;
 					action: [
-						self removeGrid.
-						] ]
+							self current currentProfile ifNotNil: [
+										self current currentProfile
+											reset;
+											cellSize: 10.
+										self current createPlaceHolderGrid: 10.
+										MenubarMorph reset ] ].
+				(aBuilder item: #'Remove Grid')
+					parent: #'Grid (Beta)';
+					order: 2;
+					help: '?';
+					iconName: #delete;
+					action: [ self removeGrid ] ]
 ]
 
 { #category : 'adding' }
@@ -354,7 +364,7 @@ CavroisWindowManager class >> renameProfileItem: aBuilder [
 		iconName: #edit
 ]
 
-{ #category : 'accessing' }
+{ #category : 'class initialization' }
 CavroisWindowManager class >> reset [
 
 	<script>
