@@ -62,9 +62,8 @@ CavroisWindowManager class >> addGridItem: aBuilder [
 					help: '?';
 					iconName: #delete;
 					action: [
-							self current currentProfile ifNotNil: [
-										self current currentProfile cellSize: nil.
-										self current currentProfile reset ] ] ]
+						self removeGrid.
+						] ]
 ]
 
 { #category : 'adding' }
@@ -296,6 +295,14 @@ CavroisWindowManager class >> profileMenuItems: aBuilder [
 		addProfileImportExportItems: aBuilder;
 		addProfileHelpItem: aBuilder;
 		addGridItem:aBuilder 
+]
+
+{ #category : 'removing' }
+CavroisWindowManager class >> removeGrid [
+
+	self current currentProfile ifNotNil: [
+			self current currentProfile cellSize: nil.
+			self current currentProfile reset ]
 ]
 
 { #category : 'removing' }
