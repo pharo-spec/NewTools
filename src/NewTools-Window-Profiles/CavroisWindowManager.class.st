@@ -585,8 +585,8 @@ CavroisWindowManager >> defaultLocation: aLocation [
 	defaultLocation := aLocation
 ]
 
-{ #category : 'dropping' }
-CavroisWindowManager >> handleWindowDrop: aWindow at: aPoint [
+{ #category : 'as yet unclassified' }
+CavroisWindowManager >> handleWindowDrop2: aWindow at: aPoint [
 
 	| closestPlaceHolder closestDistance |
 	((aWindow isKindOf: SystemWindow) or: (aWindow isKindOf: SpWindow))
@@ -602,6 +602,44 @@ CavroisWindowManager >> handleWindowDrop: aWindow at: aPoint [
 							closestDistance := distance ] ].
 			closestPlaceHolder ifNotNil: [
 				closestPlaceHolder placePresenter: aWindow ] ]
+]
+
+{ #category : 'dropping' }
+CavroisWindowManager >> handleWindowDrop: aWindow at: aPoint [
+
+	| closestPlaceHolderTL closestPlaceHolderBR closestDistanceTL closestDistanceBR |
+	((aWindow isKindOf: SystemWindow) or: (aWindow isKindOf: SpWindow))
+		ifFalse: [ ^ self ].
+
+	self currentProfile ifNotNil: [
+			closestPlaceHolderTL := nil.
+			closestPlaceHolderBR := nil.
+			closestDistanceTL := Float infinity.
+			closestDistanceBR := Float infinity.
+
+			self currentProfile placeHolders do: [ :placeHolder |
+					| distance |
+					distance := placeHolder position distanceTo:
+						            aWindow bounds origin.
+
+					distance < closestDistanceTL ifTrue: [
+							closestPlaceHolderTL := placeHolder.
+							closestDistanceTL := distance ] ].
+			self currentProfile placeHolders do: [ :placeHolder |
+					| distance |
+					distance := placeHolder position distanceTo:
+						            aWindow bounds corner.
+					distance < closestDistanceBR ifTrue: [
+							closestPlaceHolderBR := placeHolder.
+							closestDistanceBR := distance ] ].
+
+			(closestPlaceHolderTL notNil and: [ closestPlaceHolderBR notNil ])
+				ifTrue: [
+						(closestDistanceTL > 10 or: closestDistanceBR > 10) ifTrue: [
+								aWindow position: closestPlaceHolderTL position.
+								aWindow extent:
+									closestPlaceHolderBR position + closestPlaceHolderBR extent
+									- closestPlaceHolderTL position ] ] ]
 ]
 
 { #category : 'initialization' }
