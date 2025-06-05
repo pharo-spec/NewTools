@@ -87,10 +87,70 @@ StFinderClassResult >> getCompiledMethodFrom: aStFinderSelectorResult [
 	^ self content >> aStFinderSelectorResult content
 ]
 
-{ #category : 'copying' }
+{ #category : 'testing' }
+StFinderClassResult >> hasBrowseAction [ 
+	^true
+]
+
+{ #category : 'testing' }
+StFinderClassResult >> hasHierarchyAction [
+
+	^ true
+]
+
+{ #category : 'testing' }
+StFinderClassResult >> hasImplementersAction [
+
+	^ self hasSelectorParent
+]
+
+{ #category : 'testing' }
+StFinderClassResult >> hasInheritanceAction [
+
+	^ true
+]
+
+{ #category : 'testing' }
 StFinderClassResult >> hasSelectorParent [
 
 	^ self parent isNotNil and: [ self parent isSelectorResult ]
+]
+
+{ #category : 'testing' }
+StFinderClassResult >> hasSendersAction [
+
+	^ self hasSelectorParent
+]
+
+{ #category : 'testing' }
+StFinderClassResult >> hasVersionsAction [
+
+	^self hasSelectorParent
+	
+]
+
+{ #category : 'action' }
+StFinderClassResult >> hierarchyAction [
+
+	self navigation
+		browseHierarchy: self content
+		selector:  self selectorToBrowse
+]
+
+{ #category : 'action' }
+StFinderClassResult >> implementersAction [
+
+	self navigation browseAllImplementorsOf: self selectorToBrowse
+]
+
+{ #category : 'action' }
+StFinderClassResult >> inheritanceAction [
+
+	self hasInheritanceAction ifFalse: [ ^ self ].
+
+	self navigation
+		methodHierarchyBrowserForClass: self  content
+		selector: self selectorToBrowse 
 ]
 
 { #category : 'testing' }
@@ -113,4 +173,29 @@ StFinderClassResult >> selectItemIn: aSpTreePresenter [
 	aSpTreePresenter 
 		selectPath: pathIndexCollection scrollToSelection: true;
 		clickAtPath: pathIndexCollection
+]
+
+{ #category : 'testing' }
+StFinderClassResult >> selectorToBrowse [
+
+	self hasSelectorParent
+		ifTrue: [ ^ self parent content ]
+		ifFalse: [ ^ nil ]
+]
+
+{ #category : 'action' }
+StFinderClassResult >> sendersAction [
+
+	self navigation
+		browseSendersOf: self selectorToBrowse
+		name: 'Senders of ' , self selectorToBrowse asString
+		autoSelect: self selectorToBrowse asString
+]
+
+{ #category : 'action' }
+StFinderClassResult >> versionsAction [
+
+	self versionBrowser
+		browseVersionsForClass: self  content
+		selector: self selectorToBrowse 
 ]

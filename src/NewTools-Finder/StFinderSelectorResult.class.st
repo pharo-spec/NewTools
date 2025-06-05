@@ -21,8 +21,16 @@ StFinderSelectorResult >> browseAction [
 	self hasBrowseAction ifFalse: [ ^ self ].
 
 	self browser
-		openOnClass: self parent content
+		openOnClass: self contentClass
 		selector: self content
+]
+
+{ #category : 'rendering' }
+StFinderSelectorResult >> contentClass [
+
+	self hasClassParent ifTrue:[^parent  content ].
+	self hasClassChild ifTrue:[^ children first content].
+	^nil
 ]
 
 { #category : 'copying' }
@@ -61,7 +69,13 @@ StFinderSelectorResult >> getCompiledMethod [
 { #category : 'testing' }
 StFinderSelectorResult >> hasBrowseAction [
 
-	^ self hasClassParent
+	^ self hasClassChild or:[self hasClassParent ]
+]
+
+{ #category : 'testing' }
+StFinderSelectorResult >> hasClassChild [
+
+	^ children isCollection and: [ children first isClass ]
 ]
 
 { #category : 'testing' }
@@ -73,7 +87,7 @@ StFinderSelectorResult >> hasClassParent [
 { #category : 'testing' }
 StFinderSelectorResult >> hasHierarchyAction [
 
-	^ self hasClassParent
+		^ self hasClassChild or:[self hasClassParent ]
 ]
 
 { #category : 'testing' }
@@ -85,7 +99,7 @@ StFinderSelectorResult >> hasImplementersAction [
 { #category : 'testing' }
 StFinderSelectorResult >> hasInheritanceAction [
 
-	^ self hasClassParent
+		^ self hasClassChild or:[self hasClassParent ]
 ]
 
 { #category : 'testing' }
@@ -97,7 +111,7 @@ StFinderSelectorResult >> hasSendersAction [
 { #category : 'testing' }
 StFinderSelectorResult >> hasVersionsAction [
 
-	^ self parent isNotNil and: [ self parent isClassResult ]
+	^ self hasClassChild or: [ self hasClassParent ]
 ]
 
 { #category : 'action' }
