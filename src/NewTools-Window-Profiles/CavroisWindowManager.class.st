@@ -585,7 +585,7 @@ CavroisWindowManager >> defaultLocation: aLocation [
 	defaultLocation := aLocation
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'handling' }
 CavroisWindowManager >> handleWindowDrop2: aWindow at: aPoint [
 
 	| closestPlaceHolder closestDistance |
