@@ -55,14 +55,16 @@ CavAbstractWindowPlaceHolder >> display [
 
 	visualPlaceHolder := CavVisualPlaceHolderMorph new
 		                     extent: extent;
-		                     position: position.
-	CavroisWindowManager current currentProfile cellSize ifNil: [
-			visualPlaceHolder addMorph: (TextMorph new
-					 contents: kind printString;
-					 position: position x
-						 +
-							 (extent x - (TextMorph new contents: kind printString) width
-							  / 2) @ position y + 3) ].
+		                     position: position;
+		                     addMorph: (TextMorph new
+				                      contents: kind printString;
+				                      position: position x
+					                      +
+						                      (extent x
+						                       -
+							                       (TextMorph new contents:
+									                        kind printString) width / 2)
+					                      @ position y + 3).
 	visualPlaceHolder placeHolder: self.
 	visualPlaceHolder openInWorld
 ]
@@ -106,6 +108,23 @@ CavAbstractWindowPlaceHolder >> kind [
 CavAbstractWindowPlaceHolder >> kind: anObject [
 
 	kind := anObject
+]
+
+{ #category : 'api' }
+CavAbstractWindowPlaceHolder >> lightDisplay [
+
+	visualPlaceHolder := CavVisualPlaceHolderMorph new
+		                     extent: extent;
+		                     position: position.
+	CavroisWindowManager current currentProfile cellSize ifNil: [
+			visualPlaceHolder addMorph: (TextMorph new
+					 contents: kind printString;
+					 position: position x
+						 +
+							 (extent x - (TextMorph new contents: kind printString) width
+							  / 2) @ position y + 3) ].
+	visualPlaceHolder placeHolder: self.
+	visualPlaceHolder openInWorld
 ]
 
 { #category : 'accessing' }
