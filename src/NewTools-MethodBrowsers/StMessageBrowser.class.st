@@ -390,8 +390,8 @@ StMessageBrowser >> messages [
 ]
 
 { #category : 'api' }
-StMessageBrowser >> messages: arg1 [
-	messages := arg1.
+StMessageBrowser >> messages: aCollection [
+	messages := aCollection.
 	self updatePresenter.
 	self toolbarPresenter updatePresenter
 ]
