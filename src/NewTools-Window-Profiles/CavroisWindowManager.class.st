@@ -351,6 +351,8 @@ CavroisWindowManager class >> startUp: isImageStarting [
 CavroisWindowManager class >> switchToProfile: profileKey [
 
 	| oldProfile newProfile oldKey newKey baseName presenter |
+	self current currentProfile = (self current profiles at: profileKey)
+		ifTrue: [ ^ self ].
 	presenter := SpConfirmDialog new
 		             title: 'Switch Profile';
 		             label: profileKey , 'will become the current profile';
@@ -359,8 +361,6 @@ CavroisWindowManager class >> switchToProfile: profileKey [
 		             onAccept: [ :dialog |
 				             oldProfile := self current currentProfile.
 				             newProfile := self current profiles at: profileKey.
-
-				             oldProfile = newProfile ifTrue: [ ^ self ].
 				             oldKey := self current profiles keyAtValue:
 						                       oldProfile.
 				             baseName := oldKey
