@@ -84,9 +84,11 @@ StPulseTest >> testSmoke [
 
 	| window |
 	[ self shouldnt: [ 
-		SpWindowForceOpenNonModal during: [  window := StPulse open ] ] raise: Error ] ensure: [ window close ].
+		SpWindowForceOpenNonModal during: [  window := StPulse open ] ] 
+		raise: Error ] ensure: [ window close ].
 
-	[ self shouldnt: [ SpWindowForceOpenNonModal during: [ window := StPulse openWithTextOnEnvironment: '1' ] ] 
+	[ self shouldnt: [ 
+		SpWindowForceOpenNonModal during: [ window := StPulse openWithTextOnEnvironment: '1' ] ] 
 		raise: Error ] ensure: [ window close ].
 
 	[ self shouldnt: [ 
@@ -96,4 +98,3 @@ StPulseTest >> testSmoke [
 	[ self shouldnt: [ 
 		SpWindowForceOpenNonModal during: [ window := StPulse openWithTextOnCommands: '3' ] ] 
 		raise: Error ] ensure: [ window close ]
-]

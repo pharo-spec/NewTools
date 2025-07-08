@@ -14,7 +14,7 @@ StRewriterAbstractApplier class >> applyTransformationChanges: changes [
 
 	| refactoringJob |
 	refactoringJob := [
-		changes do: [ :change | RBRefactoryChangeManager instance performChange: change ] ] asJob.
+		changes do: [ :change | ReChangeManager instance performChange: change ] ] asJob.
 	refactoringJob
 		title: 'Refactoring';
 		run

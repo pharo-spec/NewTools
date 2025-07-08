@@ -40,7 +40,6 @@ CavroisWindowManagerTest >> tearDown [
 { #category : 'tests' }
 CavroisWindowManagerTest >> testAddProfileFromWindows [
 
-	| profile |
 	profile := manager addProfileFromWindows: 'Profile'.
 
 	self assert: (manager profiles includesKey: 'Profile').
@@ -130,7 +129,7 @@ CavroisWindowManagerTest >> testRemovingLastProfileUpdateCurrentProfile [
 { #category : 'tests' }
 CavroisWindowManagerTest >> testSaveProfile [
 
-	| profile fileRef |
+	| fileRef |
 	profile := manager addProfileFromWindows: 'Test'.
 	fileRef := virtualFS / 'Profile:Test.ston'.
 

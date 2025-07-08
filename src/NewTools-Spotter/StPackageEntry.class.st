@@ -9,6 +9,12 @@ Class {
 	#tag : 'Entries'
 }
 
+{ #category : 'spotter-extensions' }
+StPackageEntry class >> prepareUnifiedHeaderDescriptionFor: aHeaderPresenter [
+
+	^ aHeaderPresenter prepareAsPackages
+]
+
 { #category : 'converting' }
 StPackageEntry >> asHistoryEntry [
 
@@ -37,4 +43,10 @@ StPackageEntry >> doEvaluate [
 StPackageEntry >> iconName [
 
 	^ #package
+]
+
+{ #category : 'spotter-extensions' }
+StPackageEntry >> prepareUnifiedHeaderDescriptionFor: aHeaderPresenter [
+
+	^ aHeaderPresenter prepareAsPackages
 ]

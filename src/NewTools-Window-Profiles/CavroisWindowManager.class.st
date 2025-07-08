@@ -538,6 +538,24 @@ CavroisWindowManager class >> updateProfileItem: aBuilder [
 		iconName: #save
 ]
 
+{ #category : 'adding' }
+CavroisWindowManager >> addExtraWindowPlaceholders: placeholders [
+
+	placeholders do: [ :ph |
+			| validWindows |
+			validWindows := ph windows select: [ :window | window owner notNil ].
+			validWindows allButFirst do: [ :window |
+				self currentProfile add: (self placeHolderFromWindow: window) ] ]
+]
+
+{ #category : 'adding' }
+CavroisWindowManager >> addNewWindowPlaceholders: windowsInPlaceholders [
+
+	(self allCurrentWindows reject: [ :window |
+		 windowsInPlaceholders includes: window ]) do: [ :each |
+		self currentProfile add: (self placeHolderFromWindow: each) ]
+]
+
 { #category : 'recording' }
 CavroisWindowManager >> addProfileFromWindows: aProfileName [
 	"self new profileFromWindows"
@@ -881,6 +899,18 @@ CavroisWindowManager >> transitionToProfile [
 ]
 
 { #category : 'update' }
+CavroisWindowManager >> updatePlaceholderBounds: placeholders [
+
+	placeholders do: [ :ph |
+			ph windows
+				detect: [ :window | window owner notNil ]
+				ifFound: [ :firstValidWindow |
+						ph
+							extent: firstValidWindow extent;
+							position: firstValidWindow position ] ]
+]
+
+{ #category : 'update' }
 CavroisWindowManager >> updatePreviousCurrentProfile [
 
 	| oldProfile oldKey newKey |
@@ -896,14 +926,24 @@ CavroisWindowManager >> updatePreviousCurrentProfile [
 { #category : 'updating' }
 CavroisWindowManager >> updateProfile [
 
-	| windowsInPlaceholders |
-	windowsInPlaceholders := OrderedCollection new.
-	self currentProfile placeHolders do: [ :ph |
-			windowsInPlaceholders addAll: ph windows.
-			ph windows do: [ :window |
-					ph extent: window extent.
-					ph position: window position ] ].
-	(self allCurrentWindows reject: [ :w |
-		 windowsInPlaceholders includes: w ]) do: [ :w |
-		self currentProfile add: (self placeHolderFromWindow: w) ]
+	self updatePlaceholderBounds: self validPlaceholders.
+	self currentProfile reset.
+	self validPlaceholders do: [ :ph | self currentProfile add: ph ].
+	self addNewWindowPlaceholders:
+		(self windowsFromPlaceholders: self validPlaceholders).
+	self addExtraWindowPlaceholders: self validPlaceholders
+]
+
+{ #category : 'accessing' }
+CavroisWindowManager >> validPlaceholders [
+	^ self currentProfile placeHolders select: [ :ph |
+		ph windows anySatisfy: [ :window | window owner notNil ] ]
+
+]
+
+{ #category : 'filtering' }
+CavroisWindowManager >> windowsFromPlaceholders: placeholders [
+
+	^ placeholders flatCollect: [ :ph |
+		  ph windows select: [ :window | window owner notNil ] ]
 ]
