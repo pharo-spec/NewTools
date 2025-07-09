@@ -9,12 +9,6 @@ Class {
 	#tag : 'Entries'
 }
 
-{ #category : 'spotter-extensions' }
-StClassEntry class >> prepareUnifiedHeaderDescriptionFor: aHeaderPresenter [
-
-	^ aHeaderPresenter prepareAsClasses
-]
-
 { #category : 'accessing' }
 StClassEntry >> accept: aSpotter [
 
@@ -43,12 +37,6 @@ StClassEntry >> categoryLabel [
 StClassEntry >> doEvaluate [
 
 	content browse
-]
-
-{ #category : 'spotter-extensions' }
-StClassEntry >> headerCategoryForUnifiedProcessor: aLink on: aSpotterPresenter [
-
-	^ aSpotterPresenter headerCategoryUnifiedFor: aLink
 ]
 
 { #category : 'accessing' }

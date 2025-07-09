@@ -29,11 +29,6 @@ StEntry class >> on: aValue [
 		yourself
 ]
 
-{ #category : 'spotter-extensions' }
-StEntry class >> prepareUnifiedHeaderDescriptionFor: aHeaderPresenter [
-	"do nothing"
-]
-
 { #category : 'comparing' }
 StEntry >> = anEntry [
 
@@ -99,12 +94,6 @@ StEntry >> evaluateFor: aSpotter [
 StEntry >> hash [
 
 	^ self content hash
-]
-
-{ #category : 'spotter-extensions' }
-StEntry >> headerCategoryForUnifiedProcessor: aLink on: aSpotterPresenter [
-
-	^ aSpotterPresenter headerCategoryFor: aLink
 ]
 
 { #category : 'accessing' }

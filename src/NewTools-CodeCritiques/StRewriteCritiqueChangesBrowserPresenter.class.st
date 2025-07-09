@@ -72,7 +72,7 @@ StRewriteCritiqueChangesBrowserPresenter >> accept [
 	self okToChange
 		ifFalse: [ ^ self ].
 	self selectedChanges isEmptyOrNil ifTrue: [ ^self ].
-	[ ReChangeManager instance performChanges: self selectedChanges ] asJob
+	[ RBRefactoryChangeManager instance performChanges: self selectedChanges ] asJob
 		title: 'Refactoring';
 		run.
 	self window delete
@@ -277,7 +277,7 @@ StRewriteCritiqueChangesBrowserPresenter >> selectedChanges: anObject [
 StRewriteCritiqueChangesBrowserPresenter >> updateChanges [
 
 	| aCompositeChange |
-	aCompositeChange := ReChangeManager changeFactory compositeRefactoryChange.
+	aCompositeChange := RBRefactoryChangeManager changeFactory compositeRefactoryChange.
 	changes do: [ :each | aCompositeChange addChange: each ].
 
 	"Later we could filter the shown changes depending on the selected scope"
