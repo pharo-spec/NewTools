@@ -10,6 +10,12 @@ Class {
 	#tag : 'UI'
 }
 
+{ #category : 'hooks' }
+StOpenFileOrDirectoryPresenter >> allowsChooseDirectoryIfNoFilename [
+
+	^ true
+]
+
 { #category : 'api' }
 StOpenFileOrDirectoryPresenter >> beMultipleSelection [
 	"Allow the user to select multiple files or directories in open dialogs"
