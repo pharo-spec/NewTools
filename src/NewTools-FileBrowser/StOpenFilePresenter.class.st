@@ -109,6 +109,12 @@ StOpenFilePresenter class >> examplePreviewer [
 		open
 ]
 
+{ #category : 'hooks' }
+StOpenFilePresenter >> allowsChooseDirectoryIfNoFilename [
+
+	^ false
+]
+
 { #category : 'testing' }
 StOpenFilePresenter >> isMultipleSelection [
 	"Answer <true> if the receiver was set to enable multiple selections"
