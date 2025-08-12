@@ -33,7 +33,9 @@ StFileSystemModel class >> addBookmarkNamed: aString location: aLocation iconNam
 { #category : 'accessing - bookmarks' }
 StFileSystemModel class >> bookmarks [
 
-	^ Bookmarks
+	^ Bookmarks ifNil: [
+			  self initializeBookmarks.
+			  Bookmarks ]
 ]
 
 { #category : 'defaults' }
@@ -77,9 +79,7 @@ StFileSystemModel >> addBookmark: aFileReference [
 StFileSystemModel >> bookmarks [
 	"Answer the receiver's <Collection> of bookmarks, each one an instance of a subclass of <StFileBrowserAbstractBookMark>"
 
-	Bookmarks 
-		ifNil: [ self class initializeBookmarks ].
-	^ Bookmarks
+	^ self class bookmarks
 ]
 
 { #category : 'accessing' }
