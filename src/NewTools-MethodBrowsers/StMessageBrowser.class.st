@@ -625,6 +625,7 @@ StMessageBrowser >> windowIsClosing [
 
 { #category : 'private' }
 StMessageBrowser >> windowTitle [
-
-	^ (title ifNil: [ 'Message Browser' ]), ' [' , messageList numberOfElements printString , ']'
+	| msg |
+	msg := messageList ifNil: [ '' ] ifNotNil: [ ' [' , messageList numberOfElements printString , ']' ].
+	^ (title ifNil: [ 'Message Browser' ]), msg 
 ]
