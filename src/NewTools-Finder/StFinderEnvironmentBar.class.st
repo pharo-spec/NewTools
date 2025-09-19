@@ -88,5 +88,7 @@ StFinderEnvironmentBar >> searchInPackages: aCollection [
 { #category : 'updating - widgets' }
 StFinderEnvironmentBar >> updateStatus [
 
-	statusLabel label: self model selectedPackages size asString , ' Packages selected'
+	statusLabel label: self model selectedPackages size asString , ' Package' , (self model selectedPackages size = 1
+			 ifTrue: [ '' ]
+			 ifFalse: [ 's' ]) , ' selected' 
 ]
