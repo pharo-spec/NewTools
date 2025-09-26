@@ -102,8 +102,6 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-ProjectLoader' with: [ spec requires: #( 'NewTools-Core') ] ;
 			package: 'NewTools-ProjectLoader-Microdown';
 	
-			"Object-centric breakpoints"
-			package: 'NewTools-ObjectCentricBreakpoints'  with: [ spec requires: #( 'NewTools-Inspector') ] ;
 	
 			"Sindarin"
 			package: 'NewTools-Sindarin-Commands';
@@ -194,7 +192,6 @@ BaselineOfNewTools >> baseline: spec [
 					 	'NewTools-Debugger'
 
 						'NewTools-Debugger-Morphic'
-				    	'NewTools-ObjectCentricBreakpoints'
 				    	'NewTools-Sindarin-Tools' 
 
 					 	'NewTools-Sindarin-Commands'
@@ -314,7 +311,7 @@ BaselineOfNewTools >> graphAlgorithms: spec [
 	spec
 		baseline: 'AIGraphAlgorithms'
 		with: [
-		spec repository: 'github://pharo-ai/graph-algorithms:v1.2.7/src' ]
+		spec repository: 'github://pharo-ai/graph-algorithms:v1.2.10/src' ]
 ]
 
 { #category : 'actions' }

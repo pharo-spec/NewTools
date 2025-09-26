@@ -89,11 +89,11 @@ StPlaygroundPage >> contents [
 { #category : 'accessing' }
 StPlaygroundPage >> contents: aString [
 
-	aString asString trimmed ifEmpty: [ ^ self ].
+	aString asString trimBoth ifEmpty: [ ^ self ].
 	mutex critical: [
-		self basicContents: aString.
-		contentReceived := true.
-		self spawnFlushProcess ]
+			self basicContents: aString.
+			contentReceived := true.
+			self spawnFlushProcess ]
 ]
 
 { #category : 'accessing' }

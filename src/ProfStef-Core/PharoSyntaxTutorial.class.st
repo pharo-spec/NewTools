@@ -623,7 +623,7 @@ title: 'Message syntax: Cascade'
 lesson:
 '"; is the cascade operator. It''s useful to send message to the SAME receiver.
 
-Open a Transcript und (console):"
+Open a Transcript (console):"
 
 Transcript open.
 Transcript clear.
