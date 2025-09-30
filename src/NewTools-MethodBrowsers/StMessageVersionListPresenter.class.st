@@ -65,5 +65,6 @@ StMessageVersionListPresenter >> messageListActions [
 
 { #category : 'private' }
 StMessageVersionListPresenter >> timeStampOf: anItem [
-	^ anItem timeStamp
+	"If the item does not have an stamp, let's mark it as unknown."
+	^ anItem stamp ifNil: [ 'Unknown' ]
 ]
