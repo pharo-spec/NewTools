@@ -34,10 +34,17 @@ StPharoSettings class >> defaultToolbarDisplayMode [
 { #category : 'world menu' }
 StPharoSettings class >> openPharoAbout [
 
+	| about |
+	about := String cr , 'Pharo ' , SystemVersion current dottedMajorMinorPatch , String cr,
+		('Build information: ', (SystemVersion current version asString)), String cr,
+		SystemVersion current date asString , String cr, String cr,
+		Smalltalk licenseString.
+
+
 	SpInformDialog new
 		title: 'About Pharo';
 		icon: (self iconNamed: #pharo);
-		label: Smalltalk systemInformationString withCRs;
+		label: about;
 		acceptLabel: 'Close';
 		openDialog
 ]

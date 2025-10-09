@@ -54,13 +54,11 @@ FLDebuggerStackSerializer >> fileNameForContext: aContext [
 
 { #category : 'private' }
 FLDebuggerStackSerializer >> imageInformationString [
+
 	^ String streamContents: [ :stringStream |
-		stringStream	
-			nextPutAll: 'Image: ';
-			nextPutAll:  SystemVersion current version asString;
-			nextPutAll: ' [';
-			nextPutAll: Smalltalk lastUpdateString asString;
-			nextPutAll: ']' ]
+			  stringStream
+				  nextPutAll: 'Image: ';
+				  nextPutAll: SystemVersion current asString ]
 ]
 
 { #category : 'serializing' }

@@ -93,7 +93,7 @@ StSystemReporterPresenter >> reportImage: aStream [
 	aStream 
 		nextPutAll: Smalltalk image imagePath; cr;
 		nextPutAll: SystemVersion current version; cr;
-		nextPutAll: Smalltalk image lastUpdateString; cr
+		nextPutAll: SystemVersion current version asString; cr
 ]
 
 { #category : 'building report' }
