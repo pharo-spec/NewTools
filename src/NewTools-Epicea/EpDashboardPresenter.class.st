@@ -154,7 +154,7 @@ EpDashboardPresenter >> openSettingsBrowser [
 	| settingsBrowser settingsWindow |
 	settingsBrowser := SettingBrowser new
 		                   changePackageSet:
-			                   {self packageOrganizer packageNamed: 'EpiceaBrowsers'};
+			                   {self packageOrganizer packageNamed: 'NewTools-Epicea'};
 		                   yourself.
 	settingsWindow := settingsBrowser open.
 	settingsBrowser expandAll
