@@ -12,6 +12,12 @@ Class {
 	#tag : 'UI'
 }
 
+{ #category : 'instance creation' }
+StFileBrowserAbstractPresenter class >> defaultModel [
+
+	^ StFileSystemModel new
+]
+
 { #category : 'world menu' }
 StFileBrowserAbstractPresenter class >> menuFileSystemBrowserCommandOn: aBuilder [
 
@@ -23,12 +29,6 @@ StFileBrowserAbstractPresenter class >> menuFileSystemBrowserCommandOn: aBuilder
 		order: 1;
 		help: 'Open the File Browser.';
 		iconName: #smallOpen
-]
-
-{ #category : 'instance creation' }
-StFileBrowserAbstractPresenter class >> new [
-
-	^ self on: StFileSystemModel new
 ]
 
 { #category : 'instance creation' }
@@ -111,6 +111,13 @@ StFileBrowserAbstractPresenter >> history [
 StFileBrowserAbstractPresenter >> history: aConfigurableHistoryIterator [ 
 
 	self model history: aConfigurableHistoryIterator.
+]
+
+{ #category : 'initialization' }
+StFileBrowserAbstractPresenter >> initialize [
+
+	model ifNil: [ self setModelBeforeInitialization: self class defaultModel ].
+	super initialize
 ]
 
 { #category : 'accessing - history' }

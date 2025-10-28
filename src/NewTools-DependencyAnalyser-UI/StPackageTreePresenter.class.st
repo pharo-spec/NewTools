@@ -35,6 +35,12 @@ StPackageTreePresenter >> arePackageNodes: aCollectionOfItem [
 	^ aCollectionOfItem allSatisfy: [ :node |  node isPackageNode ]
 ]
 
+{ #category : 'testing' }
+StPackageTreePresenter >> areSubclassToPackageDependencyNodes: aCollectionOfItem [
+
+	^ aCollectionOfItem allSatisfy: [ :node | node content class inheritsFrom: StPackageDependency ]
+]
+
 { #category : 'initialization' }
 StPackageTreePresenter >> browseReference [
 	self selectedItemFromTree isReferenceNode ifTrue: [

@@ -134,7 +134,7 @@ SindarinCommandsTest >> testStepToNextCallInClassFailure [
 { #category : 'tests - step to next call' }
 SindarinCommandsTest >> testStepToNextCallInClassNeverFinishes [
 
-	| command dummyActionModel |
+	| command dummyActionModel found |
 	debugger := SindarinTestCommandDebugger new.
 	dummyActionModel := (StTestDebuggerProvider new debuggerWithContext:
 			 [ visitor visitNeverFinish: object ] asContext) debuggerActionModel.
@@ -148,12 +148,14 @@ SindarinCommandsTest >> testStepToNextCallInClassNeverFinishes [
 		assert: debugger session context method
 		identicalTo: visitor class >> #visitNeverFinish:.
 	command execute.
-	
-	"We're stuck in a loop so the debugger interrupted..."
-	self
-		assert: debugger session context method selector
-		equals: #timesRepeat:.
-	self assert: debugger session context receiver equals: 10000
+
+	"We're stuck in a loop so the debugger interrupted in the middle of it...
+	The execution may be in the loop body or in any call from it.
+	Find the loop method from the current context and verify"
+	found := debugger session context
+		findContextSuchThat: [ :c | c method selector = #timesRepeat: ].
+	self assert: found notNil.
+	self assert: found receiver equals: 10000
 ]
 
 { #category : 'tests - step to next call' }

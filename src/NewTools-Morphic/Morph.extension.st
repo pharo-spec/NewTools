@@ -1,6 +1,25 @@
 Extension { #name : 'Morph' }
 
 { #category : '*NewTools-Morphic' }
+Morph >> application [
+
+	^ self 
+		valueOfProperty: #application 
+		ifAbsent: [ 
+			self owner 
+				ifNotNil: [ self owner application ]
+				ifNil: [ StPharoApplication current ] ]
+]
+
+{ #category : '*NewTools-Morphic' }
+Morph >> application: anApplication [
+
+	^ self 
+		setProperty: #application 
+		toValue: anApplication
+]
+
+{ #category : '*NewTools-Morphic' }
 Morph >> inspectionLayout: aBuilder [
 	<inspectorPresentationOrder: 800 title: 'Layout'>
 	

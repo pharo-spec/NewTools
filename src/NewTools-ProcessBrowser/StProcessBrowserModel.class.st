@@ -22,7 +22,7 @@ StProcessBrowserModel class >> defaultStackDepth [
 { #category : 'private - accessing' }
 StProcessBrowserModel >> allNonTerminatedProcesses [
 
-	^ Process allProcesses reject: [ :each | each isTerminated ]
+	^ Process allProcesses reject: [ :each | each isTerminated or: [ each isTerminating ] ]
 ]
 
 { #category : 'initialization' }

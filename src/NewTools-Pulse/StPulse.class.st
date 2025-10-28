@@ -478,9 +478,11 @@ StPulse >> connectPresenters [
 		addShortcutWith: [ :action | action 
 			shortcutKey: KeyboardKey down asKeyCombination actionModifier;
 			action: [ self findAllButtonAction ] ].
+	
 	listPresenter 
 		whenActivatedDo: [ self acceptSelection ];
 		whenSelectionChangedDo:[ self calculateListCounterPresenter ].
+	
 	self addKeyboardBehavior: listPresenter.
 	
 	paginator whenSelectedPageChangedDo: [ :newValue |
@@ -675,10 +677,9 @@ StPulse >> historyEntries [
 { #category : 'initialization' }
 StPulse >> initialize [
 	
-	self setModelBeforeInitialization: 
-		(StPulseModel new
-			whenCandidateAddedDo: [ :aCandidate | self candidateAdded: aCandidate ];
-			yourself).
+	self setModelBeforeInitialization: (StPulseModel new
+		whenCandidateAddedDo: [ :aCandidate | self candidateAdded: aCandidate ];
+		yourself).
 	super initialize.
 	numCandidatesAdded := 0.
 	candidatesAddedList := OrderedCollection new.

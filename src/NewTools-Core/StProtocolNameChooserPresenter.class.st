@@ -30,18 +30,12 @@ Class {
 StProtocolNameChooserPresenter class >> exampleConfiguringPresenter [
 	<example>
 
-	self requestProtocolNameConfiguring: [ :presenter :dialog |
-		presenter
-			concernedClass: self class; "Giving the concerned class can allow some customizations such as knowing if we should suggest instance or class side protocols"
-			protocolName: 'ac'.
-		dialog title: 'Updated title' ]
-]
-
-{ #category : 'instance creation' }
-StProtocolNameChooserPresenter class >> open [
-
-	<script>
-	self new open
+	(self newApplication: StPharoApplication current)
+		requestProtocolNameConfiguring: [ :presenter :dialog |
+			presenter
+				concernedClass: self class; "Giving the concerned class can allow some customizations such as knowing if we should suggest instance or class side protocols"
+				protocolName: 'ac'.
+			dialog title: 'Updated title' ]
 ]
 
 { #category : 'instance creation' }
@@ -56,20 +50,9 @@ StProtocolNameChooserPresenter class >> requestProtocolName [
 StProtocolNameChooserPresenter class >> requestProtocolNameConfiguring: aBlock [
 	"I request a protocol name through a dialog and signal a CmdCommandAborted in case the provided protocol is empty or an extension name.
 	I allow the user to configure the presenter or the dialog via a configuration block."
-
-	| protocolName presenter dialog |
-	dialog := (presenter := self new) asBlockedDialogWindow.
-	aBlock cull: presenter cull: dialog.
-	presenter selectProtocolName.
-	dialog open.
-
-	dialog cancelled ifTrue: [ CmCommandAborted signal ].
-	protocolName := presenter selectedProtocolName ifNil: [ CmCommandAborted signal ].
-	(protocolName beginsWith: '*') ifTrue: [
-			presenter inform: 'Star is forbidden for protocol name since this is used for method extensions.'.
-			^ CmCommandAborted signal ].
-
-	^ protocolName
+	
+	self flag: #TODO. "Remove once integrated changes in Pharo14"
+	^ (self newApplication: StPharoApplication current) requestProtocolNameConfiguring: aBlock
 ]
 
 { #category : 'accessing' }
@@ -215,6 +198,34 @@ StProtocolNameChooserPresenter >> protocolsToSuggest [
 	suggestedProtocols := suggestedProtocols sortedCounts collect: [ :association | association value ].
 	suggestedProtocols := suggestedProtocols select: [ :protocolName | protocolName includesSubstring: self protocolName ].
 	^ suggestedProtocols
+]
+
+{ #category : 'instance creation' }
+StProtocolNameChooserPresenter >> requestProtocolName [
+	"See comment of StProtocolNameChooser class>>#requestProtocolNameConfiguring:"
+
+	^ self requestProtocolNameConfiguring: [ :presenter :dialog |  ]
+]
+
+{ #category : 'instance creation' }
+StProtocolNameChooserPresenter >> requestProtocolNameConfiguring: aBlock [
+	"I request a protocol name through a dialog and signal a CmdCommandAborted in case the provided protocol is empty or an extension name.
+	I allow the user to configure the presenter or the dialog via a configuration block."
+	| protocolName dialog |
+	
+	dialog := self asBlockedDialogWindow.
+	aBlock cull: self cull: dialog.
+	self selectProtocolName.
+	
+	dialog open.
+	dialog isCancelled ifTrue: [ CmCommandAborted signal ].
+	
+	protocolName := self selectedProtocolName ifNil: [ CmCommandAborted signal ].
+	(protocolName beginsWith: '*') ifTrue: [
+		self inform: 'Star is forbidden for protocol name since this is used for method extensions.'.
+		^ CmCommandAborted signal ].
+
+	^ protocolName
 ]
 
 { #category : 'accessing' }

@@ -36,7 +36,7 @@ StPharoSettings class >> openPharoAbout [
 
 	| about |
 	about := String cr , 'Pharo ' , SystemVersion current dottedMajorMinorPatch , String cr,
-		('Build information: ', (SystemVersion current version asString)), String cr,
+		'Build information: ', (SystemVersion current version asString), ' Build - ', SystemVersion current build asString , String cr,
 		SystemVersion current date asString , String cr, String cr,
 		Smalltalk licenseString.
 

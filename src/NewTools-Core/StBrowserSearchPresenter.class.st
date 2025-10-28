@@ -19,54 +19,36 @@ Class {
 
 { #category : 'examples' }
 StBrowserSearchPresenter class >> exampleConfiguringPresenter [
-
 	<example>
-	(self searchConfiguring: [ :presenter :dialog |
-		 dialog title: 'Choose package'.
-		 presenter
-			 items: (self packageOrganizer packages sorted: #name ascending);
-			 searchWithItem: self class package ]) inspect
+	
+	((self newApplication: StPharoApplication current) 
+		searchConfiguring: [ :presenter :dialog |
+			 dialog title: 'Choose package'.
+			 presenter
+				 items: (self packageOrganizer packages sorted: #name ascending);
+				 searchWithItem: self class package ]) 
+		inspect
 ]
 
 { #category : 'examples' }
 StBrowserSearchPresenter class >> exampleConfiguringPresenterForMultipleSelection [
-
 	<example>
-	(self searchConfiguring: [ :presenter :dialog |
-		 dialog title: 'Choose package'.
-		 presenter
-			 items: (self packageOrganizer packages sorted: #name ascending);
-			 searchWithItem: self class package;
-			 multipleSelection ]) inspect
-]
-
-{ #category : 'instance creation' }
-StBrowserSearchPresenter class >> open [
-
-	<script>
-	self new 
-		items: self class environment allClasses;
-		open
+	
+	((self newApplication: StPharoApplication current) 
+		searchConfiguring: [ :presenter :dialog |
+			dialog title: 'Choose package'.
+		 	presenter
+				 items: (self packageOrganizer packages sorted: #name ascending);
+				 searchWithItem: self class package;
+				 multipleSelection ]) 
+			inspect
 ]
 
 { #category : 'instance creation' }
 StBrowserSearchPresenter class >> searchConfiguring: aBlock [
 
-	<script>
-	| presenter dialog |
-	dialog := (presenter := self new) asBlockedDialogWindow.
-
-	aBlock cull: presenter cull: dialog.
-
-	presenter selectSearchPattern.
-
-	dialog open.
-
-	dialog cancelled ifTrue: [ ^ CmCommandAborted signal ].
-
-	^ presenter itemsList isMultipleSelection
-		  ifTrue: [ presenter selectedItems ifEmpty: [ CmCommandAborted signal ] ]
-		  ifFalse: [ presenter selectedItem ifNil: [ CmCommandAborted signal ] ]
+  self flag: #TODO. "Remove once integrated changes in Pharo14"
+	^ (self newApplication: StPharoApplication current) searchConfiguring: aBlock
 ]
 
 { #category : 'initialization' }
@@ -168,6 +150,25 @@ StBrowserSearchPresenter >> search: text [
 		  items do: [ :class |
 			  (self selectBlock value: class name value: text)  
 					ifTrue: [ stream nextPut: class ] ] ]
+]
+
+{ #category : 'instance creation' }
+StBrowserSearchPresenter >> searchConfiguring: aBlock [
+	| dialog |
+	
+	dialog := self asBlockedDialogWindow.
+
+	aBlock cull: self cull: dialog.
+
+	self selectSearchPattern.
+
+	dialog open.
+
+	dialog isCancelled ifTrue: [ ^ CmCommandAborted signal ].
+
+	^ self itemsList isMultipleSelection
+		  ifTrue: [ self selectedItems ifEmpty: [ CmCommandAborted signal ] ]
+		  ifFalse: [ self selectedItem ifNil: [ CmCommandAborted signal ] ]
 ]
 
 { #category : 'updating' }

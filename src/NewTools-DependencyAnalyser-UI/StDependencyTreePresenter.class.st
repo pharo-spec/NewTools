@@ -253,28 +253,35 @@ StDependencyTreePresenter >> initializePresenters [
 	super initializePresenters.
 	packageLabel := self newLabel label: 'Analysis of packages'.
 	textPackageField := self newTextInput
-		placeholder: 'Enter a package name';
-		entryCompletion: self packagesEntryCompletion.
+		                    placeholder: 'Enter a package name';
+		                    entryCompletion: self packagesEntryCompletion.
 	self initializeButtons.
-	
-	tree actionsWith: [ :group | group 
-		addActionWith: [ :action | action 
-			name: 'Browse scoped dependencies';
-			actionEnabled: [ self selectedPackageNames isNotEmpty ];
-			action: [
-				 (StPackageDependenciesPresenter onPackagesNamed: self selectedPackageNames) 
-					application: self application;
-					open ] ];
-		addActionWith: [ :action | action 
-			name: 'Find cycles among packages';
-			action: [
-				(StCycleDetectionPresenter onPackagesNamed: self selectedPackageNames)
-					application: self application;
-					open ] ];
-		addActionWith: [ :action | action 
-			name: 'Browse dependencies from class';
-			actionEnabled: [ self areClassToDependencyNodes: self selectedItemsFromTree ];
-			action: [  self openTreeFor: self selectedNames ] ] ]
+
+	tree actionsWith: [ :group |
+			group
+				addActionWith: [ :action |
+						action
+							name: 'Browse scoped dependencies';
+							actionEnabled: [
+									(self areSubclassToPackageDependencyNodes: self selectedItemsFromTree)
+										ifTrue: [ self selectedPackageNames isNotEmpty ]
+										ifFalse: [ false ] ];
+							action: [
+									(StPackageDependenciesPresenter onPackagesNamed: self selectedPackageNames)
+										application: self application;
+										open ] ];
+				addActionWith: [ :action |
+						action
+							name: 'Find cycles among packages';
+							action: [
+									(StCycleDetectionPresenter onPackagesNamed: self selectedPackageNames)
+										application: self application;
+										open ] ];
+				addActionWith: [ :action |
+						action
+							name: 'Browse dependencies from class';
+							actionEnabled: [ self areClassToDependencyNodes: self selectedItemsFromTree ];
+							action: [ self openTreeFor: self selectedNames ] ] ]
 ]
 
 { #category : 'accessing' }

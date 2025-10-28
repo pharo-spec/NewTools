@@ -135,13 +135,12 @@ StProcessBrowser >> buildContextToolbarActions [
 StProcessBrowser >> buildGeneralToolbarActions [
 	
 	^ SpActionGroup new
-		addActionWith: [ :action | 
-			(cpuWatcherAction := action)
-				name: 'Show CPU Usage';
-				iconName: #search;
-				description: 'Show CPU Usage per Process';
-				beToggleButton;
-				action: [ self toggleCPUWatcher ]];
+		addActionWith: [ :action | (cpuWatcherAction := action)
+			name: 'Show CPU Usage';
+			iconName: 'search';
+			description: 'Show CPU Usage per Process';
+			beToggleButton;
+			action: [ self toggleCPUWatcher ]];
 		addActionWith: [ :action | (autoUpdateAction := action) 
 			name: 'Auto update';
 			iconName: #autoReload;
@@ -158,6 +157,7 @@ StProcessBrowser >> buildGeneralToolbarActions [
 
 { #category : 'private' }
 StProcessBrowser >> buildProcessToolbarActions [
+
 	^ SpActionGroup new
 		addActionWith: [ :action | action 
 			name: 'Terminate';
@@ -175,7 +175,7 @@ StProcessBrowser >> buildProcessToolbarActions [
 			actionEnabled: [ self selectedProcess notNil ] ];
 		addActionWith: [ :action | action 
 			name: 'Signal';
-			iconName: #play; 
+			iconName: #play;
 			description: 'Signal this process semaphore.';
 			shortcutKey: $s shift actionModifier;
 			action: [ self signalSelectedProcess ];

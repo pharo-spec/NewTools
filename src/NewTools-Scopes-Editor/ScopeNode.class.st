@@ -41,12 +41,6 @@ ScopeNode >> = anotherNode [
 		and: [ self label = anotherNode label ]
 ]
 
-{ #category : 'comparing' }
-ScopeNode >> == anotherNode [
-
-	^ self = anotherNode
-]
-
 { #category : 'accessing' }
 ScopeNode >> basicEqualsTo: aNode [
 
