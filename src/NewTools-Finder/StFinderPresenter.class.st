@@ -290,8 +290,7 @@ StFinderPresenter >> connectPresenters [
 
 	self connectSearchBar.
 	previewSourcePresenter whenSubmitDo: [ :text |
-		resultTree selectedItem 
-			acceptText: text in: previewSourcePresenter ].
+		resultTree selectedItem ifNotNil: [ resultTree selectedItem acceptText: text in: previewSourcePresenter ] ].
 
 	configButton action: [
 		SettingBrowser new
