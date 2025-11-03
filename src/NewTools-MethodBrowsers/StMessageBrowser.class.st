@@ -334,7 +334,7 @@ StMessageBrowser >> horizontalLayout [
 
 { #category : 'initialization' }
 StMessageBrowser >> initialize [
-
+	
 	super initialize.
 	self registerToAnnouncements
 ]
@@ -391,9 +391,9 @@ StMessageBrowser >> messages [
 
 { #category : 'api' }
 StMessageBrowser >> messages: aCollection [
-
-	messageList messages: aCollection.
-	self toolbarPresenter updatePresenter.
+	messages := aCollection.
+	self updatePresenter.
+	self toolbarPresenter updatePresenter
 ]
 
 { #category : 'announcements' }
@@ -586,6 +586,12 @@ StMessageBrowser >> topologicSort: aBoolean [
 	^ messageList topologicSort: aBoolean
 ]
 
+{ #category : 'initialization' }
+StMessageBrowser >> updatePresenter [
+	super updatePresenter.
+	messageList messages: messages
+]
+
 { #category : 'api' }
 StMessageBrowser >> updateTitle [
 	self withWindowDo: [ :window | window title: self title ]
@@ -623,8 +629,8 @@ StMessageBrowser >> windowIsClosing [
 	self class codeChangeAnnouncer unsubscribe: self
 ]
 
-{ #category : 'private' }
+{ #category : 'accessing' }
 StMessageBrowser >> windowTitle [
 
-	^ (title ifNil: [ 'Message Browser' ]), ' [' , (messageList ifNotNil: [ messageList numberOfElements printString ] ifNil: ['']) , ']'
+	^ (title ifNil: [ 'Message Browser' ]), ' [' , messages size printString , ']'
 ]

@@ -6,6 +6,7 @@ Class {
 	#superclass : 'StPresenter',
 	#instVars : [
 		'messageList',
+		'messages',
 		'textConverter',
 		'toolbarPresenter'
 	],
@@ -27,10 +28,9 @@ StAbstractMessageCentricBrowserPresenter class >> isAbstract [
 
 { #category : 'initialization' }
 StAbstractMessageCentricBrowserPresenter >> initialize [
-
+	messages := #().
 	textConverter := self newTextConverter.
 	super initialize
-	
 ]
 
 { #category : 'initialization' }
