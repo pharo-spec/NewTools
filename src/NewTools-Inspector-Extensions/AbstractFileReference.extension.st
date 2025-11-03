@@ -8,9 +8,9 @@ AbstractFileReference >> inspectionCompressedItemsContext: aContext [
 
 { #category : '*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionContents: aBuilder [
-
 	<inspectorPresentationOrder: 0 title: 'Contents'>
 	| maxBytes buffer atEnd stringContents displayStream displayString contentPresenter toolbarPresenter |
+	
 	maxBytes := 10000.
 
 	self binaryReadStreamDo: [ :stream |
@@ -18,59 +18,58 @@ AbstractFileReference >> inspectionContents: aBuilder [
 			atEnd := stream atEnd ].
 
 	displayString := [
-		                 stringContents := ZnCharacterEncoder utf8
-			                                   decodeBytes: buffer.
-		                 atEnd
-			                 ifTrue: [ stringContents ]
-			                 ifFalse: [ stringContents , '  ... truncated ...' ] ]
-		                 on: Error
-		                 do: [
-				                 displayStream := (String new: maxBytes * 5)
-					                                  writeStream.
-				                 buffer hexDumpOn: displayStream max: maxBytes.
-				                 displayString := displayStream contents ].
+		stringContents := ZnCharacterEncoder utf8 decodeBytes: buffer.
+		atEnd
+			ifTrue: [ stringContents ]
+			ifFalse: [ stringContents , '  ... truncated ...' ] ]
+		on: Error do: [
+			displayStream := (String new: maxBytes * 5) writeStream.
+			buffer hexDumpOn: displayStream max: maxBytes.
+			displayString := displayStream contents ].
 
 	contentPresenter := aBuilder newCode
-		                    withoutSyntaxHighlight;
-		                    text: displayString;
-		                    whenSubmitDo: [ :text |
-				                    self
-					                    ensureDelete;
-					                    writeStreamDo: [ :s |
-						                    s nextPutAll: text asString ] ];
-		                    yourself.
+		addStyle: 'stCode';
+		withoutSyntaxHighlight;
+		text: displayString;
+		whenSubmitDo: [ :text |
+			self
+				ensureDelete;
+				writeStreamDo: [ :s |
+					s nextPutAll: text asString ] ];
+		yourself.
 
 	toolbarPresenter := aBuilder newToolbar.
 	toolbarPresenter displayMode: aBuilder application toolbarDisplayMode.
 	toolbarPresenter add: (toolbarPresenter newToolbarButton
-			 icon: (aBuilder application iconNamed: #smallSave);
-			 label: 'Save contents';
-			 help: 'Save contents of file';
-			 action: [
-					 self
-						 ensureDelete;
-						 writeStreamDo: [ :s |
-							 s nextPutAll: contentPresenter text asString ] ];
-			 yourself).
+		icon: (aBuilder application iconNamed: #smallSave);
+		label: 'Save contents';
+		help: 'Save contents of file';
+		action: [
+			 self
+				 ensureDelete;
+				 writeStreamDo: [ :s |
+					 s nextPutAll: contentPresenter text asString ] ];
+		yourself).
+	
 	toolbarPresenter add: (toolbarPresenter newToolbarButton
-			 icon: (aBuilder application iconNamed: #smallDelete);
-			 label: 'Delete file';
-			 help: 'Delete the file';
-			 action: [
-					 self ensureDelete.
-					 contentPresenter delete ];
-			 yourself).
+		icon: (aBuilder application iconNamed: #smallDelete);
+		label: 'Delete file';
+		help: 'Delete the file';
+		action: [
+			 self ensureDelete.
+			 contentPresenter delete ];
+		yourself).
 
 	^ aBuilder newPresenter
-		  layout: (SpBoxLayout newTopToBottom
-				   add: (SpBoxLayout newLeftToRight
-						    hAlignEnd;
-						    add: toolbarPresenter;
-						    yourself)
-				   expand: false;
-				   add: contentPresenter;
-				   yourself);
-		  yourself
+		layout: (SpBoxLayout newTopToBottom
+			add: (SpBoxLayout newLeftToRight
+					hAlignEnd;
+					add: toolbarPresenter;
+					yourself)
+				expand: false;
+			add: contentPresenter;
+			yourself);
+	  yourself
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
@@ -110,6 +109,7 @@ AbstractFileReference >> inspectionItems: aBuilder [
 		items := items copyWithFirst: self parent ]. 
 
 	^  aBuilder newTable 
+		addStyle: 'stList';
 		beResizable;
 		items: items;
 		addColumn: (SpCompositeTableColumn new 
@@ -185,6 +185,7 @@ AbstractFileReference >> inspectionStScript: aBuilder [
 	<inspectorPresentationOrder: 0 title: 'Script'>
 	
 	^ aBuilder newCode 
+		addStyle: 'stCode';
 		text: (self readStreamDo: #contents);
 		whenSubmitDo: [ :text | 
 			self writeStreamDo: [ :s | s nextPutAll: text string ] ];

@@ -98,6 +98,7 @@ StObjectContextPresenter >> initializePresenters [
 StObjectContextPresenter >> intializePresentersWithEvaluator [
 	
 	(evaluator := self newCode)
+		addStyle: 'stCode';
 		beForObject: self model inspectedObject;
 		text: self evaluatorInitialText;
 		overridingContextMenu;

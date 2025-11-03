@@ -7,6 +7,7 @@ Pragma >> inspectionSourceCodeMethod: aBuilder [
 	
 	interval := self sourceNode sourceInterval.
 	^ aBuilder newCode 
+		addStyle: 'stCode';
 		beForMethod: method ast;
 		text: method sourceCode;
 		addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight

@@ -5,6 +5,7 @@ SymbolicBytecode >> inspectionSource: aBuilder [
 	<inspectorPresentationOrder: 30 title: 'Method Source'>
 
 	^ aBuilder newCode 
+		addStyle: 'stCode';
 		beForBehavior: self method methodClass;
 		text: self method sourceCode;
 		addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight

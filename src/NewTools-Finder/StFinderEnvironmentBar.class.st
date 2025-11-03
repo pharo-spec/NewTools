@@ -14,20 +14,6 @@ Class {
 	#tag : 'Widgets'
 }
 
-{ #category : 'updating - widgets' }
-StFinderEnvironmentBar >> activateAllPackages [
-
-	allPackagesButton iconName: #radioButtonSelected.
-	chosenPackagesButton iconName: #radioButtonUnselected
-]
-
-{ #category : 'updating - widgets' }
-StFinderEnvironmentBar >> activateChosenPackages [
-
-	allPackagesButton iconName: #radioButtonUnselected.
-	chosenPackagesButton iconName: #radioButtonSelected
-]
-
 { #category : 'layout' }
 StFinderEnvironmentBar >> defaultLayout [
 
@@ -48,27 +34,59 @@ StFinderEnvironmentBar >> initializePresenters [
 	chosenPackagesButton := self newButton
 		                        label: 'Packages…';
 		                        iconName: #radioButtonUnselected;
+		                        action: [ self openPackageChooserDialog ];
 		                        yourself.
 	allPackagesButton := self newButton
 		                     label: 'All Packages';
 		                     iconName: #radioButtonSelected;
-		                     yourself
+		                     action: [ self searchInAllPackages ];
+		                     yourself.
+
+	self updateStatus
 ]
 
-{ #category : 'instance creation' }
-StFinderEnvironmentBar >> status: aString [
+{ #category : 'accessing' }
+StFinderEnvironmentBar >> model [
 
-	statusLabel label: aString
+	^ self owner model
 ]
 
-{ #category : 'events' }
-StFinderEnvironmentBar >> whenAllPackagesSelectedDo: aBlock [
+{ #category : 'private' }
+StFinderEnvironmentBar >> openPackageChooserDialog [
+	"Opens a `SpChooserPresenter` dialog to allow the user to choose the packages to search in."
 
-	allPackagesButton action: aBlock
+	((SpChooserPresenter sourceItems: self model unselectedPackages chosenItems: self model selectedPackages)
+		 sourceLabel: 'Available packages';
+		 targetLabel: 'Selected packages';
+		 openDialog)
+		title: 'Select packages for searching';
+		okAction: [ :dialog | self searchInPackages: dialog presenter chosenItems ]
 ]
 
-{ #category : 'events' }
-StFinderEnvironmentBar >> whenPackagesSelectedDo: aBlock [
+{ #category : 'private' }
+StFinderEnvironmentBar >> searchInAllPackages [
+	"Selects all packages for searching."
 
-	chosenPackagesButton action: aBlock
+	self model selectAllPackages.
+	"Maybe we could use a real radio button?"
+	allPackagesButton iconName: #radioButtonSelected.
+	chosenPackagesButton iconName: #radioButtonUnselected.
+	self updateStatus
+]
+
+{ #category : 'private' }
+StFinderEnvironmentBar >> searchInPackages: aCollection [
+	"Sets the search environment in the model to the package names given in aCollection."
+
+	self model selectedPackagesByName: aCollection.
+	"Maybe this should use a real radio button?"
+	allPackagesButton iconName: #radioButtonUnselected.
+	chosenPackagesButton iconName: #radioButtonSelected.
+	self updateStatus
+]
+
+{ #category : 'updating - widgets' }
+StFinderEnvironmentBar >> updateStatus [
+
+	statusLabel label: self model selectedPackages size asString , ' Packages selected'
 ]

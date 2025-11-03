@@ -7,6 +7,7 @@ Package >> inspectionBaselineInspector: aBuilder [
 
 	items := BaselineOf allSubclasses select: [ :e | e allPackageNames includes: self name ].
 	^ aBuilder newList
+		addStyle: 'stList';
 		items: items;
 		yourself
 ]
@@ -19,6 +20,7 @@ Package >> inspectionOverwiew: aBuilder [
 	items :={ 'Classes' -> self classes . 'Defined classes' -> self definedClasses . 'Methods' -> self methods }.
 	items := items collect: [ :e | StInspectorAssociationNode hostObject: e ].
 	^ aBuilder newTable
+		addStyle: 'stList';
 		alternateRowsColor;
 		items: items;
 		addColumn: (SpStringTableColumn

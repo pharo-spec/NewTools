@@ -9,6 +9,7 @@ MetacelloGroupSpec >> inspectionIncludes: aBuilder [
 		select: [ :each | self includes includes: each name ].
 		
 	^ aBuilder newTable
+		addStyle: 'stList';
 		addColumn: (SpStringTableColumn 
 			title: 'Type' 
 			evaluated: [ :aSpec | aSpec type ]) 

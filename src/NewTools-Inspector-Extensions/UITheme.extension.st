@@ -5,6 +5,7 @@ UITheme >> inspectionColors: aBuilder [
 	<inspectorPresentationOrder: 10 title: 'Colors'>
 	
 	^ aBuilder newList 
+		addStyle: 'stList';
 		items: ((UITheme selectors select: [ :each | 
 			(each endsWith: 'Color') and: [ ((self perform: each) isKindOf: Color) ] ])
 			sort: #yourself ascending);

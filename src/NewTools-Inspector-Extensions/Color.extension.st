@@ -16,6 +16,7 @@ Color class >> inspectionColors: aBuilder [
 	<inspectorPresentationOrder: 10 title: 'Registered'>
 	
 	^ aBuilder newList 
+		addStyle: 'stList';
 		items: ColorRegistry associations;
 		display: [ :each | each key ];
 		displayIcon: [ :each | 

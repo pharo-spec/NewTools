@@ -11,6 +11,7 @@ MetacelloProjectReferenceSpec >> inspectionProject: aBuilder [
 		ifEmpty: [ specs ].
 	
 	^ aBuilder newTable
+		addStyle: 'stList';
 		addColumn: (SpStringTableColumn 
 			title: 'Type' 
 			evaluated: [ :aSpec | aSpec type ]) 
@@ -28,9 +29,11 @@ MetacelloProjectReferenceSpec >> inspectionRecord: aBuilder [
 	<inspectorPresentationOrder: 20 title: 'Record'>
 	| specs |
 
-	specs := (self projectReference version record: (self projectReference loads ifNil: [ #('default') ])) spec packageSpecsInLoadOrder.
+	specs := (self projectReference version 
+		record: (self projectReference loads ifNil: [ #('default') ])) spec packageSpecsInLoadOrder.
 	specs := specs reject: [ :each | each name = self name ].
 	^ aBuilder newTable
+		addStyle: 'stList';
 		addColumn: (SpStringTableColumn 
 			title: 'Type' 
 			evaluated: [ :aSpec | aSpec type ]) 

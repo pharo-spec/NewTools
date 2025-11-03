@@ -18,7 +18,8 @@ WaitfreeQueue >> inspectionItemsOn: builder [
 		] whileFalse 
 	].
 
-	^ builder newList  
+	^ builder newList
+		addStyle: 'stList';
 		items: items;
 		yourself
 ]

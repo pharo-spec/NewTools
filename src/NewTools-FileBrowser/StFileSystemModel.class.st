@@ -23,6 +23,21 @@ Class {
 	#tag : 'UI'
 }
 
+{ #category : 'adding' }
+StFileSystemModel class >> addBookmarkNamed: aString location: aLocation iconName: aName [
+	"Example: `StFileSystemModel addBookmarkNamed: 'pharo' location: FileLocator preferences / 'pharo' iconName: #git`"
+
+	self bookmarks anyOne addBookmark: (StFileBrowserBookmark name: aString location: aLocation icon: (self iconNamed: aName))
+]
+
+{ #category : 'accessing - bookmarks' }
+StFileSystemModel class >> bookmarks [
+
+	^ Bookmarks ifNil: [
+			  self initializeBookmarks.
+			  Bookmarks ]
+]
+
 { #category : 'defaults' }
 StFileSystemModel class >> defaultDirectory [
 	"Answer a <FileReference> with the default directory for opening the file browser and dialogs"
@@ -64,9 +79,7 @@ StFileSystemModel >> addBookmark: aFileReference [
 StFileSystemModel >> bookmarks [
 	"Answer the receiver's <Collection> of bookmarks, each one an instance of a subclass of <StFileBrowserAbstractBookMark>"
 
-	Bookmarks 
-		ifNil: [ self class initializeBookmarks ].
-	^ Bookmarks
+	^ self class bookmarks
 ]
 
 { #category : 'accessing' }

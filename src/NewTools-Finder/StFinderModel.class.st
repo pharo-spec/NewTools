@@ -65,9 +65,9 @@ StFinderModel >> application: anApplication [
 StFinderModel >> availablePackages [
 	"Returns for searching available packages by name."
 
-	^ searchEnvironment packages
-		  collect: [ :package | package name ]
-		  as: OrderedCollection
+	| globalEnv |
+	globalEnv := RBBrowserEnvironment new.
+	^ (globalEnv forPackages: globalEnv packages) packages collect: [ :package | package name ] as: OrderedCollection
 ]
 
 { #category : 'accessing' }
@@ -279,10 +279,9 @@ StFinderModel >> time [
 
 { #category : 'information' }
 StFinderModel >> unselectedPackages [
-
 	"Returns for searching unselected packages by name."
 
-	^ self availablePackages removeAllFoundIn: self selectedPackages
+	^ self availablePackages \ self selectedPackages
 ]
 
 { #category : 'accessing' }

@@ -7,6 +7,7 @@ BaselineOf >> inspectionProject: aBuilder [
 	
 	specs := self project version spec packageSpecsInLoadOrder.
 	^ aBuilder newTable
+		addStyle: 'stList';
 		addColumn: (SpStringTableColumn 
 			title: 'Type' 
 			evaluated: [ :aSpec | aSpec type ]) 
@@ -25,6 +26,7 @@ BaselineOf >> inspectionRecord: aBuilder [
 	
 	specs := self project version record spec packageSpecsInLoadOrder.
 	^ aBuilder newTable
+		addStyle: 'stList';
 		addColumn: (SpStringTableColumn 
 			title: 'Type' 
 			evaluated: [ :aSpec | aSpec type ]) 

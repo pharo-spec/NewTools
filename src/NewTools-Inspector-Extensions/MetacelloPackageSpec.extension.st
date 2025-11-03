@@ -7,6 +7,7 @@ MetacelloPackageSpec >> inspectionRequires: aBuilder [
 
 	specs := self project version spec packageSpecsInLoadOrder.
 	^ aBuilder newList
+		addStyle: 'stList';
 		items: (specs select: [ :each | self requires includes: each name ]);
 		display: [ :aSpec | aSpec name ];
 		yourself

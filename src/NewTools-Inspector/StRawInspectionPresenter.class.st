@@ -82,6 +82,7 @@ StRawInspectionPresenter >> hasOutputActivationPort [
 StRawInspectionPresenter >> initializePresenters [
 
 	attributeTable := self newTreeTable
+		addStyle: 'stTree';
 		beResizable;
 		actions: self rootCommandsGroup;
 		dragEnabled: true;

@@ -10,6 +10,12 @@ Class {
 	#tag : 'UI'
 }
 
+{ #category : 'hooks' }
+StOpenFileOrDirectoryPresenter >> allowsChooseDirectoryIfNoFilename [
+
+	^ true
+]
+
 { #category : 'api' }
 StOpenFileOrDirectoryPresenter >> beMultipleSelection [
 	"Allow the user to select multiple files or directories in open dialogs"
@@ -34,13 +40,12 @@ StOpenFileOrDirectoryPresenter >> selectFiles: aCollectionOfFiles [
 
 { #category : 'menu - accessing' }
 StOpenFileOrDirectoryPresenter >> selectedEntries [
-	"Answer a <Collection> of user's selected <FileReference>s "
+	"Answer a <Collection> of user's selected <FileReference>s.
+	
+	When the user do not select any file reference and we allow to select a folder, return the current folder as in any other file browser."
 
-	| entries |
-	((entries := self fileNavigationSystem selectedEntries) 
-		anySatisfy: [ : entry | (entry exists not and: [ entry isDirectory ]) ])
-			ifTrue: [ 
-				self inform: 'Only files could be selected (no directories)'.
-				^ nil ].
-	^ entries
+	^ self fileNavigationSystem selectedEntries ifEmpty: [
+			  self allowsChooseDirectoryIfNoFilename
+				  ifTrue: [ { self fileNavigationSystem currentDirectory } ]
+				  ifFalse: [ {  } ] ]
 ]

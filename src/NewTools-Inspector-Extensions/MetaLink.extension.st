@@ -5,6 +5,6 @@ MetaLink >> inpectionDefiniton: aBuilder [
 	<inspectorPresentationOrder: 920 title: 'Definition'>
 	
 	^ aBuilder newText 
-		text: (self definitionString);
+		text: self definitionString;
 		yourself
 ]

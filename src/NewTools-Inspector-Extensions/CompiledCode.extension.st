@@ -45,11 +45,11 @@ CompiledCode >> inspectionAST: aBuilder [
 CompiledCode >> inspectionBytecode: aBuilder [
 	<inspectorPresentationOrder: 30 title: 'Bytecode'>
 
-	^ aBuilder newEasyListView
+	^ aBuilder newList
+		addStyle: 'stList';
 		items: self symbolicBytecodes;
 		display: [ :aBytecode | aBytecode printString ];
 		yourself
-
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }

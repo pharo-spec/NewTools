@@ -4,7 +4,8 @@ Extension { #name : 'Collection' }
 Collection >> inspectionItems: aBuilder [
 	<inspectorPresentationOrder: 0 title: 'Items'> 
 	
-	^ aBuilder newTable		
+	^ aBuilder newTable
+		addStyle: 'stList';
 		addColumn: (SpIndexTableColumn new 
 			title: 'Index';
 			sortFunction: #yourself ascending;

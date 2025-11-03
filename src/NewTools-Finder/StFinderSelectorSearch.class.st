@@ -107,10 +107,10 @@ StFinderSelectorSearch >> searchBySubstring: aString in: anEnvironment [
 { #category : 'private' }
 StFinderSelectorSearch >> searchMethods: aSelectBlock in: anEnvironment [
 
-	^ OrderedCollection streamContents: [ :stream |
-		  anEnvironment classesDo: [ :class |
-			  class methodsDo: [ :method |
-				  (aSelectBlock value: method) ifTrue: [ stream nextPut: method ] ].
-			  class classSide methodsDo: [ :method |
-				  (aSelectBlock value: method) ifTrue: [ stream nextPut: method ] ] ] ]
+	^ OrderedCollection streamContents: [ :stream | "This should just be
+		 anEnvironment methodsDo: [ :method | (aSelectBlock value: method) ifTrue: [ stream nextPut: method ] ]
+		
+		But currently the code is way too slow if we do that.
+		"
+		  anEnvironment classesDo: [ :class | class methodsDo: [ :method | (aSelectBlock value: method) ifTrue: [ stream nextPut: method ] ] ] ]
 ]

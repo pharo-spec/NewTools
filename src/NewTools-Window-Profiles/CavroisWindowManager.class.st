@@ -351,6 +351,8 @@ CavroisWindowManager class >> startUp: isImageStarting [
 CavroisWindowManager class >> switchToProfile: profileKey [
 
 	| oldProfile newProfile oldKey newKey baseName presenter |
+	self current currentProfile = (self current profiles at: profileKey)
+		ifTrue: [ ^ self ].
 	presenter := SpConfirmDialog new
 		             title: 'Switch Profile';
 		             label: profileKey , 'will become the current profile';
@@ -359,8 +361,6 @@ CavroisWindowManager class >> switchToProfile: profileKey [
 		             onAccept: [ :dialog |
 				             oldProfile := self current currentProfile.
 				             newProfile := self current profiles at: profileKey.
-
-				             oldProfile = newProfile ifTrue: [ ^ self ].
 				             oldKey := self current profiles keyAtValue:
 						                       oldProfile.
 				             baseName := oldKey
@@ -639,24 +639,7 @@ CavroisWindowManager >> updatePreviousCurrentProfile [
 { #category : 'updating' }
 CavroisWindowManager >> updateProfile [
 
-	| windowsByKind placeholdersByKind |
-	windowsByKind := Dictionary new.
-	placeholdersByKind := Dictionary new.
-
-	self allCurrentWindows do: [ :window |
-			(windowsByKind
-				 at: (self placeHolderFromWindow: window) kind
-				 ifAbsentPut: [ OrderedCollection new ]) add: window ].
-	self currentProfile placeHolders do: [ :ph |
-			placeholdersByKind
-				at: ph kind
-				put: (placeholdersByKind at: ph kind ifAbsent: [ 0 ]) + 1 ].
-	windowsByKind keysAndValuesDo: [ :kind :windows |
-			| existingCount newCount |
-			existingCount := placeholdersByKind at: kind ifAbsent: [ 0 ].
-			newCount := windows size - existingCount.
-			newCount > 0 ifTrue: [
-					1 to: newCount do: [ :i |
-						self currentProfile add:
-							(self placeHolderFromWindow: windows first) ] ] ]
+	self currentProfile reset.
+	self allCurrentWindows do: [ :each |
+		self currentProfile add: (self placeHolderFromWindow: each) ]
 ]

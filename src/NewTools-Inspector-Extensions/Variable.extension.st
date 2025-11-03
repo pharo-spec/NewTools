@@ -8,7 +8,8 @@ Variable >> inspectionUsingMethods: aBuilder [
 	usingMethods := self usingMethods sort: [ :x :y | x name < y name ].
 
 	^ aBuilder newList
+		addStyle: 'stList';
 		items: usingMethods;
 		display: #name;
-yourself
+		yourself
 ]

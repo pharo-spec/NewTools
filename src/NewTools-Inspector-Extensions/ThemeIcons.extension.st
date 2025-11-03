@@ -5,6 +5,7 @@ ThemeIcons >> inspectionIcons: aBuilder [
 	<inspectorPresentationOrder: 0 title: 'Icons'>
 	
 	^ aBuilder newTable
+		addStyle: 'stList';
 		addColumn: ((SpImageTableColumn 
 			title: 'Icon'
 			evaluated: [ :aSpec | aSpec value ])

@@ -12,9 +12,10 @@ Context >> inspectionSelectors: aBuilder [
 		aSender := aSender sender ].
 
 	^ aBuilder newList
-		  items: senders;
-		  display: [ :aContext | aContext homeMethod name ];
-		  yourself
+		addStyle: 'stList';
+		items: senders;
+		display: [ :aContext | aContext homeMethod name ];
+		yourself
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }

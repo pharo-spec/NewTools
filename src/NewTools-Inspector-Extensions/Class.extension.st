@@ -18,6 +18,7 @@ Class >> inspectionAllReferences: aBuilder [
 				rbMethodDef methodClass == aClass ])	asSortedCollection: sortBlock ].
 	
 	treeTable := aBuilder newTreeTable.	
+	treeTable addStyle: 'stList'.
 	treeTable
 		roots: allClassesReferencing;
 		children: childrenBlock.
@@ -42,7 +43,8 @@ Class >> inspectionClassDefinition: aBuilder [
 	<inspectorPresentationOrder: 915 title: 'Definition'>
 	
 	^ aBuilder newCode
-	  beForObject: self;
-	  text: self definitionString;
-	  whenSubmitDo: [ :code | (Smalltalk compiler evaluate: code) fluidInstall ]
+		addStyle: 'stCode';
+	  	beForObject: self;
+	  	text: self definitionString;
+	  	whenSubmitDo: [ :code | (Smalltalk compiler evaluate: code) fluidInstall ]
 ]

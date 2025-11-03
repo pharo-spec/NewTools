@@ -44,6 +44,7 @@ StSimpleInspectorBuilder >> table [
 	keysColumn := SpStringTableColumn title: #key evaluated: [ :anAssociation | anAssociation key ].
 	valuesColumn := SpStringTableColumn title: #value evaluated: [ :anAssociation | anAssociation value ].
 	^ specBuilder newTable
+		addStyle: 'stList';
 		addColumn: keysColumn;
 		addColumn: valuesColumn;
 		items: (info collect: [ :anAssociation | StInspectorAssociationNode hostObject: anAssociation ]);

@@ -298,10 +298,6 @@ StFinderPresenter >> connectPresenters [
 	self connectSearchOptions.
 	searchOptions substringBox click.
 
-	environmentBar
-		whenAllPackagesSelectedDo: [ self searchInAllPackages ];
-		whenPackagesSelectedDo: [ self openPackageChooserDialog ].
-
 	resultTree 
 		whenSelectedItemChangedDo: [ :newResult |
 			newResult 
@@ -423,7 +419,6 @@ StFinderPresenter >> initializePresenters [
 	searchOptions := self instantiate: StFinderSearchOptions.
 
 	environmentBar := self instantiate: StFinderEnvironmentBar.
-	self updateEnvironmentStatusFor: self model selectedPackages.
 
 	self initializeResultTree.
 		
@@ -460,20 +455,6 @@ StFinderPresenter >> notifySearchStarted [
 
 ]
 
-{ #category : 'private' }
-StFinderPresenter >> openPackageChooserDialog [
-	"Opens a `SpChooserPresenter` dialog to allow the user to choose the packages to search in."
-
-	((SpChooserPresenter
-		  sourceItems: self model unselectedPackages
-		  chosenItems: self model selectedPackages)
-		 sourceLabel: 'Available packages';
-		 targetLabel: 'Selected packages';
-		 openDialog)
-		title: 'Select packages for searching';
-		okAction: [ :dialog | self searchInPackages: dialog presenter chosenItems ]
-]
-
 { #category : 'accessing' }
 StFinderPresenter >> resultButtonBar [
 
@@ -499,21 +480,10 @@ StFinderPresenter >> searchBy: aString [
 ]
 
 { #category : 'private' }
-StFinderPresenter >> searchInAllPackages [
-	"Selects all packages for searching."
-
-	self model selectAllPackages.
-	environmentBar activateAllPackages.
-	self updateEnvironmentStatusFor: self model selectedPackages
-]
-
-{ #category : 'private' }
 StFinderPresenter >> searchInPackages: aCollection [
 	"Sets the search environment in the model to the package names given in aCollection."
 
-	self model selectedPackagesByName: aCollection.
-	environmentBar activateChosenPackages.
-	self updateEnvironmentStatusFor: aCollection
+	environmentBar searchInPackages: aCollection
 ]
 
 { #category : 'accessing' }
@@ -567,12 +537,6 @@ StFinderPresenter >> subscribeToAnnouncements [
 	self model whenSearchStarted: [ self notifySearchStarted ].
 	self model whenSearchEnded: [ :results : time | self updateResultsWith: results time: time ].
 	self model whenSearchTypesChanged: [ self searchBar updateSearchModes ]
-]
-
-{ #category : 'updating - widgets' }
-StFinderPresenter >> updateEnvironmentStatusFor: packages [
-
-	environmentBar status: packages size asString , ' Packages selected'
 ]
 
 { #category : 'updating - widgets' }

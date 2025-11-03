@@ -131,7 +131,8 @@ StProtocolNameChooserPresenter >> doAcceptFromTextInput [
 { #category : 'initialization' }
 StProtocolNameChooserPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
-	super initializeDialogWindow: aDialogWindowPresenter
+	super initializeDialogWindow: aDialogWindowPresenter.
+	aDialogWindowPresenter okAction: [ self doAcceptFromTextInput ]
 ]
 
 { #category : 'initialization' }

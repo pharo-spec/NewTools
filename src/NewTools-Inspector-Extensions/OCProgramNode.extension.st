@@ -5,6 +5,7 @@ OCProgramNode >> inspectionAST: aBuilder [
 	<inspectorPresentationOrder: 35 title: 'AST'>
 
 	^ aBuilder newTree 
+		addStyle: 'stTree';
 		roots: { self };
 		children: [ :aNode | aNode children ];
 		display: [ :each | 
@@ -24,6 +25,7 @@ OCProgramNode >> inspectionASTDump: aBuilder [
 	<inspectorPresentationOrder: 50 title: 'AST Dump'>
 
 	^ aBuilder newCode 
+		addStyle: 'stCode';
 		text: (RBParser parseExpression: self dump) formattedCode; 
 		beForScripting; "this is an expression"
 		yourself
@@ -34,6 +36,7 @@ OCProgramNode >> inspectionSource: aBuilder [
 	<inspectorPresentationOrder: 30 title: 'Method Source'>
 
 	^ aBuilder newCode 
+		addStyle: 'stCode';
 		beForMethod: self methodNode;
 		text: (self source ifNil: [ self formattedCode ]);
 		addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight

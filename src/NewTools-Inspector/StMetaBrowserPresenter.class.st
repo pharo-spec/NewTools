@@ -95,27 +95,30 @@ StMetaBrowserPresenter >> initializePresenters [
 	classHierarchy := self model class withAllSuperclasses reversed.
 
 	classes := self newTreeTable
-		           addColumn:
-			           (SpStringTableColumn
-				            title: 'Class hierarchy'
-				            evaluated: #name);
-		           roots: { classHierarchy first };
-		           children: [ :aClass |
-			           classHierarchy select: [ :subclass |
-					           subclass superclass == aClass ] ];
-		           actions: self classListActions;
-		           yourself.
-	methods := (self instantiate: SpFilteringListPresenter)
-		           display: [ :each | each selector ];
-		           actions: self methodListActions;
-		           yourself.
+		addStyle: 'stTree';
+		addColumn: (SpStringTableColumn
+			title: 'Class hierarchy'
+			evaluated: #name);
+		roots: { classHierarchy first };
+		children: [ :aClass |
+			classHierarchy select: [ :subclass |
+				subclass superclass == aClass ] ];
+		actions: self classListActions;
+		yourself.
+		
+	methods := self newFilteringList
+		addStyle: 'stList';
+		display: [ :each | each selector ];
+		actions: self methodListActions;
+		yourself.
 
 	source := self newCode
-					lineNumbers: StPharoSettings codeShowLineNumbers;
-			 		beForScripting;
-					whenSubmitDo: [ :aString | self compile: aString ];
-					whenResetDo: [ self updateSourceWith: self selectedMethod ];
-					yourself.
+		addStyle: 'stCode';
+		lineNumbers: StPharoSettings codeShowLineNumbers;
+		beForScripting;
+		whenSubmitDo: [ :aString | self compile: aString ];
+		whenResetDo: [ self updateSourceWith: self selectedMethod ];
+		yourself.
 
 	classes
 		selectPath: (Array new: classHierarchy size withAll: 1)

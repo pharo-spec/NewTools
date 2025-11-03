@@ -21,6 +21,12 @@ StFileBrowserGroupBookmark class >> name: aName collection: aCollection iconName
 		yourself
 ]
 
+{ #category : 'adding' }
+StFileBrowserGroupBookmark >> addBookmark: aBookmark [
+
+	self collection add: aBookmark
+]
+
 { #category : 'accessing' }
 StFileBrowserGroupBookmark >> children [ 
 	^ collection
