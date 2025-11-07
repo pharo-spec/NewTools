@@ -27,25 +27,15 @@ Class {
 	#name : 'StFinderSearchOptions',
 	#superclass : 'SpPresenter',
 	#instVars : [
-		'regexpCheckBox',
-		'exactCheckBox',
+		'exactRadioButton',
 		'caseCheckBox',
-		'substringBox'
+		'substringRadioButton',
+		'regexRadioButton'
 	],
 	#category : 'NewTools-Finder-Widgets',
 	#package : 'NewTools-Finder',
 	#tag : 'Widgets'
 }
-
-{ #category : 'initialization' }
-StFinderSearchOptions >> activateAll [
-	"Activate all the receiver's search options"
-
-	regexpCheckBox enabled: true.
-	exactCheckBox enabled: true.
-	caseCheckBox enabled: true.
-	substringBox enabled: true
-]
 
 { #category : 'accessing' }
 StFinderSearchOptions >> caseCheckBox [
@@ -53,104 +43,82 @@ StFinderSearchOptions >> caseCheckBox [
 	^ caseCheckBox
 ]
 
-{ #category : 'initialization' }
-StFinderSearchOptions >> deactivateAll [
-	"Deactivate all the receiver's search options"
-
-	regexpCheckBox enabled: false.
-	exactCheckBox enabled: false.
-	caseCheckBox enabled: false.
-	substringBox enabled: false
-]
-
 { #category : 'layout' }
 StFinderSearchOptions >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
-		spacing: 2;
-		add: substringBox width: 95;
-		add: regexpCheckBox width: 70;
-		add: exactCheckBox width: 70;
-		add: caseCheckBox width: 70;
-		yourself
+		  spacing: 2;
+		  add: substringRadioButton width: 95;
+		  add: regexRadioButton width: 70;
+		  add: exactRadioButton width: 70;
+		  add: caseCheckBox width: 70;
+		  yourself
+]
+
+{ #category : 'initialization' }
+StFinderSearchOptions >> disable [
+	"Deactivate all the receiver's search options"
+
+	regexRadioButton enabled: false.
+	exactRadioButton enabled: false.
+	caseCheckBox enabled: false.
+	substringRadioButton enabled: false
+]
+
+{ #category : 'initialization' }
+StFinderSearchOptions >> enable [
+	"Activate all the receiver's search options"
+
+	regexRadioButton enabled: true.
+	exactRadioButton enabled: true.
+	caseCheckBox enabled: true.
+	substringRadioButton enabled: true
 ]
 
 { #category : 'accessing' }
-StFinderSearchOptions >> disableExact [
+StFinderSearchOptions >> exactRadioButton [
 
-	exactCheckBox enabled: false.
-]
-
-{ #category : 'accessing' }
-StFinderSearchOptions >> disableRegex [
-
-	regexpCheckBox enabled: false.
-]
-
-{ #category : 'accessing' }
-StFinderSearchOptions >> disableSubstring [
-
-	substringBox enabled: false.
-]
-
-{ #category : 'accessing' }
-StFinderSearchOptions >> enableExact [
-
-	exactCheckBox enabled: true.
-]
-
-{ #category : 'accessing' }
-StFinderSearchOptions >> enableRegex [
-
-	regexpCheckBox enabled: true.
-]
-
-{ #category : 'accessing' }
-StFinderSearchOptions >> enableSubstring [
-
-	substringBox enabled: true.
-]
-
-{ #category : 'accessing' }
-StFinderSearchOptions >> exactCheckBox [
-
-	^ exactCheckBox
+	^ exactRadioButton
 ]
 
 { #category : 'initialization' }
 StFinderSearchOptions >> initializePresenters [
 
-	regexpCheckBox := self newCheckBox 
-		label: 'Regexp';
-		help: 'Use regular expression';
-		yourself.
-		
-	exactCheckBox := self newCheckBox 
-		label: 'Exact';
-		help: 'Use exact match';
-		yourself.
-		
-	caseCheckBox := self newCheckBox 
-		label: 'Case';
-		help: 'Use match case';
-		yourself.
-		
-	substringBox := self newCheckBox
-		label: 'Substring';
-		help: 'Use substring search';
-		yourself.
+	regexRadioButton := self newRadioButton
+		                    label: 'Regex';
+		                    help: 'Use regular expression';
+		                    yourself.
+
+	exactRadioButton := self newRadioButton
+		                    label: 'Exact';
+		                    help: 'Use exact match';
+		                    yourself.
+
+	substringRadioButton := self newRadioButton
+		                        label: 'Substring';
+		                        help: 'Use substring search';
+		                        yourself.
+
+	substringRadioButton associatedRadioButtons: {
+			regexRadioButton.
+			exactRadioButton }.
+
+	caseCheckBox := self newCheckBox
+		                label: 'Case';
+		                help: 'Use match case';
+		                yourself
 ]
 
 { #category : 'accessing' }
-StFinderSearchOptions >> regexpCheckBox [
+StFinderSearchOptions >> regexRadioButton [
 
-	^ regexpCheckBox
+	^ regexRadioButton
 ]
 
 { #category : 'accessing' }
-StFinderSearchOptions >> substringBox [
+StFinderSearchOptions >> substringRadioButton [
 
-	^ substringBox
+	^ substringRadioButton
 ]
 
 { #category : 'events' }
@@ -170,36 +138,35 @@ StFinderSearchOptions >> whenCaseDeactivatedDo: aBlock [
 { #category : 'events' }
 StFinderSearchOptions >> whenExactActivatedDo: aBlock [
 
-	exactCheckBox whenActivatedDo: aBlock.
-
+	exactRadioButton whenActivatedDo: aBlock
 ]
 
 { #category : 'events' }
 StFinderSearchOptions >> whenExactDeactivatedDo: aBlock [
 
-	exactCheckBox whenDeactivatedDo: aBlock.
+	exactRadioButton whenDeactivatedDo: aBlock
 ]
 
 { #category : 'events' }
 StFinderSearchOptions >> whenRegexActivatedDo: aBlock [
 
-	regexpCheckBox whenActivatedDo: aBlock
+	regexRadioButton whenActivatedDo: aBlock
 ]
 
 { #category : 'events' }
 StFinderSearchOptions >> whenRegexDeactivatedDo: aBlock [
 
-	regexpCheckBox whenDeactivatedDo: aBlock
+	regexRadioButton whenDeactivatedDo: aBlock
 ]
 
 { #category : 'events' }
 StFinderSearchOptions >> whenSubstringActivatedDo: aBlock [
 
-	substringBox whenActivatedDo: aBlock
+	substringRadioButton whenActivatedDo: aBlock
 ]
 
 { #category : 'events' }
 StFinderSearchOptions >> whenSubstringDeactivatedDo: aBlock [
 
-	substringBox whenDeactivatedDo: aBlock
+	substringRadioButton whenDeactivatedDo: aBlock
 ]

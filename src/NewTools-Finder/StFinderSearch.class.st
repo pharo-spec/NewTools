@@ -111,6 +111,6 @@ StFinderSearch >> updateDefaultPreview: aSpCodePresenter [
 { #category : 'accessing' }
 StFinderSearch >> validSearchOptions [
 	"Answer a <Collection> of valid search options for the receiver"
-	
-	^ #(#activateAll)
+
+	^ #( #enable )
 ]

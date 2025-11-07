@@ -41,21 +41,21 @@ StFinderTest >> openInstance [
 { #category : 'initialization' }
 StFinderTest >> setExactAndCaseInsensitive [
 
-	presenter searchOptions exactCheckBox click.
+	presenter searchOptions exactRadioButton click.
 	presenter searchOptions caseCheckBox state: false.
 ]
 
 { #category : 'initialization' }
 StFinderTest >> setExactAndCaseSensitive [
 
-	presenter searchOptions exactCheckBox click.
+	presenter searchOptions exactRadioButton click.
 	presenter searchOptions caseCheckBox click.
 ]
 
 { #category : 'tests' }
 StFinderTest >> setRegex [
 		
-	presenter searchOptions regexpCheckBox click.
+	presenter searchOptions regexRadioButton click.
 ]
 
 { #category : 'tests' }

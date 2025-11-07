@@ -299,7 +299,7 @@ StFinderPresenter >> connectPresenters [
 			open ].
 
 	self connectSearchOptions.
-	searchOptions substringBox click.
+	searchOptions substringRadioButton click.
 
 	resultTree 
 		whenSelectedItemChangedDo: [ :newResult |
@@ -336,41 +336,14 @@ StFinderPresenter >> connectSearchBar [
 StFinderPresenter >> connectSearchOptions [
 
 	searchOptions
-		whenSubstringActivatedDo: [ 
-			self model useSubstring: true.
-			searchOptions 
-				disableExact;
-				disableRegex ];
-		whenSubstringDeactivatedDo: [ 
-			self model useSubstring: false.
-			searchOptions
-				enableExact;
-				enableRegex ];
-
-		whenRegexActivatedDo: [ 
-			self model useRegex: true.
-			searchOptions 
-				disableSubstring;
-				disableExact. ];
-		whenRegexDeactivatedDo: [ 
-			self model useRegex: false.
-			searchOptions 
-				enableSubstring;
-				enableExact ];
-		
+		whenSubstringActivatedDo: [ self model useSubstring: true ];
+		whenSubstringDeactivatedDo: [ self model useSubstring: false ];
+		whenRegexActivatedDo: [ self model useRegex: true ];
+		whenRegexDeactivatedDo: [ self model useRegex: false ];
+		whenExactActivatedDo: [ self model useExact: true ];
+		whenExactDeactivatedDo: [ self model useExact: false ];
 		whenCaseActivatedDo: [ self model useCase: true ];
-		whenCaseDeactivatedDo: [ self model useCase: false ];
-		
-		whenExactActivatedDo: [
-			self model useExact: true.
-			searchOptions 
-				disableSubstring;
-				disableRegex ];
-		whenExactDeactivatedDo: [ 
-			self model useExact: false.
-			searchOptions 
-				enableSubstring;
-				enableRegex ].
+		whenCaseDeactivatedDo: [ self model useCase: false ]
 ]
 
 { #category : 'layout' }

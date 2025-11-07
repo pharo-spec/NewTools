@@ -37,7 +37,8 @@ Class {
 		'placeHolderIndices',
 		'cellSize',
 		'cells',
-		'previousClosestPlaceholder'
+		'previousClosestPlaceholder',
+		'application'
 	],
 	#classVars : [
 		'Current'
@@ -172,6 +173,7 @@ CavroisWindowManager class >> chooseGridSize [
 
 	| presenter |
 	presenter := SpRequestDialog new
+		             application: self current application;
 		             title: 'Grid ';
 		             label: 'What is the size of the grid ?';
 		             text: '';
@@ -181,8 +183,7 @@ CavroisWindowManager class >> chooseGridSize [
 				             | inputValue |
 				             inputValue := dialog presenter text.
 				             inputValue isAllDigits
-					             ifFalse: [
-						             self inform: 'Please enter a valid number' ]
+					             ifFalse: [ self current application inform: 'Please enter a valid number' ]
 					             ifTrue: [
 							             inputValue := inputValue asNumber.
 							             (inputValue between: 1 and: 5)
@@ -191,9 +192,7 @@ CavroisWindowManager class >> chooseGridSize [
 										             self current cellSize: inputValue.
 										             self current createPlaceHolderGrid: inputValue.
 										             MenubarMorph reset ]
-								             ifFalse: [
-									             self inform:
-											             'Please enter a number between 1 and 5' ] ] ];
+								             ifFalse: [ self current application inform: 'Please enter a number between 1 and 5' ] ] ];
 		             openDialog
 ]
 
@@ -202,6 +201,7 @@ CavroisWindowManager class >> createProfile [
 
 	| presenter |
 	presenter := SpRequestDialog new
+		             application: self current application;
 		             title: 'Snapshot Profile';
 		             label: 'What is the name of your profile?';
 		             text: '';
@@ -210,8 +210,7 @@ CavroisWindowManager class >> createProfile [
 		             onAccept: [ :dialog |
 				             self current resetCells.
 				             self current updatePreviousCurrentProfile.
-				             self current addProfileFromWindows:
-						             dialog presenter text , ' (Current)'.
+				             self current addProfileFromWindows: dialog presenter text , ' (Current)'.
 				             MenubarMorph reset ];
 		             openDialog
 ]
@@ -229,13 +228,13 @@ CavroisWindowManager class >> deleteProfile [
 	self current profiles isNotEmpty ifFalse: [ ^ self ].
 	collection := self current profiles keys asOrderedCollection.
 	presenter := SpSelectDialog new
+		             application: self current application;
 		             title: 'Delete profile';
 		             label: 'Select the profile you want to remove';
 		             items: collection;
 		             onAccept: [ :dialog |
-			             self removeSelectedProfile:
-					             dialog presenter selectedItem.
-			             MenubarMorph reset ];
+				             self removeSelectedProfile: dialog presenter selectedItem.
+				             MenubarMorph reset ];
 		             openDialog
 ]
 
@@ -250,8 +249,8 @@ CavroisWindowManager class >> loadProfile [
 
 	| file profile presenter oldProfile oldKey baseName |
 	presenter := StOpenFilePresenter new
-		             openFolder:
-			             FileLocator preferences asFileReference / 'pharo';
+		             application: self current application;
+		             openFolder: FileLocator preferences asFileReference / 'pharo';
 		             title: 'Select Profile to load'.
 	presenter okAction: [ :fileReference |
 			(fileReference basename includesSubstring: 'Profile')
@@ -265,14 +264,10 @@ CavroisWindowManager class >> loadProfile [
 								self current profiles
 									at: baseName put: oldProfile;
 									removeKey: oldKey ].
-						self current profiles
-							at:
-							(profile name copyReplaceAll: '(Current)' with: '')
-							, ' (Current)'
-							put: profile.
+						self current profiles at: (profile name copyReplaceAll: '(Current)' with: '') , ' (Current)' put: profile.
 						self current currentProfile: profile.
 						MenubarMorph reset ]
-				ifFalse: [ self inform: ' File selected is not a profile' ] ].
+				ifFalse: [ self current application inform: ' File selected is not a profile' ] ].
 	presenter openDialog
 ]
 
@@ -282,11 +277,11 @@ CavroisWindowManager class >> openTutorial [
 	<script>
 	| presenter |
 	presenter := SpTextPresenter new
+		             application: self current application;
 		             text: self comment;
 		             open.
 
-	presenter withWindowDo: [ :w |
-		w title: 'Profile Tutorial' translated ]
+	presenter withWindowDo: [ :w | w title: 'Profile Tutorial' translated ]
 ]
 
 { #category : 'menu' }
@@ -354,6 +349,7 @@ CavroisWindowManager class >> renameProfile [
 
 	| presenter profile |
 	presenter := SpSelectDialog new
+		             application: self current application;
 		             title: 'Rename a profile';
 		             label: 'Select the profile you want to rename';
 		             items: self current profiles associations;
@@ -364,15 +360,14 @@ CavroisWindowManager class >> renameProfile [
 	presenter openModal.
 	profile ifNotNil: [
 			presenter := SpRequestDialog new
+				             application: self current application;
 				             title: 'Rename ' , profile key;
 				             label: 'What is the new name of your profile ?';
 				             text: '';
 				             acceptLabel: 'Confirm';
 				             cancelLabel: 'Cancel';
 				             onAccept: [ :dialog |
-						             self
-							             updateProfile: profile
-							             withName: dialog presenter text.
+						             self updateProfile: profile withName: dialog presenter text.
 						             MenubarMorph reset ];
 				             openDialog ]
 ]
@@ -417,21 +412,14 @@ CavroisWindowManager class >> saveProfile: aLocation [
 
 	| fileString fileName file saveName |
 	self current currentProfile ifNil: [
-			"
-				We should change the architecture and probabluy introduce a little presenter objects
-			self inform: 'No profile registered'."
+			self current application inform: 'No profile registered'.
 			^ self ].
-	saveName := self current currentProfile name
-		            copyReplaceAll: '(Current)'
-		            with: ''.
+	saveName := self current currentProfile name copyReplaceAll: '(Current)' with: ''.
 	fileString := STON toString: self current currentProfile.
 	fileName := 'Profile:' , saveName trimBoth , '.ston'.
 	file := aLocation / fileName.
-
 	file writeStreamDo: [ :stream | stream nextPutAll: fileString ].
-	"
-	We should change the architecture and probabluy introduce a little presenter objects
-	self inform: 'Profile saved !'"
+	self current application inform: 'Profile saved !'
 ]
 
 { #category : 'system startup' }
@@ -444,9 +432,9 @@ CavroisWindowManager class >> startUp: isImageStarting [
 CavroisWindowManager class >> switchToProfile: profileKey [
 
 	| oldProfile newProfile oldKey newKey baseName presenter |
-	self current currentProfile = (self current profiles at: profileKey)
-		ifTrue: [ ^ self ].
+	self current currentProfile = (self current profiles at: profileKey) ifTrue: [ ^ self ].
 	presenter := SpConfirmDialog new
+		             application: self current application;
 		             title: 'Switch Profile';
 		             label: profileKey , 'will become the current profile';
 		             acceptLabel: 'Confirm';
@@ -454,11 +442,8 @@ CavroisWindowManager class >> switchToProfile: profileKey [
 		             onAccept: [ :dialog |
 				             oldProfile := self current currentProfile.
 				             newProfile := self current profiles at: profileKey.
-				             oldKey := self current profiles keyAtValue:
-						                       oldProfile.
-				             baseName := oldKey
-					                         copyReplaceAll: '(Current)'
-					                         with: ''.
+				             oldKey := self current profiles keyAtValue: oldProfile.
+				             baseName := oldKey copyReplaceAll: '(Current)' with: ''.
 				             self current profiles
 					             at: baseName put: oldProfile;
 					             removeKey: oldKey.
@@ -532,13 +517,10 @@ CavroisWindowManager class >> updateProfileItem: aBuilder [
 		order: 2;
 		enabled: [ self current currentProfile isNotNil ];
 		action: [
-				self current currentProfile
-					ifNil: [ self inform: 'No profile has been created yet' ]
-					ifNotNil: [
+				self current currentProfile ifNil: [ self current application inform: 'No profile has been created yet' ] ifNotNil: [
 							self updateProfile.
-							self inform: 'Profile has been updated' ] ];
-		help:
-			'Allows you to register new window(s) in profile or to modify previous ones';
+							self current application inform: 'Profile has been updated' ] ];
+		help: 'Allows you to register new window(s) in profile or to modify previous ones';
 		iconName: #save
 ]
 
@@ -580,6 +562,12 @@ CavroisWindowManager >> allCurrentWindows [
 	^ self currentWorld windowsSatisfying: [ :w |
 			  (w hasProperty: #isClosed) not and:
 				  (w isCollapsed not and: (w isKindOf: SpDialogWindowMorph) not) ]
+]
+
+{ #category : 'accessing' }
+CavroisWindowManager >> application [
+
+	^ application
 ]
 
 { #category : 'actions' }
@@ -723,6 +711,7 @@ CavroisWindowManager >> handleWindowDrag: aWindow at: aPoint [
 CavroisWindowManager >> initialize [
 
 	super initialize.
+	application:= StPharoApplication current.
 	classToolMapping := Dictionary new.
 	defaultLocation := FileLocator preferences asFileReference / 'pharo'.
 	placeHolderIndices := Dictionary new.

@@ -171,11 +171,10 @@ StFinderSearchBar >> updateSearchModes [
 ]
 
 { #category : 'updating - widgets' }
-StFinderSearchBar >> updateSearchOptions: aStFinderSelectorSearch [ 
+StFinderSearchBar >> updateSearchOptions: aStFinderSelectorSearch [
 	"Private - Search mode changed, update the valid search options for the selected aStFinderSelectorSearch"
 
 	owner updateSearchOptions: aStFinderSelectorSearch validSearchOptions
-
 ]
 
 { #category : 'events' }
