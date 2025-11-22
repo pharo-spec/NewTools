@@ -1,9 +1,6 @@
 Class {
 	#name : 'StMessageBrowserTest',
 	#superclass : 'TestCase',
-	#classVars : [
-		'UsingLayout'
-	],
 	#category : 'NewTools-MethodBrowsers-Senders',
 	#package : 'NewTools-MethodBrowsers',
 	#tag : 'Senders'
