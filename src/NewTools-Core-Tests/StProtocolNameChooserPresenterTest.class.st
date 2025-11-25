@@ -18,16 +18,6 @@ StProtocolNameChooserPresenterTest >> setUp [
 	presenter := StProtocolNameChooserPresenter new
 ]
 
-{ #category : 'running' }
-StProtocolNameChooserPresenterTest >> testAddButtonIsDiabledWhenTextFieldIsEmpty [
-
-	self assertEmpty: presenter protocolName.
-	self deny: presenter newProtocolButton isEnabled.
-
-	presenter protocolName: 'ANewProtocol'.
-	self assert: presenter newProtocolButton isEnabled
-]
-
 { #category : 'tests' }
 StProtocolNameChooserPresenterTest >> testCreatingProtocolThatDoesntExists [
 "When creating a protocol that doesn't exist beforehand, it should create it correctly with the same name as written."
@@ -44,16 +34,15 @@ StProtocolNameChooserPresenterTest >> testCreatingProtocolThatDoesntExists [
 
 { #category : 'tests' }
 StProtocolNameChooserPresenterTest >> testCreatingProtocolThatExists [
-"When creating a protocol that does exist beforehand, it should create the name of the suggested protocol instead of the name written."
-	| protocolName |
+	"When creating a new protocol, it should create the name written."
 
-	protocolName := 'acc' .
+	| protocolName |
+	protocolName := 'acc'.
 	presenter concernedClass: self class.
-	
+
 	presenter protocolName: protocolName.
 	presenter doAcceptFromTextInput.
-	self assert: presenter selectedProtocolName equals: 'accessing' 
-
+	self assert: presenter selectedProtocolName equals: 'acc'
 ]
 
 { #category : 'tests' }

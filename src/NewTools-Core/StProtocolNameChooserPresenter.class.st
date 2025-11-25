@@ -18,7 +18,6 @@ Class {
 		'suggestionList',
 		'protocolNameField',
 		'concernedClass',
-		'newProtocolButton',
 		'selectedProtocolName'
 	],
 	#category : 'NewTools-Core-Calypso',
@@ -93,9 +92,7 @@ StProtocolNameChooserPresenter >> connectPresenters [
 	protocolNameField whenTextChangedDo: [ self updatePresenter ].
 	protocolNameField whenSubmitDo: [ :aString | self doAcceptFromTextInput  ].
 	
-	suggestionList whenActivatedDo: [ self doAcceptFromList ].
-	
-	newProtocolButton action: [ self doAcceptFromTextInput ]
+	suggestionList whenActivatedDo: [ self doAcceptFromList ]
 ]
 
 { #category : 'layout' }
@@ -107,7 +104,6 @@ StProtocolNameChooserPresenter >> defaultLayout [
 		add: (SpBoxLayout newLeftToRight
 				spacing: 3;
 				add: protocolNameField expand: true;
-				add: newProtocolButton expand: false;
 				yourself)
 			expand: false;
 		yourself
@@ -123,8 +119,7 @@ StProtocolNameChooserPresenter >> doAcceptFromList [
 { #category : 'private - actions' }
 StProtocolNameChooserPresenter >> doAcceptFromTextInput [
 	
-	selectedProtocolName := suggestionList selectedItem 
-		ifNil: [  protocolNameField text. ].
+	selectedProtocolName := protocolNameField text.
 	self withWindowDo: [ :w | w beOk; close ]
 ]
 
@@ -144,12 +139,6 @@ StProtocolNameChooserPresenter >> initializePresenters [
 
 	protocolNameField := self newTextInput.
 	protocolNameField placeholder: 'Protocol name (e.g. accessing)'.
-
-	newProtocolButton := self newButton.
-	newProtocolButton
-		addStyle: 'small';
-		icon: (self iconNamed: #add);
-		help: 'Create a new protocol with the content of the input field if this protocol is not in the list'.
 
 	self initializeProtocolNameField
 ]
@@ -181,12 +170,6 @@ StProtocolNameChooserPresenter >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter title: 'New protocol name'.
 	aWindowPresenter whenOpenedDo: [ protocolNameField takeKeyboardFocus ]
-]
-
-{ #category : 'private - accessing' }
-StProtocolNameChooserPresenter >> newProtocolButton [
-
-	^ newProtocolButton
 ]
 
 { #category : 'private - accessing' }
@@ -238,9 +221,6 @@ StProtocolNameChooserPresenter >> selectedProtocolName [
 { #category : 'initialization' }
 StProtocolNameChooserPresenter >> updatePresenter [
 
-	newProtocolButton enabled: self protocolName isNotEmpty.
-
 	suggestionList
-		items: self protocolsToSuggest;
-		selectFirst
+		items: self protocolsToSuggest
 ]
