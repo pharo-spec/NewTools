@@ -110,10 +110,9 @@ StInspectorPresenter class >> openOn: anObject [
 { #category : 'tools registry' }
 StInspectorPresenter class >> registerToolsOn: registry [
 	"self registerToolsOn: self currentApplication tools
-	But do not use self currentApplication this is a global." 
-	
-	registry register: self as: #inspector.
-	registry register: self as: #basicInspector
+	But do not use self currentApplication this is a global."
+
+	registry register: self as: #inspector
 ]
 
 { #category : 'settings' }

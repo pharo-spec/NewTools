@@ -330,7 +330,7 @@ StDebuggerTest >> testContextChangedAfterStepOverAndReturn [
 { #category : 'tests - context inspector' }
 StDebuggerTest >> testContextTempVarList [
 	| contextItems inspectorTable |
-	
+
 	dbg := self debuggerOn: session.
 	inspectorTable := dbg inspector getRawInspectorPresenterOrNil attributeTable.
 	
@@ -342,10 +342,10 @@ StDebuggerTest >> testContextTempVarList [
 	self assert: (contextItems at: 1) class equals: StInspectorSelfNode.	
 	
 	"Next nodes are temps"
-	self assert: (contextItems at: 2) tempVariable isTempVariable.
-	self assert: (contextItems at: 3) tempVariable isTempVariable.
-	self assert: (contextItems at: 4) tempVariable isTempVariable.
-	self assert: (contextItems at: 5) tempVariable isTempVariable.
+	self assert: (contextItems at: 2) isTempVariable.
+	self assert: (contextItems at: 3) isTempVariable.
+	self assert: (contextItems at: 4) isTempVariable.
+	self assert: (contextItems at: 5) isTempVariable.
 	
 	"receiver"	
 	self assert: (contextItems at: 6) rawValue identicalTo: session shortStack first receiver session.
@@ -413,8 +413,8 @@ StDebuggerTest >> testContextTempVarListUpdatesTempsWhenEnteringOrLeavingInlined
 			assert: (newContextItems at: i)
 			identicalTo: (contextItems at: i) ].
 
-	self assert: (newContextItems at: 9) tempVariable isTempVariable.
-	self assert: (newContextItems at: 9) tempVariable name equals: 'j'.
+	self assert: (newContextItems at: 9) isTempVariable.
+	self assert: (newContextItems at: 9) tempName equals: 'j'.
 
 	"We leave inlined block"
 	2 timesRepeat: [ dbg stepOver ].
@@ -458,11 +458,10 @@ StDebuggerTest >> testContextTempVarListUpdatesTempsWhenEnteringOrLeavingInlined
 			identicalTo: (contextItems at: i) ].
 
 	self assert:
-		(newContextItems at: contextItems size + 1) tempVariable
-			isTempVariable.
+		(newContextItems at: contextItems size + 1) isTempVariable.
 	self
 		assert:
-		(newContextItems at: contextItems size + 1) tempVariable name
+		(newContextItems at: contextItems size + 1) tempName
 		equals: 'list'.
 
 	"We leave inlined block"
@@ -621,7 +620,6 @@ StDebuggerTest >> testDiscardCodeChangesFor [
 { #category : 'tests - code pane' }
 StDebuggerTest >> testDynamicVariableEvaluation [
 	|activeProcess debuggedProcess|
-	self skipOnPharoCITestingEnvironment.
 	debugger := StTestDebuggerProvider new
 		            debuggerWithDynamicVariableSuspendedContext.
 	debugger initializeCode.
@@ -1308,11 +1306,11 @@ StDebuggerTest >> testUpdateLayoutForContextsIfAssertionFailure [
 	self
 		assert: assertionFailure actualObject
 		equals:
-		((session interruptedContext tempNamed: #aStringOrBlock) at: 2).
+		((session interruptedContext tempNamed: #aStringOrBlock) at: 1).
 	self
 		assert: assertionFailure expectedObject
 		equals:
-		((session interruptedContext tempNamed: #aStringOrBlock) at: 1)
+		((session interruptedContext tempNamed: #aStringOrBlock) at: 2)
 ]
 
 { #category : 'tests - code pane' }

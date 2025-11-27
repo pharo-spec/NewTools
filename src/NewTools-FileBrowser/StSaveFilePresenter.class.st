@@ -110,5 +110,6 @@ StSaveFilePresenter >> selectedEntry [
 
 { #category : 'hooks' }
 StSaveFilePresenter >> windowTitle [
-	^ 'Save As'
+
+	^ title ifNil: ['Save As']
 ]

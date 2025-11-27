@@ -290,22 +290,18 @@ StFinderPresenter >> connectPresenters [
 
 	self connectSearchBar.
 	previewSourcePresenter whenSubmitDo: [ :text |
-		resultTree selectedItem 
-			acceptText: text in: previewSourcePresenter ].
+		resultTree selectedItem ifNotNil: [ :selected | selected acceptText: text in: previewSourcePresenter ] ].
 
 	configButton action: [
-		SettingBrowser new
-			rootNodes: (SettingBrowser currentTree nodeNamed: #finder) allChildren;
-			open ].
+			SettingBrowser new
+				rootNodes: (SettingBrowser currentTree nodeNamed: #finder) allChildren;
+				open ].
 
 	self connectSearchOptions.
 	searchOptions substringRadioButton click.
 
-	resultTree 
-		whenSelectedItemChangedDo: [ :newResult |
-			newResult 
-				ifNil: [ self resultButtonBar disableAll ] 
-				ifNotNil: [
+	resultTree whenSelectedItemChangedDo: [ :newResult |
+			newResult ifNil: [ self resultButtonBar disableAll ] ifNotNil: [
 					newResult forFinderPreview: previewSourcePresenter.
 					self resultButtonBar enableButtonsFor: newResult ] ].
 

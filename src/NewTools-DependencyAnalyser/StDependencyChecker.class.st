@@ -31,13 +31,12 @@ StDependencyChecker >> buildPackageRelationGraphFor: aPackageName [
 
 { #category : 'private' }
 StDependencyChecker >> computeDependenciesOf: aPackageName [
+
 	| dependencies |
-	dependencies := (self daPackageFor: aPackageName) dependentPackages collect: [:each | each packageName].
-	^ ((dependencies
-			addAll: (self manuallyResolvedDependenciesOf: aPackageName);
-			yourself)
-		difference: (self ignoredDependenciesOf: aPackageName))
-		sorted
+	dependencies := (self daPackageFor: aPackageName) dependentPackages collect: [ :each | each packageName ].
+	^ (dependencies
+		   addAll: (self manuallyResolvedDependenciesOf: aPackageName);
+		   yourself) sorted
 ]
 
 { #category : 'private' }
@@ -82,11 +81,6 @@ StDependencyChecker >> dependenciesOf: aPackageName [
 	^ report
 		dependenciesOf: aPackageName asSymbol
 		ifAbsentPut: [ self computeDependenciesOf: aPackageName ]
-]
-
-{ #category : 'private' }
-StDependencyChecker >> ignoredDependenciesOf: aPackageName [
-	^ (self packageOrganizer packageNamed: aPackageName) ignoredDependencies
 ]
 
 { #category : 'initialization' }

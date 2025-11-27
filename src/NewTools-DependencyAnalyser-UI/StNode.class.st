@@ -92,6 +92,12 @@ StNode >> isCycleNode [
 ]
 
 { #category : 'testing' }
+StNode >> isMethodImplementationNode [
+
+	^ false
+]
+
+{ #category : 'testing' }
 StNode >> isPackageNode [
  	^ false
 ]

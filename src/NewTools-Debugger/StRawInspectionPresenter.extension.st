@@ -44,23 +44,20 @@ StRawInspectionPresenter >> selectedPageName [
 ]
 
 { #category : '*NewTools-Debugger' }
-StRawInspectionPresenter >> updateNodesFromScope: oldASTScope to: newASTScope [
+StRawInspectionPresenter >> updateNodesFromScope: oldTemps to: newTemps [
 
-	| nodes newTemps oldTemps tempsToRemove tempsToAdd |
-	oldTemps := oldASTScope allTemps.
-	newTemps := newASTScope allTemps.
+	| nodes tempsToRemove tempsToAdd |
 	tempsToRemove := oldTemps difference: newTemps.
 	tempsToAdd := newTemps difference: oldTemps.
 	nodes := self attributeTable roots.
-
 	nodes removeAllSuchThat: [ :node |
-		node class = StInspectorTempNode and: [
-			tempsToRemove includes: node tempVariable ] ].
+		node class = StInspectorNewTempNode and: [
+			tempsToRemove includes: node tempName ] ].
 	tempsToAdd do: [ :temp |
 		nodes add:
-			((StInspectorTempNode hostObject:
+			((StInspectorNewTempNode hostObject:
 					  self model inspectedObject context)
-				 tempVariable: temp;
+				 tempName: temp;
 				 yourself) ].
 
 	self attributeTable roots: nodes

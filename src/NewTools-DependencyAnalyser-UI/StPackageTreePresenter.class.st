@@ -30,6 +30,12 @@ StPackageTreePresenter >> areClassToDependencyNodes: aCollectionOfItem [
 ]
 
 { #category : 'testing' }
+StPackageTreePresenter >> areMethodNodes: aCollectionOfItem [
+
+	^ aCollectionOfItem allSatisfy: [ :node |  node isMethodImplementationNode ]
+]
+
+{ #category : 'testing' }
 StPackageTreePresenter >> arePackageNodes: aCollectionOfItem [
 
 	^ aCollectionOfItem allSatisfy: [ :node |  node isPackageNode ]

@@ -90,6 +90,13 @@ StFinderSaveCodeTest >> testFinderShouldModifyExistingMethod [
 ]
 
 { #category : 'tests' }
+StFinderSaveCodeTest >> testFinderShouldNotTryToSaveWhenNoMethodSelected [
+ 
+	"When trying to save when no method was selected, there was MessageNotUnderstood exception"
+	self shouldnt: [ presenter previewSourcePresenter triggerSubmitAction ] raise: Error
+]
+
+{ #category : 'tests' }
 StFinderSaveCodeTest >> testNewMethodCreation [
 
 	self openInstance.

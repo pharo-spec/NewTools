@@ -133,6 +133,10 @@ BaselineOfNewTools >> baseline: spec [
 			"Profiler"
 			package: 'NewTools-ProfilerUI'  with: [ spec requires: #('NewTools-Core' 'NewTools-SpTextPresenterDecorators') ];
 			
+			"Epicea"
+			package: 'NewTools-Epicea' with: [ spec requires: #('NewTools-Core')  ];
+			package: 'NewTools-Epicea-Tests' with: [ spec requires: #('NewTools-Epicea')  ];
+			
 			"Scopes Editor"
 			package: 'NewTools-Scopes';
 			package: 'NewTools-Scopes-Editor' with: [ spec requires: #('NewTools-Core' 'NewTools-Scopes') ];
@@ -267,32 +271,14 @@ BaselineOfNewTools >> baseline: spec [
 			group: 'ColorPickerGroup' with: #('ColorPicker' 'ColorPicker-Tests');
 			group: 'ProcessBrowser' with: #('NewTools-ProcessBrowser');
 			group: 'DependencyAnalyser' with: #('NewTools-DependencyAnalyser-UI' 'NewTools-DependencyAnalyser-Tests');
+			group: 'Epicea' with: #( 'NewTools-Epicea' 'NewTools-Epicea-Tests' );
 			
 
-			group: 'default' with: #( 
-			         'Profile'
-						'Playground'
-						'ProfStef'
-						'Transcript'
-						'Inspector' 
-						'ClosedWindows'
-						'CritiqueBrowser' 
-						'Debugger'
-				   		'SystemReporter' 
-						'FontChooser' 
-						'Methods'
-				   		'Spotter'
-		            	'RewriterTools'
-						'ScopesEditor'
-						'FileBrowser'
-						'Finder'
-						'Profiler'
-						'SettingsBrowser'
-						'WelcomeBrowser'
-						'ShortcutsBrowser'
-						'ColorPickerGroup'
-						'ProcessBrowser'
-						'DependencyAnalyser' ) ]
+			group: 'default'
+				with:
+					#( 'Profile' 'Epicea' 'Playground' 'ProfStef' 'Transcript' 'Inspector' 'ClosedWindows' 'CritiqueBrowser' 'Debugger' 'SystemReporter' 'FontChooser'
+					   'Methods' 'Spotter' 'RewriterTools' 'ScopesEditor' 'FileBrowser' 'Finder' 'Profiler' 'SettingsBrowser' 'WelcomeBrowser' 'ShortcutsBrowser'
+					   'ColorPickerGroup' 'ProcessBrowser' 'DependencyAnalyser' )  ]
 ]
 
 { #category : 'external projects' }

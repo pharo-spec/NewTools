@@ -9,22 +9,15 @@ Class {
 	#tag : 'Nodes'
 }
 
-{ #category : 'building-menu' }
-StMethodImplementationNode >> addMenuActionsOn: anActionGroup [
-	| method |
-	
-	method := self content.
-	anActionGroup addActionWith: [ :action | action
-		name: 'Select this package as the right dependency';
-		action: [
-			(TheManifestBuilder of: self packageUnderAnalysis packageManifest)
-				addManuallyResolvedDependency: method package name.
-				"TODO: run the analysis again" ] ]
-]
-
 { #category : 'accessing' }
 StMethodImplementationNode >> icon [
 	^ self iconNamed: #package
+]
+
+{ #category : 'testing' }
+StMethodImplementationNode >> isMethodImplementationNode [
+
+	^ true
 ]
 
 { #category : 'displaying' }

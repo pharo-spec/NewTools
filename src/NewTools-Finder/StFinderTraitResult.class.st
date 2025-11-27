@@ -34,11 +34,11 @@ StFinderTraitResult >> displayIcon [
 { #category : 'action' }
 StFinderTraitResult >> forFinderPreview: aSpCodePresenter [
 
-	^ self parent ifNotNil: [
-		  self displaySource: self getCompiledMethod in: aSpCodePresenter
-		] ifNil: [
-			acceptTextCallback := nil.
-			aSpCodePresenter
-				beForScripting;
-				text: self content definitionString ]
+	^ self parent
+		  ifNotNil: [ self displaySource: self getCompiledMethod in: aSpCodePresenter ]
+		  ifNil: [
+				  acceptTextCallback := nil.
+				  aSpCodePresenter
+					  beForScripting;
+					  text: self content definitionString ]
 ]

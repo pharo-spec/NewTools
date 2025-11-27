@@ -124,5 +124,6 @@ StOpenFilePresenter >> isMultipleSelection [
 
 { #category : 'hooks' }
 StOpenFilePresenter >> windowTitle [
-	^ 'Select File To Open'
+
+	^ title ifNil: ['Select File To Open']
 ]

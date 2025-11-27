@@ -50,5 +50,6 @@ StOpenDirectoryPresenter >> selectedEntry [
 
 { #category : 'hooks' }
 StOpenDirectoryPresenter >> windowTitle [
-	^ 'Select Directory To Open'
+
+	^ title ifNil: [ 'Select Directory To Open' ]
 ]

@@ -141,11 +141,11 @@ StDebuggerInspectorTest >> testUpdateLayoutForContextsWithAssertionFailure [
 	self
 		assert: assertionFailure actualObject
 		equals:
-		((session interruptedContext tempNamed: #aStringOrBlock) at: 2).
+		((session interruptedContext tempNamed: #aStringOrBlock) at: 1).
 	self
 		assert: assertionFailure expectedObject
 		equals:
-		((session interruptedContext tempNamed: #aStringOrBlock) at: 1)
+		((session interruptedContext tempNamed: #aStringOrBlock) at: 2)
 ]
 
 { #category : 'tests' }

@@ -58,6 +58,43 @@ StDebuggerMNUExtensionTest >> tearDown [
 ]
 
 { #category : 'tests' }
+StDebuggerMNUExtensionTest >> testExtensionDisplaysFilteredProtocolsDNU [
+
+	self hideExtensionInDebugger.
+	debugger := StTestDebuggerProvider new debuggerWithDNUContext.
+	debugger
+		application: debugger class currentApplication;
+		initialize.
+
+	self assert: debugger debuggerActionModel isInterruptedContextDoesNotUnderstand.
+	self assert: debugger canExecuteCreateMissingMethodCommand.
+
+	self displayExtensionInDebugger.
+
+self assertCollection:  ( (debugger extensionTools first instVarNamed: #selectedProtocol) items collect: #name)  hasSameElements:  StTestDebuggerProvider protocolNames.
+self denyCollection: ( (debugger extensionTools first instVarNamed: #selectedProtocol) items collect: #name) includesAny: Object protocolNames.
+]
+
+{ #category : 'tests' }
+StDebuggerMNUExtensionTest >> testExtensionDisplaysObjectProtocolsDNU [
+
+	| extensionFilteredProtocols |
+	self hideExtensionInDebugger.
+	debugger := StTestDebuggerProvider new debuggerWithObjectClassDNUContext.
+	debugger
+		application: debugger class currentApplication;
+		initialize.
+
+	self assert: debugger debuggerActionModel isInterruptedContextDoesNotUnderstand.
+	self assert: debugger canExecuteCreateMissingMethodCommand.
+
+	self displayExtensionInDebugger.
+extensionFilteredProtocols:=( (debugger extensionTools first instVarNamed: #selectedProtocol) items ).
+self assertCollection:  (extensionFilteredProtocols collect: #name)  includesAll:  Object class protocolNames.
+self denyCollection: (extensionFilteredProtocols reject: #isExtensionProtocol thenCollect: #name) includesAny: ((Object allSuperclasses collect:#protocols) flattened reject:#isExtensionProtocol thenCollect:#name).
+]
+
+{ #category : 'tests' }
 StDebuggerMNUExtensionTest >> testExtensionDisplaysWhenDNU [
 
 	self hideExtensionInDebugger.

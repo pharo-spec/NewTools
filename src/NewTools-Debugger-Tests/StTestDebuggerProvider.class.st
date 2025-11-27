@@ -41,22 +41,25 @@ StTestDebuggerProvider >> debuggerWithDNUContext [
 
 { #category : 'helpers' }
 StTestDebuggerProvider >> debuggerWithDynamicVariableSuspendedContext [
-	|process|
+
+	| process progressSemaphore |
+	progressSemaphore := Semaphore new.
 	process := [
-	           TestDynamicVariable value: 42 during: [
-		           self assert:
-			           (thisProcess psValueAt: TestDynamicVariable soleInstance index) = 42.
-					  100 milliSeconds wait.
-		           thisProcess suspend ] ] fork.
-	session := DebugSession
-		           named: 'test session providerSessionFor:'
-		           on: process
-		           startedAt: process suspendedContext.
-	session exception:
-		(OupsNullException fromSignallerContext: process suspendedContext).
-"	self assert:
-		(process psValueAt: TestDynamicVariable soleInstance index) = 42."
+		           TestDynamicVariable value: 42 during: [
+				           self assert: (thisProcess psValueAt: TestDynamicVariable soleInstance index) = 42.
+				           "Let's tell our owner that we are inside the block!"
+							  progressSemaphore signal.
+							  "And now we suspend ourselves"
+				           thisProcess suspend ] ] fork.
 	
+	"We wait until the process reaches the block.
+	Then we can continue"
+	progressSemaphore wait.
+
+	session := DebugSession named: 'test session providerSessionFor:' on: process startedAt: process suspendedContext.
+	session exception: (OupsNullException fromSignallerContext: process suspendedContext).
+	self assert: (process psValueAt: TestDynamicVariable soleInstance index) = 42.
+
 	^ self newDebugger
 ]
 
@@ -151,6 +154,15 @@ StTestDebuggerProvider >> debuggerWithMissingSubclassResponsibilityContextWithSt
 ]
 
 { #category : 'helpers' }
+StTestDebuggerProvider >> debuggerWithObjectClassDNUContext [
+	[ self methodProducingDNUonObject ]
+		on: Error
+		do: [ :err | 
+			self sessionFor: err signalerContext exception: err.					
+			^ self newDebugger ]
+]
+
+{ #category : 'helpers' }
 StTestDebuggerProvider >> debuggerWithObjectHalting [
 	[ StDebuggerObjectForTests new haltingMethod ]
 		on: Halt
@@ -193,6 +205,12 @@ StTestDebuggerProvider >> intermediateRecursiveMethodCall [
 StTestDebuggerProvider >> methodProducingDNU [
 
 	^ self foobar
+]
+
+{ #category : 'helpers' }
+StTestDebuggerProvider >> methodProducingDNUonObject [
+
+	^ Object foobar
 ]
 
 { #category : 'helpers' }

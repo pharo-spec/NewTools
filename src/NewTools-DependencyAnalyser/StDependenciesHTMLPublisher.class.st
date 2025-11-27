@@ -99,14 +99,6 @@ StDependenciesHTMLPublisher >> htmlForDependency: dependencyPackageName of: aPac
 ]
 
 { #category : 'publishing' }
-StDependenciesHTMLPublisher >> htmlForIgnoredDependenciesOf: aPackageName [
-	^ String streamContents: [ :str |
-		(self packageOrganizer packageNamed: aPackageName) ignoredDependencies
-			do: [ :dependency | str << (self warningLabel: dependency) ]
-			separatedBy: [ str space ] ]
-]
-
-{ #category : 'publishing' }
 StDependenciesHTMLPublisher >> htmlForPackage: aPackageName [
 	^ 	aPackageName
 ]
@@ -154,8 +146,7 @@ StDependenciesHTMLPublisher >> publish: aPackageName dependencies: dependencies 
 							<td id="' << aPackageName << '">' << (self htmlForPackage: aPackageName) << '</td>
 							<td>' << (self sizeBadgeFor: dependencies) << Character space
 							<< (self htmlForDependencies: dependencies sorted of: aPackageName) << Character space
-							<< (self htmlForIgnoredDependenciesOf: aPackageName) << '</td>
-							<td>' << (self sizeBadgeFor: dependants) << Character space << (Character space join: dependantLinks) << '</td>
+							<< (self sizeBadgeFor: dependants) << Character space << (Character space join: dependantLinks) << '</td>
 						</tr>'; lf
 ]
 

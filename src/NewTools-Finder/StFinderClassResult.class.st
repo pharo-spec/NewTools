@@ -59,18 +59,15 @@ StFinderClassResult >> displayIcon [
 ]
 
 { #category : 'action' }
-StFinderClassResult >> forFinderPreview: aSpCodePresenter [ 
+StFinderClassResult >> forFinderPreview: aSpCodePresenter [
 
 	^ (self content isClass and: [ self parent isNotNil and: [ self parent isPackageResult not ] ])
-		ifTrue: [ 
-			self 
-				displaySource: self getCompiledMethod
-				in: aSpCodePresenter ]
-		ifFalse: [ 
-			acceptTextCallback := nil.
-			aSpCodePresenter 
-				beForScripting;
-				text: self content definitionString ]
+		  ifTrue: [ self displaySource: self getCompiledMethod in: aSpCodePresenter ]
+		  ifFalse: [
+				  acceptTextCallback := nil.
+				  aSpCodePresenter
+					  beForScripting;
+					  text: self content definitionString ]
 ]
 
 { #category : 'accessing' }

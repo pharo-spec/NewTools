@@ -60,9 +60,9 @@ StDebuggerContext >> buildInspectorNodes [
 	nodes := OrderedCollection new.
 	tempsAndArgs := self temporaryVariablesNodes.
 	argsNodes := tempsAndArgs select: [ :tempNode | 
-		             tempNode tempVariable isArgumentVariable ].
+		             tempNode isArgumentVariable ].
 	tempsNodes := tempsAndArgs select: [ :tempNode | 
-		              tempNode tempVariable isTempVariable ].
+		              tempNode isTempVariable ].
 	nodes add: self selfNode.
 	nodes addAll: argsNodes.
 	nodes addAll: tempsNodes.
@@ -161,8 +161,8 @@ StDebuggerContext >> stackTopNode [
 { #category : 'nodes' }
 StDebuggerContext >> temporaryVariablesNodes [
 
-	^ self context astScope allTemps collect: [ :temp | 
-		  (StInspectorTempNode hostObject: self context) tempVariable: temp ]
+	^ self context temporaryVariableNames collect: [ :arg1 |
+		  (StInspectorNewTempNode hostObject: self context) tempName: arg1 ]
 ]
 
 { #category : 'nodes' }
