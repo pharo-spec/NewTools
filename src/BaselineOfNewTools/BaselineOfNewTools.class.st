@@ -212,8 +212,7 @@ BaselineOfNewTools >> baseline: spec [
 						'NewTools-Spotter-Processors-Tests' );
 
 			group: 'SystemReporter' with: #( 'Core' 'NewTools-SystemReporter' );
-
-			group: 'Methods' with: #( 'Core' 'NewTools-SpTextPresenterDecorators' 'NewTools-MethodBrowsers' );
+			group: 'Methods' with: #( 'Core' 'NewTools-SpTextPresenterDecorators' 'NewTools-MethodBrowsers' 'NewTools-MethodBrowsers-Tests');
 			"Not in the image for the moment, we need a pass on them"
 
 			group: 'CritiqueBrowser' with: #( 'NewTools-CodeCritiques' 'NewTools-CodeCritiques-Tests' );
