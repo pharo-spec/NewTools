@@ -16,7 +16,7 @@ Class {
 }
 
 { #category : 'accessing' }
-StDebuggerCodePresenter >> debuggerActionModel: anObject [
+StDebuggerCodePresenter >> debuggerClientModel: anObject [
 
 	debuggerActionModel := anObject 
 ]

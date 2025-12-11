@@ -47,7 +47,7 @@ StDebuggerMNUExtensionTest >> tearDown [
 
 	debugger ifNotNil: [
 		debugger unsubscribeFromSystemAnnouncer.
-		debugger debuggerActionModel ifNotNil: [ :actionModel |
+		debugger debuggerClientModel ifNotNil: [ :actionModel |
 			actionModel clear.
 			actionModel session ifNotNil: [ :s | s clear ] ].
 		debugger close ].
@@ -66,7 +66,7 @@ StDebuggerMNUExtensionTest >> testExtensionDisplaysFilteredProtocolsDNU [
 		application: debugger class currentApplication;
 		initialize.
 
-	self assert: debugger debuggerActionModel isInterruptedContextDoesNotUnderstand.
+	self assert: debugger debuggerClientModel isInterruptedContextDoesNotUnderstand.
 	self assert: debugger canExecuteCreateMissingMethodCommand.
 
 	self displayExtensionInDebugger.
@@ -85,7 +85,7 @@ StDebuggerMNUExtensionTest >> testExtensionDisplaysObjectProtocolsDNU [
 		application: debugger class currentApplication;
 		initialize.
 
-	self assert: debugger debuggerActionModel isInterruptedContextDoesNotUnderstand.
+	self assert: debugger debuggerClientModel isInterruptedContextDoesNotUnderstand.
 	self assert: debugger canExecuteCreateMissingMethodCommand.
 
 	self displayExtensionInDebugger.
@@ -104,7 +104,7 @@ StDebuggerMNUExtensionTest >> testExtensionDisplaysWhenDNU [
 		initialize.
 
 	self assert:
-		debugger debuggerActionModel isInterruptedContextDoesNotUnderstand.
+		debugger debuggerClientModel isInterruptedContextDoesNotUnderstand.
 	self assert: debugger canExecuteCreateMissingMethodCommand.
 
 	self
@@ -130,7 +130,7 @@ StDebuggerMNUExtensionTest >> testExtensionHidesAfterDNUMethodHasBeenCreated [
 		initialize.
 
 	self assert:
-		debugger debuggerActionModel isInterruptedContextDoesNotUnderstand.
+		debugger debuggerClientModel isInterruptedContextDoesNotUnderstand.
 	self assert: debugger canExecuteCreateMissingMethodCommand.
 
 	self
@@ -148,7 +148,7 @@ StDebuggerMNUExtensionTest >> testExtensionHidesAfterDNUMethodHasBeenCreated [
 	extension := debugger extensionTools detect: [ :each |
 		             each class == self extensionTested ].
 
-	dnuMessage := debugger debuggerActionModel contextPredicate exception
+	dnuMessage := debugger debuggerClientModel contextPredicate exception
 		              message.
 
 	self assert: dnuMessage selector identicalTo: #foobar.
@@ -158,7 +158,7 @@ StDebuggerMNUExtensionTest >> testExtensionHidesAfterDNUMethodHasBeenCreated [
 
 	"Now, we shouldn't be able to create the method and the extension should be hidden."
 	self deny:
-		debugger debuggerActionModel isInterruptedContextDoesNotUnderstand.
+		debugger debuggerClientModel isInterruptedContextDoesNotUnderstand.
 	self deny: debugger canExecuteCreateMissingMethodCommand.
 	self
 		denyCollection: debugger extensionTools
@@ -175,7 +175,7 @@ StDebuggerMNUExtensionTest >> testExtensionHidesWhenNotDNU [
 		initialize.
 
 	self deny:
-		debugger debuggerActionModel isInterruptedContextDoesNotUnderstand.
+		debugger debuggerClientModel isInterruptedContextDoesNotUnderstand.
 	self deny: debugger canExecuteCreateMissingMethodCommand.
 
 	self

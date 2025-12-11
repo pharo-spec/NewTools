@@ -36,6 +36,6 @@ StDebuggerToggleFilterStackCommand >> canBeExecuted [
 
 { #category : 'executing' }
 StDebuggerToggleFilterStackCommand >> execute [
-	StDebuggerActionModel shouldFilterStack: StDebuggerActionModel shouldFilterStack not.
+	StDebuggerClientModel shouldFilterStack: StDebuggerClientModel shouldFilterStack not.
 	self context updateStep
 ]

@@ -83,14 +83,14 @@ StDebuggerTest >> replaceMethodWithQuickMethodStepping [
 	dbg code type: newSource.
 	dbg code update.
 	dbg acceptCodeChanges: newSource forContext: context.
-	dbg debuggerActionModel updateIfAble 
+	dbg debuggerClientModel updateIfAble 
 ]
 
 { #category : 'running' }
 StDebuggerTest >> setUp [	
 	super setUp.	
 	session := StTestDebuggerProvider new sessionForDebuggerTests.
-	shouldFilterStack := StDebuggerActionModel shouldFilterStack.
+	shouldFilterStack := StDebuggerClientModel shouldFilterStack.
 	oldMethodToSourceDictionary := Dictionary new.
 	
 	lastUserPreservation := self settings preserveWindowPosition.
@@ -123,7 +123,7 @@ StDebuggerTest >> tearDown [
 	debugger ifNotNil: [
 		debugger close.
 		debugger unsubscribeFromSystemAnnouncer.
-		debugger debuggerActionModel ifNotNil: [ :actionModel |
+		debugger debuggerClientModel ifNotNil: [ :actionModel |
 			actionModel clear.
 			actionModel session ifNotNil: [ :s | s clear ] ] ].
 
@@ -133,7 +133,7 @@ StDebuggerTest >> tearDown [
 		'haltingMethod <haltOrBreakpointForTesting> self halt. ^self'
 		classified: 'util'.
 
-	StDebuggerActionModel shouldFilterStack: shouldFilterStack.
+	StDebuggerClientModel shouldFilterStack: shouldFilterStack.
 	StTestDebuggerProvider removeSelector: #foobar.
 	oldMethodToSourceDictionary	associationsDo: [ :assoc |
 		assoc key methodClass
@@ -169,23 +169,6 @@ StDebuggerTest >> testAcceptCodeChangesForContext [
 	self assert: dbg code text equals: newSource
 ]
 
-{ #category : 'tests' }
-StDebuggerTest >> testActionModelSubscription [
-
-	self assert: self debugger debuggerActionModel isNil.
-
-	debugger session: session.
-
-	self assert: debugger debuggerActionModel isNotNil.
-	self assert:
-		(debugger debuggerActionModel hasSubscriber: debugger).
-
-	debugger unsubscribeFromActionModel.
-
-	self deny:
-		(debugger debuggerActionModel hasSubscriber: debugger)
-]
-
 { #category : 'tests - code pane' }
 StDebuggerTest >> testCancelCodeChangesFor [
 	| firstContext lastContext |
@@ -216,6 +199,23 @@ StDebuggerTest >> testClearUnsavedChanges [
 	self assertEmpty: dbg unsavedCodeChanges
 ]
 
+{ #category : 'tests' }
+StDebuggerTest >> testClientModelSubscription [
+
+	self assert: self debugger debuggerClientModel isNil.
+
+	debugger session: session.
+
+	self assert: debugger debuggerClientModel isNotNil.
+	self assert:
+		(debugger debuggerClientModel hasSubscriber: debugger).
+
+	debugger unsubscribeFromActionModel.
+
+	self deny:
+		(debugger debuggerClientModel hasSubscriber: debugger)
+]
+
 { #category : 'tests - actions' }
 StDebuggerTest >> testClose [
 
@@ -223,7 +223,7 @@ StDebuggerTest >> testClose [
 	windowPresenter := SpWindowPresenter new.
 	windowPresenter windowIsOpened.
 	debugger := self debuggerOn: session.
-	actionModel := debugger debuggerActionModel.
+	actionModel := debugger debuggerClientModel.
 	windowPresenter presenter: debugger.
 
 	"We trigger the closing from the presenter instead of the debugger itself,
@@ -505,7 +505,7 @@ StDebuggerTest >> testCopyStackToClipboard [
 StDebuggerTest >> testCreateMissingMethodWithUnfilteredStackUpdatesCodePane [
 
 	| dnuMessage method pcRangeForContext segments highlightSegment adapter |
-	StDebuggerActionModel shouldFilterStack: false.
+	StDebuggerClientModel shouldFilterStack: false.
 	debugger := StTestDebuggerProvider new debuggerWithDNUContext.
 	debugger
 		application: debugger class currentApplication;
@@ -515,11 +515,11 @@ StDebuggerTest >> testCreateMissingMethodWithUnfilteredStackUpdatesCodePane [
 	debugger code adapter: adapter.
 	debugger code adapter buildWidget.
 	self assert:
-		debugger debuggerActionModel isInterruptedContextDoesNotUnderstand.
+		debugger debuggerClientModel isInterruptedContextDoesNotUnderstand.
 	self
 		assert: debugger interruptedContext receiver class
 		identicalTo: StTestDebuggerProvider.
-	dnuMessage := debugger debuggerActionModel contextPredicate exception
+	dnuMessage := debugger debuggerClientModel contextPredicate exception
 		              message.
 
 	self assert: dnuMessage selector identicalTo: #foobar.
@@ -551,24 +551,24 @@ StDebuggerTest >> testCreateMissingMethodWithUnfilteredStackUpdatesCodePane [
 ]
 
 { #category : 'tests - initialization' }
-StDebuggerTest >> testDebuggerActionModel [
+StDebuggerTest >> testDebuggerApplication [
+	self
+		assert: (self debuggerOn: session) application
+		identicalTo: StDebugger currentApplication
+]
+
+{ #category : 'tests - initialization' }
+StDebuggerTest >> testDebuggerClientModel [
 	"Checking that when initializing a debugger its action model is correctly set up.
 	We cannot check that by calling the accessor because it is a lazy accessor. 
 	We're using slot reflection instead."
 
 	| slot debuggerActionModel |
-	slot := StDebugger slotNamed: #debuggerActionModel.
+	slot := StDebugger slotNamed: #debuggerClientModel.
 	debugger := self debuggerOn: session.
 	debuggerActionModel := slot read: debugger.
 
 	self assert: debuggerActionModel isNotNil
-]
-
-{ #category : 'tests - initialization' }
-StDebuggerTest >> testDebuggerApplication [
-	self
-		assert: (self debuggerOn: session) application
-		identicalTo: StDebugger currentApplication
 ]
 
 { #category : 'tests - session' }
@@ -624,7 +624,7 @@ StDebuggerTest >> testDynamicVariableEvaluation [
 		            debuggerWithDynamicVariableSuspendedContext.
 	debugger initializeCode.
 	activeProcess := Processor activeProcess.
-	debuggedProcess := debugger debuggerActionModel interruptedProcess.
+	debuggedProcess := debugger debuggerClientModel interruptedProcess.
 	
 	"The active process and the debugged process are different"
 	self
@@ -658,7 +658,7 @@ StDebuggerTest >> testExceptionProvidesSameExceptionAsTheActionModelOne [
 	debugger := self debuggerOn: session.
 	self
 		assert: debugger exception
-		identicalTo: debugger debuggerActionModel exception
+		identicalTo: debugger debuggerClientModel exception
 ]
 
 { #category : 'tests' }
@@ -734,7 +734,7 @@ StDebuggerTest >> testInterruptedContextProvidesSameContextAsTheActionModelOne [
 	debugger := self debuggerOn: session.
 	self
 		assert: debugger interruptedContext
-		identicalTo: debugger debuggerActionModel interruptedContext
+		identicalTo: debugger debuggerClientModel interruptedContext
 ]
 
 { #category : 'tests' }
@@ -743,7 +743,7 @@ StDebuggerTest >> testInterruptedProcessProvidesSameProcessAsTheActionModelOne [
 	debugger := self debuggerOn: session.
 	self
 		assert: debugger interruptedProcess
-		identicalTo: debugger debuggerActionModel interruptedProcess
+		identicalTo: debugger debuggerClientModel interruptedProcess
 ]
 
 { #category : 'tests' }
@@ -1110,7 +1110,7 @@ StDebuggerTest >> testSessionProvidesSameAsTheActionModelOne [
 	debugger := self debuggerOn: session.
 	self
 		assert: debugger session
-		identicalTo: debugger debuggerActionModel session
+		identicalTo: debugger debuggerClientModel session
 ]
 
 { #category : 'tests' }
@@ -1119,7 +1119,7 @@ StDebuggerTest >> testSessionStackProvidesSameStackAsTheActionModelOne [
 	debugger := self debuggerOn: session.
 	self
 		assertCollection: debugger stack
-		equals: debugger debuggerActionModel stack
+		equals: debugger debuggerClientModel stack
 ]
 
 { #category : 'tests - stack table' }

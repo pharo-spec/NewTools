@@ -25,6 +25,13 @@ Class {
 	#tag : 'Senders'
 }
 
+{ #category : 'tool registration' }
+StMessageBrowser class >> beDefaultBrowser [
+	<script>
+	
+	self registerToolsOn: Smalltalk tools
+]
+
 { #category : 'instance creation' }
 StMessageBrowser class >> browse: aCollection [
 	"Special Version that sets the correct refreshing Block for Implentors Browser"
@@ -112,7 +119,7 @@ StMessageBrowser class >> openMessageList: messageList name: aString autoSelect:
 StMessageBrowser class >> registerToolsOn: registry [
 
 	"Add ourselves to registry. See [Smalltalk tools]" 
-	"registry register: self as: #messageList"
+	registry register: self as: #messageList
 ]
 
 { #category : 'icons' }
@@ -158,6 +165,12 @@ StMessageBrowser >> addHighlightedSegments [
 	textPresenter addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight 
 		interval: (highlightInterval first to: highlightInterval last + 1);
 		yourself)
+]
+
+{ #category : 'to remove' }
+StMessageBrowser >> autoSelect: aString [
+	"this is just to absorb system navigation for now"
+	"once we remove the old message browser we should remove this empty method."
 ]
 
 { #category : 'announcements' }
@@ -431,6 +444,12 @@ StMessageBrowser >> newMessageToolbar [
 ]
 
 { #category : 'private' }
+StMessageBrowser >> numberOfElements [ 
+	
+	^ messageList ifNil: [ 0 ] ifNotNil: [ messageList numberOfElements ]
+]
+
+{ #category : 'private' }
 StMessageBrowser >> packageNameForItem: anItem [
 	^ anItem package ifNil: [ '' ] ifNotNil: [ :package | package name ]
 ]
@@ -626,5 +645,5 @@ StMessageBrowser >> windowIsClosing [
 { #category : 'private' }
 StMessageBrowser >> windowTitle [
 
-	^ (title ifNil: [ 'Message Browser' ]), ' [' , messageList numberOfElements printString , ']'
+	^ (title ifNil: [ 'Message Browser' ]), ' [' , self numberOfElements printString , ']'
 ]

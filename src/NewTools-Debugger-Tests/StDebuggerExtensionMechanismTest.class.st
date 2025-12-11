@@ -83,7 +83,7 @@ StDebuggerExtensionMechanismTest >> tearDown [
 		debugger unsubscribeFromSystemAnnouncer.
 		debugger unsubscribeFromActionModel.
 		debugger clearDebugSession.
-		debugger clearDebuggerActionModel ].
+		debugger clearDebuggerClientModel ].
 	allDebuggerExtensions := StDebugger extensionToolsClasses.
 	allDebuggerExtensions do: [ :extension |
 		| wasActivated |

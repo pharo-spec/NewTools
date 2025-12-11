@@ -302,6 +302,7 @@ StFontChooserPresenter >> selectedFontStyle [
 StFontChooserPresenter >> updateFonts [
 	
 	FreeTypeFontProvider current updateFromSystem.
+	self model fontList: (LogicalFontManager current allFamilies).
 	self updateWithFont: self selectedFont.
 
 ]

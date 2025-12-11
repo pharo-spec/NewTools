@@ -14,8 +14,8 @@ Class {
 }
 
 { #category : 'accessing' }
-SindarinTestCommandDebugger >> debuggerActionModel [
-	^ debuggerActionModel ifNil: [ debuggerActionModel := StDebuggerActionModel on: self session ]
+SindarinTestCommandDebugger >> debuggerClientModel [
+	^ debuggerActionModel ifNil: [ debuggerActionModel := StDebuggerClientModel on: self session ]
 ]
 
 { #category : 'removing' }
@@ -38,7 +38,7 @@ SindarinTestCommandDebugger >> session [
 SindarinTestCommandDebugger >> session: anObject [
 
 	session := anObject.
-	session ifNotNil: [ self debuggerActionModel session: anObject ]
+	session ifNotNil: [ self debuggerClientModel session: anObject ]
 ]
 
 { #category : 'removing' }

@@ -64,7 +64,7 @@ StDebuggerCommandTest >> testCommandsInDNUContext [
 		(StPeelToFirstCommand forContext: debugger) canBeExecuted.
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted.
 
-	debugger debuggerActionModel clear
+	debugger debuggerClientModel clear
 ]
 
 { #category : 'tests' }
@@ -72,7 +72,7 @@ StDebuggerCommandTest >> testCommandsInDeadContext [
 
 	| debugger |
 	debugger := debuggerProvider debuggerWithErrorContext.
-	debugger debuggerActionModel contextPredicate context pc: nil.
+	debugger debuggerClientModel contextPredicate context pc: nil.
 
 	"Non-executable commands relative to context"
 	self deny: (StRestartCommand forContext: debugger) canBeExecuted.
@@ -102,7 +102,7 @@ StDebuggerCommandTest >> testCommandsInDeadContext [
 		(StPeelToFirstCommand forContext: debugger) canBeExecuted.
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted.
 
-	debugger debuggerActionModel clear
+	debugger debuggerClientModel clear
 ]
 
 { #category : 'tests' }
@@ -144,7 +144,7 @@ StDebuggerCommandTest >> testCommandsInErrorContext [
 		(StPeelToFirstCommand forContext: debugger) canBeExecuted.
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted.
 
-	debugger debuggerActionModel clear
+	debugger debuggerClientModel clear
 ]
 
 { #category : 'tests' }
@@ -187,7 +187,7 @@ StDebuggerCommandTest >> testCommandsInFailingTestContext [
 	self assert:
 		(StPeelToFirstCommand forContext: debugger) canBeExecuted.
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted.
-	debugger debuggerActionModel clear
+	debugger debuggerClientModel clear
 ]
 
 { #category : 'tests' }
@@ -270,7 +270,7 @@ StDebuggerCommandTest >> testCommandsInMissingClassContext [
 	self assert:
 		(StPeelToFirstCommand forContext: debugger) canBeExecuted.
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted.
-	debugger debuggerActionModel clear
+	debugger debuggerClientModel clear
 ]
 
 { #category : 'tests' }
@@ -311,7 +311,7 @@ StDebuggerCommandTest >> testCommandsInMissingSubclassResponsibilityContext [
 		(StPeelToFirstCommand forContext: debugger) canBeExecuted.
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted.
 
-	debugger debuggerActionModel clear
+	debugger debuggerClientModel clear
 ]
 
 { #category : 'tests' }
@@ -321,7 +321,7 @@ StDebuggerCommandTest >> testCommandsInMissingSubclassResponsibilityContextWithS
 	[
 	debugger := debuggerProvider
 		            debuggerWithMissingSubclassResponsibilityContextWithSteps.
-	self assert: debugger debuggerActionModel
+	self assert: debugger debuggerClientModel
 			isInterruptedContextSubclassResponsibilityException.
 
 	"Executable commands relative to context"
@@ -395,7 +395,7 @@ StDebuggerCommandTest >> testCommandsInRunnableContext [
 		(StPeelToFirstCommand forContext: debugger) canBeExecuted.
 	self assert: (StProceedCommand forContext: debugger) canBeExecuted.
 	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted.
-	debugger debuggerActionModel clear
+	debugger debuggerClientModel clear
 ]
 
 { #category : 'tests - execution' }
@@ -445,7 +445,7 @@ StDebuggerCommandTest >> testStDefineMissingEntityCommandExecution [
 		assert: command applicableCommand class
 		identicalTo: StDefineMethodCommand.
 
-	oldActionModel := debugger debuggerActionModel.
+	oldActionModel := debugger debuggerClientModel.
 	debugger := debuggerProvider debuggerWithMissingClassContext.
 	command := StDefineMissingEntityCommand forContext: debugger.
 	oldActionModel clear.
@@ -454,7 +454,7 @@ StDebuggerCommandTest >> testStDefineMissingEntityCommandExecution [
 		assert: command applicableCommand class
 		identicalTo: StDefineClassCommand.
 
-	oldActionModel := debugger debuggerActionModel.
+	oldActionModel := debugger debuggerClientModel.
 	debugger := debuggerProvider
 		            debuggerWithMissingSubclassResponsibilityContext.
 	command := StDefineMissingEntityCommand forContext: debugger.
@@ -465,7 +465,7 @@ StDebuggerCommandTest >> testStDefineMissingEntityCommandExecution [
 
 	oldActionModel clear.
 	oldActionModel session clear.
-	debugger debuggerActionModel clear
+	debugger debuggerClientModel clear
 ]
 
 { #category : 'tests - execution' }

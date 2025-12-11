@@ -26,7 +26,7 @@ StDebuggerInspectorTest >> tearDown [
 	debugger ifNotNil: [
 		debugger close.
 		debugger unsubscribeFromSystemAnnouncer.
-		debugger debuggerActionModel ifNotNil: [ :actionModel |
+		debugger debuggerClientModel ifNotNil: [ :actionModel |
 			actionModel clear.
 			actionModel session ifNotNil: [ :s | s clear ] ] ].
 	super tearDown

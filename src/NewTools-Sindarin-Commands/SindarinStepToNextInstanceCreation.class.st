@@ -50,7 +50,7 @@ SindarinStepToNextInstanceCreation >> execute [
 
 	| debugger sender depth |
 	debugger := self debuggerPresenter sindarinDebugger.
-	self debuggerPresenter debuggerActionModel preventUpdatesDuring: [ 
+	self debuggerPresenter debuggerClientModel preventUpdatesDuring: [ 
 		sender := debugger context sender.
 
 		depth := 0.

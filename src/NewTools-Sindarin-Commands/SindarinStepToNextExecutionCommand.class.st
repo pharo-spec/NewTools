@@ -24,7 +24,7 @@ SindarinStepToNextExecutionCommand class >> isAbstract [
 SindarinStepToNextExecutionCommand >> execute [
 
 	| callingMethod maxDepth depth |
-	self debuggerPresenter debuggerActionModel preventUpdatesDuring: [ 
+	self debuggerPresenter debuggerClientModel preventUpdatesDuring: [ 
 		debugger := self context sindarinDebugger.
 		self setConditionValue.
 		callingMethod := debugger method.

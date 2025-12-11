@@ -1,5 +1,5 @@
 Class {
-	#name : 'StDebuggerActionModelAnnouncement',
+	#name : 'StDebuggeClientModelAnnouncement',
 	#superclass : 'Announcement',
 	#instVars : [
 		'debuggerActionModel'
@@ -10,19 +10,19 @@ Class {
 }
 
 { #category : 'instance creation' }
-StDebuggerActionModelAnnouncement class >> debuggerActionModel: aDebuggerActionModel [
+StDebuggeClientModelAnnouncement class >> debuggerClientModel: aDebuggerActionModel [
 
-	^ self new debuggerActionModel: aDebuggerActionModel
+	^ self new debuggerClientModel: aDebuggerActionModel
 ]
 
 { #category : 'accessing' }
-StDebuggerActionModelAnnouncement >> debuggerActionModel [
+StDebuggeClientModelAnnouncement >> debuggerClientModel [
 
 	^ debuggerActionModel
 ]
 
 { #category : 'accessing' }
-StDebuggerActionModelAnnouncement >> debuggerActionModel: aDebuggerActionModel [
+StDebuggeClientModelAnnouncement >> debuggerClientModel: aDebuggerActionModel [
 
 	debuggerActionModel := aDebuggerActionModel
 ]

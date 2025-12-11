@@ -89,25 +89,22 @@ StFileSystemPresenter >> bookmarksTreeTable [
 ]
 
 { #category : 'initialization' }
-StFileSystemPresenter >> connectPresenters [ 
+StFileSystemPresenter >> connectPresenters [
 	"Here we check that the window is displayed. 
 	If it's not, that means this is a first opening so it should preserve the path selected by the user (through openOnLastDirectory preference, or defaultRoot: message send) and not to transmit the directory selection"
 
 	super connectPresenters.
-	
-	treeNavigationSystem
-		transmitDo: [ : selection | 
-			(self isDisplayed and: [ selection isNotNil ])
-				ifTrue: [ self updateWidgetWithFileReference: selection fileReference ] ].
-			
-	bookmarksTreeTable whenSelectionChangedDo: [ :selection | 
-		selection selectedItem ifNotNil: [ :selectedItem | 
-			selectedItem isComposite ifFalse: [ 
-				self fileNavigationSystem openFolder: selectedItem location ] ] ].
 
-	self whenDisplayDo: [ 
-		self centered.
-		treeNavigationSystem expandPath: fileNavigationSystem currentDirectory ].
+	treeNavigationSystem transmitDo: [ :selection |
+			(self isDisplayed and: [ selection isNotNil ]) ifTrue: [
+				self updateWidgetWithFileReference: selection fileReference ] ].
+
+	bookmarksTreeTable whenSelectionChangedDo: [ :selection |
+			selection selectedItem ifNotNil: [ :selectedItem |
+					selectedItem isComposite ifFalse: [
+						self fileNavigationSystem openFolder: selectedItem location ] ] ].
+
+	self whenDisplayDo: [ self centered ]
 ]
 
 { #category : 'layout' }

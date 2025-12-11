@@ -2,8 +2,8 @@
 I'm used to mock certain aspects of the `StDebuggerActionModel` class for testing.
 "
 Class {
-	#name : 'StMockDebuggerActionModel',
-	#superclass : 'StDebuggerActionModel',
+	#name : 'StMockDebuggerClientModel',
+	#superclass : 'StDebuggerClientModel',
 	#instVars : [
 		'tag',
 		'interruptedContext'
@@ -14,11 +14,11 @@ Class {
 }
 
 { #category : 'context' }
-StMockDebuggerActionModel >> computeInitialTopContext [
+StMockDebuggerClientModel >> computeInitialTopContext [
 ]
 
 { #category : 'initialization' }
-StMockDebuggerActionModel >> initialize [
+StMockDebuggerClientModel >> initialize [
 	super initialize.
 	self interruptedContext: (Context
 			 sender: nil
@@ -28,30 +28,30 @@ StMockDebuggerActionModel >> initialize [
 ]
 
 { #category : 'accessing' }
-StMockDebuggerActionModel >> interruptedContext: anObject [
+StMockDebuggerClientModel >> interruptedContext: anObject [
 
 	interruptedContext := anObject.
 	topContext := anObject
 ]
 
 { #category : 'accessing' }
-StMockDebuggerActionModel >> session [
+StMockDebuggerClientModel >> session [
 	^StMockSession new
 ]
 
 { #category : 'accessing' }
-StMockDebuggerActionModel >> session: aDebugSession [
+StMockDebuggerClientModel >> session: aDebugSession [
 	session := aDebugSession 
 ]
 
 { #category : 'accessing' }
-StMockDebuggerActionModel >> tag [
+StMockDebuggerClientModel >> tag [
 	^tag
 	
 ]
 
 { #category : 'debug - stepping' }
-StMockDebuggerActionModel >> updateTopContext [
+StMockDebuggerClientModel >> updateTopContext [
 	tag :=  #updateTopContext
 	
 ]

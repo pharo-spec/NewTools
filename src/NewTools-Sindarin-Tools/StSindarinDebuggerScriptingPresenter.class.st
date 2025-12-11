@@ -39,8 +39,8 @@ StSindarinDebuggerScriptingPresenter >> createCommandFromScript [
 ]
 
 { #category : 'accessing' }
-StSindarinDebuggerScriptingPresenter >> debuggerActionModel [
-	^self debugger debuggerActionModel
+StSindarinDebuggerScriptingPresenter >> debuggerClientModel [
+	^self debugger debuggerClientModel
 ]
 
 { #category : 'debugger extension' }
@@ -70,7 +70,7 @@ StSindarinDebuggerScriptingPresenter >> defaultLayout [
 StSindarinDebuggerScriptingPresenter >> executeScript [
 
 	| stream result model receiver evaluationContext |
-	self debuggerActionModel preventUpdatesDuring: [ 
+	self debuggerClientModel preventUpdatesDuring: [ 
 		stream := code text readStream.
 		model := code interactionModel.
 		receiver := model context receiver.
@@ -215,7 +215,7 @@ StSindarinDebuggerScriptingPresenter >> updateCode [
 
 	| interactionModel |
 	interactionModel := StSindarinContextInteractionModel on:
-		                    self debuggerActionModel interruptedContext.
+		                    self debuggerClientModel interruptedContext.
 	interactionModel addBinding:
 		(WorkspaceVariable key: #sindarin value: self sindarin).
 	code interactionModel: interactionModel
