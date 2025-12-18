@@ -5,3 +5,15 @@ Class {
 	#package : 'NewTools-Debugger',
 	#tag : 'Model'
 }
+
+{ #category : 'initialize' }
+StDebuggerActionModelRestartAnnouncement >> on: aDebuggerActionModel [
+
+	super on: aDebuggerActionModel.
+	node := aDebuggerActionModel sourceNodeExecuted methodNode
+]
+
+{ #category : 'printing' }
+StDebuggerActionModelRestartAnnouncement >> printOn: aStream [
+	aStream << 'Restart context'
+]

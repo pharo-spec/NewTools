@@ -268,12 +268,6 @@ StDebuggerActionModel >> isInterruptedContextSubclassResponsibilityException [
 	^ self contextPredicate isContextSubclassResponsibilityException
 ]
 
-{ #category : 'instance creation' }
-StDebuggerActionModel >> newStepAnnouncement [
-
-	^ (StDebuggerActionModelStepAnnouncement debuggerActionModel: self)
-]
-
 { #category : 'debug - execution' }
 StDebuggerActionModel >> peelToFirstLike: aContext [
 	self session peelToFirstLike: aContext.
@@ -304,6 +298,12 @@ StDebuggerActionModel >> predicateFor: aContext postMortem: isContextPostMortem 
 	^ (StDebuggerContextPredicate context: aContext)
 		  postMortem: isContextPostMortem;
 		  yourself
+]
+
+{ #category : 'accessing' }
+StDebuggerActionModel >> preventUpdate [
+
+	^ preventUpdate ifNil: [ preventUpdate := false ]
 ]
 
 { #category : 'updating' }
@@ -373,14 +373,13 @@ StDebuggerActionModel >> referenceContext [
 { #category : 'events - handling' }
 StDebuggerActionModel >> registerActionsForSession: aSession [
 
-	self flag: 'Rewrite it'.
 	aSession ifNotNil: [
 		aSession
 			when: #restart send: #updateRestart to: self;
 			when: #resume send: #updateResume to: self;
 			when: #stepInto send: #updateStep to: self;
-			when: #stepOver send: #updateStep to: self;
-			when: #stepThrough send: #updateStep to: self;
+			when: #stepOver send: #updateStepOver to: self;
+			when: #stepThrough send: #updateStepThrough to: self;
 			when: #contextChanged send: #updateContextChanged to: self;
 			when: #clear send: #clear to: self ]
 ]
@@ -452,6 +451,12 @@ StDebuggerActionModel >> session: aDebugSession [
 StDebuggerActionModel >> shouldFilterStack [
 
 	^ self filterStack and: [ self class shouldFilterStack ]
+]
+
+{ #category : 'actions' }
+StDebuggerActionModel >> sourceNodeExecuted [
+
+	^self referenceContext ifNotNil:[:ctx| ctx sourceNodeExecuted]
 ]
 
 { #category : 'accessing - variables' }
@@ -550,7 +555,7 @@ StDebuggerActionModel >> updateAfterMethodAdded [
 			 self)
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'updating' }
 StDebuggerActionModel >> updateContextChanged [
 
 	self updateIfAble:
@@ -591,8 +596,7 @@ StDebuggerActionModel >> updateIfAble [
 { #category : 'accessing' }
 StDebuggerActionModel >> updateIfAble: anAnnouncement [
 
-	preventUpdate ifNil: [ ^ self ].
-	preventUpdate ifFalse: [ self update: anAnnouncement ]
+	self preventUpdate ifFalse: [ self update: anAnnouncement ]
 ]
 
 { #category : 'announcement' }
@@ -603,18 +607,32 @@ StDebuggerActionModel >> updateRestart [
 			   self)
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'updating' }
 StDebuggerActionModel >> updateResume [
 
 	self updateIfAble:
 		(StDebuggerActionModelResumeAnnouncement debuggerActionModel: self)
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'updating' }
 StDebuggerActionModel >> updateStep [
 
 	self updateIfAble:
-		(StDebuggerActionModelStepAnnouncement debuggerActionModel: self)
+		(StDebuggerActionModelStepAnnouncement stepInto: self)
+]
+
+{ #category : 'updating' }
+StDebuggerActionModel >> updateStepOver [
+
+	self updateIfAble:
+		(StDebuggerActionModelStepAnnouncement stepOver: self)
+]
+
+{ #category : 'updating' }
+StDebuggerActionModel >> updateStepThrough [
+
+	self updateIfAble:
+		(StDebuggerActionModelStepAnnouncement stepThrough: self)
 ]
 
 { #category : 'context' }
