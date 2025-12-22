@@ -136,7 +136,7 @@ SpClosedWindowListPresenter class >> windowMenuOn: aBuilder [
 	(aBuilder item: #Close)
 		order: 1.0;
 		action: [
-			aBuilder model hide.
+			aBuilder model close.
 			announcement := WindowClosed new
 				                window: aBuilder model;
 				                yourself.
