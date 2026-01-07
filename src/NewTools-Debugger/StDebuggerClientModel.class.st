@@ -263,6 +263,11 @@ StDebuggerClientModel >> isInterruptedContextPostMortem [
 ]
 
 { #category : 'debug - predicates' }
+StDebuggerClientModel >> isInterruptedContextShouldBeImplemented [
+	^ self contextPredicate isInterruptedContextShouldBeImplemented
+]
+
+{ #category : 'debug - predicates' }
 StDebuggerClientModel >> isInterruptedContextSubclassResponsibilityException [
 	^ self contextPredicate isContextSubclassResponsibilityException
 ]

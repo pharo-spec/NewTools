@@ -72,6 +72,11 @@ StDebuggerErrorContextPredicate >> isGeneratingCode [
 ]
 
 { #category : 'predicates' }
+StDebuggerErrorContextPredicate >> isInterruptedContextShouldBeImplemented [
+	^ exception class == ShouldBeImplemented 
+]
+
+{ #category : 'predicates' }
 StDebuggerErrorContextPredicate >> isSteppable [
 
 	super isSteppable ifFalse: [ ^ false ].

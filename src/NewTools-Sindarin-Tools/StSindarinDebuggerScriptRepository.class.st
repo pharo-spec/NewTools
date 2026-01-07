@@ -1,3 +1,14 @@
+"
+StSindarinDebuggerScriptRepository is an abstract class that defines the logic for managing script repositories in the context of Sindarin debugger extensions.
+
+Its main responsibilities include:
+- Saving scripts by name and code.
+- Retrieving the list of available script names in the repository.
+- Loading the code of a script given its name.
+
+Subclasses are expected to implement the class side `repositoryName` method, which specifies the name (or identifier) of the script repository, typically based on the project it is associated with.
+
+"
 Class {
 	#name : 'StSindarinDebuggerScriptRepository',
 	#superclass : 'Object',
@@ -19,6 +30,12 @@ StSindarinDebuggerScriptRepository class >> clearScripts [
 StSindarinDebuggerScriptRepository class >> loadScript: aString [
 	^ self scripts at: aString ifAbsent: nil.
 	
+]
+
+{ #category : 'accessing' }
+StSindarinDebuggerScriptRepository class >> repositoryName [
+	"Return the name of the repository."
+	self subclassResponsibility
 ]
 
 { #category : 'accessing' }

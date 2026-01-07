@@ -17,7 +17,7 @@ MetacelloVersion >> spotterForPackagesFor: aStep [
 	aStep listProcessor
 		title: 'Packages';
 		allCandidates: [ self packages ];
-		itemName: [ :item | item file ];
+		itemName: [ :item | item name ];
 		filter: StFilterSubstring;
 		wantsToDisplayOnEmptyQuery: true
 ]

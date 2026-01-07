@@ -2,12 +2,12 @@
 I am an abstract class for browsers centered around messages such as class `MessageBrowser` or class `VersionBrowser`.
 "
 Class {
-	#name : 'StAbstractMessageCentricBrowserPresenter',
+	#name : 'StAbstractMethodCentricBrowserPresenter',
 	#superclass : 'StPresenter',
 	#instVars : [
-		'messageList',
 		'textConverter',
-		'toolbarPresenter'
+		'toolbarPresenter',
+		'methodList'
 	],
 	#category : 'NewTools-MethodBrowsers-Base',
 	#package : 'NewTools-MethodBrowsers',
@@ -15,18 +15,18 @@ Class {
 }
 
 { #category : 'accessing' }
-StAbstractMessageCentricBrowserPresenter class >> defaultPreferredExtent [
+StAbstractMethodCentricBrowserPresenter class >> defaultPreferredExtent [
 
 	^ 900 @ 600
 ]
 
 { #category : 'testing' }
-StAbstractMessageCentricBrowserPresenter class >> isAbstract [ 
-	 ^self name = #StAbstractMessageCentricBrowserPresenter
+StAbstractMethodCentricBrowserPresenter class >> isAbstract [ 
+	 ^self name = #StAbstractMethodCentricBrowserPresenter
 ]
 
 { #category : 'initialization' }
-StAbstractMessageCentricBrowserPresenter >> initialize [
+StAbstractMethodCentricBrowserPresenter >> initialize [
 
 	textConverter := self newTextConverter.
 	super initialize
@@ -34,16 +34,16 @@ StAbstractMessageCentricBrowserPresenter >> initialize [
 ]
 
 { #category : 'initialization' }
-StAbstractMessageCentricBrowserPresenter >> initializePresenters [
+StAbstractMethodCentricBrowserPresenter >> initializePresenters [
 
-	messageList := self newMessageList.
-	toolbarPresenter := self newMessageToolbar
-		messageList: messageList;
+	methodList := self newMethodList.
+	toolbarPresenter := self newMethodToolbar
+		messageList: methodList;
 		yourself
 ]
 
 { #category : 'private - testing' }
-StAbstractMessageCentricBrowserPresenter >> isMethodDefinition: anItem [
+StAbstractMethodCentricBrowserPresenter >> isMethodDefinition: anItem [
 	"an item can be nil, a compiled method, or a ring object. Whereas a ring object can be a ring method or comment definition.
 	 Some operations are only valid for compiled methods or ring object that are a method definitions"
 
@@ -55,40 +55,40 @@ StAbstractMessageCentricBrowserPresenter >> isMethodDefinition: anItem [
 ]
 
 { #category : 'accessing' }
-StAbstractMessageCentricBrowserPresenter >> messageList [
-
-	^ messageList
-]
-
-{ #category : 'initialization' }
-StAbstractMessageCentricBrowserPresenter >> newMessageList [
+StAbstractMethodCentricBrowserPresenter >> methodList [
 	
-	^ self instantiate: StMessageListPresenter
+	^ methodList
 ]
 
 { #category : 'initialization' }
-StAbstractMessageCentricBrowserPresenter >> newMessageToolbar [
+StAbstractMethodCentricBrowserPresenter >> newMethodList [
+	
+	^ self instantiate: StMethodListPresenter
+]
+
+{ #category : 'initialization' }
+StAbstractMethodCentricBrowserPresenter >> newMethodToolbar [
 
 	^ self instantiate: StMethodToolbarPresenter
 ]
 
 { #category : 'private - factory' }
-StAbstractMessageCentricBrowserPresenter >> newTextConverter [
+StAbstractMethodCentricBrowserPresenter >> newTextConverter [
 
 	^ DiffSourceMethodConverter new
 ]
 
 { #category : 'api' }
-StAbstractMessageCentricBrowserPresenter >> selectedMessage [
-	^ messageList selectedMessage
+StAbstractMethodCentricBrowserPresenter >> selectedMethod [
+	^ methodList selectedMethod
 ]
 
 { #category : 'accessing' }
-StAbstractMessageCentricBrowserPresenter >> textConverter [
+StAbstractMethodCentricBrowserPresenter >> textConverter [
 	^ textConverter
 ]
 
 { #category : 'accessing' }
-StAbstractMessageCentricBrowserPresenter >> textConverter: aTextConverter [
+StAbstractMethodCentricBrowserPresenter >> textConverter: aTextConverter [
 	textConverter := aTextConverter method: self textConverter method
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : 'StComposedMessageElementPresenter',
+	#name : 'StComposedMethodElementPresenter',
 	#superclass : 'SpPresenter',
 	#traits : 'SpTModel',
 	#classTraits : 'SpTModel classTrait',
@@ -15,7 +15,7 @@ Class {
 }
 
 { #category : 'nil' }
-StComposedMessageElementPresenter >> defaultLayout [
+StComposedMethodElementPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		add: (SpBoxLayout newLeftToRight
@@ -27,7 +27,7 @@ StComposedMessageElementPresenter >> defaultLayout [
 ]
 
 { #category : 'initialization' }
-StComposedMessageElementPresenter >> initializePresenters [
+StComposedMethodElementPresenter >> initializePresenters [
 
 	locationLabel := self newLabel
 		addStyle: 'dim';
@@ -39,13 +39,13 @@ StComposedMessageElementPresenter >> initializePresenters [
 ]
 
 { #category : 'accessing' }
-StComposedMessageElementPresenter >> messageList: aPresenter [
+StComposedMethodElementPresenter >> messageList: aPresenter [
 
 	messageList := aPresenter
 ]
 
 { #category : 'initialization' }
-StComposedMessageElementPresenter >> updatePresenter [
+StComposedMethodElementPresenter >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	

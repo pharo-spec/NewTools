@@ -1,23 +1,23 @@
 Class {
-	#name : 'StComposedMessageListPresenter',
-	#superclass : 'StMessageListPresenter',
+	#name : 'StComposedMethodListPresenter',
+	#superclass : 'StMethodListPresenter',
 	#category : 'NewTools-MethodBrowsers-Senders',
 	#package : 'NewTools-MethodBrowsers',
 	#tag : 'Senders'
 }
 
 { #category : 'initialization' }
-StComposedMessageListPresenter >> initializePresenters [
+StComposedMethodListPresenter >> initializePresenters [
 
 	listPresenter := self newListView.
 	listPresenter
 		"sortingBlock: [ :a :b | self sortClassesInCachedHierarchy: a b: b ];"
 		setup: [ :aPresenter | 
-			(aPresenter instantiate: StComposedMessageElementPresenter)
+			(aPresenter instantiate: StComposedMethodElementPresenter)
 				messageList: self;
 				yourself ];
 		bind: [ :aPresenter :anElement | aPresenter model: anElement ].
 		
 	listPresenter outputActivationPort transmitDo: [ :aMethod | self doBrowseMethod ].
-	listPresenter actions: self messageListActions
+	listPresenter actions: self methodListActions
 ]

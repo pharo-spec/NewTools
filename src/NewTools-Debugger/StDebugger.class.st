@@ -385,7 +385,7 @@ StDebugger >> buildToolbar [
 					  hAlignStart;
 					  vAlignCenter;
 					  yourself)
-			 expand: false;
+			 expand: true;
 			 yourself)
 ]
 
@@ -1149,9 +1149,7 @@ StDebugger >> selectTopContext [
 { #category : 'highlighting' }
 StDebugger >> selectedCodeRangeForContext: aContext [
 
-	^ self debuggerClientModel exception
-		  selectedCodeRangeForContext: aContext
-		  forDebugger: self
+	^ self debuggerClientModel exception selectedCodeRangeForContext: aContext forDebugger: self
 ]
 
 { #category : 'accessing - model' }
@@ -1477,20 +1475,19 @@ StDebugger >> updateCodeFromContext: aContext [
 	aContext ifNil: [ ^ self clearCode ].
 
 	self recordUnsavedCodeChanges.
-	aContext sourceCode = self code text ifFalse: [
-		self updateSourceCodeFor: aContext ].
+	aContext sourceCode = self code text ifFalse: [ self updateSourceCodeFor: aContext ].
 	selectionInterval := self selectedCodeRangeForContext: aContext.
 	formerCodeInteractionModel := self code interactionModel.
-	self code beForContext: aContext.
-	"add bindings of the old interaction model in the new one"
+	self code beForContext: aContext. "add bindings of the old interaction model in the new one"
 	formerCodeInteractionModel ifNotNil: [
-		formerCodeInteractionModel bindings associations do: [ :assoc |
-			self code interactionModel addBinding: assoc ] ].
-	self code selectionInterval:
-		(selectionInterval last to: selectionInterval last - 1).
-	self
-		updateCodeTextSegmentDecoratorsIn: aContext
-		forInterval: selectionInterval
+		formerCodeInteractionModel bindings associations do: [ :assoc | self code interactionModel addBinding: assoc ] ].
+	self code selectionInterval: (selectionInterval last to: selectionInterval last - 1).
+	self updateCodeTextSegmentDecoratorsIn: aContext forInterval: selectionInterval.
+	self debuggerClientModel isInterruptedContextShouldBeImplemented ifTrue: [
+			| bodyAst |
+			bodyAst := aContext method ast body.
+			self code selectionInterval: (bodyAst start to: bodyAst stop).
+			self code takeKeyboardFocus ]
 ]
 
 { #category : 'updating - presenters' }

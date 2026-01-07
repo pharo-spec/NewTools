@@ -2,7 +2,7 @@
 Browse full method from a message browser list
 "
 Class {
-	#name : 'StMessageBrowseFullCommand',
+	#name : 'StMethodBrowseFullCommand',
 	#superclass : 'StCommand',
 	#category : 'NewTools-MethodBrowsers-Commands',
 	#package : 'NewTools-MethodBrowsers',
@@ -10,19 +10,19 @@ Class {
 }
 
 { #category : 'accessing' }
-StMessageBrowseFullCommand class >> defaultName [
+StMethodBrowseFullCommand class >> defaultName [
 
 	^ 'Browse full'
 ]
 
 { #category : 'accessing' }
-StMessageBrowseFullCommand class >> defaultShortcut [
+StMethodBrowseFullCommand class >> defaultShortcut [
 
 	^ $b actionModifier
 ]
 
 { #category : 'executing' }
-StMessageBrowseFullCommand >> execute [
+StMethodBrowseFullCommand >> execute [
 	
 	context doBrowseMethod
 ]

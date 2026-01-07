@@ -2,7 +2,7 @@
 Browse method versions from a message browser list
 "
 Class {
-	#name : 'StMessageVersionsCommand',
+	#name : 'StMethodVersionsCommand',
 	#superclass : 'StCommand',
 	#category : 'NewTools-MethodBrowsers-Commands',
 	#package : 'NewTools-MethodBrowsers',
@@ -10,19 +10,19 @@ Class {
 }
 
 { #category : 'accessing' }
-StMessageVersionsCommand class >> defaultName [
+StMethodVersionsCommand class >> defaultName [
 
 	^ 'Versions'
 ]
 
 { #category : 'accessing' }
-StMessageVersionsCommand class >> defaultShortcut [
+StMethodVersionsCommand class >> defaultShortcut [
 
 	^ $v actionModifier
 ]
 
 { #category : 'executing' }
-StMessageVersionsCommand >> execute [
+StMethodVersionsCommand >> execute [
 	
 	context doBrowseVersions
 ]

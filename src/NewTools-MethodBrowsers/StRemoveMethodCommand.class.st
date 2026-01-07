@@ -2,7 +2,7 @@
 Remove selected method from a message browser list
 "
 Class {
-	#name : 'StMessageRemoveMethodCommand',
+	#name : 'StRemoveMethodCommand',
 	#superclass : 'StCommand',
 	#category : 'NewTools-MethodBrowsers-Commands',
 	#package : 'NewTools-MethodBrowsers',
@@ -10,19 +10,19 @@ Class {
 }
 
 { #category : 'accessing' }
-StMessageRemoveMethodCommand class >> defaultName [
+StRemoveMethodCommand class >> defaultName [
 
 	^ 'Remove method'
 ]
 
 { #category : 'accessing' }
-StMessageRemoveMethodCommand class >> defaultShortcut [
+StRemoveMethodCommand class >> defaultShortcut [
 
 	^ $x actionModifier
 ]
 
 { #category : 'executing' }
-StMessageRemoveMethodCommand >> execute [
+StRemoveMethodCommand >> execute [
 	
 	context doRemoveMethod
 ]

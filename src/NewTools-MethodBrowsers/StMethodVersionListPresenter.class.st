@@ -1,37 +1,37 @@
 Class {
-	#name : 'StMessageVersionListPresenter',
-	#superclass : 'StMessageListPresenter',
+	#name : 'StMethodVersionListPresenter',
+	#superclass : 'StMethodListPresenter',
 	#category : 'NewTools-MethodBrowsers-Versions',
 	#package : 'NewTools-MethodBrowsers',
 	#tag : 'Versions'
 }
 
 { #category : 'private' }
-StMessageVersionListPresenter >> authorOf: anItem [
+StMethodVersionListPresenter >> authorOf: anItem [
 	^ anItem author
 ]
 
 { #category : 'actions' }
-StMessageVersionListPresenter >> doCompareToCurrentVersion [
+StMethodVersionListPresenter >> doCompareToCurrentVersion [
 	
 	self owner doCompareToCurrentVersion
 ]
 
 { #category : 'actions' }
-StMessageVersionListPresenter >> doCompareToOtherVersion [
+StMethodVersionListPresenter >> doCompareToOtherVersion [
 	
 	self owner doCompareToOtherVersion
 
 ]
 
 { #category : 'actions' }
-StMessageVersionListPresenter >> doRevert [
+StMethodVersionListPresenter >> doRevert [
 	
 	self owner doRevert
 ]
 
 { #category : 'initialization' }
-StMessageVersionListPresenter >> initializePresenters [
+StMethodVersionListPresenter >> initializePresenters [
 
 	super initializePresenters.
 	
@@ -41,7 +41,7 @@ StMessageVersionListPresenter >> initializePresenters [
 ]
 
 { #category : 'private' }
-StMessageVersionListPresenter >> messageListActions [
+StMethodVersionListPresenter >> methodListActions [
 
 	^ CmCommandGroup forSpec
 		beRoot;
@@ -53,7 +53,7 @@ StMessageVersionListPresenter >> messageListActions [
 		register: ((CmCommandGroup forSpecNamed: 'Navigation')
 			beDisplayedAsGroup;
 			register: (StMessageSendersCommand forSpecContext: self);
-			register: (StMessageImplementorsCommand forSpecContext: self);
+			register: (StImplementorsCommand forSpecContext: self);
 			yourself);
 		register: ((CmCommandGroup forSpecNamed: 'CRITICAL')
 			beDisplayedAsGroup;
@@ -64,6 +64,6 @@ StMessageVersionListPresenter >> messageListActions [
 ]
 
 { #category : 'private' }
-StMessageVersionListPresenter >> timeStampOf: anItem [
+StMethodVersionListPresenter >> timeStampOf: anItem [
 	^ anItem timeStamp
 ]

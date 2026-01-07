@@ -82,6 +82,11 @@ StDebuggerContextPredicate >> isGeneratingCode [
 ]
 
 { #category : 'predicates' }
+StDebuggerContextPredicate >> isInterruptedContextShouldBeImplemented [
+	^ false
+]
+
+{ #category : 'predicates' }
 StDebuggerContextPredicate >> isSteppable [
 
 	^ self isContextPostMortem not and: [ self isContextDead not ]

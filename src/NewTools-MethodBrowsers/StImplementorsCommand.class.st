@@ -2,7 +2,7 @@
 Browse implementors from a message browser list
 "
 Class {
-	#name : 'StMessageImplementorsCommand',
+	#name : 'StImplementorsCommand',
 	#superclass : 'StCommand',
 	#category : 'NewTools-MethodBrowsers-Commands',
 	#package : 'NewTools-MethodBrowsers',
@@ -10,25 +10,25 @@ Class {
 }
 
 { #category : 'default' }
-StMessageImplementorsCommand class >> defaultDescription [
+StImplementorsCommand class >> defaultDescription [
 
 	^ 'Browse all methods implementing the selector of the current method'
 ]
 
 { #category : 'accessing' }
-StMessageImplementorsCommand class >> defaultName [
+StImplementorsCommand class >> defaultName [
 
 	^ 'Implementors'
 ]
 
 { #category : 'accessing' }
-StMessageImplementorsCommand class >> defaultShortcut [
+StImplementorsCommand class >> defaultShortcut [
 
 	^ $m actionModifier
 ]
 
 { #category : 'executing' }
-StMessageImplementorsCommand >> execute [
+StImplementorsCommand >> execute [
 	
 	context doBrowseImplementors
 ]

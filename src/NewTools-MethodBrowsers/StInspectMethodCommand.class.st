@@ -2,7 +2,7 @@
 Inspect selected method from a message browser list
 "
 Class {
-	#name : 'StMessageInspectMethodCommand',
+	#name : 'StInspectMethodCommand',
 	#superclass : 'StCommand',
 	#category : 'NewTools-MethodBrowsers-Commands',
 	#package : 'NewTools-MethodBrowsers',
@@ -10,19 +10,19 @@ Class {
 }
 
 { #category : 'accessing' }
-StMessageInspectMethodCommand class >> defaultName [
+StInspectMethodCommand class >> defaultName [
 
 	^ 'Inspect method'
 ]
 
 { #category : 'accessing' }
-StMessageInspectMethodCommand class >> defaultShortcut [
+StInspectMethodCommand class >> defaultShortcut [
 
 	^ $i actionModifier
 ]
 
 { #category : 'executing' }
-StMessageInspectMethodCommand >> execute [
+StInspectMethodCommand >> execute [
 	
 	context doInspectMethod
 ]

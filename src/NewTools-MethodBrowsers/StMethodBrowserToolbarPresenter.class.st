@@ -1,5 +1,5 @@
 Class {
-	#name : 'StMessageToolbarPresenter',
+	#name : 'StMethodBrowserToolbarPresenter',
 	#superclass : 'StMethodToolbarPresenter',
 	#instVars : [
 		'flipAction',
@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : 'initialization' }
-StMessageToolbarPresenter >> connectPresenters [
+StMethodBrowserToolbarPresenter >> connectPresenters [
 
 	scopeList whenSelectedItemChangedDo: [ : scopeEnvironment | 
 		scopeEnvironment ifNotNil: [ messageList switchScopeTo: scopeEnvironment ] ].
@@ -24,7 +24,7 @@ StMessageToolbarPresenter >> connectPresenters [
 ]
 
 { #category : 'layout' }
-StMessageToolbarPresenter >> defaultLayout [
+StMethodBrowserToolbarPresenter >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
 		spacing: 3;
@@ -44,14 +44,14 @@ StMessageToolbarPresenter >> defaultLayout [
 ]
 
 { #category : 'actions' }
-StMessageToolbarPresenter >> doFlipLayout [
+StMethodBrowserToolbarPresenter >> doFlipLayout [
 
 	flipAction ifNil: [ ^ self ].
 	flipAction value
 ]
 
 { #category : 'initialization' }
-StMessageToolbarPresenter >> initializePresenters [
+StMethodBrowserToolbarPresenter >> initializePresenters [
 
 	super initializePresenters.
 	
@@ -67,14 +67,14 @@ StMessageToolbarPresenter >> initializePresenters [
 ]
 
 { #category : 'accessing' }
-StMessageToolbarPresenter >> owner: aPresenter [
+StMethodBrowserToolbarPresenter >> owner: aPresenter [
 
 	super owner: aPresenter.
-	messageList := aPresenter messageList.
+	messageList := aPresenter methodList
 ]
 
 { #category : 'events' }
-StMessageToolbarPresenter >> whenFlipLayoutDo: aBlock [
+StMethodBrowserToolbarPresenter >> whenFlipLayoutDo: aBlock [
 
 	flipAction := aBlock
 ]
