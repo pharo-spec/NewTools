@@ -223,6 +223,11 @@ StWorldMenuBuilderItem >> subelements [
 ]
 
 { #category : 'accessing' }
+StWorldMenuBuilderItem >> target [
+	^ target
+]
+
+{ #category : 'accessing' }
 StWorldMenuBuilderItem >> target: aMetaclass [ 
 	
 	target := aMetaclass 
