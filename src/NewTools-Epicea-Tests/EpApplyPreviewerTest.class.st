@@ -307,20 +307,6 @@ EpApplyPreviewerTest >> testMethodRemovalWithMethodAdded [
 ]
 
 { #category : 'tests' }
-EpApplyPreviewerTest >> testNonCodeChangeEvent [
-
-	monitor logEntryCommented:
-		(EpLogEntriesComment
-			entryReferences: #()
-			oldComment: ''
-			newComment: '42').
-
-	self setHeadAsInputEntry.
-
-	self assertEmptyPreviewLog
-]
-
-{ #category : 'tests' }
 EpApplyPreviewerTest >> testPackageTagAdditionWithPackageTagRemoval [
 
 	self packageOrganizer ensureTag: classFactory tagName inPackage: classFactory packageName.

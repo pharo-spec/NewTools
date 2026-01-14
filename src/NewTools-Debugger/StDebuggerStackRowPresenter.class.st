@@ -22,20 +22,16 @@ StDebuggerStackRowPresenter >> colorStyleForContext [
 ]
 
 { #category : 'layout' }
-StDebuggerStackRowPresenter >> defaultLayout [ 
+StDebuggerStackRowPresenter >> defaultLayout [
 
-	^ SpBoxLayout newLeftToRight 
-		"in fact, we are not using icons for the moment"
-		"spacing: 3;
-		add: iconPresenter expand: false;"
-		add: labelPresenter;
-		yourself
+	^ SpBoxLayout newLeftToRight
+		  add: labelPresenter;
+		  yourself
 ]
 
 { #category : 'initialization' }
-StDebuggerStackRowPresenter >> initializePresenters [ 
+StDebuggerStackRowPresenter >> initializePresenters [
 
-	"iconPresenter := self newImage."
 	labelPresenter := self newLabel
 ]
 
@@ -62,13 +58,12 @@ StDebuggerStackRowPresenter >> isInSelectedContextPackage [
 ]
 
 { #category : 'initialization' }
-StDebuggerStackRowPresenter >> updatePresenter [ 
+StDebuggerStackRowPresenter >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
-	
-	"iconPresenter image: self iconForContext."
+
+
 	labelPresenter label: (StContextPrinter printContext: self model).
 	labelPresenter removeAllStyles.
-	self colorStyleForContext
-		ifNotNil: [ :aStyle | labelPresenter addStyle: aStyle ]
+	self colorStyleForContext ifNotNil: [ :aStyle | labelPresenter addStyle: aStyle ]
 ]

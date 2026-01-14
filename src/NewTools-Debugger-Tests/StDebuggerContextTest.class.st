@@ -72,11 +72,11 @@ StDebuggerContextTest >> testArgumentsNodes [
 	self assert: nodes first key equals: 'i'.
 	self assert: nodes first variableTag equals: 'arg'.
 	self assert: nodes first rawValue equals: 4.
-	self assert: nodes first class equals: StInspectorNewTempNode.
+	self assert: nodes first class equals: StInspectorTempNode.
 	self assert: nodes second key equals: 'j'.
 	self assert: nodes second variableTag equals: 'arg'.
 	self assert: nodes second rawValue equals: 2.
-	self assert: nodes second class equals: StInspectorNewTempNode.
+	self assert: nodes second class equals: StInspectorTempNode.
 	self deny: (nodes anySatisfy: [:n| n key = 'self'])
 ]
 
@@ -202,7 +202,7 @@ StDebuggerContextTest >> testFailingAssertionNodes [
 StDebuggerContextTest >> testNoDuplicatesBetweenArgsAndTemps [
 	|nodes nodesNamesArray nodesNamesSet|
 	debuggerContext context: self contextWithArgs.
-	nodes := debuggerContext allInspectorNodes.	
+	nodes := debuggerContext allModelInspectorNodes.	
 	nodesNamesArray := (nodes collect:[:n| n key]) asSortedCollection.
 	nodesNamesSet := nodesNamesArray asSet asSortedCollection.
 	self assertCollection: nodesNamesArray equals: nodesNamesSet

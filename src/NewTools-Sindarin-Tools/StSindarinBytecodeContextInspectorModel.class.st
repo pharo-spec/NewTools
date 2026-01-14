@@ -7,7 +7,7 @@ Class {
 }
 
 { #category : 'accessing' }
-StSindarinBytecodeContextInspectorModel >> allInspectorNodes [
+StSindarinBytecodeContextInspectorModel >> allModelInspectorNodes [
 	| tempNodes slotNodes stackTopNode |
 	tempNodes := self contextTempNodes.
 	slotNodes := self contextReceiverSlotNodes.
@@ -30,9 +30,9 @@ StSindarinBytecodeContextInspectorModel >> contextReceiverSlotNodes [
 
 { #category : 'accessing' }
 StSindarinBytecodeContextInspectorModel >> contextTempNodes [
-	^ self inspectedObject astScope allTemps collect: [ :temp | 
-		  (StInspectorTempNode hostObject: self inspectedObject) tempVariable: temp ]
 
+	^ self inspectedObject temporaryVariableNames collect: [ :arg1 |
+		  (StInspectorTempNode hostObject: self inspectedObject) tempName: arg1 ]
 ]
 
 { #category : 'accessing' }

@@ -116,8 +116,8 @@ AbstractFileReference >> inspectionItems: aBuilder [
 				   width: 300;
 				   addColumn: ((SpImageTableColumn evaluated: [ :each |
 								     each isDirectory
-									     ifTrue: [ self iconNamed: #folder ]
-									     ifFalse: [ self iconNamed: #browse ] ])
+									     ifTrue: [ aBuilder application  iconNamed: #folder ]
+									     ifFalse: [ aBuilder application  iconNamed: #browse ] ])
 						    beNotExpandable;
 						    yourself);
 				   addColumn: (SpStringTableColumn evaluated: [ :each |

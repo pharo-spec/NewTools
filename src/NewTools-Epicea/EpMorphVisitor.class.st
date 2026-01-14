@@ -129,12 +129,6 @@ EpMorphVisitor >> visitExpressionEvaluation: anExpressionEvaluation [
 ]
 
 { #category : 'visitor' }
-EpMorphVisitor >> visitLogCommentModification: aLogCommentModification [
-
-	^ self displayString: aLogCommentModification comment printString
-]
-
-{ #category : 'visitor' }
 EpMorphVisitor >> visitMethodAddition: aMethodCreatedChange [
 
 	^ self
@@ -156,22 +150,6 @@ EpMorphVisitor >> visitMethodRemoval: aMethodRemoved [
 	^ self
 		displayBehavior: aMethodRemoved behaviorAffectedName
 		method: aMethodRemoved methodRemoved selector
-]
-
-{ #category : 'visitor' }
-EpMorphVisitor >> visitMonticelloVersionSave: aChange [
-
-	^	(self displayOperation: 'MC save'),
-		(self displayString: aChange versionName asString),
-		(self displayOperation: 'on'),
-		(self displayString: aChange repositoryDescription asString)
-]
-
-{ #category : 'visitor' }
-EpMorphVisitor >> visitMonticelloVersionsLoad: aMonticelloVersionLoaded [
-
-	^	(self displayOperation: 'MC load'),
-		(self displayString: (aMonticelloVersionLoaded versionNames joinUsing: ', '))
 ]
 
 { #category : 'visitor' }
