@@ -1,3 +1,6 @@
+"
+I represent an entry in the world menu
+"
 Class {
 	#name : 'StWorldMenuBuilderItem',
 	#superclass : 'Object',
@@ -18,9 +21,9 @@ Class {
 		'icon',
 		'enabled'
 	],
-	#category : 'NewTools-Toplo-Backend',
-	#package : 'NewTools-Toplo',
-	#tag : 'Backend'
+	#category : 'NewTools-WorldMenu-Model',
+	#package : 'NewTools-WorldMenu',
+	#tag : 'Model'
 }
 
 { #category : 'visiting' }
@@ -64,7 +67,7 @@ StWorldMenuBuilderItem >> enabled: aFullBlockClosure [
 	enabled := aFullBlockClosure
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private' }
 StWorldMenuBuilderItem >> fixParentsFrom: aCollection [ 
 	
 	| newParent |
@@ -75,7 +78,7 @@ StWorldMenuBuilderItem >> fixParentsFrom: aCollection [
 	parent := newParent.
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private' }
 StWorldMenuBuilderItem >> fixSubElements [	
 	
 	self assert: (subelements noneSatisfy: [:e | e parent isSymbol ]).
@@ -189,7 +192,7 @@ StWorldMenuBuilderItem >> parent: aString [
 	parent := aString
 ]
 
-{ #category : 'displaying - generic' }
+{ #category : 'printing' }
 StWorldMenuBuilderItem >> printOn: aStream [
 
 	aStream 
@@ -198,7 +201,7 @@ StWorldMenuBuilderItem >> printOn: aStream [
 		print: name 
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private' }
 StWorldMenuBuilderItem >> reorderSubElements [
 
 	subelements sort: [ :a :b | a order < b order ].

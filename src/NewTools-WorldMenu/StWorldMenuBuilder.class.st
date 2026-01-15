@@ -1,3 +1,14 @@
+"
+I am a builder for getting a tree of StWorldMenuBuilderItems.
+These items describe the configuration of the world menu. 
+The configuration is collected from all the method having the pragma #worldMenu.
+
+You can obtain all items configured by doing: 
+
+```
+StWorldMenuBuilder new collectMenuItems
+```
+"
 Class {
 	#name : 'StWorldMenuBuilder',
 	#superclass : 'Object',
@@ -7,9 +18,9 @@ Class {
 		'currentElement',
 		'root'
 	],
-	#category : 'NewTools-Toplo-Backend',
-	#package : 'NewTools-Toplo',
-	#tag : 'Backend'
+	#category : 'NewTools-WorldMenu-Model',
+	#package : 'NewTools-WorldMenu',
+	#tag : 'Model'
 }
 
 { #category : 'building' }
@@ -53,7 +64,7 @@ StWorldMenuBuilder >> collector [
 	^ collector ifNil: [ collector := (PragmaCollector selectors: #(worldMenu)) ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'building' }
 StWorldMenuBuilder >> currentParent: anItem while: aFullBlockClosure [ 
 	
 	| old |

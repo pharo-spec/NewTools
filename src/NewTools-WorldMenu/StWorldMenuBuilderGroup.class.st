@@ -1,9 +1,12 @@
+"
+I represent a group in the world menu
+"
 Class {
 	#name : 'StWorldMenuBuilderGroup',
 	#superclass : 'StWorldMenuBuilderItem',
-	#category : 'NewTools-Toplo-Backend',
-	#package : 'NewTools-Toplo',
-	#tag : 'Backend'
+	#category : 'NewTools-WorldMenu-Model',
+	#package : 'NewTools-WorldMenu',
+	#tag : 'Model'
 }
 
 { #category : 'visiting' }

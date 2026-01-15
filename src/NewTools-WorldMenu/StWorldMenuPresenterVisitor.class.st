@@ -1,3 +1,13 @@
+"
+I am a visitor to generate SpMenuPresenters from the worldMenu configuration.
+You don't use me directly, but through:
+
+```
+StWorldMenuBuilder new buildMenuBarPresenterFor: ownerPresenter
+```
+
+Where *ownerPresenter* is the presenter that will have the menu
+"
 Class {
 	#name : 'StWorldMenuPresenterVisitor',
 	#superclass : 'Object',
@@ -5,9 +15,9 @@ Class {
 		'presenter',
 		'owner'
 	],
-	#category : 'NewTools-Toplo-Backend',
-	#package : 'NewTools-Toplo',
-	#tag : 'Backend'
+	#category : 'NewTools-WorldMenu-Visitors',
+	#package : 'NewTools-WorldMenu',
+	#tag : 'Visitors'
 }
 
 { #category : 'accessing' }
@@ -22,7 +32,7 @@ StWorldMenuPresenterVisitor >> presenter: aSpMenuBarPresenter [
 	presenter := aSpMenuBarPresenter
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private' }
 StWorldMenuPresenterVisitor >> resolveActionFor: anItem [
 
 	anItem action ifNotNil: [ :action | ^ owner wrapMenuAction: action ].
@@ -33,7 +43,7 @@ StWorldMenuPresenterVisitor >> resolveActionFor: anItem [
 	^ nil
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private' }
 StWorldMenuPresenterVisitor >> resolveIconFor: anItem [ 
 	
 	anItem icon ifNotNil: [ :anIcon | ^ anIcon ].
