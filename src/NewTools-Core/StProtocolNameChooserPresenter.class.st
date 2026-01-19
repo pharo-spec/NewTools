@@ -101,9 +101,12 @@ StProtocolNameChooserPresenter >> doAcceptFromList [
 
 { #category : 'private - actions' }
 StProtocolNameChooserPresenter >> doAcceptFromTextInput [
-	
-	selectedProtocolName := protocolNameField text.
-	self withWindowDo: [ :w | w beOk; close ]
+
+	selectedProtocolName := protocolNameField text trimBoth.
+	self withWindowDo: [ :w |
+			w
+				beOk;
+				close ]
 ]
 
 { #category : 'initialization' }

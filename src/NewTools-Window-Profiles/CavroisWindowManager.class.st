@@ -650,7 +650,7 @@ CavroisWindowManager >> currentProfile: aProfile [
 	currentProfile := aProfile
 ]
 
-{ #category : 'kara-te' }
+{ #category : 'accessing' }
 CavroisWindowManager >> defaultLocation [
 
 	^ defaultLocation

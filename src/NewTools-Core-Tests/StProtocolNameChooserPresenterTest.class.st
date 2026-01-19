@@ -46,6 +46,19 @@ StProtocolNameChooserPresenterTest >> testCreatingProtocolThatExists [
 ]
 
 { #category : 'tests' }
+StProtocolNameChooserPresenterTest >> testNewProtocolIsTrimmedByBothSides [
+
+
+	| protocolName |
+	protocolName := ' nameWithSpaces '.
+	presenter concernedClass: self class.
+
+	presenter protocolName: protocolName.
+	presenter doAcceptFromTextInput.
+	self assert: presenter selectedProtocolName equals: 'nameWithSpaces'
+]
+
+{ #category : 'tests' }
 StProtocolNameChooserPresenterTest >> testSmoke [
 
 	| window |
