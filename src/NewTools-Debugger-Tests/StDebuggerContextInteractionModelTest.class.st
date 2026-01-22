@@ -217,6 +217,12 @@ StDebuggerContextInteractionModelTest >> testInteractionModelArePreservedAfterCh
 ]
 
 { #category : 'tests' }
+StDebuggerContextInteractionModelTest >> testNeedRequestorScope [
+
+	self assert: model needRequestorScope
+]
+
+{ #category : 'tests' }
 StDebuggerContextInteractionModelTest >> testNilContextModel [
 
 	self deny:
