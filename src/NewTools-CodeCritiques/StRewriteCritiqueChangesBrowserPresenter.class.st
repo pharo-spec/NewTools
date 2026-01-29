@@ -282,7 +282,7 @@ StRewriteCritiqueChangesBrowserPresenter >> updateChanges [
 
 	"Later we could filter the shown changes depending on the selected scope"
 
-	changeTree roots: (aCompositeChange whatToDisplayIn: self).
+	changeTree roots: (aCompositeChange changesToDisplayIn: self).
 	changeTree roots ifNotEmpty: [ changeTree selectItem: changeTree roots first ]
 ]
 

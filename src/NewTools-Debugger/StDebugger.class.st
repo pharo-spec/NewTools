@@ -1236,28 +1236,6 @@ StDebugger >> stackAndCodeWithExtensionsLayout [
 			yourself)
 ]
 
-{ #category : 'stack' }
-StDebugger >> stackColorForContext: context [
-	"I return the color the text should have in the stack by comparing the context in parameter to the selected context.
-	
-	If they are from the same class, we return a certain 'primary' highlight color.
-	If they are from the same package (but different class), we return a 'secondary' highlight color.
-	Else, we just keep the normal style."
-
-	self class enableStackColoring ifFalse: [ ^ self theme textColor ].
-	self selectedContext ifNil: [ ^ self theme textColor ].
-
-	^ (self isInSelectedContextClass: context)
-		  ifTrue: [ self theme highlightTextColor ]
-		  ifFalse: [
-			  (self isInSelectedContextPackage: context)
-				  ifTrue: [
-				  self theme highlightTextColor
-					  mixed: 0.5
-					  with: self theme textColor ]
-				  ifFalse: [ self theme textColor ] ]
-]
-
 { #category : 'accessing - presenters' }
 StDebugger >> stackHeader [
 
