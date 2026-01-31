@@ -10,7 +10,9 @@ Class {
 	#classTraits : 'SpTModel classTrait',
 	#instVars : [
 		'firstLineLabel',
-		'timeLabel'
+		'timeLabel',
+		'deleteIcon',
+		'deleteBlock'
 	],
 	#category : 'NewTools-Playground-View',
 	#package : 'NewTools-Playground',
@@ -27,13 +29,26 @@ StPlaygroundPageSummaryPresenter >> contents [
 StPlaygroundPageSummaryPresenter >> initializePresenters [
 
 	layout := SpBoxLayout newTopToBottom
-		borderWidth: 1;
-		spacing: 2;
-		add: (firstLineLabel := self newLabel) expand: false;
-		add: (timeLabel := self newLabel) expand: false;
-		yourself.
+		          borderWidth: 1;
+		          spacing: 2;
+		          add: (firstLineLabel := self newLabel) expand: false;
+		          add: (SpBoxLayout newLeftToRight
+				           spacing: 5;
+				           borderWidth: 1;
+				           add: (timeLabel := self newLabel);
+				           add: (deleteIcon := self newButton) width: 25;
+				           yourself)
+		          expand: false;
+		          yourself.
 
-	timeLabel addStyle: 'dim'
+	timeLabel addStyle: 'dim'.
+
+	deleteIcon
+		icon: (self iconNamed: #remove);
+		help: 'This action will remove the page from the playground and remove the persisted page.';
+		action: [
+				self model delete.
+				deleteBlock ifNotNil: [ deleteBlock value ] ]
 ]
 
 { #category : 'accessing' }
@@ -54,4 +69,10 @@ StPlaygroundPageSummaryPresenter >> updatePresenter [
 	self model ifNil: [ ^ self ].
 	firstLineLabel label: self pageTitle.
 	timeLabel label: self model modificationTime epiceaBrowsersAsString
+]
+
+{ #category : 'events' }
+StPlaygroundPageSummaryPresenter >> whenDeleteButtonPressed: aBlock [
+
+	deleteBlock := aBlock
 ]

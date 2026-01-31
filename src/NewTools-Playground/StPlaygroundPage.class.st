@@ -119,6 +119,14 @@ StPlaygroundPage >> defaultObjectInspectorClass [
 	^ StPlaygroundPagePresenter
 ]
 
+{ #category : 'submorphs - add/remove' }
+StPlaygroundPage >> delete [
+	"Delete the corresponding page"
+
+	self fileReference ensureDelete.
+	(self fileReference withExtension: 'ombu') ensureDelete
+]
+
 { #category : 'accessing' }
 StPlaygroundPage >> ensureContentsFlushed [
 
