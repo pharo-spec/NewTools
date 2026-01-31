@@ -174,10 +174,15 @@ StPlaygroundPagesPresenter >> pagesActions [
 { #category : 'initialization' }
 StPlaygroundPagesPresenter >> pagesAsPresenters [
 
-	^ self pages collect: [ :each | 
-		self 
-			instantiate: StPlaygroundPageSummaryPresenter
-			on: each  ]
+	^ self pages collect: [ :each |
+			  (self instantiate: StPlaygroundPageSummaryPresenter on: each)
+				  whenDeleteButtonPressed: [
+						  | oldIndex |
+						"Refresh the list but keep the selected index to not jump in the list."
+						  oldIndex := pageList selectedIndex. 
+						  pageList presenters: self pagesAsPresenters.
+						  pageList selectIndex: oldIndex ];
+				  yourself ]
 ]
 
 { #category : 'private' }
