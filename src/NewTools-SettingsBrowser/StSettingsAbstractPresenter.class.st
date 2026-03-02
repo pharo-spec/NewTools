@@ -1,6 +1,6 @@
 Class {
 	#name : 'StSettingsAbstractPresenter',
-	#superclass : 'StPresenter',
+	#superclass : 'SpPresenter',
 	#classVars : [
 		'IconCache'
 	],
@@ -182,16 +182,12 @@ StSettingsAbstractPresenter class >> toolsIconContents [
 ]
 
 { #category : 'accessing' }
-StSettingsAbstractPresenter >> currentApplication [ 
+StSettingsAbstractPresenter >> currentApplication [
+	self 
+		deprecated: 'Use #application' 
+		transformWith: '`@receiver currentApplication' -> '`@receiver application'.
 
-	^ self class currentApplication 
-]
-
-{ #category : 'accessing' }
-StSettingsAbstractPresenter >> iconNamed: aSymbol [
-	"Returns the icon with the given name"
-	
-	^ self class iconNamed: aSymbol 
+	^ self application
 ]
 
 { #category : 'callbacks' }
@@ -216,5 +212,7 @@ StSettingsAbstractPresenter >> sectionTitleString [
 StSettingsAbstractPresenter >> settingsTree [
 	"Answer the receiver's <StSettingsTree>, the settings model"
 
-	^ self currentApplication propertyAt: #settingsTree.
+	^ self application 
+		propertyAt: #settingsTree
+		ifAbsentPut: [ StSettingsTree new ]
 ]

@@ -88,12 +88,13 @@ StVersionBrowserPresenter >> browseSenders [
 
 { #category : 'private - factory' }
 StVersionBrowserPresenter >> buildChangeList [
-	rgMethod sourcePointer ifNil:[ ^ #() ].
 
-	^ (SourceFiles changeRecordsFor: rgMethod)
-		collectWithIndex: [ :c :i | | rg |
-			rg := c asRingDefinition.
-			rg annotationNamed: #versionIndex put: i ]
+	rgMethod sourcePointer ifNil: [ ^ #(  ) ].
+
+	^ (SourcesManager current changeRecordsFor: rgMethod) collectWithIndex: [ :c :i |
+			  | rg |
+			  rg := c asRingDefinition.
+			  rg annotationNamed: #versionIndex put: i ]
 ]
 
 { #category : 'accessing' }

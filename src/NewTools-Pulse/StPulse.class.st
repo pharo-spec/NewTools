@@ -691,10 +691,8 @@ StPulse >> initializeButtons [
 
 	| helpButton settingsButton |
 
-	findAllButton := self newButton
-		addStyle: 'small';
-		addStyle: 'stPulseButton';
-		icon: (self iconNamed: #glamorousDown);
+	findAllButton := self newLink
+		label: 'Fetch all';
 		action: [ self findAllButtonAction ];
 		help: 'Gives you all the results of a search. Normal searchs only give you the first 25';
 		yourself.
@@ -714,9 +712,11 @@ StPulse >> initializeButtons [
 			self defaultKeyboardFocus takeKeyboardFocus.
 			self openSettingsBrowser ];
 		help: 'Open settings browser to configure StPulse'.
-	self addKeyboardBehavior: findAllButton.
+
+	"self addKeyboardBehavior: findAllButton."
 	self addKeyboardBehavior: helpButton.
 	self addKeyboardBehavior: settingsButton.
+
 	buttonsToolbar := self newPresenter
 		layout: (SpBoxLayout newLeftToRight
 			add: settingsButton expand: false;
@@ -743,9 +743,10 @@ StPulse >> initializeListLabel [
 	
 	listTitleLayout := self newPresenter
 		layout: (SpBoxLayout newLeftToRight 
-			add: listLabelPresenter expand: true;
-			add: listCounterPresenter expand: false;
+			spacing: 5;
+			add: listLabelPresenter;
 			add: findAllButton expand: false;
+			add: listCounterPresenter expand: false;
 			yourself);
 		yourself
 ]

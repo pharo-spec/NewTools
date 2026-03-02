@@ -16,6 +16,7 @@ Class {
 
 { #category : 'commands' }
 StRawInspectionPresenter class >> buildCommandsGroupWith: presenter forRoot: aCmCommandsGroup [
+	
 	aCmCommandsGroup
 		beDisplayedAsGroup;
 		register: (StInspectorInspectSelectedCommand forSpecContext: presenter);
@@ -100,6 +101,7 @@ StRawInspectionPresenter >> initializePresenters [
 			transfer target save: (transfer shouldCopy ifTrue: [ value copy ] ifFalse: [ value ]).
 			self step ];
 		yourself.
+		
 	self addVariablesColumn.
 	self addValuesColumn.
 	self setAttributeTable

@@ -36,5 +36,5 @@ StSettingDirectoryPresenterItem >> value: aFileReference [
 
 	self setterPresenter 
 		help: aFileReference asString;
-		text: aFileReference
+		text: aFileReference asString
 ]

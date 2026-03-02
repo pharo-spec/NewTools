@@ -48,10 +48,10 @@ StFinderSearchOptions >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
 		  spacing: 2;
-		  add: substringRadioButton width: 95;
-		  add: regexRadioButton width: 70;
-		  add: exactRadioButton width: 70;
-		  add: caseCheckBox width: 70;
+		  add: substringRadioButton;
+		  add: regexRadioButton;
+		  add: exactRadioButton;
+		  add: caseCheckBox;
 		  yourself
 ]
 

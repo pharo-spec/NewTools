@@ -57,6 +57,23 @@ StTranscriptPresenterTest >> testClear [
 ]
 
 { #category : 'tests' }
+StTranscriptPresenterTest >> testClearViaAnnouncement [
+
+	| window |
+	[
+		window := presenter open.
+		transcript show: 'test'.
+		100 milliSeconds wait.
+		self waitUntilUIRedrawed.
+		self assert: presenter textPresenter text equals: 'test'.
+		transcript clear.
+		100 milliSeconds wait.
+		self assert: presenter textPresenter text equals: ''.
+		self assert: transcript contents equals: '' ] 
+	ensure: [ window close ]
+]
+
+{ #category : 'tests' }
 StTranscriptPresenterTest >> testFetchOld [
 
 	| window |

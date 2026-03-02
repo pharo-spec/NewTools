@@ -1,7 +1,7 @@
 Extension { #name : 'ThemeIcons' }
 
 { #category : '*NewTools-SettingsBrowser' }
-ThemeIcons >> asSettingPresenter: aString [ 
+ThemeIcons >> asSettingPresenter: aString  owner: aPresenter [
 
 	^ SpDropListPresenter new
 		items: { self };

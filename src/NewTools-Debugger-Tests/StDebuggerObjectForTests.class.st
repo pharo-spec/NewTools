@@ -36,6 +36,9 @@ StDebuggerObjectForTests >> methodWithArg1: i arg2: j [
 
 { #category : 'utilities' }
 StDebuggerObjectForTests >> methodWithArgsInBlock [
+
+	<compilerOptions: #(- optionCleanBlockClosure)>
+
 	^[ :a :b| a + b ] value: 4 value: 2
 ]
 

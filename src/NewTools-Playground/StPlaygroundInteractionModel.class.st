@@ -35,6 +35,7 @@ StPlaygroundInteractionModel >> addBindings: aCollection [
 
 { #category : 'binding' }
 StPlaygroundInteractionModel >> addBindingsByDictionary: aDictionary [
+
 	aDictionary keysAndValuesDo: [ :key :value | self addBinding: (WorkspaceVariable key: key value: value) ].
 
 ]

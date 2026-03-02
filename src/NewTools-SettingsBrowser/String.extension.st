@@ -1,7 +1,7 @@
 Extension { #name : 'String' }
 
 { #category : '*NewTools-SettingsBrowser' }
-String >> asSettingPresenter: aSettingDeclaration [ 
+String >> asSettingPresenter: aSettingDeclaration owner: aPresenter [
 
 	^ (StSettingTextPresenterItem on: aSettingDeclaration)
 		value: self;

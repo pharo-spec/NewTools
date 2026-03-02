@@ -13,6 +13,18 @@ SettingDeclaration >> asSettingPresenter [
 ]
 
 { #category : '*NewTools-SettingsBrowser' }
+SettingDeclaration >> asSettingPresenterWithOwner: aPresenter [
+	"Answer an appropriate <SpPresenter> container for the receiver's value"
+
+	^ self precondition value 
+		ifTrue: [ 
+			self hasValue
+				ifTrue: [ self realValue asSettingPresenter: self owner: aPresenter ]
+				ifFalse: [ self default asSettingPresenter: self owner: aPresenter ] ]
+		ifFalse: [ SpNullPresenter owner: aPresenter ]
+]
+
+{ #category : '*NewTools-SettingsBrowser' }
 SettingDeclaration >> getColorFor: aPresenter [
 
 	| colorPickerPresenter |

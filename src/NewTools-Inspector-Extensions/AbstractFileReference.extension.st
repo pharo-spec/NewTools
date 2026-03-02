@@ -173,6 +173,7 @@ AbstractFileReference >> inspectionPng: aBuilder [
 	<inspectorPresentationOrder: 0 title: 'Picture'>
 	
 	^ aBuilder newImage
+		autoScale: true;
 		image: (self binaryReadStreamDo: [ :stream | PNGReadWriter formFromStream: stream ]);
 		yourself
 ]

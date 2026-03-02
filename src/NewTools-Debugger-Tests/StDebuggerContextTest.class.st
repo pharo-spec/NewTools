@@ -28,6 +28,8 @@ StDebuggerContextTest >> contextWithArgs [
 { #category : 'helpers' }
 StDebuggerContextTest >> contextWithArgsInBlock [
 
+	<compilerOptions: #(- optionCleanBlockClosure)>
+
 	"Creates and returns a context in which we step until we enter a method with arguments in a block, then step 4 times until we're in the block"
 
 	| context |

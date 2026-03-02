@@ -125,13 +125,6 @@ StEntry >> iconOn: anIconProvider [
 	^ anIconProvider iconNamed: self iconName
 ]
 
-{ #category : 'initialization' }
-StEntry >> initialize [
-
-	self class initializeSlots: self.
-	super initialize
-]
-
 { #category : 'accessing' }
 StEntry >> label [
 

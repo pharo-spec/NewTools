@@ -110,15 +110,14 @@ StFileSystemPresenter >> connectPresenters [
 { #category : 'layout' }
 StFileSystemPresenter >> defaultLayout [
 
-	^ SpPanedLayout newLeftToRight
-			positionOfSlider: 0.2;
-			add: (SpPanedLayout newTopToBottom
-				positionOfSlider: 300;		
-				add: treeNavigationSystem;
-				add: bookmarksTreeTable;
-				yourself);			
-			add: fileNavigationSystem;
-			yourself
+	^ SpScrollableLayout with: (SpPanedLayout newLeftToRight
+			   positionOfSlider: 0.2;
+			   add: (SpPanedLayout newTopToBottom
+					    positionOfSlider: 300;
+					    add: treeNavigationSystem;
+					    add: bookmarksTreeTable;
+					    yourself);
+			   add: fileNavigationSystem) yourself
 ]
 
 { #category : 'accessing' }

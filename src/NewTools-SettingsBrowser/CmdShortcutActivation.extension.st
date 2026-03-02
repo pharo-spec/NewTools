@@ -1,9 +1,9 @@
 Extension { #name : 'CmdShortcutActivation' }
 
 { #category : '*NewTools-SettingsBrowser' }
-CmdShortcutActivation >> asSettingPresenter: aDeclaration [ 
+CmdShortcutActivation >> asSettingPresenter: aDeclaration owner: aPresenter [
 
-	^ (StSettingTextPresenterItem on: aDeclaration) 
+	^ (aPresenter instantiate: StSettingTextPresenterItem on: aDeclaration) 
 		value: self keyCombination asString;
 		yourself
 ]

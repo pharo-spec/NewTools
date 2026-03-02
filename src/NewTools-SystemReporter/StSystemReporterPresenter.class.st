@@ -146,9 +146,12 @@ StSystemReporterPresenter >> reportOSEnvironment: aStream [
 
 { #category : 'building report' }
 StSystemReporterPresenter >> reportSources: aStream [
+
 	self header: 'Image Sources' on: aStream.
-	aStream nextPutAll: SourceFiles class printString; cr.
-	aStream nextPutAll: SourceFiles reportString.
+	aStream
+		nextPutAll: SourceFileArray default class printString;
+		cr.
+	aStream nextPutAll: SourceFileArray default reportString
 ]
 
 { #category : 'building report' }

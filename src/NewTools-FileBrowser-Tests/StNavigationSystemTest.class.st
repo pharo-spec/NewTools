@@ -52,15 +52,10 @@ StNavigationSystemTest >> testInitializeFilterDropListSelectedItemShouldBeDefaul
 { #category : 'tests' }
 StNavigationSystemTest >> testInitializeShouldOnlySeeNotHiddenFile [
 
-	Smalltalk os isWindows ifTrue: [ 
-		self skip:
-			'Too hard to make file hidden in Windows, do not test for it' ].
+	OSPlatform current isWindows ifTrue: [ self skip: 'Too hard to make file hidden in Windows, do not test for it' ].
 	self
-		assertCollection:
-		(dialog fileReferenceTable items collect: #basename)
-		hasSameElements:
-			#( 'dir' 'dir.ext' 'banana.jpg' 'patate.png' 'sth.aaa' 'sth.ext' )
-				asOrderedCollection
+		assertCollection: (dialog fileReferenceTable items collect: #basename)
+		hasSameElements: #( 'dir' 'dir.ext' 'banana.jpg' 'patate.png' 'sth.aaa' 'sth.ext' ) asOrderedCollection
 ]
 
 { #category : 'tests' }

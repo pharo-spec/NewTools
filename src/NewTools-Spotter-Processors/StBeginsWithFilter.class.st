@@ -18,7 +18,5 @@ StBeginsWithFilter >> beginsWithFilter: aString [
 { #category : 'protected' }
 StBeginsWithFilter >> criterium: aValue [
 
-	^ aValue asString asLowercase beginsWith: filteringText asLowercase
-
-
+	^ aValue asString beginsWith: filteringText caseSensitive: false
 ]

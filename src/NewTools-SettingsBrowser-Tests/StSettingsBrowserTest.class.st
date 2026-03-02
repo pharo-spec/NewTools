@@ -4,85 +4,53 @@ Class {
 	#instVars : [
 		'categoriesPresenter',
 		'toolbarPresenter',
-		'detailsPresenter'
+		'detailsPresenter',
+		'application'
 	],
 	#category : 'NewTools-SettingsBrowser-Tests',
 	#package : 'NewTools-SettingsBrowser-Tests'
 }
 
 { #category : 'running' }
-StSettingsBrowserTest >> application [
+StSettingsBrowserTest >> application [ 
 
-	^  self classToTest currentApplication
-
+	^ application ifNil: [ application := StPharoApplication new ]
 ]
 
 { #category : 'accessing' }
 StSettingsBrowserTest >> classToTest [
-	^ StSettingsMainPresenter
+	^ StSettingsBrowser
 ]
 
 { #category : 'running' }
 StSettingsBrowserTest >> setUp [
 
 	super setUp.	
-	categoriesPresenter := presenter presenterAt: #mainCategoriesPresenter.
+	categoriesPresenter := presenter presenterAt: #categoriesPresenter.
 	toolbarPresenter := presenter presenterAt: #toolbarPresenter.
 	detailsPresenter := presenter presenterAt: #detailsPresenter. 
 ]
 
-{ #category : 'tests' }
-StSettingsBrowserTest >> testCategoriesHasIcon [
+{ #category : 'running' }
+StSettingsBrowserTest >> tearDown [ 
 
-	| categoryList |
-	categoryList := categoriesPresenter categoryListPresenter.
-	self
-		assert: (categoryList presenters allSatisfy: [ : p | p iconPresenter isForm ])
-		description: 'It tests that categories in the component list has an icon'.
-		
-	
-
-]
-
-{ #category : 'tests' }
-StSettingsBrowserTest >> testCategoriesHasSystemSettingsPragma [
-
-	self 
-		assert: (categoriesPresenter settingsCategories allSatisfy: [ : node | node pragma key = #systemsettings ])
-		description: 'It tests that there setting categories have a pragma named systemsettings'
-	
-
-]
-
-{ #category : 'tests' }
-StSettingsBrowserTest >> testCategoriesHasText [
-
-	| categoryList |
-	categoryList := categoriesPresenter categoryListPresenter.
-	self
-		assert: (categoryList presenters allSatisfy: [ : p | p labelPresenter label notEmpty ])
-		description: 'It tests that categories in the component list has text'.
-
-		
-	
-
+	application := nil.
+	super tearDown
 ]
 
 { #category : 'tests' }
 StSettingsBrowserTest >> testCategoriesRootParentsAreNotSet [
 
 	self 
-		assert: (categoriesPresenter settingsCategories allSatisfy: [ : node | node parentNode isNil ])
+		assert: (categoriesPresenter roots allSatisfy: [ : node | node parentNode isNil ])
 		description: 'It tests that all categories are root nodes'
-	
-
 ]
 
 { #category : 'tests' }
 StSettingsBrowserTest >> testDescriptionsAreString [
 
 	self 
-		assert: (categoriesPresenter settingsCategories allSatisfy: [ : node | node description isString ])
+		assert: (presenter settingsTree nodeList allSatisfy: [ : node | node description isString ])
 		description: 'It tests that categories are described by a String instance'
 	
 
@@ -92,23 +60,20 @@ StSettingsBrowserTest >> testDescriptionsAreString [
 StSettingsBrowserTest >> testDetailsPresenterNotActivatedByDefault [
 
 	self
-		assert: (detailsPresenter presenterAt: #pageTitle) label isEmpty
+		assert: detailsPresenter model isNil
 		description: 'It tests that after the window is opened, there is no autoselection of a setting category by default'
 ]
 
 { #category : 'tests' }
 StSettingsBrowserTest >> testHasCategories [
 
-	self assert: categoriesPresenter isPresenter.
-	
-	self deny: categoriesPresenter settingsCategories isEmpty.
-
+	self deny: categoriesPresenter roots isEmpty
 ]
 
 { #category : 'tests' }
 StSettingsBrowserTest >> testNonEmptyCategories [
 
-	self assert: (categoriesPresenter settingsCategories allSatisfy: #hasChildren).
+	self assert: (categoriesPresenter roots allSatisfy: #hasChildren).
 
 ]
 
@@ -116,7 +81,7 @@ StSettingsBrowserTest >> testNonEmptyCategories [
 StSettingsBrowserTest >> testNonEmptyCategoryLabels [
 
 	self 
-		assert: (categoriesPresenter settingsCategories allSatisfy: [ : node | node label notEmpty ])
+		assert: (categoriesPresenter roots allSatisfy: [ : node | node label notEmpty ])
 		description: 'It tests that there are no setting categories without an assigned name'
 	
 
@@ -126,7 +91,7 @@ StSettingsBrowserTest >> testNonEmptyCategoryLabels [
 StSettingsBrowserTest >> testNonEmptyCategoryNames [
 
 	self 
-		assert: (categoriesPresenter settingsCategories allSatisfy: [ : node | node name notEmpty ])
+		assert: (categoriesPresenter roots allSatisfy: [ : node | node name notEmpty ])
 		description: 'It tests that there are no setting nodes without an assigned name'
 
 ]
@@ -143,19 +108,6 @@ StSettingsBrowserTest >> testSimulateCategoryPopulation [
 	"(Delay forSeconds: 5) wait." 
 	self
 		assert: childSettingsLayout children notEmpty
-		description: 'It tests that after a category selection has been made, the details presenter contains a title'
-]
-
-{ #category : 'tests' }
-StSettingsBrowserTest >> testSimulateCategorySelection [
-
-	categoriesPresenter categoryListPresenter clickItem: 1.
-	self 
-		assert: categoriesPresenter categoryListPresenter selection selectedIndex
-		equals: 1.
-		
-	self
-		assert: (detailsPresenter presenterAt: #pageTitle) label notEmpty
 		description: 'It tests that after a category selection has been made, the details presenter contains a title'
 ]
 

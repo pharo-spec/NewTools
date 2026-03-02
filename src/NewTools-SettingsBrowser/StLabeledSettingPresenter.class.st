@@ -15,10 +15,15 @@ Class {
 StLabeledSettingPresenter >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
-		add: labelPresenter withConstraints: [ :constraints | constraints width: self labelWidth ];
-		add: (SpBoxLayout newTopToBottom
-				add: input withConstraints: [ :constraints | 
-					constraints height: self inputTextHeight ]);
+		hAlignStart;
+		add: (self newPresenter 
+			addStyle: 'label';
+			layout: (SpBoxLayout newHorizontal 
+				hAlignStart;
+				add: labelPresenter;
+				yourself);
+			yourself);
+		add: input;
 		yourself
 ]
 
@@ -27,12 +32,11 @@ StLabeledSettingPresenter >> description: aString [
 
 	aString ifNil: [ ^ self ].
 	labelPresenter help: aString.
-	labelPresenter eventHandler 
+	"labelPresenter eventHandler 
 		whenMouseEnterDo: [ : e | self owner help: labelPresenter help ].
 	input eventHandler 
 		whenMouseEnterDo: [ : e | self owner help: labelPresenter help ];
-		whenFocusReceivedDo: [ : e | self owner help: labelPresenter help ].
-
+		whenFocusReceivedDo: [ : e | self owner help: labelPresenter help ]."
 ]
 
 { #category : 'layout' }

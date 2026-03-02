@@ -97,14 +97,15 @@ FLDebuggerStackSerializer >> timestampString [
 
 { #category : 'private' }
 FLDebuggerStackSerializer >> vmInformationString [
+
 	^ String streamContents: [ :stringStream |
-		stringStream
-			nextPutAll: 'VM: ';
-			nextPutAll: Smalltalk os name asString;
-			nextPutAll: ' - ';	
-			nextPutAll: Smalltalk os subtype asString;
-			nextPutAll: ' - ';
-			nextPutAll: Smalltalk os version asString;
-			nextPutAll: ' - ';
-			nextPutAll: Smalltalk vm version asString ]
+			  stringStream
+				  nextPutAll: 'VM: ';
+				  nextPutAll: OSPlatform current name asString;
+				  nextPutAll: ' - ';
+				  nextPutAll: OSPlatform current subtype asString;
+				  nextPutAll: ' - ';
+				  nextPutAll: OSPlatform current version asString;
+				  nextPutAll: ' - ';
+				  nextPutAll: Smalltalk vm version asString ]
 ]
