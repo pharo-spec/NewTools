@@ -8,12 +8,6 @@ StDebugger class >> activatedDebuggerExtensions [
 ]
 
 { #category : '*NewTools-Debugger-Tests' }
-StDebugger >> inspector [
-
-	^ inspector
-]
-
-{ #category : '*NewTools-Debugger-Tests' }
 StDebugger >> stackAndCodeContainer [
 
 	^ stackAndCodeContainer

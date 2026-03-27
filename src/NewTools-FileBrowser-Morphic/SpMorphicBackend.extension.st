@@ -21,8 +21,9 @@ SpMorphicBackend >> executeOpenFileDialog: aFileDialog [
 
 { #category : '*NewTools-FileBrowser-Morphic' }
 SpMorphicBackend >> executeSaveFileDialog: aFileDialog [
+	
+	<ignoreNotImplementedSelectors: #( answerSaveFile )>
 	| dialog |
-
 	dialog := self newFileDialogFor: aFileDialog.
 	dialog answerSaveFile.
 	^ dialog openModal answer 

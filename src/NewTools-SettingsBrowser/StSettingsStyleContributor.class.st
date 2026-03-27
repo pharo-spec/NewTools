@@ -6,53 +6,13 @@ Class {
 	#tag : 'UI'
 }
 
-{ #category : 'styling' }
-StSettingsStyleContributor class >> styleSheet [
-
-	^ SpStyleVariableSTONReader fromString: self styleSheetString
-]
-
-{ #category : 'as yet unclassified' }
-StSettingsStyleContributor class >> styleSheetData [
-
-	^ '.application [
-    .superCategoryList [ Geometry { #height: 70 } ],
-	.pageTitle [ 
-		Font { #name : EnvironmentFont(#default), #size : 20 },
-		Geometry { #height: 15 } ],
-	.pageStyle [ 
-		Draw { #backgroundColor: #transparent },
-		Container { #padding: 2 } ],
-	.sectionTitleL1 [ 
-		Draw { #backgroundColor: #gray },
-		Font { #size: 16 } ],
-	.sectionTitleL2 [ 
-		Draw { #backgroundColor: #lightGray },
-		Font { #size: 14 } ],
-	.sectionTitleL3 [ 
-		Draw { #backgroundColor: #veryLightGray },
-		Font { #size: 12 } ],
-	.sectionTitleL4 [ 
-		Draw { #backgroundColor: #veryVeryLightGray },
-		Font { #size: 10 } ],
-	.sectionStyle [ 
-		Draw { #backgroundColor: #transparent }
-	 ],
-	.settingDocTitle [ 
-		Draw { #backgroundColor: #veryVeryLightGray } ], 
-	.settingItemStyle [ 
-		Container { #borderWidth: 5 } ],
-	.descriptionStyle [ 
-		Draw { #backgroundColor: EnvironmentColor(lightBackground) } ] ]'
-]
-
-{ #category : 'as yet unclassified' }
+{ #category : 'private - accessing' }
 StSettingsStyleContributor >> headerColorForLevel: aNumber [
 
 	^ self headerColors at: aNumber + 1
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private - accessing' }
 StSettingsStyleContributor >> headerColors [
 
 	^ self isDarkTheme 
@@ -60,7 +20,7 @@ StSettingsStyleContributor >> headerColors [
 		ifFalse: [ self headerColorsForLightTheme ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private - accessing' }
 StSettingsStyleContributor >> headerColorsForDarkTheme [
 	| baseColor |
 
@@ -75,7 +35,7 @@ StSettingsStyleContributor >> headerColorsForDarkTheme [
 	 }
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private - accessing' }
 StSettingsStyleContributor >> headerColorsForLightTheme [
 	| baseColor |
 
@@ -90,7 +50,7 @@ StSettingsStyleContributor >> headerColorsForLightTheme [
 	 }
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'testing' }
 StSettingsStyleContributor >> isDarkTheme [
 	
 	"hacky, but works"

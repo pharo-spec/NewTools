@@ -10,7 +10,7 @@ Subclasses are expected to implement the class side `repositoryName` method, whi
 
 "
 Class {
-	#name : 'StSindarinDebuggerScriptRepository',
+	#name : 'StSindarinDebuggerScriptRepositoryAbstract',
 	#superclass : 'Object',
 	#classInstVars : [
 		'scripts'
@@ -21,35 +21,35 @@ Class {
 }
 
 { #category : 'accessing' }
-StSindarinDebuggerScriptRepository class >> clearScripts [
+StSindarinDebuggerScriptRepositoryAbstract class >> clearScripts [
 	<script>
 	scripts := Dictionary new.
 ]
 
 { #category : 'accessing' }
-StSindarinDebuggerScriptRepository class >> loadScript: aString [
+StSindarinDebuggerScriptRepositoryAbstract class >> loadScript: aString [
 	^ self scripts at: aString ifAbsent: nil.
 	
 ]
 
 { #category : 'accessing' }
-StSindarinDebuggerScriptRepository class >> repositoryName [
+StSindarinDebuggerScriptRepositoryAbstract class >> repositoryName [
 	"Return the name of the repository."
 	self subclassResponsibility
 ]
 
 { #category : 'accessing' }
-StSindarinDebuggerScriptRepository class >> saveScript: aStringKey code: aStringValue [
+StSindarinDebuggerScriptRepositoryAbstract class >> saveScript: aStringKey code: aStringValue [
 	
 	self scripts add: aStringKey -> aStringValue.
 ]
 
 { #category : 'accessing' }
-StSindarinDebuggerScriptRepository class >> scripts [
+StSindarinDebuggerScriptRepositoryAbstract class >> scripts [
 	^ scripts ifNil: [ scripts := Dictionary new]
 ]
 
 { #category : 'accessing' }
-StSindarinDebuggerScriptRepository class >> scriptsNames [
+StSindarinDebuggerScriptRepositoryAbstract class >> scriptsNames [
    ^ self scripts keys
 ]

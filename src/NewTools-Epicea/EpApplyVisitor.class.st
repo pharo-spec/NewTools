@@ -91,7 +91,8 @@ EpApplyVisitor >> visitMethodRemoval: aMethodRemoval [
 	self
 		behaviorNamed: aMethodRemoval behaviorAffectedName
 		ifPresent: [ :behavior |
-			behavior removeSelector: aMethodRemoval selector ]
+			(behavior includesSelector: aMethodRemoval selector)
+				ifTrue: [behavior removeSelector: aMethodRemoval selector] ]
 ]
 
 { #category : 'visitor' }

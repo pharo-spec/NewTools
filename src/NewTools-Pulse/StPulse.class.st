@@ -833,9 +833,8 @@ StPulse >> mutex [
 { #category : 'private - actions' }
 StPulse >> openSettingsBrowser [
 
-	SettingBrowser new
-		rootNodes:
-		(SettingBrowser currentTree nodeNamed: #pulse) allChildren;
+	(StSettingsBrowser newApplication: self application)
+		selectPath: #(tools pulse);
 		open
 ]
 

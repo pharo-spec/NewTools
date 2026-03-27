@@ -226,11 +226,18 @@ StDebuggerClientModelTest >> tearDown [
 	debugger ifNotNil: [ debugger clear].
 	session ifNotNil: [ session clear ].
 	session := nil.
-	StDebuggerUsingSpecSelectorMock removeSelector: #testMethod.
-	StDebuggerUsingSpecSelectorMock removeSelector: #method.
-	StDebuggerUsingSpecSelectorMock removeSelector: #unclassifiedMethod.
-	StTestDebuggerProvider removeSelector: #buildDebuggerWithMissingClassContext.
-	StTestDebuggerProvider removeSelector: #foobar.
+	(StDebuggerUsingSpecSelectorMock includesSelector: #testMethod)
+		ifTrue: [ StDebuggerUsingSpecSelectorMock removeSelector: #testMethod ].
+	(StDebuggerUsingSpecSelectorMock includesSelector: #method)
+		ifTrue: [ StDebuggerUsingSpecSelectorMock removeSelector: #method ].
+	(StDebuggerUsingSpecSelectorMock includesSelector: #unclassifiedMethod)
+		ifTrue: [ StDebuggerUsingSpecSelectorMock removeSelector: #unclassifiedMethod ].
+
+	(StTestDebuggerProvider includesSelector: #buildDebuggerWithMissingClassContext)
+		ifTrue: [ StTestDebuggerProvider removeSelector: #buildDebuggerWithMissingClassContext ].
+	(StTestDebuggerProvider includesSelector: #foobar)
+		ifTrue: [ StTestDebuggerProvider removeSelector: #foobar ].
+
 	StDebuggerClientModel shouldFilterStack: shouldFilterStack.
 	DebugSession contextModelClass: DebugContext.
 	self resetModifiedSourceCode.
@@ -277,12 +284,9 @@ StDebuggerClientModelTest >> testComputeInitialTopContext [
 
 { #category : 'tests - actions' }
 StDebuggerClientModelTest >> testCopyStackToClipboard [
+
 	debugActionModel copyStackToClipboard.
-	self
-		assert: Clipboard clipboardText string
-		equals:
-			(String
-				streamContents: [ :s | session interruptedContext shortDebugStackOn: s ])
+	self assert: Clipboard clipboardText string equals: session interruptedContext stackTraceString
 ]
 
 { #category : 'tests - actions' }
@@ -604,7 +608,7 @@ StDebuggerClientModelTest >> testFileOutMethod [
 { #category : 'tests - stack filtering' }
 StDebuggerClientModelTest >> testFilterDNUStack [
 
-	|stack filteredStack dummyActionModel|
+	|stack filteredStack dummyActionModel dnuContext dnuStack |
 	dummyActionModel := StTestDebuggerProvider new debuggerWithDNUContext debuggerClientModel.
 	self changeSession: dummyActionModel session.
 	dummyActionModel clear.
@@ -613,18 +617,22 @@ StDebuggerClientModelTest >> testFilterDNUStack [
 	"First, the stack contains a top context (i.e. from which a signal was sent), then the interrupted context"
 	stack add: debugActionModel topContext.
 	
-	"Second, the stack contexts is a MNU that has a method with the <debuggerCompleteToSender> pragma"
-	stack add: debugActionModel interruptedContext.	
+	"Second, the stack contexts are all contexts existing from a DNU send, that  should be marked with the <debuggerCompleteToSender> pragma, up to the signal of the MNU exception.
+	
+	The code below builds this *substack* in a robust way that is independent of the number of contexts"
+	dnuContext := debugActionModel interruptedContext findContextSuchThat: [ :c | c method selector = #doesNotUnderstand: ].
+	dnuStack := debugActionModel interruptedContext copyTo: dnuContext sender.
+	dnuStack stack do: [ :e | stack add: e ].
 	
 	"Then we have an imaginary call stack"
 	stack add: (self emptyContextForMethod: (self class>>#method1:)).
 	stack add: (self emptyContextForMethod: (self class>>#method2:)).
 	
 	filteredStack := debugActionModel filterStack: stack copy.
-	
+
 	self assert: filteredStack size equals: 2.
-	self assert: filteredStack first identicalTo: stack third.
-	self assert: filteredStack second identicalTo: stack fourth
+	self assert: filteredStack first identicalTo: (stack last: 2) first.
+	self assert: filteredStack second identicalTo: stack last
 	
 ]
 
@@ -653,14 +661,18 @@ StDebuggerClientModelTest >> testFilterMissingSubclassResponsibilityStack [
 { #category : 'tests - stack filtering' }
 StDebuggerClientModelTest >> testFilterStack [
 
-	|stack filteredStack dummyActionModel|
+	|stack filteredStack dummyActionModel dnuContext dnuStack |
 	dummyActionModel := StTestDebuggerProvider new debuggerWithDNUContext debuggerClientModel.
 	self changeSession: dummyActionModel session.
 	dummyActionModel clear.
 	stack := OrderedCollection new.
 	
-	"First, add to the stack a MNU context that has a method with the <debuggerCompleteToSender> pragma"
-	stack add: debugActionModel interruptedContext.	
+	"Second, the stack contexts are all contexts existing from a DNU send, that  should be marked with the <debuggerCompleteToSender> pragma, up to the signal of the MNU exception.
+	
+	The code below builds this *substack* in a robust way that is independent of the number of contexts"
+	dnuContext := debugActionModel interruptedContext findContextSuchThat: [ :c | c method selector = #doesNotUnderstand: ].
+	dnuStack := debugActionModel interruptedContext copyTo: dnuContext sender.
+	dnuStack stack do: [ :e | stack add: e ].
 	
 	"Then we have an imaginary call stack"
 	stack add: (self emptyContextForMethod: (self class>>#method1:)).
@@ -674,8 +686,8 @@ StDebuggerClientModelTest >> testFilterStack [
 	StDebuggerClientModel shouldFilterStack: true.
 	filteredStack := debugActionModel filterStack: stack copy.
 	self assert: filteredStack size equals: 2.
-	self assert: filteredStack first identicalTo: stack second.
-	self assert: filteredStack second identicalTo: stack third
+	self assert: filteredStack first identicalTo: (stack last: 2) first.
+	self assert: filteredStack second identicalTo: stack last
 ]
 
 { #category : 'tests' }

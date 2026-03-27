@@ -137,7 +137,7 @@ StDebuggerClientModel >> copyStackToClipboard [
 	Clipboard
 		clipboardText:
 			(String
-				streamContents: [ :s | self interruptedContext printDebugStackOn: s ])
+				streamContents: [ :s | self interruptedContext printStackTraceOn: s ])
 ]
 
 { #category : 'stack - helpers' }

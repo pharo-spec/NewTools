@@ -118,7 +118,7 @@ StWelcomeSetupPresenter >> newThemePresenter: aTheme [
 { #category : 'actions' }
 StWelcomeSetupPresenter >> openSettingsBrowser [
 
-	SettingBrowser open
+	(StSettingsBrowser newApplication: self application) open
 ]
 
 { #category : 'private' }

@@ -15,7 +15,7 @@ StSindarinDebuggerScriptRepositoryChooserPresenter >> display [
 { #category : 'initialization' }
 StSindarinDebuggerScriptRepositoryChooserPresenter >> findRepositories [
 
-	self items: StSindarinDebuggerScriptRepository subclasses
+	self items: StSindarinDebuggerScriptRepositoryAbstract subclasses
 ]
 
 { #category : 'actions' }

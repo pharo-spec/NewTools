@@ -33,14 +33,14 @@ StSettingsBrowser class >> defaultPreferredExtent [
 { #category : 'world menu' }
 StSettingsBrowser class >> menuSettingsBrowserCommandOn: aBuilder [
 	<worldMenu>
-
-	(aBuilder item: #'New Settings Browser')
-		parent: #NewToolsMenu;
-		label: 'New Settings Browser';
+		
+	(aBuilder item: #Settings)
+		parent: #Pharo;
+		order: 1;
+		iconName: #smallConfiguration;
 		action: [ (self newApplication: StPharoApplication current) open ];
-		iconName: self taskbarIconName;
-		help: 'New Settings Browser';
-		order: 3
+		keyText: 'o, s';
+		help: 'Opens a Settings Browser which allows you to alter many system settings.'
 ]
 
 { #category : 'accessing' }
@@ -104,6 +104,22 @@ StSettingsBrowser >> exportSettings [
 StSettingsBrowser >> exporter [
 
 	^ exporter
+]
+
+{ #category : 'private' }
+StSettingsBrowser >> findPathOf: pathCollection on: itemCollection [
+	| first node |
+	
+	pathCollection ifEmpty: [ ^ #() ].
+	
+	first := pathCollection first.
+	
+	node := itemCollection detect: [ :each | each name = first ] ifNone: [ nil ].
+	node ifNil: [ ^ #() ].
+	
+	^ { node }, (self 
+		findPathOf: pathCollection allButFirst
+		on: node allChildren)
 ]
 
 { #category : 'searching' }
@@ -239,6 +255,21 @@ StSettingsBrowser >> selectDialog: fileReferneces [
 		  display: [ :each | each basename ];
 		  displayIcon: [ :each | self iconNamed: each systemIconName ];
 		  openModal
+]
+
+{ #category : 'accessing' }
+StSettingsBrowser >> selectPath: aCollection [
+	"selects a path of the settings tree (by name).
+	 e.g. aSettingsBrowser selectPath: #(tools epicea)"
+	
+	| pathItems |
+
+	pathItems := self findPathOf: aCollection on: categoriesPresenter roots.
+	pathItems isEmptyOrNil ifTrue: [ ^ self ].
+	
+	categoriesPresenter
+		selectPathByItems: pathItems 
+		scrollToSelection: true
 ]
 
 { #category : 'private' }

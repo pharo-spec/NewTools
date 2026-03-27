@@ -37,8 +37,7 @@ StDebuggerSettingsCommand >> canBeExecuted [
 { #category : 'executing' }
 StDebuggerSettingsCommand >> execute [
 
-	SettingBrowser new
-		rootNodes:
-			(SettingBrowser currentTree nodeNamed: #debugging) allChildren;
+	(StSettingsBrowser newApplication: self context application)
+		selectPath: #(tools debugging);
 		open
 ]

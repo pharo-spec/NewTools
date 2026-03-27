@@ -94,6 +94,7 @@ StSindarinDebuggerCommandPresenter >> generateCommand [
 
 	class := (SindarinCommand << className)
 		         package: package;
+					tag: 'Scripts';
 		         build;
 		         install.
 
@@ -101,7 +102,7 @@ StSindarinDebuggerCommandPresenter >> generateCommand [
 		compile: ('execute
 	|sindarin|
 	sindarin := self context sindarinDebugger.
-	self context debuggerActionModel preventUpdatesDuring: [
+	self context debuggerClientModel preventUpdatesDuring: [
 		{1}
 	]' format: { code })
 		classified: 'executing'.

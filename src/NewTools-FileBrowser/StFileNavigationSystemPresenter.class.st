@@ -121,9 +121,9 @@ StFileNavigationSystemPresenter >> columns: aCollectionOfColumns [
 StFileNavigationSystemPresenter >> configButtonAction [
 
 	configButton action: [
-		SettingBrowser new
-			rootNodes: (SettingBrowser currentTree nodeNamed: #fileBrowser) allChildren;
-			open ].
+		(StSettingsBrowser newApplication: self application)
+			selectPath: #(tools fileBrowser);
+			open ]
 ]
 
 { #category : 'initialization' }
