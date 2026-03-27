@@ -238,7 +238,7 @@ ScopesManagerTest >> testSplitOnMatchingScopesFiltersByPrefix [
 	packages := OrderedCollection new.
 	packages add: (RBPackage named: 'Kernel-ExtraUtils').
 	packages add: (RBPackage named: 'Kernel-Tests').
-	packages add: (RBPackage named: 'Collections-Strings').
+	packages add: (RBPackage named: 'Collections-Strings'). 
 
 	scope := ClyMatchingPackageScope ofAll: packages in: nil withName: ''.
 	splitScopes := scope splitOnMatchingScopes.
