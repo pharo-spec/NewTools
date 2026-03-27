@@ -115,3 +115,14 @@ StMethodBrowserTest >> testOpenWithoutMessageShouldNotDNU [
 	self shouldnt: [ br open ] raise: MessageNotUnderstood.
 		] ensure: [ br window close ]
 ]
+
+{ #category : 'tests' }
+StMethodBrowserTest >> testRefreshingBlockWithLiteralString [
+
+	| window browser methodToAdd |
+	[
+		window := StMethodBrowser browseReferencesToLiteral: 'StMethodBrowser'.
+		browser := window presenter.
+		methodToAdd := (self class >> #dataMethodForTest) copy.
+		self assert: (browser refreshingBlock value: methodToAdd) ] ensure: [ window ifNotNil: [ window delete ] ]
+]

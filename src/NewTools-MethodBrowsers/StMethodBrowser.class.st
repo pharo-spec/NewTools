@@ -578,6 +578,12 @@ StMethodBrowser >> packageNameForItem: anItem [
 ]
 
 { #category : 'api' }
+StMethodBrowser >> refreshingBlock [
+
+	^ refreshingBlock
+]
+
+{ #category : 'api' }
 StMethodBrowser >> refreshingBlock: aBlock [
 	refreshingBlock := aBlock
 ]
