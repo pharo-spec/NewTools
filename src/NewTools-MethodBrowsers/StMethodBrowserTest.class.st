@@ -29,7 +29,7 @@ StMethodBrowserTest >> testBrowseClassNameAsLiteral [
 	[
 		window := StMethodBrowser browseReferencesToLiteral: 'StMethodBrowser'.
 
-		self assert: window presenter methods size equals: 3 ] ensure: [ window ifNotNil: [ window delete ] ]
+		self assert: window presenter methods size equals: 4 ] ensure: [ window ifNotNil: [ window delete ] ]
 ]
 
 { #category : 'tests' }
