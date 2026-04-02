@@ -578,6 +578,12 @@ StMethodBrowser >> packageNameForItem: anItem [
 ]
 
 { #category : 'api' }
+StMethodBrowser >> refreshingBlock [
+
+	^ refreshingBlock
+]
+
+{ #category : 'api' }
 StMethodBrowser >> refreshingBlock: aBlock [
 	refreshingBlock := aBlock
 ]
@@ -664,9 +670,8 @@ StMethodBrowser >> selectedMethod [
 
 { #category : 'api' }
 StMethodBrowser >> setRefreshingBlockForClassReferencesOf: aString [
-	
-	self refreshingBlock: [ :method | 
-		method accessesRef: (self class environment at: aString asSymbol) ]
+
+	self refreshingBlock: [ :method | method hasLiteral: aString ]
 ]
 
 { #category : 'api' }
