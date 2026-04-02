@@ -222,13 +222,13 @@ StMethodListPresenter >> initializePresenters [
 		sortingBlock: [ :a :b | self sortClassesInCachedHierarchy: a b: b ];
 		addColumn: (SpStringTableColumn 
 			title: 'Location' 
-			evaluated: [ :item | self locationOf: item ]);
+			evaluated: [ :item | self locationOf: item ]) beSortable; yourself;
 		addColumn: (SpStringTableColumn 
 			title: 'Selector' 
-			evaluated: [ :item | self selectorOf: item ]);
+			evaluated: [ :item | self selectorOf: item ]) beSortable ; yourself ;
 		addColumn: (SpStringTableColumn 
 			title: 'Package' 
-			evaluated: [ :item | self packageNameOf: item ]);
+			evaluated: [ :item | self packageNameOf: item ]) beSortable; yourself;
 		beResizable.
 
 	listPresenter outputActivationPort transmitDo: [ :aMethod | self doBrowseMethod ].
