@@ -471,7 +471,7 @@ StMethodBrowser >> initializePresenters [
 	refreshingBlock := [ :item | true ].
 	filterPresenter := self instantiate: SpFilteringListPresenter.
 	filterPresenter matchSubstring.
-	filterPresenter display: [ :m | (m methodClass ifNil: [ '' ] ifNotNil: [ :c | c name ]) , ' >> ' , m selector ].
+	filterPresenter display: [ :m | (self methodClassNameForItem: m) , ' >> ' , m selector ].
 
 	self initializeDropList
 ]
