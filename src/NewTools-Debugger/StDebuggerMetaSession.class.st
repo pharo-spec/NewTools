@@ -15,7 +15,7 @@ StDebuggerMetaSession class >> forDebugger: aStDebugger [
 ]
 
 { #category : 'accessing' }
-StDebuggerMetaSession >> allInspectorNodes [
+StDebuggerMetaSession >> allModelInspectorNodes [
 	"Answer a list of attributes as nodes"
 
 	^ OrderedCollection new

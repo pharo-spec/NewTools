@@ -77,6 +77,17 @@ StPlaygroundPagesPresenter >> doLoadPageOnNewPlayground [
 	playground takeKeyboardFocus 		
 ]
 
+{ #category : 'actions' }
+StPlaygroundPagesPresenter >> doRemovePage [
+	| index |
+
+	index := pageList selectedIndex.
+	self selectedPage removeAllContents.
+	pageList presenters: self pagesAsPresenters.
+	pageList presenters size >= index 
+		ifTrue: [ pageList selectIndex: index ]
+]
+
 { #category : 'initialization' }
 StPlaygroundPagesPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
@@ -168,6 +179,10 @@ StPlaygroundPagesPresenter >> pagesActions [
 	^ SpActionGroup new
 		register: (StPlaygroundLoadPageCommand forSpecContext: self);
 		register: (StPlaygroundLoadPageOnNewPlaygroundCommand forSpecContext: self);
+		register: (SpActionGroup new
+			beDisplayedAsGroup;
+			register: (StPlaygroundRemovePageCommand forSpecContext: self);
+			yourself);
 		yourself
 ]
 
@@ -177,7 +192,7 @@ StPlaygroundPagesPresenter >> pagesAsPresenters [
 	^ self pages collect: [ :each | 
 		self 
 			instantiate: StPlaygroundPageSummaryPresenter
-			on: each  ]
+			on: each ]
 ]
 
 { #category : 'private' }
@@ -197,6 +212,12 @@ StPlaygroundPagesPresenter >> selectedPage [
 StPlaygroundPagesPresenter >> setModelBeforeInitialization: aPlayground [
 
 	parent := aPlayground
+]
+
+{ #category : 'initialization' }
+StPlaygroundPagesPresenter >> updatePresenter [
+
+	"nothing happens here :("
 ]
 
 { #category : 'accessing' }

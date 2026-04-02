@@ -42,7 +42,7 @@ StDebuggerMethodImplementor >> implementMissingMethod [
 	context := self targetContext.
 	method := session
 		          implement: (self exception messageToImplementInContext: context)
-		          inClass: (targetClassOrTrait ifNil: [context receiver class])
+		          inClass: (targetClassOrTrait ifNil: [self exception receiver class])
 		          forContext: context.
 	protocol ifNotNil: [ method protocol: protocol ].
 	^ method

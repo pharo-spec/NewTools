@@ -210,6 +210,13 @@ StPlaygroundPage >> readStreamDo: aBlock [
 		ifAbsent: [ nil ]
 ]
 
+{ #category : 'removing' }
+StPlaygroundPage >> removeAllContents [
+
+	(self fileReference withExtension: 'ombu') ensureDelete.
+	self fileReference ensureDelete
+]
+
 { #category : 'accessing' }
 StPlaygroundPage >> renameTo: aFileName [
 	self fileReference renameTo: aFileName, '.', self class pageExtension.

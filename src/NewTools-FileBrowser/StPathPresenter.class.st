@@ -67,11 +67,8 @@ StPathPresenter >> file: aFile [
 	| parts |
 	self initializeLayout.
 	parts := aFile asAbsolute fullPath withParents.
-	Smalltalk os isWindows ifTrue: [
-		parts first isRoot ifTrue: [ parts := parts copyWithoutFirst ] ].
-	parts
-		do: [ :path | self addLinkTo: path ]
-		separatedBy: [ self addSeparator ]
+	OSPlatform current isWindows ifTrue: [ parts first isRoot ifTrue: [ parts := parts copyWithoutFirst ] ].
+	parts do: [ :path | self addLinkTo: path ] separatedBy: [ self addSeparator ]
 ]
 
 { #category : 'initialization' }

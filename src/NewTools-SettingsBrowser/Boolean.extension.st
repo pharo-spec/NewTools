@@ -1,9 +1,9 @@
 Extension { #name : 'Boolean' }
 
 { #category : '*NewTools-SettingsBrowser' }
-Boolean >> asSettingPresenter: aSettingDeclaration [
+Boolean >> asSettingPresenter: aSettingDeclaration owner: aPresenter [
 
-	^ (StSettingBooleanPresenterItem on: aSettingDeclaration)
+	^ (aPresenter instantiate: StSettingBooleanPresenterItem on: aSettingDeclaration)
 		value: self;
 		yourself
 ]

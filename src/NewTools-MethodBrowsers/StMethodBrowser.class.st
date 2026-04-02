@@ -1,12 +1,14 @@
 "
-A MessageBrowser is a UI to browse a list of method, regardless of what they could be.
+A MethodBrowser is a UI to browse a list of methods.
 
-example: 
+Example: 
 
-MessageBrowser new
+```
+StMethodBrowser new
 	open;
-	messages: (SystemNavigation new allSendersOf: #at:)
+	methods: (SystemNavigation new allSendersOf: #at:)
 	yourself
+```
 "
 Class {
 	#name : 'StMethodBrowser',
@@ -32,60 +34,55 @@ StMethodBrowser class >> beDefaultBrowser [
 	self registerToolsOn: Smalltalk tools
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'opening - old' }
 StMethodBrowser class >> browse: aCollection [
 
-	^ self new
-		methods: aCollection;
-		open
+	^ (self methods: aCollection) open
 ]
 
-{ #category : 'instance creation' }
-StMethodBrowser class >> browse: aCollection asImplementorsOf: aSymbol [ 
-	"Special Version that sets the correct refreshing Block for Implementors Browser"
+{ #category : 'opening explicit' }
+StMethodBrowser class >> browse: compiledMethods asImplementorsOf: aSymbol [
+	"Specialized version for better UX feedback"
 
 	^ self new
-		setRefreshingBlockForImplementorsOf: aSymbol;
-		methods: aCollection;
-		title: 'Implementors of ', aSymbol printString;
-		open
+		  methods: compiledMethods asImplementorsOf: aSymbol;
+		  open
 ]
 
-{ #category : 'instance creation' }
-StMethodBrowser class >> browse: aCollection asReferencesTo: aClassName [ 
-	"Special Version that sets the correct refreshing Block for class references"
+{ #category : 'opening explicit' }
+StMethodBrowser class >> browse: compiledMethods asReferencesToClass: aClass [
+	"Specialized version for better UX feedback for class references and explicit list of methods"
+
+	^ (self new methods: compiledMethods asReferenceTo: aClass binding) open
+]
+
+{ #category : 'opening explicit' }
+StMethodBrowser class >> browse: compiledMethods asReferencesToLiteral: aLiteral [
+	"Specialized version for better UX feedback for class references and explicit list of methods"
+
+	^ (self new methods: compiledMethods asReferenceTo: aLiteral) open
+]
+
+{ #category : 'opening explicit' }
+StMethodBrowser class >> browse: compiledMethods asSendersOf: aSymbol [
+	"Specialized version for better UX feedback for senders and explicit list of methods"
 
 	^ self new
-		setRefreshingBlockForClassReferencesOf: aClassName;
-		highlight: aClassName;
-		methods: aCollection;
-		title: 'References of ', aClassName printString;
-		open
+		  methods: compiledMethods asSendersOf: aSymbol;
+		  open
 ]
 
-{ #category : 'instance creation' }
-StMethodBrowser class >> browse: aCollection asSendersOf: aSymbol [ 
-	"Special Version that sets the correct refreshing Block for Senders Browser"
-
-	^ self new
-		setRefreshingBlockForSendersOf: aSymbol;
-		highlight: aSymbol;
-		methods: aCollection;
-		title: 'Senders of ', aSymbol printString;
-		open
-]
-
-{ #category : 'instance creation' }
+{ #category : 'opening - old' }
 StMethodBrowser class >> browse: aCollection title: aString [
-	"Special Version that sets the correct refreshing Block for Implentors Browser"
+	"Basic version with limited UX feedback. Use only if you cannot use the other methods."
 
 	^ self new
-		methods: aCollection;
-		title: aString;
-		open
+		  methods: aCollection;
+		  title: aString;
+		  open
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'opening - old' }
 StMethodBrowser class >> browse: aCollection title: aString highlight: aSelectString [
 	"Special Version that sets the correct refreshing Block for Implentors Browser"
 	
@@ -96,25 +93,56 @@ StMethodBrowser class >> browse: aCollection title: aString highlight: aSelectSt
 		open
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'opening' }
 StMethodBrowser class >> browseImplementorsOf: aSymbol [ 
 	"Special Version that sets the correct refreshing Block for Implentors Browser"
 	
 	^ self browse: (self implementorsOf: aSymbol) asImplementorsOf: aSymbol
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'opening' }
+StMethodBrowser class >> browseImplementorsOfAll: aCollectionOfSymbols [
+
+	| methods |
+	methods := aCollectionOfSymbols flatCollect: [ :sym | self implementorsOf: sym ].
+	^ self browse: methods asArray
+]
+
+{ #category : 'opening' }
 StMethodBrowser class >> browseReferencesOf: aClassName [
 	"Special version that sets the correct refreshing block for senders"
 
-	^ self browse: (self referencesOf: aClassName) asReferencesTo: aClassName
+	^ self browse: (self referencesOf: aClassName) asReferencesToClass: aClassName
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'opening' }
+StMethodBrowser class >> browseReferencesToClass: aClass [
+	"Special version that sets the correct refreshing block for senders"
+
+	^ self browse: (self referencesToClass: aClass) asReferencesToClass: aClass
+]
+
+{ #category : 'opening' }
+StMethodBrowser class >> browseReferencesToLiteral: aLiteral [
+	"Special version that sets the correct refreshing block for senders"
+
+	^ self browse: (self referencesToLiteral: aLiteral) asReferencesToLiteral: aLiteral
+]
+
+{ #category : 'opening' }
 StMethodBrowser class >> browseSendersOf: aSymbol [
 	"Special version that sets the correct refreshing block for senders"
 
 	^ self browse: (self sendersOf: aSymbol) asSendersOf: aSymbol
+]
+
+{ #category : 'opening' }
+StMethodBrowser class >> browseSendersOfAll: aCollectionOfSymbols [
+
+	| methods |
+	methods := aCollectionOfSymbols flatCollect: [ :sym | self sendersOf: sym ].
+
+	^ self browse: methods asArray
 ]
 
 { #category : 'private' }
@@ -124,7 +152,16 @@ StMethodBrowser class >> implementorsOf: aSymbol [
 	^ SystemNavigation new allImplementorsOf: aSymbol 
 ]
 
-{ #category : 'instance creation - old' }
+{ #category : 'instance creation' }
+StMethodBrowser class >> methods: methods [
+	"Create a method browser on the methods argument. Do not open it."
+	
+	^ self new
+		  methods: methods;
+		  yourself
+]
+
+{ #category : 'opening - old' }
 StMethodBrowser class >> openMessageList: messageList name: aString autoSelect: aSelector refreshingBlockSelector: aRefreshingBlockSelector [
 	
 	| browser |
@@ -146,6 +183,19 @@ StMethodBrowser class >> referencesOf: aSymbol [
 	"Do not use aSymbol implementors because it is a disguised global"
 	
 	^ SystemNavigation new allReferencesTo: aSymbol 
+]
+
+{ #category : 'private' }
+StMethodBrowser class >> referencesToClass: aClass [
+	
+	^ SystemNavigation new allReferencesTo: aClass binding
+]
+
+{ #category : 'private' }
+StMethodBrowser class >> referencesToLiteral: aLiteral [
+	"Do not use aSymbol implementors because it is a disguised global"
+
+	^ SystemNavigation new allReferencesTo: aLiteral
 ]
 
 { #category : 'tool registration' }
@@ -422,7 +472,7 @@ StMethodBrowser >> installIconStylerFor: anItem [
 	
 	IconStyler withStaticStylers 
 		styleText: textPresenter 
-		withAst: anItem ast.
+		withAst: anItem ast
 ]
 
 { #category : 'private' }
@@ -476,6 +526,38 @@ StMethodBrowser >> methods: aCollection [
 	self toolbarPresenter updatePresenter.
 ]
 
+{ #category : 'api - instance side' }
+StMethodBrowser >> methods: compiledMethods asImplementorsOf: aSymbol [
+	"Create without opening it a method browsers for the implementors of a Symbol"
+
+	self
+		setRefreshingBlockForImplementorsOf: aSymbol;
+		methods: compiledMethods;
+		title: 'Implementors of ' , aSymbol
+]
+
+{ #category : 'api - instance side' }
+StMethodBrowser >> methods: compiledMethods asReferenceTo: aClassName [
+	"Create without opening it a method browsers for the implementors of a Symbol"
+
+	self
+		setRefreshingBlockForClassReferencesOf: aClassName;
+		highlight: aClassName;
+		methods: compiledMethods;
+		title: 'References of ' , aClassName printString
+]
+
+{ #category : 'api - instance side' }
+StMethodBrowser >> methods: compiledMethods asSendersOf: aSymbol [
+	"Create without opening it a method browsers for the reference to a class "
+
+	self
+		setRefreshingBlockForSendersOf: aSymbol;
+		highlight: aSymbol;
+		methods: compiledMethods;
+		title: 'Senders of ' , aSymbol
+]
+
 { #category : 'initialization' }
 StMethodBrowser >> newMethodToolbar [
 
@@ -493,6 +575,12 @@ StMethodBrowser >> numberOfElements [
 { #category : 'private' }
 StMethodBrowser >> packageNameForItem: anItem [
 	^ anItem package ifNil: [ '' ] ifNotNil: [ :package | package name ]
+]
+
+{ #category : 'api' }
+StMethodBrowser >> refreshingBlock [
+
+	^ refreshingBlock
 ]
 
 { #category : 'api' }
@@ -582,9 +670,8 @@ StMethodBrowser >> selectedMethod [
 
 { #category : 'api' }
 StMethodBrowser >> setRefreshingBlockForClassReferencesOf: aString [
-	
-	self refreshingBlock: [ :method | 
-		method accessesRef: (self class environment at: aString asSymbol) ]
+
+	self refreshingBlock: [ :method | method hasLiteral: aString ]
 ]
 
 { #category : 'api' }

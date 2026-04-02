@@ -127,14 +127,15 @@ StDebuggerTest >> tearDown [
 			actionModel clear.
 			actionModel session ifNotNil: [ :s | s clear ] ] ].
 
-	StTestDebuggerProvider removeSelector: #foobar.
+	(StTestDebuggerProvider includesSelector: #foobar)
+		ifTrue: [ StTestDebuggerProvider removeSelector: #foobar ].
+
 	StDebuggerObjectForTests
 		compile:
 		'haltingMethod <haltOrBreakpointForTesting> self halt. ^self'
 		classified: 'util'.
 
 	StDebuggerClientModel shouldFilterStack: shouldFilterStack.
-	StTestDebuggerProvider removeSelector: #foobar.
 	oldMethodToSourceDictionary	associationsDo: [ :assoc |
 		assoc key methodClass
 			compile: assoc value
@@ -493,18 +494,16 @@ StDebuggerTest >> testContextUnchangedAfterStepOver [
 
 { #category : 'tests - actions' }
 StDebuggerTest >> testCopyStackToClipboard [
+
 	debugger := self debuggerOn: session.
 	debugger copyStackToClipboard.
-	self
-		assert: Clipboard clipboardText string
-		equals: (String streamContents: [ :s | 
-				 session interruptedContext shortDebugStackOn: s ])
+	self assert: Clipboard clipboardText string equals: session interruptedContext stackTraceString
 ]
 
 { #category : 'tests' }
 StDebuggerTest >> testCreateMissingMethodWithUnfilteredStackUpdatesCodePane [
 
-	| dnuMessage method pcRangeForContext segments highlightSegment adapter |
+	| dnuMessage method pcRangeForContext segments highlightSegment adapter exception |
 	StDebuggerClientModel shouldFilterStack: false.
 	debugger := StTestDebuggerProvider new debuggerWithDNUContext.
 	debugger
@@ -516,16 +515,17 @@ StDebuggerTest >> testCreateMissingMethodWithUnfilteredStackUpdatesCodePane [
 	debugger code adapter buildWidget.
 	self assert:
 		debugger debuggerClientModel isInterruptedContextDoesNotUnderstand.
+	
+	exception := debugger debuggerClientModel contextPredicate exception.
 	self
-		assert: debugger interruptedContext receiver class
+		assert: exception receiver class
 		identicalTo: StTestDebuggerProvider.
-	dnuMessage := debugger debuggerClientModel contextPredicate exception
-		              message.
+	dnuMessage := exception message.
 
 	self assert: dnuMessage selector identicalTo: #foobar.
 
 	"stack is unfiltered. So the text shown should be the code from the DNU"
-	self assert: (debugger code text beginsWith: 'doesNotUnderstand:').
+	self assert: debugger code text equals: exception signalerContext method sourceCode.
 
 	"we create the missing method #foobar"
 	debugger implementMissingMethod.

@@ -11,7 +11,8 @@ Class {
 	#superclass : 'StSettingsAbstractPresenter',
 	#instVars : [
 		'title',
-		'settingNode'
+		'settingNode',
+		'pagePresenter'
 	],
 	#category : 'NewTools-SettingsBrowser-UI',
 	#package : 'NewTools-SettingsBrowser',
@@ -34,9 +35,7 @@ StSettingPresenter >> hasChildren [
 StSettingPresenter >> help: aString [ 
 	"Private - Callback to display the selected setting node help text in the receiver's setting browser"
 
-	self pagePresenter
-		updateSetting: settingNode declaration label 
-		helpText: aString.
+	"self pagePresenter hovering: aString"
 ]
 
 { #category : 'initialization' }
@@ -48,7 +47,13 @@ StSettingPresenter >> initializePresenters [
 { #category : 'accessing' }
 StSettingPresenter >> pagePresenter [
 
-	^ self owner pagePresenter
+	^ pagePresenter
+]
+
+{ #category : 'accessing' }
+StSettingPresenter >> pagePresenter: aPresenter [
+
+	pagePresenter := aPresenter
 ]
 
 { #category : 'printing' }

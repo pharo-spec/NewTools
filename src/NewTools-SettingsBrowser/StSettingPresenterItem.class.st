@@ -11,7 +11,8 @@ Class {
 	#instVars : [
 		'setterPresenter',
 		'model',
-		'labeledPresenter'
+		'labeledPresenter',
+		'pagePresenter'
 	],
 	#category : 'NewTools-SettingsBrowser-Widgets',
 	#package : 'NewTools-SettingsBrowser',
@@ -32,7 +33,7 @@ StSettingPresenterItem >> help: aString [
 	"To update the pop-up help"
 	self setterPresenter help: aString.
 	"To update the 'documentation' pane"
-	self owner help: aString.
+	"self pagePresenter hovering: aString"
 ]
 
 { #category : 'initialization' }
@@ -43,8 +44,7 @@ StSettingPresenterItem >> initializePresenters [
 		label: self model label;
 		input: self setterPresenter;
 		description: self model description;
-		yourself.
-
+		yourself
 ]
 
 { #category : 'initialization' }
@@ -58,6 +58,18 @@ StSettingPresenterItem >> labeledPresenterClass [
 StSettingPresenterItem >> model [
 
 	^ model
+]
+
+{ #category : 'accessing' }
+StSettingPresenterItem >> pagePresenter [
+
+	^ pagePresenter
+]
+
+{ #category : 'accessing' }
+StSettingPresenterItem >> pagePresenter: aPresenter [
+
+	pagePresenter := aPresenter
 ]
 
 { #category : 'accessing - model' }

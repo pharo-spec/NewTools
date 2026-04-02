@@ -46,15 +46,14 @@ StSettingsTree >> newTreeHolder [
 
 	^ self
 		acceptableKeywords: { #systemsettings };
-		nodeList: self newSettingTreeBuilderNodes;
+		nodeList: self nodeList;
 		yourself
 ]
 
 { #category : 'accessing' }
 StSettingsTree >> nodeList [
 
-	^ nodeList
-		ifNil: [ self newSettingTreeBuilderNodes ]
+	^ nodeList ifNil: [ nodeList := self newSettingTreeBuilderNodes ]
 ]
 
 { #category : 'accessing' }

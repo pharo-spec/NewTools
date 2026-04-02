@@ -108,5 +108,7 @@ StSettingsExporter >> settingsIndex: index fileNamed: aString [
 StSettingsExporter >> settingsTree [
 	"Answer the receiver's <StSettingsTree>, the settings model"
 
-	^ self application propertyAt: #settingsTree.
+	^ self application 
+		propertyAt: #settingsTree
+		ifAbsentPut: [ StSettingsTree new ]
 ]

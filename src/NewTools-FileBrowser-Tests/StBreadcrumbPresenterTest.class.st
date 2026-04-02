@@ -27,9 +27,9 @@ StBreadcrumbPresenterTest >> tearDown [
 
 { #category : 'tests' }
 StBreadcrumbPresenterTest >> testRoot [
-
 	"This test does not work on windows because root works differently on windows. We should review if this test makes sense on windows or not."
-	Smalltalk os isWindows ifTrue: [ self skipOnPharoCITestingEnvironment ].
+
+	OSPlatform current isWindows ifTrue: [ self skipOnPharoCITestingEnvironment ].
 	windowPathUI currentDirectory: FileLocator root.
 	windowPathUI open.
 	self assert: windowPathUI path presenters size equals: 1

@@ -46,11 +46,6 @@ EpNewStateVisitor >> visitExpressionEvaluation: anExpressionEvaluation [
 ]
 
 { #category : 'visitor' }
-EpNewStateVisitor >> visitLogCommentModification: anEvent [
-	^ anEvent newComment
-]
-
-{ #category : 'visitor' }
 EpNewStateVisitor >> visitMethodAddition: aMethodCreatedChange [
 
 	^ self printProtocol: aMethodCreatedChange protocol sourceCode: aMethodCreatedChange sourceCode

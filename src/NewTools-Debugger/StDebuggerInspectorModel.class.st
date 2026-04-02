@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : 'accessing' }
-StDebuggerInspectorModel >> allInspectorNodes [
+StDebuggerInspectorModel >> allModelInspectorNodes [
 
 	^ self inspectedObject buildInspectorNodes
 ]

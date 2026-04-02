@@ -76,13 +76,10 @@ StTerminalInterface >> preferredMacTerminalProgram [
 StTerminalInterface >> terminalShellCommand: aPath [
 	"Answer a <String> with the shell command to open a terminal for the receiver's OS"
 
-	Smalltalk os isWindows
-		ifTrue: [ ^ self openWindowsTerminalCommand: aPath ].
-	Smalltalk os isMacOS
-		ifTrue: [ ^ self openMacTerminalShellCommand: aPath ].
-	(Smalltalk os version beginsWith: 'linux')
-		ifTrue: [ ^ self openLinuxTerminalShellCommand: aPath ].
-	
+	OSPlatform current isWindows ifTrue: [ ^ self openWindowsTerminalCommand: aPath ].
+	OSPlatform current isMacOS ifTrue: [ ^ self openMacTerminalShellCommand: aPath ].
+	(Smalltalk os version beginsWith: 'linux') ifTrue: [ ^ self openLinuxTerminalShellCommand: aPath ].
+
 	self inform: 'No terminal for platform implemented'.
-	^ String empty.
+	^ String empty
 ]

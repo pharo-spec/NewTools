@@ -12,9 +12,7 @@ Class {
 { #category : 'protected' }
 StSubStringFilter >> criterium: aValue [
 
-	^ aValue asString asLowercase includesSubstring: filteringText asLowercase
-
-
+	^ aValue asString includesSubstring: filteringText caseSensitive: false
 ]
 
 { #category : 'filtering' }

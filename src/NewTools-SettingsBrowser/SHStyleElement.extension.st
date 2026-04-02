@@ -1,9 +1,9 @@
 Extension { #name : 'SHStyleElement' }
 
 { #category : '*NewTools-SettingsBrowser' }
-SHStyleElement >> asSettingPresenter: aSettingDeclaration [ 
+SHStyleElement >> asSettingPresenter: aSettingDeclaration owner: aPresenter [
 
-	^ (StSettingMultipleDropListPresenterItem on: aSettingDeclaration)
+	^ (aPresenter instantiate: StSettingMultipleDropListPresenterItem on: aSettingDeclaration)
 		value: self;
 		yourself
 ]

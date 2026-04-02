@@ -9,7 +9,7 @@ It provides the following file system services to UI:
 "
 Class {
 	#name : 'StFileSystemModel',
-	#superclass : 'StPresenter',
+	#superclass : 'Model',
 	#instVars : [
 		'currentDirectory',
 		'history'

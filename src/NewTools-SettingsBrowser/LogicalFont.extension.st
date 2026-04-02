@@ -1,7 +1,7 @@
 Extension { #name : 'LogicalFont' }
 
 { #category : '*NewTools-SettingsBrowser' }
-LogicalFont >> asSettingPresenter: aSettingDeclaration [ 
+LogicalFont >> asSettingPresenter: aSettingDeclaration owner: aPresenter [
 
 	| info currentFont |
 
@@ -13,7 +13,7 @@ LogicalFont >> asSettingPresenter: aSettingDeclaration [
 			<< currentFont pointSize asString;
 			<< ')' ].
 	
-	^ (StSettingSHStyleButtonPresenterItem on: aSettingDeclaration)
+	^ (aPresenter instantiate: StSettingSHStyleButtonPresenterItem on: aSettingDeclaration)
 		buttonLabel: info;
 		buttonFont: currentFont realFont;
 		buttonAction: [ aSettingDeclaration getFont ];

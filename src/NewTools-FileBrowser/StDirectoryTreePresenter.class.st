@@ -53,12 +53,9 @@ StDirectoryTreePresenter >> expandPath: aFileLocator [
 	aPathForSpec := OrderedCollection with: 1.
 
 	currentNode := directoryTreePresenter roots anyOne.
-	Smalltalk os isWindows ifTrue: [
+	OSPlatform current isWindows ifTrue: [
 			currentNode := currentNode asFileReference parent.
-			aPathForSpec := OrderedCollection new ].
-
-	"This code is (a certainly wrong) way to ensure the treeNavigationPresenter widget points to the right fileSystem (that could be a MemoryStore) as it search for roots of the disk and doesn't allow to check in a MemoryStore "
-	"(currentNode fileReference fileSystem = aFileLocator fileSystem)
+			aPathForSpec := OrderedCollection new ]. "This code is (a certainly wrong) way to ensure the treeNavigationPresenter widget points to the right fileSystem (that could be a MemoryStore) as it search for roots of the disk and doesn't allow to check in a MemoryStore " "(currentNode fileReference fileSystem = aFileLocator fileSystem)
         ifFalse: [ directoryTreePresenter roots: { StRootDirectoryWrapper on: aFileLocator fileSystem root }.
                     currentNode fileReference: aFileLocator ]."
 
@@ -72,11 +69,10 @@ StDirectoryTreePresenter >> expandPath: aFileLocator [
 							aPathForSpec add: index ] ].
 			currentNode ifNil: [ ^ self ] ].
 
-	directoryTreePresenter selectPath: aPathForSpec scrollToSelection: true.
+	directoryTreePresenter selectPath: aPathForSpec scrollToSelection: true. "The Morphic `configureScrolling` is executed **AFTER** the desired scroll was configured from the `StDirectoryTreePresenter`. Furthermore, the `configureScrolling` uses the `desiredVisibleRow` which is always set to 1. This statement updates the desired visible row to the last visible index of whatever the selection is pointing to."
 
-	"The Morphic `configureScrolling` is executed **AFTER** the desired scroll was configured from the `StDirectoryTreePresenter`. Furthermore, the `configureScrolling` uses the `desiredVisibleRow` which is always set to 1. This statement updates the desired visible row to the last visible index of whatever the selection is pointing to."
-
-	directoryTreePresenter verticalAlignment lastVisibleRowIndex ifNotNil: [ :index | directoryTreePresenter verticalAlignment desiredVisibleRow: index ]
+	directoryTreePresenter verticalAlignment lastVisibleRowIndex ifNotNil: [ :index |
+		directoryTreePresenter verticalAlignment desiredVisibleRow: index ]
 ]
 
 { #category : 'initialization' }

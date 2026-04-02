@@ -46,12 +46,10 @@ StDebuggerErrorContextPredicate >> exceptionWhiteList [
 { #category : 'predicates' }
 StDebuggerErrorContextPredicate >> isContextDoesNotUnderstand [
 
-	^ exception class = MessageNotUnderstood and: [ 
-		  | message |
-		  message := exception message.
-		  
-			  (exception receiver respondsTo: message selector) not and: [ 
-				  exception signalerContext method methodClass == Object ] ]
+	^ exception class = MessageNotUnderstood and: [
+			  | message |
+			  message := exception message.
+			  (exception receiver respondsTo: message selector) not ]
 ]
 
 { #category : 'predicates' }

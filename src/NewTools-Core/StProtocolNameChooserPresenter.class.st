@@ -110,7 +110,8 @@ StProtocolNameChooserPresenter >> doAcceptFromTextInput [
 StProtocolNameChooserPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
 	super initializeDialogWindow: aDialogWindowPresenter.
-	aDialogWindowPresenter okAction: [ self doAcceptFromTextInput ]
+	aDialogWindowPresenter okAction: [
+		self protocolName ifEmpty: [ self doAcceptFromList ] ifNotEmpty: [ self doAcceptFromTextInput ] ]
 ]
 
 { #category : 'initialization' }

@@ -11,18 +11,9 @@ Class {
 
 { #category : 'running' }
 HaltInCompiledBlockPrintOnTest >> setUp [
-	super setUp.
-	
-	oldCode := (BlockClosure >> #printOn:) sourceCode.
-	BlockClosure compileSilently: 'printOn: aStream
-	 	self halt.
-	'.
-]
 
-{ #category : 'running' }
-HaltInCompiledBlockPrintOnTest >> tearDown [ 
-	oldCode ifNotNil: 	[BlockClosure compileSilently: oldCode].
-	super tearDown
+	super setUp.
+	oldCode := (BlockClosure >> #printOn:) sourceCode
 ]
 
 { #category : 'running' }
@@ -31,22 +22,28 @@ HaltInCompiledBlockPrintOnTest >> testExecutingHaltingPrintOnABlockOpensASingleD
 	| ourException dbg debugSession sem myProcess |
 	"This is a smoke test making sure that putting an halt in BlockClosure printOn: does not lead 
 	to endless loop."
-	
 	sem := Semaphore new.
-	
-	myProcess := [[[  ] printString] on: Exception do: [:e | 
-		e freeze.
-		ourException := e ].	
-		sem signal.
-	] fork.
-	"We are creating a dedicated process, because when closing the debugger it will kill the process and 
-	using the active process will kill the test."
+
+	"Creating a dedicated process at high priority.
+	The process will override printOn: and try to uninstall it as quickly as possible to make the dynamic scope of the extension as little as possible.
+	Otherwise, other threads may be impacted by this global change.
+	This is far from perfect, maybe this test should be written/done in a different way."
+	myProcess := [
+		             [
+			             BlockClosure compileSilently: 'printOn: aStream self halt.'.
+			             [ ] printString ]
+			             on: Exception
+			             do: [ :e |
+					             e freeze.
+					             ourException := e ].
+		             BlockClosure compileSilently: oldCode.
+		             sem signal ] forkAt: 70.
 	sem wait.
-	
+
 	debugSession := myProcess newDebugSessionNamed: 'test' startedAt: ourException signalerContext.
-	
+
 	debugSession exception: ourException.
-	
+
 	dbg := StDebugger openOn: debugSession withFullView: true.
-	dbg window close.
+	dbg window close
 ]

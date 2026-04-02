@@ -24,8 +24,9 @@ StDummyDebuggerPresenter class >> isOnlyForTests [
 
 { #category : 'mocks' }
 StDummyDebuggerPresenter >> copyStackToClipboard [
-tag := thisContext method selector.
-^true
+
+	tag := thisContext method selector.
+	^ true
 ]
 
 { #category : 'mocks' }

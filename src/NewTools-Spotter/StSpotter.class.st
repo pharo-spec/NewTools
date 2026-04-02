@@ -774,13 +774,13 @@ StSpotter >> searchText [
 
 { #category : 'private - actions' }
 StSpotter >> searchingString [
+
 	| searchString searchChunks |
-	
-	searchString := searchText text trimmed.
+	searchString := searchText text trimBoth.
 	searchChunks := searchString substrings.
 	^ (searchChunks anySatisfy: [ :each | each first = $# ])
-		ifTrue: [ ' ' join: (searchChunks reject: [ :each | each first = $# ]) ]
-		ifFalse: [ searchString ]
+		  ifTrue: [ ' ' join: (searchChunks reject: [ :each | each first = $# ]) ]
+		  ifFalse: [ searchString ]
 ]
 
 { #category : 'accessing - model' }

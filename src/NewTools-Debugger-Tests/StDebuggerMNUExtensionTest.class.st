@@ -52,7 +52,8 @@ StDebuggerMNUExtensionTest >> tearDown [
 			actionModel session ifNotNil: [ :s | s clear ] ].
 		debugger close ].
 
-	StTestDebuggerProvider removeSelector: #foobar.
+	(StTestDebuggerProvider includesSelector: #foobar)
+		ifTrue: [ StTestDebuggerProvider removeSelector: #foobar ].
 	self extensionTested showInDebugger: oldShowInDebuggerSetting.
 	super tearDown
 ]

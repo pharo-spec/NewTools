@@ -1,8 +1,9 @@
 Class {
 	#name : 'SindarinDefaultScriptRepository',
-	#superclass : 'StSindarinDebuggerScriptRepository',
-	#category : 'NewTools-Sindarin-Scripts',
-	#package : 'NewTools-Sindarin-Scripts'
+	#superclass : 'StSindarinDebuggerScriptRepositoryAbstract',
+	#category : 'NewTools-Sindarin-Tools-Scripts',
+	#package : 'NewTools-Sindarin-Tools',
+	#tag : 'Scripts'
 }
 
 { #category : 'accessing' }
