@@ -148,8 +148,8 @@ StMethodBrowser class >> browseSendersOfAll: aCollectionOfSymbols [
 { #category : 'private' }
 StMethodBrowser class >> implementorsOf: aSymbol [
 	"Do not use aSymbol implementors because it is a disguised global"
-	
-	^ SystemNavigation new allImplementorsOf: aSymbol 
+
+	^ (SystemNavigation new allImplementorsOf: aSymbol) reject: [ :m | m isFromTrait ]
 ]
 
 { #category : 'instance creation' }
