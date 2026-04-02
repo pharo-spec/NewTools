@@ -261,26 +261,27 @@ StMethodListPresenter >> methodClassNameForItem: anItem [
 
 { #category : 'private' }
 StMethodListPresenter >> methodListActions [
-	
+
 	^ CmCommandGroup forSpec
-		beRoot;
-		register: ((CmCommandGroup forSpecNamed: 'View')
-			beDisplayedAsGroup;
-			register: (StMethodBrowseFullCommand forSpecContext: self);
-			register: (StInspectMethodCommand forSpecContext: self);
-			yourself);
-		register: ((CmCommandGroup forSpecNamed: 'Navigation')
-			beDisplayedAsGroup;
-			register: (StMessageSendersCommand forSpecContext: self);
-			register: (StImplementorsCommand forSpecContext: self);
-			register: (StClassReferencesCommand forSpecContext: self);
-			register: (StMethodVersionsCommand forSpecContext: self);
-			yourself);
-		register: ((CmCommandGroup forSpecNamed: 'CRITICAL')
-			beDisplayedAsGroup;
-			register: (StRemoveMethodCommand forSpecContext: self);
-			yourself);
-		yourself
+		  beRoot;
+		  register: ((CmCommandGroup forSpecNamed: 'View')
+				   beDisplayedAsGroup;
+				   register: (StMethodBrowseFullCommand forSpecContext: self);
+				   register: (StInspectMethodCommand forSpecContext: self);
+				   register: (StRunMethodTestCommand forSpecContext: self);
+				   yourself);
+		  register: ((CmCommandGroup forSpecNamed: 'Navigation')
+				   beDisplayedAsGroup;
+				   register: (StMessageSendersCommand forSpecContext: self);
+				   register: (StImplementorsCommand forSpecContext: self);
+				   register: (StClassReferencesCommand forSpecContext: self);
+				   register: (StMethodVersionsCommand forSpecContext: self);
+				   yourself);
+		  register: ((CmCommandGroup forSpecNamed: 'CRITICAL')
+				   beDisplayedAsGroup;
+				   register: (StRemoveMethodCommand forSpecContext: self);
+				   yourself);
+		  yourself
 ]
 
 { #category : 'accessing' }
