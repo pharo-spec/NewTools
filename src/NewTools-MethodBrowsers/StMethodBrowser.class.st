@@ -260,10 +260,13 @@ StMethodBrowser >> addHighlightedSegments [
 	| message highlightInterval highlights |
 	message := self selectedMethod.
 	message ifNil: [ ^ self ].
-
+	
 	highlights := highlight isString
 		              ifTrue: [ { highlight } ]
-		              ifFalse: [ highlight ].
+		              ifFalse: [
+				              highlight isGlobalVariable
+					              ifTrue: [ { highlight name } ]
+					              ifFalse: [ highlight ] ].
 
 	highlights asArray do: [ :each |
 			highlightInterval := (self isMethodDefinition: message)
