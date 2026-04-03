@@ -16,7 +16,8 @@ Class {
 { #category : 'initialization' }
 StTestIconCellPresenter >> connectPresenters [
 
-	self eventHandler whenMouseDownDo: [ :anEvent | executeBlock ifNotNil: [ executeBlock value ] ]
+	self eventHandler whenMouseDownDo: [ :anEvent |
+		(executeBlock notNil and: [ self model notNil ]) ifTrue: [ executeBlock value: self model ] ]
 ]
 
 { #category : 'layout' }
@@ -58,9 +59,12 @@ StTestIconCellPresenter >> testIconFor: aMethod [
 StTestIconCellPresenter >> updatePresenter [
 
 	| method |
-	
 	method := self model.
+	method ifNil: [
+			iconPresenter image: nil.
+			^ self ].
+
 	(method selector isTestSelector and: [ method isInstanceSide ])
 		ifTrue: [ iconPresenter image: (self testIconFor: method) ]
-		ifFalse: [ iconPresenter image: nil ]
+		ifFalse: [  ]
 ]

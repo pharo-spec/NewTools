@@ -240,7 +240,7 @@ StMethodListPresenter >> initializePresenters [
 		sortingBlock: [ :a :b | self sortClassesInCachedHierarchy: a b: b ];
 		addColumn: (SpStringTableColumn title: 'Location' evaluated: [ :item | self locationOf: item ]);
 		addColumn: (StTestIconColumnView new
-				 executeBlock: [ self executeTestForSelectedMethod ];
+				 executeBlock: [ :method | self executeTestForSelectedMethod ];
 				 cellPresenterClass: StTestIconCellPresenter;
 				 width: 20;
 				 yourself);
