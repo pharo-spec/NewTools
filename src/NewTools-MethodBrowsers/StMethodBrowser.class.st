@@ -140,7 +140,7 @@ StMethodBrowser class >> browseReferencesToLiteral: aLiteral [
 StMethodBrowser class >> browseReferencesToVariable: aVariable inClass: aClass [
 	"Special version that sets the correct refreshing block for senders"
 
-	^ self browse: (self referencesToVarible: aVariable inClass: aClass) asReferencesToVariable: aVariable inClass: aClass 
+	^ self browse: (self referencesToVariable: aVariable inClass: aClass) asReferencesToVariable: aVariable inClass: aClass 
 ]
 
 { #category : 'opening' }
@@ -213,7 +213,7 @@ StMethodBrowser class >> referencesToLiteral: aLiteral [
 ]
 
 { #category : 'private' }
-StMethodBrowser class >> referencesToVarible: aVariable inClass: aClass [
+StMethodBrowser class >> referencesToVariable: aVariable inClass: aClass [
 
 	^ aClass allMethodsAccessingSlot: aVariable
 ]
