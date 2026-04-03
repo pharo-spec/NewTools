@@ -117,6 +117,12 @@ StMethodBrowser class >> browseImplementorsOfAll: aCollectionOfSymbols [
 ]
 
 { #category : 'opening' }
+StMethodBrowser class >> browseMethodsWithSourceString: aString [
+
+	SystemNavigation default browseMethodsWithSourceString: aString matchCase: false
+]
+
+{ #category : 'opening' }
 StMethodBrowser class >> browseReferencesOf: aClassName [
 	"Special version that sets the correct refreshing block for senders"
 
@@ -255,8 +261,8 @@ StMethodBrowser >> addHighlightedSegments [
 	message := self selectedMethod.
 	message ifNil: [ ^ self ].
 
-	highlights := highlight isSymbol
-		              ifTrue: [ Array with: highlight ]
+	highlights := highlight isString
+		              ifTrue: [ { highlight } ]
 		              ifFalse: [ highlight ].
 
 	highlights asArray do: [ :each |
@@ -623,33 +629,32 @@ StMethodBrowser >> registerToAnnouncements [
 StMethodBrowser >> searchedString: searchedString in: aString [
 	"Return the interval that corresponds to the portion of aString "
 	"This method takes care of finding complete match to searchedString. "
-	| string interval firstIndex |
-	
+
+	| string interval firstIndex lowerString lowerSearch |
 	searchedString ifNil: [ ^ 0 to: 0 ].
-	aString isEmptyOrNil ifTrue: [ ^0 to: 0 ].
+	aString isEmptyOrNil ifTrue: [ ^ 0 to: 0 ].
 	string := aString asString.
+	lowerString := string asLowercase.
+	lowerSearch := searchedString asLowercase.
 	interval := 0 to: 0.
-	
-	(searchedString includes: $:)
-		ifTrue: [ | list |
-			list := searchedString substrings: ':'.
-			list size = 1
-				ifTrue: [" binary selector "
-					firstIndex := self findFirstOccurrenceOf: searchedString in: string.
-					firstIndex isZero
-						ifFalse: [ interval := firstIndex to: (firstIndex+searchedString size-1) ] ] 
-					
-				ifFalse: [
-					| lastIndex |
-					firstIndex := self findFirstOccurrenceOf: list first, ':' in: string. 
-					firstIndex >0 ifTrue: [ 
-								lastIndex := string findString: list last,':' startingAt: firstIndex+ (list first size -1).
-								interval := firstIndex to: (lastIndex + list last size) ] ] ]
+
+	(lowerSearch includes: $:)
+		ifTrue: [
+				| list |
+				list := lowerSearch substrings: ':'.
+				list size = 1
+					ifTrue: [
+							firstIndex := self findFirstOccurrenceOf: lowerSearch in: lowerString.
+							firstIndex isZero ifFalse: [ interval := firstIndex to: firstIndex + searchedString size - 1 ] ]
+					ifFalse: [
+							| lastIndex |
+							firstIndex := self findFirstOccurrenceOf: list first , ':' in: lowerString.
+							firstIndex > 0 ifTrue: [
+									lastIndex := lowerString findString: list last , ':' startingAt: firstIndex + (list first size - 1).
+									interval := firstIndex to: lastIndex + list last size ] ] ]
 		ifFalse: [
-			" unary selector "
-			firstIndex := self findFirstOccurrenceOf: searchedString in: string.
-			 firstIndex > 0
-						ifTrue: [ interval := firstIndex to: (firstIndex+searchedString size - 1) ] ].
+				firstIndex := self findFirstOccurrenceOf: lowerSearch in: lowerString.
+				firstIndex > 0 ifTrue: [ interval := firstIndex to: firstIndex + searchedString size - 1 ] ].
 	^ interval
 ]
 
