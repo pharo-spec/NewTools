@@ -13,6 +13,12 @@ Class {
 	#tag : 'Base'
 }
 
+{ #category : 'initialization' }
+StTestIconCellPresenter >> connectPresenters [
+
+	buttonPresenter action: [ (executeBlock notNil and: [ self model notNil ]) ifTrue: [ executeBlock value: self model ] ]
+]
+
 { #category : 'layout' }
 StTestIconCellPresenter >> defaultLayout [
 
@@ -55,13 +61,20 @@ StTestIconCellPresenter >> updatePresenter [
 
 	| method |
 	method := self model.
+
 	method ifNil: [
 			buttonPresenter icon: nil.
+			buttonPresenter enabled: false.
 			^ self ].
+
 	(method selector isTestSelector and: [ method isInstanceSide ])
 		ifTrue: [
-				buttonPresenter 
+				buttonPresenter
 					icon: (self testIconFor: method);
-					action: [ executeBlock value: method ] ]
-		ifFalse: [ buttonPresenter icon: nil ]
+					enabled: true;
+					help: 'Run test' ]
+		ifFalse: [
+				buttonPresenter
+					icon: nil;
+					enabled: false ]
 ]

@@ -207,20 +207,26 @@ StMethodListPresenter >> doRemoveMethod [
 ]
 
 { #category : 'execution' }
-StMethodListPresenter >> executeTestForSelectedMethod [
+StMethodListPresenter >> executeTestFor: aMethod [
 
-	| method selector testClasses suite result |
-	method := self selectedMethod.
-	method ifNil: [ ^ self ].
-	selector := method selector.
-	testClasses := method methodClass isAbstract
-		               ifTrue: [ method methodClass allSubclasses ]
-		               ifFalse: [ { method methodClass } ].
+	| selector testClasses suite result |
+	aMethod ifNil: [ ^ self ].
+
+	selector := aMethod selector.
+
+	testClasses := aMethod methodClass isAbstract
+		               ifTrue: [ aMethod methodClass allSubclasses ]
+		               ifFalse: [ { aMethod methodClass } ].
+
 	suite := TestSuite named: selector.
-	testClasses do: [ :concreteClass | suite addTest: (concreteClass selector: selector) ].
+
+	testClasses do: [ :each | suite addTest: (each selector: selector) ].
+
 	result := suite run.
 	result updateResultsInHistory.
+
 	self application inform: result printString.
+
 	listPresenter updateItemsKeepingSelection: listPresenter items
 ]
 
@@ -240,7 +246,7 @@ StMethodListPresenter >> initializePresenters [
 		sortingBlock: [ :a :b | self sortClassesInCachedHierarchy: a b: b ];
 		addColumn: (SpStringTableColumn title: 'Location' evaluated: [ :item | self locationOf: item ]);
 		addColumn: (StTestIconColumnView new
-				 executeBlock: [ :method | self executeTestForSelectedMethod ];
+				 executeBlock: [ :method | self executeTestFor: method ]; 
 				 cellPresenterClass: StTestIconCellPresenter;
 				 width: 20;
 				 yourself);

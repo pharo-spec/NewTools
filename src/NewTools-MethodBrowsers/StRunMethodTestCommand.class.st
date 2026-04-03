@@ -33,5 +33,5 @@ StRunMethodTestCommand >> canBeExecuted [
 { #category : 'executing' }
 StRunMethodTestCommand >> execute [
 
-	self context executeTestForSelectedMethod
+	self context executeTestFor: self context selectedMethod
 ]
