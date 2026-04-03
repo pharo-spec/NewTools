@@ -258,13 +258,13 @@ StMethodBrowser >> accept: text notifying: notifyer [
 { #category : 'private' }
 StMethodBrowser >> addHighlightedSegments [
 
-	| message highlightInterval highlights |
+	| message highlightInterval highlights  |
 	message := self selectedMethod.
 	message ifNil: [ ^ self ].
 
-	highlights := highlight isString
-		              ifTrue: [ { highlight } ]
-		              ifFalse: [ highlight ].
+	highlights := (highlight isCollection and: [ highlight isString not ])
+		              ifTrue: [ highlight ]
+		              ifFalse: [ { highlight } ].
 
 	highlights asArray do: [ :each |
 			highlightInterval := (self isMethodDefinition: message)
