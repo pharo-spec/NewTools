@@ -5,7 +5,7 @@ Class {
 	#name : 'StTestIconCellPresenter',
 	#superclass : 'SpEasyColumnCellPresenter',
 	#instVars : [
-		'iconPresenter',
+		'buttonPresenter',
 		'executeBlock'
 	],
 	#category : 'NewTools-MethodBrowsers-Base',
@@ -13,25 +13,20 @@ Class {
 	#tag : 'Base'
 }
 
-{ #category : 'initialization' }
-StTestIconCellPresenter >> connectPresenters [
-
-	self eventHandler whenMouseDownDo: [ :anEvent |
-		(executeBlock notNil and: [ self model notNil ]) ifTrue: [ executeBlock value: self model ] ]
-]
-
 { #category : 'layout' }
 StTestIconCellPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
-		  add: iconPresenter;
+		  add: buttonPresenter;
 		  yourself
 ]
 
 { #category : 'initialization' }
 StTestIconCellPresenter >> initializePresenters [
 
-	iconPresenter := self newImage
+	buttonPresenter := self newButton
+		                   addStyle: 'flat';
+		                   yourself
 ]
 
 { #category : 'block' }
@@ -61,10 +56,12 @@ StTestIconCellPresenter >> updatePresenter [
 	| method |
 	method := self model.
 	method ifNil: [
-			iconPresenter image: nil.
+			buttonPresenter icon: nil.
 			^ self ].
-
 	(method selector isTestSelector and: [ method isInstanceSide ])
-		ifTrue: [ iconPresenter image: (self testIconFor: method) ]
-		ifFalse: [  ]
+		ifTrue: [
+				buttonPresenter 
+					icon: (self testIconFor: method);
+					action: [ executeBlock value: method ] ]
+		ifFalse: [ buttonPresenter icon: nil ]
 ]

@@ -221,7 +221,7 @@ StMethodListPresenter >> executeTestForSelectedMethod [
 	result := suite run.
 	result updateResultsInHistory.
 	self application inform: result printString.
-	listPresenter refresh
+	listPresenter updateItemsKeepingSelection: listPresenter items
 ]
 
 { #category : 'initialization' }
