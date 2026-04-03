@@ -72,6 +72,14 @@ StMethodBrowser class >> browse: compiledMethods asSendersOf: aSymbol [
 		  open
 ]
 
+{ #category : 'opening explicit' }
+StMethodBrowser class >> browse: compiledMethods asSendersOfAll: aCollectionOfSymbols [
+
+	^ self new
+		  methods: compiledMethods asSendersOfAll: aCollectionOfSymbols;
+		  open
+]
+
 { #category : 'opening - old' }
 StMethodBrowser class >> browse: aCollection title: aString [
 	"Basic version with limited UX feedback. Use only if you cannot use the other methods."
@@ -138,11 +146,9 @@ StMethodBrowser class >> browseSendersOf: aSymbol [
 
 { #category : 'opening' }
 StMethodBrowser class >> browseSendersOfAll: aCollectionOfSymbols [
-
-	| methods |
-	methods := aCollectionOfSymbols flatCollect: [ :sym | self sendersOf: sym ].
-
-	^ self browse: methods asArray
+    | methods |
+    methods := aCollectionOfSymbols flatCollect: [ :sym | self sendersOf: sym ].
+    ^ self browse: methods asArray asSendersOfAll: aCollectionOfSymbols 
 ]
 
 { #category : 'private' }
@@ -244,18 +250,23 @@ StMethodBrowser >> accept: text notifying: notifyer [
 
 { #category : 'private' }
 StMethodBrowser >> addHighlightedSegments [
-	| message highlightInterval |
 
+	| message highlightInterval highlights |
 	message := self selectedMethod.
 	message ifNil: [ ^ self ].
-	
-	highlightInterval := (self isMethodDefinition: message)
-		ifFalse: [ self intervalOf: highlight inCommentText: textPresenter text ] 
-		ifTrue: [ self intervalOf: highlight inCode: textPresenter text of: message ].
-		
-	textPresenter addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight 
-		interval: (highlightInterval first to: highlightInterval last + 1);
-		yourself)
+
+	highlights := highlight isSymbol
+		              ifTrue: [ Array with: highlight ]
+		              ifFalse: [ highlight ].
+
+	highlights asArray do: [ :each |
+			highlightInterval := (self isMethodDefinition: message)
+				                     ifFalse: [ self intervalOf: each inCommentText: textPresenter text ]
+				                     ifTrue: [ self intervalOf: each inCode: textPresenter text of: message ].
+
+			textPresenter addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
+					 interval: (highlightInterval first to: highlightInterval last + 1);
+					 yourself) ]
 ]
 
 { #category : 'to remove' }
@@ -558,6 +569,16 @@ StMethodBrowser >> methods: compiledMethods asSendersOf: aSymbol [
 		title: 'Senders of ' , aSymbol
 ]
 
+{ #category : 'api - instance side' }
+StMethodBrowser >> methods: compiledMethods asSendersOfAll: aCollectionOfSymbols [
+
+	self
+		setRefreshingBlockForSendersOfAll: aCollectionOfSymbols;
+		highlight: aCollectionOfSymbols;
+		methods: compiledMethods;
+		title: 'Senders of ' , (', ' join: aCollectionOfSymbols)
+]
+
 { #category : 'initialization' }
 StMethodBrowser >> newMethodToolbar [
 
@@ -688,6 +709,16 @@ StMethodBrowser >> setRefreshingBlockForSendersOf: aSelector [
 	specialIndex := Smalltalk specialSelectorIndexOrNil: aSelector.
 	self refreshingBlock: [:method | 
 		method hasSelector: aSelector specialSelectorIndex: specialIndex ]
+]
+
+{ #category : 'api' }
+StMethodBrowser >> setRefreshingBlockForSendersOfAll: aCollectionOfSymbols [
+
+	self refreshingBlock: [ :method |
+			aCollectionOfSymbols anySatisfy: [ :sym |
+					| specialIndex |
+					specialIndex := Smalltalk specialSelectorIndexOrNil: sym.
+					method hasSelector: sym specialSelectorIndex: specialIndex ] ]
 ]
 
 { #category : 'announcements' }
