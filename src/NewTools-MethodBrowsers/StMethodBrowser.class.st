@@ -65,6 +65,13 @@ StMethodBrowser class >> browse: compiledMethods asReferencesToLiteral: aLiteral
 ]
 
 { #category : 'opening explicit' }
+StMethodBrowser class >> browse: compiledMethods asReferencesToVariable: aVariable inClass: aClass [
+	"Specialized version for better UX feedback for class references and explicit list of methods"
+
+	^ (self new methods: compiledMethods asReferencesToVariable: aVariable inClass: aClass binding) open
+]
+
+{ #category : 'opening explicit' }
 StMethodBrowser class >> browse: compiledMethods asSendersOf: aSymbol [
 	"Specialized version for better UX feedback for senders and explicit list of methods"
 
@@ -128,6 +135,13 @@ StMethodBrowser class >> browseReferencesToLiteral: aLiteral [
 	"Special version that sets the correct refreshing block for senders"
 
 	^ self browse: (self referencesToLiteral: aLiteral) asReferencesToLiteral: aLiteral
+]
+
+{ #category : 'opening' }
+StMethodBrowser class >> browseReferencesToVariable: aVariable inClass: aClass [
+
+
+	^ self browse: (self referencesToVariable: aVariable inClass: aClass) asReferencesToVariable: aVariable inClass: aClass 
 ]
 
 { #category : 'opening' }
@@ -197,6 +211,12 @@ StMethodBrowser class >> referencesToLiteral: aLiteral [
 	"Do not use aSymbol implementors because it is a disguised global"
 
 	^ SystemNavigation new allReferencesTo: aLiteral
+]
+
+{ #category : 'private' }
+StMethodBrowser class >> referencesToVariable: aVariable inClass: aClass [
+
+	^ aClass allMethodsAccessingSlot: aVariable
 ]
 
 { #category : 'tool registration' }
@@ -564,6 +584,17 @@ StMethodBrowser >> methods: compiledMethods asReferenceTo: aClassName [
 ]
 
 { #category : 'api - instance side' }
+StMethodBrowser >> methods: compiledMethods asReferencesToVariable: aVariable inClass: aClass [
+	"Configure the browser for references to a variable/slot in a class"
+
+	self
+		setRefreshingBlockForReferencesToSlot: aVariable;
+		highlight: aVariable name;
+		methods: compiledMethods;
+		title: 'References to ' , aVariable name , ' in ' , aClass name
+]
+
+{ #category : 'api - instance side' }
 StMethodBrowser >> methods: compiledMethods asSendersOf: aSymbol [
 	"Create without opening it a method browsers for the reference to a class "
 
@@ -694,6 +725,12 @@ StMethodBrowser >> setRefreshingBlockForClassReferencesOf: aString [
 StMethodBrowser >> setRefreshingBlockForImplementorsOf: aSelector [
 
 	self refreshingBlock: [ :message | message selector = aSelector ]
+]
+
+{ #category : 'initialization' }
+StMethodBrowser >> setRefreshingBlockForReferencesToSlot: aSlot [
+
+	self refreshingBlock: [ :method | method accessesSlot: aSlot ]
 ]
 
 { #category : 'api' }
