@@ -33,15 +33,5 @@ StRunMethodTestCommand >> canBeExecuted [
 { #category : 'executing' }
 StRunMethodTestCommand >> execute [
 
-	| method selector testClasses suite result |
-	method := self context selectedMethod.
-	selector := method selector.
-	testClasses := method methodClass isAbstract
-		               ifTrue: [ method methodClass allSubclasses ]
-		               ifFalse: [ { method methodClass } ].
-	suite := TestSuite named: selector.
-	testClasses do: [ :concreteClass | suite addTest: (concreteClass selector: selector) ].
-	result := suite run.
-	result updateResultsInHistory.
-	self context application inform: result printString
+	self context executeTestForSelectedMethod
 ]
