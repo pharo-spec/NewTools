@@ -17,7 +17,8 @@ Class {
 		'title',
 		'refreshingBlock',
 		'textPresenter',
-		'highlight'
+		'highlight',
+		'filterPresenter'
 	],
 	#classVars : [
 		'UsingLayout'
@@ -290,14 +291,21 @@ StMethodBrowser >> classRenamed: anAnnouncement [
 
 { #category : 'initialization' }
 StMethodBrowser >> connectPresenters [
-	
+
 	methodList
 		whenSelectionChangedDo: [ :selection | self selectItem: selection selectedItem ];
 		whenModelChangedDo: [ self updateTitle ].
-		
-	textPresenter 
+
+	textPresenter
 		whenSubmitDo: [ :text | self accept: text notifying: nil ];
-		whenResetDo: [ self selectItem: methodList selectedMethod ]	
+		whenResetDo: [ self selectItem: methodList selectedMethod ].
+
+	filterPresenter filterInputPresenter whenTextChangedDo: [ :text |
+			| allMethods filtered |
+			allMethods := filterPresenter unfilteredItems.
+			text ifEmpty: [ methodList methods: allMethods ] ifNotEmpty: [
+					filtered := allMethods select: [ :m | (filterPresenter display value: m) asLowercase includesSubstring: text asLowercase ].
+					methodList methods: filtered ] ]
 ]
 
 { #category : 'api - focus' }
@@ -443,14 +451,17 @@ StMethodBrowser >> highlight: aSelector [
 StMethodBrowser >> horizontalLayout [
 
 	^ SpBoxLayout newTopToBottom
-		add: toolbarPresenter expand: false;
-		add: (SpPanedLayout newLeftToRight
-			add: methodList;
-			add: (SpBoxLayout newTopToBottom
-				add: textPresenter;
-				yourself);
-			yourself);
-		yourself
+		  add: toolbarPresenter expand: false;
+		  add: (SpPanedLayout newLeftToRight
+				   add: (SpBoxLayout newTopToBottom
+						    add: methodList;
+						    add: filterPresenter filterInputPresenter expand: false;
+						    yourself);
+				   add: (SpBoxLayout newTopToBottom
+						    add: textPresenter;
+						    yourself);
+				   yourself);
+		  yourself
 ]
 
 { #category : 'initialization' }
@@ -475,6 +486,9 @@ StMethodBrowser >> initializePresenters [
 
 	textPresenter := self newCode.
 	refreshingBlock := [ :item | true ].
+	filterPresenter := self instantiate: SpFilteringListPresenter.
+	filterPresenter matchSubstring.
+	filterPresenter display: [ :m | (self methodClassNameForItem: m) , ' >> ' , m selector ].
 
 	self initializeDropList
 ]
@@ -539,8 +553,10 @@ StMethodBrowser >> methods [
 { #category : 'api' }
 StMethodBrowser >> methods: aCollection [
 
+	filterPresenter unfilteredItems: aCollection asOrderedCollection.
+	filterPresenter resetFilter.
 	methodList methods: aCollection.
-	self toolbarPresenter updatePresenter.
+	self toolbarPresenter updatePresenter
 ]
 
 { #category : 'api - instance side' }
@@ -788,14 +804,17 @@ StMethodBrowser >> updateTitle [
 StMethodBrowser >> verticalLayout [
 
 	^ SpBoxLayout newTopToBottom
-		add: toolbarPresenter expand: false;
-		add: (SpPanedLayout newTopToBottom
-			add: methodList;
-			add: (SpBoxLayout newTopToBottom
-				add: textPresenter;
-				yourself);
-			yourself);
-		yourself
+		  add: toolbarPresenter expand: false;
+		  add: (SpPanedLayout newTopToBottom
+				   add: (SpBoxLayout newTopToBottom
+						    add: methodList;
+						    add: filterPresenter filterInputPresenter expand: false;
+						    yourself);
+				   add: (SpBoxLayout newTopToBottom
+						    add: textPresenter;
+						    yourself);
+				   yourself);
+		  yourself
 ]
 
 { #category : 'api - events' }
