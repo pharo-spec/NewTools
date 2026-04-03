@@ -714,7 +714,7 @@ StMethodBrowser >> setRefreshingBlockForImplementorsOf: aSelector [
 { #category : 'initialization' }
 StMethodBrowser >> setRefreshingBlockForReferencesToSlot: aSlot [
 
-	self refreshingBlock: [ :method | method accessesSlot: aSlot name ]
+	self refreshingBlock: [ :method | method accessesSlot: aSlot ]
 ]
 
 { #category : 'api' }
