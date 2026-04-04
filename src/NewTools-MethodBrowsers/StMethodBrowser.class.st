@@ -80,6 +80,14 @@ StMethodBrowser class >> browse: compiledMethods asSendersOf: aSymbol [
 		  open
 ]
 
+{ #category : 'opening explicit' }
+StMethodBrowser class >> browse: compiledMethods asSendersOfAll: aCollectionOfSymbols [
+
+	^ self new
+		  methods: compiledMethods asSendersOfAll: aCollectionOfSymbols;
+		  open
+]
+
 { #category : 'opening - old' }
 StMethodBrowser class >> browse: aCollection title: aString [
 	"Basic version with limited UX feedback. Use only if you cannot use the other methods."
@@ -114,6 +122,12 @@ StMethodBrowser class >> browseImplementorsOfAll: aCollectionOfSymbols [
 	| methods |
 	methods := aCollectionOfSymbols flatCollect: [ :sym | self implementorsOf: sym ].
 	^ self browse: methods asArray
+]
+
+{ #category : 'opening' }
+StMethodBrowser class >> browseMethodsWithSourceString: aString [
+
+	SystemNavigation default browseMethodsWithSourceString: aString matchCase: false
 ]
 
 { #category : 'opening' }
@@ -153,18 +167,16 @@ StMethodBrowser class >> browseSendersOf: aSymbol [
 
 { #category : 'opening' }
 StMethodBrowser class >> browseSendersOfAll: aCollectionOfSymbols [
-
-	| methods |
-	methods := aCollectionOfSymbols flatCollect: [ :sym | self sendersOf: sym ].
-
-	^ self browse: methods asArray
+    | methods |
+    methods := aCollectionOfSymbols flatCollect: [ :sym | self sendersOf: sym ].
+    ^ self browse: methods asArray asSendersOfAll: aCollectionOfSymbols 
 ]
 
 { #category : 'private' }
 StMethodBrowser class >> implementorsOf: aSymbol [
 	"Do not use aSymbol implementors because it is a disguised global"
-	
-	^ SystemNavigation new allImplementorsOf: aSymbol 
+
+	^ (SystemNavigation new allImplementorsOf: aSymbol) reject: [ :m | m isFromTrait ]
 ]
 
 { #category : 'instance creation' }
@@ -265,18 +277,23 @@ StMethodBrowser >> accept: text notifying: notifyer [
 
 { #category : 'private' }
 StMethodBrowser >> addHighlightedSegments [
-	| message highlightInterval |
 
+	| message highlightInterval highlights  |
 	message := self selectedMethod.
 	message ifNil: [ ^ self ].
-	
-	highlightInterval := (self isMethodDefinition: message)
-		ifFalse: [ self intervalOf: highlight inCommentText: textPresenter text ] 
-		ifTrue: [ self intervalOf: highlight inCode: textPresenter text of: message ].
-		
-	textPresenter addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight 
-		interval: (highlightInterval first to: highlightInterval last + 1);
-		yourself)
+
+	highlights := (highlight isCollection and: [ highlight isString not ])
+		              ifTrue: [ highlight ]
+		              ifFalse: [ { highlight } ].
+
+	highlights asArray do: [ :each |
+			highlightInterval := (self isMethodDefinition: message)
+				                     ifFalse: [ self intervalOf: each inCommentText: textPresenter text ]
+				                     ifTrue: [ self intervalOf: each inCode: textPresenter text of: message ].
+
+			textPresenter addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
+					 interval: (highlightInterval first to: highlightInterval last + 1);
+					 yourself) ]
 ]
 
 { #category : 'to remove' }
@@ -605,6 +622,16 @@ StMethodBrowser >> methods: compiledMethods asSendersOf: aSymbol [
 		title: 'Senders of ' , aSymbol
 ]
 
+{ #category : 'api - instance side' }
+StMethodBrowser >> methods: compiledMethods asSendersOfAll: aCollectionOfSymbols [
+
+	self
+		setRefreshingBlockForSendersOfAll: aCollectionOfSymbols;
+		highlight: aCollectionOfSymbols;
+		methods: compiledMethods;
+		title: 'Senders of ' , (', ' join: aCollectionOfSymbols)
+]
+
 { #category : 'initialization' }
 StMethodBrowser >> newMethodToolbar [
 
@@ -649,33 +676,32 @@ StMethodBrowser >> registerToAnnouncements [
 StMethodBrowser >> searchedString: searchedString in: aString [
 	"Return the interval that corresponds to the portion of aString "
 	"This method takes care of finding complete match to searchedString. "
-	| string interval firstIndex |
-	
+
+	| string interval firstIndex lowerString lowerSearch |
 	searchedString ifNil: [ ^ 0 to: 0 ].
-	aString isEmptyOrNil ifTrue: [ ^0 to: 0 ].
+	aString isEmptyOrNil ifTrue: [ ^ 0 to: 0 ].
 	string := aString asString.
+	lowerString := string asLowercase.
+	lowerSearch := searchedString asLowercase.
 	interval := 0 to: 0.
-	
-	(searchedString includes: $:)
-		ifTrue: [ | list |
-			list := searchedString substrings: ':'.
-			list size = 1
-				ifTrue: [" binary selector "
-					firstIndex := self findFirstOccurrenceOf: searchedString in: string.
-					firstIndex isZero
-						ifFalse: [ interval := firstIndex to: (firstIndex+searchedString size-1) ] ] 
-					
-				ifFalse: [
-					| lastIndex |
-					firstIndex := self findFirstOccurrenceOf: list first, ':' in: string. 
-					firstIndex >0 ifTrue: [ 
-								lastIndex := string findString: list last,':' startingAt: firstIndex+ (list first size -1).
-								interval := firstIndex to: (lastIndex + list last size) ] ] ]
+
+	(lowerSearch includes: $:)
+		ifTrue: [
+				| list |
+				list := lowerSearch substrings: ':'.
+				list size = 1
+					ifTrue: [
+							firstIndex := self findFirstOccurrenceOf: lowerSearch in: lowerString.
+							firstIndex isZero ifFalse: [ interval := firstIndex to: firstIndex + searchedString size - 1 ] ]
+					ifFalse: [
+							| lastIndex |
+							firstIndex := self findFirstOccurrenceOf: list first , ':' in: lowerString.
+							firstIndex > 0 ifTrue: [
+									lastIndex := lowerString findString: list last , ':' startingAt: firstIndex + (list first size - 1).
+									interval := firstIndex to: lastIndex + list last size ] ] ]
 		ifFalse: [
-			" unary selector "
-			firstIndex := self findFirstOccurrenceOf: searchedString in: string.
-			 firstIndex > 0
-						ifTrue: [ interval := firstIndex to: (firstIndex+searchedString size - 1) ] ].
+				firstIndex := self findFirstOccurrenceOf: lowerSearch in: lowerString.
+				firstIndex > 0 ifTrue: [ interval := firstIndex to: firstIndex + searchedString size - 1 ] ].
 	^ interval
 ]
 
@@ -741,6 +767,16 @@ StMethodBrowser >> setRefreshingBlockForSendersOf: aSelector [
 	specialIndex := Smalltalk specialSelectorIndexOrNil: aSelector.
 	self refreshingBlock: [:method | 
 		method hasSelector: aSelector specialSelectorIndex: specialIndex ]
+]
+
+{ #category : 'api' }
+StMethodBrowser >> setRefreshingBlockForSendersOfAll: aCollectionOfSymbols [
+
+	self refreshingBlock: [ :method |
+			aCollectionOfSymbols anySatisfy: [ :sym |
+					| specialIndex |
+					specialIndex := Smalltalk specialSelectorIndexOrNil: sym.
+					method hasSelector: sym specialSelectorIndex: specialIndex ] ]
 ]
 
 { #category : 'announcements' }

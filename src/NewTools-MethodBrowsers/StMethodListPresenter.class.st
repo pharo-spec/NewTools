@@ -206,6 +206,30 @@ StMethodListPresenter >> doRemoveMethod [
 			inClass: aMethod methodClass ]
 ]
 
+{ #category : 'execution' }
+StMethodListPresenter >> executeTestFor: aMethod [
+
+	| selector testClasses suite result |
+	aMethod ifNil: [ ^ self ].
+
+	selector := aMethod selector.
+
+	testClasses := aMethod methodClass isAbstract
+		               ifTrue: [ aMethod methodClass allSubclasses ]
+		               ifFalse: [ { aMethod methodClass } ].
+
+	suite := TestSuite named: selector.
+
+	testClasses do: [ :each | suite addTest: (each selector: selector) ].
+
+	result := suite run.
+	result updateResultsInHistory.
+
+	self application inform: result printString.
+
+	listPresenter updateItemsKeepingSelection: listPresenter items
+]
+
 { #category : 'initialization' }
 StMethodListPresenter >> initialize [
 
@@ -217,18 +241,17 @@ StMethodListPresenter >> initialize [
 { #category : 'initialization' }
 StMethodListPresenter >> initializePresenters [
 
-	listPresenter := self newTable.
+	listPresenter := self newEasyColumnView.
 	listPresenter
 		sortingBlock: [ :a :b | self sortClassesInCachedHierarchy: a b: b ];
-		addColumn: (SpStringTableColumn 
-			title: 'Location' 
-			evaluated: [ :item | self locationOf: item ]) beSortable; yourself;
-		addColumn: (SpStringTableColumn 
-			title: 'Selector' 
-			evaluated: [ :item | self selectorOf: item ]) beSortable ; yourself ;
-		addColumn: (SpStringTableColumn 
-			title: 'Package' 
-			evaluated: [ :item | self packageNameOf: item ]) beSortable; yourself;
+		addColumn: (SpStringTableColumn title: 'Location' evaluated: [ :item | self locationOf: item ]);
+		addColumn: (StTestIconColumnView new
+				 executeBlock: [ :method | self executeTestFor: method ]; 
+				 cellPresenterClass: StTestIconCellPresenter;
+				 width: 20;
+				 yourself);
+		addColumn: (SpStringTableColumn title: 'Selector' evaluated: [ :item | self selectorOf: item ]);
+		addColumn: (SpStringTableColumn title: 'Package' evaluated: [ :item | self packageNameOf: item ]);
 		beResizable.
 
 	listPresenter outputActivationPort transmitDo: [ :aMethod | self doBrowseMethod ].
@@ -261,26 +284,27 @@ StMethodListPresenter >> methodClassNameForItem: anItem [
 
 { #category : 'private' }
 StMethodListPresenter >> methodListActions [
-	
+
 	^ CmCommandGroup forSpec
-		beRoot;
-		register: ((CmCommandGroup forSpecNamed: 'View')
-			beDisplayedAsGroup;
-			register: (StMethodBrowseFullCommand forSpecContext: self);
-			register: (StInspectMethodCommand forSpecContext: self);
-			yourself);
-		register: ((CmCommandGroup forSpecNamed: 'Navigation')
-			beDisplayedAsGroup;
-			register: (StMessageSendersCommand forSpecContext: self);
-			register: (StImplementorsCommand forSpecContext: self);
-			register: (StClassReferencesCommand forSpecContext: self);
-			register: (StMethodVersionsCommand forSpecContext: self);
-			yourself);
-		register: ((CmCommandGroup forSpecNamed: 'CRITICAL')
-			beDisplayedAsGroup;
-			register: (StRemoveMethodCommand forSpecContext: self);
-			yourself);
-		yourself
+		  beRoot;
+		  register: ((CmCommandGroup forSpecNamed: 'View')
+				   beDisplayedAsGroup;
+				   register: (StMethodBrowseFullCommand forSpecContext: self);
+				   register: (StInspectMethodCommand forSpecContext: self);
+				   register: (StRunMethodTestCommand forSpecContext: self);
+				   yourself);
+		  register: ((CmCommandGroup forSpecNamed: 'Navigation')
+				   beDisplayedAsGroup;
+				   register: (StMessageSendersCommand forSpecContext: self);
+				   register: (StImplementorsCommand forSpecContext: self);
+				   register: (StClassReferencesCommand forSpecContext: self);
+				   register: (StMethodVersionsCommand forSpecContext: self);
+				   yourself);
+		  register: ((CmCommandGroup forSpecNamed: 'CRITICAL')
+				   beDisplayedAsGroup;
+				   register: (StRemoveMethodCommand forSpecContext: self);
+				   yourself);
+		  yourself
 ]
 
 { #category : 'accessing' }
@@ -433,6 +457,27 @@ StMethodListPresenter >> switchScopeTo: aRBBrowserEnvironment [
 
 	listPresenter items: (aRBBrowserEnvironment selectMessagesFrom: allMessages)
 
+]
+
+{ #category : 'tests' }
+StMethodListPresenter >> testIconFor: aMethod [
+
+	| allCount successCount failureCount errorCount |
+	(aMethod selector isTestSelector and: [ aMethod isInstanceSide ]) ifFalse: [ ^ nil ].
+	allCount := 0.
+	successCount := 0.
+	failureCount := 0.
+	errorCount := 0.
+	allCount := allCount + 1.
+	successCount := successCount + (aMethod methodClass methodPassed: aMethod selector) asBit.
+	failureCount := failureCount + (aMethod methodClass methodFailed: aMethod selector) asBit.
+	errorCount := errorCount + (aMethod methodClass methodRaisedError: aMethod selector) asBit.
+
+	allCount = 0 ifTrue: [ ^ self iconNamed: #testNotRun ].
+	allCount = successCount ifTrue: [ ^ self iconNamed: #testGreen ].
+	errorCount = 0 & (failureCount > 0) ifTrue: [ ^ self iconNamed: #testYellow ].
+	errorCount > 0 ifTrue: [ ^ self iconNamed: #testRed ].
+	^ self iconNamed: #testNotRun
 ]
 
 { #category : 'accessing' }
