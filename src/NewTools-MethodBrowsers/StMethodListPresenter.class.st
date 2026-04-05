@@ -319,8 +319,8 @@ StMethodListPresenter >> methods: aCollection [
 	self cacheHierarchyForClasses: aCollection.
 	listPresenter items: cachedHierarchy keys asOrderedCollection.
 	allMessages := listPresenter items.
-	listPresenter listSize > 0 ifTrue: [ 
-		listPresenter selectIndex: 1 ]
+
+	listPresenter listSize > 0 ifTrue: [ self defer: [ self selectIndex: 1 ] ]
 ]
 
 { #category : 'accessing' }
