@@ -231,11 +231,18 @@ StMethodListPresenter >> executeTestFor: aMethod [
 ]
 
 { #category : 'initialization' }
+StMethodListPresenter >> handleTestResultChanged: anAnnouncement [
+
+	self defer: [ listPresenter updateItemsKeepingSelection: listPresenter items ]
+]
+
+{ #category : 'initialization' }
 StMethodListPresenter >> initialize [
 
 	super initialize.
 	topologySort := true.
 	allMessages := Set empty.
+	self registerToTestAnnouncements
 ]
 
 { #category : 'initialization' }
@@ -390,6 +397,14 @@ StMethodListPresenter >> protocolNameForItem: anItem [
 	^ anItem protocolName ifNil: [ '' ]
 ]
 
+{ #category : 'initialization' }
+StMethodListPresenter >> registerToTestAnnouncements [
+
+	TestCase historyAnnouncer unsubscribe: self.
+
+	TestCase historyAnnouncer weak when: TestSuiteEnded send: #handleTestResultChanged: to: self
+]
+
 { #category : 'private - scopes' }
 StMethodListPresenter >> scopes [
 	"Answer a <Collection> of the receiver's message list scopes"
@@ -457,27 +472,6 @@ StMethodListPresenter >> switchScopeTo: aRBBrowserEnvironment [
 
 	listPresenter items: (aRBBrowserEnvironment selectMessagesFrom: allMessages)
 
-]
-
-{ #category : 'tests' }
-StMethodListPresenter >> testIconFor: aMethod [
-
-	| allCount successCount failureCount errorCount |
-	(aMethod selector isTestSelector and: [ aMethod isInstanceSide ]) ifFalse: [ ^ nil ].
-	allCount := 0.
-	successCount := 0.
-	failureCount := 0.
-	errorCount := 0.
-	allCount := allCount + 1.
-	successCount := successCount + (aMethod methodClass methodPassed: aMethod selector) asBit.
-	failureCount := failureCount + (aMethod methodClass methodFailed: aMethod selector) asBit.
-	errorCount := errorCount + (aMethod methodClass methodRaisedError: aMethod selector) asBit.
-
-	allCount = 0 ifTrue: [ ^ self iconNamed: #testNotRun ].
-	allCount = successCount ifTrue: [ ^ self iconNamed: #testGreen ].
-	errorCount = 0 & (failureCount > 0) ifTrue: [ ^ self iconNamed: #testYellow ].
-	errorCount > 0 ifTrue: [ ^ self iconNamed: #testRed ].
-	^ self iconNamed: #testNotRun
 ]
 
 { #category : 'accessing' }

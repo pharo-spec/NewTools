@@ -60,6 +60,7 @@ StTestIconCellPresenter >> testIconFor: aMethod [
 StTestIconCellPresenter >> updatePresenter [
 
 	| method |
+
 	method := self model.
 
 	method ifNil: [
@@ -67,7 +68,7 @@ StTestIconCellPresenter >> updatePresenter [
 			buttonPresenter enabled: false.
 			^ self ].
 
-	(method selector isTestSelector and: [ method isInstanceSide ])
+	method isTestMethod
 		ifTrue: [
 				buttonPresenter
 					icon: (self testIconFor: method);
