@@ -26,29 +26,24 @@ SpColorPickerPresenter class >> open [
 	^ (self newApplication: StPharoApplication current) open
 ]
 
+{ #category : 'accessing' }
+SpColorPickerPresenter >> color [
+
+	^ colorPickerPresenter color
+]
+
 { #category : 'layout' }
 SpColorPickerPresenter >> defaultLayout [ 
 
 	^ SpBoxLayout newTopToBottom 
 		add: colorPickerPresenter;
-		add: toolbar expand: false;
 		yourself
 ]
 
 { #category : 'initialization' }
 SpColorPickerPresenter >> initializePresenters [
 
-	colorPickerPresenter := self newColorPicker.
-	toolbar := self newToolbar.
-	self toolbarButtons do: [ :button | toolbar addItem: button ]
-]
-
-{ #category : 'initialization' }
-SpColorPickerPresenter >> initializeWindow: aWindowPresenter [
-
-	super initializeWindow: aWindowPresenter.
-	aWindowPresenter
-		whenClosedDo: [ self owner color: colorPickerPresenter color ]
+	colorPickerPresenter := self newColorPicker
 ]
 
 { #category : 'initialization' }
