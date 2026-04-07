@@ -16,13 +16,7 @@ StLabeledSettingPresenter >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
 		hAlignStart;
-		add: (self newPresenter 
-			addStyle: 'label';
-			layout: (SpBoxLayout newHorizontal 
-				hAlignStart;
-				add: labelPresenter;
-				yourself);
-			yourself);
+		add: labelPresenter;
 		add: input;
 		yourself
 ]

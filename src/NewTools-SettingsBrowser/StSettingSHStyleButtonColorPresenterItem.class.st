@@ -12,6 +12,12 @@ StSettingSHStyleButtonColorPresenterItem >> buttonColor: aColor [
 	self setterPresenter color: aColor.
 ]
 
+{ #category : 'accessing' }
+StSettingSHStyleButtonColorPresenterItem >> settingStyle [
+
+	^ 'itemSHButtonColor'
+]
+
 { #category : 'initialization' }
 StSettingSHStyleButtonColorPresenterItem >> updateColor: aColor [
 

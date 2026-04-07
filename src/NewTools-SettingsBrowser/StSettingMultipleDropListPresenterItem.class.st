@@ -33,6 +33,12 @@ StSettingMultipleDropListPresenterItem >> initializePresenters [
 ]
 
 { #category : 'accessing' }
+StSettingMultipleDropListPresenterItem >> settingStyle [
+
+	^ 'itemMultipleDropList'
+]
+
+{ #category : 'accessing' }
 StSettingMultipleDropListPresenterItem >> value: aSHStyleElement [ 
 
 	self flag: #delete.

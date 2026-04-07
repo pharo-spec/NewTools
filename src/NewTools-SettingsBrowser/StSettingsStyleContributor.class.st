@@ -67,8 +67,13 @@ StSettingsStyleContributor >> styleSheetContribution [
 StSettingsStyleContributor >> styleSheetData [
 
 	^ '.application [
+.settingsLevel1 [ Geometry { #minWidth: 15, #width: 15 } ],
+.settingsCard1 [ ],
+.settingsLevel2 [ Geometry { #minWidth: 30, #width: 30 } ],
+.settingsCard2 [ ],
+.settingsLevel3 [ Geometry { #minWidth: 45, #width: 45 } ],
 .settingPanelLevel1 [ Container { #padding: 10 } ],
-.settingHeader [ 
+.settingHeader [
 		Container { #borderWidth: 2 },
 		Geometry { #minHeight: 30, #height: 30 },
 		Draw { #backgroundColor: EnvironmentColor(#border) },

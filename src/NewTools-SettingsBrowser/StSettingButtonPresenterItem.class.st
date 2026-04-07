@@ -21,6 +21,12 @@ StSettingButtonPresenterItem >> initializePresenters [
 ]
 
 { #category : 'accessing' }
+StSettingButtonPresenterItem >> settingStyle [
+
+	^ 'itemButton'
+]
+
+{ #category : 'accessing' }
 StSettingButtonPresenterItem >> target [
 	"Answer an <Object> that is the receiver of the action"
 

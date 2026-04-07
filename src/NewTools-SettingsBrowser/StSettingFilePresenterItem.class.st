@@ -15,3 +15,9 @@ StSettingFilePresenterItem >> labeledPresenterClass [
 	^ StLabeledSettingFileSelectionPresenter
 
 ]
+
+{ #category : 'accessing' }
+StSettingFilePresenterItem >> settingStyle [
+
+	^ 'itemFile'
+]
