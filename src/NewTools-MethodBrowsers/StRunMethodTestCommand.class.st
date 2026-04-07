@@ -27,7 +27,7 @@ StRunMethodTestCommand >> canBeExecuted [
 	| method |
 	method := context selectedMethod.
 	method ifNil: [ ^ false ].
-	^ method selector isTestSelector and: [ method isInstanceSide ]
+	^ method isTestMethod
 ]
 
 { #category : 'executing' }

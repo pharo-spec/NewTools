@@ -513,6 +513,13 @@ StMethodBrowser >> initializePresenters [
 	self initializeDropList
 ]
 
+{ #category : 'initialization' }
+StMethodBrowser >> initializeWindow: aWindowPresenter [
+
+	super initializeWindow: aWindowPresenter.
+	aWindowPresenter whenClosedDo: [ TestCase historyAnnouncer unsubscribe: methodList ]
+]
+
 { #category : 'private' }
 StMethodBrowser >> installIconStylerFor: anItem [
 	"icons styler are only supported for method definitions (not nil / not for comment definitions    
