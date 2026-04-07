@@ -19,11 +19,11 @@ StSettingMultipleDropListPresenterItem >> initializePresenters [
 	| modelDefault |
 
 	modelDefault := self model default.
-	modelDefault color
+	"modelDefault color
 		ifNil: [ modelDefault color: Color transparent ].
 	colorSettingItemPresenter := modelDefault color 
 		asSettingPresenter: model
-		owner: self.
+		owner: self."
 
 	setterPresenter := self newDropList 
 		items: #(#bold #italic #normal 'bold italic' );
@@ -42,8 +42,8 @@ StSettingMultipleDropListPresenterItem >> settingStyle [
 StSettingMultipleDropListPresenterItem >> value: aSHStyleElement [ 
 
 	self flag: #delete.
-	colorSettingItemPresenter 
-		buttonColor: aSHStyleElement color.
+	"colorSettingItemPresenter 
+		buttonColor: aSHStyleElement color."
 	setterPresenter selectItem: aSHStyleElement emphasis.
 
 ]
