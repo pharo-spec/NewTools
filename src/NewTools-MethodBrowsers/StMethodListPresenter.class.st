@@ -400,8 +400,6 @@ StMethodListPresenter >> protocolNameForItem: anItem [
 { #category : 'initialization' }
 StMethodListPresenter >> registerToTestAnnouncements [
 
-	TestCase historyAnnouncer unsubscribe: self.
-
 	TestCase historyAnnouncer weak when: TestSuiteEnded send: #handleTestResultChanged: to: self
 ]
 
