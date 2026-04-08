@@ -44,7 +44,11 @@ StSettingStyleElementPresenterItem >> pickColor [
 	| colorPickerPresenter |
 
 	colorPickerPresenter := setterPresenter instantiate: SpColorPickerPresenter on: self model.
-	colorPickerPresenter openModal isOk ifFalse: [ ^ self ].
+	(colorPickerPresenter asModalWindow
+		owner: setterPresenter window;
+		open) 
+		isOk 
+		ifFalse: [ ^ self ].
 
 	self model realValue color: colorPickerPresenter color.
 	self updateColor: colorPickerPresenter color
