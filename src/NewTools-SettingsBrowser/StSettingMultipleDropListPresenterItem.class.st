@@ -6,9 +6,6 @@ This presenter wraps those setting items which should present two drop lists. Fo
 Class {
 	#name : 'StSettingMultipleDropListPresenterItem',
 	#superclass : 'StSettingPresenterItem',
-	#instVars : [
-		'colorSettingItemPresenter'
-	],
 	#category : 'NewTools-SettingsBrowser-Widgets',
 	#package : 'NewTools-SettingsBrowser',
 	#tag : 'Widgets'

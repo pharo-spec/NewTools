@@ -6,8 +6,7 @@ Class {
 	#name : 'SpColorPickerPresenter',
 	#superclass : 'SpPresenter',
 	#instVars : [
-		'colorPickerPresenter',
-		'toolbar'
+		'colorPickerPresenter'
 	],
 	#category : 'ColorPicker',
 	#package : 'ColorPicker'
