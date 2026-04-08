@@ -159,6 +159,17 @@ StMethodBrowser class >> browseReferencesToVariable: aVariable inClass: aClass [
 ]
 
 { #category : 'opening' }
+StMethodBrowser class >> browseReferencesToVariables: variables [
+
+	| methods |
+	methods := SystemNavigation default allMethods select: [ :m | variables anySatisfy: [ :var | var isAccessedIn: m ] ].
+	^ self new
+		  methods: methods asArray;
+		  title: 'References to ' , (', ' join: (variables collect: [ :v | v name ]));
+		  open
+]
+
+{ #category : 'opening' }
 StMethodBrowser class >> browseSendersOf: aSymbol [
 	"Special version that sets the correct refreshing block for senders"
 
@@ -170,6 +181,17 @@ StMethodBrowser class >> browseSendersOfAll: aCollectionOfSymbols [
     | methods |
     methods := aCollectionOfSymbols flatCollect: [ :sym | self sendersOf: sym ].
     ^ self browse: methods asArray asSendersOfAll: aCollectionOfSymbols 
+]
+
+{ #category : 'opening' }
+StMethodBrowser class >> browseWritersOfVariables: variables [
+
+	| methods |
+	methods := SystemNavigation default allMethods select: [ :m | variables anySatisfy: [ :var | var isWrittenIn: m ] ].
+	^ self new
+		  methods: methods asArray;
+		  title: 'Writers to ' , (', ' join: (variables collect: [ :v | v name ]));
+		  open
 ]
 
 { #category : 'private' }
