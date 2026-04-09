@@ -29,6 +29,12 @@ StSettingNumberPresenterItem >> initializePresenters [
 ]
 
 { #category : 'accessing' }
+StSettingNumberPresenterItem >> settingStyle [
+
+	^ 'itemNumber'
+]
+
+{ #category : 'accessing' }
 StSettingNumberPresenterItem >> value: aNumber [ 
 	"Set the receiver's value to aNumber"
 

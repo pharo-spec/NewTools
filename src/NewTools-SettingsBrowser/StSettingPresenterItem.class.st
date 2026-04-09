@@ -28,6 +28,12 @@ StSettingPresenterItem >> defaultLayout [
 ]
 
 { #category : 'accessing' }
+StSettingPresenterItem >> headerStyle [
+
+	^ 'header', (self settingStyle allButFirst: 4) "remove 'item'"
+]
+
+{ #category : 'accessing' }
 StSettingPresenterItem >> help: aString [ 
 
 	"To update the pop-up help"
@@ -39,6 +45,8 @@ StSettingPresenterItem >> help: aString [
 { #category : 'initialization' }
 StSettingPresenterItem >> initializePresenters [
 	"Set a label and description presenters as baseline for every setting"
+
+	self addStyle: self settingStyle.
 
 	labeledPresenter := (self instantiate: self labeledPresenterClass on: self) 
 		label: self model label;
@@ -88,6 +96,12 @@ StSettingPresenterItem >> setterPresenter [
 StSettingPresenterItem >> setterPresenter: anObject [
 
 	setterPresenter := anObject
+]
+
+{ #category : 'accessing' }
+StSettingPresenterItem >> settingStyle [
+
+	^ self subclassResponsibility
 ]
 
 { #category : 'accessing' }

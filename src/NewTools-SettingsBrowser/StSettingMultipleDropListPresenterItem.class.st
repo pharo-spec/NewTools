@@ -6,9 +6,6 @@ This presenter wraps those setting items which should present two drop lists. Fo
 Class {
 	#name : 'StSettingMultipleDropListPresenterItem',
 	#superclass : 'StSettingPresenterItem',
-	#instVars : [
-		'colorSettingItemPresenter'
-	],
 	#category : 'NewTools-SettingsBrowser-Widgets',
 	#package : 'NewTools-SettingsBrowser',
 	#tag : 'Widgets'
@@ -19,11 +16,11 @@ StSettingMultipleDropListPresenterItem >> initializePresenters [
 	| modelDefault |
 
 	modelDefault := self model default.
-	modelDefault color
+	"modelDefault color
 		ifNil: [ modelDefault color: Color transparent ].
 	colorSettingItemPresenter := modelDefault color 
 		asSettingPresenter: model
-		owner: self.
+		owner: self."
 
 	setterPresenter := self newDropList 
 		items: #(#bold #italic #normal 'bold italic' );
@@ -33,11 +30,17 @@ StSettingMultipleDropListPresenterItem >> initializePresenters [
 ]
 
 { #category : 'accessing' }
+StSettingMultipleDropListPresenterItem >> settingStyle [
+
+	^ 'itemMultipleDropList'
+]
+
+{ #category : 'accessing' }
 StSettingMultipleDropListPresenterItem >> value: aSHStyleElement [ 
 
 	self flag: #delete.
-	colorSettingItemPresenter 
-		buttonColor: aSHStyleElement color.
+	"colorSettingItemPresenter 
+		buttonColor: aSHStyleElement color."
 	setterPresenter selectItem: aSHStyleElement emphasis.
 
 ]
