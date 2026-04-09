@@ -428,34 +428,39 @@ StMethodBrowser >> handleMethodAdded: anAnnouncement [
 
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodModified: anAnnouncement [
-	| item oldItem sel index text list edits |
-	
+
+	| item oldItem matchingItem index text edits list |
 	self isDisplayed ifFalse: [ ^ self ].
-	
 	refreshingBlock ifNil: [ ^ self ].
 	item := anAnnouncement newMethod.
 	oldItem := anAnnouncement oldMethod.
-	sel := self selectedMethod.
-	sel ifNil: [ ^ self ].
-	(sel methodClass = oldItem methodClass
-		and: [ sel selector = oldItem selector ])
-		ifFalse: [ ^ self ].
-	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement)
-		ifFalse: [ ^ self ].
-	
+
+	matchingItem := self methods
+		                detect: [ :m | m methodClass = oldItem methodClass and: [ m selector = oldItem selector ] ]
+		                ifNone: [ nil ].
+	matchingItem ifNil: [
+			(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifTrue: [
+					self methods: (self methods
+							 add: item asFullRingDefinition;
+							 yourself) ].
+			^ self ].
+
 	edits := textPresenter hasUnacceptedEdits.
-	edits ifTrue: [ 
-		text := textPresenter pendingText ].
+	edits ifTrue: [ text := textPresenter pendingText ].
 	index := methodList selectedIndex.
+
 	list := self methods
-		remove: sel ifAbsent: [  ];
-		add: item asFullRingDefinition;
-		"to ensure it's still a RGMethod"
-			yourself.
+		        remove: matchingItem ifAbsent: [ ];
+		        yourself.
+	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [
+			self methods: list.
+			self selectIndex: (index min: self methods size).
+			^ self ].
+	list add: item asFullRingDefinition.
 	self methods: list.
 	self selectIndex: index.
+
 	edits ifFalse: [ ^ self ].
-	
 	textPresenter pendingText: text.
 	textPresenter hasEditingConflicts: true
 ]
