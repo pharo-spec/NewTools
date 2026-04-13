@@ -362,6 +362,12 @@ StMethodBrowser >> defaultLayout [
 	^ self perform: self class usingLayout
 ]
 
+{ #category : 'accessing' }
+StMethodBrowser >> filterPresenter [
+
+	^ filterPresenter
+]
+
 { #category : 'text selection' }
 StMethodBrowser >> findFirstOccurrenceOf: searchedString in: textToSearchIn [
 	"Return the first index of aString in textToSearchIn "

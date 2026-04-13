@@ -99,6 +99,24 @@ StMethodBrowserTest >> testExplicitBrowseSenders [
 		self assert: window presenter methods size equals: 1 ] ensure: [ window ifNotNil: [ window delete ] ]
 ]
 
+{ #category : 'tests' }
+StMethodBrowserTest >> testHandleMethodRemovedRemovesMatchingMethod [
+
+	| window browser method announcement initialSize |
+	[
+		window := StMethodBrowser browseImplementorsOf: #printOn:.
+		browser := window presenter.
+
+		method := browser methods anyOne.
+		initialSize := browser methods size.
+
+		announcement := MethodRemoved new method: method compiledMethod.
+
+		browser handleMethodRemoved: announcement.
+
+		self assert: browser methods size equals: initialSize - 1 ] ensure: [ window ifNotNil: [ window delete ] ]
+]
+
 { #category : 'tests - smoke' }
 StMethodBrowserTest >> testMethodBrowserImplementors [
 
@@ -135,4 +153,21 @@ StMethodBrowserTest >> testRefreshingBlockWithLiteralString [
 		browser := window presenter.
 		methodToAdd := (self class >> #dataMethodForTest) copy.
 		self assert: (browser refreshingBlock value: methodToAdd) ] ensure: [ window ifNotNil: [ window delete ] ]
+]
+
+{ #category : 'tests' }
+StMethodBrowserTest >> testWindowTitleWithFilterRatio [
+
+	| window browser total filtered |
+	[
+		window := StMethodBrowser browseSendersOf: #printOn:.
+		browser := window presenter.
+
+		total := browser methods size.
+
+		browser filterPresenter filterInputPresenter text: 'print'.
+		filtered := browser methodList numberOfElements.
+
+		filtered < total ifTrue: [ self assert: (browser windowTitle includesSubstring: '/') ] ] ensure: [
+		window ifNotNil: [ window delete ] ]
 ]
