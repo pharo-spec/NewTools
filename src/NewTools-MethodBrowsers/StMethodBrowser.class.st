@@ -406,23 +406,26 @@ StMethodBrowser >> handleClassRenamed: anAnnouncement [
 
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodAdded: anAnnouncement [
-	| item sel text boolean |
 
+	| item sel text boolean |
 	self isDisplayed ifFalse: [ ^ self ].
 	refreshingBlock ifNil: [ ^ self ].
-	
+
 	item := anAnnouncement method.
-	
+
 	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [ ^ self ].
-	((item methodClass isNotNil) and:[item methodClass isObsolete not]) ifFalse: [ ^ self ].
-	
+	(item methodClass isNotNil and: [ item methodClass isObsolete not ]) ifFalse: [ ^ self ].
 	boolean := textPresenter hasUnacceptedEdits.
 	boolean ifTrue: [ text := textPresenter pendingText ].
-	
+
 	sel := self selectedMethod.
-	self methods: (self methods add: item asFullRingDefinition; yourself).
+	self methods: (self methods
+			 add: item asFullRingDefinition;
+			 yourself).
+
+	self defer: [ self selectIndex: (self methods indexOf: sel) ].
 	self selectedMessage: sel.
-	
+
 	boolean ifTrue: [ textPresenter pendingText: text ]
 ]
 
@@ -468,19 +471,26 @@ StMethodBrowser >> handleMethodModified: anAnnouncement [
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodRemoved: anAnnouncement [
 
-	| item selection removeItem |
+	| item selection matchingItem selectedMethod |
 	self isDisplayed ifFalse: [ ^ self ].
 	refreshingBlock ifNil: [ ^ self ].
 	self okToChange ifFalse: [ ^ self ]. "Item is a compiled methed, where the list is populated with RGMethod"
 	item := anAnnouncement method.
 	(item methodClass isNotNil and: [ item methodClass isObsolete not ]) ifFalse: [ ^ self ].
 	selection := methodList selectedIndex.
-	removeItem := self selectedMethod.
+	matchingItem := self methods
+		                detect: [ :m | m methodClass = item methodClass and: [ m selector = item selector ] ]
+		                ifNone: [ ^ self ].
 
+	selection := methodList selectedIndex.
+	selectedMethod := self selectedMethod.
 	self methods: (self methods
-			 remove: item ifAbsent: [ nil ];
+			 remove: matchingItem ifAbsent: [ ];
 			 yourself).
-	self defer: [ self selectIndex: (selection min: self methods size) ]
+	self defer: [
+			selectedMethod = matchingItem
+				ifTrue: [ self selectIndex: (selection min: self methods size) ]
+				ifFalse: [ self selectIndex: (self methods indexOf: selectedMethod) ] ]
 ]
 
 { #category : 'text selection' }
@@ -604,10 +614,12 @@ StMethodBrowser >> methods [
 { #category : 'api' }
 StMethodBrowser >> methods: aCollection [
 
+	| currentFilter |
+	currentFilter := filterPresenter filterText.
 	filterPresenter unfilteredItems: aCollection asOrderedCollection.
-	filterPresenter resetFilter.
 	methodList methods: aCollection.
-	self toolbarPresenter updatePresenter
+	self toolbarPresenter updatePresenter.
+	currentFilter isEmpty ifFalse: [ filterPresenter applyFilter: currentFilter ]
 ]
 
 { #category : 'api - instance side' }
@@ -865,7 +877,7 @@ StMethodBrowser >> topologicSort: aBoolean [
 
 { #category : 'api' }
 StMethodBrowser >> updateTitle [
-	self withWindowDo: [ :window | window title: self title ]
+	self withWindowDo: [ :window | window title: self windowTitle ]
 ]
 
 { #category : 'layout' }
@@ -906,8 +918,12 @@ StMethodBrowser >> windowIsClosing [
 { #category : 'private' }
 StMethodBrowser >> windowTitle [
 
-	| msg |
-	msg := methodList ifNil: [ '' ] ifNotNil: [ ' [' , methodList numberOfElements printString , ']' ].
-	^ (title ifNil: [ 'Message Browser' ]), msg 
-	
+	| msg total |
+	(filterPresenter isNil or: [ methodList isNil ]) ifTrue: [ ^ title ifNil: [ 'Message Browser' ] ].
+	total := filterPresenter unfilteredItems size.
+	msg := methodList ifNil: [ '' ] ifNotNil: [
+			       (filterPresenter filterText isEmpty or: [ methodList numberOfElements = total ])
+				       ifTrue: [ ' [' , total printString , ']' ]
+				       ifFalse: [ ' [' , methodList numberOfElements printString , '/' , total printString , ']' ] ].
+	^ (title ifNil: [ 'Message Browser' ]) , msg
 ]
