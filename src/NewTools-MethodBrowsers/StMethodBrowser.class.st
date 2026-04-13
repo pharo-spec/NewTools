@@ -454,11 +454,11 @@ StMethodBrowser >> handleMethodModified: anAnnouncement [
 		        yourself.
 	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [
 			self methods: list.
-			self selectIndex: (index min: self methods size).
+			self defer: [ self selectIndex: (index min: self methods size) ].
 			^ self ].
 	list add: item asFullRingDefinition.
 	self methods: list.
-	self selectIndex: index.
+	self defer: [ self selectIndex: index ].
 
 	edits ifFalse: [ ^ self ].
 	textPresenter pendingText: text.
@@ -467,23 +467,20 @@ StMethodBrowser >> handleMethodModified: anAnnouncement [
 
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodRemoved: anAnnouncement [
-	| item selection removeItem |
 
+	| item selection removeItem |
 	self isDisplayed ifFalse: [ ^ self ].
 	refreshingBlock ifNil: [ ^ self ].
-	self okToChange ifFalse: [ ^ self ].
-
-	"Item is a compiled methed, where the list is populated with RGMethod"
+	self okToChange ifFalse: [ ^ self ]. "Item is a compiled methed, where the list is populated with RGMethod"
 	item := anAnnouncement method.
-	(item methodClass isNotNil and: [ item methodClass isObsolete not ])
-		ifFalse: [ ^ self ].
+	(item methodClass isNotNil and: [ item methodClass isObsolete not ]) ifFalse: [ ^ self ].
 	selection := methodList selectedIndex.
 	removeItem := self selectedMethod.
 
 	self methods: (self methods
-		remove: item ifAbsent: [ nil ];
-		yourself).
-	self selectIndex: (selection min: self methods size)
+			 remove: item ifAbsent: [ nil ];
+			 yourself).
+	self defer: [ self selectIndex: (selection min: self methods size) ]
 ]
 
 { #category : 'text selection' }
