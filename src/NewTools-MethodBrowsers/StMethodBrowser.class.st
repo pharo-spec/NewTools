@@ -419,15 +419,17 @@ StMethodBrowser >> handleMethodAdded: anAnnouncement [
 
 	item := anAnnouncement method.
 
+
 	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [ ^ self ].
 	(item methodClass isNotNil and: [ item methodClass isObsolete not ]) ifFalse: [ ^ self ].
 	boolean := textPresenter hasUnacceptedEdits.
 	boolean ifTrue: [ text := textPresenter pendingText ].
 
 	sel := self selectedMethod.
-	self methods: (self methods
-			 add: item asFullRingDefinition;
-			 yourself).
+	(self methods includes: item) ifFalse: [
+			self methods: (self methods
+					 add: item asFullRingDefinition;
+					 yourself) ].
 
 	self defer: [ self selectIndex: (self methods indexOf: sel) ].
 	self selectedMessage: sel.

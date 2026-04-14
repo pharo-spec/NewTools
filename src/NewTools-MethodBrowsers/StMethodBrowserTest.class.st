@@ -100,6 +100,46 @@ StMethodBrowserTest >> testExplicitBrowseSenders [
 ]
 
 { #category : 'tests' }
+StMethodBrowserTest >> testHandleMethodAddedAddsMatchingSender [
+
+	| window browser initialSize newMethod |
+	[
+		window := StMethodBrowser browseSendersOf: #printOn:.
+		browser := window presenter.
+		initialSize := browser methods size.
+
+		self class compile: 'tmpSenderMethodForTest ^ self printOn: String new' classified: 'tests-protocol'.
+		newMethod := self class >> #tmpSenderMethodForTest.
+
+		browser handleMethodAdded: (MethodAdded method: newMethod).
+
+		self assert: browser methods size equals: initialSize + 1.
+		self assert: (browser methods includes: newMethod asFullRingDefinition) ] ensure: [
+			self class removeSelector: #tmpSenderMethodForTest.
+			window ifNotNil: [ window delete ] ]
+]
+
+{ #category : 'tests' }
+StMethodBrowserTest >> testHandleMethodModifiedRemovesSenderWhenNoLongerMatching [
+
+	| window browser method |
+	[
+		self class compile: 'methodForTest ^ Object new printOn: Transcript' classified: 'tests-protocol'.
+		method := self class >> #methodForTest.
+
+		window := StMethodBrowser browseSendersOf: #printOn:.
+		browser := window presenter.
+		self assert: (browser methods includes: method).
+		self class compile: 'methodForTest ^ Object new'.
+		browser handleMethodModified:
+			(MethodModified methodChangedFrom: method to: self class >> #methodForTest oldProtocol: method protocol).
+
+		self deny: (browser methods includes: method) ] ensure: [
+			self class removeSelector: #methodForTest.
+			window ifNotNil: [ window delete ] ]
+]
+
+{ #category : 'tests' }
 StMethodBrowserTest >> testHandleMethodRemovedRemovesMatchingMethod [
 
 	| window browser method announcement initialSize |
@@ -184,6 +224,7 @@ StMethodBrowserTest >> testWindowTitleWithFilterRatio [
 		browser filterPresenter filterInputPresenter text: 'print'.
 		filtered := browser methodList numberOfElements.
 
-		filtered < total ifTrue: [ self assert: (browser windowTitle includesSubstring: '/') ] ] ensure: [
+		self assert: filtered < total.
+		self assert: (browser windowTitle includesSubstring: filtered asString , '/' , total asString) ] ensure: [
 		window ifNotNil: [ window delete ] ]
 ]
