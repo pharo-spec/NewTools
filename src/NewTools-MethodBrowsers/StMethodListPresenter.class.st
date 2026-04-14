@@ -250,15 +250,26 @@ StMethodListPresenter >> initializePresenters [
 
 	listPresenter := self newEasyColumnView.
 	listPresenter
-		sortingBlock: [ :a :b | self sortClassesInCachedHierarchy: a b: b ];
-		addColumn: (SpStringTableColumn title: 'Location' evaluated: [ :item | self locationOf: item ]);
+		addColumn: (SpColumnViewColumn new
+				 title: 'Location';
+				 sortFunction: [ :item | self locationOf: item ] ascending;
+				 bind: [ :p :item | p label: (self locationOf: item) ];
+				 yourself);
 		addColumn: (StTestIconColumnView new
-				 executeBlock: [ :method | self executeTestFor: method ]; 
+				 executeBlock: [ :method | self executeTestFor: method ];
 				 cellPresenterClass: StTestIconCellPresenter;
 				 width: 20;
 				 yourself);
-		addColumn: (SpStringTableColumn title: 'Selector' evaluated: [ :item | self selectorOf: item ]);
-		addColumn: (SpStringTableColumn title: 'Package' evaluated: [ :item | self packageNameOf: item ]);
+		addColumn: (SpColumnViewColumn new
+				 title: 'Selector';
+				 sortFunction: #selector ascending;
+				 bind: [ :p :item | p label: (self selectorOf: item) ];
+				 yourself);
+		addColumn: (SpColumnViewColumn new
+				 title: 'Package';
+				 sortFunction: [ :item | self packageNameOf: item ] ascending;
+				 bind: [ :p :item | p label: (self packageNameOf: item) ];
+				 yourself);
 		beResizable.
 
 	listPresenter outputActivationPort transmitDo: [ :aMethod | self doBrowseMethod ].
