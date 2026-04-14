@@ -252,7 +252,7 @@ StMethodListPresenter >> initializePresenters [
 	listPresenter
 		addColumn: (SpColumnViewColumn new
 				 title: 'Location';
-				 sortFunction: [ :a :b | self sortClassesInCachedHierarchy: a b: b  ];
+				 sortFunction: [ :item | self locationOf: item ] ascending;
 				 bind: [ :p :item | p label: (self locationOf: item) ];
 				 yourself);
 		addColumn: (StTestIconColumnView new
@@ -262,12 +262,12 @@ StMethodListPresenter >> initializePresenters [
 				 yourself);
 		addColumn: (SpColumnViewColumn new
 				 title: 'Selector';
-				 sortFunction: [ :a :b | (self selectorOf: a) <= (self selectorOf: b) ];
+				 sortFunction: #selector ascending;
 				 bind: [ :p :item | p label: (self selectorOf: item) ];
 				 yourself);
 		addColumn: (SpColumnViewColumn new
 				 title: 'Package';
-				 sortFunction: [ :a :b | (self packageNameOf: a) <= (self packageNameOf: b) ];
+				 sortFunction: [ :item | self packageNameOf: item ] ascending;
 				 bind: [ :p :item | p label: (self packageNameOf: item) ];
 				 yourself);
 		beResizable.
