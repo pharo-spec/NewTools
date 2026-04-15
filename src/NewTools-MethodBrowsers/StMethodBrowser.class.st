@@ -559,6 +559,10 @@ StMethodBrowser >> initializePresenters [
 StMethodBrowser >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
+	aWindowPresenter whenWillCloseDo: [ :ann |
+			textPresenter hasUnacceptedEdits ifTrue: [
+					(self application confirm: 'Changes have not been saved.
+Is it OK to discard changes?') ifFalse: [ ann denyClose ] ] ].
 	aWindowPresenter whenClosedDo: [ TestCase historyAnnouncer unsubscribe: methodList ]
 ]
 
