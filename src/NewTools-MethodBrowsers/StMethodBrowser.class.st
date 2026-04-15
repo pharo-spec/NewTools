@@ -198,7 +198,7 @@ StMethodBrowser class >> browseWritersOfVariables: variables [
 StMethodBrowser class >> implementorsOf: aSymbol [
 	"Do not use aSymbol implementors because it is a disguised global"
 
-	^ (SystemNavigation new allImplementorsOf: aSymbol) reject: [ :m | m isFromTrait ]
+	^ (SystemNavigation default allImplementorsOf: aSymbol) reject: [ :m | m isFromTrait ]
 ]
 
 { #category : 'instance creation' }
@@ -210,41 +210,24 @@ StMethodBrowser class >> methods: methods [
 		  yourself
 ]
 
-{ #category : 'opening - old' }
-StMethodBrowser class >> openMessageList: messageList name: aString autoSelect: aSelector refreshingBlockSelector: aRefreshingBlockSelector [
-	
-	| browser |
-	browser := self new
-		methods: messageList;
-		title: aString;
-		autoSelect: aSelector;
-		yourself.
-		
-	aRefreshingBlockSelector ifNotNil:[(browser perform: aRefreshingBlockSelector with: aSelector)].
-	^browser open
-	
-				
-
-]
-
 { #category : 'private' }
 StMethodBrowser class >> referencesOf: aSymbol [
 	"Do not use aSymbol implementors because it is a disguised global"
 	
-	^ SystemNavigation new allReferencesTo: aSymbol 
+	^ SystemNavigation default allReferencesTo: aSymbol 
 ]
 
 { #category : 'private' }
 StMethodBrowser class >> referencesToClass: aClass [
 	
-	^ SystemNavigation new allReferencesTo: aClass binding
+	^ SystemNavigation default allReferencesTo: aClass binding
 ]
 
 { #category : 'private' }
 StMethodBrowser class >> referencesToLiteral: aLiteral [
 	"Do not use aSymbol implementors because it is a disguised global"
 
-	^ SystemNavigation new allReferencesTo: aLiteral
+	^ SystemNavigation default allReferencesTo: aLiteral
 ]
 
 { #category : 'private' }
@@ -316,12 +299,6 @@ StMethodBrowser >> addHighlightedSegments [
 			textPresenter addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
 					 interval: (highlightInterval first to: highlightInterval last + 1);
 					 yourself) ]
-]
-
-{ #category : 'to remove' }
-StMethodBrowser >> autoSelect: aString [
-	"this is just to absorb system navigation for now"
-	"once we remove the old message browser we should remove this empty method."
 ]
 
 { #category : 'announcements' }
@@ -559,11 +536,9 @@ StMethodBrowser >> initializePresenters [
 StMethodBrowser >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
-	aWindowPresenter whenWillCloseDo: [ :ann |
-			textPresenter hasUnacceptedEdits ifTrue: [
-					(self application confirm: 'Changes have not been saved.
-Is it OK to discard changes?') ifFalse: [ ann denyClose ] ] ].
-	aWindowPresenter whenClosedDo: [ TestCase historyAnnouncer unsubscribe: methodList ]
+	aWindowPresenter whenClosedDo: [
+			TestCase historyAnnouncer unsubscribe: methodList.
+			self class codeChangeAnnouncer unsubscribe: self ]
 ]
 
 { #category : 'private' }
@@ -919,12 +894,6 @@ StMethodBrowser >> windowIcon [
 
 	^ self iconNamed: self class taskbarIconName
 		
-]
-
-{ #category : 'private' }
-StMethodBrowser >> windowIsClosing [
-
-	self class codeChangeAnnouncer unsubscribe: self
 ]
 
 { #category : 'private' }
