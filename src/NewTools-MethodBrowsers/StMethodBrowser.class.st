@@ -18,9 +18,11 @@ Class {
 		'refreshingBlock',
 		'textPresenter',
 		'highlight',
-		'filterPresenter'
+		'filterPresenter',
+		'reuseWindowCheckbox'
 	],
 	#classVars : [
+		'NavigateInPlace',
 		'UsingLayout'
 	],
 	#category : 'NewTools-MethodBrowsers-Senders',
@@ -121,7 +123,7 @@ StMethodBrowser class >> browseImplementorsOfAll: aCollectionOfSymbols [
 
 	| methods |
 	methods := aCollectionOfSymbols flatCollect: [ :sym | self implementorsOf: sym ].
-	^ self browse: methods asArray
+	^ self browse: methods asArray title: 'Implementors of ' , (', ' join: aCollectionOfSymbols)
 ]
 
 { #category : 'opening' }
@@ -209,6 +211,31 @@ StMethodBrowser class >> methods: methods [
 		  methods: methods;
 		  yourself
 ]
+
+{ #category : 'private' }
+StMethodBrowser class >> navigateInPlace [
+
+	^ NavigateInPlace ifNil: [ NavigateInPlace := false ]  
+]
+
+{ #category : 'private' }
+StMethodBrowser class >> navigateInPlace: aBoolean [
+
+	NavigateInPlace := aBoolean 
+]
+
+{ #category : 'private' }
+StMethodBrowser class >> navigateInPlaceSettingsOn: aBuilder [
+
+	<systemsettings>
+	(aBuilder setting: #navigateInPlace)
+		label: 'Navigate in place in Method Browser';
+		description:
+			'When browsing senders/implementors/references from a Method Browser, reuse the current window instead of opening a new one';
+		target: self;
+		parent: #tools
+]
+
 
 { #category : 'private' }
 StMethodBrowser class >> referencesOf: aSymbol [
@@ -314,7 +341,7 @@ StMethodBrowser >> connectPresenters [
 	methodList
 		whenSelectionChangedDo: [ :selection | self selectItem: selection selectedItem ];
 		whenModelChangedDo: [ self updateTitle ].
-
+	methodList navigationBlock: [ :type :val | self navigateTo: type value: val ].
 	textPresenter
 		whenSubmitDo: [ :text | self accept: text notifying: nil ];
 		whenResetDo: [ self selectItem: methodList selectedMethod ].
@@ -495,6 +522,7 @@ StMethodBrowser >> horizontalLayout [
 				   add: (SpBoxLayout newTopToBottom
 						    add: methodList;
 						    add: filterPresenter filterInputPresenter expand: false;
+						    add: reuseWindowCheckbox expand: false;
 						    yourself);
 				   add: (SpBoxLayout newTopToBottom
 						    add: textPresenter;
@@ -528,7 +556,11 @@ StMethodBrowser >> initializePresenters [
 	filterPresenter := self instantiate: SpFilteringListPresenter.
 	filterPresenter matchSubstring.
 	filterPresenter display: [ :m | (self methodClassNameForItem: m) , ' >> ' , m selector ].
-
+	reuseWindowCheckbox := self newCheckBox
+		                       label: 'Reuse window';
+		                       help: 'If checked, new searches will replace current results.';
+		                       state: self class navigateInPlace;
+		                       whenChangedDo: [ :state | self class navigateInPlace: state ].
 	self initializeDropList
 ]
 
@@ -660,6 +692,28 @@ StMethodBrowser >> methods: compiledMethods asSendersOfAll: aCollectionOfSymbols
 		highlight: aCollectionOfSymbols;
 		methods: compiledMethods;
 		title: 'Senders of ' , (', ' join: aCollectionOfSymbols)
+]
+
+{ #category : 'private' }
+StMethodBrowser >> navigateInPlace [
+
+	^ self class navigateInPlace
+]
+
+{ #category : 'private' }
+StMethodBrowser >> navigateTo: aType value: anObject [
+
+	self navigateInPlace ifFalse: [
+			aType == #implementors ifTrue: [ ^ self class browseImplementorsOf: anObject ].
+			aType == #senders ifTrue: [ ^ self class browseSendersOf: anObject ].
+			aType == #references ifTrue: [ ^ self class browseReferencesOf: anObject ].
+			^ self ].
+
+	aType == #implementors ifTrue: [ self methods: (self class implementorsOf: anObject) asImplementorsOf: anObject ].
+
+	aType == #senders ifTrue: [ self methods: (self class sendersOf: anObject) asSendersOf: anObject ].
+
+	aType == #references ifTrue: [ self methods: (self class referencesOf: anObject) asReferenceTo: anObject ]
 ]
 
 { #category : 'initialization' }
@@ -876,6 +930,7 @@ StMethodBrowser >> verticalLayout [
 				   add: (SpBoxLayout newTopToBottom
 						    add: methodList;
 						    add: filterPresenter filterInputPresenter expand: false;
+						    add: reuseWindowCheckbox expand: false;
 						    yourself);
 				   add: (SpBoxLayout newTopToBottom
 						    add: textPresenter;
