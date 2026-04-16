@@ -212,6 +212,19 @@ StMethodBrowserTest >> testRefreshingBlockWithLiteralString [
 ]
 
 { #category : 'tests' }
+StMethodBrowserTest >> testReuseWindowCheckboxInitialState [
+
+	| presenter |
+	[
+		StMethodBrowser navigateInPlace: true.
+		presenter := StMethodBrowser new.
+		self assert: (presenter instVarNamed: #reuseWindowCheckbox) state.
+		StMethodBrowser navigateInPlace: false.
+		presenter := StMethodBrowser new.
+		self deny: (presenter instVarNamed: #reuseWindowCheckbox) state ] ensure: [ presenter ifNotNil: [ presenter delete ] ]
+]
+
+{ #category : 'tests' }
 StMethodBrowserTest >> testWindowTitleWithFilterRatio [
 
 	| window browser total filtered |
