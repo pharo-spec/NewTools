@@ -874,6 +874,39 @@ StDebuggerTest >> testPrintReceiverClassInContext [
 	self assert: stream contents equals: 'Set'.
 ]
 
+{ #category : 'tests - context inspector' }
+StDebuggerTest >> testPrintingOutsideVariableInCleanBlockShouldGiveAnError [
+
+	| mySession searchedMethod ctx myProcess codePresenter varStart varSize errorDetected |
+	
+	searchedMethod := ((StClassUsingCleanBlockForTest >> #boom) literalAt: 2) method.
+	errorDetected := false.
+
+	ctx := [ StClassUsingCleanBlockForTest new boom ] asContext.
+	[ ctx method = searchedMethod ] whileFalse: [ctx := ctx step ].
+
+	myProcess := Process forContext: ctx priority: 40.
+	
+	mySession := DebugSession named: 'MySession' on: myProcess startedAt: ctx.
+	mySession exception: (OupsNullException fromSignallerContext: ctx).
+	
+	debugger := self debuggerOn: mySession.
+	codePresenter := debugger code.
+	
+	varStart := codePresenter text indexOfSubCollection: 'myVar'.
+	varSize := 'myVar' size.
+	codePresenter selectionInterval: (varStart to: varStart + varSize).
+	
+	codePresenter interactionModel beNonInteractive.
+	codePresenter announcer when: SpCodeEvaluationFailedAnnouncement do: [ errorDetected:= true ] for: nil.
+	
+	"We simulate the inspect of a variable that is outside the block. Check the method StClassUsingCleanBlockForTest >> #boom "
+	(SpCodeInspectItCommand forSpecContext: codePresenter) execute.
+	
+	self assert: errorDetected
+
+]
+
 { #category : 'tests - receiver inspector' }
 StDebuggerTest >> testReceiverChangedAfterStepIn [ 
 
