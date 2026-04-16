@@ -1,5 +1,7 @@
 "
-I am a Spec browser for an EpLog.
+I am a Spec browser for an EpLog. 
+
+I am used to recovered code not saved after an image crash. 
 
 For example, open with:
 
@@ -576,6 +578,14 @@ EpLogBrowserPresenter >> initializeSearchPresenters [
 		                   placeholder: 'Filter...';
 		                   whenTextChangedDo: [ :text | self searchList: text ];
 		                   yourself
+]
+
+{ #category : 'initialization' }
+EpLogBrowserPresenter >> initializeWindow: aWindowPresenter [
+
+	super initializeWindow: aWindowPresenter.
+
+	aWindowPresenter title: 'Epicea - Recovered changes'
 ]
 
 { #category : 'menu - operations' }
