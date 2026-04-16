@@ -19,6 +19,12 @@ StSettingBooleanPresenterItem >> initializePresenters [
 
 ]
 
+{ #category : 'accessing' }
+StSettingBooleanPresenterItem >> settingStyle [
+
+	^ 'itemBoolean'
+]
+
 { #category : 'initialization' }
 StSettingBooleanPresenterItem >> updateSetting: aSettingDeclaration value: aBoolean [
 	"Private - Callback for updating aSettingDeclaration with the new receiver's selected item"

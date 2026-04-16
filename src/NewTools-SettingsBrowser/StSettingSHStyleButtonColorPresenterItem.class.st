@@ -9,7 +9,13 @@ Class {
 { #category : 'initialization' }
 StSettingSHStyleButtonColorPresenterItem >> buttonColor: aColor [
 
-	self setterPresenter color: aColor.
+	self setterPresenter icon: aColor asSettingColorForm
+]
+
+{ #category : 'accessing' }
+StSettingSHStyleButtonColorPresenterItem >> settingStyle [
+
+	^ 'itemSHButtonColor'
 ]
 
 { #category : 'initialization' }

@@ -23,7 +23,8 @@ Class {
 		'listPresenter',
 		'scopes',
 		'allMessages',
-		'visitedScopes'
+		'visitedScopes',
+		'navigationBlock'
 	],
 	#category : 'NewTools-MethodBrowsers-Base',
 	#package : 'NewTools-MethodBrowsers',
@@ -163,8 +164,12 @@ StMethodListPresenter >> defaultScopes [
 
 { #category : 'private - actions' }
 StMethodListPresenter >> doBrowseImplementors [
-		
-	StMethodBrowser browseImplementorsOf: self selectedMethod selector
+
+	| selector |
+	selector := self selectedMethod selector.
+	navigationBlock
+		ifNotNil: [ navigationBlock value: #implementors value: selector ]
+		ifNil: [ StMethodBrowser browseImplementorsOf: selector ]
 ]
 
 { #category : 'private - actions' }
@@ -176,13 +181,21 @@ StMethodListPresenter >> doBrowseMethod [
 { #category : 'private - actions' }
 StMethodListPresenter >> doBrowseSenders [
 
-	StMethodBrowser browseSendersOf: self selectedMethod selector
+	| selector |
+	selector := self selectedMethod selector.
+	navigationBlock
+		ifNotNil: [ navigationBlock value: #senders value: selector ]
+		ifNil: [ StMethodBrowser browseSendersOf: selector ]
 ]
 
 { #category : 'private - actions' }
 StMethodListPresenter >> doBrowseUsers [
-		
-	self systemNavigation browseAllUsersOfClassOrTrait: self selectedMethod methodClass
+
+	| class |
+	class := self selectedMethod methodClass.
+	navigationBlock
+		ifNotNil: [ navigationBlock value: #references value: class ]
+		ifNil: [ self systemNavigation browseAllUsersOfClassOrTrait: class ]
 ]
 
 { #category : 'private - actions' }
@@ -206,29 +219,70 @@ StMethodListPresenter >> doRemoveMethod [
 			inClass: aMethod methodClass ]
 ]
 
+{ #category : 'execution' }
+StMethodListPresenter >> executeTestFor: aMethod [
+
+	| selector testClasses suite result |
+	aMethod ifNil: [ ^ self ].
+
+	selector := aMethod selector.
+
+	testClasses := aMethod methodClass isAbstract
+		               ifTrue: [ aMethod methodClass allSubclasses ]
+		               ifFalse: [ { aMethod methodClass } ].
+
+	suite := TestSuite named: selector.
+
+	testClasses do: [ :each | suite addTest: (each selector: selector) ].
+
+	result := suite run.
+	result updateResultsInHistory.
+
+	self application inform: result printString.
+
+	listPresenter updateItemsKeepingSelection: listPresenter items
+]
+
+{ #category : 'initialization' }
+StMethodListPresenter >> handleTestResultChanged: anAnnouncement [
+
+	self defer: [ listPresenter updateItemsKeepingSelection: listPresenter items ]
+]
+
 { #category : 'initialization' }
 StMethodListPresenter >> initialize [
 
 	super initialize.
 	topologySort := true.
 	allMessages := Set empty.
+	self registerToTestAnnouncements
 ]
 
 { #category : 'initialization' }
 StMethodListPresenter >> initializePresenters [
 
-	listPresenter := self newTable.
+	listPresenter := self newEasyColumnView.
 	listPresenter
-		sortingBlock: [ :a :b | self sortClassesInCachedHierarchy: a b: b ];
-		addColumn: (SpStringTableColumn 
-			title: 'Location' 
-			evaluated: [ :item | self locationOf: item ]);
-		addColumn: (SpStringTableColumn 
-			title: 'Selector' 
-			evaluated: [ :item | self selectorOf: item ]);
-		addColumn: (SpStringTableColumn 
-			title: 'Package' 
-			evaluated: [ :item | self packageNameOf: item ]);
+		addColumn: (SpColumnViewColumn new
+				 title: 'Location';
+				 sortFunction: [ :item | self locationOf: item ] ascending;
+				 bind: [ :p :item | p label: (self locationOf: item) ];
+				 yourself);
+		addColumn: (StTestIconColumnView new
+				 executeBlock: [ :method | self executeTestFor: method ];
+				 cellPresenterClass: StTestIconCellPresenter;
+				 width: 20;
+				 yourself);
+		addColumn: (SpColumnViewColumn new
+				 title: 'Selector';
+				 sortFunction: #selector ascending;
+				 bind: [ :p :item | p label: (self selectorOf: item) ];
+				 yourself);
+		addColumn: (SpColumnViewColumn new
+				 title: 'Package';
+				 sortFunction: [ :item | self packageNameOf: item ] ascending;
+				 bind: [ :p :item | p label: (self packageNameOf: item) ];
+				 yourself);
 		beResizable.
 
 	listPresenter outputActivationPort transmitDo: [ :aMethod | self doBrowseMethod ].
@@ -261,26 +315,27 @@ StMethodListPresenter >> methodClassNameForItem: anItem [
 
 { #category : 'private' }
 StMethodListPresenter >> methodListActions [
-	
+
 	^ CmCommandGroup forSpec
-		beRoot;
-		register: ((CmCommandGroup forSpecNamed: 'View')
-			beDisplayedAsGroup;
-			register: (StMethodBrowseFullCommand forSpecContext: self);
-			register: (StInspectMethodCommand forSpecContext: self);
-			yourself);
-		register: ((CmCommandGroup forSpecNamed: 'Navigation')
-			beDisplayedAsGroup;
-			register: (StMessageSendersCommand forSpecContext: self);
-			register: (StImplementorsCommand forSpecContext: self);
-			register: (StClassReferencesCommand forSpecContext: self);
-			register: (StMethodVersionsCommand forSpecContext: self);
-			yourself);
-		register: ((CmCommandGroup forSpecNamed: 'CRITICAL')
-			beDisplayedAsGroup;
-			register: (StRemoveMethodCommand forSpecContext: self);
-			yourself);
-		yourself
+		  beRoot;
+		  register: ((CmCommandGroup forSpecNamed: 'View')
+				   beDisplayedAsGroup;
+				   register: (StMethodBrowseFullCommand forSpecContext: self);
+				   register: (StInspectMethodCommand forSpecContext: self);
+				   register: (StRunMethodTestCommand forSpecContext: self);
+				   yourself);
+		  register: ((CmCommandGroup forSpecNamed: 'Navigation')
+				   beDisplayedAsGroup;
+				   register: (StMessageSendersCommand forSpecContext: self);
+				   register: (StImplementorsCommand forSpecContext: self);
+				   register: (StClassReferencesCommand forSpecContext: self);
+				   register: (StMethodVersionsCommand forSpecContext: self);
+				   yourself);
+		  register: ((CmCommandGroup forSpecNamed: 'CRITICAL')
+				   beDisplayedAsGroup;
+				   register: (StRemoveMethodCommand forSpecContext: self);
+				   yourself);
+		  yourself
 ]
 
 { #category : 'accessing' }
@@ -295,8 +350,14 @@ StMethodListPresenter >> methods: aCollection [
 	self cacheHierarchyForClasses: aCollection.
 	listPresenter items: cachedHierarchy keys asOrderedCollection.
 	allMessages := listPresenter items.
-	listPresenter listSize > 0 ifTrue: [ 
-		listPresenter selectIndex: 1 ]
+
+	listPresenter listSize > 0 ifTrue: [ self defer: [ self selectIndex: 1 ] ]
+]
+
+{ #category : 'accessing' }
+StMethodListPresenter >> navigationBlock: aBlock [
+
+	navigationBlock := aBlock
 ]
 
 { #category : 'accessing' }
@@ -364,6 +425,12 @@ StMethodListPresenter >> packageOf: aCompiledMethod [
 StMethodListPresenter >> protocolNameForItem: anItem [
 
 	^ anItem protocolName ifNil: [ '' ]
+]
+
+{ #category : 'initialization' }
+StMethodListPresenter >> registerToTestAnnouncements [
+
+	TestCase historyAnnouncer weak when: TestSuiteEnded send: #handleTestResultChanged: to: self
 ]
 
 { #category : 'private - scopes' }

@@ -16,7 +16,7 @@ StSettingDetailPresenter >> asPath: aPath [
 	
 	aPath ifEmpty: [ ^ '' ].
 	
-	^ ('.' join: (aPath collect: #asString)), ':'
+	^ ('.' join: (aPath collect: #asString))
 ]
 
 { #category : 'layout' }
@@ -75,7 +75,7 @@ StSettingDetailPresenter >> newSettingPresenter: aNode path: aPath children: chi
 
 { #category : 'initialization' }
 StSettingDetailPresenter >> newSettingSectionPresenter: aNode path: aPath children: aCollection [
-	| newSettingPresenter |
+	| newSettingPresenter headerPresenter |
 
 	newSettingPresenter := self newPresenter 
 		addStyle: 'settingPanel';
@@ -86,14 +86,21 @@ StSettingDetailPresenter >> newSettingSectionPresenter: aNode path: aPath childr
 		yourself.
 		
 	"Add a header"
+	headerPresenter := aNode asPresenterOn: self.
+	"(headerPresenter isKindOf: StSettingPresenterItem) 
+		ifTrue: [ headerPresenter addStyle: headerPresenter headerStyle ]."
 	newSettingPresenter layout add: (self newPresenter
 		addStyle: 'settingHeader';
 		addStyle: ('settingHeaderLevel', aPath size asString);
 		layout: (SpBoxLayout newHorizontal 
 			borderWidth: 3;
 			spacing: 3;
-			add: (self asPath: aPath) expand: false;
-			add: (aNode asPresenterOn: self);
+			add: headerPresenter;
+			"add: (self newLabel 
+					addStyle: 'settingHeaderPath';
+					label: (self asPath: aPath);
+					yourself) 
+				expand: false;"
 			yourself);
 		yourself).
 	
@@ -102,15 +109,33 @@ StSettingDetailPresenter >> newSettingSectionPresenter: aNode path: aPath childr
 		(aCollection sorted: #order ascending, #name ascending) withIndexDo: [ :eachNode :index |
 			| presenter |
 			presenter := eachNode asPresenterOn: self.
+			presenter addStyle: ('level', aPath size asString).
 			newSettingPresenter layout 
 				add: (SpBoxLayout newLeftToRight
 					borderWidth: 3;
 					spacing: 3;
-					add:  presenter;
+					add: presenter;
 					yourself)
 				expand: false ] ].
 	
-	^ newSettingPresenter
+	^ aPath 
+		ifNotEmpty: [
+			self newPresenter
+				layout: (SpBoxLayout newHorizontal
+					"this is a hack, but it works :P"
+					add: (self newLabel
+						addStyle: 'settingsLevel', aPath size asString; 
+						yourself)
+						expand: false;
+					add: (self newPresenter 
+						addStyle: 'settingsCard', aPath size asString;
+						layout: (SpBoxLayout newVertical
+							add: newSettingPresenter;
+							yourself);
+						yourself);
+					yourself)	 ] 
+		ifEmpty: [ 
+			newSettingPresenter ]
 ]
 
 { #category : 'initialization' }

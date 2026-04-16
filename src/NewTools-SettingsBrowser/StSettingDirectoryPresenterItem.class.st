@@ -31,6 +31,12 @@ StSettingDirectoryPresenterItem >> labeledPresenterClass [
 ]
 
 { #category : 'accessing' }
+StSettingDirectoryPresenterItem >> settingStyle [
+
+	^ 'itemDirectory'
+]
+
+{ #category : 'accessing' }
 StSettingDirectoryPresenterItem >> value: aFileReference [ 
 	"Set the receiver's value to aString"
 
