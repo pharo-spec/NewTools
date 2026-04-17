@@ -19,7 +19,8 @@ EpHasImpactFilterTest class >> shouldLogWithEpicea [
 { #category : 'running' }
 EpHasImpactFilterTest >> setUp [
 	super setUp.
-	classFactory := ClassFactoryForTestCase new.
+	"Epicea works, sadly, with the global environment only"
+	classFactory := ClassFactoryForTestCase environment: self class environment.
 	impactFilter := EpImpactCodeChangeFilter new
 		environment: self class environment;
 		yourself
