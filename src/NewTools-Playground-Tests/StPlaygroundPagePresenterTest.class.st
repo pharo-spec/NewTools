@@ -11,7 +11,7 @@ Class {
 { #category : 'private' }
 StPlaygroundPagePresenterTest >> classFactory [
 
-	^ classFactory ifNil: [ classFactory := ClassFactoryForTestCase new ]
+	^ classFactory ifNil: [ classFactory := ClassFactoryForTestCase environment: SystemEnvironment new ]
 ]
 
 { #category : 'accessing' }
