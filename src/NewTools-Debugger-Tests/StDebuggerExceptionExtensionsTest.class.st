@@ -17,8 +17,8 @@ StDebuggerExceptionExtensionsTest >> testContextForMessageNotUnderstoodImplement
 	dummySession dummyContext: exception signalerContext.
 	methodCreator := StDebuggerMethodImplementor forSession: dummySession.
 	self
-		assert: (exception contextForMethodImplementation: methodCreator)
-		identicalTo: exception signalerContext
+		assert: (exception contextForMethodImplementation: methodCreator) method
+		identicalTo: (1 class lookupSelector: #doesNotUnderstand:) 
 ]
 
 { #category : 'testing' }
