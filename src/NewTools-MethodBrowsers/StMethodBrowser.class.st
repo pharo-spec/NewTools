@@ -15,9 +15,9 @@ Class {
 	#superclass : 'StAbstractMethodCentricBrowserPresenter',
 	#instVars : [
 		'title',
-		'refreshingBlock',
 		'textPresenter',
-		'highlight'
+		'highlight',
+		'refreshingBlock'
 	],
 	#classVars : [
 		'UsingLayout'
@@ -339,7 +339,7 @@ StMethodBrowser >> handleClassRenamed: anAnnouncement [
 
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodAdded: anAnnouncement [
-	| item sel text boolean |
+	| item selectedMethod editedText |
 
 	self isDisplayed ifFalse: [ ^ self ].
 	refreshingBlock ifNil: [ ^ self ].
@@ -349,48 +349,52 @@ StMethodBrowser >> handleMethodAdded: anAnnouncement [
 	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [ ^ self ].
 	((item methodClass isNotNil) and:[item methodClass isObsolete not]) ifFalse: [ ^ self ].
 	
-	boolean := textPresenter hasUnacceptedEdits.
-	boolean ifTrue: [ text := textPresenter pendingText ].
+	editedText := nil.
+	textPresenter isDirty ifTrue: [ 
+		editedText := textPresenter text ]. 
 	
-	sel := self selectedMethod.
-	self methods: (self methods add: item asFullRingDefinition; yourself).
-	self selectedMessage: sel.
+	selectedMethod := self selectedMethod. 
+	self selectedMessage: selectedMethod.
 	
-	boolean ifTrue: [ textPresenter pendingText: text ]
+	editedText ifNotNil: [
+		textPresenter text: editedText.
+		textPresenter markDirty ]
 ]
 
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodModified: anAnnouncement [
-	| item oldItem sel index text list edits |
+	| item oldItem selectedMethod index text list edits editedText |
 	
 	self isDisplayed ifFalse: [ ^ self ].
 	
 	refreshingBlock ifNil: [ ^ self ].
 	item := anAnnouncement newMethod.
 	oldItem := anAnnouncement oldMethod.
-	sel := self selectedMethod.
-	sel ifNil: [ ^ self ].
-	(sel methodClass = oldItem methodClass
-		and: [ sel selector = oldItem selector ])
+	selectedMethod := self selectedMethod.
+	selectedMethod ifNil: [ ^ self ].
+	(selectedMethod methodClass = oldItem methodClass
+		and: [ selectedMethod selector = oldItem selector ])
 		ifFalse: [ ^ self ].
+	
 	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement)
 		ifFalse: [ ^ self ].
 	
-	edits := textPresenter hasUnacceptedEdits.
-	edits ifTrue: [ 
-		text := textPresenter pendingText ].
+	editedText := nil.
+	textPresenter isDirty 
+		ifTrue: [ editedText := textPresenter text ].
+	
 	index := methodList selectedIndex.
 	list := self methods
-		remove: sel ifAbsent: [  ];
+		remove: selectedMethod ifAbsent: [  ];
 		add: item asFullRingDefinition;
 		"to ensure it's still a RGMethod"
-			yourself.
+		yourself.
 	self methods: list.
 	self selectIndex: index.
-	edits ifFalse: [ ^ self ].
 	
-	textPresenter pendingText: text.
-	textPresenter hasEditingConflicts: true
+	editedText ifNotNil: [
+		textPresenter text: editedText.
+		textPresenter markConflict ]
 ]
 
 { #category : 'announcements' }
@@ -456,7 +460,7 @@ StMethodBrowser >> initializePresenters [
 
 	super initializePresenters.
 
-	textPresenter := self newCode.
+	textPresenter := self instantiate: SpCodeEditorPresenter.
 	refreshingBlock := [ :item | true ].
 
 	self initializeDropList
@@ -471,7 +475,7 @@ StMethodBrowser >> installIconStylerFor: anItem [
 		ifFalse: [ ^ self ].
 	
 	IconStyler withStaticStylers 
-		styleText: textPresenter 
+		styleText: textPresenter codePresenter
 		withAst: anItem ast
 ]
 
