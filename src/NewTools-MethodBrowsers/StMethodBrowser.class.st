@@ -460,7 +460,7 @@ StMethodBrowser >> initializePresenters [
 
 	super initializePresenters.
 
-	textPresenter := self instantiate: SpCodeEditorPresenter.
+	textPresenter := self newCodeEditor.
 	refreshingBlock := [ :item | true ].
 
 	self initializeDropList
