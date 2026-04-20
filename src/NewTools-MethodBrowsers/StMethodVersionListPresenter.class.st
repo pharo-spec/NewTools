@@ -37,7 +37,7 @@ StMethodVersionListPresenter >> initializePresenters [
 	
 	listPresenter addColumn: (SpStringTableColumn 
 		title: 'Timestamp' 
-		evaluated: [ :item | self timeStampOf: item ])
+		evaluated: [ :item | self timeStampOf: item ]) beSortable; yourself 
 ]
 
 { #category : 'private' }

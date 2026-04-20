@@ -54,16 +54,18 @@ StMethodBrowserToolbarPresenter >> doFlipLayout [
 StMethodBrowserToolbarPresenter >> initializePresenters [
 
 	super initializePresenters.
-	
-	scopeList := self newDropList
-		addStyle: 'stMessageBrowserScopeList';
-		display: [ : item | item description ];
-		yourself.
-	
-	toolbarPresenter add: (self newToolbarButton
-		label: 'Flip';
-		action: [ self doFlipLayout ]).
 
+	scopeList := self newDropList
+		             addStyle: 'stMessageBrowserScopeList';
+		             display: [ :item |
+				             (item respondsTo: #description)
+					             ifTrue: [ item description ]
+					             ifFalse: [ item printString ] ];
+		             yourself.
+
+	toolbarPresenter add: (self newToolbarButton
+			 label: 'Flip';
+			 action: [ self doFlipLayout ])
 ]
 
 { #category : 'accessing' }
