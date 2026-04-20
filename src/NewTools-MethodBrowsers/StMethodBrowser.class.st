@@ -343,6 +343,12 @@ StMethodBrowser >> addHighlightedSegments [
 					 yourself) ]
 ]
 
+{ #category : 'private - scopes' }
+StMethodBrowser >> allScopes [ 
+	
+	^ methodList allScopes
+]
+
 { #category : 'to remove' }
 StMethodBrowser >> autoSelect: aString [
 	"this is just to absorb system navigation for now"
@@ -354,6 +360,12 @@ StMethodBrowser >> classRenamed: anAnnouncement [
 	"this method forces the announcement to be handled in the UI process"
 	self defer: [ 
 		self handleClassRenamed: anAnnouncement ]
+]
+
+{ #category : 'accessing' }
+StMethodBrowser >> codePresenter [
+
+	^ textPresenter
 ]
 
 { #category : 'initialization' }
@@ -571,7 +583,8 @@ StMethodBrowser >> initializePresenters [
 
 	super initializePresenters.
 
-	textPresenter := self newCode.
+	textPresenter := self instantiate: StMethodCodePresenter.
+	textPresenter methodBrowser: self.
 	refreshingBlock := [ :item | true ].
 	filterPresenter := self instantiate: SpFilteringListPresenter.
 	filterPresenter matchSubstring.
