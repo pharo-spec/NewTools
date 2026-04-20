@@ -39,6 +39,9 @@ StMethodCodePresenter >> refactoringCommandsGroup [
 		         beDisplayedAsSubMenu;
 		         iconName: #smallAuthoringTools;
 		         yourself.
-	{ StRenameClassCommand } do: [ :cmdClass | group register: (cmdClass forSpecContext: methodBrowser) ].
+	{
+		StRenameClassCommand.
+		StExtractTempCommand.
+		StConvertTempToInstVarCommand } do: [ :cmdClass | group register: (cmdClass forSpecContext: methodBrowser) ].
 	^ group
 ]
