@@ -15,9 +15,9 @@ Class {
 	#superclass : 'StAbstractMethodCentricBrowserPresenter',
 	#instVars : [
 		'title',
+		'refreshingBlock',
 		'textPresenter',
-		'highlight',
-		'refreshingBlock'
+		'highlight'
 	],
 	#classVars : [
 		'UsingLayout'
