@@ -18,8 +18,7 @@ Class {
 		'refreshingBlock',
 		'textPresenter',
 		'highlight',
-		'filterPresenter',
-		'reuseWindowCheckbox'
+		'filterPresenter'
 	],
 	#classVars : [
 		'NavigateInPlace',
@@ -544,7 +543,6 @@ StMethodBrowser >> horizontalLayout [
 				   add: (SpBoxLayout newTopToBottom
 						    add: methodList;
 						    add: filterPresenter filterInputPresenter expand: false;
-						    add: reuseWindowCheckbox expand: false;
 						    yourself);
 				   add: (SpBoxLayout newTopToBottom
 						    add: textPresenter;
@@ -578,11 +576,7 @@ StMethodBrowser >> initializePresenters [
 	filterPresenter := self instantiate: SpFilteringListPresenter.
 	filterPresenter matchSubstring.
 	filterPresenter display: [ :m | (self methodClassNameForItem: m) , ' >> ' , m selector ].
-	reuseWindowCheckbox := self newCheckBox
-		                       label: 'Reuse window';
-		                       help: 'If checked, new searches will replace current results.';
-		                       state: self class navigateInPlace;
-		                       whenChangedDo: [ :state | self class navigateInPlace: state ].
+
 	self initializeDropList
 ]
 
@@ -951,7 +945,6 @@ StMethodBrowser >> verticalLayout [
 				   add: (SpBoxLayout newTopToBottom
 						    add: methodList;
 						    add: filterPresenter filterInputPresenter expand: false;
-						    add: reuseWindowCheckbox expand: false;
 						    yourself);
 				   add: (SpBoxLayout newTopToBottom
 						    add: textPresenter;
