@@ -214,17 +214,14 @@ StMethodBrowserTest >> testRefreshingBlockWithLiteralString [
 { #category : 'tests' }
 StMethodBrowserTest >> testReuseWindowCheckboxInitialState [
 
-	| presenter initialSetting |
-	initialSetting := StMethodBrowser navigateInPlace.
+	| presenter |
 	[
 		StMethodBrowser navigateInPlace: true.
 		presenter := StMethodBrowser new.
-		self assert: presenter toolbarPresenter reuseWindowButton state.
+		self assert: (presenter instVarNamed: #reuseWindowCheckbox) state.
 		StMethodBrowser navigateInPlace: false.
 		presenter := StMethodBrowser new.
-		self deny: presenter toolbarPresenter reuseWindowButton state ] ensure: [
-			StMethodBrowser navigateInPlace: initialSetting.
-			presenter ifNotNil: [ presenter delete ] ]
+		self deny: (presenter instVarNamed: #reuseWindowCheckbox) state ] ensure: [ presenter ifNotNil: [ presenter delete ] ]
 ]
 
 { #category : 'tests' }
