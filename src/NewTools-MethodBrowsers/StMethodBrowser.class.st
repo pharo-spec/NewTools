@@ -464,35 +464,39 @@ StMethodBrowser >> handleMethodAdded: anAnnouncement [
 
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodModified: anAnnouncement [
-	| item oldItem selectedMethod index text list edits editedText |
+	| item oldItem matchingItem index editedText edits list |
 	
 	self isDisplayed ifFalse: [ ^ self ].
 	refreshingBlock ifNil: [ ^ self ].
 	item := anAnnouncement newMethod.
 	oldItem := anAnnouncement oldMethod.
-	selectedMethod := self selectedMethod.
-	selectedMethod ifNil: [ ^ self ].
-	(selectedMethod methodClass = oldItem methodClass
-		and: [ selectedMethod selector = oldItem selector ])
-		ifFalse: [ ^ self ].
-	
-	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement)
-		ifFalse: [ ^ self ].
-	
+
+	matchingItem := self methods
+		detect: [ :m | m methodClass = oldItem methodClass and: [ m selector = oldItem selector ] ]
+		ifNone: [ nil ].
+	matchingItem ifNil: [
+		(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifTrue: [
+				self methods: (self methods
+						 add: item asFullRingDefinition;
+						 yourself) ].
+		^ self ].
 	editedText := nil.
-	textPresenter isDirty 
-		ifTrue: [ editedText := textPresenter text ].
 	
 	index := methodList selectedIndex.
-
+	textPresenter isDirty 
+		ifTrue: [ editedText := textPresenter text ].
+		
 	list := self methods
-		remove: selectedMethod ifAbsent: [  ];
-		add: item asFullRingDefinition;
-		"to ensure it's still a RGMethod"
-		yourself.
+		        remove: matchingItem ifAbsent: [ ];
+		        yourself.
+	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [
+			self methods: list.
+			self selectIndex: (index min: self methods size).
+			^ self ].
+	list add: item asFullRingDefinition.
 	self methods: list.
 	self selectIndex: index.
-	
+		
 	editedText ifNotNil: [
 		textPresenter text: editedText.
 		textPresenter markConflict ]
