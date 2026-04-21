@@ -438,28 +438,29 @@ StMethodBrowser >> handleClassRenamed: anAnnouncement [
 
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodAdded: anAnnouncement [
-	| item selectedMethod editedText |
+    | item selectedMethod editedText |
+    
+    self isDisplayed ifFalse: [ ^ self ].
+    refreshingBlock ifNil: [ ^ self ].
+    
+    item := anAnnouncement method.
+    (self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [ ^ self ].
+    (item methodClass isNotNil and: [ item methodClass isObsolete not ]) ifFalse: [ ^ self ].
 
-	| item sel text boolean |
-	self isDisplayed ifFalse: [ ^ self ].
-	refreshingBlock ifNil: [ ^ self ].
+    editedText := textPresenter isDirty 
+    		ifTrue: [ textPresenter text ]
+    		ifFalse: [ nil ].
+    selectedMethod := self selectedMethod.
 
-	item := anAnnouncement method.
+    (self methods includes: item) ifFalse: [
+        self methods: (self methods add: item asFullRingDefinition; yourself) ].
 
+    self defer: [ self selectIndex: (self methods indexOf: selectedMethod ) ].
+    self selectedMessage: selectedMethod .
 
-	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [ ^ self ].
-	((item methodClass isNotNil) and:[item methodClass isObsolete not]) ifFalse: [ ^ self ].
-	
-	editedText := nil.
-	textPresenter isDirty ifTrue: [ 
-		editedText := textPresenter text ]. 
-	
-	selectedMethod := self selectedMethod. 
-	self selectedMessage: selectedMethod.
-	
-	editedText ifNotNil: [
-		textPresenter text: editedText.
-		textPresenter markDirty ]
+    editedText ifNotNil: [
+        textPresenter text: editedText.
+        textPresenter markDirty ]
 ]
 
 { #category : 'announcements' }
@@ -476,26 +477,27 @@ StMethodBrowser >> handleMethodModified: anAnnouncement [
 		ifNone: [ nil ].
 	matchingItem ifNil: [
 		(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifTrue: [
-				self methods: (self methods
-						 add: item asFullRingDefinition;
-						 yourself) ].
+			self methods: (self methods
+				add: item asFullRingDefinition;
+				yourself) ].
 		^ self ].
-	editedText := nil.
 	
-	index := methodList selectedIndex.
-	textPresenter isDirty 
-		ifTrue: [ editedText := textPresenter text ].
+	editedText := textPresenter isDirty 
+		ifTrue: [ editedText := textPresenter text ]
+		ifFalse: [ nil ].
 		
+	index := methodList selectedIndex.
 	list := self methods
-		        remove: matchingItem ifAbsent: [ ];
-		        yourself.
+		remove: matchingItem ifAbsent: [ ];
+		yourself.
 	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [
-			self methods: list.
-			self selectIndex: (index min: self methods size).
-			^ self ].
+		self methods: list.
+		self defer:[ self selectIndex: (index min: self methods size) ].
+		^ self ].
+		
 	list add: item asFullRingDefinition.
 	self methods: list.
-	self selectIndex: index.
+	self defer: [ self selectIndex: index ].
 		
 	editedText ifNotNil: [
 		textPresenter text: editedText.
