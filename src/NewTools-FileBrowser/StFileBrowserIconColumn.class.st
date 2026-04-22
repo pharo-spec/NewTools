@@ -18,7 +18,9 @@ StFileBrowserIconColumn class >> addConstraintTo: aTableColumn [
 StFileBrowserIconColumn class >> evaluateOn: aFileReference [
 	"I'm provide action for fileReference"
 
-	^ aFileReference isDirectory ifTrue: [ self iconNamed: #configNew ] ifFalse: [ self iconNamed: #page ]
+	^ StFileBrowserIconCache iconNamed: (aFileReference isDirectory
+			   ifTrue: [ #folderIcon ]
+			   ifFalse: [ #fileIcon ])
 ]
 
 { #category : 'sorting' }
