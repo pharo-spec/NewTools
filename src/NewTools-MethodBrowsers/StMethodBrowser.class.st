@@ -364,7 +364,7 @@ StMethodBrowser >> classRenamed: anAnnouncement [
 ]
 
 { #category : 'accessing' }
-StMethodBrowser >> codePresenter [
+StMethodBrowser >> codeEditor [
 
 	^ textPresenter
 ]
@@ -585,10 +585,15 @@ StMethodBrowser >> initializeDropList [
 { #category : 'initialization' }
 StMethodBrowser >> initializePresenters [
 
+	| methodCodePresenter |
 	super initializePresenters.
 
-	textPresenter := self instantiate: StMethodCodePresenter.
-	textPresenter methodBrowser: self.
+
+	methodCodePresenter := self instantiate: StMethodCodePresenter.
+	methodCodePresenter methodBrowser: self.
+
+	textPresenter := self newCodeEditor.
+	textPresenter codePresenter: methodCodePresenter.
 	refreshingBlock := [ :item | true ].
 	filterPresenter := self instantiate: SpFilteringListPresenter.
 	filterPresenter matchSubstring.
