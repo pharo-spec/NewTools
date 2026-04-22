@@ -217,21 +217,27 @@ StFileNavigationSystemPresenter >> fileReferenceTable [
 
 { #category : 'actions' }
 StFileNavigationSystemPresenter >> filesListAction [
-
 	| previewProcess |
 
-	fileReferenceTable whenActivatedDo: [ :selectedItem | 
-		previewProcess ifNotNil: [ 
-			previewProcess isTerminated ifFalse: [ previewProcess terminate ] ].
-		selectedItem selectedItem isDirectory
-			ifTrue: [ self openFolder: selectedItem selectedItem ] ].
+	fileReferenceTable
+		whenSelectedItemChangedDo: [ : selectedItem | 
+			selectedItem ifNotNil: [ self nameText: selectedItem basename ] ].
 
-	fileReferenceTable whenSelectedDo: [ :aFileReference | 
-		previewProcess ifNotNil: [ previewProcess isTerminated ifFalse: [ previewProcess terminate ] ].
-		previewProcess := [ notebookPreviewer pageContent: (self previewer previewOn: aFileReference) ]
-				forkAt: Processor userBackgroundPriority
-				named: self previewProcessName ]
+	previewProcess := nil.
 
+	fileReferenceTable outputActivationPort 
+		transmitDo: [ :aFileReference |
+			previewProcess ifNotNil: [ 
+				previewProcess isTerminated ifFalse: [ previewProcess terminate ] ].
+			aFileReference isDirectory
+				ifTrue: [ self openFolder: aFileReference ] ].
+
+	fileReferenceTable outputSelectionPort 
+		transmitDo:  [ :aFileReference | 
+			previewProcess ifNotNil: [ previewProcess isTerminated ifFalse: [ previewProcess terminate ] ].
+			previewProcess := [ notebookPreviewer pageContent: (self previewer previewOn: aFileReference) ]
+					forkAt: Processor userBackgroundPriority
+					named: self previewProcessName ]
 ]
 
 { #category : 'accessing' }
@@ -278,13 +284,10 @@ StFileNavigationSystemPresenter >> initialize [
 { #category : 'initialization' }
 StFileNavigationSystemPresenter >> initializeFilesTable [
 
-	fileReferenceTable := self newTable.
+	fileReferenceTable := self newEasyColumnView.
 	fileReferenceTable
 		beResizable;
 		columns: StFileBrowserAbstractColumn columns;
-		sortingBlock: self defaultFileSortBlock;
-		whenSelectedItemChangedDo: [ : selectedItem | 
-			selectedItem ifNotNil: [ self nameText: selectedItem basename ] ];		
 		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'StFileBrowserNavigationMenu' ]
 ]
 

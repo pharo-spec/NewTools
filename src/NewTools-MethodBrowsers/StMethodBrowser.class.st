@@ -18,9 +18,11 @@ Class {
 		'refreshingBlock',
 		'textPresenter',
 		'highlight',
-		'filterPresenter'
+		'filterPresenter',
+		'reuseWindowCheckbox'
 	],
 	#classVars : [
+		'NavigateInPlace',
 		'UsingLayout'
 	],
 	#category : 'NewTools-MethodBrowsers-Senders',
@@ -121,7 +123,7 @@ StMethodBrowser class >> browseImplementorsOfAll: aCollectionOfSymbols [
 
 	| methods |
 	methods := aCollectionOfSymbols flatCollect: [ :sym | self implementorsOf: sym ].
-	^ self browse: methods asArray
+	^ self browse: methods asArray title: 'Implementors of ' , (', ' join: aCollectionOfSymbols)
 ]
 
 { #category : 'opening' }
@@ -208,6 +210,30 @@ StMethodBrowser class >> methods: methods [
 	^ self new
 		  methods: methods;
 		  yourself
+]
+
+{ #category : 'private' }
+StMethodBrowser class >> navigateInPlace [
+
+	^ NavigateInPlace ifNil: [ NavigateInPlace := false ]  
+]
+
+{ #category : 'private' }
+StMethodBrowser class >> navigateInPlace: aBoolean [
+
+	NavigateInPlace := aBoolean 
+]
+
+{ #category : 'private' }
+StMethodBrowser class >> navigateInPlaceSettingsOn: aBuilder [
+
+	<systemsettings>
+	(aBuilder setting: #navigateInPlace)
+		label: 'Navigate in place in Method Browser';
+		description:
+			'When browsing senders/implementors/references from a Method Browser, reuse the current window instead of opening a new one';
+		target: self;
+		parent: #tools
 ]
 
 { #category : 'opening - old' }
@@ -337,7 +363,7 @@ StMethodBrowser >> connectPresenters [
 	methodList
 		whenSelectionChangedDo: [ :selection | self selectItem: selection selectedItem ];
 		whenModelChangedDo: [ self updateTitle ].
-
+	methodList navigationBlock: [ :type :val | self navigateTo: type value: val ].
 	textPresenter
 		whenSubmitDo: [ :text | self accept: text notifying: nil ];
 		whenResetDo: [ self selectItem: methodList selectedMethod ].
@@ -412,68 +438,70 @@ StMethodBrowser >> handleClassRenamed: anAnnouncement [
 
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodAdded: anAnnouncement [
+    | item selectedMethod editedText |
+    
+    self isDisplayed ifFalse: [ ^ self ].
+    refreshingBlock ifNil: [ ^ self ].
+    
+    item := anAnnouncement method.
+    (self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [ ^ self ].
+    (item methodClass isNotNil and: [ item methodClass isObsolete not ]) ifFalse: [ ^ self ].
 
-	| item sel text boolean |
-	self isDisplayed ifFalse: [ ^ self ].
-	refreshingBlock ifNil: [ ^ self ].
+    editedText := textPresenter isDirty 
+    		ifTrue: [ textPresenter text ]
+    		ifFalse: [ nil ].
+    selectedMethod := self selectedMethod.
 
-	item := anAnnouncement method.
+    (self methods includes: item) ifFalse: [
+        self methods: (self methods add: item asFullRingDefinition; yourself) ].
 
+    self defer: [ self selectIndex: (self methods indexOf: selectedMethod ) ].
+    self selectedMessage: selectedMethod .
 
-	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [ ^ self ].
-	(item methodClass isNotNil and: [ item methodClass isObsolete not ]) ifFalse: [ ^ self ].
-	boolean := textPresenter hasUnacceptedEdits.
-	boolean ifTrue: [ text := textPresenter pendingText ].
-
-	sel := self selectedMethod.
-	(self methods includes: item) ifFalse: [
-			self methods: (self methods
-					 add: item asFullRingDefinition;
-					 yourself) ].
-
-	self defer: [ self selectIndex: (self methods indexOf: sel) ].
-	self selectedMessage: sel.
-
-	boolean ifTrue: [ textPresenter pendingText: text ]
+    editedText ifNotNil: [
+        textPresenter text: editedText.
+        textPresenter markDirty ]
 ]
 
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodModified: anAnnouncement [
-
-	| item oldItem matchingItem index text edits list |
+	| item oldItem matchingItem index editedText list |
+	
 	self isDisplayed ifFalse: [ ^ self ].
 	refreshingBlock ifNil: [ ^ self ].
 	item := anAnnouncement newMethod.
 	oldItem := anAnnouncement oldMethod.
 
 	matchingItem := self methods
-		                detect: [ :m | m methodClass = oldItem methodClass and: [ m selector = oldItem selector ] ]
-		                ifNone: [ nil ].
+		detect: [ :m | m methodClass = oldItem methodClass and: [ m selector = oldItem selector ] ]
+		ifNone: [ nil ].
 	matchingItem ifNil: [
-			(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifTrue: [
-					self methods: (self methods
-							 add: item asFullRingDefinition;
-							 yourself) ].
-			^ self ].
-
-	edits := textPresenter hasUnacceptedEdits.
-	edits ifTrue: [ text := textPresenter pendingText ].
+		(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifTrue: [
+			self methods: (self methods
+				add: item asFullRingDefinition;
+				yourself) ].
+		^ self ].
+	
+	editedText := textPresenter isDirty 
+		ifTrue: [ editedText := textPresenter text ]
+		ifFalse: [ nil ].
+		
 	index := methodList selectedIndex.
-
 	list := self methods
-		        remove: matchingItem ifAbsent: [ ];
-		        yourself.
+		remove: matchingItem ifAbsent: [ ];
+		yourself.
 	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [
-			self methods: list.
-			self defer: [ self selectIndex: (index min: self methods size) ].
-			^ self ].
+		self methods: list.
+		self defer:[ self selectIndex: (index min: self methods size) ].
+		^ self ].
+		
 	list add: item asFullRingDefinition.
 	self methods: list.
 	self defer: [ self selectIndex: index ].
-
-	edits ifFalse: [ ^ self ].
-	textPresenter pendingText: text.
-	textPresenter hasEditingConflicts: true
+		
+	editedText ifNotNil: [
+		textPresenter text: editedText.
+		textPresenter markConflict ]
 ]
 
 { #category : 'announcements' }
@@ -518,6 +546,7 @@ StMethodBrowser >> horizontalLayout [
 				   add: (SpBoxLayout newTopToBottom
 						    add: methodList;
 						    add: filterPresenter filterInputPresenter expand: false;
+						    add: reuseWindowCheckbox expand: false;
 						    yourself);
 				   add: (SpBoxLayout newTopToBottom
 						    add: textPresenter;
@@ -546,12 +575,16 @@ StMethodBrowser >> initializePresenters [
 
 	super initializePresenters.
 
-	textPresenter := self newCode.
+	textPresenter := self newCodeEditor.
 	refreshingBlock := [ :item | true ].
 	filterPresenter := self instantiate: SpFilteringListPresenter.
 	filterPresenter matchSubstring.
 	filterPresenter display: [ :m | (self methodClassNameForItem: m) , ' >> ' , m selector ].
-
+	reuseWindowCheckbox := self newCheckBox
+		                       label: 'Reuse window';
+		                       help: 'If checked, new searches will replace current results.';
+		                       state: self class navigateInPlace;
+		                       whenChangedDo: [ :state | self class navigateInPlace: state ].
 	self initializeDropList
 ]
 
@@ -575,7 +608,7 @@ StMethodBrowser >> installIconStylerFor: anItem [
 		ifFalse: [ ^ self ].
 	
 	IconStyler withStaticStylers 
-		styleText: textPresenter 
+		styleText: textPresenter codePresenter
 		withAst: anItem ast
 ]
 
@@ -685,6 +718,28 @@ StMethodBrowser >> methods: compiledMethods asSendersOfAll: aCollectionOfSymbols
 		highlight: aCollectionOfSymbols;
 		methods: compiledMethods;
 		title: 'Senders of ' , (', ' join: aCollectionOfSymbols)
+]
+
+{ #category : 'private' }
+StMethodBrowser >> navigateInPlace [
+
+	^ self class navigateInPlace
+]
+
+{ #category : 'private' }
+StMethodBrowser >> navigateTo: aType value: anObject [
+
+	self navigateInPlace ifFalse: [
+			aType == #implementors ifTrue: [ ^ self class browseImplementorsOf: anObject ].
+			aType == #senders ifTrue: [ ^ self class browseSendersOf: anObject ].
+			aType == #references ifTrue: [ ^ self class browseReferencesOf: anObject ].
+			^ self ].
+
+	aType == #implementors ifTrue: [ self methods: (self class implementorsOf: anObject) asImplementorsOf: anObject ].
+
+	aType == #senders ifTrue: [ self methods: (self class sendersOf: anObject) asSendersOf: anObject ].
+
+	aType == #references ifTrue: [ self methods: (self class referencesOf: anObject) asReferenceTo: anObject ]
 ]
 
 { #category : 'initialization' }
@@ -901,6 +956,7 @@ StMethodBrowser >> verticalLayout [
 				   add: (SpBoxLayout newTopToBottom
 						    add: methodList;
 						    add: filterPresenter filterInputPresenter expand: false;
+						    add: reuseWindowCheckbox expand: false;
 						    yourself);
 				   add: (SpBoxLayout newTopToBottom
 						    add: textPresenter;
