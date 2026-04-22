@@ -465,7 +465,7 @@ StMethodBrowser >> handleMethodAdded: anAnnouncement [
 
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodModified: anAnnouncement [
-	| item oldItem matchingItem index editedText edits list |
+	| item oldItem matchingItem index editedText list |
 	
 	self isDisplayed ifFalse: [ ^ self ].
 	refreshingBlock ifNil: [ ^ self ].
