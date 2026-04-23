@@ -120,6 +120,27 @@ StMethodBrowserTest >> testHandleMethodAddedAddsMatchingSender [
 ]
 
 { #category : 'tests' }
+StMethodBrowserTest >> testHandleMethodAddedWithActiveFilterKeepsUnfilteredItems [
+
+	| window browser total newMethod |
+	[
+		window := StMethodBrowser browseSendersOf: #printOn:.
+		browser := window presenter.
+
+		total := browser filterPresenter unfilteredItems size.
+		self assert: total > 0.
+		browser filterPresenter filterInputPresenter text: 'zzznomatch'.
+		self assert: browser methodList numberOfElements equals: 0.
+		self class compile: 'tmpSenderMethodForTest ^ self printOn: String new' classified: 'tests-protocol'.
+		newMethod := self class >> #tmpSenderMethodForTest.
+		browser handleMethodAdded: (MethodAdded method: newMethod).
+
+		self assert: browser filterPresenter unfilteredItems size > total ] ensure: [
+			self class removeSelector: #tmpSenderMethodForTest.
+			window ifNotNil: [ window delete ] ]
+]
+
+{ #category : 'tests' }
 StMethodBrowserTest >> testHandleMethodModifiedRemovesSenderWhenNoLongerMatching [
 
 	| window browser method |

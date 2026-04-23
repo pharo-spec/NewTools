@@ -451,13 +451,13 @@ StMethodBrowser >> handleMethodAdded: anAnnouncement [
     		ifTrue: [ textPresenter text ]
     		ifFalse: [ nil ].
     selectedMethod := self selectedMethod.
+	(filterPresenter unfilteredItems includes: item) ifFalse: [
+		self methods: (filterPresenter unfilteredItems copy
+			add: item asFullRingDefinition;
+			yourself) ].
 
-    (self methods includes: item) ifFalse: [
-        self methods: (self methods add: item asFullRingDefinition; yourself) ].
-
-    self defer: [ self selectIndex: (self methods indexOf: selectedMethod ) ].
-    self selectedMessage: selectedMethod .
-
+	self defer: [ self selectIndex: ((self methods indexOf: selectedMethod) max: 1) ].
+   self selectedMessage: selectedMethod .
     editedText ifNotNil: [
         textPresenter text: editedText.
         textPresenter markDirty ]
@@ -487,9 +487,9 @@ StMethodBrowser >> handleMethodModified: anAnnouncement [
 		ifFalse: [ nil ].
 		
 	index := methodList selectedIndex.
-	list := self methods
-		remove: matchingItem ifAbsent: [ ];
-		yourself.
+
+	list := filterPresenter unfilteredItems copy.
+	list remove: matchingItem ifAbsent: [ ].
 	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [
 		self methods: list.
 		self defer:[ self selectIndex: (index min: self methods size) ].
@@ -517,8 +517,6 @@ StMethodBrowser >> handleMethodRemoved: anAnnouncement [
 	matchingItem := self methods
 		                detect: [ :m | m methodClass = item methodClass and: [ m selector = item selector ] ]
 		                ifNone: [ ^ self ].
-
-	selection := methodList selectedIndex.
 	selectedMethod := self selectedMethod.
 	self methods: (self methods
 			 remove: matchingItem ifAbsent: [ ];
@@ -676,7 +674,6 @@ StMethodBrowser >> methods: compiledMethods asImplementorsOf: aSymbol [
 
 { #category : 'api - instance side' }
 StMethodBrowser >> methods: compiledMethods asReferenceTo: aClassName [
-	"Create without opening it a method browsers for the implementors of a Symbol"
 
 	self
 		setRefreshingBlockForClassReferencesOf: aClassName;
@@ -860,7 +857,7 @@ StMethodBrowser >> setRefreshingBlockForImplementorsOf: aSelector [
 	self refreshingBlock: [ :message | message selector = aSelector ]
 ]
 
-{ #category : 'initialization' }
+{ #category : 'api' }
 StMethodBrowser >> setRefreshingBlockForReferencesToSlot: aSlot [
 
 	self refreshingBlock: [ :method | method accessesSlot: aSlot ]
@@ -985,6 +982,7 @@ StMethodBrowser >> windowTitle [
 
 	| msg total |
 	(filterPresenter isNil or: [ methodList isNil ]) ifTrue: [ ^ title ifNil: [ 'Message Browser' ] ].
+	self methods ifEmpty: [ ^ 'No Results' ].
 	total := filterPresenter unfilteredItems size.
 	msg := methodList ifNil: [ '' ] ifNotNil: [
 			       (filterPresenter filterText isEmpty or: [ methodList numberOfElements = total ])
