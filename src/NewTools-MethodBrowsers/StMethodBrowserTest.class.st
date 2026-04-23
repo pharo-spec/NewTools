@@ -120,6 +120,27 @@ StMethodBrowserTest >> testHandleMethodAddedAddsMatchingSender [
 ]
 
 { #category : 'tests' }
+StMethodBrowserTest >> testHandleMethodAddedWithActiveFilterKeepsUnfilteredItems [
+
+	| window browser total newMethod |
+	[
+		window := StMethodBrowser browseSendersOf: #printOn:.
+		browser := window presenter.
+
+		total := browser filterPresenter unfilteredItems size.
+		self assert: total > 0.
+		browser filterPresenter filterInputPresenter text: 'zzznomatch'.
+		self assert: browser methodList numberOfElements equals: 0.
+		self class compile: 'tmpSenderMethodForTest ^ self printOn: String new' classified: 'tests-protocol'.
+		newMethod := self class >> #tmpSenderMethodForTest.
+		browser handleMethodAdded: (MethodAdded method: newMethod).
+
+		self assert: browser filterPresenter unfilteredItems size > total ] ensure: [
+			self class removeSelector: #tmpSenderMethodForTest.
+			window ifNotNil: [ window delete ] ]
+]
+
+{ #category : 'tests' }
 StMethodBrowserTest >> testHandleMethodModifiedRemovesSenderWhenNoLongerMatching [
 
 	| window browser method |
@@ -214,14 +235,17 @@ StMethodBrowserTest >> testRefreshingBlockWithLiteralString [
 { #category : 'tests' }
 StMethodBrowserTest >> testReuseWindowCheckboxInitialState [
 
-	| presenter |
+	| presenter initialSetting |
+	initialSetting := StMethodBrowser navigateInPlace.
 	[
 		StMethodBrowser navigateInPlace: true.
 		presenter := StMethodBrowser new.
-		self assert: (presenter instVarNamed: #reuseWindowCheckbox) state.
+		self assert: presenter toolbarPresenter reuseWindowButton state.
 		StMethodBrowser navigateInPlace: false.
 		presenter := StMethodBrowser new.
-		self deny: (presenter instVarNamed: #reuseWindowCheckbox) state ] ensure: [ presenter ifNotNil: [ presenter delete ] ]
+		self deny: presenter toolbarPresenter reuseWindowButton state ] ensure: [
+			StMethodBrowser navigateInPlace: initialSetting.
+			presenter ifNotNil: [ presenter delete ] ]
 ]
 
 { #category : 'tests' }

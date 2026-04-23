@@ -17,6 +17,7 @@ Class {
 		'toolbarPresenter',
 		'messageList',
 		'runTestsButton'
+		'reuseWindowButton'
 	],
 	#category : 'NewTools-MethodBrowsers-Base',
 	#package : 'NewTools-MethodBrowsers',
@@ -104,31 +105,39 @@ StMethodToolbarPresenter >> emptyDropList [
 	dropList emptyList
 ]
 
+{ #category : 'as yet unclassified' }
+StMethodToolbarPresenter >> iconForReuseState: aBoolean [
+
+	^ aBoolean
+		  ifTrue: [ self iconNamed: #checkboxSelected ]
+		  ifFalse: [ self iconNamed: #checkboxUnselected ]
+]
+
 { #category : 'initialization' }
 StMethodToolbarPresenter >> initializePresenters [
 
 	(browseButton := self newToolbarButton)
-		label: 'Browse'; 
+		label: 'Browse';
 		icon: (self iconNamed: #smallSystemBrowser);
 		help: 'Browse current selected method';
 		action: [ self doBrowseMethod ].
-	(usersButton := self newToolbarButton) 
-		label: 'References'; 
+	(usersButton := self newToolbarButton)
+		label: 'References';
 		icon: (self iconNamed: #smallFind);
 		help: 'Browse references of current selected class';
 		action: [ self doBrowseUsers ].
-	(sendersButton := self newToolbarButton) 
-		label: 'Senders'; 
+	(sendersButton := self newToolbarButton)
+		label: 'Senders';
 		icon: (self iconNamed: #smallFind);
 		help: 'Browse senders of current selected method';
 		action: [ self doBrowseSenders ].
-	(implementorsButton := self newToolbarButton) 
-		label: 'Implementors'; 
+	(implementorsButton := self newToolbarButton)
+		label: 'Implementors';
 		icon: (self iconNamed: #smallFind);
 		help: 'Browse implementors of current selected method';
 		action: [ self doBrowseImplementors ].
-	(versionButton := self newToolbarButton) 
-		label: 'Versions'; 
+	(versionButton := self newToolbarButton)
+		label: 'Versions';
 		icon: (self iconNamed: #history);
 		help: 'Browse versions of current selected method';
 		action: [ self doBrowseVersions ].
@@ -138,20 +147,32 @@ StMethodToolbarPresenter >> initializePresenters [
 		help: 'Run all test methods in the list';
 		action: [ self doRunTests ].
 		
- 	toolbarPresenter := self newToolbar
-		displayMode: self application toolbarDisplayMode;
-		add: browseButton;
-		add: usersButton;
-		add: sendersButton;
-		add: implementorsButton;
-		add: versionButton;
-		add: runTestsButton;
-		yourself.
-		
+	reuseWindowButton := self newToolbarToggleButton
+		                     label: 'Reuse window';
+		                     help: 'If checked, new searches will replace current results.';
+		                     state: StMethodBrowser navigateInPlace;
+		                     icon: (self iconForReuseState: StMethodBrowser navigateInPlace);
+		                     whenActivatedDo: [
+				                     StMethodBrowser navigateInPlace: true.
+				                     reuseWindowButton icon: (self iconForReuseState: true) ];
+		                     whenDeactivatedDo: [
+				                     StMethodBrowser navigateInPlace: false.
+				                     reuseWindowButton icon: (self iconForReuseState: false) ].
+	toolbarPresenter := self newToolbar
+		                    displayMode: self application toolbarDisplayMode;
+		                    add: browseButton;
+		                    add: usersButton;
+		                    add: sendersButton;
+		                    add: implementorsButton;
+		                    add: versionButton;
+		                    add: reuseWindowButton;
+                        add: runTestsButton;
+		                    yourself.
+
 	dropList := self newDropList
-		display: [ :item | item label ];
-		whenSelectedItemChangedDo: [ :item | item value ];
-		yourself
+		            display: [ :item | item label ];
+		            whenSelectedItemChangedDo: [ :item | item value ];
+		            yourself
 ]
 
 { #category : 'accessing' }
@@ -177,6 +198,12 @@ StMethodToolbarPresenter >> replaceVersionWithLabel: aString action: aBlock [
 	versionButton 
 		label: aString;
 		action: aBlock
+]
+
+{ #category : 'accessing' }
+StMethodToolbarPresenter >> reuseWindowButton [
+
+	^ reuseWindowButton
 ]
 
 { #category : 'accessing' }

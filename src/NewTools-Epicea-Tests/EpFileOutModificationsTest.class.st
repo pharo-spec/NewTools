@@ -34,6 +34,19 @@ EpFileOutModificationsTest >> chunkImporter: anObject [
 	chunkImporter := anObject
 ]
 
+{ #category : 'tests' }
+EpFileOutModificationsTest >> saveFileButNotOpenOSDialogDuring: aBlock [
+
+	"During the first opening, accept the save.
+	When accepting the save, a second dialog is open.
+	Cancel it: we don't want to open a native dialog"
+	SpWindowSimulateOpenModal value: [ :pres | 
+		SpWindowSimulateOpenModal
+			value: [ :pres | pres triggerCancelAction]
+			during: [ pres triggerOkAction ] ]
+		during: aBlock
+]
+
 { #category : 'running' }
 EpFileOutModificationsTest >> setUp [
 
@@ -57,7 +70,7 @@ EpFileOutModificationsTest >> testFileOutMultipleClassAddition [
 	aClass1 := classFactory newClass.
 	aClass2 := classFactory newClass.
 
-	self triggerOkActionDuring: [ chunkExporter fileOut: (self allLogEntriesWith: EpClassAddition) ].
+	self saveFileButNotOpenOSDialogDuring: [ chunkExporter fileOut: (self allLogEntriesWith: EpClassAddition) ].
 	outputFileReference := chunkExporter outputFileReference.
 
 	chunks := chunkImporter chunksFromFileNamed: outputFileReference fullName.
@@ -83,7 +96,7 @@ EpFileOutModificationsTest >> testFileOutMultipleMethodAddition [
 	aClass compile: 'fortyTwo ^ 42'.
 	aClass compile: 'thirtyTwo ^ 32'.
 
-		self triggerOkActionDuring: [ chunkExporter fileOut: (self allLogEntriesWith: EpMethodAddition) ].
+	self saveFileButNotOpenOSDialogDuring: [ chunkExporter fileOut: (self allLogEntriesWith: EpMethodAddition) ].
 	outputFileReference := chunkExporter outputFileReference.
 
 	chunks := chunkImporter chunksFromFileNamed: outputFileReference fullName.
@@ -115,7 +128,7 @@ EpFileOutModificationsTest >> testFileOutMultipleMethodModification [
 	aClass compile: 'fortyTwo ^ 0.42'.
 	aClass compile: 'fortyTwo ^ 0.042'.	
 
-	self triggerOkActionDuring: [ chunkExporter fileOut: (self allLogEntriesWith: EpMethodModification) ].
+	self saveFileButNotOpenOSDialogDuring: [ chunkExporter fileOut: (self allLogEntriesWith: EpMethodModification) ].
 	outputFileReference := chunkExporter outputFileReference.
 
 	chunks := chunkImporter chunksFromFileNamed: outputFileReference fullName.
@@ -144,7 +157,7 @@ EpFileOutModificationsTest >> testFileOutMultipleMethodRemoval [
 	aClass removeSelector: #fortyTwo.
 	aClass removeSelector: #thirtyTwo.
 
-	self triggerOkActionDuring: [ chunkExporter fileOut: (self allLogEntriesWith: EpMethodRemoval) ].
+	self saveFileButNotOpenOSDialogDuring: [ chunkExporter fileOut: (self allLogEntriesWith: EpMethodRemoval) ].
 	outputFileReference := chunkExporter outputFileReference.
 
 	chunks := chunkImporter chunksFromFileNamed: outputFileReference fullName.
@@ -173,7 +186,7 @@ EpFileOutModificationsTest >> testFileOutSingleClassAddition [
 	| aClass outputFileReference chunks literalNodes |
 	aClass := classFactory newClass.
 
-	self triggerOkActionDuring: [ chunkExporter fileOut: (self allLogEntriesWith: EpClassAddition) ].
+	self saveFileButNotOpenOSDialogDuring: [ chunkExporter fileOut: (self allLogEntriesWith: EpClassAddition) ].
 	outputFileReference := chunkExporter outputFileReference.
 
 	chunks := chunkImporter chunksFromFileNamed: outputFileReference fullName.
@@ -195,7 +208,7 @@ EpFileOutModificationsTest >> testFileOutSingleClassModification [
 	aClass := classFactory newClass.
 	aClass addInstVarNamed: #x.
 
-	self triggerOkActionDuring: [ chunkExporter fileOut: (self allLogEntriesWith: EpClassModification) ].
+	self saveFileButNotOpenOSDialogDuring: [ chunkExporter fileOut: (self allLogEntriesWith: EpClassModification) ].
 	outputFileReference := chunkExporter outputFileReference.
 
 	chunks := chunkImporter chunksFromFileNamed: outputFileReference fullName.
@@ -215,7 +228,7 @@ EpFileOutModificationsTest >> testFileOutSingleClassRemoval [
 	aClass := classFactory newClass.
 	classFactory delete: aClass.
 	
-	self triggerOkActionDuring: [ chunkExporter fileOut: (self allLogEntriesWith: EpClassRemoval) ].
+	self saveFileButNotOpenOSDialogDuring: [ chunkExporter fileOut: (self allLogEntriesWith: EpClassRemoval) ].
 	outputFileReference := chunkExporter outputFileReference.
 
 	chunks := chunkImporter chunksFromFileNamed: outputFileReference fullName.
@@ -235,7 +248,7 @@ EpFileOutModificationsTest >> testFileOutSingleMethodAddition [
 	aClass := classFactory newClass.
 	aClass compile: 'fortyTwo ^ 42'.
 
-	self triggerOkActionDuring: [ chunkExporter fileOut: (self allLogEntriesWith: EpMethodAddition) ].
+	self saveFileButNotOpenOSDialogDuring: [ chunkExporter fileOut: (self allLogEntriesWith: EpMethodAddition) ].
 	outputFileReference := chunkExporter outputFileReference.
 
 	chunks := chunkImporter chunksFromFileNamed: outputFileReference fullName.
@@ -259,7 +272,7 @@ EpFileOutModificationsTest >> testFileOutSingleMethodModificationOfProtocol [
 	aClass compile: 'fortyTwo ^ 42' classified: 'old'.
 	aClass >> #fortyTwo protocol: 'new'.
 
-	self triggerOkActionDuring: 
+	self saveFileButNotOpenOSDialogDuring: 
 		[ chunkExporter fileOut: (self allLogEntriesWith: EpMethodModification)].
 		
 	outputFileReference := chunkExporter outputFileReference.
@@ -281,7 +294,7 @@ EpFileOutModificationsTest >> testFileOutSingleMethodModificationOfSourceCode [
 	aClass compile: 'fortyTwo ^ 42'.
 	aClass compile: 'fortyTwo ^ 0.42'.
 
-	self triggerOkActionDuring: 
+	self saveFileButNotOpenOSDialogDuring: 
 		[ chunkExporter fileOut: (self allLogEntriesWith: EpMethodModification) ].
 	outputFileReference := chunkExporter outputFileReference.
 
@@ -308,7 +321,7 @@ EpFileOutModificationsTest >> testFileOutSingleMethodRemoval [
 	aClass compile: 'fortyTwo ^ 42'.
 	aClass removeSelector: #fortyTwo.
 	
-	self triggerOkActionDuring: 
+	self saveFileButNotOpenOSDialogDuring: 
 		[ chunkExporter fileOut: (self allLogEntriesWith: EpMethodRemoval)].
 	outputFileReference := chunkExporter outputFileReference.
 
@@ -335,7 +348,7 @@ EpFileOutModificationsTest >> testFileOutSingleProtocolRemoval [
 	aClass addProtocol: 'protocol'.
 	aClass removeProtocol: 'protocol'.
 
-	self triggerOkActionDuring: 
+	self saveFileButNotOpenOSDialogDuring: 
 		[ chunkExporter fileOut: (self allLogEntriesWith: EpProtocolRemoval)] .
 	outputFileReference := chunkExporter outputFileReference.
 
@@ -356,7 +369,7 @@ EpFileOutModificationsTest >> testFileOutSingleTraitAddition [
 	| aTrait outputFileReference chunks literalNodes |
 	aTrait := classFactory newTrait.
 
-	self triggerOkActionDuring: 
+	self saveFileButNotOpenOSDialogDuring: 
 		[ chunkExporter fileOut: (self allLogEntriesWith: EpTraitAddition) ].
 	outputFileReference := chunkExporter outputFileReference.
 
@@ -379,7 +392,7 @@ EpFileOutModificationsTest >> testFileOutSingleTraitModification [
 	aTrait := classFactory newTrait.
 	aTrait addInstVarNamed: #x.
 
-	self triggerOkActionDuring: 
+	self saveFileButNotOpenOSDialogDuring: 
 		[ chunkExporter fileOut: (self allLogEntriesWith: EpTraitModification)].
 	outputFileReference := chunkExporter outputFileReference.
 
@@ -400,7 +413,7 @@ EpFileOutModificationsTest >> testFileOutSingleTraitRemoval [
 	aTrait := classFactory newTrait.
 	classFactory delete: aTrait.
 
-	self triggerOkActionDuring: 
+	self saveFileButNotOpenOSDialogDuring: 
 		[ chunkExporter fileOut: (self allLogEntriesWith: EpTraitRemoval) ].
 	outputFileReference := chunkExporter outputFileReference.
 
@@ -423,7 +436,7 @@ EpFileOutModificationsTest >> testMethodModificationWithWideString [
 	aClass compile: self wideStringSourceCode.
 	aClass compile: self wideStringSourceCode, ' '.
 
-	self triggerOkActionDuring: 
+	self saveFileButNotOpenOSDialogDuring: 
 		[ chunkExporter fileOut: (self allLogEntriesWith: EpMethodModification) ].
 	outputFileReference := chunkExporter outputFileReference.
 
@@ -439,12 +452,4 @@ EpFileOutModificationsTest >> testMethodModificationWithWideString [
 	self 
 		assert: methodNode
 		equals: (OCParser parseMethod: self wideStringSourceCode).
-]
-
-{ #category : 'tests' }
-EpFileOutModificationsTest >> triggerOkActionDuring: aBlock [
-
-	SpWindowSimulateOpenModal 
-		value: [ :pres | pres triggerOkAction ]
-		during: aBlock
 ]
