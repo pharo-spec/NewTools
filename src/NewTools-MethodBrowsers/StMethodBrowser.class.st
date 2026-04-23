@@ -446,68 +446,70 @@ StMethodBrowser >> handleClassRenamed: anAnnouncement [
 
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodAdded: anAnnouncement [
+    | item selectedMethod editedText |
+    
+    self isDisplayed ifFalse: [ ^ self ].
+    refreshingBlock ifNil: [ ^ self ].
+    
+    item := anAnnouncement method.
+    (self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [ ^ self ].
+    (item methodClass isNotNil and: [ item methodClass isObsolete not ]) ifFalse: [ ^ self ].
 
-	| item sel text boolean |
-	self isDisplayed ifFalse: [ ^ self ].
-	refreshingBlock ifNil: [ ^ self ].
+    editedText := textPresenter isDirty 
+    		ifTrue: [ textPresenter text ]
+    		ifFalse: [ nil ].
+    selectedMethod := self selectedMethod.
+	(filterPresenter unfilteredItems includes: item) ifFalse: [
+		self methods: (filterPresenter unfilteredItems copy
+			add: item asFullRingDefinition;
+			yourself) ].
 
-	item := anAnnouncement method.
-
-
-	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [ ^ self ].
-	(item methodClass isNotNil and: [ item methodClass isObsolete not ]) ifFalse: [ ^ self ].
-	boolean := textPresenter hasUnacceptedEdits.
-	boolean ifTrue: [ text := textPresenter pendingText ].
-
-	sel := self selectedMethod.
-	(self methods includes: item) ifFalse: [
-			self methods: (self methods
-					 add: item asFullRingDefinition;
-					 yourself) ].
-
-	self defer: [ self selectIndex: (self methods indexOf: sel) ].
-	self selectedMessage: sel.
-
-	boolean ifTrue: [ textPresenter pendingText: text ]
+	self defer: [ self selectIndex: ((self methods indexOf: selectedMethod) max: 1) ].
+   self selectedMessage: selectedMethod .
+    editedText ifNotNil: [
+        textPresenter text: editedText.
+        textPresenter markDirty ]
 ]
 
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodModified: anAnnouncement [
-
-	| item oldItem matchingItem index text edits list |
+	| item oldItem matchingItem index editedText list |
+	
 	self isDisplayed ifFalse: [ ^ self ].
 	refreshingBlock ifNil: [ ^ self ].
 	item := anAnnouncement newMethod.
 	oldItem := anAnnouncement oldMethod.
 
 	matchingItem := self methods
-		                detect: [ :m | m methodClass = oldItem methodClass and: [ m selector = oldItem selector ] ]
-		                ifNone: [ nil ].
+		detect: [ :m | m methodClass = oldItem methodClass and: [ m selector = oldItem selector ] ]
+		ifNone: [ nil ].
 	matchingItem ifNil: [
-			(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifTrue: [
-					self methods: (self methods
-							 add: item asFullRingDefinition;
-							 yourself) ].
-			^ self ].
-
-	edits := textPresenter hasUnacceptedEdits.
-	edits ifTrue: [ text := textPresenter pendingText ].
+		(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifTrue: [
+			self methods: (self methods
+				add: item asFullRingDefinition;
+				yourself) ].
+		^ self ].
+	
+	editedText := textPresenter isDirty 
+		ifTrue: [ editedText := textPresenter text ]
+		ifFalse: [ nil ].
+		
 	index := methodList selectedIndex.
 
-	list := self methods
-		        remove: matchingItem ifAbsent: [ ];
-		        yourself.
+	list := filterPresenter unfilteredItems copy.
+	list remove: matchingItem ifAbsent: [ ].
 	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [
-			self methods: list.
-			self defer: [ self selectIndex: (index min: self methods size) ].
-			^ self ].
+		self methods: list.
+		self defer:[ self selectIndex: (index min: self methods size) ].
+		^ self ].
+		
 	list add: item asFullRingDefinition.
 	self methods: list.
 	self defer: [ self selectIndex: index ].
-
-	edits ifFalse: [ ^ self ].
-	textPresenter pendingText: text.
-	textPresenter hasEditingConflicts: true
+		
+	editedText ifNotNil: [
+		textPresenter text: editedText.
+		textPresenter markConflict ]
 ]
 
 { #category : 'announcements' }
@@ -523,8 +525,6 @@ StMethodBrowser >> handleMethodRemoved: anAnnouncement [
 	matchingItem := self methods
 		                detect: [ :m | m methodClass = item methodClass and: [ m selector = item selector ] ]
 		                ifNone: [ ^ self ].
-
-	selection := methodList selectedIndex.
 	selectedMethod := self selectedMethod.
 	self methods: (self methods
 			 remove: matchingItem ifAbsent: [ ];
@@ -581,7 +581,7 @@ StMethodBrowser >> initializePresenters [
 
 	super initializePresenters.
 
-	textPresenter := self newCode.
+	textPresenter := self newCodeEditor.
 	refreshingBlock := [ :item | true ].
 	filterPresenter := self instantiate: SpFilteringListPresenter.
 	filterPresenter matchSubstring.
@@ -611,7 +611,7 @@ StMethodBrowser >> installIconStylerFor: anItem [
 		ifFalse: [ ^ self ].
 	
 	IconStyler withStaticStylers 
-		styleText: textPresenter 
+		styleText: textPresenter codePresenter
 		withAst: anItem ast
 ]
 
@@ -692,7 +692,6 @@ StMethodBrowser >> methods: compiledMethods asImplementorsOfAll: aCollectionOfSy
 
 { #category : 'api - instance side' }
 StMethodBrowser >> methods: compiledMethods asReferenceTo: aClassName [
-	"Create without opening it a method browsers for the implementors of a Symbol"
 
 	self
 		setRefreshingBlockForClassReferencesOf: aClassName;
@@ -1007,6 +1006,7 @@ StMethodBrowser >> windowTitle [
 
 	| msg total |
 	(filterPresenter isNil or: [ methodList isNil ]) ifTrue: [ ^ title ifNil: [ 'Message Browser' ] ].
+	self methods ifEmpty: [ ^ 'No Results' ].
 	total := filterPresenter unfilteredItems size.
 	msg := methodList ifNil: [ '' ] ifNotNil: [
 			       (filterPresenter filterText isEmpty or: [ methodList numberOfElements = total ])

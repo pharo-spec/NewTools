@@ -78,7 +78,7 @@ StDebuggerContextInteractionModel >> hasBindingOf: aString [
 		  self hasBindingInInteractionModelOf: aString ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'initialization' }
 StDebuggerContextInteractionModel >> initialize [
 
 	super initialize.
