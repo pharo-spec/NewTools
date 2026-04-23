@@ -45,6 +45,7 @@ StMethodCodePresenter >> refactoringCommandsGroup [
 		StConvertTempToInstVarCommand.
 		StInlineMethodCommand.
 		StRenameArgOrTempCommand.
-		StGenerateVariableAccessorCommand } do: [ :cmdClass | group register: (cmdClass forSpecContext: methodBrowser) ].
+		StGenerateVariableAccessorCommand.
+		StMoveInstanceVariableToClassSideCommand } do: [ :cmdClass | group register: (cmdClass forSpecContext: methodBrowser) ].
 	^ group
 ]
