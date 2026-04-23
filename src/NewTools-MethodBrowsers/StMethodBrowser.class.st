@@ -39,6 +39,7 @@ StMethodBrowser class >> beDefaultBrowser [
 
 { #category : 'opening - old' }
 StMethodBrowser class >> browse: aCollection [
+	"Basic version. Opens a browser on the given collection of methods without setting a title or refreshing block."
 
 	^ (self methods: aCollection) open
 ]
@@ -84,6 +85,7 @@ StMethodBrowser class >> browse: compiledMethods asSendersOf: aSymbol [
 
 { #category : 'opening explicit' }
 StMethodBrowser class >> browse: compiledMethods asSendersOfAll: aCollectionOfSymbols [
+	"Specialized version for better UX feedback for senders of all given selectors."
 
 	^ self new
 		  methods: compiledMethods asSendersOfAll: aCollectionOfSymbols;
@@ -102,19 +104,19 @@ StMethodBrowser class >> browse: aCollection title: aString [
 
 { #category : 'opening - old' }
 StMethodBrowser class >> browse: aCollection title: aString highlight: aSelectString [
-	"Special Version that sets the correct refreshing Block for Implentors Browser"
-	
+	"Basic version with limited UX feedback that highlights a specific string in the source code."
+
 	^ self new
-		methods: aCollection;
-		title: aString;
-		highlight: aSelectString;
-		open
+		  methods: aCollection;
+		  title: aString;
+		  highlight: aSelectString;
+		  open
 ]
 
 { #category : 'opening' }
-StMethodBrowser class >> browseImplementorsOf: aSymbol [ 
-	"Special Version that sets the correct refreshing Block for Implentors Browser"
-	
+StMethodBrowser class >> browseImplementorsOf: aSymbol [
+	"Opens a browser on all implementors of aSymbol. Sets the refreshing block to keep the list up to date."
+
 	^ self browse: (self implementorsOf: aSymbol) asImplementorsOf: aSymbol
 ]
 
