@@ -27,10 +27,11 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Gtk';
 			
 			"Basic tools (inherited from Spec)"
-			package: 'NewTools-MethodBrowsers' with: [ spec requires: #('NewTools-Core' 'NewTools-SpTextPresenterDecorators' 'NewTools-Refactoring-Commands') ];
-			package: 'NewTools-MethodBrowsers-Tests' with: [ spec requires: #( 'NewTools-MethodBrowsers' ) ];
 			package: 'NewTools-Refactoring-Commands' with: [ spec requires: #('NewTools-Core' ) ];
 			package: 'NewTools-Refactoring-Commands-Tests' with: [ spec requires: #( 'NewTools-Refactoring-Commands' ) ];
+			package: 'NewTools-MethodBrowsers' with: [ spec requires: #('NewTools-Core' 'NewTools-SpTextPresenterDecorators' 'NewTools-Refactoring-Commands') ];
+			package: 'NewTools-MethodBrowsers-Tests' with: [ spec requires: #( 'NewTools-MethodBrowsers' ) ];
+		
 			
 			"inspector"
 			package: 'NewTools-Inspector' with: [ spec requires: #( 'NewTools-Core' 'NewTools-Inspector-Extensions' ) ];
