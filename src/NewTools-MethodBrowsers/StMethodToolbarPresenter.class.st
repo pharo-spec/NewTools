@@ -16,7 +16,7 @@ Class {
 		'dropList',
 		'toolbarPresenter',
 		'messageList',
-		'runTestsButton'
+		'runTestsButton',
 		'reuseWindowButton'
 	],
 	#category : 'NewTools-MethodBrowsers-Base',
