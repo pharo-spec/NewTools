@@ -42,7 +42,7 @@ EpFileOutModificationsTest >> saveFileButNotOpenOSDialogDuring: aBlock [
 	Cancel it: we don't want to open a native dialog"
 	SpWindowSimulateOpenModal value: [ :pres | 
 		SpWindowSimulateOpenModal
-			value: [ :pres | pres triggerCancelAction]
+			value: [ :pres2 | pres2 triggerCancelAction]
 			during: [ pres triggerOkAction ] ]
 		during: aBlock
 ]
