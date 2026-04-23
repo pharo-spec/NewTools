@@ -43,6 +43,8 @@ StMethodCodePresenter >> refactoringCommandsGroup [
 		StRenameClassCommand.
 		StExtractTempCommand.
 		StConvertTempToInstVarCommand.
-		StInlineMethodCommand } do: [ :cmdClass | group register: (cmdClass forSpecContext: methodBrowser) ].
+		StInlineMethodCommand.
+		StRenameArgOrTempCommand.
+		StGenerateVariableAccessorCommand } do: [ :cmdClass | group register: (cmdClass forSpecContext: methodBrowser) ].
 	^ group
 ]

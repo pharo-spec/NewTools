@@ -840,7 +840,8 @@ StMethodBrowser >> selectItem: item [
 	| text |
 
 	toolbarPresenter method: item.
-	textPresenter beForMethod: item.
+
+	textPresenter codePresenter beForMethod: item.
 	text := (self textConverter
 		method: item;
 		getText).
