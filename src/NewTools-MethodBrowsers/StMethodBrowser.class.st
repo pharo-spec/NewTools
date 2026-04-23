@@ -53,6 +53,14 @@ StMethodBrowser class >> browse: compiledMethods asImplementorsOf: aSymbol [
 ]
 
 { #category : 'opening explicit' }
+StMethodBrowser class >> browse: compiledMethods asImplementorsOfAll: aCollectionOfSymbols [
+
+	^ self new
+		  methods: compiledMethods asImplementorsOfAll: aCollectionOfSymbols;
+		  open
+]
+
+{ #category : 'opening explicit' }
 StMethodBrowser class >> browse: compiledMethods asReferencesToClass: aClass [
 	"Specialized version for better UX feedback for class references and explicit list of methods"
 
@@ -123,7 +131,7 @@ StMethodBrowser class >> browseImplementorsOfAll: aCollectionOfSymbols [
 
 	| methods |
 	methods := aCollectionOfSymbols flatCollect: [ :sym | self implementorsOf: sym ].
-	^ self browse: methods asArray title: 'Implementors of ' , (', ' join: aCollectionOfSymbols)
+	^ self browse: methods asArray asImplementorsOfAll: aCollectionOfSymbols
 ]
 
 { #category : 'opening' }
@@ -673,6 +681,16 @@ StMethodBrowser >> methods: compiledMethods asImplementorsOf: aSymbol [
 ]
 
 { #category : 'api - instance side' }
+StMethodBrowser >> methods: compiledMethods asImplementorsOfAll: aCollectionOfSymbols [
+
+	self
+		setRefreshingBlockForImplementorsOfAll: aCollectionOfSymbols;
+		highlight: aCollectionOfSymbols;
+		methods: compiledMethods;
+		title: 'Implementors of ' , (', ' join: aCollectionOfSymbols)
+]
+
+{ #category : 'api - instance side' }
 StMethodBrowser >> methods: compiledMethods asReferenceTo: aClassName [
 
 	self
@@ -858,6 +876,12 @@ StMethodBrowser >> setRefreshingBlockForImplementorsOf: aSelector [
 ]
 
 { #category : 'api' }
+StMethodBrowser >> setRefreshingBlockForImplementorsOfAll: aCollectionOfSymbols [
+
+	self refreshingBlock: [ :message | aCollectionOfSymbols anySatisfy: [ :sel | message selector = sel ] ]
+]
+
+{ #category : 'initialization' }
 StMethodBrowser >> setRefreshingBlockForReferencesToSlot: aSlot [
 
 	self refreshingBlock: [ :method | method accessesSlot: aSlot ]
