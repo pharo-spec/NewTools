@@ -16,6 +16,7 @@ Class {
 		'dropList',
 		'toolbarPresenter',
 		'messageList',
+		'runTestsButton'
 		'reuseWindowButton'
 	],
 	#category : 'NewTools-MethodBrowsers-Base',
@@ -92,6 +93,12 @@ StMethodToolbarPresenter >> doBrowseVersions [
 	messageList doBrowseVersions
 ]
 
+{ #category : 'private - actions' }
+StMethodToolbarPresenter >> doRunTests [
+
+	messageList doRunTests
+]
+
 { #category : 'accessing' }
 StMethodToolbarPresenter >> emptyDropList [
 	
@@ -134,6 +141,12 @@ StMethodToolbarPresenter >> initializePresenters [
 		icon: (self iconNamed: #history);
 		help: 'Browse versions of current selected method';
 		action: [ self doBrowseVersions ].
+	(runTestsButton := self newToolbarButton )
+		label: 'Run Tests'; 
+		icon: (self iconNamed: #testGreen);
+		help: 'Run all test methods in the list';
+		action: [ self doRunTests ].
+		
 	reuseWindowButton := self newToolbarToggleButton
 		                     label: 'Reuse window';
 		                     help: 'If checked, new searches will replace current results.';
@@ -153,6 +166,7 @@ StMethodToolbarPresenter >> initializePresenters [
 		                    add: implementorsButton;
 		                    add: versionButton;
 		                    add: reuseWindowButton;
+                        add: runTestsButton;
 		                    yourself.
 
 	dropList := self newDropList

@@ -214,9 +214,21 @@ StMethodListPresenter >> doInspectMethod [
 StMethodListPresenter >> doRemoveMethod [
 
 	self selectedMethod ifNotNil: [ :aMethod |
-		SystemNavigation new 
+		SystemNavigation default 
 			removeMethod: aMethod 
 			inClass: aMethod methodClass ]
+]
+
+{ #category : 'private - actions' }
+StMethodListPresenter >> doRunTests [
+
+	| testMethods |
+	testMethods := self methods select: [ :each | each isTestMethod ].
+
+	testMethods ifEmpty: [
+			self application inform: 'No test found in the list.'.
+			^ self ].
+	testMethods do: [ :m | self executeTestFor: m ]
 ]
 
 { #category : 'execution' }
