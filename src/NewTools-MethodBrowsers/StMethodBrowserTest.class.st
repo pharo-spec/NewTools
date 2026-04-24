@@ -126,7 +126,7 @@ StMethodBrowserTest >> testHandleMethodAddedWithActiveFilterKeepsUnfilteredItems
 	[
 		window := StMethodBrowser browseSendersOf: #printOn:.
 		browser := window presenter.
-
+		StMethodBrowser codeChangeAnnouncer unsubscribe: browser.
 		total := browser filterPresenter unfilteredItems size.
 		self assert: total > 0.
 		browser filterPresenter filterInputPresenter text: 'zzznomatch'.
