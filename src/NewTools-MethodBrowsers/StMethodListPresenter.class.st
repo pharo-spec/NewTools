@@ -430,6 +430,7 @@ StMethodListPresenter >> packageNameOf: anItem [
 StMethodListPresenter >> packageOf: aCompiledMethod [
 	"Answer the <Package> of aCompiledMethod"
 
+	aCompiledMethod ifNil: [ ^ self ].
 	^ self packageOrganizer packageOf: aCompiledMethod methodClass
 ]
 
