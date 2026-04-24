@@ -13,9 +13,3 @@ StRefactoringVariableCommand >> canBeExecuted [
 
 	^ self codePresenter selectedNode isInstanceVariable and: [ self codePresenter selectedNode isGlobalVariable not ]
 ]
-
-{ #category : 'executing' }
-StRefactoringVariableCommand >> prepareDriver [
-
-	^ self subclassResponsibility 
-]
