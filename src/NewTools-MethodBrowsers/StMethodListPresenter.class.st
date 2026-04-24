@@ -530,9 +530,9 @@ StMethodListPresenter >> topologicSort: anObject [
 StMethodListPresenter >> updateVisitedScopesFrom: aCompiledMethod [
 	"Private - Update the list of the visited scopes"
 
-	visitedScopes 
-		ifNotNil: [ 
-			visitedScopes 
+	aCompiledMethod ifNil: [ ^ self ].
+	visitedScopes ifNotNil: [
+			visitedScopes
 				add: (self packageOf: aCompiledMethod);
 				add: (self classOf: aCompiledMethod);
 				add: (self classHierarchyOf: aCompiledMethod) ]

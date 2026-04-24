@@ -245,7 +245,6 @@ StMethodBrowser class >> navigateInPlaceSettingsOn: aBuilder [
 		parent: #tools
 ]
 
-
 { #category : 'private' }
 StMethodBrowser class >> referencesOf: aSymbol [
 	"Do not use aSymbol implementors because it is a disguised global"
@@ -578,6 +577,7 @@ StMethodBrowser >> initializePresenters [
 
 	textPresenter := self newCodeEditor.
 	textPresenter codePresenter: methodCodePresenter.
+	methodCodePresenter whenTextChangedDo: [ :aString | textPresenter markDirty ].
 	refreshingBlock := [ :item | true ].
 	filterPresenter := self instantiate: SpFilteringListPresenter.
 	filterPresenter matchSubstring.
@@ -992,12 +992,12 @@ StMethodBrowser >> windowIcon [
 		
 ]
 
-{ #category : 'private' }
+{ #category : 'accessing' }
 StMethodBrowser >> windowTitle [
 
 	| msg total |
 	(filterPresenter isNil or: [ methodList isNil ]) ifTrue: [ ^ title ifNil: [ 'Message Browser' ] ].
-	self methods ifEmpty: [ ^ 'No Results' ].
+	(title isNotNil and: [ self methods isEmpty ])  ifTrue: [ ^ title , ': No Results' ].
 	total := filterPresenter unfilteredItems size.
 	msg := methodList ifNil: [ '' ] ifNotNil: [
 			       (filterPresenter filterText isEmpty or: [ methodList numberOfElements = total ])

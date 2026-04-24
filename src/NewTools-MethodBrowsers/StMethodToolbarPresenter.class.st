@@ -105,7 +105,7 @@ StMethodToolbarPresenter >> emptyDropList [
 	dropList emptyList
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'initialization' }
 StMethodToolbarPresenter >> iconForReuseState: aBoolean [
 
 	^ aBoolean

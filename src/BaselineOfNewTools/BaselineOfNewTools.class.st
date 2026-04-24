@@ -281,7 +281,7 @@ BaselineOfNewTools >> baseline: spec [
 
 			group: 'default'
 				with:
-					#( 'Profile' 'Epicea' 'Playground' 'ProfStef' 'Transcript' 'Inspector' 'ClosedWindows' 'CritiqueBrowser' 'Debugger' 'SystemReporter' 'FontChooser'
+					#( 'Profile' 'Epicea' 'Playground' 'ProfStef' 'Transcript' 'Inspector' 'ClosedWindows' 'Commands' 'CritiqueBrowser' 'Debugger' 'SystemReporter' 'FontChooser'
 					   'Methods' 'Spotter' 'RewriterTools' 'ScopesEditor' 'FileBrowser' 'Finder' 'Profiler' 'SettingsBrowser' 'WelcomeBrowser' 'ShortcutsBrowser'
 					   'ColorPickerGroup' 'ProcessBrowser' 'DependencyAnalyser' )  ]
 ]
