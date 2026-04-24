@@ -21,6 +21,12 @@ StRefactoringCommand >> execute [
 	self prepareDriver runRefactoring
 ]
 
+{ #category : 'testing' }
+StRefactoringCommand >> isVisible [
+ 
+	^ self canBeExecuted
+]
+
 { #category : 'executing' }
 StRefactoringCommand >> prepareDriver [
 
