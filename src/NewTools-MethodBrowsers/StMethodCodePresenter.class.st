@@ -51,6 +51,7 @@ StMethodCodePresenter >> refactoringCommandsGroup [
 		StPushDownVariableCommand.
 		StRemoveVariableCommand.
 		StProtectVariableCommand.
-		StRenameVariableCommand } do: [ :cmdClass | group register: (cmdClass forSpecContext: methodBrowser) ].
+		StRenameVariableCommand.
+		StExtractMethodCommand } do: [ :cmdClass | group register: (cmdClass forSpecContext: methodBrowser) ].
 	^ group
 ]

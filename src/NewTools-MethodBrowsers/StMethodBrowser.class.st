@@ -879,7 +879,7 @@ StMethodBrowser >> setRefreshingBlockForImplementorsOfAll: aCollectionOfSymbols 
 	self refreshingBlock: [ :message | aCollectionOfSymbols anySatisfy: [ :sel | message selector = sel ] ]
 ]
 
-{ #category : 'initialization' }
+{ #category : 'api' }
 StMethodBrowser >> setRefreshingBlockForReferencesToSlot: aSlot [
 
 	self refreshingBlock: [ :method | method accessesSlot: aSlot ]
