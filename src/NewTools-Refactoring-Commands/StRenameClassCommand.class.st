@@ -3,7 +3,7 @@ Rename selected class from a code presenter
 "
 Class {
 	#name : 'StRenameClassCommand',
-	#superclass : 'StRefactoringCommand',
+	#superclass : 'StRefactoringClassCommand',
 	#category : 'NewTools-Refactoring-Commands',
 	#package : 'NewTools-Refactoring-Commands'
 }
@@ -24,14 +24,6 @@ StRenameClassCommand class >> defaultIconName [
 StRenameClassCommand class >> defaultName [
 
 	^ '(R) Rename'
-]
-
-{ #category : 'testing' }
-StRenameClassCommand >> canBeExecuted [
-
-	| node |
-	node := self codePresenter selectedNode.
-	^ node isGlobalVariable and: [ node binding value isClass ]
 ]
 
 { #category : 'executing' }
