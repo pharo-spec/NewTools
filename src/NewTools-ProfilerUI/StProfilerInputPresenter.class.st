@@ -109,9 +109,7 @@ StProfilerInputPresenter >> notify: errorMessage at: positionIndex in: sourceCod
 StProfilerInputPresenter >> profileIt [
 
 	block ifNotNil: [ ^ viewModel profileBlock: block ].
-
-	codeInput text ifNotEmpty: [
-		^ viewModel profileCode: codeInput text notifying: self ].
+	codeInput text ifNotEmpty: [ ^ viewModel profileCode: codeInput text ].
 
 	self notify: 'Must enter code' at: 0 in: codeInput text
 ]
