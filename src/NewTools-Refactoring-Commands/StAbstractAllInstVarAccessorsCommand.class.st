@@ -38,7 +38,7 @@ StAbstractAllInstVarAccessorsCommand >> prepareDriver [
 	self codePresenter selectedNode -> dialog selectedItems.
 
 
-	vars collect: [ :var |
+	vars do: [ :var |
 		refactoring := var createRefactoring: ReAbstractInstanceVariableRefactoring for: self codePresenter selectedNode variable key ].
 	^ refactoring
 ]
