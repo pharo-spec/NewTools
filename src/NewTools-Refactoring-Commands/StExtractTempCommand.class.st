@@ -26,12 +26,6 @@ StExtractTempCommand class >> defaultName [
 	^ 'Extract temp'
 ]
 
-{ #category : 'testing' }
-StExtractTempCommand >> canBeExecuted [
-
-	^ self codePresenter selectionInterval isNotEmpty
-]
-
 { #category : 'executing' }
 StExtractTempCommand >> prepareDriver [
 
