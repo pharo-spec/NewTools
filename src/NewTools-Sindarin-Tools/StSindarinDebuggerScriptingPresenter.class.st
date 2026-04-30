@@ -96,8 +96,6 @@ StSindarinDebuggerScriptingPresenter >> executeScript [
 			          source: stream;
 			          context: evaluationContext;
 			          receiver: receiver;
-			          requestor: model;
-			          failBlock: [ nil ];
 			          evaluate.
 		resultInspection model: result.
 		resultInspection update ]

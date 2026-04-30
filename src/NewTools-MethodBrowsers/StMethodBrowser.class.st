@@ -18,8 +18,7 @@ Class {
 		'refreshingBlock',
 		'textPresenter',
 		'highlight',
-		'filterPresenter',
-		'reuseWindowCheckbox'
+		'filterPresenter'
 	],
 	#classVars : [
 		'NavigateInPlace',
@@ -39,6 +38,7 @@ StMethodBrowser class >> beDefaultBrowser [
 
 { #category : 'opening - old' }
 StMethodBrowser class >> browse: aCollection [
+	"Basic version. Opens a browser on the given collection of methods without setting a title or refreshing block."
 
 	^ (self methods: aCollection) open
 ]
@@ -49,6 +49,14 @@ StMethodBrowser class >> browse: compiledMethods asImplementorsOf: aSymbol [
 
 	^ self new
 		  methods: compiledMethods asImplementorsOf: aSymbol;
+		  open
+]
+
+{ #category : 'opening explicit' }
+StMethodBrowser class >> browse: compiledMethods asImplementorsOfAll: aCollectionOfSymbols [
+
+	^ self new
+		  methods: compiledMethods asImplementorsOfAll: aCollectionOfSymbols;
 		  open
 ]
 
@@ -84,6 +92,7 @@ StMethodBrowser class >> browse: compiledMethods asSendersOf: aSymbol [
 
 { #category : 'opening explicit' }
 StMethodBrowser class >> browse: compiledMethods asSendersOfAll: aCollectionOfSymbols [
+	"Specialized version for better UX feedback for senders of all given selectors."
 
 	^ self new
 		  methods: compiledMethods asSendersOfAll: aCollectionOfSymbols;
@@ -102,19 +111,19 @@ StMethodBrowser class >> browse: aCollection title: aString [
 
 { #category : 'opening - old' }
 StMethodBrowser class >> browse: aCollection title: aString highlight: aSelectString [
-	"Special Version that sets the correct refreshing Block for Implentors Browser"
-	
+	"Basic version with limited UX feedback that highlights a specific string in the source code."
+
 	^ self new
-		methods: aCollection;
-		title: aString;
-		highlight: aSelectString;
-		open
+		  methods: aCollection;
+		  title: aString;
+		  highlight: aSelectString;
+		  open
 ]
 
 { #category : 'opening' }
-StMethodBrowser class >> browseImplementorsOf: aSymbol [ 
-	"Special Version that sets the correct refreshing Block for Implentors Browser"
-	
+StMethodBrowser class >> browseImplementorsOf: aSymbol [
+	"Opens a browser on all implementors of aSymbol. Sets the refreshing block to keep the list up to date."
+
 	^ self browse: (self implementorsOf: aSymbol) asImplementorsOf: aSymbol
 ]
 
@@ -123,7 +132,7 @@ StMethodBrowser class >> browseImplementorsOfAll: aCollectionOfSymbols [
 
 	| methods |
 	methods := aCollectionOfSymbols flatCollect: [ :sym | self implementorsOf: sym ].
-	^ self browse: methods asArray title: 'Implementors of ' , (', ' join: aCollectionOfSymbols)
+	^ self browse: methods asArray asImplementorsOfAll: aCollectionOfSymbols
 ]
 
 { #category : 'opening' }
@@ -200,7 +209,7 @@ StMethodBrowser class >> browseWritersOfVariables: variables [
 StMethodBrowser class >> implementorsOf: aSymbol [
 	"Do not use aSymbol implementors because it is a disguised global"
 
-	^ (SystemNavigation new allImplementorsOf: aSymbol) reject: [ :m | m isFromTrait ]
+	^ (SystemNavigation default allImplementorsOf: aSymbol) reject: [ :m | m isFromTrait ]
 ]
 
 { #category : 'instance creation' }
@@ -236,41 +245,24 @@ StMethodBrowser class >> navigateInPlaceSettingsOn: aBuilder [
 		parent: #tools
 ]
 
-{ #category : 'opening - old' }
-StMethodBrowser class >> openMessageList: messageList name: aString autoSelect: aSelector refreshingBlockSelector: aRefreshingBlockSelector [
-	
-	| browser |
-	browser := self new
-		methods: messageList;
-		title: aString;
-		autoSelect: aSelector;
-		yourself.
-		
-	aRefreshingBlockSelector ifNotNil:[(browser perform: aRefreshingBlockSelector with: aSelector)].
-	^browser open
-	
-				
-
-]
-
 { #category : 'private' }
 StMethodBrowser class >> referencesOf: aSymbol [
 	"Do not use aSymbol implementors because it is a disguised global"
 	
-	^ SystemNavigation new allReferencesTo: aSymbol 
+	^ SystemNavigation default allReferencesTo: aSymbol 
 ]
 
 { #category : 'private' }
 StMethodBrowser class >> referencesToClass: aClass [
 	
-	^ SystemNavigation new allReferencesTo: aClass binding
+	^ SystemNavigation default allReferencesTo: aClass binding
 ]
 
 { #category : 'private' }
 StMethodBrowser class >> referencesToLiteral: aLiteral [
 	"Do not use aSymbol implementors because it is a disguised global"
 
-	^ SystemNavigation new allReferencesTo: aLiteral
+	^ SystemNavigation default allReferencesTo: aLiteral
 ]
 
 { #category : 'private' }
@@ -344,10 +336,10 @@ StMethodBrowser >> addHighlightedSegments [
 					 yourself) ]
 ]
 
-{ #category : 'to remove' }
-StMethodBrowser >> autoSelect: aString [
-	"this is just to absorb system navigation for now"
-	"once we remove the old message browser we should remove this empty method."
+{ #category : 'private - scopes' }
+StMethodBrowser >> allScopes [ 
+	
+	^ methodList allScopes
 ]
 
 { #category : 'announcements' }
@@ -355,6 +347,12 @@ StMethodBrowser >> classRenamed: anAnnouncement [
 	"this method forces the announcement to be handled in the UI process"
 	self defer: [ 
 		self handleClassRenamed: anAnnouncement ]
+]
+
+{ #category : 'accessing' }
+StMethodBrowser >> codeEditor [
+
+	^ textPresenter
 ]
 
 { #category : 'initialization' }
@@ -438,68 +436,70 @@ StMethodBrowser >> handleClassRenamed: anAnnouncement [
 
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodAdded: anAnnouncement [
+    | item selectedMethod editedText |
+    
+    self isDisplayed ifFalse: [ ^ self ].
+    refreshingBlock ifNil: [ ^ self ].
+    
+    item := anAnnouncement method.
+    (self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [ ^ self ].
+    (item methodClass isNotNil and: [ item methodClass isObsolete not ]) ifFalse: [ ^ self ].
 
-	| item sel text boolean |
-	self isDisplayed ifFalse: [ ^ self ].
-	refreshingBlock ifNil: [ ^ self ].
+    editedText := textPresenter isDirty 
+    		ifTrue: [ textPresenter text ]
+    		ifFalse: [ nil ].
+    selectedMethod := self selectedMethod.
+	(filterPresenter unfilteredItems includes: item) ifFalse: [
+		self methods: (filterPresenter unfilteredItems copy
+			add: item asFullRingDefinition;
+			yourself) ].
 
-	item := anAnnouncement method.
-
-
-	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [ ^ self ].
-	(item methodClass isNotNil and: [ item methodClass isObsolete not ]) ifFalse: [ ^ self ].
-	boolean := textPresenter hasUnacceptedEdits.
-	boolean ifTrue: [ text := textPresenter pendingText ].
-
-	sel := self selectedMethod.
-	(self methods includes: item) ifFalse: [
-			self methods: (self methods
-					 add: item asFullRingDefinition;
-					 yourself) ].
-
-	self defer: [ self selectIndex: (self methods indexOf: sel) ].
-	self selectedMessage: sel.
-
-	boolean ifTrue: [ textPresenter pendingText: text ]
+	self defer: [ self selectIndex: ((self methods indexOf: selectedMethod) max: 1) ].
+   self selectedMessage: selectedMethod .
+    editedText ifNotNil: [
+        textPresenter text: editedText.
+        textPresenter markDirty ]
 ]
 
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodModified: anAnnouncement [
-
-	| item oldItem matchingItem index text edits list |
+	| item oldItem matchingItem index editedText list |
+	
 	self isDisplayed ifFalse: [ ^ self ].
 	refreshingBlock ifNil: [ ^ self ].
 	item := anAnnouncement newMethod.
 	oldItem := anAnnouncement oldMethod.
 
 	matchingItem := self methods
-		                detect: [ :m | m methodClass = oldItem methodClass and: [ m selector = oldItem selector ] ]
-		                ifNone: [ nil ].
+		detect: [ :m | m methodClass = oldItem methodClass and: [ m selector = oldItem selector ] ]
+		ifNone: [ nil ].
 	matchingItem ifNil: [
-			(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifTrue: [
-					self methods: (self methods
-							 add: item asFullRingDefinition;
-							 yourself) ].
-			^ self ].
-
-	edits := textPresenter hasUnacceptedEdits.
-	edits ifTrue: [ text := textPresenter pendingText ].
+		(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifTrue: [
+			self methods: (self methods
+				add: item asFullRingDefinition;
+				yourself) ].
+		^ self ].
+	
+	editedText := textPresenter isDirty 
+		ifTrue: [ editedText := textPresenter text ]
+		ifFalse: [ nil ].
+		
 	index := methodList selectedIndex.
 
-	list := self methods
-		        remove: matchingItem ifAbsent: [ ];
-		        yourself.
+	list := filterPresenter unfilteredItems copy.
+	list remove: matchingItem ifAbsent: [ ].
 	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [
-			self methods: list.
-			self defer: [ self selectIndex: (index min: self methods size) ].
-			^ self ].
+		self methods: list.
+		self defer:[ self selectIndex: (index min: self methods size) ].
+		^ self ].
+		
 	list add: item asFullRingDefinition.
 	self methods: list.
 	self defer: [ self selectIndex: index ].
-
-	edits ifFalse: [ ^ self ].
-	textPresenter pendingText: text.
-	textPresenter hasEditingConflicts: true
+		
+	editedText ifNotNil: [
+		textPresenter text: editedText.
+		textPresenter markConflict ]
 ]
 
 { #category : 'announcements' }
@@ -515,8 +515,6 @@ StMethodBrowser >> handleMethodRemoved: anAnnouncement [
 	matchingItem := self methods
 		                detect: [ :m | m methodClass = item methodClass and: [ m selector = item selector ] ]
 		                ifNone: [ ^ self ].
-
-	selection := methodList selectedIndex.
 	selectedMethod := self selectedMethod.
 	self methods: (self methods
 			 remove: matchingItem ifAbsent: [ ];
@@ -544,7 +542,6 @@ StMethodBrowser >> horizontalLayout [
 				   add: (SpBoxLayout newTopToBottom
 						    add: methodList;
 						    add: filterPresenter filterInputPresenter expand: false;
-						    add: reuseWindowCheckbox expand: false;
 						    yourself);
 				   add: (SpBoxLayout newTopToBottom
 						    add: textPresenter;
@@ -571,18 +568,21 @@ StMethodBrowser >> initializeDropList [
 { #category : 'initialization' }
 StMethodBrowser >> initializePresenters [
 
+	| methodCodePresenter |
 	super initializePresenters.
 
-	textPresenter := self newCode.
+
+	methodCodePresenter := self instantiate: StMethodCodePresenter.
+	methodCodePresenter methodBrowser: self.
+
+	textPresenter := self newCodeEditor.
+	textPresenter codePresenter: methodCodePresenter.
+	methodCodePresenter whenTextChangedDo: [ :aString | textPresenter markDirty ].
 	refreshingBlock := [ :item | true ].
 	filterPresenter := self instantiate: SpFilteringListPresenter.
 	filterPresenter matchSubstring.
 	filterPresenter display: [ :m | (self methodClassNameForItem: m) , ' >> ' , m selector ].
-	reuseWindowCheckbox := self newCheckBox
-		                       label: 'Reuse window';
-		                       help: 'If checked, new searches will replace current results.';
-		                       state: self class navigateInPlace;
-		                       whenChangedDo: [ :state | self class navigateInPlace: state ].
+
 	self initializeDropList
 ]
 
@@ -590,8 +590,13 @@ StMethodBrowser >> initializePresenters [
 StMethodBrowser >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
-	aWindowPresenter whenClosedDo: [ TestCase historyAnnouncer unsubscribe: methodList ].
-
+	aWindowPresenter whenWillCloseDo: [ :ann |
+			textPresenter isDirty ifTrue: [
+					(self application confirm: 'Changes have not been saved.
+Is it OK to discard changes?') ifFalse: [ ann denyClose ] ] ].
+	aWindowPresenter whenClosedDo: [ 
+    TestCase historyAnnouncer unsubscribe: methodList.
+    self class codeChangeAnnouncer unsubscribe: self ]
 ]
 
 { #category : 'private' }
@@ -603,7 +608,7 @@ StMethodBrowser >> installIconStylerFor: anItem [
 		ifFalse: [ ^ self ].
 	
 	IconStyler withStaticStylers 
-		styleText: textPresenter 
+		styleText: textPresenter codePresenter
 		withAst: anItem ast
 ]
 
@@ -673,8 +678,17 @@ StMethodBrowser >> methods: compiledMethods asImplementorsOf: aSymbol [
 ]
 
 { #category : 'api - instance side' }
+StMethodBrowser >> methods: compiledMethods asImplementorsOfAll: aCollectionOfSymbols [
+
+	self
+		setRefreshingBlockForImplementorsOfAll: aCollectionOfSymbols;
+		highlight: aCollectionOfSymbols;
+		methods: compiledMethods;
+		title: 'Implementors of ' , (', ' join: aCollectionOfSymbols)
+]
+
+{ #category : 'api - instance side' }
 StMethodBrowser >> methods: compiledMethods asReferenceTo: aClassName [
-	"Create without opening it a method browsers for the implementors of a Symbol"
 
 	self
 		setRefreshingBlockForClassReferencesOf: aClassName;
@@ -820,7 +834,8 @@ StMethodBrowser >> selectItem: item [
 	| text |
 
 	toolbarPresenter method: item.
-	textPresenter beForMethod: item.
+
+	textPresenter codePresenter beForMethod: item.
 	text := (self textConverter
 		method: item;
 		getText).
@@ -858,7 +873,13 @@ StMethodBrowser >> setRefreshingBlockForImplementorsOf: aSelector [
 	self refreshingBlock: [ :message | message selector = aSelector ]
 ]
 
-{ #category : 'initialization' }
+{ #category : 'api' }
+StMethodBrowser >> setRefreshingBlockForImplementorsOfAll: aCollectionOfSymbols [
+
+	self refreshingBlock: [ :message | aCollectionOfSymbols anySatisfy: [ :sel | message selector = sel ] ]
+]
+
+{ #category : 'api' }
 StMethodBrowser >> setRefreshingBlockForReferencesToSlot: aSlot [
 
 	self refreshingBlock: [ :method | method accessesSlot: aSlot ]
@@ -951,7 +972,6 @@ StMethodBrowser >> verticalLayout [
 				   add: (SpBoxLayout newTopToBottom
 						    add: methodList;
 						    add: filterPresenter filterInputPresenter expand: false;
-						    add: reuseWindowCheckbox expand: false;
 						    yourself);
 				   add: (SpBoxLayout newTopToBottom
 						    add: textPresenter;
@@ -972,17 +992,12 @@ StMethodBrowser >> windowIcon [
 		
 ]
 
-{ #category : 'private' }
-StMethodBrowser >> windowIsClosing [
-
-	self class codeChangeAnnouncer unsubscribe: self
-]
-
-{ #category : 'private' }
+{ #category : 'accessing' }
 StMethodBrowser >> windowTitle [
 
 	| msg total |
 	(filterPresenter isNil or: [ methodList isNil ]) ifTrue: [ ^ title ifNil: [ 'Message Browser' ] ].
+	(title isNotNil and: [ self methods isEmpty ])  ifTrue: [ ^ title , ': No Results' ].
 	total := filterPresenter unfilteredItems size.
 	msg := methodList ifNil: [ '' ] ifNotNil: [
 			       (filterPresenter filterText isEmpty or: [ methodList numberOfElements = total ])
