@@ -10,6 +10,18 @@ Class {
 }
 
 { #category : 'accessing' }
+StRefactoringCommand class >> priority [
+
+	^ 100
+]
+
+{ #category : 'ctions' }
+StRefactoringCommand class >> registerInMethodBrowser [
+
+	StRefactoringCommandRegistry registerCommand: self
+]
+
+{ #category : 'accessing' }
 StRefactoringCommand >> codePresenter [
 
 	^ context codeEditor codePresenter
