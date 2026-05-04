@@ -54,6 +54,7 @@ StMethodCodePresenter >> refactoringCommandsGroup [
 		StRenameVariableCommand.
 		StExtractMethodCommand.
 		StRemoveMessageArgumentCommand.
-		StAbstractAllInstVarAccessorsCommand } do: [ :cmdClass | group register: (cmdClass forSpecContext: methodBrowser) ].
+		StAbstractAllInstVarAccessorsCommand.
+		StRenameMethodCommand } do: [ :cmdClass | group register: (cmdClass forSpecContext: methodBrowser) ].
 	^ group
 ]
