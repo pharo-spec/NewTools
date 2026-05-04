@@ -992,7 +992,7 @@ StMethodBrowser >> windowTitle [
 
 	| msg total |
 	(filterPresenter isNil or: [ methodList isNil ]) ifTrue: [ ^ title ifNil: [ 'Message Browser' ] ].
-	(title isNotNil and: [ self methods isEmpty ])  ifTrue: [ ^ title , ': No Results' ].
+	(title isNotNil and: [ self methods isEmpty ])  ifTrue: [ ^ title , ' [No Results]' ].
 	total := filterPresenter unfilteredItems size.
 	msg := methodList ifNil: [ '' ] ifNotNil: [
 			       (filterPresenter filterText isEmpty or: [ methodList numberOfElements = total ])
