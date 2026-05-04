@@ -856,11 +856,6 @@ StMethodBrowser >> selectedMessage: aMessage [
 	methodList updateVisitedScopesFrom: aMessage
 ]
 
-{ #category : 'accessing' }
-StMethodBrowser >> selectedMethod [
-	^ methodList selectedMethod
-]
-
 { #category : 'api' }
 StMethodBrowser >> setRefreshingBlockForClassReferencesOf: aString [
 
