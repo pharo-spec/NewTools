@@ -16,7 +16,7 @@ StRefactoringCommand class >> priority [
 ]
 
 { #category : 'ctions' }
-StRefactoringCommand class >> registerInMethodBrowser [
+StRefactoringCommand class >> registerInEditor [
 
 	StRefactoringCommandRegistry registerCommand: self
 ]
