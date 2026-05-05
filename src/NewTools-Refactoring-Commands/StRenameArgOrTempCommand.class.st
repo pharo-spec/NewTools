@@ -28,6 +28,12 @@ StRenameArgOrTempCommand class >> defaultName [
 	^ '(R) Rename temp'
 ]
 
+{ #category : 'accessing' }
+StRenameArgOrTempCommand class >> priority [
+
+	^ 3
+]
+
 { #category : 'testing' }
 StRenameArgOrTempCommand >> canBeExecuted [
 

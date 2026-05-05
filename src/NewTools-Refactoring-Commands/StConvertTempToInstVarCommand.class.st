@@ -26,6 +26,12 @@ StConvertTempToInstVarCommand class >> defaultName [
 	^ '(R) Convert to Instance Var'
 ]
 
+{ #category : 'accessing' }
+StConvertTempToInstVarCommand class >> priority [
+
+	^ 6
+]
+
 { #category : 'testing' }
 StConvertTempToInstVarCommand >> canBeExecuted [
 

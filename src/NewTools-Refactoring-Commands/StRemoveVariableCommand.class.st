@@ -28,6 +28,12 @@ StRemoveVariableCommand class >> defaultName [
 	^ '(R) Remove'
 ]
 
+{ #category : 'accessing' }
+StRemoveVariableCommand class >> priority [
+
+	^ 12
+]
+
 { #category : 'executing' }
 StRemoveVariableCommand >> prepareDriver [
 

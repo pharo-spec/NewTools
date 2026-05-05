@@ -26,6 +26,12 @@ StExtractMethodCommand class >> defaultName [
 	^ '(R) Extract method (no occurrences)'
 ]
 
+{ #category : 'accessing' }
+StExtractMethodCommand class >> priority [
+
+	^ 4
+]
+
 { #category : 'executing' }
 StExtractMethodCommand >> prepareDriver [
 

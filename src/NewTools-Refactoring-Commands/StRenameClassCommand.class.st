@@ -26,6 +26,12 @@ StRenameClassCommand class >> defaultName [
 	^ '(R) Rename'
 ]
 
+{ #category : 'accessing' }
+StRenameClassCommand class >> priority [
+
+	^ 2
+]
+
 { #category : 'testing' }
 StRenameClassCommand >> canBeExecuted [
 
