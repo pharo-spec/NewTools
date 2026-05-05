@@ -3,7 +3,7 @@ Rename selected class from a code presenter
 "
 Class {
 	#name : 'StRenameClassCommand',
-	#superclass : 'StRefactoringCommand',
+	#superclass : 'StRefactoringClassCommand',
 	#category : 'NewTools-Refactoring-Commands',
 	#package : 'NewTools-Refactoring-Commands'
 }
