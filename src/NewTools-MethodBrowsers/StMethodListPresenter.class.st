@@ -247,10 +247,7 @@ StMethodListPresenter >> executeTestFor: aMethod [
 
 	testClasses do: [ :each | suite addTest: (each selector: selector) ].
 
-	result := TestResult new.
-	suite runWith: [ :test | test debug: result ].
-	result dispatchResultsIntoHistory.
-	suite testSuiteAnnouncer announce: (TestSuiteEnded result: result).
+	result := suite debug.
 	result updateResultsInHistory.
 
 	self application inform: result printString.
