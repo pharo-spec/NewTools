@@ -195,6 +195,35 @@ StMethodBrowser class >> browseSendersOfAll: aCollectionOfSymbols [
 ]
 
 { #category : 'opening' }
+StMethodBrowser class >> browseUsersOfSharedPool: aPoolClass [
+
+	| methods classes poolVarNames |
+	classes := aPoolClass poolUsers.
+	poolVarNames := aPoolClass classVarNames.
+
+	methods := classes flatCollect: [ :cls |
+		           cls methods select: [ :m | poolVarNames anySatisfy: [ :varName | m ast references: varName ] ] ].
+
+	self new
+		methods: methods asArray;
+		title: 'Users of pool ' , aPoolClass name;
+		open
+]
+
+{ #category : 'opening' }
+StMethodBrowser class >> browseUsersOfTrait: aTrait [
+
+	| methods classes |
+	classes := aTrait traitUsers.
+	methods := classes flatCollect: [ :cls | cls methods select: [ :m | m origin = aTrait ] ].
+
+	self new
+		methods: methods asArray;
+		title: 'Users of trait ' , aTrait name;
+		open
+]
+
+{ #category : 'opening' }
 StMethodBrowser class >> browseWritersOfVariables: variables [
 
 	| methods |
