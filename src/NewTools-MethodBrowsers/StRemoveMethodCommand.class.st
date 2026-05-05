@@ -21,8 +21,16 @@ StRemoveMethodCommand class >> defaultShortcut [
 	^ $x actionModifier
 ]
 
+{ #category : 'testing' }
+StRemoveMethodCommand >> canBeExecuted [
+
+	^ context selectedMethod isNotNil
+]
+
 { #category : 'executing' }
 StRemoveMethodCommand >> execute [
 	
-	context doRemoveMethod
+	(ReRemoveMethodDriver new
+				 scopes: context owner allScopes
+				 methods: {context selectedMethod}) runRefactoring
 ]
