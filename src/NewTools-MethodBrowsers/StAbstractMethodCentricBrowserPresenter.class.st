@@ -17,7 +17,7 @@ Class {
 { #category : 'accessing' }
 StAbstractMethodCentricBrowserPresenter class >> defaultPreferredExtent [
 
-	^ 900 @ 600
+	^ 1150 @ 620 
 ]
 
 { #category : 'testing' }
