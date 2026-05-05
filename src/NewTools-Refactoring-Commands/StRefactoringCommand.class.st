@@ -24,7 +24,7 @@ StRefactoringCommand class >> priority [
 { #category : 'ctions' }
 StRefactoringCommand class >> registerInEditor [
 
-	StRefactoringCommandRegistry registerCommand: self
+	(Smalltalk at: #StRefactoringCommandRegistry ifAbsent: [ ^ self ]) registerCommand: self
 ]
 
 { #category : 'accessing' }
