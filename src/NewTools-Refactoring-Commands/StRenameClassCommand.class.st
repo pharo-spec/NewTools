@@ -23,7 +23,7 @@ StRenameClassCommand class >> defaultIconName [
 { #category : 'default' }
 StRenameClassCommand class >> defaultName [
 
-	^ '(R) Rename'
+	^ '(R) Rename class'
 ]
 
 { #category : 'accessing' }

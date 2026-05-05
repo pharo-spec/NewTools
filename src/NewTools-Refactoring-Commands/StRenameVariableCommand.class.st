@@ -22,7 +22,7 @@ StRenameVariableCommand class >> defaultIconName [
 { #category : 'default' }
 StRenameVariableCommand class >> defaultName [
 
-	^ '(R) Rename'
+	^ '(R) Rename variable'
 ]
 
 { #category : 'accessing' }
