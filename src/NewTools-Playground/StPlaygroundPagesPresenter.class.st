@@ -214,12 +214,6 @@ StPlaygroundPagesPresenter >> setModelBeforeInitialization: aPlayground [
 	parent := aPlayground
 ]
 
-{ #category : 'initialization' }
-StPlaygroundPagesPresenter >> updatePresenter [
-
-	"nothing happens here :("
-]
-
 { #category : 'accessing' }
 StPlaygroundPagesPresenter >> windowTitle [
 

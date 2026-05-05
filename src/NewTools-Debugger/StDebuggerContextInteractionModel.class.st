@@ -10,12 +10,6 @@ Class {
 	#tag : 'Model'
 }
 
-{ #category : 'instance creation' }
-StDebuggerContextInteractionModel class >> on: aContext [
-
-	^ self new context: aContext
-]
-
 { #category : 'adding' }
 StDebuggerContextInteractionModel >> addBinding: aBinding [
 

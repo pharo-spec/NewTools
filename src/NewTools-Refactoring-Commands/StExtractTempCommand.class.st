@@ -32,12 +32,6 @@ StExtractTempCommand class >> priority [
 	^ 5
 ]
 
-{ #category : 'testing' }
-StExtractTempCommand >> canBeExecuted [
-
-	^ self codePresenter selectionInterval isNotEmpty
-]
-
 { #category : 'executing' }
 StExtractTempCommand >> prepareDriver [
 
