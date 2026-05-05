@@ -228,11 +228,11 @@ StMethodListPresenter >> doRunTests [
 	testMethods ifEmpty: [
 			self application inform: 'No test found in the list.'.
 			^ self ].
-	testMethods do: [ :m | self executeTestFor: m ]
+	testMethods do: [ :m | self executeTestFor: m debug: false ]
 ]
 
 { #category : 'execution' }
-StMethodListPresenter >> executeTestFor: aMethod [
+StMethodListPresenter >> executeTestFor: aMethod debug: shouldDebug [
 
 	| selector testClasses suite result |
 	aMethod ifNil: [ ^ self ].
@@ -247,7 +247,9 @@ StMethodListPresenter >> executeTestFor: aMethod [
 
 	testClasses do: [ :each | suite addTest: (each selector: selector) ].
 
-	result := suite debug.
+	result := shouldDebug
+		          ifTrue: [ suite debug ]
+		          ifFalse: [ suite run ].
 	result updateResultsInHistory.
 
 	self application inform: result printString.
@@ -281,7 +283,7 @@ StMethodListPresenter >> initializePresenters [
 				 bind: [ :p :item | p label: (self locationOf: item) ];
 				 yourself);
 		addColumn: (StTestIconColumnView new
-				 executeBlock: [ :method | self executeTestFor: method ];
+				 executeBlock: [ :method | self executeTestFor: method debug: true ];
 				 cellPresenterClass: StTestIconCellPresenter;
 				 width: 20;
 				 yourself);
