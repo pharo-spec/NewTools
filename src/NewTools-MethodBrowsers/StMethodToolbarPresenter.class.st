@@ -172,7 +172,8 @@ StMethodToolbarPresenter >> initializePresenters [
 	dropList := self newDropList
 		            display: [ :item | item label ];
 		            whenSelectedItemChangedDo: [ :item | item value ];
-		            yourself
+		            yourself.
+
 ]
 
 { #category : 'accessing' }
