@@ -141,12 +141,12 @@ StMethodToolbarPresenter >> initializePresenters [
 		icon: (self iconNamed: #history);
 		help: 'Browse versions of current selected method';
 		action: [ self doBrowseVersions ].
-	(runTestsButton := self newToolbarButton )
-		label: 'Run Tests'; 
+	(runTestsButton := self newToolbarButton)
+		label: 'Run Tests';
 		icon: (self iconNamed: #testGreen);
 		help: 'Run all test methods in the list';
 		action: [ self doRunTests ].
-		
+
 	reuseWindowButton := self newToolbarToggleButton
 		                     label: 'Reuse window';
 		                     help: 'If checked, new searches will replace current results.';
@@ -166,14 +166,13 @@ StMethodToolbarPresenter >> initializePresenters [
 		                    add: implementorsButton;
 		                    add: versionButton;
 		                    add: reuseWindowButton;
-                        add: runTestsButton;
+		                    add: runTestsButton;
 		                    yourself.
 
 	dropList := self newDropList
 		            display: [ :item | item label ];
 		            whenSelectedItemChangedDo: [ :item | item value ];
-		            yourself.
-
+		            yourself
 ]
 
 { #category : 'accessing' }
