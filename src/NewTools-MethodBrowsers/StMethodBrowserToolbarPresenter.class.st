@@ -13,14 +13,15 @@ Class {
 { #category : 'initialization' }
 StMethodBrowserToolbarPresenter >> connectPresenters [
 
-	scopeList whenSelectedItemChangedDo: [ : scopeEnvironment | 
+	scopeList whenSelectedItemChangedDo: [ :scopeEnvironment |
 		scopeEnvironment ifNotNil: [ messageList switchScopeTo: scopeEnvironment ] ].
-	
-	messageList whenSelectedDo: [ : item |
-		item ifNotNil: [
-			messageList updateVisitedScopesFrom: item.
-			scopeList disableSelectionDuring: [ scopeList items: messageList allScopes ] ] ]
 
+	messageList whenSelectedDo: [ :item |
+			item ifNotNil: [
+					messageList updateVisitedScopesFrom: item.
+					scopeList disableSelectionDuring: [ scopeList items: messageList allScopes ] ] ].
+	scopeList items: messageList allScopes.
+	
 ]
 
 { #category : 'layout' }

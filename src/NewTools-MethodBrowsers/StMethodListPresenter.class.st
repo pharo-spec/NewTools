@@ -512,7 +512,7 @@ StMethodListPresenter >> sortingBlock: aBlock [
 StMethodListPresenter >> switchScopeTo: aRBBrowserEnvironment [ 
 	"Private - Callback to scope selection from the user"
 
-	listPresenter items: (aRBBrowserEnvironment selectMessagesFrom: allMessages)
+	listPresenter items: (aRBBrowserEnvironment selectMessagesFrom: allMessages) asArray
 
 ]
 
