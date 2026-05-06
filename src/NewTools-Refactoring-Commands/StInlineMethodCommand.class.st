@@ -22,7 +22,13 @@ StInlineMethodCommand class >> defaultIconName [
 { #category : 'default' }
 StInlineMethodCommand class >> defaultName [
 
-	^ 'Inline method'
+	^ '(R) Inline method'
+]
+
+{ #category : 'accessing' }
+StInlineMethodCommand class >> priority [
+
+	^ 7
 ]
 
 { #category : 'testing' }

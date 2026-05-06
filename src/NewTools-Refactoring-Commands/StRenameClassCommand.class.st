@@ -23,7 +23,21 @@ StRenameClassCommand class >> defaultIconName [
 { #category : 'default' }
 StRenameClassCommand class >> defaultName [
 
-	^ '(R) Rename'
+	^ '(R) Rename class'
+]
+
+{ #category : 'accessing' }
+StRenameClassCommand class >> priority [
+
+	^ 2
+]
+
+{ #category : 'testing' }
+StRenameClassCommand >> canBeExecuted [
+
+	| node |
+	node := self codePresenter selectedNode.
+	^ node isGlobalVariable and: [ node binding value isClass ]
 ]
 
 { #category : 'executing' }

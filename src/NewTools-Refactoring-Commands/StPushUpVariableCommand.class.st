@@ -25,6 +25,12 @@ StPushUpVariableCommand class >> defaultName [
 	^'(R) Push up'
 ]
 
+{ #category : 'accessing' }
+StPushUpVariableCommand class >> priority [
+
+	^ 10
+]
+
 { #category : 'executing' }
 StPushUpVariableCommand >> prepareDriver [
 

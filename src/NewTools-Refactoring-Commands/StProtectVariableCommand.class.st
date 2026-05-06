@@ -26,6 +26,12 @@ StProtectVariableCommand class >> defaultName [
 	^ '(R) Protect'
 ]
 
+{ #category : 'accessing' }
+StProtectVariableCommand class >> priority [
+
+	^ 13
+]
+
 { #category : 'executing' }
 StProtectVariableCommand >> prepareDriver [
 

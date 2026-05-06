@@ -26,6 +26,12 @@ StPushDownVariableCommand class >> defaultName [
 	^ '(R) Push down'
 ]
 
+{ #category : 'accessing' }
+StPushDownVariableCommand class >> priority [
+
+	^ 11
+]
+
 { #category : 'executing' }
 StPushDownVariableCommand >> prepareDriver [
 
