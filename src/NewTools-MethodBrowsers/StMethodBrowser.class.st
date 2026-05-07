@@ -465,70 +465,66 @@ StMethodBrowser >> handleClassRenamed: anAnnouncement [
 
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodAdded: anAnnouncement [
-    | item selectedMethod editedText |
-    
-    self isDisplayed ifFalse: [ ^ self ].
-    refreshingBlock ifNil: [ ^ self ].
-    
-    item := anAnnouncement method.
-    (self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [ ^ self ].
-    (item methodClass isNotNil and: [ item methodClass isObsolete not ]) ifFalse: [ ^ self ].
 
-    editedText := textPresenter isDirty 
-    		ifTrue: [ textPresenter text ]
-    		ifFalse: [ nil ].
-    selectedMethod := self selectedMethod.
+	| item selectedMethod editedText |
+	self isDisplayed ifFalse: [ ^ self ].
+	refreshingBlock ifNil: [ ^ self ].
+
+	item := anAnnouncement method.
+	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [ ^ self ].
+	(item methodClass isNotNil and: [ item methodClass isObsolete not ]) ifFalse: [ ^ self ].
+
+	editedText := textPresenter isDirty ifTrue: [ textPresenter text ].
+	selectedMethod := self selectedMethod.
 	(filterPresenter unfilteredItems includes: item) ifFalse: [
-		self methods: (filterPresenter unfilteredItems copy
-			add: item asFullRingDefinition;
-			yourself) ].
+			self methods: (filterPresenter unfilteredItems asOrderedCollection
+					 add: item asFullRingDefinition;
+					 yourself) ].
 
 	self defer: [ self selectIndex: ((self methods indexOf: selectedMethod) max: 1) ].
-   self selectedMessage: selectedMethod .
-    editedText ifNotNil: [
-        textPresenter text: editedText.
-        textPresenter markDirty ]
+	self selectedMessage: selectedMethod.
+	editedText ifNotNil: [
+			textPresenter text: editedText.
+			textPresenter markDirty ]
 ]
 
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodModified: anAnnouncement [
+
 	| item oldItem matchingItem index editedText list |
-	
 	self isDisplayed ifFalse: [ ^ self ].
 	refreshingBlock ifNil: [ ^ self ].
 	item := anAnnouncement newMethod.
 	oldItem := anAnnouncement oldMethod.
 
 	matchingItem := self methods
-		detect: [ :m | m methodClass = oldItem methodClass and: [ m selector = oldItem selector ] ]
-		ifNone: [ nil ].
+		                detect: [ :m | m methodClass = oldItem methodClass and: [ m selector = oldItem selector ] ]
+		                ifNone: [ nil ].
 	matchingItem ifNil: [
-		(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifTrue: [
-			self methods: (self methods
-				add: item asFullRingDefinition;
-				yourself) ].
-		^ self ].
-	
-	editedText := textPresenter isDirty 
-		ifTrue: [ editedText := textPresenter text ]
-		ifFalse: [ nil ].
-		
+			(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifTrue: [
+					self methods: (self methods
+							 add: item asFullRingDefinition;
+							 yourself) ].
+			^ self ].
+
+	editedText := textPresenter isDirty ifTrue: [ editedText := textPresenter text ].
+
 	index := methodList selectedIndex.
 
-	list := filterPresenter unfilteredItems copy.
+	list := filterPresenter unfilteredItems asOrderedCollection.
 	list remove: matchingItem ifAbsent: [ ].
 	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [
-		self methods: list.
-		self defer:[ self selectIndex: (index min: self methods size) ].
-		^ self ].
-		
+			self methods: list.
+			self defer: [ self selectIndex: (index min: self methods size) ].
+			^ self ].
+
 	list add: item asFullRingDefinition.
 	self methods: list.
 	self defer: [ self selectIndex: index ].
-		
+
 	editedText ifNotNil: [
-		textPresenter text: editedText.
-		textPresenter markConflict ]
+			textPresenter text: editedText.
+			textPresenter markConflict ]
 ]
 
 { #category : 'announcements' }
