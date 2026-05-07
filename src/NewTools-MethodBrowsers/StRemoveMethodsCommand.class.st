@@ -2,7 +2,7 @@
 Remove selected method from a message browser list
 "
 Class {
-	#name : 'StRemoveMethodCommand',
+	#name : 'StRemoveMethodsCommand',
 	#superclass : 'StCommand',
 	#category : 'NewTools-MethodBrowsers-Commands',
 	#package : 'NewTools-MethodBrowsers',
@@ -10,27 +10,25 @@ Class {
 }
 
 { #category : 'accessing' }
-StRemoveMethodCommand class >> defaultName [
+StRemoveMethodsCommand class >> defaultName [
 
-	^ 'Remove method'
+	^ '(R) Remove'
 ]
 
 { #category : 'accessing' }
-StRemoveMethodCommand class >> defaultShortcut [
+StRemoveMethodsCommand class >> defaultShortcut [
 
 	^ $x actionModifier
 ]
 
 { #category : 'testing' }
-StRemoveMethodCommand >> canBeExecuted [
+StRemoveMethodsCommand >> canBeExecuted [
 
 	^ context selectedMethod isNotNil
 ]
 
 { #category : 'executing' }
-StRemoveMethodCommand >> execute [
-	
-	(ReRemoveMethodDriver new
-				 scopes: context owner allScopes
-				 methods: {context selectedMethod}) runRefactoring
+StRemoveMethodsCommand >> execute [
+
+	(ReRemoveMethodDriver new scopes: context owner allScopes methods: context selectedMethods) runRefactoring
 ]

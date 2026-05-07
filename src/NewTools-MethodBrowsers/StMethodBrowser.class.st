@@ -769,14 +769,16 @@ StMethodBrowser >> navigateTo: aType value: anObject [
 
 	self navigateInPlace ifFalse: [
 			aType == #implementors ifTrue: [ ^ self class browseImplementorsOf: anObject ].
+			aType == #implementorsAll ifTrue: [ ^ self class browseImplementorsOfAll: anObject ].
 			aType == #senders ifTrue: [ ^ self class browseSendersOf: anObject ].
+			aType == #sendersAll ifTrue: [ ^ self class browseSendersOfAll: anObject ].
 			aType == #references ifTrue: [ ^ self class browseReferencesOf: anObject ].
 			^ self ].
 
 	aType == #implementors ifTrue: [ self methods: (self class implementorsOf: anObject) asImplementorsOf: anObject ].
-
+	aType == #implementorsAll ifTrue: [ self methods: (self class implementorsOf: anObject) asImplementorsOfAll: anObject ].
 	aType == #senders ifTrue: [ self methods: (self class sendersOf: anObject) asSendersOf: anObject ].
-
+	aType == #sendersAll ifTrue: [ self methods: (self class sendersOf: anObject) asSendersOfAll: anObject ].
 	aType == #references ifTrue: [ self methods: (self class referencesOf: anObject) asReferenceTo: anObject ]
 ]
 

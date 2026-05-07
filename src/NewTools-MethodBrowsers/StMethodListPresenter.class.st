@@ -165,11 +165,17 @@ StMethodListPresenter >> defaultScopes [
 { #category : 'private - actions' }
 StMethodListPresenter >> doBrowseImplementors [
 
-	| selector |
-	selector := self selectedMethod selector.
-	navigationBlock
-		ifNotNil: [ navigationBlock value: #implementors value: selector ]
-		ifNil: [ StMethodBrowser browseImplementorsOf: selector ]
+	| selectors |
+	selectors := self selectedMethods collect: [ :method | method selector ].
+	selectors size = 1
+		ifTrue: [
+				navigationBlock
+					ifNotNil: [ navigationBlock value: #implementors value: selectors anyOne ]
+					ifNil: [ StMethodBrowser browseImplementorsOf: selectors anyOne ] ]
+		ifFalse: [
+				navigationBlock
+					ifNotNil: [ navigationBlock value: #implementorsAll value: selectors ]
+					ifNil: [ StMethodBrowser browseImplementorsOfAll: selectors ] ]
 ]
 
 { #category : 'private - actions' }
@@ -181,11 +187,17 @@ StMethodListPresenter >> doBrowseMethod [
 { #category : 'private - actions' }
 StMethodListPresenter >> doBrowseSenders [
 
-	| selector |
-	selector := self selectedMethod selector.
-	navigationBlock
-		ifNotNil: [ navigationBlock value: #senders value: selector ]
-		ifNil: [ StMethodBrowser browseSendersOf: selector ]
+	| selectors |
+	selectors := self selectedMethods collect: [ :method | method selector ].
+	selectors size = 1
+		ifTrue: [
+				navigationBlock
+					ifNotNil: [ navigationBlock value: #senders value: selectors anyOne ]
+					ifNil: [ StMethodBrowser browseSendersOf: selectors anyOne ] ]
+		ifFalse: [
+				navigationBlock
+					ifNotNil: [ navigationBlock value: #sendersAll value: selectors ]
+					ifNil: [ StMethodBrowser browseSendersOfAll: selectors ] ]
 ]
 
 { #category : 'private - actions' }
@@ -208,15 +220,6 @@ StMethodListPresenter >> doBrowseVersions [
 StMethodListPresenter >> doInspectMethod [
 	
 	self systemNavigation inspect: self selectedMethod
-]
-
-{ #category : 'private - actions' }
-StMethodListPresenter >> doRemoveMethod [
-
-	self selectedMethod ifNotNil: [ :aMethod |
-		SystemNavigation default 
-			removeMethod: aMethod 
-			inClass: aMethod methodClass ]
 ]
 
 { #category : 'private - actions' }
@@ -276,6 +279,7 @@ StMethodListPresenter >> initialize [
 StMethodListPresenter >> initializePresenters [
 
 	listPresenter := self newEasyColumnView.
+	listPresenter beMultipleSelection.
 	listPresenter
 		addColumn: (SpColumnViewColumn new
 				 title: 'Location';
@@ -347,7 +351,7 @@ StMethodListPresenter >> methodListActions [
 				   yourself);
 		  register: ((CmCommandGroup forSpecNamed: 'CRITICAL')
 				   beDisplayedAsGroup;
-				   register: (StRemoveMethodCommand forSpecContext: self);
+				   register: (StRemoveMethodsCommand forSpecContext: self);
 				   yourself);
 		  yourself
 ]
@@ -471,6 +475,12 @@ StMethodListPresenter >> selectedIndex [
 StMethodListPresenter >> selectedMethod [
 
 	^ listPresenter selection selectedItem
+]
+
+{ #category : 'api - accessing' }
+StMethodListPresenter >> selectedMethods [
+
+	^ listPresenter selection selectedItems
 ]
 
 { #category : 'accessing' }
