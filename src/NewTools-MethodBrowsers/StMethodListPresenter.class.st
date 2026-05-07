@@ -292,8 +292,7 @@ StMethodListPresenter >> initializePresenters [
 				 sortFunction: #selector ascending;
 				 bind: [ :labelPresenter :item |
 						 labelPresenter label: (self selectorOf: item).
-						 labelPresenter displayStrikethrough: [ item isDeprecated ].
-						 labelPresenter displayColor: [ item isDeprecated ifTrue: [ Color gray ] ] ];
+						 labelPresenter displayStrikethrough: [ item isDeprecated ] ];
 				 yourself);
 		addColumn: (SpColumnViewColumn new
 				 title: 'Package';
