@@ -167,15 +167,10 @@ StMethodListPresenter >> doBrowseImplementors [
 
 	| selectors |
 	selectors := self selectedMethods collect: [ :method | method selector ].
-	selectors size = 1
-		ifTrue: [
-				navigationBlock
-					ifNotNil: [ navigationBlock value: #implementors value: selectors anyOne ]
-					ifNil: [ StMethodBrowser browseImplementorsOf: selectors anyOne ] ]
-		ifFalse: [
-				navigationBlock
-					ifNotNil: [ navigationBlock value: #implementorsAll value: selectors ]
-					ifNil: [ StMethodBrowser browseImplementorsOfAll: selectors ] ]
+
+	navigationBlock
+		ifNotNil: [ navigationBlock value: #implementorsAll value: selectors ]
+		ifNil: [ StMethodBrowser browseImplementorsOfAll: selectors ]
 ]
 
 { #category : 'private - actions' }
@@ -189,15 +184,10 @@ StMethodListPresenter >> doBrowseSenders [
 
 	| selectors |
 	selectors := self selectedMethods collect: [ :method | method selector ].
-	selectors size = 1
-		ifTrue: [
-				navigationBlock
-					ifNotNil: [ navigationBlock value: #senders value: selectors anyOne ]
-					ifNil: [ StMethodBrowser browseSendersOf: selectors anyOne ] ]
-		ifFalse: [
-				navigationBlock
-					ifNotNil: [ navigationBlock value: #sendersAll value: selectors ]
-					ifNil: [ StMethodBrowser browseSendersOfAll: selectors ] ]
+
+	navigationBlock
+		ifNotNil: [ navigationBlock value: #sendersAll value: selectors ]
+		ifNil: [ StMethodBrowser browseSendersOfAll: selectors ]
 ]
 
 { #category : 'private - actions' }
