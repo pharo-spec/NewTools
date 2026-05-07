@@ -284,7 +284,9 @@ StMethodListPresenter >> initializePresenters [
 		addColumn: (SpColumnViewColumn new
 				 title: 'Selector';
 				 sortFunction: #selector ascending;
-				 bind: [ :p :item | p label: (self selectorOf: item) ];
+				 bind: [ :labelPresenter :item |
+						 labelPresenter label: (self selectorOf: item).
+						 labelPresenter displayStrikethrough: [ item isDeprecated ] ];
 				 yourself);
 		addColumn: (SpColumnViewColumn new
 				 title: 'Package';

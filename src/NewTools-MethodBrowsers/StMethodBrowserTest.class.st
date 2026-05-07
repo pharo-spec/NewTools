@@ -43,6 +43,30 @@ StMethodBrowserTest >> testBrowseReferencesToVariableInClass [
 ]
 
 { #category : 'tests' }
+StMethodBrowserTest >> testDeprecatedMethodDisplayedStruckOut [
+
+	| window browser deprecatedMethod label column |
+	[
+		self class
+			compile: 'tmpDeprecatedMethod
+            self deprecated: ''Use something else''.
+            ^ self'
+			classified: 'tests-protocol'.
+		deprecatedMethod := self class >> #tmpDeprecatedMethod.
+
+		window := StMethodBrowser browseImplementorsOf: #tmpDeprecatedMethod.
+		browser := window presenter.
+		column := browser methodList listPresenter contentView columns detect: [ :col | col title = 'Selector' ].
+		label := SpLabelPresenter new.
+		column bindAction value: label value: deprecatedMethod.
+
+
+		self assert: (label displayStrikethrough cull: deprecatedMethod) ] ensure: [
+			self class removeSelector: #tmpDeprecatedMethod.
+			window ifNotNil: [ window delete ] ]
+]
+
+{ #category : 'tests' }
 StMethodBrowserTest >> testExplicitBrowseClassNameAsClass [
 
 	| window |
