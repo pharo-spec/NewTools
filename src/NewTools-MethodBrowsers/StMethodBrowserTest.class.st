@@ -60,8 +60,8 @@ StMethodBrowserTest >> testDeprecatedMethodDisplayedStruckOut [
 		label := SpLabelPresenter new.
 		column bindAction value: label value: deprecatedMethod.
 
-		self assert: (label label isKindOf: Text).
-		self assert: ((label label attributesAt: 1) includes: TextEmphasis struckOut) ] ensure: [
+
+		self assert: (label displayStrikethrough cull: deprecatedMethod) ] ensure: [
 			self class removeSelector: #tmpDeprecatedMethod.
 			window ifNotNil: [ window delete ] ]
 ]
