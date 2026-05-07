@@ -545,10 +545,11 @@ StMethodBrowser >> handleMethodRemoved: anAnnouncement [
 		                detect: [ :m | m methodClass = item methodClass and: [ m selector = item selector ] ]
 		                ifNone: [ ^ self ].
 	selectedMethod := self selectedMethod.
-	self methods: (self methods
+	self methods: (self methods asOrderedCollection
 			 remove: matchingItem ifAbsent: [ ];
 			 yourself).
 	self defer: [
+			methodList listPresenter selection unselectAll.
 			selectedMethod = matchingItem
 				ifTrue: [ self selectIndex: (selection min: self methods size) ]
 				ifFalse: [ self selectIndex: (self methods indexOf: selectedMethod) ] ]
