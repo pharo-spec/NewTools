@@ -79,6 +79,8 @@ StMethodFinderSend >> evaluateWithTimeOut: anInteger [
 
 	| runner result |
 
+	"pay attention that this logic looks related to the error mentioned in
+	StMethodFinderSend>>resultIn: expectedResult timeout: anInteger "
 	runner := TKTLocalProcessTaskRunner new.
 	runner 
 		schedule: [ result := [ self evaluate ] 

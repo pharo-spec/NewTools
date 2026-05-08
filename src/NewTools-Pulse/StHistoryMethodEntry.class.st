@@ -54,11 +54,9 @@ StHistoryMethodEntry >> content: aContent [
 { #category : 'accessing' }
 StHistoryMethodEntry >> contentEvaluated [
 
-	^ [ 
-		OpalCompiler new 
-			source: self contentString;
-			evaluate ]
-	onErrorDo: [ nil ]
+	^ [ OpalEvaluator new 
+			evaluate: self contentString ]
+		onErrorDo: [ nil ]
 ]
 
 { #category : 'accessing' }
