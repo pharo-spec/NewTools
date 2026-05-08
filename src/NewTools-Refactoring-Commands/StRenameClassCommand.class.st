@@ -3,7 +3,7 @@ Rename selected class from a code presenter
 "
 Class {
 	#name : 'StRenameClassCommand',
-	#superclass : 'StRefactoringCommand',
+	#superclass : 'StRefactoringClassCommand',
 	#category : 'NewTools-Refactoring-Commands',
 	#package : 'NewTools-Refactoring-Commands'
 }
@@ -23,7 +23,13 @@ StRenameClassCommand class >> defaultIconName [
 { #category : 'default' }
 StRenameClassCommand class >> defaultName [
 
-	^ '(R) Rename'
+	^ '(R) Rename class'
+]
+
+{ #category : 'accessing' }
+StRenameClassCommand class >> priority [
+
+	^ 2
 ]
 
 { #category : 'testing' }

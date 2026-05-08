@@ -9,6 +9,24 @@ Class {
 	#package : 'NewTools-Refactoring-Commands'
 }
 
+{ #category : 'class initialization' }
+StRefactoringCommand class >> initialize [
+
+	self registerInEditor
+]
+
+{ #category : 'accessing' }
+StRefactoringCommand class >> priority [
+
+	^ 100
+]
+
+{ #category : 'ctions' }
+StRefactoringCommand class >> registerInEditor [
+
+	StRefactoringCommandRegistry registerCommand: self
+]
+
 { #category : 'accessing' }
 StRefactoringCommand >> codePresenter [
 

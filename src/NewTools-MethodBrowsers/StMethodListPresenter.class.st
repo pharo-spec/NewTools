@@ -165,11 +165,12 @@ StMethodListPresenter >> defaultScopes [
 { #category : 'private - actions' }
 StMethodListPresenter >> doBrowseImplementors [
 
-	| selector |
-	selector := self selectedMethod selector.
+	| selectors |
+	selectors := self selectedMethods collect: [ :method | method selector ].
+
 	navigationBlock
-		ifNotNil: [ navigationBlock value: #implementors value: selector ]
-		ifNil: [ StMethodBrowser browseImplementorsOf: selector ]
+		ifNotNil: [ navigationBlock value: #implementorsAll value: selectors ]
+		ifNil: [ StMethodBrowser browseImplementorsOfAll: selectors ]
 ]
 
 { #category : 'private - actions' }
@@ -181,11 +182,12 @@ StMethodListPresenter >> doBrowseMethod [
 { #category : 'private - actions' }
 StMethodListPresenter >> doBrowseSenders [
 
-	| selector |
-	selector := self selectedMethod selector.
+	| selectors |
+	selectors := self selectedMethods collect: [ :method | method selector ].
+
 	navigationBlock
-		ifNotNil: [ navigationBlock value: #senders value: selector ]
-		ifNil: [ StMethodBrowser browseSendersOf: selector ]
+		ifNotNil: [ navigationBlock value: #sendersAll value: selectors ]
+		ifNil: [ StMethodBrowser browseSendersOfAll: selectors ]
 ]
 
 { #category : 'private - actions' }
@@ -211,15 +213,6 @@ StMethodListPresenter >> doInspectMethod [
 ]
 
 { #category : 'private - actions' }
-StMethodListPresenter >> doRemoveMethod [
-
-	self selectedMethod ifNotNil: [ :aMethod |
-		SystemNavigation default 
-			removeMethod: aMethod 
-			inClass: aMethod methodClass ]
-]
-
-{ #category : 'private - actions' }
 StMethodListPresenter >> doRunTests [
 
 	| testMethods |
@@ -228,11 +221,11 @@ StMethodListPresenter >> doRunTests [
 	testMethods ifEmpty: [
 			self application inform: 'No test found in the list.'.
 			^ self ].
-	testMethods do: [ :m | self executeTestFor: m ]
+	testMethods do: [ :m | self executeTestFor: m debug: false ]
 ]
 
 { #category : 'execution' }
-StMethodListPresenter >> executeTestFor: aMethod [
+StMethodListPresenter >> executeTestFor: aMethod debug: shouldDebug [
 
 	| selector testClasses suite result |
 	aMethod ifNil: [ ^ self ].
@@ -247,7 +240,9 @@ StMethodListPresenter >> executeTestFor: aMethod [
 
 	testClasses do: [ :each | suite addTest: (each selector: selector) ].
 
-	result := suite run.
+	result := shouldDebug
+		          ifTrue: [ suite debug ]
+		          ifFalse: [ suite run ].
 	result updateResultsInHistory.
 
 	self application inform: result printString.
@@ -274,6 +269,7 @@ StMethodListPresenter >> initialize [
 StMethodListPresenter >> initializePresenters [
 
 	listPresenter := self newEasyColumnView.
+	listPresenter beMultipleSelection.
 	listPresenter
 		addColumn: (SpColumnViewColumn new
 				 title: 'Location';
@@ -281,14 +277,16 @@ StMethodListPresenter >> initializePresenters [
 				 bind: [ :p :item | p label: (self locationOf: item) ];
 				 yourself);
 		addColumn: (StTestIconColumnView new
-				 executeBlock: [ :method | self executeTestFor: method ];
+				 executeBlock: [ :method | self executeTestFor: method debug: true ];
 				 cellPresenterClass: StTestIconCellPresenter;
 				 width: 20;
 				 yourself);
 		addColumn: (SpColumnViewColumn new
 				 title: 'Selector';
 				 sortFunction: #selector ascending;
-				 bind: [ :p :item | p label: (self selectorOf: item) ];
+				 bind: [ :labelPresenter :item |
+						 labelPresenter label: (self selectorOf: item).
+						 labelPresenter displayStrikethrough: [ item isDeprecated ] ];
 				 yourself);
 		addColumn: (SpColumnViewColumn new
 				 title: 'Package';
@@ -345,7 +343,7 @@ StMethodListPresenter >> methodListActions [
 				   yourself);
 		  register: ((CmCommandGroup forSpecNamed: 'CRITICAL')
 				   beDisplayedAsGroup;
-				   register: (StRemoveMethodCommand forSpecContext: self);
+				   register: (StRemoveMethodsCommand forSpecContext: self);
 				   yourself);
 		  yourself
 ]
@@ -471,6 +469,12 @@ StMethodListPresenter >> selectedMethod [
 	^ listPresenter selection selectedItem
 ]
 
+{ #category : 'api - accessing' }
+StMethodListPresenter >> selectedMethods [
+
+	^ listPresenter selection selectedItems
+]
+
 { #category : 'accessing' }
 StMethodListPresenter >> selectorOf: anItem [
 
@@ -510,7 +514,7 @@ StMethodListPresenter >> sortingBlock: aBlock [
 StMethodListPresenter >> switchScopeTo: aRBBrowserEnvironment [ 
 	"Private - Callback to scope selection from the user"
 
-	listPresenter items: (aRBBrowserEnvironment selectMessagesFrom: allMessages)
+	listPresenter items: (aRBBrowserEnvironment selectMessagesFrom: allMessages) asArray
 
 ]
 

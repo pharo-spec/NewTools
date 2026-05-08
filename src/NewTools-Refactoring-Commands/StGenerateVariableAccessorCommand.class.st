@@ -26,6 +26,12 @@ StGenerateVariableAccessorCommand class >> defaultName [
 	^ '(T) Generate accessor'
 ]
 
+{ #category : 'accessing' }
+StGenerateVariableAccessorCommand class >> priority [
+
+	^ 8
+]
+
 { #category : 'executing' }
 StGenerateVariableAccessorCommand >> prepareDriver [
 

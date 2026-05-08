@@ -25,6 +25,12 @@ StMoveInstanceVariableToClassSideCommand class >> defaultName [
 	^ '(T) Move to class side'
 ]
 
+{ #category : 'accessing' }
+StMoveInstanceVariableToClassSideCommand class >> priority [
+
+	^ 9
+]
+
 { #category : 'executing' }
 StMoveInstanceVariableToClassSideCommand >> prepareDriver [
 

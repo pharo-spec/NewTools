@@ -23,13 +23,13 @@ StExtractTempCommand class >> defaultIconName [
 { #category : 'default' }
 StExtractTempCommand class >> defaultName [
 
-	^ 'Extract temp'
+	^ '(R) Extract temp'
 ]
 
-{ #category : 'testing' }
-StExtractTempCommand >> canBeExecuted [
+{ #category : 'accessing' }
+StExtractTempCommand class >> priority [
 
-	^ self codePresenter selectionInterval isNotEmpty
+	^ 5
 ]
 
 { #category : 'executing' }

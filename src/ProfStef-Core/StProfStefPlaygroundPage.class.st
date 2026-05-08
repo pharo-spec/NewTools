@@ -18,9 +18,3 @@ StProfStefPlaygroundPage class >> baseToolbarCommands [
 		StPlaygroundChoiceLessonCommand
 	}
 ]
-
-{ #category : 'accessing' }
-StProfStefPlaygroundPage >> windowTitle: aString [
-	titleHolder := aString.
-	self update
-]

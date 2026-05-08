@@ -195,6 +195,35 @@ StMethodBrowser class >> browseSendersOfAll: aCollectionOfSymbols [
 ]
 
 { #category : 'opening' }
+StMethodBrowser class >> browseUsersOfSharedPool: aPoolClass [
+
+	| methods classes poolVarNames |
+	classes := aPoolClass poolUsers.
+	poolVarNames := aPoolClass classVarNames.
+
+	methods := classes flatCollect: [ :cls |
+		           cls methods select: [ :m | poolVarNames anySatisfy: [ :varName | m ast references: varName ] ] ].
+
+	self new
+		methods: methods asArray;
+		title: 'Users of pool ' , aPoolClass name;
+		open
+]
+
+{ #category : 'opening' }
+StMethodBrowser class >> browseUsersOfTrait: aTrait [
+
+	| methods classes |
+	classes := aTrait traitUsers.
+	methods := classes flatCollect: [ :cls | cls methods select: [ :m | m origin = aTrait ] ].
+
+	self new
+		methods: methods asArray;
+		title: 'Users of trait ' , aTrait name;
+		open
+]
+
+{ #category : 'opening' }
 StMethodBrowser class >> browseWritersOfVariables: variables [
 
 	| methods |
@@ -436,70 +465,66 @@ StMethodBrowser >> handleClassRenamed: anAnnouncement [
 
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodAdded: anAnnouncement [
-    | item selectedMethod editedText |
-    
-    self isDisplayed ifFalse: [ ^ self ].
-    refreshingBlock ifNil: [ ^ self ].
-    
-    item := anAnnouncement method.
-    (self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [ ^ self ].
-    (item methodClass isNotNil and: [ item methodClass isObsolete not ]) ifFalse: [ ^ self ].
 
-    editedText := textPresenter isDirty 
-    		ifTrue: [ textPresenter text ]
-    		ifFalse: [ nil ].
-    selectedMethod := self selectedMethod.
+	| item selectedMethod editedText |
+	self isDisplayed ifFalse: [ ^ self ].
+	refreshingBlock ifNil: [ ^ self ].
+
+	item := anAnnouncement method.
+	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [ ^ self ].
+	(item methodClass isNotNil and: [ item methodClass isObsolete not ]) ifFalse: [ ^ self ].
+
+	editedText := textPresenter isDirty ifTrue: [ textPresenter text ].
+	selectedMethod := self selectedMethod.
 	(filterPresenter unfilteredItems includes: item) ifFalse: [
-		self methods: (filterPresenter unfilteredItems copy
-			add: item asFullRingDefinition;
-			yourself) ].
+			self methods: (filterPresenter unfilteredItems asOrderedCollection
+					 add: item asFullRingDefinition;
+					 yourself) ].
 
 	self defer: [ self selectIndex: ((self methods indexOf: selectedMethod) max: 1) ].
-   self selectedMessage: selectedMethod .
-    editedText ifNotNil: [
-        textPresenter text: editedText.
-        textPresenter markDirty ]
+	self selectedMessage: selectedMethod.
+	editedText ifNotNil: [
+			textPresenter text: editedText.
+			textPresenter markDirty ]
 ]
 
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodModified: anAnnouncement [
+
 	| item oldItem matchingItem index editedText list |
-	
 	self isDisplayed ifFalse: [ ^ self ].
 	refreshingBlock ifNil: [ ^ self ].
 	item := anAnnouncement newMethod.
 	oldItem := anAnnouncement oldMethod.
 
 	matchingItem := self methods
-		detect: [ :m | m methodClass = oldItem methodClass and: [ m selector = oldItem selector ] ]
-		ifNone: [ nil ].
+		                detect: [ :m | m methodClass = oldItem methodClass and: [ m selector = oldItem selector ] ]
+		                ifNone: [ nil ].
 	matchingItem ifNil: [
-		(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifTrue: [
-			self methods: (self methods
-				add: item asFullRingDefinition;
-				yourself) ].
-		^ self ].
-	
-	editedText := textPresenter isDirty 
-		ifTrue: [ editedText := textPresenter text ]
-		ifFalse: [ nil ].
-		
+			(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifTrue: [
+					self methods: (self methods
+							 add: item asFullRingDefinition;
+							 yourself) ].
+			^ self ].
+
+	editedText := textPresenter isDirty ifTrue: [ editedText := textPresenter text ].
+
 	index := methodList selectedIndex.
 
-	list := filterPresenter unfilteredItems copy.
+	list := filterPresenter unfilteredItems asOrderedCollection.
 	list remove: matchingItem ifAbsent: [ ].
 	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [
-		self methods: list.
-		self defer:[ self selectIndex: (index min: self methods size) ].
-		^ self ].
-		
+			self methods: list.
+			self defer: [ self selectIndex: (index min: self methods size) ].
+			^ self ].
+
 	list add: item asFullRingDefinition.
 	self methods: list.
 	self defer: [ self selectIndex: index ].
-		
+
 	editedText ifNotNil: [
-		textPresenter text: editedText.
-		textPresenter markConflict ]
+			textPresenter text: editedText.
+			textPresenter markConflict ]
 ]
 
 { #category : 'announcements' }
@@ -516,10 +541,11 @@ StMethodBrowser >> handleMethodRemoved: anAnnouncement [
 		                detect: [ :m | m methodClass = item methodClass and: [ m selector = item selector ] ]
 		                ifNone: [ ^ self ].
 	selectedMethod := self selectedMethod.
-	self methods: (self methods
+	self methods: (self methods asOrderedCollection
 			 remove: matchingItem ifAbsent: [ ];
 			 yourself).
 	self defer: [
+			methodList listPresenter selection unselectAll.
 			selectedMethod = matchingItem
 				ifTrue: [ self selectIndex: (selection min: self methods size) ]
 				ifFalse: [ self selectIndex: (self methods indexOf: selectedMethod) ] ]
@@ -739,15 +765,17 @@ StMethodBrowser >> navigateInPlace [
 StMethodBrowser >> navigateTo: aType value: anObject [
 
 	self navigateInPlace ifFalse: [
-			aType == #implementors ifTrue: [ ^ self class browseImplementorsOf: anObject ].
-			aType == #senders ifTrue: [ ^ self class browseSendersOf: anObject ].
+			aType == #implementorsAll ifTrue: [
+				self methods: (anObject flatCollect: [ :sel | self class implementorsOf: sel ]) asImplementorsOfAll: anObject ].
+			aType == #sendersAll ifTrue: [
+				self methods: (anObject flatCollect: [ :sel | self class sendersOf: sel ]) asSendersOfAll: anObject ].
 			aType == #references ifTrue: [ ^ self class browseReferencesOf: anObject ].
 			^ self ].
-
-	aType == #implementors ifTrue: [ self methods: (self class implementorsOf: anObject) asImplementorsOf: anObject ].
-
-	aType == #senders ifTrue: [ self methods: (self class sendersOf: anObject) asSendersOf: anObject ].
-
+	
+	aType == #implementorsAll ifTrue: [
+		self methods: (anObject flatCollect: [ :sel | self class implementorsOf: sel ]) asImplementorsOfAll: anObject ].
+	aType == #sendersAll ifTrue: [
+		self methods: (anObject flatCollect: [ :sel | self class sendersOf: sel ]) asSendersOfAll: anObject ].
 	aType == #references ifTrue: [ self methods: (self class referencesOf: anObject) asReferenceTo: anObject ]
 ]
 
@@ -854,11 +882,6 @@ StMethodBrowser >> selectedClass [
 { #category : 'api' }
 StMethodBrowser >> selectedMessage: aMessage [
 	methodList updateVisitedScopesFrom: aMessage
-]
-
-{ #category : 'accessing' }
-StMethodBrowser >> selectedMethod [
-	^ methodList selectedMethod
 ]
 
 { #category : 'api' }
@@ -997,7 +1020,7 @@ StMethodBrowser >> windowTitle [
 
 	| msg total |
 	(filterPresenter isNil or: [ methodList isNil ]) ifTrue: [ ^ title ifNil: [ 'Message Browser' ] ].
-	(title isNotNil and: [ self methods isEmpty ])  ifTrue: [ ^ title , ': No Results' ].
+	(title isNotNil and: [ self methods isEmpty ])  ifTrue: [ ^ title , ' [No Results]' ].
 	total := filterPresenter unfilteredItems size.
 	msg := methodList ifNil: [ '' ] ifNotNil: [
 			       (filterPresenter filterText isEmpty or: [ methodList numberOfElements = total ])
