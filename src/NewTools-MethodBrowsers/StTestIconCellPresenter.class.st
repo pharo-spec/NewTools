@@ -44,16 +44,18 @@ StTestIconCellPresenter >> onExecute: aBlock [
 { #category : 'tests' }
 StTestIconCellPresenter >> testIconFor: aMethod [
 
-	| allCount successCount failureCount errorCount |
-	allCount := 1.
-	successCount := (aMethod methodClass methodPassed: aMethod selector) asBit.
-	failureCount := (aMethod methodClass methodFailed: aMethod selector) asBit.
-	errorCount := (aMethod methodClass methodRaisedError: aMethod selector) asBit.
-	allCount = 0 ifTrue: [ ^ self iconNamed: #testNotRun ].
-	allCount = successCount ifTrue: [ ^ self iconNamed: #testGreen ].
-	errorCount = 0 & (failureCount > 0) ifTrue: [ ^ self iconNamed: #testYellow ].
+	| classes hasAny successCount failureCount errorCount |
+	classes := aMethod methodClass isAbstract
+		           ifTrue: [ aMethod methodClass allSubclasses ]
+		           ifFalse: [ { aMethod methodClass } ].
+	successCount := (classes anySatisfy: [ :class | class methodPassed: aMethod selector ]) asBit.
+	failureCount := (classes anySatisfy: [ :class | class methodFailed: aMethod selector ]) asBit.
+	errorCount := (classes anySatisfy: [ :class | class methodRaisedError: aMethod selector ]) asBit.
+	hasAny := successCount + failureCount + errorCount > 0.
+	hasAny ifFalse: [ ^ self iconNamed: #testNotRun ].
 	errorCount > 0 ifTrue: [ ^ self iconNamed: #testRed ].
-	^ self iconNamed: #testNotRun
+	failureCount > 0 ifTrue: [ ^ self iconNamed: #testYellow ].
+	^ self iconNamed: #testGreen
 ]
 
 { #category : 'initialization' }
