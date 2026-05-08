@@ -40,13 +40,12 @@ StMethodFinder >> possibleSolutionsForInput: inputCollection [
 		| foundPermutationSends args receiver |
 		args := permutation allButFirst.
 		receiver := permutation first.
-		self halt.
 		foundPermutationSends := 
 			(receiver evaluate class allSelectorsToTestInMethodFinderWithArity: inputCollection size - 1) collect: [ :method |
 			                         self methodFinderSendClass
 				                         receiver: receiver evaluate
 				                         selector: method
-				                         withArguments: (args collect: #evaluate) ].
+				                         withArguments: (args collect: [:each | each evaluate] ) ].
 		sends addAll: foundPermutationSends ].
 	^ sends
 ]
