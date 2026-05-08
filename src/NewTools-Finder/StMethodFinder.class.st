@@ -17,17 +17,11 @@ Class {
 StMethodFinder >> findMethodsByExampleInput: inputCollection andExpectedResult: expectedResult timeout: anInteger [
 	"Search for methods which giving each elements of input returns the corresponding elements of outputs."
 	
-	| evaluationSelector |
-	self halt.
-	evaluationSelector := anInteger = 0
-		ifTrue: [ #resultIn: ]
-		ifFalse: [ #resultIn:timeout: ].
 	^ (self possibleSolutionsForInput: inputCollection) asSet select: [ :send |
 		  send 
-				perform: evaluationSelector 
-				withArguments: { 
-					(expectedResult evaluateWithTimeOut: anInteger) .
-					anInteger } ]
+				resultIn: 	(expectedResult evaluateWithTimeOut: anInteger) 
+				timeout: anInteger ]
+				
 ]
 
 { #category : 'public access' }
