@@ -18,7 +18,7 @@ StMethodFinder >> findMethodsByExampleInput: inputCollection andExpectedResult: 
 	"Search for methods which giving each elements of input returns the corresponding elements of outputs."
 	
 	| evaluationSelector |
-
+	self halt.
 	evaluationSelector := anInteger = 0
 		ifTrue: [ #resultIn: ]
 		ifFalse: [ #resultIn:timeout: ].
@@ -46,8 +46,9 @@ StMethodFinder >> possibleSolutionsForInput: inputCollection [
 		| foundPermutationSends args receiver |
 		args := permutation allButFirst.
 		receiver := permutation first.
+		self halt.
 		foundPermutationSends := 
-			(receiver evaluate class allSelectorsToTestInMethodFinderWithArity: inputCollection size - 1) collect: [ : method |
+			(receiver evaluate class allSelectorsToTestInMethodFinderWithArity: inputCollection size - 1) collect: [ :method |
 			                         self methodFinderSendClass
 				                         receiver: receiver evaluate
 				                         selector: method

@@ -81,7 +81,8 @@ StMethodFinderSend >> evaluateWithTimeOut: anInteger [
 
 	runner := TKTLocalProcessTaskRunner new.
 	runner 
-		schedule: [ result := [ self evaluate ] onErrorDo: [ : e | self handleError: e ] ] asTask
+		schedule: [ result := [ self evaluate ] 
+			onErrorDo: [ :e | self handleError: e ] ] asTask
 		timeout: anInteger milliSeconds.
 	^ result
 
@@ -247,10 +248,19 @@ StMethodFinderSend >> resultIn: expectedResult [
 { #category : 'accessing' }
 StMethodFinderSend >> resultIn: expectedResult timeout: anInteger [
 
+		[ ^ expectedResult = (self evaluateWithTimeOut: anInteger) ]
+		onErrorDo: [ :anError | ^ false ] 
+
+	"The following definition shows a bug in taskit related to task termination.
+	It leads to a debugger opening after the search is done and presented to the user. 
+	So I keep the comment here for further investigation. 
+	self flag: #bug.
+	https://github.com/pharo-project/pharo/issues/19656
+	
 	[ [ ^ expectedResult = (self evaluateWithTimeOut: anInteger) ]
 		onErrorDo: [ :anError | ^ false ] ]
 			on: Deprecation
-			do: [ :depr | ^ false ]
+			do: [ :depr | ^ false ]"
 ]
 
 { #category : 'accessing' }
