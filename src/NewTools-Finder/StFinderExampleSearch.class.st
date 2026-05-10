@@ -93,7 +93,7 @@ StFinderExampleSearch >> name [
 { #category : 'parsing' }
 StFinderExampleSearch >> parseAsNodes: anExpression [
 
-	^ (RBParser parseExpression: '{', anExpression , '}') statements asArray
+	^ (OCParser parseExpression: '{', anExpression , '}') statements asArray
 ]
 
 { #category : 'accessing' }
