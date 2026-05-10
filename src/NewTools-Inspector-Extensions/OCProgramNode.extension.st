@@ -26,7 +26,7 @@ OCProgramNode >> inspectionASTDump: aBuilder [
 
 	^ aBuilder newCode 
 		addStyle: 'stCode';
-		text: (RBParser parseExpression: self dump) formattedCode; 
+		text: (OCParser parseExpression: self dump) formattedCode; 
 		beForScripting; "this is an expression"
 		yourself
 ]
