@@ -26,6 +26,12 @@ StRenameMethodCommand class >> defaultName [
 	^ '(R) Rename method'
 ]
 
+{ #category : 'accessing' }
+StRenameMethodCommand class >> defaultShortcut [
+
+	^ $r actionModifier
+]
+
 { #category : 'testing' }
 StRenameMethodCommand >> canBeExecuted [
 

@@ -27,6 +27,12 @@ StRenameClassCommand class >> defaultName [
 ]
 
 { #category : 'accessing' }
+StRenameClassCommand class >> defaultShortcut [
+
+	^ $r actionModifier
+]
+
+{ #category : 'accessing' }
 StRenameClassCommand class >> priority [
 
 	^ 2
