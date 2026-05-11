@@ -8,6 +8,12 @@ Class {
 	#package : 'NewTools-Refactoring-Commands'
 }
 
+{ #category : 'default' }
+StRefactoringVariableCommand class >> defaultName [
+
+	^ 'abc'
+]
+
 { #category : 'testing' }
 StRefactoringVariableCommand >> canBeExecuted [
 

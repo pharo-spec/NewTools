@@ -30,5 +30,5 @@ StRefactoringCommandRegistry class >> registerCommand: aCommandClass [
 StRefactoringCommandRegistry class >> reset [
 
 	<script>
-	self initialize
+	Commands := nil
 ]
