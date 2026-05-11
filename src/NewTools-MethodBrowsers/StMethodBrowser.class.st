@@ -482,7 +482,7 @@ StMethodBrowser >> handleMethodAdded: anAnnouncement [
 					 yourself) ].
 
 	self defer: [ self selectIndex: ((self methods indexOf: selectedMethod) max: 1) ].
-	self selectedMessage: selectedMethod.
+
 	editedText ifNotNil: [
 			textPresenter text: editedText.
 			textPresenter markDirty ]
@@ -877,11 +877,6 @@ StMethodBrowser >> selectItem: item [
 { #category : 'backstops' }
 StMethodBrowser >> selectedClass [
 	^ self selectedMethod origin
-]
-
-{ #category : 'api' }
-StMethodBrowser >> selectedMessage: aMessage [
-	methodList updateVisitedScopesFrom: aMessage
 ]
 
 { #category : 'api' }

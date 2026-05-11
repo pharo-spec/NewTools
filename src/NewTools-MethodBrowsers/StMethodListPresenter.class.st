@@ -536,6 +536,7 @@ StMethodListPresenter >> updateVisitedScopesFrom: aCompiledMethod [
 
 	aCompiledMethod ifNil: [ ^ self ].
 	visitedScopes ifNotNil: [
+		visitedScopes := Set new.
 			visitedScopes
 				add: (self packageOf: aCompiledMethod);
 				add: (self classOf: aCompiledMethod);
