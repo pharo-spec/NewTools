@@ -34,12 +34,6 @@ StRemoveVariableCommand class >> defaultShortcut [
 	^ $x actionModifier
 ]
 
-{ #category : 'testing' }
-StRemoveVariableCommand class >> isAbstractCommand [
-
-	^ false
-]
-
 { #category : 'accessing' }
 StRemoveVariableCommand class >> priority [
 

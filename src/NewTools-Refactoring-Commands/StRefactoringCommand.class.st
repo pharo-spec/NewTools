@@ -10,9 +10,9 @@ Class {
 }
 
 { #category : 'testing' }
-StRefactoringCommand class >> isAbstractCommand [
+StRefactoringCommand class >> isAbstract [
 
-	^ false
+	^ self = StRefactoringCommand 
 ]
 
 { #category : 'accessing' }

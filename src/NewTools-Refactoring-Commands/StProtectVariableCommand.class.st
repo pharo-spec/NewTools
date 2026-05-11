@@ -26,12 +26,6 @@ StProtectVariableCommand class >> defaultName [
 	^ '(R) Protect'
 ]
 
-{ #category : 'testing' }
-StProtectVariableCommand class >> isAbstractCommand [
-
-	^ false
-]
-
 { #category : 'accessing' }
 StProtectVariableCommand class >> priority [
 

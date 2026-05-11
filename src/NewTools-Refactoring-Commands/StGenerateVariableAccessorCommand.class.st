@@ -26,12 +26,6 @@ StGenerateVariableAccessorCommand class >> defaultName [
 	^ '(T) Generate accessor'
 ]
 
-{ #category : 'testing' }
-StGenerateVariableAccessorCommand class >> isAbstractCommand [
-
-	^ false
-]
-
 { #category : 'accessing' }
 StGenerateVariableAccessorCommand class >> priority [
 

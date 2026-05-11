@@ -32,12 +32,6 @@ StRenameClassCommand class >> defaultShortcut [
 	^ $r actionModifier
 ]
 
-{ #category : 'testing' }
-StRenameClassCommand class >> isAbstractCommand [
-
-	^ false
-]
-
 { #category : 'accessing' }
 StRenameClassCommand class >> priority [
 

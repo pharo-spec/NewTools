@@ -24,7 +24,7 @@ StRefactoringCommandRegistry class >> commands [
 StRefactoringCommandRegistry class >> initialize [
 
 	self reset.
-	StRefactoringCommand allSubclassesDo: [ :subclass | subclass isAbstractCommand ifFalse: [ subclass registerInEditor ] ]
+	StRefactoringCommand allSubclassesDo: [ :subclass | subclass isAbstract ifFalse: [ subclass registerInEditor ] ] 
 ]
 
 { #category : 'actions' }
