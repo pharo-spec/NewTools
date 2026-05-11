@@ -9,10 +9,10 @@ Class {
 	#package : 'NewTools-Refactoring-Commands'
 }
 
-{ #category : 'class initialization' }
-StRefactoringCommand class >> initialize [
+{ #category : 'testing' }
+StRefactoringCommand class >> isAbstract [
 
-	self registerInEditor
+	^ self = StRefactoringCommand 
 ]
 
 { #category : 'accessing' }
