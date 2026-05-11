@@ -40,16 +40,19 @@ StCritiquePackageSelectorPresenter >> chooserPackages [
 	^chooserPackages 
 ]
 
-{ #category : 'initialization' }
-StCritiquePackageSelectorPresenter >> initializeLayout [
+{ #category : 'layout' }
+StCritiquePackageSelectorPresenter >> defaultLayout [
 
-	self layout: (SpBoxLayout newTopToBottom
-			add: #chooserPackages;
-			add: (SpBoxLayout newLeftToRight
-					  addLast: #nextButton;
-					  yourself)
-			 height: 25;
-			 yourself)
+	^ SpBoxLayout newTopToBottom
+		spacing: 5;
+		add: chooserPackages;
+		add: (SpBoxLayout newLeftToRight
+				vAlignCenter;
+				hAlignEnd;
+				add: nextButton;
+				yourself)
+			expand: false;
+		yourself
 ]
 
 { #category : 'initialization' }
@@ -66,11 +69,10 @@ StCritiquePackageSelectorPresenter >> initializeNextButton [
 StCritiquePackageSelectorPresenter >> initializePresenters [
 
 	chooserPackages := self setChooserPackages.
-	self initializeNextButton.
-	self initializeLayout
+	self initializeNextButton
 ]
 
-{ #category : 'adding' }
+{ #category : 'actions' }
 StCritiquePackageSelectorPresenter >> nextAction [
 
 	| packages env |
