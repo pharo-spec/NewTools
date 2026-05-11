@@ -338,10 +338,17 @@ StMethodBrowser class >> usingLayout: aSymbol [
 StMethodBrowser >> accept: text notifying: notifyer [
 
 	^ self selectedMethod ifNotNil: [ :message | 
+		"OCInteractiveAPI new 
+			compile: text
+			notifying: notifyer
+			in:message methodClass "
 		message methodClass 
-			compile: text 
-			classified: message protocol
-			notifying: notifyer ]
+			compile: text
+			classified: message protocol 
+			withStamp: '' 
+			notifying: notifyer 
+			logSource: true	 
+		  ]
 ]
 
 { #category : 'private' }

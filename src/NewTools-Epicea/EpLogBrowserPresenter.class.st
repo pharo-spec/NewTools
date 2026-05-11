@@ -644,7 +644,7 @@ EpLogBrowserPresenter >> menuActions [
 		addActionWith: [ :action | action 
 			name: 'Browse current';
 			description: 'Browse working copy of entity affected in the selected event(s)';
-			iconName: #nautilusIcon;
+			iconName: #nautilus;
 			shortcutKey: $b actionModifier;
 			action: [ self browseSelection ];
 			actionEnabled: [ self itemsPresenter selectedItem isNotNil ] ];
