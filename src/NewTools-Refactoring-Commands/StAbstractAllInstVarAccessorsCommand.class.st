@@ -29,22 +29,23 @@ StAbstractAllInstVarAccessorsCommand class >> isAbstractCommand [
 { #category : 'executing' }
 StAbstractAllInstVarAccessorsCommand >> execute [
 
-	self prepareDriver execute
+	self prepareDriver do: [ :eachRefactoring | eachRefactoring execute ]
 ]
 
 { #category : 'executing' }
 StAbstractAllInstVarAccessorsCommand >> prepareDriver [
 
-	| vars dialog refactoring |
-	vars := self codePresenter selectedNode variable value slots asOrderedCollection.
+	| vars dialog selectedVariables targetClass |
+	targetClass := self codePresenter selectedNode variable value.
+	vars := targetClass slots asOrderedCollection.
+
 	dialog := (StVariablesSelectionPresenter newApplication: self application)
+		          title: 'Select variables'
 		          label: self codePresenter selectedNode name , ' - Select all variables to convert abstract'
 		          withItems: vars
-		          selecting: vars.
-	self codePresenter selectedNode -> dialog selectedItems.
+		          selecting: vars
+		          acceptBlock: [ :variables | selectedVariables := variables ].
 
-
-	vars do: [ :var |
-		refactoring := var createRefactoring: ReAbstractInstanceVariableRefactoring for: self codePresenter selectedNode variable key ].
-	^ refactoring
+	dialog openModal.
+	^ selectedVariables collect: [ :var | var createRefactoring: ReAbstractInstanceVariableRefactoring for: targetClass ]
 ]
