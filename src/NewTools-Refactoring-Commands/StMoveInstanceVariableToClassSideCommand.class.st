@@ -25,6 +25,12 @@ StMoveInstanceVariableToClassSideCommand class >> defaultName [
 	^ '(T) Move to class side'
 ]
 
+{ #category : 'testing' }
+StMoveInstanceVariableToClassSideCommand class >> isAbstractCommand [
+
+	^ false
+]
+
 { #category : 'accessing' }
 StMoveInstanceVariableToClassSideCommand class >> priority [
 

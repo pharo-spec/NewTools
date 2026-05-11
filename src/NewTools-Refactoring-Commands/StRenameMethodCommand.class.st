@@ -32,6 +32,12 @@ StRenameMethodCommand class >> defaultShortcut [
 	^ $r actionModifier
 ]
 
+{ #category : 'accessing' }
+StRenameMethodCommand class >> priority [
+
+	^ 4
+]
+
 { #category : 'testing' }
 StRenameMethodCommand >> canBeExecuted [
 

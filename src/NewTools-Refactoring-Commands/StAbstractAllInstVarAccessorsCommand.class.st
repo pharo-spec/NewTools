@@ -20,6 +20,12 @@ StAbstractAllInstVarAccessorsCommand class >> defaultName [
 	^ 'Abstract instance variables'
 ]
 
+{ #category : 'testing' }
+StAbstractAllInstVarAccessorsCommand class >> isAbstractCommand [
+
+	^ false
+]
+
 { #category : 'executing' }
 StAbstractAllInstVarAccessorsCommand >> execute [
 

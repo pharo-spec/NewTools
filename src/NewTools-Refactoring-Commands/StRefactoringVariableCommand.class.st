@@ -8,10 +8,10 @@ Class {
 	#package : 'NewTools-Refactoring-Commands'
 }
 
-{ #category : 'default' }
-StRefactoringVariableCommand class >> defaultName [
+{ #category : 'testing' }
+StRefactoringVariableCommand class >> isAbstractCommand [
 
-	^ 'abc'
+	^ true
 ]
 
 { #category : 'testing' }

@@ -26,6 +26,12 @@ StPushDownVariableCommand class >> defaultName [
 	^ '(R) Push down'
 ]
 
+{ #category : 'testing' }
+StPushDownVariableCommand class >> isAbstractCommand [
+
+	^ false
+]
+
 { #category : 'accessing' }
 StPushDownVariableCommand class >> priority [
 

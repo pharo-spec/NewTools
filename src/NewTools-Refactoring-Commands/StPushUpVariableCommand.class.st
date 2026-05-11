@@ -25,6 +25,12 @@ StPushUpVariableCommand class >> defaultName [
 	^'(R) Push up'
 ]
 
+{ #category : 'testing' }
+StPushUpVariableCommand class >> isAbstractCommand [
+
+	^ false
+]
+
 { #category : 'accessing' }
 StPushUpVariableCommand class >> priority [
 

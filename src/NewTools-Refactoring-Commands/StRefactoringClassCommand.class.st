@@ -9,6 +9,12 @@ Class {
 }
 
 { #category : 'testing' }
+StRefactoringClassCommand class >> isAbstractCommand [
+
+	^ true
+]
+
+{ #category : 'testing' }
 StRefactoringClassCommand >> canBeExecuted [
 
 	| node |
