@@ -217,7 +217,7 @@ StProcessBrowser >> buildProcessToolbarActions [
 		yourself
 ]
 
-{ #category : 'testing' }
+{ #category : 'actions' }
 StProcessBrowser >> canResumeSelectedProcess [
 
 	| process |
@@ -460,7 +460,7 @@ StProcessBrowser >> refreshProcessList [
 	processListPresenter updateItemsKeepingSelection: self model processList
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'actions' }
 StProcessBrowser >> resumeSelectedProcess [
 
 	| process |
