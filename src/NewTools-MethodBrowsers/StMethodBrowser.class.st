@@ -513,18 +513,17 @@ StMethodBrowser >> handleMethodModified: anAnnouncement [
 
 	newCompiledMethod := anAnnouncement newMethod.
 	oldCompiledMethod := anAnnouncement oldMethod.
-
+	updatedList := filterPresenter unfilteredItems asOrderedCollection.
 	existingItem := self unfilteredItemMatching: oldCompiledMethod.
 	existingItem ifNil: [
 			(self shouldRefreshItem: newCompiledMethod fromAnnouncement: anAnnouncement) ifTrue: [
-					updatedList := filterPresenter unfilteredItems asOrderedCollection.
 					updatedList add: newCompiledMethod asFullRingDefinition.
 					self methods: updatedList ].
 			^ self ].
 
 	previousEditedText := textPresenter isDirty ifTrue: [ textPresenter text ].
 	previousSelectionIndex := methodList selectedIndex.
-	updatedList := filterPresenter unfilteredItems asOrderedCollection.
+
 	existingItemIndex := updatedList indexOf: existingItem ifAbsent: [ 0 ].
 
 	(self shouldRefreshItem: newCompiledMethod fromAnnouncement: anAnnouncement) ifFalse: [
