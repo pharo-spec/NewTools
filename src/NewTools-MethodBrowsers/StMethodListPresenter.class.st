@@ -530,6 +530,12 @@ StMethodListPresenter >> topologicSort: anObject [
 	topologySort := anObject
 ]
 
+{ #category : 'api - selection' }
+StMethodListPresenter >> unselectAll [
+
+	listPresenter selection unselectAll
+]
+
 { #category : 'private - scopes' }
 StMethodListPresenter >> updateVisitedScopesFrom: aCompiledMethod [
 	"Private - Update the list of the visited scopes"

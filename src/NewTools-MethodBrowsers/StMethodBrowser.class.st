@@ -488,7 +488,9 @@ StMethodBrowser >> handleMethodAdded: anAnnouncement [
 					 add: item asFullRingDefinition;
 					 yourself) ].
 
-	self defer: [ self selectIndex: ((self methods indexOf: selectedMethod) max: 1) ].
+	self defer: [
+			methodList unselectAll.
+			self selectIndex: ((self methods indexOf: selectedMethod) max: 1) ].
 
 	editedText ifNotNil: [
 			textPresenter text: editedText.
@@ -522,12 +524,16 @@ StMethodBrowser >> handleMethodModified: anAnnouncement [
 	list remove: matchingItem ifAbsent: [ ].
 	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [
 			self methods: list.
-			self defer: [ self selectIndex: (index min: self methods size) ].
+			self defer: [
+					methodList unselectAll.
+					self selectIndex: (index min: self methods size) ].
 			^ self ].
 
 	list add: item asFullRingDefinition.
 	self methods: list.
-	self defer: [ self selectIndex: index ].
+	self defer: [
+			methodList unselectAll.
+			self selectIndex: index ].
 
 	editedText ifNotNil: [
 			textPresenter text: editedText.
@@ -552,7 +558,7 @@ StMethodBrowser >> handleMethodRemoved: anAnnouncement [
 			 remove: matchingItem ifAbsent: [ ];
 			 yourself).
 	self defer: [
-			methodList listPresenter selection unselectAll.
+			methodList unselectAll.
 			selectedMethod = matchingItem
 				ifTrue: [ self selectIndex: (selection min: self methods size) ]
 				ifFalse: [ self selectIndex: (self methods indexOf: selectedMethod) ] ]
