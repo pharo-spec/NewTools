@@ -479,7 +479,7 @@ StMethodBrowser >> handleClassRenamed: anAnnouncement [
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodAdded: anAnnouncement [
 
-	| addedMethod ringDefinition previouslySelectedMethod previousEditedText |
+	| addedMethod previouslySelectedMethod previousEditedText |
 	self canHandleAnnouncement ifFalse: [ ^ self ].
 
 	addedMethod := anAnnouncement method.
@@ -489,11 +489,11 @@ StMethodBrowser >> handleMethodAdded: anAnnouncement [
 	previousEditedText := textPresenter isDirty ifTrue: [ textPresenter text ].
 	previouslySelectedMethod := self selectedMethod.
 
-	ringDefinition := addedMethod asFullRingDefinition.
-	(filterPresenter unfilteredItems includes: ringDefinition) ifFalse: [
+
+	(filterPresenter unfilteredItems includes: addedMethod) ifFalse: [
 			| updatedList |
 			updatedList := filterPresenter unfilteredItems asOrderedCollection.
-			updatedList add: ringDefinition.
+			updatedList add: addedMethod asFullRingDefinition.
 			self methods: updatedList ].
 
 	self defer: [
@@ -1005,7 +1005,7 @@ StMethodBrowser >> topologicSort: aBoolean [
 StMethodBrowser >> unfilteredItemMatching: aCompiledMethod [
 
 	^ filterPresenter unfilteredItems
-		  detect: [ :ringDef | ringDef methodClass = aCompiledMethod methodClass and: [ ringDef selector = aCompiledMethod selector ] ]
+		  detect: [ :method | method methodClass = aCompiledMethod methodClass and: [ method selector = aCompiledMethod selector ] ]
 		  ifNone: [ nil ]
 ]
 
