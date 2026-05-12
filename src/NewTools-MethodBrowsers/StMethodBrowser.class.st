@@ -498,7 +498,7 @@ StMethodBrowser >> handleMethodAdded: anAnnouncement [
 
 	self defer: [
 			methodList unselectAll.
-			self selectIndex: ((filterPresenter unfilteredItems indexOf: previouslySelectedMethod) max: 1) ].
+			self selectIndex: (filterPresenter unfilteredItems indexOf: previouslySelectedMethod ifAbsent: [ 1 ]) ].
 
 	previousEditedText ifNotNil: [
 			textPresenter text: previousEditedText.
