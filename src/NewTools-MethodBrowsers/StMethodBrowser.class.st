@@ -378,6 +378,12 @@ StMethodBrowser >> allScopes [
 	^ methodList allScopes
 ]
 
+{ #category : 'api - private' }
+StMethodBrowser >> canHandleAnnouncement [
+
+	^ self isDisplayed and: [ refreshingBlock isNotNil ]
+]
+
 { #category : 'announcements' }
 StMethodBrowser >> classRenamed: anAnnouncement [ 
 	"this method forces the announcement to be handled in the UI process"
@@ -473,91 +479,100 @@ StMethodBrowser >> handleClassRenamed: anAnnouncement [
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodAdded: anAnnouncement [
 
-	| item selectedMethod editedText |
-	self isDisplayed ifFalse: [ ^ self ].
-	refreshingBlock ifNil: [ ^ self ].
+	| addedMethod ringDefinition previouslySelectedMethod previousEditedText |
+	self canHandleAnnouncement ifFalse: [ ^ self ].
 
-	item := anAnnouncement method.
-	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [ ^ self ].
-	(item methodClass isNotNil and: [ item methodClass isObsolete not ]) ifFalse: [ ^ self ].
+	addedMethod := anAnnouncement method.
+	(self shouldRefreshItem: addedMethod fromAnnouncement: anAnnouncement) ifFalse: [ ^ self ].
+	(addedMethod methodClass isNotNil and: [ addedMethod methodClass isObsolete not ]) ifFalse: [ ^ self ].
 
-	editedText := textPresenter isDirty ifTrue: [ textPresenter text ].
-	selectedMethod := self selectedMethod.
-	(filterPresenter unfilteredItems includes: item) ifFalse: [
-			self methods: (filterPresenter unfilteredItems asOrderedCollection
-					 add: item asFullRingDefinition;
-					 yourself) ].
+	previousEditedText := textPresenter isDirty ifTrue: [ textPresenter text ].
+	previouslySelectedMethod := self selectedMethod.
+
+	ringDefinition := addedMethod asFullRingDefinition.
+	(filterPresenter unfilteredItems includes: ringDefinition) ifFalse: [
+			| updatedList |
+			updatedList := filterPresenter unfilteredItems asOrderedCollection.
+			updatedList add: ringDefinition.
+			self methods: updatedList ].
 
 	self defer: [
 			methodList unselectAll.
-			self selectIndex: ((self methods indexOf: selectedMethod) max: 1) ].
+			self selectIndex: ((filterPresenter unfilteredItems indexOf: previouslySelectedMethod) max: 1) ].
 
-	editedText ifNotNil: [
-			textPresenter text: editedText.
+	previousEditedText ifNotNil: [
+			textPresenter text: previousEditedText.
 			textPresenter markDirty ]
 ]
 
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodModified: anAnnouncement [
-	| item oldItem matchingItem index editedText list matchingIndex |
-	self isDisplayed ifFalse: [ ^ self ].
-	refreshingBlock ifNil: [ ^ self ].
-	item := anAnnouncement newMethod.
-	oldItem := anAnnouncement oldMethod.
-	matchingItem := self methods
-		                detect: [ :m | m methodClass = oldItem methodClass and: [ m selector = oldItem selector ] ]
-		                ifNone: [ nil ].
-	matchingItem ifNil: [
-			(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifTrue: [
-					self methods: (self methods
-							 add: item asFullRingDefinition;
-							 yourself) ].
+
+	| newCompiledMethod oldCompiledMethod existingItem existingItemIndex updatedList previousSelectionIndex previousEditedText |
+	self canHandleAnnouncement ifFalse: [ ^ self ].
+
+	newCompiledMethod := anAnnouncement newMethod.
+	oldCompiledMethod := anAnnouncement oldMethod.
+
+	existingItem := self unfilteredItemMatching: oldCompiledMethod.
+	existingItem ifNil: [
+			(self shouldRefreshItem: newCompiledMethod fromAnnouncement: anAnnouncement) ifTrue: [
+					updatedList := filterPresenter unfilteredItems asOrderedCollection.
+					updatedList add: newCompiledMethod asFullRingDefinition.
+					self methods: updatedList ].
 			^ self ].
-	editedText := textPresenter isDirty ifTrue: [ editedText := textPresenter text ].
-	index := methodList selectedIndex.
-	list := filterPresenter unfilteredItems asOrderedCollection.
-	matchingIndex := list indexOf: matchingItem ifAbsent: [ 0 ].
-	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [
-			matchingIndex > 0 ifTrue: [ list removeIndex: matchingIndex ].
-			self methods: list.
+
+	previousEditedText := textPresenter isDirty ifTrue: [ textPresenter text ].
+	previousSelectionIndex := methodList selectedIndex.
+	updatedList := filterPresenter unfilteredItems asOrderedCollection.
+	existingItemIndex := updatedList indexOf: existingItem ifAbsent: [ 0 ].
+
+	(self shouldRefreshItem: newCompiledMethod fromAnnouncement: anAnnouncement) ifFalse: [
+			existingItemIndex > 0 ifTrue: [ updatedList removeIndex: existingItemIndex ].
+			self methods: updatedList.
 			self defer: [
 					methodList unselectAll.
-					self selectIndex: (index min: self methods size) ].
+					self selectIndex: (previousSelectionIndex min: self methods size) ].
 			^ self ].
-	matchingIndex > 0
-		ifTrue: [ list at: matchingIndex put: item asFullRingDefinition ]
-		ifFalse: [ list add: item asFullRingDefinition ].
-	self methods: list.
+
+	existingItemIndex > 0
+		ifTrue: [ updatedList at: existingItemIndex put: newCompiledMethod asFullRingDefinition ]
+		ifFalse: [ updatedList add: newCompiledMethod asFullRingDefinition ].
+	self methods: updatedList.
 	self defer: [
 			methodList unselectAll.
-			self selectIndex: index ].
-	editedText ifNotNil: [
-			textPresenter text: editedText.
+			self selectIndex: previousSelectionIndex ].
+
+	previousEditedText ifNotNil: [
+			textPresenter text: previousEditedText.
 			textPresenter markConflict ]
 ]
 
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodRemoved: anAnnouncement [
 
-	| item selection matchingItem selectedMethod |
-	self isDisplayed ifFalse: [ ^ self ].
-	refreshingBlock ifNil: [ ^ self ].
-	self okToChange ifFalse: [ ^ self ]. "Item is a compiled methed, where the list is populated with RGMethod"
-	item := anAnnouncement method.
-	(item methodClass isNotNil and: [ item methodClass isObsolete not ]) ifFalse: [ ^ self ].
-	selection := methodList selectedIndex.
-	matchingItem := self methods
-		                detect: [ :m | m methodClass = item methodClass and: [ m selector = item selector ] ]
-		                ifNone: [ ^ self ].
-	selectedMethod := self selectedMethod.
-	self methods: (self methods asOrderedCollection
-			 remove: matchingItem ifAbsent: [ ];
-			 yourself).
+	| removedCompiledMethod removedItem previouslySelectedMethod previousSelectionIndex updatedList |
+	self canHandleAnnouncement ifFalse: [ ^ self ].
+	self okToChange ifFalse: [ ^ self ].
+
+	removedCompiledMethod := anAnnouncement method.
+	(removedCompiledMethod methodClass isNotNil and: [ removedCompiledMethod methodClass isObsolete not ]) ifFalse: [ ^ self ].
+
+	removedItem := self unfilteredItemMatching: removedCompiledMethod.
+	removedItem ifNil: [ ^ self ].
+
+	previouslySelectedMethod := self selectedMethod.
+	previousSelectionIndex := methodList selectedIndex.
+
+	updatedList := filterPresenter unfilteredItems asOrderedCollection.
+	updatedList remove: removedItem ifAbsent: [ ].
+	self methods: updatedList.
+
 	self defer: [
 			methodList unselectAll.
-			selectedMethod = matchingItem
-				ifTrue: [ self selectIndex: (selection min: self methods size) ]
-				ifFalse: [ self selectIndex: (self methods indexOf: selectedMethod) ] ]
+			previouslySelectedMethod = removedItem
+				ifTrue: [ self selectIndex: (previousSelectionIndex min: self methods size) ]
+				ifFalse: [ self selectIndex: (self methods indexOf: previouslySelectedMethod) ] ]
 ]
 
 { #category : 'text selection' }
@@ -698,6 +713,7 @@ StMethodBrowser >> methods: aCollection [
 	currentFilter := filterPresenter filterText.
 	filterPresenter unfilteredItems: aCollection asOrderedCollection.
 	methodList methods: aCollection.
+
 	self toolbarPresenter updatePresenter.
 	currentFilter isEmpty ifFalse: [ filterPresenter applyFilter: currentFilter ]
 ]
@@ -983,6 +999,14 @@ StMethodBrowser >> topologicSort [
 { #category : 'api' }
 StMethodBrowser >> topologicSort: aBoolean [
 	^ methodList topologicSort: aBoolean
+]
+
+{ #category : 'api - private' }
+StMethodBrowser >> unfilteredItemMatching: aCompiledMethod [
+
+	^ filterPresenter unfilteredItems
+		  detect: [ :ringDef | ringDef methodClass = aCompiledMethod methodClass and: [ ringDef selector = aCompiledMethod selector ] ]
+		  ifNone: [ nil ]
 ]
 
 { #category : 'api' }
