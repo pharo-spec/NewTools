@@ -58,23 +58,23 @@ StMethodListPresenter >> browserEnvironment [
 
 { #category : 'testing' }
 StMethodListPresenter >> buildHierarchyForMessages: messages [
+
 	| result classes |
-	self topologicSort ifFalse: [ 
-		result := IdentityDictionary new.
-		messages do: [:m | result at: m put: {} ].
-		^ result ].
-	
-	result := Dictionary new.	
+	self topologicSort ifFalse: [
+			result := OrderedIdentityDictionary new.
+			messages do: [ :m | result at: m put: {  } ].
+			^ result ].
+
+	result := OrderedDictionary new.
 	classes := (messages collect: [ :each | each methodClass ]) asSet.
-	messages do: [:message || level class |
-		class := message methodClass.
-		level := OrderedCollection new.
-		class allSuperclassesDo: [:superClass |
-			(classes includes: superClass)
-				ifTrue: [ level addFirst: superClass ]].
-		level addLast: class.
-		level addLast: message selector.
-		result at: message put: level ].
+	messages do: [ :message |
+			| level class |
+			class := message methodClass.
+			level := OrderedCollection new.
+			class allSuperclassesDo: [ :superClass | (classes includes: superClass) ifTrue: [ level addFirst: superClass ] ].
+			level addLast: class.
+			level addLast: message selector.
+			result at: message put: level ].
 	^ result
 ]
 
@@ -528,6 +528,12 @@ StMethodListPresenter >> topologicSort [
 StMethodListPresenter >> topologicSort: anObject [
 
 	topologySort := anObject
+]
+
+{ #category : 'api - selection' }
+StMethodListPresenter >> unselectAll [
+
+	listPresenter selection unselectAll
 ]
 
 { #category : 'private - scopes' }

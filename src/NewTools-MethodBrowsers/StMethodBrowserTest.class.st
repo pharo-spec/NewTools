@@ -164,6 +164,28 @@ StMethodBrowserTest >> testHandleMethodAddedWithActiveFilterKeepsUnfilteredItems
 ]
 
 { #category : 'tests' }
+StMethodBrowserTest >> testHandleMethodModifiedPreservesOrder [
+
+	| window browser method initialOrder indexBefore |
+	[
+		self class compile: 'methodForTest ^ Object new printOn: Transcript' classified: 'tests-protocol'.
+		method := self class >> #methodForTest.
+
+		window := StMethodBrowser browseSendersOf: #printOn:.
+		browser := window presenter.
+		initialOrder := browser methods copy.
+		indexBefore := initialOrder indexOf: method.
+		self assert: indexBefore > 0.
+
+		self class compile: 'methodForTest ^ Object new printOn: Transcript "modified"' classified: 'tests-protocol'.
+		browser handleMethodModified:
+			(MethodModified methodChangedFrom: method to: self class >> #methodForTest oldProtocol: method protocol).
+		self assert: (browser methods indexOf: (self class >> #methodForTest) asFullRingDefinition) equals: indexBefore ] ensure: [
+			self class removeSelector: #methodForTest.
+			window ifNotNil: [ window delete ] ]
+]
+
+{ #category : 'tests' }
 StMethodBrowserTest >> testHandleMethodModifiedRemovesSenderWhenNoLongerMatching [
 
 	| window browser method |
