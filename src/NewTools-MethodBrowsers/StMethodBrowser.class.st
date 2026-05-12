@@ -499,13 +499,11 @@ StMethodBrowser >> handleMethodAdded: anAnnouncement [
 
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodModified: anAnnouncement [
-
-	| item oldItem matchingItem index editedText list |
+	| item oldItem matchingItem index editedText list matchingIndex |
 	self isDisplayed ifFalse: [ ^ self ].
 	refreshingBlock ifNil: [ ^ self ].
 	item := anAnnouncement newMethod.
 	oldItem := anAnnouncement oldMethod.
-
 	matchingItem := self methods
 		                detect: [ :m | m methodClass = oldItem methodClass and: [ m selector = oldItem selector ] ]
 		                ifNone: [ nil ].
@@ -515,26 +513,24 @@ StMethodBrowser >> handleMethodModified: anAnnouncement [
 							 add: item asFullRingDefinition;
 							 yourself) ].
 			^ self ].
-
 	editedText := textPresenter isDirty ifTrue: [ editedText := textPresenter text ].
-
 	index := methodList selectedIndex.
-
 	list := filterPresenter unfilteredItems asOrderedCollection.
-	list remove: matchingItem ifAbsent: [ ].
+	matchingIndex := list indexOf: matchingItem ifAbsent: [ 0 ].
 	(self shouldRefreshItem: item fromAnnouncement: anAnnouncement) ifFalse: [
+			matchingIndex > 0 ifTrue: [ list removeIndex: matchingIndex ].
 			self methods: list.
 			self defer: [
 					methodList unselectAll.
 					self selectIndex: (index min: self methods size) ].
 			^ self ].
-
-	list add: item asFullRingDefinition.
+	matchingIndex > 0
+		ifTrue: [ list at: matchingIndex put: item asFullRingDefinition ]
+		ifFalse: [ list add: item asFullRingDefinition ].
 	self methods: list.
 	self defer: [
 			methodList unselectAll.
 			self selectIndex: index ].
-
 	editedText ifNotNil: [
 			textPresenter text: editedText.
 			textPresenter markConflict ]
