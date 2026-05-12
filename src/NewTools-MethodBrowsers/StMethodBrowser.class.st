@@ -397,11 +397,33 @@ StMethodBrowser >> codeEditor [
 	^ textPresenter
 ]
 
+{ #category : 'tools support' }
+StMethodBrowser >> confirmDiscardChanges [
+
+	textPresenter isDirty ifFalse: [ ^ true ].
+
+	^ self application confirm: 'Changes have not been saved. Is it OK to discard changes?'
+]
+
 { #category : 'initialization' }
 StMethodBrowser >> connectPresenters [
 
+	| isReverting |
+	isReverting := false.
+
 	methodList
-		whenSelectionChangedDo: [ :selection | self selectItem: selection selectedItem ];
+		whenSelectionChangedDo: [ :selection |
+				isReverting ifFalse: [
+							self confirmDiscardChanges
+								ifTrue: [ self selectItem: selection selectedItem ]
+								ifFalse: [
+										| oldIndex |
+										oldIndex := self methods indexOf: self codeEditor codePresenter selectedMethod.
+										isReverting := true.
+										self defer: [
+													[
+														methodList unselectAll.
+														self selectIndex: oldIndex ] ensure: [ isReverting := false ] ] ] ] ];
 		whenModelChangedDo: [ self updateTitle ].
 	methodList navigationBlock: [ :type :val | self navigateTo: type value: val ].
 	textPresenter
@@ -793,14 +815,14 @@ StMethodBrowser >> navigateTo: aType value: anObject [
 				self methods: (anObject flatCollect: [ :sel | self class implementorsOf: sel ]) asImplementorsOfAll: anObject ].
 			aType == #sendersAll ifTrue: [
 				self methods: (anObject flatCollect: [ :sel | self class sendersOf: sel ]) asSendersOfAll: anObject ].
-			aType == #references ifTrue: [ ^ self class browseReferencesOf: anObject ].
+			aType == #references ifTrue: [ ^ self class browseReferencesToClass: anObject ].
 			^ self ].
-	
+
 	aType == #implementorsAll ifTrue: [
 		self methods: (anObject flatCollect: [ :sel | self class implementorsOf: sel ]) asImplementorsOfAll: anObject ].
 	aType == #sendersAll ifTrue: [
 		self methods: (anObject flatCollect: [ :sel | self class sendersOf: sel ]) asSendersOfAll: anObject ].
-	aType == #references ifTrue: [ self methods: (self class referencesOf: anObject) asReferenceTo: anObject ]
+	aType == #references ifTrue: [ self methods: (self class referencesToClass: anObject) asReferenceTo: anObject ]
 ]
 
 { #category : 'initialization' }

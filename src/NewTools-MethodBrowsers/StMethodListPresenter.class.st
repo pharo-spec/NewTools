@@ -195,9 +195,10 @@ StMethodListPresenter >> doBrowseUsers [
 
 	| class |
 	class := self selectedMethod methodClass.
+
 	navigationBlock
 		ifNotNil: [ navigationBlock value: #references value: class ]
-		ifNil: [ self systemNavigation browseAllUsersOfClassOrTrait: class ]
+		ifNil: [ StMethodBrowser browseReferencesToClass: class ]
 ]
 
 { #category : 'private - actions' }
