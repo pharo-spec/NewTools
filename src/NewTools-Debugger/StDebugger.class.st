@@ -1187,10 +1187,12 @@ StDebugger >> session: aSession [
 		ifNotNil: [ debuggerClientModel session: aSession ]
 ]
 
-{ #category : 'initialization' }
+{ #category : 'accessing - model' }
 StDebugger >> setModelBeforeInitialization: aSession [
 
-	self session: aSession
+	self session: aSession.
+	
+	aSession cBDelegate: GraphicDebugDelegate new.
 ]
 
 { #category : 'initialization' }
