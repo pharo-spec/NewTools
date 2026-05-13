@@ -311,12 +311,8 @@ StMethodBrowser class >> registerToolsOn: registry [
 StMethodBrowser class >> sendersOf: aSymbol [
 	"Do not use aSymbol senders because it is a disguised global"
 
-	| senders nonRecursive |
-	senders := SystemNavigation default allSendersOf: aSymbol.
-
-	nonRecursive := senders reject: [ :method | method selector = aSymbol ].
-
-	^ nonRecursive
+	^ SystemNavigation default allSendersOf: aSymbol
+	
 ]
 
 { #category : 'icons' }
