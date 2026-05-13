@@ -1192,7 +1192,7 @@ StDebugger >> setModelBeforeInitialization: aSession [
 
 	self session: aSession.
 	
-	aSession cBDelegate: GraphicDebugDelegate new.
+	aSession debugCallBack: (StDebuggerCallBack new presenter: self).
 ]
 
 { #category : 'initialization' }
