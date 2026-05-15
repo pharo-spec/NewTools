@@ -255,13 +255,13 @@ StMethodBrowserTest >> testHandleMethodRemovedUpdatesSelection [
 	[
 		window := StMethodBrowser browseImplementorsOf: #printOn:.
 		browser := window presenter.
-
-		method := browser methods second.
+  
+		method := browser methods second. 
 		browser selectIndex: 2.
-
+ 
 		browser handleMethodRemoved: (MethodRemoved new method: method compiledMethod).
-		World doOneCycle.
-		self assert: (browser methods indexOf: browser selectedMethod) equals: 2 ] ensure: [ window ifNotNil: [ window delete ] ]
+		3 timesRepeat: [ self currentWorld doOneCycle ]. 
+		self assert: (browser methods indexOf: browser selectedMethod) equals: 2 ] ensure: [ window ifNotNil: [ window delete ] ] 
 ]
 
 { #category : 'tests - smoke' }
