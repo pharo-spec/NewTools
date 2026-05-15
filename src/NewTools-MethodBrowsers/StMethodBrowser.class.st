@@ -373,6 +373,12 @@ StMethodBrowser >> addHighlightedSegments [
 					 yourself) ]
 ]
 
+{ #category : 'accessing' }
+StMethodBrowser >> allMethods [
+
+	^ allMethods
+]
+
 { #category : 'private - scopes' }
 StMethodBrowser >> allScopes [ 
 	

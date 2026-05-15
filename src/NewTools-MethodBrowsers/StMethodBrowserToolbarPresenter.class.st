@@ -16,7 +16,8 @@ StMethodBrowserToolbarPresenter >> connectPresenters [
 
 	scopeList whenSelectedItemChangedDo: [ :scopeEnvironment |
 			savedScope := scopeEnvironment.
-			scopeEnvironment ifNotNil: [ messageList switchScopeTo: scopeEnvironment ] ].
+			scopeEnvironment ifNotNil: [ messageList switchScopeTo: scopeEnvironment ].
+			messageList listPresenter listSize > 0 ifTrue: [ self defer: [ messageList selectIndex: 1 ] ] ].
 
 	messageList whenSelectedDo: [ :item |
 			item ifNotNil: [
