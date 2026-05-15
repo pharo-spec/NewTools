@@ -18,7 +18,8 @@ Class {
 		'refreshingBlock',
 		'textPresenter',
 		'highlight',
-		'filterPresenter'
+		'filterPresenter',
+		'allMethods'
 	],
 	#classVars : [
 		'NavigateInPlace',
@@ -378,6 +379,23 @@ StMethodBrowser >> allScopes [
 	^ methodList allScopes
 ]
 
+{ #category : 'private - scopes' }
+StMethodBrowser >> applyCurrentScopeAndFilter [
+
+	| scopedMethods currentFilter currentScope |
+	currentScope := toolbarPresenter currentScope.
+
+	scopedMethods := currentScope ifNil: [ allMethods ] ifNotNil: [ :scope |
+			                 | scoped |
+			                 scoped := (scope selectMessagesFrom: allMethods) asOrderedCollection.
+			                 allMethods select: [ :m | scoped includes: m ] ].
+	currentFilter := filterPresenter filterText.
+	filterPresenter unfilteredItems: scopedMethods.
+	currentFilter isEmpty
+		ifTrue: [ methodList methods: scopedMethods ]
+		ifFalse: [ filterPresenter applyFilter: currentFilter ]
+]
+
 { #category : 'api - private' }
 StMethodBrowser >> canHandleAnnouncement [
 
@@ -429,12 +447,14 @@ StMethodBrowser >> connectPresenters [
 	textPresenter
 		whenSubmitDo: [ :text | self accept: text notifying: nil ];
 		whenResetDo: [ self selectItem: methodList selectedMethod ].
-
 	filterPresenter filterInputPresenter whenTextChangedDo: [ :text |
-			| allMethods filtered |
-			allMethods := filterPresenter unfilteredItems.
-			text ifEmpty: [ methodList methods: allMethods ] ifNotEmpty: [
-					filtered := allMethods select: [ :m | (filterPresenter display value: m) asLowercase includesSubstring: text asLowercase ].
+			| currentScope scopedMethods filtered |
+			currentScope := toolbarPresenter currentScope.
+			scopedMethods := currentScope
+				                 ifNil: [ allMethods ]
+				                 ifNotNil: [ :scope | (scope selectMessagesFrom: allMethods) asOrderedCollection ].
+			text ifEmpty: [ methodList methods: scopedMethods ] ifNotEmpty: [
+					filtered := scopedMethods select: [ :m | (filterPresenter display value: m) asLowercase includesSubstring: text asLowercase ].
 					methodList methods: filtered ] ]
 ]
 
@@ -503,7 +523,6 @@ StMethodBrowser >> handleMethodAdded: anAnnouncement [
 
 	| addedMethod previouslySelectedMethod previousEditedText |
 	self canHandleAnnouncement ifFalse: [ ^ self ].
-
 	addedMethod := anAnnouncement method.
 	(self shouldRefreshItem: addedMethod fromAnnouncement: anAnnouncement) ifFalse: [ ^ self ].
 	(addedMethod methodClass isNotNil and: [ addedMethod methodClass isObsolete not ]) ifFalse: [ ^ self ].
@@ -511,16 +530,13 @@ StMethodBrowser >> handleMethodAdded: anAnnouncement [
 	previousEditedText := textPresenter isDirty ifTrue: [ textPresenter text ].
 	previouslySelectedMethod := self selectedMethod.
 
+	(self itemMatching: addedMethod) ifNil: [ allMethods add: addedMethod ].
 
-	(filterPresenter unfilteredItems includes: addedMethod) ifFalse: [
-			| updatedList |
-			updatedList := filterPresenter unfilteredItems asOrderedCollection.
-			updatedList add: addedMethod asFullRingDefinition.
-			self methods: updatedList ].
+	self applyCurrentScopeAndFilter.
 
 	self defer: [
 			methodList unselectAll.
-			self selectIndex: (filterPresenter unfilteredItems indexOf: previouslySelectedMethod ifAbsent: [ 1 ]) ].
+			self selectIndex: (self methods indexOf: previouslySelectedMethod ifAbsent: [ 1 ]) ].
 
 	previousEditedText ifNotNil: [
 			textPresenter text: previousEditedText.
@@ -530,36 +546,35 @@ StMethodBrowser >> handleMethodAdded: anAnnouncement [
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodModified: anAnnouncement [
 
-	| newCompiledMethod oldCompiledMethod existingItem existingItemIndex updatedList previousSelectionIndex previousEditedText |
+	| newCompiledMethod oldCompiledMethod existingItem existingItemIndex previousSelectionIndex previousEditedText |
 	self canHandleAnnouncement ifFalse: [ ^ self ].
 
 	newCompiledMethod := anAnnouncement newMethod.
 	oldCompiledMethod := anAnnouncement oldMethod.
-	updatedList := filterPresenter unfilteredItems asOrderedCollection.
-	existingItem := self unfilteredItemMatching: oldCompiledMethod.
+	existingItem := self itemMatching: oldCompiledMethod.
 	existingItem ifNil: [
 			(self shouldRefreshItem: newCompiledMethod fromAnnouncement: anAnnouncement) ifTrue: [
-					updatedList add: newCompiledMethod asFullRingDefinition.
-					self methods: updatedList ].
+					allMethods add: newCompiledMethod.
+					self applyCurrentScopeAndFilter ].
 			^ self ].
 
 	previousEditedText := textPresenter isDirty ifTrue: [ textPresenter text ].
 	previousSelectionIndex := methodList selectedIndex.
 
-	existingItemIndex := updatedList indexOf: existingItem ifAbsent: [ 0 ].
+	existingItemIndex := allMethods indexOf: existingItem ifAbsent: [ 0 ].
 
 	(self shouldRefreshItem: newCompiledMethod fromAnnouncement: anAnnouncement) ifFalse: [
-			existingItemIndex > 0 ifTrue: [ updatedList removeIndex: existingItemIndex ].
-			self methods: updatedList.
+			existingItemIndex > 0 ifTrue: [ allMethods removeIndex: existingItemIndex ].
+			self applyCurrentScopeAndFilter.
 			self defer: [
 					methodList unselectAll.
 					self selectIndex: (previousSelectionIndex min: self methods size) ].
 			^ self ].
 
 	existingItemIndex > 0
-		ifTrue: [ updatedList at: existingItemIndex put: newCompiledMethod asFullRingDefinition ]
-		ifFalse: [ updatedList add: newCompiledMethod asFullRingDefinition ].
-	self methods: updatedList.
+		ifTrue: [ allMethods at: existingItemIndex put: newCompiledMethod ]
+		ifFalse: [ allMethods add: newCompiledMethod ].
+	self applyCurrentScopeAndFilter.
 	self defer: [
 			methodList unselectAll.
 			self selectIndex: previousSelectionIndex ].
@@ -572,22 +587,21 @@ StMethodBrowser >> handleMethodModified: anAnnouncement [
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodRemoved: anAnnouncement [
 
-	| removedCompiledMethod removedItem previouslySelectedMethod previousSelectionIndex updatedList |
+	| removedCompiledMethod removedItem previouslySelectedMethod previousSelectionIndex |
 	self canHandleAnnouncement ifFalse: [ ^ self ].
 	self okToChange ifFalse: [ ^ self ].
 
 	removedCompiledMethod := anAnnouncement method.
 	(removedCompiledMethod methodClass isNotNil and: [ removedCompiledMethod methodClass isObsolete not ]) ifFalse: [ ^ self ].
 
-	removedItem := self unfilteredItemMatching: removedCompiledMethod.
+	removedItem := self itemMatching: removedCompiledMethod.
 	removedItem ifNil: [ ^ self ].
 
 	previouslySelectedMethod := self selectedMethod.
 	previousSelectionIndex := methodList selectedIndex.
 
-	updatedList := filterPresenter unfilteredItems asOrderedCollection.
-	updatedList remove: removedItem ifAbsent: [ ].
-	self methods: updatedList.
+	allMethods remove: removedItem ifAbsent: [ ].
+	self applyCurrentScopeAndFilter.
 
 	self defer: [
 			methodList unselectAll.
@@ -646,6 +660,7 @@ StMethodBrowser >> initializePresenters [
 	methodCodePresenter := self instantiate: StMethodCodePresenter.
 	methodCodePresenter methodBrowser: self.
 
+	allMethods := OrderedCollection new.
 	textPresenter := self newCodeEditor.
 	textPresenter codePresenter: methodCodePresenter.
 	methodCodePresenter whenTextChangedDo: [ :aString | textPresenter markDirty ].
@@ -696,6 +711,14 @@ StMethodBrowser >> intervalOf: aSelector inCommentText: aText [
 	^ self searchedString: aSelector asString in: aText
 ]
 
+{ #category : 'api - private' }
+StMethodBrowser >> itemMatching: aCompiledMethod [
+
+	^ allMethods
+		  detect: [ :method | method methodClass = aCompiledMethod methodClass and: [ method selector = aCompiledMethod selector ] ]
+		  ifNone: [ nil ]
+]
+
 { #category : 'announcements' }
 StMethodBrowser >> methodAdded: anAnnouncement [
 	"this method forces the announcement to be handled in the UI process"
@@ -731,10 +754,10 @@ StMethodBrowser >> methods [
 StMethodBrowser >> methods: aCollection [
 
 	| currentFilter |
+	allMethods := aCollection asOrderedCollection.
 	currentFilter := filterPresenter filterText.
-	filterPresenter unfilteredItems: aCollection asOrderedCollection.
-	methodList methods: aCollection.
-
+	filterPresenter unfilteredItems: allMethods.
+	methodList methods: allMethods.
 	self toolbarPresenter updatePresenter.
 	currentFilter isEmpty ifFalse: [ filterPresenter applyFilter: currentFilter ]
 ]
@@ -1022,14 +1045,6 @@ StMethodBrowser >> topologicSort: aBoolean [
 	^ methodList topologicSort: aBoolean
 ]
 
-{ #category : 'api - private' }
-StMethodBrowser >> unfilteredItemMatching: aCompiledMethod [
-
-	^ filterPresenter unfilteredItems
-		  detect: [ :method | method methodClass = aCompiledMethod methodClass and: [ method selector = aCompiledMethod selector ] ]
-		  ifNone: [ nil ]
-]
-
 { #category : 'api' }
 StMethodBrowser >> updateTitle [
 	self withWindowDo: [ :window | window title: self windowTitle ]
@@ -1069,8 +1084,8 @@ StMethodBrowser >> windowTitle [
 
 	| msg total |
 	(filterPresenter isNil or: [ methodList isNil ]) ifTrue: [ ^ title ifNil: [ 'Message Browser' ] ].
-	(title isNotNil and: [ self methods isEmpty ])  ifTrue: [ ^ title , ' [No Results]' ].
-	total := filterPresenter unfilteredItems size.
+	(title isNotNil and: [ self methods isEmpty ]) ifTrue: [ ^ title , ' [No Results]' ].
+	total := allMethods size.
 	msg := methodList ifNil: [ '' ] ifNotNil: [
 			       (filterPresenter filterText isEmpty or: [ methodList numberOfElements = total ])
 				       ifTrue: [ ' [' , total printString , ']' ]

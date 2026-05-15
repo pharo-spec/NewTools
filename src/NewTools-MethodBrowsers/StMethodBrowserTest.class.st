@@ -138,7 +138,7 @@ StMethodBrowserTest >> testHandleMethodAddedAddsMatchingSender [
 		browser handleMethodAdded: (MethodAdded method: newMethod).
 
 		self assert: browser methods size equals: initialSize + 1.
-		self assert: (browser methods includes: newMethod asFullRingDefinition) ] ensure: [
+		self assert: (browser methods includes: newMethod) ] ensure: [
 			self class removeSelector: #tmpSenderMethodForTest.
 			window ifNotNil: [ window delete ] ]
 ]
@@ -180,7 +180,32 @@ StMethodBrowserTest >> testHandleMethodModifiedPreservesOrder [
 		self class compile: 'methodForTest ^ Object new printOn: Transcript "modified"' classified: 'tests-protocol'.
 		browser handleMethodModified:
 			(MethodModified methodChangedFrom: method to: self class >> #methodForTest oldProtocol: method protocol).
-		self assert: (browser methods indexOf: (self class >> #methodForTest) asFullRingDefinition) equals: indexBefore ] ensure: [
+		self assert: (browser methods indexOf: self class >> #methodForTest) equals: indexBefore ] ensure: [
+			self class removeSelector: #methodForTest.
+			window ifNotNil: [ window delete ] ]
+]
+
+{ #category : 'tests' }
+StMethodBrowserTest >> testHandleMethodModifiedPreservesScopeSelection [
+	"After a method is modified, the selected scope should remain the same"
+
+	| window browser method |
+	[
+		self class compile: 'methodForTest ^ Object new printOn: Transcript' classified: 'tests-protocol'.
+		method := self class >> #methodForTest.
+
+		window := StMethodBrowser browseSendersOf: #printOn:.
+		browser := window presenter.
+		browser selectIndex: 1.
+
+		browser toolbarPresenter scopeList selectIndex: 3.
+
+		self class compile: 'methodForTest ^ Object new printOn: Transcript "modified"' classified: 'tests-protocol'.
+		browser handleMethodModified:
+			(MethodModified methodChangedFrom: method to: self class >> #methodForTest oldProtocol: method protocol).
+
+
+		self assert: browser toolbarPresenter scopeList selectedIndex equals: 3 ] ensure: [
 			self class removeSelector: #methodForTest.
 			window ifNotNil: [ window delete ] ]
 ]
