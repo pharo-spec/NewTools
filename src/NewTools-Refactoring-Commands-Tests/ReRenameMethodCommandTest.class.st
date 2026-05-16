@@ -8,13 +8,21 @@ Class {
 { #category : 'tests' }
 ReRenameMethodCommandTest >> testRenameMethodCommandSuccess [
 
-	| driver command context node method ast dialog |
+	| driver command context method dialog |
 	method := RBClassDataForRefactoringTest >> #caller1.
-	ast := OpalCompiler new parse: method sourceCode.
-	node := ast allChildren detect: [ :n | n isMessage and: [ n selector = 'called:on1:' ] ].
-
 	context := StCommandContextMock new
-		           selectedNode: node;
+		           selectedNode: (OCMessageNode new
+				            selector: (OCSelectorNode new
+						             value: #'called:on1:';
+						             yourself);
+				            arguments: {
+						            (OCVariableNode new
+							             name: 'anObject';
+							             yourself).
+						            (OCVariableNode new
+							             name: 'anArg';
+							             yourself) };
+				            yourself);
 		           behavior: RBClassDataForRefactoringTest;
 		           yourself.
 
@@ -30,5 +38,5 @@ ReRenameMethodCommandTest >> testRenameMethodCommandSuccess [
 	driver
 		forTesting: true;
 		runRefactoring.
-	self assert: driver changes changes size equals: 5
+	self assert: driver changes changes size equals: 6
 ]
