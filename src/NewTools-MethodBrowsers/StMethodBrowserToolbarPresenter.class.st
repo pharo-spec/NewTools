@@ -66,6 +66,7 @@ StMethodBrowserToolbarPresenter >> initializePresenters [
 
 	toolbarPresenter add: (self newToolbarButton
 			 label: 'Flip';
+			 icon: (self iconNamed: #glamorousRefresh);
 			 action: [ self doFlipLayout ])
 ]
 
