@@ -359,7 +359,7 @@ StMethodListPresenter >> methods: aCollection [
 
 	self cacheHierarchyForClasses: aCollection.
 	listPresenter items:
-		(cachedHierarchy keys asSortedCollection: [ :a :b | self should: a havePriorityOver: b ]) asOrderedCollection.
+		(cachedHierarchy keys asSortedCollection: [ :method :otherMethod | self should: method havePriorityOver: otherMethod ]) asOrderedCollection.
 	allMessages := listPresenter items.
 
 	listPresenter listSize > 0 ifTrue: [ self defer: [ self selectIndex: 1 ] ]
