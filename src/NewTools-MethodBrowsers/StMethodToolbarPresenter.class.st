@@ -17,7 +17,9 @@ Class {
 		'toolbarPresenter',
 		'messageList',
 		'runTestsButton',
-		'reuseWindowButton'
+		'reuseWindowButton',
+		'historyButton',
+		'copyButton'
 	],
 	#category : 'NewTools-MethodBrowsers-Base',
 	#package : 'NewTools-MethodBrowsers',
@@ -64,6 +66,12 @@ StMethodToolbarPresenter >> defaultLayout [
 ]
 
 { #category : 'private - actions' }
+StMethodToolbarPresenter >> doBrowseHistory [
+
+	messageList doBrowseHistory
+]
+
+{ #category : 'private - actions' }
 StMethodToolbarPresenter >> doBrowseImplementors [
 
 	messageList doBrowseImplementors
@@ -91,6 +99,12 @@ StMethodToolbarPresenter >> doBrowseUsers [
 StMethodToolbarPresenter >> doBrowseVersions [
 
 	messageList doBrowseVersions
+]
+
+{ #category : 'private - actions' }
+StMethodToolbarPresenter >> doCopy [
+
+	messageList doCopy
 ]
 
 { #category : 'private - actions' }
@@ -125,7 +139,7 @@ StMethodToolbarPresenter >> initializePresenters [
 		label: 'References';
 		icon: (self iconNamed: #smallFind);
 		help: 'Browse references of current selected class';
-		action: [ self doBrowseUsers ].
+		action: [ self doBrowseUsers ]. 
 	(sendersButton := self newToolbarButton)
 		label: 'Senders';
 		icon: (self iconNamed: #smallFind);
@@ -141,12 +155,22 @@ StMethodToolbarPresenter >> initializePresenters [
 		icon: (self iconNamed: #history);
 		help: 'Browse versions of current selected method';
 		action: [ self doBrowseVersions ].
+
 	(runTestsButton := self newToolbarButton)
 		label: 'Run Tests';
 		icon: (self iconNamed: #testGreen);
 		help: 'Run all test methods in the list';
 		action: [ self doRunTests ].
-
+	(historyButton := self newToolbarButton)
+		label: 'Commit history';
+		icon: (self iconNamed: #komitterSmalltalkhubRemote);
+		help: 'Browse commit history';
+		action: [ self doBrowseHistory ].
+	(copyButton := self newToolbarButton)
+		label: 'Copy to clipboard';
+		icon: (self iconNamed: #smallCopy);
+		help: 'Copy selected methods into Clipboard as class>>selector';
+		action: [ self doCopy ].
 	reuseWindowButton := self newToolbarToggleButton
 		                     label: 'Reuse window';
 		                     help: 'If checked, new searches will replace current results.';
@@ -165,6 +189,8 @@ StMethodToolbarPresenter >> initializePresenters [
 		                    add: sendersButton;
 		                    add: implementorsButton;
 		                    add: versionButton;
+		                    add: historyButton;
+		                    add: copyButton;
 		                    add: reuseWindowButton;
 		                    add: runTestsButton;
 		                    yourself.

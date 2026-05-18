@@ -163,6 +163,35 @@ StMethodListPresenter >> defaultScopes [
 ]
 
 { #category : 'private - actions' }
+StMethodListPresenter >> doBrowseHistory [
+
+	| browserClass packageName repositoriesWithPackage repository |
+	packageName := self selectedMethod package name.
+	repositoriesWithPackage := IceRepository registry select: [ :repo | repo includesPackageNamed: packageName ].
+
+	repositoriesWithPackage ifEmpty: [
+			self application inform: 'No repositories include package ' , packageName.
+			^ self ].
+
+	repository := repositoriesWithPackage size > 1
+		              ifTrue: [
+				              SpSelectDialog new
+					              application: self application;
+					              title: 'Choose a repository';
+					              message: 'Please select the repository for package ' , packageName;
+					              items: repositoriesWithPackage;
+					              display: [ :each | each name ];
+					              openModal ]
+		              ifFalse: [ repositoriesWithPackage anyOne ].
+
+	repository ifNil: [ ^ self ].
+
+	self flag: #pharoTodo.
+	browserClass := #IceTipVersionHistoryBrowser asClassInEnvironment: self class environment.
+	(browserClass onRepository: repository method: self selectedMethod) open
+]
+
+{ #category : 'private - actions' }
 StMethodListPresenter >> doBrowseImplementors [
 
 	| selectors |
@@ -205,6 +234,15 @@ StMethodListPresenter >> doBrowseUsers [
 StMethodListPresenter >> doBrowseVersions [
 	
 	self systemNavigation browseVersionsOf: self selectedMethod
+]
+
+{ #category : 'private - actions' }
+StMethodListPresenter >> doCopy [
+
+	| text |
+	text := (self selectedMethods collect: #displayString) joinUsing: String cr.
+	Clipboard clipboardText: text.
+	self application inform: 'Copied methods:' , String cr , text
 ]
 
 { #category : 'private - actions' }
