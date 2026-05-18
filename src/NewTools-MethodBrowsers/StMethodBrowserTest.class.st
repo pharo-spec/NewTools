@@ -257,6 +257,26 @@ StMethodBrowserTest >> testMethodBrowserSenders [
 	window presenter methods size > 0 ] ensure: [ window ifNotNil: [ window delete ] ]
 ]
 
+{ #category : 'tests' }
+StMethodBrowserTest >> testMethodsAreSortedByHierarchy [
+
+	| window browser methodObject methodCollection methodArray |
+	methodObject := Object >> #printString.
+	methodCollection := Collection >> #size.
+	methodArray := Array >> #asArray.
+
+	[
+		window := StMethodBrowser browse: {
+				          methodArray.
+				          methodObject.
+				          methodCollection }.
+		browser := window presenter.
+
+		self assert: browser methods first compiledMethod equals: methodObject.
+		self assert: browser methods second compiledMethod equals: methodCollection.
+		self assert: browser methods third compiledMethod equals: methodArray ] ensure: [ window ifNotNil: [ window delete ] ]
+]
+
 { #category : 'tests - smoke' }
 StMethodBrowserTest >> testOpenWithoutMessageShouldNotDNU [
 
