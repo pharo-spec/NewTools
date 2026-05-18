@@ -257,22 +257,6 @@ StMethodListPresenter >> handleTestResultChanged: anAnnouncement [
 	self defer: [ listPresenter updateItemsKeepingSelection: listPresenter items ]
 ]
 
-{ #category : 'sorting' }
-StMethodListPresenter >> hierarchySortBlock [
-
-	^ [ :a :b |
-		  | hierarchyA hierarchyB minSize answer |
-		  hierarchyA := cachedHierarchy at: a ifAbsent: [ #(  ) ].
-		  hierarchyB := cachedHierarchy at: b ifAbsent: [ #(  ) ].
-
-		  minSize := (hierarchyA size min: hierarchyB size) - 1.
-		  answer := nil.
-		  1 to: minSize do: [ :i |
-			  answer ifNil: [
-				  (hierarchyA at: i) == (hierarchyB at: i) ifFalse: [ answer := (hierarchyA at: i) name < (hierarchyB at: i) name ] ] ].
-		  answer ifNil: [ hierarchyA size <= hierarchyB size ] ]
-]
-
 { #category : 'initialization' }
 StMethodListPresenter >> initialize [
 
@@ -374,10 +358,11 @@ StMethodListPresenter >> methods [
 StMethodListPresenter >> methods: aCollection [
 
 	self cacheHierarchyForClasses: aCollection.
-	listPresenter items: (cachedHierarchy keys asSortedCollection: self hierarchySortBlock ) asOrderedCollection.
+	listPresenter items:
+		(cachedHierarchy keys asSortedCollection: [ :a :b | self should: a havePriorityOver: b ]) asOrderedCollection.
 	allMessages := listPresenter items.
 
-	listPresenter listSize > 0 ifTrue: [ self defer: [ self selectIndex: 1 ] ] 
+	listPresenter listSize > 0 ifTrue: [ self defer: [ self selectIndex: 1 ] ]
 ]
 
 { #category : 'accessing' }
@@ -499,6 +484,22 @@ StMethodListPresenter >> selectorOf: anItem [
 
 { #category : 'accessing - model' }
 StMethodListPresenter >> setModelBeforeInitialization: aMethod [
+]
+
+{ #category : 'sorting' }
+StMethodListPresenter >> should: aMethodDefinition havePriorityOver: anotherMethodDefinition [
+
+	| hierarchyA hierarchyB minSize answer |
+	hierarchyA := cachedHierarchy at: aMethodDefinition ifAbsent: [ #(  ) ].
+	hierarchyB := cachedHierarchy at: anotherMethodDefinition ifAbsent: [ #(  ) ].
+
+	minSize := (hierarchyA size min: hierarchyB size) - 1.
+
+	1 to: minSize do: [ :i |
+		answer ifNil: [
+			(hierarchyA at: i) == (hierarchyB at: i) ifFalse: [ answer := (hierarchyA at: i) name < (hierarchyB at: i) name ] ] ].
+
+	^ answer ifNil: [ hierarchyA size <= hierarchyB size ]
 ]
 
 { #category : 'api' }
