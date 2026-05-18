@@ -43,6 +43,20 @@ StMethodBrowserTest >> testBrowseReferencesToVariableInClass [
 ]
 
 { #category : 'tests' }
+StMethodBrowserTest >> testCallerMethodIsSetFromConstructor [
+
+	| window browser |
+	[
+		window := StMethodBrowser browseImplementorsOf: #printOn:.
+		browser := window presenter.
+ 
+		self assert: browser callerMethod isNotNil.
+		self assert: browser callerMethod methodClass identicalTo: self class.
+		self assert: browser callerMethod selector equals: #testCallerMethodIsSetFromConstructor ] ensure: [
+		window ifNotNil: [ window delete ] ]
+]
+
+{ #category : 'tests' }
 StMethodBrowserTest >> testDeprecatedMethodDisplayedStruckOut [
 
 	| window browser deprecatedMethod label column |
