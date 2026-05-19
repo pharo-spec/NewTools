@@ -71,14 +71,14 @@ StSystemReporterPresenter >> fillTopics [
 
 { #category : 'utils' }
 StSystemReporterPresenter >> isLinux [
-	
-	^Smalltalk os isLinux
+
+	^ OSPlatform current isLinux
 ]
 
 { #category : 'utils' }
 StSystemReporterPresenter >> isWindows [
 
-	^Smalltalk os isWindows
+	^ OSPlatform current isWindows
 ]
 
 { #category : 'building report' }
@@ -92,8 +92,8 @@ StSystemReporterPresenter >> reportImage: aStream [
 	self header: 'Image' on: aStream.
 	aStream 
 		nextPutAll: Smalltalk image imagePath; cr;
-		nextPutAll: SystemVersion current version; cr;
-		nextPutAll: SystemVersion current version asString; cr
+		nextPutAll: 'Version: '; nextPutAll: SystemVersion current version; cr;
+		nextPutAll: 'Build: '; nextPutAll: SystemVersion current imageVersionString; cr
 ]
 
 { #category : 'building report' }
@@ -149,9 +149,9 @@ StSystemReporterPresenter >> reportSources: aStream [
 
 	self header: 'Image Sources' on: aStream.
 	aStream
-		nextPutAll: SourceFileArray default class printString;
+		nextPutAll: SourcesManager current class printString;
 		cr.
-	aStream nextPutAll: SourceFileArray default reportString
+	aStream nextPutAll: SourcesManager current reportString
 ]
 
 { #category : 'building report' }

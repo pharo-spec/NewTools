@@ -8,15 +8,13 @@ Class {
 { #category : 'tests' }
 ReProtectVariableCommandTest >> testPushUpVariableToClassSideCommandSuccess [
 
-	| driver command context ast node method |
+	| driver command context method |
 	command := StProtectVariableCommand new.
 	method := RBBasicLintRuleTestData >> #result.
-	ast := OpalCompiler new
-		       class: method methodClass;
-		       parse: method sourceCode.
-	node := ast allChildren detect: [ :n | n isVariable and: [ n name = 'result' ] ].
 	context := StCommandContextMock new
-		           variable: node variable;
+		           variable: (OCVariableNode new
+				            name: 'result';
+				            yourself);
 		           behavior: RBBasicLintRuleTestData.
 	command context: context.
 	driver := command prepareDriver.

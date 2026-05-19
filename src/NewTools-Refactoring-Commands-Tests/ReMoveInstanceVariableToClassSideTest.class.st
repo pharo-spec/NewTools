@@ -8,14 +8,9 @@ Class {
 { #category : 'tests' }
 ReMoveInstanceVariableToClassSideTest >> testMoveInstanceVariableToClassSideCommandSuccess [
 
-	| driver command context ast node method |
+	| driver command context |
 	command := StMoveInstanceVariableToClassSideCommand new.
-	method := RBTransformationRuleTestData >> #isEmpty.
-	ast := OpalCompiler new
-		       class: method methodClass;
-		       parse: method sourceCode.
-	node := ast allChildren detect: [ :n | n isVariable and: [ n name = 'builder' ] ].
-	context := StCommandContextMock new variable: node variable.
+	context := StCommandContextMock new variable: (InstanceVariableSlot new named: #builder; owningClass: RBTransformationRuleTestData; yourself).
 	context selectedMethod: context.
 	command context: context.
 	driver := command prepareDriver.
