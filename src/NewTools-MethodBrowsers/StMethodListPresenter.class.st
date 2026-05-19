@@ -199,7 +199,7 @@ StMethodListPresenter >> doBrowseImplementors [
 
 	navigationBlock
 		ifNotNil: [ navigationBlock value: #implementorsAll value: selectors ]
-		ifNil: [ StMethodBrowser browseImplementorsOfAll: selectors ]
+		ifNil: [ StMethodBrowser browseImplementorsOfAll: selectors from: self class ]
 ]
 
 { #category : 'private - actions' }
@@ -216,7 +216,7 @@ StMethodListPresenter >> doBrowseSenders [
 
 	navigationBlock
 		ifNotNil: [ navigationBlock value: #sendersAll value: selectors ]
-		ifNil: [ StMethodBrowser browseSendersOfAll: selectors ]
+		ifNil: [ StMethodBrowser browseSendersOfAll: selectors from: self class]
 ]
 
 { #category : 'private - actions' }
