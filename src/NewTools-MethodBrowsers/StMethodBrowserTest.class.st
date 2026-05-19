@@ -43,17 +43,15 @@ StMethodBrowserTest >> testBrowseReferencesToVariableInClass [
 ]
 
 { #category : 'tests' }
-StMethodBrowserTest >> testCallerMethodIsSetFromConstructor [
+StMethodBrowserTest >> testCallerClassIsSetFromConstructor [
 
 	| window browser |
 	[
-		window := StMethodBrowser browseImplementorsOf: #printOn:.
+		window := StMethodBrowser browseImplementorsOf: #printOn: from: self class.
 		browser := window presenter.
- 
-		self assert: browser callerMethod isNotNil.
-		self assert: browser callerMethod methodClass identicalTo: self class.
-		self assert: browser callerMethod selector equals: #testCallerMethodIsSetFromConstructor ] ensure: [
-		window ifNotNil: [ window delete ] ]
+
+		self assert: browser callerClass isNotNil.
+		self assert: browser callerClass identicalTo: self class ] ensure: [ window ifNotNil: [ window delete ] ]
 ]
 
 { #category : 'tests' }

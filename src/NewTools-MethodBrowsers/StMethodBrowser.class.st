@@ -19,7 +19,7 @@ Class {
 		'textPresenter',
 		'highlight',
 		'filterPresenter',
-		'callerMethod'
+		'callerClass'
 	],
 	#classVars : [
 		'NavigateInPlace',
@@ -41,23 +41,36 @@ StMethodBrowser class >> beDefaultBrowser [
 StMethodBrowser class >> browse: aCollection [
 	"Basic version. Opens a browser on the given collection of methods without setting a title or refreshing block."
 
-	^ (self newFromContext methods: aCollection) open
+	^ (self new
+		   methods: aCollection;
+		   callerClass: aCollection anyOne methodClass instanceSide) open
 ]
 
 { #category : 'opening explicit' }
 StMethodBrowser class >> browse: compiledMethods asImplementorsOf: aSymbol [
 	"Specialized version for better UX feedback"
 
-	^ self newFromContext
+	^ self new
 		  methods: compiledMethods asImplementorsOf: aSymbol;
 		  open
 ]
 
 { #category : 'opening explicit' }
-StMethodBrowser class >> browse: compiledMethods asImplementorsOfAll: aCollectionOfSymbols [
+StMethodBrowser class >> browse: compiledMethods asImplementorsOf: aSymbol from: aCallerClass [
+	"Specialized version for better UX feedback"
 
-	^ self newFromContext
+	^ self new
+		  methods: compiledMethods asImplementorsOf: aSymbol;
+		  callerClass: aCallerClass;
+		  open
+]
+
+{ #category : 'opening explicit' }
+StMethodBrowser class >> browse: compiledMethods asImplementorsOfAll: aCollectionOfSymbols from: aCallerClass [
+
+	^ self new
 		  methods: compiledMethods asImplementorsOfAll: aCollectionOfSymbols;
+		  callerClass: aCallerClass;
 		  open
 ]
 
@@ -65,59 +78,64 @@ StMethodBrowser class >> browse: compiledMethods asImplementorsOfAll: aCollectio
 StMethodBrowser class >> browse: compiledMethods asReferencesToClass: aClass [
 	"Specialized version for better UX feedback for class references and explicit list of methods"
 
-	^ (self newFromContext methods: compiledMethods asReferenceTo: aClass binding) open
+	^ (self new
+		   methods: compiledMethods asReferenceTo: aClass binding;
+		   callerClass: aClass) open
 ]
 
 { #category : 'opening explicit' }
 StMethodBrowser class >> browse: compiledMethods asReferencesToLiteral: aLiteral [
 	"Specialized version for better UX feedback for class references and explicit list of methods"
 
-	^ (self newFromContext methods: compiledMethods asReferenceTo: aLiteral) open
+	^ (self new methods: compiledMethods asReferenceTo: aLiteral) open
 ]
 
 { #category : 'opening explicit' }
 StMethodBrowser class >> browse: compiledMethods asReferencesToVariable: aVariable inClass: aClass [
 	"Specialized version for better UX feedback for class references and explicit list of methods"
 
-	^ (self newFromContext methods: compiledMethods asReferencesToVariable: aVariable inClass: aClass binding) open
+	^ (self new
+		   methods: compiledMethods asReferencesToVariable: aVariable inClass: aClass binding;
+		   callerClass: aClass) open
 ]
 
 { #category : 'opening explicit' }
 StMethodBrowser class >> browse: compiledMethods asSendersOf: aSymbol [
 	"Specialized version for better UX feedback for senders and explicit list of methods"
 
-	^ self newFromContext 
+	^ self new 
 		  methods: compiledMethods asSendersOf: aSymbol;
 		  open
 ]
 
 { #category : 'opening explicit' }
-StMethodBrowser class >> browse: compiledMethods asSendersOfAll: aCollectionOfSymbols [
+StMethodBrowser class >> browse: compiledMethods asSendersOf: aSymbol from: aCallerClass [
+	"Specialized version for better UX feedback for senders and explicit list of methods"
+
+	^ self new
+		  methods: compiledMethods asSendersOf: aSymbol;
+		  callerClass: aCallerClass;
+		  open
+]
+
+{ #category : 'opening explicit' }
+StMethodBrowser class >> browse: compiledMethods asSendersOfAll: aCollectionOfSymbols from: aCallerClass [
 	"Specialized version for better UX feedback for senders of all given selectors."
 
-	^ self newFromContext 
+	^ self new
 		  methods: compiledMethods asSendersOfAll: aCollectionOfSymbols;
+		  callerClass: aCallerClass;
 		  open
 ]
 
 { #category : 'opening - old' }
-StMethodBrowser class >> browse: aCollection title: aString [
+StMethodBrowser class >> browse: aCollection title: aString from: aCallerMethod [
 	"Basic version with limited UX feedback. Use only if you cannot use the other methods."
 
-	^ self newFromContext 
+	^ self new
 		  methods: aCollection;
+		  callerClass: aCallerMethod;
 		  title: aString;
-		  open
-]
-
-{ #category : 'opening - old' }
-StMethodBrowser class >> browse: aCollection title: aString highlight: aSelectString [
-	"Basic version with limited UX feedback that highlights a specific string in the source code."
-
-	^ self newFromContext 
-		  methods: aCollection;
-		  title: aString;
-		  highlight: aSelectString;
 		  open
 ]
 
@@ -129,24 +147,24 @@ StMethodBrowser class >> browseImplementorsOf: aSymbol [
 ]
 
 { #category : 'opening' }
-StMethodBrowser class >> browseImplementorsOfAll: aCollectionOfSymbols [
+StMethodBrowser class >> browseImplementorsOf: aSymbol from: aCallerClass [
+	"Opens a browser on all implementors of aSymbol. Sets the refreshing block to keep the list up to date."
+
+	^ self browse: (self implementorsOf: aSymbol) asImplementorsOf: aSymbol from: aCallerClass
+]
+
+{ #category : 'opening' }
+StMethodBrowser class >> browseImplementorsOfAll: aCollectionOfSymbols from: aCallerClass [
 
 	| methods |
 	methods := aCollectionOfSymbols flatCollect: [ :sym | self implementorsOf: sym ].
-	^ self browse: methods asArray asImplementorsOfAll: aCollectionOfSymbols
+	^ self browse: methods asArray asImplementorsOfAll: aCollectionOfSymbols from: aCallerClass
 ]
 
 { #category : 'opening' }
 StMethodBrowser class >> browseMethodsWithSourceString: aString [
 
 	SystemNavigation default browseMethodsWithSourceString: aString matchCase: false
-]
-
-{ #category : 'opening' }
-StMethodBrowser class >> browseReferencesOf: aClassName [
-	"Special version that sets the correct refreshing block for senders"
-
-	^ self browse: (self referencesOf: aClassName) asReferencesToClass: aClassName
 ]
 
 { #category : 'opening' }
@@ -175,8 +193,10 @@ StMethodBrowser class >> browseReferencesToVariables: variables [
 
 	| methods |
 	methods := SystemNavigation default allMethods select: [ :m | variables anySatisfy: [ :var | var isAccessedIn: m ] ].
-	^ self newFromContext 
+
+	^ self new
 		  methods: methods asArray;
+		  callerClass:((variables first respondsTo: #owningClass) ifTrue: [ variables first owningClass ] ifFalse: [ variables first definingClass ]);
 		  title: 'References to ' , (', ' join: (variables collect: [ :v | v name ]));
 		  open
 ]
@@ -189,11 +209,18 @@ StMethodBrowser class >> browseSendersOf: aSymbol [
 ]
 
 { #category : 'opening' }
-StMethodBrowser class >> browseSendersOfAll: aCollectionOfSymbols [
-    | methods |
+StMethodBrowser class >> browseSendersOf: aSymbol from: aCallerMethod [
+	"Special version that sets the correct refreshing block for senders"
 
-    methods := aCollectionOfSymbols flatCollect: [ :sym | self sendersOf: sym ].
-    ^ self browse: methods asArray asSendersOfAll: aCollectionOfSymbols 
+	^ self browse: (self sendersOf: aSymbol) asSendersOf: aSymbol from: aCallerMethod 
+]
+
+{ #category : 'opening' }
+StMethodBrowser class >> browseSendersOfAll: aCollectionOfSymbols from: aCallerClass [
+
+	| methods |
+	methods := aCollectionOfSymbols flatCollect: [ :sym | self sendersOf: sym ].
+	^ self browse: methods asArray asSendersOfAll: aCollectionOfSymbols from: aCallerClass
 ]
 
 { #category : 'opening' }
@@ -206,8 +233,9 @@ StMethodBrowser class >> browseUsersOfSharedPool: aPoolClass [
 	methods := classes flatCollect: [ :cls |
 		           cls methods select: [ :m | poolVarNames anySatisfy: [ :varName | m ast references: varName ] ] ].
 
-	self newFromContext 
+	self new
 		methods: methods asArray;
+		callerClass: aPoolClass;
 		title: 'Users of pool ' , aPoolClass name;
 		open
 ]
@@ -219,8 +247,9 @@ StMethodBrowser class >> browseUsersOfTrait: aTrait [
 	classes := aTrait traitUsers.
 	methods := classes flatCollect: [ :cls | cls methods select: [ :m | m origin = aTrait ] ].
 
-	self newFromContext 
+	self new
 		methods: methods asArray;
+		callerClass: aTrait;
 		title: 'Users of trait ' , aTrait name;
 		open
 ]
@@ -230,8 +259,12 @@ StMethodBrowser class >> browseWritersOfVariables: variables [
 
 	| methods |
 	methods := SystemNavigation default allMethods select: [ :m | variables anySatisfy: [ :var | var isWrittenIn: m ] ].
-	^ self newFromContext 
+
+	^ self new
 		  methods: methods asArray;
+		  callerClass: ((variables first respondsTo: #owningClass)
+				   ifTrue: [ variables first owningClass ]
+				   ifFalse: [ variables first definingClass ]);
 		  title: 'Writers to ' , (', ' join: (variables collect: [ :v | v name ]));
 		  open
 ]
@@ -247,7 +280,7 @@ StMethodBrowser class >> implementorsOf: aSymbol [
 StMethodBrowser class >> methods: methods [
 	"Create a method browser on the methods argument. Do not open it."
 	
-	^ self newFromContext 
+	^ self new 
 		  methods: methods;
 		  yourself
 ]
@@ -274,20 +307,6 @@ StMethodBrowser class >> navigateInPlaceSettingsOn: aBuilder [
 			'When browsing senders/implementors/references from a Method Browser, reuse the current window instead of opening a new one';
 		target: self;
 		parent: #tools
-]
-
-{ #category : 'instance creation' }
-StMethodBrowser class >> newFromContext [
-
-	| context |
-	context := thisContext.
-	
-	[ context sender notNil and: [ context sender method methodClass instanceSide == self instanceSide ] ] whileTrue: [
-		context := context sender ].
-
-	^ self new
-		  callerMethod: context sender method;
-		  yourself
 ]
 
 { #category : 'private' }
@@ -395,15 +414,15 @@ StMethodBrowser >> allScopes [
 ]
 
 { #category : 'accessing' }
-StMethodBrowser >> callerMethod [
+StMethodBrowser >> callerClass [
 
-	^ callerMethod
+	^ callerClass
 ]
 
 { #category : 'accessing' }
-StMethodBrowser >> callerMethod: anObject [
+StMethodBrowser >> callerClass: anObject [
 
-	callerMethod := anObject
+	callerClass := anObject
 ]
 
 { #category : 'api - private' }
