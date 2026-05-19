@@ -43,6 +43,18 @@ StMethodBrowserTest >> testBrowseReferencesToVariableInClass [
 ]
 
 { #category : 'tests' }
+StMethodBrowserTest >> testCallerClassIsSetFromConstructor [
+
+	| window browser |
+	[
+		window := StMethodBrowser browseImplementorsOf: #printOn: from: self class.
+		browser := window presenter.
+
+		self assert: browser callerClass isNotNil.
+		self assert: browser callerClass identicalTo: self class ] ensure: [ window ifNotNil: [ window delete ] ]
+]
+
+{ #category : 'tests' }
 StMethodBrowserTest >> testDeprecatedMethodDisplayedStruckOut [
 
 	| window browser deprecatedMethod label column |
@@ -255,6 +267,26 @@ StMethodBrowserTest >> testMethodBrowserSenders [
 	[
 	window := StMethodBrowser browseImplementorsOf: #browseImplementorsOf:.
 	window presenter methods size > 0 ] ensure: [ window ifNotNil: [ window delete ] ]
+]
+
+{ #category : 'tests' }
+StMethodBrowserTest >> testMethodsAreSortedByHierarchy [
+
+	| window browser methodObject methodCollection methodArray |
+	methodObject := Object >> #printString.
+	methodCollection := Collection >> #size.
+	methodArray := Array >> #asArray.
+
+	[
+		window := StMethodBrowser browse: {
+				          methodArray.
+				          methodObject.
+				          methodCollection }.
+		browser := window presenter.
+
+		self assert: browser methods first compiledMethod equals: methodObject.
+		self assert: browser methods second compiledMethod equals: methodCollection.
+		self assert: browser methods third compiledMethod equals: methodArray ] ensure: [ window ifNotNil: [ window delete ] ]
 ]
 
 { #category : 'tests - smoke' }

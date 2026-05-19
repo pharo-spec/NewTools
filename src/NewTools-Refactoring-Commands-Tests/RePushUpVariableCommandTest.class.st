@@ -8,15 +8,11 @@ Class {
 { #category : 'tests' }
 RePushUpVariableCommandTest >> testPushUpVariableToClassSideCommandSuccess [
 
-	| driver command context ast node method |
+	| driver command context method |
 	command := StPushUpVariableCommand new.
 	method := RBTransformationRuleTestData >> #isEmpty.
-	ast := OpalCompiler new
-		       class: method methodClass;
-		       parse: method sourceCode.
-	node := ast allChildren detect: [ :n | n isVariable and: [ n name = 'builder' ] ].
 	context := StCommandContextMock new
-		           variable: node variable;
+		           variable: (OCVariableNode new name: 'builder' ; yourself);
 		           behavior: RBTransformationRuleTestData.
 	command context: context.
 	driver := command prepareDriver.

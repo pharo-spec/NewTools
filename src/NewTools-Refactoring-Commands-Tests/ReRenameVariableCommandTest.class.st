@@ -8,15 +8,11 @@ Class {
 { #category : 'tests' }
 ReRenameVariableCommandTest >> testRenameVariableCommandSuccess [
 
-	| driver command context ast node method dialogMock |
+	| driver command context method dialogMock |
 	command := StRenameVariableCommand new.
 	method := RBTransformationRuleTestData >> #isEmpty.
-	ast := OpalCompiler new
-		       class: method methodClass;
-		       parse: method sourceCode.
-	node := ast allChildren detect: [ :n | n isVariable and: [ n name = 'builder' ] ].
 	context := StCommandContextMock new
-		           name: node name;
+		           name: 'builder';
 		           behavior: RBTransformationRuleTestData.
 	command context: context.
 	driver := command prepareDriver.

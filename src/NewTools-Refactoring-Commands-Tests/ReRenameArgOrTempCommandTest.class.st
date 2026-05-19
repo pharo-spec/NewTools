@@ -8,15 +8,16 @@ Class {
 { #category : 'tests' }
 ReRenameArgOrTempCommandTest >> testRenameArgOrTempCommandSuccess [
 
-	| driver command context method ast node dialogMock |
+	| driver command context method dialogMock |
+	
 	method := ReClassToConvertTemporaryToInstanceVariable >> #doAction1.
-	ast := OpalCompiler new parse: method sourceCode.
-	node := ast allChildren detect: [ :n | n isVariable and: [ n name = 'temp' ] ].
-
 	command := StRenameArgOrTempCommand new.
 	context := StCommandContextMock new
 		           method: method;
-		           selectedNode: node.
+		           selectedNode: (OCVariableNode new
+				            name: 'temp';
+				            start: 15;
+				            yourself).
 	command context: context.
 	driver := command prepareDriver.
 	dialogMock := StRequestDialogMock new.

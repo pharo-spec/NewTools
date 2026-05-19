@@ -56,7 +56,7 @@ StMethodListPresenter >> browserEnvironment [
 	^ RBBrowserEnvironment default label: 'current image'
 ]
 
-{ #category : 'testing' }
+{ #category : 'sorting' }
 StMethodListPresenter >> buildHierarchyForMessages: messages [
 
 	| result classes |
@@ -199,7 +199,7 @@ StMethodListPresenter >> doBrowseImplementors [
 
 	navigationBlock
 		ifNotNil: [ navigationBlock value: #implementorsAll value: selectors ]
-		ifNil: [ StMethodBrowser browseImplementorsOfAll: selectors ]
+		ifNil: [ StMethodBrowser browseImplementorsOfAll: selectors from: self class ]
 ]
 
 { #category : 'private - actions' }
@@ -216,7 +216,7 @@ StMethodListPresenter >> doBrowseSenders [
 
 	navigationBlock
 		ifNotNil: [ navigationBlock value: #sendersAll value: selectors ]
-		ifNil: [ StMethodBrowser browseSendersOfAll: selectors ]
+		ifNil: [ StMethodBrowser browseSendersOfAll: selectors from: self class]
 ]
 
 { #category : 'private - actions' }
@@ -312,7 +312,6 @@ StMethodListPresenter >> initializePresenters [
 	listPresenter
 		addColumn: (SpColumnViewColumn new
 				 title: 'Location';
-				 sortFunction: [ :item | self locationOf: item ] ascending;
 				 bind: [ :p :item | p label: (self locationOf: item) ];
 				 yourself);
 		addColumn: (StTestIconColumnView new
@@ -397,7 +396,8 @@ StMethodListPresenter >> methods [
 StMethodListPresenter >> methods: aCollection [
 
 	self cacheHierarchyForClasses: aCollection.
-	listPresenter items: cachedHierarchy keys asOrderedCollection.
+	listPresenter items:
+		(cachedHierarchy keys asSortedCollection: [ :method :otherMethod | self should: method havePriorityOver: otherMethod ]) asOrderedCollection.
 	allMessages := listPresenter items.
 
 	listPresenter listSize > 0 ifTrue: [ self defer: [ self selectIndex: 1 ] ]
@@ -525,22 +525,19 @@ StMethodListPresenter >> setModelBeforeInitialization: aMethod [
 ]
 
 { #category : 'sorting' }
-StMethodListPresenter >> sortClassesInCachedHierarchy: aMethodDefinition b: otherMethodDefinition [
-	"This method checks wether the cached inheritance hierarchy of a method should be before than the one of another method.
-	It compares alphabetically the hierarchy using #compare:
-	If both are alphabetically equals, it uses the size the hierarchy.
-	We do not know why this is done like this."
-	| aMethodHierarchy otherMethodHierarchy minSize|
-	aMethodHierarchy := cachedHierarchy at: aMethodDefinition.
-	otherMethodHierarchy := cachedHierarchy at: otherMethodDefinition.
-	
-	minSize := aMethodHierarchy size min: otherMethodHierarchy size.
-	
-	1 to: minSize do: [ :i | |compare|
-		compare := (aMethodHierarchy at: i) printString compare: (otherMethodHierarchy at: i) printString.
-		compare ~~ 2
-			ifTrue: [  ^ compare == 1 ]].
-	^  aMethodHierarchy size < otherMethodHierarchy size
+StMethodListPresenter >> should: aMethodDefinition havePriorityOver: anotherMethodDefinition [
+
+	| hierarchyA hierarchyB minSize answer |
+	hierarchyA := cachedHierarchy at: aMethodDefinition ifAbsent: [ #(  ) ].
+	hierarchyB := cachedHierarchy at: anotherMethodDefinition ifAbsent: [ #(  ) ].
+
+	minSize := (hierarchyA size min: hierarchyB size) - 1.
+
+	1 to: minSize do: [ :i |
+		answer ifNil: [
+			(hierarchyA at: i) == (hierarchyB at: i) ifFalse: [ answer := (hierarchyA at: i) name < (hierarchyB at: i) name ] ] ].
+
+	^ answer ifNil: [ hierarchyA size <= hierarchyB size ]
 ]
 
 { #category : 'api' }
