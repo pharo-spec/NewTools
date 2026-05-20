@@ -83,6 +83,12 @@ StMethodListPresenter >> cacheHierarchyForClasses: aCollection [
 	cachedHierarchy := self buildHierarchyForMessages: aCollection.
 ]
 
+{ #category : 'accessing' }
+StMethodListPresenter >> callerClass [
+
+	^ owner callerClass
+]
+
 { #category : 'private - scopes' }
 StMethodListPresenter >> classEnvironmentFor: aClass [
 	"Answer a <RBClassEnvironment> for aClass"
@@ -149,17 +155,26 @@ StMethodListPresenter >> defaultOutputPort [
 
 { #category : 'private - scopes' }
 StMethodListPresenter >> defaultScopes [
-	"Private - By default we answer the <Package> of the currently selected item"
+	"Private - Answer scopes from both the caller class and the currently selected method"
 
-	^ self selectedMethod
-		ifNil: [ Set empty ]
-		ifNotNil: [ 
-			Set new
-				add: (self packageOf: self selectedMethod);
-				add: (self classOf: self selectedMethod);
-				add: (self classHierarchyOf: self selectedMethod);
-				addAll: ScopesManager availableScopes;
-				yourself ]
+	| scopeSet |
+	scopeSet := Set new.
+
+	self callerClass ifNotNil: [ :caller |
+			scopeSet
+				add: (self packageOrganizer packageOf: caller);
+				add: caller;
+				add: (RBClassHierarchyEnvironment class: caller) ].
+
+
+	self selectedMethod ifNotNil: [ :method |
+			scopeSet
+				add: (self packageOf: method);
+				add: (self classOf: method);
+				add: (self classHierarchyOf: method) ].
+
+	scopeSet addAll: ScopesManager availableScopes.
+	^ scopeSet
 ]
 
 { #category : 'private - actions' }
@@ -574,15 +589,21 @@ StMethodListPresenter >> unselectAll [
 
 { #category : 'private - scopes' }
 StMethodListPresenter >> updateVisitedScopesFrom: aCompiledMethod [
-	"Private - Update the list of the visited scopes"
+	"Private - Update the list of visited scopes from both the caller class and the selected method"
+
+	visitedScopes := Set new.
+
+	self callerClass ifNotNil: [ :caller |
+			visitedScopes
+				add: (self packageOrganizer packageOf: caller);
+				add: caller;
+				add: (RBClassHierarchyEnvironment class: caller) ].
 
 	aCompiledMethod ifNil: [ ^ self ].
-	visitedScopes ifNotNil: [
-		visitedScopes := Set new.
-			visitedScopes
-				add: (self packageOf: aCompiledMethod);
-				add: (self classOf: aCompiledMethod);
-				add: (self classHierarchyOf: aCompiledMethod) ]
+	visitedScopes
+		add: (self packageOf: aCompiledMethod);
+		add: (self classOf: aCompiledMethod);
+		add: (self classHierarchyOf: aCompiledMethod)
 ]
 
 { #category : 'private - scopes' }
