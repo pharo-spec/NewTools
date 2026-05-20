@@ -18,7 +18,8 @@ Class {
 		'suggestionList',
 		'protocolNameField',
 		'concernedClass',
-		'selectedProtocolName'
+		'selectedProtocolName',
+		'addProtocolButtonPresenter'
 	],
 	#category : 'NewTools-Core-Calypso',
 	#package : 'NewTools-Core',
@@ -86,7 +87,8 @@ StProtocolNameChooserPresenter >> defaultLayout [
 		add: suggestionList;
 		add: (SpBoxLayout newLeftToRight
 				spacing: 3;
-				add: protocolNameField expand: true;
+				add: protocolNameField;
+				add: addProtocolButtonPresenter expand: false;
 				yourself)
 			expand: false;
 		yourself
@@ -102,7 +104,7 @@ StProtocolNameChooserPresenter >> doAcceptFromList [
 { #category : 'private - actions' }
 StProtocolNameChooserPresenter >> doAcceptFromTextInput [
 	
-	selectedProtocolName := protocolNameField text.
+	selectedProtocolName := protocolNameField text trimRight.
 	self withWindowDo: [ :w | w beOk; close ]
 ]
 
@@ -111,7 +113,9 @@ StProtocolNameChooserPresenter >> initializeDialogWindow: aDialogWindowPresenter
 
 	super initializeDialogWindow: aDialogWindowPresenter.
 	aDialogWindowPresenter okAction: [
-		self protocolName ifEmpty: [ self doAcceptFromList ] ifNotEmpty: [ self doAcceptFromTextInput ] ]
+		suggestionList selectedItem
+			ifNotNil: [ self doAcceptFromList ]
+			ifNil: [ self doAcceptFromTextInput ] ]
 ]
 
 { #category : 'initialization' }
@@ -123,6 +127,12 @@ StProtocolNameChooserPresenter >> initializePresenters [
 
 	protocolNameField := self newTextInput.
 	protocolNameField placeholder: 'Protocol name (e.g. accessing)'.
+	addProtocolButtonPresenter := self newButton
+		addStyle: 'small';
+		icon: (self iconNamed: 'add');
+		help: 'Add new protocol and select it';
+		action: [ self doAcceptFromTextInput ];
+		yourself.
 
 	self initializeProtocolNameField
 ]
@@ -184,14 +194,14 @@ StProtocolNameChooserPresenter >> protocolsToSuggest [
 	^ suggestedProtocols
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'initialization' }
 StProtocolNameChooserPresenter >> requestProtocolName [
 	"See comment of StProtocolNameChooser class>>#requestProtocolNameConfiguring:"
 
 	^ self requestProtocolNameConfiguring: [ :presenter :dialog |  ]
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'initialization' }
 StProtocolNameChooserPresenter >> requestProtocolNameConfiguring: aBlock [
 	"I request a protocol name through a dialog and signal a CmdCommandAborted in case the provided protocol is empty or an extension name.
 	I allow the user to configure the presenter or the dialog via a configuration block."
