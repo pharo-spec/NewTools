@@ -19,6 +19,7 @@ Class {
 		'textPresenter',
 		'highlight',
 		'filterPresenter',
+		'allMethods',
 		'callerClass'
 	],
 	#classVars : [
