@@ -415,7 +415,7 @@ StMethodListPresenter >> methods: aCollection [
 		(cachedHierarchy keys asSortedCollection: [ :method :otherMethod | self should: method havePriorityOver: otherMethod ]) asOrderedCollection.
 	allMessages := listPresenter items.
 
-	listPresenter listSize > 0 ifTrue: [ self defer: [ self selectIndex: 1 ] ]
+
 ]
 
 { #category : 'accessing' }
@@ -562,11 +562,13 @@ StMethodListPresenter >> sortingBlock: aBlock [
 ]
 
 { #category : 'private - scopes' }
-StMethodListPresenter >> switchScopeTo: aRBBrowserEnvironment [ 
+StMethodListPresenter >> switchScopeTo: aRBBrowserEnvironment [
 	"Private - Callback to scope selection from the user"
 
-	listPresenter items: (aRBBrowserEnvironment selectMessagesFrom: allMessages) asArray
-
+	| scoped source |
+	source := (owner allMethods ifNil: [ allMessages ]) ifEmpty: [ allMessages ].
+	scoped := aRBBrowserEnvironment selectMessagesFrom: source.
+	self methods: (source select: [ :m | scoped includes: m ])
 ]
 
 { #category : 'accessing' }
