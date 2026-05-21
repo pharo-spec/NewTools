@@ -919,7 +919,7 @@ StMethodBrowser >> numberOfElements [
 { #category : 'showing' }
 StMethodBrowser >> open [
 
-	filterPresenter unfilteredItems isEmpty ifTrue: [ ^ self application inform: 'No result found' ].
+	allMethods ifEmpty: [ ^ self application inform: 'No result found' ].
 	^ super open
 ]
 
