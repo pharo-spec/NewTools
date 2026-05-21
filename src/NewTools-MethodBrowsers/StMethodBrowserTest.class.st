@@ -318,9 +318,8 @@ StMethodBrowserTest >> testMethodsAreSortedByHierarchy [
 StMethodBrowserTest >> testOpenWithoutMessageShouldNotDNU [
 
 	| br |
-	[ br := StMethodBrowser new.
-	self shouldnt: [ br open ] raise: MessageNotUnderstood.
-		] ensure: [ br window close ]
+	br := StMethodBrowser new.
+	self shouldnt: [ br open ] raise: MessageNotUnderstood
 ]
 
 { #category : 'tests' }
