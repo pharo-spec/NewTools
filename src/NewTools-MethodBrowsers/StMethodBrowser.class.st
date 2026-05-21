@@ -420,9 +420,10 @@ StMethodBrowser >> callerClass [
 ]
 
 { #category : 'accessing' }
-StMethodBrowser >> callerClass: anObject [
+StMethodBrowser >> callerClass: aClass [
 
-	callerClass := anObject
+	callerClass := aClass.
+
 ]
 
 { #category : 'api - private' }
