@@ -839,6 +839,13 @@ StMethodBrowser >> numberOfElements [
 	^ methodList ifNil: [ 0 ] ifNotNil: [ methodList numberOfElements ]
 ]
 
+{ #category : 'showing' }
+StMethodBrowser >> open [
+
+	filterPresenter unfilteredItems isEmpty ifTrue: [ ^ self application inform: 'No result found' ].
+	^ super open
+]
+
 { #category : 'private' }
 StMethodBrowser >> packageNameForItem: anItem [
 	^ anItem package ifNil: [ '' ] ifNotNil: [ :package | package name ]
@@ -1069,7 +1076,7 @@ StMethodBrowser >> windowTitle [
 
 	| msg total |
 	(filterPresenter isNil or: [ methodList isNil ]) ifTrue: [ ^ title ifNil: [ 'Message Browser' ] ].
-	(title isNotNil and: [ self methods isEmpty ])  ifTrue: [ ^ title , ' [No Results]' ].
+
 	total := filterPresenter unfilteredItems size.
 	msg := methodList ifNil: [ '' ] ifNotNil: [
 			       (filterPresenter filterText isEmpty or: [ methodList numberOfElements = total ])
