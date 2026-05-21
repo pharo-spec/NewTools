@@ -127,20 +127,23 @@ StSystemReporterPresenter >> reportModules: aStream [
 
 { #category : 'building report' }
 StSystemReporterPresenter >> reportOS: aStream [
+
 	self header: 'Operating System/Hardware' on: aStream.
 	aStream
-		nextPutAll: Smalltalk os platformName; space;
-		nextPutAll: Smalltalk os version; space;
-		nextPutAll: Smalltalk os subtype; cr
-
+		nextPutAll: OSPlatform current platformName; space;
+		nextPutAll: OSPlatform current version; space;
+		nextPutAll: OSPlatform current subtype; cr
 ]
 
 { #category : 'building report' }
 StSystemReporterPresenter >> reportOSEnvironment: aStream [
 	| env |
+	
 	self header: 'Operating System Environment' on: aStream.
-	env := [ Smalltalk os environment] on: Error do: [ ^self ].
-	env keys asSortedCollection do: [:name |
+	env := [ OSPlatform current environment ]
+		on: Error
+		do: [ ^ self ].
+	env keys asSortedCollection do: [ :name |
 		aStream nextPutAll: name; nextPut: $=; nextPutAll: (env at: name); cr ]
 ]
 

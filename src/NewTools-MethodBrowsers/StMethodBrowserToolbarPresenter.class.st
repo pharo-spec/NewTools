@@ -3,7 +3,8 @@ Class {
 	#superclass : 'StMethodToolbarPresenter',
 	#instVars : [
 		'flipAction',
-		'scopeList'
+		'scopeList',
+		'savedScope'
 	],
 	#category : 'NewTools-MethodBrowsers-Senders',
 	#package : 'NewTools-MethodBrowsers',
@@ -14,14 +15,25 @@ Class {
 StMethodBrowserToolbarPresenter >> connectPresenters [
 
 	scopeList whenSelectedItemChangedDo: [ :scopeEnvironment |
-		scopeEnvironment ifNotNil: [ messageList switchScopeTo: scopeEnvironment ] ].
+			savedScope := scopeEnvironment.
+			scopeEnvironment ifNotNil: [ messageList switchScopeTo: scopeEnvironment ].
+			messageList listPresenter listSize > 0 ifTrue: [ self defer: [ messageList selectIndex: 1 ] ] ].
 
 	messageList whenSelectedDo: [ :item |
 			item ifNotNil: [
 					messageList updateVisitedScopesFrom: item.
-					scopeList disableSelectionDuring: [ scopeList items: messageList allScopes ] ] ].
-	scopeList items: messageList allScopes.
-	
+					scopeList disableSelectionDuring: [ scopeList items: messageList allScopes ].
+					savedScope ifNotNil: [
+							| match |
+							match := scopeList items detect: [ :s | s label = savedScope label ] ifNone: [ nil ].
+							match ifNotNil: [ scopeList disableSelectionDuring: [ scopeList selectItem: match ] ] ] ] ].
+	scopeList items: messageList allScopes
+]
+
+{ #category : 'private' }
+StMethodBrowserToolbarPresenter >> currentScope [
+
+	^ savedScope
 ]
 
 { #category : 'layout' }
@@ -75,6 +87,12 @@ StMethodBrowserToolbarPresenter >> owner: aPresenter [
 
 	super owner: aPresenter.
 	messageList := aPresenter methodList
+]
+
+{ #category : 'accessing' }
+StMethodBrowserToolbarPresenter >> scopeList [
+
+	^ scopeList
 ]
 
 { #category : 'events' }

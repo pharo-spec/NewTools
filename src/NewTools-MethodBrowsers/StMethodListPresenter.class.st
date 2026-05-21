@@ -83,6 +83,12 @@ StMethodListPresenter >> cacheHierarchyForClasses: aCollection [
 	cachedHierarchy := self buildHierarchyForMessages: aCollection.
 ]
 
+{ #category : 'accessing' }
+StMethodListPresenter >> callerClass [
+
+	^ owner callerClass
+]
+
 { #category : 'private - scopes' }
 StMethodListPresenter >> classEnvironmentFor: aClass [
 	"Answer a <RBClassEnvironment> for aClass"
@@ -149,17 +155,26 @@ StMethodListPresenter >> defaultOutputPort [
 
 { #category : 'private - scopes' }
 StMethodListPresenter >> defaultScopes [
-	"Private - By default we answer the <Package> of the currently selected item"
+	"Private - Answer scopes from both the caller class and the currently selected method"
 
-	^ self selectedMethod
-		ifNil: [ Set empty ]
-		ifNotNil: [ 
-			Set new
-				add: (self packageOf: self selectedMethod);
-				add: (self classOf: self selectedMethod);
-				add: (self classHierarchyOf: self selectedMethod);
-				addAll: ScopesManager availableScopes;
-				yourself ]
+	| scopeSet |
+	scopeSet := Set new.
+
+	self callerClass ifNotNil: [ :caller |
+			scopeSet
+				add: (self packageOrganizer packageOf: caller);
+				add: caller;
+				add: (RBClassHierarchyEnvironment class: caller) ].
+
+
+	self selectedMethod ifNotNil: [ :method |
+			scopeSet
+				add: (self packageOf: method);
+				add: (self classOf: method);
+				add: (self classHierarchyOf: method) ].
+
+	scopeSet addAll: ScopesManager availableScopes.
+	^ scopeSet
 ]
 
 { #category : 'private - actions' }
@@ -199,7 +214,7 @@ StMethodListPresenter >> doBrowseImplementors [
 
 	navigationBlock
 		ifNotNil: [ navigationBlock value: #implementorsAll value: selectors ]
-		ifNil: [ StMethodBrowser browseImplementorsOfAll: selectors ]
+		ifNil: [ StMethodBrowser browseImplementorsOfAll: selectors from: self class ]
 ]
 
 { #category : 'private - actions' }
@@ -216,7 +231,7 @@ StMethodListPresenter >> doBrowseSenders [
 
 	navigationBlock
 		ifNotNil: [ navigationBlock value: #sendersAll value: selectors ]
-		ifNil: [ StMethodBrowser browseSendersOfAll: selectors ]
+		ifNil: [ StMethodBrowser browseSendersOfAll: selectors from: self class]
 ]
 
 { #category : 'private - actions' }
@@ -400,7 +415,7 @@ StMethodListPresenter >> methods: aCollection [
 		(cachedHierarchy keys asSortedCollection: [ :method :otherMethod | self should: method havePriorityOver: otherMethod ]) asOrderedCollection.
 	allMessages := listPresenter items.
 
-	listPresenter listSize > 0 ifTrue: [ self defer: [ self selectIndex: 1 ] ]
+
 ]
 
 { #category : 'accessing' }
@@ -547,11 +562,13 @@ StMethodListPresenter >> sortingBlock: aBlock [
 ]
 
 { #category : 'private - scopes' }
-StMethodListPresenter >> switchScopeTo: aRBBrowserEnvironment [ 
+StMethodListPresenter >> switchScopeTo: aRBBrowserEnvironment [
 	"Private - Callback to scope selection from the user"
 
-	listPresenter items: (aRBBrowserEnvironment selectMessagesFrom: allMessages) asArray
-
+	| scoped source |
+	source := (owner allMethods ifNil: [ allMessages ]) ifEmpty: [ allMessages ].
+	scoped := aRBBrowserEnvironment selectMessagesFrom: source.
+	self methods: (source select: [ :m | scoped includes: m ])
 ]
 
 { #category : 'accessing' }
@@ -574,15 +591,21 @@ StMethodListPresenter >> unselectAll [
 
 { #category : 'private - scopes' }
 StMethodListPresenter >> updateVisitedScopesFrom: aCompiledMethod [
-	"Private - Update the list of the visited scopes"
+	"Private - Update the list of visited scopes from both the caller class and the selected method"
+
+	visitedScopes := Set new.
+
+	self callerClass ifNotNil: [ :caller |
+			visitedScopes
+				add: (self packageOrganizer packageOf: caller);
+				add: caller;
+				add: (RBClassHierarchyEnvironment class: caller) ].
 
 	aCompiledMethod ifNil: [ ^ self ].
-	visitedScopes ifNotNil: [
-		visitedScopes := Set new.
-			visitedScopes
-				add: (self packageOf: aCompiledMethod);
-				add: (self classOf: aCompiledMethod);
-				add: (self classHierarchyOf: aCompiledMethod) ]
+	visitedScopes
+		add: (self packageOf: aCompiledMethod);
+		add: (self classOf: aCompiledMethod);
+		add: (self classHierarchyOf: aCompiledMethod)
 ]
 
 { #category : 'private - scopes' }
