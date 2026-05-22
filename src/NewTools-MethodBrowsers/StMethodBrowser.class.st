@@ -49,21 +49,16 @@ StMethodBrowser class >> browse: aCollection [
 
 { #category : 'opening explicit' }
 StMethodBrowser class >> browse: compiledMethods asImplementorsOf: aSymbol [
-	"Specialized version for better UX feedback"
 
-	^ self new
-		  methods: compiledMethods asImplementorsOf: aSymbol;
-		  open
+
+	^ self browse: compiledMethods asImplementorsOf: aSymbol from: nil
 ]
 
 { #category : 'opening explicit' }
 StMethodBrowser class >> browse: compiledMethods asImplementorsOf: aSymbol from: aCallerClass [
 	"Specialized version for better UX feedback"
 
-	^ self new
-		  methods: compiledMethods asImplementorsOf: aSymbol;
-		  callerClass: aCallerClass;
-		  open
+	^ self browse: compiledMethods asImplementorsOfAll: { aSymbol } from: aCallerClass
 ]
 
 { #category : 'opening explicit' }
@@ -104,9 +99,7 @@ StMethodBrowser class >> browse: compiledMethods asReferencesToVariable: aVariab
 StMethodBrowser class >> browse: compiledMethods asSendersOf: aSymbol [
 	"Specialized version for better UX feedback for senders and explicit list of methods"
 
-	^ self new 
-		  methods: compiledMethods asSendersOf: aSymbol;
-		  open
+	^ self browse: compiledMethods asSendersOf: aSymbol from: nil
 ]
 
 { #category : 'opening explicit' }
@@ -114,7 +107,7 @@ StMethodBrowser class >> browse: compiledMethods asSendersOf: aSymbol from: aCal
 	"Specialized version for better UX feedback for senders and explicit list of methods"
 
 	^ self new
-		  methods: compiledMethods asSendersOf: aSymbol;
+		  methods: compiledMethods asSendersOfAll: { aSymbol };
 		  callerClass: aCallerClass;
 		  open
 ]
@@ -817,16 +810,6 @@ StMethodBrowser >> methods: aCollection [
 ]
 
 { #category : 'api - instance side' }
-StMethodBrowser >> methods: compiledMethods asImplementorsOf: aSymbol [
-	"Create without opening it a method browsers for the implementors of a Symbol"
-
-	self
-		setRefreshingBlockForImplementorsOf: aSymbol;
-		methods: compiledMethods;
-		title: 'Implementors of ' , aSymbol
-]
-
-{ #category : 'api - instance side' }
 StMethodBrowser >> methods: compiledMethods asImplementorsOfAll: aCollectionOfSymbols [
 
 	self
@@ -855,17 +838,6 @@ StMethodBrowser >> methods: compiledMethods asReferencesToVariable: aVariable in
 		highlight: aVariable name;
 		methods: compiledMethods;
 		title: 'References to ' , aVariable name , ' in ' , aClass name
-]
-
-{ #category : 'api - instance side' }
-StMethodBrowser >> methods: compiledMethods asSendersOf: aSymbol [
-	"Create without opening it a method browsers for the reference to a class "
-
-	self
-		setRefreshingBlockForSendersOf: aSymbol;
-		highlight: aSymbol;
-		methods: compiledMethods;
-		title: 'Senders of ' , aSymbol
 ]
 
 { #category : 'api - instance side' }
@@ -1016,12 +988,6 @@ StMethodBrowser >> setRefreshingBlockForClassReferencesOf: aString [
 ]
 
 { #category : 'api' }
-StMethodBrowser >> setRefreshingBlockForImplementorsOf: aSelector [
-
-	self refreshingBlock: [ :message | message selector = aSelector ]
-]
-
-{ #category : 'api' }
 StMethodBrowser >> setRefreshingBlockForImplementorsOfAll: aCollectionOfSymbols [
 
 	self refreshingBlock: [ :message | aCollectionOfSymbols anySatisfy: [ :sel | message selector = sel ] ]
@@ -1031,16 +997,6 @@ StMethodBrowser >> setRefreshingBlockForImplementorsOfAll: aCollectionOfSymbols 
 StMethodBrowser >> setRefreshingBlockForReferencesToSlot: aSlot [
 
 	self refreshingBlock: [ :method | method accessesSlot: aSlot ]
-]
-
-{ #category : 'api' }
-StMethodBrowser >> setRefreshingBlockForSendersOf: aSelector [
-	"Refresh the list of senders taking into account the selectors that are not stored in the literal frame."
-	
-	| specialIndex |
-	specialIndex := Smalltalk specialSelectorIndexOrNil: aSelector.
-	self refreshingBlock: [:method | 
-		method hasSelector: aSelector specialSelectorIndex: specialIndex ]
 ]
 
 { #category : 'api' }
