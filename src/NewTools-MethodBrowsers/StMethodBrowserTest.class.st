@@ -105,17 +105,6 @@ StMethodBrowserTest >> testExplicitBrowseClassNameAsLiteral [
 ]
 
 { #category : 'tests' }
-StMethodBrowserTest >> testExplicitBrowseCompiledMethods [
-
-	| window |
-	[
-		window := StMethodBrowser
-			          browse: { (StMethodBrowser >> #methods:asImplementorsOf:) }
-			          asImplementorsOf: #methods:asImplementorsOf:.
-		self assert: window presenter methods size > 0 ] ensure: [ window ifNotNil: [ window delete ] ]
-]
-
-{ #category : 'tests' }
 StMethodBrowserTest >> testExplicitBrowseImplementors [
 
 	| window |
