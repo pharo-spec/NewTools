@@ -568,7 +568,8 @@ StMethodListPresenter >> switchScopeTo: aRBBrowserEnvironment [
 	| scoped source |
 	source := (owner allMethods ifNil: [ allMessages ]) ifEmpty: [ allMessages ].
 	scoped := aRBBrowserEnvironment selectMessagesFrom: source.
-	self methods: (source select: [ :m | scoped includes: m ])
+	self methods: (source select: [ :m | scoped includes: m ]).
+
 ]
 
 { #category : 'accessing' }
