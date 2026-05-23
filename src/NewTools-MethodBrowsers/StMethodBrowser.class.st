@@ -434,7 +434,9 @@ StMethodBrowser >> applyCurrentScopeAndFilter [
 	filterPresenter unfilteredItems: scopedMethods.
 	currentFilter isEmpty
 		ifTrue: [ methodList methods: scopedMethods ]
-		ifFalse: [ filterPresenter applyFilter: currentFilter ]
+		ifFalse: [ filterPresenter applyFilter: currentFilter ].
+
+	self selectIndex: 1
 ]
 
 { #category : 'accessing' }
@@ -920,6 +922,7 @@ StMethodBrowser >> numberOfElements [
 StMethodBrowser >> open [
 
 	allMethods ifEmpty: [ ^ self application inform: 'No result found' ].
+	self selectIndex: 1.
 	^ super open
 ]
 
