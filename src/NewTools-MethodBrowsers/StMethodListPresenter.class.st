@@ -361,14 +361,16 @@ StMethodListPresenter >> listPresenter [
 { #category : 'accessing' }
 StMethodListPresenter >> locationOf: anItem [
 
-	^ String streamContents: [ :aStream | 
-		3 to: (cachedHierarchy at: anItem) size do: [ :i | aStream << '    ' ].
-		aStream << (self methodClassNameForItem: anItem) << ' ('.
-		anItem isFromTrait
-			ifTrue: [ aStream
-					<< anItem compiledMethod origin name;
-					space ].
-		aStream << (self protocolNameForItem: anItem) << ')' ]
+	^ String streamContents: [ :aStream |
+			  | level |
+			  level := cachedHierarchy at: anItem ifAbsent: [ #(  ) ].
+			  3 to: level size do: [ :i | aStream << '    ' ].
+			  aStream << (self methodClassNameForItem: anItem) << ' ('.
+			  anItem isFromTrait ifTrue: [
+					  aStream
+						  << anItem compiledMethod origin name;
+						  space ].
+			  aStream << (self protocolNameForItem: anItem) << ')' ]
 ]
 
 { #category : 'private' }
