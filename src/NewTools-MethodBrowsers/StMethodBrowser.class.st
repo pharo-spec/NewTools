@@ -380,7 +380,7 @@ StMethodBrowser >> accept: text notifying: notifyer [
 		message methodClass 
 			compile: text
 			classified: message protocol 
-			withStamp: '' 
+			withStamp: DateAndTime now 
 			notifying: notifyer 
 			logSource: true	 
 		  ]
