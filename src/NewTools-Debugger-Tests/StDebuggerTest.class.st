@@ -390,7 +390,7 @@ StDebuggerTest >> testContextTempVarListUpdatesAfterRestartingContext [
 { #category : 'tests - context inspector' }
 StDebuggerTest >> testContextTempVarListUpdatesTempsWhenEnteringOrLeavingInlinedBlocks [
 
-	| contextItems inspectorTable newContextItems |
+	| contextItems inspectorTable newContextItems parent |
 	dbg := self debuggerOn: session.
 	inspectorTable := dbg inspector getRawInspectorPresenterOrNil
 		                  attributeTable.
@@ -417,8 +417,11 @@ StDebuggerTest >> testContextTempVarListUpdatesTempsWhenEnteringOrLeavingInlined
 	self assert: (newContextItems at: 9) isTempVariable.
 	self assert: (newContextItems at: 9) tempName equals: 'j'.
 
-	"We leave inlined block"
-	2 timesRepeat: [ dbg stepOver ].
+	"We leave inlined block.
+	Iterate until the lexical context changes"
+	parent := dbg currentContext sourceNodeExecuted methodOrBlockNode.
+	[dbg currentContext sourceNodeExecuted methodOrBlockNode == parent]
+		whileTrue: [ dbg stepOver ].
 
 	self assert: newContextItems size equals: 8.
 	1 to: 8 do: [ :i |
