@@ -34,10 +34,15 @@ StDebuggerCallBack >> chooseTraitOverwriteFor: aClass trait: aTrait [
 ]
 
 { #category : 'callbacks' }
-StDebuggerCallBack >> confirm: message [
-	"call back method to avoid dependencies in debugger-model"
+StDebuggerCallBack >> informCannotRecompileWithDifferentSelector [
 
-	^ presenter confirm: message
+	presenter inform: 'Cannot recompile method with different selector'
+]
+
+{ #category : 'callbacks' }
+StDebuggerCallBack >> informCannotRewindStack [
+
+	presenter inform: 'Method saved, but current context unchanged\because of unwind error. Click OK to see error' withCRs
 ]
 
 { #category : 'accessing' }
@@ -50,4 +55,18 @@ StDebuggerCallBack >> presenter [
 StDebuggerCallBack >> presenter: anObject [
 
 	presenter := anObject
+]
+
+{ #category : 'callbacks' }
+StDebuggerCallBack >> wantsToBroweAndRecompileMethodNotFoundInStack: aMethod [
+	"call back method to avoid dependencies in debugger-model"
+
+	| message |
+	message := 'Method for block not found on stack, can''t edit and continue. Do you want to browse and recompile ? '.
+
+	aMethod selector isDoIt ifTrue: [
+			presenter inform: message.
+			^ false ].
+
+	^ presenter confirm: message
 ]
