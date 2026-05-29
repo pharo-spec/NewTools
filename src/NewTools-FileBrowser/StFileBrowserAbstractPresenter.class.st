@@ -175,7 +175,7 @@ StFileBrowserAbstractPresenter >> requestDirectoryName: defaultName [
 		initialAnswer: defaultName
 		title: 'Create New Folder' ]
 	on: SpCancelledInteractionError
-	do: [ : ex | self inform: 'Cancelled'. nil ].
+	do: [ :ex | self inform: 'Cancelled'. nil ].
 	^ answer
 ]
 
