@@ -90,29 +90,17 @@ StFileSystemModel >> bookmarks: aCollectionOfGroupBookMark [
 ]
 
 { #category : 'utilities' }
-StFileSystemModel >> createDirectory [
-	"Create a directory with a default name"
-
-	^ self createDirectory: 'new-folder'
-]
-
-{ #category : 'utilities' }
-StFileSystemModel >> createDirectory: initialName [
+StFileSystemModel >> createDirectory: name [
 	"Create a directory named initialName <String>"
 
-	| name path |
-	
-	(name := self requestUserDirectory: initialName) isEmptyOrNil 
-		ifTrue: [ ^ self ].
-	(path := currentDirectory / name) exists
-		ifFalse: [ 
+	| path |
+	name isEmptyOrNil ifTrue: [ ^ self ].
+	(path := currentDirectory / name) exists ifFalse: [
 			(currentDirectory / name) ensureCreateDirectory.
 			self openFolder: currentDirectory.
 			^ self ].
-	path isDirectory
-		ifTrue: [ self application alert: 'A folder with that name already exists.' ].
-	path isFile
-		ifTrue: [ self application alert: 'A file with that name already exists.' ].
+	path isDirectory ifTrue: [ self application alert: 'A folder with that name already exists.' ].
+	path isFile ifTrue: [ self application alert: 'A file with that name already exists.' ].
 	self createDirectory: name
 ]
 
@@ -166,20 +154,6 @@ StFileSystemModel >> lastVisitedDirectory [
 StFileSystemModel >> openFolder: aFileReference [
 
 	self history register: self currentDirectory.
-]
-
-{ #category : 'utilities' }
-StFileSystemModel >> requestUserDirectory: initialName [
-	"Open a dialog to request a directory from the user"
-
-	| answer |
-	answer := [ self
-		request: 'Folder name'
-		initialAnswer: initialName
-		title: 'Create New Folder' ]
-	on: SpCancelledInteractionError
-	do: [ : ex | self inform: 'Cancelled'. nil ].
-	^ answer
 ]
 
 { #category : 'initialization' }

@@ -66,8 +66,8 @@ StFileBrowserAbstractPresenter >> bookmarksTreeTable [
 
 { #category : 'utilities' }
 StFileBrowserAbstractPresenter >> createDirectory [
-
-	self model createDirectory.
+	
+	self model createDirectory: (self requestDirectoryName: 'default-directory').
 	self updateFileSystemPresenters.
 ]
 
@@ -161,6 +161,20 @@ StFileBrowserAbstractPresenter >> openOnLastDirectory [
 	"Answer <true> if receiver should open in the last used directory"
 	
 	^ StFileBrowserSettings openOnLastDirectory
+]
+
+{ #category : 'utilities' }
+StFileBrowserAbstractPresenter >> requestDirectoryName: defaultName [
+	"Open a dialog to request a directory from the user"
+
+	| answer |
+	answer := [ self
+		request: 'Folder name'
+		initialAnswer: defaultName
+		title: 'Create New Folder' ]
+	on: SpCancelledInteractionError
+	do: [ : ex | self inform: 'Cancelled'. nil ].
+	^ answer
 ]
 
 { #category : 'initialization' }
