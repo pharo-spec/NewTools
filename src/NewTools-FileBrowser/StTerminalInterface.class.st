@@ -78,7 +78,7 @@ StTerminalInterface >> terminalShellCommand: aPath [
 
 	OSPlatform current isWindows ifTrue: [ ^ self openWindowsTerminalCommand: aPath ].
 	OSPlatform current isMacOS ifTrue: [ ^ self openMacTerminalShellCommand: aPath ].
-	(Smalltalk os version beginsWith: 'linux') ifTrue: [ ^ self openLinuxTerminalShellCommand: aPath ].
+	OSPlatform current isLinux ifTrue: [ ^ self openLinuxTerminalShellCommand: aPath ].
 
 	self inform: 'No terminal for platform implemented'.
 	^ String empty
