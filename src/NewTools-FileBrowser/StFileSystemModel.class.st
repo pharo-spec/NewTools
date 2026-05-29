@@ -95,13 +95,14 @@ StFileSystemModel >> createDirectory: name [
 
 	| path |
 	name isEmptyOrNil ifTrue: [ ^ self ].
-	(path := currentDirectory / name) exists ifFalse: [
-			(currentDirectory / name) ensureCreateDirectory.
-			self openFolder: currentDirectory.
-			^ self ].
-	path isDirectory ifTrue: [ self application alert: 'A folder with that name already exists.' ].
-	path isFile ifTrue: [ self application alert: 'A file with that name already exists.' ].
-	self createDirectory: name
+
+	path := currentDirectory / name.
+	path isDirectory ifTrue: [ self error: 'A folder with that name already exists.' ].
+	path isFile ifTrue: [ self error: 'A file with that name already exists.' ].
+
+	path exists ifTrue: [ ^ self ].
+	(currentDirectory / name) ensureCreateDirectory.
+	self openFolder: currentDirectory
 ]
 
 { #category : 'accessing' }

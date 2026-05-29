@@ -66,9 +66,11 @@ StFileBrowserAbstractPresenter >> bookmarksTreeTable [
 
 { #category : 'utilities' }
 StFileBrowserAbstractPresenter >> createDirectory [
-	
-	self model createDirectory: (self requestDirectoryName: 'default-directory').
-	self updateFileSystemPresenters.
+
+	[ self model createDirectory: (self requestDirectoryName: 'default-directory') ]
+		on: Error
+		do: [ :ex | self application alert: ex messageText ].
+	self updateFileSystemPresenters
 ]
 
 { #category : 'accessing' }
