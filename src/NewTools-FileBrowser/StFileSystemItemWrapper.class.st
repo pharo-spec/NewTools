@@ -149,7 +149,8 @@ StFileSystemItemWrapper >> pathString [
  
 	| path |
 	path := self fileReference fullPath pathString.
-	^Smalltalk os isWindows ifTrue: [ path allButFirst copyReplaceAll: '/' with: '\' ]
+	^ OSPlatform current isWindows 
+		ifTrue: [ path allButFirst copyReplaceAll: '/' with: '\' ]
 		ifFalse: [ path ]
 ]
 
