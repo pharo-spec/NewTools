@@ -269,13 +269,10 @@ StMethodBrowserTest >> testHandleMethodRemovedUpdatesSelection [
 { #category : 'tests' }
 StMethodBrowserTest >> testHighlightSelectsFirstOccurrence [
 
-	| window browser method interval |
+	| window browser interval |
 	[
 		window := StMethodBrowser browseSendersOf: #printOn:.
 		browser := window presenter.
-
-		method := browser selectedMethod.
-
 		interval := browser codeEditor codePresenter selectionInterval.
 
 		self assert: interval isNotEmpty.
