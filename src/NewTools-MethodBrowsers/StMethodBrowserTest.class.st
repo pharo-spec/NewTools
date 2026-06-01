@@ -266,6 +266,23 @@ StMethodBrowserTest >> testHandleMethodRemovedUpdatesSelection [
 		self assert: (browser methods indexOf: browser selectedMethod) equals: 3 ] ensure: [ window ifNotNil: [ window delete ] ]
 ]
 
+{ #category : 'tests' }
+StMethodBrowserTest >> testHighlightSelectsFirstOccurrence [
+
+	| window browser method interval |
+	[
+		window := StMethodBrowser browseSendersOf: #printOn:.
+		browser := window presenter.
+
+		method := browser selectedMethod.
+
+		interval := browser codeEditor codePresenter selectionInterval.
+
+		self assert: interval isNotEmpty.
+		self assert: ((browser codeEditor text copyFrom: interval first to: interval last) includesSubstring: 'printOn:') ] ensure: [
+		window ifNotNil: [ window delete ] ]
+]
+
 { #category : 'tests - smoke' }
 StMethodBrowserTest >> testMethodBrowserImplementors [
 
