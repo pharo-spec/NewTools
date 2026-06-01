@@ -383,7 +383,7 @@ StMethodBrowser >> accept: text notifying: notifyer [
 { #category : 'private' }
 StMethodBrowser >> addHighlightedSegments [
 
-	| message highlightInterval highlights  |
+	| message highlightInterval highlights |
 	message := self selectedMethod.
 	message ifNil: [ ^ self ].
 
@@ -396,9 +396,7 @@ StMethodBrowser >> addHighlightedSegments [
 				                     ifFalse: [ self intervalOf: each inCommentText: textPresenter text ]
 				                     ifTrue: [ self intervalOf: each inCode: textPresenter text of: message ].
 
-			textPresenter addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
-					 interval: (highlightInterval first to: highlightInterval last + 1);
-					 yourself) ]
+			textPresenter codePresenter selectionInterval: highlightInterval ]
 ]
 
 { #category : 'accessing' }
