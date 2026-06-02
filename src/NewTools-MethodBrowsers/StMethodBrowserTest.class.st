@@ -354,6 +354,48 @@ StMethodBrowserTest >> testReuseWindowCheckboxInitialState [
 ]
 
 { #category : 'tests' }
+StMethodBrowserTest >> testSendersHidesRecursiveCallWhenOnlySender [
+	"If the only sender of a method is itself, no result should be shown"
+
+	| browser senders |
+	[
+		self class compile: 'tmpRecursiveMethod ^ self tmpRecursiveMethod' classified: 'tests-protocol'.
+
+		senders := (StMethodBrowser sendersOf: #tmpRecursiveMethod) reject: [ :m | m methodClass = self class ].
+
+		browser := StMethodBrowser new
+			           callerClass: self class;
+			           yourself.
+		browser methods: senders asSendersOfAll: { #tmpRecursiveMethod }.
+
+		self assert: browser allMethods isEmpty ] ensure: [ self class removeSelector: #tmpRecursiveMethod ]
+]
+
+{ #category : 'tests' }
+StMethodBrowserTest >> testSendersKeepsRecursiveCallWhenOtherSendersExist [
+	"If a method has other senders besides itself, keep all including the recursive call"
+
+	| browser senders |
+	[
+		self class compile: 'tmpRecursiveMethod2 ^ self tmpRecursiveMethod2' classified: 'tests-protocol'.
+		self class compile: 'tmpOtherCaller ^ self tmpRecursiveMethod2' classified: 'tests-protocol'.
+
+		senders := (StMethodBrowser sendersOf: #tmpRecursiveMethod2) reject: [ :m |
+			           m methodClass = self class and: [ m selector ~= #tmpRecursiveMethod2 and: [ m selector ~= #tmpOtherCaller ] ] ].
+
+		browser := StMethodBrowser new
+			           callerClass: self class;
+			           yourself.
+		browser methods: senders asSendersOfAll: { #tmpRecursiveMethod2 }.
+
+		self assert: browser allMethods size equals: 2.
+		self assert: (browser allMethods anySatisfy: [ :m | m selector = #tmpRecursiveMethod2 ]).
+		self assert: (browser allMethods anySatisfy: [ :m | m selector = #tmpOtherCaller ]) ] ensure: [
+			self class removeSelector: #tmpRecursiveMethod2.
+			self class removeSelector: #tmpOtherCaller ]
+]
+
+{ #category : 'tests' }
 StMethodBrowserTest >> testWindowTitleWithFilterRatio [
 
 	| window browser total filtered |

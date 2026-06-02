@@ -117,8 +117,8 @@ StMethodBrowser class >> browse: compiledMethods asSendersOfAll: aCollectionOfSy
 	"Specialized version for better UX feedback for senders of all given selectors."
 
 	^ self new
-		  methods: compiledMethods asSendersOfAll: aCollectionOfSymbols;
 		  callerClass: aCallerClass;
+		  methods: compiledMethods asSendersOfAll: aCollectionOfSymbols;
 		  open
 ]
 
@@ -843,10 +843,18 @@ StMethodBrowser >> methods: compiledMethods asReferencesToVariable: aVariable in
 { #category : 'api - instance side' }
 StMethodBrowser >> methods: compiledMethods asSendersOfAll: aCollectionOfSymbols [
 
+	| filteredMethods |
+	filteredMethods := self callerClass ifNil: [ compiledMethods ] ifNotNil: [ :caller |
+			                   | withoutSelf |
+			                   withoutSelf := compiledMethods reject: [ :method |
+					                                  method methodClass instanceSide = caller instanceSide and: [
+						                                  aCollectionOfSymbols anySatisfy: [ :selector | method selector = selector ] ] ].
+			                   withoutSelf ifEmpty: [ withoutSelf ] ifNotEmpty: [ compiledMethods ] ].
+
 	self
 		setRefreshingBlockForSendersOfAll: aCollectionOfSymbols;
 		highlight: aCollectionOfSymbols;
-		methods: compiledMethods;
+		methods: filteredMethods;
 		title: 'Senders of ' , (', ' join: aCollectionOfSymbols)
 ]
 
