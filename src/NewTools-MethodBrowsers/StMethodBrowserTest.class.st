@@ -43,16 +43,6 @@ StMethodBrowserTest >> testBrowseReferencesToVariableInClass [
 ]
 
 { #category : 'tests' }
-StMethodBrowserTest >> testBrowseTraitMethodOnlyShowConcernedTrait [
-
-	| window | 
-	[
-		window := StMethodBrowser browseReferencesToVariable: (StMethodBrowser slotNamed: #title )inClass: StMethodBrowser.
-
-		self assert: window presenter methods size equals: 2 ] ensure: [ window ifNotNil: [ window delete ] ]
-]
-
-{ #category : 'tests' }
 StMethodBrowserTest >> testCallerClassIsSetFromConstructor [
 
 	| window browser |
