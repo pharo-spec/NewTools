@@ -19,7 +19,7 @@ StMethodBrowserTest >> testBrowseClassNameAsClass [
 	[
 		window := StMethodBrowser browseReferencesToClass: StMethodBrowserData.
 
-		self assert: window presenter methods size equals: 2] ensure: [ window ifNotNil: [ window delete ] ]
+		self assert: window presenter methods size equals: 3] ensure: [ window ifNotNil: [ window delete ] ]
 ]
 
 { #category : 'tests' }
