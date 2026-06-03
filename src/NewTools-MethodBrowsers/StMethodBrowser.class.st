@@ -340,8 +340,10 @@ StMethodBrowser class >> registerToolsOn: registry [
 StMethodBrowser class >> sendersOf: aSymbol [
 	"Do not use aSymbol senders because it is a disguised global"
 
-	^ SystemNavigation default allSendersOf: aSymbol
+	| allSenders |
+	allSenders := SystemNavigation default allSendersOf: aSymbol.
 	
+	^ allSenders reject: [ :sender | sender isFromTrait and: [ sender origin ~= sender methodClass ] ]
 ]
 
 { #category : 'icons' }
