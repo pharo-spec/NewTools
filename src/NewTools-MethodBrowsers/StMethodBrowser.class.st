@@ -115,7 +115,7 @@ StMethodBrowser class >> browse: aCollection asSendersOf: aSymbol from: aClass [
 StMethodBrowser class >> browse: aCollection asSendersOfAll: aCollectionOfSymbols from: aClass [
 	"Specialized version for better UX feedback for senders of all given selectors."
 
-	self
+	^ self
 		browse: aCollection
 		withInitializationBlock: [ :browser | browser methods: aCollection asSendersOfAll: aCollectionOfSymbols ]
 		from: aClass
