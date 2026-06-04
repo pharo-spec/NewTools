@@ -842,6 +842,11 @@ StMethodBrowser >> methods: compiledMethods asReferencesToVariable: aVariable in
 
 { #category : 'api - instance side' }
 StMethodBrowser >> methods: compiledMethods asSendersOfAll: aCollectionOfSymbols [
+	"
+	 If callerClass is set and all senders are recursive calls (i.e. the method only calls itself),
+	 the list is left empty so the browser displays 'No result found'.
+	 If other senders exist alongside the recursive call, all senders are kept in the list
+	 to avoid losing results when chaining sender/implementor queries."
 
 	| filteredMethods |
 	filteredMethods := self callerClass ifNil: [ compiledMethods ] ifNotNil: [ :caller |
