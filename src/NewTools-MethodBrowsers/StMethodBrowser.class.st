@@ -81,7 +81,7 @@ StMethodBrowser class >> browse: aCollection asReferencesToClass: aCallerClass [
 StMethodBrowser class >> browse: aCollection asReferencesToLiteral: aLiteral [
 	"Specialized version for better UX feedback for class references and explicit list of methods"
 
-	self browse: aCollection withInitializationBlock: [ :browser | browser methods: aCollection asReferenceTo: aLiteral ]
+	^ self browse: aCollection withInitializationBlock: [ :browser | browser methods: aCollection asReferenceTo: aLiteral ]
 ]
 
 { #category : 'opening explicit' }
