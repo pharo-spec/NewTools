@@ -125,7 +125,7 @@ StMethodBrowser class >> browse: aCollection asSendersOfAll: aCollectionOfSymbol
 StMethodBrowser class >> browse: aCollection title: aString from: aClass [
 	"Basic version with limited UX feedback. Use only if you cannot use the other methods."
 
-	self
+	^ self
 		browse: aCollection
 		withInitializationBlock: [ :browser |
 				browser
