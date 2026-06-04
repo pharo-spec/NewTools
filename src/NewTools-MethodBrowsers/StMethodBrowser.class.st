@@ -217,7 +217,7 @@ StMethodBrowser class >> browseReferencesToVariables: variables [
 	| methods |
 	methods := SystemNavigation default allMethods select: [ :m | variables anySatisfy: [ :var | var isAccessedIn: m ] ].
 
-	self
+	^ self
 		browse: methods
 		withInitializationBlock: [ :browser |
 				browser
