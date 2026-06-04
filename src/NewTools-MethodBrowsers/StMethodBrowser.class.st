@@ -137,7 +137,7 @@ StMethodBrowser class >> browse: aCollection title: aString from: aClass [
 { #category : 'opening explicit' }
 StMethodBrowser class >> browse: compiledMethods withInitializationBlock: aBlock [
 
-	self browse: compiledMethods withInitializationBlock: aBlock from: nil
+	^ self browse: compiledMethods withInitializationBlock: aBlock from: nil
 ]
 
 { #category : 'opening explicit' }
