@@ -276,7 +276,7 @@ StMethodBrowser class >> browseUsersOfTrait: aTrait [
 	classes := aTrait traitUsers.
 	methods := classes flatCollect: [ :cls | cls methods select: [ :m | m origin = aTrait ] ].
 
-	self
+	^ self
 		browse: methods
 		withInitializationBlock: [ :browser |
 				browser
