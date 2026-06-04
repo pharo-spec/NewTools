@@ -61,7 +61,7 @@ StMethodBrowser class >> browse: aCollection asImplementorsOf: aSymbol from: aCa
 { #category : 'opening explicit' }
 StMethodBrowser class >> browse: aCollection asImplementorsOfAll: aCollectionOfSymbols from: aCallerClass [
 
-	self
+	^ self
 		browse: aCollection
 		withInitializationBlock: [ :browser | browser methods: aCollection asImplementorsOfAll: aCollectionOfSymbols ]
 		from: aCallerClass
