@@ -88,7 +88,7 @@ StMethodBrowser class >> browse: aCollection asReferencesToLiteral: aLiteral [
 StMethodBrowser class >> browse: aCollection asReferencesToVariable: aVariable inClass: aClass [
 	"Specialized version for better UX feedback for class references and explicit list of methods"
 
-	self
+	^ self
 		browse: aCollection
 		withInitializationBlock: [ :browser | browser methods: aCollection asReferencesToVariable: aVariable inClass: aClass binding ]
 		from: aClass
