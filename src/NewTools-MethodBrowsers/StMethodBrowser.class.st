@@ -71,7 +71,7 @@ StMethodBrowser class >> browse: aCollection asImplementorsOfAll: aCollectionOfS
 StMethodBrowser class >> browse: aCollection asReferencesToClass: aCallerClass [
 	"Specialized version for better UX feedback for class references and explicit list of methods"
 
-	self
+	^ self
 		browse: aCollection
 		withInitializationBlock: [ :browser | browser methods: aCollection asReferenceTo: aCallerClass binding ]
 		from: aCallerClass
