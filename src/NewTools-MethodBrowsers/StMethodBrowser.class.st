@@ -291,7 +291,7 @@ StMethodBrowser class >> browseWritersOfVariables: variables [
 	| methods |
 	methods := SystemNavigation default allMethods select: [ :m | variables anySatisfy: [ :var | var isWrittenIn: m ] ].
 
-	self
+	^ self
 		browse: methods
 		withInitializationBlock: [ :browser |
 				browser
