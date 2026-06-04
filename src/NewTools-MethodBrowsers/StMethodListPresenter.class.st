@@ -157,24 +157,7 @@ StMethodListPresenter >> defaultOutputPort [
 StMethodListPresenter >> defaultScopes [
 	"Private - Answer scopes from both the caller class and the currently selected method"
 
-	| scopeSet |
-	scopeSet := Set new.
-
-	self callerClass ifNotNil: [ :caller |
-			scopeSet
-				add: (self packageOrganizer packageOf: caller);
-				add: caller;
-				add: (RBClassHierarchyEnvironment class: caller) ].
-
-
-	self selectedMethod ifNotNil: [ :method |
-			scopeSet
-				add: (self packageOf: method);
-				add: (self classOf: method);
-				add: (self classHierarchyOf: method) ].
-
-	scopeSet addAll: ScopesManager availableScopes.
-	^ scopeSet
+	^ self newVisitedScopesForMethod: self selectedMethod
 ]
 
 { #category : 'private - actions' }
@@ -426,6 +409,31 @@ StMethodListPresenter >> navigationBlock: aBlock [
 	navigationBlock := aBlock
 ]
 
+{ #category : 'private - scopes' }
+StMethodListPresenter >> newVisitedScopesForMethod: aCompiledMethod [
+	"Create a set of scopes from both the caller class and the selected method"
+
+	| newScopeSet |
+
+	newScopeSet := Set new.
+
+	self callerClass ifNotNil: [ :caller |
+			newScopeSet
+				add: (self packageOrganizer packageOf: caller);
+				add: caller;
+				add: (RBClassHierarchyEnvironment class: caller) ].
+
+	aCompiledMethod ifNil: [ ^ newScopeSet ].
+	newScopeSet
+		add: (self packageOf: aCompiledMethod);
+		add: (self classOf: aCompiledMethod);
+		add: (self classHierarchyOf: aCompiledMethod).
+
+	newScopeSet addAll: ScopesManager availableScopes.
+
+	^ newScopeSet
+]
+
 { #category : 'accessing' }
 StMethodListPresenter >> numberOfElements [
 
@@ -593,32 +601,17 @@ StMethodListPresenter >> unselectAll [
 ]
 
 { #category : 'private - scopes' }
-StMethodListPresenter >> updateVisitedScopesFrom: aCompiledMethod [
-	"Private - Update the list of visited scopes from both the caller class and the selected method"
+StMethodListPresenter >> updateVisitedScopesForMethod: aCompiledMethod [
 
-	visitedScopes := Set new.
-
-	self callerClass ifNotNil: [ :caller |
-			visitedScopes
-				add: (self packageOrganizer packageOf: caller);
-				add: caller;
-				add: (RBClassHierarchyEnvironment class: caller) ].
-
-	aCompiledMethod ifNil: [ ^ self ].
-	visitedScopes
-		add: (self packageOf: aCompiledMethod);
-		add: (self classOf: aCompiledMethod);
-		add: (self classHierarchyOf: aCompiledMethod)
+	visitedScopes := self newVisitedScopesForMethod: aCompiledMethod
 ]
 
 { #category : 'private - scopes' }
 StMethodListPresenter >> visitedScopes [
-	"Answer a <Collection> of <Package> which has been selected in the receiver"
+	"Answer a <Collection> of <Scopes> which has been selected in the receiver"
 	
 	^ visitedScopes
 		ifNil: [ visitedScopes := self defaultScopes ]
-
-
 ]
 
 { #category : 'api - events' }

@@ -21,7 +21,7 @@ StMethodBrowserToolbarPresenter >> connectPresenters [
 
 	messageList whenSelectedDo: [ :item |
 			item ifNotNil: [
-					messageList updateVisitedScopesFrom: item.
+					messageList updateVisitedScopesForMethod: item.
 					scopeList disableSelectionDuring: [ scopeList items: messageList allScopes ].
 					savedScope ifNotNil: [
 							| match |
