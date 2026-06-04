@@ -159,7 +159,7 @@ StMethodBrowser class >> browse: compiledMethods withInitializationBlock: aBlock
 	browser := self new.
 	aBlock value: browser.
 	browser callerClass: aCallerClass.
-	browser open
+	^ browser open
 ]
 
 { #category : 'opening' }
