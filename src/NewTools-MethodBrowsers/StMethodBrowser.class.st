@@ -55,7 +55,7 @@ StMethodBrowser class >> browse: aCollection asImplementorsOf: aSymbol [
 StMethodBrowser class >> browse: aCollection asImplementorsOf: aSymbol from: aCallerClass [
 	"Specialized version for better UX feedback"
 
-	self browse: aCollection asImplementorsOfAll: { aSymbol } from: aCallerClass
+	^ self browse: aCollection asImplementorsOfAll: { aSymbol } from: aCallerClass
 ]
 
 { #category : 'opening explicit' }
