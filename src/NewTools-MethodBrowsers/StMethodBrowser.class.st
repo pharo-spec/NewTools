@@ -42,7 +42,7 @@ StMethodBrowser class >> beDefaultBrowser [
 StMethodBrowser class >> browse: aCollection [
 	"Basic version. Opens a browser on the given collection of methods without setting a title or refreshing block."
 
-	self browse: aCollection withInitializationBlock: [ :browser | browser methods: aCollection ]
+	^ self browse: aCollection withInitializationBlock: [ :browser | browser methods: aCollection ]
 ]
 
 { #category : 'opening explicit' }
