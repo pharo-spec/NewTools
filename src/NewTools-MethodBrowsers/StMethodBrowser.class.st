@@ -48,7 +48,7 @@ StMethodBrowser class >> browse: aCollection [
 { #category : 'opening explicit' }
 StMethodBrowser class >> browse: aCollection asImplementorsOf: aSymbol [
 
-	self browse: aCollection asImplementorsOfAll: { aSymbol } from: nil
+	^ self browse: aCollection asImplementorsOfAll: { aSymbol } from: nil
 ]
 
 { #category : 'opening explicit' }
