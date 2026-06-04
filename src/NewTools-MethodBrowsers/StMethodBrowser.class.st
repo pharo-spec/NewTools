@@ -260,7 +260,7 @@ StMethodBrowser class >> browseUsersOfSharedPool: aPoolClass [
 	methods := classes flatCollect: [ :cls |
 		           cls methods select: [ :m | poolVarNames anySatisfy: [ :varName | m ast references: varName ] ] ].
 
-	self
+	^ self
 		browse: methods
 		withInitializationBlock: [ :browser |
 				browser
