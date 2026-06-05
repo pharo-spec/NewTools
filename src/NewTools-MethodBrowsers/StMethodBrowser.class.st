@@ -377,10 +377,15 @@ StMethodBrowser class >> registerToolsOn: registry [
 
 { #category : 'private' }
 StMethodBrowser class >> sendersOf: aSymbol [
-	"Do not use aSymbol senders because it is a disguised global"
+	"Do not use aSymbol senders because it is a disguised global.
+	When browsing senders of a trait method we only want to have the method trait itself.
+Therefore, we need both checks here because if we just put isFromTrait, we wouldn't have any methods coming from a Trait.
+And the second check allows to know whether the method is coming from a trait OR used from a trait."
 
-	^ SystemNavigation default allSendersOf: aSymbol
-	
+	| allSenders |
+	allSenders := SystemNavigation default allSendersOf: aSymbol.
+
+	^ allSenders reject: [ :sender | sender isFromTrait and: [ sender origin ~= sender methodClass ] ]
 ]
 
 { #category : 'icons' }

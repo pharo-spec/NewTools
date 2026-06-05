@@ -19,7 +19,7 @@ StMethodBrowserTest >> testBrowseClassNameAsClass [
 	[
 		window := StMethodBrowser browseReferencesToClass: StMethodBrowserData.
 
-		self assert: window presenter methods size equals: 2] ensure: [ window ifNotNil: [ window delete ] ]
+		self assert: window presenter methods size equals: 3] ensure: [ window ifNotNil: [ window delete ] ]
 ]
 
 { #category : 'tests' }
@@ -351,6 +351,16 @@ StMethodBrowserTest >> testReuseWindowCheckboxInitialState [
 		self deny: presenter toolbarPresenter reuseWindowButton state ] ensure: [
 			StMethodBrowser navigateInPlace: initialSetting.
 			presenter ifNotNil: [ presenter delete ] ]
+]
+
+{ #category : 'tests' }
+StMethodBrowserTest >> testSendersOfExcludesTraitUsers [
+
+	| senders |
+	senders := StMethodBrowser sendersOf: #sendMe.
+
+	self assert: (senders anySatisfy: [ :m | m methodClass = TData ]).
+	self deny: (senders anySatisfy: [ :m | m methodClass = StMethodBrowserData ])
 ]
 
 { #category : 'tests' }
