@@ -366,18 +366,13 @@ StMethodBrowser class >> usingLayout: aSymbol [
 { #category : 'private' }
 StMethodBrowser >> accept: text notifying: notifyer [
 
-	^ self selectedMethod ifNotNil: [ :message | 
-		"OCInteractiveAPI new 
-			compile: text
-			notifying: notifyer
-			in:message methodClass "
-		message methodClass 
-			compile: text
-			classified: message protocol 
-			withStamp: DateAndTime now 
-			notifying: notifyer 
-			logSource: true	 
-		  ]
+	^ self selectedMethod ifNotNil: [ :message |
+			  message methodClass
+				  compile: text
+				  classified: message protocol
+				  withStamp: DateAndTime now
+				  notifying: notifyer
+				  logSource: true ]
 ]
 
 { #category : 'private' }
@@ -492,7 +487,7 @@ StMethodBrowser >> connectPresenters [
 		whenModelChangedDo: [ self updateTitle ].
 	methodList navigationBlock: [ :type :val | self navigateTo: type value: val ].
 	textPresenter
-		whenSubmitDo: [ :text | self accept: text notifying: nil ];
+		whenSubmitDo: [ :text | self accept: text notifying: self ];
 		whenResetDo: [ self selectItem: methodList selectedMethod ].
 	filterPresenter filterInputPresenter whenTextChangedDo: [ :text |
 			| currentScope scopedMethods filtered |
