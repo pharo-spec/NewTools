@@ -396,7 +396,7 @@ StMethodBrowserTest >> testSendersKeepsRecursiveCallWhenOtherSendersExist [
 			self class removeSelector: #tmpOtherCaller ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 StMethodBrowserTest >> testSendersOfExcludesTraitUsers [
 
 	| senders |
