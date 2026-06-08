@@ -361,7 +361,8 @@ StMethodBrowserTest >> testSendersHidesRecursiveCallWhenOnlySender [
 	[
 		self class compile: 'tmpRecursiveMethod ^ self tmpRecursiveMethod' classified: 'tests-protocol'.
 
-		senders := (StMethodBrowser sendersOf: #tmpRecursiveMethod) reject: [ :m | m methodClass = self class ].
+		senders := (StMethodBrowser sendersOf: #tmpRecursiveMethod) reject: [ :m |
+			           m methodClass = self class and: [ m selector ~= #tmpRecursiveMethod ] ].
 
 		browser := StMethodBrowser new
 			           callerClass: self class;
