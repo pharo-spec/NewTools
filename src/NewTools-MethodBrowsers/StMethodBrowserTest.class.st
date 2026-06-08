@@ -19,7 +19,7 @@ StMethodBrowserTest >> testBrowseClassNameAsClass [
 	[
 		window := StMethodBrowser browseReferencesToClass: StMethodBrowserData.
 
-		self assert: window presenter methods size equals: 2] ensure: [ window ifNotNil: [ window delete ] ]
+		self assert: window presenter methods size equals: 3] ensure: [ window ifNotNil: [ window delete ] ]
 ]
 
 { #category : 'tests' }
@@ -393,6 +393,15 @@ StMethodBrowserTest >> testSendersKeepsRecursiveCallWhenOtherSendersExist [
 		self assert: (browser allMethods anySatisfy: [ :m | m selector = #tmpOtherCaller ]) ] ensure: [
 			self class removeSelector: #tmpRecursiveMethod2.
 			self class removeSelector: #tmpOtherCaller ]
+]
+
+StMethodBrowserTest >> testSendersOfExcludesTraitUsers [
+
+	| senders |
+	senders := StMethodBrowser sendersOf: #sendMe.
+
+	self assert: (senders anySatisfy: [ :m | m methodClass = TData ]).
+	self deny: (senders anySatisfy: [ :m | m methodClass = StMethodBrowserData ])
 ]
 
 { #category : 'tests' }
