@@ -904,9 +904,9 @@ StMethodBrowser >> navigateTo: aType value: anObject [
 
 	self navigateInPlace ifFalse: [
 			aType == #implementorsAll ifTrue: [
-				self class methods: (anObject flatCollect: [ :sel | self class implementorsOf: sel ]) asImplementorsOfAll: anObject ].
+				self class browse: (anObject flatCollect: [ :sel | self class implementorsOf: sel ]) asImplementorsOfAll: anObject from: nil ].
 			aType == #sendersAll ifTrue: [
-				self class new methods: (anObject flatCollect: [ :sel | self class sendersOf: sel ]) asSendersOfAll: anObject ].
+				self class browse: (anObject flatCollect: [ :sel | self class sendersOf: sel ]) asSendersOfAll: anObject from: nil ].
 			aType == #references ifTrue: [ ^ self class browseReferencesToClass: anObject ].
 			^ self ].
 
