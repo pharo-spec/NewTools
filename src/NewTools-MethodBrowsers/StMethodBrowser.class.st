@@ -906,7 +906,7 @@ StMethodBrowser >> navigateTo: aType value: anObject [
 			aType == #implementorsAll ifTrue: [
 				self class methods: (anObject flatCollect: [ :sel | self class implementorsOf: sel ]) asImplementorsOfAll: anObject ].
 			aType == #sendersAll ifTrue: [
-				self class methods: (anObject flatCollect: [ :sel | self class sendersOf: sel ]) asSendersOfAll: anObject ].
+				self class new methods: (anObject flatCollect: [ :sel | self class sendersOf: sel ]) asSendersOfAll: anObject ].
 			aType == #references ifTrue: [ ^ self class browseReferencesToClass: anObject ].
 			^ self ].
 
