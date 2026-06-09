@@ -152,13 +152,13 @@ StMethodBrowser class >> browse: compiledMethods withInitializationBlock: aBlock
 	  - is this a common browsing API or an API to open a StMethodBrowser? If it is the second, this is breaking expectations.
 	  - this is missing context because we are in class side. We have no application to attach the browser to.
 	"
-	compiledMethods ifEmpty: [
-			StPharoApplication current inform: 'No result found'.
-			^ nil ].
-
 	browser := self new.
 	browser callerClass: aCallerClass.
 	aBlock value: browser.
+	browser allMethods ifEmpty: [
+			StPharoApplication current inform: 'No result found'.
+			^ nil ].
+
 
 	^ browser open
 ]
