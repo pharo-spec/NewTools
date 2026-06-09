@@ -896,8 +896,8 @@ StMethodBrowser >> methods: compiledMethods asSendersOfAll: aCollectionOfSymbols
 	filteredMethods := self callerClass ifNil: [ compiledMethods ] ifNotNil: [ :caller |
 			                   | withoutSelf |
 			                   withoutSelf := compiledMethods reject: [ :method |
-					                                  method methodClass instanceSide = caller instanceSide and: [
-						                                  aCollectionOfSymbols anySatisfy: [ :selector | method selector = selector ] ] ].
+				                                  method methodClass = caller and: [
+					                                  aCollectionOfSymbols anySatisfy: [ :selector | method selector = selector ] ] ].
 			                   withoutSelf ifEmpty: [ withoutSelf ] ifNotEmpty: [ compiledMethods ] ].
 
 	self
