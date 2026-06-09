@@ -142,7 +142,7 @@ StMethodBrowser class >> browse: compiledMethods withInitializationBlock: aBlock
 
 { #category : 'opening explicit' }
 StMethodBrowser class >> browse: compiledMethods withInitializationBlock: aBlock from: aCallerClass [
-	
+
 	| browser |
 	"Inform when the collection is empty.
 	We leave this code here because this method is called from many different places.
@@ -152,13 +152,14 @@ StMethodBrowser class >> browse: compiledMethods withInitializationBlock: aBlock
 	  - is this a common browsing API or an API to open a StMethodBrowser? If it is the second, this is breaking expectations.
 	  - this is missing context because we are in class side. We have no application to attach the browser to.
 	"
-	compiledMethods ifEmpty: [
+	browser := self new.
+	browser callerClass: aCallerClass.
+	aBlock value: browser.
+	browser allMethods ifEmpty: [
 			StPharoApplication current inform: 'No result found'.
 			^ nil ].
 
-	browser := self new.
-	aBlock value: browser.
-	browser callerClass: aCallerClass.
+
 	^ browser open
 ]
 
@@ -885,11 +886,24 @@ StMethodBrowser >> methods: compiledMethods asReferencesToVariable: aVariable in
 
 { #category : 'api - instance side' }
 StMethodBrowser >> methods: compiledMethods asSendersOfAll: aCollectionOfSymbols [
+	"
+	 If callerClass is set and all senders are recursive calls (i.e. the method only calls itself),
+	 the list is left empty so the browser displays 'No result found'.
+	 If other senders exist alongside the recursive call, all senders are kept in the list
+	 to avoid losing results when chaining sender/implementor queries."
+
+	| filteredMethods |
+	filteredMethods := self callerClass ifNil: [ compiledMethods ] ifNotNil: [ :caller |
+			                   | withoutSelf |
+			                   withoutSelf := compiledMethods reject: [ :method |
+				                                  method methodClass = caller and: [
+					                                  aCollectionOfSymbols anySatisfy: [ :selector | method selector = selector ] ] ].
+			                   withoutSelf ifEmpty: [ withoutSelf ] ifNotEmpty: [ compiledMethods ] ].
 
 	self
 		setRefreshingBlockForSendersOfAll: aCollectionOfSymbols;
 		highlight: aCollectionOfSymbols;
-		methods: compiledMethods;
+		methods: filteredMethods;
 		title: 'Senders of ' , (', ' join: aCollectionOfSymbols)
 ]
 
