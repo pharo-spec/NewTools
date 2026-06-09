@@ -142,7 +142,7 @@ StMethodBrowser class >> browse: compiledMethods withInitializationBlock: aBlock
 
 { #category : 'opening explicit' }
 StMethodBrowser class >> browse: compiledMethods withInitializationBlock: aBlock from: aCallerClass [
-	
+
 	| browser |
 	"Inform when the collection is empty.
 	We leave this code here because this method is called from many different places.
@@ -157,8 +157,9 @@ StMethodBrowser class >> browse: compiledMethods withInitializationBlock: aBlock
 			^ nil ].
 
 	browser := self new.
-	aBlock value: browser.
 	browser callerClass: aCallerClass.
+	aBlock value: browser.
+
 	^ browser open
 ]
 
