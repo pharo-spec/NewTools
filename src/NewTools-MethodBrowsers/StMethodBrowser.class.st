@@ -531,7 +531,7 @@ StMethodBrowser >> connectPresenters [
 		whenModelChangedDo: [ self updateTitle ].
 	methodList navigationBlock: [ :type :val | self navigateTo: type value: val ].
 	textPresenter
-		whenSubmitDo: [ :text | self accept: text notifying: self ];
+		whenSubmitDo: [ :text | self accept: text notifying: textPresenter interactionModel ];
 		whenResetDo: [ self selectItem: methodList selectedMethod ].
 	filterPresenter filterInputPresenter whenTextChangedDo: [ :text |
 			| currentScope scopedMethods filtered |
