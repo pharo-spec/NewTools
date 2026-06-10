@@ -20,7 +20,7 @@ Class {
 { #category : 'accessing' }
 StBrowserSearchPresenter class >> defaultPreferredExtent [
 
-	^ 650@500
+	^ 400@500
 ]
 
 { #category : 'examples' }
