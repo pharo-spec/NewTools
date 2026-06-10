@@ -29,12 +29,6 @@ StRemoveVariableCommand class >> defaultName [
 ]
 
 { #category : 'accessing' }
-StRemoveVariableCommand class >> defaultShortcut [
-
-	^ $x actionModifier
-]
-
-{ #category : 'accessing' }
 StRemoveVariableCommand class >> priority [
 
 	^ 12
