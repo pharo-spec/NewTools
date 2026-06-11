@@ -10,7 +10,8 @@ Class {
 		'selectedNode',
 		'variable',
 		'behavior',
-		'method'
+		'method',
+		'methods'
 	],
 	#category : 'NewTools-Refactoring-Commands-Tests',
 	#package : 'NewTools-Refactoring-Commands-Tests'
@@ -80,6 +81,12 @@ StCommandContextMock >> method [
 StCommandContextMock >> method: anObject [
 
 	method := anObject
+]
+
+{ #category : 'accessing' }
+StCommandContextMock >> methods: someMethods [
+
+	methods := someMethods
 ]
 
 { #category : 'accessing' }
