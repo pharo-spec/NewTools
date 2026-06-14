@@ -185,7 +185,7 @@ StRewriterRuleEditorPresenter >> windowIcon [
 ]
 
 { #category : 'accessing' }
-StRewriterRuleEditorPresenter >> windowTile [
+StRewriterRuleEditorPresenter >> windowTitle [
 
-	^ 'Rewrite Basic Editor'
+	^ 'Rewrite Rule Editor'
 ]
