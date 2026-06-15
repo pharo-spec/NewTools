@@ -48,8 +48,8 @@ StRewriterExpressionFinderPresenter class >> menuCommandOn: aBuilder [
 		action: [ self new open ];
 		order: 31;
 		parent: #Tools;
-		iconName: self iconName;
-		help: self descriptionText
+		help: self descriptionText;
+		iconName: self iconName
 ]
 
 { #category : 'initialization' }

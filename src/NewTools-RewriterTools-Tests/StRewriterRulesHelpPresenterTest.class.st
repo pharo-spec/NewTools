@@ -33,7 +33,8 @@ StRewriterRulesHelpPresenterTest >> testGetMicrodownParsedText [
 
 	| aText |
 	aText := rulesHelper class getParsedText.
-	self assert: aText isNotEmpty
+	self assert: aText isNotEmpty.
+	self assert: aText isText
 ]
 
 { #category : 'accessing' }
