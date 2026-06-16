@@ -17,6 +17,12 @@ Class {
 	#tag : 'Calypso'
 }
 
+{ #category : 'accessing' }
+StBrowserSearchPresenter class >> defaultPreferredExtent [
+
+	^ 400@500
+]
+
 { #category : 'examples' }
 StBrowserSearchPresenter class >> exampleConfiguringPresenter [
 	<example>

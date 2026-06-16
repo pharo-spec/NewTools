@@ -613,26 +613,19 @@ StDebugger >> debuggerInspectorModelClass [
 
 { #category : 'updating - presenters' }
 StDebugger >> decorateCodeForBreakpointsInContext: aContext [
-
 	| debugPoints decorators |
+	
 	debugPoints := DebugPoint allInstalledInMethod: aContext method.
-	decorators := debugPoints collect: [ :dp |
-		              dp link nodes collect: [ :n |
-			              dp name
-			              ->
-			              (DebugPointIconStyler new buildIconStyleFor: dp to: n) ] ].
-
-	decorators flattened do: [ :d |
-		| styler |
-		styler := d value.
-		self code addTextSegmentDecoration:
-			(SpTextPresenterDecorator forHighlight
-				 interval: styler interval;
-				 icon: styler icon;
-				 iconBlock: styler iconBlock;
-				 highlightColor: styler color;
-				 title: d key asString;
-				 yourself) ]
+	decorators := debugPoints collect: [ :dp | 
+		dp link nodes collect: [ :n | DebugPointIconStyler new buildIconStyleFor: dp to: n ] ].
+	decorators flattened do: [ :eachDecoration |
+		self code addTextSegmentDecoration: (SpTextPresenterDecorator new
+			 interval: eachDecoration interval;
+			 highlightColor: eachDecoration highlightColor;
+			 icon: eachDecoration icon;
+			 iconBlock: eachDecoration iconBlock;
+			 title: eachDecoration title;
+			 yourself) ]
 ]
 
 { #category : 'layout' }

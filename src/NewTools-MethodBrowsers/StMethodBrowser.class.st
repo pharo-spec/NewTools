@@ -774,14 +774,13 @@ Is it OK to discard changes?') ifFalse: [ ann denyClose ] ] ].
 
 { #category : 'private' }
 StMethodBrowser >> installIconStylerFor: anItem [
-	"icons styler are only supported for method definitions (not nil / not for comment definitions    
-	 (those may occure for comment or general string searches))"
+	"Icons styler are only supported for method definitions (not nil / not for comment definitions    
+     (those may occure for comment or general string searches))"
 
-	(self isMethodDefinition: anItem)
-		ifFalse: [ ^ self ].
-	
-	IconStyler withStaticStylers 
-		styleText: textPresenter codePresenter
+	(self isMethodDefinition: anItem) ifFalse: [ ^ self ].
+
+	IconStyler withSpecStaticStyler 
+		styleText: textPresenter codePresenter 
 		withAst: anItem ast
 ]
 
