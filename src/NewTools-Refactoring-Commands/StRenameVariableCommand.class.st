@@ -3,7 +3,7 @@ I am a command to rename a variable.
 "
 Class {
 	#name : 'StRenameVariableCommand',
-	#superclass : 'StRefactoringCommand',
+	#superclass : 'StRefactoringVariableCommand',
 	#category : 'NewTools-Refactoring-Commands',
 	#package : 'NewTools-Refactoring-Commands'
 }
@@ -35,13 +35,6 @@ StRenameVariableCommand class >> defaultShortcut [
 StRenameVariableCommand class >> priority [
 
 	^ 1
-]
-
-{ #category : 'testing' }
-StRenameVariableCommand >> canBeExecuted [
-
-	^ self codePresenter selectedNode isLiteralVariable | self codePresenter selectedNode isInstanceVariable and: [
-		  self codePresenter selectedNode isGlobalVariable not ]
 ]
 
 { #category : 'executing' }
