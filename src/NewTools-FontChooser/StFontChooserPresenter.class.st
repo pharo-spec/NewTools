@@ -23,25 +23,6 @@ Class {
 	#package : 'NewTools-FontChooser'
 }
 
-{ #category : 'layout' }
-StFontChooserPresenter class >> defaultLayout [ 
-
-	^ SpPanedLayout newTopToBottom
-		add: (SpPanedLayout newLeftToRight 
-					add: (SpPanedLayout newLeftToRight
-						add: #fontFamilyList;
-						add: #fontStyleList;
-						yourself);
-					add: (SpPanedLayout newLeftToRight
-						add: #fontSizeList;
-						add: #languageList;
-						yourself);
-					yourself);
-		add: #previewText;	
-		yourself
-			
-]
-
 { #category : 'accessing' }
 StFontChooserPresenter class >> defaultPreferredExtent [
 
@@ -129,11 +110,38 @@ StFontChooserPresenter >> connectPresenters [
 			selection selectedItem ifNotNil: [ self updatePreview ] ]
 ]
 
+{ #category : 'layout' }
+StFontChooserPresenter >> defaultLayout [
+
+	^ SpPanedLayout newTopToBottom
+		add: (SpPanedLayout newLeftToRight 
+			add: (SpPanedLayout newLeftToRight
+				add: fontFamilyList;
+				add: fontStyleList;
+				yourself);
+			add: (SpPanedLayout newLeftToRight
+				add: fontSizeList;
+				add: languageList;
+				yourself);
+			yourself);
+		add: previewText;	
+		yourself
+]
+
 { #category : 'accessing' }
 StFontChooserPresenter >> fontFamilyList [ 
 	
 	^ fontFamilyList 
 
+]
+
+{ #category : 'layout' }
+StFontChooserPresenter >> fontLayout [
+
+	^ SpPanedLayout newTopToBottom
+		add: fontFamilyList;
+		add: previewText;	
+		yourself
 ]
 
 { #category : 'accessing' }
@@ -151,12 +159,16 @@ StFontChooserPresenter >> fontStyleList [
 { #category : 'initialization' }
 StFontChooserPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 	
-	super initializeDialogWindow: aDialogWindowPresenter.
-
 	aDialogWindowPresenter
-		addButton: 'Update' do: [ :presenter | self updateFonts ];
-		addDefaultButton: 'Apply' do: [ :presenter | self applyChanges ]
-
+		addButton: 'Cancel' do: [ :presenter | 
+			presenter triggerCancelAction.
+			presenter close ];
+		addButton: 'Update' do: [ :presenter | 
+			self updateFonts ];
+		addDefaultButton: 'Apply' do: [ :presenter | 
+			self applyChanges. 
+			presenter beOk.
+			presenter close ]
 ]
 
 { #category : 'initialization' }
@@ -350,8 +362,14 @@ StFontChooserPresenter >> updateWithFont: aFont [
 	self updatePreview
 ]
 
+{ #category : 'layout' }
+StFontChooserPresenter >> useFontLayout [
+
+	self layout: self fontLayout
+]
+
 { #category : 'initialization' }
 StFontChooserPresenter >> windowTitle [ 
 
-	^ self model title
+	^ self model ifNotNil: #title
 ]

@@ -12,12 +12,14 @@ Class {
 { #category : 'initialization' }
 StSettingButtonPresenterItem >> initializePresenters [ 
 
-	setterPresenter := self newButton 
+	(setterPresenter := self newButton) 
 		label: self model actionLabel; 
-		action: [ self target perform: self model name ];
+		action: [ 
+			self target 
+				perform: self model name 
+				withEnoughArguments: { setterPresenter } ];
 		yourself.
-	super initializePresenters.
-
+	super initializePresenters
 ]
 
 { #category : 'accessing' }

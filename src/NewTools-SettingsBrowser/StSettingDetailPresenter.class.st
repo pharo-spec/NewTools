@@ -28,6 +28,17 @@ StSettingDetailPresenter >> defaultLayout [
 ]
 
 { #category : 'initialization' }
+StSettingDetailPresenter >> initialize [
+
+	super initialize.
+	
+	self announcer 
+		when: StSettingModelChanged
+		send: #updatePresenter
+		to: self
+]
+
+{ #category : 'initialization' }
 StSettingDetailPresenter >> initializePresenters [
 
 	"this will be replaced when received a new setting"

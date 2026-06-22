@@ -39,6 +39,7 @@ StMethodCodePresenter >> refactoringCommandsGroup [
 		         beDisplayedAsSubMenu;
 		         iconName: #smallAuthoringTools;
 		         yourself.
-	StRefactoringCommandRegistry commands do: [ :cmdClass | group register: (cmdClass forSpecContext: self methodBrowser) ].
+	StRefactoringCommandRegistry commands do: [ :cmdClass |
+		group register: (cmdClass forSpecContext: self methodBrowser) beHiddenWhenCantBeRun ].
 	^ group
 ]

@@ -17,9 +17,9 @@ StMethodBrowserTest >> testBrowseClassNameAsClass [
 
 	| window |
 	[
-		window := StMethodBrowser browseReferencesToClass: StMethodBrowserData.
+		window := StMethodBrowser browseReferencesToClass: StMethodBrowserDummyClass.
 
-		self assert: window presenter methods size equals: 2] ensure: [ window ifNotNil: [ window delete ] ]
+		self assert: window presenter methods size equals: 6] ensure: [ window ifNotNil: [ window delete ] ]
 ]
 
 { #category : 'tests' }
@@ -87,7 +87,7 @@ StMethodBrowserTest >> testExplicitBrowseClassNameAsClass [
 			          browse: {
 					          (StMethodBrowserTest >> #testBrowseClassNameAsClass).
 					          (StMethodBrowserTest >> #testExplicitBrowseClassNameAsClass) }
-			          asReferencesToClass: StMethodBrowserData.
+			          asReferencesToClass: StMethodBrowserDummyClass.
 
 		self assert: window presenter methods size equals: 2 ] ensure: [ window ifNotNil: [ window delete ] ]
 ]
@@ -266,6 +266,20 @@ StMethodBrowserTest >> testHandleMethodRemovedUpdatesSelection [
 		self assert: (browser methods indexOf: browser selectedMethod) equals: 3 ] ensure: [ window ifNotNil: [ window delete ] ]
 ]
 
+{ #category : 'tests' }
+StMethodBrowserTest >> testHighlightSelectsFirstOccurrence [
+
+	| window browser interval |
+	[
+		window := StMethodBrowser browseSendersOf: #printOn:.
+		browser := window presenter.
+		interval := browser codeEditor codePresenter selectionInterval.
+
+		self assert: interval isNotEmpty.
+		self assert: ((browser codeEditor text copyFrom: interval first to: interval last) includesSubstring: 'printOn:') ] ensure: [
+		window ifNotNil: [ window delete ] ]
+]
+
 { #category : 'tests - smoke' }
 StMethodBrowserTest >> testMethodBrowserImplementors [
 
@@ -337,6 +351,65 @@ StMethodBrowserTest >> testReuseWindowCheckboxInitialState [
 		self deny: presenter toolbarPresenter reuseWindowButton state ] ensure: [
 			StMethodBrowser navigateInPlace: initialSetting.
 			presenter ifNotNil: [ presenter delete ] ]
+]
+
+{ #category : 'tests' }
+StMethodBrowserTest >> testSendersHidesRecursiveCallForMultipleSelectors [
+	"If the only senders of a collection of selectors are recursive calls, no result should be shown"
+
+	| browser selectorA selectorB |
+	selectorA := #tmpRecursive , #A.
+	selectorB := #tmpRecursive , #B.
+
+	browser := StMethodBrowser new
+		           callerClass: StMethodBrowserDummyClass;
+		           yourself.
+	browser methods: (StMethodBrowser sendersOf: selectorA) , (StMethodBrowser sendersOf: selectorB) asSendersOfAll: {
+			selectorA.
+			selectorB }.
+
+	self assert: browser allMethods isEmpty
+]
+
+{ #category : 'tests' }
+StMethodBrowserTest >> testSendersHidesRecursiveCallWhenOnlySender [
+	"If the only sender of a method is itself, no result should be shown"
+
+	| browser selectorName |
+	selectorName := #tmpRecursive , #Method.
+
+	browser := StMethodBrowser new
+		           callerClass: StMethodBrowserDummyClass;
+		           yourself.
+	browser methods: (StMethodBrowser sendersOf: selectorName) asSendersOfAll: { selectorName }.
+
+	self assert: browser allMethods isEmpty
+]
+
+{ #category : 'tests' }
+StMethodBrowserTest >> testSendersKeepsRecursiveCallWhenOtherSendersExist [
+	"If a method has other senders besides itself, keep all including the recursive call"
+
+	| browser selectorName |
+	selectorName := #tmpRecursive , #Method2.
+	browser := StMethodBrowser new
+		           callerClass: StMethodBrowserDummyClass;
+		           yourself.
+	browser methods: (StMethodBrowser sendersOf: selectorName) asSendersOfAll: { selectorName }.
+
+	self assert: browser allMethods size equals: 2.
+	self assert: (browser allMethods anySatisfy: [ :m | m selector = selectorName ]).
+	self assert: (browser allMethods anySatisfy: [ :m | m selector = #tmpOtherCaller ])
+]
+
+{ #category : 'tests' }
+StMethodBrowserTest >> testSendersOfExcludesTraitUsers [
+
+	| senders |
+	senders := StMethodBrowser sendersOf: #sendMe.
+
+	self assert: (senders anySatisfy: [ :m | m methodClass = TData ]).
+	self deny: (senders anySatisfy: [ :m | m methodClass = StMethodBrowserDummyClass ])
 ]
 
 { #category : 'tests' }

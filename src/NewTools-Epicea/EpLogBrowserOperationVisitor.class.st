@@ -36,8 +36,8 @@ EpLogBrowserOperationVisitor >> application: anApplication [
 EpLogBrowserOperationVisitor >> behaviorNamed: aSymbol ifPresent: presentBlock [
 
 	^ (environment classOrTraitNamed: aSymbol)
-		ifNil: [ application inform: 'Cannot find ', aSymbol ]
-		ifNotNil: presentBlock
+		  ifNil: [ InformativeNotification signal: 'Cannot find ' , aSymbol ]
+		  ifNotNil: presentBlock
 ]
 
 { #category : 'private' }

@@ -135,7 +135,12 @@ StSettingsBrowser >> followPath: aStSettingNode in: aCollection [
 StSettingsBrowser >> initialize [
 
 	super initialize.
-	exporter := StSettingsExporter new
+	exporter := StSettingsExporter new.
+	
+	self announcer 
+		when: StSettingModelChanged
+		send: #resendChange:
+		to: self
 ]
 
 { #category : 'initialization' }
@@ -214,6 +219,12 @@ StSettingsBrowser >> loadSettingsFrom: aFileReference [
 StSettingsBrowser >> pagePresenter [ 
 
 	^ detailsPresenter
+]
+
+{ #category : 'private' }
+StSettingsBrowser >> resendChange: ann [
+
+	detailsPresenter announcer announce: ann
 ]
 
 { #category : 'accessing' }

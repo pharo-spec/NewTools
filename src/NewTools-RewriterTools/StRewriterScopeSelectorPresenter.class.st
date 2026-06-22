@@ -131,15 +131,6 @@ StRewriterScopeSelectorPresenter >> initializeWithPackages: aPackagesCollection 
 	packagesListWithFilterPresenter items: aPackagesCollection
 ]
 
-{ #category : 'showing' }
-StRewriterScopeSelectorPresenter >> openDialog [
-
-	| window |
-	window := super openDialog.
-	window resize: self class windowExtent.
-	^ window
-]
-
 { #category : 'actions' }
 StRewriterScopeSelectorPresenter >> packagesChanged [
 
