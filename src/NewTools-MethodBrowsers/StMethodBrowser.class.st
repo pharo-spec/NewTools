@@ -20,10 +20,10 @@ Class {
 		'highlight',
 		'filterPresenter',
 		'allMethods',
-		'callerClass'
+		'callerClass',
+		'titleChangedCallbacks'
 	],
 	#classVars : [
-		'NavigateInPlace',
 		'UsingLayout'
 	],
 	#category : 'NewTools-MethodBrowsers-Senders',
@@ -160,7 +160,7 @@ StMethodBrowser class >> browse: compiledMethods withInitializationBlock: aBlock
 			^ nil ].
 
 
-	^ browser open
+	^ StMethodBrowserGroup addOrCreateTab: browser
 ]
 
 { #category : 'opening' }
@@ -317,30 +317,6 @@ StMethodBrowser class >> methods: methods [
 	^ self new 
 		  methods: methods;
 		  yourself
-]
-
-{ #category : 'private' }
-StMethodBrowser class >> navigateInPlace [
-
-	^ NavigateInPlace ifNil: [ NavigateInPlace := false ]  
-]
-
-{ #category : 'private' }
-StMethodBrowser class >> navigateInPlace: aBoolean [
-
-	NavigateInPlace := aBoolean 
-]
-
-{ #category : 'private' }
-StMethodBrowser class >> navigateInPlaceSettingsOn: aBuilder [
-
-	<systemsettings>
-	(aBuilder setting: #navigateInPlace)
-		label: 'Navigate in place in Method Browser';
-		description:
-			'When browsing senders/implementors/references from a Method Browser, reuse the current window instead of opening a new one';
-		target: self;
-		parent: #tools
 ]
 
 { #category : 'private' }
@@ -530,7 +506,7 @@ StMethodBrowser >> connectPresenters [
 														methodList unselectAll.
 														self selectIndex: oldIndex ] ensure: [ isReverting := false ] ] ] ] ];
 		whenModelChangedDo: [ self updateTitle ].
-	methodList navigationBlock: [ :type :val | self navigateTo: type value: val ].
+
 	textPresenter
 		whenSubmitDo: [ :text | self accept: text notifying: textPresenter interactionModel ];
 		whenResetDo: [ self selectItem: methodList selectedMethod ].
@@ -797,6 +773,12 @@ StMethodBrowser >> intervalOf: aSelector inCommentText: aText [
 	^ self searchedString: aSelector asString in: aText
 ]
 
+{ #category : 'testing' }
+StMethodBrowser >> isDirty [
+
+	^ textPresenter isDirty
+]
+
 { #category : 'api - private' }
 StMethodBrowser >> itemMatching: aCompiledMethod [
 
@@ -906,30 +888,6 @@ StMethodBrowser >> methods: compiledMethods asSendersOfAll: aCollectionOfSymbols
 		title: 'Senders of ' , (', ' join: aCollectionOfSymbols)
 ]
 
-{ #category : 'private' }
-StMethodBrowser >> navigateInPlace [
-
-	^ self class navigateInPlace
-]
-
-{ #category : 'private' }
-StMethodBrowser >> navigateTo: aType value: anObject [
-
-	self navigateInPlace ifFalse: [
-			aType == #implementorsAll ifTrue: [
-				self class browse: (anObject flatCollect: [ :sel | self class implementorsOf: sel ]) asImplementorsOfAll: anObject from: nil ].
-			aType == #sendersAll ifTrue: [
-				self class browse: (anObject flatCollect: [ :sel | self class sendersOf: sel ]) asSendersOfAll: anObject from: nil ].
-			aType == #references ifTrue: [ ^ self class browseReferencesToClass: anObject ].
-			^ self ].
-
-	aType == #implementorsAll ifTrue: [
-		self methods: (anObject flatCollect: [ :sel | self class implementorsOf: sel ]) asImplementorsOfAll: anObject ].
-	aType == #sendersAll ifTrue: [
-		self methods: (anObject flatCollect: [ :sel | self class sendersOf: sel ]) asSendersOfAll: anObject ].
-	aType == #references ifTrue: [ self methods: (self class referencesToClass: anObject) asReferenceTo: anObject ]
-]
-
 { #category : 'initialization' }
 StMethodBrowser >> newMethodToolbar [
 
@@ -942,6 +900,13 @@ StMethodBrowser >> newMethodToolbar [
 StMethodBrowser >> numberOfElements [ 
 	
 	^ methodList ifNil: [ 0 ] ifNotNil: [ methodList numberOfElements ]
+]
+
+{ #category : 'enumerating' }
+StMethodBrowser >> onTitleChangedDo: aBlock [
+
+	titleChangedCallbacks ifNil: [ titleChangedCallbacks := OrderedCollection new ].
+	titleChangedCallbacks add: aBlock
 ]
 
 { #category : 'private' }
@@ -1111,9 +1076,20 @@ StMethodBrowser >> topologicSort: aBoolean [
 	^ methodList topologicSort: aBoolean
 ]
 
+{ #category : 'system annoucements' }
+StMethodBrowser >> unregisterFromAnnouncements [
+
+	TestCase historyAnnouncer unsubscribe: methodList.
+	self class codeChangeAnnouncer unsubscribe: self
+]
+
 { #category : 'api' }
 StMethodBrowser >> updateTitle [
-	self withWindowDo: [ :window | window title: self windowTitle ]
+    | newTitle |
+    newTitle := self windowTitle.
+    self withWindowDo: [ :window | window title: newTitle ].
+    titleChangedCallbacks ifNotNil: [
+        titleChangedCallbacks do: [ :callback | callback value: newTitle ] ]
 ]
 
 { #category : 'layout' }

@@ -23,8 +23,7 @@ Class {
 		'listPresenter',
 		'scopes',
 		'allMessages',
-		'visitedScopes',
-		'navigationBlock'
+		'visitedScopes'
 	],
 	#category : 'NewTools-MethodBrowsers-Base',
 	#package : 'NewTools-MethodBrowsers',
@@ -195,9 +194,7 @@ StMethodListPresenter >> doBrowseImplementors [
 	| selectors |
 	selectors := self selectedMethods collect: [ :method | method selector ].
 
-	navigationBlock
-		ifNotNil: [ navigationBlock value: #implementorsAll value: selectors ]
-		ifNil: [ StMethodBrowser browseImplementorsOfAll: selectors from: self class ]
+	StMethodBrowser browseImplementorsOfAll: selectors from: self class
 ]
 
 { #category : 'private - actions' }
@@ -212,9 +209,7 @@ StMethodListPresenter >> doBrowseSenders [
 	| selectors |
 	selectors := self selectedMethods collect: [ :method | method selector ].
 
-	navigationBlock
-		ifNotNil: [ navigationBlock value: #sendersAll value: selectors ]
-		ifNil: [ StMethodBrowser browseSendersOfAll: selectors from: self class]
+	StMethodBrowser browseSendersOfAll: selectors from: self class
 ]
 
 { #category : 'private - actions' }
@@ -223,9 +218,7 @@ StMethodListPresenter >> doBrowseUsers [
 	| class |
 	class := self selectedMethod methodClass.
 
-	navigationBlock
-		ifNotNil: [ navigationBlock value: #references value: class ]
-		ifNil: [ StMethodBrowser browseReferencesToClass: class ]
+	StMethodBrowser browseReferencesToClass: class
 ]
 
 { #category : 'private - actions' }
@@ -401,12 +394,6 @@ StMethodListPresenter >> methods: aCollection [
 	allMessages := listPresenter items.
 
 
-]
-
-{ #category : 'accessing' }
-StMethodListPresenter >> navigationBlock: aBlock [
-
-	navigationBlock := aBlock
 ]
 
 { #category : 'private - scopes' }
