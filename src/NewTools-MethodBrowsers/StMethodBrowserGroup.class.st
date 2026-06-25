@@ -19,9 +19,11 @@ Class {
 StMethodBrowserGroup class >> addOrCreateTab: aMethodBrowser [
 	"Main entry point. Find or create the group window, add a tab for aMethodBrowser."
 
-	(Current isNil or: [ Current isDisplayed not ]) ifTrue: [
-			Current := self new.
-			Current open ].
+	(Current isNil or: [ Current isDisplayed not ])
+		ifTrue: [
+				Current := self new.
+				Current open ]
+		ifFalse: [ Current window activate ].
 
 	aMethodBrowser application: Current application.
 	aMethodBrowser owner: Current.
