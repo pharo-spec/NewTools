@@ -17,7 +17,6 @@ Class {
 		'toolbarPresenter',
 		'messageList',
 		'runTestsButton',
-		'reuseWindowButton',
 		'historyButton',
 		'copyButton'
 	],
@@ -120,14 +119,6 @@ StMethodToolbarPresenter >> emptyDropList [
 ]
 
 { #category : 'initialization' }
-StMethodToolbarPresenter >> iconForReuseState: aBoolean [
-
-	^ aBoolean
-		  ifTrue: [ self iconNamed: #checkboxSelected ]
-		  ifFalse: [ self iconNamed: #checkboxUnselected ]
-]
-
-{ #category : 'initialization' }
 StMethodToolbarPresenter >> initializePresenters [
 
 	(browseButton := self newToolbarButton)
@@ -139,7 +130,7 @@ StMethodToolbarPresenter >> initializePresenters [
 		label: 'References';
 		icon: (self iconNamed: #smallFind);
 		help: 'Browse references of current selected class';
-		action: [ self doBrowseUsers ]. 
+		action: [ self doBrowseUsers ].
 	(sendersButton := self newToolbarButton)
 		label: 'Senders';
 		icon: (self iconNamed: #smallFind);
@@ -171,17 +162,7 @@ StMethodToolbarPresenter >> initializePresenters [
 		icon: (self iconNamed: #smallCopy);
 		help: 'Copy selected methods into Clipboard as class>>selector';
 		action: [ self doCopy ].
-	reuseWindowButton := self newToolbarToggleButton
-		                     label: 'Reuse window';
-		                     help: 'If checked, new searches will replace current results.';
-		                     state: StMethodBrowser navigateInPlace;
-		                     icon: (self iconForReuseState: StMethodBrowser navigateInPlace);
-		                     whenActivatedDo: [
-				                     StMethodBrowser navigateInPlace: true.
-				                     reuseWindowButton icon: (self iconForReuseState: true) ];
-		                     whenDeactivatedDo: [
-				                     StMethodBrowser navigateInPlace: false.
-				                     reuseWindowButton icon: (self iconForReuseState: false) ].
+
 	toolbarPresenter := self newToolbar
 		                    displayMode: self application toolbarDisplayMode;
 		                    add: browseButton;
@@ -191,7 +172,6 @@ StMethodToolbarPresenter >> initializePresenters [
 		                    add: versionButton;
 		                    add: historyButton;
 		                    add: copyButton;
-		                    add: reuseWindowButton;
 		                    add: runTestsButton;
 		                    yourself.
 
@@ -224,12 +204,6 @@ StMethodToolbarPresenter >> replaceVersionWithLabel: aString action: aBlock [
 	versionButton 
 		label: aString;
 		action: aBlock
-]
-
-{ #category : 'accessing' }
-StMethodToolbarPresenter >> reuseWindowButton [
-
-	^ reuseWindowButton
 ]
 
 { #category : 'accessing' }
