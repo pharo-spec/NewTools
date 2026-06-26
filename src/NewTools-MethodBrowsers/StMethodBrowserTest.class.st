@@ -326,7 +326,7 @@ StMethodBrowserTest >> testRefreshingBlockWithLiteralString [
 		browser := StMethodBrowser browseReferencesToLiteral: 'StMethodBrowser'.
 
 		methodToAdd := (self class >> #dataMethodForTest) copy.
-		self assert: (browser refreshingBlock value: methodToAdd) ] ensure: [ browser ifNotNil: [ browser delete ] ]
+		self assert: (browser acceptBlock value: methodToAdd) ] ensure: [ browser ifNotNil: [ browser delete ] ]
 ]
 
 { #category : 'tests' }

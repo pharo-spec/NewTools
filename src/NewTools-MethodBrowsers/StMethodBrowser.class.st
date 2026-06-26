@@ -15,13 +15,13 @@ Class {
 	#superclass : 'StAbstractMethodCentricBrowserPresenter',
 	#instVars : [
 		'title',
-		'refreshingBlock',
 		'textPresenter',
 		'highlight',
 		'filterPresenter',
 		'allMethods',
 		'callerClass',
-		'titleChangedCallbacks'
+		'titleChangedCallbacks',
+		'acceptBlock'
 	],
 	#classVars : [
 		'UsingLayout'
@@ -396,6 +396,24 @@ StMethodBrowser >> accept: text notifying: notifyer [
 				  logSource: true ]
 ]
 
+{ #category : 'api' }
+StMethodBrowser >> acceptBlock [
+
+	^ acceptBlock
+]
+
+{ #category : 'api' }
+StMethodBrowser >> acceptBlock: aBlock [
+	acceptBlock := aBlock
+]
+
+{ #category : 'announcements' }
+StMethodBrowser >> acceptsItem: item fromAnnouncement: anAnnouncement [
+	"The acceptBlock checks if the argument should be accepted on the browser list"
+
+	^ acceptBlock cull: item cull: anAnnouncement cull: self
+]
+
 { #category : 'private' }
 StMethodBrowser >> addHighlightedSegments [
 
@@ -462,7 +480,7 @@ StMethodBrowser >> callerClass: aClass [
 { #category : 'api - private' }
 StMethodBrowser >> canHandleAnnouncement [
 
-	^ self isDisplayed and: [ refreshingBlock isNotNil ]
+	^ self isDisplayed and: [ acceptBlock isNotNil ]
 ]
 
 { #category : 'announcements' }
@@ -587,7 +605,7 @@ StMethodBrowser >> handleMethodAdded: anAnnouncement [
 	| addedMethod previouslySelectedMethod previousEditedText |
 	self canHandleAnnouncement ifFalse: [ ^ self ].
 	addedMethod := anAnnouncement method.
-	(self shouldRefreshItem: addedMethod fromAnnouncement: anAnnouncement) ifFalse: [ ^ self ].
+	(self acceptsItem: addedMethod fromAnnouncement: anAnnouncement) ifFalse: [ ^ self ].
 	(addedMethod methodClass isNotNil and: [ addedMethod methodClass isObsolete not ]) ifFalse: [ ^ self ].
 
 	previousEditedText := textPresenter isDirty ifTrue: [ textPresenter text ].
@@ -614,19 +632,23 @@ StMethodBrowser >> handleMethodModified: anAnnouncement [
 
 	newCompiledMethod := anAnnouncement newMethod.
 	oldCompiledMethod := anAnnouncement oldMethod.
+
 	existingItem := self itemMatching: oldCompiledMethod.
+
 	existingItem ifNil: [
-			(self shouldRefreshItem: newCompiledMethod fromAnnouncement: anAnnouncement) ifTrue: [
-					allMethods add: newCompiledMethod.
-					self applyCurrentScopeAndFilter ].
-			^ self ].
+		"Case 1, it's a new method => add it!"
+		(self acceptsItem: newCompiledMethod fromAnnouncement: anAnnouncement) ifTrue: [
+				allMethods add: newCompiledMethod.
+				self applyCurrentScopeAndFilter ].
+		^ self ].
 
 	previousEditedText := textPresenter isDirty ifTrue: [ textPresenter text ].
 	previousSelectionIndex := methodList selectedIndex.
 
-	existingItemIndex := allMethods indexOf: existingItem ifAbsent: [ 0 ].
+	existingItemIndex := allMethods indexOf: existingItem .
 
-	(self shouldRefreshItem: newCompiledMethod fromAnnouncement: anAnnouncement) ifFalse: [
+	"Case 2, the new version of the method is not valid anymore => remove it!"
+	(self acceptsItem: newCompiledMethod fromAnnouncement: anAnnouncement) ifFalse: [
 			existingItemIndex > 0 ifTrue: [ allMethods removeIndex: existingItemIndex ].
 			self applyCurrentScopeAndFilter.
 			self defer: [
@@ -634,6 +656,7 @@ StMethodBrowser >> handleMethodModified: anAnnouncement [
 					self selectIndex: (previousSelectionIndex min: self methods size) ].
 			^ self ].
 
+	"Case 2, the new version of the method is valid => update it!"
 	existingItemIndex > 0
 		ifTrue: [ allMethods at: existingItemIndex put: newCompiledMethod ]
 		ifFalse: [ allMethods add: newCompiledMethod ].
@@ -727,7 +750,7 @@ StMethodBrowser >> initializePresenters [
 	textPresenter := self newCodeEditor.
 	textPresenter codePresenter: methodCodePresenter.
 	methodCodePresenter whenTextChangedDo: [ :aString | textPresenter markDirty ].
-	refreshingBlock := [ :item | true ].
+	acceptBlock := [ :item | true ].
 	filterPresenter := self instantiate: SpFilteringListPresenter.
 	filterPresenter matchSubstring.
 	filterPresenter display: [ :m | (self methodClassNameForItem: m) , ' >> ' , m selector ].
@@ -914,15 +937,14 @@ StMethodBrowser >> packageNameForItem: anItem [
 	^ anItem package ifNil: [ '' ] ifNotNil: [ :package | package name ]
 ]
 
-{ #category : 'api' }
-StMethodBrowser >> refreshingBlock [
+{ #category : 'accessing' }
+StMethodBrowser >> refreshingBlock: aFullBlockClosure [ 
+	
+	self
+		deprecated: 'Use acceptBlock: instead'
+		transformWith: '`@rcv refreshingBlock: `@arg' -> '`@rcv acceptBlock: `@arg'.
 
-	^ refreshingBlock
-]
-
-{ #category : 'api' }
-StMethodBrowser >> refreshingBlock: aBlock [
-	refreshingBlock := aBlock
+	self acceptBlock: aFullBlockClosure 
 ]
 
 { #category : 'announcements - registration' }
@@ -998,39 +1020,29 @@ StMethodBrowser >> selectedClass [
 { #category : 'api' }
 StMethodBrowser >> setRefreshingBlockForClassReferencesOf: aString [
 
-	self refreshingBlock: [ :method | method hasLiteral: aString ]
+	self acceptBlock: [ :method | method hasLiteral: aString ]
 ]
 
 { #category : 'api' }
 StMethodBrowser >> setRefreshingBlockForImplementorsOfAll: aCollectionOfSymbols [
 
-	self refreshingBlock: [ :message | aCollectionOfSymbols anySatisfy: [ :sel | message selector = sel ] ]
+	self acceptBlock: [ :message | aCollectionOfSymbols anySatisfy: [ :sel | message selector = sel ] ]
 ]
 
 { #category : 'api' }
 StMethodBrowser >> setRefreshingBlockForReferencesToSlot: aSlot [
 
-	self refreshingBlock: [ :method | method accessesSlot: aSlot ]
+	self acceptBlock: [ :method | method accessesSlot: aSlot ]
 ]
 
 { #category : 'api' }
 StMethodBrowser >> setRefreshingBlockForSendersOfAll: aCollectionOfSymbols [
 
-	self refreshingBlock: [ :method |
+	self acceptBlock: [ :method |
 			aCollectionOfSymbols anySatisfy: [ :sym |
 					| specialIndex |
 					specialIndex := Smalltalk specialSelectorIndexOrNil: sym.
 					method hasSelector: sym specialSelectorIndex: specialIndex ] ]
-]
-
-{ #category : 'announcements' }
-StMethodBrowser >> shouldRefreshItem: item fromAnnouncement: anAnnouncement [
-	"The refreshing block contains a block that accepts an item of the list, the received announcement and the message browser.
-	It will anwer a boolean indicating if the modified item should be refreshed.
-	
-	Concretely, this is used to know if the contents of the selected message should be refreshed"
-
-	^ refreshingBlock cull: item cull: anAnnouncement cull: self
 ]
 
 { #category : 'api' }
