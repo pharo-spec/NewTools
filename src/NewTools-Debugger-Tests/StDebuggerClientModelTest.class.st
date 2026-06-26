@@ -195,10 +195,11 @@ StDebuggerClientModelTest >> setResult [
 StDebuggerClientModelTest >> setSessionAndDebuggerModelForMethod: aMethod inContext: aContext [
 
 	| dummyActionModel |
-	session ifNotNil: [ session clear ].
+	"session ifNotNil: [ session clear ]."
 	dummyActionModel := (StTestDebuggerProvider new debuggerWithContext:
 		                     aContext) debuggerClientModel.
 	session := dummyActionModel session.
+	session debugCallBack: self.
 	dummyActionModel clear.
 	session stepIntoUntil: [ :currentContext |
 		currentContext method == aMethod ].
@@ -1233,4 +1234,11 @@ StDebuggerClientModelTest >> testUpdateTopContextAfterSessionOperation [
 	mockDebugActionModel
 		clear;
 		clearDebugSession
+]
+
+{ #category : 'callbacks' }
+StDebuggerClientModelTest >> wantsToBroweAndRecompileMethodNotFoundInStack: aCollection [ 
+	
+	"The tests assume this is true"
+	^ true
 ]
