@@ -48,20 +48,22 @@ StMethodBrowserGroup class >> reset [
 StMethodBrowserGroup >> addTab: aMethodBrowser [
 
 	| page |
-
 	page := SpNotebookPage title: aMethodBrowser windowTitle provider: [ aMethodBrowser ].
+	page beCloseable.
 
 	aMethodBrowser onTitleChangedDo: [ :newTitle |
 			page title: newTitle.
 			notebook pageTitleChanged: page ].
 	notebook addPage: page.
-	notebook selectPage: page
+	notebook selectPage: page.
+	self defer: [ aMethodBrowser methodList listPresenter takeKeyboardFocus ]
 ]
 
 { #category : 'initialization' }
 StMethodBrowserGroup >> connectPresenters [
 
-	notebook whenSelectedPageChangedDo: [ :page | page ifNotNil: [ self withWindowDo: [ :window | window title: page title ] ] ]
+	notebook whenSelectedPageChangedDo: [ :page | page ifNotNil: [ self withWindowDo: [ :window | window title: page title ] ] ].
+	notebook whenPageRemovedDo: [ :page | page activePresenter ifNotNil: [ :browser | browser unregisterFromAnnouncements ] ]
 ]
 
 { #category : 'layout' }
@@ -70,6 +72,14 @@ StMethodBrowserGroup >> defaultLayout [
 	^ SpBoxLayout newTopToBottom
 		  add: notebook;
 		  yourself
+]
+
+{ #category : 'closing' }
+StMethodBrowserGroup >> handleTabsFor: anAnnouncement [
+
+	notebook pages size > 1 ifFalse: [ ^ self ].
+	anAnnouncement denyClose.
+	notebook removePage: notebook selectedPage
 ]
 
 { #category : 'initialization' }
@@ -82,10 +92,12 @@ StMethodBrowserGroup >> initializePresenters [
 StMethodBrowserGroup >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
+
 	aWindowPresenter
 		title: 'Message Browser';
 		initialExtent: 900 @ 600.
 	aWindowPresenter whenWillCloseDo: [ :ann |
+			self handleTabsFor: ann.
 			(notebook pages anySatisfy: [ :page | page activePresenter ifNil: [ false ] ifNotNil: [ :browser | browser isDirty ] ])
 				ifTrue: [
 						(self application confirm: 'Some tabs have unsaved changes.

@@ -22,12 +22,29 @@ StMethodBrowserGroupTest >> testAddTabCreatesNewPage [
 { #category : 'tests' }
 StMethodBrowserGroupTest >> testAddTwoTabsReusesSameGroup [
 
-	| browser1 browser2 group |
+	| group |
 	[
-		browser1 := StMethodBrowser browseImplementorsOf: #browseImplementorsOf:.
-		browser2 := StMethodBrowser browseImplementorsOf: #browseSendersOf:.
+		StMethodBrowser browseImplementorsOf: #browseImplementorsOf:.
+		StMethodBrowser browseImplementorsOf: #browseSendersOf:.
 		group := StMethodBrowserGroup current.
 		self assert: group notebook pages size equals: 2 ] ensure: [
+			StMethodBrowserGroup reset.
+			group ifNotNil: [
+					group window delete.
+					group window delete ] ]
+]
+
+{ #category : 'tests' }
+StMethodBrowserGroupTest >> testRemovePageWhenMultipleDoesNotCloseTheGroup [
+
+	| group |
+	[
+		StMethodBrowser browseImplementorsOf: #browseImplementorsOf:.
+		StMethodBrowser browseSendersOf: #printOn:.
+		group := StMethodBrowserGroup current.
+		self assert: group notebook pages size equals: 2.
+		group window delete.
+		self assert: group notebook pages size equals: 1 ] ensure: [
 			StMethodBrowserGroup reset.
 			group ifNotNil: [ group window delete ] ]
 ]
