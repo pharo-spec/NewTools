@@ -48,20 +48,22 @@ StMethodBrowserGroup class >> reset [
 StMethodBrowserGroup >> addTab: aMethodBrowser [
 
 	| page |
-
 	page := SpNotebookPage title: aMethodBrowser windowTitle provider: [ aMethodBrowser ].
+	page beCloseable.
 
 	aMethodBrowser onTitleChangedDo: [ :newTitle |
 			page title: newTitle.
 			notebook pageTitleChanged: page ].
 	notebook addPage: page.
-	notebook selectPage: page
+	notebook selectPage: page.
+	self defer: [ aMethodBrowser methodList listPresenter takeKeyboardFocus ]
 ]
 
 { #category : 'initialization' }
 StMethodBrowserGroup >> connectPresenters [
 
-	notebook whenSelectedPageChangedDo: [ :page | page ifNotNil: [ self withWindowDo: [ :window | window title: page title ] ] ]
+	notebook whenSelectedPageChangedDo: [ :page | page ifNotNil: [ self withWindowDo: [ :window | window title: page title ] ] ].
+	notebook whenPageRemovedDo: [ :page | page activePresenter ifNotNil: [ :browser | browser unregisterFromAnnouncements ] ]
 ]
 
 { #category : 'layout' }
