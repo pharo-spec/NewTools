@@ -25,21 +25,6 @@ Class {
 	#tag : 'Core'
 }
 
-{ #category : 'layout' }
-StDependencyTreePresenter class >> defaultLayout [
-	<spec: #default>
-	^ SpBoxLayout newVertical
-		add: (SpBoxLayout newHorizontal
-					add: #textPackageField expand: true;
-					add: #buttonDefault expand: false;
-					yourself)
-			expand: false;
-		add: #packageLabel expand: false;
-		add: #tree;
-		add: #actionBar expand: false;
-		yourself
-]
-
 { #category : 'examples' }
 StDependencyTreePresenter class >> onPackagesMatch: match [
 
@@ -188,6 +173,21 @@ StDependencyTreePresenter >> defaultDirectory [
 	^ 'saving'
 ]
 
+{ #category : 'layout' }
+StDependencyTreePresenter >> defaultLayout [
+
+	^ SpBoxLayout newVertical
+		add: #packageLabel expand: false;
+		add: #tree;
+		add: (SpBoxLayout newHorizontal
+					add: #textPackageField expand: true;
+					add: #buttonDefault expand: false;
+					yourself)
+			expand: false;
+		add: #actionBar expand: false;
+		yourself
+]
+
 { #category : 'saving' }
 StDependencyTreePresenter >> defaultName [
 	^ self defaultDirectory, '/relationGraph.FL'
@@ -212,8 +212,8 @@ StDependencyTreePresenter >> filter: aString [
 StDependencyTreePresenter >> initializeButtons [
 
 	buttonRefresh
-		icon: (self iconNamed: #refresh);
-		label: ''.
+		label: 'Refresh';
+		icon: (self iconNamed: #refresh).
 	buttonBrowseCycles := self newButton
 		help: 'Find all the cycles where the package is in the system';
 		icon: (self iconNamed: #objects).
@@ -230,6 +230,7 @@ StDependencyTreePresenter >> initializeButtons [
 		help: 'Open the graph in world';
 		label: 'Open the graph'.
 	buttonReverseAnalysis := self newButton
+		label: 'Reverse';
 		help: 'Reverse the analysis : set the dependent packages as root packages';
 		icon: (self iconNamed: #refresh).
 	buttonSave := self newButton
@@ -253,8 +254,7 @@ StDependencyTreePresenter >> initializePresenters [
 	super initializePresenters.
 	packageLabel := self newLabel label: 'Analysis of packages'.
 	textPackageField := self newTextInput
-		                    placeholder: 'Enter a package name';
-		                    entryCompletion: self packagesEntryCompletion.
+		                    placeholder: 'Filter...'.
 	self initializeButtons.
 
 	tree actionsWith: [ :group |
@@ -307,17 +307,6 @@ StDependencyTreePresenter >> nodesFor: anItemList [
 			treeModelParent: self;
 			browser: self browser;
 			yourself ]
-]
-
-{ #category : 'accessing' }
-StDependencyTreePresenter >> packagesEntryCompletion [
-
-	| applicants |
-	applicants := self packageOrganizer packages collect: [ :package | package name asString ].
-
-	^ EntryCompletion new
-		  dataSourceBlock: [ :currText | applicants ];
-		  filterBlock: [ :currApplicant :currText | currText size > 3 and: [ currApplicant asUppercase includesSubstring: currText asString asUppercase ] ]
 ]
 
 { #category : 'accessing' }
