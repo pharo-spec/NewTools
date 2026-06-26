@@ -74,6 +74,14 @@ StMethodBrowserGroup >> defaultLayout [
 		  yourself
 ]
 
+{ #category : 'closing' }
+StMethodBrowserGroup >> handleTabsFor: anAnnouncement [
+
+	notebook pages size > 1 ifFalse: [ ^ self ].
+	anAnnouncement denyClose.
+	notebook removePage: notebook selectedPage
+]
+
 { #category : 'initialization' }
 StMethodBrowserGroup >> initializePresenters [
 
@@ -84,10 +92,12 @@ StMethodBrowserGroup >> initializePresenters [
 StMethodBrowserGroup >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
+
 	aWindowPresenter
 		title: 'Message Browser';
 		initialExtent: 900 @ 600.
 	aWindowPresenter whenWillCloseDo: [ :ann |
+			self handleTabsFor: ann.
 			(notebook pages anySatisfy: [ :page | page activePresenter ifNil: [ false ] ifNotNil: [ :browser | browser isDirty ] ])
 				ifTrue: [
 						(self application confirm: 'Some tabs have unsaved changes.
