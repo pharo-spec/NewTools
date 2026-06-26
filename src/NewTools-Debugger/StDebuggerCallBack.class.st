@@ -60,6 +60,13 @@ StDebuggerCallBack >> presenter: anObject [
 { #category : 'callbacks' }
 StDebuggerCallBack >> wantsToBroweAndRecompileMethodNotFoundInStack: aMethod [
 	"call back method to avoid dependencies in debugger-model"
+	"we will remove this method in a future PR."
+	^ self wantsToBrowseAndRecompileMethodNotFoundInStack: aMethod
+]
+
+{ #category : 'callbacks' }
+StDebuggerCallBack >> wantsToBrowseAndRecompileMethodNotFoundInStack: aMethod [
+	"call back method to avoid dependencies in debugger-model"
 
 	| message |
 	message := 'Method for block not found on stack, can''t edit and continue. Do you want to browse and recompile ? '.

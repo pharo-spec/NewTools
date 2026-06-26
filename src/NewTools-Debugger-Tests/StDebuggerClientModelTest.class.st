@@ -875,11 +875,40 @@ StDebuggerClientModelTest >> testProceedDebugSession [
 
 { #category : 'tests - actions' }
 StDebuggerClientModelTest >> testRecompileMethodToInBlockContextWithDeadHome [
+	"This test also works with full blocks"
+	
+	| contextChanged |
+
+	DebugSession contextModelClass: StDebugContextForTests.
+	
+	self newSessionWithDeadHomeBlockContext.
+	session wantsToBrowseAndRecompile: true.
+	methodWithBlockContextOriginalSource := (self class >> #methodWithDeadBlockContext) sourceCode.
+	
+	contextChanged := debugActionModel topContext.
+	
+	
+	debugActionModel
+		recompileMethodTo: contextChanged method sourceCode , ' yourself'
+		inContext: contextChanged
+		notifying: nil.
+	debugActionModel updateTopContext.
+
+	"The new ast scope is the one of the AST of the first interesting bytecode of the method,
+	that is the block declaration:"
+	self assert: (self class >> #methodWithDeadBlockContext) ast formattedCode equals: 'methodWithDeadBlockContext
+
+	^ [ (1 + 1) printString ] yourself'
+]
+
+{ #category : 'tests - actions' }
+StDebuggerClientModelTest >> testRecompileMethodToInBlockContextWithDeadHomeCleanBlock [
 
 	| contextChanged |
 
 	DebugSession contextModelClass: StDebugContextForTests.
 	self newSessionWithDeadHomeBlockContext.
+	session wantsToBrowseAndRecompile: true.
 	methodWithBlockContextOriginalSource := (self class >> #methodWithDeadBlockContext) sourceCode.
 	
 	contextChanged := debugActionModel topContext.
@@ -924,13 +953,14 @@ StDebuggerClientModelTest >> testRecompileMethodToInBlockContextWithDeadHomeTwic
 	| contextChanged |
 	DebugSession contextModelClass: StDebugContextForTests.
 	self newSessionWithDeadHomeBlockContext.
+	session wantsToBrowseAndRecompile: true.
 	methodWithBlockContextOriginalSource := (self class
 	                                         >>
 	                                         #methodWithDeadBlockContext)
 		                                        sourceCode.
 
 	contextChanged := debugActionModel topContext.
-
+	
 	debugActionModel
 		recompileMethodTo: contextChanged method sourceCode , ' yourself'
 		inContext: contextChanged
