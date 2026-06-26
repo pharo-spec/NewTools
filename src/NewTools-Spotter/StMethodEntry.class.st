@@ -30,7 +30,7 @@ StMethodEntry >> asHistoryEntry [
 { #category : 'converting' }
 StMethodEntry >> asString [
 
-	^ content selector
+	^ content selector asString
 ]
 
 { #category : 'accessing' }
