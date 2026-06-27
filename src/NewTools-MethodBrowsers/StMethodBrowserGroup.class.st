@@ -65,7 +65,7 @@ StMethodBrowserGroup >> connectPresenters [
 	notebook whenSelectedPageChangedDo: [ :page | page ifNotNil: [ self withWindowDo: [ :window | window title: page title ] ] ].
 	notebook whenPageRemovedDo: [ :page |
 			page activePresenter ifNotNil: [ :browser | browser unregisterFromAnnouncements ].
-			notebook pages isEmpty ifTrue: [ self withWindowDo: [ :w | w delete ] ] ]
+			notebook pages ifEmpty: [ self withWindowDo: [ :w | w delete ] ] ]
 ]
 
 { #category : 'layout' }
