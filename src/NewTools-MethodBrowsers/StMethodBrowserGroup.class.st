@@ -63,7 +63,9 @@ StMethodBrowserGroup >> addTab: aMethodBrowser [
 StMethodBrowserGroup >> connectPresenters [
 
 	notebook whenSelectedPageChangedDo: [ :page | page ifNotNil: [ self withWindowDo: [ :window | window title: page title ] ] ].
-	notebook whenPageRemovedDo: [ :page | page activePresenter ifNotNil: [ :browser | browser unregisterFromAnnouncements ] ]
+	notebook whenPageRemovedDo: [ :page |
+			page activePresenter ifNotNil: [ :browser | browser unregisterFromAnnouncements ].
+			notebook pages ifEmpty: [ self withWindowDo: [ :w | w delete ] ] ]
 ]
 
 { #category : 'layout' }
@@ -78,8 +80,13 @@ StMethodBrowserGroup >> defaultLayout [
 StMethodBrowserGroup >> handleTabsFor: anAnnouncement [
 
 	notebook pages size > 1 ifFalse: [ ^ self ].
+
 	anAnnouncement denyClose.
-	notebook removePage: notebook selectedPage
+	notebook removePage: notebook selectedPage.
+
+	self defer: [
+			self withWindowDo: [ :w | w activate ].
+			notebook selectedPage activePresenter ifNotNil: [ :browser | browser methodList listPresenter takeKeyboardFocus ] ]
 ]
 
 { #category : 'initialization' }
