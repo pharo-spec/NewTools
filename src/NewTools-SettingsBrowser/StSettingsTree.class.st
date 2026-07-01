@@ -190,25 +190,6 @@ StSettingsTree >> processSearch: aString [
 		as: Set
 ]
 
-{ #category : 'querying' }
-StSettingsTree >> retainedNodesFromList: aListOfNodes [
-	| retained |
-	retained := OrderedCollection new.
-	aListOfNodes do: [:n | [n item precondition value ifTrue: [retained add: n]] on: Error do: [retained add: n]].
-	^ retained
-]
-
-{ #category : 'querying' }
-StSettingsTree >> settingTreeRoots [
-	^ self retainedNodesFromList: ((self nodeList select: [:n | n parentName isNil]) asArray sort: self sortBlock) asOrderedCollection
-]
-
-{ #category : 'accessing' }
-StSettingsTree >> settingsFileDirectory [
-
-	^ self persistence fileReference parent
-]
-
 { #category : 'testing' }
 StSettingsTree >> settingsFileReference [
 	"Answer a <String> with the name of the file where settings are stored"

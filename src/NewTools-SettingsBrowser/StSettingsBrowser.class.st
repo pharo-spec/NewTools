@@ -88,22 +88,10 @@ StSettingsBrowser >> defaultLayout [
 
 { #category : 'initialization' }
 StSettingsBrowser >> exportSettings [
-	| nodes actions |
 
-	nodes := self settingsTree nodeList.
-	actions := nodes 
-		collect: [ : e | e item exportSettingAction ]
-		thenReject: [ : e | e isNil ].
-		
-	self exporter exportAllSettings: actions.
-	self inform: 'Settings were exported to ' , self exporter exportedFileFullName.
+	self settingsTree persistence storeSettingNodes.
+	self inform: 'Settings were exported to ' , self settingsTree persistence fileReference fullName.
 	buttonBarPresenter enable
-]
-
-{ #category : 'accessing' }
-StSettingsBrowser >> exporter [
-
-	^ exporter
 ]
 
 { #category : 'private' }
@@ -134,9 +122,7 @@ StSettingsBrowser >> followPath: aStSettingNode in: aCollection [
 { #category : 'initialization' }
 StSettingsBrowser >> initialize [
 
-	super initialize.
-	exporter := StSettingsExporter new.
-	
+	super initialize.	
 	self announcer 
 		when: StSettingModelChanged
 		send: #resendChange:
@@ -199,20 +185,8 @@ StSettingsBrowser >> initializePresenters [
 { #category : 'loading' }
 StSettingsBrowser >> loadSettings [
 	"Load the settings from the system settings file, if exists"
-
-	self settingsTree settingsFileDirectory
-		ifNotNil: [ : settingsDirectory | 
-			settingsDirectory hasFiles 
-				ifTrue: [ self loadSettingsFrom: (self selectDialog: settingsDirectory files) ]
-				ifFalse: [ self inform: 'No settings files were found in the settings directory' ] ]
-]
-
-{ #category : 'loading' }
-StSettingsBrowser >> loadSettingsFrom: aFileReference [ 
-
-	self settingsTree persistence fileReference: aFileReference.
 	self settingsTree updateSettingNodes.
-	self inform: 'Settings were loaded from ' , aFileReference fullName
+	self inform: 'Settings loaded'
 ]
 
 { #category : 'initialization' }
