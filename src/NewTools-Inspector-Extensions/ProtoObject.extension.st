@@ -9,6 +9,14 @@ ProtoObject >> allInspectorNodes [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
+ProtoObject >> allModelInspectorNodes [
+	"Answer a list of attributes as nodes
+	This method is required because the debugger inspector has uses a model object wrapping the actual debugged object"
+
+	^ self allInspectorNodes
+]
+
+{ #category : '*NewTools-Inspector-Extensions' }
 ProtoObject >> inspectionContexts [
 	"This is a utility method that collects all presentations for the current object.
 	By default, it simply looks for the #inspectorPresentationOrder:title: pragma.

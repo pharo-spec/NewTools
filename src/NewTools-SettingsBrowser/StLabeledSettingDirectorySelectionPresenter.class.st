@@ -37,16 +37,10 @@ StLabeledSettingDirectorySelectionPresenter >> buttonWidth [
 StLabeledSettingDirectorySelectionPresenter >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
-		add: labelPresenter withConstraints: [ :constraints | constraints width: self labelWidth ];
-		add: (SpBoxLayout newTopToBottom
-				add: (SpBoxLayout newLeftToRight 
-					add: input withConstraints: [ :constraints | 
-						constraints 
-							width: 200;
-							height: self inputTextHeight ];
-					add: selectButtonPresenter withConstraints: [ :constraints | 
-						constraints width: self buttonWidth ];
-					yourself);
+		hAlignStart;
+		add: (SpBoxLayout newLeftToRight 
+			add: input;
+				add: selectButtonPresenter;
 				yourself);
 		yourself
 ]

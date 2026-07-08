@@ -150,12 +150,11 @@ EpDashboardPresenter >> monitor: anEpMonitor [
 { #category : 'actions' }
 EpDashboardPresenter >> openSettingsBrowser [
 	"Inspired on Glamour's code"
-
 	| settingsBrowser settingsWindow |
-	settingsBrowser := SettingBrowser new
-		                   changePackageSet:
-			                   {self packageOrganizer packageNamed: 'NewTools-Epicea'};
-		                   yourself.
+	
+	settingsBrowser := (StSettingsBrowser newApplication: self application)
+		selectPath: #(tools epicea);
+		yourself.
 	settingsWindow := settingsBrowser open.
 	settingsBrowser expandAll
 ]

@@ -28,6 +28,12 @@ StInspectorInspectSelectedCommand class >> defaultName [
 	^ 'Inspect'
 ]
 
+{ #category : 'initialization' }
+StInspectorInspectSelectedCommand class >> defaultShortcutKey [
+
+	^ $i actionModifier
+]
+
 { #category : 'documentation' }
 StInspectorInspectSelectedCommand class >> documentContextRequiredSelectors [
 
@@ -36,7 +42,6 @@ StInspectorInspectSelectedCommand class >> documentContextRequiredSelectors [
 
 { #category : 'execution' }
 StInspectorInspectSelectedCommand >> execute [ 
-
 	self context systemNavigation inspect: self interestingObject
 	
 ]

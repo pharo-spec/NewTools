@@ -2,24 +2,25 @@ Class {
 	#name : 'StDebuggerContextInteractionModel',
 	#superclass : 'SpContextInteractionModel',
 	#instVars : [
-		'bindings'
+		'bindings',
+		'interactive'
 	],
 	#category : 'NewTools-Debugger-Model',
 	#package : 'NewTools-Debugger',
 	#tag : 'Model'
 }
 
-{ #category : 'instance creation' }
-StDebuggerContextInteractionModel class >> on: aContext [
-
-	^ self new context: aContext
-]
-
 { #category : 'adding' }
 StDebuggerContextInteractionModel >> addBinding: aBinding [
 
 	self flag: 'This is experimental code to add a binding without writing code'.
 	self bindings add: aBinding 
+]
+
+{ #category : 'accessing' }
+StDebuggerContextInteractionModel >> beNonInteractive [
+
+	interactive := false
 ]
 
 { #category : 'binding' }
@@ -37,6 +38,18 @@ StDebuggerContextInteractionModel >> bindingOf: aString [
 StDebuggerContextInteractionModel >> bindings [
 
 	^ bindings ifNil: [ bindings := Dictionary new ] 
+]
+
+{ #category : 'accessing' }
+StDebuggerContextInteractionModel >> compiler [
+	"Provide a compiler set up on the current context/class/receiver"
+
+	^ self doItReceiver class compiler
+		context: self doItContext;
+		receiver: self doItReceiver;
+		isScripting: self isScripting;
+		requestor: self;
+		yourself
 ]
 
 { #category : 'testing' }
@@ -57,6 +70,19 @@ StDebuggerContextInteractionModel >> hasBindingOf: aString [
 
 	^ (self hasBindingInContextOf: aString) or: [ 
 		  self hasBindingInInteractionModelOf: aString ]
+]
+
+{ #category : 'initialization' }
+StDebuggerContextInteractionModel >> initialize [
+
+	super initialize.
+	interactive := true
+]
+
+{ #category : 'accessing' }
+StDebuggerContextInteractionModel >> interactive [
+
+	^ interactive
 ]
 
 { #category : 'testing' }

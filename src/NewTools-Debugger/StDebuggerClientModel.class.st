@@ -137,7 +137,7 @@ StDebuggerClientModel >> copyStackToClipboard [
 	Clipboard
 		clipboardText:
 			(String
-				streamContents: [ :s | self interruptedContext printDebugStackOn: s ])
+				streamContents: [ :s | self interruptedContext printStackTraceOn: s ])
 ]
 
 { #category : 'stack - helpers' }
@@ -260,6 +260,11 @@ StDebuggerClientModel >> isInterruptedContextMissingClassException [
 { #category : 'debug - predicates' }
 StDebuggerClientModel >> isInterruptedContextPostMortem [
 	^ self contextPredicate isContextPostMortem
+]
+
+{ #category : 'debug - predicates' }
+StDebuggerClientModel >> isInterruptedContextShouldBeImplemented [
+	^ self contextPredicate isInterruptedContextShouldBeImplemented
 ]
 
 { #category : 'debug - predicates' }

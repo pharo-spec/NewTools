@@ -174,6 +174,13 @@ StProcessBrowser >> buildProcessToolbarActions [
 			action: [ self suspendSelectedProcess ];
 			actionEnabled: [ self selectedProcess notNil ] ];
 		addActionWith: [ :action | action 
+			name: 'Resume';
+			iconName: #smallForward ; 
+			description: 'Resume selected process.';
+			shortcutKey: $r actionModifier;
+			action: [ self resumeSelectedProcess ];
+			actionEnabled: [ self canResumeSelectedProcess ] ];
+		addActionWith: [ :action | action 
 			name: 'Signal';
 			iconName: #play;
 			description: 'Signal this process semaphore.';
@@ -208,6 +215,14 @@ StProcessBrowser >> buildProcessToolbarActions [
 			action: [ self inspectSelectedProcess ];
 			actionEnabled: [ self selectedProcess notNil ] ];
 		yourself
+]
+
+{ #category : 'actions' }
+StProcessBrowser >> canResumeSelectedProcess [
+
+	| process |
+	process := self selectedProcess.
+	^ process notNil and: [ process isSuspended ]
 ]
 
 { #category : 'actions' }
@@ -443,6 +458,18 @@ StProcessBrowser >> refreshProcessList [
 
 	self model updateProcessList.
 	processListPresenter updateItemsKeepingSelection: self model processList
+]
+
+{ #category : 'actions' }
+StProcessBrowser >> resumeSelectedProcess [
+
+	| process |
+	(process := self selectedProcess) ifNil: [ ^ self ].
+	process isSuspended
+		ifTrue: [
+				process resume.
+				self refreshProcessList ]
+		ifFalse: [ self inform: 'Process is not suspended' ]
 ]
 
 { #category : 'private - accessing' }

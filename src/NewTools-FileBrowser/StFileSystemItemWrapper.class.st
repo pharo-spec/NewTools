@@ -41,13 +41,12 @@ StFileSystemItemWrapper class >> on: aFileReference [
 { #category : 'accessing' }
 StFileSystemItemWrapper class >> roots [
 
-	^ Smalltalk os isWindows
+	^ OSPlatform current isWindows
 		  ifTrue: [
-			  FileSystem root directories
-				  select: [ :each | each exists and: [ each isReadable ] ]
-				  thenCollect: [ :each | StRootDriveWrapper on: each ] ]
-		  ifFalse: [
-		  Array with: (StRootDirectoryWrapper on: FileSystem root) ]
+				  FileSystem root directories
+					  select: [ :each | each exists and: [ each isReadable ] ]
+					  thenCollect: [ :each | StRootDriveWrapper on: each ] ]
+		  ifFalse: [ Array with: (StRootDirectoryWrapper on: FileSystem root) ]
 ]
 
 { #category : 'accessing' }
@@ -150,7 +149,8 @@ StFileSystemItemWrapper >> pathString [
  
 	| path |
 	path := self fileReference fullPath pathString.
-	^Smalltalk os isWindows ifTrue: [ path allButFirst copyReplaceAll: '/' with: '\' ]
+	^ OSPlatform current isWindows 
+		ifTrue: [ path allButFirst copyReplaceAll: '/' with: '\' ]
 		ifFalse: [ path ]
 ]
 

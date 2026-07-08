@@ -15,8 +15,14 @@ StSettingBooleanPresenterItem >> initializePresenters [
 	setterPresenter := self newCheckBox
 		whenActivatedDo: [ self updateSetting: self model value: true ];
 		whenDeactivatedDo: [ self updateSetting: self model value: false ].
-	super initializePresenters.
+	super initializePresenters
 
+]
+
+{ #category : 'accessing' }
+StSettingBooleanPresenterItem >> settingStyle [
+
+	^ 'itemBoolean'
 ]
 
 { #category : 'initialization' }

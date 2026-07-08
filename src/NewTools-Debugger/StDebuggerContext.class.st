@@ -162,7 +162,7 @@ StDebuggerContext >> stackTopNode [
 StDebuggerContext >> temporaryVariablesNodes [
 
 	^ self context temporaryVariableNames collect: [ :arg1 |
-		  (StInspectorNewTempNode hostObject: self context) tempName: arg1 ]
+		  (StInspectorTempNode hostObject: self context) tempName: arg1 ]
 ]
 
 { #category : 'nodes' }

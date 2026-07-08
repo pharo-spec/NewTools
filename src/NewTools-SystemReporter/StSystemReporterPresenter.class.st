@@ -71,14 +71,14 @@ StSystemReporterPresenter >> fillTopics [
 
 { #category : 'utils' }
 StSystemReporterPresenter >> isLinux [
-	
-	^Smalltalk os isLinux
+
+	^ OSPlatform current isLinux
 ]
 
 { #category : 'utils' }
 StSystemReporterPresenter >> isWindows [
 
-	^Smalltalk os isWindows
+	^ OSPlatform current isWindows
 ]
 
 { #category : 'building report' }
@@ -92,8 +92,8 @@ StSystemReporterPresenter >> reportImage: aStream [
 	self header: 'Image' on: aStream.
 	aStream 
 		nextPutAll: Smalltalk image imagePath; cr;
-		nextPutAll: SystemVersion current version; cr;
-		nextPutAll: SystemVersion current version asString; cr
+		nextPutAll: 'Version: '; nextPutAll: SystemVersion current version; cr;
+		nextPutAll: 'Build: '; nextPutAll: SystemVersion current imageVersionString; cr
 ]
 
 { #category : 'building report' }
@@ -127,28 +127,34 @@ StSystemReporterPresenter >> reportModules: aStream [
 
 { #category : 'building report' }
 StSystemReporterPresenter >> reportOS: aStream [
+
 	self header: 'Operating System/Hardware' on: aStream.
 	aStream
-		nextPutAll: Smalltalk os platformName; space;
-		nextPutAll: Smalltalk os version; space;
-		nextPutAll: Smalltalk os subtype; cr
-
+		nextPutAll: OSPlatform current platformName; space;
+		nextPutAll: OSPlatform current version; space;
+		nextPutAll: OSPlatform current subtype; cr
 ]
 
 { #category : 'building report' }
 StSystemReporterPresenter >> reportOSEnvironment: aStream [
 	| env |
+	
 	self header: 'Operating System Environment' on: aStream.
-	env := [ Smalltalk os environment] on: Error do: [ ^self ].
-	env keys asSortedCollection do: [:name |
+	env := [ OSPlatform current environment ]
+		on: Error
+		do: [ ^ self ].
+	env keys asSortedCollection do: [ :name |
 		aStream nextPutAll: name; nextPut: $=; nextPutAll: (env at: name); cr ]
 ]
 
 { #category : 'building report' }
 StSystemReporterPresenter >> reportSources: aStream [
+
 	self header: 'Image Sources' on: aStream.
-	aStream nextPutAll: SourceFiles class printString; cr.
-	aStream nextPutAll: SourceFiles reportString.
+	aStream
+		nextPutAll: SourcesManager current class printString;
+		cr.
+	aStream nextPutAll: SourcesManager current reportString
 ]
 
 { #category : 'building report' }

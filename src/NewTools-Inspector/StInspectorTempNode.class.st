@@ -6,7 +6,8 @@ Class {
 	#name : 'StInspectorTempNode',
 	#superclass : 'StInspectorNode',
 	#instVars : [
-		'tempVariable'
+		'debugInfo',
+		'tempName'
 	],
 	#category : 'NewTools-Inspector-Model',
 	#package : 'NewTools-Inspector',
@@ -16,12 +17,10 @@ Class {
 { #category : 'comparing' }
 StInspectorTempNode >> = anObject [
 
-	"Answer whether the receiver and anObject represent the same object."
-
 	self == anObject ifTrue: [ ^ true ].
+	nil.
 	self class = anObject class ifFalse: [ ^ false ].
-	^ tempVariable = anObject tempVariable and: [ 
-		  hostObject = anObject hostObject ]
+	^ tempName = anObject tempName and: [ hostObject = anObject hostObject ]
 ]
 
 { #category : 'accessing' }
@@ -29,42 +28,80 @@ StInspectorTempNode >> children [
 	^ #()
 ]
 
+{ #category : 'accessing' }
+StInspectorTempNode >> debugInfo [
+
+	^ debugInfo
+]
+
+{ #category : 'accessing' }
+StInspectorTempNode >> debugInfo: anObject [
+
+	debugInfo := anObject
+]
+
+{ #category : 'accessing' }
+StInspectorTempNode >> debugScope [
+
+	^ debugInfo debugScopeAt:
+		  (self hostObject executedPC max: self hostObject method initialPC)
+]
+
 { #category : 'comparing' }
 StInspectorTempNode >> hash [
 
 	"Answer an integer value that is related to the identity of the receiver."
 
-	^ tempVariable hash bitXor: (hostObject hash)
+	^ tempName hash bitXor: (hostObject hash)
+]
+
+{ #category : 'accessing' }
+StInspectorTempNode >> hostObject: aContext [
+
+	super hostObject: aContext.
+	debugInfo := aContext method debugInfo.
+]
+
+{ #category : 'accessing' }
+StInspectorTempNode >> isArgumentVariable [
+
+	^ self debugScope isArgumentNamed: tempName
+]
+
+{ #category : 'accessing' }
+StInspectorTempNode >> isTempVariable [
+
+	^ self isArgumentVariable not
 ]
 
 { #category : 'accessing' }
 StInspectorTempNode >> key [
-	^ tempVariable name
+
+	^ tempName
 ]
 
 { #category : 'accessing' }
 StInspectorTempNode >> rawValue [
-	"Answer the object value of this object variable (slot, indexed attribute, computed value)."
 
-	^ [ 
-		"we use #tempNamed: to force a re-lookup of the variable"
-		self hostObject tempNamed: tempVariable name]
-		  on: Exception
-		  do: [ :err | 'Error: ' , err messageText ]
+	^ self debugScope
+		  readVariableNamed: tempName
+		  fromContext: self hostObject
 ]
 
 { #category : 'accessing' }
-StInspectorTempNode >> tempVariable [
-	^ tempVariable
+StInspectorTempNode >> tempName [
+
+	^ tempName
 ]
 
 { #category : 'accessing' }
-StInspectorTempNode >> tempVariable: anObject [
-	tempVariable := anObject
+StInspectorTempNode >> tempName: anObject [
+
+	tempName := anObject
 ]
 
 { #category : 'accessing' }
 StInspectorTempNode >> variableTag [
 
-	^ tempVariable variableTag
+	^ self isArgumentVariable ifTrue: [ 'arg' ] ifFalse: [ 'temp. var' ]
 ]

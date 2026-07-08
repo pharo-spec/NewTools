@@ -691,10 +691,8 @@ StPulse >> initializeButtons [
 
 	| helpButton settingsButton |
 
-	findAllButton := self newButton
-		addStyle: 'small';
-		addStyle: 'stPulseButton';
-		icon: (self iconNamed: #glamorousDown);
+	findAllButton := self newLink
+		label: 'Fetch all';
 		action: [ self findAllButtonAction ];
 		help: 'Gives you all the results of a search. Normal searchs only give you the first 25';
 		yourself.
@@ -714,9 +712,11 @@ StPulse >> initializeButtons [
 			self defaultKeyboardFocus takeKeyboardFocus.
 			self openSettingsBrowser ];
 		help: 'Open settings browser to configure StPulse'.
-	self addKeyboardBehavior: findAllButton.
+
+	"self addKeyboardBehavior: findAllButton."
 	self addKeyboardBehavior: helpButton.
 	self addKeyboardBehavior: settingsButton.
+
 	buttonsToolbar := self newPresenter
 		layout: (SpBoxLayout newLeftToRight
 			add: settingsButton expand: false;
@@ -743,9 +743,10 @@ StPulse >> initializeListLabel [
 	
 	listTitleLayout := self newPresenter
 		layout: (SpBoxLayout newLeftToRight 
-			add: listLabelPresenter expand: true;
-			add: listCounterPresenter expand: false;
+			spacing: 5;
+			add: listLabelPresenter;
 			add: findAllButton expand: false;
+			add: listCounterPresenter expand: false;
 			yourself);
 		yourself
 ]
@@ -832,9 +833,8 @@ StPulse >> mutex [
 { #category : 'private - actions' }
 StPulse >> openSettingsBrowser [
 
-	SettingBrowser new
-		rootNodes:
-		(SettingBrowser currentTree nodeNamed: #pulse) allChildren;
+	(StSettingsBrowser newApplication: self application)
+		selectPath: #(tools pulse);
 		open
 ]
 
@@ -1023,8 +1023,15 @@ StPulse >> updateResultListWith: aCollection [
 
 { #category : 'private - updating' }
 StPulse >> updateSearchFromProcessor: aProcessor [
+	| searchText |
+	
+	searchText := (String streamContents:  [ :stream |
+		stream << aProcessor query textInSearchBar. 
+		searchPresenter text trimBoth ifNotEmpty: [ :aString | 
+			stream space.
+			stream << (' ' join: (aString substrings reject: [ :each | each trimLeft first = $# ])) ] ]).
 
-	searchPresenter text: aProcessor query textInSearchBar.
+	searchPresenter text: searchText.
 	searchPresenter cursorPositionIndex: searchPresenter text size + 1.
 	paginator selectPage: (paginator pages indexOf: environmentContext)
 ]

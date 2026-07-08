@@ -93,7 +93,7 @@ StFinderExampleSearch >> name [
 { #category : 'parsing' }
 StFinderExampleSearch >> parseAsNodes: anExpression [
 
-	^ (RBParser parseExpression: '{', anExpression , '}') statements asArray
+	^ (OCParser parseExpression: '{', anExpression , '}') statements asArray
 ]
 
 { #category : 'accessing' }
@@ -115,6 +115,20 @@ StFinderExampleSearch >> search: aString in: aRBBrowserEnvironment [
 
 	^ self buildResult: (self computeWithMethodFinder: aString)
 
+]
+
+{ #category : 'searching' }
+StFinderExampleSearch >> searchByRegexCaseInsensitive: aRegex in: anEnvironment [
+	"Perform a search given aRegex in anEnvironment."
+
+	^ self 
+]
+
+{ #category : 'searching' }
+StFinderExampleSearch >> searchBySubstring: aString in: anEnvironment [
+	"Perform a search given aString in anEnvironment."
+
+	^ self
 ]
 
 { #category : 'initialization' }

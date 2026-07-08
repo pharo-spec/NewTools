@@ -75,11 +75,6 @@ EpIconNameVisitor >> visitExpressionEvaluation: anExpressionEvaluation [
 ]
 
 { #category : 'visitor' }
-EpIconNameVisitor >> visitLogCommentModification: aLogCommentModification [
-	^ #announcement
-]
-
-{ #category : 'visitor' }
 EpIconNameVisitor >> visitMethodAddition: aMethodCreatedChange [
 	^ self additionIcon
 ]
@@ -92,16 +87,6 @@ EpIconNameVisitor >> visitMethodModification: aMethodModified [
 { #category : 'visitor' }
 EpIconNameVisitor >> visitMethodRemoval: aMethodRemoved [
 	^ self removalIcon
-]
-
-{ #category : 'visitor' }
-EpIconNameVisitor >> visitMonticelloVersionSave: aChange [
-	^ #package
-]
-
-{ #category : 'visitor' }
-EpIconNameVisitor >> visitMonticelloVersionsLoad: aMonticelloVersionLoaded [
-	^ #package
 ]
 
 { #category : 'visitor' }

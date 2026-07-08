@@ -1,0 +1,42 @@
+"
+I am a command to protect given variables
+"
+Class {
+	#name : 'StProtectVariableCommand',
+	#superclass : 'StRefactoringVariableCommand',
+	#category : 'NewTools-Refactoring-Commands',
+	#package : 'NewTools-Refactoring-Commands'
+}
+
+{ #category : 'default' }
+StProtectVariableCommand class >> defaultDescription [
+
+	^ 'Inline all calls of accessors of selected instance variable'
+]
+
+{ #category : 'accessing' }
+StProtectVariableCommand class >> defaultIconName [
+
+	^ #group
+]
+
+{ #category : 'default' }
+StProtectVariableCommand class >> defaultName [
+
+	^ '(R) Protect'
+]
+
+{ #category : 'accessing' }
+StProtectVariableCommand class >> priority [
+
+	^ 13
+]
+
+{ #category : 'executing' }
+StProtectVariableCommand >> prepareDriver [
+
+	^ (ReProtectInstanceVariableDriver newApplication: self application)
+		  scopes: context allScopes
+		  variable: self codePresenter selectedNode variable
+		  class: self codePresenter behavior
+]

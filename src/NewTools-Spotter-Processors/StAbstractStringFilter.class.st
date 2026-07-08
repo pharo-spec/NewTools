@@ -58,17 +58,13 @@ StAbstractStringFilter >> doReset [
 { #category : 'accessing' }
 StAbstractStringFilter >> filteringText: aString [
 
-	inner := originalUnwrapped select: [ :e | self criterium: e].
+	inner := originalUnwrapped select: [ :e | self criterium: e ].
 
-	(aString asLowercase beginsWith: filteringText asLowercase) 
-		ifFalse: [ 
-			self reset ].
+	(aString beginsWith: filteringText caseSensitive: false) ifFalse: [ self reset ].
 
 	filteringText := aString.
-	results := results select: [ :e | self criterium: e].
-	returnedIndex := 0.
-
-
+	results := results select: [ :e | self criterium: e ].
+	returnedIndex := 0
 ]
 
 { #category : 'initialization' }

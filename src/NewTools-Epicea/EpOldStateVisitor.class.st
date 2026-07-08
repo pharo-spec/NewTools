@@ -40,12 +40,6 @@ EpOldStateVisitor >> visitClassRemoval: aClassRemovalChange [
 ]
 
 { #category : 'visitor' }
-EpOldStateVisitor >> visitLogCommentModification: anEvent [
-
-	^ anEvent oldComment
-]
-
-{ #category : 'visitor' }
 EpOldStateVisitor >> visitMethodModification: aMethodModification [
 
 	^ self

@@ -33,7 +33,7 @@ StPharoGtkConfiguration >> configureGeneral: anApplication [
 	self addCSSProviderFromString: self commonStyle.
 	anApplication 
 		propertyAt: #syntaxHighlightTheme
-		put: self syntaxHighlightThemeName
+		put: self syntaxHighlightTheme
 ]
 
 { #category : 'configuring' }

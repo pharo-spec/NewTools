@@ -30,14 +30,6 @@ RBCompositeEnvironment >> classesInHierarchies [
 ]
 
 { #category : '*NewTools-Scopes' }
-RBCompositeEnvironment >> definedClasses [
-	| definedClasses |
-	definedClasses := IdentitySet new: 4096.
-	self definedClassesDo: [ :each | each isMeta ifFalse: [definedClasses add: each] ].
-	^ definedClasses reject: [ :each | each isMeta ]
-]
-
-{ #category : '*NewTools-Scopes' }
 RBCompositeEnvironment >> definedClassesDo: aBlock [
 	| enumerated |
 	enumerated := IdentitySet new.

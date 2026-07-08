@@ -526,18 +526,17 @@ StCritiqueBrowserPresenter >> setActionLogButton [
 StCritiqueBrowserPresenter >> setActionResetButton [
 
 	^ [
-	| logging |
-		logging := self application newConfirm
-			           title: 'Question';
-			           label:
-				           'Do you want to delete the current configuration
+		  | logging |
+		  logging := self application newConfirm
+			             title: 'Question';
+			             message: 'Do you want to delete the current configuration
  and create a new configuration ?';
-			           acceptLabel: 'Sure!';
-			           cancelLabel: 'No';
-			           openModal.
-		logging ifTrue: [
-		  self delete.
-		  StCritiquePackageSelectorPresenter open ] ]
+			             acceptLabel: 'Sure!';
+			             cancelLabel: 'No';
+			             openModal.
+		  logging ifTrue: [
+				  self delete.
+				  StCritiquePackageSelectorPresenter open ] ]
 ]
 
 { #category : 'initialization' }

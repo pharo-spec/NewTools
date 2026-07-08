@@ -1,9 +1,9 @@
 Extension { #name : 'ActionSettingDeclaration' }
 
 { #category : '*NewTools-SettingsBrowser' }
-ActionSettingDeclaration >> asSettingPresenter [
+ActionSettingDeclaration >> asSettingPresenterWithOwner: aPresenter [
 	"Answer an appropriate <SpPresenter> for the receiver"
 
-	^ StSettingButtonPresenterItem on: self
+	^ aPresenter instantiate: StSettingButtonPresenterItem on: self
 
 ]

@@ -15,7 +15,9 @@ Class {
 		'icon',
 		'iconBlock',
 		'title',
-		'interval'
+		'interval',
+		'name',
+		'underline'
 	],
 	#category : 'NewTools-SpTextPresenterDecorators',
 	#package : 'NewTools-SpTextPresenterDecorators'
@@ -29,14 +31,15 @@ SpTextPresenterDecorator class >> defaultHighlightColor [
 
 { #category : 'accessing' }
 SpTextPresenterDecorator class >> defaultUnderlineColor [
-		
-	^ Color white alpha: 0
+
+	^ Color transparent
 ]
 
 { #category : 'instance creation' }
 SpTextPresenterDecorator class >> forHighlight [
 
 	^ self new
+		name: #highlight;
 		highlightColor: self defaultHighlightColor;
 		underlineColor: self defaultUnderlineColor;	
 		yourself
@@ -51,7 +54,7 @@ SpTextPresenterDecorator class >> highlightStyleName [
 { #category : 'accessing' }
 SpTextPresenterDecorator class >> underlineStyleName [
 
-	^ #underline
+	^ #nderline
 ]
 
 { #category : 'accessing' }
@@ -105,6 +108,24 @@ SpTextPresenterDecorator >> interval: anInterval [
 	interval := anInterval
 ]
 
+{ #category : 'testing' }
+SpTextPresenterDecorator >> isUnderline [
+
+	^ underline ifNil: [ false ]
+]
+
+{ #category : 'accessing' }
+SpTextPresenterDecorator >> name [
+
+	^ name
+]
+
+{ #category : 'accessing' }
+SpTextPresenterDecorator >> name: aString [
+
+	name := aString
+]
+
 { #category : 'accessing' }
 SpTextPresenterDecorator >> start [ 
 	^interval first
@@ -123,6 +144,12 @@ SpTextPresenterDecorator >> title [
 { #category : 'accessing' }
 SpTextPresenterDecorator >> title: anObject [
 	title := anObject
+]
+
+{ #category : 'accessing' }
+SpTextPresenterDecorator >> underline: aBoolean [
+
+	underline := aBoolean
 ]
 
 { #category : 'accessing' }

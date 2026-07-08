@@ -16,7 +16,7 @@ Class {
 { #category : 'accessing' }
 StSourceFactory class >> current [
 
-	^ Current ifNil: [ self defaultSourceFactory ]
+	^ Current ifNil: [ Current := self defaultSourceFactory ]
 ]
 
 { #category : 'detecting implementations' }

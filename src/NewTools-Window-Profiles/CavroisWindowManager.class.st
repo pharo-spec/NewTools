@@ -728,36 +728,28 @@ CavroisWindowManager >> initializeBlocks [
 			self cellSize ifNotNil: [ :size |
 					self resetCells.
 					self createPlaceHolderGrid: size ].
-			self applyWorldResize ].
+			UIManager default defer: [ self applyWorldResize ] ].
 
 	WorldMorph dragActionBlock: [ :aClient |
-			((aClient isKindOf: SystemWindow) or:
-				 (aClient isKindOf: SpWindowMorph)) ifTrue: [
+			((aClient isKindOf: SystemWindow) or: (aClient isKindOf: SpWindowMorph)) ifTrue: [
 					self cellSize ifNotNil: [
 							| dragProcess |
 							self cellDisplay.
 							dragProcess := [
 								               [ aClient owner notNil ] whileTrue: [
-										               self
-											               handleWindowDrag: aClient
-											               at: aClient position.
-										               (Delay forMilliseconds: 2) wait ] ] forkAt:
-								               Processor userBackgroundPriority.
+										               self handleWindowDrag: aClient at: aClient position.
+										               (Delay forMilliseconds: 2) wait ] ] forkAt: Processor userBackgroundPriority.
 							aClient setProperty: #cavroisDragProcess toValue: dragProcess ] ] ].
 
 	WorldMorph dropActionBlock: [ :anEvent |
 			| dragProcess |
-			dragProcess := anEvent contents
-				               valueOfProperty: #cavroisDragProcess
-				               ifAbsent: nil.
+			dragProcess := anEvent contents valueOfProperty: #cavroisDragProcess ifAbsent: nil.
 			dragProcess ifNotNil: [
 					dragProcess terminate.
 					anEvent contents removeProperty: #cavroisDragProcess ].
 			self cellSize ifNotNil: [
 					self removeVisualPlaceholders.
-					self
-						handleCellWindowDrop: anEvent contents
-						at: anEvent contents position ] ]
+					self handleCellWindowDrop: anEvent contents at: anEvent contents position ] ]
 ]
 
 { #category : 'internals' }

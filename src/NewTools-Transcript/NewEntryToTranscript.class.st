@@ -1,5 +1,5 @@
 "
-I'm a little announcement to communicate with my representents. 
+An announcement to communicate the addition of new entries to the presenter
 "
 Class {
 	#name : 'NewEntryToTranscript',
@@ -7,8 +7,9 @@ Class {
 	#instVars : [
 		'entry'
 	],
-	#category : 'NewTools-Transcript',
-	#package : 'NewTools-Transcript'
+	#category : 'NewTools-Transcript-Announcements',
+	#package : 'NewTools-Transcript',
+	#tag : 'Announcements'
 }
 
 { #category : 'accessing' }

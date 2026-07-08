@@ -30,3 +30,9 @@ StSettingSHStyleButtonPresenterItem >> initializePresenters [
 	setterPresenter := self newButton.
 	super initializePresenters.
 ]
+
+{ #category : 'accessing' }
+StSettingSHStyleButtonPresenterItem >> settingStyle [
+
+	^ 'itemSHButton'
+]

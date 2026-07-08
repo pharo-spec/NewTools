@@ -1,5 +1,7 @@
 "
-I am a Spec browser for an EpLog.
+I am a Spec browser for an EpLog. 
+
+I am used to recovered code not saved after an image crash. 
 
 For example, open with:
 
@@ -578,6 +580,14 @@ EpLogBrowserPresenter >> initializeSearchPresenters [
 		                   yourself
 ]
 
+{ #category : 'initialization' }
+EpLogBrowserPresenter >> initializeWindow: aWindowPresenter [
+
+	super initializeWindow: aWindowPresenter.
+
+	aWindowPresenter title: 'Epicea - Recovered changes'
+]
+
 { #category : 'menu - operations' }
 EpLogBrowserPresenter >> inspectSelection [
 
@@ -634,7 +644,7 @@ EpLogBrowserPresenter >> menuActions [
 		addActionWith: [ :action | action 
 			name: 'Browse current';
 			description: 'Browse working copy of entity affected in the selected event(s)';
-			iconName: #nautilusIcon;
+			iconName: #nautilus;
 			shortcutKey: $b actionModifier;
 			action: [ self browseSelection ];
 			actionEnabled: [ self itemsPresenter selectedItem isNotNil ] ];

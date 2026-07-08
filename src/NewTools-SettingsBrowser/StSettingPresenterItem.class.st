@@ -11,7 +11,8 @@ Class {
 	#instVars : [
 		'setterPresenter',
 		'model',
-		'labeledPresenter'
+		'labeledPresenter',
+		'pagePresenter'
 	],
 	#category : 'NewTools-SettingsBrowser-Widgets',
 	#package : 'NewTools-SettingsBrowser',
@@ -27,24 +28,31 @@ StSettingPresenterItem >> defaultLayout [
 ]
 
 { #category : 'accessing' }
+StSettingPresenterItem >> headerStyle [
+
+	^ 'header', (self settingStyle allButFirst: 4) "remove 'item'"
+]
+
+{ #category : 'accessing' }
 StSettingPresenterItem >> help: aString [ 
 
 	"To update the pop-up help"
 	self setterPresenter help: aString.
 	"To update the 'documentation' pane"
-	self owner help: aString.
+	"self pagePresenter hovering: aString"
 ]
 
 { #category : 'initialization' }
 StSettingPresenterItem >> initializePresenters [
 	"Set a label and description presenters as baseline for every setting"
 
+	self addStyle: self settingStyle.
+
 	labeledPresenter := (self instantiate: self labeledPresenterClass on: self) 
 		label: self model label;
 		input: self setterPresenter;
 		description: self model description;
-		yourself.
-
+		yourself
 ]
 
 { #category : 'initialization' }
@@ -58,6 +66,18 @@ StSettingPresenterItem >> labeledPresenterClass [
 StSettingPresenterItem >> model [
 
 	^ model
+]
+
+{ #category : 'accessing' }
+StSettingPresenterItem >> pagePresenter [
+
+	^ pagePresenter
+]
+
+{ #category : 'accessing' }
+StSettingPresenterItem >> pagePresenter: aPresenter [
+
+	pagePresenter := aPresenter
 ]
 
 { #category : 'accessing - model' }
@@ -76,6 +96,12 @@ StSettingPresenterItem >> setterPresenter [
 StSettingPresenterItem >> setterPresenter: anObject [
 
 	setterPresenter := anObject
+]
+
+{ #category : 'accessing' }
+StSettingPresenterItem >> settingStyle [
+
+	^ self subclassResponsibility
 ]
 
 { #category : 'accessing' }

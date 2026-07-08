@@ -13,16 +13,16 @@ Class {
 StRewriterPatternMatcher class >> parseCodeAST: code isForMethod: isForMethod [
 
 	^ isForMethod
-		ifTrue: [ RBParser parseMethod: code ]
-		ifFalse: [ RBParser parseExpression: code ]
+		ifTrue: [ OCParser parseMethod: code ]
+		ifFalse: [ OCParser parseExpression: code ]
 ]
 
 { #category : 'parsing' }
 StRewriterPatternMatcher class >> parsePatternAST: lhs isForMethod: isForMethod [
 
 	^ isForMethod
-		ifTrue: [ RBPatternParser parseMethod: lhs ]
-		ifFalse: [ RBPatternParser parseExpression: lhs ]
+		ifTrue: [ OCPatternParser parseMethod: lhs ]
+		ifFalse: [ OCPatternParser parseExpression: lhs ]
 ]
 
 { #category : 'parsing' }

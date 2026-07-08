@@ -1,9 +1,9 @@
 Extension { #name : 'Float' }
 
 { #category : '*NewTools-SettingsBrowser' }
-Float >> asSettingPresenter: aSettingDeclaration [ 
+Float >> asSettingPresenter: aSettingDeclaration owner: aPresenter [ 
 
-	^ (StSettingNumberPresenterItem on: aSettingDeclaration)
+	^ (aPresenter instantiate: StSettingNumberPresenterItem on: aSettingDeclaration)
 		beFloat;
 		value: self;
 		yourself

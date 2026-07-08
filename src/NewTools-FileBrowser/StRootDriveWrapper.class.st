@@ -22,7 +22,7 @@ StRootDriveWrapper >> directories [
 	^ [ (fileReference basename , '\') asFileReference directories ]
 		  on: FileSystemError
 		  do: [
-			  UIManager default inform: 'Missing permissions on ' , fileReference basename.
+			  StPharoApplication current inform: 'Missing permissions on ' , fileReference basename.
 			  #(  ) ]
 ]
 

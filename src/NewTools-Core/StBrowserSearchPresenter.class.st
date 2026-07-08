@@ -17,6 +17,12 @@ Class {
 	#tag : 'Calypso'
 }
 
+{ #category : 'accessing' }
+StBrowserSearchPresenter class >> defaultPreferredExtent [
+
+	^ 400@500
+]
+
 { #category : 'examples' }
 StBrowserSearchPresenter class >> exampleConfiguringPresenter [
 	<example>
@@ -68,6 +74,18 @@ StBrowserSearchPresenter >> defaultLayout [
 		  add: searchField expand: false;
 		  add: searchOptions expand: false;
 		  yourself
+]
+
+{ #category : 'api' }
+StBrowserSearchPresenter >> display: aBlock [
+
+	itemsList display: aBlock
+]
+
+{ #category : 'api' }
+StBrowserSearchPresenter >> displayOf: anItem [
+
+	^ itemsList display value: anItem
 ]
 
 { #category : 'initialization' }
@@ -145,9 +163,7 @@ StBrowserSearchPresenter >> search: text [
 	"Main search callback method. Answer a <Collection> of results"
 
 	^ OrderedCollection streamContents: [ :stream |
-		  items do: [ :class |
-			  (self selectBlock value: class name value: text)  
-					ifTrue: [ stream nextPut: class ] ] ]
+		  items do: [ :item | (self selectBlock value: (self displayOf: item) value: text) ifTrue: [ stream nextPut: item ] ] ]
 ]
 
 { #category : 'instance creation' }
@@ -185,7 +201,7 @@ StBrowserSearchPresenter >> searchValue: aString [
 { #category : 'api' }
 StBrowserSearchPresenter >> searchWithItem: anItem [
 
-	self searchValue: (itemsList display value: anItem)
+	self searchValue: (self displayOf: anItem)
 ]
 
 { #category : 'updating' }

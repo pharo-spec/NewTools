@@ -38,11 +38,6 @@ EpReferenceFixerVisitor >> visitEvent: anEvent [
 ]
 
 { #category : 'visitor' }
-EpReferenceFixerVisitor >> visitLogCommentModification: anEvent [
-	^ anEvent copyWithEntryReferences: referencesMap values
-]
-
-{ #category : 'visitor' }
 EpReferenceFixerVisitor >> visitRedo: aRedoEvent [
 	^ aRedoEvent copyWithEntryReferences: referencesMap values
 ]

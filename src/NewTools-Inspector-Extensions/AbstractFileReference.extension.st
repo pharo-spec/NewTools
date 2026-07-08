@@ -116,8 +116,8 @@ AbstractFileReference >> inspectionItems: aBuilder [
 				   width: 300;
 				   addColumn: ((SpImageTableColumn evaluated: [ :each |
 								     each isDirectory
-									     ifTrue: [ self iconNamed: #folder ]
-									     ifFalse: [ self iconNamed: #browse ] ])
+									     ifTrue: [ aBuilder application  iconNamed: #folder ]
+									     ifFalse: [ aBuilder application  iconNamed: #browse ] ])
 						    beNotExpandable;
 						    yourself);
 				   addColumn: (SpStringTableColumn evaluated: [ :each |
@@ -173,6 +173,7 @@ AbstractFileReference >> inspectionPng: aBuilder [
 	<inspectorPresentationOrder: 0 title: 'Picture'>
 	
 	^ aBuilder newImage
+		autoScale: true;
 		image: (self binaryReadStreamDo: [ :stream | PNGReadWriter formFromStream: stream ]);
 		yourself
 ]

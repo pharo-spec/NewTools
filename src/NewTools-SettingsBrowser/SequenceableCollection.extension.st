@@ -1,9 +1,9 @@
 Extension { #name : 'SequenceableCollection' }
 
 { #category : '*NewTools-SettingsBrowser' }
-SequenceableCollection >> asSettingPresenter: aSettingDeclaration [ 
+SequenceableCollection >> asSettingPresenter: aSettingDeclaration owner: aPresenter [
 
-	^ (StSettingDropListPresenterItem on: aSettingDeclaration)
+	^ (aPresenter instantiate: StSettingDropListPresenterItem on: aSettingDeclaration)
 		value: self;
 		yourself
 ]

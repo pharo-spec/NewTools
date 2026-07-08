@@ -20,8 +20,9 @@ Class {
 	#classVars : [
 		'Default'
 	],
-	#category : 'NewTools-Transcript',
-	#package : 'NewTools-Transcript'
+	#category : 'NewTools-Transcript-Base',
+	#package : 'NewTools-Transcript',
+	#tag : 'Base'
 }
 
 { #category : 'private - test support' }
@@ -103,12 +104,15 @@ StThreadSafeTranscript >> allocateRecordings: size [
 { #category : 'private - actions' }
 StThreadSafeTranscript >> announce: aString [
 
-	self worker schedule: [
-		SystemAnnouncer uniqueInstance 
-			announce: (
-				NewEntryToTranscript new 
-				entry: aString;
-				yourself ) ]
+	self scheduleAnnouncement: (NewEntryToTranscript new
+			 entry: aString;
+			 yourself)
+]
+
+{ #category : 'private - actions' }
+StThreadSafeTranscript >> announceClearing [
+
+	self scheduleAnnouncement: ClearTranscript new
 ]
 
 { #category : 'accessing' }
@@ -116,7 +120,9 @@ StThreadSafeTranscript >> clear [
 
 	self critical: [
 		self allocateRecordings: maxEntry.
-		index := 0 ]
+		index := 0.
+		self announceClearing ]
+	
 ]
 
 { #category : 'compatibility' }
@@ -212,6 +218,13 @@ StThreadSafeTranscript >> open [
 StThreadSafeTranscript >> reset [
 
 	^ self clear
+]
+
+{ #category : 'private - actions' }
+StThreadSafeTranscript >> scheduleAnnouncement: anAnnouncement [
+
+	self worker schedule: [
+		SystemAnnouncer uniqueInstance announce: anAnnouncement ]
 ]
 
 { #category : 'compatibility' }

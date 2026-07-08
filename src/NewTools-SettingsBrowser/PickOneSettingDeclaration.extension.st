@@ -1,9 +1,9 @@
 Extension { #name : 'PickOneSettingDeclaration' }
 
 { #category : '*NewTools-SettingsBrowser' }
-PickOneSettingDeclaration >> asSettingPresenter [
+PickOneSettingDeclaration >> asSettingPresenterWithOwner: aPresenter [
 	"Answer an appropriate <SpPresenter> container for the receiver's value"
 
-	^ StSettingDropListPresenterItem on: self
+	^ aPresenter instantiate: StSettingDropListPresenterItem on: self
 
 ]

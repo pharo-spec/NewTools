@@ -32,7 +32,7 @@ StInspectorModel class >> on: anObject [
 ]
 
 { #category : 'accessing' }
-StInspectorModel >> allInspectorNodes [
+StInspectorModel >> allModelInspectorNodes [
 
 	^ self inspectedObject allInspectorNodes
 ]

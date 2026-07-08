@@ -17,17 +17,11 @@ Class {
 StMethodFinder >> findMethodsByExampleInput: inputCollection andExpectedResult: expectedResult timeout: anInteger [
 	"Search for methods which giving each elements of input returns the corresponding elements of outputs."
 	
-	| evaluationSelector |
-
-	evaluationSelector := anInteger = 0
-		ifTrue: [ #resultIn: ]
-		ifFalse: [ #resultIn:timeout: ].
 	^ (self possibleSolutionsForInput: inputCollection) asSet select: [ :send |
 		  send 
-				perform: evaluationSelector 
-				withArguments: { 
-					(expectedResult evaluateWithTimeOut: anInteger) .
-					anInteger } ]
+				resultIn: 	(expectedResult evaluateWithTimeOut: anInteger) 
+				timeout: anInteger ]
+				
 ]
 
 { #category : 'public access' }
@@ -47,11 +41,11 @@ StMethodFinder >> possibleSolutionsForInput: inputCollection [
 		args := permutation allButFirst.
 		receiver := permutation first.
 		foundPermutationSends := 
-			(receiver evaluate class allSelectorsToTestInMethodFinderWithArity: inputCollection size - 1) collect: [ : method |
+			(receiver evaluate class allSelectorsToTestInMethodFinderWithArity: inputCollection size - 1) collect: [ :method |
 			                         self methodFinderSendClass
 				                         receiver: receiver evaluate
 				                         selector: method
-				                         withArguments: (args collect: #evaluate) ].
+				                         withArguments: (args collect: [:each | each evaluate] ) ].
 		sends addAll: foundPermutationSends ].
 	^ sends
 ]

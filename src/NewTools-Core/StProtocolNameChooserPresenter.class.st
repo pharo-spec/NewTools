@@ -18,7 +18,9 @@ Class {
 		'suggestionList',
 		'protocolNameField',
 		'concernedClass',
-		'selectedProtocolName'
+		'selectedProtocolName',
+		'addProtocolButtonPresenter',
+		'chooseButtonPresenter'
 	],
 	#category : 'NewTools-Core-Calypso',
 	#package : 'NewTools-Core',
@@ -75,7 +77,9 @@ StProtocolNameChooserPresenter >> connectPresenters [
 	protocolNameField whenTextChangedDo: [ self updatePresenter ].
 	protocolNameField whenSubmitDo: [ :aString | self doAcceptFromTextInput  ].
 	
-	suggestionList whenActivatedDo: [ self doAcceptFromList ]
+	suggestionList 
+		whenSelectionChangedDo: [ self updateChooseButtonPresenter ];
+		whenActivatedDo: [ self doAcceptFromList ]
 ]
 
 { #category : 'layout' }
@@ -86,7 +90,8 @@ StProtocolNameChooserPresenter >> defaultLayout [
 		add: suggestionList;
 		add: (SpBoxLayout newLeftToRight
 				spacing: 3;
-				add: protocolNameField expand: true;
+				add: protocolNameField;
+				add: addProtocolButtonPresenter expand: false;
 				yourself)
 			expand: false;
 		yourself
@@ -102,15 +107,27 @@ StProtocolNameChooserPresenter >> doAcceptFromList [
 { #category : 'private - actions' }
 StProtocolNameChooserPresenter >> doAcceptFromTextInput [
 	
-	selectedProtocolName := protocolNameField text.
+	selectedProtocolName := protocolNameField text trimRight.
 	self withWindowDo: [ :w | w beOk; close ]
 ]
 
 { #category : 'initialization' }
 StProtocolNameChooserPresenter >> initializeDialogWindow: aDialogWindowPresenter [
-
-	super initializeDialogWindow: aDialogWindowPresenter.
-	aDialogWindowPresenter okAction: [ self doAcceptFromTextInput ]
+	aDialogWindowPresenter 
+		addButton: 'Cancel' 
+		do: [ :presenter | 
+			presenter triggerCancelAction.
+			presenter close ].
+			
+	chooseButtonPresenter := aDialogWindowPresenter
+		addDefaultButton: 'Choose' 
+		do: [ :presenter | 
+			presenter triggerOkAction.
+			presenter beOk.
+			suggestionList selectedItem
+				ifNotNil: [ self doAcceptFromList ]
+				ifNil: [ self doAcceptFromTextInput ].
+			presenter close ]
 ]
 
 { #category : 'initialization' }
@@ -122,6 +139,12 @@ StProtocolNameChooserPresenter >> initializePresenters [
 
 	protocolNameField := self newTextInput.
 	protocolNameField placeholder: 'Protocol name (e.g. accessing)'.
+	addProtocolButtonPresenter := self newButton
+		addStyle: 'small';
+		icon: (self iconNamed: 'add');
+		help: 'Add new protocol and select it';
+		action: [ self doAcceptFromTextInput ];
+		yourself.
 
 	self initializeProtocolNameField
 ]
@@ -152,7 +175,10 @@ StProtocolNameChooserPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter title: 'New protocol name'.
-	aWindowPresenter whenOpenedDo: [ protocolNameField takeKeyboardFocus ]
+	aWindowPresenter whenOpenedDo: [ 
+		self updateChooseButtonPresenter.
+		self updateAddProtocolButtonPresenter.
+		protocolNameField takeKeyboardFocus ]
 ]
 
 { #category : 'private - accessing' }
@@ -183,14 +209,14 @@ StProtocolNameChooserPresenter >> protocolsToSuggest [
 	^ suggestedProtocols
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'initialization' }
 StProtocolNameChooserPresenter >> requestProtocolName [
 	"See comment of StProtocolNameChooser class>>#requestProtocolNameConfiguring:"
 
 	^ self requestProtocolNameConfiguring: [ :presenter :dialog |  ]
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'initialization' }
 StProtocolNameChooserPresenter >> requestProtocolNameConfiguring: aBlock [
 	"I request a protocol name through a dialog and signal a CmdCommandAborted in case the provided protocol is empty or an extension name.
 	I allow the user to configure the presenter or the dialog via a configuration block."
@@ -230,8 +256,25 @@ StProtocolNameChooserPresenter >> selectedProtocolName [
 ]
 
 { #category : 'initialization' }
+StProtocolNameChooserPresenter >> updateAddProtocolButtonPresenter [
+
+	addProtocolButtonPresenter enabled: self protocolName isNotEmpty
+]
+
+{ #category : 'initialization' }
+StProtocolNameChooserPresenter >> updateChooseButtonPresenter [
+
+	"not in a modal window -> exit"
+	chooseButtonPresenter ifNil: [ ^ self ].
+	
+	chooseButtonPresenter enabled: (self selectedItem isNotNil or: [ self protocolName isNotEmpty ])
+]
+
+{ #category : 'initialization' }
 StProtocolNameChooserPresenter >> updatePresenter [
 
-	suggestionList
-		items: self protocolsToSuggest
+	suggestionList items: self protocolsToSuggest.
+	
+	self updateAddProtocolButtonPresenter.
+	self updateChooseButtonPresenter.
 ]

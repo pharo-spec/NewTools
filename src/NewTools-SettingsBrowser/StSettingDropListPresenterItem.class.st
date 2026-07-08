@@ -15,7 +15,14 @@ StSettingDropListPresenterItem >> initializePresenters [
 		selectIndex: self model index;
 		whenSelectedItemChangedDo: [ :item | self updateSetting: item ];
 		yourself.
-	super initializePresenters.
+		
+	super initializePresenters
+]
+
+{ #category : 'accessing' }
+StSettingDropListPresenterItem >> settingStyle [
+
+	^ 'itemDropList'
 ]
 
 { #category : 'initialization' }

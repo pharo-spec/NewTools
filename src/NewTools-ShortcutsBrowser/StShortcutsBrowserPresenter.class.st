@@ -39,7 +39,7 @@ StShortcutsBrowserPresenter class >> menuCommandOn: aBuilder [
 	(aBuilder item: 'Shortcuts Browser')
 		action: [ self open ];
 		order: 34;
-		parent: #Tools;
+		parent: #SystemTools;
 		icon: self icon;
 		help: self descriptionText
 ]

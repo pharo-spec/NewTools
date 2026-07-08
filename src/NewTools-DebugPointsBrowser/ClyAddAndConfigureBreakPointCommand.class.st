@@ -17,8 +17,7 @@ ClyAddAndConfigureBreakPointCommand >> defaultMenuIconName [
 { #category : 'accessing' }
 ClyAddAndConfigureBreakPointCommand >> defaultMenuItemName [
 
-	^ ' Add Breakpoint to: ' , sourceNode displaySourceCode
-	  , 'and configure it'
+	^ String streamContents: [ :stream | stream << 'Configure Breakpoint on "' << sourceNode displaySourceCode << '"' ]
 ]
 
 { #category : 'execution' }

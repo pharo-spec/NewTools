@@ -127,14 +127,15 @@ StDebuggerTest >> tearDown [
 			actionModel clear.
 			actionModel session ifNotNil: [ :s | s clear ] ] ].
 
-	StTestDebuggerProvider removeSelector: #foobar.
+	(StTestDebuggerProvider includesSelector: #foobar)
+		ifTrue: [ StTestDebuggerProvider removeSelector: #foobar ].
+
 	StDebuggerObjectForTests
 		compile:
 		'haltingMethod <haltOrBreakpointForTesting> self halt. ^self'
 		classified: 'util'.
 
 	StDebuggerClientModel shouldFilterStack: shouldFilterStack.
-	StTestDebuggerProvider removeSelector: #foobar.
 	oldMethodToSourceDictionary	associationsDo: [ :assoc |
 		assoc key methodClass
 			compile: assoc value
@@ -389,7 +390,7 @@ StDebuggerTest >> testContextTempVarListUpdatesAfterRestartingContext [
 { #category : 'tests - context inspector' }
 StDebuggerTest >> testContextTempVarListUpdatesTempsWhenEnteringOrLeavingInlinedBlocks [
 
-	| contextItems inspectorTable newContextItems |
+	| contextItems inspectorTable newContextItems parent |
 	dbg := self debuggerOn: session.
 	inspectorTable := dbg inspector getRawInspectorPresenterOrNil
 		                  attributeTable.
@@ -416,8 +417,11 @@ StDebuggerTest >> testContextTempVarListUpdatesTempsWhenEnteringOrLeavingInlined
 	self assert: (newContextItems at: 9) isTempVariable.
 	self assert: (newContextItems at: 9) tempName equals: 'j'.
 
-	"We leave inlined block"
-	2 timesRepeat: [ dbg stepOver ].
+	"We leave inlined block.
+	Iterate until the lexical context changes"
+	parent := dbg currentContext sourceNodeExecuted methodOrBlockNode.
+	[dbg currentContext sourceNodeExecuted methodOrBlockNode == parent]
+		whileTrue: [ dbg stepOver ].
 
 	self assert: newContextItems size equals: 8.
 	1 to: 8 do: [ :i |
@@ -493,18 +497,16 @@ StDebuggerTest >> testContextUnchangedAfterStepOver [
 
 { #category : 'tests - actions' }
 StDebuggerTest >> testCopyStackToClipboard [
+
 	debugger := self debuggerOn: session.
 	debugger copyStackToClipboard.
-	self
-		assert: Clipboard clipboardText string
-		equals: (String streamContents: [ :s | 
-				 session interruptedContext shortDebugStackOn: s ])
+	self assert: Clipboard clipboardText string equals: session interruptedContext stackTraceString
 ]
 
 { #category : 'tests' }
 StDebuggerTest >> testCreateMissingMethodWithUnfilteredStackUpdatesCodePane [
 
-	| dnuMessage method pcRangeForContext segments highlightSegment adapter |
+	| dnuMessage method pcRangeForContext segments highlightSegment adapter exception |
 	StDebuggerClientModel shouldFilterStack: false.
 	debugger := StTestDebuggerProvider new debuggerWithDNUContext.
 	debugger
@@ -516,16 +518,17 @@ StDebuggerTest >> testCreateMissingMethodWithUnfilteredStackUpdatesCodePane [
 	debugger code adapter buildWidget.
 	self assert:
 		debugger debuggerClientModel isInterruptedContextDoesNotUnderstand.
+	
+	exception := debugger debuggerClientModel contextPredicate exception.
 	self
-		assert: debugger interruptedContext receiver class
+		assert: exception receiver class
 		identicalTo: StTestDebuggerProvider.
-	dnuMessage := debugger debuggerClientModel contextPredicate exception
-		              message.
+	dnuMessage := exception message.
 
 	self assert: dnuMessage selector identicalTo: #foobar.
 
 	"stack is unfiltered. So the text shown should be the code from the DNU"
-	self assert: (debugger code text beginsWith: 'doesNotUnderstand:').
+	self assert: debugger code text equals: exception signalerContext method sourceCode.
 
 	"we create the missing method #foobar"
 	debugger implementMissingMethod.
@@ -872,6 +875,39 @@ StDebuggerTest >> testPrintReceiverClassInContext [
 	stream := WriteStream on: String new.
 	StContextPrinter printReceiverClassInContext: ctx on: stream.
 	self assert: stream contents equals: 'Set'.
+]
+
+{ #category : 'tests - context inspector' }
+StDebuggerTest >> testPrintingOutsideVariableInCleanBlockShouldGiveAnError [
+
+	| mySession searchedMethod ctx myProcess codePresenter varStart varSize errorDetected |
+	
+	searchedMethod := ((StClassUsingCleanBlockForTest >> #boom) literalAt: 2) method.
+	errorDetected := false.
+
+	ctx := [ StClassUsingCleanBlockForTest new boom ] asContext.
+	[ ctx method = searchedMethod ] whileFalse: [ctx := ctx step ].
+
+	myProcess := Process forContext: ctx priority: 40.
+	
+	mySession := DebugSession named: 'MySession' on: myProcess startedAt: ctx.
+	mySession exception: (OupsNullException fromSignallerContext: ctx).
+	
+	debugger := self debuggerOn: mySession.
+	codePresenter := debugger code.
+	
+	varStart := codePresenter text indexOfSubCollection: 'myVar'.
+	varSize := 'myVar' size.
+	codePresenter selectionInterval: (varStart to: varStart + varSize).
+	
+	codePresenter interactionModel beNonInteractive.
+	codePresenter announcer when: SpCodeEvaluationFailedAnnouncement do: [ errorDetected:= true ] for: nil.
+	
+	"We simulate the inspect of a variable that is outside the block. Check the method StClassUsingCleanBlockForTest >> #boom "
+	(SpCodeInspectItCommand forSpecContext: codePresenter) execute.
+	
+	self assert: errorDetected
+
 ]
 
 { #category : 'tests - receiver inspector' }

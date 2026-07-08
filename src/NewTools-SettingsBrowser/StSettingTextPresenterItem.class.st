@@ -20,6 +20,12 @@ StSettingTextPresenterItem >> initializePresenters [
 ]
 
 { #category : 'accessing' }
+StSettingTextPresenterItem >> settingStyle [
+
+	^ 'itemText'
+]
+
+{ #category : 'accessing' }
 StSettingTextPresenterItem >> value: aString [ 
 	"Set the receiver's value to aString"
 

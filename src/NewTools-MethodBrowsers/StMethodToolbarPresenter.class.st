@@ -15,7 +15,10 @@ Class {
 		'versionButton',
 		'dropList',
 		'toolbarPresenter',
-		'messageList'
+		'messageList',
+		'runTestsButton',
+		'historyButton',
+		'copyButton'
 	],
 	#category : 'NewTools-MethodBrowsers-Base',
 	#package : 'NewTools-MethodBrowsers',
@@ -62,6 +65,12 @@ StMethodToolbarPresenter >> defaultLayout [
 ]
 
 { #category : 'private - actions' }
+StMethodToolbarPresenter >> doBrowseHistory [
+
+	messageList doBrowseHistory
+]
+
+{ #category : 'private - actions' }
 StMethodToolbarPresenter >> doBrowseImplementors [
 
 	messageList doBrowseImplementors
@@ -91,6 +100,18 @@ StMethodToolbarPresenter >> doBrowseVersions [
 	messageList doBrowseVersions
 ]
 
+{ #category : 'private - actions' }
+StMethodToolbarPresenter >> doCopy [
+
+	messageList doCopy
+]
+
+{ #category : 'private - actions' }
+StMethodToolbarPresenter >> doRunTests [
+
+	messageList doRunTests
+]
+
 { #category : 'accessing' }
 StMethodToolbarPresenter >> emptyDropList [
 	
@@ -101,44 +122,63 @@ StMethodToolbarPresenter >> emptyDropList [
 StMethodToolbarPresenter >> initializePresenters [
 
 	(browseButton := self newToolbarButton)
-		label: 'Browse'; 
+		label: 'Browse';
 		icon: (self iconNamed: #smallSystemBrowser);
 		help: 'Browse current selected method';
 		action: [ self doBrowseMethod ].
-	(usersButton := self newToolbarButton) 
-		label: 'References'; 
+	(usersButton := self newToolbarButton)
+		label: 'References';
 		icon: (self iconNamed: #smallFind);
 		help: 'Browse references of current selected class';
 		action: [ self doBrowseUsers ].
-	(sendersButton := self newToolbarButton) 
-		label: 'Senders'; 
+	(sendersButton := self newToolbarButton)
+		label: 'Senders';
 		icon: (self iconNamed: #smallFind);
 		help: 'Browse senders of current selected method';
 		action: [ self doBrowseSenders ].
-	(implementorsButton := self newToolbarButton) 
-		label: 'Implementors'; 
+	(implementorsButton := self newToolbarButton)
+		label: 'Implementors';
 		icon: (self iconNamed: #smallFind);
 		help: 'Browse implementors of current selected method';
 		action: [ self doBrowseImplementors ].
-	(versionButton := self newToolbarButton) 
-		label: 'Versions'; 
+	(versionButton := self newToolbarButton)
+		label: 'Versions';
 		icon: (self iconNamed: #history);
 		help: 'Browse versions of current selected method';
 		action: [ self doBrowseVersions ].
-		
- 	toolbarPresenter := self newToolbar
-		displayMode: self application toolbarDisplayMode;
-		add: browseButton;
-		add: usersButton;
-		add: sendersButton;
-		add: implementorsButton;
-		add: versionButton;
-		yourself.
-		
+
+	(runTestsButton := self newToolbarButton)
+		label: 'Run Tests';
+		icon: (self iconNamed: #testGreen);
+		help: 'Run all test methods in the list';
+		action: [ self doRunTests ].
+	(historyButton := self newToolbarButton)
+		label: 'Commit history';
+		icon: (self iconNamed: #komitterSmalltalkhubRemote);
+		help: 'Browse commit history';
+		action: [ self doBrowseHistory ].
+	(copyButton := self newToolbarButton)
+		label: 'Copy to clipboard';
+		icon: (self iconNamed: #smallCopy);
+		help: 'Copy selected methods into Clipboard as class>>selector';
+		action: [ self doCopy ].
+
+	toolbarPresenter := self newToolbar
+		                    displayMode: self application toolbarDisplayMode;
+		                    add: browseButton;
+		                    add: usersButton;
+		                    add: sendersButton;
+		                    add: implementorsButton;
+		                    add: versionButton;
+		                    add: historyButton;
+		                    add: copyButton;
+		                    add: runTestsButton;
+		                    yourself.
+
 	dropList := self newDropList
-		display: [ :item | item label ];
-		whenSelectedItemChangedDo: [ :item | item value ];
-		yourself
+		            display: [ :item | item label ];
+		            whenSelectedItemChangedDo: [ :item | item value ];
+		            yourself
 ]
 
 { #category : 'accessing' }

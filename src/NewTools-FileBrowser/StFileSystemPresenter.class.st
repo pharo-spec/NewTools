@@ -111,12 +111,12 @@ StFileSystemPresenter >> connectPresenters [
 StFileSystemPresenter >> defaultLayout [
 
 	^ SpPanedLayout newLeftToRight
-			positionOfSlider: 0.2;
+			positionOfSlider: 200;
 			add: (SpPanedLayout newTopToBottom
-				positionOfSlider: 300;		
-				add: treeNavigationSystem;
-				add: bookmarksTreeTable;
-				yourself);			
+				positionOfSlider: 300;
+					add: treeNavigationSystem;
+					add: bookmarksTreeTable;
+					yourself);
 			add: fileNavigationSystem;
 			yourself
 ]

@@ -34,10 +34,10 @@ StSettingNode >> allChildren [
 ]
 
 { #category : 'converting' }
-StSettingNode >> asPresenter [
+StSettingNode >> asPresenterOn: aPresenter [
 	"Answer a <SpPresenter> for the receiver's setting type"
 
-	^ self declaration asSettingPresenter
+	^ self declaration asSettingPresenterWithOwner: aPresenter
 ]
 
 { #category : 'checking' }
@@ -130,6 +130,12 @@ StSettingNode >> label: aString [
 ]
 
 { #category : 'accessing' }
+StSettingNode >> level [
+
+	^ self path size
+]
+
+{ #category : 'accessing' }
 StSettingNode >> matchBlock [
 
 	^ matchBlock
@@ -176,7 +182,7 @@ StSettingNode >> name [
 { #category : 'accessing' }
 StSettingNode >> order [
 
-	^ self declaration order
+	^ self declaration order ifNil: [ 1 ]
 ]
 
 { #category : 'accessing' }
@@ -199,6 +205,14 @@ StSettingNode >> parentName: aSymbol [
 StSettingNode >> parentNode [
 
 	^ self model nodeNamed: self parentName
+]
+
+{ #category : 'accessing' }
+StSettingNode >> path [
+
+	^ self hasParent 
+		ifTrue: [ self parentNode path, { self } ]
+		ifFalse: [ { self } ]
 ]
 
 { #category : 'accessing' }

@@ -35,6 +35,7 @@ StPlaygroundInteractionModel >> addBindings: aCollection [
 
 { #category : 'binding' }
 StPlaygroundInteractionModel >> addBindingsByDictionary: aDictionary [
+
 	aDictionary keysAndValuesDo: [ :key :value | self addBinding: (WorkspaceVariable key: key value: value) ].
 
 ]
@@ -77,11 +78,6 @@ StPlaygroundInteractionModel >> bindings [
 		do: [ :each | joinedBindings add: each ].
 
 	^ joinedBindings
-]
-
-{ #category : 'interactive error protocol' }
-StPlaygroundInteractionModel >> correctFrom: start to: stop with: aString [ 
-	self owner adapter widget correctFrom: start to: stop with: aString 
 ]
 
 { #category : 'binding' }

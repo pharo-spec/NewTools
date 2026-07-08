@@ -17,8 +17,9 @@ Class {
 		'waitingEntries',
 		'keepServiceAliveStep'
 	],
-	#category : 'NewTools-Transcript',
-	#package : 'NewTools-Transcript'
+	#category : 'NewTools-Transcript-Base',
+	#package : 'NewTools-Transcript',
+	#tag : 'Base'
 }
 
 { #category : 'accessing' }
@@ -247,9 +248,8 @@ StTranscriptPresenter >> processEntries [
 StTranscriptPresenter >> registerToAnnouncer [
 
 	SystemAnnouncer uniqueInstance
-		when: NewEntryToTranscript
-		send: #updateNewEntry: 
-		to: self
+		when: NewEntryToTranscript send: #updateNewEntry: to: self;
+		when: ClearTranscript send: #clear to: self
 ]
 
 { #category : 'actions' }
