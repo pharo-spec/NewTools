@@ -245,16 +245,14 @@ StProfilerResultsPresenter >> newConfigurationSectionLayout [
 				   width: 100;
 				   yourself);
 		  add: (SpBoxLayout newLeftToRight
-				   add: (self newLabel label: 'Hide nodes under: ') width: 125;
-				   add: (thresholdFilterInput := self newThresholdFilterInput)
-				   width: 55;
-				   add: (self newLabel label: '%') width: 25;
+				   add: 'Hide nodes under: ' width: 125;
+				   add: (thresholdFilterInput := self newThresholdFilterInput) width: 55;
+				   add: '%' width: 25;
 				   yourself);
 		  add: (SpBoxLayout newLeftToRight
-				   add: (self newLabel label: 'Expand nodes over: ') width: 125;
-				   add: (thresholdExpandInput := self newThresholdExpandInput)
-				   width: 55;
-				   add: (self newLabel label: '%') width: 25;
+				   add: 'Expand nodes over: ' width: 125;
+				   add: (thresholdExpandInput := self newThresholdExpandInput) width: 55;
+				   add: '%' width: 25;
 				   yourself);
 		  yourself
 ]
