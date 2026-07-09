@@ -3,7 +3,7 @@ I am a graphical user interface for profiling code using both AndreasProfiler an
 "
 Class {
 	#name : 'StProfilerPresenter',
-	#superclass : 'SpPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'inputPresenter',
 		'resultsPresenter',
@@ -34,7 +34,7 @@ StProfilerPresenter class >> menuCommandOn: aBuilder [
 StProfilerPresenter class >> open [
 
 	<example>
-	^ (self newApplication: StPharoApplication current) open
+	^ self new open
 ]
 
 { #category : 'spying' }

@@ -3,7 +3,7 @@ I am a panel in the ProfilerPresenter containing the profiling process results t
 "
 Class {
 	#name : 'StProfilerResultsPresenter',
-	#superclass : 'SpPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'treeTable',
 		'viewModel',
