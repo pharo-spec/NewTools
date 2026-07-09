@@ -37,6 +37,44 @@ StProfilerResultsPresenter >> connectPresenters [
 	treeDropList whenSelectedItemChangedDo: [ :item | viewModel showLeavesOnly: item value ]
 ]
 
+{ #category : 'layout' }
+StProfilerResultsPresenter >> defaultLayout [
+
+	^ SpPanedLayout newTopToBottom
+		  positionOfSlider: 50 percent;
+		  add: (SpBoxLayout newTopToBottom
+				   add: navigationToolbar expand: false;
+				   add: treeTable;
+				   yourself);
+		  add: (SpBoxLayout newTopToBottom
+				   add: (SpBoxLayout newTopToBottom
+						    add: (SpBoxLayout newLeftToRight
+								     add: treeDropList;
+								     add: expandAllButton expand: false;
+								     add: collapseAllButton expand: false;
+								     yourself);
+						    add: (SpBoxLayout newLeftToRight
+								     add: 'Hide nodes under (%): ' expand: false;
+								     add: thresholdFilterInput width: 55;
+								     add: 'Expand nodes over (%): ' expand: false;
+								     add: thresholdExpandInput width: 55;
+								     yourself);
+						    yourself)
+				   expand: false;
+				   add: codePresenter;
+				   add: (SpBoxLayout newLeftToRight
+						    add: reportButton withConstraints: [ :constraints |
+								    constraints
+									    bePlacedAtStart;
+									    fill: true;
+									    expand: false ];
+						    addLast: showAsRootButton;
+						    addLast: browseButton)
+				   expand: false;
+				   yourself);
+		  yourself
+]
+
 { #category : 'private' }
 StProfilerResultsPresenter >> doItNode [
 
@@ -176,13 +214,26 @@ StProfilerResultsPresenter >> initializeActions [
 { #category : 'initialization' }
 StProfilerResultsPresenter >> initializePresenters [
 
-	| h |
+	super initializePresenters.
 	navigationToolbar := self instantiate: StProfilerToolbarPresenter.
 	treeTable := self instantiate: StProfilerTreeTablePresenter on: viewModel.
 	codePresenter := self newCode.
 	reportButton := self newButton.
 	showAsRootButton := self newButton.
 	browseButton := self newButton.
+	treeDropList := self newTreeVisualizationDropList.
+	expandAllButton := self newButton.
+	collapseAllButton := self newButton.
+	thresholdFilterInput := self newThresholdFilterInput.
+	thresholdExpandInput := self newThresholdExpandInput.
+
+	collapseAllButton
+		label: 'Collapse All';
+		icon: (self iconNamed: #windowMinimize).
+
+	expandAllButton
+		label: 'Expand All';
+		icon: (self iconNamed: #windowMenu).
 
 	codePresenter beNotEditable.
 
@@ -203,53 +254,7 @@ StProfilerResultsPresenter >> initializePresenters [
 		disable;
 		action: [ treeTable selectedItem browseItem ].
 
-
-	self layout: (SpPanedLayout newTopToBottom
-			 positionOfSlider: 50 percent;
-			 add: (SpBoxLayout newTopToBottom
-					  add: navigationToolbar expand: false;
-					  add: treeTable;
-					  yourself);
-			 add: (SpBoxLayout newTopToBottom
-					  add: self newConfigurationSectionLayout expand: false;
-					  add: codePresenter;
-					  add: (SpBoxLayout newLeftToRight
-							   add: reportButton withConstraints: [ :constraints |
-									   constraints
-										   bePlacedAtStart;
-										   fill: true;
-										   expand: false ];
-							   addLast: showAsRootButton;
-							   addLast: browseButton)
-					  expand: false;
-					  yourself);
-			 yourself).
-
 	self initializeActions
-]
-
-{ #category : 'private - factory' }
-StProfilerResultsPresenter >> newConfigurationSectionLayout [
-
-	^ SpBoxLayout newTopToBottom
-		  add: (SpBoxLayout newLeftToRight
-				   add: (treeDropList := self newTreeVisualizationDropList);
-				   add: (expandAllButton := self newButton
-						                       label: 'Expand All';
-						                       icon: (self iconNamed: #windowMenu))
-				   expand: false;
-				   add: (collapseAllButton := self newButton
-						                         label: 'Collapse All';
-						                         icon: (self iconNamed: #windowMinimize))
-				   expand: false;
-				   yourself);
-		  add: (SpBoxLayout newLeftToRight
-				   add: 'Hide nodes under (%): ' expand: false;
-				   add: (thresholdFilterInput := self newThresholdFilterInput) width: 55;
-				   add: 'Expand nodes over (%): ' expand: false;
-				   add: (thresholdExpandInput := self newThresholdExpandInput) width: 55;
-				   yourself);
-		  yourself
 ]
 
 { #category : 'private - factory' }
