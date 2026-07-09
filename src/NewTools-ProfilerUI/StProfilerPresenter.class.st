@@ -145,7 +145,7 @@ StProfilerPresenter >> viewModel [
 	^ viewModel ifNil: [ viewModel := StProfilerModel new ]
 ]
 
-{ #category : 'constants' }
+{ #category : 'accessing' }
 StProfilerPresenter >> windowTitle [
 	^ 'Profiler'
 ]

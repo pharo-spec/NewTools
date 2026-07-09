@@ -10,6 +10,17 @@ Class {
 }
 
 { #category : 'initialization' }
+StProfilerNumberInput >> connectPresenters [
+
+	super connectPresenters.
+
+	self eventHandler
+		whenFocusLostDo: [ "if text is not a number, set to zero" self text asInteger ifNil: [ self number: 0 ] ];
+		whenFocusReceivedDo: [ self selectAll ];
+		whenMouseDownDo: [ :evt | self selectAll ]
+]
+
+{ #category : 'initialization' }
 StProfilerNumberInput >> initialize [
 
 	super initialize.
@@ -19,15 +30,4 @@ StProfilerNumberInput >> initialize [
 		climbRate: 0.5;
 		minimum: 0;
 		maximum: 100
-]
-
-{ #category : 'initialization' }
-StProfilerNumberInput >> initializePresenters [
-
-	self eventHandler
-		whenFocusLostDo: [
-			"if text is not a number, set to zero"
-			self text asInteger ifNil: [ self number: 0 ] ];
-		whenFocusReceivedDo: [ self selectAll ];
-		whenMouseDownDo: [ :evt | self selectAll ]
 ]
