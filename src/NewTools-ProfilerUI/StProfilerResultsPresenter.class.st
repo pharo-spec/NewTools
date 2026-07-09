@@ -90,19 +90,33 @@ StProfilerResultsPresenter >> handleProfilingStarted [
 
 { #category : 'event handling' }
 StProfilerResultsPresenter >> handleSelectionChanged [
+
 	| navButton node |
 	node := treeTable selectedItem.
 
 	node
 		ifNil: [
-			browseButton disable.
-			showAsRootButton disable.
-			codePresenter methodOrBlock: nil ]
+				browseButton disable.
+				showAsRootButton disable.
+				codePresenter
+					text: '';
+					clearInteractionModel ]
 		ifNotNil: [
-			browseButton enable.
-			showAsRootButton enable.
-			codePresenter methodOrBlock: node methodOrBlock.
-			 ].
+				| methodOrBlock |
+				methodOrBlock := node methodOrBlock.
+				browseButton enable.
+				showAsRootButton enable.
+
+				codePresenter
+					text: methodOrBlock sourceCode;
+					beForMethod: methodOrBlock originMethod.
+
+				methodOrBlock isCompiledBlock
+					ifTrue: [
+							codePresenter addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
+									 interval: (methodOrBlock sourceNode sourceInterval first to: methodOrBlock sourceNode sourceInterval last + 1);
+									 yourself) ]
+					ifFalse: [ codePresenter removeAllTextSegmentDecorations ] ].
 
 	navButton := navigationToolbar selectedItem.
 	navButton ifNil: [ ^ self ].
@@ -165,10 +179,12 @@ StProfilerResultsPresenter >> initializePresenters [
 	| h |
 	navigationToolbar := self instantiate: StProfilerToolbarPresenter.
 	treeTable := self instantiate: StProfilerTreeTablePresenter on: viewModel.
-	codePresenter := self instantiate: StProfilerCodePresenter.
+	codePresenter := self newCode.
 	reportButton := self newButton.
 	showAsRootButton := self newButton.
 	browseButton := self newButton.
+
+	codePresenter beNotEditable.
 
 	reportButton
 		icon: (self iconNamed: #recentMessages);
