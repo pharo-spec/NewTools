@@ -71,25 +71,12 @@ StProfilerPresenter >> disableInputPresenter [
 	inputPresenter enabled: false
 ]
 
-{ #category : 'private - factory' }
-StProfilerPresenter >> initializeInputPresenter [
-
-	^ inputPresenter ifNil: [
-		  inputPresenter := StProfilerInputPresenter on: self viewModel ]
-]
-
 { #category : 'initialization' }
 StProfilerPresenter >> initializePresenters [
 
-	self initializeInputPresenter.
-	self initializeResultsPresenter
-]
-
-{ #category : 'private - factory' }
-StProfilerPresenter >> initializeResultsPresenter [
-
-	^ resultsPresenter ifNil: [
-		  resultsPresenter := StProfilerResultsPresenter on: self viewModel ]
+	super initializePresenters.
+	inputPresenter := self instantiate: StProfilerInputPresenter on: self viewModel.
+	resultsPresenter := self instantiate: StProfilerResultsPresenter on: self viewModel
 ]
 
 { #category : 'initialization' }

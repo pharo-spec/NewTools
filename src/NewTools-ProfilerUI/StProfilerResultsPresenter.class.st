@@ -128,33 +128,28 @@ StProfilerResultsPresenter >> handleTreeRootChanged: event [
 StProfilerResultsPresenter >> initializeActions [
 
 	| pres |
-	treeTable
-		whenSelectedItemChangedSend: #handleSelectionChanged
-		to: self.
+	treeTable whenSelectedItemChangedSend: #handleSelectionChanged to: self.
 
 	"Report"
 	reportButton action: [
-		pres := SpTextPresenter new
-			        text: viewModel report;
-			        open.
-		pres withWindowDo: [ :w | w title: 'Profiling Report' ] ].
+			pres := self newText
+				        text: viewModel report;
+				        open.
+			pres withWindowDo: [ :w | w title: 'Profiling Report' ] ].
 	collapseAllButton action: [
-		treeTable collapseAll.
-		treeTable takeKeyboardFocus ].
+			treeTable collapseAll.
+			treeTable takeKeyboardFocus ].
 	"Configuration section actions"
 
 	expandAllButton action: [
-		treeTable expandAll.
-		treeTable takeKeyboardFocus ].
+			treeTable expandAll.
+			treeTable takeKeyboardFocus ].
 
-	thresholdExpandInput whenTextChangedDo: [ :text |
-		text asInteger ifNotNil: [ treeTable expandNodesOver: text asNumber ] ].
+	thresholdExpandInput whenTextChangedDo: [ :text | text asInteger ifNotNil: [ treeTable expandNodesOver: text asNumber ] ].
 
-	thresholdFilterInput whenTextChangedDo: [ :text |
-		text asInteger ifNotNil: [ treeTable hideNodesUnder: text asNumber ] ].
+	thresholdFilterInput whenTextChangedDo: [ :text | text asInteger ifNotNil: [ treeTable hideNodesUnder: text asNumber ] ].
 
-	treeDropList whenSelectedItemChangedDo: [ :item |
-		viewModel showLeavesOnly: item value ]
+	treeDropList whenSelectedItemChangedDo: [ :item | viewModel showLeavesOnly: item value ]
 ]
 
 { #category : 'initialization' }
