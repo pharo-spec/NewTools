@@ -57,18 +57,25 @@ StProfilerPresenter class >> profileCode: aString [
 
 { #category : 'layout' }
 StProfilerPresenter >> defaultLayout [
+	"If we open the presenter via the world menu, we display the input. If we open it programatically on a block, we do not display it."
 
-	^ SpPanedLayout newTopToBottom
-		  positionOfSlider: 20 percent;
-		  add: inputPresenter;
-		  add: resultsPresenter;
-		  yourself
+	^ inputPresenter
+		  ifNil: [
+				  SpBoxLayout newTopToBottom
+					  add: resultsPresenter;
+					  yourself ]
+		  ifNotNil: [
+				  SpPanedLayout newTopToBottom
+					  positionOfSlider: 20 percent;
+					  add: inputPresenter;
+					  add: resultsPresenter;
+					  yourself ]
 ]
 
 { #category : 'private - factory' }
 StProfilerPresenter >> disableInputPresenter [
 
-	inputPresenter enabled: false
+	inputPresenter := nil
 ]
 
 { #category : 'initialization' }
@@ -129,14 +136,14 @@ StProfilerPresenter >> resultsPresenter: aPresenter [
 StProfilerPresenter >> subscribe [
 
 	resultsPresenter subscribeOnProfilingAnnouncements.
-	inputPresenter subscribeOnProfilingAnnouncements
+	inputPresenter ifNotNil: [ inputPresenter subscribeOnProfilingAnnouncements ]
 ]
 
 { #category : 'subscription' }
 StProfilerPresenter >> unsubscribe [
 
 	resultsPresenter unsubscribeFromProfilingAnnouncements.
-	inputPresenter unsubscribeFromProfilingAnnouncements
+	inputPresenter ifNotNil: [ inputPresenter unsubscribeFromProfilingAnnouncements ]
 ]
 
 { #category : 'accessing' }
