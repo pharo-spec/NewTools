@@ -3,7 +3,7 @@ I am a panel in the ProfilerPresenter containing user defined inputs to start pr
 "
 Class {
 	#name : 'StProfilerInputPresenter',
-	#superclass : 'SpPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'profilerDropList',
 		'profileItButton',
