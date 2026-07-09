@@ -83,9 +83,10 @@ StProfilerModel >> hideNodesUnder: aNumber [
 
 { #category : 'initialization' }
 StProfilerModel >> initialize [
+
 	super initialize.
 	showLeavesOnly := false.
-	showNodeThreshold := 0
+	showNodeThreshold := 0.0
 ]
 
 { #category : 'accessing' }
