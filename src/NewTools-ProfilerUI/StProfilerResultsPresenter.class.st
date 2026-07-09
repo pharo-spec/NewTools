@@ -9,14 +9,14 @@ Class {
 		'viewModel',
 		'codePresenter',
 		'browseButton',
-		'treeDropList',
 		'expandAllButton',
 		'collapseAllButton',
 		'thresholdFilterInput',
 		'thresholdExpandInput',
 		'navigationToolbar',
 		'reportButton',
-		'showAsRootButton'
+		'showAsRootButton',
+		'leavesCheckbox'
 	],
 	#category : 'NewTools-ProfilerUI-Presenters',
 	#package : 'NewTools-ProfilerUI',
@@ -34,7 +34,7 @@ StProfilerResultsPresenter >> connectPresenters [
 
 	thresholdFilterInput whenTextChangedDo: [ :text | text asInteger ifNotNil: [ treeTable hideNodesUnder: text asNumber ] ].
 
-	treeDropList whenSelectedItemChangedDo: [ :item | viewModel showLeavesOnly: item value ]
+	leavesCheckbox whenChangedDo: [ :item | viewModel showLeavesOnly: item ]
 ]
 
 { #category : 'layout' }
@@ -47,20 +47,30 @@ StProfilerResultsPresenter >> defaultLayout [
 				   add: treeTable;
 				   yourself);
 		  add: (SpBoxLayout newTopToBottom
-				   add: (SpBoxLayout newTopToBottom
-						    add: (SpBoxLayout newLeftToRight
-								     add: treeDropList;
-								     add: expandAllButton expand: false;
-								     add: collapseAllButton expand: false;
-								     yourself);
-						    add: (SpBoxLayout newLeftToRight
-								     add: 'Hide nodes under (%): ' expand: false;
-								     add: thresholdFilterInput width: 55;
-								     add: 'Expand nodes over (%): ' expand: false;
-								     add: thresholdExpandInput width: 55;
-								     yourself);
+				   add: (SpBoxLayout newLeftToRight
+						    add: leavesCheckbox expand: false;
+						    add: expandAllButton
+						    expand: false
+						    fill: false
+						    padding: 3;
+						    add: collapseAllButton
+						    expand: false
+						    fill: false
+						    padding: 3;
+						    add: 'Hide nodes under (%): '
+						    expand: false
+						    fill: false
+						    padding: 3;
+						    add: thresholdFilterInput width: 55;
+						    add: 'Expand nodes over (%): '
+						    expand: false
+						    fill: false
+						    padding: 3;
+						    add: thresholdExpandInput width: 55;
 						    yourself)
-				   expand: false;
+				   expand: false
+				   fill: false
+				   padding: 3;
 				   add: codePresenter;
 				   add: (SpBoxLayout newLeftToRight
 						    add: reportButton withConstraints: [ :constraints |
@@ -221,11 +231,13 @@ StProfilerResultsPresenter >> initializePresenters [
 	reportButton := self newButton.
 	showAsRootButton := self newButton.
 	browseButton := self newButton.
-	treeDropList := self newTreeVisualizationDropList.
+	leavesCheckbox := self newCheckBox.
 	expandAllButton := self newButton.
 	collapseAllButton := self newButton.
 	thresholdFilterInput := self newThresholdFilterInput.
 	thresholdExpandInput := self newThresholdExpandInput.
+
+	leavesCheckbox label: 'Show only leaves'.
 
 	collapseAllButton
 		label: 'Collapse All';
@@ -258,43 +270,31 @@ StProfilerResultsPresenter >> initializePresenters [
 ]
 
 { #category : 'private - factory' }
-StProfilerResultsPresenter >> newProfilerNumberInput [
-	^ self instantiate: StProfilerNumberInput
-]
-
-{ #category : 'private - factory' }
 StProfilerResultsPresenter >> newThresholdExpandInput [
 
-	^ self newProfilerNumberInput
+	^ self newNumberInput
+		  beFloat;
+		  digits: 1;
+		  climbRate: 0.5;
+		  minimum: 0;
+		  maximum: 100;
 		  help: 'Only nodes with a percentage of time greater than this threshold will be expanded';
-		  number: 0;
+		  number: 0.0;
 		  yourself
 ]
 
 { #category : 'private - factory' }
 StProfilerResultsPresenter >> newThresholdFilterInput [
 
-	^ self newProfilerNumberInput
+	^ self newNumberInput
+		  beFloat;
+		  digits: 1;
+		  climbRate: 0.5;
+		  minimum: 0;
+		  maximum: 100;
 		  help: 'Only nodes with a percentage of time greater than this threshold will be shown';
 		  number: viewModel showNodeThreshold;
 		  yourself
-]
-
-{ #category : 'private - factory' }
-StProfilerResultsPresenter >> newTreeVisualizationDropList [
-	| items |
-	items := {
-		         ('Full tree' -> false).
-		         ('Leaves only' -> true) }.
-
-	^ self newDropList
-		                help: 'Results visualization mode';
-		                items: items;
-		                selectItem: (viewModel showLeavesOnly
-				                 ifTrue: [ items at: 2 ]
-				                 ifFalse: [ items at: 1 ]);
-		                display: [ :assoc | assoc key ];
-		                yourself
 ]
 
 { #category : 'accessing - model' }

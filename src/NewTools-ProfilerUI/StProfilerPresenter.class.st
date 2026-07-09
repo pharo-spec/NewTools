@@ -14,12 +14,12 @@ Class {
 	#tag : 'Presenters'
 }
 
-{ #category : 'examples' }
+{ #category : 'accessing' }
 StProfilerPresenter class >> defaultPreferredExtent [ 
-	^ 800 @ 800
+	^ 850 @ 800
 ]
 
-{ #category : 'examples' }
+{ #category : 'world menu' }
 StProfilerPresenter class >> menuCommandOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #'Profiler')
@@ -30,7 +30,7 @@ StProfilerPresenter class >> menuCommandOn: aBuilder [
 		action: [self new open]
 ]
 
-{ #category : 'examples' }
+{ #category : 'spying' }
 StProfilerPresenter class >> open [
 
 	<example>
