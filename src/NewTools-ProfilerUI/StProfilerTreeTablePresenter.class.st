@@ -48,13 +48,9 @@ StProfilerTreeTablePresenter >> hideNodesUnder: aNumber [
 
 { #category : 'initialization' }
 StProfilerTreeTablePresenter >> initialize [
+
 	super initialize.
-	"the column below is created only to prevent the TreeTableMorph from creating an additional column"
-	self addColumn: (SpCompositeTableColumn new
-				   addColumn: (SpStringTableColumn
-						    title: 'Method or Block'
-						    evaluated: [ :item | item reportString ]);
-				   yourself)
+	self addColumn: (SpStringTableColumn title: 'Method or Block' evaluated: [ :item | item reportString ])
 ]
 
 { #category : 'expanding-collapsing' }
