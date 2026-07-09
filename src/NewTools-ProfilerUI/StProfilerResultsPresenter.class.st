@@ -203,16 +203,15 @@ StProfilerResultsPresenter >> initializePresenters [
 		disable;
 		action: [ treeTable selectedItem browseItem ].
 
-	h := self class toolbarHeight.
 
 	self layout: (SpPanedLayout newTopToBottom
 			 positionOfSlider: 50 percent;
 			 add: (SpBoxLayout newTopToBottom
-					  add: navigationToolbar height: h;
+					  add: navigationToolbar expand: false;
 					  add: treeTable;
 					  yourself);
 			 add: (SpBoxLayout newTopToBottom
-					  add: self newConfigurationSectionLayout height: h * 2.5;
+					  add: self newConfigurationSectionLayout height: self class toolbarHeight * 2.5;
 					  add: codePresenter;
 					  add: (SpBoxLayout newLeftToRight
 							   add: reportButton withConstraints: [ :constraints |
@@ -222,7 +221,7 @@ StProfilerResultsPresenter >> initializePresenters [
 										   expand: false ];
 							   addLast: showAsRootButton;
 							   addLast: browseButton)
-					  height: h;
+					  expand: false;
 					  yourself);
 			 yourself).
 
@@ -238,21 +237,19 @@ StProfilerResultsPresenter >> newConfigurationSectionLayout [
 				   add: (expandAllButton := self newButton
 						                       label: 'Expand All';
 						                       icon: (self iconNamed: #windowMenu))
-				   width: 100;
+				   expand: false;
 				   add: (collapseAllButton := self newButton
 						                         label: 'Collapse All';
 						                         icon: (self iconNamed: #windowMinimize))
-				   width: 100;
+				   expand: false;
 				   yourself);
 		  add: (SpBoxLayout newLeftToRight
-				   add: 'Hide nodes under: ' width: 125;
+				   add: 'Hide nodes under (%): ' expand: false;
 				   add: (thresholdFilterInput := self newThresholdFilterInput) width: 55;
-				   add: '%' width: 25;
 				   yourself);
 		  add: (SpBoxLayout newLeftToRight
-				   add: 'Expand nodes over: ' width: 125;
+				   add: 'Expand nodes over (%): ' expand: false;
 				   add: (thresholdExpandInput := self newThresholdExpandInput) width: 55;
-				   add: '%' width: 25;
 				   yourself);
 		  yourself
 ]
