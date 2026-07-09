@@ -23,6 +23,20 @@ Class {
 	#tag : 'Presenters'
 }
 
+{ #category : 'initialization' }
+StProfilerResultsPresenter >> connectPresenters [
+
+	super connectPresenters.
+
+	treeTable whenSelectedItemChangedSend: #handleSelectionChanged to: self.
+
+	thresholdExpandInput whenTextChangedDo: [ :text | text asInteger ifNotNil: [ treeTable expandNodesOver: text asNumber ] ].
+
+	thresholdFilterInput whenTextChangedDo: [ :text | text asInteger ifNotNil: [ treeTable hideNodesUnder: text asNumber ] ].
+
+	treeDropList whenSelectedItemChangedDo: [ :item | viewModel showLeavesOnly: item value ]
+]
+
 { #category : 'private' }
 StProfilerResultsPresenter >> doItNode [
 
@@ -128,14 +142,13 @@ StProfilerResultsPresenter >> handleTreeRootChanged: event [
 StProfilerResultsPresenter >> initializeActions [
 
 	| pres |
-	treeTable whenSelectedItemChangedSend: #handleSelectionChanged to: self.
-
 	"Report"
 	reportButton action: [
 			pres := self newText
 				        text: viewModel report;
 				        open.
 			pres withWindowDo: [ :w | w title: 'Profiling Report' ] ].
+
 	collapseAllButton action: [
 			treeTable collapseAll.
 			treeTable takeKeyboardFocus ].
@@ -143,39 +156,39 @@ StProfilerResultsPresenter >> initializeActions [
 
 	expandAllButton action: [
 			treeTable expandAll.
-			treeTable takeKeyboardFocus ].
-
-	thresholdExpandInput whenTextChangedDo: [ :text | text asInteger ifNotNil: [ treeTable expandNodesOver: text asNumber ] ].
-
-	thresholdFilterInput whenTextChangedDo: [ :text | text asInteger ifNotNil: [ treeTable hideNodesUnder: text asNumber ] ].
-
-	treeDropList whenSelectedItemChangedDo: [ :item | viewModel showLeavesOnly: item value ]
+			treeTable takeKeyboardFocus ]
 ]
 
 { #category : 'initialization' }
 StProfilerResultsPresenter >> initializePresenters [
 
 	| h |
+	navigationToolbar := self newProfilerToolbar.
+	treeTable := self newProfilerTreeTable.
+	codePresenter := self newProfilerCode.
+	reportButton := self newReportButton.
+	showAsRootButton := self newShowAsRootButton.
+	browseButton := self newBrowseButton.
+
 	h := self class toolbarHeight.
 
 	self layout: (SpPanedLayout newTopToBottom
 			 positionOfSlider: 50 percent;
 			 add: (SpBoxLayout newTopToBottom
-					  add: (navigationToolbar := self newProfilerToolbar) height: h;
-					  add: (treeTable := self newProfilerTreeTable);
+					  add: navigationToolbar height: h;
+					  add: treeTable;
 					  yourself);
 			 add: (SpBoxLayout newTopToBottom
 					  add: self newConfigurationSectionLayout height: h * 2.5;
-					  add: (codePresenter := self newProfilerCode);
+					  add: codePresenter;
 					  add: (SpBoxLayout newLeftToRight
-							   add: (reportButton := self newReportButton)
-							   withConstraints: [ :constraints |
-								   constraints
-									   bePlacedAtStart;
-									   fill: true;
-									   expand: false ];
-							   addLast: (showAsRootButton := self newShowAsRootButton);
-							   addLast: (browseButton := self newBrowseButton))
+							   add: reportButton withConstraints: [ :constraints |
+									   constraints
+										   bePlacedAtStart;
+										   fill: true;
+										   expand: false ];
+							   addLast: showAsRootButton;
+							   addLast: browseButton)
 					  height: h;
 					  yourself);
 			 yourself).
