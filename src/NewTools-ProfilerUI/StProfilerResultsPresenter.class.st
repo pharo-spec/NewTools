@@ -211,7 +211,7 @@ StProfilerResultsPresenter >> initializePresenters [
 					  add: treeTable;
 					  yourself);
 			 add: (SpBoxLayout newTopToBottom
-					  add: self newConfigurationSectionLayout height: self class toolbarHeight * 2.5;
+					  add: self newConfigurationSectionLayout expand: false;
 					  add: codePresenter;
 					  add: (SpBoxLayout newLeftToRight
 							   add: reportButton withConstraints: [ :constraints |
@@ -246,8 +246,6 @@ StProfilerResultsPresenter >> newConfigurationSectionLayout [
 		  add: (SpBoxLayout newLeftToRight
 				   add: 'Hide nodes under (%): ' expand: false;
 				   add: (thresholdFilterInput := self newThresholdFilterInput) width: 55;
-				   yourself);
-		  add: (SpBoxLayout newLeftToRight
 				   add: 'Expand nodes over (%): ' expand: false;
 				   add: (thresholdExpandInput := self newThresholdExpandInput) width: 55;
 				   yourself);
