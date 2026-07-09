@@ -163,12 +163,29 @@ StProfilerResultsPresenter >> initializeActions [
 StProfilerResultsPresenter >> initializePresenters [
 
 	| h |
-	navigationToolbar := self newProfilerToolbar.
-	treeTable := self newProfilerTreeTable.
-	codePresenter := self newProfilerCode.
-	reportButton := self newReportButton.
-	showAsRootButton := self newShowAsRootButton.
-	browseButton := self newBrowseButton.
+	navigationToolbar := self instantiate: StProfilerToolbarPresenter.
+	treeTable := self instantiate: StProfilerTreeTablePresenter on: viewModel.
+	codePresenter := self instantiate: StProfilerCodePresenter.
+	reportButton := self newButton.
+	showAsRootButton := self newButton.
+	browseButton := self newButton.
+
+	reportButton
+		icon: (self iconNamed: #recentMessages);
+		label: 'Full Report';
+		disable.
+
+	showAsRootButton
+		icon: (self iconNamed: #redo);
+		label: 'Show node as root';
+		action: [ viewModel setTallyRoot: treeTable selectedItem ];
+		disable.
+
+	browseButton
+		icon: (self iconNamed: #browse);
+		label: 'Browse';
+		disable;
+		action: [ treeTable selectedItem browseItem ].
 
 	h := self class toolbarHeight.
 
@@ -194,17 +211,6 @@ StProfilerResultsPresenter >> initializePresenters [
 			 yourself).
 
 	self initializeActions
-]
-
-{ #category : 'private - factory' }
-StProfilerResultsPresenter >> newBrowseButton [
-
-	^ self newButton
-		  icon: (self iconNamed: #browse);
-		  label: 'Browse';
-		  disable;
-		  action: [ treeTable selectedItem browseItem ];
-		  yourself
 ]
 
 { #category : 'private - factory' }
@@ -238,47 +244,8 @@ StProfilerResultsPresenter >> newConfigurationSectionLayout [
 ]
 
 { #category : 'private - factory' }
-StProfilerResultsPresenter >> newProfilerCode [
-
-	^ self instantiate: StProfilerCodePresenter
-]
-
-{ #category : 'private - factory' }
 StProfilerResultsPresenter >> newProfilerNumberInput [
 	^ self instantiate: StProfilerNumberInput
-]
-
-{ #category : 'private - factory' }
-StProfilerResultsPresenter >> newProfilerToolbar [
-
-	^ self instantiate: StProfilerToolbarPresenter
-]
-
-{ #category : 'private - factory' }
-StProfilerResultsPresenter >> newProfilerTreeTable [
-
-	^ StProfilerTreeTablePresenter on: viewModel
-]
-
-{ #category : 'private - factory' }
-StProfilerResultsPresenter >> newReportButton [
-
-	^ self newButton
-		icon: (self iconNamed: #recentMessages);
-		label: 'Full Report';
-		disable;
-		yourself
-]
-
-{ #category : 'private - factory' }
-StProfilerResultsPresenter >> newShowAsRootButton [
-
-	^ self newButton
-		  icon: (self iconNamed: #redo);
-		  label: 'Show node as root';
-		  action: [ viewModel setTallyRoot: treeTable selectedItem ];
-		  disable;
-		  yourself
 ]
 
 { #category : 'private - factory' }
