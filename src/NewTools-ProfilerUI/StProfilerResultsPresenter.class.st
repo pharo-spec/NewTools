@@ -237,6 +237,8 @@ StProfilerResultsPresenter >> initializePresenters [
 	thresholdFilterInput := self newThresholdFilterInput.
 	thresholdExpandInput := self newThresholdExpandInput.
 
+	treeTable addColumn: (SpStringTableColumn title: 'Method or Block' evaluated: [ :item | item reportString ]).
+
 	leavesCheckbox label: 'Show only leaves'.
 
 	collapseAllButton

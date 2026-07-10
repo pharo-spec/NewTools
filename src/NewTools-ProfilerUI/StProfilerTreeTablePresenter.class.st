@@ -46,13 +46,6 @@ StProfilerTreeTablePresenter >> hideNodesUnder: aNumber [
 		self reset ]
 ]
 
-{ #category : 'initialization' }
-StProfilerTreeTablePresenter >> initialize [
-
-	super initialize.
-	self addColumn: (SpStringTableColumn title: 'Method or Block' evaluated: [ :item | item reportString ])
-]
-
 { #category : 'expanding-collapsing' }
 StProfilerTreeTablePresenter >> rememberingExpandedAndSelectedNodesDo: aBlock [
 
