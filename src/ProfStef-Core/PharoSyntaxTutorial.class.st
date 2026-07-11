@@ -38,7 +38,7 @@ They can only contain literal objects (objects created by the parser, it means w
 
 
 
-ProfStef next.'
+ProfStef next'
 ]
 
 { #category : 'lessons' }
@@ -48,23 +48,23 @@ title: 'Basic types: Characters'
 lesson:
 '"A Character can be instantiated using $ operator:"
 
-$A
+$A.
 
-$A class
+$A class.
 
-$B charCode
+$B charCode.
 
 "To get special characters we send message to the Character class."
 
-Character cr
+Character cr.
 
-Character space
+Character space.
 
 "You can print all 256 characters of the ASCII extended set:"
 
-Character allByteCharacters
+Character allByteCharacters.
 
-ProfStef next.'
+ProfStef next'
 ]
 
 { #category : 'lessons' }
@@ -77,11 +77,11 @@ Contrary to literal arrays they are created at execution time:"
 
 "The following creates an array of 6 nil elements"
 
-Array new: 6
+Array new: 6.
 
 "The following two lines create the same array. On expressed as message to the class Array and one using the { } syntax."
 
-Array with: (2+3) with: (6*6)
+Array with: (2+3) with: (6*6).
 
 { (2+3) . (6*6) }.
 
@@ -92,13 +92,13 @@ Array with: (2+3) with: (6*6)
 
 "Compare the two following expression results:"
 
-{  Point new setX: 100 setY: 200 }
+{  Point new setX: 100 setY: 200 }.
 
-#({  Point new setX: 100 setY: 200 })
+#({  Point new setX: 100 setY: 200 }).
 
 
 
-{ ProfStef } first next.'
+{ ProfStef } first next'
 ]
 
 { #category : 'lessons' }
@@ -110,28 +110,28 @@ lesson:
 
 Now let''s talk about basic objects.
 
-1, 2, 100, 2/3 ... are Numbers, and respond to many messages evaluating mathematical expressions.
-Evaluate (Print It) these ones:"
+1, 2, 100, 2/3 ... are Numbers, and respond to many messages executing mathematical expressions.
+Execute (Print It) these ones:"
 
-	2
+	2.
 
-	20 factorial
+	20 factorial.
 
-	1000 factorial / 999 factorial
+	1000 factorial / 999 factorial.
 
-	(1/3)
+	(1/3).
 
-	(1/3) + (4/5)
+	(1/3) + (4/5).
 
-	(1/3) asFloat
+	(1/3) asFloat.
 
-	1 class
+	1 class.
 
-	1 class maxVal class
+	1 class maxVal class.
 
-	(1 class maxVal + 1) class
+	(1 class maxVal + 1) class.
 
-ProfStef next.'
+ProfStef next'
 ]
 
 { #category : 'lessons' }
@@ -157,7 +157,7 @@ lesson:
 
 ''ProfStef'', '' is cool''.
 
-ProfStef next.'
+ProfStef next'
 ]
 
 { #category : 'lessons' }
@@ -176,16 +176,16 @@ The message == returns true if the two objects are the SAME object.
 
 Try the following expression: "
 
-''ProfStef'' asSymbol
+''ProfStef'' asSymbol.
 
-#ProfStef asString
+#ProfStef asString.
 
 "The following expressions returns different results. Do you guess why?"
 
 
-(2 asString) == (2 asString)
+(2 asString) == (2 asString).
 
-(2 asString asSymbol) == (2 asString asSymbol)
+(2 asString asSymbol) == (2 asString asSymbol).
 
 
 
@@ -196,7 +196,7 @@ So the second expression creates new strings but turns these strings into a uniq
 using the message asSymbol. Then it compares the symbols are they refer to exactly the same object so the results is true."
 
 
-ProfStef next.'
+ProfStef next'
 ]
 
 { #category : 'lessons' }
@@ -214,32 +214,32 @@ There is a difference between defining a block and executing a block. Let us hav
 Execute the following expression:
 "
 
-[ StPlaygroundPresenter open ]
+[ StPlaygroundPresenter open ].
 
 "It does not open a Browser because the block is defined but not executed. 
 To execute a block we should send it the message value as follows: "
 
 
-[ StPlaygroundPresenter open ] value
+[ StPlaygroundPresenter open ] value.
 
 
 
 "
 Let us take another example. Here is a block that adds 2 to its argument (its argument is named x):"
 
-[ :x | x + 2 ]
+[ :x | x + 2 ].
 
 "We can execute a block by sending the message value: because the block has one argument."
 
-[ :x | x + 2 ] value: 5
+[ :x | x + 2 ] value: 5.
 
 
-[ :x | x + 2 ] value: 10
+[ :x | x + 2 ] value: 10.
 
 "We can have block with two or more arguments and we will use the value:value: message as follows:"
 
 
-[ :x :y | x + y] value: 3 value: 5
+[ :x :y | x + y] value: 3 value: 5.
 
 [ProfStef next] value'
 ]
@@ -268,6 +268,7 @@ b value: 12.
 b := [ ProfStef next ].
 b value
 
+"You see here the last value is the last expression so no need to have period at the end"
 '
 ]
 
@@ -281,7 +282,7 @@ Here is a simple conditional."
 
 1 < 2
  	ifTrue: [ 100 ]
-	ifFalse: [ 42 ]
+	ifFalse: [ 42 ].
 
 "Here the message is ifTrue:ifFalse: sent to a Boolean (the result of the expression 1 < 2)
 
@@ -291,13 +292,13 @@ the developer wants to stress an aspect."
 
 1 < 2
 	ifFalse: [ 42 ]
-	ifTrue: [ 100 ]
+	ifTrue: [ 100 ].
 
 "In addition Pharo offers the two messages ifTrue: and ifFalse:.
 The following expression returns 33."
 
 1 < 10 
-	ifTrue: [  33 ]  
+	ifTrue: [  33 ].  
 
 
 "Note that the following expressions are not equivalent"
@@ -306,7 +307,7 @@ The following expression returns 33."
 c := 0.
 (c := c + 1) < 1
 	ifFalse: [ 42 ]
-	ifTrue: [ 100 ]
+	ifTrue: [ 100 ].
 
 
 | c |
@@ -314,7 +315,7 @@ c := 0.
 (c := c + 1) < 1
 	ifFalse: [ 42 ].
 (c := c + 1) < 1
-	ifTrue: [ 100 ]
+	ifTrue: [ 100 ].
 
 "Why? Because in the second case the condition is executed twice. While in the first one the condition is only invoked once.
 This is the same in any programming language"
@@ -331,7 +332,7 @@ lesson: '"The Debugger may be the most famous tool of Pharo environment. It will
 
 The following code will open the debugger on the message stack."
 
-1 / 0 
+1 / 0.
 
 "Close the debugger. 
 
@@ -376,7 +377,7 @@ Try to evaluate these expressions:"
 
 "Then go to the next lesson:"
 
-ProfStef next.'
+ProfStef next'
 ]
 
 { #category : 'lessons' }
@@ -389,19 +390,19 @@ The Inspector is a super cool tool that allows you to have a look inside an obje
 
 For example, select the text below, open the menu and click on ''Inspect it'':"
 
-Date today
+Date today.
 
 "You''ve seen the keyboard keys next to the ''Inspect it''? It indicates the Ctrl- (or Cmd-) shortcut to execute this command.
 
 Try ''Ctrl + I'' (or ''Cmd + I'') on the following expressions:"
 
-DateAndTime today
+DateAndTime today.
 
-Float pi
+Float pi.
 
-SystemVersion current
+SystemVersion current.
 
-ProfStef next.'
+ProfStef next'
 ]
 
 { #category : 'lessons' }
@@ -527,37 +528,37 @@ lesson:
 '"Traditional precedence rules from mathematics do not apply in Pharo.
 Let us have a look at the following expression"
 
-2 + 10 * 2
+2 + 10 * 2.
 
 "Here the message + is sent to 2, which answers 12, then 12 receives the message *, so we get 24.
 Clearly this does not follow mathematical evaluation.
 To get the mathematical result we should use parentheses as follows: "
 
-2 + (10 * 2)
+2 + (10 * 2).
 
 
 "Of course, sometimes this is not necessary to use parentheses as in the following two expressions that are equivalent:"
 
-5 * 10 + 2
-(5 * 10) + 2
+5 * 10 + 2.
+(5 * 10) + 2.
 
 
 "Remember that all messages always follow a simple left-to-right precedence rule, without any exceptions.
 So try to guess the value returned by the following expressions:"
 
-2 + 2 * 10
+2 + 2 * 10.
 
-2 + (2 * 10)
+2 + (2 * 10).
 
-8 - 5 / 2
+8 - 5 / 2.
 
-(8 - 5) / 2
+(8 - 5) / 2.
 
-8 - (5 / 2)
+8 - (5 / 2).
 
 
 
-ProfStef next.'
+ProfStef next'
 ]
 
 { #category : 'lessons' }
@@ -571,13 +572,20 @@ lesson:
 "Here we open an inspector on the point created by (0@0 corner: 100@200) and after we open an empty playground. Select the two following lines."
 
 (0@0 corner: 100@200) inspect.
-StPlaygroundPresenter open
+StPlaygroundPresenter open.
 
-"Notice that the last sentence could finish by a period but this is optional since a dot is a separator,"
+"Notice that the last sentence finishes by a period but this is optional since a dot is a separator. In the tutorial we always place a dot at the end so that the color formatting is not confused. Now you do not need to put a dot when there is no more expressions after."
+
+"Try to select the two following without selecting the last dot and execute them.
+You will see that this is working."
+
+(0@0 corner: 100@200) inspect.
+StPlaygroundPresenter open.
 
 "Notice also that you can select a single line. You can also execute an expression finishing by a period. Try to select and execute each of the previous line one by one."
 
-ProfStef next.'
+"You see here the ProfStef next expressio is the last expression so no need to have period at the end"
+ProfStef next'
 ]
 
 { #category : 'lessons' }
@@ -592,28 +600,28 @@ lesson:
 where a binary selector is from a list of non alphabetical characters e.g. ~ = , < > + - / *
 & @ %. A binary selector can be for example == or <="
 
-3 * 2
+3 * 2.
 
-Date today + 3 weeks
+Date today + 3 weeks.
 
-false | false
+false | false.
 
-true & true
+true & true.
 
-true & false
+true & false.
 
-10 @ 100
+10 @ 100.
 
-10 <= 12
+10 <= 12.
 
-''ab'' , ''cd''
+''ab'' , ''cd''.
 
-Date today < Date yesterday
-
-
+Date today < Date yesterday.
 
 
-ProfStef next.'
+
+
+ProfStef next'
 ]
 
 { #category : 'lessons' }
@@ -660,7 +668,7 @@ lesson:
 
 Go back and use a cascade!"
 
-ProfStef previous.'
+ProfStef previous'
 ]
 
 { #category : 'lessons' }
@@ -678,15 +686,15 @@ Unary messages are executed first, then binary messages and finally keyword mess
 "Make sure that you understand the order of which each expression is executed: "
 
 
-2 + 3 squared
+2 + 3 squared.
 
-2 raisedTo: 3 + 2
+2 raisedTo: 3 + 2.
 
-(0@0) class
+(0@0) class.
 
-0@0 corner: 100@200
+0@0 corner: 100@200.
 
-(0@0 corner: 100@200) class
+(0@0 corner: 100@200) class.
 
 
 "Between messages of the same precedence, expressions are executed from left to right"
@@ -695,7 +703,7 @@ Unary messages are executed first, then binary messages and finally keyword mess
 
 
 
-ProfStef next.'
+ProfStef next'
 ]
 
 { #category : 'lessons' }
@@ -713,11 +721,11 @@ Guess the result of the following expression. Follow the priority and the flow o
 
 
 
-(2 + 3) squared
+(2 + 3) squared.
 
-(2 raisedTo: 3) + 2
+(2 raisedTo: 3) + 2.
 
-(0@0 extent: 100@200) bottomRight
+(0@0 extent: 100@200) bottomRight.
 
 
 
@@ -729,15 +737,15 @@ Let us try again.
 Do you see that some parentheses are unnecessary in the following expressions?"
 
 
-(2 asString) = (2 asString)
+(2 asString) = (2 asString).
 
-(2 asString asSymbol) = (2 asString asSymbol)
+(2 asString asSymbol) = (2 asString asSymbol).
 
 "Remove some parentheses in the expressions of this lesson and try to guess the result you will get."
 
 
 
-ProfStef next.'
+ProfStef next'
 ]
 
 { #category : 'lessons' }
@@ -756,9 +764,9 @@ lesson:
 "Identify the message selectors for the following expressions:"
 
 
-1 max: 3
+1 max: 3.
 
-Color r: 1 g: 0 b: 0
+Color r: 1 g: 0 b: 0.
 
 
 "The message selector is r:g:b: implemented on class Color. Note you can also write"
@@ -766,10 +774,10 @@ Color r: 1 g: 0 b: 0
 Color
 	r: 1
 	g: 1
-	b: 0
+	b: 0.
 
 
-ProfStef perform: #next.'
+ProfStef perform: #next'
 ]
 
 { #category : 'lessons' }
@@ -785,21 +793,21 @@ Unary messages have the following form:
 
 You''ve already sent unary messages. For example:"
 
-1 class
+1 class.
 
-false not
+false not.
 
-Time now
+Time now.
 
-Date today
+Date today.
 
-Float pi
+Float pi.
 
 
 
 "And of course:"
 
-ProfStef next.'
+ProfStef next'
 ]
 
 { #category : 'lessons' }
@@ -821,7 +829,7 @@ ProfStef inspect.
 
 ProfStef browse.
 
-ProfStef next.'
+ProfStef next'
 ]
 
 { #category : 'lessons' }
@@ -844,8 +852,6 @@ Try ''Ctrl + P'' (or ''Cmd + P'') on the following expressions:"
 
 "The result is selected, so you can erase it using the backspace key. Try it!"
 
-SmalltalkImage current datedVersion.
-
 "If you want a string and not just the tooltip, for example, if you want edit it or copy and paste the result of Print It in another tools simply double the command: 
  ''Ctrl + P''  ''Ctrl + P''
 
@@ -853,11 +859,11 @@ Try it on"
 
 	Date today.
 
-	Time now
+	Time now.
 
 "Now you are a Print It Master!"
 
-ProfStef next.'
+ProfStef next'
 ]
 
 { #category : 'lessons' }
@@ -886,7 +892,7 @@ ProfStef class compile:''goToNextLesson
 
 "Wow! I can''t wait to use my new method!"
 
-ProfStef goToNextLesson.'
+ProfStef goToNextLesson'
 ]
 
 { #category : 'lessons' }
@@ -907,7 +913,7 @@ Normally you should use when you build tools and not when you develop your appli
 So watch out.
 Then move forward:"
 
-ProfStef default executeMethod: (ProfStef lookupSelector: #next).'
+ProfStef default executeMethod: (ProfStef lookupSelector: #next)'
 ]
 
 { #category : 'lessons' }
@@ -922,11 +928,11 @@ So you do not have to move the mouse (and miss the last charater :), you can jus
 
 Try it on the following expressions:"
 
-1000 factorial numberOfDigits
+1000 factorial numberOfDigits.
 
 "It works also with space before"	
 	
-	1000 factorial numberOfDigits
+	1000 factorial numberOfDigits.
 	
 "If you double click on the LAST character of a line, it selects the full line, Try it on the expressions above."	
 	
@@ -934,13 +940,14 @@ Try it on the following expressions:"
 
 Pharo can do better! If you have an expression on multiple lines you can double click at the end or the beginning of the expression to select the complete expression. Notice how you can select a line like the first one and get 3 printed or get the full result 24"
 
-StPlaygroundPresenter new contents: ''1 * 2 
-     * (4 + 8)''; open
+StPlaygroundPresenter new contents: ''"Try selecting just a line of the following expression"
+1 * 2 
+     * (4 + 8)''; open.
 
 "When you see class name in a text. You can jump to the class by Command + clicking on it,
-Try it on"
+The following is an array with three classes. Try on one of them"
 
-OrderedCollection Bag Set 
+{ OrderedCollection . Bag . Set }. 
 
 "Yes there is no s at Collection so that you jump to the class :)"
 
@@ -948,7 +955,7 @@ OrderedCollection Bag Set
  
 
 
-ProfStef next.'
+ProfStef next'
 ]
 
 { #category : 'lessons' }
@@ -1028,7 +1035,7 @@ Sending yourself is handy to get the receiver of a message. It is especially use
 
 Imagine that you have the following expression"
 	
-		#(''hello'' ''world'') copy at: 2 put: ''pharo''
+		#(''hello'' ''world'') copy at: 2 put: ''pharo''.
 	
 "and that you would like to get the modified array #(''hello'' ''pharo'') copy - the receiver of the message at:put:. We use the message copy because the literal array is read only. 
 
@@ -1036,7 +1043,7 @@ Execute the expression above  returns ''pharo'' and not the receiver because the
 
 To get the receiver we can simply use a cascade as follows:"
 
-		#(''hello'' ''world'') copy at: 2 put: ''pharo''; yourself
+		#(''hello'' ''world'') copy at: 2 put: ''pharo''; yourself.
 
 "and since yourself returns the receiver of the message we will get the modified array.
 
@@ -1046,7 +1053,7 @@ Stepping back using a cascade and yourself is equivalent to declare a variable, 
 	| a |
 	a := #(''hello'' ''world'').
 	a at: 2 put: ''pharo''.
-	a
+	a.
 
 "So you see the cascade is quite handy."
 
@@ -1067,5 +1074,5 @@ lesson:
 I''m here to  help you learn Pharo.
 So let''s go to the first lesson. Select the text below, right-click and choose ''Do it''"
 
-ProfStef next.'
+ProfStef next'
 ]
