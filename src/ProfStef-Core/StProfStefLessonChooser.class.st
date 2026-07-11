@@ -54,7 +54,7 @@ StProfStefLessonChooser >> initializeListLesson [
 	listLesson := self newColumnView.
 	selectedLesson := profStef player tutorial tutorial first.
 	
-	listLesson addColumnTitle: 'list of lesson'
+	listLesson addColumnTitle: 'List of lessons'
 		setup: [ :aPresenter | aPresenter newLabel ]
 		bind: [ :aPresenter :aLesson | aPresenter label: aLesson asString ];
 		whenSelectedDo: [ :selection |
@@ -96,5 +96,5 @@ StProfStefLessonChooser >> setModelBeforeInitialization: aModel [
 
 { #category : 'layout' }
 StProfStefLessonChooser >> windowTitle [ 
-	^ 'lesson chooser'
+	^ 'Lesson chooser'
 ]
