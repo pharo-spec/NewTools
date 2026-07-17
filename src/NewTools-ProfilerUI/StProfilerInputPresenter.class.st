@@ -3,7 +3,7 @@ I am a panel in the ProfilerPresenter containing user defined inputs to start pr
 "
 Class {
 	#name : 'StProfilerInputPresenter',
-	#superclass : 'SpPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'profilerDropList',
 		'profileItButton',
@@ -58,6 +58,13 @@ StProfilerInputPresenter >> code: aString [
 	codeInput text: aString
 ]
 
+{ #category : 'initialization' }
+StProfilerInputPresenter >> connectPresenters [
+
+	super connectPresenters.
+	profilerDropList whenSelectedItemChangedDo: [ :item | viewModel profilerClass: item ]
+]
+
 { #category : 'accessing' }
 StProfilerInputPresenter >> enabled: aBoolean [
 
@@ -67,35 +74,29 @@ StProfilerInputPresenter >> enabled: aBoolean [
 ]
 
 { #category : 'initialization' }
-StProfilerInputPresenter >> initializeActions [
-
-	profilerDropList whenSelectedItemChangedDo: [ :item |
-		viewModel profilerClass: item ].
-
-	profileItButton action: [ self profileIt ]
-]
-
-{ #category : 'initialization' }
 StProfilerInputPresenter >> initializePresenters [
 
-	codeInput := self newCode beForScripting; yourself.
+	codeInput := self newCode.
+	profilerDropList := self newDropList.
+	profileItButton := self newButton.
 
-	profilerDropList := self newDropList
-		                    help: 'Select the desired profiler.';
-		                    items: viewModel allProfilerClasses;
-		                    selectItem: viewModel profilerClass;
-		                    display: [ :each | each name ].
+	codeInput beForScripting.
 
-	profileItButton := self newButton
-		                   icon: (self iconNamed: #go);
-		                   label: 'Profile it'.
+	profilerDropList
+		help: 'Select the desired profiler.';
+		items: viewModel allProfilerClasses;
+		selectItem: viewModel profilerClass;
+		display: [ :each | each name ].
+
+	profileItButton
+		icon: (self iconNamed: #go);
+		label: 'Profile it';
+		action: [ self profileIt ].
 
 	self focusOrder
 		add: codeInput;
 		add: profilerDropList;
-		add: profileItButton.
-
-	self initializeActions
+		add: profileItButton
 ]
 
 { #category : 'error handling' }

@@ -3,7 +3,7 @@ I am a graphical user interface for profiling code using both AndreasProfiler an
 "
 Class {
 	#name : 'StProfilerPresenter',
-	#superclass : 'SpPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'inputPresenter',
 		'resultsPresenter',
@@ -14,12 +14,12 @@ Class {
 	#tag : 'Presenters'
 }
 
-{ #category : 'examples' }
+{ #category : 'accessing' }
 StProfilerPresenter class >> defaultPreferredExtent [ 
-	^ 800 @ 800
+	^ 850 @ 800
 ]
 
-{ #category : 'examples' }
+{ #category : 'world menu' }
 StProfilerPresenter class >> menuCommandOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #'Profiler')
@@ -30,11 +30,11 @@ StProfilerPresenter class >> menuCommandOn: aBuilder [
 		action: [self new open]
 ]
 
-{ #category : 'examples' }
+{ #category : 'spying' }
 StProfilerPresenter class >> open [
 
 	<example>
-	^ (self newApplication: StPharoApplication current) open
+	^ self new open
 ]
 
 { #category : 'spying' }
@@ -57,39 +57,33 @@ StProfilerPresenter class >> profileCode: aString [
 
 { #category : 'layout' }
 StProfilerPresenter >> defaultLayout [
+	"If we open the presenter via the world menu, we display the input. If we open it programatically on a block, we do not display it."
 
-	^ SpPanedLayout newTopToBottom
-		  positionOfSlider: 20 percent;
-		  add: inputPresenter;
-		  add: resultsPresenter;
-		  yourself
+	^ inputPresenter
+		  ifNil: [
+				  SpBoxLayout newTopToBottom
+					  add: resultsPresenter;
+					  yourself ]
+		  ifNotNil: [
+				  SpPanedLayout newTopToBottom
+					  positionOfSlider: 20 percent;
+					  add: inputPresenter;
+					  add: resultsPresenter;
+					  yourself ]
 ]
 
 { #category : 'private - factory' }
 StProfilerPresenter >> disableInputPresenter [
 
-	inputPresenter enabled: false
-]
-
-{ #category : 'private - factory' }
-StProfilerPresenter >> initializeInputPresenter [
-
-	^ inputPresenter ifNil: [
-		  inputPresenter := StProfilerInputPresenter on: self viewModel ]
+	inputPresenter := nil
 ]
 
 { #category : 'initialization' }
 StProfilerPresenter >> initializePresenters [
 
-	self initializeInputPresenter.
-	self initializeResultsPresenter
-]
-
-{ #category : 'private - factory' }
-StProfilerPresenter >> initializeResultsPresenter [
-
-	^ resultsPresenter ifNil: [
-		  resultsPresenter := StProfilerResultsPresenter on: self viewModel ]
+	super initializePresenters.
+	inputPresenter := self instantiate: StProfilerInputPresenter on: self viewModel.
+	resultsPresenter := self instantiate: StProfilerResultsPresenter on: self viewModel
 ]
 
 { #category : 'initialization' }
@@ -142,14 +136,14 @@ StProfilerPresenter >> resultsPresenter: aPresenter [
 StProfilerPresenter >> subscribe [
 
 	resultsPresenter subscribeOnProfilingAnnouncements.
-	inputPresenter subscribeOnProfilingAnnouncements
+	inputPresenter ifNotNil: [ inputPresenter subscribeOnProfilingAnnouncements ]
 ]
 
 { #category : 'subscription' }
 StProfilerPresenter >> unsubscribe [
 
 	resultsPresenter unsubscribeFromProfilingAnnouncements.
-	inputPresenter unsubscribeFromProfilingAnnouncements
+	inputPresenter ifNotNil: [ inputPresenter unsubscribeFromProfilingAnnouncements ]
 ]
 
 { #category : 'accessing' }
@@ -158,7 +152,7 @@ StProfilerPresenter >> viewModel [
 	^ viewModel ifNil: [ viewModel := StProfilerModel new ]
 ]
 
-{ #category : 'constants' }
+{ #category : 'accessing' }
 StProfilerPresenter >> windowTitle [
 	^ 'Profiler'
 ]
