@@ -504,6 +504,27 @@ StDebuggerTest >> testCopyStackToClipboard [
 ]
 
 { #category : 'tests' }
+StDebuggerTest >> testCreateMissingMethodUpdatesTopContext [
+
+	| dnuMessage exception |
+	debugger := StTestDebuggerProvider new debuggerWithDNUContext.
+	debugger
+		application: debugger class currentApplication;
+		initialize.
+	session := debugger session.
+
+	exception := debugger debuggerClientModel contextPredicate exception.
+	dnuMessage := exception message.
+
+	debugger implementMissingMethod.
+
+	"Check that the interrupted context has the new method.
+	And that it is in sync with the interrupted process"
+	self assert: debugger interruptedContext selector equals: dnuMessage selector.
+	self assert: debugger interruptedProcess suspendedContext equals: debugger interruptedContext
+]
+
+{ #category : 'tests' }
 StDebuggerTest >> testCreateMissingMethodWithUnfilteredStackUpdatesCodePane [
 
 	| dnuMessage method pcRangeForContext segments highlightSegment adapter exception |
