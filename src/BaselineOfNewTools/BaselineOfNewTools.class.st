@@ -71,7 +71,7 @@ BaselineOfNewTools >> baseline: spec [
 			"spotter"
 			package: 'NewTools-Spotter-Processors';
 			package: 'NewTools-Spotter' with: [ spec requires: #( 'NewTools-Core' 'NewTools-Spotter-Processors' ) ];
-			package: 'NewTools-Spotter-Extensions' with: [ spec requires: #( 'NewTools-Spotter' ) ];
+			package: 'NewTools-Spotter-Extensions' with: [ spec requires: #( 'NewTools-Spotter' 'NewTools-SettingsBrowser') ];
 			package: 'NewTools-Spotter-Processors-Tests' with: [ spec requires: #( 'NewTools-Spotter-Processors' ) ];
 			package: 'NewTools-Spotter-Tests' with: [ spec requires: #( 'NewTools-Spotter' ) ];
 			package: 'NewTools-Morphic-Spotter' with: [ spec requires: #( 'NewTools-Morphic' ) ];
