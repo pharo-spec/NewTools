@@ -19,7 +19,7 @@ StMethodBrowserTest >> testBrowseClassNameAsClass [
 	[
 		browser := StMethodBrowser browseReferencesToClass: StMethodBrowserDummyClass.
 
-		self assert: browser methods size equals: 6] ensure: [ browser ifNotNil: [ browser delete ] ]
+		self assert: browser methods size equals: 7] ensure: [ browser ifNotNil: [ browser delete ] ]
 ]
 
 { #category : 'tests' }
@@ -141,6 +141,27 @@ StMethodBrowserTest >> testHandleMethodAddedAddsMatchingSender [
 		self assert: browser methods size equals: initialSize + 1.
 		self assert: (browser methods includes: newMethod) ] ensure: [
 			self class removeSelector: #tmpSenderMethodForTest.
+			browser ifNotNil: [ browser delete ] ]
+]
+
+{ #category : 'tests' }
+StMethodBrowserTest >> testHandleMethodAddedPreservesSelectionAndUpdatesTitle [
+
+	| browser initialSize previousSelection newMethod |
+	[
+		browser := StMethodBrowser browseSendersOf: #printOn:.
+		initialSize := browser methods size.
+		previousSelection := browser selectedMethod.
+
+		self class compile: 'tmpSenderMethodForPortedTest ^ self printOn: String new' classified: 'tests-protocol'.
+		newMethod := self class >> #tmpSenderMethodForPortedTest.
+
+		browser handleMethodAdded: (MethodAdded method: newMethod).
+
+		self assert: browser selectedMethod equals: previousSelection.
+		self assert: browser methods size equals: initialSize + 1.
+		self assert: (browser windowTitle includesSubstring: (initialSize + 1) printString) ] ensure: [
+			self class removeSelector: #tmpSenderMethodForPortedTest.
 			browser ifNotNil: [ browser delete ] ]
 ]
 
@@ -330,6 +351,46 @@ StMethodBrowserTest >> testRefreshingBlockWithLiteralString [
 ]
 
 { #category : 'tests' }
+StMethodBrowserTest >> testRemovingSelectedMethodViaCommandRemovesItFromTheImage [
+
+	| browser command driver |
+	[
+		self class compile: 'tmpMethodToRemove ^ 42' classified: 'tests-protocol'.
+
+		browser := StMethodBrowser browse: { (self class >> #tmpMethodToRemove) }.
+		browser selectIndex: 1.
+
+		command := StRemoveMethodsCommand forSpecContext: browser methodList.
+		self assert: command canBeExecuted.
+
+		driver := ReRemoveMethodDriver new scopes: browser allScopes methods: browser methodList selectedMethods.
+		driver
+			configureRefactoring;
+			applyChanges.
+
+		self deny: (self class includesSelector: #tmpMethodToRemove) ] ensure: [
+			(self class includesSelector: #tmpMethodToRemove) ifTrue: [ self class removeSelector: #tmpMethodToRemove ].
+			browser ifNotNil: [ browser delete ] ]
+]
+
+{ #category : 'tests' }
+StMethodBrowserTest >> testScopeListContainsExpectedScopesAfterSelectingAMethod [
+
+	| browser scopeItems selectedClass |
+	[
+		browser := StMethodBrowser browseSendersOf: #printOn:.
+		browser selectIndex: 1.
+		selectedClass := browser selectedMethod methodClass.
+
+		scopeItems := browser toolbarPresenter scopeList items.
+		self assert: (scopeItems includes: RBBrowserEnvironment default).
+		self assert: (scopeItems anySatisfy: [ :s | s isKindOf: RBPackageEnvironment ]).
+		self assert: (scopeItems anySatisfy: [ :s | s isKindOf: RBClassEnvironment ]).
+		self assert: (scopeItems anySatisfy: [ :s | s isKindOf: RBClassHierarchyEnvironment ]) ] ensure: [
+		browser ifNotNil: [ browser delete ] ]
+]
+
+{ #category : 'tests' }
 StMethodBrowserTest >> testSendersHidesRecursiveCallForMultipleSelectors [
 	"If the only senders of a collection of selectors are recursive calls, no result should be shown"
 
@@ -386,6 +447,34 @@ StMethodBrowserTest >> testSendersOfExcludesTraitUsers [
 
 	self assert: (senders anySatisfy: [ :m | m methodClass = TData ]).
 	self deny: (senders anySatisfy: [ :m | m methodClass = StMethodBrowserDummyClass ])
+]
+
+{ #category : 'tests' }
+StMethodBrowserTest >> testSwitchingScopeToClassEnvironmentFiltersMethodList [
+
+	| browser classScope selectedClass |
+	[
+		browser := StMethodBrowser browseSendersOf: #printOn:.
+		browser selectIndex: 1.
+		selectedClass := browser selectedMethod methodClass.
+
+		classScope := browser toolbarPresenter scopeList items detect: [ :s | s isKindOf: RBClassEnvironment ].
+
+		browser toolbarPresenter scopeList selectItem: classScope.
+
+		self assert: browser methods isNotEmpty.
+		self assert: (browser methods allSatisfy: [ :m | m methodClass = selectedClass ]) ] ensure: [
+		browser ifNotNil: [ browser delete ] ]
+]
+
+{ #category : 'tests' }
+StMethodBrowserTest >> testWindowTitleForSingleMethodBrowse [
+
+	| browser |
+	[
+		browser := StMethodBrowser browse: { (StMethodBrowserDummyClass >> #tmpOtherCaller) }.
+
+		self assert: browser windowTitle equals: 'Message Browser [1]' ] ensure: [ browser ifNotNil: [ browser delete ] ]
 ]
 
 { #category : 'tests' }
