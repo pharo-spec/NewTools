@@ -185,6 +185,38 @@ StMethodBrowserTest >> testHandleMethodAddedWithActiveFilterKeepsUnfilteredItems
 ]
 
 { #category : 'tests' }
+StMethodBrowserTest >> testHandleMethodModifiedKeepsMethodIfPatternStillMatches [
+
+	| browser oldMethod newMethod substring |
+	substring := 'patternToFind'.
+	[
+		self class compile: 'tmpMethodForTest ^ ''patternToFind'' , ''patternToFind''' classified: 'tests-protocol'.
+		oldMethod := self class >> #tmpMethodForTest.
+
+		browser := (SystemNavigation default browseMessageList: { oldMethod } name: 'Search' autoSelect: substring) presenter.
+
+		self assert: (browser methods includes: oldMethod).
+
+		self class compile: 'tmpMethodForTest ^ ''patternToFind''' classified: 'tests-protocol'.
+		newMethod := self class >> #tmpMethodForTest.
+
+		browser handleMethodModified: (MethodModified methodChangedFrom: oldMethod to: newMethod oldProtocol: oldMethod protocol).
+
+
+		self assert: (browser methods includes: newMethod).
+
+		oldMethod := newMethod.
+		self class compile: 'tmpMethodForTest ^ ''noPatternHere''' classified: 'tests-protocol'.
+		newMethod := self class >> #tmpMethodForTest.
+
+		browser handleMethodModified: (MethodModified methodChangedFrom: oldMethod to: newMethod oldProtocol: oldMethod protocol).
+
+		self deny: (browser methods includes: newMethod) ] ensure: [
+			self class removeSelector: #tmpMethodForTest.
+			browser ifNotNil: [ browser delete ] ]
+]
+
+{ #category : 'tests' }
 StMethodBrowserTest >> testHandleMethodModifiedPreservesOrder [
 
 	| browser method initialOrder indexBefore |
