@@ -149,14 +149,10 @@ EpDashboardPresenter >> monitor: anEpMonitor [
 
 { #category : 'actions' }
 EpDashboardPresenter >> openSettingsBrowser [
-	"Inspired on Glamour's code"
-	| settingsBrowser settingsWindow |
-	
-	settingsBrowser := (StSettingsBrowser newApplication: self application)
-		selectPath: #(tools epicea);
-		yourself.
-	settingsWindow := settingsBrowser open.
-	settingsBrowser expandAll
+
+	(StSettingsBrowser newApplication: self application)
+		selectPath: #( tools epicea );
+		open
 ]
 
 { #category : 'refreshing' }
