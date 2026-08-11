@@ -27,16 +27,16 @@ StClassEntry >> asHistoryEntry [
 	^ StHistoryClassEntry new: self
 ]
 
-{ #category : 'converting' }
-StClassEntry >> asString [
-
-	^ content name
-]
-
 { #category : 'accessing' }
 StClassEntry >> categoryLabel [
 
 	^ 'class'
+]
+
+{ #category : 'printing' }
+StClassEntry >> displayStringOn: aStream [
+
+	aStream nextPutAll: content name
 ]
 
 { #category : 'evaluating' }

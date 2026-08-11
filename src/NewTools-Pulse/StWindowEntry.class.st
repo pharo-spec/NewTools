@@ -9,16 +9,16 @@ Class {
 	#tag : 'Entries'
 }
 
-{ #category : 'converting' }
-StWindowEntry >> asString [ 
-
-	^ '{1} [{2}]' format: { content label. content className }
-]
-
 { #category : 'accessing' }
 StWindowEntry >> categoryLabel [
 
 	^ 'window'
+]
+
+{ #category : 'printing' }
+StWindowEntry >> displayStringOn: aStream [
+
+	aStream nextPutAll: ('{1} [{2}]' format: { content label. content className })
 ]
 
 { #category : 'evaluating' }

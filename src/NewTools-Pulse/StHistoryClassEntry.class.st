@@ -34,12 +34,6 @@ StHistoryClassEntry >> accept: aSpotter [
 	aSpotter visitClassEntry: self
 ]
 
-{ #category : 'converting' }
-StHistoryClassEntry >> asString [
-
-	^ self contentEvaluated name
-]
-
 { #category : 'accessing' }
 StHistoryClassEntry >> content [
 "You shouldn't use content, use contentString to evade leaking"
@@ -73,6 +67,12 @@ StHistoryClassEntry >> contentString [
 StHistoryClassEntry >> contentString: aContent [
 
 	contentString := aContent printString
+]
+
+{ #category : 'printing' }
+StHistoryClassEntry >> displayStringOn: aStream [
+
+	aStream nextPutAll: self contentEvaluated name
 ]
 
 { #category : 'evaluating' }

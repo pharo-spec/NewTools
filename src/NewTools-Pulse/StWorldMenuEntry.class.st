@@ -16,16 +16,16 @@ StWorldMenuEntry >> = anEntry [
 		and: [ anEntry asString = self asString ]
 ]
 
-{ #category : 'converting' }
-StWorldMenuEntry >> asString [ 
-
-	^ content contents
-]
-
 { #category : 'accessing' }
 StWorldMenuEntry >> categoryLabel [
 
 	^ 'menu'
+]
+
+{ #category : 'printing' }
+StWorldMenuEntry >> displayStringOn: aStream [
+
+	aStream << content contents
 ]
 
 { #category : 'evaluating' }

@@ -73,6 +73,14 @@ StTallyModel >> detectPathOfMethodSelector: aMethodSelector maxDepth: aMaxDepth 
 	^ #(  )
 ]
 
+{ #category : 'converting' }
+StTallyModel >> displayString [
+	
+	^ [ self reportString ]
+		  on: Error
+		  do: [ 'error printing' ]
+]
+
 { #category : 'actions' }
 StTallyModel >> inspectItem [
 	self inspect
