@@ -3,25 +3,87 @@ I am a panel in the ProfilerPresenter containing the profiling process results t
 "
 Class {
 	#name : 'StProfilerResultsPresenter',
-	#superclass : 'SpPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'treeTable',
 		'viewModel',
 		'codePresenter',
 		'browseButton',
-		'treeDropList',
 		'expandAllButton',
 		'collapseAllButton',
 		'thresholdFilterInput',
 		'thresholdExpandInput',
 		'navigationToolbar',
 		'reportButton',
-		'showAsRootButton'
+		'showAsRootButton',
+		'leavesCheckbox'
 	],
 	#category : 'NewTools-ProfilerUI-Presenters',
 	#package : 'NewTools-ProfilerUI',
 	#tag : 'Presenters'
 }
+
+{ #category : 'initialization' }
+StProfilerResultsPresenter >> connectPresenters [
+
+	super connectPresenters.
+
+	treeTable whenSelectedItemChangedSend: #handleSelectionChanged to: self.
+
+	thresholdExpandInput whenTextChangedDo: [ :text | text asInteger ifNotNil: [ treeTable expandNodesOver: text asNumber ] ].
+
+	thresholdFilterInput whenTextChangedDo: [ :text | text asInteger ifNotNil: [ treeTable hideNodesUnder: text asNumber ] ].
+
+	leavesCheckbox whenChangedDo: [ :item | viewModel showLeavesOnly: item ]
+]
+
+{ #category : 'layout' }
+StProfilerResultsPresenter >> defaultLayout [
+
+	^ SpPanedLayout newTopToBottom
+		  positionOfSlider: 50 percent;
+		  add: (SpBoxLayout newTopToBottom
+				   add: navigationToolbar expand: false;
+				   add: treeTable;
+				   yourself);
+		  add: (SpBoxLayout newTopToBottom
+				   add: (SpBoxLayout newLeftToRight
+						    add: leavesCheckbox expand: false;
+						    add: expandAllButton
+						    expand: false
+						    fill: false
+						    padding: 3;
+						    add: collapseAllButton
+						    expand: false
+						    fill: false
+						    padding: 3;
+						    add: 'Hide nodes under (%): '
+						    expand: false
+						    fill: false
+						    padding: 3;
+						    add: thresholdFilterInput width: 55;
+						    add: 'Expand nodes over (%): '
+						    expand: false
+						    fill: false
+						    padding: 3;
+						    add: thresholdExpandInput width: 55;
+						    yourself)
+				   expand: false
+				   fill: false
+				   padding: 3;
+				   add: codePresenter;
+				   add: (SpBoxLayout newLeftToRight
+						    add: reportButton withConstraints: [ :constraints |
+								    constraints
+									    bePlacedAtStart;
+									    fill: true;
+									    expand: false ];
+						    addLast: showAsRootButton;
+						    addLast: browseButton)
+				   expand: false;
+				   yourself);
+		  yourself
+]
 
 { #category : 'private' }
 StProfilerResultsPresenter >> doItNode [
@@ -76,19 +138,33 @@ StProfilerResultsPresenter >> handleProfilingStarted [
 
 { #category : 'event handling' }
 StProfilerResultsPresenter >> handleSelectionChanged [
+
 	| navButton node |
 	node := treeTable selectedItem.
 
 	node
 		ifNil: [
-			browseButton disable.
-			showAsRootButton disable.
-			codePresenter methodOrBlock: nil ]
+				browseButton disable.
+				showAsRootButton disable.
+				codePresenter
+					text: '';
+					clearInteractionModel ]
 		ifNotNil: [
-			browseButton enable.
-			showAsRootButton enable.
-			codePresenter methodOrBlock: node methodOrBlock.
-			 ].
+				| methodOrBlock |
+				methodOrBlock := node methodOrBlock.
+				browseButton enable.
+				showAsRootButton enable.
+
+				codePresenter
+					text: methodOrBlock sourceCode;
+					beForMethod: methodOrBlock originMethod.
+
+				methodOrBlock isCompiledBlock
+					ifTrue: [
+							codePresenter addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
+									 interval: (methodOrBlock sourceNode sourceInterval first to: methodOrBlock sourceNode sourceInterval last + 1);
+									 yourself) ]
+					ifFalse: [ codePresenter removeAllTextSegmentDecorations ] ].
 
 	navButton := navigationToolbar selectedItem.
 	navButton ifNil: [ ^ self ].
@@ -128,184 +204,99 @@ StProfilerResultsPresenter >> handleTreeRootChanged: event [
 StProfilerResultsPresenter >> initializeActions [
 
 	| pres |
-	treeTable
-		whenSelectedItemChangedSend: #handleSelectionChanged
-		to: self.
-
 	"Report"
 	reportButton action: [
-		pres := SpTextPresenter new
-			        text: viewModel report;
-			        open.
-		pres withWindowDo: [ :w | w title: 'Profiling Report' ] ].
+			pres := self newText
+				        text: viewModel report;
+				        open.
+			pres withWindowDo: [ :w | w title: 'Profiling Report' ] ].
+
 	collapseAllButton action: [
-		treeTable collapseAll.
-		treeTable takeKeyboardFocus ].
+			treeTable collapseAll.
+			treeTable takeKeyboardFocus ].
 	"Configuration section actions"
 
 	expandAllButton action: [
-		treeTable expandAll.
-		treeTable takeKeyboardFocus ].
-
-	thresholdExpandInput whenTextChangedDo: [ :text |
-		text asInteger ifNotNil: [ treeTable expandNodesOver: text asNumber ] ].
-
-	thresholdFilterInput whenTextChangedDo: [ :text |
-		text asInteger ifNotNil: [ treeTable hideNodesUnder: text asNumber ] ].
-
-	treeDropList whenSelectedItemChangedDo: [ :item |
-		viewModel showLeavesOnly: item value ]
+			treeTable expandAll.
+			treeTable takeKeyboardFocus ]
 ]
 
 { #category : 'initialization' }
 StProfilerResultsPresenter >> initializePresenters [
 
-	| h |
-	h := self class toolbarHeight.
+	super initializePresenters.
+	navigationToolbar := self instantiate: StProfilerToolbarPresenter.
+	treeTable := self instantiate: StProfilerTreeTablePresenter on: viewModel.
+	codePresenter := self newCode.
+	reportButton := self newButton.
+	showAsRootButton := self newButton.
+	browseButton := self newButton.
+	leavesCheckbox := self newCheckBox.
+	expandAllButton := self newButton.
+	collapseAllButton := self newButton.
+	thresholdFilterInput := self newThresholdFilterInput.
+	thresholdExpandInput := self newThresholdExpandInput.
 
-	self layout: (SpPanedLayout newTopToBottom
-			 positionOfSlider: 50 percent;
-			 add: (SpBoxLayout newTopToBottom
-					  add: (navigationToolbar := self newProfilerToolbar) height: h;
-					  add: (treeTable := self newProfilerTreeTable);
-					  yourself);
-			 add: (SpBoxLayout newTopToBottom
-					  add: self newConfigurationSectionLayout height: h * 2.5;
-					  add: (codePresenter := self newProfilerCode);
-					  add: (SpBoxLayout newLeftToRight
-							   add: (reportButton := self newReportButton)
-							   withConstraints: [ :constraints |
-								   constraints
-									   bePlacedAtStart;
-									   fill: true;
-									   expand: false ];
-							   addLast: (showAsRootButton := self newShowAsRootButton);
-							   addLast: (browseButton := self newBrowseButton))
-					  height: h;
-					  yourself);
-			 yourself).
+	treeTable addColumn: (SpStringTableColumn title: 'Method or Block' evaluated: [ :item | item reportString ]).
+
+	leavesCheckbox label: 'Show only leaves'.
+
+	collapseAllButton
+		label: 'Collapse All';
+		icon: (self iconNamed: #windowMinimize).
+
+	expandAllButton
+		label: 'Expand All';
+		icon: (self iconNamed: #windowMenu).
+
+	codePresenter beNotEditable.
+
+	reportButton
+		icon: (self iconNamed: #recentMessages);
+		label: 'Full Report';
+		disable.
+
+	showAsRootButton
+		icon: (self iconNamed: #redo);
+		label: 'Show node as root';
+		action: [ viewModel setTallyRoot: treeTable selectedItem ];
+		disable.
+
+	browseButton
+		icon: (self iconNamed: #browse);
+		label: 'Browse';
+		disable;
+		action: [ treeTable selectedItem browseItem ].
 
 	self initializeActions
 ]
 
 { #category : 'private - factory' }
-StProfilerResultsPresenter >> newBrowseButton [
-
-	^ self newButton
-		  icon: (self iconNamed: #browse);
-		  label: 'Browse';
-		  disable;
-		  action: [ treeTable selectedItem browseItem ];
-		  yourself
-]
-
-{ #category : 'private - factory' }
-StProfilerResultsPresenter >> newConfigurationSectionLayout [
-
-	^ SpBoxLayout newTopToBottom
-		  add: (SpBoxLayout newLeftToRight
-				   add: (treeDropList := self newTreeVisualizationDropList);
-				   add: (expandAllButton := self newButton
-						                       label: 'Expand All';
-						                       icon: (self iconNamed: #windowMenu))
-				   width: 100;
-				   add: (collapseAllButton := self newButton
-						                         label: 'Collapse All';
-						                         icon: (self iconNamed: #windowMinimize))
-				   width: 100;
-				   yourself);
-		  add: (SpBoxLayout newLeftToRight
-				   add: (self newLabel label: 'Hide nodes under: ') width: 125;
-				   add: (thresholdFilterInput := self newThresholdFilterInput)
-				   width: 55;
-				   add: (self newLabel label: '%') width: 25;
-				   yourself);
-		  add: (SpBoxLayout newLeftToRight
-				   add: (self newLabel label: 'Expand nodes over: ') width: 125;
-				   add: (thresholdExpandInput := self newThresholdExpandInput)
-				   width: 55;
-				   add: (self newLabel label: '%') width: 25;
-				   yourself);
-		  yourself
-]
-
-{ #category : 'private - factory' }
-StProfilerResultsPresenter >> newProfilerCode [
-
-	^ self instantiate: StProfilerCodePresenter
-]
-
-{ #category : 'private - factory' }
-StProfilerResultsPresenter >> newProfilerNumberInput [
-	^ self instantiate: StProfilerNumberInput
-]
-
-{ #category : 'private - factory' }
-StProfilerResultsPresenter >> newProfilerToolbar [
-
-	^ self instantiate: StProfilerToolbarPresenter
-]
-
-{ #category : 'private - factory' }
-StProfilerResultsPresenter >> newProfilerTreeTable [
-
-	^ StProfilerTreeTablePresenter on: viewModel
-]
-
-{ #category : 'private - factory' }
-StProfilerResultsPresenter >> newReportButton [
-
-	^ self newButton
-		icon: (self iconNamed: #recentMessages);
-		label: 'Full Report';
-		disable;
-		yourself
-]
-
-{ #category : 'private - factory' }
-StProfilerResultsPresenter >> newShowAsRootButton [
-
-	^ self newButton
-		  icon: (self iconNamed: #redo);
-		  label: 'Show node as root';
-		  action: [ viewModel setTallyRoot: treeTable selectedItem ];
-		  disable;
-		  yourself
-]
-
-{ #category : 'private - factory' }
 StProfilerResultsPresenter >> newThresholdExpandInput [
 
-	^ self newProfilerNumberInput
+	^ self newNumberInput
+		  beFloat;
+		  digits: 1;
+		  climbRate: 0.5;
+		  minimum: 0;
+		  maximum: 100;
 		  help: 'Only nodes with a percentage of time greater than this threshold will be expanded';
-		  number: 0;
+		  number: 0.0;
 		  yourself
 ]
 
 { #category : 'private - factory' }
 StProfilerResultsPresenter >> newThresholdFilterInput [
 
-	^ self newProfilerNumberInput
+	^ self newNumberInput
+		  beFloat;
+		  digits: 1;
+		  climbRate: 0.5;
+		  minimum: 0;
+		  maximum: 100;
 		  help: 'Only nodes with a percentage of time greater than this threshold will be shown';
 		  number: viewModel showNodeThreshold;
 		  yourself
-]
-
-{ #category : 'private - factory' }
-StProfilerResultsPresenter >> newTreeVisualizationDropList [
-	| items |
-	items := {
-		         ('Full tree' -> false).
-		         ('Leaves only' -> true) }.
-
-	^ self newDropList
-		                help: 'Results visualization mode';
-		                items: items;
-		                selectItem: (viewModel showLeavesOnly
-				                 ifTrue: [ items at: 2 ]
-				                 ifFalse: [ items at: 1 ]);
-		                display: [ :assoc | assoc key ];
-		                yourself
 ]
 
 { #category : 'accessing - model' }

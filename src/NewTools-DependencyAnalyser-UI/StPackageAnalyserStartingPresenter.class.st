@@ -4,7 +4,7 @@ Welcome user interface to browse dependencies packages. Availaible via tools men
 self new openWithSpec
 "
 Class {
-	#name : 'StWelcomePresenter',
+	#name : 'StPackageAnalyserStartingPresenter',
 	#superclass : 'StPresenter',
 	#instVars : [
 		'choosePresenter',
@@ -16,12 +16,12 @@ Class {
 }
 
 { #category : 'accessing' }
-StWelcomePresenter class >> defaultPreferredExtent [ 
+StPackageAnalyserStartingPresenter class >> defaultPreferredExtent [ 
 	^ (800@800)
 ]
 
 { #category : 'world menu' }
-StWelcomePresenter class >> menuCommandOn: aBuilder [
+StPackageAnalyserStartingPresenter class >> menuCommandOn: aBuilder [
 	<worldMenu>
 
 	(aBuilder item: #PackageDependencies)
@@ -34,7 +34,7 @@ StWelcomePresenter class >> menuCommandOn: aBuilder [
 ]
 
 { #category : 'layout' }
-StWelcomePresenter >> defaultLayout [
+StPackageAnalyserStartingPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		add: choosePresenter;
@@ -43,7 +43,7 @@ StWelcomePresenter >> defaultLayout [
 ]
 
 { #category : 'initialization' }
-StWelcomePresenter >> initializePresenters [
+StPackageAnalyserStartingPresenter >> initializePresenters [
 
 	choosePresenter := SpChooserPresenter new
 		sourceItems: self packageOrganizer packages;
@@ -59,23 +59,23 @@ StWelcomePresenter >> initializePresenters [
 ]
 
 { #category : 'action' }
-StWelcomePresenter >> openDependencyAnalyzer [
+StPackageAnalyserStartingPresenter >> openDependencyAnalyzer [
 	(StPackageDependenciesPresenter onPackagesNamed: self selectedPackageNames) open.
 	choosePresenter delete
 ]
 
 { #category : 'accessing' }
-StWelcomePresenter >> selectedPackageNames [
+StPackageAnalyserStartingPresenter >> selectedPackageNames [
 	^ self selectedPackages collect: [ :each | each name ]
 ]
 
 { #category : 'accessing' }
-StWelcomePresenter >> selectedPackages [
+StPackageAnalyserStartingPresenter >> selectedPackages [
 	^ choosePresenter chosenItems
 ]
 
 { #category : 'accessing' }
-StWelcomePresenter >> windowTitle [
+StPackageAnalyserStartingPresenter >> windowTitle [
 
 	^ 'Package Dependencies Browser'
 ]

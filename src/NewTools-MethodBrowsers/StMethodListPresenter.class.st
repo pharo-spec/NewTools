@@ -364,6 +364,7 @@ StMethodListPresenter >> methodListActions [
 				   register: (StMethodBrowseFullCommand forSpecContext: self);
 				   register: (StInspectMethodCommand forSpecContext: self);
 				   register: (StRunMethodTestCommand forSpecContext: self);
+				   register: (StDismissMethodsCommand forSpecContext: self);
 				   yourself);
 		  register: ((CmCommandGroup forSpecNamed: 'Navigation')
 				   beDisplayedAsGroup;

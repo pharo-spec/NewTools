@@ -252,6 +252,12 @@ StSettingNode >> printOn: aStream [
 ]
 
 { #category : 'accessing' }
+StSettingNode >> realValue: anObject [
+
+	self settingDeclaration realValue: anObject
+]
+
+{ #category : 'accessing' }
 StSettingNode >> settingDeclaration [
 
 	^ declaration
