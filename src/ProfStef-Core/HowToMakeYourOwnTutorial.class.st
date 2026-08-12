@@ -92,11 +92,8 @@ lesson:
 
 First, create a subclass of AbstractTutorial. For example:"
 
-AbstractTutorial subclass: #HowToDebug
-	instanceVariableNames: ''''
-	classVariableNames: ''''
-	poolDictionaries: ''''
-	category: ''YourTutorial''.
+AbstractTutorial << #HowToDebug
+	package: ''YourTutorial'';  install.
 
 ProfStef next.'
 ]
