@@ -23,7 +23,7 @@ StSettingNodeBuilder >> builder: aTreeBuilder [
 	builder := aTreeBuilder
 ]
 
-{ #category : 'initialization' }
+{ #category : 'accessing' }
 StSettingNodeBuilder >> buttonLabel: aString [ 
 	"Set the current's node declaration button label to aString"
 
@@ -74,6 +74,12 @@ StSettingNodeBuilder >> icon: aForm [
 { #category : 'declaration accessing' }
 StSettingNodeBuilder >> iconName: aSymbol [
 	self icon: (self iconNamed: aSymbol)
+]
+
+{ #category : 'accessing' }
+StSettingNodeBuilder >> isTransient: aBoolean [
+
+	node item isTransient: aBoolean
 ]
 
 { #category : 'declaration accessing' }
