@@ -45,9 +45,7 @@ StMethodBrowserGroupTest >> testCloseBoxHitClosesEntireWindow [
 		self assert: group notebook pages size equals: 2.
 		group window window closeBoxHit.
 
-		self assert: group isDisplayed not ] ensure: [
-			SystemWindow setCurrentCloseSource: nil.
-			StMethodBrowserGroup reset ]
+		self assert: group isDisplayed not ] ensure: [ StMethodBrowserGroup reset ]
 ]
 
 { #category : 'tests' }
