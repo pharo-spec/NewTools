@@ -35,6 +35,20 @@ StMethodBrowserGroupTest >> testAddTwoTabsReusesSameGroup [
 ]
 
 { #category : 'tests' }
+StMethodBrowserGroupTest >> testCloseBoxHitClosesEntireWindow [
+
+	| group |
+	[
+		StMethodBrowser browseImplementorsOf: #browseImplementorsOf:.
+		StMethodBrowser browseImplementorsOf: #browseSendersOf:.
+		group := StMethodBrowserGroup current.
+		self assert: group notebook pages size equals: 2.
+		group window window closeBoxHit.
+
+		self assert: group isDisplayed not ] ensure: [ StMethodBrowserGroup reset ]
+]
+
+{ #category : 'tests' }
 StMethodBrowserGroupTest >> testRemovePageWhenMultipleDoesNotCloseTheGroup [
 
 	| group |

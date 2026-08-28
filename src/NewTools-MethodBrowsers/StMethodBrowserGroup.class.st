@@ -81,9 +81,14 @@ StMethodBrowserGroup >> handleTabsFor: anAnnouncement [
 
 	notebook pages size > 1 ifFalse: [ ^ self ].
 
+
+	(self withWindowDo: [ :w | w window wasClosedFromShortcut ]) ifFalse: [
+			(notebook pages anySatisfy: [ :page | page activePresenter ifNil: [ false ] ifNotNil: [ :b | b isDirty ] ]) ifTrue: [
+					(self application confirm: 'Some tabs have unsaved changes.
+Is it OK to discard changes?') ifFalse: [ anAnnouncement denyClose ] ].
+			^ self ].
 	anAnnouncement denyClose.
 	notebook removePage: notebook selectedPage.
-
 	self defer: [
 			self withWindowDo: [ :w | w activate ].
 			notebook selectedPage activePresenter ifNotNil: [ :browser | browser methodList listPresenter takeKeyboardFocus ] ]
