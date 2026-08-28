@@ -17,6 +17,7 @@ StSettingTextPresenterItem >> initializePresenters [
 		placeholder: self model label;
 		yourself.
 	super initializePresenters.
+	setterPresenter whenTextChangedDo: [ :text | self updateSetting: text ].
 ]
 
 { #category : 'accessing' }
