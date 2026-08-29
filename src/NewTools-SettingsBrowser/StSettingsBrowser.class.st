@@ -15,7 +15,6 @@ Class {
 		'toolbarPresenter',
 		'detailsPresenter',
 		'buttonBarPresenter',
-		'exporter',
 		'categoriesPresenter',
 		'searchResult'
 	],
