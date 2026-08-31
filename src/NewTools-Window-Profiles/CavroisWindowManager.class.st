@@ -281,7 +281,7 @@ CavroisWindowManager class >> openTutorial [
 		             text: self comment;
 		             open.
 
-	presenter withWindowDo: [ :w | w title: 'Profile Tutorial' translated ]
+	presenter withWindowDo: [ :w | w title: 'Profile Tutorial' ]
 ]
 
 { #category : 'menu' }

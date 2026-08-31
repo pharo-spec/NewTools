@@ -142,35 +142,35 @@ StSingleCritiqueResultListPresenter >> buildMenuCritique [
 
 	^ SpActionGroup new
 		addActionWith: [ :item | item
-			name: 'Browse' translated;
+			name: 'Browse';
 			action: [ self browseCritique ] ];
 		addGroupWith: [ :group | group 
 			addActionWith: [ :item | item
-				name: 'Mark as wrong' translated;
+				name: 'Mark as wrong';
 				actionEnabled: [ self isCritiqueFalsePositive not ];
 				action: [ self addCritiqueToFalsePositive ] ];
 			addActionWith: [ :item | item
-				name: 'Unmark as wrong' translated;
+				name: 'Unmark as wrong';
 				actionEnabled: [ self isCritiqueFalsePositive ];
 				action: [ self removeCritiqueToFalsePositive ] ];
 			addActionWith: [ :item | item
-				name: 'Unmark as To Do' translated;
+				name: 'Unmark as To Do';
 				actionEnabled: [ self isCritiqueToDo ];
 				action: [ self removeCritiqueToDo ] ];
 			addActionWith: [ :item | item
-				name: 'Mark as To Do' translated;
+				name: 'Mark as To Do';
 				actionEnabled: [ self isCritiqueToDo not ];
 				action: [ self addCritiqueToDo ] ] ];
 		addGroupWith: [ :group | group 
 			addActionWith: [ :item | item
-				name: 'View rationale behind the rule' translated;
+				name: 'View rationale behind the rule';
 				action: [ self rationaleOfRule ] ];
 			addActionWith: [ :item | item
-				name: 'Automatically resolve the issue' translated;
+				name: 'Automatically resolve the issue';
 				actionEnabled: [ critiquesModel selectedItem providesChange ];
 				action: [ self applyTransformation ] ];
 			addActionWith: [ :item | item
-				name: 'Ban this rule' translated;
+				name: 'Ban this rule';
 				action: [ self banRule ] ] ];
 		  yourself
 ]

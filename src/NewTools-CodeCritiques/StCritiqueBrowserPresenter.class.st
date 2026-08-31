@@ -191,10 +191,10 @@ StCritiqueBrowserPresenter >> buildRuleMenuActions [
 
 	^ SpActionGroup new
 		addActionWith: [ :item | item
-			name: 'Browse rule' translated;
+			name: 'Browse rule';
 			action: [ self browseRule ] ];
 		addActionWith: [ :item | item
-			name: 'Reapply this rule' translated;
+			name: 'Reapply this rule';
 			action: [ self reapplyThisRule ] ];
 		yourself
 ]
