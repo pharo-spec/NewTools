@@ -133,7 +133,7 @@ AbstractFileReference >> inspectionItems: aBuilder [
 				   evaluated: [ :each |
 						   [ each humanReadableSize ]
 							   on: Error
-							   do: [ 'N/A' translated ] ]);
+							   do: [ 'N/A' ] ]);
 		  addColumn: ((SpStringTableColumn title: 'Creation' evaluated: [ :each |
 						    [
 							    String streamContents: [ :s |
@@ -141,7 +141,7 @@ AbstractFileReference >> inspectionItems: aBuilder [
 										    s nextPut: Character space.
 										    each creationTime printHMSOn: s ] ]
 							    on: Error
-							    do: [ 'N/A' translated ] ])
+							    do: [ 'N/A' ] ])
 				   beSortable;
 				   yourself);
 		  yourself

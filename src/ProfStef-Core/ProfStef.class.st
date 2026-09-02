@@ -138,7 +138,7 @@ ProfStef class >> openPharoZenWorkspace [
     presenter
         withWindowDo: [ :w |
             w
-                title: 'Pharo Zen' translated;
+                title: 'Pharo Zen';
                 aboutText: self aboutPharoZen ]
 ]
 

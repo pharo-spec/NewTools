@@ -39,7 +39,7 @@ StMorphicUIManager >> chooseDirectory: label from: dir [
 	self flag: 'use chooseDirectory:path: instead of this'.
 	^ StOpenDirectoryPresenter new
 		defaultFolder: dir;
-		title: (label ifNil: [ 'Choose Directory' translated ]);
+		title: (label ifNil: [ 'Choose Directory' ]);
 		open
 ]
 
@@ -48,7 +48,7 @@ StMorphicUIManager >> chooseDirectory: label path: path [
 
 	^ StOpenDirectoryPresenter new
 		  defaultFolder: (path ifNil: [ StFileSystemModel defaultDirectory ]);
-		  title: (label ifNil: [ 'Choose Directory' translated ]);
+		  title: (label ifNil: [ 'Choose Directory' ]);
 		  openModal;
 		  selectedEntry
 ]
