@@ -272,7 +272,7 @@ StThreadSafeTranscript >> worker [
 
 	worker ifNil: [ 
 		worker := TKTWorker new  
-			name: 'ThreadSafeTranscript worker: ', UUID new asString ; 
+			name: 'ThreadSafeTranscript worker: ', UUID new displayString ; 
 			start ].
 	^ worker ensureIsWorking
 ]
