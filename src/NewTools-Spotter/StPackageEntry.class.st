@@ -21,16 +21,16 @@ StPackageEntry >> asHistoryEntry [
 	^ StHistoryPackageEntry new: self
 ]
 
-{ #category : 'converting' }
-StPackageEntry >> asString [
-
-	^ content name
-]
-
 { #category : 'accessing' }
 StPackageEntry >> categoryLabel [
 
 	^ 'package'
+]
+
+{ #category : 'printing' }
+StPackageEntry >> displayStringOn: aStream [
+
+	aStream nextPutAll: content name
 ]
 
 { #category : 'evaluating' }

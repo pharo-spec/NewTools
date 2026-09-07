@@ -15,7 +15,7 @@ Object >> asStSpotterProcessorLink [
 { #category : '*NewTools-Spotter' }
 Object >> spotterPreview: aBuilder [
 
-	^ self asString spotterPreview: aBuilder
+	^ self displayString spotterPreview: aBuilder
 ]
 
 { #category : '*NewTools-Spotter' }

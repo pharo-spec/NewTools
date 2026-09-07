@@ -24,10 +24,8 @@ StTallyModel >> = aTallyModel [
 
 { #category : 'converting' }
 StTallyModel >> asString [
-
-	^ [ self reportString ]
-		  on: Error
-		  do: [ 'error printing' ]
+	self deprecated: 'Do not use asString when you need displayString'.
+	^ self displayString
 ]
 
 { #category : 'transforming' }
@@ -71,6 +69,14 @@ StTallyModel >> detectPathOfMethodSelector: aMethodSelector maxDepth: aMaxDepth 
 		path ifNotEmpty: [ ^ (Array with: self) , path ] ].
 
 	^ #(  )
+]
+
+{ #category : 'converting' }
+StTallyModel >> displayString [
+	
+	^ [ self reportString ]
+		  on: Error
+		  do: [ 'error printing' ]
 ]
 
 { #category : 'actions' }

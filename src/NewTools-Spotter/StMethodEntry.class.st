@@ -27,16 +27,16 @@ StMethodEntry >> asHistoryEntry [
 	^ StHistoryMethodEntry new: self
 ]
 
-{ #category : 'converting' }
-StMethodEntry >> asString [
-
-	^ content selector asString
-]
-
 { #category : 'accessing' }
 StMethodEntry >> categoryLabel [
 
 	^ 'method'
+]
+
+{ #category : 'printing' }
+StMethodEntry >> displayStringOn: aStream [
+
+	aStream nextPutAll: content selector asString
 ]
 
 { #category : 'evaluating' }

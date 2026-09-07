@@ -32,12 +32,6 @@ StHistoryMethodEntry >> accept: aSpotter [
 	aSpotter visitMethodEntry: self
 ]
 
-{ #category : 'converting' }
-StHistoryMethodEntry >> asString [
-
-	^ self contentEvaluated selector
-]
-
 { #category : 'accessing' }
 StHistoryMethodEntry >> content [
 "You shouldn't use content, use contentString to evade leaking"
@@ -69,6 +63,12 @@ StHistoryMethodEntry >> contentString [
 StHistoryMethodEntry >> contentString: aContent [
 
 	contentString := aContent printString
+]
+
+{ #category : 'printing' }
+StHistoryMethodEntry >> displayStringOn: aStream [
+
+	aStream nextPutAll: self contentEvaluated selector
 ]
 
 { #category : 'evaluating' }

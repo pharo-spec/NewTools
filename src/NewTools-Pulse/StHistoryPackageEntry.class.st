@@ -26,12 +26,6 @@ StHistoryPackageEntry class >> new: aStEntry [
 		yourself
 ]
 
-{ #category : 'converting' }
-StHistoryPackageEntry >> asString [
-
-	^ self contentString
-]
-
 { #category : 'accessing' }
 StHistoryPackageEntry >> content [ 
 
@@ -56,6 +50,12 @@ StHistoryPackageEntry >> contentName: aSymbol [
 StHistoryPackageEntry >> contentString [ 
 "For compatability"
 	^ contentName
+]
+
+{ #category : 'printing' }
+StHistoryPackageEntry >> displayStringOn: aStream [
+
+	aStream nextPutAll: self contentString
 ]
 
 { #category : 'evaluating' }

@@ -21,7 +21,7 @@ CavVisualPlaceHolderMorph >> changeStrategy [
 		             title: 'Change Strategy';
 		             label:
 			             'Current strategy is '
-			             , placeHolder strategy class asString
+			             , placeHolder strategy class displayString
 			             , ' , select the strategy you want to use';
 		             items: CavWindowStrategy subclasses;
 		             display: [ :each | each title ];

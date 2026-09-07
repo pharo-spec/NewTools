@@ -53,12 +53,6 @@ StEntry >> asHistoryEntry [
 	^ nil
 ]
 
-{ #category : 'converting' }
-StEntry >> asString [ 
-
-	^ self subclassResponsibility 
-]
-
 { #category : 'accessing' }
 StEntry >> categoryLabel [
 
@@ -80,13 +74,7 @@ StEntry >> content: anObject [
 { #category : 'accessing' }
 StEntry >> contentString [
 
-	^ content asString
-]
-
-{ #category : 'spotter-extensions' }
-StEntry >> displayString [
-
-	^ self asString
+	^ content displayString
 ]
 
 { #category : 'evaluating' }
@@ -128,13 +116,13 @@ StEntry >> iconOn: anIconProvider [
 { #category : 'accessing' }
 StEntry >> label [
 
-	^ self asString
+	^ self displayString
 ]
 
 { #category : 'testing' }
 StEntry >> matchesText: aString [
 
-	^ self asString = aString
+	^ self displayString = aString
 ]
 
 { #category : 'printing' }
