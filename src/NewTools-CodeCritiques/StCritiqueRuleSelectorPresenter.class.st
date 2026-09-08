@@ -77,7 +77,7 @@ StCritiqueRuleSelectorPresenter class >> openWithEnvironment: anEnvironment remo
 		
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> addAll [
 
 	selectedList roots do: [ :group | selectedRules addAll: group rules ].
@@ -85,19 +85,19 @@ StCritiqueRuleSelectorPresenter >> addAll [
 	nextButton enabled: selectedRules isNotEmpty.
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> addAllButton [
 
 	^ addAllButton
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> addButton [
 
 	^ addButton
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> addSelected [
 
 	list selectedItem ifNotNil: [ :item | 
@@ -108,13 +108,35 @@ StCritiqueRuleSelectorPresenter >> addSelected [
 	nextButton enabled: selectedRules isNotEmpty.
 ]
 
-{ #category : 'adding' }
+{ #category : 'layout' }
+StCritiqueRuleSelectorPresenter >> defaultLayout [
+
+	^ SpBoxLayout newTopToBottom
+		add: (SpBoxLayout newTopToBottom
+			spacing: 5;
+		  	add: (SpPanedLayout newLeftToRight
+				add: (SpBoxLayout newLeftToRight
+					spacing: 5;
+					add: list;
+					add: buttonBar expand: false;
+					yourself);
+				add: selectedList;
+				yourself);
+		  yourself);
+ 		add: (SpBoxLayout newLeftToRight
+				addLast: nextButton;
+				yourself)
+ 			expand: false;
+ 		yourself
+]
+
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> environment: aEnviroment [
 
 	environment := aEnviroment
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> groupRules [
 	^ #(
 	#'API Change'
@@ -134,15 +156,15 @@ StCritiqueRuleSelectorPresenter >> groupRules [
 { #category : 'initialization' }
 StCritiqueRuleSelectorPresenter >> initializeButtonBar [
 
-	buttonBar 
-		add: self addButton 
-			expand: false;
-		add: self addAllButton
-			expand: false;
-		add: self removeButton
-			expand: false;
-		add: self removeAllButton
-			expand: false
+	buttonBar := SpBoxLayout newTopToBottom
+		vAlignStart;
+		hAlignCenter;
+		spacing: 3;
+		add: self addButton;
+		add: self addAllButton;
+		add: self removeButton;
+		add: self removeAllButton;
+		yourself
 ]
 
 { #category : 'initialization' }
@@ -171,29 +193,6 @@ StCritiqueRuleSelectorPresenter >> initializeButtons [
 				label: '<<';
 				action: [ self removeAll ];
 				yourself
-]
-
-{ #category : 'initialization' }
-StCritiqueRuleSelectorPresenter >> initializeLayout [
-
-	self layout: (SpBoxLayout newTopToBottom
-			 add: (SpBoxLayout newTopToBottom
-					  spacing: 5;
-					  add: (SpPanedLayout newLeftToRight
-							   add: (SpBoxLayout newLeftToRight
-									    spacing: 5;
-									    add: #list;
-									    add: (buttonBar := SpBoxLayout newTopToBottom)
-									    expand: false;
-									    yourself);
-							   add: #selectedList;
-							   yourself);
-					  yourself);
-			 add: (SpBoxLayout newLeftToRight
-					  addLast: #nextButton;
-					  yourself)
-			 height: 25;
-			 yourself)
 ]
 
 { #category : 'initialization' }
@@ -228,7 +227,6 @@ StCritiqueRuleSelectorPresenter >> initializeNextButton [
 { #category : 'initialization' }
 StCritiqueRuleSelectorPresenter >> initializePresenters [
 
-	self initializeLayout.
 	self initializeList.
 	self initializeSelectedList.
 	self initializeButtons.
@@ -258,7 +256,7 @@ StCritiqueRuleSelectorPresenter >> initializeSelectedList [
 		self updateButtonsState: aSelection ].
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> isSelected: aRule [
 
 	"Check the rule identifier to not run twice the same rule"
@@ -267,32 +265,32 @@ StCritiqueRuleSelectorPresenter >> isSelected: aRule [
 		  rule class uniqueIdentifierName = aRule class uniqueIdentifierName ]
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> items: aCollection [
 
 	list roots: aCollection.
 	selectedList roots: aCollection
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> list [
 	
 	^ list
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> list: anObject [
 
 	list := anObject
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> methodName [
 
 	^ methodName
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> nextAction [
 
 	self delete.
@@ -305,7 +303,7 @@ StCritiqueRuleSelectorPresenter >> nextAction [
 		CBCritiqueWorkingConfiguration current
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> removeAll [
 
 	selectedList roots do: [ :item | 
@@ -314,19 +312,19 @@ StCritiqueRuleSelectorPresenter >> removeAll [
 	nextButton enabled: selectedRules isNotEmpty
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> removeAllButton [
 
 	^ removeAllButton
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> removeButton [
 
 	^ removeButton
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> removeSelected [
 
 	selectedList selectedItem ifNotNil: [ :item | 
@@ -337,37 +335,37 @@ StCritiqueRuleSelectorPresenter >> removeSelected [
 	nextButton enabled: selectedRules isNotEmpty
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> removeTestCase: aBoolean [
 
 	removeTestCase := aBoolean
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> selectedItems [
 
 	^ selectedItems ifNil: [ selectedItems := #() ]
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> selectedList [
 
 	^ selectedList
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> selectedList: anObject [
 
 	selectedList := anObject
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> selectedRules [
 
 	^ selectedRules
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> selectedRules: anObject [
 
 	selectedRules := anObject
@@ -397,14 +395,14 @@ StCritiqueRuleSelectorPresenter >> updateButtonsState: aSelection [
 
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> updateTree [
 
 	list update.
 	selectedList update
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 StCritiqueRuleSelectorPresenter >> windowTitle [
 
 	^ 'Select rules'
