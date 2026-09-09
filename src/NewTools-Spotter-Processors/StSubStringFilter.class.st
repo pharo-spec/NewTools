@@ -12,7 +12,7 @@ Class {
 { #category : 'protected' }
 StSubStringFilter >> criterium: aValue [
 
-	^ aValue asString includesSubstring: filteringText caseSensitive: false
+	^ aValue displayString includesSubstring: filteringText caseSensitive: false
 ]
 
 { #category : 'filtering' }
