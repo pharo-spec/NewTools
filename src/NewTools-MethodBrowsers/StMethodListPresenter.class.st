@@ -82,12 +82,6 @@ StMethodListPresenter >> cacheHierarchyForClasses: aCollection [
 	cachedHierarchy := self buildHierarchyForMessages: aCollection.
 ]
 
-{ #category : 'accessing' }
-StMethodListPresenter >> callerClass [
-
-	^ owner callerClass
-]
-
 { #category : 'private - scopes' }
 StMethodListPresenter >> classEnvironmentFor: aClass [
 	"Answer a <RBClassEnvironment> for aClass"
@@ -194,7 +188,7 @@ StMethodListPresenter >> doBrowseImplementors [
 	| selectors |
 	selectors := self selectedMethods collect: [ :method | method selector ].
 
-	StMethodBrowser browseImplementorsOfAll: selectors from: self class
+	StMethodBrowser browseImplementorsOfAll: selectors
 ]
 
 { #category : 'private - actions' }
@@ -209,7 +203,7 @@ StMethodListPresenter >> doBrowseSenders [
 	| selectors |
 	selectors := self selectedMethods collect: [ :method | method selector ].
 
-	StMethodBrowser browseSendersOfAll: selectors from: self class
+	StMethodBrowser browseSendersOfAll: selectors
 ]
 
 { #category : 'private - actions' }
@@ -404,21 +398,14 @@ StMethodListPresenter >> newVisitedScopesForMethod: aCompiledMethod [
 	| newScopeSet |
 
 	newScopeSet := Set new.
-
-	self callerClass ifNotNil: [ :caller |
-			newScopeSet
-				add: (self packageOrganizer packageOf: caller);
-				add: caller;
-				add: (RBClassHierarchyEnvironment class: caller) ].
-
 	aCompiledMethod ifNil: [ ^ newScopeSet ].
+
 	newScopeSet
 		add: (self packageOf: aCompiledMethod);
 		add: (self classOf: aCompiledMethod);
 		add: (self classHierarchyOf: aCompiledMethod).
 
 	newScopeSet addAll: ScopesManager availableScopes.
-
 	^ newScopeSet
 ]
 

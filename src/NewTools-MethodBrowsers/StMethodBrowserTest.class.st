@@ -43,18 +43,6 @@ StMethodBrowserTest >> testBrowseReferencesToVariableInClass [
 ]
 
 { #category : 'tests' }
-StMethodBrowserTest >> testCallerClassIsSetFromConstructor [
-
-	| browser |
-	[
-		browser := StMethodBrowser browseImplementorsOf: #printOn: from: self class.
-
-
-		self assert: browser callerClass isNotNil.
-		self assert: browser callerClass identicalTo: self class ] ensure: [ browser ifNotNil: [ browser delete ] ]
-]
-
-{ #category : 'tests' }
 StMethodBrowserTest >> testDeprecatedMethodDisplayedStruckOut [
 
 	| browser deprecatedMethod label column |
@@ -337,9 +325,7 @@ StMethodBrowserTest >> testSendersHidesRecursiveCallForMultipleSelectors [
 	selectorA := #tmpRecursive , #A.
 	selectorB := #tmpRecursive , #B.
 
-	browser := StMethodBrowser new
-		           callerClass: StMethodBrowserDummyClass;
-		           yourself.
+	browser := StMethodBrowser new.
 	browser methods: (StMethodBrowser sendersOf: selectorA) , (StMethodBrowser sendersOf: selectorB) asSendersOfAll: {
 			selectorA.
 			selectorB }.
@@ -354,9 +340,7 @@ StMethodBrowserTest >> testSendersHidesRecursiveCallWhenOnlySender [
 	| browser selectorName |
 	selectorName := #tmpRecursive , #Method.
 
-	browser := StMethodBrowser new
-		           callerClass: StMethodBrowserDummyClass;
-		           yourself.
+	browser := StMethodBrowser new.
 	browser methods: (StMethodBrowser sendersOf: selectorName) asSendersOfAll: { selectorName }.
 
 	self assert: browser allMethods isEmpty
@@ -368,9 +352,7 @@ StMethodBrowserTest >> testSendersKeepsRecursiveCallWhenOtherSendersExist [
 
 	| browser selectorName |
 	selectorName := #tmpRecursive , #Method2.
-	browser := StMethodBrowser new
-		           callerClass: StMethodBrowserDummyClass;
-		           yourself.
+	browser := StMethodBrowser new.
 	browser methods: (StMethodBrowser sendersOf: selectorName) asSendersOfAll: { selectorName }.
 
 	self assert: browser allMethods size equals: 2.
