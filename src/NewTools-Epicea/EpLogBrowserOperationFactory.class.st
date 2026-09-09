@@ -83,6 +83,21 @@ EpLogBrowserOperationFactory >> events [
 ]
 
 { #category : 'private' }
+EpLogBrowserOperationFactory >> eventsSinceSnapshot: previewEventsTheOldestFirst [
+	"TODO: move method"
+
+	| aLog filter |
+	aLog := EpLog newWithStore: (OmMemoryStore withAllContents: previewEventsTheOldestFirst).
+	logBrowserModel := EpLogBrowserPresenter newWithLog: aLog.
+	filter := EpSinceLastSnapshotCodeChangeFilter new
+		logBrowserModel: logBrowserModel;
+		yourself.
+	^ aLog entries
+		select: [ :each | filter accepts: each ]
+		thenCollect: [ :each | each content ]
+]
+
+{ #category : 'private' }
 EpLogBrowserOperationFactory >> handleErrorDuring: aBlock [
 	"TODO: do not catch *all* Errors.
 	This error handler exists as a workaround to skip any unexpected error when applying or reverting a code change from GUI.

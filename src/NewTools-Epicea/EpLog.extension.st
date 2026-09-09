@@ -16,3 +16,12 @@ EpLog >> browseVersionsOf: aMethod [
 			refresh;
 			open
 ]
+
+{ #category : '*NewTools-Epicea' }
+EpLog >> mostRecentSnaphotLocalNumber [
+
+	self entries reverseDo: [ :ea |
+			ea content isSnapshotEvent ifTrue: [
+				^ (ea tagAt: #self) localName asInteger ] ].
+	^ nil
+]

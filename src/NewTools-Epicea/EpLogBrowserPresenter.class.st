@@ -261,70 +261,89 @@ EpLogBrowserPresenter >> fileOutSelection [
 EpLogBrowserPresenter >> filterActions [
 
 	^ SpActionGroup new
-		beDisplayedAsSubMenu;
-		name: 'Filters';
-		addActionWith: [ :anItem | anItem
-			name: 'Clean action filters';
-			iconName: #smallDelete;
-			action: [ self removeAllFilters ];
-			actionEnabled: [ self filters isEmptyOrNil not ] ];
-		addGroupWith: [ :aGroup | aGroup 
-			beDisplayedAsGroup;
-			addActionWith: [ :anItem | anItem
-				name: EpLatestCodeChangeFilter title;
-				description: EpLatestCodeChangeFilter comment;
-				iconName: #smallFind;
-				action: [ self filterLatestCodeChanges ] ];
-			 addActionWith: [ :anItem | anItem
-				name: EpImpactCodeChangeFilter title;
-				description: EpImpactCodeChangeFilter comment;
-				iconName: #smallFind;
-				action: [ self filterImpactCodeChanges ] ] ];
-		addGroupWith: [ :aGroup | aGroup
-			beDisplayedAsGroup; 
-			addActionWith: [ :anItem | anItem
-				name: EpEntryReferencesFilter title;
-				iconName: #smallFind;
-				action: [ self filterSelection ] ];
-			addActionWith: [ :anItem | anItem
-				name: 'Show only changes to this method';
-				description: 'Show only additions, modifications or removals of this method.';
-				iconName: #smallFind;
-				action: [ self filterAllChangesToSelection ] ] ;
-			addActionWith: [ :anItem | anItem
-				name: 'Show only changes to this class or trait';
-				description: 'Show only changes in the scope of this class or trait.';
-				iconName: #smallFind;
-				action: [ self filterAllChangesToSelectionBehavior ] ];
-			 addActionWith: [ :anItem | anItem
-				name: 'Show only changes in this package';
-				description: 'Show only additions, modifications or removals of this package.';
-				iconName: #smallFind;
-				action: [ self filterAllChangesToSelectionPackage ] ] ];
-		addGroupWith: [ :aGroup | aGroup
-			beDisplayedAsGroup; 
-			addActionWith: [ :anItem | anItem
-				name: 'Show only if done today';
-				iconName: #calendar;
-				action: [ self filterToday ] ];
-			addActionWith: [ :anItem | anItem
-				name: 'Hide events done after';
-				iconName: #calendar;
-				action: [ self filterBefore ] ]; 
-			addActionWith: [ :anItem | anItem
-				name: 'Hide events done before';
-				iconName: #calendar;
-				action: [ self filterAfter ] ] ];
-		addGroupWith: [ :aGroup | 
-			aGroup beDisplayedAsGroup.
-			EpPluggableFilter allFilters do: [ :aFilter |
-				aGroup addActionWith: [ :anItem | anItem
-					name: aFilter title;
-					iconName: #smallFind;
-					description: aFilter title;
-					action: [ self addFilter: aFilter ] ] ] ];
-		yourself
-
+		  beDisplayedAsSubMenu;
+		  name: 'Filters';
+		  addActionWith: [ :anItem |
+				  anItem
+					  name: 'Clean action filters';
+					  iconName: #smallDelete;
+					  action: [ self removeAllFilters ];
+					  actionEnabled: [ self filters isEmptyOrNil not ] ];
+		  addGroupWith: [ :aGroup |
+				  aGroup
+					  beDisplayedAsGroup;
+					  addActionWith: [ :anItem |
+							  anItem
+								  name: EpLatestCodeChangeFilter title;
+								  description: EpLatestCodeChangeFilter comment;
+								  iconName: #smallFind;
+								  action: [ self filterLatestCodeChanges ] ];
+					  addActionWith: [ :anItem |
+							  anItem
+								  name: EpSinceLastSnapshotCodeChangeFilter title;
+								  description: EpSinceLastSnapshotCodeChangeFilter comment;
+								  iconName: #smallFind;
+								  action: [ self filterLastSnapshotCodeChanges ] ];
+					  addActionWith: [ :anItem |
+							  anItem
+								  name: EpImpactCodeChangeFilter title;
+								  description: EpImpactCodeChangeFilter comment;
+								  iconName: #smallFind;
+								  action: [ self filterImpactCodeChanges ] ] ];
+		  addGroupWith: [ :aGroup |
+				  aGroup
+					  beDisplayedAsGroup;
+					  addActionWith: [ :anItem |
+							  anItem
+								  name: EpEntryReferencesFilter title;
+								  iconName: #smallFind;
+								  action: [ self filterSelection ] ];
+					  addActionWith: [ :anItem |
+							  anItem
+								  name: 'Show only changes to this method';
+								  description: 'Show only additions, modifications or removals of this method.';
+								  iconName: #smallFind;
+								  action: [ self filterAllChangesToSelection ] ];
+					  addActionWith: [ :anItem |
+							  anItem
+								  name: 'Show only changes to this class or trait';
+								  description: 'Show only changes in the scope of this class or trait.';
+								  iconName: #smallFind;
+								  action: [ self filterAllChangesToSelectionBehavior ] ];
+					  addActionWith: [ :anItem |
+							  anItem
+								  name: 'Show only changes in this package';
+								  description: 'Show only additions, modifications or removals of this package.';
+								  iconName: #smallFind;
+								  action: [ self filterAllChangesToSelectionPackage ] ] ];
+		  addGroupWith: [ :aGroup |
+				  aGroup
+					  beDisplayedAsGroup;
+					  addActionWith: [ :anItem |
+							  anItem
+								  name: 'Show only if done today';
+								  iconName: #calendar;
+								  action: [ self filterToday ] ];
+					  addActionWith: [ :anItem |
+							  anItem
+								  name: 'Hide events done after';
+								  iconName: #calendar;
+								  action: [ self filterBefore ] ];
+					  addActionWith: [ :anItem |
+							  anItem
+								  name: 'Hide events done before';
+								  iconName: #calendar;
+								  action: [ self filterAfter ] ] ];
+		  addGroupWith: [ :aGroup |
+				  aGroup beDisplayedAsGroup.
+				  EpPluggableFilter allFilters do: [ :aFilter |
+						  aGroup addActionWith: [ :anItem |
+								  anItem
+									  name: aFilter title;
+									  iconName: #smallFind;
+									  description: aFilter title;
+									  action: [ self addFilter: aFilter ] ] ] ];
+		  yourself
 ]
 
 { #category : 'menu - filters' }
@@ -384,6 +403,14 @@ EpLogBrowserPresenter >> filterBefore [
 EpLogBrowserPresenter >> filterImpactCodeChanges [
 
 	self addFilter: (EpImpactCodeChangeFilter new environment: self class environment; yourself)
+]
+
+{ #category : 'menu - filters' }
+EpLogBrowserPresenter >> filterLastSnapshotCodeChanges [
+
+	self addFilter: (EpSinceLastSnapshotCodeChangeFilter new
+			 logBrowserModel: self;
+			 yourself)
 ]
 
 { #category : 'menu - filters' }
@@ -451,94 +478,90 @@ EpLogBrowserPresenter >> filtersSubMenu [
 	aMenu := SpMenuPresenter new.
 
 	aMenu addGroup: [ :aGroup |
-		aGroup addItem: [ :anItem |
-			anItem
-				name: 'Clean filters (', self filters size asString, ' active)';
-				icon: (self iconNamed: #smallDelete);
-				action: [ self removeAllFilters ] ].
-		].
-
-	aMenu addGroup: [ :aGroup |
-
-		aGroup addItem: [ :anItem |
-			anItem
-				name: EpLatestCodeChangeFilter title;
-				description: EpLatestCodeChangeFilter comment;
-				icon: (self iconNamed: #smallFind);
-				action: [ self filterLatestCodeChanges ] ].
-
-		aGroup addItem: [ :anItem |
-			anItem
-				name: EpImpactCodeChangeFilter title;
-				description: EpImpactCodeChangeFilter comment;
-				icon: (self iconNamed: #smallFind);
-				action: [ self filterImpactCodeChanges ] ].
-	].
-
-	aMenu addGroup: [ :aGroup |
-
-		aGroup addItem: [ :anItem |
-			anItem
-				name: EpEntryReferencesFilter title;
-				icon: (self iconNamed: #smallFind);
-				action: [ self filterSelection ]
-			].
-
-		aGroup addItem: [ :anItem |
-			anItem
-				name: 'Show only changes to this method';
-				description: 'Show only additions, modifications or removals of this method.';
-				icon: (self iconNamed: #smallFind);
-				action: [ self filterAllChangesToSelection ] ].
-
-		aGroup addItem: [ :anItem |
-			anItem
-				name: 'Show only changes to this class or trait';
-				description: 'Show only changes in the scope of this class or trait.';
-				icon: (self iconNamed: #smallFind);
-				action: [ self filterAllChangesToSelectionBehavior ]
-			].
-
-		aGroup addItem: [ :anItem |
-			anItem
-				name: 'Show only changes in this package';
-				description: 'Show only additions, modifications or removals of this package.';
-				icon: (self iconNamed: #smallFind);
-				action: [ self filterAllChangesToSelectionPackage ]
-			].
-	].
-
-
-	aMenu addGroup: [ :aGroup |
-
-		aGroup addItem: [ :anItem |
-			anItem
-				name: 'Show only if done today';
-				icon: (self iconNamed: #calendar);
-				action: [ self filterToday ] ].
-
-		aGroup addItem: [ :anItem |
-			anItem
-				name: 'Hide events done after';
-				icon: (self iconNamed: #calendar);
-				action: [ self filterBefore ] ].
-
-		aGroup addItem: [ :anItem |
-			anItem
-				name: 'Hide events done before';
-				icon: (self iconNamed: #calendar);
-				action: [ self filterAfter ] ].
-	].
-
-	aMenu addGroup: [ :aGroup |
-		EpPluggableFilter allFilters do: [ :aFilter |
 			aGroup addItem: [ :anItem |
-				anItem
-					name: aFilter title;
-					icon: (self iconNamed: #smallFind);
-					description: aFilter title;
-					action: [ self addFilter: aFilter ] ] ]
-		].
+					anItem
+						name: 'Clean filters (' , self filters size asString , ' active)';
+						icon: (self iconNamed: #smallDelete);
+						action: [ self removeAllFilters ] ] ].
+
+	aMenu addGroup: [ :aGroup |
+			aGroup
+				addItem: [ :anItem |
+						anItem
+							name: EpLatestCodeChangeFilter title;
+							description: EpLatestCodeChangeFilter comment;
+							icon: (self iconNamed: #smallFind);
+							action: [ self filterLatestCodeChanges ] ];
+				addActionWith: [ :anItem |
+						anItem
+							name: EpSinceLastSnapshotCodeChangeFilter title;
+							description: EpSinceLastSnapshotCodeChangeFilter comment;
+							iconName: #smallFind;
+							action: [ self filterLastSnapshotCodeChanges ] ].
+
+			aGroup addItem: [ :anItem |
+					anItem
+						name: EpImpactCodeChangeFilter title;
+						description: EpImpactCodeChangeFilter comment;
+						icon: (self iconNamed: #smallFind);
+						action: [ self filterImpactCodeChanges ] ] ].
+
+	aMenu addGroup: [ :aGroup |
+			aGroup addItem: [ :anItem |
+					anItem
+						name: EpEntryReferencesFilter title;
+						icon: (self iconNamed: #smallFind);
+						action: [ self filterSelection ] ].
+
+			aGroup addItem: [ :anItem |
+					anItem
+						name: 'Show only changes to this method';
+						description: 'Show only additions, modifications or removals of this method.';
+						icon: (self iconNamed: #smallFind);
+						action: [ self filterAllChangesToSelection ] ].
+
+			aGroup addItem: [ :anItem |
+					anItem
+						name: 'Show only changes to this class or trait';
+						description: 'Show only changes in the scope of this class or trait.';
+						icon: (self iconNamed: #smallFind);
+						action: [ self filterAllChangesToSelectionBehavior ] ].
+
+			aGroup addItem: [ :anItem |
+					anItem
+						name: 'Show only changes in this package';
+						description: 'Show only additions, modifications or removals of this package.';
+						icon: (self iconNamed: #smallFind);
+						action: [ self filterAllChangesToSelectionPackage ] ] ].
+
+
+	aMenu addGroup: [ :aGroup |
+			aGroup addItem: [ :anItem |
+					anItem
+						name: 'Show only if done today';
+						icon: (self iconNamed: #calendar);
+						action: [ self filterToday ] ].
+
+			aGroup addItem: [ :anItem |
+					anItem
+						name: 'Hide events done after';
+						icon: (self iconNamed: #calendar);
+						action: [ self filterBefore ] ].
+
+			aGroup addItem: [ :anItem |
+					anItem
+						name: 'Hide events done before';
+						icon: (self iconNamed: #calendar);
+						action: [ self filterAfter ] ] ].
+
+	aMenu addGroup: [ :aGroup |
+			EpPluggableFilter allFilters do: [ :aFilter |
+					aGroup addItem: [ :anItem |
+							anItem
+								name: aFilter title;
+								icon: (self iconNamed: #smallFind);
+								description: aFilter title;
+								action: [ self addFilter: aFilter ] ] ] ].
 
 	^ aMenu
 ]
