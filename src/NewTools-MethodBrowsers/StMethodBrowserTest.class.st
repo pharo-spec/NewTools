@@ -1,6 +1,9 @@
 Class {
 	#name : 'StMethodBrowserTest',
 	#superclass : 'TestCase',
+	#instVars : [
+		'browser'
+	],
 	#category : 'NewTools-MethodBrowsers-Tests',
 	#package : 'NewTools-MethodBrowsers',
 	#tag : 'Tests'
@@ -12,46 +15,35 @@ StMethodBrowserTest >> dataMethodForTest [
 	^ 'StMethodBrowser'
 ]
 
+{ #category : 'running' }
+StMethodBrowserTest >> tearDown [
+
+	browser ifNotNil: [ browser delete ].
+	super tearDown
+]
+
 { #category : 'tests' }
 StMethodBrowserTest >> testBrowseClassNameAsClass [
 
-	| browser |
-	[
-		browser := StMethodBrowser browseReferencesToClass: StMethodBrowserDummyClass.
+	browser := StMethodBrowser browseReferencesToClass: StMethodBrowserDummyClass.
 
-		self assert: browser methods size equals: 6] ensure: [ browser ifNotNil: [ browser delete ] ]
+	self assert: browser methods size equals: 3
 ]
 
 { #category : 'tests' }
 StMethodBrowserTest >> testBrowseClassNameAsLiteral [
 
-	| browser |
-	[
-		browser := StMethodBrowser browseReferencesToLiteral: 'StMethodBrowser'.
+	browser := StMethodBrowser browseReferencesToLiteral: 'StMethodBrowser'.
 
-		self assert: browser methods size equals: 4 ] ensure: [ browser ifNotNil: [ browser delete ] ]
+	self assert: browser methods size equals: 4
 ]
 
 { #category : 'tests' }
 StMethodBrowserTest >> testBrowseReferencesToVariableInClass [
 
-	| browser | 
-	[
-		browser := StMethodBrowser browseReferencesToVariable: (StMethodBrowser slotNamed: #title )inClass: StMethodBrowser.
+	browser := StMethodBrowser browseReferencesToVariable: (StMethodBrowser slotNamed: #title) inClass: StMethodBrowser.
 
-		self assert: browser methods size equals: 2 ] ensure: [ browser ifNotNil: [ browser delete ] ]
-]
-
-{ #category : 'tests' }
-StMethodBrowserTest >> testCallerClassIsSetFromConstructor [
-
-	| browser |
-	[
-		browser := StMethodBrowser browseImplementorsOf: #printOn: from: self class.
-
-
-		self assert: browser callerClass isNotNil.
-		self assert: browser callerClass identicalTo: self class ] ensure: [ browser ifNotNil: [ browser delete ] ]
+	self assert: browser methods size equals: 2
 ]
 
 { #category : 'tests' }
@@ -330,50 +322,15 @@ StMethodBrowserTest >> testRefreshingBlockWithLiteralString [
 ]
 
 { #category : 'tests' }
-StMethodBrowserTest >> testSendersHidesRecursiveCallForMultipleSelectors [
-	"If the only senders of a collection of selectors are recursive calls, no result should be shown"
-
-	| browser selectorA selectorB |
-	selectorA := #tmpRecursive , #A.
-	selectorB := #tmpRecursive , #B.
-
-	browser := StMethodBrowser new
-		           callerClass: StMethodBrowserDummyClass;
-		           yourself.
-	browser methods: (StMethodBrowser sendersOf: selectorA) , (StMethodBrowser sendersOf: selectorB) asSendersOfAll: {
-			selectorA.
-			selectorB }.
-
-	self assert: browser allMethods isEmpty
-]
-
-{ #category : 'tests' }
-StMethodBrowserTest >> testSendersHidesRecursiveCallWhenOnlySender [
-	"If the only sender of a method is itself, no result should be shown"
-
-	| browser selectorName |
-	selectorName := #tmpRecursive , #Method.
-
-	browser := StMethodBrowser new
-		           callerClass: StMethodBrowserDummyClass;
-		           yourself.
-	browser methods: (StMethodBrowser sendersOf: selectorName) asSendersOfAll: { selectorName }.
-
-	self assert: browser allMethods isEmpty
-]
-
-{ #category : 'tests' }
 StMethodBrowserTest >> testSendersKeepsRecursiveCallWhenOtherSendersExist [
 	"If a method has other senders besides itself, keep all including the recursive call"
 
-	| browser selectorName |
-	selectorName := #tmpRecursive , #Method2.
-	browser := StMethodBrowser new
-		           callerClass: StMethodBrowserDummyClass;
-		           yourself.
+	| selectorName |
+	selectorName := #tmpRecursiveMethod2.
+	browser := StMethodBrowser new.
 	browser methods: (StMethodBrowser sendersOf: selectorName) asSendersOfAll: { selectorName }.
 
-	self assert: browser allMethods size equals: 2.
+	self assert: browser allMethods size equals: 3.
 	self assert: (browser allMethods anySatisfy: [ :m | m selector = selectorName ]).
 	self assert: (browser allMethods anySatisfy: [ :m | m selector = #tmpOtherCaller ])
 ]

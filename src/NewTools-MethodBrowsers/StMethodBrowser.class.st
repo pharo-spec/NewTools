@@ -19,7 +19,6 @@ Class {
 		'highlight',
 		'filterPresenter',
 		'allMethods',
-		'callerClass',
 		'titleChangedCallbacks',
 		'acceptBlock'
 	],
@@ -48,23 +47,15 @@ StMethodBrowser class >> browse: aCollection [
 { #category : 'opening explicit' }
 StMethodBrowser class >> browse: aCollection asImplementorsOf: aSymbol [
 
-	^ self browse: aCollection asImplementorsOfAll: { aSymbol } from: nil
+	^ self browse: aCollection asImplementorsOfAll: { aSymbol }
 ]
 
 { #category : 'opening explicit' }
-StMethodBrowser class >> browse: aCollection asImplementorsOf: aSymbol from: aCallerClass [
-	"Specialized version for better UX feedback"
-
-	^ self browse: aCollection asImplementorsOfAll: { aSymbol } from: aCallerClass
-]
-
-{ #category : 'opening explicit' }
-StMethodBrowser class >> browse: aCollection asImplementorsOfAll: aCollectionOfSymbols from: aCallerClass [
+StMethodBrowser class >> browse: aCollection asImplementorsOfAll: aCollectionOfSymbols [
 
 	^ self
-		browse: aCollection
-		withInitializationBlock: [ :browser | browser methods: aCollection asImplementorsOfAll: aCollectionOfSymbols ]
-		from: aCallerClass
+		  browse: aCollection
+		  withInitializationBlock: [ :browser | browser methods: aCollection asImplementorsOfAll: aCollectionOfSymbols ]
 ]
 
 { #category : 'opening explicit' }
@@ -74,7 +65,6 @@ StMethodBrowser class >> browse: aCollection asReferencesToClass: aCallerClass [
 	^ self
 		browse: aCollection
 		withInitializationBlock: [ :browser | browser methods: aCollection asReferenceTo: aCallerClass binding ]
-		from: aCallerClass
 ]
 
 { #category : 'opening explicit' }
@@ -91,34 +81,24 @@ StMethodBrowser class >> browse: aCollection asReferencesToVariable: aVariable i
 	^ self
 		browse: aCollection
 		withInitializationBlock: [ :browser | browser methods: aCollection asReferencesToVariable: aVariable inClass: aClass binding ]
-		from: aClass
 ]
 
 { #category : 'opening explicit' }
 StMethodBrowser class >> browse: compiledMethods asSendersOf: aSymbol [
 	"Specialized version for better UX feedback for senders and explicit list of methods"
 
-	^ self browse: compiledMethods asSendersOf: aSymbol from: nil
-]
-
-{ #category : 'opening explicit' }
-StMethodBrowser class >> browse: aCollection asSendersOf: aSymbol from: aClass [
-	"Specialized version for better UX feedback for senders and explicit list of methods"
-
 	^ self
-		browse: aCollection
-		withInitializationBlock: [ :browser | browser methods: aCollection asSendersOfAll: { aSymbol } ]
-		from: aClass
+		browse: compiledMethods
+		withInitializationBlock: [ :browser | browser methods: compiledMethods asSendersOfAll: { aSymbol } ]
 ]
 
 { #category : 'opening explicit' }
-StMethodBrowser class >> browse: aCollection asSendersOfAll: aCollectionOfSymbols from: aClass [
+StMethodBrowser class >> browse: aCollection asSendersOfAll: aCollectionOfSymbols [
 	"Specialized version for better UX feedback for senders of all given selectors."
 
 	^ self
 		browse: aCollection
 		withInitializationBlock: [ :browser | browser methods: aCollection asSendersOfAll: aCollectionOfSymbols ]
-		from: aClass
 ]
 
 { #category : 'opening - old' }
@@ -131,35 +111,17 @@ StMethodBrowser class >> browse: aCollection title: aString from: aClass [
 				browser
 					methods: aCollection;
 					title: aString ]
-		from: aClass
 ]
 
 { #category : 'opening explicit' }
 StMethodBrowser class >> browse: compiledMethods withInitializationBlock: aBlock [
 
-	^ self browse: compiledMethods withInitializationBlock: aBlock from: nil
-]
-
-{ #category : 'opening explicit' }
-StMethodBrowser class >> browse: compiledMethods withInitializationBlock: aBlock from: aCallerClass [
-
 	| browser |
-	"Inform when the collection is empty.
-	We leave this code here because this method is called from many different places.
-	
-	However, putting this here has several drawbacks:
-	  - browse: should return a window/presenter?
-	  - is this a common browsing API or an API to open a StMethodBrowser? If it is the second, this is breaking expectations.
-	  - this is missing context because we are in class side. We have no application to attach the browser to.
-	"
 	browser := self new.
-	browser callerClass: aCallerClass.
 	aBlock value: browser.
 	browser allMethods ifEmpty: [
 			StPharoApplication current inform: 'No result found'.
 			^ nil ].
-
-
 	^ StMethodBrowserGroup addOrCreateTab: browser
 ]
 
@@ -171,18 +133,11 @@ StMethodBrowser class >> browseImplementorsOf: aSymbol [
 ]
 
 { #category : 'opening' }
-StMethodBrowser class >> browseImplementorsOf: aSymbol from: aCallerClass [
-	"Opens a browser on all implementors of aSymbol. Sets the refreshing block to keep the list up to date."
-
-	^ self browse: (self implementorsOf: aSymbol) asImplementorsOf: aSymbol from: aCallerClass
-]
-
-{ #category : 'opening' }
-StMethodBrowser class >> browseImplementorsOfAll: aCollectionOfSymbols from: aCallerClass [
+StMethodBrowser class >> browseImplementorsOfAll: aCollectionOfSymbols [
 
 	| methods |
 	methods := aCollectionOfSymbols flatCollect: [ :sym | self implementorsOf: sym ].
-	^ self browse: methods asArray asImplementorsOfAll: aCollectionOfSymbols from: aCallerClass
+	^ self browse: methods asArray asImplementorsOfAll: aCollectionOfSymbols
 ]
 
 { #category : 'opening' }
@@ -224,9 +179,6 @@ StMethodBrowser class >> browseReferencesToVariables: variables [
 				browser
 					methods: methods asArray;
 					title: 'References to ' , (', ' join: (variables collect: [ :v | v name ])) ]
-		from: ((variables first respondsTo: #owningClass)
-				 ifTrue: [ variables first owningClass ]
-				 ifFalse: [ variables first definingClass ])
 ]
 
 { #category : 'opening' }
@@ -237,18 +189,11 @@ StMethodBrowser class >> browseSendersOf: aSymbol [
 ]
 
 { #category : 'opening' }
-StMethodBrowser class >> browseSendersOf: aSymbol from: aCallerMethod [
-	"Special version that sets the correct refreshing block for senders"
-
-	^ self browse: (self sendersOf: aSymbol) asSendersOf: aSymbol from: aCallerMethod 
-]
-
-{ #category : 'opening' }
-StMethodBrowser class >> browseSendersOfAll: aCollectionOfSymbols from: aCallerClass [
+StMethodBrowser class >> browseSendersOfAll: aCollectionOfSymbols [
 
 	| methods |
 	methods := aCollectionOfSymbols flatCollect: [ :sym | self sendersOf: sym ].
-	^ self browse: methods asArray asSendersOfAll: aCollectionOfSymbols from: aCallerClass
+	^ self browse: methods asArray asSendersOfAll: aCollectionOfSymbols
 ]
 
 { #category : 'opening' }
@@ -267,7 +212,6 @@ StMethodBrowser class >> browseUsersOfSharedPool: aPoolClass [
 				browser
 					methods: methods asArray;
 					title: 'Users of pool ' , aPoolClass name ]
-		from: aPoolClass
 ]
 
 { #category : 'opening' }
@@ -283,7 +227,6 @@ StMethodBrowser class >> browseUsersOfTrait: aTrait [
 				browser
 					methods: methods asArray;
 					title: 'Users of trait ' , aTrait name ]
-		from: aTrait
 ]
 
 { #category : 'opening' }
@@ -298,9 +241,6 @@ StMethodBrowser class >> browseWritersOfVariables: variables [
 				browser
 					methods: methods asArray;
 					title: 'Writers to ' , (', ' join: (variables collect: [ :v | v name ])) ]
-		from: ((variables first respondsTo: #owningClass)
-				 ifTrue: [ variables first owningClass ]
-				 ifFalse: [ variables first definingClass ])
 ]
 
 { #category : 'private' }
@@ -462,19 +402,6 @@ StMethodBrowser >> applyCurrentScopeAndFilter [
 		ifFalse: [ filterPresenter applyFilter: currentFilter ].
 
 	self selectIndex: 1
-]
-
-{ #category : 'accessing' }
-StMethodBrowser >> callerClass [
-
-	^ callerClass
-]
-
-{ #category : 'accessing' }
-StMethodBrowser >> callerClass: aClass [
-
-	callerClass := aClass.
-
 ]
 
 { #category : 'api - private' }
@@ -890,24 +817,11 @@ StMethodBrowser >> methods: compiledMethods asReferencesToVariable: aVariable in
 
 { #category : 'api - instance side' }
 StMethodBrowser >> methods: compiledMethods asSendersOfAll: aCollectionOfSymbols [
-	"
-	 If callerClass is set and all senders are recursive calls (i.e. the method only calls itself),
-	 the list is left empty so the browser displays 'No result found'.
-	 If other senders exist alongside the recursive call, all senders are kept in the list
-	 to avoid losing results when chaining sender/implementor queries."
-
-	| filteredMethods |
-	filteredMethods := self callerClass ifNil: [ compiledMethods ] ifNotNil: [ :caller |
-			                   | withoutSelf |
-			                   withoutSelf := compiledMethods reject: [ :method |
-				                                  method methodClass = caller and: [
-					                                  aCollectionOfSymbols anySatisfy: [ :selector | method selector = selector ] ] ].
-			                   withoutSelf ifEmpty: [ withoutSelf ] ifNotEmpty: [ compiledMethods ] ].
 
 	self
 		setRefreshingBlockForSendersOfAll: aCollectionOfSymbols;
 		highlight: aCollectionOfSymbols;
-		methods: filteredMethods;
+		methods: compiledMethods;
 		title: 'Senders of ' , (', ' join: aCollectionOfSymbols)
 ]
 
