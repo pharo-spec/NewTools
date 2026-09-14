@@ -26,6 +26,7 @@ StSettingNumberPresenterItem >> initializePresenters [
 
 	setterPresenter := self newNumberInput.
 	super initializePresenters.
+	setterPresenter whenNumberChangedDo: [ :value | self updateSetting: value ] 
 ]
 
 { #category : 'accessing' }
