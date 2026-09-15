@@ -553,48 +553,50 @@ StMethodBrowser >> handleMethodAdded: anAnnouncement [
 
 { #category : 'announcements' }
 StMethodBrowser >> handleMethodModified: anAnnouncement [
-
 	| newCompiledMethod oldCompiledMethod existingItem existingItemIndex previousSelectionIndex previousEditedText |
+	
 	self canHandleAnnouncement ifFalse: [ ^ self ].
 
 	newCompiledMethod := anAnnouncement newMethod.
 	oldCompiledMethod := anAnnouncement oldMethod.
 
-	existingItem := self itemMatching: oldCompiledMethod.
+	methodList listPresenter disableSelectionDuring: [
 
-	existingItem ifNil: [
-		"Case 1, it's a new method => add it!"
-		(self acceptsItem: newCompiledMethod fromAnnouncement: anAnnouncement) ifTrue: [
-				allMethods add: newCompiledMethod.
-				self applyCurrentScopeAndFilter ].
-		^ self ].
+		existingItem := self itemMatching: oldCompiledMethod.
 
-	previousEditedText := textPresenter isDirty ifTrue: [ textPresenter text ].
-	previousSelectionIndex := methodList selectedIndex.
+		existingItem ifNil: [
+			"Case 1, it's a new method => add it!"
+			(self acceptsItem: newCompiledMethod fromAnnouncement: anAnnouncement) ifTrue: [
+					allMethods add: newCompiledMethod.
+					self applyCurrentScopeAndFilter ].
+			^ self ].
 
-	existingItemIndex := allMethods indexOf: existingItem .
+		previousEditedText := textPresenter isDirty ifTrue: [ textPresenter text ].
+		previousSelectionIndex := methodList selectedIndex.
 
-	"Case 2, the new version of the method is not valid anymore => remove it!"
-	(self acceptsItem: newCompiledMethod fromAnnouncement: anAnnouncement) ifFalse: [
+		existingItemIndex := allMethods indexOf: existingItem .
+
+		"Case 2, the new version of the method is not valid anymore => remove it!"
+		(self acceptsItem: newCompiledMethod fromAnnouncement: anAnnouncement) ifFalse: [
 			existingItemIndex > 0 ifTrue: [ allMethods removeIndex: existingItemIndex ].
 			self applyCurrentScopeAndFilter.
 			self defer: [
-					methodList unselectAll.
-					self selectIndex: (previousSelectionIndex min: self methods size) ].
-			^ self ].
+				methodList unselectAll.
+				self selectIndex: (previousSelectionIndex min: self methods size) ].
+				^ self ].
 
-	"Case 2, the new version of the method is valid => update it!"
-	existingItemIndex > 0
-		ifTrue: [ allMethods at: existingItemIndex put: newCompiledMethod ]
-		ifFalse: [ allMethods add: newCompiledMethod ].
-	self applyCurrentScopeAndFilter.
-	self defer: [
-			methodList unselectAll.
-			self selectIndex: previousSelectionIndex ].
+		"Case 2, the new version of the method is valid => update it!"
+		existingItemIndex > 0
+			ifTrue: [ allMethods at: existingItemIndex put: newCompiledMethod ]
+			ifFalse: [ allMethods add: newCompiledMethod ].
+		self applyCurrentScopeAndFilter.
+		self defer: [
+				methodList unselectAll.
+				self selectIndex: previousSelectionIndex ].
 
-	previousEditedText ifNotNil: [
-			textPresenter text: previousEditedText.
-			textPresenter markConflict ]
+		previousEditedText ifNotNil: [
+				textPresenter text: previousEditedText.
+				textPresenter markConflict ] ]
 ]
 
 { #category : 'announcements' }
