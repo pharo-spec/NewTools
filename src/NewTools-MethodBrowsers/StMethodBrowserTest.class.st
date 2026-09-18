@@ -18,7 +18,7 @@ StMethodBrowserTest >> dataMethodForTest [
 { #category : 'running' }
 StMethodBrowserTest >> tearDown [
 
-	browser ifNotNil: [ browser delete ].
+	browser ifNotNil: [ browser withWindowDo: #close ].
 	super tearDown
 ]
 
@@ -48,8 +48,8 @@ StMethodBrowserTest >> testBrowseReferencesToVariableInClass [
 
 { #category : 'tests' }
 StMethodBrowserTest >> testDeprecatedMethodDisplayedStruckOut [
-
-	| browser deprecatedMethod label column |
+	| deprecatedMethod label column |
+	
 	[
 		self class
 			compile: 'tmpDeprecatedMethod
@@ -63,64 +63,56 @@ StMethodBrowserTest >> testDeprecatedMethodDisplayedStruckOut [
 		label := SpLabelPresenter new.
 		column bindAction value: label value: deprecatedMethod.
 
-
-		self assert: (label displayStrikethrough cull: deprecatedMethod) ] ensure: [
-			self class removeSelector: #tmpDeprecatedMethod.
-			browser ifNotNil: [ browser delete ] ]
+		self assert: (label displayStrikethrough cull: deprecatedMethod) 
+	] ensure: [
+		self class removeSelector: #tmpDeprecatedMethod ]
 ]
 
 { #category : 'tests' }
 StMethodBrowserTest >> testExplicitBrowseClassNameAsClass [
 
-	| browser |
-	[
-		browser := StMethodBrowser
-			          browse: {
-					          (StMethodBrowserTest >> #testBrowseClassNameAsClass).
-					          (StMethodBrowserTest >> #testExplicitBrowseClassNameAsClass) }
-			          asReferencesToClass: StMethodBrowserDummyClass.
+	browser := StMethodBrowser
+		browse: {
+			  (StMethodBrowserTest >> #testBrowseClassNameAsClass).
+			  (StMethodBrowserTest >> #testExplicitBrowseClassNameAsClass) }
+		asReferencesToClass: StMethodBrowserDummyClass.
 
-		self assert: browser methods size equals: 2 ] ensure: [ browser ifNotNil: [ browser delete ] ]
+	self assert: browser methods size equals: 2 
 ]
 
 { #category : 'tests' }
 StMethodBrowserTest >> testExplicitBrowseClassNameAsLiteral [
 
-	| browser |
-	[
-		browser := StMethodBrowser
-			           browse: {
-					           (StMethodBrowserTest >> #dataMethodForTest).
-					           (StMethodBrowserTest >> #testExplicitBrowseClassNameAsLiteral) }
-			           asReferencesToLiteral: 'StMethodBrowser'.
+	browser := StMethodBrowser
+		browse: {
+			   (StMethodBrowserTest >> #dataMethodForTest).
+			   (StMethodBrowserTest >> #testExplicitBrowseClassNameAsLiteral) }
+		asReferencesToLiteral: 'StMethodBrowser'.
 
-		self assert: browser methods size equals: 2 ] ensure: [ browser ifNotNil: [ browser delete ] ]
+	self assert: browser methods size equals: 2
 ]
 
 { #category : 'tests' }
 StMethodBrowserTest >> testExplicitBrowseImplementors [
 
-	| browser |
-	[
-		browser := StMethodBrowser
-			           browse: { (StMethodBrowser >> #methods:asImplementorsOfAll:) }
-			           asImplementorsOf: #methods:asImplementorsOfAll:.
-		self assert: browser methods size equals: 1 ] ensure: [ browser ifNotNil: [ browser delete ] ]
+	browser := StMethodBrowser
+		browse: { (StMethodBrowser >> #methods:asImplementorsOfAll:) }
+		asImplementorsOf: #methods:asImplementorsOfAll:.
+	
+	self assert: browser methods size equals: 1
 ]
 
 { #category : 'tests - smoke' }
 StMethodBrowserTest >> testExplicitBrowseSenders [
 
-	| browser |
-	[
 		browser := StMethodBrowser browse: { (StMethodBrowserTest >> #testMethodBrowserSenders) } asSendersOf: #browseImplementorsOf:.
-		self assert: browser methods size equals: 1 ] ensure: [ browser ifNotNil: [ browser delete ] ]
+		self assert: browser methods size equals: 1
 ]
 
 { #category : 'tests' }
 StMethodBrowserTest >> testHandleMethodAddedAddsMatchingSender [
-
-	| browser initialSize newMethod |
+	| initialSize newMethod |
+	
 	[
 		browser := StMethodBrowser browseSendersOf: #printOn:.
 		initialSize := browser methods size.
@@ -131,15 +123,15 @@ StMethodBrowserTest >> testHandleMethodAddedAddsMatchingSender [
 		browser handleMethodAdded: (MethodAdded method: newMethod).
 
 		self assert: browser methods size equals: initialSize + 1.
-		self assert: (browser methods includes: newMethod) ] ensure: [
-			self class removeSelector: #tmpSenderMethodForTest.
-			browser ifNotNil: [ browser delete ] ]
+		self assert: (browser methods includes: newMethod) ] 
+	ensure: [
+		self class removeSelector: #tmpSenderMethodForTest ]
 ]
 
 { #category : 'tests' }
 StMethodBrowserTest >> testHandleMethodAddedWithActiveFilterKeepsUnfilteredItems [
-
-	| browser total newMethod |
+	| total newMethod |
+	
 	[
 		browser := StMethodBrowser browseSendersOf: #printOn:.
 		total := browser filterPresenter unfilteredItems size.
@@ -150,15 +142,16 @@ StMethodBrowserTest >> testHandleMethodAddedWithActiveFilterKeepsUnfilteredItems
 		newMethod := self class >> #tmpSenderMethodForTest.
 		browser handleMethodAdded: (MethodAdded method: newMethod).
 
-		self assert: browser filterPresenter unfilteredItems size > total ] ensure: [
-			self class removeSelector: #tmpSenderMethodForTest.
-			browser ifNotNil: [ browser delete ] ]
+		self assert: browser filterPresenter unfilteredItems size > total 
+	] 
+	ensure: [
+		self class removeSelector: #tmpSenderMethodForTest ]
 ]
 
 { #category : 'tests' }
 StMethodBrowserTest >> testHandleMethodModifiedPreservesOrder [
+	| method initialOrder indexBefore |
 
-	| browser method initialOrder indexBefore |
 	[
 		self class compile: 'methodForTest ^ Object new printOn: Transcript' classified: 'tests-protocol'.
 		method := self class >> #methodForTest.
@@ -171,16 +164,17 @@ StMethodBrowserTest >> testHandleMethodModifiedPreservesOrder [
 		self class compile: 'methodForTest ^ Object new printOn: Transcript "modified"' classified: 'tests-protocol'.
 		browser handleMethodModified:
 			(MethodModified methodChangedFrom: method to: self class >> #methodForTest oldProtocol: method protocol).
-		self assert: (browser methods indexOf: self class >> #methodForTest) equals: indexBefore ] ensure: [
-			self class removeSelector: #methodForTest.
-			browser ifNotNil: [ browser delete ] ]
+		self assert: (browser methods indexOf: self class >> #methodForTest) equals: indexBefore 
+	] 
+	ensure: [
+		self class removeSelector: #methodForTest ]
 ]
 
 { #category : 'tests' }
 StMethodBrowserTest >> testHandleMethodModifiedPreservesScopeSelection [
 	"After a method is modified, the selected scope should remain the same"
+	| method |
 
-	| browser method |
 	[
 		self class compile: 'methodForTest ^ Object new printOn: Transcript' classified: 'tests-protocol'.
 		method := self class >> #methodForTest.
@@ -191,19 +185,20 @@ StMethodBrowserTest >> testHandleMethodModifiedPreservesScopeSelection [
 		browser toolbarPresenter scopeList selectIndex: 3.
 
 		self class compile: 'methodForTest ^ Object new printOn: Transcript "modified"' classified: 'tests-protocol'.
-		browser handleMethodModified:
-			(MethodModified methodChangedFrom: method to: self class >> #methodForTest oldProtocol: method protocol).
+		browser handleMethodModified: (MethodModified 
+			methodChangedFrom: method 
+			to: self class >> #methodForTest 
+			oldProtocol: method protocol).
 
-
-		self assert: browser toolbarPresenter scopeList selectedIndex equals: 3 ] ensure: [
-			self class removeSelector: #methodForTest.
-			browser ifNotNil: [ browser delete ] ]
+		self assert: browser toolbarPresenter scopeList selectedIndex equals: 3 ] 
+	ensure: [
+		self class removeSelector: #methodForTest ]
 ]
 
 { #category : 'tests' }
 StMethodBrowserTest >> testHandleMethodModifiedRemovesSenderWhenNoLongerMatching [
-
-	| browser method |
+	| method |
+	
 	[
 		self class compile: 'methodForTest ^ Object new printOn: Transcript' classified: 'tests-protocol'.
 		method := self class >> #methodForTest.
@@ -214,118 +209,106 @@ StMethodBrowserTest >> testHandleMethodModifiedRemovesSenderWhenNoLongerMatching
 		browser handleMethodModified:
 			(MethodModified methodChangedFrom: method to: self class >> #methodForTest oldProtocol: method protocol).
 
-		self deny: (browser methods includes: method) ] ensure: [
-			self class removeSelector: #methodForTest.
-			browser ifNotNil: [ browser delete ] ]
+		self deny: (browser methods includes: method) 
+	] ensure: [
+		self class removeSelector: #methodForTest ]
 ]
 
 { #category : 'tests' }
 StMethodBrowserTest >> testHandleMethodRemovedRemovesMatchingMethod [
+	| method announcement initialSize |
+	
+	browser := StMethodBrowser browseImplementorsOf: #printOn:.
+	method := browser methods anyOne.
+	initialSize := browser methods size.
 
-	| browser method announcement initialSize |
-	[
-		browser := StMethodBrowser browseImplementorsOf: #printOn:.
-		method := browser methods anyOne.
-		initialSize := browser methods size.
+	announcement := MethodRemoved new method: method compiledMethod.
 
-		announcement := MethodRemoved new method: method compiledMethod.
+	browser handleMethodRemoved: announcement.
 
-		browser handleMethodRemoved: announcement.
-
-		self assert: browser methods size equals: initialSize - 1 ] ensure: [ browser ifNotNil: [ browser delete ] ]
+	self assert: browser methods size equals: initialSize - 1 
 ]
 
 { #category : 'tests' }
 StMethodBrowserTest >> testHandleMethodRemovedUpdatesSelection [
+	| method |
 
-	| browser method |
-	[
-		browser := StMethodBrowser browseImplementorsOf: #printOn:.
+	browser := StMethodBrowser browseImplementorsOf: #printOn:.
 
 
-		method := browser methods third.
-		browser methodList unselectAll.
-		browser selectIndex: 3.
+	method := browser methods third.
+	browser methodList unselectAll.
+	browser selectIndex: 3.
 
-		browser handleMethodRemoved: (MethodRemoved new method: method compiledMethod).
-		self currentWorld doOneCycle.
-		self assert: (browser methods indexOf: browser selectedMethod) equals: 3 ] ensure: [ browser ifNotNil: [ browser delete ] ]
+	browser handleMethodRemoved: (MethodRemoved new method: method compiledMethod).
+	self currentWorld doOneCycle.
+	self assert: (browser methods indexOf: browser selectedMethod) equals: 3
 ]
 
 { #category : 'tests' }
 StMethodBrowserTest >> testHighlightSelectsFirstOccurrence [
+	| interval |
+	
+	browser := StMethodBrowser browseSendersOf: #printOn:.
+	interval := browser codeEditor codePresenter selectionInterval.
 
-	| browser interval |
-	[
-		browser := StMethodBrowser browseSendersOf: #printOn:.
-		interval := browser codeEditor codePresenter selectionInterval.
-
-		self assert: interval isNotEmpty.
-		self assert: ((browser codeEditor text copyFrom: interval first to: interval last) includesSubstring: 'printOn:') ] ensure: [
-		browser ifNotNil: [ browser delete ] ]
+	self assert: interval isNotEmpty.
+	self assert: ((browser codeEditor text copyFrom: interval first to: interval last) includesSubstring: 'printOn:') 
 ]
 
 { #category : 'tests - smoke' }
 StMethodBrowserTest >> testMethodBrowserImplementors [
 
-	| browser |
-	[
-		browser := StMethodBrowser browseImplementorsOf: #printOn:.
-		browser methods size > 0 ] ensure: [ browser ifNotNil: [ browser delete ] ]
+	browser := StMethodBrowser browseImplementorsOf: #printOn:.
+	self assert: browser methods size > 0
 ]
 
 { #category : 'tests - smoke' }
 StMethodBrowserTest >> testMethodBrowserSenders [
 
-	| browser |
-	[
-		browser := StMethodBrowser browseImplementorsOf: #browseImplementorsOf:.
-		browser methods size > 0 ] ensure: [ browser ifNotNil: [ browser delete ] ]
+	browser := StMethodBrowser browseImplementorsOf: #browseImplementorsOf:.
+	self assert: browser methods size > 0
 ]
 
 { #category : 'tests' }
 StMethodBrowserTest >> testMethodsAreSortedByHierarchy [
-
-	| browser methodObject methodCollection methodArray |
+	| methodObject methodCollection methodArray |
+	
 	methodObject := Object >> #printString.
 	methodCollection := Collection >> #size.
 	methodArray := Array >> #asArray.
 
-	[
-		browser := StMethodBrowser browse: {
-				           methodArray.
-				           methodObject.
-				           methodCollection }.
-		self assert: browser methods first compiledMethod equals: methodObject.
-		self assert: browser methods second compiledMethod equals: methodCollection.
-		self assert: browser methods third compiledMethod equals: methodArray ] ensure: [ browser ifNotNil: [ browser delete ] ]
+	browser := StMethodBrowser browse: {
+       methodArray.
+       methodObject.
+       methodCollection }.
+	self assert: browser methods first compiledMethod equals: methodObject.
+	self assert: browser methods second compiledMethod equals: methodCollection.
+	self assert: browser methods third compiledMethod equals: methodArray
 ]
 
 { #category : 'tests - smoke' }
 StMethodBrowserTest >> testOpenWithoutMessageShouldNotDNU [
 
-	| browser |
-	[
-		browser := StMethodBrowser new.
-		self shouldnt: [ browser open ] raise: MessageNotUnderstood ] ensure: [ browser ifNotNil: [ browser delete ] ]
+	browser := StMethodBrowser new.
+	self shouldnt: [ browser open ] raise: MessageNotUnderstood
 ]
 
 { #category : 'tests' }
 StMethodBrowserTest >> testRefreshingBlockWithLiteralString [
+	| methodToAdd |
+	
+	browser := StMethodBrowser browseReferencesToLiteral: 'StMethodBrowser'.
 
-	| browser methodToAdd |
-	[
-		browser := StMethodBrowser browseReferencesToLiteral: 'StMethodBrowser'.
-
-		methodToAdd := (self class >> #dataMethodForTest) copy.
-		self assert: (browser acceptBlock value: methodToAdd) ] ensure: [ browser ifNotNil: [ browser delete ] ]
+	methodToAdd := (self class >> #dataMethodForTest) copy.
+	self assert: (browser acceptBlock value: methodToAdd)
 ]
 
 { #category : 'tests' }
 StMethodBrowserTest >> testSendersKeepsRecursiveCallWhenOtherSendersExist [
 	"If a method has other senders besides itself, keep all including the recursive call"
-
 	| selectorName |
+	
 	selectorName := #tmpRecursiveMethod2.
 	browser := StMethodBrowser new.
 	browser methods: (StMethodBrowser sendersOf: selectorName) asSendersOfAll: { selectorName }.
@@ -337,8 +320,8 @@ StMethodBrowserTest >> testSendersKeepsRecursiveCallWhenOtherSendersExist [
 
 { #category : 'tests' }
 StMethodBrowserTest >> testSendersOfExcludesTraitUsers [
-
 	| senders |
+	
 	senders := StMethodBrowser sendersOf: #sendMe.
 
 	self assert: (senders anySatisfy: [ :m | m methodClass = TData ]).
@@ -347,19 +330,16 @@ StMethodBrowserTest >> testSendersOfExcludesTraitUsers [
 
 { #category : 'tests' }
 StMethodBrowserTest >> testWindowTitleWithFilterRatio [
-	| methodBrowser total filtered |
+	| total filtered |
 	
-	[
-		methodBrowser := StMethodBrowser browseSendersOf: #printOn:.
+	browser := StMethodBrowser browseSendersOf: #printOn:.
 
 
-		total := methodBrowser methods size.
+	total := browser methods size.
 
-		methodBrowser filterPresenter filterInputPresenter text: 'print'.
-		filtered := methodBrowser methodList numberOfElements.
+	browser filterPresenter filterInputPresenter text: 'print'.
+	filtered := browser methodList numberOfElements.
 
-		self assert: filtered < total.
-		self assert: (methodBrowser windowTitle includesSubstring: filtered asString , '/' , total asString) ] 
-	ensure: [
-		methodBrowser ifNotNil: [ methodBrowser withWindowDo: #close ] ]
+	self assert: filtered < total.
+	self assert: (browser windowTitle includesSubstring: filtered asString , '/' , total asString)
 ]
