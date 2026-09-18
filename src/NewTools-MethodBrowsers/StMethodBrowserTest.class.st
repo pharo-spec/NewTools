@@ -347,18 +347,19 @@ StMethodBrowserTest >> testSendersOfExcludesTraitUsers [
 
 { #category : 'tests' }
 StMethodBrowserTest >> testWindowTitleWithFilterRatio [
-
-	| browser total filtered |
+	| methodBrowser total filtered |
+	
 	[
-		browser := StMethodBrowser browseSendersOf: #printOn:.
+		methodBrowser := StMethodBrowser browseSendersOf: #printOn:.
 
 
-		total := browser methods size.
+		total := methodBrowser methods size.
 
-		browser filterPresenter filterInputPresenter text: 'print'.
-		filtered := browser methodList numberOfElements.
+		methodBrowser filterPresenter filterInputPresenter text: 'print'.
+		filtered := methodBrowser methodList numberOfElements.
 
 		self assert: filtered < total.
-		self assert: (browser windowTitle includesSubstring: filtered asString , '/' , total asString) ] ensure: [
-		browser ifNotNil: [ browser delete ] ]
+		self assert: (methodBrowser windowTitle includesSubstring: filtered asString , '/' , total asString) ] 
+	ensure: [
+		methodBrowser ifNotNil: [ methodBrowser withWindowDo: #close ] ]
 ]
