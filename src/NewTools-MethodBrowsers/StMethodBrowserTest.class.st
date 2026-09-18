@@ -105,10 +105,8 @@ StMethodBrowserTest >> testExplicitBrowseImplementors [
 { #category : 'tests - smoke' }
 StMethodBrowserTest >> testExplicitBrowseSenders [
 
-	| browser |
-	[
 		browser := StMethodBrowser browse: { (StMethodBrowserTest >> #testMethodBrowserSenders) } asSendersOf: #browseImplementorsOf:.
-		self assert: browser methods size equals: 1 ] ensure: [ browser ifNotNil: [ browser delete ] ]
+		self assert: browser methods size equals: 1
 ]
 
 { #category : 'tests' }
@@ -261,19 +259,15 @@ StMethodBrowserTest >> testHighlightSelectsFirstOccurrence [
 { #category : 'tests - smoke' }
 StMethodBrowserTest >> testMethodBrowserImplementors [
 
-	| browser |
-	[
-		browser := StMethodBrowser browseImplementorsOf: #printOn:.
-		browser methods size > 0 ] ensure: [ browser ifNotNil: [ browser delete ] ]
+	browser := StMethodBrowser browseImplementorsOf: #printOn:.
+	self assert: browser methods size > 0
 ]
 
 { #category : 'tests - smoke' }
 StMethodBrowserTest >> testMethodBrowserSenders [
 
-	| browser |
-	[
-		browser := StMethodBrowser browseImplementorsOf: #browseImplementorsOf:.
-		browser methods size > 0 ] ensure: [ browser ifNotNil: [ browser delete ] ]
+	browser := StMethodBrowser browseImplementorsOf: #browseImplementorsOf:.
+	self assert: browser methods size > 0
 ]
 
 { #category : 'tests' }
@@ -296,10 +290,8 @@ StMethodBrowserTest >> testMethodsAreSortedByHierarchy [
 { #category : 'tests - smoke' }
 StMethodBrowserTest >> testOpenWithoutMessageShouldNotDNU [
 
-	| browser |
-	[
-		browser := StMethodBrowser new.
-		self shouldnt: [ browser open ] raise: MessageNotUnderstood ] ensure: [ browser ifNotNil: [ browser delete ] ]
+	browser := StMethodBrowser new.
+	self shouldnt: [ browser open ] raise: MessageNotUnderstood
 ]
 
 { #category : 'tests' }
