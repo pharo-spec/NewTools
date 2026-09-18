@@ -40,10 +40,10 @@ StRemoveMessageArgumentCommand >> computeArgumentName [
 	^ (self codePresenter selectedNode argumentPartStrings reject: [ :arg | (self methodName arguments indexOf: arg) > 0 ]) first
 ]
 
-{ #category : 'executing' }
+{ #category : 'execution' }
 StRemoveMessageArgumentCommand >> execute [
 
-	self prepareDriver execute
+	self prepareDriver runRefactoring
 ]
 
 { #category : 'private' }
@@ -61,25 +61,14 @@ StRemoveMessageArgumentCommand >> methodName [
 			                arguments: self codePresenter selectedNode argumentPartStrings ]
 ]
 
-{ #category : 'executing' }
+{ #category : 'execution' }
 StRemoveMessageArgumentCommand >> prepareDriver [
 
-	| dialog argumentName |
-	dialog := SycMethodArgumentsRemoverPresenter openOn: self methodName.
-	dialog cancelled ifTrue: [ CmdCommandAborted signal ].
-
-	argumentName := self computeArgumentName.
-
-	(self codePresenter selectedNode argumentPartStrings includes: argumentName) ifFalse: [
-			self informArgumentError.
-			CmdCommandAborted signal ].
-		
-	^ (RBRemoveParameterRefactoring
-		   model: (RBNamespace onEnvironment: context allScopes first)
-		   removeParameter: argumentName
-		   in: self codePresenter behavior
-		   selector: self codePresenter selectedNode selector
-		   index: (self codePresenter selectedNode argumentPartStrings indexOf: argumentName)) newSelector: self resultMessageSelector
+	^ (ReRemoveParameterDriver newApplication: self application)
+		  scopes: context allScopes
+		  model: (RBNamespace onEnvironment: context allScopes first)
+		  removeParameterFromMethodSignature: self codePresenter selectedNode
+		  in: self codePresenter behavior
 ]
 
 { #category : 'execution' }
