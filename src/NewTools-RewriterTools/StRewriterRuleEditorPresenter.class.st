@@ -61,7 +61,7 @@ StRewriterRuleEditorPresenter class >> menuCommandOn: aBuilder [
 	(aBuilder item: 'Rewrite Rule Editor')
 		action: [ self new open ];
 		order: 30;
-		parent: #Tools;
+		parent: #Browsing;
 		help: self descriptionText;
 		iconName: self iconName
 ]

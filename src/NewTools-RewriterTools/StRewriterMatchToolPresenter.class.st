@@ -55,14 +55,14 @@ StRewriterMatchToolPresenter class >> iconName [
 	^ #jigsawIcon
 ]
 
-{ #category : 'menu' }
+{ #category : 'world menu' }
 StRewriterMatchToolPresenter class >> menuCommandOn: aBuilder [
 
 	<worldMenu>
 	(aBuilder item: 'Match Tool')
 		action: [ self new open ];
 		order: 32;
-		parent: #Tools;
+		parent: #Browsing;
 		help: self descriptionText;
 		iconName: self iconName
 ]

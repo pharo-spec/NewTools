@@ -47,7 +47,7 @@ StRewriterExpressionFinderPresenter class >> menuCommandOn: aBuilder [
 	(aBuilder item: 'Expression Finder')
 		action: [ self new open ];
 		order: 31;
-		parent: #Tools;
+		parent: #Browsing;
 		help: self descriptionText;
 		iconName: self iconName
 ]
