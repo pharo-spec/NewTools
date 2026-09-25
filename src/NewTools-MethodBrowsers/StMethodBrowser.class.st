@@ -122,7 +122,7 @@ StMethodBrowser class >> browse: compiledMethods withInitializationBlock: aBlock
 	browser allMethods ifEmpty: [
 			StPharoApplication current inform: 'No result found'.
 			^ nil ].
-	^ StMethodBrowserGroup addOrCreateTab: browser
+	^ StMethodBrowserGroup openNewBrowser: browser
 ]
 
 { #category : 'opening' }
@@ -135,9 +135,8 @@ StMethodBrowser class >> browseImplementorsOf: aSymbol [
 { #category : 'opening' }
 StMethodBrowser class >> browseImplementorsOfAll: aCollectionOfSymbols [
 
-	| methods |
-	methods := aCollectionOfSymbols flatCollect: [ :sym | self implementorsOf: sym ].
-	^ self browse: methods asArray asImplementorsOfAll: aCollectionOfSymbols
+	^ (self newImplementorsOfAllBrowser: aCollectionOfSymbols)
+		  ifNotNil: [ :browser | StMethodBrowserGroup openNewBrowser: browser ]
 ]
 
 { #category : 'opening' }
@@ -150,7 +149,8 @@ StMethodBrowser class >> browseMethodsWithSourceString: aString [
 StMethodBrowser class >> browseReferencesToClass: aClass [
 	"Special version that sets the correct refreshing block for senders"
 
-	^ self browse: (self referencesToClass: aClass) asReferencesToClass: aClass
+	^ (self newReferencesToClassBrowser: aClass)
+		  ifNotNil: [ :browser | StMethodBrowserGroup openNewBrowser: browser ]
 ]
 
 { #category : 'opening' }
@@ -191,9 +191,8 @@ StMethodBrowser class >> browseSendersOf: aSymbol [
 { #category : 'opening' }
 StMethodBrowser class >> browseSendersOfAll: aCollectionOfSymbols [
 
-	| methods |
-	methods := aCollectionOfSymbols flatCollect: [ :sym | self sendersOf: sym ].
-	^ self browse: methods asArray asSendersOfAll: aCollectionOfSymbols
+	^ (self newSendersOfAllBrowser: aCollectionOfSymbols)
+		  ifNotNil: [ :browser | StMethodBrowserGroup openNewBrowser: browser ]
 ]
 
 { #category : 'opening' }
@@ -250,6 +249,12 @@ StMethodBrowser class >> implementorsOf: aSymbol [
 	^ (SystemNavigation default allImplementorsOf: aSymbol) reject: [ :m | m isFromTrait ]
 ]
 
+{ #category : 'private' }
+StMethodBrowser class >> implementorsOfAll: aCollectionOfSymbols [
+
+	^ aCollectionOfSymbols flatCollect: [ :symbol | self implementorsOf: symbol ]
+]
+
 { #category : 'instance creation' }
 StMethodBrowser class >> methods: methods [
 	"Create a method browser on the methods argument. Do not open it."
@@ -257,6 +262,48 @@ StMethodBrowser class >> methods: methods [
 	^ self new 
 		  methods: methods;
 		  yourself
+]
+
+{ #category : 'private - browser building' }
+StMethodBrowser class >> newImplementorsOfAllBrowser: aCollectionOfSymbols [
+	"Build (but do not open) a browser on all implementors of aCollectionOfSymbols.
+	 Answer a configured browser, or nil when there is no result."
+
+	| methods |
+	methods := self implementorsOfAll: aCollectionOfSymbols.
+	^ methods
+		  ifEmpty: [
+			  StPharoApplication current inform: 'No result found'.
+			  nil ]
+		  ifNotEmpty: [ :foundMethods | self new methods: foundMethods asImplementorsOfAll: aCollectionOfSymbols ]
+]
+
+{ #category : 'private - browser building' }
+StMethodBrowser class >> newReferencesToClassBrowser: aClass [
+	"Build (but do not open) a browser on all references to aClass.
+	 Answer a configured browser, or nil when there is no result."
+
+	| methods |
+	methods := self referencesToClass: aClass.
+	^ methods
+		  ifEmpty: [
+			  StPharoApplication current inform: 'No result found'.
+			  nil ]
+		  ifNotEmpty: [ :foundMethods | self new methods: foundMethods asReferenceTo: aClass binding ]
+]
+
+{ #category : 'private - browser building' }
+StMethodBrowser class >> newSendersOfAllBrowser: aCollectionOfSymbols [
+	"Build (but do not open) a browser on all senders of aCollectionOfSymbols.
+	 Answer a configured browser, or nil when there is no result."
+
+	| methods |
+	methods := self sendersOfAll: aCollectionOfSymbols.
+	^ methods
+		  ifEmpty: [
+			  StPharoApplication current inform: 'No result found'.
+			  nil ]
+		  ifNotEmpty: [ :foundMethods | self new methods: foundMethods asSendersOfAll: aCollectionOfSymbols ]
 ]
 
 { #category : 'private' }
@@ -303,6 +350,12 @@ And the second check allows to know whether the method is coming from a trait OR
 	allSenders := SystemNavigation default allSendersOf: aSymbol.
 
 	^ allSenders reject: [ :sender | sender isFromTrait and: [ sender origin ~= sender methodClass ] ]
+]
+
+{ #category : 'private' }
+StMethodBrowser class >> sendersOfAll: aCollectionOfSymbols [
+
+	^ aCollectionOfSymbols flatCollect: [ :symbol | self sendersOf: symbol ]
 ]
 
 { #category : 'icons' }
