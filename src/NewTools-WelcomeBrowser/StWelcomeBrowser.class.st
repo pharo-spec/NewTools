@@ -77,25 +77,65 @@ StWelcomeBrowser >> addPresenter: aPresenter [
 { #category : 'accessing - contents' }
 StWelcomeBrowser >> changesContent [
 
-	^ '# Pharo 13 changes overview
+	^ '# Pharo 14 changes overview
 
 A large international community of developers worked hard to prepare a new release of the Pharo platform.
 
 ## Highlights
 
+### Tools
+
+- Mission control introduction
+- New/reworked Method Browser
+- Settings Browser rewrite/default switch
+- Epicea migration into NewTools
+- ProfStef migration into NewTools
+- Pulse (Spotter replacement) introduction
+- TestRunner integration and command-line testing
+- Calypso fixes
+- Cavrois/window profile work
+- File Browser/Finder/Transcript improvements
+
+### System 
+- Refactoring command migration and registry
+- Scoped extensions and selector semantics
+- Clean blocks and debugger/evaluation behavior
+- ClassBuilder, trait, and superclass correctness
+- Compiler API split and method installation
+- UnifiedFFI value holders, `FFIMethod`, callbacks, and bootstrap resets
+- Command-line debugger
+- Debugger/client-model cleanup
+- Package/baseline modularization and bootstrap dependency cleanup
+- Morphic/UIManager dependency reduction
+- FastTable, text, graphics, Zinc, and Zodiac fixes
+- Sindarin script tooling 
+- Code editor / code presenter work
+- list/tree/filtering behavior
+- dialog/window/modal behavior
+- Action/command enhancements and cleanup
+- Morphic backend, layout fixes
+   
+### Virtual machine
+- Frame unification and stack management improvements, delivering substantial interpreter and execution engine cleanups.
+- RISC-V JIT support, expanding platform coverage and future-proofing VM development.
+- New memory management capabilities, including direct old-space allocation and numerous GC and allocation improvements.
+- Extensive compiler and Slang/C translation work, with many correctness fixes, new tests, and improved inspection tools.
+- Platform and build modernization, including SDL updates, improved CI, cross-build support, and updated third-party dependencies.
+- Large-scale cleanup and refactoring efforts across the VM, interpreter, Cogit, PICs, and infrastructure.
+
+
 ## Status
 Current Pharo development status:
-1. XXX forks on GitHub
-2. XXX issues closed since Pharo 13
-3. XXX Pull requests processed since Pharo 13, not counting separately managed projects:
-- [https://github.com/pharo-spec/NewTools](https://github.com/pharo-spec/NewTools)
-- [https://github.com/pharo-spec/Spec](https://github.com/pharo-spec/Spec)
-- [https://github.com/pharo-vcs/Iceberg](https://github.com/pharo-vcs/Iceberg)
+1. 432 forks en GitHub (1.494 stars). 
+2. 616 issues closed since Pharo 13
+3. 978 Pull requests merged since Pharo 13, not counting separately managed projects:
+- [http://github.com/pharo-spec/NewTools](http://github.com/pharo-spec/NewTools)
+- [http://github.com/pharo-spec/Spec](http://github.com/pharo-spec/Spec)
+- [http://github.com/pharo-vcs/Iceberg](http://github.com/pharo-vcs/Iceberg)
 - [https://github.com/pharo-graphics/Roassal](https://github.com/pharo-graphics/Roassal)
-- [https://github.com/pillar-markup/Microdown](https://github.com/pillar-markup/Microdown)
-- [https://github.com/pillar-markup/BeautifulComments](https://github.com/pillar-markup/BeautifulComments)
-- [https://github.com/pharo-project/pharo-vm](https://github.com/pharo-project/pharo-vm)
-'
+- [http://github.com/pillar-markup/Microdown](http://github.com/pillar-markup/Microdown)
+- [http://github.com/pillar-markup/BeautifulComments](http://github.com/pillar-markup/BeautifulComments)
+- [https://github.com/pharo-project/pharo-vm](https://github.com/pharo-project/pharo-vm)'
 ]
 
 { #category : 'accessing - labels' }
