@@ -82,47 +82,20 @@ StWelcomeBrowser >> changesContent [
 A large international community of developers worked hard to prepare a new release of the Pharo platform.
 
 ## Highlights
-### Tools
-- Spec Tools remembering their size
-- Microdown enhancements
-- HDPI support
-- Zoomable UI 
-- New list, tables and trees, allowing any presenter as their content
-- Better source code text navigation and edition
-- New Process Browser
-- New Transcript (introducing also the Object Transcript)
-- Organic window manager 
-
-### System 
-- Better refactorings UX Cleaner leaner code logic
-- More robust and faster halt implementation
-- Debug points to enhance the debugging experience
-- Clean-ups
-   
-### Virtual machine
-- Async IO using epoll on unixes
-- Faster byte array / string comparisons
-- Improve Windows support for non ASCII filenames
-- FreeBSD support
-- Update SDL2 version in OSX (Intel & Apple)
-- Minimal MacOS version required raised to MacOS 11 and above
 
 ## Status
 Current Pharo development status:
-1. 379 forks on GitHub
-2. 922 issues closed since Pharo 12
-3. 698 Pull requests processed since Pharo 12, not counting separately managed projects:
-- [http://github.com/pharo-spec/NewTools](http://github.com/pharo-spec/NewTools)
-- [http://github.com/pharo-spec/Spec](http://github.com/pharo-spec/Spec)
-- [http://github.com/pharo-vcs/Iceberg](http://github.com/pharo-vcs/Iceberg)
+1. XXX forks on GitHub
+2. XXX issues closed since Pharo 13
+3. XXX Pull requests processed since Pharo 13, not counting separately managed projects:
+- [https://github.com/pharo-spec/NewTools](https://github.com/pharo-spec/NewTools)
+- [https://github.com/pharo-spec/Spec](https://github.com/pharo-spec/Spec)
+- [https://github.com/pharo-vcs/Iceberg](https://github.com/pharo-vcs/Iceberg)
 - [https://github.com/pharo-graphics/Roassal](https://github.com/pharo-graphics/Roassal)
-- [http://github.com/pillar-markup/Microdown](http://github.com/pillar-markup/Microdown)
-- [http://github.com/pillar-markup/BeautifulComments](http://github.com/pillar-markup/BeautifulComments)
+- [https://github.com/pillar-markup/Microdown](https://github.com/pillar-markup/Microdown)
+- [https://github.com/pillar-markup/BeautifulComments](https://github.com/pillar-markup/BeautifulComments)
 - [https://github.com/pharo-project/pharo-vm](https://github.com/pharo-project/pharo-vm)
-
-## Changelog
-
-The complete list of changes can be viewed on a weekly basis [here](https://github.com/pharo-project/pharo-changelogs).'
+'
 ]
 
 { #category : 'accessing - labels' }
@@ -175,12 +148,12 @@ StWelcomeBrowser >> helpContent [
 
 A compendium of Pharo documentation can be found at: 
 
-[http://pharo.org/documentation](http://pharo.org/documentation)
+[https://pharo.org/documentation](https://pharo.org/documentation)
 
 There you can find:
-- Pharo books: [http://books.pharo.org](http://books.pharo.org)
+- Pharo books: [https://books.pharo.org](https://books.pharo.org)
 - Screencasts: [https://www.youtube.com/@Pharo-projectOrg](https://www.youtube.com/@Pharo-projectOrg)
-- Presentations: [http://www.slideshare.net/pharoproject/](http://www.slideshare.net/pharoproject/)
+- Presentations: [https://www.slideshare.net/pharoproject/](https://www.slideshare.net/pharoproject/)
 
 ### Conferences
 Conferences are unique event where you can meet other Pharoers and Smalltalkers, discover latest advances, and share your experience.
@@ -190,7 +163,7 @@ Conferences are unique event where you can meet other Pharoers and Smalltalkers,
 - [ESUG - Video channel](https://www.youtube.com/@esugboard)
 - [FAST Foundation](https://www.fast.org.ar)
 - [FAST - Video channel](https://www.youtube.com/@FASTFoundation)
-- FAST - Smalltalks [2022](https://smalltalks2022.fast.org.ar/), [2023](https://smalltalks2023.fast.org.ar/), [2024](https://smalltalks2024.fast.org.ar/) (soon)
+- [FAST - Smalltalks](https://www.fast.org.ar/events/conferences)
 '
 ]
 
@@ -240,7 +213,7 @@ Pharo has a vibrant community that shares knowledge in different ways:
 
 You can find more information, lists to browse/suscribe and places to share code at: 
 
-[http://pharo.org/community](http://pharo.org/community)
+[https://pharo.org/community](https://pharo.org/community)
 
 ### Using ProfStef
 You can learn Pharo by clicking on the following expression: 
@@ -296,7 +269,7 @@ StWelcomeBrowser >> resourceContent [
 
 Pharo has an excellent MOOC (Massive Open Online Course). You can find more information here: 
 
-[http://mooc.pharo.org](http://mooc.pharo.org)
+[https://mooc.pharo.org](https://mooc.pharo.org)
 
 Check the testimonies: they are great and fun. Additionally there is a new MOOC on 
 "Advanced Object-Oriented Design and Development with Pharo" available
@@ -307,14 +280,14 @@ Check the testimonies: they are great and fun. Additionally there is a new MOOC 
 
 There are several free Pharo books that can be download here: 
 
-[http://books.pharo.org](http://books.pharo.org)
+[https://books.pharo.org](https://books.pharo.org)
 
 A very interesting starting point would be looking into the "Updated Pharo by Example" free book. It is based on Pharo 9.0, so using this version is recommended to learn.
 
 You can find the book here: [https://github.com/SquareBracketAssociates/PharoByExample9](https://github.com/SquareBracketAssociates/PharoByExample9)
 and you can order a copy here: [Pharo 9 by example on Amazon](https://www.amazon.com/Pharo-example-Technology-Collection/dp/2322394106/)
 
-Many of the Pharo books and bookolets are available in [https://github.com/SquareBracketAssociates](https://github.com/SquareBracketAssociates) and you can contribute to them.'
+Many of the Pharo books and booklets are available in [https://github.com/SquareBracketAssociates](https://github.com/SquareBracketAssociates) and you can contribute to them.'
 ]
 
 { #category : 'private' }
@@ -405,7 +378,7 @@ Welcome to Pharo, an immersive live programming environment.
 
 Pharo is a pure object-oriented programming language and a powerful environment, focused on simplicity and immediate feedback (think IDE and OS rolled into one).
 
-For more information, please visit here: [http://pharo.org](http://pharo.org)'
+For more information, please visit here: [https://pharo.org](https://pharo.org)'
 ]
 
 { #category : 'accessing - labels' }
