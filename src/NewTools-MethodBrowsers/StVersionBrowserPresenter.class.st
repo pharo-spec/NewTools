@@ -428,9 +428,7 @@ StVersionBrowserPresenter >> updateDiff: content [
 		ifFalse: [ 
 			sourcePresenter 
 				leftText: content first;
-				rightText: content second ].
-			
-		self installIconStylerFor: self textConverter method
+				rightText: content second ]
 ]
 
 { #category : 'private - updating' }
