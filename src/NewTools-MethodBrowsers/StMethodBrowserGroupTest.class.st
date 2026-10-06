@@ -44,6 +44,7 @@ StMethodBrowserGroupTest >> testAddingBrowserInSameGroupAddsTab [
 	group := self browsingGroupOf: browser1.
 	browser2 := self registerBrowser: (StMethodBrowser methods: { StMethodBrowserTest >> #testExplicitBrowseSenders }).
 	group addBrowser: browser2.
+	
 	self assert: group notebook pages size equals: 2
 ]
 
@@ -53,6 +54,7 @@ StMethodBrowserGroupTest >> testBrowseOpensNewGroupWindowHostingTheBrowserTab [
 	| browser group |
 	browser := self registerBrowser: (StMethodBrowser browseImplementorsOf: #browseImplementorsOf:).
 	group := self browsingGroupOf: browser.
+	
 	self assert: group isNotNil.
 	self assert: group class equals: StMethodBrowserGroup.
 	self assert: group notebook pages size equals: 1.
@@ -66,8 +68,23 @@ StMethodBrowserGroupTest >> testBrowsingGroupWhenBrowserHostedReturnsItsGroup [
 	browser := self registerBrowser: (StMethodBrowser browseImplementorsOf: #browseImplementorsOf:).
 	group := self browsingGroupOf: browser.
 	list := browser methodList.
+	
 	self assert: list browsingGroup equals: group.
 	self assert: group class equals: StMethodBrowserGroup
+]
+
+{ #category : 'tests' }
+StMethodBrowserGroupTest >> testClosingWindowClosesTheWholeGroupWindow [
+
+	| browser1 browser2 group |
+	browser1 := self registerBrowser: (StMethodBrowser browseImplementorsOf: #browseImplementorsOf:).
+	group := self browsingGroupOf: browser1.
+	browser2 := self registerBrowser: (StMethodBrowser methods: { (StMethodBrowserTest >> #testExplicitBrowseSenders) }).
+	group addBrowser: browser2.
+	self assert: group notebook pages size equals: 2.
+	
+	group window delete.
+	self deny: group isDisplayed description: 'Closing the window should close the whole browser, not remove the latest tab'
 ]
 
 { #category : 'tests' }
