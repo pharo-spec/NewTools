@@ -62,6 +62,22 @@ StThreadSafeTranscriptTest >> testLesserThanLesserThan [
 ]
 
 { #category : 'tests' }
+StThreadSafeTranscriptTest >> testNewLine [
+
+	transcript newLine.
+	self assert: transcript contents equals: '
+' withInternalLineEndings
+]
+
+{ #category : 'tests' }
+StThreadSafeTranscriptTest >> testNewLineShow [
+
+	transcript newLineShow: 'toto'.
+	self assert: transcript contents equals: '
+toto' withInternalLineEndings
+]
+
+{ #category : 'tests' }
 StThreadSafeTranscriptTest >> testNextPut [
 
 	transcript nextPut: $a.
