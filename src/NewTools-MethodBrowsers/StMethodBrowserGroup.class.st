@@ -55,6 +55,33 @@ StMethodBrowserGroup >> addTab: aMethodBrowser [
 	self defer: [ aMethodBrowser methodList listPresenter takeKeyboardFocus ]
 ]
 
+{ #category : 'private' }
+StMethodBrowserGroup >> bindWindowCloseShortcut [
+
+	| windowMorph |
+	windowMorph := self window adapter widget.
+	windowMorph kmDispatcher removeKeyCombination: $w meta.
+	windowMorph bindKeyCombination: $w meta toAction: [ self closeCurrentTab ]
+]
+
+{ #category : 'actions' }
+StMethodBrowserGroup >> closeCurrentTab [
+
+	| page browser |
+	page := notebook selectedPage.
+	page ifNil: [ ^ self ].
+	browser := page activePresenter.
+	(browser isNotNil and: [ browser isDirty ]) ifTrue: [ self confirmDiscardChanges ifFalse: [ ^ self ] ].
+	notebook removePage: page
+]
+
+{ #category : 'actions' }
+StMethodBrowserGroup >> confirmDiscardChanges [
+
+	^ self application confirm: 'Some tabs have unsaved changes.
+Is it OK to discard changes?'
+]
+
 { #category : 'initialization' }
 StMethodBrowserGroup >> connectPresenters [
 
@@ -86,6 +113,7 @@ StMethodBrowserGroup >> initializeWindow: aWindowPresenter [
 	aWindowPresenter
 		title: 'Message Browser';
 		initialExtent: 900 @ 600.
+	aWindowPresenter whenOpenedDo: [ self bindWindowCloseShortcut ].
 	aWindowPresenter whenWillCloseDo: [ :ann |
 			(notebook pages anySatisfy: [ :page | page activePresenter ifNil: [ false ] ifNotNil: [ :browser | browser isDirty ] ])
 				ifTrue: [
