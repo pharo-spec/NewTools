@@ -9,8 +9,7 @@ Class {
 		'confirmAnswer'
 	],
 	#category : 'NewTools-MethodBrowsers-Tests',
-	#package : 'NewTools-MethodBrowsers-Tests',
-	#tag : 'Tests'
+	#package : 'NewTools-MethodBrowsers-Tests'
 }
 
 { #category : 'confirming' }
