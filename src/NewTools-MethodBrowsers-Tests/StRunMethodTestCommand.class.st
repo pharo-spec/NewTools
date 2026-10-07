@@ -4,9 +4,8 @@ Run the test case selected from a message browser list
 Class {
 	#name : 'StRunMethodTestCommand',
 	#superclass : 'StCommand',
-	#category : 'NewTools-MethodBrowsers-Commands',
-	#package : 'NewTools-MethodBrowsers',
-	#tag : 'Commands'
+	#category : 'NewTools-MethodBrowsers-Tests',
+	#package : 'NewTools-MethodBrowsers-Tests'
 }
 
 { #category : 'default' }

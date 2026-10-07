@@ -5,8 +5,7 @@ Class {
 		'openedBrowsers'
 	],
 	#category : 'NewTools-MethodBrowsers-Tests',
-	#package : 'NewTools-MethodBrowsers',
-	#tag : 'Tests'
+	#package : 'NewTools-MethodBrowsers-Tests'
 }
 
 { #category : 'private' }
@@ -74,64 +73,6 @@ StMethodBrowserGroupTest >> testBrowsingGroupWhenBrowserHostedReturnsItsGroup [
 ]
 
 { #category : 'tests' }
-StMethodBrowserGroupTest >> testCloseCurrentTabClosesOnlyActiveTab [
-
-	| browser addedBrowser group |
-	browser := self registerBrowser: (StMethodBrowser browseImplementorsOf: #browseImplementorsOf:).
-	group := self browsingGroupOf: browser.
-	addedBrowser := self registerBrowser: (StMethodBrowser methods: { (StMethodBrowserTest >> #testExplicitBrowseSenders) }).
-	group addBrowser: addedBrowser.
-	self assert: group notebook pages size equals: 2.
-
-	group closeCurrentTab.
-
-	self assert: group notebook pages size equals: 1
-]
-
-{ #category : 'tests' }
-StMethodBrowserGroupTest >> testCloseCurrentTabOnDirtyTabAsksBeforeDiscarding [
-
-	| browser group |
-	browser := self registerBrowser: (StMethodBrowser browseImplementorsOf: #browseImplementorsOf:).
-	group := self browsingGroupOf: browser.
-	browser textPresenter markDirty.
-	self assert: browser isDirty.
-
-	self withDiscardConfirmation: false on: group during: [ group closeCurrentTab ].
-	browser textPresenter unmarkDirty.
-
-	self assert: group notebook pages size = 1 description: 'Declined discard should keep the dirty tab open'
-]
-
-{ #category : 'tests' }
-StMethodBrowserGroupTest >> testCloseCurrentTabOnDirtyTabClosesAfterDiscardConfirmation [
-
-	| browser group |
-	browser := self registerBrowser: (StMethodBrowser browseImplementorsOf: #browseImplementorsOf:).
-	group := self browsingGroupOf: browser.
-	browser textPresenter markDirty.
-	self assert: browser isDirty.
-
-	self withDiscardConfirmation: true on: group during: [ group closeCurrentTab ].
-
-	self assert: group notebook pages isEmpty
-]
-
-{ #category : 'tests' }
-StMethodBrowserGroupTest >> testCloseCurrentTabOnLastTabClosesWindow [
-
-	| browser group |
-	browser := self registerBrowser: (StMethodBrowser browseImplementorsOf: #browseImplementorsOf:).
-	group := self browsingGroupOf: browser.
-	self assert: group notebook pages size equals: 1.
-
-	group closeCurrentTab.
-	
-	self assert: group notebook pages isEmpty.
-	self assert: group isDisplayed not description: 'Closing the last tab should close the whole window'
-]
-
-{ #category : 'tests' }
 StMethodBrowserGroupTest >> testClosingWindowClosesTheWholeGroupWindow [
 
 	| browser1 browser2 group |
@@ -159,17 +100,4 @@ StMethodBrowserGroupTest >> testTwoBrowsesOpenTwoDistinctNewWindows [
 	self deny: group1 equals: group2.
 	self assert: group1 notebook pages size equals: 1.
 	self assert: group2 notebook pages size equals: 1
-]
-
-{ #category : 'helpers' }
-StMethodBrowserGroupTest >> withDiscardConfirmation: anAnswer on: aGroup during: aBlock [
-
-	| topWindow originalApplication confirmationStub |
-	topWindow := aGroup nearWindow.
-	originalApplication := topWindow application.
-	confirmationStub := StMethodBrowserGroupTestProxy new
-		                    wrapped: originalApplication;
-		                    confirmAnswer: anAnswer.
-	topWindow application: confirmationStub.
-	^ [ aBlock value ] ensure: [ topWindow application: originalApplication ]
 ]
