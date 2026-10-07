@@ -428,9 +428,11 @@ EpApplyTest >> testProtocolRemoval [
 
 { #category : 'tests' }
 EpApplyTest >> testTraitAdditionWithTraitRemoved [
-
 	| aTrait traitName |
+	
 	aTrait := classFactory newTrait.
+	aTrait class addInstVarNamed: #traitClassInstVar.
+	aTrait addInstVarNamed: #traitInstVar.
 	traitName := aTrait name.
 	self setHeadAsInputEntry.
 
@@ -438,7 +440,10 @@ EpApplyTest >> testTraitAdditionWithTraitRemoved [
 
 	self deny: (self class environment includesKey: traitName).
 	self applyInputEntry.
-	self assert: (self class environment includesKey: traitName)
+	aTrait := self class environment classOrTraitNamed: traitName.
+	self assert: aTrait isNotNil.
+	self assert: aTrait instVarNames equals: #(#traitInstVar).
+	self assert: aTrait class instVarNames equals: #(traitClassInstVar).
 ]
 
 { #category : 'tests' }
