@@ -1,7 +1,7 @@
 Trait {
 	#name : 'TData',
 	#category : 'NewTools-MethodBrowsers-Tests',
-	#package : 'NewTools-MethodBrowsers',
+	#package : 'NewTools-MethodBrowsers-Tests',
 	#tag : 'Tests'
 }
 

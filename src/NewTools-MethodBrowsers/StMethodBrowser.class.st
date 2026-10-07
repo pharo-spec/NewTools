@@ -1035,6 +1035,12 @@ StMethodBrowser >> textConverter: aTextConverter [
 ]
 
 { #category : 'accessing' }
+StMethodBrowser >> textPresenter [
+
+	^ textPresenter
+]
+
+{ #category : 'accessing' }
 StMethodBrowser >> title: aString [
 
 	title := aString.
