@@ -711,14 +711,6 @@ StMethodBrowser >> initialize [
 ]
 
 { #category : 'initialization' }
-StMethodBrowser >> initializeDropList [
-
-	toolbarPresenter 
-		addItemLabeled: 'Source' do: [ self textConverter: SourceMethodConverter new ];
-		addItemLabeled: 'Time stamp' do: [ self textConverter: TimeStampMethodConverter new ]
-]
-
-{ #category : 'initialization' }
 StMethodBrowser >> initializePresenters [
 
 	| methodCodePresenter |
@@ -735,9 +727,7 @@ StMethodBrowser >> initializePresenters [
 	acceptBlock := [ :item | true ].
 	filterPresenter := self instantiate: SpFilteringListPresenter.
 	filterPresenter matchSubstring.
-	filterPresenter display: [ :m | (self methodClassNameForItem: m) , ' >> ' , m selector ].
-
-	self initializeDropList
+	filterPresenter display: [ :m | (self methodClassNameForItem: m) , ' >> ' , m selector ]
 ]
 
 { #category : 'initialization' }
