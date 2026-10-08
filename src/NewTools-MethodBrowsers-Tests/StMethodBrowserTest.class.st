@@ -323,7 +323,7 @@ StMethodBrowserTest >> testSendersOfExcludesTraitUsers [
 	
 	senders := StMethodBrowser sendersOf: #sendMe.
 
-	self assert: (senders anySatisfy: [ :m | m methodClass = TData ]).
+	self assert: (senders anySatisfy: [ :m | m methodClass = TSendersFixture ]).
 	self deny: (senders anySatisfy: [ :m | m methodClass = StMethodBrowserDummyClass ])
 ]
 

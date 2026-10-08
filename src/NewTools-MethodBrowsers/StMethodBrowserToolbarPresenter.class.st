@@ -40,20 +40,15 @@ StMethodBrowserToolbarPresenter >> currentScope [
 StMethodBrowserToolbarPresenter >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
-		spacing: 3;
-		borderWidth: 3;
-		add: (SpBoxLayout newTopToBottom
-				vAlignCenter;
-				add: scopeList;
-				yourself)
-			expand: false;
-		add: toolbarPresenter;
-		add: (SpBoxLayout newTopToBottom
-				vAlignCenter;
-				add: dropList;
-				yourself)
-			expand: false;
-		yourself
+		  spacing: 3;
+		  borderWidth: 3;
+		  add: (SpBoxLayout newTopToBottom
+				   vAlignCenter;
+				   add: scopeList;
+				   yourself)
+		  expand: false;
+		  add: toolbarPresenter;
+		  yourself
 ]
 
 { #category : 'actions' }
