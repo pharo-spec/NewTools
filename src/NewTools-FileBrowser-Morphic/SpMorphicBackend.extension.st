@@ -42,7 +42,7 @@ SpMorphicBackend >> newFileDialogFor: aFileDialog [
 	aFileDialog path ifNotNil: [ :folder | dialog openFolder: folder ].
 	aFileDialog filters ifNotEmpty: [ :filters |
 		dialog fileNavigationSystem 
-			filter: (StCustomExtensionsFilter extensions: { filters }) ].
+			filter: (StCustomExtensionsFilter extensions: filters) ].
 
 	^ dialog
 ]
