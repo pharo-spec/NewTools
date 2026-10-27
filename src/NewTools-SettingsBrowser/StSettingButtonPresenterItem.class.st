@@ -14,12 +14,18 @@ StSettingButtonPresenterItem >> initializePresenters [
 
 	(setterPresenter := self newButton) 
 		label: self model buttonLabel; 
-		action: [ 
-			self target 
-				perform: self model name 
-				withEnoughArguments: { setterPresenter } ];
+		action: [
+			self target perform: self model name.
+			self refreshSettingsPage ];
 		yourself.
 	super initializePresenters
+]
+
+{ #category : 'updating' }
+StSettingButtonPresenterItem >> refreshSettingsPage [
+	"The action may have changed other settings: let the page showing the receiver display their new values"
+
+	self pagePresenter ifNotNil: [ :page | page announcer announce: StSettingModelChanged ]
 ]
 
 { #category : 'accessing' }

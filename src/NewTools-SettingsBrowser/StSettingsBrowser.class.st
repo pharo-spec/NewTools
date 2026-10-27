@@ -119,16 +119,6 @@ StSettingsBrowser >> followPath: aStSettingNode in: aCollection [
 ]
 
 { #category : 'initialization' }
-StSettingsBrowser >> initialize [
-
-	super initialize.	
-	self announcer 
-		when: StSettingModelChanged
-		send: #resendChange:
-		to: self
-]
-
-{ #category : 'initialization' }
 StSettingsBrowser >> initializeButtonBar [
 
 	buttonBarPresenter := self newToolbar
@@ -193,12 +183,6 @@ StSettingsBrowser >> loadSettings [
 StSettingsBrowser >> pagePresenter [ 
 
 	^ detailsPresenter
-]
-
-{ #category : 'private' }
-StSettingsBrowser >> resendChange: ann [
-
-	detailsPresenter announcer announce: ann
 ]
 
 { #category : 'accessing' }
