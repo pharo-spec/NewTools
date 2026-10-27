@@ -113,11 +113,10 @@ StObjectTranscriptPresenter class >> registerToolsOn: registry [
 StObjectTranscriptPresenter class >> settings: aBuilder [
 
 	<systemsettings>
-
 	(aBuilder setting: #objectTranscript)
-		parent: #tools;
+		parentName: #tools;
 		selector: #showInspector;
-		default: true;
+		defaultValue: true;
 		label: 'Display the inspector part';
 		description: 'The object transcript supports the in place inspector of log entities. This preference enables it by default';
 		target: self

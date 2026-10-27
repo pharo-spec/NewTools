@@ -120,15 +120,15 @@ StPlaygroundPresenter class >> registerToolsOn: registry [
 
 { #category : 'settings' }
 StPlaygroundPresenter class >> settingsOn: aBuilder [
-	<systemsettings>
 
+	<systemsettings>
 	(aBuilder setting: #cacheDirectory)
-		parent: #pharoSystem;
+		parentName: #pharoSystem;
 		type: #Directory;
-		default:  self defaultCacheDirectory;
+		defaultValue: self defaultCacheDirectory;
 		target: StPlaygroundPresenter;
 		description: 'The path to the local Playground cache that stores all Playground scripts in ph files';
-		label: 'Local Playground cache directory'.
+		label: 'Local Playground cache directory'
 ]
 
 { #category : 'accessing' }

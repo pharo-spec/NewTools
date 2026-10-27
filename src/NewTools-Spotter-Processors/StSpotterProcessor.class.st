@@ -94,19 +94,17 @@ StSpotterProcessor class >> settingsDescription [
 
 { #category : 'settings' }
 StSpotterProcessor class >> settingsOn: aBuilder [
-	<systemsettings>
 
+	<systemsettings>
 	(aBuilder group: #spotterProcessors)
-		parent: #spotter;
+		parentName: #spotter;
 		label: 'Sources';
 		description: 'It configures the sources that are queried when using spotter'.
 
-	self allConcreteSubclasses 
-		reject: [ :each | each hideInSettings ] 
-		thenDo: [ :aProcessorClass | 
+	self allConcreteSubclasses reject: [ :each | each hideInSettings ] thenDo: [ :aProcessorClass |
 			(aBuilder setting: aProcessorClass name , '_enabled')
-				parent: #spotterProcessors;
-				default: aProcessorClass defaultEnabled;
+				parentName: #spotterProcessors;
+				defaultValue: aProcessorClass defaultEnabled;
 				getSelector: #enabled;
 				setSelector: #enabled:;
 				target: aProcessorClass;

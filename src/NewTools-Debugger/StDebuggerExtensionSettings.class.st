@@ -17,19 +17,18 @@ StDebuggerExtensionSettings class >> debuggerExtensionSettingsForClass: toolClas
 
 	(aBuilder group: toolName asSymbol)
 		label: toolName;
-		with: [ 
-			(aBuilder setting: #showInDebugger)
-				label: 'Show in debugger';
-				target: toolClass;
-				default: toolClass showInDebugger;
-				description: 'Activate the tool tab in the debugger right column.'.
-			(aBuilder pickOne: #displayOrder)
-				label: 'Position';
-				target: toolClass;
-				default: toolClass defaultDisplayOrder;
-				domainValues: (1 to: 100) asArray;
-				description:
-					'Position of the tool tab in the debugger right column.' ]
+		with: [
+				(aBuilder setting: #showInDebugger)
+					label: 'Show in debugger';
+					target: toolClass;
+					defaultValue: toolClass showInDebugger;
+					description: 'Activate the tool tab in the debugger right column.'.
+				(aBuilder pickOne: #displayOrder)
+					label: 'Position';
+					target: toolClass;
+					defaultValue: toolClass defaultDisplayOrder;
+					domainValues: (1 to: 100) asArray;
+					description: 'Position of the tool tab in the debugger right column.' ]
 ]
 
 { #category : 'settings' }
@@ -40,12 +39,8 @@ StDebuggerExtensionSettings class >> debuggerExtensionSettingsOn: aBuilder [
 	debuggerClass := StDebugger.
 	(aBuilder group: #debuggerExtensions)
 		label: 'Debugger Extensions';
-		parent: #debugging;
-		description:
-			'Tools that extend the StDebugger and appear in the right column of the debugger';
+		parentName: #debugging;
+		description: 'Tools that extend the StDebugger and appear in the right column of the debugger';
 		with: [
-			debuggerClass extensionToolsClasses do: [ :toolClass |
-					self
-						debuggerExtensionSettingsForClass: toolClass
-						builder: aBuilder ] ]
+			debuggerClass extensionToolsClasses do: [ :toolClass | self debuggerExtensionSettingsForClass: toolClass builder: aBuilder ] ]
 ]

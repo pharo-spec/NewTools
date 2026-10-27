@@ -117,16 +117,16 @@ StInspectorPresenter class >> registerToolsOn: registry [
 
 { #category : 'settings' }
 StInspectorPresenter class >> settingsOn: aBuilder [
-	<systemsettings>
 
+	<systemsettings>
 	(aBuilder group: #inspector)
-		parent: #tools;
+		parentName: #tools;
 		label: 'Inspector';
 		description: 'Inspector'.
-		
+
 	(aBuilder setting: #inspectorDiveOnSingleClick)
-		parent: #inspector;
-		default: self inspectorDiveOnSingleClick;
+		parentName: #inspector;
+		defaultValue: self inspectorDiveOnSingleClick;
 		target: self;
 		description: 'Whether inspector will dive with single or double click';
 		label: 'Dive on single click'
