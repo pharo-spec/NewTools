@@ -2,8 +2,8 @@
 I'm a little tool that display information about the system.
 
 ```
-StSystemReporter new open.
-StSystemReporter open
+StSystemReporterPresenter new open.
+StSystemReporterPresenter open
 ```
 
 
