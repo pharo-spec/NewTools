@@ -1,5 +1,5 @@
 Class {
-	#name : 'StNewSettingNode',
+	#name : 'StSettingNode',
 	#superclass : 'Object',
 	#instVars : [
 		'setting',
@@ -12,7 +12,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-StNewSettingNode class >> forSetting: aSetting [
+StSettingNode class >> forSetting: aSetting [
 
 	^ self new
 		setting: aSetting;
@@ -20,7 +20,7 @@ StNewSettingNode class >> forSetting: aSetting [
 ]
 
 { #category : 'accessing' }
-StNewSettingNode >> allChildren [
+StSettingNode >> allChildren [
 
 	"Answer a <Collection> of the settings for which the receiver is set as parent"
 
@@ -30,43 +30,43 @@ StNewSettingNode >> allChildren [
 ]
 
 { #category : 'converting' }
-StNewSettingNode >> asPresenterOn: aPresenter [ 
+StSettingNode >> asPresenterOn: aPresenter [ 
 	^ setting asSettingPresenterWithOwner: aPresenter 
 ]
 
 { #category : 'accessing' }
-StNewSettingNode >> description [
+StSettingNode >> description [
 	"Answer a <String> representing an human-understandable description"
 
 	^ setting description
 ]
 
 { #category : 'testing' }
-StNewSettingNode >> hasChildren [
+StSettingNode >> hasChildren [
 	
 	^ setting isGroup and: [ self allChildren isNotEmpty]
 ]
 
 { #category : 'testing' }
-StNewSettingNode >> hasParent [ 
+StSettingNode >> hasParent [ 
 
 	^ setting hasParent
 ]
 
 { #category : 'accessing' }
-StNewSettingNode >> label [
+StSettingNode >> label [
 	
 	^ setting label
 ]
 
 { #category : 'accessing' }
-StNewSettingNode >> level [
+StSettingNode >> level [
 	
 	^ self path size
 ]
 
 { #category : 'accessing' }
-StNewSettingNode >> matchBlock [
+StSettingNode >> matchBlock [
 
 	^ matchBlock
 		ifNil: [ 
@@ -76,7 +76,7 @@ StNewSettingNode >> matchBlock [
 ]
 
 { #category : 'testing' }
-StNewSettingNode >> matches: aString [
+StSettingNode >> matches: aString [
 	"Recursive search the receiver for aString in its label"
 
 	| result |
@@ -92,42 +92,42 @@ StNewSettingNode >> matches: aString [
 ]
 
 { #category : 'accessing' }
-StNewSettingNode >> name [
+StSettingNode >> name [
 	
 	^ setting name
 ]
 
 { #category : 'accessing' }
-StNewSettingNode >> nodeForGroup: aSettingGroup [
+StSettingNode >> nodeForGroup: aSettingGroup [
 
 	^ tree nodeForSetting: aSettingGroup
 ]
 
 { #category : 'accessing' }
-StNewSettingNode >> order [
+StSettingNode >> order [
 	^ setting order
 ]
 
 { #category : 'accessing' }
-StNewSettingNode >> order: anInteger [ 
+StSettingNode >> order: anInteger [ 
 
 	setting order: anInteger.
 ]
 
 { #category : 'accessing' }
-StNewSettingNode >> parentName [
+StSettingNode >> parentName [
 	
 	^ setting parent ifNotNil: [ :group | group name ]
 ]
 
 { #category : 'accessing' }
-StNewSettingNode >> parentNode [
+StSettingNode >> parentNode [
 	
 	^ setting parent ifNotNil: [ :group | self nodeForGroup: group ]
 ]
 
 { #category : 'accessing' }
-StNewSettingNode >> path [
+StSettingNode >> path [
 
 	^ self hasParent
 		ifTrue: [ self parentNode path, { self } ]
@@ -135,24 +135,24 @@ StNewSettingNode >> path [
 ]
 
 { #category : 'accessing' }
-StNewSettingNode >> setting [
+StSettingNode >> setting [
 	^ setting
 ]
 
 { #category : 'accessing' }
-StNewSettingNode >> setting: aSetting [
+StSettingNode >> setting: aSetting [
 
 	setting := aSetting
 ]
 
 { #category : 'accessing' }
-StNewSettingNode >> settingDeclaration [
+StSettingNode >> settingDeclaration [
 	
 	^ setting
 ]
 
 { #category : 'accessing' }
-StNewSettingNode >> tree: aSettingTree [
+StSettingNode >> tree: aSettingTree [
 
 	tree := aSettingTree 
 ]

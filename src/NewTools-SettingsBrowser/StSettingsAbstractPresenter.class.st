@@ -202,5 +202,5 @@ StSettingsAbstractPresenter >> settingsTree [
 
 	^ self application 
 		propertyAt: #settingsTree
-		ifAbsentPut: [ StNewSettingsTree new ]
+		ifAbsentPut: [ StSettingsTree new ]
 ]

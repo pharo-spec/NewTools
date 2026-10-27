@@ -1,7 +1,7 @@
-Extension { #name : 'StNewSettingNode' }
+Extension { #name : 'StSettingNode' }
 
 { #category : '*NewTools-Spotter-Extensions' }
-StNewSettingNode >> spotterForSettingsFor: aStep [
+StSettingNode >> spotterForSettingsFor: aStep [
 	<stSpotterOrder: 0>
 	self allChildren isEmpty ifTrue: [ ^ self ].
 	aStep listProcessor
@@ -12,7 +12,7 @@ StNewSettingNode >> spotterForSettingsFor: aStep [
 ]
 
 { #category : '*NewTools-Spotter-Extensions' }
-StNewSettingNode >> spotterLabel [
+StSettingNode >> spotterLabel [
 
 	^ self parentNode
 		  ifNil: [ self label ]

@@ -10,7 +10,7 @@ AbstractSetting >> asPresenterOn: aPresenter [
 { #category : '*NewTools-SettingsBrowser' }
 AbstractSetting >> asSettingNode [
 	
-	^ StNewSettingNode forSetting: self
+	^ StSettingNode forSetting: self
 ]
 
 { #category : '*NewTools-SettingsBrowser' }

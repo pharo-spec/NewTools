@@ -1,17 +1,17 @@
 "
-I test StNewSettingsTree, the model of the settings browser.
+I test StSettingsTree, the model of the settings browser.
 "
 Class {
-	#name : 'StNewSettingsTreeTest',
+	#name : 'StSettingsTreeTest',
 	#superclass : 'TestCase',
 	#category : 'NewTools-SettingsBrowser-Tests',
 	#package : 'NewTools-SettingsBrowser-Tests'
 }
 
 { #category : 'helpers' }
-StNewSettingsTreeTest >> nodeNamed: aSymbol label: aString order: aNumberOrNil [
+StSettingsTreeTest >> nodeNamed: aSymbol label: aString order: aNumberOrNil [
 
-	^ StNewSettingNode forSetting: (Setting new
+	^ StSettingNode forSetting: (Setting new
 			   name: aSymbol;
 			   label: aString;
 			   order: aNumberOrNil;
@@ -19,10 +19,10 @@ StNewSettingsTreeTest >> nodeNamed: aSymbol label: aString order: aNumberOrNil [
 ]
 
 { #category : 'tests' }
-StNewSettingsTreeTest >> testChildrenOfGroupAreItsSettings [
+StSettingsTreeTest >> testChildrenOfGroupAreItsSettings [
 
 	| tree group |
-	tree := StNewSettingsTree new.
+	tree := StSettingsTree new.
 	group := tree nodeList detect: [ :each | each name = #'Syntax Highlighting' ].
 
 	self
@@ -31,19 +31,19 @@ StNewSettingsTreeTest >> testChildrenOfGroupAreItsSettings [
 ]
 
 { #category : 'tests' }
-StNewSettingsTreeTest >> testChildrenWithoutOrderAreOrderedAroundOrderedChildren [
+StSettingsTreeTest >> testChildrenWithoutOrderAreOrderedAroundOrderedChildren [
 
 	| group tree children |
 	group := SettingsGroup new
 		         name: #group;
 		         yourself.
-	tree := StNewSettingsTree new.
+	tree := StSettingsTree new.
 	tree nodeList: ({ group } , (#( nil nil 5 nil 9 nil ) withIndexCollect: [ :order :index |
 			   Setting new
 				   name: ('setting' , index printString) asSymbol;
 				   order: order;
 				   parentGroup: group;
-				   yourself ]) collect: [ :each | StNewSettingNode forSetting: each ]).
+				   yourself ]) collect: [ :each | StSettingNode forSetting: each ]).
 
 	children := tree childrenOf: tree nodeList first.
 
@@ -51,7 +51,7 @@ StNewSettingsTreeTest >> testChildrenWithoutOrderAreOrderedAroundOrderedChildren
 ]
 
 { #category : 'tests' }
-StNewSettingsTreeTest >> testSortBlockSortsByOrderThenByLabel [
+StSettingsTreeTest >> testSortBlockSortsByOrderThenByLabel [
 
 	| nodes |
 	nodes := {
@@ -61,15 +61,15 @@ StNewSettingsTreeTest >> testSortBlockSortsByOrderThenByLabel [
 		         (self nodeNamed: #d label: 'y' order: nil) }.
 
 	self
-		assert: ((nodes asSortedCollection: StNewSettingsTree new sortBlock) collect: [ :each | each name ]) asArray
+		assert: ((nodes asSortedCollection: StSettingsTree new sortBlock) collect: [ :each | each name ]) asArray
 		equals: #( #b #a #d #c )
 ]
 
 { #category : 'tests' }
-StNewSettingsTreeTest >> testTreeRootsHaveNoParent [
+StSettingsTreeTest >> testTreeRootsHaveNoParent [
 
 	| roots |
-	roots := StNewSettingsTree new treeRoots.
+	roots := StSettingsTree new treeRoots.
 
 	self denyEmpty: roots.
 	self assert: (roots noneSatisfy: [ :each | each hasParent ])

@@ -1,7 +1,7 @@
-Extension { #name : 'StNewSettingsTree' }
+Extension { #name : 'StSettingsTree' }
 
 { #category : '*NewTools-Spotter-Extensions' }
-StNewSettingsTree >> spotterForSettingsFor: aStep [
+StSettingsTree >> spotterForSettingsFor: aStep [
 	<stSpotterOrder: 0>
 	aStep listProcessor
 		title: 'Settings';
