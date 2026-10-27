@@ -7,7 +7,8 @@ Class {
 	#instVars : [
 		'textConverter',
 		'toolbarPresenter',
-		'methodList'
+		'methodList',
+		'browsingGroup'
 	],
 	#category : 'NewTools-MethodBrowsers-Base',
 	#package : 'NewTools-MethodBrowsers',
@@ -23,6 +24,18 @@ StAbstractMethodCentricBrowserPresenter class >> defaultPreferredExtent [
 { #category : 'testing' }
 StAbstractMethodCentricBrowserPresenter class >> isAbstract [ 
 	 ^self name = #StAbstractMethodCentricBrowserPresenter
+]
+
+{ #category : 'accessing - browsing context' }
+StAbstractMethodCentricBrowserPresenter >> browsingGroup [
+
+	^ browsingGroup
+]
+
+{ #category : 'accessing - browsing context' }
+StAbstractMethodCentricBrowserPresenter >> browsingGroup: aStMethodBrowserGroup [
+
+	browsingGroup := aStMethodBrowserGroup
 ]
 
 { #category : 'initialization' }

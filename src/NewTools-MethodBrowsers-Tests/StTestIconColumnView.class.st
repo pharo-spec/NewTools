@@ -7,9 +7,8 @@ Class {
 	#instVars : [
 		'executeBlock'
 	],
-	#category : 'NewTools-MethodBrowsers-Base',
-	#package : 'NewTools-MethodBrowsers',
-	#tag : 'Base'
+	#category : 'NewTools-MethodBrowsers-Tests',
+	#package : 'NewTools-MethodBrowsers-Tests'
 }
 
 { #category : 'accessing' }

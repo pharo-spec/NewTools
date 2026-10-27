@@ -27,6 +27,12 @@ StSettingPresenterItem >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'setting value' }
+StSettingPresenterItem >> hasTarget [
+	
+	^ self model target isNotNil
+]
+
 { #category : 'accessing' }
 StSettingPresenterItem >> headerStyle [
 
@@ -86,6 +92,14 @@ StSettingPresenterItem >> setModelBeforeInitialization: aModel [
 	model := aModel
 ]
 
+{ #category : 'setting value' }
+StSettingPresenterItem >> setSelector [
+
+	^ self model setSelector
+
+	
+]
+
 { #category : 'accessing' }
 StSettingPresenterItem >> setterPresenter [
 
@@ -98,10 +112,24 @@ StSettingPresenterItem >> setterPresenter: anObject [
 	setterPresenter := anObject
 ]
 
+{ #category : 'setting value' }
+StSettingPresenterItem >> settingReceiver [
+
+	^ self model targetSelector 
+		ifNil: [ self model target ] 
+		ifNotNil: [ self model target perform: self model targetSelector ]
+]
+
 { #category : 'accessing' }
 StSettingPresenterItem >> settingStyle [
 
 	^ self subclassResponsibility
+]
+
+{ #category : 'setting value' }
+StSettingPresenterItem >> updateSetting: anObject [
+
+	self settingReceiver perform: self setSelector with: anObject
 ]
 
 { #category : 'accessing' }
