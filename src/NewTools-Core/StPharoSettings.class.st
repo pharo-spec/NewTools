@@ -44,7 +44,7 @@ StPharoSettings class >> openPharoAbout [
 	SpInformDialog new
 		title: 'About Pharo';
 		icon: (self iconNamed: #pharo);
-		label: about;
+		message: about;
 		acceptLabel: 'Close';
 		openDialog
 ]

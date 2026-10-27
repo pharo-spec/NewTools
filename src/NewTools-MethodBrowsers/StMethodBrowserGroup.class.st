@@ -1,5 +1,9 @@
 "
 I am a presenter representing a group for method browsers, allowing them to open as tabs.
+
+A group instance is a browsing context: opening a method browser in the same group
+adds it as a tab (same browsing context), while a brand new group opens a new window
+(a new browsing context).
 "
 Class {
 	#name : 'StMethodBrowserGroup',
@@ -7,41 +11,33 @@ Class {
 	#instVars : [
 		'notebook'
 	],
-	#classVars : [
-		'Current'
-	],
 	#category : 'NewTools-MethodBrowsers-Senders',
 	#package : 'NewTools-MethodBrowsers',
 	#tag : 'Senders'
 }
 
 { #category : 'adding' }
-StMethodBrowserGroup class >> addOrCreateTab: aMethodBrowser [
-	"Main entry point. Find or create the group window, add a tab for aMethodBrowser."
+StMethodBrowserGroup class >> openNewBrowser: aMethodBrowser [
+	"Open aMethodBrowser as a new browsing context: create a fresh group window that
+	 hosts it as its first tab."
 
-	(Current isNil or: [ Current isDisplayed not ])
-		ifTrue: [
-				Current := self new.
-				Current open ]
-		ifFalse: [ Current window activate ].
-
-	aMethodBrowser application: Current application.
-	aMethodBrowser owner: Current.
-	Current addTab: aMethodBrowser.
+	| group |
+	group := self new.
+	group open.
+	group addBrowser: aMethodBrowser.
 	^ aMethodBrowser
 ]
 
-{ #category : 'accessing' }
-StMethodBrowserGroup class >> current [
+{ #category : 'adding' }
+StMethodBrowserGroup >> addBrowser: aMethodBrowser [
+	"Add aMethodBrowser as a new tab in the receiver, i.e. in the same browsing context."
 
-	^ Current
-]
-
-{ #category : 'initialization' }
-StMethodBrowserGroup class >> reset [
-
-	<script>
-	Current := nil
+	aMethodBrowser browsingGroup: self.
+	aMethodBrowser application: self application.
+	aMethodBrowser owner: self.
+	self addTab: aMethodBrowser.
+	self window activate.
+	^ aMethodBrowser
 ]
 
 { #category : 'adding' }
@@ -57,6 +53,33 @@ StMethodBrowserGroup >> addTab: aMethodBrowser [
 	notebook addPage: page.
 	notebook selectPage: page.
 	self defer: [ aMethodBrowser methodList listPresenter takeKeyboardFocus ]
+]
+
+{ #category : 'private' }
+StMethodBrowserGroup >> bindWindowCloseShortcut [
+
+	| windowMorph |
+	windowMorph := self window adapter widget.
+	windowMorph kmDispatcher removeKeyCombination: $w meta.
+	windowMorph bindKeyCombination: $w meta toAction: [ self closeCurrentTab ]
+]
+
+{ #category : 'actions' }
+StMethodBrowserGroup >> closeCurrentTab [
+
+	| page browser |
+	page := notebook selectedPage.
+	page ifNil: [ ^ self ].
+	browser := page activePresenter.
+	(browser isNotNil and: [ browser isDirty ]) ifTrue: [ self confirmDiscardChanges ifFalse: [ ^ self ] ].
+	notebook removePage: page
+]
+
+{ #category : 'actions' }
+StMethodBrowserGroup >> confirmDiscardChanges [
+
+	^ self application confirm: 'Some tabs have unsaved changes.
+Is it OK to discard changes?'
 ]
 
 { #category : 'initialization' }
@@ -76,24 +99,6 @@ StMethodBrowserGroup >> defaultLayout [
 		  yourself
 ]
 
-{ #category : 'closing' }
-StMethodBrowserGroup >> handleTabsFor: anAnnouncement [
-
-	notebook pages size > 1 ifFalse: [ ^ self ].
-
-
-	(self withWindowDo: [ :w | w window wasClosedFromShortcut ]) ifFalse: [
-			(notebook pages anySatisfy: [ :page | page activePresenter ifNil: [ false ] ifNotNil: [ :b | b isDirty ] ]) ifTrue: [
-					(self application confirm: 'Some tabs have unsaved changes.
-Is it OK to discard changes?') ifFalse: [ anAnnouncement denyClose ] ].
-			^ self ].
-	anAnnouncement denyClose.
-	notebook removePage: notebook selectedPage.
-	self defer: [
-			self withWindowDo: [ :w | w activate ].
-			notebook selectedPage activePresenter ifNotNil: [ :browser | browser methodList listPresenter takeKeyboardFocus ] ]
-]
-
 { #category : 'initialization' }
 StMethodBrowserGroup >> initializePresenters [
 
@@ -108,15 +113,14 @@ StMethodBrowserGroup >> initializeWindow: aWindowPresenter [
 	aWindowPresenter
 		title: 'Message Browser';
 		initialExtent: 900 @ 600.
+	aWindowPresenter whenOpenedDo: [ self bindWindowCloseShortcut ].
 	aWindowPresenter whenWillCloseDo: [ :ann |
-			self handleTabsFor: ann.
 			(notebook pages anySatisfy: [ :page | page activePresenter ifNil: [ false ] ifNotNil: [ :browser | browser isDirty ] ])
 				ifTrue: [
 						(self application confirm: 'Some tabs have unsaved changes.
 Is it OK to discard changes?') ifFalse: [ ann denyClose ] ] ].
 	aWindowPresenter whenClosedDo: [
-			notebook pages do: [ :page | page activePresenter ifNotNil: [ :browser | browser unregisterFromAnnouncements ] ].
-			self class reset ]
+		notebook pages do: [ :page | page activePresenter ifNotNil: [ :browser | browser unregisterFromAnnouncements ] ] ]
 ]
 
 { #category : 'accessing' }

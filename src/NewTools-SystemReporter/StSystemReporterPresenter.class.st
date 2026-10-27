@@ -242,13 +242,13 @@ StSystemReporterPresenter >> reportVMStats: aStream [
 { #category : 'building report' }
 StSystemReporterPresenter >> reportWin32HardwareDetails: aStream [
 	self header: 'Hardware Details' on: aStream.
-	aStream nextPutAll: (Smalltalk vm getSystemAttribute: 10001)
+	aStream nextPutAll: ((Smalltalk vm getSystemAttribute: 10001) ifNil: [ 'Unavailable' ])
 ]
 
 { #category : 'building report' }
 StSystemReporterPresenter >> reportWin32OSDetails: aStream [
 	self header: 'Operating System Details' on: aStream.
-	aStream nextPutAll: (Smalltalk vm getSystemAttribute: 10002)
+	aStream nextPutAll: ((Smalltalk vm getSystemAttribute: 10002) ifNil: [ 'Unavailable' ])
 ]
 
 { #category : 'building report' }
