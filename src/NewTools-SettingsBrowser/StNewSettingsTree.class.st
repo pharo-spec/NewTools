@@ -1,27 +1,38 @@
+"
+I am the model of the settings browser: I build the settings declared with <systemsettings> with a SettingsManager and wrap each of them in a StNewSettingNode.
+"
 Class {
 	#name : 'StNewSettingsTree',
-	#superclass : 'SettingTree',
+	#superclass : 'Object',
 	#instVars : [
-		'manager'
+		'manager',
+		'nodeList'
 	],
 	#category : 'NewTools-SettingsBrowser-Model',
 	#package : 'NewTools-SettingsBrowser',
 	#tag : 'Model'
 }
 
-{ #category : 'opening' }
-StNewSettingsTree class >> settingsKeywords [
+{ #category : 'accessing' }
+StNewSettingsTree >> childrenOf: aNode [
+	"Answer the nodes of the settings of the group of aNode"
 
-	^ (Pragma allNamed: #systemsettings) collect: [: p | p method selector ]
+	| children |
+	children := self nodeList select: [ :each | each setting parent == aNode setting ].
+	self completeOrdersOf: children.
+	^ children
 ]
 
-{ #category : 'checking' }
-StNewSettingsTree >> checkForUnknownTarget [
-	"check only root because other nodes with unknown target inherits it from its parent"
+{ #category : 'private' }
+StNewSettingsTree >> completeOrdersOf: nodes [
+	"Give an order to the nodes without one, so that they keep their position among the nodes with an order"
 
-	self treeRoots do: [ :node |
-		node item target ifNil: [ node item target: (node pragma ifNotNil: [ :prg | prg methodClass instanceSide ]) ] ].
-	self treeRoots do: [ :node | node checkForUnknownTarget ]
+	| firstOrderedIndex |
+	firstOrderedIndex := nodes findFirst: [ :each | each order isNotNil ].
+	firstOrderedIndex = 0 ifTrue: [ ^ self ].
+
+	self orderNodesBefore: firstOrderedIndex in: nodes.
+	self orderUnorderedNodesAfter: firstOrderedIndex in: nodes
 ]
 
 { #category : 'accessing' }
@@ -51,16 +62,6 @@ StNewSettingsTree >> newSettingTreeBuilderNodes [
 	^ nodeList 
 ]
 
-{ #category : 'instance creation' }
-StNewSettingsTree >> newTreeHolder [
-	"Set the receiver's collector to gather the system setting pragmas"
-
-	^ self
-		acceptableKeywords: { #systemsettings };
-		nodeList: self nodeList;
-		yourself
-]
-
 { #category : 'accessing' }
 StNewSettingsTree >> nodeForSetting: aSetting [
 
@@ -77,6 +78,23 @@ StNewSettingsTree >> nodeList [
 StNewSettingsTree >> nodeList: aCollection [ 
 
 	nodeList := aCollection
+]
+
+{ #category : 'private' }
+StNewSettingsTree >> orderNodesBefore: anIndex in: nodes [
+	"Each node before the one at anIndex gets the order of the node after it, minus 1"
+
+	anIndex - 1 to: 1 by: -1 do: [ :index |
+		(nodes at: index) order: (nodes at: index + 1) order - 1 ]
+]
+
+{ #category : 'private' }
+StNewSettingsTree >> orderUnorderedNodesAfter: anIndex in: nodes [
+	"Each node after the one at anIndex without an order gets the order of the node before it, plus 1"
+
+	anIndex + 1 to: nodes size do: [ :index |
+		(nodes at: index) order ifNil: [
+			(nodes at: index) order: (nodes at: index - 1) order + 1 ] ]
 ]
 
 { #category : 'accessing' }
@@ -107,15 +125,20 @@ StNewSettingsTree >> settingsFileReference [
 	^ manager settingsFile 
 ]
 
-{ #category : 'instance creation' }
-StNewSettingsTree >> settingsKeywords [
-
-	^ self class settingsKeywords
-]
-
 { #category : 'accessing' }
 StNewSettingsTree >> sortBlock [
-	^ [:a :b | self itemSortBlock value: a setting value: b setting ]
+	"Sort nodes by setting order, then by label. Nodes with an order come first"
+
+	^ [ :a :b |
+	  | orderA orderB |
+	  orderA := a setting order.
+	  orderB := b setting order.
+	  (orderA isNotNil and: [ orderB isNotNil and: [ orderA ~= orderB ] ])
+		  ifTrue: [ orderA < orderB ]
+		  ifFalse: [
+			  orderA = orderB
+				  ifTrue: [ a setting label < b setting label ]
+				  ifFalse: [ orderA isNotNil ] ] ]
 ]
 
 { #category : 'instance creation' }
