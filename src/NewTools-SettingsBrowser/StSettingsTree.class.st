@@ -128,6 +128,20 @@ StSettingsTree >> itemSortBlock [
 { #category : 'instance creation' }
 StSettingsTree >> newSettingTreeBuilderNodes [
 	"Walk over the receiver's pragmas. Build and answer a <Collection> of <StSettingNode>, each one representing a specific setting"
+	| manager |
+
+	manager := SettingsManager forPragmaNamed: #systemsettings.
+
+	nodeList := manager settings collect: [ :setting | setting asSettingNode ].
+	nodeList do: [: node | node tree: self ].
+	"self checkForUnknownParent."
+	"self checkForUnknownTarget."
+	^ nodeList 
+]
+
+{ #category : 'legacy' }
+StSettingsTree >> newSettingTreeBuilderNodesLegacy [
+	"Walk over the receiver's pragmas. Build and answer a <Collection> of <StSettingNode>, each one representing a specific setting"
 	| builder |
 
 	builder := StSettingTreeBuilder new.
@@ -218,7 +232,7 @@ StSettingsTree >> settingsKeywords [
 
 { #category : 'accessing' }
 StSettingsTree >> sortBlock [
-	^ [:a :b | self itemSortBlock value: a declaration value: b declaration ]
+	^ [:a :b | self itemSortBlock value: a setting value: b setting ]
 ]
 
 { #category : 'persistence' }

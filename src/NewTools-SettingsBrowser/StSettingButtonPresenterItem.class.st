@@ -13,7 +13,7 @@ Class {
 StSettingButtonPresenterItem >> initializePresenters [ 
 
 	(setterPresenter := self newButton) 
-		label: self model actionLabel; 
+		label: self model buttonLabel; 
 		action: [ 
 			self target 
 				perform: self model name 
