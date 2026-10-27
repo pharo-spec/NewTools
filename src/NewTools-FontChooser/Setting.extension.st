@@ -1,7 +1,8 @@
-Extension { #name : 'PragmaSetting' }
+Extension { #name : 'Setting' }
 
 { #category : '*NewTools-FontChooser' }
-PragmaSetting >> getFont [
+Setting >> getFont [
+	"Let the user choose a new font value for the receiver"
 
 	| chooser |
 	chooser := FontChooser
@@ -9,6 +10,5 @@ PragmaSetting >> getFont [
 		initialFont: self realValue
 		onAcceptDo: [ :e | self realValue: e ].
 
-	^ chooser font.
-
+	^ chooser font
 ]
