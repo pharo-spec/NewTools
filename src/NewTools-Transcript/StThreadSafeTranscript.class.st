@@ -139,15 +139,19 @@ StThreadSafeTranscript >> contents [
 
 { #category : 'streaming' }
 StThreadSafeTranscript >> cr [
-	"Output a cr on the receiver"
+	"To deprecate in favor of #newLine"
 
 	self nextPut: Character cr
 ]
 
 { #category : 'streaming' }
 StThreadSafeTranscript >> crShow: anObject [
+	"To deprecate in favor of #newLineShow:"
 
-	self critical: [ self cr; show: anObject ]
+	self critical: [
+			self
+				cr;
+				show: anObject ]
 ]
 
 { #category : 'private - actions' }
@@ -189,6 +193,22 @@ StThreadSafeTranscript >> maxEntry: aNumber [
 
 	maxEntry := aNumber.
 	self allocateRecordings: maxEntry.
+]
+
+{ #category : 'instance creation' }
+StThreadSafeTranscript >> newLine [
+	"Output a newLine using Pharo's internal line ending."
+
+	self nextPutAll: String newLine
+]
+
+{ #category : 'streaming' }
+StThreadSafeTranscript >> newLineShow: anObject [
+
+	self critical: [
+			self
+				newLine;
+				show: anObject ]
 ]
 
 { #category : 'private - accessing' }
@@ -243,8 +263,21 @@ StThreadSafeTranscript >> show: anObject [
 
 { #category : 'streaming' }
 StThreadSafeTranscript >> showCr: anObject [
+	"To deprecate in favor of #showNewLine:"
 
-	self critical: [ self show: anObject ; cr ]
+	self critical: [
+			self
+				show: anObject;
+				cr ]
+]
+
+{ #category : 'streaming' }
+StThreadSafeTranscript >> showNewLine: anObject [
+
+	self critical: [
+			self
+				show: anObject;
+				newLine ]
 ]
 
 { #category : 'streaming' }
