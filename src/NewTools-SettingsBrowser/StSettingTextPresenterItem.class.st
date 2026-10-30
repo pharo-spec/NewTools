@@ -17,7 +17,7 @@ StSettingTextPresenterItem >> initializePresenters [
 		placeholder: self model label;
 		yourself.
 	super initializePresenters.
-	setterPresenter whenTextChangedDo: [ :text | self updateSetting: text ].
+	setterPresenter whenTextChangedDo: [ :text | self shouldUpdateSetting ifTrue: [ self updateSetting: text ] ].
 ]
 
 { #category : 'accessing' }
@@ -30,5 +30,5 @@ StSettingTextPresenterItem >> settingStyle [
 StSettingTextPresenterItem >> value: aString [ 
 	"Set the receiver's value to aString"
 
-	self setterPresenter text: aString.
+	self withoutUpdatingSettingDo: [ self setterPresenter text: aString ]
 ]

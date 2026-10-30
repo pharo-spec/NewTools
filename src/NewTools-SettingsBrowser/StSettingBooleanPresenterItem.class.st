@@ -13,8 +13,8 @@ Class {
 StSettingBooleanPresenterItem >> initializePresenters [ 
 
 	setterPresenter := self newCheckBox
-		whenActivatedDo: [ self updateSetting: self model value: true ];
-		whenDeactivatedDo: [ self updateSetting: self model value: false ].
+		whenActivatedDo: [ self shouldUpdateSetting ifTrue: [ self updateSetting: self model value: true ] ];
+		whenDeactivatedDo: [ self shouldUpdateSetting ifTrue: [ self updateSetting: self model value: false ] ].
 	super initializePresenters
 
 ]
@@ -35,5 +35,5 @@ StSettingBooleanPresenterItem >> updateSetting: aSettingDeclaration value: aBool
 { #category : 'accessing' }
 StSettingBooleanPresenterItem >> value: aBoolean [
 
-	self setterPresenter state: aBoolean
+	self withoutUpdatingSettingDo: [ self setterPresenter state: aBoolean ]
 ]
