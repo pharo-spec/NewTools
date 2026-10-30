@@ -30,7 +30,7 @@ StSettingPresenterItem >> defaultLayout [
 { #category : 'setting value' }
 StSettingPresenterItem >> hasTarget [
 	
-	^ self model target isNotNil
+	^ self settingReceiver isNotNil
 ]
 
 { #category : 'accessing' }
@@ -114,10 +114,9 @@ StSettingPresenterItem >> setterPresenter: anObject [
 
 { #category : 'setting value' }
 StSettingPresenterItem >> settingReceiver [
+	"Answer the object that holds the setting value. It may be inherited from a parent group"
 
-	^ self model targetSelector 
-		ifNil: [ self model target ] 
-		ifNotNil: [ self model target perform: self model targetSelector ]
+	^ self model settingReceiver
 ]
 
 { #category : 'accessing' }
