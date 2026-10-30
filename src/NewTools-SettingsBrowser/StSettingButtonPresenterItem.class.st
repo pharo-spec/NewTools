@@ -36,7 +36,7 @@ StSettingButtonPresenterItem >> settingStyle [
 
 { #category : 'accessing' }
 StSettingButtonPresenterItem >> target [
-	"Answer an <Object> that is the receiver of the action"
+	"Answer an <Object> that is the receiver of the action. It may be inherited from a parent group"
 
-	^ self model target
+	^ self model settingReceiver
 ]

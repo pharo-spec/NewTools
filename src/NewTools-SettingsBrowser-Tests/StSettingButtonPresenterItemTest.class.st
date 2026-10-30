@@ -48,6 +48,25 @@ StSettingButtonPresenterItemTest >> testClickPerformsTheAction [
 ]
 
 { #category : 'tests' }
+StSettingButtonPresenterItemTest >> testClickPerformsTheActionOfTheGroupTarget [
+
+	| button |
+	button := ActionSetting new
+		          name: #recordAction;
+		          buttonLabel: 'Do';
+		          parentGroup: (SettingsGroup new
+				           name: #group;
+				           target: self;
+				           yourself);
+		          yourself.
+	item := button asSettingPresenterWithOwner: page.
+
+	self clickButton.
+
+	self assert: actionCount equals: 1
+]
+
+{ #category : 'tests' }
 StSettingButtonPresenterItemTest >> testClickRefreshesTheSettingsPage [
 
 	| refreshCount |
