@@ -6,7 +6,9 @@ Class {
 	#name : 'SpColorPickerPresenter',
 	#superclass : 'SpPresenter',
 	#instVars : [
-		'colorPickerPresenter'
+		'colorPickerPresenter',
+		'toolbar',
+		'colorChangedBlock'
 	],
 	#category : 'ColorPicker',
 	#package : 'ColorPicker'
@@ -25,15 +27,16 @@ SpColorPickerPresenter class >> open [
 	^ (self newApplication: StPharoApplication current) open
 ]
 
-{ #category : 'accessing' }
-SpColorPickerPresenter >> color [
+{ #category : 'events' }
+SpColorPickerPresenter >> colorChanged [
 
-	^ colorPickerPresenter color
+	colorChangedBlock ifNil: [ ^ self ].
+	^ colorChangedBlock value: colorPickerPresenter color
 ]
 
 { #category : 'layout' }
 SpColorPickerPresenter >> defaultLayout [ 
-
+	
 	^ SpBoxLayout newTopToBottom 
 		add: colorPickerPresenter;
 		yourself
@@ -42,7 +45,9 @@ SpColorPickerPresenter >> defaultLayout [
 { #category : 'initialization' }
 SpColorPickerPresenter >> initializePresenters [
 
-	colorPickerPresenter := self newColorPicker
+	colorPickerPresenter := self newColorPicker.
+	toolbar := self newToolbar.
+	self toolbarButtons do: [ :button | toolbar addItemRight: button ]
 ]
 
 { #category : 'initialization' }
@@ -52,19 +57,25 @@ SpColorPickerPresenter >> toolbarButtons [
 	buttons := OrderedCollection new.
 	buttons 
 			add: (self newToolbarButton
+			 label: 'Select';
+			 icon: (self iconNamed: #smallOk);
+			 help: 'Select and close';
+			 action: [ self colorChanged. self delete ];
+			 yourself);
+			add: (self newToolbarButton
 					 label: 'Cancel';
 					 icon: (self iconNamed: #smallCancel);
 					 help: 'Cancel the color selection';
 					 action: [ self delete ];
-					 yourself);
-			add: (self newToolbarButton
-			 label: 'Select';
-			 icon: (self iconNamed: #smallOk);
-			 help: 'Select and close';
-			 action: [ self delete ];
-			 yourself).
+					 yourself).
 
 	^ buttons
+]
+
+{ #category : 'events' }
+SpColorPickerPresenter >> whenColorChangedDo: aBlock [
+
+	colorChangedBlock := aBlock
 ]
 
 { #category : 'initialization' }

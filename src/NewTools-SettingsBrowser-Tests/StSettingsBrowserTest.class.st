@@ -97,6 +97,13 @@ StSettingsBrowserTest >> testNonEmptyCategoryNames [
 ]
 
 { #category : 'tests' }
+StSettingsBrowserTest >> testOpening [
+	"Non-Regression Test related to https://pharo.manuscript.com/f/cases/16138"
+	
+	self openInstance
+]
+
+{ #category : 'tests' }
 StSettingsBrowserTest >> testSimulateCategoryPopulation [
 
 	| childSettingsLayout |

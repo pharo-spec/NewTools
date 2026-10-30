@@ -40,12 +40,13 @@ StDebuggerClientModel class >> shouldFilterStack: aBoolean [
 
 { #category : 'settings' }
 StDebuggerClientModel class >> shouldFilterStackSettingsOn: aBuilder [
+
 	<systemsettings>
 	(aBuilder setting: #shouldFilterStack)
 		label: 'Filter the debugger stack';
 		target: self;
-		default: true;
-		parent: #debugging;
+		defaultValue: true;
+		parentName: #debugging;
 		description: 'Defines if methods with pragma #debuggerCompleteToSender are filtered (hidden) in the debugger stack'
 ]
 

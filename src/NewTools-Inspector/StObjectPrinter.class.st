@@ -46,11 +46,11 @@ StObjectPrinter class >> displayStringLength: anInteger [
 
 { #category : 'settings' }
 StObjectPrinter class >> settingsOn: aBuilder [
+
 	<systemsettings>
-		
 	(aBuilder setting: #displayStringLength)
-		parent: #inspector;
-		default: 100;
+		parentName: #inspector;
+		defaultValue: 100;
 		target: self;
 		description: 'The length of the display string shown in the inspector';
 		label: 'Display String length in Collection'

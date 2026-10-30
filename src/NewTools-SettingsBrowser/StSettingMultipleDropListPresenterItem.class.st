@@ -15,7 +15,7 @@ Class {
 StSettingMultipleDropListPresenterItem >> initializePresenters [ 
 	| modelDefault |
 
-	modelDefault := self model default.
+	modelDefault := self model defaultValue. 
 	"modelDefault color
 		ifNil: [ modelDefault color: Color transparent ].
 	colorSettingItemPresenter := modelDefault color 

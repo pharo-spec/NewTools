@@ -186,13 +186,11 @@ StDebugger class >> debuggerLayoutSettingsOn: aBuilder [
 
 	<systemsettings>
 	(aBuilder pickOne: #configureLayout)
-		parent: #debugging;
+		parentName: #debugging;
 		label: 'Debugger Layout';
 		target: StDebugger;
-		default: #beVerticalStackThenCode;
-		domainValues:
-			#( #beHorizontalCodeThenStack #beHorizontalStackThenCode
-			   #beVerticalCodeThenStack #beVerticalStackThenCode );
+		defaultValue: #beVerticalStackThenCode;
+		domainValues: #( #beHorizontalCodeThenStack #beHorizontalStackThenCode #beVerticalCodeThenStack #beVerticalStackThenCode );
 		description: ''
 ]
 
@@ -277,13 +275,13 @@ StDebugger class >> settings [
 StDebugger class >> stackColoringSettingOn: aBuilder [
 
 	<systemsettings>
-		(aBuilder setting: #enableStackColoring)
-				label: 'Enable stack coloring';
-				target: self;
-				parent: #debugging;
-				default: true;
-				description:
-					'If enable, the debugger will highlight the elements of the stacks that are from the same class and same package as the selected context.'.
+	(aBuilder setting: #enableStackColoring)
+		label: 'Enable stack coloring';
+		target: self;
+		parentName: #debugging;
+		defaultValue: true;
+		description:
+			'If enable, the debugger will highlight the elements of the stacks that are from the same class and same package as the selected context.'
 ]
 
 { #category : 'accessing' }

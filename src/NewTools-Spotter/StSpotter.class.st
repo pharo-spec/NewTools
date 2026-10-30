@@ -243,33 +243,33 @@ StSpotter class >> resetHistory [
 
 { #category : 'settings' }
 StSpotter class >> settingsOn: aBuilder [
-	<systemsettings>
 
+	<systemsettings>
 	(aBuilder group: #spotter)
-		parent: #tools;
+		parentName: #tools;
 		label: 'Spotter';
 		description: 'Spotter configuration'.
 
 	(aBuilder setting: #previewVisible)
-		parent: #spotter;
-		default: self isShowingPreview;
+		parentName: #spotter;
+		defaultValue: self isShowingPreview;
 		target: self;
 		description: 'If Spotter will show the preview panel on the right of spotter';
 		label: 'Show Preview Panel'.
-		
+
 	(aBuilder setting: #tipsVisible)
-		parent: #spotter;
-		default: self isShowingTips;
+		parentName: #spotter;
+		defaultValue: self isShowingTips;
 		target: self;
 		description: 'If Spotter will show the tips at the bottom of spotter';
 		label: 'Show Tips Panel'.
-		
+
 	(aBuilder setting: #insertsSelection)
-		parent: #spotter;
-		default: self insertsSelection;
+		parentName: #spotter;
+		defaultValue: self insertsSelection;
 		target: self;
 		description: 'When the Spotter is opened, automatically insert the selected text into the search field';
-		label: 'Inserts Selection'.
+		label: 'Inserts Selection'
 ]
 
 { #category : 'accessing' }

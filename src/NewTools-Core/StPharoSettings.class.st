@@ -63,24 +63,24 @@ StPharoSettings class >> pharoAboutOn: aBuilder [
 
 { #category : 'settings' }
 StPharoSettings class >> settingsOn: aBuilder [
-	<systemsettings>
 
+	<systemsettings>
 	(aBuilder setting: #codeShowLineNumbers)
-		parent: #tools;
+		parentName: #tools;
 		order: 0;
-		default: self codeShowLineNumbers;
+		defaultValue: self codeShowLineNumbers;
 		target: self;
 		description: 'If code panels will display line numbers';
 		label: 'Show line numbers in code panels'.
 
 	(aBuilder pickOne: #toolbarDisplayMode)
-		parent: #tools;
+		parentName: #tools;
 		order: 1;
-		default: self toolbarDisplayMode;
+		defaultValue: self toolbarDisplayMode;
 		target: self;
 		domainValues: (SpToolbarDisplayMode all collect: [ :each | each label -> each ]);
 		description: 'Toolbars will be displayed in icon+label, icon, or label mode.';
-		label: 'Toolbar display mode'		
+		label: 'Toolbar display mode'
 ]
 
 { #category : 'settings' }
