@@ -13,10 +13,10 @@ StSettingDropListPresenterItem >> initializePresenters [
 	setterPresenter := self newDropList
 		items: self model domainValues;
 		display: [ :item | item name asString ];
-		whenSelectedItemChangedDo: [ :item | self updateSetting: item ];
+		whenSelectedItemChangedDo: [ :item | self shouldUpdateSetting ifTrue: [ self updateSetting: item ] ];
 		yourself.	
 	indexOfCurrentValue := self model domainValues detectIndex: [ :each | each value = self model realValue ].
-	setterPresenter selectIndex: indexOfCurrentValue.
+	self withoutUpdatingSettingDo: [ setterPresenter selectIndex: indexOfCurrentValue ].
 	super initializePresenters
 ]
 
