@@ -55,6 +55,14 @@ StMethodListPresenter >> browserEnvironment [
 	^ RBBrowserEnvironment default label: 'current image'
 ]
 
+{ #category : 'private - browsing context' }
+StMethodListPresenter >> browsingGroup [
+	"Answer the group hosting the receiver, if any; nil when not hosted in a group.
+	 The group is the browsing context: opening a browser in it reuses it as a tab."
+
+	^ self owner ifNotNil: [ :aBrowser | aBrowser browsingGroup ]
+]
+
 { #category : 'sorting' }
 StMethodListPresenter >> buildHierarchyForMessages: messages [
 
@@ -80,12 +88,6 @@ StMethodListPresenter >> buildHierarchyForMessages: messages [
 { #category : 'testing' }
 StMethodListPresenter >> cacheHierarchyForClasses: aCollection [
 	cachedHierarchy := self buildHierarchyForMessages: aCollection.
-]
-
-{ #category : 'accessing' }
-StMethodListPresenter >> callerClass [
-
-	^ owner callerClass
 ]
 
 { #category : 'private - scopes' }
@@ -191,10 +193,7 @@ StMethodListPresenter >> doBrowseHistory [
 { #category : 'private - actions' }
 StMethodListPresenter >> doBrowseImplementors [
 
-	| selectors |
-	selectors := self selectedMethods collect: [ :method | method selector ].
-
-	StMethodBrowser browseImplementorsOfAll: selectors from: self class
+	self openMethodBrowser: (StMethodBrowser newImplementorsOfAllBrowser: self selectedMethodSelectors)
 ]
 
 { #category : 'private - actions' }
@@ -206,19 +205,13 @@ StMethodListPresenter >> doBrowseMethod [
 { #category : 'private - actions' }
 StMethodListPresenter >> doBrowseSenders [
 
-	| selectors |
-	selectors := self selectedMethods collect: [ :method | method selector ].
-
-	StMethodBrowser browseSendersOfAll: selectors from: self class
+	self openMethodBrowser: (StMethodBrowser newSendersOfAllBrowser: self selectedMethodSelectors)
 ]
 
 { #category : 'private - actions' }
 StMethodListPresenter >> doBrowseUsers [
 
-	| class |
-	class := self selectedMethod methodClass.
-
-	StMethodBrowser browseReferencesToClass: class
+	self openMethodBrowser: (StMethodBrowser newReferencesToClassBrowser: self selectedMethod methodClass)
 ]
 
 { #category : 'private - actions' }
@@ -404,21 +397,14 @@ StMethodListPresenter >> newVisitedScopesForMethod: aCompiledMethod [
 	| newScopeSet |
 
 	newScopeSet := Set new.
-
-	self callerClass ifNotNil: [ :caller |
-			newScopeSet
-				add: (self packageOrganizer packageOf: caller);
-				add: caller;
-				add: (RBClassHierarchyEnvironment class: caller) ].
-
 	aCompiledMethod ifNil: [ ^ newScopeSet ].
+
 	newScopeSet
 		add: (self packageOf: aCompiledMethod);
 		add: (self classOf: aCompiledMethod);
 		add: (self classHierarchyOf: aCompiledMethod).
 
 	newScopeSet addAll: ScopesManager availableScopes.
-
 	^ newScopeSet
 ]
 
@@ -426,6 +412,18 @@ StMethodListPresenter >> newVisitedScopesForMethod: aCompiledMethod [
 StMethodListPresenter >> numberOfElements [
 
 	^ listPresenter listSize
+]
+
+{ #category : 'private - browsing context' }
+StMethodListPresenter >> openMethodBrowser: aMethodBrowser [
+	"Open aMethodBrowser allowing the caller to decide the browsing context: if the
+	 receiver is hosted in a group, open as a tab of that group (same browsing context),
+	 otherwise open in a new window (new browsing context)."
+
+	aMethodBrowser ifNil: [ ^ nil ].
+	^ self browsingGroup
+		  ifNil: [ StMethodBrowserGroup openNewBrowser: aMethodBrowser ]
+		  ifNotNil: [ :browsingContext | browsingContext addBrowser: aMethodBrowser ]
 ]
 
 { #category : 'transmission' }
@@ -519,6 +517,12 @@ StMethodListPresenter >> selectedIndex [
 StMethodListPresenter >> selectedMethod [
 
 	^ listPresenter selection selectedItem
+]
+
+{ #category : 'api - accessing' }
+StMethodListPresenter >> selectedMethodSelectors [
+
+	^ self selectedMethods collect: [ :method | method selector ]
 ]
 
 { #category : 'api - accessing' }

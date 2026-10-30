@@ -40,21 +40,21 @@ StSpotterPragmaBasedProcessor class >> defaultNestedItemsLimit: aValue [
 
 { #category : 'accessing - defaults' }
 StSpotterPragmaBasedProcessor class >> settingsOn: aBuilder [
-	<systemsettings>
 
+	<systemsettings>
 	(aBuilder setting: #defaultItemsLimit)
 		target: self;
-		parent: #spotter;
+		parentName: #spotter;
 		label: 'Number of results per category';
-		default: 25;
+		defaultValue: 25;
 		order: 100;
 		description: 'Number of results per category to show in Spotter'.
-	
+
 	(aBuilder setting: #defaultNestedItemsLimit)
 		target: self;
-		parent: #spotter;
+		parentName: #spotter;
 		label: 'Number of nested results per category';
-		default: 2000;
+		defaultValue: 2000;
 		order: 101;
 		description: 'Number of total results per of category to show in Spotter'
 ]
