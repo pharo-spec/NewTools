@@ -8,22 +8,22 @@ Class {
 	#package : 'NewTools-DebugPointsBrowser'
 }
 
-{ #category : 'accessing' }
-ClyAddAndConfigureBreakPointCommand >> defaultMenuIconName [
-
-	^ #smallConfiguration
-]
-
-{ #category : 'accessing' }
-ClyAddAndConfigureBreakPointCommand >> defaultMenuItemName [
-
-	^ String streamContents: [ :stream | stream << 'Configure Breakpoint on "' << self sourceNode displaySourceCode << '"' ]
-]
-
 { #category : 'execution' }
 ClyAddAndConfigureBreakPointCommand >> executeRefactoring [
 
 	| dp |
 	dp := DebugPointManager installNew: BreakDebugPoint on: self sourceNode.
 	DebugPointBrowserPresenter openOn: dp
+]
+
+{ #category : 'accessing' }
+ClyAddAndConfigureBreakPointCommand >> iconName [
+
+	^ #smallConfiguration
+]
+
+{ #category : 'accessing' }
+ClyAddAndConfigureBreakPointCommand >> name [
+
+	^ String streamContents: [ :stream | stream << 'Configure Breakpoint on "' << self sourceNode displaySourceCode << '"' ]
 ]
