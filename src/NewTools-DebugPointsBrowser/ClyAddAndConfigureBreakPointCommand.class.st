@@ -17,13 +17,13 @@ ClyAddAndConfigureBreakPointCommand >> defaultMenuIconName [
 { #category : 'accessing' }
 ClyAddAndConfigureBreakPointCommand >> defaultMenuItemName [
 
-	^ String streamContents: [ :stream | stream << 'Configure Breakpoint on "' << sourceNode displaySourceCode << '"' ]
+	^ String streamContents: [ :stream | stream << 'Configure Breakpoint on "' << self sourceNode displaySourceCode << '"' ]
 ]
 
 { #category : 'execution' }
-ClyAddAndConfigureBreakPointCommand >> execute [
+ClyAddAndConfigureBreakPointCommand >> executeRefactoring [
 
 	| dp |
-	dp := DebugPointManager installNew: BreakDebugPoint on: sourceNode.
+	dp := DebugPointManager installNew: BreakDebugPoint on: self sourceNode.
 	DebugPointBrowserPresenter openOn: dp
 ]
