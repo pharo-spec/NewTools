@@ -261,6 +261,8 @@ StObjectInspectorPresenter >> refresh [
 StObjectInspectorPresenter >> refreshContent [
 	"I force a refresh of current page contents. "
 
+	self updateHeaderBar.
+	self updateTitle.
 	views selectedPage resetContent
 ]
 
