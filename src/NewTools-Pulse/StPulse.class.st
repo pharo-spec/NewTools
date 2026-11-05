@@ -288,37 +288,37 @@ StPulse class >> resetSize [
 
 { #category : 'settings' }
 StPulse class >> settingsOn: aBuilder [
-<systemsettings>
 
+	<systemsettings>
 	(aBuilder group: #pulse)
-		parent: #tools;
+		parentName: #tools;
 		label: 'Pulse';
 		target: self;
 		description: 'Pulse configuration'.
 
 	(aBuilder setting: #previewVisible)
-		parent: #pulse;
-		default: true;
+		parentName: #pulse;
+		defaultValue: true;
 		target: self;
 		description: 'Show the preview panel';
 		label: 'Show Preview Panel'.
-		
+
 	(aBuilder setting: #insertsSelection)
-		parent: #pulse;
-		default: false;
+		parentName: #pulse;
+		defaultValue: false;
 		target: self;
 		description: 'When opening pulse, insert the selected content into the search bar';
 		label: 'Inserts Selection'.
-		
+
 	(aBuilder button: #resetHistory)
-		parent: #pulse;
+		parentName: #pulse;
 		target: self;
 		description: 'Resets the history of environmment entries of Pulse';
 		label: 'Reset history';
 		buttonLabel: 'Reset'.
-		
+
 	(aBuilder button: #resetSize)
-		parent: #pulse;
+		parentName: #pulse;
 		description: 'Resets the stored size of Pulse, which can be changed at any time and will be remembered';
 		label: 'Reset size';
 		buttonLabel: 'Reset'

@@ -40,11 +40,11 @@ StFinderSettings class >> cleanResultsOnEmptyInput: aBoolean [
 
 { #category : 'system settings' }
 StFinderSettings class >> cleanResultsOnEmptyInputOn: aBuilder [
+
 	<systemsettings>
-	
 	(aBuilder setting: #cleanResultsOnEmptyInput)
-		parent: #finder;
-		default: false;
+		parentName: #finder;
+		defaultValue: false;
 		label: 'Clean results on clean text input';
 		description: 'Clean results after text input is cleaned';
 		target: self
@@ -67,12 +67,14 @@ StFinderSettings class >> evaluationTimeout: aNumber [
 
 { #category : 'system settings' }
 StFinderSettings class >> evaluationTimeoutOn: aBuilder [
+
 	<systemsettings>
 	(aBuilder setting: #evaluationTimeout)
-		parent: #finder;
-		default: 500;
+		parentName: #finder;
+		defaultValue: 500;
 		label: 'Evaluation timeout';
-		description: 'Maximum timeout delay for individual calls in Examples search. Expects an integer giving the number of miliseconds.
+		description:
+			'Maximum timeout delay for individual calls in Examples search. Expects an integer giving the number of miliseconds.
 		
 Setting a value of 0 will set the evaluation to run without timeout';
 		target: self
@@ -102,10 +104,11 @@ StFinderSettings class >> expandResults: aBoolean [
 
 { #category : 'system settings' }
 StFinderSettings class >> expandResultsOn: aBuilder [
+
 	<systemsettings>
 	(aBuilder setting: #expandResults)
-		parent: #finder;
-		default: false;
+		parentName: #finder;
+		defaultValue: false;
 		label: 'Expand all results by default';
 		description: 'All results with children will be expanded if true';
 		target: self
@@ -113,12 +116,12 @@ StFinderSettings class >> expandResultsOn: aBuilder [
 
 { #category : 'system settings' }
 StFinderSettings class >> groupSettingsOn: aBuilder [
-	<systemsettings>
 
+	<systemsettings>
 	(aBuilder group: #finder)
 		label: 'Finder';
 		description: '';
-		parent: #tools
+		parentName: #tools
 ]
 
 { #category : 'system settings' }
@@ -160,10 +163,11 @@ StFinderSettings class >> logErrorsToFile: aBoolean [
 
 { #category : 'system settings' }
 StFinderSettings class >> logErrorsToFileOn: aBuilder [
+
 	<systemsettings>
 	(aBuilder setting: #logErrorsToFile)
-		parent: #finder;
-		default: false;
+		parentName: #finder;
+		defaultValue: false;
 		label: 'Log errors to file';
 		description: 'Log evaluation errors in the examples search to a file';
 		target: self
@@ -185,10 +189,11 @@ StFinderSettings class >> logErrorsToTranscript: aBoolean [
 
 { #category : 'system settings' }
 StFinderSettings class >> logErrorsToTranscriptOn: aBuilder [
+
 	<systemsettings>
 	(aBuilder setting: #logErrorsToTranscript)
-		parent: #finder;
-		default: false;
+		parentName: #finder;
+		defaultValue: false;
 		label: 'Log errors to Transcript';
 		description: 'Log evaluation errors in the examples search to the Transcript';
 		target: self
@@ -211,11 +216,11 @@ StFinderSettings class >> searchAsYouType: aBoolean [
 
 { #category : 'system settings' }
 StFinderSettings class >> searchAsYouTypeOn: aBuilder [
+
 	<systemsettings>
-	
 	(aBuilder setting: #searchAsYouType)
-		parent: #finder;
-		default: false;
+		parentName: #finder;
+		defaultValue: false;
 		label: 'Search as you type';
 		description: 'Present results as you type';
 		target: self
@@ -237,10 +242,11 @@ StFinderSettings class >> useCompletion: aBoolean [
 
 { #category : 'system settings' }
 StFinderSettings class >> useCompletionOn: aBuilder [
+
 	<systemsettings>
 	(aBuilder setting: #useCompletion)
-		parent: #finder;
-		default: false;
+		parentName: #finder;
+		defaultValue: false;
 		label: 'Use completion';
 		description: 'Enable or disable autocompletion in finder text field as you type';
 		target: self

@@ -5,7 +5,7 @@ LogicalFont >> asSettingPresenter: aSettingDeclaration owner: aPresenter [
 
 	| info currentFont |
 
-	currentFont := aSettingDeclaration target perform: aSettingDeclaration name.
+	currentFont := aSettingDeclaration settingReceiver perform: aSettingDeclaration name.
 	info := String streamContents: [ :stream |
 		stream 
 			<< currentFont textStyleName;

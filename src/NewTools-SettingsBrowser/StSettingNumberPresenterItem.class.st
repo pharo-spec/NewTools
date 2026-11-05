@@ -26,6 +26,7 @@ StSettingNumberPresenterItem >> initializePresenters [
 
 	setterPresenter := self newNumberInput.
 	super initializePresenters.
+	setterPresenter whenNumberChangedDo: [ :value | self shouldUpdateSetting ifTrue: [ self updateSetting: value ] ]
 ]
 
 { #category : 'accessing' }
@@ -38,5 +39,5 @@ StSettingNumberPresenterItem >> settingStyle [
 StSettingNumberPresenterItem >> value: aNumber [ 
 	"Set the receiver's value to aNumber"
 
-	self setterPresenter number: aNumber
+	self withoutUpdatingSettingDo: [ self setterPresenter number: aNumber ]
 ]

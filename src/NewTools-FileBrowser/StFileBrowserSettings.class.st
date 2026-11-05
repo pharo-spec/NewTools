@@ -36,16 +36,15 @@ StFileBrowserSettings class >> defaultDirectory: aFileReference [
 
 { #category : 'settings' }
 StFileBrowserSettings class >> defaultDirectoryOn: aBuilder [
-	<systemsettings>
 
+	<systemsettings>
 	(aBuilder setting: #defaultDirectory)
-		parent: #fileBrowser;
+		parentName: #fileBrowser;
 		type: #FilePathEncoder;
-		default: self defaultDirectory;
+		defaultValue: self defaultDirectory;
 		label: 'Default directory';
 		description: 'Set the default directory for opening the file browser and dialogs';
 		target: self
-
 ]
 
 { #category : 'settings' }
@@ -56,12 +55,12 @@ StFileBrowserSettings class >> defaultTerminalProgram [
 
 { #category : 'settings' }
 StFileBrowserSettings class >> groupSettingsOn: aBuilder [
-	<systemsettings>
 
+	<systemsettings>
 	(aBuilder group: #fileBrowser)
 		label: 'File Browser';
 		description: 'Settings for the File Browser';
-		parent: #tools
+		parentName: #tools
 ]
 
 { #category : 'settings' }
@@ -92,15 +91,15 @@ StFileBrowserSettings class >> macTerminalProgram: aString [
 
 { #category : 'settings' }
 StFileBrowserSettings class >> macTerminalProgramOn: aBuilder [
+
 	<systemsettings>
-
 	(aBuilder setting: #macTerminalProgram)
-		parent: #fileBrowser;
-		default: String empty;
+		parentName: #fileBrowser;
+		defaultValue: String empty;
 		label: 'Name of the MacOS terminal';
-		description: 'Set the name of the MacOS terminal program to run when a shell terminal is requested. It is not necessary to specify the full path';
+		description:
+			'Set the name of the MacOS terminal program to run when a shell terminal is requested. It is not necessary to specify the full path';
 		target: self
-
 ]
 
 { #category : 'settings' }
@@ -122,7 +121,7 @@ StFileBrowserSettings class >> openOnLastDirectoryOn: aBuilder [
 
 	<systemsettings>
 	(aBuilder setting: #openOnLastDirectory)
-		parent: #fileBrowser;
+		parentName: #fileBrowser;
 		label: 'Open on last visited directory';
 		description: 'Open a new instance on the last visited directory';
 		target: self
@@ -145,15 +144,14 @@ StFileBrowserSettings class >> showAlwaysDefaultBookmarks: aBoolean [
 
 { #category : 'settings' }
 StFileBrowserSettings class >> showAlwaysDefaultBookmarksOn: aBuilder [
-	<systemsettings>
 
+	<systemsettings>
 	(aBuilder setting: #showAlwaysDefaultBookmarks)
-		parent: #fileBrowser;
-		default: true;
+		parentName: #fileBrowser;
+		defaultValue: true;
 		label: 'Show always default bookmarks';
 		description: 'If the global bookmarks are deleted, this setting ensures that dialogs will always preserve default bookmarks';
 		target: self
-
 ]
 
 { #category : 'accessing' }
@@ -173,8 +171,8 @@ StFileBrowserSettings class >> showHiddenFilesOn: aBuilder [
 
 	<systemsettings>
 	(aBuilder setting: #showHiddenFiles)
-		parent: #fileBrowser;
-		default: false;
+		parentName: #fileBrowser;
+		defaultValue: false;
 		label: 'Show hidden files and folders';
 		description: 'If enabled, shows the hidden files and folders in the file browser.';
 		target: self
@@ -196,15 +194,14 @@ StFileBrowserSettings class >> showPreview: aBoolean [
 
 { #category : 'settings' }
 StFileBrowserSettings class >> showPreviewOn: aBuilder [
-	<systemsettings>
 
+	<systemsettings>
 	(aBuilder setting: #showPreview)
-		parent: #fileBrowser;
-		default: true;
+		parentName: #fileBrowser;
+		defaultValue: true;
 		label: 'Enable preview';
 		description: 'File Browser will show a preview file presenter by default';
 		target: self
-
 ]
 
 { #category : 'settings' }

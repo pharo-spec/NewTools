@@ -92,12 +92,13 @@ StDebuggerSettings class >> preserveWindowPosition: aBoolean [
 
 { #category : 'initialization' }
 StDebuggerSettings class >> preserveWindowPositionAndExtentOn: aBuilder [
+
 	<systemsettings>
-	
 	(aBuilder setting: #preserveWindowPosition)
 		label: 'Preserve window position';
 		target: self;
-		parent: #debugging;
-		default: true;
-		description: 'If enabled, the debugger will preserve the last known window position, and it will open new debugger windows in that configuration'.
+		parentName: #debugging;
+		defaultValue: true;
+		description:
+			'If enabled, the debugger will preserve the last known window position, and it will open new debugger windows in that configuration'
 ]

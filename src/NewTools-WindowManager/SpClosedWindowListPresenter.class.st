@@ -86,12 +86,11 @@ SpClosedWindowListPresenter class >> settingOn: aBuilder [
 
 	<systemsettings>
 	(aBuilder setting: #useHideForClose)
-		parent: #tools;
+		parentName: #tools;
 		order: 1;
 		target: self;
 		selector: #enableCloseWindow;
-		description:
-			'If closed windows will be stored in SpClosedWindowListPresenter';
+		description: 'If closed windows will be stored in SpClosedWindowListPresenter';
 		label: 'Use last closed windows'
 ]
 

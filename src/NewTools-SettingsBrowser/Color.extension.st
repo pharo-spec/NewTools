@@ -15,13 +15,7 @@ Color >> asSettingColorForm [
 Color >> asSettingPresenter: aSettingDeclaration owner: aPresenter [
 	| settingPresenter colorValue |
 	
-	colorValue := aSettingDeclaration targetSelector 
-		ifNil: [ aSettingDeclaration realTarget perform: aSettingDeclaration name ]
-		ifNotNil: [ 
-			| settingsTarget |
-			settingsTarget := aSettingDeclaration realTarget perform: aSettingDeclaration targetSelector.
-			settingsTarget perform: aSettingDeclaration getSelector ].
-
+	colorValue := aSettingDeclaration realValue.
 	settingPresenter := (aPresenter instantiate: StSettingSHStyleButtonColorPresenterItem on: aSettingDeclaration).
 	settingPresenter
 		buttonAction: [ aSettingDeclaration getColorFor: settingPresenter ];

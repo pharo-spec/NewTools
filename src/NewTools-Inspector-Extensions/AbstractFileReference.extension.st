@@ -1,6 +1,45 @@
 Extension { #name : 'AbstractFileReference' }
 
 { #category : '*NewTools-Inspector-Extensions' }
+AbstractFileReference >> inspectionCompressedItems: aBuilder [ 
+	<inspectorPresentationOrder: 0 title: 'Compressed Items'>
+	| items children root |
+
+	root := (FileSystem zip: self) open workingDirectory.
+	children := root directories, root files.
+	items := self isRoot 
+		ifTrue: [ children ]
+		ifFalse: [ 
+			children asOrderedCollection 
+				addFirst: self parent;
+				yourself ].
+
+	^ aBuilder newTable
+		items: items;
+		addColumn: (SpCompositeTableColumn new
+			title: 'Name';
+			addColumn: (SpImageTableColumn evaluated: [ :each | 
+				self iconNamed: (each isDirectory 
+					ifTrue: [ #folder ] 
+					ifFalse: [ #browse ]) ]);
+			addColumn: (SpStringTableColumn evaluated: [ :each | 
+					self parent = each 
+						ifTrue: [ '..' ] 
+						ifFalse: [ each basename ] ]));
+		addColumn: (SpStringTableColumn 
+			title: 'Size' 
+			evaluated: [ :each | each humanReadableSize ]);
+		addColumn: (SpStringTableColumn 
+			title: 'Creation' 
+			evaluated: [ :each | 
+				String streamContents: [ :stream | 
+					each creationTime printYMDOn: stream.
+					stream nextPut: Character space.
+					each creationTime printHMSOn: stream ] ])
+
+]
+
+{ #category : '*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionCompressedItemsContext: aContext [ 
 	
 	aContext active: self isCompressedFile

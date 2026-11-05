@@ -88,8 +88,8 @@ StSettingsBrowser >> defaultLayout [
 { #category : 'initialization' }
 StSettingsBrowser >> exportSettings [
 
-	self settingsTree persistence storeSettingNodes.
-	self inform: 'Settings were exported to ' , self settingsTree persistence fileReference fullName.
+	self settingsTree persistence storeSettings.
+	self inform: 'Settings were exported to ' , self settingsTree persistence settingsFile fullName.
 	buttonBarPresenter enable
 ]
 
@@ -119,16 +119,6 @@ StSettingsBrowser >> followPath: aStSettingNode in: aCollection [
 ]
 
 { #category : 'initialization' }
-StSettingsBrowser >> initialize [
-
-	super initialize.	
-	self announcer 
-		when: StSettingModelChanged
-		send: #resendChange:
-		to: self
-]
-
-{ #category : 'initialization' }
 StSettingsBrowser >> initializeButtonBar [
 
 	buttonBarPresenter := self newToolbar
@@ -145,7 +135,7 @@ StSettingsBrowser >> initializeButtonBar [
 			icon: (self application iconNamed: #save);
 			label: 'Export';
 			help: 'Save settings into a file';
-			action: [ self exportSettings ];
+			action: [ self storeSettings ];
 			yourself);
 		yourself
 ]
@@ -184,7 +174,8 @@ StSettingsBrowser >> initializePresenters [
 { #category : 'loading' }
 StSettingsBrowser >> loadSettings [
 	"Load the settings from the system settings file, if exists"
-	self settingsTree updateSettingNodes.
+
+	self settingsTree persistence loadSettings.
 	self inform: 'Settings loaded'
 ]
 
@@ -192,12 +183,6 @@ StSettingsBrowser >> loadSettings [
 StSettingsBrowser >> pagePresenter [ 
 
 	^ detailsPresenter
-]
-
-{ #category : 'private' }
-StSettingsBrowser >> resendChange: ann [
-
-	detailsPresenter announcer announce: ann
 ]
 
 { #category : 'accessing' }
@@ -230,12 +215,12 @@ StSettingsBrowser >> select: aString [
 ]
 
 { #category : 'execution' }
-StSettingsBrowser >> selectDialog: fileReferneces [
+StSettingsBrowser >> selectDialog: fileReferences [
 
 	^ SpSelectDialog new
 		  title: 'Settings Browser Selector';
 		  message: 'Select a Stored Settings File';
-		  items: fileReferneces;
+		  items: fileReferences;
 		  display: [ :each | each basename ];
 		  displayIcon: [ :each | self iconNamed: each systemIconName ];
 		  openModal
@@ -260,6 +245,14 @@ StSettingsBrowser >> selectPath: aCollection [
 StSettingsBrowser >> sortNodes: aCollection [ 
 
 	^ aCollection sorted: #order ascending, #label ascending
+]
+
+{ #category : 'storing' }
+StSettingsBrowser >> storeSettings [
+
+	self settingsTree persistence storeSettings.
+	self inform: 'Settings were exported to ' , self settingsTree settingsFileReference fullName.
+	buttonBarPresenter enable
 ]
 
 { #category : 'initialization' }
