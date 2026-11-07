@@ -22,6 +22,18 @@ Class {
 	#tag : 'Widgets'
 }
 
+{ #category : 'actions' }
+StSettingPresenterItem >> browseDefinition [
+	"Open the system browser on the method declaring my setting, highlighting the setting name given to the builder (for example `aBuilder setting: #name`), and answer it. The symbol is searched rather than the bare name, which often starts the selector of the declaring method."
+
+	| method |
+	method := self model declaration method.
+	^ (self application toolNamed: #browser)
+		  openOnClass: method methodClass
+		  selector: method selector
+		  highlight: '#' , self model name
+]
+
 { #category : 'layout' }
 StSettingPresenterItem >> defaultLayout [
 
@@ -59,17 +71,30 @@ StSettingPresenterItem >> initialize [
 	super initialize
 ]
 
+{ #category : 'actions' }
+StSettingPresenterItem >> initializeActions [
+	"Declare the commands offered on the row: they appear in its context menu and their shortcuts work from any of its widgets"
+
+	self addActionWith: [ :action |
+			action
+				name: 'Browse definition';
+				description: 'Browse the method declaring this setting';
+				shortcutKey: $b meta;
+				action: [ self browseDefinition ] ]
+]
+
 { #category : 'initialization' }
 StSettingPresenterItem >> initializePresenters [
 	"Set a label and description presenters as baseline for every setting"
 
 	self addStyle: self settingStyle.
 
-	labeledPresenter := (self instantiate: self labeledPresenterClass on: self) 
-		label: self model label;
-		input: self setterPresenter;
-		description: self model description;
-		yourself
+	labeledPresenter := (self instantiate: self labeledPresenterClass on: self)
+		                    label: self model label;
+		                    input: self setterPresenter;
+		                    description: self model description;
+		                    yourself.
+	self initializeActions
 ]
 
 { #category : 'initialization' }
