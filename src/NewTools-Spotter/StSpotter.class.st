@@ -450,7 +450,7 @@ StSpotter >> flushPendingUpdates [
 					fork: [ :e | 
 						"Allow halts and that, but eat errors (since otherwise, ugly things can happen)"
 						(e isKindOf: Error)
-							ifTrue: [ ('Spotter error: ' , e printString) crTrace ]
+							ifTrue: [ ('Spotter error: ' , e printString) newLineTrace ]
 							ifFalse: [ e pass ] ] ] ] ]
 ]
 

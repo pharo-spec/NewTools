@@ -343,7 +343,7 @@ StFontChooserPresenter >> updateWithFont: aFont [
 	initialFamily := fontFamilyList items
 		                 detect: [ :e | e familyName = aFont familyName ]
 		                 ifNone: [ 
-									('Requested font {1} not found' format: { aFont familyName }) traceCr.
+									('Requested font {1} not found' format: { aFont familyName }) traceNewLine.
 									fontFamilyList items anyOne ].
 
 	fontFamilyList selectItem: initialFamily.
