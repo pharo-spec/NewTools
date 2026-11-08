@@ -298,11 +298,6 @@ StMethodListPresenter >> initializePresenters [
 				 title: 'Location';
 				 bind: [ :p :item | p label: (self locationOf: item) ];
 				 yourself);
-		addColumn: (StTestIconColumnView new
-				 executeBlock: [ :method | self executeTestFor: method debug: true ];
-				 cellPresenterClass: StTestIconCellPresenter;
-				 width: 20;
-				 yourself);
 		addColumn: (SpColumnViewColumn new
 				 title: 'Selector';
 				 sortFunction: #selector ascending;
