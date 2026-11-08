@@ -12,15 +12,11 @@ Class {
 { #category : 'initialization' }
 StSettingDirectoryPresenterItem >> initializePresenters [
 
-	setterPresenter := self newTextInput 
-		beEditable;
-		placeholder: self model label;
-		yourself.
-	labeledPresenter := (self instantiate: self labeledPresenterClass on: self) 
-		label: self model label;
-		input: self setterPresenter;
-		description: self model description;
-		yourself.
+	setterPresenter := self newTextInput
+		                   beEditable;
+		                   placeholder: self model label;
+		                   yourself.
+	super initializePresenters
 ]
 
 { #category : 'initialization' }

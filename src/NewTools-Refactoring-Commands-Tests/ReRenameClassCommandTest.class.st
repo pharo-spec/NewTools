@@ -20,6 +20,6 @@ ReRenameClassCommandTest >> testRenameClassCommandSuccess [
 		forTesting: true;
 		runRefactoring.
 
-	self assert: driver changes changes size equals: 7.
+	self assert: driver changes changes size equals: 9.
 
 ]
