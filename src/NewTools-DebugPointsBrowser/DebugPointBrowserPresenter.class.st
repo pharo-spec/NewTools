@@ -119,8 +119,8 @@ DebugPointBrowserPresenter >> initialize [
 DebugPointBrowserPresenter >> initializePresenters [
 
 	self initializeTable.
-	dpEditor := DebugPointEditorPresenter new.
-	dpCode := DebugPointCodePresenter new editable: false.
+	dpEditor := self instantiate: DebugPointEditorPresenter.
+	dpCode := (self instantiate: DebugPointCodePresenter) editable: false.
 
 	inputFilter := self newSearchInput
 		               placeholder: 'Search by name';
@@ -151,7 +151,7 @@ DebugPointBrowserPresenter >> initializeTable [
 { #category : 'initialization' }
 DebugPointBrowserPresenter >> initializeVariableTargetPresenter [
 
-	variableTargetPresenter := DebugPointVariableTargetPresenter new
+	variableTargetPresenter := self instantiate: DebugPointVariableTargetPresenter
 ]
 
 { #category : 'api' }

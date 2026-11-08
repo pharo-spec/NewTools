@@ -84,7 +84,7 @@ StAddPackagePresenter >> initializePresenters [
 		icon: (self iconNamed: #add);
 		yourself.
 
-	packageList := SpChooserPresenter new
+	packageList := self instantiate: SpChooserPresenter
 ]
 
 { #category : 'initialization' }

@@ -475,7 +475,7 @@ EpLogBrowserPresenter >> filters [
 EpLogBrowserPresenter >> filtersSubMenu [
 
 	| aMenu |
-	aMenu := SpMenuPresenter new.
+	aMenu := self newMenu.
 
 	aMenu addGroup: [ :aGroup |
 			aGroup addItem: [ :anItem |

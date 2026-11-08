@@ -45,7 +45,7 @@ StPackageAnalyserStartingPresenter >> defaultLayout [
 { #category : 'initialization' }
 StPackageAnalyserStartingPresenter >> initializePresenters [
 
-	choosePresenter := SpChooserPresenter new
+	choosePresenter := (self instantiate: SpChooserPresenter)
 		sourceItems: self packageOrganizer packages;
 		displayBlock: [ :aPackage | aPackage name ];
 		yourself.

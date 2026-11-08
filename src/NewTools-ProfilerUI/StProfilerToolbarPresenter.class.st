@@ -39,7 +39,7 @@ StProfilerToolbarPresenter >> getItemWith: anObject [
 StProfilerToolbarPresenter >> newItemFrom: aTallyModel [
 
 	| button |
-	button := StProfilerToolbarButtonPresenter new.
+	button := self instantiate: StProfilerToolbarButtonPresenter.
 
 	button
 		object: aTallyModel;

@@ -45,7 +45,7 @@ DebugPointSelectDialogPresenter >> initializePresenters [
 	label := self newLabel.
 
 	list := self instantiate: DebugPointTablePresenter.
-	code := DebugPointCodePresenter new
+	code := (self instantiate: DebugPointCodePresenter)
 		beForScripting;
 		editable: false.
 
@@ -58,7 +58,7 @@ DebugPointSelectDialogPresenter >> initializePresenters [
 { #category : 'presenter building' }
 DebugPointSelectDialogPresenter >> initializeVariableTargetPresenter [
 
-	variableTargetPresenter := DebugPointVariableTargetPresenter new.
+	variableTargetPresenter := self instantiate: DebugPointVariableTargetPresenter.
 	variableTargetPresenter layout: variableTargetPresenter dialogLayout
 ]
 

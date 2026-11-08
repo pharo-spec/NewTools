@@ -155,27 +155,9 @@ StCritiqueBrowserPresenter >> allRules [
 { #category : 'private' }
 StCritiqueBrowserPresenter >> applyRules [
 
-	| packageCount nbPackage process rules |
-	rules := self allRules.
-	nbPackage := rbEnvironment packages size.
-	packageCount := 0.
+	| process |
 	self updateTree.
-	process := [
-	           rbEnvironment packages do: [ :package |
-		           | windowTitle |
-		           packageCount := packageCount + 1.
-		           windowTitle := String streamContents: [ :s |
-			                          s << 'run rules on ' << package name << ' (' << packageCount asString << '/' << nbPackage asString << ')' ].
-		           self setTitle: windowTitle.
-		           checker runRules: rules onPackage: package withoutTestCase: removeTestCase ].
-	           checker rule: rules.
-	           self setTitle: self windowTitle.
-	           cache packages: rbEnvironment.
-	           cache initCache.
-	           self rules: (self allRules select: [ :r | self hasBrokenRules: r ]).
-	           self rulesModel refresh.
-	           self rebuildLayout.
-	           self updateTree ] newProcess.
+	process := [ self runRules ] newProcess.
 	process name: 'SmallLint'.
 	process resume
 ]
@@ -197,6 +179,28 @@ StCritiqueBrowserPresenter >> buildRuleMenuActions [
 			name: 'Reapply this rule';
 			action: [ self reapplyThisRule ] ];
 		yourself
+]
+
+{ #category : 'accessing' }
+StCritiqueBrowserPresenter >> cache [
+
+	^ cache
+]
+
+{ #category : 'system annoucements' }
+StCritiqueBrowserPresenter >> checkNodesOf: aMethod by: someNodeRules [
+	"Add to my checker the critiques of someNodeRules about the nodes of aMethod, as ReSmalllintChecker>>#checkMethodsForClass: does for every method of a class."
+
+	someNodeRules do: [ :rule |
+		(rule shouldCheckMethod: aMethod) ifTrue: [
+			| ast |
+			ast := aMethod ast.
+			"for rewrite rules, we run every rule on a copy of the ast"
+			rule isRewriteRule ifTrue: [ ast := ast copy ].
+			ast nodesDo: [ :node |
+				rule check: node forCritiquesDo: [ :crit |
+					crit sourceAnchor initializeEnitity: aMethod.
+					checker addCritique: crit ] ] ] ]
 ]
 
 { #category : 'system annoucements' }
@@ -355,7 +359,7 @@ StCritiqueBrowserPresenter >> initializePresenters [
 	self setResetButton.
 	self setUpdateButton.
 
-	critiqueModel := StSingleCritiqueResultListPresenter new application: application.
+	critiqueModel := (self instantiate: StSingleCritiqueResultListPresenter) application: application.
 	critiquesModel := self critiquesModel.
 	sourceCodeModel := self sourceCodeModel.
 	toolbarModel := self toolbarModel.
@@ -365,6 +369,14 @@ StCritiqueBrowserPresenter >> initializePresenters [
 	self focusOrder
 		add: rulesModel;
 		add: critiqueModel
+]
+
+{ #category : 'initialization' }
+StCritiqueBrowserPresenter >> initializeWindow: aWindowPresenter [
+
+	super initializeWindow: aWindowPresenter.
+	self registerToAnnouncements.
+	aWindowPresenter whenClosedDo: [ self onWindowClosed ]
 ]
 
 { #category : 'accessing' }
@@ -382,21 +394,19 @@ StCritiqueBrowserPresenter >> methodAdded: aMethod [
 
 	| rules |
 	(rbEnvironment includesMethod: aMethod) ifFalse: [ ^ self ].
-
 	rules := self allRules.
 	checker
 		resetResult;
 		getCritiquesAbout: aMethod
 		by: (rules select: [ :r | r class checksMethod ]).
-
-	rules do: [ :rule | 
-		(checker criticsOf: rule) do: [ :crit | 
+	self checkNodesOf: aMethod by: (rules select: [ :r | r class checksNode ]).
+	rules do: [ :rule |
+		(checker criticsOf: rule) do: [ :crit |
 			cache addCritique: crit forRule: rule ].
-		(checker falsePositiveOf: rule) do: [ :crit | 
+		(checker falsePositiveOf: rule) do: [ :crit |
 			cache addFalsePositive: crit forRule: rule ].
-		(checker toDoOf: rule) do: [ :crit | 
+		(checker toDoOf: rule) do: [ :crit |
 			cache addToDo: crit forRule: rule ] ].
-
 	cache updateBrowser
 ]
 
@@ -415,16 +425,15 @@ StCritiqueBrowserPresenter >> onWindowClosed [
 	self unregisterFromAnnouncements.
 
 	cache cacheChange ifTrue: [
-		| logging |
-		logging := self application newConfirm
-			           title: 'Question';
-			           label:
-				           'Do you want log all wrong violations in the Manifests
+			| logging |
+			logging := self application newConfirm
+				           title: 'Question';
+				           message: 'Do you want log all wrong violations in the Manifests
 before closing the Critiques Browser ?';
-			           acceptLabel: 'Sure!';
-			           cancelLabel: 'No';
-			           openModal.
-		logging ifTrue: [ cache logInManifest ] ]
+				           acceptLabel: 'Sure!';
+				           cancelLabel: 'No';
+				           openModal.
+			logging ifTrue: [ cache logInManifest ] ]
 ]
 
 { #category : 'private' }
@@ -469,15 +478,13 @@ StCritiqueBrowserPresenter >> reapplyThisRule [
 StCritiqueBrowserPresenter >> registerToAnnouncements [
 
 	self unregisterFromAnnouncements.
-
 	self class codeChangeAnnouncer weak
 		when: ClassAdded send: #handleClassAdded: to: self;
 		when: ClassModifiedClassDefinition send: #handleClassModified: to: self;
 		when: ClassRemoved send: #handleClassRemoved: to: self;
 		when: MethodAdded send: #handleMethodAdded: to: self;
 		when: MethodModified send: #handleMethodModified: to: self;
-		when: MethodRemoved send: #handleMethodRemoved: to: self.
-	self window window announcer when: WindowClosed send: #onWindowClosed to: self
+		when: MethodRemoved send: #handleMethodRemoved: to: self
 ]
 
 { #category : 'accessing' }
@@ -504,6 +511,31 @@ StCritiqueBrowserPresenter >> rules: rulesCollection [
 StCritiqueBrowserPresenter >> rulesModel [
 
 	^ rulesModel
+]
+
+{ #category : 'private' }
+StCritiqueBrowserPresenter >> runRules [
+	"Run the rules on the packages of my environment, then show the rules having critiques. Unlike applyRules, I run in the current process."
+
+	| packageCount nbPackage rules |
+	rules := self allRules.
+	nbPackage := rbEnvironment packages size.
+	packageCount := 0.
+	rbEnvironment packages do: [ :package |
+		| windowTitle |
+		packageCount := packageCount + 1.
+		windowTitle := String streamContents: [ :s |
+			s << 'run rules on ' << package name << ' (' << packageCount asString << '/' << nbPackage asString << ')' ].
+		self setTitle: windowTitle.
+		checker runRules: rules onPackage: package withoutTestCase: removeTestCase ].
+	checker rule: rules.
+	self setTitle: self windowTitle.
+	cache packages: rbEnvironment.
+	cache initCache.
+	self rules: (self allRules select: [ :r | self hasBrokenRules: r ]).
+	self rulesModel refresh.
+	self rebuildLayout.
+	self updateTree
 ]
 
 { #category : 'initialization' }

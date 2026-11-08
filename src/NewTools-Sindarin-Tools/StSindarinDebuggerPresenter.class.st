@@ -62,7 +62,7 @@ StSindarinDebuggerPresenter >> initializePresenters [
 						currentNodeSource
 							doItReceiver: selection selectedItem home receiver;
 							doItContext: selection selectedItem ] ].
-	inspector := StRawInspectionPresenter on: self model stack first.
+	inspector := self instantiate: StRawInspectionPresenter on: self model stack first.
 	currentNodeSource := self newCode.
 	currentNodeSource whenBuiltDo: [ :ann |
 		ann widget font: StandardFonts codeFont ].

@@ -224,7 +224,7 @@ StWelcomeBrowser >> initializePresenters [
 		visiblePages: 1;
 		spacing: 5.
 		
-	paginator := SpPaginatorPresenter new.
+	paginator := self instantiate: SpPaginatorPresenter.
 	paginator visiblePages: 1.
 	paginator chainTo: millerList.
 	paginator withoutResizingEdges

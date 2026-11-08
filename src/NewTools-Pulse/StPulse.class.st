@@ -754,7 +754,7 @@ StPulse >> initializeListLabel [
 { #category : 'initialization' }
 StPulse >> initializePaginator [
 
-	paginator := SpPaginatorPresenter new
+	paginator := (self instantiate: SpPaginatorPresenter)
 		addStyle: 'stPulsePaginator';
 		visiblePages: 1;
 		withoutResizingEdges;
@@ -926,7 +926,7 @@ StPulse >> showPopover: aPresenter [
 	(popover := self newPopover)
 		relativeTo: aPresenter ;
 		bePositionTop ;
-		presenter: (SpPresenter new
+		presenter: (self newPresenter
 			addStyle: 'stPulseHelp';
 			layout: (SpGridLayout new
 				beColumnNotHomogeneous ;
