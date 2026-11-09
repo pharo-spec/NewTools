@@ -176,7 +176,7 @@ StShortcutsBrowserPresenter >> shortcutActivationCategoriesItems [
 { #category : 'initialization' }
 StShortcutsBrowserPresenter >> shortcutActivationCmdInstances [
 
-	^ CmdShortcutActivation registeredInstances copyWithoutAll: CmdShortcutActivation redefiningInstances
+	^ ClyShortcutActivation registeredInstances copyWithoutAll: ClyShortcutActivation redefiningInstances
 ]
 
 { #category : 'initialization' }
