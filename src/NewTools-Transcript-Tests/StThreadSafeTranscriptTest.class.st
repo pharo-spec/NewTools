@@ -35,23 +35,6 @@ StThreadSafeTranscriptTest >> testClear [
 ]
 
 { #category : 'tests' }
-StThreadSafeTranscriptTest >> testCr [
-
-	transcript cr.
-	self assert: transcript contents equals: '
-'
-		
-]
-
-{ #category : 'tests' }
-StThreadSafeTranscriptTest >> testCrShow [
-
-	transcript crShow: 'toto'.
-	self assert: transcript contents equals: '
-toto' 
-]
-
-{ #category : 'tests' }
 StThreadSafeTranscriptTest >> testLesserThanLesserThan [
 
 	transcript << 'toto'.
@@ -82,10 +65,10 @@ StThreadSafeTranscriptTest >> testNextPut [
 
 	transcript nextPut: $a.
 	transcript << 'toto'.
-	transcript cr.
+	transcript newLine.
 	transcript nextPutAll: 'tintin'.
 	self assert: transcript contents equals: 'atoto
-tintin' 
+tintin'
 ]
 
 { #category : 'tests' }
@@ -129,11 +112,10 @@ StThreadSafeTranscriptTest >> testShowAndClear [
 ]
 
 { #category : 'tests' }
-StThreadSafeTranscriptTest >> testShowCr [
+StThreadSafeTranscriptTest >> testShowNewLine [
 
-	transcript showCr: 'toto'.
-	self assert: transcript contents equals: 'toto
-' 
+	transcript showNewLine: 'toto'.
+	self assert: transcript contents equals: 'toto' , String newLine
 ]
 
 { #category : 'tests' }
