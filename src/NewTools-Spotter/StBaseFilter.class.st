@@ -72,7 +72,7 @@ StBaseFilter >> applyFilterInContext: aSpotterContext [
 { #category : 'private' }
 StBaseFilter >> applyFilterInContext: aSpotterContext error: anException [
 	('[Spotter] Exception in filter <' , self class name , '>: '
-		, anException displayString) traceCr.
+		, anException displayString) traceNewLine.
 	^ self defaultFilteredItems
 ]
 

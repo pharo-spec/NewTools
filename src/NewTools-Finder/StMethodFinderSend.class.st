@@ -103,7 +103,7 @@ StMethodFinderSend >> forFinderPreview: aSpCodePresenter [
 StMethodFinderSend >> handleError: e [
 
 	StFinderSettings logErrorsToTranscript
-		ifTrue: [ (self logInfo: e) traceCr ].
+		ifTrue: [ (self logInfo: e) traceNewLine ].
 	StFinderSettings logErrorsToFile
 		ifTrue: [ StFinderSettings logErrorFileReference 
 			writeStreamDo: [ : stream | stream nextPutAll: (self logInfo: e) ] ].
