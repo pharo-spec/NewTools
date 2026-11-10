@@ -34,7 +34,7 @@ StSettingStyleElementPresenterItem >> initializePresenters [
 			 add: emphasisPresenter;
 			 yourself).
 
-		modelValue when: #changed send: #styleChanged to: self.
+	modelValue when: #changed send: #styleChanged to: self.
 
 	super initializePresenters
 ]
@@ -45,7 +45,7 @@ StSettingStyleElementPresenterItem >> pickColor [
 
 	colorPickerPresenter := setterPresenter instantiate: SpColorPickerPresenter on: self model.
 	
-	colorPickerPresenter color: self model realValue color.
+	colorPickerPresenter color: (self model realValue color ifNil: [ Color transparent ]).
 	(colorPickerPresenter asModalWindow
 		owner: setterPresenter window;
 		open) 
@@ -72,8 +72,9 @@ StSettingStyleElementPresenterItem >> styleChanged [
 ]
 
 { #category : 'accessing' }
-StSettingStyleElementPresenterItem >> updateColor: aColor [
-
+StSettingStyleElementPresenterItem >> updateColor: aColorOrNil [
+	| aColor |
+	aColor := aColorOrNil ifNil: [ Color transparent ].
 	colorPresenter icon: aColor asSettingColorForm
 ]
 
