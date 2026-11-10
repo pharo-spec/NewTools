@@ -81,7 +81,7 @@ BaselineOfNewTools >> baseline: spec [
 			"file browser"
 			package: 'NewTools-FileBrowser' with: [ spec requires: #( 'NewTools-Core' ) ];
 			package: 'NewTools-FileBrowser-Morphic' with: [ spec requires: #( 'NewTools-FileBrowser' ) ];
-			package: 'NewTools-FileBrowser-Tests' with: [ spec requires: #( 'NewTools-FileBrowser' ) ];
+			package: 'NewTools-FileBrowser-Tests' with: [ spec requires: #( 'NewTools-FileBrowser' 'NewTools-FileBrowser-Morphic' ) ];
 	
 			"dependency analyser"
 			package: 'NewTools-DependencyAnalyser' with: [ spec requires: #('AIGraphAlgorithms') ];
