@@ -12,11 +12,12 @@ SpMorphicBackend >> executeOpenDirectoryDialog: aFileDialog [
 
 { #category : '*NewTools-FileBrowser-Morphic' }
 SpMorphicBackend >> executeOpenFileDialog: aFileDialog [
-	| dialog |
+	"StFileDialogPresenter>>#openModal answers the selected entries, or nil when cancelled"
 
-	dialog := self newFileDialogFor: aFileDialog.
-	^ dialog openModal answer 
-		ifNotNil: [ :aString | aString asFileReference ]
+	| entries |
+	entries := (self newFileDialogFor: aFileDialog) openModal.
+	entries isEmptyOrNil ifTrue: [ ^ nil ].
+	^ entries first asFileReference
 ]
 
 { #category : '*NewTools-FileBrowser-Morphic' }
