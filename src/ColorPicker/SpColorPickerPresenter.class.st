@@ -27,17 +27,23 @@ SpColorPickerPresenter class >> open [
 	^ (self newApplication: StPharoApplication current) open
 ]
 
-{ #category : 'events' }
-SpColorPickerPresenter >> colorChanged [
+{ #category : 'accessing' }
+SpColorPickerPresenter >> color [
 
-	colorChangedBlock ifNil: [ ^ self ].
-	^ colorChangedBlock value: colorPickerPresenter color
+	^ colorPickerPresenter color
 ]
 
 { #category : 'accessing' }
 SpColorPickerPresenter >> color: aColor [
 
 	^ colorPickerPresenter setColor: aColor
+]
+
+{ #category : 'events' }
+SpColorPickerPresenter >> colorChanged [
+
+	colorChangedBlock ifNil: [ ^ self ].
+	^ colorChangedBlock value: colorPickerPresenter color
 ]
 
 { #category : 'layout' }
