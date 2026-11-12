@@ -4,5 +4,5 @@ Extension { #name : 'ClyClass' }
 ClyClass class >> newToolsCodeCritiquesCommandsIn: aCommandMap [
 
 	<calypsoCommands>
-	(aCommandMap contextMenu group: SycClassExtraMenuGroup) add: SycCmClassCritiqueCommand order: 50
+	(aCommandMap contextMenu group: SycClassExtraMenuGroup) add: SycClassCritiqueCommand order: 50
 ]
