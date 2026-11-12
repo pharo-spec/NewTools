@@ -15,7 +15,7 @@ SycClassCritiqueCommand >> canBeExecuted [
 	^ context lastSelectedClass realClass notNil
 ]
 
-{ #category : 'executing' }
+{ #category : 'execution' }
 SycClassCritiqueCommand >> execute [
 
 	StCritiqueClassRuleSelectorPresenter 
