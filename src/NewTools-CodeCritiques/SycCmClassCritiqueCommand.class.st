@@ -25,9 +25,9 @@ SycCmClassCritiqueCommand >> execute [
 ]
 
 { #category : 'accessing' }
-SycCmClassCritiqueCommand >> icon [
+SycCmClassCritiqueCommand >> iconName [
 
-	^ self iconNamed: #smallQA
+	^ #smallQA
 ]
 
 { #category : 'accessing' }
