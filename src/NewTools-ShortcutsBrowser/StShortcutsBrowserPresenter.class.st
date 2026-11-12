@@ -173,9 +173,9 @@ StShortcutsBrowserPresenter >> shortcutActivationCategoriesItems [
 
 { #category : 'initialization' }
 StShortcutsBrowserPresenter >> shortcutActivationCmdInstances [
-	"The shortcuts of Calypso commands, declared with the <calypsoCommands> pragma or with class annotations"
+	"The shortcuts of Calypso commands, declared with the <calypsoCommands> pragma or with the class annotations still supported while projects migrate"
 
-	^ ClyShortcutActivation registeredInstances copyWithoutAll: ClyShortcutActivation redefiningInstances
+	^ (ClyCommandRegistry default legacyAnnotationsOf: #shortcuts) asArray , (ClyCommandRegistry default allEntriesOf: #shortcuts) asArray
 ]
 
 { #category : 'initialization' }
