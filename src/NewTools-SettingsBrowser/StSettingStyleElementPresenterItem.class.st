@@ -16,25 +16,25 @@ Class {
 }
 
 { #category : 'initialization' }
-StSettingStyleElementPresenterItem >> initializePresenters [ 
+StSettingStyleElementPresenterItem >> initializePresenters [
+
 	| modelValue |
-
 	modelValue := self model realValue.
-	modelValue color
-		ifNil: [ modelValue color: Color transparent ].
+	modelValue color ifNil: [ modelValue color: Color transparent ].
 
-	colorPresenter := self newButton
-		action: [ self pickColor ].
-	emphasisPresenter := self newDropList 
-		items: #(#bold #italic #normal 'bold italic' );
-		selectItem: modelValue emphasis;		
-		yourself.
-	
+	colorPresenter := self newButton action: [ self pickColor ].
+	emphasisPresenter := self newDropList
+		                     items: #( #bold #italic #normal 'bold italic' );
+		                     selectItem: modelValue emphasis;
+		                     whenSelectedItemChangedDo: [ :emphasis | modelValue emphasis: emphasis ] yourself.
+
 	setterPresenter := self newPresenter.
-	setterPresenter layout: (SpBoxLayout newLeftToRight 
-		add: colorPresenter expand: false;
-		add: emphasisPresenter;
-		yourself).
+	setterPresenter layout: (SpBoxLayout newLeftToRight
+			 add: colorPresenter expand: false;
+			 add: emphasisPresenter;
+			 yourself).
+
+	modelValue when: #changed send: #styleChanged to: self.
 
 	super initializePresenters
 ]
@@ -44,6 +44,8 @@ StSettingStyleElementPresenterItem >> pickColor [
 	| colorPickerPresenter |
 
 	colorPickerPresenter := setterPresenter instantiate: SpColorPickerPresenter on: self model.
+	
+	colorPickerPresenter color: (self model realValue color ifNil: [ Color transparent ]).
 	(colorPickerPresenter asModalWindow
 		owner: setterPresenter window;
 		open) 
@@ -60,9 +62,19 @@ StSettingStyleElementPresenterItem >> settingStyle [
 	^ 'itemStyleElement'
 ]
 
-{ #category : 'accessing' }
-StSettingStyleElementPresenterItem >> updateColor: aColor [
+{ #category : 'updating' }
+StSettingStyleElementPresenterItem >> styleChanged [
 
+	| styleElement |
+	styleElement := self model realValue.
+	emphasisPresenter selectItem: styleElement emphasis.
+	self updateColor: styleElement color
+]
+
+{ #category : 'accessing' }
+StSettingStyleElementPresenterItem >> updateColor: aColorOrNil [
+	| aColor |
+	aColor := aColorOrNil ifNil: [ Color transparent ].
 	colorPresenter icon: aColor asSettingColorForm
 ]
 
