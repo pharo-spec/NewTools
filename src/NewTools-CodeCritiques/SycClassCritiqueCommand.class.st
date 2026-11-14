@@ -2,21 +2,21 @@
 I am a command to make a class abstract by adding a method that returns whether the class is abstract
 "
 Class {
-	#name : 'SycCmClassCritiqueCommand',
-	#superclass : 'SycClassExtraCmCommand',
+	#name : 'SycClassCritiqueCommand',
+	#superclass : 'SycSingleClassCommand',
 	#category : 'NewTools-CodeCritiques-Commands',
 	#package : 'NewTools-CodeCritiques',
 	#tag : 'Commands'
 }
 
 { #category : 'testing' }
-SycCmClassCritiqueCommand >> canBeExecuted [ 
+SycClassCritiqueCommand >> canBeExecuted [ 
 
 	^ context lastSelectedClass realClass notNil
 ]
 
-{ #category : 'executing' }
-SycCmClassCritiqueCommand >> execute [
+{ #category : 'execution' }
+SycClassCritiqueCommand >> execute [
 
 	StCritiqueClassRuleSelectorPresenter 
 		openWithEnvironment: (RBClassEnvironment new classes: { context lastSelectedClass realClass }) 
@@ -25,17 +25,17 @@ SycCmClassCritiqueCommand >> execute [
 ]
 
 { #category : 'accessing' }
-SycCmClassCritiqueCommand >> icon [
+SycClassCritiqueCommand >> iconName [
 
-	^ self iconNamed: #smallQA
+	^ #smallQA
 ]
 
 { #category : 'accessing' }
-SycCmClassCritiqueCommand >> name [
+SycClassCritiqueCommand >> name [
 	^ 'Class Critique Browser'
 ]
 
 { #category : 'accessing' }
-SycCmClassCritiqueCommand >> order [
+SycClassCritiqueCommand >> order [
 	^ 60
 ]
