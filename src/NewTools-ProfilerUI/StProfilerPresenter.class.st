@@ -98,7 +98,7 @@ StProfilerPresenter >> initializeWindow: aWindowPresenter [
 { #category : 'private - factory' }
 StProfilerPresenter >> newInputPresenter [
 
-	^ StProfilerInputPresenter on: self viewModel
+	^ self instantiate: StProfilerInputPresenter on: self viewModel
 ]
 
 { #category : 'actions' }

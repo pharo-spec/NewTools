@@ -21,7 +21,8 @@ Class {
 		'critiquesModel',
 		'sourceCodeModel',
 		'cache',
-		'toolbarModel'
+		'toolbarModel',
+		'displayedMethod'
 	],
 	#classInstVars : [
 		'icons'
@@ -327,7 +328,7 @@ StSingleCritiqueResultListPresenter >> isCritiqueToDo [
 { #category : 'initialization' }
 StSingleCritiqueResultListPresenter >> newSourceCodeCritique [
 	
-	^ SpCodePresenter new 
+	^ self newCode 
 		beNotEditable;
 		withoutSyntaxHighlight;
 		yourself
@@ -358,6 +359,13 @@ StSingleCritiqueResultListPresenter >> removeCritiqueToFalsePositive [
 		items do: [ :item | cache removeFalsePositive: item forRule: rule ] ]
 ]
 
+{ #category : 'private' }
+StSingleCritiqueResultListPresenter >> reselect: aCritique [
+
+	(critiquesModel items identityIncludes: aCritique) ifTrue: [ ^ critiquesModel selectItem: aCritique ].
+	self selectCritiqueOrShowCurrentVersionOf: aCritique sourceAnchor entity
+]
+
 { #category : 'api' }
 StSingleCritiqueResultListPresenter >> resetSelection [
 
@@ -376,6 +384,23 @@ StSingleCritiqueResultListPresenter >> rule: aRule [
 	(rule isNil or: [ rule isComposite ]) ifTrue: [ ^ self ].
 	self critiquesOf: aRule.
 	toolbarModel rule: aRule
+]
+
+{ #category : 'private' }
+StSingleCritiqueResultListPresenter >> selectCritiqueOrShowCurrentVersionOf: anEntity [
+	"Select a critique about anEntity, or show the current version of the method anEntity when none is left."
+
+	| current |
+	critiquesModel items
+		detect: [ :each | each sourceAnchor entity == anEntity ]
+		ifFound: [ :critique | ^ critiquesModel selectItem: critique ].
+	anEntity isCompiledMethod ifFalse: [ ^ self ].
+	current := anEntity methodClass compiledMethodAt: anEntity selector ifAbsent: [ ^ self ].
+	sourceCodeModel
+		beForBehavior: current methodClass;
+		withSyntaxHighlight;
+		text: current sourceCode.
+	displayedMethod := current
 ]
 
 { #category : 'smartSuggestions - support' }
@@ -416,10 +441,11 @@ StSingleCritiqueResultListPresenter >> setTextModelForClassOrMethod: aCritique [
 StSingleCritiqueResultListPresenter >> setTextModelForNil [
 
 	| text |
+	displayedMethod := nil.
 	text := rule rationale isEmpty
 		        ifTrue: [ rule name ]
 		        ifFalse: [ rule rationale ].
-	sourceCodeModel 
+	sourceCodeModel
 		withoutSyntaxHighlight;
 		text: text;
 		behavior: nil.
@@ -456,11 +482,14 @@ StSingleCritiqueResultListPresenter >> toolbarModel [
 
 { #category : 'thread' }
 StSingleCritiqueResultListPresenter >> updateList [
+	"Show the critiques of my rule again, keeping what the user looks at: the selected critique, or else a critique about the same method, or else the current version of that method."
 
-	| delay |
+	| selected followed |
+	selected := critiquesModel selectedItem.
+	followed := displayedMethod.
 	self critiquesOf: rule.
-	delay := [ self defer: [ critiquesModel updateList ] ]
-		          schedule
+	selected ifNotNil: [ ^ self reselect: selected ].
+	followed ifNotNil: [ self selectCritiqueOrShowCurrentVersionOf: followed ]
 ]
 
 { #category : 'initialization' }

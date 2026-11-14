@@ -64,7 +64,7 @@ DebugPointEditorPresenter >> debugPoint: aDebugPoint [
 { #category : 'layout' }
 DebugPointEditorPresenter >> defaultLayout [ 
 	^SpBoxLayout new hAlignCenter; vAlignCenter;
-	add: (SpLabelPresenter new label: 'Select a Debug Point');
+	add: (self newLabel label: 'Select a Debug Point');
 	yourself.
 ]
 
