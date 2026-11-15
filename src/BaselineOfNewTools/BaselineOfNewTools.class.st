@@ -117,6 +117,7 @@ BaselineOfNewTools >> baseline: spec [
 				package: 'NewTools-Utils' with: [ spec requires: #( 'NewTools-FileBrowser' ) ];
 				package: 'NewTools-WelcomeBrowser' with: [ spec requires: #( 'NewTools-Core' 'NewTools-Morphic' ) ];
 				package: 'NewTools-ShortcutsBrowser' with: [ spec requires: #( 'NewTools-Core' ) ];
+				package: 'NewTools-ShortcutsBrowser-Tests' with: [ spec requires: #( 'NewTools-ShortcutsBrowser' ) ];
 				package: 'NewTools-ObjectTranscript' with: [ spec requires: #( 'NewTools-Core' 'NewTools-Inspector' ) ];
 				package: 'NewTools-Transcript' with: [ spec requires: #( 'NewTools-Core' ) ];
 				package: 'NewTools-Transcript-Tests' with: [ spec requires: #( 'NewTools-Transcript' ) ];
@@ -162,7 +163,7 @@ BaselineOfNewTools >> baseline: spec [
 				"Finder"group: 'Finder' with: #( 'NewTools-Finder' 'NewTools-Finder-Tests' );
 				"Settings Browser"group: 'SettingsBrowser' with: #( 'NewTools-SettingsBrowser' 'NewTools-SettingsBrowser-Tests' );
 				group: 'WelcomeBrowser' with: #( 'NewTools-WelcomeBrowser' );
-				group: 'ShortcutsBrowser' with: #( 'NewTools-ShortcutsBrowser' );
+				group: 'ShortcutsBrowser' with: #( 'NewTools-ShortcutsBrowser' 'NewTools-ShortcutsBrowser-Tests' );
 				group: 'ColorPickerGroup' with: #( 'ColorPicker' 'ColorPicker-Tests' );
 				group: 'ProcessBrowser' with: #( 'NewTools-ProcessBrowser' );
 				group: 'DependencyAnalyser' with: #( 'NewTools-DependencyAnalyser-UI' 'NewTools-DependencyAnalyser-Tests' );
