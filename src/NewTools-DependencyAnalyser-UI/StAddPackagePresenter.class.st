@@ -84,7 +84,13 @@ StAddPackagePresenter >> initializePresenters [
 		icon: (self iconNamed: #add);
 		yourself.
 
-	packageList := SpChooserPresenter new
+	packageList := self instantiate: SpChooserPresenter
+]
+
+{ #category : 'accessing' }
+StAddPackagePresenter >> packageList [
+
+	^ packageList
 ]
 
 { #category : 'initialization' }
