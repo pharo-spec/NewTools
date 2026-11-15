@@ -1,3 +1,40 @@
+"
+I open a terminal of the operating system on a folder, for the 'Open terminal here' command.
+
+## Life cycle: who creates me and who uses me
+
+1. `StTerminalInterface default` lazily creates the shared instance; `default:` replaces it.
+2. `StFileBrowserOpenTerminalCommand>>execute` asks it to `openTerminalOn:` the current folder.
+3. I build the shell command for the current platform (`terminalShellCommand:`) and run it with `LibC system:`.
+
+## Responsibility:
+
+- Build the command opening a terminal on a folder: `open -a Terminal` on macOS (the program comes from `StFileBrowserSettings macTerminalProgram`), `gnome-terminal` on Linux, `cmd.exe` on Windows.
+- Run it.
+
+## Collaborators:
+
+- `StFileBrowserOpenTerminalCommand`: my user.
+- `StFileBrowserSettings`: the macOS terminal program.
+- `LibC`: runs the command.
+
+## Public API and Key Messages
+
+- `StTerminalInterface default`, `StTerminalInterface default: anInterface`.
+- `openTerminalOn: aFileReference`, `terminalShellCommand: aFileReference`.
+
+## Examples
+
+```smalltalk
+StTerminalInterface exampleDefault.
+```
+
+`StFileBrowserOpenTerminalCommandTest` checks the command of each platform.
+
+## Internal Representation
+
+- `Default`: class variable, the shared instance.
+"
 Class {
 	#name : 'StTerminalInterface',
 	#superclass : 'Object',
@@ -20,6 +57,13 @@ StTerminalInterface class >> default [
 StTerminalInterface class >> default: aClass [ 
 	
 	Default := aClass
+]
+
+{ #category : 'examples' }
+StTerminalInterface class >> exampleDefault [
+
+	<sampleInstance>
+	^ self new
 ]
 
 { #category : 'accessing' }

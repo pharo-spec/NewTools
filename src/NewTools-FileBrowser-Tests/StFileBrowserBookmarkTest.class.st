@@ -45,6 +45,17 @@ StFileBrowserBookmarkTest >> testBookmarksWithSameNameLocationAndIconAreEqual [
 ]
 
 { #category : 'tests' }
+StFileBrowserBookmarkTest >> testCopyOfAGroupHasItsOwnBookmarks [
+
+	| group copy |
+	group := StFileBrowserGroupBookmark examplePharoFolders.
+	copy := group copy.
+	copy addBookmark: StFileBrowserBookmark exampleHome.
+	self assert: group children size equals: 2.
+	self assert: copy children size equals: 3
+]
+
+{ #category : 'tests' }
 StFileBrowserBookmarkTest >> testGroupAddBookmark [
 
 	| group |

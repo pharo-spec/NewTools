@@ -1,22 +1,35 @@
 "
-I am a presenter representing a path in a file dialog. 
+I show a path as a row of links, one per folder from the root, separated by '/'. Clicking a link evaluates my action with its folder.
 
-I'll display a link with each part of the path and the user will be able to click on them to launch an action provided as parameter.
+## Life cycle: who creates me and who uses me
+
+1. `StPathBreadcrumbPresenter>>initializePresenters` creates me and sets my `action:` to open the clicked folder.
+2. Each time the current folder changes, it gives me the folder with `file:`; I rebuild my links.
+3. When the user clicks a link, I evaluate my action with the `FileReference` of that link.
+
+## Responsibility:
+
+- Build a link for each folder of a path, the root being shown as 'Root'.
+- Evaluate my action with the folder of the clicked link.
+
+## Collaborators:
+
+- `StPathBreadcrumbPresenter`: my owner.
+
+## Public API and Key Messages
+
+- `file: aFileReference`: show the path of a file or folder.
+- `action: aOneArgBlock`: what to do with the clicked folder.
 
 ## Examples
 
 ```smalltalk
-	path := self instantiate: StFBPathPresenter.
-	path action: [ :fileReference | self display: aFileReference ].
+StPathPresenter exampleImageDirectory.
 ```
 
-## Internal Representation and Key Implementation Points.
+## Internal Representation
 
-### Instance Variables
-
-- action:				<aValuable>		An action to launch when the user click on a link
-- count:					<anInteger>		A counter used internaly to have unique ids for my subparts.
-
+- `action`: a one argument block.
 "
 Class {
 	#name : 'StPathPresenter',
@@ -28,6 +41,20 @@ Class {
 	#package : 'NewTools-FileBrowser',
 	#tag : 'UI'
 }
+
+{ #category : 'examples' }
+StPathPresenter class >> exampleImageDirectory [
+	"Opens the links of the path of the image directory; clicking one inspects its folder."
+
+	<example>
+	| path |
+	path := self new.
+	path
+		action: [ :folder | folder inspect ];
+		file: FileLocator imageDirectory asFileReference.
+	path open title: 'Path of the image directory'.
+	^ path
+]
 
 { #category : 'accessing' }
 StPathPresenter >> action: aValuable [

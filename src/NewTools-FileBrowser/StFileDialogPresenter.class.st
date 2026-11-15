@@ -1,46 +1,37 @@
 "
-Abstract base class for different styles of opening/saving.
-Do not use this class directly, instead check subclasses to see specific uses.
+I am the abstract root of the file dialogs: a file browser with a confirm and a cancel button, answering the entry the user chose. `StFileBrowserAbstractPresenter` describes how the presenters of a dialog are created and work together; here is what I add.
 
-## Authors
+## Responsibility:
 
-- Initial release : peteruhnak
-- Migration Spec 1 to Spec 2 : CafeKrem (github pseudo)
-- Enhacements and fixes: Esteban Lorenzano, Hernán Morales Durand.
+- Open as a dialog window, modal (`openModal`) or not (`open`), and evaluate the `okAction:` block with the choice when the user confirms. The open dialogs answer their `selectedEntries` from `openModal`, or nil when cancelled.
+- Check the choice before closing (`selectedEntry`, which refuses a folder when the dialog wants a file) and enable the confirm button only when a name is entered.
+- Let the code opening me customize the dialog: filter or extensions, columns, previewer, starting folder, title, bookmarks.
+
+## Collaborators:
+
+- `StFileNavigationSystemPresenter`: receives most of the customizations.
+- `StFileBrowserAbstractFilter` (`StCustomExtensionsFilter`), `StFileBrowserAbstractColumn`, `StFileBrowserAbstractPreviewer`: the customizations.
+- `SpDialogWindowPresenter`: my window, with its buttons.
+
+## Public API and Key Messages
+
+- `MyDialogClass chooseModal`: opens a modal dialog and answers what `openModal` answers.
+- `MyDialogClass chooseThenDo: aBlock`: opens a dialog and evaluates aBlock with the choice.
+- `extensions: aCollection`, `extensions: aCollection named: aString`, `filter: aFilter`: what files to list.
+- `defaultFolder: aFileReference`, `title: aString`, `columns: aCollection`, `previewer: aPreviewer`, `bookmarks: aCollection`.
+- `okAction: aOneArgBlock`, `selectedEntry`, `nameText`, `nameText: aString`.
 
 ## Examples
 
 ```smalltalk
-""To open an 'Open File' dialog:""
-StOpenFileDialog open.
+StOpenFilePresenter exampleExtensions.
+StSaveFilePresenter example.
 ```
 
-## Customization
+## Internal Representation
 
-This class defines methods to customize your File Dialog Presenters
-
-- `whenSelected: aBlock` : Used to define the action of the accept button
-- `bookmarks: aCollection Of FDAbstractBookMark` Used to set bookmarks use the class `StFBAbstractBookMark`. You can create group with `StFBGroupBookmark` or use `StFBBookmark` to create bookmark.	  
-- `defaultFolder: aPath` Used to open a fileDialog on a aPath, this path must exist and be a directory
-
-```smalltalk
-(StOpenFileDialog new defaultFolder: '/usr/bin/' asFileReference) open 
-```
-
-- `filtersCustomization: aCollection` Used to define a set of Filter (choose one or more among `StFBAbstractPredicate` or create a new  predicate)
-
-There is always a default filter (`filterNothing`)
-
-```smalltalk		
-(StOpenFileDialog new filtersCustomization: { StJPGAndPNGPredicate new }) open
-```
-	
-## Icons
-
-If you want to add icons you just have to create a method with pragma <icons> and this method have to return an array of association 
-
-StFileDialogPresenter textIcons method 
-
+- `okAction`: the block evaluated with the choice, by default answering it.
+- `filter`: the filter given to the navigation presenter.
 "
 Class {
 	#name : 'StFileDialogPresenter',
@@ -89,7 +80,6 @@ StFileDialogPresenter class >> chooseModalIfNone: aBlock [
 
 { #category : 'examples' }
 StFileDialogPresenter class >> chooseThenDo: aBlock [
-
 	"Return selected item immediately (blocking/modal). Returns nil if no valid item selected"
 
 	<example>

@@ -1,5 +1,31 @@
 "
-Utility to access Win32 functions
+I call Windows, through FFI, to get the name of a volume. My API is on the class side; I only work on Windows.
+
+## Life cycle: who uses me
+
+1. On Windows, `StRootDriveWrapper>>label` asks me the volume name of its drive (`volumeName`).
+2. I call `GetVolumeInformationW` of `kernel32` and answer the name as a `String`.
+
+## Responsibility:
+
+- Answer the volume name of a drive.
+
+## Collaborators:
+
+- `StRootDriveWrapper`: my only user.
+- `Win32WideString`: the strings exchanged with Windows.
+
+## Public API and Key Messages
+
+- `StWin32Info getVolumeInfo: aDriveLetter`, e.g. with `'C:'`.
+
+## Examples
+
+```smalltalk
+StWin32Info example.
+```
+
+It inspects the volume name of the drive C:, on Windows only.
 "
 Class {
 	#name : 'StWin32Info',

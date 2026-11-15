@@ -118,6 +118,13 @@ StOpenFilePresenterTest >> testSetTitle [
 ]
 
 { #category : 'tests' }
+StOpenFilePresenterTest >> testTitleAndConfirmLabel [
+
+	self assert: dialog windowTitle equals: 'Select File To Open'.
+	self assert: dialog confirmLabel equals: 'Open'
+]
+
+{ #category : 'tests' }
 StOpenFilePresenterTest >> testWhenChangeDirectoryShouldFilesListContainsHisChildren [
 	| newDirectory |
 	newDirectory := (root / 'dir') asFileReference.

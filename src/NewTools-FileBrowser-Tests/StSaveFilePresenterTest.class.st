@@ -13,6 +13,14 @@ StSaveFilePresenterTest >> dialogClass [
 ]
 
 { #category : 'tests' }
+StSaveFilePresenterTest >> testSelectedEntryAddsTheExtensionOfTheFilter [
+
+	dialog filter: StPNGFilter new.
+	dialog nameText: 'photo'.
+	self assert: dialog selectedEntry basename equals: 'photo.png'
+]
+
+{ #category : 'tests' }
 StSaveFilePresenterTest >> testSetNameText [
 
 	| preFillDocName |
@@ -22,6 +30,13 @@ StSaveFilePresenterTest >> testSetNameText [
 	self
 		assert: dialog nameText
 		equals: preFillDocName
+]
+
+{ #category : 'tests' }
+StSaveFilePresenterTest >> testTitleAndConfirmLabel [
+
+	self assert: dialog windowTitle equals: 'Save As'.
+	self assert: dialog confirmLabel equals: 'Save'
 ]
 
 { #category : 'tests' }

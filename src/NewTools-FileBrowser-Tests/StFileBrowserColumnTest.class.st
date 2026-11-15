@@ -14,7 +14,7 @@ I test the columns of the file table of the file dialogs (`StFileBrowserAbstract
 "
 Class {
 	#name : 'StFileBrowserColumnTest',
-	#superclass : 'TestCase',
+	#superclass : 'StFileBrowserSharedStateTestCase',
 	#category : 'NewTools-FileBrowser-Tests-Columns',
 	#package : 'NewTools-FileBrowser-Tests',
 	#tag : 'Columns'

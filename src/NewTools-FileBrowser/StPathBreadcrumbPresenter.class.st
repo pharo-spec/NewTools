@@ -1,21 +1,33 @@
 "
-I provide a windowPathEditor 
+I am the path bar of the file browser: the parts of the current folder as links, and a button to switch to a text field where the user types a path. `StFileBrowserAbstractPresenter` describes how the presenters of a browser work together.
 
-API
+## Responsibility:
 
-- `currentDirectory:  aFileReference` see example class side 
-- `presenterUI: theUIUsingThisPresenter` you have to send this message see the following example:
+- Show the current folder as links (`StPathPresenter`) and open the folder of the link the user clicks.
+- Let the user type a path, and open it when it is an existing folder.
+
+## Collaborators:
+
+- `StFileNavigationSystemPresenter`: my owner; creates me, gives me the current folder (`currentDirectory:`) and opens the folder I choose (`openFolder:`, `nameText:`).
+- `StPathPresenter`: shows the links.
+
+## Public API and Key Messages
+
+- `currentDirectory: aFileReference`: show the path of a folder.
+- `path`: the `StPathPresenter`.
+
+## Examples
 
 ```smalltalk
-		 MyUi >> initializePresenters
-			...
-			maVar := self instantiate: StPathBreadcrumbPresenter.
-			maVar presenterUI: self.
-			...
+StPathBreadcrumbPresenter example.
 ```
-			
-UI using this widget have to define openOn: aFileReference
 
+## Internal Representation
+
+- `path`: the links, a `StPathPresenter`.
+- `textInput`: the path text field.
+- `editButton`: switches between the links and the text field.
+- `isInEditMode`: whether the text field is shown.
 "
 Class {
 	#name : 'StPathBreadcrumbPresenter',

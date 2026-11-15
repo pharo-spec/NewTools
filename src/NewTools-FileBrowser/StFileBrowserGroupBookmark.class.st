@@ -29,6 +29,10 @@ It answers a 'Pharo' group with the image directory and working directory bookma
 ## Internal Representation
 
 - `collection`: an `OrderedCollection` of bookmarks, so that bookmarks can be added and removed.
+
+### Implementation Points
+
+A copy of a group has its own collection of bookmarks (`postCopy`), so adding to the copy does not change the group.
 "
 Class {
 	#name : 'StFileBrowserGroupBookmark',
@@ -84,6 +88,13 @@ StFileBrowserGroupBookmark >> collection: anObject [
 { #category : 'testing' }
 StFileBrowserGroupBookmark >> isComposite [
 	^ true
+]
+
+{ #category : 'copying' }
+StFileBrowserGroupBookmark >> postCopy [
+
+	super postCopy.
+	collection := collection copy
 ]
 
 { #category : 'accessing' }
