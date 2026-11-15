@@ -65,6 +65,7 @@ BaselineOfNewTools >> baseline: spec [
 				with: [ spec requires: #( 'NewTools-DependencyAnalyser' 'NewTools-DependencyAnalyser-Tests-Data' ) ];
 				package: 'NewTools-DependencyAnalyser-Tests-Data';
 				package: 'NewTools-DependencyAnalyser-UI' with: [ spec requires: #( 'NewTools-Core' 'NewTools-DependencyAnalyser' ) ];
+				package: 'NewTools-DependencyAnalyser-UI-Tests' with: [ spec requires: #( 'NewTools-DependencyAnalyser-UI' ) ];
 				"extras"package: 'HelpCenter' with: [ spec requires: #( 'NewTools-Core' ) ];
 				package: 'NewTools-FlagBrowser' with: [ spec requires: #( 'NewTools-Core' ) ];
 				package: 'NewTools-FlagBrowser-Tests' with: [ spec requires: #( 'NewTools-FlagBrowser' ) ];
@@ -116,6 +117,7 @@ BaselineOfNewTools >> baseline: spec [
 				package: 'NewTools-SettingsBrowser-Tests' with: [ spec requires: #( 'NewTools-SettingsBrowser' ) ];
 				package: 'NewTools-Utils' with: [ spec requires: #( 'NewTools-FileBrowser' ) ];
 				package: 'NewTools-WelcomeBrowser' with: [ spec requires: #( 'NewTools-Core' 'NewTools-Morphic' ) ];
+				package: 'NewTools-WelcomeBrowser-Tests' with: [ spec requires: #( 'NewTools-WelcomeBrowser' ) ];
 				package: 'NewTools-ShortcutsBrowser' with: [ spec requires: #( 'NewTools-Core' ) ];
 				package: 'NewTools-ShortcutsBrowser-Tests' with: [ spec requires: #( 'NewTools-ShortcutsBrowser' ) ];
 				package: 'NewTools-ObjectTranscript' with: [ spec requires: #( 'NewTools-Core' 'NewTools-Inspector' ) ];
@@ -162,11 +164,12 @@ BaselineOfNewTools >> baseline: spec [
 					   'NewTools-Scopes-Resources-C-Tests' 'NewTools-Scopes-Tests' );
 				"Finder"group: 'Finder' with: #( 'NewTools-Finder' 'NewTools-Finder-Tests' );
 				"Settings Browser"group: 'SettingsBrowser' with: #( 'NewTools-SettingsBrowser' 'NewTools-SettingsBrowser-Tests' );
-				group: 'WelcomeBrowser' with: #( 'NewTools-WelcomeBrowser' );
+				group: 'WelcomeBrowser' with: #( 'NewTools-WelcomeBrowser' 'NewTools-WelcomeBrowser-Tests' );
 				group: 'ShortcutsBrowser' with: #( 'NewTools-ShortcutsBrowser' 'NewTools-ShortcutsBrowser-Tests' );
 				group: 'ColorPickerGroup' with: #( 'ColorPicker' 'ColorPicker-Tests' );
 				group: 'ProcessBrowser' with: #( 'NewTools-ProcessBrowser' );
-				group: 'DependencyAnalyser' with: #( 'NewTools-DependencyAnalyser-UI' 'NewTools-DependencyAnalyser-Tests' );
+				group: 'DependencyAnalyser'
+				with: #( 'NewTools-DependencyAnalyser-UI' 'NewTools-DependencyAnalyser-Tests' 'NewTools-DependencyAnalyser-UI-Tests' );
 				group: 'Epicea' with: #( 'NewTools-Epicea' 'NewTools-Epicea-Tests' );
 				group: 'default'
 				with: #( 'Profile' 'Epicea' 'Playground' 'ProfStef' 'Transcript' 'Inspector' 'ClosedWindows' 'Commands' 'CritiqueBrowser'
