@@ -22,14 +22,6 @@ StBreadcrumbPresenterTest >> links [
 ]
 
 { #category : 'helpers' }
-StBreadcrumbPresenterTest >> openedPathWidget [
-
-	breadcrumb open.
-	self currentWorld doOneCycle.
-	^ breadcrumb path adapter widget
-]
-
-{ #category : 'helpers' }
 StBreadcrumbPresenterTest >> pressInTextField: aCharacter [
 
 	breadcrumb pathTextInput adapter
@@ -45,14 +37,6 @@ StBreadcrumbPresenterTest >> setUp [
 
 	super setUp.
 	breadcrumb := StPathBreadcrumbPresenter new
-]
-
-{ #category : 'helpers' }
-StBreadcrumbPresenterTest >> shownTexts [
-
-	^ (breadcrumb path adapter widget allMorphs select: [ :each | each isKindOf: StringMorph ])
-		  collect: [ :each | each contents asString ]
-		  as: Array
 ]
 
 { #category : 'running' }
@@ -120,23 +104,13 @@ StBreadcrumbPresenterTest >> testCancelEditingRestoresTheCurrentDirectory [
 ]
 
 { #category : 'tests' }
-StBreadcrumbPresenterTest >> testChangingTheCurrentDirectoryKeepsTheWidget [
+StBreadcrumbPresenterTest >> testChangingTheCurrentDirectoryKeepsTheLayoutOfTheLinks [
 
-	| widget |
+	| layout |
 	breadcrumb currentDirectory: root.
-	widget := self openedPathWidget.
+	layout := breadcrumb path layout.
 	breadcrumb currentDirectory: root / 'dir'.
-	self assert: breadcrumb path adapter widget identicalTo: widget
-]
-
-{ #category : 'tests' }
-StBreadcrumbPresenterTest >> testChangingTheCurrentDirectoryUpdatesTheShownLinks [
-
-	breadcrumb currentDirectory: root.
-	self openedPathWidget.
-	breadcrumb currentDirectory: root / 'dir'.
-	self currentWorld doOneCycle.
-	self assert: (self shownTexts last: 3) equals: #( 'fd-test' '/' 'dir' )
+	self assert: breadcrumb path layout identicalTo: layout
 ]
 
 { #category : 'tests' }
@@ -184,15 +158,13 @@ StBreadcrumbPresenterTest >> testEditButtonWhileEditingAcceptsTheTypedPath [
 ]
 
 { #category : 'tests' }
-StBreadcrumbPresenterTest >> testEditingKeepsTheWidget [
+StBreadcrumbPresenterTest >> testEditingKeepsTheLayout [
 
-	| widget |
+	| layout |
 	breadcrumb currentDirectory: root.
-	breadcrumb open.
-	self currentWorld doOneCycle.
-	widget := breadcrumb adapter widget.
+	layout := breadcrumb layout.
 	breadcrumb beginEditing.
-	self assert: breadcrumb adapter widget identicalTo: widget
+	self assert: breadcrumb layout identicalTo: layout
 ]
 
 { #category : 'tests' }

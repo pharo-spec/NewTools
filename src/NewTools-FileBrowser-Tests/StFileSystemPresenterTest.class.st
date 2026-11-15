@@ -7,38 +7,46 @@ I test the file browser, `StFileSystemPresenter`, opened in a window.
 
 ## Collaborators:
 
-- `StFileSystemPresenter`: the browser under test, opened and closed by each test.
+- `StFileSystemPresenter`: the browser under test (`browser`), created in `setUp`, opened by each test and closed in `tearDown`.
 - `StDirectoryTreePresenter`: its directory tree.
 "
 Class {
 	#name : 'StFileSystemPresenterTest',
 	#superclass : 'StFileBrowserSharedStateTestCase',
+	#instVars : [
+		'browser'
+	],
 	#category : 'NewTools-FileBrowser-Tests-UI',
 	#package : 'NewTools-FileBrowser-Tests',
 	#tag : 'UI'
 }
 
+{ #category : 'running' }
+StFileSystemPresenterTest >> setUp [
+
+	super setUp.
+	browser := StFileSystemPresenter new
+]
+
+{ #category : 'running' }
+StFileSystemPresenterTest >> tearDown [
+
+	browser withWindowDo: [ :window | window close ].
+	super tearDown
+]
+
 { #category : 'tests' }
 StFileSystemPresenterTest >> testOpenedBrowserTreeShowsAnOpenedFolder [
 
-	| browser window |
-	browser := StFileSystemPresenter new.
-	window := browser open.
-	[
-		self currentWorld doOneCycle.
-		browser openFolder: browser currentDirectory.
-		self currentWorld doOneCycle.
-		self assert: browser treeNavigationSystem selectedEntry equals: browser currentDirectory ] ensure: [ window close ]
+	browser open.
+	browser openFolder: browser currentDirectory.
+	self assert: browser treeNavigationSystem selectedEntry equals: browser currentDirectory
 ]
 
 { #category : 'tests' }
 StFileSystemPresenterTest >> testOpenedBrowserTreeShowsTheCurrentDirectory [
 
-	| browser window |
-	browser := StFileSystemPresenter new.
-	window := browser open.
-	[
-		self currentWorld doOneCycle.
-		self assert: browser treeNavigationSystem directoryTreePresenter selectedItem isNotNil.
-		self assert: browser treeNavigationSystem selectedEntry equals: browser currentDirectory ] ensure: [ window close ]
+	browser open.
+	self assert: browser treeNavigationSystem directoryTreePresenter selectedItem isNotNil.
+	self assert: browser treeNavigationSystem selectedEntry equals: browser currentDirectory
 ]
