@@ -1,5 +1,5 @@
 "
-Implements copy to clipboard the basename of the selected item in the File Browser.
+I copy the name of the selected entry to the clipboard ('Copy name', Meta+C, file table menu).
 "
 Class {
 	#name : 'StFileBrowserCopyBasenameCommand',

@@ -1,5 +1,5 @@
 "
-I'm a inspect command use to inspect the selectedFile
+I inspect the `FileReference` of the selected entry ('Inspect', Meta+I, file table menu).
 "
 Class {
 	#name : 'StFileBrowserInspectCommand',

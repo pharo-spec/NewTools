@@ -1,5 +1,5 @@
 "
-i'm manage ContextMenu to creat Directory
+I ask my context to create a new folder ('New folder', Meta+N, file table and directory tree menus).
 "
 Class {
 	#name : 'StFileBrowserNewDirectoryCommand',

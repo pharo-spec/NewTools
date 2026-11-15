@@ -1,5 +1,5 @@
 "
-Implements an action to file in the selected file (representing a Pharo source code) into the current system
+I file in the selected `.st` file, i.e. compile its Pharo source code into the image ('File in', Meta+F, file table menu). I am hidden for other entries.
 "
 Class {
 	#name : 'StFileBrowserFileInCommand',
