@@ -3,8 +3,8 @@ I show a path as a row of links, one per folder from the root, separated by '/'.
 
 ## Life cycle: who creates me and who uses me
 
-1. `StPathBreadcrumbPresenter>>initializePresenters` creates me and sets my `action:` to open the clicked folder.
-2. Each time the current folder changes, it gives me the folder with `file:`; I rebuild my links.
+1. `StPathBreadcrumbPresenter` creates me (`initializePresenters`) and sets my `action:` to choose the clicked folder (`connectPresenters`).
+2. Each time the current folder changes, it gives me the folder with `file:`; I replace my links in my layout, so that a displayed path is updated in place.
 3. When the user clicks a link, I evaluate my action with the `FileReference` of that link.
 
 ## Responsibility:
@@ -88,20 +88,21 @@ StPathPresenter >> addSeparator [
 			   yourself)
 ]
 
-{ #category : 'accessing' }
-StPathPresenter >> file: aFile [
+{ #category : 'layout' }
+StPathPresenter >> defaultLayout [
 
-	| parts |
-	self initializeLayout.
-	parts := aFile asAbsolute fullPath withParents.
-	OSPlatform current isWindows ifTrue: [ parts first isRoot ifTrue: [ parts := parts copyWithoutFirst ] ].
-	parts do: [ :path | self addLinkTo: path ] separatedBy: [ self addSeparator ]
+	^ SpBoxLayout newLeftToRight
 ]
 
-{ #category : 'initialization' }
-StPathPresenter >> initializeLayout [
+{ #category : 'accessing' }
+StPathPresenter >> file: aFile [
+	"Show the path of aFile. The links are replaced in the layout itself, so that a displayed path is updated without rebuilding."
 
-	^ layout := SpBoxLayout newLeftToRight
+	| parts |
+	self layout removeAll.
+	parts := aFile asAbsolute fullPath withParents.
+	OSPlatform current isWindows ifTrue: [ parts first isRoot ifTrue: [ parts := parts copyWithoutFirst ] ].
+	parts do: [ :each | self addLinkTo: each ] separatedBy: [ self addSeparator ]
 ]
 
 { #category : 'accessing' }
@@ -110,10 +111,4 @@ StPathPresenter >> labelFor: aPath [
 	^ aPath isRoot
 		  ifFalse: [ aPath basename ]
 		  ifTrue: [ 'Root' ]
-]
-
-{ #category : 'accessing' }
-StPathPresenter >> layout [
-
-	^ super layout ifNil: [ self initializeLayout ]
 ]

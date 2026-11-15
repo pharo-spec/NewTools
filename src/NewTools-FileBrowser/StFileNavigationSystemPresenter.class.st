@@ -132,7 +132,8 @@ StFileNavigationSystemPresenter >> connectPresenters [
 	self previousBeforeButtonAction.
 	self nextButtonAction.
 	self configButtonAction.
-	newFolderButton action: [ self createDirectory ]
+	newFolderButton action: [ self createDirectory ].
+	pathBreadcrumbPresenter whenFolderChosenDo: [ :folder | self openFolder: folder ]
 ]
 
 { #category : 'utilities' }
@@ -319,15 +320,15 @@ StFileNavigationSystemPresenter >> initializePresenters [
 
 	super initializePresenters.
 	notebookPreviewer := self instantiate: StNoteBookPreviewerPresenter.
-	pathBreadcrumbPresenter := self instantiate: StPathBreadcrumbPresenter on: self model.
+	pathBreadcrumbPresenter := self instantiate: StPathBreadcrumbPresenter.
 	nameText := self newTextInput.
 	filtersDropList := self newDropList.
 
-	self initializeToolbarButtons.	
+	self initializeToolbarButtons.
 	self initializeNavigationPresenters.
 	self initializeFilesTable.
 	self initializeFiltersDropList.
-	self openOnLastDirectory 
+	self openOnLastDirectory
 		ifTrue: [ self updateWidgetWithFileReference: self lastVisitedDirectory ]
 		ifFalse: [ self updateWidgetWithFileReference: self defaultDirectory ].
 	self initializeHistoryIteratorWith: self currentDirectory
@@ -388,12 +389,13 @@ StFileNavigationSystemPresenter >> nameTextChanged: aText [
 
 { #category : 'layout' }
 StFileNavigationSystemPresenter >> navigationLayout [
+	"The path bar takes the free width, because its links change with the current folder."
 
 	^ SpBoxLayout newLeftToRight
 		  vAlignCenter;
 		  add: previousButton expand: false;
 		  add: nextButton expand: false;
-		  add: pathBreadcrumbPresenter expand: false;
+		  add: pathBreadcrumbPresenter;
 		  addLast: newFolderButton;
 		  addLast: configButton;
 		  yourself
@@ -526,8 +528,6 @@ StFileNavigationSystemPresenter >> updateWidgetWithFileReference: aFileReference
 
 	self currentDirectory: aFileReference.
 	self updateFileReferenceTable.
-	pathBreadcrumbPresenter 
-		currentDirectory: self currentDirectory;
-		updatePathSelection: aFileReference.
-	
+	pathBreadcrumbPresenter currentDirectory: self currentDirectory.
+	aFileReference isDirectory ifFalse: [ self nameText: aFileReference basename ]
 ]

@@ -31,6 +31,22 @@ StNavigationSystemTest >> setUp [
 ]
 
 { #category : 'tests' }
+StNavigationSystemTest >> testAcceptingAPathInTheBreadcrumbOpensTheFolder [
+
+	dialog pathBreadcrumbPresenter acceptPath: (root / 'dir') fullName.
+	self assert: dialog currentDirectory equals: root / 'dir'
+]
+
+{ #category : 'tests' }
+StNavigationSystemTest >> testClickingALinkOfTheBreadcrumbOpensTheFolder [
+
+	dialog openFolder: root / 'dir'.
+	(dialog pathBreadcrumbPresenter path presenters detect: [ :each |
+		 (each isKindOf: SpLinkPresenter) and: [ each label = 'fd-test' ] ]) performAction.
+	self assert: dialog currentDirectory equals: root
+]
+
+{ #category : 'tests' }
 StNavigationSystemTest >> testCustomizationWhenChangeCollectionOfPreviewerShouldBeSet [
 	| previewerUtil |
 	previewerUtil := StFileBrowserPNGPreviewer new.
@@ -40,7 +56,8 @@ StNavigationSystemTest >> testCustomizationWhenChangeCollectionOfPreviewerShould
 
 { #category : 'tests' }
 StNavigationSystemTest >> testInitializeCurrentPathTextInputShouldSet [
-	self assert: dialog currentDirectory fullName equals: dialog pathBreadcrumbPresenter entityText text 
+
+	self assert: dialog currentDirectory fullName equals: dialog pathBreadcrumbPresenter pathTextInput text
 ]
 
 { #category : 'tests' }
@@ -63,6 +80,13 @@ StNavigationSystemTest >> testOpenFolder [
 	self assert: dialog currentDirectory equals: root.
 	dialog openFolder: root / 'dir'.
 	self assert: dialog currentDirectory equals: root / 'dir'
+]
+
+{ #category : 'tests' }
+StNavigationSystemTest >> testOpeningAFolderShowsItInTheBreadcrumb [
+
+	dialog openFolder: root / 'dir'.
+	self assert: dialog pathBreadcrumbPresenter currentDirectory equals: root / 'dir'
 ]
 
 { #category : 'tests' }
@@ -144,11 +168,6 @@ StNavigationSystemTest >> testWhenOpenADirectoryShouldDisplayHisChildrenFilterBy
 { #category : 'tests' }
 StNavigationSystemTest >> testWhenPathTextInputPresenterAcceptShouldChangeFileListWithTheGoodContent [
 
-	dialog pathBreadcrumbPresenter pathTextChangedTo:
-		(dialog pathBreadcrumbPresenter entityText text asPath / 'dir')
-			pathString.
-	self
-		assertCollection:
-		(dialog fileReferenceTable items collect: #basename)
-		hasSameElements: { 'klm.png'. 'klm.jpg' }
+	dialog pathBreadcrumbPresenter acceptPath: (dialog pathBreadcrumbPresenter pathTextInput text asPath / 'dir') pathString.
+	self assertCollection: (dialog fileReferenceTable items collect: #basename) hasSameElements: { 'klm.png'. 'klm.jpg' }
 ]
