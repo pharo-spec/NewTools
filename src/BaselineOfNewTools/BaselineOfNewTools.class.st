@@ -97,6 +97,7 @@ BaselineOfNewTools >> baseline: spec [
 				package: 'NewTools-RewriterTools-Backend-Tests' with: [ spec requires: #( 'NewTools-RewriterTools-Backend' ) ];
 				package: 'NewTools-RewriterTools-Tests' with: [ spec requires: #( 'NewTools-RewriterTools' ) ];
 				"Profiler"package: 'NewTools-ProfilerUI' with: [ spec requires: #( 'NewTools-Core' 'NewTools-SpTextPresenterDecorators' ) ];
+				package: 'NewTools-ProfilerUI-Tests' with: [ spec requires: #( 'NewTools-ProfilerUI' ) ];
 				"Epicea"package: 'NewTools-Epicea' with: [ spec requires: #( 'NewTools-Core' ) ];
 				package: 'NewTools-Epicea-Tests' with: [ spec requires: #( 'NewTools-Epicea' ) ];
 				"Scopes Editor"package: 'NewTools-Scopes';
@@ -154,7 +155,7 @@ BaselineOfNewTools >> baseline: spec [
 				group: 'RewriterTools'
 				with: #( 'NewTools-RewriterTools-Backend' 'NewTools-RewriterTools' 'NewTools-RewriterTools-Backend-Tests'
 					   'NewTools-RewriterTools-Tests' );
-				group: 'Profiler' with: #( 'NewTools-ProfilerUI' );
+				group: 'Profiler' with: #( 'NewTools-ProfilerUI' 'NewTools-ProfilerUI-Tests' );
 				"ScopesEditor"group: 'ScopesEditor'
 				with: #( 'NewTools-Scopes' 'NewTools-Scopes-Editor' 'NewTools-Scopes-Resources-A-Tests' 'NewTools-Scopes-Resources-B-Tests'
 					   'NewTools-Scopes-Resources-C-Tests' 'NewTools-Scopes-Tests' );

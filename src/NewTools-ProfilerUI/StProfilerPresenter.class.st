@@ -95,12 +95,6 @@ StProfilerPresenter >> initializeWindow: aWindowPresenter [
 		whenClosedDo: [ self unsubscribe ]
 ]
 
-{ #category : 'private - factory' }
-StProfilerPresenter >> newInputPresenter [
-
-	^ StProfilerInputPresenter on: self viewModel
-]
-
 { #category : 'actions' }
 StProfilerPresenter >> profileBlock: aBlock [
 
