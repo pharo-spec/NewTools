@@ -289,7 +289,7 @@ StSingleCritiqueResultListPresenter >> initializePresenters [
 
 	critiquesModel := self newList.
 	sourceCodeModel := self newSourceCodeCritique.
-	toolbarModel := StCritiqueToolbarPresenter new.
+	toolbarModel := self instantiate: StCritiqueToolbarPresenter.
 	critiquesModel beMultipleSelection.
 	critiquesModel display: [ :selec | 
 		self initializeDisplayCritique: selec forRule: rule ].
@@ -327,7 +327,7 @@ StSingleCritiqueResultListPresenter >> isCritiqueToDo [
 { #category : 'initialization' }
 StSingleCritiqueResultListPresenter >> newSourceCodeCritique [
 	
-	^ SpCodePresenter new 
+	^ self newCode 
 		beNotEditable;
 		withoutSyntaxHighlight;
 		yourself

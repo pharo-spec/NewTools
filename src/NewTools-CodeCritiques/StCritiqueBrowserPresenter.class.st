@@ -256,6 +256,12 @@ StCritiqueBrowserPresenter >> connectPresenters [
 ]
 
 { #category : 'accessing' }
+StCritiqueBrowserPresenter >> critiqueModel [
+
+	^ critiqueModel
+]
+
+{ #category : 'accessing' }
 StCritiqueBrowserPresenter >> critiquesModel [
 
 	^ critiqueModel critiquesModel
@@ -355,7 +361,7 @@ StCritiqueBrowserPresenter >> initializePresenters [
 	self setResetButton.
 	self setUpdateButton.
 
-	critiqueModel := StSingleCritiqueResultListPresenter new application: application.
+	critiqueModel := self instantiate: StSingleCritiqueResultListPresenter.
 	critiquesModel := self critiquesModel.
 	sourceCodeModel := self sourceCodeModel.
 	toolbarModel := self toolbarModel.
