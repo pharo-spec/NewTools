@@ -217,7 +217,7 @@ StSettingsBrowser >> select: aString [
 { #category : 'execution' }
 StSettingsBrowser >> selectDialog: fileReferences [
 
-	^ SpSelectDialog new
+	^ self application newSelect
 		  title: 'Settings Browser Selector';
 		  message: 'Select a Stored Settings File';
 		  items: fileReferences;
