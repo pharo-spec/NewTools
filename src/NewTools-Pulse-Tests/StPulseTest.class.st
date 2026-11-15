@@ -44,6 +44,24 @@ StPulseTest >> testHistoryIsWellInitialized [
 	
 ]
 
+{ #category : 'tests - paginator' }
+StPulseTest >> testPaginatorIsOwnedByPulse [
+
+	self assert: pulse paginator owner identicalTo: pulse
+]
+
+{ #category : 'tests - paginator' }
+StPulseTest >> testPaginatorShowsOnePage [
+
+	self assert: pulse paginator visiblePages equals: 1
+]
+
+{ #category : 'tests - paginator' }
+StPulseTest >> testPaginatorUsesThePulseApplication [
+
+	self assert: pulse paginator application identicalTo: pulse application
+]
+
 { #category : 'running' }
 StPulseTest >> testSearchingAllTypeOfCandidates [
 
