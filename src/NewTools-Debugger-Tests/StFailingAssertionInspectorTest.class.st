@@ -56,3 +56,12 @@ StFailingAssertionInspectorTest >> testDiffForSymbols [
 	self assert: inspector stringDiff leftText equals: '#''#east'''.
 	self assert: inspector stringDiff rightText equals: '#east'.
 ]
+
+{ #category : 'tests' }
+StFailingAssertionInspectorTest >> testMillerListsAreOwnedByTheInspector [
+
+	| inspector |
+	inspector := StFailingAssertionInspector diffInspectorsFromActual: 'a' expected: 1 application: nil.
+	self assert: inspector actualObjectMillerList owner identicalTo: inspector.
+	self assert: inspector expectedObjectMillerList owner identicalTo: inspector
+]
