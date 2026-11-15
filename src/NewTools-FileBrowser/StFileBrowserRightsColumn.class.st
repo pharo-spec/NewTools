@@ -1,5 +1,27 @@
 "
-I'm a column use to give you the access rights of a FileReference
+I am the column showing the access rights of an entry. `StFileBrowserAbstractColumn` describes how columns are created and used; here is what is specific to me.
+
+## Responsibility:
+
+- Show the permissions of a `FileReference`, or 'N/A' when they cannot be read.
+- Make the column 110 pixels wide.
+
+## Collaborators:
+
+- `StFileBrowserAbstractPresenter>>defaultColumns`: I am one of the default columns of the file dialogs.
+
+## Public API and Key Messages
+
+Class side: `title` ('Rights'), `evaluateOn:`, `priority` (100).
+
+## Examples
+
+```smalltalk
+StFileBrowserRightsColumn scriptFilesTable.
+StFileBrowserRightsColumn column.
+```
+
+The first one opens the working directory with the icon, name and my columns; the second one answers my Spec table column.
 "
 Class {
 	#name : 'StFileBrowserRightsColumn',

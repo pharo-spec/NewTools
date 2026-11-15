@@ -1,7 +1,27 @@
 "
-I'm use to give you the name of a fileReference.
+I am the column showing the name of an entry: its basename, e.g. 'something.exe' for 'my/path/something.exe'. `StFileBrowserAbstractColumn` describes how columns are created and used; here is what is specific to me.
 
-For example for the file 'my/path/something.exe' I'll display something.exe.
+## Responsibility:
+
+- Show the basename of a `FileReference`.
+- Make the column sortable.
+
+## Collaborators:
+
+- `StFileNavigationSystemPresenter>>columns:`: always adds me, right after the icon column.
+
+## Public API and Key Messages
+
+Class side: `title` ('Name'), `evaluateOn:`, `priority` (1).
+
+## Examples
+
+```smalltalk
+StFileBrowserNameColumn scriptFilesTable.
+StFileBrowserNameColumn column.
+```
+
+The first one opens the working directory with the icon, name and my columns; the second one answers my Spec table column.
 "
 Class {
 	#name : 'StFileBrowserNameColumn',
