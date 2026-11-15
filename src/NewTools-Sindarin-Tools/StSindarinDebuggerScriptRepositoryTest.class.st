@@ -13,6 +13,13 @@ StSindarinDebuggerScriptRepositoryTest >> setUp [
 	StSindarinDebuggerScriptRepositoryAbstract clearScripts.
 ]
 
+{ #category : 'running' }
+StSindarinDebuggerScriptRepositoryTest >> tearDown [
+
+	StSindarinDebuggerScriptRepositoryAbstract clearScripts.
+	super tearDown
+]
+
 { #category : 'tests' }
 StSindarinDebuggerScriptRepositoryTest >> testAddMultipleScriptsStoresEachCorrectly [
 	"We assume that the setup clears the scripts dictionary"
