@@ -11,14 +11,6 @@ I test `StCustomExtensionsFilter`, the extension filter built from the extension
 
 - `StCustomExtensionsFilter`: the class under test, built through `StCustomExtensionsFilter class >> #examplePharoImages`.
 - `StAbstractFilterTest`: my superclass gives the file fixtures and the example test.
-
-## Public API and Key Messages
-
-Run me with:
-
-```smalltalk
-StCustomExtensionsFilterTest suite run
-```
 "
 Class {
 	#name : 'StCustomExtensionsFilterTest',
