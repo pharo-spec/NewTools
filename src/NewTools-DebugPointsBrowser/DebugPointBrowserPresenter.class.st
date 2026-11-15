@@ -104,6 +104,18 @@ DebugPointBrowserPresenter >> defaultLayout [
 		  yourself
 ]
 
+{ #category : 'accessing' }
+DebugPointBrowserPresenter >> dpCode [
+
+	^ dpCode
+]
+
+{ #category : 'accessing' }
+DebugPointBrowserPresenter >> dpEditor [
+
+	^ dpEditor
+]
+
 { #category : 'initialization' }
 DebugPointBrowserPresenter >> initialize [
 
@@ -119,8 +131,8 @@ DebugPointBrowserPresenter >> initialize [
 DebugPointBrowserPresenter >> initializePresenters [
 
 	self initializeTable.
-	dpEditor := DebugPointEditorPresenter new.
-	dpCode := DebugPointCodePresenter new editable: false.
+	dpEditor := self instantiate: DebugPointEditorPresenter.
+	dpCode := (self instantiate: DebugPointCodePresenter) editable: false.
 
 	inputFilter := self newSearchInput
 		               placeholder: 'Search by name';
@@ -151,7 +163,7 @@ DebugPointBrowserPresenter >> initializeTable [
 { #category : 'initialization' }
 DebugPointBrowserPresenter >> initializeVariableTargetPresenter [
 
-	variableTargetPresenter := DebugPointVariableTargetPresenter new
+	variableTargetPresenter := self instantiate: DebugPointVariableTargetPresenter
 ]
 
 { #category : 'api' }
@@ -212,6 +224,12 @@ DebugPointBrowserPresenter >> updateTable [
 DebugPointBrowserPresenter >> updateVariableTargetPresenterFrom: aDebugPointTarget [
 
 	variableTargetPresenter target: aDebugPointTarget
+]
+
+{ #category : 'accessing' }
+DebugPointBrowserPresenter >> variableTargetPresenter [
+
+	^ variableTargetPresenter
 ]
 
 { #category : 'initialization' }

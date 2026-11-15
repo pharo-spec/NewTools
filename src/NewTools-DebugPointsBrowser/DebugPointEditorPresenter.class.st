@@ -7,7 +7,8 @@ Class {
 	#instVars : [
 		'debugPoint',
 		'isActiveCheckBox',
-		'actionBar'
+		'actionBar',
+		'noSelectionLabel'
 	],
 	#category : 'NewTools-DebugPointsBrowser',
 	#package : 'NewTools-DebugPointsBrowser'
@@ -22,7 +23,7 @@ DebugPointEditorPresenter >> addToLayout: aPresenter [
 { #category : 'action handling' }
 DebugPointEditorPresenter >> changeDebugPointState: newState [
 	self debugPoint enabled: newState.
-	DebugPointManager notifyDebugPointChanged: self debugPoint .
+	DebugPointManager notifyDebugPointChanged: self debugPoint
 ]
 
 { #category : 'layout' }
@@ -32,21 +33,16 @@ DebugPointEditorPresenter >> createLayout [
 	self layout: SpBoxLayout newTopToBottom.
 	self layout add: actionBar expand: false.
 	self layout add: self newActiveCheckBox expand: false.
-	DebugPointBehavior allSubclasses
-		reject: [ :behaviorClass | behaviorClass isAbstract ]
-		thenDo: [ :behavior |
+	DebugPointBehavior allSubclasses reject: [ :behaviorClass | behaviorClass isAbstract ] thenDo: [ :behavior |
 			| behaviorUI |
-			behaviorUI := behavior uiElement new debugPoint: self debugPoint.
-			self layout
-				add: behaviorUI
-				expand: ((self debugPoint getBehavior: behavior)
-						 ifNotNil: [ behaviorUI expand ]
-						 ifNil: [ false ]) ].
+			behaviorUI := (self instantiate: behavior uiElement) debugPoint: self debugPoint.
+			self layout add: behaviorUI expand: ((self debugPoint getBehavior: behavior) ifNotNil: [ behaviorUI expand ] ifNil: [ false ]) ].
 	debugPoint presentIn: self
 ]
 
 { #category : 'accessing' }
 DebugPointEditorPresenter >> debugPoint [
+
 	^debugPoint
 	
 
@@ -55,22 +51,26 @@ DebugPointEditorPresenter >> debugPoint [
 
 { #category : 'accessing' }
 DebugPointEditorPresenter >> debugPoint: aDebugPoint [
-	debugPoint := aDebugPoint .
-	
+
+	debugPoint := aDebugPoint.
 	self updateAll.
 	
 ]
 
 { #category : 'layout' }
-DebugPointEditorPresenter >> defaultLayout [ 
-	^SpBoxLayout new hAlignCenter; vAlignCenter;
-	add: (SpLabelPresenter new label: 'Select a Debug Point');
-	yourself.
+DebugPointEditorPresenter >> defaultLayout [
+
+	^ SpBoxLayout new
+		  hAlignCenter;
+		  vAlignCenter;
+		  add: noSelectionLabel;
+		  yourself
 ]
 
 { #category : 'initialization' }
 DebugPointEditorPresenter >> initializePresenters [
 
+	noSelectionLabel := self newLabel label: 'Select a Debug Point'.
 	actionBar := self newToolbar
 		             add: (self newToolbarButton
 				              label: 'Refresh';
