@@ -1287,6 +1287,13 @@ StDebuggerTest >> testToolbarInDNUContext [
 	
 ]
 
+{ #category : 'tests - toolbar' }
+StDebuggerTest >> testToolbarPresenterIsOwnedByTheDebugger [
+
+	debugger := self debuggerOn: session.
+	self assert: debugger toolbarPresenter owner identicalTo: debugger
+]
+
 { #category : 'tests - code pane' }
 StDebuggerTest >> testUnsavedCodeChanges [
 

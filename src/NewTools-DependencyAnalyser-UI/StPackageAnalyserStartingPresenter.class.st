@@ -33,6 +33,12 @@ StPackageAnalyserStartingPresenter class >> menuCommandOn: aBuilder [
 		action: [ self new open ]
 ]
 
+{ #category : 'accessing' }
+StPackageAnalyserStartingPresenter >> choosePresenter [
+
+	^ choosePresenter
+]
+
 { #category : 'layout' }
 StPackageAnalyserStartingPresenter >> defaultLayout [
 
@@ -45,7 +51,7 @@ StPackageAnalyserStartingPresenter >> defaultLayout [
 { #category : 'initialization' }
 StPackageAnalyserStartingPresenter >> initializePresenters [
 
-	choosePresenter := SpChooserPresenter new
+	choosePresenter := (self instantiate: SpChooserPresenter)
 		sourceItems: self packageOrganizer packages;
 		displayBlock: [ :aPackage | aPackage name ];
 		yourself.

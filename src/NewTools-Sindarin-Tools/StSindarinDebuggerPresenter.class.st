@@ -62,7 +62,7 @@ StSindarinDebuggerPresenter >> initializePresenters [
 						currentNodeSource
 							doItReceiver: selection selectedItem home receiver;
 							doItContext: selection selectedItem ] ].
-	inspector := StRawInspectionPresenter on: self model stack first.
+	inspector := self instantiate: StRawInspectionPresenter on: self model stack first.
 	currentNodeSource := self newCode.
 	currentNodeSource whenBuiltDo: [ :ann |
 		ann widget font: StandardFonts codeFont ].
@@ -72,6 +72,12 @@ StSindarinDebuggerPresenter >> initializePresenters [
 	stack items: self model stack.
 	stack selectIndex: 1.
 	toolbar := self buildToolbar
+]
+
+{ #category : 'accessing' }
+StSindarinDebuggerPresenter >> rawInspectionPresenter [
+
+	^ inspector
 ]
 
 { #category : 'stepping' }

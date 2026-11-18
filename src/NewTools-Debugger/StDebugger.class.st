@@ -1393,7 +1393,7 @@ StDebugger >> toolbarMenuNameForGroup: aGroup [
 { #category : 'accessing - presenters' }
 StDebugger >> toolbarPresenter [
 
-	^ toolbarPresenter ifNil:[toolbarPresenter := SpPresenter new]
+	^ toolbarPresenter ifNil:[toolbarPresenter := self newPresenter]
 ]
 
 { #category : 'toolbar' }
@@ -1621,7 +1621,7 @@ StDebugger >> warning: aString for: aPresenter [
 		addStyle: 'error';
 		relativeTo: aPresenter;
 		position: SpPopoverPosition top;
-		presenter: (SpPresenter new
+		presenter: (self newPresenter
 				 layout: (SpBoxLayout newTopToBottom
 						  borderWidth: 2;
 						  spacing: 0;

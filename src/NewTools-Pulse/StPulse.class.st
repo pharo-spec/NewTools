@@ -754,7 +754,7 @@ StPulse >> initializeListLabel [
 { #category : 'initialization' }
 StPulse >> initializePaginator [
 
-	paginator := SpPaginatorPresenter new
+	paginator := (self instantiate: SpPaginatorPresenter)
 		addStyle: 'stPulsePaginator';
 		visiblePages: 1;
 		withoutResizingEdges;
@@ -836,6 +836,12 @@ StPulse >> openSettingsBrowser [
 	(StSettingsBrowser newApplication: self application)
 		selectPath: #(tools pulse);
 		open
+]
+
+{ #category : 'accessing' }
+StPulse >> paginator [
+
+	^ paginator
 ]
 
 { #category : 'private - accessing' }

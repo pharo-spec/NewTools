@@ -108,7 +108,7 @@ StFailingAssertionInspector >> initializeObjectDiffPresenters [
 	actualObjectHeader := (self instantiate: StHeaderBar)
 		label: 'Actual object: ' , (actualObject printStringLimitedTo: 40);
 		yourself.
-	actualObjectMillerList := SpMillerColumnPresenter new.
+	actualObjectMillerList := self instantiate: SpMillerColumnPresenter.
 	self
 		initializeMillerList: actualObjectMillerList
 		forObject: actualObject.
@@ -116,7 +116,7 @@ StFailingAssertionInspector >> initializeObjectDiffPresenters [
 	expectedObjectHeader := (self instantiate: StHeaderBar)
 		label: 'Expected object: ' , (expectedObject printStringLimitedTo: 40);
 		yourself.	
-	expectedObjectMillerList := SpMillerColumnPresenter new.
+	expectedObjectMillerList := self instantiate: SpMillerColumnPresenter.
 	self
 		initializeMillerList: expectedObjectMillerList
 		forObject: expectedObject
@@ -148,7 +148,7 @@ StFailingAssertionInspector >> stringDiff [
 { #category : 'views' }
 StFailingAssertionInspector >> treeTableInspectionFor: aModel [
 	| rawInspection |
-	rawInspection := StRawInspectionPresenter new.
+	rawInspection := self instantiate: StRawInspectionPresenter.
 	^ self newTreeTable
 		  roots: aModel value allInspectorNodes;
 		  children: [ :node | node children ];
