@@ -798,12 +798,10 @@ StDebuggerClientModelTest >> testIsInterruptedContextMissingClassException [
 
 { #category : 'tests - predicates' }
 StDebuggerClientModelTest >> testIsInterruptedContextPostMortem [
+	"A debugger opened on a session whose process already ended"
 
-	| process |
-	process := session interruptedProcess.
-	session resume.
-	self waitUntilTerminated: process.
-	debugActionModel updateContextPredicate.
+	session interruptedProcess terminate.
+	debugActionModel session: session.
 	self assert: debugActionModel isInterruptedContextPostMortem
 ]
 
