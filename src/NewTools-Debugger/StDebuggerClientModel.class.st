@@ -50,13 +50,6 @@ StDebuggerClientModel class >> shouldFilterStackSettingsOn: aBuilder [
 		description: 'Defines if methods with pragma #debuggerCompleteToSender are filtered (hidden) in the debugger stack'
 ]
 
-{ #category : 'updating' }
-StDebuggerClientModel >> announce: anAnnouncementClass [
-	"Refresh the top context, the context predicate and the session, then announce what changed to the listeners (the debugger UI), unless updates are prevented"
-
-	self updateIfAble: (anAnnouncementClass debuggerClientModel: self)
-]
-
 { #category : 'accessing' }
 StDebuggerClientModel >> announcer [
 
@@ -74,7 +67,7 @@ StDebuggerClientModel >> breakOnStackAtSelection: anInterval inContext: aContext
 	allContextsForCurrentMethod := self interruptedProcess findContextsForMethod: currentMethod.
 	allContextsForCurrentMethod do: [ :ctx | ctx method: newMethod ].
 
-	self announce: StDebuggerClientModelContextChangedAnnouncement
+	self refreshThenAnnounce: StDebuggerClientModelContextChangedAnnouncement
 ]
 
 { #category : 'actions' }
@@ -192,7 +185,7 @@ StDebuggerClientModel >> filterStack: aStack [
 StDebuggerClientModel >> implementMissingMethod [
 
 	(StDebuggerMethodImplementor forSession: self session) implementMissingMethod.
-	self announce: StDebuggerClientModelContextChangedAnnouncement
+	self refreshThenAnnounce: StDebuggerClientModelContextChangedAnnouncement
 ]
 
 { #category : 'initialization' }
@@ -293,7 +286,7 @@ StDebuggerClientModel >> newStepAnnouncement [
 StDebuggerClientModel >> peelToFirstLike: aContext [
 
 	self session peelToFirstLike: aContext.
-	self announce: StDebuggerClientModelContextChangedAnnouncement
+	self refreshThenAnnounce: StDebuggerClientModelContextChangedAnnouncement
 ]
 
 { #category : 'context' }
@@ -339,7 +332,7 @@ StDebuggerClientModel >> preventUpdatesDuring: aBlock [
 StDebuggerClientModel >> proceedDebugSession [
 
 	self session resume.
-	self announce: StDebuggerClientModelResumeAnnouncement.
+	self refreshThenAnnounce: StDebuggerClientModelResumeAnnouncement.
 	self endSession
 ]
 
@@ -383,11 +376,18 @@ StDebuggerClientModel >> refresh [
 	self updateDebugSession
 ]
 
+{ #category : 'updating' }
+StDebuggerClientModel >> refreshThenAnnounce: anAnnouncementClass [
+	"Refresh the top context, the context predicate and the session, then announce what changed to the listeners (the debugger UI), unless updates are prevented"
+
+	self updateIfAble: (anAnnouncementClass debuggerClientModel: self)
+]
+
 { #category : 'debug - execution' }
 StDebuggerClientModel >> restartContext: aContext [
 
 	self session restart: aContext.
-	self announce: StDebuggerClientModelRestartAnnouncement
+	self refreshThenAnnounce: StDebuggerClientModelRestartAnnouncement
 ]
 
 { #category : 'debug - execution' }
@@ -399,7 +399,7 @@ StDebuggerClientModel >> returnValueFromExpression: aString fromContext: aContex
 		         context: aContext;
 		         evaluate.
 	self session returnValue: value from: aContext.
-	self announce: StDebuggerClientModelContextChangedAnnouncement
+	self refreshThenAnnounce: StDebuggerClientModelContextChangedAnnouncement
 ]
 
 { #category : 'debug - execution' }
@@ -424,7 +424,7 @@ StDebuggerClientModel >> session [
 StDebuggerClientModel >> session: aDebugSession [
 
 	session := aDebugSession.
-	self announce: StDebuggerClientModelStepAnnouncement
+	self refreshThenAnnounce: StDebuggerClientModelStepAnnouncement
 ]
 
 { #category : 'debug - stack' }
@@ -456,7 +456,7 @@ StDebuggerClientModel >> stepInto: aContext [
 	aContext stepIntoQuickMethod: true.
 	self session stepInto: aContext.
 	aContext stepIntoQuickMethod: false.
-	self announce: StDebuggerClientModelStepAnnouncement
+	self refreshThenAnnounce: StDebuggerClientModelStepAnnouncement
 ]
 
 { #category : 'debug - stepping' }
@@ -466,14 +466,14 @@ StDebuggerClientModel >> stepOver: aContext [
 		               ifTrue: [ false ]
 		               ifFalse: [ self class shouldFilterStack ].
 	self session stepOver: aContext.
-	self announce: StDebuggerClientModelStepAnnouncement
+	self refreshThenAnnounce: StDebuggerClientModelStepAnnouncement
 ]
 
 { #category : 'debug - stepping' }
 StDebuggerClientModel >> stepThrough: aContext [
 
 	self session stepThrough: aContext.
-	self announce: StDebuggerClientModelStepAnnouncement
+	self refreshThenAnnounce: StDebuggerClientModelStepAnnouncement
 ]
 
 { #category : 'system subscription' }
