@@ -229,12 +229,16 @@ StDebuggerClientModelTest >> setUp [
 	| method process |
 	super setUp.
 	method := self class >> #setResult.
-	process := [ method valueWithReceiver: self ]
-		           newProcess.
+	process := [ method valueWithReceiver: self ] newProcess.
 
-	self
-		setSessionAndDebuggerModelForMethod: method
-		inContext: process suspendedContext
+	self setSessionAndDebuggerModelForMethod: method inContext: process suspendedContext.
+
+	"Some tests resume the debugged process and then check what it did.
+	Resuming only schedules a process: at the test's priority it would run whenever the scheduler gets to it, maybe after the assertions.
+	At a higher priority, resuming hands it control at once: it runs to its end before the test goes on, so no test has to wait for it.
+	If it never ends, the test's own timeout fails the test.
+	The session debugs a process of its own, built from the context: that is the one to raise."
+	session interruptedProcess priority: Processor activePriority + 1
 ]
 
 { #category : 'running' }
@@ -860,13 +864,10 @@ StDebuggerClientModelTest >> testPeelToFirstLike [
 { #category : 'tests - actions' }
 StDebuggerClientModelTest >> testProceedDebugSession [
 
-	| process |
-	process := session interruptedProcess.
 	self deny: session interruptedContext isNil.
 	self assert: result isNil.
 	debugActionModel proceedDebugSession.
 	self assert: session interruptedContext isNil.
-	self waitUntilTerminated: process.
 	self assert: result equals: 4
 ]
 
@@ -1031,14 +1032,11 @@ StDebuggerClientModelTest >> testRestartContextAnnouncesARestartWithTheNewTopCon
 { #category : 'tests - actions' }
 StDebuggerClientModelTest >> testReturnValueFromExpressionFromContext [
 
-	| process |
-	process := session interruptedProcess.
 	session stepInto.
 	session stepInto.
 	debugActionModel returnValueFromExpression: '0' fromContext: session interruptedContext.
 	self assert: session interruptedContext top equals: 0.
 	session resume.
-	self waitUntilTerminated: process.
 	self assert: result equals: 0
 ]
 
@@ -1291,16 +1289,6 @@ StDebuggerClientModelTest >> testUpdateTopContextAfterSessionOperation [
 	mockDebugActionModel
 		clear;
 		clearDebugSession
-]
-
-{ #category : 'helper' }
-StDebuggerClientModelTest >> waitUntilTerminated: aProcess [
-	"A resumed process runs when the scheduler gets to it, which depends on the priority the test runs at"
-
-	| deadline |
-	deadline := DateAndTime now + 2 seconds.
-	[ aProcess isTerminated or: [ DateAndTime now > deadline ] ] whileFalse: [ (Delay forMilliseconds: 5) wait ].
-	self assert: aProcess isTerminated
 ]
 
 { #category : 'callbacks' }
