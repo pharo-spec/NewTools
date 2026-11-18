@@ -796,7 +796,12 @@ StDebuggerClientModelTest >> testIsInterruptedContextMissingClassException [
 
 { #category : 'tests - predicates' }
 StDebuggerClientModelTest >> testIsInterruptedContextPostMortem [
+
+	| process |
+	process := session interruptedProcess.
 	session resume.
+	self waitUntilTerminated: process.
+	debugActionModel updateContextPredicate.
 	self assert: debugActionModel isInterruptedContextPostMortem
 ]
 
@@ -854,10 +859,14 @@ StDebuggerClientModelTest >> testPeelToFirstLike [
 
 { #category : 'tests - actions' }
 StDebuggerClientModelTest >> testProceedDebugSession [
+
+	| process |
+	process := session interruptedProcess.
 	self deny: session interruptedContext isNil.
 	self assert: result isNil.
 	debugActionModel proceedDebugSession.
 	self assert: session interruptedContext isNil.
+	self waitUntilTerminated: process.
 	self assert: result equals: 4
 ]
 
@@ -1023,11 +1032,15 @@ StDebuggerClientModelTest >> testRestartContextAnnouncesARestartWithTheNewTopCon
 
 { #category : 'tests - actions' }
 StDebuggerClientModelTest >> testReturnValueFromExpressionFromContext [
+
+	| process |
+	process := session interruptedProcess.
 	session stepInto.
 	session stepInto.
 	debugActionModel returnValueFromExpression: '0' fromContext: session interruptedContext.
 	self assert: session interruptedContext top equals: 0.
 	session resume.
+	self waitUntilTerminated: process.
 	self assert: result equals: 0
 ]
 
@@ -1280,6 +1293,16 @@ StDebuggerClientModelTest >> testUpdateTopContextAfterSessionOperation [
 	mockDebugActionModel
 		clear;
 		clearDebugSession
+]
+
+{ #category : 'helper' }
+StDebuggerClientModelTest >> waitUntilTerminated: aProcess [
+	"A resumed process runs when the scheduler gets to it, which depends on the priority the test runs at"
+
+	| deadline |
+	deadline := DateAndTime now + 2 seconds.
+	[ aProcess isTerminated or: [ DateAndTime now > deadline ] ] whileFalse: [ (Delay forMilliseconds: 5) wait ].
+	self assert: aProcess isTerminated
 ]
 
 { #category : 'callbacks' }
