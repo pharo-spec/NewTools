@@ -28,9 +28,10 @@ StDebuggerCommandTest >> setUp [
 
 { #category : 'running' }
 StDebuggerCommandTest >> tearDown [
-	"Clear the debuggers' client models even when an assertion failed: a client model left behind stays subscribed to code changes"
+	"End the debuggers' sessions even when an assertion failed: a client model left behind stays subscribed to code changes.
+	Their processes are not terminated: they run on contexts of the process running the test"
 
-	debuggers do: [ :each | each clearDebuggerClientModel ].
+	debuggers do: [ :each | each endSession ].
 	debuggerProvider terminate.
 	(StTestDebuggerProvider lookupSelector: #buildDebuggerWithMissingClassContext) ifNotNil: [ :method | method removeFromSystem ].
 	super tearDown

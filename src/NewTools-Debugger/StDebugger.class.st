@@ -699,6 +699,13 @@ StDebugger >> doBrowseSenders [
 		(self stackSelectionMethodSelectorContext value: self)
 ]
 
+{ #category : 'actions' }
+StDebugger >> endSession [
+	"Release the session without terminating its process, and clear the client model"
+
+	self debuggerClientModel ifNotNil: [ :debugActionModel | debugActionModel endSession ]
+]
+
 { #category : 'accessing' }
 StDebugger >> environment [
 	^self class environment
