@@ -991,8 +991,7 @@ StDebuggerClientModelTest >> testRecompileMethodToInContextNotifyingUpdatesSourc
 	contextChanged := debugActionModel topContext.
 	setResultOriginalSourceCode := contextChanged method sourceCode.
 
-	debugActionModel session stepIntoUntil: [ :currentContext | currentContext selector = #squared ].
-	debugActionModel updateTopContext.
+	[ debugActionModel topContext selector = #squared ] whileFalse: [ debugActionModel stepInto: debugActionModel topContext ].
 	oldStack := debugActionModel stack.
 	rejectedFromOldStack := { debugActionModel topContext }.
 
