@@ -281,7 +281,8 @@ StDebuggerClientModelTest >> testClearDebugSessionAnnouncesClear [
 	| announcements |
 	announcements := self announcementsDuring: [ debugActionModel clearDebugSession ].
 
-	self assert: (announcements collect: [ :each | each key ] as: Array) equals: { StDebuggerClientModelClearAnnouncement }
+	self assert: announcements size equals: 1.
+	self assert: announcements first key identicalTo: StDebuggerClientModelClearAnnouncement
 ]
 
 { #category : 'tests - contexts' }
@@ -877,9 +878,9 @@ StDebuggerClientModelTest >> testProceedDebugSessionAnnouncesResumeThenClear [
 	| announcements |
 	announcements := self announcementsDuring: [ debugActionModel proceedDebugSession ].
 
-	self assert: (announcements collect: [ :each | each key ] as: Array) equals: {
-		StDebuggerClientModelResumeAnnouncement.
-		StDebuggerClientModelClearAnnouncement }
+	self assert: announcements size equals: 2.
+	self assert: announcements first key identicalTo: StDebuggerClientModelResumeAnnouncement.
+	self assert: announcements second key identicalTo: StDebuggerClientModelClearAnnouncement
 ]
 
 { #category : 'tests - updates' }
