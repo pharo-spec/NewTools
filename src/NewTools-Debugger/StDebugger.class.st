@@ -305,7 +305,7 @@ StDebugger >> acceptCodeChanges: newSource forContext: aContext [
 	self recompileMethodTo: newSource inContext: aContext notifying: code adapter widget.
 	self clearUnsavedCodeChanges.
 	"Update only now: before, the code pane still holds the source being accepted as unsaved changes"
-	self debuggerClientModel updateContextChanged
+	self debuggerClientModel announce: StDebuggerClientModelContextChangedAnnouncement
 ]
 
 { #category : 'extensions' }
