@@ -21,6 +21,22 @@ StDebuggerClientModelTest class >> benchFilterStack [
 	^self new benchmarkFilterStack inspect
 ]
 
+{ #category : 'tests - updates' }
+StDebuggerClientModelTest >> announcementsDuring: aBlock [
+	"Answer the announcements of the client model during aBlock, with the top context each one saw"
+
+	| announcements announcer |
+	announcements := OrderedCollection new.
+	"Keep the announcer: proceeding or clearing drops it from the model"
+	announcer := debugActionModel announcer.
+	announcer
+		when: StDebuggeClientModelAnnouncement
+		do: [ :each | announcements add: each class -> debugActionModel topContext ]
+		for: self.
+	[ aBlock value ] ensure: [ announcer unsubscribe: self ].
+	^ announcements
+]
+
 { #category : 'benchmarks' }
 StDebuggerClientModelTest >> bench: aBlock [
 	^ aBlock timeToRun asNanoSeconds
@@ -213,12 +229,16 @@ StDebuggerClientModelTest >> setUp [
 	| method process |
 	super setUp.
 	method := self class >> #setResult.
-	process := [ method valueWithReceiver: self ]
-		           newProcess.
+	process := [ method valueWithReceiver: self ] newProcess.
 
-	self
-		setSessionAndDebuggerModelForMethod: method
-		inContext: process suspendedContext
+	self setSessionAndDebuggerModelForMethod: method inContext: process suspendedContext.
+
+	"Some tests resume the debugged process and then check what it did.
+	Resuming only schedules a process: at the test's priority it would run whenever the scheduler gets to it, maybe after the assertions.
+	At a higher priority, resuming hands it control at once: it runs to its end before the test goes on, so no test has to wait for it.
+	If it never ends, the test's own timeout fails the test.
+	The session debugs a process of its own, built from the context: that is the one to raise."
+	session interruptedProcess priority: Processor activePriority + 1
 ]
 
 { #category : 'running' }
@@ -253,6 +273,16 @@ StDebuggerClientModelTest >> testClearDebugSession [
 	debugActionModel clearDebugSession.
 	self assert: process isTerminated.
 	self assert: session interruptedContext isNil
+]
+
+{ #category : 'tests - updates' }
+StDebuggerClientModelTest >> testClearDebugSessionAnnouncesClear [
+
+	| announcements |
+	announcements := self announcementsDuring: [ debugActionModel clearDebugSession ].
+
+	self assert: announcements size equals: 1.
+	self assert: announcements first key identicalTo: StDebuggerClientModelClearAnnouncement
 ]
 
 { #category : 'tests - contexts' }
@@ -447,42 +477,6 @@ StDebuggerClientModelTest >> testEventAfterProceed [
 	self
 		assert: dummyDebugger tag class
 		identicalTo: StDebuggerClientModelResumeAnnouncement.
-	self
-		assert: dummyDebugger tag debuggerClientModel
-		identicalTo: debugActionModel
-]
-
-{ #category : 'tests - actions' }
-StDebuggerClientModelTest >> testEventAfterRecompileMethod [
-
-	| ctx dummyDebugger |
-	ctx := session interruptedContext.
-	setResultOriginalSourceCode := ctx method sourceCode.
-	dummyDebugger := StDummyDebuggerPresenter new.
-
-	debugActionModel session stepIntoUntil: [ :currentContext |
-		currentContext selector = #squared ].
-
-	"We subscribe dummy debugger to debug action model to recompilation events"
-	debugActionModel
-		when: StDebuggerClientModelContextChangedAnnouncement
-		send: #tag:
-		to: dummyDebugger.
-
-	self assert: dummyDebugger tag isNil.
-
-	debugActionModel
-		recompileMethodTo: ctx method sourceCode , ' yourself'
-		inContext: ctx
-		notifying: nil.
-	self flag:
-		'We force the world to do cycles because the tests run in the UI thread, preventing the world to propagate the event #contextChanged, which is triggered by a Morphic alarm.'.
-	[ dummyDebugger tag ] whileNil: [ WorldMorph currentWorld doOneCycle ].
-
-	self deny: dummyDebugger tag isNil.
-	self
-		assert: dummyDebugger tag class
-		identicalTo: StDebuggerClientModelContextChangedAnnouncement.
 	self
 		assert: dummyDebugger tag debuggerClientModel
 		identicalTo: debugActionModel
@@ -809,7 +803,10 @@ StDebuggerClientModelTest >> testIsInterruptedContextMissingClassException [
 
 { #category : 'tests - predicates' }
 StDebuggerClientModelTest >> testIsInterruptedContextPostMortem [
-	session resume.
+	"A debugger opened on a session whose process already ended"
+
+	session interruptedProcess terminate.
+	debugActionModel session: session.
 	self assert: debugActionModel isInterruptedContextPostMortem
 ]
 
@@ -867,11 +864,36 @@ StDebuggerClientModelTest >> testPeelToFirstLike [
 
 { #category : 'tests - actions' }
 StDebuggerClientModelTest >> testProceedDebugSession [
+
 	self deny: session interruptedContext isNil.
 	self assert: result isNil.
 	debugActionModel proceedDebugSession.
 	self assert: session interruptedContext isNil.
 	self assert: result equals: 4
+]
+
+{ #category : 'tests - updates' }
+StDebuggerClientModelTest >> testProceedDebugSessionAnnouncesResumeThenClear [
+
+	| announcements |
+	announcements := self announcementsDuring: [ debugActionModel proceedDebugSession ].
+
+	self assert: announcements size equals: 2.
+	self assert: announcements first key identicalTo: StDebuggerClientModelResumeAnnouncement.
+	self assert: announcements second key identicalTo: StDebuggerClientModelClearAnnouncement
+]
+
+{ #category : 'tests - updates' }
+StDebuggerClientModelTest >> testRecompileMethodAnnouncesNothing [
+	"The debugger updates after accepting the code, see StDebuggerTest>>#testAcceptCodeChangesUpdatesAfterClearingUnsavedChanges"
+
+	| ctx announcements |
+	ctx := session interruptedContext.
+	setResultOriginalSourceCode := ctx method sourceCode.
+	announcements := self announcementsDuring: [
+		                 debugActionModel recompileMethodTo: ctx method sourceCode , ' yourself' inContext: ctx notifying: nil ].
+
+	self assertEmpty: announcements
 ]
 
 { #category : 'tests - actions' }
@@ -969,29 +991,16 @@ StDebuggerClientModelTest >> testRecompileMethodToInContextNotifyingUpdatesSourc
 	contextChanged := debugActionModel topContext.
 	setResultOriginalSourceCode := contextChanged method sourceCode.
 
-	debugActionModel session stepIntoUntil: [ :currentContext |
-		currentContext selector = #squared ].
+	[ debugActionModel topContext selector = #squared ] whileFalse: [ debugActionModel stepInto: debugActionModel topContext ].
 	oldStack := debugActionModel stack.
 	rejectedFromOldStack := { debugActionModel topContext }.
 
 	expectedNewStack := oldStack copyWithoutFirst.
 
-	debugActionModel
-		recompileMethodTo: contextChanged method sourceCode , ' yourself'
-		inContext: contextChanged
-		notifying: nil.
+	debugActionModel recompileMethodTo: contextChanged method sourceCode , ' yourself' inContext: contextChanged notifying: nil.
 
-	self flag:
-		'We force the world to do cycles because the tests run in the UI thread, preventing the world to propagate the event #contextChanged, which is triggered by a Morphic alarm.'.
-	[ debugActionModel topContext == contextChanged ] whileFalse: [
-		WorldMorph currentWorld doOneCycle ].
-
-	self
-		denyCollection: debugActionModel stack
-		includesAny: rejectedFromOldStack.
-	self
-		assertCollection: debugActionModel stack
-		hasSameElements: expectedNewStack.
+	self denyCollection: debugActionModel stack includesAny: rejectedFromOldStack.
+	self assertCollection: debugActionModel stack hasSameElements: expectedNewStack.
 	self assert: debugActionModel topContext identicalTo: contextChanged
 ]
 
@@ -1008,8 +1017,21 @@ StDebuggerClientModelTest >> testRestartContext [
 	self assert: session interruptedContext pc equals: topPC
 ]
 
+{ #category : 'tests - updates' }
+StDebuggerClientModelTest >> testRestartContextAnnouncesARestartWithTheNewTopContext [
+
+	| announcements |
+	debugActionModel stepInto: session interruptedContext.
+	announcements := self announcementsDuring: [ debugActionModel restartContext: session interruptedContext ].
+
+	self assert: announcements size equals: 1.
+	self assert: announcements first key identicalTo: StDebuggerClientModelRestartAnnouncement.
+	self assert: announcements first value identicalTo: session interruptedContext
+]
+
 { #category : 'tests - actions' }
 StDebuggerClientModelTest >> testReturnValueFromExpressionFromContext [
+
 	session stepInto.
 	session stepInto.
 	debugActionModel returnValueFromExpression: '0' fromContext: session interruptedContext.
@@ -1099,6 +1121,17 @@ StDebuggerClientModelTest >> testStepInto [
 	self assert: session stack second identicalTo: ctx
 ]
 
+{ #category : 'tests - updates' }
+StDebuggerClientModelTest >> testStepIntoAnnouncesAStepWithTheNewTopContext [
+
+	| announcements |
+	announcements := self announcementsDuring: [ debugActionModel stepInto: session interruptedContext ].
+
+	self assert: announcements size equals: 1.
+	self assert: announcements first key identicalTo: StDebuggerClientModelStepAnnouncement.
+	self assert: announcements first value identicalTo: session interruptedContext
+]
+
 { #category : 'tests - actions' }
 StDebuggerClientModelTest >> testStepIntoQuickMethods [
 	|ctx|
@@ -1131,6 +1164,17 @@ StDebuggerClientModelTest >> testStepOver [
 		identicalTo: method ast statements second
 ]
 
+{ #category : 'tests - updates' }
+StDebuggerClientModelTest >> testStepOverAnnouncesAStepWithTheNewTopContext [
+
+	| announcements |
+	announcements := self announcementsDuring: [ debugActionModel stepOver: session interruptedContext ].
+
+	self assert: announcements size equals: 1.
+	self assert: announcements first key identicalTo: StDebuggerClientModelStepAnnouncement.
+	self assert: announcements first value identicalTo: session interruptedContext
+]
+
 { #category : 'tests - actions' }
 StDebuggerClientModelTest >> testStepThrough [
 	| method ctx |
@@ -1145,6 +1189,17 @@ StDebuggerClientModelTest >> testStepThrough [
 	self
 		assert: (method sourceNodeForPC: session interruptedContext pc)
 		identicalTo: method ast statements second
+]
+
+{ #category : 'tests - updates' }
+StDebuggerClientModelTest >> testStepThroughAnnouncesAStepWithTheNewTopContext [
+
+	| announcements |
+	announcements := self announcementsDuring: [ debugActionModel stepThrough: session interruptedContext ].
+
+	self assert: announcements size equals: 1.
+	self assert: announcements first key identicalTo: StDebuggerClientModelStepAnnouncement.
+	self assert: announcements first value identicalTo: session interruptedContext
 ]
 
 { #category : 'tests - predicates' }

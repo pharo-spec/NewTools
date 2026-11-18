@@ -298,16 +298,14 @@ StDebugger class >> usesExtensions [
 
 { #category : 'code pane' }
 StDebugger >> acceptCodeChanges: newSource forContext: aContext [
-
 	"It is wrong here that I have to use code adapter widget.
 	It is expected down in the compilation call chain that the notified requestor answers to textMorph.
 	This is for modifying the source code when declaring temps"
 
-	self
-		recompileMethodTo: newSource
-		inContext: aContext
-		notifying: code adapter widget.
-	self clearUnsavedCodeChanges
+	self recompileMethodTo: newSource inContext: aContext notifying: code adapter widget.
+	self clearUnsavedCodeChanges.
+	"Update only now: before, the code pane still holds the source being accepted as unsaved changes"
+	self updateContextChanged
 ]
 
 { #category : 'extensions' }
@@ -699,6 +697,13 @@ StDebugger >> doBrowseSenders [
 
 	self systemNavigation browseAllSendersOf:
 		(self stackSelectionMethodSelectorContext value: self)
+]
+
+{ #category : 'actions' }
+StDebugger >> endSession [
+	"Release the session without terminating its process, and clear the client model"
+
+	self debuggerClientModel ifNotNil: [ :debugActionModel | debugActionModel endSession ]
 ]
 
 { #category : 'accessing' }
