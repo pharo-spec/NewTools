@@ -997,8 +997,6 @@ StDebuggerClientModelTest >> testRecompileMethodToInContextNotifyingUpdatesSourc
 	expectedNewStack := oldStack copyWithoutFirst.
 
 	debugActionModel recompileMethodTo: contextChanged method sourceCode , ' yourself' inContext: contextChanged notifying: nil.
-	"As the debugger does after accepting the code"
-	debugActionModel announce: StDebuggerClientModelContextChangedAnnouncement.
 
 	self denyCollection: debugActionModel stack includesAny: rejectedFromOldStack.
 	self assertCollection: debugActionModel stack hasSameElements: expectedNewStack.

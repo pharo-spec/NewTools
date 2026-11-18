@@ -357,14 +357,12 @@ StDebuggerClientModel >> recompileMethodTo: aString inContext: aContext notifyin
 	"Get the home before to recompile the method, we can lost it (for clean blocks)"
 	methodContext := aContext home.
 
-	self session
-		recompileMethodTo: aString
-		inContext: aContext
-		notifying: aNotifyer.
+	self session recompileMethodTo: aString inContext: aContext notifying: aNotifyer.
 
 	homePC := methodContext isDead
-		ifTrue: [ methodContext endPC ]
-		ifFalse: [ methodContext pc ]
+		          ifTrue: [ methodContext endPC ]
+		          ifFalse: [ methodContext pc ].
+	self refresh
 ]
 
 { #category : 'context' }
@@ -374,6 +372,15 @@ StDebuggerClientModel >> referenceContext [
 	or the exception's signaler context in all other cases."
 	self contextPredicate contextSignalsException ifFalse:[^self interruptedContext].
 	^topContext receiver signalerContext 
+]
+
+{ #category : 'updating' }
+StDebuggerClientModel >> refresh [
+	"Recompute what the model caches from the session: the top context, the context predicate and the session"
+
+	self updateTopContext.
+	self updateContextPredicate.
+	self updateDebugSession
 ]
 
 { #category : 'debug - execution' }
@@ -502,10 +509,7 @@ StDebuggerClientModel >> update [
 { #category : 'accessing' }
 StDebuggerClientModel >> update: anAnnouncement [
 
-	self updateTopContext.
-	self updateContextPredicate.
-	self updateDebugSession.
-
+	self refresh.
 	self raiseUpdateEvents: anAnnouncement
 ]
 
