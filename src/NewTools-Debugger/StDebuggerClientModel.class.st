@@ -88,11 +88,8 @@ StDebuggerClientModel >> clear [
 { #category : 'debug - execution' }
 StDebuggerClientModel >> clearDebugSession [
 
-	contextPredicate := nil.
-	self session
-		terminate;
-		clear.
-	self clear
+	self session terminate.
+	self endSession
 ]
 
 { #category : 'context' }
@@ -144,6 +141,14 @@ StDebuggerClientModel >> copyStackToClipboard [
 		clipboardText:
 			(String
 				streamContents: [ :s | self interruptedContext printStackTraceOn: s ])
+]
+
+{ #category : 'debug - session' }
+StDebuggerClientModel >> endSession [
+
+	contextPredicate := nil.
+	self session clear.
+	self clear
 ]
 
 { #category : 'stack - helpers' }
@@ -333,11 +338,9 @@ StDebuggerClientModel >> preventUpdatesDuring: aBlock [
 { #category : 'debug - execution' }
 StDebuggerClientModel >> proceedDebugSession [
 
-	contextPredicate := nil.
 	self session resume.
 	self announce: StDebuggerClientModelResumeAnnouncement.
-	self session clear.
-	self clear
+	self endSession
 ]
 
 { #category : 'events-triggering' }
