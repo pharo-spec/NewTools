@@ -2,27 +2,37 @@ Class {
 	#name : 'StDebuggerCommandTest',
 	#superclass : 'TestCase',
 	#instVars : [
-		'debuggerProvider'
+		'debuggerProvider',
+		'debuggers'
 	],
 	#category : 'NewTools-Debugger-Tests-Model',
 	#package : 'NewTools-Debugger-Tests',
 	#tag : 'Model'
 }
 
+{ #category : 'helpers' }
+StDebuggerCommandTest >> clearAfterTest: aDebugger [
+	"Answer aDebugger, cleared in tearDown"
+
+	^ debuggers add: aDebugger
+]
+
 { #category : 'running' }
 StDebuggerCommandTest >> setUp [
 	"Hooks that subclasses may override to define the fixture of test."
 
 	super setUp.
-	debuggerProvider := StTestDebuggerProvider new
+	debuggerProvider := StTestDebuggerProvider new.
+	debuggers := OrderedCollection new
 ]
 
 { #category : 'running' }
 StDebuggerCommandTest >> tearDown [
+	"Clear the debuggers' client models even when an assertion failed: a client model left behind stays subscribed to code changes"
+
+	debuggers do: [ :each | each clearDebuggerClientModel ].
 	debuggerProvider terminate.
-	(StTestDebuggerProvider lookupSelector:
-		 #buildDebuggerWithMissingClassContext) ifNotNil: [ :method | 
-		method removeFromSystem ].
+	(StTestDebuggerProvider lookupSelector: #buildDebuggerWithMissingClassContext) ifNotNil: [ :method | method removeFromSystem ].
 	super tearDown
 ]
 
@@ -30,48 +40,36 @@ StDebuggerCommandTest >> tearDown [
 StDebuggerCommandTest >> testCommandsInDNUContext [
 
 	| debugger |
-	debugger := debuggerProvider debuggerWithDNUContext.
+	debugger := self clearAfterTest: debuggerProvider debuggerWithDNUContext.
 
 	"Executable commands relative to context"
-	self assert:
-		(StDefineMethodCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
+	self assert: (StDefineMethodCommand forContext: debugger) canBeExecuted.
+	self assert: (StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
 	self assert: (StRestartCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StReturnValueCommand forContext: debugger) canBeExecuted.
+	self assert: (StReturnValueCommand forContext: debugger) canBeExecuted.
 
 	"Non-executable commands relative to context"
 	self deny: (StStepIntoCommand forContext: debugger) canBeExecuted.
 	self deny: (StStepOverCommand forContext: debugger) canBeExecuted.
 	self deny: (StStepThroughCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StRunToSelectionCommand forContext: debugger) canBeExecuted.
+	self deny: (StRunToSelectionCommand forContext: debugger) canBeExecuted.
 	self deny: (StProceedCommand forContext: debugger) canBeExecuted.
 	self deny: (StDefineClassCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StDefineSubclassResponsabilityCommand forContext: debugger)
-			canBeExecuted.
-	self deny:
-		(StGenerateAndProceedCommand forContext: debugger) canBeExecuted.
+	self deny: (StDefineSubclassResponsabilityCommand forContext: debugger) canBeExecuted.
+	self deny: (StGenerateAndProceedCommand forContext: debugger) canBeExecuted.
 
 	"Executable commands, whatever the context"
-	self assert:
-		(StCopyStackToClipboardCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StFileOutMethodCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StPeelToFirstCommand forContext: debugger) canBeExecuted.
-	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted.
-
-	debugger debuggerClientModel clear
+	self assert: (StCopyStackToClipboardCommand forContext: debugger) canBeExecuted.
+	self assert: (StFileOutMethodCommand forContext: debugger) canBeExecuted.
+	self assert: (StPeelToFirstCommand forContext: debugger) canBeExecuted.
+	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted
 ]
 
 { #category : 'tests' }
 StDebuggerCommandTest >> testCommandsInDeadContext [
 
 	| debugger |
-	debugger := debuggerProvider debuggerWithErrorContext.
+	debugger := self clearAfterTest: debuggerProvider debuggerWithErrorContext.
 	debugger debuggerClientModel contextPredicate context pc: nil.
 
 	"Non-executable commands relative to context"
@@ -80,121 +78,87 @@ StDebuggerCommandTest >> testCommandsInDeadContext [
 	self deny: (StStepIntoCommand forContext: debugger) canBeExecuted.
 	self deny: (StStepOverCommand forContext: debugger) canBeExecuted.
 	self deny: (StStepThroughCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StRunToSelectionCommand forContext: debugger) canBeExecuted.
+	self deny: (StRunToSelectionCommand forContext: debugger) canBeExecuted.
 	self deny: (StProceedCommand forContext: debugger) canBeExecuted.
 	self deny: (StDefineClassCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StDefineSubclassResponsabilityCommand forContext: debugger)
-			canBeExecuted.
+	self deny: (StDefineSubclassResponsabilityCommand forContext: debugger) canBeExecuted.
 	self deny: (StDefineMethodCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StGenerateAndProceedCommand forContext: debugger) canBeExecuted.
+	self deny: (StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
+	self deny: (StGenerateAndProceedCommand forContext: debugger) canBeExecuted.
 
 	"Executable commands, whatever the context"
-	self assert:
-		(StCopyStackToClipboardCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StFileOutMethodCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StPeelToFirstCommand forContext: debugger) canBeExecuted.
-	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted.
-
-	debugger debuggerClientModel clear
+	self assert: (StCopyStackToClipboardCommand forContext: debugger) canBeExecuted.
+	self assert: (StFileOutMethodCommand forContext: debugger) canBeExecuted.
+	self assert: (StPeelToFirstCommand forContext: debugger) canBeExecuted.
+	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted
 ]
 
 { #category : 'tests' }
 StDebuggerCommandTest >> testCommandsInErrorContext [
 
 	| debugger |
-	debugger := debuggerProvider debuggerWithErrorContext.
+	debugger := self clearAfterTest: debuggerProvider debuggerWithErrorContext.
 
 	"Executable commands relative to context"
 	self assert: (StRestartCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StReturnValueCommand forContext: debugger) canBeExecuted.
+	self assert: (StReturnValueCommand forContext: debugger) canBeExecuted.
 
 	"Non-executable commands relative to context"
 	self deny: (StStepIntoCommand forContext: debugger) canBeExecuted.
 	self deny: (StStepOverCommand forContext: debugger) canBeExecuted.
 	self deny: (StStepThroughCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StRunToSelectionCommand forContext: debugger) canBeExecuted.
+	self deny: (StRunToSelectionCommand forContext: debugger) canBeExecuted.
 	self deny: (StProceedCommand forContext: debugger) canBeExecuted.
 	self deny: (StDefineClassCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StDefineSubclassResponsabilityCommand forContext: debugger)
-			canBeExecuted.
+	self deny: (StDefineSubclassResponsabilityCommand forContext: debugger) canBeExecuted.
 	self deny: (StDefineMethodCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StGenerateAndProceedCommand forContext: debugger) canBeExecuted.
+	self deny: (StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
+	self deny: (StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
+	self deny: (StGenerateAndProceedCommand forContext: debugger) canBeExecuted.
 
 	"Executable commands, whatever the context"
-	self assert:
-		(StCopyStackToClipboardCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StFileOutMethodCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StPeelToFirstCommand forContext: debugger) canBeExecuted.
-	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted.
-
-	debugger debuggerClientModel clear
+	self assert: (StCopyStackToClipboardCommand forContext: debugger) canBeExecuted.
+	self assert: (StFileOutMethodCommand forContext: debugger) canBeExecuted.
+	self assert: (StPeelToFirstCommand forContext: debugger) canBeExecuted.
+	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted
 ]
 
 { #category : 'tests' }
 StDebuggerCommandTest >> testCommandsInFailingTestContext [
 
 	| debugger |
-	debugger := debuggerProvider debuggerWithFailingTestContext.
-	self flag:
-		'Cannot work until we can properly detect a failing assertion context'.
+	debugger := self clearAfterTest: debuggerProvider debuggerWithFailingTestContext.
+	self flag: 'Cannot work until we can properly detect a failing assertion context'.
 
 	"Executable commands relative to context"
 	self assert: (StRestartCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StReturnValueCommand forContext: debugger) canBeExecuted.
+	self assert: (StReturnValueCommand forContext: debugger) canBeExecuted.
 
 	"Non-executable commands relative to context"
 	self deny: (StStepIntoCommand forContext: debugger) canBeExecuted.
 	self deny: (StStepOverCommand forContext: debugger) canBeExecuted.
 	self deny: (StStepThroughCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StRunToSelectionCommand forContext: debugger) canBeExecuted.
+	self deny: (StRunToSelectionCommand forContext: debugger) canBeExecuted.
 	self deny: (StProceedCommand forContext: debugger) canBeExecuted.
 	self deny: (StDefineClassCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StDefineSubclassResponsabilityCommand forContext: debugger)
-			canBeExecuted.
+	self deny: (StDefineSubclassResponsabilityCommand forContext: debugger) canBeExecuted.
 	self deny: (StDefineMethodCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StGenerateAndProceedCommand forContext: debugger) canBeExecuted.
+	self deny: (StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
+	self deny: (StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
+	self deny: (StGenerateAndProceedCommand forContext: debugger) canBeExecuted.
 
 	"Executable commands, whatever the context"
-	self assert:
-		(StCopyStackToClipboardCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StFileOutMethodCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StPeelToFirstCommand forContext: debugger) canBeExecuted.
-	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted.
-	debugger debuggerClientModel clear
+	self assert: (StCopyStackToClipboardCommand forContext: debugger) canBeExecuted.
+	self assert: (StFileOutMethodCommand forContext: debugger) canBeExecuted.
+	self assert: (StPeelToFirstCommand forContext: debugger) canBeExecuted.
+	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted
 ]
 
 { #category : 'tests' }
 StDebuggerCommandTest >> testCommandsInGeneratingCodeContext [
 
 	| debugger |
-	debugger := debuggerProvider debuggerWithGeneratingCodeContext.
+	debugger := self clearAfterTest: debuggerProvider debuggerWithGeneratingCodeContext.
 
 	"Executable commands relative to context"
 	self assert: (StRestartCommand forContext: debugger) canBeExecuted.
@@ -217,9 +181,7 @@ StDebuggerCommandTest >> testCommandsInGeneratingCodeContext [
 	self assert: (StCopyStackToClipboardCommand forContext: debugger) canBeExecuted.
 	self assert: (StFileOutMethodCommand forContext: debugger) canBeExecuted.
 	self assert: (StPeelToFirstCommand forContext: debugger) canBeExecuted.
-	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted.
-
-	debugger debuggerClientModel clear
+	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted
 ]
 
 { #category : 'tests' }
@@ -229,166 +191,118 @@ StDebuggerCommandTest >> testCommandsInMissingClassContext [
 
 	| debugger |
 	StTestDebuggerProvider compileMissingClassContextBuilder.
-	debugger := debuggerProvider debuggerWithMissingClassContext.
+	debugger := self clearAfterTest: debuggerProvider debuggerWithMissingClassContext.
 
 	"Executable commands relative to context"
-	self assert:
-		(StDefineClassCommand forContext: debugger) canBeExecuted.
+	self assert: (StDefineClassCommand forContext: debugger) canBeExecuted.
 	self deny: (StDefineMethodCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
+	self assert: (StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
 	self assert: (StRestartCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StReturnValueCommand forContext: debugger) canBeExecuted.
+	self assert: (StReturnValueCommand forContext: debugger) canBeExecuted.
 
 	"Non-executable commands relative to context"
 	self assert: (StStepIntoCommand forContext: debugger) canBeExecuted.
 	self assert: (StStepOverCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StStepThroughCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StRunToSelectionCommand forContext: debugger) canBeExecuted.
+	self assert: (StStepThroughCommand forContext: debugger) canBeExecuted.
+	self assert: (StRunToSelectionCommand forContext: debugger) canBeExecuted.
 	self assert: (StProceedCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StDefineSubclassResponsabilityCommand forContext: debugger)
-			canBeExecuted.
-	self deny:
-		(StGenerateAndProceedCommand forContext: debugger) canBeExecuted.
+	self deny: (StDefineSubclassResponsabilityCommand forContext: debugger) canBeExecuted.
+	self deny: (StGenerateAndProceedCommand forContext: debugger) canBeExecuted.
 
 	"Executable commands, whatever the context"
-	self assert:
-		(StCopyStackToClipboardCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StFileOutMethodCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StPeelToFirstCommand forContext: debugger) canBeExecuted.
-	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted.
-	debugger debuggerClientModel clear
+	self assert: (StCopyStackToClipboardCommand forContext: debugger) canBeExecuted.
+	self assert: (StFileOutMethodCommand forContext: debugger) canBeExecuted.
+	self assert: (StPeelToFirstCommand forContext: debugger) canBeExecuted.
+	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted
 ]
 
 { #category : 'tests' }
 StDebuggerCommandTest >> testCommandsInMissingSubclassResponsibilityContext [
 
 	| debugger |
-	debugger := debuggerProvider
-		            debuggerWithMissingSubclassResponsibilityContext.
+	debugger := self clearAfterTest: debuggerProvider debuggerWithMissingSubclassResponsibilityContext.
 
 	"Executable commands relative to context"
-	self assert:
-		(StDefineSubclassResponsabilityCommand forContext: debugger)
-			canBeExecuted.
-	self assert:
-		(StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
+	self assert: (StDefineSubclassResponsabilityCommand forContext: debugger) canBeExecuted.
+	self assert: (StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
 	self assert: (StRestartCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StReturnValueCommand forContext: debugger) canBeExecuted.
+	self assert: (StReturnValueCommand forContext: debugger) canBeExecuted.
 
 	"Non-executable commands relative to context"
 	self deny: (StStepIntoCommand forContext: debugger) canBeExecuted.
 	self deny: (StStepOverCommand forContext: debugger) canBeExecuted.
 	self deny: (StStepThroughCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StRunToSelectionCommand forContext: debugger) canBeExecuted.
+	self deny: (StRunToSelectionCommand forContext: debugger) canBeExecuted.
 	self deny: (StProceedCommand forContext: debugger) canBeExecuted.
 	self deny: (StDefineClassCommand forContext: debugger) canBeExecuted.
 	self deny: (StDefineMethodCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StGenerateAndProceedCommand forContext: debugger) canBeExecuted.
+	self deny: (StGenerateAndProceedCommand forContext: debugger) canBeExecuted.
 
 	"Executable commands, whatever the context"
-	self assert:
-		(StCopyStackToClipboardCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StFileOutMethodCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StPeelToFirstCommand forContext: debugger) canBeExecuted.
-	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted.
-
-	debugger debuggerClientModel clear
+	self assert: (StCopyStackToClipboardCommand forContext: debugger) canBeExecuted.
+	self assert: (StFileOutMethodCommand forContext: debugger) canBeExecuted.
+	self assert: (StPeelToFirstCommand forContext: debugger) canBeExecuted.
+	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted
 ]
 
 { #category : 'tests' }
 StDebuggerCommandTest >> testCommandsInMissingSubclassResponsibilityContextWithSteps [
 
-	| debugger |
-	[
-	debugger := debuggerProvider
-		            debuggerWithMissingSubclassResponsibilityContextWithSteps.
-	self assert: debugger debuggerClientModel
-			isInterruptedContextSubclassResponsibilityException.
+	 | debugger |
+	 debugger := self clearAfterTest: debuggerProvider debuggerWithMissingSubclassResponsibilityContextWithSteps.
+	 self assert: debugger debuggerClientModel isInterruptedContextSubclassResponsibilityException.
 
-	"Executable commands relative to context"
-	self assert:
-		(StDefineSubclassResponsabilityCommand forContext: debugger)
-			canBeExecuted.
-	self assert:
-		(StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
-	self assert: (StRestartCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StReturnValueCommand forContext: debugger) canBeExecuted.
+	 "Executable commands relative to context"
+	 self assert: (StDefineSubclassResponsabilityCommand forContext: debugger) canBeExecuted.
+	 self assert: (StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
+	 self assert: (StRestartCommand forContext: debugger) canBeExecuted.
+	 self assert: (StReturnValueCommand forContext: debugger) canBeExecuted.
 
-	"Non-executable commands relative to context"
-	self deny: (StStepIntoCommand forContext: debugger) canBeExecuted.
-	self deny: (StStepOverCommand forContext: debugger) canBeExecuted.
-	self deny: (StStepThroughCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StRunToSelectionCommand forContext: debugger) canBeExecuted.
-	self deny: (StProceedCommand forContext: debugger) canBeExecuted.
-	self deny: (StDefineClassCommand forContext: debugger) canBeExecuted.
-	self deny: (StDefineMethodCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StGenerateAndProceedCommand forContext: debugger) canBeExecuted.
+	 "Non-executable commands relative to context"
+	 self deny: (StStepIntoCommand forContext: debugger) canBeExecuted.
+	 self deny: (StStepOverCommand forContext: debugger) canBeExecuted.
+	 self deny: (StStepThroughCommand forContext: debugger) canBeExecuted.
+	 self deny: (StRunToSelectionCommand forContext: debugger) canBeExecuted.
+	 self deny: (StProceedCommand forContext: debugger) canBeExecuted.
+	 self deny: (StDefineClassCommand forContext: debugger) canBeExecuted.
+	 self deny: (StDefineMethodCommand forContext: debugger) canBeExecuted.
+	 self deny: (StGenerateAndProceedCommand forContext: debugger) canBeExecuted.
 
-	"Executable commands, whatever the context"
-	self assert:
-		(StCopyStackToClipboardCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StFileOutMethodCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StPeelToFirstCommand forContext: debugger) canBeExecuted.
-	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted ]
-		ensure: [ debugger ifNotNil: [ debugger clear ] ]
+	 "Executable commands, whatever the context"
+	 self assert: (StCopyStackToClipboardCommand forContext: debugger) canBeExecuted.
+	 self assert: (StFileOutMethodCommand forContext: debugger) canBeExecuted.
+	 self assert: (StPeelToFirstCommand forContext: debugger) canBeExecuted.
+	 self assert: (StWhereIsCommand forContext: debugger) canBeExecuted
 ]
 
 { #category : 'tests' }
 StDebuggerCommandTest >> testCommandsInRunnableContext [
 
 	| debugger |
-	debugger := debuggerProvider debuggerWithRunnableContext.
+	debugger := self clearAfterTest: debuggerProvider debuggerWithRunnableContext.
 
 	"Executable commands relative to context"
 	self assert: (StStepIntoCommand forContext: debugger) canBeExecuted.
 	self assert: (StStepOverCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StStepThroughCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StRunToSelectionCommand forContext: debugger) canBeExecuted.
+	self assert: (StStepThroughCommand forContext: debugger) canBeExecuted.
+	self assert: (StRunToSelectionCommand forContext: debugger) canBeExecuted.
 	self assert: (StProceedCommand forContext: debugger) canBeExecuted.
 	self assert: (StRestartCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StReturnValueCommand forContext: debugger) canBeExecuted.
+	self assert: (StReturnValueCommand forContext: debugger) canBeExecuted.
 
 	"Non-executable commands relative to context"
-	self deny:
-		(StDefineSubclassResponsabilityCommand forContext: debugger)
-			canBeExecuted.
+	self deny: (StDefineSubclassResponsabilityCommand forContext: debugger) canBeExecuted.
 	self deny: (StDefineMethodCommand forContext: debugger) canBeExecuted.
 	self deny: (StDefineClassCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
-	self deny:
-		(StGenerateAndProceedCommand forContext: debugger) canBeExecuted.
+	self deny: (StDefineMissingEntityCommand forContext: debugger) canBeExecuted.
+	self deny: (StGenerateAndProceedCommand forContext: debugger) canBeExecuted.
 
 	"Executable commands, whatever the context"
-	self assert:
-		(StCopyStackToClipboardCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StFileOutMethodCommand forContext: debugger) canBeExecuted.
-	self assert:
-		(StPeelToFirstCommand forContext: debugger) canBeExecuted.
+	self assert: (StCopyStackToClipboardCommand forContext: debugger) canBeExecuted.
+	self assert: (StFileOutMethodCommand forContext: debugger) canBeExecuted.
+	self assert: (StPeelToFirstCommand forContext: debugger) canBeExecuted.
 	self assert: (StProceedCommand forContext: debugger) canBeExecuted.
-	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted.
-	debugger debuggerClientModel clear
+	self assert: (StWhereIsCommand forContext: debugger) canBeExecuted
 ]
 
 { #category : 'tests - execution' }
@@ -427,38 +341,20 @@ StDebuggerCommandTest >> testStDefineMethodCommandExecution [
 { #category : 'tests - execution' }
 StDebuggerCommandTest >> testStDefineMissingEntityCommandExecution [
 
-	| debugger command oldActionModel |
+	| debugger command |
 	StTestDebuggerProvider compileMissingClassContextBuilder.
-	debugger := debuggerProvider debuggerWithDNUContext.
+	debugger := self clearAfterTest: debuggerProvider debuggerWithDNUContext.
 	command := StDefineMissingEntityCommand forContext: debugger.
-	self
-		assertCollection: (command subCommands collect: [ :c | c class ])
-		equals: StDefineMissingEntityCommand allSubclasses.
-	self
-		assert: command applicableCommand class
-		identicalTo: StDefineMethodCommand.
+	self assertCollection: (command subCommands collect: [ :c | c class ]) equals: StDefineMissingEntityCommand allSubclasses.
+	self assert: command applicableCommand class identicalTo: StDefineMethodCommand.
 
-	oldActionModel := debugger debuggerClientModel.
-	debugger := debuggerProvider debuggerWithMissingClassContext.
+	debugger := self clearAfterTest: debuggerProvider debuggerWithMissingClassContext.
 	command := StDefineMissingEntityCommand forContext: debugger.
-	oldActionModel clear.
-	oldActionModel session clear.
-	self
-		assert: command applicableCommand class
-		identicalTo: StDefineClassCommand.
+	self assert: command applicableCommand class identicalTo: StDefineClassCommand.
 
-	oldActionModel := debugger debuggerClientModel.
-	debugger := debuggerProvider
-		            debuggerWithMissingSubclassResponsibilityContext.
+	debugger := self clearAfterTest: debuggerProvider debuggerWithMissingSubclassResponsibilityContext.
 	command := StDefineMissingEntityCommand forContext: debugger.
-
-	self
-		assert: command applicableCommand class
-		identicalTo: StDefineSubclassResponsabilityCommand.
-
-	oldActionModel clear.
-	oldActionModel session clear.
-	debugger debuggerClientModel clear
+	self assert: command applicableCommand class identicalTo: StDefineSubclassResponsabilityCommand
 ]
 
 { #category : 'tests - execution' }
