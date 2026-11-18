@@ -25,13 +25,15 @@ StDebuggerClientModelTest class >> benchFilterStack [
 StDebuggerClientModelTest >> announcementsDuring: aBlock [
 	"Answer the announcements of the client model during aBlock, with the top context each one saw"
 
-	| announcements |
+	| announcements announcer |
 	announcements := OrderedCollection new.
-	debugActionModel announcer
+	"Keep the announcer: proceeding or clearing drops it from the model"
+	announcer := debugActionModel announcer.
+	announcer
 		when: StDebuggeClientModelAnnouncement
 		do: [ :each | announcements add: each class -> debugActionModel topContext ]
 		for: self.
-	aBlock value.
+	[ aBlock value ] ensure: [ announcer unsubscribe: self ].
 	^ announcements
 ]
 
