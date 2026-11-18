@@ -171,6 +171,32 @@ StDebuggerTest >> testAcceptCodeChangesForContext [
 ]
 
 { #category : 'tests - code pane' }
+StDebuggerTest >> testAcceptCodeChangesUpdatesAfterClearingUnsavedChanges [
+	"The debugger updates once the accepted code is no longer an unsaved change: updating earlier would put it back in the code pane"
+
+	| context newSource unsavedChangesWhenUpdated |
+	dbg := StTestDebuggerProvider new debuggerWithObjectHalting.
+	dbg
+		application: dbg class currentApplication;
+		initialize;
+		buildContextMenus.
+	context := dbg stackTable items first.
+	newSource := 'haltingMethod ^1+1 squared'.
+	dbg code type: newSource.
+	dbg code update.
+	dbg unsavedCodeChanges at: context put: newSource.
+	dbg debuggerClientModel announcer
+		when: StDebuggerClientModelContextChangedAnnouncement
+		do: [ unsavedChangesWhenUpdated := dbg unsavedCodeChanges copy ]
+		for: self.
+
+	dbg acceptCodeChanges: newSource forContext: context.
+
+	self assertEmpty: unsavedChangesWhenUpdated.
+	self assert: dbg code text equals: newSource
+]
+
+{ #category : 'tests - code pane' }
 StDebuggerTest >> testCancelCodeChangesFor [
 	| firstContext lastContext |
 	dbg := self debuggerOn: session.

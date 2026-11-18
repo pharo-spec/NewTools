@@ -75,9 +75,7 @@ StDebuggerClientModel >> breakOnStackAtSelection: anInterval inContext: aContext
 StDebuggerClientModel >> clear [
 
 	self unsubscribeFromSystemAnnouncer.
-	self removeActionsForSession: self session.
-	self raiseUpdateEvents:
-		(StDebuggerClientModelClearAnnouncement debuggerClientModel: self).
+	self raiseUpdateEvents: (StDebuggerClientModelClearAnnouncement debuggerClientModel: self).
 	announcer := nil
 ]
 
@@ -87,7 +85,8 @@ StDebuggerClientModel >> clearDebugSession [
 	contextPredicate := nil.
 	self session
 		terminate;
-		clear
+		clear.
+	self clear
 ]
 
 { #category : 'context' }
@@ -182,6 +181,7 @@ StDebuggerClientModel >> filterStack: aStack [
 StDebuggerClientModel >> implementMissingMethod [
 
 	(StDebuggerMethodImplementor forSession: self session) implementMissingMethod.
+	self updateContextChanged.
 	self updateTopContext
 ]
 
@@ -281,7 +281,9 @@ StDebuggerClientModel >> newStepAnnouncement [
 
 { #category : 'debug - execution' }
 StDebuggerClientModel >> peelToFirstLike: aContext [
+
 	self session peelToFirstLike: aContext.
+	self updateContextChanged.
 	self updateTopContext
 ]
 
@@ -328,9 +330,10 @@ StDebuggerClientModel >> preventUpdatesDuring: aBlock [
 StDebuggerClientModel >> proceedDebugSession [
 
 	contextPredicate := nil.
-	self session
-		resume;
-		clear
+	self session resume.
+	self updateResume.
+	self session clear.
+	self clear
 ]
 
 { #category : 'events-triggering' }
@@ -366,49 +369,24 @@ StDebuggerClientModel >> referenceContext [
 	^topContext receiver signalerContext 
 ]
 
-{ #category : 'events - handling' }
-StDebuggerClientModel >> registerActionsForSession: aSession [
-
-	self flag: 'Rewrite it'.
-	aSession ifNotNil: [
-		aSession
-			when: #restart send: #updateRestart to: self;
-			when: #resume send: #updateResume to: self;
-			when: #stepInto send: #updateStep to: self;
-			when: #stepOver send: #updateStep to: self;
-			when: #stepThrough send: #updateStep to: self;
-			when: #contextChanged send: #updateContextChanged to: self;
-			when: #clear send: #clear to: self ]
-]
-
-{ #category : 'events - removing' }
-StDebuggerClientModel >> removeActionsForSession: aSession [
-	self flag: 'Rewrite it'.
-	aSession
-		ifNotNil: [ aSession
-				removeActionsForEvent: #restart;
-				removeActionsForEvent: #resume;
-				removeActionsForEvent: #stepInto;
-				removeActionsForEvent: #stepOver;
-				removeActionsForEvent: #stepThrough;
-				removeActionsForEvent: #contextChanged ]
-]
-
 { #category : 'debug - execution' }
 StDebuggerClientModel >> restartContext: aContext [
 
 	self session restart: aContext.
+	self updateRestart.
 	self updateTopContext
 ]
 
 { #category : 'debug - execution' }
 StDebuggerClientModel >> returnValueFromExpression: aString fromContext: aContext [
+
 	| value |
 	value := session class compiler
-		source: aString;
-		context: aContext;
-		evaluate.
+		         source: aString;
+		         context: aContext;
+		         evaluate.
 	self session returnValue: value from: aContext.
+	self updateContextChanged.
 	self updateTopContext
 ]
 
@@ -432,10 +410,8 @@ StDebuggerClientModel >> session [
 
 { #category : 'accessing' }
 StDebuggerClientModel >> session: aDebugSession [
-	session ifNotNil: [ self removeActionsForSession: session ].
-	session := aDebugSession.
-	self registerActionsForSession: self session.
 
+	session := aDebugSession.
 	self updateIfAble
 ]
 
@@ -468,17 +444,18 @@ StDebuggerClientModel >> stepInto: aContext [
 	aContext stepIntoQuickMethod: true.
 	self session stepInto: aContext.
 	aContext stepIntoQuickMethod: false.
+	self updateStep.
 	self updateTopContext
 ]
 
 { #category : 'debug - stepping' }
 StDebuggerClientModel >> stepOver: aContext [
 
-	filterStack := (self topContext method hasPragmaNamed:
-		                #debuggerCompleteToSender)
+	filterStack := (self topContext method hasPragmaNamed: #debuggerCompleteToSender)
 		               ifTrue: [ false ]
 		               ifFalse: [ self class shouldFilterStack ].
 	self session stepOver: aContext.
+	self updateStep.
 	self updateTopContext
 ]
 
@@ -486,6 +463,7 @@ StDebuggerClientModel >> stepOver: aContext [
 StDebuggerClientModel >> stepThrough: aContext [
 
 	self session stepThrough: aContext.
+	self updateStep.
 	self updateTopContext
 ]
 
