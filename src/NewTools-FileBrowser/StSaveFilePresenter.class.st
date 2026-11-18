@@ -1,5 +1,33 @@
 "
-My responsibility is to provide dialog for SAVING files.
+I am the dialog to choose where to save a file, titled 'Save As', with a 'Save' button. `StFileDialogPresenter` describes the dialogs and their customization; here is what is specific to me.
+
+## Responsibility:
+
+- Answer the file named by the name field in the current folder, even when it does not exist yet.
+- Add the extension of the filter when the name does not have it (`StExtensionsFilter>>addExtensionTo:`).
+- Ask the user to confirm before answering an existing file.
+
+## Collaborators:
+
+- Code saving a file, e.g. `EpChunkExporter`, `Fileouter`.
+- `StFileBrowserAbstractFilter`: completes the name.
+
+## Public API and Key Messages
+
+- `okAction: aOneArgBlock`: evaluated with the chosen file; my `openModal` answers my window, not the file.
+- `extensions: aCollection`, `nameText: aString`, `selectedEntry`.
+
+## Examples
+
+```smalltalk
+StSaveFilePresenter example.
+StSaveFilePresenter exampleExtensions.
+StSaveFilePresenter exampleModal.
+```
+
+## Internal Representation
+
+- `confirmedOverwrite`: the existing file the user agreed to overwrite, so that the question is not asked twice.
 "
 Class {
 	#name : 'StSaveFilePresenter',

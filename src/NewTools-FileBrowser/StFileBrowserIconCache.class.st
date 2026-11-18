@@ -1,5 +1,38 @@
 "
-An icon cache
+I keep the icons that the file dialogs need and the icon theme may not have: folder, file, drive and terminal. My API is on the class side; I am never instantiated.
+
+## Life cycle: who creates the icons and who uses them
+
+1. My icons are PNG files encoded in base64 in my class side (`folderIconContents`, …).
+2. The first time an icon is asked (`iconNamed:`), I decode it into a `Form` and keep it in my cache; later requests answer the cached form.
+3. The file table (`StFileBrowserIconColumn`), the directory tree (`StFileSystemItemWrapper`) and the commands (`StFileBrowserCommand>>iconProvider`) ask me for icons.
+4. `reset` empties the cache, e.g. after changing an icon.
+
+## Responsibility:
+
+- Answer the folder, file, drive and terminal icons.
+- Answer any icon by name, from my own icons first, then from the icon theme.
+- Decode each icon once and cache it.
+
+## Collaborators:
+
+- `StFileBrowserIconColumn`, `StFileSystemItemWrapper`, `StFileBrowserCommand`: ask me for icons.
+
+## Public API and Key Messages
+
+- `StFileBrowserIconCache iconNamed: aSymbol`.
+- `StFileBrowserIconCache folderIcon`, `fileIcon`, `driveIcon`, `terminalIcon`.
+- `StFileBrowserIconCache reset`.
+
+## Examples
+
+```smalltalk
+StFileBrowserIconCache folderIcon.
+```
+
+## Internal Representation
+
+- `IconCache`: a class variable, a `Dictionary` from icon names to `Form`s.
 "
 Class {
 	#name : 'StFileBrowserIconCache',

@@ -1,43 +1,40 @@
 "
-This Spec presenter provides:
+I am the right part of the file browser and of the dialogs: back and forward buttons, the path of the current folder, the table of its entries, the name field, the filter drop list, a new folder and a settings button, and the preview pane. `StFileBrowserAbstractPresenter` describes how the presenters of a browser are created and work together; filters, columns and previewers have their own life cycle in `StFileBrowserAbstractFilter`, `StFileBrowserAbstractColumn` and `StFileBrowserAbstractPreviewer`.
 
-* An history of visited folder.
-* A text input used to jump to the write path.
-* A drop list used to filter the content of the fileReferenceTable
-* A text presenter to show a preview of the currently selected file.
+## Responsibility:
 
-## Example
+- List the entries of the current folder with the selected filter and the chosen columns, hiding hidden files unless `StFileBrowserSettings showHiddenFiles`.
+- Open a folder on double click, preview the selected file in the background, and put its name in the name field.
+- Go back and forward in the history, create folders, and open the settings.
+- Answer the selection (`selectedEntry`, `selectedEntries`).
 
-To open a navigation presenter for PNG files, evaluate:
+## Collaborators:
+
+- `StFileSystemPresenter` or a dialog: my owner, told when a folder is opened (`updateTreeNavigationWithFileReference:`).
+- `StPathBreadcrumbPresenter`: my path bar.
+- `StNoteBookPreviewerPresenter`: my preview pane.
+- The commands of the 'StFileBrowserNavigationMenu' (see `StFileBrowserCommand`): the context menu of my table.
+
+## Public API and Key Messages
+
+- `openFolder: aFileReference`, `defaultFolder: aFileReference`.
+- `filter: aFilter`, `filtersCustomization: aCollection`, `columns: aCollection`, `previewer: aPreviewer`, `showPreview: aBoolean`.
+- `beMultipleSelection`, `selectedEntry`, `selectedEntries`, `nameText`, `nameText: aString`.
+- `fileReferenceTable`: the table, a `SpEasyColumnViewPresenter`.
+
+## Examples
 
 ```smalltalk
 StFileNavigationSystemPresenter example.
 ```
 
-## Customization
+It opens me alone, previewing PNG files.
 
-You can customize how this presenter is displayed, with methods listed at the protocol 'api-customization'. These are some examples:
+## Internal Representation
 
-* `column: aCollectionOfColumn` : Give a `Collection` of any subclass of `StFileBrowserAbstractColumn`.
-* `defaultFoler: aFileReference`
-* `filtersCustomization: aCollectionOfFilter` : See `StFileBrowserAbstractFilter` on tge avaiable filters and how to instantiate them.
-* `previewer: aPreviewer` : See `StFileBrowserAbstractPreviewer` to check the available previewers.
-	
-## Instance variables
-
-* currentPathTextInputPresenter : <SpTextInputFieldPresenter> It's use to display the current path and there are same feature like in window 
-* nameLabel : <SpLabelPresenter>
-* nameText: <SpTextInputFieldPresenter> , use to show the name of the selected item of fileReferenceTable
-* filtersDropList <SpDropList> , use to display all the filter
-* readPointerHistoryParcour <DoubleLink> , use for the navigationSystem
-* currentDirectory , <FileReference> into there is the currentDirectory 
-* hiddenFilter <FDAbstractPredicate> there is a NullFilter or an hiddenFilter
-* columns <FDAbstractFileReferenceColumn> it's a collection of Column use by FileReferenceTable
-* previewer <FDAbstractPreviewer> 
-* nextButton <SpButton> use for the navigationSystem 
-* previousButton <SpButton> use for the navigationSystem
-* notebookPreviewer <SpNoteBook> use by the preview system
-* fileReferenceTable <SpTablePresenter> it's display children of the current directory
+- `fileReferenceTable`, `filtersDropList`, `nameText`, `pathBreadcrumbPresenter`, `notebookPreviewer`: my main subpresenters.
+- `previousButton`, `nextButton`, `newFolderButton`, `configButton`: my buttons.
+- `filter`, `previewer`, `showPreview`: the chosen filter, previewer, and whether to show the preview.
 "
 Class {
 	#name : 'StFileNavigationSystemPresenter',
@@ -135,7 +132,8 @@ StFileNavigationSystemPresenter >> connectPresenters [
 	self previousBeforeButtonAction.
 	self nextButtonAction.
 	self configButtonAction.
-	newFolderButton action: [ self createDirectory ]
+	newFolderButton action: [ self createDirectory ].
+	pathBreadcrumbPresenter whenFolderChosenDo: [ :folder | self openFolder: folder ]
 ]
 
 { #category : 'utilities' }
@@ -322,15 +320,15 @@ StFileNavigationSystemPresenter >> initializePresenters [
 
 	super initializePresenters.
 	notebookPreviewer := self instantiate: StNoteBookPreviewerPresenter.
-	pathBreadcrumbPresenter := self instantiate: StPathBreadcrumbPresenter on: self model.
+	pathBreadcrumbPresenter := self instantiate: StPathBreadcrumbPresenter.
 	nameText := self newTextInput.
 	filtersDropList := self newDropList.
 
-	self initializeToolbarButtons.	
+	self initializeToolbarButtons.
 	self initializeNavigationPresenters.
 	self initializeFilesTable.
 	self initializeFiltersDropList.
-	self openOnLastDirectory 
+	self openOnLastDirectory
 		ifTrue: [ self updateWidgetWithFileReference: self lastVisitedDirectory ]
 		ifFalse: [ self updateWidgetWithFileReference: self defaultDirectory ].
 	self initializeHistoryIteratorWith: self currentDirectory
@@ -391,12 +389,13 @@ StFileNavigationSystemPresenter >> nameTextChanged: aText [
 
 { #category : 'layout' }
 StFileNavigationSystemPresenter >> navigationLayout [
+	"The path bar takes the free width, because its links change with the current folder."
 
 	^ SpBoxLayout newLeftToRight
 		  vAlignCenter;
 		  add: previousButton expand: false;
 		  add: nextButton expand: false;
-		  add: pathBreadcrumbPresenter expand: false;
+		  add: pathBreadcrumbPresenter;
 		  addLast: newFolderButton;
 		  addLast: configButton;
 		  yourself
@@ -529,8 +528,6 @@ StFileNavigationSystemPresenter >> updateWidgetWithFileReference: aFileReference
 
 	self currentDirectory: aFileReference.
 	self updateFileReferenceTable.
-	pathBreadcrumbPresenter 
-		currentDirectory: self currentDirectory;
-		updatePathSelection: aFileReference.
-	
+	pathBreadcrumbPresenter currentDirectory: self currentDirectory.
+	aFileReference isDirectory ifFalse: [ self nameText: aFileReference basename ]
 ]

@@ -1,5 +1,5 @@
 "
-Implements an action to file in the selected file (representing a Pharo source code) into the current system
+I delete the selected entry after a confirmation, and ask again before deleting a folder that is not empty ('Remove', Meta+R, file table and directory tree menus). From the directory tree, where the deleted folder is the current one, the dialog first moves to its parent (`shouldReparent`).
 "
 Class {
 	#name : 'StFileBrowserRemoveCommand',

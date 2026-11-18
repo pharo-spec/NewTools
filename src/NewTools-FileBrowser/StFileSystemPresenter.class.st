@@ -1,18 +1,32 @@
 "
-General file system presenter, which replaces the older FileList tool.
+I am the file browser: a directory tree and a bookmark tree on the left, and on the right a navigation presenter with the path, the file table, the filters and a preview pane. I replace the old FileList tool. The file dialogs are my subclasses. `StFileBrowserAbstractPresenter` describes how the presenters of a browser are created and work together.
 
-# Examples
+## Responsibility:
 
-The default File Browser (without specifying any options), will open a presenter with Tree Navigation, Bookmarks, Breadcrumb, Navigation Buttons, File List, Filters and Preview:
+- Create and lay out my three parts: the navigation presenter (`navigationSystemClass`), the directory tree and the bookmark tree.
+- Keep them in sync: open the folder selected in the tree or in the bookmarks, and refresh them all (`updateFileSystemPresenters`).
+- Show the bookmarks and add the ones the user asks for.
+
+## Collaborators:
+
+- `StFileNavigationSystemPresenter`: my right part.
+- `StDirectoryTreePresenter`: my directory tree.
+- `StFileBrowserAbstractBookMark` and its subclasses: the bookmarks of my bookmark tree, with the 'StFileBrowserBookmarksMenu' commands.
+- `StFileBrowserAbstractColumn`: I give the default columns to the navigation presenter.
+
+## Public API and Key Messages
+
+- `StFileSystemPresenter open`: opens the file browser.
+- `disablePreview`: hides the preview pane.
+- `openFolder: aFileReference`, `expandPath: aFileReference`.
+- `title: aString`, `bookmarks: aCollection`.
+- `fileNavigationSystem`, `treeNavigationSystem`, `bookmarksTreeTable`: my parts.
+
+## Examples
+
 ```smalltalk
-StFileSystemPresenter new open.
-```
-
-Open a File Browser without the preview presenter:
-```smalltalk
-StFileSystemPresenter new
-	disablePreview;
-	open.
+StFileSystemPresenter open.
+StFileSystemPresenter exampleWithoutPreview.
 ```
 "
 Class {
@@ -43,6 +57,17 @@ StFileSystemPresenter class >> buildCommandsGroupWith: presenter forRoot: rootCo
 StFileSystemPresenter class >> defaultPreferredExtent [
 
 	^ (1100 @ 700)
+]
+
+{ #category : 'examples' }
+StFileSystemPresenter class >> exampleWithoutPreview [
+	"Opens the file browser without its preview pane."
+
+	<example>
+	^ self new
+		  disablePreview;
+		  open;
+		  yourself
 ]
 
 { #category : 'hooks' }
@@ -91,20 +116,21 @@ StFileSystemPresenter >> bookmarksTreeTable [
 { #category : 'initialization' }
 StFileSystemPresenter >> connectPresenters [
 	"Here we check that the window is displayed. 
-	If it's not, that means this is a first opening so it should preserve the path selected by the user (through openOnLastDirectory preference, or defaultRoot: message send) and not to transmit the directory selection"
+	If it's not, that means this is a first opening so it should preserve the path selected by the user (through openOnLastDirectory preference, or defaultRoot: message send) and not to transmit the directory selection.
+	Once displayed, the directory tree is expanded to the current directory, so that it shows the same folder as the file table: it cannot be expanded before."
 
 	super connectPresenters.
 
 	treeNavigationSystem transmitDo: [ :selection |
-			(self isDisplayed and: [ selection isNotNil ]) ifTrue: [
-				self updateWidgetWithFileReference: selection fileReference ] ].
+		(self isDisplayed and: [ selection isNotNil ]) ifTrue: [ self updateWidgetWithFileReference: selection fileReference ] ].
 
 	bookmarksTreeTable whenSelectionChangedDo: [ :selection |
 			selection selectedItem ifNotNil: [ :selectedItem |
-					selectedItem isComposite ifFalse: [
-						self fileNavigationSystem openFolder: selectedItem location ] ] ].
+				selectedItem isComposite ifFalse: [ self fileNavigationSystem openFolder: selectedItem location ] ] ].
 
-	self whenDisplayDo: [ self centered ]
+	self whenDisplayDo: [
+			self centered.
+			self expandPath: self currentDirectory ]
 ]
 
 { #category : 'layout' }

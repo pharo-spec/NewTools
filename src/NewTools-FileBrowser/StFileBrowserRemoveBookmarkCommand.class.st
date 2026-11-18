@@ -1,7 +1,5 @@
 "
-I'm a command use to remove bookmark
-
-
+I remove the selected bookmark ('Remove bookmark', bookmarks menu).
 "
 Class {
 	#name : 'StFileBrowserRemoveBookmarkCommand',

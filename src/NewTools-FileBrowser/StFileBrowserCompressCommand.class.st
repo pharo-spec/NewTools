@@ -1,6 +1,5 @@
 "
-Provides a command to compress the selected entry in the File Browser tool.
-
+I compress the selected entry into a `.zip` archive next to it ('Compress', Meta+Z, file table menu).
 "
 Class {
 	#name : 'StFileBrowserCompressCommand',

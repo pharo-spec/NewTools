@@ -1,5 +1,28 @@
 "
-I'm a column for display the size of the file in human readable format.
+I am the column showing the size of a file in a human readable form, e.g. '1.50 kB'. `StFileBrowserAbstractColumn` describes how columns are created and used; here is what is specific to me.
+
+## Responsibility:
+
+- Show the size of a file, 0 for a directory or when the size cannot be read.
+- Display it in SI units, or 'N/A' when there is no size.
+- Make the column 70 pixels wide and sortable.
+
+## Collaborators:
+
+- `StFileBrowserAbstractPresenter>>defaultColumns`: I am one of the default columns of the file dialogs.
+
+## Public API and Key Messages
+
+Class side: `title` ('Size'), `evaluateOn:`, `priority` (90), `formatOn:`.
+
+## Examples
+
+```smalltalk
+StFileBrowserSizeColumn scriptFilesTable.
+StFileBrowserSizeColumn column.
+```
+
+The first one opens the working directory with the icon, name and my columns; the second one answers my Spec table column.
 "
 Class {
 	#name : 'StFileBrowserSizeColumn',

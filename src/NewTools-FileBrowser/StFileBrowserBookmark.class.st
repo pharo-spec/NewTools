@@ -1,5 +1,37 @@
 "
-I represent a bookmark having location, icon, and a name.
+I am a bookmark on one folder: a leaf of the bookmark tree. `StFileBrowserAbstractBookMark` describes how bookmarks are created and used; here is what is specific to me.
+
+## Responsibility:
+
+- Know the folder I point to (`location`).
+- Create the usual bookmarks (home, working directory, image directory, desktop, documents, downloads, temporary folder) and the default bookmarks of the file dialogs (`defaultBookmarks`).
+
+## Collaborators:
+
+- `StFileSystemModel`: gets the default bookmarks from me (`initializeBookmarks`) and creates a bookmark of mine for each folder the user bookmarks (`addBookmark:`).
+- `StFileSystemPresenter`: opens my `location` when I am selected.
+- `FileLocator` / `FileReference`: my location; the usual bookmarks use a `FileLocator`, so they follow the current machine.
+
+## Public API and Key Messages
+
+- `StFileBrowserBookmark name: aString location: aFileLocator icon: aForm`: a new bookmark.
+- `StFileBrowserBookmark home`, `workingDirectory`, `image`, `desktop`, `documents`, `downloads`, `tmp`: the usual bookmarks.
+- `StFileBrowserBookmark defaultBookmarks`: a collection with one 'Bookmarks' group of drive and usual bookmarks.
+- `location`: the folder I point to.
+
+Two bookmarks are equal when they have the same name, location and icon.
+
+## Examples
+
+```smalltalk
+StFileBrowserBookmark exampleHome.
+```
+
+It answers the 'Home' bookmark on `FileLocator home` (checked by `StFileBrowserBookmarkTest`).
+
+## Internal Representation
+
+- `location`: a `FileLocator` or a `FileReference`.
 "
 Class {
 	#name : 'StFileBrowserBookmark',
@@ -63,6 +95,13 @@ StFileBrowserBookmark class >> downloads [
 		name: 'Downloads'
 		location: FileLocator downloads
 		icon: (self iconNamed: #down)
+]
+
+{ #category : 'examples' }
+StFileBrowserBookmark class >> exampleHome [
+
+	<sampleInstance>
+	^ self home
 ]
 
 { #category : 'default bookmarks' }

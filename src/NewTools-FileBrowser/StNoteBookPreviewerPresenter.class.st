@@ -1,5 +1,43 @@
 "
-I'm a notebook Presenter use by the previewer system 
+I am the preview pane of the file dialogs: a notebook with one 'Previewer' page showing the presenter built by a previewer. `StFileBrowserAbstractPreviewer` describes how previews are made.
+
+## Life cycle: who creates me and who uses me
+
+1. `StFileNavigationSystemPresenter>>initializePresenters` creates me (`instantiate:`) as its preview pane.
+2. For each selected file, its background preview process gives me the presenter of its previewer with `pageContent:`.
+3. I show a 'Loading...' text while the page is rebuilt, then the new presenter.
+
+## Responsibility:
+
+- Show the preview of the selected file in a notebook page.
+
+## Collaborators:
+
+- `StFileNavigationSystemPresenter`: creates me and gives me the previews.
+- `SpNotebookPresenter`, `SpNotebookPage`: my notebook and its page.
+
+## Public API and Key Messages
+
+- `pageContent: aPresenter`: show aPresenter in my page.
+- `pageContent`: the presenter shown.
+
+## Examples
+
+```smalltalk
+StNoteBookPreviewerPresenter exampleWithText.
+```
+
+It opens me with a text page.
+
+## Internal Representation
+
+- `notebook`: the `SpNotebookPresenter`.
+- `page`: its only `SpNotebookPage`.
+- `pageContent`: the presenter shown in the page, a text presenter at first.
+
+### Implementation Points
+
+My class side keeps its own folder and file icons, encoded in base64, in an icon cache (`iconNamed:`).
 "
 Class {
 	#name : 'StNoteBookPreviewerPresenter',
@@ -34,6 +72,19 @@ K2bem4F//AF4U/IYvdYl9c0UmAwzw0zIZvyL3thsrUYA/myU1wWCkou7U+IDRC9vHQ/av3De
 Pjm/3Cki9K9uh3c314GZTWwKyZCETOOOkAAEgqXl5mh7a6O2ADAYfATHR4ckSUKapkVlWYZz
 DucceZ4Tr8VUTitIorO3H8zf4Af4LZ/wICQO43m97AC7MHq7Papn1TndA7h/fh9GTw9B8TZZ
 kd007kzugEASi/XGaH2lWStr4Ft8AlWZooQwDP14AAAAAElFTkSuQmCC'
+]
+
+{ #category : 'examples' }
+StNoteBookPreviewerPresenter class >> exampleWithText [
+	"Opens the preview pane with a text presenter as its page, as the text previewer gives one."
+
+	| notebook |
+	notebook := self new.
+	notebook pageContent: (notebook newText
+			 text: 'The first characters of the selected file';
+			 yourself).
+	notebook open title: 'Preview pane'.
+	^ notebook
 ]
 
 { #category : 'private - icons' }

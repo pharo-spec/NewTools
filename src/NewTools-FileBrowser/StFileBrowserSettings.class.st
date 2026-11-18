@@ -1,6 +1,36 @@
 "
-Provides global settings to the File Browser. See class side for details.
+I keep the settings of the file browser and the dialogs, shown in the settings browser under Tools > File Browser. My API is on the class side.
 
+## Life cycle: who sets the settings and who reads them
+
+1. `groupSettingsOn:` and the `…On: aBuilder` methods declare the settings for the settings browser, where the user changes them; the settings button of the dialogs opens it on them.
+2. `StFileSystemModel` reads `defaultDirectory` and `showAlwaysDefaultBookmarks`; `StFileNavigationSystemPresenter` reads `openOnLastDirectory`, `showHiddenFiles` and `showPreview`; `StTerminalInterface` reads `macTerminalProgram`.
+3. `StFileBrowserToggleHiddenFilesCommand` switches `showHiddenFiles` from the context menu.
+
+## Responsibility:
+
+- Know where the dialogs open: the default folder, or the last visited one.
+- Know what the dialogs show: hidden files, preview pane, default bookmarks.
+- Know the terminal program to open on macOS.
+
+## Collaborators:
+
+- `StFileSystemModel`, `StFileNavigationSystemPresenter`, `StTerminalInterface`, `StFileBrowserToggleHiddenFilesCommand`: read or change my settings.
+- `StSettingsBrowser`: shows them.
+
+## Public API and Key Messages
+
+- `defaultDirectory`, `openOnLastDirectory`, `showHiddenFiles`, `showPreview`, `showAlwaysDefaultBookmarks`, `macTerminalProgram`, each with its setter (e.g. `showHiddenFiles: aBoolean`).
+
+## Examples
+
+```smalltalk
+StFileBrowserSettings scriptOpenSettings.
+```
+
+## Internal Representation
+
+One class variable per setting, initialized lazily by its getter.
 "
 Class {
 	#name : 'StFileBrowserSettings',
@@ -125,6 +155,16 @@ StFileBrowserSettings class >> openOnLastDirectoryOn: aBuilder [
 		label: 'Open on last visited directory';
 		description: 'Open a new instance on the last visited directory';
 		target: self
+]
+
+{ #category : 'script' }
+StFileBrowserSettings class >> scriptOpenSettings [
+	"Opens the settings browser on the File Browser settings, as the settings button of the file dialogs does."
+
+	<example>
+	^ (StSettingsBrowser newApplication: StPharoApplication current)
+		  selectPath: #( tools fileBrowser );
+		  open
 ]
 
 { #category : 'settings' }

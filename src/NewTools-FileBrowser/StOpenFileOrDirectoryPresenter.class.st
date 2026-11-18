@@ -1,6 +1,26 @@
 "
-This is an abstract class to group open dialog presenter behavior.
-See subclasses for specific users.
+I am the abstract root of the open dialogs, `StOpenFilePresenter` and `StOpenDirectoryPresenter`. `StFileDialogPresenter` describes the dialogs and their customization.
+
+## Responsibility:
+
+- Show an 'Open' confirm button.
+- Allow the user to select several entries (`beMultipleSelection`, `selectFiles:`).
+- Answer the selected entries, or the current folder when nothing is selected and folders can be chosen.
+
+## Collaborators:
+
+- `StFileNavigationSystemPresenter`: holds the selection.
+
+## Public API and Key Messages
+
+- `beMultipleSelection`, `selectFiles: aCollection`, `selectedEntries`.
+
+## Examples
+
+```smalltalk
+StOpenFilePresenter example.
+StOpenDirectoryPresenter example.
+```
 "
 Class {
 	#name : 'StOpenFileOrDirectoryPresenter',
