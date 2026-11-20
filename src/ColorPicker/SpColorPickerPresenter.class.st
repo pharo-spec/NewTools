@@ -27,6 +27,18 @@ SpColorPickerPresenter class >> open [
 	^ (self newApplication: StPharoApplication current) open
 ]
 
+{ #category : 'accessing' }
+SpColorPickerPresenter >> color [
+
+	^ colorPickerPresenter color
+]
+
+{ #category : 'accessing' }
+SpColorPickerPresenter >> color: aColor [
+
+	^ colorPickerPresenter setColor: aColor
+]
+
 { #category : 'events' }
 SpColorPickerPresenter >> colorChanged [
 
