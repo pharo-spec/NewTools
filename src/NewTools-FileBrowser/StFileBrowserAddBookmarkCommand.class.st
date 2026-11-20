@@ -1,5 +1,5 @@
 "
-I'm a command use to add bookmark
+I add the selected folder to the shared bookmarks ('Add to bookmarks', file table menu). I can only run on a directory.
 "
 Class {
 	#name : 'StFileBrowserAddBookmarkCommand',

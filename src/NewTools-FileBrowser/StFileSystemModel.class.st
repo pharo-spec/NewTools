@@ -1,11 +1,46 @@
 "
-It provides the following file system services to UI:
+I am the model of the file browser and the dialogs: the current folder and its history for one browser, and, shared by all browsers, the bookmarks and the last visited folder.
 
-- History
-- Default directory (global variable).
-- Last visited directory (global variable).
-- Directory opening and creation.
-- Bookmarks
+## Life cycle: who creates me and who uses me
+
+1. `StFileBrowserAbstractPresenter class>>defaultModel` creates me for each browser or dialog (or the code opening one gives me with `on:`), and all its presenters share me.
+2. The presenters change my `currentDirectory` when the user opens a folder; I check that it is an existing folder and remember it as the last visited one.
+3. `openFolder:` records the current folder in my `history`, a `ConfigurableHistoryIterator` set up by the presenters (back and forward buttons).
+4. My class side keeps the bookmarks of all the dialogs (see `StFileBrowserAbstractBookMark`) and the last visited folder, used when `StFileBrowserSettings openOnLastDirectory`.
+
+## Responsibility:
+
+- Know the current folder and its history.
+- Create a folder in the current one (`createDirectory:`), refusing a name already used.
+- Keep the shared bookmarks and the last visited folder, and give the default folder of the settings.
+
+## Collaborators:
+
+- `StFileBrowserAbstractPresenter` and its subclasses: my users.
+- `StFileBrowserBookmark`: the default bookmarks.
+- `StFileBrowserSettings`: the default folder and whether to keep the default bookmarks.
+
+## Public API and Key Messages
+
+- `currentDirectory`, `currentDirectory: aFileReference` (signals `DirectoryDoesNotExist` for a missing folder).
+- `history`, `history:`, `openFolder: aFileReference`.
+- `createDirectory: aString`.
+- `bookmarks`, `addBookmark: aFileReference`, `resetBookmarks`, `StFileSystemModel addBookmarkNamed:location:iconName:`.
+- `defaultDirectory`, `lastVisitedDirectory`.
+- `StFileSystemModel sharedState`, `StFileSystemModel restoreSharedState: aState`: copy and restore the shared bookmarks and last visited directory; the tests use them (`StFileBrowserSharedStateTestCase`) to leave the dialogs as they found them.
+
+## Examples
+
+```smalltalk
+StFileSystemModel exampleOnWorkingDirectory.
+```
+
+## Internal Representation
+
+- `currentDirectory`: a `FileReference`.
+- `history`: a `ConfigurableHistoryIterator` on the visited folders.
+- `Bookmarks`: class variable, the shared bookmarks.
+- `LastVisitedDirectory`: class variable, the last folder set as current directory, by any browser.
 "
 Class {
 	#name : 'StFileSystemModel',
@@ -45,6 +80,15 @@ StFileSystemModel class >> defaultDirectory [
 	^ StFileBrowserSettings defaultDirectory.
 ]
 
+{ #category : 'examples' }
+StFileSystemModel class >> exampleOnWorkingDirectory [
+
+	<sampleInstance>
+	^ self new
+		  currentDirectory: FileLocator workingDirectory asFileReference;
+		  yourself
+]
+
 { #category : 'initialization' }
 StFileSystemModel class >> initializeBookmarks [
 	"Set the initial <Collection> of receiver's bookmarks"
@@ -63,6 +107,23 @@ StFileSystemModel class >> lastVisitedDirectory [
 			 do: [ false ] ]) ifFalse: [ 
 		LastVisitedDirectory := self defaultDirectory ].
 	^ LastVisitedDirectory
+]
+
+{ #category : 'accessing - shared state' }
+StFileSystemModel class >> restoreSharedState: anArray [
+	"Set the state shared by all the file browsers and dialogs back to anArray, answered by sharedState."
+
+	Bookmarks := anArray first.
+	LastVisitedDirectory := anArray second
+]
+
+{ #category : 'accessing - shared state' }
+StFileSystemModel class >> sharedState [
+	"Answer a copy of the state shared by all the file browsers and dialogs, the bookmarks and the last visited directory, to give back to restoreSharedState:. Tests use it to leave this state as they found it."
+
+	^ {
+		  (Bookmarks ifNotNil: [ :bookmarks | bookmarks collect: [ :each | each copy ] ]).
+		  LastVisitedDirectory }
 ]
 
 { #category : 'adding' }

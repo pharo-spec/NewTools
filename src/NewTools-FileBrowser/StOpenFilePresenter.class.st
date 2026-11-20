@@ -1,10 +1,30 @@
 "
-My responsibility is to provide dialog for selecting Files.
+I am the dialog to choose a file to open, titled 'Select File To Open'. `StFileDialogPresenter` describes the dialogs and their customization.
 
-see my super for more information about customization
+## Responsibility:
 
-examples see class side method example
+- Accept only a file as choice, not a folder.
+- Tell whether several files can be chosen (`isMultipleSelection`).
 
+## Collaborators:
+
+- Code asking the user for a file, e.g. `StLabeledSettingFileSelectionPresenter`, `IceTipFilePresenter`.
+
+## Public API and Key Messages
+
+- `extensions: aCollection named: aString` then `openModal`: answers the selected files, or nil when cancelled.
+- `beMultipleSelection`, `isMultipleSelection`.
+
+## Examples
+
+```smalltalk
+StOpenFilePresenter example.
+StOpenFilePresenter exampleExtensions.
+StOpenFilePresenter examplePreviewer.
+StOpenFilePresenter exampleModal.
+```
+
+`example` inspects the chosen file, `exampleExtensions` lists only Pharo images, `examplePreviewer` previews with an inspector, and `exampleModal` waits for the choice.
 "
 Class {
 	#name : 'StOpenFilePresenter',

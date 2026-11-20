@@ -1,21 +1,48 @@
 "
-I provide a windowPathEditor 
+I am the path bar of the file browser and the dialogs: the current folder as links, one per parent folder, and a button to switch to a text field where the user types a path.
 
-API
+## Life cycle: who creates me and who uses me
 
-- `currentDirectory:  aFileReference` see example class side 
-- `presenterUI: theUIUsingThisPresenter` you have to send this message see the following example:
+1. `StFileNavigationSystemPresenter>>initializePresenters` creates me, and its `connectPresenters` asks me to tell it the folder the user chooses (`whenFolderChosenDo:`), to open it (`openFolder:`).
+2. Each time its current folder changes (`updateWidgetWithFileReference:`), it gives me the folder with `currentDirectory:`; I show its path, without telling it back.
+3. When the user clicks a link, or types the path of an existing folder and presses Return or the edit button, I show that folder and evaluate the block given to `whenFolderChosenDo:` with it.
+
+I do not depend on my owner: I can be used alone, as `example` does.
+
+## Responsibility:
+
+- Show the path of the current folder as links (`StPathPresenter`), or as text while editing.
+- Tell my user which folder was chosen, by link or by typed path.
+- Refuse a typed path that is not an existing folder, and keep the text field so that it can be corrected.
+
+## Collaborators:
+
+- `StFileNavigationSystemPresenter`: my owner; gives me the current folder and opens the folder I announce.
+- `StPathPresenter`: shows the links.
+
+## Public API and Key Messages
+
+- `currentDirectory: aFileReference`, `currentDirectory`.
+- `whenFolderChosenDo: aOneArgBlock`.
+- `beginEditing`, `acceptPath: aString`, `cancelEditing`, `isEditing`.
+
+## Examples
 
 ```smalltalk
-		 MyUi >> initializePresenters
-			...
-			maVar := self instantiate: StPathBreadcrumbPresenter.
-			maVar presenterUI: self.
-			...
+StPathBreadcrumbPresenter example.
 ```
-			
-UI using this widget have to define openOn: aFileReference
 
+## Internal Representation
+
+- `currentDirectory`: the `FileReference` shown.
+- `folderChosenAction`: the block given to `whenFolderChosenDo:`.
+- `path`: the links, a `StPathPresenter`.
+- `textInput`: the path text field (`pathTextInput`).
+- `editButton`: starts editing, or accepts the typed path while editing.
+
+### Implementation Points
+
+Editing replaces the links by the text field in my layout (`SpBoxLayout>>replace:with:`), and changing the folder replaces the links in the layout of `StPathPresenter`: nothing is rebuilt.
 "
 Class {
 	#name : 'StPathBreadcrumbPresenter',
@@ -24,7 +51,8 @@ Class {
 		'textInput',
 		'editButton',
 		'path',
-		'isInEditMode'
+		'currentDirectory',
+		'folderChosenAction'
 	],
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
@@ -33,28 +61,83 @@ Class {
 
 { #category : 'examples' }
 StPathBreadcrumbPresenter class >> example [
+	"Opens the path bar alone on the image directory: click a folder to show its path, or the edit button to type one."
+
 	<example>
-	^ self new
-		currentDirectory: FileLocator imageDirectory;
-		open
+	| breadcrumb |
+	breadcrumb := self new
+		              currentDirectory: FileLocator imageDirectory asFileReference;
+		              yourself.
+	breadcrumb open title: 'Path bar'.
+	^ breadcrumb
+]
+
+{ #category : 'editing' }
+StPathBreadcrumbPresenter >> acceptPath: aString [
+	"Choose the folder whose path the user typed. When it is not an existing folder, tell the user and keep the text field, so that the path can be corrected."
+
+	| folder |
+	folder := aString asString asFileReference.
+	(folder exists and: [ folder isDirectory ]) ifFalse: [ ^ self inform: 'You have to input an existing path to a directory' ].
+	self chooseFolder: folder.
+	self endEditing
+]
+
+{ #category : 'editing' }
+StPathBreadcrumbPresenter >> beginEditing [
+	"Replace the links by the text field, to let the user type a path."
+
+	self isEditing ifTrue: [ ^ self ].
+	self layout replace: path with: textInput.
+	textInput
+		selectAll;
+		takeKeyboardFocus
+]
+
+{ #category : 'editing' }
+StPathBreadcrumbPresenter >> cancelEditing [
+	"Forget what the user typed and show the links again."
+
+	currentDirectory ifNotNil: [ :folder | textInput text: folder fullName ].
+	self endEditing
+]
+
+{ #category : 'private' }
+StPathBreadcrumbPresenter >> chooseFolder: aFileReference [
+
+	self currentDirectory: aFileReference.
+	folderChosenAction value: aFileReference
+]
+
+{ #category : 'initialization' }
+StPathBreadcrumbPresenter >> connectPresenters [
+
+	path action: [ :folder | self chooseFolder: folder ].
+	textInput whenSubmitDo: [ :text | self acceptPath: text ].
+	editButton action: [
+			self isEditing
+				ifTrue: [ self acceptPath: textInput text ]
+				ifFalse: [ self beginEditing ] ]
 ]
 
 { #category : 'accessing' }
 StPathBreadcrumbPresenter >> currentDirectory [
-	^ self owner ifNotNil: #currentDirectory
+
+	^ currentDirectory
 ]
 
 { #category : 'accessing' }
 StPathBreadcrumbPresenter >> currentDirectory: aFileReference [
+	"Show the path of aFileReference, as links and in the text field, without announcing it."
 
+	currentDirectory := aFileReference.
 	textInput text: aFileReference fullName.
-	path file: aFileReference.
-	self needRebuild: false.
-	self build
+	path file: aFileReference
 ]
 
 { #category : 'layout' }
 StPathBreadcrumbPresenter >> defaultLayout [
+	"The links are shown; while editing, the text field takes their place in this same layout (see beginEditing)."
 
 	^ SpBoxLayout newLeftToRight
 		  vAlignCenter;
@@ -66,50 +149,38 @@ StPathBreadcrumbPresenter >> defaultLayout [
 		  yourself
 ]
 
-{ #category : 'layout' }
-StPathBreadcrumbPresenter >> editablelayout [
+{ #category : 'accessing' }
+StPathBreadcrumbPresenter >> editButton [
 
-	^ SpBoxLayout newLeftToRight
-		  add: textInput;
-		  add: editButton
-		  expand: false
-		  fill: false
-		  padding: 0;
-		  yourself
+	^ editButton
 ]
 
-{ #category : 'accessing' }
-StPathBreadcrumbPresenter >> entityText [
-	^ textInput
+{ #category : 'private' }
+StPathBreadcrumbPresenter >> endEditing [
+
+	self isEditing ifFalse: [ ^ self ].
+	self layout replace: textInput with: path
 ]
 
 { #category : 'initialization' }
 StPathBreadcrumbPresenter >> initializePresenters [
 
-	textInput := self newTextInput.
 	path := self instantiate: StPathPresenter.
+	textInput := self newTextInput.
 	editButton := self newButton.
+	folderChosenAction := [ :folder |  ].
 
-	isInEditMode := false.
-
-	self path action: [ :fileReference | self updatePathSelection: fileReference ].
-
-	self entityText whenSubmitDo: [ :newText | self pathTextChangedTo: newText ].
-
-	textInput placeholder: 'path/to/file'.
-
+	textInput placeholder: 'path/to/folder'.
 	editButton
 		addStyle: 'small';
 		icon: (self application iconNamed: #edit);
-		help: 'Edit the path to the current folder';
-		action: [
-			self needRebuild: false.
+		help: 'Edit the path to the current folder'
+]
 
-			isInEditMode
-				ifTrue: [ self pathTextChangedTo: self entityText text ]
-				ifFalse: [
-					self layout: self editablelayout.
-					isInEditMode := isInEditMode not ] ]
+{ #category : 'editing' }
+StPathBreadcrumbPresenter >> isEditing [
+
+	^ self layout presenters includes: textInput
 ]
 
 { #category : 'accessing' }
@@ -117,27 +188,15 @@ StPathBreadcrumbPresenter >> path [
 	^ path
 ]
 
-{ #category : 'callbacks' }
-StPathBreadcrumbPresenter >> pathTextChangedTo: aStringOrText [
+{ #category : 'accessing' }
+StPathBreadcrumbPresenter >> pathTextInput [
 
-	| fileReference |
-
-	fileReference := aStringOrText asString asFileReference.
-	(fileReference exists and: [ fileReference isDirectory ])
-		ifTrue: [ self updatePathSelection: fileReference ]
-		ifFalse: [ self inform: 'You have to input an existing path to a directory' ].
-	isInEditMode := false.
-	self layout: self defaultLayout.
-
+	^ textInput
 ]
 
-{ #category : 'callbacks' }
-StPathBreadcrumbPresenter >> updatePathSelection: fileReference [
-	"Private - Receiver's path has changed, update owner's presenters. Prevent recursive updating because path selection could be triggered from file table or file tree presenters"
+{ #category : 'api - events' }
+StPathBreadcrumbPresenter >> whenFolderChosenDo: aOneArgBlock [
+	"Evaluate aOneArgBlock with the folder the user chooses, by clicking a link or by typing its path."
 
-	self owner model currentDirectory = fileReference ifFalse: [
-		self owner openFolder: fileReference ].
-
-	fileReference isDirectory ifFalse: [
-		self owner nameText: fileReference basename ]
+	folderChosenAction := aOneArgBlock
 ]

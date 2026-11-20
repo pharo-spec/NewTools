@@ -74,6 +74,12 @@ StSindarinDebuggerPresenter >> initializePresenters [
 	toolbar := self buildToolbar
 ]
 
+{ #category : 'accessing' }
+StSindarinDebuggerPresenter >> rawInspectionPresenter [
+
+	^ inspector
+]
+
 { #category : 'stepping' }
 StSindarinDebuggerPresenter >> refresh [
 

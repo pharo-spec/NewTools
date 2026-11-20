@@ -1,5 +1,24 @@
 "
-File Navigation Presenter that will only show directories
+I am the navigation presenter of the folder dialogs. `StFileNavigationSystemPresenter` describes the navigation presenters.
+
+## Responsibility:
+
+- List only the folders of the current folder, without filter.
+- Lay out the navigation buttons and the table without the preview pane.
+
+## Collaborators:
+
+- `StOpenDirectoryPresenter class>>navigationSystemClass`: makes the folder dialogs use me.
+
+## Public API and Key Messages
+
+- `updateFileReferenceTable`: lists the folders.
+
+## Examples
+
+```smalltalk
+StOpenDirectoryPresenter example.
+```
 "
 Class {
 	#name : 'StDirectoryNavigationSystemPresenter',

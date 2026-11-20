@@ -1,6 +1,25 @@
 "
-I'm a previewer for GIF file 
-	I provide a SpImagePresenter to show the picture
+I preview GIF images. `StFileBrowserAbstractPreviewer` describes how previewers are created and used.
+
+## Responsibility:
+
+- Accept the files whose MIME type, found from their extension, is `image/gif` (`matchingMimeType:`).
+- Read the picture with `GIFReadWriter` and show it, scaled to the pane, in a `SpImagePresenter`.
+
+## Collaborators:
+
+- `StFileBrowserAdaptiveContentPreviewer`: chooses me for these files.
+- `GIFReadWriter`, `SpImagePresenter`: read and show the picture.
+
+## Public API and Key Messages
+
+- `previewOn: aFileReference`: inherited.
+
+## Examples
+
+```smalltalk
+StFileBrowserGIFPreviewer exampleGIF.
+```
 "
 Class {
 	#name : 'StFileBrowserGIFPreviewer',
@@ -9,6 +28,13 @@ Class {
 	#package : 'NewTools-FileBrowser',
 	#tag : 'Previewers'
 }
+
+{ #category : 'examples' }
+StFileBrowserGIFPreviewer class >> exampleGIF [
+
+	<sampleInstance>
+	^ self new
+]
 
 { #category : 'testing' }
 StFileBrowserGIFPreviewer >> matchingMimeType: element [

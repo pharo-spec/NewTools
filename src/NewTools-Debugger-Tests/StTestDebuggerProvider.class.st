@@ -353,7 +353,8 @@ StTestDebuggerProvider >> sessionWithInlinedLoop [
 ]
 
 { #category : 'helpers' }
-StTestDebuggerProvider >> terminate [ 
-	session ifNotNil:[session clear].
+StTestDebuggerProvider >> terminate [
+
+	session ifNotNil: [ session clear ].
 	session := nil
 ]

@@ -1,9 +1,26 @@
 "
-My responsibility is to provide dialog for selecting Directories.
+I am the dialog to choose a folder, titled 'Select Directory To Open'. `StFileDialogPresenter` describes the dialogs and their customization.
 
-So no files will be shown in the file/folder listings.
+## Responsibility:
 
-see my super for more information about customization
+- List only folders, through my navigation presenter, a `StDirectoryNavigationSystemPresenter` (`navigationSystemClass`).
+- Accept only a folder as choice, the current one when none is selected.
+
+## Collaborators:
+
+- `StDirectoryNavigationSystemPresenter`: my navigation presenter.
+- `SpMorphicBackend>>newFileDialogFor:`: opens me for Spec folder dialogs.
+
+## Public API and Key Messages
+
+- `selectedEntry`: the chosen folder, or nil.
+
+## Examples
+
+```smalltalk
+StOpenDirectoryPresenter example.
+StOpenDirectoryPresenter exampleModal.
+```
 "
 Class {
 	#name : 'StOpenDirectoryPresenter',

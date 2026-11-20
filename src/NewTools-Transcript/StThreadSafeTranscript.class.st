@@ -139,19 +139,26 @@ StThreadSafeTranscript >> contents [
 
 { #category : 'streaming' }
 StThreadSafeTranscript >> cr [
-	"To deprecate in favor of #newLine"
+	"Will be removed in Pharo 19."
 
-	self nextPut: Character cr
+	self
+		deprecated: 'Use #newLine instead.'
+		on: '09/11/2026'
+		in: #Pharo15
+		transformWith: '`@receiver cr' -> '`@receiver newLine'.
+	self newLine
 ]
 
 { #category : 'streaming' }
 StThreadSafeTranscript >> crShow: anObject [
-	"To deprecate in favor of #newLineShow:"
+	"Will be removed in Pharo 19."
 
-	self critical: [
-			self
-				cr;
-				show: anObject ]
+	self
+		deprecated: 'Use #newLineShow: instead.'
+		on: '09/11/2026'
+		in: #Pharo15
+		transformWith: '`@receiver crShow: `@argument' -> '`@receiver newLineShow: `@argument'.
+	self newLineShow: anObject
 ]
 
 { #category : 'private - actions' }
@@ -263,12 +270,14 @@ StThreadSafeTranscript >> show: anObject [
 
 { #category : 'streaming' }
 StThreadSafeTranscript >> showCr: anObject [
-	"To deprecate in favor of #showNewLine:"
+	"Will be removed in Pharo 19."
 
-	self critical: [
-			self
-				show: anObject;
-				cr ]
+	self
+		deprecated: 'Use #showNewLine: instead.'
+		on: '09/11/2026'
+		in: #Pharo15
+		transformWith: '`@receiver showCr: `@argument' -> '`@receiver showNewLine: `@argument'.
+	self showNewLine: anObject
 ]
 
 { #category : 'streaming' }

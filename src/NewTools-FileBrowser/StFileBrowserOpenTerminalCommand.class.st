@@ -1,5 +1,5 @@
 "
-Implements a command to open a terminal in the host Operating System, from the File Browser.
+I open an operating system terminal on the current directory ('Open terminal here', Meta+N, file table and directory tree menus), through `StTerminalInterface default`.
 "
 Class {
 	#name : 'StFileBrowserOpenTerminalCommand',

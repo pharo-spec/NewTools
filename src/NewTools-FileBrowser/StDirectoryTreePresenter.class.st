@@ -1,5 +1,32 @@
 "
-Implements a basic Spec presenter to display a directory tree.
+I am the directory tree in the left part of the file browser and of the dialogs. My roots and nodes are `StFileSystemItemWrapper`s, which describe how the tree is built. `StFileBrowserAbstractPresenter` describes how the presenters of a browser work together.
+
+## Responsibility:
+
+- Show the folders of the file system as a tree and expand it to the current folder (`expandPath:`).
+- Tell my owner which folder is selected (my output port), so that it opens it.
+- Offer the 'StFileBrowserDirectoryContextualMenu' commands (new folder, rename, remove, terminal).
+
+## Collaborators:
+
+- `StFileSystemPresenter`: creates me and opens the folder I transmit.
+- `StFileSystemItemWrapper`: the nodes of my tree.
+
+## Public API and Key Messages
+
+- `expandPath: aFileReference`, `updateFileDirectoryTree`, `selectedEntry`.
+
+## Examples
+
+```smalltalk
+StDirectoryTreePresenter example.
+```
+
+It opens the tree expanded to the working directory.
+
+## Internal Representation
+
+- `directoryTreePresenter`: the tree table.
 "
 Class {
 	#name : 'StDirectoryTreePresenter',
@@ -23,6 +50,18 @@ StDirectoryTreePresenter class >> buildCommandsGroupWith: presenterInstance forR
 				register: StFileBrowserRemoveCommand forSpec;
 				register: StFileBrowserOpenTerminalCommand forSpec;
 				yourself)
+]
+
+{ #category : 'examples' }
+StDirectoryTreePresenter class >> example [
+	"Opens the directory tree alone, as shown in the left pane of the file browser, expanded to the working directory."
+
+	<example>
+	| tree |
+	tree := self new.
+	tree open title: 'Directory tree'.
+	tree expandPath: FileLocator workingDirectory asFileReference.
+	^ tree
 ]
 
 { #category : 'layout' }

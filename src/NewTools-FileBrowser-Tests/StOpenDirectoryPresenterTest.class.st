@@ -22,6 +22,13 @@ StOpenDirectoryPresenterTest >> testDefaultDirectory [
 ]
 
 { #category : 'tests' }
+StOpenDirectoryPresenterTest >> testListsOnlyDirectories [
+
+	self denyEmpty: dialog fileReferenceTable items.
+	self assert: (dialog fileReferenceTable items allSatisfy: [ :each | each isDirectory ])
+]
+
+{ #category : 'tests' }
 StOpenDirectoryPresenterTest >> testSelectDirectory [
 
 	| selectedDirectory |
@@ -47,6 +54,13 @@ StOpenDirectoryPresenterTest >> testSelectNonexistingDirectory [
 		should: [ dialog defaultFolder: root / 'idontexist' ]
 		raise: DirectoryDoesNotExist.
 	self assert: dialog currentDirectory equals: root
+]
+
+{ #category : 'tests' }
+StOpenDirectoryPresenterTest >> testTitleAndConfirmLabel [
+
+	self assert: dialog windowTitle equals: 'Select Directory To Open'.
+	self assert: dialog confirmLabel equals: 'Open'
 ]
 
 { #category : 'tests' }

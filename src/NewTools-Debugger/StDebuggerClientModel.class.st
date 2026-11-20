@@ -64,30 +64,25 @@ StDebuggerClientModel >> breakOnStackAtSelection: anInterval inContext: aContext
 	astNode := currentMethod ast bestNodeFor: anInterval.
 	DebugPointManager installNew: BreakDebugPoint on: astNode.
 	newMethod := aContext methodClass >> aContext selector.
-	allContextsForCurrentMethod := self interruptedProcess
-		                               findContextsForMethod: currentMethod.
+	allContextsForCurrentMethod := self interruptedProcess findContextsForMethod: currentMethod.
 	allContextsForCurrentMethod do: [ :ctx | ctx method: newMethod ].
 
-	self updateContextChanged
+	self refreshThenAnnounce: StDebuggerClientModelContextChangedAnnouncement
 ]
 
 { #category : 'actions' }
 StDebuggerClientModel >> clear [
 
 	self unsubscribeFromSystemAnnouncer.
-	self removeActionsForSession: self session.
-	self raiseUpdateEvents:
-		(StDebuggerClientModelClearAnnouncement debuggerClientModel: self).
+	self raiseUpdateEvents: (StDebuggerClientModelClearAnnouncement debuggerClientModel: self).
 	announcer := nil
 ]
 
 { #category : 'debug - execution' }
 StDebuggerClientModel >> clearDebugSession [
 
-	contextPredicate := nil.
-	self session
-		terminate;
-		clear
+	self session terminate.
+	self endSession
 ]
 
 { #category : 'context' }
@@ -141,6 +136,14 @@ StDebuggerClientModel >> copyStackToClipboard [
 				streamContents: [ :s | self interruptedContext printStackTraceOn: s ])
 ]
 
+{ #category : 'debug - session' }
+StDebuggerClientModel >> endSession [
+
+	contextPredicate := nil.
+	self session clear.
+	self clear
+]
+
 { #category : 'stack - helpers' }
 StDebuggerClientModel >> exception [
 	^ self session exception
@@ -182,7 +185,7 @@ StDebuggerClientModel >> filterStack: aStack [
 StDebuggerClientModel >> implementMissingMethod [
 
 	(StDebuggerMethodImplementor forSession: self session) implementMissingMethod.
-	self updateTopContext
+	self refreshThenAnnounce: StDebuggerClientModelContextChangedAnnouncement
 ]
 
 { #category : 'initialization' }
@@ -281,8 +284,9 @@ StDebuggerClientModel >> newStepAnnouncement [
 
 { #category : 'debug - execution' }
 StDebuggerClientModel >> peelToFirstLike: aContext [
+
 	self session peelToFirstLike: aContext.
-	self updateTopContext
+	self refreshThenAnnounce: StDebuggerClientModelContextChangedAnnouncement
 ]
 
 { #category : 'context' }
@@ -327,10 +331,9 @@ StDebuggerClientModel >> preventUpdatesDuring: aBlock [
 { #category : 'debug - execution' }
 StDebuggerClientModel >> proceedDebugSession [
 
-	contextPredicate := nil.
-	self session
-		resume;
-		clear
+	self session resume.
+	self refreshThenAnnounce: StDebuggerClientModelResumeAnnouncement.
+	self endSession
 ]
 
 { #category : 'events-triggering' }
@@ -347,14 +350,12 @@ StDebuggerClientModel >> recompileMethodTo: aString inContext: aContext notifyin
 	"Get the home before to recompile the method, we can lost it (for clean blocks)"
 	methodContext := aContext home.
 
-	self session
-		recompileMethodTo: aString
-		inContext: aContext
-		notifying: aNotifyer.
+	self session recompileMethodTo: aString inContext: aContext notifying: aNotifyer.
 
 	homePC := methodContext isDead
-		ifTrue: [ methodContext endPC ]
-		ifFalse: [ methodContext pc ]
+		          ifTrue: [ methodContext endPC ]
+		          ifFalse: [ methodContext pc ].
+	self refresh
 ]
 
 { #category : 'context' }
@@ -366,50 +367,39 @@ StDebuggerClientModel >> referenceContext [
 	^topContext receiver signalerContext 
 ]
 
-{ #category : 'events - handling' }
-StDebuggerClientModel >> registerActionsForSession: aSession [
+{ #category : 'updating' }
+StDebuggerClientModel >> refresh [
+	"Recompute what the model caches from the session: the top context, the context predicate and the session"
 
-	self flag: 'Rewrite it'.
-	aSession ifNotNil: [
-		aSession
-			when: #restart send: #updateRestart to: self;
-			when: #resume send: #updateResume to: self;
-			when: #stepInto send: #updateStep to: self;
-			when: #stepOver send: #updateStep to: self;
-			when: #stepThrough send: #updateStep to: self;
-			when: #contextChanged send: #updateContextChanged to: self;
-			when: #clear send: #clear to: self ]
+	self updateTopContext.
+	self updateContextPredicate.
+	self updateDebugSession
 ]
 
-{ #category : 'events - removing' }
-StDebuggerClientModel >> removeActionsForSession: aSession [
-	self flag: 'Rewrite it'.
-	aSession
-		ifNotNil: [ aSession
-				removeActionsForEvent: #restart;
-				removeActionsForEvent: #resume;
-				removeActionsForEvent: #stepInto;
-				removeActionsForEvent: #stepOver;
-				removeActionsForEvent: #stepThrough;
-				removeActionsForEvent: #contextChanged ]
+{ #category : 'updating' }
+StDebuggerClientModel >> refreshThenAnnounce: anAnnouncementClass [
+	"Refresh the top context, the context predicate and the session, then announce what changed to the listeners (the debugger UI), unless updates are prevented"
+
+	self updateIfAble: (anAnnouncementClass debuggerClientModel: self)
 ]
 
 { #category : 'debug - execution' }
 StDebuggerClientModel >> restartContext: aContext [
 
 	self session restart: aContext.
-	self updateTopContext
+	self refreshThenAnnounce: StDebuggerClientModelRestartAnnouncement
 ]
 
 { #category : 'debug - execution' }
 StDebuggerClientModel >> returnValueFromExpression: aString fromContext: aContext [
+
 	| value |
 	value := session class compiler
-		source: aString;
-		context: aContext;
-		evaluate.
+		         source: aString;
+		         context: aContext;
+		         evaluate.
 	self session returnValue: value from: aContext.
-	self updateTopContext
+	self refreshThenAnnounce: StDebuggerClientModelContextChangedAnnouncement
 ]
 
 { #category : 'debug - execution' }
@@ -432,11 +422,9 @@ StDebuggerClientModel >> session [
 
 { #category : 'accessing' }
 StDebuggerClientModel >> session: aDebugSession [
-	session ifNotNil: [ self removeActionsForSession: session ].
-	session := aDebugSession.
-	self registerActionsForSession: self session.
 
-	self updateIfAble
+	session := aDebugSession.
+	self refreshThenAnnounce: StDebuggerClientModelStepAnnouncement
 ]
 
 { #category : 'debug - stack' }
@@ -468,25 +456,24 @@ StDebuggerClientModel >> stepInto: aContext [
 	aContext stepIntoQuickMethod: true.
 	self session stepInto: aContext.
 	aContext stepIntoQuickMethod: false.
-	self updateTopContext
+	self refreshThenAnnounce: StDebuggerClientModelStepAnnouncement
 ]
 
 { #category : 'debug - stepping' }
 StDebuggerClientModel >> stepOver: aContext [
 
-	filterStack := (self topContext method hasPragmaNamed:
-		                #debuggerCompleteToSender)
+	filterStack := (self topContext method hasPragmaNamed: #debuggerCompleteToSender)
 		               ifTrue: [ false ]
 		               ifFalse: [ self class shouldFilterStack ].
 	self session stepOver: aContext.
-	self updateTopContext
+	self refreshThenAnnounce: StDebuggerClientModelStepAnnouncement
 ]
 
 { #category : 'debug - stepping' }
 StDebuggerClientModel >> stepThrough: aContext [
 
 	self session stepThrough: aContext.
-	self updateTopContext
+	self refreshThenAnnounce: StDebuggerClientModelStepAnnouncement
 ]
 
 { #category : 'system subscription' }
@@ -522,10 +509,7 @@ StDebuggerClientModel >> update [
 { #category : 'accessing' }
 StDebuggerClientModel >> update: anAnnouncement [
 
-	self updateTopContext.
-	self updateContextPredicate.
-	self updateDebugSession.
-
+	self refresh.
 	self raiseUpdateEvents: anAnnouncement
 ]
 
@@ -536,14 +520,6 @@ StDebuggerClientModel >> updateAfterMethodAdded [
 	self raiseUpdateEvents:
 		(StDebuggeClientModelMethodAddedAnnouncement debuggerClientModel:
 			 self)
-]
-
-{ #category : 'instance creation' }
-StDebuggerClientModel >> updateContextChanged [
-
-	self updateIfAble:
-		(StDebuggerClientModelContextChangedAnnouncement
-			 debuggerClientModel: self)
 ]
 
 { #category : 'context' }
@@ -581,28 +557,6 @@ StDebuggerClientModel >> updateIfAble: anAnnouncement [
 
 	preventUpdate ifNil: [ ^ self ].
 	preventUpdate ifFalse: [ self update: anAnnouncement ]
-]
-
-{ #category : 'announcement' }
-StDebuggerClientModel >> updateRestart [
-
-	self updateIfAble:
-		  (StDebuggerClientModelRestartAnnouncement debuggerClientModel:
-			   self)
-]
-
-{ #category : 'instance creation' }
-StDebuggerClientModel >> updateResume [
-
-	self updateIfAble:
-		(StDebuggerClientModelResumeAnnouncement debuggerClientModel: self)
-]
-
-{ #category : 'instance creation' }
-StDebuggerClientModel >> updateStep [
-
-	self updateIfAble:
-		(StDebuggerClientModelStepAnnouncement debuggerClientModel: self)
 ]
 
 { #category : 'context' }

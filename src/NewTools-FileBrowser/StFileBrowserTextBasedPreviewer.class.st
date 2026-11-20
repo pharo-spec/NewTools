@@ -1,5 +1,24 @@
 "
-I'm a previewer use to display the text content of a file 
+I preview a text file: I show its first 1000 characters in a `SpTextPresenter`, followed by ' ... truncated ... ' when the file is longer. `StFileBrowserAbstractPreviewer` describes how previewers are created and used.
+
+## Responsibility:
+
+- Accept only non-empty files whose first 100 bytes are valid UTF-8 (`canBeUsedOn:`).
+- Show 'No preview' when the file turns out not to be UTF-8 text.
+
+## Collaborators:
+
+- `StFileBrowserAdaptiveContentPreviewer`: uses me for text files and when no other previewer can be used.
+
+## Public API and Key Messages
+
+- `previewOn:`, inherited.
+
+## Examples
+
+```smalltalk
+StFileBrowserTextBasedPreviewer exampleText.
+```
 "
 Class {
 	#name : 'StFileBrowserTextBasedPreviewer',
@@ -8,6 +27,13 @@ Class {
 	#package : 'NewTools-FileBrowser',
 	#tag : 'Previewers'
 }
+
+{ #category : 'examples' }
+StFileBrowserTextBasedPreviewer class >> exampleText [
+
+	<sampleInstance>
+	^ self new
+]
 
 { #category : 'testing' }
 StFileBrowserTextBasedPreviewer >> canBeUsedOn: aFileReferenceOrString [

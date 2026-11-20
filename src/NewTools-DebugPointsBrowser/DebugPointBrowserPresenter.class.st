@@ -104,6 +104,18 @@ DebugPointBrowserPresenter >> defaultLayout [
 		  yourself
 ]
 
+{ #category : 'accessing' }
+DebugPointBrowserPresenter >> dpCode [
+
+	^ dpCode
+]
+
+{ #category : 'accessing' }
+DebugPointBrowserPresenter >> dpEditor [
+
+	^ dpEditor
+]
+
 { #category : 'initialization' }
 DebugPointBrowserPresenter >> initialize [
 
@@ -212,6 +224,12 @@ DebugPointBrowserPresenter >> updateTable [
 DebugPointBrowserPresenter >> updateVariableTargetPresenterFrom: aDebugPointTarget [
 
 	variableTargetPresenter target: aDebugPointTarget
+]
+
+{ #category : 'accessing' }
+DebugPointBrowserPresenter >> variableTargetPresenter [
+
+	^ variableTargetPresenter
 ]
 
 { #category : 'initialization' }

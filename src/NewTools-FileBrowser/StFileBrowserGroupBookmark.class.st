@@ -1,5 +1,38 @@
 "
-i'm use to dispay group of bookmark
+I am a named group of bookmarks: a node of the bookmark tree, shown with my bookmarks below me. The default bookmarks of the file dialogs are one group of mine, 'Bookmarks'. `StFileBrowserAbstractBookMark` describes how bookmarks are created and used; here is what is specific to me.
+
+## Responsibility:
+
+- Hold an ordered collection of bookmarks, answered as my `children`.
+- Add and remove bookmarks.
+
+## Collaborators:
+
+- `StFileBrowserBookmark class>>defaultBookmarks`: creates the default 'Bookmarks' group.
+- `StFileSystemModel class>>addBookmarkNamed:location:iconName:`: adds a bookmark to the first shared group.
+- `StFileBrowserRemoveBookmarkCommand`: removes the selected bookmark from its group (`removeAt:`).
+
+## Public API and Key Messages
+
+- `StFileBrowserGroupBookmark name: aString collection: aCollection iconName: aSymbol`: a new group.
+- `addBookmark: aBookmark`, `removeAt: anIndex`: change my bookmarks.
+- `collection`, `children`: my bookmarks.
+
+## Examples
+
+```smalltalk
+StFileBrowserGroupBookmark examplePharoFolders.
+```
+
+It answers a 'Pharo' group with the image directory and working directory bookmarks (checked by `StFileBrowserBookmarkTest`).
+
+## Internal Representation
+
+- `collection`: an `OrderedCollection` of bookmarks, so that bookmarks can be added and removed.
+
+### Implementation Points
+
+A copy of a group has its own collection of bookmarks (`postCopy`), so adding to the copy does not change the group.
 "
 Class {
 	#name : 'StFileBrowserGroupBookmark',
@@ -11,6 +44,16 @@ Class {
 	#package : 'NewTools-FileBrowser',
 	#tag : 'Bookmark'
 }
+
+{ #category : 'examples' }
+StFileBrowserGroupBookmark class >> examplePharoFolders [
+
+	<sampleInstance>
+	^ self
+		  name: 'Pharo'
+		  collection: (OrderedCollection with: StFileBrowserBookmark image with: StFileBrowserBookmark workingDirectory)
+		  iconName: #book
+]
 
 { #category : 'instance creation' }
 StFileBrowserGroupBookmark class >> name: aName collection: aCollection iconName: icon [
@@ -45,6 +88,13 @@ StFileBrowserGroupBookmark >> collection: anObject [
 { #category : 'testing' }
 StFileBrowserGroupBookmark >> isComposite [
 	^ true
+]
+
+{ #category : 'copying' }
+StFileBrowserGroupBookmark >> postCopy [
+
+	super postCopy.
+	collection := collection copy
 ]
 
 { #category : 'accessing' }

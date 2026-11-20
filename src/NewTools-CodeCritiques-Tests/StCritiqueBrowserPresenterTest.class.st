@@ -40,6 +40,18 @@ StCritiqueBrowserPresenterTest >> testBrowseRule [
 	
 ]
 
+{ #category : 'tests' }
+StCritiqueBrowserPresenterTest >> testCritiqueListIsOwnedByTheBrowser [
+
+	self assert: critiqueBrowser critiqueModel owner identicalTo: critiqueBrowser
+]
+
+{ #category : 'tests' }
+StCritiqueBrowserPresenterTest >> testCritiqueListUsesTheBrowserApplication [
+
+	self assert: critiqueBrowser critiqueModel application identicalTo: critiqueBrowser application
+]
+
 { #category : 'initialization' }
 StCritiqueBrowserPresenterTest >> testInitializePresenters [
 

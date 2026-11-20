@@ -1,6 +1,6 @@
 Class {
 	#name : 'StFileBrowserTestCase',
-	#superclass : 'TestCase',
+	#superclass : 'StFileBrowserSharedStateTestCase',
 	#instVars : [
 		'root',
 		'fileSystemModel',

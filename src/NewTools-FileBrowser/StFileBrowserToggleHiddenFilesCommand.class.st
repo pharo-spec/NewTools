@@ -1,5 +1,5 @@
 "
-I am a command to be able to toggle the display of hidden files and folders in a file browser directly from a menu and not from the settings only.
+I show or hide the hidden files and folders ('Toggle hidden files', file table menu) by switching `StFileBrowserSettings showHiddenFiles`, so the change is also seen in the settings.
 "
 Class {
 	#name : 'StFileBrowserToggleHiddenFilesCommand',

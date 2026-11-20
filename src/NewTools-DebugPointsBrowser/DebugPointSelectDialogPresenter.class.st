@@ -19,6 +19,12 @@ DebugPointSelectDialogPresenter class >> defaultPreferredExtent [
 	^ 800@400
 ]
 
+{ #category : 'accessing' }
+DebugPointSelectDialogPresenter >> code [
+
+	^ code
+]
+
 { #category : 'layout' }
 DebugPointSelectDialogPresenter >> defaultLayout [
 
@@ -123,6 +129,12 @@ DebugPointSelectDialogPresenter >> variableTargetLayout [
 				   positionOfSlider: 30 percent;
 				   yourself);
 		  yourself
+]
+
+{ #category : 'accessing' }
+DebugPointSelectDialogPresenter >> variableTargetPresenter [
+
+	^ variableTargetPresenter
 ]
 
 { #category : 'initialization' }

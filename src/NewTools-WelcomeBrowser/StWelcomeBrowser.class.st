@@ -302,6 +302,12 @@ StWelcomeBrowser >> newTopicTitle: aTitle presenterClass: aClass [
 		yourself
 ]
 
+{ #category : 'accessing' }
+StWelcomeBrowser >> paginator [
+
+	^ paginator
+]
+
 { #category : 'accessing - contents' }
 StWelcomeBrowser >> resourceContent [
 

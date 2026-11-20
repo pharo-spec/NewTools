@@ -1,5 +1,5 @@
 "
-Implements an action to file in the selected file (representing a Pharo source code) into the current system
+I open the Changes Browser on the selected `.st` file ('Changes Browser', Meta+B, file table menu). I am hidden for other entries.
 "
 Class {
 	#name : 'StFileBrowserChangeListCommand',

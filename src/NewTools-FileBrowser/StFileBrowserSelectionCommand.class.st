@@ -1,6 +1,5 @@
 "
-Abstract class to group behavior related with selections in the File Browser tool.
-
+I am the abstract root of the commands acting on the entry selected in the file table or the directory tree. I give them `selectedEntry`, `selectedEntryBasename`, `currentDirectory` and `updateFileSystemPresenters`, all asked to the context.
 "
 Class {
 	#name : 'StFileBrowserSelectionCommand',

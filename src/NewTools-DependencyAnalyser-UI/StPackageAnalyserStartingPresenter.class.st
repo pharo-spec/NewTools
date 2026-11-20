@@ -33,6 +33,12 @@ StPackageAnalyserStartingPresenter class >> menuCommandOn: aBuilder [
 		action: [ self new open ]
 ]
 
+{ #category : 'accessing' }
+StPackageAnalyserStartingPresenter >> choosePresenter [
+
+	^ choosePresenter
+]
+
 { #category : 'layout' }
 StPackageAnalyserStartingPresenter >> defaultLayout [
 

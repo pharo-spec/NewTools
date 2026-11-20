@@ -77,3 +77,12 @@ StAbstractFilterTest >> sthExt [
 StAbstractFilterTest >> testPredicate [
 	self subclassResponsibility
 ]
+
+{ #category : 'tests - examples' }
+StAbstractFilterTest >> testSampleInstancesAreInstancesOfTheFilter [
+
+	| examples |
+	examples := self actualClass class methods select: [ :method | method hasPragmaNamed: #sampleInstance ].
+	self denyEmpty: examples.
+	examples do: [ :method | self assert: (self actualClass perform: method selector) class identicalTo: self actualClass ]
+]

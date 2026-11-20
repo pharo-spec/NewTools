@@ -1,6 +1,6 @@
 Class {
 	#name : 'StFileSystemModelTest',
-	#superclass : 'TestCase',
+	#superclass : 'StFileBrowserSharedStateTestCase',
 	#category : 'NewTools-FileBrowser-Tests-Utils',
 	#package : 'NewTools-FileBrowser-Tests',
 	#tag : 'Utils'
@@ -53,4 +53,38 @@ StFileSystemModelTest >> testCreateDirectoryShouldNotWorkWithEmptyName [
 	model := StFileSystemModel new.
 	self assert: (model createDirectory: '') equals: model.
 	self assert: (model createDirectory: nil) equals: model.
+]
+
+{ #category : 'tests - shared state' }
+StFileSystemModelTest >> testRestoreSharedStateRemovesABookmarkAddedToAGroup [
+
+	| saved size |
+	saved := StFileSystemModel sharedState.
+	size := StFileSystemModel bookmarks first children size.
+	StFileSystemModel addBookmarkNamed: 'image' location: FileLocator imageDirectory iconName: #book.
+	StFileSystemModel restoreSharedState: saved.
+	self assert: StFileSystemModel bookmarks first children size equals: size
+]
+
+{ #category : 'tests - shared state' }
+StFileSystemModelTest >> testRestoreSharedStateRemovesAnAddedBookmark [
+
+	| saved size |
+	saved := StFileSystemModel sharedState.
+	size := StFileSystemModel bookmarks size.
+	StFileSystemModel new addBookmark: FileLocator imageDirectory asFileReference.
+	StFileSystemModel restoreSharedState: saved.
+	self assert: StFileSystemModel bookmarks size equals: size
+]
+
+{ #category : 'tests - shared state' }
+StFileSystemModelTest >> testRestoreSharedStateRestoresTheLastVisitedDirectory [
+
+	| saved directory |
+	directory := FileLocator imageDirectory asFileReference.
+	StFileSystemModel new currentDirectory: directory.
+	saved := StFileSystemModel sharedState.
+	StFileSystemModel new currentDirectory: FileLocator workingDirectory asFileReference parent.
+	StFileSystemModel restoreSharedState: saved.
+	self assert: StFileSystemModel lastVisitedDirectory equals: directory
 ]

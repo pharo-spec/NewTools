@@ -1,5 +1,5 @@
 "
-Implements copy to clipboard the full path of the selected item in the File Browser.
+I copy the full path of the selected entry to the clipboard ('Copy full path', Meta+F, file table menu).
 "
 Class {
 	#name : 'StFileBrowserCopyFullnameCommand',

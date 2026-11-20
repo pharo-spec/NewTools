@@ -1,6 +1,5 @@
 "
-Abstract class to group behavior related with the file browser bookmarks.
-
+I am the abstract root of the bookmark commands. I give them the bookmark tree of their context (`bookmarksTreeTable`). `StFileBrowserAbstractBookMark` describes how bookmarks are kept.
 "
 Class {
 	#name : 'StFileBrowserBookmarkCommand',

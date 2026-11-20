@@ -838,6 +838,12 @@ StPulse >> openSettingsBrowser [
 		open
 ]
 
+{ #category : 'accessing' }
+StPulse >> paginator [
+
+	^ paginator
+]
+
 { #category : 'private - accessing' }
 StPulse >> previewContainer [
 

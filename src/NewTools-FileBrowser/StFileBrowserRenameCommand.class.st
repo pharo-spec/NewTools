@@ -1,5 +1,5 @@
 "
-Implements an action to file in the selected file (representing a Pharo source code) into the current system
+I rename the selected entry with the name the user enters, and ask what to do when an entry with that name exists ('Rename', Meta+M, file table and directory tree menus).
 "
 Class {
 	#name : 'StFileBrowserRenameCommand',

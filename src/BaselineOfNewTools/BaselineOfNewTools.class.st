@@ -12,278 +12,169 @@ Class {
 BaselineOfNewTools >> baseline: spec [
 
 	<baseline>
-	spec for: #common do: [ 
-		spec preLoadDoIt: #preload:package:.
-		spec postLoadDoIt: #postload:package:.
+	spec for: #common do: [
+			spec preLoadDoIt: #preload:package:.
+			spec postLoadDoIt: #postload:package:.
 
-		self sindarin: spec.
-		self chest: spec.
-		self graphAlgorithms: spec.
+			self sindarin: spec.
+			self chest: spec.
+			self graphAlgorithms: spec.
 
-		spec
-			package: 'NewTools-Core';
-			package: 'NewTools-Core-Tests' with: [  spec requires: #('NewTools-Core') ];
-			package: 'NewTools-Morphic';
-			package: 'NewTools-Gtk';
-			
-			"Basic tools (inherited from Spec)"
-			package: 'NewTools-Refactoring-Commands' with: [ spec requires: #('NewTools-Core' ) ];
-			package: 'NewTools-Refactoring-Commands-Tests' with: [ spec requires: #( 'NewTools-Refactoring-Commands' ) ];
-			package: 'NewTools-MethodBrowsers' with: [ spec requires: #('NewTools-Core' 'NewTools-SpTextPresenterDecorators' 'NewTools-Refactoring-Commands') ];
-			package: 'NewTools-MethodBrowsers-Tests' with: [ spec requires: #( 'NewTools-MethodBrowsers' ) ];
-		
-			
-			"inspector"
-			package: 'NewTools-Inspector' with: [ spec requires: #( 'NewTools-Core' 'NewTools-Inspector-Extensions' ) ];
-			package: 'NewTools-Inspector-Extensions' with: [ spec requires: #( 'NewTools-Core' ) ];
-			package: 'NewTools-Inspector-Tests' with: [ spec requires: #( 'NewTools-Inspector' ) ];
-			
-			"debugger"
-			package: 'NewTools-Debugger' with: [ 
-					spec requires: #( 'NewTools-Core' 
-									'NewTools-Inspector' 
-									'NewTools-Debugger-Commands' 
-									'NewTools-Debugger-Extensions' 
-									'NewTools-SpTextPresenterDecorators' ) ];
-			package: 'NewTools-Debugger-Commands';
-			package: 'NewTools-Debugger-Extensions';
-			package: 'NewTools-Debugger-Morphic';
-			package: 'NewTools-Debugger-Tests' with: [ spec requires: #( 'NewTools-Debugger' ) ];
-		
-			"playground"
-			package: 'NewTools-Playground' with: [ spec requires: #( 'NewTools-Core'  'NewTools-Inspector' ) ];
-			package: 'NewTools-Playground-Tests' with: [ spec requires: #( 'NewTools-Playground' ) ];
-			
-			"profStef"
-			package: 'ProfStef-Core' with: [ spec requires: #( 'NewTools-Playground' ) ];
-			package: 'ProfStef-Tests' with: [ spec requires: #( 'ProfStef-Core' ) ];
-					
-			"closed windows"
-			package: 'NewTools-WindowManager';
-			package: 'NewTools-WindowManager-Tests' with: [  spec requires: #( 'NewTools-Core' 'NewTools-WindowManager') ];
-	
-			"browser"
-			package: 'NewTools-SystemBrowser' with: [ spec requires: #('NewTools-Core' 'NewTools-Inspector' ) ];
-	
-			"system reporter"
-			package: 'NewTools-SystemReporter' with: [ spec requires: #( 'NewTools-Core' ) ];
-	
-			"spotter"
-			package: 'NewTools-Spotter-Processors';
-			package: 'NewTools-Spotter' with: [ spec requires: #( 'NewTools-Core' 'NewTools-Spotter-Processors' ) ];
-			package: 'NewTools-Spotter-Extensions' with: [ spec requires: #( 'NewTools-Spotter' 'NewTools-SettingsBrowser') ];
-			package: 'NewTools-Spotter-Processors-Tests' with: [ spec requires: #( 'NewTools-Spotter-Processors' ) ];
-			package: 'NewTools-Spotter-Tests' with: [ spec requires: #( 'NewTools-Spotter' ) ];
-			package: 'NewTools-Morphic-Spotter' with: [ spec requires: #( 'NewTools-Morphic' ) ];
-			package: 'NewTools-Pulse' with: [ spec requires: #( 'NewTools-Spotter' ) ];
-			package: 'NewTools-Pulse-Tests' with: [ spec requires: #( 'NewTools-Pulse' ) ];
-	
-			"file browser"
-			package: 'NewTools-FileBrowser' with: [ spec requires: #( 'NewTools-Core' ) ];
-			package: 'NewTools-FileBrowser-Morphic' with: [ spec requires: #( 'NewTools-FileBrowser' ) ];
-			package: 'NewTools-FileBrowser-Tests' with: [ spec requires: #( 'NewTools-FileBrowser' ) ];
-	
-			"dependency analyser"
-			package: 'NewTools-DependencyAnalyser' with: [ spec requires: #('AIGraphAlgorithms') ];
-			package: 'NewTools-DependencyAnalyser-Tests' with: [ spec
-					requires: #( 'NewTools-DependencyAnalyser' 'NewTools-DependencyAnalyser-Tests-Data' ) ];
-			package: 'NewTools-DependencyAnalyser-Tests-Data';
-			package: 'NewTools-DependencyAnalyser-UI' with: [ spec requires: #( 'NewTools-Core' 'NewTools-DependencyAnalyser' ) ];
-	
-			"extras"
-			package: 'HelpCenter' with: [ spec requires: #( 'NewTools-Core' ) ];
-			
-			package: 'NewTools-FlagBrowser' with: [ spec requires: #( 'NewTools-Core' ) ];
-			package: 'NewTools-FlagBrowser-Tests' with: [ spec requires: #( 'NewTools-FlagBrowser' ) ];			
-			package: 'NewTools-FontChooser' with: [ spec requires: #( 'NewTools-Core' ) ];
-			package: 'NewTools-FontChooser-Tests' with: [ spec requires: #( 'NewTools-FontChooser' ) ];
-			package: 'NewTools-SpTextPresenterDecorators';
-	
-			"Debug points"
-			package: 'NewTools-DebugPointsBrowser' with: [spec requires: #( 'NewTools-Core' 'NewTools-SpTextPresenterDecorators' )];
-			package: 'NewTools-ObjectCentricDebugPoints' with: [ spec requires: #( 'NewTools-DebugPointsBrowser' 'NewTools-Inspector' 'NewTools-Debugger' )];
-			package: 'NewTools-ProjectLoader' with: [ spec requires: #( 'NewTools-Core') ] ;
-			package: 'NewTools-ProjectLoader-Microdown';
-	
-	
-			"Sindarin"
-			package: 'NewTools-Sindarin-Commands';
-			package: 'NewTools-Sindarin-Commands-Tests' with: [ spec requires: #( 'NewTools-Sindarin-Commands' 'Sindarin' ) ];
-			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #( 'NewTools-Sindarin-Commands' 'Sindarin' ) ];
-	
-			"package: 'NewTools-Sindarin-ProcessInspector' with: [ spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ];""Debugger Selector"
-			package: 'NewTools-DebuggerSelector' with: [ spec requires: #( 'NewTools-SpTextPresenterDecorators' ) ];
-			package: 'NewTools-DebuggerSelector-Tests' with: [ spec requires: #( 'NewTools-DebuggerSelector' ) ];
-	
-			"CritiqueBrowser"
-			package: 'NewTools-CodeCritiques' with: [ spec requires: #( 'NewTools-Core' ) ];
-			package: 'NewTools-CodeCritiques-Tests';
-			
-			"Window Profile"
-			package: 'NewTools-Window-Profiles' with: [ spec requires: #('NewTools-Core')] ;
-			package: 'NewTools-Window-Profiles-Tests' with: [spec requires: #( 'NewTools-Core' 'NewTools-Window-Profiles' ) ]; 
-	
-			"Fuel"
-			package: 'NewTools-Debugger-Fuel';
-			package: 'NewTools-Debugger-Fuel-Tests' with: [ spec requires: #( 'NewTools-Debugger-Fuel' ) ];
-   
-	  		"Rewriter Tools"
-			package: 'NewTools-RewriterTools-Backend';
-			package: 'NewTools-RewriterTools' with: [ spec requires: #( 'NewTools-Core' 'NewTools-RewriterTools-Backend') ];
-			package: 'NewTools-RewriterTools-Backend-Tests' with: [ spec requires: #('NewTools-RewriterTools-Backend') ];
-			package: 'NewTools-RewriterTools-Tests' with: [ spec requires: #('NewTools-RewriterTools') ];
-			
-			"Profiler"
-			package: 'NewTools-ProfilerUI'  with: [ spec requires: #('NewTools-Core' 'NewTools-SpTextPresenterDecorators') ];
-			
-			"Epicea"
-			package: 'NewTools-Epicea' with: [ spec requires: #('NewTools-Core')  ];
-			package: 'NewTools-Epicea-Tests' with: [ spec requires: #('NewTools-Epicea')  ];
-			
-			"Scopes Editor"
-			package: 'NewTools-Scopes';
-			package: 'NewTools-Scopes-Editor' with: [ spec requires: #('NewTools-Core' 'NewTools-Scopes') ];
-			package: 'NewTools-Scopes-Tests' with: [ spec requires: #('NewTools-Scopes' 'NewTools-Scopes-Resources-A-Tests'
-			 'NewTools-Scopes-Resources-B-Tests'
-			 'NewTools-Scopes-Resources-C-Tests' )];
-			package: 'NewTools-Scopes-Resources-A-Tests';
-			package: 'NewTools-Scopes-Resources-B-Tests';
-			package: 'NewTools-Scopes-Resources-C-Tests';
-			package: 'NewTools-Scopes-Tests';
-			"Finder"			
-			package: 'NewTools-Finder'  with: [ spec requires: #('NewTools-Core') ];
-			package: 'NewTools-Finder-Tests' with: [ spec requires: #('NewTools-Finder') ];
-			
-			package: 'NewTools-SettingsBrowser' with: [ spec requires: #('ColorPicker') ];
-			package: 'NewTools-SettingsBrowser-Tests' with: [ spec requires: #('NewTools-SettingsBrowser') ];
-			
-			package: 'NewTools-Utils' with: [ spec requires: #('NewTools-FileBrowser') ];
+			spec
+				package: 'NewTools-Core';
+				package: 'NewTools-Core-Tests' with: [ spec requires: #( 'NewTools-Core' ) ];
+				package: 'NewTools-Morphic';
+				package: 'NewTools-Gtk';
+				"Basic tools (inherited from Spec)"package: 'NewTools-Refactoring-Commands' with: [ spec requires: #( 'NewTools-Core' ) ];
+				package: 'NewTools-Refactoring-Commands-Tests' with: [ spec requires: #( 'NewTools-Refactoring-Commands' ) ];
+				package: 'NewTools-MethodBrowsers'
+				with: [ spec requires: #( 'NewTools-Core' 'NewTools-SpTextPresenterDecorators' 'NewTools-Refactoring-Commands' ) ];
+				package: 'NewTools-MethodBrowsers-Tests' with: [ spec requires: #( 'NewTools-MethodBrowsers' ) ];
+				"inspector"package: 'NewTools-Inspector' with: [ spec requires: #( 'NewTools-Core' 'NewTools-Inspector-Extensions' ) ];
+				package: 'NewTools-Inspector-Extensions' with: [ spec requires: #( 'NewTools-Core' ) ];
+				package: 'NewTools-Inspector-Tests' with: [ spec requires: #( 'NewTools-Inspector' ) ];
+				"debugger"package: 'NewTools-Debugger' with: [
+						spec requires:
+								#( 'NewTools-Core' 'NewTools-Inspector' 'NewTools-Debugger-Commands' 'NewTools-Debugger-Extensions'
+								   'NewTools-SpTextPresenterDecorators' ) ];
+				package: 'NewTools-Debugger-Commands';
+				package: 'NewTools-Debugger-Extensions';
+				package: 'NewTools-Debugger-Morphic';
+				package: 'NewTools-Debugger-Tests' with: [ spec requires: #( 'NewTools-Debugger' ) ];
+				"playground"package: 'NewTools-Playground' with: [ spec requires: #( 'NewTools-Core' 'NewTools-Inspector' ) ];
+				package: 'NewTools-Playground-Tests' with: [ spec requires: #( 'NewTools-Playground' ) ];
+				"profStef"package: 'ProfStef-Core' with: [ spec requires: #( 'NewTools-Playground' ) ];
+				package: 'ProfStef-Tests' with: [ spec requires: #( 'ProfStef-Core' ) ];
+				"closed windows"package: 'NewTools-WindowManager';
+				package: 'NewTools-WindowManager-Tests' with: [ spec requires: #( 'NewTools-Core' 'NewTools-WindowManager' ) ];
+				"browser"package: 'NewTools-SystemBrowser' with: [ spec requires: #( 'NewTools-Core' 'NewTools-Inspector' ) ];
+				"system reporter"package: 'NewTools-SystemReporter' with: [ spec requires: #( 'NewTools-Core' ) ];
+				"spotter"package: 'NewTools-Spotter-Processors';
+				package: 'NewTools-Spotter' with: [ spec requires: #( 'NewTools-Core' 'NewTools-Spotter-Processors' ) ];
+				package: 'NewTools-Spotter-Extensions' with: [ spec requires: #( 'NewTools-Spotter' 'NewTools-SettingsBrowser' ) ];
+				package: 'NewTools-Spotter-Processors-Tests' with: [ spec requires: #( 'NewTools-Spotter-Processors' ) ];
+				package: 'NewTools-Spotter-Tests' with: [ spec requires: #( 'NewTools-Spotter' ) ];
+				package: 'NewTools-Morphic-Spotter' with: [ spec requires: #( 'NewTools-Morphic' ) ];
+				package: 'NewTools-Pulse' with: [ spec requires: #( 'NewTools-Spotter' ) ];
+				package: 'NewTools-Pulse-Tests' with: [ spec requires: #( 'NewTools-Pulse' ) ];
+				"file browser"package: 'NewTools-FileBrowser' with: [ spec requires: #( 'NewTools-Core' ) ];
+				package: 'NewTools-FileBrowser-Morphic' with: [ spec requires: #( 'NewTools-FileBrowser' ) ];
+				package: 'NewTools-FileBrowser-Tests' with: [ spec requires: #( 'NewTools-FileBrowser' ) ];
+				"dependency analyser"package: 'NewTools-DependencyAnalyser' with: [ spec requires: #( 'AIGraphAlgorithms' ) ];
+				package: 'NewTools-DependencyAnalyser-Tests'
+				with: [ spec requires: #( 'NewTools-DependencyAnalyser' 'NewTools-DependencyAnalyser-Tests-Data' ) ];
+				package: 'NewTools-DependencyAnalyser-Tests-Data';
+				package: 'NewTools-DependencyAnalyser-UI' with: [ spec requires: #( 'NewTools-Core' 'NewTools-DependencyAnalyser' ) ];
+				package: 'NewTools-DependencyAnalyser-UI-Tests' with: [ spec requires: #( 'NewTools-DependencyAnalyser-UI' ) ];
+				"extras"package: 'HelpCenter' with: [ spec requires: #( 'NewTools-Core' ) ];
+				package: 'NewTools-FlagBrowser' with: [ spec requires: #( 'NewTools-Core' ) ];
+				package: 'NewTools-FlagBrowser-Tests' with: [ spec requires: #( 'NewTools-FlagBrowser' ) ];
+				package: 'NewTools-FontChooser' with: [ spec requires: #( 'NewTools-Core' ) ];
+				package: 'NewTools-FontChooser-Tests' with: [ spec requires: #( 'NewTools-FontChooser' ) ];
+				package: 'NewTools-SpTextPresenterDecorators';
+				"Debug points"package: 'NewTools-DebugPointsBrowser'
+				with: [ spec requires: #( 'NewTools-Core' 'NewTools-SpTextPresenterDecorators' ) ];
+				package: 'NewTools-DebugPointsBrowser-Tests' with: [ spec requires: #( 'NewTools-DebugPointsBrowser' ) ];
+				package: 'NewTools-ObjectCentricDebugPoints'
+				with: [ spec requires: #( 'NewTools-DebugPointsBrowser' 'NewTools-Inspector' 'NewTools-Debugger' ) ];
+				package: 'NewTools-ProjectLoader' with: [ spec requires: #( 'NewTools-Core' ) ];
+				package: 'NewTools-ProjectLoader-Microdown';
+				"Sindarin"package: 'NewTools-Sindarin-Commands';
+				package: 'NewTools-Sindarin-Commands-Tests' with: [ spec requires: #( 'NewTools-Sindarin-Commands'
+						   'Sindarin' ) ];
+				package: 'NewTools-Sindarin-Tools' with: [ spec requires: #( 'NewTools-Sindarin-Commands' 'Sindarin' ) ];
+				"package: 'NewTools-Sindarin-ProcessInspector' with: [ spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ];""Debugger Selector"
+				package: 'NewTools-DebuggerSelector'
+				with: [ spec requires: #( 'NewTools-SpTextPresenterDecorators' ) ];
+				package: 'NewTools-DebuggerSelector-Tests' with: [ spec requires: #( 'NewTools-DebuggerSelector' ) ];
+				"CritiqueBrowser"package: 'NewTools-CodeCritiques' with: [ spec requires: #( 'NewTools-Core' ) ];
+				package: 'NewTools-CodeCritiques-Tests';
+				"Window Profile"package: 'NewTools-Window-Profiles' with: [ spec requires: #( 'NewTools-Core' ) ];
+				package: 'NewTools-Window-Profiles-Tests' with: [ spec requires: #( 'NewTools-Core' 'NewTools-Window-Profiles' ) ];
+				"Fuel"package: 'NewTools-Debugger-Fuel';
+				package: 'NewTools-Debugger-Fuel-Tests' with: [ spec requires: #( 'NewTools-Debugger-Fuel' ) ];
+				"Rewriter Tools"package: 'NewTools-RewriterTools-Backend';
+				package: 'NewTools-RewriterTools' with: [ spec requires: #( 'NewTools-Core' 'NewTools-RewriterTools-Backend' ) ];
+				package: 'NewTools-RewriterTools-Backend-Tests' with: [ spec requires: #( 'NewTools-RewriterTools-Backend' ) ];
+				package: 'NewTools-RewriterTools-Tests' with: [ spec requires: #( 'NewTools-RewriterTools' ) ];
+				"Profiler"package: 'NewTools-ProfilerUI' with: [ spec requires: #( 'NewTools-Core' 'NewTools-SpTextPresenterDecorators' ) ];
+				package: 'NewTools-ProfilerUI-Tests' with: [ spec requires: #( 'NewTools-ProfilerUI' ) ];
+				"Epicea"package: 'NewTools-Epicea' with: [ spec requires: #( 'NewTools-Core' ) ];
+				package: 'NewTools-Epicea-Tests' with: [ spec requires: #( 'NewTools-Epicea' ) ];
+				"Scopes Editor"package: 'NewTools-Scopes';
+				package: 'NewTools-Scopes-Editor' with: [ spec requires: #( 'NewTools-Core' 'NewTools-Scopes' ) ];
+				package: 'NewTools-Scopes-Tests' with: [
+						spec requires:
+								#( 'NewTools-Scopes' 'NewTools-Scopes-Resources-A-Tests' 'NewTools-Scopes-Resources-B-Tests'
+								   'NewTools-Scopes-Resources-C-Tests' ) ];
+				package: 'NewTools-Scopes-Resources-A-Tests';
+				package: 'NewTools-Scopes-Resources-B-Tests';
+				package: 'NewTools-Scopes-Resources-C-Tests';
+				package: 'NewTools-Scopes-Tests';
+				"Finder"package: 'NewTools-Finder' with: [ spec requires: #( 'NewTools-Core' ) ];
+				package: 'NewTools-Finder-Tests' with: [ spec requires: #( 'NewTools-Finder' ) ];
+				package: 'NewTools-SettingsBrowser' with: [ spec requires: #( 'ColorPicker' ) ];
+				package: 'NewTools-SettingsBrowser-Tests' with: [ spec requires: #( 'NewTools-SettingsBrowser' ) ];
+				package: 'NewTools-Utils' with: [ spec requires: #( 'NewTools-FileBrowser' ) ];
+				package: 'NewTools-WelcomeBrowser' with: [ spec requires: #( 'NewTools-Core' 'NewTools-Morphic' ) ];
+				package: 'NewTools-WelcomeBrowser-Tests' with: [ spec requires: #( 'NewTools-WelcomeBrowser' ) ];
+				package: 'NewTools-ShortcutsBrowser' with: [ spec requires: #( 'NewTools-Core' ) ];
+				package: 'NewTools-ShortcutsBrowser-Tests' with: [ spec requires: #( 'NewTools-ShortcutsBrowser' ) ];
+				package: 'NewTools-ObjectTranscript' with: [ spec requires: #( 'NewTools-Core' 'NewTools-Inspector' ) ];
+				package: 'NewTools-Transcript' with: [ spec requires: #( 'NewTools-Core' ) ];
+				package: 'NewTools-Transcript-Tests' with: [ spec requires: #( 'NewTools-Transcript' ) ];
+				"Shout UI"package: 'NewTools-Shout-UI' with: [ spec requires: #( 'NewTools-Core' ) ];
+				"Houston we have a bug, ColorPicker depends on roassal! "package: 'ColorPicker' with: [ spec requires: #( 'NewTools-Core' ) ];
+				package: 'ColorPicker-Tests' with: [ spec requires: #( ColorPicker ) ];
+				package: 'NewTools-ProcessBrowser' with: [ spec requires: #( 'NewTools-Core' ) ].
 
-			package: 'NewTools-WelcomeBrowser'  with: [ spec requires: #('NewTools-Core' 'NewTools-Morphic') ];
-			
-			package: 'NewTools-ShortcutsBrowser'  with: [ spec requires: #('NewTools-Core' ) ];
-			
-			package: 'NewTools-ObjectTranscript'  with: [ spec requires: #('NewTools-Core' 'NewTools-Inspector') ];
-			package: 'NewTools-Transcript'  with: [ spec requires: #('NewTools-Core') ];
-			package: 'NewTools-Transcript-Tests' with: [ spec requires: #( 'NewTools-Transcript' ) ];
-			
-			"Shout UI"
-			package: 'NewTools-Shout-UI'  with: [ spec requires: #('NewTools-Core') ];
-		
-			"Houston we have a bug, ColorPicker depends on roassal! "
-			package: 'ColorPicker'  with: [ spec requires: #('NewTools-Core' ) ];
-			package: 'ColorPicker-Tests' with: [ spec requires: #( ColorPicker ) ];
-			
-			package: 'NewTools-ProcessBrowser' with: [ spec requires: #('NewTools-Core') ].
-
-		spec
-			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Core-Tests' 'NewTools-Morphic' );
-
-			group: 'Playground' with: #( 'NewTools-Playground' 'NewTools-Playground-Tests' );
-			
-			group: 'ProfStef' with: #( 'ProfStef-Core' 'ProfStef-Tests' );
-
-			group: 'Inspector' with: #( 'Core' 'NewTools-Inspector' 'NewTools-Inspector-Tests' );
-
-			group: 'ClosedWindows' with: #( 'Core' 'NewTools-WindowManager' 'NewTools-WindowManager-Tests' );
-			
-			group: 'Profile' with: #( 'NewTools-Window-Profiles' 'NewTools-Window-Profiles-Tests' );
-			
-			group: 'Transcript' with: #( 'Core' 'NewTools-Transcript-Tests' 'NewTools-ObjectTranscript' );
-			
-			group: 'Debugger' with: #( 
-					 	'Core' 
-					 	'Inspector' 
-					 	'NewTools-Debugger-Commands'
-				    	'NewTools-Debugger-Extensions' 
-					 	'NewTools-Debugger'
-
-						'NewTools-Debugger-Morphic'
-				    	'NewTools-Sindarin-Tools'
-
-					 	'NewTools-Sindarin-Commands'
-				    	'NewTools-Sindarin-Commands-Tests'
-				    	'NewTools-Debugger-Tests' 
-					 	'NewTools-Debugger-Fuel'
-				    	'NewTools-Debugger-Fuel-Tests' 
-					 	'NewTools-Utils'
-						'NewTools-DebugPointsBrowser'
-						'NewTools-ObjectCentricDebugPoints' );
-
-			group: 'Spotter' with: #( 
-						'NewTools-Morphic-Spotter' 
-						'NewTools-Spotter-Processors'
-				   		'NewTools-Spotter' 
-						'NewTools-Spotter-Extensions'
-				   		'NewTools-Spotter-Tests' 
-						'NewTools-Spotter-Processors-Tests'
-						'NewTools-Pulse'
-						'NewTools-Pulse-Tests' );
-
-			group: 'SystemReporter' with: #( 'Core' 'NewTools-SystemReporter' );
-
-			group: 'Methods' with: #( 'Core' 'NewTools-SpTextPresenterDecorators' 'NewTools-MethodBrowsers' 'NewTools-MethodBrowsers-Tests' );
-			"Not in the image for the moment, we need a pass on them"
-			
-			group: 'Commands' with: #( 'Core' 'NewTools-Refactoring-Commands' 'NewTools-Refactoring-Commands-Tests');
-			 
-			group: 'CritiqueBrowser' with: #( 'NewTools-CodeCritiques' 'NewTools-CodeCritiques-Tests' );
-
-			group: 'FontChooser' with: #( 'Core' 'NewTools-FontChooser' 'NewTools-FontChooser-Tests' );
-
-			group: 'FlagBrowser' with: #( 
-						'Core' 
-						'NewTools-FlagBrowser' 
-						'NewTools-FlagBrowser-Tests' );
-			
-			group: 'development' with: #( 'default' 
-						'NewTools-DebuggerSelector'
-				   		'NewTools-DebuggerSelector-Tests' );
-			
-			group: 'FileBrowser' with: #( 
-						'NewTools-FileBrowser'
-						'NewTools-FileBrowser-Morphic'
-						'NewTools-FileBrowser-Tests' );
-      		
-			group: 'RewriterTools' with: #(
-				    		'NewTools-RewriterTools-Backend'
-				    		'NewTools-RewriterTools'
-				    		'NewTools-RewriterTools-Backend-Tests'
-				    		'NewTools-RewriterTools-Tests' );
-			
-			group: 'Profiler' with: #( 'NewTools-ProfilerUI' );
-	
-			"ScopesEditor"
-			group: 'ScopesEditor' with: #(
-						'NewTools-Scopes' 
-						'NewTools-Scopes-Editor' 
-						'NewTools-Scopes-Resources-A-Tests' 
-						'NewTools-Scopes-Resources-B-Tests' 
-						'NewTools-Scopes-Resources-C-Tests' 
-						'NewTools-Scopes-Tests');
-			
-			"Finder"
-			group: 'Finder' with: #(
-						'NewTools-Finder'
-						'NewTools-Finder-Tests');
-			"Settings Browser"
-			group: 'SettingsBrowser' with: #(
-						'NewTools-SettingsBrowser'
-						'NewTools-SettingsBrowser-Tests');
-						
-			group: 'WelcomeBrowser' with: #( 'NewTools-WelcomeBrowser' );
-			group: 'ShortcutsBrowser' with: #( 'NewTools-ShortcutsBrowser' );	
-			group: 'ColorPickerGroup' with: #('ColorPicker' 'ColorPicker-Tests');
-			group: 'ProcessBrowser' with: #('NewTools-ProcessBrowser');
-			group: 'DependencyAnalyser' with: #('NewTools-DependencyAnalyser-UI' 'NewTools-DependencyAnalyser-Tests');
-			group: 'Epicea' with: #( 'NewTools-Epicea' 'NewTools-Epicea-Tests' );
-			
-
-			group: 'default'
+			spec
+				group: 'Core' with: #( 'NewTools-Core' 'NewTools-Core-Tests' 'NewTools-Morphic' );
+				group: 'Playground' with: #( 'NewTools-Playground' 'NewTools-Playground-Tests' );
+				group: 'ProfStef' with: #( 'ProfStef-Core' 'ProfStef-Tests' );
+				group: 'Inspector' with: #( 'Core' 'NewTools-Inspector' 'NewTools-Inspector-Tests' );
+				group: 'ClosedWindows' with: #( 'Core' 'NewTools-WindowManager' 'NewTools-WindowManager-Tests' );
+				group: 'Profile' with: #( 'NewTools-Window-Profiles' 'NewTools-Window-Profiles-Tests' );
+				group: 'Transcript' with: #( 'Core' 'NewTools-Transcript-Tests' 'NewTools-ObjectTranscript' );
+				group: 'Debugger'
 				with:
-					#( 'Profile' 'Epicea' 'Playground' 'ProfStef' 'Transcript' 'Inspector' 'ClosedWindows' 'Commands' 'CritiqueBrowser' 'Debugger' 'SystemReporter' 'FontChooser'
-					   'Methods' 'Spotter' 'RewriterTools' 'ScopesEditor' 'FileBrowser' 'Finder' 'Profiler' 'SettingsBrowser' 'WelcomeBrowser' 'ShortcutsBrowser'
-					   'ColorPickerGroup' 'ProcessBrowser' 'DependencyAnalyser' )  ]
+					#( 'Core' 'Inspector' 'NewTools-Debugger-Commands' 'NewTools-Debugger-Extensions' 'NewTools-Debugger' 'NewTools-Debugger-Morphic'
+					   'NewTools-Sindarin-Tools' 'NewTools-Sindarin-Commands' 'NewTools-Sindarin-Commands-Tests'
+					   'NewTools-Debugger-Tests' 'NewTools-Debugger-Fuel' 'NewTools-Debugger-Fuel-Tests' 'NewTools-Utils' 'NewTools-DebugPointsBrowser'
+					   'NewTools-DebugPointsBrowser-Tests' 'NewTools-ObjectCentricDebugPoints' );
+				group: 'Spotter'
+				with: #( 'NewTools-Morphic-Spotter' 'NewTools-Spotter-Processors' 'NewTools-Spotter' 'NewTools-Spotter-Extensions'
+					   'NewTools-Spotter-Tests' 'NewTools-Spotter-Processors-Tests' 'NewTools-Pulse' 'NewTools-Pulse-Tests' );
+				group: 'SystemReporter' with: #( 'Core' 'NewTools-SystemReporter' );
+				group: 'Methods'
+				with: #( 'Core' 'NewTools-SpTextPresenterDecorators' 'NewTools-MethodBrowsers' 'NewTools-MethodBrowsers-Tests' );
+				"Not in the image for the moment, we need a pass on them"group: 'Commands'
+				with: #( 'Core' 'NewTools-Refactoring-Commands' 'NewTools-Refactoring-Commands-Tests' );
+				group: 'CritiqueBrowser' with: #( 'NewTools-CodeCritiques' 'NewTools-CodeCritiques-Tests' );
+				group: 'FontChooser' with: #( 'Core' 'NewTools-FontChooser' 'NewTools-FontChooser-Tests' );
+				group: 'FlagBrowser' with: #( 'Core' 'NewTools-FlagBrowser' 'NewTools-FlagBrowser-Tests' );
+				group: 'development' with: #( 'default' 'NewTools-DebuggerSelector' 'NewTools-DebuggerSelector-Tests' );
+				group: 'FileBrowser' with: #( 'NewTools-FileBrowser' 'NewTools-FileBrowser-Morphic' 'NewTools-FileBrowser-Tests' );
+				group: 'RewriterTools'
+				with: #( 'NewTools-RewriterTools-Backend' 'NewTools-RewriterTools' 'NewTools-RewriterTools-Backend-Tests'
+					   'NewTools-RewriterTools-Tests' );
+				group: 'Profiler' with: #( 'NewTools-ProfilerUI' 'NewTools-ProfilerUI-Tests' );
+				"ScopesEditor"group: 'ScopesEditor'
+				with: #( 'NewTools-Scopes' 'NewTools-Scopes-Editor' 'NewTools-Scopes-Resources-A-Tests' 'NewTools-Scopes-Resources-B-Tests'
+					   'NewTools-Scopes-Resources-C-Tests' 'NewTools-Scopes-Tests' );
+				"Finder"group: 'Finder' with: #( 'NewTools-Finder' 'NewTools-Finder-Tests' );
+				"Settings Browser"group: 'SettingsBrowser' with: #( 'NewTools-SettingsBrowser' 'NewTools-SettingsBrowser-Tests' );
+				group: 'WelcomeBrowser' with: #( 'NewTools-WelcomeBrowser' 'NewTools-WelcomeBrowser-Tests' );
+				group: 'ShortcutsBrowser' with: #( 'NewTools-ShortcutsBrowser' 'NewTools-ShortcutsBrowser-Tests' );
+				group: 'ColorPickerGroup' with: #( 'ColorPicker' 'ColorPicker-Tests' );
+				group: 'ProcessBrowser' with: #( 'NewTools-ProcessBrowser' );
+				group: 'DependencyAnalyser'
+				with: #( 'NewTools-DependencyAnalyser-UI' 'NewTools-DependencyAnalyser-Tests' 'NewTools-DependencyAnalyser-UI-Tests' );
+				group: 'Epicea' with: #( 'NewTools-Epicea' 'NewTools-Epicea-Tests' );
+				group: 'default'
+				with: #( 'Profile' 'Epicea' 'Playground' 'ProfStef' 'Transcript' 'Inspector' 'ClosedWindows' 'Commands' 'CritiqueBrowser'
+					   'Debugger' 'SystemReporter' 'FontChooser' 'Methods' 'Spotter' 'RewriterTools' 'ScopesEditor' 'FileBrowser' 'Finder'
+					   'Profiler' 'SettingsBrowser' 'WelcomeBrowser' 'ShortcutsBrowser' 'ColorPickerGroup' 'ProcessBrowser' 'DependencyAnalyser' ) ]
 ]
 
 { #category : 'external projects' }

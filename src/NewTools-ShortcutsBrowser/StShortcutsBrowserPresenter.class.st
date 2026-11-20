@@ -51,6 +51,12 @@ StShortcutsBrowserPresenter class >> open [
 	^ (self newApplication: StPharoApplication current) open
 ]
 
+{ #category : 'accessing' }
+StShortcutsBrowserPresenter >> actionBar [
+
+	^ actionBar
+]
+
 { #category : 'initialization' }
 StShortcutsBrowserPresenter >> allAPIsEntry [
 	"Set the receiver's category items to a list of categories in aCollectionOfSymbols.
@@ -142,12 +148,15 @@ StShortcutsBrowserPresenter >> initializePresenters [
 
 	actionBar := self newActionBar.
 	actionBar
-		addLast: (SpButtonPresenter new
-				 action: [ (self application toolNamed: #browser) openOnClass: shortcutTable selectedItem action methodClass selector: shortcutTable selectedItem action selector ];
+		addLast: (self newButton
+				 action: [
+						 (self application toolNamed: #browser)
+							 openOnClass: shortcutTable selectedItem action methodClass
+							 selector: shortcutTable selectedItem action selector ];
 				 label: 'Browse';
 				 yourself);
-		addLast: (SpButtonPresenter new
-				 action: [ (self application toolNamed: #inspector) openOn: shortcutTable selectedItem inspect ];
+		addLast: (self newButton
+				 action: [ (self application toolNamed: #inspector) openOn: shortcutTable selectedItem ];
 				 label: 'Inspect';
 				 yourself)
 ]
@@ -160,23 +169,28 @@ StShortcutsBrowserPresenter >> keymapsAtCategory: aKMCategoryOrKMCategoryAll [
 
 { #category : 'initialization' }
 StShortcutsBrowserPresenter >> shortcutActivationCategoriesItems [
-	"Answer a <Collection> of <KMCategoryItemPresenter> representing each a category of shortcuts created using the Commander 1 framework"
-	
-	| shortcutActivationCategories |
-	shortcutActivationCategories := (self shortcutActivationCmdInstances groupedBy: [ :cmdShortcutActivation |
-		                                 cmdShortcutActivation annotatedClass packageName ]) values.
+	"Answer a <Collection> of <KMCategoryItemPresenter> representing each a category of the shortcuts of Calypso commands, one per package of commands"
 
+	| shortcutActivationCategories |
+	shortcutActivationCategories := (self shortcutActivationCmdInstances groupedBy: [ :shortcut | shortcut commandClass packageName ]) values.
 	^ shortcutActivationCategories collect: [ :shortcuts |
-		  StKMCategoryAll new
-			  categoryName: shortcuts anyOne annotatedClass packageName;
-			  shortcuts: shortcuts;
-			  yourself ]
+			  StKMCategoryAll new
+				  categoryName: shortcuts anyOne commandClass packageName;
+				  shortcuts: shortcuts;
+				  yourself ]
 ]
 
 { #category : 'initialization' }
 StShortcutsBrowserPresenter >> shortcutActivationCmdInstances [
+	"The shortcuts of Calypso commands, declared with the <calypsoCommands> pragma or with the class annotations still supported while projects migrate"
 
-	^ CmdShortcutActivation registeredInstances copyWithoutAll: CmdShortcutActivation redefiningInstances
+	^ (ClyCommandRegistry default legacyAnnotationsOf: #shortcuts) asArray , (ClyCommandRegistry default allEntriesOf: #shortcuts) asArray
+]
+
+{ #category : 'accessing' }
+StShortcutsBrowserPresenter >> shortcutTable [
+
+	^ shortcutTable
 ]
 
 { #category : 'initialization' }

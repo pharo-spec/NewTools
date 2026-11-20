@@ -1,6 +1,46 @@
 "
-Abstract superclass to wrap items found in file system.
+I am the root of the wrappers of the directory tree of the file dialogs. A wrapper puts a `FileReference` in the tree: it gives its icon, its label and its subdirectories, themselves wrapped.
 
+## Life cycle: who creates the wrappers and who uses them
+
+1. **The roots are created from the platform.** `StFileSystemItemWrapper roots` answers one `StRootDirectoryWrapper` on `FileSystem root` on macOS and Linux, and one `StRootDriveWrapper` per readable drive on Windows.
+2. **The directory tree shows them.** `StDirectoryTreePresenter>>initializePresenters` (and `updateFileDirectoryTree`) uses the roots, asks each node for its `icon` and `label`, and for its `subdirectories` as children: a `StDirectoryWrapper` on each subdirectory, sorted by name ignoring case. `StDirectoryTreePresenter>>expandPath:` walks them to select the current directory.
+3. **The bookmarks reuse the roots.** `StFileBrowserBookmark class>>createDriveBookmarks` makes a bookmark of each root, with its label and icon.
+
+## Responsibility:
+
+- Know the wrapped `FileReference` and tell what it is (`isDirectory`, `isFile`, `isRoot`).
+- Give its `icon` and `label` for the tree.
+- Answer its subdirectories and files, wrapped, or nothing when they cannot be read.
+
+## Collaborators:
+
+- `StDirectoryTreePresenter`: shows the wrappers in its tree.
+- `StFileBrowserBookmark`: makes the drive bookmarks from the roots.
+- `StFileBrowserIconCache`: gives the icons.
+
+## Public API and Key Messages
+
+- `StFileSystemItemWrapper on: aFileReference`: a new wrapper.
+- `StFileSystemItemWrapper roots`: the roots of the tree.
+- `subdirectories`, `files`, `allElements`: the wrapped children.
+- `icon`, `label`, `asFileReference`.
+- `pathString`: the path, with `\` separators on Windows.
+- `browseFolder`: opens the folder in the file browser of the operating system.
+
+Two wrappers are equal when they have the same class and the same reference.
+
+## Examples
+
+```smalltalk
+StFileSystemItemWrapper scriptDirectoryTree.
+```
+
+It opens a tree of wrappers starting at the working directory, rather than at the roots of the file system as the dialogs do. `StFileSystemItemWrapperTest` checks the children and labels.
+
+## Internal Representation
+
+- `fileReference`: the wrapped `FileReference`.
 "
 Class {
 	#name : 'StFileSystemItemWrapper',
@@ -47,6 +87,24 @@ StFileSystemItemWrapper class >> roots [
 					  select: [ :each | each exists and: [ each isReadable ] ]
 					  thenCollect: [ :each | StRootDriveWrapper on: each ] ]
 		  ifFalse: [ Array with: (StRootDirectoryWrapper on: FileSystem root) ]
+]
+
+{ #category : 'script' }
+StFileSystemItemWrapper class >> scriptDirectoryTree [
+	"Opens a directory tree made of wrappers, as the file dialogs show it, but starting at the working directory instead of the roots of the file system: each node is a StDirectoryWrapper whose children are its wrapped subdirectories, with their icon and label."
+
+	<example>
+	| tree |
+	tree := SpEasyTreeListViewPresenter new
+		        roots: { (StDirectoryWrapper on: FileLocator workingDirectory asFileReference) };
+		        children: [ :wrapper | wrapper subdirectories ];
+		        displayIcon: [ :wrapper | wrapper icon ];
+		        display: [ :wrapper | wrapper label ];
+		        expandRoots;
+		        yourself.
+	^ tree open
+		  title: 'Directory tree of the working directory';
+		  yourself
 ]
 
 { #category : 'accessing' }

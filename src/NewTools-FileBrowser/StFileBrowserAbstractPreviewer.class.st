@@ -1,13 +1,42 @@
 "
-I'm an abstract class to define a interface for a preview system 
+I am the root of the previewers of the file dialogs. A previewer builds the presenter shown in the preview pane for the selected file: a picture for an image file, the first characters for a text file, an inspector, or nothing.
 
-my subclasses have to define :
+## Life cycle: who creates the previewers and who uses them
 
-* matchingMimeType: aZnMimeType
-	return a Boolean to indicate if element matches
+1. **The navigation presenter has one previewer.** `StFileNavigationSystemPresenter>>previewer` lazily creates its `defaultPreviewer`, a `StFileBrowserAdaptiveContentPreviewer`. The code opening a dialog may choose another one with `aDialog previewer: StFileBrowserInspectPreviewer new` (`StFileDialogPresenter>>previewer:`).
+2. **Each selection is previewed in the background.** When the selection of the file table changes, `StFileNavigationSystemPresenter>>filesListAction` stops the previous preview process and forks a new one that sends `previewOn:` with the selected `FileReference`.
+3. **I build the presenter.** `previewOn:` answers the presenter of `previewActionOn:` when `canBeUsedOn:` accepts the file (by default, when one of its MIME types, found from its extension, satisfies `matchingMimeType:`), and an empty `SpNullPresenter` otherwise or when anything goes wrong.
+4. **The preview pane shows it.** The presenter is given to the `StNoteBookPreviewerPresenter` of the navigation presenter (`pageContent:`).
 
-* previewOn: aFileReference 
-	return a Presenter (son of SpPresenter)  
+## Responsibility:
+
+- Tell whether I can preview a file (`canBeUsedOn:`, `matchingMimeType:`).
+- Build the presenter previewing a file (`previewActionOn:`), never failing (`previewOn:`).
+- Know the previewers that read the file contents (`concreteViewerClasses`).
+
+## Collaborators:
+
+- `StFileNavigationSystemPresenter`: keeps a previewer and asks it to preview the selected file.
+- `StNoteBookPreviewerPresenter`: shows the presenter I build.
+- `ZnMimeType`: the MIME types of the file, from its extension.
+- `SpImagePresenter`, `SpTextPresenter`, `SpNullPresenter`, `StObjectInspectorPresenter`: the presenters my subclasses build.
+
+## Public API and Key Messages
+
+- `previewOn: aFileReference`: the presenter to show, an `SpNullPresenter` when I cannot preview the file.
+- `canBeUsedOn: aFileReferenceOrString`: whether I can preview the file.
+- `matchingMimeType: aZnMimeType`: whether I handle that MIME type. Subclasses define it.
+- `previewActionOn: aFileReference`: builds the presenter. Subclasses define it.
+- `StFileBrowserAbstractPreviewer concreteViewerClasses`: the GIF, JPG, PNG and text previewers.
+- `StFileBrowserAbstractPreviewer previewerFor: aString`: the first of them that can preview a file name.
+
+## Examples
+
+```smalltalk
+StFileBrowserAbstractPreviewer scriptPreviewChangesFile.
+```
+
+It opens the preview pane on the changes file of the image. `StFileBrowserPreviewTest` checks what the previewers show.
 "
 Class {
 	#name : 'StFileBrowserAbstractPreviewer',
@@ -39,6 +68,19 @@ StFileBrowserAbstractPreviewer class >> previewerFor: anExtensionString [
 	^ self concreteViewerClasses
 			detect: [ : class | class new canBeUsedOn: anExtensionString ]
 			ifNone: [ StFileBrowserNullPreviewer new ]
+]
+
+{ #category : 'script' }
+StFileBrowserAbstractPreviewer class >> scriptPreviewChangesFile [
+	"Opens the preview pane of the file dialogs on the changes file of the image, as a dialog shows it when the file is selected: the adaptive previewer finds no image previewer for it and shows its first characters as text."
+
+	<example>
+	| notebook |
+	notebook := StNoteBookPreviewerPresenter new.
+	notebook pageContent: (StFileBrowserAdaptiveContentPreviewer new previewOn: FileLocator changes asFileReference).
+	^ notebook open
+		  title: 'Preview of the changes file';
+		  yourself
 ]
 
 { #category : 'private' }

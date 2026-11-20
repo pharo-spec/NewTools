@@ -171,6 +171,31 @@ StDebuggerTest >> testAcceptCodeChangesForContext [
 ]
 
 { #category : 'tests - code pane' }
+StDebuggerTest >> testAcceptCodeChangesUpdatesAfterClearingUnsavedChanges [
+	"An edit left in a context is kept as an unsaved change. Accepting newer code must show it, not the older edit"
+
+	| newSource |
+	dbg := StTestDebuggerProvider new debuggerWithObjectHalting.
+	dbg
+		application: dbg class currentApplication;
+		initialize;
+		buildContextMenus.
+	dbg stackTable selectIndex: 1.
+	dbg code type: 'haltingMethod ^ 2'.
+	dbg stackTable selectIndex: 2.
+	dbg stackTable selectIndex: 1.
+	newSource := 'haltingMethod ^1+1 squared'.
+	dbg code type: newSource.
+	"Accepting compiles with the code pane's widget as requestor: build it"
+	dbg code update.
+
+	dbg acceptCodeChanges: newSource forContext: dbg stackTable selection selectedItem.
+
+	self assertEmpty: dbg unsavedCodeChanges.
+	self assert: dbg code text equals: newSource
+]
+
+{ #category : 'tests - code pane' }
 StDebuggerTest >> testCancelCodeChangesFor [
 	| firstContext lastContext |
 	dbg := self debuggerOn: session.
@@ -1285,6 +1310,13 @@ StDebuggerTest >> testToolbarInDNUContext [
 	commands do: [ :c| self assert: c isEnabled].
 	
 	
+]
+
+{ #category : 'tests - toolbar' }
+StDebuggerTest >> testToolbarPresenterIsOwnedByTheDebugger [
+
+	debugger := self debuggerOn: session.
+	self assert: debugger toolbarPresenter owner identicalTo: debugger
 ]
 
 { #category : 'tests - code pane' }
