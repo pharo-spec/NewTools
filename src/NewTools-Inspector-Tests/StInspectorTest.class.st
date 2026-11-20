@@ -161,3 +161,32 @@ StInspectorTest >> testModel [
 	self assert: inspector model inspectedObject equals: #fourtytwo.
 	self assert: inspector firstPage model equals: inspector model
 ]
+
+{ #category : 'tests' }
+StInspectorTest >> testRefreshShowsTheNewDescriptionInTheHeader [
+	"The refresh button must show the new print string of the inspected object in the header, not only in the page."
+
+	| holder page |
+	holder := #field -> 'first'.
+	inspector := StInspectorPresenter onObject: holder.
+	inspector open.
+	page := inspector firstPage.
+	holder value: 'second'.
+	(StInspectorRefreshCommand forSpecContext: page) execute.
+	self assert: page header label equals: page model labelString
+]
+
+{ #category : 'tests' }
+StInspectorTest >> testRefreshShowsTheNewValuesInTheRawView [
+	"Nodes keep the display strings of their values: the refresh button must show the new ones."
+
+	| holder page raw |
+	holder := #field -> 'first'.
+	inspector := StInspectorPresenter onObject: holder.
+	inspector open.
+	page := inspector firstPage.
+	holder value: 'second'.
+	(StInspectorRefreshCommand forSpecContext: page) execute.
+	raw := page rawInspectorPageOrNil activePresenter presenters detect: [ :each | each isKindOf: StRawInspectionPresenter ].
+	self assert: raw attributeTable roots last stringValue equals: 'second' printString
+]

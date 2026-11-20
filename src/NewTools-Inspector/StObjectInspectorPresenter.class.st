@@ -155,6 +155,12 @@ StObjectInspectorPresenter >> evaluator [
 	^evaluator
 ]
 
+{ #category : 'accessing' }
+StObjectInspectorPresenter >> header [
+
+	^ header
+]
+
 { #category : 'initialization' }
 StObjectInspectorPresenter >> initialize [
 
@@ -257,10 +263,11 @@ StObjectInspectorPresenter >> refresh [
 	self updatePages
 ]
 
-{ #category : 'accessing' }
+{ #category : 'updating' }
 StObjectInspectorPresenter >> refreshContent [
-	"I force a refresh of current page contents. "
+	"I force a refresh of current page contents and of the header showing the inspected object."
 
+	self updateHeaderBar.
 	views selectedPage resetContent
 ]
 
