@@ -14,7 +14,8 @@ Class {
 	#name : 'StInspectorNode',
 	#superclass : 'Object',
 	#instVars : [
-		'hostObject'
+		'hostObject',
+		'stringValue'
 	],
 	#category : 'NewTools-Inspector-Model',
 	#package : 'NewTools-Inspector',
@@ -124,14 +125,22 @@ StInspectorNode >> rawValue [
 	^ self subclassResponsibility
 ]
 
+{ #category : 'updating' }
+StInspectorNode >> resetStringValue [
+	"Forget my display string, so that the next stringValue prints my value again. Used when I am kept while my value may have changed."
+
+	stringValue := nil
+]
+
 { #category : 'actions' }
 StInspectorNode >> save: aValue [
 ]
 
 { #category : 'accessing' }
 StInspectorNode >> stringValue [
+	"Answer the display string of my value. It is kept, because the table of the inspector asks for it each time it draws its cells; send me resetStringValue when the value may have changed."
 
-	^ self value stDisplayString
+	^ stringValue ifNil: [ stringValue := self value stDisplayString ]
 ]
 
 { #category : 'accessing' }
