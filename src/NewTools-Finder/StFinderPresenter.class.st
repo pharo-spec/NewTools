@@ -220,55 +220,32 @@ The Method Finder is not trying all methods in the system so if it will find not
 
 ]
 
-{ #category : 'instance creation' }
-StFinderPresenter class >> newApplication: anApplication model: aModel [
-
-	aModel application: anApplication.
-	^ super newApplication: anApplication model: aModel.
-]
-
 { #category : 'opening' }
 StFinderPresenter class >> open [
-	<script>
-	| model presenter |
-	
-	model := StFinderModel new.
-	presenter := self 
-		newApplication: StPresenter currentApplication 
-		model: model.
 
-	model application: presenter application. 
-	presenter open.
-	
-	^ presenter
+	<script>
+	^ self new
+		  open;
+		  yourself
 ]
 
 { #category : 'opening' }
 StFinderPresenter class >> openOnTargets: aCollection [
 	"Open the receiver with only search targets (classes) in aCollection. See `availableSearchTargets:` for details"
-	
-	| finderModel presenter |
-	
-	finderModel := StFinderModel new
-		availableSearchTargetsFromClasses: aCollection;
-		yourself.
-	presenter := self on: finderModel.
-	finderModel application: presenter application. 
-	presenter	open.
-	^ presenter
+
+	^ (self on: (StFinderModel new
+		    availableSearchTargetsFromClasses: aCollection;
+		    yourself))
+		  open;
+		  yourself
 ]
 
 { #category : 'instance creation' }
 StFinderPresenter class >> openWithText: aText [
 
-	| model presenter |
-	model := StFinderModel new.
-	presenter := self
-		             newApplication: StPresenter currentApplication
-		             model: model.
-	model application: presenter application.
+	| presenter |
+	presenter := self new.
 	presenter open.
-	
 	presenter searchBar searchInput text: aText.
 	^ presenter
 ]
@@ -359,6 +336,14 @@ StFinderPresenter >> defaultLayout [
 				   add: previewSourcePresenter);
 		  addLast: resultStatusBar expand: false;
 		  yourself
+]
+
+{ #category : 'initialization' }
+StFinderPresenter >> initialize [
+
+	self model ifNil: [ self setModelBeforeInitialization: StFinderModel new ].
+	self model application: self application.
+	super initialize
 ]
 
 { #category : 'initialization' }
