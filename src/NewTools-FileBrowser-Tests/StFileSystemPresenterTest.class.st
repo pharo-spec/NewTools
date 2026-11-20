@@ -36,6 +36,18 @@ StFileSystemPresenterTest >> tearDown [
 ]
 
 { #category : 'tests' }
+StFileSystemPresenterTest >> testBackAfterSelectingAFolderInTheTreeShowsThePreviousFolder [
+
+	| folder |
+	browser open.
+	folder := FileLocator imageDirectory asFileReference.
+	browser openFolder: folder.
+	browser treeNavigationSystem expandPath: folder parent.
+	browser fileNavigationSystem previousButton click.
+	self assert: browser currentDirectory equals: folder
+]
+
+{ #category : 'tests' }
 StFileSystemPresenterTest >> testOpenedBrowserTreeShowsAnOpenedFolder [
 
 	browser open.

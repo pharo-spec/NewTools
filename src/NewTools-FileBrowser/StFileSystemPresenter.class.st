@@ -117,6 +117,7 @@ StFileSystemPresenter >> bookmarksTreeTable [
 StFileSystemPresenter >> connectPresenters [
 	"Here we check that the window is displayed. 
 	If it's not, that means this is a first opening so it should preserve the path selected by the user (through openOnLastDirectory preference, or defaultRoot: message send) and not to transmit the directory selection.
+	A folder selected in the tree is recorded in the history, as any opened folder, so that the back button returns from it.
 	A selection of the current directory is not transmitted: it comes from opening that folder, which expands the tree to it, and the folder is already shown.
 	Once displayed, the directory tree is expanded to the current directory, so that it shows the same folder as the file table: it cannot be expanded before."
 
@@ -124,7 +125,8 @@ StFileSystemPresenter >> connectPresenters [
 
 	treeNavigationSystem transmitDo: [ :selection |
 		(self isDisplayed and: [ selection isNotNil and: [ selection fileReference ~= self currentDirectory ] ]) ifTrue: [
-			self showFolder: selection fileReference ] ].
+			self showFolder: selection fileReference.
+			model openFolder: selection fileReference ] ].
 
 	bookmarksTreeTable whenSelectionChangedDo: [ :selection |
 		selection selectedItem ifNotNil: [ :selectedItem |
