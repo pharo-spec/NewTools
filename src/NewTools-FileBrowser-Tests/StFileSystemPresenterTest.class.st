@@ -36,6 +36,20 @@ StFileSystemPresenterTest >> tearDown [
 ]
 
 { #category : 'tests' }
+StFileSystemPresenterTest >> testBackAfterOpeningTheShownFolderAgainShowsThePreviousFolder [
+	"Opening the folder already shown, as from the last link of the path bar or a bookmark, must not record it twice: one Back is enough to leave it."
+
+	| folder |
+	browser open.
+	folder := FileLocator imageDirectory asFileReference.
+	browser openFolder: folder parent.
+	browser openFolder: folder.
+	browser openFolder: folder.
+	browser fileNavigationSystem previousButton click.
+	self assert: browser currentDirectory equals: folder parent
+]
+
+{ #category : 'tests' }
 StFileSystemPresenterTest >> testBackAfterSelectingAFolderInTheTreeShowsThePreviousFolder [
 
 	| folder |
@@ -59,6 +73,21 @@ StFileSystemPresenterTest >> testBackAfterTheTreeOpensAFolderShowsThePreviousFol
 	browser openFolder: folder parent parent.
 	browser fileNavigationSystem previousButton click.
 	self assert: browser currentDirectory equals: folder parent
+]
+
+{ #category : 'tests' }
+StFileSystemPresenterTest >> testForwardAfterOpeningTheShownFolderAgainShowsTheNextFolder [
+	"Opening the folder already shown does not move anywhere, so it keeps the folders the forward button returns to."
+
+	| folder |
+	browser open.
+	folder := FileLocator imageDirectory asFileReference.
+	browser openFolder: folder parent.
+	browser openFolder: folder.
+	browser fileNavigationSystem previousButton click.
+	browser openFolder: folder parent.
+	browser fileNavigationSystem nextButton click.
+	self assert: browser currentDirectory equals: folder
 ]
 
 { #category : 'tests' }
