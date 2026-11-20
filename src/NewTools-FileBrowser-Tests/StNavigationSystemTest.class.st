@@ -89,10 +89,18 @@ StNavigationSystemTest >> testOpeningAFolderShowsItInTheBreadcrumb [
 	self assert: dialog pathBreadcrumbPresenter currentDirectory equals: root / 'dir'
 ]
 
+{ #category : 'tests' }
+StNavigationSystemTest >> testShowFolderListsItsFiles [
+
+	dialog showFolder: root / 'dir'.
+	self assert: dialog currentDirectory equals: root / 'dir'.
+	self assertCollection: (dialog fileReferenceTable items collect: #basename) hasSameElements: { 'klm.png'. 'klm.jpg' }
+]
+
 { #category : 'tests - errors' }
 StNavigationSystemTest >> testShowingAFileRaisesDirectoryDoesNotExist [
 
-	self should: [ dialog updateWidgetWithFileReference: root / 'sth.ext' ] raise: DirectoryDoesNotExist
+	self should: [ dialog showFolder: root / 'sth.ext' ] raise: DirectoryDoesNotExist
 ]
 
 { #category : 'tests' }

@@ -159,7 +159,7 @@ StFileNavigationSystemPresenter >> defaultFileSortBlock [
 
 { #category : 'api - customization' }
 StFileNavigationSystemPresenter >> defaultFolder: aFileReference [
-	self updateWidgetWithFileReference: aFileReference.
+	self showFolder: aFileReference.
 	self initializeHistoryIteratorWith: aFileReference
 ]
 
@@ -329,8 +329,8 @@ StFileNavigationSystemPresenter >> initializePresenters [
 	self initializeFilesTable.
 	self initializeFiltersDropList.
 	self openOnLastDirectory
-		ifTrue: [ self updateWidgetWithFileReference: self lastVisitedDirectory ]
-		ifFalse: [ self updateWidgetWithFileReference: self defaultDirectory ].
+		ifTrue: [ self showFolder: self lastVisitedDirectory ]
+		ifFalse: [ self showFolder: self defaultDirectory ].
 	self initializeHistoryIteratorWith: self currentDirectory
 ]
 
@@ -419,7 +419,7 @@ StFileNavigationSystemPresenter >> notebookPreviewer [
 { #category : 'utilities' }
 StFileNavigationSystemPresenter >> openFolder: aFileReference [
 
-	self updateWidgetWithFileReference: aFileReference.
+	self showFolder: aFileReference.
 	model openFolder: aFileReference.
 	self owner updateTreeNavigationWithFileReference: aFileReference.
 
@@ -487,6 +487,15 @@ StFileNavigationSystemPresenter >> shouldReparent [
 	^ false
 ]
 
+{ #category : 'accessing - history' }
+StFileNavigationSystemPresenter >> showFolder: aFolder [
+	"Show aFolder: make it the current directory, list its files and show its path. Unlike openFolder:, do not record it in the history. Signal DirectoryDoesNotExist when aFolder is not an existing folder."
+
+	self currentDirectory: aFolder.
+	self updateFileReferenceTable.
+	pathBreadcrumbPresenter currentDirectory: aFolder
+]
+
 { #category : 'layout' }
 StFileNavigationSystemPresenter >> showPreview [
 	"Answer <true> if receiver should display a preview presenter"
@@ -520,13 +529,4 @@ StFileNavigationSystemPresenter >> updateFileReferenceTable [
 	items := (filtersDropList selectedItem ifNil: [ filter ]) applyOn: self currentDirectoryChildren.
 	StFileBrowserSettings showHiddenFiles ifFalse: [ items := items reject: [ :file | file isHidden ] ].
 	fileReferenceTable items: items
-]
-
-{ #category : 'accessing - history' }
-StFileNavigationSystemPresenter >> updateWidgetWithFileReference: aFolder [
-	"Show aFolder: make it the current directory, list its files and show its path. Unlike openFolder:, do not record it in the history. Signal DirectoryDoesNotExist when aFolder is not an existing folder."
-
-	self currentDirectory: aFolder.
-	self updateFileReferenceTable.
-	pathBreadcrumbPresenter currentDirectory: aFolder
 ]

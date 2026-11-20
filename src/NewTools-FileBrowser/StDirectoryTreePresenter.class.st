@@ -141,7 +141,7 @@ StDirectoryTreePresenter >> initializePresenters [
 { #category : 'utilities' }
 StDirectoryTreePresenter >> openFolder: aFileReference [ 
 
-	self owner updateWidgetWithFileReference: aFileReference.
+	self owner showFolder: aFileReference.
 
 ]
 
@@ -159,15 +159,16 @@ StDirectoryTreePresenter >> shouldReparent [
 	^ true
 ]
 
+{ #category : 'accessing - history' }
+StDirectoryTreePresenter >> showFolder: aFolder [
+	"Expand the tree to aFolder and select it."
+
+	self expandPath: aFolder
+]
+
 { #category : 'utilities' }
 StDirectoryTreePresenter >> updateFileDirectoryTree [
 
 	directoryTreePresenter roots: StFileSystemItemWrapper roots.
 	self expandPath: self currentDirectory.
-]
-
-{ #category : 'utilities' }
-StDirectoryTreePresenter >> updateWidgetWithFileReference: aFileReference [
-
-	self expandPath: aFileReference.
 ]

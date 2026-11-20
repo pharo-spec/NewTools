@@ -124,7 +124,7 @@ StFileSystemPresenter >> connectPresenters [
 
 	treeNavigationSystem transmitDo: [ :selection |
 		(self isDisplayed and: [ selection isNotNil and: [ selection fileReference ~= self currentDirectory ] ]) ifTrue: [
-			self updateWidgetWithFileReference: selection fileReference ] ].
+			self showFolder: selection fileReference ] ].
 
 	bookmarksTreeTable whenSelectionChangedDo: [ :selection |
 		selection selectedItem ifNotNil: [ :selectedItem |
@@ -203,10 +203,16 @@ StFileSystemPresenter >> initializePresenters [
 { #category : 'utilities' }
 StFileSystemPresenter >> openFolder: aFileReference [
 
-	fileNavigationSystem updateWidgetWithFileReference: aFileReference.
+	fileNavigationSystem showFolder: aFileReference.
 	model openFolder: aFileReference.
 	self expandPath: aFileReference.
 
+]
+
+{ #category : 'accessing - history' }
+StFileSystemPresenter >> showFolder: aFolder [
+
+	fileNavigationSystem showFolder: aFolder
 ]
 
 { #category : 'accessing' }
@@ -232,13 +238,7 @@ StFileSystemPresenter >> updateFileSystemPresenters [
 { #category : 'utilities' }
 StFileSystemPresenter >> updateTreeNavigationWithFileReference: aFileReference [ 
 
-	treeNavigationSystem updateWidgetWithFileReference: aFileReference
-]
-
-{ #category : 'accessing - history' }
-StFileSystemPresenter >> updateWidgetWithFileReference: aFileReference [ 
-
-	fileNavigationSystem updateWidgetWithFileReference: aFileReference
+	treeNavigationSystem showFolder: aFileReference
 ]
 
 { #category : 'accessing' }

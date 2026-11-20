@@ -76,3 +76,12 @@ StFileSystemPresenterTest >> testSelectingAFolderInTheTreeShowsIt [
 	browser treeNavigationSystem expandPath: folder parent.
 	self assert: browser currentDirectory equals: folder parent
 ]
+
+{ #category : 'tests' }
+StFileSystemPresenterTest >> testShowFolderShowsItInTheFileTable [
+
+	| folder |
+	folder := FileLocator imageDirectory asFileReference.
+	browser showFolder: folder.
+	self assert: browser fileNavigationSystem currentDirectory equals: folder
+]

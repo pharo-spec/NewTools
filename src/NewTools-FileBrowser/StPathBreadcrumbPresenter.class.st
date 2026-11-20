@@ -4,7 +4,7 @@ I am the path bar of the file browser and the dialogs: the current folder as lin
 ## Life cycle: who creates me and who uses me
 
 1. `StFileNavigationSystemPresenter>>initializePresenters` creates me, and its `connectPresenters` asks me to tell it the folder the user chooses (`whenFolderChosenDo:`), to open it (`openFolder:`).
-2. Each time its current folder changes (`updateWidgetWithFileReference:`), it gives me the folder with `currentDirectory:`; I show its path and stop any editing, without telling it back. When it gives back the folder I just announced, nothing changes.
+2. Each time its current folder changes (`showFolder:`), it gives me the folder with `currentDirectory:`; I show its path and stop any editing, without telling it back. When it gives back the folder I just announced, nothing changes.
 3. When the user clicks a link, or types the path of an existing folder and presses Return or the edit button, I show that folder and evaluate the block given to `whenFolderChosenDo:` with it.
 
 I do not depend on my owner: I can be used alone, as `example` does.
