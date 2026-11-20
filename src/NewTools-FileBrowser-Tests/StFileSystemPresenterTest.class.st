@@ -48,6 +48,20 @@ StFileSystemPresenterTest >> testBackAfterSelectingAFolderInTheTreeShowsThePrevi
 ]
 
 { #category : 'tests' }
+StFileSystemPresenterTest >> testBackAfterTheTreeOpensAFolderShowsThePreviousFolder [
+	"The tree opens a folder itself when a folder is removed from its context menu: it moves to the parent."
+
+	| folder |
+	browser open.
+	folder := FileLocator imageDirectory asFileReference.
+	browser openFolder: folder.
+	browser treeNavigationSystem openFolder: folder parent.
+	browser openFolder: folder parent parent.
+	browser fileNavigationSystem previousButton click.
+	self assert: browser currentDirectory equals: folder parent
+]
+
+{ #category : 'tests' }
 StFileSystemPresenterTest >> testOpenedBrowserTreeShowsAnOpenedFolder [
 
 	browser open.

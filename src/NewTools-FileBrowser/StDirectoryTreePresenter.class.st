@@ -139,10 +139,10 @@ StDirectoryTreePresenter >> initializePresenters [
 ]
 
 { #category : 'utilities' }
-StDirectoryTreePresenter >> openFolder: aFileReference [ 
+StDirectoryTreePresenter >> openFolder: aFolder [
+	"Open aFolder in my owner, which records it in the history. StFileBrowserRemoveCommand sends it to move to the parent of a folder removed from my context menu."
 
-	self owner showFolder: aFileReference.
-
+	self owner openFolder: aFolder
 ]
 
 { #category : 'accessing' }
