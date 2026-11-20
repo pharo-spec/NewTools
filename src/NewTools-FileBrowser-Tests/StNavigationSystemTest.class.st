@@ -90,6 +90,20 @@ StNavigationSystemTest >> testOpeningAFolderShowsItInTheBreadcrumb [
 ]
 
 { #category : 'tests' }
+StNavigationSystemTest >> testShowFolderListsItsFiles [
+
+	dialog showFolder: root / 'dir'.
+	self assert: dialog currentDirectory equals: root / 'dir'.
+	self assertCollection: (dialog fileReferenceTable items collect: #basename) hasSameElements: { 'klm.png'. 'klm.jpg' }
+]
+
+{ #category : 'tests - errors' }
+StNavigationSystemTest >> testShowingAFileRaisesDirectoryDoesNotExist [
+
+	self should: [ dialog showFolder: root / 'sth.ext' ] raise: DirectoryDoesNotExist
+]
+
+{ #category : 'tests' }
 StNavigationSystemTest >> testWhenClickAnAfterHistoryButtonIfThereAreHistoryShouldComeBackTheGoodDirectory [
 	| itemsBefore |
 	itemsBefore := dialog fileReferenceTable items.

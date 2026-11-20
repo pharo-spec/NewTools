@@ -340,17 +340,16 @@ StFileDialogPresenter >> showDirectory: aFileReference [
 	self fileNavigationSystem currentDirectory: aFileReference
 ]
 
+{ #category : 'accessing - history' }
+StFileDialogPresenter >> showFolder: aFolder [
+
+	self currentDirectory: aFolder.
+	aFolder exists ifTrue: [ self fileNavigationSystem showFolder: aFolder ]
+]
+
 { #category : 'accessing' }
 StFileDialogPresenter >> title [
 
 	^ title
 		ifNil: [ title := self windowTitle ]
-]
-
-{ #category : 'accessing - history' }
-StFileDialogPresenter >> updateWidgetWithFileReference: aFileReference [
-
-	self currentDirectory: aFileReference.
-	aFileReference exists
-		ifTrue: [ self fileNavigationSystem updateWidgetWithFileReference: aFileReference ]
 ]
