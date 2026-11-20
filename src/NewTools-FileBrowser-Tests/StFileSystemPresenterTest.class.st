@@ -50,3 +50,29 @@ StFileSystemPresenterTest >> testOpenedBrowserTreeShowsTheCurrentDirectory [
 	self assert: browser treeNavigationSystem directoryTreePresenter selectedItem isNotNil.
 	self assert: browser treeNavigationSystem selectedEntry equals: browser currentDirectory
 ]
+
+{ #category : 'tests' }
+StFileSystemPresenterTest >> testOpeningAFolderFillsTheFileTableOnce [
+	"Opening a folder selects it in the directory tree, which must not show the folder a second time."
+
+	| fills table folder |
+	browser open.
+	folder := FileLocator imageDirectory asFileReference.
+	browser fileNavigationSystem openFolder: folder.
+	table := browser fileNavigationSystem fileReferenceTable.
+	fills := 0.
+	table whenModelChangedDo: [ fills := fills + 1 ].
+	browser fileNavigationSystem openFolder: folder parent.
+	self assert: fills equals: 1
+]
+
+{ #category : 'tests' }
+StFileSystemPresenterTest >> testSelectingAFolderInTheTreeShowsIt [
+
+	| folder |
+	browser open.
+	folder := FileLocator imageDirectory asFileReference.
+	browser openFolder: folder.
+	browser treeNavigationSystem expandPath: folder parent.
+	self assert: browser currentDirectory equals: folder parent
+]

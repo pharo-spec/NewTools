@@ -89,6 +89,12 @@ StNavigationSystemTest >> testOpeningAFolderShowsItInTheBreadcrumb [
 	self assert: dialog pathBreadcrumbPresenter currentDirectory equals: root / 'dir'
 ]
 
+{ #category : 'tests - errors' }
+StNavigationSystemTest >> testShowingAFileRaisesDirectoryDoesNotExist [
+
+	self should: [ dialog updateWidgetWithFileReference: root / 'sth.ext' ] raise: DirectoryDoesNotExist
+]
+
 { #category : 'tests' }
 StNavigationSystemTest >> testWhenClickAnAfterHistoryButtonIfThereAreHistoryShouldComeBackTheGoodDirectory [
 	| itemsBefore |

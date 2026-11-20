@@ -523,11 +523,10 @@ StFileNavigationSystemPresenter >> updateFileReferenceTable [
 ]
 
 { #category : 'accessing - history' }
-StFileNavigationSystemPresenter >> updateWidgetWithFileReference: aFileReference [
-	"A file reference was selected in the receiver or one of its subpresenters, update the file reference table and current directory"
+StFileNavigationSystemPresenter >> updateWidgetWithFileReference: aFolder [
+	"Show aFolder: make it the current directory, list its files and show its path. Unlike openFolder:, do not record it in the history. Signal DirectoryDoesNotExist when aFolder is not an existing folder."
 
-	self currentDirectory: aFileReference.
+	self currentDirectory: aFolder.
 	self updateFileReferenceTable.
-	pathBreadcrumbPresenter currentDirectory: self currentDirectory.
-	aFileReference isDirectory ifFalse: [ self nameText: aFileReference basename ]
+	pathBreadcrumbPresenter currentDirectory: aFolder
 ]
