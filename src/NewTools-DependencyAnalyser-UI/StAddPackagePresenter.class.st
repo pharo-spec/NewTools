@@ -87,12 +87,6 @@ StAddPackagePresenter >> initializePresenters [
 	packageList := self instantiate: SpChooserPresenter
 ]
 
-{ #category : 'accessing' }
-StAddPackagePresenter >> packageList [
-
-	^ packageList
-]
-
 { #category : 'initialization' }
 StAddPackagePresenter >> selectedItemsFromPackageList [
 	^ packageList chosenItems

@@ -68,7 +68,9 @@ CBCritiquesCache >> addFalsePositive: aCritique forRule: aRule [
 	(falsePositives includesKey: aRule) ifFalse: [ 
 		falsePositives at: aRule put: IdentitySet new ].
 	(falsePositives at: aRule) add: aCritique.
-	self updateBrowser
+	self
+		cacheChanged;
+		updateBrowser
 ]
 
 { #category : 'add/remove' }
@@ -80,7 +82,9 @@ CBCritiquesCache >> addFalsePositiveClass: aClass [
 		fp := critiquess select: [ :critique | 
 			      aClass = critique criticTheNonMetaclassClass ].
 		fp do: [ :each | self addFalsePositive: each forRule: rule ] ].
-	self updateBrowser
+	self
+		cacheChanged;
+		updateBrowser
 ]
 
 { #category : 'add/remove' }
@@ -102,7 +106,9 @@ CBCritiquesCache >> addToDo: aCritique forRule: aRule [
 	(toDos includesKey: aRule) ifFalse: [ 
 		toDos at: aRule put: IdentitySet new ].
 	(toDos at: aRule) add: aCritique.
-	self updateBrowser
+	self
+		cacheChanged;
+		updateBrowser
 ]
 
 { #category : 'accessing' }
@@ -349,7 +355,9 @@ CBCritiquesCache >> removeFalsePositive: aCritique forRule: aRule [
 		on: MessageNotUnderstood 
 		do: [ ^ self "#criticTheNonMetaclassClass makes no sense on a Package, ignore"].
 	(falsePositives at: aRule) remove: aCritique ifAbsent: [^ self].
-	self updateBrowser
+	self
+		cacheChanged;
+		updateBrowser
 ]
 
 { #category : 'add/remove' }
@@ -379,7 +387,9 @@ CBCritiquesCache >> removeFalsePositiveRule: aRule forPackage: aPackage [
 				      not ] ].
 	fp do: [ :c | self removeFalsePositive: c forRule: aRule ].
 
-	self updateBrowser
+	self
+		cacheChanged;
+		updateBrowser
 ]
 
 { #category : 'add/remove' }
@@ -398,7 +408,9 @@ CBCritiquesCache >> removeToDo: aCritique forRule: aRule [
 		ifFalse: [^ self].
 			
 	(toDos at:aRule) remove: aCritique ifAbsent: [^ self].
-	self updateBrowser
+	self
+		cacheChanged;
+		updateBrowser
 	
 ]
 
@@ -433,6 +445,5 @@ CBCritiquesCache >> toDosOf: aRule [
 { #category : 'private' }
 CBCritiquesCache >> updateBrowser [
 
-	self cacheChanged.
-	browser updateTree 
+	browser updateTree
 ]
