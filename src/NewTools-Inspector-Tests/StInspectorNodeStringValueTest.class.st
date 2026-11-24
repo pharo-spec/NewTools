@@ -113,7 +113,9 @@ StInspectorNodeStringValueTest >> testStringValuePrintsTheValueOnce [
 	node := StInspectorSelfNode hostObject: object.
 	node stringValue.
 	node stringValue.
-	self assert: object printCount equals: 1
+		"use perform: since object is instance of an anonymous class with methods defined in strings.
+		It defeats the static rule checker"
+	self assert: (object perform: #printCount) equals: 1
 ]
 
 { #category : 'tests' }
