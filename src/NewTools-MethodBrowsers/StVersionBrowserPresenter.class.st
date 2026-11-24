@@ -61,15 +61,18 @@ StVersionBrowserPresenter class >> registerToolsOn: registry [
 
 { #category : 'visiting' }
 StVersionBrowserPresenter >> accept: text notifying: notifyer [
-	| message |
 
+	| message class |
 	message := self selectedMethod.
 	message ifNil: [ ^ self ].
-	
-	message methodClass 
-		compile: text 
+
+	class := message methodClass.
+	class
+		compile: text
 		classified: message protocol
+		withStamp: DateAndTime now
 		notifying: notifyer
+		logSource: class shouldLogSource
 ]
 
 { #category : 'actions' }
@@ -331,14 +334,15 @@ StVersionBrowserPresenter >> replaceSourceWith: aPresenter [
 { #category : 'private - factory' }
 StVersionBrowserPresenter >> revert: aChangeRecord [
 
-	aChangeRecord ifNil: [
-		^ self inform: 'nothing selected, so nothing done' ].
+	| class |
+	aChangeRecord ifNil: [ ^ self inform: 'nothing selected, so nothing done' ].
 
-	rgMethod realClass
+	class := rgMethod realClass.
+	class
 		compile: aChangeRecord sourceCode
 		classified: aChangeRecord category
 		withStamp: aChangeRecord stamp
-		notifying: nil.
+		logSource: class shouldLogSource.
 
 	"reinitialize me"
 	self setRGMethodFrom: rgMethod realClass >> rgMethod selector.
