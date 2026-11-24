@@ -79,7 +79,9 @@ StInspectorNodeStringValueTest >> testOpeningAnInspectorDoesNotPrintTheObjectOnE
 	window := (StInspectorPresenter onObject: object) open.
 	[
 		self waitUntilUIRedrawed.
-		self assert: object printCount <= 3 ] ensure: [ window close ]
+		"use perform: since object is instance of an anonymous class with methods defined in strings.
+		It defeats the static rule checker"
+		self assert: (object perform: #printCount) <= 3 ] ensure: [ window close ]
 ]
 
 { #category : 'tests' }
