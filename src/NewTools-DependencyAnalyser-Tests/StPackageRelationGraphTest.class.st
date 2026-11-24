@@ -13,8 +13,8 @@ Class {
 		'packageB',
 		'packageC',
 		'packageD',
-		'packageMorphicBase',
-		'packageTextCore'
+		'packageTextCore',
+		'packageOfTextMorph'
 	],
 	#category : 'NewTools-DependencyAnalyser-Tests-Packages',
 	#package : 'NewTools-DependencyAnalyser-Tests',
@@ -34,7 +34,8 @@ StPackageRelationGraphTest >> setUp [
 	packageCollectionAbstract := StPackage onPackageNamed: 'Collections-Abstract'.
 	packageStrings := StPackage onPackageNamed: 'Collections-Strings'.
 	packageKernel := StPackage onPackageNamed: 'Kernel'.
-	packageMorphicBase := StPackage onPackageNamed: 'Morphic-Base'.
+	"Found through a class: Morphic's widgets package changes name"
+	packageOfTextMorph := StPackage onPackageNamed: TextMorph package name.
 	packageTextCore := StPackage onPackageNamed: 'Text-Core'.
 	packageRegexCore := StPackage onPackageNamed: 'Regex-Core'.
 	packageCollectionsSequenceable := StPackage onPackageNamed: 'Collections-Sequenceable'.
@@ -81,9 +82,10 @@ StPackageRelationGraphTest >> testAddPackages [
 
 { #category : 'tests' }
 StPackageRelationGraphTest >> testAddPoolDictionaryDependencies [
-	aPackageRelationGraph addPoolDictionaryDependencies: packageMorphicBase.
 
-	self assert: (packageMorphicBase dependentPackages includes: packageTextCore)
+	aPackageRelationGraph addPoolDictionaryDependencies: packageOfTextMorph.
+
+	self assert: (packageOfTextMorph dependentPackages includes: packageTextCore)
 ]
 
 { #category : 'tests' }
