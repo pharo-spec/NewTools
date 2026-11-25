@@ -39,6 +39,7 @@ SpColorPickerPresenter >> defaultLayout [
 	
 	^ SpBoxLayout newTopToBottom 
 		add: colorPickerPresenter;
+		add: toolbar expand: false;
 		yourself
 ]
 
