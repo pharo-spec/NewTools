@@ -42,6 +42,13 @@ StSettingsBrowser class >> menuSettingsBrowserCommandOn: aBuilder [
 		help: 'Opens a Settings Browser which allows you to alter many system settings.'
 ]
 
+{ #category : 'opening' }
+StSettingsBrowser class >> open [
+	"Open a settings browser in the Pharo application, as the tool registered as #settingsBrowser"
+
+	^ (self newApplication: StPharoApplication current) open
+]
+
 { #category : 'accessing' }
 StSettingsBrowser >> addSearchResultFrom: colOfStSettingNode [
 
