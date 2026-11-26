@@ -14,16 +14,104 @@ Class {
 		'packageC',
 		'packageD',
 		'packageTextCore',
-		'packageOfTextMorph'
+		'packageOfTextMorph',
+		'fixtureEnvironment'
 	],
 	#category : 'NewTools-DependencyAnalyser-Tests-Packages',
 	#package : 'NewTools-DependencyAnalyser-Tests',
 	#tag : 'Packages'
 }
 
+{ #category : 'fixtures' }
+StPackageRelationGraphTest >> defineFixA: aClassBuilder [
+	"Fix-Core defines FixA with aClassBuilder"
+
+	^ self defineFixture: aClassBuilder in: 'Fix-Core'
+]
+
+{ #category : 'fixtures' }
+StPackageRelationGraphTest >> defineFixture: aClassBuilder in: aPackageName [
+	"Build the class of aClassBuilder in the fixture environment, in its package aPackageName"
+
+	^ self
+		  register: (aClassBuilder
+			   environment: self fixtureEnvironment;
+			   package: aPackageName;
+			   build)
+		  in: aPackageName
+]
+
+{ #category : 'fixtures' }
+StPackageRelationGraphTest >> defineLibrary [
+	"Fix-Lib defines a superclass, a trait and a shared pool"
+
+	self defineFixture: Object << #FixBase in: 'Fix-Lib'.
+	self defineFixture: Trait << #TFix in: 'Fix-Lib'.
+	self defineFixture: (SharedPool << #FixPool sharedVariables: #( #Value )) in: 'Fix-Lib'
+]
+
+{ #category : 'fixtures' }
+StPackageRelationGraphTest >> extendFixAFromOther [
+	"Fix-Other only adds a method to FixA"
+
+	| fixA |
+	fixA := self fixtureEnvironment at: #FixA.
+	fixA
+		compile: 'extra ^ 42'
+		classified: '*Fix-Other'
+		withStamp: nil
+		notifying: nil
+		logSource: false.
+	(self fixtureEnvironment organization ensurePackage: 'Fix-Other') addMethod: fixA >> #extra
+]
+
+{ #category : 'fixtures' }
+StPackageRelationGraphTest >> fixture: aSymbol [
+
+	^ self fixtureEnvironment at: aSymbol
+]
+
+{ #category : 'fixtures' }
+StPackageRelationGraphTest >> fixtureDependenciesOf: aPackageName [
+	"The names of the packages aPackageName depends on, in a graph of all the fixture packages"
+
+	| packages |
+	packages := self fixtureEnvironment organization packages collect: [ :each |
+		            StPackage basicNew
+			            initializeWithPackage: each;
+			            packageName: each name;
+			            yourself ].
+	(StPackageRelationGraph onPackages: packages)
+		shouldComputeMessageSendDependencies: false;
+		build.
+	^ (packages detect: [ :each | each packageName = aPackageName ]) dependencies
+		  collect: [ :each | each target packageName asString ]
+		  as: Set
+]
+
+{ #category : 'fixtures' }
+StPackageRelationGraphTest >> fixtureEnvironment [
+	"A private environment for fixture classes and packages: nothing built there is installed in the image"
+
+	^ fixtureEnvironment ifNil: [
+		  fixtureEnvironment := SystemEnvironment new.
+		  fixtureEnvironment codeChangeAnnouncer: Announcer new.
+		  #( #Object #ProtoObject #FixedLayout #Trait #SharedPool ) do: [ :each |
+			  fixtureEnvironment at: each put: (self class environment at: each) ].
+		  fixtureEnvironment ]
+]
+
 { #category : 'utilities' }
 StPackageRelationGraphTest >> packageDependencyFrom: aPackage to: anOtherPackage [
 	^ StPackageDependency from: aPackage to: anOtherPackage
+]
+
+{ #category : 'fixtures' }
+StPackageRelationGraphTest >> register: aClass in: aPackageName [
+
+	self fixtureEnvironment at: aClass name put: aClass.
+	(self fixtureEnvironment organization ensurePackage: aPackageName) addClass: aClass.
+	^ aClass
 ]
 
 { #category : 'running' }
@@ -44,6 +132,18 @@ StPackageRelationGraphTest >> setUp [
 	packageB := StPackage onPackageNamed: 'B'.
 	packageC := StPackage onPackageNamed: 'C'.
 	packageD := StPackage onPackageNamed: 'D'
+]
+
+{ #category : 'tests - extensions' }
+StPackageRelationGraphTest >> testAClassDependsOnThePackagesOfItsSuperclassTraitsAndPools [
+	"The dependencies an extension must not get are still there for the package defining the class"
+
+	self defineLibrary.
+	self defineFixA: (((self fixture: #FixBase) << #FixA)
+		 traits: (self fixture: #TFix);
+		 sharedPools: { (self fixture: #FixPool) };
+		 yourself).
+	self assert: (self fixtureDependenciesOf: 'Fix-Core') equals: #( 'Fix-Lib' ) asSet
 ]
 
 { #category : 'tests' }
@@ -123,6 +223,59 @@ StPackageRelationGraphTest >> testAllSeen [
 	self deny: (aPackageRelationGraph allSeen).
 	aPackageRelationGraph computeStaticDependencies.
 	self deny: (aPackageRelationGraph allSeen)
+]
+
+{ #category : 'tests - extensions' }
+StPackageRelationGraphTest >> testAnExtensionDependsOnThePackageOfTheExtendedClass [
+
+	self defineLibrary.
+	self defineFixA: (self fixture: #FixBase) << #FixA.
+	self extendFixAFromOther.
+	self assert: ((self fixtureDependenciesOf: 'Fix-Other') includes: 'Fix-Core')
+]
+
+{ #category : 'tests - extensions' }
+StPackageRelationGraphTest >> testAnExtensionDoesNotGetTheInheritanceDependencyOfTheExtendedClass [
+
+	self defineLibrary.
+	self defineFixA: (self fixture: #FixBase) << #FixA.
+	self extendFixAFromOther.
+	self deny: ((self fixtureDependenciesOf: 'Fix-Other') includes: 'Fix-Lib')
+]
+
+{ #category : 'tests - extensions' }
+StPackageRelationGraphTest >> testAnExtensionDoesNotGetThePoolDependencyOfTheExtendedClass [
+
+	self defineLibrary.
+	self defineFixA: ((Object << #FixA)
+		 sharedPools: { (self fixture: #FixPool) };
+		 yourself).
+	self extendFixAFromOther.
+	self deny: ((self fixtureDependenciesOf: 'Fix-Other') includes: 'Fix-Lib')
+]
+
+{ #category : 'tests - extensions' }
+StPackageRelationGraphTest >> testAnExtensionDoesNotGetTheTraitDependencyOfTheExtendedClass [
+
+	self defineLibrary.
+	self defineFixA: ((Object << #FixA)
+		 traits: (self fixture: #TFix);
+		 yourself).
+	self extendFixAFromOther.
+	self deny: ((self fixtureDependenciesOf: 'Fix-Other') includes: 'Fix-Lib')
+]
+
+{ #category : 'tests - extensions' }
+StPackageRelationGraphTest >> testAnExtensionDoesNotInheritTheDependenciesOfTheExtendedClass [
+	"FixA inherits from FixBase, uses TFix and FixPool, all of Fix-Lib. Fix-Other only adds a method to FixA: it depends on Fix-Core, not on Fix-Lib"
+
+	self defineLibrary.
+	self defineFixA: (((self fixture: #FixBase) << #FixA)
+		 traits: (self fixture: #TFix);
+		 sharedPools: { (self fixture: #FixPool) };
+		 yourself).
+	self extendFixAFromOther.
+	self assert: (self fixtureDependenciesOf: 'Fix-Other') equals: #( 'Fix-Core' ) asSet
 ]
 
 { #category : 'tests' }

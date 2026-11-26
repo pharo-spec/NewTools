@@ -326,8 +326,9 @@ StPackageRelationGraph >> outgoing [
 
 { #category : 'enumerating' }
 StPackageRelationGraph >> package: aPackage classesDo: aBlock [
+	"Evaluate aBlock with each class aPackage defines. Not the classes it only extends: their superclass, traits and pools are dependencies of the package defining them"
 
-	aPackage systemPackage ifNotNil: [ :package | package classes do: aBlock ]
+	aPackage systemPackage ifNotNil: [ :package | package definedClasses do: aBlock ]
 ]
 
 { #category : 'accessing' }
