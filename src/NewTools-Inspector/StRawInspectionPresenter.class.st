@@ -178,17 +178,18 @@ StRawInspectionPresenter >> step [
 
 	rootNodes := self model allInspectorNodes.
 	mementoNodes ifNil: [ 
-		mementoNodes := rootNodes collect: #mementoValue.
+		mementoNodes := rootNodes collect: #stringValue.
 		^ self ].
-	(rootNodes collect: #value) = mementoNodes ifTrue: [ ^ self ].
+	(rootNodes collect: #stringValue) = mementoNodes ifTrue: [ ^ self ].
 
-	mementoNodes := rootNodes collect: #mementoValue.
+	mementoNodes := rootNodes collect: #stringValue.
 	attributeTable updateRootsKeepingSelection: rootNodes
 ]
 
 { #category : 'building' }
 StRawInspectionPresenter >> updatePresenter [
 
+	mementoNodes := nil.
 	attributeTable roots: self modelInspectorNodes
 ]
 
