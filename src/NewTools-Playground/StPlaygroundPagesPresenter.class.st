@@ -70,7 +70,7 @@ StPlaygroundPagesPresenter >> doLoadPage [
 StPlaygroundPagesPresenter >> doLoadPageOnNewPlayground [
 	| playground |
 	
-	(playground := StPlaygroundPresenter new) 
+	(playground := self instantiate: StPlaygroundPresenter) 
 		loadPage: self selectedPage;
 		open.
 	self window close.
