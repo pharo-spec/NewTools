@@ -45,20 +45,18 @@ StRawInspectionPresenter >> selectedPageName [
 
 { #category : '*NewTools-Debugger' }
 StRawInspectionPresenter >> updateNodesFromScope: oldTemps to: newTemps [
+	"Update the temporary nodes to the variables visible in the new scope. The kept nodes forget their display strings, since the debugger keeps them while stepping and their values may have changed."
 
 	| nodes tempsToRemove tempsToAdd |
 	tempsToRemove := oldTemps difference: newTemps.
 	tempsToAdd := newTemps difference: oldTemps.
 	nodes := self attributeTable roots.
-	nodes removeAllSuchThat: [ :node |
-		node class = StInspectorTempNode and: [
-			tempsToRemove includes: node tempName ] ].
-	tempsToAdd do: [ :temp |
-		nodes add:
-			((StInspectorTempNode hostObject:
-					  self model inspectedObject context)
-				 tempName: temp;
-				 yourself) ].
+	nodes removeAllSuchThat: [ :node | node class = StInspectorTempNode and: [ tempsToRemove includes: node tempName ] ].
+	nodes do: [ :node | node resetStringValue ].
+	nodes addAll: (tempsToAdd collect: [ :temp |
+		 (StInspectorTempNode hostObject: self model inspectedObject context)
+			 tempName: temp;
+			 yourself ]).
 
 	self attributeTable roots: nodes
 ]

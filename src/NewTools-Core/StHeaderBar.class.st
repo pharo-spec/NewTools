@@ -85,6 +85,12 @@ StHeaderBar >> isCloseable [
 ]
 
 { #category : 'accessing' }
+StHeaderBar >> label [
+
+	^ titleLabel label
+]
+
+{ #category : 'accessing' }
 StHeaderBar >> label: aString [
 
 	titleLabel label: aString
