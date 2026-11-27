@@ -214,8 +214,10 @@ StFileSystemModel >> lastVisitedDirectory [
 
 { #category : 'utilities' }
 StFileSystemModel >> openFolder: aFileReference [
+	"Record the current directory in the history, so that the back button returns to it. A folder opened again while it is shown, as from the last link of the path bar or a bookmark, is not recorded twice: it is not a move, so it keeps the folders of the forward button too."
 
-	self history register: self currentDirectory.
+	(self history hasPrevious and: [ self history current = self currentDirectory ]) ifTrue: [ ^ self ].
+	self history register: self currentDirectory
 ]
 
 { #category : 'initialization' }

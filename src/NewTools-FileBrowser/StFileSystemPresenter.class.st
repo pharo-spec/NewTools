@@ -117,20 +117,24 @@ StFileSystemPresenter >> bookmarksTreeTable [
 StFileSystemPresenter >> connectPresenters [
 	"Here we check that the window is displayed. 
 	If it's not, that means this is a first opening so it should preserve the path selected by the user (through openOnLastDirectory preference, or defaultRoot: message send) and not to transmit the directory selection.
+	A folder selected in the tree is recorded in the history, as any opened folder, so that the back button returns from it.
+	A selection of the current directory is not transmitted: it comes from opening that folder, which expands the tree to it, and the folder is already shown.
 	Once displayed, the directory tree is expanded to the current directory, so that it shows the same folder as the file table: it cannot be expanded before."
 
 	super connectPresenters.
 
 	treeNavigationSystem transmitDo: [ :selection |
-		(self isDisplayed and: [ selection isNotNil ]) ifTrue: [ self updateWidgetWithFileReference: selection fileReference ] ].
+		(self isDisplayed and: [ selection isNotNil and: [ selection fileReference ~= self currentDirectory ] ]) ifTrue: [
+			self showFolder: selection fileReference.
+			model openFolder: selection fileReference ] ].
 
 	bookmarksTreeTable whenSelectionChangedDo: [ :selection |
-			selection selectedItem ifNotNil: [ :selectedItem |
-				selectedItem isComposite ifFalse: [ self fileNavigationSystem openFolder: selectedItem location ] ] ].
+		selection selectedItem ifNotNil: [ :selectedItem |
+			selectedItem isComposite ifFalse: [ self fileNavigationSystem openFolder: selectedItem location ] ] ].
 
 	self whenDisplayDo: [
-			self centered.
-			self expandPath: self currentDirectory ]
+		self centered.
+		self expandPath: self currentDirectory ]
 ]
 
 { #category : 'layout' }
@@ -201,10 +205,16 @@ StFileSystemPresenter >> initializePresenters [
 { #category : 'utilities' }
 StFileSystemPresenter >> openFolder: aFileReference [
 
-	fileNavigationSystem updateWidgetWithFileReference: aFileReference.
+	fileNavigationSystem showFolder: aFileReference.
 	model openFolder: aFileReference.
 	self expandPath: aFileReference.
 
+]
+
+{ #category : 'accessing - history' }
+StFileSystemPresenter >> showFolder: aFolder [
+
+	fileNavigationSystem showFolder: aFolder
 ]
 
 { #category : 'accessing' }
@@ -230,13 +240,7 @@ StFileSystemPresenter >> updateFileSystemPresenters [
 { #category : 'utilities' }
 StFileSystemPresenter >> updateTreeNavigationWithFileReference: aFileReference [ 
 
-	treeNavigationSystem updateWidgetWithFileReference: aFileReference
-]
-
-{ #category : 'accessing - history' }
-StFileSystemPresenter >> updateWidgetWithFileReference: aFileReference [ 
-
-	fileNavigationSystem updateWidgetWithFileReference: aFileReference
+	treeNavigationSystem showFolder: aFileReference
 ]
 
 { #category : 'accessing' }

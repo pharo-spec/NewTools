@@ -6,14 +6,14 @@ I am the root of the presenters of the file browser and of the file dialogs (ope
 1. **Someone opens a browser or a dialog.** The World menu item System > File Browser (`StFileBrowserAbstractPresenter class>>menuFileSystemBrowserCommandOn:`) opens a `StFileSystemPresenter`, also registered as the `#fileList` tool. Code asking the user for a file or a folder opens a dialog: `StOpenFilePresenter`, `StOpenDirectoryPresenter` or `StSaveFilePresenter`, usually with `openModal` (e.g. `StLabeledSettingFileSelectionPresenter`, `IceTipFilePresenter`, `EpChunkExporter`). `SpMorphicBackend` and the `UITheme` file services open them too.
 2. **Each presenter gets the model.** `initialize` sets `StFileBrowserAbstractPresenter class>>defaultModel`, a new `StFileSystemModel`, unless one is given (`on:`, `owner:on:`). The subpresenters are created on the model of their owner, so they share the current directory and the history.
 3. **The browser assembles its parts.** `StFileSystemPresenter>>initializePresenters` creates the navigation presenter (its `navigationSystemClass`: `StFileNavigationSystemPresenter`, or `StDirectoryNavigationSystemPresenter` for folder dialogs), the directory tree (`StDirectoryTreePresenter`) and the bookmark tree. The navigation presenter creates the path bar (`StPathBreadcrumbPresenter`), the file table, the filter drop list, the name field and the preview pane.
-4. **Navigation goes through the model and the owner.** Selecting a folder in the tree, a bookmark, a link of the path or double clicking a folder ends in `openFolder:` / `updateWidgetWithFileReference:`: the model changes its `currentDirectory` and records it in its history (back and forward buttons), and the table, path and tree are updated. A subpresenter sends to its `owner` what concerns the whole browser: `updateFileSystemPresenters`, `addBookmark:`, `bookmarks:`, `bookmarksTreeTable`.
+4. **Navigation goes through the model and the owner.** Selecting a folder in the tree, a bookmark, a link of the path or double clicking a folder ends in `openFolder:`: the model changes its `currentDirectory` and records it in its history (back and forward buttons), and the table, path and tree are updated. `showFolder:` does the same without recording the folder: the back and forward buttons use it. A subpresenter sends to its `owner` what concerns the whole browser: `updateFileSystemPresenters`, `addBookmark:`, `bookmarks:`, `bookmarksTreeTable`.
 5. **A dialog gives the choice.** When the user confirms, a dialog evaluates its `okAction:` block with its `selectedEntry`. The open dialogs also answer their `selectedEntries` from `openModal` (nil when cancelled); the save dialog answers its window, so its users rely on `okAction:` (e.g. `EpChunkExporter>>fileOut:in:`).
 
 ## Responsibility:
 
 - Hold the `StFileSystemModel` and give access to its current directory, history, bookmarks and default and last visited directories.
 - Create folders (`createDirectory`, asking the name), and set up the history of a starting folder.
-- Define what each presenter must do when a folder is opened (`openFolder:`, `updateWidgetWithFileReference:`).
+- Define what each presenter must do when a folder is opened (`openFolder:`, `showFolder:`).
 
 ## Collaborators:
 
@@ -23,7 +23,7 @@ I am the root of the presenters of the file browser and of the file dialogs (ope
 
 ## Public API and Key Messages
 
-- `openFolder: aFileReference`, `updateWidgetWithFileReference: aFileReference`: show a folder. Subclasses define them.
+- `openFolder: aFileReference`: open a folder and record it in the history; `showFolder: aFolder`: show a folder without recording it. Subclasses define them.
 - `currentDirectory`, `currentDirectory:`, `history`, `bookmarks`, `defaultDirectory`, `lastVisitedDirectory`.
 - `createDirectory`, `updateFileSystemPresenters`.
 - `StFileBrowserAbstractPresenter class>>open`: opens a new instance.
@@ -170,9 +170,9 @@ StFileBrowserAbstractPresenter >> initializeHistoryIteratorWith: aDirectory [
 
 	self history: (ConfigurableHistoryIterator
 		undo: [ :folder | self history hasPrevious
-			ifTrue: [ self updateWidgetWithFileReference: self history current ]
+			ifTrue: [ self showFolder: self history current ]
 			ifFalse: [ self inform: 'Nothing to undo' ] ]
-		redo: [ :folder | self updateWidgetWithFileReference: folder ]).
+		redo: [ :folder | self showFolder: folder ]).
 	self history register: aDirectory
 ]
 
@@ -235,14 +235,26 @@ StFileBrowserAbstractPresenter >> setModelBeforeInitialization: aStFileSystemMod
 	model := aStFileSystemModel
 ]
 
+{ #category : 'accessing - history' }
+StFileBrowserAbstractPresenter >> showFolder: aFolder [
+	"Show aFolder without recording it in the history (see openFolder:)."
+
+	self subclassResponsibility
+]
+
 { #category : 'utilities' }
 StFileBrowserAbstractPresenter >> updateFileSystemPresenters [
 
 	self owner updateFileSystemPresenters
 ]
 
-{ #category : 'accessing - history' }
-StFileBrowserAbstractPresenter >> updateWidgetWithFileReference: aFileReference [
+{ #category : 'deprecated' }
+StFileBrowserAbstractPresenter >> updateWidgetWithFileReference: aFolder [
 
-	self subclassResponsibility
+	self
+		deprecated: 'Use #showFolder: instead.'
+		on: '2026-11-20'
+		in: #Pharo15
+		transformWith: '`@receiver updateWidgetWithFileReference: `@argument' -> '`@receiver showFolder: `@argument'.
+	^ self showFolder: aFolder
 ]

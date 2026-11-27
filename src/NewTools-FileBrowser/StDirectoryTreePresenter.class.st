@@ -139,10 +139,10 @@ StDirectoryTreePresenter >> initializePresenters [
 ]
 
 { #category : 'utilities' }
-StDirectoryTreePresenter >> openFolder: aFileReference [ 
+StDirectoryTreePresenter >> openFolder: aFolder [
+	"Open aFolder in my owner, which records it in the history. StFileBrowserRemoveCommand sends it to move to the parent of a folder removed from my context menu."
 
-	self owner updateWidgetWithFileReference: aFileReference.
-
+	self owner openFolder: aFolder
 ]
 
 { #category : 'accessing' }
@@ -159,15 +159,16 @@ StDirectoryTreePresenter >> shouldReparent [
 	^ true
 ]
 
+{ #category : 'accessing - history' }
+StDirectoryTreePresenter >> showFolder: aFolder [
+	"Expand the tree to aFolder and select it."
+
+	self expandPath: aFolder
+]
+
 { #category : 'utilities' }
 StDirectoryTreePresenter >> updateFileDirectoryTree [
 
 	directoryTreePresenter roots: StFileSystemItemWrapper roots.
 	self expandPath: self currentDirectory.
-]
-
-{ #category : 'utilities' }
-StDirectoryTreePresenter >> updateWidgetWithFileReference: aFileReference [
-
-	self expandPath: aFileReference.
 ]

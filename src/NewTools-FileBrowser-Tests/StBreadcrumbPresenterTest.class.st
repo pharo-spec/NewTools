@@ -114,6 +114,25 @@ StBreadcrumbPresenterTest >> testChangingTheCurrentDirectoryKeepsTheLayoutOfTheL
 ]
 
 { #category : 'tests' }
+StBreadcrumbPresenterTest >> testChangingTheCurrentDirectoryStopsEditing [
+
+	breadcrumb currentDirectory: root.
+	breadcrumb beginEditing.
+	breadcrumb currentDirectory: root / 'dir'.
+	self deny: breadcrumb isEditing
+]
+
+{ #category : 'tests' }
+StBreadcrumbPresenterTest >> testChangingTheCurrentDirectoryWhileEditingShowsItInTheTextField [
+
+	breadcrumb currentDirectory: root.
+	breadcrumb beginEditing.
+	breadcrumb pathTextInput text: 'some/thing/typed'.
+	breadcrumb currentDirectory: root / 'dir'.
+	self assert: breadcrumb pathTextInput text equals: (root / 'dir') fullName
+]
+
+{ #category : 'tests' }
 StBreadcrumbPresenterTest >> testClickingALinkAnnouncesItsFolder [
 
 	| chosen |
@@ -196,6 +215,20 @@ StBreadcrumbPresenterTest >> testNotEditingShowsTheLinksInsteadOfTheTextField [
 ]
 
 { #category : 'tests' }
+StBreadcrumbPresenterTest >> testOwnerSettingTheClickedFolderKeepsItsLinks [
+	"The owner answers a click by giving back the chosen folder, as StFileNavigationSystemPresenter does: the links must not be built a second time."
+
+	| linksAtAnnounce |
+	linksAtAnnounce := #(  ).
+	breadcrumb currentDirectory: root / 'dir'.
+	breadcrumb whenFolderChosenDo: [ :folder |
+		linksAtAnnounce := self links.
+		breadcrumb currentDirectory: folder ].
+	(self linkLabeled: 'fd-test') performAction.
+	self assert: self links equals: linksAtAnnounce
+]
+
+{ #category : 'tests' }
 StBreadcrumbPresenterTest >> testPressingReturnAcceptsTheTypedPath [
 
 	breadcrumb currentDirectory: root.
@@ -215,6 +248,16 @@ StBreadcrumbPresenterTest >> testRoot [
 	breadcrumb currentDirectory: FileLocator root.
 	breadcrumb open.
 	self assert: breadcrumb path presenters size equals: 1
+]
+
+{ #category : 'tests' }
+StBreadcrumbPresenterTest >> testSettingTheSameDirectoryKeepsItsLinks [
+
+	| links |
+	breadcrumb currentDirectory: root.
+	links := self links.
+	breadcrumb currentDirectory: root.
+	self assert: self links equals: links
 ]
 
 { #category : 'tests' }
