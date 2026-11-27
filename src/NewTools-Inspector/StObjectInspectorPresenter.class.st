@@ -350,8 +350,7 @@ StObjectInspectorPresenter >> updatePresenter [
 StObjectInspectorPresenter >> updateTitle [
 		
 	self isRoot ifFalse: [ ^ self ].
-	self withWindowDo: [ :window | 
-		window title: self windowTitle ].
+	self updateWindowTitle
 ]
 
 { #category : 'api - events' }

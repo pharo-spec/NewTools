@@ -1613,12 +1613,6 @@ StDebugger >> updateToolbar [
 		spCommand updateEnableStatus ]
 ]
 
-{ #category : 'updating - presenters' }
-StDebugger >> updateWindowTitle [
-
-	self withWindowDo: [ :window | window title: self newTitle ].
-]
-
 { #category : 'ui requests' }
 StDebugger >> warning: aString for: aPresenter [
 

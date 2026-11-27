@@ -1064,7 +1064,7 @@ StMethodBrowser >> unregisterFromAnnouncements [
 StMethodBrowser >> updateTitle [
     | newTitle |
     newTitle := self windowTitle.
-    self withWindowDo: [ :window | window title: newTitle ].
+    self updateWindowTitle.
     titleChangedCallbacks ifNotNil: [
         titleChangedCallbacks do: [ :callback | callback value: newTitle ] ]
 ]

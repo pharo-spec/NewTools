@@ -279,8 +279,7 @@ StInspectorPresenter >> updateList [
 StInspectorPresenter >> updateTitle [
 		
 	self isRoot ifFalse: [ ^ self ].
-	self withWindowDo: [ :window | 
-		window title: self windowTitle ].
+	self updateWindowTitle
 ]
 
 { #category : 'initialization' }
