@@ -2,6 +2,8 @@
 Provides a searchable list of classes, and options to configure the search mode (substring search (default), regular expression, exact). The search mode can be combined with case-sensitiveness.
 
 Multiple classes can be selected if the #multipleSelection option is enabled.
+
+A dialog can remember its search: after `rememberSearchAs: #class` it starts with the last search accepted in a dialog remembering its search as #class, and remembers its own search when it is accepted. Each key (#class, #package...) has its own last search, kept on the class side (`lastSearchAs:`).
 "
 Class {
 	#name : 'StBrowserSearchPresenter',
@@ -10,7 +12,11 @@ Class {
 		'items',
 		'itemsList',
 		'searchField',
-		'searchOptions'
+		'searchOptions',
+		'searchKey'
+	],
+	#classInstVars : [
+		'lastSearches'
 	],
 	#category : 'NewTools-Core-Calypso',
 	#package : 'NewTools-Core',
@@ -48,6 +54,45 @@ StBrowserSearchPresenter class >> exampleConfiguringPresenterForMultipleSelectio
 				 searchWithItem: self class package;
 				 multipleSelection ]) 
 			inspect
+]
+
+{ #category : 'examples' }
+StBrowserSearchPresenter class >> exampleRememberingTheSearch [
+	"Choose a package twice: the second dialog starts with the search accepted in the first one"
+
+	<example>
+	2 timesRepeat: [
+		((self newApplication: StPharoApplication current) searchConfiguring: [ :presenter :dialog |
+			 dialog title: 'Choose package'.
+			 presenter
+				 items: (self packageOrganizer packages sorted: #name ascending);
+				 rememberSearchAs: #package ]) inspect ]
+]
+
+{ #category : 'remembered searches' }
+StBrowserSearchPresenter class >> lastSearchAs: aKey [
+	"The last search accepted in a dialog remembering its search as aKey (see rememberSearchAs:), or an empty string"
+
+	^ self lastSearches at: aKey ifAbsent: [ '' ]
+]
+
+{ #category : 'remembered searches' }
+StBrowserSearchPresenter class >> lastSearches [
+	"The last search accepted for each key, shared by all the dialogs remembering their search"
+
+	^ lastSearches ifNil: [ lastSearches := Dictionary new ]
+]
+
+{ #category : 'remembered searches' }
+StBrowserSearchPresenter class >> lastSearches: aDictionary [
+
+	lastSearches := aDictionary
+]
+
+{ #category : 'remembered searches' }
+StBrowserSearchPresenter class >> rememberSearch: aString as: aKey [
+
+	self lastSearches at: aKey put: aString
 ]
 
 { #category : 'instance creation' }
@@ -158,6 +203,20 @@ StBrowserSearchPresenter >> multipleSelection [
 	itemsList beMultipleSelection
 ]
 
+{ #category : 'private' }
+StBrowserSearchPresenter >> rememberSearch [
+
+	searchKey ifNotNil: [ self class rememberSearch: self searchValue as: searchKey ]
+]
+
+{ #category : 'api' }
+StBrowserSearchPresenter >> rememberSearchAs: aKey [
+	"Start with the last search accepted in a dialog remembering its search as aKey (a symbol naming what is searched, such as #class), unless a search is already set, and remember the search of this one when it is accepted"
+
+	searchKey := aKey.
+	searchField text ifEmpty: [ self searchValue: (self class lastSearchAs: aKey) ]
+]
+
 { #category : 'updating' }
 StBrowserSearchPresenter >> search: text [
 	"Main search callback method. Answer a <Collection> of results"
@@ -180,6 +239,8 @@ StBrowserSearchPresenter >> searchConfiguring: aBlock [
 
 	dialog isCancelled ifTrue: [ ^ CmCommandAborted signal ].
 
+	self rememberSearch.
+
 	^ self itemsList isMultipleSelection
 		  ifTrue: [ self selectedItems ifEmpty: [ CmCommandAborted signal ] ]
 		  ifFalse: [ self selectedItem ifNil: [ CmCommandAborted signal ] ]
@@ -190,6 +251,12 @@ StBrowserSearchPresenter >> searchOptions [
 	"Answer the receiver's search options presenter"
 
 	^ searchOptions
+]
+
+{ #category : 'api' }
+StBrowserSearchPresenter >> searchValue [
+
+	^ searchField text
 ]
 
 { #category : 'api' }
